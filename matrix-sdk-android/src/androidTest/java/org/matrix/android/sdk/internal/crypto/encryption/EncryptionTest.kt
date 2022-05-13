@@ -34,43 +34,44 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
-import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestHelper
+import org.matrix.android.sdk.common.withTestHelpers
 import java.util.concurrent.CountDownLatch
 
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class EncryptionTest : InstrumentedTest {
 
-    private val testHelper = CommonTestHelper(context())
-    private val cryptoTestHelper = CryptoTestHelper(testHelper)
-
     @Test
     fun test_EncryptionEvent() {
-        performTest(roomShouldBeEncrypted = false) { room ->
-            // Send an encryption Event as an Event (and not as a state event)
-            room.sendService().sendEvent(
-                    eventType = EventType.STATE_ROOM_ENCRYPTION,
-                    content = EncryptionEventContent(algorithm = MXCRYPTO_ALGORITHM_MEGOLM).toContent()
-            )
-        }
-    }
-
-    @Test
-    fun test_EncryptionStateEvent() {
-        performTest(roomShouldBeEncrypted = true) { room ->
-            runBlocking {
-                // Send an encryption Event as a State Event
-                room.stateService().sendStateEvent(
+        withTestHelpers(context()) { cryptoTestHelper ->
+            performTest(cryptoTestHelper, roomShouldBeEncrypted = false) { room ->
+                // Send an encryption Event as an Event (and not as a state event)
+                room.sendService().sendEvent(
                         eventType = EventType.STATE_ROOM_ENCRYPTION,
-                        stateKey = "",
-                        body = EncryptionEventContent(algorithm = MXCRYPTO_ALGORITHM_MEGOLM).toContent()
+                        content = EncryptionEventContent(algorithm = MXCRYPTO_ALGORITHM_MEGOLM).toContent()
                 )
             }
         }
     }
 
-    private fun performTest(roomShouldBeEncrypted: Boolean, action: (Room) -> Unit) {
+    @Test
+    fun test_EncryptionStateEvent() {
+        withTestHelpers(context()) { cryptoTestHelper ->
+            performTest(cryptoTestHelper, roomShouldBeEncrypted = true) { room ->
+                runBlocking {
+                    // Send an encryption Event as a State Event
+                    room.stateService().sendStateEvent(
+                            eventType = EventType.STATE_ROOM_ENCRYPTION,
+                            stateKey = "",
+                            body = EncryptionEventContent(algorithm = MXCRYPTO_ALGORITHM_MEGOLM).toContent()
+                    )
+                }
+            }
+        }
+    }
+
+    private fun performTest(cryptoTestHelper: CryptoTestHelper, roomShouldBeEncrypted: Boolean, action: (Room) -> Unit) {
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceInARoom(encryptedRoom = false)
 
         val aliceSession = cryptoTestData.firstSession
@@ -103,12 +104,11 @@ class EncryptionTest : InstrumentedTest {
         timeline.addListener(timelineListener)
 
         action.invoke(room)
-        testHelper.await(latch)
+        cryptoTestHelper.testHelper.await(latch)
         timeline.dispose()
-        testHelper.waitWithLatch {
+        cryptoTestHelper.testHelper.waitWithLatch {
             room.roomCryptoService().isEncrypted() shouldBe roomShouldBeEncrypted
             it.countDown()
         }
-        cryptoTestData.cleanUp(testHelper)
     }
 }

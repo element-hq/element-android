@@ -50,6 +50,16 @@ import java.util.UUID
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
+internal fun withTestHelpers(context: Context, block: (CryptoTestHelper) -> Unit) {
+    val testHelper = CommonTestHelper(context)
+    val cryptoTestHelper = CryptoTestHelper(testHelper)
+    return try {
+        block(cryptoTestHelper)
+    } finally {
+        testHelper.cleanUpOpenedSessions()
+    }
+}
+
 /**
  * This class exposes methods to be used in common cases
  * Registration, login, Sync, Sending messages...
@@ -59,6 +69,8 @@ class CommonTestHelper(context: Context) {
     internal val matrix: TestMatrix
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     private var accountNumber = 0
+
+    private val trackedSessions = mutableListOf<Session>()
 
     fun getTestInterceptor(session: Session): MockOkHttpInterceptor? = TestModule.interceptorForSession(session.sessionId) as? MockOkHttpInterceptor
 
@@ -82,6 +94,15 @@ class CommonTestHelper(context: Context) {
 
     fun logIntoAccount(userId: String, testParams: SessionTestParams): Session {
         return logIntoAccount(userId, TestConstants.PASSWORD, testParams)
+    }
+
+    fun cleanUpOpenedSessions() {
+        trackedSessions.forEach {
+            runBlockingTest {
+                it.signOutService().signOut(true)
+            }
+        }
+        trackedSessions.clear()
     }
 
     /**
@@ -245,7 +266,9 @@ class CommonTestHelper(context: Context) {
                 testParams
         )
         assertNotNull(session)
-        return session
+        return session.also {
+            trackedSessions.add(session)
+        }
     }
 
     /**
@@ -261,7 +284,9 @@ class CommonTestHelper(context: Context) {
                        testParams: SessionTestParams): Session {
         val session = logAccountAndSync(userId, password, testParams)
         assertNotNull(session)
-        return session
+        return session.also {
+            trackedSessions.add(session)
+        }
     }
 
     /**
@@ -436,6 +461,7 @@ class CommonTestHelper(context: Context) {
     fun Iterable<Session>.signOutAndClose() = forEach { signOutAndClose(it) }
 
     fun signOutAndClose(session: Session) {
+        trackedSessions.remove(session)
         runBlockingTest(timeout = 60_000) {
             session.signOutService().signOut(true)
         }
