@@ -38,7 +38,7 @@ class MatrixItemColorProvider @Inject constructor(
     fun getColor(matrixItem: MatrixItem): Int {
         return cache.getOrPut(matrixItem.id) {
             when (matrixItem) {
-                is MatrixItem.UserItem -> getColorFromUserIdColorInt(colorProvider, matrixItem.id)
+                is MatrixItem.UserItem -> getColorFromUserId(colorProvider, matrixItem.id)
                 else                   -> getColorFromRoomId(colorProvider, matrixItem.id)
             }
         }
@@ -81,19 +81,9 @@ class MatrixItemColorProvider @Inject constructor(
     }
 
     companion object {
-        @ColorRes
-        @VisibleForTesting
-        fun getColorFromUserId(userId: String?): Int {
-            var hash = 0
-
-            userId?.toList()?.map { chr -> hash = (hash shl 5) - hash + chr.code }
-
-            return getUserColorByIndex(abs(hash))
-        }
-
         @ColorInt
         @VisibleForTesting
-        fun getColorFromUserIdColorInt(colorProvider: ColorProvider, userId: String?): Int {
+        fun getColorFromUserId(colorProvider: ColorProvider, userId: String?): Int {
             var hash = 0
 
             userId?.toList()?.map { chr -> hash = (hash shl 5) - hash + chr.code }
