@@ -56,7 +56,6 @@ import java.util.concurrent.CountDownLatch
 class SASTest : InstrumentedTest {
 
     @Test
-    @Ignore("This test is failing on CI")
     fun test_aliceStartThenAliceCancel() {
         val testHelper = CommonTestHelper(context())
         val cryptoTestHelper = CryptoTestHelper(testHelper)
@@ -315,7 +314,6 @@ class SASTest : InstrumentedTest {
     // any two devices may only have at most one key verification in flight at a time.
     // If a device has two verifications in progress with the same device, then it should cancel both verifications.
     @Test
-    @Ignore("This test is failing on CI")
     fun test_aliceStartTwoRequests() {
         val testHelper = CommonTestHelper(context())
         val cryptoTestHelper = CryptoTestHelper(testHelper)
@@ -420,7 +418,6 @@ class SASTest : InstrumentedTest {
     }
 
     @Test
-    @Ignore("This test is failing on CI")
     fun test_aliceAndBobSASCode() {
         val testHelper = CommonTestHelper(context())
         val cryptoTestHelper = CryptoTestHelper(testHelper)
@@ -481,7 +478,6 @@ class SASTest : InstrumentedTest {
     }
 
     @Test
-    @Ignore("This test is failing on CI")
     fun test_happyPath() {
         val testHelper = CommonTestHelper(context())
         val cryptoTestHelper = CryptoTestHelper(testHelper)
@@ -561,7 +557,6 @@ class SASTest : InstrumentedTest {
     }
 
     @Test
-    @Ignore("This test is failing on CI")
     fun test_ConcurrentStart() {
         val testHelper = CommonTestHelper(context())
         val cryptoTestHelper = CryptoTestHelper(testHelper)

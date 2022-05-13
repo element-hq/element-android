@@ -21,7 +21,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import org.junit.Assert
 import org.junit.FixMethodOrder
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
@@ -48,7 +47,6 @@ import org.matrix.android.sdk.common.TestConstants
 class WithHeldTests : InstrumentedTest {
 
     @Test
-    @Ignore("This test is failing on CI")
     fun test_WithHeldUnverifiedReason() {
         val testHelper = CommonTestHelper(context())
         val cryptoTestHelper = CryptoTestHelper(testHelper)
@@ -154,7 +152,6 @@ class WithHeldTests : InstrumentedTest {
     }
 
     @Test
-    @Ignore("This test is failing on CI")
     fun test_WithHeldNoOlm() {
         val testHelper = CommonTestHelper(context())
         val cryptoTestHelper = CryptoTestHelper(testHelper)
@@ -238,7 +235,6 @@ class WithHeldTests : InstrumentedTest {
     }
 
     @Test
-    @Ignore("This test is failing on CI")
     fun test_WithHeldKeyRequest() {
         val testHelper = CommonTestHelper(context())
         val cryptoTestHelper = CryptoTestHelper(testHelper)

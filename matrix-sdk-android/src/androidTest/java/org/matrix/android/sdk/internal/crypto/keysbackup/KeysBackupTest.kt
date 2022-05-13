@@ -102,7 +102,6 @@ class KeysBackupTest : InstrumentedTest {
      * Check that prepareKeysBackupVersionWithPassword returns valid data
      */
     @Test
-    @Ignore("This test is failing on CI")
     fun prepareKeysBackupVersionTest() {
         val testHelper = CommonTestHelper(context())
 
@@ -958,7 +957,6 @@ class KeysBackupTest : InstrumentedTest {
      * -> That must fail and her backup state must be WrongBackUpVersion
      */
     @Test
-    @Ignore("This test is failing on CI")
     fun testBackupWhenAnotherBackupWasCreated() {
         val testHelper = CommonTestHelper(context())
         val cryptoTestHelper = CryptoTestHelper(testHelper)
@@ -1136,7 +1134,6 @@ class KeysBackupTest : InstrumentedTest {
      * - Delete the backup
      */
     @Test
-    @Ignore("This test is failing on CI")
     fun deleteKeysBackupTest() {
         val testHelper = CommonTestHelper(context())
         val cryptoTestHelper = CryptoTestHelper(testHelper)

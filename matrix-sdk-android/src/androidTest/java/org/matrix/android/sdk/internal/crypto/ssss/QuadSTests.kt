@@ -55,7 +55,6 @@ class QuadSTests : InstrumentedTest {
     }
 
     @Test
-    @Ignore("This test is failing on CI")
     fun test_Generate4SKey() {
         val testHelper = CommonTestHelper(context())
 
@@ -109,7 +108,6 @@ class QuadSTests : InstrumentedTest {
     }
 
     @Test
-    @Ignore("This test is failing on CI")
     fun test_StoreSecret() {
         val testHelper = CommonTestHelper(context())
 
@@ -155,7 +153,6 @@ class QuadSTests : InstrumentedTest {
     }
 
     @Test
-    @Ignore("This test is failing on CI")
     fun test_SetDefaultLocalEcho() {
         val testHelper = CommonTestHelper(context())
 
@@ -178,7 +175,6 @@ class QuadSTests : InstrumentedTest {
     }
 
     @Test
-    @Ignore("This test is failing on CI")
     fun test_StoreSecretWithMultipleKey() {
         val testHelper = CommonTestHelper(context())
 

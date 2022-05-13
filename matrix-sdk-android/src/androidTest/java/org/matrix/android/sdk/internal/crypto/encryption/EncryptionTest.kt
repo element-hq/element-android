@@ -20,7 +20,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.runBlocking
 import org.amshove.kluent.shouldBe
 import org.junit.FixMethodOrder
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
@@ -47,7 +46,6 @@ class EncryptionTest : InstrumentedTest {
     private val cryptoTestHelper = CryptoTestHelper(testHelper)
 
     @Test
-    @Ignore("This test is failing in CI")
     fun test_EncryptionEvent() {
         performTest(roomShouldBeEncrypted = false) { room ->
             // Send an encryption Event as an Event (and not as a state event)
@@ -59,7 +57,6 @@ class EncryptionTest : InstrumentedTest {
     }
 
     @Test
-    @Ignore("This test is failing in CI")
     fun test_EncryptionStateEvent() {
         performTest(roomShouldBeEncrypted = true) { room ->
             runBlocking {
