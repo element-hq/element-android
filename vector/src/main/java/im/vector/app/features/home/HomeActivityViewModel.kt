@@ -28,8 +28,12 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.extensions.toAnalyticsType
+import im.vector.app.features.analytics.plan.Signup
 import im.vector.app.features.analytics.store.AnalyticsStore
 import im.vector.app.features.login.ReAuthHelper
+import im.vector.app.features.onboarding.AuthenticationDescription
 import im.vector.app.features.raw.wellknown.ElementWellKnown
 import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isSecureBackupRequired
@@ -37,8 +41,11 @@ import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
@@ -72,7 +79,8 @@ class HomeActivityViewModel @AssistedInject constructor(
         private val reAuthHelper: ReAuthHelper,
         private val analyticsStore: AnalyticsStore,
         private val lightweightSettingsStorage: LightweightSettingsStorage,
-        private val vectorPreferences: VectorPreferences
+        private val vectorPreferences: VectorPreferences,
+        private val analyticsTracker: AnalyticsTracker
 ) : VectorViewModel<HomeActivityViewState, HomeActivityViewActions, HomeActivityViewEvents>(initialState) {
 
     @AssistedFactory
@@ -84,7 +92,7 @@ class HomeActivityViewModel @AssistedInject constructor(
         override fun initialState(viewModelContext: ViewModelContext): HomeActivityViewState? {
             val activity: HomeActivity = viewModelContext.activity()
             val args: HomeActivityArgs? = activity.intent.getParcelableExtra(Mavericks.KEY_ARG)
-            return args?.let { HomeActivityViewState(accountCreation = it.accountCreation) }
+            return args?.let { HomeActivityViewState(authenticationDescription = it.authenticationDescription) }
                     ?: super.initialState(viewModelContext)
         }
     }
@@ -93,18 +101,18 @@ class HomeActivityViewModel @AssistedInject constructor(
     private var hasCheckedBootstrap = false
     private var onceTrusted = false
 
-    private fun initialize() {
+    private fun initialize(recentAuthentication: AuthenticationDescription?) {
         if (isInitialized) return
         isInitialized = true
         cleanupFiles()
         observeInitialSync()
         checkSessionPushIsOn()
         observeCrossSigningReset()
-        observeAnalytics()
+        observeAnalytics(recentAuthentication)
         initThreadsMigration()
     }
 
-    private fun observeAnalytics() {
+    private fun observeAnalytics(recentAuthentication: AuthenticationDescription?) {
         if (analyticsConfig.isEnabled) {
             analyticsStore.didAskUserConsentFlow
                     .onEach { didAskUser ->
@@ -113,7 +121,29 @@ class HomeActivityViewModel @AssistedInject constructor(
                         }
                     }
                     .launchIn(viewModelScope)
+
+            recentAuthentication?.let {
+                when (recentAuthentication) {
+                    is AuthenticationDescription.Register -> {
+                        viewModelScope.launch {
+                            analyticsStore.onUserGaveConsent {
+                                analyticsTracker.capture(Signup(authenticationType = recentAuthentication.type.toAnalyticsType()))
+                            }
+                        }
+                    }
+                    AuthenticationDescription.Login       -> {
+                        // do nothing
+                    }
+                }
+            }
         }
+    }
+
+    private suspend fun AnalyticsStore.onUserGaveConsent(action: () -> Unit) {
+        userConsentFlow
+                .takeWhile { !it }
+                .onCompletion { action() }
+                .collect()
     }
 
     private fun cleanupFiles() {
@@ -285,7 +315,7 @@ class HomeActivityViewModel @AssistedInject constructor(
             val isSecureBackupRequired = elementWellKnown?.isSecureBackupRequired() ?: false
 
             // In case of account creation, it is already done before
-            if (initialState.accountCreation) {
+            if (initialState.authenticationDescription is AuthenticationDescription.Register) {
                 if (isSecureBackupRequired) {
                     _viewEvents.post(HomeActivityViewEvents.StartRecoverySetupFlow)
                 } else {
@@ -395,8 +425,8 @@ class HomeActivityViewModel @AssistedInject constructor(
             HomeActivityViewActions.PushPromptHasBeenReviewed -> {
                 vectorPreferences.setDidAskUserToEnableSessionPush()
             }
-            HomeActivityViewActions.ViewStarted               -> {
-                initialize()
+            is HomeActivityViewActions.ViewStarted            -> {
+                initialize(action.recentAuthentication)
             }
         }
     }

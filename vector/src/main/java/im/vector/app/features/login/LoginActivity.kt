@@ -218,10 +218,7 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
                 // change the screen name
                 analyticsScreenName = MobileScreen.ScreenName.Register
             }
-            val intent = HomeActivity.newIntent(
-                    this,
-                    accountCreation = loginViewState.signMode == SignMode.SignUp
-            )
+            val intent = HomeActivity.newIntent(this)
             startActivity(intent)
             finish()
             return

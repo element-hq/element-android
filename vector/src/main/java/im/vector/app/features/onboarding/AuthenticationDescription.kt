@@ -16,12 +16,17 @@
 
 package im.vector.app.features.onboarding
 
+import android.os.Parcelable
 import im.vector.app.features.onboarding.AuthenticationDescription.AuthenticationType
+import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 
-sealed interface AuthenticationDescription {
+sealed interface AuthenticationDescription : Parcelable {
+    @Parcelize
     object Login : AuthenticationDescription
-    data class AccountCreated(val type: AuthenticationType) : AuthenticationDescription
+
+    @Parcelize
+    data class Register(val type: AuthenticationType) : AuthenticationDescription
 
     enum class AuthenticationType {
         Password,

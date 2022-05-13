@@ -276,7 +276,7 @@ class Login2Variant(
             is LoginViewEvents2.OnLoginModeNotSupported                    ->
                 onLoginModeNotSupported(event.supportedTypes)
             is LoginViewEvents2.OnSessionCreated                           -> handleOnSessionCreated(event)
-            is LoginViewEvents2.Finish                                     -> terminate(true)
+            is LoginViewEvents2.Finish                                     -> terminate()
             is LoginViewEvents2.CancelRegistration                         -> handleCancelRegistration()
         }
     }
@@ -296,14 +296,13 @@ class Login2Variant(
                     option = commonOption
             )
         } else {
-            terminate(false)
+            terminate()
         }
     }
 
-    private fun terminate(newAccount: Boolean) {
+    private fun terminate() {
         val intent = HomeActivity.newIntent(
-                activity,
-                accountCreation = newAccount
+                activity
         )
         activity.startActivity(intent)
         activity.finish()
