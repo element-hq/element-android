@@ -151,7 +151,7 @@ internal class DefaultWidgetPostAPIMediator @Inject constructor(private val mosh
     override fun sendError(message: String, eventData: JsonDict) {
         Timber.e("## sendError() : eventData $eventData failed $message")
 
-        // TODO: JS has an additional optional parameter: nestedError
+        // TODO JS has an additional optional parameter: nestedError
         val params = HashMap<String, Map<String, String>>()
         val subMap = HashMap<String, String>()
         subMap["message"] = message

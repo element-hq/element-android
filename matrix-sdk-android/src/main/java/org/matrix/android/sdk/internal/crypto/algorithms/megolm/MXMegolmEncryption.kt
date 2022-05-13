@@ -79,7 +79,7 @@ internal class MXMegolmEncryption(
     }
 
     // Default rotation periods
-    // TODO: Make it configurable via parameters
+    // TODO Make it configurable via parameters
     // Session rotation periods
     private var sessionRotationPeriodMsgs: Int = 100
     private var sessionRotationPeriodMs: Int = 7 * 24 * 3600 * 1000
