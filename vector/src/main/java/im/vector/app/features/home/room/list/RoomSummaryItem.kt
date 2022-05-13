@@ -18,9 +18,10 @@ package im.vector.app.features.home.room.list
 
 import android.view.HapticFeedbackConstants
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
@@ -134,12 +135,33 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
     private fun renderForDefaultDisplayMode(holder: Holder) {
         holder.subtitleView.text = lastFormattedEvent.charSequence
         holder.lastEventTimeView.text = lastEventTime
+        holder.typingView.setTextOrHide(typingMessage)
+        holder.subtitleView.isInvisible = holder.typingView.isVisible
     }
 
     private fun renderForFilteredDisplayMode(holder: Holder) {
         holder.subtitleView.text = subtitle
-        holder.typingView.setTextOrHide(typingMessage)
-        holder.subtitleView.isInvisible = holder.typingView.isVisible
+        if (subtitle.isEmpty()) {
+           holder.centerTitleVertically()
+        }
+    }
+
+    private fun Holder.centerTitleVertically() {
+        removeTitleTopMargin()
+        constrainTitleToParentBottom()
+    }
+
+    private fun Holder.removeTitleTopMargin() {
+        val layoutParams = titleView.layoutParams as ConstraintLayout.LayoutParams
+        layoutParams.topMargin = 0
+        titleView.layoutParams = layoutParams
+    }
+
+    private fun Holder.constrainTitleToParentBottom() {
+        val constraintSet = ConstraintSet()
+        constraintSet.clone(rootView)
+        constraintSet.connect(titleView.id, ConstraintSet.BOTTOM, rootView.id, ConstraintSet.BOTTOM)
+        constraintSet.applyTo(rootView)
     }
 
     override fun unbind(holder: Holder) {
@@ -175,6 +197,6 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         val roomAvatarPublicDecorationImageView by bind<ImageView>(R.id.roomAvatarPublicDecorationImageView)
         val roomAvatarFailSendingImageView by bind<ImageView>(R.id.roomAvatarFailSendingImageView)
         val roomAvatarPresenceImageView by bind<PresenceStateImageView>(R.id.roomAvatarPresenceImageView)
-        val rootView by bind<ViewGroup>(R.id.itemRoomLayout)
+        val rootView by bind<ConstraintLayout>(R.id.itemRoomLayout)
     }
 }
