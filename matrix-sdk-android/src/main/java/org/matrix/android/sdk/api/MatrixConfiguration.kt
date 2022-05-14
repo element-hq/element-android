@@ -67,10 +67,11 @@ data class MatrixConfiguration(
         val threadMessagesEnabledDefault: Boolean = false,
 
         /**
-         * Sync loop parameter: The maximum time to wait, in milliseconds, before returning this request.
+         * Server API configuration for the sync process:
+         * The maximum time to wait by the homeserver, in milliseconds, before returning the sync response.
          * If no events (or other data) become available before this time elapses, the server will return a response with empty fields.
          */
-        val defaultLongPoolTimeout: Long = 30_000L,
+        val syncRequestTimeoutMillis: Long = 30_000L,
 ) {
 
     /**
