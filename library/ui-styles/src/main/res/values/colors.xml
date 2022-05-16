@@ -138,7 +138,7 @@
 
     <!-- Badge Colors -->
     <attr name="vctr_badge_color_border" format="color" />
-    <color name="vctr_badge_color_border_light">#FFFFFF</color>
-    <color name="vctr_badge_color_border_dark">#21262C</color>
+    <color name="vctr_badge_color_border_light">@color/palette_white</color>
+    <color name="vctr_badge_color_border_dark">@color/palette_black_950</color>
 
 </resources>

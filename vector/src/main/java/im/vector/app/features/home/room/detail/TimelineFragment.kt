@@ -2443,7 +2443,11 @@ class TimelineFragment @Inject constructor(
 
     private fun onReplyInThreadClicked(action: EventSharedAction.ReplyInThread) {
         if (vectorPreferences.areThreadMessagesEnabled()) {
-            navigateToThreadTimeline(action.eventId, action.startsThread, true)
+            navigateToThreadTimeline(
+                    rootThreadEventId = action.eventId,
+                    startsThread = action.startsThread,
+                    showKeyboard = true
+            )
         } else {
             displayThreadsBetaOptInDialog()
         }
