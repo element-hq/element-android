@@ -29,7 +29,7 @@ class HardwareInfo @Inject constructor(
         private val context: Context
 ) {
     /**
-     * Tell if the device has a back (or external) camera
+     * Tell if the device has a back (or external) camera.
      */
     fun hasBackCamera(): Boolean {
         val manager = context.getSystemService<CameraManager>() ?: return Camera.getNumberOfCameras() > 0

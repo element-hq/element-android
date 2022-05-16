@@ -104,7 +104,7 @@ internal class RoomMemberHelper(private val realm: Realm,
     }
 
     /**
-     * Return all the roomMembers ids which are joined or invited to the room
+     * Return all the roomMembers ids which are joined or invited to the room.
      *
      * @return a roomMember id list of joined or invited members.
      */
@@ -113,7 +113,7 @@ internal class RoomMemberHelper(private val realm: Realm,
     }
 
     /**
-     * Return all the roomMembers ids which are joined to the room
+     * Return all the roomMembers ids which are joined to the room.
      *
      * @return a roomMember id list of joined members.
      */

@@ -39,8 +39,8 @@ import org.matrix.android.sdk.api.session.threads.ThreadDetails
 import org.matrix.android.sdk.api.util.MatrixItem
 
 /**
- * Base timeline item that adds an optional information bar with the sender avatar, name, time, send state
- * Adds associated click listeners (on avatar, displayname)
+ * Base timeline item that adds an optional information bar with the sender avatar, name, time, send state.
+ * Adds associated click listeners (on avatar, displayname).
  */
 abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>() {
 

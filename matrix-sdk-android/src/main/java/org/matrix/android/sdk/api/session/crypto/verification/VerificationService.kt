@@ -34,7 +34,7 @@ interface VerificationService {
     fun removeListener(listener: Listener)
 
     /**
-     * Mark this device as verified manually
+     * Mark this device as verified manually.
      */
     fun markedLocallyAsManuallyVerified(userId: String, deviceID: String)
 
@@ -52,7 +52,7 @@ interface VerificationService {
                              transactionId: String?): String?
 
     /**
-     * Request key verification with another user via room events (instead of the to-device API)
+     * Request key verification with another user via room events (instead of the to-device API).
      */
     fun requestKeyVerificationInDMs(methods: List<VerificationMethod>,
                                     otherUserId: String,
@@ -81,7 +81,7 @@ interface VerificationService {
                                   otherDeviceId: String): String
 
     /**
-     * Returns false if the request is unknown
+     * Returns false if the request is unknown.
      */
     fun readyPendingVerificationInDMs(methods: List<VerificationMethod>,
                                       otherUserId: String,
@@ -89,7 +89,7 @@ interface VerificationService {
                                       transactionId: String): Boolean
 
     /**
-     * Returns false if the request is unknown
+     * Returns false if the request is unknown.
      */
     fun readyPendingVerification(methods: List<VerificationMethod>,
                                  otherUserId: String,

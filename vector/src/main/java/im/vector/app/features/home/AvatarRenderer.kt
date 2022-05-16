@@ -53,9 +53,8 @@ import java.io.File
 import javax.inject.Inject
 
 /**
- * This helper centralise ways to retrieve avatar into ImageView or even generic Target<Drawable>
+ * This helper centralise ways to retrieve avatar into ImageView or even generic Target<Drawable>.
  */
-
 class AvatarRenderer @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
                                          private val matrixItemColorProvider: MatrixItemColorProvider,
                                          private val dimensionConverter: DimensionConverter) {

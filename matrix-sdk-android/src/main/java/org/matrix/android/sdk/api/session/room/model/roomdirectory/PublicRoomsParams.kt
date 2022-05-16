@@ -19,7 +19,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * Class to pass parameters to get the public rooms list
+ * Class to pass parameters to get the public rooms list.
  */
 @JsonClass(generateAdapter = true)
 data class PublicRoomsParams(

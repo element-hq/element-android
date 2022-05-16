@@ -47,7 +47,7 @@ class VectorUncaughtExceptionHandler @Inject constructor(
     private val preferences = DefaultSharedPreferences.getInstance(context)
 
     /**
-     * Activate this handler
+     * Activate this handler.
      */
     fun activate() {
         previousHandler = Thread.getDefaultUncaughtExceptionHandler()
@@ -55,7 +55,7 @@ class VectorUncaughtExceptionHandler @Inject constructor(
     }
 
     /**
-     * An uncaught exception has been triggered
+     * An uncaught exception has been triggered.
      *
      * @param thread    the thread
      * @param throwable the throwable
@@ -113,7 +113,7 @@ class VectorUncaughtExceptionHandler @Inject constructor(
     }
 
     /**
-     * Tells if the application crashed
+     * Tells if the application crashed.
      *
      * @return true if the application crashed
      */
@@ -122,7 +122,7 @@ class VectorUncaughtExceptionHandler @Inject constructor(
     }
 
     /**
-     * Clear the crash status
+     * Clear the crash status.
      */
     fun clearAppCrashStatus() {
         preferences.edit {

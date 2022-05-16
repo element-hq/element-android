@@ -292,7 +292,7 @@ internal class MXMegolmDecryption(
     }
 
     /**
-     * Check if the some messages can be decrypted with a new session
+     * Check if the some messages can be decrypted with a new session.
      *
      * @param roomId the room id where the new Megolm session has been created for, may be null when importing from external sessions
      * @param senderKey the session sender key

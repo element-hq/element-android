@@ -29,7 +29,7 @@ data class LocationData(
 ) : Parcelable
 
 /**
- * Creates location data from a LocationContent
+ * Creates location data from a LocationContent.
  * "geo:40.05,29.24;30" -> LocationData(40.05, 29.24, 30)
  * @return location data or null if geo uri is not valid
  */

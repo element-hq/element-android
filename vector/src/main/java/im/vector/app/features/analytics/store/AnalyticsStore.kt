@@ -33,9 +33,9 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 
 /**
  * Local storage for:
- * - user consent (Boolean)
- * - did ask user consent (Boolean)
- * - analytics Id (String)
+ * - user consent (Boolean);
+ * - did ask user consent (Boolean);
+ * - analytics Id (String).
  */
 class AnalyticsStore @Inject constructor(
         private val context: Context

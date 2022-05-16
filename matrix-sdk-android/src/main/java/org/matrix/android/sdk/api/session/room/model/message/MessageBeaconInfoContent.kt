@@ -32,7 +32,7 @@ import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultCon
 @JsonClass(generateAdapter = true)
 data class MessageBeaconInfoContent(
         /**
-         * Local message type, not from server
+         * Local message type, not from server.
          */
         @Transient
         override val msgType: String = MessageType.MSGTYPE_BEACON_INFO,

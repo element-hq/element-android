@@ -109,8 +109,8 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
         }
 
         /**
-         * Initializes a singleton instance of Matrix for the given MatrixConfiguration
-         * This instance will be returned by Matrix.getInstance(context)
+         * Initializes a singleton instance of Matrix for the given MatrixConfiguration.
+         * This instance will be returned by Matrix.getInstance(context).
          */
         @Deprecated("Use Matrix.createInstance and manage the instance manually")
         fun initialize(context: Context, matrixConfiguration: MatrixConfiguration) {

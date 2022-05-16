@@ -34,7 +34,7 @@ import org.matrix.android.sdk.api.failure.MatrixError
 import javax.net.ssl.HttpsURLConnection
 
 /**
- * Parent Fragment for all the login/registration screens
+ * Parent Fragment for all the login/registration screens.
  */
 abstract class AbstractLoginFragment<VB : ViewBinding> : VectorBaseFragment<VB>(), OnBackPressed {
 

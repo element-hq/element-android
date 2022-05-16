@@ -19,7 +19,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * Class representing an sharekey content
+ * Class representing an sharekey content.
  */
 @JsonClass(generateAdapter = true)
 data class RoomKeyWithHeldContent(
@@ -56,7 +56,7 @@ data class RoomKeyWithHeldContent(
 
         /**
          * the device ID of the device sending the m.room_key.withheld message
-         * MSC3735
+         * MSC3735.
          */
         @Json(name = "from_device") val fromDevice: String? = null
 
@@ -69,23 +69,23 @@ data class RoomKeyWithHeldContent(
 
 enum class WithHeldCode(val value: String) {
     /**
-     * the user/device was blacklisted
+     * the user/device was blacklisted.
      */
     BLACKLISTED("m.blacklisted"),
 
     /**
-     * the user/devices is unverified
+     * the user/devices is unverified.
      */
     UNVERIFIED("m.unverified"),
 
     /**
      * the user/device is not allowed have the key. For example, this would usually be sent in response
-     * to a key request if the user was not in the room when the message was sent
+     * to a key request if the user was not in the room when the message was sent.
      */
     UNAUTHORISED("m.unauthorised"),
 
     /**
-     * Sent in reply to a key request if the device that the key is requested from does not have the requested key
+     * Sent in reply to a key request if the device that the key is requested from does not have the requested key.
      */
     UNAVAILABLE("m.unavailable"),
 

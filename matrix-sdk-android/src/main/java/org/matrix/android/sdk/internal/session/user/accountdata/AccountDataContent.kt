@@ -17,6 +17,6 @@
 package org.matrix.android.sdk.internal.session.user.accountdata
 
 /**
- * Tag class to identify every account data content
+ * Tag class to identify every account data content.
  */
 internal interface AccountDataContent

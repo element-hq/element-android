@@ -29,7 +29,7 @@ internal class TaskInfo(val initSyncStep: InitSyncStep,
     private val offset = parent?.currentProgress ?: 0F
 
     /**
-     * Get the further child
+     * Get the further child.
      */
     fun leaf(): TaskInfo {
         var last = this
@@ -40,7 +40,7 @@ internal class TaskInfo(val initSyncStep: InitSyncStep,
     }
 
     /**
-     * Set progress of this task and update the parent progress iteratively
+     * Set progress of this task and update the parent progress iteratively.
      */
     fun setProgress(progress: Float) {
         Timber.v("setProgress: $progress / $totalProgress")

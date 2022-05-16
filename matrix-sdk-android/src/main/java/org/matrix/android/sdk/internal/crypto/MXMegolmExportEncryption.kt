@@ -32,7 +32,7 @@ import kotlin.math.min
 import kotlin.system.measureTimeMillis
 
 /**
- * Utility class to import/export the crypto data
+ * Utility class to import/export the crypto data.
  */
 internal object MXMegolmExportEncryption {
     private const val HEADER_LINE = "-----BEGIN MEGOLM SESSION DATA-----"
@@ -66,7 +66,7 @@ internal object MXMegolmExportEncryption {
     }
 
     /**
-     * Decrypt a megolm key file
+     * Decrypt a megolm key file.
      *
      * @param data     the data to decrypt
      * @param password the password.
@@ -209,8 +209,8 @@ internal object MXMegolmExportEncryption {
     }
 
     /**
-     * Unbase64 an ascii-armoured megolm key file
-     * Strips the header and trailer lines, and unbase64s the content
+     * Unbase64 an ascii-armoured megolm key file.
+     * Strips the header and trailer lines, and unbase64s the content.
      *
      * @param data the input data
      * @return unbase64ed content
@@ -302,7 +302,7 @@ internal object MXMegolmExportEncryption {
     }
 
     /**
-     * Derive the AES and HMAC-SHA-256 keys for the file
+     * Derive the AES and HMAC-SHA-256 keys for the file.
      *
      * @param salt       salt for pbkdf
      * @param iterations number of pbkdf iterations

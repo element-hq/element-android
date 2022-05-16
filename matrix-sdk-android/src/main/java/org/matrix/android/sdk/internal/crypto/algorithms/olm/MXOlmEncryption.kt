@@ -68,7 +68,7 @@ internal class MXOlmEncryption(
     }
 
     /**
-     * Ensure that the session
+     * Ensure that the session.
      *
      * @param users    the user ids list
      */

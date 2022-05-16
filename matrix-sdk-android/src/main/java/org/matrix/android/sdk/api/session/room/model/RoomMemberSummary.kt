@@ -19,7 +19,7 @@ package org.matrix.android.sdk.api.session.room.model
 import org.matrix.android.sdk.api.session.presence.model.UserPresence
 
 /**
- * Class representing a simplified version of EventType.STATE_ROOM_MEMBER state event content
+ * Class representing a simplified version of EventType.STATE_ROOM_MEMBER state event content.
  */
 data class RoomMemberSummary constructor(
         val membership: Membership,

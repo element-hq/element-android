@@ -70,7 +70,7 @@ internal class EventDecryptor @Inject constructor(
     private val wedgedDevices = mutableListOf<WedgedDeviceInfo>()
 
     /**
-     * Decrypt an event
+     * Decrypt an event.
      *
      * @param event    the raw event.
      * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
@@ -82,7 +82,7 @@ internal class EventDecryptor @Inject constructor(
     }
 
     /**
-     * Decrypt an event asynchronously
+     * Decrypt an event asynchronously.
      *
      * @param event    the raw event.
      * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
@@ -98,7 +98,7 @@ internal class EventDecryptor @Inject constructor(
     }
 
     /**
-     * Decrypt an event
+     * Decrypt an event.
      *
      * @param event    the raw event.
      * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.

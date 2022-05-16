@@ -143,7 +143,7 @@ internal fun RealmQuery<TimelineEventEntity>.filterSendStates(sendStates: List<S
 }
 
 /**
- * Find all TimelineEventEntity items where sender is in senderIds collection, excluding state events
+ * Find all TimelineEventEntity items where sender is in senderIds collection, excluding state events.
  */
 internal fun TimelineEventEntity.Companion.findAllFrom(realm: Realm,
                                                        senderIds: Collection<String>): RealmResults<TimelineEventEntity> {

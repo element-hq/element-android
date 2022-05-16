@@ -86,7 +86,7 @@ class DecryptionFailureTracker @Inject constructor(
 
     /**
      * Can be called when the timeline is disposed in order
-     * to grace those events as they are not anymore displayed on screen
+     * to grace those events as they are not anymore displayed on screen.
      * */
     fun onTimeLineDisposed(roomId: String) {
         scope.launch(Dispatchers.Default) {

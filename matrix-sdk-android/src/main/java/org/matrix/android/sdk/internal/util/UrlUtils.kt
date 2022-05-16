@@ -39,7 +39,7 @@ internal fun String.ensureProtocol(): String {
 }
 
 /**
- * Ensure string has trailing /
+ * Ensure string has trailing /.
  */
 internal fun String.ensureTrailingSlash(): String {
     return when {

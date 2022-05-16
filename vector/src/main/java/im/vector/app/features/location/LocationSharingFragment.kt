@@ -47,7 +47,7 @@ import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 /**
- * We should consider using SupportMapFragment for a out of the box lifecycle handling
+ * We should consider using SupportMapFragment for a out of the box lifecycle handling.
  */
 class LocationSharingFragment @Inject constructor(
         private val urlMapProvider: UrlMapProvider,

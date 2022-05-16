@@ -49,7 +49,7 @@ import im.vector.app.features.userdirectory.UserListSharedActionViewModel
 interface ViewModelModule {
 
     /**
-     * ViewModels with @IntoMap will be injected by this factory
+     * ViewModels with @IntoMap will be injected by this factory.
      */
     @Binds
     fun bindViewModelFactory(factory: VectorViewModelFactory): ViewModelProvider.Factory

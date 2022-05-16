@@ -23,7 +23,7 @@ import com.squareup.moshi.JsonClass
 import timber.log.Timber
 
 /**
- * Class representing the EventType.STATE_ROOM_JOIN_RULES state event content
+ * Class representing the EventType.STATE_ROOM_JOIN_RULES state event content.
  */
 @JsonClass(generateAdapter = true)
 data class RoomJoinRulesContent(

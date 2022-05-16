@@ -101,14 +101,14 @@ fun setCallRingtoneUri(context: Context, ringtoneUri: Uri) {
 }
 
 /**
- * Set using Riot default ringtone
+ * Set using Riot default ringtone.
  */
 fun useRiotDefaultRingtone(context: Context): Boolean {
     return DefaultSharedPreferences.getInstance(context).getBoolean(VectorPreferences.SETTINGS_CALL_RINGTONE_USE_RIOT_PREFERENCE_KEY, true)
 }
 
 /**
- * Ask if default Riot ringtone has to be used
+ * Ask if default Riot ringtone has to be used.
  */
 fun setUseRiotDefaultRingtone(context: Context, useRiotDefault: Boolean) {
     DefaultSharedPreferences.getInstance(context)

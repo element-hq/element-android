@@ -20,7 +20,7 @@ import org.matrix.android.sdk.api.session.crypto.model.IncomingRoomKeyRequest
 import org.matrix.android.sdk.api.session.crypto.model.SecretShareRequest
 
 /**
- * Room keys events listener
+ * Room keys events listener.
  */
 interface GossipingRequestListener {
     /**
@@ -31,7 +31,7 @@ interface GossipingRequestListener {
     fun onRoomKeyRequest(request: IncomingRoomKeyRequest)
 
     /**
-     * Returns the secret value to be shared
+     * Returns the secret value to be shared.
      * @return true if is handled
      */
     fun onSecretShareRequest(request: SecretShareRequest): Boolean

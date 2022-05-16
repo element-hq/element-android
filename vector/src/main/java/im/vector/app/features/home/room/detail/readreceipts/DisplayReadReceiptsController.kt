@@ -26,7 +26,7 @@ import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
 
 /**
- * Epoxy controller for read receipt event list
+ * Epoxy controller for read receipt event list.
  */
 class DisplayReadReceiptsController @Inject constructor(private val dateFormatter: VectorDateFormatter,
                                                         private val session: Session,

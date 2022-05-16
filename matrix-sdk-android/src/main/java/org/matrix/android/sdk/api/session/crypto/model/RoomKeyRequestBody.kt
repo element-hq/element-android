@@ -21,7 +21,7 @@ import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.internal.di.MoshiProvider
 
 /**
- * Class representing an room key request body content
+ * Class representing an room key request body content.
  */
 @JsonClass(generateAdapter = true)
 data class RoomKeyRequestBody(

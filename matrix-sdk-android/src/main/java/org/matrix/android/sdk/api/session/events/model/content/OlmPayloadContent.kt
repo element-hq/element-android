@@ -20,36 +20,36 @@ import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.internal.di.MoshiProvider
 
 /**
- * Class representing the OLM payload content
+ * Class representing the OLM payload content.
  */
 @JsonClass(generateAdapter = true)
 data class OlmPayloadContent(
         /**
-         * The room id
+         * The room id.
          */
         @Json(name = "room_id")
         val roomId: String? = null,
 
         /**
-         * The sender
+         * The sender.
          */
         @Json(name = "sender")
         val sender: String? = null,
 
         /**
-         * The recipient
+         * The recipient.
          */
         @Json(name = "recipient")
         val recipient: String? = null,
 
         /**
-         * the recipient keys
+         * The recipient keys.
          */
         @Json(name = "recipient_keys")
         val recipientKeys: Map<String, String>? = null,
 
         /**
-         * The keys
+         * The keys.
          */
         @Json(name = "keys")
         val keys: Map<String, String>? = null

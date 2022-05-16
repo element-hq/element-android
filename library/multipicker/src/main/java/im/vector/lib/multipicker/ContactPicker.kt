@@ -26,7 +26,7 @@ import im.vector.lib.multipicker.entity.MultiPickerContactType
 import im.vector.lib.multipicker.utils.getColumnIndexOrNull
 
 /**
- * Contact Picker implementation
+ * Contact Picker implementation.
  */
 class ContactPicker : Picker<MultiPickerContactType>() {
 

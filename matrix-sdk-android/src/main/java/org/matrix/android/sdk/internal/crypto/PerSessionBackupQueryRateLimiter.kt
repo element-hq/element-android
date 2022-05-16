@@ -60,8 +60,8 @@ internal class PerSessionBackupQueryRateLimiter @Inject constructor(
     )
 
     /**
-     * Remember what we already tried (a key not in backup or some server issue)
-     * We might want to retry from time to time as the backup could have been updated
+     * Remember what we already tried (a key not in backup or some server issue).
+     * We might want to retry from time to time as the backup could have been updated.
      */
     private val lastFailureMap = mutableMapOf<Info, LastTry>()
 

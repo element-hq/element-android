@@ -30,8 +30,8 @@ import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
 import javax.inject.Inject
 
 /**
- * Possible previous worker: None
- * Possible next worker    : None
+ * Possible previous worker: None.
+ * Possible next worker    : None.
  */
 internal class RedactEventWorker(context: Context, params: WorkerParameters, sessionManager: SessionManager) :
         SessionSafeCoroutineWorker<RedactEventWorker.Params>(context, params, sessionManager, Params::class.java) {

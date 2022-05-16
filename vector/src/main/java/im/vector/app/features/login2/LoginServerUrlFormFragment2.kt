@@ -41,7 +41,7 @@ import javax.inject.Inject
 import javax.net.ssl.HttpsURLConnection
 
 /**
- * In this screen, the user is prompted to enter a homeserver url
+ * In this screen, the user is prompted to enter a homeserver url.
  */
 class LoginServerUrlFormFragment2 @Inject constructor() : AbstractLoginFragment2<FragmentLoginServerUrlForm2Binding>() {
 

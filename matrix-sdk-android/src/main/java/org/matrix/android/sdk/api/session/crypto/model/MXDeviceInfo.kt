@@ -30,7 +30,7 @@ data class MXDeviceInfo(
         val deviceId: String,
 
         /**
-         * the user id
+         * the user id.
          */
         @Json(name = "user_id")
         val userId: String,
@@ -66,7 +66,7 @@ data class MXDeviceInfo(
         val verified: Int = DEVICE_VERIFICATION_UNKNOWN
 ) : Serializable {
     /**
-     * Tells if the device is unknown
+     * Tells if the device is unknown.
      *
      * @return true if the device is unknown
      */

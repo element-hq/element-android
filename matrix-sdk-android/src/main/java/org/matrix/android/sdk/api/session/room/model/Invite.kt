@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * Subclass representing a search API response
+ * Subclass representing a search API response.
  */
 @JsonClass(generateAdapter = true)
 data class Invite(

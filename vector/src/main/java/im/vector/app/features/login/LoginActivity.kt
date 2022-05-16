@@ -49,7 +49,7 @@ import org.matrix.android.sdk.api.auth.toLocalizedLoginTerms
 import org.matrix.android.sdk.api.extensions.tryOrNull
 
 /**
- * The LoginActivity manages the fragment navigation and also display the loading View
+ * The LoginActivity manages the fragment navigation and also display the loading View.
  */
 @AndroidEntryPoint
 open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedActivity {
@@ -288,7 +288,7 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
     }
 
     /**
-     * Handle the SSO redirection here
+     * Handle the SSO redirection here.
      */
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)

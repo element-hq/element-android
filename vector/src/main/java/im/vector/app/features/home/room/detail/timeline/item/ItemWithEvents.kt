@@ -28,7 +28,7 @@ interface ItemWithEvents {
     fun isVisible(): Boolean = true
 
     /**
-     * Returns false if you want epoxy controller to rebuild the event each time a built is triggered
+     * Returns false if you want epoxy controller to rebuild the event each time a built is triggered.
      */
     fun isCacheable(): Boolean = true
 }
