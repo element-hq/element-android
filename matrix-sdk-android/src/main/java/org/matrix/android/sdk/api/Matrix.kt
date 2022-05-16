@@ -79,49 +79,49 @@ class Matrix(context: Context, matrixConfiguration: MatrixConfiguration) {
 
     /**
      * Return the User Agent used for any request that the SDK is making to the homeserver.
-     * There is no way to change the user agent at the moment
+     * There is no way to change the user agent at the moment.
      */
     fun getUserAgent() = userAgentHolder.userAgent
 
     /**
-     * Return the AuthenticationService
+     * Return the AuthenticationService.
      */
     fun authenticationService() = authenticationService
 
     /**
-     * Return the RawService
+     * Return the RawService.
      */
     fun rawService() = rawService
 
     /**
-     * Return the LightweightSettingsStorage
+     * Return the LightweightSettingsStorage.
      */
     fun lightweightSettingsStorage() = lightweightSettingsStorage
 
     /**
-     * Return the HomeServerHistoryService
+     * Return the HomeServerHistoryService.
      */
     fun homeServerHistoryService() = homeServerHistoryService
 
     /**
-     * Return the legacy session importer, useful if you want to migrate an app, which was using the legacy Matrix Android Sdk
+     * Return the legacy session importer, useful if you want to migrate an app, which was using the legacy Matrix Android Sdk.
      */
     fun legacySessionImporter() = legacySessionImporter
 
     /**
-     * Get the worker factory. The returned value has to be provided to `WorkConfiguration.Builder()`
+     * Get the worker factory. The returned value has to be provided to `WorkConfiguration.Builder()`.
      */
     fun getWorkerFactory(): WorkerFactory = matrixWorkerFactory
 
     /**
-     * Register an API interceptor, to be able to be notified when the specified API got a response
+     * Register an API interceptor, to be able to be notified when the specified API got a response.
      */
     fun registerApiInterceptorListener(path: ApiPath, listener: ApiInterceptorListener) {
         apiInterceptor.addListener(path, listener)
     }
 
     /**
-     * Un-register an API interceptor
+     * Un-register an API interceptor.
      */
     fun unregisterApiInterceptorListener(path: ApiPath, listener: ApiInterceptorListener) {
         apiInterceptor.removeListener(path, listener)
@@ -129,7 +129,7 @@ class Matrix(context: Context, matrixConfiguration: MatrixConfiguration) {
 
     companion object {
         /**
-         * @return a String with details about the Matrix SDK version
+         * @return a String with details about the Matrix SDK version.
          */
         fun getSdkVersion(): String {
             return BuildConfig.SDK_VERSION + " (" + BuildConfig.GIT_SDK_REVISION + ")"
