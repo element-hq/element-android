@@ -10,7 +10,7 @@ ext.versions = [
 def gradle = "7.2.0"
 // Ref: https://kotlinlang.org/releases.html
 def kotlin = "1.6.21"
-def kotlinCoroutines = "1.6.0"
+def kotlinCoroutines = "1.6.1"
 def dagger = "2.42"
 def retrofit = "2.9.0"
 def arrow = "0.8.2"
