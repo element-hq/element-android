@@ -143,7 +143,6 @@ class XSigningTest : InstrumentedTest {
     }
 
     @Test
-    @Ignore("This test will be ignored until it is fixed")
     fun test_CrossSigningTestAliceTrustBobNewDevice() {
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 

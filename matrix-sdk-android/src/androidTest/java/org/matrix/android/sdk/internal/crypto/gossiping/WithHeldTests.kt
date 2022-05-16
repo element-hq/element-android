@@ -106,7 +106,7 @@ class WithHeldTests : InstrumentedTest {
             val type = (failure as MXCryptoError.Base).errorType
             val technicalMessage = failure.technicalMessage
             Assert.assertEquals("Error should be withheld", MXCryptoError.ErrorType.KEYS_WITHHELD, type)
-            Assert.assertEquals("Cause should be unverified", WithHeldCode.UNAUTHORISED.value, technicalMessage)
+            Assert.assertEquals("Cause should be unverified", WithHeldCode.UNVERIFIED.value, technicalMessage)
         }
 
         // Let's see if the reply we got from bob first session is unverified
@@ -147,7 +147,7 @@ class WithHeldTests : InstrumentedTest {
             val type = (failure as MXCryptoError.Base).errorType
             val technicalMessage = failure.technicalMessage
             Assert.assertEquals("Error should be withheld", MXCryptoError.ErrorType.KEYS_WITHHELD, type)
-            Assert.assertEquals("Cause should be unverified", WithHeldCode.UNAUTHORISED.value, technicalMessage)
+            Assert.assertEquals("Cause should be unverified", WithHeldCode.UNVERIFIED.value, technicalMessage)
         }
 
         testHelper.signOutAndClose(aliceSession)
