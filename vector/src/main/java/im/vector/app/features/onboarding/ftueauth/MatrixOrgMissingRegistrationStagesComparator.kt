@@ -18,7 +18,7 @@ package im.vector.app.features.onboarding.ftueauth
 
 import org.matrix.android.sdk.api.auth.registration.Stage
 
-class FtueMissingRegistrationStagesComparator : Comparator<Stage> {
+class MatrixOrgMissingRegistrationStagesComparator : Comparator<Stage> {
 
     override fun compare(a: Stage?, b: Stage?): Int {
         return (a?.toPriority() ?: 0).compareTo(b?.toPriority() ?: 0)
