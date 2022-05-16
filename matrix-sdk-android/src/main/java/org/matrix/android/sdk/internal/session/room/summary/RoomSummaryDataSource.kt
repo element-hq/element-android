@@ -194,7 +194,7 @@ internal class RoomSummaryDataSource @Inject constructor(
         }
         val dataSourceFactory = realmDataSourceFactory.map {
             roomSummaryMapper.map(it)
-        }.map { it.getWithParents()}
+        }.map { it.getWithParents() }
 
         val boundaries = MutableLiveData(ResultBoundaries())
 
