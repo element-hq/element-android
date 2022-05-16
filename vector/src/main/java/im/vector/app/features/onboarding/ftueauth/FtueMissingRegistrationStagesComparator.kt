@@ -21,7 +21,7 @@ import org.matrix.android.sdk.api.auth.registration.Stage
 class FtueMissingRegistrationStagesComparator : Comparator<Stage> {
 
     override fun compare(a: Stage?, b: Stage?): Int {
-        return (a?.toPriority() ?: 0) - (b?.toPriority() ?: 0)
+        return (a?.toPriority() ?: 0).compareTo(b?.toPriority() ?: 0)
     }
 
     private fun Stage.toPriority() = when (this) {
