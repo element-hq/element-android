@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
+
+    <!-- Ensure this file does not contain unknown Ids -->
+    <issue id="UnknownIssueId" severity="error" />
+
     <!-- Modify some severity -->
 
     <!-- Resource -->
