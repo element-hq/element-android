@@ -128,6 +128,13 @@
             app:layout_constraintStart_toStartOf="@id/loginGutterStart"
             app:layout_constraintTop_toTopOf="@id/serverSelectionSpacing" />
 
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/loginEntryGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:constraint_referenced_ids="loginInput,loginPasswordInput,entrySpacing,actionSpacing,loginSubmit" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/loginInput"
             style="@style/Widget.Vector.TextInputLayout.Username"
