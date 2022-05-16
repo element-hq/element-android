@@ -40,7 +40,7 @@ class LocationLiveMapViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<LocationLiveMapViewModel, LocationLiveMapViewState> by hiltMavericksViewModelFactory()
 
     init {
-        getListOfUserLiveLocationUseCase.execute()
+        getListOfUserLiveLocationUseCase.execute(initialState.roomId)
                 .onEach { setState { copy(userLocations = it) } }
                 .launchIn(viewModelScope)
     }
