@@ -20,6 +20,7 @@ import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.kotlin.where
 import org.matrix.android.sdk.internal.database.model.EventAnnotationsSummaryEntity
+import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntity
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntityFields
 
@@ -28,9 +29,15 @@ internal fun LiveLocationShareAggregatedSummaryEntity.Companion.where(
         roomId: String,
         eventId: String,
 ): RealmQuery<LiveLocationShareAggregatedSummaryEntity> {
-    return realm.where<LiveLocationShareAggregatedSummaryEntity>()
-            .equalTo(LiveLocationShareAggregatedSummaryEntityFields.ROOM_ID, roomId)
+    return LiveLocationShareAggregatedSummaryEntity
+            .whereRoomId(realm, roomId = roomId)
             .equalTo(LiveLocationShareAggregatedSummaryEntityFields.EVENT_ID, eventId)
+}
+
+internal fun LiveLocationShareAggregatedSummaryEntity.Companion.whereRoomId(realm: Realm,
+                                                       roomId: String): RealmQuery<LiveLocationShareAggregatedSummaryEntity> {
+    return realm.where<LiveLocationShareAggregatedSummaryEntity>()
+            .equalTo(TimelineEventEntityFields.ROOM_ID, roomId)
 }
 
 internal fun LiveLocationShareAggregatedSummaryEntity.Companion.create(
@@ -62,4 +69,13 @@ internal fun LiveLocationShareAggregatedSummaryEntity.Companion.get(
         eventId: String,
 ): LiveLocationShareAggregatedSummaryEntity? {
     return LiveLocationShareAggregatedSummaryEntity.where(realm, roomId, eventId).findFirst()
+}
+
+internal fun LiveLocationShareAggregatedSummaryEntity.Companion.findRunningLiveLocationShareInRoom(
+        realm: Realm,
+        roomId: String,
+): RealmQuery<LiveLocationShareAggregatedSummaryEntity> {
+    return LiveLocationShareAggregatedSummaryEntity
+            .whereRoomId(realm, roomId = roomId)
+            .equalTo(LiveLocationShareAggregatedSummaryEntityFields.IS_ACTIVE, true)
 }

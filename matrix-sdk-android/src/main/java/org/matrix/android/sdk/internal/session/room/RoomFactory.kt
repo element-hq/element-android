@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.room
 
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.session.room.Room
+import org.matrix.android.sdk.api.session.room.location.DefaultLocationSharingService
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.permalinks.ViaParameterFinder
 import org.matrix.android.sdk.internal.session.room.accountdata.DefaultRoomAccountDataService
@@ -69,6 +70,7 @@ internal class DefaultRoomFactory @Inject constructor(
         private val roomVersionServiceFactory: DefaultRoomVersionService.Factory,
         private val roomAccountDataServiceFactory: DefaultRoomAccountDataService.Factory,
         private val viaParameterFinder: ViaParameterFinder,
+        private val locationSharingServiceFactory: DefaultLocationSharingService.Factory,
         private val coroutineDispatchers: MatrixCoroutineDispatchers
 ) : RoomFactory {
 
@@ -96,6 +98,7 @@ internal class DefaultRoomFactory @Inject constructor(
                 roomAccountDataService = roomAccountDataServiceFactory.create(roomId),
                 roomVersionService = roomVersionServiceFactory.create(roomId),
                 viaParameterFinder = viaParameterFinder,
+                locationSharingService = locationSharingServiceFactory.create(roomId),
                 coroutineDispatchers = coroutineDispatchers
         )
     }

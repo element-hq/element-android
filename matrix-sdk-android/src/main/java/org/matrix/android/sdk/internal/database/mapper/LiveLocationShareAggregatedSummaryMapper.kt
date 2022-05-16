@@ -20,11 +20,14 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationShareAggregatedSummary
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntity
+import javax.inject.Inject
 
-internal object LiveLocationShareAggregatedSummaryMapper {
+// TODO add unit tests
+internal class LiveLocationShareAggregatedSummaryMapper @Inject constructor() {
 
     fun map(entity: LiveLocationShareAggregatedSummaryEntity): LiveLocationShareAggregatedSummary {
         return LiveLocationShareAggregatedSummary(
+                userId = entity.userId,
                 isActive = entity.isActive,
                 endOfLiveTimestampMillis = entity.endOfLiveTimestampMillis,
                 lastLocationDataContent = ContentMapper.map(entity.lastLocationContent).toModel<MessageBeaconLocationDataContent>()
