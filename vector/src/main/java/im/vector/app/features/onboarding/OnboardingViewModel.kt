@@ -292,7 +292,9 @@ class OnboardingViewModel @AssistedInject constructor(
     private fun emitFlowResultViewEvent(flowResult: FlowResult) {
         withState { state ->
             val orderedResult = when {
-                state.hasSelectedMatrixOrg() && vectorFeatures.isOnboardingCombinedRegisterEnabled() -> flowResult.overrideOrder()
+                state.hasSelectedMatrixOrg() && vectorFeatures.isOnboardingCombinedRegisterEnabled() -> flowResult.copy(
+                        missingStages = flowResult.missingStages.sortedWith(MatrixOrgMissingRegistrationStagesComparator())
+                )
                 else                                                                                 -> flowResult
             }
             _viewEvents.post(OnboardingViewEvents.RegistrationFlowResult(orderedResult, isRegistrationStarted))
@@ -300,8 +302,6 @@ class OnboardingViewModel @AssistedInject constructor(
     }
 
     private fun OnboardingViewState.hasSelectedMatrixOrg() = selectedHomeserver.userFacingUrl == matrixOrgUrl
-
-    private fun FlowResult.overrideOrder() = copy(missingStages = missingStages.sortedWith(MatrixOrgMissingRegistrationStagesComparator()))
 
     private fun handleRegisterWith(action: OnboardingAction.Register) {
         reAuthHelper.data = action.password
