@@ -85,8 +85,7 @@ comments:
   DeprecatedBlockTag:
     active: true
   EndOfSentenceFormat:
-    # TODO Enable it
-    active: false
+    active: true
   OutdatedDocumentation:
     # TODO Enable it
     active: false

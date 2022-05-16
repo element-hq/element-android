@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.api.listeners
 
 /**
- * Interface to send a progress info
+ * Interface to send a progress info.
  */
 interface StepProgressListener {
 

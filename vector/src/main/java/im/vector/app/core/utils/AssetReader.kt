@@ -21,7 +21,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 /**
- * Read asset files
+ * Read asset files.
  */
 class AssetReader @Inject constructor(private val context: Context) {
 

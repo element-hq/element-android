@@ -55,7 +55,7 @@ interface WidgetService {
     ): List<Widget>
 
     /**
-     * Return the computed URL of a widget
+     * Return the computed URL of a widget.
      */
     fun getWidgetComputedUrl(widget: Widget, isLightTheme: Boolean): String?
 

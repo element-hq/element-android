@@ -24,7 +24,7 @@ import io.noties.markwon.html.HtmlTag
 import io.noties.markwon.html.tag.SimpleTagHandler
 
 /**
- * custom to matrix for IRC-style font coloring
+ * custom to matrix for IRC-style font coloring.
  */
 class FontTagHandler : SimpleTagHandler() {
 

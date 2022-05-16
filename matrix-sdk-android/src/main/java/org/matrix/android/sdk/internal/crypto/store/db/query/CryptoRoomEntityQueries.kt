@@ -23,14 +23,14 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoRoomEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoRoomEntityFields
 
 /**
- * Get or create a room
+ * Get or create a room.
  */
 internal fun CryptoRoomEntity.Companion.getOrCreate(realm: Realm, roomId: String): CryptoRoomEntity {
     return getById(realm, roomId) ?: realm.createObject(roomId)
 }
 
 /**
- * Get a room
+ * Get a room.
  */
 internal fun CryptoRoomEntity.Companion.getById(realm: Realm, roomId: String): CryptoRoomEntity? {
     return realm.where<CryptoRoomEntity>()

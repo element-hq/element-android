@@ -37,7 +37,7 @@ import im.vector.app.features.onboarding.OnboardingViewState
 import javax.inject.Inject
 
 /**
- * In this screen, the user is asked to sign up or to sign in to the homeserver
+ * In this screen, the user is asked to sign up or to sign in to the homeserver.
  */
 class FtueAuthSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOFtueAuthFragment<FragmentLoginSignupSigninSelectionBinding>() {
 

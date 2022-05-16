@@ -29,7 +29,7 @@ import org.matrix.android.sdk.internal.util.awaitTransaction
 import javax.inject.Inject
 
 /**
- * Save the Breadcrumbs roomId list in DB, either from the sync, or updated locally
+ * Save the Breadcrumbs roomId list in DB, either from the sync, or updated locally.
  */
 internal interface SaveBreadcrumbsTask : Task<SaveBreadcrumbsTask.Params, Unit> {
     data class Params(

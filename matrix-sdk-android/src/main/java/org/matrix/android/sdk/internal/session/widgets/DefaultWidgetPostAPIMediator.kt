@@ -93,7 +93,7 @@ internal class DefaultWidgetPostAPIMediator @Inject constructor(private val mosh
      */
 
     /**
-     * Send a boolean response
+     * Send a boolean response.
      *
      * @param response  the response
      * @param eventData the modular data
@@ -104,7 +104,7 @@ internal class DefaultWidgetPostAPIMediator @Inject constructor(private val mosh
     }
 
     /**
-     * Send an integer response
+     * Send an integer response.
      *
      * @param response  the response
      * @param eventData the modular data
@@ -114,7 +114,7 @@ internal class DefaultWidgetPostAPIMediator @Inject constructor(private val mosh
     }
 
     /**
-     * Send an object response
+     * Send an object response.
      *
      * @param response  the response
      * @param eventData the modular data
@@ -133,7 +133,7 @@ internal class DefaultWidgetPostAPIMediator @Inject constructor(private val mosh
     }
 
     /**
-     * Send success
+     * Send success.
      *
      * @param eventData the modular data
      */
@@ -143,7 +143,7 @@ internal class DefaultWidgetPostAPIMediator @Inject constructor(private val mosh
     }
 
     /**
-     * Send an error
+     * Send an error.
      *
      * @param message   the error message
      * @param eventData the modular data
@@ -160,7 +160,7 @@ internal class DefaultWidgetPostAPIMediator @Inject constructor(private val mosh
     }
 
     /**
-     * Send the response to the javascript
+     * Send the response to the javascript.
      *
      * @param jsString  the response data
      * @param eventData the modular data

@@ -26,13 +26,13 @@ data class JavascriptResponse(
         val action: String? = null,
 
         /**
-         * Use for captcha result
+         * Use for captcha result.
          */
         @Json(name = "response")
         val response: String? = null,
 
         /**
-         * Used for login/registration result
+         * Used for login/registration result.
          */
         @Json(name = "credentials")
         val credentials: Credentials? = null

@@ -31,7 +31,7 @@ class MXUsersDevicesMap<E> {
         get() = map.isEmpty()
 
     /**
-     * Provides the device ids list for a user id
+     * Provides the device ids list for a user id.
      * FIXME Should maybe return emptyList and not null, to avoid many !! in the code
      *
      * @param userId the user id
@@ -44,7 +44,7 @@ class MXUsersDevicesMap<E> {
     }
 
     /**
-     * Provides the object for a device id and a user Id
+     * Provides the object for a device id and a user Id.
      *
      * @param deviceId the device id
      * @param userId   the object id
@@ -57,7 +57,7 @@ class MXUsersDevicesMap<E> {
     }
 
     /**
-     * Set an object for a dedicated user Id and device Id
+     * Set an object for a dedicated user Id and device Id.
      *
      * @param userId   the user Id
      * @param deviceId the device id
@@ -71,7 +71,7 @@ class MXUsersDevicesMap<E> {
     }
 
     /**
-     * Defines the objects map for a user Id
+     * Defines the objects map for a user Id.
      *
      * @param objectsPerDevices the objects maps
      * @param userId            the user id
@@ -87,7 +87,7 @@ class MXUsersDevicesMap<E> {
     }
 
     /**
-     * Removes objects for a dedicated user
+     * Removes objects for a dedicated user.
      *
      * @param userId the user id.
      */
@@ -98,14 +98,14 @@ class MXUsersDevicesMap<E> {
     }
 
     /**
-     * Clear the internal dictionary
+     * Clear the internal dictionary.
      */
     fun removeAllObjects() {
         map.clear()
     }
 
     /**
-     * Add entries from another MXUsersDevicesMap
+     * Add entries from another MXUsersDevicesMap.
      *
      * @param other the other one
      */

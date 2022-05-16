@@ -24,7 +24,7 @@ import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.util.JsonDict
 
 /**
- * Serializable object
+ * Serializable object.
  */
 @JsonClass(generateAdapter = true)
 internal data class SafePowerLevelContent(

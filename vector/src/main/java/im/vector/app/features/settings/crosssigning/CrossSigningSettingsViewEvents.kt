@@ -20,7 +20,7 @@ import im.vector.app.core.platform.VectorViewEvents
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 
 /**
- * Transient events for cross signing settings screen
+ * Transient events for cross signing settings screen.
  */
 sealed class CrossSigningSettingsViewEvents : VectorViewEvents {
     data class Failure(val throwable: Throwable) : CrossSigningSettingsViewEvents()

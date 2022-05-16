@@ -40,7 +40,7 @@ internal interface SpaceApi {
             @Query("from") from: String?): SpacesResponse
 
     /**
-     * Unstable version of [getSpaceHierarchy]
+     * Unstable version of [getSpaceHierarchy].
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "org.matrix.msc2946/rooms/{roomId}/hierarchy")
     suspend fun getSpaceHierarchyUnstable(

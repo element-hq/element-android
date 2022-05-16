@@ -17,7 +17,7 @@
 package im.vector.lib.core.utils.epoxy.charsequence
 
 /**
- * Wrapper for a CharSequence, which support mutation of the CharSequence, which can happen during rendering
+ * Wrapper for a CharSequence, which support mutation of the CharSequence, which can happen during rendering.
  */
 class EpoxyCharSequence(val charSequence: CharSequence) {
     private val hash = charSequence.toString().hashCode()

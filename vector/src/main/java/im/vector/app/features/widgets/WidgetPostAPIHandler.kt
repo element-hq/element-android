@@ -108,7 +108,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     }
 
     /**
-     * Retrieve the latest botOptions event
+     * Retrieve the latest botOptions event.
      *
      * @param eventData the modular data
      */
@@ -169,7 +169,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     }
 
     /**
-     * Provides the membership state
+     * Provides the membership state.
      *
      * @param eventData the modular data
      */
@@ -188,7 +188,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     }
 
     /**
-     * Request the latest joined room event
+     * Request the latest joined room event.
      *
      * @param eventData the modular data
      */
@@ -206,7 +206,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     }
 
     /**
-     * Provide the widgets list
+     * Provide the widgets list.
      *
      * @param eventData the modular data
      */
@@ -226,7 +226,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     }
 
     /**
-     * Set a new widget
+     * Set a new widget.
      *
      * @param eventData the modular data
      */
@@ -301,7 +301,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     }
 
     /**
-     * Update the 'plumbing state"
+     * Update the 'plumbing state".
      *
      * @param eventData the modular data
      */
@@ -326,7 +326,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     }
 
     /**
-     * Update the bot options
+     * Update the bot options.
      *
      * @param eventData the modular data
      */
@@ -351,7 +351,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     }
 
     /**
-     * Update the bot power levels
+     * Update the bot power levels.
      *
      * @param eventData the modular data
      */
@@ -373,7 +373,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     }
 
     /**
-     * Invite an user to this room
+     * Invite an user to this room.
      *
      * @param eventData the modular data
      */
@@ -395,7 +395,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     }
 
     /**
-     * Provides the number of members in the rooms
+     * Provides the number of members in the rooms.
      *
      * @param eventData the modular data
      */
@@ -425,8 +425,8 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     }
 
     /**
-     * Check if roomId is present in the event and match
-     * Send response and return true in case of error
+     * Check if roomId is present in the event and match.
+     * Send response and return true in case of error.
      *
      * @return true in case of error
      */
@@ -448,8 +448,8 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     }
 
     /**
-     * Check if userId is present in the event
-     * Send response and return true in case of error
+     * Check if userId is present in the event.
+     * Send response and return true in case of error.
      *
      * @return true in case of error
      */

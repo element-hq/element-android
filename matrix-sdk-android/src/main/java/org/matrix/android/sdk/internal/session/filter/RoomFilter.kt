@@ -40,7 +40,7 @@ internal data class RoomFilter(
          */
         @Json(name = "ephemeral") val ephemeral: RoomEventFilter? = null,
         /**
-         * Include rooms that the user has left in the sync, default false
+         * Include rooms that the user has left in the sync, default false.
          */
         @Json(name = "include_leave") val includeLeave: Boolean? = null,
         /**

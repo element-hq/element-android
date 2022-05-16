@@ -22,7 +22,7 @@ import io.realm.kotlin.createObject
 import io.realm.kotlin.where
 
 /**
- * Only one object can be stored at a time
+ * Only one object can be stored at a time.
  */
 internal fun IdentityDataEntity.Companion.get(realm: Realm): IdentityDataEntity? {
     return realm.where<IdentityDataEntity>().findFirst()

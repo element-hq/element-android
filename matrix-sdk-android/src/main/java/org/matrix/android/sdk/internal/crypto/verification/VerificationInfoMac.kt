@@ -17,7 +17,7 @@ package org.matrix.android.sdk.internal.crypto.verification
 
 internal interface VerificationInfoMac : VerificationInfo<ValidVerificationInfoMac> {
     /**
-     * A map of key ID to the MAC of the key, as an unpadded base64 string, calculated using the MAC key
+     * A map of key ID to the MAC of the key, as an unpadded base64 string, calculated using the MAC key.
      */
     val mac: Map<String, String>?
 

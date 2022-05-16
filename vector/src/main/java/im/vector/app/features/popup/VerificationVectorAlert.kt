@@ -30,7 +30,7 @@ class VerificationVectorAlert(uid: String,
                               override val description: String,
                               @DrawableRes override val iconId: Int?,
                               /**
-                               * Alert are displayed by default, but let this lambda return false to prevent displaying
+                               * Alert are displayed by default, but let this lambda return false to prevent displaying.
                                */
                               override val shouldBeDisplayedIn: ((Activity) -> Boolean) = { true }
 ) : DefaultVectorAlert(uid, title, description, iconId, shouldBeDisplayedIn) {

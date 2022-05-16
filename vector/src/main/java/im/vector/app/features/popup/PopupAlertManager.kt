@@ -90,7 +90,7 @@ class PopupAlertManager @Inject constructor(
     }
 
     /**
-     * Cancel all alerts, after a sign out for instance
+     * Cancel all alerts, after a sign out for instance.
      */
     fun cancelAll() {
         synchronized(alertQueue) {

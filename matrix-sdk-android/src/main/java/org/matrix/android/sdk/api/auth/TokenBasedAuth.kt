@@ -20,7 +20,7 @@ import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 
 /**
- * This class provides the authentication data by using user and password
+ * This class provides the authentication data by using user and password.
  */
 @JsonClass(generateAdapter = true)
 data class TokenBasedAuth(

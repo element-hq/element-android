@@ -36,7 +36,7 @@ import javax.inject.Inject
 
 /**
  * In this screen:
- * - the user is asked for its matrix ID, and have the possibility to open the screen to select a server
+ * - the user is asked for its matrix ID, and have the possibility to open the screen to select a server.
  */
 class LoginFragmentSigninUsername2 @Inject constructor() : AbstractLoginFragment2<FragmentLoginSigninUsername2Binding>() {
 

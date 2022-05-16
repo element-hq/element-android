@@ -25,7 +25,7 @@ import org.matrix.android.sdk.api.session.presence.model.PresenceEnum
 import org.matrix.android.sdk.api.session.presence.model.UserPresence
 
 /**
- * Custom ImageView to dynamically render Presence state in multiple screens
+ * Custom ImageView to dynamically render Presence state in multiple screens.
  */
 class PresenceStateImageView @JvmOverloads constructor(
         context: Context,

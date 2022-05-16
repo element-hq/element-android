@@ -35,7 +35,7 @@ fun EncryptedFileInfo.toElementToDecrypt(): ElementToDecrypt? {
 }
 
 /**
- * Represent data to decode an attachment
+ * Represent data to decode an attachment.
  */
 @Parcelize
 data class ElementToDecrypt(

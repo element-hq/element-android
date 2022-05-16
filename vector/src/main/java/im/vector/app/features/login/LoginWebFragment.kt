@@ -45,7 +45,7 @@ import javax.inject.Inject
 
 /**
  * This screen is displayed when the application does not support login flow or registration flow
- * of the homeserver, as a fallback to login or to create an account
+ * of the homeserver, as a fallback to login or to create an account.
  */
 class LoginWebFragment @Inject constructor(
         private val assetReader: AssetReader
@@ -189,7 +189,7 @@ class LoginWebFragment @Inject constructor(
              *             }
              *         }
              *    }
-             * </pre>
+             * </pre>.
              * @param view
              * @param url
              * @return

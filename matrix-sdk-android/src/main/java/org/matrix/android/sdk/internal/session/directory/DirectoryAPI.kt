@@ -61,7 +61,7 @@ internal interface DirectoryAPI {
                              @Body body: AddRoomAliasBody)
 
     /**
-     * Delete a room alias
+     * Delete a room alias.
      * @param roomAlias the room alias.
      */
     @DELETE(NetworkConstants.URI_API_PREFIX_PATH_R0 + "directory/room/{roomAlias}")

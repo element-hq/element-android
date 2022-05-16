@@ -21,7 +21,7 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Success
 
 /**
- * It maybe already exist somewhere but I cannot find it
+ * It maybe already exist somewhere but I cannot find it.
  */
 suspend fun <T> tryAsync(block: suspend () -> T): Async<T> {
     return try {

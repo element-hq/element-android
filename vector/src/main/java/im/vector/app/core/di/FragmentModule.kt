@@ -189,7 +189,7 @@ import im.vector.app.features.widgets.WidgetFragment
 @Module
 interface FragmentModule {
     /**
-     * Fragments with @IntoMap will be injected by this factory
+     * Fragments with @IntoMap will be injected by this factory.
      */
     @Binds
     fun bindFragmentFactory(factory: VectorFragmentFactory): FragmentFactory
