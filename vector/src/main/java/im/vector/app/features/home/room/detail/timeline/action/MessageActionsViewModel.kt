@@ -450,7 +450,7 @@ class MessageActionsViewModel @AssistedInject constructor(
 
     /**
      * Determine whether or not the Reply In Thread bottom sheet action will be visible
-     * to the user
+     * to the user.
      */
     private fun canReplyInThread(event: TimelineEvent,
                                  messageContent: MessageContent?,
@@ -481,7 +481,7 @@ class MessageActionsViewModel @AssistedInject constructor(
     }
 
     /**
-     * Determine whether or not the view in room action will be available for the current event
+     * Determine whether or not the view in room action will be available for the current event.
      */
     private fun canViewInRoom(event: TimelineEvent,
                               messageContent: MessageContent?,

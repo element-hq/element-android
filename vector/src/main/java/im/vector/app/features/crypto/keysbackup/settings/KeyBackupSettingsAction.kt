@@ -22,4 +22,8 @@ sealed class KeyBackupSettingsAction : VectorViewModelAction {
     object Init : KeyBackupSettingsAction()
     object GetKeyBackupTrust : KeyBackupSettingsAction()
     object DeleteKeyBackup : KeyBackupSettingsAction()
+    object SetUpKeyBackup : KeyBackupSettingsAction()
+    data class StoreIn4SSuccess(val recoveryKey: String, val alias: String) : KeyBackupSettingsAction()
+    object StoreIn4SReset : KeyBackupSettingsAction()
+    object StoreIn4SFailure : KeyBackupSettingsAction()
 }

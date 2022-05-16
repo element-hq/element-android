@@ -35,7 +35,7 @@ import im.vector.app.features.themes.ThemeUtils
 import org.matrix.android.sdk.api.session.media.PreviewUrlData
 
 /**
- * A View to display a PreviewUrl and some other state
+ * A View to display a PreviewUrl and some other state.
  */
 class PreviewUrlView @JvmOverloads constructor(
         context: Context,
@@ -56,7 +56,7 @@ class PreviewUrlView @JvmOverloads constructor(
     private var state: PreviewUrlUiState = PreviewUrlUiState.Unknown
 
     /**
-     * This methods is responsible for rendering the view according to the newState
+     * This methods is responsible for rendering the view according to the newState.
      *
      * @param newState the newState representing the view
      */
@@ -157,7 +157,7 @@ class PreviewUrlView @JvmOverloads constructor(
     }
 
     /**
-     * Hide all views that are not visible in all state
+     * Hide all views that are not visible in all state.
      */
     private fun hideAll() {
         views.urlPreviewTitle.isVisible = false

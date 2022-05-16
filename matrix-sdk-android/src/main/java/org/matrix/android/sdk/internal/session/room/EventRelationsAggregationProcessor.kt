@@ -379,7 +379,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
     }
 
     /**
-     * Check if the edition is on the latest thread event, and update it accordingly
+     * Check if the edition is on the latest thread event, and update it accordingly.
      * @param editedEvent The event that will be changed
      * @param replaceEvent The new event
      */
@@ -658,7 +658,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
     }
 
     /**
-     * Called when an event is deleted
+     * Called when an event is deleted.
      */
     private fun handleRedactionOfReplace(realm: Realm,
                                          redacted: EventEntity,

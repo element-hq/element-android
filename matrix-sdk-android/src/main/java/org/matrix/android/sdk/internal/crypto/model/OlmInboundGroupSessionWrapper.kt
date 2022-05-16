@@ -60,7 +60,7 @@ internal class OlmInboundGroupSessionWrapper : Serializable {
         }
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param sessionKey the session key
      * @param isImported true if it is an imported session key
@@ -101,7 +101,7 @@ internal class OlmInboundGroupSessionWrapper : Serializable {
     }
 
     /**
-     * Export the inbound group session keys
+     * Export the inbound group session keys.
      *
      * @return the inbound group session as MegolmSessionData if the operation succeeds
      */

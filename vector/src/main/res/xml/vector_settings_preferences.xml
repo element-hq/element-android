@@ -89,6 +89,13 @@
             app:isPreferenceVisible="@bool/settings_interface_bubble_visible" />
 
         <im.vector.app.core.preference.VectorSwitchPreference
+            android:defaultValue="@bool/settings_timeline_show_live_sender_info_default"
+            app:isPreferenceVisible="@bool/settings_timeline_show_live_sender_info_visible"
+            android:key="SETTINGS_TIMELINE_SHOW_LIVE_SENDER_INFO"
+            android:summary="@string/settings_show_latest_profile_description"
+            android:title="@string/settings_show_latest_profile" />
+
+        <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="true"
             android:key="SETTINGS_SHOW_URL_PREVIEW_KEY"
             android:summary="@string/settings_inline_url_preview_summary"

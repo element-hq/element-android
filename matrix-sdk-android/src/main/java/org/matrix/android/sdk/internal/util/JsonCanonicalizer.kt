@@ -51,7 +51,7 @@ internal object JsonCanonicalizer {
     }
 
     /**
-     * Canonicalize a JSON element
+     * Canonicalize a JSON element.
      *
      * @param src the src
      * @return the canonicalize element

@@ -25,13 +25,13 @@ import retrofit2.http.Path
 
 internal interface PushRulesApi {
     /**
-     * Get all push rules
+     * Get all push rules.
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "pushrules/")
     suspend fun getAllRules(): GetPushRulesResponse
 
     /**
-     * Update the ruleID enable status
+     * Update the ruleID enable status.
      *
      * @param kind   the notification kind (sender, room...)
      * @param ruleId the ruleId
@@ -43,7 +43,7 @@ internal interface PushRulesApi {
                                        @Body enabledBody: EnabledBody)
 
     /**
-     * Update the ruleID action
+     * Update the ruleID action.
      * Ref: https://matrix.org/docs/spec/client_server/latest#put-matrix-client-r0-pushrules-scope-kind-ruleid-actions
      *
      * @param kind    the notification kind (sender, room...)
@@ -56,7 +56,7 @@ internal interface PushRulesApi {
                                   @Body actions: Any)
 
     /**
-     * Delete a rule
+     * Delete a rule.
      *
      * @param kind   the notification kind (sender, room...)
      * @param ruleId the ruleId
@@ -66,7 +66,7 @@ internal interface PushRulesApi {
                            @Path("ruleId") ruleId: String)
 
     /**
-     * Add the ruleID enable status
+     * Add the ruleID enable status.
      *
      * @param kind   the notification kind (sender, room...)
      * @param ruleId the ruleId.

@@ -142,7 +142,7 @@ fun checkPermissions(permissionsToBeGranted: List<String>,
 }
 
 /**
- * To be call after the permission request
+ * To be call after the permission request.
  *
  * @param permissionsToBeGranted the permissions to be granted
  * @param activity               the calling Activity that is requesting the permissions (or fragment parent)

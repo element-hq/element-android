@@ -28,7 +28,7 @@ import im.vector.app.features.login.SSORedirectRouterActivity
 import javax.inject.Inject
 
 /**
- * In this screen, the user is asked to sign up or to sign in to the homeserver
+ * In this screen, the user is asked to sign up or to sign in to the homeserver.
  */
 class LoginSsoOnlyFragment2 @Inject constructor() : AbstractSSOLoginFragment2<FragmentLoginSsoOnly2Binding>() {
 

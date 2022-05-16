@@ -105,6 +105,7 @@ import im.vector.app.core.utils.colorizeMatchingText
 import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.createJSonViewerStyleProvider
 import im.vector.app.core.utils.createUIHandler
+import im.vector.app.core.utils.isAnimationEnabled
 import im.vector.app.core.utils.isValidUrl
 import im.vector.app.core.utils.onPermissionDeniedDialog
 import im.vector.app.core.utils.onPermissionDeniedSnackbar
@@ -586,6 +587,10 @@ class TimelineFragment @Inject constructor(
     }
 
     private fun handleChatEffect(chatEffect: ChatEffect) {
+        if (!requireContext().isAnimationEnabled()) {
+            Timber.d("Do not perform chat effect, animations are disabled.")
+            return
+        }
         when (chatEffect) {
             ChatEffect.CONFETTI -> {
                 views.viewKonfetti.isVisible = true
@@ -666,11 +671,13 @@ class TimelineFragment @Inject constructor(
             ).apply {
                 directListener = { granted ->
                     if (granted) {
-                        timelineViewModel.handle(RoomDetailAction.EnsureNativeWidgetAllowed(
-                                widget = it.widget,
-                                userJustAccepted = true,
-                                grantedEvents = it.grantedEvents
-                        ))
+                        timelineViewModel.handle(
+                                RoomDetailAction.EnsureNativeWidgetAllowed(
+                                        widget = it.widget,
+                                        userJustAccepted = true,
+                                        grantedEvents = it.grantedEvents
+                                )
+                        )
                     }
                 }
             }
@@ -719,8 +726,8 @@ class TimelineFragment @Inject constructor(
     }
 
     /**
-     *  Ensure dismiss actions only trigger when the fragment is in the started state
-     *  EmojiPopup by default dismisses onViewDetachedFromWindow, this can cause race conditions with onDestroyView
+     *  Ensure dismiss actions only trigger when the fragment is in the started state.
+     *  EmojiPopup by default dismisses onViewDetachedFromWindow, this can cause race conditions with onDestroyView.
      */
     private fun EmojiPopup.Builder.setOnEmojiPopupDismissListenerLifecycleAware(action: () -> Unit): EmojiPopup.Builder {
         return setOnEmojiPopupDismissListener {
@@ -791,25 +798,29 @@ class TimelineFragment @Inject constructor(
 
             override fun onSendVoiceMessage() {
                 messageComposerViewModel.handle(
-                        MessageComposerAction.EndRecordingVoiceMessage(isCancelled = false, rootThreadEventId = getRootThreadEventId()))
+                        MessageComposerAction.EndRecordingVoiceMessage(isCancelled = false, rootThreadEventId = getRootThreadEventId())
+                )
                 updateRecordingUiState(RecordingUiState.Idle)
             }
 
             override fun onDeleteVoiceMessage() {
                 messageComposerViewModel.handle(
-                        MessageComposerAction.EndRecordingVoiceMessage(isCancelled = true, rootThreadEventId = getRootThreadEventId()))
+                        MessageComposerAction.EndRecordingVoiceMessage(isCancelled = true, rootThreadEventId = getRootThreadEventId())
+                )
                 updateRecordingUiState(RecordingUiState.Idle)
             }
 
             override fun onRecordingLimitReached() {
                 messageComposerViewModel.handle(
-                        MessageComposerAction.PauseRecordingVoiceMessage)
+                        MessageComposerAction.PauseRecordingVoiceMessage
+                )
                 updateRecordingUiState(RecordingUiState.Draft)
             }
 
             override fun onRecordingWaveformClicked() {
                 messageComposerViewModel.handle(
-                        MessageComposerAction.PauseRecordingVoiceMessage)
+                        MessageComposerAction.PauseRecordingVoiceMessage
+                )
                 updateRecordingUiState(RecordingUiState.Draft)
             }
 
@@ -827,7 +838,8 @@ class TimelineFragment @Inject constructor(
 
             private fun updateRecordingUiState(state: RecordingUiState) {
                 messageComposerViewModel.handle(
-                        MessageComposerAction.OnVoiceRecordingUiStateChanged(state))
+                        MessageComposerAction.OnVoiceRecordingUiStateChanged(state)
+                )
             }
         }
     }
@@ -1155,7 +1167,7 @@ class TimelineFragment @Inject constructor(
     }
 
     /**
-     * Update menu thread notification badge appropriately
+     * Update menu thread notification badge appropriately.
      */
     private fun updateMenuThreadNotificationBadge(menu: Menu, state: RoomDetailViewState) {
         val menuThreadList = menu.findItem(R.id.menu_timeline_thread_list).actionView
@@ -1178,7 +1190,7 @@ class TimelineFragment @Inject constructor(
     }
 
     /**
-     * View and highlight the original root thread message in the main timeline
+     * View and highlight the original root thread message in the main timeline.
      */
     private fun handleViewInRoomAction() {
         getRootThreadEventId()?.let {
@@ -1527,9 +1539,11 @@ class TimelineFragment @Inject constructor(
                     attachmentTypeSelector = AttachmentTypeSelectorView(vectorBaseActivity, vectorBaseActivity.layoutInflater, this@TimelineFragment)
                     attachmentTypeSelector.setAttachmentVisibility(
                             AttachmentTypeSelectorView.Type.LOCATION,
-                            vectorPreferences.isLocationSharingEnabled())
+                            vectorPreferences.isLocationSharingEnabled()
+                    )
                     attachmentTypeSelector.setAttachmentVisibility(
-                            AttachmentTypeSelectorView.Type.POLL, !isThreadTimeLine())
+                            AttachmentTypeSelectorView.Type.POLL, !isThreadTimeLine()
+                    )
                 }
                 attachmentTypeSelector.show(views.composerLayout.views.attachmentButton)
             }
@@ -2292,12 +2306,18 @@ class TimelineFragment @Inject constructor(
                 handleCancelSend(action)
             }
             is EventSharedAction.ReportContentSpam          -> {
-                timelineViewModel.handle(RoomDetailAction.ReportContent(
-                        action.eventId, action.senderId, "This message is spam", spam = true))
+                timelineViewModel.handle(
+                        RoomDetailAction.ReportContent(
+                                action.eventId, action.senderId, "This message is spam", spam = true
+                        )
+                )
             }
             is EventSharedAction.ReportContentInappropriate -> {
-                timelineViewModel.handle(RoomDetailAction.ReportContent(
-                        action.eventId, action.senderId, "This message is inappropriate", inappropriate = true))
+                timelineViewModel.handle(
+                        RoomDetailAction.ReportContent(
+                                action.eventId, action.senderId, "This message is inappropriate", inappropriate = true
+                        )
+                )
             }
             is EventSharedAction.ReportContentCustom        -> {
                 promptReasonToReportContent(action)
@@ -2431,9 +2451,8 @@ class TimelineFragment @Inject constructor(
 
     /**
      * Navigate to Threads timeline for the specified rootThreadEventId
-     * using the ThreadsActivity
+     * using the ThreadsActivity.
      */
-
     private fun navigateToThreadTimeline(rootThreadEventId: String, startsThread: Boolean = false) {
         analyticsTracker.capture(Interaction.Name.MobileRoomThreadSummaryItem.toAnalyticsInteraction())
         context?.let {
@@ -2443,7 +2462,8 @@ class TimelineFragment @Inject constructor(
                     displayName = timelineViewModel.getRoomSummary()?.displayName,
                     avatarUrl = timelineViewModel.getRoomSummary()?.avatarUrl,
                     roomEncryptionTrustLevel = timelineViewModel.getRoomSummary()?.roomEncryptionTrustLevel,
-                    rootThreadEventId = rootThreadEventId)
+                    rootThreadEventId = rootThreadEventId
+            )
             navigator.openThread(it, roomThreadDetailArgs)
         }
     }
@@ -2469,9 +2489,8 @@ class TimelineFragment @Inject constructor(
 
     /**
      * Navigate to Threads list for the current room
-     * using the ThreadsActivity
+     * using the ThreadsActivity.
      */
-
     private fun navigateToThreadList() {
         analyticsTracker.capture(Interaction.Name.MobileRoomThreadListButton.toAnalyticsInteraction())
         context?.let {
@@ -2479,7 +2498,8 @@ class TimelineFragment @Inject constructor(
                     roomId = timelineArgs.roomId,
                     displayName = timelineViewModel.getRoomSummary()?.displayName,
                     roomEncryptionTrustLevel = timelineViewModel.getRoomSummary()?.roomEncryptionTrustLevel,
-                    avatarUrl = timelineViewModel.getRoomSummary()?.avatarUrl)
+                    avatarUrl = timelineViewModel.getRoomSummary()?.avatarUrl
+            )
             navigator.openThreadList(it, roomThreadDetailArgs)
         }
     }
@@ -2597,12 +2617,12 @@ class TimelineFragment @Inject constructor(
     }
 
     /**
-     * Returns true if the current room is a Thread room, false otherwise
+     * Returns true if the current room is a Thread room, false otherwise.
      */
     private fun isThreadTimeLine(): Boolean = timelineArgs.threadTimelineArgs?.rootThreadEventId != null
 
     /**
-     * Returns the root thread event if we are in a thread room, otherwise returns null
+     * Returns the root thread event if we are in a thread room, otherwise returns null.
      */
     fun getRootThreadEventId(): String? = timelineArgs.threadTimelineArgs?.rootThreadEventId
 }

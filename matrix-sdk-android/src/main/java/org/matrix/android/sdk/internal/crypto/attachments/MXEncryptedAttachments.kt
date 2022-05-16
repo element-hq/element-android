@@ -227,7 +227,7 @@ internal object MXEncryptedAttachments {
     }
 
     /**
-     * Decrypt an attachment
+     * Decrypt an attachment.
      *
      * @param attachmentStream the attachment stream. Will be closed after this method call.
      * @param elementToDecrypt the elementToDecrypt info

@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.api.util
 
 /**
- * Contains a text and eventually a formatted text
+ * Contains a text and eventually a formatted text.
  */
 data class TextContent(
         val text: String,

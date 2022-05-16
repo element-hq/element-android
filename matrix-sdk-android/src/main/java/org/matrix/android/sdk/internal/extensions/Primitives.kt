@@ -17,6 +17,6 @@
 package org.matrix.android.sdk.internal.extensions
 
 /**
- * Convert a signed byte to a int value
+ * Convert a signed byte to a int value.
  */
 internal fun Byte.toUnsignedInt() = toInt() and 0xff

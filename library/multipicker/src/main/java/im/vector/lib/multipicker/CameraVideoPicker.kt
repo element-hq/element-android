@@ -28,12 +28,12 @@ import im.vector.lib.multipicker.utils.createTemporaryMediaFile
 import im.vector.lib.multipicker.utils.toMultiPickerVideoType
 
 /**
- * Implementation of taking a video with Camera
+ * Implementation of taking a video with Camera.
  */
 class CameraVideoPicker {
 
     /**
-     * Start camera by using a ActivityResultLauncher
+     * Start camera by using a ActivityResultLauncher.
      * @return Uri of taken photo or null if the operation is cancelled.
      */
     fun startWithExpectingFile(context: Context, activityResultLauncher: ActivityResultLauncher<Intent>): Uri {

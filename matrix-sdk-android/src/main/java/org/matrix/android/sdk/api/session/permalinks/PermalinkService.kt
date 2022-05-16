@@ -57,7 +57,7 @@ interface PermalinkService {
     fun createPermalink(id: String, forceMatrixTo: Boolean = false): String?
 
     /**
-     * Creates a permalink for a roomId, including the via parameters
+     * Creates a permalink for a roomId, including the via parameters.
      *
      * @param roomId the room id
      * @param forceMatrixTo whether we should force using matrix.to base URL
@@ -79,7 +79,7 @@ interface PermalinkService {
     fun createPermalink(roomId: String, eventId: String, forceMatrixTo: Boolean = false): String
 
     /**
-     * Extract the linked id from the universal link
+     * Extract the linked id from the universal link.
      *
      * @param url the universal link, Ex: "https://matrix.to/#/@benoit:matrix.org"
      * @return the id from the url, ex: "@benoit:matrix.org", or null if the url is not a permalink

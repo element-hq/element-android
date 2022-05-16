@@ -232,7 +232,7 @@ class TimelineViewModel @AssistedInject constructor(
     }
 
     /**
-     * Threads specific initialization
+     * Threads specific initialization.
      */
     private fun initThreads() {
         markThreadTimelineAsReadLocal()
@@ -351,8 +351,8 @@ class TimelineViewModel @AssistedInject constructor(
     }
 
     /**
-     * Mark the thread as read, while the user navigated within the thread
-     * This is a local implementation has nothing to do with APIs
+     * Mark the thread as read, while the user navigated within the thread.
+     * This is a local implementation has nothing to do with APIs.
      */
     private fun markThreadTimelineAsReadLocal() {
         initialState.rootThreadEventId?.let {
@@ -363,7 +363,7 @@ class TimelineViewModel @AssistedInject constructor(
     }
 
     /**
-     * Observe local unread threads
+     * Observe local unread threads.
      */
     private fun observeLocalThreadNotifications() {
         room.flow()

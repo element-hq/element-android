@@ -44,5 +44,5 @@ class DefaultVectorFeatures : VectorFeatures {
     override fun isOnboardingPersonalizeEnabled() = false
     override fun isOnboardingCombinedRegisterEnabled() = false
     override fun isLiveLocationEnabled(): Boolean = false
-    override fun isScreenSharingEnabled(): Boolean = false
+    override fun isScreenSharingEnabled(): Boolean = true
 }

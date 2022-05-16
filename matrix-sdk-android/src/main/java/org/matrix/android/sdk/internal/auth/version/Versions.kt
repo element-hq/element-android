@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * Model for https://matrix.org/docs/spec/client_server/latest#get-matrix-client-versions
+ * Model for https://matrix.org/docs/spec/client_server/latest#get-matrix-client-versions.
  *
  * Ex:
  * <pre>
@@ -55,14 +55,14 @@ private const val FEATURE_THREADS_MSC3440 = "org.matrix.msc3440"
 private const val FEATURE_THREADS_MSC3440_STABLE = "org.matrix.msc3440.stable"
 
 /**
- * Return true if the SDK supports this homeserver version
+ * Return true if the SDK supports this homeserver version.
  */
 internal fun Versions.isSupportedBySdk(): Boolean {
     return supportLazyLoadMembers()
 }
 
 /**
- * Return true if the SDK supports this homeserver version for login and registration
+ * Return true if the SDK supports this homeserver version for login and registration.
  */
 internal fun Versions.isLoginAndRegistrationSupportedBySdk(): Boolean {
     return !doesServerRequireIdentityServerParam() &&
@@ -71,15 +71,15 @@ internal fun Versions.isLoginAndRegistrationSupportedBySdk(): Boolean {
 }
 
 /**
- * Indicate if the homeserver support MSC3440 for threads
+ * Indicate if the homeserver support MSC3440 for threads.
  */
 internal fun Versions.doesServerSupportThreads(): Boolean {
-    return getMaxVersion() >= HomeServerVersion.v1_3_0 ||
-            unstableFeatures?.get(FEATURE_THREADS_MSC3440_STABLE) ?: false
+    // TODO Check for v1.3 or whichever spec version formally specifies MSC3440.
+    return unstableFeatures?.get(FEATURE_THREADS_MSC3440_STABLE) ?: false
 }
 
 /**
- * Return true if the server support the lazy loading of room members
+ * Return true if the server support the lazy loading of room members.
  *
  * @return true if the server support the lazy loading of room members
  */

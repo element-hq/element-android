@@ -265,8 +265,4 @@ internal class MXOlmDecryption(
 
         return res["payload"]
     }
-
-    override fun requestKeysForEvent(event: Event, withHeld: Boolean) {
-        // nop
-    }
 }

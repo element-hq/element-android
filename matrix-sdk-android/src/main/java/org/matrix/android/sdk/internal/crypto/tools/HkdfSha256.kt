@@ -33,7 +33,7 @@ internal object HkdfSha256 {
     }
 
     /**
-     * HkdfSha256-Extract(salt, IKM) -> PRK
+     * HkdfSha256-Extract(salt, IKM) -> PRK.
      *
      * @param salt  optional salt value (a non-secret random value);
      * if not provided, it is set to a string of HashLen (size in octets) zeros.
@@ -45,7 +45,7 @@ internal object HkdfSha256 {
     }
 
     /**
-     * HkdfSha256-Expand(PRK, info, L) -> OKM
+     * HkdfSha256-Expand(PRK, info, L) -> OKM.
      *
      * @param prk a pseudorandom key of at least HashLen bytes (usually, the output from the extract step)
      * @param info optional context and application specific information (can be empty)

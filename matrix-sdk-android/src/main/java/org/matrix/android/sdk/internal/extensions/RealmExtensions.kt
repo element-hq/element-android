@@ -26,7 +26,7 @@ internal fun RealmObject.assertIsManaged() {
 }
 
 /**
- * Clear a RealmList by deleting all its items calling the provided lambda
+ * Clear a RealmList by deleting all its items calling the provided lambda.
  */
 internal fun <T> RealmList<T>.clearWith(delete: (T) -> Unit) {
     while (!isEmpty()) {
@@ -35,7 +35,7 @@ internal fun <T> RealmList<T>.clearWith(delete: (T) -> Unit) {
 }
 
 /**
- * Schedule a refresh of the HomeServers capabilities
+ * Schedule a refresh of the HomeServers capabilities.
  */
 internal fun RealmObjectSchema?.forceRefreshOfHomeServerCapabilities(): RealmObjectSchema? {
     return this?.transform { obj ->

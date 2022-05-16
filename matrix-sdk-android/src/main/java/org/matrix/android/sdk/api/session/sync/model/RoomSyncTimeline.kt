@@ -30,12 +30,12 @@ data class RoomSyncTimeline(
         @Json(name = "events") val events: List<Event>? = null,
 
         /**
-         * Boolean which tells whether there are more events on the server
+         * Boolean which tells whether there are more events on the server.
          */
         @Json(name = "limited") val limited: Boolean = false,
 
         /**
-         * If the batch was limited then this is a token that can be supplied to the server to retrieve more events
+         * If the batch was limited then this is a token that can be supplied to the server to retrieve more events.
          */
         @Json(name = "prev_batch") val prevToken: String? = null
 )

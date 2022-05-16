@@ -129,7 +129,7 @@ internal class SecretStoringUtils @Inject constructor(
     }
 
     /**
-     * Decrypt a secret that was encrypted by #securelyStoreString()
+     * Decrypt a secret that was encrypted by #securelyStoreString().
      */
     @SuppressLint("NewApi")
     @Throws(Exception::class)
