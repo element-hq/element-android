@@ -70,6 +70,7 @@ import java.util.concurrent.CountDownLatch
 class E2eeSanityTests : InstrumentedTest {
 
     @get:Rule var rule = RetryTestRule(3)
+
     /**
      * Simple test that create an e2ee room.
      * Some new members are added, and a message is sent.

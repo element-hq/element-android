@@ -41,7 +41,6 @@ class CryptoStoreTest : InstrumentedTest {
 
     @get:Rule var rule = RetryTestRule(3)
 
-
     private val cryptoStoreHelper = CryptoStoreHelper()
     private val clock = DefaultClock()
 
