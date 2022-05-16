@@ -2729,7 +2729,8 @@
     <string name="a11y_public_room">Public room</string>
     <string name="a11y_presence_online">Online</string>
     <string name="a11y_presence_offline">Offline</string>
-    <string name="a11y_presence_unavailable">Unavailable</string>
+    <string name="a11y_presence_busy">Busy</string>
+    <string name="a11y_presence_unavailable">Away</string>
 
     <string name="dev_tools_menu_name">Dev Tools</string>
     <string name="dev_tools_explore_room_state">Explore Room State</string>
