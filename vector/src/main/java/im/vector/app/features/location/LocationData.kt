@@ -38,7 +38,7 @@ fun MessageLocationContent.toLocationData(): LocationData? {
 }
 
 /**
- * Creates location data from a geoUri String
+ * Creates location data from a geoUri String.
  * "geo:40.05,29.24;30" -> LocationData(40.05, 29.24, 30)
  * @return location data or null if geo uri is null or not valid
  */
