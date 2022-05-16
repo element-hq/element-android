@@ -99,6 +99,8 @@ internal class MXOlmDevice @Inject constructor(
     // The second level keys are strings of form "<senderKey>|<session_id>|<message_index>"
     private val inboundGroupSessionMessageIndexes: MutableMap<String, MutableSet<String>> = HashMap()
 
+    private val replayAttackMap: MutableMap<String, String> = HashMap()
+
     init {
         // Retrieve the account from the store
         try {
@@ -763,59 +765,71 @@ internal class MXOlmDevice @Inject constructor(
     suspend fun decryptGroupMessage(body: String,
                                     roomId: String,
                                     timeline: String?,
+                                    eventId: String,
                                     sessionId: String,
                                     senderKey: String): OlmDecryptionResult {
         val sessionHolder = getInboundGroupSession(sessionId, senderKey, roomId)
         val wrapper = sessionHolder.wrapper
         val inboundGroupSession = wrapper.olmInboundGroupSession
                 ?: throw MXCryptoError.Base(MXCryptoError.ErrorType.UNABLE_TO_DECRYPT, "Session is null")
-        // Check that the room id matches the original one for the session. This stops
-        // the HS pretending a message was targeting a different room.
-        if (roomId == wrapper.roomId) {
-            val decryptResult = try {
-                sessionHolder.mutex.withLock {
-                    inboundGroupSession.decryptMessage(body)
-                }
-            } catch (e: OlmException) {
-                Timber.tag(loggerTag.value).e(e, "## decryptGroupMessage () : decryptMessage failed")
-                throw MXCryptoError.OlmError(e)
-            }
-
-            if (timeline?.isNotBlank() == true) {
-                val timelineSet = inboundGroupSessionMessageIndexes.getOrPut(timeline) { mutableSetOf() }
-
-                val messageIndexKey = senderKey + "|" + sessionId + "|" + decryptResult.mIndex
-
-                if (timelineSet.contains(messageIndexKey)) {
-                    val reason = String.format(MXCryptoError.DUPLICATE_MESSAGE_INDEX_REASON, decryptResult.mIndex)
-                    Timber.tag(loggerTag.value).e("## decryptGroupMessage() timelineId=$timeline: $reason")
-                    throw MXCryptoError.Base(MXCryptoError.ErrorType.DUPLICATED_MESSAGE_INDEX, reason)
-                }
-
-                timelineSet.add(messageIndexKey)
-            }
-
-            inboundGroupSessionStore.storeInBoundGroupSession(sessionHolder, sessionId, senderKey)
-            val payload = try {
-                val adapter = MoshiProvider.providesMoshi().adapter<JsonDict>(JSON_DICT_PARAMETERIZED_TYPE)
-                val payloadString = convertFromUTF8(decryptResult.mDecryptedMessage)
-                adapter.fromJson(payloadString)
-            } catch (e: Exception) {
-                Timber.tag(loggerTag.value).e("## decryptGroupMessage() : fails to parse the payload")
-                throw MXCryptoError.Base(MXCryptoError.ErrorType.BAD_DECRYPTED_FORMAT, MXCryptoError.BAD_DECRYPTED_FORMAT_TEXT_REASON)
-            }
-
-            return OlmDecryptionResult(
-                    payload,
-                    wrapper.keysClaimed,
-                    senderKey,
-                    wrapper.forwardingCurve25519KeyChain
-            )
-        } else {
+        if (roomId != wrapper.roomId) {
+            // Check that the room id matches the original one for the session. This stops
+            // the HS pretending a message was targeting a different room.
             val reason = String.format(MXCryptoError.INBOUND_SESSION_MISMATCH_ROOM_ID_REASON, roomId, wrapper.roomId)
             Timber.tag(loggerTag.value).e("## decryptGroupMessage() : $reason")
             throw MXCryptoError.Base(MXCryptoError.ErrorType.INBOUND_SESSION_MISMATCH_ROOM_ID, reason)
         }
+        val decryptResult = try {
+            sessionHolder.mutex.withLock {
+                inboundGroupSession.decryptMessage(body)
+            }
+        } catch (e: OlmException) {
+            Timber.tag(loggerTag.value).e(e, "## decryptGroupMessage () : decryptMessage failed")
+            throw MXCryptoError.OlmError(e)
+        }
+
+        val messageIndexKey = senderKey + "|" + sessionId + "|" + roomId + "|" + decryptResult.mIndex
+        Timber.tag(loggerTag.value).d("##########################################################")
+        Timber.tag(loggerTag.value).d("## decryptGroupMessage() timeline: $timeline")
+        Timber.tag(loggerTag.value).d("## decryptGroupMessage() senderKey: $senderKey")
+        Timber.tag(loggerTag.value).d("## decryptGroupMessage() sessionId: $sessionId")
+        Timber.tag(loggerTag.value).d("## decryptGroupMessage() roomId: $roomId")
+        Timber.tag(loggerTag.value).d("## decryptGroupMessage() eventId: $eventId")
+        Timber.tag(loggerTag.value).d("## decryptGroupMessage() mIndex: ${decryptResult.mIndex}")
+
+        if (timeline?.isNotBlank() == true) {
+            val timelineSet = inboundGroupSessionMessageIndexes.getOrPut(timeline) { mutableSetOf() }
+            if (timelineSet.contains(messageIndexKey) && messageIndexKey.alreadyUsed(eventId)) {
+                val reason = String.format(MXCryptoError.DUPLICATE_MESSAGE_INDEX_REASON, decryptResult.mIndex)
+                Timber.tag(loggerTag.value).e("## decryptGroupMessage() timelineId=$timeline: $reason")
+                throw MXCryptoError.Base(MXCryptoError.ErrorType.DUPLICATED_MESSAGE_INDEX, reason)
+            }
+            timelineSet.add(messageIndexKey)
+        }
+        replayAttackMap[messageIndexKey] = eventId
+        inboundGroupSessionStore.storeInBoundGroupSession(sessionHolder, sessionId, senderKey)
+        val payload = try {
+            val adapter = MoshiProvider.providesMoshi().adapter<JsonDict>(JSON_DICT_PARAMETERIZED_TYPE)
+            val payloadString = convertFromUTF8(decryptResult.mDecryptedMessage)
+            adapter.fromJson(payloadString)
+        } catch (e: Exception) {
+            Timber.tag(loggerTag.value).e("## decryptGroupMessage() : fails to parse the payload")
+            throw MXCryptoError.Base(MXCryptoError.ErrorType.BAD_DECRYPTED_FORMAT, MXCryptoError.BAD_DECRYPTED_FORMAT_TEXT_REASON)
+        }
+
+        return OlmDecryptionResult(
+                payload,
+                wrapper.keysClaimed,
+                senderKey,
+                wrapper.forwardingCurve25519KeyChain
+        )
+    }
+
+    /**
+     * Determines whether or not the messageKey has already been used to decrypt another eventId
+     */
+    private fun String.alreadyUsed(eventId: String): Boolean {
+        return replayAttackMap[this] != null && replayAttackMap[this] != eventId
     }
 
     /**
