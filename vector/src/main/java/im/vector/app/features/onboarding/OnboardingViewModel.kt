@@ -42,6 +42,7 @@ import im.vector.app.features.login.ReAuthHelper
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
 import im.vector.app.features.onboarding.StartAuthenticationFlowUseCase.StartAuthenticationResult
+import im.vector.app.features.onboarding.ftueauth.FtueMissingRegistrationStagesComparator
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
@@ -289,8 +290,18 @@ class OnboardingViewModel @AssistedInject constructor(
     }
 
     private fun emitFlowResultViewEvent(flowResult: FlowResult) {
-        _viewEvents.post(OnboardingViewEvents.RegistrationFlowResult(flowResult, isRegistrationStarted))
+        withState { state ->
+            val orderedResult = when {
+                state.hasSelectedMatrixOrg() && vectorFeatures.isOnboardingCombinedRegisterEnabled() -> flowResult.overrideOrder()
+                else                                                                                 -> flowResult
+            }
+            _viewEvents.post(OnboardingViewEvents.RegistrationFlowResult(orderedResult, isRegistrationStarted))
+        }
     }
+
+    private fun OnboardingViewState.hasSelectedMatrixOrg() = selectedHomeserver.userFacingUrl == matrixOrgUrl
+
+    private fun FlowResult.overrideOrder() = copy(missingStages = missingStages.sortedWith(FtueMissingRegistrationStagesComparator()))
 
     private fun handleRegisterWith(action: OnboardingAction.Register) {
         reAuthHelper.data = action.password
