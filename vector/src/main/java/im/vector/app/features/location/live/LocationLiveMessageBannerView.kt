@@ -35,25 +35,6 @@ import im.vector.app.databinding.ViewLocationLiveMessageBannerBinding
 import im.vector.app.features.themes.ThemeUtils
 import org.threeten.bp.Duration
 
-sealed class LocationLiveMessageBannerViewState(
-        open val bottomStartCornerRadiusInDp: Float,
-        open val bottomEndCornerRadiusInDp: Float,
-) {
-
-    data class Emitter(
-            override val bottomStartCornerRadiusInDp: Float,
-            override val bottomEndCornerRadiusInDp: Float,
-            val remainingTimeInMillis: Long,
-            val isStopButtonCenteredVertically: Boolean
-    ) : LocationLiveMessageBannerViewState(bottomStartCornerRadiusInDp, bottomEndCornerRadiusInDp)
-
-    data class Watcher(
-            override val bottomStartCornerRadiusInDp: Float,
-            override val bottomEndCornerRadiusInDp: Float,
-            val formattedLocalTimeOfEndOfLive: String,
-    ) : LocationLiveMessageBannerViewState(bottomStartCornerRadiusInDp, bottomEndCornerRadiusInDp)
-}
-
 private const val REMAINING_TIME_COUNTER_INTERVAL_IN_MS = 1000L
 
 class LocationLiveMessageBannerView @JvmOverloads constructor(
