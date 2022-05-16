@@ -112,13 +112,27 @@
         app:layout_constraintTop_toBottomOf="@id/roomAvatarContainer"
         tools:layout_marginStart="20dp" />
 
+    <Space
+        android:id="@+id/topMarginSpace"
+        android:layout_width="0dp"
+        android:layout_height="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Space
+        android:id="@+id/centerTitleSpace"
+        android:layout_width="match_parent"
+        android:layout_height="15dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/topMarginSpace" />
+
     <TextView
         android:id="@+id/roomNameView"
         style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
-        android:layout_marginTop="12dp"
         android:layout_marginEnd="8dp"
         android:duplicateParentState="true"
         android:ellipsize="end"
@@ -130,7 +144,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toEndOf="@id/roomAvatarContainer"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/centerTitleSpace"
         tools:text="@sample/users.json/data/displayName" />
 
     <ImageView

@@ -19,9 +19,9 @@ package im.vector.app.features.home.room.list
 import android.view.HapticFeedbackConstants
 import android.view.View
 import android.widget.ImageView
+import android.widget.Space
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
@@ -141,27 +141,11 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
 
     private fun renderForFilteredDisplayMode(holder: Holder) {
         holder.subtitleView.text = subtitle
-        if (subtitle.isEmpty()) {
-           holder.centerTitleVertically()
-        }
+        holder.centerTitle(shouldCenter = subtitle.isEmpty())
     }
 
-    private fun Holder.centerTitleVertically() {
-        removeTitleTopMargin()
-        constrainTitleToParentBottom()
-    }
-
-    private fun Holder.removeTitleTopMargin() {
-        val layoutParams = titleView.layoutParams as ConstraintLayout.LayoutParams
-        layoutParams.topMargin = 0
-        titleView.layoutParams = layoutParams
-    }
-
-    private fun Holder.constrainTitleToParentBottom() {
-        val constraintSet = ConstraintSet()
-        constraintSet.clone(rootView)
-        constraintSet.connect(titleView.id, ConstraintSet.BOTTOM, rootView.id, ConstraintSet.BOTTOM)
-        constraintSet.applyTo(rootView)
+    private fun Holder.centerTitle(shouldCenter: Boolean) {
+        centerTitleSpace.isVisible = shouldCenter
     }
 
     override fun unbind(holder: Holder) {
@@ -198,5 +182,6 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         val roomAvatarFailSendingImageView by bind<ImageView>(R.id.roomAvatarFailSendingImageView)
         val roomAvatarPresenceImageView by bind<PresenceStateImageView>(R.id.roomAvatarPresenceImageView)
         val rootView by bind<ConstraintLayout>(R.id.itemRoomLayout)
+        val centerTitleSpace by bind<Space>(R.id.centerTitleSpace)
     }
 }
