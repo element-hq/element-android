@@ -113,13 +113,13 @@ class TimelineItemFactory @Inject constructor(
                     EventType.CALL_NEGOTIATE,
                     EventType.REACTION,
                     in EventType.POLL_RESPONSE,
-                    in EventType.POLL_END             -> noticeItemFactory.create(params)
+                    in EventType.POLL_END,
+                    in EventType.BEACON_LOCATION_DATA -> noticeItemFactory.create(params)
                     // Calls
                     EventType.CALL_INVITE,
                     EventType.CALL_HANGUP,
                     EventType.CALL_REJECT,
                     EventType.CALL_ANSWER             -> callItemFactory.create(params)
-                    in EventType.BEACON_LOCATION_DATA -> noticeItemFactory.create(params)
                     // Crypto
                     EventType.ENCRYPTED               -> {
                         if (event.root.isRedacted()) {
