@@ -114,6 +114,7 @@ class SpaceListModalFragment : VectorBaseFragment<FragmentSpaceListModalBinding>
         viewModel.setSpace(it)
         binding.headerText.isVisible = it == null
         binding.headerTextLayout.isVisible = binding.headerText.isVisible || binding.invitesGroup.isVisible
+        binding.addSpaceText.setText(if (it == null) R.string.create_space else R.string.add_space)
     }
 
     override fun invalidate() {

@@ -166,6 +166,7 @@
             app:tint="?attr/vctr_spoiler_background_color" />
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/add_space_text"
             style="@style/Widget.Vector.TextView.Body.Medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
