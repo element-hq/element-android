@@ -159,7 +159,7 @@ class DefaultPollAggregationProcessor @Inject constructor() : PollAggregationPro
         val pollOwnerId = getPollEvent(session, roomId, pollEventId)?.root?.senderId
         val isPollOwner = pollOwnerId == event.senderId
 
-        if (!isPollOwner && !powerLevelsHelper.isUserAbleToRedact(event.senderId ?: "")) {
+        if (!isPollOwner || !powerLevelsHelper.isUserAbleToRedact(event.senderId ?: "")) {
             Timber.v("## Received poll.end event $pollEventId but user ${event.senderId} doesn't have enough power level in room $roomId")
             return false
         }

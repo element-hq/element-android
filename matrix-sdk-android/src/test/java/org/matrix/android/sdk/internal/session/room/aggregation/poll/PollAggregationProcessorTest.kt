@@ -33,6 +33,7 @@ import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.getTimelineEvent
+import org.matrix.android.sdk.api.session.room.model.message.MessageEndPollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollResponseContent
 import org.matrix.android.sdk.api.session.room.model.message.PollAnswer
@@ -40,6 +41,7 @@ import org.matrix.android.sdk.api.session.room.model.message.PollCreationInfo
 import org.matrix.android.sdk.api.session.room.model.message.PollQuestion
 import org.matrix.android.sdk.api.session.room.model.message.PollResponse
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
+import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.sender.SenderInfo
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.internal.database.model.EventAnnotationsSummaryEntity
@@ -48,7 +50,6 @@ import org.matrix.android.sdk.internal.database.model.PollResponseAggregatedSumm
 import org.matrix.android.sdk.test.fakes.FakeRealm
 
 private const val A_USER_ID_1 = "@user_1:matrix.org"
-private const val A_USER_ID_2 = "@user_2:matrix.org"
 private const val A_ROOM_ID = "!sUeOGZKsBValPTUMax:matrix.org"
 private const val AN_EVENT_ID = "\$vApgexcL8Vfh-WxYKsFKCDooo67ttbjm3TiVKXaWijU"
 
@@ -85,6 +86,13 @@ private val A_POLL_RESPONSE_CONTENT = MessagePollResponseContent(
         )
 )
 
+private val A_POLL_END_CONTENT = MessageEndPollContent(
+        relatesTo = RelationDefaultContent(
+                type = RelationType.REFERENCE,
+                eventId = AN_EVENT_ID
+        )
+)
+
 private val AN_INVALID_POLL_RESPONSE_CONTENT = MessagePollResponseContent(
         unstableResponse = PollResponse(
                 answers = listOf("fake-option-id")
@@ -113,23 +121,21 @@ private val A_POLL_RESPONSE_EVENT = Event(
         content = A_POLL_RESPONSE_CONTENT.toContent()
 )
 
+private val A_POLL_END_EVENT = Event(
+        type = EventType.POLL_END.first(),
+        eventId = AN_EVENT_ID,
+        originServerTs = 1652435922563,
+        senderId = A_USER_ID_1,
+        roomId = A_ROOM_ID,
+        content = A_POLL_END_CONTENT.toContent()
+)
+
 private val A_TIMELINE_EVENT = TimelineEvent(
         root = A_POLL_START_EVENT,
         localId = 1234,
         eventId = AN_EVENT_ID,
         displayIndex = 0,
         senderInfo = SenderInfo(A_USER_ID_1, "A_USER_ID_1", true, null)
-)
-
-private val A_POLL_RESPONSE_EVENT_WITHOUT_REFERENCE = A_POLL_RESPONSE_EVENT.copy(
-        content = A_POLL_RESPONSE_CONTENT
-                .copy(
-                        relatesTo = RelationDefaultContent(
-                                type = RelationType.REFERENCE,
-                                eventId = null
-                        )
-                )
-                .toContent()
 )
 
 private val A_POLL_RESPONSE_EVENT_WITH_A_WRONG_REFERENCE = A_POLL_RESPONSE_EVENT.copy(
@@ -178,12 +184,6 @@ private val A_POLL_REFERENCE_EVENT = A_POLL_START_EVENT.copy(
 
 private val AN_INVALID_POLL_RESPONSE_EVENT = A_POLL_RESPONSE_EVENT.copy(
         content = AN_INVALID_POLL_RESPONSE_CONTENT.toContent()
-)
-
-private val AN_EVENT_ANNOTATIONS_SUMMARY_ENTITY = EventAnnotationsSummaryEntity(
-        roomId = A_ROOM_ID,
-        eventId = AN_EVENT_ID,
-        pollResponseSummary = PollResponseAggregatedSummaryEntity()
 )
 
 class PollAggregationProcessorTest {
@@ -252,7 +252,17 @@ class PollAggregationProcessorTest {
     }
 
     @Test
-    fun handlePollEndEvent() {
+    fun `given a poll end event is processed by poll aggregator`() {
+        every { realm.instance.createObject(PollResponseAggregatedSummaryEntity::class.java) } returns PollResponseAggregatedSummaryEntity()
+        val powerLevelsHelper = mockRedactionPowerLevels(A_USER_ID_1, true)
+        pollAggregationProcessor.handlePollEndEvent(session, powerLevelsHelper, realm.instance, A_POLL_END_EVENT).shouldBeTrue()
+    }
+
+    @Test
+    fun `given a poll end event without redaction power level is not processed by poll aggregator`() {
+        every { realm.instance.createObject(PollResponseAggregatedSummaryEntity::class.java) } returns PollResponseAggregatedSummaryEntity()
+        val powerLevelsHelper = mockRedactionPowerLevels(A_USER_ID_1, false)
+        pollAggregationProcessor.handlePollEndEvent(session, powerLevelsHelper, realm.instance, A_POLL_END_EVENT).shouldBeFalse()
     }
 
     private inline fun <reified T : RealmModel> RealmQuery<T>.givenEqualTo(fieldName: String, value: String, result: RealmQuery<T>) {
@@ -272,5 +282,11 @@ class PollAggregationProcessorTest {
         val room = mockk<Room>()
         every { session.getRoom(roomId) } returns room
         every { room.getTimelineEvent(eventId) } returns A_TIMELINE_EVENT
+    }
+
+    private fun mockRedactionPowerLevels(userId: String, isAbleToRedact: Boolean): PowerLevelsHelper {
+        val powerLevelsHelper = mockk<PowerLevelsHelper>()
+        every { powerLevelsHelper.isUserAbleToRedact(userId) } returns isAbleToRedact
+        return powerLevelsHelper
     }
 }
