@@ -1777,6 +1777,7 @@
     <string name="send_attachment">Send attachment</string>
 
     <string name="a11y_open_drawer">Open the navigation drawer</string>
+    <string name="a11y_navigate_up_space">Navigate up one space</string>
     <string name="a11y_create_menu_open">Open the create room menu</string>
     <string name="a11y_create_menu_close">Close the create room menu…</string>
     <string name="a11y_create_direct_message">Create a new direct conversation</string>
