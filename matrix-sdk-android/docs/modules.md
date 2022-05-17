@@ -1,5 +1,8 @@
 # Module matrix-sdk-android
 
+<!-- Note: the line below will appear only when the documentation is generated from Element-Android project, and not when it's generated from the SDK project -->
+**Note**: You are viewing the nightly documentation of the Android Matrix SDK library. The documentation of the released library can be found here: [https://matrix-org.github.io/matrix-android-sdk2/](https://matrix-org.github.io/matrix-android-sdk2/)
+
 ## Welcome to the matrix-sdk-android documentation!
 
 This pages list the complete API that this SDK is exposing to a client application.

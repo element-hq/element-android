@@ -88,7 +88,7 @@ internal class DefaultFileService @Inject constructor(
 
         Timber.v("## FileService downloadFile $url")
 
-        // TODO: Remove use of `synchronized` in suspend function.
+        // TODO Remove use of `synchronized` in suspend function.
         val existingDownload = synchronized(ongoing) {
             val existing = ongoing[url]
             if (existing != null) {

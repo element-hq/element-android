@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,20 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.crypto.algorithms
+package org.matrix.android.sdk.api.session.crypto
 
-import org.matrix.android.sdk.api.session.events.model.content.RoomKeyWithHeldContent
+enum class OutgoingRoomKeyRequestState {
+    UNSENT,
+    SENT,
+    SENT_THEN_CANCELED,
+    CANCELLATION_PENDING,
+    CANCELLATION_PENDING_AND_WILL_RESEND;
 
-internal interface IMXWithHeldExtension {
-    fun onRoomKeyWithHeldEvent(withHeldInfo: RoomKeyWithHeldContent)
+    companion object {
+        fun pendingStates() = setOf(
+                UNSENT,
+                CANCELLATION_PENDING_AND_WILL_RESEND,
+                CANCELLATION_PENDING
+        )
+    }
 }

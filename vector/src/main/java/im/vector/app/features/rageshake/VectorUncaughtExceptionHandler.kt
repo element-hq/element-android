@@ -61,6 +61,7 @@ class VectorUncaughtExceptionHandler @Inject constructor(
      * @param throwable the throwable
      * @return the exception description
      */
+    @Suppress("PrintStackTrace")
     override fun uncaughtException(thread: Thread, throwable: Throwable) {
         Timber.v("Uncaught exception: $throwable")
         preferences.edit(commit = true) {

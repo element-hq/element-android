@@ -200,43 +200,13 @@ class HomeActivity :
                     when (sharedAction) {
                         is HomeActivitySharedAction.OpenDrawer        -> views.drawerLayout.openDrawer(GravityCompat.START)
                         is HomeActivitySharedAction.CloseDrawer       -> views.drawerLayout.closeDrawer(GravityCompat.START)
-                        is HomeActivitySharedAction.OpenGroup         -> {
-                            views.drawerLayout.closeDrawer(GravityCompat.START)
-
-                            // Temporary
-                            // When switching from space to group or group to space, we need to reload the fragment
-                            // To be removed when dropping legacy groups
-                            if (sharedAction.clearFragment) {
-                                replaceFragment(views.homeDetailFragmentContainer, HomeDetailFragment::class.java, allowStateLoss = true)
-                            } else {
-                                // nop
-                            }
-                            // we might want to delay that to avoid having the drawer animation lagging
-                            // would be probably better to let the drawer do that? in the on closed callback?
-                        }
-                        is HomeActivitySharedAction.OpenSpacePreview  -> {
-                            startActivity(SpacePreviewActivity.newIntent(this, sharedAction.spaceId))
-                        }
-                        is HomeActivitySharedAction.AddSpace          -> {
-                            createSpaceResultLauncher.launch(SpaceCreationActivity.newIntent(this))
-                        }
-                        is HomeActivitySharedAction.ShowSpaceSettings -> {
-                            // open bottom sheet
-                            SpaceSettingsMenuBottomSheet
-                                    .newInstance(sharedAction.spaceId, object : SpaceSettingsMenuBottomSheet.InteractionListener {
-                                        override fun onShareSpaceSelected(spaceId: String) {
-                                            ShareSpaceBottomSheet.show(supportFragmentManager, spaceId)
-                                        }
-                                    })
-                                    .show(supportFragmentManager, "SPACE_SETTINGS")
-                        }
-                        is HomeActivitySharedAction.OpenSpaceInvite   -> {
-                            SpaceInviteBottomSheet.newInstance(sharedAction.spaceId)
-                                    .show(supportFragmentManager, "SPACE_INVITE")
-                        }
-                        HomeActivitySharedAction.SendSpaceFeedBack    -> {
-                            bugReporter.openBugReportScreen(this, ReportType.SPACE_BETA_FEEDBACK)
-                        }
+                        is HomeActivitySharedAction.OpenGroup         -> openGroup(sharedAction.shouldClearFragment)
+                        is HomeActivitySharedAction.OpenSpacePreview  -> startActivity(SpacePreviewActivity.newIntent(this, sharedAction.spaceId))
+                        is HomeActivitySharedAction.AddSpace          -> createSpaceResultLauncher.launch(SpaceCreationActivity.newIntent(this))
+                        is HomeActivitySharedAction.ShowSpaceSettings -> showSpaceSettings(sharedAction.spaceId)
+                        is HomeActivitySharedAction.OpenSpaceInvite   -> openSpaceInvite(sharedAction.spaceId)
+                        HomeActivitySharedAction.SendSpaceFeedBack    -> bugReporter.openBugReportScreen(this, ReportType.SPACE_BETA_FEEDBACK)
+                        HomeActivitySharedAction.CloseGroup           -> closeGroup()
                     }
                 }
                 .launchIn(lifecycleScope)
@@ -271,6 +241,37 @@ class HomeActivity :
             handleIntent(intent)
         }
         homeActivityViewModel.handle(HomeActivityViewActions.ViewStarted)
+    }
+
+    private fun openGroup(shouldClearFragment: Boolean) {
+        views.drawerLayout.closeDrawer(GravityCompat.START)
+
+        // When switching from space to group or group to space, we need to reload the fragment
+        if (shouldClearFragment) {
+            replaceFragment(views.homeDetailFragmentContainer, HomeDetailFragment::class.java, allowStateLoss = true)
+        } else {
+            // do nothing
+        }
+    }
+
+    private fun showSpaceSettings(spaceId: String) {
+        // open bottom sheet
+        SpaceSettingsMenuBottomSheet
+                .newInstance(spaceId, object : SpaceSettingsMenuBottomSheet.InteractionListener {
+                    override fun onShareSpaceSelected(spaceId: String) {
+                        ShareSpaceBottomSheet.show(supportFragmentManager, spaceId)
+                    }
+                })
+                .show(supportFragmentManager, "SPACE_SETTINGS")
+    }
+
+    private fun openSpaceInvite(spaceId: String) {
+        SpaceInviteBottomSheet.newInstance(spaceId)
+                .show(supportFragmentManager, "SPACE_INVITE")
+    }
+
+    private fun closeGroup() {
+        views.drawerLayout.openDrawer(GravityCompat.START)
     }
 
     private fun handleShowAnalyticsOptIn() {

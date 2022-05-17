@@ -74,8 +74,8 @@ internal fun Versions.isLoginAndRegistrationSupportedBySdk(): Boolean {
  * Indicate if the homeserver support MSC3440 for threads
  */
 internal fun Versions.doesServerSupportThreads(): Boolean {
-    return getMaxVersion() >= HomeServerVersion.v1_3_0 ||
-            unstableFeatures?.get(FEATURE_THREADS_MSC3440_STABLE) ?: false
+    // TODO Check for v1.3 or whichever spec version formally specifies MSC3440.
+    return unstableFeatures?.get(FEATURE_THREADS_MSC3440_STABLE) ?: false
 }
 
 /**

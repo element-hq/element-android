@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.crypto
+package org.matrix.android.sdk.internal.crypto.store.db.model
 
-import org.matrix.android.sdk.api.session.crypto.model.OutgoingGossipingRequestState
+import io.realm.RealmObject
+import io.realm.annotations.Index
 
-internal interface OutgoingGossipingRequest {
-    val recipients: Map<String, List<String>>
-    val requestId: String
-    val state: OutgoingGossipingRequestState
-    // transaction id for the cancellation, if any
-    // var cancellationTxnId: String?
+internal open class AuditTrailEntity(
+        var ageLocalTs: Long? = null,
+        @Index var type: String? = null,
+        var contentJson: String? = null
+) : RealmObject() {
+    companion object
 }

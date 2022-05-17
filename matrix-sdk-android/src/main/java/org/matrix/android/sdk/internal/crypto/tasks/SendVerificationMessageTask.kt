@@ -47,7 +47,7 @@ internal class DefaultSendVerificationMessageTask @Inject constructor(
             localEchoRepository.updateSendState(localId, event.roomId, SendState.SENDING)
             val response = executeRequest(globalErrorReceiver) {
                 roomAPI.send(
-                        localId,
+                        txId = localId,
                         roomId = event.roomId ?: "",
                         content = event.content,
                         eventType = event.type ?: ""
