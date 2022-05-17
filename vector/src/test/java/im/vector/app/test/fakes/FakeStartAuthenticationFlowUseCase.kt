@@ -22,7 +22,6 @@ import im.vector.app.test.fixtures.aHomeserverUnavailableError
 import io.mockk.coEvery
 import io.mockk.mockk
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
-import org.matrix.android.sdk.api.failure.Failure
 
 class FakeStartAuthenticationFlowUseCase {
 
@@ -33,6 +32,6 @@ class FakeStartAuthenticationFlowUseCase {
     }
 
     fun givenHomeserverUnavailable(config: HomeServerConnectionConfig) {
-        coEvery { instance.execute(config) } throws  aHomeserverUnavailableError()
+        coEvery { instance.execute(config) } throws aHomeserverUnavailableError()
     }
 }

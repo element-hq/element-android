@@ -25,7 +25,7 @@ import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.network.ssl.Fingerprint
 
 sealed interface OnboardingAction : VectorViewModelAction {
-    sealed interface SplashAction: OnboardingAction {
+    sealed interface SplashAction : OnboardingAction {
         val onboardingFlow: OnboardingFlow
 
         data class OnGetStarted(override val onboardingFlow: OnboardingFlow) : SplashAction
