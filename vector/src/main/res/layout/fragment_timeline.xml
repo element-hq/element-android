@@ -37,13 +37,6 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/timelineRecyclerViewBarrier"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="top"
-        app:constraint_referenced_ids="composerLayout,notificationAreaView,failedMessagesWarningStub" />
-
     <im.vector.app.features.sync.widget.SyncStateView
         android:id="@+id/syncStateView"
         android:layout_width="0dp"
@@ -68,9 +61,8 @@
         android:layout_height="wrap_content"
         android:background="?android:colorBackground"
         android:minHeight="54dp"
-        android:visibility="visible"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/locationLiveStatusIndicator" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -78,7 +70,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:overScrollMode="always"
-        app:layout_constraintBottom_toTopOf="@id/timelineRecyclerViewBarrier"
+        app:layout_constraintBottom_toTopOf="@id/typingMessageView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/removeJitsiWidgetView"
@@ -103,14 +95,13 @@
     <im.vector.app.core.ui.views.TypingMessageView
         android:id="@+id/typingMessageView"
         android:layout_width="0dp"
-        android:layout_height="20dp"
+        android:layout_height="wrap_content"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
-        app:layout_constraintBottom_toTopOf="@id/composerLayout"
+        app:layout_constraintBottom_toTopOf="@id/bottomBarrier"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/timelineRecyclerView"
-        tools:visibility="visible" />
+        app:layout_constraintTop_toBottomOf="@id/timelineRecyclerView" />
 
     <im.vector.app.core.ui.views.NotificationAreaView
         android:id="@+id/notificationAreaView"
@@ -130,7 +121,8 @@
         android:layout="@layout/view_stub_failed_message_warning_layout"
         app:layout_constraintBottom_toTopOf="@id/composerLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_height="300dp" />
 
     <im.vector.app.features.home.room.detail.composer.MessageComposerView
         android:id="@+id/composerLayout"
@@ -142,7 +134,8 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible" />
 
     <im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView
         android:id="@+id/voiceMessageRecorderView"
@@ -166,11 +159,11 @@
         app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
 
     <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/badgeBarrier"
+        android:id="@+id/bottomBarrier"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:barrierDirection="top"
-        app:constraint_referenced_ids="composerLayout,notificationAreaView, failedMessagesWarningStub" />
+        app:constraint_referenced_ids="composerLayout,notificationAreaView,failedMessagesWarningStub" />
 
     <im.vector.app.core.platform.BadgeFloatingActionButton
         android:id="@+id/jumpToBottomView"
@@ -184,7 +177,7 @@
         app:badgeTextColor="?colorOnPrimary"
         app:badgeTextPadding="2dp"
         app:badgeTextSize="10sp"
-        app:layout_constraintBottom_toTopOf="@id/badgeBarrier"
+        app:layout_constraintBottom_toTopOf="@id/bottomBarrier"
         app:layout_constraintEnd_toEndOf="parent"
         app:tint="@android:color/black" />
 
