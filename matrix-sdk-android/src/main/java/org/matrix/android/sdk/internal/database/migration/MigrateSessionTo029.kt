@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.database.migration
 
 import io.realm.DynamicRealm
 import io.realm.FieldAttribute
-import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntityFields
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
