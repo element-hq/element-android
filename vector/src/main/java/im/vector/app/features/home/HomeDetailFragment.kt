@@ -33,6 +33,7 @@ import im.vector.app.R
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.toMvRxBundle
+import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
@@ -60,11 +61,6 @@ import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 
-/*
- * TODO:
- *  1) Change the hamburger menu to a back button when in a space
- *  2) Make the back navigation button follow the same behaviour
- */
 class HomeDetailFragment @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
         private val colorProvider: ColorProvider,
@@ -74,7 +70,8 @@ class HomeDetailFragment @Inject constructor(
         private val appStateHandler: AppStateHandler
 ) : VectorBaseFragment<FragmentHomeDetailBinding>(),
         KeysBackupBanner.Delegate,
-        CurrentCallsView.Callback {
+        CurrentCallsView.Callback,
+        OnBackPressed {
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
     private val unknownDeviceDetectorSharedViewModel: UnknownDeviceDetectorSharedViewModel by activityViewModel()
@@ -149,7 +146,7 @@ class HomeDetailFragment @Inject constructor(
         }
 
         views.groupToolbarNavigateUp.setOnClickListener {
-            navigateUpOneParentSpace()
+            navigateUpOneSpace()
         }
 
         viewModel.observeViewEvents { viewEvent ->
@@ -194,14 +191,13 @@ class HomeDetailFragment @Inject constructor(
                 }
     }
 
-    private fun navigateUpOneParentSpace() = with(appStateHandler) {
-        val parentId = when (val roomGroupingMethod = getCurrentRoomGroupingMethod()) {
-            is RoomGroupingMethod.BySpace -> roomGroupingMethod.spaceSummary?.flattenParentIds?.firstOrNull { it.isNotBlank() }
-            else                          -> null
-        }
-        setCurrentSpace(parentId)
+    private fun navigateUpOneSpace() {
+        val parentId = getCurrentSpace()?.flattenParentIds?.lastOrNull()
+        appStateHandler.setCurrentSpace(parentId)
         sharedActionViewModel.post(HomeActivitySharedAction.CloseGroup)
     }
+
+    private fun getCurrentSpace() = (appStateHandler.getCurrentRoomGroupingMethod() as? RoomGroupingMethod.BySpace)?.spaceSummary
 
     private fun handleCallStarted() {
         dismissLoadingDialog()
@@ -438,7 +434,6 @@ class HomeDetailFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(viewModel) {
-//        Timber.v(it.toString())
         views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_people).render(it.notificationCountPeople, it.notificationHighlightPeople)
         views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_rooms).render(it.notificationCountRooms, it.notificationHighlightRooms)
         views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_notification).render(it.notificationCountCatchup, it.notificationHighlightCatchup)
@@ -497,5 +492,12 @@ class HomeDetailFragment @Inject constructor(
             }
         }
         return this
+    }
+
+    override fun onBackPressed(toolbarButton: Boolean) = if (getCurrentSpace() != null) {
+        navigateUpOneSpace()
+        true
+    } else {
+        false
     }
 }
