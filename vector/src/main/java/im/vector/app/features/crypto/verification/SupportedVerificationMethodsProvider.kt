@@ -26,14 +26,15 @@ class SupportedVerificationMethodsProvider @Inject constructor(
 ) {
     /**
      * Provide the list of supported method by Element, with or without the QR_CODE_SCAN, depending if a back camera
-     * is available
+     * is available.
      */
     fun provide(): List<VerificationMethod> {
         return mutableListOf(
                 // Element supports SAS verification
                 VerificationMethod.SAS,
                 // Element is able to show QR codes
-                VerificationMethod.QR_CODE_SHOW)
+                VerificationMethod.QR_CODE_SHOW
+        )
                 .apply {
                     if (hardwareInfo.hasBackCamera()) {
                         // Element is able to scan QR codes, and a Camera is available

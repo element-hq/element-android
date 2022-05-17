@@ -159,9 +159,12 @@ class SoftLogoutViewModel @AssistedInject constructor(
         withState { softLogoutViewState ->
             if (softLogoutViewState.userId != action.credentials.userId) {
                 Timber.w("User login again with SSO, but using another account")
-                _viewEvents.post(SoftLogoutViewEvents.ErrorNotSameUser(
-                        softLogoutViewState.userId,
-                        action.credentials.userId))
+                _viewEvents.post(
+                        SoftLogoutViewEvents.ErrorNotSameUser(
+                                softLogoutViewState.userId,
+                                action.credentials.userId
+                        )
+                )
             } else {
                 setState {
                     copy(

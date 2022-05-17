@@ -161,11 +161,13 @@ class LocationSharingViewModel @AssistedInject constructor(
     }
 
     private fun handleStartLiveLocationSharingAction(durationMillis: Long) {
-        _viewEvents.post(LocationSharingViewEvents.StartLiveLocationService(
-                sessionId = session.sessionId,
-                roomId = room.roomId,
-                durationMillis = durationMillis
-        ))
+        _viewEvents.post(
+                LocationSharingViewEvents.StartLiveLocationService(
+                        sessionId = session.sessionId,
+                        roomId = room.roomId,
+                        durationMillis = durationMillis
+                )
+        )
     }
 
     override fun onLocationUpdate(locationData: LocationData) {

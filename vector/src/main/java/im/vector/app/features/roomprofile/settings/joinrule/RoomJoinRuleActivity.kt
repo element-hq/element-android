@@ -121,7 +121,8 @@ class RoomJoinRuleActivity : VectorBaseActivity<ActivitySimpleBinding>() {
         supportFragmentManager.commitTransaction {
             setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
             val tag = RoomJoinRuleChooseRestrictedFragment::class.simpleName
-            replace(views.simpleFragmentContainer.id,
+            replace(
+                    views.simpleFragmentContainer.id,
                     RoomJoinRuleChooseRestrictedFragment::class.java,
                     this@RoomJoinRuleActivity.roomProfileArgs.toMvRxBundle(),
                     tag

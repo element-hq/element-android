@@ -28,9 +28,9 @@ import org.matrix.android.sdk.api.util.JsonDict
  */
 @JsonClass(generateAdapter = true)
 data class MatrixError(
-        /** unique string which can be used to handle an error message */
+        /** unique string which can be used to handle an error message. */
         @Json(name = "errcode") val code: String,
-        /** human-readable error message */
+        /** human-readable error message. */
         @Json(name = "error") val message: String,
 
         // For M_CONSENT_NOT_GIVEN
@@ -92,19 +92,19 @@ data class MatrixError(
         /** Sent when the room alias given to the createRoom API is already in use. */
         const val M_ROOM_IN_USE = "M_ROOM_IN_USE"
 
-        /** (Not documented yet) */
+        /** (Not documented yet). */
         const val M_BAD_PAGINATION = "M_BAD_PAGINATION"
 
         /** The request was not correctly authorized. Usually due to login failures. */
         const val M_UNAUTHORIZED = "M_UNAUTHORIZED"
 
-        /** (Not documented yet) */
+        /** (Not documented yet). */
         const val M_OLD_VERSION = "M_OLD_VERSION"
 
         /** The server did not understand the request. */
         const val M_UNRECOGNIZED = "M_UNRECOGNIZED"
 
-        /** (Not documented yet) */
+        /** (Not documented yet). */
         const val M_LOGIN_EMAIL_URL_NOT_YET = "M_LOGIN_EMAIL_URL_NOT_YET"
 
         /** Authentication could not be performed on the third party identifier. */
@@ -122,7 +122,7 @@ data class MatrixError(
         /** The request or entity was too large. */
         const val M_TOO_LARGE = "M_TOO_LARGE"
 
-        /** (Not documented yet) */
+        /** (Not documented yet). */
         const val M_CONSENT_NOT_GIVEN = "M_CONSENT_NOT_GIVEN"
 
         /** The request cannot be completed because the homeserver has reached a resource limit imposed on it. For example,
@@ -176,10 +176,10 @@ data class MatrixError(
         /** The user is unable to reject an invite to join the server notices room. See the Server Notices module for more information. */
         const val M_CANNOT_LEAVE_SERVER_NOTICE_ROOM = "M_CANNOT_LEAVE_SERVER_NOTICE_ROOM"
 
-        /** (Not documented yet) */
+        /** (Not documented yet). */
         const val M_WRONG_ROOM_KEYS_VERSION = "M_WRONG_ROOM_KEYS_VERSION"
 
-        /** (Not documented yet) */
+        /** (Not documented yet). */
         const val M_WEAK_PASSWORD = "M_WEAK_PASSWORD"
 
         /** The provided password's length is shorter than the minimum length required by the server. */

@@ -54,7 +54,7 @@ class SyncStateView @JvmOverloads constructor(context: Context, attrs: Attribute
         views.syncStateProgressBar.isVisible = newState is SyncState.Running && newState.afterPause
 
         if (newState == SyncState.NoNetwork) {
-            val isAirplaneModeOn = isAirplaneModeOn(context)
+            val isAirplaneModeOn = context.isAirplaneModeOn()
             views.syncStateNoNetwork.isVisible = isAirplaneModeOn.not()
             views.syncStateNoNetworkAirplane.isVisible = isAirplaneModeOn
         } else {

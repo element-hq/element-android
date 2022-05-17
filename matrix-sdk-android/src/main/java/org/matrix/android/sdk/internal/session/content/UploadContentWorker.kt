@@ -62,8 +62,8 @@ private data class NewAttachmentAttributes(
 )
 
 /**
- * Possible previous worker: None
- * Possible next worker    : Always [MultipleEventSendingDispatcherWorker]
+ * Possible previous worker: None.
+ * Possible next worker    : Always [MultipleEventSendingDispatcherWorker].
  */
 internal class UploadContentWorker(val context: Context, params: WorkerParameters, sessionManager: SessionManager) :
         SessionSafeCoroutineWorker<UploadContentWorker.Params>(context, params, sessionManager, Params::class.java) {
@@ -289,12 +289,14 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
 
                 val uploadThumbnailResult = dealWithThumbnail(params)
 
-                handleSuccess(params,
+                handleSuccess(
+                        params,
                         contentUploadResponse.contentUri,
                         uploadedFileEncryptedFileInfo,
                         uploadThumbnailResult?.uploadedThumbnailUrl,
                         uploadThumbnailResult?.uploadedThumbnailEncryptedFileInfo,
-                        newAttachmentAttributes)
+                        newAttachmentAttributes
+                )
             } catch (t: Throwable) {
                 Timber.e(t, "## ERROR ${t.localizedMessage}")
                 handleFailure(params, t)
@@ -316,7 +318,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
     )
 
     /**
-     * If appropriate, it will create and upload a thumbnail
+     * If appropriate, it will create and upload a thumbnail.
      */
     private suspend fun dealWithThumbnail(params: Params): UploadThumbnailResult? {
         return thumbnailExtractor.extractThumbnail(params.attachment)

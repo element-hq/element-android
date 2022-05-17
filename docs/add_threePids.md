@@ -37,9 +37,9 @@ Wording: "We've sent you an email to verify your address. Please follow the inst
 }
 ```
 
-## User receive an e-mail
+## User receives an e-mail
 
-> [homeserver.org] Validate your email
+> `homeserver.org` Validate your email
 >
 > A request to add an email address to your Matrix account has been received. If this was you, please click the link below to confirm adding this email:
   https://homeserver.org/_matrix/client/unstable/add_threepid/email/submit_token?token=WUnEhQAmJrXupdEbXgdWvnVIKaGYZFsU&client_secret=TixzvOnw7nLEUdiQEmkHzkXKrY4HhiGh&sid=bxyDHuJKsdkjMlTJ

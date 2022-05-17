@@ -81,14 +81,16 @@ class MergedTimelines(
                 timeline = mainTimeline,
                 wrappedListener = listener,
                 shouldFilterTypes = false,
-                allowedTypes = emptyList()) {
+                allowedTypes = emptyList()
+        ) {
             processTimelineUpdates(::mainIsInit, mainTimelineEvents, it)
         }
         val secondaryTimelineListener = ListenerInterceptor(
                 timeline = secondaryTimeline,
                 wrappedListener = listener,
                 shouldFilterTypes = secondaryTimelineParams.shouldFilterTypes,
-                allowedTypes = secondaryTimelineParams.allowedTypes) {
+                allowedTypes = secondaryTimelineParams.allowedTypes
+        ) {
             processTimelineUpdates(::secondaryIsInit, secondaryTimelineEvents, it)
         }
         listenersMapping[listener] = listOf(mainTimelineListener, secondaryTimelineListener)

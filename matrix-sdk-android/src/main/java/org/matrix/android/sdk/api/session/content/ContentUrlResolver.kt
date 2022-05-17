@@ -29,7 +29,7 @@ interface ContentUrlResolver {
     }
 
     /**
-     * URL to use to upload content
+     * URL to use to upload content.
      */
     val uploadUrl: String
 
@@ -42,7 +42,7 @@ interface ContentUrlResolver {
     fun resolveFullSize(contentUrl: String?): String?
 
     /**
-     * Get the ResolvedMethod to download a URL
+     * Get the ResolvedMethod to download a URL.
      *
      * @param contentUrl  the Matrix media content URI (in the form of "mxc://...").
      * @param elementToDecrypt Encryption data may be required if you use a content scanner

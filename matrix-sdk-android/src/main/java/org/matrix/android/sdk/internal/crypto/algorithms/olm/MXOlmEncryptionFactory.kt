@@ -38,6 +38,7 @@ internal class MXOlmEncryptionFactory @Inject constructor(private val olmDevice:
                 cryptoStore,
                 messageEncrypter,
                 deviceListManager,
-                ensureOlmSessionsForUsersAction)
+                ensureOlmSessionsForUsersAction
+        )
     }
 }

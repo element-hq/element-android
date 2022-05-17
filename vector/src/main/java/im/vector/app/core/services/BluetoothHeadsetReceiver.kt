@@ -37,9 +37,10 @@ class BluetoothHeadsetReceiver : BroadcastReceiver() {
             val plugged: Boolean,
             val headsetName: String?,
             /**
-             * BluetoothClass.Device.AUDIO_VIDEO_HANDSFREE
-             * BluetoothClass.Device.AUDIO_VIDEO_CAR_AUDIO
-             * AUDIO_VIDEO_WEARABLE_HEADSET
+             * Can be:
+             * - BluetoothClass.Device.AUDIO_VIDEO_HANDSFREE
+             * - BluetoothClass.Device.AUDIO_VIDEO_CAR_AUDIO
+             * - AUDIO_VIDEO_WEARABLE_HEADSET.
              */
             val deviceClass: Int
     )

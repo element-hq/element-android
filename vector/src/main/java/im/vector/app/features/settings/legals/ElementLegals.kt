@@ -26,7 +26,7 @@ class ElementLegals @Inject constructor(
         private val stringProvider: StringProvider
 ) {
     /**
-     * Use ServerPolicy model
+     * Use ServerPolicy model.
      */
     fun getData(): List<ServerPolicy> {
         return listOf(

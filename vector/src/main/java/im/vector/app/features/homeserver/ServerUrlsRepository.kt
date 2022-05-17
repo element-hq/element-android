@@ -22,7 +22,7 @@ import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
 
 /**
- * Object to store and retrieve home and identity server urls
+ * Object to store and retrieve home and identity server urls.
  */
 object ServerUrlsRepository {
 
@@ -35,7 +35,7 @@ object ServerUrlsRepository {
     const val IDENTITY_SERVER_URL_PREF = "identity_server_url"
 
     /**
-     * Save home and identity sever urls received by the Referrer receiver
+     * Save home and identity sever urls received by the Referrer receiver.
      */
     fun setDefaultUrlsFromReferrer(context: Context, homeServerUrl: String, identityServerUrl: String) {
         DefaultSharedPreferences.getInstance(context)
@@ -51,7 +51,7 @@ object ServerUrlsRepository {
     }
 
     /**
-     * Save home and identity sever urls entered by the user. May be custom or default value
+     * Save home and identity sever urls entered by the user. May be custom or default value.
      */
     fun saveServerUrls(context: Context, homeServerUrl: String, identityServerUrl: String) {
         DefaultSharedPreferences.getInstance(context)
@@ -62,23 +62,27 @@ object ServerUrlsRepository {
     }
 
     /**
-     * Return last used homeserver url, or the default one from referrer or the default one from resources
+     * Return last used homeserver url, or the default one from referrer or the default one from resources.
      */
     fun getLastHomeServerUrl(context: Context): String {
         val prefs = DefaultSharedPreferences.getInstance(context)
 
-        return prefs.getString(HOME_SERVER_URL_PREF,
-                prefs.getString(DEFAULT_REFERRER_HOME_SERVER_URL_PREF,
-                        getDefaultHomeServerUrl(context))!!)!!
+        return prefs.getString(
+                HOME_SERVER_URL_PREF,
+                prefs.getString(
+                        DEFAULT_REFERRER_HOME_SERVER_URL_PREF,
+                        getDefaultHomeServerUrl(context)
+                )!!
+        )!!
     }
 
     /**
-     * Return true if url is the default homeserver url form resources
+     * Return true if url is the default homeserver url form resources.
      */
     fun isDefaultHomeServerUrl(context: Context, url: String) = url == getDefaultHomeServerUrl(context)
 
     /**
-     * Return default homeserver url from resources
+     * Return default homeserver url from resources.
      */
     fun getDefaultHomeServerUrl(context: Context): String = context.getString(R.string.matrix_org_server_url)
 }

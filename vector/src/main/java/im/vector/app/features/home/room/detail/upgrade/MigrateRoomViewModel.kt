@@ -60,7 +60,7 @@ class MigrateRoomViewModel @AssistedInject constructor(
 
     override fun handle(action: MigrateRoomAction) {
         when (action) {
-            is MigrateRoomAction.SetAutoInvite             -> {
+            is MigrateRoomAction.SetAutoInvite -> {
                 setState {
                     copy(shouldIssueInvites = action.autoInvite)
                 }
@@ -70,7 +70,7 @@ class MigrateRoomViewModel @AssistedInject constructor(
                     copy(shouldUpdateKnownParents = action.update)
                 }
             }
-            MigrateRoomAction.UpgradeRoom                  -> {
+            MigrateRoomAction.UpgradeRoom -> {
                 handleUpgradeRoom()
             }
         }

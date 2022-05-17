@@ -36,8 +36,8 @@ import timber.log.Timber
 import javax.inject.Inject
 
 /**
- * In this screen, the user is viewing a message informing that he has been logged out
- * Extends LoginActivity to get the login with SSO and forget password functionality for (nearly) free
+ * In this screen, the user is viewing a message informing that he has been logged out.
+ * Extends LoginActivity to get the login with SSO and forget password functionality for (nearly) free.
  */
 @AndroidEntryPoint
 class SoftLogoutActivity : LoginActivity() {
@@ -66,10 +66,12 @@ class SoftLogoutActivity : LoginActivity() {
                 supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
                 // And inform the user
-                showError(getString(
-                        R.string.soft_logout_sso_not_same_user_error,
-                        softLogoutViewEvents.currentUserId,
-                        softLogoutViewEvents.newUserId)
+                showError(
+                        getString(
+                                R.string.soft_logout_sso_not_same_user_error,
+                                softLogoutViewEvents.currentUserId,
+                                softLogoutViewEvents.newUserId
+                        )
                 )
             }
             is SoftLogoutViewEvents.ClearData        -> {

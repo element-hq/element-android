@@ -68,7 +68,7 @@ private fun logAction(file: File): Boolean {
  * ========================================================================================== */
 
 /**
- * Return true in case of success
+ * Return true in case of success.
  */
 private fun recursiveActionOnFile(file: File, action: ActionOnFile): Boolean {
     if (file.isDirectory) {
@@ -86,7 +86,7 @@ private fun recursiveActionOnFile(file: File, action: ActionOnFile): Boolean {
 }
 
 /**
- * Get the file extension of a fileUri or a filename
+ * Get the file extension of a fileUri or a filename.
  *
  * @param fileUri the fileUri (can be a simple filename)
  * @return the file extension, in lower case, or null is extension is not available or empty

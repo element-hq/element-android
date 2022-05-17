@@ -30,8 +30,8 @@ data class KeysVersionResult(
         override val algorithm: String,
 
         /**
-         * algorithm-dependent data, for "m.megolm_backup.v1.curve25519-aes-sha2"
-         * see [org.matrix.android.sdk.internal.crypto.keysbackup.MegolmBackupAuthData]
+         * algorithm-dependent data, for "m.megolm_backup.v1.curve25519-aes-sha2".
+         * @see [org.matrix.android.sdk.internal.crypto.keysbackup.MegolmBackupAuthData]
          */
         @Json(name = "auth_data")
         override val authData: JsonDict,

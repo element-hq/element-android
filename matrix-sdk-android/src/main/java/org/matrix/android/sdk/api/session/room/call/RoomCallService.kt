@@ -21,7 +21,7 @@ package org.matrix.android.sdk.api.session.room.call
  */
 interface RoomCallService {
     /**
-     * Return true if calls (audio or video) can be performed on this Room
+     * Return true if calls (audio or video) can be performed on this Room.
      */
     fun canStartCall(): Boolean
 }

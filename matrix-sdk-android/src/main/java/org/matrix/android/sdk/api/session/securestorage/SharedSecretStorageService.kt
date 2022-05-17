@@ -98,12 +98,12 @@ interface SharedSecretStorageService {
     suspend fun storeSecret(name: String, secretBase64: String, keys: List<KeyRef>)
 
     /**
-     * Use this call to determine which SSSSKeySpec to use for requesting secret
+     * Use this call to determine which SSSSKeySpec to use for requesting secret.
      */
     fun getAlgorithmsForSecret(name: String): List<KeyInfoResult>
 
     /**
-     * Get an encrypted secret from the shared storage
+     * Get an encrypted secret from the shared storage.
      *
      * @param name The name of the secret
      * @param keyId The id of the key that should be used to decrypt (null for default key)
@@ -113,7 +113,7 @@ interface SharedSecretStorageService {
     suspend fun getSecret(name: String, keyId: String?, secretKey: SsssKeySpec): String
 
     /**
-     * Return true if SSSS is configured
+     * Return true if SSSS is configured.
      */
     fun isRecoverySetup(): Boolean {
         return checkShouldBeAbleToAccessSecrets(
@@ -131,7 +131,7 @@ interface SharedSecretStorageService {
 
     fun checkShouldBeAbleToAccessSecrets(secretNames: List<String>, keyId: String?): IntegrityResult
 
-    fun requestSecret(name: String, myOtherDeviceId: String)
+    suspend fun requestSecret(name: String, myOtherDeviceId: String)
 
     data class KeyRef(
             val keyId: String?,

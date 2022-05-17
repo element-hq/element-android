@@ -59,7 +59,7 @@ internal fun generatePrivateKeyWithPassword(password: String,
 }
 
 /**
- * Retrieve a private key from {password, salt, iterations}
+ * Retrieve a private key from {password, salt, iterations}.
  *
  * @param password the password used to generated the private key.
  * @param salt the salt.
@@ -143,7 +143,7 @@ internal fun deriveKey(password: String,
 }
 
 /**
- * Generate a 32 chars salt
+ * Generate a 32 chars salt.
  */
 private fun generateSalt(): String {
     val salt = buildString {

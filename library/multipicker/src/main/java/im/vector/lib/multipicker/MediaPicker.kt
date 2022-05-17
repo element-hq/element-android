@@ -24,7 +24,7 @@ import im.vector.lib.multipicker.utils.toMultiPickerImageType
 import im.vector.lib.multipicker.utils.toMultiPickerVideoType
 
 /**
- * Image/Video Picker implementation
+ * Image/Video Picker implementation.
  */
 class MediaPicker : Picker<MultiPickerBaseMediaType>() {
 

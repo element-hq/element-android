@@ -60,8 +60,10 @@ internal class DefaultUpdateBreadcrumbsTask @Inject constructor(
 
         // FIXME It can remove the previous breadcrumbs, if not synced yet
         // And update account data
-        updateUserAccountDataTask.execute(UpdateUserAccountDataTask.BreadcrumbsParams(
-                breadcrumbsContent = BreadcrumbsContent(newBreadcrumbs)
-        ))
+        updateUserAccountDataTask.execute(
+                UpdateUserAccountDataTask.BreadcrumbsParams(
+                        breadcrumbsContent = BreadcrumbsContent(newBreadcrumbs)
+                )
+        )
     }
 }

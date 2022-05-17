@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,11 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.crypto.model
+package im.vector.app.features.crypto.keysbackup.settings
 
-enum class OutgoingGossipingRequestState {
-    UNSENT,
-    SENDING,
-    SENT,
-    CANCELLING,
-    CANCELLED,
-    FAILED_TO_SEND,
-    FAILED_TO_CANCEL
+import im.vector.app.core.platform.VectorViewEvents
+
+sealed class KeysBackupViewEvents : VectorViewEvents {
+    object OpenLegacyCreateBackup : KeysBackupViewEvents()
+    data class RequestStore4SSecret(val recoveryKey: String) : KeysBackupViewEvents()
 }

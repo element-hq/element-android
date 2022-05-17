@@ -19,7 +19,7 @@ package im.vector.app.features.home
 import im.vector.app.core.platform.VectorSharedAction
 
 /**
- * Supported navigation actions for [HomeActivity]
+ * Supported navigation actions for [HomeActivity].
  */
 sealed class HomeActivitySharedAction : VectorSharedAction {
     object OpenDrawer : HomeActivitySharedAction()

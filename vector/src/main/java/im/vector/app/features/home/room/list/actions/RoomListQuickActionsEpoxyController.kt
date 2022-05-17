@@ -32,7 +32,7 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 /**
- * Epoxy controller for room list actions
+ * Epoxy controller for room list actions.
  */
 class RoomListQuickActionsEpoxyController @Inject constructor(
         private val avatarRenderer: AvatarRenderer,

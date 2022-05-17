@@ -25,7 +25,7 @@ import retrofit2.http.Path
 internal interface FilterApi {
 
     /**
-     * Upload FilterBody to get a filter_id which can be used for /sync requests
+     * Upload FilterBody to get a filter_id which can be used for /sync requests.
      *
      * @param userId the user id
      * @param body   the Json representation of a FilterBody object
@@ -35,7 +35,7 @@ internal interface FilterApi {
                              @Body body: Filter): FilterResponse
 
     /**
-     * Gets a filter with a given filterId from the homeserver
+     * Gets a filter with a given filterId from the homeserver.
      *
      * @param userId   the user id
      * @param filterId the filterID

@@ -85,7 +85,8 @@ class SearchMessagesTest : InstrumentedTest {
         commonTestHelper.sendTextMessage(
                 roomFromAlicePOV,
                 MESSAGE,
-                2)
+                2
+        )
 
         val data = commonTestHelper.runBlockingTest {
             block.invoke(cryptoTestData)

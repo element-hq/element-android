@@ -32,7 +32,7 @@ fun containsOnlyEmojis(str: String?): Boolean {
 }
 
 /**
- * Same as split, but considering emojis
+ * Same as split, but considering emojis.
  */
 fun CharSequence.splitEmoji(): List<CharSequence> {
     val result = mutableListOf<CharSequence>()

@@ -32,7 +32,7 @@ import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvid
 import java.lang.ref.WeakReference
 import javax.inject.Inject
 
-/**
+/*
  * TODO Move locationPinProvider to a ViewModel
  */
 class LocationPreviewFragment @Inject constructor(

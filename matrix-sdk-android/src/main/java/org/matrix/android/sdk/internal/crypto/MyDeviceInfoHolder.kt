@@ -34,7 +34,7 @@ internal class MyDeviceInfoHolder @Inject constructor(
 ) {
     // Our device keys
     /**
-     * my device info
+     * my device info.
      */
     val myDevice: CryptoDeviceInfo
 

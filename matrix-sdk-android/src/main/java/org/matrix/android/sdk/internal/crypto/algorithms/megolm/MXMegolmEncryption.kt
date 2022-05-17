@@ -28,7 +28,6 @@ import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.api.session.crypto.model.forEach
 import org.matrix.android.sdk.api.session.events.model.Content
-import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.content.RoomKeyWithHeldContent
 import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
@@ -80,7 +79,7 @@ internal class MXMegolmEncryption(
     }
 
     // Default rotation periods
-    // TODO: Make it configurable via parameters
+    // TODO Make it configurable via parameters
     // Session rotation periods
     private var sessionRotationPeriodMsgs: Int = 100
     private var sessionRotationPeriodMs: Int = 7 * 24 * 3600 * 1000
@@ -161,7 +160,7 @@ internal class MXMegolmEncryption(
     }
 
     /**
-     * Ensure the outbound session
+     * Ensure the outbound session.
      *
      * @param devicesInRoom the devices list
      */
@@ -197,7 +196,7 @@ internal class MXMegolmEncryption(
     }
 
     /**
-     * Share the device key to a list of users
+     * Share the device key to a list of users.
      *
      * @param session        the session info
      * @param devicesByUsers the devices map
@@ -226,7 +225,7 @@ internal class MXMegolmEncryption(
     }
 
     /**
-     * Share the device keys of a an user
+     * Share the device keys of a an user.
      *
      * @param session       the session info
      * @param devicesByUser the devices map
@@ -285,24 +284,13 @@ internal class MXMegolmEncryption(
         // attempted to share with) rather than the contentMap (those we did
         // share with), because we don't want to try to claim a one-time-key
         // for dead devices on every message.
-        val gossipingEventBuffer = arrayListOf<Event>()
-        for ((userId, devicesToShareWith) in devicesByUser) {
+        for ((_, devicesToShareWith) in devicesByUser) {
             for (deviceInfo in devicesToShareWith) {
                 session.sharedWithHelper.markedSessionAsShared(deviceInfo, chainIndex)
-                gossipingEventBuffer.add(
-                        Event(
-                                type = EventType.ROOM_KEY,
-                                senderId = myUserId,
-                                content = submap.apply {
-                                    this["session_key"] = ""
-                                    // we add a fake key for trail
-                                    this["_dest"] = "$userId|${deviceInfo.deviceId}"
-                                }
-                        ))
+                // XXX is it needed to add it to the audit trail?
+                // For now decided that no, we are more interested by forward trail
             }
         }
-
-        cryptoStore.saveGossipingEvents(gossipingEventBuffer)
 
         if (haveTargets) {
             t0 = clock.epochMillis()
@@ -337,15 +325,17 @@ internal class MXMegolmEncryption(
                                           sessionId: String,
                                           senderKey: String?,
                                           code: WithHeldCode) {
-        Timber.tag(loggerTag.value).d("notifyKeyWithHeld() :sending withheld for session:$sessionId and code $code to" +
-                " ${targets.joinToString { "${it.userId}|${it.deviceId}" }}"
+        Timber.tag(loggerTag.value).d(
+                "notifyKeyWithHeld() :sending withheld for session:$sessionId and code $code to" +
+                        " ${targets.joinToString { "${it.userId}|${it.deviceId}" }}"
         )
         val withHeldContent = RoomKeyWithHeldContent(
                 roomId = roomId,
                 senderKey = senderKey,
                 algorithm = MXCRYPTO_ALGORITHM_MEGOLM,
                 sessionId = sessionId,
-                codeString = code.value
+                codeString = code.value,
+                fromDevice = myDeviceId
         )
         val params = SendToDeviceTask.Params(
                 EventType.ROOM_KEY_WITHHELD,
@@ -366,7 +356,7 @@ internal class MXMegolmEncryption(
     }
 
     /**
-     * process the pending encryptions
+     * process the pending encryptions.
      */
     private fun encryptContent(session: MXOutboundSessionInfo, eventType: String, eventContent: Content): Content {
         // Everything is in place, encrypt all pending events

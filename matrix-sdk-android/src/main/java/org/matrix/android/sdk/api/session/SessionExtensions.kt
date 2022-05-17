@@ -21,16 +21,16 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.user.model.User
 
 /**
- * Get a room using the RoomService of a Session
+ * Get a room using the RoomService of a Session.
  */
 fun Session.getRoom(roomId: String): Room? = roomService().getRoom(roomId)
 
 /**
- * Get a room summary using the RoomService of a Session
+ * Get a room summary using the RoomService of a Session.
  */
 fun Session.getRoomSummary(roomIdOrAlias: String): RoomSummary? = roomService().getRoomSummary(roomIdOrAlias)
 
 /**
- * Get a user using the UserService of a Session
+ * Get a user using the UserService of a Session.
  */
 fun Session.getUser(userId: String): User? = userService().getUser(userId)

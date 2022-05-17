@@ -310,7 +310,7 @@ class LoginViewModel2 @AssistedInject constructor(
     }
 
     /**
-     * Check that the user name is available
+     * Check that the user name is available.
      */
     private fun handleSetUserNameForSignUp(action: LoginAction2.SetUserName) {
         setState { copy(isLoading = true) }
@@ -562,7 +562,7 @@ class LoginViewModel2 @AssistedInject constructor(
     }
 
     /**
-     * Perform wellknown request
+     * Perform wellknown request.
      */
     private fun handleSetUserNameForSignIn(action: LoginAction2.SetUserName, homeServerConnectionConfig: HomeServerConnectionConfig?) {
         setState { copy(isLoading = true) }

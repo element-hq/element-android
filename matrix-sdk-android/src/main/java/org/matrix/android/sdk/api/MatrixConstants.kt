@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.api
 
 /**
- * This object define some global constants regarding the Matrix specification
+ * This object define some global constants regarding the Matrix specification.
  */
 object MatrixConstants {
     /**

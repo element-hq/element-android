@@ -17,6 +17,6 @@
 package im.vector.lib.core.utils.epoxy.charsequence
 
 /**
- * Extensions to wrap CharSequence to EpoxyCharSequence
+ * Extensions to wrap CharSequence to EpoxyCharSequence.
  */
 fun CharSequence.toEpoxyCharSequence() = EpoxyCharSequence(this)

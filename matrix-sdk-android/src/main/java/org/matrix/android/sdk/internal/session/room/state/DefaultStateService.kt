@@ -136,7 +136,7 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
         if (joinRules != null) {
             val body = if (joinRules == RoomJoinRules.RESTRICTED) {
                 RoomJoinRulesContent(
-                        _joinRules = RoomJoinRules.RESTRICTED.value,
+                        joinRulesStr = RoomJoinRules.RESTRICTED.value,
                         allowList = allowList
                 ).toContent()
             } else {

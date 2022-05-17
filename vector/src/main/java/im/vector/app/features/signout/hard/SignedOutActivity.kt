@@ -28,7 +28,7 @@ import org.matrix.android.sdk.api.failure.GlobalError
 import timber.log.Timber
 
 /**
- * In this screen, the user is viewing a message informing that he has been logged out
+ * In this screen, the user is viewing a message informing that he has been logged out.
  */
 @AndroidEntryPoint
 class SignedOutActivity : VectorBaseActivity<ActivitySignedOutBinding>() {

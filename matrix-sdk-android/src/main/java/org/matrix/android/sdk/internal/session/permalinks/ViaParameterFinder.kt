@@ -68,7 +68,7 @@ internal class ViaParameterFinder @Inject constructor(
     }
 
     /**
-     * Get a set of userIds of joined members of a room
+     * Get a set of userIds of joined members of a room.
      */
     private fun getUserIdsOfJoinedMembers(roomId: String): Set<String> {
         return roomGetterProvider.get().getRoom(roomId)

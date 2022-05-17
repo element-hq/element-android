@@ -22,7 +22,7 @@ import im.vector.lib.multipicker.entity.MultiPickerVideoType
 import im.vector.lib.multipicker.utils.toMultiPickerVideoType
 
 /**
- * Video Picker implementation
+ * Video Picker implementation.
  */
 class VideoPicker : Picker<MultiPickerVideoType>() {
 

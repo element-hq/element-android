@@ -42,7 +42,6 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.isVerified
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupLastVersionResult
 import org.matrix.android.sdk.api.session.crypto.keysbackup.computeRecoveryKey
 import org.matrix.android.sdk.api.session.crypto.keysbackup.toKeysVersionResult
-import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
@@ -275,10 +274,11 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                 } else {
                     setState {
                         copy(
-                                pendingRequest = Success(session
-                                        .cryptoService()
-                                        .verificationService()
-                                        .requestKeyVerificationInDMs(supportedVerificationMethodsProvider.provide(), otherUserId, roomId)
+                                pendingRequest = Success(
+                                        session
+                                                .cryptoService()
+                                                .verificationService()
+                                                .requestKeyVerificationInDMs(supportedVerificationMethodsProvider.provide(), otherUserId, roomId)
                                 )
                         )
                     }
@@ -416,12 +416,18 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                     )
                 }
                 _viewEvents.post(
-                        VerificationBottomSheetViewEvents.ModalError(failure.localizedMessage ?: stringProvider.getString(R.string.unexpected_error)))
+                        VerificationBottomSheetViewEvents.ModalError(failure.localizedMessage ?: stringProvider.getString(R.string.unexpected_error))
+                )
             }
         }
     }
 
     private fun tentativeRestoreBackup(res: Map<String, String>?) {
+        // It's not a good idea to download the full backup, it might take very long
+        // and use a lot of resources
+        // Just check that the key is valid and store it, the backup will be used megolm session per
+        // megolm session when an UISI is encountered
+
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val secret = res?.get(KEYBACKUP_SECRET_SSSS_NAME) ?: return@launch Unit.also {
@@ -432,17 +438,13 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                     session.cryptoService().keysBackupService().getCurrentVersion(it)
                 }.toKeysVersionResult() ?: return@launch
 
-                awaitCallback<ImportRoomKeysResult> {
-                    session.cryptoService().keysBackupService().restoreKeysWithRecoveryKey(
-                            version,
-                            computeRecoveryKey(secret.fromBase64()),
-                            null,
-                            null,
-                            null,
-                            it
-                    )
+                val recoveryKey = computeRecoveryKey(secret.fromBase64())
+                val isValid = awaitCallback<Boolean> {
+                    session.cryptoService().keysBackupService().isValidRecoveryKeyForCurrentVersion(recoveryKey, it)
                 }
-
+                if (isValid) {
+                    session.cryptoService().keysBackupService().saveBackupRecoveryKey(recoveryKey, version.version)
+                }
                 awaitCallback<Unit> {
                     session.cryptoService().keysBackupService().trustKeysBackupVersion(version, true, it)
                 }

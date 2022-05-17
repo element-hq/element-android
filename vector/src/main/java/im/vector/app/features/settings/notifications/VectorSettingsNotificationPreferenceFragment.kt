@@ -204,7 +204,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
             // Important, Battery optim white listing is needed in this mode;
             // Even if using foreground service with foreground notif, it stops to work
             // in doze mode for certain devices :/
-            if (!isIgnoringBatteryOptimizations(requireContext())) {
+            if (!requireContext().isIgnoringBatteryOptimizations()) {
                 requestDisablingBatteryOptimization(requireActivity(), batteryStartForActivityResult)
             }
         }
@@ -241,7 +241,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
     }
 
     /**
-     * Convert a delay in seconds to string
+     * Convert a delay in seconds to string.
      *
      * @param seconds the delay in seconds
      * @return the text
@@ -352,8 +352,8 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
         super.onDetach()
     }
 
-    override fun onPreferenceTreeClick(preference: Preference?): Boolean {
-        return when (preference?.key) {
+    override fun onPreferenceTreeClick(preference: Preference): Boolean {
+        return when (preference.key) {
             VectorPreferences.SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY -> {
                 updateEnabledForAccount(preference)
                 true
@@ -373,9 +373,11 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
                     // Trick, we must enable this room to disable notifications
                     lifecycleScope.launch {
                         try {
-                            pushRuleService.updatePushRuleEnableStatus(RuleKind.OVERRIDE,
+                            pushRuleService.updatePushRuleEnableStatus(
+                                    RuleKind.OVERRIDE,
                                     it,
-                                    !switchPref.isChecked)
+                                    !switchPref.isChecked
+                            )
                             // Push rules will be updated from the sync
                         } catch (failure: Throwable) {
                             if (!isAdded) {

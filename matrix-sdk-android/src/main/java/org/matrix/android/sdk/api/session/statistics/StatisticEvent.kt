@@ -17,11 +17,11 @@
 package org.matrix.android.sdk.api.session.statistics
 
 /**
- * Statistic Events. You can subscribe to received such events using [Session.Listener]
+ * Statistic Events. You can subscribe to received such events using [Session.Listener].
  */
 sealed interface StatisticEvent {
     /**
-     * Initial sync request, response downloading, and treatment (parsing and storage) of response
+     * Initial sync request, response downloading, and treatment (parsing and storage) of response.
      */
     data class InitialSyncRequest(val requestDurationMs: Int,
                                   val downloadDurationMs: Int,
@@ -29,7 +29,7 @@ sealed interface StatisticEvent {
                                   val nbOfJoinedRooms: Int) : StatisticEvent
 
     /**
-     * Incremental sync event
+     * Incremental sync event.
      */
     data class SyncTreatment(val durationMs: Int,
                              val afterPause: Boolean,

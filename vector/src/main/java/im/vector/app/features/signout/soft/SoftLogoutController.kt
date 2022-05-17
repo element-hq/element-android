@@ -74,10 +74,14 @@ class SoftLogoutController @Inject constructor(
         }
         loginTextItem {
             id("signText1")
-            text(host.stringProvider.getString(R.string.soft_logout_signin_notice,
-                    state.homeServerUrl.toReducedUrl(),
-                    state.userDisplayName,
-                    state.userId))
+            text(
+                    host.stringProvider.getString(
+                            R.string.soft_logout_signin_notice,
+                            state.homeServerUrl.toReducedUrl(),
+                            state.userDisplayName,
+                            state.userId
+                    )
+            )
         }
         if (state.hasUnsavedKeys) {
             loginTextItem {
