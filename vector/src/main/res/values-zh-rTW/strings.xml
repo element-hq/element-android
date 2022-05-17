@@ -2300,7 +2300,6 @@
     <string name="location_share_external">開啟以</string>
     <string name="location_not_available_dialog_content">${app_name} 無法存取您的位置。請稍後再試。</string>
     <string name="location_not_available_dialog_title">${app_name} 無法存取您的位置</string>
-    <string name="location_share">分享位置</string>
     <string name="location_activity_title_preview">位置</string>
     <string name="location_activity_title_static_sharing">分享位置</string>
     <string name="closed_poll_option_description">結果僅在您結束投票後顯示</string>

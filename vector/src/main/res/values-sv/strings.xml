@@ -2345,7 +2345,6 @@
     <string name="location_share_external">Öppna med</string>
     <string name="location_not_available_dialog_content">${app_name} kunde inte komma åt din plats. Försök igen senare.</string>
     <string name="location_not_available_dialog_title">${app_name} kunde inte komma åt din plats</string>
-    <string name="location_share">Dela plats</string>
     <string name="location_activity_title_preview">Plats</string>
     <string name="location_activity_title_static_sharing">Dela plats</string>
     <string name="open_poll_option_description">Väljare kan se resultatet så fort de har röstat</string>

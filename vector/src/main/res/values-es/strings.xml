@@ -2365,7 +2365,6 @@
     <string name="a11y_location_share_option_pinned_icon">Compartir esta ubicación</string>
     <string name="a11y_location_share_option_user_live_icon">Compartir ubicación en tiempo real</string>
     <string name="a11y_location_share_option_user_current_icon">Compartir mi ubicación actual</string>
-    <string name="location_share" tools:ignore="UnusedResources">Compartir ubicación</string>
     <string name="ftue_auth_carousel_workplace_body">${app_name} también es estupenda para el trabajo. Es confiada por las organizaciones más seguras del mundo.</string>
     <string name="identity_server_consent_dialog_content_3">Para descubrir contactos ya existentes, tendrás que enviar información de contacto (emails y números de teléfono) a tu servidor de identidad. Aplicamos hashes en tus datos antes de enviarlos por privacidad.</string>
     <string name="send_feedback_threads_info">Los hilos son un proyecto en progreso con nuevas y excitantes características nuevas, como notificaciones mejoradas. ¡Nos encantaría escuchar tus comentarios!</string>

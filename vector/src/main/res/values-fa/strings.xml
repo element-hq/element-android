@@ -2340,7 +2340,6 @@
     <string name="tooltip_attachment_location">هم‌رسانی مکان</string>
     <string name="settings_enable_location_sharing">به کار انداختن هم‌رسانی مکان</string>
     <string name="location_share_external">گشودن با</string>
-    <string name="location_share">هم‌رسانی مکان</string>
     <string name="location_activity_title_preview">مکان</string>
     <string name="location_activity_title_static_sharing">هم‌رسانی مکان</string>
     <string name="closed_poll_option_title">نظرسنجی بسته</string>

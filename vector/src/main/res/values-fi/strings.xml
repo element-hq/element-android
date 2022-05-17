@@ -1968,7 +1968,6 @@
     <string name="tooltip_attachment_photo">Avaa kamera</string>
     <string name="message_bubbles">Näytä viestikuplat</string>
     <string name="location_timeline_failed_to_load_map">Kartan lataaminen epäonnistui</string>
-    <string name="location_share">Jaa sijainti</string>
     <string name="tooltip_attachment_poll">Luo kysely</string>
     <string name="tooltip_attachment_location">Jaa sijainti</string>
     <string name="message_reaction_show_less">Näytä vähemmän</string>

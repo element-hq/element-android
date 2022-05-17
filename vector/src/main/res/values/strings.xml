@@ -2984,8 +2984,6 @@
     <string name="location_activity_title_static_sharing">Share location</string>
     <string name="location_activity_title_preview">Location</string>
     <string name="a11y_static_map_image">Map</string>
-    <!-- TODO delete -->
-    <string name="location_share" tools:ignore="UnusedResources">Share location</string>
     <string name="a11y_location_share_pin_on_map">Pin of selected location on map</string>
     <string name="a11y_location_share_locate_button">Zoom to current location</string>
     <string name="location_share_option_user_current">Share my current location</string>

@@ -2433,7 +2433,6 @@
     <string name="location_share_external">Відкрити за допомогою</string>
     <string name="location_not_available_dialog_content">${app_name} не може отримати доступ до вашого місцеперебування. Спробуйте пізніше.</string>
     <string name="location_not_available_dialog_title">${app_name} не може отримати доступ до вашого місцеперебування</string>
-    <string name="location_share">Поділитися місцеперебуванням</string>
     <string name="location_activity_title_preview">Місцеперебування</string>
     <string name="location_activity_title_static_sharing">Поділитися місцеперебуванням</string>
     <string name="closed_poll_option_description">Результати можна переглянути лише після завершення опитування</string>

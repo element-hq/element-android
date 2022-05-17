@@ -2524,7 +2524,6 @@
     <string name="location_share_option_user_current">Udostępnij moją aktualną lokalizację</string>
     <string name="a11y_location_share_locate_button">Powiększ do bieżącej lokalizacji</string>
     <string name="a11y_location_share_pin_on_map">Przypnij na mapie wybraną lokalizację</string>
-    <string name="location_share" tools:ignore="UnusedResources">Udostępnij lokalizację</string>
     <string name="a11y_static_map_image">Mapa</string>
     <string name="location_activity_title_preview">Lokalizacja</string>
     <string name="location_activity_title_static_sharing">Udostępnij lokalizację</string>

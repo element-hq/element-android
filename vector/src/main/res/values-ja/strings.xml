@@ -1541,7 +1541,6 @@
     <string name="location_timeline_failed_to_load_map">地図を読み込めませんでした</string>
     <string name="reply_in_thread">スレッドで返信</string>
     <string name="location_activity_title_static_sharing">位置情報を共有</string>
-    <string name="location_share">位置情報を共有</string>
     <string name="tooltip_attachment_photo">カメラを開く</string>
     <string name="tooltip_attachment_gallery">画像と動画を送信</string>
     <string name="tooltip_attachment_file">ファイルをアップロード</string>

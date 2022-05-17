@@ -1023,7 +1023,6 @@
     <string name="tooltip_attachment_gallery">Senda myndir og myndskeið</string>
     <string name="tooltip_attachment_photo">Opna myndavél</string>
     <string name="location_share_external">Opna með</string>
-    <string name="location_share">Deila staðsetningu</string>
     <string name="a11y_static_map_image">Landakort</string>
     <string name="location_activity_title_preview">Staðsetning</string>
     <string name="location_activity_title_static_sharing">Deila staðsetningu</string>

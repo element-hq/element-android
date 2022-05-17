@@ -1888,7 +1888,6 @@
     <string name="location_share_external">פתח באמצעות</string>
     <string name="location_not_available_dialog_content">${app_name} לא הצליח לגשת למיקום שלך. אנא נסה שוב מאוחר יותר.</string>
     <string name="location_not_available_dialog_title">${app_name} לא הצליח לגשת למיקום שלך</string>
-    <string name="location_share">שתף מיקום</string>
     <string name="settings_notification_emails_enable_for_email">אפשר התראת דוא\"ל עבור %s</string>
     <string name="settings_notification_keyword_contains_invalid_character">מילות מפתח לא יכולות להכיל \'%s\'</string>
     <string name="settings_notification_keyword_contains_dot">מילות מפתח אינן יכולות להתחיל ב-\'.\'</string>

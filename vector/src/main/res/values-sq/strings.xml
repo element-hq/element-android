@@ -2332,7 +2332,6 @@
     <string name="ftue_auth_carousel_secure_title">Jini zot i bisedave tuaja.</string>
     <string name="tooltip_attachment_location">Jepe vendndodhjen</string>
     <string name="settings_enable_location_sharing">Aktivizoni dhënie vendndodhjeje</string>
-    <string name="location_share">Jepe vendndodhjen</string>
     <string name="location_activity_title_preview">Vendndodhje</string>
     <string name="location_activity_title_static_sharing">Jepe vendndodhjen</string>
     <string name="closed_poll_option_description">Përfundimet shfaqen vetëm kur përfundoni anketimin</string>

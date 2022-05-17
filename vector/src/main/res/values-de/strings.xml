@@ -2339,7 +2339,6 @@
     </plurals>
     <string name="room_profile_section_restore_security">Verschlüsselung wiederherstellen</string>
     <string name="tooltip_attachment_location">Standort freigeben</string>
-    <string name="location_share">Standort freigeben</string>
     <string name="location_activity_title_static_sharing">Standort freigeben</string>
     <string name="settings_enable_location_sharing">Standortfreigabe aktivieren</string>
     <string name="location_share_external">Öffnen mit</string>

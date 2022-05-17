@@ -2333,7 +2333,6 @@
     <string name="location_share_external">Открыть с помощью</string>
     <string name="location_not_available_dialog_content">${app_name} не смог получить доступ к вашему местоположению. Пожалуйста, повторите попытку позже.</string>
     <string name="location_not_available_dialog_title">${app_name} не смог получить доступ к вашему местоположению</string>
-    <string name="location_share">Поделиться местоположением</string>
     <string name="location_activity_title_preview">Местоположение</string>
     <string name="location_activity_title_static_sharing">Поделиться местоположением</string>
     <string name="closed_poll_option_description">Результаты отображаются только после завершения опроса</string>

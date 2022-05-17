@@ -2345,7 +2345,6 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="location_share_external">Megnyitás ezzel</string>
     <string name="location_not_available_dialog_content">Az ${app_name} nem fér hozzá a tartózkodási helyedhez. Próbáld újra később.</string>
     <string name="location_not_available_dialog_title">Az ${app_name} nem tudott hozzáférni a tartózkodási helyedhez</string>
-    <string name="location_share">Tartózkodási hely megosztása</string>
     <string name="location_activity_title_preview">Földrajzi helyzet</string>
     <string name="location_activity_title_static_sharing">Tartózkodási hely megosztása</string>
     <string name="closed_poll_option_description">Az eredmény csak a szavazás végeztével válik láthatóvá</string>

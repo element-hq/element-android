@@ -2372,7 +2372,6 @@
     <string name="location_share_option_user_current">ແບ່ງປັນສະຖານທີ່ປະຈຸບັນຂອງຂ້ອຍ</string>
     <string name="a11y_location_share_locate_button">ຂະຫຍາຍໄປຫາສະຖານທີ່ປັດຈຸບັນ</string>
     <string name="a11y_location_share_pin_on_map">ປັກໝຸດຂອງສະຖານທີ່ທີ່ເລືອກຢູ່ໃນແຜນທີ່</string>
-    <string name="location_share" tools:ignore="UnusedResources">ແບ່ງປັນສະຖານທີ່</string>
     <string name="a11y_static_map_image">ແຜນທີ່</string>
     <string name="location_activity_title_preview">ສະຖານທີ່</string>
     <string name="location_activity_title_static_sharing">ແບ່ງປັນສະຖານທີ່</string>

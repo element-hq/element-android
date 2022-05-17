@@ -2390,7 +2390,6 @@
     <string name="location_share_external">Otevřít v</string>
     <string name="location_not_available_dialog_content">${app_name} nemohl získat přístup k vaší poloze. Zkuste to prosím později.</string>
     <string name="location_not_available_dialog_title">${app_name} nemohl získat přístup k vaší poloze</string>
-    <string name="location_share">Sdílet polohu</string>
     <string name="location_activity_title_preview">Poloha</string>
     <string name="location_activity_title_static_sharing">Sdílet polohu</string>
     <string name="closed_poll_option_description">Výsledky se zobrazí až po ukončení hlasování</string>

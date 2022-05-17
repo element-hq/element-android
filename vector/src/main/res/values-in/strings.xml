@@ -2302,7 +2302,6 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="location_share_external">Buka dengan</string>
     <string name="location_not_available_dialog_content">${app_name} tidak dapat mengakses lokasi Anda. Silakan coba lagi nanti.</string>
     <string name="location_not_available_dialog_title">${app_name} tidak dapat mengakses lokasi Anda</string>
-    <string name="location_share">Bagikan lokasi</string>
     <string name="location_activity_title_preview">Lokasi</string>
     <string name="location_activity_title_static_sharing">Bagikan lokasi</string>
     <string name="closed_poll_option_description">Hasil akan ditampilkan ketika Anda mengakhiri poll-nya</string>
