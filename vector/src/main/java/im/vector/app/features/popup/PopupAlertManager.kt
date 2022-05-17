@@ -25,7 +25,7 @@ import com.tapadoo.alerter.Alerter
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.time.Clock
-import im.vector.app.core.utils.isAnimationDisabled
+import im.vector.app.core.utils.isAnimationEnabled
 import im.vector.app.features.analytics.ui.consent.AnalyticsOptInActivity
 import im.vector.app.features.pin.PinActivity
 import im.vector.app.features.signout.hard.SignedOutActivity
@@ -90,7 +90,7 @@ class PopupAlertManager @Inject constructor(
     }
 
     /**
-     * Cancel all alerts, after a sign out for instance
+     * Cancel all alerts, after a sign out for instance.
      */
     fun cancelAll() {
         synchronized(alertQueue) {
@@ -218,7 +218,7 @@ class PopupAlertManager @Inject constructor(
         if (!alert.isLight) {
             clearLightStatusBar()
         }
-        val noAnimation = !animate || isAnimationDisabled(activity)
+        val noAnimation = !(animate && activity.isAnimationEnabled())
 
         alert.weakCurrentActivity = WeakReference(activity)
         val alerter = Alerter.create(activity, alert.layoutRes)

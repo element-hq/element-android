@@ -450,11 +450,8 @@
     <string name="settings_new_password">新密碼</string>
     <string name="settings_fail_to_update_password">更新密碼失敗</string>
     <string name="settings_password_updated">您的密碼已經更新</string>
-    <string name="settings_unignore_user">顯示所有來自 %s 的訊息？ 
-\n
-\n注意此動作將會重新啟動應用程式，而其可能需要一點時間。</string>
+    <string name="settings_unignore_user">顯示所有來自 %s 的訊息？</string>
     <string name="settings_select_country">選擇國家</string>
-    <string name="settings_flair">特色</string>
     <string name="media_saving_period_3_days">3 天</string>
     <string name="media_saving_period_1_week">1 週</string>
     <string name="media_saving_period_1_month">1 個月</string>
@@ -1501,9 +1498,7 @@
 \n
 \n您隨時都可以在一般設定中撤銷此動作。</string>
     <string name="room_participants_action_unignore_title">取消忽略使用者</string>
-    <string name="room_participants_action_unignore_prompt_msg">取消忽略此使用者將再次顯示從他們而來的所有訊息。
-\n
-\n注意，此動作將會重新啟動應用程式，且可能需要一些時間。</string>
+    <string name="room_participants_action_unignore_prompt_msg">取消忽略此使用者將再次顯示從他們而來的所有訊息。</string>
     <string name="room_participants_action_cancel_invite_title">取消邀請</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">您確定您想要取消對此使用者的邀請嗎？</string>
     <string name="room_participants_remove_title">踢除使用者</string>
@@ -2305,8 +2300,6 @@
     <string name="location_share_external">開啟以</string>
     <string name="location_not_available_dialog_content">${app_name} 無法存取您的位置。請稍後再試。</string>
     <string name="location_not_available_dialog_title">${app_name} 無法存取您的位置</string>
-    <string name="location_share">分享位置</string>
-    <string name="a11y_location_share_icon">分享位置</string>
     <string name="location_activity_title_preview">位置</string>
     <string name="location_activity_title_static_sharing">分享位置</string>
     <string name="closed_poll_option_description">結果僅在您結束投票後顯示</string>
@@ -2440,4 +2433,14 @@
     <string name="threads_beta_enable_notice_title">討論串測試版</string>
     <string name="action_learn_more">取得更多資訊</string>
     <string name="action_try_it_out">試試看</string>
+    <string name="screen_sharing_notification_description">正在分享畫面</string>
+    <string name="screen_sharing_notification_title">${app_name} 分享畫面中</string>
+    <string name="call_stop_screen_sharing">停止分享畫面</string>
+    <string name="call_start_screen_sharing">分享畫面</string>
+    <string name="initial_sync_request_reason_unignored_users">- 部份使用者已被取消忽略</string>
+    <string name="initial_sync_request_content">${app_name} 需要執行清除快取以保持最新狀態，原因如下：
+\n%s
+\n
+\n注意，此動作將會重新啟動應用程式，並可能需要一些時間。</string>
+    <string name="initial_sync_request_title">初始同步請求</string>
 </resources>

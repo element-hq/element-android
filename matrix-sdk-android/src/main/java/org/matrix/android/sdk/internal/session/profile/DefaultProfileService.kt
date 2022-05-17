@@ -135,21 +135,25 @@ internal class DefaultProfileService @Inject constructor(private val taskExecuto
     override suspend fun finalizeAddingThreePid(threePid: ThreePid,
                                                 userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor) {
         finalizeAddingThreePidTask
-                .execute(FinalizeAddingThreePidTask.Params(
-                        threePid = threePid,
-                        userInteractiveAuthInterceptor = userInteractiveAuthInterceptor,
-                        userWantsToCancel = false
-                ))
+                .execute(
+                        FinalizeAddingThreePidTask.Params(
+                                threePid = threePid,
+                                userInteractiveAuthInterceptor = userInteractiveAuthInterceptor,
+                                userWantsToCancel = false
+                        )
+                )
         refreshThreePids()
     }
 
     override suspend fun cancelAddingThreePid(threePid: ThreePid) {
         finalizeAddingThreePidTask
-                .execute(FinalizeAddingThreePidTask.Params(
-                        threePid = threePid,
-                        userInteractiveAuthInterceptor = null,
-                        userWantsToCancel = true
-                ))
+                .execute(
+                        FinalizeAddingThreePidTask.Params(
+                                threePid = threePid,
+                                userInteractiveAuthInterceptor = null,
+                                userWantsToCancel = true
+                        )
+                )
         refreshThreePids()
     }
 

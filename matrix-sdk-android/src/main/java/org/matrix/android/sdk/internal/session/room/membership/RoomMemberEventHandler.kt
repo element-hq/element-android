@@ -83,7 +83,8 @@ internal class RoomMemberEventHandler @Inject constructor(
                 roomMember,
                 // When an update is happening, insertOrUpdate replace existing values with null if they are not provided,
                 // but we want to preserve presence record value and not replace it with null
-                getExistingPresenceState(realm, roomId, userId))
+                getExistingPresenceState(realm, roomId, userId)
+        )
         realm.insertOrUpdate(roomMemberEntity)
     }
 

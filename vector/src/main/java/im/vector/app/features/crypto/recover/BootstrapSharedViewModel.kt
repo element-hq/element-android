@@ -404,7 +404,8 @@ class BootstrapSharedViewModel @AssistedInject constructor(
         }
 
         viewModelScope.launch(Dispatchers.IO) {
-            bootstrapTask.invoke(this,
+            bootstrapTask.invoke(
+                    this,
                     Params(
                             userInteractiveAuthInterceptor = interceptor,
                             progressListener = progressListener,

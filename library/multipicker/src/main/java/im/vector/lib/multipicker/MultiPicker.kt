@@ -16,7 +16,7 @@
 
 package im.vector.lib.multipicker
 
-class MultiPicker<T> {
+class MultiPicker<T> private constructor() {
 
     companion object Type {
         val IMAGE by lazy { MultiPicker<ImagePicker>() }

@@ -19,14 +19,15 @@ package org.matrix.android.sdk.internal.util
 import javax.crypto.SecretKey
 
 /**
- * Tuple which contains the secret key and the version of Android when the key has been generated
+ * Tuple which contains the secret key and the version of Android when the key has been generated.
  */
 internal data class SecretKeyAndVersion(
         /**
-         * the key
+         * the key.
          */
         val secretKey: SecretKey,
         /**
-         * The android version when the key has been generated
+         * The android version when the key has been generated.
          */
-        val androidVersionWhenTheKeyHasBeenGenerated: Int)
+        val androidVersionWhenTheKeyHasBeenGenerated: Int
+)

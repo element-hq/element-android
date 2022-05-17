@@ -45,7 +45,7 @@ import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
 /**
- * In this screen, the user is asked for a text input
+ * In this screen, the user is asked for a text input.
  */
 class LoginGenericTextInputFormFragment2 @Inject constructor() : AbstractLoginFragment2<FragmentLoginGenericTextInputForm2Binding>() {
 

@@ -19,6 +19,7 @@ package im.vector.app.features.home.room.threads.list.views
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -70,6 +71,16 @@ class ThreadListFragment @Inject constructor(
         analyticsScreenName = MobileScreen.ScreenName.ThreadList
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+
+        menu.findItem(R.id.menu_thread_list_filter)?.let { menuItem ->
+            menuItem.actionView.setOnClickListener {
+                onOptionsItemSelected(menuItem)
+            }
+        }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_thread_list_filter -> {
@@ -82,6 +93,9 @@ class ThreadListFragment @Inject constructor(
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         withState(threadListViewModel) { state ->
+            val filterIcon = menu.findItem(R.id.menu_thread_list_filter).actionView
+            val filterBadge = filterIcon.findViewById<View>(R.id.threadListFilterBadge)
+            filterBadge.isVisible = state.shouldFilterThreads
             when (threadListViewModel.canHomeserverUseThreading()) {
                 true  -> menu.findItem(R.id.menu_thread_list_filter).isVisible = !state.threadSummaryList.invoke().isNullOrEmpty()
                 false -> menu.findItem(R.id.menu_thread_list_filter).isVisible = !state.rootThreadEventList.invoke().isNullOrEmpty()
@@ -112,7 +126,8 @@ class ThreadListFragment @Inject constructor(
     private fun initTextConstants() {
         views.threadListEmptyNoticeTextView.text = String.format(
                 resources.getString(R.string.thread_list_empty_notice),
-                resources.getString(R.string.reply_in_thread))
+                resources.getString(R.string.reply_in_thread)
+        )
     }
 
     private fun initBetaFeedback() {
@@ -145,21 +160,23 @@ class ThreadListFragment @Inject constructor(
 
     override fun onThreadSummaryClicked(threadSummary: ThreadSummary) {
         val roomThreadDetailArgs = ThreadTimelineArgs(
-                roomId = threadSummary.roomId,
-                displayName = threadSummary.rootThreadSenderInfo.displayName,
-                avatarUrl = threadSummary.rootThreadSenderInfo.avatarUrl,
+                roomId = threadListArgs.roomId,
+                displayName = threadListArgs.displayName,
+                avatarUrl = threadListArgs.avatarUrl,
                 roomEncryptionTrustLevel = null,
-                rootThreadEventId = threadSummary.rootEventId)
+                rootThreadEventId = threadSummary.rootEventId
+        )
         (activity as? ThreadsActivity)?.navigateToThreadTimeline(roomThreadDetailArgs)
     }
 
     override fun onThreadListClicked(timelineEvent: TimelineEvent) {
         val threadTimelineArgs = ThreadTimelineArgs(
-                roomId = timelineEvent.roomId,
-                displayName = timelineEvent.senderInfo.displayName,
-                avatarUrl = timelineEvent.senderInfo.avatarUrl,
+                roomId = threadListArgs.roomId,
+                displayName = threadListArgs.displayName,
+                avatarUrl = threadListArgs.avatarUrl,
                 roomEncryptionTrustLevel = null,
-                rootThreadEventId = timelineEvent.eventId)
+                rootThreadEventId = timelineEvent.eventId
+        )
         (activity as? ThreadsActivity)?.navigateToThreadTimeline(threadTimelineArgs)
     }
 

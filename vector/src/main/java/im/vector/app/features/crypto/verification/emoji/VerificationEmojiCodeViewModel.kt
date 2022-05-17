@@ -60,9 +60,13 @@ class VerificationEmojiCodeViewModel @AssistedInject constructor(
 
     init {
         withState { state ->
-            refreshStateFromTx(session.cryptoService().verificationService()
-                    .getExistingTransaction(state.otherUser?.id ?: "", state.transactionId
-                            ?: "") as? SasVerificationTransaction)
+            refreshStateFromTx(
+                    session.cryptoService().verificationService()
+                            .getExistingTransaction(
+                                    state.otherUser?.id ?: "", state.transactionId
+                                    ?: ""
+                            ) as? SasVerificationTransaction
+            )
         }
 
         session.cryptoService().verificationService().addListener(this)

@@ -19,7 +19,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * Class to define a filter to retrieve public rooms
+ * Class to define a filter to retrieve public rooms.
  */
 @JsonClass(generateAdapter = true)
 data class PublicRoomsFilter(

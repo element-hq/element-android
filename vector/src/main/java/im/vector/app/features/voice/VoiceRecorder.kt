@@ -27,30 +27,30 @@ interface VoiceRecorder {
     fun initializeRecord(attachmentData: ContentAttachmentData)
 
     /**
-     * Start the recording
+     * Start the recording.
      * @param roomId id of the room to start record
      */
     fun startRecord(roomId: String)
 
     /**
-     * Stop the recording
+     * Stop the recording.
      */
     fun stopRecord()
 
     /**
-     * Remove the file
+     * Remove the file.
      */
     fun cancelRecord()
 
     fun getMaxAmplitude(): Int
 
     /**
-     * Not guaranteed to be a ogg file
+     * Not guaranteed to be a ogg file.
      */
     fun getCurrentRecord(): File?
 
     /**
-     * Guaranteed to be a ogg file
+     * Guaranteed to be a ogg file.
      */
     fun getVoiceMessageFile(): File?
 }

@@ -92,7 +92,8 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
                 2,
                 eventIdToHighlight,
                 partialState.rootThreadEventId,
-                partialState.isFromThreadTimeline())
+                partialState.isFromThreadTimeline()
+        )
         return if (mergedEvents.isEmpty()) {
             null
         } else {

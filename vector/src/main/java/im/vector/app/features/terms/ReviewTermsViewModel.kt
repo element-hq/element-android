@@ -111,7 +111,8 @@ class ReviewTermsViewModel @AssistedInject constructor(
             try {
                 val data = session.termsService().getTerms(termsArgs.type, termsArgs.baseURL)
                 val terms = data.serverResponse.getLocalizedTerms(action.preferredLanguageCode).map {
-                    Term(it.localizedUrl ?: "",
+                    Term(
+                            it.localizedUrl ?: "",
                             it.localizedName ?: "",
                             it.version,
                             accepted = data.alreadyAcceptedTermUrls.contains(it.localizedUrl)

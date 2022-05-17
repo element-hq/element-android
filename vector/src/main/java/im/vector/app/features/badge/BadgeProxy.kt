@@ -24,12 +24,12 @@ import me.leolin.shortcutbadger.ShortcutBadger
 import org.matrix.android.sdk.api.session.Session
 
 /**
- * Manage application badge (displayed in the launcher)
+ * Manage application badge (displayed in the launcher).
  */
 object BadgeProxy {
 
     /**
-     * Badge is now managed by notification channel, so no need to use compatibility library in recent versions
+     * Badge is now managed by notification channel, so no need to use compatibility library in recent versions.
      *
      * @return true if library ShortcutBadger can be used
      */

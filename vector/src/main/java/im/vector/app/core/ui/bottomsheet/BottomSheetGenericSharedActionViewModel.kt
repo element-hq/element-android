@@ -20,6 +20,6 @@ import im.vector.app.core.platform.VectorSharedAction
 import im.vector.app.core.platform.VectorSharedActionViewModel
 
 /**
- * Activity shared view model to handle bottom sheet quick actions
+ * Activity shared view model to handle bottom sheet quick actions.
  */
 abstract class BottomSheetGenericSharedActionViewModel<Action : VectorSharedAction> : VectorSharedActionViewModel<Action>()

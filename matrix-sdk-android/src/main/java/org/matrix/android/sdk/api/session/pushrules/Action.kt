@@ -42,7 +42,7 @@ sealed class Action {
 }
 
 /**
- * Ref: https://matrix.org/docs/spec/client_server/latest#actions
+ * Ref: https://matrix.org/docs/spec/client_server/latest#actions.
  *
  * Convert
  * <pre>

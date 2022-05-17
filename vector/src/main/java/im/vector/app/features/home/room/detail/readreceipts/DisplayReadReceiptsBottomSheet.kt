@@ -40,7 +40,7 @@ data class DisplayReadReceiptArgs(
 ) : Parcelable
 
 /**
- * Bottom sheet displaying list of read receipts for a given event ordered by descending timestamp
+ * Bottom sheet displaying list of read receipts for a given event ordered by descending timestamp.
  */
 @AndroidEntryPoint
 class DisplayReadReceiptsBottomSheet :

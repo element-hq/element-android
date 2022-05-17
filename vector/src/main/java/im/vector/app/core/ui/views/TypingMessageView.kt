@@ -31,7 +31,8 @@ import javax.inject.Inject
 class TypingMessageView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0) : ConstraintLayout(context, attrs, defStyleAttr) {
+        defStyleAttr: Int = 0
+) : ConstraintLayout(context, attrs, defStyleAttr) {
 
     val views: TypingMessageLayoutBinding
 
@@ -44,8 +45,8 @@ class TypingMessageView @JvmOverloads constructor(
     }
 
     fun render(typingUsers: List<SenderInfo>, avatarRenderer: AvatarRenderer) {
-        views.usersName.text = typingHelper.getNotificationTypingMessage(typingUsers)
-        views.avatars.render(typingUsers, avatarRenderer)
+        views.typingUserText.text = typingHelper.getNotificationTypingMessage(typingUsers)
+        views.typingUserAvatars.render(typingUsers, avatarRenderer)
     }
 
     override fun onDetachedFromWindow() {

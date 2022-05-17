@@ -140,7 +140,8 @@ class SpaceCardRenderer @Inject constructor(
                 avatarRenderer.render(item, images[index])
             }
             inCard.peopleYouMayKnowText.setTextOrHide(
-                    stringProvider.getQuantityString(R.plurals.space_people_you_know,
+                    stringProvider.getQuantityString(
+                            R.plurals.space_people_you_know,
                             peopleYouKnow.count(),
                             peopleYouKnow.count()
                     )

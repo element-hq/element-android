@@ -95,6 +95,7 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
                 nextDisplayableEvent.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER, EventType.ENCRYPTED) ||
                 isNextMessageReceivedMoreThanOneHourAgo ||
                 isTileTypeMessage(nextDisplayableEvent) ||
+                nextDisplayableEvent.isRootThread() ||
                 event.isRootThread() ||
                 nextDisplayableEvent.isEdition()
 
@@ -153,7 +154,7 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
         return when {
             this == null || msgType == MessageType.MSGTYPE_BEACON_INFO -> false
             msgType == MessageType.MSGTYPE_LOCATION                    -> vectorPreferences.labsRenderLocationsInTimeline()
-            else                                                               -> msgType in MSG_TYPES_WITH_TIMESTAMP_INSIDE_MESSAGE
+            else                                                       -> msgType in MSG_TYPES_WITH_TIMESTAMP_INSIDE_MESSAGE
         }
     }
 
@@ -196,7 +197,7 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
 
     /**
      * Tiles type message never show the sender information (like verification request), so we should repeat it for next message
-     * even if same sender
+     * even if same sender.
      */
     private fun isTileTypeMessage(event: TimelineEvent?): Boolean {
         return when (event?.root?.getClearType()) {

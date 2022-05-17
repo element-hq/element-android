@@ -33,7 +33,7 @@ import java.net.UnknownHostException
 import javax.inject.Inject
 
 /**
- * In this screen, the user is viewing an introduction to what he can do with this application
+ * In this screen, the user is viewing an introduction to what he can do with this application.
  */
 class LoginSplashFragment @Inject constructor(
         private val vectorPreferences: VectorPreferences

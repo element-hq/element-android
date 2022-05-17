@@ -24,7 +24,7 @@ import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
 
 /**
- * Save a filter, in db and if any changes, upload to the server
+ * Save a filter, in db and if any changes, upload to the server.
  */
 internal interface SaveFilterTask : Task<SaveFilterTask.Params, Unit> {
 

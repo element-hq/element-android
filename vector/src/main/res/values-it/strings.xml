@@ -410,9 +410,7 @@
     <string name="settings_new_password">Nuova password</string>
     <string name="settings_fail_to_update_password">L\'aggiornamento della password è fallito</string>
     <string name="settings_password_updated">La tua password è stata aggiornata</string>
-    <string name="settings_unignore_user">Mostra tutti i messaggi di %s\?
-\n
-\nTieni presente che questa azione riavvierà l\'app e ciò potrebbe richiedere molto tempo.</string>
+    <string name="settings_unignore_user">Mostrare tutti i messaggi di %s\?</string>
     <string name="settings_select_country">Scegli un paese</string>
     <string name="media_saving_period_3_days">3 giorni</string>
     <string name="media_saving_period_1_week">1 settimana</string>
@@ -539,7 +537,6 @@
     <string name="has_been_banned">%2$s ti ha bannato da %1$s</string>
     <string name="reason_colon">Motivo: %1$s</string>
     <string name="avatar">Avatar</string>
-    <string name="settings_flair">Predisposizione</string>
     <string name="widget_integration_positive_power_level">Il livello di potere deve essere un intero positivo.</string>
     <plurals name="membership_changes">
         <item quantity="one">%d cambio d\'appartenenza</item>
@@ -1519,9 +1516,7 @@
 \n
 \nPuoi annullare questa azione in qualsiasi momento nelle impostazioni generali.</string>
     <string name="room_participants_action_unignore_title">Non ignorare più</string>
-    <string name="room_participants_action_unignore_prompt_msg">Se non ignori più l\'utente vedrai di nuovo tutti i suoi messaggi.
-\n
-\nNota che quest\'azione riavvierà l\'app e potrebbe richiedere del tempo.</string>
+    <string name="room_participants_action_unignore_prompt_msg">Se non ignori più l\'utente vedrai di nuovo tutti i suoi messaggi.</string>
     <string name="room_participants_action_cancel_invite_title">Annulla invito</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Sei sicuro di voler annullare l\'invito per questo utente\?</string>
     <string name="room_participants_remove_title">Butta fuori l\'utente</string>
@@ -2341,8 +2336,6 @@
     <string name="location_share_external">Apri con</string>
     <string name="location_not_available_dialog_content">${app_name} non ha potuto rilevare la tua posizione. Riprova più tardi.</string>
     <string name="location_not_available_dialog_title">${app_name} non ha potuto rilevare la tua posizione</string>
-    <string name="location_share">Condividi posizione</string>
-    <string name="a11y_location_share_icon">Condividi posizione</string>
     <string name="location_activity_title_preview">Posizione</string>
     <string name="location_activity_title_static_sharing">Condividi posizione</string>
     <string name="closed_poll_option_description">I risultati verranno rivelati solo quando termini il sondaggio</string>
@@ -2478,4 +2471,14 @@
     <string name="threads_beta_enable_notice_title">Beta conversazioni</string>
     <string name="action_learn_more">Maggiori informazioni</string>
     <string name="action_try_it_out">Provalo</string>
+    <string name="screen_sharing_notification_description">Stai condividendo lo schermo</string>
+    <string name="screen_sharing_notification_title">${app_name} - Condivisione schermo</string>
+    <string name="call_stop_screen_sharing">Ferma condivisione schermo</string>
+    <string name="call_start_screen_sharing">Condividi schermo</string>
+    <string name="initial_sync_request_reason_unignored_users">- Alcuni utenti non vengono più ignorati</string>
+    <string name="initial_sync_request_content">${app_name} ha bisogno di eseguire una pulizia della cache per aggiornarsi, per il seguente motivo:
+\n%s
+\n
+\nNota che questa azione riavvierà l\'app e potrebbe richiedere del tempo.</string>
+    <string name="initial_sync_request_title">Richiesta di sincronizzazione iniziale</string>
 </resources>

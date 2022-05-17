@@ -21,7 +21,7 @@ import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 
 /**
- * Class representing the org.matrix.msc3381.poll.end event content
+ * Class representing the org.matrix.msc3381.poll.end event content.
  */
 @JsonClass(generateAdapter = true)
 data class MessageEndPollContent(

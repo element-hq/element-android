@@ -68,11 +68,12 @@ interface FileService {
                     mxcUrl = messageContent.getFileUrl(),
                     fileName = messageContent.getFileName(),
                     mimeType = messageContent.mimeType,
-                    elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt())
+                    elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt()
+            )
 
     /**
      * Use this URI and pass it to intent using flag Intent.FLAG_GRANT_READ_URI_PERMISSION
-     * (if not other app won't be able to access it)
+     * (if not other app won't be able to access it).
      */
     fun getTemporarySharableURI(mxcUrl: String?,
                                 fileName: String,
@@ -105,17 +106,17 @@ interface FileService {
             )
 
     /**
-     * Clears all the files downloaded by the service, including decrypted files
+     * Clears all the files downloaded by the service, including decrypted files.
      */
     fun clearCache()
 
     /**
-     * Clears all the decrypted files by the service
+     * Clears all the decrypted files by the service.
      */
     fun clearDecryptedCache()
 
     /**
-     * Get size of cached files
+     * Get size of cached files.
      */
     fun getCacheSize(): Long
 }

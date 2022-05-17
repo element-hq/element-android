@@ -18,7 +18,7 @@ import javax.inject.Inject
 data class ${fragmentArgsClass}() : Parcelable
 </#if>
 
-//TODO: add this fragment into FragmentModule
+//TODO add this fragment into FragmentModule
 class ${fragmentClass} @Inject constructor(
         private val viewModelFactory: ${viewModelClass}.Factory
 ) : VectorBaseFragment(), ${viewModelClass}.Factory by viewModelFactory {

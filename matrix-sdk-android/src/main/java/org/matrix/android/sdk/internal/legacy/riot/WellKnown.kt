@@ -63,7 +63,7 @@ class WellKnown {
     var integrations: Map<String, *>? = null
 
     /**
-     * Returns the list of integration managers proposed
+     * Returns the list of integration managers proposed.
      */
     fun getIntegrationManagers(): List<WellKnownManagerConfig> {
         val managers = ArrayList<WellKnownManagerConfig>()
@@ -76,10 +76,12 @@ class WellKnown {
                         if (apiUrl != null &&
                                 apiUrl.startsWith("https://") &&
                                 uiUrl!!.startsWith("https://")) {
-                            managers.add(WellKnownManagerConfig(
-                                    apiUrl = apiUrl,
-                                    uiUrl = uiUrl
-                            ))
+                            managers.add(
+                                    WellKnownManagerConfig(
+                                            apiUrl = apiUrl,
+                                            uiUrl = uiUrl
+                                    )
+                            )
                         }
                     }
                 }

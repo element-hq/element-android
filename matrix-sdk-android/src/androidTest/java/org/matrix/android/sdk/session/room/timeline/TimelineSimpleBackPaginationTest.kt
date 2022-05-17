@@ -64,7 +64,8 @@ class TimelineSimpleBackPaginationTest : InstrumentedTest {
         commonTestHelper.sendTextMessage(
                 roomFromAlicePOV,
                 message,
-                numberOfMessagesToSent)
+                numberOfMessagesToSent
+        )
 
         val bobTimeline = roomFromBobPOV.timelineService().createTimeline(null, TimelineSettings(30))
         bobTimeline.start()

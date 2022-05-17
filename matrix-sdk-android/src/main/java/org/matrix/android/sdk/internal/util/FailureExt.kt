@@ -22,7 +22,7 @@ import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.internal.di.MoshiProvider
 
 /**
- * Try to extract and serialize a MatrixError, or default to localizedMessage
+ * Try to extract and serialize a MatrixError, or default to localizedMessage.
  */
 internal fun Throwable.toMatrixErrorStr(): String {
     return (this as? Failure.ServerError)

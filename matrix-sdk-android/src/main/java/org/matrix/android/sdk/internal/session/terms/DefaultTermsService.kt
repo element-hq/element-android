@@ -61,7 +61,7 @@ internal class DefaultTermsService @Inject constructor(
     }
 
     /**
-     * We use a trick here to get the homeserver T&C, we use the register API
+     * We use a trick here to get the homeserver T&C, we use the register API.
      */
     override suspend fun getHomeserverTerms(baseUrl: String): TermsResponse {
         return try {
@@ -108,9 +108,11 @@ internal class DefaultTermsService @Inject constructor(
 
         val newList = listOfAcceptedTerms.toMutableSet().apply { addAll(agreedUrls) }.toList()
 
-        updateUserAccountDataTask.execute(UpdateUserAccountDataTask.AcceptedTermsParams(
-                acceptedTermsContent = AcceptedTermsContent(newList)
-        ))
+        updateUserAccountDataTask.execute(
+                UpdateUserAccountDataTask.AcceptedTermsParams(
+                        acceptedTermsContent = AcceptedTermsContent(newList)
+                )
+        )
     }
 
     private suspend fun getToken(url: String): String {

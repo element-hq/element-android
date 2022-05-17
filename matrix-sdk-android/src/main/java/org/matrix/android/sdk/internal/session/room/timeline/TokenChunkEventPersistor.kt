@@ -230,7 +230,8 @@ internal class TokenChunkEventPersistor @Inject constructor(
                         roomId = roomId,
                         eventEntity = eventEntity,
                         direction = direction,
-                        roomMemberContentsByUser = roomMemberContentsByUser)
+                        roomMemberContentsByUser = roomMemberContentsByUser
+                )
                 if (lightweightSettingsStorage.areThreadMessagesEnabled()) {
                     eventEntity.rootThreadEventId?.let {
                         // This is a thread event

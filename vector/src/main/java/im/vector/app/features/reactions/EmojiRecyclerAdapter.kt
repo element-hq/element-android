@@ -39,11 +39,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.abs
 
-/**
- *
- * TODO: Configure Span using available width and emoji size
- * TODO: Performances
- * TODO: Scroll to section - Find a way to snap section to the top
+/*
+ * TODO Configure Span using available width and emoji size
+ * TODO Performances
+ * TODO Scroll to section - Find a way to snap section to the top
  */
 class EmojiRecyclerAdapter @Inject constructor() :
         RecyclerView.Adapter<EmojiRecyclerAdapter.ViewHolder>() {

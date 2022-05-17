@@ -19,7 +19,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * This class provides the parameter to delete a device
+ * This class provides the parameter to delete a device.
  */
 @JsonClass(generateAdapter = true)
 internal data class DeleteDeviceParams(

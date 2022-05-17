@@ -242,10 +242,12 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
         if (state.isRoomEncrypted) {
             if (!state.isMine && state.userMXCrossSigningInfo?.isTrusted() == false) {
                 // ok, let's find or create the DM room
-                _viewEvents.post(RoomMemberProfileViewEvents.StartVerification(
-                        userId = state.userId,
-                        canCrossSign = session.cryptoService().crossSigningService().canCrossSign()
-                ))
+                _viewEvents.post(
+                        RoomMemberProfileViewEvents.StartVerification(
+                                userId = state.userId,
+                                canCrossSign = session.cryptoService().crossSigningService().canCrossSign()
+                        )
+                )
             }
         }
     }

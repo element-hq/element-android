@@ -46,6 +46,7 @@ abstract class SearchResultItem : VectorEpoxyModel<SearchResultItem.Holder>() {
     @EpoxyAttribute var areThreadMessagesEnabled: Boolean = false
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var listener: ClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var threadSummaryListener: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -66,23 +67,24 @@ abstract class SearchResultItem : VectorEpoxyModel<SearchResultItem.Holder>() {
                     val displayName = it.threadSummarySenderInfo?.displayName
                     val avatarUrl = it.threadSummarySenderInfo?.avatarUrl
                     avatarRenderer.render(MatrixItem.UserItem(userId, displayName, avatarUrl), holder.threadSummaryAvatarImageView)
+                    holder.threadSummaryContainer.onClick(threadSummaryListener)
                 } else {
                     showFromThread(holder)
                 }
             } ?: run {
-                holder.threadSummaryConstraintLayout.isVisible = false
+                holder.threadSummaryContainer.isVisible = false
                 holder.fromThreadConstraintLayout.isVisible = false
             }
         }
     }
 
     private fun showThreadSummary(holder: Holder, show: Boolean = true) {
-        holder.threadSummaryConstraintLayout.isVisible = show
+        holder.threadSummaryContainer.isVisible = show
         holder.fromThreadConstraintLayout.isVisible = !show
     }
 
     private fun showFromThread(holder: Holder, show: Boolean = true) {
-        holder.threadSummaryConstraintLayout.isVisible = !show
+        holder.threadSummaryContainer.isVisible = !show
         holder.fromThreadConstraintLayout.isVisible = show
     }
 
@@ -91,7 +93,7 @@ abstract class SearchResultItem : VectorEpoxyModel<SearchResultItem.Holder>() {
         val memberNameView by bind<TextView>(R.id.messageMemberNameView)
         val timeView by bind<TextView>(R.id.messageTimeView)
         val contentView by bind<TextView>(R.id.messageContentView)
-        val threadSummaryConstraintLayout by bind<ConstraintLayout>(R.id.searchThreadSummaryConstraintLayout)
+        val threadSummaryContainer by bind<ConstraintLayout>(R.id.searchThreadSummaryContainer)
         val threadSummaryCounterTextView by bind<TextView>(R.id.messageThreadSummaryCounterTextView)
         val threadSummaryAvatarImageView by bind<ImageView>(R.id.messageThreadSummaryAvatarImageView)
         val threadSummaryInfoTextView by bind<TextView>(R.id.messageThreadSummaryInfoTextView)

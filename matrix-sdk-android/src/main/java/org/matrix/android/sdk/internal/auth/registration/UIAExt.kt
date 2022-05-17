@@ -26,7 +26,7 @@ import timber.log.Timber
 import kotlin.coroutines.suspendCoroutine
 
 /**
- * Handle a UIA challenge
+ * Handle a UIA challenge.
  *
  * @param failure the failure to handle
  * @param interceptor see doc in [UserInteractiveAuthInterceptor]

@@ -54,8 +54,8 @@ internal class RealmSessionStoreMigration @Inject constructor(
         private val normalizer: Normalizer
 ) : RealmMigration {
     /**
-     * Forces all RealmSessionStoreMigration instances to be equal
-     * Avoids Realm throwing when multiple instances of the migration are set
+     * Forces all RealmSessionStoreMigration instances to be equal.
+     * Avoids Realm throwing when multiple instances of the migration are set.
      */
     override fun equals(other: Any?) = other is RealmSessionStoreMigration
     override fun hashCode() = 1000

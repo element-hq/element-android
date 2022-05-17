@@ -25,7 +25,7 @@ import im.vector.app.databinding.ActivitySimpleBinding
 import javax.inject.Inject
 
 /**
- * Simple container for AnalyticsOptInFragment
+ * Simple container for AnalyticsOptInFragment.
  */
 @AndroidEntryPoint
 class AnalyticsOptInActivity : VectorBaseActivity<ActivitySimpleBinding>() {

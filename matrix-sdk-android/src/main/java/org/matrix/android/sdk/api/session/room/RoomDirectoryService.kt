@@ -26,18 +26,18 @@ import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsRe
 interface RoomDirectoryService {
 
     /**
-     * Get rooms from directory
+     * Get rooms from directory.
      */
     suspend fun getPublicRooms(server: String?,
                                publicRoomsParams: PublicRoomsParams): PublicRoomsResponse
 
     /**
-     * Get the visibility of a room in the directory
+     * Get the visibility of a room in the directory.
      */
     suspend fun getRoomDirectoryVisibility(roomId: String): RoomDirectoryVisibility
 
     /**
-     * Set the visibility of a room in the directory
+     * Set the visibility of a room in the directory.
      */
     suspend fun setRoomDirectoryVisibility(roomId: String, roomDirectoryVisibility: RoomDirectoryVisibility)
 

@@ -43,21 +43,20 @@ import im.vector.app.features.notifications.NotificationUtils
  * This user option appears on Android M but Android O enforces its usage and kills apps not
  * authorised by the user to run in background.
  *
- * @param context the context
  * @return true if battery optimisations are ignored
  */
-fun isIgnoringBatteryOptimizations(context: Context): Boolean {
+fun Context.isIgnoringBatteryOptimizations(): Boolean {
     // no issue before Android M, battery optimisations did not exist
     return Build.VERSION.SDK_INT < Build.VERSION_CODES.M ||
-            context.getSystemService<PowerManager>()?.isIgnoringBatteryOptimizations(context.packageName) == true
+            getSystemService<PowerManager>()?.isIgnoringBatteryOptimizations(packageName) == true
 }
 
-fun isAirplaneModeOn(context: Context): Boolean {
-    return Settings.Global.getInt(context.contentResolver, Settings.Global.AIRPLANE_MODE_ON, 0) != 0
+fun Context.isAirplaneModeOn(): Boolean {
+    return Settings.Global.getInt(contentResolver, Settings.Global.AIRPLANE_MODE_ON, 0) != 0
 }
 
-fun isAnimationDisabled(context: Context): Boolean {
-    return Settings.Global.getFloat(context.contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f) == 0f
+fun Context.isAnimationEnabled(): Boolean {
+    return Settings.Global.getFloat(contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f) != 0f
 }
 
 /**
@@ -80,7 +79,7 @@ fun requestDisablingBatteryOptimization(activity: Activity, activityResultLaunch
 // ==============================================================================================================
 
 /**
- * Copy a text to the clipboard, and display a Toast when done
+ * Copy a text to the clipboard, and display a Toast when done.
  *
  * @param context the context
  * @param text    the text to copy

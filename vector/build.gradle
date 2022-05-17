@@ -7,9 +7,22 @@ apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.likethesalad.stem'
 apply plugin: 'dagger.hilt.android.plugin'
+apply plugin: 'kotlinx-knit'
 
 kapt {
     correctErrorTypes = true
+}
+
+knit {
+    files = fileTree(project.rootDir) {
+        include '**/*.md'
+        include '**/*.kt'
+        include '**/*.kts'
+        exclude '**/build/**'
+        exclude '**/.gradle/**'
+        exclude '**/towncrier/template.md'
+        exclude '**/CHANGES.md'
+    }
 }
 
 // Note: 2 digits max for each value
@@ -18,7 +31,7 @@ ext.versionMinor = 4
 // Note: even values are reserved for regular release, odd values for hotfix release.
 // When creating a hotfix, you should decrease the value, since the current value
 // is the value for the next regular release.
-ext.versionPatch = 14
+ext.versionPatch = 16
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -297,14 +310,14 @@ android {
     kotlinOptions {
         jvmTarget = "11"
         freeCompilerArgs += [
-                "-Xopt-in=kotlin.RequiresOptIn",
+                "-opt-in=kotlin.RequiresOptIn",
                 // Fixes false positive "This is an internal Mavericks API. It is not intended for external use."
                 // of MvRx `by viewModel()` calls. Maybe due to the inlining of code... This is a temporary fix...
-                "-Xopt-in=com.airbnb.mvrx.InternalMavericksApi",
+                "-opt-in=com.airbnb.mvrx.InternalMavericksApi",
                 // Opt in for kotlinx.coroutines.FlowPreview too
-                "-Xopt-in=kotlinx.coroutines.FlowPreview",
+                "-opt-in=kotlinx.coroutines.FlowPreview",
                 // Opt in for kotlinx.coroutines.ExperimentalCoroutinesApi too
-                "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
         ]
     }
 
@@ -343,11 +356,11 @@ dependencies {
     implementation libs.androidx.constraintLayout
     implementation "androidx.sharetarget:sharetarget:1.1.0"
     implementation libs.androidx.core
-    implementation "androidx.media:media:1.4.3"
+    implementation "androidx.media:media:1.6.0"
     implementation "androidx.transition:transition:1.4.1"
 
     implementation "org.threeten:threetenbp:1.4.0:no-tzdb"
-    implementation "com.gabrielittner.threetenbp:lazythreetenbp:0.9.0"
+    implementation "com.gabrielittner.threetenbp:lazythreetenbp:0.10.0"
 
     implementation libs.squareup.moshi
     kapt libs.squareup.moshiKotlin
@@ -368,7 +381,7 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.6.0'
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.47'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.48'
 
     // FlowBinding
     implementation libs.github.flowBinding
@@ -413,10 +426,10 @@ dependencies {
     implementation 'androidx.browser:browser:1.4.0'
 
     // Passphrase strength helper
-    implementation 'com.nulab-inc:zxcvbn:1.5.2'
+    implementation 'com.nulab-inc:zxcvbn:1.7.0'
 
-    // To convert voice message on old platforms
-    implementation 'com.arthenica:ffmpeg-kit-audio:4.5.LTS'
+    // To convert voice message on old platforms. Always keep the LTS suffix!
+    implementation 'com.arthenica:ffmpeg-kit-audio:4.5.1.LTS'
 
     // Alerter
     implementation 'com.github.tapadoo:alerter:7.2.4'
@@ -463,7 +476,7 @@ dependencies {
     // OSS License, gplay flavor only
     gplayImplementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
 
-    implementation "androidx.emoji2:emoji2:1.0.1"
+    implementation "androidx.emoji2:emoji2:1.1.0"
 
     // WebRTC
     // org.webrtc:google-webrtc is for development purposes only

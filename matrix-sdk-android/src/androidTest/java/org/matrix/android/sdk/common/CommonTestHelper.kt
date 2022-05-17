@@ -63,8 +63,9 @@ class CommonTestHelper(context: Context) {
     fun getTestInterceptor(session: Session): MockOkHttpInterceptor? = TestModule.interceptorForSession(session.sessionId) as? MockOkHttpInterceptor
 
     init {
+        var _matrix: TestMatrix? = null
         UiThreadStatement.runOnUiThread {
-            TestMatrix.initialize(
+            _matrix = TestMatrix(
                     context,
                     MatrixConfiguration(
                             applicationFlavor = "TestFlavor",
@@ -72,7 +73,7 @@ class CommonTestHelper(context: Context) {
                     )
             )
         }
-        matrix = TestMatrix.getInstance()
+        matrix = _matrix!!
     }
 
     fun createAccount(userNamePrefix: String, testParams: SessionTestParams): Session {

@@ -18,7 +18,7 @@
 package org.matrix.android.sdk.api.session.room.model.message
 
 /**
- * A content with image information
+ * A content with image information.
  */
 interface MessageImageInfoContent : MessageWithAttachmentContent {
     val info: ImageInfo?

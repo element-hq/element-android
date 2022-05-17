@@ -166,7 +166,8 @@ class RoomDirectoryViewModel @AssistedInject constructor(
 
         currentJob = viewModelScope.launch {
             val data = try {
-                session.roomDirectoryService().getPublicRooms(roomDirectoryData.homeServer,
+                session.roomDirectoryService().getPublicRooms(
+                        roomDirectoryData.homeServer,
                         PublicRoomsParams(
                                 limit = PUBLIC_ROOMS_LIMIT,
                                 filter = PublicRoomsFilter(searchTerm = filter),

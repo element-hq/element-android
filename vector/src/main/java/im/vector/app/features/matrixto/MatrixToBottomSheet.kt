@@ -84,7 +84,8 @@ class MatrixToBottomSheet :
     private fun showFragment(fragmentClass: KClass<out Fragment>, bundle: Bundle) {
         if (childFragmentManager.findFragmentByTag(fragmentClass.simpleName) == null) {
             childFragmentManager.commitTransaction {
-                replace(views.matrixToCardFragmentContainer.id,
+                replace(
+                        views.matrixToCardFragmentContainer.id,
                         fragmentClass.java,
                         bundle,
                         fragmentClass.simpleName

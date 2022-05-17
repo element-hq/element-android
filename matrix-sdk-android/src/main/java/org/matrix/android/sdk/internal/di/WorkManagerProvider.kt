@@ -50,14 +50,14 @@ internal class WorkManagerProvider @Inject constructor(
     }
 
     /**
-     * Create a OneTimeWorkRequestBuilder, with the Matrix SDK tag
+     * Create a OneTimeWorkRequestBuilder, with the Matrix SDK tag.
      */
     inline fun <reified W : ListenableWorker> matrixOneTimeWorkRequestBuilder() =
             OneTimeWorkRequestBuilder<W>()
                     .addTag(tag)
 
     /**
-     * Create a PeriodicWorkRequestBuilder, with the Matrix SDK tag
+     * Create a PeriodicWorkRequestBuilder, with the Matrix SDK tag.
      */
     inline fun <reified W : ListenableWorker> matrixPeriodicWorkRequestBuilder(repeatInterval: Long,
                                                                                repeatIntervalTimeUnit: TimeUnit) =
@@ -65,7 +65,7 @@ internal class WorkManagerProvider @Inject constructor(
                     .addTag(tag)
 
     /**
-     * Cancel all works instantiated by the Matrix SDK for the current session, and not those from the SDK client, or for other sessions
+     * Cancel all works instantiated by the Matrix SDK for the current session, and not those from the SDK client, or for other sessions.
      */
     fun cancelAllWorks() {
         workManager.let {
@@ -84,9 +84,11 @@ internal class WorkManagerProvider @Inject constructor(
                     if (workInfo?.state?.isFinished == true) {
                         checkWorkerLiveState.removeObserver(this)
                         if (workInfo.state == WorkInfo.State.FAILED) {
-                            throw RuntimeException("MatrixWorkerFactory is not being set on your worker configuration.\n" +
-                                    "Makes sure to add it to a DelegatingWorkerFactory if you have your own factory or use it directly.\n" +
-                                    "You can grab the instance through the Matrix class.")
+                            throw RuntimeException(
+                                    "MatrixWorkerFactory is not being set on your worker configuration.\n" +
+                                            "Makes sure to add it to a DelegatingWorkerFactory if you have your own factory or use it directly.\n" +
+                                            "You can grab the instance through the Matrix class."
+                            )
                         }
                     }
                 }
@@ -99,7 +101,7 @@ internal class WorkManagerProvider @Inject constructor(
         private const val MATRIX_SDK_TAG_PREFIX = "MatrixSDK-"
 
         /**
-         * Default constraints: connected network
+         * Default constraints: connected network.
          */
         val workConstraints = Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)

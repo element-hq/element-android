@@ -102,7 +102,7 @@ internal class DeviceListManager @Inject constructor(
     }
 
     /**
-     * Tells if the key downloads should be tried
+     * Tells if the key downloads should be tried.
      *
      * @param userId the userId
      * @return true if the keys download can be retrieved
@@ -124,7 +124,7 @@ internal class DeviceListManager @Inject constructor(
     }
 
     /**
-     * Clear the unavailable server lists
+     * Clear the unavailable server lists.
      */
     private fun clearUnavailableServersList() {
         synchronized(notReadyToRetryHS) {
@@ -167,7 +167,7 @@ internal class DeviceListManager @Inject constructor(
     }
 
     /**
-     * Update the devices list statuses
+     * Update the devices list statuses.
      *
      * @param changed the user ids list which have new devices
      * @param left    the user ids list which left a room
@@ -203,15 +203,14 @@ internal class DeviceListManager @Inject constructor(
     }
 
     /**
-     * This will flag each user whose devices we are tracking as in need of an
-     * + update
+     * This will flag each user whose devices we are tracking as in need of an update.
      */
     fun invalidateAllDeviceLists() {
         handleDeviceListsChanges(cryptoStore.getDeviceTrackingStatuses().keys, emptyList())
     }
 
     /**
-     * The keys download failed
+     * The keys download failed.
      *
      * @param userIds the user ids list
      */
@@ -315,10 +314,19 @@ internal class DeviceListManager @Inject constructor(
         } else {
             Timber.v("## CRYPTO | downloadKeys() : starts")
             val t0 = clock.epochMillis()
-            val result = doKeyDownloadForUsers(downloadUsers)
-            Timber.v("## CRYPTO | downloadKeys() : doKeyDownloadForUsers succeeds after ${clock.epochMillis() - t0} ms")
-            result.also {
-                it.addEntriesFromMap(stored)
+            try {
+                val result = doKeyDownloadForUsers(downloadUsers)
+                Timber.v("## CRYPTO | downloadKeys() : doKeyDownloadForUsers succeeds after ${clock.epochMillis() - t0} ms")
+                result.also {
+                    it.addEntriesFromMap(stored)
+                }
+            } catch (failure: Throwable) {
+                Timber.w(failure, "## CRYPTO | downloadKeys() : doKeyDownloadForUsers failed after ${clock.epochMillis() - t0} ms")
+                if (forceDownload) {
+                    throw failure
+                } else {
+                    stored
+                }
             }
         }
     }
@@ -543,7 +551,7 @@ internal class DeviceListManager @Inject constructor(
     companion object {
 
         /**
-         * State transition diagram for DeviceList.deviceTrackingStatus
+         * State transition diagram for DeviceList.deviceTrackingStatus.
          * <pre>
          *
          *                                   |
