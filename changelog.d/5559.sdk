@@ -1,4 +1,0 @@
-- New API to enable/disable key forwarding CryptoService#enableKeyGossiping()
-- New API to limit room key request only to own devices MXCryptoConfig#limitRoomKeyRequestsToMyDevices
-- Event Trail API has changed, now using AuditTrail events
-- New API to manually accept an incoming key request CryptoService#manuallyAcceptRoomKeyRequest()
