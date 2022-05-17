@@ -14,20 +14,13 @@
  * limitations under the License.
  */
 
-package im.vector.app.test.fakes
+package im.vector.app.test.fixtures
 
-import im.vector.app.features.DefaultVectorFeatures
-import im.vector.app.features.VectorFeatures
-import io.mockk.every
-import io.mockk.spyk
+import im.vector.app.features.onboarding.SelectedHomeserverState
 
-class FakeVectorFeatures : VectorFeatures by spyk<DefaultVectorFeatures>() {
+object SelectedHomeserverStateFixture {
 
-    fun givenPersonalisationEnabled() {
-        every { isOnboardingPersonalizeEnabled() } returns true
-    }
-
-    fun givenCombinedRegisterEnabled() {
-        every { isOnboardingCombinedRegisterEnabled() } returns true
-    }
+    fun aSelectedHomeserverState(
+            userFacingUrl: String = "https://myhomeserver.com",
+    ) = SelectedHomeserverState(userFacingUrl = userFacingUrl)
 }
