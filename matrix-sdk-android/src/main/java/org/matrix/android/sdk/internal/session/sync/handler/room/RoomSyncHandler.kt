@@ -25,6 +25,7 @@ import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.isThread
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 import org.matrix.android.sdk.api.session.initsync.InitSyncStep
@@ -520,9 +521,10 @@ internal class RoomSyncHandler @Inject constructor(
 
     private fun decryptIfNeeded(event: Event, roomId: String) {
         try {
+            val timelineId = generateTimelineId(roomId, event)
             // Event from sync does not have roomId, so add it to the event first
             // note: runBlocking should be used here while we are in realm single thread executor, to avoid thread switching
-            val result = runBlocking { cryptoService.decryptEvent(event.copy(roomId = roomId), "") }
+            val result = runBlocking { cryptoService.decryptEvent(event.copy(roomId = roomId), timelineId) }
             event.mxDecryptionResult = OlmDecryptionResult(
                     payload = result.clearEvent,
                     senderKey = result.senderCurve25519Key,
@@ -535,6 +537,11 @@ internal class RoomSyncHandler @Inject constructor(
                 event.mCryptoErrorReason = e.technicalMessage.takeIf { it.isNotEmpty() } ?: e.detailedErrorDescription
             }
         }
+    }
+
+    private fun generateTimelineId(roomId: String, event: Event): String {
+        val threadIndicator = if (event.isThread()) "_thread_" else "_"
+        return "${RoomSyncHandler::class.java.simpleName}$threadIndicator$roomId"
     }
 
     data class EphemeralResult(
