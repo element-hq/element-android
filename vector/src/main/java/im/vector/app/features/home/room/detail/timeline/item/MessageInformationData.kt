@@ -43,7 +43,6 @@ data class MessageInformationData(
         val sendStateDecoration: SendStateDecoration = SendStateDecoration.NONE,
         val isFirstFromThisSender: Boolean = false,
         val isLastFromThisSender: Boolean = false,
-        val liveLocationShareSummaryData: LiveLocationShareSummaryData? = null,
 ) : Parcelable {
 
     val matrixItem: MatrixItem
@@ -97,13 +96,6 @@ data class PollResponseData(
 data class PollVoteSummaryData(
         val total: Int = 0,
         val percentage: Double = 0.0
-) : Parcelable
-
-@Parcelize
-data class LiveLocationShareSummaryData(
-        val isActive: Boolean?,
-        val endOfLiveTimestampMillis: Long?,
-        val lastGeoUri: String?,
 ) : Parcelable
 
 enum class E2EDecoration {

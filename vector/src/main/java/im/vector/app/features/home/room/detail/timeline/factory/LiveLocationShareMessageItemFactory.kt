@@ -24,7 +24,6 @@ import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvide
 import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
-import im.vector.app.features.home.room.detail.timeline.item.LiveLocationShareSummaryData
 import im.vector.app.features.home.room.detail.timeline.item.MessageLiveLocationInactiveItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageLiveLocationInactiveItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageLiveLocationItem
@@ -36,6 +35,7 @@ import im.vector.app.features.location.UrlMapProvider
 import im.vector.app.features.location.toLocationData
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.threeten.bp.LocalDateTime
 import timber.log.Timber
 import javax.inject.Inject
@@ -51,10 +51,11 @@ class LiveLocationShareMessageItemFactory @Inject constructor(
 ) {
 
     fun create(
-            liveLocationShareSummaryData: LiveLocationShareSummaryData?,
+            event: TimelineEvent,
             highlight: Boolean,
             attributes: AbsMessageItem.Attributes,
     ): VectorEpoxyModel<*>? {
+        val liveLocationShareSummaryData = getLiveLocationShareSummaryData(event)
         val item = when (val currentState = getViewState(liveLocationShareSummaryData)) {
             LiveLocationShareViewState.Inactive   -> buildInactiveItem(highlight, attributes)
             LiveLocationShareViewState.Loading    -> buildLoadingItem(highlight, attributes)
@@ -149,6 +150,22 @@ class LiveLocationShareMessageItemFactory @Inject constructor(
     private fun getEndOfLiveDateTime(liveLocationShareSummaryData: LiveLocationShareSummaryData): LocalDateTime? {
         return liveLocationShareSummaryData.endOfLiveTimestampMillis?.let { DateProvider.toLocalDateTime(timestamp = it) }
     }
+
+    private fun getLiveLocationShareSummaryData(event: TimelineEvent): LiveLocationShareSummaryData? {
+        return event.annotations?.liveLocationShareAggregatedSummary?.let { summary ->
+            LiveLocationShareSummaryData(
+                    isActive = summary.isActive,
+                    endOfLiveTimestampMillis = summary.endOfLiveTimestampMillis,
+                    lastGeoUri = summary.lastLocationDataContent?.getBestLocationInfo()?.geoUri
+            )
+        }
+    }
+
+    private data class LiveLocationShareSummaryData(
+            val isActive: Boolean?,
+            val endOfLiveTimestampMillis: Long?,
+            val lastGeoUri: String?,
+    )
 
     private sealed class LiveLocationShareViewState {
         object Loading : LiveLocationShareViewState()

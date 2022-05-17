@@ -21,7 +21,6 @@ import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.extensions.localDateTime
 import im.vector.app.features.home.room.detail.timeline.factory.TimelineItemFactoryParams
 import im.vector.app.features.home.room.detail.timeline.item.E2EDecoration
-import im.vector.app.features.home.room.detail.timeline.item.LiveLocationShareSummaryData
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.app.features.home.room.detail.timeline.item.PollResponseData
 import im.vector.app.features.home.room.detail.timeline.item.PollVoteSummaryData
@@ -120,7 +119,6 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                 isLastFromThisSender = isLastFromThisSender,
                 e2eDecoration = e2eDecoration,
                 sendStateDecoration = sendStateDecoration,
-                liveLocationShareSummaryData = getLiveLocationShareSummaryData(event)
         )
     }
 
@@ -186,16 +184,6 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
             }
         } else {
             E2EDecoration.NONE
-        }
-    }
-
-    private fun getLiveLocationShareSummaryData(event: TimelineEvent): LiveLocationShareSummaryData? {
-        return event.annotations?.liveLocationShareAggregatedSummary?.let { summary ->
-            LiveLocationShareSummaryData(
-                    isActive = summary.isActive,
-                    endOfLiveTimestampMillis = summary.endOfLiveTimestampMillis,
-                    lastGeoUri = summary.lastLocationDataContent?.getBestLocationInfo()?.geoUri
-            )
         }
     }
 
