@@ -19,7 +19,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * Class representing the public rooms request response
+ * Class representing the public rooms request response.
  */
 @JsonClass(generateAdapter = true)
 data class PublicRoomsResponse(

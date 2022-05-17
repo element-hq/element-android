@@ -17,7 +17,7 @@
 package im.vector.app.features.roomdirectory
 
 /**
- * Join state of a room
+ * Join state of a room.
  */
 enum class JoinState {
     NOT_JOINED,

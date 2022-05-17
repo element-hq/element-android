@@ -241,7 +241,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
     }
 
     /**
-     * Convert a delay in seconds to string
+     * Convert a delay in seconds to string.
      *
      * @param seconds the delay in seconds
      * @return the text
@@ -352,8 +352,8 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
         super.onDetach()
     }
 
-    override fun onPreferenceTreeClick(preference: Preference?): Boolean {
-        return when (preference?.key) {
+    override fun onPreferenceTreeClick(preference: Preference): Boolean {
+        return when (preference.key) {
             VectorPreferences.SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY -> {
                 updateEnabledForAccount(preference)
                 true

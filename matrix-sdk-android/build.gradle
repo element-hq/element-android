@@ -21,7 +21,7 @@ dokkaHtml {
     dokkaSourceSets {
         configureEach {
             // Emit warnings about not documented members.
-            reportUndocumented.set(true)
+            // reportUndocumented.set(true)
             // Suppress legacy Riot's packages.
             perPackageOption {
                 matchingRegex.set("org.matrix.android.sdk.internal.legacy.riot")

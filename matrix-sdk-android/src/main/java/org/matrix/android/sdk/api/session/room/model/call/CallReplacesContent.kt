@@ -44,7 +44,7 @@ data class CallReplacesContent(
          */
         @Json(name = "target_room") val targetRoomId: String? = null,
         /**
-         * An object giving information about the transfer target
+         * An object giving information about the transfer target.
          */
         @Json(name = "target_user") val targetUser: TargetUser? = null,
         /**

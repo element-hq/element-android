@@ -44,7 +44,7 @@ import java.util.Formatter
 import javax.inject.Inject
 
 /**
- * In this screen, the user is asked to confirm he is not a robot
+ * In this screen, the user is asked to confirm he is not a robot.
  */
 class LoginCaptchaFragment2 @Inject constructor(
         private val assetReader: AssetReader

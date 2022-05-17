@@ -26,7 +26,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxStat
 internal interface VerificationTransport {
 
     /**
-     * Sends a message
+     * Sends a message.
      */
     fun <T> sendToOther(type: String,
                         verificationInfo: VerificationInfo<T>,
@@ -53,7 +53,7 @@ internal interface VerificationTransport {
              onDone: (() -> Unit)?)
 
     /**
-     * Creates an accept message suitable for this transport
+     * Creates an accept message suitable for this transport.
      */
     fun createAccept(tid: String,
                      keyAgreementProtocol: String,
@@ -66,7 +66,7 @@ internal interface VerificationTransport {
                   pubKey: String): VerificationInfoKey
 
     /**
-     * Create start for SAS verification
+     * Create start for SAS verification.
      */
     fun createStartForSas(fromDevice: String,
                           transactionId: String,
@@ -76,7 +76,7 @@ internal interface VerificationTransport {
                           shortAuthenticationStrings: List<String>): VerificationInfoStart
 
     /**
-     * Create start for QR code verification
+     * Create start for QR code verification.
      */
     fun createStartForQrCode(fromDevice: String,
                              transactionId: String,

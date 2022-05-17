@@ -310,7 +310,7 @@ class WebRtcCall(
     }
 
     /**
-     * Without consultation
+     * Without consultation.
      */
     fun transferToUser(targetUserId: String, targetRoomId: String?) {
         sessionScope?.launch(dispatcher) {
@@ -325,7 +325,7 @@ class WebRtcCall(
     }
 
     /**
-     * With consultation
+     * With consultation.
      */
     fun transferToCall(transferTargetCall: WebRtcCall) {
         sessionScope?.launch(dispatcher) {
@@ -357,7 +357,7 @@ class WebRtcCall(
     }
 
     /**
-     * Sends a DTMF digit to the other party
+     * Sends a DTMF digit to the other party.
      * @param digit The digit (nb. string - '#' and '*' are dtmf too)
      */
     fun sendDtmfDigit(digit: String) {

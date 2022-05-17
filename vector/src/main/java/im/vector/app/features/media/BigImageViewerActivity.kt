@@ -27,7 +27,7 @@ import im.vector.app.databinding.ActivityBigImageViewerBinding
 import javax.inject.Inject
 
 /**
- * Simple Activity to display an avatar in fullscreen
+ * Simple Activity to display an avatar in fullscreen.
  */
 @AndroidEntryPoint
 class BigImageViewerActivity : VectorBaseActivity<ActivityBigImageViewerBinding>() {

@@ -26,7 +26,7 @@ import org.matrix.android.sdk.api.util.md5
 
 /**
  * User session scoped storage for:
- * - messaging use case (Enum/String)
+ * - messaging use case (Enum/String).
  */
 class VectorSessionStore constructor(
         context: Context,

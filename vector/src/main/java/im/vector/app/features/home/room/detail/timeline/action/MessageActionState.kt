@@ -25,7 +25,7 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 
 /**
- * Quick reactions state
+ * Quick reactions state.
  */
 data class ToggleState(
         val reaction: String,

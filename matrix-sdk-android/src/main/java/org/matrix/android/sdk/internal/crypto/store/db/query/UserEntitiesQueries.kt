@@ -24,7 +24,7 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.UserEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.deleteOnCascade
 
 /**
- * Get or create a user
+ * Get or create a user.
  */
 internal fun UserEntity.Companion.getOrCreate(realm: Realm, userId: String): UserEntity {
     return realm.where<UserEntity>()
@@ -34,7 +34,7 @@ internal fun UserEntity.Companion.getOrCreate(realm: Realm, userId: String): Use
 }
 
 /**
- * Delete a user
+ * Delete a user.
  */
 internal fun UserEntity.Companion.delete(realm: Realm, userId: String) {
     realm.where<UserEntity>()

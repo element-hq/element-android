@@ -82,7 +82,7 @@ interface RelationService {
                  options: List<String>): Cancelable
 
     /**
-     * Edit a text message body. Limited to "m.text" contentType
+     * Edit a text message body. Limited to "m.text" contentType.
      * @param targetEvent The event to edit
      * @param newBodyText The edited body
      * @param compatibilityBodyText The text that will appear on clients that don't support yet edition
@@ -107,7 +107,7 @@ interface RelationService {
                   compatibilityBodyText: String = "* $newBodyText"): Cancelable
 
     /**
-     * Get the edit history of the given event
+     * Get the edit history of the given event.
      * The return list will contain the original event and all the editions of this event, done by the
      * same sender, sorted in the reverse order (so the original event is the latest element, and the
      * latest edition is the first element of the list)
@@ -133,21 +133,21 @@ interface RelationService {
     ): Cancelable?
 
     /**
-     * Get the current EventAnnotationsSummary
+     * Get the current EventAnnotationsSummary.
      * @param eventId the eventId to look for EventAnnotationsSummary
      * @return the EventAnnotationsSummary found
      */
     fun getEventAnnotationsSummary(eventId: String): EventAnnotationsSummary?
 
     /**
-     * Get a LiveData of EventAnnotationsSummary for the specified eventId
+     * Get a LiveData of EventAnnotationsSummary for the specified eventId.
      * @param eventId the eventId to look for EventAnnotationsSummary
      * @return the LiveData of EventAnnotationsSummary
      */
     fun getEventAnnotationsSummaryLive(eventId: String): LiveData<Optional<EventAnnotationsSummary>>
 
     /**
-     * Creates a thread reply for an existing timeline event
+     * Creates a thread reply for an existing timeline event.
      * The replyInThreadText can be a Spannable and contains special spans (MatrixItemSpan) that will be translated
      * by the sdk into pills.
      * @param rootThreadEventId the root thread eventId

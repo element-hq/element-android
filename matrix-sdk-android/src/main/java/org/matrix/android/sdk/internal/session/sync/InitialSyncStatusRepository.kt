@@ -45,7 +45,7 @@ internal interface InitialSyncStatusRepository {
 }
 
 /**
- * This class handle the current status of an initial sync and persist it on the disk, to be robust against crash
+ * This class handle the current status of an initial sync and persist it on the disk, to be robust against crash.
  */
 internal class FileInitialSyncStatusRepository(
         directory: File,
@@ -95,7 +95,7 @@ internal class FileInitialSyncStatusRepository(
     }
 
     /**
-     * File -> Cache
+     * File -> Cache.
      */
     private fun readFile() {
         cache = file
@@ -104,7 +104,7 @@ internal class FileInitialSyncStatusRepository(
     }
 
     /**
-     * Cache -> File
+     * Cache -> File.
      */
     private fun writeFile() {
         file.delete()

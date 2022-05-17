@@ -1485,7 +1485,7 @@ internal class DefaultVerificationService @Inject constructor(
     }
 
     /**
-     * This string must be unique for the pair of users performing verification for the duration that the transaction is valid
+     * This string must be unique for the pair of users performing verification for the duration that the transaction is valid.
      */
     private fun createUniqueIDForTransaction(otherUserId: String, otherDeviceID: String): String {
         return buildString {

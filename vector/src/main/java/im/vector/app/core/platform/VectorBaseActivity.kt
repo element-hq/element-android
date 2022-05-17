@@ -377,8 +377,8 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     private val postResumeScheduledActions = mutableListOf<() -> Unit>()
 
     /**
-     * Schedule action to be done in the next call of onPostResume()
-     * It fixes bug observed on Android 6 (API 23)
+     * Schedule action to be done in the next call of onPostResume().
+     * It fixes bug observed on Android 6 (API 23).
      */
     protected fun doOnPostResume(action: () -> Unit) {
         synchronized(postResumeScheduledActions) {
@@ -434,7 +434,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
      * ========================================================================================== */
 
     /**
-     * Force to render the activity in fullscreen
+     * Force to render the activity in fullscreen.
      */
     @Suppress("DEPRECATION")
     private fun setFullScreen() {
@@ -526,7 +526,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     }
 
     /**
-     * Is first creation
+     * Is first creation.
      *
      * @return true if Activity is created for the first time (and not restored by the system)
      */
@@ -545,7 +545,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
         }
 
     /**
-     * Tells if the waiting view is currently displayed
+     * Tells if the waiting view is currently displayed.
      *
      * @return true if the waiting view is displayed
      */
@@ -562,7 +562,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     }
 
     /**
-     * Hide the waiting view
+     * Hide the waiting view.
      */
     open fun hideWaitingView() {
         waitingView?.isVisible = false
@@ -590,7 +590,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     open fun getMenuRes() = -1
 
     /**
-     * Return a object containing other themes for this activity
+     * Return a object containing other themes for this activity.
      */
     open fun getOtherThemes(): ActivityOtherThemes = ActivityOtherThemes.Default
 
@@ -643,7 +643,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     }
 
     /**
-     * Sets toolbar as actionBar
+     * Sets toolbar as actionBar.
      *
      * @return Instance of [ToolbarConfig] with set of helper methods to configure toolbar
      * */

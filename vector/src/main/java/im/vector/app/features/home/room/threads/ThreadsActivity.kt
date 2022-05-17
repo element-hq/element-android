@@ -117,7 +117,7 @@ class ThreadsActivity : VectorBaseActivity<ActivityThreadsBinding>() {
     }
 
     /**
-     * Determine in witch fragment we should navigate
+     * Determine in witch fragment we should navigate.
      */
     private fun fragmentToNavigate(): DisplayFragment {
         getThreadTimelineArgs()?.let {

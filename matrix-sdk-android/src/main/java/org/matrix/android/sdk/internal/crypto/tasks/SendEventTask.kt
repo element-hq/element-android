@@ -69,6 +69,7 @@ internal class DefaultSendEventTask @Inject constructor(
             }
         } catch (e: Throwable) {
 //            localEchoRepository.updateSendState(params.event.eventId!!, SendState.UNDELIVERED)
+            Timber.w(e, "Unable to send the Event")
             throw e
         }
     }

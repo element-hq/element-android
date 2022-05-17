@@ -36,12 +36,12 @@ data class RoomSyncSummary(
         @Json(name = "m.heroes") val heroes: List<String> = emptyList(),
 
         /**
-         * The number of m.room.members in state 'joined' (including the syncing user) (can be null)
+         * The number of m.room.members in state 'joined' (including the syncing user) (can be null).
          */
         @Json(name = "m.joined_member_count") val joinedMembersCount: Int? = null,
 
         /**
-         * The number of m.room.members in state 'invited' (can be null)
+         * The number of m.room.members in state 'invited' (can be null).
          */
         @Json(name = "m.invited_member_count") val invitedMembersCount: Int? = null
 )

@@ -19,7 +19,7 @@ package org.matrix.android.sdk.api.session.sync.model
 import com.squareup.moshi.JsonClass
 
 /**
- * This class describes the device list response from a sync request
+ * This class describes the device list response from a sync request.
  */
 @JsonClass(generateAdapter = true)
 data class DeviceListResponse(

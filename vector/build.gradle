@@ -7,9 +7,22 @@ apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.likethesalad.stem'
 apply plugin: 'dagger.hilt.android.plugin'
+apply plugin: 'kotlinx-knit'
 
 kapt {
     correctErrorTypes = true
+}
+
+knit {
+    files = fileTree(project.rootDir) {
+        include '**/*.md'
+        include '**/*.kt'
+        include '**/*.kts'
+        exclude '**/build/**'
+        exclude '**/.gradle/**'
+        exclude '**/towncrier/template.md'
+        exclude '**/CHANGES.md'
+    }
 }
 
 // Note: 2 digits max for each value

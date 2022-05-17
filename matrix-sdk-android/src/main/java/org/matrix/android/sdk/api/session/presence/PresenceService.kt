@@ -25,7 +25,7 @@ import org.matrix.android.sdk.api.session.presence.model.UserPresence
  */
 interface PresenceService {
     /**
-     * Update the presence status for the current user
+     * Update the presence status for the current user.
      * @param presence the new presence state
      * @param statusMsg the status message to attach to this state
      */

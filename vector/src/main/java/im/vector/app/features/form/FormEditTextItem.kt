@@ -128,7 +128,7 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
     /**
      * Configure the inputType of the EditText, input type should be always defined
      * especially when we want to use a single line, we set the InputType to InputType.TYPE_CLASS_TEXT
-     * while the default for the EditText is InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
+     * while the default for the EditText is InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE.
      */
     private fun configureInputType(holder: Holder) {
         val newInputType =
@@ -146,7 +146,7 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
     /**
      * Configure the imeOptions of the EditText, when imeOptions are not defined by the developer
      * EditorInfo.IME_ACTION_NEXT will be used for singleLine EditTexts to disable "new line"
-     * while EditorInfo.IME_ACTION_NONE will be used for all the other cases
+     * while EditorInfo.IME_ACTION_NONE will be used for all the other cases.
      */
     private fun configureImeOptions(holder: Holder) {
         holder.textInputEditText.imeOptions =

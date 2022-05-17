@@ -38,7 +38,7 @@ internal class MXOlmEncryption(
     override suspend fun encryptEventContent(eventContent: Content, eventType: String, userIds: List<String>): Content {
         // pick the list of recipients based on the membership list.
         //
-        // TODO: there is a race condition here! What if a new user turns up
+        // TODO there is a race condition here! What if a new user turns up
         ensureSession(userIds)
         val deviceInfos = ArrayList<CryptoDeviceInfo>()
         for (userId in userIds) {
@@ -68,7 +68,7 @@ internal class MXOlmEncryption(
     }
 
     /**
-     * Ensure that the session
+     * Ensure that the session.
      *
      * @param users    the user ids list
      */

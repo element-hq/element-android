@@ -27,7 +27,7 @@ import org.matrix.android.sdk.internal.util.awaitTransaction
 import javax.inject.Inject
 
 /**
- * Save the push rules in DB
+ * Save the push rules in DB.
  */
 internal interface SavePushRulesTask : Task<SavePushRulesTask.Params, Unit> {
     data class Params(val pushRules: GetPushRulesResponse)

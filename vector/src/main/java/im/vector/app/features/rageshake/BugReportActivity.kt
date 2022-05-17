@@ -33,7 +33,7 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import timber.log.Timber
 
 /**
- * Form to send a bug report
+ * Form to send a bug report.
  */
 @AndroidEntryPoint
 class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
@@ -146,7 +146,7 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
     }
 
     /**
-     * Send the bug report
+     * Send the bug report.
      */
     private fun sendBugReport() = withState(viewModel) { state ->
         views.bugReportScrollview.alpha = 0.3f

@@ -16,7 +16,7 @@
 package im.vector.app.core.linkify
 
 /**
- * Better support for geo URi
+ * Better support for geo URI.
  */
 object VectorAutoLinkPatterns {
 
