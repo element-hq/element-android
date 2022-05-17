@@ -363,7 +363,6 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="settings_password_updated">Kata sandi Anda telah diperbaharui</string>
     <string name="settings_unignore_user">Tampilkan semua pesan dari %s\?</string>
     <string name="settings_select_country">Pilih negara</string>
-    <string name="settings_flair">Flair</string>
     <string name="media_saving_period_3_days">3 hari</string>
     <string name="media_saving_period_1_week">1 minggu</string>
     <string name="media_saving_period_1_month">1 bulan</string>
@@ -2303,8 +2302,6 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="location_share_external">Buka dengan</string>
     <string name="location_not_available_dialog_content">${app_name} tidak dapat mengakses lokasi Anda. Silakan coba lagi nanti.</string>
     <string name="location_not_available_dialog_title">${app_name} tidak dapat mengakses lokasi Anda</string>
-    <string name="location_share">Bagikan lokasi</string>
-    <string name="a11y_location_share_icon">Bagikan lokasi</string>
     <string name="location_activity_title_preview">Lokasi</string>
     <string name="location_activity_title_static_sharing">Bagikan lokasi</string>
     <string name="closed_poll_option_description">Hasil akan ditampilkan ketika Anda mengakhiri poll-nya</string>

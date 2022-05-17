@@ -1122,7 +1122,6 @@
     <string name="media_saving_period_1_month">1 monato</string>
     <string name="media_saving_period_1_week">1 semajno</string>
     <string name="media_saving_period_3_days">3 tagoj</string>
-    <string name="settings_flair">Insigno</string>
     <string name="settings_play_shutter_sound">Ludi sonon de fotkovrilo</string>
     <string name="media_source_choose">Elekti</string>
     <string name="settings_default_media_source">Implicita fonto de vidaŭdaĵoj</string>
@@ -2182,7 +2181,6 @@
     <string name="room_settings_room_notifications_notify_me">Sciigu min pri</string>
     <string name="settings_mentions_and_keywords_encryption_notice">VI ne ricevos sciigojn al poŝtelefono pri mencioj kaj ĉefvortoj en ĉifritaj ĉambroj.</string>
     <string name="settings_messages_containing_keywords">Ĉefvortoj</string>
-    <string name="settings_mentions_at_room"/>
     <string name="settings_notification_keyword_contains_invalid_character">Ĉefvortoj ne povas enhavi «%s»</string>
     <string name="settings_notification_keyword_contains_dot">Ĉefvortoj ne povas eki per «.»</string>
     <string name="settings_notification_new_keyword">Aldoni novan ĉefvorton</string>

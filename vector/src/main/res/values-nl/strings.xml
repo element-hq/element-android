@@ -378,7 +378,6 @@
     <string name="room_settings_add_homescreen_shortcut">Snelkoppeling aan thuisscherm toevoegen</string>
     <string name="settings_inline_url_preview">Inline URL-voorvertoning</string>
     <string name="settings_vibrate_on_mention">Trillen bij vermelden van een persoon</string>
-    <string name="settings_flair">Badge</string>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="one">%d gesprek</item>
         <item quantity="other">%d gesprekken</item>
@@ -2346,8 +2345,6 @@
     <string name="location_share_external">Open met</string>
     <string name="location_not_available_dialog_content">${app_name} kan geen toegang krijgen tot uw locatie. Probeer het later opnieuw.</string>
     <string name="location_not_available_dialog_title">${app_name} heeft geen toegang tot uw locatie</string>
-    <string name="location_share">Deel locatie</string>
-    <string name="a11y_location_share_icon">Deel locatie</string>
     <string name="location_activity_title_preview">Locatie</string>
     <string name="location_activity_title_static_sharing">Deel locatie</string>
     <string name="closed_poll_option_description">Resultaten worden pas onthuld als je de poll beëindigt</string>

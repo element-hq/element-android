@@ -537,7 +537,6 @@
     <string name="has_been_banned">%2$s ti ha bannato da %1$s</string>
     <string name="reason_colon">Motivo: %1$s</string>
     <string name="avatar">Avatar</string>
-    <string name="settings_flair">Predisposizione</string>
     <string name="widget_integration_positive_power_level">Il livello di potere deve essere un intero positivo.</string>
     <plurals name="membership_changes">
         <item quantity="one">%d cambio d\'appartenenza</item>
@@ -2337,8 +2336,6 @@
     <string name="location_share_external">Apri con</string>
     <string name="location_not_available_dialog_content">${app_name} non ha potuto rilevare la tua posizione. Riprova più tardi.</string>
     <string name="location_not_available_dialog_title">${app_name} non ha potuto rilevare la tua posizione</string>
-    <string name="location_share">Condividi posizione</string>
-    <string name="a11y_location_share_icon">Condividi posizione</string>
     <string name="location_activity_title_preview">Posizione</string>
     <string name="location_activity_title_static_sharing">Condividi posizione</string>
     <string name="closed_poll_option_description">I risultati verranno rivelati solo quando termini il sondaggio</string>

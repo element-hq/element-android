@@ -595,7 +595,6 @@
     <string name="settings_default_media_source">Vaikimisi meediaallikas</string>
     <string name="media_source_choose">Vali</string>
     <string name="settings_play_shutter_sound">Tee katiku klõpsu</string>
-    <string name="settings_flair">Kogukonna rinnasilt</string>
     <string name="media_saving_period_3_days">3 päeva</string>
     <string name="media_saving_period_1_week">1 nädal</string>
     <string name="media_saving_period_1_month">1 kuu</string>
@@ -2346,8 +2345,6 @@
     <string name="location_share_external">Ava muu rakendusega</string>
     <string name="location_not_available_dialog_content">${app_name} ei saanud asukohta tuvastada. Palun proovi hiljem uuesti.</string>
     <string name="location_not_available_dialog_title">${app_name} ei saanud asukohta tuvastada</string>
-    <string name="location_share">Jaga asukohta</string>
-    <string name="a11y_location_share_icon">Jaga asukohta</string>
     <string name="location_activity_title_preview">Asukoht</string>
     <string name="location_activity_title_static_sharing">Jaga asukohta</string>
     <string name="closed_poll_option_description">Tulemusi kuvame vaid siis, kui küsitlus on lõppenud</string>

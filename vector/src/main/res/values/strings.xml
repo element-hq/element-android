@@ -1056,9 +1056,6 @@
     <string name="media_source_choose">Choose</string>
     <string name="settings_play_shutter_sound">Play shutter sound</string>
 
-    <!-- TODO Remove -->
-    <string name="settings_flair" tools:ignore="UnusedResources">Flair</string>
-
     <!-- medias saving settings -->
     <string name="media_saving_period_3_days">3 days</string>
     <string name="media_saving_period_1_week">1 week</string>
@@ -1670,7 +1667,6 @@
     <string name="you_may_contact_me">You may contact me if you have any follow up questions</string>
     <string name="feedback_sent">Thanks, your feedback has been successfully sent</string>
     <string name="feedback_failed">The feedback failed to be sent (%s)</string>
-    <!-- TODO TO BE REMOVED -->
     <string name="give_feedback" tools:ignore="UnusedResources">Give Feedback</string>
     <string name="give_feedback_threads">Give Feedback</string>
     <string name="send_feedback_threads_title">Threads Beta feedback</string>
@@ -2986,11 +2982,7 @@
     <!-- Location -->
     <string name="location_activity_title_static_sharing">Share location</string>
     <string name="location_activity_title_preview">Location</string>
-    <!-- TODO delete -->
-    <string name="a11y_location_share_icon" tools:ignore="UnusedResources">Share location</string>
     <string name="a11y_static_map_image">Map</string>
-    <!-- TODO delete -->
-    <string name="location_share" tools:ignore="UnusedResources">Share location</string>
     <string name="a11y_location_share_pin_on_map">Pin of selected location on map</string>
     <string name="a11y_location_share_locate_button">Zoom to current location</string>
     <string name="location_share_option_user_current">Share my current location</string>

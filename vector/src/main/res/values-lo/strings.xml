@@ -994,7 +994,6 @@
     <string name="media_saving_period_1_month">1 ເດືອນ</string>
     <string name="media_saving_period_1_week">1 ອາທິດ</string>
     <string name="media_saving_period_3_days">3 ມື້</string>
-    <string name="settings_flair" tools:ignore="MissingTranslation">ໄຫວພິບ</string>
     <string name="settings_play_shutter_sound">ຫຼິ້ນສຽງ shutter</string>
     <string name="media_source_choose">ເລືອກ</string>
     <string name="settings_default_media_source">ແຫຼ່ງສື່</string>
@@ -2373,9 +2372,7 @@
     <string name="location_share_option_user_current">ແບ່ງປັນສະຖານທີ່ປະຈຸບັນຂອງຂ້ອຍ</string>
     <string name="a11y_location_share_locate_button">ຂະຫຍາຍໄປຫາສະຖານທີ່ປັດຈຸບັນ</string>
     <string name="a11y_location_share_pin_on_map">ປັກໝຸດຂອງສະຖານທີ່ທີ່ເລືອກຢູ່ໃນແຜນທີ່</string>
-    <string name="location_share" tools:ignore="UnusedResources">ແບ່ງປັນສະຖານທີ່</string>
     <string name="a11y_static_map_image">ແຜນທີ່</string>
-    <string name="a11y_location_share_icon" tools:ignore="UnusedResources">ແບ່ງປັນສະຖານທີ່</string>
     <string name="location_activity_title_preview">ສະຖານທີ່</string>
     <string name="location_activity_title_static_sharing">ແບ່ງປັນສະຖານທີ່</string>
     <string name="closed_poll_option_description">ຜົນໄດ້ຮັບຈະຖືກເປີດເຜີຍເມື່ອທ່ານສິ້ນສຸດແບບສຳຫຼວດເທົ່ານັ້ນ</string>

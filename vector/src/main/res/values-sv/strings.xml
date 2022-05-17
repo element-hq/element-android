@@ -527,7 +527,6 @@
     <string name="settings_unignore_user">Visa alla meddelanden från %s\?</string>
     <string name="settings_media">Media</string>
     <string name="settings_default_media_source">Förvald mediakälla</string>
-    <string name="settings_flair">Emblem</string>
     <string name="room_settings_category_advanced_title">Avancerat</string>
     <string name="room_settings_labs_pref_title">Experiment</string>
     <string name="encryption_message_recovery">Återställning av krypterade meddelanden</string>
@@ -2346,8 +2345,6 @@
     <string name="location_share_external">Öppna med</string>
     <string name="location_not_available_dialog_content">${app_name} kunde inte komma åt din plats. Försök igen senare.</string>
     <string name="location_not_available_dialog_title">${app_name} kunde inte komma åt din plats</string>
-    <string name="location_share">Dela plats</string>
-    <string name="a11y_location_share_icon">Dela plats</string>
     <string name="location_activity_title_preview">Plats</string>
     <string name="location_activity_title_static_sharing">Dela plats</string>
     <string name="open_poll_option_description">Väljare kan se resultatet så fort de har röstat</string>

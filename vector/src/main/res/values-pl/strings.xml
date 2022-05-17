@@ -385,7 +385,6 @@
     <string name="widget_integration_positive_power_level">Poziom uprawnień musi być liczbą dodatnią.</string>
     <string name="widget_integration_must_be_in_room">Nie jesteś w tym pokoju.</string>
     <string name="widget_integration_no_permission_in_room">Nie masz uprawnień, aby zrobić to w tym pokoju.</string>
-    <string name="settings_flair">Wyróżnik społeczności</string>
     <string name="widget_integration_missing_room_id">Brakujące room_id w żądaniu.</string>
     <string name="widget_integration_missing_user_id">Brakujące user_id w żądaniu.</string>
     <string name="widget_integration_missing_parameter">Brakuje wymaganego parametru.</string>
@@ -2525,9 +2524,7 @@
     <string name="location_share_option_user_current">Udostępnij moją aktualną lokalizację</string>
     <string name="a11y_location_share_locate_button">Powiększ do bieżącej lokalizacji</string>
     <string name="a11y_location_share_pin_on_map">Przypnij na mapie wybraną lokalizację</string>
-    <string name="location_share" tools:ignore="UnusedResources">Udostępnij lokalizację</string>
     <string name="a11y_static_map_image">Mapa</string>
-    <string name="a11y_location_share_icon" tools:ignore="UnusedResources">Udostępnij lokalizację</string>
     <string name="location_activity_title_preview">Lokalizacja</string>
     <string name="location_activity_title_static_sharing">Udostępnij lokalizację</string>
     <string name="closed_poll_option_description">Wyniki są ujawniane dopiero po zakończeniu ankiety</string>

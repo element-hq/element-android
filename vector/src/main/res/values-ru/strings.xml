@@ -570,7 +570,6 @@
         <item quantity="many">%d непрочитанных уведомлений</item>
         <item quantity="other"/>
     </plurals>
-    <string name="settings_flair">Чутье</string>
     <string name="title_activity_choose_sticker">Отправить стикер</string>
     <string name="option_send_sticker">Отправить стикер</string>
     <string name="no_sticker_application_dialog_content">У вас сейчас нет доступных стикеров. 
@@ -2334,8 +2333,6 @@
     <string name="location_share_external">Открыть с помощью</string>
     <string name="location_not_available_dialog_content">${app_name} не смог получить доступ к вашему местоположению. Пожалуйста, повторите попытку позже.</string>
     <string name="location_not_available_dialog_title">${app_name} не смог получить доступ к вашему местоположению</string>
-    <string name="location_share">Поделиться местоположением</string>
-    <string name="a11y_location_share_icon">Поделиться местоположением</string>
     <string name="location_activity_title_preview">Местоположение</string>
     <string name="location_activity_title_static_sharing">Поделиться местоположением</string>
     <string name="closed_poll_option_description">Результаты отображаются только после завершения опроса</string>

@@ -488,7 +488,6 @@
     <string name="settings_12_24_timestamps">Mostrar timestamps em formato de 12 horas</string>
     <string name="settings_vibrate_on_mention">Vibrar ao mencionar um/uma usuário(a)</string>
     <string name="settings_analytics">Analítica</string>
-    <string name="settings_flair">Flair</string>
     <string name="widget_delete_message_confirmation">Você tem certeza que você quer deletar o widget desta sala\?</string>
     <string name="widget_integration_unable_to_create">Incapaz de criar widget.</string>
     <string name="widget_integration_failed_to_send_request">Falha para enviar requisição.</string>
@@ -2346,8 +2345,6 @@
     <string name="location_share_external">Abrir com</string>
     <string name="location_not_available_dialog_content">${app_name} não pôde acessar sua localização. Por favor tente de novo mais tarde.</string>
     <string name="location_not_available_dialog_title">${app_name} não pôde acessar sua localização</string>
-    <string name="location_share">Compartilhar localização</string>
-    <string name="a11y_location_share_icon">Compartilhar localização</string>
     <string name="location_activity_title_preview">Localização</string>
     <string name="location_activity_title_static_sharing">Compartilhar localização</string>
     <string name="closed_poll_option_description">Resultados são somente revelados quando você termina a sondagem</string>

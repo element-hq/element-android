@@ -431,7 +431,6 @@
     <string name="settings_password_updated">La contrasenya s\'ha actualitzat</string>
     <string name="settings_unignore_user">Mostrar tots els missatges de %s\?</string>
     <string name="settings_select_country">Escull un país</string>
-    <string name="settings_flair">Insígnia</string>
     <string name="media_saving_period_3_days">Tres dies</string>
     <string name="media_saving_period_1_week">Una setmana</string>
     <string name="media_saving_period_1_month">Un mes</string>

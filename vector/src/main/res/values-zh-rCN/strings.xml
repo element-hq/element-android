@@ -475,7 +475,6 @@
         <item quantity="other">%d 条未读消息</item>
     </plurals>
     <string name="list_members">显示成员</string>
-    <string name="settings_flair">徽章</string>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="other">%d 个聊天室</item>
     </plurals>
