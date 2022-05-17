@@ -168,7 +168,7 @@ class HomeDetailFragment @Inject constructor(
             hideModal()
             views.toolbarChevron.animate()
                     .rotation(0F)
-                    .setDuration(500)
+                    .setDuration(300)
                     .setInterpolator(DecelerateInterpolator())
                     .start()
         }
@@ -177,7 +177,7 @@ class HomeDetailFragment @Inject constructor(
             hideModal()
             views.toolbarChevron.animate()
                     .rotation(0F)
-                    .setDuration(500)
+                    .setDuration(300)
                     .setInterpolator(DecelerateInterpolator())
                     .start()
         }
@@ -245,7 +245,7 @@ class HomeDetailFragment @Inject constructor(
             hideModal()
             views.toolbarChevron.animate()
                     .rotation(0F)
-                    .setDuration(500)
+                    .setDuration(300)
                     .setInterpolator(DecelerateInterpolator())
                     .start()
         } else {
@@ -258,8 +258,8 @@ class HomeDetailFragment @Inject constructor(
         views.dimView.isVisible = true
         views.dimViewBottom.isVisible = true
         views.toolbarChevron.animate()
-                .rotation(-270F)
-                .setDuration(500)
+                .rotation(90F)
+                .setDuration(300)
                 .setInterpolator(DecelerateInterpolator())
                 .start()
     }
@@ -363,14 +363,12 @@ class HomeDetailFragment @Inject constructor(
             views.backButtonLayout.isVisible = false
             views.groupToolbarSpaceTitleView.isVisible = false
             views.groupToolbarSpaceTitleView.text = getString(R.string.all_chats)
-            ImageViewCompat.setImageTintList(views.toolbarChevron, ColorStateList.valueOf(resources.getColor(R.color.palette_element_green)))
             views.groupToolbarTitleView.text = getString(R.string.all_chats)
         } else {
             views.backButtonLayout.isVisible = true
             views.groupToolbarSpaceTitleView.isVisible = true
             views.groupToolbarSpaceTitleView.text = groupSummary.displayName
             views.groupToolbarTitleView.text = groupSummary.displayName
-            ImageViewCompat.setImageTintList(views.toolbarChevron, ColorStateList.valueOf(MaterialColors.getColor(views.toolbarChevron, R.attr.vctr_message_text_color)))
         }
     }
 
@@ -384,7 +382,6 @@ class HomeDetailFragment @Inject constructor(
             views.groupToolbarSpaceTitleView.text = getString(R.string.all_chats)
             views.groupToolbarTitleView.text = getString(R.string.all_chats)
             views.spaceAvatar.isVisible = false
-            ImageViewCompat.setImageTintList(views.toolbarChevron, ColorStateList.valueOf(resources.getColor(R.color.palette_element_green)))
         } else {
             views.backButtonLayout.isVisible = true
             views.groupToolbarSpaceTitleView.isVisible = true
@@ -392,7 +389,6 @@ class HomeDetailFragment @Inject constructor(
             views.groupToolbarTitleView.text = spaceSummary.displayName
             views.spaceAvatar.isVisible = true
             avatarRenderer.render(spaceSummary.toMatrixItem(), requireContext(), views.spaceAvatar)
-            ImageViewCompat.setImageTintList(views.toolbarChevron, ColorStateList.valueOf(MaterialColors.getColor(views.toolbarChevron, R.attr.vctr_message_text_color)))
 
             spaceSummary.spaceParents?.firstOrNull()?.let { directParent ->
                 views.backButtonText.text = directParent.roomSummary?.name ?: getString(R.string.all_chats)
