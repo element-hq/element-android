@@ -21,7 +21,6 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
@@ -31,23 +30,18 @@ import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
-import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.ui.views.PresenceStateImageView
 import im.vector.app.core.ui.views.ShieldImageView
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.themes.ThemeUtils
-import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.presence.model.UserPresence
 import org.matrix.android.sdk.api.util.MatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_room)
-abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
-
-    @EpoxyAttribute
-    lateinit var typingMessage: String
+@EpoxyModelClass(layout = R.layout.item_room_centered)
+abstract class RoomSummaryItemCentered : VectorEpoxyModel<RoomSummaryItemCentered.Holder>() {
 
     @EpoxyAttribute
     lateinit var avatarRenderer: AvatarRenderer
@@ -57,15 +51,6 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
 
     @EpoxyAttribute
     var displayMode: RoomListDisplayMode = RoomListDisplayMode.PEOPLE
-
-    @EpoxyAttribute
-    lateinit var subtitle: String
-
-    @EpoxyAttribute
-    lateinit var lastFormattedEvent: EpoxyCharSequence
-
-    @EpoxyAttribute
-    lateinit var lastEventTime: String
 
     @EpoxyAttribute
     var encryptionTrustLevel: RoomEncryptionTrustLevel? = null
@@ -89,9 +74,6 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
     var hasDraft: Boolean = false
 
     @EpoxyAttribute
-    var showHighlighted: Boolean = false
-
-    @EpoxyAttribute
     var hasFailedSending: Boolean = false
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
@@ -106,40 +88,18 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
     override fun bind(holder: Holder) {
         super.bind(holder)
 
-        renderDisplayMode(holder)
         holder.rootView.onClick(itemClickListener)
         holder.rootView.setOnLongClickListener {
             it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
             itemLongClickListener?.onLongClick(it) ?: false
         }
         holder.titleView.text = matrixItem.getBestName()
-        holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted))
-        holder.unreadIndentIndicator.isVisible = hasUnreadMessage
-        holder.draftView.isVisible = hasDraft
         avatarRenderer.render(matrixItem, holder.avatarImageView)
         holder.roomAvatarDecorationImageView.render(encryptionTrustLevel)
         holder.roomAvatarPublicDecorationImageView.isVisible = isPublic
         holder.roomAvatarFailSendingImageView.isVisible = hasFailedSending
         renderSelection(holder, showSelected)
         holder.roomAvatarPresenceImageView.render(showPresence, userPresence)
-    }
-
-    private fun renderDisplayMode(holder: Holder) = when (displayMode) {
-        RoomListDisplayMode.ROOMS,
-        RoomListDisplayMode.PEOPLE,
-        RoomListDisplayMode.NOTIFICATIONS -> renderForDefaultDisplayMode(holder)
-        RoomListDisplayMode.FILTERED      -> renderForFilteredDisplayMode(holder)
-    }
-
-    private fun renderForDefaultDisplayMode(holder: Holder) {
-        holder.subtitleView.text = lastFormattedEvent.charSequence
-        holder.lastEventTimeView.text = lastEventTime
-        holder.typingView.setTextOrHide(typingMessage)
-        holder.subtitleView.isInvisible = holder.typingView.isVisible
-    }
-
-    private fun renderForFilteredDisplayMode(holder: Holder) {
-        holder.subtitleView.text = subtitle
     }
 
     override fun unbind(holder: Holder) {
@@ -163,12 +123,6 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
 
     class Holder : VectorEpoxyHolder() {
         val titleView by bind<TextView>(R.id.roomNameView)
-        val unreadCounterBadgeView by bind<UnreadCounterBadgeView>(R.id.roomUnreadCounterBadgeView)
-        val unreadIndentIndicator by bind<View>(R.id.roomUnreadIndicator)
-        val subtitleView by bind<TextView>(R.id.subtitleView)
-        val typingView by bind<TextView>(R.id.roomTypingView)
-        val draftView by bind<ImageView>(R.id.roomDraftBadge)
-        val lastEventTimeView by bind<TextView>(R.id.roomLastEventTimeView)
         val avatarCheckedImageView by bind<ImageView>(R.id.roomAvatarCheckedImageView)
         val avatarImageView by bind<ImageView>(R.id.roomAvatarImageView)
         val roomAvatarDecorationImageView by bind<ShieldImageView>(R.id.roomAvatarDecorationImageView)

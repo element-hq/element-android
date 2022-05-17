@@ -126,31 +126,74 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
         }
 
         val typingMessage = typingHelper.getTypingMessage(roomSummary.typingUsers)
-        return RoomSummaryItem_()
-                .id(roomSummary.roomId)
-                .avatarRenderer(avatarRenderer)
-                // We do not display shield in the room list anymore
-                // .encryptionTrustLevel(roomSummary.roomEncryptionTrustLevel)
-                .displayMode(displayMode)
-                .subtitle(subtitle)
-                .isPublic(roomSummary.isPublic)
-                .showPresence(roomSummary.isDirect)
-                .userPresence(roomSummary.directUserPresence)
-                .matrixItem(roomSummary.toMatrixItem())
-                .lastEventTime(latestEventTime)
-                .typingMessage(typingMessage)
-                .lastFormattedEvent(latestFormattedEvent.toEpoxyCharSequence())
-                .showHighlighted(showHighlighted)
-                .showSelected(showSelected)
-                .hasFailedSending(roomSummary.hasFailedSending)
-                .unreadNotificationCount(unreadCount)
-                .hasUnreadMessage(roomSummary.hasUnreadMessages)
-                .hasDraft(roomSummary.userDrafts.isNotEmpty())
-                .itemLongClickListener { _ ->
-                    onLongClick?.invoke(roomSummary) ?: false
-                }
-                .itemClickListener { onClick?.invoke(roomSummary) }
+
+        return if (subtitle.isBlank() && displayMode == RoomListDisplayMode.FILTERED) {
+            createCenteredRoomSummaryItem(roomSummary, displayMode, showSelected, unreadCount, onClick, onLongClick)
+        } else {
+            createRoomSummaryItem(roomSummary, displayMode, subtitle, latestEventTime, typingMessage,
+                    latestFormattedEvent, showHighlighted, showSelected, unreadCount, onClick, onLongClick)
+        }
     }
+    
+    private fun createRoomSummaryItem(
+            roomSummary: RoomSummary,
+            displayMode: RoomListDisplayMode,
+            subtitle: String,
+            latestEventTime: String,
+            typingMessage: String,
+            latestFormattedEvent: CharSequence,
+            showHighlighted: Boolean,
+            showSelected: Boolean,
+            unreadCount: Int,
+            onClick: ((RoomSummary) -> Unit)?,
+            onLongClick: ((RoomSummary) -> Boolean)?
+    ) = RoomSummaryItem_()
+            .id(roomSummary.roomId)
+            .avatarRenderer(avatarRenderer)
+            // We do not display shield in the room list anymore
+            // .encryptionTrustLevel(roomSummary.roomEncryptionTrustLevel)
+            .displayMode(displayMode)
+            .subtitle(subtitle)
+            .isPublic(roomSummary.isPublic)
+            .showPresence(roomSummary.isDirect)
+            .userPresence(roomSummary.directUserPresence)
+            .matrixItem(roomSummary.toMatrixItem())
+            .lastEventTime(latestEventTime)
+            .typingMessage(typingMessage)
+            .lastFormattedEvent(latestFormattedEvent.toEpoxyCharSequence())
+            .showHighlighted(showHighlighted)
+            .showSelected(showSelected)
+            .hasFailedSending(roomSummary.hasFailedSending)
+            .unreadNotificationCount(unreadCount)
+            .hasUnreadMessage(roomSummary.hasUnreadMessages)
+            .hasDraft(roomSummary.userDrafts.isNotEmpty())
+            .itemLongClickListener { _ -> onLongClick?.invoke(roomSummary) ?: false }
+            .itemClickListener { onClick?.invoke(roomSummary) }
+
+    private fun createCenteredRoomSummaryItem(
+            roomSummary: RoomSummary,
+            displayMode: RoomListDisplayMode,
+            showSelected: Boolean,
+            unreadCount: Int,
+            onClick: ((RoomSummary) -> Unit)?,
+            onLongClick: ((RoomSummary) -> Boolean)?
+    ) = RoomSummaryItemCentered_()
+            .id(roomSummary.roomId)
+            .avatarRenderer(avatarRenderer)
+            // We do not display shield in the room list anymore
+            // .encryptionTrustLevel(roomSummary.roomEncryptionTrustLevel)
+            .displayMode(displayMode)
+            .isPublic(roomSummary.isPublic)
+            .showPresence(roomSummary.isDirect)
+            .userPresence(roomSummary.directUserPresence)
+            .matrixItem(roomSummary.toMatrixItem())
+            .showSelected(showSelected)
+            .hasFailedSending(roomSummary.hasFailedSending)
+            .unreadNotificationCount(unreadCount)
+            .hasUnreadMessage(roomSummary.hasUnreadMessages)
+            .hasDraft(roomSummary.userDrafts.isNotEmpty())
+            .itemLongClickListener { _ -> onLongClick?.invoke(roomSummary) ?: false }
+            .itemClickListener { onClick?.invoke(roomSummary) }
 
     private fun getSearchResultSubtitle(roomSummary: RoomSummary): String {
         val userId = roomSummary.directUserId
