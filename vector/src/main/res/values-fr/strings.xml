@@ -2454,5 +2454,4 @@
 \nPour nous y préparer, nous avons besoin de faire certains changements : les fils créés avant maintenant seront affichés comme des réponses classiques.
 \n
 \nCette transition sera unique, maintenant que les fils de discussions ont intégré la spécification de Matrix.</string>
-    <string name="action_try_it_out"></string>
 </resources>

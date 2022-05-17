@@ -1388,7 +1388,6 @@
     <string name="settings_troubleshoot_title">Diagnostikoje</string>
     <string name="command_description_plain">E dërgon një mesazh si tekst të thjeshtë, pa interpretuar elementët Markdown</string>
     <string name="auth_invalid_login_param_space_in_password">Emër përdoruesi dhe/ose fjalëkalim i pasaktë. Fjalëkalimi i dhënë fillon ose mbaron me hapësirë, ju lutemi, kontrollojeni.</string>
-    <string name="settings_rageshake"/>
     <string name="bootstrap_crosssigning_progress_initializing">Po publikohen kyçe të krijuar identiteti</string>
     <string name="room_message_placeholder">Mesazh…</string>
     <string name="upgrade_security">Ka të gatshëm përmirësim fshehtëzimi</string>
