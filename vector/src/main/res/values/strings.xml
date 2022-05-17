@@ -1678,7 +1678,7 @@
     <string name="fab_menu_create_chat">"Direct Messages"</string>
     <string name="room_participants_header_direct_chats">Direct Messages</string>
 
-    <string name="bottom_action_people_x">Direct Messages</string>
+    <string name="bottom_action_people_x">People</string>
     <string name="settings_messages_direct_messages">Direct messages</string>
 
     <string name="send_file_step_idle">Waiting…</string>

@@ -239,7 +239,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/home_bottom_navigation" />
+        app:menu="@menu/home_bottom_navigation"
+        app:labelVisibilityMode="labeled" />
 
     <View
         android:id="@+id/dim_view"
