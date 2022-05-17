@@ -22,17 +22,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.args
-import com.mapbox.mapboxsdk.maps.MapView
 import com.mapbox.mapboxsdk.maps.MapboxMapOptions
 import com.mapbox.mapboxsdk.maps.SupportMapFragment
 import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentLiveLocationMapBinding
-import im.vector.app.databinding.FragmentLocationPreviewBinding
-import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
 import im.vector.app.features.location.UrlMapProvider
-import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 /**
@@ -40,7 +36,6 @@ import javax.inject.Inject
  */
 class LocationLiveMapViewFragment @Inject constructor(
         private val urlMapProvider: UrlMapProvider,
-        private val locationPinProvider: LocationPinProvider
 ) : VectorBaseFragment<FragmentLiveLocationMapBinding>() {
 
     private val args: LocationLiveMapViewArgs by args()
