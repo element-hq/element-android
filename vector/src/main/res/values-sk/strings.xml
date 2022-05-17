@@ -456,7 +456,6 @@
     <string name="room_settings_add_homescreen_shortcut">Pridať na domovskú obrazovku</string>
     <string name="settings_inline_url_preview">Náhľady URL adries</string>
     <string name="settings_vibrate_on_mention">Vibrovať keď spomeniete iného používateľa</string>
-    <string name="settings_flair">Príslušnosť ku komunitám</string>
     <string name="create">Vytvoriť</string>
     <string name="group_details_home">Domov</string>
     <string name="rooms">Miestnosti</string>

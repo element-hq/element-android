@@ -449,7 +449,6 @@
     <string name="settings_deactivate_account_section">Деактивація облікового запису</string>
     <string name="settings_deactivate_my_account">Деактивувати мій обліковий запис</string>
     <string name="settings_opt_in_of_analytics">Надсилання аналітичних даних</string>
-    <string name="settings_flair">Настрій</string>
     <string name="e2e_re_request_encryption_key_dialog_content">Щоб надіслати ключ на цей пристрій, запустіть ${app_name} на іншому пристрої, що може розшифрувати повідомлення.</string>
     <string name="error_no_external_application_found">Вибачте, жодного зовнішнього застосунку не знайдено для виконання цієї дії.</string>
     <string name="option_send_voice">Надіслати голосове повідомлення</string>

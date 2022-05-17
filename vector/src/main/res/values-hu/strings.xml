@@ -448,7 +448,6 @@
     <string name="has_been_banned">Ki lettél tiltva innen: %1$s, %2$s által</string>
     <string name="reason_colon">Ok: %1$s</string>
     <string name="settings_inline_url_preview">URL előnézet</string>
-    <string name="settings_flair">Kitűző</string>
     <string name="group_details_home">Kezdőlap</string>
     <string name="send_bug_report_rage_shake">Rázd meg az eszközt, ha hibát szeretnél bejelenteni</string>
     <plurals name="membership_changes">

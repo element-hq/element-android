@@ -994,7 +994,6 @@
     <string name="media_saving_period_1_month">1 ເດືອນ</string>
     <string name="media_saving_period_1_week">1 ອາທິດ</string>
     <string name="media_saving_period_3_days">3 ມື້</string>
-    <string name="settings_flair" tools:ignore="MissingTranslation">ໄຫວພິບ</string>
     <string name="settings_play_shutter_sound">ຫຼິ້ນສຽງ shutter</string>
     <string name="media_source_choose">ເລືອກ</string>
     <string name="settings_default_media_source">ແຫຼ່ງສື່</string>

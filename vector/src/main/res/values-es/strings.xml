@@ -504,7 +504,6 @@
     <string name="room_settings_add_homescreen_shortcut">Añadir a la Pantalla de Inicio</string>
     <string name="settings_inline_url_preview">Vistas previas de URL en línea</string>
     <string name="settings_vibrate_on_mention">Vibrar al mencionar un usuario</string>
-    <string name="settings_flair">Insignia</string>
     <string name="create">Crear</string>
     <string name="group_details_home">Inicio</string>
     <string name="rooms">Salas</string>

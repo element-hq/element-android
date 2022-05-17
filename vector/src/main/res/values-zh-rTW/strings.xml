@@ -452,7 +452,6 @@
     <string name="settings_password_updated">您的密碼已經更新</string>
     <string name="settings_unignore_user">顯示所有來自 %s 的訊息？</string>
     <string name="settings_select_country">選擇國家</string>
-    <string name="settings_flair">特色</string>
     <string name="media_saving_period_3_days">3 天</string>
     <string name="media_saving_period_1_week">1 週</string>
     <string name="media_saving_period_1_month">1 個月</string>

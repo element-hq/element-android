@@ -527,7 +527,6 @@
     <string name="settings_unignore_user">Visa alla meddelanden från %s\?</string>
     <string name="settings_media">Media</string>
     <string name="settings_default_media_source">Förvald mediakälla</string>
-    <string name="settings_flair">Emblem</string>
     <string name="room_settings_category_advanced_title">Avancerat</string>
     <string name="room_settings_labs_pref_title">Experiment</string>
     <string name="encryption_message_recovery">Återställning av krypterade meddelanden</string>

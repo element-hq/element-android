@@ -595,7 +595,6 @@
     <string name="settings_default_media_source">Vaikimisi meediaallikas</string>
     <string name="media_source_choose">Vali</string>
     <string name="settings_play_shutter_sound">Tee katiku klõpsu</string>
-    <string name="settings_flair">Kogukonna rinnasilt</string>
     <string name="media_saving_period_3_days">3 päeva</string>
     <string name="media_saving_period_1_week">1 nädal</string>
     <string name="media_saving_period_1_month">1 kuu</string>

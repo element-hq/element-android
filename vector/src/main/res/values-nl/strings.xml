@@ -378,7 +378,6 @@
     <string name="room_settings_add_homescreen_shortcut">Snelkoppeling aan thuisscherm toevoegen</string>
     <string name="settings_inline_url_preview">Inline URL-voorvertoning</string>
     <string name="settings_vibrate_on_mention">Trillen bij vermelden van een persoon</string>
-    <string name="settings_flair">Badge</string>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="one">%d gesprek</item>
         <item quantity="other">%d gesprekken</item>

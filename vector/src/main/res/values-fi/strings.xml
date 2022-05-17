@@ -455,7 +455,6 @@
     <string name="room_settings_add_homescreen_shortcut">Lisää aloitusruudulle</string>
     <string name="settings_inline_url_preview">Linkkien esikatselu</string>
     <string name="settings_vibrate_on_mention">Värise, kun käyttäjä mainitaan</string>
-    <string name="settings_flair">Tyyli</string>
     <string name="create">Luo</string>
     <string name="group_details_home">Koti</string>
     <string name="rooms">Huoneet</string>

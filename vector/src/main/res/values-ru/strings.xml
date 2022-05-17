@@ -570,7 +570,6 @@
         <item quantity="many">%d непрочитанных уведомлений</item>
         <item quantity="other"/>
     </plurals>
-    <string name="settings_flair">Чутье</string>
     <string name="title_activity_choose_sticker">Отправить стикер</string>
     <string name="option_send_sticker">Отправить стикер</string>
     <string name="no_sticker_application_dialog_content">У вас сейчас нет доступных стикеров. 

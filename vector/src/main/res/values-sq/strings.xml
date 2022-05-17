@@ -621,7 +621,6 @@
     <string name="settings_call_ringtone_use_app_ringtone">Për thirrje ardhëse përdor zilen parazgjedhje të ${app_name}-it</string>
     <string name="settings_call_ringtone_title">Zile thirrjesh ardhëse</string>
     <string name="settings_call_ringtone_dialog_title">Përzgjidhni zile për thirrjet:</string>
-    <string name="settings_flair">Simbole</string>
     <string name="action_accept">Pranoje</string>
     <string name="auth_accept_policies">Ju lutemi, merrni në shqyrtim dhe pranoni rregullat e këtij shërbyesi Home:</string>
     <string name="settings_notification_troubleshoot">Diagnostikoni Njoftime</string>

@@ -1658,7 +1658,6 @@
     </plurals>
     <string name="encryption_exported_successfully">کلیدها با موفقیت بر روی دستگاه استخراج شدند</string>
     <string name="encryption_export_notice">لطفاً یک رمز برای رمزنگاری کلیدها وارد کنید. ورود این رمز برای بارگذاری کلیدها ضروری خواهد بود.</string>
-    <string name="settings_flair">اجتماع</string>
     <string name="settings_play_shutter_sound">پخش صدای شاتر</string>
     <string name="media_source_choose">گزینش</string>
     <string name="settings_default_media_source">منبع رسانهٔ پیش‌گزیده</string>

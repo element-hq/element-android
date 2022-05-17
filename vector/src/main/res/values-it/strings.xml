@@ -537,7 +537,6 @@
     <string name="has_been_banned">%2$s ti ha bannato da %1$s</string>
     <string name="reason_colon">Motivo: %1$s</string>
     <string name="avatar">Avatar</string>
-    <string name="settings_flair">Predisposizione</string>
     <string name="widget_integration_positive_power_level">Il livello di potere deve essere un intero positivo.</string>
     <plurals name="membership_changes">
         <item quantity="one">%d cambio d\'appartenenza</item>

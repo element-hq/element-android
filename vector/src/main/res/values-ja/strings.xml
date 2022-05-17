@@ -341,7 +341,6 @@
     <string name="room_settings_all_messages">全てのメッセージ</string>
     <string name="room_settings_add_homescreen_shortcut">ホーム画面にショートカットを作成</string>
     <string name="settings_inline_url_preview">インラインURLプレビュー</string>
-    <string name="settings_flair">コミュニティーのアバター</string>
     <string name="you_added_a_new_device">暗号鍵を要求している新しいセッション \'%s\' を追加しました。</string>
     <string name="your_unverified_device_requesting">未認証のセッション \'%s\' が暗号鍵を要求しています。</string>
     <string name="create">作成</string>
