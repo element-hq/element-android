@@ -140,8 +140,10 @@ class DefaultPollAggregationProcessor @Inject constructor() : PollAggregationPro
             aggregatedPollSummaryEntity.sourceEvents.add(event.eventId)
         }
 
+        val myVote = existingVotes.find { it.userId == session.myUserId }?.option
+
         val newSumModel = PollSummaryContent(
-                myVote = vote,
+                myVote = myVote,
                 votes = existingVotes,
                 votesSummary = newVotesSummary,
                 totalVotes = totalVotes,
@@ -159,7 +161,7 @@ class DefaultPollAggregationProcessor @Inject constructor() : PollAggregationPro
         val pollOwnerId = getPollEvent(session, roomId, pollEventId)?.root?.senderId
         val isPollOwner = pollOwnerId == event.senderId
 
-        if (!isPollOwner || !powerLevelsHelper.isUserAbleToRedact(event.senderId ?: "")) {
+        if (!isPollOwner && !powerLevelsHelper.isUserAbleToRedact(event.senderId ?: "")) {
             Timber.v("## Received poll.end event $pollEventId but user ${event.senderId} doesn't have enough power level in room $roomId")
             return false
         }

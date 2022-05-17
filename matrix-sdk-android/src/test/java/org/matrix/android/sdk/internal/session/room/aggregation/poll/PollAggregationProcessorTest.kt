@@ -196,6 +196,7 @@ class PollAggregationProcessorTest {
     fun setup() {
         mockEventAnnotationsSummaryEntity()
         mockRoom(A_ROOM_ID, AN_EVENT_ID)
+        every { session.myUserId } returns A_USER_ID_1
     }
 
     @Test
@@ -259,10 +260,18 @@ class PollAggregationProcessorTest {
     }
 
     @Test
-    fun `given a poll end event without redaction power level is not processed by poll aggregator`() {
+    fun `given a poll end event without redaction power level of event owner is processed by poll aggregator`() {
         every { realm.instance.createObject(PollResponseAggregatedSummaryEntity::class.java) } returns PollResponseAggregatedSummaryEntity()
         val powerLevelsHelper = mockRedactionPowerLevels(A_USER_ID_1, false)
-        pollAggregationProcessor.handlePollEndEvent(session, powerLevelsHelper, realm.instance, A_POLL_END_EVENT).shouldBeFalse()
+        pollAggregationProcessor.handlePollEndEvent(session, powerLevelsHelper, realm.instance, A_POLL_END_EVENT).shouldBeTrue()
+    }
+
+    @Test
+    fun `given a poll end event without redaction power level of non event owner is not processed by poll aggregator`() {
+        every { realm.instance.createObject(PollResponseAggregatedSummaryEntity::class.java) } returns PollResponseAggregatedSummaryEntity()
+        val powerLevelsHelper = mockRedactionPowerLevels("another-sender-id", false)
+        val event = A_POLL_END_EVENT.copy(senderId = "another-sender-id")
+        pollAggregationProcessor.handlePollEndEvent(session, powerLevelsHelper, realm.instance, event).shouldBeFalse()
     }
 
     private inline fun <reified T : RealmModel> RealmQuery<T>.givenEqualTo(fieldName: String, value: String, result: RealmQuery<T>) {
