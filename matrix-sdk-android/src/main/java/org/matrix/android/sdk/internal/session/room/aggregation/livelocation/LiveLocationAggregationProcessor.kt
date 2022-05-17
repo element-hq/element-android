@@ -70,6 +70,7 @@ internal class LiveLocationAggregationProcessor @Inject constructor(
         val endOfLiveTimestampMillis = content.getBestTimestampMillis()?.let { it + (content.timeout ?: 0) }
         aggregatedSummary.endOfLiveTimestampMillis = endOfLiveTimestampMillis
         aggregatedSummary.isActive = isLive
+        aggregatedSummary.userId = event.senderId
 
         if (isLive) {
             scheduleDeactivationAfterTimeout(targetEventId, roomId, endOfLiveTimestampMillis)
