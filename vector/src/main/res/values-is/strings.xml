@@ -179,9 +179,7 @@
     <string name="settings_new_password">Nýtt lykilorð</string>
     <string name="settings_fail_to_update_password">Mistókst að uppfæra lykilorð</string>
     <string name="settings_password_updated">Lykilorðið þitt hefur verið uppfært</string>
-    <string name="settings_unignore_user">Sýna öll skilaboð frá %s\?
-\n
-\nAthugaðu að þessi aðgerð mun endurræsa forritið og það getur tekið nokkurn tíma.</string>
+    <string name="settings_unignore_user">Sýna öll skilaboð frá %s\?</string>
     <string name="settings_select_country">Veldu land</string>
     <string name="media_saving_period_3_days">3 dagar</string>
     <string name="media_saving_period_1_week">1 vika</string>
