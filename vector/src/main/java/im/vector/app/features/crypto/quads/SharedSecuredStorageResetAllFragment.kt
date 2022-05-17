@@ -30,7 +30,7 @@ import im.vector.app.features.roommemberprofile.devices.DeviceListBottomSheet
 import javax.inject.Inject
 
 class SharedSecuredStorageResetAllFragment @Inject constructor() :
-    VectorBaseFragment<FragmentSsssResetAllBinding>() {
+        VectorBaseFragment<FragmentSsssResetAllBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSsssResetAllBinding {
         return FragmentSsssResetAllBinding.inflate(inflater, container, false)

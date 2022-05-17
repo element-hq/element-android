@@ -23,7 +23,7 @@ import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
 
 /**
- * Object to manage the Font Scale choice of the user
+ * Object to manage the Font Scale choice of the user.
  */
 object FontScale {
     // Key for the SharedPrefs
@@ -51,7 +51,7 @@ object FontScale {
     private val normalFontScaleValue = fontScaleValues[2]
 
     /**
-     * Get the font scale value from SharedPrefs. Init the SharedPrefs if necessary
+     * Get the font scale value from SharedPrefs. Init the SharedPrefs if necessary.
      *
      * @return the font scale value
      */
@@ -76,7 +76,7 @@ object FontScale {
     }
 
     /**
-     * Store the font scale vale
+     * Store the font scale value.
      *
      * @param fontScaleValue the font scale value to store
      */

@@ -80,11 +80,11 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
     private var progress: AlertDialog? = null
 
     /**
-     * [ToolbarConfig] instance from host activity
+     * [ToolbarConfig] instance from host activity.
      * */
     protected var toolbar: ToolbarConfig? = null
-            get() = (activity as? VectorBaseActivity<*>)?.toolbar
-            private set
+        get() = (activity as? VectorBaseActivity<*>)?.toolbar
+        private set
     /* ==========================================================================================
      * View model
      * ========================================================================================== */
@@ -234,7 +234,7 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
      * ========================================================================================== */
 
     /**
-     * Sets toolbar as actionBar for current activity
+     * Sets toolbar as actionBar for current activity.
      *
      * @return Instance of [ToolbarConfig] with set of helper methods to configure toolbar
      * */

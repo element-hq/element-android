@@ -31,8 +31,8 @@ internal open class CryptoRoomEntity(
         // a security to ensure that a room will never revert to not encrypted
         // even if a new state event with empty encryption, or state is reset somehow
         var wasEncryptedOnce: Boolean? = false
-        ) :
-    RealmObject() {
+) :
+        RealmObject() {
 
     companion object
 }

@@ -40,7 +40,7 @@
     <dimen name="menu_item_icon_size">24dp</dimen>
     <dimen name="menu_item_size">48dp</dimen>
     <dimen name="menu_item_ripple_size">48dp</dimen>
-    <dimen name="menu_item_width_small">38dp</dimen>
+    <dimen name="menu_item_width_small">34dp</dimen>
 
     <!-- Composer -->
     <dimen name="composer_min_height">56dp</dimen>

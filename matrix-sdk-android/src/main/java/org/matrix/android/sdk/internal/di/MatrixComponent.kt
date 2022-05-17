@@ -43,15 +43,17 @@ import org.matrix.android.sdk.internal.worker.MatrixWorkerFactory
 import org.matrix.olm.OlmManager
 import java.io.File
 
-@Component(modules = [
-    MatrixModule::class,
-    NetworkModule::class,
-    AuthModule::class,
-    RawModule::class,
-    SettingsModule::class,
-    SystemModule::class,
-    NoOpTestModule::class
-])
+@Component(
+        modules = [
+            MatrixModule::class,
+            NetworkModule::class,
+            AuthModule::class,
+            RawModule::class,
+            SettingsModule::class,
+            SystemModule::class,
+            NoOpTestModule::class
+        ]
+)
 @MatrixScope
 internal interface MatrixComponent {
 

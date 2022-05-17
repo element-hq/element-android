@@ -380,24 +380,33 @@ internal class DefaultAuthenticationService @Inject constructor(
             throw MatrixIdFailure.InvalidMatrixId
         }
 
-        return getWellknownTask.execute(GetWellknownTask.Params(
-                domain = matrixId.getDomain(),
-                homeServerConnectionConfig = homeServerConnectionConfig)
+        return getWellknownTask.execute(
+                GetWellknownTask.Params(
+                        domain = matrixId.getDomain(),
+                        homeServerConnectionConfig = homeServerConnectionConfig.orWellKnownDefaults()
+                )
         )
     }
+
+    private fun HomeServerConnectionConfig?.orWellKnownDefaults() = this ?: HomeServerConnectionConfig.Builder()
+            // server uri is ignored when doing a wellknown lookup as we use the matrix id domain instead
+            .withHomeServerUri("https://dummy.org")
+            .build()
 
     override suspend fun directAuthentication(homeServerConnectionConfig: HomeServerConnectionConfig,
                                               matrixId: String,
                                               password: String,
                                               initialDeviceName: String,
                                               deviceId: String?): Session {
-        return directLoginTask.execute(DirectLoginTask.Params(
-                homeServerConnectionConfig = homeServerConnectionConfig,
-                userId = matrixId,
-                password = password,
-                deviceName = initialDeviceName,
-                deviceId = deviceId
-        ))
+        return directLoginTask.execute(
+                DirectLoginTask.Params(
+                        homeServerConnectionConfig = homeServerConnectionConfig,
+                        userId = matrixId,
+                        password = password,
+                        deviceName = initialDeviceName,
+                        deviceId = deviceId
+                )
+        )
     }
 
     private fun buildAuthAPI(homeServerConnectionConfig: HomeServerConnectionConfig): AuthAPI {

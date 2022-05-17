@@ -20,24 +20,24 @@ import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.interfaces.DatedObject
 
 /**
- * This class describes the device information
+ * This class describes the device information.
  */
 @JsonClass(generateAdapter = true)
 data class DeviceInfo(
         /**
-         * The owner user id (not documented and useless but the homeserver sent it. You should not need it)
+         * The owner user id (not documented and useless but the homeserver sent it. You should not need it).
          */
         @Json(name = "user_id")
         val userId: String? = null,
 
         /**
-         * The device id
+         * The device id.
          */
         @Json(name = "device_id")
         val deviceId: String? = null,
 
         /**
-         * The device display name
+         * The device display name.
          */
         @Json(name = "display_name")
         val displayName: String? = null,
@@ -49,7 +49,7 @@ data class DeviceInfo(
         val lastSeenTs: Long? = null,
 
         /**
-         * The last ip address
+         * The last ip address.
          */
         @Json(name = "last_seen_ip")
         val lastSeenIp: String? = null

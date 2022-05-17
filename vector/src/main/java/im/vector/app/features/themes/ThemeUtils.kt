@@ -76,7 +76,7 @@ object ThemeUtils {
     }
 
     /**
-     * Provides the selected application theme
+     * Provides the selected application theme.
      *
      * @param context the context
      * @return the selected application theme
@@ -106,7 +106,7 @@ object ThemeUtils {
     }
 
     /**
-     * Update the application theme
+     * Update the application theme.
      *
      * @param aTheme the new theme
      */
@@ -141,7 +141,7 @@ object ThemeUtils {
     }
 
     /**
-     * Translates color attributes to colors
+     * Translates color attributes to colors.
      *
      * @param c              Context
      * @param colorAttribute Color Attribute
@@ -173,7 +173,7 @@ object ThemeUtils {
     }
 
     /**
-     * Tint the drawable with a theme attribute
+     * Tint the drawable with a theme attribute.
      *
      * @param context   the context
      * @param drawable  the drawable to tint
@@ -185,7 +185,7 @@ object ThemeUtils {
     }
 
     /**
-     * Tint the drawable with a color integer
+     * Tint the drawable with a color integer.
      *
      * @param drawable the drawable to tint
      * @param color    the color

@@ -55,7 +55,7 @@ data class FtueAuthGenericTextInputFormFragmentArgument(
 ) : Parcelable
 
 /**
- * In this screen, the user is asked for a text input
+ * In this screen, the user is asked for a text input.
  */
 class FtueAuthGenericTextInputFormFragment @Inject constructor() : AbstractFtueAuthFragment<FragmentLoginGenericTextInputFormBinding>() {
 

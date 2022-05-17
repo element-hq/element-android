@@ -20,6 +20,7 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.accountdata.RoomAccountDataTypes
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
@@ -29,7 +30,7 @@ class CallUserMapper(private val session: Session, private val protocolsChecker:
     fun nativeRoomForVirtualRoom(roomId: String): String? {
         if (!protocolsChecker.supportVirtualRooms) return null
         val virtualRoom = session.getRoom(roomId) ?: return null
-        val virtualRoomEvent = virtualRoom.getAccountDataEvent(RoomAccountDataTypes.EVENT_TYPE_VIRTUAL_ROOM)
+        val virtualRoomEvent = virtualRoom.roomAccountDataService().getAccountDataEvent(RoomAccountDataTypes.EVENT_TYPE_VIRTUAL_ROOM)
         return virtualRoomEvent?.content?.toModel<RoomVirtualContent>()?.nativeRoomId
     }
 
@@ -61,7 +62,7 @@ class CallUserMapper(private val session: Session, private val protocolsChecker:
         val nativeLookup = session.sipNativeLookup(inviterId).firstOrNull() ?: return
         if (nativeLookup.fields.containsKey("is_virtual")) {
             val nativeUser = nativeLookup.userId
-            val nativeRoomId = session.getExistingDirectRoomWithUser(nativeUser)
+            val nativeRoomId = session.roomService().getExistingDirectRoomWithUser(nativeUser)
             if (nativeRoomId != null) {
                 // It's a virtual room with a matching native room, so set the room account data. This
                 // will make sure we know where how to map calls and also allow us know not to display
@@ -78,11 +79,11 @@ class CallUserMapper(private val session: Session, private val protocolsChecker:
 
     private suspend fun Room.markVirtual(nativeRoomId: String) {
         val virtualRoomContent = RoomVirtualContent(nativeRoomId = nativeRoomId)
-        updateAccountData(RoomAccountDataTypes.EVENT_TYPE_VIRTUAL_ROOM, virtualRoomContent.toContent())
+        roomAccountDataService().updateAccountData(RoomAccountDataTypes.EVENT_TYPE_VIRTUAL_ROOM, virtualRoomContent.toContent())
     }
 
     private suspend fun ensureVirtualRoomExists(userId: String, nativeRoomId: String): String {
-        val existingDMRoom = tryOrNull { session.getExistingDirectRoomWithUser(userId) }
+        val existingDMRoom = tryOrNull { session.roomService().getExistingDirectRoomWithUser(userId) }
         val roomId: String
         if (existingDMRoom != null) {
             roomId = existingDMRoom
@@ -92,7 +93,7 @@ class CallUserMapper(private val session: Session, private val protocolsChecker:
                 setDirectMessage()
                 creationContent[RoomAccountDataTypes.EVENT_TYPE_VIRTUAL_ROOM] = nativeRoomId
             }
-            roomId = session.createRoom(roomParams)
+            roomId = session.roomService().createRoom(roomParams)
         }
         return roomId
     }

@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * Class representing an users search response
+ * Class representing an users search response.
  */
 @JsonClass(generateAdapter = true)
 internal data class SearchUsersResponse(

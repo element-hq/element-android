@@ -77,10 +77,12 @@ class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>
                 SettingsActivityPayload.SecurityPrivacy               ->
                     replaceFragment(views.vectorSettingsPage, VectorSettingsSecurityPrivacyFragment::class.java, null, FRAGMENT_TAG)
                 SettingsActivityPayload.SecurityPrivacyManageSessions ->
-                    replaceFragment(views.vectorSettingsPage,
+                    replaceFragment(
+                            views.vectorSettingsPage,
                             VectorSettingsDevicesFragment::class.java,
                             null,
-                            FRAGMENT_TAG)
+                            FRAGMENT_TAG
+                    )
                 SettingsActivityPayload.Notifications                 -> {
                     requestHighlightPreferenceKeyOnResume(VectorPreferences.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY)
                     replaceFragment(views.vectorSettingsPage, VectorSettingsNotificationPreferenceFragment::class.java, null, FRAGMENT_TAG)
@@ -161,7 +163,8 @@ class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>
     }
 
     companion object {
-        fun getIntent(context: Context, directAccess: Int) = Companion.getIntent(context, when (directAccess) {
+        fun getIntent(context: Context, directAccess: Int) = Companion.getIntent(
+                context, when (directAccess) {
             EXTRA_DIRECT_ACCESS_ROOT                             -> SettingsActivityPayload.Root
             EXTRA_DIRECT_ACCESS_ADVANCED_SETTINGS                -> SettingsActivityPayload.AdvancedSettings
             EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY                 -> SettingsActivityPayload.SecurityPrivacy
@@ -173,7 +176,8 @@ class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>
                 Timber.w("Unknown directAccess: $directAccess defaulting to Root")
                 SettingsActivityPayload.Root
             }
-        })
+        }
+        )
 
         fun getIntent(context: Context, payload: SettingsActivityPayload) = Intent(context, VectorSettingsActivity::class.java)
                 .applyPayload(payload)

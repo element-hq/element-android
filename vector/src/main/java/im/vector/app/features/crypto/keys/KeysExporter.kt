@@ -30,7 +30,7 @@ class KeysExporter @Inject constructor(
         private val dispatchers: CoroutineDispatchers
 ) {
     /**
-     * Export keys and write them to the provided uri
+     * Export keys and write them to the provided uri.
      */
     suspend fun export(password: String, uri: Uri) {
         withContext(dispatchers.io) {

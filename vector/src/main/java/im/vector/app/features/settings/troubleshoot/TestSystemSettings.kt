@@ -29,7 +29,7 @@ import javax.inject.Inject
  */
 class TestSystemSettings @Inject constructor(private val context: FragmentActivity,
                                              private val stringProvider: StringProvider) :
-    TroubleshootTest(R.string.settings_troubleshoot_test_system_settings_title) {
+        TroubleshootTest(R.string.settings_troubleshoot_test_system_settings_title) {
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         if (NotificationManagerCompat.from(context).areNotificationsEnabled()) {

@@ -23,8 +23,8 @@ import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerific
 import org.matrix.android.sdk.api.session.crypto.verification.SasMode
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.internal.crypto.IncomingGossipingRequestManager
-import org.matrix.android.sdk.internal.crypto.OutgoingGossipingRequestManager
+import org.matrix.android.sdk.internal.crypto.OutgoingKeyRequestManager
+import org.matrix.android.sdk.internal.crypto.SecretShareManager
 import org.matrix.android.sdk.internal.crypto.actions.SetDeviceVerificationAction
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import timber.log.Timber
@@ -35,8 +35,8 @@ internal class DefaultIncomingSASDefaultVerificationTransaction(
         override val deviceId: String?,
         private val cryptoStore: IMXCryptoStore,
         crossSigningService: CrossSigningService,
-        outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
-        incomingGossipingRequestManager: IncomingGossipingRequestManager,
+        outgoingKeyRequestManager: OutgoingKeyRequestManager,
+        secretShareManager: SecretShareManager,
         deviceFingerprint: String,
         transactionId: String,
         otherUserID: String,
@@ -47,13 +47,14 @@ internal class DefaultIncomingSASDefaultVerificationTransaction(
         deviceId,
         cryptoStore,
         crossSigningService,
-        outgoingGossipingRequestManager,
-        incomingGossipingRequestManager,
+        outgoingKeyRequestManager,
+        secretShareManager,
         deviceFingerprint,
         transactionId,
         otherUserID,
         null,
-        isIncoming = true),
+        isIncoming = true
+),
         IncomingSasVerificationTransaction {
 
     override val uxState: IncomingSasVerificationTransaction.UxState

@@ -28,6 +28,7 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
@@ -72,7 +73,7 @@ class RoomUploadsViewModel @AssistedInject constructor(
 
         viewModelScope.launch {
             try {
-                val result = room.getUploads(20, token)
+                val result = room.uploadsService().getUploads(20, token)
 
                 token = result.nextToken
 
@@ -116,7 +117,8 @@ class RoomUploadsViewModel @AssistedInject constructor(
         viewModelScope.launch {
             val event = try {
                 val file = session.fileService().downloadFile(
-                        messageContent = action.uploadEvent.contentWithAttachmentContent)
+                        messageContent = action.uploadEvent.contentWithAttachmentContent
+                )
                 RoomUploadsViewEvents.FileReadyForSharing(file)
             } catch (failure: Throwable) {
                 RoomUploadsViewEvents.Failure(failure)
@@ -129,7 +131,8 @@ class RoomUploadsViewModel @AssistedInject constructor(
         viewModelScope.launch {
             val event = try {
                 val file = session.fileService().downloadFile(
-                        messageContent = action.uploadEvent.contentWithAttachmentContent)
+                        messageContent = action.uploadEvent.contentWithAttachmentContent
+                )
                 RoomUploadsViewEvents.FileReadyForSaving(file, action.uploadEvent.contentWithAttachmentContent.body)
             } catch (failure: Throwable) {
                 RoomUploadsViewEvents.Failure(failure)

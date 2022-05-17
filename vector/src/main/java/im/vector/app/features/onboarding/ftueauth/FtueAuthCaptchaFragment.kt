@@ -33,7 +33,7 @@ data class FtueAuthCaptchaFragmentArgument(
 ) : Parcelable
 
 /**
- * In this screen, the user is asked to confirm they are not a robot
+ * In this screen, the user is asked to confirm they are not a robot.
  */
 class FtueAuthCaptchaFragment @Inject constructor(
         private val captchaWebview: CaptchaWebview

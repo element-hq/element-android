@@ -41,7 +41,7 @@ internal class DefaultSessionCreator @Inject constructor(
 
     /**
      * Credentials can affect the homeServerConnectionConfig, override homeserver url and/or
-     * identity server url if provided in the credentials
+     * identity server url if provided in the credentials.
      */
     override suspend fun createSession(
             credentials: Credentials,

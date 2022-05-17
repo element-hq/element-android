@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 internal class DefaultThirdPartyService @Inject constructor(private val getThirdPartyProtocolTask: GetThirdPartyProtocolsTask,
                                                             private val getThirdPartyUserTask: GetThirdPartyUserTask) :
-    ThirdPartyService {
+        ThirdPartyService {
 
     override suspend fun getThirdPartyProtocols(): Map<String, ThirdPartyProtocol> {
         return getThirdPartyProtocolTask.execute(Unit)

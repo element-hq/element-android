@@ -49,7 +49,7 @@ class VectorGlideModelLoaderFactory(private val context: Context) : ModelLoaderF
 }
 
 class VectorGlideModelLoader(private val context: Context) :
-    ModelLoader<ImageContentRenderer.Data, InputStream> {
+        ModelLoader<ImageContentRenderer.Data, InputStream> {
     override fun handles(model: ImageContentRenderer.Data): Boolean {
         // Always handle
         return true
@@ -64,7 +64,7 @@ class VectorGlideDataFetcher(context: Context,
                              private val data: ImageContentRenderer.Data,
                              private val width: Int,
                              private val height: Int) :
-    DataFetcher<InputStream> {
+        DataFetcher<InputStream> {
 
     private val localFilesHelper = LocalFilesHelper(context)
     private val activeSessionHolder = context.singletonEntryPoint().activeSessionHolder()
@@ -121,7 +121,8 @@ class VectorGlideDataFetcher(context: Context,
                         fileName = data.filename,
                         mimeType = data.mimeType,
                         url = data.url,
-                        elementToDecrypt = data.elementToDecrypt)
+                        elementToDecrypt = data.elementToDecrypt
+                )
             }
             withContext(Dispatchers.Main) {
                 result.fold(

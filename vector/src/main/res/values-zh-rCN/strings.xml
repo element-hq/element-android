@@ -867,7 +867,9 @@
 \n
 \n你随时可以在通用设置中反转此操作。</string>
     <string name="room_participants_action_unignore_title">取消忽略用户</string>
-    <string name="room_participants_action_unignore_prompt_msg">取消忽略此用户将重新显示来自他们的全部消息。</string>
+    <string name="room_participants_action_unignore_prompt_msg">取消忽略此用户将重新显示来自他们的全部消息。
+\n
+\n请注意：此操作将重新启动应用程序，并且可能需要一些时间。</string>
     <string name="room_participants_action_cancel_invite_title">取消邀请</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">你确定想要取消邀请此用户吗？</string>
     <string name="room_participants_remove_title">踢掉用户</string>
@@ -2284,4 +2286,12 @@
     <plurals name="notice_room_server_acl_changes">
         <item quantity="other">修改服务器 %d 的 ACLs</item>
     </plurals>
+    <string name="thread_list_empty_subtitle">子区有助于保持您的对话主题并易于跟踪</string>
+    <string name="thread_list_modal_all_threads_subtitle">显示当前房间的所有子区</string>
+    <string name="thread_list_modal_all_threads_title">所有子区</string>
+    <string name="thread_list_modal_title">筛选器</string>
+    <string name="thread_timeline_title">子区</string>
+    <string name="room_threads_filter">在房间中筛选子区</string>
+    <string name="action_thread_copy_link_to_thread">复制子区的链接</string>
+    <string name="action_thread_view_in_room">在房间中查看</string>
 </resources>

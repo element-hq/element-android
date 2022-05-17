@@ -102,6 +102,19 @@
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
     <im.vector.app.core.preference.VectorPreferenceCategory
+        android:key="SETTINGS_IGNORED_USERS_PREFERENCE_CATEGORY_KEY"
+        android:title="@string/settings_ignored_users"
+        app:isPreferenceVisible="@bool/settings_ignored_users_visible">
+
+        <im.vector.app.core.preference.VectorPreference
+            android:icon="@drawable/ic_settings_root_ignored_users"
+            android:key="SETTINGS_IGNORED_USERS_PREFERENCE_KEY"
+            android:title="@string/settings_ignored_users"
+            app:fragment="im.vector.app.features.settings.ignored.VectorSettingsIgnoredUsersFragment" />
+
+    </im.vector.app.core.preference.VectorPreferenceCategory>
+
+    <im.vector.app.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_ANALYTICS_PREFERENCE_KEY"
         android:title="@string/settings_analytics">
 

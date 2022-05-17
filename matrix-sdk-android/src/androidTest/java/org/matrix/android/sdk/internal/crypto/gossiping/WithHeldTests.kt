@@ -21,7 +21,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import org.junit.Assert
 import org.junit.FixMethodOrder
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
@@ -29,10 +28,13 @@ import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
+import org.matrix.android.sdk.api.session.crypto.RequestResult
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestHelper
 import org.matrix.android.sdk.common.MockOkHttpInterceptor
@@ -44,12 +46,11 @@ import org.matrix.android.sdk.common.TestConstants
 @LargeTest
 class WithHeldTests : InstrumentedTest {
 
-    private val testHelper = CommonTestHelper(context())
-    private val cryptoTestHelper = CryptoTestHelper(testHelper)
-
     @Test
-    @Ignore("This test will be ignored until it is fixed")
     fun test_WithHeldUnverifiedReason() {
+        val testHelper = CommonTestHelper(context())
+        val cryptoTestHelper = CryptoTestHelper(testHelper)
+
         // =============================
         // ARRANGE
         // =============================
@@ -67,7 +68,6 @@ class WithHeldTests : InstrumentedTest {
         val roomAlicePOV = aliceSession.getRoom(roomId)!!
 
         val bobUnverifiedSession = testHelper.logIntoAccount(bobSession.myUserId, SessionTestParams(true))
-
         // =============================
         // ACT
         // =============================
@@ -86,6 +86,7 @@ class WithHeldTests : InstrumentedTest {
 
         val eventBobPOV = bobUnverifiedSession.getRoom(roomId)?.getTimelineEvent(timelineEvent.eventId)!!
 
+        val megolmSessionId = eventBobPOV.root.content.toModel<EncryptedEventContent>()!!.sessionId!!
         // =============================
         // ASSERT
         // =============================
@@ -101,9 +102,23 @@ class WithHeldTests : InstrumentedTest {
             val type = (failure as MXCryptoError.Base).errorType
             val technicalMessage = failure.technicalMessage
             Assert.assertEquals("Error should be withheld", MXCryptoError.ErrorType.KEYS_WITHHELD, type)
-            Assert.assertEquals("Cause should be unverified", WithHeldCode.UNVERIFIED.value, technicalMessage)
+            Assert.assertEquals("Cause should be unverified", WithHeldCode.UNAUTHORISED.value, technicalMessage)
         }
 
+        // Let's see if the reply we got from bob first session is unverified
+        testHelper.waitWithLatch { latch ->
+            testHelper.retryPeriodicallyWithLatch(latch) {
+                bobUnverifiedSession.cryptoService().getOutgoingRoomKeyRequests()
+                        .firstOrNull { it.sessionId == megolmSessionId }
+                        ?.results
+                        ?.firstOrNull { it.fromDevice == bobSession.sessionParams.deviceId }
+                        ?.result
+                        ?.let {
+                            it as? RequestResult.Failure
+                        }
+                        ?.code == WithHeldCode.UNVERIFIED
+            }
+        }
         // enable back sending to unverified
         aliceSession.cryptoService().setGlobalBlacklistUnverifiedDevices(false)
 
@@ -128,7 +143,7 @@ class WithHeldTests : InstrumentedTest {
             val type = (failure as MXCryptoError.Base).errorType
             val technicalMessage = failure.technicalMessage
             Assert.assertEquals("Error should be withheld", MXCryptoError.ErrorType.KEYS_WITHHELD, type)
-            Assert.assertEquals("Cause should be unverified", WithHeldCode.UNVERIFIED.value, technicalMessage)
+            Assert.assertEquals("Cause should be unverified", WithHeldCode.UNAUTHORISED.value, technicalMessage)
         }
 
         testHelper.signOutAndClose(aliceSession)
@@ -137,21 +152,25 @@ class WithHeldTests : InstrumentedTest {
     }
 
     @Test
-    @Ignore("This test will be ignored until it is fixed")
     fun test_WithHeldNoOlm() {
+        val testHelper = CommonTestHelper(context())
+        val cryptoTestHelper = CryptoTestHelper(testHelper)
+
         val testData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
         val aliceSession = testData.firstSession
         val bobSession = testData.secondSession!!
         val aliceInterceptor = testHelper.getTestInterceptor(aliceSession)
 
         // Simulate no OTK
-        aliceInterceptor!!.addRule(MockOkHttpInterceptor.SimpleRule(
-                "/keys/claim",
-                200,
-                """
+        aliceInterceptor!!.addRule(
+                MockOkHttpInterceptor.SimpleRule(
+                        "/keys/claim",
+                        200,
+                        """
                    { "one_time_keys" : {} } 
                 """
-        ))
+                )
+        )
         Log.d("#TEST", "Recovery :${aliceSession.sessionParams.credentials.accessToken}")
 
         val roomAlicePov = aliceSession.getRoom(testData.roomId)!!
@@ -182,7 +201,10 @@ class WithHeldTests : InstrumentedTest {
 
         // Ensure that alice has marked the session to be shared with bob
         val sessionId = eventBobPOV!!.root.content.toModel<EncryptedEventContent>()!!.sessionId!!
-        val chainIndex = aliceSession.cryptoService().getSharedWithInfo(testData.roomId, sessionId).getObject(bobSession.myUserId, bobSession.sessionParams.credentials.deviceId)
+        val chainIndex = aliceSession.cryptoService().getSharedWithInfo(testData.roomId, sessionId).getObject(
+                bobSession.myUserId,
+                bobSession.sessionParams.credentials.deviceId
+        )
 
         Assert.assertEquals("Alice should have marked bob's device for this session", 0, chainIndex)
         // Add a new device for bob
@@ -200,7 +222,10 @@ class WithHeldTests : InstrumentedTest {
             }
         }
 
-        val chainIndex2 = aliceSession.cryptoService().getSharedWithInfo(testData.roomId, sessionId).getObject(bobSecondSession.myUserId, bobSecondSession.sessionParams.credentials.deviceId)
+        val chainIndex2 = aliceSession.cryptoService().getSharedWithInfo(testData.roomId, sessionId).getObject(
+                bobSecondSession.myUserId,
+                bobSecondSession.sessionParams.credentials.deviceId
+        )
 
         Assert.assertEquals("Alice should have marked bob's device for this session", 1, chainIndex2)
 
@@ -210,8 +235,10 @@ class WithHeldTests : InstrumentedTest {
     }
 
     @Test
-    @Ignore("This test will be ignored until it is fixed")
     fun test_WithHeldKeyRequest() {
+        val testHelper = CommonTestHelper(context())
+        val cryptoTestHelper = CryptoTestHelper(testHelper)
+
         val testData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
         val aliceSession = testData.firstSession
         val bobSession = testData.secondSession!!
@@ -257,5 +284,8 @@ class WithHeldTests : InstrumentedTest {
                 wc?.code == WithHeldCode.UNAUTHORISED
             }
         }
+
+        testHelper.signOutAndClose(aliceSession)
+        testHelper.signOutAndClose(bobSecondSession)
     }
 }

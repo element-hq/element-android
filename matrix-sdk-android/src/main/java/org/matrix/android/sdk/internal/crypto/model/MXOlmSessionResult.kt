@@ -21,7 +21,7 @@ import java.io.Serializable
 
 internal data class MXOlmSessionResult(
         /**
-         * the device
+         * the device.
          */
         val deviceInfo: CryptoDeviceInfo,
         /**

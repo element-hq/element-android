@@ -46,7 +46,7 @@ internal interface ProfileAPI {
     suspend fun getThreePIDs(): AccountThreePidsResponse
 
     /**
-     * Change user display name
+     * Change user display name.
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "profile/{userId}/displayname")
     suspend fun setDisplayName(@Path("userId") userId: String,
@@ -86,7 +86,7 @@ internal interface ProfileAPI {
     suspend fun addMsisdn(@Body body: AddMsisdnBody): AddMsisdnResponse
 
     /**
-     * Validate Msisdn code (same model than for identity server API)
+     * Validate Msisdn code (same model than for identity server API).
      */
     @POST
     suspend fun validateMsisdn(@Url url: String,

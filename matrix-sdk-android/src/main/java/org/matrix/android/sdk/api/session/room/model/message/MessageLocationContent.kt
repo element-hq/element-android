@@ -42,15 +42,15 @@ data class MessageLocationContent(
         @Json(name = "m.relates_to") override val relatesTo: RelationDefaultContent? = null,
         @Json(name = "m.new_content") override val newContent: Content? = null,
         /**
-         * See [MSC3488](https://github.com/matrix-org/matrix-doc/blob/matthew/location/proposals/3488-location.md)
+         * See [MSC3488](https://github.com/matrix-org/matrix-doc/blob/matthew/location/proposals/3488-location.md).
          */
         @Json(name = "org.matrix.msc3488.location") val unstableLocationInfo: LocationInfo? = null,
         @Json(name = "m.location") val locationInfo: LocationInfo? = null,
         /**
-         * Exact time that the data in the event refers to (milliseconds since the UNIX epoch)
+         * Exact time that the data in the event refers to (milliseconds since the UNIX epoch).
          */
-        @Json(name = "org.matrix.msc3488.ts") val unstableTs: Long? = null,
-        @Json(name = "m.ts") val ts: Long? = null,
+        @Json(name = "org.matrix.msc3488.ts") val unstableTimestampMillis: Long? = null,
+        @Json(name = "m.ts") val timestampMillis: Long? = null,
         @Json(name = "org.matrix.msc1767.text") val unstableText: String? = null,
         @Json(name = "m.text") val text: String? = null,
         /**
@@ -66,7 +66,7 @@ data class MessageLocationContent(
 
     fun getBestLocationInfo() = locationInfo ?: unstableLocationInfo
 
-    fun getBestTs() = ts ?: unstableTs
+    fun getBestTimestampMillis() = timestampMillis ?: unstableTimestampMillis
 
     fun getBestText() = text ?: unstableText
 

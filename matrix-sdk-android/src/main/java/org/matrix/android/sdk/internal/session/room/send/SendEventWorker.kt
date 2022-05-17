@@ -36,11 +36,11 @@ import javax.inject.Inject
 // private const val MAX_NUMBER_OF_RETRY_BEFORE_FAILING = 3
 
 /**
- * Possible previous worker: [EncryptEventWorker] or first worker
- * Possible next worker    : None
+ * Possible previous worker: [EncryptEventWorker] or first worker.
+ * Possible next worker    : None.
  */
 internal class SendEventWorker(context: Context, params: WorkerParameters, sessionManager: SessionManager) :
-    SessionSafeCoroutineWorker<SendEventWorker.Params>(context, params, sessionManager, Params::class.java) {
+        SessionSafeCoroutineWorker<SendEventWorker.Params>(context, params, sessionManager, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
@@ -89,13 +89,13 @@ internal class SendEventWorker(context: Context, params: WorkerParameters, sessi
                     .also { Timber.e("Work cancelled due to input error from parent") }
         }
 
-        Timber.v("## SendEvent: [${System.currentTimeMillis()}] Send event ${params.eventId}")
+        Timber.v("## SendEvent: Send event ${params.eventId}")
         return try {
             sendEventTask.execute(SendEventTask.Params(event, params.isEncrypted ?: cryptoService.isRoomEncrypted(event.roomId)))
             Result.success()
         } catch (exception: Throwable) {
             if (/*currentAttemptCount >= MAX_NUMBER_OF_RETRY_BEFORE_FAILING ||**/ !exception.shouldBeRetried()) {
-                Timber.e("## SendEvent: [${System.currentTimeMillis()}]  Send event Failed cannot retry ${params.eventId} > ${exception.localizedMessage}")
+                Timber.e("## SendEvent: Send event Failed cannot retry ${params.eventId} > ${exception.localizedMessage}")
                 localEchoRepository.updateSendState(
                         eventId = event.eventId,
                         roomId = event.roomId,
@@ -104,7 +104,7 @@ internal class SendEventWorker(context: Context, params: WorkerParameters, sessi
                 )
                 Result.success()
             } else {
-                Timber.e("## SendEvent: [${System.currentTimeMillis()}]  Send event Failed schedule retry ${params.eventId} > ${exception.localizedMessage}")
+                Timber.e("## SendEvent: Send event Failed schedule retry ${params.eventId} > ${exception.localizedMessage}")
                 Result.retry()
             }
         }

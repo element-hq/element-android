@@ -23,22 +23,20 @@ import android.provider.MediaStore
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.FileProvider
 import im.vector.lib.multipicker.entity.MultiPickerImageType
+import im.vector.lib.multipicker.utils.MediaType
+import im.vector.lib.multipicker.utils.createTemporaryMediaFile
 import im.vector.lib.multipicker.utils.toMultiPickerImageType
-import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 /**
- * Implementation of taking a photo with Camera
+ * Implementation of taking a photo with Camera.
  */
 class CameraPicker {
 
     /**
-     * Start camera by using a ActivityResultLauncher
+     * Start camera by using a ActivityResultLauncher.
      * @return Uri of taken photo or null if the operation is cancelled.
      */
-    fun startWithExpectingFile(context: Context, activityResultLauncher: ActivityResultLauncher<Intent>): Uri? {
+    fun startWithExpectingFile(context: Context, activityResultLauncher: ActivityResultLauncher<Intent>): Uri {
         val photoUri = createPhotoUri(context)
         val intent = createIntent().apply {
             putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
@@ -63,19 +61,9 @@ class CameraPicker {
 
     companion object {
         fun createPhotoUri(context: Context): Uri {
-            val file = createImageFile(context)
+            val file = createTemporaryMediaFile(context, MediaType.IMAGE)
             val authority = context.packageName + ".multipicker.fileprovider"
             return FileProvider.getUriForFile(context, authority, file)
-        }
-
-        private fun createImageFile(context: Context): File {
-            val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-            val storageDir: File = context.filesDir
-            return File.createTempFile(
-                    "${timeStamp}_", /* prefix */
-                    ".jpg", /* suffix */
-                    storageDir /* directory */
-            )
         }
     }
 }

@@ -18,10 +18,10 @@ package im.vector.app.core.ui.bottomsheet
 import com.airbnb.epoxy.TypedEpoxyController
 
 /**
- * Epoxy controller for generic bottom sheet actions
+ * Epoxy controller for generic bottom sheet actions.
  */
 abstract class BottomSheetGenericController<State : BottomSheetGenericState, Action : BottomSheetGenericRadioAction> :
-    TypedEpoxyController<State>() {
+        TypedEpoxyController<State>() {
 
     var listener: Listener<Action>? = null
 

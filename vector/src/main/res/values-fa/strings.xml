@@ -1256,7 +1256,9 @@
     <string name="ssl_cert_new_account_expl">اگر مدیر کارساز خبر از مورد انتظار بودنش داده، مطمئن شوید که اثر انگشت زیر با اثر انگشت ارائه شده به دستشان مطابق است.</string>
     <string name="ssl_cert_not_trust">می‌تواند به این معنی باشد که کسی شدامدتان را بدخواهانه دستکاری کرده یا تلفنتان، به گواهی فراهم‌شده به دست کارساز دوردست، اطمینان ندارد.</string>
     <string name="room_participants_unban_prompt_msg">با لغو مسدودیت، کاربر می‌تواند مجددا به اتاق اضافه شود.</string>
-    <string name="room_participants_action_unignore_prompt_msg">لغو نادیده‌گیری کاربر سبب می‌شود دوباره همه پیام‌های او نمایش داده شود.</string>
+    <string name="room_participants_action_unignore_prompt_msg">ناچشم‌پوشی این کاربر موجب نمایانی تمامی پیام‌ها از سویش خواهد شد.
+\n
+\nبه خاطر داشته باشید که این کنش کاره را دوباره آغاز خواهد کرد و ممکن است مدّتی زمان ببرد.</string>
     <string name="room_participants_action_ignore_prompt_msg">نادیده‌گرفتن این کاربر پیام‌هایش را از اتاق‌های مشترکتان حذف خواهد کرد.
 \n 
 \nهرگاه که بخواهید می‌توانید این کنش را در تنظیمات کلی لغو کنید.</string>
@@ -2457,4 +2459,32 @@
     <string name="ftue_account_created_take_me_home">مرا به خانه ببر</string>
     <string name="ftue_account_created_personalize">شخصی سازی نمایه</string>
     <string name="action_disable">از کار انداختن</string>
+    <string name="send_feedback_threads_info">رشته‌ها کاری در حال پیشرفت با ویژگی‌های جذّاب جدید مانند آگاهی‌های بهبودیافته هستند. دوست داریم بازخوردتان را بشنویم!</string>
+    <string name="threads_labs_enable_notice_message">کارساز خانگیتان در حال حاضر از رشته‌ها پشتیبانی نمی‌کند؛ بنابراین ممکن است این ویژگی قابل اتّکا نباشد. ممکن است برخی پیام‌های رشته‌ای همواره موجود نباشند. %sدر هر صورت می‌خواهید رشته‌ها را به کار بیندازید؟</string>
+    <string name="threads_beta_enable_notice_message">رشته‌ها به روی موضوع نگه داشتن گفت‌وگوها کمک کرده و ردیابیشان را آسان می‌کنند. %sبه کارانداختن رشته‌ها کاره را دوباره آغاز خواهد کرد. ممکن است این کار برای برخی حساب‌ها بیش‌تر طول بکشد.</string>
+    <string name="location_share_live_started">بار کردن مکان زنده…</string>
+    <string name="location_share_live_select_duration_option_3">۸ ساعت</string>
+    <string name="location_share_live_select_duration_option_2">۱ ساعت</string>
+    <string name="location_share_live_select_duration_option_1">۱۵ دقیقه</string>
+    <string name="location_share_live_select_duration_title">هم‌رسانی مکان زنده‌تان برای</string>
+    <string name="audio_message_file_size">(%1$s)</string>
+    <string name="audio_message_reply_content">%1$s (%2$s)</string>
+    <string name="error_audio_message_unable_to_play">ناتوان در پخش %1$s</string>
+    <string name="a11y_pause_audio_message">مکث %1$s</string>
+    <string name="a11y_play_audio_message">پخش %1$s</string>
+    <string name="a11y_audio_playback_duration">%1$d دقیقه و %2$d ثانیه</string>
+    <string name="a11y_audio_message_item">%1$s، %2$s، %3$s</string>
+    <string name="sent_live_location">مکان زنده‌اش را هم‌رساند</string>
+    <string name="ftue_auth_carousel_workplace_body">${app_name} برای محل کار نیز عالیست. مورد اعتماد امن‌ترین سازمان‌های جهان است.</string>
+    <string name="beta">آزمایشی</string>
+    <string name="send_feedback_threads_title">بازخورد رشته‌های آزمایشی</string>
+    <string name="give_feedback_threads">بازخورد دادن</string>
+    <string name="beta_title_bottom_sheet_action">آزمایشی</string>
+    <string name="settings_presence_user_always_appears_offline_summary">اگر به کار افتاده باشد، برای دیگر کاربران، همواره برون‌خط ظاهر خواهید شد، حتا هنگام استفاده از برنامه.</string>
+    <string name="settings_presence_user_always_appears_offline">حالت برون‌خط</string>
+    <string name="settings_presence">حضور</string>
+    <string name="threads_labs_enable_notice_title">رشته‌های آزمایشی</string>
+    <string name="threads_beta_enable_notice_title">رشته‌های آزمایشی</string>
+    <string name="action_learn_more">بیش تر بدانید</string>
+    <string name="action_try_it_out">بیازماییدش</string>
 </resources>

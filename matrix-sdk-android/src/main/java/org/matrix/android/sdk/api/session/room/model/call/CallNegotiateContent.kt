@@ -47,7 +47,7 @@ data class CallNegotiateContent(
          */
         @Json(name = "version") override val version: String?
 
-        ) : CallSignalingContent  {
+) : CallSignalingContent {
     @JsonClass(generateAdapter = true)
     data class Description(
             /**

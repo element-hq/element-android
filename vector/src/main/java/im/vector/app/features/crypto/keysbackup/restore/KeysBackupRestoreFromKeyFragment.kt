@@ -31,7 +31,7 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import javax.inject.Inject
 
 class KeysBackupRestoreFromKeyFragment @Inject constructor() :
-    VectorBaseFragment<FragmentKeysBackupRestoreFromKeyBinding>() {
+        VectorBaseFragment<FragmentKeysBackupRestoreFromKeyBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentKeysBackupRestoreFromKeyBinding {
         return FragmentKeysBackupRestoreFromKeyBinding.inflate(inflater, container, false)

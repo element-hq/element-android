@@ -31,6 +31,7 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getUser
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
 import org.matrix.android.sdk.api.session.user.model.User
@@ -74,11 +75,13 @@ class UserCodeSharedViewModel @AssistedInject constructor(
     private fun handleShareByText() {
         session.permalinkService().createPermalink(session.myUserId)?.let { permalink ->
             val text = stringProvider.getString(R.string.invite_friends_text, permalink)
-            _viewEvents.post(UserCodeShareViewEvents.SharePlainText(
-                    text,
-                    stringProvider.getString(R.string.invite_friends),
-                    stringProvider.getString(R.string.invite_friends_rich_title)
-            ))
+            _viewEvents.post(
+                    UserCodeShareViewEvents.SharePlainText(
+                            text,
+                            stringProvider.getString(R.string.invite_friends),
+                            stringProvider.getString(R.string.invite_friends_rich_title)
+                    )
+            )
         }
     }
 
@@ -115,7 +118,7 @@ class UserCodeSharedViewModel @AssistedInject constructor(
                     _viewEvents.post(UserCodeShareViewEvents.ToastMessage(stringProvider.getString(R.string.not_implemented)))
                 }
                 is PermalinkData.UserLink            -> {
-                    val user = tryOrNull { session.resolveUser(linkedId.userId) }
+                    val user = tryOrNull { session.userService().resolveUser(linkedId.userId) }
                     // Create raw Uxid in case the user is not searchable
                             ?: User(linkedId.userId, null, null)
 

@@ -147,7 +147,7 @@ object MatrixPatterns {
     }
 
     /**
-     * Extract server name from a matrix id
+     * Extract server name from a matrix id.
      *
      * @param matrixId
      * @return null if not found or if matrixId is null
@@ -172,7 +172,7 @@ object MatrixPatterns {
     }
 
     /**
-     * Return the domain form a userId
+     * Return the domain form a userId.
      * Examples:
      * - "@alice:domain.org".getDomain() will return "domain.org"
      * - "@bob:domain.org:3455".getDomain() will return "domain.org:3455"

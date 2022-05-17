@@ -30,7 +30,7 @@ internal open class OlmSessionEntity(@PrimaryKey var primaryKey: String = "",
                                      var deviceKey: String? = null,
                                      var olmSessionData: String? = null,
                                      var lastReceivedMessageTs: Long = 0) :
-    RealmObject() {
+        RealmObject() {
 
     fun getOlmSession(): OlmSession? {
         return deserializeFromRealm(olmSessionData)

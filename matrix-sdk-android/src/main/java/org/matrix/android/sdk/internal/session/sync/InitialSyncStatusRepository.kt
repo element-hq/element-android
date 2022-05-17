@@ -20,6 +20,7 @@ import com.squareup.moshi.JsonClass
 import okio.buffer
 import okio.source
 import org.matrix.android.sdk.internal.di.MoshiProvider
+import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import java.io.File
 
@@ -44,9 +45,12 @@ internal interface InitialSyncStatusRepository {
 }
 
 /**
- * This class handle the current status of an initial sync and persist it on the disk, to be robust against crash
+ * This class handle the current status of an initial sync and persist it on the disk, to be robust against crash.
  */
-internal class FileInitialSyncStatusRepository(directory: File) : InitialSyncStatusRepository {
+internal class FileInitialSyncStatusRepository(
+        directory: File,
+        private val clock: Clock,
+) : InitialSyncStatusRepository {
 
     companion object {
         // After 2 hours, we consider that the downloaded file is outdated:
@@ -64,7 +68,7 @@ internal class FileInitialSyncStatusRepository(directory: File) : InitialSyncSta
         ensureCache()
         val state = cache?.step ?: InitialSyncStatus.STEP_INIT
         return if (state >= InitialSyncStatus.STEP_DOWNLOADED &&
-                System.currentTimeMillis() > (cache?.downloadedDate ?: 0) + INIT_SYNC_FILE_LIFETIME) {
+                clock.epochMillis() > (cache?.downloadedDate ?: 0) + INIT_SYNC_FILE_LIFETIME) {
             Timber.d("INIT_SYNC downloaded file is outdated, download it again")
             // The downloaded file is outdated
             setStep(InitialSyncStatus.STEP_INIT)
@@ -79,7 +83,7 @@ internal class FileInitialSyncStatusRepository(directory: File) : InitialSyncSta
         if (step == InitialSyncStatus.STEP_DOWNLOADED) {
             // Also store the downloaded date
             newStatus = newStatus.copy(
-                    downloadedDate = System.currentTimeMillis()
+                    downloadedDate = clock.epochMillis()
             )
         }
         cache = newStatus
@@ -91,7 +95,7 @@ internal class FileInitialSyncStatusRepository(directory: File) : InitialSyncSta
     }
 
     /**
-     * File -> Cache
+     * File -> Cache.
      */
     private fun readFile() {
         cache = file
@@ -100,7 +104,7 @@ internal class FileInitialSyncStatusRepository(directory: File) : InitialSyncSta
     }
 
     /**
-     * Cache -> File
+     * Cache -> File.
      */
     private fun writeFile() {
         file.delete()

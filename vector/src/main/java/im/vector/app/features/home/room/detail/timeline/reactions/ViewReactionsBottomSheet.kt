@@ -35,7 +35,7 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageInformationD
 import javax.inject.Inject
 
 /**
- * Bottom sheet displaying list of reactions for a given event ordered by timestamp
+ * Bottom sheet displaying list of reactions for a given event ordered by timestamp.
  */
 @AndroidEntryPoint
 class ViewReactionsBottomSheet :
@@ -82,11 +82,13 @@ class ViewReactionsBottomSheet :
     companion object {
         fun newInstance(roomId: String, informationData: MessageInformationData): ViewReactionsBottomSheet {
             return ViewReactionsBottomSheet().apply {
-                setArguments(TimelineEventFragmentArgs(
-                        eventId = informationData.eventId,
-                        roomId = roomId,
-                        informationData = informationData
-                ))
+                setArguments(
+                        TimelineEventFragmentArgs(
+                                eventId = informationData.eventId,
+                                roomId = roomId,
+                                informationData = informationData
+                        )
+                )
             }
         }
     }

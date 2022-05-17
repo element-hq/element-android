@@ -30,17 +30,17 @@ data class IntegrationManagerConfig(
      */
     enum class Kind {
         /**
-         * Defined in UserAccountData
+         * Defined in UserAccountData.
          */
         ACCOUNT,
 
         /**
-         * Defined in Wellknown
+         * Defined in Wellknown.
          */
         HOMESERVER,
 
         /**
-         * Fallback value, hardcoded by the SDK
+         * Fallback value, hardcoded by the SDK.
          */
         DEFAULT
     }

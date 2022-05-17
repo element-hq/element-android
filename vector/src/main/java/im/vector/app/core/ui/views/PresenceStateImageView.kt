@@ -25,7 +25,7 @@ import org.matrix.android.sdk.api.session.presence.model.PresenceEnum
 import org.matrix.android.sdk.api.session.presence.model.UserPresence
 
 /**
- * Custom ImageView to dynamically render Presence state in multiple screens
+ * Custom ImageView to dynamically render Presence state in multiple screens.
  */
 class PresenceStateImageView @JvmOverloads constructor(
         context: Context,
@@ -42,12 +42,16 @@ class PresenceStateImageView @JvmOverloads constructor(
                 contentDescription = context.getString(R.string.a11y_presence_online)
             }
             PresenceEnum.UNAVAILABLE -> {
-                setImageResource(R.drawable.ic_presence_offline)
+                setImageResource(R.drawable.ic_presence_away)
                 contentDescription = context.getString(R.string.a11y_presence_unavailable)
             }
             PresenceEnum.OFFLINE     -> {
                 setImageResource(R.drawable.ic_presence_offline)
                 contentDescription = context.getString(R.string.a11y_presence_offline)
+            }
+            PresenceEnum.BUSY     -> {
+                setImageResource(R.drawable.ic_presence_busy)
+                contentDescription = context.getString(R.string.a11y_presence_busy)
             }
             null                     -> Unit
         }

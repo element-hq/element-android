@@ -28,11 +28,11 @@ import com.airbnb.mvrx.ViewModelContext
 import kotlinx.coroutines.launch
 
 internal data class JSonViewerState(
-    val root: Async<JSonViewerObject> = Uninitialized
+        val root: Async<JSonViewerObject> = Uninitialized
 ) : MavericksState
 
 internal class JSonViewerViewModel(initialState: JSonViewerState) :
-    MavericksViewModel<JSonViewerState>(initialState) {
+        MavericksViewModel<JSonViewerState>(initialState) {
 
     fun setJsonSource(json: String, initialOpenDepth: Int) {
         setState {
@@ -43,14 +43,14 @@ internal class JSonViewerViewModel(initialState: JSonViewerState) :
                 ModelParser.fromJsonString(json, initialOpenDepth).let {
                     setState {
                         copy(
-                            root = Success(it)
+                                root = Success(it)
                         )
                     }
                 }
             } catch (error: Throwable) {
                 setState {
                     copy(
-                        root = Fail(error)
+                            root = Fail(error)
                     )
                 }
             }
@@ -64,7 +64,7 @@ internal class JSonViewerViewModel(initialState: JSonViewerState) :
             val arg: JSonViewerFragmentArgs = viewModelContext.args()
             return try {
                 JSonViewerState(
-                    Success(ModelParser.fromJsonString(arg.jsonString, arg.defaultOpenDepth))
+                        Success(ModelParser.fromJsonString(arg.jsonString, arg.defaultOpenDepth))
                 )
             } catch (failure: Throwable) {
                 JSonViewerState(Fail(failure))

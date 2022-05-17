@@ -33,7 +33,7 @@ data class SignInvitationResult(
          */
         val signatures: Map<String, *>,
         /**
-         * The token for the invitation
+         * The token for the invitation.
          */
         val token: String
 )

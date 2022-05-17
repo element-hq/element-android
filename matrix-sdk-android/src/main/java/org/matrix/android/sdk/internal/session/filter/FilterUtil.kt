@@ -81,8 +81,7 @@ internal object FilterUtil {
     } */
 
     /**
-     * Compute a new filter to enable or disable the lazy loading
-     *
+     * Compute a new filter to enable or disable the lazy loading.
      *
      * If lazy loading is on, the filter will looks like
      * {"room":{"state":{"lazy_load_members":true})}

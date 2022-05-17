@@ -48,12 +48,12 @@ data class SyncResponse(
         @Json(name = "rooms") val rooms: RoomsSyncResponse? = null,
 
         /**
-         * Devices list update
+         * Devices list update.
          */
         @Json(name = "device_lists") val deviceLists: DeviceListResponse? = null,
 
         /**
-         * One time keys management
+         * One time keys management.
          */
         @Json(name = "device_one_time_keys_count")
         val deviceOneTimeKeysCount: DeviceOneTimeKeysCountSyncResponse? = null,

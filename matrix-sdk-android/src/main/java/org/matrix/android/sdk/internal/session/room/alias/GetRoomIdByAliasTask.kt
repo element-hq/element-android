@@ -52,7 +52,7 @@ internal class DefaultGetRoomIdByAliasTask @Inject constructor(
         } else if (!params.searchOnServer) {
             Optional.from(null)
         } else {
-            val description  = tryOrNull("## Failed to get roomId from alias") {
+            val description = tryOrNull("## Failed to get roomId from alias") {
                 executeRequest(globalErrorReceiver) {
                     directoryAPI.getRoomIdByAlias(params.roomAlias)
                 }

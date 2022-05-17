@@ -31,6 +31,7 @@ import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.peeking.PeekResult
 import org.matrix.android.sdk.api.session.space.JoinSpaceResult
@@ -64,8 +65,8 @@ class SpacePreviewViewModel @AssistedInject constructor(
 
     override fun handle(action: SpacePreviewViewAction) {
         when (action) {
-            SpacePreviewViewAction.ViewReady -> handleReady()
-            SpacePreviewViewAction.AcceptInvite -> handleAcceptInvite()
+            SpacePreviewViewAction.ViewReady     -> handleReady()
+            SpacePreviewViewAction.AcceptInvite  -> handleAcceptInvite()
             SpacePreviewViewAction.DismissInvite -> handleDismissInvite()
         }
     }
@@ -103,7 +104,7 @@ class SpacePreviewViewModel @AssistedInject constructor(
                         // For now we don't handle partial success, it's just success
                         _viewEvents.post(SpacePreviewViewEvents.JoinSuccess)
                     }
-                    is JoinSpaceResult.Fail -> {
+                    is JoinSpaceResult.Fail           -> {
                         _viewEvents.post(SpacePreviewViewEvents.JoinFailure(errorFormatter.toHumanReadable(joinResult.error)))
                     }
                 }

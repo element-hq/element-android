@@ -28,6 +28,7 @@ import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
 import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.util.time.Clock
 import javax.inject.Inject
 
 internal class MXMegolmEncryptionFactory @Inject constructor(
@@ -42,7 +43,9 @@ internal class MXMegolmEncryptionFactory @Inject constructor(
         private val messageEncrypter: MessageEncrypter,
         private val warnOnUnknownDevicesRepository: WarnOnUnknownDeviceRepository,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val cryptoCoroutineScope: CoroutineScope) {
+        private val cryptoCoroutineScope: CoroutineScope,
+        private val clock: Clock,
+) {
 
     fun create(roomId: String): MXMegolmEncryption {
         return MXMegolmEncryption(
@@ -58,7 +61,8 @@ internal class MXMegolmEncryptionFactory @Inject constructor(
                 messageEncrypter = messageEncrypter,
                 warnOnUnknownDevicesRepository = warnOnUnknownDevicesRepository,
                 coroutineDispatchers = coroutineDispatchers,
-                cryptoCoroutineScope = cryptoCoroutineScope
+                cryptoCoroutineScope = cryptoCoroutineScope,
+                clock = clock,
         )
     }
 }

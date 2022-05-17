@@ -22,7 +22,7 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class ElementWellKnown(
         /**
-         * Preferred Jitsi domain
+         * Preferred Jitsi domain.
          */
         @Json(name = "im.vector.riot.jitsi")
         val jitsiServer: WellKnownPreferredConfig? = null,

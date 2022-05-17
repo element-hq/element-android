@@ -29,10 +29,10 @@ import im.vector.app.features.analytics.plan.MobileScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.matrix.android.sdk.api.pushrules.RuleIds
-import org.matrix.android.sdk.api.pushrules.RuleKind
-import org.matrix.android.sdk.api.pushrules.rest.PushRule
-import org.matrix.android.sdk.api.pushrules.toJson
+import org.matrix.android.sdk.api.session.pushrules.RuleIds
+import org.matrix.android.sdk.api.session.pushrules.RuleKind
+import org.matrix.android.sdk.api.session.pushrules.rest.PushRule
+import org.matrix.android.sdk.api.session.pushrules.toJson
 
 class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment :
         VectorSettingsPushRuleNotificationPreferenceFragment() {
@@ -50,7 +50,7 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        session.getKeywords().observe(viewLifecycleOwner, this::updateWithKeywords)
+        session.pushRuleService().getKeywords().observe(viewLifecycleOwner, this::updateWithKeywords)
     }
 
     override fun bindPref() {
@@ -61,7 +61,7 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment :
         val yourKeywordsCategory = findPreference<VectorPreferenceCategory>("SETTINGS_YOUR_KEYWORDS")!!
         yourKeywordsCategory.isIconSpaceReserved = false
 
-        val keywordRules = session.getPushRules().content?.filter { !it.ruleId.startsWith(".") }.orEmpty()
+        val keywordRules = session.pushRuleService().getPushRules().content?.filter { !it.ruleId.startsWith(".") }.orEmpty()
         val enableKeywords = keywordRules.isEmpty() || keywordRules.any(PushRule::enabled)
 
         val editKeywordPreference = findPreference<KeywordPreference>("SETTINGS_KEYWORD_EDIT")!!
@@ -119,10 +119,12 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment :
             val results = keywords.map {
                 runCatching {
                     withContext(Dispatchers.Default) {
-                        session.updatePushRuleActions(RuleKind.CONTENT,
+                        session.pushRuleService().updatePushRuleActions(
+                                RuleKind.CONTENT,
                                 it,
                                 enabled,
-                                newActions)
+                                newActions
+                        )
                     }
                 }
             }
@@ -151,7 +153,7 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment :
         displayLoadingView()
         lifecycleScope.launch {
             val result = runCatching {
-                session.addPushRule(RuleKind.CONTENT, newRule)
+                session.pushRuleService().addPushRule(RuleKind.CONTENT, newRule)
             }
             hideLoadingView()
             if (!isAdded) {
@@ -167,7 +169,7 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment :
         displayLoadingView()
         lifecycleScope.launch {
             val result = runCatching {
-                session.removePushRule(RuleKind.CONTENT, keyword)
+                session.pushRuleService().removePushRule(RuleKind.CONTENT, keyword)
             }
             hideLoadingView()
             if (!isAdded) {
