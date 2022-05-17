@@ -144,4 +144,9 @@
     <color name="shield_color_black">#17191C</color>
     <color name="shield_color_warning">#FF4B55</color>
 
+    <!-- Badge Colors -->
+    <attr name="vctr_badge_color_border" format="color" />
+    <color name="vctr_badge_color_border_light">@color/palette_white</color>
+    <color name="vctr_badge_color_border_dark">@color/palette_black_950</color>
+
 </resources>
