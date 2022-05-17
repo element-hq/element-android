@@ -69,7 +69,7 @@ import java.util.concurrent.CountDownLatch
 @LargeTest
 class E2eeSanityTests : InstrumentedTest {
 
-    @get:Rule var rule = RetryTestRule(3)
+    @get:Rule val rule = RetryTestRule(3)
 
     /**
      * Simple test that create an e2ee room.

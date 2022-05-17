@@ -39,7 +39,7 @@ private const val DUMMY_DEVICE_KEY = "DeviceKey"
 @RunWith(AndroidJUnit4::class)
 class CryptoStoreTest : InstrumentedTest {
 
-    @get:Rule var rule = RetryTestRule(3)
+    @get:Rule val rule = RetryTestRule(3)
 
     private val cryptoStoreHelper = CryptoStoreHelper()
     private val clock = DefaultClock()

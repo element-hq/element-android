@@ -53,7 +53,7 @@ import org.matrix.android.sdk.common.TestConstants
 @LargeTest
 class KeyShareTests : InstrumentedTest {
 
-    @get:Rule var rule = RetryTestRule(3)
+    @get:Rule val rule = RetryTestRule(3)
 
     @Test
     fun test_DoNotSelfShareIfNotTrusted() {
