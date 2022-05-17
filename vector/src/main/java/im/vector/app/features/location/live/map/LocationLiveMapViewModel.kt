@@ -39,6 +39,11 @@ class LocationLiveMapViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<LocationLiveMapViewModel, LocationLiveMapViewState> by hiltMavericksViewModelFactory()
 
+    /**
+     * Map to keep track of symbol ids associated to each user Id.
+     */
+    val mapSymbolIds = mutableMapOf<String, Long>()
+
     init {
         getListOfUserLiveLocationUseCase.execute(initialState.roomId)
                 .onEach { setState { copy(userLocations = it) } }

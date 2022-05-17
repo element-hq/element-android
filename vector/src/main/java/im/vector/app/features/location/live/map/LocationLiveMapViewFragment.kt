@@ -25,8 +25,6 @@ import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import com.mapbox.mapboxsdk.camera.CameraPosition
-import com.mapbox.mapboxsdk.constants.MapboxConstants
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.geometry.LatLngBounds
 import com.mapbox.mapboxsdk.maps.MapView
@@ -43,11 +41,13 @@ import im.vector.app.core.extensions.addChildFragment
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSimpleContainerBinding
 import im.vector.app.features.location.UrlMapProvider
+import im.vector.app.features.location.zoomToBounds
+import im.vector.app.features.location.zoomToLocation
 import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 /**
- * Screen showing a map with all the current users sharing their live location in room.
+ * Screen showing a map with all the current users sharing their live location in a room.
  */
 @AndroidEntryPoint
 class LocationLiveMapViewFragment : VectorBaseFragment<FragmentSimpleContainerBinding>() {
@@ -91,33 +91,90 @@ class LocationLiveMapViewFragment : VectorBaseFragment<FragmentSimpleContainerBi
         }
     }
 
+    private fun getOrCreateSupportMapFragment() =
+            childFragmentManager.findFragmentByTag(MAP_FRAGMENT_TAG) as? SupportMapFragment
+                    ?: run {
+                        val options = MapboxMapOptions.createFromAttributes(requireContext(), null)
+                        SupportMapFragment.newInstance(options)
+                                .also { addChildFragment(R.id.fragmentContainer, it, tag = MAP_FRAGMENT_TAG) }
+                    }
+
     override fun invalidate() = withState(viewModel) { viewState ->
         updateMap(viewState.userLocations)
     }
 
     private fun updateMap(userLiveLocations: List<UserLiveLocationViewState>) {
-        symbolManager?.let {
-            it.deleteAll()
-
+        symbolManager?.let { sManager ->
             val latLngBoundsBuilder = LatLngBounds.Builder()
+
             userLiveLocations.forEach { userLocation ->
-                addUserPinToMapStyle(userLocation.userId, userLocation.pinDrawable)
-                val symbolOptions = buildSymbolOptions(userLocation)
-                it.create(symbolOptions)
+                createOrUpdateSymbol(userLocation, sManager)
 
                 if (isMapFirstUpdate) {
-                    latLngBoundsBuilder.include(LatLng(userLocation.locationData.latitude, userLocation.locationData.longitude))
+                    val latLng = LatLng(userLocation.locationData.latitude, userLocation.locationData.longitude)
+                    latLngBoundsBuilder.include(latLng)
                 }
             }
 
-            if (isMapFirstUpdate) {
-                isMapFirstUpdate = false
-                zoomToViewAllUsers(latLngBoundsBuilder.build())
-            }
-        } ?: run {
-            pendingLiveLocations.clear()
-            pendingLiveLocations.addAll(userLiveLocations)
+            removeOutdatedSymbols(userLiveLocations, sManager)
+            updateMapZoomWhenNeeded(userLiveLocations, latLngBoundsBuilder)
+
+        } ?: postponeUpdateOfMap(userLiveLocations)
+    }
+
+    private fun createOrUpdateSymbol(userLocation: UserLiveLocationViewState, symbolManager: SymbolManager) {
+        val symbolId = viewModel.mapSymbolIds[userLocation.userId]
+
+        if (symbolId == null) {
+            createSymbol(userLocation, symbolManager)
+        } else {
+            updateSymbol(symbolId, userLocation, symbolManager)
         }
+    }
+
+    private fun createSymbol(userLocation: UserLiveLocationViewState, symbolManager: SymbolManager) {
+        addUserPinToMapStyle(userLocation.userId, userLocation.pinDrawable)
+        val symbolOptions = buildSymbolOptions(userLocation)
+        val symbol = symbolManager.create(symbolOptions)
+        viewModel.mapSymbolIds[userLocation.userId] = symbol.id
+    }
+
+    private fun updateSymbol(symbolId: Long, userLocation: UserLiveLocationViewState, symbolManager: SymbolManager) {
+        val newLocation = LatLng(userLocation.locationData.latitude, userLocation.locationData.longitude)
+        val symbol = symbolManager.annotations.get(symbolId)
+        symbol?.let {
+            it.latLng = newLocation
+            symbolManager.update(it)
+        }
+    }
+
+    private fun removeOutdatedSymbols(userLiveLocations: List<UserLiveLocationViewState>, symbolManager: SymbolManager) {
+        val userIdsToRemove = viewModel.mapSymbolIds.keys.subtract(userLiveLocations.map { it.userId }.toSet())
+        userIdsToRemove
+                .mapNotNull { userId ->
+                    removeUserPinFromMapStyle(userId)
+                    viewModel.mapSymbolIds[userId]
+                }
+                .forEach { symbolId ->
+                    val symbol = symbolManager.annotations.get(symbolId)
+                    symbolManager.delete(symbol)
+                }
+    }
+
+    private fun updateMapZoomWhenNeeded(userLiveLocations: List<UserLiveLocationViewState>, latLngBoundsBuilder: LatLngBounds.Builder) {
+        if (userLiveLocations.isNotEmpty() && isMapFirstUpdate) {
+            isMapFirstUpdate = false
+            if (userLiveLocations.size > 1) {
+                mapboxMap?.get()?.zoomToBounds(latLngBoundsBuilder.build())
+            } else {
+                mapboxMap?.get()?.zoomToLocation(userLiveLocations.first().locationData)
+            }
+        }
+    }
+
+    private fun postponeUpdateOfMap(userLiveLocations: List<UserLiveLocationViewState>) {
+        pendingLiveLocations.clear()
+        pendingLiveLocations.addAll(userLiveLocations)
     }
 
     private fun addUserPinToMapStyle(userId: String, userPinDrawable: Drawable) {
@@ -128,30 +185,15 @@ class LocationLiveMapViewFragment : VectorBaseFragment<FragmentSimpleContainerBi
         }
     }
 
+    private fun removeUserPinFromMapStyle(userId: String) {
+        mapStyle?.removeImage(userId)
+    }
+
     private fun buildSymbolOptions(userLiveLocation: UserLiveLocationViewState) =
             SymbolOptions()
                     .withLatLng(LatLng(userLiveLocation.locationData.latitude, userLiveLocation.locationData.longitude))
                     .withIconImage(userLiveLocation.userId)
                     .withIconAnchor(Property.ICON_ANCHOR_BOTTOM)
-
-    private fun zoomToViewAllUsers(latLngBounds: LatLngBounds) {
-        mapboxMap?.get()?.let { mapboxMap ->
-            mapboxMap.getCameraForLatLngBounds(latLngBounds)?.let { cameraPosition ->
-                // update the zoom a little to avoid having pins exactly at the edges of the map
-                mapboxMap.cameraPosition = CameraPosition.Builder(cameraPosition)
-                        .zoom((cameraPosition.zoom - 1).coerceAtLeast(MapboxConstants.MINIMUM_ZOOM.toDouble()))
-                        .build()
-            }
-        }
-    }
-
-    private fun getOrCreateSupportMapFragment() =
-            childFragmentManager.findFragmentByTag(MAP_FRAGMENT_TAG) as? SupportMapFragment
-                    ?: run {
-                        val options = MapboxMapOptions.createFromAttributes(requireContext(), null)
-                        SupportMapFragment.newInstance(options)
-                                .also { addChildFragment(R.id.fragmentContainer, it, tag = MAP_FRAGMENT_TAG) }
-                    }
 
     companion object {
         private const val MAP_FRAGMENT_TAG = "im.vector.app.features.location.live.map"
