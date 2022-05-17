@@ -28,8 +28,8 @@ import im.vector.app.databinding.ViewKeysBackupBannerBinding
 import timber.log.Timber
 
 /**
- * The view used in VectorHomeActivity to show some information about the keys backup state
- * It does have a unique render method
+ * The view used in VectorHomeActivity to show some information about the keys backup state.
+ * It does have a unique render method.
  */
 class KeysBackupBanner @JvmOverloads constructor(
         context: Context,
@@ -51,7 +51,7 @@ class KeysBackupBanner @JvmOverloads constructor(
     }
 
     /**
-     * This methods is responsible for rendering the view according to the newState
+     * This methods is responsible for rendering the view according to the newState.
      *
      * @param newState the newState representing the view
      */
@@ -182,7 +182,7 @@ class KeysBackupBanner @JvmOverloads constructor(
     }
 
     /**
-     * Hide all views that are not visible in all state
+     * Hide all views that are not visible in all state.
      */
     private fun hideAll() {
         views.viewKeysBackupBannerText2.isVisible = false
@@ -191,8 +191,8 @@ class KeysBackupBanner @JvmOverloads constructor(
     }
 
     /**
-     * The state representing the view
-     * It can take one state at a time
+     * The state representing the view.
+     * It can take one state at a time.
      */
     sealed class State {
         // Not yet rendered
@@ -215,7 +215,7 @@ class KeysBackupBanner @JvmOverloads constructor(
     }
 
     /**
-     * An interface to delegate some actions to another object
+     * An interface to delegate some actions to another object.
      */
     interface Delegate {
         fun setupKeysBackup()
@@ -239,7 +239,7 @@ class KeysBackupBanner @JvmOverloads constructor(
         private const val BANNER_UPDATE_DO_NOT_SHOW_FOR_VERSION = "BANNER_UPDATE_DO_NOT_SHOW_FOR_VERSION"
 
         /**
-         * Inform the banner that a Recover has been done for this version, so do not show the Recover banner for this version
+         * Inform the banner that a Recover has been done for this version, so do not show the Recover banner for this version.
          */
         fun onRecoverDoneForVersion(context: Context, version: String) {
             DefaultSharedPreferences.getInstance(context).edit {

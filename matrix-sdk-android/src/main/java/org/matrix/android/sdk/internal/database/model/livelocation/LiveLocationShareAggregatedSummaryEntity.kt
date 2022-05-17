@@ -36,7 +36,7 @@ internal open class LiveLocationShareAggregatedSummaryEntity(
         var endOfLiveTimestampMillis: Long? = null,
 
         /**
-         * For now we persist this as a JSON for greater flexibility
+         * For now we persist this as a JSON for greater flexibility.
          * @see [org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent]
          */
         var lastLocationContent: String? = null,

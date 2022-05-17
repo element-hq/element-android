@@ -20,7 +20,7 @@ import org.matrix.android.sdk.api.session.media.PreviewUrlData
 import org.matrix.android.sdk.internal.database.model.PreviewUrlCacheEntity
 
 /**
- * PreviewUrlCacheEntity -> PreviewUrlData
+ * PreviewUrlCacheEntity -> PreviewUrlData.
  */
 internal fun PreviewUrlCacheEntity.toDomain() = PreviewUrlData(
         url = urlFromServer ?: url,

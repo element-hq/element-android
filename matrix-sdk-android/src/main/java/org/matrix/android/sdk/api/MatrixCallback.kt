@@ -23,7 +23,7 @@ package org.matrix.android.sdk.api
 interface MatrixCallback<in T> {
 
     /**
-     * On success method, default to no-op
+     * On success method, default to no-op.
      * @param data the data successfully returned from the async function
      */
     fun onSuccess(data: T) {
@@ -31,7 +31,7 @@ interface MatrixCallback<in T> {
     }
 
     /**
-     * On failure method, default to no-op
+     * On failure method, default to no-op.
      * @param failure the failure data returned from the async function
      */
     fun onFailure(failure: Throwable) {
@@ -40,6 +40,6 @@ interface MatrixCallback<in T> {
 }
 
 /**
- * Basic no op implementation
+ * Basic no op implementation.
  */
 class NoOpMatrixCallback<T> : MatrixCallback<T>

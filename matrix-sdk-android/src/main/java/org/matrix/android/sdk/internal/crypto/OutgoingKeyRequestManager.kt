@@ -151,7 +151,7 @@ internal class OutgoingKeyRequestManager @Inject constructor(
     }
 
     /**
-     * Typically called when we the session as been imported or received meanwhile
+     * Typically called when we the session as been imported or received meanwhile.
      */
     fun postCancelRequestForSessionIfNeeded(sessionId: String, roomId: String, senderKey: String, fromIndex: Int) {
         outgoingRequestScope.launch {
@@ -266,7 +266,7 @@ internal class OutgoingKeyRequestManager @Inject constructor(
     }
 
     /**
-     * Should be called after a sync, ideally if no catchup sync needed (as keys might arrive in those)
+     * Should be called after a sync, ideally if no catchup sync needed (as keys might arrive in those).
      */
     fun requireProcessAllPendingKeyRequests() {
         outgoingRequestScope.launch {

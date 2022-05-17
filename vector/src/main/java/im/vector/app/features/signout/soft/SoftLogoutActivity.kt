@@ -36,8 +36,8 @@ import timber.log.Timber
 import javax.inject.Inject
 
 /**
- * In this screen, the user is viewing a message informing that he has been logged out
- * Extends LoginActivity to get the login with SSO and forget password functionality for (nearly) free
+ * In this screen, the user is viewing a message informing that he has been logged out.
+ * Extends LoginActivity to get the login with SSO and forget password functionality for (nearly) free.
  */
 @AndroidEntryPoint
 class SoftLogoutActivity : LoginActivity() {

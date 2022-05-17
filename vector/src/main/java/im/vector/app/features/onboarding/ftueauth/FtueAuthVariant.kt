@@ -288,8 +288,8 @@ class FtueAuthVariant(
                 .show()
     }
 
-    private fun onServerSelectionDone(OnboardingViewEvents: OnboardingViewEvents.OnServerSelectionDone) {
-        when (OnboardingViewEvents.serverType) {
+    private fun onServerSelectionDone(onboardingViewEvents: OnboardingViewEvents.OnServerSelectionDone) {
+        when (onboardingViewEvents.serverType) {
             ServerType.MatrixOrg -> Unit // In this case, we wait for the login flow
             ServerType.EMS,
             ServerType.Other     -> activity.addFragmentToBackstack(
@@ -301,9 +301,9 @@ class FtueAuthVariant(
         }
     }
 
-    private fun onSignModeSelected(OnboardingViewEvents: OnboardingViewEvents.OnSignModeSelected) = withState(onboardingViewModel) { state ->
+    private fun onSignModeSelected(onboardingViewEvents: OnboardingViewEvents.OnSignModeSelected) = withState(onboardingViewModel) { state ->
         // state.signMode could not be ready yet. So use value from the ViewEvent
-        when (OnboardingViewEvents.signMode) {
+        when (onboardingViewEvents.signMode) {
             SignMode.Unknown            -> error("Sign mode has to be set before calling this method")
             SignMode.SignUp             -> Unit // This case is processed in handleOnboardingViewEvents
             SignMode.SignIn             -> handleSignInSelected(state)
@@ -362,7 +362,7 @@ class FtueAuthVariant(
     }
 
     /**
-     * Handle the SSO redirection here
+     * Handle the SSO redirection here.
      */
     override fun onNewIntent(intent: Intent?) {
         intent?.data

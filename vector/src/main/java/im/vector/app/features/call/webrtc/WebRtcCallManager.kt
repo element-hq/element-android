@@ -63,7 +63,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Manage peerConnectionFactory & Peer connections outside of activity lifecycle to resist configuration changes
+ * Manage peerConnectionFactory & Peer connections outside of activity lifecycle to resist configuration changes.
  * Use app context
  */
 private val loggerTag = LoggerTag("WebRtcCallManager", LoggerTag.VOIP)
@@ -454,7 +454,7 @@ class WebRtcCallManager @Inject constructor(
     }
 
     /**
-     * Analytics
+     * Analytics.
      */
     private fun WebRtcCall.trackCallStarted() {
         analyticsTracker.capture(

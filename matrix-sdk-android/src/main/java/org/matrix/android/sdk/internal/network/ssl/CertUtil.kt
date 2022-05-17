@@ -33,7 +33,7 @@ import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
 
 /**
- * Various utility classes for dealing with X509Certificates
+ * Various utility classes for dealing with X509Certificates.
  */
 internal object CertUtil {
 
@@ -43,7 +43,7 @@ internal object CertUtil {
     private val hexArray = "0123456789ABCDEF".toCharArray()
 
     /**
-     * Generates the SHA-256 fingerprint of the given certificate
+     * Generates the SHA-256 fingerprint of the given certificate.
      *
      * @param cert the certificate.
      * @return the finger print
@@ -55,7 +55,7 @@ internal object CertUtil {
     }
 
     /**
-     * Generates the SHA-1 fingerprint of the given certificate
+     * Generates the SHA-1 fingerprint of the given certificate.
      *
      * @param cert the certificated
      * @return the SHA1 fingerprint
@@ -109,7 +109,7 @@ internal object CertUtil {
 
     /**
      * Recursively checks the exception to see if it was caused by an
-     * UnrecognizedCertificateException
+     * UnrecognizedCertificateException.
      *
      * @param root the throwable.
      * @return The UnrecognizedCertificateException if exists, else null.
@@ -250,7 +250,7 @@ internal object CertUtil {
         builder.supportsTlsExtensions(hsConfig.shouldAcceptTlsExtensions)
         val list = ArrayList<ConnectionSpec>()
         list.add(builder.build())
-        // TODO: we should display a warning if user enter an http url
+        // TODO we should display a warning if user enter an http url
         if (hsConfig.allowHttpExtension || hsConfig.homeServerUriBase.toString().startsWith("http://")) {
             list.add(ConnectionSpec.CLEARTEXT)
         }

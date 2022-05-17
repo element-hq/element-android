@@ -26,7 +26,7 @@ import org.matrix.android.sdk.internal.crypto.actions.SetDeviceVerificationActio
 import timber.log.Timber
 
 /**
- * Generic interactive key verification transaction
+ * Generic interactive key verification transaction.
  */
 internal abstract class DefaultVerificationTransaction(
         private val setDeviceVerificationAction: SetDeviceVerificationAction,

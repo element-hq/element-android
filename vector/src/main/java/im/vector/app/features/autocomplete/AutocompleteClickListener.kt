@@ -17,7 +17,7 @@
 package im.vector.app.features.autocomplete
 
 /**
- * Simple generic listener interface
+ * Simple generic listener interface.
  */
 interface AutocompleteClickListener<T> {
 

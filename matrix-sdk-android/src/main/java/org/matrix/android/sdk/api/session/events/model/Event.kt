@@ -62,7 +62,7 @@ inline fun <reified T> Content?.toModel(catchError: Boolean = true): T? {
 }
 
 /**
- * This methods is a facility method to map a model to a json Content
+ * This methods is a facility method to map a model to a json Content.
  */
 @Suppress("UNCHECKED_CAST")
 inline fun <reified T> T.toContent(): Content {
@@ -123,7 +123,7 @@ data class Event(
     var ageLocalTs: Long? = null
 
     /**
-     * Copy all fields, including transient fields
+     * Copy all fields, including transient fields.
      */
     fun copyAll(): Event {
         return copy().also {
@@ -227,14 +227,14 @@ data class Event(
     }
 
     /**
-     * Determines whether or not current event has mentioned the user
+     * Determines whether or not current event has mentioned the user.
      */
     fun isUserMentioned(userId: String): Boolean {
         return getDecryptedValue("formatted_body")?.contains(userId) ?: false
     }
 
     /**
-     * Decrypt the message, or return the pure payload value if there is no encryption
+     * Decrypt the message, or return the pure payload value if there is no encryption.
      */
     private fun getDecryptedValue(key: String = "body"): String? {
         return if (isEncrypted()) {
@@ -247,7 +247,7 @@ data class Event(
     }
 
     /**
-     * Tells if the event is redacted
+     * Tells if the event is redacted.
      */
     fun isRedacted() = unsignedData?.redactedEvent != null
 
@@ -305,7 +305,7 @@ data class Event(
 
 /**
  * Return the value of "content.msgtype", if the Event type is "m.room.message"
- * and if the content has it, and if it is a String
+ * and if the content has it, and if it is a String.
  */
 fun Event.getMsgType(): String? {
     if (getClearType() != EventType.MESSAGE) return null
@@ -386,13 +386,13 @@ fun Event.getRelationContent(): RelationDefaultContent? {
 }
 
 /**
- * Returns the poll question or null otherwise
+ * Returns the poll question or null otherwise.
  */
 fun Event.getPollQuestion(): String? =
         getPollContent()?.getBestPollCreationInfo()?.question?.getBestQuestion()
 
 /**
- * Returns the relation content for a specific type or null otherwise
+ * Returns the relation content for a specific type or null otherwise.
  */
 fun Event.getRelationContentForType(type: String): RelationDefaultContent? =
         getRelationContent()?.takeIf { it.type == type }

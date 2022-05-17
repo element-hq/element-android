@@ -53,21 +53,21 @@ internal suspend fun okhttp3.Call.awaitResponse(): okhttp3.Response {
 }
 
 /**
- * Convert a retrofit Response to a Failure, and eventually parse errorBody to convert it to a MatrixError
+ * Convert a retrofit Response to a Failure, and eventually parse errorBody to convert it to a [MatrixError].
  */
 internal fun <T> Response<T>.toFailure(globalErrorReceiver: GlobalErrorReceiver?): Failure {
     return toFailure(errorBody(), code(), globalErrorReceiver)
 }
 
 /**
- * Convert a HttpException to a Failure, and eventually parse errorBody to convert it to a MatrixError
+ * Convert a HttpException to a Failure, and eventually parse errorBody to convert it to a [MatrixError].
  */
 internal fun HttpException.toFailure(globalErrorReceiver: GlobalErrorReceiver?): Failure {
     return toFailure(response()?.errorBody(), code(), globalErrorReceiver)
 }
 
 /**
- * Convert a okhttp3 Response to a Failure, and eventually parse errorBody to convert it to a MatrixError
+ * Convert a okhttp3 Response to a Failure, and eventually parse errorBody to convert it to a [MatrixError].
  */
 internal fun okhttp3.Response.toFailure(globalErrorReceiver: GlobalErrorReceiver?): Failure {
     return toFailure(body, code, globalErrorReceiver)

@@ -26,12 +26,12 @@ import javax.inject.Inject
 private val loggerTag = LoggerTag("OlmSessionStore", LoggerTag.CRYPTO)
 
 /**
- * Keep the used olm session in memory and load them from the data layer when needed
- * Access is synchronized for thread safety
+ * Keep the used olm session in memory and load them from the data layer when needed.
+ * Access is synchronized for thread safety.
  */
 internal class OlmSessionStore @Inject constructor(private val store: IMXCryptoStore) {
     /**
-     * map of device key to list of olm sessions (it is possible to have several active sessions with a device)
+     * Map of device key to list of olm sessions (it is possible to have several active sessions with a device).
      */
     private val olmSessions = HashMap<String, MutableList<OlmSessionWrapper>>()
 
@@ -89,7 +89,7 @@ internal class OlmSessionStore @Inject constructor(private val store: IMXCryptoS
     }
 
     /**
-     * Retrieve the last used sessionId, regarding `lastReceivedMessageTs`, or null if no session exist
+     * Retrieve the last used sessionId, regarding `lastReceivedMessageTs`, or null if no session exist.
      *
      * @param deviceKey the public key of the other device.
      * @return last used sessionId, or null if not found
@@ -110,7 +110,7 @@ internal class OlmSessionStore @Inject constructor(private val store: IMXCryptoS
     }
 
     /**
-     * Release all sessions and clear cache
+     * Release all sessions and clear cache.
      */
     @Synchronized
     fun clear() {

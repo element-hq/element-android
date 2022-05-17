@@ -21,7 +21,7 @@ import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 
 /**
- * Open class, parent to all possible authentication parameters
+ * Open class, parent to all possible authentication parameters.
  */
 @JsonClass(generateAdapter = true)
 internal data class AuthParams(
@@ -29,19 +29,19 @@ internal data class AuthParams(
         val type: String,
 
         /**
-         * Note: session can be null for reset password request
+         * Note: session can be null for reset password request.
          */
         @Json(name = "session")
         val session: String?,
 
         /**
-         * parameter for "m.login.recaptcha" type
+         * parameter for "m.login.recaptcha" type.
          */
         @Json(name = "response")
         val captchaResponse: String? = null,
 
         /**
-         * parameter for "m.login.email.identity" type
+         * parameter for "m.login.email.identity" type.
          */
         @Json(name = "threepid_creds")
         val threePidCredentials: ThreePidCredentials? = null

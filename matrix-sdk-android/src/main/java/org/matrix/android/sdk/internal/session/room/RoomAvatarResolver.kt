@@ -34,7 +34,7 @@ import javax.inject.Inject
 internal class RoomAvatarResolver @Inject constructor(@UserId private val userId: String) {
 
     /**
-     * Compute the room avatar url
+     * Compute the room avatar url.
      * @param realm: the current instance of realm
      * @param roomId the roomId of the room to resolve avatar
      * @return the room avatar url, can be a fallback to a room member avatar or null

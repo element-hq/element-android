@@ -65,7 +65,7 @@ internal fun ThreadSummaryEntity.updateThreadSummary(
 }
 
 /**
- * Updates the root thread event properties
+ * Updates the root thread event properties.
  */
 internal fun ThreadSummaryEntity.updateThreadSummaryRootEvent(
         rootThreadEventEntity: EventEntity,
@@ -84,7 +84,7 @@ internal fun ThreadSummaryEntity.updateThreadSummaryRootEvent(
 }
 
 /**
- * Updates the latest thread event properties
+ * Updates the latest thread event properties.
  */
 internal fun ThreadSummaryEntity.updateThreadSummaryLatestEvent(
         latestThreadEventEntity: EventEntity?,
@@ -241,7 +241,7 @@ private fun decryptIfNeeded(cryptoService: CryptoService?, eventEntity: EventEnt
 }
 
 /**
- * Request decryption
+ * Request decryption.
  */
 private fun requestDecryption(eventDecryptor: TimelineEventDecryptor?, event: Event?) {
     eventDecryptor ?: return
@@ -255,7 +255,7 @@ private fun requestDecryption(eventDecryptor: TimelineEventDecryptor?, event: Ev
 }
 
 /**
- * If we don't have any new state on this user, get it from db
+ * If we don't have any new state on this user, get it from db.
  */
 private fun HashMap<String, RoomMemberContent?>.addSenderState(realm: Realm, roomId: String, senderId: String) {
     getOrPut(senderId) {
@@ -267,7 +267,7 @@ private fun HashMap<String, RoomMemberContent?>.addSenderState(realm: Realm, roo
 }
 
 /**
- * Create an EventEntity for the root thread event or get an existing one
+ * Create an EventEntity for the root thread event or get an existing one.
  */
 private fun createEventEntity(realm: Realm, roomId: String, event: Event, currentTimeMillis: Long): EventEntity {
     val ageLocalTs = event.unsignedData?.age?.let { currentTimeMillis - it }
@@ -294,15 +294,15 @@ private fun createLatestEventEntity(
 }
 
 /**
- * Returned the latest event message, if any
+ * Returned the latest event message, if any.
  */
 private fun getLatestEvent(rootThreadEvent: Event): Event? {
     return rootThreadEvent.unsignedData?.relations?.latestThread?.event
 }
 
 /**
- * Find all ThreadSummaryEntity for the specified roomId, sorted by origin server
- * note: Sorting cannot be provided by server, so we have to use that unstable property
+ * Find all ThreadSummaryEntity for the specified roomId, sorted by origin server.
+ * note: Sorting cannot be provided by server, so we have to use that unstable property.
  * @param roomId The id of the room
  */
 internal fun ThreadSummaryEntity.Companion.findAllThreadsForRoomId(realm: Realm, roomId: String): RealmQuery<ThreadSummaryEntity> =
@@ -311,7 +311,7 @@ internal fun ThreadSummaryEntity.Companion.findAllThreadsForRoomId(realm: Realm,
                 .sort(ThreadSummaryEntityFields.LATEST_THREAD_EVENT_ENTITY.ORIGIN_SERVER_TS, Sort.DESCENDING)
 
 /**
- * Enhance each [ThreadSummary] root and latest event with the equivalent decrypted text edition/replacement
+ * Enhance each [ThreadSummary] root and latest event with the equivalent decrypted text edition/replacement.
  */
 internal fun List<ThreadSummary>.enhanceWithEditions(realm: Realm, roomId: String): List<ThreadSummary> =
         this.map {

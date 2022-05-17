@@ -20,7 +20,7 @@ import androidx.core.content.pm.ShortcutInfoCompat
 import im.vector.app.core.platform.VectorViewEvents
 
 /**
- * Transient events for RoomProfile
+ * Transient events for RoomProfile.
  */
 sealed class RoomProfileViewEvents : VectorViewEvents {
     data class Loading(val message: CharSequence? = null) : RoomProfileViewEvents()

@@ -79,7 +79,7 @@ fun requestDisablingBatteryOptimization(activity: Activity, activityResultLaunch
 // ==============================================================================================================
 
 /**
- * Copy a text to the clipboard, and display a Toast when done
+ * Copy a text to the clipboard, and display a Toast when done.
  *
  * @param context the context
  * @param text    the text to copy

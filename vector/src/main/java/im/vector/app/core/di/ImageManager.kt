@@ -28,7 +28,7 @@ import java.io.InputStream
 import javax.inject.Inject
 
 /**
- * This class is used to configure the library we use for images
+ * This class is used to configure the library we use for images.
  */
 class ImageManager @Inject constructor(
         private val context: Context,

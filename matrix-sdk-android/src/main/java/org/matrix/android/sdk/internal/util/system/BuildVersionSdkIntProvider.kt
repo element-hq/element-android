@@ -18,7 +18,7 @@ package org.matrix.android.sdk.internal.util.system
 
 internal interface BuildVersionSdkIntProvider {
     /**
-     * Return the current version of the Android SDK
+     * Return the current version of the Android SDK.
      */
     fun get(): Int
 }

@@ -20,7 +20,7 @@ import im.vector.app.core.platform.VectorViewEvents
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 
 /**
- * Transient events for deactivate account settings screen
+ * Transient events for deactivate account settings screen.
  */
 sealed class DeactivateAccountViewEvents : VectorViewEvents {
     data class Loading(val message: CharSequence? = null) : DeactivateAccountViewEvents()

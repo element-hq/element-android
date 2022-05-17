@@ -726,8 +726,8 @@ class TimelineFragment @Inject constructor(
     }
 
     /**
-     *  Ensure dismiss actions only trigger when the fragment is in the started state
-     *  EmojiPopup by default dismisses onViewDetachedFromWindow, this can cause race conditions with onDestroyView
+     *  Ensure dismiss actions only trigger when the fragment is in the started state.
+     *  EmojiPopup by default dismisses onViewDetachedFromWindow, this can cause race conditions with onDestroyView.
      */
     private fun EmojiPopup.Builder.setOnEmojiPopupDismissListenerLifecycleAware(action: () -> Unit): EmojiPopup.Builder {
         return setOnEmojiPopupDismissListener {
@@ -1167,7 +1167,7 @@ class TimelineFragment @Inject constructor(
     }
 
     /**
-     * Update menu thread notification badge appropriately
+     * Update menu thread notification badge appropriately.
      */
     private fun updateMenuThreadNotificationBadge(menu: Menu, state: RoomDetailViewState) {
         val menuThreadList = menu.findItem(R.id.menu_timeline_thread_list).actionView
@@ -1190,7 +1190,7 @@ class TimelineFragment @Inject constructor(
     }
 
     /**
-     * View and highlight the original root thread message in the main timeline
+     * View and highlight the original root thread message in the main timeline.
      */
     private fun handleViewInRoomAction() {
         getRootThreadEventId()?.let {
@@ -2455,9 +2455,8 @@ class TimelineFragment @Inject constructor(
 
     /**
      * Navigate to Threads timeline for the specified rootThreadEventId
-     * using the ThreadsActivity
+     * using the ThreadsActivity.
      */
-
     private fun navigateToThreadTimeline(rootThreadEventId: String, startsThread: Boolean = false, showKeyboard: Boolean = false) {
         analyticsTracker.capture(Interaction.Name.MobileRoomThreadSummaryItem.toAnalyticsInteraction())
         context?.let {
@@ -2495,9 +2494,8 @@ class TimelineFragment @Inject constructor(
 
     /**
      * Navigate to Threads list for the current room
-     * using the ThreadsActivity
+     * using the ThreadsActivity.
      */
-
     private fun navigateToThreadList() {
         analyticsTracker.capture(Interaction.Name.MobileRoomThreadListButton.toAnalyticsInteraction())
         context?.let {
@@ -2624,12 +2622,12 @@ class TimelineFragment @Inject constructor(
     }
 
     /**
-     * Returns true if the current room is a Thread room, false otherwise
+     * Returns true if the current room is a Thread room, false otherwise.
      */
     private fun isThreadTimeLine(): Boolean = timelineArgs.threadTimelineArgs?.rootThreadEventId != null
 
     /**
-     * Returns the root thread event if we are in a thread room, otherwise returns null
+     * Returns the root thread event if we are in a thread room, otherwise returns null.
      */
     fun getRootThreadEventId(): String? = timelineArgs.threadTimelineArgs?.rootThreadEventId
 }

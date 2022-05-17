@@ -28,7 +28,7 @@ import org.matrix.android.sdk.api.failure.is401
 import javax.inject.Inject
 
 /**
- * In this screen, the user is asked to check his emails
+ * In this screen, the user is asked to check their emails.
  */
 class LoginWaitForEmailFragment2 @Inject constructor() : AbstractLoginFragment2<FragmentLoginWaitForEmail2Binding>() {
 

@@ -19,7 +19,7 @@ package org.matrix.android.sdk.internal.di
 import javax.inject.Scope
 
 /**
- * Use the annotation @MatrixScope to annotate classes we want the SDK to instantiate only once
+ * Use the annotation @MatrixScope to annotate classes we want the SDK to instantiate only once.
  */
 @Scope
 @MustBeDocumented

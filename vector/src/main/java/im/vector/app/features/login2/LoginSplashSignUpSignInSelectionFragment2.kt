@@ -28,8 +28,8 @@ import im.vector.app.features.settings.VectorPreferences
 import javax.inject.Inject
 
 /**
- * In this screen, the user is asked to sign up or to sign in to the homeserver
- * This is the new splash screen
+ * In this screen, the user is asked to sign up or to sign in to the homeserver.
+ * This is the new splash screen.
  */
 class LoginSplashSignUpSignInSelectionFragment2 @Inject constructor(
         private val vectorPreferences: VectorPreferences

@@ -25,11 +25,11 @@ import kotlin.random.Random
 
 /**
  * Describes the current send mode:
- * REGULAR: sends the text as a regular message
- * QUOTE: User is currently quoting a message
- * EDIT: User is currently editing an existing message
+ * REGULAR: sends the text as a regular message;
+ * QUOTE: User is currently quoting a message;
+ * EDIT: User is currently editing an existing message.
  *
- * Depending on the state the bottom toolbar will change (icons/preview/actions...)
+ * Depending on the state the bottom toolbar will change (icons/preview/actions...).
  */
 sealed interface SendMode {
     data class Regular(

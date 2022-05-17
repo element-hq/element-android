@@ -20,6 +20,6 @@ import im.vector.app.core.platform.VectorSharedActionViewModel
 import javax.inject.Inject
 
 /**
- * Activity shared view model to handle room list quick actions
+ * Activity shared view model to handle room list quick actions.
  */
 class RoomListQuickActionsSharedActionViewModel @Inject constructor() : VectorSharedActionViewModel<RoomListQuickActionsSharedAction>()

@@ -23,8 +23,11 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.util.JsonDict
 
+/**
+ * Serializable object.
+ */
 @JsonClass(generateAdapter = true)
-internal data class SerializablePowerLevelsContent(
+internal data class SafePowerLevelContent(
         @Json(name = "ban") val ban: Int?,
         @Json(name = "kick") val kick: Int?,
         @Json(name = "invite") val invite: Int?,
@@ -41,7 +44,7 @@ internal data class SerializablePowerLevelsContent(
 internal fun JsonDict.toSafePowerLevelsContentDict(): JsonDict {
     return toModel<PowerLevelsContent>()
             ?.let { content ->
-                SerializablePowerLevelsContent(
+                SafePowerLevelContent(
                         ban = content.ban,
                         kick = content.kick,
                         invite = content.invite,

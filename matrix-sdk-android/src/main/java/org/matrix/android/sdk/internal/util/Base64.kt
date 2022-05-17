@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.internal.util
 
 /**
- * Base64 URL conversion methods
+ * Base64 URL conversion methods.
  */
 
 internal fun base64UrlToBase64(base64Url: String): String {

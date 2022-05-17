@@ -49,7 +49,7 @@ data class LoginCaptchaFragmentArgument(
 ) : Parcelable
 
 /**
- * In this screen, the user is asked to confirm he is not a robot
+ * In this screen, the user is asked to confirm he is not a robot.
  */
 class LoginCaptchaFragment @Inject constructor(
         private val assetReader: AssetReader

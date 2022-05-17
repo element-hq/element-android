@@ -21,7 +21,7 @@ import org.matrix.android.sdk.internal.database.model.KnownServerUrlEntity
 import org.matrix.android.sdk.internal.database.model.RawCacheEntity
 
 /**
- * Realm module for global classes
+ * Realm module for global classes.
  */
 @RealmModule(
         library = true,
