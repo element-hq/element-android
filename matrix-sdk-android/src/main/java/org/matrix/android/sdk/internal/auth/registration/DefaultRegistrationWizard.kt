@@ -207,7 +207,7 @@ internal class DefaultRegistrationWizard(
         mutableParams["session"] = safeSession
 
         val params = RegistrationCustomParams(auth = mutableParams)
-        return performRegistrationOtherRequest(params)
+        return performRegistrationOtherRequest(LoginType.CUSTOM, params)
     }
 
     private suspend fun performRegistrationRequest(
@@ -216,17 +216,19 @@ internal class DefaultRegistrationWizard(
             delayMillis: Long = 0
     ): RegistrationResult {
         delay(delayMillis)
-        return register { registerTask.execute(RegisterTask.Params(registrationParams)) }
+        return register(loginType) { registerTask.execute(RegisterTask.Params(registrationParams)) }
     }
 
     private suspend fun performRegistrationOtherRequest(
-            registrationCustomParams: RegistrationCustomParams
+            loginType: LoginType,
+            registrationCustomParams: RegistrationCustomParams,
     ): RegistrationResult {
-        return register { registerCustomTask.execute(RegisterCustomTask.Params(registrationCustomParams)) }
+        return register(loginType) { registerCustomTask.execute(RegisterCustomTask.Params(registrationCustomParams)) }
     }
 
     private suspend fun register(
-            execute: suspend () -> Credentials
+            loginType: LoginType,
+            execute: suspend () -> Credentials,
     ): RegistrationResult {
         val credentials = try {
             execute.invoke()
@@ -241,8 +243,7 @@ internal class DefaultRegistrationWizard(
             }
         }
 
-        val session =
-                sessionCreator.createSession(credentials, pendingSessionData.homeServerConnectionConfig, loginType)
+        val session = sessionCreator.createSession(credentials, pendingSessionData.homeServerConnectionConfig, loginType)
         return RegistrationResult.Success(session)
     }
 
