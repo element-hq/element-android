@@ -42,7 +42,7 @@ import im.vector.app.features.login.ReAuthHelper
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
 import im.vector.app.features.onboarding.StartAuthenticationFlowUseCase.StartAuthenticationResult
-import im.vector.app.features.onboarding.ftueauth.MatrixOrgMissingRegistrationStagesComparator
+import im.vector.app.features.onboarding.ftueauth.MatrixOrgRegistrationStagesComparator
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
@@ -293,7 +293,7 @@ class OnboardingViewModel @AssistedInject constructor(
         withState { state ->
             val orderedResult = when {
                 state.hasSelectedMatrixOrg() && vectorFeatures.isOnboardingCombinedRegisterEnabled() -> flowResult.copy(
-                        missingStages = flowResult.missingStages.sortedWith(MatrixOrgMissingRegistrationStagesComparator())
+                        missingStages = flowResult.missingStages.sortedWith(MatrixOrgRegistrationStagesComparator())
                 )
                 else                                                                                 -> flowResult
             }
