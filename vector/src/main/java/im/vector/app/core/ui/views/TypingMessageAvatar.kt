@@ -37,7 +37,7 @@ class TypingMessageAvatar @JvmOverloads constructor(
         const val OVERLAP_FACT0R = -3 // =~ 30% to left
     }
 
-    private val typingAvatarSize by lazy {
+    private val typingAvatarSize by lazy(LazyThreadSafetyMode.NONE) {
         context.resources.getDimension(R.dimen.typing_avatar_size).toInt()
     }
 
