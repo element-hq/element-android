@@ -20,8 +20,8 @@ import org.matrix.android.sdk.api.auth.registration.Stage
 
 class MatrixOrgRegistrationStagesComparator : Comparator<Stage> {
 
-    override fun compare(a: Stage?, b: Stage?): Int {
-        return (a?.toPriority() ?: 0).compareTo(b?.toPriority() ?: 0)
+    override fun compare(a: Stage, b: Stage): Int {
+        return a.toPriority().compareTo(b.toPriority())
     }
 
     private fun Stage.toPriority() = when (this) {
