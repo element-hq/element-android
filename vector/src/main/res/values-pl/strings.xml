@@ -216,9 +216,7 @@
     <string name="settings_new_password">Nowe hasło</string>
     <string name="settings_fail_to_update_password">Nie udało się zmienić hasła</string>
     <string name="settings_password_updated">Twoje hasło zostało zmienione</string>
-    <string name="settings_unignore_user">Pokazywać wszystkie wiadomości od %s\?
-\n
-\nZauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to trochę potrwać.</string>
+    <string name="settings_unignore_user">Pokazywać wszystkie wiadomości od %s\?</string>
     <string name="settings_select_country">Wybierz kraj</string>
     <string name="media_saving_period_3_days">3 dni</string>
     <string name="media_saving_period_1_week">1 tydzień</string>
@@ -1523,9 +1521,7 @@
     <string name="room_participants_remove_title">Wykop użytkownika</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Czy na pewno anulować zaproszenie dla tego użytkownika\?</string>
     <string name="room_participants_action_cancel_invite_title">Anuluj zaproszenie</string>
-    <string name="room_participants_action_unignore_prompt_msg">Zaprzestanie ignorowania użytkownika spowoduje ponowne wyświetlanie wszystkich jego wiadomości.
-\n
-\nAplikacja uruchomi się ponownie aby zsynchronizować wiadomości, może to potrwać kilka chwil.</string>
+    <string name="room_participants_action_unignore_prompt_msg">Zaprzestanie ignorowania użytkownika spowoduje ponowne wyświetlanie wszystkich jego wiadomości.</string>
     <string name="room_participants_action_unignore_title">Przestań ignorować użytkownika</string>
     <string name="room_participants_action_ignore_prompt_msg">Zignorowanie tego użytkownika usunie wszystkie jego wiadomości z pokojów, które współdzielicie.
 \n
@@ -2429,7 +2425,7 @@
     <string name="threads_notice_migration_title">Wątki zbliżają się do wersji beta 🎉</string>
     <string name="search_thread_from_a_thread">Z wątku</string>
     <string name="thread_list_empty_notice">Wskazówka: naciśnij i przytrzymaj wiadomość i użyj „%s”.</string>
-    <string name="thread_list_empty_subtitle">Dzięki wątkom Twoje rozmowy są aktualne i łatwe do śledzenia.</string>
+    <string name="thread_list_empty_subtitle">Dzięki wątkom Twoje rozmowy są zorganizowane i łatwe do śledzenia.</string>
     <string name="thread_list_empty_title">Organizuj dyskusje za pomocą wątków</string>
     <string name="thread_list_modal_my_threads_subtitle">Pokazuje wszystkie wątki, w których brałeś udział</string>
     <string name="thread_list_modal_all_threads_subtitle">Pokazuje wszystkie wątki z bieżącego pokoju</string>
@@ -2565,4 +2561,29 @@
     <string name="threads_beta_enable_notice_title">Wątki (Beta)</string>
     <string name="action_learn_more">Dowiedz się więcej</string>
     <string name="action_try_it_out">Wypróbuj</string>
+    <string name="initial_sync_request_content">${app_name} musi wykonać czyszczenie pamięci podręcznej, aby była aktualna, z następującego powodu:
+\n%s
+\n
+\nPamiętaj, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to zająć trochę czasu.</string>
+    <string name="screen_sharing_notification_title">Udostępnianie ekranu ${app_name}</string>
+    <string name="a11y_audio_playback_duration">%1$d minut %2$d sekund</string>
+    <string name="ftue_auth_carousel_workplace_body">${app_name} świetnie sprawdza się również w miejscu pracy. Cieszy się zaufaniem najbezpieczniejszych organizacji na świecie.</string>
+    <string name="screen_sharing_notification_description">Trwa udostępnianie ekranu</string>
+    <string name="location_share_live_started">Wczytuję lokalizację na żywo…</string>
+    <string name="location_share_live_select_duration_option_3">8 godzin</string>
+    <string name="location_share_live_select_duration_option_2">1 godzinę</string>
+    <string name="location_share_live_select_duration_option_1">15 minut</string>
+    <string name="location_share_live_select_duration_title">Udostępnij swoją lokalizację na żywo przez</string>
+    <string name="audio_message_file_size">(%1$s)</string>
+    <string name="audio_message_reply_content">%1$s (%2$s)</string>
+    <string name="error_audio_message_unable_to_play">Nie można odtworzyć %1$s</string>
+    <string name="a11y_pause_audio_message">Wstrzymaj %1$s</string>
+    <string name="a11y_play_audio_message">Odtwórz %1$s</string>
+    <string name="a11y_audio_message_item">%1$s, %2$s, %3$s</string>
+    <string name="sent_live_location">Udostępnił swoją lokalizację na żywo</string>
+    <string name="send_feedback_threads_info">Wątki są w toku produkcyjnym i mają nowe, ekscytujące nadchodzące funkcje, takie jak ulepszone powiadomienia. Chętnie poznamy Twoją opinię!</string>
+    <string name="call_stop_screen_sharing">Zatrzymaj udostępnianie ekranu</string>
+    <string name="call_start_screen_sharing">Udostępnij ekran</string>
+    <string name="initial_sync_request_reason_unignored_users">- Niektórzy użytkownicy przestali być ignorowani</string>
+    <string name="initial_sync_request_title">Początkowe żądanie synchronizacji</string>
 </resources>

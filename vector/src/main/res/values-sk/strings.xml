@@ -368,9 +368,7 @@
     <string name="settings_new_password">Nové heslo</string>
     <string name="settings_fail_to_update_password">Nepodarilo sa zmeniť heslo</string>
     <string name="settings_password_updated">Vaše heslo bolo aktualizované</string>
-    <string name="settings_unignore_user">Zobraziť všetky správy od %s\?
-\n
-\nUpozorňujeme, že táto akcia spôsobí reštart aplikácie a môže chvíľu trvať.</string>
+    <string name="settings_unignore_user">Zobraziť všetky správy od %s\?</string>
     <string name="settings_select_country">Vyberte si krajinu</string>
     <string name="media_saving_period_3_days">3 dni</string>
     <string name="media_saving_period_1_week">1 týždeň</string>
@@ -751,9 +749,7 @@
 \n
 \nTúto akciu môžete kedykoľvek zmeniť späť vo všeobecných nastaveniach.</string>
     <string name="room_participants_action_unignore_title">Neignorovať používateľa</string>
-    <string name="room_participants_action_unignore_prompt_msg">Zrušením ignorovania tohto používateľa sa opäť zobrazia všetky správy od neho.
-\n
-\nUpozorňujeme, že táto akcia spôsobí reštart aplikácie a môže chvíľu trvať.</string>
+    <string name="room_participants_action_unignore_prompt_msg">Zrušením ignorovania tohto používateľa sa opäť zobrazia všetky správy od neho.</string>
     <string name="room_participants_action_cancel_invite_title">Zrušiť pozvanie</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Ste si istí, že chcete zrušiť pozvanie tohoto používateľa\?</string>
     <string name="room_participants_remove_title">Vykázať používateľa</string>
@@ -2534,4 +2530,14 @@
     <string name="threads_beta_enable_notice_title">Vlákna Beta</string>
     <string name="action_learn_more">Zistiť viac</string>
     <string name="action_try_it_out">Vyskúšajte si to</string>
+    <string name="screen_sharing_notification_description">Prebieha zdieľanie obrazovky</string>
+    <string name="screen_sharing_notification_title">Zdieľanie obrazovky aplikácie ${app_name}</string>
+    <string name="call_stop_screen_sharing">Zastaviť zdieľanie obrazovky</string>
+    <string name="call_start_screen_sharing">Zdieľať obrazovku</string>
+    <string name="initial_sync_request_reason_unignored_users">- Pre niektorých používateľov bolo zrušené ignorovanie</string>
+    <string name="initial_sync_request_content">${app_name} potrebuje vyčistiť vyrovnávaciu pamäť, aby bola aktuálna, a to z nasledujúceho dôvodu:
+\n%s
+\n
+\nUpozorňujeme, že táto akcia spôsobí reštart aplikácie a môže chvíľu trvať.</string>
+    <string name="initial_sync_request_title">Úvodná žiadosť o synchronizáciu</string>
 </resources>
