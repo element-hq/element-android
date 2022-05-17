@@ -1025,7 +1025,6 @@
     <string name="location_share_external">Opna með</string>
     <string name="location_share">Deila staðsetningu</string>
     <string name="a11y_static_map_image">Landakort</string>
-    <string name="a11y_location_share_icon">Deila staðsetningu</string>
     <string name="location_activity_title_preview">Staðsetning</string>
     <string name="location_activity_title_static_sharing">Deila staðsetningu</string>
     <string name="poll_type_title">Tegund könnunar</string>

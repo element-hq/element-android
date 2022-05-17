@@ -1566,7 +1566,6 @@
     <string name="sent_location">Zdieľali svoju polohu</string>
     <string name="location_activity_title_static_sharing">Zdieľať polohu</string>
     <string name="location_activity_title_preview">Poloha</string>
-    <string name="a11y_location_share_icon">Zdieľať polohu</string>
     <string name="location_share">Zdieľať polohu</string>
     <string name="location_not_available_dialog_title">${app_name} nemohol získať prístup k vašej polohe</string>
     <string name="location_not_available_dialog_content">${app_name} nemohol získať prístup k vašej polohe. Skúste to prosím neskôr.</string>

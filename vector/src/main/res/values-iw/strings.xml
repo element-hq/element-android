@@ -1861,7 +1861,6 @@
     <string name="notice_room_visibility_shared">כל חברי החדר.</string>
     <string name="notice_room_visibility_joined">כל חברי החדר, מהרגע שבו הצטרפו.</string>
     <string name="a11y_static_map_image">מפה</string>
-    <string name="a11y_location_share_icon">שתף מיקום</string>
     <string name="location_activity_title_preview">מיקום</string>
     <string name="location_activity_title_static_sharing">שתף מיקום</string>
     <string name="closed_poll_option_description">התוצאות נחשפות רק לאחר מסיום הסקר</string>

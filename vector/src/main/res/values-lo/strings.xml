@@ -2374,7 +2374,6 @@
     <string name="a11y_location_share_pin_on_map">ປັກໝຸດຂອງສະຖານທີ່ທີ່ເລືອກຢູ່ໃນແຜນທີ່</string>
     <string name="location_share" tools:ignore="UnusedResources">ແບ່ງປັນສະຖານທີ່</string>
     <string name="a11y_static_map_image">ແຜນທີ່</string>
-    <string name="a11y_location_share_icon" tools:ignore="UnusedResources">ແບ່ງປັນສະຖານທີ່</string>
     <string name="location_activity_title_preview">ສະຖານທີ່</string>
     <string name="location_activity_title_static_sharing">ແບ່ງປັນສະຖານທີ່</string>
     <string name="closed_poll_option_description">ຜົນໄດ້ຮັບຈະຖືກເປີດເຜີຍເມື່ອທ່ານສິ້ນສຸດແບບສຳຫຼວດເທົ່ານັ້ນ</string>

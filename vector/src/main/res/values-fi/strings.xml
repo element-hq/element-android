@@ -1956,7 +1956,6 @@
     </plurals>
     <string name="poll_response_room_list_preview">Ääni annettu</string>
     <string name="a11y_static_map_image">Kartta</string>
-    <string name="a11y_location_share_icon">Jaa sijainti</string>
     <string name="location_activity_title_preview">Sijainti</string>
     <string name="location_activity_title_static_sharing">Jaa sijainti</string>
     <string name="closed_poll_option_title">Suljettu kysely</string>

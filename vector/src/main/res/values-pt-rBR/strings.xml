@@ -2346,7 +2346,6 @@
     <string name="location_not_available_dialog_content">${app_name} não pôde acessar sua localização. Por favor tente de novo mais tarde.</string>
     <string name="location_not_available_dialog_title">${app_name} não pôde acessar sua localização</string>
     <string name="location_share">Compartilhar localização</string>
-    <string name="a11y_location_share_icon">Compartilhar localização</string>
     <string name="location_activity_title_preview">Localização</string>
     <string name="location_activity_title_static_sharing">Compartilhar localização</string>
     <string name="closed_poll_option_description">Resultados são somente revelados quando você termina a sondagem</string>

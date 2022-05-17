@@ -2337,7 +2337,6 @@
     <string name="location_not_available_dialog_content">${app_name} non ha potuto rilevare la tua posizione. Riprova più tardi.</string>
     <string name="location_not_available_dialog_title">${app_name} non ha potuto rilevare la tua posizione</string>
     <string name="location_share">Condividi posizione</string>
-    <string name="a11y_location_share_icon">Condividi posizione</string>
     <string name="location_activity_title_preview">Posizione</string>
     <string name="location_activity_title_static_sharing">Condividi posizione</string>
     <string name="closed_poll_option_description">I risultati verranno rivelati solo quando termini il sondaggio</string>

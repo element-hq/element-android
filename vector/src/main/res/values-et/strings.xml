@@ -2346,7 +2346,6 @@
     <string name="location_not_available_dialog_content">${app_name} ei saanud asukohta tuvastada. Palun proovi hiljem uuesti.</string>
     <string name="location_not_available_dialog_title">${app_name} ei saanud asukohta tuvastada</string>
     <string name="location_share">Jaga asukohta</string>
-    <string name="a11y_location_share_icon">Jaga asukohta</string>
     <string name="location_activity_title_preview">Asukoht</string>
     <string name="location_activity_title_static_sharing">Jaga asukohta</string>
     <string name="closed_poll_option_description">Tulemusi kuvame vaid siis, kui küsitlus on lõppenud</string>

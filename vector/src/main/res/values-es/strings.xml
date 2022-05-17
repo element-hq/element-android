@@ -2390,7 +2390,6 @@
     <string name="a11y_location_share_locate_button">Hacer zoom a ubicación actual</string>
     <string name="a11y_location_share_pin_on_map">Pin de ubicación selecionada en el mapa</string>
     <string name="a11y_static_map_image">Mapa</string>
-    <string name="a11y_location_share_icon" tools:ignore="UnusedResources">Compartir ubicación</string>
     <string name="location_activity_title_preview">Ubicación</string>
     <string name="location_activity_title_static_sharing">Compartir ubicación</string>
     <string name="closed_poll_option_description">Los resultados solo se revelan cuando finalices la encuesta</string>

@@ -2346,7 +2346,6 @@
     <string name="location_not_available_dialog_content">${app_name} kan geen toegang krijgen tot uw locatie. Probeer het later opnieuw.</string>
     <string name="location_not_available_dialog_title">${app_name} heeft geen toegang tot uw locatie</string>
     <string name="location_share">Deel locatie</string>
-    <string name="a11y_location_share_icon">Deel locatie</string>
     <string name="location_activity_title_preview">Locatie</string>
     <string name="location_activity_title_static_sharing">Deel locatie</string>
     <string name="closed_poll_option_description">Resultaten worden pas onthuld als je de poll beëindigt</string>
