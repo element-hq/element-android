@@ -271,7 +271,7 @@ class HomeActivity :
     }
 
     private fun closeGroup() {
-        views.drawerLayout.openDrawer(GravityCompat.START)
+//        views.drawerLayout.openDrawer(GravityCompat.START)
     }
 
     private fun handleShowAnalyticsOptIn() {

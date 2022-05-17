@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home
 
-import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -25,14 +24,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import androidx.core.view.isVisible
-import androidx.core.widget.ImageViewCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.badge.BadgeDrawable
-import com.google.android.material.color.MaterialColors
 import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.RoomGroupingMethod
@@ -158,12 +155,13 @@ class HomeDetailFragment @Inject constructor(
         }
 
         views.backButtonLayout.setOnClickListener {
-            val currentSpace = sharedActionViewModel.space.value
-            val directParent = currentSpace?.spaceParents?.firstOrNull()
-            viewModel.handleSelectSpace(directParent?.roomSummary)
-            sharedActionViewModel.space.value = directParent?.roomSummary
-            sharedActionViewModel.post(HomeActivitySharedAction.OpenGroup(false))
-            onSpaceChange(directParent?.roomSummary)
+            navigateUpOneSpace()
+//            val currentSpace = sharedActionViewModel.space.value
+//            val directParent = currentSpace?.spaceParents?.firstOrNull()
+//            viewModel.handleSelectSpace(directParent?.roomSummary)
+//            sharedActionViewModel.space.value = directParent?.roomSummary
+//            sharedActionViewModel.post(HomeActivitySharedAction.OpenGroup(false))
+//            onSpaceChange(directParent?.roomSummary)
         }
 
         views.dimView.setOnClickListener {
@@ -186,10 +184,6 @@ class HomeDetailFragment @Inject constructor(
 
         viewModel.onEach(HomeDetailViewState::showDialPadTab) { showDialPadTab ->
             updateTabVisibilitySafely(R.id.bottom_action_dial_pad, showDialPadTab)
-        }
-
-        views.groupToolbarNavigateUp.setOnClickListener {
-            navigateUpOneSpace()
         }
 
         viewModel.observeViewEvents { viewEvent ->
