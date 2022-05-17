@@ -35,7 +35,7 @@ internal fun LiveLocationShareAggregatedSummaryEntity.Companion.where(
 }
 
 internal fun LiveLocationShareAggregatedSummaryEntity.Companion.whereRoomId(realm: Realm,
-                                                       roomId: String): RealmQuery<LiveLocationShareAggregatedSummaryEntity> {
+                                                                            roomId: String): RealmQuery<LiveLocationShareAggregatedSummaryEntity> {
     return realm.where<LiveLocationShareAggregatedSummaryEntity>()
             .equalTo(TimelineEventEntityFields.ROOM_ID, roomId)
 }
@@ -78,4 +78,6 @@ internal fun LiveLocationShareAggregatedSummaryEntity.Companion.findRunningLiveL
     return LiveLocationShareAggregatedSummaryEntity
             .whereRoomId(realm, roomId = roomId)
             .equalTo(LiveLocationShareAggregatedSummaryEntityFields.IS_ACTIVE, true)
+            .isNotEmpty(LiveLocationShareAggregatedSummaryEntityFields.USER_ID)
+            .isNotNull(LiveLocationShareAggregatedSummaryEntityFields.LAST_LOCATION_CONTENT)
 }
