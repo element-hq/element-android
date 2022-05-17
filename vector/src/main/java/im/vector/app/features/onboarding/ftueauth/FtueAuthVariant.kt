@@ -44,7 +44,6 @@ import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
 import im.vector.app.features.login.TextInputFormFragmentMode
-import im.vector.app.features.login.isSupported
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingActivity
 import im.vector.app.features.onboarding.OnboardingVariant
@@ -129,9 +128,6 @@ class FtueAuthVariant(
 
     private fun handleOnboardingViewEvents(viewEvents: OnboardingViewEvents) {
         when (viewEvents) {
-            is OnboardingViewEvents.RegistrationFlowResult                     -> {
-                onRegistrationFlow(viewEvents)
-            }
             is OnboardingViewEvents.OutdatedHomeserver                         -> {
                 MaterialAlertDialogBuilder(activity)
                         .setTitle(R.string.login_error_outdated_homeserver_title)
@@ -233,27 +229,18 @@ class FtueAuthVariant(
                 )
             }
             OnboardingViewEvents.OnHomeserverEdited                            -> activity.popBackstack()
-        }
-    }
-
-    private fun onRegistrationFlow(viewEvents: OnboardingViewEvents.RegistrationFlowResult) {
-        when {
-            registrationShouldFallback(viewEvents)               -> displayFallbackWebDialog()
-            viewEvents.isRegistrationStarted                     -> handleRegistrationNavigation(viewEvents.flowResult.missingStages)
-            vectorFeatures.isOnboardingCombinedRegisterEnabled() -> openStartCombinedRegister()
-            else                                                 -> openAuthLoginFragmentWithTag(FRAGMENT_REGISTRATION_STAGE_TAG)
+            OnboardingViewEvents.DisplayRegistrationFallback                   -> displayFallbackWebDialog()
+            is OnboardingViewEvents.DisplayRegistrationStage                   -> doStage(viewEvents.stage)
+            OnboardingViewEvents.DisplayStartRegistration                      -> when {
+                vectorFeatures.isOnboardingCombinedRegisterEnabled() -> openStartCombinedRegister()
+                else                                                 -> openAuthLoginFragmentWithTag(FRAGMENT_REGISTRATION_STAGE_TAG)
+            }
         }
     }
 
     private fun openStartCombinedRegister() {
         addRegistrationStageFragmentToBackstack(FtueAuthCombinedRegisterFragment::class.java)
     }
-
-    private fun registrationShouldFallback(registrationFlowResult: OnboardingViewEvents.RegistrationFlowResult) =
-            isForceLoginFallbackEnabled || registrationFlowResult.containsUnsupportedRegistrationFlow()
-
-    private fun OnboardingViewEvents.RegistrationFlowResult.containsUnsupportedRegistrationFlow() =
-            flowResult.missingStages.any { !it.isSupported() }
 
     private fun displayFallbackWebDialog() {
         MaterialAlertDialogBuilder(activity)
@@ -362,23 +349,6 @@ class FtueAuthVariant(
         intent?.data
                 ?.let { tryOrNull { it.getQueryParameter("loginToken") } }
                 ?.let { onboardingViewModel.handle(OnboardingAction.LoginWithToken(it)) }
-    }
-
-    private fun handleRegistrationNavigation(remainingStages: List<Stage>) {
-        // Complete all mandatory stages first
-        val mandatoryStage = remainingStages.firstOrNull { it.mandatory }
-
-        if (mandatoryStage != null) {
-            doStage(mandatoryStage)
-        } else {
-            // Consider optional stages
-            val optionalStage = remainingStages.firstOrNull { !it.mandatory && it !is Stage.Dummy }
-            if (optionalStage == null) {
-                // Should not happen...
-            } else {
-                doStage(optionalStage)
-            }
-        }
     }
 
     private fun doStage(stage: Stage) {
