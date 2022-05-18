@@ -112,13 +112,24 @@ class FtueAuthCombinedLoginFragment @Inject constructor(
 
     private fun setupUi(state: OnboardingViewState) {
         when (state.selectedHomeserver.preferredLoginMode) {
-            is LoginMode.SsoAndPassword -> renderSsoProviders(state.deviceId, state.selectedHomeserver.preferredLoginMode.ssoIdentityProviders)
-            else                        -> hideSsoProviders()
+            is LoginMode.SsoAndPassword -> {
+                showUsernamePassword()
+                renderSsoProviders(state.deviceId, state.selectedHomeserver.preferredLoginMode.ssoIdentityProviders)
+            }
+            is LoginMode.Sso            -> {
+                hideUsernamePassword()
+                renderSsoProviders(state.deviceId, state.selectedHomeserver.preferredLoginMode.ssoIdentityProviders)
+            }
+            else                        -> {
+                showUsernamePassword()
+                hideSsoProviders()
+            }
         }
     }
 
     private fun renderSsoProviders(deviceId: String?, ssoProviders: List<SsoIdentityProvider>?) {
         views.ssoGroup.isVisible = ssoProviders?.isNotEmpty() == true
+        views.ssoButtonsHeader.isVisible = views.ssoGroup.isVisible && views.loginEntryGroup.isVisible
         views.ssoButtons.render(ssoProviders, SocialLoginButtonsView.Mode.MODE_CONTINUE) { id ->
             viewModel.getSsoUrl(
                     redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
@@ -131,6 +142,14 @@ class FtueAuthCombinedLoginFragment @Inject constructor(
     private fun hideSsoProviders() {
         views.ssoGroup.isVisible = false
         views.ssoButtons.ssoIdentityProviders = null
+    }
+
+    private fun hideUsernamePassword() {
+        views.loginEntryGroup.isVisible = false
+    }
+
+    private fun showUsernamePassword() {
+        views.loginEntryGroup.isVisible = true
     }
 
     private fun setupAutoFill() {
