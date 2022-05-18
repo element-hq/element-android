@@ -61,7 +61,7 @@ interface SpaceService {
      * Get's information of a space by querying the server.
      * @param suggestedOnly If true, return only child events and rooms where the m.space.child event has suggested: true.
      * @param limit a client-defined limit to the maximum number of rooms to return per page. Must be a non-negative integer.
-     * @param from: Optional. Pagination token given to retrieve the next set of rooms. Note that if a pagination token is provided,
+     * @param from Optional. Pagination token given to retrieve the next set of rooms. Note that if a pagination token is provided,
      * then the parameters given for suggested_only and max_depth must be the same.
      */
     suspend fun querySpaceChildren(spaceId: String,

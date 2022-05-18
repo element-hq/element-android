@@ -90,7 +90,7 @@ interface PermalinkService {
      * Creates a HTML or Markdown mention span template. Can be used to replace a mention with a permalink to mentioned user.
      * Ex: "<a href=\"https://matrix.to/#/%1\$s\">%2\$s</a>" or "[%2\$s](https://matrix.to/#/%1\$s)"
      *
-     * @param type: type of template to create
+     * @param type type of template to create
      * @param forceMatrixTo whether we should force using matrix.to base URL
      *
      * @return the created template
