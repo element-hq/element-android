@@ -22,7 +22,6 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationShareAggregatedSummary
 import javax.inject.Inject
 
-// TODO add unit tests
 class UserLiveLocationViewStateMapper @Inject constructor(
         private val locationPinProvider: LocationPinProvider,
 ) {
@@ -44,7 +43,8 @@ class UserLiveLocationViewStateMapper @Inject constructor(
                             val viewState = UserLiveLocationViewState(
                                     userId = userId,
                                     pinDrawable = pinDrawable,
-                                    locationData = locationData
+                                    locationData = locationData,
+                                    endOfLiveTimestampMillis = liveLocationShareAggregatedSummary.endOfLiveTimestampMillis
                             )
                             continuation.resume(viewState) {
                                 // do nothing on cancellation

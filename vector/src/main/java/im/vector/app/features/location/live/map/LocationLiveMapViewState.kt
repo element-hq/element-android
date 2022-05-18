@@ -32,5 +32,6 @@ data class LocationLiveMapViewState(
 data class UserLiveLocationViewState(
         val userId: String,
         val pinDrawable: Drawable,
-        val locationData: LocationData
+        val locationData: LocationData,
+        val endOfLiveTimestampMillis: Long?
 )
