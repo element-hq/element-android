@@ -188,6 +188,7 @@ ext.groups = [
                         'org.jvnet.staxex',
                         'org.maplibre.gl',
                         'org.matrix.android',
+                        'org.matrix.rustcomponents',
                         'org.mockito',
                         'org.mongodb',
                         'org.objenesis',

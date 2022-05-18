@@ -140,7 +140,7 @@ dependencies {
     implementation libs.jetbrains.coroutinesCore
     implementation libs.jetbrains.coroutinesAndroid
 
-    implementation 'org.matrix.rustcomponents:crypto-android:0.1.1-SNAPSHOT'
+    implementation 'org.matrix.rustcomponents:crypto-android:0.1.0'
     //implementation files('libs/crypto-android-release.aar')
 
 //    implementation(name: 'crypto-android-release', ext: 'aar')
