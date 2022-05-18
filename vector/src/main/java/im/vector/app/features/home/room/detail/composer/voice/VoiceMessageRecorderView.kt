@@ -225,7 +225,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     override fun onUpdate(state: AudioMessagePlaybackTracker.Listener.State) {
         when (state) {
             is AudioMessagePlaybackTracker.Listener.State.Recording -> {
-                voiceMessageViews.renderRecordingWaveform(state.amplitudeList.toTypedArray())
+                voiceMessageViews.renderRecordingWaveform(state.amplitudeList.toList())
             }
             is AudioMessagePlaybackTracker.Listener.State.Playing   -> {
                 voiceMessageViews.renderPlaying(state)

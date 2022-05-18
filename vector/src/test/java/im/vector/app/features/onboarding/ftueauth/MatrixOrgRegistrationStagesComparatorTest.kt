@@ -25,7 +25,7 @@ import im.vector.app.test.fixtures.anOtherStage
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
 
-class FtueMissingRegistrationStagesComparatorTest {
+class MatrixOrgRegistrationStagesComparatorTest {
 
     @Test
     fun `when ordering stages, then prioritizes email`() {
@@ -38,7 +38,7 @@ class FtueMissingRegistrationStagesComparatorTest {
                 aTermsStage()
         )
 
-        val result = input.sortedWith(FtueMissingRegistrationStagesComparator())
+        val result = input.sortedWith(MatrixOrgRegistrationStagesComparator())
 
         result shouldBeEqualTo listOf(
                 anEmailStage(),
