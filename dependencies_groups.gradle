@@ -141,7 +141,6 @@ ext.groups = [
                         'jline',
                         'jp.wasabeef',
                         'junit',
-                        'me.leolin',
                         'me.saket',
                         'net.bytebuddy',
                         'net.java',
