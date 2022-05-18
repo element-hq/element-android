@@ -96,10 +96,9 @@ internal class MXOlmDevice @Inject constructor(
     // So, store these message indexes per timeline id.
     //
     // The first level keys are timeline ids.
-    // The second level keys are strings of form "<senderKey>|<session_id>|<message_index>"
-    private val inboundGroupSessionMessageIndexes: MutableMap<String, MutableSet<String>> = HashMap()
-
-    private val replayAttackMap: MutableMap<String, String> = HashMap()
+    // The second level values is a Map that represents:
+    // "<senderKey>|<session_id>|<roomId>|<message_index>" --> eventId
+    private val inboundGroupSessionMessageIndexes: MutableMap<String, MutableMap<String, String>> = HashMap()
 
     init {
         // Retrieve the account from the store
@@ -798,15 +797,14 @@ internal class MXOlmDevice @Inject constructor(
         Timber.tag(loggerTag.value).d("## decryptGroupMessage() mIndex: ${decryptResult.mIndex}")
 
         if (timeline?.isNotBlank() == true) {
-            val timelineSet = inboundGroupSessionMessageIndexes.getOrPut(timeline) { mutableSetOf() }
-            if (timelineSet.contains(messageIndexKey) && messageIndexKey.alreadyUsed(eventId)) {
+            val replayAttackMap = inboundGroupSessionMessageIndexes.getOrPut(timeline) { mutableMapOf() }
+            if (replayAttackMap.contains(messageIndexKey) && replayAttackMap[messageIndexKey] != eventId) {
                 val reason = String.format(MXCryptoError.DUPLICATE_MESSAGE_INDEX_REASON, decryptResult.mIndex)
                 Timber.tag(loggerTag.value).e("## decryptGroupMessage() timelineId=$timeline: $reason")
                 throw MXCryptoError.Base(MXCryptoError.ErrorType.DUPLICATED_MESSAGE_INDEX, reason)
             }
-            timelineSet.add(messageIndexKey)
+            replayAttackMap[messageIndexKey] = eventId
         }
-        replayAttackMap[messageIndexKey] = eventId
         inboundGroupSessionStore.storeInBoundGroupSession(sessionHolder, sessionId, senderKey)
         val payload = try {
             val adapter = MoshiProvider.providesMoshi().adapter<JsonDict>(JSON_DICT_PARAMETERIZED_TYPE)
@@ -823,13 +821,6 @@ internal class MXOlmDevice @Inject constructor(
                 senderKey,
                 wrapper.forwardingCurve25519KeyChain
         )
-    }
-
-    /**
-     * Determines whether or not the messageKey has already been used to decrypt another eventId
-     */
-    private fun String.alreadyUsed(eventId: String): Boolean {
-        return replayAttackMap[this] != null && replayAttackMap[this] != eventId
     }
 
     /**

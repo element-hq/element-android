@@ -20,6 +20,7 @@ import androidx.test.filters.LargeTest
 import org.amshove.kluent.internal.assertFailsWith
 import org.junit.Assert
 import org.junit.Assert.assertEquals
+import org.junit.Assert.fail
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -101,8 +102,12 @@ class ReplayAttackTest : InstrumentedTest {
             val timelineId = "timelineId"
             // Lets decrypt the original event
             aliceSession.cryptoService().decryptEvent(sentEvents[0].root, timelineId)
-            // Lets try to decrypt the same event
-            aliceSession.cryptoService().decryptEvent(sentEvents[0].root, timelineId)
+            try {
+                // Lets try to decrypt the same event
+                aliceSession.cryptoService().decryptEvent(sentEvents[0].root, timelineId)
+            } catch (ex: Throwable) {
+                fail("Shouldn't throw a decryption error for same event")
+            }
         }
         cryptoTestData.cleanUp(testHelper)
     }
