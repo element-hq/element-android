@@ -14,15 +14,10 @@
  * limitations under the License.
  */
 
-package im.vector.app.test.fixtures
+package im.vector.app.core.resources
 
-import org.matrix.android.sdk.api.failure.Failure
-import org.matrix.android.sdk.api.failure.MatrixError
-import java.net.UnknownHostException
-import javax.net.ssl.HttpsURLConnection
+import android.os.Build
 
-fun a401ServerError() = Failure.ServerError(
-        MatrixError(MatrixError.M_UNAUTHORIZED, ""), HttpsURLConnection.HTTP_UNAUTHORIZED
+data class BuildMeta(
+        val sdkInt: Int = Build.VERSION.SDK_INT
 )
-
-fun aHomeserverUnavailableError() = Failure.NetworkConnection(UnknownHostException())

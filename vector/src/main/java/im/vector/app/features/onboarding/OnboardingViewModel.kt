@@ -26,9 +26,12 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.configureAndStart
+import im.vector.app.core.extensions.inferNoConnectivity
 import im.vector.app.core.extensions.vectorStore
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.utils.ensureProtocol
 import im.vector.app.core.utils.ensureTrailingSlash
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.VectorOverrides
@@ -53,6 +56,7 @@ import org.matrix.android.sdk.api.auth.login.LoginWizard
 import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.auth.registration.Stage
+import org.matrix.android.sdk.api.failure.isHomeserverUnavailable
 import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
 import java.util.UUID
@@ -76,7 +80,8 @@ class OnboardingViewModel @AssistedInject constructor(
         private val registrationActionHandler: RegistrationActionHandler,
         private val directLoginUseCase: DirectLoginUseCase,
         private val startAuthenticationFlowUseCase: StartAuthenticationFlowUseCase,
-        private val vectorOverrides: VectorOverrides
+        private val vectorOverrides: VectorOverrides,
+        private val buildMeta: BuildMeta
 ) : VectorViewModel<OnboardingViewState, OnboardingAction, OnboardingViewEvents>(initialState) {
 
     @AssistedFactory
@@ -134,8 +139,7 @@ class OnboardingViewModel @AssistedInject constructor(
 
     override fun handle(action: OnboardingAction) {
         when (action) {
-            is OnboardingAction.OnGetStarted               -> handleSplashAction(action.resetLoginConfig, action.onboardingFlow)
-            is OnboardingAction.OnIAlreadyHaveAnAccount    -> handleSplashAction(action.resetLoginConfig, action.onboardingFlow)
+            is OnboardingAction.SplashAction               -> handleSplashAction(action)
             is OnboardingAction.UpdateUseCase              -> handleUpdateUseCase(action)
             OnboardingAction.ResetUseCase                  -> resetUseCase()
             is OnboardingAction.UpdateServerType           -> handleUpdateServerType(action)
@@ -175,26 +179,9 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleSplashAction(resetConfig: Boolean, onboardingFlow: OnboardingFlow) {
-        if (resetConfig) {
-            loginConfig = null
-        }
-        setState { copy(onboardingFlow = onboardingFlow) }
-
-        return when (val config = loginConfig.toHomeserverConfig()) {
-            null -> continueToPageAfterSplash(onboardingFlow)
-            else -> startAuthenticationFlow(trigger = null, config, ServerType.Other)
-        }
-    }
-
-    private fun LoginConfig?.toHomeserverConfig(): HomeServerConnectionConfig? {
-        return this?.homeServerUrl?.takeIf { it.isNotEmpty() }?.let { url ->
-            homeServerConnectionConfigFactory.create(url).also {
-                if (it == null) {
-                    Timber.w("Url from config url was invalid: $url")
-                }
-            }
-        }
+    private fun handleSplashAction(action: OnboardingAction.SplashAction) {
+        setState { copy(onboardingFlow = action.onboardingFlow) }
+        continueToPageAfterSplash(action.onboardingFlow)
     }
 
     private fun continueToPageAfterSplash(onboardingFlow: OnboardingFlow) {
@@ -208,10 +195,21 @@ class OnboardingViewModel @AssistedInject constructor(
                         }
                 )
             }
-            OnboardingFlow.SignIn       -> if (vectorFeatures.isOnboardingCombinedLoginEnabled()) {
-                handle(OnboardingAction.HomeServerChange.SelectHomeServer(defaultHomeserverUrl))
-            } else _viewEvents.post(OnboardingViewEvents.OpenServerSelection)
-            OnboardingFlow.SignInSignUp -> _viewEvents.post(OnboardingViewEvents.OpenServerSelection)
+            OnboardingFlow.SignIn       -> when {
+                vectorFeatures.isOnboardingCombinedLoginEnabled() -> {
+                    handle(OnboardingAction.HomeServerChange.SelectHomeServer(deeplinkOrDefaultHomeserverUrl()))
+                }
+                else                                              -> openServerSelectionOrDeeplinkToOther()
+            }
+
+            OnboardingFlow.SignInSignUp -> openServerSelectionOrDeeplinkToOther()
+        }
+    }
+
+    private fun openServerSelectionOrDeeplinkToOther() {
+        when (loginConfig) {
+            null -> _viewEvents.post(OnboardingViewEvents.OpenServerSelection)
+            else -> handleHomeserverChange(OnboardingAction.HomeServerChange.SelectHomeServer(deeplinkOrDefaultHomeserverUrl()), ServerType.Other)
         }
     }
 
@@ -222,7 +220,7 @@ class OnboardingViewModel @AssistedInject constructor(
             is OnboardingAction.HomeServerChange.SelectHomeServer -> {
                 currentHomeServerConnectionConfig
                         ?.let { it.copy(allowedFingerprints = it.allowedFingerprints + action.fingerprint) }
-                        ?.let { startAuthenticationFlow(finalLastAction, it) }
+                        ?.let { startAuthenticationFlow(finalLastAction, it, serverTypeOverride = null) }
             }
             is AuthenticateAction.LoginDirect                     ->
                 handleDirectLogin(
@@ -368,6 +366,7 @@ class OnboardingViewModel @AssistedInject constructor(
                     )
                 }
             }
+            OnboardingAction.ResetDeeplinkConfig        -> loginConfig = null
         }
     }
 
@@ -388,10 +387,12 @@ class OnboardingViewModel @AssistedInject constructor(
     private fun handleUpdateUseCase(action: OnboardingAction.UpdateUseCase) {
         setState { copy(useCase = action.useCase) }
         when (vectorFeatures.isOnboardingCombinedRegisterEnabled()) {
-            true  -> handle(OnboardingAction.HomeServerChange.SelectHomeServer(defaultHomeserverUrl))
+            true  -> handle(OnboardingAction.HomeServerChange.SelectHomeServer(deeplinkOrDefaultHomeserverUrl()))
             false -> _viewEvents.post(OnboardingViewEvents.OpenServerSelection)
         }
     }
+
+    private fun deeplinkOrDefaultHomeserverUrl() = loginConfig?.homeServerUrl?.ensureProtocol() ?: defaultHomeserverUrl
 
     private fun resetUseCase() {
         setState { copy(useCase = null) }
@@ -416,7 +417,6 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private fun handleInitWith(action: OnboardingAction.InitWith) {
         loginConfig = action.loginConfig
-
         // If there is a pending email validation continue on this step
         try {
             if (registrationWizard.isRegistrationStarted) {
@@ -605,20 +605,20 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleHomeserverChange(action: OnboardingAction.HomeServerChange) {
+    private fun handleHomeserverChange(action: OnboardingAction.HomeServerChange, serverTypeOverride: ServerType? = null) {
         val homeServerConnectionConfig = homeServerConnectionConfigFactory.create(action.homeServerUrl)
         if (homeServerConnectionConfig == null) {
             // This is invalid
             _viewEvents.post(OnboardingViewEvents.Failure(Throwable("Unable to create a HomeServerConnectionConfig")))
         } else {
-            startAuthenticationFlow(action, homeServerConnectionConfig)
+            startAuthenticationFlow(action, homeServerConnectionConfig, serverTypeOverride)
         }
     }
 
     private fun startAuthenticationFlow(
-            trigger: OnboardingAction?,
+            trigger: OnboardingAction.HomeServerChange,
             homeServerConnectionConfig: HomeServerConnectionConfig,
-            serverTypeOverride: ServerType? = null
+            serverTypeOverride: ServerType?
     ) {
         currentHomeServerConnectionConfig = homeServerConnectionConfig
 
@@ -626,14 +626,36 @@ class OnboardingViewModel @AssistedInject constructor(
             setState { copy(isLoading = true) }
             runCatching { startAuthenticationFlowUseCase.execute(homeServerConnectionConfig) }.fold(
                     onSuccess = { onAuthenticationStartedSuccess(trigger, homeServerConnectionConfig, it, serverTypeOverride) },
-                    onFailure = { _viewEvents.post(OnboardingViewEvents.Failure(it)) }
+                    onFailure = { onAuthenticationStartError(it, trigger) }
             )
             setState { copy(isLoading = false) }
         }
     }
 
+    private fun onAuthenticationStartError(it: Throwable, trigger: OnboardingAction.HomeServerChange) {
+        when {
+            it.isHomeserverUnavailable() && applicationContext.inferNoConnectivity(buildMeta) -> _viewEvents.post(
+                    OnboardingViewEvents.Failure(it)
+            )
+            deeplinkUrlIsUnavailable(it, trigger)                                             -> _viewEvents.post(
+                    OnboardingViewEvents.DeeplinkAuthenticationFailure(
+                            retryAction = (trigger as OnboardingAction.HomeServerChange.SelectHomeServer).resetToDefaultUrl()
+                    )
+            )
+            else                                                                              -> _viewEvents.post(
+                    OnboardingViewEvents.Failure(it)
+            )
+        }
+    }
+
+    private fun deeplinkUrlIsUnavailable(error: Throwable, trigger: OnboardingAction.HomeServerChange) = error.isHomeserverUnavailable() &&
+            loginConfig != null &&
+            trigger is OnboardingAction.HomeServerChange.SelectHomeServer
+
+    private fun OnboardingAction.HomeServerChange.SelectHomeServer.resetToDefaultUrl() = copy(homeServerUrl = defaultHomeserverUrl)
+
     private suspend fun onAuthenticationStartedSuccess(
-            trigger: OnboardingAction?,
+            trigger: OnboardingAction.HomeServerChange,
             config: HomeServerConnectionConfig,
             authResult: StartAuthenticationResult,
             serverTypeOverride: ServerType?
@@ -644,47 +666,51 @@ class OnboardingViewModel @AssistedInject constructor(
         }
 
         when (trigger) {
-            is OnboardingAction.HomeServerChange.EditHomeServer   -> {
-                when (awaitState().onboardingFlow) {
-                    OnboardingFlow.SignUp -> internalRegisterAction(RegisterAction.StartRegistration) {
-                        updateServerSelection(config, serverTypeOverride, authResult)
-                        _viewEvents.post(OnboardingViewEvents.OnHomeserverEdited)
-                    }
-                    OnboardingFlow.SignIn -> {
-                        updateServerSelection(config, serverTypeOverride, authResult)
-                        _viewEvents.post(OnboardingViewEvents.OnHomeserverEdited)
-                    }
-                    else                  -> throw IllegalArgumentException("developer error")
-                }
-            }
             is OnboardingAction.HomeServerChange.SelectHomeServer -> {
-                updateServerSelection(config, serverTypeOverride, authResult)
-                if (authResult.selectedHomeserver.preferredLoginMode.supportsSignModeScreen()) {
-                    when (awaitState().onboardingFlow) {
-                        OnboardingFlow.SignIn -> {
-                            updateSignMode(SignMode.SignIn)
-                            when (vectorFeatures.isOnboardingCombinedLoginEnabled()) {
-                                true  -> _viewEvents.post(OnboardingViewEvents.OpenCombinedLogin)
-                                false -> _viewEvents.post(OnboardingViewEvents.OnSignModeSelected(SignMode.SignIn))
-                            }
-                        }
-                        OnboardingFlow.SignUp -> {
-                            updateSignMode(SignMode.SignUp)
-                            internalRegisterAction(RegisterAction.StartRegistration, ::emitFlowResultViewEvent)
-                        }
-                        OnboardingFlow.SignInSignUp,
-                        null                  -> {
-                            _viewEvents.post(OnboardingViewEvents.OnLoginFlowRetrieved)
-                        }
+                onHomeServerSelected(config, serverTypeOverride, authResult)
+            }
+            is OnboardingAction.HomeServerChange.EditHomeServer   -> {
+                onHomeServerEdited(config, serverTypeOverride, authResult)
+            }
+        }
+    }
+
+    private suspend fun onHomeServerSelected(config: HomeServerConnectionConfig, serverTypeOverride: ServerType?, authResult: StartAuthenticationResult) {
+        updateServerSelection(config, serverTypeOverride, authResult)
+        if (authResult.selectedHomeserver.preferredLoginMode.supportsSignModeScreen()) {
+            when (awaitState().onboardingFlow) {
+                OnboardingFlow.SignIn -> {
+                    updateSignMode(SignMode.SignIn)
+                    when (vectorFeatures.isOnboardingCombinedLoginEnabled()) {
+                        true  -> _viewEvents.post(OnboardingViewEvents.OpenCombinedLogin)
+                        false -> _viewEvents.post(OnboardingViewEvents.OnSignModeSelected(SignMode.SignIn))
                     }
-                } else {
+                }
+                OnboardingFlow.SignUp -> {
+                    updateSignMode(SignMode.SignUp)
+                    internalRegisterAction(RegisterAction.StartRegistration, ::emitFlowResultViewEvent)
+                }
+                OnboardingFlow.SignInSignUp,
+                null                  -> {
                     _viewEvents.post(OnboardingViewEvents.OnLoginFlowRetrieved)
                 }
             }
-            else                                                  -> {
+        } else {
+            _viewEvents.post(OnboardingViewEvents.OnLoginFlowRetrieved)
+        }
+    }
+
+    private suspend fun onHomeServerEdited(config: HomeServerConnectionConfig, serverTypeOverride: ServerType?, authResult: StartAuthenticationResult) {
+        when (awaitState().onboardingFlow) {
+            OnboardingFlow.SignUp -> internalRegisterAction(RegisterAction.StartRegistration) {
                 updateServerSelection(config, serverTypeOverride, authResult)
-                _viewEvents.post(OnboardingViewEvents.OnLoginFlowRetrieved)
+                _viewEvents.post(OnboardingViewEvents.OnHomeserverEdited)
             }
+            OnboardingFlow.SignIn -> {
+                updateServerSelection(config, serverTypeOverride, authResult)
+                _viewEvents.post(OnboardingViewEvents.OnHomeserverEdited)
+            }
+            else                  -> throw IllegalArgumentException("developer error")
         }
     }
 

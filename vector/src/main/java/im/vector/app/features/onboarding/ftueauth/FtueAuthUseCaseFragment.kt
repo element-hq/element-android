@@ -44,7 +44,7 @@ private const val DARK_MODE_ICON_BACKGROUND_ALPHA = 0.30f
 private const val LIGHT_MODE_ICON_BACKGROUND_ALPHA = 0.15f
 
 class FtueAuthUseCaseFragment @Inject constructor(
-        private val themeProvider: ThemeProvider
+        private val themeProvider: ThemeProvider,
 ) : AbstractFtueAuthFragment<FragmentFtueAuthUseCaseBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueAuthUseCaseBinding {
@@ -104,7 +104,7 @@ class FtueAuthUseCaseFragment @Inject constructor(
     private fun createIcon(@ColorRes tint: Int, icon: Int, isLightMode: Boolean): Drawable {
         val context = requireContext()
         val alpha = when (isLightMode) {
-            true  -> LIGHT_MODE_ICON_BACKGROUND_ALPHA
+            true -> LIGHT_MODE_ICON_BACKGROUND_ALPHA
             false -> DARK_MODE_ICON_BACKGROUND_ALPHA
         }
         val iconBackground = context.getResTintedDrawable(R.drawable.bg_feature_icon, tint, alpha = alpha)

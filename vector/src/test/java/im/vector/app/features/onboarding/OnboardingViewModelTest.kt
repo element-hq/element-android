@@ -18,6 +18,8 @@ package im.vector.app.features.onboarding
 
 import android.net.Uri
 import com.airbnb.mvrx.test.MvRxTestRule
+import im.vector.app.R
+import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.ReAuthHelper
 import im.vector.app.features.login.SignMode
@@ -38,6 +40,8 @@ import im.vector.app.test.fakes.FakeUri
 import im.vector.app.test.fakes.FakeUriFilenameResolver
 import im.vector.app.test.fakes.FakeVectorFeatures
 import im.vector.app.test.fakes.FakeVectorOverrides
+import im.vector.app.test.fakes.toTestString
+import im.vector.app.test.fixtures.aBuildMeta
 import im.vector.app.test.fixtures.aHomeServerCapabilities
 import im.vector.app.test.test
 import kotlinx.coroutines.test.runTest
@@ -239,6 +243,27 @@ class OnboardingViewModelTest {
                         { copy(isLoading = false) }
                 )
                 .assertNoEvents()
+                .finish()
+    }
+
+    @Test
+    fun `given unavailable deeplink, when selecting homeserver, then emits failure with default homeserver as retry action`() = runTest {
+        fakeContext.givenHasConnection()
+        fakeHomeServerConnectionConfigFactory.givenConfigFor(A_HOMESERVER_URL, A_HOMESERVER_CONFIG)
+        fakeStartAuthenticationFlowUseCase.givenHomeserverUnavailable(A_HOMESERVER_CONFIG)
+        val test = viewModel.test()
+
+        viewModel.handle(OnboardingAction.InitWith(LoginConfig(A_HOMESERVER_URL, null)))
+        viewModel.handle(OnboardingAction.HomeServerChange.SelectHomeServer(A_HOMESERVER_URL))
+
+        val expectedRetryAction = OnboardingAction.HomeServerChange.SelectHomeServer("${R.string.matrix_org_server_url.toTestString()}/")
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false) }
+                )
+                .assertEvents(OnboardingViewEvents.DeeplinkAuthenticationFailure(expectedRetryAction))
                 .finish()
     }
 
@@ -451,7 +476,8 @@ class OnboardingViewModelTest {
                 fakeRegisterActionHandler.instance,
                 fakeDirectLoginUseCase.instance,
                 fakeStartAuthenticationFlowUseCase.instance,
-                FakeVectorOverrides()
+                FakeVectorOverrides(),
+                aBuildMeta()
         ).also {
             viewModel = it
             initialState = state
