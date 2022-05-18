@@ -57,7 +57,6 @@ abstract class MessageLiveLocationItem : AbsMessageLocationItem<MessageLiveLocat
         holder.locationLiveMessageBanner.stopButton.setOnClickListener {
             attributes.callback?.onTimelineItemAction(RoomDetailAction.StopLiveLocationSharing)
         }
-        // TODO adjust Copyright map placement if needed
     }
 
     private fun buildViewState(

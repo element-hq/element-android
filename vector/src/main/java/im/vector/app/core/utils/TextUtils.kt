@@ -118,7 +118,7 @@ object TextUtils {
 
     private fun appendHours(context: Context, builder: StringBuilder, hours: Int) {
         builder.append(hours)
-        builder.append(context.resources.getQuantityString(R.plurals.time_unit_hour_short, hours))
+        builder.append(context.resources.getString(R.string.time_unit_hour_short))
     }
 
     private fun appendMinutes(context: Context, builder: StringBuilder, minutes: Int) {
