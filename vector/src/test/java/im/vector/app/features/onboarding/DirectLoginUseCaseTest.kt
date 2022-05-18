@@ -27,7 +27,7 @@ import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.should
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
-import org.matrix.android.sdk.api.MatrixPatterns.getDomain
+import org.matrix.android.sdk.api.MatrixPatterns.getServerName
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.WellKnown
 import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
@@ -38,7 +38,7 @@ private val A_WELLKNOWN_FAILED_WITH_CONTENT_RESULT = WellknownResult.FailPrompt(
 private val A_WELLKNOWN_FAILED_WITHOUT_CONTENT_RESULT = WellknownResult.FailPrompt(null, null)
 private val NO_HOMESERVER_CONFIG: HomeServerConnectionConfig? = null
 private val A_FALLBACK_CONFIG: HomeServerConnectionConfig = HomeServerConnectionConfig(
-        homeServerUri = FakeUri("https://${A_LOGIN_OR_REGISTER_ACTION.username.getDomain()}").instance,
+        homeServerUri = FakeUri("https://${A_LOGIN_OR_REGISTER_ACTION.username.getServerName()}").instance,
         homeServerUriBase = FakeUri(A_WELLKNOWN_SUCCESS_RESULT.homeServerUrl).instance,
         identityServerUri = null
 )

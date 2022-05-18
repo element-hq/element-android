@@ -20,7 +20,7 @@ import android.net.Uri
 import dagger.Lazy
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.MatrixPatterns
-import org.matrix.android.sdk.api.MatrixPatterns.getDomain
+import org.matrix.android.sdk.api.MatrixPatterns.getServerName
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
@@ -381,7 +381,7 @@ internal class DefaultAuthenticationService @Inject constructor(
 
         return getWellknownTask.execute(
                 GetWellknownTask.Params(
-                        domain = matrixId.getDomain().substringBeforeLast(":"),
+                        domain = matrixId.getServerName().substringBeforeLast(":"),
                         homeServerConnectionConfig = homeServerConnectionConfig.orWellKnownDefaults()
                 )
         )
