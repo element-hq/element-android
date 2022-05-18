@@ -130,11 +130,13 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
         return if (subtitle.isBlank() && displayMode == RoomListDisplayMode.FILTERED) {
             createCenteredRoomSummaryItem(roomSummary, displayMode, showSelected, unreadCount, onClick, onLongClick)
         } else {
-            createRoomSummaryItem(roomSummary, displayMode, subtitle, latestEventTime, typingMessage,
-                    latestFormattedEvent, showHighlighted, showSelected, unreadCount, onClick, onLongClick)
+            createRoomSummaryItem(
+                    roomSummary, displayMode, subtitle, latestEventTime, typingMessage,
+                    latestFormattedEvent, showHighlighted, showSelected, unreadCount, onClick, onLongClick
+            )
         }
     }
-    
+
     private fun createRoomSummaryItem(
             roomSummary: RoomSummary,
             displayMode: RoomListDisplayMode,
