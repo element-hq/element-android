@@ -35,6 +35,7 @@ import im.vector.app.features.login.SocialLoginButtonsView
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
@@ -96,11 +97,11 @@ class LoginFragmentSignupUsername2 @Inject constructor() : AbstractSSOLoginFragm
             views.loginSocialLoginContainer.isVisible = true
             views.loginSocialLoginButtons.ssoIdentityProviders = state.loginMode.ssoIdentityProviders?.sorted()
             views.loginSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
-                override fun onProviderSelected(id: String?) {
+                override fun onProviderSelected(provider: SsoIdentityProvider?) {
                     loginViewModel.getSsoUrl(
                             redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                             deviceId = state.deviceId,
-                            providerId = id
+                            providerId = provider?.id
                     )
                             ?.let { openInCustomTab(it) }
                 }

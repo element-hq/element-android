@@ -55,6 +55,7 @@ import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.matrixto.OriginOfMatrixTo
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.notifications.NotificationDrawerManager
+import im.vector.app.features.onboarding.AuthenticationDescription
 import im.vector.app.features.permalink.NavigationInterceptor
 import im.vector.app.features.permalink.PermalinkHandler
 import im.vector.app.features.permalink.PermalinkHandler.Companion.MATRIX_TO_CUSTOM_SCHEME_URL_BASE
@@ -90,7 +91,7 @@ import javax.inject.Inject
 @Parcelize
 data class HomeActivityArgs(
         val clearNotification: Boolean,
-        val accountCreation: Boolean,
+        val authenticationDescription: AuthenticationDescription? = null,
         val hasExistingSession: Boolean = false,
         val inviteNotificationRoomId: String? = null
 ) : Parcelable
@@ -269,7 +270,7 @@ class HomeActivity :
         if (isFirstCreation()) {
             handleIntent(intent)
         }
-        homeActivityViewModel.handle(HomeActivityViewActions.ViewStarted)
+        homeActivityViewModel.handle(HomeActivityViewActions.ViewStarted(args?.authenticationDescription))
     }
 
     private fun handleShowAnalyticsOptIn() {
@@ -594,13 +595,13 @@ class HomeActivity :
     companion object {
         fun newIntent(context: Context,
                       clearNotification: Boolean = false,
-                      accountCreation: Boolean = false,
+                      authenticationDescription: AuthenticationDescription? = null,
                       existingSession: Boolean = false,
                       inviteNotificationRoomId: String? = null
         ): Intent {
             val args = HomeActivityArgs(
                     clearNotification = clearNotification,
-                    accountCreation = accountCreation,
+                    authenticationDescription = authenticationDescription,
                     hasExistingSession = existingSession,
                     inviteNotificationRoomId = inviteNotificationRoomId
             )

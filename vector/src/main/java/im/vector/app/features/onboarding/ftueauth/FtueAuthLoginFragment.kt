@@ -45,6 +45,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import org.matrix.android.sdk.api.failure.isInvalidPassword
 import org.matrix.android.sdk.api.failure.isInvalidUsername
 import org.matrix.android.sdk.api.failure.isLoginEmailUnknown
@@ -216,11 +217,11 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
                 views.loginSocialLoginContainer.isVisible = true
                 views.loginSocialLoginButtons.ssoIdentityProviders = state.selectedHomeserver.preferredLoginMode.ssoIdentityProviders?.sorted()
                 views.loginSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
-                    override fun onProviderSelected(id: String?) {
+                    override fun onProviderSelected(provider: SsoIdentityProvider?) {
                         viewModel.getSsoUrl(
                                 redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                                 deviceId = state.deviceId,
-                                providerId = id
+                                provider = provider
                         )
                                 ?.let { openInCustomTab(it) }
                     }

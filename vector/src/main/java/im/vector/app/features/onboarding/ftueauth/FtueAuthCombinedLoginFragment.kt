@@ -130,11 +130,11 @@ class FtueAuthCombinedLoginFragment @Inject constructor(
     private fun renderSsoProviders(deviceId: String?, ssoProviders: List<SsoIdentityProvider>?) {
         views.ssoGroup.isVisible = ssoProviders?.isNotEmpty() == true
         views.ssoButtonsHeader.isVisible = views.ssoGroup.isVisible && views.loginEntryGroup.isVisible
-        views.ssoButtons.render(ssoProviders, SocialLoginButtonsView.Mode.MODE_CONTINUE) { id ->
+        views.ssoButtons.render(ssoProviders, SocialLoginButtonsView.Mode.MODE_CONTINUE) { provider ->
             viewModel.getSsoUrl(
                     redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                     deviceId = deviceId,
-                    providerId = id
+                    provider = provider
             )?.let { openInCustomTab(it) }
         }
     }
