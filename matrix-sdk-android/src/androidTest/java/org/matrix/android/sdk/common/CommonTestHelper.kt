@@ -297,7 +297,7 @@ class CommonTestHelper(context: Context) {
         val session = (registrationResult as RegistrationResult.Success).session
         session.open()
         if (sessionTestParams.withInitialSync) {
-            syncSession(session, 60_000)
+            syncSession(session, 120_000)
         }
         return session
     }
@@ -378,7 +378,10 @@ class CommonTestHelper(context: Context) {
      * @throws InterruptedException
      */
     fun await(latch: CountDownLatch, timeout: Long? = TestConstants.timeOutMillis) {
-        assertTrue(latch.await(timeout ?: TestConstants.timeOutMillis, TimeUnit.MILLISECONDS))
+        assertTrue(
+            "Timed out after " + timeout + "ms waiting for something to happen. See stacktrace for cause.",
+	    latch.await(timeout ?: TestConstants.timeOutMillis, TimeUnit.MILLISECONDS)
+        )
     }
 
     suspend fun retryPeriodicallyWithLatch(latch: CountDownLatch, condition: (() -> Boolean)) {

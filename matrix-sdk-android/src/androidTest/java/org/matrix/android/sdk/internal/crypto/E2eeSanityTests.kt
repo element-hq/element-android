@@ -23,6 +23,7 @@ import org.amshove.kluent.fail
 import org.amshove.kluent.internal.assertEquals
 import org.junit.Assert
 import org.junit.FixMethodOrder
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
@@ -57,6 +58,7 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestHelper
+import org.matrix.android.sdk.common.RetryTestRule
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
 import org.matrix.android.sdk.common.TestMatrixCallback
@@ -66,6 +68,8 @@ import java.util.concurrent.CountDownLatch
 @FixMethodOrder(MethodSorters.JVM)
 @LargeTest
 class E2eeSanityTests : InstrumentedTest {
+
+    @get:Rule val rule = RetryTestRule(3)
 
     /**
      * Simple test that create an e2ee room.

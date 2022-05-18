@@ -26,6 +26,7 @@ import org.amshove.kluent.internal.assertEquals
 import org.junit.Assert
 import org.junit.Assert.assertNull
 import org.junit.FixMethodOrder
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
@@ -43,6 +44,7 @@ import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestHelper
+import org.matrix.android.sdk.common.RetryTestRule
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
 
@@ -50,6 +52,8 @@ import org.matrix.android.sdk.common.TestConstants
 @FixMethodOrder(MethodSorters.JVM)
 @LargeTest
 class KeyShareTests : InstrumentedTest {
+
+    @get:Rule val rule = RetryTestRule(3)
 
     @Test
     fun test_DoNotSelfShareIfNotTrusted() {
