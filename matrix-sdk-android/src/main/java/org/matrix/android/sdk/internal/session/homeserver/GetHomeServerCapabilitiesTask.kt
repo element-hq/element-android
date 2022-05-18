@@ -93,10 +93,14 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
             }
         }.getOrNull()
 
+        // Domain may include a port (eg, matrix.org:8080)
+        // Per https://spec.matrix.org/latest/client-server-api/#well-known-uri we should extract the hostname from the server name
+        // So we take everything before the last : as the domain for the well-known task.
+        // NB: This is not always the same endpoint as capabilities / mediaConfig uses.
         val wellknownResult = runCatching {
             getWellknownTask.execute(
                     GetWellknownTask.Params(
-                            domain = userId.getDomain(),
+                            domain = userId.getDomain().substringBeforeLast(":"),
                             homeServerConnectionConfig = homeServerConnectionConfig
                     )
             )

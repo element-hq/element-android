@@ -381,7 +381,7 @@ internal class DefaultAuthenticationService @Inject constructor(
 
         return getWellknownTask.execute(
                 GetWellknownTask.Params(
-                        domain = matrixId.getDomain(),
+                        domain = matrixId.getDomain().substringBeforeLast(":"),
                         homeServerConnectionConfig = homeServerConnectionConfig.orWellKnownDefaults()
                 )
         )
