@@ -136,10 +136,6 @@ internal class DefaultAuthenticationService @Inject constructor(
      * valid homeserver API url, the url of Element Web, or anything else.
      */
     override suspend fun getLoginFlow(homeServerConnectionConfig: HomeServerConnectionConfig): LoginFlowResult {
-        pendingSessionData = null
-
-        pendingSessionStore.delete()
-
         val result = runCatching {
             getLoginFlowInternal(homeServerConnectionConfig)
         }
