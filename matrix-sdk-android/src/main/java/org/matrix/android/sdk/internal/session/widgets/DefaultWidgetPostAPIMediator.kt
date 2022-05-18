@@ -95,7 +95,7 @@ internal class DefaultWidgetPostAPIMediator @Inject constructor(private val mosh
     /**
      * Send a boolean response.
      *
-     * @param response  the response
+     * @param response the response
      * @param eventData the modular data
      */
     override fun sendBoolResponse(response: Boolean, eventData: JsonDict) {
@@ -106,7 +106,7 @@ internal class DefaultWidgetPostAPIMediator @Inject constructor(private val mosh
     /**
      * Send an integer response.
      *
-     * @param response  the response
+     * @param response the response
      * @param eventData the modular data
      */
     override fun sendIntegerResponse(response: Int, eventData: JsonDict) {
@@ -116,9 +116,9 @@ internal class DefaultWidgetPostAPIMediator @Inject constructor(private val mosh
     /**
      * Send an object response.
      *
-     * @param T         the Json type
-     * @param type      the type
-     * @param response  the response
+     * @param T the Json type
+     * @param type the type
+     * @param response the response
      * @param eventData the modular data
      */
     override fun <T> sendObjectResponse(type: Type, response: T?, eventData: JsonDict) {
@@ -147,7 +147,7 @@ internal class DefaultWidgetPostAPIMediator @Inject constructor(private val mosh
     /**
      * Send an error.
      *
-     * @param message   the error message
+     * @param message the error message
      * @param eventData the modular data
      */
     override fun sendError(message: String, eventData: JsonDict) {
@@ -164,7 +164,7 @@ internal class DefaultWidgetPostAPIMediator @Inject constructor(private val mosh
     /**
      * Send the response to the javascript.
      *
-     * @param jsString  the response data
+     * @param jsString the response data
      * @param eventData the modular data
      */
     private fun sendResponse(jsString: String, eventData: JsonDict) = uiHandler.post {

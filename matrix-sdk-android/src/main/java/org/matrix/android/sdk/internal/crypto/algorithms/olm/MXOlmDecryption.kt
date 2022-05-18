@@ -180,7 +180,7 @@ internal class MXOlmDecryption(
     /**
      * Attempt to decrypt an Olm message.
      *
-     * @param message                message object, with 'type' and 'body' fields.
+     * @param message message object, with 'type' and 'body' fields.
      * @param theirDeviceIdentityKey the Curve25519 identity key of the sender.
      * @return payload, if decrypted successfully.
      */

@@ -49,7 +49,7 @@ interface WidgetPostAPIMediator {
     /**
      * Send a boolean response.
      *
-     * @param response  the response
+     * @param response the response
      * @param eventData the modular data
      */
     fun sendBoolResponse(response: Boolean, eventData: JsonDict)
@@ -57,7 +57,7 @@ interface WidgetPostAPIMediator {
     /**
      * Send an integer response.
      *
-     * @param response  the response
+     * @param response the response
      * @param eventData the modular data
      */
     fun sendIntegerResponse(response: Int, eventData: JsonDict)
@@ -67,7 +67,7 @@ interface WidgetPostAPIMediator {
      *
      * @param T the generic type
      * @param type the type of the response
-     * @param response  the response
+     * @param response the response
      * @param eventData the modular data
      */
     fun <T> sendObjectResponse(type: Type, response: T?, eventData: JsonDict)
@@ -82,7 +82,7 @@ interface WidgetPostAPIMediator {
     /**
      * Send an error.
      *
-     * @param message   the error message
+     * @param message the error message
      * @param eventData the modular data
      */
     fun sendError(message: String, eventData: JsonDict)

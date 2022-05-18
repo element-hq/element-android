@@ -146,7 +146,7 @@ object ThemeUtils {
     /**
      * Translates color attributes to colors.
      *
-     * @param c              Context
+     * @param c Context
      * @param colorAttribute Color Attribute
      * @return Requested Color
      */
@@ -178,8 +178,8 @@ object ThemeUtils {
     /**
      * Tint the drawable with a theme attribute.
      *
-     * @param context   the context
-     * @param drawable  the drawable to tint
+     * @param context the context
+     * @param drawable the drawable to tint
      * @param attribute the theme color
      * @return the tinted drawable
      */
@@ -191,7 +191,7 @@ object ThemeUtils {
      * Tint the drawable with a color integer.
      *
      * @param drawable the drawable to tint
-     * @param color    the color
+     * @param color the color
      * @return the tinted drawable
      */
     fun tintDrawableWithColor(drawable: Drawable, @ColorInt color: Int): Drawable {

@@ -120,8 +120,8 @@ object VectorLocale {
     /**
      * Get String from a locale.
      *
-     * @param context    the context
-     * @param locale     the locale
+     * @param context the context
+     * @param locale the locale
      * @param resourceId the string resource id
      * @return the localized string
      */

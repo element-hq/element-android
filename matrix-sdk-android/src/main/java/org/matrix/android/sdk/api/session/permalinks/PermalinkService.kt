@@ -71,7 +71,7 @@ interface PermalinkService {
      * Creates a permalink for an event. If you have an event you can use [createPermalink]
      * Ex: "https://matrix.to/#/!nbzmcXAqpxBXjAdgoX:matrix.org/$1531497316352799BevdV:matrix.org?via=matrix.org"
      *
-     * @param roomId  the id of the room
+     * @param roomId the id of the room
      * @param eventId the id of the event
      * @param forceMatrixTo whether we should force using matrix.to base URL
      *

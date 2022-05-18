@@ -170,7 +170,7 @@ internal interface IMXCryptoStore {
     /**
      * Retrieve a device for a user.
      *
-     * @param userId   the user's id.
+     * @param userId the user's id.
      * @param deviceId the device id.
      * @return the device
      */
@@ -187,7 +187,7 @@ internal interface IMXCryptoStore {
     /**
      * Store the known devices for a user.
      *
-     * @param userId  The user's id.
+     * @param userId The user's id.
      * @param devices A map from device id to 'MXDevice' object for the device.
      */
     fun storeUserDevices(userId: String, devices: Map<String, CryptoDeviceInfo>?)
@@ -223,7 +223,7 @@ internal interface IMXCryptoStore {
     /**
      * Store the crypto algorithm for a room.
      *
-     * @param roomId    the id of the room.
+     * @param roomId the id of the room.
      * @param algorithm the algorithm.
      */
     fun storeRoomAlgorithm(roomId: String, algorithm: String?)
@@ -251,7 +251,7 @@ internal interface IMXCryptoStore {
     /**
      * Store a session between the logged-in user and another device.
      *
-     * @param olmSessionWrapper   the end-to-end session.
+     * @param olmSessionWrapper the end-to-end session.
      * @param deviceKey the public key of the other device.
      */
     fun storeSession(olmSessionWrapper: OlmSessionWrapper, deviceKey: String)
@@ -359,7 +359,7 @@ internal interface IMXCryptoStore {
     /**
      * Get the tracking status of a specified userId devices.
      *
-     * @param userId       the user id
+     * @param userId the user id
      * @param defaultValue the default value
      * @return the tracking status
      */

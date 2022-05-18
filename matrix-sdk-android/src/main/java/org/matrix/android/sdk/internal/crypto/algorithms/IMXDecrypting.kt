@@ -29,7 +29,7 @@ internal interface IMXDecrypting {
     /**
      * Decrypt an event.
      *
-     * @param event    the raw event.
+     * @param event the raw event.
      * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
      * @return the decryption information, or an error
      */

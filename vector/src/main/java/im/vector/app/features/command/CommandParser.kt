@@ -30,7 +30,7 @@ class CommandParser @Inject constructor() {
     /**
      * Convert the text message into a Slash command.
      *
-     * @param textMessage   the text message
+     * @param textMessage the text message
      * @param isInThreadTimeline true if the user is currently typing in a thread
      * @return a parsed slash command (ok or error)
      */

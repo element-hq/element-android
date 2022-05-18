@@ -26,9 +26,9 @@ class EvenBetterLinkMovementMethod(private val onLinkClickListener: OnLinkClickL
 
     interface OnLinkClickListener {
         /**
-         * @param textView   The TextView on which a click was registered.
-         * @param span       The ClickableSpan which is clicked on.
-         * @param url        The clicked URL.
+         * @param textView The TextView on which a click was registered.
+         * @param span The ClickableSpan which is clicked on.
+         * @param url The clicked URL.
          * @param actualText The original text which is spanned. Can be used to compare actualText and target url to prevent misleading urls.
          * @return true if this click was handled, false to let Android handle the URL.
          */

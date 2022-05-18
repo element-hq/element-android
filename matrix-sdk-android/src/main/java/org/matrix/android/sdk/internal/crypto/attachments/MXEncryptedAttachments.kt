@@ -232,8 +232,8 @@ internal object MXEncryptedAttachments {
      *
      * @param attachmentStream the attachment stream. Will be closed after this method call.
      * @param elementToDecrypt the elementToDecrypt info
-     * @param outputStream     the outputStream where the decrypted attachment will be write.
-     * @param clock            a clock to retrieve current time
+     * @param outputStream the outputStream where the decrypted attachment will be write.
+     * @param clock a clock to retrieve current time
      * @return true in case of success, false in case of error
      */
     fun decryptAttachment(attachmentStream: InputStream?,

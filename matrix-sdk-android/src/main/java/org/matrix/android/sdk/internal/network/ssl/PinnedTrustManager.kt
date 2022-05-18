@@ -25,7 +25,7 @@ import javax.net.ssl.X509TrustManager
  * Implements a TrustManager that checks Certificates against an explicit list of known
  * fingerprints.
  *
- * @property fingerprints        Not empty array of SHA256 cert fingerprints
+ * @property fingerprints Not empty array of SHA256 cert fingerprints
  * @property defaultTrustManager Optional trust manager to fall back on if cert does not match
  * any of the fingerprints. Can be null.
  */

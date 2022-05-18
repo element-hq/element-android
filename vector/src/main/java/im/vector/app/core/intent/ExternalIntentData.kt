@@ -29,9 +29,9 @@ sealed class ExternalIntentData {
     /**
      * Constructor for a text message.
      *
-     * @property text     the text
+     * @property text the text
      * @property htmlText the HTML text
-     * @property format   the formatted text format
+     * @property format the formatted text format
      * @property clipDataItem the ClipData
      * @property mimeType the mimetype
      */
@@ -54,7 +54,7 @@ sealed class ExternalIntentData {
     /**
      * Constructor from a media Uri/.
      *
-     * @property uri      the media uri
+     * @property uri the media uri
      * @property filename the media file name
      */
     data class IntentDataUri(
