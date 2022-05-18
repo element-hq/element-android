@@ -224,8 +224,8 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
 
                 // Bob can see the first event of the room (so Back pagination has worked)
                 snapshot.lastOrNull()?.root?.getClearType() == EventType.STATE_ROOM_CREATE &&
-                        // 8 for room creation item 60 message from Alice
-                        snapshot.size == 69 && // 8 + 60
+                        // 9 for room creation item 60 message from Alice
+                        snapshot.size == 69 && // 9 + 60U
                         snapshot.checkSendOrder(secondMessage, 30, 0) &&
                         snapshot.checkSendOrder(firstMessage, 30, 30)
             }
