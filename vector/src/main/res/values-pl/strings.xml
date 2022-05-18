@@ -736,8 +736,8 @@
     <string name="settings_show_join_leave_messages_summary">Zaproszenia, usunięcia i bany pozostają nienaruszone.</string>
     <string name="settings_send_message_with_enter">Wysyłaj wiadomości za pomocą klawisza enter</string>
     <string name="settings_send_message_with_enter_summary">Przycisk enter na klawiaturze programowej wyśle wiadomość zamiast wprowadzania łamanania linii</string>
-    <string name="settings_discovery_category">Znajdź</string>
-    <string name="settings_discovery_manage">Zarządzaj ustawieniami wyszukiwania.</string>
+    <string name="settings_discovery_category">Ustawienia wyszukiwania</string>
+    <string name="settings_discovery_manage">Ustal jak inni mogą odnaleść twoje konto.</string>
     <string name="settings_media">Media</string>
     <string name="settings_default_media_source">Domyślne źródło mediów</string>
     <string name="encryption_message_recovery">Odzyskiwanie zaszyforwanych wiadomości</string>
@@ -1619,7 +1619,7 @@
     <string name="settings_security_pin_code_summary">Jeżeli chcesz zresetować kod PIN, naciśnij Zapomnij kod PIN aby wylogować i zresetować.</string>
     <string name="settings_security_pin_code_title">Włącz kod PIN</string>
     <string name="settings_security_application_protection_screen_title">Skonfiguruj ochronę</string>
-    <string name="settings_security_application_protection_summary">Ochrona dostępu poprzez kod PIN oraz biometrię.</string>
+    <string name="settings_security_application_protection_summary">Blokada aplikacji poprzez kod PIN oraz biometrię.</string>
     <string name="settings_security_application_protection_title">Ochrona dostępu</string>
     <string name="auth_pin_reset_content">Aby zresetować kod PIN musisz się ponownie zalogować i utworzyć nowy.</string>
     <string name="auth_pin_new_pin_action">Nowy kod PIN</string>
@@ -2584,4 +2584,7 @@
     <string name="initial_sync_request_reason_unignored_users">- Niektórzy użytkownicy przestali być ignorowani</string>
     <string name="initial_sync_request_title">Początkowe żądanie synchronizacji</string>
     <string name="keys_backup_settings_signature_from_this_user">Kopia zapasowa ma poprawny podpis tego użytkownika.</string>
+    <string name="settings_show_latest_profile_description">Pokazuj aktualny stan profilu (obraz i nazwa) w całej historii konwersacji.</string>
+    <string name="settings_show_latest_profile">Pokazuj najnowsze informacje o użytkowniku</string>
+    <string name="a11y_presence_busy">Zajęty</string>
 </resources>
