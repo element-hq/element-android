@@ -130,11 +130,6 @@ internal class DefaultAuthenticationService @Inject constructor(
                 ?.trim { it == '/' }
     }
 
-    /**
-     * This is the entry point of the authentication service.
-     * homeServerConnectionConfig contains a homeserver URL probably entered by the user, which can be a
-     * valid homeserver API url, the url of Element Web, or anything else.
-     */
     override suspend fun getLoginFlow(homeServerConnectionConfig: HomeServerConnectionConfig): LoginFlowResult {
         val result = runCatching {
             getLoginFlowInternal(homeServerConnectionConfig)
