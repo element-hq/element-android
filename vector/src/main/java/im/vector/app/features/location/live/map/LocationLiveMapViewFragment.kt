@@ -21,6 +21,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
@@ -180,7 +181,7 @@ class LocationLiveMapViewFragment : VectorBaseFragment<FragmentSimpleContainerBi
     private fun addUserPinToMapStyle(userId: String, userPinDrawable: Drawable) {
         mapStyle?.let { style ->
             if (style.getImage(userId) == null) {
-                style.addImage(userId, userPinDrawable)
+                style.addImage(userId, userPinDrawable.toBitmap())
             }
         }
     }
