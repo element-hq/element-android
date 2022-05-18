@@ -41,7 +41,6 @@ import org.matrix.android.sdk.internal.database.model.PollResponseAggregatedSumm
 import org.matrix.android.sdk.internal.database.query.create
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.where
-import timber.log.Timber
 import javax.inject.Inject
 
 class DefaultPollAggregationProcessor @Inject constructor() : PollAggregationProcessor {
@@ -162,7 +161,6 @@ class DefaultPollAggregationProcessor @Inject constructor() : PollAggregationPro
         val isPollOwner = pollOwnerId == event.senderId
 
         if (!isPollOwner && !powerLevelsHelper.isUserAbleToRedact(event.senderId ?: "")) {
-            Timber.v("## Received poll.end event $pollEventId but user ${event.senderId} doesn't have enough power level in room $roomId")
             return false
         }
 
@@ -182,17 +180,12 @@ class DefaultPollAggregationProcessor @Inject constructor() : PollAggregationPro
     }
 
     private fun getPollEvent(session: Session, roomId: String, eventId: String): TimelineEvent? {
-        return session.roomService().getRoom(roomId)?.getTimelineEvent(eventId) ?: return null.also {
-            Timber.v("## POLL target poll event $eventId not found in room $roomId")
-        }
+        return session.roomService().getRoom(roomId)?.getTimelineEvent(eventId)
     }
 
     private fun getPollContent(session: Session, roomId: String, eventId: String): MessagePollContent? {
-        val pollEvent = getPollEvent(session, roomId, eventId) ?: return null
-
-        return pollEvent.getLastMessageContent() as? MessagePollContent ?: return null.also {
-            Timber.v("## POLL target poll event $eventId content is malformed")
-        }
+        val pollEvent = getPollEvent(session, roomId, eventId)
+        return pollEvent?.getLastMessageContent() as? MessagePollContent
     }
 
     private fun getAnnotationsSummaryEntity(realm: Realm, roomId: String, eventId: String): EventAnnotationsSummaryEntity {

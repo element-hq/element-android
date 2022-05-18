@@ -28,7 +28,7 @@ internal class FakeRealm {
     val instance = mockk<Realm>(relaxed = true)
 
     inline fun <reified T : RealmModel> givenWhereReturns(result: T?): RealmQuery<T> {
-        val queryResult = mockk<RealmQuery<T>>(relaxed = true)
+        val queryResult = mockk<RealmQuery<T>>()
         every { queryResult.findFirst() } returns result
         every { instance.where<T>() } returns queryResult
         return queryResult
