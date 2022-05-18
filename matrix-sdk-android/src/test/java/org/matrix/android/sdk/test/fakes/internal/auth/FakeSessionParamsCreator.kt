@@ -21,10 +21,10 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import org.matrix.android.sdk.api.auth.LoginType
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.internal.auth.SessionParamsCreator
-import org.matrix.android.sdk.internal.auth.login.LoginType
 import org.matrix.android.sdk.test.fixtures.SessionParamsFixture.aSessionParams
 
 internal class FakeSessionParamsCreator {

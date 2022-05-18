@@ -16,11 +16,11 @@
 
 package org.matrix.android.sdk.internal.auth
 
+import org.matrix.android.sdk.api.auth.LoginType
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.internal.SessionManager
-import org.matrix.android.sdk.internal.auth.login.LoginType
 import javax.inject.Inject
 
 internal interface SessionCreator {

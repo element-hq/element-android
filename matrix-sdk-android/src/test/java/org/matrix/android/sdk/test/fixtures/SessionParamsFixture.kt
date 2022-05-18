@@ -16,10 +16,10 @@
 
 package org.matrix.android.sdk.test.fixtures
 
+import org.matrix.android.sdk.api.auth.LoginType
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.SessionParams
-import org.matrix.android.sdk.internal.auth.login.LoginType
 import org.matrix.android.sdk.test.fixtures.CredentialsFixture.aCredentials
 
 object SessionParamsFixture {

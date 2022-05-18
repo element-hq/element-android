@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.auth.login
+package org.matrix.android.sdk.api.auth
 
 enum class LoginType {
     PASSWORD,

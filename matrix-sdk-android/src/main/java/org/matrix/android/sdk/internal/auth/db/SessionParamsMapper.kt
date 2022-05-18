@@ -17,11 +17,11 @@
 package org.matrix.android.sdk.internal.auth.db
 
 import com.squareup.moshi.Moshi
+import org.matrix.android.sdk.api.auth.LoginType
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.auth.data.sessionId
-import org.matrix.android.sdk.internal.auth.login.LoginType
 import javax.inject.Inject
 
 internal class SessionParamsMapper @Inject constructor(moshi: Moshi) {

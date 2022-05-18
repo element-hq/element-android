@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.api.auth.data
 
-import org.matrix.android.sdk.internal.auth.login.LoginType
+import org.matrix.android.sdk.api.auth.LoginType
 
 /**
  * This data class holds necessary data to open a session.

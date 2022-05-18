@@ -20,6 +20,7 @@ import android.content.Context
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import kotlinx.coroutines.runBlocking
+import org.matrix.android.sdk.api.auth.LoginType
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.DiscoveryInformation
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
@@ -29,7 +30,6 @@ import org.matrix.android.sdk.api.legacy.LegacySessionImporter
 import org.matrix.android.sdk.api.network.ssl.Fingerprint
 import org.matrix.android.sdk.api.util.md5
 import org.matrix.android.sdk.internal.auth.SessionParamsStore
-import org.matrix.android.sdk.internal.auth.login.LoginType
 import org.matrix.android.sdk.internal.crypto.store.db.RealmCryptoStoreMigration
 import org.matrix.android.sdk.internal.crypto.store.db.RealmCryptoStoreModule
 import org.matrix.android.sdk.internal.database.RealmKeysUtils

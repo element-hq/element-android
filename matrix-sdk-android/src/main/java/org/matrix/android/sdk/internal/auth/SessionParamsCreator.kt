@@ -17,11 +17,11 @@
 package org.matrix.android.sdk.internal.auth
 
 import android.net.Uri
+import org.matrix.android.sdk.api.auth.LoginType
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.extensions.tryOrNull
-import org.matrix.android.sdk.internal.auth.login.LoginType
 import timber.log.Timber
 import javax.inject.Inject
 

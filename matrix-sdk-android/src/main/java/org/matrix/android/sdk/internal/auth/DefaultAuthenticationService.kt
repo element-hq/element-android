@@ -22,6 +22,7 @@ import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.MatrixPatterns.getDomain
 import org.matrix.android.sdk.api.auth.AuthenticationService
+import org.matrix.android.sdk.api.auth.LoginType
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.LoginFlowResult
@@ -38,7 +39,6 @@ import org.matrix.android.sdk.internal.auth.data.WebClientConfig
 import org.matrix.android.sdk.internal.auth.db.PendingSessionData
 import org.matrix.android.sdk.internal.auth.login.DefaultLoginWizard
 import org.matrix.android.sdk.internal.auth.login.DirectLoginTask
-import org.matrix.android.sdk.internal.auth.login.LoginType
 import org.matrix.android.sdk.internal.auth.registration.DefaultRegistrationWizard
 import org.matrix.android.sdk.internal.auth.version.Versions
 import org.matrix.android.sdk.internal.auth.version.isLoginAndRegistrationSupportedBySdk

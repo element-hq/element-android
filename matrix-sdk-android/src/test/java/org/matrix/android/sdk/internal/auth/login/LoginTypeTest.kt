@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.auth.login
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldNotBeEqualTo
 import org.junit.Test
+import org.matrix.android.sdk.api.auth.LoginType
 
 class LoginTypeTest {
 

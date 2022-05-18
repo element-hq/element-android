@@ -17,8 +17,8 @@
 package org.matrix.android.sdk.internal.auth.db.migration
 
 import io.realm.DynamicRealm
+import org.matrix.android.sdk.api.auth.LoginType
 import org.matrix.android.sdk.internal.auth.db.SessionParamsEntityFields
-import org.matrix.android.sdk.internal.auth.login.LoginType
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 import timber.log.Timber
 

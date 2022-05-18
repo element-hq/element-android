@@ -23,12 +23,12 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeNull
+import org.matrix.android.sdk.api.auth.LoginType
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.auth.data.sessionId
 import org.matrix.android.sdk.internal.auth.db.SessionParamsEntity
-import org.matrix.android.sdk.internal.auth.login.LoginType
 import org.matrix.android.sdk.test.fakes.internal.auth.db.sessionparams.FakeCredentialsJsonAdapter.Companion.CREDENTIALS_JSON
 import org.matrix.android.sdk.test.fakes.internal.auth.db.sessionparams.FakeCredentialsJsonAdapter.Companion.credentials
 import org.matrix.android.sdk.test.fakes.internal.auth.db.sessionparams.FakeHomeServerConnectionConfigJsonAdapter.Companion.HOME_SERVER_CONNECTION_CONFIG_JSON
@@ -39,8 +39,8 @@ import org.matrix.android.sdk.test.fixtures.SessionParamsFixture.aSessionParams
 internal class FakeSessionParamsMapperMoshi {
 
     val instance: Moshi = mockk()
-    val credentialsJsonAdapter = FakeCredentialsJsonAdapter()
-    val homeServerConnectionConfigAdapter = FakeHomeServerConnectionConfigJsonAdapter()
+    private val credentialsJsonAdapter = FakeCredentialsJsonAdapter()
+    private val homeServerConnectionConfigAdapter = FakeHomeServerConnectionConfigJsonAdapter()
 
     init {
         mockkStatic(Uri::class)

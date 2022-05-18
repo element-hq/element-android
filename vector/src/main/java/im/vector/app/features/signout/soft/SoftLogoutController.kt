@@ -36,12 +36,12 @@ import im.vector.app.features.signout.soft.epoxy.loginRedButtonItem
 import im.vector.app.features.signout.soft.epoxy.loginTextItem
 import im.vector.app.features.signout.soft.epoxy.loginTitleItem
 import im.vector.app.features.signout.soft.epoxy.loginTitleSmallItem
-import org.matrix.android.sdk.internal.auth.login.LoginType
+import org.matrix.android.sdk.api.auth.LoginType
 import javax.inject.Inject
 
 class SoftLogoutController @Inject constructor(
-    private val stringProvider: StringProvider,
-    private val errorFormatter: ErrorFormatter
+        private val stringProvider: StringProvider,
+        private val errorFormatter: ErrorFormatter
 ) : EpoxyController() {
 
     var listener: Listener? = null
@@ -94,10 +94,10 @@ class SoftLogoutController @Inject constructor(
     }
 
     private fun buildForm(state: SoftLogoutViewState) = when (state.asyncHomeServerLoginFlowRequest) {
-        is Fail -> buildLoginErrorWithRetryItem(state.asyncHomeServerLoginFlowRequest.error)
-        is Success -> buildLoginSuccessItem(state)
+        is Fail                   -> buildLoginErrorWithRetryItem(state.asyncHomeServerLoginFlowRequest.error)
+        is Success                -> buildLoginSuccessItem(state)
         is Loading, Uninitialized -> buildLoadingItem()
-        is Incomplete -> Unit
+        is Incomplete             -> Unit
     }
 
     private fun buildLoadingItem() {
@@ -116,11 +116,11 @@ class SoftLogoutController @Inject constructor(
     }
 
     private fun buildLoginSuccessItem(state: SoftLogoutViewState) = when (state.asyncHomeServerLoginFlowRequest.invoke()) {
-        LoginMode.Password -> buildLoginPasswordForm(state)
-        is LoginMode.Sso -> buildLoginSSOForm()
+        LoginMode.Password          -> buildLoginPasswordForm(state)
+        is LoginMode.Sso            -> buildLoginSSOForm()
         is LoginMode.SsoAndPassword -> disambiguateLoginSSOAndPasswordForm(state)
-        LoginMode.Unsupported -> buildLoginUnsupportedForm()
-        LoginMode.Unknown, null -> Unit // Should not happen
+        LoginMode.Unsupported       -> buildLoginUnsupportedForm()
+        LoginMode.Unknown, null     -> Unit // Should not happen
     }
 
     private fun buildLoginPasswordForm(state: SoftLogoutViewState) {
@@ -148,12 +148,12 @@ class SoftLogoutController @Inject constructor(
 
     private fun disambiguateLoginSSOAndPasswordForm(state: SoftLogoutViewState) {
         when (state.loginType) {
-            LoginType.PASSWORD -> buildLoginPasswordForm(state)
-            LoginType.SSO -> buildLoginSSOForm()
+            LoginType.PASSWORD    -> buildLoginPasswordForm(state)
+            LoginType.SSO         -> buildLoginSSOForm()
             LoginType.DIRECT,
             LoginType.CUSTOM,
             LoginType.UNSUPPORTED -> buildLoginUnsupportedForm()
-            LoginType.UNKNOWN -> Unit
+            LoginType.UNKNOWN     -> Unit
         }
     }
 
