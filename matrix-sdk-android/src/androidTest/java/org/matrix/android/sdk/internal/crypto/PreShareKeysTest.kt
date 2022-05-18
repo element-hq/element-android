@@ -50,7 +50,9 @@ class PreShareKeysTest : InstrumentedTest {
         // clear any outbound session
         aliceSession.cryptoService().discardOutboundSession(e2eRoomID)
 
-        val preShareCount = bobSession.cryptoService().keysBackupService().getTotalNumbersOfKeys()
+        val preShareCount = testHelper.runBlockingTest {
+            bobSession.cryptoService().keysBackupService().getTotalNumbersOfKeys()
+        }
 
         assertEquals("Bob should not have receive any key from alice at this point", 0, preShareCount)
         Log.d("#Test", "Room Key Received from alice $preShareCount")

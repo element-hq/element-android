@@ -161,7 +161,7 @@ class KeysBackupTestHelper(
         testHelper.await(latch)
     }
 
-    fun assertKeysEquals(keys1: MegolmSessionData?, keys2: MegolmSessionData?) {
+    internal fun assertKeysEquals(keys1: MegolmSessionData?, keys2: MegolmSessionData?) {
         Assert.assertNotNull(keys1)
         Assert.assertNotNull(keys2)
 
