@@ -20,7 +20,6 @@ import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.kotlin.where
 import org.matrix.android.sdk.internal.database.model.EventAnnotationsSummaryEntity
-import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntity
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntityFields
 
@@ -37,7 +36,7 @@ internal fun LiveLocationShareAggregatedSummaryEntity.Companion.where(
 internal fun LiveLocationShareAggregatedSummaryEntity.Companion.whereRoomId(realm: Realm,
                                                                             roomId: String): RealmQuery<LiveLocationShareAggregatedSummaryEntity> {
     return realm.where<LiveLocationShareAggregatedSummaryEntity>()
-            .equalTo(TimelineEventEntityFields.ROOM_ID, roomId)
+            .equalTo(LiveLocationShareAggregatedSummaryEntityFields.ROOM_ID, roomId)
 }
 
 internal fun LiveLocationShareAggregatedSummaryEntity.Companion.create(
@@ -71,7 +70,22 @@ internal fun LiveLocationShareAggregatedSummaryEntity.Companion.get(
     return LiveLocationShareAggregatedSummaryEntity.where(realm, roomId, eventId).findFirst()
 }
 
-internal fun LiveLocationShareAggregatedSummaryEntity.Companion.findRunningLiveLocationShareInRoom(
+internal fun LiveLocationShareAggregatedSummaryEntity.Companion.findActiveLiveInRoomForUser(
+        realm: Realm,
+        roomId: String,
+        userId: String,
+): List<LiveLocationShareAggregatedSummaryEntity> {
+    return LiveLocationShareAggregatedSummaryEntity
+            .whereRoomId(realm, roomId = roomId)
+            .equalTo(LiveLocationShareAggregatedSummaryEntityFields.USER_ID, userId)
+            .equalTo(LiveLocationShareAggregatedSummaryEntityFields.IS_ACTIVE, true)
+            .findAll()
+}
+
+/**
+ * A live is considered as running when active and with at least a last known location.
+ */
+internal fun LiveLocationShareAggregatedSummaryEntity.Companion.findRunningLiveInRoom(
         realm: Realm,
         roomId: String,
 ): RealmQuery<LiveLocationShareAggregatedSummaryEntity> {
