@@ -17,18 +17,17 @@
 package im.vector.app.features.onboarding
 
 import im.vector.app.R
-import im.vector.app.test.fixtures.SelectedHomeserverStateFixture.aSelectedHomeserverState
 import im.vector.app.test.fakes.FakeAuthenticationService
 import im.vector.app.test.fakes.FakeRegistrationWizardActionDelegate
 import im.vector.app.test.fakes.FakeSession
 import im.vector.app.test.fakes.FakeStringProvider
 import im.vector.app.test.fakes.FakeVectorFeatures
 import im.vector.app.test.fakes.FakeVectorOverrides
+import im.vector.app.test.fixtures.SelectedHomeserverStateFixture.aSelectedHomeserverState
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
 import org.matrix.android.sdk.api.auth.registration.FlowResult
-import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import org.matrix.android.sdk.api.auth.registration.Stage
 
 private val A_SESSION = FakeSession()
