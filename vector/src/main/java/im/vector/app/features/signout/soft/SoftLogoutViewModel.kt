@@ -41,7 +41,6 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getUser
 import timber.log.Timber
 
-
 class SoftLogoutViewModel @AssistedInject constructor(
         @Assisted initialState: SoftLogoutViewState,
         private val session: Session,
