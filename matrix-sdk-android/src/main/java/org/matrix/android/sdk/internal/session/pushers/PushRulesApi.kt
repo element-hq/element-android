@@ -35,7 +35,7 @@ internal interface PushRulesApi {
      *
      * @param kind   the notification kind (sender, room...)
      * @param ruleId the ruleId
-     * @param enable the new enable status
+     * @param enabledBody the new enable status
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "pushrules/global/{kind}/{ruleId}/enabled")
     suspend fun updateEnableRuleStatus(@Path("kind") kind: String,

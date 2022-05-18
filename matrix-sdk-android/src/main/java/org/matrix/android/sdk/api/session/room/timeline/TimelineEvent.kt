@@ -90,6 +90,7 @@ data class TimelineEvent(
 
     /**
      * Get the metadata associated with a key.
+     * @param T type to cast the metadata to
      * @param key the key to get the metadata
      * @return the metadata
      */

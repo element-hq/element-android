@@ -72,7 +72,7 @@ internal interface RoomKeysApi {
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "room_keys/version/{version}")
     suspend fun updateKeysBackupVersion(@Path("version") version: String,
-                                        @Body keysBackupVersionBody: UpdateKeysBackupVersionBody)
+                                        @Body updateKeysBackupVersionBody: UpdateKeysBackupVersionBody)
 
     /* ==========================================================================================
      * Storing keys

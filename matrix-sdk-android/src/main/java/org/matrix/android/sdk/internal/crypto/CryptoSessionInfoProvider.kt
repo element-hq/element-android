@@ -46,6 +46,7 @@ internal class CryptoSessionInfoProvider @Inject constructor(
     }
 
     /**
+     * @param roomId the room Id
      * @param allActive if true return joined as well as invited, if false, only joined
      */
     fun getRoomUserIds(roomId: String, allActive: Boolean): List<String> {

@@ -60,6 +60,7 @@ interface PermalinkService {
      * Creates a permalink for a roomId, including the via parameters.
      *
      * @param roomId the room id
+     * @param viaServers the via parameter
      * @param forceMatrixTo whether we should force using matrix.to base URL
      *
      * @return the permalink, or null in case of error

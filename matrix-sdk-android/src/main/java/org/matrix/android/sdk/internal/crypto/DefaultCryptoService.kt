@@ -905,6 +905,7 @@ internal class DefaultCryptoService @Inject constructor(
     /**
      * Handle an m.room.encryption event.
      *
+     * @param roomId the room Id
      * @param event the encryption event.
      */
     private fun onRoomEncryptionEvent(roomId: String, event: Event) {
@@ -928,6 +929,7 @@ internal class DefaultCryptoService @Inject constructor(
     /**
      * Handle a change in the membership state of a member of a room.
      *
+     * @param roomId the room Id
      * @param event the membership event causing the change
      */
     private fun onRoomMembershipEvent(roomId: String, event: Event) {

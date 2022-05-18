@@ -162,6 +162,9 @@ class BugReporter @Inject constructor(
      * @param withKeyRequestHistory true to include the crash logs
      * @param withScreenshot    true to include the screenshot
      * @param theBugDescription the bug description
+     * @param serverVersion     version of the server
+     * @param canContact        true if the user opt in to be contacted directly
+     * @param customFields      fields which will be sent with the report
      * @param listener          the listener
      */
     @SuppressLint("StaticFieldLeak")
@@ -287,7 +290,8 @@ class BugReporter @Inject constructor(
                             .addFormDataPart("app_language", VectorLocale.applicationLocale.toString())
                             .addFormDataPart("default_app_language", systemLocaleProvider.getSystemLocale().toString())
                             .addFormDataPart("theme", ThemeUtils.getApplicationTheme(context))
-                            .addFormDataPart("server_version", serverVersion).apply {
+                            .addFormDataPart("server_version", serverVersion)
+                            .apply {
                                 customFields?.forEach { (name, value) ->
                                     addFormDataPart(name, value)
                                 }

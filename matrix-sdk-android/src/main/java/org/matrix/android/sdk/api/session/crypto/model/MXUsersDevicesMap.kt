@@ -46,8 +46,8 @@ class MXUsersDevicesMap<E> {
     /**
      * Provides the object for a device id and a user Id.
      *
-     * @param deviceId the device id
      * @param userId   the object id
+     * @param deviceId the device id
      * @return the object
      */
     fun getObject(userId: String?, deviceId: String?): E? {
@@ -73,8 +73,8 @@ class MXUsersDevicesMap<E> {
     /**
      * Defines the objects map for a user Id.
      *
-     * @param objectsPerDevices the objects maps
      * @param userId            the user id
+     * @param objectsPerDevices the objects maps
      */
     fun setObjects(userId: String?, objectsPerDevices: Map<String, E>?) {
         if (!userId.isNullOrBlank()) {

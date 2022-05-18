@@ -108,6 +108,7 @@ object ThemeUtils {
     /**
      * Update the application theme.
      *
+     * @param context the Android context
      * @param aTheme the new theme
      */
     fun setApplicationTheme(context: Context, aTheme: String) {
@@ -126,9 +127,11 @@ object ThemeUtils {
     }
 
     /**
-     * Set the activity theme according to the selected one.
+     * Set the activity theme according to the selected one. Default is Light, so if this is the current
+     * theme, the theme is not changed.
      *
      * @param activity the activity
+     * @param otherThemes themes to apply for dark and black theme
      */
     fun setActivityTheme(activity: Activity, otherThemes: ActivityOtherThemes) {
         when (getApplicationTheme(activity)) {

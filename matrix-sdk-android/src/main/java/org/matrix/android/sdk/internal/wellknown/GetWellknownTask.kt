@@ -76,6 +76,7 @@ internal class DefaultGetWellknownTask @Inject constructor(
      * - return action and .well-known data
      *
      * @param domain homeserver domain, deduced from mx userId (ex: "matrix.org" from userId "@user:matrix.org")
+     * @param client Http client to perform the request
      */
     private suspend fun findClientConfig(domain: String, client: OkHttpClient): WellknownResult {
         val wellKnownAPI = retrofitFactory.create(client, "https://dummy.org")

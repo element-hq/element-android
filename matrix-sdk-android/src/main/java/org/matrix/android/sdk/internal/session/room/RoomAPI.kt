@@ -179,6 +179,7 @@ internal interface RoomAPI {
      * Invite a user to a room, using a ThreePid
      * Ref: https://matrix.org/docs/spec/client_server/r0.6.1#id101
      * @param roomId Required. The room identifier (not alias) to which to invite the user.
+     * @param body the Json body
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/invite")
     suspend fun invite3pid(@Path("roomId") roomId: String,
@@ -221,8 +222,13 @@ internal interface RoomAPI {
 
     /**
      * Paginate relations for event based in normal topological order.
+     * @param roomId the room Id
+     * @param eventId the event Id
      * @param relationType filter for this relation type
      * @param eventType filter for this event type
+     * @param from from token
+     * @param to to token
+     * @param limit max number of Event to retrieve
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "rooms/{roomId}/relations/{eventId}/{relationType}/{eventType}")
     suspend fun getRelations(@Path("roomId") roomId: String,
@@ -236,7 +242,13 @@ internal interface RoomAPI {
 
     /**
      * Paginate relations for thread events based in normal topological order.
+     *
+     * @param roomId the room Id
+     * @param eventId the event Id
      * @param relationType filter for this relation type
+     * @param from from token
+     * @param to to token
+     * @param limit max number of Event to retrieve
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "rooms/{roomId}/relations/{eventId}/{relationType}")
     suspend fun getThreadsRelations(@Path("roomId") roomId: String,

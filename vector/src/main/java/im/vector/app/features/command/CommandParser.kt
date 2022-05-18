@@ -31,6 +31,7 @@ class CommandParser @Inject constructor() {
      * Convert the text message into a Slash command.
      *
      * @param textMessage   the text message
+     * @param isInThreadTimeline true if the user is currently typing in a thread
      * @return a parsed slash command (ok or error)
      */
     fun parseSlashCommand(textMessage: CharSequence, isInThreadTimeline: Boolean): ParsedCommand {
@@ -412,8 +413,8 @@ class CommandParser @Inject constructor() {
 
     /**
      * Checks whether or not the current command is not supported by threads.
-     * @param slashCommand the slash command that will be checked
      * @param isInThreadTimeline if its true we are in a thread timeline
+     * @param slashCommand the slash command that will be checked
      * @return The command that is not supported
      */
     private fun getNotSupportedByThreads(isInThreadTimeline: Boolean, slashCommand: String): Command? {

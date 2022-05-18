@@ -65,7 +65,8 @@ interface WidgetPostAPIMediator {
     /**
      * Send an object response.
      *
-     * @param klass the class of the response
+     * @param T the generic type
+     * @param type the type of the response
      * @param response  the response
      * @param eventData the modular data
      */

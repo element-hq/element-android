@@ -164,16 +164,14 @@ internal interface IMXCryptoStore {
 
     /**
      * Store the end to end account for the logged-in user.
-     *
-     * @param account the account to save
      */
     fun saveOlmAccount()
 
     /**
      * Retrieve a device for a user.
      *
-     * @param deviceId the device id.
      * @param userId   the user's id.
+     * @param deviceId the device id.
      * @return the device
      */
     fun getUserDevice(userId: String, deviceId: String): CryptoDeviceInfo?
@@ -331,7 +329,7 @@ internal interface IMXCryptoStore {
     /**
      * Mark inbound group sessions as backed up on the user homeserver.
      *
-     * @param sessions the sessions
+     * @param olmInboundGroupSessionWrappers the sessions
      */
     fun markBackupDoneForInboundGroupSessions(olmInboundGroupSessionWrappers: List<OlmInboundGroupSessionWrapper2>)
 
@@ -380,7 +378,9 @@ internal interface IMXCryptoStore {
     /**
      * Look for an existing outgoing room key request, and if none is found, add a new one.
      *
-     * @param request the request
+     * @param requestBody the request
+     * @param recipients list of recipients
+     * @param fromIndex start index
      * @return either the same instance as passed in, or the existing one.
      */
     fun getOrAddOutgoingRoomKeyRequest(requestBody: RoomKeyRequestBody, recipients: Map<String, List<String>>, fromIndex: Int): OutgoingKeyRequest

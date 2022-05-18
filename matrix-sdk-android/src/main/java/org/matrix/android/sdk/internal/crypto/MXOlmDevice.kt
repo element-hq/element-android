@@ -429,8 +429,8 @@ internal class MXOlmDevice @Inject constructor(
      *
      * @param ciphertext             the base64-encoded body from the received message.
      * @param messageType            message_type field from the received message.
-     * @param theirDeviceIdentityKey the Curve25519 identity key for the remote device.
      * @param sessionId              the id of the active session.
+     * @param theirDeviceIdentityKey the Curve25519 identity key for the remote device.
      * @return the decrypted payload.
      */
     @kotlin.jvm.Throws
@@ -873,9 +873,9 @@ internal class MXOlmDevice @Inject constructor(
      * Extract an InboundGroupSession from the session store and do some check.
      * inboundGroupSessionWithIdError describes the failure reason.
      *
-     * @param roomId    the room where the session is used.
      * @param sessionId the session identifier.
      * @param senderKey the base64-encoded curve25519 key of the sender.
+     * @param roomId    the room where the session is used.
      * @return the inbound group session.
      */
     fun getInboundGroupSession(sessionId: String?, senderKey: String?, roomId: String?): InboundGroupSessionHolder {

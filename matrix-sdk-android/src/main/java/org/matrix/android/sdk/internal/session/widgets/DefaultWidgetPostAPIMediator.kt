@@ -116,6 +116,8 @@ internal class DefaultWidgetPostAPIMediator @Inject constructor(private val mosh
     /**
      * Send an object response.
      *
+     * @param T         the Json type
+     * @param type      the type
      * @param response  the response
      * @param eventData the modular data
      */

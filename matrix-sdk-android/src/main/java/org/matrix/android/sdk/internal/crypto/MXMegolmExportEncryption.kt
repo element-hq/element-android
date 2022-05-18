@@ -140,7 +140,7 @@ internal object MXMegolmExportEncryption {
      *
      * @param data       the data to encrypt.
      * @param password   the password
-     * @param kdf_rounds the iteration count
+     * @param kdfRounds  the iteration count
      * @return the encrypted data
      * @throws Exception the failure reason
      */

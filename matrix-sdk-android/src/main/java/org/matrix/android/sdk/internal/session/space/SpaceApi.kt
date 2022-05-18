@@ -24,6 +24,7 @@ import retrofit2.http.Query
 internal interface SpaceApi {
 
     /**
+     * @param spaceId the space Id
      * @param suggestedOnly Optional. If true, return only child events and rooms where the m.space.child event has suggested: true.
      * @param limit Optional: a client-defined limit to the maximum number of rooms to return per page. Must be a non-negative integer.
      * @param maxDepth Optional: The maximum depth in the tree (from the root room) to return.

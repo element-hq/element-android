@@ -103,7 +103,7 @@ internal interface CryptoApi {
      * Claim one-time keys.
      * Doc: https://matrix.org/docs/spec/client_server/r0.4.0.html#post-matrix-client-r0-keys-claim
      *
-     * @param params the params.
+     * @param body the Json body.
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "keys/claim")
     suspend fun claimOneTimeKeysForUsersDevices(@Body body: KeysClaimBody): KeysClaimResponse
