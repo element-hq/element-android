@@ -117,6 +117,8 @@ jobs:
             ${{ runner.os }}-gradle-
       - name: Lint analysis
         run: ./gradlew clean :vector:lint --stacktrace
+      - name: Dependency analysis
+        run: ./gradlew buildHealth
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@v3
@@ -124,6 +126,12 @@ jobs:
           name: lint-report
           path: |
             vector/build/reports/*.*
+      - name: Upload dependency analysis
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: dependency-analysis
+          path: build/reports/dependency-analysis/build-health-report.txt
 
 # Lint for Gplay and Fdroid release APK
   apk-lint:
