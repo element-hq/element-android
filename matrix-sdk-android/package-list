@@ -4524,7 +4524,7 @@ $dokka.location:org.matrix.android.sdk.api/MatrixPatterns/PATTERN_CONTAIN_MATRIX
 $dokka.location:org.matrix.android.sdk.api/MatrixPatterns/SEP_REGEX/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api/-matrix-patterns/-s-e-p_-r-e-g-e-x.html
 $dokka.location:org.matrix.android.sdk.api/MatrixPatterns/candidateAliasFromRoomName/#kotlin.String#kotlin.String/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api/-matrix-patterns/candidate-alias-from-room-name.html
 $dokka.location:org.matrix.android.sdk.api/MatrixPatterns/extractServerNameFromId/#kotlin.String?/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api/-matrix-patterns/extract-server-name-from-id.html
-$dokka.location:org.matrix.android.sdk.api/MatrixPatterns/getDomain/kotlin.String#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api/-matrix-patterns/get-domain.html
+$dokka.location:org.matrix.android.sdk.api/MatrixPatterns/getServerName/kotlin.String#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api/-matrix-patterns/get-server-name.html
 $dokka.location:org.matrix.android.sdk.api/MatrixPatterns/isEventId/#kotlin.String?/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api/-matrix-patterns/is-event-id.html
 $dokka.location:org.matrix.android.sdk.api/MatrixPatterns/isGroupId/#kotlin.String?/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api/-matrix-patterns/is-group-id.html
 $dokka.location:org.matrix.android.sdk.api/MatrixPatterns/isRoomAlias/#kotlin.String?/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api/-matrix-patterns/is-room-alias.html
