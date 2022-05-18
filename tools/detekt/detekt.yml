@@ -87,8 +87,7 @@ comments:
   EndOfSentenceFormat:
     active: true
   OutdatedDocumentation:
-    # TODO Enable it
-    active: false
+    active: true
   UndocumentedPublicClass:
     active: false
   UndocumentedPublicFunction:
