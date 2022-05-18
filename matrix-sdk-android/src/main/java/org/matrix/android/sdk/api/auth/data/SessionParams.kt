@@ -39,7 +39,7 @@ data class SessionParams(
         val isTokenValid: Boolean,
 
         /**
-         * Which authentication method was used to create the session
+         * The authentication method that was used to create the session.
          */
         val loginType: LoginType,
 ) {
