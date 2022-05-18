@@ -53,13 +53,15 @@ class RegistrationActionHandler @Inject constructor(
     }
 
     private suspend fun processFlowResult(result: RegistrationResult.FlowResponse, state: SelectedHomeserverState): Result {
-        // If dummy stage is mandatory, and password is already sent, do the dummy stage now
-        return if (authenticationService.isRegistrationStarted && result.flowResult.missingStages.hasMandatoryDummy()) {
+        return if (shouldFastTrackDummyAction(result)) {
             processAction(state, RegisterAction.RegisterDummy)
         } else {
             handleNextStep(state, result.flowResult)
         }
     }
+
+    private fun shouldFastTrackDummyAction(result: RegistrationResult.FlowResponse) = authenticationService.isRegistrationStarted &&
+            result.flowResult.missingStages.hasMandatoryDummy()
 
     private suspend fun handleNextStep(state: SelectedHomeserverState, flowResult: FlowResult): Result {
         return when {
