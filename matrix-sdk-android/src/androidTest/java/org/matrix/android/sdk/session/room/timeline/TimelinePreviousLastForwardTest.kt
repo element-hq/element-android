@@ -74,8 +74,12 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
                     Timber.w(" event ${it.root}")
                 }
 
-                // Ok, we have the 8 first messages of the initial sync (room creation and bob invite and join events)
-                snapshot.size == 8
+                // Ok, we have the 9 first messages of the initial sync (room creation and bob invite and join events)
+                // create
+                // join alice
+                // power_levels, join_rules, history_visibility, guest_access, name
+                // invite, join bob
+                snapshot.size == 9
             }
 
             bobTimeline.addListener(eventsListener)
@@ -192,7 +196,7 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
                     Timber.w(" event ${it.root}")
                 }
 
-                snapshot.size == 44 // 8 + 1 + 35
+                snapshot.size == 45 // 9 + 1 + 35
             }
 
             bobTimeline.addListener(eventsListener)
@@ -221,7 +225,7 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
                 // Bob can see the first event of the room (so Back pagination has worked)
                 snapshot.lastOrNull()?.root?.getClearType() == EventType.STATE_ROOM_CREATE &&
                         // 8 for room creation item 60 message from Alice
-                        snapshot.size == 68 && // 8 + 60
+                        snapshot.size == 69 && // 8 + 60
                         snapshot.checkSendOrder(secondMessage, 30, 0) &&
                         snapshot.checkSendOrder(firstMessage, 30, 30)
             }
