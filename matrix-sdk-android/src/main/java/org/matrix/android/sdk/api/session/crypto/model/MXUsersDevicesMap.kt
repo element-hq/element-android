@@ -46,7 +46,7 @@ class MXUsersDevicesMap<E> {
     /**
      * Provides the object for a device id and a user Id.
      *
-     * @param userId   the object id
+     * @param userId   the user id
      * @param deviceId the device id
      * @return the object
      */
