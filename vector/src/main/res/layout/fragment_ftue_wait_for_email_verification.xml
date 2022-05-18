@@ -24,7 +24,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintHeight_percent="0.60"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:background="@drawable/bg_waiting_for_email_verification" />
 
     <Space
         android:id="@+id/emailVerificationSpace1"
@@ -82,7 +83,7 @@
         app:layout_constraintEnd_toEndOf="@id/ftueAuthGutterEnd"
         app:layout_constraintStart_toStartOf="@id/ftueAuthGutterStart"
         app:layout_constraintTop_toBottomOf="@id/emailVerificationTitle"
-        tools:text="To confirm your email address, tap the button in the email we just sent to hello@world.org" />
+        tools:text="@string/ftue_auth_email_verification_subtitle" />
 
     <Space
         android:id="@+id/emailVerificationSpace4"

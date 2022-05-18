@@ -25,10 +25,9 @@ import im.vector.app.core.extensions.associateContentStateWith
 import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.editText
 import im.vector.app.core.extensions.isEmail
-import im.vector.app.core.extensions.setOnImeDone
+import im.vector.app.core.extensions.setOnImeDoneListener
 import im.vector.app.databinding.FragmentFtueEmailInputBinding
 import im.vector.app.features.onboarding.OnboardingAction
-import im.vector.app.features.onboarding.OnboardingViewState
 import im.vector.app.features.onboarding.RegisterAction
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -49,7 +48,7 @@ class FtueAuthEmailEntryFragment @Inject constructor() : AbstractFtueAuthFragmen
 
     private fun setupViews() {
         views.emailEntryInput.associateContentStateWith(button = views.emailEntrySubmit)
-        views.emailEntryInput.setOnImeDone { updateEmail() }
+        views.emailEntryInput.setOnImeDoneListener { updateEmail() }
         views.emailEntrySubmit.debouncedClicks { updateEmail() }
 
         views.emailEntryInput.editText().textChanges()
@@ -67,10 +66,6 @@ class FtueAuthEmailEntryFragment @Inject constructor() : AbstractFtueAuthFragmen
 
     override fun onError(throwable: Throwable) {
         views.emailEntryInput.error = errorFormatter.toHumanReadable(throwable)
-    }
-
-    override fun updateWithState(state: OnboardingViewState) {
-        views.emailEntrySubmit.isEnabled = views.emailEntryInput.content().isEmail()
     }
 
     override fun resetViewModel() {

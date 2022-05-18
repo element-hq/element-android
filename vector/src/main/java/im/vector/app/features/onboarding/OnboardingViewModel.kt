@@ -269,12 +269,21 @@ class OnboardingViewModel @AssistedInject constructor(
     }
 
     private fun handleRegisterAction(action: RegisterAction, onNextRegistrationStepAction: (FlowResult) -> Unit) {
-        currentJob = viewModelScope.launch {
+        val job = viewModelScope.launch {
             if (action.hasLoadingState()) {
                 setState { copy(isLoading = true) }
             }
             internalRegisterAction(action, onNextRegistrationStepAction)
             setState { copy(isLoading = false) }
+        }
+
+        when (action) {
+            is RegisterAction.SendAgainThreePid -> {
+                // avoid cancelling the current job which is polling for verification complete
+            }
+            else -> {
+                currentJob = job
+            }
         }
     }
 
