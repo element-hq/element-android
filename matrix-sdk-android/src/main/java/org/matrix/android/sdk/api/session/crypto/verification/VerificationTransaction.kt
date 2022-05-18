@@ -28,7 +28,7 @@ interface VerificationTransaction {
     val isIncoming: Boolean
 
     /**
-     * User wants to cancel the transaction
+     * User wants to cancel the transaction.
      */
     fun cancel()
 

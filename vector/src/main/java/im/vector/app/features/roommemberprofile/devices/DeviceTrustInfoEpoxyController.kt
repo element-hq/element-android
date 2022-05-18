@@ -36,7 +36,7 @@ class DeviceTrustInfoEpoxyController @Inject constructor(private val stringProvi
                                                          private val colorProvider: ColorProvider,
                                                          private val dimensionConverter: DimensionConverter,
                                                          private val vectorPreferences: VectorPreferences) :
-    TypedEpoxyController<DeviceListViewState>() {
+        TypedEpoxyController<DeviceListViewState>() {
 
     interface InteractionListener {
         fun onVerifyManually(device: CryptoDeviceInfo)
@@ -65,14 +65,22 @@ class DeviceTrustInfoEpoxyController @Inject constructor(private val stringProvi
                 apply {
                     if (isVerified) {
                         // TODO FORMAT
-                        text(host.stringProvider.getString(R.string.verification_profile_device_verified_because,
-                                data.userItem?.displayName ?: "",
-                                data.userItem?.id ?: "").toEpoxyCharSequence())
+                        text(
+                                host.stringProvider.getString(
+                                        R.string.verification_profile_device_verified_because,
+                                        data.userItem?.displayName ?: "",
+                                        data.userItem?.id ?: ""
+                                ).toEpoxyCharSequence()
+                        )
                     } else {
                         // TODO what if mine
-                        text(host.stringProvider.getString(R.string.verification_profile_device_new_signing,
-                                data.userItem?.displayName ?: "",
-                                data.userItem?.id ?: "").toEpoxyCharSequence())
+                        text(
+                                host.stringProvider.getString(
+                                        R.string.verification_profile_device_new_signing,
+                                        data.userItem?.displayName ?: "",
+                                        data.userItem?.id ?: ""
+                                ).toEpoxyCharSequence()
+                        )
                     }
                 }
 //                    text(stringProvider.getString(R.string.verification_profile_device_untrust_info))

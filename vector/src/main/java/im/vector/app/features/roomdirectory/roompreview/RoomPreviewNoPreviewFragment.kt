@@ -38,6 +38,7 @@ import im.vector.app.core.utils.styleMatchingText
 import im.vector.app.core.utils.tappableMatchingText
 import im.vector.app.databinding.FragmentRoomPreviewNoPreviewBinding
 import im.vector.app.features.analytics.plan.MobileScreen
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.roomdirectory.JoinState
@@ -49,7 +50,7 @@ import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
 
 /**
- * Note: this Fragment is also used for world readable room for the moment
+ * Note: this Fragment is also used for world readable room for the moment.
  */
 class RoomPreviewNoPreviewFragment @Inject constructor(
         private val avatarRenderer: AvatarRenderer
@@ -100,7 +101,13 @@ class RoomPreviewNoPreviewFragment @Inject constructor(
             if (state.roomType == RoomType.SPACE) {
                 navigator.switchToSpace(requireActivity(), state.roomId, Navigator.PostSwitchSpaceAction.None)
             } else {
-                navigator.openRoom(requireActivity(), state.roomId, roomPreviewData.eventId, roomPreviewData.buildTask)
+                navigator.openRoom(
+                        context = requireActivity(),
+                        roomId = state.roomId,
+                        eventId = roomPreviewData.eventId,
+                        buildTask = roomPreviewData.buildTask,
+                        trigger = ViewRoom.Trigger.MobileRoomPreview
+                )
             }
         }
 

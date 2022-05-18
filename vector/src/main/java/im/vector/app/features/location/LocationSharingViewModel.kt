@@ -36,6 +36,8 @@ import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.getUser
 import org.matrix.android.sdk.api.util.toMatrixItem
 
 /**
@@ -134,7 +136,7 @@ class LocationSharingViewModel @AssistedInject constructor(
 
     private fun shareLocation(locationData: LocationData?, isUserLocation: Boolean) {
         locationData?.let { location ->
-            room.sendLocation(
+            room.sendService().sendLocation(
                     latitude = location.latitude,
                     longitude = location.longitude,
                     uncertainty = location.uncertainty,
@@ -159,11 +161,13 @@ class LocationSharingViewModel @AssistedInject constructor(
     }
 
     private fun handleStartLiveLocationSharingAction(durationMillis: Long) {
-        _viewEvents.post(LocationSharingViewEvents.StartLiveLocationService(
-                sessionId = session.sessionId,
-                roomId = room.roomId,
-                durationMillis = durationMillis
-        ))
+        _viewEvents.post(
+                LocationSharingViewEvents.StartLiveLocationService(
+                        sessionId = session.sessionId,
+                        roomId = room.roomId,
+                        durationMillis = durationMillis
+                )
+        )
     }
 
     override fun onLocationUpdate(locationData: LocationData) {

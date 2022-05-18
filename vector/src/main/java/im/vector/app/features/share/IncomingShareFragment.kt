@@ -37,16 +37,18 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentIncomingShareBinding
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.attachments.AttachmentsHelper
 import im.vector.app.features.attachments.preview.AttachmentsPreviewActivity
 import im.vector.app.features.attachments.preview.AttachmentsPreviewArgs
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
+import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 
 /**
- * Display the list of rooms
- * The user can select multiple rooms to send the data to
+ * Display the list of rooms.
+ * The user can select multiple rooms to send the data to.
  */
 class IncomingShareFragment @Inject constructor(
         private val incomingShareController: IncomingShareController,
@@ -124,7 +126,11 @@ class IncomingShareFragment @Inject constructor(
 
     private fun handleMultipleRoomsShareDone(viewEvent: IncomingShareViewEvents.MultipleRoomsShareDone) {
         requireActivity().let {
-            navigator.openRoom(it, viewEvent.roomId)
+            navigator.openRoom(
+                    context = it,
+                    roomId = viewEvent.roomId,
+                    trigger = ViewRoom.Trigger.MobileLinkShare
+            )
             it.finish()
         }
     }

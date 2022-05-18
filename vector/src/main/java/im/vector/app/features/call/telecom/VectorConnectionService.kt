@@ -50,7 +50,7 @@ import im.vector.app.core.services.CallService
 @RequiresApi(Build.VERSION_CODES.M) class VectorConnectionService : ConnectionService() {
 
     /**
-     * The telecom subsystem calls this method in response to your app calling placeCall(Uri, Bundle) to create a new outgoing call
+     * The telecom subsystem calls this method in response to your app calling placeCall(Uri, Bundle) to create a new outgoing call.
      */
     override fun onCreateOutgoingConnection(connectionManagerPhoneAccount: PhoneAccountHandle?, request: ConnectionRequest?): Connection? {
         val callId = request?.address?.encodedQuery ?: return null

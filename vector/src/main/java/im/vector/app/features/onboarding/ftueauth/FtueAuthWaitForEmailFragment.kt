@@ -36,7 +36,7 @@ data class FtueAuthWaitForEmailFragmentArgument(
 ) : Parcelable
 
 /**
- * In this screen, the user is asked to check his emails
+ * In this screen, the user is asked to check their emails.
  */
 class FtueAuthWaitForEmailFragment @Inject constructor() : AbstractFtueAuthFragment<FragmentLoginWaitForEmailBinding>() {
 

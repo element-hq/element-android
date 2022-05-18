@@ -27,12 +27,12 @@ import org.matrix.android.sdk.api.session.widgets.model.Widget
 import javax.inject.Inject
 
 /**
- * Epoxy controller for room widgets list
+ * Epoxy controller for room widgets list.
  */
 class RoomWidgetsController @Inject constructor(
         val stringProvider: StringProvider,
         val colorProvider: ColorProvider) :
-    TypedEpoxyController<List<Widget>>() {
+        TypedEpoxyController<List<Widget>>() {
 
     var listener: Listener? = null
 

@@ -28,8 +28,12 @@ internal class MathsHtmlNodeRenderer(private val context: HtmlNodeRendererContex
         val display = node.javaClass == DisplayMaths::class.java
         val contents = node.firstChild // should be the only child
         val latex = (contents as Text).literal
-        val attributes = context.extendAttributes(node, if (display) "div" else "span", Collections.singletonMap("data-mx-maths",
-                latex))
+        val attributes = context.extendAttributes(
+                node, if (display) "div" else "span", Collections.singletonMap(
+                "data-mx-maths",
+                latex
+        )
+        )
         html.tag(if (display) "div" else "span", attributes)
         html.tag("code")
         context.render(contents)

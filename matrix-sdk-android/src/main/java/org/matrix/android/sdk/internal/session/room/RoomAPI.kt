@@ -92,7 +92,7 @@ internal interface RoomAPI {
     ): PaginationResponse
 
     /**
-     * Get all members of a room
+     * Get all members of a room.
      *
      * @param roomId        the room id where to get the members
      * @param syncToken     the sync token (optional)
@@ -136,7 +136,7 @@ internal interface RoomAPI {
                                   @Query("filter") filter: String? = null): EventContextResponse
 
     /**
-     * Retrieve an event from its room id / events id
+     * Retrieve an event from its room id / events id.
      *
      * @param roomId  the room id
      * @param eventId the event Id
@@ -156,7 +156,7 @@ internal interface RoomAPI {
                                @Body markers: Map<String, String>)
 
     /**
-     * Send receipt to a room
+     * Send receipt to a room.
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/receipt/{receiptType}/{eventId}")
     suspend fun sendReceipt(@Path("roomId") roomId: String,
@@ -185,7 +185,7 @@ internal interface RoomAPI {
                            @Body body: ThreePidInviteBody)
 
     /**
-     * Send a generic state event
+     * Send a generic state event.
      *
      * @param roomId         the room id.
      * @param stateEventType the state event type
@@ -194,10 +194,11 @@ internal interface RoomAPI {
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/state/{state_event_type}")
     suspend fun sendStateEvent(@Path("roomId") roomId: String,
                                @Path("state_event_type") stateEventType: String,
-                               @Body params: JsonDict)
+                               @Body params: JsonDict
+    ): SendResponse
 
     /**
-     * Send a generic state event
+     * Send a generic state event.
      *
      * @param roomId         the room id.
      * @param stateEventType the state event type
@@ -208,7 +209,8 @@ internal interface RoomAPI {
     suspend fun sendStateEvent(@Path("roomId") roomId: String,
                                @Path("state_event_type") stateEventType: String,
                                @Path("state_key") stateKey: String,
-                               @Body params: JsonDict)
+                               @Body params: JsonDict
+    ): SendResponse
 
     /**
      * Get state events of a room
@@ -218,7 +220,7 @@ internal interface RoomAPI {
     suspend fun getRoomState(@Path("roomId") roomId: String): List<Event>
 
     /**
-     * Paginate relations for event based in normal topological order
+     * Paginate relations for event based in normal topological order.
      * @param relationType filter for this relation type
      * @param eventType filter for this event type
      */
@@ -233,7 +235,7 @@ internal interface RoomAPI {
     ): RelationsResponse
 
     /**
-     * Paginate relations for thread events based in normal topological order
+     * Paginate relations for thread events based in normal topological order.
      * @param relationType filter for this relation type
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "rooms/{roomId}/relations/{eventId}/{relationType}")
@@ -335,14 +337,14 @@ internal interface RoomAPI {
     suspend fun getAliases(@Path("roomId") roomId: String): GetAliasesResponse
 
     /**
-     * Inform that the user is starting to type or has stopped typing
+     * Inform that the user is starting to type or has stopped typing.
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/typing/{userId}")
     suspend fun sendTypingState(@Path("roomId") roomId: String,
                                 @Path("userId") userId: String,
                                 @Body body: TypingBody)
 
-    /**
+    /*
      * Room tagging
      */
 

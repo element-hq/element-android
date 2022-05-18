@@ -44,7 +44,7 @@ data class FtueAuthTermsLegacyStyleFragmentArgument(
 ) : Parcelable
 
 /**
- * LoginTermsFragment displays the list of policies the user has to accept
+ * LoginTermsFragment displays the list of policies the user has to accept.
  */
 class FtueAuthLegacyStyleTermsFragment @Inject constructor(
         private val policyController: PolicyController

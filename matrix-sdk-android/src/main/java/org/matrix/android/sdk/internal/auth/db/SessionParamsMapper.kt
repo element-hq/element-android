@@ -54,6 +54,7 @@ internal class SessionParamsMapper @Inject constructor(moshi: Moshi) {
                 sessionParams.userId,
                 credentialsJson,
                 homeServerConnectionConfigJson,
-                sessionParams.isTokenValid)
+                sessionParams.isTokenValid
+        )
     }
 }

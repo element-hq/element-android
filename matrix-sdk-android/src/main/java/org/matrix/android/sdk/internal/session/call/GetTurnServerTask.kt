@@ -22,16 +22,16 @@ import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
 
-internal abstract class GetTurnServerTask : Task<GetTurnServerTask.Params, TurnServerResponse> {
-    object Params
-}
+internal abstract class GetTurnServerTask : Task<Unit, TurnServerResponse>
 
-internal class DefaultGetTurnServerTask @Inject constructor(private val voipAPI: VoipApi,
-                                                            private val globalErrorReceiver: GlobalErrorReceiver) : GetTurnServerTask() {
+internal class DefaultGetTurnServerTask @Inject constructor(
+        private val voipApi: VoipApi,
+        private val globalErrorReceiver: GlobalErrorReceiver
+) : GetTurnServerTask() {
 
-    override suspend fun execute(params: Params): TurnServerResponse {
+    override suspend fun execute(params: Unit): TurnServerResponse {
         return executeRequest(globalErrorReceiver) {
-            voipAPI.getTurnServer()
+            voipApi.getTurnServer()
         }
     }
 }

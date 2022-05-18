@@ -95,7 +95,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
             when (it) {
                 is VerificationBottomSheetViewEvents.Dismiss           -> dismiss()
                 is VerificationBottomSheetViewEvents.AccessSecretStore -> {
-                    secretStartForActivityResult.launch(SharedSecureStorageActivity.newIntent(
+                    secretStartForActivityResult.launch(SharedSecureStorageActivity.newReadIntent(
                             requireContext(),
                             null, // use default key
                             listOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME, KEYBACKUP_SECRET_SSSS_NAME),
@@ -183,7 +183,8 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
                             isSuccessFull = true,
                             isMe = true,
                             cancelReason = null
-                    ))
+                    )
+            )
             return@withState
         }
 
@@ -348,7 +349,8 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
     private fun showFragment(fragmentClass: KClass<out Fragment>, argsParcelable: Parcelable? = null) {
         if (childFragmentManager.findFragmentByTag(fragmentClass.simpleName) == null) {
             childFragmentManager.commitTransaction {
-                replace(R.id.bottomSheetFragmentContainer,
+                replace(
+                        R.id.bottomSheetFragmentContainer,
                         fragmentClass.java,
                         argsParcelable?.toMvRxBundle(),
                         fragmentClass.simpleName
@@ -360,31 +362,37 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
     companion object {
         fun withArgs(roomId: String?, otherUserId: String, transactionId: String? = null): VerificationBottomSheet {
             return VerificationBottomSheet().apply {
-                setArguments(VerificationArgs(
-                        otherUserId = otherUserId,
-                        roomId = roomId,
-                        verificationId = transactionId,
-                        selfVerificationMode = false
-                ))
+                setArguments(
+                        VerificationArgs(
+                                otherUserId = otherUserId,
+                                roomId = roomId,
+                                verificationId = transactionId,
+                                selfVerificationMode = false
+                        )
+                )
             }
         }
 
         fun forSelfVerification(session: Session): VerificationBottomSheet {
             return VerificationBottomSheet().apply {
-                setArguments(VerificationArgs(
-                        otherUserId = session.myUserId,
-                        selfVerificationMode = true
-                ))
+                setArguments(
+                        VerificationArgs(
+                                otherUserId = session.myUserId,
+                                selfVerificationMode = true
+                        )
+                )
             }
         }
 
         fun forSelfVerification(session: Session, outgoingRequest: String): VerificationBottomSheet {
             return VerificationBottomSheet().apply {
-                setArguments(VerificationArgs(
-                        otherUserId = session.myUserId,
-                        selfVerificationMode = true,
-                        verificationId = outgoingRequest
-                ))
+                setArguments(
+                        VerificationArgs(
+                                otherUserId = session.myUserId,
+                                selfVerificationMode = true,
+                                verificationId = outgoingRequest
+                        )
+                )
             }
         }
 

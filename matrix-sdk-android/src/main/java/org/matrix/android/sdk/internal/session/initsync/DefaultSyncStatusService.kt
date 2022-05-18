@@ -24,7 +24,7 @@ import javax.inject.Inject
 
 @SessionScope
 internal class DefaultSyncStatusService @Inject constructor() :
-    SyncStatusService,
+        SyncStatusService,
         ProgressReporter {
 
     private val status = MutableLiveData<SyncStatusService.Status>()
@@ -41,7 +41,7 @@ internal class DefaultSyncStatusService @Inject constructor() :
     }
 
     /**
-     * Create a rootTask
+     * Create a rootTask.
      */
     fun startRoot(initSyncStep: InitSyncStep,
                   totalProgress: Int) {
@@ -51,7 +51,7 @@ internal class DefaultSyncStatusService @Inject constructor() :
     }
 
     /**
-     * Add a child to the leaf
+     * Add a child to the leaf.
      */
     override fun startTask(initSyncStep: InitSyncStep,
                            totalProgress: Int,

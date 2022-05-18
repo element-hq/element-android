@@ -47,8 +47,6 @@ import im.vector.app.databinding.DialogBaseEditTextBinding
 import im.vector.app.databinding.DialogShareQrCodeBinding
 import im.vector.app.databinding.FragmentMatrixProfileBinding
 import im.vector.app.databinding.ViewStubRoomMemberProfileHeaderBinding
-import im.vector.app.features.MainActivity
-import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.displayname.getBestName
@@ -113,7 +111,8 @@ class RoomMemberProfileFragment @Inject constructor(
         headerViews.memberProfileStateView.contentView = headerViews.memberProfileInfoContainer
         views.matrixProfileRecyclerView.configureWith(roomMemberProfileController, hasFixedSize = true, disableItemAnimation = true)
         roomMemberProfileController.callback = this
-        appBarStateChangeListener = MatrixItemAppBarStateChangeListener(headerView,
+        appBarStateChangeListener = MatrixItemAppBarStateChangeListener(
+                headerView,
                 listOf(
                         views.matrixProfileToolbarAvatarImageView,
                         views.matrixProfileToolbarTitleView,
@@ -133,18 +132,11 @@ class RoomMemberProfileFragment @Inject constructor(
                 is RoomMemberProfileViewEvents.OnKickActionSuccess         -> Unit
                 is RoomMemberProfileViewEvents.OnSetPowerLevelSuccess      -> Unit
                 is RoomMemberProfileViewEvents.OnBanActionSuccess          -> Unit
-                is RoomMemberProfileViewEvents.OnIgnoreActionSuccess       -> handleOnIgnoreActionSuccess(it)
+                is RoomMemberProfileViewEvents.OnIgnoreActionSuccess       -> Unit
                 is RoomMemberProfileViewEvents.OnInviteActionSuccess       -> Unit
             }
         }
         setupLongClicks()
-    }
-
-    private fun handleOnIgnoreActionSuccess(action: RoomMemberProfileViewEvents.OnIgnoreActionSuccess) {
-        if (action.shouldPerformInitialSync) {
-            // A user has been un-ignored, perform a initial sync
-            MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCache = true))
-        }
     }
 
     private fun setupLongClicks() {

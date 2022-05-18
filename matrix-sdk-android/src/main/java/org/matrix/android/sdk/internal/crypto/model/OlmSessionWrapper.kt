@@ -20,7 +20,7 @@ import kotlinx.coroutines.sync.Mutex
 import org.matrix.olm.OlmSession
 
 /**
- * Encapsulate a OlmSession and a last received message Timestamp
+ * Encapsulate a OlmSession and a last received message Timestamp.
  */
 internal data class OlmSessionWrapper(
         // The associated olm session.
@@ -32,9 +32,9 @@ internal data class OlmSessionWrapper(
 ) {
 
     /**
-     * Notify that a message has been received on this olm session so that it updates `lastReceivedMessageTs`
+     * Notify that a message has been received on this olm session so that it updates `lastReceivedMessageTs`.
      */
-    fun onMessageReceived() {
-        lastReceivedMessageTs = System.currentTimeMillis()
+    fun onMessageReceived(currentTimeMillis: Long) {
+        lastReceivedMessageTs = currentTimeMillis
     }
 }

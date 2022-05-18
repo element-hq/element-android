@@ -47,7 +47,7 @@ import javax.inject.Inject
 
 /**
  * This screen is displayed when the application does not support login flow or registration flow
- * of the homeserver, as a fallback to login or to create an account
+ * of the homeserver, as a fallback to login or to create an account.
  */
 class FtueAuthWebFragment @Inject constructor(
         private val assetReader: AssetReader
@@ -138,6 +138,7 @@ class FtueAuthWebFragment @Inject constructor(
                         .show()
             }
 
+            @Deprecated("Deprecated in Java")
             override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {
                 super.onReceivedError(view, errorCode, description, failingUrl)
 
@@ -186,10 +187,12 @@ class FtueAuthWebFragment @Inject constructor(
              *         }
              *    }
              * </pre>
+             * .
              * @param view
              * @param url
              * @return
              */
+            @Deprecated("Deprecated in Java")
             override fun shouldOverrideUrlLoading(view: WebView, url: String?): Boolean {
                 if (url == null) return super.shouldOverrideUrlLoading(view, url as String?)
 

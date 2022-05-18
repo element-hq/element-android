@@ -17,69 +17,78 @@
 package org.matrix.android.sdk.internal.session.room.aggregation.livelocation
 
 import io.realm.Realm
-import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationBeaconContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageLiveLocationContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
-import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
-import org.matrix.android.sdk.internal.database.query.getOrNull
+import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntity
+import org.matrix.android.sdk.internal.database.query.getOrCreate
 import timber.log.Timber
 import javax.inject.Inject
 
 internal class DefaultLiveLocationAggregationProcessor @Inject constructor() : LiveLocationAggregationProcessor {
 
-    override fun handleLiveLocation(realm: Realm, event: Event, content: MessageLiveLocationContent, roomId: String, isLocalEcho: Boolean) {
-        val locationSenderId = event.senderId ?: return
-
-        // We shouldn't process local echos
-        if (isLocalEcho) {
+    override fun handleBeaconInfo(realm: Realm, event: Event, content: MessageBeaconInfoContent, roomId: String, isLocalEcho: Boolean) {
+        if (event.senderId.isNullOrEmpty() || isLocalEcho) {
             return
         }
 
-        // A beacon info state event has to be sent before sending location
-        // TODO handle missing check of m_relatesTo field
-        var beaconInfoEntity: CurrentStateEventEntity? = null
-        val eventTypesIterator = EventType.STATE_ROOM_BEACON_INFO.iterator()
-        while (beaconInfoEntity == null && eventTypesIterator.hasNext()) {
-            beaconInfoEntity = CurrentStateEventEntity.getOrNull(realm, roomId, locationSenderId, eventTypesIterator.next())
-        }
-
-        if (beaconInfoEntity == null) {
-            Timber.v("## LIVE LOCATION. There is not any beacon info which should be emitted before sending location updates")
-            return
-        }
-        val beaconInfoContent = ContentMapper.map(beaconInfoEntity.root?.content)?.toModel<LiveLocationBeaconContent>(catchError = true)
-        if (beaconInfoContent == null) {
-            Timber.v("## LIVE LOCATION. Beacon info content is invalid")
-            return
-        }
-
-        // Check if live location is ended
-        if (!beaconInfoContent.getBestBeaconInfo()?.isLive.orFalse()) {
-            Timber.v("## LIVE LOCATION. Beacon info is not live anymore")
-            return
-        }
-
-        // Check if beacon info is outdated
-        if (isBeaconInfoOutdated(beaconInfoContent, content)) {
-            Timber.v("## LIVE LOCATION. Beacon info has timeout")
-            beaconInfoContent.hasTimedOut = true
+        val targetEventId = if (content.isLive.orTrue()) {
+            event.eventId
         } else {
-            beaconInfoContent.lastLocationContent = content
+            // when live is set to false, we use the id of the event that should have been replaced
+            event.unsignedData?.replacesState
         }
 
-        beaconInfoEntity.root?.content = ContentMapper.map(beaconInfoContent.toContent())
+        if (targetEventId.isNullOrEmpty()) {
+            Timber.w("no target event id found for the beacon content")
+            return
+        }
+
+        val aggregatedSummary = LiveLocationShareAggregatedSummaryEntity.getOrCreate(
+                realm = realm,
+                roomId = roomId,
+                eventId = targetEventId
+        )
+
+        Timber.d("updating summary of id=$targetEventId with isLive=${content.isLive}")
+
+        aggregatedSummary.endOfLiveTimestampMillis = content.getBestTimestampMillis()?.let { it + (content.timeout ?: 0) }
+        aggregatedSummary.isActive = content.isLive
     }
 
-    private fun isBeaconInfoOutdated(beaconInfoContent: LiveLocationBeaconContent,
-                                     liveLocationContent: MessageLiveLocationContent): Boolean {
-        val beaconInfoStartTime = beaconInfoContent.getBestTimestampAsMilliseconds() ?: 0
-        val liveLocationEventTime = liveLocationContent.getBestTimestampAsMilliseconds() ?: 0
-        val timeout = beaconInfoContent.getBestBeaconInfo()?.timeout ?: 0
-        return liveLocationEventTime - beaconInfoStartTime > timeout
+    override fun handleBeaconLocationData(realm: Realm, event: Event, content: MessageBeaconLocationDataContent, roomId: String, isLocalEcho: Boolean) {
+        if (event.senderId.isNullOrEmpty() || isLocalEcho) {
+            return
+        }
+
+        val targetEventId = content.relatesTo?.eventId
+
+        if (targetEventId.isNullOrEmpty()) {
+            Timber.w("no target event id found for the live location content")
+            return
+        }
+
+        val aggregatedSummary = LiveLocationShareAggregatedSummaryEntity.getOrCreate(
+                realm = realm,
+                roomId = roomId,
+                eventId = targetEventId
+        )
+        val updatedLocationTimestamp = content.getBestTimestampMillis() ?: 0
+        val currentLocationTimestamp = ContentMapper
+                .map(aggregatedSummary.lastLocationContent)
+                .toModel<MessageBeaconLocationDataContent>()
+                ?.getBestTimestampMillis()
+                ?: 0
+
+        if (updatedLocationTimestamp.isMoreRecentThan(currentLocationTimestamp)) {
+            Timber.d("updating last location of the summary of id=$targetEventId")
+            aggregatedSummary.lastLocationContent = ContentMapper.map(content.toContent())
+        }
     }
+
+    private fun Long.isMoreRecentThan(timestamp: Long) = this > timestamp
 }

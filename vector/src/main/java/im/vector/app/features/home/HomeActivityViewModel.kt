@@ -42,10 +42,11 @@ import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.api.extensions.tryOrNull
-import org.matrix.android.sdk.api.pushrules.RuleIds
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
+import org.matrix.android.sdk.api.session.getUser
 import org.matrix.android.sdk.api.session.initsync.SyncStatusService
+import org.matrix.android.sdk.api.session.pushrules.RuleIds
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
@@ -175,7 +176,7 @@ class HomeActivityViewModel @AssistedInject constructor(
     private fun observeInitialSync() {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
 
-        session.getSyncStatusLive()
+        session.syncStatusService().getSyncStatusLive()
                 .asFlow()
                 .onEach { status ->
                     when (status) {
@@ -189,7 +190,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                                 maybeBootstrapCrossSigningAfterInitialSync()
                             }
                         }
-                        else                                    -> Unit
+                        else                                               -> Unit
                     }
 
                     setState {
@@ -203,9 +204,9 @@ class HomeActivityViewModel @AssistedInject constructor(
 
     /**
      * After migration from riot to element some users reported that their
-     * push setting for the session was set to off
+     * push setting for the session was set to off.
      * In order to mitigate this, we want to display a popup once to the user
-     * giving him the option to review this setting
+     * giving him the option to review this setting.
      */
     private fun checkSessionPushIsOn() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -215,15 +216,18 @@ class HomeActivityViewModel @AssistedInject constructor(
             if (!vectorPreferences.areNotificationEnabledForDevice()) {
                 // Check if set at account level
                 val mRuleMaster = activeSessionHolder.getSafeActiveSession()
+                        ?.pushRuleService()
                         ?.getPushRules()
                         ?.getAllRules()
                         ?.find { it.ruleId == RuleIds.RULE_ID_DISABLE_ALL }
                 if (mRuleMaster?.enabled == false) {
                     // So push are enabled at account level but not for this session
                     // Let's check that there are some rooms?
-                    val knownRooms = activeSessionHolder.getSafeActiveSession()?.getRoomSummaries(roomSummaryQueryParams {
-                        memberships = Membership.activeMemberships()
-                    })?.size ?: 0
+                    val knownRooms = activeSessionHolder.getSafeActiveSession()
+                            ?.roomService()
+                            ?.getRoomSummaries(roomSummaryQueryParams {
+                                memberships = Membership.activeMemberships()
+                            })?.size ?: 0
 
                     // Prompt once to the user
                     if (knownRooms > 1 && !vectorPreferences.didAskUserToEnableSessionPush()) {

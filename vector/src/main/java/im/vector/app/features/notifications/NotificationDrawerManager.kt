@@ -27,6 +27,7 @@ import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
+import org.matrix.android.sdk.api.session.getUser
 import org.matrix.android.sdk.api.util.toMatrixItem
 import timber.log.Timber
 import javax.inject.Inject
@@ -56,7 +57,7 @@ class NotificationDrawerManager @Inject constructor(
         get() = activeSessionDataSource.currentValue?.orNull()
 
     /**
-     * Lazily initializes the NotificationState as we rely on having a current session in order to fetch the persisted queue of events
+     * Lazily initializes the NotificationState as we rely on having a current session in order to fetch the persisted queue of events.
      */
     private val notificationState by lazy { createInitialNotificationState() }
     private val avatarSize = context.resources.getDimensionPixelSize(R.dimen.profile_avatar_size)
@@ -101,7 +102,7 @@ class NotificationDrawerManager @Inject constructor(
     }
 
     /**
-     * Clear all known events and refresh the notification drawer
+     * Clear all known events and refresh the notification drawer.
      */
     fun clearAllEvents() {
         updateEvents { it.clear() }
@@ -154,7 +155,8 @@ class NotificationDrawerManager @Inject constructor(
                         Timber.w(throwable, "refreshNotificationDrawerBg failure")
                     }
                 },
-                canHandle.waitMillis())
+                canHandle.waitMillis()
+        )
     }
 
     @WorkerThread

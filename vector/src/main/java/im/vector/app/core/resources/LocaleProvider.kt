@@ -32,6 +32,6 @@ class LocaleProvider @Inject constructor(private val resources: Resources) {
 
 fun LocaleProvider.isEnglishSpeaking() = current().language.startsWith("en")
 
-fun LocaleProvider.getLayoutDirectionFromCurrentLocale() =  TextUtils.getLayoutDirectionFromLocale(current())
+fun LocaleProvider.getLayoutDirectionFromCurrentLocale() = TextUtils.getLayoutDirectionFromLocale(current())
 
 fun LocaleProvider.isRTL() = getLayoutDirectionFromCurrentLocale() == View.LAYOUT_DIRECTION_RTL

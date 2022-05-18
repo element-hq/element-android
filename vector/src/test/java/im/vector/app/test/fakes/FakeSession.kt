@@ -16,7 +16,6 @@
 
 package im.vector.app.test.fakes
 
-import android.net.Uri
 import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.extensions.startSyncing
 import im.vector.app.core.extensions.vectorStore
@@ -27,6 +26,8 @@ import io.mockk.coJustRun
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
+import org.matrix.android.sdk.api.session.profile.ProfileService
 
 class FakeSession(
         val fakeCryptoService: FakeCryptoService = FakeCryptoService(),
@@ -41,12 +42,12 @@ class FakeSession(
 
     override val myUserId: String = "@fake:server.fake"
 
-    override fun cryptoService() = fakeCryptoService
-    override val sharedSecretStorageService = fakeSharedSecretStorageService
     override val coroutineDispatchers = testCoroutineDispatchers
-    override suspend fun setDisplayName(userId: String, newDisplayName: String) = fakeProfileService.setDisplayName(userId, newDisplayName)
-    override suspend fun updateAvatar(userId: String, newAvatarUri: Uri, fileName: String) = fakeProfileService.updateAvatar(userId, newAvatarUri, fileName)
-    override fun getHomeServerCapabilities() = fakeHomeServerCapabilitiesService.getHomeServerCapabilities()
+
+    override fun cryptoService() = fakeCryptoService
+    override fun profileService(): ProfileService = fakeProfileService
+    override fun homeServerCapabilitiesService(): HomeServerCapabilitiesService = fakeHomeServerCapabilitiesService
+    override fun sharedSecretStorageService() = fakeSharedSecretStorageService
 
     fun givenVectorStore(vectorSessionStore: VectorSessionStore) {
         coEvery {

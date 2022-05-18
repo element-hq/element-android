@@ -55,7 +55,7 @@ internal data class SearchRequestRoomEvents(
          * Requests the server return the current state for each room returned.
          */
         @Json(name = "include_state")
-        val include_state: Boolean? = null
+        val includeState: Boolean? = null
 
         /**
          * Requests that the server partitions the result set based on the provided list of keys.

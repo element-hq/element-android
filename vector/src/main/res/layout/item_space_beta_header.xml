@@ -8,6 +8,7 @@
     android:paddingStart="16dp"
     android:paddingTop="8dp"
     android:paddingEnd="16dp"
+    android:paddingBottom="16dp"
     tools:viewBindingIgnore="true">
 
     <TextView
@@ -26,19 +27,5 @@
         android:layout_marginTop="8dp"
         android:text="@string/spaces_beta_welcome_to_spaces_desc"
         android:textColor="?vctr_content_secondary" />
-
-    <TextView
-        android:id="@+id/spaceBetaFeedbackAction"
-        style="@style/Widget.Vector.TextView.Body"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawablePadding="8dp"
-        android:paddingStart="0dp"
-        android:paddingTop="8dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="8dp"
-        android:text="@string/give_feedback"
-        android:textColor="@color/vector_info_color"
-        app:drawableStartCompat="@drawable/ic_feedback" />
 
 </LinearLayout>

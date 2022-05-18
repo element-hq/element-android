@@ -23,7 +23,7 @@ import org.matrix.android.sdk.internal.database.model.RawCacheEntity
 import org.matrix.android.sdk.internal.database.model.RawCacheEntityFields
 
 /**
- * Get the current RawCacheEntity, return null if it does not exist
+ * Get the current RawCacheEntity, return null if it does not exist.
  */
 internal fun RawCacheEntity.Companion.get(realm: Realm, url: String): RawCacheEntity? {
     return realm.where<RawCacheEntity>()
@@ -32,7 +32,7 @@ internal fun RawCacheEntity.Companion.get(realm: Realm, url: String): RawCacheEn
 }
 
 /**
- * Get the current RawCacheEntity, create one if it does not exist
+ * Get the current RawCacheEntity, create one if it does not exist.
  */
 internal fun RawCacheEntity.Companion.getOrCreate(realm: Realm, url: String): RawCacheEntity {
     return get(realm, url) ?: realm.createObject(url)

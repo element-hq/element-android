@@ -92,7 +92,7 @@
         android:maxWidth="496dp"
         android:minWidth="144dp"
         android:paddingTop="8dp"
-        android:paddingBottom="8dp"
+        android:paddingBottom="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/threadSummaryTitleTextView"
         app:layout_constraintTop_toBottomOf="@id/threadSummaryRootMessageTextView"

@@ -99,9 +99,10 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
                     style(ItemStyle.BIG_TEXT)
                     titleIconResourceId(shield)
                     title(host.stringProvider.getString(R.string.crosssigning_verify_this_session).toEpoxyCharSequence())
-                    description(host.stringProvider
-                            .getString(if (data.hasOtherSessions) R.string.confirm_your_identity else R.string.confirm_your_identity_quad_s)
-                            .toEpoxyCharSequence()
+                    description(
+                            host.stringProvider
+                                    .getString(if (data.hasOtherSessions) R.string.confirm_your_identity else R.string.confirm_your_identity_quad_s)
+                                    .toEpoxyCharSequence()
                     )
                 }
             }

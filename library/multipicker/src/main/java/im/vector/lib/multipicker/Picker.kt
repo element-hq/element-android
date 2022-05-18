@@ -24,7 +24,7 @@ import android.net.Uri
 import androidx.activity.result.ActivityResultLauncher
 
 /**
- * Abstract class to provide all types of Pickers
+ * Abstract class to provide all types of Pickers.
  */
 abstract class Picker<T> {
 

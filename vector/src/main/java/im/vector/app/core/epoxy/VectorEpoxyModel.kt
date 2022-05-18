@@ -25,7 +25,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancelChildren
 
 /**
- * EpoxyModelWithHolder which can listen to visibility state change
+ * EpoxyModelWithHolder which can listen to visibility state change.
  */
 abstract class VectorEpoxyModel<H : VectorEpoxyHolder> : EpoxyModelWithHolder<H>() {
 

@@ -32,7 +32,7 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageInformationD
 import javax.inject.Inject
 
 /**
- * Bottom sheet displaying list of edits for a given event ordered by timestamp
+ * Bottom sheet displaying list of edits for a given event ordered by timestamp.
  */
 @AndroidEntryPoint
 class ViewEditHistoryBottomSheet :
@@ -51,7 +51,8 @@ class ViewEditHistoryBottomSheet :
         views.bottomSheetRecyclerView.configureWith(
                 epoxyController,
                 dividerDrawable = R.drawable.divider_horizontal_on_secondary,
-                hasFixedSize = false)
+                hasFixedSize = false
+        )
         views.bottomSheetTitle.text = context?.getString(R.string.message_edits)
     }
 
@@ -68,11 +69,13 @@ class ViewEditHistoryBottomSheet :
     companion object {
         fun newInstance(roomId: String, informationData: MessageInformationData): ViewEditHistoryBottomSheet {
             return ViewEditHistoryBottomSheet().apply {
-                setArguments(TimelineEventFragmentArgs(
-                        eventId = informationData.eventId,
-                        roomId = roomId,
-                        informationData = informationData
-                ))
+                setArguments(
+                        TimelineEventFragmentArgs(
+                                eventId = informationData.eventId,
+                                roomId = roomId,
+                                informationData = informationData
+                        )
+                )
             }
         }
     }

@@ -48,8 +48,8 @@ data class ServerBackupStatusViewState(
 ) : MavericksState
 
 /**
- * The state representing the view
- * It can take one state at a time
+ * The state representing the view.
+ * It can take one state at a time.
  */
 sealed class BannerState {
 
@@ -87,7 +87,7 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
         val liveCrossSigningPrivateKeys = session.flow().liveCrossSigningPrivateKeys()
         combine(liveUserAccountData, liveCrossSigningInfo, keyBackupFlow, liveCrossSigningPrivateKeys) { _, crossSigningInfo, keyBackupState, pInfo ->
             // first check if 4S is already setup
-            if (session.sharedSecretStorageService.isRecoverySetup()) {
+            if (session.sharedSecretStorageService().isRecoverySetup()) {
                 // 4S is already setup sp we should not display anything
                 return@combine when (keyBackupState) {
                     KeysBackupState.BackingUp -> BannerState.BackingUp
@@ -121,21 +121,21 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
     }
 
     /**
-     * Safe way to get the current KeysBackup version
+     * Safe way to get the current KeysBackup version.
      */
     fun getCurrentBackupVersion(): String {
         return session.cryptoService().keysBackupService().currentBackupVersion ?: ""
     }
 
     /**
-     * Safe way to get the number of keys to backup
+     * Safe way to get the number of keys to backup.
      */
     fun getNumberOfKeysToBackup(): Int {
         return session.cryptoService().inboundGroupSessionsCount(false)
     }
 
     /**
-     * Safe way to tell if there are more keys on the server
+     * Safe way to tell if there are more keys on the server.
      */
     fun canRestoreKeys(): Boolean {
         return session.cryptoService().keysBackupService().canRestoreKeys()

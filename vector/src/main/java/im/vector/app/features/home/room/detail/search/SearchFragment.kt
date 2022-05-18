@@ -37,6 +37,7 @@ import im.vector.app.core.extensions.trackItemsVisibilityChange
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSearchBinding
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -97,7 +98,8 @@ class SearchFragment @Inject constructor(
                 is Success -> {
                     views.stateView.state = StateView.State.Empty(
                             title = getString(R.string.search_no_results),
-                            image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_search_no_results))
+                            image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_search_no_results)
+                    )
                 }
                 else       -> Unit
             }
@@ -119,22 +121,43 @@ class SearchFragment @Inject constructor(
     override fun onItemClicked(event: Event) =
             navigateToEvent(event)
 
+    override fun onThreadSummaryClicked(event: Event) {
+        navigateToEvent(event, true)
+    }
+
     /**
      * Navigate and highlight the event. If this is a thread event,
      * user will be redirected to the appropriate thread room
      * @param event the event to navigate and highlight
+     * @param forceNavigateToThread force navigate within the thread (ex. when user clicks on thread summary)
      */
-    private fun navigateToEvent(event: Event) {
+    private fun navigateToEvent(event: Event, forceNavigateToThread: Boolean = false) {
         val roomId = event.roomId ?: return
-        event.getRootThreadEventId()?.let {
+        val rootThreadEventId = if (forceNavigateToThread) {
+            event.eventId
+        } else {
+            event.getRootThreadEventId()
+        }
+
+        rootThreadEventId?.let {
             val threadTimelineArgs = ThreadTimelineArgs(
                     roomId = roomId,
                     displayName = fragmentArgs.roomDisplayName,
                     avatarUrl = fragmentArgs.roomAvatarUrl,
                     roomEncryptionTrustLevel = null,
-                    rootThreadEventId = it)
+                    rootThreadEventId = it
+            )
             navigator.openThread(requireContext(), threadTimelineArgs, event.eventId)
-        } ?: navigator.openRoom(requireContext(), roomId, event.eventId)
+        } ?: openRoom(roomId, event.eventId)
+    }
+
+    private fun openRoom(roomId: String, eventId: String?) {
+        navigator.openRoom(
+                context = requireContext(),
+                roomId = roomId,
+                eventId = eventId,
+                trigger = ViewRoom.Trigger.MessageSearch
+        )
     }
 
     override fun loadMore() {

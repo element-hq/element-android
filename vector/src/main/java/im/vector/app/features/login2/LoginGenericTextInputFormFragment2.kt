@@ -45,7 +45,7 @@ import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
 /**
- * In this screen, the user is asked for a text input
+ * In this screen, the user is asked for a text input.
  */
 class LoginGenericTextInputFormFragment2 @Inject constructor() : AbstractLoginFragment2<FragmentLoginGenericTextInputForm2Binding>() {
 
@@ -75,8 +75,8 @@ class LoginGenericTextInputFormFragment2 @Inject constructor() : AbstractLoginFr
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             views.loginGenericTextInputFormTextInput.setAutofillHints(
                     when (params.mode) {
-                        TextInputFormFragmentMode.SetEmail  -> HintConstants.AUTOFILL_HINT_EMAIL_ADDRESS
-                        TextInputFormFragmentMode.SetMsisdn -> HintConstants.AUTOFILL_HINT_PHONE_NUMBER
+                        TextInputFormFragmentMode.SetEmail      -> HintConstants.AUTOFILL_HINT_EMAIL_ADDRESS
+                        TextInputFormFragmentMode.SetMsisdn     -> HintConstants.AUTOFILL_HINT_PHONE_NUMBER
                         TextInputFormFragmentMode.ConfirmMsisdn -> HintConstants.AUTOFILL_HINT_SMS_OTP
                     }
             )

@@ -30,7 +30,7 @@ internal interface AccountAPI {
     suspend fun changePassword(@Body params: ChangePasswordParams)
 
     /**
-     * Deactivate the user account
+     * Deactivate the user account.
      *
      * @param params the deactivate account params
      */

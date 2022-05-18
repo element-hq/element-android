@@ -74,9 +74,12 @@ class VerificationChooseMethodFragment @Inject constructor(
     }
 
     override fun doVerifyBySas() = withState(sharedViewModel) { state ->
-        sharedViewModel.handle(VerificationAction.StartSASVerification(
-                state.otherUserMxItem?.id ?: "",
-                state.pendingRequest.invoke()?.transactionId ?: ""))
+        sharedViewModel.handle(
+                VerificationAction.StartSASVerification(
+                        state.otherUserMxItem?.id ?: "",
+                        state.pendingRequest.invoke()?.transactionId ?: ""
+                )
+        )
     }
 
     private val openCameraActivityResultLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
@@ -115,10 +118,12 @@ class VerificationChooseMethodFragment @Inject constructor(
     }
 
     private fun onRemoteQrCodeScanned(remoteQrCode: String) = withState(sharedViewModel) { state ->
-        sharedViewModel.handle(VerificationAction.RemoteQrCodeScanned(
-                state.otherUserMxItem?.id ?: "",
-                state.pendingRequest.invoke()?.transactionId ?: "",
-                remoteQrCode
-        ))
+        sharedViewModel.handle(
+                VerificationAction.RemoteQrCodeScanned(
+                        state.otherUserMxItem?.id ?: "",
+                        state.pendingRequest.invoke()?.transactionId ?: "",
+                        remoteQrCode
+                )
+        )
     }
 }

@@ -44,7 +44,7 @@ data class CallReplacesContent(
          */
         @Json(name = "target_room") val targetRoomId: String? = null,
         /**
-         * An object giving information about the transfer target
+         * An object giving information about the transfer target.
          */
         @Json(name = "target_user") val targetUser: TargetUser? = null,
         /**
@@ -61,7 +61,7 @@ data class CallReplacesContent(
          * Required. The version of the VoIP specification this messages adheres to.
          */
         @Json(name = "version") override val version: String?
-) : CallSignalingContent  {
+) : CallSignalingContent {
 
     @JsonClass(generateAdapter = true)
     data class TargetUser(

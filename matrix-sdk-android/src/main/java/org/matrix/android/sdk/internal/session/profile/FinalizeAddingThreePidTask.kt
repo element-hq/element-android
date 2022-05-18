@@ -22,6 +22,7 @@ import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.toRegistrationFlowResponse
 import org.matrix.android.sdk.api.session.identity.ThreePid
+import org.matrix.android.sdk.api.session.uia.UiaResult
 import org.matrix.android.sdk.internal.auth.registration.handleUIA
 import org.matrix.android.sdk.internal.database.model.PendingThreePidEntity
 import org.matrix.android.sdk.internal.database.model.PendingThreePidEntityFields
@@ -72,13 +73,13 @@ internal class DefaultFinalizeAddingThreePidTask @Inject constructor(
                 true
             } catch (throwable: Throwable) {
                 if (params.userInteractiveAuthInterceptor == null ||
-                        !handleUIA(
+                        handleUIA(
                                 failure = throwable,
                                 interceptor = params.userInteractiveAuthInterceptor,
                                 retryBlock = { authUpdate ->
                                     execute(params.copy(userAuthParam = authUpdate))
                                 }
-                        )
+                        ) != UiaResult.SUCCESS
                 ) {
                     Timber.d("## UIA: propagate failure")
                     throw throwable.toRegistrationFlowResponse()

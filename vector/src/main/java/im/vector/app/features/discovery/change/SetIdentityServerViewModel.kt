@@ -39,7 +39,7 @@ class SetIdentityServerViewModel @AssistedInject constructor(
         @Assisted initialState: SetIdentityServerState,
         private val mxSession: Session,
         stringProvider: StringProvider) :
-    VectorViewModel<SetIdentityServerState, SetIdentityServerAction, SetIdentityServerViewEvents>(initialState) {
+        VectorViewModel<SetIdentityServerState, SetIdentityServerAction, SetIdentityServerViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<SetIdentityServerViewModel, SetIdentityServerState> {
@@ -107,7 +107,7 @@ class SetIdentityServerViewModel @AssistedInject constructor(
 
     private suspend fun checkTerms(baseUrl: String) {
         try {
-            val data = mxSession.getTerms(TermsService.ServiceType.IdentityService, baseUrl)
+            val data = mxSession.termsService().getTerms(TermsService.ServiceType.IdentityService, baseUrl)
 
             // has all been accepted?
             val resp = data.serverResponse

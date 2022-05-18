@@ -34,27 +34,27 @@ data class HomeServerCapabilities(
          */
         val canChange3pid: Boolean = true,
         /**
-         * Max size of file which can be uploaded to the homeserver in bytes. [MAX_UPLOAD_FILE_SIZE_UNKNOWN] if unknown or not retrieved yet
+         * Max size of file which can be uploaded to the homeserver in bytes. [MAX_UPLOAD_FILE_SIZE_UNKNOWN] if unknown or not retrieved yet.
          */
         val maxUploadFileSize: Long = MAX_UPLOAD_FILE_SIZE_UNKNOWN,
         /**
-         * Last version identity server and binding supported
+         * Last version identity server and binding supported.
          */
         val lastVersionIdentityServerSupported: Boolean = false,
         /**
-         * Default identity server url, provided in Wellknown
+         * Default identity server url, provided in Wellknown.
          */
         val defaultIdentityServerUrl: String? = null,
         /**
-         * Room versions supported by the server
+         * Room versions supported by the server.
          * This capability describes the default and available room versions a server supports, and at what level of stability.
          * Clients should make use of this capability to determine if users need to be encouraged to upgrade their rooms.
          */
         val roomVersions: RoomVersionCapabilities? = null,
         /**
-         * True if the home server support threading
+         * True if the home server support threading.
          */
-        var canUseThreading: Boolean = false
+        val canUseThreading: Boolean = false
 ) {
 
     enum class RoomCapabilitySupport {

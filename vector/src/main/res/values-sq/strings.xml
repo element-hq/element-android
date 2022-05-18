@@ -621,7 +621,6 @@
     <string name="settings_call_ringtone_use_app_ringtone">Për thirrje ardhëse përdor zilen parazgjedhje të ${app_name}-it</string>
     <string name="settings_call_ringtone_title">Zile thirrjesh ardhëse</string>
     <string name="settings_call_ringtone_dialog_title">Përzgjidhni zile për thirrjet:</string>
-    <string name="settings_flair">Simbole</string>
     <string name="action_accept">Pranoje</string>
     <string name="auth_accept_policies">Ju lutemi, merrni në shqyrtim dhe pranoni rregullat e këtij shërbyesi Home:</string>
     <string name="settings_notification_troubleshoot">Diagnostikoni Njoftime</string>
@@ -1389,7 +1388,6 @@
     <string name="settings_troubleshoot_title">Diagnostikoje</string>
     <string name="command_description_plain">E dërgon një mesazh si tekst të thjeshtë, pa interpretuar elementët Markdown</string>
     <string name="auth_invalid_login_param_space_in_password">Emër përdoruesi dhe/ose fjalëkalim i pasaktë. Fjalëkalimi i dhënë fillon ose mbaron me hapësirë, ju lutemi, kontrollojeni.</string>
-    <string name="settings_rageshake"/>
     <string name="bootstrap_crosssigning_progress_initializing">Po publikohen kyçe të krijuar identiteti</string>
     <string name="room_message_placeholder">Mesazh…</string>
     <string name="upgrade_security">Ka të gatshëm përmirësim fshehtëzimi</string>
@@ -1528,7 +1526,9 @@
 \n
 \nKëtë veprim mund ta zhbëni në çfarëdo kohe, te rregullimet e përgjithshme.</string>
     <string name="room_participants_action_unignore_title">Hiqe shpërfilljen e përdoruesit</string>
-    <string name="room_participants_action_unignore_prompt_msg">Heqja e shpërfilljes së këtij përdoruesi do të shfaqë sërish krejt mesazhet prej tij.</string>
+    <string name="room_participants_action_unignore_prompt_msg">Heqja e shpërfilljes së këtij përdoruesi do të shfaqë sërish krejt mesazhet prej tij.
+\n
+\nKini parasysh se ky veprim do të sjellë rinisjen e aplikacionit dhe do të hajë ca kohë.</string>
     <string name="room_participants_action_cancel_invite_title">Anuloje ftesën</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Jeni i sigurt se doni të anulohet ftesa për këtë përdorues\?</string>
     <string name="room_participants_remove_title">Përzëre përdoruesin</string>
@@ -1957,7 +1957,7 @@
 \nRiprovoni më vonë, ose kërkojini një përgjegjësi dhome të kontrollojë nëse keni leje për hyrje.</string>
     <string name="join_anyway">Hyni, Sido Qoftë</string>
     <string name="join_space">Hyni te Hapësirë</string>
-    <string name="create_space">Krijo Hapësirën</string>
+    <string name="create_space">Krijo hapësirën</string>
     <string name="skip_for_now">Hëpërhë anashkaloje</string>
     <string name="share_space_link_message">Ejani në hapësirën time %1$s %2$s</string>
     <string name="invite_just_to_this_room_desc">S’do të jenë pjesë e %s</string>
@@ -1996,7 +1996,7 @@
     <string name="create_spaces_choose_type_label">Ç’lloj hapësire doni të krijoni\?</string>
     <string name="your_private_space">Hapësira juaj private</string>
     <string name="your_public_space">Hapësira juaj publike</string>
-    <string name="add_space">Shtoni Hapësirë</string>
+    <string name="add_space">Shtoni hapësirë</string>
     <string name="command_description_leave_room">Braktiseni dhomën me ID-në e dhënë (ose dhomën e tanishme, në qoftë nul)</string>
     <string name="command_description_join_space">Hyni te Hapësira me ID-në e dhënë</string>
     <string name="command_description_create_space">Krijoni një Hapësirë</string>
@@ -2331,8 +2331,6 @@
     <string name="ftue_auth_carousel_secure_title">Jini zot i bisedave tuaja.</string>
     <string name="tooltip_attachment_location">Jepe vendndodhjen</string>
     <string name="settings_enable_location_sharing">Aktivizoni dhënie vendndodhjeje</string>
-    <string name="location_share">Jepe vendndodhjen</string>
-    <string name="a11y_location_share_icon">Jepe vendndodhjen</string>
     <string name="location_activity_title_preview">Vendndodhje</string>
     <string name="location_activity_title_static_sharing">Jepe vendndodhjen</string>
     <string name="closed_poll_option_description">Përfundimet shfaqen vetëm kur përfundoni anketimin</string>
@@ -2376,7 +2374,7 @@
     <string name="ftue_auth_use_case_title">Me kë do të bisedoni më shumë\?</string>
     <string name="navigate_to_thread_when_already_in_the_thread">Po e shihni tashmë këtë rrjedhë!</string>
     <string name="view_in_room">Shiheni në Dhomë</string>
-    <string name="reply_in_thread">Përgjigjuni Te Rrjedha</string>
+    <string name="reply_in_thread">Përgjigjuni te rrjedha</string>
     <string name="command_not_supported_in_threads">Urdhri “%s” njihet, por nuk mbulohet në rrjedha.</string>
     <string name="search_thread_from_a_thread">Nga një Rrjedhë</string>
     <string name="thread_list_empty_notice">Ndihmëz: Prekni pakëz gjatë një mesazh dhe përdorni “%s”.</string>
@@ -2425,4 +2423,50 @@
 \n
 \nKy do të jetë tranzicion vetëm për një herë, meqë tanimë Rrjedhat janë pjesë e protokollit Matrix.</string>
     <string name="threads_notice_migration_title">Rrjedhat Po i Afrohen Beta-s 🎉</string>
+    <string name="live_location_sharing_notification_description">Tregimi i vendndodhjes është në punë e sipër</string>
+    <string name="a11y_location_share_option_user_live_icon">Jepe vendndodhjen “live”</string>
+    <string name="location_share_option_user_live">Jepe vendndodhjen “live”</string>
+    <string name="error_forbidden_digits_only_username">Shërbyesi Home s’pranon emër përdorues vetëm me shifra.</string>
+    <string name="ftue_personalize_skip_this_step">Anashkalojeni këtë hap</string>
+    <string name="ftue_personalize_submit">Ruajeni dhe vazhdoni</string>
+    <string name="ftue_personalize_complete_subtitle">Parapëlqimet tuaja u ruajtën.</string>
+    <string name="ftue_personalize_complete_title">Kaq qe!</string>
+    <string name="ftue_personalize_lets_go">Shkojmë</string>
+    <string name="ftue_profile_picture_subtitle">Këtë mund ta ndryshoni kurdo.</string>
+    <string name="ftue_profile_picture_title">Shtoni një foto profili</string>
+    <string name="ftue_display_name_entry_footer">Këtë mund ta ndryshoni më vonë</string>
+    <string name="ftue_display_name_entry_title">Emër Në Ekran</string>
+    <string name="ftue_display_name_subtitle">Kjo do të shfaqet kur dërgoni mesazhe.</string>
+    <string name="ftue_display_name_title">Zgjidhni një emër për në ekran</string>
+    <string name="ftue_account_created_subtitle">Llogaria juaj %s u krijua.</string>
+    <string name="ftue_account_created_congratulations_title">Përgëzime!</string>
+    <string name="ftue_account_created_take_me_home">Shpjemëni në shtëpi</string>
+    <string name="ftue_account_created_personalize">Personalizoni profil</string>
+    <string name="action_disable">Çaktivizoje</string>
+    <string name="send_feedback_threads_title">Përshtypje për Beta-n e Rrjedhave</string>
+    <string name="settings_presence_user_always_appears_offline_summary">Në u aktivizoftë, përdoruesve të tjerë do t’u dukeni në linjë, madje edhe kur përdoret aplikacioni.</string>
+    <string name="threads_labs_enable_notice_message">Shërbyesi juaj Home aktualisht s’mbulon rrjedha, ndaj kjo veçori mund të jetë e paqëndrueshme. Disa mesazhe rrjedhash mund të mos jenë të përdorshëm. %sDoni të aktivizohen rrjedhat, sido qoftë\?</string>
+    <string name="threads_labs_enable_notice_title">Beta Rrjedhash</string>
+    <string name="threads_beta_enable_notice_message">Rrjedhat ju ndihmojnë t’i mbani bisedat tuaja brenda temës dhe ndjekjen e tyre të lehtë. %sAktivizimi i rrjedhave do të sjellë rifreskimin e aplikacionit. Për disa llogari, kjo mund të zgjasë më shumë.</string>
+    <string name="threads_beta_enable_notice_title">Beta Rrjedhash</string>
+    <string name="send_feedback_threads_info">Rrjedhat janë në përpunim të vazhdueshëm, me veçori të reja, ngazëlluese, të ardhshme, bie fjala, njoftime. Do të donim fort të dëgjonim mendimin tuaj!</string>
+    <string name="location_share_live_select_duration_option_3">8 orë</string>
+    <string name="location_share_live_select_duration_option_2">1 orë</string>
+    <string name="location_share_live_select_duration_option_1">15 minuta</string>
+    <string name="location_share_live_select_duration_title">Tregoni vendndodhjen tuaj drejtpërsëdrejti për</string>
+    <string name="audio_message_file_size">(%1$s)</string>
+    <string name="audio_message_reply_content">%1$s (%2$s)</string>
+    <string name="error_audio_message_unable_to_play">S’arrihet të luhet %1$s</string>
+    <string name="a11y_pause_audio_message">Ndale %1$s</string>
+    <string name="a11y_play_audio_message">Luaje %1$s</string>
+    <string name="a11y_audio_playback_duration">%1$d minuta %2$d sekonda</string>
+    <string name="a11y_audio_message_item">%1$s, %2$s, %3$s</string>
+    <string name="ftue_auth_carousel_workplace_body">${app_name} është gjithashtu i goditur për në punë. Është i besuar nga entet më të sigurta të botës.</string>
+    <string name="beta">BETA</string>
+    <string name="give_feedback_threads">Jepni Përshtypje</string>
+    <string name="beta_title_bottom_sheet_action">BETA</string>
+    <string name="settings_presence_user_always_appears_offline">Mënyra <em>offline</em></string>
+    <string name="settings_presence">Prani</string>
+    <string name="action_learn_more">Mësoni më tepër</string>
+    <string name="action_try_it_out">Provojeni</string>
 </resources>

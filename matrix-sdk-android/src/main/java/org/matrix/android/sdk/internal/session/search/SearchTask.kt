@@ -87,7 +87,7 @@ internal class DefaultSearchTask @Inject constructor(
                 results = searchCategories.roomEvents?.results?.map { searchResponseItem ->
 
                     val localThreadEventDetails = localTimelineEvents
-                            ?.firstOrNull { it.eventId ==  searchResponseItem.event.eventId }
+                            ?.firstOrNull { it.eventId == searchResponseItem.event.eventId }
                             ?.root
                             ?.asDomain()
                             ?.threadDetails
@@ -112,7 +112,7 @@ internal class DefaultSearchTask @Inject constructor(
     }
 
     /**
-     * Find local events if exists in order to enhance the result with thread summary
+     * Find local events if exists in order to enhance the result with thread summary.
      */
     private fun findRootThreadEventsFromDB(searchResponseItemList: List<SearchResponseItem>?): List<TimelineEventEntity>? {
         return realmSessionProvider.withRealm { realm ->

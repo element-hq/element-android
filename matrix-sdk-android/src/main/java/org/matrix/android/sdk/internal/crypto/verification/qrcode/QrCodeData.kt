@@ -21,34 +21,34 @@ package org.matrix.android.sdk.internal.crypto.verification.qrcode
  */
 internal sealed class QrCodeData(
         /**
-         * the event ID or transaction_id of the associated verification
+         * the event ID or transaction_id of the associated verification.
          */
         open val transactionId: String,
         /**
-         * First key (32 bytes, in base64 no padding)
+         * First key (32 bytes, in base64 no padding).
          */
         val firstKey: String,
         /**
-         * Second key (32 bytes, in base64 no padding)
+         * Second key (32 bytes, in base64 no padding).
          */
         val secondKey: String,
         /**
-         * a random shared secret (in base64 no padding)
+         * a random shared secret (in base64 no padding).
          */
         open val sharedSecret: String
 ) {
     /**
-     * verifying another user with cross-signing
-     * QR code verification mode: 0x00
+     * Verifying another user with cross-signing
+     * QR code verification mode: 0x00.
      */
     data class VerifyingAnotherUser(
             override val transactionId: String,
             /**
-             * the user's own master cross-signing public key
+             * the user's own master cross-signing public key.
              */
             val userMasterCrossSigningPublicKey: String,
             /**
-             * what the device thinks the other user's master cross-signing key is
+             * what the device thinks the other user's master cross-signing key is.
              */
             val otherUserMasterCrossSigningPublicKey: String,
             override val sharedSecret: String
@@ -56,20 +56,21 @@ internal sealed class QrCodeData(
             transactionId,
             userMasterCrossSigningPublicKey,
             otherUserMasterCrossSigningPublicKey,
-            sharedSecret)
+            sharedSecret
+    )
 
     /**
      * self-verifying in which the current device does trust the master key
-     * QR code verification mode: 0x01
+     * QR code verification mode: 0x01.
      */
     data class SelfVerifyingMasterKeyTrusted(
             override val transactionId: String,
             /**
-             * the user's own master cross-signing public key
+             * the user's own master cross-signing public key.
              */
             val userMasterCrossSigningPublicKey: String,
             /**
-             * what the device thinks the other device's device key is
+             * what the device thinks the other device's device key is.
              */
             val otherDeviceKey: String,
             override val sharedSecret: String
@@ -77,20 +78,21 @@ internal sealed class QrCodeData(
             transactionId,
             userMasterCrossSigningPublicKey,
             otherDeviceKey,
-            sharedSecret)
+            sharedSecret
+    )
 
     /**
      * self-verifying in which the current device does not yet trust the master key
-     * QR code verification mode: 0x02
+     * QR code verification mode: 0x02.
      */
     data class SelfVerifyingMasterKeyNotTrusted(
             override val transactionId: String,
             /**
-             * the current device's device key
+             * the current device's device key.
              */
             val deviceKey: String,
             /**
-             * what the device thinks the user's master cross-signing key is
+             * what the device thinks the user's master cross-signing key is.
              */
             val userMasterCrossSigningPublicKey: String,
             override val sharedSecret: String
@@ -98,5 +100,6 @@ internal sealed class QrCodeData(
             transactionId,
             deviceKey,
             userMasterCrossSigningPublicKey,
-            sharedSecret)
+            sharedSecret
+    )
 }

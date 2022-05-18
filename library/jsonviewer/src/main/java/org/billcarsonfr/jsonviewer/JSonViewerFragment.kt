@@ -32,10 +32,10 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 internal data class JSonViewerFragmentArgs(
-    val jsonString: String,
-    val defaultOpenDepth: Int,
-    val wrap: Boolean,
-    val styleProvider: JSonViewerStyleProvider?
+        val jsonString: String,
+        val defaultOpenDepth: Int,
+        val wrap: Boolean,
+        val styleProvider: JSonViewerStyleProvider?
 ) : Parcelable
 
 class JSonViewerFragment : Fragment(), MavericksView {
@@ -49,20 +49,20 @@ class JSonViewerFragment : Fragment(), MavericksView {
     private lateinit var recyclerView: EpoxyRecyclerView
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         val args: JSonViewerFragmentArgs? = arguments?.getParcelable(Mavericks.KEY_ARG)
         val inflate =
-            if (args?.wrap == true) {
-                inflater.inflate(R.layout.fragment_jv_recycler_view_wrap, container, false)
-            } else {
-                inflater.inflate(R.layout.fragment_jv_recycler_view, container, false)
-            }
+                if (args?.wrap == true) {
+                    inflater.inflate(R.layout.fragment_jv_recycler_view_wrap, container, false)
+                } else {
+                    inflater.inflate(R.layout.fragment_jv_recycler_view, container, false)
+                }
         recyclerView = inflate.findViewById(R.id.jvRecyclerView)
         recyclerView.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+                LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         recyclerView.setController(epoxyController)
         epoxyController.setStyle(args?.styleProvider)
         registerForContextMenu(recyclerView)
@@ -79,21 +79,21 @@ class JSonViewerFragment : Fragment(), MavericksView {
 
     companion object {
         fun newInstance(
-            jsonString: String,
-            initialOpenDepth: Int = -1,
-            wrap: Boolean = false,
-            styleProvider: JSonViewerStyleProvider? = null
+                jsonString: String,
+                initialOpenDepth: Int = -1,
+                wrap: Boolean = false,
+                styleProvider: JSonViewerStyleProvider? = null
         ): JSonViewerFragment {
             return JSonViewerFragment().apply {
                 arguments = Bundle().apply {
                     putParcelable(
-                        Mavericks.KEY_ARG,
-                        JSonViewerFragmentArgs(
-                            jsonString,
-                            initialOpenDepth,
-                            wrap,
-                            styleProvider
-                        )
+                            Mavericks.KEY_ARG,
+                            JSonViewerFragmentArgs(
+                                    jsonString,
+                                    initialOpenDepth,
+                                    wrap,
+                                    styleProvider
+                            )
                     )
                 }
             }

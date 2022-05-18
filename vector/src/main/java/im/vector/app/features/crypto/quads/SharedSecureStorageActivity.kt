@@ -48,8 +48,9 @@ class SharedSecureStorageActivity :
     @Parcelize
     data class Args(
             val keyId: String?,
-            val requestedSecrets: List<String>,
-            val resultKeyStoreAlias: String
+            val requestedSecrets: List<String> = emptyList(),
+            val resultKeyStoreAlias: String,
+            val writeSecrets: List<Pair<String, String>> = emptyList(),
     ) : Parcelable
 
     private val viewModel: SharedSecureStorageViewModel by viewModel()
@@ -148,17 +149,37 @@ class SharedSecureStorageActivity :
         const val EXTRA_DATA_RESET = "EXTRA_DATA_RESET"
         const val DEFAULT_RESULT_KEYSTORE_ALIAS = "SharedSecureStorageActivity"
 
-        fun newIntent(context: Context,
-                      keyId: String? = null,
-                      requestedSecrets: List<String>,
-                      resultKeyStoreAlias: String = DEFAULT_RESULT_KEYSTORE_ALIAS): Intent {
+        fun newReadIntent(context: Context,
+                          keyId: String? = null,
+                          requestedSecrets: List<String>,
+                          resultKeyStoreAlias: String = DEFAULT_RESULT_KEYSTORE_ALIAS): Intent {
             require(requestedSecrets.isNotEmpty())
             return Intent(context, SharedSecureStorageActivity::class.java).also {
-                it.putExtra(Mavericks.KEY_ARG, Args(
-                        keyId,
-                        requestedSecrets,
-                        resultKeyStoreAlias
-                ))
+                it.putExtra(
+                        Mavericks.KEY_ARG,
+                        Args(
+                                keyId = keyId,
+                                requestedSecrets = requestedSecrets,
+                                resultKeyStoreAlias = resultKeyStoreAlias
+                        )
+                )
+            }
+        }
+
+        fun newWriteIntent(context: Context,
+                           keyId: String? = null,
+                           writeSecrets: List<Pair<String, String>>,
+                           resultKeyStoreAlias: String = DEFAULT_RESULT_KEYSTORE_ALIAS): Intent {
+            require(writeSecrets.isNotEmpty())
+            return Intent(context, SharedSecureStorageActivity::class.java).also {
+                it.putExtra(
+                        Mavericks.KEY_ARG,
+                        Args(
+                                keyId = keyId,
+                                writeSecrets = writeSecrets,
+                                resultKeyStoreAlias = resultKeyStoreAlias
+                        )
+                )
             }
         }
     }

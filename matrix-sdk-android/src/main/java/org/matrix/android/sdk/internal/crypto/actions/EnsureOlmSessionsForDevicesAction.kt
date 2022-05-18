@@ -45,7 +45,7 @@ internal class EnsureOlmSessionsForDevicesAction @Inject constructor(
 
     /**
      * We want to synchronize a bit here, because we are iterating to check existing olm session and
-     * also adding some
+     * also adding some.
      */
     suspend fun handle(devicesByUser: Map<String, List<CryptoDeviceInfo>>, force: Boolean = false): MXUsersDevicesMap<MXOlmSessionResult> {
         ensureMutex.withLock {
@@ -137,10 +137,14 @@ internal class EnsureOlmSessionsForDevicesAction @Inject constructor(
                 olmDevice.verifySignature(fingerprint, oneTimeKey.signalableJSONDictionary(), signature)
                 isVerified = true
             } catch (e: Exception) {
-                Timber.tag(loggerTag.value).d(e, "verifyKeyAndStartSession() : Verify error for otk: ${oneTimeKey.signalableJSONDictionary()}," +
-                        " signature:$signature fingerprint:$fingerprint")
-                Timber.tag(loggerTag.value).e("verifyKeyAndStartSession() : Verify error for ${deviceInfo.userId}|${deviceInfo.deviceId} " +
-                        " - signable json ${oneTimeKey.signalableJSONDictionary()}")
+                Timber.tag(loggerTag.value).d(
+                        e, "verifyKeyAndStartSession() : Verify error for otk: ${oneTimeKey.signalableJSONDictionary()}," +
+                        " signature:$signature fingerprint:$fingerprint"
+                )
+                Timber.tag(loggerTag.value).e(
+                        "verifyKeyAndStartSession() : Verify error for ${deviceInfo.userId}|${deviceInfo.deviceId} " +
+                                " - signable json ${oneTimeKey.signalableJSONDictionary()}"
+                )
                 errorMessage = e.message
             }
 

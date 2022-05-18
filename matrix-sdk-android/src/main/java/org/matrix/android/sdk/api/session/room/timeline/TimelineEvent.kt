@@ -29,7 +29,7 @@ import org.matrix.android.sdk.api.session.events.model.isSticker
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.EventAnnotationsSummary
 import org.matrix.android.sdk.api.session.room.model.ReadReceipt
-import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationBeaconContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageStickerContent
@@ -47,7 +47,7 @@ import org.matrix.android.sdk.api.util.ContentUtils.extractUsefulTextFromReply
 data class TimelineEvent(
         val root: Event,
         /**
-         * Uniquely identify an event, computed locally by the sdk
+         * Uniquely identify an event, computed locally by the sdk.
          */
         val localId: Long,
         val eventId: String,
@@ -103,12 +103,12 @@ data class TimelineEvent(
 }
 
 /**
- * Tells if the event has been edited
+ * Tells if the event has been edited.
  */
 fun TimelineEvent.hasBeenEdited() = annotations?.editSummary != null
 
 /**
- * Get the latest known eventId for an edited event, or the eventId for an Event which has not been edited
+ * Get the latest known eventId for an edited event, or the eventId for an Event which has not been edited.
  */
 fun TimelineEvent.getLatestEventId(): String {
     return annotations
@@ -119,33 +119,33 @@ fun TimelineEvent.getLatestEventId(): String {
 }
 
 /**
- * Get the relation content if any
+ * Get the relation content if any.
  */
 fun TimelineEvent.getRelationContent(): RelationDefaultContent? {
     return root.getRelationContent()
 }
 
 /**
- * Get the eventId which was edited by this event if any
+ * Get the eventId which was edited by this event if any.
  */
 fun TimelineEvent.getEditedEventId(): String? {
     return getRelationContent()?.takeIf { it.type == RelationType.REPLACE }?.eventId
 }
 
 /**
- * Get last MessageContent, after a possible edition
+ * Get last MessageContent, after a possible edition.
  */
 fun TimelineEvent.getLastMessageContent(): MessageContent? {
     return when (root.getClearType()) {
         EventType.STICKER                   -> root.getClearContent().toModel<MessageStickerContent>()
         in EventType.POLL_START             -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel<MessagePollContent>()
-        in EventType.STATE_ROOM_BEACON_INFO -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel<LiveLocationBeaconContent>()
+        in EventType.STATE_ROOM_BEACON_INFO -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel<MessageBeaconInfoContent>()
         else                                -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel()
     }
 }
 
 /**
- * Returns true if it's a reply
+ * Returns true if it's a reply.
  */
 fun TimelineEvent.isReply(): Boolean {
     return root.isReply()
@@ -163,14 +163,14 @@ fun TimelineEvent.isSticker(): Boolean {
 }
 
 /**
- * Returns whether or not the event is a root thread event
+ * Returns whether or not the event is a root thread event.
  */
 fun TimelineEvent.isRootThread(): Boolean {
     return root.threadDetails?.isRootThread.orFalse()
 }
 
 /**
- * Get the latest message body, after a possible edition, stripping the reply prefix if necessary
+ * Get the latest message body, after a possible edition, stripping the reply prefix if necessary.
  */
 fun TimelineEvent.getTextEditableContent(): String {
     val lastContentBody = getLastMessageContent()?.body ?: return ""

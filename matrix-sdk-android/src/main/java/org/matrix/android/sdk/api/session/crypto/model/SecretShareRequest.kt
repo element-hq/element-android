@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * Class representing a room key request content
+ * Class representing a room key request content.
  */
 @JsonClass(generateAdapter = true)
 data class SecretShareRequest(

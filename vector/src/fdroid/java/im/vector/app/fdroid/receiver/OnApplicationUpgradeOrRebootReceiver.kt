@@ -29,10 +29,11 @@ class OnApplicationUpgradeOrRebootReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         Timber.v("## onReceive() ${intent.action}")
         val singletonEntryPoint = context.singletonEntryPoint()
-            BackgroundSyncStarter.start(
-                    context,
-                    singletonEntryPoint.vectorPreferences(),
-                    singletonEntryPoint.activeSessionHolder()
-            )
+        BackgroundSyncStarter.start(
+                context,
+                singletonEntryPoint.vectorPreferences(),
+                singletonEntryPoint.activeSessionHolder(),
+                singletonEntryPoint.clock()
+        )
     }
 }

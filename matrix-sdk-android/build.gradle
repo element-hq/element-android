@@ -7,10 +7,34 @@ apply plugin: "org.jetbrains.dokka"
 
 buildscript {
     repositories {
-        mavenCentral()
+        // Do not use `mavenCentral()`, it prevents Dependabot from working properly
+        maven {
+            url 'https://repo1.maven.org/maven2'
+        }
     }
     dependencies {
         classpath "io.realm:realm-gradle-plugin:10.9.0"
+    }
+}
+
+dokkaHtml {
+    dokkaSourceSets {
+        configureEach {
+            // Emit warnings about not documented members.
+            // reportUndocumented.set(true)
+            // Suppress legacy Riot's packages.
+            perPackageOption {
+                matchingRegex.set("org.matrix.android.sdk.internal.legacy.riot")
+                suppress.set(true)
+            }
+            perPackageOption {
+                matchingRegex.set("org.matrix.androidsdk.crypto.data")
+                suppress.set(true)
+            }
+            // List of files with module and package documentation
+            // https://kotlinlang.org/docs/reference/kotlin-doc.html#module-and-package-documentation
+            includes.from("./docs/modules.md", "./docs/packages.md")
+        }
     }
 }
 
@@ -32,7 +56,7 @@ android {
         // that the app's state is completely cleared between tests.
         testInstrumentationRunnerArguments clearPackageData: 'true'
 
-        buildConfigField "String", "SDK_VERSION", "\"1.4.12\""
+        buildConfigField "String", "SDK_VERSION", "\"1.4.18\""
 
         buildConfigField "String", "GIT_SDK_REVISION", "\"${gitRevision()}\""
         buildConfigField "String", "GIT_SDK_REVISION_UNIX_DATE", "\"${gitRevisionUnixDate()}\""
@@ -77,6 +101,9 @@ android {
         freeCompilerArgs += [
                 // Disabled for now, there are too many errors. Could be handled in another dedicated PR
                 // '-Xexplicit-api=strict', // or warning
+                "-opt-in=kotlin.RequiresOptIn",
+                // Opt in for kotlinx.coroutines.FlowPreview
+                "-opt-in=kotlinx.coroutines.FlowPreview",
         ]
     }
 
@@ -148,7 +175,7 @@ dependencies {
     implementation libs.androidx.work
 
     // olm lib is now hosted in MavenCentral
-    implementation 'org.matrix.android:olm-sdk:3.2.10'
+    implementation 'org.matrix.android:olm-sdk:3.2.11'
 
     // DI
     implementation libs.dagger.dagger
@@ -165,7 +192,7 @@ dependencies {
     implementation libs.apache.commonsImaging
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.46'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.48'
 
     testImplementation libs.tests.junit
     // Note: version sticks to 1.9.2 due to https://github.com/mockk/mockk/issues/281

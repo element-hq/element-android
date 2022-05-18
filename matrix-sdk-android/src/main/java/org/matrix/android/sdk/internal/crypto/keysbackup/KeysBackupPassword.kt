@@ -26,6 +26,7 @@ import java.util.UUID
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 import kotlin.experimental.xor
+import kotlin.system.measureTimeMillis
 
 private const val SALT_LENGTH = 32
 private const val DEFAULT_ITERATION = 500_000
@@ -58,7 +59,7 @@ internal fun generatePrivateKeyWithPassword(password: String,
 }
 
 /**
- * Retrieve a private key from {password, salt, iterations}
+ * Retrieve a private key from {password, salt, iterations}.
  *
  * @param password the password used to generated the private key.
  * @param salt the salt.
@@ -91,57 +92,58 @@ internal fun deriveKey(password: String,
                        iterations: Int,
                        progressListener: ProgressListener?): ByteArray {
     // Note: copied and adapted from MXMegolmExportEncryption
-    val t0 = System.currentTimeMillis()
-
     // based on https://en.wikipedia.org/wiki/PBKDF2 algorithm
     // it is simpler than the generic algorithm because the expected key length is equal to the mac key length.
     // noticed as dklen/hlen
 
-    // dklen = 256
-    // hlen = 512
-    val prf = Mac.getInstance("HmacSHA512")
-
-    prf.init(SecretKeySpec(password.toByteArray(), "HmacSHA512"))
-
     // 256 bits key length
     val dk = ByteArray(32)
-    val uc = ByteArray(64)
 
-    // U1 = PRF(Password, Salt || INT_32_BE(i)) with i goes from 1 to dklen/hlen
-    prf.update(salt.toByteArray())
-    val int32BE = byteArrayOf(0, 0, 0, 1)
-    prf.update(int32BE)
-    prf.doFinal(uc, 0)
+    measureTimeMillis {
+        // dklen = 256
+        // hlen = 512
+        val prf = Mac.getInstance("HmacSHA512")
 
-    // copy to the key
-    System.arraycopy(uc, 0, dk, 0, dk.size)
+        prf.init(SecretKeySpec(password.toByteArray(), "HmacSHA512"))
 
-    var lastProgress = -1
+        val uc = ByteArray(64)
 
-    for (index in 2..iterations) {
-        // Uc = PRF(Password, Uc-1)
-        prf.update(uc)
+        // U1 = PRF(Password, Salt || INT_32_BE(i)) with i goes from 1 to dklen/hlen
+        prf.update(salt.toByteArray())
+        val int32BE = byteArrayOf(0, 0, 0, 1)
+        prf.update(int32BE)
         prf.doFinal(uc, 0)
 
-        // F(Password, Salt, c, i) = U1 ^ U2 ^ ... ^ Uc
-        for (byteIndex in dk.indices) {
-            dk[byteIndex] = dk[byteIndex] xor uc[byteIndex]
-        }
+        // copy to the key
+        System.arraycopy(uc, 0, dk, 0, dk.size)
 
-        val progress = (index + 1) * 100 / iterations
-        if (progress != lastProgress) {
-            lastProgress = progress
-            progressListener?.onProgress(lastProgress, 100)
+        var lastProgress = -1
+
+        for (index in 2..iterations) {
+            // Uc = PRF(Password, Uc-1)
+            prf.update(uc)
+            prf.doFinal(uc, 0)
+
+            // F(Password, Salt, c, i) = U1 ^ U2 ^ ... ^ Uc
+            for (byteIndex in dk.indices) {
+                dk[byteIndex] = dk[byteIndex] xor uc[byteIndex]
+            }
+
+            val progress = (index + 1) * 100 / iterations
+            if (progress != lastProgress) {
+                lastProgress = progress
+                progressListener?.onProgress(lastProgress, 100)
+            }
         }
+    }.also {
+        Timber.v("KeysBackupPassword: deriveKeys() : $iterations in $it ms")
     }
-
-    Timber.v("KeysBackupPassword: deriveKeys() : " + iterations + " in " + (System.currentTimeMillis() - t0) + " ms")
 
     return dk
 }
 
 /**
- * Generate a 32 chars salt
+ * Generate a 32 chars salt.
  */
 private fun generateSalt(): String {
     val salt = buildString {

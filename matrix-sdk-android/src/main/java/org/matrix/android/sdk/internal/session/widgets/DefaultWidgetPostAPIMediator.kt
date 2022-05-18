@@ -29,7 +29,7 @@ import javax.inject.Inject
 
 internal class DefaultWidgetPostAPIMediator @Inject constructor(private val moshi: Moshi,
                                                                 private val widgetPostMessageAPIProvider: WidgetPostMessageAPIProvider) :
-    WidgetPostAPIMediator {
+        WidgetPostAPIMediator {
 
     private val jsonAdapter = moshi.adapter<JsonDict>(JSON_DICT_PARAMETERIZED_TYPE)
 
@@ -93,7 +93,7 @@ internal class DefaultWidgetPostAPIMediator @Inject constructor(private val mosh
      */
 
     /**
-     * Send a boolean response
+     * Send a boolean response.
      *
      * @param response  the response
      * @param eventData the modular data
@@ -104,7 +104,7 @@ internal class DefaultWidgetPostAPIMediator @Inject constructor(private val mosh
     }
 
     /**
-     * Send an integer response
+     * Send an integer response.
      *
      * @param response  the response
      * @param eventData the modular data
@@ -114,7 +114,7 @@ internal class DefaultWidgetPostAPIMediator @Inject constructor(private val mosh
     }
 
     /**
-     * Send an object response
+     * Send an object response.
      *
      * @param response  the response
      * @param eventData the modular data
@@ -133,7 +133,7 @@ internal class DefaultWidgetPostAPIMediator @Inject constructor(private val mosh
     }
 
     /**
-     * Send success
+     * Send success.
      *
      * @param eventData the modular data
      */
@@ -143,7 +143,7 @@ internal class DefaultWidgetPostAPIMediator @Inject constructor(private val mosh
     }
 
     /**
-     * Send an error
+     * Send an error.
      *
      * @param message   the error message
      * @param eventData the modular data
@@ -151,7 +151,7 @@ internal class DefaultWidgetPostAPIMediator @Inject constructor(private val mosh
     override fun sendError(message: String, eventData: JsonDict) {
         Timber.e("## sendError() : eventData $eventData failed $message")
 
-        // TODO: JS has an additional optional parameter: nestedError
+        // TODO JS has an additional optional parameter: nestedError
         val params = HashMap<String, Map<String, String>>()
         val subMap = HashMap<String, String>()
         subMap["message"] = message
@@ -160,7 +160,7 @@ internal class DefaultWidgetPostAPIMediator @Inject constructor(private val mosh
     }
 
     /**
-     * Send the response to the javascript
+     * Send the response to the javascript.
      *
      * @param jsString  the response data
      * @param eventData the modular data

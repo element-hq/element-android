@@ -33,23 +33,23 @@ sealed class PermalinkData {
             val viaParameters: List<String>
     ) : PermalinkData()
 
-    /**
+    /*
      * &room_name=Team2
-        &room_avatar_url=mxc:
-         &inviter_name=bob
+     * &room_avatar_url=mxc:
+     * &inviter_name=bob
      */
     @Parcelize
     data class RoomEmailInviteLink(
-        val roomId: String,
-        val email: String,
-        val signUrl: String,
-        val roomName: String?,
-        val roomAvatarUrl: String?,
-        val inviterName: String?,
-        val identityServer: String,
-        val token: String,
-        val privateKey: String,
-        val roomType: String?
+            val roomId: String,
+            val email: String,
+            val signUrl: String,
+            val roomName: String?,
+            val roomAvatarUrl: String?,
+            val inviterName: String?,
+            val identityServer: String,
+            val token: String,
+            val privateKey: String,
+            val roomType: String?
     ) : PermalinkData(), Parcelable
 
     data class UserLink(val userId: String) : PermalinkData()
