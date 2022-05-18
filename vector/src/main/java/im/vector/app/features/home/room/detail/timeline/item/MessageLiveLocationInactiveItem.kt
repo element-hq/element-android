@@ -22,8 +22,8 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
-abstract class MessageLiveLocationStartItem :
-        AbsMessageItem<MessageLiveLocationStartItem.Holder>(),
+abstract class MessageLiveLocationInactiveItem :
+        AbsMessageItem<MessageLiveLocationInactiveItem.Holder>(),
         LiveLocationShareStatusItem by DefaultLiveLocationShareStatusItem() {
 
     @EpoxyAttribute
@@ -42,11 +42,11 @@ abstract class MessageLiveLocationStartItem :
     override fun getViewStubId() = STUB_ID
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
-        val bannerImageView by bind<ImageView>(R.id.locationLiveStartBanner)
-        val noLocationMapImageView by bind<ImageView>(R.id.locationLiveStartMap)
+        val bannerImageView by bind<ImageView>(R.id.locationLiveInactiveBanner)
+        val noLocationMapImageView by bind<ImageView>(R.id.locationLiveInactiveMap)
     }
 
     companion object {
-        private const val STUB_ID = R.id.messageContentLiveLocationStartStub
+        private const val STUB_ID = R.id.messageContentLiveLocationInactiveStub
     }
 }

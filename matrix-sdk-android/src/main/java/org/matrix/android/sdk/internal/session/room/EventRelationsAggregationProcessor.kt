@@ -193,9 +193,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                                 }
                             }
                             in EventType.BEACON_LOCATION_DATA -> {
-                                event.getClearContent().toModel<MessageBeaconLocationDataContent>(catchError = true)?.let {
-                                    liveLocationAggregationProcessor.handleBeaconLocationData(realm, event, it, roomId, isLocalEcho)
-                                }
+                                handleBeaconLocationData(event, realm, roomId, isLocalEcho)
                             }
                         }
                     } else if (encryptedEventContent?.relatesTo?.type == RelationType.ANNOTATION) {
@@ -259,6 +257,9 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                     event.content.toModel<MessageBeaconInfoContent>(catchError = true)?.let {
                         liveLocationAggregationProcessor.handleBeaconInfo(realm, event, it, roomId, isLocalEcho)
                     }
+                }
+                in EventType.BEACON_LOCATION_DATA -> {
+                    handleBeaconLocationData(event, realm, roomId, isLocalEcho)
                 }
                 else                                -> Timber.v("UnHandled event ${event.eventId}")
             }
@@ -754,6 +755,19 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
         } else {
             verifSummary.sourceLocalEcho.remove(txId)
             verifSummary.sourceEvents.add(event.eventId)
+        }
+    }
+
+    private fun handleBeaconLocationData(event: Event, realm: Realm, roomId: String, isLocalEcho: Boolean) {
+        event.getClearContent().toModel<MessageBeaconLocationDataContent>(catchError = true)?.let {
+            liveLocationAggregationProcessor.handleBeaconLocationData(
+                    realm,
+                    event,
+                    it,
+                    roomId,
+                    event.getRelationContent()?.eventId,
+                    isLocalEcho
+            )
         }
     }
 }

@@ -322,6 +322,13 @@
     <string name="start_chatting">Start Chatting</string>
     <string name="spaces">Spaces</string>
 
+    <!-- Time unit for hour: if a short version exists, it should be used -->
+    <string name="time_unit_hour_short">h</string>
+    <!-- Time unit for minute: if a short version exists, it should be used -->
+    <string name="time_unit_minute_short">min</string>
+    <!-- Time unit for second: if a short version exists, it should be used -->
+    <string name="time_unit_second_short">sec</string>
+
     <!-- Permissions denied forever -->
     <string name="denied_permission_generic">Some permissions are missing to perform this action, please grant the permissions from the system settings.</string>
     <string name="denied_permission_camera">To perform this action, please grant the Camera permission from the system settings.</string>
@@ -3006,7 +3013,13 @@
     <string name="location_timeline_failed_to_load_map">Failed to load map</string>
     <string name="location_share_live_enabled">Live location enabled</string>
     <string name="location_share_live_started">Loading live location…</string>
+    <string name="location_share_live_ended">Live location ended</string>
+    <string name="location_share_live_view">View live location</string>
+    <!-- Examples of usage: Live until 5:42 PM/Live until 17:42-->
+    <string name="location_share_live_until">Live until %1$s</string>
     <string name="location_share_live_stop">Stop</string>
+    <!-- Examples of usage: 6h 15min 30sec left/15min 30sec left/30 sec left-->
+    <string name="location_share_live_remaining_time">%1$s left</string>
     <string name="live_location_sharing_notification_title">${app_name} Live Location</string>
     <string name="live_location_sharing_notification_description">Location sharing is in progress</string>
 

@@ -40,9 +40,11 @@ class LocationTracker @Inject constructor(
         fun onLocationProviderIsNotAvailable()
     }
 
-    private var callbacks = mutableListOf<Callback>()
+    private val callbacks = mutableListOf<Callback>()
 
     private var hasGpsProviderLiveLocation = false
+
+    private var lastLocation: LocationData? = null
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
     fun start() {
@@ -92,6 +94,14 @@ class LocationTracker @Inject constructor(
         callbacks.clear()
     }
 
+    /**
+     * Request the last known location. It will be given async through Callback.
+     * Please ensure adding a callback to receive the value.
+     */
+    fun requestLastKnownLocation() {
+        lastLocation?.let { location -> callbacks.forEach { it.onLocationUpdate(location) } }
+    }
+
     fun addCallback(callback: Callback) {
         if (!callbacks.contains(callback)) {
             callbacks.add(callback)
@@ -127,7 +137,9 @@ class LocationTracker @Inject constructor(
                 }
             }
         }
-        callbacks.forEach { it.onLocationUpdate(location.toLocationData()) }
+        val locationData = location.toLocationData()
+        lastLocation = locationData
+        callbacks.forEach { it.onLocationUpdate(locationData) }
     }
 
     override fun onProviderDisabled(provider: String) {

@@ -16,17 +16,16 @@
 
 package im.vector.app.features.home.room.detail.timeline.item
 
-import com.airbnb.epoxy.EpoxyModelClass
-import im.vector.app.R
+import android.widget.ImageView
+import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_base)
-abstract class MessageLocationItem : AbsMessageLocationItem<MessageLocationItem.Holder>() {
+interface LiveLocationShareStatusItem {
+    fun bindMap(
+            mapImageView: ImageView,
+            mapWidth: Int,
+            mapHeight: Int,
+            messageLayout: TimelineMessageLayout
+    )
 
-    override fun getViewStubId() = STUB_ID
-
-    class Holder : AbsMessageLocationItem.Holder(STUB_ID)
-
-    companion object {
-        private const val STUB_ID = R.id.messageContentLocationStub
-    }
+    fun bindBottomBanner(bannerImageView: ImageView, messageLayout: TimelineMessageLayout)
 }
