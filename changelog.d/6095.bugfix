@@ -1,0 +1,1 @@
+Correct .well-known/matrix/client handling for server_names which include ports.
