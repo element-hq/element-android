@@ -203,6 +203,7 @@ class VectorPreferences @Inject constructor(
         private const val TAKE_PHOTO_VIDEO_MODE = "TAKE_PHOTO_VIDEO_MODE"
 
         private const val SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE = "SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE"
+        private const val SETTINGS_LABS_ENABLE_LIVE_LOCATION = "SETTINGS_LABS_ENABLE_LIVE_LOCATION"
 
         // This key will be used to identify clients with the old thread support enabled io.element.thread
         const val SETTINGS_LABS_ENABLE_THREAD_MESSAGES_OLD_CLIENTS = "SETTINGS_LABS_ENABLE_THREAD_MESSAGES"
@@ -1039,6 +1040,10 @@ class VectorPreferences @Inject constructor(
 
     fun labsRenderLocationsInTimeline(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE, true)
+    }
+
+    fun labsEnableLiveLocation(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_LABS_ENABLE_LIVE_LOCATION, false)
     }
 
     /**

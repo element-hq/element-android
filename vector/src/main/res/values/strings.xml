@@ -3035,6 +3035,8 @@
     <string name="location_share_live_remaining_time">%1$s left</string>
     <string name="live_location_sharing_notification_title">${app_name} Live Location</string>
     <string name="live_location_sharing_notification_description">Location sharing is in progress</string>
+    <string name="labs_enable_live_location">Enable Live Location Sharing</string>
+    <string name="labs_enable_live_location_summary">Temporary implementation: locations persist in room history</string>
 
     <string name="message_bubbles">Show Message bubbles</string>
 
