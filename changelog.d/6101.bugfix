@@ -1,0 +1,1 @@
+Refactor - better naming, return native user id and not sip user id and create a dm with the native user instead of with the sip user.
