@@ -118,7 +118,7 @@ jobs:
       - name: Lint analysis
         run: ./gradlew clean :vector:lint --stacktrace
       - name: Dependency analysis
-        run: ./gradlew buildHealth
+        run: ./gradlew buildHealth --max-workers=1
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@v3
