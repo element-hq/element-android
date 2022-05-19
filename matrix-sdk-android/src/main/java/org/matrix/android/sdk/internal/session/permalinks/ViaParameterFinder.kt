@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.permalinks
 
-import org.matrix.android.sdk.api.MatrixPatterns.getDomain
+import org.matrix.android.sdk.api.MatrixPatterns.getServerName
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -55,9 +55,9 @@ internal class ViaParameterFinder @Inject constructor(
     }
 
     fun computeViaParams(userId: String, roomId: String, max: Int): List<String> {
-        val userHomeserver = userId.getDomain()
+        val userHomeserver = userId.getServerName()
         return getUserIdsOfJoinedMembers(roomId)
-                .map { it.getDomain() }
+                .map { it.getServerName() }
                 .groupBy { it }
                 .mapValues { it.value.size }
                 .toMutableMap()
@@ -92,7 +92,7 @@ internal class ViaParameterFinder @Inject constructor(
                 .orEmpty()
                 .toSet()
 
-        return userThatCanInvite.map { it.getDomain() }
+        return userThatCanInvite.map { it.getServerName() }
                 .groupBy { it }
                 .mapValues { it.value.size }
                 .toMutableMap()

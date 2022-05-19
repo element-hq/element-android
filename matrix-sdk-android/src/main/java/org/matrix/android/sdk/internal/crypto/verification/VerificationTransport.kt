@@ -49,6 +49,11 @@ internal interface VerificationTransport {
                           otherUserDeviceId: String?,
                           code: CancelCode)
 
+    fun cancelTransaction(transactionId: String,
+                          otherUserId: String,
+                          otherUserDeviceIds: List<String>,
+                          code: CancelCode)
+
     fun done(transactionId: String,
              onDone: (() -> Unit)?)
 

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/space_explore_rooms_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:colorBackground"
+    android:foreground="?attr/selectableItemBackground"
+    android:orientation="vertical"
+    android:paddingHorizontal="32dp"
+    android:paddingTop="16dp"
+    tools:viewBindingIgnore="true">
+
+    <TextView
+        style="@style/Widget.Vector.TextView.Body.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/space_explore_filter_no_result_title" />
+
+    <TextView
+        style="@style/Widget.Vector.TextView.Body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/space_explore_filter_no_result_description"
+        android:textColor="?vctr_content_secondary" />
+
+    <TextView
+        style="@style/Widget.Vector.TextView.Body.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/create_new_room"
+        android:textColor="?colorSecondary" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>

@@ -450,9 +450,6 @@ dependencies {
     kapt libs.github.glideCompiler
     implementation 'com.github.yalantis:ucrop:2.2.8'
 
-    // Badge for compatibility
-    implementation 'me.leolin:ShortcutBadger:1.1.22@aar'
-
     // Chat effects
     implementation 'nl.dionsegijn:konfetti-xml:2.0.2'
 

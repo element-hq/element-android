@@ -67,6 +67,9 @@ echo "Search for forbidden patterns in code..."
 ${searchForbiddenStringsScript} ./tools/check/forbidden_strings_in_code.txt \
     ./matrix-sdk-android/src/main/java \
     ./matrix-sdk-android-flow/src/main/java \
+    ./library/core-utils/src/main/java \
+    ./library/jsonviewer/src/main/java \
+    ./library/ui-styles/src/main/java \
     ./vector/src/main/java \
     ./vector/src/debug/java \
     ./vector/src/release/java \
@@ -100,6 +103,7 @@ echo
 echo "Search for forbidden patterns in resources..."
 
 ${searchForbiddenStringsScript} ./tools/check/forbidden_strings_in_resources.txt \
+    ./library/ui-styles/src/main/res/values \
     ./vector/src/main/res/color \
     ./vector/src/main/res/layout \
     ./vector/src/main/res/values \
