@@ -40,7 +40,7 @@ class RetryTestRule(val retryCount: Int = 3) : TestRule {
                 for (i in 0 until retryCount) {
                     try {
                         base.evaluate()
-                        if(i > 0) {
+                        if (i > 0) {
                             println("Retried test $i times")
                         }
                         return
