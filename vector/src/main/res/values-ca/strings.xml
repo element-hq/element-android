@@ -846,7 +846,7 @@
     <string name="keys_backup_setup_override_backup_prompt_tile">Ja existeix una còpia de seguretat al teu servidor</string>
     <string name="keys_backup_setup_override_backup_prompt_description">Sembla que ja has configurat una còpia de seguretat de claus des d\'una altra sessió. Vols reemplaçar-la amb la que estàs creant\?</string>
     <string name="keys_backup_setup_override_replace">Reemplaçar</string>
-    <string name="keys_backup_setup_override_stop">Aturar</string>
+    <string name="keys_backup_setup_override_stop">Atura</string>
     <string name="keys_backup_settings_checking_backup_state">Comprovant l\'estat de la còpia de seguretat</string>
     <string name="sas_verified">Verificat!</string>
     <string name="sas_got_it">Entesos</string>
@@ -1633,9 +1633,9 @@
     <string name="user_code_info_text">Comparteix aquest codi amb la gent perquè puguin escanejar-lo, afegir-te i començar a xatejar amb tu.</string>
     <string name="identity_server_user_consent_not_provided">L\'usuari no s\'ha acceptat el consentiment.</string>
     <string name="command_confetti">Envia el missatge proporcionat amb confetis</string>
-    <string name="command_snow">Envia el missatge proporcionat nevant</string>
-    <string name="default_message_emote_confetti">envia confetis 🎉</string>
-    <string name="default_message_emote_snow">envia una nevada❄️</string>
+    <string name="command_snow">Envia el missatge proporcionat amb una nevada</string>
+    <string name="default_message_emote_confetti">ha enviat confetis 🎉</string>
+    <string name="default_message_emote_snow">ha enviat una nevada ❄️</string>
     <string name="user_code_my_code">El meu codi</string>
     <string name="user_code_share">Comparteix el meu codi</string>
     <string name="user_code_scan">Escaneja un codi QR</string>
@@ -1651,8 +1651,8 @@
     <string name="room_settings_enable_encryption_no_permission">No tens permís per activar el xifrat en aquesta sala.</string>
     <string name="room_settings_enable_encryption">Activa el xifrat d\'extrem a extrem…</string>
     <string name="settings_category_composer">Editor de missatges</string>
-    <string name="command_description_rainbow_emote">Envia l\'emoticona proporcionat pintat amb un arc de Sant Martí</string>
-    <string name="command_description_rainbow">Envia el missatge proporcionat pintat amb un arc de Sant Martí</string>
+    <string name="command_description_rainbow_emote">Envia l\'emoticona proporcionat pintat en arc de Sant Martí</string>
+    <string name="command_description_rainbow">Envia el missatge proporcionat pintat en arc de Sant Martí</string>
     <string name="signed_out_notice">Pot ser causat per diferents motius:
 \n
 \n• Has canviat la teva contrasenya des d\'una altra sessió.
@@ -2051,4 +2051,38 @@
         <item quantity="one">%d canvi a l\'ACL del servidor</item>
         <item quantity="other">%d canvis a l\'ACL del servidor</item>
     </plurals>
+    <string name="space_type_private">Privat</string>
+    <string name="space_type_public">Públic</string>
+    <string name="create_spaces_organise_rooms">Espai privat per organitzar les teves sales</string>
+    <string name="your_public_space">Espai públic (teu)</string>
+    <string name="your_private_space">Espai privat (teu)</string>
+    <string name="add_space">Afegeix espai</string>
+    <string name="private_space">Espai privat</string>
+    <string name="public_space">Espai públic</string>
+    <string name="command_description_upgrade_room">Actualitza una sala a una nova versió</string>
+    <string name="a11y_presence_unavailable">A fora</string>
+    <string name="a11y_presence_busy">Ocupat</string>
+    <string name="a11y_presence_offline">Fora de línia</string>
+    <string name="a11y_pause_audio_message">Pausa %1$s</string>
+    <string name="a11y_pause_voice_message">Pausa missatge de veu</string>
+    <string name="command_description_unignore_user">Deixa d\'ignorar un usuari, es mostraran els nous missatges</string>
+    <string name="a11y_play_audio_message">Reprodueix %1$s</string>
+    <string name="a11y_audio_playback_duration">%1$d minuts %2$d segons</string>
+    <string name="a11y_audio_message_item">%1$s, %2$s, %3$s</string>
+    <string name="voice_message_reply_content">Missatge de veu (%1$s)</string>
+    <string name="error_voice_message_cannot_reply_or_edit">No pots respondre o editar mentre el missatge de veu està actiu</string>
+    <string name="error_voice_message_unable_to_record">No es pot enregistrar missatge de veu</string>
+    <string name="error_voice_message_unable_to_play">Aquest missatge de veu no es pot reproduir</string>
+    <string name="voice_message_tap_to_stop_toast">Clica l\'enregistrament per aturar-lo o escoltar-lo</string>
+    <string name="voice_message_n_seconds_warning_toast">%1$ds restants</string>
+    <string name="voice_message_release_to_send_toast">Manté per enregistrar, deixa anar per enviar</string>
+    <string name="a11y_delete_recorded_voice_message">Elimina enregistrament</string>
+    <string name="a11y_recording_voice_message">Enregistrant missatge de veu</string>
+    <string name="a11y_stop_voice_message">Atura l\'enregistrament</string>
+    <string name="a11y_play_voice_message">Reprodueix missatge de veu</string>
+    <string name="voice_message_slide_to_cancel">Llisca per cancel·lar</string>
+    <string name="a11y_start_voice_message">Enregistra missatge de veu</string>
+    <string name="error_failed_to_join_room">S\'ha produït un error en provar d\'entrar a: %s</string>
+    <string name="room_upgrade_to_recommended_version">Actualitza a la versió de sala recomanada</string>
+    <string name="room_using_unstable_room_version">Aquesta sala té la versió %s, la qual està marcada com a no estable pel servidor.</string>
 </resources>
