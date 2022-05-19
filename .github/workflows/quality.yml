@@ -97,6 +97,25 @@ jobs:
               comment_id: ${{ steps.fc.outputs.comment-id }}
             })
 
+# Gradle dependency analysis using https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin
+  dependency-analysis:
+    name: Dependency analysis
+    runs-on: ubuntu-latest
+    # Allow all jobs on main and develop. Just one per PR.
+    concurrency:
+      group: ${{ github.ref == 'refs/heads/main' && format('ktlint-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('ktlint-develop-{0}', github.sha) || format('ktlint-{0}', github.ref) }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v3
+      - name: Dependency analysis
+        run: ./gradlew buildHealth --max-workers=1
+      - name: Upload dependency analysis
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: dependency-analysis
+          path: build/reports/dependency-analysis/build-health-report.txt
+
 # Lint for main module
   android-lint:
     name: Android Linter
@@ -117,8 +136,6 @@ jobs:
             ${{ runner.os }}-gradle-
       - name: Lint analysis
         run: ./gradlew clean :vector:lint --stacktrace
-      - name: Dependency analysis
-        run: ./gradlew buildHealth --max-workers=1
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@v3
@@ -126,12 +143,6 @@ jobs:
           name: lint-report
           path: |
             vector/build/reports/*.*
-      - name: Upload dependency analysis
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: dependency-analysis
-          path: build/reports/dependency-analysis/build-health-report.txt
 
 # Lint for Gplay and Fdroid release APK
   apk-lint:
