@@ -16,27 +16,29 @@
 
 package im.vector.app.features.onboarding.ftueauth
 
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.autofill.HintConstants
+import androidx.lifecycle.lifecycleScope
 import im.vector.app.core.extensions.associateContentStateWith
-import im.vector.app.core.extensions.clearErrorOnChange
 import im.vector.app.core.extensions.content
+import im.vector.app.core.extensions.editText
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.setOnImeDoneListener
-import im.vector.app.databinding.FragmentFtuePhoneInputBinding
+import im.vector.app.databinding.FragmentFtueEmailInputBinding
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.RegisterAction
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
+import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
-class FtueAuthEmailEntryFragment @Inject constructor() : AbstractFtueAuthFragment<FragmentFtuePhoneInputBinding>() {
+class FtueAuthPhoneEntryFragment @Inject constructor() : AbstractFtueAuthFragment<FragmentFtueEmailInputBinding>() {
 
-    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtuePhoneInputBinding {
-        return FragmentFtuePhoneInputBinding.inflate(inflater, container, false)
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueEmailInputBinding {
+        return FragmentFtueEmailInputBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -45,17 +47,16 @@ class FtueAuthEmailEntryFragment @Inject constructor() : AbstractFtueAuthFragmen
     }
 
     private fun setupViews() {
-        views.emailEntryInput.associateContentStateWith(button = views.emailEntrySubmit, enabledPredicate = { it.isEmail() })
+        views.emailEntryInput.associateContentStateWith(button = views.emailEntrySubmit)
         views.emailEntryInput.setOnImeDoneListener { updateEmail() }
-        views.emailEntryInput.clearErrorOnChange(viewLifecycleOwner)
         views.emailEntrySubmit.debouncedClicks { updateEmail() }
-        setupAutoFill()
-    }
 
-    private fun setupAutoFill() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            views.emailEntryInput.setAutofillHints(HintConstants.AUTOFILL_HINT_PHONE_NUMBER)
-        }
+        views.emailEntryInput.editText().textChanges()
+                .onEach {
+                    views.emailEntryInput.error = null
+                    views.emailEntrySubmit.isEnabled = it.isEmail()
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun updateEmail() {
