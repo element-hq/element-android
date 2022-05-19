@@ -16,13 +16,12 @@
 
 package im.vector.app.features.onboarding.ftueauth
 
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.autofill.HintConstants
 import im.vector.app.core.extensions.associateContentStateWith
+import im.vector.app.core.extensions.autofillEmail
 import im.vector.app.core.extensions.clearErrorOnChange
 import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.isEmail
@@ -49,13 +48,7 @@ class FtueAuthEmailEntryFragment @Inject constructor() : AbstractFtueAuthFragmen
         views.emailEntryInput.setOnImeDoneListener { updateEmail() }
         views.emailEntryInput.clearErrorOnChange(viewLifecycleOwner)
         views.emailEntrySubmit.debouncedClicks { updateEmail() }
-        setupAutoFill()
-    }
-
-    private fun setupAutoFill() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            views.emailEntryInput.setAutofillHints(HintConstants.AUTOFILL_HINT_PHONE_NUMBER)
-        }
+        views.emailEntryInput.autofillEmail()
     }
 
     private fun updateEmail() {

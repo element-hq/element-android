@@ -22,6 +22,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import im.vector.app.core.extensions.associateContentStateWith
+import im.vector.app.core.extensions.autofillPhoneNumber
 import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.editText
 import im.vector.app.core.extensions.isEmail
@@ -57,6 +58,8 @@ class FtueAuthPhoneEntryFragment @Inject constructor() : AbstractFtueAuthFragmen
                     views.emailEntrySubmit.isEnabled = it.isEmail()
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
+
+        views.emailEntryInput.autofillPhoneNumber()
     }
 
     private fun updateEmail() {
