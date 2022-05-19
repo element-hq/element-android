@@ -24,7 +24,7 @@ import retrofit2.http.Query
 internal interface WidgetsAPI {
 
     /**
-     * register to the server
+     * Register to the server.
      *
      * @param body the body content (Ref: https://github.com/matrix-org/matrix-doc/pull/1961)
      */

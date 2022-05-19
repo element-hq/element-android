@@ -50,7 +50,7 @@ internal interface RoomKeysApi {
     suspend fun createKeysBackupVersion(@Body createKeysBackupVersionBody: CreateKeysBackupVersionBody): KeysVersion
 
     /**
-     * Get the key backup last version
+     * Get the key backup last version.
      * If not supported by the server, an error is returned: {"errcode":"M_NOT_FOUND","error":"No backup found"}
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "room_keys/version")

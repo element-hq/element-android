@@ -155,8 +155,8 @@ interface CryptoService {
     fun getIncomingRoomKeyRequestsPaged(): LiveData<PagedList<IncomingRoomKeyRequest>>
 
     /**
-     * Can be called by the app layer to accept a request manually
-     * Use carefully as it is prone to social attacks
+     * Can be called by the app layer to accept a request manually.
+     * Use carefully as it is prone to social attacks.
      */
     suspend fun manuallyAcceptRoomKeyRequest(request: IncomingRoomKeyRequest)
 

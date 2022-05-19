@@ -32,7 +32,7 @@ import org.matrix.android.sdk.api.session.room.model.usersDefaultOrDefault
 class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
 
     /**
-     * Returns the user power level of a dedicated user Id
+     * Returns the user power level of a dedicated user Id.
      *
      * @param userId the user id
      * @return the power level
@@ -44,7 +44,7 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
     }
 
     /**
-     * Returns the user power level of a dedicated user Id
+     * Returns the user power level of a dedicated user Id.
      *
      * @param userId the user id
      * @return the power level
@@ -56,7 +56,7 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
     }
 
     /**
-     * Tell if an user can send an event of a certain type
+     * Tell if an user can send an event of a certain type.
      *
      * @param userId  the id of the user to check for.
      * @param isState true if the event is a state event (ie. state key is not null)
@@ -77,7 +77,7 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
     }
 
     /**
-     * Check if the user have the necessary power level to invite
+     * Check if the user have the necessary power level to invite.
      * @param userId the id of the user to check for.
      * @return true if able to invite
      */
@@ -87,7 +87,7 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
     }
 
     /**
-     * Check if the user have the necessary power level to ban
+     * Check if the user have the necessary power level to ban.
      * @param userId the id of the user to check for.
      * @return true if able to ban
      */
@@ -97,7 +97,7 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
     }
 
     /**
-     * Check if the user have the necessary power level to kick
+     * Check if the user have the necessary power level to kick (remove).
      * @param userId the id of the user to check for.
      * @return true if able to kick
      */
@@ -107,7 +107,7 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
     }
 
     /**
-     * Check if the user have the necessary power level to redact
+     * Check if the user have the necessary power level to redact.
      * @param userId the id of the user to check for.
      * @return true if able to redact
      */

@@ -661,7 +661,7 @@ internal class DefaultKeysBackupService @Inject constructor(
     }
 
     /**
-     * Get public key from a Recovery key
+     * Get public key from a Recovery key.
      *
      * @param recoveryKey the recovery key
      * @return the corresponding public key, from Olm
@@ -857,7 +857,7 @@ internal class DefaultKeysBackupService @Inject constructor(
 
     /**
      * Same method as [RoomKeysRestClient.getRoomKey] except that it accepts nullable
-     * parameters and always returns a KeysBackupData object through the Callback
+     * parameters and always returns a KeysBackupData object through the Callback.
      */
     private suspend fun getKeys(sessionId: String?,
                                 roomId: String?,
@@ -911,7 +911,7 @@ internal class DefaultKeysBackupService @Inject constructor(
     }
 
     /**
-     * Do a backup if there are new keys, with a delay
+     * Do a backup if there are new keys, with a delay.
      */
     fun maybeBackupKeys() {
         when {
@@ -1222,7 +1222,7 @@ internal class DefaultKeysBackupService @Inject constructor(
     }
 
     /**
-     * Update the DB with data fetch from the server
+     * Update the DB with data fetch from the server.
      */
     private fun onServerDataRetrieved(count: Int?, etag: String?) {
         cryptoStore.setKeysBackupData(KeysBackupDataEntity()
@@ -1251,7 +1251,7 @@ internal class DefaultKeysBackupService @Inject constructor(
     }
 
     /**
-     * Send a chunk of keys to backup
+     * Send a chunk of keys to backup.
      */
     @UiThread
     private fun backupKeys() {

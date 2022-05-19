@@ -68,7 +68,7 @@ interface WebViewEventListener {
     }
 
     /**
-     * Triggered when a webview load an url
+     * Triggered when a webview load an url.
      *
      * @param url The url about to be rendered.
      * @return true if the method needs to manage some custom handling

@@ -25,7 +25,6 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Assert.fail
 import org.junit.FixMethodOrder
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
@@ -143,7 +142,6 @@ class XSigningTest : InstrumentedTest {
     }
 
     @Test
-    @Ignore("This test will be ignored until it is fixed")
     fun test_CrossSigningTestAliceTrustBobNewDevice() {
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 

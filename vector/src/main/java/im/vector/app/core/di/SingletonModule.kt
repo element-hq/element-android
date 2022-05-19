@@ -129,12 +129,12 @@ object VectorStaticModule {
     @Provides
     @Singleton
     fun providesMatrix(context: Context, configuration: MatrixConfiguration): Matrix {
-        return Matrix.createInstance(context, configuration)
+        return Matrix(context, configuration)
     }
 
     @Provides
     fun providesCurrentSession(activeSessionHolder: ActiveSessionHolder): Session {
-        // TODO: handle session injection better
+        // TODO handle session injection better
         return activeSessionHolder.getActiveSession()
     }
 

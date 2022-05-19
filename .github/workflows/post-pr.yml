@@ -325,5 +325,5 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           hookshot_url: ${{ secrets.ELEMENT_ANDROID_HOOKSHOT_URL }}
-          text_template: "Post-merge validation of ${{ github.head_ref }} into ${{ github.base_ref }} by ${{ github.event.merged_by }} failed: {{#each job_statuses }}{{#with this }}{{#if completed }}  {{name}} {{conclusion}} at {{completed_at}}, {{/if}}{{/with}}{{/each}}"
-          html_template: "Post-merge validation of ${{ github.head_ref }} into ${{ github.base_ref }} by ${{ github.event.merged_by }} failed: {{#each job_statuses }}{{#with this }}{{#if completed }}<br />{{icon conclusion}} {{name}} <font color='{{color conclusion}}'>{{conclusion}} at {{completed_at}} <a href=\"{{html_url}}\">[details]</a></font>{{/if}}{{/with}}{{/each}}"
+          text_template: "Post-merge validation of ${{ github.head_ref }} into ${{ github.base_ref }} by ${{ github.event.pull_request.merged_by.login }} failed: {{#each job_statuses }}{{#with this }}{{#if completed }}  {{name}} {{conclusion}} at {{completed_at}}, {{/if}}{{/with}}{{/each}}"
+          html_template: "Post-merge validation of ${{ github.head_ref }} into ${{ github.base_ref }} by ${{ github.event.pull_request.merged_by.login }} failed: {{#each job_statuses }}{{#with this }}{{#if completed }}<br />{{icon conclusion}} {{name}} <font color='{{color conclusion}}'>{{conclusion}} at {{completed_at}} <a href=\"{{html_url}}\">[details]</a></font>{{/if}}{{/with}}{{/each}}"

@@ -67,8 +67,8 @@ internal data class Capabilities(
         @Json(name = "m.room_versions")
         val roomVersions: RoomVersions? = null,
         /**
-         * Capability to indicate if the server supports MSC3440 Threading
-         * True if the user can use m.thread relation, false otherwise
+         * Capability to indicate if the server supports MSC3440 Threading.
+         * True if the user can use m.thread relation, false otherwise.
          */
         @Json(name = "m.thread")
         val threads: BooleanCapability? = null
@@ -98,6 +98,8 @@ internal data class RoomVersions(
         val available: JsonDict? = null,
 
         /**
+         * Example:
+         * <pre>
          *  "room_capabilities": {
          *      "knock" : {
          *              "preferred": "7",
@@ -108,6 +110,7 @@ internal data class RoomVersions(
          *              "support" : ["8", "9"]
          *      }
          * }
+         * </pre>.
          */
         @Json(name = "org.matrix.msc3244.room_capabilities")
         val roomCapabilities: JsonDict? = null

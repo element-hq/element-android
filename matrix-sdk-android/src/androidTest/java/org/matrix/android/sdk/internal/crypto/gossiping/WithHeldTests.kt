@@ -21,6 +21,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import org.junit.Assert
 import org.junit.FixMethodOrder
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
@@ -38,6 +39,7 @@ import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestHelper
 import org.matrix.android.sdk.common.MockOkHttpInterceptor
+import org.matrix.android.sdk.common.RetryTestRule
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
 
@@ -45,6 +47,8 @@ import org.matrix.android.sdk.common.TestConstants
 @FixMethodOrder(MethodSorters.JVM)
 @LargeTest
 class WithHeldTests : InstrumentedTest {
+
+    @get:Rule val rule = RetryTestRule(3)
 
     @Test
     fun test_WithHeldUnverifiedReason() {
@@ -102,7 +106,7 @@ class WithHeldTests : InstrumentedTest {
             val type = (failure as MXCryptoError.Base).errorType
             val technicalMessage = failure.technicalMessage
             Assert.assertEquals("Error should be withheld", MXCryptoError.ErrorType.KEYS_WITHHELD, type)
-            Assert.assertEquals("Cause should be unverified", WithHeldCode.UNAUTHORISED.value, technicalMessage)
+            Assert.assertEquals("Cause should be unverified", WithHeldCode.UNVERIFIED.value, technicalMessage)
         }
 
         // Let's see if the reply we got from bob first session is unverified
@@ -143,7 +147,7 @@ class WithHeldTests : InstrumentedTest {
             val type = (failure as MXCryptoError.Base).errorType
             val technicalMessage = failure.technicalMessage
             Assert.assertEquals("Error should be withheld", MXCryptoError.ErrorType.KEYS_WITHHELD, type)
-            Assert.assertEquals("Cause should be unverified", WithHeldCode.UNAUTHORISED.value, technicalMessage)
+            Assert.assertEquals("Cause should be unverified", WithHeldCode.UNVERIFIED.value, technicalMessage)
         }
 
         testHelper.signOutAndClose(aliceSession)

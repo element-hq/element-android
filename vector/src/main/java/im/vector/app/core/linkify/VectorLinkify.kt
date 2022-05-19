@@ -22,7 +22,7 @@ import androidx.core.text.util.LinkifyCompat
 
 object VectorLinkify {
     /**
-     * Better support for auto link than the default implementation
+     * Better support for auto link than the default implementation.
      */
     fun addLinks(spannable: Spannable, keepExistingUrlSpan: Boolean = false) {
         // we might want to modify some matches

@@ -341,7 +341,6 @@
     <string name="room_settings_all_messages">全てのメッセージ</string>
     <string name="room_settings_add_homescreen_shortcut">ホーム画面にショートカットを作成</string>
     <string name="settings_inline_url_preview">インラインURLプレビュー</string>
-    <string name="settings_flair">コミュニティーのアバター</string>
     <string name="you_added_a_new_device">暗号鍵を要求している新しいセッション \'%s\' を追加しました。</string>
     <string name="your_unverified_device_requesting">未認証のセッション \'%s\' が暗号鍵を要求しています。</string>
     <string name="create">作成</string>
@@ -512,7 +511,7 @@
     <string name="settings_security_and_privacy">セキュリティーとプライバシー</string>
     <string name="preference_root_help_about">ヘルプと概要</string>
     <string name="bottom_action_people_x">ダイレクトメッセージ</string>
-    <string name="edited_suffix">（編集した）</string>
+    <string name="edited_suffix">（編集済）</string>
     <string name="room_filtering_filter_hint">会話を検索…</string>
     <string name="room_list_quick_actions_notifications_all_noisy">全てのメッセージ (音量大)</string>
     <string name="room_list_quick_actions_notifications_all">全てのメッセージ</string>
@@ -1538,12 +1537,10 @@
     <string name="create_poll_options_hint">選択肢%1$d</string>
     <string name="create_poll_options_title">選択肢を作成</string>
     <string name="location_activity_title_preview">位置情報</string>
-    <string name="a11y_location_share_icon">位置情報を共有</string>
     <string name="settings_enable_location_sharing">位置情報の共有を有効にする</string>
     <string name="location_timeline_failed_to_load_map">地図を読み込めませんでした</string>
     <string name="reply_in_thread">スレッドで返信</string>
     <string name="location_activity_title_static_sharing">位置情報を共有</string>
-    <string name="location_share">位置情報を共有</string>
     <string name="tooltip_attachment_photo">カメラを開く</string>
     <string name="tooltip_attachment_gallery">画像と動画を送信</string>
     <string name="tooltip_attachment_file">ファイルをアップロード</string>
@@ -2372,4 +2369,9 @@
 \nスレッドはMatrixの仕様の一部になったため、これは一度限りの変更です。</string>
     <string name="threads_notice_migration_title">スレッドはベータ版になります 🎉</string>
     <string name="action_disable">無効にする</string>
+    <string name="send_feedback_threads_title">スレッドについてのフィードバック</string>
+    <string name="give_feedback_threads">フィードバックを送信</string>
+    <string name="beta_title_bottom_sheet_action">ベータ版</string>
+    <string name="beta">ベータ版</string>
+    <string name="action_try_it_out">試す</string>
 </resources>

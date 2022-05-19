@@ -939,9 +939,25 @@ internal class DefaultVerificationService @Inject constructor(
 
         updatePendingRequest(
                 existingRequest.copy(
-                        readyInfo = readyReq
+                    readyInfo = readyReq
                 )
         )
+
+        notifyOthersOfAcceptance(readyReq.transactionId, readyReq.fromDevice)
+    }
+
+    /**
+     * Gets a list of device ids excluding the current one.
+     */
+    private fun getMyOtherDeviceIds(): List<String> = cryptoStore.getUserDevices(userId)?.keys?.filter { it != deviceId }.orEmpty()
+
+    /**
+     * Notifies other devices that the current verification transaction is being handled by [acceptedByDeviceId].
+     */
+    private fun notifyOthersOfAcceptance(transactionId: String, acceptedByDeviceId: String) {
+        val deviceIds = getMyOtherDeviceIds().filter { it != acceptedByDeviceId }
+        val transport = verificationTransportToDeviceFactory.createTransport(null)
+        transport.cancelTransaction(transactionId, userId, deviceIds, CancelCode.AcceptedByAnotherDevice)
     }
 
     private fun createQrCodeData(requestId: String?, otherUserId: String, otherDeviceId: String?): QrCodeData? {
@@ -1485,7 +1501,7 @@ internal class DefaultVerificationService @Inject constructor(
     }
 
     /**
-     * This string must be unique for the pair of users performing verification for the duration that the transaction is valid
+     * This string must be unique for the pair of users performing verification for the duration that the transaction is valid.
      */
     private fun createUniqueIDForTransaction(otherUserId: String, otherDeviceID: String): String {
         return buildString {

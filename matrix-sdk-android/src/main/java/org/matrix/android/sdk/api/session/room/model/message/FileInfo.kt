@@ -49,7 +49,7 @@ data class FileInfo(
 )
 
 /**
- * Get the url of the encrypted thumbnail or of the thumbnail
+ * Get the url of the encrypted thumbnail or of the thumbnail.
  */
 fun FileInfo.getThumbnailUrl(): String? {
     return thumbnailFile?.url ?: thumbnailUrl

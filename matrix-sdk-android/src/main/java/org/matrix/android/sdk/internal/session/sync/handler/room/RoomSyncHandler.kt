@@ -213,7 +213,7 @@ internal class RoomSyncHandler @Inject constructor(
         val isInitialSync = insertType == EventInsertType.INITIAL_SYNC
 
         val ephemeralResult = (roomSync.ephemeral as? LazyRoomSyncEphemeral.Parsed)
-                ?._roomSyncEphemeral
+                ?.roomSyncEphemeral
                 ?.events
                 ?.takeIf { it.isNotEmpty() }
                 ?.let { handleEphemeral(realm, roomId, it, insertType == EventInsertType.INITIAL_SYNC, aggregator) }

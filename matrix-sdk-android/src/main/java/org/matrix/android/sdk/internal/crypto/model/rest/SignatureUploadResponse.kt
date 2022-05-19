@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * Upload Signature response
+ * Upload Signature response.
  */
 @JsonClass(generateAdapter = true)
 internal data class SignatureUploadResponse(

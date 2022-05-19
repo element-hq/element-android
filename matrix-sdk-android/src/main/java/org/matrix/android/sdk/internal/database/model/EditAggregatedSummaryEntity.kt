@@ -20,7 +20,7 @@ import io.realm.RealmObject
 import io.realm.annotations.RealmClass
 
 /**
- * Keep all the editions of a message
+ * Keep all the editions of a message.
  */
 internal open class EditAggregatedSummaryEntity(
         // The list of the editions used to build the summary (might be out of sync if chunked received from message chunk)

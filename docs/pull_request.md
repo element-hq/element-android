@@ -116,7 +116,7 @@ Review such PR is the same recipe than for PR from Dependabot
 ##### Sync analytics plan
 
 This tools imports any update in the analytics plan. See instruction in the PR itself to handle it.
-More info can be found in the file [analytics.md]
+More info can be found in the file [analytics.md](./analytics.md)
 
 ## Reviewing PR
 

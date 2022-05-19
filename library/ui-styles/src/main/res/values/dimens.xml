@@ -9,6 +9,7 @@
     <dimen name="layout_vertical_margin_big">32dp</dimen>
 
     <dimen name="profile_avatar_size">50dp</dimen>
+    <dimen name="typing_avatar_size">20dp</dimen>
     <dimen name="item_event_message_state_size">16dp</dimen>
 
     <dimen name="item_event_message_media_button_size">32dp</dimen>
@@ -40,7 +41,7 @@
     <dimen name="menu_item_icon_size">24dp</dimen>
     <dimen name="menu_item_size">48dp</dimen>
     <dimen name="menu_item_ripple_size">48dp</dimen>
-    <dimen name="menu_item_width_small">38dp</dimen>
+    <dimen name="menu_item_width_small">34dp</dimen>
 
     <!-- Composer -->
     <dimen name="composer_min_height">56dp</dimen>

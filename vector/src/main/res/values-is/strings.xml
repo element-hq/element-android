@@ -179,9 +179,7 @@
     <string name="settings_new_password">Nýtt lykilorð</string>
     <string name="settings_fail_to_update_password">Mistókst að uppfæra lykilorð</string>
     <string name="settings_password_updated">Lykilorðið þitt hefur verið uppfært</string>
-    <string name="settings_unignore_user">Sýna öll skilaboð frá %s\?
-\n
-\nAthugaðu að þessi aðgerð mun endurræsa forritið og það getur tekið nokkurn tíma.</string>
+    <string name="settings_unignore_user">Sýna öll skilaboð frá %s\?</string>
     <string name="settings_select_country">Veldu land</string>
     <string name="media_saving_period_3_days">3 dagar</string>
     <string name="media_saving_period_1_week">1 vika</string>
@@ -251,7 +249,6 @@
     <string name="settings_labs_native_camera">Nota innbyggða myndavél</string>
     <string name="room_participants_action_mention">Minnst á</string>
     <string name="settings_vibrate_on_mention">Titra þegar minnst er á</string>
-    <string name="settings_flair">Hlutverksmerki</string>
     <string name="room_settings_room_read_history_rules_pref_title">Lesanleiki ferilskrár spjallrásar</string>
     <string name="encryption_export_e2e_room_keys">Flytja út E2E dulritunarlykla spjallrásar</string>
     <string name="encryption_export_room_keys">Flytja út dulritunarlykla spjallrásar</string>
@@ -1026,9 +1023,7 @@
     <string name="tooltip_attachment_gallery">Senda myndir og myndskeið</string>
     <string name="tooltip_attachment_photo">Opna myndavél</string>
     <string name="location_share_external">Opna með</string>
-    <string name="location_share">Deila staðsetningu</string>
     <string name="a11y_static_map_image">Landakort</string>
-    <string name="a11y_location_share_icon">Deila staðsetningu</string>
     <string name="location_activity_title_preview">Staðsetning</string>
     <string name="location_activity_title_static_sharing">Deila staðsetningu</string>
     <string name="poll_type_title">Tegund könnunar</string>

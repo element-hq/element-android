@@ -30,6 +30,7 @@
         <item name="vctr_toolbar_background">@color/element_background_light</item>
         <item name="vctr_message_bubble_inbound">@color/vctr_message_bubble_inbound_light</item>
         <item name="vctr_message_bubble_outbound">@color/vctr_message_bubble_outbound_light</item>
+        <item name="vctr_badge_color_border">@color/vctr_badge_color_border_light</item>
 
         <!-- room message colors -->
         <item name="vctr_notice_secondary">#61708B</item>
@@ -44,6 +45,8 @@
         <!-- Presence Indicator colors -->
         <item name="vctr_presence_indicator_offline">@color/vctr_presence_indicator_offline_light</item>
         <item name="vctr_presence_indicator_online">@color/vctr_presence_indicator_online_light</item>
+        <item name="vctr_presence_indicator_busy">@color/vctr_presence_indicator_busy_light</item>
+        <item name="vctr_presence_indicator_away">@color/vctr_presence_indicator_away_light</item>
 
         <!-- Some aliases -->
         <item name="vctr_header_background">?vctr_system</item>

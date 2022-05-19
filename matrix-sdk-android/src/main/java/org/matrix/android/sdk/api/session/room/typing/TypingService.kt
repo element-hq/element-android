@@ -22,7 +22,7 @@ package org.matrix.android.sdk.api.session.room.typing
 interface TypingService {
 
     /**
-     * To call when user is typing a message in the room
+     * To call when user is typing a message in the room.
      * The SDK will handle the requests scheduling to the homeserver:
      * - No more than one typing request per 10s
      * - If not called after 10s, the SDK will notify the homeserver that the user is not typing anymore

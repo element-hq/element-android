@@ -97,7 +97,7 @@ internal data class SpaceChildSummaryResponse(
         val avatarUrl: String? = null,
 
         /**
-         * Undocumented item
+         * Undocumented item.
          */
         @Json(name = "m.federate")
         val isFederated: Boolean = false

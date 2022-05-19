@@ -64,7 +64,7 @@ data class ViewRoom(
         MessageUser,
 
         /**
-         * Room accessed via space explore
+         * Room accessed via space explore.
          */
         MobileExploreRooms,
 
@@ -79,12 +79,12 @@ data class ViewRoom(
         MobileInCall,
 
         /**
-         * Room accessed during external sharing
+         * Room accessed during external sharing.
          */
         MobileLinkShare,
 
         /**
-         * Room accessed via link
+         * Room accessed via link.
          */
         MobilePermalink,
 
@@ -95,7 +95,7 @@ data class ViewRoom(
         MobileRoomMemberDetail,
 
         /**
-         * Room accessed via preview
+         * Room accessed via preview.
          */
         MobileRoomPreview,
 
@@ -117,7 +117,7 @@ data class ViewRoom(
         MobileSpaceMemberDetail,
 
         /**
-         * Room accessed via space members list
+         * Room accessed via space members list.
          */
         MobileSpaceMembers,
 

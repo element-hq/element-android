@@ -475,7 +475,6 @@
         <item quantity="other">%d 条未读消息</item>
     </plurals>
     <string name="list_members">显示成员</string>
-    <string name="settings_flair">徽章</string>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="other">%d 个聊天室</item>
     </plurals>
@@ -2294,4 +2293,5 @@
     <string name="room_threads_filter">在房间中筛选子区</string>
     <string name="action_thread_copy_link_to_thread">复制子区的链接</string>
     <string name="action_thread_view_in_room">在房间中查看</string>
+    <string name="room_message_autocomplete_notification">群组通知</string>
 </resources>

@@ -19,7 +19,7 @@ package org.matrix.android.sdk.internal.crypto.algorithms
 import org.matrix.android.sdk.api.session.events.model.Content
 
 /**
- * An interface for encrypting data
+ * An interface for encrypting data.
  */
 internal interface IMXEncrypting {
 

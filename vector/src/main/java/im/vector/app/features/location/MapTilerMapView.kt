@@ -78,7 +78,7 @@ class MapTilerMapView @JvmOverloads constructor(
     }
 
     /**
-     * For location fragments
+     * For location fragments.
      */
     fun initialize(
             url: String,

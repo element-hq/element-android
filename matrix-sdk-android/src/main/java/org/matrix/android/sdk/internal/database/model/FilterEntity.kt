@@ -19,8 +19,8 @@ package org.matrix.android.sdk.internal.database.model
 import io.realm.RealmObject
 
 /**
- * Contain a map between Json filter string and filterId (from Homeserver)
- * Currently there is only one object in this table
+ * Contain a map between Json filter string and filterId (from Homeserver).
+ * Currently there is only one object in this table.
  */
 internal open class FilterEntity(
         // The serialized FilterBody

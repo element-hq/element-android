@@ -49,7 +49,7 @@ data class PushRule(
         @Json(name = "rule_id")
         val ruleId: String,
         /**
-         * The conditions that must hold true for an event in order for a rule to be applied to an event
+         * The conditions that must hold true for an event in order for a rule to be applied to an event.
          */
         @Json(name = "conditions")
         val conditions: List<PushCondition>? = null,
@@ -71,7 +71,7 @@ data class PushRule(
     }
 
     /**
-     * Set the notification sound
+     * Set the notification sound.
      *
      * @param sound notification sound
      */
@@ -82,7 +82,7 @@ data class PushRule(
     }
 
     /**
-     * Remove the notification sound
+     * Remove the notification sound.
      */
     fun removeNotificationSound(): PushRule {
         return copy(

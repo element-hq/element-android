@@ -19,7 +19,7 @@ package im.vector.app.features.crypto.verification
 import im.vector.app.core.platform.VectorViewEvents
 
 /**
- * Transient events for the verification bottom sheet
+ * Transient events for the verification bottom sheet.
  */
 sealed class VerificationBottomSheetViewEvents : VectorViewEvents {
     object Dismiss : VerificationBottomSheetViewEvents()

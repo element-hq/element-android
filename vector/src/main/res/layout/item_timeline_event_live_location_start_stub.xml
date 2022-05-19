@@ -19,8 +19,8 @@
         android:id="@+id/locationLiveStartBanner"
         android:layout_width="0dp"
         android:layout_height="48dp"
-        android:alpha="0.85"
-        android:src="?colorSurface"
+        android:alpha="0.75"
+        android:src="?android:colorBackground"
         app:layout_constraintBottom_toBottomOf="@id/locationLiveStartMap"
         app:layout_constraintEnd_toEndOf="@id/locationLiveStartMap"
         app:layout_constraintStart_toStartOf="@id/locationLiveStartMap"
@@ -28,9 +28,10 @@
 
     <ImageView
         android:id="@+id/locationLiveStartIcon"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_marginHorizontal="8dp"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:layout_marginVertical="8dp"
+        android:layout_marginStart="8dp"
         android:background="@drawable/circle"
         android:backgroundTint="?vctr_content_quaternary"
         android:padding="3dp"
@@ -38,6 +39,7 @@
         app:layout_constraintStart_toStartOf="@id/locationLiveStartBanner"
         app:layout_constraintTop_toTopOf="@id/locationLiveStartBanner"
         app:srcCompat="@drawable/ic_attachment_location_live_white"
+        app:tint="?android:colorBackground"
         tools:ignore="ContentDescription" />
 
     <TextView

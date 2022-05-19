@@ -26,7 +26,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 /**
- * This class displays the unknown certificate dialog
+ * This class displays the unknown certificate dialog.
  */
 class UnrecognizedCertificateDialog @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
@@ -37,7 +37,7 @@ class UnrecognizedCertificateDialog @Inject constructor(
 
     /**
      * Display a certificate dialog box, asking the user about an unknown certificate
-     * To use when user is currently logged in
+     * To use when user is currently logged in.
      *
      * @param unrecognizedFingerprint the fingerprint for the unknown certificate
      * @param callback                callback to fire when the user makes a decision
@@ -60,7 +60,7 @@ class UnrecognizedCertificateDialog @Inject constructor(
     }
 
     /**
-     * To use during login flow
+     * To use during login flow.
      */
     fun show(activity: Activity,
              unrecognizedFingerprint: Fingerprint,
@@ -78,7 +78,7 @@ class UnrecognizedCertificateDialog @Inject constructor(
     }
 
     /**
-     * Display a certificate dialog box, asking the user about an unknown certificate
+     * Display a certificate dialog box, asking the user about an unknown certificate.
      *
      * @param unrecognizedFingerprint the fingerprint for the unknown certificate
      * @param existing                the current session already exist, so it mean that something has changed server side
@@ -167,17 +167,17 @@ class UnrecognizedCertificateDialog @Inject constructor(
 
     interface Callback {
         /**
-         * The certificate was explicitly accepted
+         * The certificate was explicitly accepted.
          */
         fun onAccept()
 
         /**
-         * The warning was ignored by the user
+         * The warning was ignored by the user.
          */
         fun onIgnore()
 
         /**
-         * The unknown certificate was explicitly rejected
+         * The unknown certificate was explicitly rejected.
          */
         fun onReject()
     }

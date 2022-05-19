@@ -47,7 +47,7 @@ interface WidgetPostAPIMediator {
     fun injectAPI()
 
     /**
-     * Send a boolean response
+     * Send a boolean response.
      *
      * @param response  the response
      * @param eventData the modular data
@@ -55,7 +55,7 @@ interface WidgetPostAPIMediator {
     fun sendBoolResponse(response: Boolean, eventData: JsonDict)
 
     /**
-     * Send an integer response
+     * Send an integer response.
      *
      * @param response  the response
      * @param eventData the modular data
@@ -63,7 +63,7 @@ interface WidgetPostAPIMediator {
     fun sendIntegerResponse(response: Int, eventData: JsonDict)
 
     /**
-     * Send an object response
+     * Send an object response.
      *
      * @param klass the class of the response
      * @param response  the response
@@ -72,14 +72,14 @@ interface WidgetPostAPIMediator {
     fun <T> sendObjectResponse(type: Type, response: T?, eventData: JsonDict)
 
     /**
-     * Send success
+     * Send success.
      *
      * @param eventData the modular data
      */
     fun sendSuccess(eventData: JsonDict)
 
     /**
-     * Send an error
+     * Send an error.
      *
      * @param message   the error message
      * @param eventData the modular data
@@ -88,7 +88,7 @@ interface WidgetPostAPIMediator {
 
     interface Handler {
         /**
-         * Triggered when a widget is posting
+         * Triggered when a widget is posting.
          */
         fun handleWidgetRequest(mediator: WidgetPostAPIMediator, eventData: JsonDict): Boolean
     }

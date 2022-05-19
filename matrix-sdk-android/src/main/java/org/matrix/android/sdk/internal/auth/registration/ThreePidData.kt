@@ -20,7 +20,7 @@ import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 
 /**
- * Container to store the data when a three pid is in validation step
+ * Container to store the data when a three pid is in validation step.
  */
 @JsonClass(generateAdapter = true)
 internal data class ThreePidData(
