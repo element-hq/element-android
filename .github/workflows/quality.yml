@@ -5,6 +5,12 @@ on:
   push:
     branches: [ main, develop ]
 
+# Enrich gradle.properties for CI/CD
+env:
+  CI_GRADLE_ARG_PROPERTIES: >
+    -Porg.gradle.jvmargs=-Xmx4g
+    -Porg.gradle.parallel=false
+
 jobs:
   check:
     name: Project Check Suite
@@ -108,7 +114,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Dependency analysis
-        run: ./gradlew buildHealth --max-workers=1
+        run: ./gradlew buildHealth $CI_GRADLE_ARG_PROPERTIES
       - name: Upload dependency analysis
         if: always()
         uses: actions/upload-artifact@v3
