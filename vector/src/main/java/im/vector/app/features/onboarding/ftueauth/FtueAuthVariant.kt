@@ -395,10 +395,15 @@ class FtueAuthVariant(
     }
 
     private fun onMsisdn(stage: Stage) {
-        addRegistrationStageFragmentToBackstack(
-                FtueAuthGenericTextInputFormFragment::class.java,
-                FtueAuthGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.SetMsisdn, stage.mandatory),
-        )
+        when {
+            vectorFeatures.isOnboardingCombinedRegisterEnabled() -> addRegistrationStageFragmentToBackstack(
+                    FtueAuthPhoneEntryFragment::class.java
+            )
+            else                                                 -> addRegistrationStageFragmentToBackstack(
+                    FtueAuthGenericTextInputFormFragment::class.java,
+                    FtueAuthGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.SetMsisdn, stage.mandatory),
+            )
+        }
     }
 
     private fun onEmail(stage: Stage) {

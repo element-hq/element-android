@@ -26,16 +26,16 @@ import im.vector.app.core.extensions.clearErrorOnChange
 import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.setOnImeDoneListener
-import im.vector.app.databinding.FragmentFtuePhoneInputBinding
+import im.vector.app.databinding.FragmentFtueEmailInputBinding
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.RegisterAction
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import javax.inject.Inject
 
-class FtueAuthEmailEntryFragment @Inject constructor() : AbstractFtueAuthFragment<FragmentFtuePhoneInputBinding>() {
+class FtueAuthEmailEntryFragment @Inject constructor() : AbstractFtueAuthFragment<FragmentFtueEmailInputBinding>() {
 
-    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtuePhoneInputBinding {
-        return FragmentFtuePhoneInputBinding.inflate(inflater, container, false)
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueEmailInputBinding {
+        return FragmentFtueEmailInputBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

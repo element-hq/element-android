@@ -13,14 +13,14 @@
         android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/emailEntryGutterStart"
+            android:id="@+id/phoneEntryGutterStart"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="@dimen/ftue_auth_gutter_start_percent" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/emailEntryGutterEnd"
+            android:id="@+id/phoneEntryGutterEnd"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -30,76 +30,76 @@
             android:id="@+id/headerSpacing"
             android:layout_width="match_parent"
             android:layout_height="52dp"
-            app:layout_constraintBottom_toTopOf="@id/emailEntryHeaderIcon"
+            app:layout_constraintBottom_toTopOf="@id/phoneEntryHeaderIcon"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/emailEntryHeaderIcon"
+            android:id="@+id/phoneEntryHeaderIcon"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:adjustViewBounds="true"
             android:background="@drawable/circle"
             android:backgroundTint="?colorSecondary"
             android:contentDescription="@null"
-            android:src="@drawable/ic_email"
-            app:layout_constraintBottom_toTopOf="@id/emailEntryHeaderTitle"
-            app:layout_constraintEnd_toEndOf="@id/emailEntryGutterEnd"
+            android:src="@drawable/ic_ftue_phone"
+            app:layout_constraintBottom_toTopOf="@id/phoneEntryHeaderTitle"
+            app:layout_constraintEnd_toEndOf="@id/phoneEntryGutterEnd"
             app:layout_constraintHeight_percent="0.12"
-            app:layout_constraintStart_toStartOf="@id/emailEntryGutterStart"
+            app:layout_constraintStart_toStartOf="@id/phoneEntryGutterStart"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/palette_white" />
 
         <TextView
-            android:id="@+id/emailEntryHeaderTitle"
+            android:id="@+id/phoneEntryHeaderTitle"
             style="@style/Widget.Vector.TextView.Title.Medium"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:gravity="center"
-            android:text="@string/ftue_auth_email_title"
+            android:text="@string/ftue_auth_phone_title"
             android:textColor="?vctr_content_primary"
-            app:layout_constraintBottom_toTopOf="@id/emailEntryHeaderSubtitle"
-            app:layout_constraintEnd_toEndOf="@id/emailEntryGutterEnd"
-            app:layout_constraintStart_toStartOf="@id/emailEntryGutterStart"
-            app:layout_constraintTop_toBottomOf="@id/emailEntryHeaderIcon" />
+            app:layout_constraintBottom_toTopOf="@id/phoneEntryHeaderSubtitle"
+            app:layout_constraintEnd_toEndOf="@id/phoneEntryGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/phoneEntryGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/phoneEntryHeaderIcon" />
 
         <TextView
-            android:id="@+id/emailEntryHeaderSubtitle"
+            android:id="@+id/phoneEntryHeaderSubtitle"
             style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:gravity="center"
-            android:text="@string/ftue_auth_email_subtitle"
+            android:text="@string/ftue_auth_phone_subtitle"
             android:textColor="?vctr_content_secondary"
             app:layout_constraintBottom_toTopOf="@id/titleContentSpacing"
-            app:layout_constraintEnd_toEndOf="@id/emailEntryGutterEnd"
-            app:layout_constraintStart_toStartOf="@id/emailEntryGutterStart"
-            app:layout_constraintTop_toBottomOf="@id/emailEntryHeaderTitle" />
+            app:layout_constraintEnd_toEndOf="@id/phoneEntryGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/phoneEntryGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/phoneEntryHeaderTitle" />
 
         <Space
             android:id="@+id/titleContentSpacing"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@id/emailEntryInput"
+            app:layout_constraintBottom_toTopOf="@id/phoneEntryInput"
             app:layout_constraintHeight_percent="0.03"
-            app:layout_constraintTop_toBottomOf="@id/emailEntryHeaderSubtitle" />
+            app:layout_constraintTop_toBottomOf="@id/phoneEntryHeaderSubtitle" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/emailEntryInput"
+            android:id="@+id/phoneEntryInput"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="@string/ftue_auth_email_entry_title"
+            android:hint="@string/ftue_auth_phone_entry_title"
             app:endIconMode="clear_text"
-            app:layout_constraintEnd_toEndOf="@id/emailEntryGutterEnd"
-            app:layout_constraintStart_toStartOf="@id/emailEntryGutterStart"
+            app:layout_constraintEnd_toEndOf="@id/phoneEntryGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/phoneEntryGutterStart"
             app:layout_constraintTop_toBottomOf="@id/titleContentSpacing">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:imeOptions="actionDone"
-                android:inputType="textEmailAddress"
+                android:inputType="phone"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -108,22 +108,22 @@
             android:id="@+id/entrySpacing"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@id/emailEntrySubmit"
+            app:layout_constraintBottom_toTopOf="@id/phoneEntrySubmit"
             app:layout_constraintHeight_percent="0.03"
-            app:layout_constraintTop_toBottomOf="@id/emailEntryInput"
+            app:layout_constraintTop_toBottomOf="@id/phoneEntryInput"
             app:layout_constraintVertical_bias="0"
             app:layout_constraintVertical_chainStyle="packed" />
 
         <Button
-            android:id="@+id/emailEntrySubmit"
+            android:id="@+id/phoneEntrySubmit"
             style="@style/Widget.Vector.Button.Login"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/login_set_email_submit"
             android:textAllCaps="true"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/emailEntryGutterEnd"
-            app:layout_constraintStart_toStartOf="@id/emailEntryGutterStart"
+            app:layout_constraintEnd_toEndOf="@id/phoneEntryGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/phoneEntryGutterStart"
             app:layout_constraintTop_toBottomOf="@id/entrySpacing" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

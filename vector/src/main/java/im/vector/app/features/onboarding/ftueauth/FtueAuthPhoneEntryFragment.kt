@@ -21,13 +21,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
+import im.vector.app.R
 import im.vector.app.core.extensions.associateContentStateWith
 import im.vector.app.core.extensions.autofillPhoneNumber
 import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.editText
-import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.setOnImeDoneListener
-import im.vector.app.databinding.FragmentFtueEmailInputBinding
+import im.vector.app.databinding.FragmentFtuePhoneInputBinding
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.RegisterAction
 import kotlinx.coroutines.flow.launchIn
@@ -36,10 +36,12 @@ import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
-class FtueAuthPhoneEntryFragment @Inject constructor() : AbstractFtueAuthFragment<FragmentFtueEmailInputBinding>() {
+class FtueAuthPhoneEntryFragment @Inject constructor(
+        private val phoneNumberParser: PhoneNumberParser
+) : AbstractFtueAuthFragment<FragmentFtuePhoneInputBinding>() {
 
-    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueEmailInputBinding {
-        return FragmentFtueEmailInputBinding.inflate(inflater, container, false)
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtuePhoneInputBinding {
+        return FragmentFtuePhoneInputBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -48,27 +50,35 @@ class FtueAuthPhoneEntryFragment @Inject constructor() : AbstractFtueAuthFragmen
     }
 
     private fun setupViews() {
-        views.emailEntryInput.associateContentStateWith(button = views.emailEntrySubmit)
-        views.emailEntryInput.setOnImeDoneListener { updateEmail() }
-        views.emailEntrySubmit.debouncedClicks { updateEmail() }
+        views.phoneEntryInput.associateContentStateWith(button = views.phoneEntrySubmit)
+        views.phoneEntryInput.setOnImeDoneListener { updatePhoneNumber() }
+        views.phoneEntrySubmit.debouncedClicks { updatePhoneNumber() }
 
-        views.emailEntryInput.editText().textChanges()
+        views.phoneEntryInput.editText().textChanges()
                 .onEach {
-                    views.emailEntryInput.error = null
-                    views.emailEntrySubmit.isEnabled = it.isEmail()
+                    views.phoneEntryInput.error = null
+                    views.phoneEntrySubmit.isEnabled = it.isNotBlank()
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 
-        views.emailEntryInput.autofillPhoneNumber()
+        views.phoneEntryInput.autofillPhoneNumber()
     }
 
-    private fun updateEmail() {
-        val email = views.emailEntryInput.content()
-        viewModel.handle(OnboardingAction.PostRegisterAction(RegisterAction.AddThreePid(RegisterThreePid.Email(email))))
+    private fun updatePhoneNumber() {
+        val number = views.phoneEntryInput.content()
+
+        when (val result = phoneNumberParser.parseInternationalNumber(number)) {
+            PhoneNumberParser.Result.ErrorInvalidNumber            -> views.phoneEntryInput.error = getString(R.string.login_msisdn_error_other)
+            PhoneNumberParser.Result.ErrorMissingInternationalCode -> views.phoneEntryInput.error = getString(R.string.login_msisdn_error_not_international)
+            is PhoneNumberParser.Result.Success                    -> {
+                val (countryCode, phoneNumber) = result
+                viewModel.handle(OnboardingAction.PostRegisterAction(RegisterAction.AddThreePid(RegisterThreePid.Msisdn(phoneNumber, countryCode))))
+            }
+        }
     }
 
     override fun onError(throwable: Throwable) {
-        views.emailEntryInput.error = errorFormatter.toHumanReadable(throwable)
+        views.phoneEntryInput.error = errorFormatter.toHumanReadable(throwable)
     }
 
     override fun resetViewModel() {
