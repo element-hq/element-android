@@ -42,18 +42,23 @@ class DialPadLookup @Inject constructor(
         val sipUserId = thirdPartyUser.userId
         val nativeLookupResults = session.sipNativeLookup(thirdPartyUser.userId)
         // If I have a native user I check for an existing native room with him...
-        val roomId = if (nativeLookupResults.isNotEmpty()) {
+        if (nativeLookupResults.isNotEmpty()) {
             val nativeUserId = nativeLookupResults.first().userId
             if (nativeUserId == session.myUserId) {
                 throw Failure.NumberIsYours
             }
-            session.roomService().getExistingDirectRoomWithUser(nativeUserId)
-            // if there is not, just create a DM with the sip user
-                    ?: directRoomHelper.ensureDMExists(sipUserId)
-        } else {
-            // do the same if there is no corresponding native user.
-            directRoomHelper.ensureDMExists(sipUserId)
+            var nativeRoomId = session.getExistingDirectRoomWithUser(nativeUserId)
+            if (nativeRoomId == null) {
+                // if there is no existing native room with the existing native user,
+                // just create a DM with the native user
+                nativeRoomId = directRoomHelper.ensureDMExists(nativeUserId)
+            }
+            Timber.d("lookupPhoneNumber with nativeUserId: $nativeUserId and nativeRoomId: $nativeRoomId")
+            return Result(userId = nativeUserId, roomId = nativeRoomId)
         }
-        return Result(userId = sipUserId, roomId = roomId)
+        // If there is no native user then we return sipUserId and sipRoomId - this is usually a PSTN call.
+        val sipRoomId = directRoomHelper.ensureDMExists(sipUserId)
+        Timber.d("lookupPhoneNumber with sipRoomId: $sipRoomId and sipUserId: $sipUserId")
+        return Result(userId = sipUserId, roomId = sipRoomId)
     }
 }
