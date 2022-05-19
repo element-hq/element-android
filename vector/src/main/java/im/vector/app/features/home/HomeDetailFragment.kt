@@ -146,7 +146,7 @@ class HomeDetailFragment @Inject constructor(
         }
 
         views.groupToolbarNavigateUp.setOnClickListener {
-            navigateUpOneSpace()
+            navigateBack()
         }
 
         viewModel.observeViewEvents { viewEvent ->
@@ -191,10 +191,23 @@ class HomeDetailFragment @Inject constructor(
                 }
     }
 
+    private fun navigateBack() {
+        try {
+            val lastSpace = appStateHandler.getSpaceBackstack().removeLast()
+            setCurrentSpace(lastSpace)
+        } catch (e: NoSuchElementException) {
+            navigateUpOneSpace()
+        }
+    }
+
+    private fun setCurrentSpace(spaceId: String?) {
+        appStateHandler.setCurrentSpace(spaceId, isForwardNavigation = false)
+        sharedActionViewModel.post(HomeActivitySharedAction.CloseGroup)
+    }
+
     private fun navigateUpOneSpace() {
         val parentId = getCurrentSpace()?.flattenParentIds?.lastOrNull()
-        appStateHandler.setCurrentSpace(parentId)
-        sharedActionViewModel.post(HomeActivitySharedAction.CloseGroup)
+        setCurrentSpace(parentId)
     }
 
     private fun getCurrentSpace() = (appStateHandler.getCurrentRoomGroupingMethod() as? RoomGroupingMethod.BySpace)?.spaceSummary
@@ -495,7 +508,7 @@ class HomeDetailFragment @Inject constructor(
     }
 
     override fun onBackPressed(toolbarButton: Boolean) = if (getCurrentSpace() != null) {
-        navigateUpOneSpace()
+        navigateBack()
         true
     } else {
         false
