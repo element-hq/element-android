@@ -21,6 +21,9 @@ import im.vector.app.core.platform.VectorViewModelAction
 sealed class SpaceLeaveAdvanceViewAction : VectorViewModelAction {
     data class ToggleSelection(val roomId: String) : SpaceLeaveAdvanceViewAction()
     data class UpdateFilter(val filter: String) : SpaceLeaveAdvanceViewAction()
+    data class SetFilteringEnabled(val isEnabled: Boolean) : SpaceLeaveAdvanceViewAction()
     object DoLeave : SpaceLeaveAdvanceViewAction()
     object ClearError : SpaceLeaveAdvanceViewAction()
+    object SelectAll : SpaceLeaveAdvanceViewAction()
+    object SelectNone : SpaceLeaveAdvanceViewAction()
 }
