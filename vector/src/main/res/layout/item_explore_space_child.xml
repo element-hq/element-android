@@ -136,8 +136,8 @@
         android:layout_height="1dp"
         android:background="?vctr_list_separator_system"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/joinSuggestedRoomButton"
+        app:layout_constraintStart_toStartOf="@id/roomNameView"
         app:layout_constraintTop_toBottomOf="@id/inlineErrorText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

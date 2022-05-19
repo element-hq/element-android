@@ -29,13 +29,13 @@ typealias SpaceSummaryQueryParams = RoomSummaryQueryParams
 interface SpaceService {
 
     /**
-     * Create a space asynchronously
+     * Create a space asynchronously.
      * @return the spaceId of the created space
      */
     suspend fun createSpace(params: CreateSpaceParams): String
 
     /**
-     * Just a shortcut for space creation for ease of use
+     * Just a shortcut for space creation for ease of use.
      */
     suspend fun createSpace(name: String,
                             topic: String?,
@@ -44,7 +44,7 @@ interface SpaceService {
                             roomAliasLocalPart: String? = null): String
 
     /**
-     * Get a space from a roomId
+     * Get a space from a roomId.
      * @param spaceId the roomId to look for.
      * @return a space with spaceId or null if room type is not space
      */
@@ -58,7 +58,7 @@ interface SpaceService {
     suspend fun peekSpace(spaceId: String): SpacePeekResult
 
     /**
-     * Get's information of a space by querying the server
+     * Get's information of a space by querying the server.
      * @param suggestedOnly If true, return only child events and rooms where the m.space.child event has suggested: true.
      * @param limit a client-defined limit to the maximum number of rooms to return per page. Must be a non-negative integer.
      * @param from: Optional. Pagination token given to retrieve the next set of rooms. Note that if a pagination token is provided,

@@ -18,7 +18,7 @@ package org.matrix.android.sdk.api.federation
 
 interface FederationService {
     /**
-     * Get information about the homeserver
+     * Get information about the homeserver.
      */
     suspend fun getFederationVersion(): FederationVersion
 }

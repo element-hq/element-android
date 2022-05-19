@@ -21,7 +21,7 @@ import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.api.util.MimeTypes.isMimeTypeImage
 
 /**
- * All images are editable, expect Gif
+ * All images are editable, expect Gif.
  */
 fun ContentAttachmentData.isEditable(): Boolean {
     return type == ContentAttachmentData.Type.IMAGE &&

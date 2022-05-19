@@ -5,9 +5,10 @@
 
     <item
         android:id="@+id/menu_thread_list_filter"
-        android:icon="@drawable/ic_filter"
         android:title="@string/room_threads_filter"
+        app:actionLayout="@layout/view_thread_list_filter"
         app:iconTint="?vctr_content_secondary"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always"
+        tools:visible="true" />
 
 </menu>

@@ -42,7 +42,7 @@ data class MessageInformationData(
         val e2eDecoration: E2EDecoration = E2EDecoration.NONE,
         val sendStateDecoration: SendStateDecoration = SendStateDecoration.NONE,
         val isFirstFromThisSender: Boolean = false,
-        val isLastFromThisSender: Boolean = false
+        val isLastFromThisSender: Boolean = false,
 ) : Parcelable {
 
     val matrixItem: MatrixItem

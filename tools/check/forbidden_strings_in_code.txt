@@ -60,7 +60,7 @@ private short
 final short
 
 ### Line length is limited to 160 chars. Please split long lines
-[^─]{161}
+#[^─]{161}
 
 ### "DO NOT COMMIT" has been committed
 DO NOT COMMIT

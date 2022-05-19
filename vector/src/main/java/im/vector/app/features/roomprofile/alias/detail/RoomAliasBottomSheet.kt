@@ -42,7 +42,7 @@ data class RoomAliasBottomSheetArgs(
 ) : Parcelable
 
 /**
- * Bottom sheet fragment that shows room alias information with list of contextual actions
+ * Bottom sheet fragment that shows room alias information with list of contextual actions.
  */
 @AndroidEntryPoint
 class RoomAliasBottomSheet :

@@ -90,7 +90,7 @@ class RoomListViewModel @AssistedInject constructor(
          */
         ALL_IF_SPACE_NULL,
 
-        /** Do not filter based on space*/
+        /** Do not filter based on space. */
         NONE
     }
 

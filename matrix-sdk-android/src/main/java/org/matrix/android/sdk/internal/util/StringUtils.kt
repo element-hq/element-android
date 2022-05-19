@@ -20,7 +20,7 @@ import timber.log.Timber
 import java.util.Locale
 
 /**
- * Convert a string to an UTF8 String
+ * Convert a string to an UTF8 String.
  *
  * @param s the string to convert
  * @return the utf-8 string
@@ -36,7 +36,7 @@ internal fun convertToUTF8(s: String): String {
 }
 
 /**
- * Convert a string from an UTF8 String
+ * Convert a string from an UTF8 String.
  *
  * @param s the string to convert
  * @return the utf-16 string
@@ -76,7 +76,7 @@ internal fun String.caseInsensitiveFind(subString: String): Boolean {
 internal val spaceChars = "[\u00A0\u2000-\u200B\u2800\u3000]".toRegex()
 
 /**
- * Strip all the UTF-8 chars which are actually spaces
+ * Strip all the UTF-8 chars which are actually spaces.
  */
 internal fun String.replaceSpaceChars(replacement: String = "") = replace(spaceChars, replacement)
 

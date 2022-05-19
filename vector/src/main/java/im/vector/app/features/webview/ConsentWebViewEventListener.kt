@@ -44,7 +44,7 @@ class ConsentWebViewEventListener(activity: VectorBaseActivity<*>,
     }
 
     /**
-     * This methods try to create the RiotBot room when the user gives his agreement
+     * This methods try to create the RiotBot room when the user gives his agreement.
      */
     private fun createRiotBotRoomIfNeeded() {
         safeActivity?.let {
@@ -72,7 +72,7 @@ class ConsentWebViewEventListener(activity: VectorBaseActivity<*>,
     }
 
     /**
-     * APICallback instance
+     * APICallback instance.
      */
     private val createRiotBotRoomCallback = object : MatrixCallback<String> {
         override fun onSuccess(data: String) {

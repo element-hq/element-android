@@ -22,7 +22,7 @@ package org.matrix.android.sdk.api.session.room.uploads
 interface UploadsService {
 
     /**
-     * Get a list of events containing URL sent to a room, from most recent to oldest one
+     * Get a list of events containing URL sent to a room, from most recent to oldest one.
      * @param numberOfEvents the expected number of events to retrieve. The result can contain less events.
      * @param since token to get next page, or null to get the first page
      */

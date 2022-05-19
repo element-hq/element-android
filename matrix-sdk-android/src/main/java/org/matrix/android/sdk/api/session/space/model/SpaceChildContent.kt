@@ -20,11 +20,14 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
+ * Example:
+ * <pre>
  *  "content": {
  *      "via": ["example.com"],
  *      "order": "abcd",
  *      "default": true
  *  }
+ * </pre>.
  */
 @JsonClass(generateAdapter = true)
 data class SpaceChildContent(
@@ -56,7 +59,7 @@ data class SpaceChildContent(
 ) {
     /**
      * Orders which are not strings, or do not consist solely of ascii characters in the range \x20 (space) to \x7F (~),
-     * or consist of more than 50 characters, are forbidden and should be ignored if received.)
+     * or consist of more than 50 characters, are forbidden and should be ignored if received.).
      */
     fun validOrder(): String? {
         return order

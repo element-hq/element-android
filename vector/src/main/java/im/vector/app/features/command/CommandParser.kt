@@ -411,7 +411,7 @@ class CommandParser @Inject constructor() {
     }
 
     /**
-     * Checks whether or not the current command is not supported by threads
+     * Checks whether or not the current command is not supported by threads.
      * @param slashCommand the slash command that will be checked
      * @param isInThreadTimeline if its true we are in a thread timeline
      * @return The command that is not supported

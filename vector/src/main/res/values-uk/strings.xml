@@ -333,9 +333,7 @@
     <string name="settings_new_password">Новий пароль</string>
     <string name="settings_fail_to_update_password">Не вдалося оновити пароль</string>
     <string name="settings_password_updated">Пароль успішно оновлено</string>
-    <string name="settings_unignore_user">Показувати всі повідомлення %s\?
-\n
-\nЗауважте, що це перезавантажить застосунок та може тривати деякий час.</string>
+    <string name="settings_unignore_user">Показувати всі повідомлення %s\?</string>
     <string name="settings_select_country">Оберіть країну</string>
     <string name="media_saving_period_3_days">3 дні</string>
     <string name="media_saving_period_1_week">1 тиждень</string>
@@ -451,7 +449,6 @@
     <string name="settings_deactivate_account_section">Деактивація облікового запису</string>
     <string name="settings_deactivate_my_account">Деактивувати мій обліковий запис</string>
     <string name="settings_opt_in_of_analytics">Надсилання аналітичних даних</string>
-    <string name="settings_flair">Настрій</string>
     <string name="e2e_re_request_encryption_key_dialog_content">Щоб надіслати ключ на цей пристрій, запустіть ${app_name} на іншому пристрої, що може розшифрувати повідомлення.</string>
     <string name="error_no_external_application_found">Вибачте, жодного зовнішнього застосунку не знайдено для виконання цієї дії.</string>
     <string name="option_send_voice">Надіслати голосове повідомлення</string>
@@ -1002,9 +999,7 @@
     <string name="room_participants_remove_title">Вилучити користувача</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Ви впевнені, що бажаєте скасувати запрошення для цього користувача\?</string>
     <string name="room_participants_action_cancel_invite_title">Скасувати запрошення</string>
-    <string name="room_participants_action_unignore_prompt_msg">Якщо перестати нехтувати цього користувача, усі його повідомлення стануть знову видимими.
-\n
-\nЗауважте, що ця дія перезапустить застосунок, а це може тривати деякий час.</string>
+    <string name="room_participants_action_unignore_prompt_msg">Якщо перестати нехтувати цього користувача, усі його повідомлення стануть знову видимими.</string>
     <string name="room_participants_action_unignore_title">Рознехтувати користувача</string>
     <string name="room_participants_action_ignore_prompt_msg">Нехтування цього користувача призведе до вилучення його повідомлень з усіх спільних кімнат.
 \n
@@ -1243,7 +1238,7 @@
 \n
 \nВаші повідомлення захищені замками, тож лише ви та отримувачі мають унікальні ключі для їхнього відмикання.</string>
     <string name="this_is_the_beginning_of_room">Це початок %s.</string>
-    <string name="call_tile_other_declined">%1$s відхиляє цей виклик</string>
+    <string name="call_tile_other_declined">%1$s відхиляє виклик</string>
     <string name="call_transfer_users_tab_title">Користувачі</string>
     <string name="call_transfer_failure">Під час переадресації трапилась помилка</string>
     <string name="call_transfer_title">Переадресувати</string>
@@ -2438,8 +2433,6 @@
     <string name="location_share_external">Відкрити за допомогою</string>
     <string name="location_not_available_dialog_content">${app_name} не може отримати доступ до вашого місцеперебування. Спробуйте пізніше.</string>
     <string name="location_not_available_dialog_title">${app_name} не може отримати доступ до вашого місцеперебування</string>
-    <string name="location_share">Поділитися місцеперебуванням</string>
-    <string name="a11y_location_share_icon">Поділитися місцеперебуванням</string>
     <string name="location_activity_title_preview">Місцеперебування</string>
     <string name="location_activity_title_static_sharing">Поділитися місцеперебуванням</string>
     <string name="closed_poll_option_description">Результати можна переглянути лише після завершення опитування</string>
@@ -2579,4 +2572,14 @@
     <string name="threads_beta_enable_notice_title">Треди бета</string>
     <string name="action_learn_more">Докладніше</string>
     <string name="action_try_it_out">Спробувати</string>
+    <string name="screen_sharing_notification_description">Триває трансляція з екрана</string>
+    <string name="screen_sharing_notification_title">Трансляція з екрана ${app_name}</string>
+    <string name="call_stop_screen_sharing">Припинити ділитися екраном</string>
+    <string name="call_start_screen_sharing">Поділитися екраном</string>
+    <string name="initial_sync_request_reason_unignored_users">- Деякі користувачі нехтуються</string>
+    <string name="initial_sync_request_content">Щоб оновитися, ${app_name} потребує очищення кешу з такої причини:
+\n%s
+\n
+\nЗауважте, що ця дія перезапустить застосунок, і це може тривати деякий час.</string>
+    <string name="initial_sync_request_title">Початковий запит синхронізації</string>
 </resources>

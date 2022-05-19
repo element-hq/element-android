@@ -22,7 +22,7 @@ import im.vector.app.core.ui.bottomsheet.bottomSheetTitleItem
 import javax.inject.Inject
 
 /**
- * Epoxy controller for room alias actions
+ * Epoxy controller for room alias actions.
  */
 class RoomAliasBottomSheetController @Inject constructor() : TypedEpoxyController<RoomAliasBottomSheetState>() {
 

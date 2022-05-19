@@ -27,7 +27,7 @@ interface Space {
     val spaceId: String
 
     /**
-     * A current snapshot of [RoomSummary] associated with the space
+     * A current snapshot of [RoomSummary] associated with the space.
      */
     fun spaceSummary(): RoomSummary?
 

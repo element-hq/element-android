@@ -25,7 +25,7 @@ internal class RealmDebugTools(
         private val realmConfiguration: RealmConfiguration
 ) {
     /**
-     * Log info about the DB
+     * Log info about the DB.
      */
     fun logInfo(baseName: String) {
         buildString {

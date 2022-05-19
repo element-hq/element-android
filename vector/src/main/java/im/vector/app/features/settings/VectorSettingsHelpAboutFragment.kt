@@ -20,6 +20,7 @@ import android.os.Bundle
 import androidx.preference.Preference
 import im.vector.app.BuildConfig
 import im.vector.app.R
+import im.vector.app.core.extensions.orEmpty
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.utils.FirstThrottler
 import im.vector.app.core.utils.copyToClipboard
@@ -72,7 +73,7 @@ class VectorSettingsHelpAboutFragment @Inject constructor(
             }
 
             it.setOnPreferenceClickListener { pref ->
-                copyToClipboard(requireContext(), pref.summary)
+                copyToClipboard(requireContext(), pref.summary.orEmpty())
                 true
             }
         }
@@ -82,7 +83,7 @@ class VectorSettingsHelpAboutFragment @Inject constructor(
             it.summary = Matrix.getSdkVersion()
 
             it.setOnPreferenceClickListener { pref ->
-                copyToClipboard(requireContext(), pref.summary)
+                copyToClipboard(requireContext(), pref.summary.orEmpty())
                 true
             }
         }

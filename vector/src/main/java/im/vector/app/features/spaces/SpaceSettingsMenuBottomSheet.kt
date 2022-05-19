@@ -35,6 +35,7 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.rageshake.BugReporter
 import im.vector.app.features.roomprofile.RoomProfileActivity
+import im.vector.app.features.spaces.leave.SpaceLeaveAdvancedActivity
 import im.vector.app.features.spaces.manage.ManageType
 import im.vector.app.features.spaces.manage.SpaceManageActivity
 import kotlinx.parcelize.Parcelize
@@ -109,7 +110,7 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
         }
 
         views.leaveSpace.views.bottomSheetActionClickableZone.debouncedClicks {
-            LeaveSpaceBottomSheet.newInstance(spaceArgs.spaceId).show(childFragmentManager, "LOGOUT")
+            startActivity(SpaceLeaveAdvancedActivity.newIntent(requireContext(), spaceArgs.spaceId))
         }
     }
 

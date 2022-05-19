@@ -32,7 +32,7 @@ import timber.log.Timber
 import java.io.File
 
 /**
- * Save a string to a file with Okio
+ * Save a string to a file with Okio.
  */
 @WorkerThread
 fun writeToFile(str: String, file: File): Try<Unit> {
@@ -44,7 +44,7 @@ fun writeToFile(str: String, file: File): Try<Unit> {
 }
 
 /**
- * Save a byte array to a file with Okio
+ * Save a byte array to a file with Okio.
  */
 @WorkerThread
 fun writeToFile(data: ByteArray, file: File): Try<Unit> {

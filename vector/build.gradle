@@ -7,9 +7,22 @@ apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.likethesalad.stem'
 apply plugin: 'dagger.hilt.android.plugin'
+apply plugin: 'kotlinx-knit'
 
 kapt {
     correctErrorTypes = true
+}
+
+knit {
+    files = fileTree(project.rootDir) {
+        include '**/*.md'
+        include '**/*.kt'
+        include '**/*.kts'
+        exclude '**/build/**'
+        exclude '**/.gradle/**'
+        exclude '**/towncrier/template.md'
+        exclude '**/CHANGES.md'
+    }
 }
 
 // Note: 2 digits max for each value
@@ -18,7 +31,7 @@ ext.versionMinor = 4
 // Note: even values are reserved for regular release, odd values for hotfix release.
 // When creating a hotfix, you should decrease the value, since the current value
 // is the value for the next regular release.
-ext.versionPatch = 16
+ext.versionPatch = 18
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -297,14 +310,14 @@ android {
     kotlinOptions {
         jvmTarget = "11"
         freeCompilerArgs += [
-                "-Xopt-in=kotlin.RequiresOptIn",
+                "-opt-in=kotlin.RequiresOptIn",
                 // Fixes false positive "This is an internal Mavericks API. It is not intended for external use."
                 // of MvRx `by viewModel()` calls. Maybe due to the inlining of code... This is a temporary fix...
-                "-Xopt-in=com.airbnb.mvrx.InternalMavericksApi",
+                "-opt-in=com.airbnb.mvrx.InternalMavericksApi",
                 // Opt in for kotlinx.coroutines.FlowPreview too
-                "-Xopt-in=kotlinx.coroutines.FlowPreview",
+                "-opt-in=kotlinx.coroutines.FlowPreview",
                 // Opt in for kotlinx.coroutines.ExperimentalCoroutinesApi too
-                "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
         ]
     }
 
@@ -438,9 +451,6 @@ dependencies {
     implementation libs.github.glide
     kapt libs.github.glideCompiler
     implementation 'com.github.yalantis:ucrop:2.2.8'
-
-    // Badge for compatibility
-    implementation 'me.leolin:ShortcutBadger:1.1.22@aar'
 
     // Chat effects
     implementation 'nl.dionsegijn:konfetti-xml:2.0.2'

@@ -37,7 +37,7 @@ data class Credentials(
          */
         @Json(name = "access_token") val accessToken: String,
         /**
-         * Not documented
+         * Not documented.
          */
         @Json(name = "refresh_token") val refreshToken: String?,
         /**

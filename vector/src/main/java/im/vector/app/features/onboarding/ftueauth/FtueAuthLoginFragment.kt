@@ -310,7 +310,7 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
     }
 
     /**
-     * Detect if password ends or starts with spaces
+     * Detect if password ends or starts with spaces.
      */
     private fun spaceInPassword() = views.passwordField.text.toString().let { it.trim() != it }
 }

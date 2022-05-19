@@ -46,7 +46,7 @@ interface VectorAlert {
     var contentAction: Runnable?
     var dismissedAction: Runnable?
 
-    /** If this timestamp is after current time, this alert will be skipped */
+    /** If this timestamp is after current time, this alert will be skipped. */
     var expirationTimestamp: Long?
 
     fun addButton(title: String, action: Runnable, autoClose: Boolean = true) {
@@ -77,7 +77,7 @@ open class DefaultVectorAlert(
         override val description: String,
         @DrawableRes override val iconId: Int?,
         /**
-         * Alert are displayed by default, but let this lambda return false to prevent displaying
+         * Alert are displayed by default, but let this lambda return false to prevent displaying.
          */
         override val shouldBeDisplayedIn: ((Activity) -> Boolean) = { true }
 ) : VectorAlert {
@@ -90,7 +90,7 @@ open class DefaultVectorAlert(
     override var contentAction: Runnable? = null
     override var dismissedAction: Runnable? = null
 
-    /** If this timestamp is after current time, this alert will be skipped */
+    /** If this timestamp is after current time, this alert will be skipped. */
     override var expirationTimestamp: Long? = null
 
     @LayoutRes

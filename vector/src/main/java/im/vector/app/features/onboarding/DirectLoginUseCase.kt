@@ -20,7 +20,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.andThen
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.onboarding.OnboardingAction.LoginOrRegister
-import org.matrix.android.sdk.api.MatrixPatterns.getDomain
+import org.matrix.android.sdk.api.MatrixPatterns.getServerName
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
@@ -75,7 +75,7 @@ class DirectLoginUseCase @Inject constructor(
     )
 
     private fun fallbackConfig(action: LoginOrRegister, wellKnownPrompt: WellknownResult.Prompt) = HomeServerConnectionConfig(
-            homeServerUri = uriFactory.parse("https://${action.username.getDomain()}"),
+            homeServerUri = uriFactory.parse("https://${action.username.getServerName()}"),
             homeServerUriBase = uriFactory.parse(wellKnownPrompt.homeServerUrl),
             identityServerUri = wellKnownPrompt.identityServerUrl?.let { uriFactory.parse(it) }
     )

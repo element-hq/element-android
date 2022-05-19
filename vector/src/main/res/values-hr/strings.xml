@@ -582,7 +582,6 @@
 
     <string name="settings_integrations_summary">Koristite upravitelja integracijama kako biste rukovali botovima, mostovima, grafičkim elementima i paketima naljepnica.
 \nUpravitelji integracijama primaju konfiguracijske podatke i mogu mijenjati grafičke elemente, slati pozivnice za pridruživanje u sobe i postavljati razine upravljanja u Vaše ime.</string>
-    <string name="settings_flair">Sklonost</string>
     <string name="room_settings_room_read_history_rules_pref_title">Čitljivost sobne povijesti</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Tko može čitati povijest\?</string>
     <string name="room_settings_read_history_entry_anyone">Bilo tko</string>

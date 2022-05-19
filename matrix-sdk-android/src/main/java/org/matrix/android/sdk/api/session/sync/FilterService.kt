@@ -22,13 +22,13 @@ interface FilterService {
         NoFilter,
 
         /**
-         * Filter for Element, will include only known event type
+         * Filter for Element, will include only known event type.
          */
         ElementFilter
     }
 
     /**
-     * Configure the filter for the sync
+     * Configure the filter for the sync.
      */
     fun setFilter(filterPreset: FilterPreset)
 }

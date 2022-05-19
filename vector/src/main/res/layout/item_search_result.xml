@@ -63,7 +63,7 @@
         tools:text="@sample/messages.json/data/message" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/searchThreadSummaryConstraintLayout"
+        android:id="@+id/searchThreadSummaryContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constrainedWidth="true"

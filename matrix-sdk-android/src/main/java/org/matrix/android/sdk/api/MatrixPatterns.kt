@@ -147,7 +147,7 @@ object MatrixPatterns {
     }
 
     /**
-     * Extract server name from a matrix id
+     * Extract server name from a matrix id.
      *
      * @param matrixId
      * @return null if not found or if matrixId is null
@@ -172,12 +172,12 @@ object MatrixPatterns {
     }
 
     /**
-     * Return the domain form a userId
+     * Return the domain form a userId.
      * Examples:
      * - "@alice:domain.org".getDomain() will return "domain.org"
      * - "@bob:domain.org:3455".getDomain() will return "domain.org:3455"
      */
-    fun String.getDomain(): String {
+    fun String.getServerName(): String {
         if (BuildConfig.DEBUG && !isUserId(this)) {
             // They are some invalid userId localpart in the wild, but the domain part should be there anyway
             Timber.w("Not a valid user ID: $this")

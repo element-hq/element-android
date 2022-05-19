@@ -21,7 +21,7 @@ import java.util.UUID
 interface PushersService {
 
     /**
-     * Refresh pushers from server state
+     * Refresh pushers from server state.
      */
     fun refreshPushers()
 
@@ -66,7 +66,7 @@ interface PushersService {
                                append: Boolean = true)
 
     /**
-     * Directly ask the push gateway to send a push to this device
+     * Directly ask the push gateway to send a push to this device.
      * If successful, the push gateway has accepted the request. In this case, the app should receive a Push with the provided eventId.
      * In case of error, PusherRejected will be thrown. In this case it means that the pushkey is not valid.
      *
@@ -81,30 +81,30 @@ interface PushersService {
                          eventId: String)
 
     /**
-     * Remove a registered pusher
+     * Remove a registered pusher.
      * @param pusher the pusher to remove, can be http or email
      */
     suspend fun removePusher(pusher: Pusher)
 
     /**
-     * Remove a Http pusher by its pushkey and appId
+     * Remove a Http pusher by its pushkey and appId.
      * @see addHttpPusher
      */
     suspend fun removeHttpPusher(pushkey: String, appId: String)
 
     /**
-     * Remove an Email pusher
+     * Remove an Email pusher.
      * @see addEmailPusher
      */
     suspend fun removeEmailPusher(email: String)
 
     /**
-     * Get the current pushers, as a LiveData
+     * Get the current pushers, as a LiveData.
      */
     fun getPushersLive(): LiveData<List<Pusher>>
 
     /**
-     * Get the current pushers
+     * Get the current pushers.
      */
     fun getPushers(): List<Pusher>
 

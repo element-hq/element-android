@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * Class representing the EventType.STATE_ROOM_TOPIC state event content
+ * Class representing the EventType.STATE_ROOM_TOPIC state event content.
  */
 @JsonClass(generateAdapter = true)
 data class RoomTopicContent(

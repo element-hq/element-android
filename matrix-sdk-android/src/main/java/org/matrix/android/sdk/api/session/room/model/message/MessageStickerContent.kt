@@ -25,7 +25,7 @@ import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultCon
 @JsonClass(generateAdapter = true)
 data class MessageStickerContent(
         /**
-         * Set in local, not from server
+         * Set in local, not from server.
          */
         @Transient
         override val msgType: String = MessageType.MSGTYPE_STICKER_LOCAL,

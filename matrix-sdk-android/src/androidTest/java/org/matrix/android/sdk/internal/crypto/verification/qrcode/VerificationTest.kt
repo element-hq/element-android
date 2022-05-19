@@ -19,7 +19,6 @@ package org.matrix.android.sdk.internal.crypto.verification.qrcode
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.amshove.kluent.shouldBe
 import org.junit.FixMethodOrder
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
@@ -28,11 +27,13 @@ import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
+import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestHelper
+import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
 import java.util.concurrent.CountDownLatch
 import kotlin.coroutines.Continuation
@@ -40,7 +41,6 @@ import kotlin.coroutines.resume
 
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
-@Ignore("This test is flaky ; see issue #5449")
 class VerificationTest : InstrumentedTest {
 
     data class ExpectedResult(
@@ -253,5 +253,49 @@ class VerificationTest : InstrumentedTest {
         }
 
         cryptoTestData.cleanUp(testHelper)
+    }
+
+    @Test
+    fun test_selfVerificationAcceptedCancelsItForOtherSessions() {
+        val defaultSessionParams = SessionTestParams(true)
+        val testHelper = CommonTestHelper(context())
+
+        val aliceSessionToVerify = testHelper.createAccount(TestConstants.USER_ALICE, defaultSessionParams)
+        val aliceSessionThatVerifies = testHelper.logIntoAccount(aliceSessionToVerify.myUserId, TestConstants.PASSWORD, defaultSessionParams)
+        val aliceSessionThatReceivesCanceledEvent = testHelper.logIntoAccount(aliceSessionToVerify.myUserId, TestConstants.PASSWORD, defaultSessionParams)
+
+        val verificationMethods = listOf(VerificationMethod.SAS, VerificationMethod.QR_CODE_SCAN, VerificationMethod.QR_CODE_SHOW)
+
+        val serviceOfVerified = aliceSessionToVerify.cryptoService().verificationService()
+        val serviceOfVerifier = aliceSessionThatVerifies.cryptoService().verificationService()
+        val serviceOfUserWhoReceivesCancellation = aliceSessionThatReceivesCanceledEvent.cryptoService().verificationService()
+
+        serviceOfVerifier.addListener(object : VerificationService.Listener {
+            override fun verificationRequestCreated(pr: PendingVerificationRequest) {
+                // Accept verification request
+                serviceOfVerifier.readyPendingVerification(
+                        verificationMethods,
+                        pr.otherUserId,
+                        pr.transactionId!!,
+                )
+            }
+        })
+
+        serviceOfVerified.requestKeyVerification(
+                methods = verificationMethods,
+                otherUserId = aliceSessionToVerify.myUserId,
+                otherDevices = listOfNotNull(aliceSessionThatVerifies.sessionParams.deviceId, aliceSessionThatReceivesCanceledEvent.sessionParams.deviceId),
+        )
+
+        testHelper.waitWithLatch { latch ->
+            testHelper.retryPeriodicallyWithLatch(latch) {
+                val requests = serviceOfUserWhoReceivesCancellation.getExistingVerificationRequests(aliceSessionToVerify.myUserId)
+                requests.any { it.cancelConclusion == CancelCode.AcceptedByAnotherDevice }
+            }
+        }
+
+        testHelper.signOutAndClose(aliceSessionToVerify)
+        testHelper.signOutAndClose(aliceSessionThatVerifies)
+        testHelper.signOutAndClose(aliceSessionThatReceivesCanceledEvent)
     }
 }

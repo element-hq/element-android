@@ -19,7 +19,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * Class to contains Tombstone information
+ * Class to contains Tombstone information.
  */
 @JsonClass(generateAdapter = true)
 data class RoomTombstoneContent(

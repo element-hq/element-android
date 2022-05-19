@@ -621,7 +621,6 @@
     <string name="settings_call_ringtone_use_app_ringtone">Për thirrje ardhëse përdor zilen parazgjedhje të ${app_name}-it</string>
     <string name="settings_call_ringtone_title">Zile thirrjesh ardhëse</string>
     <string name="settings_call_ringtone_dialog_title">Përzgjidhni zile për thirrjet:</string>
-    <string name="settings_flair">Simbole</string>
     <string name="action_accept">Pranoje</string>
     <string name="auth_accept_policies">Ju lutemi, merrni në shqyrtim dhe pranoni rregullat e këtij shërbyesi Home:</string>
     <string name="settings_notification_troubleshoot">Diagnostikoni Njoftime</string>
@@ -1389,7 +1388,6 @@
     <string name="settings_troubleshoot_title">Diagnostikoje</string>
     <string name="command_description_plain">E dërgon një mesazh si tekst të thjeshtë, pa interpretuar elementët Markdown</string>
     <string name="auth_invalid_login_param_space_in_password">Emër përdoruesi dhe/ose fjalëkalim i pasaktë. Fjalëkalimi i dhënë fillon ose mbaron me hapësirë, ju lutemi, kontrollojeni.</string>
-    <string name="settings_rageshake"/>
     <string name="bootstrap_crosssigning_progress_initializing">Po publikohen kyçe të krijuar identiteti</string>
     <string name="room_message_placeholder">Mesazh…</string>
     <string name="upgrade_security">Ka të gatshëm përmirësim fshehtëzimi</string>
@@ -2333,8 +2331,6 @@
     <string name="ftue_auth_carousel_secure_title">Jini zot i bisedave tuaja.</string>
     <string name="tooltip_attachment_location">Jepe vendndodhjen</string>
     <string name="settings_enable_location_sharing">Aktivizoni dhënie vendndodhjeje</string>
-    <string name="location_share">Jepe vendndodhjen</string>
-    <string name="a11y_location_share_icon">Jepe vendndodhjen</string>
     <string name="location_activity_title_preview">Vendndodhje</string>
     <string name="location_activity_title_static_sharing">Jepe vendndodhjen</string>
     <string name="closed_poll_option_description">Përfundimet shfaqen vetëm kur përfundoni anketimin</string>

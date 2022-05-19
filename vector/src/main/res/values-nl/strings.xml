@@ -260,9 +260,7 @@
     <string name="settings_new_password">Nieuw wachtwoord</string>
     <string name="settings_fail_to_update_password">Bijwerken van wachtwoord is mislukt</string>
     <string name="settings_password_updated">Uw wachtwoord is gewijzigd</string>
-    <string name="settings_unignore_user">Alle berichten van %s tonen\?
-\n
-\nLet op: deze actie zal de app herstarten; dit kan even duren.</string>
+    <string name="settings_unignore_user">Alle berichten van %s tonen\?</string>
     <string name="settings_select_country">Kies een land</string>
     <string name="room_settings_topic">Onderwerp</string>
     <string name="room_settings_room_read_history_rules_pref_title">Toegang tot de gespreksgeschiedenis</string>
@@ -380,7 +378,6 @@
     <string name="room_settings_add_homescreen_shortcut">Snelkoppeling aan thuisscherm toevoegen</string>
     <string name="settings_inline_url_preview">Inline URL-voorvertoning</string>
     <string name="settings_vibrate_on_mention">Trillen bij vermelden van een persoon</string>
-    <string name="settings_flair">Badge</string>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="one">%d gesprek</item>
         <item quantity="other">%d gesprekken</item>
@@ -1244,9 +1241,7 @@
 \nOm te voorkomen dat hij/zij opnieuw toetreedt, kun je hem/haar ook verbannen.</string>
     <string name="room_participants_remove_reason">Reden voor verwijdering</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Weet u zeker dat u uitnodiging voor deze persoon wilt annuleren\?</string>
-    <string name="room_participants_action_unignore_prompt_msg">Als u deze persoon niet negeert, worden alle berichten van deze persoon opnieuw weergegeven.
-\n
-\nHoud er rekening mee dat deze actie de app opnieuw zal starten en dat dit enige tijd kan duren.</string>
+    <string name="room_participants_action_unignore_prompt_msg">Als u deze persoon niet negeert, worden alle berichten van deze persoon opnieuw weergegeven.</string>
     <string name="room_participants_action_ignore_prompt_msg">Door deze persoon te negeren worden zijn/haar berichten verwijderd uit gesprekken die jullie delen.
 \n
 \nU kunt deze actie op elk moment ongedaan maken in de algemene instellingen.</string>
@@ -2350,8 +2345,6 @@
     <string name="location_share_external">Open met</string>
     <string name="location_not_available_dialog_content">${app_name} kan geen toegang krijgen tot uw locatie. Probeer het later opnieuw.</string>
     <string name="location_not_available_dialog_title">${app_name} heeft geen toegang tot uw locatie</string>
-    <string name="location_share">Deel locatie</string>
-    <string name="a11y_location_share_icon">Deel locatie</string>
     <string name="location_activity_title_preview">Locatie</string>
     <string name="location_activity_title_static_sharing">Deel locatie</string>
     <string name="closed_poll_option_description">Resultaten worden pas onthuld als je de poll beëindigt</string>
@@ -2487,4 +2480,14 @@
     <string name="threads_beta_enable_notice_title">Discussies bèta</string>
     <string name="action_learn_more">Leer meer</string>
     <string name="action_try_it_out">Probeer het uit</string>
+    <string name="screen_sharing_notification_description">Scherm delen is bezig</string>
+    <string name="screen_sharing_notification_title">${app_name} Scherm delen</string>
+    <string name="call_stop_screen_sharing">Stop scherm delen</string>
+    <string name="call_start_screen_sharing">Deel scherm</string>
+    <string name="initial_sync_request_reason_unignored_users">- Sommige personen zijn niet genegeerd</string>
+    <string name="initial_sync_request_content">${app_name} moet de cache wissen om up-to-date te zijn om volgende reden een:
+\n%s
+\n
+\nHoud er rekening mee dat deze actie de app opnieuw zal starten en dat dit enige tijd kan duren.</string>
+    <string name="initial_sync_request_title">Initieel synchronisatieverzoek</string>
 </resources>
