@@ -21,7 +21,7 @@ import im.vector.app.core.platform.VectorViewEvents
 import org.matrix.android.sdk.api.auth.registration.FlowResult
 
 /**
- * Transient events for Login
+ * Transient events for Login.
  */
 sealed class LoginViewEvents2 : VectorViewEvents {
     data class Failure(val throwable: Throwable) : LoginViewEvents2()

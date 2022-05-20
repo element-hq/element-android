@@ -293,7 +293,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     /**
-     * Provides the tracking status
+     * Provides the tracking status.
      *
      * @param userId the user id
      * @return the tracking status
@@ -303,7 +303,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     /**
-     * Tell if the MXCrypto is started
+     * Tell if the MXCrypto is started.
      *
      * @return true if the crypto is started
      */
@@ -395,7 +395,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     /**
-     * Close the crypto
+     * Close the crypto.
      */
     fun close() = runBlocking(coroutineDispatchers.crypto) {
         cryptoCoroutineScope.coroutineContext.cancelChildren(CancellationException("Closing crypto module"))
@@ -421,7 +421,7 @@ internal class DefaultCryptoService @Inject constructor(
     override fun crossSigningService() = crossSigningService
 
     /**
-     * A sync response has been received
+     * A sync response has been received.
      *
      * @param syncResponse the syncResponse
      */
@@ -492,7 +492,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     /**
-     * Find a device by curve25519 identity key
+     * Find a device by curve25519 identity key.
      *
      * @param senderKey the curve25519 key to match.
      * @param algorithm the encryption algorithm.
@@ -506,7 +506,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     /**
-     * Provides the device information for a user id and a device Id
+     * Provides the device information for a user id and a device Id.
      *
      * @param userId   the user id
      * @param deviceId the device id
@@ -536,7 +536,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     /**
-     * Set the devices as known
+     * Set the devices as known.
      *
      * @param devices  the devices. Note that the verified member of the devices in this list will not be updated by this method.
      * @param callback the asynchronous callback
@@ -647,7 +647,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     /**
-     * Tells if a room is encrypted with MXCRYPTO_ALGORITHM_MEGOLM
+     * Tells if a room is encrypted with MXCRYPTO_ALGORITHM_MEGOLM.
      *
      * @param roomId the room id
      * @return true if the room is encrypted with algorithm MXCRYPTO_ALGORITHM_MEGOLM
@@ -740,7 +740,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     /**
-     * Decrypt an event
+     * Decrypt an event.
      *
      * @param event    the raw event.
      * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
@@ -752,7 +752,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     /**
-     * Decrypt an event asynchronously
+     * Decrypt an event asynchronously.
      *
      * @param event    the raw event.
      * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
@@ -763,7 +763,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     /**
-     * Decrypt an event
+     * Decrypt an event.
      *
      * @param event    the raw event.
      * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
@@ -784,7 +784,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     /**
-     * Handle the 'toDevice' event
+     * Handle the 'toDevice' event.
      *
      * @param event the event
      */
@@ -877,7 +877,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     /**
-     * Returns true if handled by SDK, otherwise should be sent to application layer
+     * Returns true if handled by SDK, otherwise should be sent to application layer.
      */
     private fun handleSDKLevelGossip(secretName: String?,
                                      secretValue: String): Boolean {
@@ -984,7 +984,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     /**
-     * Export the crypto keys
+     * Export the crypto keys.
      *
      * @param password the password
      * @return the exported keys
@@ -994,7 +994,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     /**
-     * Export the crypto keys
+     * Export the crypto keys.
      *
      * @param password         the password
      * @param anIterationCount the encryption iteration count (0 means no encryption)
@@ -1013,7 +1013,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     /**
-     * Import the room keys
+     * Import the room keys.
      *
      * @param roomKeysAsArray  the room keys as array.
      * @param password         the password
@@ -1198,7 +1198,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     /**
-     * Provides the list of unknown devices
+     * Provides the list of unknown devices.
      *
      * @param devicesInRoom the devices map
      * @return the unknown devices map

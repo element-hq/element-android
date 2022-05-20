@@ -110,7 +110,7 @@ class AudioMessageHelper @Inject constructor(
     }
 
     /**
-     * When entering in playback mode actually
+     * When entering in playback mode actually.
      */
     fun pauseRecording() {
         voiceRecorder.stopRecord()

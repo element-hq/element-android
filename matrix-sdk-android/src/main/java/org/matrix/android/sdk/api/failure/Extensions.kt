@@ -47,7 +47,7 @@ fun Throwable.shouldBeRetried() = this is Failure.NetworkConnection ||
         isLimitExceededError()
 
 /**
- * Get the retry delay in case of rate limit exceeded error, adding 100 ms, of defaultValue otherwise
+ * Get the retry delay in case of rate limit exceeded error, adding 100 ms, of defaultValue otherwise.
  */
 fun Throwable.getRetryDelay(defaultValue: Long): Long {
     return (this as? Failure.ServerError)

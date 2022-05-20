@@ -30,57 +30,57 @@ import org.matrix.android.sdk.api.util.Optional
 interface StateService {
 
     /**
-     * Update the topic of the room
+     * Update the topic of the room.
      */
     suspend fun updateTopic(topic: String)
 
     /**
-     * Update the name of the room
+     * Update the name of the room.
      */
     suspend fun updateName(name: String)
 
     /**
-     * Update the canonical alias of the room
+     * Update the canonical alias of the room.
      * @param alias the canonical alias, or null to reset the canonical alias of this room
      * @param altAliases the alternative aliases for this room. It should include the canonical alias if any.
      */
     suspend fun updateCanonicalAlias(alias: String?, altAliases: List<String>)
 
     /**
-     * Update the history readability of the room
+     * Update the history readability of the room.
      */
     suspend fun updateHistoryReadability(readability: RoomHistoryVisibility)
 
     /**
-     * Update the join rule and/or the guest access
+     * Update the join rule and/or the guest access.
      */
     suspend fun updateJoinRule(joinRules: RoomJoinRules?, guestAccess: GuestAccess?, allowList: List<RoomJoinRulesAllowEntry>? = null)
 
     /**
-     * Update the avatar of the room
+     * Update the avatar of the room.
      */
     suspend fun updateAvatar(avatarUri: Uri, fileName: String)
 
     /**
-     * Delete the avatar of the room
+     * Delete the avatar of the room.
      */
     suspend fun deleteAvatar()
 
     /**
-     * Stops sharing live location in the room
+     * Stops sharing live location in the room.
      * @param userId user id
      */
     suspend fun stopLiveLocation(userId: String)
 
     /**
-     * Returns beacon info state event of a user
+     * Returns beacon info state event of a user.
      * @param userId user id who is sharing location
      * @param filterOnlyLive filters only ongoing live location sharing beacons if true else ended event is included
      */
     suspend fun getLiveLocationBeaconInfo(userId: String, filterOnlyLive: Boolean): Event?
 
     /**
-     * Send a state event to the room
+     * Send a state event to the room.
      * @param eventType The type of event to send.
      * @param stateKey The state_key for the state to send. Can be an empty string.
      * @param body The content object of the event; the fields in this object will vary depending on the type of event
@@ -89,23 +89,23 @@ interface StateService {
     suspend fun sendStateEvent(eventType: String, stateKey: String, body: JsonDict): String
 
     /**
-     * Get a state event of the room
+     * Get a state event of the room.
      */
     fun getStateEvent(eventType: String, stateKey: QueryStringValue = QueryStringValue.NoCondition): Event?
 
     /**
-     * Get a live state event of the room
+     * Get a live state event of the room.
      */
     fun getStateEventLive(eventType: String, stateKey: QueryStringValue = QueryStringValue.NoCondition): LiveData<Optional<Event>>
 
     /**
-     * Get state events of the room
+     * Get state events of the room.
      * @param eventTypes Set of eventType. If empty, all state events will be returned
      */
     fun getStateEvents(eventTypes: Set<String>, stateKey: QueryStringValue = QueryStringValue.NoCondition): List<Event>
 
     /**
-     * Get live state events of the room
+     * Get live state events of the room.
      * @param eventTypes Set of eventType to observe. If empty, all state events will be observed
      */
     fun getStateEventsLive(eventTypes: Set<String>, stateKey: QueryStringValue = QueryStringValue.NoCondition): LiveData<List<Event>>

@@ -79,7 +79,7 @@ internal class RoomDecryptorProvider @Inject constructor(
                             newSessionListeners.toList().forEach {
                                 try {
                                     it.onNewSession(roomId, senderKey, sessionId)
-                                } catch (e: Throwable) {
+                                } catch (ignore: Throwable) {
                                 }
                             }
                         }

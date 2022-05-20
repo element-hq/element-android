@@ -47,7 +47,7 @@ import javax.inject.Inject
 
 /**
  * In this screen:
- * - the account has been created and we propose the user to set an avatar and a display name
+ * - the account has been created and we propose the user to set an avatar and a display name.
  */
 class AccountCreatedFragment @Inject constructor(
         private val avatarRenderer: AvatarRenderer,

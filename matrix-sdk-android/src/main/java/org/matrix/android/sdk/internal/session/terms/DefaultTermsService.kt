@@ -61,7 +61,7 @@ internal class DefaultTermsService @Inject constructor(
     }
 
     /**
-     * We use a trick here to get the homeserver T&C, we use the register API
+     * We use a trick here to get the homeserver T&C, we use the register API.
      */
     override suspend fun getHomeserverTerms(baseUrl: String): TermsResponse {
         return try {

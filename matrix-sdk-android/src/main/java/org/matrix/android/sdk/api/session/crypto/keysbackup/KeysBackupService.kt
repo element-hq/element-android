@@ -23,7 +23,7 @@ import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
 
 interface KeysBackupService {
     /**
-     * Retrieve the current version of the backup from the homeserver
+     * Retrieve the current version of the backup from the homeserver.
      *
      * It can be different than keysBackupVersion.
      * @param callback Asynchronous callback
@@ -40,12 +40,12 @@ interface KeysBackupService {
                                 callback: MatrixCallback<KeysVersion>)
 
     /**
-     * Facility method to get the total number of locally stored keys
+     * Facility method to get the total number of locally stored keys.
      */
     fun getTotalNumbersOfKeys(): Int
 
     /**
-     * Facility method to get the number of backed up keys
+     * Facility method to get the number of backed up keys.
      */
     fun getTotalNumbersOfBackedUpKeys(): Int
 
@@ -68,7 +68,7 @@ interface KeysBackupService {
                            callback: MatrixCallback<KeysBackupVersionTrust>)
 
     /**
-     * Return the current progress of the backup
+     * Return the current progress of the backup.
      */
     fun getBackupProgress(progressListener: ProgressListener)
 

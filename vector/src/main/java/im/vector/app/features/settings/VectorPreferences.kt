@@ -399,7 +399,7 @@ class VectorPreferences @Inject constructor(
     }
 
     /**
-     * Tells if the timestamp must be displayed in 12h format
+     * Tells if the timestamp must be displayed in 12h format.
      *
      * @return true if the time must be displayed in 12h format
      */
@@ -444,14 +444,14 @@ class VectorPreferences @Inject constructor(
     }
 
     /**
-     * Show all rooms in room directory
+     * Show all rooms in room directory.
      */
     fun showAllPublicRooms(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_ROOM_DIRECTORY_SHOW_ALL_PUBLIC_ROOMS, false)
     }
 
     /**
-     * Tells which compression level to use by default
+     * Tells which compression level to use by default.
      *
      * @return the selected compression level
      */
@@ -460,7 +460,7 @@ class VectorPreferences @Inject constructor(
     }
 
     /**
-     * Tells which media source to use by default
+     * Tells which media source to use by default.
      *
      * @return the selected media source
      */
@@ -490,7 +490,7 @@ class VectorPreferences @Inject constructor(
     }
 
     /**
-     * Update the notification ringtone
+     * Update the notification ringtone.
      *
      * @param uri     the new notification ringtone, or null for no RingTone
      */
@@ -514,7 +514,7 @@ class VectorPreferences @Inject constructor(
     }
 
     /**
-     * Provides the selected notification ring tone
+     * Provides the selected notification ring tone.
      *
      * @return the selected ring tone or null for no RingTone
      */
@@ -546,7 +546,7 @@ class VectorPreferences @Inject constructor(
     }
 
     /**
-     * Provide the notification ringtone filename
+     * Provide the notification ringtone filename.
      *
      * @return the filename or null if "None" is selected
      */
@@ -568,7 +568,7 @@ class VectorPreferences @Inject constructor(
     }
 
     /**
-     * Enable or disable the lazy loading
+     * Enable or disable the lazy loading.
      *
      * @param newValue true to enable lazy loading, false to disable it
      */
@@ -579,7 +579,7 @@ class VectorPreferences @Inject constructor(
     }
 
     /**
-     * Tells if the lazy loading is enabled
+     * Tells if the lazy loading is enabled.
      *
      * @return true if the lazy loading of room members is enabled
      */
@@ -589,7 +589,6 @@ class VectorPreferences @Inject constructor(
 
     /**
      * User explicitly refuses the lazy loading.
-     *
      */
     fun setUserRefuseLazyLoading() {
         defaultPrefs.edit {
@@ -598,7 +597,7 @@ class VectorPreferences @Inject constructor(
     }
 
     /**
-     * Tells if the user has explicitly refused the lazy loading
+     * Tells if the user has explicitly refused the lazy loading.
      *
      * @return true if the user has explicitly refuse the lazy loading of room members
      */
@@ -607,7 +606,7 @@ class VectorPreferences @Inject constructor(
     }
 
     /**
-     * Tells if the data save mode is enabled
+     * Tells if the data save mode is enabled.
      *
      * @return true if the data save mode is enabled
      */
@@ -625,7 +624,7 @@ class VectorPreferences @Inject constructor(
     }
 
     /**
-     * Tells if the application is started on boot
+     * Tells if the application is started on boot.
      *
      * @return true if the application must be started on boot
      */
@@ -634,7 +633,7 @@ class VectorPreferences @Inject constructor(
     }
 
     /**
-     * Tells if the application is started on boot
+     * Tells if the application is started on boot.
      *
      * @param value   true to start the application on boot
      */
@@ -695,14 +694,14 @@ class VectorPreferences @Inject constructor(
     }
 
     /**
-     * Fix some migration issues
+     * Fix some migration issues.
      */
     fun fixMigrationIssues() {
         // Nothing to do for the moment
     }
 
     /**
-     * Tells if the markdown is enabled
+     * Tells if the markdown is enabled.
      *
      * @return true if the markdown is enabled
      */
@@ -722,14 +721,14 @@ class VectorPreferences @Inject constructor(
     }
 
     /**
-     * Tells if a confirmation dialog should be displayed before staring a call
+     * Tells if a confirmation dialog should be displayed before staring a call.
      */
     fun preventAccidentalCall(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_CALL_PREVENT_ACCIDENTAL_CALL_KEY, false)
     }
 
     /**
-     * Tells if the read receipts should be shown
+     * Tells if the read receipts should be shown.
      *
      * @return true if the read receipts should be shown
      */
@@ -738,7 +737,7 @@ class VectorPreferences @Inject constructor(
     }
 
     /**
-     * Tells if the redacted message should be shown
+     * Tells if the redacted message should be shown.
      *
      * @return true if the redacted should be shown
      */
@@ -747,7 +746,7 @@ class VectorPreferences @Inject constructor(
     }
 
     /**
-     * Tells if the help on room list should be shown
+     * Tells if the help on room list should be shown.
      *
      * @return true if the help on room list should be shown
      */
@@ -756,7 +755,7 @@ class VectorPreferences @Inject constructor(
     }
 
     /**
-     * Prevent help on room list to be shown again
+     * Prevent help on room list to be shown again.
      */
     fun neverShowLongClickOnRoomHelpAgain() {
         defaultPrefs.edit {
@@ -765,7 +764,7 @@ class VectorPreferences @Inject constructor(
     }
 
     /**
-     * Tells if the message timestamps must be always shown
+     * Tells if the message timestamps must be always shown.
      *
      * @return true if the message timestamps must be always shown
      */
@@ -774,7 +773,7 @@ class VectorPreferences @Inject constructor(
     }
 
     /**
-     * Tells if the typing notifications should be sent
+     * Tells if the typing notifications should be sent.
      *
      * @return true to send the typing notifs
      */
@@ -783,7 +782,7 @@ class VectorPreferences @Inject constructor(
     }
 
     /**
-     * Tells of the missing notifications rooms must be displayed at left (home screen)
+     * Tells of the missing notifications rooms must be displayed at left (home screen).
      *
      * @return true to move the missed notifications to the left side
      */
@@ -792,7 +791,7 @@ class VectorPreferences @Inject constructor(
     }
 
     /**
-     * Tells of the unread rooms must be displayed at left (home screen)
+     * Tells of the unread rooms must be displayed at left (home screen).
      *
      * @return true to move the unread room to the left side
      */
@@ -801,7 +800,7 @@ class VectorPreferences @Inject constructor(
     }
 
     /**
-     * Tells if the phone must vibrate when mentioning
+     * Tells if the phone must vibrate when mentioning.
      *
      * @return true
      */
@@ -829,7 +828,7 @@ class VectorPreferences @Inject constructor(
     }
 
     /**
-     * Tells if the user wants to see URL previews in the timeline
+     * Tells if the user wants to see URL previews in the timeline.
      *
      * @return true if the user wants to see URL previews in the timeline
      */
@@ -838,7 +837,7 @@ class VectorPreferences @Inject constructor(
     }
 
     /**
-     * Tells if media should be previewed before sending
+     * Tells if media should be previewed before sending.
      *
      * @return true to preview media
      */
@@ -847,7 +846,7 @@ class VectorPreferences @Inject constructor(
     }
 
     /**
-     * Tells if message should be send by pressing enter on the soft keyboard
+     * Tells if message should be send by pressing enter on the soft keyboard.
      *
      * @return true to send message with enter
      */
@@ -922,7 +921,7 @@ class VectorPreferences @Inject constructor(
     }
 
     /**
-     * The user does not allow screenshots of the application
+     * The user does not allow screenshots of the application.
      */
     fun useFlagSecure(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_SECURITY_USE_FLAG_SECURE, false)
@@ -949,7 +948,7 @@ class VectorPreferences @Inject constructor(
     }
 
     /**
-     * Return true if Pin code is disabled, or if user set the settings to see full notification content
+     * Return true if Pin code is disabled, or if user set the settings to see full notification content.
      */
     fun useCompleteNotificationFormat(): Boolean {
         return !useFlagPinCode() ||
@@ -1042,12 +1041,15 @@ class VectorPreferences @Inject constructor(
         return defaultPrefs.getBoolean(SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE, true)
     }
 
+    /**
+     * Indicates whether or not thread messages are enabled.
+     */
     fun areThreadMessagesEnabled(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_LABS_ENABLE_THREAD_MESSAGES, getDefault(R.bool.settings_labs_thread_messages_default))
     }
 
     /**
-     * Manually sets thread messages enabled, useful for migrating users from io.element.thread
+     * Manually sets thread messages enabled, useful for migrating users from io.element.thread.
      */
     fun setThreadMessagesEnabled() {
         defaultPrefs
@@ -1057,15 +1059,15 @@ class VectorPreferences @Inject constructor(
     }
 
     /**
-     * Indicates whether or not the user will be notified about the new thread support
-     * We should notify the user only if he had old thread support enabled
+     * Indicates whether or not the user will be notified about the new thread support.
+     * We should notify the user only if he had old thread support enabled.
      */
     fun shouldNotifyUserAboutThreads(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_LABS_ENABLE_THREAD_MESSAGES_OLD_CLIENTS, false)
     }
 
     /**
-     * Indicates that the user have been notified about threads migration
+     * Indicates that the user have been notified about threads migration.
      */
     fun userNotifiedAboutThreads() {
         defaultPrefs
@@ -1083,7 +1085,7 @@ class VectorPreferences @Inject constructor(
     }
 
     /**
-     * Indicates that there no longer threads migration needed
+     * Indicates that there no longer threads migration needed.
      */
     fun setShouldMigrateThreads(shouldMigrate: Boolean) {
         defaultPrefs

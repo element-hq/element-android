@@ -34,7 +34,7 @@ class ToolbarConfig(val activity: AppCompatActivity, val toolbar: MaterialToolba
     }
 
     /**
-     * Delegating property for [activity.supportActionBar?.title]
+     * Delegating property for [activity.supportActionBar?.title].
      */
     var title: CharSequence?
         set(value) {
@@ -43,7 +43,7 @@ class ToolbarConfig(val activity: AppCompatActivity, val toolbar: MaterialToolba
         get() = activity.supportActionBar?.title
 
     /**
-     * Delegating property for [activity.supportActionBar?.subtitle]
+     * Delegating property for [activity.supportActionBar?.subtitle].
      */
     var subtitle: CharSequence?
         set(value) {
@@ -52,27 +52,27 @@ class ToolbarConfig(val activity: AppCompatActivity, val toolbar: MaterialToolba
         get() = activity.supportActionBar?.subtitle
 
     /**
-     * Sets toolbar's title text
+     * Sets toolbar's title text.
      */
     fun setTitle(title: CharSequence?) = apply { activity.supportActionBar?.title = title }
 
     /**
-     * Sets toolbar's title text using provided string resource
+     * Sets toolbar's title text using provided string resource.
      */
     fun setTitle(@StringRes titleRes: Int) = apply { activity.supportActionBar?.setTitle(titleRes) }
 
     /**
-     * Sets toolbar's subtitle text
+     * Sets toolbar's subtitle text.
      */
     fun setSubtitle(subtitle: CharSequence?) = apply { activity.supportActionBar?.subtitle = subtitle }
 
     /**
-     * Sets toolbar's title text using provided string resource
+     * Sets toolbar's title text using provided string resource.
      */
     fun setSubtitle(@StringRes subtitleRes: Int) = apply { activity.supportActionBar?.setSubtitle(subtitleRes) }
 
     /**
-     * Enables/disables navigate back button
+     * Enables/disables navigate back button.
      *
      * @param isAllowed defines if back button is enabled. Default [true]
      * @param useCross defines if cross icon should be used instead of arrow. Default [false]

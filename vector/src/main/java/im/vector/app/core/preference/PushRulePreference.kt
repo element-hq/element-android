@@ -53,7 +53,7 @@ class PushRulePreference : VectorPreference {
     }
 
     /**
-     * Refresh the summary
+     * Refresh the summary.
      */
     private fun refreshSummary() {
         summary = context.getString(

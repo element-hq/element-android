@@ -79,7 +79,7 @@ internal class MXMegolmEncryption(
     }
 
     // Default rotation periods
-    // TODO: Make it configurable via parameters
+    // TODO Make it configurable via parameters
     // Session rotation periods
     private var sessionRotationPeriodMsgs: Int = 100
     private var sessionRotationPeriodMs: Int = 7 * 24 * 3600 * 1000
@@ -160,7 +160,7 @@ internal class MXMegolmEncryption(
     }
 
     /**
-     * Ensure the outbound session
+     * Ensure the outbound session.
      *
      * @param devicesInRoom the devices list
      */
@@ -196,7 +196,7 @@ internal class MXMegolmEncryption(
     }
 
     /**
-     * Share the device key to a list of users
+     * Share the device key to a list of users.
      *
      * @param session        the session info
      * @param devicesByUsers the devices map
@@ -225,7 +225,7 @@ internal class MXMegolmEncryption(
     }
 
     /**
-     * Share the device keys of a an user
+     * Share the device keys of a an user.
      *
      * @param session       the session info
      * @param devicesByUser the devices map
@@ -356,7 +356,7 @@ internal class MXMegolmEncryption(
     }
 
     /**
-     * process the pending encryptions
+     * process the pending encryptions.
      */
     private fun encryptContent(session: MXOutboundSessionInfo, eventType: String, eventContent: Content): Content {
         // Everything is in place, encrypt all pending events

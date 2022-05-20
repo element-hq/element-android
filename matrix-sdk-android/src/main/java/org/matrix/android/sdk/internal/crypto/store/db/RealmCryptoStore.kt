@@ -233,7 +233,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     /**
-     * Olm account access should be synchronized
+     * Olm account access should be synchronized.
      */
     override fun <T> doWithOlmAccount(block: (OlmAccount) -> T): T {
         return olmAccount!!.let { olmAccount ->
@@ -815,7 +815,7 @@ internal class RealmCryptoStore @Inject constructor(
 
     /**
      * Note: the result will be only use to export all the keys and not to use the OlmInboundGroupSessionWrapper2,
-     * so there is no need to use or update `inboundGroupSessionToRelease` for native memory management
+     * so there is no need to use or update `inboundGroupSessionToRelease` for native memory management.
      */
     override fun getInboundGroupSessions(): List<OlmInboundGroupSessionWrapper2> {
         return doWithRealm(realmConfiguration) {
@@ -1667,8 +1667,8 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     /**
-     * Some entries in the DB can get a bit out of control with time
-     * So we need to tidy up a bit
+     * Some entries in the DB can get a bit out of control with time.
+     * So we need to tidy up a bit.
      */
     override fun tidyUpDataBase() {
         val prevWeekTs = clock.epochMillis() - 7 * 24 * 60 * 60 * 1_000
@@ -1695,7 +1695,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     /**
-     * Prints out database info
+     * Prints out database info.
      */
     override fun logDbUsageInfo() {
         RealmDebugTools(realmConfiguration).logInfo("Crypto")

@@ -24,8 +24,8 @@ import org.matrix.android.sdk.internal.di.SerializeNulls
 import org.matrix.android.sdk.internal.network.parsing.RuntimeJsonAdapterFactory
 
 /**
- * Info that need to be persisted by the sender thread
- * With polymorphic moshi parsing
+ * Info that need to be persisted by the sender thread.
+ * With polymorphic moshi parsing.
  */
 internal interface TaskInfo {
     val type: String

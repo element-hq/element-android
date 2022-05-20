@@ -52,7 +52,7 @@ data class EncryptedFileKey(
         val k: String? = null
 ) {
     /**
-     * Check what the spec tells us
+     * Check what the spec tells us.
      */
     fun isValid(): Boolean {
         if (alg != "A256CTR") {

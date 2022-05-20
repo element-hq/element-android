@@ -43,7 +43,7 @@ import org.matrix.olm.OlmAccount
 import org.matrix.olm.OlmOutboundGroupSession
 
 /**
- * the crypto data store
+ * The crypto data store.
  */
 internal interface IMXCryptoStore {
 
@@ -105,24 +105,24 @@ internal interface IMXCryptoStore {
     fun setRoomsListBlacklistUnverifiedDevices(roomIds: List<String>)
 
     /**
-     * Get the current keys backup version
+     * Get the current keys backup version.
      */
     fun getKeyBackupVersion(): String?
 
     /**
-     * Set the current keys backup version
+     * Set the current keys backup version.
      *
      * @param keyBackupVersion the keys backup version or null to delete it
      */
     fun setKeyBackupVersion(keyBackupVersion: String?)
 
     /**
-     * Get the current keys backup local data
+     * Get the current keys backup local data.
      */
     fun getKeysBackupData(): KeysBackupDataEntity?
 
     /**
-     * Set the keys backup local data
+     * Set the keys backup local data.
      *
      * @param keysBackupData the keys backup local data, or null to erase data
      */
@@ -146,12 +146,12 @@ internal interface IMXCryptoStore {
     fun deleteStore()
 
     /**
-     * open any existing crypto store
+     * open any existing crypto store.
      */
     fun open()
 
     /**
-     * Close the store
+     * Close the store.
      */
     fun close()
 
@@ -239,10 +239,10 @@ internal interface IMXCryptoStore {
     fun getRoomAlgorithm(roomId: String): String?
 
     /**
-     * This is a bit different than isRoomEncrypted
-     * A room is encrypted when there is a m.room.encryption state event in the room (malformed/invalid or not)
-     * But the crypto layer has additional guaranty to ensure that encryption would never been reverted
-     * It's defensive coding out of precaution (if ever state is reset)
+     * This is a bit different than isRoomEncrypted.
+     * A room is encrypted when there is a m.room.encryption state event in the room (malformed/invalid or not).
+     * But the crypto layer has additional guaranty to ensure that encryption would never been reverted.
+     * It's defensive coding out of precaution (if ever state is reset).
      */
     fun roomWasOnceEncrypted(roomId: String): Boolean
 
@@ -278,7 +278,7 @@ internal interface IMXCryptoStore {
     fun getDeviceSession(sessionId: String, deviceKey: String): OlmSessionWrapper?
 
     /**
-     * Retrieve the last used sessionId, regarding `lastReceivedMessageTs`, or null if no session exist
+     * Retrieve the last used sessionId, regarding `lastReceivedMessageTs`, or null if no session exist.
      *
      * @param deviceKey the public key of the other device.
      * @return last used sessionId, or null if not found
@@ -302,17 +302,17 @@ internal interface IMXCryptoStore {
     fun getInboundGroupSession(sessionId: String, senderKey: String): OlmInboundGroupSessionWrapper2?
 
     /**
-     * Get the current outbound group session for this encrypted room
+     * Get the current outbound group session for this encrypted room.
      */
     fun getCurrentOutboundGroupSessionForRoom(roomId: String): OutboundGroupSessionWrapper?
 
     /**
-     * Get the current outbound group session for this encrypted room
+     * Get the current outbound group session for this encrypted room.
      */
     fun storeCurrentOutboundGroupSessionForRoom(roomId: String, outboundGroupSession: OlmOutboundGroupSession?)
 
     /**
-     * Remove an inbound group session
+     * Remove an inbound group session.
      *
      * @param sessionId the session identifier.
      * @param senderKey the base64-encoded curve25519 key of the sender.
@@ -352,7 +352,7 @@ internal interface IMXCryptoStore {
     fun inboundGroupSessionsCount(onlyBackedUp: Boolean): Int
 
     /**
-     * Save the device statuses
+     * Save the device statuses.
      *
      * @param deviceTrackingStatuses the device tracking statuses
      */
@@ -368,7 +368,7 @@ internal interface IMXCryptoStore {
     fun getDeviceTrackingStatus(userId: String, defaultValue: Int): Int
 
     /**
-     * Look for an existing outgoing room key request, and if none is found, return null
+     * Look for an existing outgoing room key request, and if none is found, return null.
      *
      * @param requestBody the request body
      * @return an OutgoingRoomKeyRequest instance or null
@@ -446,7 +446,7 @@ internal interface IMXCryptoStore {
     // =============================================
 
     /**
-     * Gets the current crosssigning info
+     * Gets the current crosssigning info.
      */
     fun getMyCrossSigningInfo(): MXCrossSigningInfo?
 

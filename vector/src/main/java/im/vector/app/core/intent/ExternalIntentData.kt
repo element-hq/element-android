@@ -23,7 +23,7 @@ import android.net.Uri
 import androidx.core.util.PatternsCompat.WEB_URL
 
 /**
- * Inspired from Riot code: RoomMediaMessage.java
+ * Inspired from Riot code: RoomMediaMessage.java.
  */
 sealed class ExternalIntentData {
     /**
@@ -42,7 +42,7 @@ sealed class ExternalIntentData {
     ) : ExternalIntentData()
 
     /**
-     * Clip data
+     * Clip data.
      */
     data class IntentDataClipData(
             val clipDataItem: ClipData.Item,
@@ -50,7 +50,7 @@ sealed class ExternalIntentData {
     ) : ExternalIntentData()
 
     /**
-     * Constructor from a media Uri/
+     * Constructor from a media Uri/.
      *
      * @param uri      the media uri
      * @param filename the media file name

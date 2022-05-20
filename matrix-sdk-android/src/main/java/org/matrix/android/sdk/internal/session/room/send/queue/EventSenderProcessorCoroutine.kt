@@ -64,12 +64,12 @@ internal class EventSenderProcessorCoroutine @Inject constructor(
     private val waitForNetworkSequencer = SemaphoreCoroutineSequencer()
 
     /**
-     * sequencers use QueuedTask.queueIdentifier as key
+     * sequencers use QueuedTask.queueIdentifier as key.
      */
     private val sequencers = ConcurrentHashMap<String, CoroutineSequencer>()
 
     /**
-     * cancelableBag use QueuedTask.taskIdentifier as key
+     * cancelableBag use QueuedTask.taskIdentifier as key.
      */
     private val cancelableBag = ConcurrentHashMap<String, Cancelable>()
 

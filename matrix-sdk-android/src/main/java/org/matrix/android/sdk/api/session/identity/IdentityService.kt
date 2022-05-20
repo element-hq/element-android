@@ -19,13 +19,13 @@ package org.matrix.android.sdk.api.session.identity
 import org.matrix.android.sdk.api.session.identity.model.SignInvitationResult
 
 /**
- * Provides access to the identity server configuration and services identity server can provide
+ * Provides access to the identity server configuration and services identity server can provide.
  */
 interface IdentityService {
     /**
      * Return the default identity server of the user, which may have been provided at login time by the homeserver,
-     * or by the Well-known setup of the homeserver
-     * It may be different from the current configured identity server
+     * or by the Well-known setup of the homeserver.
+     * It may be different from the current configured identity server.
      */
     fun getDefaultIdentityServer(): String?
 
@@ -35,9 +35,9 @@ interface IdentityService {
     fun getCurrentIdentityServerUrl(): String?
 
     /**
-     * Check if the identity server is valid
-     * See https://matrix.org/docs/spec/identity_service/latest#status-check
-     * Matrix Android SDK2 only supports identity server API v2
+     * Check if the identity server is valid.
+     * See https://matrix.org/docs/spec/identity_service/latest#status-check.
+     * Matrix Android SDK2 only supports identity server API v2.
      */
     suspend fun isValidIdentityServer(url: String)
 
@@ -52,12 +52,12 @@ interface IdentityService {
     suspend fun setNewIdentityServer(url: String): String
 
     /**
-     * Disconnect (logout) from the current identity server
+     * Disconnect (logout) from the current identity server.
      */
     suspend fun disconnect()
 
     /**
-     * This will ask the identity server to send an email or an SMS to let the user confirm he owns the ThreePid
+     * This will ask the identity server to send an email or an SMS to let the user confirm he owns the ThreePid.
      */
     suspend fun startBindThreePid(threePid: ThreePid)
 
@@ -67,32 +67,32 @@ interface IdentityService {
     suspend fun cancelBindThreePid(threePid: ThreePid)
 
     /**
-     * This will ask the identity server to send an new email or a new SMS to let the user confirm he owns the ThreePid
+     * This will ask the identity server to send an new email or a new SMS to let the user confirm he owns the ThreePid.
      */
     suspend fun sendAgainValidationCode(threePid: ThreePid)
 
     /**
-     * Submit the code that the identity server has sent to the user (in email or SMS)
+     * Submit the code that the identity server has sent to the user (in email or SMS).
      * Once successful, you will have to call [finalizeBindThreePid]
      * @param code the code sent to the user
      */
     suspend fun submitValidationToken(threePid: ThreePid, code: String)
 
     /**
-     * This will perform the actual association of ThreePid and Matrix account
+     * This will perform the actual association of ThreePid and Matrix account.
      */
     suspend fun finalizeBindThreePid(threePid: ThreePid)
 
     /**
-     * Unbind a threePid
-     * The request will actually be done on the homeserver
+     * Unbind a threePid.
+     * The request will actually be done on the homeserver.
      */
     suspend fun unbindThreePid(threePid: ThreePid)
 
     /**
-     * Search MatrixId of users providing email and phone numbers
-     * Note the the user consent has to be set to true, or it will throw a UserConsentNotProvided failure
-     * Application has to explicitly ask for the user consent, and the answer can be stored using [setUserConsent]
+     * Search MatrixId of users providing email and phone numbers.
+     * Note the the user consent has to be set to true, or it will throw a UserConsentNotProvided failure.
+     * Application has to explicitly ask for the user consent, and the answer can be stored using [setUserConsent].
      * Please see https://support.google.com/googleplay/android-developer/answer/9888076?hl=en for more details.
      */
     suspend fun lookUp(threePids: List<ThreePid>): List<FoundThreePid>
@@ -115,8 +115,8 @@ interface IdentityService {
     fun setUserConsent(newValue: Boolean)
 
     /**
-     * Get the status of the current user's threePid
-     * A lookup will be performed, but also pending binding state will be restored
+     * Get the status of the current user's threePid.
+     * A lookup will be performed, but also pending binding state will be restored.
      *
      * @param threePids the list of threePid the user owns (retrieved form the homeserver)
      * @return a map of ThreePid -> SharedState
@@ -126,7 +126,7 @@ interface IdentityService {
     /**
      * When one performs a 3pid invite and the third party identifier is unknown, the home server
      * will store the invitation in the Identity server and store some information in the room state membership event.
-     * The email invite will contains the token and secret that can be used to claim the stored invitation
+     * The email invite will contains the token and secret that can be used to claim the stored invitation.
      *
      * To aid clients who may not be able to perform crypto themselves,
      * the identity server offers some crypto functionality to help in accepting invitations.

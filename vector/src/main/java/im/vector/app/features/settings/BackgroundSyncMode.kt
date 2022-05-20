@@ -17,7 +17,7 @@
 package im.vector.app.features.settings
 
 /**
- * Different strategies for Background sync, only applicable to F-Droid version of the app
+ * Different strategies for Background sync, only applicable to F-Droid version of the app.
  */
 enum class BackgroundSyncMode {
     /**
@@ -34,7 +34,7 @@ enum class BackgroundSyncMode {
     FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME,
 
     /**
-     * The app won't sync in background
+     * The app won't sync in background.
      */
     FDROID_BACKGROUND_SYNC_MODE_DISABLED;
 

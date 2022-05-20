@@ -38,7 +38,7 @@ import org.matrix.android.sdk.internal.util.Normalizer
 import javax.inject.Inject
 
 /**
- * This class computes room display name
+ * This class computes room display name.
  */
 internal class RoomDisplayNameResolver @Inject constructor(
         matrixConfiguration: MatrixConfiguration,
@@ -50,7 +50,7 @@ internal class RoomDisplayNameResolver @Inject constructor(
     private val roomDisplayNameFallbackProvider = matrixConfiguration.roomDisplayNameFallbackProvider
 
     /**
-     * Compute the room display name
+     * Compute the room display name.
      *
      * @param realm: the current instance of realm
      * @param roomId: the roomId to resolve the name of.
@@ -157,7 +157,7 @@ internal class RoomDisplayNameResolver @Inject constructor(
         return (name ?: roomId).toRoomName()
     }
 
-    /** See [org.matrix.android.sdk.api.session.room.sender.SenderInfo.disambiguatedDisplayName] */
+    /** See [org.matrix.android.sdk.api.session.room.sender.SenderInfo.disambiguatedDisplayName]. */
     private fun resolveRoomMemberName(roomMemberSummary: RoomMemberSummaryEntity,
                                       roomMemberHelper: RoomMemberHelper): String {
         val isUnique = roomMemberHelper.isUniqueDisplayName(roomMemberSummary.displayName)

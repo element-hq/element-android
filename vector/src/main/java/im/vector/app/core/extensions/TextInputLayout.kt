@@ -23,7 +23,7 @@ import reactivecircus.flowbinding.android.widget.textChanges
 fun TextInputLayout.editText() = this.editText!!
 
 /**
- * Detect if a field starts or ends with spaces
+ * Detect if a field starts or ends with spaces.
  */
 fun TextInputLayout.hasSurroundingSpaces() = editText().text.toString().let { it.trim() != it }
 
