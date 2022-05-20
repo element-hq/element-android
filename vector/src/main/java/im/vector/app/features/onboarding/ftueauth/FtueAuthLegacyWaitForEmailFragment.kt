@@ -28,7 +28,7 @@ import im.vector.app.features.onboarding.RegisterAction
 import javax.inject.Inject
 
 /**
- * In this screen, the user is asked to check his emails
+ * In this screen, the user is asked to check their emails.
  */
 class FtueAuthLegacyWaitForEmailFragment @Inject constructor() : AbstractFtueAuthFragment<FragmentLoginWaitForEmailBinding>() {
 
