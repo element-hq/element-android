@@ -16,14 +16,14 @@
 
 package im.vector.app.features.raw.wellknown
 
-import org.matrix.android.sdk.api.MatrixPatterns.getDomain
+import org.matrix.android.sdk.api.MatrixPatterns.getServerName
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
 
 suspend fun RawService.getElementWellknown(sessionParams: SessionParams): ElementWellKnown? {
     // By default we use the domain of the userId to retrieve the .well-known data
-    val domain = sessionParams.userId.getDomain()
+    val domain = sessionParams.userId.getServerName()
     return tryOrNull { getWellknown(domain) }
             ?.let { ElementWellKnownMapper.from(it) }
 }

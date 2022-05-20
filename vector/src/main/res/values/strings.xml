@@ -322,6 +322,13 @@
     <string name="start_chatting">Start Chatting</string>
     <string name="spaces">Spaces</string>
 
+    <!-- Time unit for hour: if a short version exists, it should be used -->
+    <string name="time_unit_hour_short">h</string>
+    <!-- Time unit for minute: if a short version exists, it should be used -->
+    <string name="time_unit_minute_short">min</string>
+    <!-- Time unit for second: if a short version exists, it should be used -->
+    <string name="time_unit_second_short">sec</string>
+
     <!-- Permissions denied forever -->
     <string name="denied_permission_generic">Some permissions are missing to perform this action, please grant the permissions from the system settings.</string>
     <string name="denied_permission_camera">To perform this action, please grant the Camera permission from the system settings.</string>
@@ -1056,9 +1063,6 @@
     <string name="media_source_choose">Choose</string>
     <string name="settings_play_shutter_sound">Play shutter sound</string>
 
-    <!-- TODO Remove -->
-    <string name="settings_flair" tools:ignore="UnusedResources">Flair</string>
-
     <!-- medias saving settings -->
     <string name="media_saving_period_3_days">3 days</string>
     <string name="media_saving_period_1_week">1 week</string>
@@ -1670,7 +1674,6 @@
     <string name="you_may_contact_me">You may contact me if you have any follow up questions</string>
     <string name="feedback_sent">Thanks, your feedback has been successfully sent</string>
     <string name="feedback_failed">The feedback failed to be sent (%s)</string>
-    <!-- TODO TO BE REMOVED -->
     <string name="give_feedback" tools:ignore="UnusedResources">Give Feedback</string>
     <string name="give_feedback_threads">Give Feedback</string>
     <string name="send_feedback_threads_title">Threads Beta feedback</string>
@@ -2834,14 +2837,27 @@
     <string name="space_explore_activity_title">Explore rooms</string>
     <string name="space_add_child_title">Add rooms</string>
     <string name="leave_space">Leave</string>
+
+    <string name="space_leave_radio_buttons_title">Things in this space</string>
+    <string name="space_leave_radio_button_all">Leave all</string>
+    <string name="space_leave_radio_button_none">Leave none</string>
+
     <string name="space_leave_prompt_msg_with_name">Are you sure you want to leave %s?</string>
     <string name="space_leave_prompt_msg_only_you">You are the only person here. If you leave, no one will be able to join in the future, including you.</string>
     <string name="space_leave_prompt_msg_private">You won\'t be able to rejoin unless you are re-invited.</string>
     <string name="space_leave_prompt_msg_as_admin">You\'re the only admin of this space. Leaving it will mean no one has control over it.</string>
-    <string name="leave_all_rooms_and_spaces">Leave all rooms and spaces</string>
-    <string name="dont_leave_any">Don’t leave any rooms and spaces</string>
-    <string name="leave_specific_ones">Leave specific rooms and spaces…</string>
-    <string name="pick_tings_to_leave">Pick things to leave</string>
+
+    <!-- TODO delete -->
+    <string name="leave_all_rooms_and_spaces" tools:ignore="UnusedResources">Leave all rooms and spaces</string>
+    <!-- TODO delete -->
+    <string name="dont_leave_any" tools:ignore="UnusedResources">Don’t leave any rooms and spaces</string>
+    <!-- TODO delete -->
+    <string name="leave_specific_ones" tools:ignore="UnusedResources">Leave specific rooms and spaces…</string>
+    <!-- TODO delete -->
+    <string name="pick_tings_to_leave" tools:ignore="UnusedResources">Pick things to leave</string>
+
+    <string name="space_explore_filter_no_result_title">No results found</string>
+    <string name="space_explore_filter_no_result_description">Some results may be hidden because they’re private and you need an invite to them.</string>
 
     <string name="space_add_existing_rooms">Add existing rooms and space</string>
     <string name="space_add_existing_rooms_only">Add existing rooms</string>
@@ -2986,11 +3002,7 @@
     <!-- Location -->
     <string name="location_activity_title_static_sharing">Share location</string>
     <string name="location_activity_title_preview">Location</string>
-    <!-- TODO delete -->
-    <string name="a11y_location_share_icon" tools:ignore="UnusedResources">Share location</string>
     <string name="a11y_static_map_image">Map</string>
-    <!-- TODO delete -->
-    <string name="location_share" tools:ignore="UnusedResources">Share location</string>
     <string name="a11y_location_share_pin_on_map">Pin of selected location on map</string>
     <string name="a11y_location_share_locate_button">Zoom to current location</string>
     <string name="location_share_option_user_current">Share my current location</string>
@@ -3014,9 +3026,17 @@
     <string name="location_timeline_failed_to_load_map">Failed to load map</string>
     <string name="location_share_live_enabled">Live location enabled</string>
     <string name="location_share_live_started">Loading live location…</string>
+    <string name="location_share_live_ended">Live location ended</string>
+    <string name="location_share_live_view">View live location</string>
+    <!-- Examples of usage: Live until 5:42 PM/Live until 17:42-->
+    <string name="location_share_live_until">Live until %1$s</string>
     <string name="location_share_live_stop">Stop</string>
+    <!-- Examples of usage: 6h 15min 30sec left/15min 30sec left/30 sec left-->
+    <string name="location_share_live_remaining_time">%1$s left</string>
     <string name="live_location_sharing_notification_title">${app_name} Live Location</string>
     <string name="live_location_sharing_notification_description">Location sharing is in progress</string>
+    <string name="labs_enable_live_location">Enable Live Location Sharing</string>
+    <string name="labs_enable_live_location_summary">Temporary implementation: locations persist in room history</string>
 
     <string name="message_bubbles">Show Message bubbles</string>
 

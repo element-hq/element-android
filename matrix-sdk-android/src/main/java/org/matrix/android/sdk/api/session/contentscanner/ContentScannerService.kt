@@ -33,7 +33,7 @@ interface ContentScannerService {
 
     /**
      * Get the current public curve25519 key that the AV server is advertising.
-     * @param callback on success callback containing the server public key
+     * @param forceDownload true to force the SDK to download again the server public key
      */
     suspend fun getServerPublicKey(forceDownload: Boolean = false): String?
     suspend fun getScanResultForAttachment(mxcUrl: String, fileInfo: ElementToDecrypt? = null): ScanStatusInfo

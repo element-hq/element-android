@@ -22,9 +22,11 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNull
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.matrix.android.sdk.InstrumentedTest
+import org.matrix.android.sdk.common.RetryTestRule
 import org.matrix.android.sdk.internal.crypto.model.OlmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.util.time.DefaultClock
@@ -36,6 +38,8 @@ private const val DUMMY_DEVICE_KEY = "DeviceKey"
 
 @RunWith(AndroidJUnit4::class)
 class CryptoStoreTest : InstrumentedTest {
+
+    @get:Rule val rule = RetryTestRule(3)
 
     private val cryptoStoreHelper = CryptoStoreHelper()
     private val clock = DefaultClock()

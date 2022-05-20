@@ -683,6 +683,8 @@ class WebRtcCall(
                 direction = RtpTransceiver.RtpTransceiverDirection.SEND_RECV
             }
             for (transceiver in peerConnection?.transceivers ?: emptyList()) {
+                transceiver.sender.track()?.setEnabled(!onHold)
+                transceiver.receiver.track()?.setEnabled(!onHold)
                 transceiver.direction = direction
             }
             updateMuteStatus()

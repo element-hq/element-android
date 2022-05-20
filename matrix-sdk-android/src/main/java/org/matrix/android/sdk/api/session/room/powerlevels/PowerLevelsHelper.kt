@@ -58,7 +58,7 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
     /**
      * Tell if an user can send an event of a certain type.
      *
-     * @param userId  the id of the user to check for.
+     * @param userId the id of the user to check for.
      * @param isState true if the event is a state event (ie. state key is not null)
      * @param eventType the event type to check for
      * @return true if the user can send this type of event

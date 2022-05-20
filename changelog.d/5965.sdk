@@ -1,1 +1,0 @@
-Including SSL/TLS error handing when doing WellKnown lookups without a custom HomeServerConnectionConfig

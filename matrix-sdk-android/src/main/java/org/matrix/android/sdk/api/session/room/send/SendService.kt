@@ -62,6 +62,7 @@ interface SendService {
      * @param quotedEvent The event to which we will quote it's content.
      * @param text the text message to send
      * @param autoMarkdown If true, the SDK will generate a formatted HTML message from the body text if markdown syntax is present
+     * @param rootThreadEventId when this param is not null, the message will be sent in this specific thread
      * @return a [Cancelable]
      */
     fun sendQuotedTextMessage(quotedEvent: TimelineEvent, text: String, autoMarkdown: Boolean, rootThreadEventId: String? = null): Cancelable

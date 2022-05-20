@@ -54,7 +54,7 @@ internal fun convertFromUTF8(s: String): String {
 /**
  * Returns whether a string contains an occurrence of another, as a standalone word, regardless of case.
  *
- * @param subString  the string to search for
+ * @param subString the string to search for
  * @return whether a match was found
  */
 internal fun String.caseInsensitiveFind(subString: String): Boolean {

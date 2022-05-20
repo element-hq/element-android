@@ -100,7 +100,7 @@ class TimelineItemFactory @Inject constructor(
                     // Message itemsX
                     EventType.STICKER,
                     in EventType.POLL_START,
-                    EventType.MESSAGE               -> messageItemFactory.create(params)
+                    EventType.MESSAGE                 -> messageItemFactory.create(params)
                     EventType.REDACTION,
                     EventType.KEY_VERIFICATION_ACCEPT,
                     EventType.KEY_VERIFICATION_START,
@@ -113,14 +113,15 @@ class TimelineItemFactory @Inject constructor(
                     EventType.CALL_NEGOTIATE,
                     EventType.REACTION,
                     in EventType.POLL_RESPONSE,
-                    in EventType.POLL_END           -> noticeItemFactory.create(params)
+                    in EventType.POLL_END,
+                    in EventType.BEACON_LOCATION_DATA -> noticeItemFactory.create(params)
                     // Calls
                     EventType.CALL_INVITE,
                     EventType.CALL_HANGUP,
                     EventType.CALL_REJECT,
-                    EventType.CALL_ANSWER           -> callItemFactory.create(params)
+                    EventType.CALL_ANSWER             -> callItemFactory.create(params)
                     // Crypto
-                    EventType.ENCRYPTED             -> {
+                    EventType.ENCRYPTED               -> {
                         if (event.root.isRedacted()) {
                             // Redacted event, let the MessageItemFactory handle it
                             messageItemFactory.create(params)
@@ -129,11 +130,11 @@ class TimelineItemFactory @Inject constructor(
                         }
                     }
                     EventType.KEY_VERIFICATION_CANCEL,
-                    EventType.KEY_VERIFICATION_DONE -> {
+                    EventType.KEY_VERIFICATION_DONE   -> {
                         verificationConclusionItemFactory.create(params)
                     }
                     // Unhandled event types
-                    else                            -> {
+                    else                              -> {
                         // Should only happen when shouldShowHiddenEvents() settings is ON
                         Timber.v("Type ${event.root.getClearType()} not handled")
                         defaultItemFactory.create(params)

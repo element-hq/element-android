@@ -48,8 +48,7 @@ data class IncomingRoomKeyRequest(
         /**
          * Factory.
          *
-         * @param event the event
-         * @param currentTimeMillis the current time in milliseconds
+         * @param trail the AuditTrail data
          */
         fun fromEvent(trail: AuditTrail): IncomingRoomKeyRequest? {
             return trail

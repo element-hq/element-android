@@ -1,3 +1,44 @@
+Changes in Element v1.4.16 (2022-05-17)
+=======================================
+
+Features ✨
+----------
+ - Use key backup before requesting keys + refactor & improvement of key request/forward ([#5494](https://github.com/vector-im/element-android/issues/5494))
+ - Screen sharing over WebRTC ([#5911](https://github.com/vector-im/element-android/issues/5911))
+ - Allow using the latest user Avatar and name for all messages in the timeline ([#5932](https://github.com/vector-im/element-android/issues/5932))
+ - Added themed launch icons for Android 13 ([#5936](https://github.com/vector-im/element-android/issues/5936))
+ - Add presence indicator busy and away. ([#6047](https://github.com/vector-im/element-android/issues/6047))
+
+Bugfixes 🐛
+----------
+ - Changed copy and list order in member profile screen. ([#5825](https://github.com/vector-im/element-android/issues/5825))
+ - Fix for audio only being received in one direction after an un-hold during a sip call. ([#5865](https://github.com/vector-im/element-android/issues/5865))
+ - Desynchronized 4S | Megolm backup causing Unusable backup ([#5906](https://github.com/vector-im/element-android/issues/5906))
+ - If animations are disable on the System, chat effects and confetti will be disabled too ([#5941](https://github.com/vector-im/element-android/issues/5941))
+ - Multiple threads improvement (mainly UI) ([#5959](https://github.com/vector-im/element-android/issues/5959))
+
+Improved Documentation 📚
+------------------------
+ - Note public_baseurl requirement in integration tests documentation. ([#5973](https://github.com/vector-im/element-android/issues/5973))
+
+SDK API changes ⚠️
+------------------
+ - - New API to enable/disable key forwarding CryptoService#enableKeyGossiping()
+  - New API to limit room key request only to own devices MXCryptoConfig#limitRoomKeyRequestsToMyDevices
+  - Event Trail API has changed, now using AuditTrail events
+  - New API to manually accept an incoming key request CryptoService#manuallyAcceptRoomKeyRequest() ([#5559](https://github.com/vector-im/element-android/issues/5559))
+ - Small change in the Matrix class: deprecated methods have been removed and the constructor is now public. Also the fun `workerFactory()` has been renamed to `getWorkerFactory()` ([#5887](https://github.com/vector-im/element-android/issues/5887))
+ - Including SSL/TLS error handing when doing WellKnown lookups without a custom HomeServerConnectionConfig ([#5965](https://github.com/vector-im/element-android/issues/5965))
+
+Other changes
+-------------
+ - Improve threads rendering in the main timeline ([#5151](https://github.com/vector-im/element-android/issues/5151))
+ - Reformatted project code ([#5953](https://github.com/vector-im/element-android/issues/5953))
+ - Update check for server-side threads support to match spec. ([#5997](https://github.com/vector-im/element-android/issues/5997))
+ - Setup detekt ([#6038](https://github.com/vector-im/element-android/issues/6038))
+ - Notify the user for each new message ([#46312](https://github.com/vector-im/element-android/issues/46312))
+
+
 Changes in Element v1.4.14 (2022-05-05)
 =======================================
 

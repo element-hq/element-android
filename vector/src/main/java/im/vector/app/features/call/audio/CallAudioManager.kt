@@ -122,6 +122,7 @@ class CallAudioManager(private val context: Context, val configChange: (() -> Un
      * Updates the audio route for the given mode.
      *
      * @param mode the audio mode to be used when computing the audio route.
+     * @param force true to force setting the audio route
      * @return `true` if the audio route was updated successfully;
      * `false`, otherwise.
      */

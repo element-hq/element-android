@@ -54,6 +54,7 @@ class KeysBackupBanner @JvmOverloads constructor(
      * This methods is responsible for rendering the view according to the newState.
      *
      * @param newState the newState representing the view
+     * @param force true to force the rendering of the view
      */
     fun render(newState: State, force: Boolean = false) {
         if (newState == state && !force) {

@@ -21,7 +21,8 @@ import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.work.Configuration
-import androidx.work.WorkManager
+import androidx.work.impl.WorkManagerImpl
+import androidx.work.impl.utils.taskexecutor.WorkManagerTaskExecutor
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.MatrixConfiguration
@@ -66,7 +67,12 @@ internal class TestMatrix(context: Context, matrixConfiguration: MatrixConfigura
                 .setExecutor(Executors.newCachedThreadPool())
                 .setWorkerFactory(matrixWorkerFactory)
                 .build()
-        WorkManager.initialize(appContext, configuration)
+        val delegate = WorkManagerImpl(
+                context,
+                configuration,
+                WorkManagerTaskExecutor(configuration.taskExecutor)
+        )
+        WorkManagerImpl.setDelegate(delegate)
         uiHandler.post {
             ProcessLifecycleOwner.get().lifecycle.addObserver(backgroundDetectionObserver)
         }

@@ -233,6 +233,7 @@ class NotificationUtils @Inject constructor(
      * Build a polling thread listener notification.
      *
      * @param subTitleResId subtitle string resource Id of the notification
+     * @param withProgress true to show indeterminate progress on the notification
      * @return the polling thread listener notification
      */
     @SuppressLint("NewApi")
@@ -298,10 +299,8 @@ class NotificationUtils @Inject constructor(
      * Build an incoming call notification.
      * This notification starts the VectorHomeActivity which is in charge of centralizing the incoming call flow.
      *
-     * @param isVideo  true if this is a video call, false for voice call
-     * @param roomName the room name in which the call is pending.
-     * @param matrixId the matrix id
-     * @param callId   the call id.
+     * @param call information about the call
+     * @param title title of the notification
      * @param fromBg true if the app is in background when posting the notification
      * @return the call notification.
      */
@@ -430,11 +429,8 @@ class NotificationUtils @Inject constructor(
     /**
      * Build a pending call notification.
      *
-     * @param isVideo  true if this is a video call, false for voice call
-     * @param roomName the room name in which the call is pending.
-     * @param roomId   the room Id
-     * @param matrixId the matrix id
-     * @param callId   the call id.
+     * @param call information about the call
+     * @param title title of the notification
      * @return the call notification.
      */
     @SuppressLint("NewApi")

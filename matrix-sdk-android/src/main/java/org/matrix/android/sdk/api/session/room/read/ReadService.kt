@@ -71,7 +71,7 @@ interface ReadService {
 
     /**
      * Returns a live list of read receipts for a given event.
-     * @param eventId: the event
+     * @param eventId the event
      */
     fun getEventReadReceiptsLive(eventId: String): LiveData<List<ReadReceipt>>
 }
