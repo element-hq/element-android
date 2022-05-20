@@ -753,13 +753,13 @@ internal class MXOlmDevice @Inject constructor(
     /**
      * Decrypt a received message with an inbound group session.
      *
-     * @param body      the base64-encoded body of the encrypted message.
-     * @param roomId    the room in which the message was received.
-     * @param timeline  the id of the timeline where the event is decrypted. It is used to prevent replay attack.
-     * @param eventId   the eventId of the message that will be decrypted
+     * @param body the base64-encoded body of the encrypted message.
+     * @param roomId the room in which the message was received.
+     * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
+     * @param eventId the eventId of the message that will be decrypted
      * @param sessionId the session identifier.
      * @param senderKey the base64-encoded curve25519 key of the sender.
-     * @return the decrypting result. Nil if the sessionId is unknown.
+     * @return the decrypting result. Null if the sessionId is unknown.
      */
     @Throws(MXCryptoError::class)
     suspend fun decryptGroupMessage(body: String,
