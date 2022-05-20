@@ -29,7 +29,7 @@ internal class EnsureOlmSessionsForUsersAction @Inject constructor(private val o
 
     /**
      * Try to make sure we have established olm sessions for the given users.
-     * @param users    a list of user ids.
+     * @param users a list of user ids.
      */
     suspend fun handle(users: List<String>): MXUsersDevicesMap<MXOlmSessionResult> {
         Timber.v("## ensureOlmSessionsForUsers() : ensureOlmSessionsForUsers $users")

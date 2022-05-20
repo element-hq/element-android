@@ -24,6 +24,7 @@ import kotlinx.coroutines.sync.withPermit
  */
 internal interface CoroutineSequencer {
     /**
+     * @param T generic type
      * @param block the suspendable block to execute
      * @return the result of the block
      */

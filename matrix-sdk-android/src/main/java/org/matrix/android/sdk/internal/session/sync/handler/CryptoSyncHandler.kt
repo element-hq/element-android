@@ -62,7 +62,7 @@ internal class CryptoSyncHandler @Inject constructor(private val cryptoService: 
     /**
      * Decrypt an encrypted event.
      *
-     * @param event      the event to decrypt
+     * @param event the event to decrypt
      * @param timelineId the timeline identifier
      * @return true if the event has been decrypted
      */

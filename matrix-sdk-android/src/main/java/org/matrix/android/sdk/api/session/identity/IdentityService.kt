@@ -74,6 +74,7 @@ interface IdentityService {
     /**
      * Submit the code that the identity server has sent to the user (in email or SMS).
      * Once successful, you will have to call [finalizeBindThreePid]
+     * @param threePid the three pid
      * @param code the code sent to the user
      */
     suspend fun submitValidationToken(threePid: ThreePid, code: String)

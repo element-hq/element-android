@@ -71,8 +71,8 @@ interface RelationService {
 
     /**
      * Edit a poll.
-     * @param pollType indicates open or closed polls
      * @param targetEvent The poll event to edit
+     * @param pollType indicates open or closed polls
      * @param question The edited question
      * @param options The edited options
      */
@@ -84,7 +84,9 @@ interface RelationService {
     /**
      * Edit a text message body. Limited to "m.text" contentType.
      * @param targetEvent The event to edit
+     * @param msgType the message type
      * @param newBodyText The edited body
+     * @param newBodyAutoMarkdown true to parse markdown on the new body
      * @param compatibilityBodyText The text that will appear on clients that don't support yet edition
      */
     fun editTextMessage(targetEvent: TimelineEvent,
@@ -153,8 +155,8 @@ interface RelationService {
      * @param rootThreadEventId the root thread eventId
      * @param replyInThreadText the reply text
      * @param msgType the message type: MessageType.MSGTYPE_TEXT (default) or MessageType.MSGTYPE_EMOTE
-     * @param formattedText The formatted body using MessageType#FORMAT_MATRIX_HTML
      * @param autoMarkdown If true, the SDK will generate a formatted HTML message from the body text if markdown syntax is present
+     * @param formattedText The formatted body using MessageType#FORMAT_MATRIX_HTML
      * @param eventReplied the event referenced by the reply within a thread
      */
     fun replyInThread(rootThreadEventId: String,

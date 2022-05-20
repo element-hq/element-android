@@ -53,7 +53,7 @@ object FcmHelper {
      * TODO Store in realm
      *
      * @param context android context
-     * @param token   the token to store
+     * @param token the token to store
      */
     fun storeFcmToken(context: Context,
                       token: String?) {

@@ -195,7 +195,7 @@ data class HomeServerConnectionConfig(
          * - https://www.ssi.gouv.fr/uploads/2017/07/anssi-guide-recommandations_de_securite_relatives_a_tls-v1.2.pdf
          * - https://developer.android.com/reference/javax/net/ssl/SSLEngine
          *
-         * @param tlsLimitations         true to use Tls limitations
+         * @param tlsLimitations true to use Tls limitations
          * @param enableCompatibilityMode set to true for Android < 20
          * @return this builder
          */

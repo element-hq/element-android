@@ -198,7 +198,7 @@ internal class MXMegolmEncryption(
     /**
      * Share the device key to a list of users.
      *
-     * @param session        the session info
+     * @param session the session info
      * @param devicesByUsers the devices map
      */
     private suspend fun shareKey(session: MXOutboundSessionInfo,
@@ -227,7 +227,7 @@ internal class MXMegolmEncryption(
     /**
      * Share the device keys of a an user.
      *
-     * @param session       the session info
+     * @param session the session info
      * @param devicesByUser the devices map
      */
     private suspend fun shareUserDevicesKey(session: MXOutboundSessionInfo,
@@ -387,7 +387,7 @@ internal class MXMegolmEncryption(
      * Get the list of devices which can encrypt data to.
      * This method must be called in getDecryptingThreadHandler() thread.
      *
-     * @param userIds  the user ids whose devices must be checked.
+     * @param userIds the user ids whose devices must be checked.
      */
     private suspend fun getDevicesInRoom(userIds: List<String>): DeviceInRoomInfo {
         // We are happy to use a cached version here: we assume that if we already

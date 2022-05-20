@@ -111,8 +111,8 @@ interface WidgetService {
     /**
      * Deactivate a widget in a room. It makes sure you have the rights to handle this.
      *
-     * @param roomId: the room where you want to deactivate the widget.
-     * @param widgetId: the widget to deactivate.
+     * @param roomId the room where you want to deactivate the widget.
+     * @param widgetId the widget to deactivate.
      */
     suspend fun destroyRoomWidget(roomId: String, widgetId: String)
 

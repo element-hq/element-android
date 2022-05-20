@@ -34,10 +34,11 @@ interface PushRuleService {
 
     /**
      * Enables/Disables a push rule and updates the actions if necessary.
+     * @param kind the rule kind
+     * @param ruleId the rule id
      * @param enable Enables/Disables the rule
      * @param actions Actions to update if not null
      */
-
     suspend fun updatePushRuleActions(kind: RuleKind, ruleId: String, enable: Boolean, actions: List<Action>?)
 
     suspend fun removePushRule(kind: RuleKind, ruleId: String)

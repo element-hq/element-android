@@ -59,7 +59,7 @@ internal data class MXKey(
     /**
      * Returns a signature for an user Id and a signkey.
      *
-     * @param userId  the user id
+     * @param userId the user id
      * @param signkey the sign key
      * @return the signature
      */
