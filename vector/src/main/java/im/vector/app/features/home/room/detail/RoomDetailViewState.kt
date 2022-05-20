@@ -36,7 +36,7 @@ sealed class UnreadState {
     object Unknown : UnreadState()
     object HasNoUnread : UnreadState()
     data class ReadMarkerNotLoaded(val readMarkerId: String) : UnreadState()
-    data class HasUnread(val firstUnreadEventId: String) : UnreadState()
+    data class HasUnread(val firstUnreadEventId: String, val readMarkerId: String) : UnreadState()
 }
 
 data class JitsiState(
@@ -87,7 +87,12 @@ data class RoomDetailViewState(
             rootThreadEventId = args.threadTimelineArgs?.rootThreadEventId
     )
 
-    fun isWebRTCCallOptionAvailable() = (asyncRoomSummary.invoke()?.joinedMembersCount ?: 0) <= 2
+    fun isCallOptionAvailable(): Boolean {
+        return asyncRoomSummary.invoke()?.isDirect ?: true ||
+                // When there is only one member, a warning will be displayed when the user
+                // clicks on the menu item to start a call
+                asyncRoomSummary.invoke()?.joinedMembersCount == 1
+    }
 
     fun isSearchAvailable() = asyncRoomSummary()?.isEncrypted == false
 

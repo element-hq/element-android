@@ -33,6 +33,8 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.home.room.detail.timeline.action.TimelineEventFragmentArgs
 import kotlinx.coroutines.flow.map
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
 
@@ -56,10 +58,10 @@ data class ReactionInfo(
 /**
  * Used to display the list of members that reacted to a given event
  */
-class ViewReactionsViewModel @AssistedInject constructor(@Assisted
-                                                         initialState: DisplayReactionsViewState,
-                                                         session: Session,
-                                                         private val dateFormatter: VectorDateFormatter
+class ViewReactionsViewModel @AssistedInject constructor(
+        @Assisted initialState: DisplayReactionsViewState,
+        session: Session,
+        private val dateFormatter: VectorDateFormatter
 ) : VectorViewModel<DisplayReactionsViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     private val roomId = initialState.roomId

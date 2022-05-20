@@ -28,9 +28,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.Success
 import im.vector.app.R
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.extensions.toReducedUrl
@@ -97,7 +95,7 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
                     views.loginField.setAutofillHints(HintConstants.AUTOFILL_HINT_USERNAME)
                     views.passwordField.setAutofillHints(HintConstants.AUTOFILL_HINT_PASSWORD)
                 }
-            }.exhaustive
+            }
         }
     }
 
@@ -107,7 +105,7 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
             SignMode.SignUp             -> SocialLoginButtonsView.Mode.MODE_SIGN_UP
             SignMode.SignIn,
             SignMode.SignInWithMatrixId -> SocialLoginButtonsView.Mode.MODE_SIGN_IN
-        }.exhaustive
+        }
     }
 
     private fun submit() {
@@ -119,23 +117,27 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
         // This can be called by the IME action, so deal with empty cases
         var error = 0
         if (login.isEmpty()) {
-            views.loginFieldTil.error = getString(if (isSignupMode) {
-                R.string.error_empty_field_choose_user_name
-            } else {
-                R.string.error_empty_field_enter_user_name
-            })
+            views.loginFieldTil.error = getString(
+                    if (isSignupMode) {
+                        R.string.error_empty_field_choose_user_name
+                    } else {
+                        R.string.error_empty_field_enter_user_name
+                    }
+            )
             error++
         }
         if (isSignupMode && isNumericOnlyUserIdForbidden && login.isDigitsOnly()) {
-            views.loginFieldTil.error = "The homeserver does not accept username with only digits."
+            views.loginFieldTil.error = getString(R.string.error_forbidden_digits_only_username)
             error++
         }
         if (password.isEmpty()) {
-            views.passwordFieldTil.error = getString(if (isSignupMode) {
-                R.string.error_empty_field_choose_password
-            } else {
-                R.string.error_empty_field_your_password
-            })
+            views.passwordFieldTil.error = getString(
+                    if (isSignupMode) {
+                        R.string.error_empty_field_choose_password
+                    } else {
+                        R.string.error_empty_field_your_password
+                    }
+            )
             error++
         }
 
@@ -151,12 +153,14 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
     }
 
     private fun setupUi(state: LoginViewState) {
-        views.loginFieldTil.hint = getString(when (state.signMode) {
-            SignMode.Unknown            -> error("developer error")
-            SignMode.SignUp             -> R.string.login_signup_username_hint
-            SignMode.SignIn             -> R.string.login_signin_username_hint
-            SignMode.SignInWithMatrixId -> R.string.login_signin_matrix_id_hint
-        })
+        views.loginFieldTil.hint = getString(
+                when (state.signMode) {
+                    SignMode.Unknown            -> error("developer error")
+                    SignMode.SignUp             -> R.string.login_signup_username_hint
+                    SignMode.SignIn             -> R.string.login_signin_username_hint
+                    SignMode.SignInWithMatrixId -> R.string.login_signin_matrix_id_hint
+                }
+        )
 
         // Handle direct signin first
         if (state.signMode == SignMode.SignInWithMatrixId) {
@@ -217,12 +221,14 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
     private fun setupButtons(state: LoginViewState) {
         views.forgetPasswordButton.isVisible = state.signMode == SignMode.SignIn
 
-        views.loginSubmit.text = getString(when (state.signMode) {
-            SignMode.Unknown            -> error("developer error")
-            SignMode.SignUp             -> R.string.login_signup_submit
-            SignMode.SignIn,
-            SignMode.SignInWithMatrixId -> R.string.login_signin
-        })
+        views.loginSubmit.text = getString(
+                when (state.signMode) {
+                    SignMode.Unknown            -> error("developer error")
+                    SignMode.SignUp             -> R.string.login_signup_submit
+                    SignMode.SignIn,
+                    SignMode.SignInWithMatrixId -> R.string.login_signin
+                }
+        )
     }
 
     private fun setupSubmitButton() {
@@ -291,7 +297,7 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
                 }
             }
             // Success is handled by the LoginActivity
-            is Success -> Unit
+            else       -> Unit
         }
 
         when (state.asyncRegistration) {
@@ -300,7 +306,7 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
                 views.passwordField.hidePassword()
             }
             // Success is handled by the LoginActivity
-            is Success -> Unit
+            else       -> Unit
         }
     }
 

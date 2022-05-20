@@ -45,6 +45,7 @@ import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.securestorage.SecureStorageService
 import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
 import org.matrix.android.sdk.api.session.typing.TypingUsersTracker
+import org.matrix.android.sdk.api.util.md5
 import org.matrix.android.sdk.internal.crypto.secrets.DefaultSharedSecretStorageService
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultRedactEventTask
 import org.matrix.android.sdk.internal.crypto.tasks.RedactEventTask
@@ -86,6 +87,8 @@ import org.matrix.android.sdk.internal.session.integrationmanager.IntegrationMan
 import org.matrix.android.sdk.internal.session.openid.DefaultOpenIdService
 import org.matrix.android.sdk.internal.session.permalinks.DefaultPermalinkService
 import org.matrix.android.sdk.internal.session.room.EventRelationsAggregationProcessor
+import org.matrix.android.sdk.internal.session.room.aggregation.livelocation.DefaultLiveLocationAggregationProcessor
+import org.matrix.android.sdk.internal.session.room.aggregation.livelocation.LiveLocationAggregationProcessor
 import org.matrix.android.sdk.internal.session.room.create.RoomCreateEventProcessor
 import org.matrix.android.sdk.internal.session.room.prune.RedactionEventProcessor
 import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
@@ -95,7 +98,6 @@ import org.matrix.android.sdk.internal.session.securestorage.DefaultSecureStorag
 import org.matrix.android.sdk.internal.session.typing.DefaultTypingUsersTracker
 import org.matrix.android.sdk.internal.session.user.accountdata.DefaultSessionAccountDataService
 import org.matrix.android.sdk.internal.session.widgets.DefaultWidgetURLFormatter
-import org.matrix.android.sdk.internal.util.md5
 import retrofit2.Retrofit
 import java.io.File
 import javax.inject.Provider
@@ -103,7 +105,7 @@ import javax.inject.Qualifier
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
-annotation class MockHttpInterceptor
+internal annotation class MockHttpInterceptor
 
 @Module
 internal abstract class SessionModule {
@@ -385,4 +387,7 @@ internal abstract class SessionModule {
 
     @Binds
     abstract fun bindEventSenderProcessor(processor: EventSenderProcessorCoroutine): EventSenderProcessor
+
+    @Binds
+    abstract fun bindLiveLocationAggregationProcessor(processor: DefaultLiveLocationAggregationProcessor): LiveLocationAggregationProcessor
 }

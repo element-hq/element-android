@@ -29,6 +29,7 @@ import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.room.getStateEvent
 import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomGuestAccessContent
@@ -147,7 +148,7 @@ class SpaceCreationTest : InstrumentedTest {
         // create a room
         var firstChild: String? = null
         commonTestHelper.waitWithLatch {
-            firstChild = aliceSession.createRoom(CreateRoomParams().apply {
+            firstChild = aliceSession.roomService().createRoom(CreateRoomParams().apply {
                 this.name = "FirstRoom"
                 this.topic = "Description of first room"
                 this.preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
@@ -162,7 +163,7 @@ class SpaceCreationTest : InstrumentedTest {
 
         var secondChild: String? = null
         commonTestHelper.waitWithLatch {
-            secondChild = aliceSession.createRoom(CreateRoomParams().apply {
+            secondChild = aliceSession.roomService().createRoom(CreateRoomParams().apply {
                 this.name = "SecondRoom"
                 this.topic = "Description of second room"
                 this.preset = CreateRoomPreset.PRESET_PUBLIC_CHAT

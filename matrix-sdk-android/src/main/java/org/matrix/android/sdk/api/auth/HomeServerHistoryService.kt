@@ -20,10 +20,19 @@ package org.matrix.android.sdk.api.auth
  * A simple service to remember homeservers you already connected to.
  */
 interface HomeServerHistoryService {
-
+    /**
+     * Get a list of stored homeserver urls.
+     */
     fun getKnownServersUrls(): List<String>
 
+    /**
+     * Add a homeserver url to the list of stored homeserver urls.
+     * Will not be added again if already present in the list.
+     */
     fun addHomeServerToHistory(url: String)
 
+    /**
+     * Delete the list of stored homeserver urls.
+     */
     fun clearHistory()
 }

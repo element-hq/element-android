@@ -30,8 +30,9 @@ import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
+import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.isReply
-import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
+import org.matrix.android.sdk.api.session.getRoom
 import timber.log.Timber
 import java.util.UUID
 
@@ -61,7 +62,7 @@ class ViewEditHistoryViewModel @AssistedInject constructor(
 
         viewModelScope.launch {
             val data = try {
-                room.fetchEditHistory(eventId)
+                room.relationService().fetchEditHistory(eventId)
             } catch (failure: Throwable) {
                 setState {
                     copy(editList = Fail(failure))

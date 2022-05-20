@@ -233,4 +233,8 @@ internal class SasVerification(
 
         return
     }
+
+    override fun toString(): String {
+        return "SasVerification(otherUserId='$otherUserId', otherDeviceId=$otherDeviceId, isIncoming=$isIncoming, state=$state, transactionId='$transactionId')"
+    }
 }

@@ -71,6 +71,9 @@ abstract class BottomSheetActionItem : VectorEpoxyModel<BottomSheetActionItem.Ho
     @EpoxyAttribute
     var destructive = false
 
+    @EpoxyAttribute
+    var showBetaLabel = false
+
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     lateinit var listener: ClickListener
 
@@ -106,6 +109,7 @@ abstract class BottomSheetActionItem : VectorEpoxyModel<BottomSheetActionItem.Ho
         } else {
             holder.text.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
         }
+        holder.betaLabel.isVisible = showBetaLabel
     }
 
     class Holder : VectorEpoxyHolder() {
@@ -113,5 +117,6 @@ abstract class BottomSheetActionItem : VectorEpoxyModel<BottomSheetActionItem.Ho
         val icon by bind<ImageView>(R.id.actionIcon)
         val text by bind<TextView>(R.id.actionTitle)
         val selected by bind<ImageView>(R.id.actionSelected)
+        val betaLabel by bind<TextView>(R.id.actionBetaTextView)
     }
 }

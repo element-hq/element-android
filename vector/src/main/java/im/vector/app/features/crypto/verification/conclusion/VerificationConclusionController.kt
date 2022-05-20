@@ -26,7 +26,7 @@ import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationB
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationNoticeItem
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
-import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import javax.inject.Inject
 
 class VerificationConclusionController @Inject constructor(
@@ -52,10 +52,13 @@ class VerificationConclusionController @Inject constructor(
             ConclusionState.SUCCESS   -> {
                 bottomSheetVerificationNoticeItem {
                     id("notice")
-                    notice(host.stringProvider.getString(
-                            if (state.isSelfVerification) R.string.verification_conclusion_ok_self_notice
-                            else R.string.verification_conclusion_ok_notice)
-                            .toEpoxyCharSequence())
+                    notice(
+                            host.stringProvider.getString(
+                                    if (state.isSelfVerification) R.string.verification_conclusion_ok_self_notice
+                                    else R.string.verification_conclusion_ok_notice
+                            )
+                                    .toEpoxyCharSequence()
+                    )
                 }
 
                 bottomSheetVerificationBigImageItem {

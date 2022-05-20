@@ -20,20 +20,16 @@ import im.vector.app.R
 import im.vector.app.core.platform.ViewModelTask
 import im.vector.app.core.platform.WaitingViewData
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.features.session.coroutineScope
-import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
+import org.matrix.android.sdk.api.session.crypto.keysbackup.computeRecoveryKey
+import org.matrix.android.sdk.api.session.crypto.keysbackup.extractCurveKeyFromRecoveryKey
 import org.matrix.android.sdk.api.session.securestorage.EmptyKeySigner
 import org.matrix.android.sdk.api.session.securestorage.RawBytesKeySpec
 import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
 import org.matrix.android.sdk.api.session.securestorage.SsssKeyCreationInfo
-import org.matrix.android.sdk.internal.crypto.crosssigning.toBase64NoPadding
-import org.matrix.android.sdk.internal.crypto.keysbackup.deriveKey
-import org.matrix.android.sdk.internal.crypto.keysbackup.util.computeRecoveryKey
-import org.matrix.android.sdk.internal.crypto.keysbackup.util.extractCurveKeyFromRecoveryKey
+import org.matrix.android.sdk.api.util.toBase64NoPadding
 import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
@@ -63,7 +59,7 @@ class BackupToQuadSMigrationTask @Inject constructor(
             // We need to use the current secret for keybackup and use it as the new master key for SSSS
             // Then we need to put back the backup key in sss
             val keysBackupService = session.cryptoService().keysBackupService()
-            val quadS = session.sharedSecretStorageService
+            val quadS = session.sharedSecretStorageService()
 
             val version = keysBackupService.keysBackupVersion ?: return Result.NoKeyBackupVersion
 
@@ -73,14 +69,22 @@ class BackupToQuadSMigrationTask @Inject constructor(
                         extractCurveKeyFromRecoveryKey(params.recoveryKey)
                     } else if (!params.passphrase.isNullOrEmpty() && version.getAuthDataAsMegolmBackupAuthData()?.privateKeySalt != null) {
                         version.getAuthDataAsMegolmBackupAuthData()?.let { authData ->
-                            deriveKey(params.passphrase, authData.privateKeySalt!!, authData.privateKeyIterations!!, object : ProgressListener {
-                                override fun onProgress(progress: Int, total: Int) {
-                                    params.progressListener?.onProgress(WaitingViewData(
-                                            stringProvider.getString(R.string.bootstrap_progress_checking_backup_with_info,
-                                                    "$progress/$total")
-                                    ))
-                                }
-                            })
+                            keysBackupService.computePrivateKey(
+                                    params.passphrase,
+                                    authData.privateKeySalt!!,
+                                    authData.privateKeyIterations!!,
+                                    object : ProgressListener {
+                                        override fun onProgress(progress: Int, total: Int) {
+                                            params.progressListener?.onProgress(
+                                                    WaitingViewData(
+                                                            stringProvider.getString(
+                                                                    R.string.bootstrap_progress_checking_backup_with_info,
+                                                                    "$progress/$total"
+                                                            )
+                                                    )
+                                            )
+                                        }
+                                    })
                         }
                     } else null)
                             ?: return Result.IllegalParams
@@ -107,8 +111,10 @@ class BackupToQuadSMigrationTask @Inject constructor(
                                                     WaitingViewData(
                                                             stringProvider.getString(
                                                                     R.string.bootstrap_progress_generating_ssss_with_info,
-                                                                    "$progress/$total")
-                                                    ))
+                                                                    "$progress/$total"
+                                                            )
+                                                    )
+                                            )
                                         }
                                     }
                             )
@@ -138,20 +144,8 @@ class BackupToQuadSMigrationTask @Inject constructor(
 
             // save for gossiping
             keysBackupService.saveBackupRecoveryKey(recoveryKey, version.version)
-
-            // while we are there let's restore, but do not block
-            session.coroutineScope.launch {
-                tryOrNull {
-                    session.cryptoService().keysBackupService().restoreKeysWithRecoveryKey(
-                            version,
-                            recoveryKey,
-                            null,
-                            null,
-                            null
-                    )
-                }
-            }
-
+            // It's not a good idea to download the full backup, it might take very long
+            // and use a lot of resources
             return Result.Success
         } catch (failure: Throwable) {
             Timber.e(failure, "## BackupToQuadSMigrationTask - Failed to migrate backup")

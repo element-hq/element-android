@@ -23,7 +23,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import timber.log.Timber
 
-class FormattedJsonHttpLogger : HttpLoggingInterceptor.Logger {
+internal class FormattedJsonHttpLogger : HttpLoggingInterceptor.Logger {
 
     companion object {
         private const val INDENT_SPACE = 2

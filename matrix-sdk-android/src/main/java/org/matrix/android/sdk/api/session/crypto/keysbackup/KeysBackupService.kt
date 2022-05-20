@@ -18,12 +18,7 @@ package org.matrix.android.sdk.api.session.crypto.keysbackup
 
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.listeners.StepProgressListener
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.KeysBackupVersionTrust
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersion
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionResult
-import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
-import org.matrix.android.sdk.internal.crypto.store.SavedKeyBackupKeyInfo
+import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
 
 interface KeysBackupService {
 
@@ -32,7 +27,7 @@ interface KeysBackupService {
      *
      * It can be different than keysBackupVersion.
      */
-    suspend fun getCurrentVersion(): KeysVersionResult?
+    suspend fun getCurrentVersion(): KeysBackupLastVersionResult?
 
     /**
      * Create a new keys backup version and enable it, using the information return from [prepareKeysBackupVersion].
@@ -203,4 +198,9 @@ interface KeysBackupService {
     suspend fun getKeyBackupRecoveryKeyInfo(): SavedKeyBackupKeyInfo?
 
     suspend fun isValidRecoveryKeyForCurrentVersion(recoveryKey: String): Boolean
+
+    fun computePrivateKey(passphrase: String,
+                          privateKeySalt: String,
+                          privateKeyIterations: Int,
+                          progressListener: ProgressListener): ByteArray
 }

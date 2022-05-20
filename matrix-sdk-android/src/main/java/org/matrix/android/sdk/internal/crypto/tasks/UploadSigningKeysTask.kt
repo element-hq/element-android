@@ -18,10 +18,10 @@ package org.matrix.android.sdk.internal.crypto.tasks
 
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.session.crypto.crosssigning.CryptoCrossSigningKey
+import org.matrix.android.sdk.api.session.crypto.crosssigning.toRest
 import org.matrix.android.sdk.internal.crypto.api.CryptoApi
-import org.matrix.android.sdk.internal.crypto.model.CryptoCrossSigningKey
 import org.matrix.android.sdk.internal.crypto.model.rest.UploadSigningKeysBody
-import org.matrix.android.sdk.internal.crypto.model.toRest
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
@@ -42,7 +42,7 @@ internal interface UploadSigningKeysTask : Task<UploadSigningKeysTask.Params, Un
     )
 }
 
-data class UploadSigningKeys(val failures: Map<String, Any>?) : Failure.FeatureFailure()
+internal data class UploadSigningKeys(val failures: Map<String, Any>?) : Failure.FeatureFailure()
 
 internal class DefaultUploadSigningKeysTask @Inject constructor(
         private val cryptoApi: CryptoApi,

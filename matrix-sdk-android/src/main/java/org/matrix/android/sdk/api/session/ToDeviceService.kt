@@ -16,8 +16,8 @@
 
 package org.matrix.android.sdk.api.session
 
+import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.api.session.events.model.Content
-import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import java.util.UUID
 
 interface ToDeviceService {

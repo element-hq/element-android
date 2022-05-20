@@ -34,11 +34,12 @@ import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
+import im.vector.app.core.time.Clock
 import im.vector.app.databinding.FragmentCreateRoomBinding
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.roomdirectory.RoomDirectorySharedAction
 import im.vector.app.features.roomdirectory.RoomDirectorySharedActionViewModel
@@ -63,7 +64,8 @@ data class CreateRoomArgs(
 class CreateRoomFragment @Inject constructor(
         private val createRoomController: CreateRoomController,
         private val createSpaceController: CreateSubSpaceController,
-        colorProvider: ColorProvider
+        colorProvider: ColorProvider,
+        clock: Clock,
 ) : VectorBaseFragment<FragmentCreateRoomBinding>(),
         CreateRoomController.Listener,
         GalleryOrCameraDialogHelper.Listener,
@@ -75,7 +77,7 @@ class CreateRoomFragment @Inject constructor(
 
     private lateinit var roomJoinRuleSharedActionViewModel: RoomJoinRuleSharedActionViewModel
 
-    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider)
+    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider, clock)
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentCreateRoomBinding {
         return FragmentCreateRoomBinding.inflate(inflater, container, false)
@@ -94,7 +96,7 @@ class CreateRoomFragment @Inject constructor(
             when (it) {
                 CreateRoomViewEvents.Quit       -> vectorBaseActivity.onBackPressed()
                 is CreateRoomViewEvents.Failure -> showFailure(it.throwable)
-            }.exhaustive
+            }
         }
     }
 
@@ -167,7 +169,8 @@ class CreateRoomFragment @Inject constructor(
         } else {
             listOf(RoomJoinRules.INVITE, RoomJoinRules.PUBLIC)
         }
-        RoomJoinRuleBottomSheet.newInstance(state.roomJoinRules,
+        RoomJoinRuleBottomSheet.newInstance(
+                state.roomJoinRules,
                 allowed.map { it.toOption(false) },
                 state.isSubSpace,
                 state.parentSpaceSummary?.displayName
@@ -220,20 +223,25 @@ class CreateRoomFragment @Inject constructor(
         val async = state.asyncCreateRoomRequest
         views.waitingView.root.isVisible = async is Loading
         if (async is Success) {
+            val roomId = async()
             // Navigate to freshly created room
             if (state.openAfterCreate) {
                 if (state.isSubSpace) {
                     navigator.switchToSpace(
                             requireContext(),
-                            async(),
+                            roomId,
                             Navigator.PostSwitchSpaceAction.None
                     )
                 } else {
-                    navigator.openRoom(requireActivity(), async())
+                    navigator.openRoom(
+                            context = requireActivity(),
+                            roomId = roomId,
+                            trigger = ViewRoom.Trigger.Created
+                    )
                 }
             }
 
-            sharedActionViewModel.post(RoomDirectorySharedAction.CreateRoomSuccess(async()))
+            sharedActionViewModel.post(RoomDirectorySharedAction.CreateRoomSuccess(roomId))
             sharedActionViewModel.post(RoomDirectorySharedAction.Close)
         } else {
             // Populate list with Epoxy

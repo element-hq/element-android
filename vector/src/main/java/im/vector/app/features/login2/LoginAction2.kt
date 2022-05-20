@@ -21,7 +21,7 @@ import im.vector.app.features.login.LoginConfig
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
-import org.matrix.android.sdk.internal.network.ssl.Fingerprint
+import org.matrix.android.sdk.api.network.ssl.Fingerprint
 
 sealed class LoginAction2 : VectorViewModelAction {
     // First action

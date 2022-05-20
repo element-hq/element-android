@@ -1,0 +1,55 @@
+def excludes = [ ]
+
+def initializeReport(report, projects, classExcludes) {
+    projects.each { project -> project.apply plugin: 'jacoco' }
+    report.executionData { fileTree(rootProject.rootDir.absolutePath).include("**/build/jacoco/*.exec") }
+
+    report.reports {
+        xml.enabled true
+        html.enabled true
+        csv.enabled false
+    }
+
+    gradle.projectsEvaluated {
+        def androidSourceDirs = []
+        def androidClassDirs = []
+
+        projects.each { project ->
+            switch (project) {
+                case { project.plugins.hasPlugin("com.android.application") }:
+                    androidClassDirs.add("${project.buildDir}/tmp/kotlin-classes/gplayDebug")
+                    androidSourceDirs.add("${project.projectDir}/src/main/kotlin")
+                    androidSourceDirs.add("${project.projectDir}/src/main/java")
+                    break
+                case { project.plugins.hasPlugin("com.android.library") }:
+                    androidClassDirs.add("${project.buildDir}/tmp/kotlin-classes/debug")
+                    androidSourceDirs.add("${project.projectDir}/src/main/kotlin")
+                    androidSourceDirs.add("${project.projectDir}/src/main/java")
+                    break
+                default:
+                    report.sourceSets project.sourceSets.main
+            }
+        }
+
+        report.sourceDirectories.setFrom(report.sourceDirectories + files(androidSourceDirs))
+        def classFiles = androidClassDirs.collect { files(it).files }.flatten()
+        report.classDirectories.setFrom(files((report.classDirectories.files + classFiles).collect {
+            fileTree(dir: it, excludes: classExcludes)
+        }))
+    }
+}
+
+def collectProjects(predicate) {
+    return subprojects.findAll { it.buildFile.isFile() && predicate(it) }
+}
+
+task allCodeCoverageReport(type: JacocoReport) {
+    outputs.upToDateWhen { false }
+    rootProject.apply plugin: 'jacoco'
+    // to limit projects in a specific report, add
+    // def excludedProjects = [ ... ]
+    // def projects = collectProjects { !excludedProjects.contains(it.name) }
+    def projects = collectProjects { true }
+    dependsOn { projects*.test }
+    initializeReport(it, projects, excludes)
+}

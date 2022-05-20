@@ -21,7 +21,7 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoMetadataEntit
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
 // Version 11L added deviceKeysSentToServer boolean to CryptoMetadataEntity
-class MigrateCryptoTo011(realm: DynamicRealm) : RealmMigrator(realm, 11) {
+internal class MigrateCryptoTo011(realm: DynamicRealm) : RealmMigrator(realm, 11) {
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.get("CryptoMetadataEntity")

@@ -37,10 +37,11 @@ import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.utils.PERMISSIONS_EMPTY
-import im.vector.app.core.utils.PERMISSIONS_FOR_LOCATION_SHARING
+import im.vector.app.core.utils.PERMISSIONS_FOR_FOREGROUND_LOCATION_SHARING
 import im.vector.app.core.utils.PERMISSIONS_FOR_PICKING_CONTACT
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.app.databinding.ViewAttachmentTypeSelectorBinding
+import im.vector.app.features.attachments.AttachmentTypeSelectorView.Callback
 import kotlin.math.max
 
 private const val ANIMATION_DURATION = 250
@@ -139,22 +140,26 @@ class AttachmentTypeSelectorView(context: Context,
 
     private fun animateWindowInCircular(anchor: View, contentView: View) {
         val coordinates = getClickCoordinates(anchor, contentView)
-        val animator = ViewAnimationUtils.createCircularReveal(contentView,
+        val animator = ViewAnimationUtils.createCircularReveal(
+                contentView,
                 coordinates.first,
                 coordinates.second,
                 0f,
-                max(contentView.width, contentView.height).toFloat())
+                max(contentView.width, contentView.height).toFloat()
+        )
         animator.duration = ANIMATION_DURATION.toLong()
         animator.start()
     }
 
     private fun animateWindowOutCircular(anchor: View, contentView: View) {
         val coordinates = getClickCoordinates(anchor, contentView)
-        val animator = ViewAnimationUtils.createCircularReveal(getContentView(),
+        val animator = ViewAnimationUtils.createCircularReveal(
+                getContentView(),
                 coordinates.first,
                 coordinates.second,
                 max(getContentView().width, getContentView().height).toFloat(),
-                0f)
+                0f
+        )
 
         animator.duration = ANIMATION_DURATION.toLong()
         animator.addListener(object : AnimatorListenerAdapter() {
@@ -215,6 +220,6 @@ class AttachmentTypeSelectorView(context: Context,
         STICKER(PERMISSIONS_EMPTY, R.string.tooltip_attachment_sticker),
         CONTACT(PERMISSIONS_FOR_PICKING_CONTACT, R.string.tooltip_attachment_contact),
         POLL(PERMISSIONS_EMPTY, R.string.tooltip_attachment_poll),
-        LOCATION(PERMISSIONS_FOR_LOCATION_SHARING, R.string.tooltip_attachment_location)
+        LOCATION(PERMISSIONS_FOR_FOREGROUND_LOCATION_SHARING, R.string.tooltip_attachment_location)
     }
 }

@@ -1,1 +1,0 @@
-Log the `since` token used and `next_batch` token returned when doing an incremental sync.

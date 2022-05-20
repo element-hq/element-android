@@ -58,6 +58,9 @@ items = [
     # Need token , ["Capability", baseUrl + "_matrix/client/r0/capabilities", True]
     # Need token , ["Media config", baseUrl + "_matrix/media/r0/config", True]
     # Need token , ["Turn", baseUrl + "_matrix/client/r0/voip/turnServer", True]
+
+    # Only for Synapse
+    , ["Synapse version", baseUrl + "_synapse/admin/v1/server_version", True]
 ]
 
 for item in items:
@@ -65,6 +68,6 @@ for item in items:
     print("# " + item[0] + " (" + item[1] + ")")
     print("====================================================================================================")
     if item[2]:
-        os.system("curl -s -X GET '" + item[1] + "' | python -m json.tool")
+        os.system("curl -s -X GET '" + item[1] + "' | python3 -m json.tool")
     else:
-        os.system("curl -s -X POST --data $'{}' '" + item[1] + "' | python -m json.tool")
+        os.system("curl -s -X POST --data $'{}' '" + item[1] + "' | python3 -m json.tool")

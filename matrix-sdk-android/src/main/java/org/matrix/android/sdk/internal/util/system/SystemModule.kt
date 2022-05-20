@@ -18,10 +18,15 @@ package org.matrix.android.sdk.internal.util.system
 
 import dagger.Binds
 import dagger.Module
+import org.matrix.android.sdk.internal.util.time.Clock
+import org.matrix.android.sdk.internal.util.time.DefaultClock
 
 @Module
 internal abstract class SystemModule {
 
     @Binds
     abstract fun bindBuildVersionSdkIntProvider(provider: DefaultBuildVersionSdkIntProvider): BuildVersionSdkIntProvider
+
+    @Binds
+    abstract fun bindClock(clock: DefaultClock): Clock
 }

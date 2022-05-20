@@ -29,7 +29,6 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.databinding.FragmentReviewTermsBinding
@@ -70,7 +69,7 @@ class ReviewTermsFragment @Inject constructor(
                 ReviewTermsViewEvents.Success    -> {
                     // Handled by the Activity
                 }
-            }.exhaustive
+            }
         }
 
         reviewTermsViewModel.handle(ReviewTermsAction.LoadTerms(getString(R.string.resources_language)))

@@ -36,9 +36,10 @@ import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityRoomDetailBinding
 import im.vector.app.features.analytics.plan.MobileScreen
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.home.room.breadcrumbs.BreadcrumbsFragment
 import im.vector.app.features.home.room.detail.arguments.TimelineArgs
-import im.vector.app.features.home.room.detail.timeline.helper.VoiceMessagePlaybackTracker
+import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.room.RequireActiveMembershipAction
@@ -75,7 +76,7 @@ class RoomDetailActivity :
     }
 
     private var lastKnownPlayingOrRecordingState: Boolean? = null
-    private val playbackActivityListener = VoiceMessagePlaybackTracker.ActivityListener { isPlayingOrRecording ->
+    private val playbackActivityListener = AudioMessagePlaybackTracker.ActivityListener { isPlayingOrRecording ->
         if (lastKnownPlayingOrRecordingState == isPlayingOrRecording) return@ActivityListener
         when (isPlayingOrRecording) {
             true  -> keepScreenOn()
@@ -86,7 +87,7 @@ class RoomDetailActivity :
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
 
-    @Inject lateinit var playbackTracker: VoiceMessagePlaybackTracker
+    @Inject lateinit var playbackTracker: AudioMessagePlaybackTracker
     private lateinit var sharedActionViewModel: RoomDetailSharedActionViewModel
     private val requireActiveMembershipViewModel: RequireActiveMembershipViewModel by viewModel()
 
@@ -152,7 +153,7 @@ class RoomDetailActivity :
     override fun onDestroy() {
         supportFragmentManager.unregisterFragmentLifecycleCallbacks(fragmentLifecycleCallbacks)
         views.drawerLayout.removeDrawerListener(drawerListener)
-        playbackTracker.unTrackActivity(playbackActivityListener)
+        playbackTracker.untrackActivity(playbackActivityListener)
         super.onDestroy()
     }
 
@@ -205,8 +206,8 @@ class RoomDetailActivity :
         }
     }
 
-    override fun mxToBottomSheetNavigateToRoom(roomId: String) {
-        navigator.openRoom(this, roomId)
+    override fun mxToBottomSheetNavigateToRoom(roomId: String, trigger: ViewRoom.Trigger?) {
+        navigator.openRoom(this, roomId, trigger = trigger)
     }
 
     override fun mxToBottomSheetSwitchToSpace(spaceId: String) {

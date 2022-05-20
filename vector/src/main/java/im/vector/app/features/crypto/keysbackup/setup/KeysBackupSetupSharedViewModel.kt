@@ -23,19 +23,23 @@ import androidx.lifecycle.viewModelScope
 import com.nulabinc.zxcvbn.Strength
 import im.vector.app.R
 import im.vector.app.core.platform.WaitingViewData
+import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.LiveEvent
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupService
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersion
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersion
+import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
+import org.matrix.android.sdk.api.session.crypto.keysbackup.toKeysVersionResult
 import timber.log.Timber
 import javax.inject.Inject
 
 /**
  * The shared view model between all fragments.
  */
-class KeysBackupSetupSharedViewModel @Inject constructor() : ViewModel() {
+class KeysBackupSetupSharedViewModel @Inject constructor(
+        private val clock: Clock,
+) : ViewModel() {
 
     companion object {
         const val NAVIGATE_TO_STEP_2 = "NAVIGATE_TO_STEP_2"
@@ -83,7 +87,7 @@ class KeysBackupSetupSharedViewModel @Inject constructor() : ViewModel() {
 
     fun prepareRecoveryKey(context: Context, withPassphrase: String?) {
         // Update requestId
-        currentRequestId.value = System.currentTimeMillis()
+        currentRequestId.value = clock.epochMillis()
         isCreatingBackupVersion.value = true
 
         recoveryKey.value = null
@@ -135,7 +139,7 @@ class KeysBackupSetupSharedViewModel @Inject constructor() : ViewModel() {
 
         viewModelScope.launch {
             try {
-                val data = keysBackup.getCurrentVersion()
+                val data = keysBackup.getCurrentVersion()?.toKeysVersionResult()
                 if (data?.version.isNullOrBlank() || forceOverride) {
                     processOnCreate(keysBackup)
                 } else {

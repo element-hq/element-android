@@ -29,7 +29,6 @@ import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.error.ErrorFormatter
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
@@ -192,7 +191,7 @@ class CreateSpaceViewModel @AssistedInject constructor(
             is CreateSpaceAction.SetSpaceTopology         -> {
                 handleSetTopology(action)
             }
-        }.exhaustive
+        }
     }
 
     private fun handleSetTopology(action: CreateSpaceAction.SetSpaceTopology) {
@@ -316,7 +315,7 @@ class CreateSpaceViewModel @AssistedInject constructor(
                 }
                 viewModelScope.launch {
                     try {
-                        when (val result = session.checkAliasAvailability(aliasLocalPart)) {
+                        when (val result = session.roomDirectoryService().checkAliasAvailability(aliasLocalPart)) {
                             AliasAvailabilityResult.Available       -> {
                                 setState {
                                     copy(
@@ -374,7 +373,7 @@ class CreateSpaceViewModel @AssistedInject constructor(
                         )
                 )
                 when (result) {
-                    is  CreateSpaceTaskResult.Success             -> {
+                    is CreateSpaceTaskResult.Success             -> {
                         setState {
                             copy(creationResult = Success(result.spaceId))
                         }

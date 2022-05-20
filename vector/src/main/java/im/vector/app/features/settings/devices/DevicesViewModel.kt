@@ -50,14 +50,14 @@ import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
+import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
+import org.matrix.android.sdk.api.util.fromBase64
 import org.matrix.android.sdk.flow.flow
-import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
-import org.matrix.android.sdk.internal.crypto.model.rest.DefaultBaseAuth
-import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import timber.log.Timber
 import javax.net.ssl.HttpsURLConnection
 import kotlin.coroutines.Continuation
@@ -220,7 +220,8 @@ class DevicesViewModel @AssistedInject constructor(
                 Unit
             }
             is DevicesAction.PasswordAuthDone       -> {
-                val decryptedPass = session.loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
+                val decryptedPass = session.secureStorageService()
+                        .loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
                 uiaContinuation?.resume(
                         UserPasswordAuth(
                                 session = pendingAuth?.session,
@@ -245,10 +246,12 @@ class DevicesViewModel @AssistedInject constructor(
             val txID = session.cryptoService()
                     .verificationService()
                     .beginDeviceVerification(session.myUserId, action.deviceId)
-            _viewEvents.post(DevicesViewEvents.ShowVerifyDevice(
-                    session.myUserId,
-                    txID
-            ))
+            _viewEvents.post(
+                    DevicesViewEvents.ShowVerifyDevice(
+                            session.myUserId,
+                            txID
+                    )
+            )
         }
     }
 
@@ -273,7 +276,8 @@ class DevicesViewModel @AssistedInject constructor(
                 // legacy
                 session.cryptoService().verificationService().markedLocallyAsManuallyVerified(
                         action.cryptoDeviceInfo.userId,
-                        action.cryptoDeviceInfo.deviceId)
+                        action.cryptoDeviceInfo.deviceId
+                )
             }
         }
     }

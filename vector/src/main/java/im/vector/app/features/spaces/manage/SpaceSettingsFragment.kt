@@ -34,12 +34,11 @@ import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.intent.getFilenameFromUri
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
-import im.vector.app.core.resources.DrawableProvider
+import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.FragmentRoomSettingGenericBinding
 import im.vector.app.features.home.AvatarRenderer
@@ -61,9 +60,9 @@ import javax.inject.Inject
 
 class SpaceSettingsFragment @Inject constructor(
         private val epoxyController: SpaceSettingsController,
-        private val colorProvider: ColorProvider,
+        colorProvider: ColorProvider,
+        clock: Clock,
         private val avatarRenderer: AvatarRenderer,
-        private val drawableProvider: DrawableProvider
 ) : VectorBaseFragment<FragmentRoomSettingGenericBinding>(),
         SpaceSettingsController.Callback,
         GalleryOrCameraDialogHelper.Listener,
@@ -74,7 +73,7 @@ class SpaceSettingsFragment @Inject constructor(
 
     private lateinit var roomJoinRuleSharedActionViewModel: RoomJoinRuleSharedActionViewModel
 
-    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider)
+    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider, clock)
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentRoomSettingGenericBinding.inflate(inflater)
 
@@ -97,12 +96,12 @@ class SpaceSettingsFragment @Inject constructor(
         viewModel.observeViewEvents {
             when (it) {
                 is RoomSettingsViewEvents.Failure -> showFailure(it.throwable)
-                RoomSettingsViewEvents.Success -> showSuccess()
-                RoomSettingsViewEvents.GoBack -> {
+                RoomSettingsViewEvents.Success    -> showSuccess()
+                RoomSettingsViewEvents.GoBack     -> {
                     ignoreChanges = true
                     vectorBaseActivity.onBackPressed()
                 }
-            }.exhaustive
+            }
         }
     }
 
@@ -237,7 +236,8 @@ class SpaceSettingsFragment @Inject constructor(
                 RoomSettingsAction.SetAvatarAction(
                         RoomSettingsViewState.AvatarAction.UpdateAvatar(
                                 newAvatarUri = uri,
-                                newAvatarFileName = getFilenameFromUri(requireContext(), uri) ?: UUID.randomUUID().toString())
+                                newAvatarFileName = getFilenameFromUri(requireContext(), uri) ?: UUID.randomUUID().toString()
+                        )
                 )
         )
     }
@@ -245,10 +245,10 @@ class SpaceSettingsFragment @Inject constructor(
     override fun onAvatarDelete() {
         withState(viewModel) {
             when (it.avatarAction) {
-                RoomSettingsViewState.AvatarAction.None -> {
+                RoomSettingsViewState.AvatarAction.None            -> {
                     viewModel.handle(RoomSettingsAction.SetAvatarAction(RoomSettingsViewState.AvatarAction.DeleteAvatar))
                 }
-                RoomSettingsViewState.AvatarAction.DeleteAvatar -> {
+                RoomSettingsViewState.AvatarAction.DeleteAvatar    -> {
                     /* Should not happen */
                 }
                 is RoomSettingsViewState.AvatarAction.UpdateAvatar -> {

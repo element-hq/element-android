@@ -18,6 +18,8 @@ The generated maven repository is then host in the project https://github.com/ve
 
 Update the script `./tools/jitsi/build_jisti_libs.sh` with the tag of the project `https://github.com/jitsi/jitsi-meet`.
 
+Latest tag can be found from this page: https://github.com/jitsi/jitsi-meet-release-notes/blob/master/CHANGELOG-MOBILE-SDKS.md
+
 Currently we are building the version with the tag `android-sdk-3.10.0`.
 
 ### Run the build script

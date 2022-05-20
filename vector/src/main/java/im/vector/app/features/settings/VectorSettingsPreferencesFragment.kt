@@ -18,8 +18,10 @@ package im.vector.app.features.settings
 
 import android.app.Activity
 import android.content.Context
+import android.os.Bundle
 import android.widget.CheckedTextView
 import androidx.core.view.children
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.BuildConfig
@@ -32,8 +34,11 @@ import im.vector.app.core.preference.VectorSwitchPreference
 import im.vector.app.databinding.DialogSelectTextSizeBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.configuration.VectorConfiguration
 import im.vector.app.features.themes.ThemeUtils
+import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.session.presence.model.PresenceEnum
 import javax.inject.Inject
 
 class VectorSettingsPreferencesFragment @Inject constructor(
@@ -54,6 +59,11 @@ class VectorSettingsPreferencesFragment @Inject constructor(
         findPreference<VectorPreference>("SETTINGS_INTERFACE_TAKE_PHOTO_VIDEO")!!
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        analyticsScreenName = MobileScreen.ScreenName.SettingsPreferences
+    }
+
     override fun bindPref() {
         // user interface preferences
         setUserInterfacePreferences()
@@ -68,6 +78,17 @@ class VectorSettingsPreferencesFragment @Inject constructor(
                 true
             } else {
                 false
+            }
+        }
+
+        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_PRESENCE_USER_ALWAYS_APPEARS_OFFLINE)!!.let { pref ->
+            pref.isChecked = vectorPreferences.userAlwaysAppearsOffline()
+            pref.setOnPreferenceChangeListener { _, newValue ->
+                val presenceOfflineModeEnabled = newValue as? Boolean ?: false
+                lifecycleScope.launch {
+                    session.presenceService().setMyPresence(if (presenceOfflineModeEnabled) PresenceEnum.OFFLINE else PresenceEnum.ONLINE)
+                }
+                true
             }
         }
 
@@ -117,7 +138,7 @@ class VectorSettingsPreferencesFragment @Inject constructor(
                 false
             }
         }
-        */
+         */
 
         // update keep medias period
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_MEDIA_SAVING_PERIOD_KEY)!!.let {
@@ -126,8 +147,10 @@ class VectorSettingsPreferencesFragment @Inject constructor(
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 context?.let { context: Context ->
                     MaterialAlertDialogBuilder(context)
-                            .setSingleChoiceItems(R.array.media_saving_choice,
-                                    vectorPreferences.getSelectedMediasSavingPeriod()) { d, n ->
+                            .setSingleChoiceItems(
+                                    R.array.media_saving_choice,
+                                    vectorPreferences.getSelectedMediasSavingPeriod()
+                            ) { d, n ->
                                 vectorPreferences.setSelectedMediasSavingPeriod(n)
                                 d.cancel()
 

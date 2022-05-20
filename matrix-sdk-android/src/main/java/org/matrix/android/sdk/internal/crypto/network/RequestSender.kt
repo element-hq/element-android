@@ -22,15 +22,18 @@ import dagger.Lazy
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupLastVersionResult
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersion
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersionResult
+import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.uia.UiaResult
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.auth.registration.handleUIA
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.BackupKeysResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.CreateKeysBackupVersionBody
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysBackupData
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersion
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.RoomKeysBackupData
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.UpdateKeysBackupVersionBody
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.CreateKeysBackupVersionTask
@@ -42,7 +45,6 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.GetRoomSessionsDa
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.GetSessionsDataTask
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.StoreSessionsDataTask
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.UpdateKeysBackupVersionTask
-import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysClaimResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysQueryResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysUploadResponse
@@ -83,7 +85,7 @@ internal class RequestSender @Inject constructor(
         private val getSessionsDataTask: GetSessionsDataTask,
         private val getRoomSessionsDataTask: GetRoomSessionsDataTask,
         private val getRoomSessionDataTask: GetRoomSessionDataTask,
-        private val moshi: Moshi
+        private val moshi: Moshi,
 ) {
     companion object {
         const val REQUEST_RETRY_COUNT = 3
@@ -177,7 +179,7 @@ internal class RequestSender @Inject constructor(
             uploadSigningKeysTask.execute(uploadSigningKeysParams)
         } catch (failure: Throwable) {
             if (interactiveAuthInterceptor == null ||
-                    !handleUIA(
+                    handleUIA(
                             failure = failure,
                             interceptor = interactiveAuthInterceptor,
                             retryBlock = { authUpdate ->
@@ -186,7 +188,7 @@ internal class RequestSender @Inject constructor(
                                         REQUEST_RETRY_COUNT
                                 )
                             }
-                    )
+                    ) != UiaResult.SUCCESS
             ) {
                 Timber.d("## UIA: propagate failure")
                 throw failure
@@ -217,13 +219,17 @@ internal class RequestSender @Inject constructor(
         sendToDeviceTask.executeRetry(sendToDeviceParams, REQUEST_RETRY_COUNT)
     }
 
-    suspend fun getKeyBackupVersion(version: String? = null): KeysVersionResult? {
+    suspend fun getKeyBackupVersion(version: String): KeysVersionResult? = getKeyBackupVersion {
+        getKeysBackupVersionTask.executeRetry(version, 3)
+    }
+
+    suspend fun getKeyBackupLastVersion(): KeysBackupLastVersionResult? = getKeyBackupVersion {
+        getKeysBackupLastVersionTask.executeRetry(Unit, 3)
+    }
+
+    private inline fun <reified T> getKeyBackupVersion(block: ()-> T?): T?{
         return try {
-            if (version != null) {
-                getKeysBackupVersionTask.executeRetry(version, 3)
-            } else {
-                getKeysBackupLastVersionTask.executeRetry(Unit, 3)
-            }
+            block()
         } catch (failure: Throwable) {
             if (failure is Failure.ServerError &&
                     failure.error.code == MatrixError.M_NOT_FOUND) {

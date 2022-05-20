@@ -32,14 +32,16 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
 import org.matrix.android.sdk.api.listeners.StepProgressListener
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupStateListener
+import org.matrix.android.sdk.api.session.crypto.keysbackup.toKeysVersionResult
+import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestHelper
 import org.matrix.android.sdk.common.TestConstants
-import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
-import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
 import java.util.concurrent.CountDownLatch
 
 @RunWith(AndroidJUnit4::class)
@@ -399,7 +401,7 @@ class KeysBackupTest : InstrumentedTest {
 
         // - Retrieve the last version from the server
         val keysVersionResult = testHelper.runBlockingTest {
-            testData.aliceSession2.cryptoService().keysBackupService().getCurrentVersion()
+            testData.aliceSession2.cryptoService().keysBackupService().getCurrentVersion()?.toKeysVersionResult()
         }
 
         // - It must be the same
@@ -458,7 +460,7 @@ class KeysBackupTest : InstrumentedTest {
 
         // - Retrieve the last version from the server
         val keysVersionResult = testHelper.runBlockingTest {
-            testData.aliceSession2.cryptoService().keysBackupService().getCurrentVersion()
+            testData.aliceSession2.cryptoService().keysBackupService().getCurrentVersion()?.toKeysVersionResult()
         }
 
         // - It must be the same
@@ -562,7 +564,7 @@ class KeysBackupTest : InstrumentedTest {
 
         // - Retrieve the last version from the server
         val keysVersionResult = testHelper.runBlockingTest {
-            testData.aliceSession2.cryptoService().keysBackupService().getCurrentVersion()
+            testData.aliceSession2.cryptoService().keysBackupService().getCurrentVersion()?.toKeysVersionResult()
         }
 
         // - It must be the same
@@ -825,7 +827,7 @@ class KeysBackupTest : InstrumentedTest {
 
         // Get key backup version from the homeserver
         val keysVersionResult = testHelper.runBlockingTest {
-            keysBackup.getCurrentVersion()
+            keysBackup.getCurrentVersion()?.toKeysVersionResult()
         }
 
         // - Check the returned KeyBackupVersion is trusted

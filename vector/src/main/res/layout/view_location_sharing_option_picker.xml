@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+
+    <im.vector.app.features.location.option.LocationSharingOptionView
+        android:id="@+id/locationSharingOptionPinned"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/locationSharingOptionUserCurrent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:locShareIcon="@drawable/ic_attachment_location_white"
+        app:locShareIconBackground="@drawable/circle"
+        app:locShareIconBackgroundTint="?colorPrimary"
+        app:locShareIconDescription="@string/a11y_location_share_option_pinned_icon"
+        app:locShareIconPadding="11dp"
+        app:locShareTitle="@string/location_share_option_pinned" />
+
+    <View
+        android:id="@+id/locationSharingOptionsDivider1"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:alpha="0.15"
+        android:background="?vctr_content_secondary"
+        app:layout_constraintBottom_toTopOf="@id/locationSharingOptionUserCurrent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/locationSharingOptionPinned" />
+
+    <im.vector.app.features.location.option.LocationSharingOptionView
+        android:id="@+id/locationSharingOptionUserCurrent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/locationSharingOptionUserLive"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/locationSharingOptionPinned"
+        app:locShareIconBackground="@drawable/circle"
+        app:locShareIconBackgroundTint="?colorPrimary"
+        app:locShareIconDescription="@string/a11y_location_share_option_user_current_icon"
+        app:locShareIconPadding="3dp"
+        app:locShareTitle="@string/location_share_option_user_current" />
+
+    <View
+        android:id="@+id/locationSharingOptionsDivider2"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:alpha="0.15"
+        android:background="?vctr_content_secondary"
+        app:layout_constraintBottom_toTopOf="@id/locationSharingOptionUserLive"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/locationSharingOptionUserCurrent" />
+
+    <im.vector.app.features.location.option.LocationSharingOptionView
+        android:id="@+id/locationSharingOptionUserLive"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/locationSharingOptionUserCurrent"
+        app:locShareIcon="@drawable/ic_attachment_location_live_white"
+        app:locShareIconBackground="@drawable/circle"
+        app:locShareIconBackgroundTint="?vctr_live_location"
+        app:locShareIconDescription="@string/a11y_location_share_option_user_live_icon"
+        app:locShareIconPadding="3dp"
+        app:locShareTitle="@string/location_share_option_user_live" />
+
+</merge>

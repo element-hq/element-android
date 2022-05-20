@@ -28,7 +28,7 @@ import im.vector.app.core.ui.views.toDrawableRes
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import org.matrix.android.sdk.api.extensions.orFalse
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -99,9 +99,10 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
                     style(ItemStyle.BIG_TEXT)
                     titleIconResourceId(shield)
                     title(host.stringProvider.getString(R.string.crosssigning_verify_this_session).toEpoxyCharSequence())
-                    description(host.stringProvider
-                            .getString(if (data.hasOtherSessions) R.string.confirm_your_identity else R.string.confirm_your_identity_quad_s)
-                            .toEpoxyCharSequence()
+                    description(
+                            host.stringProvider
+                                    .getString(if (data.hasOtherSessions) R.string.confirm_your_identity else R.string.confirm_your_identity_quad_s)
+                                    .toEpoxyCharSequence()
                     )
                 }
             }

@@ -16,9 +16,9 @@
 
 package org.matrix.android.sdk.internal.session.directory
 
+import org.matrix.android.sdk.api.session.room.alias.RoomAliasDescription
 import org.matrix.android.sdk.internal.network.NetworkConstants
 import org.matrix.android.sdk.internal.session.room.alias.AddRoomAliasBody
-import org.matrix.android.sdk.internal.session.room.alias.RoomAliasDescription
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET

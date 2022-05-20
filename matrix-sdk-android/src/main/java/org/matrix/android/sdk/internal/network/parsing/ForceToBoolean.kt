@@ -25,7 +25,7 @@ import timber.log.Timber
 @JsonQualifier
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.FIELD, AnnotationTarget.VALUE_PARAMETER, AnnotationTarget.FUNCTION)
-annotation class ForceToBoolean
+internal annotation class ForceToBoolean
 
 internal class ForceToBooleanJsonAdapter {
     @ToJson

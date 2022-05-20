@@ -26,7 +26,6 @@ import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.showIdentityServerConsentDialog
@@ -73,7 +72,7 @@ class ContactsBookFragment @Inject constructor(
             when (it) {
                 is ContactsBookViewEvents.Failure             -> showFailure(it.throwable)
                 is ContactsBookViewEvents.OnPoliciesRetrieved -> showConsentDialog(it)
-            }.exhaustive
+            }
         }
     }
 

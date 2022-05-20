@@ -131,7 +131,9 @@ class RoomMemberListController @Inject constructor(
             clickListener {
                 host.callback?.onRoomMemberClicked(roomMember)
             }
+            showPresence(true)
             userPresence(roomMember.userPresence)
+            ignoredUser(roomMember.userId in data.ignoredUserIds)
             powerLevelLabel(
                     span {
                         span(powerLabel) {

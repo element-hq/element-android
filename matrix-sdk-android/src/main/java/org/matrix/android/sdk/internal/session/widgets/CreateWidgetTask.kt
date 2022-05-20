@@ -29,9 +29,10 @@ import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.task.Task
+import timber.log.Timber
 import javax.inject.Inject
 
-internal interface CreateWidgetTask : Task<CreateWidgetTask.Params, Unit> {
+internal interface CreateWidgetTask : Task<CreateWidgetTask.Params, String> {
 
     data class Params(
             val roomId: String,
@@ -45,8 +46,8 @@ internal class DefaultCreateWidgetTask @Inject constructor(@SessionDatabase priv
                                                            @UserId private val userId: String,
                                                            private val globalErrorReceiver: GlobalErrorReceiver) : CreateWidgetTask {
 
-    override suspend fun execute(params: CreateWidgetTask.Params) {
-        executeRequest(globalErrorReceiver) {
+    override suspend fun execute(params: CreateWidgetTask.Params): String {
+        val response = executeRequest(globalErrorReceiver) {
             roomAPI.sendStateEvent(
                     roomId = params.roomId,
                     stateEventType = EventType.STATE_ROOM_WIDGET_LEGACY,
@@ -59,6 +60,9 @@ internal class DefaultCreateWidgetTask @Inject constructor(@SessionDatabase priv
                     .whereStateKey(it, params.roomId, type = EventType.STATE_ROOM_WIDGET_LEGACY, stateKey = params.widgetId)
                     .and()
                     .equalTo(CurrentStateEventEntityFields.ROOT.SENDER, userId)
+        }
+        return response.eventId.also {
+            Timber.d("Widget state event: $it just sent in room ${params.roomId}")
         }
     }
 }

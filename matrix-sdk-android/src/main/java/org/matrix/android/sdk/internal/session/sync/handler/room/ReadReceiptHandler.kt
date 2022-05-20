@@ -33,7 +33,7 @@ import javax.inject.Inject
 // value : dict key $UserId
 //              value dict key ts
 //                    dict value ts value
-typealias ReadReceiptContent = Map<String, Map<String, Map<String, Map<String, Double>>>>
+internal typealias ReadReceiptContent = Map<String, Map<String, Map<String, Map<String, Double>>>>
 
 private const val READ_KEY = "m.read"
 private const val TIMESTAMP_KEY = "ts"
@@ -44,12 +44,14 @@ internal class ReadReceiptHandler @Inject constructor(
 
     companion object {
 
-        fun createContent(userId: String, eventId: String): ReadReceiptContent {
+        fun createContent(userId: String,
+                          eventId: String,
+                          currentTimeMillis: Long): ReadReceiptContent {
             return mapOf(
                     eventId to mapOf(
                             READ_KEY to mapOf(
                                     userId to mapOf(
-                                            TIMESTAMP_KEY to System.currentTimeMillis().toDouble()
+                                            TIMESTAMP_KEY to currentTimeMillis.toDouble()
                                     )
                             )
                     )

@@ -13,7 +13,6 @@
     <bool name="settings_root_notification_visible">true</bool>
     <bool name="settings_root_preferences_visible">true</bool>
     <bool name="settings_root_voice_video_visible">true</bool>
-    <bool name="settings_root_ignored_users_visible">true</bool>
     <bool name="settings_root_security_privacy_visible">true</bool>
     <bool name="settings_root_labs_visible">true</bool>
     <bool name="settings_root_advanced_visible">true</bool>
@@ -28,16 +27,19 @@
 
     <bool name="settings_interface_bubble_visible">true</bool>
     <bool name="settings_interface_bubble_default">false</bool>
+    <bool name="settings_presence_visible">false</bool>
+    <bool name="settings_presence_user_always_appears_offline_default">false</bool>
 
     <!-- Level 1: Voice and video -->
 
-    <!-- Level 1: Ignored Users -->
-
     <!-- Level 1: Security and Privacy -->
 
-    <!-- Level 1: Labs -->
+    <bool name="settings_ignored_users_visible">true</bool>
 
-    <!-- Level 1: Advcanced settings -->
+    <!-- Level 1: Labs -->
+    <bool name="settings_labs_thread_messages_default">false</bool>
+
+    <!-- Level 1: Advanced settings -->
 
     <!-- Level 1: Help and about -->
 

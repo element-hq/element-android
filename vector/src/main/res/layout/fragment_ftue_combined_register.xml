@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/LoginFormScrollView"
+    android:layout_height="match_parent"
+    android:background="?android:colorBackground"
+    android:fillViewport="true"
+    android:paddingTop="0dp"
+    android:paddingBottom="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/createAccountRoot"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/createAccountGutterStart"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="@dimen/ftue_auth_gutter_start_percent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/createAccountGutterEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="@dimen/ftue_auth_gutter_end_percent" />
+
+        <Space
+            android:id="@+id/headerSpacing"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            app:layout_constraintBottom_toTopOf="@id/createAccountHeaderIcon"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <ImageView
+            android:id="@+id/createAccountHeaderIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:adjustViewBounds="true"
+            android:background="@drawable/circle"
+            android:backgroundTint="?colorSecondary"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_user_fg"
+            app:layout_constraintBottom_toTopOf="@id/createAccountHeaderTitle"
+            app:layout_constraintEnd_toEndOf="@id/createAccountGutterEnd"
+            app:layout_constraintHeight_percent="0.10"
+            app:layout_constraintStart_toStartOf="@id/createAccountGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/headerSpacing"
+            app:tint="@color/palette_white" />
+
+        <TextView
+            android:id="@+id/createAccountHeaderTitle"
+            style="@style/Widget.Vector.TextView.Title.Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="@string/ftue_auth_create_account_title"
+            android:textColor="?vctr_content_primary"
+            app:layout_constraintBottom_toTopOf="@id/createAccountHeaderSubtitle"
+            app:layout_constraintEnd_toEndOf="@id/createAccountGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/createAccountGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/createAccountHeaderIcon" />
+
+        <TextView
+            android:id="@+id/createAccountHeaderSubtitle"
+            style="@style/Widget.Vector.TextView.Subtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="@string/ftue_auth_create_account_subtitle"
+            android:textColor="?vctr_content_secondary"
+            app:layout_constraintBottom_toTopOf="@id/titleContentSpacing"
+            app:layout_constraintEnd_toEndOf="@id/createAccountGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/createAccountGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/createAccountHeaderTitle" />
+
+        <Space
+            android:id="@+id/titleContentSpacing"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/chooseYourServerHeader"
+            app:layout_constraintHeight_percent="0.03"
+            app:layout_constraintTop_toBottomOf="@id/createAccountHeaderSubtitle" />
+
+        <TextView
+            android:id="@+id/chooseYourServerHeader"
+            style="@style/Widget.Vector.TextView.Caption"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="4dp"
+            android:text="@string/ftue_auth_create_account_choose_server_header"
+            android:textColor="?vctr_content_secondary"
+            app:layout_constraintBottom_toTopOf="@id/selectedServerName"
+            app:layout_constraintEnd_toStartOf="@id/editServerButton"
+            app:layout_constraintStart_toStartOf="@id/createAccountGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/titleContentSpacing" />
+
+        <TextView
+            android:id="@+id/selectedServerName"
+            style="@style/Widget.Vector.TextView.Subtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:textColor="?vctr_content_primary"
+            app:layout_constraintBottom_toTopOf="@id/selectedServerDescription"
+            app:layout_constraintEnd_toStartOf="@id/editServerButton"
+            app:layout_constraintStart_toStartOf="@id/createAccountGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/chooseYourServerHeader" />
+
+        <TextView
+            android:id="@+id/selectedServerDescription"
+            style="@style/Widget.Vector.TextView.Micro"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:textColor="?vctr_content_tertiary"
+            app:layout_constraintBottom_toTopOf="@id/serverSelectionSpacing"
+            app:layout_constraintEnd_toStartOf="@id/editServerButton"
+            app:layout_constraintStart_toStartOf="@id/createAccountGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/selectedServerName" />
+
+        <Button
+            android:id="@+id/editServerButton"
+            style="@style/Widget.Vector.Button.Outlined"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="0dp"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:text="@string/ftue_auth_create_account_edit_server_selection"
+            android:textAllCaps="true"
+            app:layout_constraintBottom_toBottomOf="@id/selectedServerDescription"
+            app:layout_constraintEnd_toEndOf="@id/createAccountGutterEnd"
+            app:layout_constraintTop_toTopOf="@id/chooseYourServerHeader" />
+
+        <Space
+            android:id="@+id/serverSelectionSpacing"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/createAccountInput"
+            app:layout_constraintHeight_percent="0.05"
+            app:layout_constraintTop_toBottomOf="@id/selectedServerDescription" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="?vctr_content_quaternary"
+            app:layout_constraintBottom_toBottomOf="@id/serverSelectionSpacing"
+            app:layout_constraintEnd_toEndOf="@id/createAccountGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/createAccountGutterStart"
+            app:layout_constraintTop_toTopOf="@id/serverSelectionSpacing" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/createAccountInput"
+            style="@style/Widget.Vector.TextInputLayout.Username"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/username"
+            app:layout_constraintBottom_toTopOf="@id/createAccountEntryFooter"
+            app:layout_constraintEnd_toEndOf="@id/createAccountGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/createAccountGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/serverSelectionSpacing">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:imeOptions="actionNext"
+                android:nextFocusForward="@id/createAccountPasswordInput"
+                android:inputType="text"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/createAccountEntryFooter"
+            style="@style/Widget.Vector.TextView.Micro"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/ftue_auth_create_account_username_entry_footer"
+            app:layout_constraintBottom_toTopOf="@id/entrySpacing"
+            app:layout_constraintEnd_toEndOf="@id/createAccountGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/createAccountGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/createAccountInput" />
+
+        <Space
+            android:id="@+id/entrySpacing"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/createAccountPasswordInput"
+            app:layout_constraintHeight_percent="0.03"
+            app:layout_constraintTop_toBottomOf="@id/createAccountEntryFooter" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/createAccountPasswordInput"
+            style="@style/Widget.Vector.TextInputLayout.Password"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/login_signup_password_hint"
+            app:layout_constraintBottom_toTopOf="@id/createAccountPasswordEntryFooter"
+            app:layout_constraintEnd_toEndOf="@id/createAccountGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/createAccountGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/entrySpacing">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/createAccountPasswordEntryFooter"
+            style="@style/Widget.Vector.TextView.Micro"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/ftue_auth_create_account_password_entry_footer"
+            app:layout_constraintBottom_toTopOf="@id/actionSpacing"
+            app:layout_constraintEnd_toEndOf="@id/createAccountGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/createAccountGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/createAccountPasswordInput" />
+
+        <Space
+            android:id="@+id/actionSpacing"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/createAccountSubmit"
+            app:layout_constraintHeight_percent="0.02"
+            app:layout_constraintTop_toBottomOf="@id/createAccountPasswordEntryFooter" />
+
+        <Button
+            android:id="@+id/createAccountSubmit"
+            style="@style/Widget.Vector.Button.Login"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/login_signup_submit"
+            android:textAllCaps="true"
+            app:layout_constraintBottom_toTopOf="@id/ssoButtonsHeader"
+            app:layout_constraintEnd_toEndOf="@id/createAccountGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/createAccountGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/actionSpacing" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/ssoGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:constraint_referenced_ids="ssoButtonsHeader,ssoButtons"
+            app:layout_constraintBottom_toTopOf="@id/ssoButtonsHeader"
+            app:layout_constraintTop_toBottomOf="@id/createAccountSubmit"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/ssoButtonsHeader"
+            style="@style/Widget.Vector.TextView.Subtitle.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/ftue_auth_create_account_sso_section_header"
+            android:textColor="?vctr_content_secondary"
+            app:layout_constraintBottom_toTopOf="@id/ssoButtons"
+            app:layout_constraintEnd_toEndOf="@id/createAccountGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/createAccountGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/createAccountSubmit" />
+
+        <im.vector.app.features.login.SocialLoginButtonsView
+            android:id="@+id/ssoButtons"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/createAccountGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/createAccountGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/ssoButtonsHeader"
+            tools:signMode="signup" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

@@ -116,12 +116,13 @@ class SharedSecureStorageActivity :
             is SharedSecureStorageViewEvent.FinishSuccess        -> {
                 val dataResult = Intent()
                 dataResult.putExtra(EXTRA_DATA_RESULT, it.cypherResult)
-                setResult(Activity.RESULT_OK, dataResult)
+                setResult(RESULT_OK, dataResult)
                 finish()
             }
             is SharedSecureStorageViewEvent.ShowResetBottomSheet -> {
                 navigator.open4SSetup(this, SetupMode.HARD_RESET)
             }
+            else                                                 -> Unit
         }
     }
 
@@ -153,11 +154,13 @@ class SharedSecureStorageActivity :
                       resultKeyStoreAlias: String = DEFAULT_RESULT_KEYSTORE_ALIAS): Intent {
             require(requestedSecrets.isNotEmpty())
             return Intent(context, SharedSecureStorageActivity::class.java).also {
-                it.putExtra(Mavericks.KEY_ARG, Args(
+                it.putExtra(
+                        Mavericks.KEY_ARG, Args(
                         keyId,
                         requestedSecrets,
                         resultKeyStoreAlias
-                ))
+                )
+                )
             }
         }
     }

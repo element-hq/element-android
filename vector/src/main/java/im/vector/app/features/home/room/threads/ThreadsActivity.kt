@@ -26,13 +26,14 @@ import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityThreadsBinding
+import im.vector.app.features.analytics.extensions.toAnalyticsInteraction
+import im.vector.app.features.analytics.plan.Interaction
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.TimelineFragment
 import im.vector.app.features.home.room.detail.arguments.TimelineArgs
 import im.vector.app.features.home.room.threads.arguments.ThreadListArgs
 import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
 import im.vector.app.features.home.room.threads.list.views.ThreadListFragment
-import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -75,7 +76,8 @@ class ThreadsActivity : VectorBaseActivity<ActivityThreadsBinding>() {
         replaceFragment(
                 views.threadsActivityFragmentContainer,
                 ThreadListFragment::class.java,
-                threadListArgs)
+                threadListArgs
+        )
     }
 
     private fun initThreadTimelineFragment(threadTimelineArgs: ThreadTimelineArgs) =
@@ -86,33 +88,29 @@ class ThreadsActivity : VectorBaseActivity<ActivityThreadsBinding>() {
                             roomId = threadTimelineArgs.roomId,
                             eventId = getEventIdToNavigate(),
                             threadTimelineArgs = threadTimelineArgs
-                    ))
+                    )
+            )
 
     /**
      * This function is used to navigate to the selected thread timeline.
      * One usage of that is from the Threads Activity
      */
-    fun navigateToThreadTimeline(
-            timelineEvent: TimelineEvent) {
-        val roomThreadDetailArgs = ThreadTimelineArgs(
-                roomId = timelineEvent.roomId,
-                displayName = timelineEvent.senderInfo.displayName,
-                avatarUrl = timelineEvent.senderInfo.avatarUrl,
-                roomEncryptionTrustLevel = null,
-                rootThreadEventId = timelineEvent.eventId)
+    fun navigateToThreadTimeline(threadTimelineArgs: ThreadTimelineArgs) {
+        analyticsTracker.capture(Interaction.Name.MobileThreadListThreadItem.toAnalyticsInteraction())
         val commonOption: (FragmentTransaction) -> Unit = {
             it.setCustomAnimations(
                     R.anim.animation_slide_in_right,
                     R.anim.animation_slide_out_left,
                     R.anim.animation_slide_in_left,
-                    R.anim.animation_slide_out_right)
+                    R.anim.animation_slide_out_right
+            )
         }
         addFragmentToBackstack(
                 container = views.threadsActivityFragmentContainer,
                 fragmentClass = TimelineFragment::class.java,
                 params = TimelineArgs(
-                        roomId = timelineEvent.roomId,
-                        threadTimelineArgs = roomThreadDetailArgs
+                        roomId = threadTimelineArgs.roomId,
+                        threadTimelineArgs = threadTimelineArgs
                 ),
                 option = commonOption
         )

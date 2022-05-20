@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.crypto.verification
 
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
@@ -81,6 +82,51 @@ class SasVerificationTestHelper(private val testHelper: CommonTestHelper, privat
         testHelper.await(latch)
         bobVerificationService.removeListener(bobListener)
         aliceVerificationService.removeListener(aliceListener)
+        return bobReadyPendingVerificationRequest?.transactionId!!
+    }
+
+    fun requestSelfKeyAndWaitForReadyState(session1: Session, session2: Session, supportedMethods: List<VerificationMethod>): String {
+
+        val session1VerificationService = session1.cryptoService().verificationService()
+        val session2VerificationService = session2.cryptoService().verificationService()
+        var bobReadyPendingVerificationRequest: PendingVerificationRequest? = null
+
+        val latch = CountDownLatch(2)
+        val aliceListener = object : VerificationService.Listener {
+            override fun verificationRequestUpdated(pr: PendingVerificationRequest) {
+                if (pr.isReady) {
+                    latch.countDown()
+                }
+            }
+        }
+        session1VerificationService.addListener(aliceListener)
+
+        val bobListener = object : VerificationService.Listener {
+            override fun verificationRequestCreated(pr: PendingVerificationRequest) {
+                testHelper.runBlockingTest {
+                    session2VerificationService.readyPendingVerification(
+                            supportedMethods,
+                            session1.myUserId,
+                            pr.transactionId!!
+                    )
+                }
+            }
+
+            override fun verificationRequestUpdated(pr: PendingVerificationRequest) {
+                Timber.v("Bob request updated $pr")
+                if (pr.isReady) {
+                    bobReadyPendingVerificationRequest = pr
+                    latch.countDown()
+                }
+            }
+        }
+        session2VerificationService.addListener(bobListener)
+        testHelper.runBlockingTest {
+            session1VerificationService.requestSelfKeyVerification(supportedMethods)
+        }
+        testHelper.await(latch)
+        session2VerificationService.removeListener(bobListener)
+        session1VerificationService.removeListener(aliceListener)
         return bobReadyPendingVerificationRequest?.transactionId!!
     }
 }

@@ -29,7 +29,6 @@ import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.error.ErrorFormatter
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.WaitingViewData
 import im.vector.app.core.resources.StringProvider
@@ -45,10 +44,13 @@ import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupLastVersionResult
+import org.matrix.android.sdk.api.session.crypto.keysbackup.extractCurveKeyFromRecoveryKey
+import org.matrix.android.sdk.api.session.crypto.keysbackup.toKeysVersionResult
 import org.matrix.android.sdk.api.session.securestorage.RawBytesKeySpec
-import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
-import org.matrix.android.sdk.internal.crypto.keysbackup.util.extractCurveKeyFromRecoveryKey
-import org.matrix.android.sdk.internal.crypto.model.rest.DefaultBaseAuth
+import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
+import org.matrix.android.sdk.api.util.awaitCallback
+import org.matrix.android.sdk.api.util.fromBase64
 import java.io.OutputStream
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
@@ -103,8 +105,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
 
                 // We need to check if there is an existing backup
                 viewModelScope.launch(Dispatchers.IO) {
-                    val version = tryOrNull { session.cryptoService().keysBackupService().getCurrentVersion() }
-
+                    val version = tryOrNull { session.cryptoService().keysBackupService().getCurrentVersion() }?.toKeysVersionResult()
                     if (version == null) {
                         // we just resume plain bootstrap
                         doesKeyBackupExist = false
@@ -243,7 +244,8 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                 uiaContinuation?.resume(DefaultBaseAuth(session = pendingAuth?.session ?: ""))
             }
             is BootstrapActions.PasswordAuthDone                 -> {
-                val decryptedPass = session.loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
+                val decryptedPass = session.secureStorageService()
+                        .loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
                 uiaContinuation?.resume(
                         UserPasswordAuth(
                                 session = pendingAuth?.session,
@@ -257,7 +259,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                     copy(step = BootstrapStep.AccountReAuth(stringProvider.getString(R.string.authentication_error)))
                 }
             }
-        }.exhaustive
+        }
     }
 
     private fun handleStart(action: BootstrapActions.Start) = withState {
@@ -342,7 +344,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                             )
                         }
                     }
-                }.exhaustive
+                }
             }
         }
     }
@@ -400,7 +402,8 @@ class BootstrapSharedViewModel @AssistedInject constructor(
         }
 
         viewModelScope.launch(Dispatchers.IO) {
-            bootstrapTask.invoke(this,
+            bootstrapTask.invoke(
+                    this,
                     Params(
                             userInteractiveAuthInterceptor = interceptor,
                             progressListener = progressListener,
@@ -447,7 +450,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                             }
                         }
                     }
-                }.exhaustive
+                }
             }
         }
     }
@@ -531,7 +534,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                     )
                 }
             }
-        }.exhaustive
+        }
     }
 
     private fun BackupToQuadSMigrationTask.Result.Failure.toHumanReadable(): String {

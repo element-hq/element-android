@@ -18,10 +18,10 @@ package org.matrix.android.sdk.internal.database.model
 
 import io.realm.RealmObject
 import io.realm.annotations.Index
+import org.matrix.android.sdk.api.session.crypto.model.MXEventDecryptionResult
+import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.threads.ThreadNotificationState
-import org.matrix.android.sdk.internal.crypto.MXEventDecryptionResult
-import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.extensions.assertIsManaged
 
@@ -34,16 +34,17 @@ internal open class EventEntity(@Index var eventId: String = "",
                                 @Index var stateKey: String? = null,
                                 var originServerTs: Long? = null,
                                 @Index var sender: String? = null,
-                                // Can contain a serialized MatrixError
+        // Can contain a serialized MatrixError
                                 var sendStateDetails: String? = null,
                                 var age: Long? = 0,
                                 var unsignedData: String? = null,
                                 var redacts: String? = null,
                                 var decryptionResultJson: String? = null,
                                 var ageLocalTs: Long? = null,
-                                // Thread related, no need to create a new Entity for performance
+        // Thread related, no need to create a new Entity for performance
                                 @Index var isRootThread: Boolean = false,
                                 @Index var rootThreadEventId: String? = null,
+        // Number messages within the thread
                                 var numberOfThreads: Int = 0,
                                 var threadSummaryLatestMessage: TimelineEventEntity? = null
 ) : RealmObject() {

@@ -33,15 +33,18 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.tabs.TabLayoutMediator
 import im.vector.app.R
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.registerStartForActivityResult
+import im.vector.app.core.extensions.safeOpenOutputStream
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.selectTxtFileToWrite
 import im.vector.app.databinding.FragmentDevtoolKeyrequestsBinding
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import javax.inject.Inject
 
-class KeyRequestsFragment @Inject constructor() : VectorBaseFragment<FragmentDevtoolKeyrequestsBinding>() {
+class KeyRequestsFragment @Inject constructor(
+        private val clock: Clock,
+) : VectorBaseFragment<FragmentDevtoolKeyrequestsBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentDevtoolKeyrequestsBinding {
         return FragmentDevtoolKeyrequestsBinding.inflate(inflater, container, false)
@@ -107,11 +110,11 @@ class KeyRequestsFragment @Inject constructor() : VectorBaseFragment<FragmentDev
             when (it) {
                 is KeyRequestEvents.SaveAudit -> {
                     tryOrNull {
-                        requireContext().contentResolver?.openOutputStream(it.uri)
+                        requireContext().safeOpenOutputStream(it.uri)
                                 ?.use { os -> os.write(it.raw.toByteArray()) }
                     }
                 }
-            }.exhaustive
+            }
         }
     }
 
@@ -126,7 +129,7 @@ class KeyRequestsFragment @Inject constructor() : VectorBaseFragment<FragmentDev
             selectTxtFileToWrite(
                     activity = requireActivity(),
                     activityResultLauncher = epxortAuditForActivityResult,
-                    defaultFileName = "audit-export_${System.currentTimeMillis()}.txt",
+                    defaultFileName = "audit-export_${clock.epochMillis()}.txt",
                     chooserHint = "Export Audit"
             )
             return true

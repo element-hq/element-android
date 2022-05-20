@@ -27,10 +27,10 @@ import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.FragmentRoomSettingGenericBinding
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roommemberprofile.powerlevel.EditPowerLevelDialogs
 import im.vector.app.features.roomprofile.RoomProfileArgs
@@ -53,6 +53,11 @@ class RoomPermissionsFragment @Inject constructor(
         return FragmentRoomSettingGenericBinding.inflate(inflater, container, false)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        analyticsScreenName = MobileScreen.ScreenName.RoomPermissions
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -67,7 +72,7 @@ class RoomPermissionsFragment @Inject constructor(
             when (it) {
                 is RoomPermissionsViewEvents.Failure -> showFailure(it.throwable)
                 RoomPermissionsViewEvents.Success    -> showSuccess()
-            }.exhaustive
+            }
         }
     }
 

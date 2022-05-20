@@ -34,7 +34,7 @@ import javax.inject.Inject
  * Possible next worker    : None
  */
 internal class RedactEventWorker(context: Context, params: WorkerParameters, sessionManager: SessionManager) :
-    SessionSafeCoroutineWorker<RedactEventWorker.Params>(context, params, sessionManager, Params::class.java) {
+        SessionSafeCoroutineWorker<RedactEventWorker.Params>(context, params, sessionManager, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
@@ -74,9 +74,13 @@ internal class RedactEventWorker(context: Context, params: WorkerParameters, ses
                         else                         -> {
                             // TODO mark as failed to send?
                             // always return success, or the chain will be stuck for ever!
-                            Result.success(WorkerParamsFactory.toData(params.copy(
-                                    lastFailureMessage = it.localizedMessage
-                            )))
+                            Result.success(
+                                    WorkerParamsFactory.toData(
+                                            params.copy(
+                                                    lastFailureMessage = it.localizedMessage
+                                            )
+                                    )
+                            )
                         }
                     }
                 }

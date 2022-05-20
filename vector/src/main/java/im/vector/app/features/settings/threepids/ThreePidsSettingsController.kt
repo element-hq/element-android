@@ -25,7 +25,6 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.epoxy.noResultItem
 import im.vector.app.core.error.ErrorFormatter
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.getFormattedValue
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
@@ -94,6 +93,7 @@ class ThreePidsSettingsController @Inject constructor(
                 val dataList = data.threePids.invoke()
                 buildThreePids(dataList, data)
             }
+            else       -> Unit
         }
     }
 
@@ -160,7 +160,7 @@ class ThreePidsSettingsController @Inject constructor(
                 }
             }
             is ThreePidsSettingsUiState.AddingPhoneNumber -> Unit
-        }.exhaustive
+        }
 
         settingsSectionTitleItem {
             id("msisdn")
@@ -223,7 +223,7 @@ class ThreePidsSettingsController @Inject constructor(
                     cancelOnClick { host.interactionListener?.cancelAdding() }
                 }
             }
-        }.exhaustive
+        }
     }
 
     private fun buildThreePid(idPrefix: String, threePid: ThreePid) {

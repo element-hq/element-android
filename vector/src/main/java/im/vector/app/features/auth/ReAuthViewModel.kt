@@ -25,7 +25,7 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.internal.crypto.crosssigning.toBase64NoPadding
+import org.matrix.android.sdk.api.util.toBase64NoPadding
 import java.io.ByteArrayOutputStream
 
 class ReAuthViewModel @AssistedInject constructor(
@@ -42,7 +42,7 @@ class ReAuthViewModel @AssistedInject constructor(
 
     override fun handle(action: ReAuthActions) = withState { state ->
         when (action) {
-            ReAuthActions.StartSSOFallback -> {
+            ReAuthActions.StartSSOFallback   -> {
                 if (state.flowType == LoginFlowTypes.SSO) {
                     setState { copy(ssoFallbackPageWasShown = true) }
                     val ssoURL = session.getUiaSsoFallbackUrl(initialState.session ?: "")
@@ -55,10 +55,10 @@ class ReAuthViewModel @AssistedInject constructor(
             ReAuthActions.FallBackPageClosed -> {
                 // Should we do something here?
             }
-            is ReAuthActions.ReAuthWithPass -> {
+            is ReAuthActions.ReAuthWithPass  -> {
                 val safeForIntentCypher = ByteArrayOutputStream().also {
                     it.use {
-                        session.securelyStoreObject(action.password, initialState.resultKeyStoreAlias, it)
+                        session.secureStorageService().securelyStoreObject(action.password, initialState.resultKeyStoreAlias, it)
                     }
                 }.toByteArray().toBase64NoPadding()
                 _viewEvents.post(ReAuthEvents.PasswordFinishSuccess(safeForIntentCypher))

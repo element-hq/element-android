@@ -35,11 +35,9 @@ import okhttp3.CipherSuite;
 import okhttp3.TlsVersion;
 import timber.log.Timber;
 
-/*
- * IMPORTANT: This class is imported from Riot-Android to be able to perform a migration. Do not use it for any other purpose
- */
-
 /**
+ * <b>IMPORTANT:</b> This class is imported from Riot-Android to be able to perform a migration. Do not use it for any other purpose
+ *
  * Represents how to connect to a specific Homeserver, may include credentials to use.
  */
 public class HomeServerConnectionConfig {

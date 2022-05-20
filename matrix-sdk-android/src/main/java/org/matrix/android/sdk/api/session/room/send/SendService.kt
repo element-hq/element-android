@@ -142,8 +142,18 @@ interface SendService {
      * @param latitude required latitude of the location
      * @param longitude required longitude of the location
      * @param uncertainty Accuracy of the location in meters
+     * @param isUserLocation indicates whether the location data corresponds to the user location or not
      */
-    fun sendLocation(latitude: Double, longitude: Double, uncertainty: Double?): Cancelable
+    fun sendLocation(latitude: Double, longitude: Double, uncertainty: Double?, isUserLocation: Boolean): Cancelable
+
+    /**
+     * Send a live location event to the room. beacon_info state event has to be sent before sending live location updates.
+     * @param beaconInfoEventId event id of the initial beacon info state event
+     * @param latitude required latitude of the location
+     * @param longitude required longitude of the location
+     * @param uncertainty Accuracy of the location in meters
+     */
+    fun sendLiveLocation(beaconInfoEventId: String, latitude: Double, longitude: Double, uncertainty: Double?): Cancelable
 
     /**
      * Remove this failed message from the timeline

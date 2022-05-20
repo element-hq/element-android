@@ -80,13 +80,15 @@ internal class WorkManagerProvider @Inject constructor(
             workManager.enqueue(checkWorkerRequest)
             val checkWorkerLiveState = workManager.getWorkInfoByIdLiveData(checkWorkerRequest.id)
             val observer = object : Observer<WorkInfo> {
-                override fun onChanged(workInfo: WorkInfo) {
-                    if (workInfo.state.isFinished) {
+                override fun onChanged(workInfo: WorkInfo?) {
+                    if (workInfo?.state?.isFinished == true) {
                         checkWorkerLiveState.removeObserver(this)
                         if (workInfo.state == WorkInfo.State.FAILED) {
-                            throw RuntimeException("MatrixWorkerFactory is not being set on your worker configuration.\n" +
-                                    "Makes sure to add it to a DelegatingWorkerFactory if you have your own factory or use it directly.\n" +
-                                    "You can grab the instance through the Matrix class.")
+                            throw RuntimeException(
+                                    "MatrixWorkerFactory is not being set on your worker configuration.\n" +
+                                            "Makes sure to add it to a DelegatingWorkerFactory if you have your own factory or use it directly.\n" +
+                                            "You can grab the instance through the Matrix class."
+                            )
                         }
                     }
                 }

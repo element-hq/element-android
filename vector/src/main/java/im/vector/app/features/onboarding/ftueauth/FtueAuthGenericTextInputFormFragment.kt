@@ -37,6 +37,7 @@ import im.vector.app.databinding.FragmentLoginGenericTextInputFormBinding
 import im.vector.app.features.login.TextInputFormFragmentMode
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewEvents
+import im.vector.app.features.onboarding.RegisterAction
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
@@ -138,7 +139,7 @@ class FtueAuthGenericTextInputFormFragment @Inject constructor() : AbstractFtueA
     private fun onOtherButtonClicked() {
         when (params.mode) {
             TextInputFormFragmentMode.ConfirmMsisdn -> {
-                viewModel.handle(OnboardingAction.SendAgainThreePid)
+                viewModel.handle(OnboardingAction.PostRegisterAction(RegisterAction.SendAgainThreePid))
             }
             else                                    -> {
                 // Should not happen, button is not displayed
@@ -152,19 +153,19 @@ class FtueAuthGenericTextInputFormFragment @Inject constructor() : AbstractFtueA
 
         if (text.isEmpty()) {
             // Perform dummy action
-            viewModel.handle(OnboardingAction.RegisterDummy)
+            viewModel.handle(OnboardingAction.PostRegisterAction(RegisterAction.RegisterDummy))
         } else {
             when (params.mode) {
                 TextInputFormFragmentMode.SetEmail      -> {
-                    viewModel.handle(OnboardingAction.AddThreePid(RegisterThreePid.Email(text)))
+                    viewModel.handle(OnboardingAction.PostRegisterAction(RegisterAction.AddThreePid(RegisterThreePid.Email(text))))
                 }
                 TextInputFormFragmentMode.SetMsisdn     -> {
                     getCountryCodeOrShowError(text)?.let { countryCode ->
-                        viewModel.handle(OnboardingAction.AddThreePid(RegisterThreePid.Msisdn(text, countryCode)))
+                        viewModel.handle(OnboardingAction.PostRegisterAction(RegisterAction.AddThreePid(RegisterThreePid.Msisdn(text, countryCode))))
                     }
                 }
                 TextInputFormFragmentMode.ConfirmMsisdn -> {
-                    viewModel.handle(OnboardingAction.ValidateThreePid(text))
+                    viewModel.handle(OnboardingAction.PostRegisterAction(RegisterAction.ValidateThreePid(text)))
                 }
             }
         }
@@ -253,6 +254,6 @@ class FtueAuthGenericTextInputFormFragment @Inject constructor() : AbstractFtueA
     }
 
     override fun resetViewModel() {
-        viewModel.handle(OnboardingAction.ResetLogin)
+        viewModel.handle(OnboardingAction.ResetAuthenticationAttempt)
     }
 }

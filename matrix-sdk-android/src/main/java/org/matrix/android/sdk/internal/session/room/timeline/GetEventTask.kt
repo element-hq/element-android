@@ -17,13 +17,14 @@
 package org.matrix.android.sdk.internal.session.room.timeline
 
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
-import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
+import org.matrix.android.sdk.internal.crypto.DecryptRoomEventUseCase
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.task.Task
+import org.matrix.android.sdk.internal.util.time.Clock
 import javax.inject.Inject
 
 internal interface GetEventTask : Task<GetEventTask.Params, Event> {
@@ -36,7 +37,8 @@ internal interface GetEventTask : Task<GetEventTask.Params, Event> {
 internal class DefaultGetEventTask @Inject constructor(
         private val roomAPI: RoomAPI,
         private val globalErrorReceiver: GlobalErrorReceiver,
-        private val cryptoService: DefaultCryptoService
+        private val decryptEvent: DecryptRoomEventUseCase,
+        private val clock: Clock,
 ) : GetEventTask {
 
     override suspend fun execute(params: GetEventTask.Params): Event {
@@ -47,7 +49,7 @@ internal class DefaultGetEventTask @Inject constructor(
         // Try to decrypt the Event
         if (event.isEncrypted()) {
             tryOrNull(message = "Unable to decrypt the event") {
-                cryptoService.decryptEvent(event, "")
+                decryptEvent(event)
             }
                     ?.let { result ->
                         event.mxDecryptionResult = OlmDecryptionResult(
@@ -59,7 +61,7 @@ internal class DefaultGetEventTask @Inject constructor(
                     }
         }
 
-        event.ageLocalTs = event.unsignedData?.age?.let { System.currentTimeMillis() - it }
+        event.ageLocalTs = event.unsignedData?.age?.let { clock.epochMillis() - it }
 
         return event
     }

@@ -81,7 +81,7 @@ class AccountCreatedViewModel @AssistedInject constructor(
     private fun handleSetAvatar(action: AccountCreatedAction.SetAvatar) {
         setState { copy(isLoading = true) }
         viewModelScope.launch {
-            val result = runCatching { session.updateAvatar(session.myUserId, action.avatarUri, action.filename) }
+            val result = runCatching { session.profileService().updateAvatar(session.myUserId, action.avatarUri, action.filename) }
                     .onFailure { _viewEvents.post(AccountCreatedViewEvents.Failure(it)) }
             setState {
                 copy(
@@ -95,7 +95,7 @@ class AccountCreatedViewModel @AssistedInject constructor(
     private fun handleSetDisplayName(action: AccountCreatedAction.SetDisplayName) {
         setState { copy(isLoading = true) }
         viewModelScope.launch {
-            val result = runCatching { session.setDisplayName(session.myUserId, action.displayName) }
+            val result = runCatching { session.profileService().setDisplayName(session.myUserId, action.displayName) }
                     .onFailure { _viewEvents.post(AccountCreatedViewEvents.Failure(it)) }
             setState {
                 copy(

@@ -25,6 +25,7 @@ import com.airbnb.mvrx.args
 import im.vector.app.R
 import im.vector.app.databinding.FragmentLoginWaitForEmailBinding
 import im.vector.app.features.onboarding.OnboardingAction
+import im.vector.app.features.onboarding.RegisterAction
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.failure.is401
 import javax.inject.Inject
@@ -54,7 +55,7 @@ class FtueAuthWaitForEmailFragment @Inject constructor() : AbstractFtueAuthFragm
     override fun onResume() {
         super.onResume()
 
-        viewModel.handle(OnboardingAction.CheckIfEmailHasBeenValidated(0))
+        viewModel.handle(OnboardingAction.PostRegisterAction(RegisterAction.CheckIfEmailHasBeenValidated(0)))
     }
 
     override fun onPause() {
@@ -70,13 +71,13 @@ class FtueAuthWaitForEmailFragment @Inject constructor() : AbstractFtueAuthFragm
     override fun onError(throwable: Throwable) {
         if (throwable.is401()) {
             // Try again, with a delay
-            viewModel.handle(OnboardingAction.CheckIfEmailHasBeenValidated(10_000))
+            viewModel.handle(OnboardingAction.PostRegisterAction(RegisterAction.CheckIfEmailHasBeenValidated(10_000)))
         } else {
             super.onError(throwable)
         }
     }
 
     override fun resetViewModel() {
-        viewModel.handle(OnboardingAction.ResetLogin)
+        viewModel.handle(OnboardingAction.ResetAuthenticationAttempt)
     }
 }

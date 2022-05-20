@@ -16,8 +16,6 @@
 
 package org.matrix.android.sdk.api.session.terms
 
-import org.matrix.android.sdk.internal.session.terms.TermsResponse
-
 interface TermsService {
     enum class ServiceType {
         IntegrationManager,

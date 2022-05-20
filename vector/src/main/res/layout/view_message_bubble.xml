@@ -26,12 +26,18 @@
         android:padding="2dp"
         tools:src="@sample/user_round_avatars" />
 
+    <View
+        android:id="@+id/additionalTopSpace"
+        android:layout_height="12dp"
+        android:layout_width="0dp"
+        android:layout_toEndOf="@id/messageStartGuideline" />
+
     <TextView
         android:id="@+id/messageMemberNameView"
         style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_below="@id/additionalTopSpace"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="12dp"
         android:layout_marginEnd="4dp"

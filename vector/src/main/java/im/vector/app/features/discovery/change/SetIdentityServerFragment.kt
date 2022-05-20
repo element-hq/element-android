@@ -29,7 +29,6 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.core.platform.VectorBaseFragment
@@ -68,8 +67,10 @@ class SetIdentityServerFragment @Inject constructor(
                     state.defaultIdentityServerUrl.toReducedUrl()
             )
                     .toSpannable()
-                    .colorizeMatchingText(state.defaultIdentityServerUrl.toReducedUrl(),
-                            colorProvider.getColorFromAttribute(R.attr.vctr_content_tertiary))
+                    .colorizeMatchingText(
+                            state.defaultIdentityServerUrl.toReducedUrl(),
+                            colorProvider.getColorFromAttribute(R.attr.vctr_content_tertiary)
+                    )
 
             views.identityServerSetDefaultNotice.isVisible = true
             views.identityServerSetDefaultSubmit.isVisible = true
@@ -130,9 +131,10 @@ class SetIdentityServerFragment @Inject constructor(
                             termsActivityResultLauncher,
                             TermsService.ServiceType.IdentityService,
                             it.identityServerUrl,
-                            null)
+                            null
+                    )
                 }
-            }.exhaustive
+            }
         }
     }
 

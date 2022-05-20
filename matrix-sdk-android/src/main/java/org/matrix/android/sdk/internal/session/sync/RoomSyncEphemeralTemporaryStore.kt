@@ -21,8 +21,8 @@ import com.squareup.moshi.Moshi
 import okio.buffer
 import okio.source
 import org.matrix.android.sdk.api.session.sync.model.RoomSyncEphemeral
+import org.matrix.android.sdk.api.util.md5
 import org.matrix.android.sdk.internal.di.SessionFilesDirectory
-import org.matrix.android.sdk.internal.util.md5
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject

@@ -23,15 +23,19 @@ import org.matrix.android.sdk.api.session.presence.model.UserPresence
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.presence.service.task.GetPresenceTask
 import org.matrix.android.sdk.internal.session.presence.service.task.SetPresenceTask
+import org.matrix.android.sdk.internal.session.sync.SyncPresence
+import org.matrix.android.sdk.internal.settings.DefaultLightweightSettingsStorage
 import javax.inject.Inject
 
 internal class DefaultPresenceService @Inject constructor(
         @UserId private val userId: String,
         private val setPresenceTask: SetPresenceTask,
-        private val getPresenceTask: GetPresenceTask
+        private val getPresenceTask: GetPresenceTask,
+        private val lightweightSettingsStorage: DefaultLightweightSettingsStorage
 ) : PresenceService {
 
     override suspend fun setMyPresence(presence: PresenceEnum, statusMsg: String?) {
+        lightweightSettingsStorage.setSyncPresenceStatus(SyncPresence.from(presence))
         setPresenceTask.execute(SetPresenceTask.Params(userId, presence, statusMsg))
     }
 

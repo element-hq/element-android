@@ -59,7 +59,7 @@ internal class IntegrationManager @Inject constructor(matrixConfiguration: Matri
                                                       private val updateUserAccountDataTask: UpdateUserAccountDataTask,
                                                       private val accountDataDataSource: UserAccountDataDataSource,
                                                       private val widgetFactory: WidgetFactory) :
-    SessionLifecycleObserver {
+        SessionLifecycleObserver {
 
     private val currentConfigs = ArrayList<IntegrationManagerConfig>()
     private val lifecycleOwner: LifecycleOwner = LifecycleOwner { lifecycleRegistry }

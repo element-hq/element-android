@@ -23,11 +23,9 @@ import android.provider.MediaStore
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.FileProvider
 import im.vector.lib.multipicker.entity.MultiPickerVideoType
+import im.vector.lib.multipicker.utils.MediaType
+import im.vector.lib.multipicker.utils.createTemporaryMediaFile
 import im.vector.lib.multipicker.utils.toMultiPickerVideoType
-import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 /**
  * Implementation of taking a video with Camera
@@ -38,7 +36,7 @@ class CameraVideoPicker {
      * Start camera by using a ActivityResultLauncher
      * @return Uri of taken photo or null if the operation is cancelled.
      */
-    fun startWithExpectingFile(context: Context, activityResultLauncher: ActivityResultLauncher<Intent>): Uri? {
+    fun startWithExpectingFile(context: Context, activityResultLauncher: ActivityResultLauncher<Intent>): Uri {
         val videoUri = createVideoUri(context)
         val intent = createIntent().apply {
             putExtra(MediaStore.EXTRA_OUTPUT, videoUri)
@@ -63,19 +61,9 @@ class CameraVideoPicker {
 
     companion object {
         fun createVideoUri(context: Context): Uri {
-            val file = createVideoFile(context)
+            val file = createTemporaryMediaFile(context, MediaType.VIDEO)
             val authority = context.packageName + ".multipicker.fileprovider"
             return FileProvider.getUriForFile(context, authority, file)
-        }
-
-        private fun createVideoFile(context: Context): File {
-            val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-            val storageDir: File = context.filesDir
-            return File.createTempFile(
-                    "${timeStamp}_", /* prefix */
-                    ".mp4", /* suffix */
-                    storageDir /* directory */
-            )
         }
     }
 }

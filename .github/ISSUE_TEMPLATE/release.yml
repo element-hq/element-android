@@ -18,11 +18,13 @@ body:
 
         - [ ] Weblate sync, fix lint issue if any (in a dedicated PR)
         - [ ] Check the update of the store descriptions (using Google Translate if necessary) to ensure that the changes are acceptable to be published to the stores.
+        - [ ] While Weblate is locked, and after the PR from Weblate has been merged, handle all the TODOs in the main `strings.xml` file
         - [ ] Run the script `./tools/release/pushPlayStoreMetaData.sh`. You can check in the GooglePlay console the Activity log to check the effect.
 
         ### Do the release
 
-        - [ ] Create release with gitflow, branch name `release/1.2.3`
+        - [ ] Make sure `develop` and `main` are up to date (git pull)
+        - [ ] Checkout develop and create a release with gitflow, branch name `release/1.2.3`
         - [ ] Check the crashes from the PlayStore
         - [ ] Check the rageshake with the current dev version: https://github.com/matrix-org/element-android-rageshakes/labels/1.2.3-dev
         - [ ] Run the integration test, and especially `UiAllScreensSanityTest.allScreensTest()`
@@ -105,7 +107,7 @@ body:
 
         https://github.com/matrix-org/matrix-android-sdk2-sample
 
-        - [ ] Update the dependency to the new version of the SDK2. It can take some time for MavenCentral to make the librarie available. You can check status on https://repo1.maven.org/maven2/org/matrix/android/matrix-android-sdk2/
+        - [ ] Update the dependency to the new version of the SDK2. It can take a few minutes for MavenCentral to make the library available. You can check status on https://repo1.maven.org/maven2/org/matrix/android/matrix-android-sdk2/
         - [ ] Build and run the sample, you may have to fix some API break
         - [ ] Commit and push directly on `main`
     validations:

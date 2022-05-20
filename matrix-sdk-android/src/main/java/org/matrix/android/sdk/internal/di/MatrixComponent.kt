@@ -28,12 +28,14 @@ import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.raw.RawService
+import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.auth.AuthModule
 import org.matrix.android.sdk.internal.auth.SessionParamsStore
 import org.matrix.android.sdk.internal.raw.RawModule
 import org.matrix.android.sdk.internal.session.MockHttpInterceptor
 import org.matrix.android.sdk.internal.session.TestInterceptor
+import org.matrix.android.sdk.internal.settings.SettingsModule
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.util.BackgroundDetectionObserver
 import org.matrix.android.sdk.internal.util.system.SystemModule
@@ -41,14 +43,17 @@ import org.matrix.android.sdk.internal.worker.MatrixWorkerFactory
 import org.matrix.olm.OlmManager
 import java.io.File
 
-@Component(modules = [
-    MatrixModule::class,
-    NetworkModule::class,
-    AuthModule::class,
-    RawModule::class,
-    SystemModule::class,
-    NoOpTestModule::class
-])
+@Component(
+        modules = [
+            MatrixModule::class,
+            NetworkModule::class,
+            AuthModule::class,
+            RawModule::class,
+            SettingsModule::class,
+            SystemModule::class,
+            NoOpTestModule::class
+        ]
+)
 @MatrixScope
 internal interface MatrixComponent {
 
@@ -65,6 +70,8 @@ internal interface MatrixComponent {
     fun authenticationService(): AuthenticationService
 
     fun rawService(): RawService
+
+    fun lightweightSettingsStorage(): LightweightSettingsStorage
 
     fun homeServerHistoryService(): HomeServerHistoryService
 
