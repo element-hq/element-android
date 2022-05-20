@@ -62,6 +62,7 @@ import org.matrix.android.sdk.common.RetryTestRule
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
 import org.matrix.android.sdk.common.TestMatrixCallback
+import org.matrix.android.sdk.mustFail
 import java.util.concurrent.CountDownLatch
 
 @RunWith(JUnit4::class)
@@ -525,10 +526,8 @@ class E2eeSanityTests : InstrumentedTest {
 
         // Confirm we can decrypt one but not the other
         testHelper.runBlockingTest {
-            try {
+            mustFail(message = "Should not be able to decrypt event") {
                 newBobSession.cryptoService().decryptEvent(firstEventNewBobPov.root, "")
-                fail("Should not be able to decrypt event")
-            } catch (_: MXCryptoError) {
             }
         }
 
