@@ -706,31 +706,31 @@ class TimelineFragment @Inject constructor(
     }
 
     private fun createEmojiPopup(): EmojiPopup {
-        return EmojiPopup
-                .Builder
-                .fromRootView(views.rootConstraintLayout)
-                .setKeyboardAnimationStyle(R.style.emoji_fade_animation_style)
-                .setOnEmojiPopupShownListener {
+        return EmojiPopup(
+                rootView = views.rootConstraintLayout,
+                keyboardAnimationStyle = R.style.emoji_fade_animation_style,
+                onEmojiPopupShownListener = {
                     views.composerLayout.views.composerEmojiButton.apply {
                         contentDescription = getString(R.string.a11y_close_emoji_picker)
                         setImageResource(R.drawable.ic_keyboard)
                     }
-                }
-                .setOnEmojiPopupDismissListenerLifecycleAware {
+                },
+                onEmojiPopupDismissListener = lifecycleAwareDismissAction {
                     views.composerLayout.views.composerEmojiButton.apply {
                         contentDescription = getString(R.string.a11y_open_emoji_picker)
                         setImageResource(R.drawable.ic_insert_emoji)
                     }
-                }
-                .build(views.composerLayout.views.composerEditText)
+                },
+                editText = views.composerLayout.views.composerEditText
+        )
     }
 
     /**
      *  Ensure dismiss actions only trigger when the fragment is in the started state.
      *  EmojiPopup by default dismisses onViewDetachedFromWindow, this can cause race conditions with onDestroyView.
      */
-    private fun EmojiPopup.Builder.setOnEmojiPopupDismissListenerLifecycleAware(action: () -> Unit): EmojiPopup.Builder {
-        return setOnEmojiPopupDismissListener {
+    private fun lifecycleAwareDismissAction(action: () -> Unit): () -> Unit {
+        return {
             if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
                 action()
             }
