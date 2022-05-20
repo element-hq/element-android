@@ -38,4 +38,10 @@ data class MXCryptoConfig constructor(
          * You can limit request only to your sessions by turning this setting to `true`
          */
         val limitRoomKeyRequestsToMyDevices: Boolean = false,
+
+        /**
+         * Flag that indicates whether or not key history will be shared to invited
+         * users with respect to room visibility
+         */
+        val shouldShareKeyHistory: Boolean = true,
 )

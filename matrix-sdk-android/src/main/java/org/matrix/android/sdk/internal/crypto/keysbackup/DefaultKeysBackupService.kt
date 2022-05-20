@@ -1429,7 +1429,8 @@ internal class DefaultKeysBackupService @Inject constructor(
                 "sender_key" to sessionData.senderKey,
                 "sender_claimed_keys" to sessionData.senderClaimedKeys,
                 "forwarding_curve25519_key_chain" to (sessionData.forwardingCurve25519KeyChain.orEmpty()),
-                "session_key" to sessionData.sessionKey
+                "session_key" to sessionData.sessionKey,
+                "org.matrix.msc3061.shared_history" to sessionData.sharedHistory
         )
 
         val json = MoshiProvider.providesMoshi()
@@ -1456,7 +1457,7 @@ internal class DefaultKeysBackupService @Inject constructor(
                 },
                 forwardedCount = olmInboundGroupSessionWrapper.sessionData.forwardingCurve25519KeyChain.orEmpty().size,
                 isVerified = device?.isVerified == true,
-
+                sharedHistory = olmInboundGroupSessionWrapper.sessionData.sharedHistory,
                 sessionData = mapOf(
                         "ciphertext" to encryptedSessionBackupData.mCipherText,
                         "mac" to encryptedSessionBackupData.mMac,

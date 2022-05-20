@@ -24,6 +24,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.realm.Realm
 import io.realm.RealmQuery
+import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.room.members.MembershipService
@@ -57,6 +58,7 @@ internal class DefaultMembershipService @AssistedInject constructor(
         private val cryptoService: CryptoService,
         @UserId
         private val userId: String,
+        private val matrixConfiguration: MatrixConfiguration,
         private val queryStringValueProcessor: QueryStringValueProcessor
 ) : MembershipService {
 
@@ -144,13 +146,18 @@ internal class DefaultMembershipService @AssistedInject constructor(
     }
 
     override suspend fun invite(userId: String, reason: String?) {
+        sendShareHistoryKeysIfNeeded(userId)
+        val params = InviteTask.Params(roomId, userId, reason)
+        inviteTask.execute(params)
+    }
+
+    private suspend fun sendShareHistoryKeysIfNeeded(userId: String) {
+        if (!matrixConfiguration.cryptoConfig.shouldShareKeyHistory) return
         // TODO not sure it's the right way to get the latest messages in a room
         val sessionInfo = Realm.getInstance(monarchy.realmConfiguration).use {
             ChunkEntity.findLatestSessionInfo(it, roomId)
         }
         cryptoService.sendSharedHistoryKeys(roomId, userId, sessionInfo)
-        val params = InviteTask.Params(roomId, userId, reason)
-        inviteTask.execute(params)
     }
 
     override suspend fun invite3pid(threePid: ThreePid) {
