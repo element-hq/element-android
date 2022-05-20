@@ -78,7 +78,6 @@ import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.StreamEventsManager
-import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
@@ -234,6 +233,7 @@ internal class DefaultCryptoService @Inject constructor(
     fun start() {
         internalStart()
         cryptoCoroutineScope.launch {
+            cryptoStore.open()
             // Just update
             fetchDevicesList()
             cryptoStore.tidyUpDataBase()
@@ -264,9 +264,6 @@ internal class DefaultCryptoService @Inject constructor(
             }
         }
 
-        // Open the store
-        cryptoStore.open()
-
         isStarting.set(false)
         isStarted.set(true)
     }
@@ -277,7 +274,7 @@ internal class DefaultCryptoService @Inject constructor(
     fun close() {
         cryptoCoroutineScope.coroutineContext.cancelChildren(CancellationException("Closing crypto module"))
         cryptoCoroutineScope.launch {
-            withContext(coroutineDispatchers.crypto + NonCancellable) {
+            withContext(NonCancellable) {
                 cryptoStore.close()
             }
         }
