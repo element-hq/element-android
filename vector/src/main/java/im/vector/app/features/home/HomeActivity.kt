@@ -244,7 +244,7 @@ class HomeActivity :
     }
 
     private fun openGroup(shouldClearFragment: Boolean) {
-        views.drawerLayout.closeDrawer(GravityCompat.START)
+//        views.drawerLayout.closeDrawer(GravityCompat.START)
 
         // When switching from space to group or group to space, we need to reload the fragment
         if (shouldClearFragment) {
