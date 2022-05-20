@@ -341,7 +341,7 @@ internal class DefaultKeysBackupService @Inject constructor(
 
     override fun backupAllGroupSessions(progressListener: ProgressListener?,
                                         callback: MatrixCallback<Unit>?) {
-        if (!isEnabled || backupOlmPkEncryption == null || keysBackupVersion == null) {
+        if (!isEnabled() || backupOlmPkEncryption == null || keysBackupVersion == null) {
             callback?.onFailure(Throwable("Backup not enabled"))
             return
         }
