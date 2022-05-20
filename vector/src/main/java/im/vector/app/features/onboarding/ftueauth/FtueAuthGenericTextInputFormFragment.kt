@@ -36,7 +36,6 @@ import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.databinding.FragmentLoginGenericTextInputFormBinding
 import im.vector.app.features.login.TextInputFormFragmentMode
 import im.vector.app.features.onboarding.OnboardingAction
-import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.RegisterAction
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach

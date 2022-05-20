@@ -24,7 +24,6 @@ import org.matrix.android.sdk.api.auth.registration.RegistrationResult.Success
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.failure.is401
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.identity.ThreePid
 import javax.inject.Inject
 import org.matrix.android.sdk.api.auth.registration.RegistrationResult as MatrixRegistrationResult
 
