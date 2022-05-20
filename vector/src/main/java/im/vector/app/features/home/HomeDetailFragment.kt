@@ -19,6 +19,7 @@ package im.vector.app.features.home
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -33,6 +34,7 @@ import com.google.android.material.badge.BadgeDrawable
 import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.RoomGroupingMethod
+import im.vector.app.SessionVariables
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.platform.OnBackPressed
@@ -106,10 +108,14 @@ class HomeDetailFragment @Inject constructor(
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        if (SessionVariables.optionsMenuShouldShow) super.onCreateOptionsMenu(menu, inflater) else Unit
+    }
+
     override fun onPrepareOptionsMenu(menu: Menu) {
         withState(viewModel) { state ->
             val isRoomList = state.currentTab is HomeTab.RoomList
-            menu.findItem(R.id.menu_home_mark_all_as_read).isVisible = isRoomList && hasUnreadRooms
+            menu.findItem(R.id.menu_home_mark_all_as_read)?.isVisible = isRoomList && hasUnreadRooms
         }
         super.onPrepareOptionsMenu(menu)
     }
@@ -253,6 +259,8 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun showModal() {
+        SessionVariables.optionsMenuShouldShow = false
+        invalidateOptionsMenu()
         views.spaceModalFragment.isVisible = true
         views.dimView.isVisible = true
         views.dimViewBottom.isVisible = true
@@ -264,6 +272,8 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun hideModal() {
+        SessionVariables.optionsMenuShouldShow = true
+        invalidateOptionsMenu()
         views.spaceModalFragment.isVisible = false
         views.dimView.isVisible = false
         views.dimViewBottom.isVisible = false
