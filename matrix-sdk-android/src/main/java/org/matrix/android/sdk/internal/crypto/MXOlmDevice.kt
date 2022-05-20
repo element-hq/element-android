@@ -788,13 +788,13 @@ internal class MXOlmDevice @Inject constructor(
         }
 
         val messageIndexKey = senderKey + "|" + sessionId + "|" + roomId + "|" + decryptResult.mIndex
-        Timber.tag(loggerTag.value).d("##########################################################")
-        Timber.tag(loggerTag.value).d("## decryptGroupMessage() timeline: $timeline")
-        Timber.tag(loggerTag.value).d("## decryptGroupMessage() senderKey: $senderKey")
-        Timber.tag(loggerTag.value).d("## decryptGroupMessage() sessionId: $sessionId")
-        Timber.tag(loggerTag.value).d("## decryptGroupMessage() roomId: $roomId")
-        Timber.tag(loggerTag.value).d("## decryptGroupMessage() eventId: $eventId")
-        Timber.tag(loggerTag.value).d("## decryptGroupMessage() mIndex: ${decryptResult.mIndex}")
+        Timber.tag(loggerTag.value).v("##########################################################")
+        Timber.tag(loggerTag.value).v("## decryptGroupMessage() timeline: $timeline")
+        Timber.tag(loggerTag.value).v("## decryptGroupMessage() senderKey: $senderKey")
+        Timber.tag(loggerTag.value).v("## decryptGroupMessage() sessionId: $sessionId")
+        Timber.tag(loggerTag.value).v("## decryptGroupMessage() roomId: $roomId")
+        Timber.tag(loggerTag.value).v("## decryptGroupMessage() eventId: $eventId")
+        Timber.tag(loggerTag.value).v("## decryptGroupMessage() mIndex: ${decryptResult.mIndex}")
 
         if (timeline?.isNotBlank() == true) {
             val replayAttackMap = inboundGroupSessionMessageIndexes.getOrPut(timeline) { mutableMapOf() }
