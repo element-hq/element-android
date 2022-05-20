@@ -211,4 +211,8 @@ internal class QrCodeVerification(
 
         return
     }
+
+    override fun toString(): String {
+        return "QrCodeVerification(qrCodeText=$qrCodeText, state=$state, transactionId='$transactionId', otherUserId='$otherUserId', otherDeviceId=$otherDeviceId, isIncoming=$isIncoming)"
+    }
 }

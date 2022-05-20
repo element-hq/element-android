@@ -55,6 +55,7 @@ import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestHelper
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
+import org.matrix.android.sdk.internal.crypto.verification.SasVerificationTestHelper
 import java.util.concurrent.CountDownLatch
 
 @RunWith(JUnit4::class)
@@ -610,7 +611,6 @@ class E2eeSanityTests : InstrumentedTest {
     fun testSelfInteractiveVerificationAndGossip() {
         val testHelper = CommonTestHelper(context())
         val cryptoTestHelper = CryptoTestHelper(testHelper)
-
         val aliceSession = testHelper.createAccount("alice", SessionTestParams(true))
         cryptoTestHelper.bootstrapSecurity(aliceSession)
 
@@ -618,18 +618,18 @@ class E2eeSanityTests : InstrumentedTest {
 
         val aliceNewSession = testHelper.logIntoAccount(aliceSession.myUserId, SessionTestParams(true))
 
+        val transactionId = SasVerificationTestHelper(testHelper, cryptoTestHelper).requestSelfKeyAndWaitForReadyState(
+                aliceSession,
+                aliceNewSession,
+                listOf(VerificationMethod.SAS)
+        )
+
         val oldCompleteLatch = CountDownLatch(1)
         lateinit var oldCode: String
         aliceSession.cryptoService().verificationService().addListener(object : VerificationService.Listener {
 
             override fun verificationRequestUpdated(pr: PendingVerificationRequest) {
-                val readyInfo = pr.readyInfo ?: return
-                testHelper.runBlockingTest {
-                    aliceSession.cryptoService().verificationService().beginDeviceVerification(
-                            aliceSession.myUserId,
-                            readyInfo.fromDevice
-                    )
-                }
+                Log.d("##TEST", "existingPov: $pr")
             }
 
             override fun transactionUpdated(tx: VerificationTransaction) {
@@ -656,15 +656,8 @@ class E2eeSanityTests : InstrumentedTest {
         lateinit var newCode: String
         aliceNewSession.cryptoService().verificationService().addListener(object : VerificationService.Listener {
 
-            override fun verificationRequestCreated(pr: PendingVerificationRequest) {
-                // let's ready
-                testHelper.runBlockingTest {
-                    aliceNewSession.cryptoService().verificationService().readyPendingVerification(
-                            listOf(VerificationMethod.SAS, VerificationMethod.QR_CODE_SCAN, VerificationMethod.QR_CODE_SHOW),
-                            aliceSession.myUserId,
-                            pr.transactionId!!
-                    )
-                }
+            override fun verificationRequestUpdated(pr: PendingVerificationRequest) {
+                Log.d("##TEST", "newPov: $pr")
             }
 
             var matchOnce = true
@@ -689,11 +682,8 @@ class E2eeSanityTests : InstrumentedTest {
             }
         })
 
-        // initiate self verification
         testHelper.runBlockingTest {
-            aliceSession.cryptoService().verificationService().requestSelfKeyVerification(
-                    listOf(VerificationMethod.SAS, VerificationMethod.QR_CODE_SCAN, VerificationMethod.QR_CODE_SHOW)
-            )
+            aliceSession.cryptoService().verificationService().beginKeyVerification(VerificationMethod.SAS, aliceNewSession.myUserId, transactionId)
         }
         testHelper.await(oldCompleteLatch)
         testHelper.await(newCompleteLatch)
