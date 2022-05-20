@@ -58,7 +58,8 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.common.CommonTestHelper
-import org.matrix.android.sdk.common.CryptoTestHelper
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSessionTest
 import org.matrix.android.sdk.common.RetryTestRule
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
@@ -84,8 +85,7 @@ class E2eeSanityTests : InstrumentedTest {
      * Alice sends a new message, then check that the new one can be decrypted
      */
     @Test
-    fun testSendingE2EEMessages() = withTestHelpers(context()) { cryptoTestHelper ->
-        val testHelper = cryptoTestHelper.testHelper
+    fun testSendingE2EEMessages() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
 
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true)
         val aliceSession = cryptoTestData.firstSession
@@ -202,11 +202,9 @@ class E2eeSanityTests : InstrumentedTest {
     }
 
     @Test
-    fun testKeyGossipingIsEnabledByDefault() {
-        val testHelper = CommonTestHelper(context())
+    fun testKeyGossipingIsEnabledByDefault() = runSessionTest(context()) { testHelper ->
         val session = testHelper.createAccount("alice", SessionTestParams(true))
         Assert.assertTrue("Key gossiping should be enabled by default", session.cryptoService().isKeyGossipingEnabled())
-        testHelper.signOutAndClose(session)
     }
 
     /**
@@ -224,8 +222,7 @@ class E2eeSanityTests : InstrumentedTest {
      * 9. Check that new session can decrypt
      */
     @Test
-    fun testBasicBackupImport() = withTestHelpers(context()) { cryptoTestHelper ->
-        val testHelper = cryptoTestHelper.testHelper
+    fun testBasicBackupImport() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
 
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true)
         val aliceSession = cryptoTestData.firstSession
@@ -344,8 +341,7 @@ class E2eeSanityTests : InstrumentedTest {
      * get them from an older one.
      */
     @Test
-    fun testSimpleGossip() = withTestHelpers(context()) { cryptoTestHelper ->
-        val testHelper = cryptoTestHelper.testHelper
+    fun testSimpleGossip() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
 
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true)
         val aliceSession = cryptoTestData.firstSession
@@ -445,8 +441,7 @@ class E2eeSanityTests : InstrumentedTest {
      * Test that if a better key is forwarded (lower index, it is then used)
      */
     @Test
-    fun testForwardBetterKey() = withTestHelpers(context()) { cryptoTestHelper ->
-        val testHelper = cryptoTestHelper.testHelper
+    fun testForwardBetterKey() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
 
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true)
         val aliceSession = cryptoTestData.firstSession
@@ -592,8 +587,7 @@ class E2eeSanityTests : InstrumentedTest {
      * Test that if a better key is forwared (lower index, it is then used)
      */
     @Test
-    fun testASelfInteractiveVerificationAndGossip() = withTestHelpers(context()) { cryptoTestHelper ->
-        val testHelper = cryptoTestHelper.testHelper
+    fun testASelfInteractiveVerificationAndGossip() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
 
         val aliceSession = testHelper.createAccount("alice", SessionTestParams(true))
         cryptoTestHelper.bootstrapSecurity(aliceSession)

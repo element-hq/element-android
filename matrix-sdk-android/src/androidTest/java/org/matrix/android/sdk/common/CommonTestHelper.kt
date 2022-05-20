@@ -50,21 +50,32 @@ import java.util.UUID
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
-internal fun withTestHelpers(context: Context, block: (CryptoTestHelper) -> Unit) {
-    val testHelper = CommonTestHelper(context)
-    val cryptoTestHelper = CryptoTestHelper(testHelper)
-    return try {
-        block(cryptoTestHelper)
-    } finally {
-        testHelper.cleanUpOpenedSessions()
-    }
-}
-
 /**
  * This class exposes methods to be used in common cases
  * Registration, login, Sync, Sending messages...
  */
-class CommonTestHelper(context: Context) {
+class CommonTestHelper private constructor(context: Context) {
+
+    companion object {
+        internal fun runSessionTest(context: Context, block: (CommonTestHelper) -> Unit) {
+            val testHelper = CommonTestHelper(context)
+            return try {
+                block(testHelper)
+            } finally {
+                testHelper.cleanUpOpenedSessions()
+            }
+        }
+
+        internal fun runCryptoTest(context: Context, block: (CryptoTestHelper, CommonTestHelper) -> Unit) {
+            val testHelper = CommonTestHelper(context)
+            val cryptoTestHelper = CryptoTestHelper(testHelper)
+            return try {
+                block(cryptoTestHelper, testHelper)
+            } finally {
+                testHelper.cleanUpOpenedSessions()
+            }
+        }
+    }
 
     internal val matrix: TestMatrix
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)

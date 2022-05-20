@@ -37,9 +37,10 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.isCrossSignedVerif
 import org.matrix.android.sdk.api.session.crypto.crosssigning.isVerified
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSessionTest
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
-import org.matrix.android.sdk.common.withTestHelpers
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 
@@ -49,8 +50,7 @@ import kotlin.coroutines.resume
 class XSigningTest : InstrumentedTest {
 
     @Test
-    fun test_InitializeAndStoreKeys() = withTestHelpers(context()) { cryptoTestHelper ->
-        val testHelper = cryptoTestHelper.testHelper
+    fun test_InitializeAndStoreKeys() = runSessionTest(context()) { testHelper ->
         val aliceSession = testHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(true))
 
         testHelper.doSync<Unit> {
@@ -84,8 +84,7 @@ class XSigningTest : InstrumentedTest {
     }
 
     @Test
-    fun test_CrossSigningCheckBobSeesTheKeys() = withTestHelpers(context()) { cryptoTestHelper ->
-        val testHelper = cryptoTestHelper.testHelper
+    fun test_CrossSigningCheckBobSeesTheKeys() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession
@@ -138,8 +137,7 @@ class XSigningTest : InstrumentedTest {
     }
 
     @Test
-    fun test_CrossSigningTestAliceTrustBobNewDevice() = withTestHelpers(context()) { cryptoTestHelper ->
-        val testHelper = cryptoTestHelper.testHelper
+    fun test_CrossSigningTestAliceTrustBobNewDevice() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession

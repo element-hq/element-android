@@ -34,8 +34,9 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
+import org.matrix.android.sdk.common.CommonTestHelper
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import org.matrix.android.sdk.common.CryptoTestHelper
-import org.matrix.android.sdk.common.withTestHelpers
 import java.util.concurrent.CountDownLatch
 
 @RunWith(AndroidJUnit4::class)
@@ -44,8 +45,8 @@ class EncryptionTest : InstrumentedTest {
 
     @Test
     fun test_EncryptionEvent() {
-        withTestHelpers(context()) { cryptoTestHelper ->
-            performTest(cryptoTestHelper, roomShouldBeEncrypted = false) { room ->
+        runCryptoTest(context()) { cryptoTestHelper, testHelper ->
+            performTest(cryptoTestHelper, testHelper, roomShouldBeEncrypted = false) { room ->
                 // Send an encryption Event as an Event (and not as a state event)
                 room.sendService().sendEvent(
                         eventType = EventType.STATE_ROOM_ENCRYPTION,
@@ -57,8 +58,8 @@ class EncryptionTest : InstrumentedTest {
 
     @Test
     fun test_EncryptionStateEvent() {
-        withTestHelpers(context()) { cryptoTestHelper ->
-            performTest(cryptoTestHelper, roomShouldBeEncrypted = true) { room ->
+        runCryptoTest(context()) { cryptoTestHelper, testHelper ->
+            performTest(cryptoTestHelper, testHelper, roomShouldBeEncrypted = true) { room ->
                 runBlocking {
                     // Send an encryption Event as a State Event
                     room.stateService().sendStateEvent(
@@ -71,7 +72,7 @@ class EncryptionTest : InstrumentedTest {
         }
     }
 
-    private fun performTest(cryptoTestHelper: CryptoTestHelper, roomShouldBeEncrypted: Boolean, action: (Room) -> Unit) {
+    private fun performTest(cryptoTestHelper: CryptoTestHelper, testHelper: CommonTestHelper, roomShouldBeEncrypted: Boolean, action: (Room) -> Unit) {
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceInARoom(encryptedRoom = false)
 
         val aliceSession = cryptoTestData.firstSession
@@ -104,9 +105,9 @@ class EncryptionTest : InstrumentedTest {
         timeline.addListener(timelineListener)
 
         action.invoke(room)
-        cryptoTestHelper.testHelper.await(latch)
+        testHelper.await(latch)
         timeline.dispose()
-        cryptoTestHelper.testHelper.waitWithLatch {
+        testHelper.waitWithLatch {
             room.roomCryptoService().isEncrypted() shouldBe roomShouldBeEncrypted
             it.countDown()
         }

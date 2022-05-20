@@ -38,8 +38,8 @@ import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import org.matrix.android.sdk.common.TestConstants
-import org.matrix.android.sdk.common.withTestHelpers
 import org.matrix.android.sdk.internal.crypto.model.OlmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.store.db.deserializeFromRealm
 import org.matrix.android.sdk.internal.crypto.store.db.serializeForRealm
@@ -82,8 +82,7 @@ class UnwedgingTest : InstrumentedTest {
      * -> This is automatically fixed after SDKs restarted the olm session
      */
     @Test
-    fun testUnwedging() = withTestHelpers(context()) { cryptoTestHelper ->
-        val testHelper = cryptoTestHelper.testHelper
+    fun testUnwedging() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession
