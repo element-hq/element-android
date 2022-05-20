@@ -23,6 +23,7 @@ import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.createdirect.DirectRoomHelper
 import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
+import timber.log.Timber
 
 class DialPadLookup @Inject constructor(
         private val session: Session,
@@ -47,7 +48,7 @@ class DialPadLookup @Inject constructor(
             if (nativeUserId == session.myUserId) {
                 throw Failure.NumberIsYours
             }
-            var nativeRoomId = session.getExistingDirectRoomWithUser(nativeUserId)
+            var nativeRoomId = session.roomService().getExistingDirectRoomWithUser(nativeUserId)
             if (nativeRoomId == null) {
                 // if there is no existing native room with the existing native user,
                 // just create a DM with the native user
