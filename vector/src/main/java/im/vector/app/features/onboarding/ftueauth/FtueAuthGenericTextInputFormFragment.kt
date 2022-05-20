@@ -225,13 +225,8 @@ class FtueAuthGenericTextInputFormFragment @Inject constructor() : AbstractFtueA
             TextInputFormFragmentMode.SetEmail -> {
                 views.loginGenericTextInputFormTil.error = errorFormatter.toHumanReadable(throwable)
             }
-            TextInputFormFragmentMode.SetMsisdn -> {
-                if (throwable.is401()) {
-                    // This is normal use case, we go to the enter code screen
-                    viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnSendMsisdnSuccess(viewModel.currentThreePid ?: "")))
-                } else {
-                    views.loginGenericTextInputFormTil.error = errorFormatter.toHumanReadable(throwable)
-                }
+            TextInputFormFragmentMode.SetMsisdn     -> {
+                views.loginGenericTextInputFormTil.error = errorFormatter.toHumanReadable(throwable)
             }
             TextInputFormFragmentMode.ConfirmMsisdn -> {
                 when {
