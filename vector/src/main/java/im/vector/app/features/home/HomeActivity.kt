@@ -191,7 +191,7 @@ class HomeActivity :
         views.drawerLayout.addDrawerListener(drawerListener)
         if (isFirstCreation()) {
             replaceFragment(views.homeDetailFragmentContainer, HomeDetailFragment::class.java)
-            replaceFragment(views.homeDrawerFragmentContainer, HomeDrawerFragment::class.java)
+//            replaceFragment(views.homeDrawerFragmentContainer, HomeDrawerFragment::class.java)
         }
 
         sharedActionViewModel
