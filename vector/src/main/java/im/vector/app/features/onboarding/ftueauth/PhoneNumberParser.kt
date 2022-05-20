@@ -20,7 +20,9 @@ import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import javax.inject.Inject
 
-class PhoneNumberParser @Inject constructor() {
+class PhoneNumberParser @Inject constructor(
+        private val phoneNumberUtil: PhoneNumberUtil
+) {
 
     fun parseInternationalNumber(rawPhoneNumber: String): Result {
         return when {
@@ -30,9 +32,8 @@ class PhoneNumberParser @Inject constructor() {
     }
 
     private fun parseNumber(rawPhoneNumber: String) = try {
-        val instance = PhoneNumberUtil.getInstance()
-        val phoneNumber = instance.parse(rawPhoneNumber, null)
-        Result.Success(instance.getRegionCodeForCountryCode(phoneNumber.countryCode), rawPhoneNumber)
+        val phoneNumber = phoneNumberUtil.parse(rawPhoneNumber, null)
+        Result.Success(phoneNumberUtil.getRegionCodeForCountryCode(phoneNumber.countryCode), rawPhoneNumber)
     } catch (e: NumberParseException) {
         Result.ErrorInvalidNumber
     }
