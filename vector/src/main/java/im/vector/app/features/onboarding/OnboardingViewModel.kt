@@ -25,6 +25,7 @@ import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
+import im.vector.app.core.extensions.cancelCurrentOnSet
 import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.extensions.vectorStore
 import im.vector.app.core.platform.VectorViewModel
@@ -124,12 +125,8 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private var loginConfig: LoginConfig? = null
 
-    private var currentJob: Job? = null
-        set(value) {
-            // Cancel any previous Job
-            field?.cancel()
-            field = value
-        }
+    private var emailVerificationPollingJob: Job? by cancelCurrentOnSet()
+    private var currentJob: Job? by cancelCurrentOnSet()
 
     override fun handle(action: OnboardingAction) {
         when (action) {
@@ -264,13 +261,10 @@ class OnboardingViewModel @AssistedInject constructor(
             setState { copy(isLoading = false) }
         }
 
+        // Allow email verification polling to coexist with other jobs
         when (action) {
-            is RegisterAction.SendAgainThreePid -> {
-                // avoid cancelling the current job which is polling for verification complete
-            }
-            else -> {
-                currentJob = job
-            }
+            is RegisterAction.CheckIfEmailHasBeenValidated -> emailVerificationPollingJob = job
+            else                                           -> currentJob = job
         }
     }
 
@@ -317,6 +311,7 @@ class OnboardingViewModel @AssistedInject constructor(
     private fun handleResetAction(action: OnboardingAction.ResetAction) {
         // Cancel any request
         currentJob = null
+        emailVerificationPollingJob = null
 
         when (action) {
             OnboardingAction.ResetHomeServerType        -> {
@@ -800,7 +795,7 @@ class OnboardingViewModel @AssistedInject constructor(
     }
 
     private fun cancelWaitForEmailValidation() {
-        currentJob = null
+        emailVerificationPollingJob = null
     }
 }
 
