@@ -82,7 +82,9 @@ fun requestDisablingBatteryOptimization(activity: Activity, activityResultLaunch
  * Copy a text to the clipboard, and display a Toast when done.
  *
  * @param context the context
- * @param text    the text to copy
+ * @param text the text to copy
+ * @param showToast true to also show a Toast to the user
+ * @param toastMessage content of the toast message as a String resource
  */
 fun copyToClipboard(context: Context, text: CharSequence, showToast: Boolean = true, @StringRes toastMessage: Int = R.string.copied_to_clipboard) {
     val clipboard = context.getSystemService<ClipboardManager>()!!

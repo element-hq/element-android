@@ -364,6 +364,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
      * Check if the edition is on the latest thread event, and update it accordingly.
      * @param editedEvent The event that will be changed
      * @param replaceEvent The new event
+     * @param editions list of edition of event
      */
     private fun handleThreadSummaryEdition(editedEvent: EventEntity?,
                                            replaceEvent: TimelineEventEntity?,

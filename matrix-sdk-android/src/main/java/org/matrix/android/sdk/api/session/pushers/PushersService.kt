@@ -47,12 +47,12 @@ interface PushersService {
      * Add a new Email pusher.
      * Ref: https://matrix.org/docs/spec/client_server/latest#post-matrix-client-r0-pushers-set
      *
-     * @param email             The email address to send notifications to.
-     * @param lang              The preferred language for receiving notifications (e.g. "en" or "en-US").
-     * @param emailBranding     The branding placeholder to include in the email communications.
-     * @param appDisplayName    A human readable string that will allow the user to identify what application owns this pusher.
+     * @param email The email address to send notifications to.
+     * @param lang The preferred language for receiving notifications (e.g. "en" or "en-US").
+     * @param emailBranding The branding placeholder to include in the email communications.
+     * @param appDisplayName A human readable string that will allow the user to identify what application owns this pusher.
      * @param deviceDisplayName A human readable string that will allow the user to identify what device owns this pusher.
-     * @param append            If true, the homeserver should add another pusher with the given pushkey and App ID in addition
+     * @param append If true, the homeserver should add another pusher with the given pushkey and App ID in addition
      *                          to any others with different user IDs. Otherwise, the homeserver must remove any other pushers
      *                          with the same App ID and pushkey for different users. Typically We always want to append for
      *                          email pushers since we don't want to stop other accounts notifying to the same email address.

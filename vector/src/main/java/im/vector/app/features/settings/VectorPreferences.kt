@@ -493,7 +493,7 @@ class VectorPreferences @Inject constructor(
     /**
      * Update the notification ringtone.
      *
-     * @param uri     the new notification ringtone, or null for no RingTone
+     * @param uri the new notification ringtone, or null for no RingTone
      */
     fun setNotificationRingTone(uri: Uri?) {
         defaultPrefs.edit {
@@ -636,7 +636,7 @@ class VectorPreferences @Inject constructor(
     /**
      * Tells if the application is started on boot.
      *
-     * @param value   true to start the application on boot
+     * @param value true to start the application on boot
      */
     fun setAutoStartOnBoot(value: Boolean) {
         defaultPrefs.edit {
@@ -656,7 +656,7 @@ class VectorPreferences @Inject constructor(
     /**
      * Updates the selected saving period.
      *
-     * @param index   the selected period index
+     * @param index the selected period index
      */
     fun setSelectedMediasSavingPeriod(index: Int) {
         defaultPrefs.edit {

@@ -25,7 +25,7 @@ internal object FilterUtil {
      * FIXME New expected filter:
      * "{\"room\": {\"ephemeral\": {\"notTypes\": [\"m.typing\"]}}, \"presence\":{\"notTypes\": [\"*\"]}}"
      *
-     * @param filterBody      filterBody to patch
+     * @param filterBody filterBody to patch
      * @param useDataSaveMode true to enable data save mode
      */
     /*

@@ -72,7 +72,7 @@ internal class EventDecryptor @Inject constructor(
     /**
      * Decrypt an event.
      *
-     * @param event    the raw event.
+     * @param event the raw event.
      * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
      * @return the MXEventDecryptionResult data, or throw in case of error
      */
@@ -84,7 +84,7 @@ internal class EventDecryptor @Inject constructor(
     /**
      * Decrypt an event asynchronously.
      *
-     * @param event    the raw event.
+     * @param event the raw event.
      * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
      * @param callback the callback to return data or null
      */
@@ -100,7 +100,7 @@ internal class EventDecryptor @Inject constructor(
     /**
      * Decrypt an event.
      *
-     * @param event    the raw event.
+     * @param event the raw event.
      * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
      * @return the MXEventDecryptionResult data, or null in case of error
      */

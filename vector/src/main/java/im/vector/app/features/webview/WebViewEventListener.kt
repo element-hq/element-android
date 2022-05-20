@@ -48,8 +48,8 @@ interface WebViewEventListener {
     /**
      * Triggered when an error occurred while loading a page.
      *
-     * @param url         The url that failed.
-     * @param errorCode   The error code.
+     * @param url The url that failed.
+     * @param errorCode The error code.
      * @param description The error description.
      */
     fun onPageError(url: String, errorCode: Int, description: String) {
@@ -59,8 +59,8 @@ interface WebViewEventListener {
     /**
      * Triggered when an error occurred while loading a page.
      *
-     * @param url         The url that failed.
-     * @param errorCode   The error code.
+     * @param url The url that failed.
+     * @param errorCode The error code.
      * @param description The error description.
      */
     fun onHttpError(url: String, errorCode: Int, description: String) {

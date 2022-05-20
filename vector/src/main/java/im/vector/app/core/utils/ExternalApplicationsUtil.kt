@@ -170,9 +170,9 @@ fun openUri(activity: Activity, uri: String) {
 /**
  * Send media to a third party application.
  *
- * @param activity       the activity
+ * @param activity the activity
  * @param savedMediaPath the media path
- * @param mimeType       the media mime type.
+ * @param mimeType the media mime type.
  */
 fun openMedia(activity: Activity, savedMediaPath: String, mimeType: String) {
     val file = File(savedMediaPath)
@@ -415,8 +415,8 @@ fun selectTxtFileToWrite(
  *
  * ~~ This is copied from the old matrix sdk ~~
  *
- * @param sourceFile     the file source path
- * @param dstDirPath     the dst path
+ * @param sourceFile the file source path
+ * @param dstDirPath the dst path
  * @param outputFilename optional the output filename
  * @param currentTimeMillis the current time in milliseconds
  * @return               the created file

@@ -508,7 +508,7 @@ internal class DefaultCryptoService @Inject constructor(
     /**
      * Provides the device information for a user id and a device Id.
      *
-     * @param userId   the user id
+     * @param userId the user id
      * @param deviceId the device id
      */
     override fun getDeviceInfo(userId: String, deviceId: String?): CryptoDeviceInfo? {
@@ -538,7 +538,7 @@ internal class DefaultCryptoService @Inject constructor(
     /**
      * Set the devices as known.
      *
-     * @param devices  the devices. Note that the verified member of the devices in this list will not be updated by this method.
+     * @param devices the devices. Note that the verified member of the devices in this list will not be updated by this method.
      * @param callback the asynchronous callback
      */
     override fun setDevicesKnown(devices: List<MXDeviceInfo>, callback: MatrixCallback<Unit>?) {
@@ -576,8 +576,8 @@ internal class DefaultCryptoService @Inject constructor(
      * Update the blocked/verified state of the given device.
      *
      * @param trustLevel the new trust level
-     * @param userId     the owner of the device
-     * @param deviceId   the unique identifier for the device.
+     * @param userId the owner of the device
+     * @param deviceId the unique identifier for the device.
      */
     override fun setDeviceVerification(trustLevel: DeviceTrustLevel, userId: String, deviceId: String) {
         setDeviceVerificationAction.handle(trustLevel, userId, deviceId)
@@ -586,10 +586,10 @@ internal class DefaultCryptoService @Inject constructor(
     /**
      * Configure a room to use encryption.
      *
-     * @param roomId             the room id to enable encryption in.
-     * @param algorithm          the encryption config for the room.
+     * @param roomId the room id to enable encryption in.
+     * @param algorithm the encryption config for the room.
      * @param inhibitDeviceQuery true to suppress device list query for users in the room (for now)
-     * @param membersId          list of members to start tracking their devices
+     * @param membersId list of members to start tracking their devices
      * @return true if the operation succeeds.
      */
     private suspend fun setEncryptionInRoom(roomId: String,
@@ -687,9 +687,9 @@ internal class DefaultCryptoService @Inject constructor(
      * Encrypt an event content according to the configuration of the room.
      *
      * @param eventContent the content of the event.
-     * @param eventType    the type of the event.
-     * @param roomId       the room identifier the event will be sent.
-     * @param callback     the asynchronous callback
+     * @param eventType the type of the event.
+     * @param roomId the room identifier the event will be sent.
+     * @param callback the asynchronous callback
      */
     override fun encryptEventContent(eventContent: Content,
                                      eventType: String,
@@ -742,7 +742,7 @@ internal class DefaultCryptoService @Inject constructor(
     /**
      * Decrypt an event.
      *
-     * @param event    the raw event.
+     * @param event the raw event.
      * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
      * @return the MXEventDecryptionResult data, or throw in case of error
      */
@@ -754,7 +754,7 @@ internal class DefaultCryptoService @Inject constructor(
     /**
      * Decrypt an event asynchronously.
      *
-     * @param event    the raw event.
+     * @param event the raw event.
      * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
      * @param callback the callback to return data or null
      */
@@ -765,7 +765,7 @@ internal class DefaultCryptoService @Inject constructor(
     /**
      * Decrypt an event.
      *
-     * @param event    the raw event.
+     * @param event the raw event.
      * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
      * @return the MXEventDecryptionResult data, or null in case of error
      */
@@ -905,6 +905,7 @@ internal class DefaultCryptoService @Inject constructor(
     /**
      * Handle an m.room.encryption event.
      *
+     * @param roomId the room Id
      * @param event the encryption event.
      */
     private fun onRoomEncryptionEvent(roomId: String, event: Event) {
@@ -928,6 +929,7 @@ internal class DefaultCryptoService @Inject constructor(
     /**
      * Handle a change in the membership state of a member of a room.
      *
+     * @param roomId the room Id
      * @param event the membership event causing the change
      */
     private fun onRoomMembershipEvent(roomId: String, event: Event) {
@@ -996,7 +998,7 @@ internal class DefaultCryptoService @Inject constructor(
     /**
      * Export the crypto keys.
      *
-     * @param password         the password
+     * @param password the password
      * @param anIterationCount the encryption iteration count (0 means no encryption)
      */
     private suspend fun exportRoomKeys(password: String, anIterationCount: Int): ByteArray {
@@ -1015,8 +1017,8 @@ internal class DefaultCryptoService @Inject constructor(
     /**
      * Import the room keys.
      *
-     * @param roomKeysAsArray  the room keys as array.
-     * @param password         the password
+     * @param roomKeysAsArray the room keys as array.
+     * @param password the password
      * @param progressListener the progress listener
      * @return the result ImportRoomKeysResult
      */
@@ -1066,7 +1068,7 @@ internal class DefaultCryptoService @Inject constructor(
      * A success means there is no unknown devices.
      * If there are some unknown devices, a MXCryptoError.UnknownDevice exception is triggered.
      *
-     * @param userIds  the user ids list
+     * @param userIds the user ids list
      * @param callback the asynchronous callback.
      */
     fun checkUnknownDevices(userIds: List<String>, callback: MatrixCallback<Unit>) {
@@ -1089,7 +1091,7 @@ internal class DefaultCryptoService @Inject constructor(
      * If false, it can still be overridden per-room.
      * If true, it overrides the per-room settings.
      *
-     * @param block    true to unilaterally blacklist all
+     * @param block true to unilaterally blacklist all
      */
     override fun setGlobalBlacklistUnverifiedDevices(block: Boolean) {
         cryptoStore.setGlobalBlacklistUnverifiedDevices(block)
@@ -1129,8 +1131,8 @@ internal class DefaultCryptoService @Inject constructor(
     /**
      * Manages the room black-listing for unverified devices.
      *
-     * @param roomId   the room id
-     * @param add      true to add the room id to the list, false to remove it.
+     * @param roomId the room id
+     * @param add true to add the room id to the list, false to remove it.
      */
     private fun setRoomBlacklistUnverifiedDevices(roomId: String, add: Boolean) {
         val roomIds = cryptoStore.getRoomsListBlacklistUnverifiedDevices().toMutableList()
@@ -1149,7 +1151,7 @@ internal class DefaultCryptoService @Inject constructor(
     /**
      * Add this room to the ones which don't encrypt messages to unverified devices.
      *
-     * @param roomId   the room id
+     * @param roomId the room id
      */
     override fun setRoomBlacklistUnverifiedDevices(roomId: String) {
         setRoomBlacklistUnverifiedDevices(roomId, true)
@@ -1158,7 +1160,7 @@ internal class DefaultCryptoService @Inject constructor(
     /**
      * Remove this room to the ones which don't encrypt messages to unverified devices.
      *
-     * @param roomId   the room id
+     * @param roomId the room id
      */
     override fun setRoomUnBlacklistUnverifiedDevices(roomId: String) {
         setRoomBlacklistUnverifiedDevices(roomId, false)

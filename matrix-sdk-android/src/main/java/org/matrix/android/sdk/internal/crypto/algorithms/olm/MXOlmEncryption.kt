@@ -70,7 +70,7 @@ internal class MXOlmEncryption(
     /**
      * Ensure that the session.
      *
-     * @param users    the user ids list
+     * @param users the user ids list
      */
     private suspend fun ensureSession(users: List<String>) {
         deviceListManager.downloadKeys(users, false)

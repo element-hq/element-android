@@ -96,7 +96,9 @@ internal fun EventEntity.markEventAsRoot(
 /**
  * Count the number of threads for the provided root thread eventId, and finds the latest event message.
  * Note: Redactions are handled by RedactionEventProcessor.
+ * @param realm the realm database
  * @param rootThreadEventId The root eventId that will find the number of threads
+ * @param chunkEntity the chunk entity
  * @return A ThreadSummary containing the counted threads and the latest event message
  */
 internal fun EventEntity.threadSummaryInThread(realm: Realm, rootThreadEventId: String, chunkEntity: ChunkEntity?): Summary {
@@ -184,6 +186,7 @@ private fun findLatestSortedChunkEvent(chunk: ChunkEntity, rootThreadEventId: St
 
 /**
  * Find all TimelineEventEntity that are root threads for the specified room.
+ * @param realm the realm instance
  * @param roomId The room that all stored root threads will be returned
  */
 internal fun TimelineEventEntity.Companion.findAllThreadsForRoomId(realm: Realm, roomId: String): RealmQuery<TimelineEventEntity> =
@@ -218,6 +221,7 @@ internal fun List<TimelineEvent>.mapEventsWithEdition(realm: Realm, roomId: Stri
 
 /**
  * Returns a list of all the marked unread threads that exists for the specified room.
+ * @param realm the realm instance
  * @param roomId The roomId that the user is currently in
  */
 internal fun TimelineEventEntity.Companion.findAllLocalThreadNotificationsForRoomId(realm: Realm, roomId: String): RealmQuery<TimelineEventEntity> =
@@ -232,6 +236,7 @@ internal fun TimelineEventEntity.Companion.findAllLocalThreadNotificationsForRoo
 
 /**
  * Returns whether or not the given user is participating in a current thread.
+ * @param realm the realm instance
  * @param roomId the room that the thread exists
  * @param rootThreadEventId the thread that the search will be done
  * @param senderId the user that will try to find participation
@@ -247,6 +252,7 @@ internal fun TimelineEventEntity.Companion.isUserParticipatingInThread(realm: Re
 
 /**
  * Returns whether or not the given user is mentioned in a current thread.
+ * @param realm the realm instance
  * @param roomId the room that the thread exists
  * @param rootThreadEventId the thread that the search will be done
  * @param userId the user that will try to find if there is a mention

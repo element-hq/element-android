@@ -39,8 +39,9 @@ class UnrecognizedCertificateDialog @Inject constructor(
      * Display a certificate dialog box, asking the user about an unknown certificate
      * To use when user is currently logged in.
      *
+     * @param activity the Android activity
      * @param unrecognizedFingerprint the fingerprint for the unknown certificate
-     * @param callback                callback to fire when the user makes a decision
+     * @param callback callback to fire when the user makes a decision
      */
     fun show(activity: Activity,
              unrecognizedFingerprint: Fingerprint,
@@ -80,9 +81,13 @@ class UnrecognizedCertificateDialog @Inject constructor(
     /**
      * Display a certificate dialog box, asking the user about an unknown certificate.
      *
+     * @param activity the Activity
      * @param unrecognizedFingerprint the fingerprint for the unknown certificate
-     * @param existing                the current session already exist, so it mean that something has changed server side
-     * @param callback                callback to fire when the user makes a decision
+     * @param existing the current session already exist, so it mean that something has changed server side
+     * @param callback callback to fire when the user makes a decision
+     * @param userId the matrix userId
+     * @param homeServerUrl the homeserver url
+     * @param homeServerConnectionConfigHasFingerprints true if the homeServerConnectionConfig has fingerprint
      */
     private fun internalShow(activity: Activity,
                              unrecognizedFingerprint: Fingerprint,
