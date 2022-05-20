@@ -18,7 +18,7 @@ package org.matrix.android.sdk.api.cache
 
 sealed class CacheStrategy {
     /**
-     * Data is always fetched from the server
+     * Data is always fetched from the server.
      */
     object NoCache : CacheStrategy()
 
@@ -29,7 +29,7 @@ sealed class CacheStrategy {
     data class TtlCache(val validityDurationInMillis: Long, val strict: Boolean) : CacheStrategy()
 
     /**
-     * Once retrieved, the data is stored in cache and will be always get from the cache
+     * Once retrieved, the data is stored in cache and will be always get from the cache.
      */
     object InfiniteCache : CacheStrategy()
 }

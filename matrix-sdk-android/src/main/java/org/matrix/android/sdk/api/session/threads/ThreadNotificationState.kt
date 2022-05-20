@@ -21,17 +21,17 @@ package org.matrix.android.sdk.api.session.threads
  */
 enum class ThreadNotificationState {
     /**
-     * There are no new message
+     * There are no new message.
      */
     NO_NEW_MESSAGE,
 
     /**
-     * There is at least one new message
+     * There is at least one new message.
      */
     NEW_MESSAGE,
 
     /**
-     * The is at least one new message that should be highlighted
+     * The is at least one new message that should be highlighted.
      * ex. "Hello @aris.kotsomitopoulos"
      */
     NEW_HIGHLIGHTED_MESSAGE;

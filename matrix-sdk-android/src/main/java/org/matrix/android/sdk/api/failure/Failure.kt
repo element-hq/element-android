@@ -38,7 +38,7 @@ sealed class Failure(cause: Throwable? = null) : Throwable(cause = cause) {
     object SuccessError : Failure(RuntimeException(RuntimeException("SuccessResult is false")))
 
     /**
-     * When server send an error, but it cannot be interpreted as a MatrixError
+     * When server send an error, but it cannot be interpreted as a MatrixError.
      */
     data class OtherServerError(val errorBody: String, val httpCode: Int) : Failure(RuntimeException("HTTP $httpCode: $errorBody"))
 

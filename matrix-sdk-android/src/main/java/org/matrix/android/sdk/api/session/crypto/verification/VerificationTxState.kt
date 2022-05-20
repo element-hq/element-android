@@ -18,12 +18,12 @@ package org.matrix.android.sdk.api.session.crypto.verification
 
 sealed class VerificationTxState {
     /**
-     * Uninitialized state
+     * Uninitialized state.
      */
     object None : VerificationTxState()
 
     /**
-     * Specific for SAS
+     * Specific for SAS.
      */
     abstract class VerificationSasTxState : VerificationTxState()
 
@@ -43,25 +43,25 @@ sealed class VerificationTxState {
     object Verifying : VerificationSasTxState()
 
     /**
-     * Specific for QR code
+     * Specific for QR code.
      */
     abstract class VerificationQrTxState : VerificationTxState()
 
     /**
-     * Will be used to ask the user if the other user has correctly scanned
+     * Will be used to ask the user if the other user has correctly scanned.
      */
     object QrScannedByOther : VerificationQrTxState()
     object WaitingOtherReciprocateConfirm : VerificationQrTxState()
 
     /**
-     * Terminal states
+     * Terminal states.
      */
     abstract class TerminalTxState : VerificationTxState()
 
     object Verified : TerminalTxState()
 
     /**
-     * Cancelled by me or by other
+     * Cancelled by me or by other.
      */
     data class Cancelled(val cancelCode: CancelCode, val byMe: Boolean) : TerminalTxState()
 }

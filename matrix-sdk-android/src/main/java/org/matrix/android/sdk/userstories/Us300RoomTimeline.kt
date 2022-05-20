@@ -20,7 +20,7 @@ package org.matrix.android.sdk.userstories
 
 /**
  * ### Title
- * Display a Room timeline, and navigate backward and forward
+ * Display a Room timeline, and navigate backward and forward.
  *
  * #### Required APIs:
  * - TODO

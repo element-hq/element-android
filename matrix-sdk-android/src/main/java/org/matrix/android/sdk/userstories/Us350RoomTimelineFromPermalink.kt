@@ -20,7 +20,7 @@ package org.matrix.android.sdk.userstories
 
 /**
  * ### Title
- * Display a Room timeline at a specific point
+ * Display a Room timeline at a specific point.
  *
  * #### Required APIs:
  * - TODO

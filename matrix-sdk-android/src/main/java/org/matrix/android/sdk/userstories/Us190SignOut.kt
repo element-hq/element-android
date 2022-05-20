@@ -20,7 +20,7 @@ package org.matrix.android.sdk.userstories
 
 /**
  * ### Title
- * Sign out
+ * Sign out.
  *
  * #### Required APIs:
  * - TODO

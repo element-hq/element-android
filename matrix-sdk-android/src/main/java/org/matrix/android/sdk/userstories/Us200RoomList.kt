@@ -20,7 +20,7 @@ package org.matrix.android.sdk.userstories
 
 /**
  * ### Title
- * Get the Room list
+ * Get the Room list.
  *
  * #### Required APIs:
  * - TODO

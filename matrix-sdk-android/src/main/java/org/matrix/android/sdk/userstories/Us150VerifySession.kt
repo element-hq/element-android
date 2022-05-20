@@ -20,7 +20,7 @@ package org.matrix.android.sdk.userstories
 
 /**
  * ### Title
- * Verify a Session after a Sign in
+ * Verify a Session after a Sign in.
  *
  * #### Required APIs:
  * - TODO

@@ -20,7 +20,7 @@ package org.matrix.android.sdk.userstories
 
 /**
  * ### Title
- * Manage the sync with the server
+ * Manage the sync with the server.
  *
  * #### Required APIs:
  * - TODO

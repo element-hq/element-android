@@ -20,7 +20,7 @@ package org.matrix.android.sdk.userstories
 
 /**
  * ### Title
- * Send content to a room, including monitoring the sending state
+ * Send content to a room, including monitoring the sending state.
  *
  * #### Required APIs:
  * - TODO

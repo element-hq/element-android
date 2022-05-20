@@ -20,7 +20,7 @@ package org.matrix.android.sdk.userstories
 
 /**
  * ### Title
- * Sign in to an existing account
+ * Sign in to an existing account.
  *
  * #### Required APIs:
  * - [org.matrix.android.sdk.api.Matrix.authenticationService]

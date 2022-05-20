@@ -20,7 +20,7 @@ package org.matrix.android.sdk.userstories
 
 /**
  * ### Title
- * Init a Matrix object
+ * Init a Matrix object.
  *
  * ### Required APIs:
  * - [org.matrix.android.sdk.api.Matrix] constructor

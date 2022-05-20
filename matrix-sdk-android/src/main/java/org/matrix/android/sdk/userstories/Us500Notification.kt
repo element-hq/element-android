@@ -20,7 +20,7 @@ package org.matrix.android.sdk.userstories
 
 /**
  * ### Title
- * Get notified when new Events are received
+ * Get notified when new Events are received.
  *
  * #### Required APIs:
  * - TODO
