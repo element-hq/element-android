@@ -539,7 +539,7 @@ internal class RoomSyncHandler @Inject constructor(
     }
 
     private fun generateTimelineId(roomId: String): String {
-        return "${RoomSyncHandler::class.java.simpleName}$roomId"
+        return "RoomSyncHandler$roomId"
     }
 
     data class EphemeralResult(

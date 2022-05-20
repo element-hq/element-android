@@ -55,7 +55,7 @@ class ReplayAttackTest : InstrumentedTest {
 
         // Alice will send a message
         val sentEvents = testHelper.sendTextMessage(aliceRoomPOV, "Hello I will be decrypted twice", 1)
-        Assert.assertTrue("Message should be sent", sentEvents.size == 1)
+        assertEquals(1, sentEvents.size)
 
         val fakeEventId = sentEvents[0].eventId + "_fake"
         val fakeEventWithTheSameIndex =
@@ -96,6 +96,7 @@ class ReplayAttackTest : InstrumentedTest {
         // Alice will send a message
         val sentEvents = testHelper.sendTextMessage(aliceRoomPOV, "Hello I will be decrypted twice", 1)
         Assert.assertTrue("Message should be sent", sentEvents.size == 1)
+        assertEquals(sentEvents.size, 1)
 
         testHelper.runBlockingTest {
             // Lets assume we are from the main timelineId
