@@ -2,7 +2,10 @@ def excludes = [ ]
 
 def initializeReport(report, projects, classExcludes) {
     projects.each { project -> project.apply plugin: 'jacoco' }
-    report.executionData { fileTree(rootProject.rootDir.absolutePath).include("**/build/outputs/unit_test_code_coverage/**/*.exec") }
+    report.executionData { fileTree(rootProject.rootDir.absolutePath).include(
+        "**/build/outputs/unit_test_code_coverage/**/*.exec",
+        "**/build/outputs/code_coverage/**/coverage.ec"
+    ) }
 
     report.reports {
         xml.enabled true
@@ -50,7 +53,7 @@ task theCodeCoverageReport(type: JacocoReport) {
     // def excludedProjects = [ ... ]
     def projects = collectProjects { ['vector','matrix-sdk-android'].contains(it.name) }
     //def projects = collectProjects { true }
-    dependsOn { [':vector:assembleGplay'] + [':matrix-sdk-android:testDebugUnitTest']  + [':vector:testGplayDebugUnitTest'] + ['matrix-sdk-android:createDebugCoverageReport'] } //+ [':matrix-sdk-android:connectedDebugAndroidTest'] }
+    dependsOn { [':vector:assembleGplay'] + [':matrix-sdk-android:testDebugUnitTest']  + [':vector:testGplayDebugUnitTest'] + ['matrix-sdk-android:createDebugCoverageReport'] + [':matrix-sdk-android:connectedDebugAndroidTest'] }
     initializeReport(it, projects, excludes)
 }
 
