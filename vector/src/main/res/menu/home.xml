@@ -7,26 +7,31 @@
         android:id="@+id/menu_home_setting"
         android:icon="@drawable/ic_settings_x"
         android:title="@string/settings"
+        android:orderInCategory="100"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/menu_home_suggestion"
         android:icon="@drawable/ic_material_bug_report"
+        android:orderInCategory="110"
         android:title="@string/send_suggestion" />
 
     <item
         android:id="@+id/menu_home_report_bug"
         android:icon="@drawable/ic_material_bug_report"
+        android:orderInCategory="120"
         android:title="@string/send_bug_report" />
 
     <item
         android:id="@+id/menu_home_init_sync_legacy"
         android:title="Do a legacy init sync"
+        android:orderInCategory="130"
         tools:ignore="HardcodedText" />
 
     <item
         android:id="@+id/menu_home_init_sync_optimized"
         android:title="Do an optimized init sync"
+        android:orderInCategory="140"
         tools:ignore="HardcodedText" />
 
     <item

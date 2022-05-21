@@ -1,9 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/menu_home_mark_all_as_read"
         android:icon="@drawable/ic_material_done"
+        android:orderInCategory="50"
         android:title="@string/action_mark_all_as_read" />
+
+    <item
+        android:id="@+id/menu_explore_rooms"
+        android:title="@string/space_explore_activity_title"
+        android:orderInCategory="10"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_invite_people"
+        android:title="@string/invite_people_menu"
+        android:orderInCategory="20"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_add_rooms"
+        android:title="@string/space_add_child_title"
+        android:orderInCategory="30"
+        app:showAsAction="never" />
 
 </menu>

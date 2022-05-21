@@ -57,6 +57,10 @@ import im.vector.app.features.popup.VerificationVectorAlert
 import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity.Companion.EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY_MANAGE_SESSIONS
+import im.vector.app.features.spaces.SpaceExploreActivity
+import im.vector.app.features.spaces.manage.ManageType
+import im.vector.app.features.spaces.manage.SpaceManageActivity
+import im.vector.app.features.spaces.share.ShareSpaceBottomSheet
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.BannerState
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
@@ -87,6 +91,8 @@ class HomeDetailFragment @Inject constructor(
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
     private lateinit var sharedCallActionViewModel: SharedKnownCallsViewModel
 
+    private var isInSpace = false
+
     private var hasUnreadRooms = false
         set(value) {
             if (value != field) {
@@ -103,6 +109,20 @@ class HomeDetailFragment @Inject constructor(
                 viewModel.handle(HomeDetailAction.MarkAllRoomsRead)
                 return true
             }
+            R.id.menu_explore_rooms -> {
+                sharedActionViewModel.space.value?.let { startActivity(SpaceExploreActivity.newIntent(requireContext(), it.roomId)) }
+                return true
+            }
+            R.id.menu_invite_people -> {
+                activity?.let { activity ->
+                    sharedActionViewModel.space.value?.let { ShareSpaceBottomSheet.show(activity.supportFragmentManager, it.roomId) }
+                }
+                return true
+            }
+            R.id.menu_add_rooms -> {
+                sharedActionViewModel.space.value?.let { startActivity(SpaceManageActivity.newIntent(requireActivity(), it.roomId, ManageType.AddRooms)) }
+                return true
+            }
         }
 
         return super.onOptionsItemSelected(item)
@@ -117,6 +137,11 @@ class HomeDetailFragment @Inject constructor(
             val isRoomList = state.currentTab is HomeTab.RoomList
             menu.findItem(R.id.menu_home_mark_all_as_read)?.isVisible = isRoomList && hasUnreadRooms
         }
+
+        menu.findItem(R.id.menu_explore_rooms)?.isVisible = isInSpace
+        menu.findItem(R.id.menu_invite_people)?.isVisible = isInSpace
+        menu.findItem(R.id.menu_add_rooms)?.isVisible = isInSpace
+
         super.onPrepareOptionsMenu(menu)
     }
 
@@ -390,12 +415,16 @@ class HomeDetailFragment @Inject constructor(
         views.backButtonText.text = getString(R.string.all_chats)
         views.toolbarChevron.rotation = 0F
         if (spaceSummary == null) {
+            isInSpace = false
+            invalidateOptionsMenu()
             views.backButtonLayout.isVisible = false
             views.groupToolbarSpaceTitleView.isVisible = false
             views.groupToolbarSpaceTitleView.text = getString(R.string.all_chats)
             views.groupToolbarTitleView.text = getString(R.string.all_chats)
             views.spaceAvatar.isVisible = false
         } else {
+            isInSpace = true
+            invalidateOptionsMenu()
             views.backButtonLayout.isVisible = true
             views.groupToolbarSpaceTitleView.isVisible = true
             views.groupToolbarSpaceTitleView.text = spaceSummary.displayName
