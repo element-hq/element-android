@@ -2085,4 +2085,5 @@
     <string name="error_failed_to_join_room">S\'ha produït un error en provar d\'entrar a: %s</string>
     <string name="room_upgrade_to_recommended_version">Actualitza a la versió de sala recomanada</string>
     <string name="room_using_unstable_room_version">Aquesta sala té la versió %s, la qual està marcada com a no estable pel servidor.</string>
+    <string name="space_type_private_desc">Només amb invitació, per tu o per equips</string>
 </resources>
