@@ -25,35 +25,35 @@ package im.vector.app.features.analytics.plan
  */
 data class UserProperties(
         /**
-         * Whether the user has the favourites space enabled.
+         * Whether the user has the favourites space enabled
          */
-        val webMetaSpaceFavouritesEnabled: Boolean? = null,
+        val WebMetaSpaceFavouritesEnabled: Boolean? = null,
         /**
-         * Whether the user has the home space set to all rooms.
+         * Whether the user has the home space set to all rooms
          */
-        val webMetaSpaceHomeAllRooms: Boolean? = null,
+        val WebMetaSpaceHomeAllRooms: Boolean? = null,
         /**
-         * Whether the user has the home space enabled.
+         * Whether the user has the home space enabled
          */
-        val webMetaSpaceHomeEnabled: Boolean? = null,
+        val WebMetaSpaceHomeEnabled: Boolean? = null,
         /**
-         * Whether the user has the other rooms space enabled.
+         * Whether the user has the other rooms space enabled
          */
-        val webMetaSpaceOrphansEnabled: Boolean? = null,
+        val WebMetaSpaceOrphansEnabled: Boolean? = null,
         /**
-         * Whether the user has the people space enabled.
+         * Whether the user has the people space enabled
          */
-        val webMetaSpacePeopleEnabled: Boolean? = null,
+        val WebMetaSpacePeopleEnabled: Boolean? = null,
         /**
          * The selected messaging use case during the onboarding flow.
          */
         val ftueUseCaseSelection: FtueUseCaseSelection? = null,
         /**
-         * Number of joined rooms the user has favourited.
+         * Number of joined rooms the user has favourited
          */
         val numFavouriteRooms: Int? = null,
         /**
-         * Number of spaces (and sub-spaces) the user is joined to.
+         * Number of spaces (and sub-spaces) the user is joined to
          */
         val numSpaces: Int? = null,
 ) {
@@ -82,11 +82,11 @@ data class UserProperties(
 
     fun getProperties(): Map<String, Any>? {
         return mutableMapOf<String, Any>().apply {
-            webMetaSpaceFavouritesEnabled?.let { put("WebMetaSpaceFavouritesEnabled", it) }
-            webMetaSpaceHomeAllRooms?.let { put("WebMetaSpaceHomeAllRooms", it) }
-            webMetaSpaceHomeEnabled?.let { put("WebMetaSpaceHomeEnabled", it) }
-            webMetaSpaceOrphansEnabled?.let { put("WebMetaSpaceOrphansEnabled", it) }
-            webMetaSpacePeopleEnabled?.let { put("WebMetaSpacePeopleEnabled", it) }
+            WebMetaSpaceFavouritesEnabled?.let { put("WebMetaSpaceFavouritesEnabled", it) }
+            WebMetaSpaceHomeAllRooms?.let { put("WebMetaSpaceHomeAllRooms", it) }
+            WebMetaSpaceHomeEnabled?.let { put("WebMetaSpaceHomeEnabled", it) }
+            WebMetaSpaceOrphansEnabled?.let { put("WebMetaSpaceOrphansEnabled", it) }
+            WebMetaSpacePeopleEnabled?.let { put("WebMetaSpacePeopleEnabled", it) }
             ftueUseCaseSelection?.let { put("ftueUseCaseSelection", it.name) }
             numFavouriteRooms?.let { put("numFavouriteRooms", it) }
             numSpaces?.let { put("numSpaces", it) }

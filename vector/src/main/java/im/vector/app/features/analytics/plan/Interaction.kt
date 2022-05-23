@@ -106,6 +106,12 @@ data class Interaction(
         WebHomeExploreRoomsButton,
 
         /**
+         * User clicked on the mini avatar uploader in the home page of Element
+         * Web/Desktop.
+         */
+        WebHomeMiniAvatarUploadButton,
+
+        /**
          * User clicked the explore rooms button next to the search field at the
          * top of the left panel in Element Web/Desktop.
          */
