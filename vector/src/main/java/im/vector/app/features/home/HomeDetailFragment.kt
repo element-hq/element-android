@@ -145,10 +145,6 @@ class HomeDetailFragment @Inject constructor(
             updateTabVisibilitySafely(R.id.bottom_action_dial_pad, showDialPadTab)
         }
 
-        views.groupToolbarNavigateUp.setOnClickListener {
-            navigateBack()
-        }
-
         viewModel.observeViewEvents { viewEvent ->
             when (viewEvent) {
                 HomeDetailViewEvents.CallStarted   -> handleCallStarted()
@@ -307,13 +303,9 @@ class HomeDetailFragment @Inject constructor(
     private fun onSpaceChange(spaceSummary: RoomSummary?) {
         if (spaceSummary == null) {
             views.groupToolbarSpaceTitleView.isVisible = false
-            views.groupToolbarAvatarImageView.isVisible = true
-            views.groupToolbarNavigateUp.isVisible = false
         } else {
             views.groupToolbarSpaceTitleView.isVisible = true
             views.groupToolbarSpaceTitleView.text = spaceSummary.displayName
-            views.groupToolbarAvatarImageView.isVisible = false
-            views.groupToolbarNavigateUp.isVisible = true
         }
     }
 
