@@ -46,6 +46,7 @@ import org.matrix.android.sdk.internal.session.profile.ProfileModule
 import org.matrix.android.sdk.internal.session.pushers.AddPusherWorker
 import org.matrix.android.sdk.internal.session.pushers.PushersModule
 import org.matrix.android.sdk.internal.session.room.RoomModule
+import org.matrix.android.sdk.internal.session.room.aggregation.livelocation.DeactivateLiveLocationShareWorker
 import org.matrix.android.sdk.internal.session.room.send.MultipleEventSendingDispatcherWorker
 import org.matrix.android.sdk.internal.session.room.send.RedactEventWorker
 import org.matrix.android.sdk.internal.session.room.send.SendEventWorker
@@ -130,6 +131,8 @@ internal interface SessionComponent {
     fun inject(worker: AddPusherWorker)
 
     fun inject(worker: UpdateTrustWorker)
+
+    fun inject(worker: DeactivateLiveLocationShareWorker)
 
     @Component.Factory
     interface Factory {

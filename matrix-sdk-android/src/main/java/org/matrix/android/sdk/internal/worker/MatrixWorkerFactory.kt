@@ -27,6 +27,7 @@ import org.matrix.android.sdk.internal.di.MatrixScope
 import org.matrix.android.sdk.internal.session.content.UploadContentWorker
 import org.matrix.android.sdk.internal.session.group.GetGroupDataWorker
 import org.matrix.android.sdk.internal.session.pushers.AddPusherWorker
+import org.matrix.android.sdk.internal.session.room.aggregation.livelocation.DeactivateLiveLocationShareWorker
 import org.matrix.android.sdk.internal.session.room.send.MultipleEventSendingDispatcherWorker
 import org.matrix.android.sdk.internal.session.room.send.RedactEventWorker
 import org.matrix.android.sdk.internal.session.room.send.SendEventWorker
@@ -64,9 +65,11 @@ internal class MatrixWorkerFactory @Inject constructor(private val sessionManage
                 SyncWorker(appContext, workerParameters, sessionManager)
             UpdateTrustWorker::class.java.name                    ->
                 UpdateTrustWorker(appContext, workerParameters, sessionManager)
-            UploadContentWorker::class.java.name                  ->
+            UploadContentWorker::class.java.name                    ->
                 UploadContentWorker(appContext, workerParameters, sessionManager)
-            else                                                  -> {
+            DeactivateLiveLocationShareWorker::class.java.name ->
+                DeactivateLiveLocationShareWorker(appContext, workerParameters, sessionManager)
+            else                                                    -> {
                 Timber.w("No worker defined on MatrixWorkerFactory for $workerClassName will delegate to default.")
                 // Return null to delegate to the default WorkerFactory.
                 null
