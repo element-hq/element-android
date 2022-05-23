@@ -28,7 +28,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.addChildFragment
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.databinding.FragmentLiveLocationMapBinding
+import im.vector.app.databinding.FragmentSimpleContainerBinding
 import im.vector.app.features.location.UrlMapProvider
 import javax.inject.Inject
 
@@ -36,15 +36,15 @@ import javax.inject.Inject
  * Screen showing a map with all the current users sharing their live location in room.
  */
 @AndroidEntryPoint
-class LocationLiveMapViewFragment : VectorBaseFragment<FragmentLiveLocationMapBinding>() {
+class LocationLiveMapViewFragment : VectorBaseFragment<FragmentSimpleContainerBinding>() {
 
     @Inject
     lateinit var urlMapProvider: UrlMapProvider
 
     private val args: LocationLiveMapViewArgs by args()
 
-    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLiveLocationMapBinding {
-        return FragmentLiveLocationMapBinding.inflate(layoutInflater, container, false)
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSimpleContainerBinding {
+        return FragmentSimpleContainerBinding.inflate(layoutInflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -67,7 +67,7 @@ class LocationLiveMapViewFragment : VectorBaseFragment<FragmentLiveLocationMapBi
                     ?: run {
                         val options = MapboxMapOptions.createFromAttributes(requireContext(), null)
                         SupportMapFragment.newInstance(options)
-                                .also { addChildFragment(R.id.liveLocationMapContainer, it, tag = MAP_FRAGMENT_TAG) }
+                                .also { addChildFragment(R.id.fragmentContainer, it, tag = MAP_FRAGMENT_TAG) }
                     }
 
     companion object {
