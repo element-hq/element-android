@@ -25,6 +25,7 @@ import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
+import im.vector.app.core.extensions.cancelCurrentOnSet
 import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.extensions.vectorStore
 import im.vector.app.core.platform.VectorViewModel
@@ -50,7 +51,6 @@ import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.login.LoginWizard
 import org.matrix.android.sdk.api.auth.registration.FlowResult
-import org.matrix.android.sdk.api.auth.registration.RegistrationResult
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.session.Session
@@ -125,12 +125,8 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private var loginConfig: LoginConfig? = null
 
-    private var currentJob: Job? = null
-        set(value) {
-            // Cancel any previous Job
-            field?.cancel()
-            field = value
-        }
+    private var emailVerificationPollingJob: Job? by cancelCurrentOnSet()
+    private var currentJob: Job? by cancelCurrentOnSet()
 
     override fun handle(action: OnboardingAction) {
         when (action) {
@@ -257,12 +253,18 @@ class OnboardingViewModel @AssistedInject constructor(
     }
 
     private fun handleRegisterAction(action: RegisterAction, onNextRegistrationStepAction: (FlowResult) -> Unit) {
-        currentJob = viewModelScope.launch {
+        val job = viewModelScope.launch {
             if (action.hasLoadingState()) {
                 setState { copy(isLoading = true) }
             }
             internalRegisterAction(action, onNextRegistrationStepAction)
             setState { copy(isLoading = false) }
+        }
+
+        // Allow email verification polling to coexist with other jobs
+        when (action) {
+            is RegisterAction.CheckIfEmailHasBeenValidated -> emailVerificationPollingJob = job
+            else                                           -> currentJob = job
         }
     }
 
@@ -275,8 +277,10 @@ class OnboardingViewModel @AssistedInject constructor(
                                     // do nothing
                                 }
                                 else                   -> when (it) {
-                                    is RegistrationResult.Success      -> onSessionCreated(it.session, isAccountCreated = true)
-                                    is RegistrationResult.FlowResponse -> onFlowResponse(it.flowResult, onNextRegistrationStepAction)
+                                    is RegistrationResult.Complete         -> onSessionCreated(it.session, isAccountCreated = true)
+                                    is RegistrationResult.NextStep         -> onFlowResponse(it.flowResult, onNextRegistrationStepAction)
+                                    is RegistrationResult.SendEmailSuccess -> _viewEvents.post(OnboardingViewEvents.OnSendEmailSuccess(it.email))
+                                    is RegistrationResult.Error            -> _viewEvents.post(OnboardingViewEvents.Failure(it.cause))
                                 }
                             }
                         },
@@ -307,6 +311,7 @@ class OnboardingViewModel @AssistedInject constructor(
     private fun handleResetAction(action: OnboardingAction.ResetAction) {
         // Cancel any request
         currentJob = null
+        emailVerificationPollingJob = null
 
         when (action) {
             OnboardingAction.ResetHomeServerType        -> {
@@ -790,7 +795,7 @@ class OnboardingViewModel @AssistedInject constructor(
     }
 
     private fun cancelWaitForEmailValidation() {
-        currentJob = null
+        emailVerificationPollingJob = null
     }
 }
 
