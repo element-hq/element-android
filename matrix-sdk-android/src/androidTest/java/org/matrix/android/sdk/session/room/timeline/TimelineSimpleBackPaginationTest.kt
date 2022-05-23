@@ -21,6 +21,7 @@ import kotlinx.coroutines.runBlocking
 import org.amshove.kluent.internal.assertEquals
 import org.junit.FixMethodOrder
 import org.junit.Test
+import org.junit.Ignore
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.junit.runners.MethodSorters
@@ -39,6 +40,7 @@ import org.matrix.android.sdk.common.TestConstants
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
 @LargeTest
+@Ignore
 class TimelineSimpleBackPaginationTest : InstrumentedTest {
 
     @Test
