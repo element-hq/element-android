@@ -33,10 +33,10 @@ import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.MapboxMapOptions
 import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.mapboxsdk.maps.SupportMapFragment
-import dagger.hilt.android.AndroidEntryPoint
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
 import com.mapbox.mapboxsdk.style.layers.Property
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.addChildFragment
 import im.vector.app.core.platform.VectorBaseFragment
@@ -44,6 +44,7 @@ import im.vector.app.databinding.FragmentSimpleContainerBinding
 import im.vector.app.features.location.UrlMapProvider
 import im.vector.app.features.location.zoomToBounds
 import im.vector.app.features.location.zoomToLocation
+import timber.log.Timber
 import java.lang.ref.WeakReference
 import javax.inject.Inject
 
@@ -155,10 +156,13 @@ class LocationLiveMapViewFragment : VectorBaseFragment<FragmentSimpleContainerBi
                 .mapNotNull { userId ->
                     removeUserPinFromMapStyle(userId)
                     viewModel.mapSymbolIds[userId]
+                    viewModel.mapSymbolIds.remove(userId)
                 }
                 .forEach { symbolId ->
-                    val symbol = symbolManager.annotations.get(symbolId)
-                    symbolManager.delete(symbol)
+                    Timber.d("trying to delete symbol with id: $symbolId")
+                    symbolManager.annotations.get(symbolId)?.let {
+                        symbolManager.delete(it)
+                    }
                 }
     }
 
