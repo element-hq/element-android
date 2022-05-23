@@ -45,7 +45,7 @@ class TermsController @Inject constructor(
                     id("loading")
                 }
             }
-            is Fail    -> {
+            is Fail -> {
                 errorWithRetryItem {
                     id("errorRetry")
                     text(host.errorFormatter.toHumanReadable(data.termsList.error))

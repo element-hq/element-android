@@ -205,7 +205,7 @@ internal class TokenChunkEventPersistor @Inject constructor(
                                 existingChunk.nextChunk = currentChunk
                             }
                         }
-                        PaginationDirection.FORWARDS  -> {
+                        PaginationDirection.FORWARDS -> {
                             if (currentChunk.prevChunk == existingChunk) {
                                 Timber.w("Avoid double link, shouldn't happen in an ideal world")
                             } else {

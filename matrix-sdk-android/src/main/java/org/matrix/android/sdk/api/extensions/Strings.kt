@@ -19,7 +19,7 @@ package org.matrix.android.sdk.api.extensions
 fun CharSequence.ensurePrefix(prefix: CharSequence): CharSequence {
     return when {
         startsWith(prefix) -> this
-        else               -> "$prefix$this"
+        else -> "$prefix$this"
     }
 }
 

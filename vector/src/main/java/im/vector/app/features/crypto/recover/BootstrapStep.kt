@@ -108,6 +108,6 @@ sealed class BootstrapStep {
 fun BootstrapStep.GetBackupSecretForMigration.useKey(): Boolean {
     return when (this) {
         is BootstrapStep.GetBackupSecretPassForMigration -> useKey
-        else                                             -> true
+        else -> true
     }
 }

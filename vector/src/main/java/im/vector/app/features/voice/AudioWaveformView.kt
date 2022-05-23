@@ -180,7 +180,7 @@ class AudioWaveformView @JvmOverloads constructor(
                     val stopY = startY + it.value
                     canvas.drawLine(currentX, startY, currentX, stopY, barPaint)
                 }
-                Alignment.TOP    -> {
+                Alignment.TOP -> {
                     val startY = verticalPadding
                     val stopY = startY + it.value
                     canvas.drawLine(currentX, startY, currentX, stopY, barPaint)

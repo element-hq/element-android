@@ -79,7 +79,7 @@ class RoomDetailActivity :
     private val playbackActivityListener = AudioMessagePlaybackTracker.ActivityListener { isPlayingOrRecording ->
         if (lastKnownPlayingOrRecordingState == isPlayingOrRecording) return@ActivityListener
         when (isPlayingOrRecording) {
-            true  -> keepScreenOn()
+            true -> keepScreenOn()
             false -> endKeepScreenOn()
         }
         lastKnownPlayingOrRecordingState = isPlayingOrRecording

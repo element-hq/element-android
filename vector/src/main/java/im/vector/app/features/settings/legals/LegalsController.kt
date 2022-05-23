@@ -98,7 +98,7 @@ class LegalsController @Inject constructor(
                     buildPolicies(tag, policies)
                 }
             }
-            is Fail    -> {
+            is Fail -> {
                 errorWithRetryItem {
                     id("errorRetry_$tag")
                     text(host.errorFormatter.toHumanReadable(serverAndPolicies.error))

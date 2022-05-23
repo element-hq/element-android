@@ -70,7 +70,7 @@ class JoinReplacementRoomBottomSheet :
                     views.roomUpgradeButton.render(ButtonStateView.State.Loaded)
                     dismiss()
                 }
-                is Fail    -> {
+                is Fail -> {
                     // display the error message
                     views.descriptionText.text = errorFormatter.toHumanReadable(joinState.error)
                     views.roomUpgradeButton.render(ButtonStateView.State.Error)

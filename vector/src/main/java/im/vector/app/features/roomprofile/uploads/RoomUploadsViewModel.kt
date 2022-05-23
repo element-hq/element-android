@@ -107,9 +107,9 @@ class RoomUploadsViewModel @AssistedInject constructor(
     override fun handle(action: RoomUploadsAction) {
         when (action) {
             is RoomUploadsAction.Download -> handleDownload(action)
-            is RoomUploadsAction.Share    -> handleShare(action)
-            RoomUploadsAction.Retry       -> handleLoadMore()
-            RoomUploadsAction.LoadMore    -> handleLoadMore()
+            is RoomUploadsAction.Share -> handleShare(action)
+            RoomUploadsAction.Retry -> handleLoadMore()
+            RoomUploadsAction.LoadMore -> handleLoadMore()
         }
     }
 

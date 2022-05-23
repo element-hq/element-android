@@ -86,7 +86,7 @@ class SpaceLeaveAdvancedActivity : VectorBaseActivity<ActivitySimpleLoadingBindi
                     setResult(RESULT_OK)
                     finish()
                 }
-                is Fail    -> {
+                is Fail -> {
                     hideWaitingView()
                     MaterialAlertDialogBuilder(this)
                             .setTitle(R.string.dialog_title_error)
@@ -96,7 +96,7 @@ class SpaceLeaveAdvancedActivity : VectorBaseActivity<ActivitySimpleLoadingBindi
                             }
                             .show()
                 }
-                else       -> {
+                else -> {
                     hideWaitingView()
                 }
             }

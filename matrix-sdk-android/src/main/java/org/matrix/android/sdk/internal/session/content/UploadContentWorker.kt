@@ -192,7 +192,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                     })
                             .let { videoCompressionResult ->
                                 when (videoCompressionResult) {
-                                    is VideoCompressionResult.Success           -> {
+                                    is VideoCompressionResult.Success -> {
                                         val compressedFile = videoCompressionResult.compressedFile
                                         var compressedWidth: Int? = null
                                         var compressedHeight: Int? = null
@@ -411,9 +411,9 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
             val updatedContent = when (messageContent) {
                 is MessageImageContent -> messageContent.update(url, encryptedFileInfo, newAttachmentAttributes)
                 is MessageVideoContent -> messageContent.update(url, encryptedFileInfo, thumbnailUrl, thumbnailEncryptedFileInfo, newAttachmentAttributes)
-                is MessageFileContent  -> messageContent.update(url, encryptedFileInfo, newAttachmentAttributes.newFileSize)
+                is MessageFileContent -> messageContent.update(url, encryptedFileInfo, newAttachmentAttributes.newFileSize)
                 is MessageAudioContent -> messageContent.update(url, encryptedFileInfo, newAttachmentAttributes.newFileSize)
-                else                   -> messageContent
+                else -> messageContent
             }
             event.content = ContentMapper.map(updatedContent.toContent())
         }

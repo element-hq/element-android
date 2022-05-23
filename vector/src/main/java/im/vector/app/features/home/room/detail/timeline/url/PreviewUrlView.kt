@@ -76,10 +76,10 @@ class PreviewUrlView @JvmOverloads constructor(
         hideAll()
         when (newState) {
             PreviewUrlUiState.Unknown,
-            PreviewUrlUiState.NoUrl    -> renderHidden()
-            PreviewUrlUiState.Loading  -> renderLoading()
+            PreviewUrlUiState.NoUrl -> renderHidden()
+            PreviewUrlUiState.Loading -> renderLoading()
             is PreviewUrlUiState.Error -> renderHidden()
-            is PreviewUrlUiState.Data  -> renderData(newState.previewUrlData, imageContentRenderer)
+            is PreviewUrlUiState.Data -> renderData(newState.previewUrlData, imageContentRenderer)
         }
     }
 
@@ -91,7 +91,7 @@ class PreviewUrlView @JvmOverloads constructor(
                 val guidelineBegin = DimensionConverter(resources).dpToPx(8)
                 views.urlPreviewStartGuideline.setGuidelineBegin(guidelineBegin)
             }
-            is TimelineMessageLayout.Bubble  -> {
+            is TimelineMessageLayout.Bubble -> {
                 setCardBackgroundColor(Color.TRANSPARENT)
                 rippleColor = ColorStateList.valueOf(Color.TRANSPARENT)
                 views.urlPreviewStartGuideline.setGuidelineBegin(0)
@@ -102,7 +102,7 @@ class PreviewUrlView @JvmOverloads constructor(
     override fun onClick(v: View?) {
         when (val finalState = state) {
             is PreviewUrlUiState.Data -> delegate?.onPreviewUrlClicked(finalState.url)
-            else                      -> Unit
+            else -> Unit
         }
     }
 
@@ -115,14 +115,14 @@ class PreviewUrlView @JvmOverloads constructor(
                         title = finalState.previewUrlData.title
                 )
             }
-            else                      -> Unit
+            else -> Unit
         }
     }
 
     private fun onCloseClick() {
         when (val finalState = state) {
             is PreviewUrlUiState.Data -> delegate?.onPreviewUrlCloseClicked(finalState.eventId, finalState.url)
-            else                      -> Unit
+            else -> Unit
         }
     }
 
@@ -154,8 +154,8 @@ class PreviewUrlView @JvmOverloads constructor(
         views.urlPreviewDescription.setTextOrHide(previewUrlData.description)
         views.urlPreviewDescription.maxLines = when {
             previewUrlData.mxcUrl != null -> 2
-            previewUrlData.title != null  -> 3
-            else                          -> 5
+            previewUrlData.title != null -> 3
+            else -> 5
         }
         views.urlPreviewSite.setTextOrHide(previewUrlData.siteName.takeIf { it != previewUrlData.title })
     }

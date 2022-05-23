@@ -57,10 +57,10 @@ class LiveLocationShareMessageItemFactory @Inject constructor(
     ): VectorEpoxyModel<*>? {
         val liveLocationShareSummaryData = getLiveLocationShareSummaryData(event)
         val item = when (val currentState = getViewState(liveLocationShareSummaryData)) {
-            LiveLocationShareViewState.Inactive   -> buildInactiveItem(highlight, attributes)
-            LiveLocationShareViewState.Loading    -> buildLoadingItem(highlight, attributes)
+            LiveLocationShareViewState.Inactive -> buildInactiveItem(highlight, attributes)
+            LiveLocationShareViewState.Loading -> buildLoadingItem(highlight, attributes)
             is LiveLocationShareViewState.Running -> buildRunningItem(highlight, attributes, currentState)
-            LiveLocationShareViewState.Unkwown    -> null
+            LiveLocationShareViewState.Unkwown -> null
         }
         item?.layout(attributes.informationData.messageLayout.layoutRes)
 
@@ -126,10 +126,10 @@ class LiveLocationShareMessageItemFactory @Inject constructor(
 
     private fun getViewState(liveLocationShareSummaryData: LiveLocationShareSummaryData?): LiveLocationShareViewState {
         return when {
-            liveLocationShareSummaryData?.isActive == null                                                   -> LiveLocationShareViewState.Unkwown
-            liveLocationShareSummaryData.isActive.not() || isLiveTimedOut(liveLocationShareSummaryData)      -> LiveLocationShareViewState.Inactive
+            liveLocationShareSummaryData?.isActive == null -> LiveLocationShareViewState.Unkwown
+            liveLocationShareSummaryData.isActive.not() || isLiveTimedOut(liveLocationShareSummaryData) -> LiveLocationShareViewState.Inactive
             liveLocationShareSummaryData.isActive && liveLocationShareSummaryData.lastGeoUri.isNullOrEmpty() -> LiveLocationShareViewState.Loading
-            else                                                                                             ->
+            else ->
                 LiveLocationShareViewState.Running(
                         liveLocationShareSummaryData.lastGeoUri.orEmpty(),
                         getEndOfLiveDateTime(liveLocationShareSummaryData)

@@ -57,9 +57,9 @@ internal class DefaultRefreshUserThreePidsTask @Inject constructor(
 
 private fun Any?.toLong(): Long {
     return when (this) {
-        null      -> 0L
-        is Long   -> this
+        null -> 0L
+        is Long -> this
         is Double -> this.toLong()
-        else      -> 0L
+        else -> 0L
     }
 }

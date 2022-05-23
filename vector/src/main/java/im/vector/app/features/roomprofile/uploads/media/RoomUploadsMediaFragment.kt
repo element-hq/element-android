@@ -157,7 +157,7 @@ class RoomUploadsMediaFragment @Inject constructor(
                             thumbnailMediaData = thumbnailData
                     )
                 }
-                else                   -> null
+                else -> null
             }
         }
     }
@@ -191,7 +191,7 @@ class RoomUploadsMediaFragment @Inject constructor(
                 is Loading -> {
                     views.genericStateViewListStateView.state = StateView.State.Loading
                 }
-                is Fail    -> {
+                is Fail -> {
                     views.genericStateViewListStateView.state = StateView.State.Error(errorFormatter.toHumanReadable(state.asyncEventsRequest.error))
                 }
                 is Success -> {
@@ -205,7 +205,7 @@ class RoomUploadsMediaFragment @Inject constructor(
                         )
                     }
                 }
-                else       -> Unit
+                else -> Unit
             }
         } else {
             views.genericStateViewListStateView.state = StateView.State.Content

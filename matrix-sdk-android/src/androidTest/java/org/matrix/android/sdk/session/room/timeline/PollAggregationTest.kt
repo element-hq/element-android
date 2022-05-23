@@ -80,7 +80,7 @@ class PollAggregationTest : InstrumentedTest {
                     }
 
                     when (lock.count.toInt()) {
-                        TOTAL_TEST_COUNT     -> {
+                        TOTAL_TEST_COUNT -> {
                             // Poll has just been created.
                             testInitialPollConditions(pollContent, pollSummary)
                             lock.countDown()
@@ -122,7 +122,7 @@ class PollAggregationTest : InstrumentedTest {
                             testEndedPoll(pollSummary)
                             lock.countDown()
                         }
-                        else                 -> {
+                        else -> {
                             fail("Lock count ${lock.count} didn't handled.")
                         }
                     }

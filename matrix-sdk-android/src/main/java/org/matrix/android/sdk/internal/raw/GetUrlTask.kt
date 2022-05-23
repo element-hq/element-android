@@ -42,8 +42,8 @@ internal class DefaultGetUrlTask @Inject constructor(
 
     override suspend fun execute(params: GetUrlTask.Params): String {
         return when (params.cacheStrategy) {
-            CacheStrategy.NoCache       -> doRequest(params.url)
-            is CacheStrategy.TtlCache   -> doRequestWithCache(
+            CacheStrategy.NoCache -> doRequest(params.url)
+            is CacheStrategy.TtlCache -> doRequestWithCache(
                     params.url,
                     params.cacheStrategy.validityDurationInMillis,
                     params.cacheStrategy.strict

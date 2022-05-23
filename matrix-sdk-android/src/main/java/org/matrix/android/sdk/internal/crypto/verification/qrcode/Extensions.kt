@@ -36,8 +36,8 @@ internal fun QrCodeData.toEncodedString(): String {
 
     // Mode
     result += when (this) {
-        is QrCodeData.VerifyingAnotherUser             -> 0
-        is QrCodeData.SelfVerifyingMasterKeyTrusted    -> 1
+        is QrCodeData.VerifyingAnotherUser -> 0
+        is QrCodeData.SelfVerifyingMasterKeyTrusted -> 1
         is QrCodeData.SelfVerifyingMasterKeyNotTrusted -> 2
     }.toByte()
 
@@ -119,9 +119,9 @@ internal fun String.toQrCodeData(): QrCodeData? {
     val secret = byteArray.copyOfRange(cursor, byteArray.size).toBase64NoPadding()
 
     return when (mode) {
-        0    -> QrCodeData.VerifyingAnotherUser(transactionId, key1, key2, secret)
-        1    -> QrCodeData.SelfVerifyingMasterKeyTrusted(transactionId, key1, key2, secret)
-        2    -> QrCodeData.SelfVerifyingMasterKeyNotTrusted(transactionId, key1, key2, secret)
+        0 -> QrCodeData.VerifyingAnotherUser(transactionId, key1, key2, secret)
+        1 -> QrCodeData.SelfVerifyingMasterKeyTrusted(transactionId, key1, key2, secret)
+        2 -> QrCodeData.SelfVerifyingMasterKeyNotTrusted(transactionId, key1, key2, secret)
         else -> null
     }
 }

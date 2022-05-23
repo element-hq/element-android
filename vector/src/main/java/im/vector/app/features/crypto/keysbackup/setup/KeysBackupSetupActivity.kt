@@ -78,15 +78,15 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
 
         viewModel.navigateEvent.observeEvent(this) { uxStateEvent ->
             when (uxStateEvent) {
-                KeysBackupSetupSharedViewModel.NAVIGATE_TO_STEP_2      -> {
+                KeysBackupSetupSharedViewModel.NAVIGATE_TO_STEP_2 -> {
                     supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     replaceFragment(views.container, KeysBackupSetupStep2Fragment::class.java)
                 }
-                KeysBackupSetupSharedViewModel.NAVIGATE_TO_STEP_3      -> {
+                KeysBackupSetupSharedViewModel.NAVIGATE_TO_STEP_3 -> {
                     supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     replaceFragment(views.container, KeysBackupSetupStep3Fragment::class.java)
                 }
-                KeysBackupSetupSharedViewModel.NAVIGATE_FINISH         -> {
+                KeysBackupSetupSharedViewModel.NAVIGATE_FINISH -> {
                     val resultIntent = Intent()
                     viewModel.keysVersion.value?.version?.let {
                         resultIntent.putExtra(KEYS_VERSION, it)
@@ -105,7 +105,7 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
                             }
                             .show()
                 }
-                KeysBackupSetupSharedViewModel.NAVIGATE_MANUAL_EXPORT  -> {
+                KeysBackupSetupSharedViewModel.NAVIGATE_MANUAL_EXPORT -> {
                     queryExportKeys(session.myUserId, saveStartForActivityResult)
                 }
             }

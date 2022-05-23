@@ -188,8 +188,8 @@ internal class DefaultCryptoService @Inject constructor(
 
     fun onStateEvent(roomId: String, event: Event) {
         when (event.type) {
-            EventType.STATE_ROOM_ENCRYPTION         -> onRoomEncryptionEvent(roomId, event)
-            EventType.STATE_ROOM_MEMBER             -> onRoomMembershipEvent(roomId, event)
+            EventType.STATE_ROOM_ENCRYPTION -> onRoomEncryptionEvent(roomId, event)
+            EventType.STATE_ROOM_MEMBER -> onRoomMembershipEvent(roomId, event)
             EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
         }
     }
@@ -198,8 +198,8 @@ internal class DefaultCryptoService @Inject constructor(
         // handle state events
         if (event.isStateEvent()) {
             when (event.type) {
-                EventType.STATE_ROOM_ENCRYPTION         -> onRoomEncryptionEvent(roomId, event)
-                EventType.STATE_ROOM_MEMBER             -> onRoomMembershipEvent(roomId, event)
+                EventType.STATE_ROOM_ENCRYPTION -> onRoomEncryptionEvent(roomId, event)
+                EventType.STATE_ROOM_MEMBER -> onRoomMembershipEvent(roomId, event)
                 EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
             }
         }
@@ -620,8 +620,8 @@ internal class DefaultCryptoService @Inject constructor(
 
         val alg: IMXEncrypting? = when (algorithm) {
             MXCRYPTO_ALGORITHM_MEGOLM -> megolmEncryptionFactory.create(roomId)
-            MXCRYPTO_ALGORITHM_OLM    -> olmEncryptionFactory.create(roomId)
-            else                      -> null
+            MXCRYPTO_ALGORITHM_OLM -> olmEncryptionFactory.create(roomId)
+            else -> null
         }
 
         if (alg != null) {
@@ -800,10 +800,10 @@ internal class DefaultCryptoService @Inject constructor(
                     // Keys are imported directly, not waiting for end of sync
                     onRoomKeyEvent(event)
                 }
-                EventType.REQUEST_SECRET                         -> {
+                EventType.REQUEST_SECRET -> {
                     secretShareManager.handleSecretRequest(event)
                 }
-                EventType.ROOM_KEY_REQUEST                       -> {
+                EventType.ROOM_KEY_REQUEST -> {
                     event.getClearContent().toModel<RoomKeyShareRequest>()?.let { req ->
                         // We'll always get these because we send room key requests to
                         // '*' (ie. 'all devices') which includes the sending device,
@@ -815,13 +815,13 @@ internal class DefaultCryptoService @Inject constructor(
                         }
                     }
                 }
-                EventType.SEND_SECRET                            -> {
+                EventType.SEND_SECRET -> {
                     onSecretSendReceived(event)
                 }
-                EventType.ROOM_KEY_WITHHELD                      -> {
+                EventType.ROOM_KEY_WITHHELD -> {
                     onKeyWithHeldReceived(event)
                 }
-                else                                             -> {
+                else -> {
                     // ignore
                 }
             }
@@ -888,7 +888,7 @@ internal class DefaultCryptoService @Inject constructor(
             secretValue: String
     ): Boolean {
         return when (secretName) {
-            MASTER_KEY_SSSS_NAME       -> {
+            MASTER_KEY_SSSS_NAME -> {
                 crossSigningService.onSecretMSKGossip(secretValue)
                 true
             }
@@ -904,7 +904,7 @@ internal class DefaultCryptoService @Inject constructor(
                 keysBackupService.onSecretKeyGossip(secretValue)
                 true
             }
-            else                       -> false
+            else -> false
         }
     }
 

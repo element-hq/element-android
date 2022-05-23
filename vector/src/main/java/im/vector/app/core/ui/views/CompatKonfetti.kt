@@ -34,7 +34,7 @@ class CompatKonfetti @JvmOverloads constructor(
     override fun onVisibilityChanged(changedView: View, visibility: Int) {
         when (Build.VERSION.SDK_INT) {
             Build.VERSION_CODES.LOLLIPOP, Build.VERSION_CODES.LOLLIPOP_MR1 -> safeOnVisibilityChanged(changedView, visibility)
-            else                                                           -> super.onVisibilityChanged(changedView, visibility)
+            else -> super.onVisibilityChanged(changedView, visibility)
         }
     }
 

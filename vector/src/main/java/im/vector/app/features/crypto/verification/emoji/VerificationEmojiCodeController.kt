@@ -81,13 +81,13 @@ class VerificationEmojiCodeController @Inject constructor(
 
                 buildActions(state)
             }
-            is Fail    -> {
+            is Fail -> {
                 errorWithRetryItem {
                     id("error")
                     text(host.errorFormatter.toHumanReadable(emojiDescription.error))
                 }
             }
-            else       -> {
+            else -> {
                 bottomSheetVerificationWaitingItem {
                     id("waiting")
                     title(host.stringProvider.getString(R.string.please_wait))
@@ -112,13 +112,13 @@ class VerificationEmojiCodeController @Inject constructor(
 
                 buildActions(state)
             }
-            is Fail    -> {
+            is Fail -> {
                 errorWithRetryItem {
                     id("error")
                     text(host.errorFormatter.toHumanReadable(decimalDescription.error))
                 }
             }
-            else       -> {
+            else -> {
                 bottomSheetVerificationWaitingItem {
                     id("waiting")
                     title(host.stringProvider.getString(R.string.please_wait))

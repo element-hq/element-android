@@ -45,7 +45,7 @@ internal class SendEventQueuedTask(
                 localEchoRepository.deleteFailedEchoAsync(eventId = event.eventId, roomId = event.roomId ?: "")
                 // TODO update aggregation :/ or it will stay locally
             }
-            else               -> {
+            else -> {
                 localEchoRepository.updateSendState(event.eventId!!, event.roomId, SendState.UNDELIVERED)
             }
         }

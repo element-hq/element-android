@@ -93,7 +93,7 @@ class ServerBackupStatusViewModel @AssistedInject constructor(
                 // 4S is already setup sp we should not display anything
                 return@combine when (keyBackupState) {
                     KeysBackupState.BackingUp -> BannerState.BackingUp
-                    else                      -> BannerState.Hidden
+                    else -> BannerState.Hidden
                 }
             }
 

@@ -104,10 +104,10 @@ internal class MigrateCryptoTo004(realm: DynamicRealm) : RealmMigrator(realm, 4)
 
                             val trustLevel = realm.createObject("TrustLevelEntity")
                             when (oldDevice.verified) {
-                                MXDeviceInfo.DEVICE_VERIFICATION_UNKNOWN    -> {
+                                MXDeviceInfo.DEVICE_VERIFICATION_UNKNOWN -> {
                                     obj.setNull(DeviceInfoEntityFields.TRUST_LEVEL_ENTITY.`$`)
                                 }
-                                MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED    -> {
+                                MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED -> {
                                     trustLevel.setNull(TrustLevelEntityFields.LOCALLY_VERIFIED)
                                     trustLevel.setNull(TrustLevelEntityFields.CROSS_SIGNED_VERIFIED)
                                     obj.setBoolean(DeviceInfoEntityFields.IS_BLOCKED, oldDevice.isBlocked)
@@ -118,7 +118,7 @@ internal class MigrateCryptoTo004(realm: DynamicRealm) : RealmMigrator(realm, 4)
                                     trustLevel.setBoolean(TrustLevelEntityFields.CROSS_SIGNED_VERIFIED, false)
                                     obj.setObject(DeviceInfoEntityFields.TRUST_LEVEL_ENTITY.`$`, trustLevel)
                                 }
-                                MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED   -> {
+                                MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED -> {
                                     trustLevel.setBoolean(TrustLevelEntityFields.LOCALLY_VERIFIED, true)
                                     trustLevel.setBoolean(TrustLevelEntityFields.CROSS_SIGNED_VERIFIED, false)
                                     obj.setObject(DeviceInfoEntityFields.TRUST_LEVEL_ENTITY.`$`, trustLevel)

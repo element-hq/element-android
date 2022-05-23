@@ -61,8 +61,8 @@ internal class RoomChangeMembershipStateDataSource @Inject constructor() {
     private fun Membership.toMembershipChangeState(): ChangeMembershipState {
         return when {
             this == Membership.JOIN -> ChangeMembershipState.Joined
-            this.isLeft()           -> ChangeMembershipState.Left
-            else                    -> ChangeMembershipState.Unknown
+            this.isLeft() -> ChangeMembershipState.Left
+            else -> ChangeMembershipState.Unknown
         }
     }
 }

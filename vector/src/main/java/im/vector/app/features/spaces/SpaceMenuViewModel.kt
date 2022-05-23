@@ -114,16 +114,16 @@ class SpaceMenuViewModel @AssistedInject constructor(
 
     override fun handle(action: SpaceLeaveViewAction) {
         when (action) {
-            SpaceLeaveViewAction.SetAutoLeaveAll      -> setState {
+            SpaceLeaveViewAction.SetAutoLeaveAll -> setState {
                 copy(leaveMode = SpaceMenuState.LeaveMode.LEAVE_ALL, leavingState = Uninitialized)
             }
-            SpaceLeaveViewAction.SetAutoLeaveNone     -> setState {
+            SpaceLeaveViewAction.SetAutoLeaveNone -> setState {
                 copy(leaveMode = SpaceMenuState.LeaveMode.LEAVE_NONE, leavingState = Uninitialized)
             }
             SpaceLeaveViewAction.SetAutoLeaveSelected -> setState {
                 copy(leaveMode = SpaceMenuState.LeaveMode.LEAVE_SELECTED, leavingState = Uninitialized)
             }
-            SpaceLeaveViewAction.LeaveSpace           -> handleLeaveSpace()
+            SpaceLeaveViewAction.LeaveSpace -> handleLeaveSpace()
         }
     }
 

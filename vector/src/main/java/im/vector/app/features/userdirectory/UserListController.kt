@@ -106,11 +106,11 @@ class UserListController @Inject constructor(
                         when (pendingSelection) {
                             is PendingSelection.ThreePidPendingSelection -> {
                                 when (pendingSelection.threePid) {
-                                    is ThreePid.Email  -> pendingSelection.threePid.email == threePidUser.email
+                                    is ThreePid.Email -> pendingSelection.threePid.email == threePidUser.email
                                     is ThreePid.Msisdn -> false
                                 }
                             }
-                            is PendingSelection.UserPendingSelection     -> {
+                            is PendingSelection.UserPendingSelection -> {
                                 threePidUser.user != null && threePidUser.user.userId == pendingSelection.user.userId
                             }
                         }
@@ -141,9 +141,9 @@ class UserListController @Inject constructor(
                     }
                 }
             }
-            is Fail    -> {
+            is Fail -> {
                 when (matchingEmail.error) {
-                    is IdentityServiceError.UserConsentNotProvided     -> {
+                    is IdentityServiceError.UserConsentNotProvided -> {
                         genericPillItem {
                             id("consent_not_given")
                             text(
@@ -203,24 +203,24 @@ class UserListController @Inject constructor(
                     id("is_loading")
                 }
             }
-            else       -> {
+            else -> {
                 // nop
             }
         }
 
         when (currentState.knownUsers) {
             is Uninitialized -> renderEmptyState()
-            is Loading       -> renderLoading()
-            is Fail          -> renderFailure(currentState.knownUsers.error)
-            is Success       -> buildKnownUsers(currentState, currentState.getSelectedMatrixId())
+            is Loading -> renderLoading()
+            is Fail -> renderFailure(currentState.knownUsers.error)
+            is Success -> buildKnownUsers(currentState, currentState.getSelectedMatrixId())
         }
 
         when (val asyncUsers = currentState.directoryUsers) {
             is Uninitialized -> {
             }
-            is Loading       -> renderLoading()
-            is Fail          -> renderFailure(asyncUsers.error)
-            is Success       -> buildDirectoryUsers(
+            is Loading -> renderLoading()
+            is Fail -> renderFailure(asyncUsers.error)
+            is Success -> buildDirectoryUsers(
                     asyncUsers(),
                     currentState.getSelectedMatrixId(),
                     currentState.searchTerm,

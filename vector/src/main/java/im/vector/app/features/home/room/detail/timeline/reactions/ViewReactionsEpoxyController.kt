@@ -49,7 +49,7 @@ class ViewReactionsEpoxyController @Inject constructor(
                     id("Spinner")
                 }
             }
-            is Fail    -> {
+            is Fail -> {
                 genericFooterItem {
                     id("failure")
                     text(host.stringProvider.getString(R.string.unknown_error).toEpoxyCharSequence())

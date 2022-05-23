@@ -91,7 +91,7 @@ class EncryptedItemFactory @Inject constructor(
                                     }
                                 }
                             }
-                            else                                  -> {
+                            else -> {
                                 span {
                                     drawableProvider.getDrawable(R.drawable.ic_clock, colorFromAttribute)?.let {
                                         image(it, "baseline")
@@ -124,7 +124,7 @@ class EncryptedItemFactory @Inject constructor(
                         .message(spannableStr.toEpoxyCharSequence())
                         .movementMethod(createLinkMovementMethod(params.callback))
             }
-            else                                             -> null
+            else -> null
         }
     }
 }

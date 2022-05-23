@@ -111,7 +111,7 @@ internal class DefaultPeekRoomTask @Inject constructor(
                     ))
                 }?.chunk?.firstOrNull { it.roomId == roomId }
             }
-            else                           -> {
+            else -> {
                 // RoomDirectoryVisibility.PRIVATE or null
                 // We cannot resolve this room :/
                 null

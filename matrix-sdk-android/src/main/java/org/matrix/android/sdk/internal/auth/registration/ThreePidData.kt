@@ -46,7 +46,7 @@ internal data class ThreePidData(
                 registrationParams: RegistrationParams
         ): ThreePidData {
             return when (threePid) {
-                is RegisterThreePid.Email  ->
+                is RegisterThreePid.Email ->
                     ThreePidData(threePid.email, "", "", addThreePidRegistrationResponse, registrationParams)
                 is RegisterThreePid.Msisdn ->
                     ThreePidData("", threePid.msisdn, threePid.countryCode, addThreePidRegistrationResponse, registrationParams)

@@ -389,70 +389,70 @@ class TimelineViewModel @AssistedInject constructor(
 
     override fun handle(action: RoomDetailAction) {
         when (action) {
-            is RoomDetailAction.ComposerFocusChange              -> handleComposerFocusChange(action)
-            is RoomDetailAction.SendMedia                        -> handleSendMedia(action)
-            is RoomDetailAction.SendSticker                      -> handleSendSticker(action)
-            is RoomDetailAction.TimelineEventTurnsVisible        -> handleEventVisible(action)
-            is RoomDetailAction.TimelineEventTurnsInvisible      -> handleEventInvisible(action)
-            is RoomDetailAction.LoadMoreTimelineEvents           -> handleLoadMore(action)
-            is RoomDetailAction.SendReaction                     -> handleSendReaction(action)
-            is RoomDetailAction.AcceptInvite                     -> handleAcceptInvite()
-            is RoomDetailAction.RejectInvite                     -> handleRejectInvite()
-            is RoomDetailAction.RedactAction                     -> handleRedactEvent(action)
-            is RoomDetailAction.UndoReaction                     -> handleUndoReact(action)
-            is RoomDetailAction.UpdateQuickReactAction           -> handleUpdateQuickReaction(action)
-            is RoomDetailAction.DownloadOrOpen                   -> handleOpenOrDownloadFile(action)
-            is RoomDetailAction.NavigateToEvent                  -> handleNavigateToEvent(action)
-            is RoomDetailAction.JoinAndOpenReplacementRoom       -> handleJoinAndOpenReplacementRoom()
-            is RoomDetailAction.OnClickMisconfiguredEncryption   -> handleClickMisconfiguredE2E()
-            is RoomDetailAction.ResendMessage                    -> handleResendEvent(action)
-            is RoomDetailAction.RemoveFailedEcho                 -> handleRemove(action)
-            is RoomDetailAction.MarkAllAsRead                    -> handleMarkAllAsRead()
-            is RoomDetailAction.ReportContent                    -> handleReportContent(action)
-            is RoomDetailAction.IgnoreUser                       -> handleIgnoreUser(action)
+            is RoomDetailAction.ComposerFocusChange -> handleComposerFocusChange(action)
+            is RoomDetailAction.SendMedia -> handleSendMedia(action)
+            is RoomDetailAction.SendSticker -> handleSendSticker(action)
+            is RoomDetailAction.TimelineEventTurnsVisible -> handleEventVisible(action)
+            is RoomDetailAction.TimelineEventTurnsInvisible -> handleEventInvisible(action)
+            is RoomDetailAction.LoadMoreTimelineEvents -> handleLoadMore(action)
+            is RoomDetailAction.SendReaction -> handleSendReaction(action)
+            is RoomDetailAction.AcceptInvite -> handleAcceptInvite()
+            is RoomDetailAction.RejectInvite -> handleRejectInvite()
+            is RoomDetailAction.RedactAction -> handleRedactEvent(action)
+            is RoomDetailAction.UndoReaction -> handleUndoReact(action)
+            is RoomDetailAction.UpdateQuickReactAction -> handleUpdateQuickReaction(action)
+            is RoomDetailAction.DownloadOrOpen -> handleOpenOrDownloadFile(action)
+            is RoomDetailAction.NavigateToEvent -> handleNavigateToEvent(action)
+            is RoomDetailAction.JoinAndOpenReplacementRoom -> handleJoinAndOpenReplacementRoom()
+            is RoomDetailAction.OnClickMisconfiguredEncryption -> handleClickMisconfiguredE2E()
+            is RoomDetailAction.ResendMessage -> handleResendEvent(action)
+            is RoomDetailAction.RemoveFailedEcho -> handleRemove(action)
+            is RoomDetailAction.MarkAllAsRead -> handleMarkAllAsRead()
+            is RoomDetailAction.ReportContent -> handleReportContent(action)
+            is RoomDetailAction.IgnoreUser -> handleIgnoreUser(action)
             is RoomDetailAction.EnterTrackingUnreadMessagesState -> startTrackingUnreadMessages()
-            is RoomDetailAction.ExitTrackingUnreadMessagesState  -> stopTrackingUnreadMessages()
-            is RoomDetailAction.VoteToPoll                       -> handleVoteToPoll(action)
-            is RoomDetailAction.AcceptVerificationRequest        -> handleAcceptVerification(action)
-            is RoomDetailAction.DeclineVerificationRequest       -> handleDeclineVerification(action)
-            is RoomDetailAction.RequestVerification              -> handleRequestVerification(action)
-            is RoomDetailAction.ResumeVerification               -> handleResumeRequestVerification(action)
-            is RoomDetailAction.ReRequestKeys                    -> handleReRequestKeys(action)
-            is RoomDetailAction.TapOnFailedToDecrypt             -> handleTapOnFailedToDecrypt(action)
-            is RoomDetailAction.SelectStickerAttachment          -> handleSelectStickerAttachment()
-            is RoomDetailAction.OpenIntegrationManager           -> handleOpenIntegrationManager()
-            is RoomDetailAction.StartCall                        -> handleStartCall(action)
-            is RoomDetailAction.AcceptCall                       -> handleAcceptCall(action)
-            is RoomDetailAction.EndCall                          -> handleEndCall()
-            is RoomDetailAction.ManageIntegrations               -> handleManageIntegrations()
-            is RoomDetailAction.AddJitsiWidget                   -> handleAddJitsiConference(action)
-            is RoomDetailAction.UpdateJoinJitsiCallStatus        -> handleJitsiCallJoinStatus(action)
-            is RoomDetailAction.JoinJitsiCall                    -> handleJoinJitsiCall()
-            is RoomDetailAction.LeaveJitsiCall                   -> handleLeaveJitsiCall()
-            is RoomDetailAction.RemoveWidget                     -> handleDeleteWidget(action.widgetId)
-            is RoomDetailAction.EnsureNativeWidgetAllowed        -> handleCheckWidgetAllowed(action)
-            is RoomDetailAction.CancelSend                       -> handleCancel(action)
-            is RoomDetailAction.JumpToReadReceipt                -> handleJumpToReadReceipt(action)
-            RoomDetailAction.QuickActionInvitePeople             -> handleInvitePeople()
-            RoomDetailAction.QuickActionSetAvatar                -> handleQuickSetAvatar()
-            is RoomDetailAction.SetAvatarAction                  -> handleSetNewAvatar(action)
-            RoomDetailAction.QuickActionSetTopic                 -> _viewEvents.post(RoomDetailViewEvents.OpenRoomSettings)
-            is RoomDetailAction.ShowRoomAvatarFullScreen         -> {
+            is RoomDetailAction.ExitTrackingUnreadMessagesState -> stopTrackingUnreadMessages()
+            is RoomDetailAction.VoteToPoll -> handleVoteToPoll(action)
+            is RoomDetailAction.AcceptVerificationRequest -> handleAcceptVerification(action)
+            is RoomDetailAction.DeclineVerificationRequest -> handleDeclineVerification(action)
+            is RoomDetailAction.RequestVerification -> handleRequestVerification(action)
+            is RoomDetailAction.ResumeVerification -> handleResumeRequestVerification(action)
+            is RoomDetailAction.ReRequestKeys -> handleReRequestKeys(action)
+            is RoomDetailAction.TapOnFailedToDecrypt -> handleTapOnFailedToDecrypt(action)
+            is RoomDetailAction.SelectStickerAttachment -> handleSelectStickerAttachment()
+            is RoomDetailAction.OpenIntegrationManager -> handleOpenIntegrationManager()
+            is RoomDetailAction.StartCall -> handleStartCall(action)
+            is RoomDetailAction.AcceptCall -> handleAcceptCall(action)
+            is RoomDetailAction.EndCall -> handleEndCall()
+            is RoomDetailAction.ManageIntegrations -> handleManageIntegrations()
+            is RoomDetailAction.AddJitsiWidget -> handleAddJitsiConference(action)
+            is RoomDetailAction.UpdateJoinJitsiCallStatus -> handleJitsiCallJoinStatus(action)
+            is RoomDetailAction.JoinJitsiCall -> handleJoinJitsiCall()
+            is RoomDetailAction.LeaveJitsiCall -> handleLeaveJitsiCall()
+            is RoomDetailAction.RemoveWidget -> handleDeleteWidget(action.widgetId)
+            is RoomDetailAction.EnsureNativeWidgetAllowed -> handleCheckWidgetAllowed(action)
+            is RoomDetailAction.CancelSend -> handleCancel(action)
+            is RoomDetailAction.JumpToReadReceipt -> handleJumpToReadReceipt(action)
+            RoomDetailAction.QuickActionInvitePeople -> handleInvitePeople()
+            RoomDetailAction.QuickActionSetAvatar -> handleQuickSetAvatar()
+            is RoomDetailAction.SetAvatarAction -> handleSetNewAvatar(action)
+            RoomDetailAction.QuickActionSetTopic -> _viewEvents.post(RoomDetailViewEvents.OpenRoomSettings)
+            is RoomDetailAction.ShowRoomAvatarFullScreen -> {
                 _viewEvents.post(
                         RoomDetailViewEvents.ShowRoomAvatarFullScreen(action.matrixItem, action.transitionView)
                 )
             }
-            is RoomDetailAction.DoNotShowPreviewUrlFor           -> handleDoNotShowPreviewUrlFor(action)
-            RoomDetailAction.RemoveAllFailedMessages             -> handleRemoveAllFailedMessages()
-            RoomDetailAction.ResendAll                           -> handleResendAll()
-            is RoomDetailAction.RoomUpgradeSuccess               -> {
+            is RoomDetailAction.DoNotShowPreviewUrlFor -> handleDoNotShowPreviewUrlFor(action)
+            RoomDetailAction.RemoveAllFailedMessages -> handleRemoveAllFailedMessages()
+            RoomDetailAction.ResendAll -> handleResendAll()
+            is RoomDetailAction.RoomUpgradeSuccess -> {
                 setState {
                     copy(joinUpgradedRoomAsync = Success(action.replacementRoomId))
                 }
                 _viewEvents.post(RoomDetailViewEvents.OpenRoom(action.replacementRoomId, closeCurrentRoom = true))
             }
-            is RoomDetailAction.EndPoll                          -> handleEndPoll(action.eventId)
-            RoomDetailAction.StopLiveLocationSharing             -> handleStopLiveLocationSharing()
+            is RoomDetailAction.EndPoll -> handleEndPoll(action.eventId)
+            RoomDetailAction.StopLiveLocationSharing -> handleStopLiveLocationSharing()
         }
     }
 
@@ -469,7 +469,7 @@ class TimelineViewModel @AssistedInject constructor(
             is ConferenceEvent.Terminated -> {
                 setState { copy(jitsiState = jitsiState.copy(hasJoined = activeConferenceHolder.isJoined(jitsiState.confId))) }
             }
-            else                          -> Unit
+            else -> Unit
         }
     }
 
@@ -604,7 +604,7 @@ class TimelineViewModel @AssistedInject constructor(
                                 is Success -> {
                                     Success(activeRoomWidgets.invoke().filter { it.widgetId != widgetId })
                                 }
-                                else       -> activeRoomWidgets
+                                else -> activeRoomWidgets
                             }
                     )
                 }
@@ -725,21 +725,21 @@ class TimelineViewModel @AssistedInject constructor(
                 R.id.menu_thread_timeline_view_in_room,
                 R.id.menu_thread_timeline_copy_link,
                 R.id.menu_thread_timeline_share -> true
-                else                            -> false
+                else -> false
             }
         } else {
             when (itemId) {
-                R.id.timeline_setting          -> true
-                R.id.invite                    -> state.canInvite
-                R.id.open_matrix_apps          -> true
-                R.id.voice_call                -> state.isCallOptionAvailable()
-                R.id.video_call                -> state.isCallOptionAvailable() || state.jitsiState.confId == null || state.jitsiState.hasJoined
+                R.id.timeline_setting -> true
+                R.id.invite -> state.canInvite
+                R.id.open_matrix_apps -> true
+                R.id.voice_call -> state.isCallOptionAvailable()
+                R.id.video_call -> state.isCallOptionAvailable() || state.jitsiState.confId == null || state.jitsiState.hasJoined
                 // Show Join conference button only if there is an active conf id not joined. Otherwise fallback to default video disabled. ^
-                R.id.join_conference           -> !state.isCallOptionAvailable() && state.jitsiState.confId != null && !state.jitsiState.hasJoined
-                R.id.search                    -> state.isSearchAvailable()
+                R.id.join_conference -> !state.isCallOptionAvailable() && state.jitsiState.confId != null && !state.jitsiState.hasJoined
+                R.id.search -> state.isSearchAvailable()
                 R.id.menu_timeline_thread_list -> vectorPreferences.areThreadMessagesEnabled()
-                R.id.dev_tools                 -> vectorPreferences.developerMode()
-                else                           -> false
+                R.id.dev_tools -> vectorPreferences.developerMode()
+                else -> false
             }
         }
     }
@@ -917,9 +917,9 @@ class TimelineViewModel @AssistedInject constructor(
                 return
             }
             when {
-                it.root.isTextMessage()       -> room.sendService().resendTextMessage(it)
+                it.root.isTextMessage() -> room.sendService().resendTextMessage(it)
                 it.root.isAttachmentMessage() -> room.sendService().resendMediaMessage(it)
-                else                          -> {
+                else -> {
                     // TODO
                 }
             }
@@ -1088,7 +1088,7 @@ class TimelineViewModel @AssistedInject constructor(
                 MXCryptoError.ErrorType.KEYS_WITHHELD -> {
                     WithHeldCode.fromCode(it.root.mCryptoErrorReason)
                 }
-                else                                  -> null
+                else -> null
             }
 
             _viewEvents.post(RoomDetailViewEvents.ShowE2EErrorMessage(code))
@@ -1154,9 +1154,9 @@ class TimelineViewModel @AssistedInject constructor(
                     when {
                         previous is UnreadState.Unknown || previous is UnreadState.ReadMarkerNotLoaded -> false
                         previous is UnreadState.HasUnread && current is UnreadState.HasUnread &&
-                                previous.readMarkerId == current.readMarkerId                          -> false
-                        current is UnreadState.HasUnread || current is UnreadState.HasNoUnread         -> true
-                        else                                                                           -> false
+                                previous.readMarkerId == current.readMarkerId -> false
+                        current is UnreadState.HasUnread || current is UnreadState.HasNoUnread -> true
+                        else -> false
                     }
                 }
                 .setOnEach {

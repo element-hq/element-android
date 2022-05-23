@@ -73,7 +73,7 @@ class AccountCreatedViewModel @AssistedInject constructor(
 
     override fun handle(action: AccountCreatedAction) {
         when (action) {
-            is AccountCreatedAction.SetAvatar      -> handleSetAvatar(action)
+            is AccountCreatedAction.SetAvatar -> handleSetAvatar(action)
             is AccountCreatedAction.SetDisplayName -> handleSetDisplayName(action)
         }
     }

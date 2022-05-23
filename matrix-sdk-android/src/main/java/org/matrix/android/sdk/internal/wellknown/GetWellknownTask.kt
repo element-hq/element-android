@@ -101,25 +101,25 @@ internal class DefaultGetWellknownTask @Inject constructor(
             }
         } catch (throwable: Throwable) {
             when (throwable) {
-                is UnrecognizedCertificateException        -> {
+                is UnrecognizedCertificateException -> {
                     throw Failure.UnrecognizedCertificateFailure(
                             "https://$domain",
                             throwable.fingerprint
                     )
                 }
-                is Failure.NetworkConnection               -> {
+                is Failure.NetworkConnection -> {
                     WellknownResult.Ignore
                 }
-                is Failure.OtherServerError                -> {
+                is Failure.OtherServerError -> {
                     when (throwable.httpCode) {
                         HttpsURLConnection.HTTP_NOT_FOUND -> WellknownResult.Ignore
-                        else                              -> WellknownResult.FailPrompt(null, null)
+                        else -> WellknownResult.FailPrompt(null, null)
                     }
                 }
                 is MalformedJsonException, is EOFException -> {
                     WellknownResult.FailPrompt(null, null)
                 }
-                else                                       -> {
+                else -> {
                     throw throwable
                 }
             }

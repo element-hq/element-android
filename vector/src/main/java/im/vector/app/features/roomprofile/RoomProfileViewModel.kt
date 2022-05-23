@@ -135,12 +135,12 @@ class RoomProfileViewModel @AssistedInject constructor(
 
     override fun handle(action: RoomProfileAction) {
         when (action) {
-            is RoomProfileAction.EnableEncryption            -> handleEnableEncryption()
-            RoomProfileAction.LeaveRoom                      -> handleLeaveRoom()
+            is RoomProfileAction.EnableEncryption -> handleEnableEncryption()
+            RoomProfileAction.LeaveRoom -> handleLeaveRoom()
             is RoomProfileAction.ChangeRoomNotificationState -> handleChangeNotificationMode(action)
-            is RoomProfileAction.ShareRoomProfile            -> handleShareRoomProfile()
-            RoomProfileAction.CreateShortcut                 -> handleCreateShortcut()
-            RoomProfileAction.RestoreEncryptionState         -> restoreEncryptionState()
+            is RoomProfileAction.ShareRoomProfile -> handleShareRoomProfile()
+            RoomProfileAction.CreateShortcut -> handleCreateShortcut()
+            RoomProfileAction.RestoreEncryptionState -> restoreEncryptionState()
         }
     }
 

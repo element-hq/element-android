@@ -45,9 +45,9 @@ class ReviewTermsViewModel @AssistedInject constructor(
 
     override fun handle(action: ReviewTermsAction) {
         when (action) {
-            is ReviewTermsAction.LoadTerms          -> loadTerms(action)
+            is ReviewTermsAction.LoadTerms -> loadTerms(action)
             is ReviewTermsAction.MarkTermAsAccepted -> markTermAsAccepted(action)
-            ReviewTermsAction.Accept                -> acceptTerms()
+            ReviewTermsAction.Accept -> acceptTerms()
         }
     }
 

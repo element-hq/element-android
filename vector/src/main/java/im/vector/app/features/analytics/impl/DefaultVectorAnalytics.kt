@@ -49,7 +49,7 @@ class DefaultVectorAnalytics @Inject constructor(
 
     private val posthog: PostHog? = when {
         analyticsConfig.isEnabled -> postHogFactory.createPosthog()
-        else                      -> {
+        else -> {
             Timber.tag(analyticsTag.value).w("Analytics is disabled")
             null
         }

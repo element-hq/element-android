@@ -122,11 +122,11 @@ class RoomProfileFragment @Inject constructor(
         views.matrixProfileAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener)
         roomProfileViewModel.observeViewEvents {
             when (it) {
-                is RoomProfileViewEvents.Loading          -> showLoading(it.message)
-                is RoomProfileViewEvents.Failure          -> showFailure(it.throwable)
+                is RoomProfileViewEvents.Loading -> showLoading(it.message)
+                is RoomProfileViewEvents.Failure -> showFailure(it.throwable)
                 is RoomProfileViewEvents.ShareRoomProfile -> onShareRoomProfile(it.permalink)
-                is RoomProfileViewEvents.OnShortcutReady  -> addShortcut(it)
-                RoomProfileViewEvents.DismissLoading      -> dismissLoadingDialog()
+                is RoomProfileViewEvents.OnShortcutReady -> addShortcut(it)
+                RoomProfileViewEvents.DismissLoading -> dismissLoadingDialog()
             }
         }
         roomListQuickActionsSharedActionViewModel
@@ -181,19 +181,19 @@ class RoomProfileFragment @Inject constructor(
     }
 
     private fun handleQuickActions(action: RoomListQuickActionsSharedAction) = when (action) {
-        is RoomListQuickActionsSharedAction.NotificationsAllNoisy     -> {
+        is RoomListQuickActionsSharedAction.NotificationsAllNoisy -> {
             roomProfileViewModel.handle(RoomProfileAction.ChangeRoomNotificationState(RoomNotificationState.ALL_MESSAGES_NOISY))
         }
-        is RoomListQuickActionsSharedAction.NotificationsAll          -> {
+        is RoomListQuickActionsSharedAction.NotificationsAll -> {
             roomProfileViewModel.handle(RoomProfileAction.ChangeRoomNotificationState(RoomNotificationState.ALL_MESSAGES))
         }
         is RoomListQuickActionsSharedAction.NotificationsMentionsOnly -> {
             roomProfileViewModel.handle(RoomProfileAction.ChangeRoomNotificationState(RoomNotificationState.MENTIONS_ONLY))
         }
-        is RoomListQuickActionsSharedAction.NotificationsMute         -> {
+        is RoomListQuickActionsSharedAction.NotificationsMute -> {
             roomProfileViewModel.handle(RoomProfileAction.ChangeRoomNotificationState(RoomNotificationState.MUTE))
         }
-        else                                                          -> Timber.v("$action not handled")
+        else -> Timber.v("$action not handled")
     }
 
     private fun setupRecyclerView() {

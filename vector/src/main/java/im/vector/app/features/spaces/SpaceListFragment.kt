@@ -105,10 +105,10 @@ class SpaceListFragment @Inject constructor(
         viewModel.observeViewEvents {
             when (it) {
                 is SpaceListViewEvents.OpenSpaceSummary -> sharedActionViewModel.post(HomeActivitySharedAction.OpenSpacePreview(it.id))
-                is SpaceListViewEvents.OpenSpace        -> sharedActionViewModel.post(HomeActivitySharedAction.OpenGroup(it.groupingMethodHasChanged))
-                is SpaceListViewEvents.AddSpace         -> sharedActionViewModel.post(HomeActivitySharedAction.AddSpace)
-                is SpaceListViewEvents.OpenGroup        -> sharedActionViewModel.post(HomeActivitySharedAction.OpenGroup(it.groupingMethodHasChanged))
-                is SpaceListViewEvents.OpenSpaceInvite  -> sharedActionViewModel.post(HomeActivitySharedAction.OpenSpaceInvite(it.id))
+                is SpaceListViewEvents.OpenSpace -> sharedActionViewModel.post(HomeActivitySharedAction.OpenGroup(it.groupingMethodHasChanged))
+                is SpaceListViewEvents.AddSpace -> sharedActionViewModel.post(HomeActivitySharedAction.AddSpace)
+                is SpaceListViewEvents.OpenGroup -> sharedActionViewModel.post(HomeActivitySharedAction.OpenGroup(it.groupingMethodHasChanged))
+                is SpaceListViewEvents.OpenSpaceInvite -> sharedActionViewModel.post(HomeActivitySharedAction.OpenSpaceInvite(it.id))
             }
         }
     }
@@ -124,7 +124,7 @@ class SpaceListFragment @Inject constructor(
             Uninitialized,
             is Loading -> views.stateView.state = StateView.State.Loading
             is Success -> views.stateView.state = StateView.State.Content
-            else       -> Unit
+            else -> Unit
         }
         spaceController.update(state)
     }

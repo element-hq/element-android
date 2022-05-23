@@ -54,15 +54,15 @@ class RoomListSectionBuilderGroup(
         val actualGroupId = appStateHandler.safeActiveGroupId()
 
         when (mode) {
-            RoomListDisplayMode.PEOPLE        -> {
+            RoomListDisplayMode.PEOPLE -> {
                 // 4 sections Invites / Fav / Dms / Low Priority
                 buildPeopleSections(sections, activeGroupAwareQueries, actualGroupId)
             }
-            RoomListDisplayMode.ROOMS         -> {
+            RoomListDisplayMode.ROOMS -> {
                 // 5 sections invites / Fav / Rooms / Low Priority / Server notice
                 buildRoomsSections(sections, activeGroupAwareQueries, actualGroupId)
             }
-            RoomListDisplayMode.FILTERED      -> {
+            RoomListDisplayMode.FILTERED -> {
                 // Used when searching for rooms
                 withQueryParams(
                         {

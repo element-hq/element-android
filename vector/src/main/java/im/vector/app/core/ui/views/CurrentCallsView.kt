@@ -58,13 +58,13 @@ class CurrentCallsView @JvmOverloads constructor(
                 is CallState.Idle,
                 is CallState.CreateOffer,
                 is CallState.LocalRinging,
-                is CallState.Dialing   -> {
+                is CallState.Dialing -> {
                     resources.getString(R.string.call_ringing)
                 }
                 is CallState.Answering -> {
                     resources.getString(R.string.call_connecting)
                 }
-                else                   -> {
+                else -> {
                     resources.getString(R.string.call_one_active, formattedDuration)
                 }
             }

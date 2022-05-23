@@ -200,24 +200,24 @@ class MessageItemFactory @Inject constructor(
         //        val all = event.root.toContent()
         //        val ev = all.toModel<Event>()
         val messageItem = when (messageContent) {
-            is MessageEmoteContent               -> buildEmoteMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageTextContent                -> buildItemForTextContent(messageContent, informationData, highlight, callback, attributes)
-            is MessageImageInfoContent           -> buildImageMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageNoticeContent              -> buildNoticeMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageVideoContent               -> buildVideoMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageFileContent                -> buildFileMessageItem(messageContent, highlight, attributes)
-            is MessageAudioContent               -> buildAudioContent(params, messageContent, informationData, highlight, attributes)
+            is MessageEmoteContent -> buildEmoteMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageTextContent -> buildItemForTextContent(messageContent, informationData, highlight, callback, attributes)
+            is MessageImageInfoContent -> buildImageMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageNoticeContent -> buildNoticeMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageVideoContent -> buildVideoMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageFileContent -> buildFileMessageItem(messageContent, highlight, attributes)
+            is MessageAudioContent -> buildAudioContent(params, messageContent, informationData, highlight, attributes)
             is MessageVerificationRequestContent -> buildVerificationRequestMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessagePollContent                -> buildPollItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageLocationContent            -> {
+            is MessagePollContent -> buildPollItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageLocationContent -> {
                 if (vectorPreferences.labsRenderLocationsInTimeline()) {
                     buildLocationItem(messageContent, informationData, highlight, attributes)
                 } else {
                     buildMessageTextItem(messageContent.body, false, informationData, highlight, callback, attributes)
                 }
             }
-            is MessageBeaconInfoContent          -> liveLocationShareMessageItemFactory.create(params.event, highlight, attributes)
-            else                                 -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageBeaconInfoContent -> liveLocationShareMessageItemFactory.create(params.event, highlight, attributes)
+            else -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
         }
         return messageItem?.apply {
             layout(informationData.messageLayout.layoutRes)
@@ -283,11 +283,11 @@ class MessageItemFactory @Inject constructor(
             pollResponseSummary: PollResponseData?,
             pollContent: MessagePollContent,
     ): PollState = when {
-        !informationData.sendState.isSent()                                 -> Sending
-        pollResponseSummary?.isClosed.orFalse()                             -> Ended
+        !informationData.sendState.isSent() -> Sending
+        pollResponseSummary?.isClosed.orFalse() -> Ended
         pollContent.getBestPollCreationInfo()?.kind == PollType.UNDISCLOSED -> Undisclosed
-        pollResponseSummary?.myVote?.isNotEmpty().orFalse()                 -> Voted(pollResponseSummary?.totalVotes ?: 0)
-        else                                                                -> Ready
+        pollResponseSummary?.myVote?.isNotEmpty().orFalse() -> Voted(pollResponseSummary?.totalVotes ?: 0)
+        else -> Ready
     }
 
     private fun List<PollAnswer>.mapToOptions(
@@ -305,11 +305,11 @@ class MessageItemFactory @Inject constructor(
         val isWinner = winnerVoteCount != 0 && voteCount == winnerVoteCount
 
         when (pollState) {
-            Sending     -> PollSending(optionId, optionAnswer)
-            Ready       -> PollReady(optionId, optionAnswer)
-            is Voted    -> PollVoted(optionId, optionAnswer, voteCount, votePercentage, isMyVote)
+            Sending -> PollSending(optionId, optionAnswer)
+            Ready -> PollReady(optionId, optionAnswer)
+            is Voted -> PollVoted(optionId, optionAnswer, voteCount, votePercentage, isMyVote)
             Undisclosed -> PollUndisclosed(optionId, optionAnswer, isMyVote)
-            Ended       -> PollEnded(optionId, optionAnswer, voteCount, votePercentage, isWinner)
+            Ended -> PollEnded(optionId, optionAnswer, voteCount, votePercentage, isWinner)
         }
     }
 
@@ -329,11 +329,11 @@ class MessageItemFactory @Inject constructor(
     ): String {
         val votes = pollResponseSummary?.totalVotes ?: 0
         return when {
-            pollState is Ended       -> stringProvider.getQuantityString(R.plurals.poll_total_vote_count_after_ended, votes, votes)
+            pollState is Ended -> stringProvider.getQuantityString(R.plurals.poll_total_vote_count_after_ended, votes, votes)
             pollState is Undisclosed -> ""
-            pollState is Voted       -> stringProvider.getQuantityString(R.plurals.poll_total_vote_count_before_ended_and_voted, votes, votes)
-            votes == 0               -> stringProvider.getString(R.string.poll_no_votes_cast)
-            else                     -> stringProvider.getQuantityString(R.plurals.poll_total_vote_count_before_ended_and_not_voted, votes, votes)
+            pollState is Voted -> stringProvider.getQuantityString(R.plurals.poll_total_vote_count_before_ended_and_voted, votes, votes)
+            votes == 0 -> stringProvider.getString(R.string.poll_no_votes_cast)
+            else -> stringProvider.getQuantityString(R.plurals.poll_total_vote_count_before_ended_and_not_voted, votes, votes)
         }
     }
 

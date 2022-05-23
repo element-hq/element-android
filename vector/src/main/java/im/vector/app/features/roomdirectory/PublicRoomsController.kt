@@ -103,10 +103,10 @@ class PublicRoomsController @Inject constructor(
             val roomChangeMembership = viewState.changeMembershipStates[publicRoom.roomId] ?: ChangeMembershipState.Unknown
             val isJoined = viewState.joinedRoomsIds.contains(publicRoom.roomId) || roomChangeMembership is ChangeMembershipState.Joined
             val joinState = when {
-                isJoined                                                    -> JoinState.JOINED
-                roomChangeMembership is ChangeMembershipState.Joining       -> JoinState.JOINING
+                isJoined -> JoinState.JOINED
+                roomChangeMembership is ChangeMembershipState.Joining -> JoinState.JOINING
                 roomChangeMembership is ChangeMembershipState.FailedJoining -> JoinState.JOINING_ERROR
-                else                                                        -> JoinState.NOT_JOINED
+                else -> JoinState.NOT_JOINED
             }
             joinState(joinState)
 
@@ -124,9 +124,9 @@ class PublicRoomsController @Inject constructor(
         val isAlias = MatrixPatterns.isRoomAlias(roomIdOrAlias) && !publicRooms.any { it.canonicalAlias == roomIdOrAlias }
         val isRoomId = !isAlias && MatrixPatterns.isRoomId(roomIdOrAlias) && !publicRooms.any { it.roomId == roomIdOrAlias }
         val roomItem = when {
-            isAlias  -> MatrixItem.RoomAliasItem(roomIdOrAlias, roomIdOrAlias)
+            isAlias -> MatrixItem.RoomAliasItem(roomIdOrAlias, roomIdOrAlias)
             isRoomId -> MatrixItem.RoomItem(roomIdOrAlias)
-            else     -> null
+            else -> null
         }
         val host = this@PublicRoomsController
         return roomItem?.let {

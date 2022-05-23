@@ -52,7 +52,7 @@ class PushGatewaysFragment @Inject constructor(
                 viewModel.handle(PushGatewayAction.Refresh)
                 true
             }
-            else         ->
+            else ->
                 super.onOptionsItemSelected(item)
         }
     }

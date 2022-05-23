@@ -98,12 +98,12 @@ enum class WithHeldCode(val value: String) {
     companion object {
         fun fromCode(code: String?): WithHeldCode? {
             return when (code) {
-                BLACKLISTED.value  -> BLACKLISTED
-                UNVERIFIED.value   -> UNVERIFIED
+                BLACKLISTED.value -> BLACKLISTED
+                UNVERIFIED.value -> UNVERIFIED
                 UNAUTHORISED.value -> UNAUTHORISED
-                UNAVAILABLE.value  -> UNAVAILABLE
-                NO_OLM.value       -> NO_OLM
-                else               -> null
+                UNAVAILABLE.value -> UNAVAILABLE
+                NO_OLM.value -> NO_OLM
+                else -> null
             }
         }
     }

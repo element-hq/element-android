@@ -53,7 +53,7 @@ class SpacePeopleViewModel @AssistedInject constructor(
 
     override fun handle(action: SpacePeopleViewAction) {
         when (action) {
-            is SpacePeopleViewAction.ChatWith   -> handleChatWith(action)
+            is SpacePeopleViewAction.ChatWith -> handleChatWith(action)
             SpacePeopleViewAction.InviteToSpace -> handleInviteToSpace()
         }
     }

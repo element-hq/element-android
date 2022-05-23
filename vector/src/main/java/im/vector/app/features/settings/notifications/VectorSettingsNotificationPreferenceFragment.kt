@@ -215,9 +215,9 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
     private fun refreshBackgroundSyncPrefs() {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_FDROID_BACKGROUND_SYNC_MODE)?.let {
             it.summary = when (vectorPreferences.getFdroidSyncBackgroundMode()) {
-                BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY  -> getString(R.string.settings_background_fdroid_sync_mode_battery)
+                BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY -> getString(R.string.settings_background_fdroid_sync_mode_battery)
                 BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME -> getString(R.string.settings_background_fdroid_sync_mode_real_time)
-                BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_DISABLED     -> getString(R.string.settings_background_fdroid_sync_mode_disabled)
+                BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_DISABLED -> getString(R.string.settings_background_fdroid_sync_mode_disabled)
             }
         }
 
@@ -236,7 +236,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
         }
         when {
             backgroundSyncEnabled -> guardServiceStarter.start()
-            else                  -> guardServiceStarter.stop()
+            else -> guardServiceStarter.stop()
         }
     }
 
@@ -358,7 +358,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
                 updateEnabledForAccount(preference)
                 true
             }
-            else                                                       -> {
+            else -> {
                 return super.onPreferenceTreeClick(preference)
             }
         }

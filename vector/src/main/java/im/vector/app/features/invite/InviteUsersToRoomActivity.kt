@@ -69,12 +69,12 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity() {
                 .stream()
                 .onEach { sharedAction ->
                     when (sharedAction) {
-                        UserListSharedAction.Close                 -> finish()
-                        UserListSharedAction.GoBack                -> onBackPressed()
+                        UserListSharedAction.Close -> finish()
+                        UserListSharedAction.GoBack -> onBackPressed()
                         is UserListSharedAction.OnMenuItemSelected -> onMenuItemSelected(sharedAction)
-                        UserListSharedAction.OpenPhoneBook         -> openPhoneBook()
+                        UserListSharedAction.OpenPhoneBook -> openPhoneBook()
                         // not exhaustive because it's a sharedAction
-                        else                                       -> Unit
+                        else -> Unit
                     }
                 }
                 .launchIn(lifecycleScope)

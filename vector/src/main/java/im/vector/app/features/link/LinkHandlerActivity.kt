@@ -59,16 +59,16 @@ class LinkHandlerActivity : VectorBaseActivity<ActivityProgressBinding>() {
     private fun handleIntent() {
         val uri = intent.data
         when {
-            uri == null                                                                    -> {
+            uri == null -> {
                 // Should not happen
                 Timber.w("Uri is null")
                 finish()
             }
-            uri.getQueryParameter(LoginConfig.CONFIG_HS_PARAMETER) != null                 -> handleConfigUrl(uri)
-            uri.toString().startsWith(PermalinkService.MATRIX_TO_URL_BASE)                 -> handleSupportedHostUrl()
-            uri.toString().startsWith(PermalinkHandler.MATRIX_TO_CUSTOM_SCHEME_URL_BASE)   -> handleSupportedHostUrl()
+            uri.getQueryParameter(LoginConfig.CONFIG_HS_PARAMETER) != null -> handleConfigUrl(uri)
+            uri.toString().startsWith(PermalinkService.MATRIX_TO_URL_BASE) -> handleSupportedHostUrl()
+            uri.toString().startsWith(PermalinkHandler.MATRIX_TO_CUSTOM_SCHEME_URL_BASE) -> handleSupportedHostUrl()
             resources.getStringArray(R.array.permalink_supported_hosts).contains(uri.host) -> handleSupportedHostUrl()
-            else                                                                           -> {
+            else -> {
                 // Other links are not yet handled, but should not come here (manifest configuration error?)
                 toast(R.string.universal_link_malformed)
                 finish()

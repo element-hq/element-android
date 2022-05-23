@@ -145,10 +145,10 @@ internal class RedactionEventProcessor @Inject constructor() : EventInsertLivePr
     private fun computeAllowedKeys(type: String): List<String> {
         // Add filtered content, allowed keys in content depends on the event type
         return when (type) {
-            EventType.STATE_ROOM_MEMBER          -> listOf("membership")
-            EventType.STATE_ROOM_CREATE          -> listOf("creator")
-            EventType.STATE_ROOM_JOIN_RULES      -> listOf("join_rule")
-            EventType.STATE_ROOM_POWER_LEVELS    -> listOf(
+            EventType.STATE_ROOM_MEMBER -> listOf("membership")
+            EventType.STATE_ROOM_CREATE -> listOf("creator")
+            EventType.STATE_ROOM_JOIN_RULES -> listOf("join_rule")
+            EventType.STATE_ROOM_POWER_LEVELS -> listOf(
                     "users",
                     "users_default",
                     "events",
@@ -159,10 +159,10 @@ internal class RedactionEventProcessor @Inject constructor() : EventInsertLivePr
                     "redact",
                     "invite"
             )
-            EventType.STATE_ROOM_ALIASES         -> listOf("aliases")
+            EventType.STATE_ROOM_ALIASES -> listOf("aliases")
             EventType.STATE_ROOM_CANONICAL_ALIAS -> listOf("alias")
-            EventType.FEEDBACK                   -> listOf("type", "target_event_id")
-            else                                 -> emptyList()
+            EventType.FEEDBACK -> listOf("type", "target_event_id")
+            else -> emptyList()
         }
     }
 }

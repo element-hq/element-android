@@ -141,7 +141,7 @@ class ElementRobot {
                 // I hereby cheat and write:
                 Thread.sleep(30_000)
             }
-            else                       -> {
+            else -> {
             }
         }
     }

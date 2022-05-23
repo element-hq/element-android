@@ -49,10 +49,10 @@ object WebviewPermissionUtils {
 
     private fun webPermissionToHumanReadable(permission: String, context: Context): String {
         return when (permission) {
-            PermissionRequest.RESOURCE_AUDIO_CAPTURE      -> context.getString(R.string.room_widget_webview_access_microphone)
-            PermissionRequest.RESOURCE_VIDEO_CAPTURE      -> context.getString(R.string.room_widget_webview_access_camera)
+            PermissionRequest.RESOURCE_AUDIO_CAPTURE -> context.getString(R.string.room_widget_webview_access_microphone)
+            PermissionRequest.RESOURCE_VIDEO_CAPTURE -> context.getString(R.string.room_widget_webview_access_camera)
             PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID -> context.getString(R.string.room_widget_webview_read_protected_media)
-            else                                          -> permission
+            else -> permission
         }
     }
 }

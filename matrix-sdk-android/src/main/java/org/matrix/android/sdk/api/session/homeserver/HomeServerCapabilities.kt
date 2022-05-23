@@ -81,13 +81,13 @@ data class HomeServerCapabilities(
         val versionCap = roomVersions.supportedVersion.firstOrNull { it.version == preferred }
 
         return when {
-            versionCap == null                            -> {
+            versionCap == null -> {
                 RoomCapabilitySupport.UNKNOWN
             }
             versionCap.status == RoomVersionStatus.STABLE -> {
                 RoomCapabilitySupport.SUPPORTED
             }
-            else                                          -> {
+            else -> {
                 RoomCapabilitySupport.SUPPORTED_UNSTABLE
             }
         }

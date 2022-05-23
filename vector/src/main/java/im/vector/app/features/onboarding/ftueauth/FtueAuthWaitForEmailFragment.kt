@@ -60,7 +60,7 @@ class FtueAuthWaitForEmailFragment @Inject constructor(
     private fun setupUi() {
         views.emailVerificationGradientContainer.setBackgroundResource(
                 when (themeProvider.isLightTheme()) {
-                    true  -> R.drawable.bg_waiting_for_email_verification
+                    true -> R.drawable.bg_waiting_for_email_verification
                     false -> R.drawable.bg_color_background
                 }
         )
@@ -80,7 +80,7 @@ class FtueAuthWaitForEmailFragment @Inject constructor(
 
     private fun showLoadingIfReturningToScreen() {
         when (inferHasLeftAndReturnedToScreen) {
-            true  -> views.emailVerificationWaiting.isVisible = true
+            true -> views.emailVerificationWaiting.isVisible = true
             false -> {
                 inferHasLeftAndReturnedToScreen = true
             }

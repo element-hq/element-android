@@ -44,7 +44,7 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
         holder.avatarImageView.onClick(attributes.avatarClickListener)
 
         when (attributes.informationData.e2eDecoration) {
-            E2EDecoration.NONE                 -> {
+            E2EDecoration.NONE -> {
                 holder.e2EDecorationView.render(null)
             }
             E2EDecoration.WARN_IN_CLEAR,

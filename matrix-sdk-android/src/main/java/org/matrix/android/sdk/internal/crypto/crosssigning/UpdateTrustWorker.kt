@@ -149,7 +149,7 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
             val trusts = otherInfos.mapValues { entry ->
                 when (entry.key) {
                     myUserId -> myTrustResult
-                    else     -> {
+                    else -> {
                         crossSigningService.checkOtherMSKTrusted(myCrossSigningInfo, entry.value).also {
                             Timber.v("## CrossSigning - user:${entry.key} result:$it")
                         }

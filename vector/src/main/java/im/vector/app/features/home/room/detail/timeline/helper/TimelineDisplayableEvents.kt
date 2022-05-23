@@ -71,11 +71,11 @@ fun TimelineEvent.isRoomConfiguration(roomCreatorUserId: String?): Boolean {
         EventType.STATE_ROOM_CANONICAL_ALIAS,
         EventType.STATE_ROOM_POWER_LEVELS,
         EventType.STATE_ROOM_ENCRYPTION -> true
-        EventType.STATE_ROOM_MEMBER     -> {
+        EventType.STATE_ROOM_MEMBER -> {
             // Keep only room member events regarding the room creator (when he joined the room),
             // but exclude events where the room creator invite others, or where others join
             roomCreatorUserId != null && root.stateKey == roomCreatorUserId
         }
-        else                            -> false
+        else -> false
     }
 }

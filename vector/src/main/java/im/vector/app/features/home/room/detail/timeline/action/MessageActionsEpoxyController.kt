@@ -126,7 +126,7 @@ class MessageActionsEpoxyController @Inject constructor(
         }
 
         when (state.informationData.e2eDecoration) {
-            E2EDecoration.WARN_IN_CLEAR        -> {
+            E2EDecoration.WARN_IN_CLEAR -> {
                 bottomSheetSendStateItem {
                     id("e2e_clear")
                     showProgress(false)
@@ -143,7 +143,7 @@ class MessageActionsEpoxyController @Inject constructor(
                     drawableStart(R.drawable.ic_shield_warning_small)
                 }
             }
-            else                               -> {
+            else -> {
                 // nothing
             }
         }

@@ -56,7 +56,7 @@ abstract class BooleanFeatureItem : VectorEpoxyModel<BooleanFeatureItem.Holder>(
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     when (position) {
-                        0    -> listener?.onBooleanOptionSelected(option = null, feature)
+                        0 -> listener?.onBooleanOptionSelected(option = null, feature)
                         else -> listener?.onBooleanOptionSelected(options[position].fromEmoji(), feature)
                     }
                 }
@@ -80,7 +80,7 @@ abstract class BooleanFeatureItem : VectorEpoxyModel<BooleanFeatureItem.Holder>(
 
 private fun Boolean.toEmoji() = if (this) "✅" else "❌"
 private fun String.fromEmoji() = when (this) {
-    "✅"  -> true
-    "❌"  -> false
+    "✅" -> true
+    "❌" -> false
     else -> error("unexpected input $this")
 }

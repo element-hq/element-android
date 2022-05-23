@@ -149,13 +149,13 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
 
     override fun handle(action: SharedSecureStorageAction) = withState {
         when (action) {
-            is SharedSecureStorageAction.Cancel           -> handleCancel()
+            is SharedSecureStorageAction.Cancel -> handleCancel()
             is SharedSecureStorageAction.SubmitPassphrase -> handleSubmitPassphrase(action)
-            SharedSecureStorageAction.UseKey              -> handleUseKey()
-            is SharedSecureStorageAction.SubmitKey        -> handleSubmitKey(action)
-            SharedSecureStorageAction.Back                -> handleBack()
-            SharedSecureStorageAction.ForgotResetAll      -> handleResetAll()
-            SharedSecureStorageAction.DoResetAll          -> handleDoResetAll()
+            SharedSecureStorageAction.UseKey -> handleUseKey()
+            is SharedSecureStorageAction.SubmitKey -> handleSubmitKey(action)
+            SharedSecureStorageAction.Back -> handleBack()
+            SharedSecureStorageAction.ForgotResetAll -> handleResetAll()
+            SharedSecureStorageAction.DoResetAll -> handleDoResetAll()
         }
     }
 
@@ -207,7 +207,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                     )
                 }
             }
-            else                                       -> {
+            else -> {
                 _viewEvents.post(SharedSecureStorageViewEvent.Dismiss)
             }
         }
@@ -263,7 +263,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
 
     private suspend fun performRequest(keyInfo: KeyInfo, keySpec: RawBytesKeySpec, decryptedSecretMap: HashMap<String, String>) {
         when (val requestType = initialState.requestType) {
-            is RequestType.ReadSecrets  -> {
+            is RequestType.ReadSecrets -> {
                 requestType.secretsName.forEach {
                     if (session.accountDataService().getUserAccountDataEvent(it) != null) {
                         val res = session.sharedSecretStorageService().getSecret(

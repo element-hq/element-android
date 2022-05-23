@@ -56,28 +56,28 @@ class DraggableStateProcessor(
 
     private fun DraggingState.nextDragState(currentX: Float, currentY: Float, distanceX: Float, distanceY: Float): DraggingState {
         return when (this) {
-            DraggingState.Ready         -> {
+            DraggingState.Ready -> {
                 when {
                     isDraggingToCancel(currentX, distanceX, distanceY) -> DraggingState.Cancelling(distanceX)
-                    isDraggingToLock(currentY, distanceX, distanceY)   -> DraggingState.Locking(distanceY)
-                    else                                               -> DraggingState.Ready
+                    isDraggingToLock(currentY, distanceX, distanceY) -> DraggingState.Locking(distanceY)
+                    else -> DraggingState.Ready
                 }
             }
             is DraggingState.Cancelling -> {
                 when {
                     isDraggingToLock(currentY, distanceX, distanceY) -> DraggingState.Locking(distanceY)
-                    shouldCancelRecording(distanceX)                 -> DraggingState.Cancel
-                    else                                             -> DraggingState.Cancelling(distanceX)
+                    shouldCancelRecording(distanceX) -> DraggingState.Cancel
+                    else -> DraggingState.Cancelling(distanceX)
                 }
             }
-            is DraggingState.Locking    -> {
+            is DraggingState.Locking -> {
                 when {
                     isDraggingToCancel(currentX, distanceX, distanceY) -> DraggingState.Cancelling(distanceX)
-                    shouldLockRecording(distanceY)                     -> DraggingState.Lock
-                    else                                               -> DraggingState.Locking(distanceY)
+                    shouldLockRecording(distanceY) -> DraggingState.Lock
+                    else -> DraggingState.Locking(distanceY)
                 }
             }
-            else                        -> {
+            else -> {
                 this
             }
         }

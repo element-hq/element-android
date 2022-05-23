@@ -83,7 +83,7 @@ class ThreePidsSettingsController @Inject constructor(
                     loadingText(host.stringProvider.getString(R.string.loading))
                 }
             }
-            is Fail    -> {
+            is Fail -> {
                 genericFooterItem {
                     id("fail")
                     text(data.threePids.error.localizedMessage?.toEpoxyCharSequence())
@@ -93,7 +93,7 @@ class ThreePidsSettingsController @Inject constructor(
                 val dataList = data.threePids.invoke()
                 buildThreePids(dataList, data)
             }
-            else       -> Unit
+            else -> Unit
         }
     }
 
@@ -126,14 +126,14 @@ class ThreePidsSettingsController @Inject constructor(
                 }
 
         when (data.uiState) {
-            ThreePidsSettingsUiState.Idle                 ->
+            ThreePidsSettingsUiState.Idle ->
                 genericButtonItem {
                     id("addEmail")
                     text(host.stringProvider.getString(R.string.settings_add_email_address))
                     textColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
                     buttonClickAction { host.interactionListener?.addEmail() }
                 }
-            is ThreePidsSettingsUiState.AddingEmail       -> {
+            is ThreePidsSettingsUiState.AddingEmail -> {
                 settingsEditTextItem {
                     id("addingEmail")
                     inputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS)
@@ -185,14 +185,14 @@ class ThreePidsSettingsController @Inject constructor(
                 }
 
         when (data.uiState) {
-            ThreePidsSettingsUiState.Idle                 ->
+            ThreePidsSettingsUiState.Idle ->
                 genericButtonItem {
                     id("addMsisdn")
                     text(host.stringProvider.getString(R.string.settings_add_phone_number))
                     textColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
                     buttonClickAction { host.interactionListener?.addMsisdn() }
                 }
-            is ThreePidsSettingsUiState.AddingEmail       -> Unit
+            is ThreePidsSettingsUiState.AddingEmail -> Unit
             is ThreePidsSettingsUiState.AddingPhoneNumber -> {
                 settingsInfoItem {
                     id("addingMsisdnInfo")
@@ -247,7 +247,7 @@ class ThreePidsSettingsController @Inject constructor(
         }
 
         when (threePid) {
-            is ThreePid.Email  -> {
+            is ThreePid.Email -> {
                 settingsInformationItem {
                     id("info" + idPrefix + threePid.value)
                     message(host.stringProvider.getString(R.string.account_email_validation_message))

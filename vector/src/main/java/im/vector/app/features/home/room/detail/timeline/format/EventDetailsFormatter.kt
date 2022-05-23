@@ -50,8 +50,8 @@ class EventDetailsFormatter @Inject constructor(
             event.isImageMessage() -> formatForImageMessage(event)
             event.isVideoMessage() -> formatForVideoMessage(event)
             event.isAudioMessage() -> formatForAudioMessage(event)
-            event.isFileMessage()  -> formatForFileMessage(event)
-            else                   -> null
+            event.isFileMessage() -> formatForFileMessage(event)
+            else -> null
         }
     }
 

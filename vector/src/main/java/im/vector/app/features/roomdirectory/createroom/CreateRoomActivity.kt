@@ -64,12 +64,12 @@ class CreateRoomActivity : VectorBaseActivity<ActivitySimpleBinding>() {
                 .onEach { sharedAction ->
                     when (sharedAction) {
                         is RoomDirectorySharedAction.Back,
-                        is RoomDirectorySharedAction.Close             -> finish()
+                        is RoomDirectorySharedAction.Close -> finish()
                         is RoomDirectorySharedAction.CreateRoomSuccess -> {
                             setResult(Activity.RESULT_OK, Intent().apply { putExtra(RESULT_CREATED_ROOM_ID, sharedAction.createdRoomId) })
                             finish()
                         }
-                        else                                           -> {
+                        else -> {
                             // nop
                         }
                     }

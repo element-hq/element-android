@@ -57,13 +57,13 @@ class DeviceListEpoxyController @Inject constructor(
         when (data.cryptoDevices) {
             Uninitialized -> {
             }
-            is Loading    -> {
+            is Loading -> {
                 loadingItem {
                     id("loading")
                     loadingText(host.stringProvider.getString(R.string.loading))
                 }
             }
-            is Success    -> {
+            is Success -> {
                 val deviceList = data.cryptoDevices.invoke().sortedBy {
                     it.isVerified
                 }
@@ -141,7 +141,7 @@ class DeviceListEpoxyController @Inject constructor(
                     }
                 }
             }
-            is Fail       -> {
+            is Fail -> {
                 errorWithRetryItem {
                     id("error")
                     text(host.stringProvider.getString(R.string.room_member_profile_failed_to_get_devices))

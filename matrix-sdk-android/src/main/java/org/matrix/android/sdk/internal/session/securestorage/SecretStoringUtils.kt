@@ -124,7 +124,7 @@ internal class SecretStoringUtils @Inject constructor(
     fun securelyStoreString(secret: String, keyAlias: String): ByteArray {
         return when {
             buildVersionSdkIntProvider.get() >= Build.VERSION_CODES.M -> encryptStringM(secret, keyAlias)
-            else                                                      -> encryptString(secret, keyAlias)
+            else -> encryptString(secret, keyAlias)
         }
     }
 
@@ -138,8 +138,8 @@ internal class SecretStoringUtils @Inject constructor(
             // First get the format
             return when (val format = inputStream.read().toByte()) {
                 FORMAT_API_M -> decryptStringM(inputStream, keyAlias)
-                FORMAT_1     -> decryptString(inputStream, keyAlias)
-                else         -> throw IllegalArgumentException("Unknown format $format")
+                FORMAT_1 -> decryptString(inputStream, keyAlias)
+                else -> throw IllegalArgumentException("Unknown format $format")
             }
         }
     }
@@ -148,7 +148,7 @@ internal class SecretStoringUtils @Inject constructor(
     fun securelyStoreObject(any: Any, keyAlias: String, output: OutputStream) {
         when {
             buildVersionSdkIntProvider.get() >= Build.VERSION_CODES.M -> saveSecureObjectM(keyAlias, output, any)
-            else                                                      -> saveSecureObject(keyAlias, output, any)
+            else -> saveSecureObject(keyAlias, output, any)
         }
     }
 
@@ -157,8 +157,8 @@ internal class SecretStoringUtils @Inject constructor(
         // First get the format
         return when (val format = inputStream.read().toByte()) {
             FORMAT_API_M -> loadSecureObjectM(keyAlias, inputStream)
-            FORMAT_1     -> loadSecureObject(keyAlias, inputStream)
-            else         -> throw IllegalArgumentException("Unknown format $format")
+            FORMAT_1 -> loadSecureObject(keyAlias, inputStream)
+            else -> throw IllegalArgumentException("Unknown format $format")
         }
     }
 

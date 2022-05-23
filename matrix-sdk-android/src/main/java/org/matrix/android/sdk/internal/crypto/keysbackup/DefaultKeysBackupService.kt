@@ -328,7 +328,7 @@ internal class DefaultKeysBackupService @Inject constructor(
         // val hashServer = keysBackupData?.backupLastServerHash
 
         return when {
-            totalNumberOfKeysLocally < totalNumberOfKeysServer  -> {
+            totalNumberOfKeysLocally < totalNumberOfKeysServer -> {
                 // Server contains more keys than this device
                 true
             }
@@ -337,7 +337,7 @@ internal class DefaultKeysBackupService @Inject constructor(
                 // TODO We have not found any algorithm to determine if a restore is recommended here. Return false for the moment
                 false
             }
-            else                                                -> false
+            else -> false
         }
     }
 
@@ -935,7 +935,7 @@ internal class DefaultKeysBackupService @Inject constructor(
      */
     fun maybeBackupKeys() {
         when {
-            isStucked                              -> {
+            isStucked -> {
                 // If not already done, or in error case, check for a valid backup version on the homeserver.
                 // If there is one, maybeBackupKeys will be called again.
                 checkAndStartKeysBackup()
@@ -953,7 +953,7 @@ internal class DefaultKeysBackupService @Inject constructor(
                     uiHandler.post { backupKeys() }
                 }
             }
-            else                                   -> {
+            else -> {
                 Timber.v("maybeBackupKeys: Skip it because state: $state")
             }
         }
@@ -998,7 +998,7 @@ internal class DefaultKeysBackupService @Inject constructor(
             override fun onSuccess(data: KeysBackupLastVersionResult) {
                 val localBackupVersion = keysBackupVersion?.version
                 when (data) {
-                    KeysBackupLastVersionResult.NoKeysBackup  -> {
+                    KeysBackupLastVersionResult.NoKeysBackup -> {
                         if (localBackupVersion == null) {
                             // No backup on the server, and backup is not active
                             callback.onSuccess(true)
@@ -1384,7 +1384,7 @@ internal class DefaultKeysBackupService @Inject constructor(
                                                     // Do not stay in KeysBackupState.WrongBackUpVersion but check what is available on the homeserver
                                                     checkAndStartKeysBackup()
                                                 }
-                                                else                                  ->
+                                                else ->
                                                     // Come back to the ready state so that we will retry on the next received key
                                                     keysBackupStateManager.state = KeysBackupState.ReadyToBackUp
                                             }

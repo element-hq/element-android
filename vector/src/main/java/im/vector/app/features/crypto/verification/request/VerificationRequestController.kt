@@ -133,13 +133,13 @@ class VerificationRequestController @Inject constructor(
                         listener { host.listener?.onClickOnVerificationStart() }
                     }
                 }
-                is Loading       -> {
+                is Loading -> {
                     bottomSheetVerificationWaitingItem {
                         id("waiting")
                         title(host.stringProvider.getString(R.string.verification_request_waiting_for, matrixItem.getBestName()))
                     }
                 }
-                is Success       -> {
+                is Success -> {
                     if (!pr.invoke().isReady) {
                         if (state.isMe) {
                             bottomSheetVerificationWaitingItem {
@@ -154,7 +154,7 @@ class VerificationRequestController @Inject constructor(
                         }
                     }
                 }
-                is Fail          -> Unit
+                is Fail -> Unit
             }
         }
 

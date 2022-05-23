@@ -132,7 +132,7 @@ internal class DefaultTermsService @Inject constructor(
     private fun buildUrl(baseUrl: String, serviceType: TermsService.ServiceType): String {
         val servicePath = when (serviceType) {
             TermsService.ServiceType.IntegrationManager -> NetworkConstants.URI_INTEGRATION_MANAGER_PATH
-            TermsService.ServiceType.IdentityService    -> NetworkConstants.URI_IDENTITY_PATH_V2
+            TermsService.ServiceType.IdentityService -> NetworkConstants.URI_IDENTITY_PATH_V2
         }
         return "${baseUrl.ensureTrailingSlash()}$servicePath"
     }

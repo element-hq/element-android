@@ -113,7 +113,7 @@ internal class VideoCompressor @Inject constructor(
                 deleteFile(destinationFile)
                 VideoCompressionResult.CompressionNotNeeded
             }
-            else                          -> {
+            else -> {
                 // Should not happen...
                 // Delete now the temporary file
                 deleteFile(destinationFile)

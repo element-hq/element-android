@@ -149,7 +149,7 @@ class RoomAliasViewModel @AssistedInject constructor(
                         val newPublishManuallyState = if (permissions.canChangeCanonicalAlias) {
                             when (publishManuallyState) {
                                 RoomAliasViewState.AddAliasState.Hidden -> RoomAliasViewState.AddAliasState.Closed
-                                else                                    -> publishManuallyState
+                                else -> publishManuallyState
                             }
                         } else {
                             RoomAliasViewState.AddAliasState.Hidden
@@ -180,18 +180,18 @@ class RoomAliasViewModel @AssistedInject constructor(
 
     override fun handle(action: RoomAliasAction) {
         when (action) {
-            RoomAliasAction.ToggleManualPublishForm       -> handleToggleManualPublishForm()
-            is RoomAliasAction.SetNewAlias                -> handleSetNewAlias(action)
-            is RoomAliasAction.ManualPublishAlias         -> handleManualPublishAlias()
-            is RoomAliasAction.UnpublishAlias             -> handleUnpublishAlias(action)
-            is RoomAliasAction.SetCanonicalAlias          -> handleSetCanonicalAlias(action)
+            RoomAliasAction.ToggleManualPublishForm -> handleToggleManualPublishForm()
+            is RoomAliasAction.SetNewAlias -> handleSetNewAlias(action)
+            is RoomAliasAction.ManualPublishAlias -> handleManualPublishAlias()
+            is RoomAliasAction.UnpublishAlias -> handleUnpublishAlias(action)
+            is RoomAliasAction.SetCanonicalAlias -> handleSetCanonicalAlias(action)
             is RoomAliasAction.SetRoomDirectoryVisibility -> handleSetRoomDirectoryVisibility(action)
-            RoomAliasAction.ToggleAddLocalAliasForm       -> handleToggleAddLocalAliasForm()
-            is RoomAliasAction.SetNewLocalAliasLocalPart  -> handleSetNewLocalAliasLocalPart(action)
-            RoomAliasAction.AddLocalAlias                 -> handleAddLocalAlias()
-            is RoomAliasAction.RemoveLocalAlias           -> handleRemoveLocalAlias(action)
-            is RoomAliasAction.PublishAlias               -> handlePublishAlias(action)
-            RoomAliasAction.Retry                         -> handleRetry()
+            RoomAliasAction.ToggleAddLocalAliasForm -> handleToggleAddLocalAliasForm()
+            is RoomAliasAction.SetNewLocalAliasLocalPart -> handleSetNewLocalAliasLocalPart(action)
+            RoomAliasAction.AddLocalAlias -> handleAddLocalAlias()
+            is RoomAliasAction.RemoveLocalAlias -> handleRemoveLocalAlias(action)
+            is RoomAliasAction.PublishAlias -> handlePublishAlias(action)
+            RoomAliasAction.Retry -> handleRetry()
         }
     }
 
@@ -231,8 +231,8 @@ class RoomAliasViewModel @AssistedInject constructor(
         setState {
             copy(
                     newLocalAliasState = when (newLocalAliasState) {
-                        RoomAliasViewState.AddAliasState.Hidden     -> RoomAliasViewState.AddAliasState.Hidden
-                        RoomAliasViewState.AddAliasState.Closed     -> RoomAliasViewState.AddAliasState.Editing("", Uninitialized)
+                        RoomAliasViewState.AddAliasState.Hidden -> RoomAliasViewState.AddAliasState.Hidden
+                        RoomAliasViewState.AddAliasState.Closed -> RoomAliasViewState.AddAliasState.Editing("", Uninitialized)
                         is RoomAliasViewState.AddAliasState.Editing -> RoomAliasViewState.AddAliasState.Closed
                     }
             )
@@ -243,8 +243,8 @@ class RoomAliasViewModel @AssistedInject constructor(
         setState {
             copy(
                     publishManuallyState = when (publishManuallyState) {
-                        RoomAliasViewState.AddAliasState.Hidden     -> RoomAliasViewState.AddAliasState.Hidden
-                        RoomAliasViewState.AddAliasState.Closed     -> RoomAliasViewState.AddAliasState.Editing("", Uninitialized)
+                        RoomAliasViewState.AddAliasState.Hidden -> RoomAliasViewState.AddAliasState.Hidden
+                        RoomAliasViewState.AddAliasState.Closed -> RoomAliasViewState.AddAliasState.Editing("", Uninitialized)
                         is RoomAliasViewState.AddAliasState.Editing -> RoomAliasViewState.AddAliasState.Closed
                     }
             )

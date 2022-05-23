@@ -43,9 +43,9 @@ internal class DefaultMembershipAdminTask @Inject constructor(private val roomAP
         val userIdAndReason = UserIdAndReason(params.userId, params.reason)
         executeRequest(null) {
             when (params.type) {
-                MembershipAdminTask.Type.BAN   -> roomAPI.ban(params.roomId, userIdAndReason)
+                MembershipAdminTask.Type.BAN -> roomAPI.ban(params.roomId, userIdAndReason)
                 MembershipAdminTask.Type.UNBAN -> roomAPI.unban(params.roomId, userIdAndReason)
-                MembershipAdminTask.Type.KICK  -> roomAPI.kick(params.roomId, userIdAndReason)
+                MembershipAdminTask.Type.KICK -> roomAPI.kick(params.roomId, userIdAndReason)
             }
         }
     }

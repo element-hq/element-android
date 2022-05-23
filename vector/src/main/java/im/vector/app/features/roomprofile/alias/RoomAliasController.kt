@@ -80,8 +80,8 @@ class RoomAliasController @Inject constructor(
         val host = this
         when (data.roomDirectoryVisibility) {
             Uninitialized -> Unit
-            is Loading    -> Unit
-            is Success    -> {
+            is Loading -> Unit
+            is Success -> {
                 formSwitchItem {
                     id("roomVisibility")
                     title(host.stringProvider.getString(R.string.room_alias_publish_to_directory, data.homeServerName))
@@ -95,7 +95,7 @@ class RoomAliasController @Inject constructor(
                     }
                 }
             }
-            is Fail       -> {
+            is Fail -> {
                 errorWithRetryItem {
                     id("rd_error")
                     text(
@@ -162,8 +162,8 @@ class RoomAliasController @Inject constructor(
     private fun buildPublishManuallyForm(data: RoomAliasViewState) {
         val host = this
         when (data.publishManuallyState) {
-            RoomAliasViewState.AddAliasState.Hidden     -> Unit
-            RoomAliasViewState.AddAliasState.Closed     -> {
+            RoomAliasViewState.AddAliasState.Hidden -> Unit
+            RoomAliasViewState.AddAliasState.Closed -> {
                 settingsButtonItem {
                     id("publishManually")
                     colorProvider(host.colorProvider)
@@ -225,7 +225,7 @@ class RoomAliasController @Inject constructor(
                     }
                 }
             }
-            is Fail    -> {
+            is Fail -> {
                 errorWithRetryItem {
                     id("alt_error")
                     text(host.errorFormatter.toHumanReadable(localAliases.error))
@@ -241,8 +241,8 @@ class RoomAliasController @Inject constructor(
     private fun buildAddLocalAlias(data: RoomAliasViewState) {
         val host = this
         when (data.newLocalAliasState) {
-            RoomAliasViewState.AddAliasState.Hidden     -> Unit
-            RoomAliasViewState.AddAliasState.Closed     -> {
+            RoomAliasViewState.AddAliasState.Hidden -> Unit
+            RoomAliasViewState.AddAliasState.Closed -> {
                 settingsButtonItem {
                     id("newLocalAliasButton")
                     colorProvider(host.colorProvider)

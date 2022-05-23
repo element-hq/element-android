@@ -70,11 +70,11 @@ class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>
             // display the fragment
 
             when (val payload = readPayload<SettingsActivityPayload>(SettingsActivityPayload.Root)) {
-                SettingsActivityPayload.General                       ->
+                SettingsActivityPayload.General ->
                     replaceFragment(views.vectorSettingsPage, VectorSettingsGeneralFragment::class.java, null, FRAGMENT_TAG)
-                SettingsActivityPayload.AdvancedSettings              ->
+                SettingsActivityPayload.AdvancedSettings ->
                     replaceFragment(views.vectorSettingsPage, VectorSettingsAdvancedSettingsFragment::class.java, null, FRAGMENT_TAG)
-                SettingsActivityPayload.SecurityPrivacy               ->
+                SettingsActivityPayload.SecurityPrivacy ->
                     replaceFragment(views.vectorSettingsPage, VectorSettingsSecurityPrivacyFragment::class.java, null, FRAGMENT_TAG)
                 SettingsActivityPayload.SecurityPrivacyManageSessions ->
                     replaceFragment(
@@ -83,14 +83,14 @@ class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>
                             null,
                             FRAGMENT_TAG
                     )
-                SettingsActivityPayload.Notifications                 -> {
+                SettingsActivityPayload.Notifications -> {
                     requestHighlightPreferenceKeyOnResume(VectorPreferences.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY)
                     replaceFragment(views.vectorSettingsPage, VectorSettingsNotificationPreferenceFragment::class.java, null, FRAGMENT_TAG)
                 }
-                is SettingsActivityPayload.DiscoverySettings          -> {
+                is SettingsActivityPayload.DiscoverySettings -> {
                     replaceFragment(views.vectorSettingsPage, DiscoverySettingsFragment::class.java, payload, FRAGMENT_TAG)
                 }
-                else                                                  ->
+                else ->
                     replaceFragment(views.vectorSettingsPage, VectorSettingsRootFragment::class.java, null, FRAGMENT_TAG)
             }
         }
@@ -165,14 +165,14 @@ class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>
     companion object {
         fun getIntent(context: Context, directAccess: Int) = Companion.getIntent(
                 context, when (directAccess) {
-            EXTRA_DIRECT_ACCESS_ROOT                             -> SettingsActivityPayload.Root
-            EXTRA_DIRECT_ACCESS_ADVANCED_SETTINGS                -> SettingsActivityPayload.AdvancedSettings
-            EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY                 -> SettingsActivityPayload.SecurityPrivacy
+            EXTRA_DIRECT_ACCESS_ROOT -> SettingsActivityPayload.Root
+            EXTRA_DIRECT_ACCESS_ADVANCED_SETTINGS -> SettingsActivityPayload.AdvancedSettings
+            EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY -> SettingsActivityPayload.SecurityPrivacy
             EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY_MANAGE_SESSIONS -> SettingsActivityPayload.SecurityPrivacyManageSessions
-            EXTRA_DIRECT_ACCESS_GENERAL                          -> SettingsActivityPayload.General
-            EXTRA_DIRECT_ACCESS_NOTIFICATIONS                    -> SettingsActivityPayload.Notifications
-            EXTRA_DIRECT_ACCESS_DISCOVERY_SETTINGS               -> SettingsActivityPayload.DiscoverySettings()
-            else                                                 -> {
+            EXTRA_DIRECT_ACCESS_GENERAL -> SettingsActivityPayload.General
+            EXTRA_DIRECT_ACCESS_NOTIFICATIONS -> SettingsActivityPayload.Notifications
+            EXTRA_DIRECT_ACCESS_DISCOVERY_SETTINGS -> SettingsActivityPayload.DiscoverySettings()
+            else -> {
                 Timber.w("Unknown directAccess: $directAccess defaulting to Root")
                 SettingsActivityPayload.Root
             }

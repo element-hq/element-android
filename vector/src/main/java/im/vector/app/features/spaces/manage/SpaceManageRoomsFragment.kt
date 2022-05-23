@@ -88,7 +88,7 @@ class SpaceManageRoomsFragment @Inject constructor(
                 is Loading -> {
                     sharedViewModel.handle(SpaceManagedSharedAction.ShowLoading)
                 }
-                else       -> {
+                else -> {
                     sharedViewModel.handle(SpaceManagedSharedAction.HideLoading)
                 }
             }
@@ -171,16 +171,16 @@ class SpaceManageRoomsFragment @Inject constructor(
 
     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
         when (item?.itemId) {
-            R.id.action_delete                -> {
+            R.id.action_delete -> {
                 handleDeleteSelection()
             }
-            R.id.action_mark_as_suggested     -> {
+            R.id.action_mark_as_suggested -> {
                 viewModel.handle(SpaceManageRoomViewAction.MarkAllAsSuggested(true))
             }
             R.id.action_mark_as_not_suggested -> {
                 viewModel.handle(SpaceManageRoomViewAction.MarkAllAsSuggested(false))
             }
-            else                              -> {
+            else -> {
             }
         }
         mode?.finish()

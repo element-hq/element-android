@@ -85,16 +85,16 @@ class SpaceDirectoryFragment @Inject constructor(
             bundle.getString(SpaceAddRoomSpaceChooserBottomSheet.BUNDLE_KEY_ACTION)?.let { action ->
                 val spaceId = withState(viewModel) { it.spaceId }
                 when (action) {
-                    SpaceAddRoomSpaceChooserBottomSheet.ACTION_ADD_ROOMS   -> {
+                    SpaceAddRoomSpaceChooserBottomSheet.ACTION_ADD_ROOMS -> {
                         addExistingRoomActivityResult.launch(SpaceManageActivity.newIntent(requireContext(), spaceId, ManageType.AddRooms))
                     }
-                    SpaceAddRoomSpaceChooserBottomSheet.ACTION_ADD_SPACES  -> {
+                    SpaceAddRoomSpaceChooserBottomSheet.ACTION_ADD_SPACES -> {
                         addExistingRoomActivityResult.launch(SpaceManageActivity.newIntent(requireContext(), spaceId, ManageType.AddRoomsOnlySpaces))
                     }
                     SpaceAddRoomSpaceChooserBottomSheet.ACTION_CREATE_ROOM -> {
                         viewModel.handle(SpaceDirectoryViewAction.CreateNewRoom)
                     }
-                    else                                                   -> {
+                    else -> {
                         // nop
                     }
                 }
@@ -129,7 +129,7 @@ class SpaceDirectoryFragment @Inject constructor(
                         views.addOrCreateChatRoomButton.removeCallbacks(showFabRunnable)
 
                         when (newState) {
-                            RecyclerView.SCROLL_STATE_IDLE     -> {
+                            RecyclerView.SCROLL_STATE_IDLE -> {
                                 views.addOrCreateChatRoomButton.postDelayed(showFabRunnable, 250)
                             }
                             RecyclerView.SCROLL_STATE_DRAGGING,
@@ -199,7 +199,7 @@ class SpaceDirectoryFragment @Inject constructor(
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.spaceAddRoom    -> {
+            R.id.spaceAddRoom -> {
                 withState(viewModel) { state ->
                     addExistingRooms(state.spaceId)
                 }

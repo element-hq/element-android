@@ -38,7 +38,7 @@ class TestBackgroundRestrictions @Inject constructor(
             if (isActiveNetworkMetered) {
                 // Checks user’s Data Saver settings.
                 when (ConnectivityManagerCompat.getRestrictBackgroundStatus(this)) {
-                    ConnectivityManagerCompat.RESTRICT_BACKGROUND_STATUS_ENABLED     -> {
+                    ConnectivityManagerCompat.RESTRICT_BACKGROUND_STATUS_ENABLED -> {
                         // Background data usage is blocked for this app. Wherever possible,
                         // the app should also use less data in the foreground.
                         description = stringProvider.getString(
@@ -58,7 +58,7 @@ class TestBackgroundRestrictions @Inject constructor(
                         status = TestStatus.SUCCESS
                         quickFix = null
                     }
-                    ConnectivityManagerCompat.RESTRICT_BACKGROUND_STATUS_DISABLED    -> {
+                    ConnectivityManagerCompat.RESTRICT_BACKGROUND_STATUS_DISABLED -> {
                         // Data Saver is disabled. Since the device is connected to a
                         // metered network, the app should use less data wherever possible.
                         description = stringProvider.getString(

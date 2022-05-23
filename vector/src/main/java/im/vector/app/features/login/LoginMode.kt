@@ -31,16 +31,16 @@ sealed class LoginMode : Parcelable { // Parcelable because persist state
 
 fun LoginMode.ssoIdentityProviders(): List<SsoIdentityProvider>? {
     return when (this) {
-        is LoginMode.Sso            -> ssoIdentityProviders
+        is LoginMode.Sso -> ssoIdentityProviders
         is LoginMode.SsoAndPassword -> ssoIdentityProviders
-        else                        -> null
+        else -> null
     }
 }
 
 fun LoginMode.hasSso(): Boolean {
     return when (this) {
-        is LoginMode.Sso            -> true
+        is LoginMode.Sso -> true
         is LoginMode.SsoAndPassword -> true
-        else                        -> false
+        else -> false
     }
 }

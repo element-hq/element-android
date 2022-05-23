@@ -161,18 +161,18 @@ class MessageInformationDataFactory @Inject constructor(
                                 session.cryptoService().getDeviceInfo(event.root.senderId ?: "", deviceId)
                             }
                     when {
-                        sendingDevice == null                            -> {
+                        sendingDevice == null -> {
                             // For now do not decorate this with warning
                             // maybe it's a deleted session
                             E2EDecoration.NONE
                         }
-                        sendingDevice.trustLevel == null                 -> {
+                        sendingDevice.trustLevel == null -> {
                             E2EDecoration.WARN_SENT_BY_UNKNOWN
                         }
                         sendingDevice.trustLevel?.isVerified().orFalse() -> {
                             E2EDecoration.NONE
                         }
-                        else                                             -> {
+                        else -> {
                             E2EDecoration.WARN_SENT_BY_UNVERIFIED
                         }
                     }
@@ -199,10 +199,10 @@ class MessageInformationDataFactory @Inject constructor(
         return when (event?.root?.getClearType()) {
             EventType.KEY_VERIFICATION_DONE,
             EventType.KEY_VERIFICATION_CANCEL -> true
-            EventType.MESSAGE                 -> {
+            EventType.MESSAGE -> {
                 event.getLastMessageContent() is MessageVerificationRequestContent
             }
-            else                              -> false
+            else -> false
         }
     }
 }

@@ -146,7 +146,7 @@ class SignOutBottomSheetDialogFragment :
                     views.signOutButton.isVisible = true
                 }
                 KeysBackupState.WillBackUp,
-                KeysBackupState.BackingUp     -> {
+                KeysBackupState.BackingUp -> {
                     views.bottomSheetSignoutWarningText.text = getString(R.string.sign_out_bottom_sheet_warning_backing_up)
 
                     // save in progress
@@ -160,7 +160,7 @@ class SignOutBottomSheetDialogFragment :
                     views.exitAnywayButton.isVisible = true
                     views.signOutButton.isVisible = false
                 }
-                KeysBackupState.NotTrusted    -> {
+                KeysBackupState.NotTrusted -> {
                     views.bottomSheetSignoutWarningText.text = getString(R.string.sign_out_bottom_sheet_warning_backup_not_active)
                     // It's not trusted and we know there are unsaved keys..
                     views.backingUpStatusGroup.isVisible = false
@@ -171,7 +171,7 @@ class SignOutBottomSheetDialogFragment :
                     views.exitAnywayButton.isVisible = true
                     views.signOutButton.isVisible = false
                 }
-                else                          -> {
+                else -> {
                     // mmm.. strange state
 
                     views.exitAnywayButton.isVisible = true
@@ -203,7 +203,7 @@ class SignOutBottomSheetDialogFragment :
                     views.signOutButton.isVisible = true
                 }
             }
-            else       -> {
+            else -> {
             }
         }
         super.invalidate()

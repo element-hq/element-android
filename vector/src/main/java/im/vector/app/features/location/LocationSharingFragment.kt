@@ -89,9 +89,9 @@ class LocationSharingFragment @Inject constructor(
 
         viewModel.observeViewEvents {
             when (it) {
-                LocationSharingViewEvents.Close                       -> locationSharingNavigator.quit()
-                LocationSharingViewEvents.LocationNotAvailableError   -> handleLocationNotAvailableError()
-                is LocationSharingViewEvents.ZoomToUserLocation       -> handleZoomToUserLocationEvent(it)
+                LocationSharingViewEvents.Close -> locationSharingNavigator.quit()
+                LocationSharingViewEvents.LocationNotAvailableError -> handleLocationNotAvailableError()
+                is LocationSharingViewEvents.ZoomToUserLocation -> handleZoomToUserLocationEvent(it)
                 is LocationSharingViewEvents.StartLiveLocationService -> handleStartLiveLocationService(it)
             }
         }
@@ -254,7 +254,7 @@ class LocationSharingFragment @Inject constructor(
     private fun updateMap(state: LocationSharingViewState) {
         // first, update the options view
         val options: Set<LocationSharingOption> = when (state.areTargetAndUserLocationEqual) {
-            true  -> {
+            true -> {
                 if (vectorPreferences.labsEnableLiveLocation()) {
                     setOf(LocationSharingOption.USER_CURRENT, LocationSharingOption.USER_LIVE)
                 } else {
@@ -262,7 +262,7 @@ class LocationSharingFragment @Inject constructor(
                 }
             }
             false -> setOf(LocationSharingOption.PINNED)
-            else  -> emptySet()
+            else -> emptySet()
         }
         views.shareLocationOptionsPicker.render(options)
 

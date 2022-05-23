@@ -150,13 +150,13 @@ internal class EventSenderProcessorCoroutine @Inject constructor(
                     canReachServer.set(false)
                     task.markAsFailedOrRetry(exception, 0)
                 }
-                (exception.isLimitExceededError())                                 -> {
+                (exception.isLimitExceededError()) -> {
                     task.markAsFailedOrRetry(exception, exception.getRetryDelay(3_000))
                 }
-                exception is CancellationException                                 -> {
+                exception is CancellationException -> {
                     Timber.v("## $task has been cancelled, try next task")
                 }
-                else                                                               -> {
+                else -> {
                     Timber.v("## un-retryable error for $task, try next task")
                     // this task is in error, check next one?
                     task.onTaskFailed()

@@ -36,7 +36,7 @@ data class Fingerprint(
     internal fun matchesCert(cert: X509Certificate): Boolean {
         val o: Fingerprint? = when (hashType) {
             HashType.SHA256 -> newSha256Fingerprint(cert)
-            HashType.SHA1   -> newSha1Fingerprint(cert)
+            HashType.SHA1 -> newSha1Fingerprint(cert)
         }
         return equals(o)
     }

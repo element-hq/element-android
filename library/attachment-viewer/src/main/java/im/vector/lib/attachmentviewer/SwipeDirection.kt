@@ -27,12 +27,12 @@ sealed class SwipeDirection {
     companion object {
         fun fromAngle(angle: Double): SwipeDirection {
             return when (angle) {
-                in 0.0..45.0    -> Right
-                in 45.0..135.0  -> Up
+                in 0.0..45.0 -> Right
+                in 45.0..135.0 -> Up
                 in 135.0..225.0 -> Left
                 in 225.0..315.0 -> Down
                 in 315.0..360.0 -> Right
-                else            -> NotDetected
+                else -> NotDetected
             }
         }
     }

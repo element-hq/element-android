@@ -35,9 +35,9 @@ internal enum class SyncPresence(val value: String) {
     companion object {
         fun from(presenceEnum: PresenceEnum): SyncPresence {
             return when (presenceEnum) {
-                PresenceEnum.ONLINE      -> Online
-                PresenceEnum.OFFLINE     -> Offline
-                PresenceEnum.BUSY        -> Busy
+                PresenceEnum.ONLINE -> Online
+                PresenceEnum.OFFLINE -> Offline
+                PresenceEnum.BUSY -> Busy
                 PresenceEnum.UNAVAILABLE -> Unavailable
             }
         }

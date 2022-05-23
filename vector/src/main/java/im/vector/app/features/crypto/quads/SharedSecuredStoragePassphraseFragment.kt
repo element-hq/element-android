@@ -86,7 +86,7 @@ class SharedSecuredStoragePassphraseFragment @Inject constructor(
                 is SharedSecureStorageViewEvent.InlineError -> {
                     views.ssssPassphraseEnterTil.error = it.message
                 }
-                else                                        -> Unit
+                else -> Unit
             }
         }
 

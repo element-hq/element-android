@@ -71,7 +71,7 @@ class ThreadListViewModel @AssistedInject constructor(
      */
     private fun fetchAndObserveThreads() {
         when (session.homeServerCapabilitiesService().getHomeServerCapabilities().canUseThreading) {
-            true  -> {
+            true -> {
                 fetchThreadList()
                 observeThreadSummaries()
             }

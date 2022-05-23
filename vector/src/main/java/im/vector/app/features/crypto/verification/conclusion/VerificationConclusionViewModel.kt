@@ -51,7 +51,7 @@ class VerificationConclusionViewModel(initialState: VerificationConclusionViewSt
                 CancelCode.MismatchedKeys -> {
                     VerificationConclusionViewState(ConclusionState.WARNING, args.isMe)
                 }
-                else                      -> {
+                else -> {
                     VerificationConclusionViewState(
                             if (args.isSuccessFull) ConclusionState.SUCCESS else ConclusionState.CANCELLED,
                             args.isMe

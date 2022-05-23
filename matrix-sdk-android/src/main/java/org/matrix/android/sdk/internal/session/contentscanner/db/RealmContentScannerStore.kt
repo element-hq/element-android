@@ -106,7 +106,7 @@ internal class RealmContentScannerStore @Inject constructor(
                 ScanState.IN_PROGRESS,
                 ScanState.TRUSTED,
                 ScanState.INFECTED -> true
-                else               -> false
+                else -> false
             }
         }
         return isKnown

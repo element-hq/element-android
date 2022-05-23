@@ -118,13 +118,13 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
 
     override fun handle(action: ThreePidsSettingsAction) {
         when (action) {
-            is ThreePidsSettingsAction.AddThreePid      -> handleAddThreePid(action)
+            is ThreePidsSettingsAction.AddThreePid -> handleAddThreePid(action)
             is ThreePidsSettingsAction.ContinueThreePid -> handleContinueThreePid(action)
-            is ThreePidsSettingsAction.SubmitCode       -> handleSubmitCode(action)
-            is ThreePidsSettingsAction.CancelThreePid   -> handleCancelThreePid(action)
-            is ThreePidsSettingsAction.DeleteThreePid   -> handleDeleteThreePid(action)
-            is ThreePidsSettingsAction.ChangeUiState    -> handleChangeUiState(action)
-            ThreePidsSettingsAction.SsoAuthDone         -> {
+            is ThreePidsSettingsAction.SubmitCode -> handleSubmitCode(action)
+            is ThreePidsSettingsAction.CancelThreePid -> handleCancelThreePid(action)
+            is ThreePidsSettingsAction.DeleteThreePid -> handleDeleteThreePid(action)
+            is ThreePidsSettingsAction.ChangeUiState -> handleChangeUiState(action)
+            ThreePidsSettingsAction.SsoAuthDone -> {
                 Timber.d("## UIA - FallBack success")
                 if (pendingAuth != null) {
                     uiaContinuation?.resume(pendingAuth!!)
@@ -143,7 +143,7 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
                         )
                 )
             }
-            ThreePidsSettingsAction.ReAuthCancelled     -> {
+            ThreePidsSettingsAction.ReAuthCancelled -> {
                 Timber.d("## UIA - Reauth cancelled")
                 uiaContinuation?.resumeWithException(Exception())
                 uiaContinuation = null
@@ -215,7 +215,7 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
                                 IllegalArgumentException(
                                         stringProvider.getString(
                                                 when (action.threePid) {
-                                                    is ThreePid.Email  -> R.string.auth_email_already_defined
+                                                    is ThreePid.Email -> R.string.auth_email_already_defined
                                                     is ThreePid.Msisdn -> R.string.auth_msisdn_already_defined
                                                 }
                                         )

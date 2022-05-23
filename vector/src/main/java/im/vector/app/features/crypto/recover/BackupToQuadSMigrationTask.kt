@@ -122,7 +122,7 @@ class BackupToQuadSMigrationTask @Inject constructor(
                                     }
                             )
                         }
-                        params.recoveryKey != null              -> {
+                        params.recoveryKey != null -> {
                             reportProgress(params, R.string.bootstrap_progress_generating_ssss_recovery)
                             quadS.generateKey(
                                     UUID.randomUUID().toString(),
@@ -131,7 +131,7 @@ class BackupToQuadSMigrationTask @Inject constructor(
                                     EmptyKeySigner()
                             )
                         }
-                        else                                    -> {
+                        else -> {
                             return Result.IllegalParams
                         }
                     }

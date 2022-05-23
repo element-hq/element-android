@@ -26,10 +26,10 @@ class RoomAliasErrorFormatter @Inject constructor(
 ) {
     fun format(roomAliasError: RoomAliasError?): String? {
         return when (roomAliasError) {
-            is RoomAliasError.AliasIsBlank      -> R.string.create_room_alias_empty
+            is RoomAliasError.AliasIsBlank -> R.string.create_room_alias_empty
             is RoomAliasError.AliasNotAvailable -> R.string.create_room_alias_already_in_use
-            is RoomAliasError.AliasInvalid      -> R.string.create_room_alias_invalid
-            else                                -> null
+            is RoomAliasError.AliasInvalid -> R.string.create_room_alias_invalid
+            else -> null
         }
                 ?.let { stringProvider.getString(it) }
     }

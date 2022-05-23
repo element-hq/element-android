@@ -78,7 +78,7 @@ class FtueAuthWebFragment @Inject constructor(
     private fun setupTitle(state: OnboardingViewState) {
         toolbar?.title = when (state.signMode) {
             SignMode.SignIn -> getString(R.string.login_signin)
-            else            -> getString(R.string.login_signup)
+            else -> getString(R.string.login_signup)
         }
     }
 
@@ -245,9 +245,9 @@ class FtueAuthWebFragment @Inject constructor(
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
         return when {
-            toolbarButton                     -> super.onBackPressed(toolbarButton)
+            toolbarButton -> super.onBackPressed(toolbarButton)
             views.loginWebWebView.canGoBack() -> views.loginWebWebView.goBack().run { true }
-            else                              -> super.onBackPressed(toolbarButton)
+            else -> super.onBackPressed(toolbarButton)
         }
     }
 }

@@ -125,10 +125,10 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<F
                 // Ensure new password is hidden
                 views.passwordField.hidePassword()
             }
-            is Fail    -> {
+            is Fail -> {
                 views.resetPasswordEmailTil.error = errorFormatter.toHumanReadable(state.asyncResetPassword.error)
             }
-            else       -> Unit
+            else -> Unit
         }
     }
 }

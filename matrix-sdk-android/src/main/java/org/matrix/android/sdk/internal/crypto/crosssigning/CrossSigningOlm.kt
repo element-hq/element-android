@@ -53,13 +53,13 @@ internal class CrossSigningOlm @Inject constructor(
     fun signObject(type: KeyType, strToSign: String): Map<String, String> {
         val myKeys = cryptoStore.getMyCrossSigningInfo()
         val pubKey = when (type) {
-            KeyType.SELF   -> myKeys?.selfSigningKey()
-            KeyType.USER   -> myKeys?.userKey()
+            KeyType.SELF -> myKeys?.selfSigningKey()
+            KeyType.USER -> myKeys?.userKey()
             KeyType.MASTER -> myKeys?.masterKey()
         }?.unpaddedBase64PublicKey
         val pkSigning = when (type) {
-            KeyType.SELF   -> selfSigningPkSigning
-            KeyType.USER   -> userPkSigning
+            KeyType.SELF -> selfSigningPkSigning
+            KeyType.USER -> userPkSigning
             KeyType.MASTER -> masterPkSigning
         }
         if (pubKey == null || pkSigning == null) {
@@ -76,8 +76,8 @@ internal class CrossSigningOlm @Inject constructor(
                 ?: throw NoSuchElementException("Cross Signing not configured")
         val myUserID = myKeys.userId
         val pubKey = when (type) {
-            KeyType.SELF   -> myKeys.selfSigningKey()
-            KeyType.USER   -> myKeys.userKey()
+            KeyType.SELF -> myKeys.selfSigningKey()
+            KeyType.USER -> myKeys.userKey()
             KeyType.MASTER -> myKeys.masterKey()
         }?.unpaddedBase64PublicKey ?: throw NoSuchElementException("Cross Signing not configured")
         val signaturesMadeByMyKey = signatures[myUserID] // Signatures made by me

@@ -79,8 +79,8 @@ class SwipeToDismissHandler(
     private fun onTrackingEnd(parentHeight: Int) {
         val animateTo = when {
             swipeView.translationY < -translationLimit -> -parentHeight.toFloat()
-            swipeView.translationY > translationLimit  -> parentHeight.toFloat()
-            else                                       -> 0f
+            swipeView.translationY > translationLimit -> parentHeight.toFloat()
+            else -> 0f
         }
 
         if (animateTo != 0f && !shouldAnimateDismiss()) {

@@ -40,7 +40,7 @@ fun ViewPager2.setCurrentItem(
         kotlin.runCatching {
             when {
                 isRtl -> fakeDragBy(currentPxToDrag)
-                else  -> fakeDragBy(-currentPxToDrag)
+                else -> fakeDragBy(-currentPxToDrag)
             }
             previousValue = currentValue
         }.onFailure { animator.cancel() }

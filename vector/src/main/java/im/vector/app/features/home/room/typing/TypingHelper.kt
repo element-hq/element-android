@@ -38,7 +38,7 @@ class TypingHelper @Inject constructor(private val stringProvider: StringProvide
                         typingUsers[0].disambiguatedDisplayName,
                         typingUsers[1].disambiguatedDisplayName
                 )
-            else                  ->
+            else ->
                 stringProvider.getString(
                         R.string.room_many_users_are_typing,
                         typingUsers[0].disambiguatedDisplayName,
@@ -55,7 +55,7 @@ class TypingHelper @Inject constructor(private val stringProvider: StringProvide
                     R.string.room_notification_two_users_are_typing,
                     typingUsers[0].disambiguatedDisplayName, typingUsers[1].disambiguatedDisplayName
             )
-            else                  -> stringProvider.getString(
+            else -> stringProvider.getString(
                     R.string.room_notification_more_than_two_users_are_typing,
                     typingUsers[0].disambiguatedDisplayName, typingUsers[1].disambiguatedDisplayName
             )

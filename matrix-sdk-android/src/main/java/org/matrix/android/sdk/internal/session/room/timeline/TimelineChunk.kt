@@ -213,7 +213,7 @@ internal class TimelineChunk(
                 fetchFromServerIfNeeded -> {
                     fetchFromServer(offsetCount, chunkEntity.nextToken, direction)
                 }
-                else                    -> {
+                else -> {
                     LoadMoreResult.SUCCESS
                 }
             }
@@ -231,7 +231,7 @@ internal class TimelineChunk(
                 fetchFromServerIfNeeded -> {
                     fetchFromServer(offsetCount, chunkEntity.prevToken, direction)
                 }
-                else                    -> {
+                else -> {
                     LoadMoreResult.SUCCESS
                 }
             }
@@ -457,7 +457,7 @@ internal class TimelineChunk(
         return when (this) {
             TokenChunkEventPersistor.Result.REACHED_END -> LoadMoreResult.REACHED_END
             TokenChunkEventPersistor.Result.SHOULD_FETCH_MORE,
-            TokenChunkEventPersistor.Result.SUCCESS     -> LoadMoreResult.SUCCESS
+            TokenChunkEventPersistor.Result.SUCCESS -> LoadMoreResult.SUCCESS
         }
     }
 
@@ -465,7 +465,7 @@ internal class TimelineChunk(
         return when (this) {
             DefaultFetchThreadTimelineTask.Result.REACHED_END -> LoadMoreResult.REACHED_END
             DefaultFetchThreadTimelineTask.Result.SHOULD_FETCH_MORE,
-            DefaultFetchThreadTimelineTask.Result.SUCCESS     -> LoadMoreResult.SUCCESS
+            DefaultFetchThreadTimelineTask.Result.SUCCESS -> LoadMoreResult.SUCCESS
         }
     }
 

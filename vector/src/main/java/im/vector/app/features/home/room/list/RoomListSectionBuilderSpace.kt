@@ -76,15 +76,15 @@ class RoomListSectionBuilderSpace(
         val sections = mutableListOf<RoomsSection>()
         val activeSpaceAwareQueries = mutableListOf<RoomListViewModel.ActiveSpaceQueryUpdater>()
         when (mode) {
-            RoomListDisplayMode.PEOPLE        -> {
+            RoomListDisplayMode.PEOPLE -> {
                 // 4 sections Invites / Fav / Dms / Low Priority
                 buildDmSections(sections, activeSpaceAwareQueries)
             }
-            RoomListDisplayMode.ROOMS         -> {
+            RoomListDisplayMode.ROOMS -> {
                 // 6 sections invites / Fav / Rooms / Low Priority / Server notice / Suggested rooms
                 buildRoomsSections(sections, activeSpaceAwareQueries)
             }
-            RoomListDisplayMode.FILTERED      -> {
+            RoomListDisplayMode.FILTERED -> {
                 // Used when searching for rooms
                 buildFilteredSection(sections)
             }
@@ -384,7 +384,7 @@ class RoomListSectionBuilderSpace(
                         }
                     })
                 }
-                RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL     -> {
+                RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL -> {
                     activeSpaceUpdaters.add(object : RoomListViewModel.ActiveSpaceQueryUpdater {
                         override fun updateForSpaceId(roomId: String?) {
                             if (roomId != null) {
@@ -400,7 +400,7 @@ class RoomListSectionBuilderSpace(
                         }
                     })
                 }
-                RoomListViewModel.SpaceFilterStrategy.NONE                  -> {
+                RoomListViewModel.SpaceFilterStrategy.NONE -> {
                     // we ignore current space for this one
                 }
             }
@@ -450,7 +450,7 @@ class RoomListSectionBuilderSpace(
                         activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(currentSpace)
                 )
             }
-            RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL     -> {
+            RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL -> {
                 if (currentSpace == null) {
                     copy(
                             activeSpaceFilter = ActiveSpaceFilter.None
@@ -461,7 +461,7 @@ class RoomListSectionBuilderSpace(
                     )
                 }
             }
-            RoomListViewModel.SpaceFilterStrategy.NONE                  -> this
+            RoomListViewModel.SpaceFilterStrategy.NONE -> this
         }
     }
 }

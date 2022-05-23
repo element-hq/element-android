@@ -61,10 +61,10 @@ internal class DefaultRoomCryptoService @AssistedInject constructor(
             (!force && isEncrypted() && encryptionAlgorithm() == MXCRYPTO_ALGORITHM_MEGOLM) -> {
                 throw IllegalStateException("Encryption is already enabled for this room")
             }
-            (!force && algorithm != MXCRYPTO_ALGORITHM_MEGOLM)                              -> {
+            (!force && algorithm != MXCRYPTO_ALGORITHM_MEGOLM) -> {
                 throw InvalidParameterException("Only MXCRYPTO_ALGORITHM_MEGOLM algorithm is supported")
             }
-            else                                                                            -> {
+            else -> {
                 val params = SendStateTask.Params(
                         roomId = roomId,
                         stateKey = "",

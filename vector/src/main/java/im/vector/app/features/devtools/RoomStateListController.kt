@@ -37,7 +37,7 @@ class RoomStateListController @Inject constructor(
     override fun buildModels(data: RoomDevToolViewState?) {
         val host = this
         when (data?.displayMode) {
-            RoomDevToolViewState.Mode.StateEventList       -> {
+            RoomDevToolViewState.Mode.StateEventList -> {
                 val stateEventsGroups = data.stateEvents.invoke().orEmpty().groupBy { it.getClearType() }
 
                 if (stateEventsGroups.isEmpty()) {
@@ -98,7 +98,7 @@ class RoomStateListController @Inject constructor(
                     }
                 }
             }
-            else                                           -> {
+            else -> {
                 // nop
             }
         }

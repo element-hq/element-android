@@ -183,7 +183,7 @@ class VectorSettingsPreferencesFragment @Inject constructor(
                     VectorPreferences.TAKE_PHOTO_VIDEO_MODE_PHOTO -> R.string.option_take_photo
                     VectorPreferences.TAKE_PHOTO_VIDEO_MODE_VIDEO -> R.string.option_take_video
                     /* VectorPreferences.TAKE_PHOTO_VIDEO_MODE_ALWAYS_ASK */
-                    else                                          -> R.string.option_always_ask
+                    else -> R.string.option_always_ask
                 }
         )
     }

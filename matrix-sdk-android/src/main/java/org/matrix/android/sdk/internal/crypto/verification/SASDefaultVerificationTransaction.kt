@@ -333,11 +333,11 @@ internal abstract class SASDefaultVerificationTransaction(
                 if (shortCodeBytes!!.size < 5) return null
                 return getDecimalCodeRepresentation(shortCodeBytes!!)
             }
-            SasMode.EMOJI   -> {
+            SasMode.EMOJI -> {
                 if (shortCodeBytes!!.size < 6) return null
                 return getEmojiCodeRepresentation(shortCodeBytes!!).joinToString(" ") { it.emoji }
             }
-            else            -> return null
+            else -> return null
         }
     }
 
@@ -362,8 +362,8 @@ internal abstract class SASDefaultVerificationTransaction(
     private fun macUsingAgreedMethod(message: String, info: String): String? {
         return when (accepted?.messageAuthenticationCode?.lowercase(Locale.ROOT)) {
             SAS_MAC_SHA256_LONGKDF -> getSAS().calculateMacLongKdf(message, info)
-            SAS_MAC_SHA256         -> getSAS().calculateMac(message, info)
-            else                   -> null
+            SAS_MAC_SHA256 -> getSAS().calculateMac(message, info)
+            else -> null
         }
     }
 

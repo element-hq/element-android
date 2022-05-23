@@ -41,7 +41,7 @@ internal class DefaultRegisterAddThreePidTask(
 
     private fun RegisterThreePid.toPath(): String {
         return when (this) {
-            is RegisterThreePid.Email  -> "email"
+            is RegisterThreePid.Email -> "email"
             is RegisterThreePid.Msisdn -> "msisdn"
         }
     }

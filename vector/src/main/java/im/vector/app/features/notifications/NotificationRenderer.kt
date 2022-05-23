@@ -75,7 +75,7 @@ class NotificationRenderer @Inject constructor(
                         Timber.d("Removing invitation notification ${wrapper.key}")
                         notificationDisplayer.cancelNotificationMessage(wrapper.key, ROOM_INVITATION_NOTIFICATION_ID)
                     }
-                    is OneShotNotification.Append  -> if (useCompleteNotificationFormat) {
+                    is OneShotNotification.Append -> if (useCompleteNotificationFormat) {
                         Timber.d("Updating invitation notification ${wrapper.meta.key}")
                         notificationDisplayer.showNotificationMessage(wrapper.meta.key, ROOM_INVITATION_NOTIFICATION_ID, wrapper.notification)
                     }
@@ -88,7 +88,7 @@ class NotificationRenderer @Inject constructor(
                         Timber.d("Removing simple notification ${wrapper.key}")
                         notificationDisplayer.cancelNotificationMessage(wrapper.key, ROOM_EVENT_NOTIFICATION_ID)
                     }
-                    is OneShotNotification.Append  -> if (useCompleteNotificationFormat) {
+                    is OneShotNotification.Append -> if (useCompleteNotificationFormat) {
                         Timber.d("Updating simple notification ${wrapper.meta.key}")
                         notificationDisplayer.showNotificationMessage(wrapper.meta.key, ROOM_EVENT_NOTIFICATION_ID, wrapper.notification)
                     }
@@ -110,12 +110,12 @@ private fun List<ProcessedEvent<NotifiableEvent>>.groupByType(): GroupedNotifica
     val invitationEvents: MutableList<ProcessedEvent<InviteNotifiableEvent>> = ArrayList()
     forEach {
         when (val event = it.event) {
-            is InviteNotifiableEvent  -> invitationEvents.add(it.castedToEventType())
+            is InviteNotifiableEvent -> invitationEvents.add(it.castedToEventType())
             is NotifiableMessageEvent -> {
                 val roomEvents = roomIdToEventMap.getOrPut(event.roomId) { ArrayList() }
                 roomEvents.add(it.castedToEventType())
             }
-            is SimpleNotifiableEvent  -> simpleEvents.add(it.castedToEventType())
+            is SimpleNotifiableEvent -> simpleEvents.add(it.castedToEventType())
         }
     }
     return GroupedNotificationEvents(roomIdToEventMap, simpleEvents, invitationEvents)

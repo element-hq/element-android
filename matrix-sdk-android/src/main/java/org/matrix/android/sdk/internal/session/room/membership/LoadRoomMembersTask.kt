@@ -68,9 +68,9 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
 
     override suspend fun execute(params: LoadRoomMembersTask.Params) {
         when (getRoomMembersLoadStatus(params.roomId)) {
-            RoomMembersLoadStatusType.NONE    -> doRequest(params)
+            RoomMembersLoadStatusType.NONE -> doRequest(params)
             RoomMembersLoadStatusType.LOADING -> waitPreviousRequestToFinish(params)
-            RoomMembersLoadStatusType.LOADED  -> Unit
+            RoomMembersLoadStatusType.LOADED -> Unit
         }
     }
 

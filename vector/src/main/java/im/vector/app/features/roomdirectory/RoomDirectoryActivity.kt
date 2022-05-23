@@ -63,8 +63,8 @@ class RoomDirectoryActivity : VectorBaseActivity<ActivitySimpleBinding>(), Matri
                 .stream()
                 .onEach { sharedAction ->
                     when (sharedAction) {
-                        is RoomDirectorySharedAction.Back              -> popBackstack()
-                        is RoomDirectorySharedAction.CreateRoom        -> {
+                        is RoomDirectorySharedAction.Back -> popBackstack()
+                        is RoomDirectorySharedAction.CreateRoom -> {
                             // Transmit the filter to the CreateRoomFragment
                             withState(roomDirectoryViewModel) {
                                 addFragmentToBackstack(
@@ -74,9 +74,9 @@ class RoomDirectoryActivity : VectorBaseActivity<ActivitySimpleBinding>(), Matri
                                 )
                             }
                         }
-                        is RoomDirectorySharedAction.ChangeProtocol    ->
+                        is RoomDirectorySharedAction.ChangeProtocol ->
                             addFragmentToBackstack(views.simpleFragmentContainer, RoomDirectoryPickerFragment::class.java)
-                        is RoomDirectorySharedAction.Close             -> finish()
+                        is RoomDirectorySharedAction.Close -> finish()
                         is RoomDirectorySharedAction.CreateRoomSuccess -> Unit
                     }
                 }

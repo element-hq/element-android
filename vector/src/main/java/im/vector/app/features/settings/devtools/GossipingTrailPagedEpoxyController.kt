@@ -69,7 +69,7 @@ class GossipingTrailPagedEpoxyController @Inject constructor(
                         +event.info.sessionId
                         apply {
                             when (event.type) {
-                                TrailType.OutgoingKeyForward  -> {
+                                TrailType.OutgoingKeyForward -> {
                                     val fInfo = event.info as ForwardInfo
                                     span("\nchainIndex: ") {
                                         textStyle = "bold"
@@ -83,17 +83,17 @@ class GossipingTrailPagedEpoxyController @Inject constructor(
                                     }
                                     +"${fInfo.code}"
                                 }
-                                TrailType.IncomingKeyRequest  -> {
+                                TrailType.IncomingKeyRequest -> {
                                     // no additional info
                                 }
-                                TrailType.IncomingKeyForward  -> {
+                                TrailType.IncomingKeyForward -> {
                                     val fInfo = event.info as ForwardInfo
                                     span("\nchainIndex: ") {
                                         textStyle = "bold"
                                     }
                                     +"${fInfo.chainIndex}"
                                 }
-                                TrailType.Unknown             -> {
+                                TrailType.Unknown -> {
                                 }
                             }
                         }
@@ -108,7 +108,7 @@ class GossipingTrailPagedEpoxyController @Inject constructor(
             TrailType.OutgoingKeyForward -> "to"
             TrailType.IncomingKeyRequest,
             TrailType.IncomingKeyForward -> "from"
-            TrailType.Unknown            -> ""
+            TrailType.Unknown -> ""
         }
     }
 }

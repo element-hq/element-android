@@ -34,7 +34,7 @@ object BackgroundSyncStarter {
         if (vectorPreferences.areNotificationEnabledForDevice()) {
             val activeSession = activeSessionHolder.getSafeActiveSession() ?: return
             when (vectorPreferences.getFdroidSyncBackgroundMode()) {
-                BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY  -> {
+                BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY -> {
                     // we rely on periodic worker
                     Timber.i("## Sync: Work scheduled to periodically sync in ${vectorPreferences.backgroundSyncDelay()}s")
                     activeSession.startAutomaticBackgroundSync(
@@ -52,7 +52,7 @@ object BackgroundSyncStarter {
                     )
                     Timber.i("## Sync: Alarm scheduled to start syncing")
                 }
-                BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_DISABLED     -> {
+                BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_DISABLED -> {
                     // we do nothing
                     Timber.i("## Sync: background sync is disabled")
                 }

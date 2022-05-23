@@ -53,26 +53,26 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
         if (intent == null || context == null) return
         Timber.v("NotificationBroadcastReceiver received : $intent")
         when (intent.action) {
-            NotificationUtils.SMART_REPLY_ACTION        ->
+            NotificationUtils.SMART_REPLY_ACTION ->
                 handleSmartReply(intent, context)
             NotificationUtils.DISMISS_ROOM_NOTIF_ACTION ->
                 intent.getStringExtra(KEY_ROOM_ID)?.let { roomId ->
                     notificationDrawerManager.updateEvents { it.clearMessagesForRoom(roomId) }
                 }
-            NotificationUtils.DISMISS_SUMMARY_ACTION    ->
+            NotificationUtils.DISMISS_SUMMARY_ACTION ->
                 notificationDrawerManager.clearAllEvents()
-            NotificationUtils.MARK_ROOM_READ_ACTION     ->
+            NotificationUtils.MARK_ROOM_READ_ACTION ->
                 intent.getStringExtra(KEY_ROOM_ID)?.let { roomId ->
                     notificationDrawerManager.updateEvents { it.clearMessagesForRoom(roomId) }
                     handleMarkAsRead(roomId)
                 }
-            NotificationUtils.JOIN_ACTION               -> {
+            NotificationUtils.JOIN_ACTION -> {
                 intent.getStringExtra(KEY_ROOM_ID)?.let { roomId ->
                     notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(roomId) }
                     handleJoinRoom(roomId)
                 }
             }
-            NotificationUtils.REJECT_ACTION             -> {
+            NotificationUtils.REJECT_ACTION -> {
                 intent.getStringExtra(KEY_ROOM_ID)?.let { roomId ->
                     notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(roomId) }
                     handleRejectRoom(roomId)

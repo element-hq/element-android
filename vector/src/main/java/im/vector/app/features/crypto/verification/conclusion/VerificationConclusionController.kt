@@ -49,7 +49,7 @@ class VerificationConclusionController @Inject constructor(
         val host = this
 
         when (state.conclusionState) {
-            ConclusionState.SUCCESS   -> {
+            ConclusionState.SUCCESS -> {
                 bottomSheetVerificationNoticeItem {
                     id("notice")
                     notice(
@@ -68,7 +68,7 @@ class VerificationConclusionController @Inject constructor(
 
                 bottomDone()
             }
-            ConclusionState.WARNING   -> {
+            ConclusionState.WARNING -> {
                 bottomSheetVerificationNoticeItem {
                     id("notice")
                     notice(host.stringProvider.getString(R.string.verification_conclusion_not_secure).toEpoxyCharSequence())

@@ -77,10 +77,10 @@ class SpacePeopleActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>() {
                 .stream()
                 .onEach { sharedAction ->
                     when (sharedAction) {
-                        SpacePeopleSharedAction.Dismiss             -> finish()
-                        is SpacePeopleSharedAction.NavigateToRoom   -> navigateToRooms(sharedAction)
-                        SpacePeopleSharedAction.HideModalLoading    -> hideWaitingView()
-                        SpacePeopleSharedAction.ShowModalLoading    -> {
+                        SpacePeopleSharedAction.Dismiss -> finish()
+                        is SpacePeopleSharedAction.NavigateToRoom -> navigateToRooms(sharedAction)
+                        SpacePeopleSharedAction.HideModalLoading -> hideWaitingView()
+                        SpacePeopleSharedAction.ShowModalLoading -> {
                             showWaitingView(getString(R.string.please_wait))
                         }
                         is SpacePeopleSharedAction.NavigateToInvite -> {

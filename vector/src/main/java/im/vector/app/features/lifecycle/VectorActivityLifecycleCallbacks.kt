@@ -66,7 +66,7 @@ class VectorActivityLifecycleCallbacks constructor(private val popupAlertManager
             } catch (failure: Throwable) {
                 when (failure) {
                     // The task was not found. We can ignore it.
-                    is IllegalArgumentException             -> {
+                    is IllegalArgumentException -> {
                         Timber.e("The task was not found: ${failure.localizedMessage}")
                         false
                     }
@@ -74,7 +74,7 @@ class VectorActivityLifecycleCallbacks constructor(private val popupAlertManager
                         Timber.e("Package manager error: ${failure.localizedMessage}")
                         true
                     }
-                    else                                    -> throw failure
+                    else -> throw failure
                 }
             }
 

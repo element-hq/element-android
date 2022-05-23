@@ -90,7 +90,7 @@ class LocalePickerController @Inject constructor(
                                 }
                             }
                 }
-            is Fail    ->
+            is Fail ->
                 errorWithRetryItem {
                     id("error")
                     text(host.errorFormatter.toHumanReadable(list.error))

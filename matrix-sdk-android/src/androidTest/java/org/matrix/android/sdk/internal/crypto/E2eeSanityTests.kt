@@ -651,7 +651,7 @@ class E2eeSanityTests : InstrumentedTest {
                         // we can release this latch?
                         oldCompleteLatch.countDown()
                     }
-                    else                                                -> Unit
+                    else -> Unit
                 }
             }
         })
@@ -678,17 +678,17 @@ class E2eeSanityTests : InstrumentedTest {
                     IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT -> {
                         // no need to accept as there was a request first it will auto accept
                     }
-                    IncomingSasVerificationTransaction.UxState.SHOW_SAS    -> {
+                    IncomingSasVerificationTransaction.UxState.SHOW_SAS -> {
                         if (matchOnce) {
                             sasTx.userHasVerifiedShortCode()
                             newCode = sasTx.getDecimalCodeRepresentation()
                             matchOnce = false
                         }
                     }
-                    IncomingSasVerificationTransaction.UxState.VERIFIED    -> {
+                    IncomingSasVerificationTransaction.UxState.VERIFIED -> {
                         newCompleteLatch.countDown()
                     }
-                    else                                                   -> Unit
+                    else -> Unit
                 }
             }
         })

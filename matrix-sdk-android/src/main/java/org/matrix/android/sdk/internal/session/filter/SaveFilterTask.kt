@@ -45,7 +45,7 @@ internal class DefaultSaveFilterTask @Inject constructor(
             FilterService.FilterPreset.ElementFilter -> {
                 FilterFactory.createElementFilter()
             }
-            FilterService.FilterPreset.NoFilter      -> {
+            FilterService.FilterPreset.NoFilter -> {
                 FilterFactory.createDefaultFilter()
             }
         }
@@ -53,7 +53,7 @@ internal class DefaultSaveFilterTask @Inject constructor(
             FilterService.FilterPreset.ElementFilter -> {
                 FilterFactory.createElementRoomFilter()
             }
-            FilterService.FilterPreset.NoFilter      -> {
+            FilterService.FilterPreset.NoFilter -> {
                 FilterFactory.createDefaultRoomFilter()
             }
         }

@@ -54,7 +54,7 @@ class FtueAuthChooseDisplayNameFragment @Inject constructor() : AbstractFtueAuth
                     updateDisplayName()
                     true
                 }
-                else                       -> false
+                else -> false
             }
         }
 

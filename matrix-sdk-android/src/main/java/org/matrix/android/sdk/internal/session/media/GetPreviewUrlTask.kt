@@ -48,8 +48,8 @@ internal class DefaultGetPreviewUrlTask @Inject constructor(
 
     override suspend fun execute(params: GetPreviewUrlTask.Params): PreviewUrlData {
         return when (params.cacheStrategy) {
-            CacheStrategy.NoCache       -> doRequest(params.url, params.timestamp)
-            is CacheStrategy.TtlCache   -> doRequestWithCache(
+            CacheStrategy.NoCache -> doRequest(params.url, params.timestamp)
+            is CacheStrategy.TtlCache -> doRequestWithCache(
                     params.url,
                     params.timestamp,
                     params.cacheStrategy.validityDurationInMillis,

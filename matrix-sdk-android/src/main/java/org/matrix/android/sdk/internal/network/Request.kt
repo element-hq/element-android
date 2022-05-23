@@ -56,8 +56,8 @@ internal suspend inline fun <DATA> executeRequest(
         } catch (throwable: Throwable) {
             val exception = when (throwable) {
                 is KotlinNullPointerException -> IllegalStateException("The request returned a null body")
-                is HttpException              -> throwable.toFailure(globalErrorReceiver)
-                else                          -> throwable
+                is HttpException -> throwable.toFailure(globalErrorReceiver)
+                else -> throwable
             }
 
             // Log some details about the request which has failed.
@@ -94,11 +94,11 @@ internal suspend inline fun <DATA> executeRequest(
                 // Try again (loop)
             } else {
                 throw when (exception) {
-                    is IOException           -> Failure.NetworkConnection(exception)
+                    is IOException -> Failure.NetworkConnection(exception)
                     is Failure.ServerError,
                     is Failure.OtherServerError,
                     is CancellationException -> exception
-                    else                     -> Failure.Unknown(exception)
+                    else -> Failure.Unknown(exception)
                 }
             }
         }

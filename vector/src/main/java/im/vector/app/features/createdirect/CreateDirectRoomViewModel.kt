@@ -60,7 +60,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
     override fun handle(action: CreateDirectRoomAction) {
         when (action) {
             is CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers -> onSubmitInvitees(action.selections)
-            is CreateDirectRoomAction.QrScannedAction                  -> onCodeParsed(action)
+            is CreateDirectRoomAction.QrScannedAction -> onCodeParsed(action)
         }
     }
 
@@ -115,7 +115,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
                     .apply {
                         selections.forEach {
                             when (it) {
-                                is PendingSelection.UserPendingSelection     -> invitedUserIds.add(it.user.userId)
+                                is PendingSelection.UserPendingSelection -> invitedUserIds.add(it.user.userId)
                                 is PendingSelection.ThreePidPendingSelection -> invite3pids.add(it.threePid)
                             }
                         }

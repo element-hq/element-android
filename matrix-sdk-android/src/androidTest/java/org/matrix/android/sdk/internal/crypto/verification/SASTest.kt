@@ -439,7 +439,7 @@ class SASTest : InstrumentedTest {
                     OutgoingSasVerificationTransaction.UxState.SHOW_SAS -> {
                         aliceSASLatch.countDown()
                     }
-                    else                                                -> Unit
+                    else -> Unit
                 }
             }
         }
@@ -453,7 +453,7 @@ class SASTest : InstrumentedTest {
                     IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT -> {
                         tx.performAccept()
                     }
-                    else                                                   -> Unit
+                    else -> Unit
                 }
                 if (uxState === IncomingSasVerificationTransaction.UxState.SHOW_SAS) {
                     bobSASLatch.countDown()
@@ -507,7 +507,7 @@ class SASTest : InstrumentedTest {
                             aliceSASLatch.countDown()
                         }
                     }
-                    else                                                -> Unit
+                    else -> Unit
                 }
             }
         }
@@ -527,16 +527,16 @@ class SASTest : InstrumentedTest {
                             tx.performAccept()
                         }
                     }
-                    IncomingSasVerificationTransaction.UxState.SHOW_SAS    -> {
+                    IncomingSasVerificationTransaction.UxState.SHOW_SAS -> {
                         if (matchOnce) {
                             matchOnce = false
                             tx.userHasVerifiedShortCode()
                         }
                     }
-                    IncomingSasVerificationTransaction.UxState.VERIFIED    -> {
+                    IncomingSasVerificationTransaction.UxState.VERIFIED -> {
                         bobSASLatch.countDown()
                     }
-                    else                                                   -> Unit
+                    else -> Unit
                 }
             }
         }

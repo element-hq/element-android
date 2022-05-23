@@ -129,7 +129,7 @@ class LocationTracker @Inject constructor(
             LocationManager.GPS_PROVIDER -> {
                 hasGpsProviderLiveLocation = isLive
             }
-            else                         -> {
+            else -> {
                 if (hasGpsProviderLiveLocation) {
                     // Ignore this update
                     Timber.d("## LocationTracker. ignoring location from ${location.provider}, we have gps live location")

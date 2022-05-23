@@ -197,9 +197,9 @@ class HomeActivity :
                 .stream()
                 .onEach { sharedAction ->
                     when (sharedAction) {
-                        is HomeActivitySharedAction.OpenDrawer        -> views.drawerLayout.openDrawer(GravityCompat.START)
-                        is HomeActivitySharedAction.CloseDrawer       -> views.drawerLayout.closeDrawer(GravityCompat.START)
-                        is HomeActivitySharedAction.OpenGroup         -> {
+                        is HomeActivitySharedAction.OpenDrawer -> views.drawerLayout.openDrawer(GravityCompat.START)
+                        is HomeActivitySharedAction.CloseDrawer -> views.drawerLayout.closeDrawer(GravityCompat.START)
+                        is HomeActivitySharedAction.OpenGroup -> {
                             views.drawerLayout.closeDrawer(GravityCompat.START)
 
                             // Temporary
@@ -213,10 +213,10 @@ class HomeActivity :
                             // we might want to delay that to avoid having the drawer animation lagging
                             // would be probably better to let the drawer do that? in the on closed callback?
                         }
-                        is HomeActivitySharedAction.OpenSpacePreview  -> {
+                        is HomeActivitySharedAction.OpenSpacePreview -> {
                             startActivity(SpacePreviewActivity.newIntent(this, sharedAction.spaceId))
                         }
-                        is HomeActivitySharedAction.AddSpace          -> {
+                        is HomeActivitySharedAction.AddSpace -> {
                             createSpaceResultLauncher.launch(SpaceCreationActivity.newIntent(this))
                         }
                         is HomeActivitySharedAction.ShowSpaceSettings -> {
@@ -229,11 +229,11 @@ class HomeActivity :
                                     })
                                     .show(supportFragmentManager, "SPACE_SETTINGS")
                         }
-                        is HomeActivitySharedAction.OpenSpaceInvite   -> {
+                        is HomeActivitySharedAction.OpenSpaceInvite -> {
                             SpaceInviteBottomSheet.newInstance(sharedAction.spaceId)
                                     .show(supportFragmentManager, "SPACE_INVITE")
                         }
-                        HomeActivitySharedAction.SendSpaceFeedBack    -> {
+                        HomeActivitySharedAction.SendSpaceFeedBack -> {
                             bugReporter.openBugReportScreen(this, ReportType.SPACE_BETA_FEEDBACK)
                         }
                     }
@@ -254,12 +254,12 @@ class HomeActivity :
         homeActivityViewModel.observeViewEvents {
             when (it) {
                 is HomeActivityViewEvents.AskPasswordToInitCrossSigning -> handleAskPasswordToInitCrossSigning(it)
-                is HomeActivityViewEvents.OnNewSession                  -> handleOnNewSession(it)
-                HomeActivityViewEvents.PromptToEnableSessionPush        -> handlePromptToEnablePush()
-                is HomeActivityViewEvents.OnCrossSignedInvalidated      -> handleCrossSigningInvalidated(it)
-                HomeActivityViewEvents.ShowAnalyticsOptIn               -> handleShowAnalyticsOptIn()
-                HomeActivityViewEvents.NotifyUserForThreadsMigration    -> handleNotifyUserForThreadsMigration()
-                is HomeActivityViewEvents.MigrateThreads                -> migrateThreadsIfNeeded(it.checkSession)
+                is HomeActivityViewEvents.OnNewSession -> handleOnNewSession(it)
+                HomeActivityViewEvents.PromptToEnableSessionPush -> handlePromptToEnablePush()
+                is HomeActivityViewEvents.OnCrossSignedInvalidated -> handleCrossSigningInvalidated(it)
+                HomeActivityViewEvents.ShowAnalyticsOptIn -> handleShowAnalyticsOptIn()
+                HomeActivityViewEvents.NotifyUserForThreadsMigration -> handleNotifyUserForThreadsMigration()
+                is HomeActivityViewEvents.MigrateThreads -> migrateThreadsIfNeeded(it.checkSession)
             }
         }
         homeActivityViewModel.onEach { renderState(it) }
@@ -326,12 +326,12 @@ class HomeActivity :
                     when {
                         deepLink.startsWith(USER_LINK_PREFIX) -> deepLink.substring(USER_LINK_PREFIX.length)
                         deepLink.startsWith(ROOM_LINK_PREFIX) -> deepLink.substring(ROOM_LINK_PREFIX.length)
-                        else                                  -> null
+                        else -> null
                     }?.let { permalinkId ->
                         activeSessionHolder.getSafeActiveSession()?.permalinkService()?.createPermalink(permalinkId)
                     }
                 }
-                else                                                  -> deepLink
+                else -> deepLink
             }
 
             lifecycleScope.launch {
@@ -374,7 +374,7 @@ class HomeActivity :
                 }
                 views.waitingView.root.isVisible = true
             }
-            else                                               -> {
+            else -> {
                 // Idle or Incremental sync status
                 views.waitingView.root.isVisible = false
             }
@@ -526,15 +526,15 @@ class HomeActivity :
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_home_suggestion          -> {
+            R.id.menu_home_suggestion -> {
                 bugReporter.openBugReportScreen(this, ReportType.SUGGESTION)
                 return true
             }
-            R.id.menu_home_report_bug          -> {
+            R.id.menu_home_report_bug -> {
                 bugReporter.openBugReportScreen(this, ReportType.BUG_REPORT)
                 return true
             }
-            R.id.menu_home_init_sync_legacy    -> {
+            R.id.menu_home_init_sync_legacy -> {
                 // Configure the SDK
                 initialSyncStrategy = InitialSyncStrategy.Legacy
                 // And clear cache
@@ -548,11 +548,11 @@ class HomeActivity :
                 MainActivity.restartApp(this, MainActivityArgs(clearCache = true))
                 return true
             }
-            R.id.menu_home_filter              -> {
+            R.id.menu_home_filter -> {
                 navigator.openRoomsFiltering(this)
                 return true
             }
-            R.id.menu_home_setting             -> {
+            R.id.menu_home_setting -> {
                 navigator.openSettings(this)
                 return true
             }

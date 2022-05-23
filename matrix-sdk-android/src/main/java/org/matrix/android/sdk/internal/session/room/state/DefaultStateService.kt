@@ -88,7 +88,7 @@ internal class DefaultStateService @AssistedInject constructor(
         // Safe treatment for PowerLevelContent
         return when (eventType) {
             EventType.STATE_ROOM_POWER_LEVELS -> toSafePowerLevelsContentDict()
-            else                              -> this
+            else -> this
         }
     }
 

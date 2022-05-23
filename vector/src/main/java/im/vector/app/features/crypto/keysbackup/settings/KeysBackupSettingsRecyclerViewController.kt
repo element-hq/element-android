@@ -57,7 +57,7 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
         val keyVersionResult = data.keysBackupVersion
 
         when (keyBackupState) {
-            KeysBackupState.Unknown                    -> {
+            KeysBackupState.Unknown -> {
                 errorWithRetryItem {
                     id("summary")
                     text(host.stringProvider.getString(R.string.keys_backup_unable_to_get_keys_backup_data))
@@ -73,7 +73,7 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
                     loadingText(host.stringProvider.getString(R.string.keys_backup_settings_checking_backup_state))
                 }
             }
-            KeysBackupState.Disabled                   -> {
+            KeysBackupState.Disabled -> {
                 genericItem {
                     id("summary")
                     title(host.stringProvider.getString(R.string.keys_backup_settings_status_not_setup).toEpoxyCharSequence())
@@ -88,7 +88,7 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
             }
             KeysBackupState.WrongBackUpVersion,
             KeysBackupState.NotTrusted,
-            KeysBackupState.Enabling                   -> {
+            KeysBackupState.Enabling -> {
                 genericItem {
                     id("summary")
                     title(host.stringProvider.getString(R.string.keys_backup_settings_status_ko).toEpoxyCharSequence())
@@ -103,7 +103,7 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
 
                 isBackupAlreadySetup = true
             }
-            KeysBackupState.ReadyToBackUp              -> {
+            KeysBackupState.ReadyToBackUp -> {
                 genericItem {
                     id("summary")
                     title(host.stringProvider.getString(R.string.keys_backup_settings_status_ok).toEpoxyCharSequence())
@@ -119,7 +119,7 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
                 isBackupAlreadySetup = true
             }
             KeysBackupState.WillBackUp,
-            KeysBackupState.BackingUp                  -> {
+            KeysBackupState.BackingUp -> {
                 genericItem {
                     id("summary")
                     title(host.stringProvider.getString(R.string.keys_backup_settings_status_ok).toEpoxyCharSequence())
@@ -144,7 +144,7 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
 
                 isBackupAlreadySetup = true
             }
-            null                                       -> Unit
+            null -> Unit
         }
 
         if (isBackupAlreadySetup) {
@@ -187,12 +187,12 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
         val host = this
         when (keysVersionTrust) {
             is Uninitialized -> Unit
-            is Loading       -> {
+            is Loading -> {
                 loadingItem {
                     id("trust")
                 }
             }
-            is Success       -> {
+            is Success -> {
                 keysVersionTrust()
                         .signatures
                         .filterIsInstance<KeysBackupVersionTrustSignature.UserSignature>()
@@ -293,7 +293,7 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
                             }
                         } // end for each
             }
-            is Fail          -> {
+            is Fail -> {
                 errorWithRetryItem {
                     id("trust")
                     text(host.stringProvider.getString(R.string.keys_backup_unable_to_get_trust_info))

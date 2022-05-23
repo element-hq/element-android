@@ -39,7 +39,7 @@ class ContainsDisplayNameCondition : Condition {
             // EventType.ENCRYPTED -> {
             //     event.root.getClearContent()?.toModel<MessageContent>()
             // }
-            else              -> null
+            else -> null
         } ?: return false
 
         return message.body.caseInsensitiveFind(displayName)

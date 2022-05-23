@@ -82,7 +82,7 @@ class LoginWebFragment2 @Inject constructor(
     private fun setupTitle(state: LoginViewState2) {
         toolbar?.title = when (state.signMode) {
             SignMode2.SignIn -> getString(R.string.login_signin)
-            else             -> getString(R.string.login_signup)
+            else -> getString(R.string.login_signup)
         }
     }
 
@@ -253,9 +253,9 @@ class LoginWebFragment2 @Inject constructor(
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
         return when {
-            toolbarButton                     -> super.onBackPressed(toolbarButton)
+            toolbarButton -> super.onBackPressed(toolbarButton)
             views.loginWebWebView.canGoBack() -> views.loginWebWebView.goBack().run { true }
-            else                              -> super.onBackPressed(toolbarButton)
+            else -> super.onBackPressed(toolbarButton)
         }
     }
 }

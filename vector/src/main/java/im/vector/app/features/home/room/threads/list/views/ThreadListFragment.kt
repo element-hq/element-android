@@ -87,7 +87,7 @@ class ThreadListFragment @Inject constructor(
                 ThreadListBottomSheet().show(childFragmentManager, "Filtering")
                 true
             }
-            else                         -> super.onOptionsItemSelected(item)
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
@@ -97,7 +97,7 @@ class ThreadListFragment @Inject constructor(
             val filterBadge = filterIcon.findViewById<View>(R.id.threadListFilterBadge)
             filterBadge.isVisible = state.shouldFilterThreads
             when (threadListViewModel.canHomeserverUseThreading()) {
-                true  -> menu.findItem(R.id.menu_thread_list_filter).isVisible = !state.threadSummaryList.invoke().isNullOrEmpty()
+                true -> menu.findItem(R.id.menu_thread_list_filter).isVisible = !state.threadSummaryList.invoke().isNullOrEmpty()
                 false -> menu.findItem(R.id.menu_thread_list_filter).isVisible = !state.rootThreadEventList.invoke().isNullOrEmpty()
             }
         }
@@ -182,7 +182,7 @@ class ThreadListFragment @Inject constructor(
 
     private fun renderEmptyStateIfNeeded(state: ThreadListViewState) {
         when (threadListViewModel.canHomeserverUseThreading()) {
-            true  -> views.threadListEmptyConstraintLayout.isVisible = state.threadSummaryList.invoke().isNullOrEmpty()
+            true -> views.threadListEmptyConstraintLayout.isVisible = state.threadSummaryList.invoke().isNullOrEmpty()
             false -> views.threadListEmptyConstraintLayout.isVisible = state.rootThreadEventList.invoke().isNullOrEmpty()
         }
     }

@@ -48,14 +48,14 @@ class WiredHeadsetStateReceiver : BroadcastReceiver() {
         //  microphone 1 if headset has a microphone, 0 otherwise
 
         val isPlugged = when (intent?.getIntExtra("state", -1)) {
-            0    -> false
-            1    -> true
+            0 -> false
+            1 -> true
             else -> return Unit.also {
                 Timber.v("## VOIP WiredHeadsetStateReceiver invalid state")
             }
         }
         val hasMicrophone = when (intent.getIntExtra("microphone", -1)) {
-            1    -> true
+            1 -> true
             else -> false
         }
 

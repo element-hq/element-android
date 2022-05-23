@@ -57,11 +57,11 @@ internal class TaskExecutor @Inject constructor(private val coroutineDispatchers
     fun cancelAll() = executorScope.coroutineContext.cancelChildren()
 
     private fun TaskThread.toDispatcher() = when (this) {
-        TaskThread.MAIN        -> coroutineDispatchers.main
+        TaskThread.MAIN -> coroutineDispatchers.main
         TaskThread.COMPUTATION -> coroutineDispatchers.computation
-        TaskThread.IO          -> coroutineDispatchers.io
-        TaskThread.CALLER      -> EmptyCoroutineContext
-        TaskThread.CRYPTO      -> coroutineDispatchers.crypto
-        TaskThread.DM_VERIF    -> coroutineDispatchers.dmVerif
+        TaskThread.IO -> coroutineDispatchers.io
+        TaskThread.CALLER -> EmptyCoroutineContext
+        TaskThread.CRYPTO -> coroutineDispatchers.crypto
+        TaskThread.DM_VERIF -> coroutineDispatchers.dmVerif
     }
 }

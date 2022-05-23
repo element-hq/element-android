@@ -129,7 +129,7 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(
                             RoomAggregateNotificationCount(0, 0)
                     )
                 }
-                is RoomGroupingMethod.BySpace       -> {
+                is RoomGroupingMethod.BySpace -> {
                     val selectedSpace = appStateHandler.safeActiveSpaceId()
 
                     val inviteCount = if (autoAcceptInvites.hideInvites) {
@@ -181,7 +181,7 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(
                             )
                     )
                 }
-                null                                -> {
+                null -> {
                     CountInfo(
                             RoomAggregateNotificationCount(0, 0),
                             RoomAggregateNotificationCount(0, 0)

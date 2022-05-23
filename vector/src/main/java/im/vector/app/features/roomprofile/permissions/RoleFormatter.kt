@@ -26,9 +26,9 @@ class RoleFormatter @Inject constructor(
 ) {
     fun format(role: Role): String {
         return when (role) {
-            Role.Admin     -> stringProvider.getString(R.string.power_level_admin)
+            Role.Admin -> stringProvider.getString(R.string.power_level_admin)
             Role.Moderator -> stringProvider.getString(R.string.power_level_moderator)
-            Role.Default   -> stringProvider.getString(R.string.power_level_default)
+            Role.Default -> stringProvider.getString(R.string.power_level_default)
             is Role.Custom -> stringProvider.getString(R.string.power_level_custom, role.value)
         }
     }

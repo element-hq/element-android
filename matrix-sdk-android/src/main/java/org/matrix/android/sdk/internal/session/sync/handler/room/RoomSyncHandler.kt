@@ -140,7 +140,7 @@ internal class RoomSyncHandler @Inject constructor(
         }
         val syncLocalTimeStampMillis = clock.epochMillis()
         val rooms = when (handlingStrategy) {
-            is HandlingStrategy.JOINED  -> {
+            is HandlingStrategy.JOINED -> {
                 if (isInitialSync && initialSyncStrategy is InitialSyncStrategy.Optimized) {
                     insertJoinRoomsFromInitSync(realm, handlingStrategy, syncLocalTimeStampMillis, aggregator, reporter)
                     // Rooms are already inserted, return an empty list
@@ -156,7 +156,7 @@ internal class RoomSyncHandler @Inject constructor(
                     handleInvitedRoom(realm, it.key, it.value, insertType, syncLocalTimeStampMillis)
                 }
 
-            is HandlingStrategy.LEFT    -> {
+            is HandlingStrategy.LEFT -> {
                 handlingStrategy.data.mapWithProgress(reporter, InitSyncStep.ImportingAccountLeftRooms, 0.3f) {
                     handleLeftRoom(realm, it.key, it.value, insertType, syncLocalTimeStampMillis)
                 }
@@ -573,12 +573,12 @@ internal class RoomSyncHandler @Inject constructor(
                         readReceiptHandler.handle(realm, roomId, readReceiptContent, isInitialSync, aggregator)
                     }
                 }
-                EventType.TYPING  -> {
+                EventType.TYPING -> {
                     event.content.toModel<TypingEventContent>()?.let { typingEventContent ->
                         result = result.copy(typingUserIds = typingEventContent.typingUserIds)
                     }
                 }
-                else              -> Timber.w("Ephemeral event type '${event.type}' not yet supported")
+                else -> Timber.w("Ephemeral event type '${event.type}' not yet supported")
             }
         }
 

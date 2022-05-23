@@ -84,7 +84,7 @@ abstract class SyncService : Service() {
                     stopMe()
                 }
             }
-            else        -> {
+            else -> {
                 val isInit = initialize(intent)
                 onStart(isInitialSync)
                 if (isInit) {

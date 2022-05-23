@@ -45,7 +45,7 @@ class RoomListFooterController @Inject constructor(
                     inSpace(data.currentRoomGrouping.invoke()?.space() != null)
                 }
             }
-            else                         -> {
+            else -> {
                 if (userPreferencesProvider.shouldShowLongClickOnRoomHelp()) {
                     helpFooterItem {
                         id("long_click_help")

@@ -84,10 +84,10 @@ internal class UserAccountDataSyncHandler @Inject constructor(
             // Generic handling, just save in base
             handleGenericAccountData(realm, event.type, event.content)
             when (event.type) {
-                UserAccountDataTypes.TYPE_DIRECT_MESSAGES   -> handleDirectChatRooms(realm, event)
-                UserAccountDataTypes.TYPE_PUSH_RULES        -> handlePushRules(realm, event)
+                UserAccountDataTypes.TYPE_DIRECT_MESSAGES -> handleDirectChatRooms(realm, event)
+                UserAccountDataTypes.TYPE_PUSH_RULES -> handlePushRules(realm, event)
                 UserAccountDataTypes.TYPE_IGNORED_USER_LIST -> handleIgnoredUsers(realm, event)
-                UserAccountDataTypes.TYPE_BREADCRUMBS       -> handleBreadcrumbs(realm, event)
+                UserAccountDataTypes.TYPE_BREADCRUMBS -> handleBreadcrumbs(realm, event)
             }
         }
     }

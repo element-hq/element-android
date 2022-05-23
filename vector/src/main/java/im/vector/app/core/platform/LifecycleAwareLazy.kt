@@ -64,7 +64,7 @@ class LifecycleAwareLazy<out T>(
 
     private fun getLifecycleOwner() = when (owner) {
         is Fragment -> owner.viewLifecycleOwner
-        else        -> owner
+        else -> owner
     }
 
     override fun isInitialized(): Boolean = _value !== UninitializedValue

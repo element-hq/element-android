@@ -63,17 +63,17 @@ class FtueAuthSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOF
                     title = getString(R.string.login_connect_to, state.selectedHomeserver.userFacingUrl.toReducedUrl()),
                     subtitle = getString(R.string.login_server_matrix_org_text)
             )
-            ServerType.EMS       -> renderServerInformation(
+            ServerType.EMS -> renderServerInformation(
                     icon = R.drawable.ic_logo_element_matrix_services,
                     title = getString(R.string.login_connect_to_modular),
                     subtitle = state.selectedHomeserver.userFacingUrl.toReducedUrl()
             )
-            ServerType.Other     -> renderServerInformation(
+            ServerType.Other -> renderServerInformation(
                     icon = null,
                     title = getString(R.string.login_server_other_title),
                     subtitle = getString(R.string.login_connect_to, state.selectedHomeserver.userFacingUrl.toReducedUrl())
             )
-            ServerType.Unknown   -> Unit /* Should not happen */
+            ServerType.Unknown -> Unit /* Should not happen */
         }
 
         when (state.selectedHomeserver.preferredLoginMode) {
@@ -91,7 +91,7 @@ class FtueAuthSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOF
                     }
                 }
             }
-            else                        -> {
+            else -> {
                 // SSO only is managed without container as well as No sso
                 views.loginSignupSigninSignInSocialLoginContainer.isVisible = false
                 views.loginSignupSigninSocialLoginButtons.ssoIdentityProviders = null
@@ -114,7 +114,7 @@ class FtueAuthSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOF
                 views.loginSignupSigninSubmit.text = getString(R.string.login_signin_sso)
                 views.loginSignupSigninSignIn.isVisible = false
             }
-            else             -> {
+            else -> {
                 views.loginSignupSigninSubmit.text = getString(R.string.login_signup)
                 views.loginSignupSigninSignIn.isVisible = true
             }

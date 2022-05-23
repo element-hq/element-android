@@ -75,7 +75,7 @@ class DataAttachmentRoomProvider(
                             )
                     )
                 }
-                else                         -> throw IllegalArgumentException()
+                else -> throw IllegalArgumentException()
             }
         }
     }

@@ -51,7 +51,7 @@ internal class GroupSyncHandler @Inject constructor() {
 
     private fun handleGroupSync(realm: Realm, handlingStrategy: HandlingStrategy, reporter: ProgressReporter?) {
         val groups = when (handlingStrategy) {
-            is HandlingStrategy.JOINED  ->
+            is HandlingStrategy.JOINED ->
                 handlingStrategy.data.mapWithProgress(reporter, InitSyncStep.ImportingAccountGroups, 0.6f) {
                     handleJoinedGroup(realm, it.key)
                 }
@@ -61,7 +61,7 @@ internal class GroupSyncHandler @Inject constructor() {
                     handleInvitedGroup(realm, it.key)
                 }
 
-            is HandlingStrategy.LEFT    ->
+            is HandlingStrategy.LEFT ->
                 handlingStrategy.data.mapWithProgress(reporter, InitSyncStep.ImportingAccountGroups, 0.1f) {
                     handleLeftGroup(realm, it.key)
                 }

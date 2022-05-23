@@ -86,7 +86,7 @@ class RoomBannedMemberListViewModel @AssistedInject constructor(
         when (action) {
             is RoomBannedMemberListAction.QueryInfo -> onQueryBanInfo(action.roomMemberSummary)
             is RoomBannedMemberListAction.UnBanUser -> unBanUser(action.roomMemberSummary)
-            is RoomBannedMemberListAction.Filter    -> handleFilter(action)
+            is RoomBannedMemberListAction.Filter -> handleFilter(action)
         }
     }
 

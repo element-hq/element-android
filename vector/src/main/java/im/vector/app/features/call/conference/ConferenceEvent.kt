@@ -85,10 +85,10 @@ class ConferenceEventObserver(
     private fun onBroadcastReceived(intent: Intent) {
         val event = BroadcastEvent(intent)
         val conferenceEvent = when (event.type) {
-            BroadcastEvent.Type.CONFERENCE_JOINED     -> ConferenceEvent.Joined(event.data)
+            BroadcastEvent.Type.CONFERENCE_JOINED -> ConferenceEvent.Joined(event.data)
             BroadcastEvent.Type.CONFERENCE_TERMINATED -> ConferenceEvent.Terminated(event.data)
-            BroadcastEvent.Type.CONFERENCE_WILL_JOIN  -> ConferenceEvent.WillJoin(event.data)
-            else                                      -> null
+            BroadcastEvent.Type.CONFERENCE_WILL_JOIN -> ConferenceEvent.WillJoin(event.data)
+            else -> null
         }
         if (conferenceEvent != null) {
             onBroadcastEvent(conferenceEvent)

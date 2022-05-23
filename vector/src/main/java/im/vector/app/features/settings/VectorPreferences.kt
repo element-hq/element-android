@@ -671,11 +671,11 @@ class VectorPreferences @Inject constructor(
      */
     fun getMinMediasLastAccessTime(): Long {
         return when (getSelectedMediasSavingPeriod()) {
-            MEDIA_SAVING_3_DAYS  -> clock.epochMillis() / 1000 - 3 * 24 * 60 * 60
-            MEDIA_SAVING_1_WEEK  -> clock.epochMillis() / 1000 - 7 * 24 * 60 * 60
+            MEDIA_SAVING_3_DAYS -> clock.epochMillis() / 1000 - 3 * 24 * 60 * 60
+            MEDIA_SAVING_1_WEEK -> clock.epochMillis() / 1000 - 7 * 24 * 60 * 60
             MEDIA_SAVING_1_MONTH -> clock.epochMillis() / 1000 - 30 * 24 * 60 * 60
             MEDIA_SAVING_FOREVER -> 0
-            else                 -> 0
+            else -> 0
         }
     }
 
@@ -686,11 +686,11 @@ class VectorPreferences @Inject constructor(
      */
     fun getSelectedMediasSavingPeriodString(): String {
         return when (getSelectedMediasSavingPeriod()) {
-            MEDIA_SAVING_3_DAYS  -> context.getString(R.string.media_saving_period_3_days)
-            MEDIA_SAVING_1_WEEK  -> context.getString(R.string.media_saving_period_1_week)
+            MEDIA_SAVING_3_DAYS -> context.getString(R.string.media_saving_period_3_days)
+            MEDIA_SAVING_1_WEEK -> context.getString(R.string.media_saving_period_1_week)
             MEDIA_SAVING_1_MONTH -> context.getString(R.string.media_saving_period_1_month)
             MEDIA_SAVING_FOREVER -> context.getString(R.string.media_saving_period_forever)
-            else                 -> "?"
+            else -> "?"
         }
     }
 

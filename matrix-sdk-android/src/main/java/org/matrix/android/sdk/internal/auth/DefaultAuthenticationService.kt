@@ -290,7 +290,7 @@ internal class DefaultAuthenticationService @Inject constructor(
 
                 getLoginFlowResult(newAuthAPI, versions, wellknownResult.homeServerUrl)
             }
-            else                      -> throw Failure.OtherServerError("", HttpsURLConnection.HTTP_NOT_FOUND /* 404 */)
+            else -> throw Failure.OtherServerError("", HttpsURLConnection.HTTP_NOT_FOUND /* 404 */)
         }
     }
 

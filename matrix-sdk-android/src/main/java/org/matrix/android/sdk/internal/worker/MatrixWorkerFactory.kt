@@ -48,25 +48,25 @@ internal class MatrixWorkerFactory @Inject constructor(private val sessionManage
     ): ListenableWorker? {
         Timber.d("MatrixWorkerFactory.createWorker for $workerClassName")
         return when (workerClassName) {
-            CheckFactoryWorker::class.java.name                   ->
+            CheckFactoryWorker::class.java.name ->
                 CheckFactoryWorker(appContext, workerParameters, true)
-            AddPusherWorker::class.java.name                      ->
+            AddPusherWorker::class.java.name ->
                 AddPusherWorker(appContext, workerParameters, sessionManager)
-            GetGroupDataWorker::class.java.name                   ->
+            GetGroupDataWorker::class.java.name ->
                 GetGroupDataWorker(appContext, workerParameters, sessionManager)
             MultipleEventSendingDispatcherWorker::class.java.name ->
                 MultipleEventSendingDispatcherWorker(appContext, workerParameters, sessionManager)
-            RedactEventWorker::class.java.name                    ->
+            RedactEventWorker::class.java.name ->
                 RedactEventWorker(appContext, workerParameters, sessionManager)
-            SendEventWorker::class.java.name                      ->
+            SendEventWorker::class.java.name ->
                 SendEventWorker(appContext, workerParameters, sessionManager)
-            SyncWorker::class.java.name                           ->
+            SyncWorker::class.java.name ->
                 SyncWorker(appContext, workerParameters, sessionManager)
-            UpdateTrustWorker::class.java.name                    ->
+            UpdateTrustWorker::class.java.name ->
                 UpdateTrustWorker(appContext, workerParameters, sessionManager)
-            UploadContentWorker::class.java.name                  ->
+            UploadContentWorker::class.java.name ->
                 UploadContentWorker(appContext, workerParameters, sessionManager)
-            else                                                  -> {
+            else -> {
                 Timber.w("No worker defined on MatrixWorkerFactory for $workerClassName will delegate to default.")
                 // Return null to delegate to the default WorkerFactory.
                 null

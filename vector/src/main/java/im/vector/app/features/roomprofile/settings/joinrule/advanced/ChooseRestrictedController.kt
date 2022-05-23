@@ -50,7 +50,7 @@ class ChooseRestrictedController @Inject constructor(
         if (data.filter.isNotEmpty()) {
             when (val results = data.filteredResults) {
                 Uninitialized,
-                is Fail    -> return
+                is Fail -> return
                 is Loading -> loadingItem { id("filter_load") }
                 is Success -> {
                     if (results.invoke().isEmpty()) {

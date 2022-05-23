@@ -57,11 +57,11 @@ class VoicePlayerHelper @Inject constructor(
                     // SUCCESS
                     targetFile
                 }
-                ReturnCode.isCancel(session.returnCode)  -> {
+                ReturnCode.isCancel(session.returnCode) -> {
                     // CANCEL
                     null
                 }
-                else                                     -> {
+                else -> {
                     // FAILURE
                     Timber.e("Command failed with state ${session.state} and rc ${session.returnCode}.${session.failStackTrace}")
                     // TODO throw?

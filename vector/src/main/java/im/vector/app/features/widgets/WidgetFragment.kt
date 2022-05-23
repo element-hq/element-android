@@ -82,11 +82,11 @@ class WidgetFragment @Inject constructor() :
         viewModel.observeViewEvents {
             Timber.v("Observed view events: $it")
             when (it) {
-                is WidgetViewEvents.DisplayTerms              -> displayTerms(it)
-                is WidgetViewEvents.OnURLFormatted            -> loadFormattedUrl(it)
+                is WidgetViewEvents.DisplayTerms -> displayTerms(it)
+                is WidgetViewEvents.OnURLFormatted -> loadFormattedUrl(it)
                 is WidgetViewEvents.DisplayIntegrationManager -> displayIntegrationManager(it)
-                is WidgetViewEvents.Failure                   -> displayErrorDialog(it.throwable)
-                is WidgetViewEvents.Close                     -> Unit
+                is WidgetViewEvents.Failure -> displayErrorDialog(it.throwable)
+                is WidgetViewEvents.Close -> Unit
             }
         }
         viewModel.handle(WidgetAction.LoadFormattedUrl)
@@ -150,7 +150,7 @@ class WidgetFragment @Inject constructor() :
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = withState(viewModel) { state ->
         when (item.itemId) {
-            R.id.action_edit            -> {
+            R.id.action_edit -> {
                 navigator.openIntegrationManager(
                         requireContext(),
                         integrationManagerActivityResultLauncher,
@@ -160,11 +160,11 @@ class WidgetFragment @Inject constructor() :
                 )
                 return@withState true
             }
-            R.id.action_delete          -> {
+            R.id.action_delete -> {
                 deleteWidget()
                 return@withState true
             }
-            R.id.action_refresh         -> if (state.formattedURL.complete) {
+            R.id.action_refresh -> if (state.formattedURL.complete) {
                 views.widgetWebView.reload()
                 return@withState true
             }
@@ -172,7 +172,7 @@ class WidgetFragment @Inject constructor() :
                 openUrlInExternalBrowser(requireContext(), state.formattedURL.invoke())
                 return@withState true
             }
-            R.id.action_revoke          -> if (state.status == WidgetStatus.WIDGET_ALLOWED) {
+            R.id.action_revoke -> if (state.status == WidgetStatus.WIDGET_ALLOWED) {
                 revokeWidget()
                 return@withState true
             }
@@ -206,24 +206,24 @@ class WidgetFragment @Inject constructor() :
                     Uninitialized -> {
                         views.widgetWebView.isInvisible = true
                     }
-                    is Loading    -> {
+                    is Loading -> {
                         setStateError(null)
                         views.widgetWebView.isInvisible = false
                         views.widgetProgressBar.isIndeterminate = true
                         views.widgetProgressBar.isVisible = true
                     }
-                    is Success    -> {
+                    is Success -> {
                         views.widgetWebView.isInvisible = false
                         views.widgetProgressBar.isVisible = false
                         setStateError(null)
                     }
-                    is Fail       -> {
+                    is Fail -> {
                         views.widgetProgressBar.isInvisible = true
                         setStateError(state.webviewLoadedUrl.error.message)
                     }
                 }
             }
-            is Fail    -> {
+            is Fail -> {
                 // we need to show Error
                 views.widgetWebView.isInvisible = true
                 views.widgetProgressBar.isVisible = false

@@ -129,16 +129,16 @@ class CreateRoomViewModel @AssistedInject constructor(
 
     override fun handle(action: CreateRoomAction) {
         when (action) {
-            is CreateRoomAction.SetAvatar             -> setAvatar(action)
-            is CreateRoomAction.SetName               -> setName(action)
-            is CreateRoomAction.SetTopic              -> setTopic(action)
-            is CreateRoomAction.SetVisibility         -> setVisibility(action)
+            is CreateRoomAction.SetAvatar -> setAvatar(action)
+            is CreateRoomAction.SetName -> setName(action)
+            is CreateRoomAction.SetTopic -> setTopic(action)
+            is CreateRoomAction.SetVisibility -> setVisibility(action)
             is CreateRoomAction.SetRoomAliasLocalPart -> setRoomAliasLocalPart(action)
-            is CreateRoomAction.SetIsEncrypted        -> setIsEncrypted(action)
-            is CreateRoomAction.Create                -> doCreateRoom()
-            CreateRoomAction.Reset                    -> doReset()
-            CreateRoomAction.ToggleShowAdvanced       -> toggleShowAdvanced()
-            is CreateRoomAction.DisableFederation     -> disableFederation(action)
+            is CreateRoomAction.SetIsEncrypted -> setIsEncrypted(action)
+            is CreateRoomAction.Create -> doCreateRoom()
+            CreateRoomAction.Reset -> doReset()
+            CreateRoomAction.ToggleShowAdvanced -> toggleShowAdvanced()
+            is CreateRoomAction.DisableFederation -> disableFederation(action)
         }
     }
 
@@ -181,7 +181,7 @@ class CreateRoomViewModel @AssistedInject constructor(
 
     private fun setVisibility(action: CreateRoomAction.SetVisibility) = setState {
         when (action.rule) {
-            RoomJoinRules.PUBLIC     -> {
+            RoomJoinRules.PUBLIC -> {
                 copy(
                         roomJoinRules = RoomJoinRules.PUBLIC,
                         // Reset any error in the form about alias
@@ -200,7 +200,7 @@ class CreateRoomViewModel @AssistedInject constructor(
 //            RoomJoinRules.INVITE,
 //            RoomJoinRules.KNOCK,
 //            RoomJoinRules.PRIVATE,
-            else                     -> {
+            else -> {
                 // default to invite
                 copy(
                         roomJoinRules = RoomJoinRules.INVITE,
@@ -257,7 +257,7 @@ class CreateRoomViewModel @AssistedInject constructor(
                     }
 
                     when (state.roomJoinRules) {
-                        RoomJoinRules.PUBLIC     -> {
+                        RoomJoinRules.PUBLIC -> {
                             // Directory visibility
                             visibility = RoomDirectoryVisibility.PUBLIC
                             // Preset
@@ -275,7 +275,7 @@ class CreateRoomViewModel @AssistedInject constructor(
 //                        RoomJoinRules.KNOCK      ->
 //                        RoomJoinRules.PRIVATE    ->
 //                        RoomJoinRules.INVITE
-                        else                     -> {
+                        else -> {
                             // by default create invite only
                             // Directory visibility
                             visibility = RoomDirectoryVisibility.PRIVATE
@@ -290,7 +290,7 @@ class CreateRoomViewModel @AssistedInject constructor(
                     val shouldEncrypt = when (state.roomJoinRules) {
                         // we ignore the isEncrypted for public room as the switch is hidden in this case
                         RoomJoinRules.PUBLIC -> false
-                        else                 -> state.isEncrypted ?: state.defaultEncrypted[state.roomJoinRules].orFalse()
+                        else -> state.isEncrypted ?: state.defaultEncrypted[state.roomJoinRules].orFalse()
                     }
                     if (shouldEncrypt) {
                         enableEncryption()

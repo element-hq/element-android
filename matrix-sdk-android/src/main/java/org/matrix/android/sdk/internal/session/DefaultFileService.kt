@@ -127,7 +127,7 @@ internal class DefaultFileService @Inject constructor(
                     val resolvedUrl = contentUrlResolver.resolveForDownload(url, elementToDecrypt) ?: throw IllegalArgumentException("url is null")
 
                     val request = when (resolvedUrl) {
-                        is ContentUrlResolver.ResolvedMethod.GET  -> {
+                        is ContentUrlResolver.ResolvedMethod.GET -> {
                             Request.Builder()
                                     .url(resolvedUrl.url)
                                     .header(DOWNLOAD_PROGRESS_INTERCEPTOR_HEADER, url)

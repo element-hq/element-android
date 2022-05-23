@@ -26,7 +26,7 @@ fun RoomSummary?.toAnalyticsViewRoom(trigger: ViewRoom.Trigger?, groupingMethod:
     val activeSpace = groupingMethod?.let {
         when (it) {
             is RoomGroupingMethod.BySpace -> it.spaceSummary?.toActiveSpace() ?: ViewRoom.ActiveSpace.Home
-            else                          -> null
+            else -> null
         }
     }
 

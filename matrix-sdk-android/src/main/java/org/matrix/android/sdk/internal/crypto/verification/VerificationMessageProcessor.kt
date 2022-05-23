@@ -131,7 +131,7 @@ internal class VerificationMessageProcessor @Inject constructor(
             EventType.KEY_VERIFICATION_DONE -> {
                 verificationService.onRoomEvent(event)
             }
-            EventType.MESSAGE               -> {
+            EventType.MESSAGE -> {
                 if (MessageType.MSGTYPE_VERIFICATION_REQUEST == event.getClearContent().toModel<MessageContent>()?.msgType) {
                     verificationService.onRoomRequestReceived(event)
                 }

@@ -180,8 +180,8 @@ internal class SyncThread @Inject constructor(
                 val afterPause = state.let { it is SyncState.Running && it.afterPause }
                 val timeout = when {
                     previousSyncResponseHasToDevice -> 0L /* Force timeout to 0 */
-                    afterPause                      -> 0L /* No timeout after a pause */
-                    else                            -> DEFAULT_LONG_POOL_TIMEOUT
+                    afterPause -> 0L /* No timeout after a pause */
+                    else -> DEFAULT_LONG_POOL_TIMEOUT
                 }
                 Timber.tag(loggerTag.value).d("Execute sync request with timeout $timeout")
                 val presence = lightweightSettingsStorage.getSyncPresenceStatus()

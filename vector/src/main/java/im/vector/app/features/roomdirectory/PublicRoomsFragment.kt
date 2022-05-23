@@ -111,7 +111,7 @@ class PublicRoomsFragment @Inject constructor(
                 sharedActionViewModel.post(RoomDirectorySharedAction.ChangeProtocol)
                 true
             }
-            else                                     ->
+            else ->
                 super.onOptionsItemSelected(item)
         }
     }
@@ -150,7 +150,7 @@ class PublicRoomsFragment @Inject constructor(
                             trigger = ViewRoom.Trigger.RoomDirectory
                     )
                 }
-                else             -> {
+                else -> {
                     // ROOM PREVIEW
                     navigator.openRoomPreview(requireActivity(), publicRoom, state.roomDirectoryData)
                 }

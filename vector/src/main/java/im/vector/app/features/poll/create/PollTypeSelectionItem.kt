@@ -38,7 +38,7 @@ abstract class PollTypeSelectionItem : VectorEpoxyModel<PollTypeSelectionItem.Ho
 
         holder.pollTypeRadioGroup.check(
                 when (pollType) {
-                    PollType.DISCLOSED_UNSTABLE, PollType.DISCLOSED     -> R.id.openPollTypeRadioButton
+                    PollType.DISCLOSED_UNSTABLE, PollType.DISCLOSED -> R.id.openPollTypeRadioButton
                     PollType.UNDISCLOSED_UNSTABLE, PollType.UNDISCLOSED -> R.id.closedPollTypeRadioButton
                 }
         )

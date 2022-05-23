@@ -71,7 +71,7 @@ class RoomPermissionsFragment @Inject constructor(
         viewModel.observeViewEvents {
             when (it) {
                 is RoomPermissionsViewEvents.Failure -> showFailure(it.throwable)
-                RoomPermissionsViewEvents.Success    -> showSuccess()
+                RoomPermissionsViewEvents.Success -> showSuccess()
             }
         }
     }

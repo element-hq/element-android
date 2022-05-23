@@ -66,20 +66,20 @@ class VectorDateFormatter @Inject constructor(
         val localDateTime = DateProvider.toLocalDateTime(ts)
         return when (dateFormatKind) {
             DateFormatKind.DEFAULT_DATE_AND_TIME -> formatDateAndTime(ts)
-            DateFormatKind.ROOM_LIST             -> formatTimeOrDate(
+            DateFormatKind.ROOM_LIST -> formatTimeOrDate(
                     date = localDateTime,
                     showTimeIfSameDay = true,
                     abbrev = true,
                     useRelative = true
             )
-            DateFormatKind.TIMELINE_DAY_DIVIDER  -> formatTimeOrDate(
+            DateFormatKind.TIMELINE_DAY_DIVIDER -> formatTimeOrDate(
                     date = localDateTime,
                     alwaysShowYear = true
             )
-            DateFormatKind.MESSAGE_DETAIL        -> formatFullDate(localDateTime)
-            DateFormatKind.MESSAGE_SIMPLE        -> formatHour(localDateTime)
-            DateFormatKind.EDIT_HISTORY_ROW      -> formatHour(localDateTime)
-            DateFormatKind.EDIT_HISTORY_HEADER   -> formatTimeOrDate(
+            DateFormatKind.MESSAGE_DETAIL -> formatFullDate(localDateTime)
+            DateFormatKind.MESSAGE_SIMPLE -> formatHour(localDateTime)
+            DateFormatKind.EDIT_HISTORY_ROW -> formatHour(localDateTime)
+            DateFormatKind.EDIT_HISTORY_HEADER -> formatTimeOrDate(
                     date = localDateTime,
                     abbrev = true,
                     useRelative = true

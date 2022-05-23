@@ -179,7 +179,7 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
     private fun setupUi(state: OnboardingViewState) {
         when (state.selectedHomeserver.preferredLoginMode) {
             is LoginMode.SsoAndPassword -> renderSsoProviders(state.deviceId, state.selectedHomeserver.preferredLoginMode.ssoIdentityProviders)
-            else                        -> hideSsoProviders()
+            else -> hideSsoProviders()
         }
     }
 

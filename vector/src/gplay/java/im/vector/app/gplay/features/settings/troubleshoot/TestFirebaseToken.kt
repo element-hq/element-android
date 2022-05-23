@@ -43,13 +43,13 @@ class TestFirebaseToken @Inject constructor(
                         if (!task.isSuccessful) {
                             // Can't find where this constant is (not documented -or deprecated in docs- and all obfuscated)
                             description = when (val errorMsg = task.exception?.localizedMessage ?: "Unknown") {
-                                "SERVICE_NOT_AVAILABLE"  -> {
+                                "SERVICE_NOT_AVAILABLE" -> {
                                     stringProvider.getString(R.string.settings_troubleshoot_test_fcm_failed_service_not_available, errorMsg)
                                 }
                                 "TOO_MANY_REGISTRATIONS" -> {
                                     stringProvider.getString(R.string.settings_troubleshoot_test_fcm_failed_too_many_registration, errorMsg)
                                 }
-                                "ACCOUNT_MISSING"        -> {
+                                "ACCOUNT_MISSING" -> {
                                     quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_fcm_failed_account_missing_quick_fix) {
                                         override fun doFix() {
                                             startAddGoogleAccountIntent(context, activityResultLauncher)
@@ -57,7 +57,7 @@ class TestFirebaseToken @Inject constructor(
                                     }
                                     stringProvider.getString(R.string.settings_troubleshoot_test_fcm_failed_account_missing, errorMsg)
                                 }
-                                else                     -> {
+                                else -> {
                                     stringProvider.getString(R.string.settings_troubleshoot_test_fcm_failed, errorMsg)
                                 }
                             }

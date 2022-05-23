@@ -146,7 +146,7 @@ class VideoViewHolder constructor(itemView: View) :
                 wasPaused = true
                 views.videoView.pause()
             }
-            is AttachmentCommands.SeekTo  -> {
+            is AttachmentCommands.SeekTo -> {
                 val duration = views.videoView.duration
                 if (duration > 0) {
                     val seekDuration = duration * (commands.percentProgress / 100f)

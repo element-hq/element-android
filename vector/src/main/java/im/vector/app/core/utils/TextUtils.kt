@@ -60,10 +60,10 @@ object TextUtils {
         } else {
             // First convert the size
             when {
-                sizeBytes < 1024               -> sizeBytes
-                sizeBytes < 1024 * 1024        -> sizeBytes * 1000 / 1024
+                sizeBytes < 1024 -> sizeBytes
+                sizeBytes < 1024 * 1024 -> sizeBytes * 1000 / 1024
                 sizeBytes < 1024 * 1024 * 1024 -> sizeBytes * 1000 / 1024 * 1000 / 1024
-                else                           -> sizeBytes * 1000 / 1024 * 1000 / 1024 * 1000 / 1024
+                else -> sizeBytes * 1000 / 1024 * 1000 / 1024 * 1000 / 1024
             }
         }
 
@@ -91,7 +91,7 @@ object TextUtils {
         val seconds = getSeconds(duration)
         val builder = StringBuilder()
         when {
-            hours > 0   -> {
+            hours > 0 -> {
                 appendHours(context, builder, hours)
                 if (minutes > 0) {
                     builder.append(" ")
@@ -109,7 +109,7 @@ object TextUtils {
                     appendSeconds(context, builder, seconds)
                 }
             }
-            else        -> {
+            else -> {
                 appendSeconds(context, builder, seconds)
             }
         }

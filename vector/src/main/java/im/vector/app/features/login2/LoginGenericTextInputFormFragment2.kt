@@ -75,8 +75,8 @@ class LoginGenericTextInputFormFragment2 @Inject constructor() : AbstractLoginFr
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             views.loginGenericTextInputFormTextInput.setAutofillHints(
                     when (params.mode) {
-                        TextInputFormFragmentMode.SetEmail      -> HintConstants.AUTOFILL_HINT_EMAIL_ADDRESS
-                        TextInputFormFragmentMode.SetMsisdn     -> HintConstants.AUTOFILL_HINT_PHONE_NUMBER
+                        TextInputFormFragmentMode.SetEmail -> HintConstants.AUTOFILL_HINT_EMAIL_ADDRESS
+                        TextInputFormFragmentMode.SetMsisdn -> HintConstants.AUTOFILL_HINT_PHONE_NUMBER
                         TextInputFormFragmentMode.ConfirmMsisdn -> HintConstants.AUTOFILL_HINT_SMS_OTP
                     }
             )
@@ -93,7 +93,7 @@ class LoginGenericTextInputFormFragment2 @Inject constructor() : AbstractLoginFr
 
     private fun setupUi() {
         when (params.mode) {
-            TextInputFormFragmentMode.SetEmail      -> {
+            TextInputFormFragmentMode.SetEmail -> {
                 views.loginGenericTextInputFormTitle.text = getString(R.string.login_set_email_title_2)
                 views.loginGenericTextInputFormNotice.text = getString(R.string.login_set_email_notice_2)
                 // Text will be updated with the state
@@ -105,7 +105,7 @@ class LoginGenericTextInputFormFragment2 @Inject constructor() : AbstractLoginFr
                 views.loginGenericTextInputFormOtherButton.isVisible = false
                 views.loginGenericTextInputFormSubmit.text = getString(R.string.login_set_email_submit)
             }
-            TextInputFormFragmentMode.SetMsisdn     -> {
+            TextInputFormFragmentMode.SetMsisdn -> {
                 views.loginGenericTextInputFormTitle.text = getString(R.string.login_set_msisdn_title_2)
                 views.loginGenericTextInputFormNotice.text = getString(R.string.login_set_msisdn_notice_2)
                 // Text will be updated with the state
@@ -137,7 +137,7 @@ class LoginGenericTextInputFormFragment2 @Inject constructor() : AbstractLoginFr
             TextInputFormFragmentMode.ConfirmMsisdn -> {
                 loginViewModel.handle(LoginAction2.SendAgainThreePid)
             }
-            else                                    -> {
+            else -> {
                 // Should not happen, button is not displayed
             }
         }
@@ -152,10 +152,10 @@ class LoginGenericTextInputFormFragment2 @Inject constructor() : AbstractLoginFr
             loginViewModel.handle(LoginAction2.RegisterDummy)
         } else {
             when (params.mode) {
-                TextInputFormFragmentMode.SetEmail      -> {
+                TextInputFormFragmentMode.SetEmail -> {
                     loginViewModel.handle(LoginAction2.AddThreePid(RegisterThreePid.Email(text)))
                 }
-                TextInputFormFragmentMode.SetMsisdn     -> {
+                TextInputFormFragmentMode.SetMsisdn -> {
                     getCountryCodeOrShowError(text)?.let { countryCode ->
                         loginViewModel.handle(LoginAction2.AddThreePid(RegisterThreePid.Msisdn(text, countryCode)))
                     }
@@ -214,8 +214,8 @@ class LoginGenericTextInputFormFragment2 @Inject constructor() : AbstractLoginFr
             true
         } else {
             when (params.mode) {
-                TextInputFormFragmentMode.SetEmail      -> input.isEmail()
-                TextInputFormFragmentMode.SetMsisdn     -> input.isNotBlank()
+                TextInputFormFragmentMode.SetEmail -> input.isEmail()
+                TextInputFormFragmentMode.SetMsisdn -> input.isNotBlank()
                 TextInputFormFragmentMode.ConfirmMsisdn -> input.isNotBlank()
             }
         }
@@ -223,7 +223,7 @@ class LoginGenericTextInputFormFragment2 @Inject constructor() : AbstractLoginFr
 
     override fun onError(throwable: Throwable) {
         when (params.mode) {
-            TextInputFormFragmentMode.SetEmail      -> {
+            TextInputFormFragmentMode.SetEmail -> {
                 if (throwable.is401()) {
                     // This is normal use case, we go to the mail waiting screen
                     loginViewModel.handle(LoginAction2.PostViewEvent(LoginViewEvents2.OnSendEmailSuccess(loginViewModel.currentThreePid ?: "")))
@@ -231,7 +231,7 @@ class LoginGenericTextInputFormFragment2 @Inject constructor() : AbstractLoginFr
                     views.loginGenericTextInputFormTil.error = errorFormatter.toHumanReadable(throwable)
                 }
             }
-            TextInputFormFragmentMode.SetMsisdn     -> {
+            TextInputFormFragmentMode.SetMsisdn -> {
                 if (throwable.is401()) {
                     // This is normal use case, we go to the enter code screen
                     loginViewModel.handle(LoginAction2.PostViewEvent(LoginViewEvents2.OnSendMsisdnSuccess(loginViewModel.currentThreePid ?: "")))
@@ -244,10 +244,10 @@ class LoginGenericTextInputFormFragment2 @Inject constructor() : AbstractLoginFr
                     throwable is Failure.SuccessError ->
                         // The entered code is not correct
                         views.loginGenericTextInputFormTil.error = getString(R.string.login_validation_code_is_not_correct)
-                    throwable.is401()                 ->
+                    throwable.is401() ->
                         // It can happen if user request again the 3pid
                         Unit
-                    else                              ->
+                    else ->
                         views.loginGenericTextInputFormTil.error = errorFormatter.toHumanReadable(throwable)
                 }
             }
@@ -260,8 +260,8 @@ class LoginGenericTextInputFormFragment2 @Inject constructor() : AbstractLoginFr
 
     override fun updateWithState(state: LoginViewState2) {
         views.loginGenericTextInputFormMandatoryNotice.text = when (params.mode) {
-            TextInputFormFragmentMode.SetEmail      -> getString(R.string.login_set_email_mandatory_notice_2, state.homeServerUrlFromUser.toReducedUrl())
-            TextInputFormFragmentMode.SetMsisdn     -> getString(R.string.login_set_msisdn_mandatory_notice_2, state.homeServerUrlFromUser.toReducedUrl())
+            TextInputFormFragmentMode.SetEmail -> getString(R.string.login_set_email_mandatory_notice_2, state.homeServerUrlFromUser.toReducedUrl())
+            TextInputFormFragmentMode.SetMsisdn -> getString(R.string.login_set_msisdn_mandatory_notice_2, state.homeServerUrlFromUser.toReducedUrl())
             TextInputFormFragmentMode.ConfirmMsisdn -> null
         }
     }

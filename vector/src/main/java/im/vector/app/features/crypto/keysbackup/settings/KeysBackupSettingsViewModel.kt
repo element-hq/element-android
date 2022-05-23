@@ -71,14 +71,14 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(
 
     override fun handle(action: KeyBackupSettingsAction) {
         when (action) {
-            KeyBackupSettingsAction.Init                -> init()
-            KeyBackupSettingsAction.GetKeyBackupTrust   -> getKeysBackupTrust()
-            KeyBackupSettingsAction.DeleteKeyBackup     -> deleteCurrentBackup()
-            KeyBackupSettingsAction.SetUpKeyBackup      -> viewModelScope.launch {
+            KeyBackupSettingsAction.Init -> init()
+            KeyBackupSettingsAction.GetKeyBackupTrust -> getKeysBackupTrust()
+            KeyBackupSettingsAction.DeleteKeyBackup -> deleteCurrentBackup()
+            KeyBackupSettingsAction.SetUpKeyBackup -> viewModelScope.launch {
                 setUpKeyBackup()
             }
             KeyBackupSettingsAction.StoreIn4SReset,
-            KeyBackupSettingsAction.StoreIn4SFailure    -> {
+            KeyBackupSettingsAction.StoreIn4SFailure -> {
                 pendingBackupCreationInfo = null
                 // nothing to do just stay on fragment
             }

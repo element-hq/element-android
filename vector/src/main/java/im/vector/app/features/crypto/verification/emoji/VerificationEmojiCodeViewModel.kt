@@ -88,7 +88,7 @@ class VerificationEmojiCodeViewModel @AssistedInject constructor(
             is VerificationTxState.OnAccepted,
             is VerificationTxState.SendingKey,
             is VerificationTxState.KeySent,
-            is VerificationTxState.OnKeyReceived  -> {
+            is VerificationTxState.OnKeyReceived -> {
                 setState {
                     copy(
                             isWaitingFromOther = false,
@@ -118,12 +118,12 @@ class VerificationEmojiCodeViewModel @AssistedInject constructor(
             is VerificationTxState.SendingMac,
             is VerificationTxState.MacSent,
             is VerificationTxState.Verifying,
-            is VerificationTxState.Verified       -> {
+            is VerificationTxState.Verified -> {
                 setState {
                     copy(isWaitingFromOther = true)
                 }
             }
-            is VerificationTxState.Cancelled      -> {
+            is VerificationTxState.Cancelled -> {
                 // The fragment should not be rendered in this state,
                 // it should have been replaced by a conclusion fragment
                 setState {
@@ -135,7 +135,7 @@ class VerificationEmojiCodeViewModel @AssistedInject constructor(
                     )
                 }
             }
-            null                                  -> {
+            null -> {
                 setState {
                     copy(
                             isWaitingFromOther = false,
@@ -144,7 +144,7 @@ class VerificationEmojiCodeViewModel @AssistedInject constructor(
                     )
                 }
             }
-            else                                  -> Unit
+            else -> Unit
         }
     }
 

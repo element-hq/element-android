@@ -109,10 +109,10 @@ class VerificationItemFactory @Inject constructor(
                                 .highlighted(params.isHighlighted)
                                 .leftGuideline(avatarSizeProvider.leftGuideline)
                     }
-                    else                     -> return ignoredConclusion(params)
+                    else -> return ignoredConclusion(params)
                 }
             }
-            EventType.KEY_VERIFICATION_DONE   -> {
+            EventType.KEY_VERIFICATION_DONE -> {
                 // Is the request referenced is actually really completed?
                 if (referenceInformationData.referencesInfoData?.verificationStatus != VerificationState.DONE) {
                     return ignoredConclusion(params)

@@ -65,7 +65,7 @@ class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>() {
         TabLayoutMediator(views.callTransferTabLayout, views.callTransferViewPager) { tab, position ->
             when (position) {
                 CallTransferPagerAdapter.USER_LIST_INDEX -> tab.text = getString(R.string.call_transfer_users_tab_title)
-                CallTransferPagerAdapter.DIAL_PAD_INDEX  -> tab.text = getString(R.string.call_dial_pad_title)
+                CallTransferPagerAdapter.DIAL_PAD_INDEX -> tab.text = getString(R.string.call_dial_pad_title)
             }
         }.attach()
         setupToolbar(views.callTransferToolbar)
@@ -81,7 +81,7 @@ class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>() {
                     val result = CallTransferResult.ConnectWithUserId(views.callTransferConsultCheckBox.isChecked, selectedUser)
                     handleComplete(result)
                 }
-                CallTransferPagerAdapter.DIAL_PAD_INDEX  -> {
+                CallTransferPagerAdapter.DIAL_PAD_INDEX -> {
                     val phoneNumber = sectionsPagerAdapter.dialPadFragment?.getRawInput() ?: return@debouncedClicks
                     val result = CallTransferResult.ConnectWithPhoneNumber(views.callTransferConsultCheckBox.isChecked, phoneNumber)
                     handleComplete(result)

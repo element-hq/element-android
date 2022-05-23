@@ -56,7 +56,7 @@ class RoomSummaryItemFactory @Inject constructor(
                 val changeMembershipState = roomChangeMembershipStates[roomSummary.roomId] ?: ChangeMembershipState.Unknown
                 createInvitationItem(roomSummary, changeMembershipState, listener)
             }
-            else              -> createRoomItem(roomSummary, selectedRoomIds, listener?.let { it::onRoomClicked }, listener?.let { it::onRoomLongClicked })
+            else -> createRoomItem(roomSummary, selectedRoomIds, listener?.let { it::onRoomClicked }, listener?.let { it::onRoomLongClicked })
         }
     }
 

@@ -138,20 +138,20 @@ sealed class MatrixItem(
      * Return the prefix as defined in the matrix spec (and not extracted from the id).
      */
     private fun getIdPrefix() = when (this) {
-        is UserItem           -> '@'
-        is EventItem          -> '$'
+        is UserItem -> '@'
+        is EventItem -> '$'
         is SpaceItem,
         is RoomItem,
         is EveryoneInRoomItem -> '!'
-        is RoomAliasItem      -> '#'
-        is GroupItem          -> '+'
+        is RoomAliasItem -> '#'
+        is GroupItem -> '+'
     }
 
     fun firstLetterOfDisplayName(): String {
         val displayName = when (this) {
             // use the room display name for the notify everyone item
             is EveryoneInRoomItem -> roomDisplayName
-            else                  -> displayName
+            else -> displayName
         }
         return (displayName?.takeIf { it.isNotBlank() } ?: id)
                 .let { dn ->

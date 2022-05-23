@@ -60,6 +60,6 @@ fun TimelineEvent.buildImageContentRendererData(maxHeight: Int): ImageContentRen
                             allowNonMxcUrls = false
                     )
                 }
-        else                  -> null
+        else -> null
     }
 }

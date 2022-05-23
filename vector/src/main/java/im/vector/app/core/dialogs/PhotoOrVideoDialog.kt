@@ -42,7 +42,7 @@ class PhotoOrVideoDialog(
             VectorPreferences.TAKE_PHOTO_VIDEO_MODE_PHOTO -> listener.takePhoto()
             VectorPreferences.TAKE_PHOTO_VIDEO_MODE_VIDEO -> listener.takeVideo()
             /* VectorPreferences.TAKE_PHOTO_VIDEO_MODE_ALWAYS_ASK */
-            else                                          -> {
+            else -> {
                 val dialogLayout = activity.layoutInflater.inflate(R.layout.dialog_photo_or_video, null)
                 val views = DialogPhotoOrVideoBinding.bind(dialogLayout)
 
@@ -113,7 +113,7 @@ class PhotoOrVideoDialog(
                 when {
                     views.dialogPhotoOrVideoPhoto.isChecked -> VectorPreferences.TAKE_PHOTO_VIDEO_MODE_PHOTO
                     views.dialogPhotoOrVideoVideo.isChecked -> VectorPreferences.TAKE_PHOTO_VIDEO_MODE_VIDEO
-                    else                                    -> VectorPreferences.TAKE_PHOTO_VIDEO_MODE_ALWAYS_ASK
+                    else -> VectorPreferences.TAKE_PHOTO_VIDEO_MODE_ALWAYS_ASK
                 }
         )
     }

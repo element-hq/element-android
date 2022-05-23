@@ -51,9 +51,9 @@ class ContactsBookController @Inject constructor(
         val currentState = state ?: return
         when (val asyncMappedContacts = currentState.mappedContacts) {
             is Uninitialized -> renderEmptyState(false)
-            is Loading       -> renderLoading()
-            is Success       -> renderSuccess(currentState)
-            is Fail          -> renderFailure(asyncMappedContacts.error)
+            is Loading -> renderLoading()
+            is Success -> renderSuccess(currentState)
+            is Fail -> renderFailure(asyncMappedContacts.error)
         }
     }
 

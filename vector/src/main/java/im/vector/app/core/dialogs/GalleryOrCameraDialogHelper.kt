@@ -123,7 +123,7 @@ class GalleryOrCameraDialogHelper(
 
     private fun onAvatarTypeSelected(type: Type) {
         when (type) {
-            Type.Camera  ->
+            Type.Camera ->
                 if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, activity, takePhotoPermissionActivityResultLauncher)) {
                     doOpenCamera()
                 }

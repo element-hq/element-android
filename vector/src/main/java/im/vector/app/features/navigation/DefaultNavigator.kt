@@ -128,7 +128,7 @@ class DefaultNavigator @Inject constructor(
 
     override fun openLogin(context: Context, loginConfig: LoginConfig?, flags: Int) {
         val intent = when (features.onboardingVariant()) {
-            OnboardingVariant.LEGACY    -> LoginActivity.newIntent(context, loginConfig)
+            OnboardingVariant.LEGACY -> LoginActivity.newIntent(context, loginConfig)
             OnboardingVariant.LOGIN_2,
             OnboardingVariant.FTUE_AUTH -> OnboardingActivity.newIntent(context, loginConfig)
         }
@@ -138,7 +138,7 @@ class DefaultNavigator @Inject constructor(
 
     override fun loginSSORedirect(context: Context, data: Uri?) {
         val intent = when (features.onboardingVariant()) {
-            OnboardingVariant.LEGACY    -> LoginActivity.redirectIntent(context, data)
+            OnboardingVariant.LEGACY -> LoginActivity.redirectIntent(context, data)
             OnboardingVariant.LOGIN_2,
             OnboardingVariant.FTUE_AUTH -> OnboardingActivity.redirectIntent(context, data)
         }
@@ -184,7 +184,7 @@ class DefaultNavigator @Inject constructor(
         }
         appStateHandler.setCurrentSpace(spaceId)
         when (postSwitchSpaceAction) {
-            Navigator.PostSwitchSpaceAction.None                 -> {
+            Navigator.PostSwitchSpaceAction.None -> {
                 // go back to home if we are showing room details?
                 // This is a bit ugly, but the navigator is supposed to know about the activity stack
                 if (context is RoomDetailActivity) {
@@ -194,10 +194,10 @@ class DefaultNavigator @Inject constructor(
             Navigator.PostSwitchSpaceAction.OpenAddExistingRooms -> {
                 startActivity(context, SpaceManageActivity.newIntent(context, spaceId, ManageType.AddRooms), false)
             }
-            Navigator.PostSwitchSpaceAction.OpenRoomList         -> {
+            Navigator.PostSwitchSpaceAction.OpenRoomList -> {
                 startActivity(context, SpaceExploreActivity.newIntent(context, spaceId), buildTask = false)
             }
-            is Navigator.PostSwitchSpaceAction.OpenDefaultRoom   -> {
+            is Navigator.PostSwitchSpaceAction.OpenDefaultRoom -> {
                 val args = TimelineArgs(
                         postSwitchSpaceAction.roomId,
                         eventId = null,
@@ -332,7 +332,7 @@ class DefaultNavigator @Inject constructor(
                 val intent = RoomDirectoryActivity.getIntent(context, initialFilter)
                 context.startActivity(intent)
             }
-            is RoomGroupingMethod.BySpace       -> {
+            is RoomGroupingMethod.BySpace -> {
                 val selectedSpace = groupingMethod.space()
                 if (selectedSpace == null) {
                     val intent = RoomDirectoryActivity.getIntent(context, initialFilter)
@@ -343,7 +343,7 @@ class DefaultNavigator @Inject constructor(
                     }
                 }
             }
-            null                                -> Unit
+            null -> Unit
         }
     }
 
@@ -357,14 +357,14 @@ class DefaultNavigator @Inject constructor(
             is RoomGroupingMethod.ByLegacyGroup -> {
                 CreateDirectRoomActivity.getIntent(context)
             }
-            is RoomGroupingMethod.BySpace       -> {
+            is RoomGroupingMethod.BySpace -> {
                 if (currentGroupingMethod.spaceSummary != null) {
                     SpacePeopleActivity.newIntent(context, currentGroupingMethod.spaceSummary.roomId)
                 } else {
                     CreateDirectRoomActivity.getIntent(context)
                 }
             }
-            else                                -> null
+            else -> null
         } ?: return
         context.startActivity(intent)
     }
@@ -375,7 +375,7 @@ class DefaultNavigator @Inject constructor(
                 val intent = InviteUsersToRoomActivity.getIntent(context, roomId)
                 context.startActivity(intent)
             }
-            is RoomGroupingMethod.BySpace       -> {
+            is RoomGroupingMethod.BySpace -> {
                 if (currentGroupingMethod.spaceSummary != null) {
                     // let user decides if he does it from space or room
                     (context as? AppCompatActivity)?.supportFragmentManager?.let { fm ->
@@ -400,7 +400,7 @@ class DefaultNavigator @Inject constructor(
                     context.startActivity(intent)
                 }
             }
-            null                                -> Unit
+            null -> Unit
         }
     }
 

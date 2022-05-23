@@ -153,17 +153,17 @@ class TimelineMessageLayoutFactory @Inject constructor(
 
     private fun MessageContent?.timestampInsideMessage(): Boolean {
         return when {
-            this == null                            -> false
+            this == null -> false
             msgType in MSG_TYPES_WITH_LOCATION_DATA -> vectorPreferences.labsRenderLocationsInTimeline()
-            else                                    -> msgType in MSG_TYPES_WITH_TIMESTAMP_INSIDE_MESSAGE
+            else -> msgType in MSG_TYPES_WITH_TIMESTAMP_INSIDE_MESSAGE
         }
     }
 
     private fun MessageContent?.shouldAddMessageOverlay(): Boolean {
         return when {
             this == null || msgType == MessageType.MSGTYPE_BEACON_INFO -> false
-            msgType == MessageType.MSGTYPE_LOCATION                    -> vectorPreferences.labsRenderLocationsInTimeline()
-            else                                                       -> msgType in MSG_TYPES_WITH_TIMESTAMP_INSIDE_MESSAGE
+            msgType == MessageType.MSGTYPE_LOCATION -> vectorPreferences.labsRenderLocationsInTimeline()
+            else -> msgType in MSG_TYPES_WITH_TIMESTAMP_INSIDE_MESSAGE
         }
     }
 
@@ -214,10 +214,10 @@ class TimelineMessageLayoutFactory @Inject constructor(
         return when (event?.root?.getClearType()) {
             EventType.KEY_VERIFICATION_DONE,
             EventType.KEY_VERIFICATION_CANCEL -> true
-            EventType.MESSAGE                 -> {
+            EventType.MESSAGE -> {
                 event.getLastMessageContent() is MessageVerificationRequestContent
             }
-            else                              -> false
+            else -> false
         }
     }
 }

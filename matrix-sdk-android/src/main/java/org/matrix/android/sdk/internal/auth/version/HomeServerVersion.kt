@@ -33,7 +33,7 @@ internal data class HomeServerVersion(
             minor < other.minor -> -1
             patch > other.patch -> 1
             patch < other.patch -> -1
-            else                -> 0
+            else -> 0
         }
     }
 

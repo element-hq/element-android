@@ -64,7 +64,7 @@ class CreatePollFragment @Inject constructor(
                 views.createPollToolbar.title = getString(R.string.create_poll_title)
                 views.createPollButton.text = getString(R.string.create_poll_title)
             }
-            PollMode.EDIT   -> {
+            PollMode.EDIT -> {
                 views.createPollToolbar.title = getString(R.string.edit_poll_title)
                 views.createPollButton.text = getString(R.string.edit_poll_title)
             }
@@ -85,8 +85,8 @@ class CreatePollFragment @Inject constructor(
 
         viewModel.observeViewEvents {
             when (it) {
-                CreatePollViewEvents.Success                  -> handleSuccess()
-                CreatePollViewEvents.EmptyQuestionError       -> handleEmptyQuestionError()
+                CreatePollViewEvents.Success -> handleSuccess()
+                CreatePollViewEvents.EmptyQuestionError -> handleEmptyQuestionError()
                 is CreatePollViewEvents.NotEnoughOptionsError -> handleNotEnoughOptionsError(it.requiredOptionsCount)
             }
         }

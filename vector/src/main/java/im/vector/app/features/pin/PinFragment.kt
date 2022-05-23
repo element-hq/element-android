@@ -60,7 +60,7 @@ class PinFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         when (fragmentArgs.pinMode) {
             PinMode.CREATE -> showCreateFragment()
-            PinMode.AUTH   -> showAuthFragment()
+            PinMode.AUTH -> showAuthFragment()
             PinMode.MODIFY -> showCreateFragment() // No need to create another function for now because texts are generic
         }
     }
@@ -143,11 +143,11 @@ class PinFragment @Inject constructor(
     private fun onWrongPin() {
         val remainingAttempts = pinCodeStore.onWrongPin()
         when {
-            remainingAttempts > 1  ->
+            remainingAttempts > 1 ->
                 requireActivity().toast(resources.getQuantityString(R.plurals.wrong_pin_message_remaining_attempts, remainingAttempts, remainingAttempts))
             remainingAttempts == 1 ->
                 requireActivity().toast(R.string.wrong_pin_message_last_remaining_attempt)
-            else                   -> {
+            else -> {
                 requireActivity().toast(R.string.too_many_pin_failures)
                 // Logout
                 MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCredentials = true))

@@ -48,7 +48,7 @@ data class UserListViewState(
         return pendingSelections
                 .mapNotNull {
                     when (it) {
-                        is PendingSelection.UserPendingSelection     -> it.user.userId
+                        is PendingSelection.UserPendingSelection -> it.user.userId
                         is PendingSelection.ThreePidPendingSelection -> null
                     }
                 }

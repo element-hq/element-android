@@ -48,7 +48,7 @@ class WidgetItemFactory @Inject constructor(
         return when (WidgetType.fromString(widgetContent.type ?: previousWidgetContent?.type ?: "")) {
             WidgetType.Jitsi -> createJitsiItem(params, widgetContent)
             // There is lot of other widget types we could improve here
-            else             -> noticeItemFactory.create(params)
+            else -> noticeItemFactory.create(params)
         }
     }
 

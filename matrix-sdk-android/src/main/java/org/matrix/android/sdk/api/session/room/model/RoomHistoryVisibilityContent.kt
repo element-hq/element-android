@@ -26,10 +26,10 @@ data class RoomHistoryVisibilityContent(
 ) {
     val historyVisibility: RoomHistoryVisibility? = when (historyVisibilityStr) {
         "world_readable" -> RoomHistoryVisibility.WORLD_READABLE
-        "shared"         -> RoomHistoryVisibility.SHARED
-        "invited"        -> RoomHistoryVisibility.INVITED
-        "joined"         -> RoomHistoryVisibility.JOINED
-        else             -> {
+        "shared" -> RoomHistoryVisibility.SHARED
+        "invited" -> RoomHistoryVisibility.INVITED
+        "joined" -> RoomHistoryVisibility.JOINED
+        else -> {
             Timber.w("Invalid value for RoomHistoryVisibility: `$historyVisibilityStr`")
             null
         }

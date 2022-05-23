@@ -53,7 +53,7 @@ fun TextInputLayout.setOnImeDoneListener(action: () -> Unit) {
                 action()
                 true
             }
-            else                       -> false
+            else -> false
         }
     }
 }

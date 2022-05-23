@@ -97,11 +97,11 @@ class RoomDirectoryPickerViewModel @AssistedInject constructor(
 
     override fun handle(action: RoomDirectoryPickerAction) {
         when (action) {
-            RoomDirectoryPickerAction.Retry           -> load()
-            RoomDirectoryPickerAction.EnterEditMode   -> handleEnterEditMode()
-            RoomDirectoryPickerAction.ExitEditMode    -> handleExitEditMode()
+            RoomDirectoryPickerAction.Retry -> load()
+            RoomDirectoryPickerAction.EnterEditMode -> handleEnterEditMode()
+            RoomDirectoryPickerAction.ExitEditMode -> handleExitEditMode()
             is RoomDirectoryPickerAction.SetServerUrl -> handleSetServerUrl(action)
-            RoomDirectoryPickerAction.Submit          -> handleSubmit()
+            RoomDirectoryPickerAction.Submit -> handleSubmit()
             is RoomDirectoryPickerAction.RemoveServer -> handleRemoveServer(action)
         }
     }

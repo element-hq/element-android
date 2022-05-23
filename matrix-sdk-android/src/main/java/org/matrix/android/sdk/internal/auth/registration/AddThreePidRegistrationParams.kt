@@ -84,7 +84,7 @@ internal data class AddThreePidRegistrationParams(
     companion object {
         fun from(params: RegisterAddThreePidTask.Params): AddThreePidRegistrationParams {
             return when (params.threePid) {
-                is RegisterThreePid.Email  -> AddThreePidRegistrationParams(
+                is RegisterThreePid.Email -> AddThreePidRegistrationParams(
                         email = params.threePid.email,
                         clientSecret = params.clientSecret,
                         sendAttempt = params.sendAttempt

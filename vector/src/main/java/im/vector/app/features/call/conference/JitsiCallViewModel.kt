@@ -99,7 +99,7 @@ class JitsiCallViewModel @AssistedInject constructor(
 
     override fun handle(action: JitsiCallViewActions) {
         when (action) {
-            is JitsiCallViewActions.SwitchTo      -> handleSwitchTo(action)
+            is JitsiCallViewActions.SwitchTo -> handleSwitchTo(action)
             JitsiCallViewActions.OnConferenceLeft -> handleOnConferenceLeft()
         }
     }
