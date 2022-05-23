@@ -463,20 +463,20 @@ class HomeDetailFragment @Inject constructor(
             sharedActionViewModel.post(HomeActivitySharedAction.OpenDrawer)
         }
 
-        views.homeToolbarContent.debouncedClicks {
-            withState(viewModel) {
-                when (it.roomGroupingMethod) {
-                    is RoomGroupingMethod.ByLegacyGroup -> {
-                        // do nothing
-                    }
-                    is RoomGroupingMethod.BySpace       -> {
-                        it.roomGroupingMethod.spaceSummary?.let { spaceSummary ->
-                            sharedActionViewModel.post(HomeActivitySharedAction.ShowSpaceSettings(spaceSummary.roomId))
-                        }
-                    }
-                }
-            }
-        }
+//        views.homeToolbarContent.debouncedClicks {
+//            withState(viewModel) {
+//                when (it.roomGroupingMethod) {
+//                    is RoomGroupingMethod.ByLegacyGroup -> {
+//                        // do nothing
+//                    }
+//                    is RoomGroupingMethod.BySpace       -> {
+//                        it.roomGroupingMethod.spaceSummary?.let { spaceSummary ->
+//                            sharedActionViewModel.post(HomeActivitySharedAction.ShowSpaceSettings(spaceSummary.roomId))
+//                        }
+//                    }
+//                }
+//            }
+//        }
     }
 
     private fun setupBottomNavigationView() {
