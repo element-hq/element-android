@@ -36,7 +36,7 @@ fun SignMode.toAuthenticateAction(login: String, password: String, initialDevice
 
 /**
  * A flow to monitor content changes from both username/id and password fields,
- * clearing errors and enabling/disabling the submission button on non empty content changes
+ * clearing errors and enabling/disabling the submission button on non empty content changes.
  */
 fun observeContentChangesAndResetErrors(username: TextInputLayout, password: TextInputLayout, submit: Button): Flow<*> {
     return combine(

@@ -19,8 +19,8 @@ package im.vector.app.features.onboarding
 import im.vector.app.R
 import im.vector.app.core.extensions.andThen
 import im.vector.app.core.resources.StringProvider
-import org.matrix.android.sdk.api.MatrixPatterns.getServerName
 import im.vector.app.features.onboarding.OnboardingAction.AuthenticateAction.LoginDirect
+import org.matrix.android.sdk.api.MatrixPatterns.getServerName
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
