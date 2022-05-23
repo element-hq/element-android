@@ -75,7 +75,8 @@ class LiveLocationShareMessageItemFactory @Inject constructor(
         val height = dimensionConverter.dpToPx(MessageItemFactory.MESSAGE_LOCATION_ITEM_HEIGHT_IN_DP)
 
         return MessageLiveLocationInactiveItem_()
-                .attributes(attributes)
+                // disable the click on this state item
+                .attributes(attributes.copy(itemClickListener = null))
                 .mapWidth(width)
                 .mapHeight(height)
                 .highlighted(highlight)
@@ -90,7 +91,8 @@ class LiveLocationShareMessageItemFactory @Inject constructor(
         val height = dimensionConverter.dpToPx(MessageItemFactory.MESSAGE_LOCATION_ITEM_HEIGHT_IN_DP)
 
         return MessageLiveLocationStartItem_()
-                .attributes(attributes)
+                // disable the click on this state item
+                .attributes(attributes.copy(itemClickListener = null))
                 .mapWidth(width)
                 .mapHeight(height)
                 .highlighted(highlight)

@@ -343,6 +343,7 @@
         <activity android:name=".features.spaces.leave.SpaceLeaveAdvancedActivity" />
         <activity android:name=".features.poll.create.CreatePollActivity" />
         <activity android:name=".features.location.LocationSharingActivity" />
+        <activity android:name=".features.location.live.map.LocationLiveMapViewActivity" />
 
         <!-- Services -->
 
