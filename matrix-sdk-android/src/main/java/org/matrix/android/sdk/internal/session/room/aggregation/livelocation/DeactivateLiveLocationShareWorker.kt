@@ -86,4 +86,10 @@ internal class DeactivateLiveLocationShareWorker(context: Context, params: Worke
     override fun buildErrorParams(params: Params, message: String): Params {
         return params.copy(lastFailureMessage = params.lastFailureMessage ?: message)
     }
+
+    companion object {
+        private const val WORK_NAME_PREFIX = "DeactivateLiveLocationWork-"
+
+        fun getWorkName(eventId: String, roomId: String) = "${WORK_NAME_PREFIX}$eventId-$roomId"
+    }
 }
