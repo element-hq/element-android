@@ -45,6 +45,7 @@ import im.vector.app.core.ui.views.CurrentCallsView
 import im.vector.app.core.ui.views.CurrentCallsViewPresenter
 import im.vector.app.core.ui.views.KeysBackupBanner
 import im.vector.app.databinding.FragmentHomeDetailBinding
+import im.vector.app.features.analytics.experiment.ExperimentInteraction
 import im.vector.app.features.call.SharedKnownCallsViewModel
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.dialpad.DialPadFragment
@@ -279,6 +280,12 @@ class HomeDetailFragment @Inject constructor(
                     .setInterpolator(DecelerateInterpolator())
                     .start()
         } else {
+            val extraProperties = if (getCurrentSpace() != null) {
+                mapOf("isSubspace" to true)
+            } else {
+                mapOf("isSubspace" to false)
+            }
+            analyticsTracker.capture(ExperimentInteraction(ExperimentInteraction.Name.SpaceSwitchHeader, extraProperties))
             showModal()
         }
     }
