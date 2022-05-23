@@ -13,7 +13,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "io.realm:realm-gradle-plugin:10.9.0"
+        classpath "io.realm:realm-gradle-plugin:10.11.0"
     }
 }
 
