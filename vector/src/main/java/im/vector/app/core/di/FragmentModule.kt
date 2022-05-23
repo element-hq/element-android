@@ -993,9 +993,4 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(LocationPreviewFragment::class)
     fun bindLocationPreviewFragment(fragment: LocationPreviewFragment): Fragment
-
-    /*@Binds
-    @IntoMap
-    @FragmentKey(LocationLiveMapViewFragment::class)
-    fun bindLocationLiveMapViewFragment(fragment: LocationLiveMapViewFragment): Fragment*/
 }
