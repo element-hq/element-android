@@ -21,4 +21,5 @@ import javax.inject.Inject
 
 data class CoroutineDispatchers @Inject constructor(
         val io: CoroutineDispatcher,
-        val computation: CoroutineDispatcher)
+        val computation: CoroutineDispatcher
+)

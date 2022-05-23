@@ -30,10 +30,14 @@ internal interface WidgetsAPI {
      * @param version the widget API version
      */
     @POST("register")
-    suspend fun register(@Body body: OpenIdToken,
-                         @Query("v") version: String?): RegisterWidgetResponse
+    suspend fun register(
+            @Body body: OpenIdToken,
+            @Query("v") version: String?
+    ): RegisterWidgetResponse
 
     @GET("account")
-    suspend fun validateToken(@Query("scalar_token") scalarToken: String?,
-                              @Query("v") version: String?)
+    suspend fun validateToken(
+            @Query("scalar_token") scalarToken: String?,
+            @Query("v") version: String?
+    )
 }

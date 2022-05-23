@@ -30,7 +30,8 @@ internal abstract class SetAvatarUrlTask : Task<SetAvatarUrlTask.Params, Unit> {
 
 internal class DefaultSetAvatarUrlTask @Inject constructor(
         private val profileAPI: ProfileAPI,
-        private val globalErrorReceiver: GlobalErrorReceiver) : SetAvatarUrlTask() {
+        private val globalErrorReceiver: GlobalErrorReceiver
+) : SetAvatarUrlTask() {
 
     override suspend fun execute(params: Params) {
         val body = SetAvatarUrlBody(

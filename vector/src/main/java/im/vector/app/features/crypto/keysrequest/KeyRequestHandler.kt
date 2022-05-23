@@ -143,12 +143,14 @@ class KeyRequestHandler @Inject constructor(
         })
     }
 
-    private fun postAlert(context: Context,
-                          userId: String,
-                          deviceId: String,
-                          wasNewDevice: Boolean,
-                          deviceInfo: CryptoDeviceInfo?,
-                          moreInfo: DeviceInfo? = null) {
+    private fun postAlert(
+            context: Context,
+            userId: String,
+            deviceId: String,
+            wasNewDevice: Boolean,
+            deviceInfo: CryptoDeviceInfo?,
+            moreInfo: DeviceInfo? = null
+    ) {
         val deviceName = if (deviceInfo!!.displayName().isNullOrEmpty()) deviceInfo.deviceId else deviceInfo.displayName()
         val dialogText: String?
 

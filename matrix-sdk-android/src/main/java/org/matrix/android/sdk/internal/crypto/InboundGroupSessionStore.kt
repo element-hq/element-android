@@ -44,7 +44,8 @@ private val loggerTag = LoggerTag("InboundGroupSessionStore", LoggerTag.CRYPTO)
 internal class InboundGroupSessionStore @Inject constructor(
         private val store: IMXCryptoStore,
         private val cryptoCoroutineScope: CoroutineScope,
-        private val coroutineDispatchers: MatrixCoroutineDispatchers) {
+        private val coroutineDispatchers: MatrixCoroutineDispatchers
+) {
 
     private data class CacheKey(
             val sessionId: String,

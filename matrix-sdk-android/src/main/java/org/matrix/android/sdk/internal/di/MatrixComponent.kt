@@ -100,7 +100,9 @@ internal interface MatrixComponent {
 
     @Component.Factory
     interface Factory {
-        fun create(@BindsInstance context: Context,
-                   @BindsInstance matrixConfiguration: MatrixConfiguration): MatrixComponent
+        fun create(
+                @BindsInstance context: Context,
+                @BindsInstance matrixConfiguration: MatrixConfiguration
+        ): MatrixComponent
     }
 }

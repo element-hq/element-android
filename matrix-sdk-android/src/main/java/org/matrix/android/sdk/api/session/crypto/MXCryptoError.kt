@@ -25,12 +25,14 @@ import org.matrix.olm.OlmException
  */
 sealed class MXCryptoError : Throwable() {
 
-    data class Base(val errorType: ErrorType,
-                    val technicalMessage: String,
-                    /**
-                     * Describe the error with more details.
-                     */
-                    val detailedErrorDescription: String? = null) : MXCryptoError()
+    data class Base(
+            val errorType: ErrorType,
+            val technicalMessage: String,
+            /**
+             * Describe the error with more details.
+             */
+            val detailedErrorDescription: String? = null
+    ) : MXCryptoError()
 
     data class OlmError(val olmException: OlmException) : MXCryptoError()
 

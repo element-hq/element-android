@@ -25,9 +25,10 @@ import org.matrix.android.sdk.api.session.events.model.EventType
  */
 sealed class EditablePermission(@StringRes val labelResId: Int, @StringRes val spaceLabelResId: Int = labelResId) {
     // Updates `content.events.[eventType]`
-    open class EventTypeEditablePermission(val eventType: String,
-                                           @StringRes labelResId: Int,
-                                           @StringRes spaceLabelResId: Int = labelResId
+    open class EventTypeEditablePermission(
+            val eventType: String,
+            @StringRes labelResId: Int,
+            @StringRes spaceLabelResId: Int = labelResId
     ) : EditablePermission(labelResId, spaceLabelResId)
 
     class ModifyWidgets : EventTypeEditablePermission(

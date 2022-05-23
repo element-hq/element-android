@@ -280,10 +280,12 @@ class MessageActionsViewModel @AssistedInject constructor(
         }
     }
 
-    private fun ArrayList<EventSharedAction>.addActionsForFailedState(timelineEvent: TimelineEvent,
-                                                                      actionPermissions: ActionPermissions,
-                                                                      messageContent: MessageContent?,
-                                                                      msgType: String?) {
+    private fun ArrayList<EventSharedAction>.addActionsForFailedState(
+            timelineEvent: TimelineEvent,
+            actionPermissions: ActionPermissions,
+            messageContent: MessageContent?,
+            msgType: String?
+    ) {
         val eventId = timelineEvent.eventId
         if (canRetry(timelineEvent, actionPermissions)) {
             add(EventSharedAction.Resend(eventId))
@@ -320,10 +322,12 @@ class MessageActionsViewModel @AssistedInject constructor(
         // TODO sent by me or sufficient power level
     }
 
-    private fun ArrayList<EventSharedAction>.addActionsForSyncedState(timelineEvent: TimelineEvent,
-                                                                      actionPermissions: ActionPermissions,
-                                                                      messageContent: MessageContent?,
-                                                                      msgType: String?) {
+    private fun ArrayList<EventSharedAction>.addActionsForSyncedState(
+            timelineEvent: TimelineEvent,
+            actionPermissions: ActionPermissions,
+            messageContent: MessageContent?,
+            msgType: String?
+    ) {
         val eventId = timelineEvent.eventId
         if (!timelineEvent.root.isRedacted()) {
             if (canReply(timelineEvent, messageContent, actionPermissions)) {
@@ -452,9 +456,11 @@ class MessageActionsViewModel @AssistedInject constructor(
      * Determine whether or not the Reply In Thread bottom sheet action will be visible
      * to the user.
      */
-    private fun canReplyInThread(event: TimelineEvent,
-                                 messageContent: MessageContent?,
-                                 actionPermissions: ActionPermissions): Boolean {
+    private fun canReplyInThread(
+            event: TimelineEvent,
+            messageContent: MessageContent?,
+            actionPermissions: ActionPermissions
+    ): Boolean {
         // We let reply in thread visible even if threads are not enabled, with an enhanced flow to attract users
 //        if (!vectorPreferences.areThreadMessagesEnabled()) return false
         // Disable beta prompt if the homeserver do not support threads
@@ -483,9 +489,11 @@ class MessageActionsViewModel @AssistedInject constructor(
     /**
      * Determine whether or not the view in room action will be available for the current event.
      */
-    private fun canViewInRoom(event: TimelineEvent,
-                              messageContent: MessageContent?,
-                              actionPermissions: ActionPermissions): Boolean {
+    private fun canViewInRoom(
+            event: TimelineEvent,
+            messageContent: MessageContent?,
+            actionPermissions: ActionPermissions
+    ): Boolean {
         if (!vectorPreferences.areThreadMessagesEnabled()) return false
         if (!initialState.isFromThreadTimeline) return false
         if (event.root.getClearType() != EventType.MESSAGE &&

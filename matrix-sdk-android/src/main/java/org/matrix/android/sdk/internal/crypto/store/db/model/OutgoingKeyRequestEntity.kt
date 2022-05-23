@@ -117,7 +117,7 @@ internal open class OutgoingKeyRequestEntity(
 
     private fun eventToResult(event: Event): RequestResult? {
         return when (event.getClearType()) {
-            EventType.ROOM_KEY_WITHHELD  -> {
+            EventType.ROOM_KEY_WITHHELD -> {
                 event.content.toModel<RoomKeyWithHeldContent>()?.code?.let {
                     RequestResult.Failure(it)
                 }
@@ -125,7 +125,7 @@ internal open class OutgoingKeyRequestEntity(
             EventType.FORWARDED_ROOM_KEY -> {
                 RequestResult.Success((event.content?.get("chain_index") as? Number)?.toInt() ?: 0)
             }
-            else                         -> null
+            else -> null
         }
     }
 }

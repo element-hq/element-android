@@ -369,9 +369,11 @@ internal class IncomingKeyRequestManager @Inject constructor(
         shareMegolmKey(validReq, requestingDevice, null)
     }
 
-    private suspend fun shareMegolmKey(validRequest: ValidMegolmRequestBody,
-                                       requestingDevice: CryptoDeviceInfo,
-                                       chainIndex: Long?): Boolean {
+    private suspend fun shareMegolmKey(
+            validRequest: ValidMegolmRequestBody,
+            requestingDevice: CryptoDeviceInfo,
+            chainIndex: Long?
+    ): Boolean {
         Timber.tag(loggerTag.value)
                 .d("try to re-share Megolm Key at index $chainIndex for ${validRequest.shortDbgString()}")
 

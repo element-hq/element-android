@@ -41,10 +41,12 @@ class SummaryGroupMessageCreator @Inject constructor(
         private val notificationUtils: NotificationUtils
 ) {
 
-    fun createSummaryNotification(roomNotifications: List<RoomNotification.Message.Meta>,
-                                  invitationNotifications: List<OneShotNotification.Append.Meta>,
-                                  simpleNotifications: List<OneShotNotification.Append.Meta>,
-                                  useCompleteNotificationFormat: Boolean): Notification {
+    fun createSummaryNotification(
+            roomNotifications: List<RoomNotification.Message.Meta>,
+            invitationNotifications: List<OneShotNotification.Append.Meta>,
+            simpleNotifications: List<OneShotNotification.Append.Meta>,
+            useCompleteNotificationFormat: Boolean
+    ): Notification {
         val summaryInboxStyle = NotificationCompat.InboxStyle().also { style ->
             roomNotifications.forEach { style.addLine(it.summaryLine) }
             invitationNotifications.forEach { style.addLine(it.summaryLine) }
@@ -86,12 +88,14 @@ class SummaryGroupMessageCreator @Inject constructor(
         }
     }
 
-    private fun processSimpleGroupSummary(summaryIsNoisy: Boolean,
-                                          messageEventsCount: Int,
-                                          simpleEventsCount: Int,
-                                          invitationEventsCount: Int,
-                                          roomCount: Int,
-                                          lastMessageTimestamp: Long): Notification {
+    private fun processSimpleGroupSummary(
+            summaryIsNoisy: Boolean,
+            messageEventsCount: Int,
+            simpleEventsCount: Int,
+            invitationEventsCount: Int,
+            roomCount: Int,
+            lastMessageTimestamp: Long
+    ): Notification {
         // Add the simple events as message (?)
         val messageNotificationCount = messageEventsCount + simpleEventsCount
 

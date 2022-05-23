@@ -193,8 +193,10 @@ class DefaultPollAggregationProcessor @Inject constructor() : PollAggregationPro
                 ?: EventAnnotationsSummaryEntity.create(realm, roomId, eventId)
     }
 
-    private fun getAggregatedPollSummaryEntity(realm: Realm,
-                                               eventAnnotationsSummaryEntity: EventAnnotationsSummaryEntity): PollResponseAggregatedSummaryEntity {
+    private fun getAggregatedPollSummaryEntity(
+            realm: Realm,
+            eventAnnotationsSummaryEntity: EventAnnotationsSummaryEntity
+    ): PollResponseAggregatedSummaryEntity {
         return eventAnnotationsSummaryEntity.pollResponseSummary
                 ?: realm.createObject(PollResponseAggregatedSummaryEntity::class.java).also {
                     eventAnnotationsSummaryEntity.pollResponseSummary = it

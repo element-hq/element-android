@@ -669,11 +669,13 @@ class NoticeEventFormatter @Inject constructor(
         return displayText.toString()
     }
 
-    private fun buildMembershipNotice(event: Event,
-                                      senderName: String?,
-                                      eventContent: RoomMemberContent?,
-                                      prevEventContent: RoomMemberContent?,
-                                      isDm: Boolean): String? {
+    private fun buildMembershipNotice(
+            event: Event,
+            senderName: String?,
+            eventContent: RoomMemberContent?,
+            prevEventContent: RoomMemberContent?,
+            isDm: Boolean
+    ): String? {
         val senderDisplayName = senderName ?: event.senderId ?: ""
         val targetDisplayName = eventContent?.displayName ?: prevEventContent?.displayName ?: event.stateKey ?: ""
         return when (eventContent?.membership) {

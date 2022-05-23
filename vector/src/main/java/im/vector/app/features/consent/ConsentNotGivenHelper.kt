@@ -24,8 +24,10 @@ import im.vector.app.core.platform.Restorable
 import im.vector.app.features.webview.VectorWebViewActivity
 import im.vector.app.features.webview.WebViewMode
 
-class ConsentNotGivenHelper(private val activity: Activity,
-                            private val dialogLocker: DialogLocker) :
+class ConsentNotGivenHelper(
+        private val activity: Activity,
+        private val dialogLocker: DialogLocker
+) :
         Restorable by dialogLocker {
 
     /* ==========================================================================================

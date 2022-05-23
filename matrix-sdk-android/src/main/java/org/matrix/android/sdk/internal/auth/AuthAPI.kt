@@ -98,15 +98,19 @@ internal interface AuthAPI {
      * https://github.com/matrix-org/matrix-doc/pull/2290
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "register/{threePid}/requestToken")
-    suspend fun add3Pid(@Path("threePid") threePid: String,
-                        @Body params: AddThreePidRegistrationParams): AddThreePidRegistrationResponse
+    suspend fun add3Pid(
+            @Path("threePid") threePid: String,
+            @Body params: AddThreePidRegistrationParams
+    ): AddThreePidRegistrationResponse
 
     /**
      * Validate 3pid.
      */
     @POST
-    suspend fun validate3Pid(@Url url: String,
-                             @Body params: ValidationCodeBody): SuccessResult
+    suspend fun validate3Pid(
+            @Url url: String,
+            @Body params: ValidationCodeBody
+    ): SuccessResult
 
     /**
      * Get the supported login flow.

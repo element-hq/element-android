@@ -36,9 +36,11 @@ import timber.log.Timber
 import java.net.URLEncoder
 import javax.inject.Inject
 
-class VideoContentRenderer @Inject constructor(private val localFilesHelper: LocalFilesHelper,
-                                               private val activeSessionHolder: ActiveSessionHolder,
-                                               private val errorFormatter: ErrorFormatter) {
+class VideoContentRenderer @Inject constructor(
+        private val localFilesHelper: LocalFilesHelper,
+        private val activeSessionHolder: ActiveSessionHolder,
+        private val errorFormatter: ErrorFormatter
+) {
 
     private val sessionScope: CoroutineScope
         get() = activeSessionHolder.getActiveSession().coroutineScope
@@ -55,11 +57,13 @@ class VideoContentRenderer @Inject constructor(private val localFilesHelper: Loc
             override val allowNonMxcUrls: Boolean = false
     ) : AttachmentData
 
-    fun render(data: Data,
-               thumbnailView: ImageView,
-               loadingView: ProgressBar,
-               videoView: VideoView,
-               errorView: TextView) {
+    fun render(
+            data: Data,
+            thumbnailView: ImageView,
+            loadingView: ProgressBar,
+            videoView: VideoView,
+            errorView: TextView
+    ) {
         val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
 
         if (data.elementToDecrypt != null) {

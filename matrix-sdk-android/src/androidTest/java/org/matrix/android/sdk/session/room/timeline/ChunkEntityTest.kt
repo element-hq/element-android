@@ -154,9 +154,11 @@ internal class ChunkEntityTest : InstrumentedTest {
         }
     }
 
-    private fun ChunkEntity.addAll(roomId: String,
-                                   events: List<Event>,
-                                   direction: PaginationDirection) {
+    private fun ChunkEntity.addAll(
+            roomId: String,
+            events: List<Event>,
+            direction: PaginationDirection
+    ) {
         events.forEach { event ->
             val fakeEvent = event.toEntity(roomId, SendState.SYNCED, clock.epochMillis()).let {
                 realm.copyToRealm(it)

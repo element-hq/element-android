@@ -112,7 +112,7 @@ class CreateSubSpaceController @Inject constructor(
         }
 
         when (data.roomJoinRules) {
-            RoomJoinRules.INVITE     -> {
+            RoomJoinRules.INVITE -> {
                 buildProfileAction(
                         id = "joinRule",
                         title = stringProvider.getString(R.string.room_settings_room_access_private_title),
@@ -122,7 +122,7 @@ class CreateSubSpaceController @Inject constructor(
                         action = { host.listener?.selectVisibility() }
                 )
             }
-            RoomJoinRules.PUBLIC     -> {
+            RoomJoinRules.PUBLIC -> {
                 buildProfileAction(
                         id = "joinRule",
                         title = stringProvider.getString(R.string.room_settings_room_access_public_title),
@@ -142,7 +142,7 @@ class CreateSubSpaceController @Inject constructor(
                         action = { host.listener?.selectVisibility() }
                 )
             }
-            else                     -> {
+            else -> {
                 // not yet supported
             }
         }

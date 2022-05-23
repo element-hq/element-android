@@ -28,15 +28,17 @@ class FakeNotificationFactory {
 
     val instance = mockk<NotificationFactory>()
 
-    fun givenNotificationsFor(groupedEvents: GroupedNotificationEvents,
-                              myUserId: String,
-                              myUserDisplayName: String,
-                              myUserAvatarUrl: String?,
-                              useCompleteNotificationFormat: Boolean,
-                              roomNotifications: List<RoomNotification>,
-                              invitationNotifications: List<OneShotNotification>,
-                              simpleNotifications: List<OneShotNotification>,
-                              summaryNotification: SummaryNotification) {
+    fun givenNotificationsFor(
+            groupedEvents: GroupedNotificationEvents,
+            myUserId: String,
+            myUserDisplayName: String,
+            myUserAvatarUrl: String?,
+            useCompleteNotificationFormat: Boolean,
+            roomNotifications: List<RoomNotification>,
+            invitationNotifications: List<OneShotNotification>,
+            simpleNotifications: List<OneShotNotification>,
+            summaryNotification: SummaryNotification
+    ) {
         with(instance) {
             every { groupedEvents.roomEvents.toNotifications(myUserDisplayName, myUserAvatarUrl) } returns roomNotifications
             every { groupedEvents.invitationEvents.toNotifications(myUserId) } returns invitationNotifications

@@ -79,11 +79,13 @@ internal fun ChunkEntity.addStateEvent(roomId: String, stateEvent: EventEntity, 
     }
 }
 
-internal fun ChunkEntity.addTimelineEvent(roomId: String,
-                                          eventEntity: EventEntity,
-                                          direction: PaginationDirection,
-                                          ownedByThreadChunk: Boolean = false,
-                                          roomMemberContentsByUser: Map<String, RoomMemberContent?>? = null): TimelineEventEntity? {
+internal fun ChunkEntity.addTimelineEvent(
+        roomId: String,
+        eventEntity: EventEntity,
+        direction: PaginationDirection,
+        ownedByThreadChunk: Boolean = false,
+        roomMemberContentsByUser: Map<String, RoomMemberContent?>? = null
+): TimelineEventEntity? {
     val eventId = eventEntity.eventId
     if (timelineEvents.find(eventId) != null) {
         return null

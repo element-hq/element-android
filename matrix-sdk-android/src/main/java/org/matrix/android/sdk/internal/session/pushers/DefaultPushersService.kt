@@ -45,10 +45,12 @@ internal class DefaultPushersService @Inject constructor(
         private val taskExecutor: TaskExecutor
 ) : PushersService {
 
-    override suspend fun testPush(url: String,
-                                  appId: String,
-                                  pushkey: String,
-                                  eventId: String) {
+    override suspend fun testPush(
+            url: String,
+            appId: String,
+            pushkey: String,
+            eventId: String
+    ) {
         pushGatewayNotifyTask.execute(PushGatewayNotifyTask.Params(url, appId, pushkey, eventId))
     }
 
@@ -78,12 +80,14 @@ internal class DefaultPushersService @Inject constructor(
             append = append
     )
 
-    override suspend fun addEmailPusher(email: String,
-                                        lang: String,
-                                        emailBranding: String,
-                                        appDisplayName: String,
-                                        deviceDisplayName: String,
-                                        append: Boolean) {
+    override suspend fun addEmailPusher(
+            email: String,
+            lang: String,
+            emailBranding: String,
+            appDisplayName: String,
+            deviceDisplayName: String,
+            append: Boolean
+    ) {
         addPusherTask.execute(
                 AddPusherTask.Params(
                         JsonPusher(

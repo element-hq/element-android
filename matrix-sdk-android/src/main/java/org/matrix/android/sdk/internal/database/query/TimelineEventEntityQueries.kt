@@ -33,39 +33,49 @@ internal fun TimelineEventEntity.Companion.where(realm: Realm): RealmQuery<Timel
     return realm.where()
 }
 
-internal fun TimelineEventEntity.Companion.where(realm: Realm,
-                                                 roomId: String,
-                                                 eventId: String): RealmQuery<TimelineEventEntity> {
+internal fun TimelineEventEntity.Companion.where(
+        realm: Realm,
+        roomId: String,
+        eventId: String
+): RealmQuery<TimelineEventEntity> {
     return where(realm)
             .equalTo(TimelineEventEntityFields.ROOM_ID, roomId)
             .equalTo(TimelineEventEntityFields.EVENT_ID, eventId)
 }
 
-internal fun TimelineEventEntity.Companion.where(realm: Realm,
-                                                 roomId: String,
-                                                 eventIds: List<String>): RealmQuery<TimelineEventEntity> {
+internal fun TimelineEventEntity.Companion.where(
+        realm: Realm,
+        roomId: String,
+        eventIds: List<String>
+): RealmQuery<TimelineEventEntity> {
     return where(realm)
             .equalTo(TimelineEventEntityFields.ROOM_ID, roomId)
             .`in`(TimelineEventEntityFields.EVENT_ID, eventIds.toTypedArray())
 }
 
-internal fun TimelineEventEntity.Companion.whereRoomId(realm: Realm,
-                                                       roomId: String): RealmQuery<TimelineEventEntity> {
+internal fun TimelineEventEntity.Companion.whereRoomId(
+        realm: Realm,
+        roomId: String
+): RealmQuery<TimelineEventEntity> {
     return where(realm)
             .equalTo(TimelineEventEntityFields.ROOM_ID, roomId)
 }
 
-internal fun TimelineEventEntity.Companion.findWithSenderMembershipEvent(realm: Realm,
-                                                                         senderMembershipEventId: String): List<TimelineEventEntity> {
+internal fun TimelineEventEntity.Companion.findWithSenderMembershipEvent(
+        realm: Realm,
+        senderMembershipEventId: String
+): List<TimelineEventEntity> {
     return where(realm)
             .equalTo(TimelineEventEntityFields.SENDER_MEMBERSHIP_EVENT_ID, senderMembershipEventId)
             .findAll()
 }
 
-internal fun TimelineEventEntity.Companion.latestEvent(realm: Realm,
-                                                       roomId: String,
-                                                       includesSending: Boolean,
-                                                       filters: TimelineEventFilters = TimelineEventFilters()): TimelineEventEntity? {
+internal fun TimelineEventEntity.Companion.latestEvent(
+        realm: Realm,
+        roomId: String,
+        includesSending: Boolean,
+        filters: TimelineEventFilters = TimelineEventFilters()
+): TimelineEventEntity? {
     val roomEntity = RoomEntity.where(realm, roomId).findFirst() ?: return null
     val sendingTimelineEvents = roomEntity.sendingTimelineEvents.where().filterEvents(filters)
 
@@ -129,9 +139,11 @@ internal fun RealmList<TimelineEventEntity>.find(eventId: String): TimelineEvent
             .findFirst()
 }
 
-internal fun TimelineEventEntity.Companion.findAllInRoomWithSendStates(realm: Realm,
-                                                                       roomId: String,
-                                                                       sendStates: List<SendState>): RealmResults<TimelineEventEntity> {
+internal fun TimelineEventEntity.Companion.findAllInRoomWithSendStates(
+        realm: Realm,
+        roomId: String,
+        sendStates: List<SendState>
+): RealmResults<TimelineEventEntity> {
     return whereRoomId(realm, roomId)
             .filterSendStates(sendStates)
             .findAll()
@@ -145,8 +157,10 @@ internal fun RealmQuery<TimelineEventEntity>.filterSendStates(sendStates: List<S
 /**
  * Find all TimelineEventEntity items where sender is in senderIds collection, excluding state events.
  */
-internal fun TimelineEventEntity.Companion.findAllFrom(realm: Realm,
-                                                       senderIds: Collection<String>): RealmResults<TimelineEventEntity> {
+internal fun TimelineEventEntity.Companion.findAllFrom(
+        realm: Realm,
+        senderIds: Collection<String>
+): RealmResults<TimelineEventEntity> {
     return where(realm)
             .`in`(TimelineEventEntityFields.ROOT.SENDER, senderIds.toTypedArray())
             .isNull(TimelineEventEntityFields.ROOT.STATE_KEY)

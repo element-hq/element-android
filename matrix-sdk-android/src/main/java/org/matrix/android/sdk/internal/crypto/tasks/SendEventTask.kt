@@ -39,7 +39,8 @@ internal class DefaultSendEventTask @Inject constructor(
         private val encryptEventTask: EncryptEventTask,
         private val loadRoomMembersTask: LoadRoomMembersTask,
         private val roomAPI: RoomAPI,
-        private val globalErrorReceiver: GlobalErrorReceiver) : SendEventTask {
+        private val globalErrorReceiver: GlobalErrorReceiver
+) : SendEventTask {
 
     override suspend fun execute(params: SendEventTask.Params): String {
         try {

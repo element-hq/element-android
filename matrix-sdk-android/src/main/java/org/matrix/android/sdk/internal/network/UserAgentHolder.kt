@@ -24,8 +24,10 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @MatrixScope
-internal class UserAgentHolder @Inject constructor(private val context: Context,
-                                                   matrixConfiguration: MatrixConfiguration) {
+internal class UserAgentHolder @Inject constructor(
+        private val context: Context,
+        matrixConfiguration: MatrixConfiguration
+) {
 
     var userAgent: String = ""
         private set

@@ -27,8 +27,10 @@ interface AccountService {
      * @param password Current password.
      * @param newPassword New password
      */
-    suspend fun changePassword(password: String,
-                               newPassword: String)
+    suspend fun changePassword(
+            password: String,
+            newPassword: String
+    )
 
     /**
      * Deactivate the account.
@@ -46,6 +48,8 @@ interface AccountService {
      * an incomplete view of conversations
      * @param userInteractiveAuthInterceptor see [UserInteractiveAuthInterceptor]
      */
-    suspend fun deactivateAccount(eraseAllData: Boolean,
-                                  userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor)
+    suspend fun deactivateAccount(
+            eraseAllData: Boolean,
+            userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor
+    )
 }

@@ -109,8 +109,10 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
         return handleRelationsResponse(response, params)
     }
 
-    private suspend fun handleRelationsResponse(response: RelationsResponse,
-                                                params: FetchThreadTimelineTask.Params): Result {
+    private suspend fun handleRelationsResponse(
+            response: RelationsResponse,
+            params: FetchThreadTimelineTask.Params
+    ): Result {
         val threadList = response.chunks
         val threadRootEvent = response.originalEvent
         val hasReachEnd = response.nextBatch == null
@@ -232,9 +234,11 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
         }
     }
 
-    private fun handleReaction(realm: Realm,
-                               event: Event,
-                               roomId: String) {
+    private fun handleReaction(
+            realm: Realm,
+            event: Event,
+            roomId: String
+    ) {
         val unsignedData = event.unsignedData ?: return
         val relatedEventId = event.eventId ?: return
 

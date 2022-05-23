@@ -106,11 +106,13 @@ internal class RoomSyncHandler @Inject constructor(
         data class LEFT(val data: Map<String, RoomSync>) : HandlingStrategy()
     }
 
-    fun handle(realm: Realm,
-               roomsSyncResponse: RoomsSyncResponse,
-               isInitialSync: Boolean,
-               aggregator: SyncResponsePostTreatmentAggregator,
-               reporter: ProgressReporter? = null) {
+    fun handle(
+            realm: Realm,
+            roomsSyncResponse: RoomsSyncResponse,
+            isInitialSync: Boolean,
+            aggregator: SyncResponsePostTreatmentAggregator,
+            reporter: ProgressReporter? = null
+    ) {
         handleRoomSync(realm, HandlingStrategy.JOINED(roomsSyncResponse.join), isInitialSync, aggregator, reporter)
         handleRoomSync(realm, HandlingStrategy.INVITED(roomsSyncResponse.invite), isInitialSync, aggregator, reporter)
         handleRoomSync(realm, HandlingStrategy.LEFT(roomsSyncResponse.leave), isInitialSync, aggregator, reporter)
@@ -124,11 +126,13 @@ internal class RoomSyncHandler @Inject constructor(
     }
     // PRIVATE METHODS *****************************************************************************
 
-    private fun handleRoomSync(realm: Realm,
-                               handlingStrategy: HandlingStrategy,
-                               isInitialSync: Boolean,
-                               aggregator: SyncResponsePostTreatmentAggregator,
-                               reporter: ProgressReporter?) {
+    private fun handleRoomSync(
+            realm: Realm,
+            handlingStrategy: HandlingStrategy,
+            isInitialSync: Boolean,
+            aggregator: SyncResponsePostTreatmentAggregator,
+            reporter: ProgressReporter?
+    ) {
         val insertType = if (isInitialSync) {
             EventInsertType.INITIAL_SYNC
         } else {
@@ -161,11 +165,13 @@ internal class RoomSyncHandler @Inject constructor(
         realm.insertOrUpdate(rooms)
     }
 
-    private fun insertJoinRoomsFromInitSync(realm: Realm,
-                                            handlingStrategy: HandlingStrategy.JOINED,
-                                            syncLocalTimeStampMillis: Long,
-                                            aggregator: SyncResponsePostTreatmentAggregator,
-                                            reporter: ProgressReporter?) {
+    private fun insertJoinRoomsFromInitSync(
+            realm: Realm,
+            handlingStrategy: HandlingStrategy.JOINED,
+            syncLocalTimeStampMillis: Long,
+            aggregator: SyncResponsePostTreatmentAggregator,
+            reporter: ProgressReporter?
+    ) {
         val bestChunkSize = computeBestChunkSize(
                 listSize = handlingStrategy.data.keys.size,
                 limit = (initialSyncStrategy as? InitialSyncStrategy.Optimized)?.maxRoomsToInsert ?: Int.MAX_VALUE
@@ -203,12 +209,14 @@ internal class RoomSyncHandler @Inject constructor(
         }
     }
 
-    private fun handleJoinedRoom(realm: Realm,
-                                 roomId: String,
-                                 roomSync: RoomSync,
-                                 insertType: EventInsertType,
-                                 syncLocalTimestampMillis: Long,
-                                 aggregator: SyncResponsePostTreatmentAggregator): RoomEntity {
+    private fun handleJoinedRoom(
+            realm: Realm,
+            roomId: String,
+            roomSync: RoomSync,
+            insertType: EventInsertType,
+            syncLocalTimestampMillis: Long,
+            aggregator: SyncResponsePostTreatmentAggregator
+    ): RoomEntity {
         Timber.v("Handle join sync for room $roomId")
         val isInitialSync = insertType == EventInsertType.INITIAL_SYNC
 
@@ -281,11 +289,13 @@ internal class RoomSyncHandler @Inject constructor(
         return roomEntity
     }
 
-    private fun handleInvitedRoom(realm: Realm,
-                                  roomId: String,
-                                  roomSync: InvitedRoomSync,
-                                  insertType: EventInsertType,
-                                  syncLocalTimestampMillis: Long): RoomEntity {
+    private fun handleInvitedRoom(
+            realm: Realm,
+            roomId: String,
+            roomSync: InvitedRoomSync,
+            insertType: EventInsertType,
+            syncLocalTimestampMillis: Long
+    ): RoomEntity {
         Timber.v("Handle invited sync for room $roomId")
         val isInitialSync = insertType == EventInsertType.INITIAL_SYNC
         val roomEntity = RoomEntity.getOrCreate(realm, roomId)
@@ -312,11 +322,13 @@ internal class RoomSyncHandler @Inject constructor(
         return roomEntity
     }
 
-    private fun handleLeftRoom(realm: Realm,
-                               roomId: String,
-                               roomSync: RoomSync,
-                               insertType: EventInsertType,
-                               syncLocalTimestampMillis: Long): RoomEntity {
+    private fun handleLeftRoom(
+            realm: Realm,
+            roomId: String,
+            roomSync: RoomSync,
+            insertType: EventInsertType,
+            syncLocalTimestampMillis: Long
+    ): RoomEntity {
         val isInitialSync = insertType == EventInsertType.INITIAL_SYNC
         val roomEntity = RoomEntity.getOrCreate(realm, roomId)
         for (event in roomSync.state?.events.orEmpty()) {
@@ -357,15 +369,17 @@ internal class RoomSyncHandler @Inject constructor(
         return roomEntity
     }
 
-    private fun handleTimelineEvents(realm: Realm,
-                                     roomId: String,
-                                     roomEntity: RoomEntity,
-                                     eventList: List<Event>,
-                                     prevToken: String? = null,
-                                     isLimited: Boolean = true,
-                                     insertType: EventInsertType,
-                                     syncLocalTimestampMillis: Long,
-                                     aggregator: SyncResponsePostTreatmentAggregator): ChunkEntity {
+    private fun handleTimelineEvents(
+            realm: Realm,
+            roomId: String,
+            roomEntity: RoomEntity,
+            eventList: List<Event>,
+            prevToken: String? = null,
+            isLimited: Boolean = true,
+            insertType: EventInsertType,
+            syncLocalTimestampMillis: Long,
+            aggregator: SyncResponsePostTreatmentAggregator
+    ): ChunkEntity {
         val lastChunk = ChunkEntity.findLastForwardChunkOfRoom(realm, roomEntity.roomId)
         if (isLimited && lastChunk != null) {
             lastChunk.deleteOnCascade(deleteStateEvents = false, canDeleteRoot = true)
@@ -500,11 +514,13 @@ internal class RoomSyncHandler @Inject constructor(
      * Adds new event to the appropriate thread chunk. If the event is already in
      * the thread timeline and /relations api, we should not added it
      */
-    private fun addToThreadChunkIfNeeded(realm: Realm,
-                                         roomId: String,
-                                         threadId: String,
-                                         timelineEventEntity: TimelineEventEntity?,
-                                         roomEntity: RoomEntity) {
+    private fun addToThreadChunkIfNeeded(
+            realm: Realm,
+            roomId: String,
+            threadId: String,
+            timelineEventEntity: TimelineEventEntity?,
+            roomEntity: RoomEntity
+    ) {
         val eventId = timelineEventEntity?.eventId ?: return
 
         ChunkEntity.findLastForwardChunkOfThread(realm, roomId, threadId)?.let { threadChunk ->
@@ -541,11 +557,13 @@ internal class RoomSyncHandler @Inject constructor(
             val typingUserIds: List<String> = emptyList()
     )
 
-    private fun handleEphemeral(realm: Realm,
-                                roomId: String,
-                                ephemeralEvents: List<Event>,
-                                isInitialSync: Boolean,
-                                aggregator: SyncResponsePostTreatmentAggregator): EphemeralResult {
+    private fun handleEphemeral(
+            realm: Realm,
+            roomId: String,
+            ephemeralEvents: List<Event>,
+            isInitialSync: Boolean,
+            aggregator: SyncResponsePostTreatmentAggregator
+    ): EphemeralResult {
         var result = EphemeralResult()
         for (event in ephemeralEvents) {
             when (event.type) {

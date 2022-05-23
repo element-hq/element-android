@@ -36,7 +36,8 @@ internal class MessageEncrypter @Inject constructor(
         private val userId: String,
         @DeviceId
         private val deviceId: String?,
-        private val olmDevice: MXOlmDevice) {
+        private val olmDevice: MXOlmDevice
+) {
     /**
      * Encrypt an event payload for a list of devices.
      * This method must be called from the getCryptoHandler() thread.

@@ -47,7 +47,8 @@ internal class DefaultFinalizeAddingThreePidTask @Inject constructor(
         private val profileAPI: ProfileAPI,
         @SessionDatabase private val monarchy: Monarchy,
         private val pendingThreePidMapper: PendingThreePidMapper,
-        private val globalErrorReceiver: GlobalErrorReceiver) : FinalizeAddingThreePidTask() {
+        private val globalErrorReceiver: GlobalErrorReceiver
+) : FinalizeAddingThreePidTask() {
 
     override suspend fun execute(params: Params) {
         val canCleanup = if (params.userWantsToCancel) {

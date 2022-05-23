@@ -322,10 +322,12 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun storeUserCrossSigningKeys(userId: String,
-                                           masterKey: CryptoCrossSigningKey?,
-                                           selfSigningKey: CryptoCrossSigningKey?,
-                                           userSigningKey: CryptoCrossSigningKey?) {
+    override fun storeUserCrossSigningKeys(
+            userId: String,
+            masterKey: CryptoCrossSigningKey?,
+            selfSigningKey: CryptoCrossSigningKey?,
+            userSigningKey: CryptoCrossSigningKey?
+    ) {
         doRealmTransaction(realmConfiguration) { realm ->
             UserEntity.getOrCreate(realm, userId)
                     .let { userEntity ->
@@ -1154,9 +1156,11 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun getOrAddOutgoingRoomKeyRequest(requestBody: RoomKeyRequestBody,
-                                                recipients: Map<String, List<String>>,
-                                                fromIndex: Int): OutgoingKeyRequest {
+    override fun getOrAddOutgoingRoomKeyRequest(
+            requestBody: RoomKeyRequestBody,
+            recipients: Map<String, List<String>>,
+            fromIndex: Int
+    ): OutgoingKeyRequest {
         // Insert the request and return the one passed in parameter
         lateinit var request: OutgoingKeyRequest
         doRealmTransaction(realmConfiguration) { realm ->
@@ -1220,12 +1224,14 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun updateOutgoingRoomKeyReply(roomId: String,
-                                            sessionId: String,
-                                            algorithm: String,
-                                            senderKey: String,
-                                            fromDevice: String?,
-                                            event: Event) {
+    override fun updateOutgoingRoomKeyReply(
+            roomId: String,
+            sessionId: String,
+            algorithm: String,
+            senderKey: String,
+            fromDevice: String?,
+            event: Event
+    ) {
         doRealmTransaction(realmConfiguration) { realm ->
             realm.where<OutgoingKeyRequestEntity>()
                     .equalTo(OutgoingKeyRequestEntityFields.ROOM_ID, roomId)
@@ -1266,7 +1272,8 @@ internal class RealmCryptoStore @Inject constructor(
             senderKey: String,
             algorithm: String,
             fromUser: String,
-            fromDevice: String) {
+            fromDevice: String
+    ) {
         monarchy.writeAsync { realm ->
             val now = clock.epochMillis()
             realm.createObject<AuditTrailEntity>().apply {
@@ -1288,13 +1295,15 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun saveWithheldAuditTrail(roomId: String,
-                                        sessionId: String,
-                                        senderKey: String,
-                                        algorithm: String,
-                                        code: WithHeldCode,
-                                        userId: String,
-                                        deviceId: String) {
+    override fun saveWithheldAuditTrail(
+            roomId: String,
+            sessionId: String,
+            senderKey: String,
+            algorithm: String,
+            code: WithHeldCode,
+            userId: String,
+            deviceId: String
+    ) {
         monarchy.writeAsync { realm ->
             val now = clock.epochMillis()
             realm.createObject<AuditTrailEntity>().apply {
@@ -1316,34 +1325,39 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun saveForwardKeyAuditTrail(roomId: String,
-                                          sessionId: String,
-                                          senderKey: String,
-                                          algorithm: String,
-                                          userId: String,
-                                          deviceId: String,
-                                          chainIndex: Long?) {
+    override fun saveForwardKeyAuditTrail(
+            roomId: String,
+            sessionId: String,
+            senderKey: String,
+            algorithm: String,
+            userId: String,
+            deviceId: String,
+            chainIndex: Long?
+    ) {
         saveForwardKeyTrail(roomId, sessionId, senderKey, algorithm, userId, deviceId, chainIndex, false)
     }
 
-    override fun saveIncomingForwardKeyAuditTrail(roomId: String,
-                                                  sessionId: String,
-                                                  senderKey: String,
-                                                  algorithm: String,
-                                                  userId: String,
-                                                  deviceId: String,
-                                                  chainIndex: Long?) {
+    override fun saveIncomingForwardKeyAuditTrail(
+            roomId: String,
+            sessionId: String,
+            senderKey: String,
+            algorithm: String,
+            userId: String,
+            deviceId: String,
+            chainIndex: Long?
+    ) {
         saveForwardKeyTrail(roomId, sessionId, senderKey, algorithm, userId, deviceId, chainIndex, true)
     }
 
-    private fun saveForwardKeyTrail(roomId: String,
-                                    sessionId: String,
-                                    senderKey: String,
-                                    algorithm: String,
-                                    userId: String,
-                                    deviceId: String,
-                                    chainIndex: Long?,
-                                    incoming: Boolean
+    private fun saveForwardKeyTrail(
+            roomId: String,
+            sessionId: String,
+            senderKey: String,
+            algorithm: String,
+            userId: String,
+            deviceId: String,
+            chainIndex: Long?,
+            incoming: Boolean
     ) {
         monarchy.writeAsync { realm ->
             val now = clock.epochMillis()
@@ -1617,12 +1631,14 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun markedSessionAsShared(roomId: String?,
-                                       sessionId: String,
-                                       userId: String,
-                                       deviceId: String,
-                                       deviceIdentityKey: String,
-                                       chainIndex: Int) {
+    override fun markedSessionAsShared(
+            roomId: String?,
+            sessionId: String,
+            userId: String,
+            deviceId: String,
+            deviceIdentityKey: String,
+            chainIndex: Int
+    ) {
         doRealmTransaction(realmConfiguration) { realm ->
             SharedSessionEntity.create(
                     realm = realm,

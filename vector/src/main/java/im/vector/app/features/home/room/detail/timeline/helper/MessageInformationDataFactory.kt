@@ -46,10 +46,12 @@ import javax.inject.Inject
 /**
  * This class is responsible of building extra information data associated to a given event.
  */
-class MessageInformationDataFactory @Inject constructor(private val session: Session,
-                                                        private val dateFormatter: VectorDateFormatter,
-                                                        private val messageLayoutFactory: TimelineMessageLayoutFactory,
-                                                        private val reactionsSummaryFactory: ReactionsSummaryFactory) {
+class MessageInformationDataFactory @Inject constructor(
+        private val session: Session,
+        private val dateFormatter: VectorDateFormatter,
+        private val messageLayoutFactory: TimelineMessageLayoutFactory,
+        private val reactionsSummaryFactory: ReactionsSummaryFactory
+) {
 
     fun create(params: TimelineItemFactoryParams): MessageInformationData {
         val event = params.event
@@ -122,9 +124,11 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
         )
     }
 
-    private fun getSendStateDecoration(event: TimelineEvent,
-                                       lastSentEventWithoutReadReceipts: String?,
-                                       isMedia: Boolean): SendStateDecoration {
+    private fun getSendStateDecoration(
+            event: TimelineEvent,
+            lastSentEventWithoutReadReceipts: String?,
+            isMedia: Boolean
+    ): SendStateDecoration {
         val eventSendState = event.root.sendState
         return if (eventSendState.isSending()) {
             if (isMedia) SendStateDecoration.SENDING_MEDIA else SendStateDecoration.SENDING_NON_MEDIA

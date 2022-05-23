@@ -24,7 +24,8 @@ import im.vector.app.core.platform.VectorSharedAction
 sealed class RoomListQuickActionsSharedAction(
         @StringRes val titleRes: Int,
         @DrawableRes val iconResId: Int?,
-        val destructive: Boolean = false) :
+        val destructive: Boolean = false
+) :
         VectorSharedAction {
 
     data class NotificationsAllNoisy(val roomId: String) : RoomListQuickActionsSharedAction(

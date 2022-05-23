@@ -39,6 +39,8 @@ internal interface ThirdPartyAPI {
      * Ref: https://matrix.org/docs/spec/client_server/r0.6.1#get-matrix-client-r0-thirdparty-user-protocol
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "thirdparty/user/{protocol}")
-    suspend fun getThirdPartyUser(@Path("protocol") protocol: String,
-                                  @QueryMap params: Map<String, String>?): List<ThirdPartyUser>
+    suspend fun getThirdPartyUser(
+            @Path("protocol") protocol: String,
+            @QueryMap params: Map<String, String>?
+    ): List<ThirdPartyUser>
 }

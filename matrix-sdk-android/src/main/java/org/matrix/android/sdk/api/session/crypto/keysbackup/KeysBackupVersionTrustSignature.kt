@@ -40,7 +40,8 @@ sealed class KeysBackupVersionTrustSignature {
             /**
              * Flag to indicate the signature from this device is valid.
              */
-            val valid: Boolean) : KeysBackupVersionTrustSignature()
+            val valid: Boolean
+    ) : KeysBackupVersionTrustSignature()
 
     data class UserSignature(
             val keyId: String?,

@@ -41,8 +41,10 @@ internal interface UpdateQuickReactionTask : Task<UpdateQuickReactionTask.Params
     )
 }
 
-internal class DefaultUpdateQuickReactionTask @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
-                                                                  @UserId private val userId: String) : UpdateQuickReactionTask {
+internal class DefaultUpdateQuickReactionTask @Inject constructor(
+        @SessionDatabase private val monarchy: Monarchy,
+        @UserId private val userId: String
+) : UpdateQuickReactionTask {
 
     override suspend fun execute(params: UpdateQuickReactionTask.Params): UpdateQuickReactionTask.Result {
         var res: Pair<String?, List<String>?>? = null

@@ -25,8 +25,10 @@ import org.matrix.android.sdk.api.session.pushrules.RuleIds
 import org.matrix.android.sdk.api.session.pushrules.getActions
 import javax.inject.Inject
 
-class TestPushRulesSettings @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
-                                                private val stringProvider: StringProvider) :
+class TestPushRulesSettings @Inject constructor(
+        private val activeSessionHolder: ActiveSessionHolder,
+        private val stringProvider: StringProvider
+) :
         TroubleshootTest(R.string.settings_troubleshoot_test_bing_settings_title) {
 
     private val testedRules =

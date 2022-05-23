@@ -31,8 +31,9 @@ class AttachmentProviderFactory @Inject constructor(
         private val session: Session
 ) {
 
-    fun createProvider(attachments: List<TimelineEvent>,
-                       coroutineScope: CoroutineScope
+    fun createProvider(
+            attachments: List<TimelineEvent>,
+            coroutineScope: CoroutineScope
     ): RoomEventsAttachmentProvider {
         return RoomEventsAttachmentProvider(
                 attachments = attachments,
@@ -44,9 +45,10 @@ class AttachmentProviderFactory @Inject constructor(
         )
     }
 
-    fun createProvider(attachments: List<AttachmentData>,
-                       room: Room?,
-                       coroutineScope: CoroutineScope
+    fun createProvider(
+            attachments: List<AttachmentData>,
+            room: Room?,
+            coroutineScope: CoroutineScope
     ): DataAttachmentRoomProvider {
         return DataAttachmentRoomProvider(
                 attachments = attachments,

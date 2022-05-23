@@ -35,7 +35,8 @@ internal class ImageCompressor @Inject constructor(
             imageFile: File,
             desiredWidth: Int,
             desiredHeight: Int,
-            desiredQuality: Int = 80): File {
+            desiredQuality: Int = 80
+    ): File {
         return withContext(coroutineDispatchers.io) {
             val compressedBitmap = BitmapFactory.Options().run {
                 inJustDecodeBounds = true

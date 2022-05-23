@@ -39,10 +39,11 @@ class SyncStateView @JvmOverloads constructor(context: Context, attrs: Attribute
     }
 
     @SuppressLint("SetTextI18n")
-    fun render(newState: SyncState,
-               incrementalSyncStatus: SyncStatusService.Status.IncrementalSyncStatus,
-               pushCounter: Int,
-               showDebugInfo: Boolean
+    fun render(
+            newState: SyncState,
+            incrementalSyncStatus: SyncStatusService.Status.IncrementalSyncStatus,
+            pushCounter: Int,
+            showDebugInfo: Boolean
     ) {
         views.syncStateDebugInfo.isVisible = showDebugInfo
         if (showDebugInfo) {

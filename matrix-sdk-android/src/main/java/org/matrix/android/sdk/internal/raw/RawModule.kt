@@ -51,8 +51,10 @@ internal abstract class RawModule {
         @Provides
         @GlobalDatabase
         @MatrixScope
-        fun providesRealmConfiguration(realmKeysUtils: RealmKeysUtils,
-                                       globalRealmMigration: GlobalRealmMigration): RealmConfiguration {
+        fun providesRealmConfiguration(
+                realmKeysUtils: RealmKeysUtils,
+                globalRealmMigration: GlobalRealmMigration
+        ): RealmConfiguration {
             return RealmConfiguration.Builder()
                     .apply {
                         realmKeysUtils.configureEncryption(this, DB_ALIAS)
@@ -67,8 +69,10 @@ internal abstract class RawModule {
 
         @Provides
         @JvmStatic
-        fun providesRawAPI(@Unauthenticated okHttpClient: Lazy<OkHttpClient>,
-                           retrofitFactory: RetrofitFactory): RawAPI {
+        fun providesRawAPI(
+                @Unauthenticated okHttpClient: Lazy<OkHttpClient>,
+                retrofitFactory: RetrofitFactory
+        ): RawAPI {
             return retrofitFactory.create(okHttpClient, "https://example.org").create(RawAPI::class.java)
         }
     }

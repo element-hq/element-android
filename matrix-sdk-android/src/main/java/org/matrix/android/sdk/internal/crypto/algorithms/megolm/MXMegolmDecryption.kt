@@ -148,7 +148,8 @@ internal class MXMegolmDecryption(
                                         throw MXCryptoError.Base(
                                                 MXCryptoError.ErrorType.KEYS_WITHHELD,
                                                 withHeldInfo.code?.value ?: "",
-                                                withHeldInfo.reason)
+                                                withHeldInfo.reason
+                                        )
                                     }
 
                                     if (requestKeysOnFail) {
@@ -248,9 +249,9 @@ internal class MXMegolmDecryption(
         )
 
         when (addSessionResult) {
-            is MXOlmDevice.AddSessionResult.Imported               -> addSessionResult.ratchetIndex
+            is MXOlmDevice.AddSessionResult.Imported -> addSessionResult.ratchetIndex
             is MXOlmDevice.AddSessionResult.NotImportedHigherIndex -> addSessionResult.newIndex
-            else                                                   -> null
+            else -> null
         }?.let { index ->
             if (event.getClearType() == EventType.FORWARDED_ROOM_KEY) {
                 val fromDevice = (event.content?.get("sender_key") as? String)?.let { senderDeviceIdentityKey ->
@@ -267,7 +268,8 @@ internal class MXMegolmDecryption(
                         senderKey = senderKey,
                         fromIndex = index,
                         fromDevice = fromDevice,
-                        event = event)
+                        event = event
+                )
 
                 cryptoStore.saveIncomingForwardKeyAuditTrail(
                         roomId = roomKeyContent.roomId,
@@ -276,7 +278,8 @@ internal class MXMegolmDecryption(
                         algorithm = roomKeyContent.algorithm ?: "",
                         userId = event.senderId ?: "",
                         deviceId = fromDevice ?: "",
-                        chainIndex = index.toLong())
+                        chainIndex = index.toLong()
+                )
 
                 // The index is used to decide if we cancel sent request or if we wait for a better key
                 outgoingKeyRequestManager.postCancelRequestForSessionIfNeeded(roomKeyContent.sessionId, roomKeyContent.roomId, senderKey, index)

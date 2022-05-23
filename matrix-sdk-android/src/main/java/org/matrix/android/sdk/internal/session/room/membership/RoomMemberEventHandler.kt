@@ -34,11 +34,13 @@ internal class RoomMemberEventHandler @Inject constructor(
         @UserId private val myUserId: String
 ) {
 
-    fun handle(realm: Realm,
-               roomId: String,
-               event: Event,
-               isInitialSync: Boolean,
-               aggregator: SyncResponsePostTreatmentAggregator? = null): Boolean {
+    fun handle(
+            realm: Realm,
+            roomId: String,
+            event: Event,
+            isInitialSync: Boolean,
+            aggregator: SyncResponsePostTreatmentAggregator? = null
+    ): Boolean {
         if (event.type != EventType.STATE_ROOM_MEMBER) {
             return false
         }
@@ -59,12 +61,14 @@ internal class RoomMemberEventHandler @Inject constructor(
         }
     }
 
-    private fun handleInitialSync(realm: Realm,
-                                  roomId: String,
-                                  currentUserId: String,
-                                  eventUserId: String,
-                                  roomMember: RoomMemberContent,
-                                  aggregator: SyncResponsePostTreatmentAggregator?): Boolean {
+    private fun handleInitialSync(
+            realm: Realm,
+            roomId: String,
+            currentUserId: String,
+            eventUserId: String,
+            roomMember: RoomMemberContent,
+            aggregator: SyncResponsePostTreatmentAggregator?
+    ): Boolean {
         if (currentUserId != eventUserId) {
             saveUserEntityLocallyIfNecessary(realm, eventUserId, roomMember)
         }
@@ -73,10 +77,12 @@ internal class RoomMemberEventHandler @Inject constructor(
         return true
     }
 
-    private fun saveRoomMemberEntityLocally(realm: Realm,
-                                            roomId: String,
-                                            userId: String,
-                                            roomMember: RoomMemberContent) {
+    private fun saveRoomMemberEntityLocally(
+            realm: Realm,
+            roomId: String,
+            userId: String,
+            roomMember: RoomMemberContent
+    ) {
         val roomMemberEntity = RoomMemberEntityFactory.create(
                 roomId,
                 userId,
@@ -96,9 +102,11 @@ internal class RoomMemberEventHandler @Inject constructor(
         return RoomMemberSummaryEntity.where(realm, roomId, userId).findFirst()?.userPresenceEntity
     }
 
-    private fun saveUserEntityLocallyIfNecessary(realm: Realm,
-                                                 userId: String,
-                                                 roomMember: RoomMemberContent) {
+    private fun saveUserEntityLocallyIfNecessary(
+            realm: Realm,
+            userId: String,
+            roomMember: RoomMemberContent
+    ) {
         if (roomMember.membership.isActive()) {
             saveUserLocally(realm, userId, roomMember)
         }
@@ -109,9 +117,11 @@ internal class RoomMemberEventHandler @Inject constructor(
         realm.insertOrUpdate(userEntity)
     }
 
-    private fun updateDirectChatsIfNecessary(roomId: String,
-                                             roomMember: RoomMemberContent,
-                                             aggregator: SyncResponsePostTreatmentAggregator?) {
+    private fun updateDirectChatsIfNecessary(
+            roomId: String,
+            roomMember: RoomMemberContent,
+            aggregator: SyncResponsePostTreatmentAggregator?
+    ) {
         // check whether this new room member event may be used to update the directs dictionary in account data
         // this is required to handle correctly invite by email in DM
         val mxId = roomMember.thirdPartyInvite?.signed?.mxid
@@ -120,12 +130,14 @@ internal class RoomMemberEventHandler @Inject constructor(
         }
     }
 
-    private fun handleIncrementalSync(realm: Realm,
-                                      roomId: String,
-                                      eventUserId: String,
-                                      roomMember: RoomMemberContent,
-                                      prevContent: Content?,
-                                      aggregator: SyncResponsePostTreatmentAggregator?): Boolean {
+    private fun handleIncrementalSync(
+            realm: Realm,
+            roomId: String,
+            eventUserId: String,
+            roomMember: RoomMemberContent,
+            prevContent: Content?,
+            aggregator: SyncResponsePostTreatmentAggregator?
+    ): Boolean {
         if (aggregator != null) {
             val previousDisplayName = prevContent?.get("displayname") as? String
             val previousAvatar = prevContent?.get("avatar_url") as? String

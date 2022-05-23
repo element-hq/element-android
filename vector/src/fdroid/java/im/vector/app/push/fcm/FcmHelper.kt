@@ -67,10 +67,12 @@ object FcmHelper {
         AlarmSyncBroadcastReceiver.cancelAlarm(context)
     }
 
-    fun onEnterBackground(context: Context,
-                          vectorPreferences: VectorPreferences,
-                          activeSessionHolder: ActiveSessionHolder,
-                          clock: Clock) {
+    fun onEnterBackground(
+            context: Context,
+            vectorPreferences: VectorPreferences,
+            activeSessionHolder: ActiveSessionHolder,
+            clock: Clock
+    ) {
         BackgroundSyncStarter.start(context, vectorPreferences, activeSessionHolder, clock)
     }
 }

@@ -25,10 +25,12 @@ import im.vector.app.features.settings.VectorPreferences
 import timber.log.Timber
 
 object BackgroundSyncStarter {
-    fun start(context: Context,
-              vectorPreferences: VectorPreferences,
-              activeSessionHolder: ActiveSessionHolder,
-              clock: Clock) {
+    fun start(
+            context: Context,
+            vectorPreferences: VectorPreferences,
+            activeSessionHolder: ActiveSessionHolder,
+            clock: Clock
+    ) {
         if (vectorPreferences.areNotificationEnabledForDevice()) {
             val activeSession = activeSessionHolder.getSafeActiveSession() ?: return
             when (vectorPreferences.getFdroidSyncBackgroundMode()) {

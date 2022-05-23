@@ -39,7 +39,8 @@ import im.vector.app.features.roomdirectory.RoomDirectoryViewModel
 import timber.log.Timber
 import javax.inject.Inject
 
-class RoomDirectoryPickerFragment @Inject constructor(private val roomDirectoryPickerController: RoomDirectoryPickerController
+class RoomDirectoryPickerFragment @Inject constructor(
+        private val roomDirectoryPickerController: RoomDirectoryPickerController
 ) : VectorBaseFragment<FragmentRoomDirectoryPickerBinding>(),
         OnBackPressed,
         RoomDirectoryPickerController.Callback {

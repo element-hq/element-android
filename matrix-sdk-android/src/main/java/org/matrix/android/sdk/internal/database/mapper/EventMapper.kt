@@ -127,10 +127,12 @@ internal fun EventEntity.asDomain(castJsonNumbers: Boolean = false): Event {
     return EventMapper.map(this, castJsonNumbers)
 }
 
-internal fun Event.toEntity(roomId: String,
-                            sendState: SendState,
-                            ageLocalTs: Long?,
-                            contentToInject: String? = null): EventEntity {
+internal fun Event.toEntity(
+        roomId: String,
+        sendState: SendState,
+        ageLocalTs: Long?,
+        contentToInject: String? = null
+): EventEntity {
     return EventMapper.map(this, roomId).apply {
         this.sendState = sendState
         this.ageLocalTs = ageLocalTs

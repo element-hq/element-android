@@ -23,7 +23,8 @@ import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 internal class SharedWithHelper(
         private val roomId: String,
         private val sessionId: String,
-        private val cryptoStore: IMXCryptoStore) {
+        private val cryptoStore: IMXCryptoStore
+) {
 
     fun sharedWithDevices(): MXUsersDevicesMap<Int> {
         return cryptoStore.getSharedWithInfo(roomId, sessionId)

@@ -23,15 +23,19 @@ sealed interface StatisticEvent {
     /**
      * Initial sync request, response downloading, and treatment (parsing and storage) of response.
      */
-    data class InitialSyncRequest(val requestDurationMs: Int,
-                                  val downloadDurationMs: Int,
-                                  val treatmentDurationMs: Int,
-                                  val nbOfJoinedRooms: Int) : StatisticEvent
+    data class InitialSyncRequest(
+            val requestDurationMs: Int,
+            val downloadDurationMs: Int,
+            val treatmentDurationMs: Int,
+            val nbOfJoinedRooms: Int
+    ) : StatisticEvent
 
     /**
      * Incremental sync event.
      */
-    data class SyncTreatment(val durationMs: Int,
-                             val afterPause: Boolean,
-                             val nbOfJoinedRooms: Int) : StatisticEvent
+    data class SyncTreatment(
+            val durationMs: Int,
+            val afterPause: Boolean,
+            val nbOfJoinedRooms: Int
+    ) : StatisticEvent
 }

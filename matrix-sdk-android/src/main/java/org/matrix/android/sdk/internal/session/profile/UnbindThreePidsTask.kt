@@ -32,9 +32,11 @@ internal abstract class UnbindThreePidsTask : Task<UnbindThreePidsTask.Params, B
     )
 }
 
-internal class DefaultUnbindThreePidsTask @Inject constructor(private val profileAPI: ProfileAPI,
-                                                              private val identityStore: IdentityStore,
-                                                              private val globalErrorReceiver: GlobalErrorReceiver) : UnbindThreePidsTask() {
+internal class DefaultUnbindThreePidsTask @Inject constructor(
+        private val profileAPI: ProfileAPI,
+        private val identityStore: IdentityStore,
+        private val globalErrorReceiver: GlobalErrorReceiver
+) : UnbindThreePidsTask() {
     override suspend fun execute(params: Params): Boolean {
         val identityServerUrlWithoutProtocol = identityStore.getIdentityServerUrlWithoutProtocol()
                 ?: throw IdentityServiceError.NoIdentityServerConfigured

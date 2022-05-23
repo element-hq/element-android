@@ -35,8 +35,9 @@ internal interface UpdateUserAccountDataTask : Task<UpdateUserAccountDataTask.Pa
         fun getData(): Any
     }
 
-    data class IdentityParams(override val type: String = UserAccountDataTypes.TYPE_IDENTITY_SERVER,
-                              private val identityContent: IdentityServerContent
+    data class IdentityParams(
+            override val type: String = UserAccountDataTypes.TYPE_IDENTITY_SERVER,
+            private val identityContent: IdentityServerContent
     ) : Params {
 
         override fun getData(): Any {
@@ -44,8 +45,9 @@ internal interface UpdateUserAccountDataTask : Task<UpdateUserAccountDataTask.Pa
         }
     }
 
-    data class AcceptedTermsParams(override val type: String = UserAccountDataTypes.TYPE_ACCEPTED_TERMS,
-                                   private val acceptedTermsContent: AcceptedTermsContent
+    data class AcceptedTermsParams(
+            override val type: String = UserAccountDataTypes.TYPE_ACCEPTED_TERMS,
+            private val acceptedTermsContent: AcceptedTermsContent
     ) : Params {
 
         override fun getData(): Any {
@@ -54,8 +56,9 @@ internal interface UpdateUserAccountDataTask : Task<UpdateUserAccountDataTask.Pa
     }
 
     // TODO Use [UserAccountDataDirectMessages] class?
-    data class DirectChatParams(override val type: String = UserAccountDataTypes.TYPE_DIRECT_MESSAGES,
-                                private val directMessages: Map<String, List<String>>
+    data class DirectChatParams(
+            override val type: String = UserAccountDataTypes.TYPE_DIRECT_MESSAGES,
+            private val directMessages: Map<String, List<String>>
     ) : Params {
 
         override fun getData(): Any {
@@ -63,8 +66,9 @@ internal interface UpdateUserAccountDataTask : Task<UpdateUserAccountDataTask.Pa
         }
     }
 
-    data class BreadcrumbsParams(override val type: String = UserAccountDataTypes.TYPE_BREADCRUMBS,
-                                 private val breadcrumbsContent: BreadcrumbsContent
+    data class BreadcrumbsParams(
+            override val type: String = UserAccountDataTypes.TYPE_BREADCRUMBS,
+            private val breadcrumbsContent: BreadcrumbsContent
     ) : Params {
 
         override fun getData(): Any {
@@ -72,24 +76,29 @@ internal interface UpdateUserAccountDataTask : Task<UpdateUserAccountDataTask.Pa
         }
     }
 
-    data class AllowedWidgets(override val type: String = UserAccountDataTypes.TYPE_ALLOWED_WIDGETS,
-                              private val allowedWidgetsContent: AllowedWidgetsContent) : Params {
+    data class AllowedWidgets(
+            override val type: String = UserAccountDataTypes.TYPE_ALLOWED_WIDGETS,
+            private val allowedWidgetsContent: AllowedWidgetsContent
+    ) : Params {
 
         override fun getData(): Any {
             return allowedWidgetsContent
         }
     }
 
-    data class IntegrationProvisioning(override val type: String = UserAccountDataTypes.TYPE_INTEGRATION_PROVISIONING,
-                                       private val integrationProvisioningContent: IntegrationProvisioningContent) : Params {
+    data class IntegrationProvisioning(
+            override val type: String = UserAccountDataTypes.TYPE_INTEGRATION_PROVISIONING,
+            private val integrationProvisioningContent: IntegrationProvisioningContent
+    ) : Params {
 
         override fun getData(): Any {
             return integrationProvisioningContent
         }
     }
 
-    data class AnyParams(override val type: String,
-                         private val any: Any
+    data class AnyParams(
+            override val type: String,
+            private val any: Any
     ) : Params {
         override fun getData(): Any {
             return any

@@ -261,11 +261,11 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
     private fun handleGlobalError(globalError: GlobalError) {
         when (globalError) {
-            is GlobalError.InvalidToken         -> handleInvalidToken(globalError)
+            is GlobalError.InvalidToken -> handleInvalidToken(globalError)
             is GlobalError.ConsentNotGivenError -> displayConsentNotGivenDialog(globalError)
-            is GlobalError.CertificateError     -> handleCertificateError(globalError)
-            GlobalError.ExpiredAccount          -> Unit // TODO Handle account expiration
-            is GlobalError.InitialSyncRequest   -> handleInitialSyncRequest(globalError)
+            is GlobalError.CertificateError -> handleCertificateError(globalError)
+            GlobalError.ExpiredAccount -> Unit // TODO Handle account expiration
+            is GlobalError.InitialSyncRequest -> handleInitialSyncRequest(globalError)
         }
     }
 

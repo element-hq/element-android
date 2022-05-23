@@ -38,8 +38,10 @@ data class GossipingEventsPaperTrailState(
         val events: Async<PagedList<AuditTrail>> = Uninitialized
 ) : MavericksState
 
-class GossipingEventsPaperTrailViewModel @AssistedInject constructor(@Assisted initialState: GossipingEventsPaperTrailState,
-                                                                     private val session: Session) :
+class GossipingEventsPaperTrailViewModel @AssistedInject constructor(
+        @Assisted initialState: GossipingEventsPaperTrailState,
+        private val session: Session
+) :
         VectorViewModel<GossipingEventsPaperTrailState, EmptyAction, EmptyViewEvents>(initialState) {
 
     init {

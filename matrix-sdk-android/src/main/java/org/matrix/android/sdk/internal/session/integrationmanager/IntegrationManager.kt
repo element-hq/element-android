@@ -54,11 +54,13 @@ import javax.inject.Inject
  *
  */
 @SessionScope
-internal class IntegrationManager @Inject constructor(matrixConfiguration: MatrixConfiguration,
-                                                      @SessionDatabase private val monarchy: Monarchy,
-                                                      private val updateUserAccountDataTask: UpdateUserAccountDataTask,
-                                                      private val accountDataDataSource: UserAccountDataDataSource,
-                                                      private val widgetFactory: WidgetFactory) :
+internal class IntegrationManager @Inject constructor(
+        matrixConfiguration: MatrixConfiguration,
+        @SessionDatabase private val monarchy: Monarchy,
+        private val updateUserAccountDataTask: UpdateUserAccountDataTask,
+        private val accountDataDataSource: UserAccountDataDataSource,
+        private val widgetFactory: WidgetFactory
+) :
         SessionLifecycleObserver {
 
     private val currentConfigs = ArrayList<IntegrationManagerConfig>()

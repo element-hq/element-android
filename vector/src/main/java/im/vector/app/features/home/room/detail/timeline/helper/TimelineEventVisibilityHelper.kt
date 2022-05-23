@@ -47,7 +47,8 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
             minSize: Int,
             eventIdToHighlight: String?,
             rootThreadEventId: String?,
-            isFromThreadTimeline: Boolean): List<TimelineEvent> {
+            isFromThreadTimeline: Boolean
+    ): List<TimelineEvent> {
         if (index >= timelineEvents.size - 1) {
             return emptyList()
         }
@@ -99,7 +100,8 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
             minSize: Int,
             eventIdToHighlight: String?,
             rootThreadEventId: String?,
-            isFromThreadTimeline: Boolean): List<TimelineEvent> {
+            isFromThreadTimeline: Boolean
+    ): List<TimelineEvent> {
         val prevSub = timelineEvents.subList(0, index + 1)
         return prevSub
                 .reversed()

@@ -92,9 +92,11 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
                         awaitCallback<Unit> {
                             session.cryptoService().crossSigningService().initializeCrossSigning(
                                     object : UserInteractiveAuthInterceptor {
-                                        override fun performStage(flowResponse: RegistrationFlowResponse,
-                                                                  errCode: String?,
-                                                                  promise: Continuation<UIABaseAuth>) {
+                                        override fun performStage(
+                                                flowResponse: RegistrationFlowResponse,
+                                                errCode: String?,
+                                                promise: Continuation<UIABaseAuth>
+                                        ) {
                                             Timber.d("## UIA : initializeCrossSigning UIA")
                                             if (flowResponse.nextUncompletedStage() == LoginFlowTypes.PASSWORD &&
                                                     reAuthHelper.data != null && errCode == null) {

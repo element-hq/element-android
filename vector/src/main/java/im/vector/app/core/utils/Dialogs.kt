@@ -45,8 +45,10 @@ fun Context.displayInWebView(url: String) {
             .show()
 }
 
-fun Context.showIdentityServerConsentDialog(identityServerWithTerms: ServerAndPolicies?,
-                                            consentCallBack: (() -> Unit)) {
+fun Context.showIdentityServerConsentDialog(
+        identityServerWithTerms: ServerAndPolicies?,
+        consentCallBack: (() -> Unit)
+) {
     // Build the message
     val content = span {
         +getString(R.string.identity_server_consent_dialog_content_3)

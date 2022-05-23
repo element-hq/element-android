@@ -21,9 +21,10 @@ import org.matrix.android.sdk.api.session.signout.SignOutService
 import org.matrix.android.sdk.internal.auth.SessionParamsStore
 import javax.inject.Inject
 
-internal class DefaultSignOutService @Inject constructor(private val signOutTask: SignOutTask,
-                                                         private val signInAgainTask: SignInAgainTask,
-                                                         private val sessionParamsStore: SessionParamsStore
+internal class DefaultSignOutService @Inject constructor(
+        private val signOutTask: SignOutTask,
+        private val signInAgainTask: SignInAgainTask,
+        private val sessionParamsStore: SessionParamsStore
 ) : SignOutService {
 
     override suspend fun signInAgain(password: String) {

@@ -30,7 +30,8 @@ class ReadReceiptsItemFactory @Inject constructor(private val avatarRenderer: Av
             eventId: String,
             readReceipts: List<ReadReceipt>,
             callback: TimelineEventController.Callback?,
-            isFromThreadTimeLine: Boolean): ReadReceiptsItem? {
+            isFromThreadTimeLine: Boolean
+    ): ReadReceiptsItem? {
         if (readReceipts.isEmpty()) {
             return null
         }

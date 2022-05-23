@@ -41,8 +41,9 @@ import org.matrix.android.sdk.api.util.awaitCallback
 import org.matrix.android.sdk.api.util.toBase64NoPadding
 import timber.log.Timber
 
-class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialState: KeysBackupSettingViewState,
-                                                              private val session: Session
+class KeysBackupSettingsViewModel @AssistedInject constructor(
+        @Assisted initialState: KeysBackupSettingViewState,
+        private val session: Session
 ) : VectorViewModel<KeysBackupSettingViewState, KeyBackupSettingsAction, KeysBackupViewEvents>(initialState),
         KeysBackupStateListener {
 

@@ -220,10 +220,12 @@ internal class MxCallImpl(
                 .also { eventSenderProcessor.postEvent(it) }
     }
 
-    override suspend fun transfer(targetUserId: String,
-                                  targetRoomId: String?,
-                                  createCallId: String?,
-                                  awaitCallId: String?) {
+    override suspend fun transfer(
+            targetUserId: String,
+            targetRoomId: String?,
+            createCallId: String?,
+            awaitCallId: String?
+    ) {
         val profileInfoParams = GetProfileInfoTask.Params(targetUserId)
         val profileInfo = try {
             getProfileInfoTask.execute(profileInfoParams)

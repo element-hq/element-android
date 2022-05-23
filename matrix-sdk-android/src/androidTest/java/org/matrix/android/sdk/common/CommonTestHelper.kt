@@ -216,7 +216,8 @@ class CommonTestHelper(context: Context) {
             message: String,
             numberOfMessages: Int,
             rootThreadEventId: String,
-            timeout: Long = TestConstants.timeOutMillis): List<TimelineEvent> {
+            timeout: Long = TestConstants.timeOutMillis
+    ): List<TimelineEvent> {
         val timeline = room.timelineService().createTimeline(null, TimelineSettings(10))
         timeline.start()
         val sentEvents = sendTextMessagesBatched(timeline, room, message, numberOfMessages, timeout, rootThreadEventId)
@@ -236,9 +237,11 @@ class CommonTestHelper(context: Context) {
      * @param testParams test params about the session
      * @return the session associated with the newly created account
      */
-    private fun createAccount(userNamePrefix: String,
-                              password: String,
-                              testParams: SessionTestParams): Session {
+    private fun createAccount(
+            userNamePrefix: String,
+            password: String,
+            testParams: SessionTestParams
+    ): Session {
         val session = createAccountAndSync(
                 userNamePrefix + "_" + accountNumber++ + "_" + UUID.randomUUID(),
                 password,
@@ -256,9 +259,11 @@ class CommonTestHelper(context: Context) {
      * @param testParams test params about the session
      * @return the session associated with the existing account
      */
-    fun logIntoAccount(userId: String,
-                       password: String,
-                       testParams: SessionTestParams): Session {
+    fun logIntoAccount(
+            userId: String,
+            password: String,
+            testParams: SessionTestParams
+    ): Session {
         val session = logAccountAndSync(userId, password, testParams)
         assertNotNull(session)
         return session
@@ -271,9 +276,11 @@ class CommonTestHelper(context: Context) {
      * @param password the password
      * @param sessionTestParams parameters for the test
      */
-    private fun createAccountAndSync(userName: String,
-                                     password: String,
-                                     sessionTestParams: SessionTestParams): Session {
+    private fun createAccountAndSync(
+            userName: String,
+            password: String,
+            sessionTestParams: SessionTestParams
+    ): Session {
         val hs = createHomeServerConfig()
 
         runBlockingTest {
@@ -309,9 +316,11 @@ class CommonTestHelper(context: Context) {
      * @param password the password
      * @param sessionTestParams session test params
      */
-    private fun logAccountAndSync(userName: String,
-                                  password: String,
-                                  sessionTestParams: SessionTestParams): Session {
+    private fun logAccountAndSync(
+            userName: String,
+            password: String,
+            sessionTestParams: SessionTestParams
+    ): Session {
         val hs = createHomeServerConfig()
 
         runBlockingTest {
@@ -337,8 +346,10 @@ class CommonTestHelper(context: Context) {
      * @param userName the account username
      * @param password the password
      */
-    fun logAccountWithError(userName: String,
-                            password: String): Throwable {
+    fun logAccountWithError(
+            userName: String,
+            password: String
+    ): Throwable {
         val hs = createHomeServerConfig()
 
         runBlockingTest {
@@ -379,8 +390,8 @@ class CommonTestHelper(context: Context) {
      */
     fun await(latch: CountDownLatch, timeout: Long? = TestConstants.timeOutMillis) {
         assertTrue(
-            "Timed out after " + timeout + "ms waiting for something to happen. See stacktrace for cause.",
-	    latch.await(timeout ?: TestConstants.timeOutMillis, TimeUnit.MILLISECONDS)
+                "Timed out after " + timeout + "ms waiting for something to happen. See stacktrace for cause.",
+                latch.await(timeout ?: TestConstants.timeOutMillis, TimeUnit.MILLISECONDS)
         )
     }
 

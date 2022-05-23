@@ -62,13 +62,15 @@ internal object NetworkModule {
     @Provides
     @JvmStatic
     @Unauthenticated
-    fun providesOkHttpClient(matrixConfiguration: MatrixConfiguration,
-                             stethoInterceptor: StethoInterceptor,
-                             timeoutInterceptor: TimeOutInterceptor,
-                             userAgentInterceptor: UserAgentInterceptor,
-                             httpLoggingInterceptor: HttpLoggingInterceptor,
-                             curlLoggingInterceptor: CurlLoggingInterceptor,
-                             apiInterceptor: ApiInterceptor): OkHttpClient {
+    fun providesOkHttpClient(
+            matrixConfiguration: MatrixConfiguration,
+            stethoInterceptor: StethoInterceptor,
+            timeoutInterceptor: TimeOutInterceptor,
+            userAgentInterceptor: UserAgentInterceptor,
+            httpLoggingInterceptor: HttpLoggingInterceptor,
+            curlLoggingInterceptor: CurlLoggingInterceptor,
+            apiInterceptor: ApiInterceptor
+    ): OkHttpClient {
         val spec = ConnectionSpec.Builder(matrixConfiguration.connectionSpec).build()
 
         return OkHttpClient.Builder()

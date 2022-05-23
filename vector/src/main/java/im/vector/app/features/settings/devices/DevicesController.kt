@@ -36,12 +36,14 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import javax.inject.Inject
 
-class DevicesController @Inject constructor(private val errorFormatter: ErrorFormatter,
-                                            private val stringProvider: StringProvider,
-                                            private val colorProvider: ColorProvider,
-                                            private val dateFormatter: VectorDateFormatter,
-                                            private val dimensionConverter: DimensionConverter,
-                                            private val vectorPreferences: VectorPreferences) : EpoxyController() {
+class DevicesController @Inject constructor(
+        private val errorFormatter: ErrorFormatter,
+        private val stringProvider: StringProvider,
+        private val colorProvider: ColorProvider,
+        private val dateFormatter: VectorDateFormatter,
+        private val dimensionConverter: DimensionConverter,
+        private val vectorPreferences: VectorPreferences
+) : EpoxyController() {
 
     var callback: Callback? = null
     private var viewState: DevicesViewState? = null
@@ -75,10 +77,12 @@ class DevicesController @Inject constructor(private val errorFormatter: ErrorFor
         }
     }
 
-    private fun buildDevicesList(devices: List<DeviceFullInfo>,
-                                 myDeviceId: String,
-                                 legacyMode: Boolean,
-                                 currentSessionCrossTrusted: Boolean) {
+    private fun buildDevicesList(
+            devices: List<DeviceFullInfo>,
+            myDeviceId: String,
+            legacyMode: Boolean,
+            currentSessionCrossTrusted: Boolean
+    ) {
         val host = this
         devices
                 .firstOrNull {

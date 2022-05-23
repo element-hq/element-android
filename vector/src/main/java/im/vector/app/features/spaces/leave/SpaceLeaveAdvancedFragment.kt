@@ -141,7 +141,8 @@ class SpaceLeaveAdvancedFragment @Inject constructor(
     private fun MenuItem.bind(
             onExpanded: () -> Unit,
             onCollapsed: () -> Unit,
-            onTextChanged: (String) -> Unit) {
+            onTextChanged: (String) -> Unit
+    ) {
         setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
                 onExpanded()

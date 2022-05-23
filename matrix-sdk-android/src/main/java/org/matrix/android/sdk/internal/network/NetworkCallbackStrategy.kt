@@ -31,8 +31,10 @@ internal interface NetworkCallbackStrategy {
     fun unregister()
 }
 
-internal class FallbackNetworkCallbackStrategy @Inject constructor(private val context: Context,
-                                                                   private val networkInfoReceiver: NetworkInfoReceiver) : NetworkCallbackStrategy {
+internal class FallbackNetworkCallbackStrategy @Inject constructor(
+        private val context: Context,
+        private val networkInfoReceiver: NetworkInfoReceiver
+) : NetworkCallbackStrategy {
 
     @Suppress("DEPRECATION")
     val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)

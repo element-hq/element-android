@@ -145,12 +145,14 @@ fun startInstallFromSourceIntent(context: Context, activityResultLauncher: Activ
     }
 }
 
-fun startSharePlainTextIntent(fragment: Fragment,
-                              activityResultLauncher: ActivityResultLauncher<Intent>?,
-                              chooserTitle: String?,
-                              text: String,
-                              subject: String? = null,
-                              extraTitle: String? = null) {
+fun startSharePlainTextIntent(
+        fragment: Fragment,
+        activityResultLauncher: ActivityResultLauncher<Intent>?,
+        chooserTitle: String?,
+        text: String,
+        subject: String? = null,
+        extraTitle: String? = null
+) {
     val share = Intent(Intent.ACTION_SEND)
     share.type = "text/plain"
     share.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)

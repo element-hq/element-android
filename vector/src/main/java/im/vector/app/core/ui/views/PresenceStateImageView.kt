@@ -49,7 +49,7 @@ class PresenceStateImageView @JvmOverloads constructor(
                 setImageResource(R.drawable.ic_presence_offline)
                 contentDescription = context.getString(R.string.a11y_presence_offline)
             }
-            PresenceEnum.BUSY     -> {
+            PresenceEnum.BUSY        -> {
                 setImageResource(R.drawable.ic_presence_busy)
                 contentDescription = context.getString(R.string.a11y_presence_busy)
             }

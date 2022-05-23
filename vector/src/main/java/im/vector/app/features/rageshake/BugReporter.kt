@@ -168,16 +168,18 @@ class BugReporter @Inject constructor(
      * @param listener the listener
      */
     @SuppressLint("StaticFieldLeak")
-    fun sendBugReport(reportType: ReportType,
-                      withDevicesLogs: Boolean,
-                      withCrashLogs: Boolean,
-                      withKeyRequestHistory: Boolean,
-                      withScreenshot: Boolean,
-                      theBugDescription: String,
-                      serverVersion: String,
-                      canContact: Boolean = false,
-                      customFields: Map<String, String>? = null,
-                      listener: IMXBugReportListener?) {
+    fun sendBugReport(
+            reportType: ReportType,
+            withDevicesLogs: Boolean,
+            withCrashLogs: Boolean,
+            withKeyRequestHistory: Boolean,
+            withScreenshot: Boolean,
+            theBugDescription: String,
+            serverVersion: String,
+            canContact: Boolean = false,
+            customFields: Map<String, String>? = null,
+            listener: IMXBugReportListener?
+    ) {
         // enumerate files to delete
         val mBugReportFiles: MutableList<File> = ArrayList()
 

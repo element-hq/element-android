@@ -46,9 +46,11 @@ import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.mapOptional
 import org.matrix.android.sdk.flow.unwrap
 
-class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: RoomSettingsViewState,
-                                                        private val vectorPreferences: VectorPreferences,
-                                                        private val session: Session) :
+class RoomSettingsViewModel @AssistedInject constructor(
+        @Assisted initialState: RoomSettingsViewState,
+        private val vectorPreferences: VectorPreferences,
+        private val session: Session
+) :
         VectorViewModel<RoomSettingsViewState, RoomSettingsAction, RoomSettingsViewEvents>(initialState) {
 
     @AssistedFactory

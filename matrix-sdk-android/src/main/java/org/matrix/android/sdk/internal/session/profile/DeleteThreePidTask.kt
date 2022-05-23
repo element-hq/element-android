@@ -31,7 +31,8 @@ internal abstract class DeleteThreePidTask : Task<DeleteThreePidTask.Params, Uni
 
 internal class DefaultDeleteThreePidTask @Inject constructor(
         private val profileAPI: ProfileAPI,
-        private val globalErrorReceiver: GlobalErrorReceiver) : DeleteThreePidTask() {
+        private val globalErrorReceiver: GlobalErrorReceiver
+) : DeleteThreePidTask() {
 
     override suspend fun execute(params: Params) {
         val body = DeleteThreePidBody(

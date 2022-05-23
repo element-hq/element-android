@@ -34,7 +34,8 @@ import javax.inject.Inject
  */
 class ViewReactionsEpoxyController @Inject constructor(
         private val stringProvider: StringProvider,
-        private val emojiSpanify: EmojiSpanify) :
+        private val emojiSpanify: EmojiSpanify
+) :
         TypedEpoxyController<DisplayReactionsViewState>() {
 
     var listener: Listener? = null

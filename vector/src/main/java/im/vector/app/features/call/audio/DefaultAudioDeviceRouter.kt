@@ -22,8 +22,9 @@ import androidx.media.AudioFocusRequestCompat
 import androidx.media.AudioManagerCompat
 import timber.log.Timber
 
-class DefaultAudioDeviceRouter(private val audioManager: AudioManager,
-                               private val callAudioManager: CallAudioManager
+class DefaultAudioDeviceRouter(
+        private val audioManager: AudioManager,
+        private val callAudioManager: CallAudioManager
 ) : CallAudioManager.AudioDeviceRouter, AudioManager.OnAudioFocusChangeListener {
 
     private var audioFocusLost = false

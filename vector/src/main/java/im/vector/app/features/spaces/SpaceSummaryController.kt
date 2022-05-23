@@ -107,11 +107,13 @@ class SpaceSummaryController @Inject constructor(
         }
     }
 
-    private fun buildGroupModels(summaries: List<RoomSummary>?,
-                                 selected: RoomGroupingMethod,
-                                 rootSpaces: List<RoomSummary>?,
-                                 expandedStates: Map<String, Boolean>,
-                                 homeCount: RoomAggregateNotificationCount) {
+    private fun buildGroupModels(
+            summaries: List<RoomSummary>?,
+            selected: RoomGroupingMethod,
+            rootSpaces: List<RoomSummary>?,
+            expandedStates: Map<String, Boolean>,
+            homeCount: RoomAggregateNotificationCount
+    ) {
         val host = this
         spaceBetaHeaderItem {
             id("beta_header")
@@ -187,11 +189,13 @@ class SpaceSummaryController @Inject constructor(
         }
     }
 
-    private fun buildSubSpace(idPrefix: String,
-                              summaries: List<RoomSummary>?,
-                              expandedStates: Map<String, Boolean>,
-                              selected: RoomGroupingMethod,
-                              info: SpaceChildInfo, currentDepth: Int, maxDepth: Int) {
+    private fun buildSubSpace(
+            idPrefix: String,
+            summaries: List<RoomSummary>?,
+            expandedStates: Map<String, Boolean>,
+            selected: RoomGroupingMethod,
+            info: SpaceChildInfo, currentDepth: Int, maxDepth: Int
+    ) {
         val host = this
         if (currentDepth >= maxDepth) return
         val childSummary = summaries?.firstOrNull { it.roomId == info.childRoomId } ?: return

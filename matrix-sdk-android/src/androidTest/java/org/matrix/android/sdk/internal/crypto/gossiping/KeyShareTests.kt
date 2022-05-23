@@ -442,7 +442,7 @@ class KeyShareTests : InstrumentedTest {
         // Should get a reply from bob and not from alice
         commonTestHelper.waitWithLatch { latch ->
             commonTestHelper.retryPeriodicallyWithLatch(latch) {
-              //  Log.d("#TEST", "outgoing key requests :${aliceNewSession.cryptoService().getOutgoingRoomKeyRequests().joinToString { it.sessionId ?: "?" }}")
+                //  Log.d("#TEST", "outgoing key requests :${aliceNewSession.cryptoService().getOutgoingRoomKeyRequests().joinToString { it.sessionId ?: "?" }}")
                 val outgoing = aliceNewSession.cryptoService().getOutgoingRoomKeyRequests().firstOrNull { it.sessionId == sentEventMegolmSession }
                 val bobReply = outgoing?.results?.firstOrNull { it.userId == bobSession.myUserId }
                 val result = bobReply?.result

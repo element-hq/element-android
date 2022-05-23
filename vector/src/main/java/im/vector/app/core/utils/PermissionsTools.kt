@@ -106,10 +106,12 @@ private fun onPermissionResult(result: Map<String, Boolean>, lambda: (allGranted
  * @param rationaleMessage message to be displayed BEFORE requesting for the permission
  * @return true if the permissions are granted (synchronous flow), false otherwise (asynchronous flow)
  */
-fun checkPermissions(permissionsToBeGranted: List<String>,
-                     activity: Activity,
-                     activityResultLauncher: ActivityResultLauncher<Array<String>>,
-                     @StringRes rationaleMessage: Int = 0): Boolean {
+fun checkPermissions(
+        permissionsToBeGranted: List<String>,
+        activity: Activity,
+        activityResultLauncher: ActivityResultLauncher<Array<String>>,
+        @StringRes rationaleMessage: Int = 0
+): Boolean {
     // retrieve the permissions to be granted according to the permission list
     val missingPermissions = permissionsToBeGranted.filter { permission ->
         ContextCompat.checkSelfPermission(activity.applicationContext, permission) == PackageManager.PERMISSION_DENIED
@@ -149,8 +151,10 @@ fun checkPermissions(permissionsToBeGranted: List<String>,
  *
  * @return true if one of the permission has been denied and the user check the do not ask again checkbox
  */
-private fun permissionsDeniedPermanently(permissionsToBeGranted: List<String>,
-                                         activity: Activity): Boolean {
+private fun permissionsDeniedPermanently(
+        permissionsToBeGranted: List<String>,
+        activity: Activity
+): Boolean {
     return permissionsToBeGranted
             .filter { permission ->
                 ContextCompat.checkSelfPermission(activity.applicationContext, permission) == PackageManager.PERMISSION_DENIED

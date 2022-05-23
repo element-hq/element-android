@@ -40,8 +40,10 @@ data class KeyRequestListViewState(
         val outgoingRoomKeyRequests: Async<PagedList<OutgoingKeyRequest>> = Uninitialized
 ) : MavericksState
 
-class KeyRequestListViewModel @AssistedInject constructor(@Assisted initialState: KeyRequestListViewState,
-                                                          private val session: Session) :
+class KeyRequestListViewModel @AssistedInject constructor(
+        @Assisted initialState: KeyRequestListViewState,
+        private val session: Session
+) :
         VectorViewModel<KeyRequestListViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     init {

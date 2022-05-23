@@ -36,7 +36,8 @@ import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 
 class ShareSpaceViewModel @AssistedInject constructor(
         @Assisted private val initialState: ShareSpaceViewState,
-        private val session: Session) : VectorViewModel<ShareSpaceViewState, ShareSpaceAction, ShareSpaceViewEvents>(initialState) {
+        private val session: Session
+) : VectorViewModel<ShareSpaceViewState, ShareSpaceAction, ShareSpaceViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<ShareSpaceViewModel, ShareSpaceViewState> {

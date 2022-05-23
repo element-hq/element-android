@@ -98,13 +98,15 @@ class RoomMessageTouchHelperCallback(
         return super.convertToAbsoluteDirection(flags, layoutDirection)
     }
 
-    override fun onChildDraw(c: Canvas,
-                             recyclerView: RecyclerView,
-                             viewHolder: EpoxyViewHolder,
-                             dX: Float,
-                             dY: Float,
-                             actionState: Int,
-                             isCurrentlyActive: Boolean) {
+    override fun onChildDraw(
+            c: Canvas,
+            recyclerView: RecyclerView,
+            viewHolder: EpoxyViewHolder,
+            dX: Float,
+            dY: Float,
+            actionState: Int,
+            isCurrentlyActive: Boolean
+    ) {
         if (actionState == ACTION_STATE_SWIPE) {
             setTouchListener(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
         }
@@ -119,13 +121,15 @@ class RoomMessageTouchHelperCallback(
 
     @Suppress("UNUSED_PARAMETER")
     @SuppressLint("ClickableViewAccessibility")
-    private fun setTouchListener(c: Canvas,
-                                 recyclerView: RecyclerView,
-                                 viewHolder: EpoxyViewHolder,
-                                 dX: Float,
-                                 dY: Float,
-                                 actionState: Int,
-                                 isCurrentlyActive: Boolean) {
+    private fun setTouchListener(
+            c: Canvas,
+            recyclerView: RecyclerView,
+            viewHolder: EpoxyViewHolder,
+            dX: Float,
+            dY: Float,
+            actionState: Int,
+            isCurrentlyActive: Boolean
+    ) {
         // TODO can this interfere with other interactions? should i remove it
         recyclerView.setOnTouchListener { _, event ->
             swipeBack = event.action == MotionEvent.ACTION_CANCEL || event.action == MotionEvent.ACTION_UP

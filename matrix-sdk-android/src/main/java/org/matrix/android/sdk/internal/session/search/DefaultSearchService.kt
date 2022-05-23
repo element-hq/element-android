@@ -24,14 +24,16 @@ internal class DefaultSearchService @Inject constructor(
         private val searchTask: SearchTask
 ) : SearchService {
 
-    override suspend fun search(searchTerm: String,
-                                roomId: String,
-                                nextBatch: String?,
-                                orderByRecent: Boolean,
-                                limit: Int,
-                                beforeLimit: Int,
-                                afterLimit: Int,
-                                includeProfile: Boolean): SearchResult {
+    override suspend fun search(
+            searchTerm: String,
+            roomId: String,
+            nextBatch: String?,
+            orderByRecent: Boolean,
+            limit: Int,
+            beforeLimit: Int,
+            afterLimit: Int,
+            includeProfile: Boolean
+    ): SearchResult {
         return searchTask.execute(
                 SearchTask.Params(
                         searchTerm = searchTerm,

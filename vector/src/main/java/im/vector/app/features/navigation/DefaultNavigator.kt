@@ -467,29 +467,35 @@ class DefaultNavigator @Inject constructor(
         context.startActivity(Intent(context, AnalyticsOptInActivity::class.java))
     }
 
-    override fun openTerms(context: Context,
-                           activityResultLauncher: ActivityResultLauncher<Intent>,
-                           serviceType: TermsService.ServiceType,
-                           baseUrl: String,
-                           token: String?) {
+    override fun openTerms(
+            context: Context,
+            activityResultLauncher: ActivityResultLauncher<Intent>,
+            serviceType: TermsService.ServiceType,
+            baseUrl: String,
+            token: String?
+    ) {
         val intent = ReviewTermsActivity.intent(context, serviceType, baseUrl, token)
         activityResultLauncher.launch(intent)
     }
 
-    override fun openStickerPicker(context: Context,
-                                   activityResultLauncher: ActivityResultLauncher<Intent>,
-                                   roomId: String,
-                                   widget: Widget) {
+    override fun openStickerPicker(
+            context: Context,
+            activityResultLauncher: ActivityResultLauncher<Intent>,
+            roomId: String,
+            widget: Widget
+    ) {
         val widgetArgs = widgetArgsBuilder.buildStickerPickerArgs(roomId, widget)
         val intent = WidgetActivity.newIntent(context, widgetArgs)
         activityResultLauncher.launch(intent)
     }
 
-    override fun openIntegrationManager(context: Context,
-                                        activityResultLauncher: ActivityResultLauncher<Intent>,
-                                        roomId: String,
-                                        integId: String?,
-                                        screen: String?) {
+    override fun openIntegrationManager(
+            context: Context,
+            activityResultLauncher: ActivityResultLauncher<Intent>,
+            roomId: String,
+            integId: String?,
+            screen: String?
+    ) {
         val widgetArgs = widgetArgsBuilder.buildIntegrationManagerArgs(roomId, integId, screen)
         val intent = WidgetActivity.newIntent(context, widgetArgs)
         activityResultLauncher.launch(intent)
@@ -514,19 +520,23 @@ class DefaultNavigator @Inject constructor(
         }
     }
 
-    override fun openPinCode(context: Context,
-                             activityResultLauncher: ActivityResultLauncher<Intent>,
-                             pinMode: PinMode) {
+    override fun openPinCode(
+            context: Context,
+            activityResultLauncher: ActivityResultLauncher<Intent>,
+            pinMode: PinMode
+    ) {
         val intent = PinActivity.newIntent(context, PinArgs(pinMode))
         activityResultLauncher.launch(intent)
     }
 
-    override fun openMediaViewer(activity: Activity,
-                                 roomId: String,
-                                 mediaData: AttachmentData,
-                                 view: View,
-                                 inMemory: List<AttachmentData>,
-                                 options: ((MutableList<Pair<View, String>>) -> Unit)?) {
+    override fun openMediaViewer(
+            activity: Activity,
+            roomId: String,
+            mediaData: AttachmentData,
+            view: View,
+            inMemory: List<AttachmentData>,
+            options: ((MutableList<Pair<View, String>>) -> Unit)?
+    ) {
         VectorAttachmentViewerActivity.newIntent(
                 activity,
                 mediaData,
@@ -551,10 +561,12 @@ class DefaultNavigator @Inject constructor(
         }
     }
 
-    override fun openSearch(context: Context,
-                            roomId: String,
-                            roomDisplayName: String?,
-                            roomAvatarUrl: String?) {
+    override fun openSearch(
+            context: Context,
+            roomId: String,
+            roomDisplayName: String?,
+            roomAvatarUrl: String?
+    ) {
         val intent = SearchActivity.newIntent(context, SearchArgs(roomId, roomDisplayName, roomAvatarUrl))
         context.startActivity(intent)
     }
@@ -580,11 +592,13 @@ class DefaultNavigator @Inject constructor(
         context.startActivity(intent)
     }
 
-    override fun openLocationSharing(context: Context,
-                                     roomId: String,
-                                     mode: LocationSharingMode,
-                                     initialLocationData: LocationData?,
-                                     locationOwnerId: String?) {
+    override fun openLocationSharing(
+            context: Context,
+            roomId: String,
+            mode: LocationSharingMode,
+            initialLocationData: LocationData?,
+            locationOwnerId: String?
+    ) {
         val intent = LocationSharingActivity.getIntent(
                 context,
                 LocationSharingArgs(roomId = roomId, mode = mode, initialLocationData = initialLocationData, locationOwnerId = locationOwnerId)
@@ -628,8 +642,10 @@ class DefaultNavigator @Inject constructor(
         )
     }
 
-    override fun openScreenSharingPermissionDialog(screenCaptureIntent: Intent,
-                                                   activityResultLauncher: ActivityResultLauncher<Intent>) {
+    override fun openScreenSharingPermissionDialog(
+            screenCaptureIntent: Intent,
+            activityResultLauncher: ActivityResultLauncher<Intent>
+    ) {
         activityResultLauncher.launch(screenCaptureIntent)
     }
 }

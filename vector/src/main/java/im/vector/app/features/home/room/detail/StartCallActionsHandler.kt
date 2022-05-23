@@ -35,7 +35,8 @@ class StartCallActionsHandler(
         private val timelineViewModel: TimelineViewModel,
         private val startCallActivityResultLauncher: ActivityResultLauncher<Array<String>>,
         private val showDialogWithMessage: (String) -> Unit,
-        private val onTapToReturnToCall: () -> Unit) {
+        private val onTapToReturnToCall: () -> Unit
+) {
 
     fun onVideoCallClicked() {
         handleCallRequest(true)

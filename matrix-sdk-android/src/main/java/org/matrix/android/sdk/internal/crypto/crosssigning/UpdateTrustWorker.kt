@@ -276,10 +276,12 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
                 }
     }
 
-    private fun computeRoomShield(myCrossSigningInfo: MXCrossSigningInfo?,
-                                  cryptoRealm: Realm,
-                                  activeMemberUserIds: List<String>,
-                                  roomSummaryEntity: RoomSummaryEntity): RoomEncryptionTrustLevel {
+    private fun computeRoomShield(
+            myCrossSigningInfo: MXCrossSigningInfo?,
+            cryptoRealm: Realm,
+            activeMemberUserIds: List<String>,
+            roomSummaryEntity: RoomSummaryEntity
+    ): RoomEncryptionTrustLevel {
         Timber.v("## CrossSigning - computeRoomShield ${roomSummaryEntity.roomId} -> ${activeMemberUserIds.logLimit()}")
         // The set of “all users” depends on the type of room:
         // For regular / topic rooms which have more than 2 members (including yourself) are considered when decorating a room

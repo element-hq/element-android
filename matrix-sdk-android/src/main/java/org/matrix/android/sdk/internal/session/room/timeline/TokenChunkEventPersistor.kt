@@ -65,9 +65,11 @@ internal class TokenChunkEventPersistor @Inject constructor(
         SUCCESS
     }
 
-    suspend fun insertInDb(receivedChunk: TokenChunkEvent,
-                           roomId: String,
-                           direction: PaginationDirection): Result {
+    suspend fun insertInDb(
+            receivedChunk: TokenChunkEvent,
+            roomId: String,
+            direction: PaginationDirection
+    ): Result {
         monarchy
                 .awaitTransaction { realm ->
                     Timber.v("Start persisting ${receivedChunk.events.size} events in $roomId towards $direction")

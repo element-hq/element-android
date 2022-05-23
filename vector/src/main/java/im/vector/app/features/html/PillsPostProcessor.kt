@@ -34,10 +34,12 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 
-class PillsPostProcessor @AssistedInject constructor(@Assisted private val roomId: String?,
-                                                     private val context: Context,
-                                                     private val avatarRenderer: AvatarRenderer,
-                                                     private val sessionHolder: ActiveSessionHolder) :
+class PillsPostProcessor @AssistedInject constructor(
+        @Assisted private val roomId: String?,
+        private val context: Context,
+        private val avatarRenderer: AvatarRenderer,
+        private val sessionHolder: ActiveSessionHolder
+) :
         EventHtmlRenderer.PostProcessor {
 
     /* ==========================================================================================

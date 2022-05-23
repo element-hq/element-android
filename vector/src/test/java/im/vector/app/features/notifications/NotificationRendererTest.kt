@@ -205,11 +205,13 @@ class NotificationRendererTest {
         givenNotifications(emptyList(), emptyList(), emptyList(), USE_COMPLETE_NOTIFICATION_FORMAT, A_REMOVE_SUMMARY_NOTIFICATION)
     }
 
-    private fun givenNotifications(roomNotifications: List<RoomNotification> = emptyList(),
-                                   invitationNotifications: List<OneShotNotification> = emptyList(),
-                                   simpleNotifications: List<OneShotNotification> = emptyList(),
-                                   useCompleteNotificationFormat: Boolean = USE_COMPLETE_NOTIFICATION_FORMAT,
-                                   summaryNotification: SummaryNotification = A_SUMMARY_NOTIFICATION) {
+    private fun givenNotifications(
+            roomNotifications: List<RoomNotification> = emptyList(),
+            invitationNotifications: List<OneShotNotification> = emptyList(),
+            simpleNotifications: List<OneShotNotification> = emptyList(),
+            useCompleteNotificationFormat: Boolean = USE_COMPLETE_NOTIFICATION_FORMAT,
+            summaryNotification: SummaryNotification = A_SUMMARY_NOTIFICATION
+    ) {
         notificationFactory.givenNotificationsFor(
                 groupedEvents = A_PROCESSED_EVENTS,
                 myUserId = MY_USER_ID,

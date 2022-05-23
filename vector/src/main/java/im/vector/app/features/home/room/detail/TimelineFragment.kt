@@ -1230,10 +1230,12 @@ class TimelineFragment @Inject constructor(
         views.composerLayout.views.sendButton.contentDescription = getString(R.string.action_send)
     }
 
-    private fun renderSpecialMode(event: TimelineEvent,
-                                  @DrawableRes iconRes: Int,
-                                  @StringRes descriptionRes: Int,
-                                  defaultContent: String) {
+    private fun renderSpecialMode(
+            event: TimelineEvent,
+            @DrawableRes iconRes: Int,
+            @StringRes descriptionRes: Int,
+            defaultContent: String
+    ) {
         autoCompleter.enterSpecialMode()
         // switch to expanded bar
         views.composerLayout.views.composerRelatedMessageTitle.apply {
@@ -1958,10 +1960,12 @@ class TimelineFragment @Inject constructor(
         vectorBaseActivity.notImplemented("encrypted message click")
     }
 
-    override fun onImageMessageClicked(messageImageContent: MessageImageInfoContent,
-                                       mediaData: ImageContentRenderer.Data,
-                                       view: View,
-                                       inMemory: List<AttachmentData>) {
+    override fun onImageMessageClicked(
+            messageImageContent: MessageImageInfoContent,
+            mediaData: ImageContentRenderer.Data,
+            view: View,
+            inMemory: List<AttachmentData>
+    ) {
         navigator.openMediaViewer(
                 activity = requireActivity(),
                 roomId = timelineArgs.roomId,

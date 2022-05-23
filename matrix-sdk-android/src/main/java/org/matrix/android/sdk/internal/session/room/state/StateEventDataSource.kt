@@ -76,10 +76,11 @@ internal class StateEventDataSource @Inject constructor(
         }
     }
 
-    private fun buildStateEventQuery(realm: Realm,
-                                     roomId: String,
-                                     eventTypes: Set<String>,
-                                     stateKey: QueryStringValue
+    private fun buildStateEventQuery(
+            realm: Realm,
+            roomId: String,
+            eventTypes: Set<String>,
+            stateKey: QueryStringValue
     ): RealmQuery<CurrentStateEventEntity> {
         return with(queryStringValueProcessor) {
             realm.where<CurrentStateEventEntity>()

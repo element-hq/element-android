@@ -117,10 +117,12 @@ class RoomMemberListController @Inject constructor(
         }
     }
 
-    private fun buildRoomMember(roomMember: RoomMemberSummary,
-                                powerLevelCategory: RoomMemberListCategories,
-                                host: RoomMemberListController,
-                                data: RoomMemberListViewState) {
+    private fun buildRoomMember(
+            roomMember: RoomMemberSummary,
+            powerLevelCategory: RoomMemberListCategories,
+            host: RoomMemberListController,
+            data: RoomMemberListViewState
+    ) {
         val powerLabel = stringProvider.getString(powerLevelCategory.titleRes)
 
         profileMatrixItemWithPowerLevelWithPresence {

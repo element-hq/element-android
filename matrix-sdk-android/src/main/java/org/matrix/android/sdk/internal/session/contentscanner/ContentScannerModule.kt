@@ -49,9 +49,11 @@ internal abstract class ContentScannerModule {
         @Provides
         @ContentScannerDatabase
         @SessionScope
-        fun providesContentScannerRealmConfiguration(realmKeysUtils: RealmKeysUtils,
-                                                     @SessionFilesDirectory directory: File,
-                                                     @UserMd5 userMd5: String): RealmConfiguration {
+        fun providesContentScannerRealmConfiguration(
+                realmKeysUtils: RealmKeysUtils,
+                @SessionFilesDirectory directory: File,
+                @UserMd5 userMd5: String
+        ): RealmConfiguration {
             return RealmConfiguration.Builder()
                     .directory(directory)
                     .name("matrix-sdk-content-scanning.realm")

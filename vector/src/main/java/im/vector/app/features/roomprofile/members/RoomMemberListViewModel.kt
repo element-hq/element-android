@@ -51,9 +51,11 @@ import org.matrix.android.sdk.flow.mapOptional
 import org.matrix.android.sdk.flow.unwrap
 import timber.log.Timber
 
-class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState: RoomMemberListViewState,
-                                                          private val roomMemberSummaryComparator: RoomMemberSummaryComparator,
-                                                          private val session: Session) :
+class RoomMemberListViewModel @AssistedInject constructor(
+        @Assisted initialState: RoomMemberListViewState,
+        private val roomMemberSummaryComparator: RoomMemberSummaryComparator,
+        private val session: Session
+) :
         VectorViewModel<RoomMemberListViewState, RoomMemberListAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory

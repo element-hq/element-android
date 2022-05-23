@@ -92,25 +92,31 @@ internal class DefaultRelationService @AssistedInject constructor(
         }
     }
 
-    override fun editPoll(targetEvent: TimelineEvent,
-                          pollType: PollType,
-                          question: String,
-                          options: List<String>): Cancelable {
+    override fun editPoll(
+            targetEvent: TimelineEvent,
+            pollType: PollType,
+            question: String,
+            options: List<String>
+    ): Cancelable {
         return eventEditor.editPoll(targetEvent, pollType, question, options)
     }
 
-    override fun editTextMessage(targetEvent: TimelineEvent,
-                                 msgType: String,
-                                 newBodyText: CharSequence,
-                                 newBodyAutoMarkdown: Boolean,
-                                 compatibilityBodyText: String): Cancelable {
+    override fun editTextMessage(
+            targetEvent: TimelineEvent,
+            msgType: String,
+            newBodyText: CharSequence,
+            newBodyAutoMarkdown: Boolean,
+            compatibilityBodyText: String
+    ): Cancelable {
         return eventEditor.editTextMessage(targetEvent, msgType, newBodyText, newBodyAutoMarkdown, compatibilityBodyText)
     }
 
-    override fun editReply(replyToEdit: TimelineEvent,
-                           originalTimelineEvent: TimelineEvent,
-                           newBodyText: String,
-                           compatibilityBodyText: String): Cancelable {
+    override fun editReply(
+            replyToEdit: TimelineEvent,
+            originalTimelineEvent: TimelineEvent,
+            newBodyText: String,
+            compatibilityBodyText: String
+    ): Cancelable {
         return eventEditor.editReply(replyToEdit, originalTimelineEvent, newBodyText, compatibilityBodyText)
     }
 
@@ -164,7 +170,8 @@ internal class DefaultRelationService @AssistedInject constructor(
             msgType: String,
             autoMarkdown: Boolean,
             formattedText: String?,
-            eventReplied: TimelineEvent?): Cancelable? {
+            eventReplied: TimelineEvent?
+    ): Cancelable? {
         val event = if (eventReplied != null) {
             // Reply within a thread
             eventFactory.createReplyTextEvent(
