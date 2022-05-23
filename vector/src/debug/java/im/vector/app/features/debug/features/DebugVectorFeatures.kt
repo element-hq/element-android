@@ -57,6 +57,9 @@ class DebugVectorFeatures(
     override fun isOnboardingCombinedRegisterEnabled(): Boolean = read(DebugFeatureKeys.onboardingCombinedRegister)
             ?: vectorFeatures.isOnboardingCombinedRegisterEnabled()
 
+    override fun isLiveLocationEnabled(): Boolean = read(DebugFeatureKeys.liveLocationSharing)
+            ?: vectorFeatures.isLiveLocationEnabled()
+
     override fun isScreenSharingEnabled(): Boolean = read(DebugFeatureKeys.screenSharing)
             ?: vectorFeatures.isScreenSharingEnabled()
 

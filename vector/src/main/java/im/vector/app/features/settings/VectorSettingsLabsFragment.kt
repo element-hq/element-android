@@ -25,6 +25,7 @@ import im.vector.app.R
 import im.vector.app.core.preference.VectorSwitchPreference
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.room.threads.ThreadsManager
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
@@ -33,7 +34,8 @@ import javax.inject.Inject
 class VectorSettingsLabsFragment @Inject constructor(
         private val vectorPreferences: VectorPreferences,
         private val lightweightSettingsStorage: LightweightSettingsStorage,
-        private val threadsManager: ThreadsManager
+        private val threadsManager: ThreadsManager,
+        private val vectorFeatures: VectorFeatures,
 ) : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.room_settings_labs_pref_title
@@ -57,6 +59,8 @@ class VectorSettingsLabsFragment @Inject constructor(
                 false
             }
         }
+
+        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_LABS_ENABLE_LIVE_LOCATION)?.isVisible = vectorFeatures.isLiveLocationEnabled()
     }
 
     /**

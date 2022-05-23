@@ -27,6 +27,7 @@ import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
 import im.vector.app.core.time.Clock
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.disclaimer.SHARED_PREF_KEY
 import im.vector.app.features.homeserver.ServerUrlsRepository
 import im.vector.app.features.themes.ThemeUtils
@@ -37,6 +38,7 @@ import javax.inject.Inject
 class VectorPreferences @Inject constructor(
         private val context: Context,
         private val clock: Clock,
+        private val vectorFeatures: VectorFeatures,
 ) {
 
     companion object {
@@ -203,7 +205,7 @@ class VectorPreferences @Inject constructor(
         private const val TAKE_PHOTO_VIDEO_MODE = "TAKE_PHOTO_VIDEO_MODE"
 
         private const val SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE = "SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE"
-        private const val SETTINGS_LABS_ENABLE_LIVE_LOCATION = "SETTINGS_LABS_ENABLE_LIVE_LOCATION"
+        const val SETTINGS_LABS_ENABLE_LIVE_LOCATION = "SETTINGS_LABS_ENABLE_LIVE_LOCATION"
 
         // This key will be used to identify clients with the old thread support enabled io.element.thread
         const val SETTINGS_LABS_ENABLE_THREAD_MESSAGES_OLD_CLIENTS = "SETTINGS_LABS_ENABLE_THREAD_MESSAGES"
@@ -1043,7 +1045,7 @@ class VectorPreferences @Inject constructor(
     }
 
     fun labsEnableLiveLocation(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_LABS_ENABLE_LIVE_LOCATION, false)
+        return vectorFeatures.isLiveLocationEnabled() && defaultPrefs.getBoolean(SETTINGS_LABS_ENABLE_LIVE_LOCATION, false)
     }
 
     /**
