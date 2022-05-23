@@ -30,7 +30,7 @@ import im.vector.app.core.extensions.editText
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.extensions.realignPercentagesToParent
-import im.vector.app.core.extensions.setOnImeDone
+import im.vector.app.core.extensions.setOnImeDoneListener
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentFtueCombinedLoginBinding
 import im.vector.app.features.login.LoginMode
@@ -58,7 +58,7 @@ class FtueAuthCombinedLoginFragment @Inject constructor(
         setupSubmitButton()
         views.loginRoot.realignPercentagesToParent()
         views.editServerButton.debouncedClicks { viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.EditServerSelection)) }
-        views.loginPasswordInput.setOnImeDone { submit() }
+        views.loginPasswordInput.setOnImeDoneListener { submit() }
     }
 
     private fun setupSubmitButton() {
