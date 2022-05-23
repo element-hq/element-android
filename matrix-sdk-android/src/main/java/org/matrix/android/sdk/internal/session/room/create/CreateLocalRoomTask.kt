@@ -149,15 +149,12 @@ internal class DefaultCreateLocalRoomTask @Inject constructor(
         }
 
         val eventList = createLocalRoomEvents(createRoomBody)
-        val eventIds = ArrayList<String>(eventList.size)
         val roomMemberContentsByUser = HashMap<String, RoomMemberContent?>()
 
         for (event in eventList) {
             if (event.eventId == null || event.senderId == null || event.type == null) {
                 continue
             }
-
-            eventIds.add(event.eventId)
 
             val eventEntity = event.toEntity(roomId, SendState.SYNCED, null).copyToRealmOrIgnore(realm, EventInsertType.INCREMENTAL_SYNC)
             if (event.stateKey != null) {
