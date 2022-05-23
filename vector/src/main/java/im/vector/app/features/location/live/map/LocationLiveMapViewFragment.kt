@@ -24,6 +24,7 @@ import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.args
 import com.mapbox.mapboxsdk.maps.MapboxMapOptions
 import com.mapbox.mapboxsdk.maps.SupportMapFragment
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.VectorBaseFragment
@@ -34,9 +35,11 @@ import javax.inject.Inject
 /**
  * Screen showing a map with all the current users sharing their live location in room.
  */
-class LocationLiveMapViewFragment @Inject constructor(
-        private val urlMapProvider: UrlMapProvider,
-) : VectorBaseFragment<FragmentLiveLocationMapBinding>() {
+@AndroidEntryPoint
+class LocationLiveMapViewFragment : VectorBaseFragment<FragmentLiveLocationMapBinding>() {
+
+    @Inject
+    lateinit var urlMapProvider: UrlMapProvider
 
     private val args: LocationLiveMapViewArgs by args()
 
