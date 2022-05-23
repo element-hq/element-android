@@ -1851,7 +1851,7 @@
         <item quantity="many">%d nie odebranych połączeń głosowych</item>
         <item quantity="other">%d nie odebranych połączeń głosowych</item>
     </plurals>
-    <string name="call_ringing">Połączenie przychodzące…</string>
+    <string name="call_ringing">Dzwoni…</string>
     <string name="error_unauthorized">Błąd autoryzacji, niepoprawne dane logowania</string>
     <string name="login_error_homeserver_from_url_not_found_enter_manual">Wybierz serwer domowy</string>
     <string name="login_error_homeserver_from_url_not_found">Nie można było połączyć się z serwerem domowym %s. Proszę sprawdzić link lub wybrać serwer domowy manualnie.</string>
@@ -1964,7 +1964,7 @@
     <string name="looking_for_someone_not_in_space">Szukasz kogoś , kto nie jest w %s\?</string>
     <string name="user_invites_you">%s Cię zaprasza</string>
     <string name="you_are_invited">Zostałeś zaproszony</string>
-    <string name="spaces_beta_welcome_to_spaces_desc">Przestrzenie są nową metodą na zarządzanie pokojami i osobami.</string>
+    <string name="spaces_beta_welcome_to_spaces_desc">Przestrzenie są nową metodą na grupowanie razem wielu pokoi i osób.</string>
     <string name="space_add_space_to_any_space_you_manage">Dodaj przestrzeń do jakiejkolwiek przestrzeni którą zarządzasz.</string>
     <string name="space_add_existing_spaces">Dodaj istniejące przestrzenie</string>
     <string name="space_add_existing_rooms_only">Dodaj istniejące pokoje</string>
@@ -2083,7 +2083,7 @@
     <string name="give_feedback">Podziel się opinią</string>
     <string name="feedback_failed">Nie udało się przesłać opinii (%s)</string>
     <string name="feedback_sent">Dziękujemy, Twoja opinia została wysłana</string>
-    <string name="you_may_contact_me">Zachęcamy do kontaktu, jeśli masz dodatkowe pytania</string>
+    <string name="you_may_contact_me">Pozwalam na kontakt ze mną w razie dodatkowych pytań</string>
     <string name="send_feedback_space_info">Używasz przestrzeni w wersji beta. Ta opinia pomoże nam w tworzeniu kolejnych wersji. Twoja platforma i nazwa użytkownika zostaną odnotowane, abyśmy mogli w pełni wykorzystać Twoje sugestie.</string>
     <string name="send_feedback_space_title">Prześlij opinię o przestrzeniach</string>
     <string name="create_new_space">Stwórz nową przestrzeń</string>
