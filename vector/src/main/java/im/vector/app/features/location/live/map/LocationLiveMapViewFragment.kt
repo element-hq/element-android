@@ -26,7 +26,7 @@ import com.mapbox.mapboxsdk.maps.MapboxMapOptions
 import com.mapbox.mapboxsdk.maps.SupportMapFragment
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.extensions.addFragment
+import im.vector.app.core.extensions.addChildFragment
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentLiveLocationMapBinding
 import im.vector.app.features.location.UrlMapProvider
@@ -53,14 +53,7 @@ class LocationLiveMapViewFragment : VectorBaseFragment<FragmentLiveLocationMapBi
     }
 
     private fun setupMap() {
-        val mapFragment: SupportMapFragment =
-                parentFragmentManager.findFragmentByTag(MAP_FRAGMENT_TAG) as? SupportMapFragment
-                        ?: run {
-                            val options = MapboxMapOptions.createFromAttributes(requireContext(), null)
-                            val fragment = SupportMapFragment.newInstance(options)
-                            addFragment(R.id.liveLocationMapContainer, fragment, tag = MAP_FRAGMENT_TAG)
-                            fragment
-                        }
+        val mapFragment = getOrCreateSupportMapFragment()
 
         mapFragment.getMapAsync { mapBoxMap ->
             lifecycleScope.launchWhenCreated {
@@ -68,6 +61,14 @@ class LocationLiveMapViewFragment : VectorBaseFragment<FragmentLiveLocationMapBi
             }
         }
     }
+
+    private fun getOrCreateSupportMapFragment() =
+            childFragmentManager.findFragmentByTag(MAP_FRAGMENT_TAG) as? SupportMapFragment
+                    ?: run {
+                        val options = MapboxMapOptions.createFromAttributes(requireContext(), null)
+                        SupportMapFragment.newInstance(options)
+                                .also { addChildFragment(R.id.liveLocationMapContainer, it, tag = MAP_FRAGMENT_TAG) }
+                    }
 
     companion object {
         private const val MAP_FRAGMENT_TAG = "im.vector.app.features.location.live.map"
