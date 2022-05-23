@@ -16,6 +16,10 @@
 
 package org.matrix.android.sdk.internal.session.sync.handler
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.joinAll
+import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.model.MXEventDecryptionResult
@@ -36,15 +40,32 @@ import javax.inject.Inject
 private val loggerTag = LoggerTag("CryptoSyncHandler", LoggerTag.CRYPTO)
 
 internal class CryptoSyncHandler @Inject constructor(private val cryptoService: DefaultCryptoService,
+                                                     private val cryptoCoroutineScope: CoroutineScope,
+                                                     private val coroutineDispatchers: MatrixCoroutineDispatchers,
                                                      private val verificationService: DefaultVerificationService) {
 
     suspend fun handleToDevice(toDevice: ToDeviceSyncResponse, progressReporter: ProgressReporter? = null) {
-        val total = toDevice.events?.size ?: 0
+        val toDeviceList = toDevice.events.orEmpty()
+
+        val total = toDeviceList.size
+        progressReporter?.reportProgress(0f)
+        // Olm decryption can be parallelized for better performances.
+        // We keep events in the same order and group them by sender_key
+        // as we can't parallelized event from same sender
+        toDeviceList
+                .filter { it.getClearType() == EventType.ENCRYPTED }
+                .groupBy { it.content?.get("sender_key") }
+                .map {
+                    cryptoCoroutineScope.launch(coroutineDispatchers.computation) {
+                        it.value.forEach { toDevice ->
+                            decryptToDeviceEvent(toDevice, null)
+                        }
+                    }
+                }.joinAll()
+
         toDevice.events?.forEachIndexed { index, event ->
             progressReporter?.reportProgress(index * 100F / total)
-            // Decrypt event if necessary
             Timber.tag(loggerTag.value).i("To device event from ${event.senderId} of type:${event.type}")
-            decryptToDeviceEvent(event, null)
             if (event.getClearType() == EventType.MESSAGE &&
                     event.getClearContent()?.toModel<MessageContent>()?.msgType == "m.bad.encrypted") {
                 Timber.tag(loggerTag.value).e("handleToDeviceEvent() : Warning: Unable to decrypt to-device event : ${event.content}")

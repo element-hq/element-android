@@ -17,9 +17,11 @@
 package org.matrix.android.sdk.internal.crypto
 
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_OLM
 import org.matrix.android.sdk.api.session.crypto.NewSessionListener
 import org.matrix.android.sdk.internal.crypto.algorithms.IMXDecrypting
 import org.matrix.android.sdk.internal.crypto.algorithms.megolm.MXMegolmDecryptionFactory
+import org.matrix.android.sdk.internal.crypto.algorithms.olm.MXOlmDecryption
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.MXOlmDecryptionFactory
 import org.matrix.android.sdk.internal.session.SessionScope
 import timber.log.Timber
@@ -43,6 +45,8 @@ internal class RoomDecryptorProvider @Inject constructor(
     fun removeSessionListener(listener: NewSessionListener) {
         newSessionListeners.remove(listener)
     }
+
+    private val olmDecryptor: MXOlmDecryption by lazy { olmDecryptionFactory.create() }
 
     /**
      * Get a decryptor for a given room and algorithm.
@@ -85,7 +89,8 @@ internal class RoomDecryptorProvider @Inject constructor(
                         }
                     }
                 }
-                else                      -> olmDecryptionFactory.create()
+                MXCRYPTO_ALGORITHM_OLM    -> olmDecryptor
+                else                      -> return null
             }
             if (!roomId.isNullOrEmpty()) {
                 synchronized(roomDecryptors) {

@@ -94,7 +94,7 @@ internal class SyncResponseHandler @Inject constructor(
                 }
             }
         }.also {
-            Timber.v("Finish handling toDevice in $it ms")
+            Timber.d("Finish handling toDevice in $it ms")
         }
         val aggregator = SyncResponsePostTreatmentAggregator()
 
