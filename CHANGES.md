@@ -36,7 +36,7 @@ Other changes
  - Reformatted project code ([#5953](https://github.com/vector-im/element-android/issues/5953))
  - Update check for server-side threads support to match spec. ([#5997](https://github.com/vector-im/element-android/issues/5997))
  - Setup detekt ([#6038](https://github.com/vector-im/element-android/issues/6038))
- - Notify the user for each new message ([#46312](https://github.com/vector-im/element-android/issues/46312))
+ - Notify the user for each new message ([#4632](https://github.com/vector-im/element-android/issues/4632))
 
 
 Changes in Element v1.4.14 (2022-05-05)
