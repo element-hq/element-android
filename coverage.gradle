@@ -51,6 +51,9 @@ task theCodeCoverageReport(type: JacocoReport) {
     rootProject.apply plugin: 'jacoco'
     // to limit projects in a specific report, add
     // def excludedProjects = [ ... ]
+    tasks.withType(Test) {
+        jacoco.includeNoLocationClasses = true
+    }
     def projects = collectProjects { ['vector','matrix-sdk-android'].contains(it.name) }
     //def projects = collectProjects { true }
     dependsOn { [':vector:assembleGplay'] + [':matrix-sdk-android:testDebugUnitTest']  + [':vector:testGplayDebugUnitTest'] + [':matrix-sdk-android:connectedDebugAndroidTest'] }
