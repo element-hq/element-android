@@ -22,7 +22,6 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocati
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntity
 import javax.inject.Inject
 
-// TODO add unit tests
 internal class LiveLocationShareAggregatedSummaryMapper @Inject constructor() {
 
     fun map(entity: LiveLocationShareAggregatedSummaryEntity): LiveLocationShareAggregatedSummary {
