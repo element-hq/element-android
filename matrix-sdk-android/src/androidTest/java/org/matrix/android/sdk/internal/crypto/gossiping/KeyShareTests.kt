@@ -28,6 +28,7 @@ import org.junit.Assert.assertNull
 import org.junit.FixMethodOrder
 import org.junit.Rule
 import org.junit.Test
+import org.junit.Ignore
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
@@ -51,6 +52,7 @@ import org.matrix.android.sdk.common.TestConstants
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
 @LargeTest
+@Ignore
 class KeyShareTests : InstrumentedTest {
 
     @get:Rule val rule = RetryTestRule(3)
