@@ -67,6 +67,7 @@ data class Params(
         val progressListener: BootstrapProgressListener? = null,
         val passphrase: String?,
         val keySpec: SsssKeySpec? = null,
+        val forceResetIfSomeSecretsAreMissing: Boolean = false,
         val setupMode: SetupMode
 )
 
@@ -83,6 +84,7 @@ class BootstrapCrossSigningTask @Inject constructor(
         // Ensure cross-signing is initialized. Due to migration it is maybe not always correctly initialized
 
         val shouldSetCrossSigning = !crossSigningService.isCrossSigningInitialized() ||
+                (params.forceResetIfSomeSecretsAreMissing && !crossSigningService.allPrivateKeysKnown()) ||
                 (params.setupMode == SetupMode.PASSPHRASE_AND_NEEDED_SECRETS_RESET && !crossSigningService.allPrivateKeysKnown()) ||
                 (params.setupMode == SetupMode.HARD_RESET)
         if (shouldSetCrossSigning) {

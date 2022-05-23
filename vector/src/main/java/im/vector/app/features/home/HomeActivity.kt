@@ -50,6 +50,7 @@ import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.analytics.accountdata.AnalyticsAccountDataViewModel
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.analytics.plan.ViewRoom
+import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.disclaimer.showDisclaimerDialog
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.matrixto.OriginOfMatrixTo
@@ -226,6 +227,14 @@ class HomeActivity :
                 is HomeActivityViewEvents.AskPasswordToInitCrossSigning -> handleAskPasswordToInitCrossSigning(it)
                 is HomeActivityViewEvents.OnNewSession                  -> handleOnNewSession(it)
                 HomeActivityViewEvents.PromptToEnableSessionPush        -> handlePromptToEnablePush()
+                HomeActivityViewEvents.StartRecoverySetupFlow           -> handleStartRecoverySetup()
+                is HomeActivityViewEvents.ForceVerification             ->  {
+                    if (it.sendRequest) {
+                        navigator.requestSelfSessionVerification(this)
+                    } else {
+                        navigator.waitSessionVerification(this)
+                    }
+                }
                 is HomeActivityViewEvents.OnCrossSignedInvalidated      -> handleCrossSigningInvalidated(it)
                 HomeActivityViewEvents.ShowAnalyticsOptIn               -> handleShowAnalyticsOptIn()
                 HomeActivityViewEvents.NotifyUserForThreadsMigration    -> handleNotifyUserForThreadsMigration()
@@ -352,6 +361,13 @@ class HomeActivity :
                             .show()
                 }
             }
+        }
+    }
+
+    private fun handleStartRecoverySetup() {
+        // To avoid IllegalStateException in case the transaction was executed after onSaveInstanceState
+        lifecycleScope.launchWhenResumed {
+            navigator.open4SSetup(this@HomeActivity, SetupMode.NORMAL)
         }
     }
 

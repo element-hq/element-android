@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.home
+package im.vector.app.features.raw.wellknown
 
-import com.airbnb.mvrx.MavericksState
-import org.matrix.android.sdk.api.session.initsync.SyncStatusService
+enum class SecureBackupMethod {
+    KEY,
+    PASSPHRASE,
+    KEY_OR_PASSPHRASE;
 
-data class HomeActivityViewState(
-        val syncStatusServiceStatus: SyncStatusService.Status = SyncStatusService.Status.Idle,
-        val accountCreation: Boolean = false
-) : MavericksState
+    val isKeyAvailable: Boolean get() = this == KEY || this == KEY_OR_PASSPHRASE
+    val isPassphraseAvailable: Boolean get() = this == PASSPHRASE || this == KEY_OR_PASSPHRASE
+}
