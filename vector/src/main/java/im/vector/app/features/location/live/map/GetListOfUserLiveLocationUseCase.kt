@@ -29,7 +29,6 @@ class GetListOfUserLiveLocationUseCase @Inject constructor(
         private val userLiveLocationViewStateMapper: UserLiveLocationViewStateMapper,
 ) {
 
-    // TODO add unit tests
     fun execute(roomId: String): Flow<List<UserLiveLocationViewState>> {
         return session.getRoom(roomId)
                 ?.locationSharingService()
