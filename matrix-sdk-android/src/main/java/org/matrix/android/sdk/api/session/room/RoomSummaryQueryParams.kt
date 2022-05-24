@@ -24,19 +24,26 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.space.SpaceSummaryQueryParams
 
+/**
+ * Create a [RoomSummaryQueryParams] object, calling [init] with a [RoomSummaryQueryParams.Builder]
+ */
 fun roomSummaryQueryParams(init: (RoomSummaryQueryParams.Builder.() -> Unit) = {}): RoomSummaryQueryParams {
-    return RoomSummaryQueryParams.Builder().apply(init).build()
-}
-
-fun spaceSummaryQueryParams(init: (RoomSummaryQueryParams.Builder.() -> Unit) = {}): SpaceSummaryQueryParams {
     return RoomSummaryQueryParams.Builder()
             .apply(init)
-            .apply {
-                includeType = listOf(RoomType.SPACE)
-                excludeType = null
-                roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-            }
             .build()
+}
+
+/**
+ * Create a [RoomSummaryQueryParams] object, calling [init] with a [RoomSummaryQueryParams.Builder]
+ * This is specific for spaces, other filters will be applied after invoking [init]
+ */
+fun spaceSummaryQueryParams(init: (RoomSummaryQueryParams.Builder.() -> Unit) = {}): SpaceSummaryQueryParams {
+    return roomSummaryQueryParams {
+        init()
+        includeType = listOf(RoomType.SPACE)
+        excludeType = null
+        roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+    }
 }
 
 /**
