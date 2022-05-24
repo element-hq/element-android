@@ -23,7 +23,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityLocationSharingBinding
+import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.location.live.map.bottomsheet.LiveLocationUsersBottomSheet
 import kotlinx.parcelize.Parcelize
+import javax.inject.Inject
 
 @Parcelize
 data class LocationSharingArgs(
@@ -35,6 +38,8 @@ data class LocationSharingArgs(
 
 @AndroidEntryPoint
 class LocationSharingActivity : VectorBaseActivity<ActivityLocationSharingBinding>() {
+
+    @Inject lateinit var avatarRenderer: AvatarRenderer
 
     override fun getBinding() = ActivityLocationSharingBinding.inflate(layoutInflater)
 
@@ -66,6 +71,8 @@ class LocationSharingActivity : VectorBaseActivity<ActivityLocationSharingBindin
                 }
             }
         }
+
+        LiveLocationUsersBottomSheet(avatarRenderer).show(supportFragmentManager, "LiveLocationUsersBottomSheet")
     }
 
     companion object {
