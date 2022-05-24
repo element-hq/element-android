@@ -43,9 +43,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import org.matrix.android.sdk.api.extensions.tryOrNull
-import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.query.RoomTagQueryFilter
+import org.matrix.android.sdk.api.query.SpaceFilter
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
@@ -370,7 +370,7 @@ class RoomListSectionBuilderSpace(
                     activeSpaceUpdaters.add(object : RoomListViewModel.ActiveSpaceQueryUpdater {
                         override fun updateForSpaceId(roomId: String?) {
                             filteredPagedRoomSummariesLive.queryParams = roomQueryParams.copy(
-                                    activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(roomId)
+                                    spaceFilter = SpaceFilter.ActiveSpace(roomId)
                             )
                             liveQueryParams.update { filteredPagedRoomSummariesLive.queryParams }
                         }
@@ -381,11 +381,11 @@ class RoomListSectionBuilderSpace(
                         override fun updateForSpaceId(roomId: String?) {
                             if (roomId != null) {
                                 filteredPagedRoomSummariesLive.queryParams = roomQueryParams.copy(
-                                        activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(roomId)
+                                        spaceFilter = SpaceFilter.ActiveSpace(roomId)
                                 )
                             } else {
                                 filteredPagedRoomSummariesLive.queryParams = roomQueryParams.copy(
-                                        activeSpaceFilter = null
+                                        spaceFilter = null
                                 )
                             }
                             liveQueryParams.update { filteredPagedRoomSummariesLive.queryParams }
@@ -436,17 +436,17 @@ class RoomListSectionBuilderSpace(
         return when (spaceFilter) {
             RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL -> {
                 copy(
-                        activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(currentSpace)
+                        spaceFilter = SpaceFilter.ActiveSpace(currentSpace)
                 )
             }
             RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL     -> {
                 if (currentSpace == null) {
                     copy(
-                            activeSpaceFilter = null
+                            spaceFilter = null
                     )
                 } else {
                     copy(
-                            activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(currentSpace)
+                            spaceFilter = SpaceFilter.ActiveSpace(currentSpace)
                     )
                 }
             }

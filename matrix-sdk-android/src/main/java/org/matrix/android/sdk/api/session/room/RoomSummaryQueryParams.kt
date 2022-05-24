@@ -16,10 +16,10 @@
 
 package org.matrix.android.sdk.api.session.room
 
-import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.query.RoomTagQueryFilter
+import org.matrix.android.sdk.api.query.SpaceFilter
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.space.SpaceSummaryQueryParams
@@ -86,7 +86,7 @@ data class RoomSummaryQueryParams(
         /**
          * Used to filter room using the current space.
          */
-        val activeSpaceFilter: ActiveSpaceFilter?,
+        val spaceFilter: SpaceFilter?,
         /**
          * Used to filter room using the current group.
          */
@@ -101,7 +101,7 @@ data class RoomSummaryQueryParams(
         var roomTagQueryFilter: RoomTagQueryFilter? = null
         var excludeType: List<String?>? = listOf(RoomType.SPACE)
         var includeType: List<String?>? = null
-        var activeSpaceFilter: ActiveSpaceFilter? = null
+        var spaceFilter: SpaceFilter? = null
         var activeGroupId: String? = null
 
         fun build() = RoomSummaryQueryParams(
@@ -112,7 +112,7 @@ data class RoomSummaryQueryParams(
                 roomTagQueryFilter = roomTagQueryFilter,
                 excludeType = excludeType,
                 includeType = includeType,
-                activeSpaceFilter = activeSpaceFilter,
+                spaceFilter = spaceFilter,
                 activeGroupId = activeGroupId
         )
     }

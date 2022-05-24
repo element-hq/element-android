@@ -26,9 +26,9 @@ import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.kotlin.where
-import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
+import org.matrix.android.sdk.api.query.SpaceFilter
 import org.matrix.android.sdk.api.query.isNormalized
 import org.matrix.android.sdk.api.session.room.ResultBoundaries
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
@@ -300,21 +300,21 @@ internal class RoomSummaryDataSource @Inject constructor(
         }
 
         // Timber.w("VAL: activeSpaceId : ${queryParams.activeSpaceId}")
-        when (queryParams.activeSpaceFilter) {
-            is ActiveSpaceFilter.ActiveSpace  -> {
+        when (queryParams.spaceFilter) {
+            is SpaceFilter.ActiveSpace  -> {
                 // It's annoying but for now realm java does not support querying in primitive list :/
                 // https://github.com/realm/realm-java/issues/5361
-                if (queryParams.activeSpaceFilter.currentSpaceId == null) {
+                if (queryParams.spaceFilter.currentSpaceId == null) {
                     // orphan rooms
                     query.isNull(RoomSummaryEntityFields.FLATTEN_PARENT_IDS)
                 } else {
-                    query.contains(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, queryParams.activeSpaceFilter.currentSpaceId)
+                    query.contains(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, queryParams.spaceFilter.currentSpaceId)
                 }
             }
-            is ActiveSpaceFilter.ExcludeSpace -> {
-                query.not().contains(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, queryParams.activeSpaceFilter.spaceId)
+            is SpaceFilter.ExcludeSpace -> {
+                query.not().contains(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, queryParams.spaceFilter.spaceId)
             }
-            else                              -> {
+            else                        -> {
                 // nop
             }
         }

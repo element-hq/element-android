@@ -45,8 +45,8 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
+import org.matrix.android.sdk.api.query.SpaceFilter
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.NewSessionListener
 import org.matrix.android.sdk.api.session.initsync.SyncStatusService
@@ -241,7 +241,7 @@ class HomeDetailViewModel @AssistedInject constructor(
                                         roomSummaryQueryParams {
                                             memberships = listOf(Membership.INVITE)
                                             roomCategoryFilter = RoomCategoryFilter.ONLY_DM
-                                            activeSpaceFilter = activeSpaceRoomId?.let { ActiveSpaceFilter.ActiveSpace(it) }
+                                            spaceFilter = activeSpaceRoomId?.let { SpaceFilter.ActiveSpace(it) }
                                         }
                                 ).size
 
@@ -249,7 +249,7 @@ class HomeDetailViewModel @AssistedInject constructor(
                                         roomSummaryQueryParams {
                                             memberships = listOf(Membership.INVITE)
                                             roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-                                            activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(groupingMethod.spaceSummary?.roomId)
+                                            spaceFilter = SpaceFilter.ActiveSpace(groupingMethod.spaceSummary?.roomId)
                                         }
                                 ).size
                             }
@@ -258,7 +258,7 @@ class HomeDetailViewModel @AssistedInject constructor(
                                     roomSummaryQueryParams {
                                         memberships = listOf(Membership.JOIN)
                                         roomCategoryFilter = RoomCategoryFilter.ONLY_DM
-                                        activeSpaceFilter = activeSpaceRoomId?.let { ActiveSpaceFilter.ActiveSpace(it) }
+                                        spaceFilter = activeSpaceRoomId?.let { SpaceFilter.ActiveSpace(it) }
                                     }
                             )
 
@@ -266,7 +266,7 @@ class HomeDetailViewModel @AssistedInject constructor(
                                     roomSummaryQueryParams {
                                         memberships = listOf(Membership.JOIN)
                                         roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-                                        activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(groupingMethod.spaceSummary?.roomId)
+                                        spaceFilter = SpaceFilter.ActiveSpace(groupingMethod.spaceSummary?.roomId)
                                     }
                             )
 
