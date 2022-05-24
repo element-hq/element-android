@@ -16,6 +16,10 @@
 
 package org.matrix.android.sdk.api.query
 
+/**
+ * Filter to be used to do room queries.
+ * @see [org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams]
+ */
 sealed class ActiveSpaceFilter {
     object None : ActiveSpaceFilter()
     data class ActiveSpace(val currentSpaceId: String?) : ActiveSpaceFilter()

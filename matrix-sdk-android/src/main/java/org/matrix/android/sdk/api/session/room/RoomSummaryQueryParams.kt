@@ -47,18 +47,49 @@ fun spaceSummaryQueryParams(init: (RoomSummaryQueryParams.Builder.() -> Unit) = 
 }
 
 /**
- * This class can be used to filter room summaries to use with:
- * [org.matrix.android.sdk.api.session.room.Room] and [org.matrix.android.sdk.api.session.room.RoomService].
+ * This class can be used to filter room summaries to use with [RoomService].
+ * It provides a [Builder].
+ * [roomSummaryQueryParams] and [spaceSummaryQueryParams] can also be used to build an instance of this class.
  */
 data class RoomSummaryQueryParams(
+        /**
+         * Query for the displayName of the room. The display name can be the value of the state event,
+         * or a value returned by [org.matrix.android.sdk.api.RoomDisplayNameFallbackProvider].
+         */
         val displayName: QueryStringValue,
+        /**
+         * Query for the canonical alias of the room.
+         */
         val canonicalAlias: QueryStringValue,
+        /**
+         * Used to filter room by membership.
+         */
         val memberships: List<Membership>,
+        /**
+         * Used to filter room by room category.
+         */
         val roomCategoryFilter: RoomCategoryFilter?,
+        /**
+         * Used to filter room by room tag.
+         */
         val roomTagQueryFilter: RoomTagQueryFilter?,
+        /**
+         * Used to filter room by room type.
+         * @see [includeType]
+         */
         val excludeType: List<String?>?,
+        /**
+         * Used to filter room by room type.
+         * @see [excludeType]
+         */
         val includeType: List<String?>?,
+        /**
+         * Used to filter room using the current space.
+         */
         val activeSpaceFilter: ActiveSpaceFilter?,
+        /**
+         * Used to filter room using the current group.
+         */
         val activeGroupId: String? = null
 ) {
 
