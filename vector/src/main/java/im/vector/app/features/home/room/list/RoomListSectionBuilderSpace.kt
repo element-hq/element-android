@@ -385,7 +385,7 @@ class RoomListSectionBuilderSpace(
                                 )
                             } else {
                                 filteredPagedRoomSummariesLive.queryParams = roomQueryParams.copy(
-                                        activeSpaceFilter = ActiveSpaceFilter.None
+                                        activeSpaceFilter = null
                                 )
                             }
                             liveQueryParams.update { filteredPagedRoomSummariesLive.queryParams }
@@ -442,7 +442,7 @@ class RoomListSectionBuilderSpace(
             RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL     -> {
                 if (currentSpace == null) {
                     copy(
-                            activeSpaceFilter = ActiveSpaceFilter.None
+                            activeSpaceFilter = null
                     )
                 } else {
                     copy(

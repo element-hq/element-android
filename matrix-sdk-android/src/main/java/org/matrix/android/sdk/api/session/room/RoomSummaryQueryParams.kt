@@ -101,7 +101,7 @@ data class RoomSummaryQueryParams(
         var roomTagQueryFilter: RoomTagQueryFilter? = null
         var excludeType: List<String?>? = listOf(RoomType.SPACE)
         var includeType: List<String?>? = null
-        var activeSpaceFilter: ActiveSpaceFilter = ActiveSpaceFilter.None
+        var activeSpaceFilter: ActiveSpaceFilter? = null
         var activeGroupId: String? = null
 
         fun build() = RoomSummaryQueryParams(
