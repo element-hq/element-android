@@ -107,6 +107,10 @@ ext.libs = [
                 'mavericks'              : "com.airbnb.android:mavericks:$mavericks",
                 'mavericksTesting'       : "com.airbnb.android:mavericks-testing:$mavericks"
         ],
+        maplibre    : [
+                'androidSdk'             : "org.maplibre.gl:android-sdk:9.5.2",
+                'pluginAnnotation'       : "org.maplibre.gl:android-plugin-annotation-v9:1.0.0"
+        ],
         mockk      : [
                 'mockk'                   : "io.mockk:mockk:$mockk",
                 'mockkAndroid'            : "io.mockk:mockk-android:$mockk"
