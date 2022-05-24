@@ -36,6 +36,7 @@ import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
+// TODO add unit tests
 internal class LiveLocationAggregationProcessor @Inject constructor(
         @SessionId private val sessionId: String,
         private val workManagerProvider: WorkManagerProvider,
