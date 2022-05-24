@@ -97,7 +97,6 @@ class RoomListSectionBuilderGroup(
                             true
                     ) {
                         it.memberships = listOf(Membership.INVITE)
-                        it.roomCategoryFilter = RoomCategoryFilter.ALL
                         it.activeGroupId = actualGroupId
                     }
                 }

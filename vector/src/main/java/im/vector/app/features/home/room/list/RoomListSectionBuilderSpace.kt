@@ -298,7 +298,6 @@ class RoomListSectionBuilderSpace(
                     countRoomAsNotif = true
             ) {
                 it.memberships = listOf(Membership.INVITE)
-                it.roomCategoryFilter = RoomCategoryFilter.ALL
             }
         }
 

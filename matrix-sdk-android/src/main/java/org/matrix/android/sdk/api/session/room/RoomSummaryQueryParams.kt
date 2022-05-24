@@ -66,7 +66,7 @@ data class RoomSummaryQueryParams(
         var displayName: QueryStringValue = QueryStringValue.NoCondition
         var canonicalAlias: QueryStringValue = QueryStringValue.NoCondition
         var memberships: List<Membership> = Membership.all()
-        var roomCategoryFilter: RoomCategoryFilter? = RoomCategoryFilter.ALL
+        var roomCategoryFilter: RoomCategoryFilter? = null
         var roomTagQueryFilter: RoomTagQueryFilter? = null
         var excludeType: List<String?>? = listOf(RoomType.SPACE)
         var includeType: List<String?>? = null
