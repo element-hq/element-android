@@ -171,9 +171,6 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
                 roomUpdatableLivePageResult.queryParams = roomUpdatableLivePageResult.queryParams.copy(
                         displayName = QueryStringValue.Contains(action.filter, QueryStringValue.Case.INSENSITIVE)
                 )
-                roomUpdatableLivePageResult.queryParams = roomUpdatableLivePageResult.queryParams.copy(
-                        displayName = QueryStringValue.Contains(action.filter, QueryStringValue.Case.INSENSITIVE)
-                )
                 setState {
                     copy(
                             currentFilter = action.filter
