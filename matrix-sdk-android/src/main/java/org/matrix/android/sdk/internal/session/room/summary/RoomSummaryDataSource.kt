@@ -301,22 +301,19 @@ internal class RoomSummaryDataSource @Inject constructor(
 
         // Timber.w("VAL: activeSpaceId : ${queryParams.activeSpaceId}")
         when (queryParams.spaceFilter) {
+            SpaceFilter.OrphanRooms     -> {
+                // orphan rooms
+                query.isNull(RoomSummaryEntityFields.FLATTEN_PARENT_IDS)
+            }
             is SpaceFilter.ActiveSpace  -> {
                 // It's annoying but for now realm java does not support querying in primitive list :/
                 // https://github.com/realm/realm-java/issues/5361
-                if (queryParams.spaceFilter.currentSpaceId == null) {
-                    // orphan rooms
-                    query.isNull(RoomSummaryEntityFields.FLATTEN_PARENT_IDS)
-                } else {
-                    query.contains(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, queryParams.spaceFilter.currentSpaceId)
-                }
+                query.contains(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, queryParams.spaceFilter.spaceId)
             }
             is SpaceFilter.ExcludeSpace -> {
                 query.not().contains(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, queryParams.spaceFilter.spaceId)
             }
-            else                        -> {
-                // nop
-            }
+            null                        -> Unit // nop
         }
 
         queryParams.activeGroupId?.let { activeGroupId ->

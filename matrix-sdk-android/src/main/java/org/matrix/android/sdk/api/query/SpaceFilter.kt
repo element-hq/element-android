@@ -17,10 +17,22 @@
 package org.matrix.android.sdk.api.query
 
 /**
- * Filter to be used to do room queries.
+ * Filter to be used to do room queries regarding the space hierarchy.
  * @see [org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams]
  */
-sealed class SpaceFilter {
-    data class ActiveSpace(val currentSpaceId: String?) : SpaceFilter()
-    data class ExcludeSpace(val spaceId: String) : SpaceFilter()
+sealed interface SpaceFilter {
+    /**
+     * Used to get all the rooms that are not in any space.
+     */
+    object OrphanRooms : SpaceFilter
+
+    /**
+     * Used to get all the rooms that have the provided space in their parent hierarchy.
+     */
+    data class ActiveSpace(val spaceId: String) : SpaceFilter
+
+    /**
+     * Used to get all the rooms that do not have the provided space in their parent hierarchy.
+     */
+    data class ExcludeSpace(val spaceId: String) : SpaceFilter
 }

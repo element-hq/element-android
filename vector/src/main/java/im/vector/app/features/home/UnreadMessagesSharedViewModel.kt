@@ -74,11 +74,10 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
     private val roomService = session.roomService()
 
     init {
-
         roomService.getPagedRoomSummariesLive(
                 roomSummaryQueryParams {
                     this.memberships = listOf(Membership.JOIN)
-                    this.spaceFilter = SpaceFilter.ActiveSpace(null)
+                    this.spaceFilter = SpaceFilter.OrphanRooms
                 }, sortOrder = RoomSortOrder.NONE
         ).asFlow()
                 .throttleFirst(300)
@@ -86,7 +85,7 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                     val counts = roomService.getNotificationCountForRooms(
                             roomSummaryQueryParams {
                                 this.memberships = listOf(Membership.JOIN)
-                                this.spaceFilter = SpaceFilter.ActiveSpace(null)
+                                this.spaceFilter = SpaceFilter.OrphanRooms
                             }
                     )
                     val invites = if (autoAcceptInvites.hideInvites) {
@@ -95,7 +94,7 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                         roomService.getRoomSummaries(
                                 roomSummaryQueryParams {
                                     this.memberships = listOf(Membership.INVITE)
-                                    this.spaceFilter = SpaceFilter.ActiveSpace(null)
+                                    this.spaceFilter = SpaceFilter.OrphanRooms
                                 }
                         ).size
                     }
@@ -151,7 +150,7 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                     val totalCount = roomService.getNotificationCountForRooms(
                             roomSummaryQueryParams {
                                 this.memberships = listOf(Membership.JOIN)
-                                this.spaceFilter = SpaceFilter.ActiveSpace(null).takeIf {
+                                this.spaceFilter = SpaceFilter.OrphanRooms.takeIf {
                                     !vectorPreferences.prefSpacesShowAllRoomInHome()
                                 }
                             }

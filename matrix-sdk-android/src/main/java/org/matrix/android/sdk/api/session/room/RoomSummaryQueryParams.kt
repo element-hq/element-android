@@ -25,7 +25,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.space.SpaceSummaryQueryParams
 
 /**
- * Create a [RoomSummaryQueryParams] object, calling [init] with a [RoomSummaryQueryParams.Builder]
+ * Create a [RoomSummaryQueryParams] object, calling [init] with a [RoomSummaryQueryParams.Builder].
  */
 fun roomSummaryQueryParams(init: (RoomSummaryQueryParams.Builder.() -> Unit) = {}): RoomSummaryQueryParams {
     return RoomSummaryQueryParams.Builder()
@@ -34,7 +34,7 @@ fun roomSummaryQueryParams(init: (RoomSummaryQueryParams.Builder.() -> Unit) = {
 }
 
 /**
- * Create a [SpaceSummaryQueryParams] object (which is a [RoomSummaryQueryParams]), calling [init] with a [RoomSummaryQueryParams.Builder]
+ * Create a [SpaceSummaryQueryParams] object (which is a [RoomSummaryQueryParams]), calling [init] with a [RoomSummaryQueryParams.Builder].
  * This is specific for spaces, other filters will be applied after invoking [init]
  */
 fun spaceSummaryQueryParams(init: (RoomSummaryQueryParams.Builder.() -> Unit) = {}): SpaceSummaryQueryParams {

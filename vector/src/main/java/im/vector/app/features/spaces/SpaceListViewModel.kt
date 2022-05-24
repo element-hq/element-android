@@ -110,7 +110,7 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
         session.roomService().getPagedRoomSummariesLive(
                 roomSummaryQueryParams {
                     this.memberships = listOf(Membership.JOIN)
-                    this.spaceFilter = SpaceFilter.ActiveSpace(null).takeIf {
+                    this.spaceFilter = SpaceFilter.OrphanRooms.takeIf {
                         !vectorPreferences.prefSpacesShowAllRoomInHome()
                     }
                 }, sortOrder = RoomSortOrder.NONE
@@ -127,7 +127,7 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
                     val totalCount = session.roomService().getNotificationCountForRooms(
                             roomSummaryQueryParams {
                                 this.memberships = listOf(Membership.JOIN)
-                                this.spaceFilter = SpaceFilter.ActiveSpace(null).takeIf {
+                                this.spaceFilter = SpaceFilter.OrphanRooms.takeIf {
                                     !vectorPreferences.prefSpacesShowAllRoomInHome()
                                 }
                             }

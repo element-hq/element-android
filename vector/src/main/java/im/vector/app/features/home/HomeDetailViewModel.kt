@@ -249,7 +249,7 @@ class HomeDetailViewModel @AssistedInject constructor(
                                         roomSummaryQueryParams {
                                             memberships = listOf(Membership.INVITE)
                                             roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-                                            spaceFilter = SpaceFilter.ActiveSpace(groupingMethod.spaceSummary?.roomId)
+                                            spaceFilter = groupingMethod.spaceSummary?.roomId?.let { SpaceFilter.ActiveSpace(it) } ?: SpaceFilter.OrphanRooms
                                         }
                                 ).size
                             }
@@ -266,7 +266,7 @@ class HomeDetailViewModel @AssistedInject constructor(
                                     roomSummaryQueryParams {
                                         memberships = listOf(Membership.JOIN)
                                         roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-                                        spaceFilter = SpaceFilter.ActiveSpace(groupingMethod.spaceSummary?.roomId)
+                                        spaceFilter = groupingMethod.spaceSummary?.roomId?.let { SpaceFilter.ActiveSpace(it) } ?: SpaceFilter.OrphanRooms
                                     }
                             )
 
