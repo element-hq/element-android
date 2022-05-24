@@ -63,7 +63,7 @@ data class RoomSummaryQueryParams(
 ) {
 
     class Builder {
-        var displayName: QueryStringValue = QueryStringValue.IsNotEmpty
+        var displayName: QueryStringValue = QueryStringValue.NoCondition
         var canonicalAlias: QueryStringValue = QueryStringValue.NoCondition
         var memberships: List<Membership> = Membership.all()
         var roomCategoryFilter: RoomCategoryFilter? = RoomCategoryFilter.ALL
