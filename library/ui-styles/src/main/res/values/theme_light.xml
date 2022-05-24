@@ -3,7 +3,7 @@
 
     <!-- LIGHT THEME COLORS -->
 
-    <style name="Base.Theme.Vector.Light" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="Base.Theme.Vector.Light" parent="Theme.Material3.Light.NoActionBar">
         <!-- Element attribute for palette -->
         <!-- content colors -->
         <item name="vctr_content_primary">@color/element_content_primary_light</item>

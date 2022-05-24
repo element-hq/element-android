@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Launcher Theme, only used for VectorLauncherActivity (will be use even before the Activity is started) -->
-    <style name="Theme.Vector.Launcher" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="Theme.Vector.Launcher" parent="Theme.Material3.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/splash</item>
         <item name="colorPrimary">@color/element_accent_light</item>
         <item name="android:statusBarColor">@color/element_accent_light</item>

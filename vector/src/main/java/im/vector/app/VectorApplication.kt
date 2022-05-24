@@ -196,7 +196,9 @@ class VectorApplication :
             addAction(Intent.ACTION_SCREEN_OFF)
             addAction(Intent.ACTION_SCREEN_ON)
         })
-
+        // Apply dynamic color
+        DynamicColors.applyToActivitiesIfAvailable(this)
+        
         EmojiManager.install(GoogleEmojiProvider())
 
         // Initialize Mapbox before inflating mapViews

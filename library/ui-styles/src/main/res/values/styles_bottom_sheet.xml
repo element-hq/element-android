@@ -2,7 +2,7 @@
 <resources>
 
     <!-- BottomSheet theming -->
-    <style name="Theme.Vector.BottomSheetDialog.Light" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+    <style name="Theme.Vector.BottomSheetDialog.Light" parent="Theme.Material3.Light.BottomSheetDialog">
         <item name="colorPrimary">@color/element_accent_light</item>
         <item name="colorSecondary">@color/palette_element_green</item>
         <item name="colorSurface">@color/element_background_light</item>
