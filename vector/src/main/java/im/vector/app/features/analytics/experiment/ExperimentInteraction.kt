@@ -31,6 +31,7 @@ data class ExperimentInteraction(
         SpaceSwitchHeader,
         SpaceSwitchHeaderAdd,
         SpaceSwitchHeaderCreate,
+        SpacePanelSwitchSpace
     }
 
     override fun getName() = "Interaction"

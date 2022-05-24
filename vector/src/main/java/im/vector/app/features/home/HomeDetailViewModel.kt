@@ -228,8 +228,22 @@ class HomeDetailViewModel @AssistedInject constructor(
         appStateHandler.setCurrentSpace(space?.roomId)
     }
 
+    private fun trackSpaceSwitch(){
+        when (val groupingMethod = appStateHandler.getCurrentRoomGroupingMethod()) {
+            is RoomGroupingMethod.ByLegacyGroup -> {
+                // TODO!!
+            }
+            is RoomGroupingMethod.BySpace       -> {
+                groupingMethod.spaceSummary?.toAnalyticsViewRoom(null, groupingMethod)?.let {
+                    analyticsTracker.capture(it)
+                }
+            }
+        }
+    }
+
     private fun observeRoomSummaries() {
         appStateHandler.selectedRoomGroupingFlow.distinctUntilChanged().flatMapLatest {
+            trackSpaceSwitch()
             // we use it as a trigger to all changes in room, but do not really load
             // the actual models
             session.roomService().getPagedRoomSummariesLive(
@@ -293,9 +307,6 @@ class HomeDetailViewModel @AssistedInject constructor(
                                         notificationHighlightRooms = otherRooms.isHighlight || roomsInvite > 0,
                                         hasUnreadMessages = dmRooms.totalCount + otherRooms.totalCount > 0
                                 )
-                            }
-                            groupingMethod.spaceSummary?.toAnalyticsViewRoom(null, groupingMethod)?.let {
-                                analyticsTracker.capture(it)
                             }
                         }
                         null                                -> Unit
