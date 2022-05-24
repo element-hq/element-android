@@ -51,7 +51,8 @@ internal fun SharedSessionEntity.Companion.get(realm: Realm, roomId: String?, se
 }
 
 internal fun SharedSessionEntity.Companion.create(
-        realm: Realm, roomId: String?,
+        realm: Realm,
+        roomId: String?,
         sessionId: String,
         userId: String,
         deviceId: String,
