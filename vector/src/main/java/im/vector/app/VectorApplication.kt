@@ -36,6 +36,7 @@ import com.airbnb.epoxy.EpoxyController
 import com.airbnb.mvrx.Mavericks
 import com.facebook.stetho.Stetho
 import com.gabrielittner.threetenbp.LazyThreeTen
+import com.google.android.material.color.DynamicColors
 import com.mapbox.mapboxsdk.Mapbox
 import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.google.GoogleEmojiProvider
