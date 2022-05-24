@@ -31,17 +31,24 @@ internal class RoomDecryptorProvider @Inject constructor(
         private val megolmDecryptionFactory: MXMegolmDecryptionFactory
 ) {
 
+    // This lock aims to prevent removing/adding newSessionListeners while iterating
+    private val lock = Any()
+
     // A map from algorithm to MXDecrypting instance, for each room
     private val roomDecryptors: MutableMap<String /* room id */, MutableMap<String /* algorithm */, IMXDecrypting>> = HashMap()
 
     private val newSessionListeners = ArrayList<NewSessionListener>()
 
     fun addNewSessionListener(listener: NewSessionListener) {
-        if (!newSessionListeners.contains(listener)) newSessionListeners.add(listener)
+        synchronized(lock) {
+            if (!newSessionListeners.contains(listener)) newSessionListeners.add(listener)
+        }
     }
 
     fun removeSessionListener(listener: NewSessionListener) {
-        newSessionListeners.remove(listener)
+        synchronized(lock) {
+            newSessionListeners.remove(listener)
+        }
     }
 
     /**
@@ -76,10 +83,12 @@ internal class RoomDecryptorProvider @Inject constructor(
                     this.newSessionListener = object : NewSessionListener {
                         override fun onNewSession(roomId: String?, senderKey: String, sessionId: String) {
                             // PR reviewer: the parameter has been renamed so is now in conflict with the parameter of getOrCreateRoomDecryptor
-                            newSessionListeners.toList().forEach {
-                                try {
-                                    it.onNewSession(roomId, senderKey, sessionId)
-                                } catch (ignore: Throwable) {
+                            synchronized(lock) {
+                                newSessionListeners.toList().forEach {
+                                    try {
+                                        it.onNewSession(roomId, senderKey, sessionId)
+                                    } catch (ignore: Throwable) {
+                                    }
                                 }
                             }
                         }
