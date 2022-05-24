@@ -268,13 +268,7 @@ internal class RoomSummaryDataSource @Inject constructor(
         val query = with(queryStringValueProcessor) {
             RoomSummaryEntity.where(realm)
                     .process(RoomSummaryEntityFields.ROOM_ID, QueryStringValue.IsNotEmpty)
-                    .let {
-                        if (queryParams.displayName.isNormalized()) {
-                            it.process(RoomSummaryEntityFields.NORMALIZED_DISPLAY_NAME, queryParams.displayName)
-                        } else {
-                            it.process(RoomSummaryEntityFields.DISPLAY_NAME, queryParams.displayName)
-                        }
-                    }
+                    .process(queryParams.displayName.toDisplayNameField(), queryParams.displayName)
                     .process(RoomSummaryEntityFields.CANONICAL_ALIAS, queryParams.canonicalAlias)
                     .process(RoomSummaryEntityFields.MEMBERSHIP_STR, queryParams.memberships)
                     .equalTo(RoomSummaryEntityFields.IS_HIDDEN_FROM_USER, false)
@@ -340,6 +334,14 @@ internal class RoomSummaryDataSource @Inject constructor(
             query.contains(RoomSummaryEntityFields.GROUP_IDS, activeGroupId)
         }
         return query
+    }
+
+    private fun QueryStringValue.toDisplayNameField(): String {
+        return if (isNormalized()) {
+            RoomSummaryEntityFields.NORMALIZED_DISPLAY_NAME
+        } else {
+            RoomSummaryEntityFields.DISPLAY_NAME
+        }
     }
 
     fun getAllRoomSummaryChildOf(spaceAliasOrId: String, memberShips: List<Membership>): List<RoomSummary> {
