@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.api.query
 
 /**
- * To filter by Room category
+ * To filter by Room category.
  * @see [org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams]
  */
 enum class RoomCategoryFilter {

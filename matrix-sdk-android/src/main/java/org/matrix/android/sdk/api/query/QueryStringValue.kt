@@ -21,32 +21,32 @@ package org.matrix.android.sdk.api.query
  */
 sealed interface QueryStringValue {
     /**
-     * No condition, i.e. there will be no test on the tested field
+     * No condition, i.e. there will be no test on the tested field.
      */
     object NoCondition : QueryStringValue
 
     /**
-     * The tested field has to be null
+     * The tested field has to be null.
      */
     object IsNull : QueryStringValue
 
     /**
-     * The tested field has to be not null
+     * The tested field has to be not null.
      */
     object IsNotNull : QueryStringValue
 
     /**
-     * The tested field has to be empty
+     * The tested field has to be empty.
      */
     object IsEmpty : QueryStringValue
 
     /**
-     * The tested field has to not empty
+     * The tested field has to not empty.
      */
     object IsNotEmpty : QueryStringValue
 
     /**
-     * Interface to check String content
+     * Interface to check String content.
      */
     sealed interface ContentQueryStringValue : QueryStringValue {
         val string: String
@@ -59,12 +59,12 @@ sealed interface QueryStringValue {
     data class Equals(override val string: String, override val case: Case = Case.SENSITIVE) : ContentQueryStringValue
 
     /**
-     * The tested field must contain the [string]
+     * The tested field must contain the [string].
      */
     data class Contains(override val string: String, override val case: Case = Case.SENSITIVE) : ContentQueryStringValue
 
     /**
-     * Case enum for [ContentQueryStringValue]
+     * Case enum for [ContentQueryStringValue].
      */
     enum class Case {
         /**
