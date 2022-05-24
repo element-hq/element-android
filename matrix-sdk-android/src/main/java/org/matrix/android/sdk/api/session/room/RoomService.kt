@@ -98,6 +98,12 @@ interface RoomService {
     fun getRoomSummary(roomIdOrAlias: String): RoomSummary?
 
     /**
+     * A live [RoomSummary] associated with the room with id [roomId].
+     * You can observe this summary to get dynamic data from this room, even if the room is not joined yet
+     */
+    fun getRoomSummaryLive(roomId: String): LiveData<Optional<RoomSummary>>
+
+    /**
      * Get a snapshot list of room summaries.
      * @return the immutable list of [RoomSummary]
      */

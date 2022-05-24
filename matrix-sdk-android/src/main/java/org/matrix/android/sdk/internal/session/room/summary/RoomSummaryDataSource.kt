@@ -27,6 +27,7 @@ import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.kotlin.where
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
+import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.query.isNormalized
 import org.matrix.android.sdk.api.session.room.ResultBoundaries
@@ -266,7 +267,7 @@ internal class RoomSummaryDataSource @Inject constructor(
     private fun roomSummariesQuery(realm: Realm, queryParams: RoomSummaryQueryParams): RealmQuery<RoomSummaryEntity> {
         val query = with(queryStringValueProcessor) {
             RoomSummaryEntity.where(realm)
-                    .process(RoomSummaryEntityFields.ROOM_ID, queryParams.roomId)
+                    .process(RoomSummaryEntityFields.ROOM_ID, QueryStringValue.IsNotEmpty)
                     .let {
                         if (queryParams.displayName.isNormalized()) {
                             it.process(RoomSummaryEntityFields.NORMALIZED_DISPLAY_NAME, queryParams.displayName)
