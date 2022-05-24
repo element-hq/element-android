@@ -1584,9 +1584,9 @@
     <string name="room_list_catchup_empty_title">You’re all caught up!</string>
     <string name="room_list_catchup_empty_body">You have no more unread messages</string>
     <string name="room_list_people_empty_title">Conversations</string>
-    <string name="room_list_people_empty_body">Your direct message conversations will be displayed here. Tap the + bottom right to start some.</string>
+    <string name="room_list_people_empty_body">Your direct message conversations will be displayed here. Tap the + at the bottom right to start some.</string>
     <string name="room_list_rooms_empty_title">Rooms</string>
-    <string name="room_list_rooms_empty_body">Your rooms will be displayed here. Tap the + bottom right to find existing ones or start some of your own.</string>
+    <string name="room_list_rooms_empty_body">Your rooms will be displayed here. Tap the + at the bottom right to find existing ones or start some of your own.</string>
 
     <string name="title_activity_emoji_reaction_picker">Reactions</string>
     <string name="message_add_reaction">Add Reaction</string>
