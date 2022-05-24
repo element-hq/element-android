@@ -29,6 +29,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSpaceListModalBinding
+import im.vector.app.features.analytics.experiment.ExperimentInteraction
+import im.vector.app.features.analytics.plan.Interaction
 import im.vector.app.features.home.room.list.UnreadCounterBadgeView
 import im.vector.app.features.spaces.SpaceListAction
 import im.vector.app.features.spaces.SpaceListViewModel
@@ -90,8 +92,10 @@ class SpaceListModalFragment : VectorBaseFragment<FragmentSpaceListModalBinding>
         binding.addSpaceLayout.setOnClickListener {
             val currentSpace = sharedActionViewModel.space.value
             if (currentSpace != null) {
+                analyticsTracker.capture(ExperimentInteraction(ExperimentInteraction.Name.SpaceSwitchHeaderAdd))
                 startActivity(SpaceManageActivity.newIntent(requireActivity(), currentSpace.roomId, ManageType.AddRoomsOnlySpaces))
             } else {
+                analyticsTracker.capture(ExperimentInteraction(ExperimentInteraction.Name.SpaceSwitchHeaderCreate))
                 sharedActionViewModel.post(HomeActivitySharedAction.AddSpace)
             }
         }

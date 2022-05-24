@@ -29,7 +29,10 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.VectorOverrides
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.extensions.toAnalyticsViewRoom
 import im.vector.app.features.analytics.plan.Interaction
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.call.dialpad.DialPadLookup
 import im.vector.app.features.call.lookup.CallProtocolsChecker
 import im.vector.app.features.call.webrtc.WebRtcCallManager
@@ -75,7 +78,8 @@ class HomeDetailViewModel @AssistedInject constructor(
         private val directRoomHelper: DirectRoomHelper,
         private val appStateHandler: AppStateHandler,
         private val autoAcceptInvites: AutoAcceptInvites,
-        private val vectorOverrides: VectorOverrides
+        private val vectorOverrides: VectorOverrides,
+        private val analyticsTracker: AnalyticsTracker
 ) : VectorViewModel<HomeDetailViewState, HomeDetailAction, HomeDetailViewEvents>(initialState),
         CallProtocolsChecker.Listener {
 
@@ -289,6 +293,9 @@ class HomeDetailViewModel @AssistedInject constructor(
                                         notificationHighlightRooms = otherRooms.isHighlight || roomsInvite > 0,
                                         hasUnreadMessages = dmRooms.totalCount + otherRooms.totalCount > 0
                                 )
+                            }
+                            groupingMethod.spaceSummary?.toAnalyticsViewRoom(null, groupingMethod)?.let {
+                                analyticsTracker.capture(it)
                             }
                         }
                         null                                -> Unit
