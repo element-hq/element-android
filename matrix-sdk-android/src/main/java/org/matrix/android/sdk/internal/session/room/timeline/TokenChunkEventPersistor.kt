@@ -211,7 +211,10 @@ internal class TokenChunkEventPersistor @Inject constructor(
                     when (direction) {
                         PaginationDirection.BACKWARDS -> {
                             if (currentChunk.nextChunk == existingChunk) {
-                                Timber.w("Avoid double link, shouldn't happen in an ideal world")
+                                Timber.i("Avoid double link")
+                                // Do not stop processing here: even though this event already exists in an already linked chunk,
+                                // we still may have new events to add
+                                return@forEach
                             } else {
                                 currentChunk.prevChunk = existingChunk
                                 existingChunk.nextChunk = currentChunk
@@ -219,7 +222,10 @@ internal class TokenChunkEventPersistor @Inject constructor(
                         }
                         PaginationDirection.FORWARDS  -> {
                             if (currentChunk.prevChunk == existingChunk) {
-                                Timber.w("Avoid double link, shouldn't happen in an ideal world")
+                                Timber.i("Avoid double link")
+                                // Do not stop processing here: even though this event already exists in an already linked chunk,
+                                // we still may have new events to add
+                                return@forEach
                             } else {
                                 currentChunk.nextChunk = existingChunk
                                 existingChunk.prevChunk = currentChunk
