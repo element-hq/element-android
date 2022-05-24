@@ -36,8 +36,7 @@ internal abstract class BindThreePidsTask : Task<BindThreePidsTask.Params, Unit>
 internal class DefaultBindThreePidsTask @Inject constructor(
         private val profileAPI: ProfileAPI,
         private val identityStore: IdentityStore,
-        @AuthenticatedIdentity
-        private val accessTokenProvider: AccessTokenProvider,
+        @AuthenticatedIdentity private val accessTokenProvider: AccessTokenProvider,
         private val globalErrorReceiver: GlobalErrorReceiver
 ) : BindThreePidsTask() {
     override suspend fun execute(params: Params) {

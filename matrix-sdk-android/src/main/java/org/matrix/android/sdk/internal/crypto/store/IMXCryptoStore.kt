@@ -483,8 +483,12 @@ internal interface IMXCryptoStore {
     fun getWithHeldMegolmSession(roomId: String, sessionId: String): RoomKeyWithHeldContent?
 
     fun markedSessionAsShared(
-            roomId: String?, sessionId: String, userId: String, deviceId: String,
-            deviceIdentityKey: String, chainIndex: Int
+            roomId: String?,
+            sessionId: String,
+            userId: String,
+            deviceId: String,
+            deviceIdentityKey: String,
+            chainIndex: Int
     )
 
     /**

@@ -200,7 +200,8 @@ interface KeysBackupService {
      */
     fun restoreKeysWithRecoveryKey(
             keysVersionResult: KeysVersionResult,
-            recoveryKey: String, roomId: String?,
+            recoveryKey: String,
+            roomId: String?,
             sessionId: String?,
             stepProgressListener: StepProgressListener?,
             callback: MatrixCallback<ImportRoomKeysResult>
