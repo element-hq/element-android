@@ -93,6 +93,10 @@ data class RoomSummaryQueryParams(
         val activeGroupId: String? = null
 ) {
 
+    /**
+     * Builder for [RoomSummaryQueryParams].
+     * [roomSummaryQueryParams] and [spaceSummaryQueryParams] can also be used to build an instance of [RoomSummaryQueryParams].
+     */
     class Builder {
         var displayName: QueryStringValue = QueryStringValue.NoCondition
         var canonicalAlias: QueryStringValue = QueryStringValue.NoCondition
