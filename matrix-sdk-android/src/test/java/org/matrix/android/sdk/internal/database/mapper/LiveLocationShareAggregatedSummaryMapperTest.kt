@@ -18,7 +18,9 @@ package org.matrix.android.sdk.internal.database.mapper
 
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkObject
 import io.mockk.mockkStatic
+import io.mockk.unmockkObject
 import io.mockk.unmockkStatic
 import org.amshove.kluent.internal.assertEquals
 import org.junit.After
@@ -36,14 +38,12 @@ class LiveLocationShareAggregatedSummaryMapperTest {
 
     @Before
     fun setUp() {
-        mockkStatic("org.matrix.android.sdk.internal.database.mapper.ContentMapperKt")
-        mockkStatic("org.matrix.android.sdk.api.session.events.model.EventKt")
+        mockkObject(ContentMapper)
     }
 
     @After
     fun tearDown() {
-        unmockkStatic("org.matrix.android.sdk.internal.database.mapper.ContentMapperKt")
-        unmockkStatic("org.matrix.android.sdk.api.session.events.model.EventKt")
+        unmockkObject(ContentMapper)
     }
 
     @Test
@@ -52,7 +52,6 @@ class LiveLocationShareAggregatedSummaryMapperTest {
         val timeout = 123L
         val isActive = true
         val lastKnownLocationContent = "lastKnownLocationContent"
-        val messageBeaconLocationDataContent = MessageBeaconLocationDataContent()
         val entity = LiveLocationShareAggregatedSummaryEntity(
                 userId = userId,
                 isActive = isActive,
@@ -61,15 +60,16 @@ class LiveLocationShareAggregatedSummaryMapperTest {
         )
         val content = mockk<Content>()
         every { ContentMapper.map(lastKnownLocationContent) } returns content
-        every { content.toModel<MessageBeaconLocationDataContent>() } returns messageBeaconLocationDataContent
 
         val summary = mapper.map(entity)
 
+        // note: unfortunately the implementation relies on an inline method to map the lastLocationDataContent
+        // since inline methods do not produce bytecode, it is not mockable and the verification on this field cannot be done
         val expectedSummary = LiveLocationShareAggregatedSummary(
                 userId = userId,
                 isActive = isActive,
                 endOfLiveTimestampMillis = timeout,
-                lastLocationDataContent = messageBeaconLocationDataContent
+                lastLocationDataContent = null
         )
         assertEquals(expectedSummary, summary)
     }
