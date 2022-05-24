@@ -25,7 +25,7 @@ internal object FilterUtil {
      * FIXME New expected filter:
      * "{\"room\": {\"ephemeral\": {\"notTypes\": [\"m.typing\"]}}, \"presence\":{\"notTypes\": [\"*\"]}}"
      *
-     * @param filterBody      filterBody to patch
+     * @param filterBody filterBody to patch
      * @param useDataSaveMode true to enable data save mode
      */
     /*
@@ -81,8 +81,7 @@ internal object FilterUtil {
     } */
 
     /**
-     * Compute a new filter to enable or disable the lazy loading
-     *
+     * Compute a new filter to enable or disable the lazy loading.
      *
      * If lazy loading is on, the filter will looks like
      * {"room":{"state":{"lazy_load_members":true})}

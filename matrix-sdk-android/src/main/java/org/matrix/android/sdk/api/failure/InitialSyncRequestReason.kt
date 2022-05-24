@@ -17,11 +17,11 @@
 package org.matrix.android.sdk.api.failure
 
 /**
- * This enum provide the reason why the SDK request an initial sync to the application
+ * This enum provide the reason why the SDK request an initial sync to the application.
  */
 enum class InitialSyncRequestReason {
     /**
-     * The list of ignored users has changed, and at least one user who was ignored is not ignored anymore
+     * The list of ignored users has changed, and at least one user who was ignored is not ignored anymore.
      */
     IGNORED_USERS_LIST_CHANGE,
 }

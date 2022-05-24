@@ -129,7 +129,7 @@ internal class SecretStoringUtils @Inject constructor(
     }
 
     /**
-     * Decrypt a secret that was encrypted by #securelyStoreString()
+     * Decrypt a secret that was encrypted by #securelyStoreString().
      */
     @SuppressLint("NewApi")
     @Throws(Exception::class)
@@ -169,8 +169,10 @@ internal class SecretStoringUtils @Inject constructor(
         if (secretKeyEntry == null) {
             // we generate it
             val generator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
-            val keyGenSpec = KeyGenParameterSpec.Builder(alias,
-                    KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
+            val keyGenSpec = KeyGenParameterSpec.Builder(
+                    alias,
+                    KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
+            )
                     .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
                     .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
                     .setKeySize(128)

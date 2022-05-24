@@ -119,7 +119,7 @@ class IncomingShareViewModel @AssistedInject constructor(
                 is SharedData.Text        -> {
                     state.selectedRoomIds.forEach { roomId ->
                         val room = session.getRoom(roomId)
-                        room?.sendTextMessage(sharedData.text)
+                        room?.sendService()?.sendTextMessage(sharedData.text)
                     }
                     // This is it, pass the first roomId to let the screen open it
                     _viewEvents.post(IncomingShareViewEvents.MultipleRoomsShareDone(state.selectedRoomIds.first()))
@@ -153,6 +153,7 @@ class IncomingShareViewModel @AssistedInject constructor(
                 // Pick the first room to send the media
                 selectedRoomIds.firstOrNull()
                         ?.let { roomId -> session.getRoom(roomId) }
+                        ?.sendService()
                         ?.sendMedias(grouped.notPreviewables, compressMediaBeforeSending, selectedRoomIds)
 
                 // Ensure they will not be sent twice
@@ -173,6 +174,7 @@ class IncomingShareViewModel @AssistedInject constructor(
             // Pick the first room to send the media
             selectedRoomIds.firstOrNull()
                     ?.let { roomId -> session.getRoom(roomId) }
+                    ?.sendService()
                     ?.sendMedias(attachmentData, compressMediaBeforeSending, selectedRoomIds)
             // This is it, pass the first roomId to let the screen open it
             _viewEvents.post(IncomingShareViewEvents.MultipleRoomsShareDone(selectedRoomIds.first()))

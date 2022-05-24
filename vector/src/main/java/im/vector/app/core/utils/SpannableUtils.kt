@@ -22,6 +22,7 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import androidx.annotation.ColorInt
 import me.gujun.android.span.Span
+import me.gujun.android.span.span
 
 fun Spannable.styleMatchingText(match: String, typeFace: Int): Spannable {
     if (match.isEmpty()) return this
@@ -55,4 +56,18 @@ fun Span.bullet(text: CharSequence = "",
         init()
         build()
     })
+}
+
+fun String.colorTerminatingFullStop(@ColorInt color: Int): CharSequence {
+    val fullStop = "."
+    return if (endsWith(fullStop)) {
+        span {
+            +this@colorTerminatingFullStop.removeSuffix(fullStop)
+            span(fullStop) {
+                textColor = color
+            }
+        }
+    } else {
+        this
+    }
 }

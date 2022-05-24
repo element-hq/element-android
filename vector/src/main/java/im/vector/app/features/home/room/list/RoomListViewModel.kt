@@ -32,6 +32,8 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.extensions.toAnalyticsJoinedRoom
+import im.vector.app.features.analytics.plan.JoinedRoom
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.settings.VectorPreferences
@@ -43,6 +45,7 @@ import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
@@ -87,7 +90,7 @@ class RoomListViewModel @AssistedInject constructor(
          */
         ALL_IF_SPACE_NULL,
 
-        /** Do not filter based on space*/
+        /** Do not filter based on space. */
         NONE
     }
 
@@ -167,7 +170,7 @@ class RoomListViewModel @AssistedInject constructor(
     }
 
     fun isPublicRoom(roomId: String): Boolean {
-        return session.getRoom(roomId)?.isPublic().orFalse()
+        return session.getRoom(roomId)?.stateService()?.isPublic().orFalse()
     }
 
     // PRIVATE METHODS *****************************************************************************
@@ -251,7 +254,7 @@ class RoomListViewModel @AssistedInject constructor(
         if (room != null) {
             viewModelScope.launch {
                 try {
-                    room.setRoomNotificationState(action.notificationState)
+                    room.roomPushRuleService().setRoomNotificationState(action.notificationState)
                 } catch (failure: Exception) {
                     _viewEvents.post(RoomListViewEvents.Failure(failure))
                 }
@@ -276,6 +279,8 @@ class RoomListViewModel @AssistedInject constructor(
                     this[action.roomId] = Fail(failure)
                 }.toMap())
             }
+            session.getRoomSummary(action.roomId)
+                    ?.let { analyticsTracker.capture(it.toAnalyticsJoinedRoom(JoinedRoom.Trigger.RoomDirectory)) }
         }
     }
 
@@ -294,13 +299,13 @@ class RoomListViewModel @AssistedInject constructor(
                         action.tag.otherTag()
                                 ?.takeIf { room.roomSummary()?.hasTag(it).orFalse() }
                                 ?.let { tagToRemove ->
-                                    room.deleteTag(tagToRemove)
+                                    room.tagsService().deleteTag(tagToRemove)
                                 }
 
                         // Set the tag. We do not handle the order for the moment
-                        room.addTag(action.tag, 0.5)
+                        room.tagsService().addTag(action.tag, 0.5)
                     } else {
-                        room.deleteTag(action.tag)
+                        room.tagsService().deleteTag(action.tag)
                     }
                 } catch (failure: Throwable) {
                     _viewEvents.post(RoomListViewEvents.Failure(failure))

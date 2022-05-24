@@ -43,7 +43,7 @@ class MigrateRoomViewModel @AssistedInject constructor(
         val summary = session.getRoomSummary(initialState.roomId)
         setState {
             copy(
-                    currentVersion = room?.getRoomVersion(),
+                    currentVersion = room?.roomVersionService()?.getRoomVersion(),
                     isPublic = summary?.isPublic ?: false,
                     otherMemberCount = summary?.otherMemberIds?.count() ?: 0,
                     knownParents = summary?.flattenParentIds ?: emptyList()
@@ -60,7 +60,7 @@ class MigrateRoomViewModel @AssistedInject constructor(
 
     override fun handle(action: MigrateRoomAction) {
         when (action) {
-            is MigrateRoomAction.SetAutoInvite             -> {
+            is MigrateRoomAction.SetAutoInvite -> {
                 setState {
                     copy(shouldIssueInvites = action.autoInvite)
                 }
@@ -70,7 +70,7 @@ class MigrateRoomViewModel @AssistedInject constructor(
                     copy(shouldUpdateKnownParents = action.update)
                 }
             }
-            MigrateRoomAction.UpgradeRoom                  -> {
+            MigrateRoomAction.UpgradeRoom -> {
                 handleUpgradeRoom()
             }
         }

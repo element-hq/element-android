@@ -30,6 +30,8 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.extensions.toAnalyticsJoinedRoom
 import im.vector.app.features.createdirect.DirectRoomHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -37,6 +39,7 @@ import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.peeking.PeekResult
@@ -50,7 +53,8 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
         private val session: Session,
         private val stringProvider: StringProvider,
         private val directRoomHelper: DirectRoomHelper,
-        private val errorFormatter: ErrorFormatter
+        private val errorFormatter: ErrorFormatter,
+        private val analyticsTracker: AnalyticsTracker
 ) : VectorViewModel<MatrixToBottomSheetState, MatrixToAction, MatrixToViewEvents>(initialState) {
 
     @AssistedFactory
@@ -242,7 +246,7 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
 
     /**
      * Let's try to get some information about that room,
-     * main thing is trying to see if it's a space or a room
+     * main thing is trying to see if it's a space or a room.
      */
     private suspend fun resolveRoom(roomIdOrAlias: String): PeekResult {
         return session.roomService().peekRoom(roomIdOrAlias)
@@ -275,6 +279,11 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
         viewModelScope.launch {
             try {
                 val joinResult = session.spaceService().joinSpace(joinSpace.spaceID, null, joinSpace.viaServers?.take(3) ?: emptyList())
+                withState { state ->
+                    session.getRoomSummary(joinSpace.spaceID)?.let { summary ->
+                        analyticsTracker.capture(summary.toAnalyticsJoinedRoom(state.origin.toJoinedRoomTrigger()))
+                    }
+                }
                 if (joinResult.isSuccess()) {
                     _viewEvents.post(MatrixToViewEvents.NavigateToSpace(joinSpace.spaceID))
                 } else {
@@ -303,7 +312,14 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                         reason = null,
                         viaServers = action.viaServers?.take(3) ?: emptyList()
                 )
-                _viewEvents.post(MatrixToViewEvents.NavigateToRoom(getRoomIdFromRoomIdOrAlias(action.roomIdOrAlias)))
+
+                val roomId = getRoomIdFromRoomIdOrAlias(action.roomIdOrAlias)
+                withState { state ->
+                    session.getRoomSummary(roomId)?.let { summary ->
+                        analyticsTracker.capture(summary.toAnalyticsJoinedRoom(state.origin.toJoinedRoomTrigger()))
+                    }
+                }
+                _viewEvents.post(MatrixToViewEvents.NavigateToRoom(roomId))
             } catch (failure: Throwable) {
                 _viewEvents.post(MatrixToViewEvents.ShowModalError(errorFormatter.toHumanReadable(failure)))
             } finally {

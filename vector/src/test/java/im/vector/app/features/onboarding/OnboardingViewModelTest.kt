@@ -46,8 +46,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.registration.FlowResult
-import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
-import org.matrix.android.sdk.api.auth.registration.RegistrationResult
 import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
@@ -57,10 +55,10 @@ private const val A_PICTURE_FILENAME = "a-picture.png"
 private val AN_ERROR = RuntimeException("an error!")
 private val A_LOADABLE_REGISTER_ACTION = RegisterAction.StartRegistration
 private val A_NON_LOADABLE_REGISTER_ACTION = RegisterAction.CheckIfEmailHasBeenValidated(delayMillis = -1L)
-private val A_RESULT_IGNORED_REGISTER_ACTION = RegisterAction.AddThreePid(RegisterThreePid.Email("an email"))
+private val A_RESULT_IGNORED_REGISTER_ACTION = RegisterAction.SendAgainThreePid
 private val A_HOMESERVER_CAPABILITIES = aHomeServerCapabilities(canChangeDisplayName = true, canChangeAvatar = true)
 private val AN_IGNORED_FLOW_RESULT = FlowResult(missingStages = emptyList(), completedStages = emptyList())
-private val ANY_CONTINUING_REGISTRATION_RESULT = RegistrationResult.FlowResponse(AN_IGNORED_FLOW_RESULT)
+private val ANY_CONTINUING_REGISTRATION_RESULT = RegistrationResult.NextStep(AN_IGNORED_FLOW_RESULT)
 private val A_LOGIN_OR_REGISTER_ACTION = OnboardingAction.LoginOrRegister("@a-user:id.org", "a-password", "a-device-name")
 private const val A_HOMESERVER_URL = "https://edited-homeserver.org"
 private val A_HOMESERVER_CONFIG = HomeServerConnectionConfig(FakeUri().instance)
@@ -105,7 +103,14 @@ class OnboardingViewModelTest {
 
     @Test
     fun `given supports changing display name, when handling PersonalizeProfile, then emits contents choose display name`() = runTest {
-        viewModelWith(initialState.copy(personalizationState = PersonalizationState(supportsChangingDisplayName = true, supportsChangingProfilePicture = false)))
+        viewModelWith(
+                initialState.copy(
+                        personalizationState = PersonalizationState(
+                                supportsChangingDisplayName = true,
+                                supportsChangingProfilePicture = false
+                        )
+                )
+        )
         val test = viewModel.test()
 
         viewModel.handle(OnboardingAction.PersonalizeProfile)
@@ -117,7 +122,14 @@ class OnboardingViewModelTest {
 
     @Test
     fun `given only supports changing profile picture, when handling PersonalizeProfile, then emits contents choose profile picture`() = runTest {
-        viewModelWith(initialState.copy(personalizationState = PersonalizationState(supportsChangingDisplayName = false, supportsChangingProfilePicture = true)))
+        viewModelWith(
+                initialState.copy(
+                        personalizationState = PersonalizationState(
+                                supportsChangingDisplayName = false,
+                                supportsChangingProfilePicture = true
+                        )
+                )
+        )
         val test = viewModel.test()
 
         viewModel.handle(OnboardingAction.PersonalizeProfile)
@@ -216,7 +228,7 @@ class OnboardingViewModelTest {
     @Test
     fun `given register action ignores result, when handling action, then does nothing on success`() = runTest {
         val test = viewModel.test()
-        givenRegistrationResultFor(A_RESULT_IGNORED_REGISTER_ACTION, RegistrationResult.FlowResponse(AN_IGNORED_FLOW_RESULT))
+        givenRegistrationResultFor(A_RESULT_IGNORED_REGISTER_ACTION, RegistrationResult.NextStep(AN_IGNORED_FLOW_RESULT))
 
         viewModel.handle(OnboardingAction.PostRegisterAction(A_RESULT_IGNORED_REGISTER_ACTION))
 
@@ -235,7 +247,7 @@ class OnboardingViewModelTest {
         viewModelWith(initialState.copy(onboardingFlow = OnboardingFlow.SignUp))
         fakeHomeServerConnectionConfigFactory.givenConfigFor(A_HOMESERVER_URL, A_HOMESERVER_CONFIG)
         fakeStartAuthenticationFlowUseCase.givenResult(A_HOMESERVER_CONFIG, StartAuthenticationResult(isHomeserverOutdated = false, SELECTED_HOMESERVER_STATE))
-        givenRegistrationResultFor(RegisterAction.StartRegistration, RegistrationResult.FlowResponse(AN_IGNORED_FLOW_RESULT))
+        givenRegistrationResultFor(RegisterAction.StartRegistration, RegistrationResult.NextStep(AN_IGNORED_FLOW_RESULT))
         fakeHomeServerHistoryService.expectUrlToBeAdded(A_HOMESERVER_CONFIG.homeServerUri.toString())
         val test = viewModel.test()
 
@@ -277,7 +289,7 @@ class OnboardingViewModelTest {
     @Test
     fun `given personalisation enabled, when registering account, then updates state and emits account created event`() = runTest {
         fakeVectorFeatures.givenPersonalisationEnabled()
-        givenRegistrationResultFor(A_LOADABLE_REGISTER_ACTION, RegistrationResult.Success(fakeSession))
+        givenRegistrationResultFor(A_LOADABLE_REGISTER_ACTION, RegistrationResult.Complete(fakeSession))
         givenSuccessfullyCreatesAccount(A_HOMESERVER_CAPABILITIES)
         val test = viewModel.test()
 
@@ -294,49 +306,55 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `given personalisation enabled and registration has started and has dummy step to do, when handling action, then ignores other steps and executes dummy`() = runTest {
-        fakeVectorFeatures.givenPersonalisationEnabled()
-        givenSuccessfulRegistrationForStartAndDummySteps(missingStages = listOf(Stage.Dummy(mandatory = true)))
-        val test = viewModel.test()
+    fun `given personalisation enabled and registration has started and has dummy step to do, when handling action, then ignores other steps and does dummy`() {
+        runTest {
+            fakeVectorFeatures.givenPersonalisationEnabled()
+            givenSuccessfulRegistrationForStartAndDummySteps(missingStages = listOf(Stage.Dummy(mandatory = true)))
+            val test = viewModel.test()
 
-        viewModel.handle(OnboardingAction.PostRegisterAction(A_LOADABLE_REGISTER_ACTION))
+            viewModel.handle(OnboardingAction.PostRegisterAction(A_LOADABLE_REGISTER_ACTION))
 
-        test
-                .assertStatesChanges(
-                        initialState,
-                        { copy(isLoading = true) },
-                        { copy(isLoading = false, personalizationState = A_HOMESERVER_CAPABILITIES.toPersonalisationState()) }
-                )
-                .assertEvents(OnboardingViewEvents.OnAccountCreated)
-                .finish()
+            test
+                    .assertStatesChanges(
+                            initialState,
+                            { copy(isLoading = true) },
+                            { copy(isLoading = false, personalizationState = A_HOMESERVER_CAPABILITIES.toPersonalisationState()) }
+                    )
+                    .assertEvents(OnboardingViewEvents.OnAccountCreated)
+                    .finish()
+        }
     }
 
     @Test
-    fun `given changing profile picture is supported, when updating display name, then updates upstream user display name and moves to choose profile picture`() = runTest {
-        viewModelWith(initialState.copy(personalizationState = PersonalizationState(supportsChangingProfilePicture = true)))
-        val test = viewModel.test()
+    fun `given changing profile avatar is supported, when updating display name, then updates upstream user display name and moves to choose profile avatar`() {
+        runTest {
+            viewModelWith(initialState.copy(personalizationState = PersonalizationState(supportsChangingProfilePicture = true)))
+            val test = viewModel.test()
 
-        viewModel.handle(OnboardingAction.UpdateDisplayName(A_DISPLAY_NAME))
+            viewModel.handle(OnboardingAction.UpdateDisplayName(A_DISPLAY_NAME))
 
-        test
-                .assertStatesChanges(initialState, expectedSuccessfulDisplayNameUpdateStates())
-                .assertEvents(OnboardingViewEvents.OnChooseProfilePicture)
-                .finish()
-        fakeSession.fakeProfileService.verifyUpdatedName(fakeSession.myUserId, A_DISPLAY_NAME)
+            test
+                    .assertStatesChanges(initialState, expectedSuccessfulDisplayNameUpdateStates())
+                    .assertEvents(OnboardingViewEvents.OnChooseProfilePicture)
+                    .finish()
+            fakeSession.fakeProfileService.verifyUpdatedName(fakeSession.myUserId, A_DISPLAY_NAME)
+        }
     }
 
     @Test
-    fun `given changing profile picture is not supported, when updating display name, then updates upstream user display name and completes personalization`() = runTest {
-        viewModelWith(initialState.copy(personalizationState = PersonalizationState(supportsChangingProfilePicture = false)))
-        val test = viewModel.test()
+    fun `given changing profile avatar is not supported, when updating display name, then updates upstream user display name and completes personalization`() {
+        runTest {
+            viewModelWith(initialState.copy(personalizationState = PersonalizationState(supportsChangingProfilePicture = false)))
+            val test = viewModel.test()
 
-        viewModel.handle(OnboardingAction.UpdateDisplayName(A_DISPLAY_NAME))
+            viewModel.handle(OnboardingAction.UpdateDisplayName(A_DISPLAY_NAME))
 
-        test
-                .assertStatesChanges(initialState, expectedSuccessfulDisplayNameUpdateStates())
-                .assertEvents(OnboardingViewEvents.OnPersonalizationComplete)
-                .finish()
-        fakeSession.fakeProfileService.verifyUpdatedName(fakeSession.myUserId, A_DISPLAY_NAME)
+            test
+                    .assertStatesChanges(initialState, expectedSuccessfulDisplayNameUpdateStates())
+                    .assertEvents(OnboardingViewEvents.OnPersonalizationComplete)
+                    .finish()
+            fakeSession.fakeProfileService.verifyUpdatedName(fakeSession.myUserId, A_DISPLAY_NAME)
+        }
     }
 
     @Test
@@ -473,10 +491,12 @@ class OnboardingViewModelTest {
 
     private fun givenSuccessfulRegistrationForStartAndDummySteps(missingStages: List<Stage>) {
         val flowResult = FlowResult(missingStages = missingStages, completedStages = emptyList())
-        givenRegistrationResultsFor(listOf(
-                A_LOADABLE_REGISTER_ACTION to RegistrationResult.FlowResponse(flowResult),
-                RegisterAction.RegisterDummy to RegistrationResult.Success(fakeSession)
-        ))
+        givenRegistrationResultsFor(
+                listOf(
+                        A_LOADABLE_REGISTER_ACTION to RegistrationResult.NextStep(flowResult),
+                        RegisterAction.RegisterDummy to RegistrationResult.Complete(fakeSession)
+                )
+        )
         givenSuccessfullyCreatesAccount(A_HOMESERVER_CAPABILITIES)
     }
 

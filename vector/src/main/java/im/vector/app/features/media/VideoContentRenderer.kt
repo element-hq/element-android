@@ -87,7 +87,8 @@ class VideoContentRenderer @Inject constructor(private val localFilesHelper: Loc
                                         fileName = data.filename,
                                         mimeType = data.mimeType,
                                         url = data.url,
-                                        elementToDecrypt = data.elementToDecrypt)
+                                        elementToDecrypt = data.elementToDecrypt
+                                )
                     }
                     withContext(Dispatchers.Main) {
                         result.fold(
@@ -130,7 +131,8 @@ class VideoContentRenderer @Inject constructor(private val localFilesHelper: Loc
                                         fileName = data.filename,
                                         mimeType = data.mimeType,
                                         url = data.url,
-                                        elementToDecrypt = null)
+                                        elementToDecrypt = null
+                                )
                     }
                     withContext(Dispatchers.Main) {
                         result.fold(

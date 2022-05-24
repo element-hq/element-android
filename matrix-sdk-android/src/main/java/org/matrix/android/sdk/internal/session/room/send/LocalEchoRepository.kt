@@ -43,16 +43,20 @@ import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryUpdater
 import org.matrix.android.sdk.internal.session.room.timeline.TimelineInput
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.util.awaitTransaction
+import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
 
-internal class LocalEchoRepository @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
-                                                       private val taskExecutor: TaskExecutor,
-                                                       private val realmSessionProvider: RealmSessionProvider,
-                                                       private val roomSummaryUpdater: RoomSummaryUpdater,
-                                                       private val timelineInput: TimelineInput,
-                                                       private val timelineEventMapper: TimelineEventMapper) {
+internal class LocalEchoRepository @Inject constructor(
+        @SessionDatabase private val monarchy: Monarchy,
+        private val taskExecutor: TaskExecutor,
+        private val realmSessionProvider: RealmSessionProvider,
+        private val roomSummaryUpdater: RoomSummaryUpdater,
+        private val timelineInput: TimelineInput,
+        private val timelineEventMapper: TimelineEventMapper,
+        private val clock: Clock,
+) {
 
     fun createLocalEcho(event: Event) {
         val roomId = event.roomId ?: throw IllegalStateException("You should have set a roomId for your event")
@@ -61,7 +65,7 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
         event.type ?: throw IllegalStateException("You should have set a type for your event")
 
         val timelineEventEntity = realmSessionProvider.withRealm { realm ->
-            val eventEntity = event.toEntity(roomId, SendState.UNSENT, System.currentTimeMillis())
+            val eventEntity = event.toEntity(roomId, SendState.UNSENT, clock.epochMillis())
             val roomMemberHelper = RoomMemberHelper(realm, roomId)
             val myUser = roomMemberHelper.getLastRoomMember(senderId)
             val localId = UUID.randomUUID().mostSignificantBits
@@ -88,7 +92,7 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
     }
 
     fun updateSendState(eventId: String, roomId: String?, sendState: SendState, sendStateDetails: String? = null) {
-        Timber.v("## SendEvent: [${System.currentTimeMillis()}] Update local state of $eventId to ${sendState.name}")
+        Timber.v("## SendEvent: [${clock.epochMillis()}] Update local state of $eventId to ${sendState.name}")
         timelineInput.onLocalEchoUpdated(roomId = roomId ?: "", eventId = eventId, sendState = sendState)
         updateEchoAsync(eventId) { realm, sendingEventEntity ->
             if (sendState == SendState.SENT && sendingEventEntity.sendState == SendState.SYNCED) {
@@ -217,7 +221,7 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
     }
 
     /**
-     * Returns the latest known thread event message, or the rootThreadEventId if no other event found
+     * Returns the latest known thread event message, or the rootThreadEventId if no other event found.
      */
     fun getLatestThreadEvent(rootThreadEventId: String): String {
         return realmSessionProvider.withRealm { realm ->

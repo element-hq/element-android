@@ -50,12 +50,12 @@ class UpgradeRoomViewModelTask @Inject constructor(
 
         val room = session.getRoom(params.roomId)
                 ?: return Result.UnknownRoom
-        if (!room.userMayUpgradeRoom(session.myUserId)) {
+        if (!room.roomVersionService().userMayUpgradeRoom(session.myUserId)) {
             return Result.NotAllowed
         }
 
         val updatedRoomId = try {
-            room.upgradeToVersion(params.newVersion)
+            room.roomVersionService().upgradeToVersion(params.newVersion)
         } catch (failure: Throwable) {
             return Result.ErrorFailure(failure)
         }
@@ -65,7 +65,7 @@ class UpgradeRoomViewModelTask @Inject constructor(
         params.userIdsToAutoInvite.forEach {
             params.progressReporter?.invoke(false, currentStep, totalStep)
             tryOrNull {
-                session.getRoom(updatedRoomId)?.invite(it)
+                session.getRoom(updatedRoomId)?.membershipService()?.invite(it)
             }
             currentStep++
         }

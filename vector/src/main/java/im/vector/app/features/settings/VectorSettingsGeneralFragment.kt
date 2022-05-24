@@ -45,6 +45,7 @@ import im.vector.app.core.preference.UserAvatarPreference
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorSwitchPreference
 import im.vector.app.core.resources.ColorProvider
+import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.TextUtils
 import im.vector.app.core.utils.getSizeOfFiles
 import im.vector.app.core.utils.toast
@@ -74,7 +75,8 @@ import java.util.UUID
 import javax.inject.Inject
 
 class VectorSettingsGeneralFragment @Inject constructor(
-        colorProvider: ColorProvider
+        colorProvider: ColorProvider,
+        clock: Clock,
 ) :
         VectorSettingsBaseFragment(),
         GalleryOrCameraDialogHelper.Listener {
@@ -82,7 +84,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
     override var titleRes = R.string.settings_general_title
     override val preferenceXmlRes = R.xml.vector_settings_general
 
-    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider)
+    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider, clock)
 
     private val mUserSettingsCategory by lazy {
         findPreference<PreferenceCategory>(VectorPreferences.SETTINGS_USER_SETTINGS_PREFERENCE_KEY)!!

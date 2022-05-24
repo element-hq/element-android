@@ -20,37 +20,37 @@ import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 
 /**
- * Class representing an encrypted event content
+ * Class representing an encrypted event content.
  */
 @JsonClass(generateAdapter = true)
 data class EncryptedEventContent(
 
         /**
-         * the used algorithm
+         * The used algorithm.
          */
         @Json(name = "algorithm")
         val algorithm: String? = null,
 
         /**
-         * The encrypted event
+         * The encrypted event.
          */
         @Json(name = "ciphertext")
         val ciphertext: String? = null,
 
         /**
-         * The device id
+         * The device id.
          */
         @Json(name = "device_id")
         val deviceId: String? = null,
 
         /**
-         * the sender key
+         * The sender key.
          */
         @Json(name = "sender_key")
         val senderKey: String? = null,
 
         /**
-         * The session id
+         * The session id.
          */
         @Json(name = "session_id")
         val sessionId: String? = null,

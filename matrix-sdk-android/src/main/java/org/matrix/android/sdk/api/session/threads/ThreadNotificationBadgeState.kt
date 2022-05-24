@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.api.session.threads
 
 /**
- * This class defines the state of a thread notification badge
+ * This class defines the state of a thread notification badge.
  */
 data class ThreadNotificationBadgeState(
         val numberOfLocalUnreadThreads: Int = 0,

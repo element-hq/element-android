@@ -31,6 +31,7 @@ import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.intent.getFilenameFromUri
 import im.vector.app.core.resources.ColorProvider
+import im.vector.app.core.time.Clock
 import im.vector.app.databinding.DialogBaseEditTextBinding
 import im.vector.app.databinding.FragmentLoginAccountCreatedBinding
 import im.vector.app.features.displayname.getBestName
@@ -46,19 +47,20 @@ import javax.inject.Inject
 
 /**
  * In this screen:
- * - the account has been created and we propose the user to set an avatar and a display name
+ * - the account has been created and we propose the user to set an avatar and a display name.
  */
 class AccountCreatedFragment @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
         private val dateFormatter: VectorDateFormatter,
         private val matrixItemColorProvider: MatrixItemColorProvider,
+        private val clock: Clock,
         colorProvider: ColorProvider
 ) : AbstractLoginFragment2<FragmentLoginAccountCreatedBinding>(),
         GalleryOrCameraDialogHelper.Listener {
 
     private val viewModel: AccountCreatedViewModel by fragmentViewModel()
 
-    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider)
+    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider, clock)
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginAccountCreatedBinding {
         return FragmentLoginAccountCreatedBinding.inflate(inflater, container, false)
@@ -73,7 +75,7 @@ class AccountCreatedFragment @Inject constructor(
 
         viewModel.onEach { invalidateState(it) }
 
-        views.loginAccountCreatedTime.text = dateFormatter.format(System.currentTimeMillis(), DateFormatKind.MESSAGE_SIMPLE)
+        views.loginAccountCreatedTime.text = dateFormatter.format(clock.epochMillis(), DateFormatKind.MESSAGE_SIMPLE)
     }
 
     private fun observeViewEvents() {
@@ -113,9 +115,11 @@ class AccountCreatedFragment @Inject constructor(
 
     override fun onImageReady(uri: Uri?) {
         uri ?: return
-        viewModel.handle(AccountCreatedAction.SetAvatar(
-                avatarUri = uri,
-                filename = getFilenameFromUri(requireContext(), uri) ?: UUID.randomUUID().toString())
+        viewModel.handle(
+                AccountCreatedAction.SetAvatar(
+                        avatarUri = uri,
+                        filename = getFilenameFromUri(requireContext(), uri) ?: UUID.randomUUID().toString()
+                )
         )
     }
 

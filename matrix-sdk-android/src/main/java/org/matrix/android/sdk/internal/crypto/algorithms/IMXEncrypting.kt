@@ -19,7 +19,7 @@ package org.matrix.android.sdk.internal.crypto.algorithms
 import org.matrix.android.sdk.api.session.events.model.Content
 
 /**
- * An interface for encrypting data
+ * An interface for encrypting data.
  */
 internal interface IMXEncrypting {
 
@@ -27,8 +27,8 @@ internal interface IMXEncrypting {
      * Encrypt an event content according to the configuration of the room.
      *
      * @param eventContent the content of the event.
-     * @param eventType    the type of the event.
-     * @param userIds      the room members the event will be sent to.
+     * @param eventType the type of the event.
+     * @param userIds the room members the event will be sent to.
      * @return the encrypted content
      */
     suspend fun encryptEventContent(eventContent: Content, eventType: String, userIds: List<String>): Content

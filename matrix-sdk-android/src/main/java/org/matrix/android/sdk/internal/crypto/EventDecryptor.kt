@@ -36,6 +36,7 @@ import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
 import org.matrix.android.sdk.internal.extensions.foldToCallback
 import org.matrix.android.sdk.internal.session.SessionScope
+import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -47,6 +48,7 @@ private val loggerTag = LoggerTag("CryptoSyncHandler", LoggerTag.CRYPTO)
 internal class EventDecryptor @Inject constructor(
         private val cryptoCoroutineScope: CoroutineScope,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
+        private val clock: Clock,
         private val roomDecryptorProvider: RoomDecryptorProvider,
         private val messageEncrypter: MessageEncrypter,
         private val sendToDeviceTask: SendToDeviceTask,
@@ -68,9 +70,9 @@ internal class EventDecryptor @Inject constructor(
     private val wedgedDevices = mutableListOf<WedgedDeviceInfo>()
 
     /**
-     * Decrypt an event
+     * Decrypt an event.
      *
-     * @param event    the raw event.
+     * @param event the raw event.
      * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
      * @return the MXEventDecryptionResult data, or throw in case of error
      */
@@ -80,9 +82,9 @@ internal class EventDecryptor @Inject constructor(
     }
 
     /**
-     * Decrypt an event asynchronously
+     * Decrypt an event asynchronously.
      *
-     * @param event    the raw event.
+     * @param event the raw event.
      * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
      * @param callback the callback to return data or null
      */
@@ -96,9 +98,9 @@ internal class EventDecryptor @Inject constructor(
     }
 
     /**
-     * Decrypt an event
+     * Decrypt an event.
      *
-     * @param event    the raw event.
+     * @param event the raw event.
      * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
      * @return the MXEventDecryptionResult data, or null in case of error
      */
@@ -153,7 +155,7 @@ internal class EventDecryptor @Inject constructor(
         // we should force start a new session for those
         Timber.tag(loggerTag.value).v("Unwedging:  ${wedgedDevices.size} are wedged")
         // get the one that should be retried according to rate limit
-        val now = System.currentTimeMillis()
+        val now = clock.epochMillis()
         val toUnwedge = wedgedDevices.filter {
             val lastForcedDate = lastNewSessionForcedDates[it] ?: 0
             if (now - lastForcedDate < DefaultCryptoService.CRYPTO_MIN_FORCE_SESSION_PERIOD_MILLIS) {

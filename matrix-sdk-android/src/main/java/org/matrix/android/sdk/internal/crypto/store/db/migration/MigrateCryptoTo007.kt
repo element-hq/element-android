@@ -42,7 +42,7 @@ internal class MigrateCryptoTo007(realm: DynamicRealm) : RealmMigrator(realm, 7)
                 val jsonSignatures = crossSigningKeysMapper.serializeSignatures(objectSignatures)
                 it.setString(KeyInfoEntityFields.SIGNATURES, jsonSignatures)
             }
-        } catch (failure: Throwable) {
+        } catch (ignore: Throwable) {
         }
 
         // Migrate frozen classes

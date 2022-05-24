@@ -23,10 +23,14 @@ import com.arthenica.ffmpegkit.FFmpegKitConfig
 import com.arthenica.ffmpegkit.Level
 import com.arthenica.ffmpegkit.ReturnCode
 import im.vector.app.BuildConfig
+import im.vector.app.core.time.Clock
 import timber.log.Timber
 import java.io.File
 
-class VoiceRecorderL(context: Context) : AbstractVoiceRecorder(context, "mp4") {
+class VoiceRecorderL(
+        context: Context,
+        private val clock: Clock,
+) : AbstractVoiceRecorder(context, "mp4") {
     override fun setOutputFormat(mediaRecorder: MediaRecorder) {
         // Use AAC/MP4 format here
         mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
@@ -43,9 +47,9 @@ class VoiceRecorderL(context: Context) : AbstractVoiceRecorder(context, "mp4") {
         if (targetFile.exists()) {
             targetFile.delete()
         }
-        val start = System.currentTimeMillis()
+        val start = clock.epochMillis()
         val session = FFmpegKit.execute("-i \"${recordedFile.path}\" -c:a libvorbis \"${targetFile.path}\"")
-        val duration = System.currentTimeMillis() - start
+        val duration = clock.epochMillis() - start
         Timber.d("Convert to ogg in $duration ms. Size in bytes from ${recordedFile.length()} to ${targetFile.length()}")
         return when {
             ReturnCode.isSuccess(session.returnCode) -> {

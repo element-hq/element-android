@@ -51,9 +51,9 @@ internal object JsonCanonicalizer {
     }
 
     /**
-     * Canonicalize a JSON element
+     * Canonicalize a JSON element.
      *
-     * @param src the src
+     * @param any the src
      * @return the canonicalize element
      */
     private fun canonicalizeRecursive(any: Any): String {

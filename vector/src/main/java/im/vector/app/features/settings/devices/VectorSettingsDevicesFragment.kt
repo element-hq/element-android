@@ -43,7 +43,7 @@ import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import javax.inject.Inject
 
 /**
- * Display the list of the user's device
+ * Display the list of the user's device.
  */
 class VectorSettingsDevicesFragment @Inject constructor(
         private val devicesController: DevicesController
@@ -117,7 +117,7 @@ class VectorSettingsDevicesFragment @Inject constructor(
     }
 
     /**
-     * Display an alert dialog to rename a device
+     * Display an alert dialog to rename a device.
      *
      * @param deviceInfo device info
      */
@@ -159,13 +159,15 @@ class VectorSettingsDevicesFragment @Inject constructor(
     }
 
     /**
-     * Launch the re auth activity to get credentials
+     * Launch the re auth activity to get credentials.
      */
     private fun askForReAuthentication(reAuthReq: DevicesViewEvents.RequestReAuth) {
-        ReAuthActivity.newIntent(requireContext(),
+        ReAuthActivity.newIntent(
+                requireContext(),
                 reAuthReq.registrationFlowResponse,
                 reAuthReq.lastErrorCode,
-                getString(R.string.devices_delete_dialog_title)).let { intent ->
+                getString(R.string.devices_delete_dialog_title)
+        ).let { intent ->
             reAuthActivityResultLauncher.launch(intent)
         }
     }

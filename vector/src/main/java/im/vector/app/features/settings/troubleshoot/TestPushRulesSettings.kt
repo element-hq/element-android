@@ -30,10 +30,12 @@ class TestPushRulesSettings @Inject constructor(private val activeSessionHolder:
         TroubleshootTest(R.string.settings_troubleshoot_test_bing_settings_title) {
 
     private val testedRules =
-            listOf(RuleIds.RULE_ID_CONTAIN_DISPLAY_NAME,
+            listOf(
+                    RuleIds.RULE_ID_CONTAIN_DISPLAY_NAME,
                     RuleIds.RULE_ID_CONTAIN_USER_NAME,
                     RuleIds.RULE_ID_ONE_TO_ONE_ROOM,
-                    RuleIds.RULE_ID_ALL_OTHER_MESSAGES_ROOMS)
+                    RuleIds.RULE_ID_ALL_OTHER_MESSAGES_ROOMS
+            )
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         val session = activeSessionHolder.getSafeActiveSession() ?: return

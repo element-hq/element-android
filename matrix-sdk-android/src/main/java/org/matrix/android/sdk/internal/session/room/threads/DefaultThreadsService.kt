@@ -72,17 +72,21 @@ internal class DefaultThreadsService @AssistedInject constructor(
     }
 
     override suspend fun fetchThreadTimeline(rootThreadEventId: String, from: String, limit: Int) {
-        fetchThreadTimelineTask.execute(FetchThreadTimelineTask.Params(
-                roomId = roomId,
-                rootThreadEventId = rootThreadEventId,
-                from = from,
-                limit = limit
-        ))
+        fetchThreadTimelineTask.execute(
+                FetchThreadTimelineTask.Params(
+                        roomId = roomId,
+                        rootThreadEventId = rootThreadEventId,
+                        from = from,
+                        limit = limit
+                )
+        )
     }
 
     override suspend fun fetchThreadSummaries() {
-        fetchThreadSummariesTask.execute(FetchThreadSummariesTask.Params(
-                roomId = roomId
-        ))
+        fetchThreadSummariesTask.execute(
+                FetchThreadSummariesTask.Params(
+                        roomId = roomId
+                )
+        )
     }
 }

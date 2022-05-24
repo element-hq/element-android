@@ -57,10 +57,12 @@ class VectorSettingsAdvancedNotificationPreferenceFragment @Inject constructor()
 
                             lifecycleScope.launch {
                                 val result = runCatching {
-                                    session.pushRuleService().updatePushRuleActions(ruleAndKind.kind,
+                                    session.pushRuleService().updatePushRuleActions(
+                                            ruleAndKind.kind,
                                             ruleAndKind.pushRule.ruleId,
                                             enabled,
-                                            newActions)
+                                            newActions
+                                    )
                                 }
                                 if (!isAdded) {
                                     return@launch

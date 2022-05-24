@@ -23,7 +23,7 @@ import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
 
 interface KeysBackupService {
     /**
-     * Retrieve the current version of the backup from the homeserver
+     * Retrieve the current version of the backup from the homeserver.
      *
      * It can be different than keysBackupVersion.
      * @param callback Asynchronous callback
@@ -34,18 +34,18 @@ interface KeysBackupService {
      * Create a new keys backup version and enable it, using the information return from [prepareKeysBackupVersion].
      *
      * @param keysBackupCreationInfo the info object from [prepareKeysBackupVersion].
-     * @param callback               Asynchronous callback
+     * @param callback Asynchronous callback
      */
     fun createKeysBackupVersion(keysBackupCreationInfo: MegolmBackupCreationInfo,
                                 callback: MatrixCallback<KeysVersion>)
 
     /**
-     * Facility method to get the total number of locally stored keys
+     * Facility method to get the total number of locally stored keys.
      */
     fun getTotalNumbersOfKeys(): Int
 
     /**
-     * Facility method to get the number of backed up keys
+     * Facility method to get the number of backed up keys.
      */
     fun getTotalNumbersOfBackedUpKeys(): Int
 
@@ -68,7 +68,7 @@ interface KeysBackupService {
                            callback: MatrixCallback<KeysBackupVersionTrust>)
 
     /**
-     * Return the current progress of the backup
+     * Return the current progress of the backup.
      */
     fun getBackupProgress(progressListener: ProgressListener)
 
@@ -122,7 +122,7 @@ interface KeysBackupService {
      * Delete a keys backup version. It will delete all backed up keys on the server, and the backup itself.
      * If we are backing up to this version. Backup will be stopped.
      *
-     * @param version  the backup version to delete.
+     * @param version the backup version to delete.
      * @param callback Asynchronous callback
      */
     fun deleteBackup(version: String,
@@ -173,12 +173,12 @@ interface KeysBackupService {
     /**
      * Restore a backup with a recovery key from a given backup version stored on the homeserver.
      *
-     * @param keysVersionResult    the backup version to restore from.
-     * @param recoveryKey          the recovery key to decrypt the retrieved backup.
-     * @param roomId               the id of the room to get backup data from.
-     * @param sessionId            the id of the session to restore.
+     * @param keysVersionResult the backup version to restore from.
+     * @param recoveryKey the recovery key to decrypt the retrieved backup.
+     * @param roomId the id of the room to get backup data from.
+     * @param sessionId the id of the session to restore.
      * @param stepProgressListener the step progress listener
-     * @param callback             Callback. It provides the number of found keys and the number of successfully imported keys.
+     * @param callback Callback. It provides the number of found keys and the number of successfully imported keys.
      */
     fun restoreKeysWithRecoveryKey(keysVersionResult: KeysVersionResult,
                                    recoveryKey: String, roomId: String?,

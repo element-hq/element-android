@@ -18,13 +18,17 @@ package im.vector.app.fdroid
 
 import android.content.Context
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.time.Clock
 import im.vector.app.fdroid.receiver.AlarmSyncBroadcastReceiver
 import im.vector.app.features.settings.BackgroundSyncMode
 import im.vector.app.features.settings.VectorPreferences
 import timber.log.Timber
 
 object BackgroundSyncStarter {
-    fun start(context: Context, vectorPreferences: VectorPreferences, activeSessionHolder: ActiveSessionHolder) {
+    fun start(context: Context,
+              vectorPreferences: VectorPreferences,
+              activeSessionHolder: ActiveSessionHolder,
+              clock: Clock) {
         if (vectorPreferences.areNotificationEnabledForDevice()) {
             val activeSession = activeSessionHolder.getSafeActiveSession() ?: return
             when (vectorPreferences.getFdroidSyncBackgroundMode()) {
@@ -38,7 +42,12 @@ object BackgroundSyncStarter {
                 }
                 BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME -> {
                     // We need to use alarm in this mode
-                    AlarmSyncBroadcastReceiver.scheduleAlarm(context, activeSession.sessionId, vectorPreferences.backgroundSyncDelay())
+                    AlarmSyncBroadcastReceiver.scheduleAlarm(
+                            context,
+                            activeSession.sessionId,
+                            vectorPreferences.backgroundSyncDelay(),
+                            clock
+                    )
                     Timber.i("## Sync: Alarm scheduled to start syncing")
                 }
                 BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_DISABLED     -> {

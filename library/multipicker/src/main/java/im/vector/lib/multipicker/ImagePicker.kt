@@ -22,7 +22,7 @@ import im.vector.lib.multipicker.entity.MultiPickerImageType
 import im.vector.lib.multipicker.utils.toMultiPickerImageType
 
 /**
- * Image Picker implementation
+ * Image Picker implementation.
  */
 class ImagePicker : Picker<MultiPickerImageType>() {
 

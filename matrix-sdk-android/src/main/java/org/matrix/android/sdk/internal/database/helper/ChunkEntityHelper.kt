@@ -192,7 +192,7 @@ private fun ChunkEntity.addTimelineEventFromMove(realm: Realm, event: TimelineEv
 }
 
 /**
- * Upon copy of the timeline events we should update the latestMessage TimelineEventEntity with the new one
+ * Upon copy of the timeline events we should update the latestMessage TimelineEventEntity with the new one.
  */
 private fun handleThreadSummary(realm: Realm, oldEventId: String, newTimelineEventEntity: TimelineEventEntity) {
     EventEntity

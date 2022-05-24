@@ -31,7 +31,7 @@ import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.MatrixPatterns.getDomain
+import org.matrix.android.sdk.api.MatrixPatterns.getServerName
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -96,7 +96,7 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
     private fun initHomeServerName() {
         setState {
             copy(
-                    homeServerName = session.myUserId.getDomain()
+                    homeServerName = session.myUserId.getServerName()
             )
         }
     }
@@ -109,7 +109,7 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
         }
 
         viewModelScope.launch {
-            runCatching { room.getRoomAliases() }
+            runCatching { room.aliasService().getRoomAliases() }
                     .fold(
                             {
                                 setState { copy(localAliases = Success(it.sorted())) }
@@ -304,7 +304,7 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
         postLoading(true)
         viewModelScope.launch {
             try {
-                room.updateCanonicalAlias(canonicalAlias, alternativeAliases)
+                room.stateService().updateCanonicalAlias(canonicalAlias, alternativeAliases)
                 setState {
                     copy(
                             isLoading = false,
@@ -328,7 +328,7 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
             )
         }
         viewModelScope.launch {
-            runCatching { room.addAlias(previousState.value) }
+            runCatching { room.aliasService().addAlias(previousState.value) }
                     .onFailure {
                         setState {
                             copy(

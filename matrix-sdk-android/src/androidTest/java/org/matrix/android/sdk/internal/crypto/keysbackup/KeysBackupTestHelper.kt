@@ -88,10 +88,12 @@ internal class KeysBackupTestHelper(
 
         stateObserver.stopAndCheckStates(null)
 
-        return KeysBackupScenarioData(cryptoTestData,
+        return KeysBackupScenarioData(
+                cryptoTestData,
                 aliceKeys,
                 prepareKeysBackupDataResult,
-                aliceSession2)
+                aliceSession2
+        )
     }
 
     fun prepareAndCreateKeysBackupData(keysBackup: KeysBackupService,
@@ -104,14 +106,14 @@ internal class KeysBackupTestHelper(
 
         Assert.assertNotNull(megolmBackupCreationInfo)
 
-        Assert.assertFalse(keysBackup.isEnabled)
+        Assert.assertFalse("Key backup should not be enabled before creation", keysBackup.isEnabled)
 
         // Create the version
         val keysVersion = testHelper.doSync<KeysVersion> {
             keysBackup.createKeysBackupVersion(megolmBackupCreationInfo, it)
         }
 
-        Assert.assertNotNull(keysVersion.version)
+        Assert.assertNotNull("Key backup version should not be null", keysVersion.version)
 
         // Backup must be enable now
         Assert.assertTrue(keysBackup.isEnabled)

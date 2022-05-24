@@ -20,7 +20,7 @@ import im.vector.app.core.platform.VectorViewEvents
 import im.vector.app.features.discovery.ServerAndPolicies
 
 /**
- * Transient events for invite users to room screen
+ * Transient events for invite users to room screen.
  */
 sealed class UserListViewEvents : VectorViewEvents {
     data class Failure(val throwable: Throwable) : UserListViewEvents()

@@ -21,6 +21,7 @@ import android.app.Activity
 import android.content.Context
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.pushers.PushersManager
+import im.vector.app.core.time.Clock
 import im.vector.app.fdroid.BackgroundSyncStarter
 import im.vector.app.fdroid.receiver.AlarmSyncBroadcastReceiver
 import im.vector.app.features.settings.VectorPreferences
@@ -45,7 +46,7 @@ object FcmHelper {
      * Store FCM token to the SharedPrefs
      *
      * @param context android context
-     * @param token   the token to store
+     * @param token the token to store
      */
     fun storeFcmToken(context: Context, token: String?) {
         // No op
@@ -66,7 +67,10 @@ object FcmHelper {
         AlarmSyncBroadcastReceiver.cancelAlarm(context)
     }
 
-    fun onEnterBackground(context: Context, vectorPreferences: VectorPreferences, activeSessionHolder: ActiveSessionHolder) {
-        BackgroundSyncStarter.start(context, vectorPreferences, activeSessionHolder)
+    fun onEnterBackground(context: Context,
+                          vectorPreferences: VectorPreferences,
+                          activeSessionHolder: ActiveSessionHolder,
+                          clock: Clock) {
+        BackgroundSyncStarter.start(context, vectorPreferences, activeSessionHolder, clock)
     }
 }

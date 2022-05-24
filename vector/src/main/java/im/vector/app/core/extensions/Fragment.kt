@@ -36,9 +36,10 @@ fun Fragment.registerStartForActivityResult(onResult: (ActivityResult) -> Unit):
 fun Fragment.addFragment(
         frameId: Int,
         fragment: Fragment,
+        tag: String? = null,
         allowStateLoss: Boolean = false
 ) {
-    parentFragmentManager.commitTransaction(allowStateLoss) { add(frameId, fragment) }
+    parentFragmentManager.commitTransaction(allowStateLoss) { add(frameId, fragment, tag) }
 }
 
 fun <T : Fragment> Fragment.addFragment(
@@ -158,7 +159,7 @@ fun <T : Fragment> Fragment.addChildFragmentToBackstack(
 }
 
 /**
- * Return a list of all child Fragments, recursively
+ * Return a list of all child Fragments, recursively.
  */
 fun Fragment.getAllChildFragments(): List<Fragment> {
     return listOf(this) + childFragmentManager.fragments.map { it.getAllChildFragments() }.flatten()

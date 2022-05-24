@@ -29,13 +29,13 @@ typealias SpaceSummaryQueryParams = RoomSummaryQueryParams
 interface SpaceService {
 
     /**
-     * Create a space asynchronously
+     * Create a space asynchronously.
      * @return the spaceId of the created space
      */
     suspend fun createSpace(params: CreateSpaceParams): String
 
     /**
-     * Just a shortcut for space creation for ease of use
+     * Just a shortcut for space creation for ease of use.
      */
     suspend fun createSpace(name: String,
                             topic: String?,
@@ -44,8 +44,8 @@ interface SpaceService {
                             roomAliasLocalPart: String? = null): String
 
     /**
-     * Get a space from a roomId
-     * @param spaceId the roomId to look for.
+     * Get a space from a spaceId.
+     * @param spaceId the spaceId to look for.
      * @return a space with spaceId or null if room type is not space
      */
     fun getSpace(spaceId: String): Space?
@@ -54,21 +54,24 @@ interface SpaceService {
      * Try to resolve (peek) rooms and subspace in this space.
      * Use this call get preview of children of this space, particularly useful to get a
      * preview of rooms that you did not join yet.
+     * @param spaceId the spaceId to look for.
      */
     suspend fun peekSpace(spaceId: String): SpacePeekResult
 
     /**
-     * Get's information of a space by querying the server
+     * Get's information of a space by querying the server.
+     *
+     * @param spaceId the spaceId to look for.
      * @param suggestedOnly If true, return only child events and rooms where the m.space.child event has suggested: true.
      * @param limit a client-defined limit to the maximum number of rooms to return per page. Must be a non-negative integer.
-     * @param from: Optional. Pagination token given to retrieve the next set of rooms. Note that if a pagination token is provided,
+     * @param from Optional. Pagination token given to retrieve the next set of rooms. Note that if a pagination token is provided,
      * then the parameters given for suggested_only and max_depth must be the same.
+     * @param knownStateList when paginating, pass back the m.space.child state events
      */
     suspend fun querySpaceChildren(spaceId: String,
                                    suggestedOnly: Boolean? = null,
                                    limit: Int? = null,
                                    from: String? = null,
-            // when paginating, pass back the m.space.child state events
                                    knownStateList: List<Event>? = null): SpaceHierarchyData
 
     /**
@@ -98,7 +101,10 @@ interface SpaceService {
 
     /**
      * Let this room declare that it has a parent.
+     * @param childRoomId the space to set as a child
+     * @param parentSpaceId the parentId which will be set
      * @param canonical true if it should be the main parent of this room
+     * @param viaServers list of candidate servers that can be used to set the parent
      * In practice, well behaved rooms should only have one canonical parent, but given this is not enforced:
      * if multiple are present the client should select the one with the lowest room ID, as determined via a lexicographic utf-8 ordering.
      */

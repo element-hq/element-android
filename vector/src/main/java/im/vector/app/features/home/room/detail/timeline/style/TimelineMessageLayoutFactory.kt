@@ -59,12 +59,17 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
                 MessageType.MSGTYPE_VIDEO,
                 MessageType.MSGTYPE_STICKER_LOCAL,
                 MessageType.MSGTYPE_EMOTE,
-                MessageType.MSGTYPE_LIVE_LOCATION_STATE,
+                MessageType.MSGTYPE_BEACON_INFO,
         )
         private val MSG_TYPES_WITH_TIMESTAMP_INSIDE_MESSAGE = setOf(
                 MessageType.MSGTYPE_IMAGE,
                 MessageType.MSGTYPE_VIDEO,
-                MessageType.MSGTYPE_LIVE_LOCATION_STATE,
+                MessageType.MSGTYPE_BEACON_INFO,
+        )
+
+        private val MSG_TYPES_WITH_LOCATION_DATA = setOf(
+                MessageType.MSGTYPE_LOCATION,
+                MessageType.MSGTYPE_BEACON_LOCATION_DATA
         )
     }
 
@@ -95,6 +100,7 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
                 nextDisplayableEvent.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER, EventType.ENCRYPTED) ||
                 isNextMessageReceivedMoreThanOneHourAgo ||
                 isTileTypeMessage(nextDisplayableEvent) ||
+                nextDisplayableEvent.isRootThread() ||
                 event.isRootThread() ||
                 nextDisplayableEvent.isEdition()
 
@@ -144,16 +150,18 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
     }
 
     private fun MessageContent?.timestampInsideMessage(): Boolean {
-        if (this == null) return false
-        if (msgType == MessageType.MSGTYPE_LOCATION) return vectorPreferences.labsRenderLocationsInTimeline()
-        return this.msgType in MSG_TYPES_WITH_TIMESTAMP_INSIDE_MESSAGE
+        return when {
+            this == null                            -> false
+            msgType in MSG_TYPES_WITH_LOCATION_DATA -> vectorPreferences.labsRenderLocationsInTimeline()
+            else                                    -> msgType in MSG_TYPES_WITH_TIMESTAMP_INSIDE_MESSAGE
+        }
     }
 
     private fun MessageContent?.shouldAddMessageOverlay(): Boolean {
         return when {
-            this == null || msgType == MessageType.MSGTYPE_LIVE_LOCATION_STATE -> false
-            msgType == MessageType.MSGTYPE_LOCATION                            -> vectorPreferences.labsRenderLocationsInTimeline()
-            else                                                               -> msgType in MSG_TYPES_WITH_TIMESTAMP_INSIDE_MESSAGE
+            this == null || msgType == MessageType.MSGTYPE_BEACON_INFO -> false
+            msgType == MessageType.MSGTYPE_LOCATION                    -> vectorPreferences.labsRenderLocationsInTimeline()
+            else                                                       -> msgType in MSG_TYPES_WITH_TIMESTAMP_INSIDE_MESSAGE
         }
     }
 
@@ -196,7 +204,7 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
 
     /**
      * Tiles type message never show the sender information (like verification request), so we should repeat it for next message
-     * even if same sender
+     * even if same sender.
      */
     private fun isTileTypeMessage(event: TimelineEvent?): Boolean {
         return when (event?.root?.getClearType()) {

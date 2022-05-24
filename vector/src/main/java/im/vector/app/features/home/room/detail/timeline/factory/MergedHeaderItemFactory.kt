@@ -39,6 +39,7 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.content.EncryptionEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.room.getStateEvent
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
@@ -54,8 +55,15 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
     private val mergeItemCollapseStates = HashMap<Long, Boolean>()
 
     /**
+     * @param event the main timeline event
      * @param nextEvent is an older event than event
      * @param items all known items, sorted from newer event to oldest event
+     * @param partialState partial state data
+     * @param addDaySeparator true to add a day separator
+     * @param currentPosition the current position
+     * @param eventIdToHighlight if not null the event which has to be highlighted
+     * @param callback callback for user event
+     * @param requestModelBuild lambda to let the built Item request a model build when the collapse state is changed
      */
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
@@ -91,7 +99,8 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
                 2,
                 eventIdToHighlight,
                 partialState.rootThreadEventId,
-                partialState.isFromThreadTimeline())
+                partialState.isFromThreadTimeline()
+        )
         return if (mergedEvents.isEmpty()) {
             null
         } else {

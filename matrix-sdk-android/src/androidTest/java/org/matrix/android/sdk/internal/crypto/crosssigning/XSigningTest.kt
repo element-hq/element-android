@@ -25,7 +25,6 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Assert.fail
 import org.junit.FixMethodOrder
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
@@ -126,8 +125,16 @@ class XSigningTest : InstrumentedTest {
         assertNull("Alice should not see bob User key", bobKeysFromAlicePOV.userKey())
         assertNotNull("Alice can see bob SelfSigned key", bobKeysFromAlicePOV.selfSigningKey())
 
-        assertEquals("Bob keys from alice pov should match", bobKeysFromAlicePOV.masterKey()?.unpaddedBase64PublicKey, bobSession.cryptoService().crossSigningService().getMyCrossSigningKeys()?.masterKey()?.unpaddedBase64PublicKey)
-        assertEquals("Bob keys from alice pov should match", bobKeysFromAlicePOV.selfSigningKey()?.unpaddedBase64PublicKey, bobSession.cryptoService().crossSigningService().getMyCrossSigningKeys()?.selfSigningKey()?.unpaddedBase64PublicKey)
+        assertEquals(
+                "Bob keys from alice pov should match",
+                bobKeysFromAlicePOV.masterKey()?.unpaddedBase64PublicKey,
+                bobSession.cryptoService().crossSigningService().getMyCrossSigningKeys()?.masterKey()?.unpaddedBase64PublicKey
+        )
+        assertEquals(
+                "Bob keys from alice pov should match",
+                bobKeysFromAlicePOV.selfSigningKey()?.unpaddedBase64PublicKey,
+                bobSession.cryptoService().crossSigningService().getMyCrossSigningKeys()?.selfSigningKey()?.unpaddedBase64PublicKey
+        )
 
         assertFalse("Bob keys from alice pov should not be trusted", bobKeysFromAlicePOV.isTrusted())
 
@@ -135,7 +142,6 @@ class XSigningTest : InstrumentedTest {
     }
 
     @Test
-    @Ignore("This test will be ignored until it is fixed")
     fun test_CrossSigningTestAliceTrustBobNewDevice() {
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 

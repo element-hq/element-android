@@ -34,6 +34,7 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.room.getStateEvent
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
@@ -107,8 +108,9 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     }
 
     /**
-     * Retrieve the latest botOptions event
+     * Retrieve the latest botOptions event.
      *
+     * @param widgetPostAPIMediator the post api mediator
      * @param eventData the modular data
      */
     private fun getBotOptions(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
@@ -117,7 +119,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
         }
         val userId = eventData["user_id"] as String
         Timber.d("Received request to get options for bot $userId in room $roomId requested")
-        val stateEvents = room.getStateEvents(setOf(EventType.BOT_OPTIONS))
+        val stateEvents = room.stateService().getStateEvents(setOf(EventType.BOT_OPTIONS))
         var botOptionsEvent: Event? = null
         val stateKey = "_$userId"
         for (stateEvent in stateEvents) {
@@ -168,8 +170,9 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     }
 
     /**
-     * Provides the membership state
+     * Provides the membership state.
      *
+     * @param widgetPostAPIMediator the post api mediator
      * @param eventData the modular data
      */
     private fun getMembershipState(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
@@ -187,8 +190,9 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     }
 
     /**
-     * Request the latest joined room event
+     * Request the latest joined room event.
      *
+     * @param widgetPostAPIMediator the post api mediator
      * @param eventData the modular data
      */
     private fun getJoinRules(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
@@ -196,7 +200,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
             return
         }
         Timber.d("Received request join rules  in room $roomId")
-        val joinedEvents = room.getStateEvents(setOf(EventType.STATE_ROOM_JOIN_RULES))
+        val joinedEvents = room.stateService().getStateEvents(setOf(EventType.STATE_ROOM_JOIN_RULES))
         if (joinedEvents.isNotEmpty()) {
             widgetPostAPIMediator.sendObjectResponse(Event::class.java, joinedEvents.last(), eventData)
         } else {
@@ -205,8 +209,9 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     }
 
     /**
-     * Provide the widgets list
+     * Provide the widgets list.
      *
+     * @param widgetPostAPIMediator the post api mediator
      * @param eventData the modular data
      */
     private fun getWidgets(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
@@ -225,8 +230,9 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     }
 
     /**
-     * Set a new widget
+     * Set a new widget.
      *
+     * @param widgetPostAPIMediator the post api mediator
      * @param eventData the modular data
      */
     private fun setWidget(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
@@ -300,8 +306,9 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     }
 
     /**
-     * Update the 'plumbing state"
+     * Update the 'plumbing state".
      *
+     * @param widgetPostAPIMediator the post api mediator
      * @param eventData the modular data
      */
     private fun setPlumbingState(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
@@ -316,7 +323,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
         val params = HashMap<String, Any>()
         params["status"] = status
         launchWidgetAPIAction(widgetPostAPIMediator, eventData) {
-            room.sendStateEvent(
+            room.stateService().sendStateEvent(
                     eventType = EventType.PLUMBING,
                     stateKey = "",
                     body = params
@@ -325,8 +332,9 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     }
 
     /**
-     * Update the bot options
+     * Update the bot options.
      *
+     * @param widgetPostAPIMediator the post api mediator
      * @param eventData the modular data
      */
     @Suppress("UNCHECKED_CAST")
@@ -341,7 +349,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
         val stateKey = "_$userId"
 
         launchWidgetAPIAction(widgetPostAPIMediator, eventData) {
-            room.sendStateEvent(
+            room.stateService().sendStateEvent(
                     eventType = EventType.BOT_OPTIONS,
                     stateKey = stateKey,
                     body = content
@@ -350,8 +358,9 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     }
 
     /**
-     * Update the bot power levels
+     * Update the bot power levels.
      *
+     * @param widgetPostAPIMediator the post api mediator
      * @param eventData the modular data
      */
     private fun setBotPower(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
@@ -372,8 +381,9 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     }
 
     /**
-     * Invite an user to this room
+     * Invite an user to this room.
      *
+     * @param widgetPostAPIMediator the post api mediator
      * @param eventData the modular data
      */
     private fun inviteUser(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
@@ -383,26 +393,27 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
         val userId = eventData["user_id"] as String
         val description = "Received request to invite $userId into room $roomId"
         Timber.d(description)
-        val member = room.getRoomMember(userId)
+        val member = room.membershipService().getRoomMember(userId)
         if (member != null && member.membership == Membership.JOIN) {
             widgetPostAPIMediator.sendSuccess(eventData)
         } else {
             launchWidgetAPIAction(widgetPostAPIMediator, eventData) {
-                room.invite(userId = userId)
+                room.membershipService().invite(userId = userId)
             }
         }
     }
 
     /**
-     * Provides the number of members in the rooms
+     * Provides the number of members in the rooms.
      *
+     * @param widgetPostAPIMediator the post api mediator
      * @param eventData the modular data
      */
     private fun getMembershipCount(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
         if (checkRoomId(widgetPostAPIMediator, eventData)) {
             return
         }
-        val numberOfJoinedMembers = room.getNumberOfJoinedMembers()
+        val numberOfJoinedMembers = room.membershipService().getNumberOfJoinedMembers()
         widgetPostAPIMediator.sendIntegerResponse(numberOfJoinedMembers, eventData)
     }
 
@@ -424,8 +435,8 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     }
 
     /**
-     * Check if roomId is present in the event and match
-     * Send response and return true in case of error
+     * Check if roomId is present in the event and match.
+     * Send response and return true in case of error.
      *
      * @return true in case of error
      */
@@ -447,8 +458,8 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     }
 
     /**
-     * Check if userId is present in the event
-     * Send response and return true in case of error
+     * Check if userId is present in the event.
+     * Send response and return true in case of error.
      *
      * @return true in case of error
      */

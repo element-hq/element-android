@@ -18,7 +18,6 @@ package im.vector.app.ui.robot.settings
 
 import androidx.test.espresso.Espresso
 import im.vector.app.R
-import im.vector.app.clickOnAndGoBack
 import im.vector.app.espresso.tools.clickOnPreference
 
 class SettingsSecurityRobot {
@@ -38,10 +37,7 @@ class SettingsSecurityRobot {
         clickOnPreference(R.string.settings_opt_in_of_analytics)
         Espresso.pressBack()
 
-        ignoredUsers()
-    }
-
-    private fun ignoredUsers(block: () -> Unit = {}) {
-        clickOnAndGoBack(R.string.settings_ignored_users) { block() }
+        clickOnPreference(R.string.settings_ignored_users)
+        Espresso.pressBack()
     }
 }

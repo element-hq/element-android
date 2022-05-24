@@ -22,6 +22,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.airbnb.mvrx.withState
@@ -90,7 +92,7 @@ class FtueAuthSplashCarouselFragment @Inject constructor(
 
     private fun ViewPager2.registerAutomaticUntilInteractionTransitions() {
         var scheduledTransition: Job? = null
-        registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        val pageChangingCallback = object : ViewPager2.OnPageChangeCallback() {
             private var hasUserManuallyInteractedWithCarousel: Boolean = false
 
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
@@ -104,12 +106,21 @@ class FtueAuthSplashCarouselFragment @Inject constructor(
                     scheduledTransition = scheduleCarouselTransition()
                 }
             }
+        }
+        viewLifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
+            override fun onCreate(owner: LifecycleOwner) {
+                registerOnPageChangeCallback(pageChangingCallback)
+            }
+
+            override fun onDestroy(owner: LifecycleOwner) {
+                unregisterOnPageChangeCallback(pageChangingCallback)
+            }
         })
     }
 
     private fun ViewPager2.scheduleCarouselTransition(): Job {
         val itemCount = adapter?.itemCount ?: throw IllegalStateException("An adapter must be set")
-        return lifecycleScope.launch {
+        return viewLifecycleOwner.lifecycleScope.launch {
             delay(CAROUSEL_ROTATION_DELAY_MS)
             setCurrentItem(currentItem.incrementByOneAndWrap(max = itemCount - 1), duration = CAROUSEL_TRANSITION_TIME_MS)
         }

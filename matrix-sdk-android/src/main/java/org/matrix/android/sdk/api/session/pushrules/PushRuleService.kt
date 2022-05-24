@@ -22,7 +22,7 @@ import org.matrix.android.sdk.api.session.pushrules.rest.RuleSet
 
 interface PushRuleService {
     /**
-     * Fetch the push rules from the server
+     * Fetch the push rules from the server.
      */
     fun fetchPushRules(scope: String = RuleScope.GLOBAL)
 
@@ -33,11 +33,12 @@ interface PushRuleService {
     suspend fun addPushRule(kind: RuleKind, pushRule: PushRule)
 
     /**
-     * Enables/Disables a push rule and updates the actions if necessary
+     * Enables/Disables a push rule and updates the actions if necessary.
+     * @param kind the rule kind
+     * @param ruleId the rule id
      * @param enable Enables/Disables the rule
      * @param actions Actions to update if not null
      */
-
     suspend fun updatePushRuleActions(kind: RuleKind, ruleId: String, enable: Boolean, actions: List<Action>?)
 
     suspend fun removePushRule(kind: RuleKind, ruleId: String)

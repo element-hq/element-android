@@ -21,7 +21,7 @@ import java.util.UUID
 interface PushersService {
 
     /**
-     * Refresh pushers from server state
+     * Refresh pushers from server state.
      */
     fun refreshPushers()
 
@@ -47,12 +47,12 @@ interface PushersService {
      * Add a new Email pusher.
      * Ref: https://matrix.org/docs/spec/client_server/latest#post-matrix-client-r0-pushers-set
      *
-     * @param email             The email address to send notifications to.
-     * @param lang              The preferred language for receiving notifications (e.g. "en" or "en-US").
-     * @param emailBranding     The branding placeholder to include in the email communications.
-     * @param appDisplayName    A human readable string that will allow the user to identify what application owns this pusher.
+     * @param email The email address to send notifications to.
+     * @param lang The preferred language for receiving notifications (e.g. "en" or "en-US").
+     * @param emailBranding The branding placeholder to include in the email communications.
+     * @param appDisplayName A human readable string that will allow the user to identify what application owns this pusher.
      * @param deviceDisplayName A human readable string that will allow the user to identify what device owns this pusher.
-     * @param append            If true, the homeserver should add another pusher with the given pushkey and App ID in addition
+     * @param append If true, the homeserver should add another pusher with the given pushkey and App ID in addition
      *                          to any others with different user IDs. Otherwise, the homeserver must remove any other pushers
      *                          with the same App ID and pushkey for different users. Typically We always want to append for
      *                          email pushers since we don't want to stop other accounts notifying to the same email address.
@@ -66,7 +66,7 @@ interface PushersService {
                                append: Boolean = true)
 
     /**
-     * Directly ask the push gateway to send a push to this device
+     * Directly ask the push gateway to send a push to this device.
      * If successful, the push gateway has accepted the request. In this case, the app should receive a Push with the provided eventId.
      * In case of error, PusherRejected will be thrown. In this case it means that the pushkey is not valid.
      *
@@ -81,30 +81,30 @@ interface PushersService {
                          eventId: String)
 
     /**
-     * Remove a registered pusher
+     * Remove a registered pusher.
      * @param pusher the pusher to remove, can be http or email
      */
     suspend fun removePusher(pusher: Pusher)
 
     /**
-     * Remove a Http pusher by its pushkey and appId
+     * Remove a Http pusher by its pushkey and appId.
      * @see addHttpPusher
      */
     suspend fun removeHttpPusher(pushkey: String, appId: String)
 
     /**
-     * Remove an Email pusher
+     * Remove an Email pusher.
      * @see addEmailPusher
      */
     suspend fun removeEmailPusher(email: String)
 
     /**
-     * Get the current pushers, as a LiveData
+     * Get the current pushers, as a LiveData.
      */
     fun getPushersLive(): LiveData<List<Pusher>>
 
     /**
-     * Get the current pushers
+     * Get the current pushers.
      */
     fun getPushers(): List<Pusher>
 

@@ -50,7 +50,7 @@ internal interface RoomKeysApi {
     suspend fun createKeysBackupVersion(@Body createKeysBackupVersionBody: CreateKeysBackupVersionBody): KeysVersion
 
     /**
-     * Get the key backup last version
+     * Get the key backup last version.
      * If not supported by the server, an error is returned: {"errcode":"M_NOT_FOUND","error":"No backup found"}
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "room_keys/version")
@@ -60,19 +60,19 @@ internal interface RoomKeysApi {
      * Get information about the given version.
      * If not supported by the server, an error is returned: {"errcode":"M_NOT_FOUND","error":"No backup found"}
      *
-     * @param version  version
+     * @param version version
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "room_keys/version/{version}")
     suspend fun getKeysBackupVersion(@Path("version") version: String): KeysVersionResult
 
     /**
      * Update information about the given version.
-     * @param version                     version
+     * @param version version
      * @param updateKeysBackupVersionBody the body
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "room_keys/version/{version}")
     suspend fun updateKeysBackupVersion(@Path("version") version: String,
-                                        @Body keysBackupVersionBody: UpdateKeysBackupVersionBody)
+                                        @Body updateKeysBackupVersionBody: UpdateKeysBackupVersionBody)
 
     /* ==========================================================================================
      * Storing keys
@@ -87,9 +87,9 @@ internal interface RoomKeysApi {
      * flag (true is better than false), then by the first_message_index (a lower number is better), and finally by
      * forwarded_count (a lower number is better).
      *
-     * @param roomId        the room id
-     * @param sessionId     the session id
-     * @param version       the version of the backup
+     * @param roomId the room id
+     * @param sessionId the session id
+     * @param version the version of the backup
      * @param keyBackupData the data to send
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "room_keys/keys/{roomId}/{sessionId}")
@@ -101,8 +101,8 @@ internal interface RoomKeysApi {
     /**
      * Store several keys for the given room, using the given backup version.
      *
-     * @param roomId             the room id
-     * @param version            the version of the backup
+     * @param roomId the room id
+     * @param version the version of the backup
      * @param roomKeysBackupData the data to send
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "room_keys/keys/{roomId}")
@@ -113,7 +113,7 @@ internal interface RoomKeysApi {
     /**
      * Store several keys, using the given backup version.
      *
-     * @param version        the version of the backup
+     * @param version the version of the backup
      * @param keysBackupData the data to send
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "room_keys/keys")
@@ -127,9 +127,9 @@ internal interface RoomKeysApi {
     /**
      * Retrieve the key for the given session in the given room from the backup.
      *
-     * @param roomId    the room id
+     * @param roomId the room id
      * @param sessionId the session id
-     * @param version   the version of the backup, or empty String to retrieve the last version
+     * @param version the version of the backup, or empty String to retrieve the last version
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "room_keys/keys/{roomId}/{sessionId}")
     suspend fun getRoomSessionData(@Path("roomId") roomId: String,
@@ -139,8 +139,8 @@ internal interface RoomKeysApi {
     /**
      * Retrieve all the keys for the given room from the backup.
      *
-     * @param roomId   the room id
-     * @param version  the version of the backup, or empty String to retrieve the last version
+     * @param roomId the room id
+     * @param version the version of the backup, or empty String to retrieve the last version
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "room_keys/keys/{roomId}")
     suspend fun getRoomSessionsData(@Path("roomId") roomId: String,
@@ -149,7 +149,7 @@ internal interface RoomKeysApi {
     /**
      * Retrieve all the keys from the backup.
      *
-     * @param version  the version of the backup, or empty String to retrieve the last version
+     * @param version the version of the backup, or empty String to retrieve the last version
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "room_keys/keys")
     suspend fun getSessionsData(@Query("version") version: String): KeysBackupData

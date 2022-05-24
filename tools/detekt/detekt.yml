@@ -1,0 +1,96 @@
+# Default rules: https://github.com/detekt/detekt/blob/main/detekt-core/src/main/resources/default-detekt-config.yml
+
+style:
+  MaxLineLength:
+    # Default is 120
+    maxLineLength: 160
+  MagicNumber:
+    active: false
+  ReturnCount:
+    active: false
+  UnnecessaryAbstractClass:
+    active: false
+  FunctionOnlyReturningConstant:
+    active: false
+  UnusedPrivateMember:
+    # TODO Enable it
+    active: false
+  ThrowsCount:
+    active: false
+  LoopWithTooManyJumpStatements:
+    active: false
+  SerialVersionUIDInSerializableClass:
+    active: false
+  ProtectedMemberInFinalClass:
+    active: false
+
+empty-blocks:
+  EmptyFunctionBlock:
+    active: false
+  EmptySecondaryConstructor:
+    active: false
+
+potential-bugs:
+  ImplicitDefaultLocale:
+    active: false
+
+exceptions:
+  TooGenericExceptionCaught:
+    active: false
+  SwallowedException:
+    active: false
+  ThrowingExceptionsWithoutMessageOrCause:
+    active: false
+  TooGenericExceptionThrown:
+    active: false
+
+complexity:
+  TooManyFunctions:
+    active: false
+  LongMethod:
+    active: false
+  LongParameterList:
+    active: false
+  ComplexMethod:
+    active: false
+  NestedBlockDepth:
+    active: false
+  ComplexCondition:
+    active: false
+  LargeClass:
+    active: false
+
+naming:
+  VariableNaming:
+    # TODO Enable it
+    active: false
+  TopLevelPropertyNaming:
+    # TODO Enable it
+    active: false
+
+performance:
+  SpreadOperator:
+    active: false
+
+# Note: all rules for `comments` are disabled by default, but I put them here to be aware of their existence
+comments:
+  AbsentOrWrongFileLicense:
+    active: false
+    licenseTemplateFile: 'license.template'
+    licenseTemplateIsRegex: false
+  CommentOverPrivateFunction:
+    active: false
+  CommentOverPrivateProperty:
+    active: false
+  DeprecatedBlockTag:
+    active: true
+  EndOfSentenceFormat:
+    active: true
+  OutdatedDocumentation:
+    active: true
+  UndocumentedPublicClass:
+    active: false
+  UndocumentedPublicFunction:
+    active: false
+  UndocumentedPublicProperty:
+    active: false

@@ -21,7 +21,7 @@ import org.matrix.android.sdk.internal.util.replaceSpaceChars
 data class SenderInfo(
         val userId: String,
         /**
-         * Consider using [disambiguatedDisplayName]
+         * Consider using [disambiguatedDisplayName].
          */
         val displayName: String?,
         val isUniqueDisplayName: Boolean,

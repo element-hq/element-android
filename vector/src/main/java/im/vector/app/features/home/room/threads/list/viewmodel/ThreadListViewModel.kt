@@ -65,8 +65,7 @@ class ThreadListViewModel @AssistedInject constructor(@Assisted val initialState
     override fun handle(action: EmptyAction) {}
 
     /**
-     * Observing thread list with respect to homeserver
-     * capabilities
+     * Observing thread list with respect to homeserver capabilities.
      */
     private fun fetchAndObserveThreads() {
         when (session.homeServerCapabilitiesService().getHomeServerCapabilities().canUseThreading) {
@@ -79,13 +78,12 @@ class ThreadListViewModel @AssistedInject constructor(@Assisted val initialState
     }
 
     /**
-     * Observing thread summaries when homeserver support
-     * threading
+     * Observing thread summaries when homeserver support threading.
      */
     private fun observeThreadSummaries() {
         room?.flow()
                 ?.liveThreadSummaries()
-                ?.map { room.enhanceThreadWithEditions(it) }
+                ?.map { room.threadsService().enhanceThreadWithEditions(it) }
                 ?.flowOn(room.coroutineDispatchers.io)
                 ?.execute { asyncThreads ->
                     copy(threadSummaryList = asyncThreads)
@@ -93,16 +91,15 @@ class ThreadListViewModel @AssistedInject constructor(@Assisted val initialState
     }
 
     /**
-     * Observing thread list when homeserver do not support
-     * threading
+     * Observing thread list when homeserver do not support threading.
      */
     private fun observeThreadsList() {
         room?.flow()
                 ?.liveThreadList()
-                ?.map { room.mapEventsWithEdition(it) }
+                ?.map { room.threadsLocalService().mapEventsWithEdition(it) }
                 ?.map {
                     it.map { threadRootEvent ->
-                        val isParticipating = room.isUserParticipatingInThread(threadRootEvent.eventId)
+                        val isParticipating = room.threadsLocalService().isUserParticipatingInThread(threadRootEvent.eventId)
                         ThreadTimelineEvent(threadRootEvent, isParticipating)
                     }
                 }
@@ -115,7 +112,7 @@ class ThreadListViewModel @AssistedInject constructor(@Assisted val initialState
     private fun fetchThreadList() {
         viewModelScope.launch {
             setLoading(true)
-            room?.fetchThreadSummaries()
+            room?.threadsService()?.fetchThreadSummaries()
             setLoading(false)
         }
     }

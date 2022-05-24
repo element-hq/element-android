@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.room.membership.joining
 
 import io.realm.RealmConfiguration
 import kotlinx.coroutines.TimeoutCancellationException
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.identity.model.SignInvitationResult
 import org.matrix.android.sdk.api.session.room.failure.JoinRoomFailure
@@ -35,6 +36,7 @@ import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.session.room.membership.RoomChangeMembershipStateDataSource
 import org.matrix.android.sdk.internal.session.room.read.SetReadMarkersTask
 import org.matrix.android.sdk.internal.task.Task
+import org.matrix.android.sdk.internal.util.time.Clock
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -52,8 +54,10 @@ internal class DefaultJoinRoomTask @Inject constructor(
         private val readMarkersTask: SetReadMarkersTask,
         @SessionDatabase
         private val realmConfiguration: RealmConfiguration,
+        private val coroutineDispatcher: MatrixCoroutineDispatchers,
         private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource,
-        private val globalErrorReceiver: GlobalErrorReceiver
+        private val globalErrorReceiver: GlobalErrorReceiver,
+        private val clock: Clock,
 ) : JoinRoomTask {
 
     override suspend fun execute(params: JoinRoomTask.Params) {
@@ -90,7 +94,7 @@ internal class DefaultJoinRoomTask @Inject constructor(
             throw JoinRoomFailure.JoinedWithTimeout
         }
         awaitTransaction(realmConfiguration) {
-            RoomSummaryEntity.where(it, roomId).findFirst()?.lastActivityTime = System.currentTimeMillis()
+            RoomSummaryEntity.where(it, roomId).findFirst()?.lastActivityTime = clock.epochMillis()
         }
         setReadMarkers(roomId)
     }

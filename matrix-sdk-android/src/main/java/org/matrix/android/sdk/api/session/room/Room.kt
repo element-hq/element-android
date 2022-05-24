@@ -44,42 +44,23 @@ import org.matrix.android.sdk.api.util.Optional
 /**
  * This interface defines methods to interact within a room.
  */
-interface Room :
-        TimelineService,
-        ThreadsService,
-        ThreadsLocalService,
-        SendService,
-        DraftService,
-        ReadService,
-        TypingService,
-        AliasService,
-        TagsService,
-        MembershipService,
-        StateService,
-        UploadsService,
-        ReportingService,
-        RoomCallService,
-        RelationService,
-        RoomCryptoService,
-        RoomPushRuleService,
-        RoomAccountDataService,
-        RoomVersionService {
+interface Room {
 
     val coroutineDispatchers: MatrixCoroutineDispatchers
 
     /**
-     * The roomId of this room
+     * The roomId of this room.
      */
     val roomId: String
 
     /**
-     * A live [RoomSummary] associated with the room
+     * A live [RoomSummary] associated with the room.
      * You can observe this summary to get dynamic data from this room.
      */
     fun getRoomSummaryLive(): LiveData<Optional<RoomSummary>>
 
     /**
-     * A current snapshot of [RoomSummary] associated with the room
+     * A current snapshot of [RoomSummary] associated with the room.
      */
     fun roomSummary(): RoomSummary?
 
@@ -87,4 +68,99 @@ interface Room :
      * Use this room as a Space, if the type is correct.
      */
     fun asSpace(): Space?
+
+    /**
+     * Get the TimelineService associated to this Room.
+     */
+    fun timelineService(): TimelineService
+
+    /**
+     * Get the ThreadsService associated to this Room.
+     */
+    fun threadsService(): ThreadsService
+
+    /**
+     * Get the ThreadsLocalService associated to this Room.
+     */
+    fun threadsLocalService(): ThreadsLocalService
+
+    /**
+     * Get the SendService associated to this Room.
+     */
+    fun sendService(): SendService
+
+    /**
+     * Get the DraftService associated to this Room.
+     */
+    fun draftService(): DraftService
+
+    /**
+     * Get the ReadService associated to this Room.
+     */
+    fun readService(): ReadService
+
+    /**
+     * Get the TypingService associated to this Room.
+     */
+    fun typingService(): TypingService
+
+    /**
+     * Get the AliasService associated to this Room.
+     */
+    fun aliasService(): AliasService
+
+    /**
+     * Get the TagsService associated to this Room.
+     */
+    fun tagsService(): TagsService
+
+    /**
+     * Get the MembershipService associated to this Room.
+     */
+    fun membershipService(): MembershipService
+
+    /**
+     * Get the StateService associated to this Room.
+     */
+    fun stateService(): StateService
+
+    /**
+     * Get the UploadsService associated to this Room.
+     */
+    fun uploadsService(): UploadsService
+
+    /**
+     * Get the ReportingService associated to this Room.
+     */
+    fun reportingService(): ReportingService
+
+    /**
+     * Get the RoomCallService associated to this Room.
+     */
+    fun roomCallService(): RoomCallService
+
+    /**
+     * Get the RelationService associated to this Room.
+     */
+    fun relationService(): RelationService
+
+    /**
+     * Get the RoomCryptoService associated to this Room.
+     */
+    fun roomCryptoService(): RoomCryptoService
+
+    /**
+     * Get the RoomPushRuleService associated to this Room.
+     */
+    fun roomPushRuleService(): RoomPushRuleService
+
+    /**
+     * Get the RoomAccountDataService associated to this Room.
+     */
+    fun roomAccountDataService(): RoomAccountDataService
+
+    /**
+     * Get the RoomVersionService associated to this Room.
+     */
+    fun roomVersionService(): RoomVersionService
 }

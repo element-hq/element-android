@@ -36,6 +36,7 @@ import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityRoomDetailBinding
 import im.vector.app.features.analytics.plan.MobileScreen
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.home.room.breadcrumbs.BreadcrumbsFragment
 import im.vector.app.features.home.room.detail.arguments.TimelineArgs
 import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
@@ -205,8 +206,8 @@ class RoomDetailActivity :
         }
     }
 
-    override fun mxToBottomSheetNavigateToRoom(roomId: String) {
-        navigator.openRoom(this, roomId)
+    override fun mxToBottomSheetNavigateToRoom(roomId: String, trigger: ViewRoom.Trigger?) {
+        navigator.openRoom(this, roomId, trigger = trigger)
     }
 
     override fun mxToBottomSheetSwitchToSpace(spaceId: String) {

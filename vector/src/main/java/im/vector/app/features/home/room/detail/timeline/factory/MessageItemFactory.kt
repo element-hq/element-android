@@ -31,6 +31,7 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.files.LocalFilesHelper
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.containsOnlyEmojis
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
@@ -98,8 +99,8 @@ import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.isThread
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationBeaconContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContentWithFormattedBody
 import org.matrix.android.sdk.api.session.room.model.message.MessageEmoteContent
@@ -142,11 +143,12 @@ class MessageItemFactory @Inject constructor(
         private val lightweightSettingsStorage: LightweightSettingsStorage,
         private val spanUtils: SpanUtils,
         private val session: Session,
+        private val clock: Clock,
         private val audioMessagePlaybackTracker: AudioMessagePlaybackTracker,
         private val locationPinProvider: LocationPinProvider,
         private val vectorPreferences: VectorPreferences,
         private val urlMapProvider: UrlMapProvider,
-        private val liveLocationMessageItemFactory: LiveLocationMessageItemFactory,
+        private val liveLocationShareMessageItemFactory: LiveLocationShareMessageItemFactory,
 ) {
 
     // TODO inject this properly?
@@ -214,7 +216,7 @@ class MessageItemFactory @Inject constructor(
                     buildMessageTextItem(messageContent.body, false, informationData, highlight, callback, attributes)
                 }
             }
-            is LiveLocationBeaconContent         -> liveLocationMessageItemFactory.create(messageContent, highlight, attributes)
+            is MessageBeaconInfoContent          -> liveLocationShareMessageItemFactory.create(params.event, highlight, attributes)
             else                                 -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
         }
         return messageItem?.apply {
@@ -235,14 +237,14 @@ class MessageItemFactory @Inject constructor(
             urlMapProvider.buildStaticMapUrl(it, INITIAL_MAP_ZOOM_IN_TIMELINE, width, height)
         }
 
-        val userId = if (locationContent.isSelfLocation()) informationData.senderId else null
+        val locationUserId = if (locationContent.isSelfLocation()) informationData.senderId else null
 
         return MessageLocationItem_()
                 .attributes(attributes)
                 .locationUrl(locationUrl)
                 .mapWidth(width)
                 .mapHeight(height)
-                .userId(userId)
+                .locationUserId(locationUserId)
                 .locationPinProvider(locationPinProvider)
                 .highlighted(highlight)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
@@ -457,6 +459,7 @@ class MessageItemFactory @Inject constructor(
                                 reactionsSummaryEvents = attributes.reactionsSummaryEvents,
                         )
                 )
+                .clock(clock)
                 .callback(callback)
                 .highlighted(highlight)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
@@ -663,27 +666,31 @@ class MessageItemFactory @Inject constructor(
                 ForegroundColorSpan(color),
                 editStart,
                 editEnd,
-                Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+        )
 
         // Note: text size is set to 14sp
         spannable.setSpan(
                 AbsoluteSizeSpan(dimensionConverter.spToPx(13)),
                 editStart,
                 editEnd,
-                Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+        )
 
-        spannable.setSpan(object : ClickableSpan() {
-            override fun onClick(widget: View) {
-                callback?.onEditedDecorationClicked(informationData)
-            }
+        spannable.setSpan(
+                object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        callback?.onEditedDecorationClicked(informationData)
+                    }
 
-            override fun updateDrawState(ds: TextPaint) {
-                // nop
-            }
-        },
+                    override fun updateDrawState(ds: TextPaint) {
+                        // nop
+                    }
+                },
                 editStart,
                 editEnd,
-                Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+        )
         return spannable
     }
 

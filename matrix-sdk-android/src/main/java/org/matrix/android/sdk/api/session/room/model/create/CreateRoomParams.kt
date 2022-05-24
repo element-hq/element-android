@@ -69,13 +69,13 @@ open class CreateRoomParams {
     val invite3pids = mutableListOf<ThreePid>()
 
     /**
-     * Initial Guest Access
+     * Initial Guest Access.
      */
     var guestAccess: GuestAccess? = null
 
     /**
      * If set to true, when the room will be created, if cross-signing is enabled and we can get keys for every invited users,
-     * the encryption will be enabled on the created room
+     * the encryption will be enabled on the created room.
      */
     var enableEncryptionIfInvitedUsersSupportIt: Boolean = false
 
@@ -135,7 +135,7 @@ open class CreateRoomParams {
         }
 
     /**
-     * The power level content to override in the default power level event
+     * The power level content to override in the default power level event.
      */
     var powerLevelContentOverride: PowerLevelsContent? = null
 
@@ -148,7 +148,7 @@ open class CreateRoomParams {
     }
 
     /**
-     * Supported value: MXCRYPTO_ALGORITHM_MEGOLM
+     * Supported value: MXCRYPTO_ALGORITHM_MEGOLM.
      */
     var algorithm: String? = null
         private set

@@ -22,8 +22,9 @@ import java.util.TimerTask
 const val THREE_MINUTES = 3 * 60_000L
 
 /**
- * Store an object T for a specific period of time
- * @param delay delay to keep the data, in millis
+ * Store an object T for a specific period of time.
+ * @param T type of the data to store
+ * @property delay delay to keep the data, in millis
  */
 open class TemporaryStore<T>(private val delay: Long = THREE_MINUTES) {
 

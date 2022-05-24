@@ -455,7 +455,6 @@
     <string name="room_settings_add_homescreen_shortcut">Lisää aloitusruudulle</string>
     <string name="settings_inline_url_preview">Linkkien esikatselu</string>
     <string name="settings_vibrate_on_mention">Värise, kun käyttäjä mainitaan</string>
-    <string name="settings_flair">Tyyli</string>
     <string name="create">Luo</string>
     <string name="group_details_home">Koti</string>
     <string name="rooms">Huoneet</string>
@@ -1957,7 +1956,6 @@
     </plurals>
     <string name="poll_response_room_list_preview">Ääni annettu</string>
     <string name="a11y_static_map_image">Kartta</string>
-    <string name="a11y_location_share_icon">Jaa sijainti</string>
     <string name="location_activity_title_preview">Sijainti</string>
     <string name="location_activity_title_static_sharing">Jaa sijainti</string>
     <string name="closed_poll_option_title">Suljettu kysely</string>
@@ -1970,7 +1968,6 @@
     <string name="tooltip_attachment_photo">Avaa kamera</string>
     <string name="message_bubbles">Näytä viestikuplat</string>
     <string name="location_timeline_failed_to_load_map">Kartan lataaminen epäonnistui</string>
-    <string name="location_share">Jaa sijainti</string>
     <string name="tooltip_attachment_poll">Luo kysely</string>
     <string name="tooltip_attachment_location">Jaa sijainti</string>
     <string name="message_reaction_show_less">Näytä vähemmän</string>

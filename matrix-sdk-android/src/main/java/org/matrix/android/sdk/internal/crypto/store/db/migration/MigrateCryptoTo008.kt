@@ -21,8 +21,12 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.internal.crypto.store.db.model.DeviceInfoEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.MyDeviceLastSeenInfoEntityFields
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
+import org.matrix.android.sdk.internal.util.time.Clock
 
-internal class MigrateCryptoTo008(realm: DynamicRealm) : RealmMigrator(realm, 8) {
+internal class MigrateCryptoTo008(
+        realm: DynamicRealm,
+        private val clock: Clock,
+) : RealmMigrator(realm, 8) {
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.create("MyDeviceLastSeenInfoEntity")
@@ -33,7 +37,7 @@ internal class MigrateCryptoTo008(realm: DynamicRealm) : RealmMigrator(realm, 8)
                 .addField(MyDeviceLastSeenInfoEntityFields.LAST_SEEN_TS, Long::class.java)
                 .setNullable(MyDeviceLastSeenInfoEntityFields.LAST_SEEN_TS, true)
 
-        val now = System.currentTimeMillis()
+        val now = clock.epochMillis()
         realm.schema.get("DeviceInfoEntity")
                 ?.addField(DeviceInfoEntityFields.FIRST_TIME_SEEN_LOCAL_TS, Long::class.java)
                 ?.setNullable(DeviceInfoEntityFields.FIRST_TIME_SEEN_LOCAL_TS, true)

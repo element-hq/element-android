@@ -19,7 +19,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * A link to an old room in case of room versioning
+ * A link to an old room in case of room versioning.
  */
 @JsonClass(generateAdapter = true)
 data class Predecessor(

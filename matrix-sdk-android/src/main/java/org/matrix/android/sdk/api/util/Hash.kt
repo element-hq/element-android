@@ -20,7 +20,7 @@ import java.security.MessageDigest
 import java.util.Locale
 
 /**
- * Compute a Hash of a String, using md5 algorithm
+ * Compute a Hash of a String, using md5 algorithm.
  */
 fun String.md5() = try {
     val digest = MessageDigest.getInstance("md5")

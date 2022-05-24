@@ -92,7 +92,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
                     copy(roomMemberSummaries = async)
                 }
 
-        if (room.isEncrypted()) {
+        if (room.roomCryptoService().isEncrypted()) {
             room.flow().liveRoomMembers(roomMemberQueryParams)
                     .flatMapLatest { membersSummary ->
                         session.cryptoService().getLiveCryptoDeviceInfo(membersSummary.map { it.userId })
@@ -197,7 +197,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
 
     private fun handleRevokeThreePidInvite(action: RoomMemberListAction.RevokeThreePidInvite) {
         viewModelScope.launch {
-            room.sendStateEvent(
+            room.stateService().sendStateEvent(
                     eventType = EventType.STATE_ROOM_THIRD_PARTY_INVITE,
                     stateKey = action.stateKey,
                     body = emptyMap()

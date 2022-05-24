@@ -35,6 +35,7 @@ import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.util.JsonCanonicalizer
 import org.matrix.android.sdk.internal.util.convertFromUTF8
 import org.matrix.android.sdk.internal.util.convertToUTF8
+import org.matrix.android.sdk.internal.util.time.Clock
 import org.matrix.olm.OlmAccount
 import org.matrix.olm.OlmException
 import org.matrix.olm.OlmMessage
@@ -42,7 +43,6 @@ import org.matrix.olm.OlmOutboundGroupSession
 import org.matrix.olm.OlmSession
 import org.matrix.olm.OlmUtility
 import timber.log.Timber
-import java.net.URLEncoder
 import javax.inject.Inject
 
 private val loggerTag = LoggerTag("MXOlmDevice", LoggerTag.CRYPTO)
@@ -55,7 +55,8 @@ internal class MXOlmDevice @Inject constructor(
          */
         private val store: IMXCryptoStore,
         private val olmSessionStore: OlmSessionStore,
-        private val inboundGroupSessionStore: InboundGroupSessionStore
+        private val inboundGroupSessionStore: InboundGroupSessionStore,
+        private val clock: Clock,
 ) {
 
     val mutex = Mutex()
@@ -147,9 +148,9 @@ internal class MXOlmDevice @Inject constructor(
     }
 
     /**
-     * Returns an unpublished fallback key
+     * Returns an unpublished fallback key.
      * A call to markKeysAsPublished will mark it as published and this
-     * call will return null (until a call to generateFallbackKey is made)
+     * call will return null (until a call to generateFallbackKey is made).
      */
     fun getFallbackKey(): MutableMap<String, MutableMap<String, String>>? {
         try {
@@ -196,7 +197,7 @@ internal class MXOlmDevice @Inject constructor(
     }
 
     /**
-     * Release the instance
+     * Release the instance.
      */
     fun release() {
         olmUtility?.releaseUtility()
@@ -239,7 +240,7 @@ internal class MXOlmDevice @Inject constructor(
     }
 
     /**
-     * Generate some new one-time keys
+     * Generate some new one-time keys.
      *
      * @param numKeys number of keys to generate
      */
@@ -259,7 +260,7 @@ internal class MXOlmDevice @Inject constructor(
      * The new session will be stored in the MXStore.
      *
      * @param theirIdentityKey the remote user's Curve25519 identity key
-     * @param theirOneTimeKey  the remote user's one-time Curve25519 key
+     * @param theirOneTimeKey the remote user's one-time Curve25519 key
      * @return the session id for the outbound session.
      */
     fun createOutboundSession(theirIdentityKey: String, theirOneTimeKey: String): String? {
@@ -277,7 +278,7 @@ internal class MXOlmDevice @Inject constructor(
             // Pretend we've received a message at this point, otherwise
             // if we try to send a message to the device, it won't use
             // this session
-            olmSessionWrapper.onMessageReceived()
+            olmSessionWrapper.onMessageReceived(clock.epochMillis())
 
             olmSessionStore.storeSession(olmSessionWrapper, theirIdentityKey)
 
@@ -298,8 +299,8 @@ internal class MXOlmDevice @Inject constructor(
      * Generate a new inbound session, given an incoming message.
      *
      * @param theirDeviceIdentityKey the remote user's Curve25519 identity key.
-     * @param messageType            the message_type field from the received message (must be 0).
-     * @param ciphertext             base64-encoded body from the received message.
+     * @param messageType the message_type field from the received message (must be 0).
+     * @param ciphertext base64-encoded body from the received message.
      * @return {{payload: string, session_id: string}} decrypted payload, and session id of new session.
      */
     fun createInboundSession(theirDeviceIdentityKey: String, messageType: Int, ciphertext: String): Map<String, String>? {
@@ -329,14 +330,6 @@ internal class MXOlmDevice @Inject constructor(
                 Timber.tag(loggerTag.value).e(e, "## createInboundSession() : removeOneTimeKeys failed")
             }
 
-            Timber.tag(loggerTag.value).v("## createInboundSession() : ciphertext: $ciphertext")
-            try {
-                val sha256 = olmUtility!!.sha256(URLEncoder.encode(ciphertext, "utf-8"))
-                Timber.tag(loggerTag.value).v("## createInboundSession() :ciphertext: SHA256: $sha256")
-            } catch (e: Exception) {
-                Timber.tag(loggerTag.value).e(e, "## createInboundSession() :ciphertext: cannot encode ciphertext")
-            }
-
             val olmMessage = OlmMessage()
             olmMessage.mCipherText = ciphertext
             olmMessage.mType = messageType.toLong()
@@ -348,7 +341,7 @@ internal class MXOlmDevice @Inject constructor(
 
                 val olmSessionWrapper = OlmSessionWrapper(olmSession, 0)
                 // This counts as a received message: set last received message time to now
-                olmSessionWrapper.onMessageReceived()
+                olmSessionWrapper.onMessageReceived(clock.epochMillis())
 
                 olmSessionStore.storeSession(olmSessionWrapper, theirDeviceIdentityKey)
             } catch (e: Exception) {
@@ -401,8 +394,8 @@ internal class MXOlmDevice @Inject constructor(
      * Encrypt an outgoing message using an existing session.
      *
      * @param theirDeviceIdentityKey the Curve25519 identity key for the remote device.
-     * @param sessionId              the id of the active session
-     * @param payloadString          the payload to be encrypted and sent
+     * @param sessionId the id of the active session
+     * @param payloadString the payload to be encrypted and sent
      * @return the cipher text
      */
     suspend fun encryptMessage(theirDeviceIdentityKey: String, sessionId: String, payloadString: String): Map<String, Any>? {
@@ -434,10 +427,10 @@ internal class MXOlmDevice @Inject constructor(
     /**
      * Decrypt an incoming message using an existing session.
      *
-     * @param ciphertext             the base64-encoded body from the received message.
-     * @param messageType            message_type field from the received message.
+     * @param ciphertext the base64-encoded body from the received message.
+     * @param messageType message_type field from the received message.
+     * @param sessionId the id of the active session.
      * @param theirDeviceIdentityKey the Curve25519 identity key for the remote device.
-     * @param sessionId              the id of the active session.
      * @return the decrypted payload.
      */
     @kotlin.jvm.Throws
@@ -454,7 +447,7 @@ internal class MXOlmDevice @Inject constructor(
             payloadString =
                     olmSessionWrapper.mutex.withLock {
                         olmSessionWrapper.olmSession.decryptMessage(olmMessage).also {
-                            olmSessionWrapper.onMessageReceived()
+                            olmSessionWrapper.onMessageReceived(clock.epochMillis())
                         }
                     }
             olmSessionStore.storeSession(olmSessionWrapper, theirDeviceIdentityKey)
@@ -467,9 +460,9 @@ internal class MXOlmDevice @Inject constructor(
      * Determine if an incoming messages is a prekey message matching an existing session.
      *
      * @param theirDeviceIdentityKey the Curve25519 identity key for the remote device.
-     * @param sessionId              the id of the active session.
-     * @param messageType            message_type field from the received message.
-     * @param ciphertext             the base64-encoded body from the received message.
+     * @param sessionId the id of the active session.
+     * @param messageType message_type field from the received message.
+     * @param ciphertext the base64-encoded body from the received message.
      * @return YES if the received message is a prekey message which matchesthe given session.
      */
     fun matchesSession(theirDeviceIdentityKey: String, sessionId: String, messageType: Int, ciphertext: String): Boolean {
@@ -520,6 +513,7 @@ internal class MXOlmDevice @Inject constructor(
             return MXOutboundSessionInfo(
                     sessionId = sessionId,
                     sharedWithHelper = SharedWithHelper(roomId, sessionId, store),
+                    clock,
                     restoredOutboundGroupSession.creationTime
             )
         }
@@ -569,7 +563,7 @@ internal class MXOlmDevice @Inject constructor(
     /**
      * Encrypt an outgoing message with an outbound group session.
      *
-     * @param sessionId     the id of the outbound group session.
+     * @param sessionId the id of the outbound group session.
      * @param payloadString the payload to be encrypted and sent.
      * @return ciphertext
      */
@@ -586,16 +580,23 @@ internal class MXOlmDevice @Inject constructor(
 
     //  Inbound group session
 
+    sealed interface AddSessionResult {
+        data class Imported(val ratchetIndex: Int) : AddSessionResult
+        abstract class Failure : AddSessionResult
+        object NotImported : Failure()
+        data class NotImportedHigherIndex(val newIndex: Int) : Failure()
+    }
+
     /**
      * Add an inbound group session to the session store.
      *
-     * @param sessionId                    the session identifier.
-     * @param sessionKey                   base64-encoded secret key.
-     * @param roomId                       the id of the room in which this session will be used.
-     * @param senderKey                    the base64-encoded curve25519 key of the sender.
+     * @param sessionId the session identifier.
+     * @param sessionKey base64-encoded secret key.
+     * @param roomId the id of the room in which this session will be used.
+     * @param senderKey the base64-encoded curve25519 key of the sender.
      * @param forwardingCurve25519KeyChain Devices involved in forwarding this session to us.
-     * @param keysClaimed                  Other keys the sender claims.
-     * @param exportFormat                 true if the megolm keys are in export format
+     * @param keysClaimed Other keys the sender claims.
+     * @param exportFormat true if the megolm keys are in export format
      * @return true if the operation succeeds.
      */
     fun addInboundGroupSession(sessionId: String,
@@ -604,7 +605,7 @@ internal class MXOlmDevice @Inject constructor(
                                senderKey: String,
                                forwardingCurve25519KeyChain: List<String>,
                                keysClaimed: Map<String, String>,
-                               exportFormat: Boolean): Boolean {
+                               exportFormat: Boolean): AddSessionResult {
         val candidateSession = OlmInboundGroupSessionWrapper2(sessionKey, exportFormat)
         val existingSessionHolder = tryOrNull { getInboundGroupSession(sessionId, senderKey, roomId) }
         val existingSession = existingSessionHolder?.wrapper
@@ -612,7 +613,7 @@ internal class MXOlmDevice @Inject constructor(
         if (existingSession != null) {
             Timber.tag(loggerTag.value).d("## addInboundGroupSession() check if known session is better than candidate session")
             try {
-                val existingFirstKnown = existingSession.firstKnownIndex ?: return false.also {
+                val existingFirstKnown = existingSession.firstKnownIndex ?: return AddSessionResult.NotImported.also {
                     // This is quite unexpected, could throw if native was released?
                     Timber.tag(loggerTag.value).e("## addInboundGroupSession() null firstKnownIndex on existing session")
                     candidateSession.olmInboundGroupSession?.releaseSession()
@@ -623,12 +624,12 @@ internal class MXOlmDevice @Inject constructor(
                 if (newKnownFirstIndex != null && existingFirstKnown <= newKnownFirstIndex) {
                     Timber.tag(loggerTag.value).d("## addInboundGroupSession() : ignore session our is better $senderKey/$sessionId")
                     candidateSession.olmInboundGroupSession?.releaseSession()
-                    return false
+                    return AddSessionResult.NotImportedHigherIndex(newKnownFirstIndex.toInt())
                 }
             } catch (failure: Throwable) {
                 Timber.tag(loggerTag.value).e("## addInboundGroupSession() Failed to add inbound: ${failure.localizedMessage}")
                 candidateSession.olmInboundGroupSession?.releaseSession()
-                return false
+                return AddSessionResult.NotImported
             }
         }
 
@@ -638,19 +639,19 @@ internal class MXOlmDevice @Inject constructor(
         val candidateOlmInboundSession = candidateSession.olmInboundGroupSession
         if (null == candidateOlmInboundSession) {
             Timber.tag(loggerTag.value).e("## addInboundGroupSession : invalid session <null>")
-            return false
+            return AddSessionResult.NotImported
         }
 
         try {
             if (candidateOlmInboundSession.sessionIdentifier() != sessionId) {
                 Timber.tag(loggerTag.value).e("## addInboundGroupSession : ERROR: Mismatched group session ID from senderKey: $senderKey")
                 candidateOlmInboundSession.releaseSession()
-                return false
+                return AddSessionResult.NotImported
             }
         } catch (e: Throwable) {
             candidateOlmInboundSession.releaseSession()
             Timber.tag(loggerTag.value).e(e, "## addInboundGroupSession : sessionIdentifier() failed")
-            return false
+            return AddSessionResult.NotImported
         }
 
         candidateSession.senderKey = senderKey
@@ -664,7 +665,7 @@ internal class MXOlmDevice @Inject constructor(
             inboundGroupSessionStore.storeInBoundGroupSession(InboundGroupSessionHolder(candidateSession), sessionId, senderKey)
         }
 
-        return true
+        return AddSessionResult.Imported(candidateSession.firstKnownIndex?.toInt() ?: 0)
     }
 
     /**
@@ -751,9 +752,9 @@ internal class MXOlmDevice @Inject constructor(
     /**
      * Decrypt a received message with an inbound group session.
      *
-     * @param body      the base64-encoded body of the encrypted message.
-     * @param roomId    the room in which the message was received.
-     * @param timeline  the id of the timeline where the event is decrypted. It is used to prevent replay attack.
+     * @param body the base64-encoded body of the encrypted message.
+     * @param roomId the room in which the message was received.
+     * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
      * @param sessionId the session identifier.
      * @param senderKey the base64-encoded curve25519 key of the sender.
      * @return the decrypting result. Nil if the sessionId is unknown.
@@ -787,7 +788,7 @@ internal class MXOlmDevice @Inject constructor(
 
                 if (timelineSet.contains(messageIndexKey)) {
                     val reason = String.format(MXCryptoError.DUPLICATE_MESSAGE_INDEX_REASON, decryptResult.mIndex)
-                    Timber.tag(loggerTag.value).e("## decryptGroupMessage() : $reason")
+                    Timber.tag(loggerTag.value).e("## decryptGroupMessage() timelineId=$timeline: $reason")
                     throw MXCryptoError.Base(MXCryptoError.ErrorType.DUPLICATED_MESSAGE_INDEX, reason)
                 }
 
@@ -833,9 +834,9 @@ internal class MXOlmDevice @Inject constructor(
     /**
      * Verify an ed25519 signature on a JSON object.
      *
-     * @param key            the ed25519 key.
+     * @param key the ed25519 key.
      * @param jsonDictionary the JSON object which was signed.
-     * @param signature      the base64-encoded signature to be checked.
+     * @param signature the base64-encoded signature to be checked.
      * @throws Exception the exception
      */
     @Throws(Exception::class)
@@ -855,10 +856,10 @@ internal class MXOlmDevice @Inject constructor(
     }
 
     /**
-     * Search an OlmSession
+     * Search an OlmSession.
      *
      * @param theirDeviceIdentityKey the device key
-     * @param sessionId              the session Id
+     * @param sessionId the session Id
      * @return the olm session
      */
     private fun getSessionForDevice(theirDeviceIdentityKey: String, sessionId: String): OlmSessionWrapper? {
@@ -872,9 +873,9 @@ internal class MXOlmDevice @Inject constructor(
      * Extract an InboundGroupSession from the session store and do some check.
      * inboundGroupSessionWithIdError describes the failure reason.
      *
-     * @param roomId    the room where the session is used.
      * @param sessionId the session identifier.
      * @param senderKey the base64-encoded curve25519 key of the sender.
+     * @param roomId the room where the session is used.
      * @return the inbound group session.
      */
     fun getInboundGroupSession(sessionId: String?, senderKey: String?, roomId: String?): InboundGroupSessionHolder {
@@ -904,7 +905,7 @@ internal class MXOlmDevice @Inject constructor(
     /**
      * Determine if we have the keys for a given megolm session.
      *
-     * @param roomId    room in which the message was received
+     * @param roomId room in which the message was received
      * @param senderKey base64-encoded curve25519 key of the sender
      * @param sessionId session identifier
      * @return true if the unbound session keys are known.

@@ -101,9 +101,9 @@ private fun onPermissionResult(result: Map<String, Boolean>, lambda: (allGranted
  * explain why vector needs the corresponding permission.
  *
  * @param permissionsToBeGranted the permissions to be granted
- * @param activity               the calling Activity that is requesting the permissions (or fragment parent)
+ * @param activity the calling Activity that is requesting the permissions (or fragment parent)
  * @param activityResultLauncher from the calling fragment/Activity that is requesting the permissions
- * @param rationaleMessage       message to be displayed BEFORE requesting for the permission
+ * @param rationaleMessage message to be displayed BEFORE requesting for the permission
  * @return true if the permissions are granted (synchronous flow), false otherwise (asynchronous flow)
  */
 fun checkPermissions(permissionsToBeGranted: List<String>,
@@ -142,10 +142,10 @@ fun checkPermissions(permissionsToBeGranted: List<String>,
 }
 
 /**
- * To be call after the permission request
+ * To be call after the permission request.
  *
  * @param permissionsToBeGranted the permissions to be granted
- * @param activity               the calling Activity that is requesting the permissions (or fragment parent)
+ * @param activity the calling Activity that is requesting the permissions (or fragment parent)
  *
  * @return true if one of the permission has been denied and the user check the do not ask again checkbox
  */

@@ -50,13 +50,15 @@ class TimelineItemFactory @Inject constructor(
                             timelineEvent = event,
                             highlightedEventId = params.highlightedEventId,
                             isFromThreadTimeline = params.isFromThreadTimeline(),
-                            rootThreadEventId = params.rootThreadEventId)) {
+                            rootThreadEventId = params.rootThreadEventId
+                    )) {
                 return buildEmptyItem(
                         event,
                         params.prevEvent,
                         params.highlightedEventId,
                         params.rootThreadEventId,
-                        params.isFromThreadTimeline())
+                        params.isFromThreadTimeline()
+                )
             }
 
             // Manage state event differently, to check validity
@@ -98,7 +100,7 @@ class TimelineItemFactory @Inject constructor(
                     // Message itemsX
                     EventType.STICKER,
                     in EventType.POLL_START,
-                    EventType.MESSAGE               -> messageItemFactory.create(params)
+                    EventType.MESSAGE                 -> messageItemFactory.create(params)
                     EventType.REDACTION,
                     EventType.KEY_VERIFICATION_ACCEPT,
                     EventType.KEY_VERIFICATION_START,
@@ -111,14 +113,15 @@ class TimelineItemFactory @Inject constructor(
                     EventType.CALL_NEGOTIATE,
                     EventType.REACTION,
                     in EventType.POLL_RESPONSE,
-                    in EventType.POLL_END           -> noticeItemFactory.create(params)
+                    in EventType.POLL_END,
+                    in EventType.BEACON_LOCATION_DATA -> noticeItemFactory.create(params)
                     // Calls
                     EventType.CALL_INVITE,
                     EventType.CALL_HANGUP,
                     EventType.CALL_REJECT,
-                    EventType.CALL_ANSWER           -> callItemFactory.create(params)
+                    EventType.CALL_ANSWER             -> callItemFactory.create(params)
                     // Crypto
-                    EventType.ENCRYPTED             -> {
+                    EventType.ENCRYPTED               -> {
                         if (event.root.isRedacted()) {
                             // Redacted event, let the MessageItemFactory handle it
                             messageItemFactory.create(params)
@@ -127,11 +130,11 @@ class TimelineItemFactory @Inject constructor(
                         }
                     }
                     EventType.KEY_VERIFICATION_CANCEL,
-                    EventType.KEY_VERIFICATION_DONE -> {
+                    EventType.KEY_VERIFICATION_DONE   -> {
                         verificationConclusionItemFactory.create(params)
                     }
                     // Unhandled event types
-                    else                            -> {
+                    else                              -> {
                         // Should only happen when shouldShowHiddenEvents() settings is ON
                         Timber.v("Type ${event.root.getClearType()} not handled")
                         defaultItemFactory.create(params)
@@ -151,7 +154,8 @@ class TimelineItemFactory @Inject constructor(
                 params.prevEvent,
                 params.highlightedEventId,
                 params.rootThreadEventId,
-                params.isFromThreadTimeline())
+                params.isFromThreadTimeline()
+        )
     }
 
     private fun buildEmptyItem(timelineEvent: TimelineEvent,
@@ -163,7 +167,8 @@ class TimelineItemFactory @Inject constructor(
                 timelineEvent = prevEvent,
                 highlightedEventId = highlightedEventId,
                 isFromThreadTimeline = isFromThreadTimeline,
-                rootThreadEventId = rootThreadEventId)
+                rootThreadEventId = rootThreadEventId
+        )
         return TimelineEmptyItem_()
                 .id(timelineEvent.localId)
                 .eventId(timelineEvent.eventId)

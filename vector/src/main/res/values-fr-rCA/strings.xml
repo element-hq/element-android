@@ -825,7 +825,6 @@
     <string name="media_saving_period_1_month">1 mois</string>
     <string name="media_saving_period_1_week">1 semaine</string>
     <string name="media_saving_period_3_days">3 jours</string>
-    <string name="settings_flair">Badge</string>
     <string name="settings_play_shutter_sound">Jouer le son de l’obturateur</string>
     <string name="media_source_choose">Choisir</string>
     <string name="settings_default_media_source">Source de médias par défaut</string>

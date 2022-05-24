@@ -20,12 +20,15 @@ import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.MatrixPatterns
 
 /**
+ * Example:
+ * <pre>
  * {
  * "type": "m.space_order",
  *   "content": {
  *       "order": "..."
  *   }
  * }
+ * </pre>.
  */
 @JsonClass(generateAdapter = true)
 data class SpaceOrderContent(

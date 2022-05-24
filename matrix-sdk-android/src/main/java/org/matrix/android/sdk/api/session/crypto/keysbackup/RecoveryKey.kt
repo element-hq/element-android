@@ -30,7 +30,7 @@ private const val CHAR_1 = 0x01.toByte()
 private const val RECOVERY_KEY_LENGTH = 2 + 32 + 1
 
 /**
- * Tell if the format of the recovery key is correct
+ * Tell if the format of the recovery key is correct.
  *
  * @param recoveryKey
  * @return true if the format of the recovery key is correct
@@ -40,7 +40,7 @@ fun isValidRecoveryKey(recoveryKey: String?): Boolean {
 }
 
 /**
- * Compute recovery key from curve25519 key
+ * Compute recovery key from curve25519 key.
  *
  * @param curve25519Key
  * @return the recovery key
@@ -69,7 +69,7 @@ fun computeRecoveryKey(curve25519Key: ByteArray): String {
 }
 
 /**
- * Please call [.isValidRecoveryKey] and ensure it returns true before calling this method
+ * Please call [.isValidRecoveryKey] and ensure it returns true before calling this method.
  *
  * @param recoveryKey the recovery key
  * @return curveKey, or null in case of error

@@ -34,6 +34,7 @@ import im.vector.app.features.home.room.detail.timeline.action.TimelineEventFrag
 import kotlinx.coroutines.flow.map
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
 
@@ -55,7 +56,7 @@ data class ReactionInfo(
 )
 
 /**
- * Used to display the list of members that reacted to a given event
+ * Used to display the list of members that reacted to a given event.
  */
 class ViewReactionsViewModel @AssistedInject constructor(
         @Assisted initialState: DisplayReactionsViewState,
