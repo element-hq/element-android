@@ -274,13 +274,6 @@ internal class RoomSummaryDataSource @Inject constructor(
                     .equalTo(RoomSummaryEntityFields.IS_HIDDEN_FROM_USER, false)
         }
 
-        queryParams.roomCategoryFilter?.let {
-            when (it) {
-                RoomCategoryFilter.ONLY_DM                 -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
-                RoomCategoryFilter.ONLY_ROOMS              -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
-                RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS -> query.greaterThan(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0)
-            }
-        }
         queryParams.roomTagQueryFilter?.let {
             it.isFavorite?.let { fav ->
                 query.equalTo(RoomSummaryEntityFields.IS_FAVOURITE, fav)
