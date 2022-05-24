@@ -234,7 +234,7 @@ class HomeDetailViewModel @AssistedInject constructor(
                 // TODO!!
             }
             is RoomGroupingMethod.BySpace       -> {
-                groupingMethod.spaceSummary?.toAnalyticsViewRoom(null, groupingMethod)?.let {
+                groupingMethod.spaceSummary.toAnalyticsViewRoom(null, groupingMethod).let {
                     analyticsTracker.capture(it)
                 }
             }
