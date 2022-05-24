@@ -120,7 +120,6 @@ class LocationLiveMapViewFragment : VectorBaseFragment<FragmentSimpleContainerBi
 
             removeOutdatedSymbols(userLiveLocations, sManager)
             updateMapZoomWhenNeeded(userLiveLocations, latLngBoundsBuilder)
-
         } ?: postponeUpdateOfMap(userLiveLocations)
     }
 

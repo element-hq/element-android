@@ -27,6 +27,6 @@ class FakeLocationPinProvider {
     val instance = mockk<LocationPinProvider>(relaxed = true)
 
     fun givenCreateForUserId(userId: String, expectedDrawable: Drawable) {
-        every { instance.create(userId, captureLambda()) } answers { lambda<(Drawable) -> Unit>().invoke(expectedDrawable)}
+        every { instance.create(userId, captureLambda()) } answers { lambda<(Drawable) -> Unit>().invoke(expectedDrawable) }
     }
 }
