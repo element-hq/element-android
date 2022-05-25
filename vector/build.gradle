@@ -244,6 +244,7 @@ android {
             buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
 
             signingConfig signingConfigs.debug
+            testCoverageEnabled true
         }
 
         release {
