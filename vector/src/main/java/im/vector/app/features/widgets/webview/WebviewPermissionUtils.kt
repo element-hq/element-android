@@ -26,8 +26,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.utils.checkPermissions
 import java.lang.NullPointerException
+import javax.inject.Inject
 
-class WebviewPermissionUtils {
+class WebviewPermissionUtils @Inject constructor() {
 
     private var permissionRequest: PermissionRequest? = null
     private var selectedPermissions = listOf<String>()

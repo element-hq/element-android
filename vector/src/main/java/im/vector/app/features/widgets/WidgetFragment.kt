@@ -64,7 +64,9 @@ data class WidgetArgs(
         val urlParams: Map<String, String> = emptyMap()
 ) : Parcelable
 
-class WidgetFragment @Inject constructor() :
+class WidgetFragment @Inject constructor(
+        private val permissionUtils: WebviewPermissionUtils
+) :
         VectorBaseFragment<FragmentRoomWidgetBinding>(),
         WebViewEventListener,
         WebChromeEventListener,
@@ -72,7 +74,6 @@ class WidgetFragment @Inject constructor() :
 
     private val fragmentArgs: WidgetArgs by args()
     private val viewModel: WidgetViewModel by activityViewModel()
-    private val permissionUtils = WebviewPermissionUtils()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomWidgetBinding {
         return FragmentRoomWidgetBinding.inflate(inflater, container, false)
