@@ -507,9 +507,14 @@ dependencies {
     implementation 'commons-codec:commons-codec:1.15'
 
     // MapTiler
-    implementation 'org.maplibre.gl:android-sdk:9.5.2'
-    implementation 'org.maplibre.gl:android-plugin-annotation-v9:1.0.0'
-
+    fdroidImplementation(libs.maplibre.androidSdk) {
+        exclude group: 'com.google.android.gms', module: 'play-services-location'
+    }
+    fdroidImplementation(libs.maplibre.pluginAnnotation) {
+        exclude group: 'com.google.android.gms', module: 'play-services-location'
+    }
+    gplayImplementation libs.maplibre.androidSdk
+    gplayImplementation libs.maplibre.pluginAnnotation
 
     // TESTS
     testImplementation libs.tests.junit
