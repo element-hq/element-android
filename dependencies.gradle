@@ -10,7 +10,7 @@ ext.versions = [
 
 // Pinned to 7.1.3 because of https://github.com/vector-im/element-android/issues/6142
 // Please test carefully before upgrading again.
-def gradle = "7.1.3"
+def gradle = "7.2.1"
 // Ref: https://kotlinlang.org/releases.html
 def kotlin = "1.6.21"
 def kotlinCoroutines = "1.6.1"
