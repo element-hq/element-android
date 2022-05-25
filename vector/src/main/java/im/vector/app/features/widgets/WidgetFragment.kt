@@ -72,6 +72,7 @@ class WidgetFragment @Inject constructor() :
 
     private val fragmentArgs: WidgetArgs by args()
     private val viewModel: WidgetViewModel by activityViewModel()
+    private val permissionUtils = WebviewPermissionUtils()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomWidgetBinding {
         return FragmentRoomWidgetBinding.inflate(inflater, container, false)
@@ -277,16 +278,17 @@ class WidgetFragment @Inject constructor() :
     }
 
     private val permissionResultLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
-        WebviewPermissionUtils.onPermissionResult(result)
+        permissionUtils.onPermissionResult(result)
     }
 
     override fun onPermissionRequest(request: PermissionRequest) {
-        WebviewPermissionUtils.promptForPermissions(
+        permissionUtils.promptForPermissions(
                 title = R.string.room_widget_resource_permission_title,
                 request = request,
                 context = requireContext(),
                 activity = requireActivity(),
-                activityResultLauncher = permissionResultLauncher)
+                activityResultLauncher = permissionResultLauncher
+        )
     }
 
     private fun displayTerms(displayTerms: WidgetViewEvents.DisplayTerms) {

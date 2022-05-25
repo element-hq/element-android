@@ -25,8 +25,9 @@ import androidx.fragment.app.FragmentActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.utils.checkPermissions
+import java.lang.NullPointerException
 
-object WebviewPermissionUtils {
+class WebviewPermissionUtils {
 
     private var permissionRequest: PermissionRequest? = null
     private var selectedPermissions = listOf<String>()
@@ -73,20 +74,21 @@ object WebviewPermissionUtils {
     }
 
     fun onPermissionResult(result: Map<String, Boolean>) {
-        permissionRequest?.let { request ->
-            val grantedPermissions = selectedPermissions.filter { webPermission ->
-                val androidPermission = webPermissionToAndroidPermission(webPermission)
-                        ?: return@filter true // No corresponding Android permission exists
-                return@filter result[androidPermission]
-                        ?: return@filter true // Android permission already granted before
-            }
-            if (grantedPermissions.isNotEmpty()) {
-                request.grant(grantedPermissions.toTypedArray())
-            } else {
-                request.deny()
-            }
-            reset()
+        if (permissionRequest == null) {
+            throw NullPointerException("permissionRequest was null! Make sure to call promptForPermissions first.")
         }
+        val grantedPermissions = selectedPermissions.filter { webPermission ->
+            val androidPermission = webPermissionToAndroidPermission(webPermission)
+                    ?: return@filter true // No corresponding Android permission exists
+            return@filter result[androidPermission]
+                    ?: return@filter true // Android permission already granted before
+        }
+        if (grantedPermissions.isNotEmpty()) {
+            permissionRequest?.grant(grantedPermissions.toTypedArray())
+        } else {
+            permissionRequest?.deny()
+        }
+        reset()
     }
 
     private fun reset() {
