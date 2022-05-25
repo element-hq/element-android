@@ -17,12 +17,14 @@
 package org.matrix.android.sdk.internal.crypto
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.amshove.kluent.fail
+import org.junit.Assert
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
+import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.common.CommonTestHelper
@@ -44,7 +46,8 @@ class DecryptRedactedEventTest : InstrumentedTest {
 
         val roomALicePOV = aliceSession.getRoom(e2eRoomID)!!
         val timelineEvent = testHelper.sendTextMessage(roomALicePOV, "Hello", 1).first()
-        roomALicePOV.sendService().redactEvent(timelineEvent.root, "Wrong Room")
+        val redactionReason = "Wrong Room"
+        roomALicePOV.sendService().redactEvent(timelineEvent.root, redactionReason)
 
         // get the event from bob
         testHelper.waitWithLatch {
@@ -57,9 +60,19 @@ class DecryptRedactedEventTest : InstrumentedTest {
 
         testHelper.runBlockingTest {
             try {
-                bobSession.cryptoService().decryptEvent(eventBobPov.root, "")
+                val result = bobSession.cryptoService().decryptEvent(eventBobPov.root, "")
+                Assert.assertEquals(
+                        "Unexpected redacted reason",
+                        redactionReason,
+                        result.clearEvent.toModel<Event>()?.unsignedData?.redactedEvent?.content?.get("reason")
+                )
+                Assert.assertEquals(
+                        "Unexpected Redacted event id",
+                        timelineEvent.eventId,
+                        result.clearEvent.toModel<Event>()?.unsignedData?.redactedEvent?.redacts
+                )
             } catch (failure: Throwable) {
-                fail("Should not throw when decrypting a redacted event")
+                Assert.fail("Should not throw when decrypting a redacted event")
             }
         }
     }
