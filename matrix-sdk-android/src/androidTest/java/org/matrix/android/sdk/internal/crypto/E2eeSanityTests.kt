@@ -23,6 +23,7 @@ import org.amshove.kluent.fail
 import org.amshove.kluent.internal.assertEquals
 import org.junit.Assert
 import org.junit.FixMethodOrder
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -68,6 +69,7 @@ import java.util.concurrent.CountDownLatch
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
 @LargeTest
+@Ignore
 class E2eeSanityTests : InstrumentedTest {
 
     @get:Rule val rule = RetryTestRule(3)

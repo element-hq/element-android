@@ -53,6 +53,7 @@ import java.util.concurrent.CountDownLatch
 
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@Ignore
 class SASTest : InstrumentedTest {
 
     @Test
