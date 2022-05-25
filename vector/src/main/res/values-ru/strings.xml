@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="notice_room_invite_no_invitee">%s приглашение</string>
+    <string name="notice_room_invite_no_invitee">приглашение %s</string>
     <string name="notice_room_invite">%1$s пригласил(а) %2$s</string>
     <string name="notice_room_invite_you">%1$s пригласил(а) вас</string>
     <string name="notice_room_join">%1$s вошёл(ла) в комнату</string>
