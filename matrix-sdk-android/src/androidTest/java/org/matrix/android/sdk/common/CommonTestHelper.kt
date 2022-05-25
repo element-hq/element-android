@@ -57,22 +57,26 @@ import java.util.concurrent.TimeUnit
 class CommonTestHelper private constructor(context: Context) {
 
     companion object {
-        internal fun runSessionTest(context: Context, block: (CommonTestHelper) -> Unit) {
+        internal fun runSessionTest(context: Context, autoSignoutOnClose: Boolean = true, block: (CommonTestHelper) -> Unit) {
             val testHelper = CommonTestHelper(context)
             return try {
                 block(testHelper)
             } finally {
-                testHelper.cleanUpOpenedSessions()
+                if (autoSignoutOnClose) {
+                    testHelper.cleanUpOpenedSessions()
+                }
             }
         }
 
-        internal fun runCryptoTest(context: Context, block: (CryptoTestHelper, CommonTestHelper) -> Unit) {
+        internal fun runCryptoTest(context: Context, autoSignoutOnClose: Boolean = true, block: (CryptoTestHelper, CommonTestHelper) -> Unit) {
             val testHelper = CommonTestHelper(context)
             val cryptoTestHelper = CryptoTestHelper(testHelper)
             return try {
                 block(cryptoTestHelper, testHelper)
             } finally {
-                testHelper.cleanUpOpenedSessions()
+                if (autoSignoutOnClose) {
+                    testHelper.cleanUpOpenedSessions()
+                }
             }
         }
     }
@@ -110,11 +114,7 @@ class CommonTestHelper private constructor(context: Context) {
     fun cleanUpOpenedSessions() {
         trackedSessions.forEach {
             runBlockingTest {
-                try {
-                    it.signOutService().signOut(true)
-                } catch (failure: Throwable) {
-                   // Well, as long as you tried.
-                }
+                it.signOutService().signOut(true)
             }
         }
         trackedSessions.clear()
@@ -419,8 +419,8 @@ class CommonTestHelper private constructor(context: Context) {
      */
     fun await(latch: CountDownLatch, timeout: Long? = TestConstants.timeOutMillis) {
         assertTrue(
-            "Timed out after " + timeout + "ms waiting for something to happen. See stacktrace for cause.",
-	    latch.await(timeout ?: TestConstants.timeOutMillis, TimeUnit.MILLISECONDS)
+                "Timed out after " + timeout + "ms waiting for something to happen. See stacktrace for cause.",
+                latch.await(timeout ?: TestConstants.timeOutMillis, TimeUnit.MILLISECONDS)
         )
     }
 

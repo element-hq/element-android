@@ -40,7 +40,7 @@ import kotlin.coroutines.resume
 class DeactivateAccountTest : InstrumentedTest {
 
     @Test
-    fun deactivateAccountTest() = runSessionTest(context()) { commonTestHelper ->
+    fun deactivateAccountTest() = runSessionTest(context(), false /* session will be deactivated */) { commonTestHelper ->
         val session = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = true))
 
         // Deactivate the account
