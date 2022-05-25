@@ -166,7 +166,7 @@ interface Room {
     fun roomVersionService(): RoomVersionService
 
     /**
-     * Get the LocationSharingService associated to this Room
+     * Get the LocationSharingService associated to this Room.
      */
     fun locationSharingService(): LocationSharingService
 }
