@@ -18,7 +18,7 @@ package org.matrix.android.sdk.internal.session.room
 
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.session.room.Room
-import org.matrix.android.sdk.api.session.room.location.DefaultLocationSharingService
+import org.matrix.android.sdk.internal.session.room.location.DefaultLocationSharingService
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.permalinks.ViaParameterFinder
 import org.matrix.android.sdk.internal.session.room.accountdata.DefaultRoomAccountDataService
