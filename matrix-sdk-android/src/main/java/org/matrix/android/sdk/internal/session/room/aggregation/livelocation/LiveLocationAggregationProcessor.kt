@@ -79,22 +79,22 @@ internal class LiveLocationAggregationProcessor @Inject constructor(
     }
 
     private fun scheduleDeactivationAfterTimeout(eventId: String, roomId: String, endOfLiveTimestampMillis: Long?) {
-        endOfLiveTimestampMillis?.let { endOfLiveMillis ->
-            val workParams = DeactivateLiveLocationShareWorker.Params(sessionId = sessionId, eventId = eventId, roomId = roomId)
-            val workData = WorkerParamsFactory.toData(workParams)
-            val workName = DeactivateLiveLocationShareWorker.getWorkName(eventId = eventId, roomId = roomId)
-            val workDelayMillis = (endOfLiveMillis - clock.epochMillis()).coerceAtLeast(0)
-            val workRequest = workManagerProvider.matrixOneTimeWorkRequestBuilder<DeactivateLiveLocationShareWorker>()
-                    .setInitialDelay(workDelayMillis, TimeUnit.MILLISECONDS)
-                    .setInputData(workData)
-                    .build()
+        endOfLiveTimestampMillis ?: return
 
-            workManagerProvider.workManager.enqueueUniqueWork(
-                    workName,
-                    ExistingWorkPolicy.KEEP,
-                    workRequest
-            )
-        }
+        val workParams = DeactivateLiveLocationShareWorker.Params(sessionId = sessionId, eventId = eventId, roomId = roomId)
+        val workData = WorkerParamsFactory.toData(workParams)
+        val workName = DeactivateLiveLocationShareWorker.getWorkName(eventId = eventId, roomId = roomId)
+        val workDelayMillis = (endOfLiveTimestampMillis - clock.epochMillis()).coerceAtLeast(0)
+        val workRequest = workManagerProvider.matrixOneTimeWorkRequestBuilder<DeactivateLiveLocationShareWorker>()
+                .setInitialDelay(workDelayMillis, TimeUnit.MILLISECONDS)
+                .setInputData(workData)
+                .build()
+
+        workManagerProvider.workManager.enqueueUniqueWork(
+                workName,
+                ExistingWorkPolicy.KEEP,
+                workRequest
+        )
     }
 
     private fun cancelDeactivationAfterTimeout(eventId: String, roomId: String) {
