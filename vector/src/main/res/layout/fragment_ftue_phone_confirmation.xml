@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/LoginFormScrollView"
     android:layout_height="match_parent"
     android:background="?android:colorBackground"
@@ -13,14 +14,14 @@
         android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/phoneEntryGutterStart"
+            android:id="@+id/phoneConfirmationGutterStart"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="@dimen/ftue_auth_gutter_start_percent" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/phoneEntryGutterEnd"
+            android:id="@+id/phoneConfirmationGutterEnd"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -30,11 +31,13 @@
             android:id="@+id/headerSpacing"
             android:layout_width="match_parent"
             android:layout_height="52dp"
-            app:layout_constraintBottom_toTopOf="@id/phoneEntryHeaderIcon"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBottom_toTopOf="@id/phoneConfirmationHeaderIcon"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintVertical_chainStyle="packed" />
 
         <ImageView
-            android:id="@+id/phoneEntryHeaderIcon"
+            android:id="@+id/phoneConfirmationHeaderIcon"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:adjustViewBounds="true"
@@ -42,57 +45,58 @@
             android:backgroundTint="?colorSecondary"
             android:contentDescription="@null"
             android:src="@drawable/ic_ftue_phone"
-            app:layout_constraintBottom_toTopOf="@id/phoneEntryHeaderTitle"
-            app:layout_constraintEnd_toEndOf="@id/phoneEntryGutterEnd"
+            app:layout_constraintBottom_toTopOf="@id/phoneConfirmationHeaderTitle"
+            app:layout_constraintEnd_toEndOf="@id/phoneConfirmationGutterEnd"
             app:layout_constraintHeight_percent="0.12"
-            app:layout_constraintStart_toStartOf="@id/phoneEntryGutterStart"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="@id/phoneConfirmationGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/headerSpacing"
             app:tint="@color/palette_white" />
 
         <TextView
-            android:id="@+id/phoneEntryHeaderTitle"
+            android:id="@+id/phoneConfirmationHeaderTitle"
             style="@style/Widget.Vector.TextView.Title.Medium"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:gravity="center"
-            android:text="@string/ftue_auth_phone_title"
+            android:text="@string/ftue_auth_phone_confirmation_title"
             android:textColor="?vctr_content_primary"
-            app:layout_constraintBottom_toTopOf="@id/phoneEntryHeaderSubtitle"
-            app:layout_constraintEnd_toEndOf="@id/phoneEntryGutterEnd"
-            app:layout_constraintStart_toStartOf="@id/phoneEntryGutterStart"
-            app:layout_constraintTop_toBottomOf="@id/phoneEntryHeaderIcon" />
+            app:layout_constraintBottom_toTopOf="@id/phoneConfirmationHeaderSubtitle"
+            app:layout_constraintEnd_toEndOf="@id/phoneConfirmationGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/phoneConfirmationGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/phoneConfirmationHeaderIcon" />
 
         <TextView
-            android:id="@+id/phoneEntryHeaderSubtitle"
+            android:id="@+id/phoneConfirmationHeaderSubtitle"
             style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:gravity="center"
-            android:text="@string/ftue_auth_phone_subtitle"
             android:textColor="?vctr_content_secondary"
             app:layout_constraintBottom_toTopOf="@id/titleContentSpacing"
-            app:layout_constraintEnd_toEndOf="@id/phoneEntryGutterEnd"
-            app:layout_constraintStart_toStartOf="@id/phoneEntryGutterStart"
-            app:layout_constraintTop_toBottomOf="@id/phoneEntryHeaderTitle" />
+            app:layout_constraintEnd_toEndOf="@id/phoneConfirmationGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/phoneConfirmationGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/phoneConfirmationHeaderTitle"
+            tools:text="@string/ftue_auth_phone_confirmation_subtitle" />
 
         <Space
             android:id="@+id/titleContentSpacing"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@id/phoneEntryInput"
+            app:layout_constraintBottom_toTopOf="@id/phoneConfirmationInput"
             app:layout_constraintHeight_percent="0.03"
-            app:layout_constraintTop_toBottomOf="@id/phoneEntryHeaderSubtitle" />
+            app:layout_constraintTop_toBottomOf="@id/phoneConfirmationHeaderSubtitle" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/phoneEntryInput"
+            android:id="@+id/phoneConfirmationInput"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="@string/ftue_auth_phone_entry_title"
             app:endIconMode="clear_text"
-            app:layout_constraintEnd_toEndOf="@id/phoneEntryGutterEnd"
-            app:layout_constraintStart_toStartOf="@id/phoneEntryGutterStart"
+            app:layout_constraintBottom_toTopOf="@id/phoneConfirmationResend"
+            app:layout_constraintEnd_toEndOf="@id/phoneConfirmationGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/phoneConfirmationGutterStart"
             app:layout_constraintTop_toBottomOf="@id/titleContentSpacing">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -104,26 +108,41 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <Button
+            android:id="@+id/phoneConfirmationResend"
+            style="@style/Widget.Vector.Button.Text.Login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/element_background_light"
+            android:text="@string/ftue_auth_phone_confirmation_resend_code"
+            android:textAllCaps="true"
+            android:textColor="?colorSecondary"
+            app:layout_constraintBottom_toTopOf="@id/entrySpacing"
+            app:layout_constraintEnd_toEndOf="@id/phoneConfirmationGutterEnd"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintStart_toStartOf="@id/phoneConfirmationGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/phoneConfirmationInput" />
+
         <Space
             android:id="@+id/entrySpacing"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@id/phoneEntrySubmit"
+            app:layout_constraintBottom_toTopOf="@id/phoneConfirmationSubmit"
             app:layout_constraintHeight_percent="0.03"
-            app:layout_constraintTop_toBottomOf="@id/phoneEntryInput"
+            app:layout_constraintTop_toBottomOf="@id/phoneConfirmationResend"
             app:layout_constraintVertical_bias="0"
             app:layout_constraintVertical_chainStyle="packed" />
 
         <Button
-            android:id="@+id/phoneEntrySubmit"
+            android:id="@+id/phoneConfirmationSubmit"
             style="@style/Widget.Vector.Button.Login"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/login_set_email_submit"
             android:textAllCaps="true"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/phoneEntryGutterEnd"
-            app:layout_constraintStart_toStartOf="@id/phoneEntryGutterStart"
+            app:layout_constraintEnd_toEndOf="@id/phoneConfirmationGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/phoneConfirmationGutterStart"
             app:layout_constraintTop_toBottomOf="@id/entrySpacing" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

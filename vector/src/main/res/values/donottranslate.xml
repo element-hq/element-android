@@ -48,6 +48,11 @@
     <string name="ftue_auth_reset_password">Reset password</string>
     <string name="ftue_auth_sign_out_all_devices">Sign out all devices</string>
 
+    <string name="ftue_auth_phone_confirmation_title">Confirm your phone number</string>
+    <!-- Note for translators, %s is the users international phone number -->
+    <string name="ftue_auth_phone_confirmation_subtitle">We just sent a code to %s. Enter it below to verify it\'s you.</string>
+    <string name="ftue_auth_phone_confirmation_resend_code">Resend code</string>
+
     <string name="ftue_auth_email_verification_title">Check your email to verify.</string>
     <!-- Note for translators, %s is the users email address -->
     <string name="ftue_auth_email_verification_subtitle">To confirm your email address, tap the button in the email we just sent to %s</string>

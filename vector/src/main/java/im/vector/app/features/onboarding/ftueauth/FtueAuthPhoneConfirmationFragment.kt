@@ -22,9 +22,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
+import com.airbnb.mvrx.args
 import im.vector.app.R
 import im.vector.app.core.extensions.associateContentStateWith
-import im.vector.app.core.extensions.autofillPhoneNumber
 import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.editText
 import im.vector.app.core.extensions.setOnImeDoneListener
@@ -34,7 +34,7 @@ import im.vector.app.features.onboarding.RegisterAction
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
+import org.matrix.android.sdk.api.failure.Failure
 import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
@@ -43,9 +43,9 @@ data class FtueAuthPhoneConfirmationFragmentArgument(
         val msisdn: String
 ) : Parcelable
 
-class FtueAuthPhoneConfirmationFragment @Inject constructor(
-        private val phoneNumberParser: PhoneNumberParser
-) : AbstractFtueAuthFragment<FragmentFtuePhoneConfirmationBinding>() {
+class FtueAuthPhoneConfirmationFragment @Inject constructor() : AbstractFtueAuthFragment<FragmentFtuePhoneConfirmationBinding>() {
+
+    private val params: FtueAuthPhoneConfirmationFragmentArgument by args()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtuePhoneConfirmationBinding {
         return FragmentFtuePhoneConfirmationBinding.inflate(inflater, container, false)
@@ -57,35 +57,32 @@ class FtueAuthPhoneConfirmationFragment @Inject constructor(
     }
 
     private fun setupViews() {
-        views.phoneEntryInput.associateContentStateWith(button = views.phoneEntrySubmit)
-        views.phoneEntryInput.setOnImeDoneListener { updatePhoneNumber() }
-        views.phoneEntrySubmit.debouncedClicks { updatePhoneNumber() }
+        views.phoneConfirmationHeaderSubtitle.text = getString(R.string.ftue_auth_phone_confirmation_subtitle, params.msisdn)
+        views.phoneConfirmationInput.associateContentStateWith(button = views.phoneConfirmationSubmit)
+        views.phoneConfirmationInput.setOnImeDoneListener { submitConfirmationCode() }
+        views.phoneConfirmationSubmit.debouncedClicks { submitConfirmationCode() }
 
-        views.phoneEntryInput.editText().textChanges()
+        views.phoneConfirmationInput.editText().textChanges()
                 .onEach {
-                    views.phoneEntryInput.error = null
-                    views.phoneEntrySubmit.isEnabled = it.isNotBlank()
+                    views.phoneConfirmationInput.error = null
+                    views.phoneConfirmationSubmit.isEnabled = it.isNotBlank()
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 
-        views.phoneEntryInput.autofillPhoneNumber()
+        views.phoneConfirmationResend.debouncedClicks { viewModel.handle(OnboardingAction.PostRegisterAction(RegisterAction.SendAgainThreePid)) }
     }
 
-    private fun updatePhoneNumber() {
-        val number = views.phoneEntryInput.content()
-
-        when (val result = phoneNumberParser.parseInternationalNumber(number)) {
-            PhoneNumberParser.Result.ErrorInvalidNumber            -> views.phoneEntryInput.error = getString(R.string.login_msisdn_error_other)
-            PhoneNumberParser.Result.ErrorMissingInternationalCode -> views.phoneEntryInput.error = getString(R.string.login_msisdn_error_not_international)
-            is PhoneNumberParser.Result.Success                    -> {
-                val (countryCode, phoneNumber) = result
-                viewModel.handle(OnboardingAction.PostRegisterAction(RegisterAction.AddThreePid(RegisterThreePid.Msisdn(phoneNumber, countryCode))))
-            }
-        }
+    private fun submitConfirmationCode() {
+        val code = views.phoneConfirmationInput.content()
+        viewModel.handle(OnboardingAction.PostRegisterAction(RegisterAction.ValidateThreePid(code)))
     }
 
     override fun onError(throwable: Throwable) {
-        views.phoneEntryInput.error = errorFormatter.toHumanReadable(throwable)
+        when (throwable) {
+            // The entered code is not correct
+            is Failure.SuccessError -> views.phoneConfirmationInput.error = getString(R.string.login_validation_code_is_not_correct)
+            else                    -> views.phoneConfirmationInput.error = errorFormatter.toHumanReadable(throwable)
+        }
     }
 
     override fun resetViewModel() {
