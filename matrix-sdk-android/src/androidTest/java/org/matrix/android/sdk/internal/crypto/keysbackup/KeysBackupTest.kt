@@ -34,6 +34,7 @@ import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
 import org.matrix.android.sdk.api.listeners.StepProgressListener
+import org.matrix.android.sdk.api.session.crypto.keysbackup.BackupRecoveryKey
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupStateListener
 import org.matrix.android.sdk.api.session.crypto.keysbackup.toKeysVersionResult
@@ -505,7 +506,7 @@ class KeysBackupTest : InstrumentedTest {
             try {
                 testData.aliceSession2.cryptoService().keysBackupService().trustKeysBackupVersionWithRecoveryKey(
                         testData.aliceSession2.cryptoService().keysBackupService().keysBackupVersion!!,
-                        "Bad recovery key"
+                        BackupRecoveryKey.fromBase58("Bad recovery key")
                 )
                 fail("Should have failed to trust")
             } catch (failure: Throwable) {
@@ -645,7 +646,7 @@ class KeysBackupTest : InstrumentedTest {
         var importRoomKeysResult: ImportRoomKeysResult? = null
         testHelper.runBlockingTest {
             testData.aliceSession2.cryptoService().keysBackupService().restoreKeysWithRecoveryKey(testData.aliceSession2.cryptoService().keysBackupService().keysBackupVersion!!,
-                    "EsTc LW2K PGiF wKEA 3As5 g5c4 BXwk qeeJ ZJV8 Q9fu gUMN UE4d",
+                    BackupRecoveryKey.fromBase58("EsTc LW2K PGiF wKEA 3As5 g5c4 BXwk qeeJ ZJV8 Q9fu gUMN UE4d"),
                     null,
                     null,
                     null

@@ -34,6 +34,7 @@ import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.listeners.StepProgressListener
+import org.matrix.android.sdk.api.session.crypto.keysbackup.BackupRecoveryKey
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupLastVersionResult
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupService
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
@@ -60,7 +61,6 @@ import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.util.JsonCanonicalizer
 import org.matrix.olm.OlmException
 import timber.log.Timber
-import uniffi.olm.BackupRecoveryKey
 import uniffi.olm.Request
 import uniffi.olm.RequestType
 import java.security.InvalidParameterException
@@ -150,7 +150,7 @@ internal class RustKeyBackupService @Inject constructor(
             MegolmBackupCreationInfo(
                     algorithm = publicKey.backupAlgorithm,
                     authData = signedMegolmBackupAuthData,
-                    recoveryKey = key.toBase58()
+                    recoveryKey = key
             )
         }
     }
@@ -189,9 +189,11 @@ internal class RustKeyBackupService @Inject constructor(
         }
     }
 
-    override fun saveBackupRecoveryKey(recoveryKey: String?, version: String?) {
+    override fun saveBackupRecoveryKey(recoveryKey: BackupRecoveryKey?, version: String?) {
         cryptoCoroutineScope.launch {
-            olmMachine.saveRecoveryKey(recoveryKey, version)
+            val recoveryKeyStr = recoveryKey?.toBase64()
+            // TODO : change rust API to use BackupRecoveryKey
+            olmMachine.saveRecoveryKey(recoveryKeyStr, version)
         }
     }
 
@@ -312,7 +314,8 @@ internal class RustKeyBackupService @Inject constructor(
                 val body = UpdateKeysBackupVersionBody(
                         algorithm = keysBackupVersion.algorithm,
                         authData = newAuthData.copy(signatures = newSignatures).toJsonDict(),
-                        version = keysBackupVersion.version)
+                        version = keysBackupVersion.version
+                )
 
                 withContext(coroutineDispatchers.io) {
                     sender.updateBackup(keysBackupVersion, body)
@@ -353,14 +356,13 @@ internal class RustKeyBackupService @Inject constructor(
         }
     }
 
-    override suspend fun trustKeysBackupVersionWithRecoveryKey(keysBackupVersion: KeysVersionResult, recoveryKey: String) {
+    override suspend fun trustKeysBackupVersionWithRecoveryKey(keysBackupVersion: KeysVersionResult, recoveryKey: BackupRecoveryKey) {
         Timber.v("trustKeysBackupVersionWithRecoveryKey: version ${keysBackupVersion.version}")
         withContext(coroutineDispatchers.crypto) {
             // This is ~nowhere mentioned, the string here is actually a base58 encoded key.
             // This not really supported by the spec for the backup key, the 4S key supports
             // base58 encoding and the same method seems to be used here.
-            val key = BackupRecoveryKey.fromBase58(recoveryKey)
-            checkRecoveryKey(key, keysBackupVersion)
+            checkRecoveryKey(recoveryKey, keysBackupVersion)
             trustKeysBackupVersion(keysBackupVersion, true)
         }
     }
@@ -378,7 +380,7 @@ internal class RustKeyBackupService @Inject constructor(
         withContext(coroutineDispatchers.crypto) {
             try {
                 val version = sender.getKeyBackupLastVersion()?.toKeysVersionResult()
-
+                Timber.v("Keybackup version: $version")
                 if (version != null) {
                     val key = BackupRecoveryKey.fromBase64(secret)
                     if (isValidRecoveryKey(key, version)) {
@@ -395,7 +397,9 @@ internal class RustKeyBackupService @Inject constructor(
                             }
                         }
                         // we can save, it's valid
-                        saveBackupRecoveryKey(key.toBase64(), version.version)
+                        saveBackupRecoveryKey(key, version.version)
+                    } else {
+                        Timber.d("Invalid recovery key")
                     }
                 } else {
                     Timber.e("onSecretKeyGossip: Failed to import backup recovery key, no backup version was found on the server")
@@ -480,7 +484,7 @@ internal class RustKeyBackupService @Inject constructor(
             }
 
             // Save for next time and for gossiping
-            saveBackupRecoveryKey(recoveryKey.toBase64(), keysVersionResult.version)
+            saveBackupRecoveryKey(recoveryKey, keysVersionResult.version)
         }
 
         withContext(coroutineDispatchers.main) {
@@ -519,14 +523,18 @@ internal class RustKeyBackupService @Inject constructor(
                 stepProgressListener?.onStepProgress(stepProgress)
             }
 
-            Timber.v("restoreKeysWithRecoveryKey: Decrypted ${sessionsData.size} keys out" +
-                    " of ${data.roomIdToRoomKeysBackupData.size} rooms from the backup store on the homeserver")
+            Timber.v(
+                    "restoreKeysWithRecoveryKey: Decrypted ${sessionsData.size} keys out" +
+                            " of ${data.roomIdToRoomKeysBackupData.size} rooms from the backup store on the homeserver"
+            )
 
             // Do not trigger a backup for them if they come from the backup version we are using
             val backUp = keysVersionResult.version != keysBackupVersion?.version
             if (backUp) {
-                Timber.v("restoreKeysWithRecoveryKey: Those keys will be backed up" +
-                        " to backup version: ${keysBackupVersion?.version}")
+                Timber.v(
+                        "restoreKeysWithRecoveryKey: Those keys will be backed up" +
+                                " to backup version: ${keysBackupVersion?.version}"
+                )
             }
 
             // Import them into the crypto store
@@ -557,15 +565,12 @@ internal class RustKeyBackupService @Inject constructor(
     }
 
     override suspend fun restoreKeysWithRecoveryKey(keysVersionResult: KeysVersionResult,
-                                                    recoveryKey: String,
+                                                    recoveryKey: BackupRecoveryKey,
                                                     roomId: String?,
                                                     sessionId: String?,
                                                     stepProgressListener: StepProgressListener?): ImportRoomKeysResult {
         Timber.v("restoreKeysWithRecoveryKey: From backup version: ${keysVersionResult.version}")
-
-        val key = BackupRecoveryKey.fromBase58(recoveryKey)
-
-        return restoreBackup(keysVersionResult, key, roomId, sessionId, stepProgressListener)
+        return restoreBackup(keysVersionResult, recoveryKey, roomId, sessionId, stepProgressListener)
     }
 
     override suspend fun restoreKeyBackupWithPassword(keysBackupVersion: KeysVersionResult,
@@ -577,7 +582,6 @@ internal class RustKeyBackupService @Inject constructor(
         val recoveryKey = withContext(coroutineDispatchers.crypto) {
             recoveryKeyFromPassword(password, keysBackupVersion)
         }
-
         return restoreBackup(keysBackupVersion, recoveryKey, roomId, sessionId, stepProgressListener)
     }
 
@@ -703,16 +707,15 @@ internal class RustKeyBackupService @Inject constructor(
     private fun isValidRecoveryKey(recoveryKey: BackupRecoveryKey, version: KeysVersionResult): Boolean {
         val publicKey = recoveryKey.megolmV1PublicKey().publicKey
         val authData = getMegolmBackupAuthData(version) ?: return false
+        Timber.v("recoveryKey.megolmV1PublicKey().publicKey $publicKey == getMegolmBackupAuthData(version).publicKey ${authData.publicKey}")
         return authData.publicKey == publicKey
     }
 
-    override suspend fun isValidRecoveryKeyForCurrentVersion(recoveryKey: String): Boolean {
+    override suspend fun isValidRecoveryKeyForCurrentVersion(recoveryKey: BackupRecoveryKey): Boolean {
         return withContext(coroutineDispatchers.crypto) {
             val keysBackupVersion = keysBackupVersion ?: return@withContext false
-
-            val key = BackupRecoveryKey.fromBase64(recoveryKey)
             try {
-                isValidRecoveryKey(key, keysBackupVersion)
+                isValidRecoveryKey(recoveryKey, keysBackupVersion)
             } catch (failure: Throwable) {
                 Timber.i("isValidRecoveryKeyForCurrentVersion: Invalid recovery key")
                 false
@@ -726,7 +729,9 @@ internal class RustKeyBackupService @Inject constructor(
 
     override suspend fun getKeyBackupRecoveryKeyInfo(): SavedKeyBackupKeyInfo? {
         val info = olmMachine.getBackupKeys() ?: return null
-        return SavedKeyBackupKeyInfo(info.recoveryKey, info.backupVersion)
+        // TODO change rust ffi to return BackupRecoveryKey instead of base64 string
+        val backupRecoveryKey = BackupRecoveryKey.fromBase64(info.recoveryKey)
+        return SavedKeyBackupKeyInfo(backupRecoveryKey, info.backupVersion)
     }
 
     /**
