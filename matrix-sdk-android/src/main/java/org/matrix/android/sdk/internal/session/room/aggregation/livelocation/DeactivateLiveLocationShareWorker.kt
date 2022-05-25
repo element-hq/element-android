@@ -20,6 +20,7 @@ import android.content.Context
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import io.realm.RealmConfiguration
+import org.matrix.android.sdk.api.util.md5
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.database.awaitTransaction
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntity
@@ -88,8 +89,9 @@ internal class DeactivateLiveLocationShareWorker(context: Context, params: Worke
     }
 
     companion object {
-        private const val WORK_NAME_PREFIX = "DeactivateLiveLocationWork-"
-
-        fun getWorkName(eventId: String, roomId: String) = "${WORK_NAME_PREFIX}$eventId-$roomId"
+        fun getWorkName(eventId: String, roomId: String): String {
+            val hash = "$eventId$roomId".md5()
+            return "DeactivateLiveLocationWork-$hash"
+        }
     }
 }
