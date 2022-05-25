@@ -28,5 +28,4 @@ interface WebChromeEventListener {
     fun onPermissionRequest(request: PermissionRequest) {
         // NO-OP
     }
-
 }
