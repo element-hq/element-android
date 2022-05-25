@@ -1,0 +1,5 @@
+Some methods from `Session` have been moved to a new `SyncService`, that you can retrieve from a `Session`.
+- `SyncStatusService` method has been moved to the new `SyncService`
+- `InitSyncStep` have been moved and renamed to `InitialSyncStep`
+- `SyncStatusService.Status` has been renamed to `SyncRequestState`
+- The existing `SyncService` has been renamed to `SyncAndroidService` because of name clash with the new SDK Service
