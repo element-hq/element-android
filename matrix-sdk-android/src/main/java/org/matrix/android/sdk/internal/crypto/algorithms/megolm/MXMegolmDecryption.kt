@@ -78,6 +78,7 @@ internal class MXMegolmDecryption(
                     encryptedEventContent.ciphertext,
                     event.roomId,
                     timeline,
+                    eventId = event.eventId.orEmpty(),
                     encryptedEventContent.sessionId,
                     encryptedEventContent.senderKey
             )

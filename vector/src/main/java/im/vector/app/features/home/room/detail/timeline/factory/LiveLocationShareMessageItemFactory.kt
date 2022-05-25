@@ -33,7 +33,6 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageLiveLocation
 import im.vector.app.features.location.INITIAL_MAP_ZOOM_IN_TIMELINE
 import im.vector.app.features.location.UrlMapProvider
 import im.vector.app.features.location.toLocationData
-import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.threeten.bp.LocalDateTime
@@ -75,7 +74,8 @@ class LiveLocationShareMessageItemFactory @Inject constructor(
         val height = dimensionConverter.dpToPx(MessageItemFactory.MESSAGE_LOCATION_ITEM_HEIGHT_IN_DP)
 
         return MessageLiveLocationInactiveItem_()
-                .attributes(attributes)
+                // disable the click on this state item
+                .attributes(attributes.copy(itemClickListener = null))
                 .mapWidth(width)
                 .mapHeight(height)
                 .highlighted(highlight)
@@ -90,7 +90,8 @@ class LiveLocationShareMessageItemFactory @Inject constructor(
         val height = dimensionConverter.dpToPx(MessageItemFactory.MESSAGE_LOCATION_ITEM_HEIGHT_IN_DP)
 
         return MessageLiveLocationStartItem_()
-                .attributes(attributes)
+                // disable the click on this state item
+                .attributes(attributes.copy(itemClickListener = null))
                 .mapWidth(width)
                 .mapHeight(height)
                 .highlighted(highlight)
@@ -127,7 +128,7 @@ class LiveLocationShareMessageItemFactory @Inject constructor(
     private fun getViewState(liveLocationShareSummaryData: LiveLocationShareSummaryData?): LiveLocationShareViewState {
         return when {
             liveLocationShareSummaryData?.isActive == null                                                   -> LiveLocationShareViewState.Unkwown
-            liveLocationShareSummaryData.isActive.not() || isLiveTimedOut(liveLocationShareSummaryData)      -> LiveLocationShareViewState.Inactive
+            liveLocationShareSummaryData.isActive.not()                                                      -> LiveLocationShareViewState.Inactive
             liveLocationShareSummaryData.isActive && liveLocationShareSummaryData.lastGeoUri.isNullOrEmpty() -> LiveLocationShareViewState.Loading
             else                                                                                             ->
                 LiveLocationShareViewState.Running(
@@ -135,16 +136,6 @@ class LiveLocationShareMessageItemFactory @Inject constructor(
                         getEndOfLiveDateTime(liveLocationShareSummaryData)
                 )
         }.also { viewState -> Timber.d("computed viewState: $viewState") }
-    }
-
-    private fun isLiveTimedOut(liveLocationShareSummaryData: LiveLocationShareSummaryData): Boolean {
-        return getEndOfLiveDateTime(liveLocationShareSummaryData)
-                ?.let { endOfLive ->
-                    // this will only cover users with different timezones but not users with manually time set
-                    val now = LocalDateTime.now()
-                    now.isAfter(endOfLive)
-                }
-                .orFalse()
     }
 
     private fun getEndOfLiveDateTime(liveLocationShareSummaryData: LiveLocationShareSummaryData): LocalDateTime? {
