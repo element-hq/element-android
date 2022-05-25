@@ -115,7 +115,7 @@ internal class EventDecryptor @Inject constructor(
             // we shouldn't attempt to decrypt a redacted event because the content is cleared and decryption will fail because of null algorithm
             return MXEventDecryptionResult(
                     clearEvent = mapOf(
-                            "room_id"  to event.roomId.orEmpty(),
+                            "room_id" to event.roomId.orEmpty(),
                             "type" to EventType.MESSAGE,
                             "content" to emptyMap<String, Any>(),
                             "unsigned" to event.unsignedData.toContent()
