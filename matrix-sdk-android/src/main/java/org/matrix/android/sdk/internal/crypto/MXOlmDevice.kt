@@ -764,12 +764,14 @@ internal class MXOlmDevice @Inject constructor(
      * @return the decrypting result. Null if the sessionId is unknown.
      */
     @Throws(MXCryptoError::class)
-    suspend fun decryptGroupMessage(body: String,
-                                    roomId: String,
-                                    timeline: String?,
-                                    eventId: String,
-                                    sessionId: String,
-                                    senderKey: String): OlmDecryptionResult {
+    suspend fun decryptGroupMessage(
+            body: String,
+            roomId: String,
+            timeline: String?,
+            eventId: String,
+            sessionId: String,
+            senderKey: String
+    ): OlmDecryptionResult {
         val sessionHolder = getInboundGroupSession(sessionId, senderKey, roomId)
         val wrapper = sessionHolder.wrapper
         val inboundGroupSession = wrapper.olmInboundGroupSession
