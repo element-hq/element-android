@@ -2452,7 +2452,7 @@
 \nPour nous y préparer, nous avons besoin de faire certains changements : les fils créés avant maintenant seront affichés comme des réponses classiques.
 \n
 \nCette transition sera unique, maintenant que les fils de discussions ont intégré la spécification de Matrix.</string>
-    <string name="screen_sharing_notification_description">Partage d\'écran en cours</string>
+    <string name="screen_sharing_notification_description">Partage d’écran en cours</string>
     <string name="screen_sharing_notification_title">Partage d’écran pour ${app_name}</string>
     <string name="location_share_live_started">Chargement de la position en direct…</string>
     <string name="location_share_live_select_duration_option_3">8 heures</string>
