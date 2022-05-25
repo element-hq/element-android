@@ -26,6 +26,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.PermissionRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
@@ -42,7 +44,9 @@ import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.openUrlInExternalBrowser
 import im.vector.app.databinding.FragmentRoomWidgetBinding
+import im.vector.app.features.webview.WebChromeEventListener
 import im.vector.app.features.webview.WebViewEventListener
+import im.vector.app.features.widgets.webview.WebviewPermissionUtils
 import im.vector.app.features.widgets.webview.clearAfterWidget
 import im.vector.app.features.widgets.webview.setupForWidget
 import kotlinx.parcelize.Parcelize
@@ -63,6 +67,7 @@ data class WidgetArgs(
 class WidgetFragment @Inject constructor() :
         VectorBaseFragment<FragmentRoomWidgetBinding>(),
         WebViewEventListener,
+        WebChromeEventListener,
         OnBackPressed {
 
     private val fragmentArgs: WidgetArgs by args()
@@ -75,7 +80,7 @@ class WidgetFragment @Inject constructor() :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
-        views.widgetWebView.setupForWidget(this)
+        views.widgetWebView.setupForWidget(this, this)
         if (fragmentArgs.kind.isAdmin()) {
             viewModel.getPostAPIMediator().setWebView(views.widgetWebView)
         }
@@ -269,6 +274,19 @@ class WidgetFragment @Inject constructor() :
 
     override fun onHttpError(url: String, errorCode: Int, description: String) {
         viewModel.handle(WidgetAction.OnWebViewLoadingError(url, true, errorCode, description))
+    }
+
+    private val permissionResultLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
+        WebviewPermissionUtils.onPermissionResult(result)
+    }
+
+    override fun onPermissionRequest(request: PermissionRequest) {
+        WebviewPermissionUtils.promptForPermissions(
+                title = R.string.room_widget_resource_permission_title,
+                request = request,
+                context = requireContext(),
+                activity = requireActivity(),
+                activityResultLauncher = permissionResultLauncher)
     }
 
     private fun displayTerms(displayTerms: WidgetViewEvents.DisplayTerms) {

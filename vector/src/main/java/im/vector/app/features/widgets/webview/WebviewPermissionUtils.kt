@@ -15,17 +15,30 @@
  */
 package im.vector.app.features.widgets.webview
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.webkit.PermissionRequest
+import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.StringRes
+import androidx.fragment.app.FragmentActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
+import im.vector.app.core.utils.checkPermissions
 
 object WebviewPermissionUtils {
 
+    private var permissionRequest: PermissionRequest? = null
+    private var selectedPermissions = listOf<String>()
+
     @SuppressLint("NewApi")
-    fun promptForPermissions(@StringRes title: Int, request: PermissionRequest, context: Context) {
+    fun promptForPermissions(
+            @StringRes title: Int,
+            request: PermissionRequest,
+            context: Context,
+            activity: FragmentActivity,
+            activityResultLauncher: ActivityResultLauncher<Array<String>>
+    ) {
         val allowedPermissions = request.resources.map {
             it to false
         }.toMutableList()
@@ -37,14 +50,48 @@ object WebviewPermissionUtils {
                     allowedPermissions[which] = allowedPermissions[which].first to isChecked
                 }
                 .setPositiveButton(R.string.room_widget_resource_grant_permission) { _, _ ->
-                    request.grant(allowedPermissions.mapNotNull { perm ->
+                    permissionRequest = request
+                    selectedPermissions = allowedPermissions.mapNotNull { perm ->
                         perm.first.takeIf { perm.second }
-                    }.toTypedArray())
+                    }
+
+                    val requiredAndroidPermissions = selectedPermissions.mapNotNull { permission ->
+                        webPermissionToAndroidPermission(permission)
+                    }
+
+                    // When checkPermissions returns false, some of the required Android permissions will
+                    // have to be requested and the flow completes asynchronously via onPermissionResult
+                    if (checkPermissions(requiredAndroidPermissions, activity, activityResultLauncher)) {
+                        request.grant(selectedPermissions.toTypedArray())
+                        reset()
+                    }
                 }
                 .setNegativeButton(R.string.room_widget_resource_decline_permission) { _, _ ->
                     request.deny()
                 }
                 .show()
+    }
+
+    fun onPermissionResult(result: Map<String, Boolean>) {
+        permissionRequest?.let { request ->
+            val grantedPermissions = selectedPermissions.filter { webPermission ->
+                val androidPermission = webPermissionToAndroidPermission(webPermission)
+                        ?: return@filter true // No corresponding Android permission exists
+                return@filter result[androidPermission]
+                        ?: return@filter true // Android permission already granted before
+            }
+            if (grantedPermissions.isNotEmpty()) {
+                request.grant(grantedPermissions.toTypedArray())
+            } else {
+                request.deny()
+            }
+            reset()
+        }
+    }
+
+    private fun reset() {
+        permissionRequest = null
+        selectedPermissions = listOf()
     }
 
     private fun webPermissionToHumanReadable(permission: String, context: Context): String {
@@ -53,6 +100,14 @@ object WebviewPermissionUtils {
             PermissionRequest.RESOURCE_VIDEO_CAPTURE      -> context.getString(R.string.room_widget_webview_access_camera)
             PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID -> context.getString(R.string.room_widget_webview_read_protected_media)
             else                                          -> permission
+        }
+    }
+
+    private fun webPermissionToAndroidPermission(permission: String): String? {
+        return when (permission) {
+            PermissionRequest.RESOURCE_AUDIO_CAPTURE -> Manifest.permission.RECORD_AUDIO
+            PermissionRequest.RESOURCE_VIDEO_CAPTURE -> Manifest.permission.CAMERA
+            else                                     -> null
         }
     }
 }
