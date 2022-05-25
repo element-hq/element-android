@@ -23,7 +23,7 @@ import io.realm.RealmConfiguration
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.database.awaitTransaction
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntity
-import org.matrix.android.sdk.internal.database.query.getOrCreate
+import org.matrix.android.sdk.internal.database.query.get
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.SessionComponent
 import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
@@ -74,12 +74,12 @@ internal class DeactivateLiveLocationShareWorker(context: Context, params: Worke
 
     private suspend fun deactivateLiveLocationShare(params: Params) {
         awaitTransaction(realmConfiguration) { realm ->
-            val aggregatedSummary = LiveLocationShareAggregatedSummaryEntity.getOrCreate(
+            val aggregatedSummary = LiveLocationShareAggregatedSummaryEntity.get(
                     realm = realm,
                     roomId = params.roomId,
                     eventId = params.eventId
             )
-            aggregatedSummary.isActive = false
+            aggregatedSummary?.isActive = false
         }
     }
 

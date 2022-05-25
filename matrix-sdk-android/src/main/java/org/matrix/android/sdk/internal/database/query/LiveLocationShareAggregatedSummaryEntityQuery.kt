@@ -55,3 +55,11 @@ internal fun LiveLocationShareAggregatedSummaryEntity.Companion.getOrCreate(
     return LiveLocationShareAggregatedSummaryEntity.where(realm, roomId, eventId).findFirst()
             ?: LiveLocationShareAggregatedSummaryEntity.create(realm, roomId, eventId)
 }
+
+internal fun LiveLocationShareAggregatedSummaryEntity.Companion.get(
+        realm: Realm,
+        roomId: String,
+        eventId: String,
+): LiveLocationShareAggregatedSummaryEntity? {
+    return LiveLocationShareAggregatedSummaryEntity.where(realm, roomId, eventId).findFirst()
+}
