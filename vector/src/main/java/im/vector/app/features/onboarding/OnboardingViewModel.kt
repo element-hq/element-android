@@ -638,18 +638,18 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun onAuthenticationStartError(it: Throwable, trigger: OnboardingAction.HomeServerChange) {
+    private fun onAuthenticationStartError(error: Throwable, trigger: OnboardingAction.HomeServerChange) {
         when {
-            it.isHomeserverUnavailable() && applicationContext.inferNoConnectivity(buildMeta) -> _viewEvents.post(
-                    OnboardingViewEvents.Failure(it)
+            error.isHomeserverUnavailable() && applicationContext.inferNoConnectivity(buildMeta) -> _viewEvents.post(
+                    OnboardingViewEvents.Failure(error)
             )
-            deeplinkUrlIsUnavailable(it, trigger)                                             -> _viewEvents.post(
+            deeplinkUrlIsUnavailable(error, trigger)                                             -> _viewEvents.post(
                     OnboardingViewEvents.DeeplinkAuthenticationFailure(
                             retryAction = (trigger as OnboardingAction.HomeServerChange.SelectHomeServer).resetToDefaultUrl()
                     )
             )
-            else                                                                              -> _viewEvents.post(
-                    OnboardingViewEvents.Failure(it)
+            else                                                                                 -> _viewEvents.post(
+                    OnboardingViewEvents.Failure(error)
             )
         }
     }
