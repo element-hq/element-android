@@ -26,7 +26,6 @@ import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-// TODO add unit tests
 class LocationLiveMapViewModel @AssistedInject constructor(
         @Assisted private val initialState: LocationLiveMapViewState,
         getListOfUserLiveLocationUseCase: GetListOfUserLiveLocationUseCase
