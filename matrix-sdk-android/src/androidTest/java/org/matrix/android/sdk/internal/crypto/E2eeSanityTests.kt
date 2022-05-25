@@ -640,6 +640,7 @@ class E2eeSanityTests : InstrumentedTest {
                         // for the test we just accept?
                         oldCode = sasTx.getDecimalCodeRepresentation()
                         testHelper.runBlockingTest {
+                            delay(500)
                             sasTx.userHasVerifiedShortCode()
                         }
                     }
@@ -666,11 +667,12 @@ class E2eeSanityTests : InstrumentedTest {
                 val sasTx = tx as SasVerificationTransaction
                 when (sasTx.state) {
                     VerificationTxState.ShortCodeReady -> {
+                        newCode = sasTx.getDecimalCodeRepresentation()
                         if (matchOnce) {
                             testHelper.runBlockingTest {
+                                delay(500)
                                 sasTx.userHasVerifiedShortCode()
                             }
-                            newCode = sasTx.getDecimalCodeRepresentation()
                             matchOnce = false
                         }
                     }
@@ -712,6 +714,7 @@ class E2eeSanityTests : InstrumentedTest {
                 aliceNewSession.cryptoService().keysBackupService().getKeyBackupRecoveryKeyInfo() != null
             }
         }
+
         testHelper.runBlockingTest {
             assertEquals(
                     "MSK Private parts should be the same",
