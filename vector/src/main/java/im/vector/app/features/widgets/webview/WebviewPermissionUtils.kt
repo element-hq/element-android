@@ -21,6 +21,7 @@ import android.content.Context
 import android.webkit.PermissionRequest
 import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.StringRes
+import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.FragmentActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
@@ -78,18 +79,23 @@ class WebviewPermissionUtils @Inject constructor() {
         if (permissionRequest == null) {
             throw NullPointerException("permissionRequest was null! Make sure to call promptForPermissions first.")
         }
-        val grantedPermissions = selectedPermissions.filter { webPermission ->
-            val androidPermission = webPermissionToAndroidPermission(webPermission)
-                    ?: return@filter true // No corresponding Android permission exists
-            return@filter result[androidPermission]
-                    ?: return@filter true // Android permission already granted before
-        }
+        val grantedPermissions = filterPermissionsToBeGranted(selectedPermissions, result)
         if (grantedPermissions.isNotEmpty()) {
             permissionRequest?.grant(grantedPermissions.toTypedArray())
         } else {
             permissionRequest?.deny()
         }
         reset()
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun filterPermissionsToBeGranted(selectedWebPermissions: List<String>, androidPermissionResult: Map<String, Boolean>): List<String> {
+        return selectedWebPermissions.filter { webPermission ->
+            val androidPermission = webPermissionToAndroidPermission(webPermission)
+                    ?: return@filter true // No corresponding Android permission exists
+            return@filter androidPermissionResult[androidPermission]
+                    ?: return@filter true // Android permission already granted before
+        }
     }
 
     private fun reset() {
