@@ -92,7 +92,7 @@ internal class LiveLocationAggregationProcessor @Inject constructor(
 
         workManagerProvider.workManager.enqueueUniqueWork(
                 workName,
-                ExistingWorkPolicy.KEEP,
+                ExistingWorkPolicy.REPLACE,
                 workRequest
         )
     }
