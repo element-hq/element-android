@@ -110,7 +110,11 @@ class CommonTestHelper private constructor(context: Context) {
     fun cleanUpOpenedSessions() {
         trackedSessions.forEach {
             runBlockingTest {
-                it.signOutService().signOut(true)
+                try {
+                    it.signOutService().signOut(true)
+                } catch (failure: Throwable) {
+                   // Well, as long as you tried.
+                }
             }
         }
         trackedSessions.clear()
