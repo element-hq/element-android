@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="notice_room_join">%1$s அறையில் சேர்ந்தார்</string>
+    <string name="notice_room_join">%1$s அறையில் சேர்ந்துள்ளார்</string>
     <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• உடன் பொருந்தக்கூடிய சேவையகங்கள் இப்போது தடைசெய்யப்பட்டுள்ளன.</string>
     <string name="notice_room_server_acl_updated_banned">• %s உடன் பொருந்தக்கூடிய சேவையகங்கள் இப்போது தடைசெய்யப்பட்டுள்ளன.</string>
     <plurals name="notice_room_server_acl_changes">
@@ -59,4 +59,20 @@
     <string name="notice_room_unban">%1$s என்பவர் %2$s இன் தடையை நீக்கியுள்ளார்</string>
     <string name="notice_room_remove">%2$s ஐ %1$s நீக்கினார்</string>
     <string name="notice_room_remove_by_you">%1$s ஐ நீங்கள் நீக்கினீர்கள்</string>
+    <string name="notice_direct_room_leave_by_you">நீங்கள் அறையை விட்டு வெளியேறினீர்கள்</string>
+    <string name="notice_direct_room_leave">%1$s அறையை விட்டு வெளியேறினார்</string>
+    <string name="notice_room_leave_by_you">நீங்கள் அறையை விட்டு வெளியேறினீர்கள்</string>
+    <string name="notice_room_leave">%1$s அறையை விட்டு வெளியேறினார்</string>
+    <string name="notice_direct_room_join_by_you">நீங்கள் சேர்ந்துள்ளீர்கள்</string>
+    <string name="notice_direct_room_join">%1$s சேர்ந்துள்ளார்</string>
+    <string name="notice_room_join_by_you">நீங்கள் அறையில் சேர்ந்துள்ளீர்கள்</string>
+    <string name="notice_room_invite_you">%1$s உங்களை அழைத்துள்ளார்</string>
+    <string name="notice_room_invite_by_you">நீங்கள் %1$s ஐ அழைத்துள்ளீர்கள்</string>
+    <string name="notice_room_invite">%1$s என்பவர் %2$s ஐ அழைத்துள்ளார்</string>
+    <string name="notice_direct_room_created_by_you">நீங்கள் கலந்துரையாடலை உருவாக்கியுள்ளீர்கள்</string>
+    <string name="notice_direct_room_created">%1$s கலந்துரையாடலை உருவாக்கியுள்ளார்</string>
+    <string name="notice_room_created_by_you">நீங்கள் இந்த அறையை உருவாக்கியுள்ளீர்கள்</string>
+    <string name="notice_room_created">%1$s அறையை உருவாக்கியுள்ளார்</string>
+    <string name="notice_room_invite_no_invitee_by_you">உங்கள் அழைப்பிதழ்</string>
+    <string name="notice_room_invite_no_invitee">%s இன் அழைப்பிதழ்</string>
 </resources>
