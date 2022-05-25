@@ -14,7 +14,7 @@ env:
 jobs:
   tests:
     name: Runs all tests
-    runs-on: macos-latest # for the emulator
+    runs-on: ubuntu-latest # for the emulator
     # Allow all jobs on main and develop. Just one per PR.
     concurrency:
       group: ${{ github.ref == 'refs/heads/main' && format('unit-tests-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('unit-tests-develop-{0}', github.sha) || format('unit-tests-{0}', github.ref) }}
