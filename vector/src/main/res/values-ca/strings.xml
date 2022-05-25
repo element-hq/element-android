@@ -36,7 +36,7 @@
     <string name="notice_display_name_set">%1$s a canviat el seu àlies a %2$s</string>
     <string name="notice_placed_video_call">%s ha realitzat una videotrucada.</string>
     <string name="notice_placed_voice_call">%s ha realitzat una trucada de veu.</string>
-    <string name="room_displayname_room_invite">Convida a la sala</string>
+    <string name="room_displayname_room_invite"></string>
     <string name="room_displayname_two_members">%1$s i %2$s</string>
     <string name="room_displayname_empty_room">Sala buida</string>
     <string name="notice_direct_room_update">%s s\'ha actualitzat aquí.</string>
@@ -505,7 +505,7 @@
     <string name="create">Crea</string>
     <string name="group_details_home">Inici</string>
     <string name="rooms">Sales</string>
-    <string name="invited">Ha sigut convidat</string>
+    <string name="invited">Convidat</string>
     <string name="has_been_removed">%2$s t\'ha expulsat de %1$s</string>
     <string name="has_been_banned">%2$s l\'ha expulsat de la sala %1$s</string>
     <string name="reason_colon">Raó: %1$s</string>
@@ -1185,7 +1185,7 @@
     <string name="room_permissions_ban_users">Vetar usuaris</string>
     <string name="room_permissions_remove_users">Expulsar usuaris</string>
     <string name="room_permissions_change_settings">Canviar la configuració</string>
-    <string name="room_permissions_invite_users">Convidar usuaris</string>
+    <string name="room_permissions_invite_users">Convida usuaris</string>
     <string name="room_permissions_send_messages">Enviar missatges</string>
     <string name="room_permissions_default_role">Rol predeterminat</string>
     <string name="room_permissions_notice_read_only">No tens permisos per modificar els rols necessaris per canviar les diferents parts de la sala</string>
@@ -1957,7 +1957,7 @@
     <string name="room_settings_room_access_public_title">Públic</string>
     <string name="room_settings_room_access_private_description">Només els convidats poden trobar-la i unir-s\'hi</string>
     <string name="room_settings_room_access_entry_knock">Qualsevol pot demanar entrar a la sala, els participants poden acceptar-ho o rebutjar-ho</string>
-    <string name="room_settings_guest_access_title">Permet als convidats unir-se</string>
+    <string name="room_settings_guest_access_title"></string>
     <string name="suggested_header">Sales suggerides</string>
     <string name="settings_notification_emails_enable_for_email">Activa les notificacions per correu de %s</string>
     <string name="settings_notification_emails_category">Notificacions per correu</string>
@@ -2086,4 +2086,25 @@
     <string name="room_upgrade_to_recommended_version">Actualitza a la versió de sala recomanada</string>
     <string name="room_using_unstable_room_version">Aquesta sala té la versió %s, la qual està marcada com a no estable pel servidor.</string>
     <string name="space_type_private_desc">Només amb invitació, per tu o per equips</string>
+    <string name="live_location_sharing_notification_title">${app_name} Ubicació en directe</string>
+    <string name="location_share_live_stop">Atura</string>
+    <string name="location_share_live_started">Carregant ubicació en directe…</string>
+    <string name="location_share_live_enabled">Compartició d\'ubicació en directe activada</string>
+    <string name="location_timeline_failed_to_load_map">No s\'ha pogut carregar el mapa</string>
+    <string name="labs_render_locations_in_timeline">Mostra les ubicacions dels usuaris a la cronologia</string>
+    <string name="settings_enable_location_sharing_summary">Si està activat, podràs enviar la teva ubicació a qualsevol sala</string>
+    <string name="settings_enable_location_sharing">Activa la compartició d\'ubicació</string>
+    <string name="location_share_external">Obre amb</string>
+    <string name="location_not_available_dialog_content">${app_name} no ha pogut accedir a la teva ubicació. Torna-ho a provar més tard.</string>
+    <string name="location_not_available_dialog_title">${app_name} no ha pogut accedir a la teva ubicació</string>
+    <string name="location_in_background_missing_permission_dialog_title">Permet l\'accés</string>
+    <string name="location_share_live_select_duration_option_3">8 hores</string>
+    <string name="location_share_live_select_duration_option_2">1 hora</string>
+    <string name="location_share_live_select_duration_option_1">15 minuts</string>
+    <string name="location_share_live_select_duration_title">Comparteix la teva ubicació en directe durant</string>
+    <string name="a11y_location_share_option_pinned_icon">Comparteix la ubicació</string>
+    <string name="location_share_option_pinned">Comparteix la ubicació</string>
+    <string name="invite_people_to_your_space">Convida gent al teu espai</string>
+    <string name="invite_people_menu">Convida gent</string>
+    <string name="create_space_error_empty_field_space_name">Posa-li un nom per continuar.</string>
 </resources>
