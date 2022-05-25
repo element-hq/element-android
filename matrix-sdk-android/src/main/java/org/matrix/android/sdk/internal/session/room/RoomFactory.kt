@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.session.room
 
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.session.room.Room
-import org.matrix.android.sdk.internal.session.room.location.DefaultLocationSharingService
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.permalinks.ViaParameterFinder
 import org.matrix.android.sdk.internal.session.room.accountdata.DefaultRoomAccountDataService
@@ -26,6 +25,7 @@ import org.matrix.android.sdk.internal.session.room.alias.DefaultAliasService
 import org.matrix.android.sdk.internal.session.room.call.DefaultRoomCallService
 import org.matrix.android.sdk.internal.session.room.crypto.DefaultRoomCryptoService
 import org.matrix.android.sdk.internal.session.room.draft.DefaultDraftService
+import org.matrix.android.sdk.internal.session.room.location.DefaultLocationSharingService
 import org.matrix.android.sdk.internal.session.room.membership.DefaultMembershipService
 import org.matrix.android.sdk.internal.session.room.notification.DefaultRoomPushRuleService
 import org.matrix.android.sdk.internal.session.room.read.DefaultReadService
