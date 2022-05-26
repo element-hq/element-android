@@ -41,6 +41,7 @@ import im.vector.app.core.glide.GlideRequest
 import im.vector.app.core.glide.GlideRequests
 import im.vector.app.core.ui.model.Size
 import im.vector.app.core.utils.DimensionConverter
+import im.vector.app.features.settings.VectorPreferences
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
@@ -67,7 +68,8 @@ private const val URL_PREVIEW_IMAGE_MIN_FULL_HEIGHT_PX = 315
 
 class ImageContentRenderer @Inject constructor(private val localFilesHelper: LocalFilesHelper,
                                                private val activeSessionHolder: ActiveSessionHolder,
-                                               private val dimensionConverter: DimensionConverter) {
+                                               private val dimensionConverter: DimensionConverter,
+                                               private val vectorPreferences: VectorPreferences) {
 
     @Parcelize
     data class Data(
@@ -133,7 +135,10 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
         imageView.contentDescription = data.filename
 
         createGlideRequest(data, mode, imageView, size)
-                .dontAnimate()
+                .let {
+                    if (vectorPreferences.autoplayAnimatedImages()) it
+                    else it.dontAnimate()
+                }
                 .transform(cornerTransformation)
                 // .thumbnail(0.3f)
                 .into(imageView)
