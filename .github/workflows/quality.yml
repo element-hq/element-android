@@ -108,7 +108,7 @@ jobs:
     runs-on: ubuntu-latest
     # Allow all jobs on main and develop. Just one per PR.
     concurrency:
-      group: ${{ github.ref == 'refs/heads/main' && format('ktlint-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('ktlint-develop-{0}', github.sha) || format('ktlint-{0}', github.ref) }}
+      group: ${{ github.ref == 'refs/heads/main' && format('dep-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('dep-develop-{0}', github.sha) || format('dep-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v3
