@@ -90,6 +90,7 @@ fun getCallRingtoneName(context: Context): String? {
 /**
  * Sets the selected ringtone for riot calls.
  *
+ * @param context Android context
  * @param ringtoneUri
  * @see Ringtone
  */

@@ -21,7 +21,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import junit.framework.TestCase.assertNotNull
 import junit.framework.TestCase.assertTrue
-import junit.framework.TestCase.fail
 import org.amshove.kluent.internal.assertEquals
 import org.junit.Assert
 import org.junit.Assert.assertNull
@@ -47,6 +46,7 @@ import org.matrix.android.sdk.common.CryptoTestHelper
 import org.matrix.android.sdk.common.RetryTestRule
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
+import org.matrix.android.sdk.mustFail
 
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
@@ -95,12 +95,10 @@ class KeyShareTests : InstrumentedTest {
         assertNotNull(receivedEvent)
         assert(receivedEvent!!.isEncrypted())
 
-        try {
-            commonTestHelper.runBlockingTest {
+        commonTestHelper.runBlockingTest {
+            mustFail {
                 aliceSession2.cryptoService().decryptEvent(receivedEvent.root, "foo")
             }
-            fail("should fail")
-        } catch (failure: Throwable) {
         }
 
         val outgoingRequestsBefore = aliceSession2.cryptoService().getOutgoingRoomKeyRequests()
@@ -168,12 +166,10 @@ class KeyShareTests : InstrumentedTest {
             }
         }
 
-        try {
-            commonTestHelper.runBlockingTest {
+        commonTestHelper.runBlockingTest {
+            mustFail {
                 aliceSession2.cryptoService().decryptEvent(receivedEvent.root, "foo")
             }
-            fail("should fail")
-        } catch (failure: Throwable) {
         }
 
         // Mark the device as trusted

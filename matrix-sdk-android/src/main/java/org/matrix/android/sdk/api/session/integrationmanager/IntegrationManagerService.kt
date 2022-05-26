@@ -99,6 +99,7 @@ interface IntegrationManagerService {
      * Offers to allow or disallow a native widget domain.
      * @param widgetType the widget type to check for
      * @param domain the domain to check for
+     * @param allowed true or false
      */
     suspend fun setNativeWidgetDomainAllowed(widgetType: String, domain: String, allowed: Boolean)
 

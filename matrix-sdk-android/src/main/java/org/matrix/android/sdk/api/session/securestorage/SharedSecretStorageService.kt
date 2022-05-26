@@ -92,7 +92,7 @@ interface SharedSecretStorageService {
      * Clients MUST ensure that the key is trusted before using it to encrypt secrets.
      *
      * @param name The name of the secret
-     * @param secret The secret contents.
+     * @param secretBase64 The secret contents.
      * @param keys The list of (ID,privateKey) of the keys to use to encrypt the secret.
      */
     suspend fun storeSecret(name: String, secretBase64: String, keys: List<KeyRef>)

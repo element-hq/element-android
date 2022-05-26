@@ -306,7 +306,9 @@
             android:supportsPictureInPicture="true" />
 
         <activity android:name=".features.terms.ReviewTermsActivity" />
-        <activity android:name=".features.widgets.WidgetActivity" />
+        <activity android:name=".features.widgets.WidgetActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation" />
+
         <activity android:name=".features.pin.PinActivity" />
         <activity android:name=".features.analytics.ui.consent.AnalyticsOptInActivity" />
         <activity android:name=".features.home.room.detail.search.SearchActivity" />
@@ -343,6 +345,7 @@
         <activity android:name=".features.spaces.leave.SpaceLeaveAdvancedActivity" />
         <activity android:name=".features.poll.create.CreatePollActivity" />
         <activity android:name=".features.location.LocationSharingActivity" />
+        <activity android:name=".features.location.live.map.LocationLiveMapViewActivity" />
 
         <!-- Services -->
 

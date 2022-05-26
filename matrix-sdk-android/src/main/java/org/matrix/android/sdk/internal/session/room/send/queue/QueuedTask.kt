@@ -21,8 +21,8 @@ import timber.log.Timber
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
- * @param queueIdentifier String value to identify a unique Queue
- * @param taskIdentifier String value to identify a unique Task. Should be different from queueIdentifier
+ * @property queueIdentifier String value to identify a unique Queue
+ * @property taskIdentifier String value to identify a unique Task. Should be different from queueIdentifier
  */
 internal abstract class QueuedTask(
         val queueIdentifier: String,

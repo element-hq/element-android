@@ -42,7 +42,7 @@ internal class MessageEncrypter @Inject constructor(
      * This method must be called from the getCryptoHandler() thread.
      *
      * @param payloadFields fields to include in the encrypted payload.
-     * @param deviceInfos   list of device infos to encrypt for.
+     * @param deviceInfos list of device infos to encrypt for.
      * @return the content for an m.room.encrypted event.
      */
     suspend fun encryptMessage(payloadFields: Content, deviceInfos: List<CryptoDeviceInfo>): EncryptedMessage {

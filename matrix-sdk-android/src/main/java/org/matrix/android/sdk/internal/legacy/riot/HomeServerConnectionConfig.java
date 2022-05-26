@@ -612,7 +612,7 @@ public class HomeServerConnectionConfig {
          * - https://www.ssi.gouv.fr/uploads/2017/02/security-recommendations-for-tls_v1.1.pdf
          * - https://developer.android.com/reference/javax/net/ssl/SSLEngine
          *
-         * @param tlsLimitations          true to use Tls limitations
+         * @param tlsLimitations true to use Tls limitations
          * @param enableCompatibilityMode set to true for Android < 20
          * @return this builder
          */
@@ -649,7 +649,7 @@ public class HomeServerConnectionConfig {
 
         /**
          * @param proxyHostname Proxy Hostname
-         * @param proxyPort     Proxy Port
+         * @param proxyPort Proxy Port
          * @return this builder
          */
         public Builder withProxy(@Nullable String proxyHostname, int proxyPort) {

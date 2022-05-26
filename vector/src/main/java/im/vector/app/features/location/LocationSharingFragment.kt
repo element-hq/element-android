@@ -37,11 +37,11 @@ import im.vector.app.core.utils.PERMISSIONS_FOR_FOREGROUND_LOCATION_SHARING
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.databinding.FragmentLocationSharingBinding
-import im.vector.app.features.VectorFeatures
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import im.vector.app.features.location.live.duration.ChooseLiveDurationBottomSheet
 import im.vector.app.features.location.option.LocationSharingOption
+import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.util.MatrixItem
 import java.lang.ref.WeakReference
 import javax.inject.Inject
@@ -53,7 +53,7 @@ class LocationSharingFragment @Inject constructor(
         private val urlMapProvider: UrlMapProvider,
         private val avatarRenderer: AvatarRenderer,
         private val matrixItemColorProvider: MatrixItemColorProvider,
-        private val vectorFeatures: VectorFeatures,
+        private val vectorPreferences: VectorPreferences,
 ) : VectorBaseFragment<FragmentLocationSharingBinding>(),
         LocationTargetChangeListener,
         VectorBaseBottomSheetDialogFragment.ResultListener {
@@ -255,7 +255,7 @@ class LocationSharingFragment @Inject constructor(
         // first, update the options view
         val options: Set<LocationSharingOption> = when (state.areTargetAndUserLocationEqual) {
             true  -> {
-                if (vectorFeatures.isLiveLocationEnabled()) {
+                if (vectorPreferences.labsEnableLiveLocation()) {
                     setOf(LocationSharingOption.USER_CURRENT, LocationSharingOption.USER_LIVE)
                 } else {
                     setOf(LocationSharingOption.USER_CURRENT)

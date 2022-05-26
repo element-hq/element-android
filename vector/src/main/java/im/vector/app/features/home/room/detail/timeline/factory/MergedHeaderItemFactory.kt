@@ -55,8 +55,15 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
     private val mergeItemCollapseStates = HashMap<Long, Boolean>()
 
     /**
+     * @param event the main timeline event
      * @param nextEvent is an older event than event
      * @param items all known items, sorted from newer event to oldest event
+     * @param partialState partial state data
+     * @param addDaySeparator true to add a day separator
+     * @param currentPosition the current position
+     * @param eventIdToHighlight if not null the event which has to be highlighted
+     * @param callback callback for user event
+     * @param requestModelBuild lambda to let the built Item request a model build when the collapse state is changed
      */
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,

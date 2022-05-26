@@ -94,6 +94,7 @@ internal object CertUtil {
      * Convert the fingerprint to an hexa string.
      *
      * @param fingerprint the fingerprint
+     * @param sep the separator character, default to space
      * @return the hexa string.
      */
     fun fingerprintToHexString(fingerprint: ByteArray, sep: Char = ' '): String {

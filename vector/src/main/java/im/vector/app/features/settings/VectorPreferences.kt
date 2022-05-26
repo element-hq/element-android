@@ -203,6 +203,7 @@ class VectorPreferences @Inject constructor(
         private const val TAKE_PHOTO_VIDEO_MODE = "TAKE_PHOTO_VIDEO_MODE"
 
         private const val SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE = "SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE"
+        private const val SETTINGS_LABS_ENABLE_LIVE_LOCATION = "SETTINGS_LABS_ENABLE_LIVE_LOCATION"
 
         // This key will be used to identify clients with the old thread support enabled io.element.thread
         const val SETTINGS_LABS_ENABLE_THREAD_MESSAGES_OLD_CLIENTS = "SETTINGS_LABS_ENABLE_THREAD_MESSAGES"
@@ -492,7 +493,7 @@ class VectorPreferences @Inject constructor(
     /**
      * Update the notification ringtone.
      *
-     * @param uri     the new notification ringtone, or null for no RingTone
+     * @param uri the new notification ringtone, or null for no RingTone
      */
     fun setNotificationRingTone(uri: Uri?) {
         defaultPrefs.edit {
@@ -635,7 +636,7 @@ class VectorPreferences @Inject constructor(
     /**
      * Tells if the application is started on boot.
      *
-     * @param value   true to start the application on boot
+     * @param value true to start the application on boot
      */
     fun setAutoStartOnBoot(value: Boolean) {
         defaultPrefs.edit {
@@ -655,7 +656,7 @@ class VectorPreferences @Inject constructor(
     /**
      * Updates the selected saving period.
      *
-     * @param index   the selected period index
+     * @param index the selected period index
      */
     fun setSelectedMediasSavingPeriod(index: Int) {
         defaultPrefs.edit {
@@ -1039,6 +1040,10 @@ class VectorPreferences @Inject constructor(
 
     fun labsRenderLocationsInTimeline(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE, true)
+    }
+
+    fun labsEnableLiveLocation(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_LABS_ENABLE_LIVE_LOCATION, false)
     }
 
     /**

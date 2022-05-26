@@ -75,6 +75,7 @@ abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder> : AbsMe
         GlideApp.with(holder.staticMapImageView)
                 .load(location)
                 .apply(RequestOptions.centerCropTransform())
+                .placeholder(holder.staticMapImageView.drawable)
                 .listener(object : RequestListener<Drawable> {
                     override fun onLoadFailed(e: GlideException?,
                                               model: Any?,

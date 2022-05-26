@@ -14,22 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.onboarding.ftueauth
+package im.vector.app.test.fixtures
 
-import org.matrix.android.sdk.api.auth.registration.Stage
+import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.failure.MatrixError
+import javax.net.ssl.HttpsURLConnection
 
-class FtueMissingRegistrationStagesComparator : Comparator<Stage> {
-
-    override fun compare(a: Stage?, b: Stage?): Int {
-        return (a?.toPriority() ?: 0) - (b?.toPriority() ?: 0)
-    }
-
-    private fun Stage.toPriority() = when (this) {
-        is Stage.Email     -> 0
-        is Stage.Msisdn    -> 1
-        is Stage.Terms     -> 2
-        is Stage.ReCaptcha -> 3
-        is Stage.Other     -> 4
-        is Stage.Dummy     -> 5
-    }
-}
+fun a401ServerError() = Failure.ServerError(
+        MatrixError(MatrixError.M_UNAUTHORIZED, ""), HttpsURLConnection.HTTP_UNAUTHORIZED
+)

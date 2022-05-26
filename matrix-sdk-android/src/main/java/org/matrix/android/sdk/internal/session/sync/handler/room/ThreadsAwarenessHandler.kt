@@ -206,6 +206,8 @@ internal class ThreadsAwarenessHandler @Inject constructor(
     /**
      * Handle for not thread events that we have marked them as root.
      * Find relations and inject them accordingly
+     * @param realm the realm instance
+     * @param roomId the current room Id
      * @param eventEntity the current eventEntity received
      * @param event the current event received
      * @return The content to inject in the roomSyncHandler live events
@@ -229,9 +231,12 @@ internal class ThreadsAwarenessHandler @Inject constructor(
      * This function is responsible to check if there is any event that relates to our current event.
      * This is useful when we receive an event that relates to a missing parent, so when later we receive the parent
      * we can update the child as well.
+     * @param realm the realm instance
+     * @param roomId the current room Id
      * @param event the current event that we examine
      * @param eventBody the current body of the event
      * @param isFromCache determines whether or not we already know this is root thread event
+     * @param threadRelation the information about thread
      * @return The content to inject in the roomSyncHandler live events
      */
     private fun handleEventsThatRelatesTo(
@@ -291,9 +296,12 @@ internal class ThreadsAwarenessHandler @Inject constructor(
     }
 
     /**
-     * Injecting $eventToInject decrypted content as a reply to $event.
-     * @param eventToInject the event that will inject
+     * Injecting [eventToInject] decrypted content as a reply to event.
+     * @param roomId the room id
      * @param eventBody the actual event body
+     * @param eventToInject the event that will inject
+     * @param eventToInjectBody the event body to inject
+     * @param threadRelation the information about thread
      * @return The final content with the injected event
      */
     private fun injectEvent(roomId: String,

@@ -303,6 +303,7 @@ private fun getLatestEvent(rootThreadEvent: Event): Event? {
 /**
  * Find all ThreadSummaryEntity for the specified roomId, sorted by origin server.
  * note: Sorting cannot be provided by server, so we have to use that unstable property.
+ * @param realm the realm instance
  * @param roomId The id of the room
  */
 internal fun ThreadSummaryEntity.Companion.findAllThreadsForRoomId(realm: Realm, roomId: String): RealmQuery<ThreadSummaryEntity> =

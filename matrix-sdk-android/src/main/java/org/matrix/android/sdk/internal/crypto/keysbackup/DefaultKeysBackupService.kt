@@ -1105,6 +1105,7 @@ internal class DefaultKeysBackupService @Inject constructor(
      *
      * @param password the password.
      * @param keysBackupData the backup and its auth data.
+     * @param progressListener listener to track progress
      *
      * @return the recovery key if successful, null in other cases
      */
