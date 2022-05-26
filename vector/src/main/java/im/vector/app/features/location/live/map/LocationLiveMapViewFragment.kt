@@ -17,13 +17,10 @@
 package im.vector.app.features.location.live.map
 
 import android.graphics.drawable.Drawable
-import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.lifecycleScope
-import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.mapbox.mapboxsdk.geometry.LatLng
@@ -36,7 +33,6 @@ import com.mapbox.mapboxsdk.maps.SupportMapFragment
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
 import com.mapbox.mapboxsdk.style.layers.Property
-import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.addChildFragment
 import im.vector.app.core.platform.VectorBaseFragment
@@ -44,6 +40,7 @@ import im.vector.app.databinding.FragmentSimpleContainerBinding
 import im.vector.app.features.location.UrlMapProvider
 import im.vector.app.features.location.zoomToBounds
 import im.vector.app.features.location.zoomToLocation
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.lang.ref.WeakReference
 import javax.inject.Inject
@@ -51,13 +48,9 @@ import javax.inject.Inject
 /**
  * Screen showing a map with all the current users sharing their live location in a room.
  */
-@AndroidEntryPoint
-class LocationLiveMapViewFragment : VectorBaseFragment<FragmentSimpleContainerBinding>() {
-
-    @Inject
-    lateinit var urlMapProvider: UrlMapProvider
-
-    private val args: LocationLiveMapViewArgs by args()
+class LocationLiveMapViewFragment @Inject constructor(
+        private var urlMapProvider: UrlMapProvider,
+) : VectorBaseFragment<FragmentSimpleContainerBinding>() {
 
     private val viewModel: LocationLiveMapViewModel by fragmentViewModel()
 
@@ -71,16 +64,15 @@ class LocationLiveMapViewFragment : VectorBaseFragment<FragmentSimpleContainerBi
         return FragmentSimpleContainerBinding.inflate(layoutInflater, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onResume() {
+        super.onResume()
         setupMap()
     }
 
     private fun setupMap() {
         val mapFragment = getOrCreateSupportMapFragment()
-
         mapFragment.getMapAsync { mapboxMap ->
-            lifecycleScope.launchWhenCreated {
+            lifecycleScope.launch {
                 mapboxMap.setStyle(urlMapProvider.getMapUrl()) { style ->
                     mapStyle = style
                     this@LocationLiveMapViewFragment.mapboxMap = WeakReference(mapboxMap)
@@ -108,10 +100,8 @@ class LocationLiveMapViewFragment : VectorBaseFragment<FragmentSimpleContainerBi
     private fun updateMap(userLiveLocations: List<UserLiveLocationViewState>) {
         symbolManager?.let { sManager ->
             val latLngBoundsBuilder = LatLngBounds.Builder()
-
             userLiveLocations.forEach { userLocation ->
                 createOrUpdateSymbol(userLocation, sManager)
-
                 if (isMapFirstUpdate) {
                     val latLng = LatLng(userLocation.locationData.latitude, userLocation.locationData.longitude)
                     latLngBoundsBuilder.include(latLng)
@@ -123,10 +113,10 @@ class LocationLiveMapViewFragment : VectorBaseFragment<FragmentSimpleContainerBi
         } ?: postponeUpdateOfMap(userLiveLocations)
     }
 
-    private fun createOrUpdateSymbol(userLocation: UserLiveLocationViewState, symbolManager: SymbolManager) {
-        val symbolId = viewModel.mapSymbolIds[userLocation.userId]
+    private fun createOrUpdateSymbol(userLocation: UserLiveLocationViewState, symbolManager: SymbolManager) = withState(viewModel) { state ->
+        val symbolId = state.mapSymbolIds[userLocation.userId]
 
-        if (symbolId == null) {
+        if (symbolId == null || symbolManager.annotations.get(symbolId) == null) {
             createSymbol(userLocation, symbolManager)
         } else {
             updateSymbol(symbolId, userLocation, symbolManager)
@@ -137,7 +127,7 @@ class LocationLiveMapViewFragment : VectorBaseFragment<FragmentSimpleContainerBi
         addUserPinToMapStyle(userLocation.userId, userLocation.pinDrawable)
         val symbolOptions = buildSymbolOptions(userLocation)
         val symbol = symbolManager.create(symbolOptions)
-        viewModel.mapSymbolIds[userLocation.userId] = symbol.id
+        viewModel.handle(LocationLiveMapAction.AddMapSymbol(userLocation.userId, symbol.id))
     }
 
     private fun updateSymbol(symbolId: Long, userLocation: UserLiveLocationViewState, symbolManager: SymbolManager) {
@@ -149,20 +139,19 @@ class LocationLiveMapViewFragment : VectorBaseFragment<FragmentSimpleContainerBi
         }
     }
 
-    private fun removeOutdatedSymbols(userLiveLocations: List<UserLiveLocationViewState>, symbolManager: SymbolManager) {
-        val userIdsToRemove = viewModel.mapSymbolIds.keys.subtract(userLiveLocations.map { it.userId }.toSet())
-        userIdsToRemove
-                .mapNotNull { userId ->
-                    removeUserPinFromMapStyle(userId)
-                    viewModel.mapSymbolIds[userId]
-                    viewModel.mapSymbolIds.remove(userId)
+    private fun removeOutdatedSymbols(userLiveLocations: List<UserLiveLocationViewState>, symbolManager: SymbolManager) = withState(viewModel) { state ->
+        val userIdsToRemove = state.mapSymbolIds.keys.subtract(userLiveLocations.map { it.userId }.toSet())
+        userIdsToRemove.forEach { userId ->
+            removeUserPinFromMapStyle(userId)
+            viewModel.handle(LocationLiveMapAction.RemoveMapSymbol(userId))
+
+            state.mapSymbolIds[userId]?.let { symbolId ->
+                Timber.d("trying to delete symbol with id: $symbolId")
+                symbolManager.annotations.get(symbolId)?.let {
+                    symbolManager.delete(it)
                 }
-                .forEach { symbolId ->
-                    Timber.d("trying to delete symbol with id: $symbolId")
-                    symbolManager.annotations.get(symbolId)?.let {
-                        symbolManager.delete(it)
-                    }
-                }
+            }
+        }
     }
 
     private fun updateMapZoomWhenNeeded(userLiveLocations: List<UserLiveLocationViewState>, latLngBoundsBuilder: LatLngBounds.Builder) {

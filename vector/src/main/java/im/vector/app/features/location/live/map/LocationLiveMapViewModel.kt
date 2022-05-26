@@ -38,11 +38,6 @@ class LocationLiveMapViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<LocationLiveMapViewModel, LocationLiveMapViewState> by hiltMavericksViewModelFactory()
 
-    /**
-     * Map to keep track of symbol ids associated to each user Id.
-     */
-    val mapSymbolIds = mutableMapOf<String, Long>()
-
     init {
         getListOfUserLiveLocationUseCase.execute(initialState.roomId)
                 .onEach { setState { copy(userLocations = it) } }
@@ -50,6 +45,23 @@ class LocationLiveMapViewModel @AssistedInject constructor(
     }
 
     override fun handle(action: LocationLiveMapAction) {
-        // do nothing, no action for now
+        when (action) {
+            is LocationLiveMapAction.AddMapSymbol    -> handleAddMapSymbol(action)
+            is LocationLiveMapAction.RemoveMapSymbol -> handleRemoveMapSymbol(action)
+        }
+    }
+
+    private fun handleAddMapSymbol(action: LocationLiveMapAction.AddMapSymbol) = withState { state ->
+        val newMapSymbolIds = state.mapSymbolIds.toMutableMap().apply { set(action.key, action.value) }
+        setState {
+            copy(mapSymbolIds = newMapSymbolIds)
+        }
+    }
+
+    private fun handleRemoveMapSymbol(action: LocationLiveMapAction.RemoveMapSymbol) = withState { state ->
+        val newMapSymbolIds = state.mapSymbolIds.toMutableMap().apply { remove(action.key) }
+        setState {
+            copy(mapSymbolIds = newMapSymbolIds)
+        }
     }
 }
