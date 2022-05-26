@@ -267,5 +267,10 @@ dependencyAnalysis {
                 exclude("androidx.paging:paging-runtime-ktx") // False positive
             }
         }
+        project(":vector") {
+            onUnusedDependencies {
+                exclude("org.maplibre.gl:android-sdk", "org.maplibre.gl:android-plugin-annotation-v9") // False positives
+            }
+        }
     }
 }
