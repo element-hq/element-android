@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="notice_room_join">%1$s அறையில் சேர்ந்துள்ளார்</string>
-    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• உடன் பொருந்தக்கூடிய சேவையகங்கள் இப்போது தடைசெய்யப்பட்டுள்ளன.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• IP எழுத்துக்கள் உடன் பொருந்தக்கூடிய சேவையகங்கள் இப்போது தடைசெய்யப்பட்டுள்ளன.</string>
     <string name="notice_room_server_acl_updated_banned">• %s உடன் பொருந்தக்கூடிய சேவையகங்கள் இப்போது தடைசெய்யப்பட்டுள்ளன.</string>
     <plurals name="notice_room_server_acl_changes">
         <item quantity="one">%d சேவையக-அணுகல் கட்டுப்பாட்டுப் பட்டியல் மாற்றம்</item>
@@ -75,4 +75,7 @@
     <string name="notice_room_created">%1$s அறையை உருவாக்கியுள்ளார்</string>
     <string name="notice_room_invite_no_invitee_by_you">உங்கள் அழைப்பிதழ்</string>
     <string name="notice_room_invite_no_invitee">%s இன் அழைப்பிதழ்</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• %s உடன் பொருந்தக்கூடிய சேவையகங்கள் அனுமதிக்கப்பட்ட பட்டியலில் இருந்து நீக்கப்பட்டுள்ளது.</string>
+    <string name="notice_room_server_acl_updated_allowed">• %s உடன் பொருந்தக்கூடிய சேவையகங்கள் இப்போது அனுமதிக்கப்பட்டுள்ளன.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• %s உடன் பொருந்தக்கூடிய சேவையகங்கள் தடை பட்டியலில் இருந்து நீக்கப்பட்டுள்ளது.</string>
 </resources>
