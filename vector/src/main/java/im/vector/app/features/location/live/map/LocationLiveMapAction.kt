@@ -21,4 +21,5 @@ import im.vector.app.core.platform.VectorViewModelAction
 sealed class LocationLiveMapAction : VectorViewModelAction {
     data class AddMapSymbol(val key: String, val value: Long) : LocationLiveMapAction()
     data class RemoveMapSymbol(val key: String) : LocationLiveMapAction()
+    object StopSharing : LocationLiveMapAction()
 }

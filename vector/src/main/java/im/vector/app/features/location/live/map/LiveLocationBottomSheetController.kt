@@ -26,6 +26,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.resources.toTimestamp
 import im.vector.app.core.time.Clock
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.location.live.map.bottomsheet.LiveLocationUserItem
 import im.vector.app.features.location.live.map.bottomsheet.liveLocationUserItem
 import javax.inject.Inject
 
@@ -54,10 +55,17 @@ class LiveLocationBottomSheetController @Inject constructor(
         val currentUserLocations = userLocations ?: return
         val host = this
 
+        val userItemCallback = object : LiveLocationUserItem.Callback {
+            override fun onStopSharingClicked() {
+                host.callback?.onStopLocationClicked()
+            }
+        }
+
         currentUserLocations.forEach { liveLocationViewState ->
             val remainingTime = getFormattedLocalTimeEndOfLive(liveLocationViewState.endOfLiveTimestampMillis)
             liveLocationUserItem {
                 id(liveLocationViewState.matrixItem.id)
+                callback(userItemCallback)
                 matrixItem(liveLocationViewState.matrixItem)
                 stringProvider(host.stringProvider)
                 clock(host.clock)

@@ -71,6 +71,16 @@ class LocationLiveMapViewFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         views.bottomSheetRecyclerView.configureWith(bottomSheetController, hasFixedSize = false, disableItemAnimation = true)
+
+        bottomSheetController.callback = object : LiveLocationBottomSheetController.Callback {
+            override fun onUserSelected(userId: String) {
+
+            }
+
+            override fun onStopLocationClicked() {
+                viewModel.handle(LocationLiveMapAction.StopSharing)
+            }
+        }
     }
 
     override fun onResume() {

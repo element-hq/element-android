@@ -23,13 +23,15 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.location.LocationSharingServiceConnection
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 class LocationLiveMapViewModel @AssistedInject constructor(
         @Assisted private val initialState: LocationLiveMapViewState,
-        getListOfUserLiveLocationUseCase: GetListOfUserLiveLocationUseCase
-) : VectorViewModel<LocationLiveMapViewState, LocationLiveMapAction, LocationLiveMapViewEvents>(initialState) {
+        getListOfUserLiveLocationUseCase: GetListOfUserLiveLocationUseCase,
+        private val locationSharingServiceConnection: LocationSharingServiceConnection,
+) : VectorViewModel<LocationLiveMapViewState, LocationLiveMapAction, LocationLiveMapViewEvents>(initialState), LocationSharingServiceConnection.Callback {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<LocationLiveMapViewModel, LocationLiveMapViewState> {
@@ -42,12 +44,14 @@ class LocationLiveMapViewModel @AssistedInject constructor(
         getListOfUserLiveLocationUseCase.execute(initialState.roomId)
                 .onEach { setState { copy(userLocations = it) } }
                 .launchIn(viewModelScope)
+        locationSharingServiceConnection.bind(this)
     }
 
     override fun handle(action: LocationLiveMapAction) {
         when (action) {
             is LocationLiveMapAction.AddMapSymbol    -> handleAddMapSymbol(action)
             is LocationLiveMapAction.RemoveMapSymbol -> handleRemoveMapSymbol(action)
+            LocationLiveMapAction.StopSharing        -> handleStopSharing()
         }
     }
 
@@ -63,5 +67,17 @@ class LocationLiveMapViewModel @AssistedInject constructor(
         setState {
             copy(mapSymbolIds = newMapSymbolIds)
         }
+    }
+
+    private fun handleStopSharing() {
+        locationSharingServiceConnection.stopLiveLocationSharing(initialState.roomId)
+    }
+
+    override fun onLocationServiceRunning() {
+        // NOOP
+    }
+
+    override fun onLocationServiceStopped() {
+        // NOOP
     }
 }
