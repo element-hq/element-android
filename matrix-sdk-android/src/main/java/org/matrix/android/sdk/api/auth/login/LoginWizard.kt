@@ -65,16 +65,18 @@ interface LoginWizard {
      * [resetPasswordMailConfirmed] is successfully called.
      *
      * @param email an email previously associated to the account the user wants the password to be reset.
-     * @param newPassword the desired new password
+     * @param newPassword the desired new password, can be optionally set here or as part of [resetPasswordMailConfirmed]
      */
     suspend fun resetPassword(
             email: String,
-            newPassword: String
+            newPassword: String? = null
     )
 
     /**
      * Confirm the new password, once the user has checked their email
      * When this method succeed, tha account password will be effectively modified.
+     *
+     * @param newPassword the desired new password, required if a password was not supplied to [resetPassword]
      */
-    suspend fun resetPasswordMailConfirmed()
+    suspend fun resetPasswordMailConfirmed(newPassword: String? = null)
 }

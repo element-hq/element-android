@@ -30,6 +30,7 @@ import org.matrix.android.sdk.internal.auth.data.ThreePidMedium
 import org.matrix.android.sdk.internal.auth.data.TokenLoginParams
 import org.matrix.android.sdk.internal.auth.db.PendingSessionData
 import org.matrix.android.sdk.internal.auth.registration.AddThreePidRegistrationParams
+import org.matrix.android.sdk.internal.auth.registration.AddThreePidRegistrationResponse
 import org.matrix.android.sdk.internal.auth.registration.RegisterAddThreePidTask
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.content.DefaultContentUrlResolver
@@ -103,7 +104,7 @@ internal class DefaultLoginWizard(
         return sessionCreator.createSession(credentials, pendingSessionData.homeServerConnectionConfig)
     }
 
-    override suspend fun resetPassword(email: String, newPassword: String) {
+    override suspend fun resetPassword(email: String, newPassword: String?) {
         val param = RegisterAddThreePidTask.Params(
                 RegisterThreePid.Email(email),
                 pendingSessionData.clientSecret,
@@ -121,15 +122,14 @@ internal class DefaultLoginWizard(
                 .also { pendingSessionStore.savePendingSessionData(it) }
     }
 
-    override suspend fun resetPasswordMailConfirmed() {
-        val safeResetPasswordData = pendingSessionData.resetPasswordData
-                ?: throw IllegalStateException("developer error, no reset password in progress")
-
-        val param = ResetPasswordMailConfirmed.create(
-                pendingSessionData.clientSecret,
-                safeResetPasswordData.addThreePidRegistrationResponse.sid,
-                safeResetPasswordData.newPassword
-        )
+    override suspend fun resetPasswordMailConfirmed(newPassword: String?) {
+        val param = pendingSessionData.readResetPasswordDataOrThrow(newPassword).let { (response, password) ->
+            ResetPasswordMailConfirmed.create(
+                    pendingSessionData.clientSecret,
+                    response.sid,
+                    password
+            )
+        }
 
         executeRequest(null) {
             authAPI.resetPasswordMailConfirmed(param)
@@ -137,5 +137,15 @@ internal class DefaultLoginWizard(
 
         // Set to null?
         // resetPasswordData = null
+    }
+
+    private fun PendingSessionData.readResetPasswordDataOrThrow(newPassword: String?): Pair<AddThreePidRegistrationResponse, String> {
+        return when (resetPasswordData) {
+            null -> throw IllegalStateException("developer error, no reset password in progress")
+            else -> {
+                val password = newPassword ?: resetPasswordData.newPassword ?: throw IllegalStateException("developer error, no new password set")
+                resetPasswordData.addThreePidRegistrationResponse to password
+            }
+        }
     }
 }
