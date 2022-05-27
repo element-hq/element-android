@@ -20,6 +20,7 @@ import android.content.Context
 import android.os.Build
 import android.text.format.Formatter
 import im.vector.app.R
+import im.vector.app.core.resources.StringProvider
 import org.threeten.bp.Duration
 import java.util.TreeMap
 
@@ -86,49 +87,57 @@ object TextUtils {
     }
 
     fun formatDurationWithUnits(context: Context, duration: Duration): String {
+        return formatDurationWithUnits(duration, context::getString)
+    }
+
+    fun formatDurationWithUnits(stringProvider: StringProvider, duration: Duration): String {
+        return formatDurationWithUnits(duration, stringProvider::getString)
+    }
+
+    private fun formatDurationWithUnits(duration: Duration, getString: ((Int) -> String)): String {
         val hours = getHours(duration)
         val minutes = getMinutes(duration)
         val seconds = getSeconds(duration)
         val builder = StringBuilder()
         when {
             hours > 0   -> {
-                appendHours(context, builder, hours)
+                appendHours(getString, builder, hours)
                 if (minutes > 0) {
                     builder.append(" ")
-                    appendMinutes(context, builder, minutes)
+                    appendMinutes(getString, builder, minutes)
                 }
                 if (seconds > 0) {
                     builder.append(" ")
-                    appendSeconds(context, builder, seconds)
+                    appendSeconds(getString, builder, seconds)
                 }
             }
             minutes > 0 -> {
-                appendMinutes(context, builder, minutes)
+                appendMinutes(getString, builder, minutes)
                 if (seconds > 0) {
                     builder.append(" ")
-                    appendSeconds(context, builder, seconds)
+                    appendSeconds(getString, builder, seconds)
                 }
             }
             else        -> {
-                appendSeconds(context, builder, seconds)
+                appendSeconds(getString, builder, seconds)
             }
         }
         return builder.toString()
     }
 
-    private fun appendHours(context: Context, builder: StringBuilder, hours: Int) {
+    private fun appendHours(getString: ((Int) -> String), builder: StringBuilder, hours: Int) {
         builder.append(hours)
-        builder.append(context.resources.getString(R.string.time_unit_hour_short))
+        builder.append(getString(R.string.time_unit_hour_short))
     }
 
-    private fun appendMinutes(context: Context, builder: StringBuilder, minutes: Int) {
+    private fun appendMinutes(getString: ((Int) -> String), builder: StringBuilder, minutes: Int) {
         builder.append(minutes)
-        builder.append(context.getString(R.string.time_unit_minute_short))
+        builder.append(getString(R.string.time_unit_minute_short))
     }
 
-    private fun appendSeconds(context: Context, builder: StringBuilder, seconds: Int) {
+    private fun appendSeconds(getString: ((Int) -> String), builder: StringBuilder, seconds: Int) {
         builder.append(seconds)
-        builder.append(context.getString(R.string.time_unit_second_short))
+        builder.append(getString(R.string.time_unit_second_short))
     }
 
     private fun getHours(duration: Duration): Int = duration.toHours().toInt()
