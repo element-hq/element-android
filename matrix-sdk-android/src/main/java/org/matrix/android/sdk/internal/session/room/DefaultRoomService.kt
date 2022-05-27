@@ -127,7 +127,7 @@ internal class DefaultRoomService @Inject constructor(
     override fun getFilteredPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams,
                                                    pagedListConfig: PagedList.Config,
                                                    sortOrder: RoomSortOrder): UpdatableLivePageResult {
-        return roomSummaryDataSource.getUpdatablePagedRoomSummariesLive(queryParams, pagedListConfig, sortOrder)
+        return roomSummaryDataSource.getUpdatablePagedRoomSummariesLive(queryParams, pagedListConfig, sortOrder, getFlattenedParents = true)
     }
 
     override fun getRoomCountLive(queryParams: RoomSummaryQueryParams): LiveData<Int> {

@@ -36,7 +36,6 @@ import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomType
-import org.matrix.android.sdk.api.session.room.model.SpaceParentInfo
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.spaceSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
@@ -188,13 +187,14 @@ internal class RoomSummaryDataSource @Inject constructor(
 
     fun getUpdatablePagedRoomSummariesLive(queryParams: RoomSummaryQueryParams,
                                            pagedListConfig: PagedList.Config,
-                                           sortOrder: RoomSortOrder): UpdatableLivePageResult {
+                                           sortOrder: RoomSortOrder,
+                                           getFlattenedParents: Boolean = false): UpdatableLivePageResult {
         val realmDataSourceFactory = monarchy.createDataSourceFactory { realm ->
             roomSummariesQuery(realm, queryParams).process(sortOrder)
         }
         val dataSourceFactory = realmDataSourceFactory.map {
             roomSummaryMapper.map(it)
-        }.map { it.getWithParents() }
+        }.map { if (getFlattenedParents) it.getWithParents() else it }
 
         val boundaries = MutableLiveData(ResultBoundaries())
 
@@ -235,14 +235,7 @@ internal class RoomSummaryDataSource @Inject constructor(
 
     private fun RoomSummary.getWithParents(): RoomSummary {
         val parents = flattenParentIds.mapNotNull { parentId ->
-            getRoomSummary(parentId)?.let { parentSummary ->
-                SpaceParentInfo(
-                        parentId = parentSummary.flattenParentIds.firstOrNull(),
-                        roomSummary = parentSummary,
-                        canonical = true,
-                        viaServers = emptyList()
-                )
-            }
+            getRoomSummary(parentId)
         }
         return copy(flattenParents = parents)
     }
