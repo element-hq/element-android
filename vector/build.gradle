@@ -337,6 +337,9 @@ android {
 }
 
 dependencies {
+    implementation fileTree(dir: "libs", include: ["*.aar", "*.jar"])
+    implementation project(':library:opusencoder')
+
     implementation project(":vector-config")
     implementation project(":matrix-sdk-android")
     implementation project(":matrix-sdk-android-flow")
@@ -426,9 +429,6 @@ dependencies {
 
     // Passphrase strength helper
     implementation 'com.nulab-inc:zxcvbn:1.7.0'
-
-    // To convert voice message on old platforms. Always keep the LTS suffix!
-    implementation 'com.arthenica:ffmpeg-kit-audio:4.5.1.LTS'
 
     // Alerter
     implementation 'com.github.tapadoo:alerter:7.2.4'

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,15 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.voice
+package im.vector.opusencoder.configuration
 
-import android.content.Context
-import android.os.Build
-import kotlinx.coroutines.Dispatchers
-import javax.inject.Inject
-
-class VoiceRecorderProvider @Inject constructor(
-        private val context: Context,
-) {
-    fun provideVoiceRecorder(): VoiceRecorder {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            VoiceRecorderQ(context)
-        } else {
-            VoiceRecorderL(context, Dispatchers.IO)
-        }
-    }
+/**
+ * Sampling rate of the input signal in Hz.
+ */
+sealed class SampleRate private constructor(val value: Int) {
+    object _8khz : SampleRate(8000)
+    object _12kHz : SampleRate(12000)
+    object _16kHz : SampleRate(16000)
+    object _24KHz : SampleRate(24000)
+    object _48kHz : SampleRate(48000)
 }

@@ -18,7 +18,6 @@ package im.vector.app.features.voice
 
 import android.content.Context
 import android.media.MediaRecorder
-import android.net.Uri
 import android.os.Build
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.util.md5
@@ -28,19 +27,14 @@ import java.util.UUID
 
 abstract class AbstractVoiceRecorder(
         private val context: Context,
-        private val filenameExt: String
+        internal val filenameExt: String
 ) : VoiceRecorder {
-    private val outputDirectory: File by lazy {
-        File(context.cacheDir, "voice_records").also {
-            it.mkdirs()
-        }
-    }
+    private val outputDirectory: File by lazy { ensureAudioDirectory(context) }
 
     private var mediaRecorder: MediaRecorder? = null
     private var outputFile: File? = null
 
     abstract fun setOutputFormat(mediaRecorder: MediaRecorder)
-    abstract fun convertFile(recordedFile: File?): File?
 
     private fun init() {
         createMediaRecorder().let {
@@ -104,19 +98,7 @@ abstract class AbstractVoiceRecorder(
         return mediaRecorder?.maxAmplitude ?: 0
     }
 
-    override fun getCurrentRecord(): File? {
+    override fun getVoiceMessageFile(): File? {
         return outputFile
     }
-
-    override fun getVoiceMessageFile(): File? {
-        return convertFile(outputFile)
-    }
-}
-
-private fun ContentAttachmentData.findVoiceFile(baseDirectory: File): File {
-    return File(baseDirectory, queryUri.takePathAfter(baseDirectory.name))
-}
-
-private fun Uri.takePathAfter(after: String): String {
-    return pathSegments.takeLastWhile { it != after }.joinToString(separator = "/") { it }
 }
