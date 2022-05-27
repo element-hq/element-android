@@ -74,7 +74,7 @@ class LocationLiveMapViewFragment @Inject constructor(
 
         bottomSheetController.callback = object : LiveLocationBottomSheetController.Callback {
             override fun onUserSelected(userId: String) {
-
+                handleBottomSheetUserSelected(userId)
             }
 
             override fun onStopLocationClicked() {
@@ -211,6 +211,15 @@ class LocationLiveMapViewFragment @Inject constructor(
                     .withLatLng(LatLng(userLiveLocation.locationData.latitude, userLiveLocation.locationData.longitude))
                     .withIconImage(userLiveLocation.matrixItem.id)
                     .withIconAnchor(Property.ICON_ANCHOR_BOTTOM)
+
+    private fun handleBottomSheetUserSelected(userId: String) = withState(viewModel) { state ->
+        state.userLocations
+                .find { it.matrixItem.id == userId }
+                ?.locationData
+                ?.let { locationData ->
+                    mapboxMap?.get()?.zoomToLocation(locationData, preserveCurrentZoomLevel = true)
+                }
+    }
 
     companion object {
         private const val MAP_FRAGMENT_TAG = "im.vector.app.features.location.live.map"

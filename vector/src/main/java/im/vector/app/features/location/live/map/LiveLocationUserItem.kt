@@ -38,6 +38,7 @@ import org.threeten.bp.Duration
 abstract class LiveLocationUserItem : VectorEpoxyModel<LiveLocationUserItem.Holder>() {
 
     interface Callback {
+        fun onUserSelected(userId: String)
         fun onStopSharingClicked()
     }
 
@@ -79,7 +80,6 @@ abstract class LiveLocationUserItem : VectorEpoxyModel<LiveLocationUserItem.Hold
         }
 
         stopTimer(holder)
-
         holder.timer = CountUpTimer(1000).apply {
             tickListener = object : CountUpTimer.TickListener {
                 override fun onTick(milliseconds: Long) {
@@ -88,6 +88,8 @@ abstract class LiveLocationUserItem : VectorEpoxyModel<LiveLocationUserItem.Hold
             }
             resume()
         }
+
+        holder.view.setOnClickListener { callback?.onUserSelected(matrixItem.id) }
     }
 
     override fun unbind(holder: Holder) {

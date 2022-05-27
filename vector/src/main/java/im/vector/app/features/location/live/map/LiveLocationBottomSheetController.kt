@@ -56,6 +56,10 @@ class LiveLocationBottomSheetController @Inject constructor(
         val host = this
 
         val userItemCallback = object : LiveLocationUserItem.Callback {
+            override fun onUserSelected(userId: String) {
+                host.callback?.onUserSelected(userId)
+            }
+
             override fun onStopSharingClicked() {
                 host.callback?.onStopLocationClicked()
             }
