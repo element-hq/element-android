@@ -28,8 +28,7 @@ import org.junit.runners.JUnit4
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
-import org.matrix.android.sdk.common.CommonTestHelper
-import org.matrix.android.sdk.common.CryptoTestHelper
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
@@ -37,9 +36,7 @@ import org.matrix.android.sdk.common.CryptoTestHelper
 class ReplayAttackTest : InstrumentedTest {
 
     @Test
-    fun replayAttackAlreadyDecryptedEventTest() {
-        val testHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(testHelper)
+    fun replayAttackAlreadyDecryptedEventTest() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true)
 
         val e2eRoomID = cryptoTestData.roomId
@@ -77,9 +74,7 @@ class ReplayAttackTest : InstrumentedTest {
     }
 
     @Test
-    fun replayAttackSameEventTest() {
-        val testHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(testHelper)
+    fun replayAttackSameEventTest() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true)
 
         val e2eRoomID = cryptoTestData.roomId
@@ -110,6 +105,5 @@ class ReplayAttackTest : InstrumentedTest {
                 fail("Shouldn't throw a decryption error for same event")
             }
         }
-        cryptoTestData.cleanUp(testHelper)
     }
 }
