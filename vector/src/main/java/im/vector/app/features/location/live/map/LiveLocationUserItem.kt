@@ -65,8 +65,6 @@ abstract class LiveLocationUserItem : VectorEpoxyModel<LiveLocationUserItem.Hold
     @EpoxyAttribute
     var showStopSharingButton: Boolean = false
 
-    private var timer: CountUpTimer? = null
-
     override fun bind(holder: Holder) {
         super.bind(holder)
         avatarRenderer.render(matrixItem, holder.itemUserAvatarImageView)
@@ -80,7 +78,9 @@ abstract class LiveLocationUserItem : VectorEpoxyModel<LiveLocationUserItem.Hold
             }
         }
 
-        timer = CountUpTimer(1000).apply {
+        stopTimer(holder)
+
+        holder.timer = CountUpTimer(1000).apply {
             tickListener = object : CountUpTimer.TickListener {
                 override fun onTick(milliseconds: Long) {
                     holder.itemLastUpdatedAtTextView.text = getFormattedLastUpdatedAt(locationUpdateTimeMillis)
@@ -88,6 +88,16 @@ abstract class LiveLocationUserItem : VectorEpoxyModel<LiveLocationUserItem.Hold
             }
             resume()
         }
+    }
+
+    override fun unbind(holder: Holder) {
+        super.unbind(holder)
+        stopTimer(holder)
+    }
+
+    private fun stopTimer(holder: Holder) {
+        holder.timer?.stop()
+        holder.timer = null
     }
 
     private fun getFormattedLastUpdatedAt(locationUpdateTimeMillis: Long?): String {
@@ -98,6 +108,7 @@ abstract class LiveLocationUserItem : VectorEpoxyModel<LiveLocationUserItem.Hold
     }
 
     class Holder : VectorEpoxyHolder() {
+        var timer: CountUpTimer? = null
         val itemUserAvatarImageView by bind<ImageView>(R.id.itemUserAvatarImageView)
         val itemUserDisplayNameTextView by bind<TextView>(R.id.itemUserDisplayNameTextView)
         val itemRemainingTimeTextView by bind<TextView>(R.id.itemRemainingTimeTextView)

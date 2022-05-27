@@ -64,7 +64,7 @@ class LiveLocationBottomSheetController @Inject constructor(
                 avatarRenderer(host.avatarRenderer)
                 remainingTime(remainingTime)
                 locationUpdateTimeMillis(liveLocationViewState.locationTimestampMillis)
-                showStopSharingButton(false)
+                showStopSharingButton(liveLocationViewState.showStopSharingButton)
             }
         }
     }

@@ -39,5 +39,6 @@ data class UserLiveLocationViewState(
         val pinDrawable: Drawable,
         val locationData: LocationData,
         val endOfLiveTimestampMillis: Long?,
-        val locationTimestampMillis: Long?
+        val locationTimestampMillis: Long?,
+        val showStopSharingButton: Boolean
 )

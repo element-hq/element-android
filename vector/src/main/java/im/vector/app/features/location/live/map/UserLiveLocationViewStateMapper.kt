@@ -44,14 +44,16 @@ class UserLiveLocationViewStateMapper @Inject constructor(
                     }
                     else                                           -> {
                         locationPinProvider.create(userId) { pinDrawable ->
-                            activeSessionHolder.getActiveSession().getUser(userId)?.toMatrixItem()?.let { matrixItem ->
+                            val session = activeSessionHolder.getActiveSession()
+                            session.getUser(userId)?.toMatrixItem()?.let { matrixItem ->
                                 val locationTimestampMillis = liveLocationShareAggregatedSummary.lastLocationDataContent?.getBestTimestampMillis()
                                 val viewState = UserLiveLocationViewState(
                                         matrixItem = matrixItem,
                                         pinDrawable = pinDrawable,
                                         locationData = locationData,
                                         endOfLiveTimestampMillis = liveLocationShareAggregatedSummary.endOfLiveTimestampMillis,
-                                        locationTimestampMillis = locationTimestampMillis
+                                        locationTimestampMillis = locationTimestampMillis,
+                                        showStopSharingButton = userId == session.myUserId
                                 )
                                 continuation.resume(viewState) {
                                     // do nothing on cancellation
