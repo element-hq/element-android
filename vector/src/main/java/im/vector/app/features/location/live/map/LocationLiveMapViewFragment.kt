@@ -33,6 +33,7 @@ import com.mapbox.mapboxsdk.maps.SupportMapFragment
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
 import com.mapbox.mapboxsdk.style.layers.Property
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.addChildFragment
 import im.vector.app.core.platform.VectorBaseFragment
@@ -48,9 +49,11 @@ import javax.inject.Inject
 /**
  * Screen showing a map with all the current users sharing their live location in a room.
  */
+@AndroidEntryPoint
 class LocationLiveMapViewFragment @Inject constructor(
-        private var urlMapProvider: UrlMapProvider,
 ) : VectorBaseFragment<FragmentSimpleContainerBinding>() {
+
+    @Inject lateinit var urlMapProvider: UrlMapProvider
 
     private val viewModel: LocationLiveMapViewModel by fragmentViewModel()
 
