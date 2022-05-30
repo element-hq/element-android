@@ -29,7 +29,7 @@ import org.junit.runners.MethodSorters
 
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
-class WebviewPermissionUtilsTest : InstrumentedTest {
+class WebviewPermissionUtilsTest {
 
     private val utils = WebviewPermissionUtils()
 
