@@ -21,6 +21,7 @@ import org.matrix.android.sdk.api.session.sync.SyncRequestState
 import org.matrix.android.sdk.api.session.sync.SyncService
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
+import org.matrix.android.sdk.internal.session.SessionState
 import org.matrix.android.sdk.internal.session.sync.job.SyncThread
 import org.matrix.android.sdk.internal.session.sync.job.SyncWorker
 import timber.log.Timber
@@ -33,6 +34,7 @@ internal class DefaultSyncService @Inject constructor(
         private val syncThreadProvider: Provider<SyncThread>,
         private val syncTokenStore: SyncTokenStore,
         private val syncRequestStateTracker: SyncRequestStateTracker,
+        private val sessionState: SessionState,
 ) : SyncService {
     private var syncThread: SyncThread? = null
 
@@ -50,8 +52,7 @@ internal class DefaultSyncService @Inject constructor(
 
     override fun startSync(fromForeground: Boolean) {
         Timber.i("Starting sync thread")
-        // TODO How to check that now?
-        // assert(isOpen)
+        assert(sessionState.isOpen)
         val localSyncThread = getSyncThread()
         localSyncThread.setInitialForeground(fromForeground)
         if (!localSyncThread.isAlive) {
@@ -63,8 +64,7 @@ internal class DefaultSyncService @Inject constructor(
     }
 
     override fun stopSync() {
-        // TODO How to check that now?
-        // assert(isOpen)
+        assert(sessionState.isOpen)
         syncThread?.kill()
         syncThread = null
     }

@@ -131,11 +131,10 @@ internal class DefaultSession @Inject constructor(
         private val toDeviceService: Lazy<ToDeviceService>,
         private val eventStreamService: Lazy<EventStreamService>,
         @UnauthenticatedWithCertificate
-        private val unauthenticatedWithCertificateOkHttpClient: Lazy<OkHttpClient>
+        private val unauthenticatedWithCertificateOkHttpClient: Lazy<OkHttpClient>,
+        private val sessionState: SessionState,
 ) : Session,
         GlobalErrorHandler.Listener {
-
-    private var isOpen = false
 
     private val uiHandler = createUIHandler()
 
@@ -144,8 +143,7 @@ internal class DefaultSession @Inject constructor(
 
     @MainThread
     override fun open() {
-        assert(!isOpen)
-        isOpen = true
+        sessionState.setIsOpen(true)
         globalErrorHandler.listener = this
         cryptoService.get().ensureDevice()
         uiHandler.post {
@@ -159,7 +157,7 @@ internal class DefaultSession @Inject constructor(
     }
 
     override fun close() {
-        assert(isOpen)
+        assert(sessionState.isOpen)
         syncService.get().stopSync()
         // timelineEventDecryptor.destroy()
         uiHandler.post {
@@ -170,7 +168,7 @@ internal class DefaultSession @Inject constructor(
         }
         cryptoService.get().close()
         globalErrorHandler.listener = null
-        isOpen = false
+        sessionState.setIsOpen(false)
     }
 
     override suspend fun clearCache() {
