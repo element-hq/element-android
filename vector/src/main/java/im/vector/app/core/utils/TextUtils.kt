@@ -94,6 +94,13 @@ object TextUtils {
         return formatDurationWithUnits(duration, stringProvider::getString)
     }
 
+    /**
+     * We don't always have Context to get strings or we want to use StringProvider instead.
+     * So we can pass the getString function either from Context or the StringProvider.
+     * @param duration duration to be formatted
+     * @param getString getString method from Context or StringProvider
+     * @return formatted duration with a localized form like "10h 30min 5sec"
+     */
     private fun formatDurationWithUnits(duration: Duration, getString: ((Int) -> String)): String {
         val hours = getHours(duration)
         val minutes = getMinutes(duration)
