@@ -21,7 +21,10 @@ import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.LocationSharingServiceConnection
 import im.vector.app.test.test
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
+import io.mockk.verify
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -60,7 +63,7 @@ class LocationLiveMapViewModelTest {
                         showStopSharingButton = false
                 )
         )
-
+        every { locationServiceConnection.bind(any()) } just runs
         every { getListOfUserLiveLocationUseCase.execute(fakeRoomId) } returns flowOf(userLocations)
 
         val viewModel = createViewModel()
@@ -72,5 +75,7 @@ class LocationLiveMapViewModelTest {
                         )
                 )
                 .finish()
+
+        verify { locationServiceConnection.bind(viewModel) }
     }
 }
