@@ -66,7 +66,7 @@ interface LoginWizard {
      * [resetPasswordMailConfirmed] is successfully called.
      *
      * @param email an email previously associated to the account the user wants the password to be reset.
-     * @return a [ResetCapabilities] if the reset is successful
+     * @return a [ResetCapabilities] if the reset is successful.
      */
     suspend fun resetPassword(email: String): ResetCapabilities
 
@@ -74,7 +74,10 @@ interface LoginWizard {
      * Confirm the new password, once the user has checked their email
      * When this method succeed, tha account password will be effectively modified.
      *
-     * @param newPassword the desired new password
+     * @param newPassword the desired new password.
+     * @param logoutAllDevices when true, all devices will be logged out. False values will only be taken into account
+     * if [ResetCapabilities.supportsLogoutAllDevices] is supported.
+     * When [ResetCapabilities.supportsLogoutAllDevices] is false the default behaviour is to logout all devices.
      */
-    suspend fun resetPasswordMailConfirmed(newPassword: String)
+    suspend fun resetPasswordMailConfirmed(newPassword: String, logoutAllDevices: Boolean = true)
 }

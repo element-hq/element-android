@@ -121,7 +121,6 @@ internal class DefaultLoginWizard(
         pendingSessionData = pendingSessionData.copy(resetPasswordData = ResetPasswordData(result))
                 .also { pendingSessionStore.savePendingSessionData(it) }
 
-
         val versions = executeRequest(null) {
             authAPI.versions()
         }
@@ -129,12 +128,13 @@ internal class DefaultLoginWizard(
         return ResetCapabilities(supportsLogoutAllDevices = versions.doesServerSupportLogoutDevices())
     }
 
-    override suspend fun resetPasswordMailConfirmed(newPassword: String) {
+    override suspend fun resetPasswordMailConfirmed(newPassword: String, logoutAllDevices: Boolean) {
         val resetPasswordData = pendingSessionData.resetPasswordData ?: throw IllegalStateException("Developer error - Must call resetPassword first")
         val param = ResetPasswordMailConfirmed.create(
                 pendingSessionData.clientSecret,
                 resetPasswordData.addThreePidRegistrationResponse.sid,
-                newPassword
+                newPassword,
+                logoutAllDevices
         )
 
         executeRequest(null) {
