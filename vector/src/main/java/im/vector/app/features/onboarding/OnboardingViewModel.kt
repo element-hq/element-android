@@ -246,21 +246,15 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private fun handleLoginWithToken(action: OnboardingAction.LoginWithToken) {
         val safeLoginWizard = loginWizard
+        setState { copy(isLoading = true) }
 
-        if (safeLoginWizard == null) {
-            setState { copy(isLoading = false) }
-            _viewEvents.post(OnboardingViewEvents.Failure(Throwable("Bad configuration")))
-        } else {
-            setState { copy(isLoading = true) }
-
-            currentJob = viewModelScope.launch {
-                try {
-                    val result = safeLoginWizard.loginWithToken(action.loginToken)
-                    onSessionCreated(result, authenticationDescription = AuthenticationDescription.Login)
-                } catch (failure: Throwable) {
-                    setState { copy(isLoading = false) }
-                    _viewEvents.post(OnboardingViewEvents.Failure(failure))
-                }
+        currentJob = viewModelScope.launch {
+            try {
+                val result = safeLoginWizard.loginWithToken(action.loginToken)
+                onSessionCreated(result, authenticationDescription = AuthenticationDescription.Login)
+            } catch (failure: Throwable) {
+                setState { copy(isLoading = false) }
+                _viewEvents.post(OnboardingViewEvents.Failure(failure))
             }
         }
     }
