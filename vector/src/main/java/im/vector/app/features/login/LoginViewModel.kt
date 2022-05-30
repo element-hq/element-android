@@ -531,26 +531,34 @@ class LoginViewModel @AssistedInject constructor(
             }
 
             currentJob = viewModelScope.launch {
-                try {
-                    val state = awaitState()
-                    safeLoginWizard.resetPasswordMailConfirmed(state.resetPasswordNewPassword!!)
-                } catch (failure: Throwable) {
+                val state = awaitState()
+
+                if (state.resetPasswordNewPassword == null)
                     setState {
                         copy(
-                                asyncResetMailConfirmed = Fail(failure)
+                                asyncResetPassword = Uninitialized,
+                                asyncResetMailConfirmed = Fail(Throwable("Developer error - New password not set"))
+                        )
+                    } else {
+                    try {
+                        safeLoginWizard.resetPasswordMailConfirmed(state.resetPasswordNewPassword)
+                    } catch (failure: Throwable) {
+                        setState {
+                            copy(
+                                    asyncResetMailConfirmed = Fail(failure)
+                            )
+                        }
+                        return@launch
+                    }
+                    setState {
+                        copy(
+                                asyncResetMailConfirmed = Success(Unit),
+                                resetPasswordEmail = null,
+                                resetPasswordNewPassword = null
                         )
                     }
-                    return@launch
+                    _viewEvents.post(LoginViewEvents.OnResetPasswordMailConfirmationSuccess)
                 }
-                setState {
-                    copy(
-                            asyncResetMailConfirmed = Success(Unit),
-                            resetPasswordEmail = null,
-                            resetPasswordNewPassword = null
-                    )
-                }
-
-                _viewEvents.post(LoginViewEvents.OnResetPasswordMailConfirmationSuccess)
             }
         }
     }
