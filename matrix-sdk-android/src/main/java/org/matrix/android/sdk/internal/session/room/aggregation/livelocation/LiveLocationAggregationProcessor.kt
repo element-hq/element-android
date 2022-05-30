@@ -147,9 +147,9 @@ internal class LiveLocationAggregationProcessor @Inject constructor(
                 .findActiveLiveInRoomForUser(
                         realm = realm,
                         roomId = roomId,
-                        userId = userId
+                        userId = userId,
+                        ignoredEventId = currentEventId
                 )
-                .filterNot { it.eventId == currentEventId }
                 .forEach { it.isActive = false }
     }
 
