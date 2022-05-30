@@ -441,15 +441,9 @@ class RoomListSectionBuilderSpace(
                 )
             }
             RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL     -> {
-                if (currentSpace == null) {
-                    copy(
-                            spaceFilter = null
-                    )
-                } else {
-                    copy(
-                            spaceFilter = SpaceFilter.ActiveSpace(currentSpace)
-                    )
-                }
+                copy(
+                        spaceFilter = currentSpace?.let { SpaceFilter.ActiveSpace(it) }
+                )
             }
             RoomListViewModel.SpaceFilterStrategy.NONE                  -> this
         }
