@@ -35,6 +35,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationShareAggregatedSummary
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
+import org.matrix.android.sdk.api.util.MatrixItem
 
 class GetListOfUserLiveLocationUseCaseTest {
 
@@ -88,16 +89,20 @@ class GetListOfUserLiveLocationUseCaseTest {
         every { liveData.asFlow() } returns flowOf(summaries)
 
         val viewState1 = UserLiveLocationViewState(
-                userId = "userId1",
+                matrixItem = MatrixItem.UserItem(id = "@userId1:matrix.org", displayName = "User 1", avatarUrl = ""),
                 pinDrawable = mockk(),
                 locationData = LocationData(latitude = 1.0, longitude = 2.0, uncertainty = null),
-                endOfLiveTimestampMillis = 123
+                endOfLiveTimestampMillis = 123,
+                locationTimestampMillis = 123,
+                showStopSharingButton = false
         )
         val viewState2 = UserLiveLocationViewState(
-                userId = "userId2",
+                matrixItem = MatrixItem.UserItem(id = "@userId2:matrix.org", displayName = "User 2", avatarUrl = ""),
                 pinDrawable = mockk(),
                 locationData = LocationData(latitude = 1.0, longitude = 2.0, uncertainty = null),
-                endOfLiveTimestampMillis = 1234
+                endOfLiveTimestampMillis = 1234,
+                locationTimestampMillis = 1234,
+                showStopSharingButton = false
         )
         coEvery { viewStateMapper.map(summary1) } returns viewState1
         coEvery { viewStateMapper.map(summary2) } returns viewState2

@@ -19,6 +19,7 @@ package im.vector.app.features.location.live.map
 import android.graphics.drawable.Drawable
 import com.airbnb.mvrx.MavericksState
 import im.vector.app.features.location.LocationData
+import org.matrix.android.sdk.api.util.MatrixItem
 
 data class LocationLiveMapViewState(
         val roomId: String,
@@ -34,8 +35,10 @@ data class LocationLiveMapViewState(
 }
 
 data class UserLiveLocationViewState(
-        val userId: String,
+        val matrixItem: MatrixItem,
         val pinDrawable: Drawable,
         val locationData: LocationData,
-        val endOfLiveTimestampMillis: Long?
+        val endOfLiveTimestampMillis: Long?,
+        val locationTimestampMillis: Long?,
+        val showStopSharingButton: Boolean
 )
