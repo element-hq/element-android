@@ -32,8 +32,8 @@ import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
-import org.matrix.android.sdk.common.CommonTestHelper
-import org.matrix.android.sdk.common.CryptoTestHelper
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSessionTest
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
 import java.util.concurrent.CountDownLatch
@@ -156,9 +156,7 @@ class VerificationTest : InstrumentedTest {
     private fun doTest(aliceSupportedMethods: List<VerificationMethod>,
                        bobSupportedMethods: List<VerificationMethod>,
                        expectedResultForAlice: ExpectedResult,
-                       expectedResultForBob: ExpectedResult) {
-        val testHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(testHelper)
+                       expectedResultForBob: ExpectedResult) = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession
@@ -253,14 +251,11 @@ class VerificationTest : InstrumentedTest {
             pr.otherCanShowQrCode() shouldBe expectedResultForBob.otherCanShowQrCode
             pr.otherCanScanQrCode() shouldBe expectedResultForBob.otherCanScanQrCode
         }
-
-        cryptoTestData.cleanUp(testHelper)
     }
 
     @Test
-    fun test_selfVerificationAcceptedCancelsItForOtherSessions() {
+    fun test_selfVerificationAcceptedCancelsItForOtherSessions() = runSessionTest(context()) { testHelper ->
         val defaultSessionParams = SessionTestParams(true)
-        val testHelper = CommonTestHelper(context())
 
         val aliceSessionToVerify = testHelper.createAccount(TestConstants.USER_ALICE, defaultSessionParams)
         val aliceSessionThatVerifies = testHelper.logIntoAccount(aliceSessionToVerify.myUserId, TestConstants.PASSWORD, defaultSessionParams)

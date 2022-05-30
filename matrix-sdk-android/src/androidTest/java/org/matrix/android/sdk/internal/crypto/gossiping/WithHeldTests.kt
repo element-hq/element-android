@@ -37,8 +37,7 @@ import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.getTimelineEvent
-import org.matrix.android.sdk.common.CommonTestHelper
-import org.matrix.android.sdk.common.CryptoTestHelper
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import org.matrix.android.sdk.common.MockOkHttpInterceptor
 import org.matrix.android.sdk.common.RetryTestRule
 import org.matrix.android.sdk.common.SessionTestParams
@@ -54,9 +53,7 @@ class WithHeldTests : InstrumentedTest {
     @get:Rule val rule = RetryTestRule(3)
 
     @Test
-    fun test_WithHeldUnverifiedReason() {
-        val testHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(testHelper)
+    fun test_WithHeldUnverifiedReason() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
 
         // =============================
         // ARRANGE
@@ -155,16 +152,10 @@ class WithHeldTests : InstrumentedTest {
                 bobUnverifiedSession.cryptoService().decryptEvent(eventBobPOV.root, "")
             }
         }
-
-        testHelper.signOutAndClose(aliceSession)
-        testHelper.signOutAndClose(bobSession)
-        testHelper.signOutAndClose(bobUnverifiedSession)
     }
 
     @Test
-    fun test_WithHeldNoOlm() {
-        val testHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(testHelper)
+    fun test_WithHeldNoOlm() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
 
         val testData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
         val aliceSession = testData.firstSession
@@ -241,14 +232,10 @@ class WithHeldTests : InstrumentedTest {
         Assert.assertEquals("Alice should have marked bob's device for this session", 1, chainIndex2)
 
         aliceInterceptor.clearRules()
-        testData.cleanUp(testHelper)
-        testHelper.signOutAndClose(bobSecondSession)
     }
 
     @Test
-    fun test_WithHeldKeyRequest() {
-        val testHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(testHelper)
+    fun test_WithHeldKeyRequest() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
 
         val testData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
         val aliceSession = testData.firstSession
@@ -295,8 +282,5 @@ class WithHeldTests : InstrumentedTest {
                 wc?.code == WithHeldCode.UNAUTHORISED
             }
         }
-
-        testHelper.signOutAndClose(aliceSession)
-        testHelper.signOutAndClose(bobSecondSession)
     }
 }

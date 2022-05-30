@@ -29,7 +29,7 @@ import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
-import org.matrix.android.sdk.common.CommonTestHelper
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSessionTest
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
 import kotlin.coroutines.Continuation
@@ -39,10 +39,8 @@ import kotlin.coroutines.resume
 @FixMethodOrder(MethodSorters.JVM)
 class DeactivateAccountTest : InstrumentedTest {
 
-    private val commonTestHelper = CommonTestHelper(context())
-
     @Test
-    fun deactivateAccountTest() {
+    fun deactivateAccountTest() = runSessionTest(context(), false /* session will be deactivated */) { commonTestHelper ->
         val session = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = true))
 
         // Deactivate the account

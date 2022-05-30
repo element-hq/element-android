@@ -227,8 +227,13 @@ class FtueAuthVariant(
                         option = commonOption
                 )
             }
-            OnboardingViewEvents.OnHomeserverEdited                            -> activity.popBackstack()
+            OnboardingViewEvents.OnHomeserverEdited -> activity.popBackstack()
+            OnboardingViewEvents.OpenCombinedLogin  -> onStartCombinedLogin()
         }
+    }
+
+    private fun onStartCombinedLogin() {
+        addRegistrationStageFragmentToBackstack(FtueAuthCombinedLoginFragment::class.java)
     }
 
     private fun onRegistrationFlow(viewEvents: OnboardingViewEvents.RegistrationFlowResult) {

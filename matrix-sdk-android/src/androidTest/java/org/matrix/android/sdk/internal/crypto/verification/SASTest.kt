@@ -44,8 +44,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransa
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.common.CommonTestHelper
-import org.matrix.android.sdk.common.CryptoTestHelper
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationCancel
 import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationStart
 import org.matrix.android.sdk.internal.crypto.model.rest.toValue
@@ -57,9 +56,7 @@ import java.util.concurrent.CountDownLatch
 class SASTest : InstrumentedTest {
 
     @Test
-    fun test_aliceStartThenAliceCancel() {
-        val testHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(testHelper)
+    fun test_aliceStartThenAliceCancel() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession
@@ -136,15 +133,11 @@ class SASTest : InstrumentedTest {
 
         assertNull(bobVerificationService.getExistingTransaction(aliceSession.myUserId, txID))
         assertNull(aliceVerificationService.getExistingTransaction(bobSession.myUserId, txID))
-
-        cryptoTestData.cleanUp(testHelper)
     }
 
     @Test
     @Ignore("This test will be ignored until it is fixed")
-    fun test_key_agreement_protocols_must_include_curve25519() {
-        val testHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(testHelper)
+    fun test_key_agreement_protocols_must_include_curve25519() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         fail("Not passing for the moment")
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
@@ -196,15 +189,11 @@ class SASTest : InstrumentedTest {
         testHelper.await(cancelLatch)
 
         assertEquals("Request should be cancelled with m.unknown_method", CancelCode.UnknownMethod, cancelReason)
-
-        cryptoTestData.cleanUp(testHelper)
     }
 
     @Test
     @Ignore("This test will be ignored until it is fixed")
-    fun test_key_agreement_macs_Must_include_hmac_sha256() {
-        val testHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(testHelper)
+    fun test_key_agreement_macs_Must_include_hmac_sha256() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         fail("Not passing for the moment")
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
@@ -237,15 +226,11 @@ class SASTest : InstrumentedTest {
 
         val cancelReq = canceledToDeviceEvent!!.content.toModel<KeyVerificationCancel>()!!
         assertEquals("Request should be cancelled with m.unknown_method", CancelCode.UnknownMethod.value, cancelReq.code)
-
-        cryptoTestData.cleanUp(testHelper)
     }
 
     @Test
     @Ignore("This test will be ignored until it is fixed")
-    fun test_key_agreement_short_code_include_decimal() {
-        val testHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(testHelper)
+    fun test_key_agreement_short_code_include_decimal() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         fail("Not passing for the moment")
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
@@ -278,8 +263,6 @@ class SASTest : InstrumentedTest {
 
         val cancelReq = canceledToDeviceEvent!!.content.toModel<KeyVerificationCancel>()!!
         assertEquals("Request should be cancelled with m.unknown_method", CancelCode.UnknownMethod.value, cancelReq.code)
-
-        cryptoTestData.cleanUp(testHelper)
     }
 
     private fun fakeBobStart(bobSession: Session,
@@ -315,9 +298,7 @@ class SASTest : InstrumentedTest {
     // any two devices may only have at most one key verification in flight at a time.
     // If a device has two verifications in progress with the same device, then it should cancel both verifications.
     @Test
-    fun test_aliceStartTwoRequests() {
-        val testHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(testHelper)
+    fun test_aliceStartTwoRequests() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession
@@ -358,9 +339,7 @@ class SASTest : InstrumentedTest {
      */
     @Test
     @Ignore("This test will be ignored until it is fixed")
-    fun test_aliceAndBobAgreement() {
-        val testHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(testHelper)
+    fun test_aliceAndBobAgreement() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession
@@ -414,14 +393,10 @@ class SASTest : InstrumentedTest {
         accepted!!.shortAuthenticationStrings.forEach {
             assertTrue("all agreed Short Code should be known by alice", startReq!!.shortAuthenticationStrings.contains(it))
         }
-
-        cryptoTestData.cleanUp(testHelper)
     }
 
     @Test
-    fun test_aliceAndBobSASCode() {
-        val testHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(testHelper)
+    fun test_aliceAndBobSASCode() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession
@@ -474,14 +449,10 @@ class SASTest : InstrumentedTest {
                 "Should have same SAS", aliceTx.getShortCodeRepresentation(SasMode.DECIMAL),
                 bobTx.getShortCodeRepresentation(SasMode.DECIMAL)
         )
-
-        cryptoTestData.cleanUp(testHelper)
     }
 
     @Test
-    fun test_happyPath() {
-        val testHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(testHelper)
+    fun test_happyPath() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession
@@ -554,13 +525,10 @@ class SASTest : InstrumentedTest {
 
         assertTrue("alice device should be verified from bob point of view", aliceDeviceInfoFromBobPOV!!.isVerified)
         assertTrue("bob device should be verified from alice point of view", bobDeviceInfoFromAlicePOV!!.isVerified)
-        cryptoTestData.cleanUp(testHelper)
     }
 
     @Test
-    fun test_ConcurrentStart() {
-        val testHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(testHelper)
+    fun test_ConcurrentStart() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession
@@ -647,7 +615,5 @@ class SASTest : InstrumentedTest {
                 bobPovTx?.state == VerificationTxState.ShortCodeReady
             }
         }
-
-        cryptoTestData.cleanUp(testHelper)
     }
 }

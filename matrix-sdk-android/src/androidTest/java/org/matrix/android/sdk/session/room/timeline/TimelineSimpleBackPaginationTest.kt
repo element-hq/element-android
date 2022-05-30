@@ -33,8 +33,7 @@ import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
-import org.matrix.android.sdk.common.CommonTestHelper
-import org.matrix.android.sdk.common.CryptoTestHelper
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import org.matrix.android.sdk.common.TestConstants
 
 @RunWith(JUnit4::class)
@@ -44,9 +43,7 @@ import org.matrix.android.sdk.common.TestConstants
 class TimelineSimpleBackPaginationTest : InstrumentedTest {
 
     @Test
-    fun timeline_backPaginate_shouldReachEndOfTimeline() {
-        val commonTestHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
+    fun timeline_backPaginate_shouldReachEndOfTimeline() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
         val numberOfMessagesToSent = 200
 
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(false)
@@ -104,6 +101,5 @@ class TimelineSimpleBackPaginationTest : InstrumentedTest {
         assertEquals(numberOfMessagesToSent, onlySentEvents.size)
 
         bobTimeline.dispose()
-        cryptoTestData.cleanUp(commonTestHelper)
     }
 }
