@@ -47,6 +47,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.query.SpaceFilter
+import org.matrix.android.sdk.api.query.toActiveSpaceOrOrphanRooms
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.NewSessionListener
 import org.matrix.android.sdk.api.session.initsync.SyncStatusService
@@ -249,7 +250,7 @@ class HomeDetailViewModel @AssistedInject constructor(
                                         roomSummaryQueryParams {
                                             memberships = listOf(Membership.INVITE)
                                             roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-                                            spaceFilter = groupingMethod.spaceSummary?.roomId?.let { SpaceFilter.ActiveSpace(it) } ?: SpaceFilter.OrphanRooms
+                                            spaceFilter = groupingMethod.toActiveSpaceOrOrphanRooms()
                                         }
                                 ).size
                             }
@@ -266,7 +267,7 @@ class HomeDetailViewModel @AssistedInject constructor(
                                     roomSummaryQueryParams {
                                         memberships = listOf(Membership.JOIN)
                                         roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-                                        spaceFilter = groupingMethod.spaceSummary?.roomId?.let { SpaceFilter.ActiveSpace(it) } ?: SpaceFilter.OrphanRooms
+                                        spaceFilter = groupingMethod.toActiveSpaceOrOrphanRooms()
                                     }
                             )
 
@@ -286,5 +287,9 @@ class HomeDetailViewModel @AssistedInject constructor(
                     }
                 }
                 .launchIn(viewModelScope)
+    }
+
+    private fun RoomGroupingMethod.BySpace.toActiveSpaceOrOrphanRooms(): SpaceFilter? {
+        return spaceSummary?.roomId?.toActiveSpaceOrOrphanRooms()
     }
 }

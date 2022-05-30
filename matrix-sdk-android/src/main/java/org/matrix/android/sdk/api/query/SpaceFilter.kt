@@ -36,3 +36,8 @@ sealed interface SpaceFilter {
      */
     data class ExcludeSpace(val spaceId: String) : SpaceFilter
 }
+
+/**
+ * Return a [SpaceFilter.ActiveSpace] if the String is not null, or [SpaceFilter.OrphanRooms].
+ */
+fun String?.toActiveSpaceOrOrphanRooms(): SpaceFilter = this?.let { SpaceFilter.ActiveSpace(it) } ?: SpaceFilter.OrphanRooms

@@ -46,6 +46,7 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.query.RoomTagQueryFilter
 import org.matrix.android.sdk.api.query.SpaceFilter
+import org.matrix.android.sdk.api.query.toActiveSpaceOrOrphanRooms
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
@@ -370,7 +371,7 @@ class RoomListSectionBuilderSpace(
                     activeSpaceUpdaters.add(object : RoomListViewModel.ActiveSpaceQueryUpdater {
                         override fun updateForSpaceId(roomId: String?) {
                             filteredPagedRoomSummariesLive.queryParams = roomQueryParams.copy(
-                                    spaceFilter = roomId?.let { SpaceFilter.ActiveSpace(it) } ?: SpaceFilter.OrphanRooms
+                                    spaceFilter = roomId?.toActiveSpaceOrOrphanRooms()
                             )
                             liveQueryParams.update { filteredPagedRoomSummariesLive.queryParams }
                         }
@@ -436,7 +437,7 @@ class RoomListSectionBuilderSpace(
         return when (spaceFilter) {
             RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL -> {
                 copy(
-                        spaceFilter = currentSpace?.let { SpaceFilter.ActiveSpace(it) } ?: SpaceFilter.OrphanRooms
+                        spaceFilter = currentSpace?.toActiveSpaceOrOrphanRooms()
                 )
             }
             RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL     -> {
