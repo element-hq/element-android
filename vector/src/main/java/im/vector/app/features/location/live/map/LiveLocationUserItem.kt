@@ -106,7 +106,8 @@ abstract class LiveLocationUserItem : VectorEpoxyModel<LiveLocationUserItem.Hold
         if (locationUpdateTimeMillis == null) return ""
         val elapsedTime = clock.epochMillis() - locationUpdateTimeMillis
         val duration = Duration.ofMillis(elapsedTime.coerceAtLeast(0L))
-        return stringProvider.getString(R.string.live_location_bottom_sheet_last_updated_at, TextUtils.formatDurationWithUnits(stringProvider, duration))
+        val formattedDuration = TextUtils.formatDurationWithUnits(stringProvider, duration, appendSeconds = false)
+        return stringProvider.getString(R.string.live_location_bottom_sheet_last_updated_at, formattedDuration)
     }
 
     class Holder : VectorEpoxyHolder() {

@@ -70,7 +70,7 @@ class LocationLiveMapViewFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        views.bottomSheetRecyclerView.configureWith(bottomSheetController, hasFixedSize = false, disableItemAnimation = true)
+        views.liveLocationBottomSheetRecyclerView.configureWith(bottomSheetController, hasFixedSize = false, disableItemAnimation = true)
 
         bottomSheetController.callback = object : LiveLocationBottomSheetController.Callback {
             override fun onUserSelected(userId: String) {
@@ -95,7 +95,9 @@ class LocationLiveMapViewFragment @Inject constructor(
                 mapboxMap.setStyle(urlMapProvider.getMapUrl()) { style ->
                     mapStyle = style
                     this@LocationLiveMapViewFragment.mapboxMap = WeakReference(mapboxMap)
-                    symbolManager = SymbolManager(mapFragment.view as MapView, mapboxMap, style)
+                    symbolManager = SymbolManager(mapFragment.view as MapView, mapboxMap, style).apply {
+                        iconAllowOverlap = true
+                    }
                     pendingLiveLocations
                             .takeUnless { it.isEmpty() }
                             ?.let { updateMap(it) }
@@ -109,7 +111,7 @@ class LocationLiveMapViewFragment @Inject constructor(
                     ?: run {
                         val options = MapboxMapOptions.createFromAttributes(requireContext(), null)
                         SupportMapFragment.newInstance(options)
-                                .also { addChildFragment(R.id.fragmentContainer, it, tag = MAP_FRAGMENT_TAG) }
+                                .also { addChildFragment(R.id.liveLocationMapFragmentContainer, it, tag = MAP_FRAGMENT_TAG) }
                     }
 
     override fun invalidate() = withState(viewModel) { viewState ->

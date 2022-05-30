@@ -86,12 +86,12 @@ object TextUtils {
         }
     }
 
-    fun formatDurationWithUnits(context: Context, duration: Duration): String {
-        return formatDurationWithUnits(duration, context::getString)
+    fun formatDurationWithUnits(context: Context, duration: Duration, appendSeconds: Boolean = true): String {
+        return formatDurationWithUnits(duration, context::getString, appendSeconds)
     }
 
-    fun formatDurationWithUnits(stringProvider: StringProvider, duration: Duration): String {
-        return formatDurationWithUnits(duration, stringProvider::getString)
+    fun formatDurationWithUnits(stringProvider: StringProvider, duration: Duration, appendSeconds: Boolean = true): String {
+        return formatDurationWithUnits(duration, stringProvider::getString, appendSeconds)
     }
 
     /**
@@ -99,9 +99,10 @@ object TextUtils {
      * So we can pass the getString function either from Context or the StringProvider.
      * @param duration duration to be formatted
      * @param getString getString method from Context or StringProvider
+     * @param appendSeconds if false than formatter will not append seconds
      * @return formatted duration with a localized form like "10h 30min 5sec"
      */
-    private fun formatDurationWithUnits(duration: Duration, getString: ((Int) -> String)): String {
+    private fun formatDurationWithUnits(duration: Duration, getString: ((Int) -> String), appendSeconds: Boolean = true): String {
         val hours = getHours(duration)
         val minutes = getMinutes(duration)
         val seconds = getSeconds(duration)
@@ -113,14 +114,14 @@ object TextUtils {
                     builder.append(" ")
                     appendMinutes(getString, builder, minutes)
                 }
-                if (seconds > 0) {
+                if (appendSeconds && seconds > 0) {
                     builder.append(" ")
                     appendSeconds(getString, builder, seconds)
                 }
             }
             minutes > 0 -> {
                 appendMinutes(getString, builder, minutes)
-                if (seconds > 0) {
+                if (appendSeconds && seconds > 0) {
                     builder.append(" ")
                     appendSeconds(getString, builder, seconds)
                 }
