@@ -31,6 +31,7 @@ import org.matrix.android.sdk.internal.auth.data.TokenLoginParams
 import org.matrix.android.sdk.internal.auth.db.PendingSessionData
 import org.matrix.android.sdk.internal.auth.registration.AddThreePidRegistrationParams
 import org.matrix.android.sdk.internal.auth.registration.RegisterAddThreePidTask
+import org.matrix.android.sdk.internal.auth.version.doesServerSupportLogoutDevices
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.content.DefaultContentUrlResolver
 import org.matrix.android.sdk.internal.session.contentscanner.DisabledContentScannerService
@@ -103,7 +104,7 @@ internal class DefaultLoginWizard(
         return sessionCreator.createSession(credentials, pendingSessionData.homeServerConnectionConfig)
     }
 
-    override suspend fun resetPassword(email: String) {
+    override suspend fun resetPassword(email: String): ResetCapabilities {
         val param = RegisterAddThreePidTask.Params(
                 RegisterThreePid.Email(email),
                 pendingSessionData.clientSecret,
@@ -119,6 +120,13 @@ internal class DefaultLoginWizard(
 
         pendingSessionData = pendingSessionData.copy(resetPasswordData = ResetPasswordData(result))
                 .also { pendingSessionStore.savePendingSessionData(it) }
+
+
+        val versions = executeRequest(null) {
+            authAPI.versions()
+        }
+
+        return ResetCapabilities(supportsLogoutAllDevices = versions.doesServerSupportLogoutDevices())
     }
 
     override suspend fun resetPasswordMailConfirmed(newPassword: String) {
