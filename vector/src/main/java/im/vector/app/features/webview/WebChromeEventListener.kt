@@ -25,7 +25,5 @@ interface WebChromeEventListener {
      *
      * @param request The permission request.
      */
-    fun onPermissionRequest(request: PermissionRequest) {
-        // NO-OP
-    }
+    fun onPermissionRequest(request: PermissionRequest)
 }
