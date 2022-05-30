@@ -1927,10 +1927,14 @@ class TimelineFragment @Inject constructor(
             if (!isManaged) {
                 when {
                     url.containsRtLOverride()                                                  -> {
-                        displayUrlConfirmationDialog(title.ensureEndsLeftToRight(), url.filterDirectionOverrides())
+                        displayUrlConfirmationDialog(
+                                seenUrl = title.ensureEndsLeftToRight(),
+                                actualUrl = url.filterDirectionOverrides(),
+                                continueTo = url
+                        )
                     }
                     title.isValidUrl() && url.isValidUrl() && URL(title).host != URL(url).host -> {
-                        displayUrlConfirmationDialog(title.ensureEndsLeftToRight(), url)
+                        displayUrlConfirmationDialog(title, url)
                     }
                     else                                                                       -> {
                         openUrlInExternalBrowser(requireContext(), url)
@@ -1942,17 +1946,17 @@ class TimelineFragment @Inject constructor(
         return true
     }
 
-    private fun displayUrlConfirmationDialog(title: String, url: String) {
+    private fun displayUrlConfirmationDialog(seenUrl: String, actualUrl: String, continueTo: String = actualUrl) {
         MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_NegativeDestructive)
                 .setTitle(R.string.external_link_confirmation_title)
                 .setMessage(
-                        getString(R.string.external_link_confirmation_message, title, url)
+                        getString(R.string.external_link_confirmation_message, seenUrl, actualUrl)
                                 .toSpannable()
-                                .colorizeMatchingText(url, colorProvider.getColorFromAttribute(R.attr.vctr_content_tertiary))
-                                .colorizeMatchingText(title, colorProvider.getColorFromAttribute(R.attr.vctr_content_tertiary))
+                                .colorizeMatchingText(actualUrl, colorProvider.getColorFromAttribute(R.attr.vctr_content_tertiary))
+                                .colorizeMatchingText(seenUrl, colorProvider.getColorFromAttribute(R.attr.vctr_content_tertiary))
                 )
                 .setPositiveButton(R.string._continue) { _, _ ->
-                    openUrlInExternalBrowser(requireContext(), url)
+                    openUrlInExternalBrowser(requireContext(), continueTo)
                 }
                 .setNegativeButton(R.string.action_cancel, null)
                 .show()
