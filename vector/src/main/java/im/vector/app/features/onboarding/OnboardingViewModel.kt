@@ -116,11 +116,11 @@ class OnboardingViewModel @AssistedInject constructor(
         get() = authenticationService.getRegistrationWizard()
 
     val currentThreePid: String?
-        get() = registrationWizard.currentThreePid
+        get() = registrationWizard.getCurrentThreePid()
 
     // True when login and password has been sent with success to the homeserver
     val isRegistrationStarted: Boolean
-        get() = authenticationService.isRegistrationStarted
+        get() = authenticationService.isRegistrationStarted()
 
     private val loginWizard: LoginWizard?
         get() = authenticationService.getLoginWizard()
@@ -425,7 +425,7 @@ class OnboardingViewModel @AssistedInject constructor(
 
         // If there is a pending email validation continue on this step
         try {
-            if (registrationWizard.isRegistrationStarted) {
+            if (registrationWizard.isRegistrationStarted()) {
                 currentThreePid?.let {
                     handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnSendEmailSuccess(it)))
                 }

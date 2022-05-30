@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,24 +14,9 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.crypto.verification
+package org.matrix.android.sdk.api.session.securestorage
 
-/**
- * Verification methods.
- */
-enum class VerificationMethod {
-    /**
-     * Use it when your application supports the SAS verification method.
-     */
-    SAS,
-
-    /**
-     * Use it if your application is able to display QR codes.
-     */
-    QR_CODE_SHOW,
-
-    /**
-     * Use it if your application is able to scan QR codes.
-     */
-    QR_CODE_SCAN
-}
+data class KeyRef(
+        val keyId: String?,
+        val keySpec: SsssKeySpec?
+)
