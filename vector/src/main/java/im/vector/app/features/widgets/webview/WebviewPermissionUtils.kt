@@ -16,7 +16,6 @@
 package im.vector.app.features.widgets.webview
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Context
 import android.webkit.PermissionRequest
 import androidx.activity.result.ActivityResultLauncher

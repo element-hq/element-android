@@ -18,7 +18,6 @@ package im.vector.app.features.widgets
 
 import android.Manifest
 import android.webkit.PermissionRequest
-import im.vector.app.InstrumentedTest
 import im.vector.app.features.widgets.webview.WebviewPermissionUtils
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.FixMethodOrder
