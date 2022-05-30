@@ -158,7 +158,7 @@ dependencies {
     implementation libs.squareup.moshi
     kapt libs.squareup.moshiKotlin
 
-    api "com.atlassian.commonmark:commonmark:0.13.0"
+    api "com.atlassian.commonmark:commonmark:0.17.0"
 
     // Image
     implementation libs.androidx.exifinterface
