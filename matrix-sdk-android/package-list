@@ -2385,6 +2385,9 @@ $dokka.location:org.matrix.android.sdk.api.session.room.failure/CreateRoomFailur
 $dokka.location:org.matrix.android.sdk.api.session.room.failure/CreateRoomFailure///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.failure/-create-room-failure/index.html
 $dokka.location:org.matrix.android.sdk.api.session.room.failure/JoinRoomFailure.JoinedWithTimeout///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.failure/-join-room-failure/-joined-with-timeout/index.html
 $dokka.location:org.matrix.android.sdk.api.session.room.failure/JoinRoomFailure///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.failure/-join-room-failure/index.html
+$dokka.location:org.matrix.android.sdk.api.session.room.location////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.location/index.html
+$dokka.location:org.matrix.android.sdk.api.session.room.location/LocationSharingService///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.location/-location-sharing-service/index.html
+$dokka.location:org.matrix.android.sdk.api.session.room.location/LocationSharingService/getRunningLiveLocationShareSummaries/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.location/-location-sharing-service/get-running-live-location-share-summaries.html
 $dokka.location:org.matrix.android.sdk.api.session.room.members////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.members/index.html
 $dokka.location:org.matrix.android.sdk.api.session.room.members//roomMemberQueryParams/#kotlin.Function1[org.matrix.android.sdk.api.session.room.members.RoomMemberQueryParams.Builder,kotlin.Unit]/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.members/room-member-query-params.html
 $dokka.location:org.matrix.android.sdk.api.session.room.members/ChangeMembershipState.FailedJoining///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.members/-change-membership-state/-failed-joining/index.html
@@ -2598,10 +2601,11 @@ $dokka.location:org.matrix.android.sdk.api.session.room.model.create/RoomFeature
 $dokka.location:org.matrix.android.sdk.api.session.room.model.create/RoomFeaturePreset/updateRoomParams/#org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.model.create/-room-feature-preset/update-room-params.html
 $dokka.location:org.matrix.android.sdk.api.session.room.model.livelocation////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.model.livelocation/index.html
 $dokka.location:org.matrix.android.sdk.api.session.room.model.livelocation/LiveLocationShareAggregatedSummary///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.model.livelocation/-live-location-share-aggregated-summary/index.html
-$dokka.location:org.matrix.android.sdk.api.session.room.model.livelocation/LiveLocationShareAggregatedSummary/LiveLocationShareAggregatedSummary/#kotlin.Boolean?#kotlin.Long?#org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent?/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.model.livelocation/-live-location-share-aggregated-summary/-live-location-share-aggregated-summary.html
+$dokka.location:org.matrix.android.sdk.api.session.room.model.livelocation/LiveLocationShareAggregatedSummary/LiveLocationShareAggregatedSummary/#kotlin.String?#kotlin.Boolean?#kotlin.Long?#org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent?/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.model.livelocation/-live-location-share-aggregated-summary/-live-location-share-aggregated-summary.html
 $dokka.location:org.matrix.android.sdk.api.session.room.model.livelocation/LiveLocationShareAggregatedSummary/endOfLiveTimestampMillis/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.model.livelocation/-live-location-share-aggregated-summary/end-of-live-timestamp-millis.html
 $dokka.location:org.matrix.android.sdk.api.session.room.model.livelocation/LiveLocationShareAggregatedSummary/isActive/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.model.livelocation/-live-location-share-aggregated-summary/is-active.html
 $dokka.location:org.matrix.android.sdk.api.session.room.model.livelocation/LiveLocationShareAggregatedSummary/lastLocationDataContent/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.model.livelocation/-live-location-share-aggregated-summary/last-location-data-content.html
+$dokka.location:org.matrix.android.sdk.api.session.room.model.livelocation/LiveLocationShareAggregatedSummary/userId/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.model.livelocation/-live-location-share-aggregated-summary/user-id.html
 $dokka.location:org.matrix.android.sdk.api.session.room.model.message////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.model.message/index.html
 $dokka.location:org.matrix.android.sdk.api.session.room.model.message//getFileName/org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.model.message/get-file-name.html
 $dokka.location:org.matrix.android.sdk.api.session.room.model.message//getFileUrl/org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.model.message/get-file-url.html
@@ -3639,6 +3643,7 @@ $dokka.location:org.matrix.android.sdk.api.session.room/Room/asSpace/#/PointingT
 $dokka.location:org.matrix.android.sdk.api.session.room/Room/coroutineDispatchers/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room/-room/coroutine-dispatchers.html
 $dokka.location:org.matrix.android.sdk.api.session.room/Room/draftService/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room/-room/draft-service.html
 $dokka.location:org.matrix.android.sdk.api.session.room/Room/getRoomSummaryLive/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room/-room/get-room-summary-live.html
+$dokka.location:org.matrix.android.sdk.api.session.room/Room/locationSharingService/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room/-room/location-sharing-service.html
 $dokka.location:org.matrix.android.sdk.api.session.room/Room/membershipService/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room/-room/membership-service.html
 $dokka.location:org.matrix.android.sdk.api.session.room/Room/readService/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room/-room/read-service.html
 $dokka.location:org.matrix.android.sdk.api.session.room/Room/relationService/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room/-room/relation-service.html
@@ -4615,6 +4620,7 @@ org.matrix.android.sdk.api.session.room.alias
 org.matrix.android.sdk.api.session.room.call
 org.matrix.android.sdk.api.session.room.crypto
 org.matrix.android.sdk.api.session.room.failure
+org.matrix.android.sdk.api.session.room.location
 org.matrix.android.sdk.api.session.room.members
 org.matrix.android.sdk.api.session.room.model
 org.matrix.android.sdk.api.session.room.model.call
