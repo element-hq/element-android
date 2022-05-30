@@ -11,7 +11,7 @@ This document aims to describe how Element android displays notifications to the
     * [Background processing limitations](#background-processing-limitations)
 2. [Element Notification implementations](#element-notification-implementations)
     * [Requirements](#requirements) 
-    * [Foreground sync mode (Gplay & F-Droid)](#foreground-sync-mode-gplay-f-droid)
+    * [Foreground sync mode (Gplay & F-Droid)](#foreground-sync-mode-gplay--f-droid)
     * [Push (FCM) received in background](#push-fcm-received-in-background)
     * [FCM Fallback mode](#fcm-fallback-mode)
     * [F-Droid background Mode](#f-droid-background-mode)
@@ -28,10 +28,10 @@ In order to get messages from a homeserver, a matrix client need to perform a ``
 
 `To read events, the intended flow of operation is for clients to first call the /sync API without a since parameter. This returns the most recent message events for each room, as well as the state of the room at the start of the returned timeline. `
 
-The client need to call the `sync`API periodically in order to get incremental updates of the server state (new messages).
+The client need to call the `sync` API periodically in order to get incremental updates of the server state (new messages).
 This mechanism is known as **HTTP long Polling**.
 
-Using the **HTTP Long Polling** mechanism  a client polls a server requesting new information.
+Using the **HTTP Long Polling** mechanism a client polls a server requesting new information.
 The server *holds the request open until new data is available*.
 Once available, the server responds and sends the new information.
 When the client receives the new information, it immediately sends another request, and the operation is repeated.
@@ -66,15 +66,15 @@ FCM will only work on android devices that have Google plays services installed
 (In simple terms, Google Play Services is a background service that runs on Android, which in turn helps in integrating Google’s advanced functionalities to other applications)
 
 De-Googlified devices need to rely on something else in order to stay up to date with a server.
-There some cases when devices with google services cannot use FCM (network infrastructure limitations -firewalls- ,
- privacy and or independency requirement, source code licence)
+There some cases when devices with google services cannot use FCM (network infrastructure limitations -firewalls-,
+ privacy and or independence requirement, source code licence)
 
 ## Push VS Notification
 
 This need some disambiguation, because it is the source of common confusion:
 
 
-*The fact that you see a notification on your screen does not mean that you have successfully configured your PUSH plateform.*
+*The fact that you see a notification on your screen does not mean that you have successfully configured your PUSH platform.*
 
   Technically there is a difference between a push and a notification. A notification is what you see on screen and/or in the notification Menu/Drawer (in the top bar of the phone).
 
@@ -118,7 +118,7 @@ Client/Server API  +              |                    |  |      |            |
 ```
 
 Recommended reading:
- * https://thomask.sdf.org/blog/2016/12/11/riots-magical-push-notifications-in-ios.html
+* https://thomask.sdf.org/blog/2016/12/11/riots-magical-push-notifications-in-ios.html
 * https://matrix.org/docs/spec/client_server/r0.4.0.html#id128
 
 
@@ -183,7 +183,7 @@ As this mode does not need to live beyond the scope of the application, and as p
 
 This mode is turned on when the app enters foreground, and off when enters background.
 
-In background, and depending on wether push is available or not, Element will use different methods to perform the syncs (Workers / Alarms / Service)
+In background, and depending on whether push is available or not, Element will use different methods to perform the syncs (Workers / Alarms / Service)
 
 ## Push (FCM) received in background 
 
@@ -228,7 +228,7 @@ Element implements several strategies in these cases (TODO document)
 ## FCM Fallback mode
 
 It is possible that Element is not able to get a FCM push token.
-Common errors (amoung several others) that can cause that:
+Common errors (among several others) that can cause that:
 * Google Play Services is outdated
 * Google Play Service fails in someways with FCM servers (infamous `SERVICE_NOT_AVAILABLE`)
 
@@ -256,7 +256,7 @@ Only solution left is to use `AlarmManager`, that offers new API to allow launch
 
 Notice that these alarms, due to their potential impact on battery life, can still be restricted by the system. Documentation says that they will not be triggered more than every minutes under normal system operation, and when in low power mode about every 15 mn.
 
-These restrictions can be relaxed by requirering the app to be white listed from battery optimization.
+These restrictions can be relaxed by requiring the app to be white listed from battery optimization.
 
 F-Droid version will schedule alarms that will then trigger a Broadcast Receiver, that in turn will launch a Service (in the classic android way), and the reschedule an alarm for next time.
 
