@@ -49,7 +49,7 @@ if(savedDarkMode === true){
     <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">RegistrationWizard</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">Set of methods to be able to create an account on a homeserver.</p><p class="paragraph">Common scenario to register an account successfully:</p><ul><li><p class="paragraph">Call <a href="get-registration-flow.html">getRegistrationFlow</a> to check that you application supports all the mandatory registration stages</p></li><li><p class="paragraph">Call <a href="create-account.html">createAccount</a> to start the account creation</p></li><li><p class="paragraph">Fulfill all mandatory stages using the methods <a href="accept-terms.html">performReCaptcha</a><a href="dummy.html">dummy</a>, etc.</p></li></ul><p class="paragraph">More documentation can be found in the file https://github.com/vector-im/element-android/blob/main/docs/signup.md and https://matrix.org/docs/spec/client_server/latest#account-registration-and-management</p></div></div>
   </div>
   <div class="tabbedcontent">
-    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Functions">Functions</button><button class="section-tab" data-togglable="Properties">Properties</button></div>
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Functions">Functions</button></div>
     <div class="tabs-section-body">
       <h2 class="">Functions</h2>
       <div class="table" data-togglable="Functions"><a data-name="-224034161%2FFunctions%2F468305090" anchor-label="acceptTerms" id="-224034161%2FFunctions%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
@@ -127,6 +127,21 @@ if(savedDarkMode === true){
             </div>
           </div>
         </div>
+<a data-name="1791710172%2FFunctions%2F468305090" anchor-label="getCurrentThreePid" id="1791710172%2FFunctions%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
+        <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="get-current-three-pid.html"><span>get</span><wbr></wbr><span>Current</span><wbr></wbr><span>Three</span><wbr></wbr><span><span>Pid</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1791710172%2FFunctions%2F468305090"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="get-current-three-pid.html"><span class="token function">getCurrentThreePid</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Returns the current ThreePid, waiting for validation. The SDK will store it in database, so it can be restored even if the app has been killed during the registration</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
 <a data-name="-924215375%2FFunctions%2F468305090" anchor-label="getRegistrationFlow" id="-924215375%2FFunctions%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
         <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
           <div class="main-subrow keyValue ">
@@ -153,6 +168,21 @@ if(savedDarkMode === true){
             <div>
               <div class="title">
                 <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">suspend </span><span class="token keyword">fun </span><a href="handle-validate-three-pid.html"><span class="token function">handleValidateThreePid</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">code<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-registration-result/index.html">RegistrationResult</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Send the code received by SMS to validate a msisdn. If the code is correct, the registration request will be executed to validate the msisdn.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="516855696%2FFunctions%2F468305090" anchor-label="isRegistrationStarted" id="516855696%2FFunctions%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
+        <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="is-registration-started.html"><span>is</span><wbr></wbr><span>Registration</span><wbr></wbr><span><span>Started</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="516855696%2FFunctions%2F468305090"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="is-registration-started.html"><span class="token function">isRegistrationStarted</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Return true when login and password have been sent with success to the homeserver, i.e. <a href="create-account.html">createAccount</a> has been called successfully.</p></div></div></div>
               </div>
             </div>
           </div>
@@ -213,38 +243,6 @@ if(savedDarkMode === true){
             <div>
               <div class="title">
                 <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">suspend </span><span class="token keyword">fun </span><a href="send-again-three-pid.html"><span class="token function">sendAgainThreePid</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-registration-result/index.html">RegistrationResult</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Ask the homeserver to send again the current threePid (email or msisdn).</p></div></div></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <h2 class="">Properties</h2>
-      <div class="table" data-togglable="Properties"><a data-name="1120725416%2FProperties%2F468305090" anchor-label="currentThreePid" id="1120725416%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
-        <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
-          <div class="main-subrow keyValue ">
-            <div class=""><span class="inline-flex">
-                <div><a href="current-three-pid.html">currentThreePid</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1120725416%2FProperties%2F468305090"></span>
-                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                </span></span></div>
-            <div>
-              <div class="title">
-                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="1120725416%2FProperties%2F468305090" anchor-label="currentThreePid" id="1120725416%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">val </span><a href="current-three-pid.html">currentThreePid</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="1120725416%2FProperties%2F468305090" anchor-label="currentThreePid" id="1120725416%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><p class="paragraph">This is the current ThreePid, waiting for validation. The SDK will store it in database, so it can be restored even if the app has been killed during the registration</p></div></div></div>
-              </div>
-            </div>
-          </div>
-        </div>
-<a data-name="516855696%2FProperties%2F468305090" anchor-label="isRegistrationStarted" id="516855696%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
-        <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
-          <div class="main-subrow keyValue ">
-            <div class=""><span class="inline-flex">
-                <div><a href="is-registration-started.html">isRegistrationStarted</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="516855696%2FProperties%2F468305090"></span>
-                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                </span></span></div>
-            <div>
-              <div class="title">
-                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="516855696%2FProperties%2F468305090" anchor-label="isRegistrationStarted" id="516855696%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">val </span><a href="is-registration-started.html">isRegistrationStarted</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="516855696%2FProperties%2F468305090" anchor-label="isRegistrationStarted" id="516855696%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><p class="paragraph">True when login and password have been sent with success to the homeserver, i.e. <a href="create-account.html">createAccount</a> has been called successfully.</p></div></div></div>
               </div>
             </div>
           </div>
