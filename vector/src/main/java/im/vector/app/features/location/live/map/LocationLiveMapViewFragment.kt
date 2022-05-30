@@ -50,8 +50,7 @@ import javax.inject.Inject
  * Screen showing a map with all the current users sharing their live location in a room.
  */
 @AndroidEntryPoint
-class LocationLiveMapViewFragment @Inject constructor(
-) : VectorBaseFragment<FragmentSimpleContainerBinding>() {
+class LocationLiveMapViewFragment @Inject constructor() : VectorBaseFragment<FragmentSimpleContainerBinding>() {
 
     @Inject lateinit var urlMapProvider: UrlMapProvider
 
