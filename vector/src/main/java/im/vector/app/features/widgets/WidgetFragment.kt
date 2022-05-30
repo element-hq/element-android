@@ -44,8 +44,7 @@ import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.openUrlInExternalBrowser
 import im.vector.app.databinding.FragmentRoomWidgetBinding
-import im.vector.app.features.webview.WebChromeEventListener
-import im.vector.app.features.webview.WebViewEventListener
+import im.vector.app.features.webview.WebEventListener
 import im.vector.app.features.widgets.webview.WebviewPermissionUtils
 import im.vector.app.features.widgets.webview.clearAfterWidget
 import im.vector.app.features.widgets.webview.setupForWidget
@@ -68,8 +67,7 @@ class WidgetFragment @Inject constructor(
         private val permissionUtils: WebviewPermissionUtils
 ) :
         VectorBaseFragment<FragmentRoomWidgetBinding>(),
-        WebViewEventListener,
-        WebChromeEventListener,
+        WebEventListener,
         OnBackPressed {
 
     private val fragmentArgs: WidgetArgs by args()
@@ -82,7 +80,7 @@ class WidgetFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
-        views.widgetWebView.setupForWidget(this, this)
+        views.widgetWebView.setupForWidget(this)
         if (fragmentArgs.kind.isAdmin()) {
             viewModel.getPostAPIMediator().setWebView(views.widgetWebView)
         }
