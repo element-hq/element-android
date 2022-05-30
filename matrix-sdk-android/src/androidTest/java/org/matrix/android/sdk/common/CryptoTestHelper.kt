@@ -66,7 +66,7 @@ import java.util.UUID
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 
-class CryptoTestHelper(private val testHelper: CommonTestHelper) {
+class CryptoTestHelper(val testHelper: CommonTestHelper) {
 
     private val messagesFromAlice: List<String> = listOf("0 - Hello I'm Alice!", "4 - Go!")
     private val messagesFromBob: List<String> = listOf("1 - Hello I'm Bob!", "2 - Isn't life grand?", "3 - Let's go to the opera.")

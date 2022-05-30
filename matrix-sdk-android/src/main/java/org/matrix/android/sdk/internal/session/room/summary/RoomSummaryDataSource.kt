@@ -26,8 +26,9 @@ import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.kotlin.where
-import org.matrix.android.sdk.api.query.ActiveSpaceFilter
+import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
+import org.matrix.android.sdk.api.query.SpaceFilter
 import org.matrix.android.sdk.api.query.isNormalized
 import org.matrix.android.sdk.api.session.room.ResultBoundaries
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
@@ -187,13 +188,14 @@ internal class RoomSummaryDataSource @Inject constructor(
 
     fun getUpdatablePagedRoomSummariesLive(queryParams: RoomSummaryQueryParams,
                                            pagedListConfig: PagedList.Config,
-                                           sortOrder: RoomSortOrder): UpdatableLivePageResult {
+                                           sortOrder: RoomSortOrder,
+                                           getFlattenedParents: Boolean = false): UpdatableLivePageResult {
         val realmDataSourceFactory = monarchy.createDataSourceFactory { realm ->
             roomSummariesQuery(realm, queryParams).process(sortOrder)
         }
         val dataSourceFactory = realmDataSourceFactory.map {
             roomSummaryMapper.map(it)
-        }
+        }.map { if (getFlattenedParents) it.getWithParents() else it }
 
         val boundaries = MutableLiveData(ResultBoundaries())
 
@@ -232,6 +234,13 @@ internal class RoomSummaryDataSource @Inject constructor(
         }
     }
 
+    private fun RoomSummary.getWithParents(): RoomSummary {
+        val parents = flattenParentIds.mapNotNull { parentId ->
+            getRoomSummary(parentId)
+        }
+        return copy(flattenParents = parents)
+    }
+
     fun getCountLive(queryParams: RoomSummaryQueryParams): LiveData<Int> {
         val liveRooms = monarchy.findAllManagedWithChanges {
             roomSummariesQuery(it, queryParams)
@@ -258,29 +267,13 @@ internal class RoomSummaryDataSource @Inject constructor(
     private fun roomSummariesQuery(realm: Realm, queryParams: RoomSummaryQueryParams): RealmQuery<RoomSummaryEntity> {
         val query = with(queryStringValueProcessor) {
             RoomSummaryEntity.where(realm)
-                    .process(RoomSummaryEntityFields.ROOM_ID, queryParams.roomId)
-                    .let {
-                        if (queryParams.displayName.isNormalized()) {
-                            it.process(RoomSummaryEntityFields.NORMALIZED_DISPLAY_NAME, queryParams.displayName)
-                        } else {
-                            it.process(RoomSummaryEntityFields.DISPLAY_NAME, queryParams.displayName)
-                        }
-                    }
+                    .process(RoomSummaryEntityFields.ROOM_ID, QueryStringValue.IsNotEmpty)
+                    .process(queryParams.displayName.toDisplayNameField(), queryParams.displayName)
                     .process(RoomSummaryEntityFields.CANONICAL_ALIAS, queryParams.canonicalAlias)
                     .process(RoomSummaryEntityFields.MEMBERSHIP_STR, queryParams.memberships)
                     .equalTo(RoomSummaryEntityFields.IS_HIDDEN_FROM_USER, false)
         }
 
-        queryParams.roomCategoryFilter?.let {
-            when (it) {
-                RoomCategoryFilter.ONLY_DM                 -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
-                RoomCategoryFilter.ONLY_ROOMS              -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
-                RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS -> query.greaterThan(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0)
-                RoomCategoryFilter.ALL                     -> {
-                    // nop
-                }
-            }
-        }
         queryParams.roomTagQueryFilter?.let {
             it.isFavorite?.let { fav ->
                 query.equalTo(RoomSummaryEntityFields.IS_FAVOURITE, fav)
@@ -303,34 +296,38 @@ internal class RoomSummaryDataSource @Inject constructor(
             RoomCategoryFilter.ONLY_DM                 -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
             RoomCategoryFilter.ONLY_ROOMS              -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
             RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS -> query.greaterThan(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0)
-            RoomCategoryFilter.ALL                     -> Unit // nop
             null                                       -> Unit
         }
 
         // Timber.w("VAL: activeSpaceId : ${queryParams.activeSpaceId}")
-        when (queryParams.activeSpaceFilter) {
-            is ActiveSpaceFilter.ActiveSpace  -> {
+        when (queryParams.spaceFilter) {
+            SpaceFilter.OrphanRooms     -> {
+                // orphan rooms
+                query.isNull(RoomSummaryEntityFields.FLATTEN_PARENT_IDS)
+            }
+            is SpaceFilter.ActiveSpace  -> {
                 // It's annoying but for now realm java does not support querying in primitive list :/
                 // https://github.com/realm/realm-java/issues/5361
-                if (queryParams.activeSpaceFilter.currentSpaceId == null) {
-                    // orphan rooms
-                    query.isNull(RoomSummaryEntityFields.FLATTEN_PARENT_IDS)
-                } else {
-                    query.contains(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, queryParams.activeSpaceFilter.currentSpaceId)
-                }
+                query.contains(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, queryParams.spaceFilter.spaceId)
             }
-            is ActiveSpaceFilter.ExcludeSpace -> {
-                query.not().contains(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, queryParams.activeSpaceFilter.spaceId)
+            is SpaceFilter.ExcludeSpace -> {
+                query.not().contains(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, queryParams.spaceFilter.spaceId)
             }
-            else                              -> {
-                // nop
-            }
+            null                        -> Unit // nop
         }
 
         queryParams.activeGroupId?.let { activeGroupId ->
             query.contains(RoomSummaryEntityFields.GROUP_IDS, activeGroupId)
         }
         return query
+    }
+
+    private fun QueryStringValue.toDisplayNameField(): String {
+        return if (isNormalized()) {
+            RoomSummaryEntityFields.NORMALIZED_DISPLAY_NAME
+        } else {
+            RoomSummaryEntityFields.DISPLAY_NAME
+        }
     }
 
     fun getAllRoomSummaryChildOf(spaceAliasOrId: String, memberShips: List<Membership>): List<RoomSummary> {

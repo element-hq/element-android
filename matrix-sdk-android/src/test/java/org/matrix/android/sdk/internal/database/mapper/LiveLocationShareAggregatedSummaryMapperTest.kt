@@ -16,57 +16,41 @@
 
 package org.matrix.android.sdk.internal.database.mapper
 
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.mockkObject
-import io.mockk.unmockkObject
-import org.amshove.kluent.internal.assertEquals
-import org.junit.After
-import org.junit.Before
+import com.squareup.moshi.Moshi
+import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
-import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationShareAggregatedSummary
+import org.matrix.android.sdk.api.session.room.model.message.LocationInfo
+import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntity
+
+private const val ANY_USER_ID = "a-user-id"
+private const val ANY_ACTIVE_STATE = true
+private const val ANY_TIMEOUT = 123L
+private val A_LOCATION_INFO = LocationInfo("a-geo-uri")
 
 class LiveLocationShareAggregatedSummaryMapperTest {
 
     private val mapper = LiveLocationShareAggregatedSummaryMapper()
 
-    @Before
-    fun setUp() {
-        mockkObject(ContentMapper)
-    }
-
-    @After
-    fun tearDown() {
-        unmockkObject(ContentMapper)
-    }
-
     @Test
     fun `given an entity then result should be mapped correctly`() {
-        val userId = "userId"
-        val timeout = 123L
-        val isActive = true
-        val lastKnownLocationContent = "lastKnownLocationContent"
-        val entity = LiveLocationShareAggregatedSummaryEntity(
-                userId = userId,
-                isActive = isActive,
-                endOfLiveTimestampMillis = timeout,
-                lastLocationContent = lastKnownLocationContent
-        )
-        val content = mockk<Content>()
-        every { ContentMapper.map(lastKnownLocationContent) } returns content
+        val entity = anEntity(content = MessageBeaconLocationDataContent(locationInfo = A_LOCATION_INFO))
 
         val summary = mapper.map(entity)
 
-        // note: unfortunately the implementation relies on an inline method to map the lastLocationDataContent
-        // since inline methods do not produce bytecode, it is not mockable and the verification on this field cannot be done
-        val expectedSummary = LiveLocationShareAggregatedSummary(
-                userId = userId,
-                isActive = isActive,
-                endOfLiveTimestampMillis = timeout,
-                lastLocationDataContent = null
+        summary shouldBeEqualTo LiveLocationShareAggregatedSummary(
+                userId = ANY_USER_ID,
+                isActive = ANY_ACTIVE_STATE,
+                endOfLiveTimestampMillis = ANY_TIMEOUT,
+                lastLocationDataContent = MessageBeaconLocationDataContent(locationInfo = A_LOCATION_INFO)
         )
-        assertEquals(expectedSummary, summary)
     }
+
+    private fun anEntity(content: MessageBeaconLocationDataContent) = LiveLocationShareAggregatedSummaryEntity(
+            userId = ANY_USER_ID,
+            isActive = ANY_ACTIVE_STATE,
+            endOfLiveTimestampMillis = ANY_TIMEOUT,
+            lastLocationContent = Moshi.Builder().build().adapter(MessageBeaconLocationDataContent::class.java).toJson(content)
+    )
 }

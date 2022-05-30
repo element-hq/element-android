@@ -64,7 +64,6 @@ import im.vector.app.features.home.room.list.RoomListFragment
 import im.vector.app.features.home.room.threads.list.views.ThreadListFragment
 import im.vector.app.features.location.LocationPreviewFragment
 import im.vector.app.features.location.LocationSharingFragment
-import im.vector.app.features.location.live.map.LocationLiveMapViewFragment
 import im.vector.app.features.login.LoginCaptchaFragment
 import im.vector.app.features.login.LoginFragment
 import im.vector.app.features.login.LoginGenericTextInputFormFragment
@@ -102,6 +101,9 @@ import im.vector.app.features.onboarding.ftueauth.FtueAuthAccountCreatedFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthCaptchaFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthChooseDisplayNameFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthChooseProfilePictureFragment
+import im.vector.app.features.onboarding.ftueauth.FtueAuthCombinedLoginFragment
+import im.vector.app.features.onboarding.ftueauth.FtueAuthCombinedRegisterFragment
+import im.vector.app.features.onboarding.ftueauth.FtueAuthCombinedServerSelectionFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthEmailEntryFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthGenericTextInputFormFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthLegacyStyleCaptchaFragment
@@ -521,6 +523,21 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(FtueAuthPersonalizationCompleteFragment::class)
     fun bindFtueAuthPersonalizationCompleteFragment(fragment: FtueAuthPersonalizationCompleteFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(FtueAuthCombinedLoginFragment::class)
+    fun bindFtueAuthCombinedLoginFragment(fragment: FtueAuthCombinedLoginFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(FtueAuthCombinedRegisterFragment::class)
+    fun bindFtueAuthCombinedRegisterFragment(fragment: FtueAuthCombinedRegisterFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(FtueAuthCombinedServerSelectionFragment::class)
+    fun bindFtueAuthCombinedServerSelectionFragment(fragment: FtueAuthCombinedServerSelectionFragment): Fragment
 
     @Binds
     @IntoMap
@@ -1006,9 +1023,4 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(LocationPreviewFragment::class)
     fun bindLocationPreviewFragment(fragment: LocationPreviewFragment): Fragment
-
-    @Binds
-    @IntoMap
-    @FragmentKey(LocationLiveMapViewFragment::class)
-    fun bindLocationLiveMapViewFragment(fragment: LocationLiveMapViewFragment): Fragment
 }

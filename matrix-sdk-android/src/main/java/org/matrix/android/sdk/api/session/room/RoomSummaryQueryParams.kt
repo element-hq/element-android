@@ -16,60 +16,99 @@
 
 package org.matrix.android.sdk.api.session.room
 
-import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.query.RoomTagQueryFilter
+import org.matrix.android.sdk.api.query.SpaceFilter
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.space.SpaceSummaryQueryParams
 
+/**
+ * Create a [RoomSummaryQueryParams] object, calling [init] with a [RoomSummaryQueryParams.Builder].
+ */
 fun roomSummaryQueryParams(init: (RoomSummaryQueryParams.Builder.() -> Unit) = {}): RoomSummaryQueryParams {
-    return RoomSummaryQueryParams.Builder().apply(init).build()
-}
-
-fun spaceSummaryQueryParams(init: (RoomSummaryQueryParams.Builder.() -> Unit) = {}): SpaceSummaryQueryParams {
     return RoomSummaryQueryParams.Builder()
             .apply(init)
-            .apply {
-                includeType = listOf(RoomType.SPACE)
-                excludeType = null
-                roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-            }
             .build()
 }
 
 /**
- * This class can be used to filter room summaries to use with:
- * [org.matrix.android.sdk.api.session.room.Room] and [org.matrix.android.sdk.api.session.room.RoomService].
+ * Create a [SpaceSummaryQueryParams] object (which is a [RoomSummaryQueryParams]), calling [init] with a [RoomSummaryQueryParams.Builder].
+ * This is specific for spaces, other filters will be applied after invoking [init]
+ */
+fun spaceSummaryQueryParams(init: (RoomSummaryQueryParams.Builder.() -> Unit) = {}): SpaceSummaryQueryParams {
+    return roomSummaryQueryParams {
+        init()
+        includeType = listOf(RoomType.SPACE)
+        excludeType = null
+        roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+    }
+}
+
+/**
+ * This class can be used to filter room summaries to use with [RoomService].
+ * It provides a [Builder].
+ * [roomSummaryQueryParams] and [spaceSummaryQueryParams] can also be used to build an instance of this class.
  */
 data class RoomSummaryQueryParams(
-        val roomId: QueryStringValue,
+        /**
+         * Query for the displayName of the room. The display name can be the value of the state event,
+         * or a value returned by [org.matrix.android.sdk.api.RoomDisplayNameFallbackProvider].
+         */
         val displayName: QueryStringValue,
+        /**
+         * Query for the canonical alias of the room.
+         */
         val canonicalAlias: QueryStringValue,
+        /**
+         * Used to filter room by membership.
+         */
         val memberships: List<Membership>,
+        /**
+         * Used to filter room by room category.
+         */
         val roomCategoryFilter: RoomCategoryFilter?,
+        /**
+         * Used to filter room by room tag.
+         */
         val roomTagQueryFilter: RoomTagQueryFilter?,
+        /**
+         * Used to filter room by room type.
+         * @see [includeType]
+         */
         val excludeType: List<String?>?,
+        /**
+         * Used to filter room by room type.
+         * @see [excludeType]
+         */
         val includeType: List<String?>?,
-        val activeSpaceFilter: ActiveSpaceFilter?,
+        /**
+         * Used to filter room using the current space.
+         */
+        val spaceFilter: SpaceFilter?,
+        /**
+         * Used to filter room using the current group.
+         */
         val activeGroupId: String? = null
 ) {
 
+    /**
+     * Builder for [RoomSummaryQueryParams].
+     * [roomSummaryQueryParams] and [spaceSummaryQueryParams] can also be used to build an instance of [RoomSummaryQueryParams].
+     */
     class Builder {
-        var roomId: QueryStringValue = QueryStringValue.IsNotEmpty
-        var displayName: QueryStringValue = QueryStringValue.IsNotEmpty
+        var displayName: QueryStringValue = QueryStringValue.NoCondition
         var canonicalAlias: QueryStringValue = QueryStringValue.NoCondition
         var memberships: List<Membership> = Membership.all()
-        var roomCategoryFilter: RoomCategoryFilter? = RoomCategoryFilter.ALL
+        var roomCategoryFilter: RoomCategoryFilter? = null
         var roomTagQueryFilter: RoomTagQueryFilter? = null
         var excludeType: List<String?>? = listOf(RoomType.SPACE)
         var includeType: List<String?>? = null
-        var activeSpaceFilter: ActiveSpaceFilter = ActiveSpaceFilter.None
+        var spaceFilter: SpaceFilter? = null
         var activeGroupId: String? = null
 
         fun build() = RoomSummaryQueryParams(
-                roomId = roomId,
                 displayName = displayName,
                 canonicalAlias = canonicalAlias,
                 memberships = memberships,
@@ -77,7 +116,7 @@ data class RoomSummaryQueryParams(
                 roomTagQueryFilter = roomTagQueryFilter,
                 excludeType = excludeType,
                 includeType = includeType,
-                activeSpaceFilter = activeSpaceFilter,
+                spaceFilter = spaceFilter,
                 activeGroupId = activeGroupId
         )
     }

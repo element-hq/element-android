@@ -33,7 +33,6 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.common.CommonTestHelper
-import org.matrix.android.sdk.common.CryptoTestHelper
 import org.matrix.android.sdk.common.checkSendOrder
 import timber.log.Timber
 import java.util.concurrent.CountDownLatch
@@ -48,9 +47,7 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
      */
 
     @Test
-    fun previousLastForwardTest() {
-        val commonTestHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
+    fun previousLastForwardTest() = CommonTestHelper.runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(false)
 
         val aliceSession = cryptoTestData.firstSession
@@ -242,7 +239,5 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
         }
 
         bobTimeline.dispose()
-
-        cryptoTestData.cleanUp(commonTestHelper)
     }
 }

@@ -1,0 +1,3 @@
+Remove `RoomSummaryQueryParams.roomId`. If you need to observe a single room, use the new API `RoomService.getRoomSummaryLive(roomId: String)`
+- `ActiveSpaceFilter` has been renamed to `SpaceFilter`
+- `RoomCategoryFilter.ALL` has been removed, just pass `null` to not filter on Room category.
