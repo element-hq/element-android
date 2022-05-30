@@ -1166,4 +1166,6 @@
     <string name="settings_room_directory_show_all_rooms">عرض الغُرف ذات المحتوى الواضح</string>
     <string name="initial_sync_request_reason_unignored_users">أُلْغِيَ تجاهل بعض المستخدمين</string>
     <string name="initial_sync_request_title">طَلَبُ مُزامَنة أوَّلِيّ</string>
+    <string name="a11y_public_room">غُرفة عامة</string>
+    <string name="a11y_video">تسجيل مرئيّ</string>
 </resources>
