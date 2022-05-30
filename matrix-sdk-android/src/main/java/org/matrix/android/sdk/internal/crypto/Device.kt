@@ -28,7 +28,6 @@ import org.matrix.android.sdk.internal.crypto.verification.prepareMethods
 import uniffi.olm.CryptoStoreException
 import uniffi.olm.OlmMachine
 import uniffi.olm.SignatureException
-import uniffi.olm.VerificationRequest
 import uniffi.olm.Device as InnerDevice
 
 /** Class representing a device that supports E2EE in the Matrix world
@@ -71,10 +70,15 @@ internal class Device(
         val result = withContext(coroutineDispatchers.io) {
             machine.requestVerificationWithDevice(inner.userId, inner.deviceId, stringMethods)
         }
-
         return if (result != null) {
             sender.sendVerificationRequest(result.request)
-            result.verification
+            VerificationRequest(
+                    machine = machine,
+                    inner = result.verification,
+                    sender = sender,
+                    coroutineDispatchers = coroutineDispatchers,
+                    listeners = listeners
+            )
         } else {
             null
         }

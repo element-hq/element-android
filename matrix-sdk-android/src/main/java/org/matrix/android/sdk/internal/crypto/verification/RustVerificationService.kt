@@ -254,6 +254,14 @@ internal class RustVerificationService @Inject constructor(private val olmMachin
         return verification.toPendingVerificationRequest()
     }
 
+
+    override suspend fun requestDeviceVerification(methods: List<VerificationMethod>, otherUserId: String, otherDeviceId: String): PendingVerificationRequest? {
+        olmMachine.ensureUsersKeys(listOf(otherUserId))
+        val otherDevice = olmMachine.getDevice(otherUserId, otherDeviceId)
+        val verificationRequest = otherDevice?.requestVerification(methods)
+        return verificationRequest?.toPendingVerificationRequest()
+    }
+
     override suspend fun readyPendingVerification(
             methods: List<VerificationMethod>,
             otherUserId: String,

@@ -45,6 +45,18 @@ interface VerificationService {
 
     fun getExistingVerificationRequestInRoom(roomId: String, tid: String?): PendingVerificationRequest?
 
+
+    /**
+     * Request an interactive verification to begin
+     *
+     * This sends out a m.key.verification.request event over to-device messaging to
+     * to this device.
+     *
+     * If no specific device should be verified, but we would like to request
+     * verification from all our devices, use [requestSelfKeyVerification] instead.
+     */
+    suspend fun requestDeviceVerification(methods: List<VerificationMethod>, otherUserId: String, otherDeviceId: String): PendingVerificationRequest?
+
     /**
      * Request key verification with another user via room events (instead of the to-device API).
      */
