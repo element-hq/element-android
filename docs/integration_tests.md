@@ -1,5 +1,8 @@
 # Integration tests
 
+<!--- TOC -->
+<!--- END -->
+
 Integration tests are useful to ensure that the code works well for any use cases.
 
 They can also be used as sample on how to use the Matrix SDK.

@@ -1,5 +1,8 @@
 # Element Android design
 
+<!--- TOC -->
+<!--- END -->
+
 ## Introduction
 
 Design at element.io is done using Figma - https://www.figma.com

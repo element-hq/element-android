@@ -10,6 +10,9 @@ Currently the test are covering a small set of application flows:
 	- Self verification via emoji
 	- Self verification via passphrase
 
+<!--- TOC -->
+<!--- END -->
+
 ## Prerequisites:
 
 Out of the box, the tests use one of the homeservers (located at http://localhost:8080) of the "Demo Federation of Homeservers" (https://github.com/matrix-org/synapse#running-a-demo-federation-of-synapses).

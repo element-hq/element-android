@@ -4,6 +4,9 @@ This document describes the flow of registration to a homeserver. Examples come 
 
 *Ref*: https://matrix.org/docs/spec/client_server/latest#account-registration-and-management
 
+<!--- TOC -->
+<!--- END -->
+
 ## Sign up flows
 
 ### First step

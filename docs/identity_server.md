@@ -1,5 +1,8 @@
 # Identity server
 
+<!--- TOC -->
+<!--- END -->
+
 Issue: #607
 PR: #1354
 

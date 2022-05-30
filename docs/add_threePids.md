@@ -1,5 +1,8 @@
 # Adding and removing ThreePids to an account
 
+<!--- TOC -->
+<!--- END -->
+
 ## Add email
 
 ### User enter the email

@@ -1,5 +1,8 @@
 # Pull requests
 
+<!--- TOC -->
+<!--- END -->
+
 ## Introduction
 
 This document gives some clue about how to efficiently manage Pull Requests (PR). This document is a first draft and may be improved later.

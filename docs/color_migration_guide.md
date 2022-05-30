@@ -1,5 +1,8 @@
 # Color migration
 
+<!--- TOC -->
+<!--- END -->
+
 ### Changes
 
 - use colors defined in https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=557%3A0
