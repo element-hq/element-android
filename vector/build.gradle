@@ -381,7 +381,7 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.6.0'
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.48'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.49'
 
     // FlowBinding
     implementation libs.github.flowBinding
