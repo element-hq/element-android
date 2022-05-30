@@ -323,9 +323,9 @@ class RoomListSectionBuilderSpace(
                 {
                     it.memberships = Membership.activeMemberships()
                 },
-                { qpm ->
+                { queryParams ->
                     val name = stringProvider.getString(R.string.bottom_action_rooms)
-                    val updatableFilterLivePageResult = session.roomService().getFilteredPagedRoomSummariesLive(qpm)
+                    val updatableFilterLivePageResult = session.roomService().getFilteredPagedRoomSummariesLive(queryParams)
                     onUpdatable(updatableFilterLivePageResult)
 
                     val itemCountFlow = updatableFilterLivePageResult.livePagedList.asFlow()

@@ -68,7 +68,7 @@ abstract class CollapsableTypedEpoxyController<T> :
     }
 
     override fun buildModels() {
-        check(isBuildingModels()) {
+        check(isBuildingModels) {
             ("You cannot call `buildModels` directly. Call `setData` instead to trigger a model " +
                     "refresh with new data.")
         }
