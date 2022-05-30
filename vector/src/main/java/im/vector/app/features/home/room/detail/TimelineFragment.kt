@@ -1926,10 +1926,13 @@ class TimelineFragment @Inject constructor(
                     })
             if (!isManaged) {
                 when {
-                    url.containsRtLOverride() || (title.isValidUrl() && url.isValidUrl() && URL(title).host != URL(url).host) -> {
+                    url.containsRtLOverride()                                                  -> {
                         displayUrlConfirmationDialog(title.ensureEndsLeftToRight(), url.filterDirectionOverrides())
                     }
-                    else                                                                                                      -> {
+                    title.isValidUrl() && url.isValidUrl() && URL(title).host != URL(url).host -> {
+                        displayUrlConfirmationDialog(title.ensureEndsLeftToRight(), url)
+                    }
+                    else                                                                       -> {
                         openUrlInExternalBrowser(requireContext(), url)
                     }
                 }
