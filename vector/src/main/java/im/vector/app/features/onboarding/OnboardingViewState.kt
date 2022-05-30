@@ -87,7 +87,8 @@ data class PersonalizationState(
 @Parcelize
 data class ResetState(
         val email: String? = null,
-        val newPassword: String? = null
+        val newPassword: String? = null,
+        val supportsLogoutAllDevices: Boolean = false
 ) : Parcelable
 
 @Parcelize
