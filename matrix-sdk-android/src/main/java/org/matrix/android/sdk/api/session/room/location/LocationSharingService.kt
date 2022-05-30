@@ -14,19 +14,14 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.room.model.livelocation
+package org.matrix.android.sdk.api.session.room.location
 
-import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
+import androidx.lifecycle.LiveData
+import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationShareAggregatedSummary
 
 /**
- * Aggregation info concerning a live location share.
+ * Manage all location sharing related features.
  */
-data class LiveLocationShareAggregatedSummary(
-        val userId: String?,
-        /**
-         * Indicate whether the live is currently running.
-         */
-        val isActive: Boolean?,
-        val endOfLiveTimestampMillis: Long?,
-        val lastLocationDataContent: MessageBeaconLocationDataContent?,
-)
+interface LocationSharingService {
+    fun getRunningLiveLocationShareSummaries(): LiveData<List<LiveLocationShareAggregatedSummary>>
+}

@@ -26,6 +26,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoCo
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntity
+import org.matrix.android.sdk.internal.database.query.findActiveLiveInRoomForUser
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
@@ -35,6 +36,7 @@ import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
+// TODO add unit tests
 internal class LiveLocationAggregationProcessor @Inject constructor(
         @SessionId private val sessionId: String,
         private val workManagerProvider: WorkManagerProvider,
@@ -70,6 +72,9 @@ internal class LiveLocationAggregationProcessor @Inject constructor(
         val endOfLiveTimestampMillis = content.getBestTimestampMillis()?.let { it + (content.timeout ?: 0) }
         aggregatedSummary.endOfLiveTimestampMillis = endOfLiveTimestampMillis
         aggregatedSummary.isActive = isLive
+        aggregatedSummary.userId = event.senderId
+
+        deactivateAllPreviousBeacons(realm, roomId, event.senderId, targetEventId)
 
         if (isLive) {
             scheduleDeactivationAfterTimeout(targetEventId, roomId, endOfLiveTimestampMillis)
@@ -135,6 +140,17 @@ internal class LiveLocationAggregationProcessor @Inject constructor(
             Timber.d("updating last location of the summary of id=$relatedEventId")
             aggregatedSummary.lastLocationContent = ContentMapper.map(content.toContent())
         }
+    }
+
+    private fun deactivateAllPreviousBeacons(realm: Realm, roomId: String, userId: String, currentEventId: String) {
+        LiveLocationShareAggregatedSummaryEntity
+                .findActiveLiveInRoomForUser(
+                        realm = realm,
+                        roomId = roomId,
+                        userId = userId,
+                        ignoredEventId = currentEventId
+                )
+                .forEach { it.isActive = false }
     }
 
     private fun Long.isMoreRecentThan(timestamp: Long) = this > timestamp

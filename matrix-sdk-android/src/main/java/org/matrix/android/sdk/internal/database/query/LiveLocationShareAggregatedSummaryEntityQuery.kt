@@ -28,9 +28,15 @@ internal fun LiveLocationShareAggregatedSummaryEntity.Companion.where(
         roomId: String,
         eventId: String,
 ): RealmQuery<LiveLocationShareAggregatedSummaryEntity> {
+    return LiveLocationShareAggregatedSummaryEntity
+            .whereRoomId(realm, roomId = roomId)
+            .equalTo(LiveLocationShareAggregatedSummaryEntityFields.EVENT_ID, eventId)
+}
+
+internal fun LiveLocationShareAggregatedSummaryEntity.Companion.whereRoomId(realm: Realm,
+                                                                            roomId: String): RealmQuery<LiveLocationShareAggregatedSummaryEntity> {
     return realm.where<LiveLocationShareAggregatedSummaryEntity>()
             .equalTo(LiveLocationShareAggregatedSummaryEntityFields.ROOM_ID, roomId)
-            .equalTo(LiveLocationShareAggregatedSummaryEntityFields.EVENT_ID, eventId)
 }
 
 internal fun LiveLocationShareAggregatedSummaryEntity.Companion.create(
@@ -62,4 +68,32 @@ internal fun LiveLocationShareAggregatedSummaryEntity.Companion.get(
         eventId: String,
 ): LiveLocationShareAggregatedSummaryEntity? {
     return LiveLocationShareAggregatedSummaryEntity.where(realm, roomId, eventId).findFirst()
+}
+
+internal fun LiveLocationShareAggregatedSummaryEntity.Companion.findActiveLiveInRoomForUser(
+        realm: Realm,
+        roomId: String,
+        userId: String,
+        ignoredEventId: String
+): List<LiveLocationShareAggregatedSummaryEntity> {
+    return LiveLocationShareAggregatedSummaryEntity
+            .whereRoomId(realm, roomId = roomId)
+            .equalTo(LiveLocationShareAggregatedSummaryEntityFields.USER_ID, userId)
+            .equalTo(LiveLocationShareAggregatedSummaryEntityFields.IS_ACTIVE, true)
+            .notEqualTo(LiveLocationShareAggregatedSummaryEntityFields.EVENT_ID, ignoredEventId)
+            .findAll()
+}
+
+/**
+ * A live is considered as running when active and with at least a last known location.
+ */
+internal fun LiveLocationShareAggregatedSummaryEntity.Companion.findRunningLiveInRoom(
+        realm: Realm,
+        roomId: String,
+): RealmQuery<LiveLocationShareAggregatedSummaryEntity> {
+    return LiveLocationShareAggregatedSummaryEntity
+            .whereRoomId(realm, roomId = roomId)
+            .equalTo(LiveLocationShareAggregatedSummaryEntityFields.IS_ACTIVE, true)
+            .isNotEmpty(LiveLocationShareAggregatedSummaryEntityFields.USER_ID)
+            .isNotNull(LiveLocationShareAggregatedSummaryEntityFields.LAST_LOCATION_CONTENT)
 }

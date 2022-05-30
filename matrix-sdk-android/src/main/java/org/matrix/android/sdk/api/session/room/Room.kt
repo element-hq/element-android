@@ -22,6 +22,7 @@ import org.matrix.android.sdk.api.session.room.accountdata.RoomAccountDataServic
 import org.matrix.android.sdk.api.session.room.alias.AliasService
 import org.matrix.android.sdk.api.session.room.call.RoomCallService
 import org.matrix.android.sdk.api.session.room.crypto.RoomCryptoService
+import org.matrix.android.sdk.api.session.room.location.LocationSharingService
 import org.matrix.android.sdk.api.session.room.members.MembershipService
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.relation.RelationService
@@ -163,4 +164,9 @@ interface Room {
      * Get the RoomVersionService associated to this Room.
      */
     fun roomVersionService(): RoomVersionService
+
+    /**
+     * Get the LocationSharingService associated to this Room.
+     */
+    fun locationSharingService(): LocationSharingService
 }
