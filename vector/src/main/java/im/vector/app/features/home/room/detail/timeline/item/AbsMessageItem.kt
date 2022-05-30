@@ -188,6 +188,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             val threadSummaryFormatted: String? = null,
             val threadDetails: ThreadDetails? = null,
             val areThreadMessagesEnabled: Boolean = false,
+            val autoplayAnimatedImages: Boolean = false,
             override val reactionsSummaryEvents: ReactionsSummaryEvents? = null,
     ) : AbsBaseMessageItem.Attributes {
 
