@@ -18,6 +18,7 @@ package im.vector.app.features.location.live.map
 
 import com.airbnb.mvrx.test.MvRxTestRule
 import im.vector.app.features.location.LocationData
+import im.vector.app.features.location.LocationSharingServiceConnection
 import im.vector.app.test.test
 import io.mockk.every
 import io.mockk.mockk
@@ -25,6 +26,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
+import org.matrix.android.sdk.api.util.MatrixItem
 
 class LocationLiveMapViewModelTest {
 
@@ -36,11 +38,13 @@ class LocationLiveMapViewModelTest {
     private val args = LocationLiveMapViewArgs(roomId = fakeRoomId)
 
     private val getListOfUserLiveLocationUseCase = mockk<GetListOfUserLiveLocationUseCase>()
+    private val locationServiceConnection = mockk<LocationSharingServiceConnection>()
 
     private fun createViewModel(): LocationLiveMapViewModel {
         return LocationLiveMapViewModel(
                 LocationLiveMapViewState(args),
-                getListOfUserLiveLocationUseCase
+                getListOfUserLiveLocationUseCase,
+                locationServiceConnection
         )
     }
 
@@ -48,10 +52,12 @@ class LocationLiveMapViewModelTest {
     fun `given the viewModel has been initialized then viewState contains user locations list`() = runTest {
         val userLocations = listOf(
                 UserLiveLocationViewState(
-                        userId = "",
+                        MatrixItem.UserItem(id = "@userId1:matrix.org", displayName = "User 1", avatarUrl = ""),
                         pinDrawable = mockk(),
                         locationData = LocationData(latitude = 1.0, longitude = 2.0, uncertainty = null),
-                        endOfLiveTimestampMillis = 123
+                        endOfLiveTimestampMillis = 123,
+                        locationTimestampMillis = 123,
+                        showStopSharingButton = false
                 )
         )
 
