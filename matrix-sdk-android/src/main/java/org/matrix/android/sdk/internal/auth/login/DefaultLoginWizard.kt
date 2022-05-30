@@ -30,7 +30,6 @@ import org.matrix.android.sdk.internal.auth.data.ThreePidMedium
 import org.matrix.android.sdk.internal.auth.data.TokenLoginParams
 import org.matrix.android.sdk.internal.auth.db.PendingSessionData
 import org.matrix.android.sdk.internal.auth.registration.AddThreePidRegistrationParams
-import org.matrix.android.sdk.internal.auth.registration.AddThreePidRegistrationResponse
 import org.matrix.android.sdk.internal.auth.registration.RegisterAddThreePidTask
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.content.DefaultContentUrlResolver

@@ -533,13 +533,14 @@ class LoginViewModel @AssistedInject constructor(
             currentJob = viewModelScope.launch {
                 val state = awaitState()
 
-                if (state.resetPasswordNewPassword == null)
+                if (state.resetPasswordNewPassword == null) {
                     setState {
                         copy(
                                 asyncResetPassword = Uninitialized,
                                 asyncResetMailConfirmed = Fail(Throwable("Developer error - New password not set"))
                         )
-                    } else {
+                    }
+                } else {
                     try {
                         safeLoginWizard.resetPasswordMailConfirmed(state.resetPasswordNewPassword)
                     } catch (failure: Throwable) {

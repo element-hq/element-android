@@ -462,6 +462,7 @@ class OnboardingViewModel @AssistedInject constructor(
     }
 
     private fun handleResetPasswordMailConfirmed() {
+        setState { copy(isLoading = true) }
         currentJob = viewModelScope.launch {
             val resetState = awaitState().resetState
             when (val newPassword = resetState.newPassword) {
