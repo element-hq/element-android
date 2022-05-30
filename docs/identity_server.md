@@ -1,6 +1,17 @@
 # Identity server
 
 <!--- TOC -->
+
+* [Introduction](#introduction)
+* [Implementation](#implementation)
+* [Related MSCs](#related-mscs)
+* [Steps and requirements](#steps-and-requirements)
+* [Screens](#screens)
+  * [Settings](#settings)
+  * [Discovery screen](#discovery-screen)
+  * [Set identity server screen](#set-identity-server-screen)
+* [Ref:](#ref:)
+
 <!--- END -->
 
 Issue: #607

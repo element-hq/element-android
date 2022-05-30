@@ -1,6 +1,15 @@
 # Jitsi in Element Android
 
 <!--- TOC -->
+
+* [Native Jitsi SDK](#native-jitsi-sdk)
+  * [How to build the Jitsi Meet SDK](#how-to-build-the-jitsi-meet-sdk)
+    * [Jitsi version](#jitsi-version)
+    * [Run the build script](#run-the-build-script)
+    * [Link with the new generated library](#link-with-the-new-generated-library)
+    * [Sanity tests](#sanity-tests)
+    * [Export the build library](#export-the-build-library)
+
 <!--- END -->
 
 Native Jitsi support has been added to Element Android by the PR [#1914](https://github.com/vector-im/element-android/pull/1914). The description of the PR contains some documentation about the behaviour in each possible room configuration.

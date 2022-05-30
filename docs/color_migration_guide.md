@@ -1,6 +1,12 @@
 # Color migration
 
 <!--- TOC -->
+
+  * [Changes](#changes)
+  * [Main change for developers](#main-change-for-developers)
+  * [Remaining work](#remaining-work)
+  * [Migration guide](#migration-guide)
+
 <!--- END -->
 
 ### Changes
