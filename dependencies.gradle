@@ -26,7 +26,7 @@ def mavericks = "2.6.1"
 def glide = "4.13.2"
 def bigImageViewer = "1.8.1"
 def jjwt = "0.11.5"
-def vanniktechEmoji = "0.13.0"
+def vanniktechEmoji = "0.15.0"
 
 // Testing
 def mockk = "1.12.4"
