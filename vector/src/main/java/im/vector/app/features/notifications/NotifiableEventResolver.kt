@@ -151,7 +151,7 @@ class NotifiableEventResolver @Inject constructor(
                     senderName = senderDisplayName,
                     senderId = event.root.senderId,
                     body = body.toString(),
-                    imageUri = event.fetchImageIfPresent(session),
+                    imageUriString = event.fetchImageIfPresent(session)?.toString(),
                     roomId = event.root.roomId!!,
                     roomName = roomName,
                     matrixID = session.myUserId
@@ -176,7 +176,7 @@ class NotifiableEventResolver @Inject constructor(
                             senderName = senderDisplayName,
                             senderId = event.root.senderId,
                             body = body,
-                            imageUri = event.fetchImageIfPresent(session),
+                            imageUriString = event.fetchImageIfPresent(session)?.toString(),
                             roomId = event.root.roomId!!,
                             roomName = roomName,
                             roomIsDirect = room.roomSummary()?.isDirect ?: false,
