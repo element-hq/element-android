@@ -14,7 +14,7 @@ This document aims to describe how Element android displays notifications to the
   * [Background processing limitations](#background-processing-limitations)
 * [Element Notification implementations](#element-notification-implementations)
   * [Requirements](#requirements)
-  * [Foreground sync mode (Gplay & F-Droid)](#foreground-sync-mode-gplay-&-f-droid)
+  * [Foreground sync mode (Gplay and F-Droid)](#foreground-sync-mode-gplay-and-f-droid)
   * [Push (FCM) received in background](#push-fcm-received-in-background)
   * [FCM Fallback mode](#fcm-fallback-mode)
   * [F-Droid background Mode](#f-droid-background-mode)
@@ -180,7 +180,7 @@ Element Android must work with and without FCM.
 * The Element android app published on F-Droid do not rely on FCM (all related dependencies are not present)
 * The Element android app published on google play rely on FCM, with a fallback mode when FCM registration has failed (e.g outdated or missing Google Play Services)
 
-### Foreground sync mode (Gplay & F-Droid)
+### Foreground sync mode (Gplay and F-Droid)
 
 When in foreground, Element performs sync continuously with a timeout value set to 10 seconds (see HttpPooling).
 
