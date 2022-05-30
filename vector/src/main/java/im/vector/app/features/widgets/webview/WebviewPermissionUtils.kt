@@ -34,7 +34,6 @@ class WebviewPermissionUtils @Inject constructor() {
     private var permissionRequest: PermissionRequest? = null
     private var selectedPermissions = listOf<String>()
 
-    @SuppressLint("NewApi")
     fun promptForPermissions(
             @StringRes title: Int,
             request: PermissionRequest,
