@@ -17,22 +17,27 @@
 package org.matrix.android.sdk.api.query
 
 /**
- * To filter by Room category.
+ * Filter to be used to do room queries regarding the space hierarchy.
  * @see [org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams]
  */
-enum class RoomCategoryFilter {
+sealed interface SpaceFilter {
     /**
-     * Get only the DM, i.e. the rooms referenced in `m.direct` account data.
+     * Used to get all the rooms that are not in any space.
      */
-    ONLY_DM,
+    object OrphanRooms : SpaceFilter
 
     /**
-     * Get only the Room, not the DM, i.e. the rooms not referenced in `m.direct` account data.
+     * Used to get all the rooms that have the provided space in their parent hierarchy.
      */
-    ONLY_ROOMS,
+    data class ActiveSpace(val spaceId: String) : SpaceFilter
 
     /**
-     * Get the room with non-0 notifications.
+     * Used to get all the rooms that do not have the provided space in their parent hierarchy.
      */
-    ONLY_WITH_NOTIFICATIONS,
+    data class ExcludeSpace(val spaceId: String) : SpaceFilter
 }
+
+/**
+ * Return a [SpaceFilter.ActiveSpace] if the String is not null, or [SpaceFilter.OrphanRooms].
+ */
+fun String?.toActiveSpaceOrOrphanRooms(): SpaceFilter = this?.let { SpaceFilter.ActiveSpace(it) } ?: SpaceFilter.OrphanRooms
