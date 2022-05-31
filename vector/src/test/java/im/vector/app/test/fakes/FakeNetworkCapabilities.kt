@@ -14,15 +14,19 @@
  * limitations under the License.
  */
 
-package im.vector.app.test.fixtures
+package im.vector.app.test.fakes
 
-import org.matrix.android.sdk.api.failure.Failure
-import org.matrix.android.sdk.api.failure.MatrixError
-import java.net.UnknownHostException
-import javax.net.ssl.HttpsURLConnection
+import android.net.NetworkCapabilities
+import io.mockk.every
+import io.mockk.mockk
 
-fun a401ServerError() = Failure.ServerError(
-        MatrixError(MatrixError.M_UNAUTHORIZED, ""), HttpsURLConnection.HTTP_UNAUTHORIZED
-)
+class FakeNetworkCapabilities {
+    val instance = mockk<NetworkCapabilities>()
 
-fun aHomeserverUnavailableError() = Failure.NetworkConnection(UnknownHostException())
+    fun givenTransports(vararg type: Int) {
+        every { instance.hasTransport(any()) } answers {
+            val input = it.invocation.args.first() as Int
+            type.contains(input)
+        }
+    }
+}
