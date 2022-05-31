@@ -1,1 +1,0 @@
-Test: Ensure calling 'fail()' is not caught by the catch block
