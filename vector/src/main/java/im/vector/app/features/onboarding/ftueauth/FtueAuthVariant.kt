@@ -54,7 +54,6 @@ import im.vector.app.features.onboarding.OnboardingViewState
 import im.vector.app.features.onboarding.ftueauth.terms.FtueAuthLegacyStyleTermsFragment
 import im.vector.app.features.onboarding.ftueauth.terms.FtueAuthTermsFragment
 import im.vector.app.features.onboarding.ftueauth.terms.FtueAuthTermsLegacyStyleFragmentArgument
-import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.auth.toLocalizedLoginTerms
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -228,22 +227,22 @@ class FtueAuthVariant(
                         option = commonOption
                 )
             }
-            OnboardingViewEvents.OnHomeserverEdited                            -> activity.popBackstack()
+            OnboardingViewEvents.OnHomeserverEdited -> activity.popBackstack()
+            OnboardingViewEvents.OpenCombinedLogin  -> onStartCombinedLogin()
         }
+    }
+
+    private fun onStartCombinedLogin() {
+        addRegistrationStageFragmentToBackstack(FtueAuthCombinedLoginFragment::class.java)
     }
 
     private fun onRegistrationFlow(viewEvents: OnboardingViewEvents.RegistrationFlowResult) {
         when {
             registrationShouldFallback(viewEvents)               -> displayFallbackWebDialog()
-            viewEvents.isRegistrationStarted                     -> handleRegistrationNavigation(viewEvents.flowResult.orderedStages())
+            viewEvents.isRegistrationStarted                     -> handleRegistrationNavigation(viewEvents.flowResult.missingStages)
             vectorFeatures.isOnboardingCombinedRegisterEnabled() -> openStartCombinedRegister()
             else                                                 -> openAuthLoginFragmentWithTag(FRAGMENT_REGISTRATION_STAGE_TAG)
         }
-    }
-
-    private fun FlowResult.orderedStages() = when {
-        vectorFeatures.isOnboardingCombinedRegisterEnabled() -> missingStages.sortedWith(FtueMissingRegistrationStagesComparator())
-        else                                                 -> missingStages
     }
 
     private fun openStartCombinedRegister() {

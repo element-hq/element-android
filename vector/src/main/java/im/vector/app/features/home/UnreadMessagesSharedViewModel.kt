@@ -37,7 +37,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
-import org.matrix.android.sdk.api.query.ActiveSpaceFilter
+import org.matrix.android.sdk.api.query.SpaceFilter
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -74,11 +74,10 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
     private val roomService = session.roomService()
 
     init {
-
         roomService.getPagedRoomSummariesLive(
                 roomSummaryQueryParams {
                     this.memberships = listOf(Membership.JOIN)
-                    this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null)
+                    this.spaceFilter = SpaceFilter.OrphanRooms
                 }, sortOrder = RoomSortOrder.NONE
         ).asFlow()
                 .throttleFirst(300)
@@ -86,7 +85,7 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                     val counts = roomService.getNotificationCountForRooms(
                             roomSummaryQueryParams {
                                 this.memberships = listOf(Membership.JOIN)
-                                this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null)
+                                this.spaceFilter = SpaceFilter.OrphanRooms
                             }
                     )
                     val invites = if (autoAcceptInvites.hideInvites) {
@@ -95,7 +94,7 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                         roomService.getRoomSummaries(
                                 roomSummaryQueryParams {
                                     this.memberships = listOf(Membership.INVITE)
-                                    this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null)
+                                    this.spaceFilter = SpaceFilter.OrphanRooms
                                 }
                         ).size
                     }
@@ -151,9 +150,9 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                     val totalCount = roomService.getNotificationCountForRooms(
                             roomSummaryQueryParams {
                                 this.memberships = listOf(Membership.JOIN)
-                                this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null).takeIf {
+                                this.spaceFilter = SpaceFilter.OrphanRooms.takeIf {
                                     !vectorPreferences.prefSpacesShowAllRoomInHome()
-                                } ?: ActiveSpaceFilter.None
+                                }
                             }
                     )
 

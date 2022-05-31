@@ -23,6 +23,7 @@ import org.matrix.android.sdk.api.session.room.accountdata.RoomAccountDataServic
 import org.matrix.android.sdk.api.session.room.alias.AliasService
 import org.matrix.android.sdk.api.session.room.call.RoomCallService
 import org.matrix.android.sdk.api.session.room.crypto.RoomCryptoService
+import org.matrix.android.sdk.api.session.room.location.LocationSharingService
 import org.matrix.android.sdk.api.session.room.members.MembershipService
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomType
@@ -69,6 +70,7 @@ internal class DefaultRoom(
         private val roomAccountDataService: RoomAccountDataService,
         private val roomVersionService: RoomVersionService,
         private val viaParameterFinder: ViaParameterFinder,
+        private val locationSharingService: LocationSharingService,
         override val coroutineDispatchers: MatrixCoroutineDispatchers
 ) : Room {
 
@@ -104,4 +106,5 @@ internal class DefaultRoom(
     override fun roomPushRuleService() = roomPushRuleService
     override fun roomAccountDataService() = roomAccountDataService
     override fun roomVersionService() = roomVersionService
+    override fun locationSharingService() = locationSharingService
 }

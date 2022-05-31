@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.pushers
 import androidx.lifecycle.LiveData
 import androidx.work.BackoffPolicy
 import com.zhuinden.monarchy.Monarchy
+import org.matrix.android.sdk.api.session.pushers.HttpPusher
 import org.matrix.android.sdk.api.session.pushers.Pusher
 import org.matrix.android.sdk.api.session.pushers.PushersService
 import org.matrix.android.sdk.internal.database.mapper.asDomain
@@ -58,15 +59,15 @@ internal class DefaultPushersService @Inject constructor(
                 .executeBy(taskExecutor)
     }
 
-    override fun enqueueAddHttpPusher(httpPusher: PushersService.HttpPusher): UUID {
+    override fun enqueueAddHttpPusher(httpPusher: HttpPusher): UUID {
         return enqueueAddPusher(httpPusher.toJsonPusher())
     }
 
-    override suspend fun addHttpPusher(httpPusher: PushersService.HttpPusher) {
+    override suspend fun addHttpPusher(httpPusher: HttpPusher) {
         addPusherTask.execute(AddPusherTask.Params(httpPusher.toJsonPusher()))
     }
 
-    private fun PushersService.HttpPusher.toJsonPusher() = JsonPusher(
+    private fun HttpPusher.toJsonPusher() = JsonPusher(
             pushKey = pushkey,
             kind = "http",
             appId = appId,

@@ -41,8 +41,8 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.securestorage.IntegrityResult
 import org.matrix.android.sdk.api.session.securestorage.KeyInfo
 import org.matrix.android.sdk.api.session.securestorage.KeyInfoResult
+import org.matrix.android.sdk.api.session.securestorage.KeyRef
 import org.matrix.android.sdk.api.session.securestorage.RawBytesKeySpec
-import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
 import org.matrix.android.sdk.api.util.toBase64NoPadding
 import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
@@ -283,7 +283,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                     session.sharedSecretStorageService().storeSecret(
                             name = name,
                             secretBase64 = value,
-                            keys = listOf(SharedSecretStorageService.KeyRef(keyInfo.id, keySpec))
+                            keys = listOf(KeyRef(keyInfo.id, keySpec))
                     )
                     decryptedSecretMap[name] = value
                 }

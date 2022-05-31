@@ -145,7 +145,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                         ?: context?.getString(R.string.notification_sender_me),
                 senderId = session.myUserId,
                 body = message,
-                imageUri = null,
+                imageUriString = null,
                 roomId = room.roomId,
                 roomName = room.roomSummary()?.displayName ?: room.roomId,
                 roomIsDirect = room.roomSummary()?.isDirect == true,

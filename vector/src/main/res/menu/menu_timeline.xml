@@ -72,7 +72,7 @@
 
     <item
         android:id="@+id/menu_thread_timeline_view_in_room"
-        android:icon="@drawable/ic_thread_view_in_room_menu_item"
+        android:icon="@drawable/ic_threads_view_in_room_24"
         android:title="@string/action_thread_view_in_room"
         app:iconTint="?vctr_content_secondary"
         app:showAsAction="withText" />

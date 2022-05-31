@@ -37,6 +37,7 @@ sealed class OnboardingViewEvents : VectorViewEvents {
     object OpenUseCaseSelection : OnboardingViewEvents()
     object OpenServerSelection : OnboardingViewEvents()
     object OpenCombinedRegister : OnboardingViewEvents()
+    object OpenCombinedLogin : OnboardingViewEvents()
     object EditServerSelection : OnboardingViewEvents()
     data class OnServerSelectionDone(val serverType: ServerType) : OnboardingViewEvents()
     object OnLoginFlowRetrieved : OnboardingViewEvents()
