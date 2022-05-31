@@ -124,6 +124,7 @@ class VoiceRecorderL(
             audioRecorder?.stop()
         }
         audioRecorder?.release()
+        audioRecorder = null
 
         noiseSuppressor?.release()
         noiseSuppressor = null
