@@ -27,6 +27,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
@@ -120,6 +121,7 @@ internal class DefaultKeysBackupService @Inject constructor(
         private val updateKeysBackupVersionTask: UpdateKeysBackupVersionTask,
         // Task executor
         private val taskExecutor: TaskExecutor,
+        private val matrixConfiguration: MatrixConfiguration,
         private val inboundGroupSessionStore: InboundGroupSessionStore,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val cryptoCoroutineScope: CoroutineScope
@@ -1457,13 +1459,21 @@ internal class DefaultKeysBackupService @Inject constructor(
                 },
                 forwardedCount = olmInboundGroupSessionWrapper.sessionData.forwardingCurve25519KeyChain.orEmpty().size,
                 isVerified = device?.isVerified == true,
-                sharedHistory = olmInboundGroupSessionWrapper.sessionData.sharedHistory,
+                sharedHistory = olmInboundGroupSessionWrapper.getSharedKey(),
                 sessionData = mapOf(
                         "ciphertext" to encryptedSessionBackupData.mCipherText,
                         "mac" to encryptedSessionBackupData.mMac,
                         "ephemeral" to encryptedSessionBackupData.mEphemeralKey
                 )
         )
+    }
+
+    /**
+     * Returns boolean shared key flag, if enabled with respect to matrix configuration
+     */
+    private fun MXInboundMegolmSessionWrapper.getSharedKey(): Boolean {
+        if (!matrixConfiguration.cryptoConfig.shouldShareKeyHistory) return false
+        return sessionData.sharedHistory
     }
 
     @VisibleForTesting
