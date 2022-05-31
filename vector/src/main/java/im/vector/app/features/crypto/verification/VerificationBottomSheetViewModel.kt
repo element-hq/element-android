@@ -30,9 +30,13 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.raw.wellknown.getElementWellknown
+import im.vector.app.features.raw.wellknown.isSecureBackupRequired
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
@@ -78,6 +82,7 @@ data class VerificationBottomSheetViewState(
         val userWantsToCancel: Boolean = false,
         val userThinkItsNotHim: Boolean = false,
         val quadSContainsSecrets: Boolean = true,
+        val isVerificationRequired: Boolean = false,
         val quadSHasBeenReset: Boolean = false,
         val hasAnyOtherSession: Boolean = false
 ) : MavericksState {
@@ -92,6 +97,7 @@ data class VerificationBottomSheetViewState(
 
 class VerificationBottomSheetViewModel @AssistedInject constructor(
         @Assisted initialState: VerificationBottomSheetViewState,
+        private val rawService: RawService,
         private val session: Session,
         private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
         private val stringProvider: StringProvider) :
@@ -107,6 +113,15 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
 
     init {
         session.cryptoService().verificationService().addListener(this)
+
+        // This is async, but at this point should be in cache
+        // so it's ok to not wait until result
+        viewModelScope.launch(Dispatchers.IO) {
+            val wellKnown = rawService.getElementWellknown(session.sessionParams)
+            setState {
+                copy(isVerificationRequired = wellKnown?.isSecureBackupRequired().orFalse())
+            }
+        }
 
         val userItem = session.getUser(initialState.otherUserId)
 
@@ -182,8 +197,10 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                     state.verifyingFrom4S) {
                 // you cannot cancel anymore
             } else {
-                setState {
-                    copy(userWantsToCancel = true)
+                if (!state.isVerificationRequired) {
+                    setState {
+                        copy(userWantsToCancel = true)
+                    }
                 }
             }
         }
@@ -341,7 +358,18 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                         ?.shortCodeDoesNotMatch()
             }
             is VerificationAction.GotItConclusion              -> {
-                _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)
+                if (state.isVerificationRequired && !action.verified) {
+                    // we should go back to first screen
+                    setState {
+                        copy(
+                                pendingRequest = Uninitialized,
+                                sasTransactionState = null,
+                                qrTransactionState = null
+                        )
+                    }
+                } else {
+                    _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)
+                }
             }
             is VerificationAction.SkipVerification             -> {
                 _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)

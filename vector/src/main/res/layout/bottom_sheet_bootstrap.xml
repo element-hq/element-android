@@ -25,7 +25,8 @@
             android:scaleType="fitCenter"
             android:src="@drawable/ic_security_key_24dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@id/bootstrapTitleText"
+            app:layout_constraintBottom_toBottomOf="@id/bootstrapTitleText"
             app:tint="?vctr_content_primary"
             tools:ignore="MissingPrefix" />
 
@@ -39,10 +40,9 @@
             android:ellipsize="end"
             android:textColor="?vctr_content_primary"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/bootstrapIcon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/bootstrapIcon"
-            app:layout_constraintTop_toTopOf="@id/bootstrapIcon"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="@string/bottom_sheet_setup_secure_backup_title" />
 
         <androidx.fragment.app.FragmentContainerView
