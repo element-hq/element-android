@@ -472,16 +472,14 @@ class MessageComposerViewModel @AssistedInject constructor(
                             Unit
                         }
                         is ParsedCommand.UpgradeRoom                       -> {
-                            viewModelScope.launch {
-                                _viewEvents.emit(
-                                        MessageComposerViewEvents.ShowRoomUpgradeDialog(
-                                                parsedCommand.newVersion,
-                                                room.roomSummary()?.isPublic ?: false
-                                        )
-                                )
-                                _viewEvents.emit(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
-                                popDraft()
-                            }
+                            _viewEvents.post(
+                                    MessageComposerViewEvents.ShowRoomUpgradeDialog(
+                                            parsedCommand.newVersion,
+                                            room.roomSummary()?.isPublic ?: false
+                                    )
+                            )
+                            _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
+                            popDraft()
                         }
                     }
                 }

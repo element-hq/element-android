@@ -56,10 +56,13 @@ open class BehaviorDataSource<T>(private val defaultValue: T? = null) : MutableD
 
 /**
  * This datasource only emits all subsequent observed values to each subscriber.
+ *
+ * @param bufferSize number of buffered items before it starts dropping oldest. Should be at least 1
+ *
  */
-open class PublishDataSource<T> : MutableDataSource<T> {
+open class PublishDataSource<T>(bufferSize: Int = 10) : MutableDataSource<T> {
 
-    private val mutableFlow = MutableSharedFlow<T>(replay = 0, extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    private val mutableFlow = MutableSharedFlow<T>(replay = 0, extraBufferCapacity = bufferSize, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
     override fun stream(): Flow<T> {
         return mutableFlow
