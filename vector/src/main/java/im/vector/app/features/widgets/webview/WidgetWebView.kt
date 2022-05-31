@@ -25,10 +25,10 @@ import android.webkit.WebView
 import im.vector.app.R
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.webview.VectorWebViewClient
-import im.vector.app.features.webview.WebViewEventListener
+import im.vector.app.features.webview.WebEventListener
 
 @SuppressLint("NewApi")
-fun WebView.setupForWidget(webViewEventListener: WebViewEventListener) {
+fun WebView.setupForWidget(eventListener: WebEventListener) {
     // xml value seems ignored
     setBackgroundColor(ThemeUtils.getColor(context, R.attr.colorSurface))
 
@@ -59,10 +59,10 @@ fun WebView.setupForWidget(webViewEventListener: WebViewEventListener) {
     // Permission requests
     webChromeClient = object : WebChromeClient() {
         override fun onPermissionRequest(request: PermissionRequest) {
-            WebviewPermissionUtils.promptForPermissions(R.string.room_widget_resource_permission_title, request, context)
+            eventListener.onPermissionRequest(request)
         }
     }
-    webViewClient = VectorWebViewClient(webViewEventListener)
+    webViewClient = VectorWebViewClient(eventListener)
 
     val cookieManager = CookieManager.getInstance()
     cookieManager.setAcceptThirdPartyCookies(this, false)
