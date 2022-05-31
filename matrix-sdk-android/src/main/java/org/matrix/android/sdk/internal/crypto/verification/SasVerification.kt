@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.crypto
+package org.matrix.android.sdk.internal.crypto.verification
 
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
@@ -25,8 +25,6 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationServic
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.crypto.verification.safeValueOf
 import org.matrix.android.sdk.internal.crypto.network.RequestSender
-import org.matrix.android.sdk.internal.crypto.verification.UpdateDispatcher
-import org.matrix.android.sdk.internal.crypto.verification.getEmojiForCode
 import uniffi.olm.CryptoStoreException
 import uniffi.olm.OlmMachine
 import uniffi.olm.Sas
@@ -235,6 +233,11 @@ internal class SasVerification(
     }
 
     override fun toString(): String {
-        return "SasVerification(otherUserId='$otherUserId', otherDeviceId=$otherDeviceId, isIncoming=$isIncoming, state=$state, transactionId='$transactionId')"
+        return "SasVerification(" +
+                "otherUserId='$otherUserId', " +
+                "otherDeviceId=$otherDeviceId, " +
+                "isIncoming=$isIncoming, " +
+                "state=$state, " +
+                "transactionId='$transactionId')"
     }
 }

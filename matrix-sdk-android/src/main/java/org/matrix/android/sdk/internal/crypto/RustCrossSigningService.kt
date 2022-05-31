@@ -207,7 +207,7 @@ internal class RustCrossSigningService @Inject constructor(
     }
 
     override fun onSecretUSKGossip(uskPrivateKey: String) {
-        // And 
+        // And
     }
 
     override suspend fun shieldForGroup(userIds: List<String>): RoomEncryptionTrustLevel {

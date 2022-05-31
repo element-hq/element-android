@@ -24,6 +24,9 @@ import org.matrix.android.sdk.api.session.crypto.model.UnsignedDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.internal.crypto.network.RequestSender
+import org.matrix.android.sdk.internal.crypto.verification.SasVerification
+import org.matrix.android.sdk.internal.crypto.verification.VerificationRequest
+import org.matrix.android.sdk.internal.crypto.verification.VerificationRequestFactory
 import org.matrix.android.sdk.internal.crypto.verification.prepareMethods
 import uniffi.olm.CryptoStoreException
 import uniffi.olm.OlmMachine
@@ -36,20 +39,21 @@ import uniffi.olm.Device as InnerDevice
  * or to manually verify the device.
  */
 internal class Device(
-        private val machine: OlmMachine,
-        private var inner: InnerDevice,
-        private val sender: RequestSender,
+        private val innerMachine: OlmMachine,
+        private var innerDevice: InnerDevice,
+        private val requestSender: RequestSender,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val listeners: ArrayList<VerificationService.Listener>
+        private val listeners: ArrayList<VerificationService.Listener>,
+        private val verificationRequestFactory: VerificationRequestFactory,
 ) {
     @Throws(CryptoStoreException::class)
     private suspend fun refreshData() {
         val device = withContext(coroutineDispatchers.io) {
-            machine.getDevice(inner.userId, inner.deviceId)
+            innerMachine.getDevice(innerDevice.userId, innerDevice.deviceId)
         }
 
         if (device != null) {
-            inner = device
+            innerDevice = device
         }
     }
 
@@ -68,17 +72,11 @@ internal class Device(
     suspend fun requestVerification(methods: List<VerificationMethod>): VerificationRequest? {
         val stringMethods = prepareMethods(methods)
         val result = withContext(coroutineDispatchers.io) {
-            machine.requestVerificationWithDevice(inner.userId, inner.deviceId, stringMethods)
+            innerMachine.requestVerificationWithDevice(innerDevice.userId, innerDevice.deviceId, stringMethods)
         }
         return if (result != null) {
-            sender.sendVerificationRequest(result.request)
-            VerificationRequest(
-                    machine = machine,
-                    inner = result.verification,
-                    sender = sender,
-                    coroutineDispatchers = coroutineDispatchers,
-                    listeners = listeners
-            )
+            requestSender.sendVerificationRequest(result.request)
+            verificationRequestFactory.create(result.verification)
         } else {
             null
         }
@@ -96,15 +94,15 @@ internal class Device(
     @Throws(CryptoStoreException::class)
     suspend fun startVerification(): SasVerification? {
         val result = withContext(coroutineDispatchers.io) {
-            machine.startSasWithDevice(inner.userId, inner.deviceId)
+            innerMachine.startSasWithDevice(innerDevice.userId, innerDevice.deviceId)
         }
 
         return if (result != null) {
-            sender.sendVerificationRequest(result.request)
+            requestSender.sendVerificationRequest(result.request)
             SasVerification(
-                    machine = machine,
+                    machine = innerMachine,
                     inner = result.sas,
-                    sender = sender,
+                    sender = requestSender,
                     coroutineDispatchers = coroutineDispatchers,
                     listeners = listeners
             )
@@ -122,7 +120,7 @@ internal class Device(
     @Throws(CryptoStoreException::class)
     suspend fun markAsTrusted() {
         withContext(coroutineDispatchers.io) {
-            machine.markDeviceAsTrusted(inner.userId, inner.deviceId)
+            innerMachine.markDeviceAsTrusted(innerDevice.userId, innerDevice.deviceId)
         }
     }
 
@@ -138,10 +136,10 @@ internal class Device(
     @Throws(SignatureException::class)
     suspend fun verify(): Boolean {
         val request = withContext(coroutineDispatchers.io) {
-            machine.verifyDevice(inner.userId, inner.deviceId)
+            innerMachine.verifyDevice(innerDevice.userId, innerDevice.deviceId)
         }
 
-        sender.sendSignatureUpload(request)
+        requestSender.sendSignatureUpload(request)
 
         return true
     }
@@ -152,7 +150,7 @@ internal class Device(
     @Throws(CryptoStoreException::class)
     suspend fun trustLevel(): DeviceTrustLevel {
         refreshData()
-        return DeviceTrustLevel(crossSigningVerified = inner.crossSigningTrusted, locallyVerified = inner.locallyTrusted)
+        return DeviceTrustLevel(crossSigningVerified = innerDevice.crossSigningTrusted, locallyVerified = innerDevice.locallyTrusted)
     }
 
     /**
@@ -161,19 +159,19 @@ internal class Device(
      * This will not fetch out fresh data from the Rust side.
      **/
     internal fun toCryptoDeviceInfo(): CryptoDeviceInfo {
-        val keys = inner.keys.map { (keyId, key) -> "$keyId:$inner.deviceId" to key }.toMap()
+        val keys = innerDevice.keys.map { (keyId, key) -> "$keyId:$innerDevice.deviceId" to key }.toMap()
 
         return CryptoDeviceInfo(
-                deviceId = inner.deviceId,
-                userId = inner.userId,
-                algorithms = inner.algorithms,
+                deviceId = innerDevice.deviceId,
+                userId = innerDevice.userId,
+                algorithms = innerDevice.algorithms,
                 keys = keys,
                 // The Kotlin side doesn't need to care about signatures,
                 // so we're not filling this out
                 signatures = mapOf(),
-                unsigned = UnsignedDeviceInfo(inner.displayName),
-                trustLevel = DeviceTrustLevel(crossSigningVerified = inner.crossSigningTrusted, locallyVerified = inner.locallyTrusted),
-                isBlocked = inner.isBlocked,
+                unsigned = UnsignedDeviceInfo(innerDevice.displayName),
+                trustLevel = DeviceTrustLevel(crossSigningVerified = innerDevice.crossSigningTrusted, locallyVerified = innerDevice.locallyTrusted),
+                isBlocked = innerDevice.isBlocked,
                 // TODO
                 firstTimeSeenLocalTs = null)
     }

@@ -24,8 +24,11 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.internal.crypto.network.RequestSender
+import org.matrix.android.sdk.internal.crypto.verification.VerificationRequest
+import org.matrix.android.sdk.internal.crypto.verification.VerificationRequestFactory
 import org.matrix.android.sdk.internal.crypto.verification.prepareMethods
 import uniffi.olm.CryptoStoreException
+import uniffi.olm.OlmMachine
 import uniffi.olm.SignatureException
 
 /**
@@ -79,9 +82,11 @@ internal class OwnUserIdentity(
         private val selfSigningKey: CryptoCrossSigningKey,
         private val userSigningKey: CryptoCrossSigningKey,
         private val trustsOurOwnDevice: Boolean,
-        private val olmMachine: OlmMachine,
+        private val innerMachine: OlmMachine,
         private val requestSender: RequestSender,
-        private val coroutineDispatchers: MatrixCoroutineDispatchers) : UserIdentities() {
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
+        private val verificationRequestFactory: VerificationRequestFactory,
+) : UserIdentities() {
     /**
      * Our own user id.
      */
@@ -96,7 +101,7 @@ internal class OwnUserIdentity(
      */
     @Throws(SignatureException::class)
     override suspend fun verify() {
-        val request = withContext(coroutineDispatchers.computation) { olmMachine.inner().verifyIdentity(userId) }
+        val request = withContext(coroutineDispatchers.computation) { innerMachine.verifyIdentity(userId) }
         requestSender.sendSignatureUpload(request)
     }
 
@@ -107,7 +112,7 @@ internal class OwnUserIdentity(
      */
     @Throws(CryptoStoreException::class)
     override suspend fun verified(): Boolean {
-        return withContext(coroutineDispatchers.io) { olmMachine.inner().isIdentityVerified(userId) }
+        return withContext(coroutineDispatchers.io) { innerMachine.isIdentityVerified(userId) }
     }
 
     /**
@@ -134,16 +139,9 @@ internal class OwnUserIdentity(
     @Throws(CryptoStoreException::class)
     suspend fun requestVerification(methods: List<VerificationMethod>): VerificationRequest {
         val stringMethods = prepareMethods(methods)
-        val result = olmMachine.inner().requestSelfVerification(stringMethods)
+        val result = innerMachine.requestSelfVerification(stringMethods)
         requestSender.sendVerificationRequest(result!!.request)
-
-        return VerificationRequest(
-                machine = olmMachine.inner(),
-                inner = result.verification,
-                sender = requestSender,
-                coroutineDispatchers = coroutineDispatchers,
-                listeners = olmMachine.verificationListeners
-        )
+        return verificationRequestFactory.create(result.verification)
     }
 
     /**
@@ -173,9 +171,11 @@ internal class UserIdentity(
         private val userId: String,
         private val masterKey: CryptoCrossSigningKey,
         private val selfSigningKey: CryptoCrossSigningKey,
-        private val olmMachine: OlmMachine,
+        private val innerMachine: OlmMachine,
         private val requestSender: RequestSender,
-        private val coroutineDispatchers: MatrixCoroutineDispatchers) : UserIdentities() {
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
+        private val verificationRequestFactory: VerificationRequestFactory,
+) : UserIdentities() {
     /**
      * The unique ID of the user that this identity belongs to.
      */
@@ -192,7 +192,7 @@ internal class UserIdentity(
      */
     @Throws(SignatureException::class)
     override suspend fun verify() {
-        val request = withContext(coroutineDispatchers.computation) { olmMachine.inner().verifyIdentity(userId) }
+        val request = withContext(coroutineDispatchers.computation) { innerMachine.verifyIdentity(userId) }
         requestSender.sendSignatureUpload(request)
     }
 
@@ -202,7 +202,7 @@ internal class UserIdentity(
      * @return True if the identity is considered to be verified and trusted, false otherwise.
      */
     override suspend fun verified(): Boolean {
-        return withContext(coroutineDispatchers.io) { olmMachine.inner().isIdentityVerified(userId) }
+        return withContext(coroutineDispatchers.io) { innerMachine.isIdentityVerified(userId) }
     }
 
     /**
@@ -235,19 +235,10 @@ internal class UserIdentity(
             transactionId: String
     ): VerificationRequest {
         val stringMethods = prepareMethods(methods)
-        val content = olmMachine.inner().verificationRequestContent(userId, stringMethods)!!
-
+        val content = innerMachine.verificationRequestContent(userId, stringMethods)!!
         val eventID = requestSender.sendRoomMessage(EventType.MESSAGE, roomId, content, transactionId).eventId
-
-        val innerRequest = olmMachine.inner().requestVerification(userId, roomId, eventID, stringMethods)!!
-
-        return VerificationRequest(
-                machine = olmMachine.inner(),
-                inner = innerRequest,
-                sender = requestSender,
-                coroutineDispatchers = coroutineDispatchers,
-                listeners = olmMachine.verificationListeners
-        )
+        val innerRequest = innerMachine.requestVerification(userId, roomId, eventID, stringMethods)!!
+        return verificationRequestFactory.create(innerRequest)
     }
 
     /**

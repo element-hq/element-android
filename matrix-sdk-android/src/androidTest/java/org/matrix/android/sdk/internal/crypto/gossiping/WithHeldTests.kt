@@ -140,7 +140,7 @@ class WithHeldTests : InstrumentedTest {
 
     @Test
     @Ignore("This test will be ignored until it is fixed")
-    fun  test_WithHeldNoOlm() {
+    fun test_WithHeldNoOlm() {
         val testData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
         val aliceSession = testData.firstSession
         val bobSession = testData.secondSession!!

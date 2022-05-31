@@ -23,24 +23,30 @@ import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.SessionFilesDirectory
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.SessionScope
+import org.matrix.android.sdk.internal.util.time.Clock
 import java.io.File
 import javax.inject.Inject
 
 @SessionScope
 internal class OlmMachineProvider @Inject constructor(
-        @UserId private val userId: String,
-        @DeviceId private val deviceId: String?,
-        @SessionFilesDirectory private val dataDir: File,
+        @UserId userId: String,
+        @DeviceId deviceId: String?,
+        @SessionFilesDirectory dataDir: File,
         requestSender: RequestSender,
         coroutineDispatchers: MatrixCoroutineDispatchers,
-        moshi: Moshi
+        moshi: Moshi,
+        clock: Clock
 ) {
 
-    var olmMachine: OlmMachine = OlmMachine(
-            user_id = userId,
-            device_id = deviceId!!,
-            path = dataDir,
-            requestSender = requestSender,
-            coroutineDispatchers = coroutineDispatchers,
-            moshi = moshi)
+    val olmMachine: OlmMachine by lazy {
+        OlmMachine(
+                user_id = userId,
+                device_id = deviceId!!,
+                path = dataDir,
+                clock = clock,
+                requestSender = requestSender,
+                coroutineDispatchers = coroutineDispatchers,
+                moshi = moshi
+        )
+    }
 }

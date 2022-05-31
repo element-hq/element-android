@@ -250,7 +250,7 @@ class MessageActionsViewModel @AssistedInject constructor(
                 }
     }
 
-    private suspend fun  actionsForEvent(timelineEvent: TimelineEvent, actionPermissions: ActionPermissions): List<EventSharedAction> {
+    private suspend fun actionsForEvent(timelineEvent: TimelineEvent, actionPermissions: ActionPermissions): List<EventSharedAction> {
         val messageContent = timelineEvent.getLastMessageContent()
         val msgType = messageContent?.msgType
 

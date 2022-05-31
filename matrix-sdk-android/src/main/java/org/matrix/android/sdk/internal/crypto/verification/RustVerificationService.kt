@@ -30,7 +30,6 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageRelationCont
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.internal.crypto.OlmMachineProvider
 import org.matrix.android.sdk.internal.crypto.OwnUserIdentity
-import org.matrix.android.sdk.internal.crypto.SasVerification
 import org.matrix.android.sdk.internal.crypto.UserIdentity
 import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SCAN
 import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SHOW
@@ -254,8 +253,9 @@ internal class RustVerificationService @Inject constructor(private val olmMachin
         return verification.toPendingVerificationRequest()
     }
 
-
-    override suspend fun requestDeviceVerification(methods: List<VerificationMethod>, otherUserId: String, otherDeviceId: String): PendingVerificationRequest? {
+    override suspend fun requestDeviceVerification(methods: List<VerificationMethod>,
+                                                   otherUserId: String,
+                                                   otherDeviceId: String): PendingVerificationRequest? {
         olmMachine.ensureUsersKeys(listOf(otherUserId))
         val otherDevice = olmMachine.getDevice(otherUserId, otherDeviceId)
         val verificationRequest = otherDevice?.requestVerification(methods)

@@ -108,7 +108,6 @@ class MXUsersDevicesMap<E> {
         map.putAll(other)
     }
 
-
     /**
      * Add entries from another MXUsersDevicesMap
      *

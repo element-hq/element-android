@@ -86,7 +86,6 @@ class SasVerificationTestHelper(private val testHelper: CommonTestHelper, privat
     }
 
     fun requestSelfKeyAndWaitForReadyState(session1: Session, session2: Session, supportedMethods: List<VerificationMethod>): String {
-
         val session1VerificationService = session1.cryptoService().verificationService()
         val session2VerificationService = session2.cryptoService().verificationService()
         var bobReadyPendingVerificationRequest: PendingVerificationRequest? = null

@@ -546,7 +546,6 @@ class E2eeSanityTests : InstrumentedTest {
 
             // now let new session request
             newBobSession.cryptoService().reRequestRoomKeyForEvent(firstEventNewBobPov.root)
-
         }
 
         // We need to wait for the key request to be sent out and then a reply to be received

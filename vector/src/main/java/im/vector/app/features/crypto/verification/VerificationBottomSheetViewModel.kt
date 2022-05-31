@@ -460,7 +460,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                             tx.performAccept()
                         }
                     }
-                    */
+                     */
                     // Use this one!
                     setState {
                         copy(

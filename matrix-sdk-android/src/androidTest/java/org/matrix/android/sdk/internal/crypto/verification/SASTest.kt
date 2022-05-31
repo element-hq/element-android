@@ -40,10 +40,8 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationServic
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestHelper
-import org.matrix.android.sdk.internal.crypto.model.rest.toValue
 import timber.log.Timber
 import java.util.concurrent.CountDownLatch
 
@@ -321,8 +319,6 @@ class SASTest : InstrumentedTest {
         // TODO )
          */
     }
-
-
 
     // any two devices may only have at most one key verification in flight at a time.
     // If a device has two verifications in progress with the same device, then it should cancel both verifications.

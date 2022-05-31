@@ -45,7 +45,6 @@ interface VerificationService {
 
     fun getExistingVerificationRequestInRoom(roomId: String, tid: String?): PendingVerificationRequest?
 
-
     /**
      * Request an interactive verification to begin
      *

@@ -19,10 +19,6 @@ package org.matrix.android.sdk.internal.session
 import org.matrix.android.sdk.api.session.ToDeviceService
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.api.session.events.model.Content
-import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.internal.crypto.EncryptEventContentUseCase
-import org.matrix.android.sdk.internal.crypto.OlmMachineProvider
-import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
 import javax.inject.Inject
 
@@ -52,7 +48,7 @@ internal class DefaultToDeviceService @Inject constructor(
     }
 
     override suspend fun sendEncryptedToDevice(eventType: String, targets: Map<String, List<String>>, content: Content, txnId: String?) {
-        //TODO: add to rust-ffi
+        // TODO: add to rust-ffi
         /*
         val payloadJson = mapOf(
                 "type" to eventType,
