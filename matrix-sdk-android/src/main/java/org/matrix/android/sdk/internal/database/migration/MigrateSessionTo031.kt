@@ -17,21 +17,15 @@
 package org.matrix.android.sdk.internal.database.migration
 
 import io.realm.DynamicRealm
-import io.realm.FieldAttribute
-import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntityFields
+import org.matrix.android.sdk.internal.database.model.HomeServerCapabilitiesEntityFields
+import org.matrix.android.sdk.internal.extensions.forceRefreshOfHomeServerCapabilities
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
-/**
- * Migrating to:
- * Live location sharing aggregated summary: adding new field userId.
- */
-internal class MigrateSessionTo029(realm: DynamicRealm) : RealmMigrator(realm, 29) {
+internal class MigrateSessionTo031(realm: DynamicRealm) : RealmMigrator(realm, 31) {
 
     override fun doMigrate(realm: DynamicRealm) {
-        realm.schema.get("LiveLocationShareAggregatedSummaryEntity")
-                ?.addField(LiveLocationShareAggregatedSummaryEntityFields.USER_ID, String::class.java, FieldAttribute.REQUIRED)
-                ?.transform { obj ->
-                    obj.setString(LiveLocationShareAggregatedSummaryEntityFields.USER_ID, "")
-                }
+        realm.schema.get("HomeServerCapabilitiesEntity")
+                ?.addField(HomeServerCapabilitiesEntityFields.CAN_CONTROL_LOGOUT_DEVICES, Boolean::class.java)
+                ?.forceRefreshOfHomeServerCapabilities()
     }
 }
