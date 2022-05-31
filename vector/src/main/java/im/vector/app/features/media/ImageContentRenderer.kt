@@ -85,6 +85,7 @@ class ImageContentRenderer @Inject constructor(
 
     enum class Mode {
         FULL_SIZE,
+        ANIMATED_THUMBNAIL,
         THUMBNAIL,
         STICKER
     }
@@ -231,6 +232,7 @@ class ImageContentRenderer @Inject constructor(
             val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
             val resolvedUrl = when (mode) {
                 Mode.FULL_SIZE,
+                Mode.ANIMATED_THUMBNAIL,
                 Mode.STICKER -> resolveUrl(data)
                 Mode.THUMBNAIL -> contentUrlResolver.resolveThumbnail(data.url, size.width, size.height, ContentUrlResolver.ThumbnailMethod.SCALE)
             }
@@ -269,6 +271,7 @@ class ImageContentRenderer @Inject constructor(
                     finalHeight = height
                     finalWidth = width
                 }
+                Mode.ANIMATED_THUMBNAIL,
                 Mode.THUMBNAIL -> {
                     finalHeight = min(maxImageWidth * height / width, maxImageHeight)
                     finalWidth = finalHeight * width / height
