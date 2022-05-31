@@ -771,16 +771,16 @@ internal class MXOlmDevice @Inject constructor(
         val sessionHolder = getInboundGroupSession(sessionId, senderKey, roomId)
         val wrapper = sessionHolder.wrapper
         val inboundGroupSession = wrapper.session
-        // Check that the room id matches the original one for the session. This stops
-        // the HS pretending a message was targeting a different room.
-        if (roomId == wrapper.roomId) {
-            val decryptResult = try {
-                sessionHolder.mutex.withLock {
-                    inboundGroupSession.decryptMessage(body)
-                }
-            } catch (e: OlmException) {
-                Timber.tag(loggerTag.value).e(e, "## decryptGroupMessage () : decryptMessage failed")
-                throw MXCryptoError.OlmError(e)
+        if (roomId != wrapper.roomId) {
+            // Check that the room id matches the original one for the session. This stops
+            // the HS pretending a message was targeting a different room.
+            val reason = String.format(MXCryptoError.INBOUND_SESSION_MISMATCH_ROOM_ID_REASON, roomId, wrapper.roomId)
+            Timber.tag(loggerTag.value).e("## decryptGroupMessage() : $reason")
+            throw MXCryptoError.Base(MXCryptoError.ErrorType.INBOUND_SESSION_MISMATCH_ROOM_ID, reason)
+        }
+        val decryptResult = try {
+            sessionHolder.mutex.withLock {
+                inboundGroupSession.decryptMessage(body)
             }
         } catch (e: OlmException) {
             Timber.tag(loggerTag.value).e(e, "## decryptGroupMessage () : decryptMessage failed")
