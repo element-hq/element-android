@@ -269,7 +269,13 @@ dependencyAnalysis {
         }
         project(":vector") {
             onUnusedDependencies {
-                exclude("org.maplibre.gl:android-sdk", "org.maplibre.gl:android-plugin-annotation-v9") // False positives
+                // False positives
+                exclude(
+                        "org.maplibre.gl:android-sdk",
+                        "org.maplibre.gl:android-plugin-annotation-v9",
+                        "com.vanniktech:emoji-google",
+                        "com.vanniktech:emoji-material"
+                )
             }
         }
     }
