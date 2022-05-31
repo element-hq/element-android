@@ -24,11 +24,14 @@ import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.FragmentActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
+import im.vector.app.core.error.fatalError
 import im.vector.app.core.utils.checkPermissions
-import java.lang.NullPointerException
+import im.vector.app.features.settings.VectorPreferences
 import javax.inject.Inject
 
-class WebviewPermissionUtils @Inject constructor() {
+class WebviewPermissionUtils @Inject constructor(
+        private val vectorPreferences: VectorPreferences,
+) {
 
     private var permissionRequest: PermissionRequest? = null
     private var selectedPermissions = listOf<String>()
@@ -75,7 +78,11 @@ class WebviewPermissionUtils @Inject constructor() {
 
     fun onPermissionResult(result: Map<String, Boolean>) {
         if (permissionRequest == null) {
-            throw NullPointerException("permissionRequest was null! Make sure to call promptForPermissions first.")
+            fatalError(
+                message = "permissionRequest was null! Make sure to call promptForPermissions first.",
+                failFast = vectorPreferences.failFast()
+            )
+            return
         }
         val grantedPermissions = filterPermissionsToBeGranted(selectedPermissions, result)
         if (grantedPermissions.isNotEmpty()) {
