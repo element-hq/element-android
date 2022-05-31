@@ -26,9 +26,8 @@ import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.search.SearchResult
-import org.matrix.android.sdk.common.CommonTestHelper
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import org.matrix.android.sdk.common.CryptoTestData
-import org.matrix.android.sdk.common.CryptoTestHelper
 
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
@@ -74,9 +73,7 @@ class SearchMessagesTest : InstrumentedTest {
         }
     }
 
-    private fun doTest(block: suspend (CryptoTestData) -> SearchResult) {
-        val commonTestHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
+    private fun doTest(block: suspend (CryptoTestData) -> SearchResult) = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceInARoom(false)
         val aliceSession = cryptoTestData.firstSession
         val aliceRoomId = cryptoTestData.roomId
@@ -99,7 +96,5 @@ class SearchMessagesTest : InstrumentedTest {
                             (it.event.content?.get("body") as? String)?.startsWith(MESSAGE).orFalse()
                         }.orFalse()
         )
-
-        cryptoTestData.cleanUp(commonTestHelper)
     }
 }

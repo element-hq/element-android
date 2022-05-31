@@ -56,8 +56,8 @@ data class Resource(
 /**
  * Get a resource stream and metadata about it given its URI returned from onActivityResult.
  *
- * @param context          the context.
- * @param uri              the URI
+ * @param context the context.
+ * @param uri the URI
  * @param providedMimetype the mimetype
  * @return a [Resource] encapsulating the opened resource stream and associated metadata
  * or `null` if opening the resource stream failed.

@@ -68,7 +68,7 @@ class FtueAuthCombinedServerSelectionFragment @Inject constructor() : AbstractFt
         views.chooseServerSubmit.debouncedClicks { updateServerUrl() }
         views.chooseServerInput.editText().textChanges()
                 .onEach { views.chooseServerInput.error = null }
-                .launchIn(lifecycleScope)
+                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun updateServerUrl() {

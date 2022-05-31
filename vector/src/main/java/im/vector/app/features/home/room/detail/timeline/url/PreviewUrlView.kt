@@ -59,6 +59,8 @@ class PreviewUrlView @JvmOverloads constructor(
      * This methods is responsible for rendering the view according to the newState.
      *
      * @param newState the newState representing the view
+     * @param imageContentRenderer the tool to render the image
+     * @param force true to force refresh
      */
     fun render(newState: PreviewUrlUiState,
                imageContentRenderer: ImageContentRenderer,

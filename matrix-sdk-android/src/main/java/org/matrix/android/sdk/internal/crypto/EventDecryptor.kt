@@ -29,6 +29,7 @@ import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.content.OlmEventContent
+import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.internal.crypto.actions.EnsureOlmSessionsForDevicesAction
 import org.matrix.android.sdk.internal.crypto.actions.MessageEncrypter
@@ -42,7 +43,7 @@ import javax.inject.Inject
 
 private const val SEND_TO_DEVICE_RETRY_COUNT = 3
 
-private val loggerTag = LoggerTag("CryptoSyncHandler", LoggerTag.CRYPTO)
+private val loggerTag = LoggerTag("EventDecryptor", LoggerTag.CRYPTO)
 
 @SessionScope
 internal class EventDecryptor @Inject constructor(
@@ -72,7 +73,7 @@ internal class EventDecryptor @Inject constructor(
     /**
      * Decrypt an event.
      *
-     * @param event    the raw event.
+     * @param event the raw event.
      * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
      * @return the MXEventDecryptionResult data, or throw in case of error
      */
@@ -84,7 +85,7 @@ internal class EventDecryptor @Inject constructor(
     /**
      * Decrypt an event asynchronously.
      *
-     * @param event    the raw event.
+     * @param event the raw event.
      * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
      * @param callback the callback to return data or null
      */
@@ -100,7 +101,7 @@ internal class EventDecryptor @Inject constructor(
     /**
      * Decrypt an event.
      *
-     * @param event    the raw event.
+     * @param event the raw event.
      * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
      * @return the MXEventDecryptionResult data, or null in case of error
      */
@@ -110,6 +111,16 @@ internal class EventDecryptor @Inject constructor(
         if (eventContent == null) {
             Timber.tag(loggerTag.value).e("decryptEvent : empty event content")
             throw MXCryptoError.Base(MXCryptoError.ErrorType.BAD_ENCRYPTED_MESSAGE, MXCryptoError.BAD_ENCRYPTED_MESSAGE_REASON)
+        } else if (event.isRedacted()) {
+            // we shouldn't attempt to decrypt a redacted event because the content is cleared and decryption will fail because of null algorithm
+            return MXEventDecryptionResult(
+                    clearEvent = mapOf(
+                            "room_id" to event.roomId.orEmpty(),
+                            "type" to EventType.MESSAGE,
+                            "content" to emptyMap<String, Any>(),
+                            "unsigned" to event.unsignedData.toContent()
+                    )
+            )
         } else {
             val algorithm = eventContent["algorithm"]?.toString()
             val alg = roomDecryptorProvider.getOrCreateRoomDecryptor(event.roomId, algorithm)

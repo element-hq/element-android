@@ -16,6 +16,14 @@
 
 package org.matrix.android.sdk.api
 
+/**
+ * This interface exists to let the implementation provide localized room display name fallback.
+ * The methods can be called when the room has no name, i.e. its `m.room.name` state event does not exist or
+ * the name in it is an empty String.
+ * It allows the SDK to store the room name fallback into the local storage and so let the client do
+ * queries on the room name.
+ * *Limitation*: if the locale of the device changes, the methods will not be called again.
+ */
 interface RoomDisplayNameFallbackProvider {
     fun getNameForRoomInvite(): String
     fun getNameForEmptyRoom(isDirect: Boolean, leftMemberNames: List<String>): String

@@ -44,6 +44,7 @@ internal data class GeneratePrivateKeyResult(
  * Compute a private key from a password.
  *
  * @param password the password to use.
+ * @param progressListener a listener to track progress
  *
  * @return a {privateKey, salt, iterations} tuple.
  */

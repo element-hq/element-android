@@ -33,7 +33,7 @@ class FakeAuthenticationService : AuthenticationService by mockk() {
     }
 
     fun givenRegistrationStarted(started: Boolean) {
-        every { isRegistrationStarted } returns started
+        every { isRegistrationStarted() } returns started
     }
 
     fun givenLoginFlow(config: HomeServerConnectionConfig, result: LoginFlowResult) {

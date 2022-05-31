@@ -34,7 +34,7 @@ interface KeysBackupService {
      * Create a new keys backup version and enable it, using the information return from [prepareKeysBackupVersion].
      *
      * @param keysBackupCreationInfo the info object from [prepareKeysBackupVersion].
-     * @param callback               Asynchronous callback
+     * @param callback Asynchronous callback
      */
     fun createKeysBackupVersion(keysBackupCreationInfo: MegolmBackupCreationInfo,
                                 callback: MatrixCallback<KeysVersion>)
@@ -122,7 +122,7 @@ interface KeysBackupService {
      * Delete a keys backup version. It will delete all backed up keys on the server, and the backup itself.
      * If we are backing up to this version. Backup will be stopped.
      *
-     * @param version  the backup version to delete.
+     * @param version the backup version to delete.
      * @param callback Asynchronous callback
      */
     fun deleteBackup(version: String,
@@ -168,17 +168,15 @@ interface KeysBackupService {
                                              password: String,
                                              callback: MatrixCallback<Unit>)
 
-    fun onSecretKeyGossip(secret: String)
-
     /**
      * Restore a backup with a recovery key from a given backup version stored on the homeserver.
      *
-     * @param keysVersionResult    the backup version to restore from.
-     * @param recoveryKey          the recovery key to decrypt the retrieved backup.
-     * @param roomId               the id of the room to get backup data from.
-     * @param sessionId            the id of the session to restore.
+     * @param keysVersionResult the backup version to restore from.
+     * @param recoveryKey the recovery key to decrypt the retrieved backup.
+     * @param roomId the id of the room to get backup data from.
+     * @param sessionId the id of the session to restore.
      * @param stepProgressListener the step progress listener
-     * @param callback             Callback. It provides the number of found keys and the number of successfully imported keys.
+     * @param callback Callback. It provides the number of found keys and the number of successfully imported keys.
      */
     fun restoreKeysWithRecoveryKey(keysVersionResult: KeysVersionResult,
                                    recoveryKey: String, roomId: String?,
@@ -204,10 +202,13 @@ interface KeysBackupService {
                                      callback: MatrixCallback<ImportRoomKeysResult>)
 
     val keysBackupVersion: KeysVersionResult?
+
     val currentBackupVersion: String?
-    val isEnabled: Boolean
-    val isStucked: Boolean
-    val state: KeysBackupState
+        get() = keysBackupVersion?.version
+
+    fun isEnabled(): Boolean
+    fun isStuck(): Boolean
+    fun getState(): KeysBackupState
 
     // For gossiping
     fun saveBackupRecoveryKey(recoveryKey: String?, version: String?)

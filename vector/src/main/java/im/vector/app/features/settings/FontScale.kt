@@ -78,6 +78,7 @@ object FontScale {
     /**
      * Store the font scale value.
      *
+     * @param context the Android context
      * @param fontScaleValue the font scale value to store
      */
     private fun saveFontScaleValue(context: Context, fontScaleValue: FontScaleValue) {

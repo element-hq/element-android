@@ -68,7 +68,7 @@ internal object MXMegolmExportEncryption {
     /**
      * Decrypt a megolm key file.
      *
-     * @param data     the data to decrypt
+     * @param data the data to decrypt
      * @param password the password.
      * @return the decrypted output.
      * @throws Exception the failure reason
@@ -138,9 +138,9 @@ internal object MXMegolmExportEncryption {
     /**
      * Encrypt a string into the megolm export format.
      *
-     * @param data       the data to encrypt.
-     * @param password   the password
-     * @param kdf_rounds the iteration count
+     * @param data the data to encrypt.
+     * @param password the password
+     * @param kdfRounds the iteration count
      * @return the encrypted data
      * @throws Exception the failure reason
      */
@@ -304,9 +304,9 @@ internal object MXMegolmExportEncryption {
     /**
      * Derive the AES and HMAC-SHA-256 keys for the file.
      *
-     * @param salt       salt for pbkdf
+     * @param salt salt for pbkdf
      * @param iterations number of pbkdf iterations
-     * @param password   password
+     * @param password password
      * @return the derived keys
      */
     @Throws(Exception::class)

@@ -1,5 +1,34 @@
 # Adding and removing ThreePids to an account
 
+<!--- TOC -->
+
+* [Add email](#add-email)
+  * [User enter the email](#user-enter-the-email)
+    * [The email is already added to an account](#the-email-is-already-added-to-an-account)
+    * [The email is free](#the-email-is-free)
+* [User receives an e-mail](#user-receives-an-e-mail)
+  * [User clicks on the link](#user-clicks-on-the-link)
+  * [User returns on Element](#user-returns-on-element)
+  * [User enters his password](#user-enters-his-password)
+    * [The link has not been clicked](#the-link-has-not-been-clicked)
+    * [Wrong password](#wrong-password)
+    * [The link has been clicked and the account password is correct](#the-link-has-been-clicked-and-the-account-password-is-correct)
+* [Remove email](#remove-email)
+  * [User want to remove an email from his account](#user-want-to-remove-an-email-from-his-account)
+    * [Email was not bound to an identity server](#email-was-not-bound-to-an-identity-server)
+    * [Email was bound to an identity server](#email-was-bound-to-an-identity-server)
+* [Add phone number](#add-phone-number)
+    * [The phone number is already added to an account](#the-phone-number-is-already-added-to-an-account)
+    * [The phone number is free](#the-phone-number-is-free)
+* [User receive a text message](#user-receive-a-text-message)
+  * [User enter the code to the app](#user-enter-the-code-to-the-app)
+    * [Wrong code](#wrong-code)
+    * [Correct code](#correct-code)
+* [Remove phone number](#remove-phone-number)
+  * [User wants to remove a phone number from his account](#user-wants-to-remove-a-phone-number-from-his-account)
+
+<!--- END -->
+
 ## Add email
 
 ### User enter the email

@@ -55,6 +55,7 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ActivityEntryPoint
 import im.vector.app.core.dialogs.DialogLocker
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
+import im.vector.app.core.error.fatalError
 import im.vector.app.core.extensions.observeEvent
 import im.vector.app.core.extensions.observeNotNull
 import im.vector.app.core.extensions.registerStartForActivityResult
@@ -611,11 +612,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
                 }
             }.show()
         } else {
-            if (vectorPreferences.failFast()) {
-                error("No CoordinatorLayout to display this snackbar!")
-            } else {
-                Timber.w("No CoordinatorLayout to display this snackbar!")
-            }
+            fatalError("No CoordinatorLayout to display this snackbar!", vectorPreferences.failFast())
         }
     }
 

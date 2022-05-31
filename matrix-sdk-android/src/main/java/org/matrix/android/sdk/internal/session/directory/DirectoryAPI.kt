@@ -55,6 +55,7 @@ internal interface DirectoryAPI {
     /**
      * Add alias to the room.
      * @param roomAlias the room alias.
+     * @param body the Json body
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "directory/room/{roomAlias}")
     suspend fun addRoomAlias(@Path("roomAlias") roomAlias: String,

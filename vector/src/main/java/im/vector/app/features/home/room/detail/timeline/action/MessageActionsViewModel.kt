@@ -401,8 +401,8 @@ class MessageActionsViewModel @AssistedInject constructor(
         if (vectorPreferences.developerMode()) {
             if (timelineEvent.isEncrypted() && timelineEvent.root.mCryptoError != null) {
                 val keysBackupService = session.cryptoService().keysBackupService()
-                if (keysBackupService.state == KeysBackupState.NotTrusted ||
-                        (keysBackupService.state == KeysBackupState.ReadyToBackUp &&
+                if (keysBackupService.getState() == KeysBackupState.NotTrusted ||
+                        (keysBackupService.getState() == KeysBackupState.ReadyToBackUp &&
                                 keysBackupService.canRestoreKeys())
                 ) {
                     add(EventSharedAction.UseKeyBackup)

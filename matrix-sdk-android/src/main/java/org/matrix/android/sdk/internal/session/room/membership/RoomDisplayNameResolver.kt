@@ -52,8 +52,8 @@ internal class RoomDisplayNameResolver @Inject constructor(
     /**
      * Compute the room display name.
      *
-     * @param realm: the current instance of realm
-     * @param roomId: the roomId to resolve the name of.
+     * @param realm the current instance of realm
+     * @param roomId the roomId to resolve the name of.
      * @return the room display name
      */
     fun resolve(realm: Realm, roomId: String): RoomName {

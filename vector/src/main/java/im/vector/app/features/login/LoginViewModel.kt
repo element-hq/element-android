@@ -36,7 +36,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.ensureTrailingSlash
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.MatrixPatterns.getDomain
+import org.matrix.android.sdk.api.MatrixPatterns.getServerName
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
@@ -91,11 +91,11 @@ class LoginViewModel @AssistedInject constructor(
     private val matrixOrgUrl = stringProvider.getString(R.string.matrix_org_server_url).ensureTrailingSlash()
 
     val currentThreePid: String?
-        get() = registrationWizard?.currentThreePid
+        get() = registrationWizard?.getCurrentThreePid()
 
     // True when login and password has been sent with success to the homeserver
     val isRegistrationStarted: Boolean
-        get() = authenticationService.isRegistrationStarted
+        get() = authenticationService.isRegistrationStarted()
 
     private val registrationWizard: RegistrationWizard?
         get() = authenticationService.getRegistrationWizard()
@@ -455,7 +455,7 @@ class LoginViewModel @AssistedInject constructor(
 
         // If there is a pending email validation continue on this step
         try {
-            if (registrationWizard?.isRegistrationStarted == true) {
+            if (registrationWizard?.isRegistrationStarted() == true) {
                 currentThreePid?.let {
                     handle(LoginAction.PostViewEvent(LoginViewEvents.OnSendEmailSuccess(it)))
                 }
@@ -607,7 +607,7 @@ class LoginViewModel @AssistedInject constructor(
                         identityServerUri = wellKnownPrompt.identityServerUrl?.let { Uri.parse(it) }
                 )
                 ?: HomeServerConnectionConfig(
-                        homeServerUri = Uri.parse("https://${action.username.getDomain()}"),
+                        homeServerUri = Uri.parse("https://${action.username.getServerName()}"),
                         homeServerUriBase = Uri.parse(wellKnownPrompt.homeServerUrl),
                         identityServerUri = wellKnownPrompt.identityServerUrl?.let { Uri.parse(it) }
                 )

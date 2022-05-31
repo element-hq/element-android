@@ -43,14 +43,16 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import org.matrix.android.sdk.api.extensions.tryOrNull
-import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.query.RoomTagQueryFilter
+import org.matrix.android.sdk.api.query.SpaceFilter
+import org.matrix.android.sdk.api.query.toActiveSpaceOrOrphanRooms
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
 import timber.log.Timber
 
@@ -297,7 +299,6 @@ class RoomListSectionBuilderSpace(
                     countRoomAsNotif = true
             ) {
                 it.memberships = listOf(Membership.INVITE)
-                it.roomCategoryFilter = RoomCategoryFilter.ALL
             }
         }
 
@@ -323,9 +324,9 @@ class RoomListSectionBuilderSpace(
                 {
                     it.memberships = Membership.activeMemberships()
                 },
-                { qpm ->
+                { queryParams ->
                     val name = stringProvider.getString(R.string.bottom_action_rooms)
-                    val updatableFilterLivePageResult = session.roomService().getFilteredPagedRoomSummariesLive(qpm)
+                    val updatableFilterLivePageResult = session.roomService().getFilteredPagedRoomSummariesLive(queryParams)
                     onUpdatable(updatableFilterLivePageResult)
 
                     val itemCountFlow = updatableFilterLivePageResult.livePagedList.asFlow()
@@ -370,7 +371,7 @@ class RoomListSectionBuilderSpace(
                     activeSpaceUpdaters.add(object : RoomListViewModel.ActiveSpaceQueryUpdater {
                         override fun updateForSpaceId(roomId: String?) {
                             filteredPagedRoomSummariesLive.queryParams = roomQueryParams.copy(
-                                    activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(roomId)
+                                    spaceFilter = roomId?.toActiveSpaceOrOrphanRooms()
                             )
                             liveQueryParams.update { filteredPagedRoomSummariesLive.queryParams }
                         }
@@ -381,11 +382,11 @@ class RoomListSectionBuilderSpace(
                         override fun updateForSpaceId(roomId: String?) {
                             if (roomId != null) {
                                 filteredPagedRoomSummariesLive.queryParams = roomQueryParams.copy(
-                                        activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(roomId)
+                                        spaceFilter = SpaceFilter.ActiveSpace(roomId)
                                 )
                             } else {
                                 filteredPagedRoomSummariesLive.queryParams = roomQueryParams.copy(
-                                        activeSpaceFilter = ActiveSpaceFilter.None
+                                        spaceFilter = null
                                 )
                             }
                             liveQueryParams.update { filteredPagedRoomSummariesLive.queryParams }
@@ -429,29 +430,20 @@ class RoomListSectionBuilderSpace(
     }
 
     private fun withQueryParams(builder: (RoomSummaryQueryParams.Builder) -> Unit, block: (RoomSummaryQueryParams) -> Unit) {
-        RoomSummaryQueryParams.Builder()
-                .apply { builder.invoke(this) }
-                .build()
-                .let { block(it) }
+        block(roomSummaryQueryParams { builder.invoke(this) })
     }
 
     internal fun RoomSummaryQueryParams.process(spaceFilter: RoomListViewModel.SpaceFilterStrategy, currentSpace: String?): RoomSummaryQueryParams {
         return when (spaceFilter) {
             RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL -> {
                 copy(
-                        activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(currentSpace)
+                        spaceFilter = currentSpace?.toActiveSpaceOrOrphanRooms()
                 )
             }
             RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL     -> {
-                if (currentSpace == null) {
-                    copy(
-                            activeSpaceFilter = ActiveSpaceFilter.None
-                    )
-                } else {
-                    copy(
-                            activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(currentSpace)
-                    )
-                }
+                copy(
+                        spaceFilter = currentSpace?.let { SpaceFilter.ActiveSpace(it) }
+                )
             }
             RoomListViewModel.SpaceFilterStrategy.NONE                  -> this
         }

@@ -67,7 +67,7 @@ data class RuleSet(
     /**
      * Find a rule from its rule Id.
      *
-     * @param rules  the rules list.
+     * @param rules the rules list.
      * @param ruleId the rule Id.
      * @return the bing rule if it exists, else null.
      */

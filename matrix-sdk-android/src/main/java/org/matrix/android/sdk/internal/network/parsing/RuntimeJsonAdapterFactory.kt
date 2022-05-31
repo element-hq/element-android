@@ -119,9 +119,11 @@ internal class RuntimeJsonAdapterFactory<T>(
 
     companion object {
         /**
+         * @param T the generic type to pass to [RuntimeJsonAdapterFactory]
          * @param baseType The base type for which this factory will create adapters. Cannot be Object.
          * @param labelKey The key in the JSON object whose value determines the type to which to map the
          * JSON object.
+         * @param fallbackType alternative Type to try in case of the serialization fails
          */
         @CheckReturnValue
         fun <T> of(baseType: Class<T>, labelKey: String, fallbackType: Class<out T>): RuntimeJsonAdapterFactory<T> {

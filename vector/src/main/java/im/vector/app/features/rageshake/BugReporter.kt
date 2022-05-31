@@ -156,13 +156,16 @@ class BugReporter @Inject constructor(
     /**
      * Send a bug report.
      *
-     * @param reportType        The report type (bug, suggestion, feedback)
-     * @param withDevicesLogs   true to include the device log
-     * @param withCrashLogs     true to include the crash logs
+     * @param reportType The report type (bug, suggestion, feedback)
+     * @param withDevicesLogs true to include the device log
+     * @param withCrashLogs true to include the crash logs
      * @param withKeyRequestHistory true to include the crash logs
-     * @param withScreenshot    true to include the screenshot
+     * @param withScreenshot true to include the screenshot
      * @param theBugDescription the bug description
-     * @param listener          the listener
+     * @param serverVersion version of the server
+     * @param canContact true if the user opt in to be contacted directly
+     * @param customFields fields which will be sent with the report
+     * @param listener the listener
      */
     @SuppressLint("StaticFieldLeak")
     fun sendBugReport(reportType: ReportType,
@@ -287,7 +290,8 @@ class BugReporter @Inject constructor(
                             .addFormDataPart("app_language", VectorLocale.applicationLocale.toString())
                             .addFormDataPart("default_app_language", systemLocaleProvider.getSystemLocale().toString())
                             .addFormDataPart("theme", ThemeUtils.getApplicationTheme(context))
-                            .addFormDataPart("server_version", serverVersion).apply {
+                            .addFormDataPart("server_version", serverVersion)
+                            .apply {
                                 customFields?.forEach { (name, value) ->
                                     addFormDataPart(name, value)
                                 }
@@ -678,7 +682,7 @@ class BugReporter @Inject constructor(
     /**
      * Retrieves the logs.
      *
-     * @param streamWriter  the stream writer
+     * @param streamWriter the stream writer
      * @param isErrorLogCat true to save the error logs
      */
     private fun getLogCatError(streamWriter: OutputStreamWriter, isErrorLogCat: Boolean) {

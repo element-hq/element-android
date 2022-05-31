@@ -35,6 +35,11 @@ internal interface VerificationTransport {
                         onDone: (() -> Unit)?)
 
     /**
+     * @param supportedMethods list of supported method by this client
+     * @param localId a local Id
+     * @param otherUserId the user id to send the verification request to
+     * @param roomId a room Id to use to send verification message
+     * @param toDevices list of device Ids
      * @param callback will be called with eventId and ValidVerificationInfoRequest in case of success
      */
     fun sendVerificationRequest(supportedMethods: List<String>,
@@ -47,6 +52,11 @@ internal interface VerificationTransport {
     fun cancelTransaction(transactionId: String,
                           otherUserId: String,
                           otherUserDeviceId: String?,
+                          code: CancelCode)
+
+    fun cancelTransaction(transactionId: String,
+                          otherUserId: String,
+                          otherUserDeviceIds: List<String>,
                           code: CancelCode)
 
     fun done(transactionId: String,

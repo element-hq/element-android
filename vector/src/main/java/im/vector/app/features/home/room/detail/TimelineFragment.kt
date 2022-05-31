@@ -74,6 +74,9 @@ import im.vector.app.core.dialogs.ConfirmationDialogBuilder
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.epoxy.LayoutManagerStateRestorer
 import im.vector.app.core.extensions.cleanup
+import im.vector.app.core.extensions.containsRtLOverride
+import im.vector.app.core.extensions.ensureEndsLeftToRight
+import im.vector.app.core.extensions.filterDirectionOverrides
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.setTextOrHide
@@ -221,6 +224,7 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageInfoContent
@@ -647,6 +651,13 @@ class TimelineFragment @Inject constructor(
                 )
     }
 
+    private fun navigateToLocationLiveMap() {
+        navigator.openLocationLiveMap(
+                context = requireContext(),
+                roomId = timelineArgs.roomId
+        )
+    }
+
     private fun handleChangeLocationIndicator(event: RoomDetailViewEvents.ChangeLocationIndicator) {
         views.locationLiveStatusIndicator.isVisible = event.isVisible
     }
@@ -706,31 +717,31 @@ class TimelineFragment @Inject constructor(
     }
 
     private fun createEmojiPopup(): EmojiPopup {
-        return EmojiPopup
-                .Builder
-                .fromRootView(views.rootConstraintLayout)
-                .setKeyboardAnimationStyle(R.style.emoji_fade_animation_style)
-                .setOnEmojiPopupShownListener {
+        return EmojiPopup(
+                rootView = views.rootConstraintLayout,
+                keyboardAnimationStyle = R.style.emoji_fade_animation_style,
+                onEmojiPopupShownListener = {
                     views.composerLayout.views.composerEmojiButton.apply {
                         contentDescription = getString(R.string.a11y_close_emoji_picker)
                         setImageResource(R.drawable.ic_keyboard)
                     }
-                }
-                .setOnEmojiPopupDismissListenerLifecycleAware {
+                },
+                onEmojiPopupDismissListener = lifecycleAwareDismissAction {
                     views.composerLayout.views.composerEmojiButton.apply {
                         contentDescription = getString(R.string.a11y_open_emoji_picker)
                         setImageResource(R.drawable.ic_insert_emoji)
                     }
-                }
-                .build(views.composerLayout.views.composerEditText)
+                },
+                editText = views.composerLayout.views.composerEditText
+        )
     }
 
     /**
      *  Ensure dismiss actions only trigger when the fragment is in the started state.
      *  EmojiPopup by default dismisses onViewDetachedFromWindow, this can cause race conditions with onDestroyView.
      */
-    private fun EmojiPopup.Builder.setOnEmojiPopupDismissListenerLifecycleAware(action: () -> Unit): EmojiPopup.Builder {
-        return setOnEmojiPopupDismissListener {
+    private fun lifecycleAwareDismissAction(action: () -> Unit): () -> Unit {
+        return {
             if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
                 action()
             }
@@ -1914,28 +1925,41 @@ class TimelineFragment @Inject constructor(
                         }
                     })
             if (!isManaged) {
-                if (title.isValidUrl() && url.isValidUrl() && URL(title).host != URL(url).host) {
-                    MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_NegativeDestructive)
-                            .setTitle(R.string.external_link_confirmation_title)
-                            .setMessage(
-                                    getString(R.string.external_link_confirmation_message, title, url)
-                                            .toSpannable()
-                                            .colorizeMatchingText(url, colorProvider.getColorFromAttribute(R.attr.vctr_content_tertiary))
-                                            .colorizeMatchingText(title, colorProvider.getColorFromAttribute(R.attr.vctr_content_tertiary))
-                            )
-                            .setPositiveButton(R.string._continue) { _, _ ->
-                                openUrlInExternalBrowser(requireContext(), url)
-                            }
-                            .setNegativeButton(R.string.action_cancel, null)
-                            .show()
-                } else {
-                    // Open in external browser, in a new Tab
-                    openUrlInExternalBrowser(requireContext(), url)
+                when {
+                    url.containsRtLOverride()                                                  -> {
+                        displayUrlConfirmationDialog(
+                                seenUrl = title.ensureEndsLeftToRight(),
+                                actualUrl = url.filterDirectionOverrides(),
+                                continueTo = url
+                        )
+                    }
+                    title.isValidUrl() && url.isValidUrl() && URL(title).host != URL(url).host -> {
+                        displayUrlConfirmationDialog(title, url)
+                    }
+                    else                                                                       -> {
+                        openUrlInExternalBrowser(requireContext(), url)
+                    }
                 }
             }
         }
         // In fact it is always managed
         return true
+    }
+
+    private fun displayUrlConfirmationDialog(seenUrl: String, actualUrl: String, continueTo: String = actualUrl) {
+        MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_NegativeDestructive)
+                .setTitle(R.string.external_link_confirmation_title)
+                .setMessage(
+                        getString(R.string.external_link_confirmation_message, seenUrl, actualUrl)
+                                .toSpannable()
+                                .colorizeMatchingText(actualUrl, colorProvider.getColorFromAttribute(R.attr.vctr_content_tertiary))
+                                .colorizeMatchingText(seenUrl, colorProvider.getColorFromAttribute(R.attr.vctr_content_tertiary))
+                )
+                .setPositiveButton(R.string._continue) { _, _ ->
+                    openUrlInExternalBrowser(requireContext(), continueTo)
+                }
+                .setNegativeButton(R.string.action_cancel, null)
+                .show()
     }
 
     override fun onUrlLongClicked(url: String): Boolean {
@@ -2014,6 +2038,9 @@ class TimelineFragment @Inject constructor(
             }
             is MessageLocationContent            -> {
                 handleShowLocationPreview(messageContent, informationData.senderId)
+            }
+            is MessageBeaconInfoContent          -> {
+                navigateToLocationLiveMap()
             }
             else                                 -> {
                 val handled = onThreadSummaryClicked(informationData.eventId, isRootThreadEvent)

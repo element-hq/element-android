@@ -29,9 +29,11 @@ sealed class ExternalIntentData {
     /**
      * Constructor for a text message.
      *
-     * @param text     the text
-     * @param htmlText the HTML text
-     * @param format   the formatted text format
+     * @property text the text
+     * @property htmlText the HTML text
+     * @property format the formatted text format
+     * @property clipDataItem the ClipData
+     * @property mimeType the mimetype
      */
     data class IntentDataText(
             val text: CharSequence? = null,
@@ -52,8 +54,8 @@ sealed class ExternalIntentData {
     /**
      * Constructor from a media Uri/.
      *
-     * @param uri      the media uri
-     * @param filename the media file name
+     * @property uri the media uri
+     * @property filename the media file name
      */
     data class IntentDataUri(
             val uri: Uri,

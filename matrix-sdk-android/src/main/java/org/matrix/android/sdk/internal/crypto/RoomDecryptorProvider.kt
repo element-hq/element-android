@@ -49,7 +49,7 @@ internal class RoomDecryptorProvider @Inject constructor(
      * If we already have a decryptor for the given room and algorithm, return
      * it. Otherwise try to instantiate it.
      *
-     * @param roomId    the room id
+     * @param roomId the room id
      * @param algorithm the crypto algorithm
      * @return the decryptor
      * // TODO Create another method for the case of roomId is null

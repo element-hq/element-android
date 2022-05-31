@@ -16,6 +16,7 @@
 
 package im.vector.lib.core.utils.flow
 
+import android.os.SystemClock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
@@ -68,10 +69,10 @@ fun <T> Flow<T>.chunk(durationInMillis: Long): Flow<List<T>> {
 
 @ExperimentalCoroutinesApi
 fun <T> Flow<T>.throttleFirst(windowDuration: Long): Flow<T> = flow {
-    var windowStartTime = System.currentTimeMillis()
+    var windowStartTime = SystemClock.elapsedRealtime()
     var emitted = false
     collect { value ->
-        val currentTime = System.currentTimeMillis()
+        val currentTime = SystemClock.elapsedRealtime()
         val delta = currentTime - windowStartTime
         if (delta >= windowDuration) {
             windowStartTime += delta / windowDuration * windowDuration

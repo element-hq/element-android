@@ -1,5 +1,31 @@
 # Element Android design
 
+<!--- TOC -->
+
+* [Introduction](#introduction)
+* [How to import from Figma to the Element Android project](#how-to-import-from-figma-to-the-element-android-project)
+  * [Colors](#colors)
+  * [Text](#text)
+  * [Dimension, position and margin](#dimension-position-and-margin)
+  * [Icons](#icons)
+    * [Export drawable from Figma](#export-drawable-from-figma)
+    * [Import in Android Studio](#import-in-android-studio)
+  * [Images](#images)
+* [Figma links](#figma-links)
+  * [Coumpound](#coumpound)
+  * [Login](#login)
+    * [Login v2](#login-v2)
+  * [Room list](#room-list)
+  * [Timeline](#timeline)
+  * [Voice message](#voice-message)
+  * [Room settings](#room-settings)
+  * [VoIP](#voip)
+  * [Presence](#presence)
+  * [Spaces](#spaces)
+  * [List to be continued...](#list-to-be-continued)
+
+<!--- END -->
+
 ## Introduction
 
 Design at element.io is done using Figma - https://www.figma.com

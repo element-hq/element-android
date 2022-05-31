@@ -32,6 +32,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationState
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
+import org.matrix.android.sdk.api.session.events.model.getMsgType
 import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.ReferencesAggregatedContent
@@ -44,8 +45,7 @@ import org.matrix.android.sdk.api.session.room.timeline.hasBeenEdited
 import javax.inject.Inject
 
 /**
- * This class compute if data of an event (such has avatar, display name, ...) should be displayed, depending on the previous event in the timeline.
- * TODO Update this comment
+ * This class is responsible of building extra information data associated to a given event.
  */
 class MessageInformationDataFactory @Inject constructor(private val session: Session,
                                                         private val dateFormatter: VectorDateFormatter,
@@ -119,7 +119,8 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                 isFirstFromThisSender = isFirstFromThisSender,
                 isLastFromThisSender = isLastFromThisSender,
                 e2eDecoration = e2eDecoration,
-                sendStateDecoration = sendStateDecoration
+                sendStateDecoration = sendStateDecoration,
+                messageType = event.root.getMsgType()
         )
     }
 

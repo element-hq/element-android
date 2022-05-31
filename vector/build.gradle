@@ -31,7 +31,7 @@ ext.versionMinor = 4
 // Note: even values are reserved for regular release, odd values for hotfix release.
 // When creating a hotfix, you should decrease the value, since the current value
 // is the value for the next regular release.
-ext.versionPatch = 16
+ext.versionPatch = 18
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -370,7 +370,6 @@ dependencies {
     implementation libs.androidx.lifecycleProcess
     implementation libs.androidx.lifecycleRuntimeKtx
 
-    implementation libs.androidx.datastore
     implementation libs.androidx.datastorepreferences
 
 
@@ -381,12 +380,11 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.6.0'
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.48'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.49'
 
     // FlowBinding
     implementation libs.github.flowBinding
     implementation libs.github.flowBindingAppcompat
-    implementation libs.github.flowBindingMaterial
 
     implementation libs.airbnb.epoxy
     implementation libs.airbnb.epoxyGlide
@@ -452,9 +450,6 @@ dependencies {
     kapt libs.github.glideCompiler
     implementation 'com.github.yalantis:ucrop:2.2.8'
 
-    // Badge for compatibility
-    implementation 'me.leolin:ShortcutBadger:1.1.22@aar'
-
     // Chat effects
     implementation 'nl.dionsegijn:konfetti-xml:2.0.2'
 
@@ -510,9 +505,14 @@ dependencies {
     implementation 'commons-codec:commons-codec:1.15'
 
     // MapTiler
-    implementation 'org.maplibre.gl:android-sdk:9.5.2'
-    implementation 'org.maplibre.gl:android-plugin-annotation-v9:1.0.0'
-
+    fdroidImplementation(libs.maplibre.androidSdk) {
+        exclude group: 'com.google.android.gms', module: 'play-services-location'
+    }
+    fdroidImplementation(libs.maplibre.pluginAnnotation) {
+        exclude group: 'com.google.android.gms', module: 'play-services-location'
+    }
+    gplayImplementation libs.maplibre.androidSdk
+    gplayImplementation libs.maplibre.pluginAnnotation
 
     // TESTS
     testImplementation libs.tests.junit

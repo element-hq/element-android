@@ -54,7 +54,6 @@ import im.vector.app.features.onboarding.OnboardingViewState
 import im.vector.app.features.onboarding.ftueauth.terms.FtueAuthLegacyStyleTermsFragment
 import im.vector.app.features.onboarding.ftueauth.terms.FtueAuthTermsFragment
 import im.vector.app.features.onboarding.ftueauth.terms.FtueAuthTermsLegacyStyleFragmentArgument
-import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.auth.toLocalizedLoginTerms
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -192,12 +191,7 @@ class FtueAuthVariant(
                 supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
             }
             is OnboardingViewEvents.OnSendEmailSuccess                         -> {
-                // Pop the enter email Fragment
-                supportFragmentManager.popBackStack(FRAGMENT_REGISTRATION_STAGE_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                addRegistrationStageFragmentToBackstack(
-                        FtueAuthWaitForEmailFragment::class.java,
-                        FtueAuthWaitForEmailFragmentArgument(viewEvents.email),
-                )
+                openWaitForEmailVerification(viewEvents.email)
             }
             is OnboardingViewEvents.OnSendMsisdnSuccess                        -> {
                 // Pop the enter Msisdn Fragment
@@ -234,21 +228,38 @@ class FtueAuthVariant(
                 )
             }
             OnboardingViewEvents.OnHomeserverEdited                            -> activity.popBackstack()
+            OnboardingViewEvents.OpenCombinedLogin                             -> onStartCombinedLogin()
+            is OnboardingViewEvents.DeeplinkAuthenticationFailure              -> onDeeplinkedHomeserverUnavailable(viewEvents)
         }
+    }
+
+    private fun onDeeplinkedHomeserverUnavailable(viewEvents: OnboardingViewEvents.DeeplinkAuthenticationFailure) {
+        showHomeserverUnavailableDialog(onboardingViewModel.getInitialHomeServerUrl().orEmpty()) {
+            onboardingViewModel.handle(OnboardingAction.ResetDeeplinkConfig)
+            onboardingViewModel.handle(viewEvents.retryAction)
+        }
+    }
+
+    private fun showHomeserverUnavailableDialog(url: String, action: () -> Unit) {
+        MaterialAlertDialogBuilder(activity)
+                .setTitle(R.string.dialog_title_error)
+                .setMessage(activity.getString(R.string.login_error_homeserver_from_url_not_found, url))
+                .setPositiveButton(R.string.login_error_homeserver_from_url_not_found_enter_manual) { _, _ -> action() }
+                .setNegativeButton(R.string.action_cancel, null)
+                .show()
+    }
+
+    private fun onStartCombinedLogin() {
+        addRegistrationStageFragmentToBackstack(FtueAuthCombinedLoginFragment::class.java)
     }
 
     private fun onRegistrationFlow(viewEvents: OnboardingViewEvents.RegistrationFlowResult) {
         when {
             registrationShouldFallback(viewEvents)               -> displayFallbackWebDialog()
-            viewEvents.isRegistrationStarted                     -> handleRegistrationNavigation(viewEvents.flowResult.orderedStages())
+            viewEvents.isRegistrationStarted                     -> handleRegistrationNavigation(viewEvents.flowResult.missingStages)
             vectorFeatures.isOnboardingCombinedRegisterEnabled() -> openStartCombinedRegister()
             else                                                 -> openAuthLoginFragmentWithTag(FRAGMENT_REGISTRATION_STAGE_TAG)
         }
-    }
-
-    private fun FlowResult.orderedStages() = when {
-        vectorFeatures.isOnboardingCombinedRegisterEnabled() -> missingStages.sortedWith(FtueMissingRegistrationStagesComparator())
-        else                                                 -> missingStages
     }
 
     private fun openStartCombinedRegister() {
@@ -393,16 +404,39 @@ class FtueAuthVariant(
 
         when (stage) {
             is Stage.ReCaptcha -> onCaptcha(stage)
-            is Stage.Email     -> addRegistrationStageFragmentToBackstack(
-                    FtueAuthGenericTextInputFormFragment::class.java,
-                    FtueAuthGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.SetEmail, stage.mandatory),
-            )
+            is Stage.Email     -> onEmail(stage)
             is Stage.Msisdn    -> addRegistrationStageFragmentToBackstack(
                     FtueAuthGenericTextInputFormFragment::class.java,
                     FtueAuthGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.SetMsisdn, stage.mandatory),
             )
             is Stage.Terms     -> onTerms(stage)
             else               -> Unit // Should not happen
+        }
+    }
+
+    private fun onEmail(stage: Stage) {
+        when {
+            vectorFeatures.isOnboardingCombinedRegisterEnabled() -> addRegistrationStageFragmentToBackstack(
+                    FtueAuthEmailEntryFragment::class.java
+            )
+            else                                                 -> addRegistrationStageFragmentToBackstack(
+                    FtueAuthGenericTextInputFormFragment::class.java,
+                    FtueAuthGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.SetEmail, stage.mandatory),
+            )
+        }
+    }
+
+    private fun openWaitForEmailVerification(email: String) {
+        supportFragmentManager.popBackStack(FRAGMENT_REGISTRATION_STAGE_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        when {
+            vectorFeatures.isOnboardingCombinedRegisterEnabled() -> addRegistrationStageFragmentToBackstack(
+                    FtueAuthWaitForEmailFragment::class.java,
+                    FtueAuthWaitForEmailFragmentArgument(email),
+            )
+            else                                                 -> addRegistrationStageFragmentToBackstack(
+                    FtueAuthLegacyWaitForEmailFragment::class.java,
+                    FtueAuthWaitForEmailFragmentArgument(email),
+            )
         }
     }
 

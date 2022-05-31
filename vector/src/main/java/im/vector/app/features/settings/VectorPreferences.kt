@@ -105,6 +105,7 @@ class VectorPreferences @Inject constructor(
         private const val SETTINGS_SHOW_EMOJI_KEYBOARD = "SETTINGS_SHOW_EMOJI_KEYBOARD"
         private const val SETTINGS_LABS_ENABLE_LATEX_MATHS = "SETTINGS_LABS_ENABLE_LATEX_MATHS"
         const val SETTINGS_PRESENCE_USER_ALWAYS_APPEARS_OFFLINE = "SETTINGS_PRESENCE_USER_ALWAYS_APPEARS_OFFLINE"
+        const val SETTINGS_AUTOPLAY_ANIMATED_IMAGES = "SETTINGS_AUTOPLAY_ANIMATED_IMAGES"
 
         // Room directory
         private const val SETTINGS_ROOM_DIRECTORY_SHOW_ALL_PUBLIC_ROOMS = "SETTINGS_ROOM_DIRECTORY_SHOW_ALL_PUBLIC_ROOMS"
@@ -203,6 +204,7 @@ class VectorPreferences @Inject constructor(
         private const val TAKE_PHOTO_VIDEO_MODE = "TAKE_PHOTO_VIDEO_MODE"
 
         private const val SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE = "SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE"
+        private const val SETTINGS_LABS_ENABLE_LIVE_LOCATION = "SETTINGS_LABS_ENABLE_LIVE_LOCATION"
 
         // This key will be used to identify clients with the old thread support enabled io.element.thread
         const val SETTINGS_LABS_ENABLE_THREAD_MESSAGES_OLD_CLIENTS = "SETTINGS_LABS_ENABLE_THREAD_MESSAGES"
@@ -492,7 +494,7 @@ class VectorPreferences @Inject constructor(
     /**
      * Update the notification ringtone.
      *
-     * @param uri     the new notification ringtone, or null for no RingTone
+     * @param uri the new notification ringtone, or null for no RingTone
      */
     fun setNotificationRingTone(uri: Uri?) {
         defaultPrefs.edit {
@@ -635,7 +637,7 @@ class VectorPreferences @Inject constructor(
     /**
      * Tells if the application is started on boot.
      *
-     * @param value   true to start the application on boot
+     * @param value true to start the application on boot
      */
     fun setAutoStartOnBoot(value: Boolean) {
         defaultPrefs.edit {
@@ -655,7 +657,7 @@ class VectorPreferences @Inject constructor(
     /**
      * Updates the selected saving period.
      *
-     * @param index   the selected period index
+     * @param index the selected period index
      */
     fun setSelectedMediasSavingPeriod(index: Int) {
         defaultPrefs.edit {
@@ -770,6 +772,15 @@ class VectorPreferences @Inject constructor(
      */
     fun alwaysShowTimeStamps(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY, false)
+    }
+
+    /**
+     * Tells if animated image attachments should automatically play their animation in the timeline.
+     *
+     * @return true if animated image attachments should automatically play their animation in the timeline
+     */
+    fun autoplayAnimatedImages(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_AUTOPLAY_ANIMATED_IMAGES, false)
     }
 
     /**
@@ -1039,6 +1050,10 @@ class VectorPreferences @Inject constructor(
 
     fun labsRenderLocationsInTimeline(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE, true)
+    }
+
+    fun labsEnableLiveLocation(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_LABS_ENABLE_LIVE_LOCATION, false)
     }
 
     /**

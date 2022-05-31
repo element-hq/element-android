@@ -28,7 +28,8 @@ interface RoomCryptoService {
 
     /**
      * Enable encryption of the room.
-     * @param Use force to ensure that this algorithm will be used. Otherwise this call
+     * @param algorithm the algorithm to set, default to [MXCRYPTO_ALGORITHM_MEGOLM]
+     * @param force Use force to ensure that this algorithm will be used. Otherwise this call
      * will throw if encryption is already setup or if the algorithm is not supported. Only to
      * be used by admins to fix misconfigured encryption.
      */

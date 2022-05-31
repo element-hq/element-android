@@ -30,7 +30,7 @@ import me.gujun.android.span.span
 /**
  * Open a web view above the current activity.
  *
- * @param url     the url to open
+ * @param url the url to open
  */
 fun Context.displayInWebView(url: String) {
     val wv = WebView(this)

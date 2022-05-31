@@ -35,7 +35,7 @@ import im.vector.app.core.resources.StringProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixPatterns
-import org.matrix.android.sdk.api.MatrixPatterns.getDomain
+import org.matrix.android.sdk.api.MatrixPatterns.getServerName
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.identity.IdentityServiceListener
 import org.matrix.android.sdk.api.session.room.AliasAvailabilityResult
@@ -66,7 +66,7 @@ class CreateSpaceViewModel @AssistedInject constructor(
         val identityServerUrl = identityService.getCurrentIdentityServerUrl()
         setState {
             copy(
-                    homeServerName = session.myUserId.getDomain(),
+                    homeServerName = session.myUserId.getServerName(),
                     canInviteByMail = identityServerUrl != null
             )
         }
