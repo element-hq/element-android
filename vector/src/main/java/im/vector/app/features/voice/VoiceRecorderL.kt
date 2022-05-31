@@ -118,12 +118,13 @@ class VoiceRecorderL(
     }
 
     override fun stopRecord() {
+        val recorder = this.audioRecorder ?: return
         recordingJob?.cancel()
 
-        if (audioRecorder?.state == AudioRecord.STATE_INITIALIZED) {
-            audioRecorder?.stop()
+        if (recorder.state == AudioRecord.STATE_INITIALIZED) {
+            recorder.stop()
         }
-        audioRecorder?.release()
+        recorder.release()
         audioRecorder = null
 
         noiseSuppressor?.release()
