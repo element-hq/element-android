@@ -128,7 +128,7 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
     }
 
     private fun launch4SActivity() {
-        SharedSecureStorageActivity.newIntent(
+        SharedSecureStorageActivity.newReadIntent(
                 context = this,
                 keyId = null, // default key
                 requestedSecrets = listOf(KEYBACKUP_SECRET_SSSS_NAME),

@@ -26,13 +26,13 @@ import org.matrix.android.sdk.api.session.pushrules.rest.RuleSet
 @JsonClass(generateAdapter = true)
 internal data class GetPushRulesResponse(
         /**
-         * Global rules, account level applying to all devices
+         * Global rules, account level applying to all devices.
          */
         @Json(name = "global")
         val global: RuleSet,
 
         /**
-         * Device specific rules, apply only to current device
+         * Device specific rules, apply only to current device.
          */
         @Json(name = "device")
         val device: RuleSet? = null

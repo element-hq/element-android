@@ -23,8 +23,8 @@ import org.matrix.android.sdk.api.session.crypto.verification.SasMode
 import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.internal.crypto.IncomingGossipingRequestManager
-import org.matrix.android.sdk.internal.crypto.OutgoingGossipingRequestManager
+import org.matrix.android.sdk.internal.crypto.OutgoingKeyRequestManager
+import org.matrix.android.sdk.internal.crypto.SecretShareManager
 import org.matrix.android.sdk.internal.crypto.actions.SetDeviceVerificationAction
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.extensions.toUnsignedInt
@@ -42,8 +42,8 @@ internal abstract class SASDefaultVerificationTransaction(
         open val deviceId: String?,
         private val cryptoStore: IMXCryptoStore,
         crossSigningService: CrossSigningService,
-        outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
-        incomingGossipingRequestManager: IncomingGossipingRequestManager,
+        outgoingKeyRequestManager: OutgoingKeyRequestManager,
+        secretShareManager: SecretShareManager,
         private val deviceFingerprint: String,
         transactionId: String,
         otherUserId: String,
@@ -52,8 +52,8 @@ internal abstract class SASDefaultVerificationTransaction(
 ) : DefaultVerificationTransaction(
         setDeviceVerificationAction,
         crossSigningService,
-        outgoingGossipingRequestManager,
-        incomingGossipingRequestManager,
+        outgoingKeyRequestManager,
+        secretShareManager,
         userId,
         transactionId,
         otherUserId,
@@ -132,7 +132,7 @@ internal abstract class SASDefaultVerificationTransaction(
 
     /**
      * To be called by the client when the user has verified that
-     * both short codes do match
+     * both short codes do match.
      */
     override fun userHasVerifiedShortCode() {
         Timber.v("## SAS short code verified by user for id:$transactionId")

@@ -26,7 +26,7 @@ import org.matrix.android.sdk.api.util.JsonDict
 data class User(
         val userId: String,
         /**
-         * For usage in UI, consider converting to MatrixItem and call getBestName()
+         * For usage in UI, consider converting to MatrixItem and call getBestName().
          */
         val displayName: String? = null,
         val avatarUrl: String? = null

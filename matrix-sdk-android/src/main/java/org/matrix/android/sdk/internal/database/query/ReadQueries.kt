@@ -61,7 +61,7 @@ private fun TimelineEventEntity.isBeforeLatestReadReceipt(realm: Realm, roomId: 
 
 /**
  * Missing events can be caused by the latest timeline chunk no longer contain an older event or
- * by fast lane eagerly displaying events before the database has finished updating
+ * by fast lane eagerly displaying events before the database has finished updating.
  */
 private fun hasReadMissingEvent(realm: Realm, latestChunkEntity: ChunkEntity, roomId: String, userId: String, eventId: String): Boolean {
     return realm.doesEventExistInChunkHistory(eventId) && realm.hasReadReceiptInLatestChunk(latestChunkEntity, roomId, userId)

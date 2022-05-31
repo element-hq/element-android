@@ -29,7 +29,7 @@ import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import javax.inject.Inject
 
 /**
- * The class is responsible for handling thread specific tasks
+ * The class is responsible for handling thread specific tasks.
  */
 class ThreadsManager @Inject constructor(
         private val vectorPreferences: VectorPreferences,
@@ -48,7 +48,7 @@ class ThreadsManager @Inject constructor(
     }
 
     /**
-     * Generates and return an Html spanned string to be rendered especially in dialogs
+     * Generates and return an Html spanned string to be rendered especially in dialogs.
      */
     private fun generateLearnMoreHtmlString(@StringRes messageId: Int): Spanned {
         val learnMore = stringProvider.getString(R.string.action_learn_more)

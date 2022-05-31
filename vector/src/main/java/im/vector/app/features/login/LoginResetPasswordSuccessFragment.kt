@@ -24,7 +24,7 @@ import im.vector.app.databinding.FragmentLoginResetPasswordSuccessBinding
 import javax.inject.Inject
 
 /**
- * In this screen, we confirm to the user that his password has been reset
+ * In this screen, we confirm to the user that his password has been reset.
  */
 class LoginResetPasswordSuccessFragment @Inject constructor() : AbstractLoginFragment<FragmentLoginResetPasswordSuccessBinding>() {
 

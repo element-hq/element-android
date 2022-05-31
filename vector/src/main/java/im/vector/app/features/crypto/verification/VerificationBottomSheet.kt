@@ -95,14 +95,12 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
             when (it) {
                 is VerificationBottomSheetViewEvents.Dismiss           -> dismiss()
                 is VerificationBottomSheetViewEvents.AccessSecretStore -> {
-                    secretStartForActivityResult.launch(
-                            SharedSecureStorageActivity.newIntent(
-                                    requireContext(),
-                                    null, // use default key
-                                    listOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME, KEYBACKUP_SECRET_SSSS_NAME),
-                                    SharedSecureStorageActivity.DEFAULT_RESULT_KEYSTORE_ALIAS
-                            )
-                    )
+                    secretStartForActivityResult.launch(SharedSecureStorageActivity.newReadIntent(
+                            requireContext(),
+                            null, // use default key
+                            listOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME, KEYBACKUP_SECRET_SSSS_NAME),
+                            SharedSecureStorageActivity.DEFAULT_RESULT_KEYSTORE_ALIAS
+                    ))
                 }
                 is VerificationBottomSheetViewEvents.ModalError        -> {
                     MaterialAlertDialogBuilder(requireContext())

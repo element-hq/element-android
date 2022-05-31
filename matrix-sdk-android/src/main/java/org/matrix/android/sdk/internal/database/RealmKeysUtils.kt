@@ -53,7 +53,7 @@ internal class RealmKeysUtils @Inject constructor(context: Context,
     }
 
     /**
-     * Check if there is already a key for this alias
+     * Check if there is already a key for this alias.
      */
     private fun hasKeyForDatabase(alias: String): Boolean {
         return sharedPreferences.contains("${ENCRYPTED_KEY_PREFIX}_$alias")
@@ -77,8 +77,8 @@ internal class RealmKeysUtils @Inject constructor(context: Context,
     }
 
     /**
-     * Retrieves the key for this database
-     * throws if something goes wrong
+     * Retrieves the key for this database.
+     * Throws if something goes wrong.
      */
     private fun extractKeyForDatabase(alias: String): ByteArray {
         val encryptedB64 = sharedPreferences.getString("${ENCRYPTED_KEY_PREFIX}_$alias", null)

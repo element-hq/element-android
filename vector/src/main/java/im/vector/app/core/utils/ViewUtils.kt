@@ -23,7 +23,7 @@ import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.core.platform.SimpleTextWatcher
 
 /**
- * Find all TextInputLayout in a ViewGroup and in all its descendants
+ * Find all TextInputLayout in a ViewGroup and in all its descendants.
  */
 fun ViewGroup.findAllTextInputLayout(): List<TextInputLayout> {
     val res = ArrayList<TextInputLayout>()
@@ -41,7 +41,7 @@ fun ViewGroup.findAllTextInputLayout(): List<TextInputLayout> {
 }
 
 /**
- * Add a text change listener to all TextInputEditText to reset error on its TextInputLayout when the text is changed
+ * Add a text change listener to all TextInputEditText to reset error on its TextInputLayout when the text is changed.
  */
 fun autoResetTextInputLayoutErrors(textInputLayouts: List<TextInputLayout>) {
     textInputLayouts.forEach {

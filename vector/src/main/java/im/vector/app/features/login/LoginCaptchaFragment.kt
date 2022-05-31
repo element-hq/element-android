@@ -49,7 +49,7 @@ data class LoginCaptchaFragmentArgument(
 ) : Parcelable
 
 /**
- * In this screen, the user is asked to confirm he is not a robot
+ * In this screen, the user is asked to confirm he is not a robot.
  */
 class LoginCaptchaFragment @Inject constructor(
         private val assetReader: AssetReader
@@ -157,12 +157,14 @@ class LoginCaptchaFragment @Inject constructor(
                 }
             }
 
+            @Deprecated("Deprecated in Java")
             override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {
                 @Suppress("DEPRECATION")
                 super.onReceivedError(view, errorCode, description, failingUrl)
                 onError(description)
             }
 
+            @Deprecated("Deprecated in Java")
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
                 if (url?.startsWith("js:") == true) {
                     var json = url.substring(3)

@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.api.session.crypto.verification
 
 /**
- * Verification methods
+ * Verification methods.
  */
 enum class VerificationMethod {
     // Use it when your application supports the SAS verification method

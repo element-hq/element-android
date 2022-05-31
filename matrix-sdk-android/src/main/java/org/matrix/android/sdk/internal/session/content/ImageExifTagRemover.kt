@@ -31,9 +31,8 @@ import java.io.FileOutputStream
 import javax.inject.Inject
 
 /**
- * This class is responsible for removing Exif tags from image files
+ * This class is responsible for removing Exif tags from image files.
  */
-
 internal class ImageExifTagRemover @Inject constructor(
         private val temporaryFileCreator: TemporaryFileCreator,
         private val coroutineDispatchers: MatrixCoroutineDispatchers

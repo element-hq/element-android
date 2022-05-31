@@ -26,8 +26,8 @@ import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import javax.inject.Inject
 
 /**
- * Possible previous worker: None
- * Possible next worker    : None
+ * Possible previous worker: None.
+ * Possible next worker    : None.
  */
 internal class GetGroupDataWorker(context: Context, params: WorkerParameters, sessionManager: SessionManager) :
         SessionSafeCoroutineWorker<GetGroupDataWorker.Params>(context, params, sessionManager, Params::class.java) {

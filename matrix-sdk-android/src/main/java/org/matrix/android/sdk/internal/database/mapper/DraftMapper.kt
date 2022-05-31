@@ -20,7 +20,7 @@ import org.matrix.android.sdk.api.session.room.send.UserDraft
 import org.matrix.android.sdk.internal.database.model.DraftEntity
 
 /**
- * DraftEntity <-> UserDraft
+ * DraftEntity <-> UserDraft.
  */
 internal object DraftMapper {
 

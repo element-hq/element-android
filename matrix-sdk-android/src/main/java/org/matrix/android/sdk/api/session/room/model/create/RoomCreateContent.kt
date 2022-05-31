@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * Content of a m.room.create type event
+ * Content of a m.room.create type event.
  */
 @JsonClass(generateAdapter = true)
 data class RoomCreateContent(

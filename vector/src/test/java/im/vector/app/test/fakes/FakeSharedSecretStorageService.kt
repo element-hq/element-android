@@ -34,7 +34,11 @@ class FakeSharedSecretStorageService : SharedSecretStorageService {
         TODO("Not yet implemented")
     }
 
-    override suspend fun generateKeyWithPassphrase(keyId: String, keyName: String, passphrase: String, keySigner: KeySigner, progressListener: ProgressListener?): SsssKeyCreationInfo {
+    override suspend fun generateKeyWithPassphrase(keyId: String,
+                                                   keyName: String,
+                                                   passphrase: String,
+                                                   keySigner: KeySigner,
+                                                   progressListener: ProgressListener?): SsssKeyCreationInfo {
         TODO("Not yet implemented")
     }
 
@@ -66,7 +70,7 @@ class FakeSharedSecretStorageService : SharedSecretStorageService {
 
     override fun checkShouldBeAbleToAccessSecrets(secretNames: List<String>, keyId: String?) = integrityResult
 
-    override fun requestSecret(name: String, myOtherDeviceId: String) {
+    override suspend fun requestSecret(name: String, myOtherDeviceId: String) {
         TODO("Not yet implemented")
     }
 }

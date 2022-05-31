@@ -473,7 +473,6 @@
     <string name="account_email_validation_message">رجاءً افحص بريدك وانقر على الرابط في الرسالة. ما إن تفعل انقر ”تابع“.</string>
     <string name="account_email_already_used_error">عنوان البريد مستخدم بالفعل</string>
     <string name="account_phone_number_already_used_error">رقم الهاتف مستخدم بالفعل</string>
-    <string name="settings_flair">الميل</string>
     <string name="notification_off">معطّل</string>
     <string name="notification_noisy">مزعج</string>
     <string name="encryption_never_send_to_unverified_devices_summary">لا ترسل من هذا الجهاز الرسائل المعمّاة إلى الأجهزة غير المؤكّدة</string>

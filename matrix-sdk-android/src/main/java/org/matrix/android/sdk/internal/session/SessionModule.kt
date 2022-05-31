@@ -49,7 +49,6 @@ import org.matrix.android.sdk.api.util.md5
 import org.matrix.android.sdk.internal.crypto.secrets.DefaultSharedSecretStorageService
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultRedactEventTask
 import org.matrix.android.sdk.internal.crypto.tasks.RedactEventTask
-import org.matrix.android.sdk.internal.crypto.verification.VerificationMessageProcessor
 import org.matrix.android.sdk.internal.database.EventInsertLiveObserver
 import org.matrix.android.sdk.internal.database.RealmSessionProvider
 import org.matrix.android.sdk.internal.database.SessionRealmConfigurationFactory
@@ -88,8 +87,8 @@ import org.matrix.android.sdk.internal.session.integrationmanager.IntegrationMan
 import org.matrix.android.sdk.internal.session.openid.DefaultOpenIdService
 import org.matrix.android.sdk.internal.session.permalinks.DefaultPermalinkService
 import org.matrix.android.sdk.internal.session.room.EventRelationsAggregationProcessor
-import org.matrix.android.sdk.internal.session.room.aggregation.livelocation.DefaultLiveLocationAggregationProcessor
-import org.matrix.android.sdk.internal.session.room.aggregation.livelocation.LiveLocationAggregationProcessor
+import org.matrix.android.sdk.internal.session.room.aggregation.poll.DefaultPollAggregationProcessor
+import org.matrix.android.sdk.internal.session.room.aggregation.poll.PollAggregationProcessor
 import org.matrix.android.sdk.internal.session.room.create.RoomCreateEventProcessor
 import org.matrix.android.sdk.internal.session.room.prune.RedactionEventProcessor
 import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
@@ -320,10 +319,6 @@ internal abstract class SessionModule {
 
     @Binds
     @IntoSet
-    abstract fun bindVerificationMessageProcessor(processor: VerificationMessageProcessor): EventInsertLiveProcessor
-
-    @Binds
-    @IntoSet
     abstract fun bindCallEventProcessor(processor: CallEventProcessor): EventInsertLiveProcessor
 
     @Binds
@@ -394,5 +389,5 @@ internal abstract class SessionModule {
     abstract fun bindEventSenderProcessor(processor: EventSenderProcessorCoroutine): EventSenderProcessor
 
     @Binds
-    abstract fun bindLiveLocationAggregationProcessor(processor: DefaultLiveLocationAggregationProcessor): LiveLocationAggregationProcessor
+    abstract fun bindPollAggregationProcessor(processor: DefaultPollAggregationProcessor): PollAggregationProcessor
 }

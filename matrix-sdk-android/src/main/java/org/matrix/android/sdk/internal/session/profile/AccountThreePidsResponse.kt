@@ -19,7 +19,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * Class representing the ThreePids response
+ * Class representing the ThreePids response.
  */
 @JsonClass(generateAdapter = true)
 internal data class AccountThreePidsResponse(

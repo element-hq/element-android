@@ -27,12 +27,12 @@ import org.matrix.android.sdk.internal.crypto.verification.VerificationInfoKeyFa
 @JsonClass(generateAdapter = true)
 internal data class KeyVerificationKey(
         /**
-         * the ID of the transaction that the message is part of
+         * The ID of the transaction that the message is part of.
          */
         @Json(name = "transaction_id") override val transactionId: String? = null,
 
         /**
-         * The device’s ephemeral public key, as an unpadded base64 string
+         * The device’s ephemeral public key, as an unpadded base64 string.
          */
         @Json(name = "key") override val key: String? = null
 

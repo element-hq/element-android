@@ -57,7 +57,7 @@ data class LoginGenericTextInputFormFragmentArgument(
 ) : Parcelable
 
 /**
- * In this screen, the user is asked for a text input
+ * In this screen, the user is asked for a text input.
  */
 class LoginGenericTextInputFormFragment @Inject constructor() : AbstractLoginFragment<FragmentLoginGenericTextInputFormBinding>() {
 

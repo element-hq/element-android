@@ -64,9 +64,9 @@ data class MainActivityArgs(
 ) : Parcelable
 
 /**
- * This is the entry point of Element Android
+ * This is the entry point of Element Android.
  * This Activity, when started with argument, is also doing some cleanup when user signs out,
- * clears cache, is logged out, or is soft logged out
+ * clears cache, is logged out, or is soft logged out.
  */
 @AndroidEntryPoint
 class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity {

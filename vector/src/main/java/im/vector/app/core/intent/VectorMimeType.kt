@@ -27,6 +27,7 @@ import java.util.Locale
  * Returns the mimetype from a uri.
  *
  * @param context the context
+ * @param uri the uri
  * @return the mimetype
  */
 fun getMimeTypeFromUri(context: Context, uri: Uri): String? {

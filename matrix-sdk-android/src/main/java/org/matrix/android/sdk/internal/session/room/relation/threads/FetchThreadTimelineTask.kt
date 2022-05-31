@@ -192,7 +192,7 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
 
     // TODO Reuse this function to all the app
     /**
-     * If we don't have any new state on this user, get it from db
+     * If we don't have any new state on this user, get it from db.
      */
     private fun HashMap<String, RoomMemberContent?>.addSenderState(realm: Realm, roomId: String, senderId: String) {
         getOrPut(senderId) {
@@ -204,7 +204,7 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
     }
 
     /**
-     * Create an EventEntity to be added in the TimelineEventEntity
+     * Create an EventEntity to be added in the TimelineEventEntity.
      */
     private fun createEventEntity(roomId: String, event: Event, realm: Realm): EventEntity {
         val ageLocalTs = event.unsignedData?.age?.let { clock.epochMillis() - it }
@@ -212,7 +212,7 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
     }
 
     /**
-     * Invoke the event decryption mechanism for a specific event
+     * Invoke the event decryption mechanism for a specific event.
      */
     private suspend fun decryptIfNeeded(event: Event, roomId: String) {
         try {

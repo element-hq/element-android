@@ -33,7 +33,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 /**
- * Simple container for [CreateRoomFragment]
+ * Simple container for [CreateRoomFragment].
  */
 @AndroidEntryPoint
 class CreateRoomActivity : VectorBaseActivity<ActivitySimpleBinding>() {

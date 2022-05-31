@@ -28,7 +28,6 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentKeysBackupSettingsBinding
 import im.vector.app.features.crypto.keysbackup.restore.KeysBackupRestoreActivity
-import im.vector.app.features.crypto.keysbackup.setup.KeysBackupSetupActivity
 import javax.inject.Inject
 
 class KeysBackupSettingsFragment @Inject constructor(private val keysBackupSettingsRecyclerViewController: KeysBackupSettingsRecyclerViewController) :
@@ -58,9 +57,7 @@ class KeysBackupSettingsFragment @Inject constructor(private val keysBackupSetti
     }
 
     override fun didSelectSetupMessageRecovery() {
-        context?.let {
-            startActivity(KeysBackupSetupActivity.intent(it, false))
-        }
+        viewModel.handle(KeyBackupSettingsAction.SetUpKeyBackup)
     }
 
     override fun didSelectRestoreMessageRecovery() {

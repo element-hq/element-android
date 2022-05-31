@@ -32,6 +32,7 @@ import java.io.IOException
  * Execute a request from the requestBlock and handle some of the Exception it could generate
  * Ref: https://github.com/matrix-org/matrix-js-sdk/blob/develop/src/scheduler.js#L138-L175
  *
+ * @param DATA type of data return by the [requestBlock]
  * @param globalErrorReceiver will be use to notify error such as invalid token error. See [GlobalError]
  * @param canRetry if set to true, the request will be executed again in case of error, after a delay
  * @param maxDelayBeforeRetry the max delay to wait before a retry. Note that in the case of a 429, if the provided delay exceeds this value, the error will

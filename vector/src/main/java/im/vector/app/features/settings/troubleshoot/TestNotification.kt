@@ -25,7 +25,7 @@ import im.vector.app.features.notifications.NotificationUtils
 import javax.inject.Inject
 
 /**
- * Checks if notifications can be displayed and clicked by the user
+ * Checks if notifications can be displayed and clicked by the user.
  */
 class TestNotification @Inject constructor(private val context: Context,
                                            private val notificationUtils: NotificationUtils,

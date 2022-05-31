@@ -22,7 +22,7 @@ import org.matrix.android.sdk.internal.database.model.presence.UserPresenceEntit
 import org.matrix.android.sdk.internal.database.model.threads.ThreadSummaryEntity
 
 /**
- * Realm module for Session
+ * Realm module for Session.
  */
 @RealmModule(
         library = true,

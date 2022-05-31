@@ -159,6 +159,7 @@ internal object MXEncryptedAttachments {
      * Encrypt an attachment stream.
      * DO NOT USE for big files, it will load all in memory
      * @param attachmentStream the attachment stream. Will be closed after this method call.
+     * @param clock a clock to retrieve current time
      * @return the encryption file info
      */
     fun encryptAttachment(attachmentStream: InputStream, clock: Clock): EncryptionResult {
@@ -227,11 +228,12 @@ internal object MXEncryptedAttachments {
     }
 
     /**
-     * Decrypt an attachment
+     * Decrypt an attachment.
      *
      * @param attachmentStream the attachment stream. Will be closed after this method call.
      * @param elementToDecrypt the elementToDecrypt info
-     * @param outputStream     the outputStream where the decrypted attachment will be write.
+     * @param outputStream the outputStream where the decrypted attachment will be write.
+     * @param clock a clock to retrieve current time
      * @return true in case of success, false in case of error
      */
     fun decryptAttachment(attachmentStream: InputStream?,

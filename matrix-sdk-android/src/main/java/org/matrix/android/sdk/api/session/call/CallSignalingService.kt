@@ -21,7 +21,7 @@ interface CallSignalingService {
     suspend fun getTurnServer(): TurnServerResponse
 
     /**
-     * Create an outgoing call
+     * Create an outgoing call.
      */
     fun createOutgoingCall(roomId: String, otherUserId: String, isVideoCall: Boolean): MxCall
 

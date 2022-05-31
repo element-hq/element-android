@@ -22,7 +22,7 @@ import io.realm.RealmResults
 import io.realm.annotations.LinkingObjects
 
 /**
- * Create a specific table to be able to do direct query on it and keep the draft ordered
+ * Create a specific table to be able to do direct query on it and keep the draft ordered.
  */
 internal open class UserDraftsEntity(var userDrafts: RealmList<DraftEntity> = RealmList()
 ) : RealmObject() {

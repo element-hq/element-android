@@ -103,12 +103,14 @@ class CaptchaWebview @Inject constructor(
                 }
             }
 
+            @Deprecated("Deprecated in Java")
             override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {
                 @Suppress("DEPRECATION")
                 super.onReceivedError(view, errorCode, description, failingUrl)
                 onError(description)
             }
 
+            @Deprecated("Deprecated in Java")
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
                 if (url?.startsWith("js:") == true) {
                     val javascriptResponse = parseJsonFromUrl(url)

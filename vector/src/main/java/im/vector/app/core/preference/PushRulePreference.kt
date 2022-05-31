@@ -45,7 +45,7 @@ class PushRulePreference : VectorPreference {
     /**
      * Update the notification index.
      *
-     * @param pushRule
+     * @param notificationIndex the new notification index
      */
     fun setIndex(notificationIndex: NotificationIndex?) {
         index = notificationIndex
@@ -53,7 +53,7 @@ class PushRulePreference : VectorPreference {
     }
 
     /**
-     * Refresh the summary
+     * Refresh the summary.
      */
     private fun refreshSummary() {
         summary = context.getString(

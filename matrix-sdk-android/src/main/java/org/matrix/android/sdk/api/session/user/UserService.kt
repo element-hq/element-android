@@ -27,14 +27,14 @@ import org.matrix.android.sdk.api.util.Optional
 interface UserService {
 
     /**
-     * Get a user from a userId
+     * Get a user from a userId.
      * @param userId the userId to look for.
      * @return a user with userId or null
      */
     fun getUser(userId: String): User?
 
     /**
-     * Try to resolve user from known users, or using profile api
+     * Try to resolve user from known users, or using profile api.
      */
     suspend fun resolveUser(userId: String): User
 
@@ -48,14 +48,14 @@ interface UserService {
     suspend fun searchUsersDirectory(search: String, limit: Int, excludedUserIds: Set<String>): List<User>
 
     /**
-     * Observe a live user from a userId
+     * Observe a live user from a userId.
      * @param userId the userId to look for.
      * @return a LiveData of user with userId
      */
     fun getUserLive(userId: String): LiveData<Optional<User>>
 
     /**
-     * Observe a live list of users sorted alphabetically
+     * Observe a live list of users sorted alphabetically.
      * @return a Livedata of users
      */
     fun getUsersLive(): LiveData<List<User>>
@@ -69,19 +69,19 @@ interface UserService {
     fun getPagedUsersLive(filter: String? = null, excludedUserIds: Set<String>? = null): LiveData<PagedList<User>>
 
     /**
-     * Get list of ignored users
+     * Get list of ignored users.
      */
     fun getIgnoredUsersLive(): LiveData<List<User>>
 
     /**
-     * Ignore users
+     * Ignore users.
      * Note: once done, for the change to take effect, you have to request an initial sync.
-     * This may be improved in the future
+     * This may be improved in the future.
      */
     suspend fun ignoreUserIds(userIds: List<String>)
 
     /**
-     * Un-ignore some users
+     * Un-ignore some users.
      * Note: once done, for the change to take effect, you have to request an initial sync.
      */
     suspend fun unIgnoreUserIds(userIds: List<String>)

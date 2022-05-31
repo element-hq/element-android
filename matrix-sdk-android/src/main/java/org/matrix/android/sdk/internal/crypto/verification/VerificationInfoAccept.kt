@@ -17,28 +17,28 @@ package org.matrix.android.sdk.internal.crypto.verification
 
 internal interface VerificationInfoAccept : VerificationInfo<ValidVerificationInfoAccept> {
     /**
-     * The key agreement protocol that Bob’s device has selected to use, out of the list proposed by Alice’s device
+     * The key agreement protocol that Bob’s device has selected to use, out of the list proposed by Alice’s device.
      */
     val keyAgreementProtocol: String?
 
     /**
-     * The hash algorithm that Bob’s device has selected to use, out of the list proposed by Alice’s device
+     * The hash algorithm that Bob’s device has selected to use, out of the list proposed by Alice’s device.
      */
     val hash: String?
 
     /**
-     * The message authentication code that Bob’s device has selected to use, out of the list proposed by Alice’s device
+     * The message authentication code that Bob’s device has selected to use, out of the list proposed by Alice’s device.
      */
     val messageAuthenticationCode: String?
 
     /**
-     * An array of short authentication string methods that Bob’s client (and Bob) understands.  Must be a subset of the list proposed by Alice’s device
+     * An array of short authentication string methods that Bob’s client (and Bob) understands.  Must be a subset of the list proposed by Alice’s device.
      */
     val shortAuthenticationStrings: List<String>?
 
     /**
      * The hash (encoded as unpadded base64) of the concatenation of the device’s ephemeral public key (QB, encoded as unpadded base64)
-     *  and the canonical JSON representation of the m.key.verification.start message.
+     * and the canonical JSON representation of the m.key.verification.start message.
      */
     var commitment: String?
 

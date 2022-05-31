@@ -307,7 +307,7 @@ internal class DefaultSendService @AssistedInject constructor(
     }
 
     /**
-     * We use the roomId of the local echo event
+     * We use the roomId of the local echo event.
      */
     private fun internalSendMedia(allLocalEchoes: List<Event>, attachment: ContentAttachmentData, compressBeforeSending: Boolean): Cancelable {
         val cancelableBag = CancelableBag()

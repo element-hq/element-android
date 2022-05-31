@@ -361,11 +361,8 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="settings_new_password">Sandi baru</string>
     <string name="settings_fail_to_update_password">Gagal memperbaharui kata sandi</string>
     <string name="settings_password_updated">Kata sandi Anda telah diperbaharui</string>
-    <string name="settings_unignore_user">Tunjukkan semua pesan dari %s\?
-\n
-\nMohon perhatikan bahwa tindakan ini akan me-restart aplikasi dan mungkin akan membutuhkan waktu.</string>
+    <string name="settings_unignore_user">Tampilkan semua pesan dari %s\?</string>
     <string name="settings_select_country">Pilih negara</string>
-    <string name="settings_flair">Flair</string>
     <string name="media_saving_period_3_days">3 hari</string>
     <string name="media_saving_period_1_week">1 minggu</string>
     <string name="media_saving_period_1_month">1 bulan</string>
@@ -590,9 +587,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="room_participants_remove_title">Keluarkan pengguna</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Apakah Anda yakin ingin membatalkan undangan untuk pengguna ini\?</string>
     <string name="room_participants_action_cancel_invite_title">Batalkan undangan</string>
-    <string name="room_participants_action_unignore_prompt_msg">Membatalkan abaian pengguna ini akan menampilkan semua pesan dari mereka.
-\n
-\nDicatat bahwa tindakan ini akan memulai ulang aplikasi dan mungkin membutuhkan beberapa waktu.</string>
+    <string name="room_participants_action_unignore_prompt_msg">Membatalkan abaian pengguna ini akan menampilkan semua pesan dari mereka.</string>
     <string name="room_participants_action_unignore_title">Batal pengabaian pengguna</string>
     <string name="room_participants_action_ignore_prompt_msg">Mengabaikan pengguna ini akan menghilangkan pesan mereka dari ruangan yang Anda bagikan.
 \n
@@ -2307,8 +2302,6 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="location_share_external">Buka dengan</string>
     <string name="location_not_available_dialog_content">${app_name} tidak dapat mengakses lokasi Anda. Silakan coba lagi nanti.</string>
     <string name="location_not_available_dialog_title">${app_name} tidak dapat mengakses lokasi Anda</string>
-    <string name="location_share">Bagikan lokasi</string>
-    <string name="a11y_location_share_icon">Bagikan lokasi</string>
     <string name="location_activity_title_preview">Lokasi</string>
     <string name="location_activity_title_static_sharing">Bagikan lokasi</string>
     <string name="closed_poll_option_description">Hasil akan ditampilkan ketika Anda mengakhiri poll-nya</string>
@@ -2442,4 +2435,14 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="threads_beta_enable_notice_title">Utasan Beta</string>
     <string name="action_learn_more">Pelajari lebih lanjut</string>
     <string name="action_try_it_out">Coba</string>
+    <string name="screen_sharing_notification_description">Sedang membagikan layar</string>
+    <string name="screen_sharing_notification_title">Pembagian Layar ${app_name}</string>
+    <string name="call_stop_screen_sharing">Berhenti membagikan layar</string>
+    <string name="call_start_screen_sharing">Bagikan layar</string>
+    <string name="initial_sync_request_reason_unignored_users">- Beberapa pengguna telah dibatalkan pengabaiannya</string>
+    <string name="initial_sync_request_content">${app_name} membutuhkan sebuah penghapusan cache supaya bisa diperbarui, untuk alasan berikut:
+\n%s
+\n
+\nDicatat bahwa tindakan ini akan memulai ulang aplikasinya dan mungkin membutuhkan beberapa waktu.</string>
+    <string name="initial_sync_request_title">Permintaan sinkronisasi awal</string>
 </resources>

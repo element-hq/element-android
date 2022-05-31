@@ -57,6 +57,7 @@ class MessageItemAttributesFactory @Inject constructor(
                 memberClickListener = {
                     callback?.onMemberNameClicked(informationData)
                 },
+                callback = callback,
                 reactionPillCallback = callback,
                 avatarCallback = callback,
                 threadCallback = callback,

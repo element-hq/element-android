@@ -59,7 +59,7 @@ class ResourceLimitErrorFormatter(private val context: Context) {
     }
 
     /**
-     * Create a HTML link with a uri
+     * Create a HTML link with a uri.
      */
     private fun uriAsLink(uri: String): String {
         val contactStr = context.getString(R.string.resource_limit_contact_admin)

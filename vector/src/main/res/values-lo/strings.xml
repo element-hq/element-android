@@ -169,9 +169,7 @@
     <string name="room_participants_action_cancel_invite_prompt_msg">ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການຍົກເລີກການເຊີນຜູ້ໃຊ້ນີ້\?</string>
     <string name="room_participants_action_cancel_invite_title">ຍົກເລີກການເຊີນ</string>
     <string name="room_participants_action_unignore">ຍົກເລີກການບໍ່ສົນໃຈ</string>
-    <string name="room_participants_action_unignore_prompt_msg">ການບໍ່ສົນໃຈຜູ້ໃຊ້ນີ້ຈະສະແດງຂໍ້ຄວາມທັງໝົດຈາກເຂົາເຈົ້າອີກຄັ້ງ.
-\n
-\nກະລຸນາຮັບຊາບວ່າຄຳສັ່ງນີ້ຈະປິດເປີດແອັບຄືນໃໝ່ ແລະ ມັນອາດຈະໃຊ້ເວລາຄາວໜຶ່ງ.</string>
+    <string name="room_participants_action_unignore_prompt_msg">ການຍົກເລີກບໍ່ສົນໃຈຜູ້ໃຊ້ນີ້ຈະສະແດງຂໍ້ຄວາມທັງໝົດຈາກພວກເຂົາອີກຄັ້ງ.</string>
     <string name="room_participants_action_unignore_title">ບໍ່ສົນໃຈຜູ້ໃຊ້</string>
     <string name="room_participants_action_ignore">ບໍ່ສົນໃຈ</string>
     <string name="room_participants_action_ignore_prompt_msg">ການບໍ່ສົນໃຈຜູ້ໃຊ້ນີ້ຈະລຶບຂໍ້ຄວາມຂອງເຂົາເຈົ້າອອກຈາກຫ້ອງທີ່ທ່ານແບ່ງປັນ.
@@ -747,10 +745,10 @@
     <string name="create_new_room">ສ້າງຫ້ອງໃຫມ່</string>
     <string name="malformed_message">ເຫດການບໍ່ຖືກຕ້ອງ, ບໍ່ສາມາດສະແດງໄດ້</string>
     <string name="event_redacted_by_admin_reason">ຄວບຄຸມເຫດການໂດຍຜູ້ເບິ່ງແຍງຫ້ອງ</string>
-    <string name="event_redacted_by_user_reason">ເຫດການຖືກລຶບໂດຍຜູ້ໃຊ້</string>
+    <string name="event_redacted_by_user_reason">ເຫດການທີ່ຖືກລຶບໂດຍຜູ້ໃຊ້</string>
     <string name="settings_show_redacted_summary">ສະແດງຕົວຍຶດສໍາລັບຂໍ້ຄວາມທີ່ຖືກລົບອອກ</string>
     <string name="settings_show_redacted">ສະແດງຂໍ້ຄວາມທີ່ຖືກລືບອອກ</string>
-    <string name="event_redacted">ຂໍ້ຄວາມຖືກລຶບ</string>
+    <string name="event_redacted">ລຶບຂໍ້ຄວາມອອກແລ້ວ</string>
     <string name="reactions">ການໂຕ້ຕອບ</string>
     <string name="message_view_reaction">ເບິ່ງການໂຕ້ຕອບ</string>
     <string name="message_add_reaction">ເພີ່ມປະຕິກິລິຍາ</string>
@@ -996,7 +994,6 @@
     <string name="media_saving_period_1_month">1 ເດືອນ</string>
     <string name="media_saving_period_1_week">1 ອາທິດ</string>
     <string name="media_saving_period_3_days">3 ມື້</string>
-    <string name="settings_flair" tools:ignore="MissingTranslation">ໄຫວພິບ</string>
     <string name="settings_play_shutter_sound">ຫຼິ້ນສຽງ shutter</string>
     <string name="media_source_choose">ເລືອກ</string>
     <string name="settings_default_media_source">ແຫຼ່ງສື່</string>
@@ -1006,9 +1003,7 @@
     <string name="settings_select_country">ເລືອກປະເທດ</string>
     <string name="settings_emails_and_phone_numbers_summary">ຈັດການອີເມວ ແລະເບີໂທລະສັບທີ່ເຊື່ອມຕໍ່ກັບບັນຊີ Matrix ຂອງທ່ານ</string>
     <string name="settings_emails_and_phone_numbers_title">ອີເມວ ແລະເບີໂທລະສັບ</string>
-    <string name="settings_unignore_user">ສະແດງຂໍ້ຄວາມທັງໝົດຈາກ %s ບໍ\?
-\n
-\nກະລຸນາຮັບຊາບວ່າຄຳສັ່ງນີ້ຈະປິດເປີດແອັບຄືນໃໝ່ ແລະ ມັນອາດຈະໃຊ້ເວລາຄາວໜຶ່ງ.</string>
+    <string name="settings_unignore_user">ສະແດງຂໍ້ຄວາມທັງໝົດຈາກ %s \?</string>
     <string name="settings_password_updated">ລະຫັດຜ່ານຂອງທ່ານໄດ້ຮັບການປັບປຸງ</string>
     <string name="settings_fail_to_update_password_invalid_current_password">ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ</string>
     <string name="settings_fail_to_update_password">ອັບເດດລະຫັດຜ່ານບໍ່ສຳເລັດ</string>
@@ -1449,7 +1444,7 @@
     <string name="it_may_take_some_time">ກະລຸນາລໍຖ້າ, ມັນອາດຈະໃຊ້ເວລາຄາວໜຶ່ງ.</string>
     <string name="joining_replacement_room">ເຂົ້າຮ່ວມຫ້ອງແທນ</string>
     <string name="unnamed_room">ບໍ່ມີຊື່ຫ້ອງ</string>
-    <string name="this_space_has_no_rooms_admin">ບາງຫ້ອງອາດຈະຖືກເຊື່ອງໄວ້ເພາະວ່າເປັນສ່ວນຕົວ ແລະ ທ່ານຕ້ອງໄດ້ຮັບການເຊີນ</string>
+    <string name="this_space_has_no_rooms_admin">ບາງຫ້ອງອາດຈະຖືກເຊື່ອງໄວ້ເພາະວ່າເປັນສ່ວນຕົວ ແລະ ທ່ານຕ້ອງໄດ້ຮັບການເຊີນ.</string>
     <string name="this_space_has_no_rooms_not_admin">ບາງຫ້ອງອາດຈະຖືກເຊື່ອງໄວ້ເພາະວ່າເປັນສ່ວນຕົວ ແລະ ທ່ານຕ້ອງການການເຊີນ.
 \nທ່ານບໍ່ໄດ້ຮັບອະນຸຍາດໃຫ້ເພີ່ມຫ້ອງ.</string>
     <string name="this_space_has_no_rooms">ພື້ນທີ່ນີ້ບໍ່ມີຫ້ອງ</string>
@@ -1782,7 +1777,7 @@
     <string name="verification_conclusion_compromised">"ຫນຶ່ງໃນຕໍ່ໄປນີ້ອາດຈະຖືກທໍາລາຍ:
 \n
 \n  - homeserver ຂອງທ່ານ
-\n  - homeserver ທີ່ຜູ້ໃຊ້ທີ່ທ່ານກໍາລັງກວດສອບແມ່ນໄດ້ເຊື່ອມຕໍ່ກັບ
+\n  - homeserver ທີ່ຜູ້ໃຊ້ທີ່ທ່ານກໍາລັງກວດສອບການເຊື່ອມຕໍ່ຢູ່
 \n  - ຂອງທ່ານ, ຫຼື ການເຊື່ອມຕໍ່ອິນເຕີເນັດຂອງຜູ້ໃຊ້ອື່ນໆ
 \n  - ຂອງທ່ານ, ຫຼື ອຸປະກອນຂອງຜູ້ໃຊ້ອື່ນ"</string>
     <string name="verification_conclusion_not_secure">ບໍ່ປອດໄພ</string>
@@ -1994,9 +1989,9 @@
     <string name="add_space">ເພີ່ມພື້ນທີ່</string>
     <string name="private_space">ພື້ນທີ່ສ່ວນຕົວ</string>
     <string name="public_space">ພື້ນທີ່ສາທາລະນະ</string>
-    <string name="event_status_delete_all_failed_dialog_message">ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບຂໍ້ຄວາມທີ່ຍັງບໍ່ໄດ້ສົ່ງທັງໝົດຢູ່ໃນຫ້ອງນີ້\?</string>
-    <string name="event_status_delete_all_failed_dialog_title">ລຶບຂໍ້ຄວາມທີ່ຍັງບໍ່ໄດ້ສົ່ງ</string>
-    <string name="event_status_failed_messages_warning">ສົ່ງຂໍ້ຄວາມບໍ່ສຳເລັດ</string>
+    <string name="event_status_delete_all_failed_dialog_message">ທ່ານແນ່ໃຈບໍ່ວ່າທ່ານຕ້ອງການລຶບຂໍ້ຄວາມທີ່ຍັງບໍ່ໄດ້ສົ່ງທັງໝົດຢູ່ໃນຫ້ອງນີ້\?</string>
+    <string name="event_status_delete_all_failed_dialog_title">ລຶບຂໍ້ຄວາມທີ່ຍັງບໍ່ໄດ້ສົ່ງອອກ</string>
+    <string name="event_status_failed_messages_warning">ບໍ່ສາມາດສົ່ງຂໍ້ຄວາມ</string>
     <string name="event_status_cancel_sending_dialog_message">ທ່ານຕ້ອງການຍົກເລີກການສົ່ງຂໍ້ຄວາມບໍ\?</string>
     <string name="event_status_a11y_delete_all">ລຶບຂໍ້ຄວາມທີ່ບໍ່ສຳເລັດທັງໝົດອອກ</string>
     <string name="event_status_a11y_failed">ບໍ່ສຳເລັດ</string>
@@ -2007,20 +2002,20 @@
     <string name="command_description_join_space">ເຂົ້າຮ່ວມພື້ນທີ່ກັບ id ທີ່ກຳນົດໃຫ້</string>
     <string name="command_description_add_to_space">ເພີ່ມໃສ່ພື້ນທີ່ທີ່ກຳນົດໃຫ້</string>
     <string name="command_description_create_space">ສ້າງພື້ນທີ່</string>
-    <string name="dev_tools_event_content_hint">ເນື້ອໃນການນັດໝາຍ</string>
-    <string name="dev_tools_success_state_event">ສົ່ງການນັດໝາຍຂອງລັດ!</string>
-    <string name="dev_tools_success_event">ສົ່ງນັດໝາຍ!</string>
+    <string name="dev_tools_event_content_hint">ເນື້ອໃນຂອງເຫດການ</string>
+    <string name="dev_tools_success_state_event">ສົ່ງຖະແຫຼງການຂອງເຫດການ!</string>
+    <string name="dev_tools_success_event">ສົ່ງເຫດການແລ້ວ!</string>
     <string name="dev_tools_error_malformed_event">ເຫດການຜິດປົກກະຕິ</string>
     <string name="dev_tools_error_no_message_type">ບໍ່ມີປະເພດຂໍ້ຄວາມ</string>
     <string name="dev_tools_error_no_content">ບໍ່ມີເນື້ອຫາ</string>
-    <string name="dev_tools_form_hint_event_content">ເນື້ອໃນການນັດໝາຍ</string>
+    <string name="dev_tools_form_hint_event_content">ເນື້ອໃນຂອງເຫດການ</string>
     <string name="dev_tools_form_hint_state_key">ສະຖານະຂອງກະເເຈ</string>
     <string name="dev_tools_form_hint_type">ປະເພດ</string>
-    <string name="dev_tools_send_custom_state_event">ສົ່ງນັດໝາຍຂອງລັດແບບກຳນົດເອງ</string>
+    <string name="dev_tools_send_custom_state_event">ສົ່ງຖະແຫຼງການຂອງເຫດການທີ່ກຳນົດເອງ</string>
     <string name="dev_tools_edit_content">ແກ້ໄຂເນື້ອຫາ</string>
-    <string name="dev_tools_state_event">ການນັດໝາຍຂອງລັດ</string>
-    <string name="dev_tools_send_state_event">ສົ່ງນັດມາຍຂອງລັດ</string>
-    <string name="dev_tools_send_custom_event">ສົ່ງນັດໝາຍທີ່ກຳນົດເອງ</string>
+    <string name="dev_tools_state_event">ຖະແຫຼງການຂອງເຫດການ</string>
+    <string name="dev_tools_send_state_event">ສົ່ງສະຖານະຂອງເຫດການ</string>
+    <string name="dev_tools_send_custom_event">ສົ່ງເຫດການທີ່ກຳນົດເອງ</string>
     <string name="dev_tools_explore_room_state">ສຳຫຼວດສະຖານະຫ້ອງ</string>
     <string name="dev_tools_menu_name">ເຄື່ອງມືພັດທະນາ</string>
     <string name="a11y_presence_unavailable">ບໍ່ສາມາດໃຊ້ໄດ້</string>
@@ -2147,7 +2142,7 @@
     <string name="login_default_session_public_name">${app_name} Android</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">ລະຫັດແມ່ນທັນສະໄຫມແລ້ວ!</string>
     <string name="event_redacted_by_admin_reason_with_reason">ເຫດການຖືກກວດສອບໂດຍຜູ້ເບິ່ງແຍງຫ້ອງ, ເຫດຜົນ: %1$s</string>
-    <string name="event_redacted_by_user_reason_with_reason">ເຫດການທີ່ລຶບໂດຍຜູ້ໃຊ້, ເຫດຜົນ: %1$s</string>
+    <string name="event_redacted_by_user_reason_with_reason">ເຫດການທີ່ຖືກລຶບໂດຍຜູ້ໃຊ້, ເຫດຜົນ: %1$s</string>
     <string name="delete_event_dialog_reason_hint">ເຫດຜົນສໍາລັບການແກ້ໄຂ</string>
     <string name="delete_event_dialog_reason_checkbox">ລວມທັງເຫດຜົນ</string>
     <string name="delete_event_dialog_content">ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບ (ລຶບ) ເຫດການນີ້ອອກ\? ກະລຸນາຮັບຊາບວ່າຖ້າຫາກທ່ານລຶບຊື່ຫ້ອງ ຫຼື ການປ່ຽນຫົວຂໍ້, ມັນສາມາດຍົກເລີກການປ່ຽນແປງໄດ້.</string>
@@ -2236,7 +2231,7 @@
 \nການຢັ້ງຢືນຈະຖືກບັນທຶກໄວ້ໃນເຄື່ອງ ແລະ ແບ່ງປັນໃນເວີຊັນຂອງແອັບໃນອະນາຄົດ.</string>
     <string name="unignore">ບໍ່ສົນໃຈ</string>
     <string name="rendering_event_error_exception">${app_name} ປະສົບບັນຫາໃນເວລາສະແດງເນື້ອຫາຂອງເຫດການດ້ວຍ id \'%1$s\'</string>
-    <string name="rendering_event_error_type_of_event_not_handled">${app_name} ບໍ່ໄດ້ຈັດການເຫດການຂອງປະເພດ \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_event_not_handled">${app_name} ບໍ່ໄດ້ຈັດການ ເຫດການຂອງປະເພດ \'%1$s\'</string>
     <string name="room_member_jump_to_read_receipt">ໄປເພື່ອອ່ານ</string>
     <string name="room_member_open_or_create_dm">ຂໍ້ຄວາມໂດຍກົງ</string>
     <string name="room_member_power_level_custom_in">ກຳນົດເອງ (%1$d) ໃນ %2$s</string>
@@ -2320,4 +2315,130 @@
     <string name="report_content_custom_title">ລາຍງານເນື້ອຫານີ້</string>
     <string name="report_content_custom">ລາຍງານທີ່ກຳນົດເອງ…</string>
     <string name="report_content_inappropriate">ບໍ່ເຫມາະສົມ</string>
+    <string name="voice_message_n_seconds_warning_toast">ເຫຼືອ %1$ds</string>
+    <string name="voice_message_slide_to_cancel">ເລື່ອນເພື່ອຍົກເລີກ</string>
+    <string name="a11y_start_voice_message">ບັນທຶກຂໍ້ຄວາມສຽງ</string>
+    <string name="error_failed_to_join_room">ຂໍອະໄພ, ເກີດຄວາມຜິດພາດຂຶ້ນໃນຂະນະທີ່ພະຍາຍາມເຂົ້າຮ່ວມ: %s</string>
+    <string name="room_upgrade_to_recommended_version">ຍົກລະດັບເປັນເວີຊັນຫ້ອງທີ່ແນະນຳ</string>
+    <string name="call_stop_screen_sharing">ຢຸດການແບ່ງປັນໜ້າຈໍ</string>
+    <string name="call_start_screen_sharing">ແບ່ງປັນຫນ້າຈໍ</string>
+    <string name="initial_sync_request_reason_unignored_users">- ຜູ້ໃຊ້ບາງຄົນໄດ້ຖືກສົນໃຈ</string>
+    <string name="initial_sync_request_content">${app_name} ຕ້ອງດໍາເນີນການ cache ທີ່ຊັດເຈນເພື່ອໃຫ້ທັນສະໄຫມ, ສໍາລັບເຫດຜົນດັ່ງຕໍ່ໄປນີ້:
+\n%s
+\n
+\nກະລຸນາຮັບຊາບວ່າຄຳສັ່ງນີ້ຈະປິດເປີດແອັບຄືນໃໝ່ ແລະ ມັນອາດຈະໃຊ້ເວລາຄາວໜຶ່ງ.</string>
+    <string name="initial_sync_request_title">ການຮ້ອງຂໍການຊິງຄ໌ເບື້ອງຕົ້ນ</string>
+    <string name="screen_sharing_notification_description">ການແບ່ງປັນໜ້າຈໍກຳລັງດຳເນີນຢູ່</string>
+    <string name="screen_sharing_notification_title">${app_name} ການແບ່ງປັນໜ້າຈໍ</string>
+    <string name="room_message_autocomplete_notification">ການແຈ້ງເຕືອນຫ້ອງ</string>
+    <string name="room_message_autocomplete_users">ຜູ້ໃຊ້</string>
+    <string name="room_message_notify_everyone">ແຈ້ງໃຫ້ຫ້ອງໍທັງຫມົດ</string>
+    <plurals name="message_reaction_show_more">
+        <item quantity="other">%1$d ເພີ່ມເຕີມ</item>
+    </plurals>
+    <string name="message_reaction_show_less">ສະແດງໜ້ອຍລົງ</string>
+    <string name="tooltip_attachment_location">ແບ່ງປັນສະຖານທີ່</string>
+    <string name="tooltip_attachment_poll">ສ້າງແບບສຳຫຼວດ</string>
+    <string name="tooltip_attachment_contact">ເປີດລາຍຊື່ຜູ້ຕິດຕໍ່</string>
+    <string name="tooltip_attachment_sticker">ສົ່ງສະຕິກເກີ</string>
+    <string name="tooltip_attachment_file">ອັບໂຫຼດໄຟລ໌</string>
+    <string name="tooltip_attachment_gallery">ສົ່ງຮູບພາບ ແລະ ວິດີໂອ</string>
+    <string name="tooltip_attachment_photo">ເປີດກ້ອງຖ່າຍຮູບ</string>
+    <string name="message_bubbles">ສະແດງຟອງຂໍ້ຄວາມ</string>
+    <string name="live_location_sharing_notification_description">ການແບ່ງປັນສະຖານທີ່ກຳລັງດຳເນີນຢູ່</string>
+    <string name="live_location_sharing_notification_title">${app_name} ສະຖານທີ່ປັດຈຸບັນ</string>
+    <string name="location_share_live_stop">ຢຸດ</string>
+    <string name="location_share_live_started">ກຳລັງໂຫຼດສະຖານທີ່ປັດຈຸບັນ…</string>
+    <string name="location_share_live_enabled">ເປີດໃຊ້ສະຖານທີ່ປັດຈຸບັນແລ້ວ</string>
+    <string name="location_timeline_failed_to_load_map">ໂຫຼດແຜນທີ່ບໍ່ສຳເລັດ</string>
+    <string name="labs_render_locations_in_timeline">ສະແດງສະຖານທີ່ຂອງຜູ້ໃຊ້ໃນທາມລາຍ</string>
+    <string name="settings_enable_location_sharing_summary">ເມື່ອເປີດໃຊ້ແລ້ວທ່ານຈະສາມາດສົ່ງສະຖານທີ່ຂອງທ່ານໄປຫາຫ້ອງໃດກໍໄດ້</string>
+    <string name="settings_enable_location_sharing">ເປີດໃຊ້ການແບ່ງປັນສະຖານທີ່</string>
+    <string name="location_share_external">ເປີດດ້ວຍ</string>
+    <string name="location_not_available_dialog_content">${app_name} ບໍ່ສາມາດເຂົ້າເຖິງສະຖານທີ່ຂອງທ່ານໄດ້. ກະລຸນາລອງໃໝ່ໃນພາຍຫຼັງ.</string>
+    <string name="location_not_available_dialog_title">${app_name} ບໍ່ສາມາດເຂົ້າເຖິງສະຖານທີ່ຂອງທ່ານໄດ້</string>
+    <string name="location_in_background_missing_permission_dialog_content">ຖ້າທ່ານຕ້ອງການແບ່ງປັນສະຖານທີ່ປັດຈຸບັນຂອງທ່ານ, ${app_name} ຕ້ອງການການເຂົ້າເຖິງສະຖານທີ່ຕະຫຼອດເວລາທີ່ແອັບຯຢູ່ໃນພື້ນຫຼັງ.
+\nພວກເຮົາຈະເຂົ້າເຖິງສະຖານທີ່ຂອງທ່ານສະເພາະໄລຍະເວລາທີ່ທ່ານເລືອກ.</string>
+    <string name="location_in_background_missing_permission_dialog_title">ອະນຸຍາດໃຫ້ເຂົ້າເຖິງ</string>
+    <string name="location_share_live_select_duration_option_3">8 ຊົ່ວໂມງ</string>
+    <string name="location_share_live_select_duration_option_2">1 ຊົ່ວໂມງ</string>
+    <string name="location_share_live_select_duration_option_1">15 ນາທີ</string>
+    <string name="location_share_live_select_duration_title">ແບ່ງປັນສະຖານທີ່ປັດຈຸບັນຂອງທ່ານສໍາລັບ</string>
+    <string name="a11y_location_share_option_pinned_icon">ແບ່ງປັນສະຖານທີ່ນີ້</string>
+    <string name="location_share_option_pinned">ແບ່ງປັນສະຖານທີ່ນີ້</string>
+    <string name="a11y_location_share_option_user_live_icon">ແບ່ງປັນສະຖານທີ່ປັດຈຸບັນ</string>
+    <string name="location_share_option_user_live">ແບ່ງປັນສະຖານທີ່ປັດຈຸບັນ</string>
+    <string name="a11y_location_share_option_user_current_icon">ແບ່ງປັນສະຖານທີ່ປະຈຸບັນຂອງຂ້ອຍ</string>
+    <string name="location_share_option_user_current">ແບ່ງປັນສະຖານທີ່ປະຈຸບັນຂອງຂ້ອຍ</string>
+    <string name="a11y_location_share_locate_button">ຂະຫຍາຍໄປຫາສະຖານທີ່ປັດຈຸບັນ</string>
+    <string name="a11y_location_share_pin_on_map">ປັກໝຸດຂອງສະຖານທີ່ທີ່ເລືອກຢູ່ໃນແຜນທີ່</string>
+    <string name="a11y_static_map_image">ແຜນທີ່</string>
+    <string name="location_activity_title_preview">ສະຖານທີ່</string>
+    <string name="location_activity_title_static_sharing">ແບ່ງປັນສະຖານທີ່</string>
+    <string name="closed_poll_option_description">ຜົນໄດ້ຮັບຈະຖືກເປີດເຜີຍເມື່ອທ່ານສິ້ນສຸດແບບສຳຫຼວດເທົ່ານັ້ນ</string>
+    <string name="closed_poll_option_title">ປິດແບບສຳຫຼວດ</string>
+    <string name="open_poll_option_description">ຜູ້ລົງຄະແນນສຽງເຫັນຜົນທັນທີທີ່ເຂົາເຈົ້າລົງຄະແນນສຽງ</string>
+    <string name="open_poll_option_title">ເປີດແບບສຳຫຼວດ</string>
+    <string name="poll_type_title">ປະເພດແບບສຳຫຼວດ</string>
+    <string name="edit_poll_title">ແກ້ໄຂແບບສຳຫຼວດ</string>
+    <string name="delete_poll_dialog_content">ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບແບບສຳຫຼວດນີ້ອອກ\? ທ່ານຈະບໍ່ສາມາດກູ້ມັນຄືນໄດ້ເມື່ອລຶບອອກແລ້ວ.</string>
+    <string name="delete_poll_dialog_title">ລຶບການສຳຫຼວດ</string>
+    <string name="poll_end_room_list_preview">ແບບສຳຫຼວດສິ້ນສຸດລົງ</string>
+    <string name="poll_response_room_list_preview">ລົງຄະແນນສຽງ</string>
+    <string name="end_poll_confirmation_approve_button">ສິ້ນສຸດແບບສຳຫຼວດ</string>
+    <string name="end_poll_confirmation_description">ອັນນີ້ຈະຢຸດບໍ່ໃຫ້ຜູ້ຄົນສາມາດລົງຄະແນນສຽງໄດ້ ແລະຈະສະແດງຜົນສຸດທ້າຍຂອງການສຳຫຼວດຄວາມຄິດເຫັນ.</string>
+    <string name="end_poll_confirmation_title">ສິ້ນສຸດແບບສຳຫຼວດນີ້ບໍ\?</string>
+    <string name="a11y_poll_winner_option">ເລືອກຜູ້ຊະນະ</string>
+    <string name="poll_end_action">ສິ້ນສຸດແບບສຳຫຼວດ</string>
+    <plurals name="poll_total_vote_count_after_ended">
+        <item quantity="other">ຜົນສຸດທ້າຍໂດຍອີງໃສ່ %1$d ຄະແນນສຽງ</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_not_voted">
+        <item quantity="other">%1$dຄະແນນສຽງ. ລົງຄະແນນສຽງເພື່ອເບິ່ງຜົນໄດ້ຮັບ</item>
+    </plurals>
+    <string name="poll_no_votes_cast">ບໍ່ມີການລົງຄະແນນສຽງ</string>
+    <plurals name="poll_total_vote_count_before_ended_and_voted">
+        <item quantity="other">ອີງຕາມ %1$d ຄະແນນສຽງ</item>
+    </plurals>
+    <plurals name="poll_option_vote_count">
+        <item quantity="other">%1$d ຄະແນນສຽງ</item>
+    </plurals>
+    <plurals name="create_poll_not_enough_options_error">
+        <item quantity="other">ຢ່າງໜ້ອຍຕ້ອງເລືອກ %1$s</item>
+    </plurals>
+    <string name="create_poll_empty_question_error">ຄຳຖາມບໍ່ສາມາດຫວ່າງເປົ່າໄດ້</string>
+    <string name="create_poll_button">ສ້າງແບບສຳຫຼວດ</string>
+    <string name="create_poll_add_option">ເພີ່ມຕົວເລືອກ</string>
+    <string name="create_poll_options_hint">ທາງເລືອກ %1$d</string>
+    <string name="create_poll_options_title">ສ້າງທາງເລືອກ</string>
+    <string name="create_poll_question_hint">ຄໍາຖາມ ຫຼື ຫົວຂໍ້</string>
+    <string name="create_poll_question_title">ຄຳຖາມ ຫຼື ຫົວຂໍ້ການສຳຫຼວດ</string>
+    <string name="create_poll_title">ສ້າງແບບສຳຫຼວດ</string>
+    <string name="restart_the_application_to_apply_changes">ປິດເປີດແອັບພລິເຄຊັນຄືນໃໝ່ ເພື່ອໃຫ້ການປ່ຽນແປງ.</string>
+    <string name="labs_enable_latex_maths">ເປີດໃຊ້ຄະນິດສາດ LaTeX</string>
+    <string name="link_this_email_with_your_account">%s ໃນການຕັ້ງຄ່າເພື່ອຮັບຄຳເຊີນໂດຍກົງໃນ ${app_name}.</string>
+    <string name="link_this_email_settings_link">ເຊື່ອມຕໍ່ອີເມວນີ້ກັບບັນຊີຂອງທ່ານ</string>
+    <string name="this_invite_to_this_space_was_sent">ການເຊີນໄປຫາພື້ນທີ່ນີ້ຖືກສົ່ງໄປຫາ %s ທີ່ບໍ່ກ່ຽວຂ້ອງກັບບັນຊີຂອງທ່ານ</string>
+    <string name="this_invite_to_this_room_was_sent">ການເຊີນເຂົ້າຫ້ອງນີ້ຖືກສົ່ງໄປໃຫ້ %s ເຊິ່ງບໍ່ໄດ້ເຊື່ອມໂຍງກັບບັນຊີຂອງທ່ານ</string>
+    <string name="upgrade_room_for_restricted_note">ກະລຸນາຮັບຊາບວ່າການຍົກລະດັບຈະເຮັດໃຫ້ຫ້ອງເປັນເວີຊັນໃໝ່. ຂໍ້ຄວາມປັດຈຸບັນທັງໝົດຈະຢູ່ໃນຫ້ອງເກັບມ້ຽນນີ້.</string>
+    <string name="upgrade_room_for_restricted_no_param">ທຸກຄົນທີ່ຢູ່ໃນແຫຼ່ງພື້ນທີ່ຈະສາມາດຊອກຫາ ແລະ ເຂົ້າຮ່ວມຫ້ອງນີ້ໄດ້ - ບໍ່ຈໍາເປັນຕ້ອງເຊີນທຸກຄົນດ້ວຍຕົນເອງ. ທ່ານສາມາດປ່ຽນສີ່ງນີ້ໃນການຕັ້ງຄ່າຫ້ອງໄດ້ທຸກເວລາ.</string>
+    <string name="upgrade_room_for_restricted">ທຸກຄົນໃນ %s ຈະສາມາດຊອກຫາ ແລະ ເຂົ້າຮ່ວມຫ້ອງນີ້ໄດ້ - ບໍ່ຈໍາເປັນຕ້ອງເຊີນທຸກຄົນດ້ວຍຕົນເອງ. ທ່ານຈະສາມາດປ່ຽນສິ່ງນີ້ໃນການຕັ້ງຄ່າຫ້ອງໄດ້ທຸກເວລາ.</string>
+    <string name="audio_message_file_size">(%1$s)</string>
+    <string name="audio_message_reply_content">%1$s (%2$s)</string>
+    <string name="error_audio_message_unable_to_play">ບໍ່ສາມາດຫຼິ້ນໄດ້ %1$s</string>
+    <string name="a11y_pause_audio_message">ຢຸດ %1$s ໄວ້ຊົ່ວຄາວ</string>
+    <string name="a11y_play_audio_message">ຫຼິ້ນ %1$s</string>
+    <string name="a11y_audio_playback_duration">%1$d ນາທີ %2$d ວິນາທີ</string>
+    <string name="a11y_audio_message_item">%1$s, %2$s, %3$s</string>
+    <string name="voice_message_reply_content">ຂໍ້ຄວາມສຽງ (%1$s)</string>
+    <string name="error_voice_message_cannot_reply_or_edit">ບໍ່ສາມາດຕອບ ຫຼື ແກ້ໄຂໄດ້ ໃນຂະນະທີ່ຂໍ້ຄວາມສຽງເປີດຢູ່</string>
+    <string name="error_voice_message_unable_to_record">ບໍ່ສາມາດບັນທຶກຂໍ້ຄວາມສຽງໄດ້</string>
+    <string name="error_voice_message_unable_to_play">ບໍ່ສາມາດຫຼິ້ນຂໍ້ຄວາມສຽງນີ້ໄດ້</string>
+    <string name="voice_message_tap_to_stop_toast">ແຕະໃສ່ການບັນທຶກຂອງທ່ານເພື່ອຢຸດ ຫຼືຟັງ</string>
+    <string name="voice_message_release_to_send_toast">ກົດຄ້າງໄວ້ເພື່ອບັນທຶກ, ປ່ອຍເພື່ອສົ່ງ</string>
+    <string name="a11y_delete_recorded_voice_message">ລຶບການບັນທຶກ</string>
+    <string name="a11y_recording_voice_message">ການບັນທຶກຂໍ້ຄວາມສຽງ</string>
+    <string name="a11y_stop_voice_message">ຢຸດການບັນທຶກ</string>
+    <string name="a11y_pause_voice_message">ຢຸດຂໍ້ຄວາມສຽງຊົ່ວຄາວ</string>
+    <string name="a11y_play_voice_message">ຫຼິ້ນຂໍ້ຄວາມສຽງ</string>
 </resources>

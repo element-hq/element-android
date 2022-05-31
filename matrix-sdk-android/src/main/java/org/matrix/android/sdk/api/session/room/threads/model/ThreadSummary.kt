@@ -20,7 +20,7 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.sender.SenderInfo
 
 /**
- * The main thread Summary model, mainly used to display the thread list
+ * The main thread Summary model, mainly used to display the thread list.
  */
 data class ThreadSummary(val roomId: String,
                          val rootEvent: Event?,

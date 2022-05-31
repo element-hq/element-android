@@ -47,7 +47,7 @@ class RestrictedRoomPreset(val homeServerCapabilities: HomeServerCapabilities, v
                         type = EventType.STATE_ROOM_JOIN_RULES,
                         stateKey = "",
                         content = RoomJoinRulesContent(
-                                _joinRules = RoomJoinRules.RESTRICTED.value,
+                                joinRulesStr = RoomJoinRules.RESTRICTED.value,
                                 allowList = restrictedList
                         ).toContent()
                 )

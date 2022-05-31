@@ -121,7 +121,7 @@ sealed class MatrixItem(
     abstract fun updateAvatar(newAvatar: String?): MatrixItem
 
     /**
-     * Return the prefix as defined in the matrix spec (and not extracted from the id)
+     * Return the prefix as defined in the matrix spec (and not extracted from the id).
      */
     private fun getIdPrefix() = when (this) {
         is UserItem           -> '@'

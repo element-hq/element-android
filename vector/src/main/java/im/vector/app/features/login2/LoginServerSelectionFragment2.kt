@@ -28,7 +28,7 @@ import im.vector.app.features.login.EMS_LINK
 import javax.inject.Inject
 
 /**
- * In this screen, the user will choose between matrix.org, or other type of homeserver
+ * In this screen, the user will choose between matrix.org, or other type of homeserver.
  */
 class LoginServerSelectionFragment2 @Inject constructor() : AbstractLoginFragment2<FragmentLoginServerSelection2Binding>() {
 

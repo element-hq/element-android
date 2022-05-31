@@ -23,7 +23,7 @@ import org.matrix.android.sdk.internal.crypto.model.CryptoInfoMapper
 @JsonClass(generateAdapter = true)
 internal data class RestKeyInfo(
         /**
-         * The user who owns the key
+         * The user who owns the key.
          */
         @Json(name = "user_id")
         val userId: String,

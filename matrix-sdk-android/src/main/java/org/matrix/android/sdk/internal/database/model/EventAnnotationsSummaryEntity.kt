@@ -33,7 +33,7 @@ internal open class EventAnnotationsSummaryEntity(
 ) : RealmObject() {
 
     /**
-     * Cleanup undesired editions, done by users different from the originalEventSender
+     * Cleanup undesired editions, done by users different from the originalEventSender.
      */
     fun cleanUp(originalEventSenderId: String?) {
         originalEventSenderId ?: return

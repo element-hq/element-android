@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.api.session.threads
 
 /**
- * This class defines the state of a thread notification
+ * This class defines the state of a thread notification.
  */
 enum class ThreadNotificationState {
 

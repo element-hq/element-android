@@ -24,7 +24,7 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.DeviceInfoEntityFie
 import org.matrix.android.sdk.internal.crypto.store.db.model.createPrimaryKey
 
 /**
- * Get or create a device info
+ * Get or create a device info.
  */
 internal fun DeviceInfoEntity.Companion.getOrCreate(realm: Realm, userId: String, deviceId: String): DeviceInfoEntity {
     val key = DeviceInfoEntity.createPrimaryKey(userId, deviceId)

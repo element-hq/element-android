@@ -73,7 +73,7 @@ internal class ThreadsAwarenessHandler @Inject constructor(
     private val cacheEventRootId = hashSetOf<String>()
 
     /**
-     * Fetch root thread events if they are missing from the local storage
+     * Fetch root thread events if they are missing from the local storage.
      * @param syncResponse the sync response
      */
     suspend fun fetchRootThreadEventsIfNeeded(syncResponse: SyncResponse) {
@@ -92,7 +92,7 @@ internal class ThreadsAwarenessHandler @Inject constructor(
     }
 
     /**
-     * Fetch root thread events if they are missing from the local storage
+     * Fetch root thread events if they are missing from the local storage.
      * @param eventList a list with the events to examine
      */
     suspend fun fetchRootThreadEventsIfNeeded(eventList: List<Event>) {
@@ -115,7 +115,7 @@ internal class ThreadsAwarenessHandler @Inject constructor(
     }
 
     /**
-     * Fetch multiple unique events using the fetchEvent function
+     * Fetch multiple unique events using the fetchEvent function.
      */
     private suspend fun fetchThreadsEvents(threadsToFetch: Map<String, String>) {
         val eventEntityList = threadsToFetch.mapNotNull { (eventId, roomId) ->
@@ -153,7 +153,7 @@ internal class ThreadsAwarenessHandler @Inject constructor(
     }
 
     /**
-     * Handle events mainly coming from the RoomSyncHandler
+     * Handle events mainly coming from the RoomSyncHandler.
      * @return The content to inject in the roomSyncHandler live events
      */
     fun makeEventThreadAware(realm: Realm,
@@ -206,6 +206,8 @@ internal class ThreadsAwarenessHandler @Inject constructor(
     /**
      * Handle for not thread events that we have marked them as root.
      * Find relations and inject them accordingly
+     * @param realm the realm instance
+     * @param roomId the current room Id
      * @param eventEntity the current eventEntity received
      * @param event the current event received
      * @return The content to inject in the roomSyncHandler live events
@@ -226,12 +228,15 @@ internal class ThreadsAwarenessHandler @Inject constructor(
     }
 
     /**
-     * This function is responsible to check if there is any event that relates to our current event
+     * This function is responsible to check if there is any event that relates to our current event.
      * This is useful when we receive an event that relates to a missing parent, so when later we receive the parent
-     * we can update the child as well
+     * we can update the child as well.
+     * @param realm the realm instance
+     * @param roomId the current room Id
      * @param event the current event that we examine
      * @param eventBody the current body of the event
      * @param isFromCache determines whether or not we already know this is root thread event
+     * @param threadRelation the information about thread
      * @return The content to inject in the roomSyncHandler live events
      */
     private fun handleEventsThatRelatesTo(
@@ -263,7 +268,7 @@ internal class ThreadsAwarenessHandler @Inject constructor(
     }
 
     /**
-     * Actual update the eventEntity with the new payload
+     * Actual update the eventEntity with the new payload.
      * @return the content to inject when this is executed by RoomSyncHandler
      */
     private fun updateEventEntity(event: Event,
@@ -291,9 +296,12 @@ internal class ThreadsAwarenessHandler @Inject constructor(
     }
 
     /**
-     * Injecting $eventToInject decrypted content as a reply to $event
-     * @param eventToInject the event that will inject
+     * Injecting [eventToInject] decrypted content as a reply to event.
+     * @param roomId the room id
      * @param eventBody the actual event body
+     * @param eventToInject the event that will inject
+     * @param eventToInjectBody the event body to inject
+     * @param threadRelation the information about thread
      * @return The final content with the injected event
      */
     private fun injectEvent(roomId: String,
@@ -324,7 +332,7 @@ internal class ThreadsAwarenessHandler @Inject constructor(
     }
 
     /**
-     * Integrate fallback Quote reply
+     * Integrate fallback Quote reply.
      */
     private fun injectFallbackIndicator(event: Event,
                                         eventBody: String,
@@ -364,7 +372,7 @@ internal class ThreadsAwarenessHandler @Inject constructor(
 
     /**
      * Try to get the event form the local DB, if the event does not exist null
-     * will be returned
+     * will be returned.
      */
     private fun getEventFromDB(realm: Realm, eventId: String): Event? {
         val eventEntity = EventEntity.where(realm, eventId = eventId).findFirst() ?: return null
@@ -372,14 +380,14 @@ internal class ThreadsAwarenessHandler @Inject constructor(
     }
 
     /**
-     * Returns True if the event is a thread
+     * Returns True if the event is a thread.
      * @param event
      */
     private fun isThreadEvent(event: Event): Boolean =
             event.content.toModel<MessageRelationContent>()?.relatesTo?.type == RelationType.THREAD
 
     /**
-     * Returns the root thread eventId or null otherwise
+     * Returns the root thread eventId or null otherwise.
      * @param event
      */
     private fun getRootThreadEventId(event: Event): String? =

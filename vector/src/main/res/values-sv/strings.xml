@@ -524,12 +524,9 @@
     <string name="settings_identity_server">Identitetsserver</string>
     <string name="account_email_validation_message">Vänligen kolla din e-post klicka på länken i den. När du är klar med detta, klicka på fortsätt.</string>
     <string name="account_email_already_used_error">Den här e-postadressen är upptagen.</string>
-    <string name="settings_unignore_user">Visa alla meddelanden från %s\?
-\n
-\nObservera att den har handlingen kommer att starta om appen, och det kan ta lite tid.</string>
+    <string name="settings_unignore_user">Visa alla meddelanden från %s\?</string>
     <string name="settings_media">Media</string>
     <string name="settings_default_media_source">Förvald mediakälla</string>
-    <string name="settings_flair">Emblem</string>
     <string name="room_settings_category_advanced_title">Avancerat</string>
     <string name="room_settings_labs_pref_title">Experiment</string>
     <string name="encryption_message_recovery">Återställning av krypterade meddelanden</string>
@@ -837,9 +834,7 @@
     <string name="room_participants_power_level_demote">Degradera</string>
     <string name="room_participants_action_ignore_title">Ignorera användare</string>
     <string name="room_participants_action_unignore_title">Avignorera användare</string>
-    <string name="room_participants_action_unignore_prompt_msg">Att avignorera den här användaren kommer att visa alla meddelanden från denne igen.
-\n
-\nObservera att detta kräver en omstart av appen och kan ta en stund.</string>
+    <string name="room_participants_action_unignore_prompt_msg">Att avignorera den här användaren kommer att visa alla meddelanden från denne igen.</string>
     <string name="room_participants_action_cancel_invite_title">Avbryt inbjudan</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Är du säker på att du vill avbryta inbjudan för den här användaren\?</string>
     <string name="room_participants_remove_title">Kicka användaren</string>
@@ -2350,8 +2345,6 @@
     <string name="location_share_external">Öppna med</string>
     <string name="location_not_available_dialog_content">${app_name} kunde inte komma åt din plats. Försök igen senare.</string>
     <string name="location_not_available_dialog_title">${app_name} kunde inte komma åt din plats</string>
-    <string name="location_share">Dela plats</string>
-    <string name="a11y_location_share_icon">Dela plats</string>
     <string name="location_activity_title_preview">Plats</string>
     <string name="location_activity_title_static_sharing">Dela plats</string>
     <string name="open_poll_option_description">Väljare kan se resultatet så fort de har röstat</string>
@@ -2487,4 +2480,14 @@
     <string name="threads_beta_enable_notice_title">Trådar Beta</string>
     <string name="action_learn_more">Läs mer</string>
     <string name="action_try_it_out">Prova</string>
+    <string name="screen_sharing_notification_description">Skärmdelning pågår</string>
+    <string name="screen_sharing_notification_title">${app_name} delar skärm</string>
+    <string name="call_stop_screen_sharing">Avsluta skärmdelning</string>
+    <string name="call_start_screen_sharing">Dela skärm</string>
+    <string name="initial_sync_request_reason_unignored_users">- Vissa användare har avignorerats</string>
+    <string name="initial_sync_request_content">${app_name} behöver rensa cache för att uppdateras, av följande anledning:
+\n%s
+\n
+\nObservera att detta startar om appen, och kan ta ett tag.</string>
+    <string name="initial_sync_request_title">Förfrågan om inledande synk</string>
 </resources>

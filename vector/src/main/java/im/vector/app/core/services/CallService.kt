@@ -48,7 +48,7 @@ import javax.inject.Inject
 private val loggerTag = LoggerTag("CallService", LoggerTag.VOIP)
 
 /**
- * Foreground service to manage calls
+ * Foreground service to manage calls.
  */
 @AndroidEntryPoint
 class CallService : VectorService() {

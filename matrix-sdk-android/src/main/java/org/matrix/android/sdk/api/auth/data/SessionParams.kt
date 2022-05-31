@@ -22,12 +22,12 @@ package org.matrix.android.sdk.api.auth.data
  */
 data class SessionParams(
         /**
-         * Please consider using shortcuts instead
+         * Please consider using shortcuts instead.
          */
         val credentials: Credentials,
 
         /**
-         * Please consider using shortcuts instead
+         * Please consider using shortcuts instead.
          */
         val homeServerConnectionConfig: HomeServerConnectionConfig,
 
@@ -41,12 +41,12 @@ data class SessionParams(
      */
 
     /**
-     * The userId of the session (Ex: "@user:domain.org")
+     * The userId of the session (Ex: "@user:domain.org").
      */
     val userId = credentials.userId
 
     /**
-     * The deviceId of the session (Ex: "ABCDEFGH")
+     * The deviceId of the session (Ex: "ABCDEFGH").
      */
     val deviceId = credentials.deviceId
 
@@ -62,12 +62,12 @@ data class SessionParams(
     val homeServerUrlBase = homeServerConnectionConfig.homeServerUriBase.toString()
 
     /**
-     * The current homeserver host, using what has been entered by the user during login phase
+     * The current homeserver host, using what has been entered by the user during login phase.
      */
     val homeServerHost = homeServerConnectionConfig.homeServerUri.host
 
     /**
-     * The default identity server url if any, returned by the homeserver during login phase
+     * The default identity server url if any, returned by the homeserver during login phase.
      */
     val defaultIdentityServerUrl = homeServerConnectionConfig.identityServerUri?.toString()
 }

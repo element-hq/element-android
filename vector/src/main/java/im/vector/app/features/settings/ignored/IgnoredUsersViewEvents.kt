@@ -20,7 +20,7 @@ package im.vector.app.features.settings.ignored
 import im.vector.app.core.platform.VectorViewEvents
 
 /**
- * Transient events for Ignored users screen
+ * Transient events for Ignored users screen.
  */
 sealed class IgnoredUsersViewEvents : VectorViewEvents {
     data class Loading(val message: CharSequence? = null) : IgnoredUsersViewEvents()

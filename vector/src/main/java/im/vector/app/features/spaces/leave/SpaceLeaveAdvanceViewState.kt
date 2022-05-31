@@ -28,8 +28,11 @@ data class SpaceLeaveAdvanceViewState(
         val allChildren: Async<List<RoomSummary>> = Uninitialized,
         val selectedRooms: List<String> = emptyList(),
         val currentFilter: String = "",
-        val leaveState: Async<Unit> = Uninitialized
+        val leaveState: Async<Unit> = Uninitialized,
+        val isFilteringEnabled: Boolean = false,
+        val isLastAdmin: Boolean = false
 ) : MavericksState {
+
     constructor(args: SpaceBottomSheetSettingsArgs) : this(
             spaceId = args.spaceId
     )

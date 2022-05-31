@@ -311,7 +311,7 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
     }
 
     /**
-     * Detect if password ends or starts with spaces
+     * Detect if password ends or starts with spaces.
      */
     private fun spaceInPassword() = views.passwordField.text.toString().let { it.trim() != it }
 }

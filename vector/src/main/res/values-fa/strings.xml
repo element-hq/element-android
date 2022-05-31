@@ -662,9 +662,7 @@
     <string name="settings_deactivate_my_account">حسابم را غیرفعال کن</string>
     <string name="settings_discovery_category">کشف</string>
     <string name="settings_discovery_manage">مدیریت تنظیمات کشفتان.</string>
-    <string name="settings_unignore_user">نمایش همهٔ پیام‌ها از %s؟
-\n
-\nبه خاطر داشته باشید این عمل، کاره را دوباره شروع خواهد کرد و ممکن است کمی زمان ببرد.</string>
+    <string name="settings_unignore_user">نمایش همهٔ پیام‌ها از %s؟</string>
     <string name="settings_emails_and_phone_numbers_title">رایانامه‌ها و شماره تلفن‌ها</string>
     <string name="settings_emails_and_phone_numbers_summary">مدیریت رایانامه‌ها و شماره تلفن‌های پیوسته به حساب ماتریکستان</string>
     <string name="media_saving_period_3_days">۳ روز</string>
@@ -1256,9 +1254,7 @@
     <string name="ssl_cert_new_account_expl">اگر مدیر کارساز خبر از مورد انتظار بودنش داده، مطمئن شوید که اثر انگشت زیر با اثر انگشت ارائه شده به دستشان مطابق است.</string>
     <string name="ssl_cert_not_trust">می‌تواند به این معنی باشد که کسی شدامدتان را بدخواهانه دستکاری کرده یا تلفنتان، به گواهی فراهم‌شده به دست کارساز دوردست، اطمینان ندارد.</string>
     <string name="room_participants_unban_prompt_msg">با لغو مسدودیت، کاربر می‌تواند مجددا به اتاق اضافه شود.</string>
-    <string name="room_participants_action_unignore_prompt_msg">ناچشم‌پوشی این کاربر موجب نمایانی تمامی پیام‌ها از سویش خواهد شد.
-\n
-\nبه خاطر داشته باشید که این کنش کاره را دوباره آغاز خواهد کرد و ممکن است مدّتی زمان ببرد.</string>
+    <string name="room_participants_action_unignore_prompt_msg">ناچشم‌پوشی این کاربر موجب نمایانی تمامی پیام‌ها از سویش خواهد شد.</string>
     <string name="room_participants_action_ignore_prompt_msg">نادیده‌گرفتن این کاربر پیام‌هایش را از اتاق‌های مشترکتان حذف خواهد کرد.
 \n 
 \nهرگاه که بخواهید می‌توانید این کنش را در تنظیمات کلی لغو کنید.</string>
@@ -1662,7 +1658,6 @@
     </plurals>
     <string name="encryption_exported_successfully">کلیدها با موفقیت بر روی دستگاه استخراج شدند</string>
     <string name="encryption_export_notice">لطفاً یک رمز برای رمزنگاری کلیدها وارد کنید. ورود این رمز برای بارگذاری کلیدها ضروری خواهد بود.</string>
-    <string name="settings_flair">اجتماع</string>
     <string name="settings_play_shutter_sound">پخش صدای شاتر</string>
     <string name="media_source_choose">گزینش</string>
     <string name="settings_default_media_source">منبع رسانهٔ پیش‌گزیده</string>
@@ -2345,8 +2340,6 @@
     <string name="tooltip_attachment_location">هم‌رسانی مکان</string>
     <string name="settings_enable_location_sharing">به کار انداختن هم‌رسانی مکان</string>
     <string name="location_share_external">گشودن با</string>
-    <string name="location_share">هم‌رسانی مکان</string>
-    <string name="a11y_location_share_icon">هم‌رسانی مکان</string>
     <string name="location_activity_title_preview">مکان</string>
     <string name="location_activity_title_static_sharing">هم‌رسانی مکان</string>
     <string name="closed_poll_option_title">نظرسنجی بسته</string>
@@ -2378,7 +2371,7 @@
     <string name="location_timeline_failed_to_load_map">شکست در بار کردن نقشه</string>
     <string name="a11y_static_map_image">نقشه</string>
     <string name="labs_enable_thread_messages_desc">نکته: کاره دوباره آغاز خواهد شد</string>
-    <string name="labs_enable_thread_messages">به کار انداختن ویام‌های رشته‌ای</string>
+    <string name="labs_enable_thread_messages">به کار انداختن پیام‌های رشته‌ای</string>
     <string name="ftue_auth_use_case_connect_to_server">وصل شدن به کارساز</string>
     <string name="ftue_auth_use_case_join_existing_server">دنبال پیوستن به کارسازهای موجودید؟</string>
     <string name="ftue_auth_use_case_skip_partial">از این پرسش بگذرید</string>
@@ -2487,4 +2480,14 @@
     <string name="threads_beta_enable_notice_title">رشته‌های آزمایشی</string>
     <string name="action_learn_more">بیش تر بدانید</string>
     <string name="action_try_it_out">بیازماییدش</string>
+    <string name="initial_sync_request_content">لازم است به این دلیل، ${app_name} انباره را برای به‌روز بودن خالی کند:
+\n%s
+\n
+\nبه خاطر داشته باشید این عمل، کاره را دوباره شروع خواهد کرد و ممکن است کمی زمان ببرد.</string>
+    <string name="screen_sharing_notification_description">هم‌رسانی صفحه در حال پیشرفت است</string>
+    <string name="screen_sharing_notification_title">هم‌رسانی صفحهٔ ${app_name}</string>
+    <string name="call_stop_screen_sharing">توقّف هم‌رسانی صفحه</string>
+    <string name="call_start_screen_sharing">هم‌رسانی صفحه</string>
+    <string name="initial_sync_request_reason_unignored_users">- برخی کاربران ناچشم‌پوشی شده‌اند</string>
+    <string name="initial_sync_request_title">درخواست همگام سازی نخستین</string>
 </resources>

@@ -60,7 +60,7 @@ class VectorSettingsLabsFragment @Inject constructor(
     }
 
     /**
-     * Intercept the click to display a user friendly dialog when their homeserver do not support threads
+     * Intercept the click to display a user friendly dialog when their homeserver do not support threads.
      */
     private fun onThreadsPreferenceClickedInterceptor(vectorSwitchPreference: VectorSwitchPreference) {
         val userEnabledThreads = vectorPreferences.areThreadMessagesEnabled()
@@ -89,7 +89,7 @@ class VectorSettingsLabsFragment @Inject constructor(
     }
 
     /**
-     * Action when threads preference switch is actually clicked
+     * Action when threads preference switch is actually clicked.
      */
     private fun onThreadsPreferenceClicked() {
         // We should migrate threads only if threads are disabled

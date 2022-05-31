@@ -16,25 +16,35 @@
 
 package org.matrix.android.sdk.api.session.crypto.keysbackup
 
+import org.matrix.android.sdk.api.session.crypto.crosssigning.CryptoCrossSigningKey
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 
 /**
  * A signature in a `KeysBackupVersionTrust` object.
  */
-data class KeysBackupVersionTrustSignature(
-        /**
-         * The id of the device that signed the backup version.
-         */
-        val deviceId: String?,
 
-        /**
-         * The device that signed the backup version.
-         * Can be null if the device is not known.
-         */
-        val device: CryptoDeviceInfo?,
+sealed class KeysBackupVersionTrustSignature {
 
-        /**
-         * Flag to indicate the signature from this device is valid.
-         */
-        val valid: Boolean,
-)
+    data class DeviceSignature(
+            /**
+             * The id of the device that signed the backup version.
+             */
+            val deviceId: String?,
+
+            /**
+             * The device that signed the backup version.
+             * Can be null if the device is not known.
+             */
+            val device: CryptoDeviceInfo?,
+
+            /**
+             * Flag to indicate the signature from this device is valid.
+             */
+            val valid: Boolean) : KeysBackupVersionTrustSignature()
+
+    data class UserSignature(
+            val keyId: String?,
+            val cryptoCrossSigningKey: CryptoCrossSigningKey?,
+            val valid: Boolean
+    ) : KeysBackupVersionTrustSignature()
+}

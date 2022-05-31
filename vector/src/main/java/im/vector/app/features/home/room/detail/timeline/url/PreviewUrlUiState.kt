@@ -19,7 +19,7 @@ package im.vector.app.features.home.room.detail.timeline.url
 import org.matrix.android.sdk.api.session.media.PreviewUrlData
 
 /**
- * The state representing a preview url UI state for an Event
+ * The state representing a preview url UI state for an Event.
  */
 sealed class PreviewUrlUiState {
     // No info

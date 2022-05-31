@@ -26,7 +26,7 @@ import org.matrix.android.sdk.api.util.JsonDict
  */
 interface LoginWizard {
     /**
-     * Get some information about a matrixId: displayName and avatar url
+     * Get some information about a matrixId: displayName and avatar url.
      */
     suspend fun getProfileInfo(matrixId: String): LoginProfileInfo
 

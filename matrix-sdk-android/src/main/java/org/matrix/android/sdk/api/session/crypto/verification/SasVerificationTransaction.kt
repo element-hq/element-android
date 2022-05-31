@@ -28,7 +28,7 @@ interface SasVerificationTransaction : VerificationTransaction {
 
     /**
      * To be called by the client when the user has verified that
-     * both short codes do match
+     * both short codes do match.
      */
     fun userHasVerifiedShortCode()
 

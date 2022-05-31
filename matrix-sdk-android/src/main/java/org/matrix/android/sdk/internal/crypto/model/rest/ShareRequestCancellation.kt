@@ -21,7 +21,7 @@ import org.matrix.android.sdk.api.session.crypto.model.GossipingToDeviceObject
 import org.matrix.android.sdk.api.session.crypto.model.GossipingToDeviceObject.Companion.ACTION_SHARE_CANCELLATION
 
 /**
- * Class representing a room key request cancellation content
+ * Class representing a room key request cancellation content.
  */
 @JsonClass(generateAdapter = true)
 internal data class ShareRequestCancellation(

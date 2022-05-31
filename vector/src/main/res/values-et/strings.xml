@@ -595,7 +595,6 @@
     <string name="settings_default_media_source">Vaikimisi meediaallikas</string>
     <string name="media_source_choose">Vali</string>
     <string name="settings_play_shutter_sound">Tee katiku klõpsu</string>
-    <string name="settings_flair">Kogukonna rinnasilt</string>
     <string name="media_saving_period_3_days">3 päeva</string>
     <string name="media_saving_period_1_week">1 nädal</string>
     <string name="media_saving_period_1_month">1 kuu</string>
@@ -743,9 +742,7 @@
 \nÜldistest seadistustest saad seda alati muuta.</string>
     <string name="room_participants_action_ignore">Eira selle kasutaja sõnumeid</string>
     <string name="room_participants_action_unignore_title">Lõpeta selle kasutaja eiramine</string>
-    <string name="room_participants_action_unignore_prompt_msg">Selle kasutaja eiramise lõpetamine teeb tema sõnumid uuesti nähtavaks.
-\n
-\nPalun arvesta, et samaga käivitud rakendub uuesti ning andmete sünkroniseerimiseks kulub natuke aega.</string>
+    <string name="room_participants_action_unignore_prompt_msg">Selle kasutaja eiramise lõpetamine teeb tema sõnumid uuesti nähtavaks.</string>
     <string name="room_participants_action_unignore">Lõpeta eiramine</string>
     <string name="room_participants_action_cancel_invite_title">Tühista kutse</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Kas oled kindel et sa soovid tühistada kutse sellele kasutajale\?</string>
@@ -971,9 +968,7 @@
     <string name="settings_fail_to_update_password">Salasõna uuendamine ei õnnestunud</string>
     <string name="settings_fail_to_update_password_invalid_current_password">Salasõna ei ole sobilik</string>
     <string name="settings_password_updated">Sinu salasõna on muudetud</string>
-    <string name="settings_unignore_user">Kas sa soovid näha kasutaja %s kõiki sõnumeid\?
-\n
-\nPane tähele, et antud toiming taaskäivitab rakenduse ja see võib võtta veidi aega.</string>
+    <string name="settings_unignore_user">Kas sa soovid näha kasutaja %s kõiki sõnumeid\?</string>
     <string name="settings_select_country">Vali riik</string>
     <string name="encryption_export_notice">Eksporditavate võtmete krüptimiseks palun sisesta paroolifraas. Võtmete importimisel pead kasutama sama paroolifraasi.</string>
     <string name="encryption_exported_successfully">Võtmete eksportimine õnnestus</string>
@@ -2350,8 +2345,6 @@
     <string name="location_share_external">Ava muu rakendusega</string>
     <string name="location_not_available_dialog_content">${app_name} ei saanud asukohta tuvastada. Palun proovi hiljem uuesti.</string>
     <string name="location_not_available_dialog_title">${app_name} ei saanud asukohta tuvastada</string>
-    <string name="location_share">Jaga asukohta</string>
-    <string name="a11y_location_share_icon">Jaga asukohta</string>
     <string name="location_activity_title_preview">Asukoht</string>
     <string name="location_activity_title_static_sharing">Jaga asukohta</string>
     <string name="closed_poll_option_description">Tulemusi kuvame vaid siis, kui küsitlus on lõppenud</string>
@@ -2487,4 +2480,14 @@
     <string name="action_try_it_out">Proovi nüüd</string>
     <string name="send_feedback_threads_info">Jutulõngad on hetkel arendusjärgus funktsionaalsus ning samaga lisandub ka senisest parem versioon teavitustest. Me hea meelega tahaksime kuulda, mida sa nendest muutustest arvad!</string>
     <string name="threads_beta_enable_notice_message">Jutulõngad aitavad hoida sinu vestlusi teemakohastena ning kergesti jälgitavatena.%sJutulõngade kasutusele võtmisel laadime rakenduse uuesti. Kui sul on väga mahukad kontod, siis võib natuke aega kuluda.</string>
+    <string name="screen_sharing_notification_description">Ekraanijagamine on hetkel kasutusel</string>
+    <string name="screen_sharing_notification_title">${app_name} ekraanijagamine</string>
+    <string name="call_stop_screen_sharing">Lõpeta ekraani jagamine</string>
+    <string name="call_start_screen_sharing">Jaga ekraani</string>
+    <string name="initial_sync_request_reason_unignored_users">- Sa oled lõpetanud mõnede kasutajate eiramise</string>
+    <string name="initial_sync_request_content">${app_name} peab andmete korrektsuse tagamiseks kustutama puhverdatud teabe. Toimingu põhjus on:
+\n%s
+\n
+\nPalun arvesta, et selle käigus rakendus käivitub uuesti ja see võib aega võtta.</string>
+    <string name="initial_sync_request_title">Alusandmete sünkroniseerimise päring</string>
 </resources>

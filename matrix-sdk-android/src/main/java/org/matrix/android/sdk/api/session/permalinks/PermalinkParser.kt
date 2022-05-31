@@ -23,7 +23,7 @@ import timber.log.Timber
 import java.net.URLDecoder
 
 /**
- * This class turns a uri to a [PermalinkData]
+ * This class turns a uri to a [PermalinkData].
  * element-based domains (e.g. https://app.element.io/#/user/@chagai95:matrix.org) permalinks
  * or matrix.to permalinks (e.g. https://matrix.to/#/@chagai95:matrix.org)
  * or client permalinks (e.g. <clientPermalinkBaseUrl>user/@chagai95:matrix.org)
@@ -31,7 +31,7 @@ import java.net.URLDecoder
 object PermalinkParser {
 
     /**
-     * Turns a uri string to a [PermalinkData]
+     * Turns a uri string to a [PermalinkData].
      */
     fun parse(uriString: String): PermalinkData {
         val uri = Uri.parse(uriString)
@@ -39,7 +39,7 @@ object PermalinkParser {
     }
 
     /**
-     * Turns a uri to a [PermalinkData]
+     * Turns a uri to a [PermalinkData].
      * https://github.com/matrix-org/matrix-doc/blob/master/proposals/1704-matrix.to-permalinks.md
      */
     fun parse(uri: Uri): PermalinkData {

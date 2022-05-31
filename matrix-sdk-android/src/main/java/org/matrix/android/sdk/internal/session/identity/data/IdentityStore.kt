@@ -32,7 +32,7 @@ internal interface IdentityStore {
     fun setHashDetails(hashDetailResponse: IdentityHashDetailResponse)
 
     /**
-     * Store details about a current binding
+     * Store details about a current binding.
      */
     fun storePendingBinding(threePid: ThreePid, data: IdentityPendingBinding)
 

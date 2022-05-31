@@ -59,7 +59,7 @@ import timber.log.Timber
 
 /**
  * View model used to update the home bottom bar notification counts, observe the sync state and
- * change the selected room list view
+ * change the selected room list view.
  */
 class HomeDetailViewModel @AssistedInject constructor(
         @Assisted initialState: HomeDetailViewState,

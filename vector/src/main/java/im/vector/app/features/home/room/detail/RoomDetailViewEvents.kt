@@ -26,7 +26,7 @@ import org.matrix.android.sdk.api.util.MatrixItem
 import java.io.File
 
 /**
- * Transient events for RoomDetail
+ * Transient events for RoomDetail.
  */
 sealed class RoomDetailViewEvents : VectorViewEvents {
     data class Failure(val throwable: Throwable, val showInDialog: Boolean = false) : RoomDetailViewEvents()

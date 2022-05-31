@@ -112,7 +112,7 @@ internal class DefaultSearchTask @Inject constructor(
     }
 
     /**
-     * Find local events if exists in order to enhance the result with thread summary
+     * Find local events if exists in order to enhance the result with thread summary.
      */
     private fun findRootThreadEventsFromDB(searchResponseItemList: List<SearchResponseItem>?): List<TimelineEventEntity>? {
         return realmSessionProvider.withRealm { realm ->

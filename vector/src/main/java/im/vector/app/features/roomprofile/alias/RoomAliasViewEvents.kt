@@ -20,7 +20,7 @@ package im.vector.app.features.roomprofile.alias
 import im.vector.app.core.platform.VectorViewEvents
 
 /**
- * Transient events for room settings screen
+ * Transient events for room settings screen.
  */
 sealed class RoomAliasViewEvents : VectorViewEvents {
     data class Failure(val throwable: Throwable) : RoomAliasViewEvents()

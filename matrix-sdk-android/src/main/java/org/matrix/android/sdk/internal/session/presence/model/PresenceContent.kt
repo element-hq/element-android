@@ -21,7 +21,7 @@ import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.session.presence.model.PresenceEnum
 
 /**
- * Class representing the EventType.PRESENCE event content
+ * Class representing the EventType.PRESENCE event content.
  */
 @JsonClass(generateAdapter = true)
 internal data class PresenceContent(
@@ -38,7 +38,7 @@ internal data class PresenceContent(
          */
         @Json(name = "status_msg") val statusMessage: String? = null,
         /**
-         * Whether the user is currently active
+         * Whether the user is currently active.
          */
         @Json(name = "currently_active") val isCurrentlyActive: Boolean = false,
         /**

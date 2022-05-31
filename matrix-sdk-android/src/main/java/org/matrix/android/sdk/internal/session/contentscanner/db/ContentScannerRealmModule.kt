@@ -19,7 +19,7 @@ package org.matrix.android.sdk.internal.session.contentscanner.db
 import io.realm.annotations.RealmModule
 
 /**
- * Realm module for content scanner classes
+ * Realm module for content scanner classes.
  */
 @RealmModule(
         library = true,

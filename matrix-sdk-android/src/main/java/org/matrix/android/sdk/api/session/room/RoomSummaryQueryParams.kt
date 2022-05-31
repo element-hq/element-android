@@ -41,7 +41,7 @@ fun spaceSummaryQueryParams(init: (RoomSummaryQueryParams.Builder.() -> Unit) = 
 
 /**
  * This class can be used to filter room summaries to use with:
- * [org.matrix.android.sdk.api.session.room.Room] and [org.matrix.android.sdk.api.session.room.RoomService]
+ * [org.matrix.android.sdk.api.session.room.Room] and [org.matrix.android.sdk.api.session.room.RoomService].
  */
 data class RoomSummaryQueryParams(
         val roomId: QueryStringValue,

@@ -68,7 +68,7 @@ class SpaceInviteBottomSheetViewModel @AssistedInject constructor(
     }
 
     /**
-     * Try to request the room summary api to get more info
+     * Try to request the room summary api to get more info.
      */
     private fun getLatestRoomSummary(roomSummary: RoomSummary) {
         viewModelScope.launch(Dispatchers.IO) {

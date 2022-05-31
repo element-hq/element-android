@@ -33,7 +33,7 @@ class ConsentNotGivenHelper(private val activity: Activity,
      * ========================================================================================== */
 
     /**
-     * Display the consent dialog, if not already displayed
+     * Display the consent dialog, if not already displayed.
      */
     fun displayDialog(consentUri: String, homeServerHost: String) {
         dialogLocker.displayDialog {

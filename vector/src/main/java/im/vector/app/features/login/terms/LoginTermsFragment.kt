@@ -40,7 +40,7 @@ data class LoginTermsFragmentArgument(
 ) : Parcelable
 
 /**
- * LoginTermsFragment displays the list of policies the user has to accept
+ * LoginTermsFragment displays the list of policies the user has to accept.
  */
 class LoginTermsFragment @Inject constructor(
         private val policyController: PolicyController

@@ -32,7 +32,7 @@ const val MXCRYPTO_ALGORITHM_MEGOLM = "m.megolm.v1.aes-sha2"
 const val MXCRYPTO_ALGORITHM_MEGOLM_BACKUP = "m.megolm_backup.v1.curve25519-aes-sha2"
 
 /**
- * Secured Shared Storage algorithm constant
+ * Secured Shared Storage algorithm constant.
  */
 const val SSSS_ALGORITHM_CURVE25519_AES_SHA2 = "m.secret_storage.v1.curve25519-aes-sha2"
 

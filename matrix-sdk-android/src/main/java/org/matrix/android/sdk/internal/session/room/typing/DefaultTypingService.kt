@@ -31,7 +31,7 @@ import timber.log.Timber
  * Rules:
  * - user is typing: notify the homeserver (true), at least once every 10s
  * - user stop typing: after 10s delay: notify the homeserver (false)
- * - user empty the text composer or quit the timeline screen: notify the homeserver (false)
+ * - user empty the text composer or quit the timeline screen: notify the homeserver (false).
  */
 internal class DefaultTypingService @AssistedInject constructor(
         @Assisted private val roomId: String,
@@ -53,7 +53,7 @@ internal class DefaultTypingService @AssistedInject constructor(
     private var lastRequestTimestamp: Long = 0
 
     /**
-     * Notify to the server that the user is typing and schedule the auto typing off
+     * Notify to the server that the user is typing and schedule the auto typing off.
      */
     override fun userIsTyping() {
         val now = SystemClock.elapsedRealtime()

@@ -491,7 +491,6 @@
     <string name="has_been_removed">%2$s vous a expulsé de %1$s</string>
     <string name="has_been_banned">%2$s vous a banni de %1$s</string>
     <string name="reason_colon">Motif : %1$s</string>
-    <string name="settings_flair">Badge</string>
     <string name="send_bug_report_rage_shake">Secouer avec agacement pour signaler une anomalie</string>
     <plurals name="room_title_members">
         <item quantity="one">%d membre</item>
@@ -2350,8 +2349,6 @@
     <string name="location_share_external">Ouvrir avec</string>
     <string name="location_not_available_dialog_content">${app_name} n\'a pas pu accéder à votre localisation. Veuillez réessayer plus tard.</string>
     <string name="location_not_available_dialog_title">${app_name} n\'a pas pu accéder à votre localisation</string>
-    <string name="location_share">Partager la localisation</string>
-    <string name="a11y_location_share_icon">Partager la localisation</string>
     <string name="location_activity_title_preview">Localisation</string>
     <string name="location_activity_title_static_sharing">Partager la localisation</string>
     <string name="closed_poll_option_description">Les résultats ne sont dévoilés que lorsque vous terminez le sondage</string>

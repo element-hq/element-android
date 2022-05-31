@@ -26,7 +26,7 @@ class SupportedVerificationMethodsProvider @Inject constructor(
 ) {
     /**
      * Provide the list of supported method by Element, with or without the QR_CODE_SCAN, depending if a back camera
-     * is available
+     * is available.
      */
     fun provide(): List<VerificationMethod> {
         return mutableListOf(

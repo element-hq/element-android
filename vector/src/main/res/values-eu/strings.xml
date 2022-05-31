@@ -534,7 +534,6 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="has_been_removed">%1$s gelatik kanporatu zaitu %2$s erabiltzaileak</string>
     <string name="has_been_banned">%1$s gelatik debekatu zaitu %2$s erabiltzaileak</string>
     <string name="reason_colon">Arrazoia: %1$s</string>
-    <string name="settings_flair">Ikurra</string>
 
     <string name="send_bug_report_rage_shake">Astindu amorruz akatsaren berri emateko</string>
 

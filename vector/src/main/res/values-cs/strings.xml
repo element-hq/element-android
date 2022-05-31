@@ -610,9 +610,7 @@
     <string name="settings_fail_to_update_password">Aktualizace hesla se nezdařila</string>
     <string name="settings_fail_to_update_password_invalid_current_password">Heslo není správné</string>
     <string name="settings_password_updated">Vaše heslo bylo aktualizováno</string>
-    <string name="settings_unignore_user">Ukázat všechny zprávy od %s\?
-\n
-\nPřipomínám, že tato akce restartuje aplikaci a může chvíli trvat.</string>
+    <string name="settings_unignore_user">Ukázat všechny zprávy od %s\?</string>
     <string name="settings_select_country">Vybrat zemi</string>
     <string name="settings_media">Média</string>
     <string name="settings_default_compression">Výchozí komprese</string>
@@ -620,7 +618,6 @@
     <string name="settings_default_media_source">Výchozí zdroj médií</string>
     <string name="media_source_choose">Vybrat</string>
     <string name="settings_play_shutter_sound">Přehrát zvuk uzávěrky</string>
-    <string name="settings_flair">Příslušnost ke skupinám</string>
     <string name="media_saving_period_3_days">3 dny</string>
     <string name="media_saving_period_1_week">1 týden</string>
     <string name="media_saving_period_1_month">1 měsíc</string>
@@ -1566,9 +1563,7 @@
 \n
 \nMůžete tuto akci kdykoli zvrátit v obecných nastaveních.</string>
     <string name="room_participants_action_unignore_title">Odignorovat uživatele</string>
-    <string name="room_participants_action_unignore_prompt_msg">Zrušení ignorování tohoto uživatele opět ukáže všechny jejich zprávy.
-\n
-\nTato akce povede k restartování aplikace a může trvat nějakou dobu.</string>
+    <string name="room_participants_action_unignore_prompt_msg">Zrušení ignorování tohoto uživatele opět ukáže všechny jejich zprávy.</string>
     <string name="room_participants_action_cancel_invite_title">Zrušit pozvánku</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Jste si jisti, že chcete zrušit pozvánku tomuto uživateli\?</string>
     <string name="room_participants_remove_title">Vykopnout uživatele</string>
@@ -2395,8 +2390,6 @@
     <string name="location_share_external">Otevřít v</string>
     <string name="location_not_available_dialog_content">${app_name} nemohl získat přístup k vaší poloze. Zkuste to prosím později.</string>
     <string name="location_not_available_dialog_title">${app_name} nemohl získat přístup k vaší poloze</string>
-    <string name="location_share">Sdílet polohu</string>
-    <string name="a11y_location_share_icon">Sdílet polohu</string>
     <string name="location_activity_title_preview">Poloha</string>
     <string name="location_activity_title_static_sharing">Sdílet polohu</string>
     <string name="closed_poll_option_description">Výsledky se zobrazí až po ukončení hlasování</string>
@@ -2534,4 +2527,14 @@
     <string name="threads_beta_enable_notice_title">Vlákna Beta</string>
     <string name="action_learn_more">Zjistit více</string>
     <string name="action_try_it_out">Vyzkoušet to</string>
+    <string name="screen_sharing_notification_description">Probíhá sdílení obrazovky</string>
+    <string name="screen_sharing_notification_title">Sdílení obrazovky aplikace ${app_name}</string>
+    <string name="call_stop_screen_sharing">Zastavit sdílení obrazovky</string>
+    <string name="call_start_screen_sharing">Sdílet obrazovku</string>
+    <string name="initial_sync_request_reason_unignored_users">- Některý uživatelům bylo zrušeno ignorování</string>
+    <string name="initial_sync_request_content">${app_name} potřebuje vymazat mezipaměť, aby byla aktuální, a to z následujícího důvodu:
+\n%s
+\n
+\nTato akce povede k restartování aplikace a může trvat nějakou dobu.</string>
+    <string name="initial_sync_request_title">Požadavek na počáteční synchronizaci</string>
 </resources>

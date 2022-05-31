@@ -26,7 +26,7 @@ import org.matrix.android.sdk.internal.crypto.verification.VerificationInfoKeyFa
 @JsonClass(generateAdapter = true)
 internal data class MessageVerificationKeyContent(
         /**
-         * The device’s ephemeral public key, as an unpadded base64 string
+         * The device’s ephemeral public key, as an unpadded base64 string.
          */
         @Json(name = "key") override val key: String? = null,
         @Json(name = "m.relates_to") val relatesTo: RelationDefaultContent?

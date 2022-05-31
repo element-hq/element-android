@@ -215,7 +215,7 @@ class NotifiableEventResolver @Inject constructor(
                         keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
                         forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
                 )
-            } catch (e: MXCryptoError) {
+            } catch (ignore: MXCryptoError) {
             }
         }
     }

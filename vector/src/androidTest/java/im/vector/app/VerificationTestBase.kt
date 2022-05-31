@@ -19,6 +19,7 @@ package im.vector.app
 import android.net.Uri
 import androidx.lifecycle.Observer
 import im.vector.app.ui.robot.OnboardingRobot
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -107,7 +108,7 @@ abstract class VerificationTestBase {
         return result!!
     }
 
-    @Suppress("EXPERIMENTAL_API_USAGE")
+    @OptIn(DelicateCoroutinesApi::class)
     private fun syncSession(session: Session) {
         val lock = CountDownLatch(1)
 

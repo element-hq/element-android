@@ -72,12 +72,12 @@ internal class DefaultFileService @Inject constructor(
 
     /**
      * Retain ongoing downloads to avoid re-downloading and already downloading file
-     * map of mxCurl to callbacks
+     * map of mxCurl to callbacks.
      */
     private val ongoing = mutableMapOf<String, CompletableDeferred<File>>()
 
     /**
-     * Download file in the cache folder, and eventually decrypt it
+     * Download file in the cache folder, and eventually decrypt it.
      * TODO looks like files are copied 3 times
      */
     override suspend fun downloadFile(fileName: String,
@@ -88,7 +88,7 @@ internal class DefaultFileService @Inject constructor(
 
         Timber.v("## FileService downloadFile $url")
 
-        // TODO: Remove use of `synchronized` in suspend function.
+        // TODO Remove use of `synchronized` in suspend function.
         val existingDownload = synchronized(ongoing) {
             val existing = ongoing[url]
             if (existing != null) {
@@ -312,7 +312,7 @@ internal class DefaultFileService @Inject constructor(
 
     /**
      * Use this URI and pass it to intent using flag Intent.FLAG_GRANT_READ_URI_PERMISSION
-     * (if not other app won't be able to access it)
+     * (if not other app won't be able to access it).
      */
     override fun getTemporarySharableURI(mxcUrl: String?,
                                          fileName: String,

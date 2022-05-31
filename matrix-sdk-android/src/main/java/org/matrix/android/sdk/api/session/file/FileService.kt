@@ -33,7 +33,7 @@ interface FileService {
         /**
          * The original file is in cache, but the decrypted files can be deleted for security reason.
          * To decrypt the file again, call [downloadFile], the encrypted file will not be downloaded again
-         * @param decryptedFileInCache true if the decrypted file is available. Always true for clear files.
+         * @property decryptedFileInCache true if the decrypted file is available. Always true for clear files.
          */
         data class InCache(val decryptedFileInCache: Boolean) : FileState()
         object Downloading : FileState()
@@ -73,7 +73,7 @@ interface FileService {
 
     /**
      * Use this URI and pass it to intent using flag Intent.FLAG_GRANT_READ_URI_PERMISSION
-     * (if not other app won't be able to access it)
+     * (if not other app won't be able to access it).
      */
     fun getTemporarySharableURI(mxcUrl: String?,
                                 fileName: String,
@@ -106,17 +106,17 @@ interface FileService {
             )
 
     /**
-     * Clears all the files downloaded by the service, including decrypted files
+     * Clears all the files downloaded by the service, including decrypted files.
      */
     fun clearCache()
 
     /**
-     * Clears all the decrypted files by the service
+     * Clears all the decrypted files by the service.
      */
     fun clearDecryptedCache()
 
     /**
-     * Get size of cached files
+     * Get size of cached files.
      */
     fun getCacheSize(): Long
 }

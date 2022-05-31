@@ -336,9 +336,7 @@
     <string name="settings_new_password">Új jelszó</string>
     <string name="settings_fail_to_update_password">Jelszó frissítése sikertelen</string>
     <string name="settings_password_updated">A jelszavad sikeresen frissítésre került</string>
-    <string name="settings_unignore_user">"Az összes üzenet mutatása %s -tól/-től?
-
-Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe."</string>
+    <string name="settings_unignore_user">Az összes üzenet mutatása %s -tól/-től\?</string>
     <string name="settings_select_country">Válassz országot</string>
     <string name="room_settings_topic">Téma</string>
     <string name="room_settings_room_read_history_rules_pref_title">Üzenet előzmények láthatósága</string>
@@ -450,7 +448,6 @@ Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe."<
     <string name="has_been_banned">Ki lettél tiltva innen: %1$s, %2$s által</string>
     <string name="reason_colon">Ok: %1$s</string>
     <string name="settings_inline_url_preview">URL előnézet</string>
-    <string name="settings_flair">Kitűző</string>
     <string name="group_details_home">Kezdőlap</string>
     <string name="send_bug_report_rage_shake">Rázd meg az eszközt, ha hibát szeretnél bejelenteni</string>
     <plurals name="membership_changes">
@@ -1486,9 +1483,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 \n
 \nEzt a műveletet bármikor visszavonhatja az általános beállításokban.</string>
     <string name="room_participants_action_unignore_title">Felhasználó figyelembe vétele</string>
-    <string name="room_participants_action_unignore_prompt_msg">A felhasználó figyelembe vétele után újra meg fog jelenni az összes üzenete.
-\n
-\nEz a művelet újraindítja az alkalmazást ami sokáig tarthat.</string>
+    <string name="room_participants_action_unignore_prompt_msg">A felhasználó figyelembe vétele után újra meg fog jelenni az összes üzenete.</string>
     <string name="room_participants_action_cancel_invite_title">Meghívás visszavonása</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Biztos, hogy visszavonja a felhasználó meghívását\?</string>
     <string name="room_participants_remove_prompt_msg">a felhasználó kirúgása eltávolítja a szobából.
@@ -2350,8 +2345,6 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="location_share_external">Megnyitás ezzel</string>
     <string name="location_not_available_dialog_content">Az ${app_name} nem fér hozzá a tartózkodási helyedhez. Próbáld újra később.</string>
     <string name="location_not_available_dialog_title">Az ${app_name} nem tudott hozzáférni a tartózkodási helyedhez</string>
-    <string name="location_share">Tartózkodási hely megosztása</string>
-    <string name="a11y_location_share_icon">Tartózkodási hely megosztása</string>
     <string name="location_activity_title_preview">Földrajzi helyzet</string>
     <string name="location_activity_title_static_sharing">Tartózkodási hely megosztása</string>
     <string name="closed_poll_option_description">Az eredmény csak a szavazás végeztével válik láthatóvá</string>
@@ -2487,4 +2480,14 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="threads_beta_enable_notice_title">Béta Üzenetszálak</string>
     <string name="action_learn_more">Tudj meg többet</string>
     <string name="action_try_it_out">Próbáld ki</string>
+    <string name="screen_sharing_notification_description">Képernyőmegosztás folyamatban</string>
+    <string name="screen_sharing_notification_title">${app_name} képernyő megosztás</string>
+    <string name="call_stop_screen_sharing">Képernyőmegosztás megállítása</string>
+    <string name="call_start_screen_sharing">Képernyő megosztása</string>
+    <string name="initial_sync_request_reason_unignored_users">- Néhány felhasználó újra figyelembe vannak véve</string>
+    <string name="initial_sync_request_content">${app_name} alkalmazásnak az alábbi okokból törölnie kell a gyorsítótárat:
+\n%s
+\n
+\nFigyelem, ez az alkalmazást újra is indítja, ami eltarthat egy darabig.</string>
+    <string name="initial_sync_request_title">Kezdő szinkronizálási kérés</string>
 </resources>

@@ -33,7 +33,7 @@ import org.matrix.android.sdk.internal.auth.SessionCreator
 import org.matrix.android.sdk.internal.auth.db.PendingSessionData
 
 /**
- * This class execute the registration request and is responsible to keep the session of interactive authentication
+ * This class execute the registration request and is responsible to keep the session of interactive authentication.
  */
 internal class DefaultRegistrationWizard(
         authAPI: AuthAPI,

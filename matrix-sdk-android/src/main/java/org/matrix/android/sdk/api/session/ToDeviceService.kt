@@ -21,9 +21,8 @@ import org.matrix.android.sdk.api.session.events.model.Content
 import java.util.UUID
 
 interface ToDeviceService {
-
     /**
-     * Send an event to a specific list of devices
+     * Send an event to a specific list of devices.
      */
     suspend fun sendToDevice(eventType: String, contentMap: MXUsersDevicesMap<Any>, txnId: String? = UUID.randomUUID().toString())
 

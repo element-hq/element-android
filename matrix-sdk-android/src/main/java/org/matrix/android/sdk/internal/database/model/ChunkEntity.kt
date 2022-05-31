@@ -69,7 +69,7 @@ internal fun ChunkEntity.deleteOnCascade(
 }
 
 /**
- * Delete the chunk along with the thread events that were temporarily created
+ * Delete the chunk along with the thread events that were temporarily created.
  */
 internal fun ChunkEntity.deleteAndClearThreadEvents() {
     assertIsManaged()

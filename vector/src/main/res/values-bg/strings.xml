@@ -390,7 +390,6 @@
 \n
 \nИмайте предвид, че това действие ще рестартира приложението, което може да отнеме известно време.</string>
     <string name="settings_select_country">Избор на държава</string>
-    <string name="settings_flair">Значка</string>
     <string name="media_saving_period_3_days">3 дни</string>
     <string name="media_saving_period_1_week">1 седмица</string>
     <string name="media_saving_period_1_month">1 месец</string>

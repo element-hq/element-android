@@ -35,7 +35,7 @@ import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isE2EByDefault
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.MatrixPatterns.getDomain
+import org.matrix.android.sdk.api.MatrixPatterns.getServerName
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
@@ -98,7 +98,7 @@ class CreateRoomViewModel @AssistedInject constructor(
     private fun initHomeServerName() {
         setState {
             copy(
-                    homeServerName = session.myUserId.getDomain()
+                    homeServerName = session.myUserId.getServerName()
             )
         }
     }
@@ -297,7 +297,7 @@ class CreateRoomViewModel @AssistedInject constructor(
                     }
                 }
 
-        // TODO: Should this be non-cancellable?
+        // TODO Should this be non-cancellable?
         viewModelScope.launch {
             runCatching { session.roomService().createRoom(createRoomParams) }.fold(
                     { roomId ->

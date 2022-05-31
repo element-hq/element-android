@@ -23,7 +23,7 @@ import im.vector.app.features.login.SignMode
 import org.matrix.android.sdk.api.auth.registration.FlowResult
 
 /**
- * Transient events for Login
+ * Transient events for Login.
  */
 sealed class OnboardingViewEvents : VectorViewEvents {
     data class Loading(val message: CharSequence? = null) : OnboardingViewEvents()
@@ -37,6 +37,7 @@ sealed class OnboardingViewEvents : VectorViewEvents {
     object OpenUseCaseSelection : OnboardingViewEvents()
     object OpenServerSelection : OnboardingViewEvents()
     object OpenCombinedRegister : OnboardingViewEvents()
+    object OpenCombinedLogin : OnboardingViewEvents()
     object EditServerSelection : OnboardingViewEvents()
     data class OnServerSelectionDone(val serverType: ServerType) : OnboardingViewEvents()
     object OnLoginFlowRetrieved : OnboardingViewEvents()

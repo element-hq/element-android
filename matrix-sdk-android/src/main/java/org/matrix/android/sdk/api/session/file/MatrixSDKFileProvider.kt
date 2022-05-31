@@ -21,7 +21,7 @@ import androidx.core.content.FileProvider
 
 /**
  * We have to declare our own file provider to avoid collision with apps using the sdk
- * and having their own
+ * and having their own.
  */
 class MatrixSDKFileProvider : FileProvider() {
     override fun getType(uri: Uri): String? {

@@ -20,9 +20,9 @@ import androidx.annotation.StringRes
 import im.vector.app.R
 
 /**
- * Defines the command line operations
- * the user can write theses messages to perform some actions
- * the list will be displayed in this order
+ * Defines the command line operations.
+ * The user can write theses messages to perform some actions.
+ * The list will be displayed in this order.
  */
 enum class Command(val command: String,
                    val aliases: Array<CharSequence>?,

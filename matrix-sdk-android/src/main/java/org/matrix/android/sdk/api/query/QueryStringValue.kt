@@ -36,19 +36,19 @@ sealed interface QueryStringValue {
 
     enum class Case {
         /**
-         * Match query sensitive to case
+         * Match query sensitive to case.
          */
         SENSITIVE,
 
         /**
-         * Match query insensitive to case, this only works for Latin-1 character sets
+         * Match query insensitive to case, this only works for Latin-1 character sets.
          */
         INSENSITIVE,
 
         /**
-         * Match query with input normalized (case insensitive)
-         * Works around Realms inability to sort or filter by case for non Latin-1 character sets
-         * Expects the target field to contain normalized data
+         * Match query with input normalized (case insensitive).
+         * Works around Realms inability to sort or filter by case for non Latin-1 character sets.
+         * Expects the target field to contain normalized data.
          *
          * @see org.matrix.android.sdk.internal.util.Normalizer.normalize
          */

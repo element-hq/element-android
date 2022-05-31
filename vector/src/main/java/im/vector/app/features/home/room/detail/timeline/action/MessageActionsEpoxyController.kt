@@ -54,7 +54,7 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import javax.inject.Inject
 
 /**
- * Epoxy controller for message action list
+ * Epoxy controller for message action list.
  */
 class MessageActionsEpoxyController @Inject constructor(
         private val stringProvider: StringProvider,

@@ -73,21 +73,21 @@ class AttachmentsHelper(val context: Context, val callback: Callback) : Restorab
     // Public Methods
 
     /**
-     * Starts the process for handling file picking
+     * Starts the process for handling file picking.
      */
     fun selectFile(activityResultLauncher: ActivityResultLauncher<Intent>) {
         MultiPicker.get(MultiPicker.FILE).startWith(activityResultLauncher)
     }
 
     /**
-     * Starts the process for handling image/video picking
+     * Starts the process for handling image/video picking.
      */
     fun selectGallery(activityResultLauncher: ActivityResultLauncher<Intent>) {
         MultiPicker.get(MultiPicker.MEDIA).startWith(activityResultLauncher)
     }
 
     /**
-     * Starts the process for handling audio picking
+     * Starts the process for handling audio picking.
      */
     fun selectAudio(activityResultLauncher: ActivityResultLauncher<Intent>) {
         MultiPicker.get(MultiPicker.AUDIO).startWith(activityResultLauncher)
@@ -112,7 +112,7 @@ class AttachmentsHelper(val context: Context, val callback: Callback) : Restorab
     }
 
     /**
-     * Starts the process for handling contact picking
+     * Starts the process for handling contact picking.
      */
     fun selectContact(activityResultLauncher: ActivityResultLauncher<Intent>) {
         MultiPicker.get(MultiPicker.CONTACT).startWith(activityResultLauncher)

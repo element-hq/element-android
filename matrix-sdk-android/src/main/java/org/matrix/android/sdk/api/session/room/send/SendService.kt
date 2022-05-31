@@ -62,6 +62,7 @@ interface SendService {
      * @param quotedEvent The event to which we will quote it's content.
      * @param text the text message to send
      * @param autoMarkdown If true, the SDK will generate a formatted HTML message from the body text if markdown syntax is present
+     * @param rootThreadEventId when this param is not null, the message will be sent in this specific thread
      * @return a [Cancelable]
      */
     fun sendQuotedTextMessage(quotedEvent: TimelineEvent, text: String, autoMarkdown: Boolean, rootThreadEventId: String? = null): Cancelable
@@ -126,19 +127,19 @@ interface SendService {
     fun redactEvent(event: Event, reason: String?): Cancelable
 
     /**
-     * Schedule this message to be resent
+     * Schedule this message to be resent.
      * @param localEcho the unsent local echo
      */
     fun resendTextMessage(localEcho: TimelineEvent): Cancelable
 
     /**
-     * Schedule this message to be resent
+     * Schedule this message to be resent.
      * @param localEcho the unsent local echo
      */
     fun resendMediaMessage(localEcho: TimelineEvent): Cancelable
 
     /**
-     * Send a location event to the room
+     * Send a location event to the room.
      * @param latitude required latitude of the location
      * @param longitude required longitude of the location
      * @param uncertainty Accuracy of the location in meters
@@ -156,23 +157,23 @@ interface SendService {
     fun sendLiveLocation(beaconInfoEventId: String, latitude: Double, longitude: Double, uncertainty: Double?): Cancelable
 
     /**
-     * Remove this failed message from the timeline
+     * Remove this failed message from the timeline.
      * @param localEcho the unsent local echo
      */
     fun deleteFailedEcho(localEcho: TimelineEvent)
 
     /**
-     * Cancel sending a specific event. It has to be in one of the sending states
+     * Cancel sending a specific event. It has to be in one of the sending states.
      */
     fun cancelSend(eventId: String)
 
     /**
-     * Resend all failed messages one by one (and keep order)
+     * Resend all failed messages one by one (and keep order).
      */
     fun resendAllFailedMessages()
 
     /**
-     * Cancel all failed messages
+     * Cancel all failed messages.
      */
     fun cancelAllFailedMessages()
 }

@@ -28,7 +28,7 @@ sealed class MXCryptoError : Throwable() {
     data class Base(val errorType: ErrorType,
                     val technicalMessage: String,
                     /**
-                     * Describe the error with more details
+                     * Describe the error with more details.
                      */
                     val detailedErrorDescription: String? = null) : MXCryptoError()
 
@@ -63,7 +63,7 @@ sealed class MXCryptoError : Throwable() {
 
     companion object {
         /**
-         * Resource for technicalMessage
+         * Resource for technicalMessage.
          */
         const val UNABLE_TO_ENCRYPT_REASON = "Unable to encrypt %s"
         const val UNABLE_TO_DECRYPT_REASON = "Unable to decrypt %1\$s. Algorithm: %2\$s"

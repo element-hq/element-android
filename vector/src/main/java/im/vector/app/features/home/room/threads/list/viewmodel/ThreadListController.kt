@@ -55,8 +55,7 @@ class ThreadListController @Inject constructor(
             }
 
     /**
-     * Building thread summaries when homeserver
-     * supports threading
+     * Building thread summaries when homeserver supports threading.
      */
     private fun buildThreadSummaries() {
         val safeViewState = viewState ?: return
@@ -104,8 +103,7 @@ class ThreadListController @Inject constructor(
     }
 
     /**
-     * Building local thread list when homeserver do not
-     * support threading
+     * Building local thread list when homeserver do not support threading.
      */
     private fun buildThreadList() {
         val safeViewState = viewState ?: return

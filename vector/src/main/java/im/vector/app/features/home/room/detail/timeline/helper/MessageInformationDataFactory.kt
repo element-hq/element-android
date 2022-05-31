@@ -44,8 +44,7 @@ import org.matrix.android.sdk.api.session.room.timeline.hasBeenEdited
 import javax.inject.Inject
 
 /**
- * TODO Update this comment
- * This class compute if data of an event (such has avatar, display name, ...) should be displayed, depending on the previous event in the timeline
+ * This class is responsible of building extra information data associated to a given event.
  */
 class MessageInformationDataFactory @Inject constructor(private val session: Session,
                                                         private val dateFormatter: VectorDateFormatter,
@@ -119,7 +118,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                 isFirstFromThisSender = isFirstFromThisSender,
                 isLastFromThisSender = isLastFromThisSender,
                 e2eDecoration = e2eDecoration,
-                sendStateDecoration = sendStateDecoration
+                sendStateDecoration = sendStateDecoration,
         )
     }
 
@@ -190,7 +189,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
 
     /**
      * Tiles type message never show the sender information (like verification request), so we should repeat it for next message
-     * even if same sender
+     * even if same sender.
      */
     private fun isTileTypeMessage(event: TimelineEvent?): Boolean {
         return when (event?.root?.getClearType()) {

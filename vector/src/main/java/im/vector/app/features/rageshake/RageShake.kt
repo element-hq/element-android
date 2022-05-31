@@ -105,7 +105,7 @@ class RageShake @Inject constructor(private val activity: FragmentActivity,
 
     companion object {
         /**
-         * Check if the feature is available
+         * Check if the feature is available.
          */
         fun isAvailable(context: Context): Boolean {
             return context.getSystemService<SensorManager>()?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null

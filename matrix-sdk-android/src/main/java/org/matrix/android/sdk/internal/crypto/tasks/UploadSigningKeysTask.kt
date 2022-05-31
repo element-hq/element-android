@@ -36,7 +36,7 @@ internal interface UploadSigningKeysTask : Task<UploadSigningKeysTask.Params, Un
             // the SSK
             val selfSignedKey: CryptoCrossSigningKey,
             /**
-             * Authorisation info (User Interactive flow)
+             * Authorisation info (User Interactive flow).
              */
             val userAuthParam: UIABaseAuth?
     )

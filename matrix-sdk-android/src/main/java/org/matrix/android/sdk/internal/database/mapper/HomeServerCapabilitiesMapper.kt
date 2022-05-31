@@ -28,7 +28,7 @@ import org.matrix.android.sdk.internal.session.homeserver.RoomVersions
 import org.matrix.android.sdk.internal.session.room.version.DefaultRoomVersionService
 
 /**
- * HomeServerCapabilitiesEntity -> HomeSeverCapabilities
+ * HomeServerCapabilitiesEntity -> HomeSeverCapabilities.
  */
 internal object HomeServerCapabilitiesMapper {
 

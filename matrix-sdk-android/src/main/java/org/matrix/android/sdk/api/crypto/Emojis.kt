@@ -20,7 +20,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.EmojiRepresentatio
 import org.matrix.android.sdk.internal.crypto.verification.getEmojiForCode
 
 /**
- * Provide all the emojis used for SAS verification (for debug purpose)
+ * Provide all the emojis used for SAS verification (for debug purpose).
  */
 fun getAllVerificationEmojis(): List<EmojiRepresentation> {
     return (0..63).map { getEmojiForCode(it) }

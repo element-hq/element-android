@@ -193,6 +193,27 @@ internal class VerificationTransportToDevice(
                 .executeBy(taskExecutor)
     }
 
+    override fun cancelTransaction(transactionId: String, otherUserId: String, otherUserDeviceIds: List<String>, code: CancelCode) {
+        Timber.d("## SAS canceling transaction $transactionId for reason $code")
+        val cancelMessage = KeyVerificationCancel.create(transactionId, code)
+        val contentMap = MXUsersDevicesMap<Any>()
+        val messages = otherUserDeviceIds.associateWith { cancelMessage }
+        contentMap.setObjects(otherUserId, messages)
+        sendToDeviceTask
+                .configureWith(SendToDeviceTask.Params(EventType.KEY_VERIFICATION_CANCEL, contentMap)) {
+                    this.callback = object : MatrixCallback<Unit> {
+                        override fun onSuccess(data: Unit) {
+                            Timber.v("## SAS verification [$transactionId] canceled for reason ${code.value}")
+                        }
+
+                        override fun onFailure(failure: Throwable) {
+                            Timber.e(failure, "## SAS verification [$transactionId] failed to cancel.")
+                        }
+                    }
+                }
+                .executeBy(taskExecutor)
+    }
+
     override fun createAccept(tid: String,
                               keyAgreementProtocol: String,
                               hash: String,

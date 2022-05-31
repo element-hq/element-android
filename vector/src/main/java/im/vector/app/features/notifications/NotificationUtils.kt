@@ -230,9 +230,10 @@ class NotificationUtils @Inject constructor(
     }
 
     /**
-     * Build a polling thread listener notification
+     * Build a polling thread listener notification.
      *
      * @param subTitleResId subtitle string resource Id of the notification
+     * @param withProgress true to show indeterminate progress on the notification
      * @return the polling thread listener notification
      */
     @SuppressLint("NewApi")
@@ -298,10 +299,8 @@ class NotificationUtils @Inject constructor(
      * Build an incoming call notification.
      * This notification starts the VectorHomeActivity which is in charge of centralizing the incoming call flow.
      *
-     * @param isVideo  true if this is a video call, false for voice call
-     * @param roomName the room name in which the call is pending.
-     * @param matrixId the matrix id
-     * @param callId   the call id.
+     * @param call information about the call
+     * @param title title of the notification
      * @param fromBg true if the app is in background when posting the notification
      * @return the call notification.
      */
@@ -428,13 +427,10 @@ class NotificationUtils @Inject constructor(
     }
 
     /**
-     * Build a pending call notification
+     * Build a pending call notification.
      *
-     * @param isVideo  true if this is a video call, false for voice call
-     * @param roomName the room name in which the call is pending.
-     * @param roomId   the room Id
-     * @param matrixId the matrix id
-     * @param callId   the call id.
+     * @param call information about the call
+     * @param title title of the notification
      * @return the call notification.
      */
     @SuppressLint("NewApi")
@@ -489,7 +485,7 @@ class NotificationUtils @Inject constructor(
     }
 
     /**
-     * Build a temporary (because service will be stopped just after) notification for the CallService, when a call is ended
+     * Build a temporary (because service will be stopped just after) notification for the CallService, when a call is ended.
      */
     fun buildCallEndedNotification(isVideoCall: Boolean): Notification {
         return NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
@@ -508,7 +504,7 @@ class NotificationUtils @Inject constructor(
     }
 
     /**
-     * Build notification for the CallService, when a call is missed
+     * Build notification for the CallService, when a call is missed.
      */
     fun buildCallMissedNotification(callInformation: CallService.CallInformation): Notification {
         val builder = NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
@@ -588,7 +584,7 @@ class NotificationUtils @Inject constructor(
     }
 
     /**
-     * Build a notification for a Room
+     * Build a notification for a Room.
      */
     fun buildMessagesListNotification(messageStyle: NotificationCompat.MessagingStyle,
                                       roomInfo: RoomEventGroupInfo,
@@ -889,7 +885,7 @@ class NotificationUtils @Inject constructor(
 
     // // Number of new notifications for API <24 (M and below) devices.
     /**
-     * Build the summary notification
+     * Build the summary notification.
      */
     fun buildSummaryListNotification(style: NotificationCompat.InboxStyle?,
                                      compatSummary: String,
@@ -951,14 +947,14 @@ class NotificationUtils @Inject constructor(
     }
 
     /**
-     * Cancel the foreground notification service
+     * Cancel the foreground notification service.
      */
     fun cancelNotificationForegroundService() {
         notificationManager.cancel(NOTIFICATION_ID_FOREGROUND_SERVICE)
     }
 
     /**
-     * Cancel all the notification
+     * Cancel all the notification.
      */
     fun cancelAllNotifications() {
         // Keep this try catch (reported by GA)
@@ -1007,7 +1003,7 @@ class NotificationUtils @Inject constructor(
     }
 
     /**
-     * Return true it the user has enabled the do not disturb mode
+     * Return true it the user has enabled the do not disturb mode.
      */
     fun isDoNotDisturbModeOn(): Boolean {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {

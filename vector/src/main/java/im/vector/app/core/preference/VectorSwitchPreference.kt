@@ -30,7 +30,7 @@ import im.vector.app.R
 import im.vector.app.features.themes.ThemeUtils
 
 /**
- * Switch preference with title on multiline (only used in XML)
+ * Switch preference with title on multiline (only used in XML).
  */
 class VectorSwitchPreference : SwitchPreference {
 

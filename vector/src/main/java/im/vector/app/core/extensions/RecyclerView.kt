@@ -25,7 +25,7 @@ import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyVisibilityTracker
 
 /**
- * Apply a Vertical LinearLayout Manager to the recyclerView and set the adapter from the epoxy controller
+ * Apply a Vertical LinearLayout Manager to the recyclerView and set the adapter from the epoxy controller.
  */
 fun RecyclerView.configureWith(epoxyController: EpoxyController,
                                itemAnimator: RecyclerView.ItemAnimator? = null,
@@ -57,7 +57,7 @@ fun RecyclerView.configureWith(epoxyController: EpoxyController,
 }
 
 /**
- * To call from Fragment.onDestroyView()
+ * To call from Fragment.onDestroyView().
  */
 fun RecyclerView.cleanup() {
     adapter = null

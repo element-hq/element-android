@@ -180,8 +180,8 @@ internal class MXOlmDecryption(
     /**
      * Attempt to decrypt an Olm message.
      *
+     * @param message message object, with 'type' and 'body' fields.
      * @param theirDeviceIdentityKey the Curve25519 identity key of the sender.
-     * @param message                message object, with 'type' and 'body' fields.
      * @return payload, if decrypted successfully.
      */
     private suspend fun decryptMessage(message: JsonDict, theirDeviceIdentityKey: String): String? {
@@ -264,9 +264,5 @@ internal class MXOlmDecryption(
         Timber.tag(loggerTag.value).v("## decryptMessage() :  Created new inbound Olm session get id ${res["session_id"]} with $theirDeviceIdentityKey")
 
         return res["payload"]
-    }
-
-    override fun requestKeysForEvent(event: Event, withHeld: Boolean) {
-        // nop
     }
 }

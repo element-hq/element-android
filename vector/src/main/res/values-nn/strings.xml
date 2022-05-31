@@ -291,7 +291,6 @@
     <string name="settings_password_updated">Passordet ditt vart oppdatert</string>
     <string name="settings_unignore_user">Vis alle meldingane frå %s\? Merk at denne handlinga gjer at applikasjonen startar på nytt og kan taka litt tid.</string>
     <string name="settings_select_country">Vel eit land</string>
-    <string name="settings_flair">Etikett</string>
     <string name="media_saving_period_3_days">3 dagar</string>
     <string name="media_saving_period_1_week">1 veke</string>
     <string name="media_saving_period_1_month">1 månad</string>

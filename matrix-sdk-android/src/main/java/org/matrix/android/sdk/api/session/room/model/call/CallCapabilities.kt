@@ -24,7 +24,7 @@ import org.matrix.android.sdk.api.extensions.orFalse
 data class CallCapabilities(
         /**
          * If set to true, states that the sender of the event supports the m.call.replaces event and therefore supports
-         * being transferred to another destination
+         * being transferred to another destination.
          */
         @Json(name = "m.call.transferee") val transferee: Boolean? = null
 )

@@ -19,7 +19,7 @@ package org.matrix.android.sdk.internal.session.identity.db
 import io.realm.annotations.RealmModule
 
 /**
- * Realm module for identity server classes
+ * Realm module for identity server classes.
  */
 @RealmModule(
         library = true,

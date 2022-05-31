@@ -26,7 +26,7 @@ import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
 
 /**
- * Get realm, invoke the action, close realm, and return the result of the action
+ * Get realm, invoke the action, close realm, and return the result of the action.
  */
 internal fun <T> doWithRealm(realmConfiguration: RealmConfiguration, action: (Realm) -> T): T {
     return Realm.getInstance(realmConfiguration).use { realm ->
@@ -35,7 +35,7 @@ internal fun <T> doWithRealm(realmConfiguration: RealmConfiguration, action: (Re
 }
 
 /**
- * Get realm, do the query, copy from realm, close realm, and return the copied result
+ * Get realm, do the query, copy from realm, close realm, and return the copied result.
  */
 internal fun <T : RealmObject> doRealmQueryAndCopy(realmConfiguration: RealmConfiguration, action: (Realm) -> T?): T? {
     return Realm.getInstance(realmConfiguration).use { realm ->
@@ -44,7 +44,7 @@ internal fun <T : RealmObject> doRealmQueryAndCopy(realmConfiguration: RealmConf
 }
 
 /**
- * Get realm, do the list query, copy from realm, close realm, and return the copied result
+ * Get realm, do the list query, copy from realm, close realm, and return the copied result.
  */
 internal fun <T : RealmObject> doRealmQueryAndCopyList(realmConfiguration: RealmConfiguration, action: (Realm) -> Iterable<T>): Iterable<T> {
     return Realm.getInstance(realmConfiguration).use { realm ->
@@ -53,7 +53,7 @@ internal fun <T : RealmObject> doRealmQueryAndCopyList(realmConfiguration: Realm
 }
 
 /**
- * Get realm instance, invoke the action in a transaction and close realm
+ * Get realm instance, invoke the action in a transaction and close realm.
  */
 internal fun doRealmTransaction(realmConfiguration: RealmConfiguration, action: (Realm) -> Unit) {
     Realm.getInstance(realmConfiguration).use { realm ->
@@ -68,7 +68,7 @@ internal fun doRealmTransactionAsync(realmConfiguration: RealmConfiguration, act
 }
 
 /**
- * Serialize any Serializable object, zip it and convert to Base64 String
+ * Serialize any Serializable object, zip it and convert to Base64 String.
  */
 internal fun serializeForRealm(o: Any?): String? {
     if (o == null) {

@@ -23,7 +23,7 @@ internal class ObjectSigner @Inject constructor(private val credentials: Credent
                                                 private val olmDevice: MXOlmDevice) {
 
     /**
-     * Sign Object
+     * Sign Object.
      *
      * Example:
      * <pre>

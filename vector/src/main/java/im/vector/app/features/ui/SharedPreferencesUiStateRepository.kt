@@ -23,7 +23,7 @@ import im.vector.app.features.settings.VectorPreferences
 import javax.inject.Inject
 
 /**
- * This class is used to persist UI state across application restart
+ * This class is used to persist UI state across application restart.
  */
 class SharedPreferencesUiStateRepository @Inject constructor(
         private val sharedPreferences: SharedPreferences,

@@ -6,8 +6,14 @@ apply plugin: 'com.jakewharton.butterknife'
 
 buildscript {
     repositories {
-        google()
-        mavenCentral()
+        // Do not use `google()`, it prevents Dependabot from working properly
+        maven {
+            url 'https://maven.google.com'
+        }
+        // Do not use `mavenCentral()`, it prevents Dependabot from working properly
+        maven {
+            url 'https://repo1.maven.org/maven2'
+        }
     }
     dependencies {
         classpath 'com.jakewharton:butterknife-gradle-plugin:10.2.3'

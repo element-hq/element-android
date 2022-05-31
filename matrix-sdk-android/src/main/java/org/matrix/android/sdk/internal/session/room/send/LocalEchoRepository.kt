@@ -221,7 +221,7 @@ internal class LocalEchoRepository @Inject constructor(
     }
 
     /**
-     * Returns the latest known thread event message, or the rootThreadEventId if no other event found
+     * Returns the latest known thread event message, or the rootThreadEventId if no other event found.
      */
     fun getLatestThreadEvent(rootThreadEventId: String): String {
         return realmSessionProvider.withRealm { realm ->

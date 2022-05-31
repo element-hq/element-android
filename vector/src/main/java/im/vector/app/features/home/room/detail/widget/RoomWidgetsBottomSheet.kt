@@ -37,7 +37,7 @@ import org.matrix.android.sdk.api.session.widgets.model.Widget
 import javax.inject.Inject
 
 /**
- * Bottom sheet displaying active widgets in a room
+ * Bottom sheet displaying active widgets in a room.
  */
 @AndroidEntryPoint
 class RoomWidgetsBottomSheet :

@@ -165,7 +165,7 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
     }
 
     /**
-     * Open room either joined, or not
+     * Open room either joined, or not.
      */
     private fun openRoom(
             navigationInterceptor: NavigationInterceptor?,
@@ -238,14 +238,14 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
 interface NavigationInterceptor {
 
     /**
-     * Return true if the navigation has been intercepted
+     * Return true if the navigation has been intercepted.
      */
     fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri? = null, rootThreadEventId: String? = null): Boolean {
         return false
     }
 
     /**
-     * Return true if the navigation has been intercepted
+     * Return true if the navigation has been intercepted.
      */
     fun navToMemberProfile(userId: String, deepLink: Uri): Boolean {
         return false

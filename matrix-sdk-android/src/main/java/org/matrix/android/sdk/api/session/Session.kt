@@ -72,23 +72,23 @@ interface Session {
     val coroutineDispatchers: MatrixCoroutineDispatchers
 
     /**
-     * The params associated to the session
+     * The params associated to the session.
      */
     val sessionParams: SessionParams
 
     /**
-     * The session is valid, i.e. it has a valid token so far
+     * The session is valid, i.e. it has a valid token so far.
      */
     val isOpenable: Boolean
 
     /**
-     * Useful shortcut to get access to the userId
+     * Useful shortcut to get access to the userId.
      */
     val myUserId: String
         get() = sessionParams.userId
 
     /**
-     * The sessionId
+     * The sessionId.
      */
     val sessionId: String
 
@@ -99,16 +99,16 @@ interface Session {
     fun open()
 
     /**
-     * Requires a one time background sync
+     * Requires a one time background sync.
      */
     fun requireBackgroundSync()
 
     /**
-     * Launches infinite self rescheduling background syncs via the WorkManager
+     * Launches infinite self rescheduling background syncs via the WorkManager.
      *
-     * While dozing, syncs will only occur during maintenance windows
+     * While dozing, syncs will only occur during maintenance windows.
      * For reliability it's recommended to also start a long running foreground service
-     * along with disabling battery optimizations
+     * along with disabling battery optimizations.
      */
     fun startAutomaticBackgroundSync(timeOutInSeconds: Long, repeatDelayInSeconds: Long)
 
@@ -125,7 +125,7 @@ interface Session {
     fun stopSync()
 
     /**
-     * Clear cache of the session
+     * Clear cache of the session.
      */
     suspend fun clearCache()
 
@@ -147,7 +147,7 @@ interface Session {
     fun syncFlow(): SharedFlow<SyncResponse>
 
     /**
-     * This methods return true if an initial sync has been processed
+     * This methods return true if an initial sync has been processed.
      */
     fun hasAlreadySynced(): Boolean
 
@@ -162,187 +162,187 @@ interface Session {
     fun contentUrlResolver(): ContentUrlResolver
 
     /**
-     * Returns the ContentUploadProgressTracker associated with the session
+     * Returns the ContentUploadProgressTracker associated with the session.
      */
     fun contentUploadProgressTracker(): ContentUploadStateTracker
 
     /**
-     * Returns the TypingUsersTracker associated with the session
+     * Returns the TypingUsersTracker associated with the session.
      */
     fun typingUsersTracker(): TypingUsersTracker
 
     /**
-     * Returns the ContentDownloadStateTracker associated with the session
+     * Returns the ContentDownloadStateTracker associated with the session.
      */
     fun contentDownloadProgressTracker(): ContentDownloadStateTracker
 
     /**
-     * Returns the cryptoService associated with the session
+     * Returns the cryptoService associated with the session.
      */
     fun cryptoService(): CryptoService
 
     /**
-     * Returns the ContentScannerService associated with the session
+     * Returns the ContentScannerService associated with the session.
      */
     fun contentScannerService(): ContentScannerService
 
     /**
-     * Returns the identity service associated with the session
+     * Returns the identity service associated with the session.
      */
     fun identityService(): IdentityService
 
     /**
-     * Returns the HomeServerCapabilities service associated with the session
+     * Returns the HomeServerCapabilities service associated with the session.
      */
     fun homeServerCapabilitiesService(): HomeServerCapabilitiesService
 
     /**
-     * Returns the RoomService associated with the session
+     * Returns the RoomService associated with the session.
      */
     fun roomService(): RoomService
 
     /**
-     * Returns the RoomDirectoryService associated with the session
+     * Returns the RoomDirectoryService associated with the session.
      */
     fun roomDirectoryService(): RoomDirectoryService
 
     /**
-     * Returns the GroupService associated with the session
+     * Returns the GroupService associated with the session.
      */
     fun groupService(): GroupService
 
     /**
-     * Returns the UserService associated with the session
+     * Returns the UserService associated with the session.
      */
     fun userService(): UserService
 
     /**
-     * Returns the SignOutService associated with the session
+     * Returns the SignOutService associated with the session.
      */
     fun signOutService(): SignOutService
 
     /**
-     * Returns the FilterService associated with the session
+     * Returns the FilterService associated with the session.
      */
     fun filterService(): FilterService
 
     /**
-     * Returns the PushRuleService associated with the session
+     * Returns the PushRuleService associated with the session.
      */
     fun pushRuleService(): PushRuleService
 
     /**
-     * Returns the PushersService associated with the session
+     * Returns the PushersService associated with the session.
      */
     fun pushersService(): PushersService
 
     /**
-     * Returns the EventService associated with the session
+     * Returns the EventService associated with the session.
      */
     fun eventService(): EventService
 
     /**
-     * Returns the TermsService associated with the session
+     * Returns the TermsService associated with the session.
      */
     fun termsService(): TermsService
 
     /**
-     * Returns the SyncStatusService associated with the session
+     * Returns the SyncStatusService associated with the session.
      */
     fun syncStatusService(): SyncStatusService
 
     /**
-     * Returns the SecureStorageService associated with the session
+     * Returns the SecureStorageService associated with the session.
      */
     fun secureStorageService(): SecureStorageService
 
     /**
-     * Returns the ProfileService associated with the session
+     * Returns the ProfileService associated with the session.
      */
     fun profileService(): ProfileService
 
     /**
-     * Returns the PresenceService associated with the session
+     * Returns the PresenceService associated with the session.
      */
     fun presenceService(): PresenceService
 
     /**
-     * Returns the AccountService associated with the session
+     * Returns the AccountService associated with the session.
      */
     fun accountService(): AccountService
 
     /**
-     * Returns the ToDeviceService associated with the session
+     * Returns the ToDeviceService associated with the session.
      */
     fun toDeviceService(): ToDeviceService
 
     /**
-     * Returns the EventStreamService associated with the session
+     * Returns the EventStreamService associated with the session.
      */
     fun eventStreamService(): EventStreamService
 
     /**
-     * Returns the widget service associated with the session
+     * Returns the widget service associated with the session.
      */
     fun widgetService(): WidgetService
 
     /**
-     * Returns the media service associated with the session
+     * Returns the media service associated with the session.
      */
     fun mediaService(): MediaService
 
     /**
-     * Returns the integration manager service associated with the session
+     * Returns the integration manager service associated with the session.
      */
     fun integrationManagerService(): IntegrationManagerService
 
     /**
-     * Returns the call signaling service associated with the session
+     * Returns the call signaling service associated with the session.
      */
     fun callSignalingService(): CallSignalingService
 
     /**
-     * Returns the file download service associated with the session
+     * Returns the file download service associated with the session.
      */
     fun fileService(): FileService
 
     /**
-     * Returns the permalink service associated with the session
+     * Returns the permalink service associated with the session.
      */
     fun permalinkService(): PermalinkService
 
     /**
-     * Returns the search service associated with the session
+     * Returns the search service associated with the session.
      */
     fun searchService(): SearchService
 
     /**
-     * Returns the federation service associated with the session
+     * Returns the federation service associated with the session.
      */
     fun federationService(): FederationService
 
     /**
-     * Returns the third party service associated with the session
+     * Returns the third party service associated with the session.
      */
     fun thirdPartyService(): ThirdPartyService
 
     /**
-     * Returns the space service associated with the session
+     * Returns the space service associated with the session.
      */
     fun spaceService(): SpaceService
 
     /**
-     * Returns the open id service associated with the session
+     * Returns the open id service associated with the session.
      */
     fun openIdService(): OpenIdService
 
     /**
-     * Returns the account data service associated with the session
+     * Returns the account data service associated with the session.
      */
     fun accountDataService(): SessionAccountDataService
 
     /**
-     * Returns the SharedSecretStorageService associated with the session
+     * Returns the SharedSecretStorageService associated with the session.
      */
     fun sharedSecretStorageService(): SharedSecretStorageService
 
@@ -377,8 +377,8 @@ interface Session {
         /**
          * Possible cases:
          * - The access token is not valid anymore,
-         * - a M_CONSENT_NOT_GIVEN error has been received from the homeserver
-         * See [GlobalError] for all the possible cases
+         * - a M_CONSENT_NOT_GIVEN error has been received from the homeserver;
+         * See [GlobalError] for all the possible cases.
          */
         fun onGlobalError(session: Session, globalError: GlobalError) = Unit
     }
@@ -386,7 +386,7 @@ interface Session {
     fun getUiaSsoFallbackUrl(authenticationSessionId: String): String
 
     /**
-     * Maintenance API, allows to print outs info on DB size to logcat
+     * Maintenance API, allows to print outs info on DB size to logcat.
      */
     fun logDbUsageInfo()
 }

@@ -36,7 +36,7 @@ import kotlinx.coroutines.CancellationException
 import org.matrix.android.sdk.api.failure.Failure
 
 /**
- * Parent Fragment for all the login/registration screens
+ * Parent Fragment for all the login/registration screens.
  */
 abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<VB>(), OnBackPressed {
 

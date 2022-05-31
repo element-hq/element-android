@@ -107,7 +107,8 @@ class NoticeEventFormatter @Inject constructor(
             EventType.REDACTION,
             EventType.STICKER,
             in EventType.POLL_RESPONSE,
-            in EventType.POLL_END                   -> formatDebug(timelineEvent.root)
+            in EventType.POLL_END,
+            in EventType.BEACON_LOCATION_DATA       -> formatDebug(timelineEvent.root)
             else                                    -> {
                 Timber.v("Type $type not handled by this formatter")
                 null

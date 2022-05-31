@@ -39,7 +39,7 @@ import java.util.UUID
 import javax.inject.Inject
 
 /**
- * Receives actions broadcast by notification (on click, on dismiss, inline replies, etc.)
+ * Receives actions broadcast by notification (on click, on dismiss, inline replies, etc.).
  */
 @AndroidEntryPoint
 class NotificationBroadcastReceiver : BroadcastReceiver() {

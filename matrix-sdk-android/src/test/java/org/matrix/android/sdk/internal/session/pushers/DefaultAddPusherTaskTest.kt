@@ -81,7 +81,7 @@ class DefaultAddPusherTaskTest {
     }
 
     @Test
-    fun `given a persisted push entity and SetPush API fails when adding Pusher then mutates persisted result with Failed registration state and rethrows error`() {
+    fun `given a persisted push entity and SetPush API fails when adding Pusher then mutates persisted result with Failed registration state and rethrows`() {
         val realmResult = PusherEntity()
         monarchy.givenWhereReturns(result = realmResult)
         pushersAPI.givenSetPusherErrors(SocketException())

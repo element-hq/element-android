@@ -50,7 +50,7 @@ import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
 
 /**
- * Note: this Fragment is also used for world readable room for the moment
+ * Note: this Fragment is also used for world readable room for the moment.
  */
 class RoomPreviewNoPreviewFragment @Inject constructor(
         private val avatarRenderer: AvatarRenderer

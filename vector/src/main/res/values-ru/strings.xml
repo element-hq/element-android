@@ -570,7 +570,6 @@
         <item quantity="many">%d непрочитанных уведомлений</item>
         <item quantity="other"/>
     </plurals>
-    <string name="settings_flair">Чутье</string>
     <string name="title_activity_choose_sticker">Отправить стикер</string>
     <string name="option_send_sticker">Отправить стикер</string>
     <string name="no_sticker_application_dialog_content">У вас сейчас нет доступных стикеров. 
@@ -2334,8 +2333,6 @@
     <string name="location_share_external">Открыть с помощью</string>
     <string name="location_not_available_dialog_content">${app_name} не смог получить доступ к вашему местоположению. Пожалуйста, повторите попытку позже.</string>
     <string name="location_not_available_dialog_title">${app_name} не смог получить доступ к вашему местоположению</string>
-    <string name="location_share">Поделиться местоположением</string>
-    <string name="a11y_location_share_icon">Поделиться местоположением</string>
     <string name="location_activity_title_preview">Местоположение</string>
     <string name="location_activity_title_static_sharing">Поделиться местоположением</string>
     <string name="closed_poll_option_description">Результаты отображаются только после завершения опроса</string>
@@ -2444,7 +2441,7 @@
     <string name="login_error_homeserver_from_url_not_found">Не могу связаться с домашним сервером на URL %s. Пожалуйста, проверьте вашу ссылку или выберите домашний сервер вручную.</string>
     <string name="action_not_now">Не сейчас</string>
     <string name="action_enable">Включить</string>
-    <string name="notification_listening_for_notifications">Слежка за уведомлениями</string>
+    <string name="notification_listening_for_notifications">Поиск уведомлений</string>
     <string name="room_error_access_unauthorized">Вам не разрешено подключаться к этой комнате</string>
     <string name="thread_list_empty_title">Организуйте обсуждение с помощью веток</string>
     <string name="thread_list_modal_my_threads_subtitle">Показать все ветки, в которых вы участвуете</string>

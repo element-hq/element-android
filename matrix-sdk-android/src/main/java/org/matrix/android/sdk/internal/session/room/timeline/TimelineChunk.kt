@@ -136,6 +136,7 @@ internal class TimelineChunk(
             val prevEvents = prevChunk?.builtItems(includesNext = false, includesPrev = true).orEmpty()
             deepBuiltItems.addAll(prevEvents)
         }
+
         return deepBuiltItems
     }
 
@@ -238,7 +239,7 @@ internal class TimelineChunk(
     }
 
     /**
-     * Simple log that displays the number and timeline of loaded events
+     * Simple log that displays the number and timeline of loaded events.
      */
     private fun logLoadedFromStorage(loadedFromStorage: LoadedFromStorage, direction: Timeline.Direction) {
         Timber.v(
@@ -380,7 +381,7 @@ internal class TimelineChunk(
 
     /**
      * This function is responsible to fetch and store the root event of a thread event
-     * in order to be able to display the event to the user appropriately
+     * in order to be able to display the event to the user appropriately.
      */
     private suspend fun fetchRootThreadEventsIfNeeded(offsetResults: List<TimelineEventEntity>) {
         val eventEntityList = offsetResults

@@ -56,7 +56,7 @@ data class ReactionInfo(
 )
 
 /**
- * Used to display the list of members that reacted to a given event
+ * Used to display the list of members that reacted to a given event.
  */
 class ViewReactionsViewModel @AssistedInject constructor(
         @Assisted initialState: DisplayReactionsViewState,

@@ -24,7 +24,7 @@ internal interface VerificationInfoStart : VerificationInfo<ValidVerificationInf
     val method: String?
 
     /**
-     * Alice’s device ID
+     * Alice’s device ID.
      */
     val fromDevice: String?
 
@@ -57,7 +57,7 @@ internal interface VerificationInfoStart : VerificationInfo<ValidVerificationInf
     val shortAuthenticationStrings: List<String>?
 
     /**
-     * Shared secret, when starting verification with QR code
+     * Shared secret, when starting verification with QR code.
      */
     val sharedSecret: String?
 

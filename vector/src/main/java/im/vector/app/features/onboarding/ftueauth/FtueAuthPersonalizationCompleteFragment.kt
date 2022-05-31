@@ -22,6 +22,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import im.vector.app.core.animations.play
+import im.vector.app.core.utils.isAnimationEnabled
 import im.vector.app.databinding.FragmentFtuePersonalizationCompleteBinding
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewEvents
@@ -43,7 +44,7 @@ class FtueAuthPersonalizationCompleteFragment @Inject constructor() : AbstractFt
     private fun setupViews() {
         views.personalizationCompleteCta.debouncedClicks { viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnTakeMeHome)) }
 
-        if (!hasPlayedConfetti) {
+        if (!hasPlayedConfetti && requireContext().isAnimationEnabled()) {
             hasPlayedConfetti = true
             views.viewKonfetti.isVisible = true
             views.viewKonfetti.play()

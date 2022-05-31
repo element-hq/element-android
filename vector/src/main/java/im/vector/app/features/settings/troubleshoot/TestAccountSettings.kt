@@ -30,7 +30,7 @@ import org.matrix.android.sdk.api.session.pushrules.RuleKind
 import javax.inject.Inject
 
 /**
- * Check that the main pushRule (RULE_ID_DISABLE_ALL) is correctly setup
+ * Check that the main pushRule (RULE_ID_DISABLE_ALL) is correctly setup.
  */
 class TestAccountSettings @Inject constructor(private val stringProvider: StringProvider,
                                               private val activeSessionHolder: ActiveSessionHolder) :

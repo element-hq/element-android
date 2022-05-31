@@ -37,7 +37,7 @@ import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import javax.inject.Inject
 
 /**
- * This Fragment is only used when user activates developer mode from the settings
+ * This Fragment is only used when user activates developer mode from the settings.
  */
 class CrossSigningSettingsFragment @Inject constructor(
         private val controller: CrossSigningSettingsController,

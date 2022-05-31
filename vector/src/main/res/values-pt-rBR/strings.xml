@@ -403,9 +403,7 @@
     <string name="settings_new_password">Senha nova</string>
     <string name="settings_fail_to_update_password">Falha para atualizar senha</string>
     <string name="settings_password_updated">Sua senha tem sido atualizada</string>
-    <string name="settings_unignore_user">Mostrar todas as mensagens de %s\?
-\n
-\nNote que esta ação vai recomeçar o app e pode levar algum tempo.</string>
+    <string name="settings_unignore_user">Mostrar todas as mensagens de %s\?</string>
     <string name="settings_select_country">Escolha um país</string>
     <string name="room_settings_topic">Tópico</string>
     <string name="room_settings_room_read_history_rules_pref_title">Legibilidade de Histórico de Sala</string>
@@ -490,7 +488,6 @@
     <string name="settings_12_24_timestamps">Mostrar timestamps em formato de 12 horas</string>
     <string name="settings_vibrate_on_mention">Vibrar ao mencionar um/uma usuário(a)</string>
     <string name="settings_analytics">Analítica</string>
-    <string name="settings_flair">Flair</string>
     <string name="widget_delete_message_confirmation">Você tem certeza que você quer deletar o widget desta sala\?</string>
     <string name="widget_integration_unable_to_create">Incapaz de criar widget.</string>
     <string name="widget_integration_failed_to_send_request">Falha para enviar requisição.</string>
@@ -757,9 +754,7 @@
 \n
 \nVocê pode reverter esta ação a qualquer momento nas configurações gerais.</string>
     <string name="room_participants_action_unignore_title">Designorar usuária(o)</string>
-    <string name="room_participants_action_unignore_prompt_msg">Designorar esta(e) usuária(o) vai mostrar todas as mensagens dela(e) de novo.
-\n
-\nNote que esta ação vai recomeçar o app e pode levar algum tempo.</string>
+    <string name="room_participants_action_unignore_prompt_msg">Designorar esta(e) usuária(o) vai mostrar todas as mensagens dela(e) de novo.</string>
     <string name="room_participants_action_cancel_invite_title">Cancelar convite</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Você tem certeza que você quer cancelar o convite para esta(e) usuária(o)\?</string>
     <string name="room_participants_remove_title">Expulsar usuária(o)</string>
@@ -2350,8 +2345,6 @@
     <string name="location_share_external">Abrir com</string>
     <string name="location_not_available_dialog_content">${app_name} não pôde acessar sua localização. Por favor tente de novo mais tarde.</string>
     <string name="location_not_available_dialog_title">${app_name} não pôde acessar sua localização</string>
-    <string name="location_share">Compartilhar localização</string>
-    <string name="a11y_location_share_icon">Compartilhar localização</string>
     <string name="location_activity_title_preview">Localização</string>
     <string name="location_activity_title_static_sharing">Compartilhar localização</string>
     <string name="closed_poll_option_description">Resultados são somente revelados quando você termina a sondagem</string>
@@ -2487,4 +2480,14 @@
     <string name="threads_beta_enable_notice_title">Threads Beta</string>
     <string name="action_learn_more">Saber mais</string>
     <string name="action_try_it_out">Teste aí</string>
+    <string name="screen_sharing_notification_description">Compartilhamento de tela está em progresso</string>
+    <string name="screen_sharing_notification_title">${app_name} Compartilhamento de Tela</string>
+    <string name="call_stop_screen_sharing">Parar compartilhamento de tela</string>
+    <string name="call_start_screen_sharing">Compartilhar tela</string>
+    <string name="initial_sync_request_reason_unignored_users">- Algumas(ns) usuárias(os) têm sido designoradas(os)</string>
+    <string name="initial_sync_request_content">${app_name} precisa performar um cache limpo para estar atualizado, pela seguinte razão:
+\n%s
+\n
+\nNote que esta ação vai recomeçar o app e pode levar algum tempo.</string>
+    <string name="initial_sync_request_title">Requisição de sinc inicial</string>
 </resources>

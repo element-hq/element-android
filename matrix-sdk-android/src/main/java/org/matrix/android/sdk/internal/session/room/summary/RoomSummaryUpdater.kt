@@ -212,7 +212,7 @@ internal class RoomSummaryUpdater @Inject constructor(
     }
 
     /**
-     * Should be called at the end of the room sync, to check and validate all parent/child relations
+     * Should be called at the end of the room sync, to check and validate all parent/child relations.
      */
     fun validateSpaceRelationship(realm: Realm) {
         measureTimeMillis {
