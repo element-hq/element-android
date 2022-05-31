@@ -18,7 +18,6 @@ package org.matrix.android.sdk.api.auth.login
 
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.util.JsonDict
-import org.matrix.android.sdk.internal.auth.login.ResetCapabilities
 
 /**
  * Set of methods to be able to login to an existing account on a homeserver.
@@ -66,9 +65,8 @@ interface LoginWizard {
      * [resetPasswordMailConfirmed] is successfully called.
      *
      * @param email an email previously associated to the account the user wants the password to be reset.
-     * @return a [ResetCapabilities] if the reset is successful.
      */
-    suspend fun resetPassword(email: String): ResetCapabilities
+    suspend fun resetPassword(email: String)
 
     /**
      * Confirm the new password, once the user has checked their email

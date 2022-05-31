@@ -52,7 +52,6 @@ import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
-import org.matrix.android.sdk.internal.auth.login.ResetCapabilities
 
 private const val A_DISPLAY_NAME = "a display name"
 private const val A_PICTURE_FILENAME = "a-picture.png"
@@ -66,9 +65,9 @@ private val A_DIRECT_LOGIN = OnboardingAction.AuthenticateAction.LoginDirect("@a
 private const val A_HOMESERVER_URL = "https://edited-homeserver.org"
 private val A_HOMESERVER_CONFIG = HomeServerConnectionConfig(FakeUri().instance)
 private val SELECTED_HOMESERVER_STATE = SelectedHomeserverState(preferredLoginMode = LoginMode.Password)
+private val SELECTED_HOMESERVER_STATE_SUPPORTED_LOGOUT_DEVICES = SelectedHomeserverState(isLogoutDevicesSupported = true)
 private const val AN_EMAIL = "hello@example.com"
 private const val A_PASSWORD = "a-password"
-private val A_RESET_CAPABILITIES = ResetCapabilities(supportsLogoutAllDevices = true)
 
 class OnboardingViewModelTest {
 
@@ -480,8 +479,9 @@ class OnboardingViewModelTest {
 
     @Test
     fun `given can successfully reset password, when resetting password, then emits reset done event`() = runTest {
+        viewModelWith(initialState.copy(selectedHomeserver = SELECTED_HOMESERVER_STATE_SUPPORTED_LOGOUT_DEVICES))
         val test = viewModel.test()
-        fakeLoginWizard.givenResetPasswordSuccess(AN_EMAIL, A_RESET_CAPABILITIES)
+        fakeLoginWizard.givenResetPasswordSuccess(AN_EMAIL)
         fakeAuthenticationService.givenLoginWizard(fakeLoginWizard)
 
         viewModel.handle(OnboardingAction.ResetPassword(email = AN_EMAIL, newPassword = A_PASSWORD))
@@ -491,7 +491,7 @@ class OnboardingViewModelTest {
                         initialState,
                         { copy(isLoading = true) },
                         {
-                            val resetState = ResetState(AN_EMAIL, A_PASSWORD, supportsLogoutAllDevices = A_RESET_CAPABILITIES.supportsLogoutAllDevices)
+                            val resetState = ResetState(AN_EMAIL, A_PASSWORD, supportsLogoutAllDevices = true)
                             copy(isLoading = false, resetState = resetState)
                         }
                 )

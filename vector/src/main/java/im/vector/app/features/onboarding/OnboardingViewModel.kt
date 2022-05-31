@@ -60,7 +60,6 @@ import org.matrix.android.sdk.api.auth.login.LoginWizard
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.failure.isHomeserverUnavailable
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.internal.auth.login.ResetCapabilities
 import timber.log.Timber
 import java.util.UUID
 import java.util.concurrent.CancellationException
@@ -444,11 +443,12 @@ class OnboardingViewModel @AssistedInject constructor(
         setState { copy(isLoading = true) }
         currentJob = viewModelScope.launch {
             runCatching { safeLoginWizard.resetPassword(action.email) }.fold(
-                    onSuccess = { resetCapabilities ->
+                    onSuccess = {
+                        val state = awaitState()
                         setState {
                             copy(
                                     isLoading = false,
-                                    resetState = createResetState(action, resetCapabilities)
+                                    resetState = createResetState(action, state.selectedHomeserver)
                             )
                         }
                         _viewEvents.post(OnboardingViewEvents.OnResetPasswordSendThreePidDone)
@@ -461,10 +461,10 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun createResetState(action: OnboardingAction.ResetPassword, it: ResetCapabilities) = ResetState(
+    private fun createResetState(action: OnboardingAction.ResetPassword, selectedHomeserverState: SelectedHomeserverState) = ResetState(
             email = action.email,
             newPassword = action.newPassword,
-            supportsLogoutAllDevices = it.supportsLogoutAllDevices
+            supportsLogoutAllDevices = selectedHomeserverState.isLogoutDevicesSupported
     )
 
     private fun handleResetPasswordMailConfirmed() {
