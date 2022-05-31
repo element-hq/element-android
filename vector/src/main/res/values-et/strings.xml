@@ -2198,10 +2198,6 @@
     <string name="space_add_space_to_any_space_you_manage">Lisa kogukond ükspuha millisesse kogukonda, mida sa juba haldad.</string>
     <string name="space_add_existing_spaces">Lisa olemasolevaid kogukondi</string>
     <string name="space_add_existing_rooms_only">Lisa olemasolevaid jututubasid</string>
-    <string name="pick_tings_to_leave">Vali, kust soovid lahkuda</string>
-    <string name="leave_specific_ones">Lahku neist jututubadest ja kogukondadest…</string>
-    <string name="dont_leave_any">Ära lahku ainsamastki jututoast ega kogukonnast</string>
-    <string name="leave_all_rooms_and_spaces">Lahku kõikidest jututubadest ja kogukondadest</string>
     <string name="space_leave_prompt_msg_with_name">Kas oled kindel, et soovid lahkuda %s kogukonnast\?</string>
     <string name="discovery_section">Isikutuvastuse server (%s)</string>
     <string name="finish_setup">Lõpeta seadistamine</string>

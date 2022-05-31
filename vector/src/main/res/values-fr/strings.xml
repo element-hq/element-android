@@ -2199,10 +2199,6 @@
     <string name="space_add_space_to_any_space_you_manage">Ajouter un espace à un espace que vous gérez.</string>
     <string name="space_add_existing_spaces">Ajouter des espaces existants</string>
     <string name="space_add_existing_rooms_only">Ajouter des salons existants</string>
-    <string name="pick_tings_to_leave">Choisissez les endroits à quitter</string>
-    <string name="leave_specific_ones">Quitter certains salons et espaces…</string>
-    <string name="dont_leave_any">Ne quitter aucun salon ni espace</string>
-    <string name="leave_all_rooms_and_spaces">Quitter tous les salons et espaces</string>
     <string name="space_leave_prompt_msg_with_name">Voulez-vous vraiment quitter %s \?</string>
     <string name="discovery_section">Découverte (%s)</string>
     <string name="finish_setup">Terminer le réglage</string>

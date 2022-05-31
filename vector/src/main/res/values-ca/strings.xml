@@ -2110,7 +2110,6 @@
     <string name="settings_messages_direct_messages">Xats directes</string>
     <string name="settings_encrypted_direct_messages">Xats directes xifrats</string>
     <string name="create_spaces_invite_public_header">Qui son els teus companys\?</string>
-    <string name="pick_tings_to_leave">Tria què deixar</string>
     <string name="a11y_unchecked">Sense marcar</string>
     <string name="you_may_contact_me">Pots contactar amb mi si tens més preguntes al respecte</string>
     <string name="a11y_location_share_pin_on_map">Pin d\'ubicació seleccionada al mapa</string>
@@ -2275,9 +2274,6 @@
     <string name="leave_space">Marxa</string>
     <string name="space_add_child_title">Afegeix sales</string>
     <string name="space_explore_activity_title">Explora sales</string>
-    <string name="leave_specific_ones">Marxa de sales i espais específics…</string>
-    <string name="dont_leave_any">No marxis de cap sala o espai</string>
-    <string name="leave_all_rooms_and_spaces">Marxa de totes les sales i espais</string>
     <string name="command_description_leave_room">Marxa de la sala amb l\'ID especificat (o la sala actual si és \'null\')</string>
     <string name="command_description_join_space">Uneix-te a l\'espai amb l\'ID especificat</string>
     <string name="command_description_add_to_space">Afegeix a l\'espai especificat</string>

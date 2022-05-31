@@ -1471,10 +1471,6 @@
     <string name="space_add_existing_spaces">ເພີ່ມພື້ນທີ່ທີ່ມີຢູ່</string>
     <string name="space_add_existing_rooms_only">ເພີ່ມຫ້ອງທີ່ມີຢູ່</string>
     <string name="space_add_existing_rooms">ເພີ່ມຫ້ອງ ແລະພື້ນທີ່ທີ່ມີຢູ່</string>
-    <string name="pick_tings_to_leave">ເລືອກສິ່ງທີ່ຕ້ອງອອກໄປ</string>
-    <string name="leave_specific_ones">ອອກຈາກຫ້ອງ ແລະພື້ນທີ່ສະເພາະ…</string>
-    <string name="dont_leave_any">ຢ່າອອກຈາກຫ້ອງ ແລະ ພື້ນທີ່ໃດໆ</string>
-    <string name="leave_all_rooms_and_spaces">ອອກຈາກຫ້ອງ ແລະ ພື້ນທີ່ທັງໝົດ</string>
     <string name="space_leave_prompt_msg_as_admin">ທ່ານພຽງຜູ້ທີ່ເບິ່ງແຍງລະບົບພື້ນທີ່ນີ້. ການອອກຈາກລະບົບນັ້ນຫມາຍຄວາມວ່າບໍ່ມີໃຜຄວບຄຸມມັນ.</string>
     <string name="space_leave_prompt_msg_private">ທ່ານຈະບໍ່ສາມາດເຂົ້າຮ່ວມຄືນໃໝ່ໄດ້ເວັ້ນເສຍແຕ່ວ່າທ່ານໄດ້ຮັບເຊີນຄືນໃໝ່.</string>
     <string name="space_leave_prompt_msg_only_you">ທ່ານເປັນຄົນດຽວຢູ່ທີ່ນີ້. ຖ້າທ່ານອອກໄປ, ບໍ່ມີໃຜຈະສາມາດເຂົ້າຮ່ວມໃນອະນາຄົດ, ລວມທັງທ່ານ.</string>

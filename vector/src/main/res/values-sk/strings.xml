@@ -1752,7 +1752,6 @@
     <string name="space_add_space_to_any_space_you_manage">Pridať priestor do priestoru, ktorý spravujete.</string>
     <string name="space_add_existing_rooms_only">Pridať existujúce miestnosti</string>
     <string name="space_add_existing_rooms">Pridať existujúce miestnosti a priestor</string>
-    <string name="dont_leave_any">Neopustiť žiadne miestnosti ani priestory</string>
     <string name="space_leave_prompt_msg_as_admin">Ste jediným správcom tohto priestoru. Jeho opustenie bude znamenať, že nad ním nikto nebude mať kontrolu.</string>
     <string name="space_leave_prompt_msg_only_you">Ste tu jediný človek. Ak odídete, nikto sa už v budúcnosti nebude môcť pripojiť do tejto miestnosti, vrátane vás.</string>
     <string name="space_leave_prompt_msg_with_name">Ste si istí, že chcete opustiť %s\?</string>
@@ -1882,8 +1881,6 @@
     <string name="space_manage_rooms_and_spaces">Spravovať miestnosti a priestory</string>
     <string name="spaces_beta_welcome_to_spaces_desc">Priestory sú novým spôsobom spájania miestností a ľudí.</string>
     <string name="space_add_existing_spaces">Pridať existujúce priestory</string>
-    <string name="leave_specific_ones">Opustiť konkrétne miestnosti a priestory…</string>
-    <string name="leave_all_rooms_and_spaces">Opustiť všetky miestnosti a priestory</string>
     <string name="create_spaces_room_private_header_desc">Vytvorme pre každého z nich miestnosť. Neskôr môžete pridať aj ďalšie, vrátane už existujúcich.</string>
     <string name="create_spaces_room_private_header">Na akých veciach pracujete\?</string>
     <string name="create_spaces_invite_public_header_desc">Zabezpečte, aby mali k spoločnosti %s prístup správni ľudia. Neskôr môžete pozvať ďalších.</string>
@@ -2457,7 +2454,6 @@
     <string name="bootstrap_crosssigning_progress_default_key">Definovanie predvoleného kľúča SSSS</string>
     <string name="settings_developer_mode_fail_fast_title">Rýchle-zlyhanie</string>
     <string name="call_transfer_consult_first">Najprv konzultovať</string>
-    <string name="pick_tings_to_leave">Vyberte si, čo opustíte</string>
     <string name="command_description_leave_room">Opustiť miestnosť s daným id (alebo aktuálnu miestnosť, ak je prázdna)</string>
     <string name="a11y_trust_level_warning">Varovná úroveň dôveryhodnosti</string>
     <string name="call_transfer_connect_action">Pripojiť</string>

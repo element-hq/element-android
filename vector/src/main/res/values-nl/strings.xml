@@ -2268,10 +2268,6 @@
     <string name="space_add_existing_spaces">Bestaande spaces toevoegen</string>
     <string name="space_add_existing_rooms_only">Bestaande kamers toevoegen</string>
     <string name="space_add_existing_rooms">Bestaande kamers en space toevoegen</string>
-    <string name="pick_tings_to_leave">Kies dingen om te verlaten</string>
-    <string name="leave_specific_ones">Specifieke kamers en spaces verlaten…</string>
-    <string name="dont_leave_any">Verlaat geen kamers en spaces</string>
-    <string name="leave_all_rooms_and_spaces">Verlaat alle kamers en spaces</string>
     <string name="space_leave_prompt_msg_private">U kunt pas weer deelnemen als u opnieuw wordt uitgenodigd.</string>
     <string name="space_leave_prompt_msg_only_you">U bent de enige persoon hier. Als u weggaat, kan niemand meer meedoen, ook u niet.</string>
     <string name="space_leave_prompt_msg_with_name">Weet u zeker dat u %s wilt verlaten\?</string>

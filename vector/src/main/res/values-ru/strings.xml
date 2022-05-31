@@ -2262,10 +2262,6 @@
     <string name="space_add_space_to_any_space_you_manage">Добавьте пространство в любое пространство, которым вы управляете.</string>
     <string name="space_add_existing_spaces">Добавить существующие пространства</string>
     <string name="space_add_existing_rooms_only">Добавить существующие комнаты</string>
-    <string name="pick_tings_to_leave">Выберите, что нужно покинуть</string>
-    <string name="leave_specific_ones">Покинуть определенные комнаты и пространства…</string>
-    <string name="dont_leave_any">Не покидать ни одну комнату и пространство</string>
-    <string name="leave_all_rooms_and_spaces">Покинуть все комнаты и пространства</string>
     <string name="space_leave_prompt_msg_with_name">Вы уверены, что хотите покинуть %s\?</string>
     <string name="discovery_section">Обнаружение (%s)</string>
     <string name="finish_setup">Завершение настройки</string>
