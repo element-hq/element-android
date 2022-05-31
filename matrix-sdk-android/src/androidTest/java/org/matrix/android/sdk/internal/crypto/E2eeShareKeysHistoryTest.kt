@@ -305,7 +305,7 @@ class E2eeShareKeysHistoryTest : InstrumentedTest {
                             eventType = EventType.STATE_ROOM_HISTORY_VISIBILITY,
                             stateKey = "",
                             body = RoomHistoryVisibilityContent(
-                                    _historyVisibility = nextRoomHistoryVisibility._historyVisibility
+                                    historyVisibilityStr = nextRoomHistoryVisibility.historyVisibilityStr
                             ).toContent()
                     )
             it.countDown()

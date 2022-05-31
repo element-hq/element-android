@@ -54,7 +54,7 @@ import java.util.concurrent.TimeUnit
  * This class exposes methods to be used in common cases
  * Registration, login, Sync, Sending messages...
  */
-class CommonTestHelper private constructor(context: Context) {
+class CommonTestHelper internal constructor(context: Context) {
 
     companion object {
         internal fun runSessionTest(context: Context, autoSignoutOnClose: Boolean = true, block: (CommonTestHelper) -> Unit) {
