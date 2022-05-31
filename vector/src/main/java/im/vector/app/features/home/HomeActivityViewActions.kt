@@ -17,7 +17,6 @@
 package im.vector.app.features.home
 
 import im.vector.app.core.platform.VectorViewModelAction
-import im.vector.app.features.onboarding.AuthenticationDescription
 
 sealed interface HomeActivityViewActions : VectorViewModelAction {
     object ViewStarted : HomeActivityViewActions
