@@ -2211,7 +2211,7 @@
     <string name="command_description_room_name">設定聊天室名稱</string>
     <string name="command_description_unignore_user">停止忽略使用者，繼續顯示他們的訊息</string>
     <string name="command_description_ignore_user">忽略使用者，為您隱藏他們的訊息</string>
-    <string name="a11y_presence_unavailable">不可用</string>
+    <string name="a11y_presence_unavailable">離開</string>
     <string name="a11y_presence_offline">離線</string>
     <string name="a11y_presence_online">線上</string>
     <string name="login_error_homeserver_from_url_not_found_enter_manual">選擇家伺服器</string>
@@ -2288,7 +2288,7 @@
     <string name="tooltip_attachment_photo">開啟攝影機</string>
     <string name="labs_auto_report_uisi_desc">發生無法解密錯誤時，您的系統將會自動傳送紀錄檔</string>
     <string name="labs_auto_report_uisi">自動回報解密錯誤。</string>
-    <string name="room_member_override_nick_color">覆寫暱稱色彩</string>
+    <string name="room_member_override_nick_color">覆寫顯示名稱色彩</string>
     <string name="login_splash_already_have_account">我已有一個帳號</string>
     <string name="ftue_auth_carousel_encrypted_title">安全傳送訊息。</string>
     <string name="ftue_auth_carousel_control_title">您已掌控了您的資料。</string>
@@ -2443,4 +2443,8 @@
 \n
 \n注意，此動作將會重新啟動應用程式，並可能需要一些時間。</string>
     <string name="initial_sync_request_title">初始同步請求</string>
+    <string name="settings_show_latest_profile_description">顯示所有訊息的最新個人檔案資訊（大頭照與顯示名稱）。</string>
+    <string name="settings_show_latest_profile">顯示最新的使用者資訊</string>
+    <string name="a11y_presence_busy">忙碌</string>
+    <string name="keys_backup_settings_signature_from_this_user">備份具有來自該使用者的有效簽名。</string>
 </resources>
