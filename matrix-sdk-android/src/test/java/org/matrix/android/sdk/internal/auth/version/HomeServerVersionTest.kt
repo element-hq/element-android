@@ -22,27 +22,23 @@ import org.junit.Test
 class HomeServerVersionTest {
 
     @Test
-    fun `given a semantic version, when parsing then converts to home server version`() {
-        val cases = buildList {
-            addAll(
-                    listOf(
-                            case("0.5.1", expected = aVersion(0, 5, 1)),
-                            case("1.0.0", expected = aVersion(1, 0, 0)),
-                            case("1.10.3", expected = aVersion(1, 10, 3))
-                    ).withPrefixes("v", "r"),
-            )
-            addAll(
-                    listOf(
-                            case("-1.5.1", expected = null),
-                            case("1", expected = null),
-                            case("a", expected = null),
-                            case("1.0", expected = null),
-                            case("1a.2b.3c", expected = null),
-                    )
-            )
-        }
+    fun `given a semantic version, when parsing, then converts to home server version`() {
+        val supportedVersions = listOf(
+                case("1.5", expected = aVersion(1, 5, 0)),
+                case("0.5.1", expected = aVersion(0, 5, 1)),
+                case("1.0.0", expected = aVersion(1, 0, 0)),
+                case("1.10.3", expected = aVersion(1, 10, 3))
+        ).withPrefixes("v", "r")
 
-        cases.forEach { (input, expected) ->
+        val unsupportedVersions = listOf(
+                case("v-1.5.1", expected = null),
+                case("r1", expected = null),
+                case("a", expected = null),
+                case("1a.2b.3c", expected = null),
+                case("r", expected = null)
+        )
+
+        (supportedVersions + unsupportedVersions).forEach { (input, expected) ->
             val result = HomeServerVersion.parse(input)
 
             assertEquals(expected, result, "Expected $input to be $expected but got $result")

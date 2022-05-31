@@ -38,14 +38,14 @@ internal data class HomeServerVersion(
     }
 
     companion object {
-        internal val pattern = Regex("""[r|v](\d+)\.(\d+)\.(\d+)""")
+        internal val pattern = Regex("""[r|v](\d+)\.(\d+)(?:\.(\d+))?""")
 
         internal fun parse(value: String): HomeServerVersion? {
             val result = pattern.matchEntire(value) ?: return null
             return HomeServerVersion(
                     major = result.groupValues[1].toInt(),
                     minor = result.groupValues[2].toInt(),
-                    patch = result.groupValues[3].toInt()
+                    patch = result.groupValues.getOptional(index = 3, default = "0").toInt()
             )
         }
 
@@ -59,3 +59,5 @@ internal data class HomeServerVersion(
         val v1_3_0 = HomeServerVersion(major = 1, minor = 3, patch = 0)
     }
 }
+
+private fun List<String>.getOptional(index: Int, default: String) = getOrNull(index)?.ifEmpty { default } ?: default
