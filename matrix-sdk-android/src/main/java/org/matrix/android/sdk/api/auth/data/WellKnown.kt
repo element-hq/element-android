@@ -43,6 +43,7 @@ import org.matrix.android.sdk.api.util.JsonDict
  *    }
  * }
  * </pre>
+ * .
  */
 @JsonClass(generateAdapter = true)
 data class WellKnown(

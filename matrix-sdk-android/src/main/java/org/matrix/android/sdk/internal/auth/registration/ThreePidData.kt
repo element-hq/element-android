@@ -20,7 +20,7 @@ import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 
 /**
- * Container to store the data when a three pid is in validation step
+ * Container to store the data when a three pid is in validation step.
  */
 @JsonClass(generateAdapter = true)
 internal data class ThreePidData(
@@ -40,9 +40,11 @@ internal data class ThreePidData(
         }
 
     companion object {
-        fun from(threePid: RegisterThreePid,
-                 addThreePidRegistrationResponse: AddThreePidRegistrationResponse,
-                 registrationParams: RegistrationParams): ThreePidData {
+        fun from(
+                threePid: RegisterThreePid,
+                addThreePidRegistrationResponse: AddThreePidRegistrationResponse,
+                registrationParams: RegistrationParams
+        ): ThreePidData {
             return when (threePid) {
                 is RegisterThreePid.Email  ->
                     ThreePidData(threePid.email, "", "", addThreePidRegistrationResponse, registrationParams)

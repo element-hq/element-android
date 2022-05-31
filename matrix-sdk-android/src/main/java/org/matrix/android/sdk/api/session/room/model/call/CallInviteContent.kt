@@ -47,7 +47,7 @@ data class CallInviteContent(
          */
         @Json(name = "lifetime") val lifetime: Int?,
         /**
-         * The field should be added for all invites where the target is a specific user
+         * The field should be added for all invites where the target is a specific user.
          */
         @Json(name = "invitee") val invitee: String? = null,
         /**

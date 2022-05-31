@@ -21,12 +21,12 @@ package org.matrix.android.sdk.api.session.room.tags
  */
 interface TagsService {
     /**
-     * Add a tag to a room
+     * Add a tag to a room.
      */
     suspend fun addTag(tag: String, order: Double?)
 
     /**
-     * Remove tag from a room
+     * Remove tag from a room.
      */
     suspend fun deleteTag(tag: String)
 }

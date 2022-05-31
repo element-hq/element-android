@@ -42,7 +42,7 @@ data class RoomAliasBottomSheetArgs(
 ) : Parcelable
 
 /**
- * Bottom sheet fragment that shows room alias information with list of contextual actions
+ * Bottom sheet fragment that shows room alias information with list of contextual actions.
  */
 @AndroidEntryPoint
 class RoomAliasBottomSheet :
@@ -86,11 +86,13 @@ class RoomAliasBottomSheet :
     }
 
     companion object {
-        fun newInstance(alias: String,
-                        isPublished: Boolean,
-                        isMainAlias: Boolean,
-                        isLocal: Boolean,
-                        canEditCanonicalAlias: Boolean): RoomAliasBottomSheet {
+        fun newInstance(
+                alias: String,
+                isPublished: Boolean,
+                isMainAlias: Boolean,
+                isLocal: Boolean,
+                canEditCanonicalAlias: Boolean
+        ): RoomAliasBottomSheet {
             return RoomAliasBottomSheet().apply {
                 setArguments(
                         RoomAliasBottomSheetArgs(

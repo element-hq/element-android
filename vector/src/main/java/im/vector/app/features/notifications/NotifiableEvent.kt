@@ -18,7 +18,7 @@ package im.vector.app.features.notifications
 import java.io.Serializable
 
 /**
- * Parent interface for all events which can be displayed as a Notification
+ * Parent interface for all events which can be displayed as a Notification.
  */
 sealed interface NotifiableEvent : Serializable {
     val eventId: String

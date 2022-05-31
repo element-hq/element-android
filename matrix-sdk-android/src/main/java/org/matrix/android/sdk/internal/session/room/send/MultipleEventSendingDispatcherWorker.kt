@@ -33,10 +33,10 @@ import timber.log.Timber
 import javax.inject.Inject
 
 /**
- * This worker creates a new work for each events passed in parameter
+ * This worker creates a new work for each events passed in parameter.
  *
- * Possible previous worker: Always [UploadContentWorker]
- * Possible next worker    : None, but it will post new work to send events, encrypted or not
+ * Possible previous worker: Always [UploadContentWorker].
+ * Possible next worker    : None, but it will post new work to send events, encrypted or not.
  */
 internal class MultipleEventSendingDispatcherWorker(context: Context, params: WorkerParameters, sessionManager: SessionManager) :
         SessionSafeCoroutineWorker<MultipleEventSendingDispatcherWorker.Params>(context, params, sessionManager, Params::class.java) {

@@ -39,7 +39,7 @@ import javax.net.ssl.HttpsURLConnection
 internal interface GetWellknownTask : Task<GetWellknownTask.Params, WellknownResult> {
     data class Params(
             /**
-             * domain, for instance "matrix.org"
+             * domain, for instance "matrix.org".
              * the URL will be https://{domain}/.well-known/matrix/client
              */
             val domain: String,
@@ -48,7 +48,7 @@ internal interface GetWellknownTask : Task<GetWellknownTask.Params, WellknownRes
 }
 
 /**
- * Inspired from AutoDiscovery class from legacy Matrix Android SDK
+ * Inspired from AutoDiscovery class from legacy Matrix Android SDK.
  */
 internal class DefaultGetWellknownTask @Inject constructor(
         @Unauthenticated
@@ -69,13 +69,14 @@ internal class DefaultGetWellknownTask @Inject constructor(
     }
 
     /**
-     * Find client config
+     * Find client config.
      *
      * - Do the .well-known request
      * - validate homeserver url and identity server url if provide in .well-known result
      * - return action and .well-known data
      *
-     * @param domain: homeserver domain, deduced from mx userId (ex: "matrix.org" from userId "@user:matrix.org")
+     * @param domain homeserver domain, deduced from mx userId (ex: "matrix.org" from userId "@user:matrix.org")
+     * @param client Http client to perform the request
      */
     private suspend fun findClientConfig(domain: String, client: OkHttpClient): WellknownResult {
         val wellKnownAPI = retrofitFactory.create(client, "https://dummy.org")
@@ -126,7 +127,7 @@ internal class DefaultGetWellknownTask @Inject constructor(
     }
 
     /**
-     * Return true if homeserver is valid, and (if applicable) if identity server is pingable
+     * Return true if homeserver is valid, and (if applicable) if identity server is pingable.
      */
     private suspend fun validateHomeServer(homeServerBaseUrl: String, wellKnown: WellKnown, client: OkHttpClient): WellknownResult {
         val capabilitiesAPI = retrofitFactory.create(client, homeServerBaseUrl)
@@ -164,7 +165,7 @@ internal class DefaultGetWellknownTask @Inject constructor(
     }
 
     /**
-     * Return true if identity server is pingable
+     * Return true if identity server is pingable.
      */
     private suspend fun validateIdentityServer(identityServerBaseUrl: String, client: OkHttpClient): Boolean {
         val identityPingApi = retrofitFactory.create(client, identityServerBaseUrl)

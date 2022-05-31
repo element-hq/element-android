@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.internal.session.homeserver
 
 import com.zhuinden.monarchy.Monarchy
-import org.matrix.android.sdk.api.MatrixPatterns.getDomain
+import org.matrix.android.sdk.api.MatrixPatterns.getServerName
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -93,10 +93,14 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
             }
         }.getOrNull()
 
+        // Domain may include a port (eg, matrix.org:8080)
+        // Per https://spec.matrix.org/latest/client-server-api/#well-known-uri we should extract the hostname from the server name
+        // So we take everything before the last : as the domain for the well-known task.
+        // NB: This is not always the same endpoint as capabilities / mediaConfig uses.
         val wellknownResult = runCatching {
             getWellknownTask.execute(
                     GetWellknownTask.Params(
-                            domain = userId.getDomain(),
+                            domain = userId.getServerName().substringBeforeLast(":"),
                             homeServerConnectionConfig = homeServerConnectionConfig
                     )
             )
@@ -105,10 +109,12 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
         insertInDb(capabilities, mediaConfig, versions, wellknownResult)
     }
 
-    private suspend fun insertInDb(getCapabilitiesResult: GetCapabilitiesResult?,
-                                   getMediaConfigResult: GetMediaConfigResult?,
-                                   getVersionResult: Versions?,
-                                   getWellknownResult: WellknownResult?) {
+    private suspend fun insertInDb(
+            getCapabilitiesResult: GetCapabilitiesResult?,
+            getMediaConfigResult: GetMediaConfigResult?,
+            getVersionResult: Versions?,
+            getWellknownResult: WellknownResult?
+    ) {
         monarchy.awaitTransaction { realm ->
             val homeServerCapabilitiesEntity = HomeServerCapabilitiesEntity.getOrCreate(realm)
 

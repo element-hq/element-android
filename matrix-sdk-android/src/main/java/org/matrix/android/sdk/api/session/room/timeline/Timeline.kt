@@ -100,23 +100,23 @@ interface Timeline {
         fun onTimelineUpdated(snapshot: List<TimelineEvent>) = Unit
 
         /**
-         * Called whenever an error we can't recover from occurred
+         * Called whenever an error we can't recover from occurred.
          */
         fun onTimelineFailure(throwable: Throwable) = Unit
 
         /**
-         * Called when new events come through the sync
+         * Called when new events come through the sync.
          */
         fun onNewTimelineEvents(eventIds: List<String>) = Unit
 
         /**
-         * Called when the pagination state has changed in one direction
+         * Called when the pagination state has changed in one direction.
          */
         fun onStateUpdated(direction: Direction, state: PaginationState) = Unit
     }
 
     /**
-     * Pagination state
+     * Pagination state.
      */
     data class PaginationState(
             val hasMoreToLoad: Boolean = true,

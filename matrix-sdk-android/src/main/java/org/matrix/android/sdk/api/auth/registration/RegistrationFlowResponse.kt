@@ -73,7 +73,7 @@ data class RegistrationFlowResponse(
 )
 
 /**
- * Convert to something easier to handle on client side
+ * Convert to something easier to handle on client side.
  */
 fun RegistrationFlowResponse.toFlowResult(): FlowResult {
     // Get all the returned stages

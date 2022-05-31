@@ -241,7 +241,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
     }
 
     /**
-     * Convert a delay in seconds to string
+     * Convert a delay in seconds to string.
      *
      * @param seconds the delay in seconds
      * @return the text

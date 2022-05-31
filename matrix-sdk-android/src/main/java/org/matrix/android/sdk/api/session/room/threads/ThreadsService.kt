@@ -28,24 +28,24 @@ import org.matrix.android.sdk.api.session.room.threads.model.ThreadSummary
 interface ThreadsService {
 
     /**
-     * Returns a [LiveData] list of all the [ThreadSummary] that exists at the room level
+     * Returns a [LiveData] list of all the [ThreadSummary] that exists at the room level.
      */
     fun getAllThreadSummariesLive(): LiveData<List<ThreadSummary>>
 
     /**
-     * Returns a list of all the [ThreadSummary] that exists at the room level
+     * Returns a list of all the [ThreadSummary] that exists at the room level.
      */
     fun getAllThreadSummaries(): List<ThreadSummary>
 
     /**
      * Enhance the provided ThreadSummary[List] by adding the latest
-     * message edition for that thread
+     * message edition for that thread.
      * @return the enhanced [List] with edited updates
      */
     fun enhanceThreadWithEditions(threads: List<ThreadSummary>): List<ThreadSummary>
 
     /**
-     * Fetch all thread replies for the specified thread using the /relations api
+     * Fetch all thread replies for the specified thread using the /relations api.
      * @param rootThreadEventId the root thread eventId
      * @param from defines the token that will fetch from that position
      * @param limit defines the number of max results the api will respond with
@@ -53,7 +53,7 @@ interface ThreadsService {
     suspend fun fetchThreadTimeline(rootThreadEventId: String, from: String, limit: Int)
 
     /**
-     * Fetch all thread summaries for the current room using the enhanced /messages api
+     * Fetch all thread summaries for the current room using the enhanced /messages api.
      */
     suspend fun fetchThreadSummaries()
 }

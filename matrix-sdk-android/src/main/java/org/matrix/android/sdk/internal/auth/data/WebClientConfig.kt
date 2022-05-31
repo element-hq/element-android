@@ -22,7 +22,7 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 internal data class WebClientConfig(
         /**
-         * This is now deprecated, but still used first, rather than value from "default_server_config"
+         * This is now deprecated, but still used first, rather than value from "default_server_config".
          */
         @Json(name = "default_hs_url")
         val defaultHomeServerUrl: String?,

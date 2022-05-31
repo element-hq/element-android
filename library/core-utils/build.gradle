@@ -50,6 +50,5 @@ android {
 }
 
 dependencies {
-    implementation libs.androidx.appCompat
     implementation libs.jetbrains.coroutinesAndroid
 }

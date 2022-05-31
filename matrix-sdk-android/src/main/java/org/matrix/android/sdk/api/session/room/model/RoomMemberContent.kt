@@ -21,7 +21,7 @@ import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.session.events.model.UnsignedData
 
 /**
- * Class representing the EventType.STATE_ROOM_MEMBER state event content
+ * Class representing the EventType.STATE_ROOM_MEMBER state event content.
  */
 @JsonClass(generateAdapter = true)
 data class RoomMemberContent(

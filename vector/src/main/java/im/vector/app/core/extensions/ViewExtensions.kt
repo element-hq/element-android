@@ -33,7 +33,7 @@ import im.vector.app.R
 import im.vector.app.features.themes.ThemeUtils
 
 /**
- * Remove left margin of a SearchView
+ * Remove left margin of a SearchView.
  */
 fun SearchView.withoutLeftMargin() {
     (findViewById<View>(R.id.search_edit_frame))?.let {

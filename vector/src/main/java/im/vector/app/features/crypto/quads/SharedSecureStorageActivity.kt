@@ -149,10 +149,12 @@ class SharedSecureStorageActivity :
         const val EXTRA_DATA_RESET = "EXTRA_DATA_RESET"
         const val DEFAULT_RESULT_KEYSTORE_ALIAS = "SharedSecureStorageActivity"
 
-        fun newReadIntent(context: Context,
-                          keyId: String? = null,
-                          requestedSecrets: List<String>,
-                          resultKeyStoreAlias: String = DEFAULT_RESULT_KEYSTORE_ALIAS): Intent {
+        fun newReadIntent(
+                context: Context,
+                keyId: String? = null,
+                requestedSecrets: List<String>,
+                resultKeyStoreAlias: String = DEFAULT_RESULT_KEYSTORE_ALIAS
+        ): Intent {
             require(requestedSecrets.isNotEmpty())
             return Intent(context, SharedSecureStorageActivity::class.java).also {
                 it.putExtra(
@@ -166,10 +168,12 @@ class SharedSecureStorageActivity :
             }
         }
 
-        fun newWriteIntent(context: Context,
-                           keyId: String? = null,
-                           writeSecrets: List<Pair<String, String>>,
-                           resultKeyStoreAlias: String = DEFAULT_RESULT_KEYSTORE_ALIAS): Intent {
+        fun newWriteIntent(
+                context: Context,
+                keyId: String? = null,
+                writeSecrets: List<Pair<String, String>>,
+                resultKeyStoreAlias: String = DEFAULT_RESULT_KEYSTORE_ALIAS
+        ): Intent {
             require(writeSecrets.isNotEmpty())
             return Intent(context, SharedSecureStorageActivity::class.java).also {
                 it.putExtra(

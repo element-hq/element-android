@@ -38,7 +38,8 @@ import java.net.UnknownHostException
 class SetIdentityServerViewModel @AssistedInject constructor(
         @Assisted initialState: SetIdentityServerState,
         private val mxSession: Session,
-        stringProvider: StringProvider) :
+        stringProvider: StringProvider
+) :
         VectorViewModel<SetIdentityServerState, SetIdentityServerAction, SetIdentityServerViewEvents>(initialState) {
 
     @AssistedFactory

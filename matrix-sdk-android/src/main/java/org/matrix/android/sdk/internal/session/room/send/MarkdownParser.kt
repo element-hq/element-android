@@ -78,7 +78,7 @@ internal class MarkdownParser @Inject constructor(
             text != htmlText && htmlText != "<p>${text.trim()}</p>\n"
 
     /**
-     * The parser makes some mistakes, so deal with it here
+     * The parser makes some mistakes, so deal with it here.
      */
     private fun String.postTreatment(): String {
         return this

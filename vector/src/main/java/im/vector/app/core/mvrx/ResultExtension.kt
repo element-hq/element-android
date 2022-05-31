@@ -21,7 +21,7 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Success
 
 /**
- * Note: this will be removed when upgrading to mvrx2
+ * Note: this will be removed when upgrading to mvrx2.
  */
 suspend fun <A> runCatchingToAsync(block: suspend () -> A): Async<A> {
     return runCatching {

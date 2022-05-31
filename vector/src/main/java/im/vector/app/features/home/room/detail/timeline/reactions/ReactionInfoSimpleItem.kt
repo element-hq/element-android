@@ -28,7 +28,7 @@ import im.vector.app.core.epoxy.onClick
 import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
 
 /**
- * Item displaying an emoji reaction (single line with emoji, author, time)
+ * Item displaying an emoji reaction (single line with emoji, author, time).
  */
 @EpoxyModelClass(layout = R.layout.item_simple_reaction_info)
 abstract class ReactionInfoSimpleItem : EpoxyModelWithHolder<ReactionInfoSimpleItem.Holder>() {

@@ -32,10 +32,12 @@ import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import javax.inject.Inject
 
-class DeviceTrustInfoEpoxyController @Inject constructor(private val stringProvider: StringProvider,
-                                                         private val colorProvider: ColorProvider,
-                                                         private val dimensionConverter: DimensionConverter,
-                                                         private val vectorPreferences: VectorPreferences) :
+class DeviceTrustInfoEpoxyController @Inject constructor(
+        private val stringProvider: StringProvider,
+        private val colorProvider: ColorProvider,
+        private val dimensionConverter: DimensionConverter,
+        private val vectorPreferences: VectorPreferences
+) :
         TypedEpoxyController<DeviceListViewState>() {
 
     interface InteractionListener {

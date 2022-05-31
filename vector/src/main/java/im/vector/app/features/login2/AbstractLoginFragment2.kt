@@ -32,7 +32,7 @@ import kotlinx.coroutines.CancellationException
 import org.matrix.android.sdk.api.failure.Failure
 
 /**
- * Parent Fragment for all the login/registration screens
+ * Parent Fragment for all the login/registration screens.
  */
 abstract class AbstractLoginFragment2<VB : ViewBinding> : VectorBaseFragment<VB>(), OnBackPressed {
 
@@ -76,12 +76,12 @@ abstract class AbstractLoginFragment2<VB : ViewBinding> : VectorBaseFragment<VB>
         }
 
         when (throwable) {
-            is CancellationException                  ->
+            is CancellationException ->
                 /* Ignore this error, user has cancelled the action */
                 Unit
             is Failure.UnrecognizedCertificateFailure ->
                 showUnrecognizedCertificateFailure(throwable)
-            else                                      ->
+            else ->
                 onError(throwable)
         }
     }

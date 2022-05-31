@@ -19,28 +19,28 @@ package org.matrix.android.sdk.internal.di
 import javax.inject.Qualifier
 
 /**
- * Used to inject the userId
+ * Used to inject the userId.
  */
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
 internal annotation class UserId
 
 /**
- * Used to inject the deviceId
+ * Used to inject the deviceId.
  */
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
 internal annotation class DeviceId
 
 /**
- * Used to inject the md5 of the userId
+ * Used to inject the md5 of the userId.
  */
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
 internal annotation class UserMd5
 
 /**
- * Used to inject the sessionId, which is defined as md5(userId|deviceId)
+ * Used to inject the sessionId, which is defined as md5(userId|deviceId).
  */
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)

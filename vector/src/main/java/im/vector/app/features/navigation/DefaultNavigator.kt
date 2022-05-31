@@ -68,6 +68,8 @@ import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.LocationSharingActivity
 import im.vector.app.features.location.LocationSharingArgs
 import im.vector.app.features.location.LocationSharingMode
+import im.vector.app.features.location.live.map.LocationLiveMapViewActivity
+import im.vector.app.features.location.live.map.LocationLiveMapViewArgs
 import im.vector.app.features.login.LoginActivity
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.matrixto.MatrixToBottomSheet
@@ -317,6 +319,7 @@ class DefaultNavigator @Inject constructor(
         if (context is AppCompatActivity) {
             if (context !is MatrixToBottomSheet.InteractionListener) {
                 fatalError("Caller context should implement MatrixToBottomSheet.InteractionListener", vectorPreferences.failFast())
+                return
             }
             // TODO check if there is already one??
             MatrixToBottomSheet.withLink(link, origin)
@@ -466,29 +469,35 @@ class DefaultNavigator @Inject constructor(
         context.startActivity(Intent(context, AnalyticsOptInActivity::class.java))
     }
 
-    override fun openTerms(context: Context,
-                           activityResultLauncher: ActivityResultLauncher<Intent>,
-                           serviceType: TermsService.ServiceType,
-                           baseUrl: String,
-                           token: String?) {
+    override fun openTerms(
+            context: Context,
+            activityResultLauncher: ActivityResultLauncher<Intent>,
+            serviceType: TermsService.ServiceType,
+            baseUrl: String,
+            token: String?
+    ) {
         val intent = ReviewTermsActivity.intent(context, serviceType, baseUrl, token)
         activityResultLauncher.launch(intent)
     }
 
-    override fun openStickerPicker(context: Context,
-                                   activityResultLauncher: ActivityResultLauncher<Intent>,
-                                   roomId: String,
-                                   widget: Widget) {
+    override fun openStickerPicker(
+            context: Context,
+            activityResultLauncher: ActivityResultLauncher<Intent>,
+            roomId: String,
+            widget: Widget
+    ) {
         val widgetArgs = widgetArgsBuilder.buildStickerPickerArgs(roomId, widget)
         val intent = WidgetActivity.newIntent(context, widgetArgs)
         activityResultLauncher.launch(intent)
     }
 
-    override fun openIntegrationManager(context: Context,
-                                        activityResultLauncher: ActivityResultLauncher<Intent>,
-                                        roomId: String,
-                                        integId: String?,
-                                        screen: String?) {
+    override fun openIntegrationManager(
+            context: Context,
+            activityResultLauncher: ActivityResultLauncher<Intent>,
+            roomId: String,
+            integId: String?,
+            screen: String?
+    ) {
         val widgetArgs = widgetArgsBuilder.buildIntegrationManagerArgs(roomId, integId, screen)
         val intent = WidgetActivity.newIntent(context, widgetArgs)
         activityResultLauncher.launch(intent)
@@ -513,19 +522,23 @@ class DefaultNavigator @Inject constructor(
         }
     }
 
-    override fun openPinCode(context: Context,
-                             activityResultLauncher: ActivityResultLauncher<Intent>,
-                             pinMode: PinMode) {
+    override fun openPinCode(
+            context: Context,
+            activityResultLauncher: ActivityResultLauncher<Intent>,
+            pinMode: PinMode
+    ) {
         val intent = PinActivity.newIntent(context, PinArgs(pinMode))
         activityResultLauncher.launch(intent)
     }
 
-    override fun openMediaViewer(activity: Activity,
-                                 roomId: String,
-                                 mediaData: AttachmentData,
-                                 view: View,
-                                 inMemory: List<AttachmentData>,
-                                 options: ((MutableList<Pair<View, String>>) -> Unit)?) {
+    override fun openMediaViewer(
+            activity: Activity,
+            roomId: String,
+            mediaData: AttachmentData,
+            view: View,
+            inMemory: List<AttachmentData>,
+            options: ((MutableList<Pair<View, String>>) -> Unit)?
+    ) {
         VectorAttachmentViewerActivity.newIntent(
                 activity,
                 mediaData,
@@ -550,10 +563,12 @@ class DefaultNavigator @Inject constructor(
         }
     }
 
-    override fun openSearch(context: Context,
-                            roomId: String,
-                            roomDisplayName: String?,
-                            roomAvatarUrl: String?) {
+    override fun openSearch(
+            context: Context,
+            roomId: String,
+            roomDisplayName: String?,
+            roomAvatarUrl: String?
+    ) {
         val intent = SearchActivity.newIntent(context, SearchArgs(roomId, roomDisplayName, roomAvatarUrl))
         context.startActivity(intent)
     }
@@ -579,14 +594,24 @@ class DefaultNavigator @Inject constructor(
         context.startActivity(intent)
     }
 
-    override fun openLocationSharing(context: Context,
-                                     roomId: String,
-                                     mode: LocationSharingMode,
-                                     initialLocationData: LocationData?,
-                                     locationOwnerId: String?) {
+    override fun openLocationSharing(
+            context: Context,
+            roomId: String,
+            mode: LocationSharingMode,
+            initialLocationData: LocationData?,
+            locationOwnerId: String?
+    ) {
         val intent = LocationSharingActivity.getIntent(
                 context,
                 LocationSharingArgs(roomId = roomId, mode = mode, initialLocationData = initialLocationData, locationOwnerId = locationOwnerId)
+        )
+        context.startActivity(intent)
+    }
+
+    override fun openLocationLiveMap(context: Context, roomId: String) {
+        val intent = LocationLiveMapViewActivity.getIntent(
+                context = context,
+                locationLiveMapViewArgs = LocationLiveMapViewArgs(roomId = roomId)
         )
         context.startActivity(intent)
     }
@@ -627,8 +652,10 @@ class DefaultNavigator @Inject constructor(
         )
     }
 
-    override fun openScreenSharingPermissionDialog(screenCaptureIntent: Intent,
-                                                   activityResultLauncher: ActivityResultLauncher<Intent>) {
+    override fun openScreenSharingPermissionDialog(
+            screenCaptureIntent: Intent,
+            activityResultLauncher: ActivityResultLauncher<Intent>
+    ) {
         activityResultLauncher.launch(screenCaptureIntent)
     }
 }

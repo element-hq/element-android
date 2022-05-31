@@ -27,8 +27,10 @@ import org.matrix.android.sdk.internal.session.SessionComponent
 import javax.inject.Inject
 
 @MatrixScope
-internal class SessionManager @Inject constructor(private val matrixComponent: MatrixComponent,
-                                                  private val sessionParamsStore: SessionParamsStore) {
+internal class SessionManager @Inject constructor(
+        private val matrixComponent: MatrixComponent,
+        private val sessionParamsStore: SessionParamsStore
+) {
 
     // SessionId -> SessionComponent
     private val sessionComponents = HashMap<String, SessionComponent>()

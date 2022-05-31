@@ -19,7 +19,7 @@ package org.matrix.android.sdk.api.session.room.model.message
 import org.matrix.android.sdk.api.session.crypto.model.EncryptedFileInfo
 
 /**
- * Interface for message which can contains an encrypted file
+ * Interface for message which can contains an encrypted file.
  */
 interface MessageWithAttachmentContent : MessageContent {
     /**
@@ -36,7 +36,7 @@ interface MessageWithAttachmentContent : MessageContent {
 }
 
 /**
- * Get the url of the encrypted file or of the file
+ * Get the url of the encrypted file or of the file.
  */
 fun MessageWithAttachmentContent.getFileUrl() = encryptedFileInfo?.url ?: url
 

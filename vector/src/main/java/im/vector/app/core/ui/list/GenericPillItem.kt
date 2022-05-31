@@ -34,7 +34,7 @@ import im.vector.app.features.themes.ThemeUtils
 import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
 
 /**
- * A generic list item with a rounded corner background and an optional icon
+ * A generic list item with a rounded corner background and an optional icon.
  */
 @EpoxyModelClass(layout = R.layout.item_generic_pill_footer)
 abstract class GenericPillItem : VectorEpoxyModel<GenericPillItem.Holder>() {

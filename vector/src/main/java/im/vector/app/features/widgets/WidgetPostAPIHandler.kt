@@ -42,9 +42,11 @@ import org.matrix.android.sdk.api.session.widgets.WidgetPostAPIMediator
 import org.matrix.android.sdk.api.util.JsonDict
 import timber.log.Timber
 
-class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roomId: String,
-                                                       private val stringProvider: StringProvider,
-                                                       private val session: Session) : WidgetPostAPIMediator.Handler {
+class WidgetPostAPIHandler @AssistedInject constructor(
+        @Assisted private val roomId: String,
+        private val stringProvider: StringProvider,
+        private val session: Session
+) : WidgetPostAPIMediator.Handler {
 
     @AssistedFactory
     interface Factory {
@@ -108,8 +110,9 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     }
 
     /**
-     * Retrieve the latest botOptions event
+     * Retrieve the latest botOptions event.
      *
+     * @param widgetPostAPIMediator the post api mediator
      * @param eventData the modular data
      */
     private fun getBotOptions(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
@@ -169,8 +172,9 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     }
 
     /**
-     * Provides the membership state
+     * Provides the membership state.
      *
+     * @param widgetPostAPIMediator the post api mediator
      * @param eventData the modular data
      */
     private fun getMembershipState(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
@@ -188,8 +192,9 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     }
 
     /**
-     * Request the latest joined room event
+     * Request the latest joined room event.
      *
+     * @param widgetPostAPIMediator the post api mediator
      * @param eventData the modular data
      */
     private fun getJoinRules(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
@@ -206,8 +211,9 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     }
 
     /**
-     * Provide the widgets list
+     * Provide the widgets list.
      *
+     * @param widgetPostAPIMediator the post api mediator
      * @param eventData the modular data
      */
     private fun getWidgets(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
@@ -226,8 +232,9 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     }
 
     /**
-     * Set a new widget
+     * Set a new widget.
      *
+     * @param widgetPostAPIMediator the post api mediator
      * @param eventData the modular data
      */
     private fun setWidget(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
@@ -301,8 +308,9 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     }
 
     /**
-     * Update the 'plumbing state"
+     * Update the 'plumbing state".
      *
+     * @param widgetPostAPIMediator the post api mediator
      * @param eventData the modular data
      */
     private fun setPlumbingState(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
@@ -326,8 +334,9 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     }
 
     /**
-     * Update the bot options
+     * Update the bot options.
      *
+     * @param widgetPostAPIMediator the post api mediator
      * @param eventData the modular data
      */
     @Suppress("UNCHECKED_CAST")
@@ -351,8 +360,9 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     }
 
     /**
-     * Update the bot power levels
+     * Update the bot power levels.
      *
+     * @param widgetPostAPIMediator the post api mediator
      * @param eventData the modular data
      */
     private fun setBotPower(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
@@ -373,8 +383,9 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     }
 
     /**
-     * Invite an user to this room
+     * Invite an user to this room.
      *
+     * @param widgetPostAPIMediator the post api mediator
      * @param eventData the modular data
      */
     private fun inviteUser(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
@@ -395,8 +406,9 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     }
 
     /**
-     * Provides the number of members in the rooms
+     * Provides the number of members in the rooms.
      *
+     * @param widgetPostAPIMediator the post api mediator
      * @param eventData the modular data
      */
     private fun getMembershipCount(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
@@ -425,8 +437,8 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     }
 
     /**
-     * Check if roomId is present in the event and match
-     * Send response and return true in case of error
+     * Check if roomId is present in the event and match.
+     * Send response and return true in case of error.
      *
      * @return true in case of error
      */
@@ -448,8 +460,8 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     }
 
     /**
-     * Check if userId is present in the event
-     * Send response and return true in case of error
+     * Check if userId is present in the event.
+     * Send response and return true in case of error.
      *
      * @return true in case of error
      */

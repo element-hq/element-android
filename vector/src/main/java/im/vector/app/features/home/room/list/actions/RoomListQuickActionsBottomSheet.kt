@@ -47,7 +47,7 @@ data class RoomListActionsArgs(
 ) : Parcelable
 
 /**
- * Bottom sheet fragment that shows room information with list of contextual actions
+ * Bottom sheet fragment that shows room information with list of contextual actions.
  */
 @AndroidEntryPoint
 class RoomListQuickActionsBottomSheet :

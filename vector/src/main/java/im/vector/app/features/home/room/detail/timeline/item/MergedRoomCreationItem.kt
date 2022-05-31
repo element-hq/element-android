@@ -135,7 +135,7 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
         if (isDirect) {
             holder.roomDescriptionText.text = holder.view.resources.getString(
                     R.string.this_is_the_beginning_of_dm,
-                    distinctMergeData.lastOrNull()?.memberName ?: ""
+                    roomSummary?.displayName ?: ""
             )
         } else if (roomDisplayName.isNullOrBlank() || roomSummary.name.isBlank()) {
             holder.roomDescriptionText.text = holder.view.resources.getString(R.string.this_is_the_beginning_of_room_no_name)

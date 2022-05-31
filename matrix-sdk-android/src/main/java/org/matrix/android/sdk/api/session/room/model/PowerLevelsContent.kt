@@ -67,7 +67,7 @@ data class PowerLevelsContent(
         @Json(name = "notifications") val notifications: Map<String, Any>? = null
 ) {
     /**
-     * Return a copy of this content with a new power level for the specified user
+     * Return a copy of this content with a new power level for the specified user.
      *
      * @param userId the userId to alter the power level of
      * @param powerLevel the new power level, or null to set the default value.

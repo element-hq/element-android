@@ -23,22 +23,22 @@ import org.matrix.android.sdk.internal.util.time.Clock
  */
 data class IncomingRoomKeyRequest(
         /**
-         * The user id
+         * The user id.
          */
         val userId: String? = null,
 
         /**
-         * The device id
+         * The device id.
          */
         val deviceId: String? = null,
 
         /**
-         * The request id
+         * The request id.
          */
         val requestId: String? = null,
 
         /**
-         * The request body
+         * The request body.
          */
         val requestBody: RoomKeyRequestBody? = null,
 
@@ -46,10 +46,9 @@ data class IncomingRoomKeyRequest(
 ) {
     companion object {
         /**
-         * Factory
+         * Factory.
          *
-         * @param event the event
-         * @param currentTimeMillis the current time in milliseconds
+         * @param trail the AuditTrail data
          */
         fun fromEvent(trail: AuditTrail): IncomingRoomKeyRequest? {
             return trail

@@ -19,7 +19,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * This class describes the key changes response
+ * This class describes the key changes response.
  */
 @JsonClass(generateAdapter = true)
 internal data class KeyChangesResponse(

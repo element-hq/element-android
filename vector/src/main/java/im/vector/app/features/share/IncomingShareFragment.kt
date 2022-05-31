@@ -47,8 +47,8 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 
 /**
- * Display the list of rooms
- * The user can select multiple rooms to send the data to
+ * Display the list of rooms.
+ * The user can select multiple rooms to send the data to.
  */
 class IncomingShareFragment @Inject constructor(
         private val incomingShareController: IncomingShareController,

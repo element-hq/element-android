@@ -50,7 +50,7 @@ data class JoinedRoom(
         Invite,
 
         /**
-         * Room joined via link
+         * Room joined via link.
          */
         MobilePermalink,
 

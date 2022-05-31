@@ -36,11 +36,13 @@ import org.matrix.android.sdk.internal.database.query.where
 /**
  * This class takes care of handling case where local echo is replaced by the synced event in the db.
  */
-internal class LiveTimelineEvent(private val monarchy: Monarchy,
-                                 private val coroutineScope: CoroutineScope,
-                                 private val timelineEventMapper: TimelineEventMapper,
-                                 private val roomId: String,
-                                 private val eventId: String) :
+internal class LiveTimelineEvent(
+        private val monarchy: Monarchy,
+        private val coroutineScope: CoroutineScope,
+        private val timelineEventMapper: TimelineEventMapper,
+        private val roomId: String,
+        private val eventId: String
+) :
         MediatorLiveData<Optional<TimelineEvent>>() {
 
     init {

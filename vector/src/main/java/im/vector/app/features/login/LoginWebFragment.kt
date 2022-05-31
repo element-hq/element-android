@@ -45,7 +45,7 @@ import javax.inject.Inject
 
 /**
  * This screen is displayed when the application does not support login flow or registration flow
- * of the homeserver, as a fallback to login or to create an account
+ * of the homeserver, as a fallback to login or to create an account.
  */
 class LoginWebFragment @Inject constructor(
         private val assetReader: AssetReader
@@ -123,8 +123,10 @@ class LoginWebFragment @Inject constructor(
         views.loginWebWebView.loadUrl(url)
 
         views.loginWebWebView.webViewClient = object : WebViewClient() {
-            override fun onReceivedSslError(view: WebView, handler: SslErrorHandler,
-                                            error: SslError) {
+            override fun onReceivedSslError(
+                    view: WebView, handler: SslErrorHandler,
+                    error: SslError
+            ) {
                 MaterialAlertDialogBuilder(requireActivity())
                         .setMessage(R.string.ssl_could_not_verify)
                         .setPositiveButton(R.string.ssl_trust) { _, _ -> handler.proceed() }
@@ -189,7 +191,7 @@ class LoginWebFragment @Inject constructor(
              *             }
              *         }
              *    }
-             * </pre>
+             * </pre>.
              * @param view
              * @param url
              * @return

@@ -51,8 +51,10 @@ internal class DefaultTermsService @Inject constructor(
         private val updateUserAccountDataTask: UpdateUserAccountDataTask
 ) : TermsService {
 
-    override suspend fun getTerms(serviceType: TermsService.ServiceType,
-                                  baseUrl: String): GetTermsResponse {
+    override suspend fun getTerms(
+            serviceType: TermsService.ServiceType,
+            baseUrl: String
+    ): GetTermsResponse {
         val url = buildUrl(baseUrl, serviceType)
         val termsResponse = executeRequest(null) {
             termsAPI.getTerms("${url}terms")
@@ -61,7 +63,7 @@ internal class DefaultTermsService @Inject constructor(
     }
 
     /**
-     * We use a trick here to get the homeserver T&C, we use the register API
+     * We use a trick here to get the homeserver T&C, we use the register API.
      */
     override suspend fun getHomeserverTerms(baseUrl: String): TermsResponse {
         return try {
@@ -90,10 +92,12 @@ internal class DefaultTermsService @Inject constructor(
         }
     }
 
-    override suspend fun agreeToTerms(serviceType: TermsService.ServiceType,
-                                      baseUrl: String,
-                                      agreedUrls: List<String>,
-                                      token: String?) {
+    override suspend fun agreeToTerms(
+            serviceType: TermsService.ServiceType,
+            baseUrl: String,
+            agreedUrls: List<String>,
+            token: String?
+    ) {
         val url = buildUrl(baseUrl, serviceType)
         val tokenToUse = token?.takeIf { it.isNotEmpty() } ?: getToken(baseUrl)
 

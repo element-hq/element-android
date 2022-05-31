@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * In Matrix specs: EncryptedFile
+ * In Matrix specs: EncryptedFile.
  */
 @JsonClass(generateAdapter = true)
 data class EncryptedFileInfo(
@@ -56,7 +56,7 @@ data class EncryptedFileInfo(
         val v: String? = null
 ) {
     /**
-     * Check what the spec tells us
+     * Check what the spec tells us.
      */
     fun isValid(): Boolean {
         if (url.isNullOrBlank()) {

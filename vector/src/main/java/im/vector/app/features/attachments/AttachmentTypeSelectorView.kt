@@ -51,9 +51,10 @@ private const val ANIMATION_DURATION = 250
  * It will return result through [Callback].
  */
 
-class AttachmentTypeSelectorView(context: Context,
-                                 inflater: LayoutInflater,
-                                 var callback: Callback?
+class AttachmentTypeSelectorView(
+        context: Context,
+        inflater: LayoutInflater,
+        var callback: Callback?
 ) : PopupWindow(context) {
 
     interface Callback {
@@ -211,7 +212,7 @@ class AttachmentTypeSelectorView(context: Context,
     }
 
     /**
-     * The all possible types to pick with their required permissions and tooltip resource
+     * The all possible types to pick with their required permissions and tooltip resource.
      */
     enum class Type(val permissions: List<String>, @StringRes val tooltipRes: Int) {
         CAMERA(PERMISSIONS_FOR_TAKING_PHOTO, R.string.tooltip_attachment_photo),

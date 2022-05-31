@@ -69,7 +69,7 @@ internal abstract class SessionSafeCoroutineWorker<PARAM : SessionWorkerParams>(
     abstract fun injectWith(injector: SessionComponent)
 
     /**
-     * Should only return Result.Success for workers added to a unique queue
+     * Should only return Result.Success for workers added to a unique queue.
      */
     abstract suspend fun doSafeWork(params: PARAM): Result
 

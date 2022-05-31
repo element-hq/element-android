@@ -23,9 +23,10 @@ import org.matrix.android.sdk.internal.database.awaitTransaction
 import org.matrix.android.sdk.internal.di.AuthDatabase
 import javax.inject.Inject
 
-internal class RealmPendingSessionStore @Inject constructor(private val mapper: PendingSessionMapper,
-                                                            @AuthDatabase
-                                                            private val realmConfiguration: RealmConfiguration
+internal class RealmPendingSessionStore @Inject constructor(
+        private val mapper: PendingSessionMapper,
+        @AuthDatabase
+        private val realmConfiguration: RealmConfiguration
 ) : PendingSessionStore {
 
     override suspend fun savePendingSessionData(pendingSessionData: PendingSessionData) {

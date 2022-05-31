@@ -45,9 +45,11 @@ import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.timeline.isRootThread
 import javax.inject.Inject
 
-class PermalinkHandler @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
-                                           private val userPreferencesProvider: UserPreferencesProvider,
-                                           private val navigator: Navigator) {
+class PermalinkHandler @Inject constructor(
+        private val activeSessionHolder: ActiveSessionHolder,
+        private val userPreferencesProvider: UserPreferencesProvider,
+        private val navigator: Navigator
+) {
 
     suspend fun launch(
             context: Context,
@@ -165,7 +167,7 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
     }
 
     /**
-     * Open room either joined, or not
+     * Open room either joined, or not.
      */
     private fun openRoom(
             navigationInterceptor: NavigationInterceptor?,
@@ -204,13 +206,14 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
         }
     }
 
-    private fun NavigationInterceptor?.openJoinedRoomScreen(buildTask: Boolean,
-                                                            roomId: String,
-                                                            eventId: String?,
-                                                            rawLink: Uri,
-                                                            context: Context,
-                                                            rootThreadEventId: String?,
-                                                            roomSummary: RoomSummary
+    private fun NavigationInterceptor?.openJoinedRoomScreen(
+            buildTask: Boolean,
+            roomId: String,
+            eventId: String?,
+            rawLink: Uri,
+            context: Context,
+            rootThreadEventId: String?,
+            roomSummary: RoomSummary
     ) {
         if (this?.navToRoom(roomId, eventId, rawLink, rootThreadEventId) != true) {
             if (rootThreadEventId != null && userPreferencesProvider.areThreadMessagesEnabled()) {
@@ -238,14 +241,14 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
 interface NavigationInterceptor {
 
     /**
-     * Return true if the navigation has been intercepted
+     * Return true if the navigation has been intercepted.
      */
     fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri? = null, rootThreadEventId: String? = null): Boolean {
         return false
     }
 
     /**
-     * Return true if the navigation has been intercepted
+     * Return true if the navigation has been intercepted.
      */
     fun navToMemberProfile(userId: String, deepLink: Uri): Boolean {
         return false

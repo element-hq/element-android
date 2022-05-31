@@ -28,7 +28,8 @@ import javax.inject.Inject
 class MessageColorProvider @Inject constructor(
         private val colorProvider: ColorProvider,
         private val matrixItemColorProvider: MatrixItemColorProvider,
-        private val vectorPreferences: VectorPreferences) {
+        private val vectorPreferences: VectorPreferences
+) {
 
     @ColorInt
     fun getMemberNameTextColor(matrixItem: MatrixItem): Int {

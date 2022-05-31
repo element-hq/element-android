@@ -44,7 +44,7 @@ import java.util.Calendar
 import javax.inject.Inject
 
 /**
- * Epoxy controller for edit history list
+ * Epoxy controller for edit history list.
  */
 class ViewEditHistoryEpoxyController @Inject constructor(
         private val stringProvider: StringProvider,

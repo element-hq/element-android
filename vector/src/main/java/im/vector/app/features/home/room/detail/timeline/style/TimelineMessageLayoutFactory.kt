@@ -34,11 +34,13 @@ import org.matrix.android.sdk.api.session.room.timeline.isEdition
 import org.matrix.android.sdk.api.session.room.timeline.isRootThread
 import javax.inject.Inject
 
-class TimelineMessageLayoutFactory @Inject constructor(private val session: Session,
-                                                       private val layoutSettingsProvider: TimelineLayoutSettingsProvider,
-                                                       private val localeProvider: LocaleProvider,
-                                                       private val resources: Resources,
-                                                       private val vectorPreferences: VectorPreferences) {
+class TimelineMessageLayoutFactory @Inject constructor(
+        private val session: Session,
+        private val layoutSettingsProvider: TimelineLayoutSettingsProvider,
+        private val localeProvider: LocaleProvider,
+        private val resources: Resources,
+        private val vectorPreferences: VectorPreferences
+) {
 
     companion object {
         // Can be rendered in bubbles, other types will fallback to default
@@ -65,6 +67,11 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
                 MessageType.MSGTYPE_IMAGE,
                 MessageType.MSGTYPE_VIDEO,
                 MessageType.MSGTYPE_BEACON_INFO,
+        )
+
+        private val MSG_TYPES_WITH_LOCATION_DATA = setOf(
+                MessageType.MSGTYPE_LOCATION,
+                MessageType.MSGTYPE_BEACON_LOCATION_DATA
         )
     }
 
@@ -145,9 +152,11 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
     }
 
     private fun MessageContent?.timestampInsideMessage(): Boolean {
-        if (this == null) return false
-        if (msgType == MessageType.MSGTYPE_LOCATION) return vectorPreferences.labsRenderLocationsInTimeline()
-        return this.msgType in MSG_TYPES_WITH_TIMESTAMP_INSIDE_MESSAGE
+        return when {
+            this == null                            -> false
+            msgType in MSG_TYPES_WITH_LOCATION_DATA -> vectorPreferences.labsRenderLocationsInTimeline()
+            else                                    -> msgType in MSG_TYPES_WITH_TIMESTAMP_INSIDE_MESSAGE
+        }
     }
 
     private fun MessageContent?.shouldAddMessageOverlay(): Boolean {
@@ -175,9 +184,11 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
         )
     }
 
-    private fun buildCornersRadius(isIncoming: Boolean,
-                                   isFirstFromThisSender: Boolean,
-                                   isLastFromThisSender: Boolean): TimelineMessageLayout.Bubble.CornersRadius {
+    private fun buildCornersRadius(
+            isIncoming: Boolean,
+            isFirstFromThisSender: Boolean,
+            isLastFromThisSender: Boolean
+    ): TimelineMessageLayout.Bubble.CornersRadius {
         return if ((isIncoming && !isRTL) || (!isIncoming && isRTL)) {
             TimelineMessageLayout.Bubble.CornersRadius(
                     topStartRadius = if (isFirstFromThisSender) cornerRadius else 0f,
@@ -197,7 +208,7 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
 
     /**
      * Tiles type message never show the sender information (like verification request), so we should repeat it for next message
-     * even if same sender
+     * even if same sender.
      */
     private fun isTileTypeMessage(event: TimelineEvent?): Boolean {
         return when (event?.root?.getClearType()) {

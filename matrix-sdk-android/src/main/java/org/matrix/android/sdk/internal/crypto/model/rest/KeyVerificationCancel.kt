@@ -27,18 +27,18 @@ import org.matrix.android.sdk.internal.crypto.verification.VerificationInfoCance
 @JsonClass(generateAdapter = true)
 internal data class KeyVerificationCancel(
         /**
-         * the transaction ID of the verification to cancel
+         * the transaction ID of the verification to cancel.
          */
         @Json(name = "transaction_id")
         override val transactionId: String? = null,
 
         /**
-         * machine-readable reason for cancelling, see #CancelCode
+         * machine-readable reason for cancelling, see #CancelCode.
          */
         override val code: String? = null,
 
         /**
-         * human-readable reason for cancelling.  This should only be used if the receiving client does not understand the code given.
+         * human-readable reason for cancelling. This should only be used if the receiving client does not understand the code given.
          */
         override val reason: String? = null
 ) : SendToDeviceObject, VerificationInfoCancel {

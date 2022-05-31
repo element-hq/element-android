@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * Class representing an user search parameters
+ * Class representing an user search parameters.
  */
 @JsonClass(generateAdapter = true)
 internal data class SearchUsersParams(

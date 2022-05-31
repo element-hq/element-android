@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.api.session.crypto
 
 /**
- * This listener notifies on new Megolm sessions being created
+ * This listener notifies on new Megolm sessions being created.
  */
 interface NewSessionListener {
 

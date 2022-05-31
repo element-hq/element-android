@@ -108,14 +108,14 @@ import retrofit2.Retrofit
 import javax.inject.Qualifier
 
 /**
- * Used to inject the simple commonmark Parser
+ * Used to inject the simple commonmark Parser.
  */
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
 internal annotation class SimpleCommonmarkParser
 
 /**
- * Used to inject the advanced commonmark Parser
+ * Used to inject the advanced commonmark Parser.
  */
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)

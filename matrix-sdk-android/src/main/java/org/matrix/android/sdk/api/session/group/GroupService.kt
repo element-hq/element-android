@@ -23,16 +23,15 @@ import org.matrix.android.sdk.api.session.group.model.GroupSummary
  * This interface defines methods to get groups. It's implemented at the session level.
  */
 interface GroupService {
-
     /**
-     * Get a group from a groupId
+     * Get a group from a groupId.
      * @param groupId the groupId to look for.
      * @return the group with groupId or null
      */
     fun getGroup(groupId: String): Group?
 
     /**
-     * Get a groupSummary from a groupId
+     * Get a groupSummary from a groupId.
      * @param groupId the groupId to look for.
      * @return the groupSummary with groupId or null
      */

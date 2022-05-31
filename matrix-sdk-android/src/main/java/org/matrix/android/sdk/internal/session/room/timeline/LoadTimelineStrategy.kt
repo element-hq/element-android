@@ -287,7 +287,7 @@ internal class LoadTimelineStrategy constructor(
 
     /**
      * Clear any existing thread chunk entity and create a new one, with the
-     * rootThreadEventId included
+     * rootThreadEventId included.
      */
     private fun recreateThreadChunkEntity(realm: Realm, rootThreadEventId: String) {
         realm.executeTransaction {
@@ -307,7 +307,7 @@ internal class LoadTimelineStrategy constructor(
     }
 
     /**
-     * Clear any existing thread chunk
+     * Clear any existing thread chunk.
      */
     private fun clearThreadChunkEntity(realm: Realm, rootThreadEventId: String) {
         realm.executeTransaction {

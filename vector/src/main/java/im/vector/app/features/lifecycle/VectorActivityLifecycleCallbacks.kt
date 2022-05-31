@@ -136,7 +136,7 @@ class VectorActivityLifecycleCallbacks constructor(private val popupAlertManager
      * Detect potential malicious activity.
      * Check if the activity running in app task is declared in app manifest.
      *
-     * @param activity      the activity of the task
+     * @param activity the activity of the task
      * @return true if the activity is potentially malicious
      */
     private fun isPotentialMaliciousActivity(activity: ComponentName): Boolean = activitiesInfo.none { it.name == activity.className }

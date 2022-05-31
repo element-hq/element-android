@@ -63,7 +63,7 @@ class AudioMessagePlaybackTracker @Inject constructor() {
     }
 
     /**
-     * Set state and notify the listeners
+     * Set state and notify the listeners.
      */
     private fun setState(key: String, state: Listener.State) {
         states[key] = state

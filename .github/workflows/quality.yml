@@ -5,6 +5,11 @@ on:
   push:
     branches: [ main, develop ]
 
+# Enrich gradle.properties for CI/CD
+env:
+  CI_GRADLE_ARG_PROPERTIES: >
+    -Porg.gradle.jvmargs=-Xmx4g
+
 jobs:
   check:
     name: Project Check Suite
@@ -13,6 +18,16 @@ jobs:
       - uses: actions/checkout@v3
       - name: Run code quality check suite
         run: ./tools/check/check_code_quality.sh
+
+# Knit for all the modules (https://github.com/Kotlin/kotlinx-knit)
+  knit:
+    name: Knit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run knit
+        run: |
+          ./gradlew knit
 
 # ktlint for all the modules
   ktlint:
@@ -87,6 +102,25 @@ jobs:
               comment_id: ${{ steps.fc.outputs.comment-id }}
             })
 
+# Gradle dependency analysis using https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin
+  dependency-analysis:
+    name: Dependency analysis
+    runs-on: ubuntu-latest
+    # Allow all jobs on main and develop. Just one per PR.
+    concurrency:
+      group: ${{ github.ref == 'refs/heads/main' && format('dep-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('dep-develop-{0}', github.sha) || format('dep-{0}', github.ref) }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v3
+      - name: Dependency analysis
+        run: ./gradlew buildHealth $CI_GRADLE_ARG_PROPERTIES
+      - name: Upload dependency analysis
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: dependency-analysis
+          path: build/reports/dependency-analysis/build-health-report.txt
+
 # Lint for main module
   android-lint:
     name: Android Linter
@@ -147,3 +181,23 @@ jobs:
           name: release-lint-report-${{ matrix.target }}
           path: |
             vector/build/reports/*.*
+
+  detekt:
+    name: Detekt Analysis
+    runs-on: ubuntu-latest
+    # Allow all jobs on main and develop. Just one per PR.
+    concurrency:
+      group: ${{ github.ref == 'refs/heads/main' && format('detekt-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('detekt-develop-{0}', github.sha) || format('detekt-{0}', github.ref) }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run detekt
+        run: |
+          ./gradlew detekt
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: detekt-report
+          path: |
+            */build/reports/detekt/detekt.html

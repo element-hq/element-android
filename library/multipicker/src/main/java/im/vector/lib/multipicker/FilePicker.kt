@@ -32,7 +32,7 @@ import im.vector.lib.multipicker.utils.toMultiPickerImageType
 import im.vector.lib.multipicker.utils.toMultiPickerVideoType
 
 /**
- * Implementation of selecting any type of files
+ * Implementation of selecting any type of files.
  */
 class FilePicker : Picker<MultiPickerBaseType>() {
 

@@ -47,7 +47,9 @@ internal interface TestMatrixComponent : MatrixComponent {
 
     @Component.Factory
     interface Factory {
-        fun create(@BindsInstance context: Context,
-                   @BindsInstance matrixConfiguration: MatrixConfiguration): TestMatrixComponent
+        fun create(
+                @BindsInstance context: Context,
+                @BindsInstance matrixConfiguration: MatrixConfiguration
+        ): TestMatrixComponent
     }
 }

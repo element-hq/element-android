@@ -22,14 +22,14 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.internal.crypto.keysbackup.DefaultKeysBackupService
 
 /**
- * An interface for decrypting data
+ * An interface for decrypting data.
  */
 internal interface IMXDecrypting {
 
     /**
-     * Decrypt an event
+     * Decrypt an event.
      *
-     * @param event    the raw event.
+     * @param event the raw event.
      * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
      * @return the decryption information, or an error
      */
@@ -40,6 +40,7 @@ internal interface IMXDecrypting {
      * Handle a key event.
      *
      * @param event the key event.
+     * @param defaultKeysBackupService the keys backup service
      */
     fun onRoomKeyEvent(event: Event, defaultKeysBackupService: DefaultKeysBackupService) {}
 }

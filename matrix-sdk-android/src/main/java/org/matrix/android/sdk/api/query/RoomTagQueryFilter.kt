@@ -16,8 +16,22 @@
 
 package org.matrix.android.sdk.api.query
 
+/**
+ * Filter room by their tag.
+ * @see [org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams]
+ * @see [org.matrix.android.sdk.api.session.room.model.tag.RoomTag]
+ */
 data class RoomTagQueryFilter(
+        /**
+         * Set to true to get the rooms which have the tag "m.favourite".
+         */
         val isFavorite: Boolean?,
+        /**
+         * Set to true to get the rooms which have the tag "m.lowpriority".
+         */
         val isLowPriority: Boolean?,
-        val isServerNotice: Boolean?
+        /**
+         * Set to true to get the rooms which have the tag "m.server_notice".
+         */
+        val isServerNotice: Boolean?,
 )

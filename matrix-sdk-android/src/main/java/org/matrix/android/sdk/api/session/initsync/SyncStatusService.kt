@@ -23,7 +23,7 @@ interface SyncStatusService {
 
     sealed class Status {
         /**
-         * For initial sync
+         * For initial sync.
          */
         abstract class InitialSyncStatus : Status()
 
@@ -34,7 +34,7 @@ interface SyncStatusService {
         ) : InitialSyncStatus()
 
         /**
-         * For incremental sync
+         * For incremental sync.
          */
         abstract class IncrementalSyncStatus : Status()
 

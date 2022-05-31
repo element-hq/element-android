@@ -818,7 +818,7 @@ class MessageComposerViewModel @AssistedInject constructor(
     }
 
     /**
-     * Convert a send mode to a draft and save the draft
+     * Convert a send mode to a draft and save the draft.
      */
     private fun handleSaveTextDraft(draft: String) = withState {
         session.coroutineScope.launch {

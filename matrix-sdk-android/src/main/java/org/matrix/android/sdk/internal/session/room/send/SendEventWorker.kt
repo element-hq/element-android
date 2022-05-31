@@ -36,8 +36,8 @@ import javax.inject.Inject
 // private const val MAX_NUMBER_OF_RETRY_BEFORE_FAILING = 3
 
 /**
- * Possible previous worker: [EncryptEventWorker] or first worker
- * Possible next worker    : None
+ * Possible previous worker: [EncryptEventWorker] or first worker.
+ * Possible next worker    : None.
  */
 internal class SendEventWorker(context: Context, params: WorkerParameters, sessionManager: SessionManager) :
         SessionSafeCoroutineWorker<SendEventWorker.Params>(context, params, sessionManager, Params::class.java) {

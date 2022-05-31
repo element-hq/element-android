@@ -29,7 +29,7 @@ import org.matrix.android.sdk.internal.util.database.RealmMigrator
 /**
  * Migrating to:
  * Live thread list: using enhanced /messages api MSC3440
- * Live thread timeline: using /relations api
+ * Live thread timeline: using /relations api.
  */
 internal class MigrateSessionTo026(realm: DynamicRealm) : RealmMigrator(realm, 26) {
 

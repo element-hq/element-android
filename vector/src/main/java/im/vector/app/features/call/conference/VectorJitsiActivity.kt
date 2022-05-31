@@ -138,8 +138,10 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
                 .show()
     }
 
-    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean,
-                                               newConfig: Configuration) {
+    override fun onPictureInPictureModeChanged(
+            isInPictureInPictureMode: Boolean,
+            newConfig: Configuration
+    ) {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
         checkIfActivityShouldBeFinished()
         Timber.w("onPictureInPictureModeChanged($isInPictureInPictureMode)")

@@ -20,10 +20,14 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
+ * Example:
+ * <pre>
  * {
  *      "clean": true,
  *      "info": "File clean at 6/7/2018, 6:02:40 PM"
  *  }
+ * </pre>
+ * .
  */
 @JsonClass(generateAdapter = true)
 internal data class ScanResponse(

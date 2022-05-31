@@ -53,10 +53,12 @@ object FcmHelper {
      * TODO Store in realm
      *
      * @param context android context
-     * @param token   the token to store
+     * @param token the token to store
      */
-    fun storeFcmToken(context: Context,
-                      token: String?) {
+    fun storeFcmToken(
+            context: Context,
+            token: String?
+    ) {
         DefaultSharedPreferences.getInstance(context).edit {
             putString(PREFS_KEY_FCM_TOKEN, token)
         }
@@ -108,10 +110,12 @@ object FcmHelper {
     }
 
     @Suppress("UNUSED_PARAMETER")
-    fun onEnterBackground(context: Context,
-                          vectorPreferences: VectorPreferences,
-                          activeSessionHolder: ActiveSessionHolder,
-                          clock: Clock) {
+    fun onEnterBackground(
+            context: Context,
+            vectorPreferences: VectorPreferences,
+            activeSessionHolder: ActiveSessionHolder,
+            clock: Clock
+    ) {
         // No op
     }
 }

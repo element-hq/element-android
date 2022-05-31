@@ -20,7 +20,7 @@ import org.matrix.android.sdk.api.session.room.model.call.EndCallReason
 
 sealed class CallState {
 
-    /** Idle, setting up objects */
+    /** Idle, setting up objects. */
     object Idle : CallState()
 
     /**

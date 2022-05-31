@@ -278,7 +278,7 @@ class RoomMemberProfileController @Inject constructor(
 
         if (canKick) {
             when (membership) {
-                Membership.JOIN   -> {
+                Membership.JOIN -> {
                     buildProfileAction(
                             id = "kick",
                             editable = false,
@@ -298,7 +298,7 @@ class RoomMemberProfileController @Inject constructor(
                             action = { callback?.onCancelInviteClicked() }
                     )
                 }
-                else              -> Unit
+                else -> Unit
             }
         }
         if (canBan) {

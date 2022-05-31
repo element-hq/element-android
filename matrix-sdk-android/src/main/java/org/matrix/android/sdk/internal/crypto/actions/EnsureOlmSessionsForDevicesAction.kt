@@ -39,13 +39,14 @@ private val loggerTag = LoggerTag("EnsureOlmSessionsForDevicesAction", LoggerTag
 internal class EnsureOlmSessionsForDevicesAction @Inject constructor(
         private val olmDevice: MXOlmDevice,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val oneTimeKeysForUsersDeviceTask: ClaimOneTimeKeysForUsersDeviceTask) {
+        private val oneTimeKeysForUsersDeviceTask: ClaimOneTimeKeysForUsersDeviceTask
+) {
 
     private val ensureMutex = Mutex()
 
     /**
      * We want to synchronize a bit here, because we are iterating to check existing olm session and
-     * also adding some
+     * also adding some.
      */
     suspend fun handle(devicesByUser: Map<String, List<CryptoDeviceInfo>>, force: Boolean = false): MXUsersDevicesMap<MXOlmSessionResult> {
         ensureMutex.withLock {

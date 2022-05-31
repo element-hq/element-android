@@ -36,7 +36,7 @@ class VoicePlayerHelper @Inject constructor(
     }
 
     /**
-     * Ensure the file is encoded using aac audio codec
+     * Ensure the file is encoded using aac audio codec.
      */
     fun convertFile(file: File): File? {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {

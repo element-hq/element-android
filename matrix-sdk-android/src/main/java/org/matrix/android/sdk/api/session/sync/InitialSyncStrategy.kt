@@ -20,7 +20,7 @@ var initialSyncStrategy: InitialSyncStrategy = InitialSyncStrategy.Optimized()
 
 sealed class InitialSyncStrategy {
     /**
-     * Parse the result in its entirety
+     * Parse the result in its entirety.
      * Pros:
      * - Faster to handle parsed data
      * Cons:
@@ -32,21 +32,21 @@ sealed class InitialSyncStrategy {
 
     /**
      * Optimized.
-     * First store the request result in a file, to avoid doing it again in case of crash
+     * First store the request result in a file, to avoid doing it again in case of crash.
      */
     data class Optimized(
             /**
-             * Limit to reach to decide to split the init sync response into smaller files
-             * Empiric value: 1 megabytes
+             * Limit to reach to decide to split the init sync response into smaller files.
+             * Empiric value: 1 megabytes.
              */
             val minSizeToSplit: Long = 1_048_576, // 1024 * 1024
             /**
-             * Limit per room to reach to decide to store a join room ephemeral Events into a file
-             * Empiric value: 1 kilobytes
+             * Limit per room to reach to decide to store a join room ephemeral Events into a file.
+             * Empiric value: 1 kilobytes.
              */
             val minSizeToStoreInFile: Long = 1024,
             /**
-             * Max number of rooms to insert at a time in database (to avoid too much RAM usage)
+             * Max number of rooms to insert at a time in database (to avoid too much RAM usage).
              */
             val maxRoomsToInsert: Int = 100
     ) : InitialSyncStrategy()

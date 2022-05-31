@@ -80,9 +80,11 @@ internal class DefaultContentUrlResolver @Inject constructor(
                 }
     }
 
-    private fun resolve(contentUrl: String,
-                        toThumbnail: Boolean,
-                        params: String = ""): String {
+    private fun resolve(
+            contentUrl: String,
+            toThumbnail: Boolean,
+            params: String = ""
+    ): String {
         var serverAndMediaId = contentUrl.removeMxcPrefix()
 
         val apiPath = if (scannerService.isScannerEnabled()) {

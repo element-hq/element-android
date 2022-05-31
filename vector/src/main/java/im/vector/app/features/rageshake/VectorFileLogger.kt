@@ -129,7 +129,7 @@ class VectorFileLogger @Inject constructor(
     }
 
     /**
-     * Log an Throwable
+     * Log an Throwable.
      *
      * @param throwable the throwable to log
      */

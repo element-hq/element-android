@@ -74,6 +74,9 @@ import im.vector.app.core.dialogs.ConfirmationDialogBuilder
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.epoxy.LayoutManagerStateRestorer
 import im.vector.app.core.extensions.cleanup
+import im.vector.app.core.extensions.containsRtLOverride
+import im.vector.app.core.extensions.ensureEndsLeftToRight
+import im.vector.app.core.extensions.filterDirectionOverrides
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.setTextOrHide
@@ -221,6 +224,7 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageInfoContent
@@ -647,6 +651,13 @@ class TimelineFragment @Inject constructor(
                 )
     }
 
+    private fun navigateToLocationLiveMap() {
+        navigator.openLocationLiveMap(
+                context = requireContext(),
+                roomId = timelineArgs.roomId
+        )
+    }
+
     private fun handleChangeLocationIndicator(event: RoomDetailViewEvents.ChangeLocationIndicator) {
         views.locationLiveStatusIndicator.isVisible = event.isVisible
     }
@@ -706,31 +717,31 @@ class TimelineFragment @Inject constructor(
     }
 
     private fun createEmojiPopup(): EmojiPopup {
-        return EmojiPopup
-                .Builder
-                .fromRootView(views.rootConstraintLayout)
-                .setKeyboardAnimationStyle(R.style.emoji_fade_animation_style)
-                .setOnEmojiPopupShownListener {
+        return EmojiPopup(
+                rootView = views.rootConstraintLayout,
+                keyboardAnimationStyle = R.style.emoji_fade_animation_style,
+                onEmojiPopupShownListener = {
                     views.composerLayout.views.composerEmojiButton.apply {
                         contentDescription = getString(R.string.a11y_close_emoji_picker)
                         setImageResource(R.drawable.ic_keyboard)
                     }
-                }
-                .setOnEmojiPopupDismissListenerLifecycleAware {
+                },
+                onEmojiPopupDismissListener = lifecycleAwareDismissAction {
                     views.composerLayout.views.composerEmojiButton.apply {
                         contentDescription = getString(R.string.a11y_open_emoji_picker)
                         setImageResource(R.drawable.ic_insert_emoji)
                     }
-                }
-                .build(views.composerLayout.views.composerEditText)
+                },
+                editText = views.composerLayout.views.composerEditText
+        )
     }
 
     /**
-     *  Ensure dismiss actions only trigger when the fragment is in the started state
-     *  EmojiPopup by default dismisses onViewDetachedFromWindow, this can cause race conditions with onDestroyView
+     *  Ensure dismiss actions only trigger when the fragment is in the started state.
+     *  EmojiPopup by default dismisses onViewDetachedFromWindow, this can cause race conditions with onDestroyView.
      */
-    private fun EmojiPopup.Builder.setOnEmojiPopupDismissListenerLifecycleAware(action: () -> Unit): EmojiPopup.Builder {
-        return setOnEmojiPopupDismissListener {
+    private fun lifecycleAwareDismissAction(action: () -> Unit): () -> Unit {
+        return {
             if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
                 action()
             }
@@ -1167,7 +1178,7 @@ class TimelineFragment @Inject constructor(
     }
 
     /**
-     * Update menu thread notification badge appropriately
+     * Update menu thread notification badge appropriately.
      */
     private fun updateMenuThreadNotificationBadge(menu: Menu, state: RoomDetailViewState) {
         val menuThreadList = menu.findItem(R.id.menu_timeline_thread_list).actionView
@@ -1190,7 +1201,7 @@ class TimelineFragment @Inject constructor(
     }
 
     /**
-     * View and highlight the original root thread message in the main timeline
+     * View and highlight the original root thread message in the main timeline.
      */
     private fun handleViewInRoomAction() {
         getRootThreadEventId()?.let {
@@ -1230,10 +1241,12 @@ class TimelineFragment @Inject constructor(
         views.composerLayout.views.sendButton.contentDescription = getString(R.string.action_send)
     }
 
-    private fun renderSpecialMode(event: TimelineEvent,
-                                  @DrawableRes iconRes: Int,
-                                  @StringRes descriptionRes: Int,
-                                  defaultContent: String) {
+    private fun renderSpecialMode(
+            event: TimelineEvent,
+            @DrawableRes iconRes: Int,
+            @StringRes descriptionRes: Int,
+            defaultContent: String
+    ) {
         autoCompleter.enterSpecialMode()
         // switch to expanded bar
         views.composerLayout.views.composerRelatedMessageTitle.apply {
@@ -1529,7 +1542,7 @@ class TimelineFragment @Inject constructor(
 
         views.composerLayout.views.composerEmojiButton.isVisible = vectorPreferences.showEmojiKeyboard()
 
-        if (isThreadTimeLine() && timelineArgs.threadTimelineArgs?.startsThread == true) {
+        if (isThreadTimeLine() && timelineArgs.threadTimelineArgs?.showKeyboard == true) {
             // Show keyboard when the user started a thread
             views.composerLayout.views.composerEditText.showKeyboard(andRequestFocus = true)
         }
@@ -1914,28 +1927,41 @@ class TimelineFragment @Inject constructor(
                         }
                     })
             if (!isManaged) {
-                if (title.isValidUrl() && url.isValidUrl() && URL(title).host != URL(url).host) {
-                    MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_NegativeDestructive)
-                            .setTitle(R.string.external_link_confirmation_title)
-                            .setMessage(
-                                    getString(R.string.external_link_confirmation_message, title, url)
-                                            .toSpannable()
-                                            .colorizeMatchingText(url, colorProvider.getColorFromAttribute(R.attr.vctr_content_tertiary))
-                                            .colorizeMatchingText(title, colorProvider.getColorFromAttribute(R.attr.vctr_content_tertiary))
-                            )
-                            .setPositiveButton(R.string._continue) { _, _ ->
-                                openUrlInExternalBrowser(requireContext(), url)
-                            }
-                            .setNegativeButton(R.string.action_cancel, null)
-                            .show()
-                } else {
-                    // Open in external browser, in a new Tab
-                    openUrlInExternalBrowser(requireContext(), url)
+                when {
+                    url.containsRtLOverride()                                                  -> {
+                        displayUrlConfirmationDialog(
+                                seenUrl = title.ensureEndsLeftToRight(),
+                                actualUrl = url.filterDirectionOverrides(),
+                                continueTo = url
+                        )
+                    }
+                    title.isValidUrl() && url.isValidUrl() && URL(title).host != URL(url).host -> {
+                        displayUrlConfirmationDialog(title, url)
+                    }
+                    else                                                                       -> {
+                        openUrlInExternalBrowser(requireContext(), url)
+                    }
                 }
             }
         }
         // In fact it is always managed
         return true
+    }
+
+    private fun displayUrlConfirmationDialog(seenUrl: String, actualUrl: String, continueTo: String = actualUrl) {
+        MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_NegativeDestructive)
+                .setTitle(R.string.external_link_confirmation_title)
+                .setMessage(
+                        getString(R.string.external_link_confirmation_message, seenUrl, actualUrl)
+                                .toSpannable()
+                                .colorizeMatchingText(actualUrl, colorProvider.getColorFromAttribute(R.attr.vctr_content_tertiary))
+                                .colorizeMatchingText(seenUrl, colorProvider.getColorFromAttribute(R.attr.vctr_content_tertiary))
+                )
+                .setPositiveButton(R.string._continue) { _, _ ->
+                    openUrlInExternalBrowser(requireContext(), continueTo)
+                }
+                .setNegativeButton(R.string.action_cancel, null)
+                .show()
     }
 
     override fun onUrlLongClicked(url: String): Boolean {
@@ -1958,10 +1984,12 @@ class TimelineFragment @Inject constructor(
         vectorBaseActivity.notImplemented("encrypted message click")
     }
 
-    override fun onImageMessageClicked(messageImageContent: MessageImageInfoContent,
-                                       mediaData: ImageContentRenderer.Data,
-                                       view: View,
-                                       inMemory: List<AttachmentData>) {
+    override fun onImageMessageClicked(
+            messageImageContent: MessageImageInfoContent,
+            mediaData: ImageContentRenderer.Data,
+            view: View,
+            inMemory: List<AttachmentData>
+    ) {
         navigator.openMediaViewer(
                 activity = requireActivity(),
                 roomId = timelineArgs.roomId,
@@ -2014,6 +2042,9 @@ class TimelineFragment @Inject constructor(
             }
             is MessageLocationContent            -> {
                 handleShowLocationPreview(messageContent, informationData.senderId)
+            }
+            is MessageBeaconInfoContent          -> {
+                navigateToLocationLiveMap()
             }
             else                                 -> {
                 val handled = onThreadSummaryClicked(informationData.eventId, isRootThreadEvent)
@@ -2443,7 +2474,11 @@ class TimelineFragment @Inject constructor(
 
     private fun onReplyInThreadClicked(action: EventSharedAction.ReplyInThread) {
         if (vectorPreferences.areThreadMessagesEnabled()) {
-            navigateToThreadTimeline(action.eventId, action.startsThread)
+            navigateToThreadTimeline(
+                    rootThreadEventId = action.eventId,
+                    startsThread = action.startsThread,
+                    showKeyboard = true
+            )
         } else {
             displayThreadsBetaOptInDialog()
         }
@@ -2451,10 +2486,9 @@ class TimelineFragment @Inject constructor(
 
     /**
      * Navigate to Threads timeline for the specified rootThreadEventId
-     * using the ThreadsActivity
+     * using the ThreadsActivity.
      */
-
-    private fun navigateToThreadTimeline(rootThreadEventId: String, startsThread: Boolean = false) {
+    private fun navigateToThreadTimeline(rootThreadEventId: String, startsThread: Boolean = false, showKeyboard: Boolean = false) {
         analyticsTracker.capture(Interaction.Name.MobileRoomThreadSummaryItem.toAnalyticsInteraction())
         context?.let {
             val roomThreadDetailArgs = ThreadTimelineArgs(
@@ -2463,7 +2497,8 @@ class TimelineFragment @Inject constructor(
                     displayName = timelineViewModel.getRoomSummary()?.displayName,
                     avatarUrl = timelineViewModel.getRoomSummary()?.avatarUrl,
                     roomEncryptionTrustLevel = timelineViewModel.getRoomSummary()?.roomEncryptionTrustLevel,
-                    rootThreadEventId = rootThreadEventId
+                    rootThreadEventId = rootThreadEventId,
+                    showKeyboard = showKeyboard
             )
             navigator.openThread(it, roomThreadDetailArgs)
         }
@@ -2490,9 +2525,8 @@ class TimelineFragment @Inject constructor(
 
     /**
      * Navigate to Threads list for the current room
-     * using the ThreadsActivity
+     * using the ThreadsActivity.
      */
-
     private fun navigateToThreadList() {
         analyticsTracker.capture(Interaction.Name.MobileRoomThreadListButton.toAnalyticsInteraction())
         context?.let {
@@ -2619,12 +2653,12 @@ class TimelineFragment @Inject constructor(
     }
 
     /**
-     * Returns true if the current room is a Thread room, false otherwise
+     * Returns true if the current room is a Thread room, false otherwise.
      */
     private fun isThreadTimeLine(): Boolean = timelineArgs.threadTimelineArgs?.rootThreadEventId != null
 
     /**
-     * Returns the root thread event if we are in a thread room, otherwise returns null
+     * Returns the root thread event if we are in a thread room, otherwise returns null.
      */
     fun getRootThreadEventId(): String? = timelineArgs.threadTimelineArgs?.rootThreadEventId
 }

@@ -19,7 +19,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * Class representing an sharekey content
+ * Class representing an sharekey content.
  */
 @JsonClass(generateAdapter = true)
 data class RoomKeyContent(

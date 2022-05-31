@@ -25,7 +25,7 @@ import timber.log.Timber
 import java.lang.ref.WeakReference
 
 /**
- * Dynamic broadcast receiver to detect headset plug/unplug
+ * Dynamic broadcast receiver to detect headset plug/unplug.
  */
 class WiredHeadsetStateReceiver : BroadcastReceiver() {
 

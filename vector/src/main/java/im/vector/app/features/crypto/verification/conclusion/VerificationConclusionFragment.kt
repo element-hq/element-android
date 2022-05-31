@@ -73,7 +73,7 @@ class VerificationConclusionFragment @Inject constructor(
         controller.update(state)
     }
 
-    override fun onButtonTapped() {
-        sharedViewModel.handle(VerificationAction.GotItConclusion)
+    override fun onButtonTapped(success: Boolean) {
+        sharedViewModel.handle(VerificationAction.GotItConclusion(success))
     }
 }

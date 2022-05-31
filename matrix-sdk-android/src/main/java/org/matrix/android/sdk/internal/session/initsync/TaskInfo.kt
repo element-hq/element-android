@@ -19,17 +19,19 @@ package org.matrix.android.sdk.internal.session.initsync
 import org.matrix.android.sdk.api.session.initsync.InitSyncStep
 import timber.log.Timber
 
-internal class TaskInfo(val initSyncStep: InitSyncStep,
-                        val totalProgress: Int,
-                        val parent: TaskInfo?,
-                        val parentWeight: Float) {
+internal class TaskInfo(
+        val initSyncStep: InitSyncStep,
+        val totalProgress: Int,
+        val parent: TaskInfo?,
+        val parentWeight: Float
+) {
     var child: TaskInfo? = null
     var currentProgress = 0F
         private set
     private val offset = parent?.currentProgress ?: 0F
 
     /**
-     * Get the further child
+     * Get the further child.
      */
     fun leaf(): TaskInfo {
         var last = this
@@ -40,7 +42,7 @@ internal class TaskInfo(val initSyncStep: InitSyncStep,
     }
 
     /**
-     * Set progress of this task and update the parent progress iteratively
+     * Set progress of this task and update the parent progress iteratively.
      */
     fun setProgress(progress: Float) {
         Timber.v("setProgress: $progress / $totalProgress")

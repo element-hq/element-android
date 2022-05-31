@@ -34,10 +34,12 @@ class ResourceLimitErrorFormatter(private val context: Context) {
         object Hard : Mode(R.string.resource_limit_hard_mau, R.string.resource_limit_hard_default, R.string.resource_limit_hard_contact)
     }
 
-    fun format(matrixError: MatrixError,
-               mode: Mode,
-               separator: CharSequence = " ",
-               clickable: Boolean = false): CharSequence {
+    fun format(
+            matrixError: MatrixError,
+            mode: Mode,
+            separator: CharSequence = " ",
+            clickable: Boolean = false
+    ): CharSequence {
         val error = if (MatrixError.LIMIT_TYPE_MAU == matrixError.limitType) {
             context.getString(mode.mauErrorRes)
         } else {
@@ -59,7 +61,7 @@ class ResourceLimitErrorFormatter(private val context: Context) {
     }
 
     /**
-     * Create a HTML link with a uri
+     * Create a HTML link with a uri.
      */
     private fun uriAsLink(uri: String): String {
         val contactStr = context.getString(R.string.resource_limit_contact_admin)

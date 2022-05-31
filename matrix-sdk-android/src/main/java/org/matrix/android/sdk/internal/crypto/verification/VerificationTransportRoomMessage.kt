@@ -61,11 +61,13 @@ internal class VerificationTransportRoomMessage(
     private val verificationSenderScope = CoroutineScope(cryptoCoroutineScope.coroutineContext + dispatcher)
     private val sequencer = SemaphoreCoroutineSequencer()
 
-    override fun <T> sendToOther(type: String,
-                                 verificationInfo: VerificationInfo<T>,
-                                 nextState: VerificationTxState,
-                                 onErrorReason: CancelCode,
-                                 onDone: (() -> Unit)?) {
+    override fun <T> sendToOther(
+            type: String,
+            verificationInfo: VerificationInfo<T>,
+            nextState: VerificationTxState,
+            onErrorReason: CancelCode,
+            onDone: (() -> Unit)?
+    ) {
         Timber.d("## SAS sending msg type $type")
         Timber.v("## SAS sending msg info $verificationInfo")
         val event = createEventAndLocalEcho(
@@ -92,12 +94,14 @@ internal class VerificationTransportRoomMessage(
         }
     }
 
-    override fun sendVerificationRequest(supportedMethods: List<String>,
-                                         localId: String,
-                                         otherUserId: String,
-                                         roomId: String?,
-                                         toDevices: List<String>?,
-                                         callback: (String?, ValidVerificationInfoRequest?) -> Unit) {
+    override fun sendVerificationRequest(
+            supportedMethods: List<String>,
+            localId: String,
+            otherUserId: String,
+            roomId: String?,
+            toDevices: List<String>?,
+            callback: (String?, ValidVerificationInfoRequest?) -> Unit
+    ) {
         Timber.d("## SAS sending verification request with supported methods: $supportedMethods")
         // This transport requires a room
         requireNotNull(roomId)
@@ -160,8 +164,17 @@ internal class VerificationTransportRoomMessage(
         }
     }
 
-    override fun done(transactionId: String,
-                      onDone: (() -> Unit)?) {
+    override fun cancelTransaction(
+            transactionId: String,
+            otherUserId: String,
+            otherUserDeviceIds: List<String>,
+            code: CancelCode
+    ) = cancelTransaction(transactionId, otherUserId, null, code)
+
+    override fun done(
+            transactionId: String,
+            onDone: (() -> Unit)?
+    ) {
         Timber.d("## SAS sending done for $transactionId")
         val event = createEventAndLocalEcho(
                 type = EventType.KEY_VERIFICATION_DONE,
@@ -188,12 +201,14 @@ internal class VerificationTransportRoomMessage(
         }
     }
 
-    override fun createAccept(tid: String,
-                              keyAgreementProtocol: String,
-                              hash: String,
-                              commitment: String,
-                              messageAuthenticationCode: String,
-                              shortAuthenticationStrings: List<String>): VerificationInfoAccept =
+    override fun createAccept(
+            tid: String,
+            keyAgreementProtocol: String,
+            hash: String,
+            commitment: String,
+            messageAuthenticationCode: String,
+            shortAuthenticationStrings: List<String>
+    ): VerificationInfoAccept =
             MessageVerificationAcceptContent.create(
                     tid,
                     keyAgreementProtocol,
@@ -207,12 +222,14 @@ internal class VerificationTransportRoomMessage(
 
     override fun createMac(tid: String, mac: Map<String, String>, keys: String) = MessageVerificationMacContent.create(tid, mac, keys)
 
-    override fun createStartForSas(fromDevice: String,
-                                   transactionId: String,
-                                   keyAgreementProtocols: List<String>,
-                                   hashes: List<String>,
-                                   messageAuthenticationCodes: List<String>,
-                                   shortAuthenticationStrings: List<String>): VerificationInfoStart {
+    override fun createStartForSas(
+            fromDevice: String,
+            transactionId: String,
+            keyAgreementProtocols: List<String>,
+            hashes: List<String>,
+            messageAuthenticationCodes: List<String>,
+            shortAuthenticationStrings: List<String>
+    ): VerificationInfoStart {
         return MessageVerificationStartContent(
                 fromDevice,
                 hashes,
@@ -228,9 +245,11 @@ internal class VerificationTransportRoomMessage(
         )
     }
 
-    override fun createStartForQrCode(fromDevice: String,
-                                      transactionId: String,
-                                      sharedSecret: String): VerificationInfoStart {
+    override fun createStartForQrCode(
+            fromDevice: String,
+            transactionId: String,
+            sharedSecret: String
+    ): VerificationInfoStart {
         return MessageVerificationStartContent(
                 fromDevice,
                 null,
@@ -271,10 +290,12 @@ internal class VerificationTransportRoomMessage(
         }
     }
 
-    override fun sendVerificationReady(keyReq: VerificationInfoReady,
-                                       otherUserId: String,
-                                       otherDeviceId: String?,
-                                       callback: (() -> Unit)?) {
+    override fun sendVerificationReady(
+            keyReq: VerificationInfoReady,
+            otherUserId: String,
+            otherDeviceId: String?,
+            callback: (() -> Unit)?
+    ) {
         // Not applicable (send event is called directly)
         Timber.w("## SAS ignored verification ready with methods: ${keyReq.methods}")
     }

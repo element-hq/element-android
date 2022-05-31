@@ -23,7 +23,7 @@ import im.vector.app.core.utils.PublishDataSource
 interface VectorSharedAction
 
 /**
- * Parent class to handle navigation events, action events, or other any events
+ * Parent class to handle navigation events, action events, or other any events.
  */
 open class VectorSharedActionViewModel<T : VectorSharedAction>(private val store: MutableDataSource<T> = PublishDataSource()) :
         ViewModel(), MutableDataSource<T> by store

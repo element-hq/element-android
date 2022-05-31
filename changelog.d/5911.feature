@@ -1,1 +1,0 @@
-Screen sharing over WebRTC

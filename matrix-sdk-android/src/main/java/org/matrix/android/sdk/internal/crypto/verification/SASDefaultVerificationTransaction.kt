@@ -132,7 +132,7 @@ internal abstract class SASDefaultVerificationTransaction(
 
     /**
      * To be called by the client when the user has verified that
-     * both short codes do match
+     * both short codes do match.
      */
     override fun userHasVerifiedShortCode() {
         Timber.v("## SAS short code verified by user for id:$transactionId")
@@ -314,11 +314,13 @@ internal abstract class SASDefaultVerificationTransaction(
         transport.cancelTransaction(transactionId, otherUserId, otherDeviceId ?: "", code)
     }
 
-    protected fun <T> sendToOther(type: String,
-                                  keyToDevice: VerificationInfo<T>,
-                                  nextState: VerificationTxState,
-                                  onErrorReason: CancelCode,
-                                  onDone: (() -> Unit)?) {
+    protected fun <T> sendToOther(
+            type: String,
+            keyToDevice: VerificationInfo<T>,
+            nextState: VerificationTxState,
+            onErrorReason: CancelCode,
+            onDone: (() -> Unit)?
+    ) {
         transport.sendToOther(type, keyToDevice, nextState, onErrorReason, onDone)
     }
 

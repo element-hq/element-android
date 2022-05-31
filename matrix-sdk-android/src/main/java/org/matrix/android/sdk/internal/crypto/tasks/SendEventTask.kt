@@ -39,7 +39,8 @@ internal class DefaultSendEventTask @Inject constructor(
         private val encryptEventTask: EncryptEventTask,
         private val loadRoomMembersTask: LoadRoomMembersTask,
         private val roomAPI: RoomAPI,
-        private val globalErrorReceiver: GlobalErrorReceiver) : SendEventTask {
+        private val globalErrorReceiver: GlobalErrorReceiver
+) : SendEventTask {
 
     override suspend fun execute(params: SendEventTask.Params): String {
         try {
@@ -69,6 +70,7 @@ internal class DefaultSendEventTask @Inject constructor(
             }
         } catch (e: Throwable) {
 //            localEchoRepository.updateSendState(params.event.eventId!!, SendState.UNDELIVERED)
+            Timber.w(e, "Unable to send the Event")
             throw e
         }
     }

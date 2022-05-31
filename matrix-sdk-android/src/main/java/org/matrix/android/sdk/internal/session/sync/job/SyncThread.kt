@@ -56,12 +56,12 @@ private const val RETRY_WAIT_TIME_MS = 10_000L
 
 private val loggerTag = LoggerTag("SyncThread", LoggerTag.SYNC)
 
-internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
-                                              private val networkConnectivityChecker: NetworkConnectivityChecker,
-                                              private val backgroundDetectionObserver: BackgroundDetectionObserver,
-                                              private val activeCallHandler: ActiveCallHandler,
-                                              private val matrixConfiguration: MatrixConfiguration,
-                                              private val lightweightSettingsStorage: DefaultLightweightSettingsStorage
+internal class SyncThread @Inject constructor(
+        private val syncTask: SyncTask,
+        private val networkConnectivityChecker: NetworkConnectivityChecker,
+        private val backgroundDetectionObserver: BackgroundDetectionObserver,
+        private val activeCallHandler: ActiveCallHandler,
+        private val lightweightSettingsStorage: DefaultLightweightSettingsStorage,
 ) : Thread("SyncThread"), NetworkConnectivityChecker.Listener, BackgroundDetectionObserver.Listener {
 
     private var state: SyncState = SyncState.Idle

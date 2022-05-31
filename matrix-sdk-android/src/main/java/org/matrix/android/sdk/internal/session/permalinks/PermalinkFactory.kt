@@ -126,7 +126,7 @@ internal class PermalinkFactory @Inject constructor(
     }
 
     /**
-     * Escape '/' in id, because it is used as a separator
+     * Escape '/' in id, because it is used as a separator.
      *
      * @param id the id to escape
      * @return the escaped id
@@ -136,7 +136,7 @@ internal class PermalinkFactory @Inject constructor(
     }
 
     /**
-     * Unescape '/' in id
+     * Unescape '/' in id.
      *
      * @param id the id to escape
      * @return the escaped id

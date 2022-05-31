@@ -38,8 +38,10 @@ import javax.inject.Inject
  * then we generate a random secret key. The database key is encrypted with the secret key; The secret
  * key is encrypted with the public RSA key and stored with the encrypted key in the shared pref
  */
-internal class RealmKeysUtils @Inject constructor(context: Context,
-                                                  private val secretStoringUtils: SecretStoringUtils) {
+internal class RealmKeysUtils @Inject constructor(
+        context: Context,
+        private val secretStoringUtils: SecretStoringUtils
+) {
 
     private val rng = SecureRandom()
 
@@ -53,7 +55,7 @@ internal class RealmKeysUtils @Inject constructor(context: Context,
     }
 
     /**
-     * Check if there is already a key for this alias
+     * Check if there is already a key for this alias.
      */
     private fun hasKeyForDatabase(alias: String): Boolean {
         return sharedPreferences.contains("${ENCRYPTED_KEY_PREFIX}_$alias")
@@ -77,8 +79,8 @@ internal class RealmKeysUtils @Inject constructor(context: Context,
     }
 
     /**
-     * Retrieves the key for this database
-     * throws if something goes wrong
+     * Retrieves the key for this database.
+     * Throws if something goes wrong.
      */
     private fun extractKeyForDatabase(alias: String): ByteArray {
         val encryptedB64 = sharedPreferences.getString("${ENCRYPTED_KEY_PREFIX}_$alias", null)

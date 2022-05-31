@@ -30,8 +30,10 @@ import javax.inject.Inject
 /*
 * Test that app can successfully retrieve a token via firebase
  */
-class TestFirebaseToken @Inject constructor(private val context: FragmentActivity,
-                                            private val stringProvider: StringProvider) : TroubleshootTest(R.string.settings_troubleshoot_test_fcm_title) {
+class TestFirebaseToken @Inject constructor(
+        private val context: FragmentActivity,
+        private val stringProvider: StringProvider
+) : TroubleshootTest(R.string.settings_troubleshoot_test_fcm_title) {
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         status = TestStatus.RUNNING

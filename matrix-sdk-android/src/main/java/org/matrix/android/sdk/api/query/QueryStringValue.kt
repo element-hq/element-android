@@ -20,35 +20,67 @@ package org.matrix.android.sdk.api.query
  * Basic query language. All these cases are mutually exclusive.
  */
 sealed interface QueryStringValue {
+    /**
+     * No condition, i.e. there will be no test on the tested field.
+     */
+    object NoCondition : QueryStringValue
+
+    /**
+     * The tested field has to be null.
+     */
+    object IsNull : QueryStringValue
+
+    /**
+     * The tested field has to be not null.
+     */
+    object IsNotNull : QueryStringValue
+
+    /**
+     * The tested field has to be empty.
+     */
+    object IsEmpty : QueryStringValue
+
+    /**
+     * The tested field has to not empty.
+     */
+    object IsNotEmpty : QueryStringValue
+
+    /**
+     * Interface to check String content.
+     */
     sealed interface ContentQueryStringValue : QueryStringValue {
         val string: String
         val case: Case
     }
 
-    object NoCondition : QueryStringValue
-    object IsNull : QueryStringValue
-    object IsNotNull : QueryStringValue
-    object IsEmpty : QueryStringValue
-    object IsNotEmpty : QueryStringValue
-
+    /**
+     * The tested field must match the [string].
+     */
     data class Equals(override val string: String, override val case: Case = Case.SENSITIVE) : ContentQueryStringValue
+
+    /**
+     * The tested field must contain the [string].
+     */
     data class Contains(override val string: String, override val case: Case = Case.SENSITIVE) : ContentQueryStringValue
 
+    /**
+     * Case enum for [ContentQueryStringValue].
+     */
     enum class Case {
         /**
-         * Match query sensitive to case
+         * Match query sensitive to case.
          */
         SENSITIVE,
 
         /**
-         * Match query insensitive to case, this only works for Latin-1 character sets
+         * Match query insensitive to case, this only works for Latin-1 character sets.
          */
         INSENSITIVE,
 
         /**
-         * Match query with input normalized (case insensitive)
-         * Works around Realms inability to sort or filter by case for non Latin-1 character sets
-         * Expects the target field to contain normalized data
+         * Match query with input normalized (case insensitive).
+         * Works around Realms inability to sort or filter by case for non Latin-1 character sets.
+         * Expects the target field to contain normalized data.
          *
          * @see org.matrix.android.sdk.internal.util.Normalizer.normalize
          */

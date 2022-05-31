@@ -62,7 +62,7 @@ class ViewModelTest<S, VE>(
     }
 
     /**
-     * Asserts the expected states are in the same order as the actual state emissions
+     * Asserts the expected states are in the same order as the actual state emissions.
      * Each expected lambda is given the previous expected state, starting with the initial
      */
     fun assertStatesChanges(initial: S, expected: List<S.() -> S>): ViewModelTest<S, VE> {

@@ -21,7 +21,7 @@ import java.io.File
 import java.io.InputStream
 
 /**
- * Save an input stream to a file with Okio
+ * Save an input stream to a file with Okio.
  */
 @WorkerThread
 internal fun writeToFile(inputStream: InputStream, outputFile: File) {

@@ -67,4 +67,4 @@ jobs:
           path: |
             vector/build/outputs/apk/*/release/*.apk
 
-# TODO: add exodus checks
+# TODO add exodus checks

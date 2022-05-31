@@ -71,7 +71,8 @@ internal class OutgoingKeyRequestManager @Inject constructor(
         private val inboundGroupSessionStore: InboundGroupSessionStore,
         private val sendToDeviceTask: SendToDeviceTask,
         private val deviceListManager: DeviceListManager,
-        private val perSessionBackupQueryRateLimiter: PerSessionBackupQueryRateLimiter) {
+        private val perSessionBackupQueryRateLimiter: PerSessionBackupQueryRateLimiter
+) {
 
     private val dispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
     private val outgoingRequestScope = CoroutineScope(SupervisorJob() + dispatcher)
@@ -151,7 +152,7 @@ internal class OutgoingKeyRequestManager @Inject constructor(
     }
 
     /**
-     * Typically called when we the session as been imported or received meanwhile
+     * Typically called when we the session as been imported or received meanwhile.
      */
     fun postCancelRequestForSessionIfNeeded(sessionId: String, roomId: String, senderKey: String, fromIndex: Int) {
         outgoingRequestScope.launch {
@@ -180,13 +181,15 @@ internal class OutgoingKeyRequestManager @Inject constructor(
         }
     }
 
-    fun onRoomKeyForwarded(sessionId: String,
-                           algorithm: String,
-                           roomId: String,
-                           senderKey: String,
-                           fromDevice: String?,
-                           fromIndex: Int,
-                           event: Event) {
+    fun onRoomKeyForwarded(
+            sessionId: String,
+            algorithm: String,
+            roomId: String,
+            senderKey: String,
+            fromDevice: String?,
+            fromIndex: Int,
+            event: Event
+    ) {
         Timber.tag(loggerTag.value).d("Key forwarded for $sessionId from ${event.senderId}|$fromDevice at index $fromIndex")
         outgoingRequestScope.launch {
             sequencer.post {
@@ -208,12 +211,14 @@ internal class OutgoingKeyRequestManager @Inject constructor(
         }
     }
 
-    fun onRoomKeyWithHeld(sessionId: String,
-                          algorithm: String,
-                          roomId: String,
-                          senderKey: String,
-                          fromDevice: String?,
-                          event: Event) {
+    fun onRoomKeyWithHeld(
+            sessionId: String,
+            algorithm: String,
+            roomId: String,
+            senderKey: String,
+            fromDevice: String?,
+            event: Event
+    ) {
         outgoingRequestScope.launch {
             sequencer.post {
                 Timber.tag(loggerTag.value).d("Withheld received for $sessionId from ${event.senderId}|$fromDevice")
@@ -266,7 +271,7 @@ internal class OutgoingKeyRequestManager @Inject constructor(
     }
 
     /**
-     * Should be called after a sync, ideally if no catchup sync needed (as keys might arrive in those)
+     * Should be called after a sync, ideally if no catchup sync needed (as keys might arrive in those).
      */
     fun requireProcessAllPendingKeyRequests() {
         outgoingRequestScope.launch {

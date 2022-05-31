@@ -79,11 +79,13 @@ internal fun ChunkEntity.addStateEvent(roomId: String, stateEvent: EventEntity, 
     }
 }
 
-internal fun ChunkEntity.addTimelineEvent(roomId: String,
-                                          eventEntity: EventEntity,
-                                          direction: PaginationDirection,
-                                          ownedByThreadChunk: Boolean = false,
-                                          roomMemberContentsByUser: Map<String, RoomMemberContent?>? = null): TimelineEventEntity? {
+internal fun ChunkEntity.addTimelineEvent(
+        roomId: String,
+        eventEntity: EventEntity,
+        direction: PaginationDirection,
+        ownedByThreadChunk: Boolean = false,
+        roomMemberContentsByUser: Map<String, RoomMemberContent?>? = null
+): TimelineEventEntity? {
     val eventId = eventEntity.eventId
     if (timelineEvents.find(eventId) != null) {
         return null
@@ -166,7 +168,7 @@ private fun ChunkEntity.addTimelineEventFromMerge(realm: Realm, timelineEventEnt
 }
 
 /**
- * Upon copy of the timeline events we should update the latestMessage TimelineEventEntity with the new one
+ * Upon copy of the timeline events we should update the latestMessage TimelineEventEntity with the new one.
  */
 private fun handleThreadSummary(realm: Realm, oldEventId: String, newTimelineEventEntity: TimelineEventEntity) {
     EventEntity

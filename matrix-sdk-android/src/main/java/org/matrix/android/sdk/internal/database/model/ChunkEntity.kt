@@ -53,7 +53,8 @@ internal open class ChunkEntity(
 
 internal fun ChunkEntity.deleteOnCascade(
         deleteStateEvents: Boolean,
-        canDeleteRoot: Boolean) {
+        canDeleteRoot: Boolean
+) {
     assertIsManaged()
     if (deleteStateEvents) {
         stateEvents.deleteAllFromRealm()
@@ -69,7 +70,7 @@ internal fun ChunkEntity.deleteOnCascade(
 }
 
 /**
- * Delete the chunk along with the thread events that were temporarily created
+ * Delete the chunk along with the thread events that were temporarily created.
  */
 internal fun ChunkEntity.deleteAndClearThreadEvents() {
     assertIsManaged()

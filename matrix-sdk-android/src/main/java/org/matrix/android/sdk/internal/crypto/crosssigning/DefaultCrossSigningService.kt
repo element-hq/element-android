@@ -147,10 +147,10 @@ internal class DefaultCrossSigningService @Inject constructor(
     }
 
     /**
-     *   - Make 3 key pairs (MSK, USK, SSK)
-     *   - Save the private keys with proper security
-     *   - Sign the keys and upload them
-     *   - Sign the current device with SSK and sign MSK with device key (migration) and upload signatures
+     * - Make 3 key pairs (MSK, USK, SSK)
+     * - Save the private keys with proper security
+     * - Sign the keys and upload them
+     * - Sign the current device with SSK and sign MSK with device key (migration) and upload signatures.
      */
     override fun initializeCrossSigning(uiaInterceptor: UserInteractiveAuthInterceptor?, callback: MatrixCallback<Unit>) {
         Timber.d("## CrossSigning  initializeCrossSigning")
@@ -261,9 +261,10 @@ internal class DefaultCrossSigningService @Inject constructor(
                 }
     }
 
-    override fun checkTrustFromPrivateKeys(masterKeyPrivateKey: String?,
-                                           uskKeyPrivateKey: String?,
-                                           sskPrivateKey: String?
+    override fun checkTrustFromPrivateKeys(
+            masterKeyPrivateKey: String?,
+            uskKeyPrivateKey: String?,
+            sskPrivateKey: String?
     ): UserTrustResult {
         val mxCrossSigningInfo = getMyCrossSigningKeys() ?: return UserTrustResult.CrossSigningNotConfigured(userId)
 
@@ -347,6 +348,7 @@ internal class DefaultCrossSigningService @Inject constructor(
      *     │                      │
      *     │                      │
      *     └──▶ USK   ────────────┘
+     * .
      */
     override fun isUserTrusted(otherUserId: String): Boolean {
         return cryptoStore.getCrossSigningInfo(userId)?.isTrusted() == true
@@ -357,7 +359,7 @@ internal class DefaultCrossSigningService @Inject constructor(
     }
 
     /**
-     * Will not force a download of the key, but will verify signatures trust chain
+     * Will not force a download of the key, but will verify signatures trust chain.
      */
     override fun checkUserTrust(otherUserId: String): UserTrustResult {
         Timber.v("## CrossSigning  checkUserTrust for $otherUserId")

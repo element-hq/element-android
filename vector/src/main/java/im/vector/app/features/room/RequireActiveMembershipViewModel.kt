@@ -46,12 +46,13 @@ import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
 
 /**
- * This ViewModel observe a room summary and notify when the room is left
+ * This ViewModel observe a room summary and notify when the room is left.
  */
 class RequireActiveMembershipViewModel @AssistedInject constructor(
         @Assisted initialState: RequireActiveMembershipViewState,
         private val stringProvider: StringProvider,
-        private val session: Session) :
+        private val session: Session
+) :
         VectorViewModel<RequireActiveMembershipViewState, RequireActiveMembershipAction, RequireActiveMembershipViewEvents>(initialState) {
 
     @AssistedFactory

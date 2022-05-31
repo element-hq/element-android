@@ -46,7 +46,7 @@ data class MatrixConfiguration(
          */
         val proxy: Proxy? = null,
         /**
-         * TLS versions and cipher suites limitation for unauthenticated requests
+         * TLS versions and cipher suites limitation for unauthenticated requests.
          */
         val connectionSpec: ConnectionSpec = ConnectionSpec.RESTRICTED_TLS,
         /**
@@ -62,7 +62,7 @@ data class MatrixConfiguration(
          */
         val roomDisplayNameFallbackProvider: RoomDisplayNameFallbackProvider,
         /**
-         * Thread messages default enable/disabled value
+         * Thread messages default enable/disabled value.
          */
         val threadMessagesEnabledDefault: Boolean = false,
 
@@ -72,13 +72,4 @@ data class MatrixConfiguration(
          * If no events (or other data) become available before this time elapses, the server will return a response with empty fields.
          */
         val syncRequestTimeoutMillis: Long = 30_000L,
-) {
-
-    /**
-     * Can be implemented by your Application class.
-     */
-    @Deprecated("Use Matrix.createInstance and manage the instance manually instead of Matrix.getInstance")
-    interface Provider {
-        fun providesMatrixConfiguration(): MatrixConfiguration
-    }
-}
+)

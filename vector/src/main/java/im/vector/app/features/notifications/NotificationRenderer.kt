@@ -24,16 +24,20 @@ import im.vector.app.features.notifications.NotificationDrawerManager.Companion.
 import timber.log.Timber
 import javax.inject.Inject
 
-class NotificationRenderer @Inject constructor(private val notificationDisplayer: NotificationDisplayer,
-                                               private val notificationFactory: NotificationFactory,
-                                               private val appContext: Context) {
+class NotificationRenderer @Inject constructor(
+        private val notificationDisplayer: NotificationDisplayer,
+        private val notificationFactory: NotificationFactory,
+        private val appContext: Context
+) {
 
     @WorkerThread
-    fun render(myUserId: String,
-               myUserDisplayName: String,
-               myUserAvatarUrl: String?,
-               useCompleteNotificationFormat: Boolean,
-               eventsToProcess: List<ProcessedEvent<NotifiableEvent>>) {
+    fun render(
+            myUserId: String,
+            myUserDisplayName: String,
+            myUserAvatarUrl: String?,
+            useCompleteNotificationFormat: Boolean,
+            eventsToProcess: List<ProcessedEvent<NotifiableEvent>>
+    ) {
         val (roomEvents, simpleEvents, invitationEvents) = eventsToProcess.groupByType()
         with(notificationFactory) {
             val roomNotifications = roomEvents.toNotifications(myUserDisplayName, myUserAvatarUrl)

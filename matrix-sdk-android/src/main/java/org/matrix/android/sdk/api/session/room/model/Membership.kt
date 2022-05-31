@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * Represents the membership of a user on a room
+ * Represents the membership of a user on a room.
  */
 @JsonClass(generateAdapter = false)
 enum class Membership {

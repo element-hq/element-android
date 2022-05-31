@@ -16,7 +16,7 @@
 
 package im.vector.app.core.utils
 
-import com.vanniktech.emoji.EmojiUtils
+import com.vanniktech.emoji.isOnlyEmojis
 
 /**
  * Test if a string contains emojis.
@@ -28,11 +28,11 @@ import com.vanniktech.emoji.EmojiUtils
  */
 fun containsOnlyEmojis(str: String?): Boolean {
     // Now rely on vanniktech library
-    return EmojiUtils.isOnlyEmojis(str)
+    return str.isOnlyEmojis()
 }
 
 /**
- * Same as split, but considering emojis
+ * Same as split, but considering emojis.
  */
 fun CharSequence.splitEmoji(): List<CharSequence> {
     val result = mutableListOf<CharSequence>()

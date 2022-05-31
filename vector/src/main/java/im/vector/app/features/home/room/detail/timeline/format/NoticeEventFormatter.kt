@@ -107,7 +107,8 @@ class NoticeEventFormatter @Inject constructor(
             EventType.REDACTION,
             EventType.STICKER,
             in EventType.POLL_RESPONSE,
-            in EventType.POLL_END                   -> formatDebug(timelineEvent.root)
+            in EventType.POLL_END,
+            in EventType.BEACON_LOCATION_DATA       -> formatDebug(timelineEvent.root)
             else                                    -> {
                 Timber.v("Type $type not handled by this formatter")
                 null
@@ -668,11 +669,13 @@ class NoticeEventFormatter @Inject constructor(
         return displayText.toString()
     }
 
-    private fun buildMembershipNotice(event: Event,
-                                      senderName: String?,
-                                      eventContent: RoomMemberContent?,
-                                      prevEventContent: RoomMemberContent?,
-                                      isDm: Boolean): String? {
+    private fun buildMembershipNotice(
+            event: Event,
+            senderName: String?,
+            eventContent: RoomMemberContent?,
+            prevEventContent: RoomMemberContent?,
+            isDm: Boolean
+    ): String? {
         val senderDisplayName = senderName ?: event.senderId ?: ""
         val targetDisplayName = eventContent?.displayName ?: prevEventContent?.displayName ?: event.stateKey ?: ""
         return when (eventContent?.membership) {

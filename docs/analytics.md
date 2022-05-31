@@ -1,5 +1,13 @@
 # Analytics in Element
 
+<!--- TOC -->
+
+* [Solution](#solution)
+* [How to add a new Event](#how-to-add-a-new-event)
+* [Forks of Element](#forks-of-element)
+
+<!--- END -->
+
 ## Solution
 
 Element is using PostHog to send analytics event.

@@ -18,16 +18,19 @@ package im.vector.app.features.onboarding
 
 import im.vector.app.test.fakes.FakeRegistrationWizard
 import im.vector.app.test.fakes.FakeSession
+import im.vector.app.test.fixtures.a401ServerError
 import io.mockk.coVerifyAll
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
-import org.matrix.android.sdk.api.auth.registration.RegistrationResult
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
+import org.matrix.android.sdk.api.auth.registration.RegistrationResult as SdkResult
 
+private const val IGNORED_DELAY = 0L
+private val AN_ERROR = RuntimeException()
 private val A_SESSION = FakeSession()
-private val AN_EXPECTED_RESULT = RegistrationResult.Success(A_SESSION)
+private val AN_EXPECTED_RESULT = RegistrationResult.Complete(A_SESSION)
 private const val A_USERNAME = "a username"
 private const val A_PASSWORD = "a password"
 private const val AN_INITIAL_DEVICE_NAME = "a device name"
@@ -37,6 +40,9 @@ private const val EMAIL_VALIDATED_DELAY = 10000L
 private val A_PID_TO_REGISTER = RegisterThreePid.Email("an email")
 
 class RegistrationActionHandlerTest {
+
+    private val fakeRegistrationWizard = FakeRegistrationWizard()
+    private val registrationActionHandler = RegistrationActionHandler()
 
     @Test
     fun `when handling register action then delegates to wizard`() = runTest {
@@ -57,9 +63,52 @@ class RegistrationActionHandlerTest {
         cases.forEach { testSuccessfulActionDelegation(it) }
     }
 
+    @Test
+    fun `given adding an email ThreePid fails with 401, when handling register action, then infer EmailSuccess`() = runTest {
+        fakeRegistrationWizard.givenAddEmailThreePidErrors(
+                cause = a401ServerError(),
+                email = A_PID_TO_REGISTER.email
+        )
+
+        val result = registrationActionHandler.handleRegisterAction(fakeRegistrationWizard, RegisterAction.AddThreePid(A_PID_TO_REGISTER))
+
+        result shouldBeEqualTo RegistrationResult.SendEmailSuccess(A_PID_TO_REGISTER.email)
+    }
+
+    @Test
+    fun `given email verification errors with 401 then fatal error, when checking email validation, then continues to poll until non 401 error`() = runTest {
+        val errorsToThrow = listOf(
+                a401ServerError(),
+                a401ServerError(),
+                a401ServerError(),
+                AN_ERROR
+        )
+        fakeRegistrationWizard.givenCheckIfEmailHasBeenValidatedErrors(errorsToThrow)
+
+        val result = registrationActionHandler.handleRegisterAction(fakeRegistrationWizard, RegisterAction.CheckIfEmailHasBeenValidated(IGNORED_DELAY))
+
+        fakeRegistrationWizard.verifyCheckedEmailedVerification(times = errorsToThrow.size)
+        result shouldBeEqualTo RegistrationResult.Error(AN_ERROR)
+    }
+
+    @Test
+    fun `given email verification errors with 401 and succeeds, when checking email validation, then continues to poll until success`() = runTest {
+        val errorsToThrow = listOf(
+                a401ServerError(),
+                a401ServerError(),
+                a401ServerError()
+        )
+        fakeRegistrationWizard.givenCheckIfEmailHasBeenValidatedErrors(errorsToThrow, finally = SdkResult.Success(A_SESSION))
+
+        val result = registrationActionHandler.handleRegisterAction(fakeRegistrationWizard, RegisterAction.CheckIfEmailHasBeenValidated(IGNORED_DELAY))
+
+        fakeRegistrationWizard.verifyCheckedEmailedVerification(times = errorsToThrow.size + 1)
+        result shouldBeEqualTo RegistrationResult.Complete(A_SESSION)
+    }
+
     private suspend fun testSuccessfulActionDelegation(case: Case) {
-        val registrationActionHandler = RegistrationActionHandler()
         val fakeRegistrationWizard = FakeRegistrationWizard()
+        val registrationActionHandler = RegistrationActionHandler()
         fakeRegistrationWizard.givenSuccessFor(result = A_SESSION, case.expect)
 
         val result = registrationActionHandler.handleRegisterAction(fakeRegistrationWizard, case.action)
@@ -69,6 +118,6 @@ class RegistrationActionHandlerTest {
     }
 }
 
-private fun case(action: RegisterAction, expect: suspend RegistrationWizard.() -> RegistrationResult) = Case(action, expect)
+private fun case(action: RegisterAction, expect: suspend RegistrationWizard.() -> SdkResult) = Case(action, expect)
 
-private class Case(val action: RegisterAction, val expect: suspend RegistrationWizard.() -> RegistrationResult)
+private class Case(val action: RegisterAction, val expect: suspend RegistrationWizard.() -> SdkResult)

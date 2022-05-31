@@ -39,9 +39,9 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageVerification
 import javax.inject.Inject
 
 /**
- * Can creates verification conclusion items
+ * Can creates verification conclusion items.
  * Notice that not all KEY_VERIFICATION_DONE will be displayed in timeline,
- * several checks are made to see if this conclusion is attached to a known request
+ * several checks are made to see if this conclusion is attached to a known request.
  */
 class VerificationItemFactory @Inject constructor(
         private val messageColorProvider: MessageColorProvider,

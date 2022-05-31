@@ -27,7 +27,7 @@ internal class DefaultTypingUsersTracker @Inject constructor() : TypingUsersTrac
     private val typingUsers = mutableMapOf<String, List<SenderInfo>>()
 
     /**
-     * Set all currently typing users for a room (excluding yourself)
+     * Set all currently typing users for a room (excluding yourself).
      */
     fun setTypingUsersFromRoom(roomId: String, senderInfoList: List<SenderInfo>) {
         val hasNewValue = typingUsers[roomId] != senderInfoList

@@ -211,7 +211,7 @@ class RoomListFragment @Inject constructor(
             RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.isVisible = true
             RoomListDisplayMode.PEOPLE        -> views.createChatRoomButton.isVisible = true
             RoomListDisplayMode.ROOMS         -> views.createGroupRoomButton.isVisible = true
-            else                              -> Unit // No button in this mode
+            RoomListDisplayMode.FILTERED      -> Unit // No button in this mode
         }
 
         views.createChatRoomButton.debouncedClicks {
@@ -237,7 +237,7 @@ class RoomListFragment @Inject constructor(
                                     RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.hide()
                                     RoomListDisplayMode.PEOPLE        -> views.createChatRoomButton.hide()
                                     RoomListDisplayMode.ROOMS         -> views.createGroupRoomButton.hide()
-                                    else                              -> Unit
+                                    RoomListDisplayMode.FILTERED      -> Unit
                                 }
                             }
                         }
@@ -294,7 +294,7 @@ class RoomListFragment @Inject constructor(
             val contentAdapter =
                     when {
                         section.livePages != null     -> {
-                            pagedControllerFactory.createRoomSummaryPagedController()
+                            pagedControllerFactory.createRoomSummaryPagedController(roomListParams.displayMode)
                                     .also { controller ->
                                         section.livePages.observe(viewLifecycleOwner) { pl ->
                                             controller.submitList(pl)
@@ -316,7 +316,7 @@ class RoomListFragment @Inject constructor(
                                                 )
                                             }
                                         }
-                                        section.isExpanded.observe(viewLifecycleOwner) { _ ->
+                                        section.isExpanded.observe(viewLifecycleOwner) {
                                             refreshCollapseStates()
                                         }
                                         controller.listener = this
@@ -337,14 +337,14 @@ class RoomListFragment @Inject constructor(
                                             checkEmptyState()
                                         }
                                         observeItemCount(section, sectionAdapter)
-                                        section.isExpanded.observe(viewLifecycleOwner) { _ ->
+                                        section.isExpanded.observe(viewLifecycleOwner) {
                                             refreshCollapseStates()
                                         }
                                         controller.listener = this
                                     }
                         }
                         else                          -> {
-                            pagedControllerFactory.createRoomSummaryListController()
+                            pagedControllerFactory.createRoomSummaryListController(roomListParams.displayMode)
                                     .also { controller ->
                                         section.liveList?.observe(viewLifecycleOwner) { list ->
                                             controller.setData(list)
@@ -366,7 +366,7 @@ class RoomListFragment @Inject constructor(
                                                 )
                                             }
                                         }
-                                        section.isExpanded.observe(viewLifecycleOwner) { _ ->
+                                        section.isExpanded.observe(viewLifecycleOwner) {
                                             refreshCollapseStates()
                                         }
                                         controller.listener = this
@@ -402,7 +402,7 @@ class RoomListFragment @Inject constructor(
                 RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.show()
                 RoomListDisplayMode.PEOPLE        -> views.createChatRoomButton.show()
                 RoomListDisplayMode.ROOMS         -> views.createGroupRoomButton.show()
-                else                              -> Unit
+                RoomListDisplayMode.FILTERED      -> Unit
             }
         }
     }
@@ -498,7 +498,7 @@ class RoomListFragment @Inject constructor(
                             isBigImage = true,
                             message = getString(R.string.room_list_rooms_empty_body)
                     )
-                else                              ->
+                RoomListDisplayMode.FILTERED      ->
                     // Always display the content in this mode, because if the footer
                     StateView.State.Content
             }

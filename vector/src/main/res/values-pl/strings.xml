@@ -216,9 +216,7 @@
     <string name="settings_new_password">Nowe hasło</string>
     <string name="settings_fail_to_update_password">Nie udało się zmienić hasła</string>
     <string name="settings_password_updated">Twoje hasło zostało zmienione</string>
-    <string name="settings_unignore_user">Pokazywać wszystkie wiadomości od %s\?
-\n
-\nZauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to trochę potrwać.</string>
+    <string name="settings_unignore_user">Pokazywać wszystkie wiadomości od %s\?</string>
     <string name="settings_select_country">Wybierz kraj</string>
     <string name="media_saving_period_3_days">3 dni</string>
     <string name="media_saving_period_1_week">1 tydzień</string>
@@ -387,7 +385,6 @@
     <string name="widget_integration_positive_power_level">Poziom uprawnień musi być liczbą dodatnią.</string>
     <string name="widget_integration_must_be_in_room">Nie jesteś w tym pokoju.</string>
     <string name="widget_integration_no_permission_in_room">Nie masz uprawnień, aby zrobić to w tym pokoju.</string>
-    <string name="settings_flair">Wyróżnik społeczności</string>
     <string name="widget_integration_missing_room_id">Brakujące room_id w żądaniu.</string>
     <string name="widget_integration_missing_user_id">Brakujące user_id w żądaniu.</string>
     <string name="widget_integration_missing_parameter">Brakuje wymaganego parametru.</string>
@@ -739,8 +736,8 @@
     <string name="settings_show_join_leave_messages_summary">Zaproszenia, usunięcia i bany pozostają nienaruszone.</string>
     <string name="settings_send_message_with_enter">Wysyłaj wiadomości za pomocą klawisza enter</string>
     <string name="settings_send_message_with_enter_summary">Przycisk enter na klawiaturze programowej wyśle wiadomość zamiast wprowadzania łamanania linii</string>
-    <string name="settings_discovery_category">Znajdź</string>
-    <string name="settings_discovery_manage">Zarządzaj ustawieniami wyszukiwania.</string>
+    <string name="settings_discovery_category">Ustawienia wyszukiwania</string>
+    <string name="settings_discovery_manage">Ustal jak inni mogą odnaleść twoje konto.</string>
     <string name="settings_media">Media</string>
     <string name="settings_default_media_source">Domyślne źródło mediów</string>
     <string name="encryption_message_recovery">Odzyskiwanie zaszyforwanych wiadomości</string>
@@ -1523,9 +1520,7 @@
     <string name="room_participants_remove_title">Wykop użytkownika</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Czy na pewno anulować zaproszenie dla tego użytkownika\?</string>
     <string name="room_participants_action_cancel_invite_title">Anuluj zaproszenie</string>
-    <string name="room_participants_action_unignore_prompt_msg">Zaprzestanie ignorowania użytkownika spowoduje ponowne wyświetlanie wszystkich jego wiadomości.
-\n
-\nAplikacja uruchomi się ponownie aby zsynchronizować wiadomości, może to potrwać kilka chwil.</string>
+    <string name="room_participants_action_unignore_prompt_msg">Zaprzestanie ignorowania użytkownika spowoduje ponowne wyświetlanie wszystkich jego wiadomości.</string>
     <string name="room_participants_action_unignore_title">Przestań ignorować użytkownika</string>
     <string name="room_participants_action_ignore_prompt_msg">Zignorowanie tego użytkownika usunie wszystkie jego wiadomości z pokojów, które współdzielicie.
 \n
@@ -1624,7 +1619,7 @@
     <string name="settings_security_pin_code_summary">Jeżeli chcesz zresetować kod PIN, naciśnij Zapomnij kod PIN aby wylogować i zresetować.</string>
     <string name="settings_security_pin_code_title">Włącz kod PIN</string>
     <string name="settings_security_application_protection_screen_title">Skonfiguruj ochronę</string>
-    <string name="settings_security_application_protection_summary">Ochrona dostępu poprzez kod PIN oraz biometrię.</string>
+    <string name="settings_security_application_protection_summary">Blokada aplikacji poprzez kod PIN oraz biometrię.</string>
     <string name="settings_security_application_protection_title">Ochrona dostępu</string>
     <string name="auth_pin_reset_content">Aby zresetować kod PIN musisz się ponownie zalogować i utworzyć nowy.</string>
     <string name="auth_pin_new_pin_action">Nowy kod PIN</string>
@@ -1856,7 +1851,7 @@
         <item quantity="many">%d nie odebranych połączeń głosowych</item>
         <item quantity="other">%d nie odebranych połączeń głosowych</item>
     </plurals>
-    <string name="call_ringing">Połączenie przychodzące…</string>
+    <string name="call_ringing">Dzwoni…</string>
     <string name="error_unauthorized">Błąd autoryzacji, niepoprawne dane logowania</string>
     <string name="login_error_homeserver_from_url_not_found_enter_manual">Wybierz serwer domowy</string>
     <string name="login_error_homeserver_from_url_not_found">Nie można było połączyć się z serwerem domowym %s. Proszę sprawdzić link lub wybrać serwer domowy manualnie.</string>
@@ -1969,15 +1964,11 @@
     <string name="looking_for_someone_not_in_space">Szukasz kogoś , kto nie jest w %s\?</string>
     <string name="user_invites_you">%s Cię zaprasza</string>
     <string name="you_are_invited">Zostałeś zaproszony</string>
-    <string name="spaces_beta_welcome_to_spaces_desc">Przestrzenie są nową metodą na zarządzanie pokojami i osobami.</string>
+    <string name="spaces_beta_welcome_to_spaces_desc">Przestrzenie są nową metodą na grupowanie razem wielu pokoi i osób.</string>
     <string name="space_add_space_to_any_space_you_manage">Dodaj przestrzeń do jakiejkolwiek przestrzeni którą zarządzasz.</string>
     <string name="space_add_existing_spaces">Dodaj istniejące przestrzenie</string>
     <string name="space_add_existing_rooms_only">Dodaj istniejące pokoje</string>
     <string name="space_add_existing_rooms">Dodaj istniejące pokoje i przestrzenie</string>
-    <string name="pick_tings_to_leave">Wybierz aby opuścić</string>
-    <string name="leave_specific_ones">Opuść wybrane pokoje i przestrzenie…</string>
-    <string name="dont_leave_any">Nie opuszczaj żadnych pokojów i przestrzeni</string>
-    <string name="leave_all_rooms_and_spaces">Opuść wszystkie pokoje i przestrzenie</string>
     <string name="space_leave_prompt_msg_as_admin">Jesteś jedynym administratorem tej przestrzeni. Opuszczenie jej oznacza brak kontroli nad nią.</string>
     <string name="space_leave_prompt_msg_private">Nie będziesz w stanie ponownie dołączyć, do momentu kiedy nie zostaniesz ponownie zaproszony.</string>
     <string name="space_leave_prompt_msg_only_you">Jesteś jedyną osoba tutaj. Jeśli wyjdziesz, nikt nie będzie w stanie dołączyć w przyszłości, włączając Ciebie.</string>
@@ -2088,7 +2079,7 @@
     <string name="give_feedback">Podziel się opinią</string>
     <string name="feedback_failed">Nie udało się przesłać opinii (%s)</string>
     <string name="feedback_sent">Dziękujemy, Twoja opinia została wysłana</string>
-    <string name="you_may_contact_me">Zachęcamy do kontaktu, jeśli masz dodatkowe pytania</string>
+    <string name="you_may_contact_me">Pozwalam na kontakt ze mną w razie dodatkowych pytań</string>
     <string name="send_feedback_space_info">Używasz przestrzeni w wersji beta. Ta opinia pomoże nam w tworzeniu kolejnych wersji. Twoja platforma i nazwa użytkownika zostaną odnotowane, abyśmy mogli w pełni wykorzystać Twoje sugestie.</string>
     <string name="send_feedback_space_title">Prześlij opinię o przestrzeniach</string>
     <string name="create_new_space">Stwórz nową przestrzeń</string>
@@ -2263,7 +2254,7 @@
     <string name="dev_tools_edit_content">Edytuj treść</string>
     <string name="dev_tools_explore_room_state">Poznaj stan pokoju</string>
     <string name="dev_tools_menu_name">Narzędzia deweloperskie</string>
-    <string name="a11y_presence_unavailable">Niedostępny</string>
+    <string name="a11y_presence_unavailable">Nieobecny</string>
     <string name="a11y_public_room">Pokój publiczny</string>
     <string name="a11y_rule_notify_off">Nie powiadamiaj</string>
     <string name="a11y_rule_notify_silent">Powiadom bez dźwięku</string>
@@ -2326,7 +2317,7 @@
         <item quantity="many">Usunąłeś(aś) %1$s jako adresy tego pokoju.</item>
         <item quantity="other">Usunąłeś(aś) %1$s jako adresy tego pokoju.</item>
     </plurals>
-    <string name="room_member_override_nick_color">Nadpisz kolor nicku</string>
+    <string name="room_member_override_nick_color">Zastąp kolor wyświetlanej nazwy</string>
     <string name="login_splash_already_have_account">Posiadam już konto</string>
     <string name="ftue_auth_carousel_encrypted_title">Połącz się z każdym.</string>
     <string name="ftue_auth_carousel_control_title">Ty jesteś w kontroli.</string>
@@ -2429,7 +2420,7 @@
     <string name="threads_notice_migration_title">Wątki zbliżają się do wersji beta 🎉</string>
     <string name="search_thread_from_a_thread">Z wątku</string>
     <string name="thread_list_empty_notice">Wskazówka: naciśnij i przytrzymaj wiadomość i użyj „%s”.</string>
-    <string name="thread_list_empty_subtitle">Dzięki wątkom Twoje rozmowy są aktualne i łatwe do śledzenia.</string>
+    <string name="thread_list_empty_subtitle">Dzięki wątkom Twoje rozmowy są zorganizowane i łatwe do śledzenia.</string>
     <string name="thread_list_empty_title">Organizuj dyskusje za pomocą wątków</string>
     <string name="thread_list_modal_my_threads_subtitle">Pokazuje wszystkie wątki, w których brałeś udział</string>
     <string name="thread_list_modal_all_threads_subtitle">Pokazuje wszystkie wątki z bieżącego pokoju</string>
@@ -2529,9 +2520,7 @@
     <string name="location_share_option_user_current">Udostępnij moją aktualną lokalizację</string>
     <string name="a11y_location_share_locate_button">Powiększ do bieżącej lokalizacji</string>
     <string name="a11y_location_share_pin_on_map">Przypnij na mapie wybraną lokalizację</string>
-    <string name="location_share" tools:ignore="UnusedResources">Udostępnij lokalizację</string>
     <string name="a11y_static_map_image">Mapa</string>
-    <string name="a11y_location_share_icon" tools:ignore="UnusedResources">Udostępnij lokalizację</string>
     <string name="location_activity_title_preview">Lokalizacja</string>
     <string name="location_activity_title_static_sharing">Udostępnij lokalizację</string>
     <string name="closed_poll_option_description">Wyniki są ujawniane dopiero po zakończeniu ankiety</string>
@@ -2565,4 +2554,33 @@
     <string name="threads_beta_enable_notice_title">Wątki (Beta)</string>
     <string name="action_learn_more">Dowiedz się więcej</string>
     <string name="action_try_it_out">Wypróbuj</string>
+    <string name="initial_sync_request_content">${app_name} musi wykonać czyszczenie pamięci podręcznej, aby była aktualna, z następującego powodu:
+\n%s
+\n
+\nPamiętaj, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to zająć trochę czasu.</string>
+    <string name="screen_sharing_notification_title">Udostępnianie ekranu ${app_name}</string>
+    <string name="a11y_audio_playback_duration">%1$d minut %2$d sekund</string>
+    <string name="ftue_auth_carousel_workplace_body">${app_name} świetnie sprawdza się również w miejscu pracy. Cieszy się zaufaniem najbezpieczniejszych organizacji na świecie.</string>
+    <string name="screen_sharing_notification_description">Trwa udostępnianie ekranu</string>
+    <string name="location_share_live_started">Wczytuję lokalizację na żywo…</string>
+    <string name="location_share_live_select_duration_option_3">8 godzin</string>
+    <string name="location_share_live_select_duration_option_2">1 godzinę</string>
+    <string name="location_share_live_select_duration_option_1">15 minut</string>
+    <string name="location_share_live_select_duration_title">Udostępnij swoją lokalizację na żywo przez</string>
+    <string name="audio_message_file_size">(%1$s)</string>
+    <string name="audio_message_reply_content">%1$s (%2$s)</string>
+    <string name="error_audio_message_unable_to_play">Nie można odtworzyć %1$s</string>
+    <string name="a11y_pause_audio_message">Wstrzymaj %1$s</string>
+    <string name="a11y_play_audio_message">Odtwórz %1$s</string>
+    <string name="a11y_audio_message_item">%1$s, %2$s, %3$s</string>
+    <string name="sent_live_location">Udostępnił swoją lokalizację na żywo</string>
+    <string name="send_feedback_threads_info">Wątki są w toku produkcyjnym i mają nowe, ekscytujące nadchodzące funkcje, takie jak ulepszone powiadomienia. Chętnie poznamy Twoją opinię!</string>
+    <string name="call_stop_screen_sharing">Zatrzymaj udostępnianie ekranu</string>
+    <string name="call_start_screen_sharing">Udostępnij ekran</string>
+    <string name="initial_sync_request_reason_unignored_users">- Niektórzy użytkownicy przestali być ignorowani</string>
+    <string name="initial_sync_request_title">Początkowe żądanie synchronizacji</string>
+    <string name="keys_backup_settings_signature_from_this_user">Kopia zapasowa ma poprawny podpis tego użytkownika.</string>
+    <string name="settings_show_latest_profile_description">Pokazuj aktualny stan profilu (obraz i nazwa) w całej historii konwersacji.</string>
+    <string name="settings_show_latest_profile">Pokazuj najnowsze informacje o użytkowniku</string>
+    <string name="a11y_presence_busy">Zajęty</string>
 </resources>

@@ -45,7 +45,7 @@ import java.net.UnknownHostException
 import javax.inject.Inject
 
 /**
- * In this screen, the user is prompted to enter a homeserver url
+ * In this screen, the user is prompted to enter a homeserver url.
  */
 class FtueAuthServerUrlFormFragment @Inject constructor() : AbstractFtueAuthFragment<FragmentLoginServerUrlFormBinding>() {
 

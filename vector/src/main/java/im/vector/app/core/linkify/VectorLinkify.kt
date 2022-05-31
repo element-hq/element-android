@@ -22,7 +22,7 @@ import androidx.core.text.util.LinkifyCompat
 
 object VectorLinkify {
     /**
-     * Better support for auto link than the default implementation
+     * Better support for auto link than the default implementation.
      */
     fun addLinks(spannable: Spannable, keepExistingUrlSpan: Boolean = false) {
         // we might want to modify some matches
@@ -143,10 +143,12 @@ object VectorLinkify {
         }
     }
 
-    private data class LinkSpec(val span: URLSpan,
-                                val start: Int,
-                                val end: Int,
-                                val important: Boolean = false)
+    private data class LinkSpec(
+            val span: URLSpan,
+            val start: Int,
+            val end: Int,
+            val important: Boolean = false
+    )
 
     private val COMPARATOR = Comparator<LinkSpec> { (_, startA, endA), (_, startB, endB) ->
         if (startA < startB) {

@@ -20,7 +20,7 @@ package im.vector.app.features.signout.soft
 import im.vector.app.core.platform.VectorViewEvents
 
 /**
- * Transient events for SoftLogout
+ * Transient events for SoftLogout.
  */
 sealed class SoftLogoutViewEvents : VectorViewEvents {
     data class Failure(val throwable: Throwable) : SoftLogoutViewEvents()

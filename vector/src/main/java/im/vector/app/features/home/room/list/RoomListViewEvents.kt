@@ -21,7 +21,7 @@ import im.vector.app.core.platform.VectorViewEvents
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 /**
- * Transient events for RoomList
+ * Transient events for RoomList.
  */
 sealed class RoomListViewEvents : VectorViewEvents {
     data class Loading(val message: CharSequence? = null) : RoomListViewEvents()

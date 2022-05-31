@@ -38,8 +38,8 @@ private const val DEFAULT_LONG_POOL_TIMEOUT_SECONDS = 6L
 private const val DEFAULT_DELAY_MILLIS = 30_000L
 
 /**
- * Possible previous worker: None
- * Possible next worker    : None
+ * Possible previous worker: None.
+ * Possible next worker    : None.
  */
 internal class SyncWorker(context: Context, workerParameters: WorkerParameters, sessionManager: SessionManager) :
         SessionSafeCoroutineWorker<SyncWorker.Params>(context, workerParameters, sessionManager, Params::class.java) {
@@ -119,9 +119,11 @@ internal class SyncWorker(context: Context, workerParameters: WorkerParameters, 
     companion object {
         private const val BG_SYNC_WORK_NAME = "BG_SYNCP"
 
-        fun requireBackgroundSync(workManagerProvider: WorkManagerProvider,
-                                  sessionId: String,
-                                  serverTimeoutInSeconds: Long = 0) {
+        fun requireBackgroundSync(
+                workManagerProvider: WorkManagerProvider,
+                sessionId: String,
+                serverTimeoutInSeconds: Long = 0
+        ) {
             val data = WorkerParamsFactory.toData(
                     Params(
                             sessionId = sessionId,
@@ -139,11 +141,13 @@ internal class SyncWorker(context: Context, workerParameters: WorkerParameters, 
                     .enqueueUniqueWork(BG_SYNC_WORK_NAME, ExistingWorkPolicy.APPEND_OR_REPLACE, workRequest)
         }
 
-        fun automaticallyBackgroundSync(workManagerProvider: WorkManagerProvider,
-                                        sessionId: String,
-                                        serverTimeoutInSeconds: Long = 0,
-                                        delayInSeconds: Long = 30,
-                                        forceImmediate: Boolean = false) {
+        fun automaticallyBackgroundSync(
+                workManagerProvider: WorkManagerProvider,
+                sessionId: String,
+                serverTimeoutInSeconds: Long = 0,
+                delayInSeconds: Long = 30,
+                forceImmediate: Boolean = false
+        ) {
             val data = WorkerParamsFactory.toData(
                     Params(
                             sessionId = sessionId,

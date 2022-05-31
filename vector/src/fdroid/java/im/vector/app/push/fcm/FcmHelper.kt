@@ -46,7 +46,7 @@ object FcmHelper {
      * Store FCM token to the SharedPrefs
      *
      * @param context android context
-     * @param token   the token to store
+     * @param token the token to store
      */
     fun storeFcmToken(context: Context, token: String?) {
         // No op
@@ -67,10 +67,12 @@ object FcmHelper {
         AlarmSyncBroadcastReceiver.cancelAlarm(context)
     }
 
-    fun onEnterBackground(context: Context,
-                          vectorPreferences: VectorPreferences,
-                          activeSessionHolder: ActiveSessionHolder,
-                          clock: Clock) {
+    fun onEnterBackground(
+            context: Context,
+            vectorPreferences: VectorPreferences,
+            activeSessionHolder: ActiveSessionHolder,
+            clock: Clock
+    ) {
         BackgroundSyncStarter.start(context, vectorPreferences, activeSessionHolder, clock)
     }
 }

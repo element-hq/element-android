@@ -36,7 +36,7 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.UserEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.WithHeldSessionEntity
 
 /**
- * Realm module for Crypto store classes
+ * Realm module for Crypto store classes.
  */
 @RealmModule(
         library = true,

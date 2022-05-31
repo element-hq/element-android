@@ -26,6 +26,7 @@ import androidx.autofill.HintConstants
 import androidx.core.text.isDigitsOnly
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
@@ -119,40 +120,43 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
     }
 
     private fun submit() {
-        cleanupUi()
+        withState(viewModel) { state ->
+            cleanupUi()
 
-        val login = views.loginField.text.toString()
-        val password = views.passwordField.text.toString()
+            val login = views.loginField.text.toString()
+            val password = views.passwordField.text.toString()
 
-        // This can be called by the IME action, so deal with empty cases
-        var error = 0
-        if (login.isEmpty()) {
-            views.loginFieldTil.error = getString(
-                    if (isSignupMode) {
-                        R.string.error_empty_field_choose_user_name
-                    } else {
-                        R.string.error_empty_field_enter_user_name
-                    }
-            )
-            error++
-        }
-        if (isSignupMode && isNumericOnlyUserIdForbidden && login.isDigitsOnly()) {
-            views.loginFieldTil.error = getString(R.string.error_forbidden_digits_only_username)
-            error++
-        }
-        if (password.isEmpty()) {
-            views.passwordFieldTil.error = getString(
-                    if (isSignupMode) {
-                        R.string.error_empty_field_choose_password
-                    } else {
-                        R.string.error_empty_field_your_password
-                    }
-            )
-            error++
-        }
+            // This can be called by the IME action, so deal with empty cases
+            var error = 0
+            if (login.isEmpty()) {
+                views.loginFieldTil.error = getString(
+                        if (isSignupMode) {
+                            R.string.error_empty_field_choose_user_name
+                        } else {
+                            R.string.error_empty_field_enter_user_name
+                        }
+                )
+                error++
+            }
+            if (isSignupMode && isNumericOnlyUserIdForbidden && login.isDigitsOnly()) {
+                views.loginFieldTil.error = getString(R.string.error_forbidden_digits_only_username)
+                error++
+            }
+            if (password.isEmpty()) {
+                views.passwordFieldTil.error = getString(
+                        if (isSignupMode) {
+                            R.string.error_empty_field_choose_password
+                        } else {
+                            R.string.error_empty_field_your_password
+                        }
+                )
+                error++
+            }
 
-        if (error == 0) {
-            viewModel.handle(OnboardingAction.LoginOrRegister(login, password, getString(R.string.login_default_session_public_name)))
+            if (error == 0) {
+                val initialDeviceName = getString(R.string.login_default_session_public_name)
+                viewModel.handle(state.signMode.toAuthenticateAction(login, password, initialDeviceName))
+            }
         }
     }
 
@@ -310,7 +314,7 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
     }
 
     /**
-     * Detect if password ends or starts with spaces
+     * Detect if password ends or starts with spaces.
      */
     private fun spaceInPassword() = views.passwordField.text.toString().let { it.trim() != it }
 }

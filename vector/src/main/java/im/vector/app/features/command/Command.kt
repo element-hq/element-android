@@ -20,16 +20,18 @@ import androidx.annotation.StringRes
 import im.vector.app.R
 
 /**
- * Defines the command line operations
- * the user can write theses messages to perform some actions
- * the list will be displayed in this order
+ * Defines the command line operations.
+ * The user can write theses messages to perform some actions.
+ * The list will be displayed in this order.
  */
-enum class Command(val command: String,
-                   val aliases: Array<CharSequence>?,
-                   val parameters: String,
-                   @StringRes val description: Int,
-                   val isDevCommand: Boolean,
-                   val isThreadCommand: Boolean) {
+enum class Command(
+        val command: String,
+        val aliases: Array<CharSequence>?,
+        val parameters: String,
+        @StringRes val description: Int,
+        val isDevCommand: Boolean,
+        val isThreadCommand: Boolean
+) {
     EMOTE("/me", null, "<message>", R.string.command_description_emote, false, true),
     BAN_USER("/ban", null, "<user-id> [reason]", R.string.command_description_ban_user, false, false),
     UNBAN_USER("/unban", null, "<user-id> [reason]", R.string.command_description_unban_user, false, false),

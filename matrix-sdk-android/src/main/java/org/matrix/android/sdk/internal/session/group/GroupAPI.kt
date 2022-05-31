@@ -26,7 +26,7 @@ import retrofit2.http.Path
 internal interface GroupAPI {
 
     /**
-     * Request a group summary
+     * Request a group summary.
      *
      * @param groupId the group id
      */

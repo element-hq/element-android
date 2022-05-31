@@ -143,7 +143,7 @@ class VectorDateFormatter @Inject constructor(
     }
 
     /**
-     * This method will show date and time with a preposition
+     * This method will show date and time with a preposition.
      */
     private fun formatDateAndTime(ts: Long): String {
         val date = DateProvider.toLocalDateTime(ts)
@@ -157,7 +157,7 @@ class VectorDateFormatter @Inject constructor(
     }
 
     /**
-     * We are using this method for the keywords Today/Yesterday
+     * We are using this method for the keywords Today/Yesterday.
      */
     private fun getRelativeDay(ts: Long): String {
         return DateUtils.getRelativeTimeSpanString(

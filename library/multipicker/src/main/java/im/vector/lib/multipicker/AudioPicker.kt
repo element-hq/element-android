@@ -22,7 +22,7 @@ import im.vector.lib.multipicker.entity.MultiPickerAudioType
 import im.vector.lib.multipicker.utils.toMultiPickerAudioType
 
 /**
- * Audio file picker implementation
+ * Audio file picker implementation.
  */
 class AudioPicker : Picker<MultiPickerAudioType>() {
 

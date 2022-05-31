@@ -246,7 +246,7 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
 
     /**
      * Let's try to get some information about that room,
-     * main thing is trying to see if it's a space or a room
+     * main thing is trying to see if it's a space or a room.
      */
     private suspend fun resolveRoom(roomIdOrAlias: String): PeekResult {
         return session.roomService().peekRoom(roomIdOrAlias)

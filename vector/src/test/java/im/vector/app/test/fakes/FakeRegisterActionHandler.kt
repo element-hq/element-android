@@ -18,9 +18,9 @@ package im.vector.app.test.fakes
 
 import im.vector.app.features.onboarding.RegisterAction
 import im.vector.app.features.onboarding.RegistrationActionHandler
+import im.vector.app.features.onboarding.RegistrationResult
 import io.mockk.coEvery
 import io.mockk.mockk
-import org.matrix.android.sdk.api.auth.registration.RegistrationResult
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 
 class FakeRegisterActionHandler {

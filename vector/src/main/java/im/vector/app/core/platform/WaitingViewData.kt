@@ -17,7 +17,7 @@
 package im.vector.app.core.platform
 
 /**
- * Model to display a Waiting View
+ * Model to display a Waiting View.
  */
 data class WaitingViewData(
         val message: String,

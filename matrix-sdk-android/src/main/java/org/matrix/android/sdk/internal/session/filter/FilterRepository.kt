@@ -19,22 +19,22 @@ package org.matrix.android.sdk.internal.session.filter
 internal interface FilterRepository {
 
     /**
-     * Return true if the filterBody has changed, or need to be sent to the server
+     * Return true if the filterBody has changed, or need to be sent to the server.
      */
     suspend fun storeFilter(filter: Filter, roomEventFilter: RoomEventFilter): Boolean
 
     /**
-     * Set the filterId of this filter
+     * Set the filterId of this filter.
      */
     suspend fun storeFilterId(filter: Filter, filterId: String)
 
     /**
-     * Return filter json or filter id
+     * Return filter json or filter id.
      */
     suspend fun getFilter(): String
 
     /**
-     * Return the room filter
+     * Return the room filter.
      */
     suspend fun getRoomFilter(): String
 }

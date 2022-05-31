@@ -24,7 +24,7 @@ import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
 /**
  * Migrating to:
- * Live location sharing aggregated summary
+ * Live location sharing aggregated summary.
  */
 internal class MigrateSessionTo027(realm: DynamicRealm) : RealmMigrator(realm, 27) {
 

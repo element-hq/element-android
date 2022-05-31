@@ -33,15 +33,19 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import javax.inject.Inject
 
 @ActivityScoped
-class ContentUploadStateTrackerBinder @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
-                                                          private val messageColorProvider: MessageColorProvider,
-                                                          private val errorFormatter: ErrorFormatter) {
+class ContentUploadStateTrackerBinder @Inject constructor(
+        private val activeSessionHolder: ActiveSessionHolder,
+        private val messageColorProvider: MessageColorProvider,
+        private val errorFormatter: ErrorFormatter
+) {
 
     private val updateListeners = mutableMapOf<String, ContentUploadStateTracker.UpdateListener>()
 
-    fun bind(eventId: String,
-             isLocalFile: Boolean,
-             progressLayout: ViewGroup) {
+    fun bind(
+            eventId: String,
+            isLocalFile: Boolean,
+            progressLayout: ViewGroup
+    ) {
         activeSessionHolder.getSafeActiveSession()?.also { session ->
             val uploadStateTracker = session.contentUploadProgressTracker()
             val updateListener = ContentMediaProgressUpdater(progressLayout, isLocalFile, messageColorProvider, errorFormatter)
@@ -66,10 +70,12 @@ class ContentUploadStateTrackerBinder @Inject constructor(private val activeSess
     }
 }
 
-private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
-                                          private val isLocalFile: Boolean,
-                                          private val messageColorProvider: MessageColorProvider,
-                                          private val errorFormatter: ErrorFormatter) : ContentUploadStateTracker.UpdateListener {
+private class ContentMediaProgressUpdater(
+        private val progressLayout: ViewGroup,
+        private val isLocalFile: Boolean,
+        private val messageColorProvider: MessageColorProvider,
+        private val errorFormatter: ErrorFormatter
+) : ContentUploadStateTracker.UpdateListener {
 
     private val progressBar: ProgressBar = progressLayout.findViewById(R.id.mediaProgressBar)
     private val progressTextView: TextView = progressLayout.findViewById(R.id.mediaProgressTextView)

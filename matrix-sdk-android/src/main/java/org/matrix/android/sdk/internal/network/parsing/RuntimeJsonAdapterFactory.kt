@@ -70,11 +70,13 @@ internal class RuntimeJsonAdapterFactory<T>(
     }
 
     @Suppress("UNCHECKED_CAST")
-    internal class RuntimeJsonAdapter(val labelKey: String,
-                                      val labelToAdapter: Map<String, JsonAdapter<Any>>,
-                                      val typeToLabel: Map<Type, String>,
-                                      val objectJsonAdapter: JsonAdapter<Any>,
-                                      val fallbackAdapter: JsonAdapter<Any>) : JsonAdapter<Any?>() {
+    internal class RuntimeJsonAdapter(
+            val labelKey: String,
+            val labelToAdapter: Map<String, JsonAdapter<Any>>,
+            val typeToLabel: Map<Type, String>,
+            val objectJsonAdapter: JsonAdapter<Any>,
+            val fallbackAdapter: JsonAdapter<Any>
+    ) : JsonAdapter<Any?>() {
         @Throws(IOException::class)
         override fun fromJson(reader: JsonReader): Any? {
             val peekedToken = reader.peek()
@@ -119,9 +121,11 @@ internal class RuntimeJsonAdapterFactory<T>(
 
     companion object {
         /**
+         * @param T the generic type to pass to [RuntimeJsonAdapterFactory]
          * @param baseType The base type for which this factory will create adapters. Cannot be Object.
          * @param labelKey The key in the JSON object whose value determines the type to which to map the
          * JSON object.
+         * @param fallbackType alternative Type to try in case of the serialization fails
          */
         @CheckReturnValue
         fun <T> of(baseType: Class<T>, labelKey: String, fallbackType: Class<out T>): RuntimeJsonAdapterFactory<T> {

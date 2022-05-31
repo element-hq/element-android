@@ -44,17 +44,17 @@ interface PinCodeStore {
     fun getRemainingBiometricsAttemptsNumber(): Int
 
     /**
-     * Will return the number of remaining attempts
+     * Will return the number of remaining attempts.
      */
     fun onWrongPin(): Int
 
     /**
-     * Will return the number of remaining attempts
+     * Will return the number of remaining attempts.
      */
     fun onWrongBiometrics(): Int
 
     /**
-     * Will reset the counters
+     * Will reset the counters.
      */
     fun resetCounters()
 

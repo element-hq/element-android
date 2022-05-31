@@ -20,6 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
+ * Example:
  *  name: 'a',
  *  unified: 'b',
  *  non_qualified: 'c',
@@ -34,7 +35,7 @@ import com.squareup.moshi.JsonClass
  *  emoticons: 'l',
  *  text: 'm',
  *  short_names: 'n',
- *  added_in: 'o'
+ *  added_in: 'o'.
  */
 @JsonClass(generateAdapter = true)
 data class EmojiItem(

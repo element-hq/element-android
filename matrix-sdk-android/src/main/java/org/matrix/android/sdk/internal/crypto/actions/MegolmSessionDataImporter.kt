@@ -33,11 +33,12 @@ import javax.inject.Inject
 
 private val loggerTag = LoggerTag("MegolmSessionDataImporter", LoggerTag.CRYPTO)
 
-internal class MegolmSessionDataImporter @Inject constructor(private val olmDevice: MXOlmDevice,
-                                                             private val roomDecryptorProvider: RoomDecryptorProvider,
-                                                             private val outgoingKeyRequestManager: OutgoingKeyRequestManager,
-                                                             private val cryptoStore: IMXCryptoStore,
-                                                             private val clock: Clock,
+internal class MegolmSessionDataImporter @Inject constructor(
+        private val olmDevice: MXOlmDevice,
+        private val roomDecryptorProvider: RoomDecryptorProvider,
+        private val outgoingKeyRequestManager: OutgoingKeyRequestManager,
+        private val cryptoStore: IMXCryptoStore,
+        private val clock: Clock,
 ) {
 
     /**
@@ -45,14 +46,16 @@ internal class MegolmSessionDataImporter @Inject constructor(private val olmDevi
      * Must be call on the crypto coroutine thread
      *
      * @param megolmSessionsData megolm sessions.
-     * @param fromBackup         true if the imported keys are already backed up on the server.
-     * @param progressListener   the progress listener
+     * @param fromBackup true if the imported keys are already backed up on the server.
+     * @param progressListener the progress listener
      * @return import room keys result
      */
     @WorkerThread
-    fun handle(megolmSessionsData: List<MegolmSessionData>,
-               fromBackup: Boolean,
-               progressListener: ProgressListener?): ImportRoomKeysResult {
+    fun handle(
+            megolmSessionsData: List<MegolmSessionData>,
+            fromBackup: Boolean,
+            progressListener: ProgressListener?
+    ): ImportRoomKeysResult {
         val t0 = clock.epochMillis()
 
         val totalNumbersOfKeys = megolmSessionsData.size

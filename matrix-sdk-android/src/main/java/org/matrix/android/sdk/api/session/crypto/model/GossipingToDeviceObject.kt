@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.api.session.crypto.model
 
 /**
- * Interface representing an room key action request
+ * Interface representing an room key action request.
  * Note: this class cannot be abstract because of [org.matrix.androidsdk.core.JsonUtils.toRoomKeyShare]
  */
 interface GossipingToDeviceObject : SendToDeviceObject {

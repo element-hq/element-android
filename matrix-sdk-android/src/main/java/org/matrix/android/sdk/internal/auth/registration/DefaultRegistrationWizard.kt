@@ -33,7 +33,7 @@ import org.matrix.android.sdk.internal.auth.SessionCreator
 import org.matrix.android.sdk.internal.auth.db.PendingSessionData
 
 /**
- * This class execute the registration request and is responsible to keep the session of interactive authentication
+ * This class execute the registration request and is responsible to keep the session of interactive authentication.
  */
 internal class DefaultRegistrationWizard(
         authAPI: AuthAPI,
@@ -49,29 +49,29 @@ internal class DefaultRegistrationWizard(
     private val validateCodeTask: ValidateCodeTask = DefaultValidateCodeTask(authAPI)
     private val registerCustomTask: RegisterCustomTask = DefaultRegisterCustomTask(authAPI)
 
-    override val currentThreePid: String?
-        get() {
-            return when (val threePid = pendingSessionData.currentThreePidData?.threePid) {
-                is RegisterThreePid.Email  -> threePid.email
-                is RegisterThreePid.Msisdn -> {
-                    // Take formatted msisdn if provided by the server
-                    pendingSessionData.currentThreePidData?.addThreePidRegistrationResponse?.formattedMsisdn?.takeIf { it.isNotBlank() } ?: threePid.msisdn
-                }
-                null                       -> null
+    override fun getCurrentThreePid(): String? {
+        return when (val threePid = pendingSessionData.currentThreePidData?.threePid) {
+            is RegisterThreePid.Email  -> threePid.email
+            is RegisterThreePid.Msisdn -> {
+                // Take formatted msisdn if provided by the server
+                pendingSessionData.currentThreePidData?.addThreePidRegistrationResponse?.formattedMsisdn?.takeIf { it.isNotBlank() } ?: threePid.msisdn
             }
+            null                       -> null
         }
+    }
 
-    override val isRegistrationStarted: Boolean
-        get() = pendingSessionData.isRegistrationStarted
+    override fun isRegistrationStarted() = pendingSessionData.isRegistrationStarted
 
     override suspend fun getRegistrationFlow(): RegistrationResult {
         val params = RegistrationParams()
         return performRegistrationRequest(params)
     }
 
-    override suspend fun createAccount(userName: String?,
-                                       password: String?,
-                                       initialDeviceDisplayName: String?): RegistrationResult {
+    override suspend fun createAccount(
+            userName: String?,
+            password: String?,
+            initialDeviceDisplayName: String?
+    ): RegistrationResult {
         val params = RegistrationParams(
                 username = userName,
                 password = password,

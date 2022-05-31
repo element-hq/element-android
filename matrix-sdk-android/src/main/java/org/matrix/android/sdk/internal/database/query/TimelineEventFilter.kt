@@ -17,11 +17,11 @@
 package org.matrix.android.sdk.internal.database.query
 
 /**
- * Query strings used to filter the timeline events regarding the Json raw string of the Event
+ * Query strings used to filter the timeline events regarding the Json raw string of the Event.
  */
 internal object TimelineEventFilter {
     /**
-     * To apply to Event.content
+     * To apply to Event.content.
      */
     internal object Content {
         internal const val EDIT = """{*"m.relates_to"*"rel_type":*"m.replace"*}"""
@@ -30,14 +30,14 @@ internal object TimelineEventFilter {
     }
 
     /**
-     * To apply to Event.decryptionResultJson
+     * To apply to Event.decryptionResultJson.
      */
     internal object DecryptedContent {
         internal const val URL = """{*"file":*"url":*}"""
     }
 
     /**
-     * To apply to Event.unsigned
+     * To apply to Event.unsigned.
      */
     internal object Unsigned {
         internal const val REDACTED = """{*"redacted_because":*}"""

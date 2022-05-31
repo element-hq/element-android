@@ -33,6 +33,7 @@ import im.vector.app.config.analyticsConfig
 import im.vector.app.core.dispatchers.CoroutineDispatchers
 import im.vector.app.core.error.DefaultErrorFormatter
 import im.vector.app.core.error.ErrorFormatter
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.time.Clock
 import im.vector.app.core.time.DefaultClock
 import im.vector.app.features.analytics.AnalyticsConfig
@@ -118,7 +119,8 @@ object VectorStaticModule {
     @Provides
     fun providesMatrixConfiguration(
             vectorPreferences: VectorPreferences,
-            vectorRoomDisplayNameFallbackProvider: VectorRoomDisplayNameFallbackProvider): MatrixConfiguration {
+            vectorRoomDisplayNameFallbackProvider: VectorRoomDisplayNameFallbackProvider
+    ): MatrixConfiguration {
         return MatrixConfiguration(
                 applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
                 roomDisplayNameFallbackProvider = vectorRoomDisplayNameFallbackProvider,
@@ -129,12 +131,12 @@ object VectorStaticModule {
     @Provides
     @Singleton
     fun providesMatrix(context: Context, configuration: MatrixConfiguration): Matrix {
-        return Matrix.createInstance(context, configuration)
+        return Matrix(context, configuration)
     }
 
     @Provides
     fun providesCurrentSession(activeSessionHolder: ActiveSessionHolder): Session {
-        // TODO: handle session injection better
+        // TODO handle session injection better
         return activeSessionHolder.getActiveSession()
     }
 
@@ -185,4 +187,8 @@ object VectorStaticModule {
     fun providesAnalyticsConfig(): AnalyticsConfig {
         return analyticsConfig
     }
+
+    @Provides
+    @Singleton
+    fun providesBuildMeta() = BuildMeta()
 }

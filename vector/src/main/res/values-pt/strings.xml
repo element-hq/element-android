@@ -369,7 +369,6 @@ Adicionar alguns agora?</string>
     <string name="settings_analytics">Estatísticas de uso</string>
     <string name="settings_opt_in_of_analytics">Enviar dados de análise de estatísticas</string>
     <string name="settings_opt_in_of_analytics_summary">O ${app_name} recolhe dados anónimos de análise de estatísticas para ajudar a melhorar a aplicação.</string>
-    <string name="settings_flair">Insígnias</string>
     <string name="encryption_export_notice">Por favor, crie uma frase-passe para cifrar as chaves exportadas. Precisará de usar a mesma frase-passe para conseguir importar as chaves.</string>
     <string name="passphrase_create_passphrase">Criar frase-passe</string>
     <string name="passphrase_passphrase_does_not_match">As frase-passes devem coincidir</string>

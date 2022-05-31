@@ -25,7 +25,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.marginBottom
 import androidx.core.view.marginTop
 import androidx.core.view.updateLayoutParams
-import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.maps.MapView
 import com.mapbox.mapboxsdk.maps.MapboxMap
@@ -78,7 +77,7 @@ class MapTilerMapView @JvmOverloads constructor(
     }
 
     /**
-     * For location fragments
+     * For location fragments.
      */
     fun initialize(
             url: String,
@@ -164,7 +163,7 @@ class MapTilerMapView @JvmOverloads constructor(
 
         state.userLocationData?.let { locationData ->
             if (!initZoomDone || !state.zoomOnlyOnce) {
-                zoomToLocation(locationData.latitude, locationData.longitude)
+                zoomToLocation(locationData)
                 initZoomDone = true
             }
 
@@ -180,12 +179,9 @@ class MapTilerMapView @JvmOverloads constructor(
         }
     }
 
-    fun zoomToLocation(latitude: Double, longitude: Double) {
+    fun zoomToLocation(locationData: LocationData) {
         Timber.d("## Location: zoomToLocation")
-        mapRefs?.map?.cameraPosition = CameraPosition.Builder()
-                .target(LatLng(latitude, longitude))
-                .zoom(INITIAL_MAP_ZOOM_IN_PREVIEW)
-                .build()
+        mapRefs?.map?.zoomToLocation(locationData)
     }
 
     fun getLocationOfMapCenter(): LocationData? =

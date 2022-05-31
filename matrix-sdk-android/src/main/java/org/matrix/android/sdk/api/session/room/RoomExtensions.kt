@@ -21,13 +21,13 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 
 /**
- * Get a TimelineEvent using the TimelineService of a Room
+ * Get a TimelineEvent using the TimelineService of a Room.
  */
 fun Room.getTimelineEvent(eventId: String): TimelineEvent? =
         timelineService().getTimelineEvent(eventId)
 
 /**
- * Get a StateEvent using the StateService of a Room
+ * Get a StateEvent using the StateService of a Room.
  */
 fun Room.getStateEvent(eventType: String, stateKey: QueryStringValue = QueryStringValue.NoCondition): Event? =
         stateService().getStateEvent(eventType, stateKey)

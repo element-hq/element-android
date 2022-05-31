@@ -68,7 +68,7 @@ internal class DefaultSessionAccountDataService @Inject constructor(
         val params = UpdateUserAccountDataTask.AnyParams(type = type, any = content)
         awaitCallback<Unit> { callback ->
             updateUserAccountDataTask.configureWith(params) {
-                this.retryCount = 5 // TODO: Need to refactor retrying out into a helper method.
+                this.retryCount = 5 // TODO Need to refactor retrying out into a helper method.
                 this.callback = callback
             }
                     .executeBy(taskExecutor)

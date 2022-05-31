@@ -271,6 +271,6 @@ class UserListViewModel @AssistedInject constructor(
 private fun UserListViewState.hasNoIdentityServerConfigured() = matchingEmail is Fail && matchingEmail.error == IdentityServiceError.NoIdentityServerConfigured
 
 /**
- * Wrapper class to allow identical search terms to be re-emitted
+ * Wrapper class to allow identical search terms to be re-emitted.
  */
 private data class UserSearch(val searchTerm: String, val cacheBuster: Long = 0)

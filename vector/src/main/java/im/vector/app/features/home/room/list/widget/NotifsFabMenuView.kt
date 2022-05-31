@@ -24,8 +24,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import im.vector.app.R
 import im.vector.app.databinding.MotionNotifsFabMenuMergeBinding
 
-class NotifsFabMenuView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null,
-                                                  defStyleAttr: Int = 0) : MotionLayout(context, attrs, defStyleAttr) {
+class NotifsFabMenuView @JvmOverloads constructor(
+        context: Context, attrs: AttributeSet? = null,
+        defStyleAttr: Int = 0
+) : MotionLayout(context, attrs, defStyleAttr) {
 
     private val views: MotionNotifsFabMenuMergeBinding
 

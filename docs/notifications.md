@@ -1,37 +1,42 @@
 This document aims to describe how Element android displays notifications to the end user. It also clarifies notifications and background settings in the app.
 
 # Table of Contents
-1. [Prerequisites Knowledge](#prerequisites-knowledge)
-    * [How does a matrix client get a message from a homeserver?](#how-does-a-matrix-client-get-a-message-from-a-homeserver)
-    * [How does a mobile app receives push notification?](#how-does-a-mobile-app-receives-push-notification)
-    * [Push VS Notification](#push-vs-notification)
-    * [Push in the matrix federated world](#push-in-the-matrix-federated-world)
-    * [How does the homeserver know when to notify a client?](#how-does-the-homeserver-know-when-to-notify-a-client)
-    * [Push vs privacy, and mitigation](#push-vs-privacy-and-mitigation)
-    * [Background processing limitations](#background-processing-limitations)
-2. [Element Notification implementations](#element-notification-implementations)
-    * [Requirements](#requirements) 
-    * [Foreground sync mode (Gplay & F-Droid)](#foreground-sync-mode-gplay-f-droid)
-    * [Push (FCM) received in background](#push-fcm-received-in-background)
-    * [FCM Fallback mode](#fcm-fallback-mode)
-    * [F-Droid background Mode](#f-droid-background-mode)
-3. [Application Settings](#application-settings)
+
+<!--- TOC -->
+
+* [Prerequisites Knowledge](#prerequisites-knowledge)
+  * [How does a matrix client get a message from a homeserver?](#how-does-a-matrix-client-get-a-message-from-a-homeserver?)
+  * [How does a mobile app receives push notification](#how-does-a-mobile-app-receives-push-notification)
+  * [Push VS Notification](#push-vs-notification)
+  * [Push in the matrix federated world](#push-in-the-matrix-federated-world)
+  * [How does the homeserver know when to notify a client?](#how-does-the-homeserver-know-when-to-notify-a-client?)
+  * [Push vs privacy, and mitigation](#push-vs-privacy-and-mitigation)
+  * [Background processing limitations](#background-processing-limitations)
+* [Element Notification implementations](#element-notification-implementations)
+  * [Requirements](#requirements)
+  * [Foreground sync mode (Gplay and F-Droid)](#foreground-sync-mode-gplay-and-f-droid)
+  * [Push (FCM) received in background](#push-fcm-received-in-background)
+  * [FCM Fallback mode](#fcm-fallback-mode)
+  * [F-Droid background Mode](#f-droid-background-mode)
+* [Application Settings](#application-settings)
+
+<!--- END -->
 
 
 First let's start with some prerequisite knowledge
 
-# Prerequisites Knowledge
+## Prerequisites Knowledge
 
-## How does a matrix client get a message from a homeserver?
+### How does a matrix client get a message from a homeserver?
 
 In order to get messages from a homeserver, a matrix client need to perform a ``sync`` operation.
 
 `To read events, the intended flow of operation is for clients to first call the /sync API without a since parameter. This returns the most recent message events for each room, as well as the state of the room at the start of the returned timeline. `
 
-The client need to call the `sync`API periodically in order to get incremental updates of the server state (new messages).
+The client need to call the `sync` API periodically in order to get incremental updates of the server state (new messages).
 This mechanism is known as **HTTP long Polling**.
 
-Using the **HTTP Long Polling** mechanism  a client polls a server requesting new information.
+Using the **HTTP Long Polling** mechanism a client polls a server requesting new information.
 The server *holds the request open until new data is available*.
 Once available, the server responds and sends the new information.
 When the client receives the new information, it immediately sends another request, and the operation is repeated.
@@ -52,7 +57,7 @@ By default, this is 0, so the server will return immediately even if the respons
 
 When the Element Android app is open (i.e in foreground state), the default timeout is 30 seconds, and delay is 0.
 
-## How does a mobile app receives push notification
+### How does a mobile app receives push notification
 
 Push notification is used as a way to wake up a mobile application when some important information is available and should be processed.
 
@@ -66,22 +71,22 @@ FCM will only work on android devices that have Google plays services installed
 (In simple terms, Google Play Services is a background service that runs on Android, which in turn helps in integrating Google’s advanced functionalities to other applications)
 
 De-Googlified devices need to rely on something else in order to stay up to date with a server.
-There some cases when devices with google services cannot use FCM (network infrastructure limitations -firewalls- ,
- privacy and or independency requirement, source code licence)
+There some cases when devices with google services cannot use FCM (network infrastructure limitations -firewalls-,
+ privacy and or independence requirement, source code licence)
 
-## Push VS Notification
+### Push VS Notification
 
 This need some disambiguation, because it is the source of common confusion:
 
 
-*The fact that you see a notification on your screen does not mean that you have successfully configured your PUSH plateform.*
+*The fact that you see a notification on your screen does not mean that you have successfully configured your PUSH platform.*
 
   Technically there is a difference between a push and a notification. A notification is what you see on screen and/or in the notification Menu/Drawer (in the top bar of the phone).
 
   Notifications are not always triggered by a push (One can display a notification locally triggered by an alarm)
 
 
-## Push in the matrix federated world
+### Push in the matrix federated world
 
 In order to send a push to a mobile, App developers need to have a server that will use the FCM APIs, and these APIs requires authentication!
 This server is called a **Push Gateway** in the matrix world
@@ -118,11 +123,11 @@ Client/Server API  +              |                    |  |      |            |
 ```
 
 Recommended reading:
- * https://thomask.sdf.org/blog/2016/12/11/riots-magical-push-notifications-in-ios.html
+* https://thomask.sdf.org/blog/2016/12/11/riots-magical-push-notifications-in-ios.html
 * https://matrix.org/docs/spec/client_server/r0.4.0.html#id128
 
 
-## How does the homeserver know when to notify a client?
+### How does the homeserver know when to notify a client?
 
 This is defined by [**push rules**](https://matrix.org/docs/spec/client_server/r0.4.0.html#push-rules-).
 
@@ -140,14 +145,14 @@ Of course, content patterns matching cannot be used for encrypted messages serve
 
 That is why clients are able to **process the push rules client side** to decide what kind of notification should be presented for a given event.
 
-## Push vs privacy, and mitigation
+### Push vs privacy, and mitigation
 
 As seen previously, App developers don't directly send a push to the end user's device, they use a Push Provider as intermediary. So technically this intermediary is able to read the content of what is sent.
 
 App developers usually mitigate this by sending a `silent notification`, that is a notification with no identifiable data, or with an encrypted payload. When the push is received the app can then synchronise to it's server in order to generate a local notification.
 
 
-## Background processing limitations
+### Background processing limitations
 
 A mobile applications process live in a managed word, meaning that its process can be limited (e.g no network access), stopped or killed at almost anytime by the Operating System.
 
@@ -167,15 +172,15 @@ The documentation on this subject is vague, and as per our experiments not alway
 
 It is getting more and more complex to have reliable notifications when FCM is not used.
 
-# Element Notification implementations
+## Element Notification implementations
 
-## Requirements
+### Requirements
 
 Element Android must work with and without FCM.
 * The Element android app published on F-Droid do not rely on FCM (all related dependencies are not present)
 * The Element android app published on google play rely on FCM, with a fallback mode when FCM registration has failed (e.g outdated or missing Google Play Services)
 
-## Foreground sync mode (Gplay & F-Droid)
+### Foreground sync mode (Gplay and F-Droid)
 
 When in foreground, Element performs sync continuously with a timeout value set to 10 seconds (see HttpPooling).
 
@@ -183,9 +188,9 @@ As this mode does not need to live beyond the scope of the application, and as p
 
 This mode is turned on when the app enters foreground, and off when enters background.
 
-In background, and depending on wether push is available or not, Element will use different methods to perform the syncs (Workers / Alarms / Service)
+In background, and depending on whether push is available or not, Element will use different methods to perform the syncs (Workers / Alarms / Service)
 
-## Push (FCM) received in background 
+### Push (FCM) received in background 
 
 In order to enable Push, Element must first get a push token from the firebase SDK, then register a pusher with this token on the homeserver.
 
@@ -225,10 +230,10 @@ Upon reception of the FCM push, Element will perform a sync call to the homeserv
 
 Element implements several strategies in these cases (TODO document)
 
-## FCM Fallback mode
+### FCM Fallback mode
 
 It is possible that Element is not able to get a FCM push token.
-Common errors (amoung several others) that can cause that:
+Common errors (among several others) that can cause that:
 * Google Play Services is outdated
 * Google Play Service fails in someways with FCM servers (infamous `SERVICE_NOT_AVAILABLE`)
 
@@ -246,7 +251,7 @@ Usually in this mode, what happen is when you take back your phone in your hand,
 
 The fallback mode is supposed to be a temporary state waiting for the user to fix issues for FCM, or for App Developers that has done a fork to correctly configure their FCM settings.
 
-## F-Droid background Mode
+### F-Droid background Mode
 
 The F-Droid Element flavor has no dependencies to FCM, therefore cannot relies on Push.
 
@@ -256,7 +261,7 @@ Only solution left is to use `AlarmManager`, that offers new API to allow launch
 
 Notice that these alarms, due to their potential impact on battery life, can still be restricted by the system. Documentation says that they will not be triggered more than every minutes under normal system operation, and when in low power mode about every 15 mn.
 
-These restrictions can be relaxed by requirering the app to be white listed from battery optimization.
+These restrictions can be relaxed by requiring the app to be white listed from battery optimization.
 
 F-Droid version will schedule alarms that will then trigger a Broadcast Receiver, that in turn will launch a Service (in the classic android way), and the reschedule an alarm for next time.
 
@@ -266,9 +271,7 @@ That is why on Element F-Droid, the broadcast receiver will acquire a temporary 
 
 Note that foreground services require to put a notification informing the user that the app is doing something even if not launched).
 
-
-
-# Application Settings
+## Application Settings
 
 **Notifications > Enable notifications for this account**
 

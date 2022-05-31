@@ -589,7 +589,6 @@
     <string name="media_saving_period_1_month">חודש 1</string>
     <string name="media_saving_period_1_week">שבוע 1</string>
     <string name="media_saving_period_3_days">3 ימים</string>
-    <string name="settings_flair">כשרון</string>
     <string name="settings_play_shutter_sound">השמע צליל תריס</string>
     <string name="media_source_choose">בחרו</string>
     <string name="settings_default_media_source">מקור מדיה ברירת מחדל</string>
@@ -1862,7 +1861,6 @@
     <string name="notice_room_visibility_shared">כל חברי החדר.</string>
     <string name="notice_room_visibility_joined">כל חברי החדר, מהרגע שבו הצטרפו.</string>
     <string name="a11y_static_map_image">מפה</string>
-    <string name="a11y_location_share_icon">שתף מיקום</string>
     <string name="location_activity_title_preview">מיקום</string>
     <string name="location_activity_title_static_sharing">שתף מיקום</string>
     <string name="closed_poll_option_description">התוצאות נחשפות רק לאחר מסיום הסקר</string>
@@ -1890,7 +1888,6 @@
     <string name="location_share_external">פתח באמצעות</string>
     <string name="location_not_available_dialog_content">${app_name} לא הצליח לגשת למיקום שלך. אנא נסה שוב מאוחר יותר.</string>
     <string name="location_not_available_dialog_title">${app_name} לא הצליח לגשת למיקום שלך</string>
-    <string name="location_share">שתף מיקום</string>
     <string name="settings_notification_emails_enable_for_email">אפשר התראת דוא\"ל עבור %s</string>
     <string name="settings_notification_keyword_contains_invalid_character">מילות מפתח לא יכולות להכיל \'%s\'</string>
     <string name="settings_notification_keyword_contains_dot">מילות מפתח אינן יכולות להתחיל ב-\'.\'</string>
@@ -2275,10 +2272,6 @@
     <string name="space_add_existing_spaces">הוסף מרחבים קיימים</string>
     <string name="space_add_existing_rooms_only">הוסף חדרים קיימים</string>
     <string name="space_add_existing_rooms">הוסף חדרים ומרחבים קיימים</string>
-    <string name="pick_tings_to_leave">בחר דברים להשאיר</string>
-    <string name="leave_specific_ones">השאירו חדרים ומרחבים ספציפיים…</string>
-    <string name="dont_leave_any">אל תעזובו חדרים וא מרחבים</string>
-    <string name="leave_all_rooms_and_spaces">עזבו את כל החדרים והמרחבים</string>
     <string name="space_leave_prompt_msg_as_admin">אתה המנהל היחיד של המרחב הזה. עזיבה תגרום לכך שאף אחד לא ישלוט על המרחב.</string>
     <string name="space_leave_prompt_msg_private">לא תוכל להצטרף מחדש אלא אם כן תוזמן מחדש.</string>
     <string name="space_leave_prompt_msg_only_you">אתה האדם היחיד כאן. אם תעזוב, אף אחד לא יוכל להצטרף בעתיד, כולל אותך.</string>

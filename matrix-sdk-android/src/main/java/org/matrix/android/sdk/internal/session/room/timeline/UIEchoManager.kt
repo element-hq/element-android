@@ -44,7 +44,7 @@ internal class UIEchoManager(
     }
 
     /**
-     * Due to lag of DB updates, we keep some UI echo of some properties to update timeline faster
+     * Due to lag of DB updates, we keep some UI echo of some properties to update timeline faster.
      */
     private val inMemorySendingStates = Collections.synchronizedMap<String, SendState>(HashMap())
 

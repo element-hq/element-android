@@ -28,7 +28,7 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.platform.CheckableView
 
 /**
- * Children must override getViewType()
+ * Children must override getViewType().
  */
 abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>(), ItemWithEvents {
 

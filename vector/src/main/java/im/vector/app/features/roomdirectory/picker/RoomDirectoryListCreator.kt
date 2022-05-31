@@ -20,7 +20,7 @@ import im.vector.app.R
 import im.vector.app.core.resources.StringArrayProvider
 import im.vector.app.features.roomdirectory.RoomDirectoryData
 import im.vector.app.features.roomdirectory.RoomDirectoryServer
-import org.matrix.android.sdk.api.MatrixPatterns.getDomain
+import org.matrix.android.sdk.api.MatrixPatterns.getServerName
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.thirdparty.ThirdPartyProtocol
 import javax.inject.Inject
@@ -30,14 +30,16 @@ class RoomDirectoryListCreator @Inject constructor(
         private val session: Session
 ) {
 
-    fun computeDirectories(thirdPartyProtocolData: Map<String, ThirdPartyProtocol>,
-                           customHomeservers: Set<String>): List<RoomDirectoryServer> {
+    fun computeDirectories(
+            thirdPartyProtocolData: Map<String, ThirdPartyProtocol>,
+            customHomeservers: Set<String>
+    ): List<RoomDirectoryServer> {
         val result = ArrayList<RoomDirectoryServer>()
 
         val protocols = ArrayList<RoomDirectoryData>()
 
         // Add user homeserver name
-        val userHsName = session.myUserId.getDomain()
+        val userHsName = session.myUserId.getServerName()
 
         // Add default protocol
         protocols.add(

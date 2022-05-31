@@ -158,8 +158,8 @@ class DefaultVectorAnalytics @Inject constructor(
     }
 
     /**
-     * We avoid sending nulls as part of the UserProperties as this will reset the values across all devices
-     * The UserProperties event has nullable properties to allow for clients to opt in
+     * We avoid sending nulls as part of the UserProperties as this will reset the values across all devices.
+     * The UserProperties event has nullable properties to allow for clients to opt in.
      */
     private fun Map<String, Any?>.toPostHogUserProperties(): Properties {
         return Properties().apply {

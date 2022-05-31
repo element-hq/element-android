@@ -39,7 +39,7 @@ import java.util.UUID
 import javax.inject.Inject
 
 /**
- * Receives actions broadcast by notification (on click, on dismiss, inline replies, etc.)
+ * Receives actions broadcast by notification (on click, on dismiss, inline replies, etc.).
  */
 @AndroidEntryPoint
 class NotificationBroadcastReceiver : BroadcastReceiver() {
@@ -145,7 +145,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                         ?: context?.getString(R.string.notification_sender_me),
                 senderId = session.myUserId,
                 body = message,
-                imageUri = null,
+                imageUriString = null,
                 roomId = room.roomId,
                 roomName = room.roomSummary()?.displayName ?: room.roomId,
                 roomIsDirect = room.roomSummary()?.isDirect == true,

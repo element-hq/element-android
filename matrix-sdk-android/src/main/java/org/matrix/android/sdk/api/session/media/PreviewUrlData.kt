@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.api.session.media
 
 /**
- * Facility data class to get the common field of a PreviewUrl response form the server
+ * Facility data class to get the common field of a PreviewUrl response form the server.
  *
  * Example of return data for the url `https://matrix.org`:
  * <pre>

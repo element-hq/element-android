@@ -42,8 +42,8 @@ internal class RealmCryptoStoreMigration @Inject constructor(
         private val clock: Clock,
 ) : RealmMigration {
     /**
-     * Forces all RealmCryptoStoreMigration instances to be equal
-     * Avoids Realm throwing when multiple instances of the migration are set
+     * Forces all RealmCryptoStoreMigration instances to be equal.
+     * Avoids Realm throwing when multiple instances of the migration are set.
      */
     override fun equals(other: Any?) = other is RealmCryptoStoreMigration
     override fun hashCode() = 5000
