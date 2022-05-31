@@ -213,5 +213,5 @@ class SpaceDirectoryController @Inject constructor(
     }
 
     private fun SpaceChildInfo.isUpgradedRoom(data: SpaceDirectoryState) =
-            data.knownRoomSummaries.any { it.roomId == childRoomId && it.versioningState == VersioningState.UPGRADED_ROOM_JOINED }
+            data.knownRoomSummaries.any { it.roomId == childRoomId && it.versioningState != VersioningState.NONE }
 }
