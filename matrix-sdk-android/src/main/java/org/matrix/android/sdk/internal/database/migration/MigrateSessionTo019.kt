@@ -21,8 +21,10 @@ import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.util.Normalizer
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
-internal class MigrateSessionTo019(realm: DynamicRealm,
-                                   private val normalizer: Normalizer) : RealmMigrator(realm, 19) {
+internal class MigrateSessionTo019(
+        realm: DynamicRealm,
+        private val normalizer: Normalizer
+) : RealmMigrator(realm, 19) {
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.get("RoomSummaryEntity")

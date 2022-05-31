@@ -59,9 +59,10 @@ internal fun EventEntity.Companion.where(realm: Realm, eventIds: List<String>): 
             .`in`(EventEntityFields.EVENT_ID, eventIds.toTypedArray())
 }
 
-internal fun EventEntity.Companion.whereType(realm: Realm,
-                                             type: String,
-                                             roomId: String? = null
+internal fun EventEntity.Companion.whereType(
+        realm: Realm,
+        type: String,
+        roomId: String? = null
 ): RealmQuery<EventEntity> {
     val query = realm.where<EventEntity>()
     if (roomId != null) {
@@ -70,9 +71,11 @@ internal fun EventEntity.Companion.whereType(realm: Realm,
     return query.equalTo(EventEntityFields.TYPE, type)
 }
 
-internal fun EventEntity.Companion.whereTypes(realm: Realm,
-                                              typeList: List<String> = emptyList(),
-                                              roomId: String? = null): RealmQuery<EventEntity> {
+internal fun EventEntity.Companion.whereTypes(
+        realm: Realm,
+        typeList: List<String> = emptyList(),
+        roomId: String? = null
+): RealmQuery<EventEntity> {
     val query = realm.where<EventEntity>()
     query.`in`(EventEntityFields.TYPE, typeList.toTypedArray())
     if (roomId != null) {

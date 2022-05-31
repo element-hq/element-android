@@ -100,7 +100,8 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
         private val rawService: RawService,
         private val session: Session,
         private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
-        private val stringProvider: StringProvider) :
+        private val stringProvider: StringProvider
+) :
         VectorViewModel<VerificationBottomSheetViewState, VerificationAction, VerificationBottomSheetViewEvents>(initialState),
         VerificationService.Listener {
 

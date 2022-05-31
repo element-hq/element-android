@@ -38,8 +38,10 @@ import javax.inject.Inject
  * then we generate a random secret key. The database key is encrypted with the secret key; The secret
  * key is encrypted with the public RSA key and stored with the encrypted key in the shared pref
  */
-internal class RealmKeysUtils @Inject constructor(context: Context,
-                                                  private val secretStoringUtils: SecretStoringUtils) {
+internal class RealmKeysUtils @Inject constructor(
+        context: Context,
+        private val secretStoringUtils: SecretStoringUtils
+) {
 
     private val rng = SecureRandom()
 

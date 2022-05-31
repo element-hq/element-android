@@ -35,8 +35,10 @@ import javax.inject.Inject
 
 private val loggerTag = LoggerTag("CryptoSyncHandler", LoggerTag.CRYPTO)
 
-internal class CryptoSyncHandler @Inject constructor(private val cryptoService: DefaultCryptoService,
-                                                     private val verificationService: DefaultVerificationService) {
+internal class CryptoSyncHandler @Inject constructor(
+        private val cryptoService: DefaultCryptoService,
+        private val verificationService: DefaultVerificationService
+) {
 
     suspend fun handleToDevice(toDevice: ToDeviceSyncResponse, progressReporter: ProgressReporter? = null) {
         val total = toDevice.events?.size ?: 0

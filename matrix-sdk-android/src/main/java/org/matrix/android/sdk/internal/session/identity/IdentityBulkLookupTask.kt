@@ -75,10 +75,12 @@ internal class DefaultIdentityBulkLookupTask @Inject constructor(
             val identityLookUpResponse: IdentityLookUpResponse
     )
 
-    private suspend fun lookUpInternal(identityAPI: IdentityAPI,
-                                       threePids: List<ThreePid>,
-                                       hashDetailResponse: IdentityHashDetailResponse,
-                                       canRetry: Boolean): LookUpData {
+    private suspend fun lookUpInternal(
+            identityAPI: IdentityAPI,
+            threePids: List<ThreePid>,
+            hashDetailResponse: IdentityHashDetailResponse,
+            canRetry: Boolean
+    ): LookUpData {
         val hashedAddresses = getHashedAddresses(threePids, hashDetailResponse.pepper)
         return try {
             LookUpData(hashedAddresses,

@@ -33,8 +33,10 @@ import org.matrix.android.sdk.internal.session.EventInsertLiveProcessor
 import timber.log.Timber
 import javax.inject.Inject
 
-internal class EventInsertLiveObserver @Inject constructor(@SessionDatabase realmConfiguration: RealmConfiguration,
-                                                           private val processors: Set<@JvmSuppressWildcards EventInsertLiveProcessor>) :
+internal class EventInsertLiveObserver @Inject constructor(
+        @SessionDatabase realmConfiguration: RealmConfiguration,
+        private val processors: Set<@JvmSuppressWildcards EventInsertLiveProcessor>
+) :
         RealmLiveEntityObserver<EventInsertEntity>(realmConfiguration) {
 
     override val query = Monarchy.Query {

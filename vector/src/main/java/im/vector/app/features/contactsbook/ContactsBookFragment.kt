@@ -70,7 +70,7 @@ class ContactsBookFragment @Inject constructor(
                 .allowBack(useCross = true)
         contactsBookViewModel.observeViewEvents {
             when (it) {
-                is ContactsBookViewEvents.Failure             -> showFailure(it.throwable)
+                is ContactsBookViewEvents.Failure -> showFailure(it.throwable)
                 is ContactsBookViewEvents.OnPoliciesRetrieved -> showConsentDialog(it)
             }
         }

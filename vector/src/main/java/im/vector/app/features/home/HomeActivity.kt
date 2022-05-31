@@ -609,11 +609,12 @@ class HomeActivity :
     }
 
     companion object {
-        fun newIntent(context: Context,
-                      clearNotification: Boolean = false,
-                      accountCreation: Boolean = false,
-                      existingSession: Boolean = false,
-                      inviteNotificationRoomId: String? = null
+        fun newIntent(
+                context: Context,
+                clearNotification: Boolean = false,
+                accountCreation: Boolean = false,
+                existingSession: Boolean = false,
+                inviteNotificationRoomId: String? = null
         ): Intent {
             val args = HomeActivityArgs(
                     clearNotification = clearNotification,

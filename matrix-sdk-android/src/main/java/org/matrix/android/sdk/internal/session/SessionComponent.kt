@@ -138,6 +138,7 @@ internal interface SessionComponent {
     interface Factory {
         fun create(
                 matrixComponent: MatrixComponent,
-                @BindsInstance sessionParams: SessionParams): SessionComponent
+                @BindsInstance sessionParams: SessionParams
+        ): SessionComponent
     }
 }

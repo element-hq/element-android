@@ -37,7 +37,8 @@ internal abstract class DefaultVerificationTransaction(
         override val transactionId: String,
         override val otherUserId: String,
         override var otherDeviceId: String? = null,
-        override val isIncoming: Boolean) : VerificationTransaction {
+        override val isIncoming: Boolean
+) : VerificationTransaction {
 
     lateinit var transport: VerificationTransport
 
@@ -55,9 +56,12 @@ internal abstract class DefaultVerificationTransaction(
         listeners.remove(listener)
     }
 
-    protected fun trust(canTrustOtherUserMasterKey: Boolean,
-                        toVerifyDeviceIds: List<String>,
-                        eventuallyMarkMyMasterKeyAsTrusted: Boolean, autoDone: Boolean = true) {
+    protected fun trust(
+            canTrustOtherUserMasterKey: Boolean,
+            toVerifyDeviceIds: List<String>,
+            eventuallyMarkMyMasterKeyAsTrusted: Boolean,
+            autoDone: Boolean = true
+    ) {
         Timber.d("## Verification: trust ($otherUserId,$otherDeviceId) , verifiedDevices:$toVerifyDeviceIds")
         Timber.d("## Verification: trust Mark myMSK trusted $eventuallyMarkMyMasterKeyAsTrusted")
 

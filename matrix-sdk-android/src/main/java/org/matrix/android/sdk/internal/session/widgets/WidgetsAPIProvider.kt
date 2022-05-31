@@ -24,8 +24,10 @@ import org.matrix.android.sdk.internal.session.SessionScope
 import javax.inject.Inject
 
 @SessionScope
-internal class WidgetsAPIProvider @Inject constructor(@Unauthenticated private val okHttpClient: Lazy<OkHttpClient>,
-                                                      private val retrofitFactory: RetrofitFactory) {
+internal class WidgetsAPIProvider @Inject constructor(
+        @Unauthenticated private val okHttpClient: Lazy<OkHttpClient>,
+        private val retrofitFactory: RetrofitFactory
+) {
 
     // Map to keep one WidgetAPI instance by serverUrl
     private val widgetsAPIs = mutableMapOf<String, WidgetsAPI>()

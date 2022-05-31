@@ -20,8 +20,10 @@ import io.realm.DynamicRealm
 import io.realm.RealmObjectSchema
 import timber.log.Timber
 
-internal abstract class RealmMigrator(private val realm: DynamicRealm,
-                                      private val targetSchemaVersion: Int) {
+internal abstract class RealmMigrator(
+        private val realm: DynamicRealm,
+        private val targetSchemaVersion: Int
+) {
     fun perform() {
         Timber.d("Migrate ${realm.configuration.realmFileName} to $targetSchemaVersion")
         doMigrate(realm)

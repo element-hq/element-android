@@ -30,8 +30,10 @@ data class TermsResponse(
         val policies: JsonDict? = null
 ) {
 
-    fun getLocalizedTerms(userLanguage: String,
-                          defaultLanguage: String = "en"): List<LocalizedFlowDataLoginTerms> {
+    fun getLocalizedTerms(
+            userLanguage: String,
+            defaultLanguage: String = "en"
+    ): List<LocalizedFlowDataLoginTerms> {
         return policies?.map {
             val tos = policies[it.key] as? Map<*, *> ?: return@map null
             ((tos[userLanguage] ?: tos[defaultLanguage]) as? Map<*, *>)?.let { termsMap ->

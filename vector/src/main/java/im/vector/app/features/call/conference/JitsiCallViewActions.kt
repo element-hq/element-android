@@ -19,8 +19,10 @@ package im.vector.app.features.call.conference
 import im.vector.app.core.platform.VectorViewModelAction
 
 sealed class JitsiCallViewActions : VectorViewModelAction {
-    data class SwitchTo(val args: VectorJitsiActivity.Args,
-                        val withConfirmation: Boolean) : JitsiCallViewActions()
+    data class SwitchTo(
+            val args: VectorJitsiActivity.Args,
+            val withConfirmation: Boolean
+    ) : JitsiCallViewActions()
 
     /**
      * The ViewModel will either ask the View to finish, or to join another conf.

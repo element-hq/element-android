@@ -25,28 +25,29 @@ import org.matrix.android.sdk.api.session.threads.ThreadNotificationState
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.extensions.assertIsManaged
 
-internal open class EventEntity(@Index var eventId: String = "",
-                                @Index var roomId: String = "",
-                                @Index var type: String = "",
-                                var content: String? = null,
-                                var prevContent: String? = null,
-                                var isUseless: Boolean = false,
-                                @Index var stateKey: String? = null,
-                                var originServerTs: Long? = null,
-                                @Index var sender: String? = null,
+internal open class EventEntity(
+        @Index var eventId: String = "",
+        @Index var roomId: String = "",
+        @Index var type: String = "",
+        var content: String? = null,
+        var prevContent: String? = null,
+        var isUseless: Boolean = false,
+        @Index var stateKey: String? = null,
+        var originServerTs: Long? = null,
+        @Index var sender: String? = null,
         // Can contain a serialized MatrixError
-                                var sendStateDetails: String? = null,
-                                var age: Long? = 0,
-                                var unsignedData: String? = null,
-                                var redacts: String? = null,
-                                var decryptionResultJson: String? = null,
-                                var ageLocalTs: Long? = null,
+        var sendStateDetails: String? = null,
+        var age: Long? = 0,
+        var unsignedData: String? = null,
+        var redacts: String? = null,
+        var decryptionResultJson: String? = null,
+        var ageLocalTs: Long? = null,
         // Thread related, no need to create a new Entity for performance
-                                @Index var isRootThread: Boolean = false,
-                                @Index var rootThreadEventId: String? = null,
+        @Index var isRootThread: Boolean = false,
+        @Index var rootThreadEventId: String? = null,
         // Number messages within the thread
-                                var numberOfThreads: Int = 0,
-                                var threadSummaryLatestMessage: TimelineEventEntity? = null
+        var numberOfThreads: Int = 0,
+        var threadSummaryLatestMessage: TimelineEventEntity? = null
 ) : RealmObject() {
 
     private var sendStateStr: String = SendState.UNKNOWN.name

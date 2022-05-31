@@ -112,7 +112,7 @@ class RoomGroupMessageCreator @Inject constructor(
     private fun createRoomMessagesGroupSummaryLine(events: List<NotifiableMessageEvent>, roomName: String, roomIsDirect: Boolean): CharSequence {
         return try {
             when (events.size) {
-                1    -> createFirstMessageSummaryLine(events.first(), roomName, roomIsDirect)
+                1 -> createFirstMessageSummaryLine(events.first(), roomName, roomIsDirect)
                 else -> {
                     stringProvider.getQuantityString(
                             R.plurals.notification_compat_summary_line_for_room,

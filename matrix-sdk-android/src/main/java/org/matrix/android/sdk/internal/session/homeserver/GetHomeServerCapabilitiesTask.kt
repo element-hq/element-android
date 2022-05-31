@@ -109,10 +109,12 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
         insertInDb(capabilities, mediaConfig, versions, wellknownResult)
     }
 
-    private suspend fun insertInDb(getCapabilitiesResult: GetCapabilitiesResult?,
-                                   getMediaConfigResult: GetMediaConfigResult?,
-                                   getVersionResult: Versions?,
-                                   getWellknownResult: WellknownResult?) {
+    private suspend fun insertInDb(
+            getCapabilitiesResult: GetCapabilitiesResult?,
+            getMediaConfigResult: GetMediaConfigResult?,
+            getVersionResult: Versions?,
+            getWellknownResult: WellknownResult?
+    ) {
         monarchy.awaitTransaction { realm ->
             val homeServerCapabilitiesEntity = HomeServerCapabilitiesEntity.getOrCreate(realm)
 

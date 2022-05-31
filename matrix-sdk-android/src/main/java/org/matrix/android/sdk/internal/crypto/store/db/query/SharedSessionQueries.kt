@@ -24,12 +24,14 @@ import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.internal.crypto.store.db.model.SharedSessionEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.SharedSessionEntityFields
 
-internal fun SharedSessionEntity.Companion.get(realm: Realm,
-                                               roomId: String?,
-                                               sessionId: String,
-                                               userId: String,
-                                               deviceId: String,
-                                               deviceIdentityKey: String?): SharedSessionEntity? {
+internal fun SharedSessionEntity.Companion.get(
+        realm: Realm,
+        roomId: String?,
+        sessionId: String,
+        userId: String,
+        deviceId: String,
+        deviceIdentityKey: String?
+): SharedSessionEntity? {
     return realm.where<SharedSessionEntity>()
             .equalTo(SharedSessionEntityFields.ROOM_ID, roomId)
             .equalTo(SharedSessionEntityFields.SESSION_ID, sessionId)
@@ -48,12 +50,15 @@ internal fun SharedSessionEntity.Companion.get(realm: Realm, roomId: String?, se
             .findAll()
 }
 
-internal fun SharedSessionEntity.Companion.create(realm: Realm, roomId: String?,
-                                                  sessionId: String,
-                                                  userId: String,
-                                                  deviceId: String,
-                                                  deviceIdentityKey: String,
-                                                  chainIndex: Int): SharedSessionEntity {
+internal fun SharedSessionEntity.Companion.create(
+        realm: Realm,
+        roomId: String?,
+        sessionId: String,
+        userId: String,
+        deviceId: String,
+        deviceIdentityKey: String,
+        chainIndex: Int
+): SharedSessionEntity {
     return realm.createObject<SharedSessionEntity>().apply {
         this.roomId = roomId
         this.algorithm = MXCRYPTO_ALGORITHM_MEGOLM

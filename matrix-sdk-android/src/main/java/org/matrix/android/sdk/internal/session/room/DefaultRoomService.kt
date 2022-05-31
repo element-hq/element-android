@@ -94,8 +94,10 @@ internal class DefaultRoomService @Inject constructor(
         return roomSummaryDataSource.getRoomSummaryLive(roomId)
     }
 
-    override fun getRoomSummaries(queryParams: RoomSummaryQueryParams,
-                                  sortOrder: RoomSortOrder): List<RoomSummary> {
+    override fun getRoomSummaries(
+            queryParams: RoomSummaryQueryParams,
+            sortOrder: RoomSortOrder
+    ): List<RoomSummary> {
         return roomSummaryDataSource.getRoomSummaries(queryParams, sortOrder)
     }
 
@@ -119,20 +121,26 @@ internal class DefaultRoomService @Inject constructor(
         }
     }
 
-    override fun getRoomSummariesLive(queryParams: RoomSummaryQueryParams,
-                                      sortOrder: RoomSortOrder): LiveData<List<RoomSummary>> {
+    override fun getRoomSummariesLive(
+            queryParams: RoomSummaryQueryParams,
+            sortOrder: RoomSortOrder
+    ): LiveData<List<RoomSummary>> {
         return roomSummaryDataSource.getRoomSummariesLive(queryParams, sortOrder)
     }
 
-    override fun getPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams,
-                                           pagedListConfig: PagedList.Config,
-                                           sortOrder: RoomSortOrder): LiveData<PagedList<RoomSummary>> {
+    override fun getPagedRoomSummariesLive(
+            queryParams: RoomSummaryQueryParams,
+            pagedListConfig: PagedList.Config,
+            sortOrder: RoomSortOrder
+    ): LiveData<PagedList<RoomSummary>> {
         return roomSummaryDataSource.getSortedPagedRoomSummariesLive(queryParams, pagedListConfig, sortOrder)
     }
 
-    override fun getFilteredPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams,
-                                                   pagedListConfig: PagedList.Config,
-                                                   sortOrder: RoomSortOrder): UpdatableLivePageResult {
+    override fun getFilteredPagedRoomSummariesLive(
+            queryParams: RoomSummaryQueryParams,
+            pagedListConfig: PagedList.Config,
+            sortOrder: RoomSortOrder
+    ): UpdatableLivePageResult {
         return roomSummaryDataSource.getUpdatablePagedRoomSummariesLive(queryParams, pagedListConfig, sortOrder, getFlattenedParents = true)
     }
 
@@ -160,9 +168,11 @@ internal class DefaultRoomService @Inject constructor(
         joinRoomTask.execute(JoinRoomTask.Params(roomIdOrAlias, reason, viaServers))
     }
 
-    override suspend fun joinRoom(roomId: String,
-                                  reason: String?,
-                                  thirdPartySigned: SignInvitationResult) {
+    override suspend fun joinRoom(
+            roomId: String,
+            reason: String?,
+            thirdPartySigned: SignInvitationResult
+    ) {
         joinRoomTask.execute(JoinRoomTask.Params(roomId, reason, thirdPartySigned = thirdPartySigned))
     }
 

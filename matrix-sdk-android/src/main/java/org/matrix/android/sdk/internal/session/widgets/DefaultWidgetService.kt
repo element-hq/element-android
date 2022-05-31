@@ -26,9 +26,11 @@ import org.matrix.android.sdk.api.session.widgets.model.Widget
 import javax.inject.Inject
 import javax.inject.Provider
 
-internal class DefaultWidgetService @Inject constructor(private val widgetManager: WidgetManager,
-                                                        private val widgetURLFormatter: WidgetURLFormatter,
-                                                        private val widgetPostAPIMediator: Provider<WidgetPostAPIMediator>) :
+internal class DefaultWidgetService @Inject constructor(
+        private val widgetManager: WidgetManager,
+        private val widgetURLFormatter: WidgetURLFormatter,
+        private val widgetPostAPIMediator: Provider<WidgetPostAPIMediator>
+) :
         WidgetService {
 
     override fun getWidgetURLFormatter(): WidgetURLFormatter {

@@ -36,13 +36,16 @@ class MessageItemAttributesFactory @Inject constructor(
         private val stringProvider: StringProvider,
         private val displayableEventFormatter: DisplayableEventFormatter,
         private val preferencesProvider: UserPreferencesProvider,
-        private val emojiCompatFontProvider: EmojiCompatFontProvider) {
+        private val emojiCompatFontProvider: EmojiCompatFontProvider
+) {
 
-    fun create(messageContent: Any?,
-               informationData: MessageInformationData,
-               callback: TimelineEventController.Callback?,
-               reactionsSummaryEvents: ReactionsSummaryEvents?,
-               threadDetails: ThreadDetails? = null): AbsMessageItem.Attributes {
+    fun create(
+            messageContent: Any?,
+            informationData: MessageInformationData,
+            callback: TimelineEventController.Callback?,
+            reactionsSummaryEvents: ReactionsSummaryEvents?,
+            threadDetails: ThreadDetails? = null
+    ): AbsMessageItem.Attributes {
         return AbsMessageItem.Attributes(
                 avatarSize = avatarSizeProvider.avatarSize,
                 informationData = informationData,

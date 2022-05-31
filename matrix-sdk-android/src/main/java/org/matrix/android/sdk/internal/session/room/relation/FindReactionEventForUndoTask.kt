@@ -41,7 +41,8 @@ internal interface FindReactionEventForUndoTask : Task<FindReactionEventForUndoT
 
 internal class DefaultFindReactionEventForUndoTask @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
-        @UserId private val userId: String) : FindReactionEventForUndoTask {
+        @UserId private val userId: String
+) : FindReactionEventForUndoTask {
 
     override suspend fun execute(params: FindReactionEventForUndoTask.Params): FindReactionEventForUndoTask.Result {
         val eventId = Realm.getInstance(monarchy.realmConfiguration).use { realm ->

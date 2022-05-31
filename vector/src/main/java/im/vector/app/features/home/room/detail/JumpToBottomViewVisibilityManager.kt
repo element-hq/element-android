@@ -31,7 +31,8 @@ class JumpToBottomViewVisibilityManager(
         private val jumpToBottomView: FloatingActionButton,
         private val debouncer: Debouncer,
         recyclerView: RecyclerView,
-        private val layoutManager: LinearLayoutManager) {
+        private val layoutManager: LinearLayoutManager
+) {
 
     init {
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {

@@ -55,11 +55,13 @@ data class CountInfo(
         val otherCount: RoomAggregateNotificationCount
 )
 
-class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initialState: UnreadMessagesState,
-                                                                session: Session,
-                                                                private val vectorPreferences: VectorPreferences,
-                                                                appStateHandler: AppStateHandler,
-                                                                private val autoAcceptInvites: AutoAcceptInvites) :
+class UnreadMessagesSharedViewModel @AssistedInject constructor(
+        @Assisted initialState: UnreadMessagesState,
+        session: Session,
+        private val vectorPreferences: VectorPreferences,
+        appStateHandler: AppStateHandler,
+        private val autoAcceptInvites: AutoAcceptInvites
+) :
         VectorViewModel<UnreadMessagesState, EmptyAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory

@@ -264,14 +264,16 @@ class SASTest : InstrumentedTest {
         assertEquals("Request should be cancelled with m.unknown_method", CancelCode.UnknownMethod.value, cancelReq.code)
     }
 
-    private fun fakeBobStart(bobSession: Session,
-                             aliceUserID: String?,
-                             aliceDevice: String?,
-                             tid: String,
-                             protocols: List<String> = SASDefaultVerificationTransaction.KNOWN_AGREEMENT_PROTOCOLS,
-                             hashes: List<String> = SASDefaultVerificationTransaction.KNOWN_HASHES,
-                             mac: List<String> = SASDefaultVerificationTransaction.KNOWN_MACS,
-                             codes: List<String> = SASDefaultVerificationTransaction.KNOWN_SHORT_CODES) {
+    private fun fakeBobStart(
+            bobSession: Session,
+            aliceUserID: String?,
+            aliceDevice: String?,
+            tid: String,
+            protocols: List<String> = SASDefaultVerificationTransaction.KNOWN_AGREEMENT_PROTOCOLS,
+            hashes: List<String> = SASDefaultVerificationTransaction.KNOWN_HASHES,
+            mac: List<String> = SASDefaultVerificationTransaction.KNOWN_MACS,
+            codes: List<String> = SASDefaultVerificationTransaction.KNOWN_SHORT_CODES
+    ) {
         val startMessage = KeyVerificationStart(
                 fromDevice = bobSession.cryptoService().getMyDevice().deviceId,
                 method = VerificationMethod.SAS.toValue(),

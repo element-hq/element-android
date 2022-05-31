@@ -80,11 +80,11 @@ abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<V
         }
 
         when (throwable) {
-            is CancellationException                  ->
+            is CancellationException ->
                 /* Ignore this error, user has cancelled the action */
                 Unit
             is Failure.UnrecognizedCertificateFailure -> showUnrecognizedCertificateFailure(throwable)
-            else                                      -> onError(throwable)
+            else -> onError(throwable)
         }
     }
 

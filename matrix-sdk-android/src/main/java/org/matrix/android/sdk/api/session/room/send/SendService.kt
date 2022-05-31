@@ -76,10 +76,12 @@ interface SendService {
      * @param rootThreadEventId when this param is not null, the Media will be sent in this specific thread
      * @return a [Cancelable]
      */
-    fun sendMedia(attachment: ContentAttachmentData,
-                  compressBeforeSending: Boolean,
-                  roomIds: Set<String>,
-                  rootThreadEventId: String? = null): Cancelable
+    fun sendMedia(
+            attachment: ContentAttachmentData,
+            compressBeforeSending: Boolean,
+            roomIds: Set<String>,
+            rootThreadEventId: String? = null
+    ): Cancelable
 
     /**
      * Method to send a list of media asynchronously.
@@ -90,10 +92,12 @@ interface SendService {
      * @param rootThreadEventId when this param is not null, all the Media will be sent in this specific thread
      * @return a [Cancelable]
      */
-    fun sendMedias(attachments: List<ContentAttachmentData>,
-                   compressBeforeSending: Boolean,
-                   roomIds: Set<String>,
-                   rootThreadEventId: String? = null): Cancelable
+    fun sendMedias(
+            attachments: List<ContentAttachmentData>,
+            compressBeforeSending: Boolean,
+            roomIds: Set<String>,
+            rootThreadEventId: String? = null
+    ): Cancelable
 
     /**
      * Send a poll to the room.

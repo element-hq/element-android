@@ -501,7 +501,8 @@ class MessageItemFactory @Inject constructor(
             informationData: MessageInformationData,
             highlight: Boolean,
             callback: TimelineEventController.Callback?,
-            attributes: AbsMessageItem.Attributes): MessageTextItem? {
+            attributes: AbsMessageItem.Attributes
+    ): MessageTextItem? {
         // For compatibility reason we should display the body
         return buildMessageTextItem(messageContent.body, false, informationData, highlight, callback, attributes)
     }

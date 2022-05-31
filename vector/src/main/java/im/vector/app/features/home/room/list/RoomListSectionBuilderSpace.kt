@@ -107,8 +107,10 @@ class RoomListSectionBuilderSpace(
         return sections
     }
 
-    private fun buildRoomsSections(sections: MutableList<RoomsSection>,
-                                   activeSpaceAwareQueries: MutableList<RoomListViewModel.ActiveSpaceQueryUpdater>) {
+    private fun buildRoomsSections(
+            sections: MutableList<RoomsSection>,
+            activeSpaceAwareQueries: MutableList<RoomListViewModel.ActiveSpaceQueryUpdater>
+    ) {
         if (autoAcceptInvites.showInvites()) {
             addSection(
                     sections = sections,
@@ -230,8 +232,10 @@ class RoomListSectionBuilderSpace(
         )
     }
 
-    private fun buildDmSections(sections: MutableList<RoomsSection>,
-                                activeSpaceAwareQueries: MutableList<RoomListViewModel.ActiveSpaceQueryUpdater>) {
+    private fun buildDmSections(
+            sections: MutableList<RoomsSection>,
+            activeSpaceAwareQueries: MutableList<RoomListViewModel.ActiveSpaceQueryUpdater>
+    ) {
         if (autoAcceptInvites.showInvites()) {
             addSection(
                     sections = sections,
@@ -283,8 +287,10 @@ class RoomListSectionBuilderSpace(
         }
     }
 
-    private fun buildNotificationsSection(sections: MutableList<RoomsSection>,
-                                          activeSpaceAwareQueries: MutableList<RoomListViewModel.ActiveSpaceQueryUpdater>) {
+    private fun buildNotificationsSection(
+            sections: MutableList<RoomsSection>,
+            activeSpaceAwareQueries: MutableList<RoomListViewModel.ActiveSpaceQueryUpdater>
+    ) {
         if (autoAcceptInvites.showInvites()) {
             addSection(
                     sections = sections,
@@ -344,13 +350,15 @@ class RoomListSectionBuilderSpace(
         )
     }
 
-    private fun addSection(sections: MutableList<RoomsSection>,
-                           activeSpaceUpdaters: MutableList<RoomListViewModel.ActiveSpaceQueryUpdater>,
-                           @StringRes nameRes: Int,
-                           notifyOfLocalEcho: Boolean = false,
-                           spaceFilterStrategy: RoomListViewModel.SpaceFilterStrategy = RoomListViewModel.SpaceFilterStrategy.NONE,
-                           countRoomAsNotif: Boolean = false,
-                           query: (RoomSummaryQueryParams.Builder) -> Unit) {
+    private fun addSection(
+            sections: MutableList<RoomsSection>,
+            activeSpaceUpdaters: MutableList<RoomListViewModel.ActiveSpaceQueryUpdater>,
+            @StringRes nameRes: Int,
+            notifyOfLocalEcho: Boolean = false,
+            spaceFilterStrategy: RoomListViewModel.SpaceFilterStrategy = RoomListViewModel.SpaceFilterStrategy.NONE,
+            countRoomAsNotif: Boolean = false,
+            query: (RoomSummaryQueryParams.Builder) -> Unit
+    ) {
         withQueryParams(query) { roomQueryParams ->
             val updatedQueryParams = roomQueryParams.process(spaceFilterStrategy, appStateHandler.safeActiveSpaceId())
             val liveQueryParams = MutableStateFlow(updatedQueryParams)

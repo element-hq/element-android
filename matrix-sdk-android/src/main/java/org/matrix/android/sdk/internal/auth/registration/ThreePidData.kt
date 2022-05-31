@@ -40,9 +40,11 @@ internal data class ThreePidData(
         }
 
     companion object {
-        fun from(threePid: RegisterThreePid,
-                 addThreePidRegistrationResponse: AddThreePidRegistrationResponse,
-                 registrationParams: RegistrationParams): ThreePidData {
+        fun from(
+                threePid: RegisterThreePid,
+                addThreePidRegistrationResponse: AddThreePidRegistrationResponse,
+                registrationParams: RegistrationParams
+        ): ThreePidData {
             return when (threePid) {
                 is RegisterThreePid.Email  ->
                     ThreePidData(threePid.email, "", "", addThreePidRegistrationResponse, registrationParams)

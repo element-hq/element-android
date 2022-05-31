@@ -28,10 +28,11 @@ class OnboardingVariantFactory @Inject constructor(
         private val orientationLocker: ScreenOrientationLocker,
 ) {
 
-    fun create(activity: OnboardingActivity,
-               views: ActivityLoginBinding,
-               onboardingViewModel: Lazy<OnboardingViewModel>,
-               loginViewModel2: Lazy<LoginViewModel2>
+    fun create(
+            activity: OnboardingActivity,
+            views: ActivityLoginBinding,
+            onboardingViewModel: Lazy<OnboardingViewModel>,
+            loginViewModel2: Lazy<LoginViewModel2>
     ) = when (vectorFeatures.onboardingVariant()) {
         VectorFeatures.OnboardingVariant.LEGACY    -> error("Legacy is not supported by the FTUE")
         VectorFeatures.OnboardingVariant.FTUE_AUTH -> FtueAuthVariant(

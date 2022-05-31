@@ -68,9 +68,11 @@ internal class SyncResponseHandler @Inject constructor(
         private val presenceSyncHandler: PresenceSyncHandler
 ) {
 
-    suspend fun handleResponse(syncResponse: SyncResponse,
-                               fromToken: String?,
-                               reporter: ProgressReporter?) {
+    suspend fun handleResponse(
+            syncResponse: SyncResponse,
+            fromToken: String?,
+            reporter: ProgressReporter?
+    ) {
         val isInitialSync = fromToken == null
         Timber.v("Start handling sync, is InitialSync: $isInitialSync")
 

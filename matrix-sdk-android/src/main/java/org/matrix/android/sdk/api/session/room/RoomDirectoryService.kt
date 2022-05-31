@@ -28,8 +28,10 @@ interface RoomDirectoryService {
     /**
      * Get rooms from directory.
      */
-    suspend fun getPublicRooms(server: String?,
-                               publicRoomsParams: PublicRoomsParams): PublicRoomsResponse
+    suspend fun getPublicRooms(
+            server: String?,
+            publicRoomsParams: PublicRoomsParams
+    ): PublicRoomsResponse
 
     /**
      * Get the visibility of a room in the directory.

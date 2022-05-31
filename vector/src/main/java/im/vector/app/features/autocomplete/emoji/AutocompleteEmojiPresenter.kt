@@ -28,9 +28,11 @@ import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class AutocompleteEmojiPresenter @Inject constructor(context: Context,
-                                                     private val emojiDataSource: EmojiDataSource,
-                                                     private val controller: AutocompleteEmojiController) :
+class AutocompleteEmojiPresenter @Inject constructor(
+        context: Context,
+        private val emojiDataSource: EmojiDataSource,
+        private val controller: AutocompleteEmojiController
+) :
         RecyclerViewPresenter<String>(context), AutocompleteClickListener<String> {
 
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)

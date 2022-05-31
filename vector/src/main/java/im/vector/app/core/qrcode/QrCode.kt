@@ -32,8 +32,10 @@ fun String.toBitMatrix(size: Int): BitMatrix {
     )
 }
 
-fun BitMatrix.toBitmap(@ColorInt backgroundColor: Int = Color.WHITE,
-                       @ColorInt foregroundColor: Int = Color.BLACK): Bitmap {
+fun BitMatrix.toBitmap(
+        @ColorInt backgroundColor: Int = Color.WHITE,
+        @ColorInt foregroundColor: Int = Color.BLACK
+): Bitmap {
     val colorBuffer = IntArray(width * height)
     var rowOffset = 0
     for (y in 0 until height) {
