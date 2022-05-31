@@ -32,6 +32,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationState
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
+import org.matrix.android.sdk.api.session.events.model.getMsgType
 import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.ReferencesAggregatedContent
@@ -121,6 +122,7 @@ class MessageInformationDataFactory @Inject constructor(
                 isLastFromThisSender = isLastFromThisSender,
                 e2eDecoration = e2eDecoration,
                 sendStateDecoration = sendStateDecoration,
+                messageType = event.root.getMsgType()
         )
     }
 

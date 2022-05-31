@@ -2190,10 +2190,6 @@
     <string name="space_add_space_to_any_space_you_manage">Shtoni një hapësirë te cilado hapësirë që administroni.</string>
     <string name="space_add_existing_spaces">Shtoni hapësira ekzistuese</string>
     <string name="space_add_existing_rooms_only">Shtoni dhoma ekzistuese</string>
-    <string name="pick_tings_to_leave">Zgjidhni gjëra që duhen braktisur</string>
-    <string name="leave_specific_ones">Braktisni dhoma dhe hapësira të përcaktuara…</string>
-    <string name="dont_leave_any">Mos braktis ndonjë dhomë dhe hapësirë</string>
-    <string name="leave_all_rooms_and_spaces">Braktis krejt dhomat dhe hapësirat</string>
     <string name="space_leave_prompt_msg_with_name">Jeni i sigurt se doni të dilni nga \'%s\?</string>
     <string name="discovery_section">Zbulim (%s)</string>
     <string name="finish_setup">Përfundoje ujdisjen</string>

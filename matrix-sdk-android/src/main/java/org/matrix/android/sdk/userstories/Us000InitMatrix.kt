@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,15 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.query
+@file:Suppress("unused")
 
-sealed class ActiveSpaceFilter {
-    object None : ActiveSpaceFilter()
-    data class ActiveSpace(val currentSpaceId: String?) : ActiveSpaceFilter()
-    data class ExcludeSpace(val spaceId: String) : ActiveSpaceFilter()
-}
+package org.matrix.android.sdk.userstories
+
+/**
+ * ### Title
+ * Init a Matrix object.
+ *
+ * ### Required APIs:
+ * - [org.matrix.android.sdk.api.Matrix] constructor
+ */
+class Us000InitMatrix private constructor()

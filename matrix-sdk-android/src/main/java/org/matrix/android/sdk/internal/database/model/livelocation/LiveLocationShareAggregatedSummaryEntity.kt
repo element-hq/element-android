@@ -31,6 +31,8 @@ internal open class LiveLocationShareAggregatedSummaryEntity(
 
         var roomId: String = "",
 
+        var userId: String = "",
+
         /**
          * Indicate whether the live is currently running.
          */

@@ -186,8 +186,6 @@ interface KeysBackupService {
             callback: MatrixCallback<Unit>
     )
 
-    fun onSecretKeyGossip(secret: String)
-
     /**
      * Restore a backup with a recovery key from a given backup version stored on the homeserver.
      *
@@ -227,10 +225,13 @@ interface KeysBackupService {
     )
 
     val keysBackupVersion: KeysVersionResult?
+
     val currentBackupVersion: String?
-    val isEnabled: Boolean
-    val isStucked: Boolean
-    val state: KeysBackupState
+        get() = keysBackupVersion?.version
+
+    fun isEnabled(): Boolean
+    fun isStuck(): Boolean
+    fun getState(): KeysBackupState
 
     // For gossiping
     fun saveBackupRecoveryKey(recoveryKey: String?, version: String?)

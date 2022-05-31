@@ -20,14 +20,19 @@ package org.matrix.android.sdk.api.session.threads
  * This class defines the state of a thread notification.
  */
 enum class ThreadNotificationState {
-
-    // There are no new message
+    /**
+     * There are no new message.
+     */
     NO_NEW_MESSAGE,
 
-    // There is at least one new message
+    /**
+     * There is at least one new message.
+     */
     NEW_MESSAGE,
 
-    // The is at least one new message that should be highlighted
-    // ex. "Hello @aris.kotsomitopoulos"
+    /**
+     * The is at least one new message that should be highlighted.
+     * ex. "Hello @aris.kotsomitopoulos"
+     */
     NEW_HIGHLIGHTED_MESSAGE;
 }

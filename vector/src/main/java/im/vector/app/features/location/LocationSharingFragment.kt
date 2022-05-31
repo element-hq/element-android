@@ -181,7 +181,7 @@ class LocationSharingFragment @Inject constructor(
     }
 
     private fun handleZoomToUserLocationEvent(event: LocationSharingViewEvents.ZoomToUserLocation) {
-        views.mapView.zoomToLocation(event.userLocation.latitude, event.userLocation.longitude)
+        views.mapView.zoomToLocation(event.userLocation)
     }
 
     private fun handleStartLiveLocationService(event: LocationSharingViewEvents.StartLiveLocationService) {

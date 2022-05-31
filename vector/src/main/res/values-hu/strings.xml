@@ -2198,10 +2198,6 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="space_add_space_to_any_space_you_manage">Add hozzá a teret bármelyik általad kezelt térhez.</string>
     <string name="space_add_existing_spaces">Meglévő terek hozzáadása</string>
     <string name="space_add_existing_rooms_only">Létező szobák hozzáadása</string>
-    <string name="pick_tings_to_leave">Válaszd ki ahonnan kilépsz</string>
-    <string name="leave_specific_ones">Kilépés a megadott szobákból és terekből…</string>
-    <string name="dont_leave_any">Nem lépek ki egyetlen szobából vagy térből sem</string>
-    <string name="leave_all_rooms_and_spaces">Minden szoba és tér elhagyása</string>
     <string name="space_leave_prompt_msg_with_name">Biztos, hogy ki akarsz lépni innen: %s\?</string>
     <string name="discovery_section">Felderítés (%s)</string>
     <string name="finish_setup">Beállítás befejezése</string>
@@ -2251,7 +2247,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="command_description_room_name">Szobanév beállítása</string>
     <string name="command_description_unignore_user">A felhasználó újbóli figyelembe vétele, és az üzenetei megjelenítése a jövőben</string>
     <string name="command_description_ignore_user">Figyelmen kívül hagy egy felhasználót, elrejtve előled az üzeneteit</string>
-    <string name="a11y_presence_unavailable">Elérhetetlen</string>
+    <string name="a11y_presence_unavailable">Távol</string>
     <string name="a11y_presence_offline">Kapcsolat nélkül</string>
     <string name="a11y_presence_online">Kapcsolódva</string>
     <string name="login_error_homeserver_from_url_not_found_enter_manual">Matrix szerver kiválasztása</string>
@@ -2334,7 +2330,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="tooltip_attachment_file">Fájl feltöltése</string>
     <string name="tooltip_attachment_gallery">Képek és videók küldése</string>
     <string name="tooltip_attachment_photo">Kamera megnyitása</string>
-    <string name="room_member_override_nick_color">Becenév színének megváltoztatása</string>
+    <string name="room_member_override_nick_color">Megjelenítendő név színének megváltoztatása</string>
     <string name="login_splash_already_have_account">Már van fiókom</string>
     <string name="ftue_auth_carousel_encrypted_title">Biztonságos üzenetküldés.</string>
     <string name="ftue_auth_carousel_control_title">Te irányítasz.</string>
@@ -2490,4 +2486,8 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 \n
 \nFigyelem, ez az alkalmazást újra is indítja, ami eltarthat egy darabig.</string>
     <string name="initial_sync_request_title">Kezdő szinkronizálási kérés</string>
+    <string name="settings_show_latest_profile_description">A legfrissebb profil információk (profilkép és megjelenítendő név) megjelenítése minden üzenetnél.</string>
+    <string name="settings_show_latest_profile">Legfrissebb felhasználói információ megjelenítése</string>
+    <string name="a11y_presence_busy">Foglalt</string>
+    <string name="keys_backup_settings_signature_from_this_user">A mentésnek érvényes aláírása van ettől a felhasználótól.</string>
 </resources>

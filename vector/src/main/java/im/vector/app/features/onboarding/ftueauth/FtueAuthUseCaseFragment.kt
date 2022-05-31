@@ -44,7 +44,7 @@ private const val DARK_MODE_ICON_BACKGROUND_ALPHA = 0.30f
 private const val LIGHT_MODE_ICON_BACKGROUND_ALPHA = 0.15f
 
 class FtueAuthUseCaseFragment @Inject constructor(
-        private val themeProvider: ThemeProvider
+        private val themeProvider: ThemeProvider,
 ) : AbstractFtueAuthFragment<FragmentFtueAuthUseCaseBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueAuthUseCaseBinding {

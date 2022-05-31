@@ -17,7 +17,9 @@
 package im.vector.app.features.home
 
 import androidx.lifecycle.asFlow
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.MavericksViewModelFactory
+import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -28,6 +30,9 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.analytics.store.AnalyticsStore
 import im.vector.app.features.login.ReAuthHelper
+import im.vector.app.features.raw.wellknown.ElementWellKnown
+import im.vector.app.features.raw.wellknown.getElementWellknown
+import im.vector.app.features.raw.wellknown.isSecureBackupRequired
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.Dispatchers
@@ -42,6 +47,8 @@ import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.raw.RawService
+import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.api.session.getUser
@@ -59,8 +66,9 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
 class HomeActivityViewModel @AssistedInject constructor(
-        @Assisted initialState: HomeActivityViewState,
+        @Assisted private val initialState: HomeActivityViewState,
         private val activeSessionHolder: ActiveSessionHolder,
+        private val rawService: RawService,
         private val reAuthHelper: ReAuthHelper,
         private val analyticsStore: AnalyticsStore,
         private val lightweightSettingsStorage: LightweightSettingsStorage,
@@ -72,10 +80,17 @@ class HomeActivityViewModel @AssistedInject constructor(
         override fun create(initialState: HomeActivityViewState): HomeActivityViewModel
     }
 
-    companion object : MavericksViewModelFactory<HomeActivityViewModel, HomeActivityViewState> by hiltMavericksViewModelFactory()
+    companion object : MavericksViewModelFactory<HomeActivityViewModel, HomeActivityViewState> by hiltMavericksViewModelFactory() {
+        override fun initialState(viewModelContext: ViewModelContext): HomeActivityViewState? {
+            val activity: HomeActivity = viewModelContext.activity()
+            val args: HomeActivityArgs? = activity.intent.getParcelableExtra(Mavericks.KEY_ARG)
+            return args?.let { HomeActivityViewState(accountCreation = it.accountCreation) }
+                    ?: super.initialState(viewModelContext)
+        }
+    }
 
     private var isInitialized = false
-    private var checkBootstrap = false
+    private var hasCheckedBootstrap = false
     private var onceTrusted = false
 
     private fun initialize() {
@@ -116,17 +131,13 @@ class HomeActivityViewModel @AssistedInject constructor(
         safeActiveSession
                 .flow()
                 .liveCrossSigningInfo(safeActiveSession.myUserId)
-                .onEach {
-                    val isVerified = it.getOrNull()?.isTrusted() ?: false
+                .onEach { info ->
+                    val isVerified = info.getOrNull()?.isTrusted() ?: false
                     if (!isVerified && onceTrusted) {
-                        // cross signing keys have been reset
-                        // Trigger a popup to re-verify
-                        // Note: user can be null in case of logout
-                        safeActiveSession.getUser(safeActiveSession.myUserId)
-                                ?.toMatrixItem()
-                                ?.let { user ->
-                                    _viewEvents.post(HomeActivityViewEvents.OnCrossSignedInvalidated(user))
-                                }
+                        viewModelScope.launch(Dispatchers.IO) {
+                            val elementWellKnown = rawService.getElementWellknown(safeActiveSession.sessionParams)
+                            sessionHasBeenUnverified(elementWellKnown)
+                        }
                     }
                     onceTrusted = isVerified
                 }
@@ -180,15 +191,8 @@ class HomeActivityViewModel @AssistedInject constructor(
                 .asFlow()
                 .onEach { status ->
                     when (status) {
-                        is SyncStatusService.Status.InitialSyncProgressing -> {
-                            // Schedule a check of the bootstrap when the init sync will be finished
-                            checkBootstrap = true
-                        }
                         is SyncStatusService.Status.Idle                   -> {
-                            if (checkBootstrap) {
-                                checkBootstrap = false
-                                maybeBootstrapCrossSigningAfterInitialSync()
-                            }
+                            maybeVerifyOrBootstrapCrossSigning()
                         }
                         else                                               -> Unit
                     }
@@ -200,6 +204,10 @@ class HomeActivityViewModel @AssistedInject constructor(
                     }
                 }
                 .launchIn(viewModelScope)
+
+        if (session.hasAlreadySynced()) {
+            maybeVerifyOrBootstrapCrossSigning()
+        }
     }
 
     /**
@@ -240,12 +248,72 @@ class HomeActivityViewModel @AssistedInject constructor(
         }
     }
 
-    private fun maybeBootstrapCrossSigningAfterInitialSync() {
+    private fun sessionHasBeenUnverified(elementWellKnown: ElementWellKnown?) {
+        val session = activeSessionHolder.getSafeActiveSession() ?: return
+        val isSecureBackupRequired = elementWellKnown?.isSecureBackupRequired() ?: false
+        if (isSecureBackupRequired) {
+            // If 4S is forced, force verification
+            // for stability cancel all pending verifications?
+            session.cryptoService().verificationService().getExistingVerificationRequests(session.myUserId).forEach {
+                session.cryptoService().verificationService().cancelVerificationRequest(it)
+            }
+            _viewEvents.post(HomeActivityViewEvents.ForceVerification(false))
+        } else {
+            // cross signing keys have been reset
+            // Trigger a popup to re-verify
+            // Note: user can be null in case of logout
+            session.getUser(session.myUserId)
+                    ?.toMatrixItem()
+                    ?.let { user ->
+                        _viewEvents.post(HomeActivityViewEvents.OnCrossSignedInvalidated(user))
+                    }
+        }
+    }
+
+    private fun maybeVerifyOrBootstrapCrossSigning() {
+        // The contents of this method should only run once
+        if (hasCheckedBootstrap) return
+        hasCheckedBootstrap = true
+
         // We do not use the viewModel context because we do not want to tie this action to activity view model
         activeSessionHolder.getSafeActiveSession()?.coroutineScope?.launch(Dispatchers.IO) {
-            val session = activeSessionHolder.getSafeActiveSession() ?: return@launch
+            val session = activeSessionHolder.getSafeActiveSession() ?: return@launch Unit.also {
+                Timber.w("## No session to init cross signing or bootstrap")
+            }
 
-            tryOrNull("## MaybeBootstrapCrossSigning: Failed to download keys") {
+            val elementWellKnown = rawService.getElementWellknown(session.sessionParams)
+            val isSecureBackupRequired = elementWellKnown?.isSecureBackupRequired() ?: false
+
+            // In case of account creation, it is already done before
+            if (initialState.accountCreation) {
+                if (isSecureBackupRequired) {
+                    _viewEvents.post(HomeActivityViewEvents.StartRecoverySetupFlow)
+                } else {
+                    val password = reAuthHelper.data ?: return@launch Unit.also {
+                        Timber.w("No password to init cross signing")
+                    }
+
+                    // Silently initialize cross signing without 4S
+                    // We do not use the viewModel context because we do not want to cancel this action
+                    Timber.d("Initialize cross signing")
+                    try {
+                        session.cryptoService().crossSigningService().awaitCrossSigninInitialization { response, _ ->
+                            resume(
+                                    UserPasswordAuth(
+                                            session = response.session,
+                                            user = session.myUserId,
+                                            password = password
+                                    )
+                            )
+                        }
+                    } catch (failure: Throwable) {
+                        Timber.e(failure, "Failed to initialize cross signing")
+                    }
+                }
+                return@launch
+            }
+
+            tryOrNull("## MaybeVerifyOrBootstrapCrossSigning: Failed to download keys") {
                 awaitCallback<MXUsersDevicesMap<CryptoDeviceInfo>> {
                     session.cryptoService().downloadKeys(listOf(session.myUserId), true, it)
                 }
@@ -255,47 +323,68 @@ class HomeActivityViewModel @AssistedInject constructor(
             // Is there already cross signing keys here?
             val mxCrossSigningInfo = session.cryptoService().crossSigningService().getMyCrossSigningKeys()
             if (mxCrossSigningInfo != null) {
-                // Cross-signing is already set up for this user, is it trusted?
-                if (!mxCrossSigningInfo.isTrusted()) {
-                    // New session
-                    _viewEvents.post(
-                            HomeActivityViewEvents.OnNewSession(
-                                    session.getUser(session.myUserId)?.toMatrixItem(),
-                                    // Always send request instead of waiting for an incoming as per recent EW changes
-                                    false
+                if (isSecureBackupRequired && !session.sharedSecretStorageService().isRecoverySetup()) {
+                    // If 4S is forced, start the full interactive setup flow
+                    _viewEvents.post(HomeActivityViewEvents.StartRecoverySetupFlow)
+                } else {
+                    // Cross-signing is already set up for this user, is it trusted?
+                    if (!mxCrossSigningInfo.isTrusted()) {
+                        if (isSecureBackupRequired) {
+                            // If 4S is forced, force verification
+                            _viewEvents.post(HomeActivityViewEvents.ForceVerification(true))
+                        } else {
+                            // New session
+                            _viewEvents.post(
+                                    HomeActivityViewEvents.OnNewSession(
+                                            session.getUser(session.myUserId)?.toMatrixItem(),
+                                            // Always send request instead of waiting for an incoming as per recent EW changes
+                                            false
+                                    )
                             )
-                    )
+                        }
+                    }
                 }
             } else {
-                // Try to initialize cross signing in background if possible
-                Timber.d("Initialize cross signing...")
-                try {
-                    awaitCallback<Unit> {
-                        session.cryptoService().crossSigningService().initializeCrossSigning(
-                                object : UserInteractiveAuthInterceptor {
-                                    override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
-                                        // We missed server grace period or it's not setup, see if we remember locally password
-                                        if (flowResponse.nextUncompletedStage() == LoginFlowTypes.PASSWORD &&
-                                                errCode == null &&
-                                                reAuthHelper.data != null) {
-                                            promise.resume(
-                                                    UserPasswordAuth(
-                                                            session = flowResponse.session,
-                                                            user = session.myUserId,
-                                                            password = reAuthHelper.data
-                                                    )
+                // Cross signing is not initialized
+                if (isSecureBackupRequired) {
+                    // If 4S is forced, start the full interactive setup flow
+                    _viewEvents.post(HomeActivityViewEvents.StartRecoverySetupFlow)
+                } else {
+                    // Initialize cross-signing silently
+                    val password = reAuthHelper.data
+
+                    if (password == null) {
+                        // Check this is not an SSO account
+                        if (session.homeServerCapabilitiesService().getHomeServerCapabilities().canChangePassword) {
+                            // Ask password to the user: Upgrade security
+                            _viewEvents.post(HomeActivityViewEvents.AskPasswordToInitCrossSigning(session.getUser(session.myUserId)?.toMatrixItem()))
+                        }
+                        // Else (SSO) just ignore for the moment
+                    } else {
+                        // Try to initialize cross signing in background if possible
+                        Timber.d("Initialize cross signing...")
+                        try {
+                            session.cryptoService().crossSigningService().awaitCrossSigninInitialization { response, errCode ->
+                                // We missed server grace period or it's not setup, see if we remember locally password
+                                if (response.nextUncompletedStage() == LoginFlowTypes.PASSWORD &&
+                                        errCode == null &&
+                                        reAuthHelper.data != null) {
+                                    resume(
+                                            UserPasswordAuth(
+                                                    session = response.session,
+                                                    user = session.myUserId,
+                                                    password = reAuthHelper.data
                                             )
-                                        } else {
-                                            promise.resumeWithException(Exception("Cannot silently initialize cross signing, UIA missing"))
-                                        }
-                                    }
-                                },
-                                callback = it
-                        )
-                        Timber.d("Initialize cross signing SUCCESS")
+                                    )
+                                    Timber.d("Initialize cross signing SUCCESS")
+                                } else {
+                                    resumeWithException(Exception("Cannot silently initialize cross signing, UIA missing"))
+                                }
+                            }
+                        } catch (failure: Throwable) {
+                            Timber.e(failure, "Failed to initialize cross signing")
+                        }
                     }
-                } catch (failure: Throwable) {
-                    Timber.e(failure, "Failed to initialize cross signing")
                 }
             }
         }
@@ -310,5 +399,20 @@ class HomeActivityViewModel @AssistedInject constructor(
                 initialize()
             }
         }
+    }
+}
+
+private suspend fun CrossSigningService.awaitCrossSigninInitialization(
+        block: Continuation<UIABaseAuth>.(response: RegistrationFlowResponse, errCode: String?) -> Unit
+) {
+    awaitCallback<Unit> {
+        initializeCrossSigning(
+                object : UserInteractiveAuthInterceptor {
+                    override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
+                        promise.block(flowResponse, errCode)
+                    }
+                },
+                callback = it
+        )
     }
 }

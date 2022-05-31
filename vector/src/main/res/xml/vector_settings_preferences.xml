@@ -141,6 +141,12 @@
             android:title="@string/settings_chat_effects_title" />
 
         <im.vector.app.core.preference.VectorSwitchPreference
+            android:defaultValue="false"
+            android:key="SETTINGS_AUTOPLAY_ANIMATED_IMAGES"
+            android:summary="@string/settings_autoplay_animated_images_summary"
+            android:title="@string/settings_autoplay_animated_images_title" />
+
+        <im.vector.app.core.preference.VectorSwitchPreference
             android:key="SETTINGS_VIBRATE_ON_MENTION_KEY"
             android:title="@string/settings_vibrate_on_mention"
             app:isPreferenceVisible="@bool/false_not_implemented" />
