@@ -2198,10 +2198,6 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="space_add_space_to_any_space_you_manage">Add hozzá a teret bármelyik általad kezelt térhez.</string>
     <string name="space_add_existing_spaces">Meglévő terek hozzáadása</string>
     <string name="space_add_existing_rooms_only">Létező szobák hozzáadása</string>
-    <string name="pick_tings_to_leave">Válaszd ki ahonnan kilépsz</string>
-    <string name="leave_specific_ones">Kilépés a megadott szobákból és terekből…</string>
-    <string name="dont_leave_any">Nem lépek ki egyetlen szobából vagy térből sem</string>
-    <string name="leave_all_rooms_and_spaces">Minden szoba és tér elhagyása</string>
     <string name="space_leave_prompt_msg_with_name">Biztos, hogy ki akarsz lépni innen: %s\?</string>
     <string name="discovery_section">Felderítés (%s)</string>
     <string name="finish_setup">Beállítás befejezése</string>

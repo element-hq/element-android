@@ -2239,10 +2239,6 @@
     <string name="space_add_space_to_any_space_you_manage">Lägg till ett utrymme till alla utrymmen du hanterar.</string>
     <string name="space_add_existing_spaces">Lägg till befintliga utrymmen</string>
     <string name="space_add_existing_rooms_only">Lägg till befintliga rum</string>
-    <string name="pick_tings_to_leave">Välj saker att lämna</string>
-    <string name="leave_specific_ones">Lämna specifika rum och utrymmen…</string>
-    <string name="dont_leave_any">Lämna inga rum och utrymmen</string>
-    <string name="leave_all_rooms_and_spaces">Lämna alla rum och utrymmen</string>
     <string name="space_leave_prompt_msg_with_name">Är du säker på att du vill lämna %s\?</string>
     <string name="discovery_section">Upptäckt (%s)</string>
     <string name="finish_setup">Slutför konfigurationen</string>

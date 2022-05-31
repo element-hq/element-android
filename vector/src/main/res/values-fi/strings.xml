@@ -2063,8 +2063,6 @@
     <string name="location_share_option_user_current">Jaa nykyinen sijaintini</string>
     <string name="restart_the_application_to_apply_changes">Käynnistä sovellus uudelleen, jotta muutos tulee voimaan.</string>
     <string name="space_add_existing_rooms">Lisää olemassa olevia huoneita ja avaruuksia</string>
-    <string name="dont_leave_any">Älä poistu mistään huoneesta ja avaruudesta</string>
-    <string name="leave_all_rooms_and_spaces">Poistu kaikista huoneista ja avaruuksista</string>
     <string name="use_latest_app">Käytä ${app_name}in uusinta versiota muilla laitteillasi:</string>
     <string name="ftue_personalize_skip_this_step">Ohita tämä vaihe</string>
     <string name="ftue_personalize_submit">Tallenna ja jatka</string>

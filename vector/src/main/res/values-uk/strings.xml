@@ -2133,7 +2133,6 @@
     <string name="space_add_space_to_any_space_you_manage">Додайте простір до будь-якого простору, яким ви керуєте.</string>
     <string name="space_add_existing_spaces">Додати наявні простори</string>
     <string name="space_add_existing_rooms_only">Додати наявні кімнати</string>
-    <string name="leave_all_rooms_and_spaces">Вийти з усіх кімнат і просторів</string>
     <string name="space_leave_prompt_msg_with_name">Ви впевнені, що хочете вийти з %s\?</string>
     <string name="create_spaces_private_teammates">Приватний простір для вас і учасників вашої команди</string>
     <string name="create_spaces_me_and_teammates">Я та учасники команди</string>
@@ -2197,9 +2196,6 @@
     <string name="spaces_no_server_support_description">Зверніться до адміністратора домашнього сервера за подробицями</string>
     <string name="spaces_no_server_support_title">Схоже, ваш домашній сервер ще не підтримує просторів</string>
     <string name="looking_for_someone_not_in_space">Шукаєте когось не в %s\?</string>
-    <string name="pick_tings_to_leave">Виберіть, звідки хочете вийти</string>
-    <string name="leave_specific_ones">Вийти з обраних кімнат і просторів…</string>
-    <string name="dont_leave_any">Не виходити з жодної кімнати й простору</string>
     <string name="finish_setup">Завершити налаштування</string>
     <string name="skip_for_now">На разі пропустити</string>
     <string name="share_space_link_message">Приєднуйтеся до мого простору %1$s %2$s</string>

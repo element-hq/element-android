@@ -2110,10 +2110,6 @@
     <string name="send_images_and_video_with_original_size">Enviar contenido multimedia con su tamaño original</string>
     <string name="settings_server_room_version_unstable">inestable</string>
     <string name="space_add_existing_rooms_only">Agregar salas existentes</string>
-    <string name="pick_tings_to_leave">Elige cosas para dar</string>
-    <string name="leave_specific_ones">Dejar salas y espacios específicos…</string>
-    <string name="dont_leave_any">No dejes salas y espacios</string>
-    <string name="leave_all_rooms_and_spaces">Deja todas las habitaciones y espacios</string>
     <string name="space_leave_prompt_msg_with_name">¿Estás seguro de que quieres irte %s\?</string>
     <string name="discovery_section">Descubrimiento (%s)</string>
     <string name="finish_setup">Terminar la configuración</string>

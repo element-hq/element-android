@@ -1969,10 +1969,6 @@
     <string name="space_add_existing_spaces">Dodaj istniejące przestrzenie</string>
     <string name="space_add_existing_rooms_only">Dodaj istniejące pokoje</string>
     <string name="space_add_existing_rooms">Dodaj istniejące pokoje i przestrzenie</string>
-    <string name="pick_tings_to_leave">Wybierz aby opuścić</string>
-    <string name="leave_specific_ones">Opuść wybrane pokoje i przestrzenie…</string>
-    <string name="dont_leave_any">Nie opuszczaj żadnych pokojów i przestrzeni</string>
-    <string name="leave_all_rooms_and_spaces">Opuść wszystkie pokoje i przestrzenie</string>
     <string name="space_leave_prompt_msg_as_admin">Jesteś jedynym administratorem tej przestrzeni. Opuszczenie jej oznacza brak kontroli nad nią.</string>
     <string name="space_leave_prompt_msg_private">Nie będziesz w stanie ponownie dołączyć, do momentu kiedy nie zostaniesz ponownie zaproszony.</string>
     <string name="space_leave_prompt_msg_only_you">Jesteś jedyną osoba tutaj. Jeśli wyjdziesz, nikt nie będzie w stanie dołączyć w przyszłości, włączając Ciebie.</string>

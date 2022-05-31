@@ -2158,10 +2158,6 @@
     <string name="space_add_space_to_any_space_you_manage">新增空間至您管理的任何空間。</string>
     <string name="space_add_existing_spaces">新增既有的空間</string>
     <string name="space_add_existing_rooms_only">新增既有的聊天室</string>
-    <string name="pick_tings_to_leave">挑選要離開的對象</string>
-    <string name="leave_specific_ones">離開特定的聊天室與空間……</string>
-    <string name="dont_leave_any">不要離開任何聊天室與空間</string>
-    <string name="leave_all_rooms_and_spaces">離開所有聊天室與空間</string>
     <string name="space_leave_prompt_msg_with_name">您確定您想要離開 %s？</string>
     <string name="discovery_section">探索 (%s)</string>
     <string name="finish_setup">結束設定</string>

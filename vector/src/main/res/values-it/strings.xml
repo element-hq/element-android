@@ -2192,10 +2192,6 @@
     <string name="space_add_space_to_any_space_you_manage">Aggiungi uno spazio ad un altro che gestisci.</string>
     <string name="space_add_existing_spaces">Aggiungi spazi esistenti</string>
     <string name="space_add_existing_rooms_only">Aggiungi stanze esistenti</string>
-    <string name="pick_tings_to_leave">Scegli da cosa uscire</string>
-    <string name="leave_specific_ones">Esci da stanze e spazi specifici…</string>
-    <string name="dont_leave_any">Non uscire da alcuna stanza e spazio</string>
-    <string name="leave_all_rooms_and_spaces">Esci da tutte le stanze e gli spazi</string>
     <string name="space_leave_prompt_msg_with_name">Vuoi davvero uscire da %s\?</string>
     <string name="finish_setup">Termina configurazione</string>
     <string name="discovery_invite">Invita per email, trova contatti e altro…</string>

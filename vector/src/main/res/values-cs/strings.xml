@@ -2238,10 +2238,6 @@
     <string name="space_add_space_to_any_space_you_manage">Přidejte prostor do jakéhokoli prostoru, který spravujete.</string>
     <string name="space_add_existing_spaces">Přidat stávající prostory</string>
     <string name="space_add_existing_rooms_only">Přidat stávající místnosti</string>
-    <string name="pick_tings_to_leave">Vyberte místa, která chcete opustit</string>
-    <string name="leave_specific_ones">Opustit konkrétní místnosti a prostory…</string>
-    <string name="dont_leave_any">Neopouštět žádné místnosti a prostory</string>
-    <string name="leave_all_rooms_and_spaces">Opustit všechny místnosti a prostory</string>
     <string name="space_leave_prompt_msg_with_name">Opravdu chcete opustit %s\?</string>
     <string name="discovery_section">Objevování (%s)</string>
     <string name="finish_setup">Dokončit nastavení</string>

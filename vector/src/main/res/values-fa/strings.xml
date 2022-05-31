@@ -2198,10 +2198,6 @@
     <string name="space_add_space_to_any_space_you_manage">افزودن فضایی به هر فضایی که مدیریت می‌کنید.</string>
     <string name="space_add_existing_spaces">افزودن فضاهای موجود</string>
     <string name="space_add_existing_rooms_only">افزودن اتاق‌های موجود</string>
-    <string name="pick_tings_to_leave">گزینش خارج شدن‌ها</string>
-    <string name="leave_specific_ones">خارج شدن از اتاق‌ها و فضاهایی خاص…</string>
-    <string name="dont_leave_any">از هیچ اتاق و فضایی خارج نشو</string>
-    <string name="leave_all_rooms_and_spaces">ترک تمامی اتاق‌ها و فضاها</string>
     <string name="space_leave_prompt_msg_with_name">مطمئنید می‌خواهید %s را ترک کنید؟</string>
     <string name="discovery_section">کشف (%s)</string>
     <string name="finish_setup">پایان برپایی</string>

@@ -1724,7 +1724,6 @@
     <string name="settings_troubleshoot_test_play_services_title">Athugun á Play-þjónustum</string>
     <string name="upgrade_private_room">Uppfæra einkaspjallrás</string>
     <string name="upgrade_public_room">Uppfæra almenningsspjallrás</string>
-    <string name="leave_all_rooms_and_spaces">Yfirgefa allar spjallrásir og svæði</string>
     <string name="invite_by_email">Bjóða með tölvupósti</string>
     <string name="create_spaces_organise_rooms">Einkasvæði til að skipuleggja spjallrásirnar þínar</string>
     <string name="create_spaces_who_are_you_working_with">Hverjum ertu að vinna með\?</string>
@@ -1932,9 +1931,6 @@
     <string name="labs_auto_report_uisi">Tilkynna afkóðunarvillur sjálfvirkt.</string>
     <string name="space_add_space_to_any_space_you_manage">Bættu svæði við eitthvað svæði sem þú stýrir.</string>
     <string name="space_add_existing_rooms">Bæta við fyrirliggjandi spjallrásum og svæði</string>
-    <string name="pick_tings_to_leave">Veldu það sem á að yfirgefa</string>
-    <string name="leave_specific_ones">Yfirgefa tilteknar spjallrásir og svæði…</string>
-    <string name="dont_leave_any">Ekki yfirgefa neinar spjallrásir eða svæði</string>
     <string name="space_leave_prompt_msg_with_name">Ertu viss um að þú viljir yfirgefa %s\?</string>
     <string name="create_spaces_private_teammates">Einkasvæði fyrir þig og félaga í teyminu þínu</string>
     <string name="command_description_add_to_space">Bæta við í uppgefið svæði</string>
