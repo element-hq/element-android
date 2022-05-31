@@ -20,6 +20,6 @@ import im.vector.app.core.platform.VectorViewModelAction
 import im.vector.app.features.onboarding.AuthenticationDescription
 
 sealed interface HomeActivityViewActions : VectorViewModelAction {
-    data class ViewStarted(val recentAuthentication: AuthenticationDescription?) : HomeActivityViewActions
+    object ViewStarted : HomeActivityViewActions
     object PushPromptHasBeenReviewed : HomeActivityViewActions
 }

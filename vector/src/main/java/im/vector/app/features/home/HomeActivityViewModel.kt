@@ -101,18 +101,18 @@ class HomeActivityViewModel @AssistedInject constructor(
     private var hasCheckedBootstrap = false
     private var onceTrusted = false
 
-    private fun initialize(recentAuthentication: AuthenticationDescription?) {
+    private fun initialize() {
         if (isInitialized) return
         isInitialized = true
         cleanupFiles()
         observeInitialSync()
         checkSessionPushIsOn()
         observeCrossSigningReset()
-        observeAnalytics(recentAuthentication)
+        observeAnalytics()
         initThreadsMigration()
     }
 
-    private fun observeAnalytics(recentAuthentication: AuthenticationDescription?) {
+    private fun observeAnalytics() {
         if (analyticsConfig.isEnabled) {
             analyticsStore.didAskUserConsentFlow
                     .onEach { didAskUser ->
@@ -122,7 +122,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                     }
                     .launchIn(viewModelScope)
 
-            recentAuthentication?.let {
+            initialState.authenticationDescription?.let { recentAuthentication ->
                 when (recentAuthentication) {
                     is AuthenticationDescription.Register -> {
                         viewModelScope.launch {
@@ -426,7 +426,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                 vectorPreferences.setDidAskUserToEnableSessionPush()
             }
             is HomeActivityViewActions.ViewStarted            -> {
-                initialize(action.recentAuthentication)
+                initialize()
             }
         }
     }

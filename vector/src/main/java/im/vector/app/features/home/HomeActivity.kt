@@ -249,7 +249,7 @@ class HomeActivity :
         if (isFirstCreation()) {
             handleIntent(intent)
         }
-        homeActivityViewModel.handle(HomeActivityViewActions.ViewStarted(args?.authenticationDescription))
+        homeActivityViewModel.handle(HomeActivityViewActions.ViewStarted)
     }
 
     private fun openGroup(shouldClearFragment: Boolean) {
