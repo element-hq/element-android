@@ -2242,7 +2242,7 @@
     <string name="command_description_room_name">Imposta il nome della stanza</string>
     <string name="command_description_unignore_user">Smetti di ignorare un utente, mostrando i suoi messaggi successivi</string>
     <string name="command_description_ignore_user">Ignora un utente, non mostrandoti i suoi messaggi</string>
-    <string name="a11y_presence_unavailable">Non disponibile</string>
+    <string name="a11y_presence_unavailable">Assente</string>
     <string name="a11y_presence_offline">Offline</string>
     <string name="a11y_presence_online">Online</string>
     <string name="login_error_homeserver_from_url_not_found_enter_manual">Scegli homeserver</string>
@@ -2324,7 +2324,7 @@
     <string name="tooltip_attachment_photo">Apri fotocamera</string>
     <string name="labs_auto_report_uisi_desc">Il tuo sistema invierà automaticamente i log quando si verifica un errore di decifrazione</string>
     <string name="labs_auto_report_uisi">Auto-segnala errori di decifrazione.</string>
-    <string name="room_member_override_nick_color">Sovrascrivi colore nick</string>
+    <string name="room_member_override_nick_color">Sovrascrivi colore nome visualizzato</string>
     <string name="login_splash_already_have_account">Ho già un account</string>
     <string name="ftue_auth_carousel_encrypted_title">Messaggistica sicura.</string>
     <string name="ftue_auth_carousel_control_title">Tu hai il controllo.</string>
@@ -2481,4 +2481,8 @@
 \n
 \nNota che questa azione riavvierà l\'app e potrebbe richiedere del tempo.</string>
     <string name="initial_sync_request_title">Richiesta di sincronizzazione iniziale</string>
+    <string name="settings_show_latest_profile_description">Mostra le informazioni di profilo più recenti (avatar e nome visualizzato) per tutti i messaggi.</string>
+    <string name="settings_show_latest_profile">Mostra info utente più recenti</string>
+    <string name="a11y_presence_busy">Occupato</string>
+    <string name="keys_backup_settings_signature_from_this_user">Il backup ha una firma valida da questo utente.</string>
 </resources>
