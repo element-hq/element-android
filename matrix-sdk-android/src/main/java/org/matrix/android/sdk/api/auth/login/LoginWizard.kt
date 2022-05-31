@@ -73,9 +73,8 @@ interface LoginWizard {
      * When this method succeed, tha account password will be effectively modified.
      *
      * @param newPassword the desired new password.
-     * @param logoutAllDevices when true, all devices will be logged out. False values will only be taken into account
-     * if [ResetCapabilities.supportsLogoutAllDevices] is supported.
-     * When [ResetCapabilities.supportsLogoutAllDevices] is false the default behaviour is to logout all devices.
+     * @param logoutAllDevices defaults to true, all devices will be logged out. False values will only be taken into account
+     * if [org.matrix.android.sdk.api.auth.data.LoginFlowResult.isLogoutDevicesSupported] is true.
      */
     suspend fun resetPasswordMailConfirmed(newPassword: String, logoutAllDevices: Boolean = true)
 }

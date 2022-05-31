@@ -66,6 +66,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.failure.isInvalidPassword
 import org.matrix.android.sdk.api.session.getUser
+import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerConfig
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
 import org.matrix.android.sdk.flow.flow
@@ -178,9 +179,10 @@ class VectorSettingsGeneralFragment @Inject constructor(
             }
         }
 
+        val homeServerCapabilities = session.homeServerCapabilitiesService().getHomeServerCapabilities()
         // Password
         // Hide the preference if password can not be updated
-        if (session.homeServerCapabilitiesService().getHomeServerCapabilities().canChangePassword) {
+        if (homeServerCapabilities.canChangePassword) {
             mPasswordPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 onPasswordUpdateClick()
                 false
