@@ -17,6 +17,8 @@
 package org.matrix.android.sdk.internal.crypto
 
 import io.realm.RealmConfiguration
+import org.matrix.android.sdk.api.MatrixConfiguration
+import org.matrix.android.sdk.common.TestRoomDisplayNameFallbackProvider
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.store.db.RealmCryptoStore
 import org.matrix.android.sdk.internal.crypto.store.db.RealmCryptoStoreModule
@@ -36,6 +38,10 @@ internal class CryptoStoreHelper {
                 crossSigningKeysMapper = CrossSigningKeysMapper(MoshiProvider.providesMoshi()),
                 userId = "userId_" + Random.nextInt(),
                 deviceId = "deviceId_sample",
+                matrixConfiguration = MatrixConfiguration(
+                        applicationFlavor = "TestFlavor",
+                        roomDisplayNameFallbackProvider = TestRoomDisplayNameFallbackProvider()
+                ),
                 clock = DefaultClock(),
         )
     }
