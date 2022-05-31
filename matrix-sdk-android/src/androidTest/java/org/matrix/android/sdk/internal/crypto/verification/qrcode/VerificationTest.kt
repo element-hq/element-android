@@ -151,10 +151,12 @@ class VerificationTest : InstrumentedTest {
 
     // TODO Add tests without SAS
 
-    private fun doTest(aliceSupportedMethods: List<VerificationMethod>,
-                       bobSupportedMethods: List<VerificationMethod>,
-                       expectedResultForAlice: ExpectedResult,
-                       expectedResultForBob: ExpectedResult) = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    private fun doTest(
+            aliceSupportedMethods: List<VerificationMethod>,
+            bobSupportedMethods: List<VerificationMethod>,
+            expectedResultForAlice: ExpectedResult,
+            expectedResultForBob: ExpectedResult
+    ) = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession
