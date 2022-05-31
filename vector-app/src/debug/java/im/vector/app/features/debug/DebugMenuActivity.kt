@@ -35,6 +35,7 @@ import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.toast
 import im.vector.app.features.debug.analytics.DebugAnalyticsActivity
 import im.vector.app.features.debug.features.DebugFeaturesSettingsActivity
+import im.vector.app.features.debug.jitsi.DebugJitsiActivity
 import im.vector.app.features.debug.leak.DebugMemoryLeaksActivity
 import im.vector.app.features.debug.sas.DebugSasEmojiActivity
 import im.vector.app.features.debug.settings.DebugPrivateSettingsActivity
@@ -120,6 +121,9 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
         views.debugScanQrCode.setOnClickListener { scanQRCode() }
         views.debugPermission.setOnClickListener {
             startActivity(Intent(this, DebugPermissionActivity::class.java))
+        }
+        views.debugJitsi.setOnClickListener {
+            startActivity(Intent(this, DebugJitsiActivity::class.java))
         }
     }
 
