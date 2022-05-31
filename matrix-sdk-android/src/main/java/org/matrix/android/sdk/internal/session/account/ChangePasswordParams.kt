@@ -35,11 +35,11 @@ internal data class ChangePasswordParams(
         val logoutDevices: Boolean = true
 ) {
     companion object {
-        fun create(userId: String, oldPassword: String, newPassword: String, logoutDevices: Boolean): ChangePasswordParams {
+        fun create(userId: String, oldPassword: String, newPassword: String, logoutAllDevices: Boolean): ChangePasswordParams {
             return ChangePasswordParams(
                     auth = UserPasswordAuth(user = userId, password = oldPassword),
                     newPassword = newPassword,
-                    logoutDevices = logoutDevices
+                    logoutDevices = logoutAllDevices
             )
         }
     }
