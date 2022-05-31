@@ -27,7 +27,6 @@ import im.vector.app.R
 import im.vector.app.core.error.fatalError
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.features.settings.VectorPreferences
-import java.lang.NullPointerException
 import javax.inject.Inject
 
 class WebviewPermissionUtils @Inject constructor(
