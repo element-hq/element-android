@@ -19,6 +19,7 @@ package im.vector.app.features.widgets
 import android.Manifest
 import android.webkit.PermissionRequest
 import im.vector.app.features.widgets.webview.WebviewPermissionUtils
+import im.vector.app.test.fakes.FakeVectorPreferences
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.FixMethodOrder
 import org.junit.Test
@@ -30,7 +31,8 @@ import org.junit.runners.MethodSorters
 @FixMethodOrder(MethodSorters.JVM)
 class WebviewPermissionUtilsTest {
 
-    private val utils = WebviewPermissionUtils()
+    private val prefs = FakeVectorPreferences()
+    private val utils = WebviewPermissionUtils(prefs.instance)
 
     @Test
     fun filterPermissionsToBeGranted_selectedAndGrantedNothing() {
