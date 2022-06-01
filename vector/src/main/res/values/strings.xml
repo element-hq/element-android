@@ -3077,7 +3077,10 @@
     <string name="settings_troubleshoot_test_distributors_title">Available methods</string>
     <string name="settings_troubleshoot_test_distributors_gplay">No other method than Google Play Service found.</string>
     <string name="settings_troubleshoot_test_distributors_fdroid">No other method than background synchronization found.</string>
-    <string name="settings_troubleshoot_test_distributors_many">Found %d methods.</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="one">Found %d method.</item>
+        <item quantity="other">Found %d methods.</item>
+    </plurals>
     <string name="settings_troubleshoot_test_current_distributor_title">Method</string>
     <string name="settings_troubleshoot_test_current_distributor">Currently using %s.</string>
     <string name="settings_troubleshoot_test_current_endpoint_title">Endpoint</string>

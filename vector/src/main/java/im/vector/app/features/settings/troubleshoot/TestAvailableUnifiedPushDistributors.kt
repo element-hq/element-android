@@ -40,7 +40,8 @@ class TestAvailableUnifiedPushDistributors @Inject constructor(
                     }
             )
         } else {
-            stringProvider.getString(R.string.settings_troubleshoot_test_distributors_many, distributors.size + 1)
+            val quantity = distributors.size + 1
+            stringProvider.getQuantityString(R.plurals.settings_troubleshoot_test_distributors_many, quantity, quantity)
         }
         status = TestStatus.SUCCESS
     }
