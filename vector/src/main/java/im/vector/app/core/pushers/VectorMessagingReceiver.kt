@@ -26,8 +26,6 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.BuildConfig
 import im.vector.app.core.di.ActiveSessionHolder
@@ -48,6 +46,7 @@ import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.getTimelineEvent
+import org.matrix.android.sdk.api.util.MatrixJsonParser
 import org.unifiedpush.android.connector.MessagingReceiver
 import timber.log.Timber
 import javax.inject.Inject
@@ -113,20 +112,15 @@ class VectorMessagingReceiver : MessagingReceiver() {
             vectorDataStore.incrementPushCounter()
         }
 
-        val moshi: Moshi = Moshi.Builder()
-                .add(KotlinJsonAdapterFactory())
-                .build()
-        lateinit var notification: Notification
-
-        if (unifiedPushHelper.isEmbeddedDistributor()) {
-            notification = moshi.adapter(Notification::class.java)
-                    .fromJson(sMessage) ?: return
+        val moshi = MatrixJsonParser.getMoshi()
+        val notification: Notification = if (unifiedPushHelper.isEmbeddedDistributor()) {
+            moshi.adapter(Notification::class.java).fromJson(sMessage)
         } else {
-            val data = moshi.adapter(UnifiedPushMessage::class.java)
-                    .fromJson(sMessage) ?: return
-            notification = data.notification
-            notification.unread = notification.counts.unread
-        }
+            val data = moshi.adapter(UnifiedPushMessage::class.java).fromJson(sMessage)
+            data?.notification?.also {
+                it.unread = it.counts.unread
+            }
+        } ?: return Unit.also { Timber.w("Invalid received data") }
 
         // Diagnostic Push
         if (notification.eventId == PushersManager.TEST_EVENT_ID) {
