@@ -31,16 +31,18 @@ import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.session.pushers.PusherState
 import javax.inject.Inject
 
-class TestEndpointAsTokenRegistration @Inject constructor(private val context: FragmentActivity,
-                                                          private val stringProvider: StringProvider,
-                                                          private val pushersManager: PushersManager,
-                                                          private val vectorPreferences: VectorPreferences,
-                                                          private val activeSessionHolder: ActiveSessionHolder) :
-        TroubleshootTest(R.string.settings_troubleshoot_test_endpoint_registration_title) {
+class TestEndpointAsTokenRegistration @Inject constructor(
+        private val context: FragmentActivity,
+        private val stringProvider: StringProvider,
+        private val pushersManager: PushersManager,
+        private val vectorPreferences: VectorPreferences,
+        private val activeSessionHolder: ActiveSessionHolder,
+        private val unifiedPushHelper: UnifiedPushHelper,
+) : TroubleshootTest(R.string.settings_troubleshoot_test_endpoint_registration_title) {
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         // Check if we have a registered pusher for this token
-        val endpoint = UnifiedPushHelper.getEndpointOrToken(context) ?: run {
+        val endpoint = unifiedPushHelper.getEndpointOrToken() ?: run {
             status = TestStatus.FAILED
             return
         }
@@ -52,12 +54,13 @@ class TestEndpointAsTokenRegistration @Inject constructor(private val context: F
             it.pushKey == endpoint && it.state == PusherState.REGISTERED
         }
         if (pushers.isEmpty()) {
-            description = stringProvider.getString(R.string.settings_troubleshoot_test_endpoint_registration_failed,
-                    stringProvider.getString(R.string.sas_error_unknown))
+            description = stringProvider.getString(
+                    R.string.settings_troubleshoot_test_endpoint_registration_failed,
+                    stringProvider.getString(R.string.sas_error_unknown)
+            )
             quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_endpoint_registration_quick_fix) {
                 override fun doFix() {
-                    UnifiedPushHelper.reRegister(
-                            context,
+                    unifiedPushHelper.reRegister(
                             pushersManager,
                             vectorPreferences
                     )

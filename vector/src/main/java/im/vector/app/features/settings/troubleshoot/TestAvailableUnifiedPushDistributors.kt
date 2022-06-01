@@ -18,19 +18,19 @@ package im.vector.app.features.settings.troubleshoot
 
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
-import androidx.fragment.app.FragmentActivity
 import im.vector.app.R
 import im.vector.app.core.pushers.UnifiedPushHelper
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.push.fcm.FcmHelper
 import javax.inject.Inject
 
-class TestAvailableUnifiedPushDistributors @Inject constructor(private val context: FragmentActivity,
-                                                    private val stringProvider: StringProvider) :
-        TroubleshootTest(R.string.settings_troubleshoot_test_distributors_title) {
+class TestAvailableUnifiedPushDistributors @Inject constructor(
+        private val unifiedPushHelper: UnifiedPushHelper,
+        private val stringProvider: StringProvider,
+) : TroubleshootTest(R.string.settings_troubleshoot_test_distributors_title) {
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
-        val distributors = UnifiedPushHelper.getExternalDistributors(context)
+        val distributors = unifiedPushHelper.getExternalDistributors()
         if (distributors.isEmpty()) {
             description = if (FcmHelper.isPushSupported()) {
                 stringProvider.getString(R.string.settings_troubleshoot_test_distributors_gplay)
@@ -39,8 +39,10 @@ class TestAvailableUnifiedPushDistributors @Inject constructor(private val conte
             }
             status = TestStatus.SUCCESS
         } else {
-            description = stringProvider.getString(R.string.settings_troubleshoot_test_distributors_many,
-                    distributors.size + 1)
+            description = stringProvider.getString(
+                    R.string.settings_troubleshoot_test_distributors_many,
+                    distributors.size + 1
+            )
             status = TestStatus.SUCCESS
         }
     }

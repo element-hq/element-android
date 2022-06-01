@@ -36,6 +36,7 @@ import im.vector.app.features.settings.troubleshoot.TestUnifiedPushGateway
 import javax.inject.Inject
 
 class NotificationTroubleshootTestManagerFactory @Inject constructor(
+        private val unifiedPushHelper: UnifiedPushHelper,
         private val testSystemSettings: TestSystemSettings,
         private val testAccountSettings: TestAccountSettings,
         private val testDeviceSettings: TestDeviceSettings,
@@ -62,7 +63,7 @@ class NotificationTroubleshootTestManagerFactory @Inject constructor(
             mgr.addTest(testAvailableUnifiedPushDistributors)
             mgr.addTest(testCurrentUnifiedPushDistributor)
         }
-        if (UnifiedPushHelper.isBackgroundSync(fragment.requireContext())) {
+        if (unifiedPushHelper.isBackgroundSync()) {
             mgr.addTest(testAutoStartBoot)
             mgr.addTest(testBackgroundRestrictions)
             mgr.addTest(testBatteryOptimization)

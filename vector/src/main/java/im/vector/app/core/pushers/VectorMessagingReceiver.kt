@@ -85,6 +85,7 @@ class VectorMessagingReceiver : MessagingReceiver() {
     @Inject lateinit var vectorDataStore: VectorDataStore
     @Inject lateinit var wifiDetector: WifiDetector
     @Inject lateinit var guardServiceStarter: GuardServiceStarter
+    @Inject lateinit var unifiedPushHelper: UnifiedPushHelper
 
     private val coroutineScope = CoroutineScope(SupervisorJob())
 
@@ -116,7 +117,7 @@ class VectorMessagingReceiver : MessagingReceiver() {
                 .build()
         lateinit var notification: Notification
 
-        if (UnifiedPushHelper.isEmbeddedDistributor(context)) {
+        if (unifiedPushHelper.isEmbeddedDistributor()) {
             notification = moshi.adapter(Notification::class.java)
                     .fromJson(sMessage) ?: return
         } else {
@@ -159,10 +160,10 @@ class VectorMessagingReceiver : MessagingReceiver() {
         if (vectorPreferences.areNotificationEnabledForDevice() && activeSessionHolder.hasActiveSession()) {
             // If the endpoint has changed
             // or the gateway has changed
-            if (UnifiedPushHelper.getEndpointOrToken(context) != endpoint) {
-                UnifiedPushHelper.storeUpEndpoint(context, endpoint)
-                UnifiedPushHelper.storeCustomOrDefaultGateway(context, endpoint) {
-                    UnifiedPushHelper.getPushGateway(context)?.let {
+            if (unifiedPushHelper.getEndpointOrToken() != endpoint) {
+                unifiedPushHelper.storeUpEndpoint(endpoint)
+                unifiedPushHelper.storeCustomOrDefaultGateway(endpoint) {
+                    unifiedPushHelper.getPushGateway()?.let {
                         pushersManager.enqueueRegisterPusher(endpoint, it)
                     }
                 }
@@ -189,7 +190,7 @@ class VectorMessagingReceiver : MessagingReceiver() {
         guardServiceStarter.start()
         runBlocking {
             try {
-                pushersManager.unregisterPusher(UnifiedPushHelper.getEndpointOrToken(context) ?: "")
+                pushersManager.unregisterPusher(unifiedPushHelper.getEndpointOrToken() ?: "")
             } catch (e: Exception) {
                 Timber.tag(loggerTag.value).d("Probably unregistering a non existant pusher")
             }

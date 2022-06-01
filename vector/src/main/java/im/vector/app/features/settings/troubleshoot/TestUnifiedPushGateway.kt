@@ -18,19 +18,21 @@ package im.vector.app.features.settings.troubleshoot
 
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
-import androidx.fragment.app.FragmentActivity
 import im.vector.app.R
 import im.vector.app.core.pushers.UnifiedPushHelper
 import im.vector.app.core.resources.StringProvider
 import javax.inject.Inject
 
-class TestUnifiedPushGateway @Inject constructor(private val context: FragmentActivity,
-                                                private val stringProvider: StringProvider) :
-        TroubleshootTest(R.string.settings_troubleshoot_test_current_gateway_title) {
+class TestUnifiedPushGateway @Inject constructor(
+        private val unifiedPushHelper: UnifiedPushHelper,
+        private val stringProvider: StringProvider
+) : TroubleshootTest(R.string.settings_troubleshoot_test_current_gateway_title) {
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
-        description = stringProvider.getString(R.string.settings_troubleshoot_test_current_gateway,
-                UnifiedPushHelper.getPushGateway(context))
+        description = stringProvider.getString(
+                R.string.settings_troubleshoot_test_current_gateway,
+                unifiedPushHelper.getPushGateway()
+        )
         status = TestStatus.SUCCESS
     }
 }

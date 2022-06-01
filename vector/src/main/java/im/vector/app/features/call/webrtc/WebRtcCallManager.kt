@@ -72,7 +72,8 @@ private val loggerTag = LoggerTag("WebRtcCallManager", LoggerTag.VOIP)
 class WebRtcCallManager @Inject constructor(
         private val context: Context,
         private val activeSessionDataSource: ActiveSessionDataSource,
-        private val analyticsTracker: AnalyticsTracker
+        private val analyticsTracker: AnalyticsTracker,
+        private val unifiedPushHelper: UnifiedPushHelper,
 ) : CallListener,
         DefaultLifecycleObserver {
 
@@ -272,7 +273,7 @@ class WebRtcCallManager @Inject constructor(
             audioManager.setMode(CallAudioManager.Mode.DEFAULT)
             // did we start background sync? so we should stop it
             if (isInBackground) {
-                if (!UnifiedPushHelper.isBackgroundSync(context)) {
+                if (!unifiedPushHelper.isBackgroundSync()) {
                     currentSession?.syncService()?.stopAnyBackgroundSync()
                 } else {
                     // for fdroid we should not stop, it should continue syncing
@@ -378,7 +379,7 @@ class WebRtcCallManager @Inject constructor(
         // and thus won't be able to received events. For example if the call is
         // accepted on an other session this device will continue ringing
         if (isInBackground) {
-            if (!UnifiedPushHelper.isBackgroundSync(context)) {
+            if (!unifiedPushHelper.isBackgroundSync()) {
                 // only for push version as fdroid version is already doing it?
                 currentSession?.syncService()?.startAutomaticBackgroundSync(30, 0)
             } else {

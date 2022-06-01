@@ -27,6 +27,7 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
+import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.settings.BackgroundSyncMode
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.push.fcm.FcmHelper
@@ -39,10 +40,17 @@ import okhttp3.Request
 import org.unifiedpush.android.connector.UnifiedPush
 import timber.log.Timber
 import java.net.URL
+import javax.inject.Inject
 
-object UnifiedPushHelper {
-    private const val PREFS_ENDPOINT_OR_TOKEN = "UP_ENDPOINT_OR_TOKEN"
-    private const val PREFS_PUSH_GATEWAY = "PUSH_GATEWAY"
+class UnifiedPushHelper @Inject constructor(
+        private val context: Context,
+        private val stringProvider: StringProvider,
+) {
+    companion object {
+        private const val PREFS_ENDPOINT_OR_TOKEN = "UP_ENDPOINT_OR_TOKEN"
+        private const val PREFS_PUSH_GATEWAY = "PUSH_GATEWAY"
+    }
+
     private val up = UnifiedPush
 
     /**
@@ -50,7 +58,7 @@ object UnifiedPushHelper {
      *
      * @return the UnifiedPush Endpoint or null if not received
      */
-    fun getEndpointOrToken(context: Context): String? {
+    fun getEndpointOrToken(): String? {
         return DefaultSharedPreferences.getInstance(context).getString(PREFS_ENDPOINT_OR_TOKEN, null)
     }
 
@@ -58,11 +66,9 @@ object UnifiedPushHelper {
      * Store UnifiedPush Endpoint to the SharedPrefs.
      * TODO Store in realm
      *
-     * @param context android context
      * @param endpoint the endpoint to store
      */
-    fun storeUpEndpoint(context: Context,
-                        endpoint: String?) {
+    fun storeUpEndpoint(endpoint: String?) {
         DefaultSharedPreferences.getInstance(context).edit {
             putString(PREFS_ENDPOINT_OR_TOKEN, endpoint)
         }
@@ -73,7 +79,7 @@ object UnifiedPushHelper {
      *
      * @return the Push Gateway or null if not defined
      */
-    fun getPushGateway(context: Context): String? {
+    fun getPushGateway(): String? {
         return DefaultSharedPreferences.getInstance(context).getString(PREFS_PUSH_GATEWAY, null)
     }
 
@@ -81,26 +87,26 @@ object UnifiedPushHelper {
      * Store Push Gateway to the SharedPrefs.
      * TODO Store in realm
      *
-     * @param context android context
      * @param gateway the push gateway to store
      */
-    private fun storePushGateway(context: Context,
-                         gateway: String?) {
+    private fun storePushGateway(gateway: String?) {
         DefaultSharedPreferences.getInstance(context).edit {
             putString(PREFS_PUSH_GATEWAY, gateway)
         }
     }
 
-    fun register(context: Context, onDoneRunnable: Runnable? = null) {
-        gRegister(context,
-                onDoneRunnable = onDoneRunnable)
+    fun register(onDoneRunnable: Runnable? = null) {
+        gRegister(
+                onDoneRunnable = onDoneRunnable
+        )
     }
 
-    fun reRegister(context: Context,
-                   pushersManager: PushersManager,
-                   vectorPreferences: VectorPreferences,
-                   onDoneRunnable: Runnable? = null) {
-        gRegister(context,
+    fun reRegister(
+            pushersManager: PushersManager,
+            vectorPreferences: VectorPreferences,
+            onDoneRunnable: Runnable? = null
+    ) {
+        gRegister(
                 force = true,
                 pushersManager = pushersManager,
                 vectorPreferences = vectorPreferences,
@@ -108,11 +114,12 @@ object UnifiedPushHelper {
         )
     }
 
-    private fun gRegister(context: Context,
-                 force: Boolean = false,
-                 pushersManager: PushersManager? = null,
-                 vectorPreferences: VectorPreferences? = null,
-                 onDoneRunnable: Runnable? = null) {
+    private fun gRegister(
+            force: Boolean = false,
+            pushersManager: PushersManager? = null,
+            vectorPreferences: VectorPreferences? = null,
+            onDoneRunnable: Runnable? = null
+    ) {
         if (!BuildConfig.ALLOW_EXTERNAL_UNIFIEDPUSH_DISTRIB) {
             up.saveDistributor(context, context.packageName)
             up.registerApp(context)
@@ -121,7 +128,7 @@ object UnifiedPushHelper {
         }
         if (force) {
             // Un-register first
-            unregister(context, pushersManager, vectorPreferences)
+            unregister(pushersManager, vectorPreferences)
         }
         if (up.getDistributor(context).isNotEmpty()) {
             up.registerApp(context)
@@ -134,9 +141,9 @@ object UnifiedPushHelper {
         val distributors = up.getDistributors(context).toMutableList()
 
         val internalDistributorName = if (FcmHelper.isPushSupported()) {
-            context.getString(R.string.unifiedpush_distributor_fcm_fallback)
+            stringProvider.getString(R.string.unifiedpush_distributor_fcm_fallback)
         } else {
-            context.getString(R.string.unifiedpush_distributor_background_sync)
+            stringProvider.getString(R.string.unifiedpush_distributor_background_sync)
         }
 
         if (distributors.size == 1 &&
@@ -146,7 +153,7 @@ object UnifiedPushHelper {
             onDoneRunnable?.run()
         } else {
             val builder: AlertDialog.Builder = MaterialAlertDialogBuilder(context)
-            builder.setTitle(context.getString(R.string.unifiedpush_getdistributors_dialog_title))
+            builder.setTitle(stringProvider.getString(R.string.unifiedpush_getdistributors_dialog_title))
 
             val distributorsArray = distributors.toTypedArray()
             val distributorsNameArray = distributorsArray.map {
@@ -180,7 +187,6 @@ object UnifiedPushHelper {
     }
 
     fun unregister(
-            context: Context,
             pushersManager: PushersManager? = null,
             vectorPreferences: VectorPreferences? = null
     ) {
@@ -188,13 +194,13 @@ object UnifiedPushHelper {
         vectorPreferences?.setFdroidSyncBackgroundMode(mode)
         runBlocking {
             try {
-                pushersManager?.unregisterPusher(getEndpointOrToken(context) ?: "")
+                pushersManager?.unregisterPusher(getEndpointOrToken() ?: "")
             } catch (e: Exception) {
                 Timber.d("Probably unregistering a non existant pusher")
             }
         }
-        storeUpEndpoint(context, null)
-        storePushGateway(context, null)
+        storeUpEndpoint(null)
+        storePushGateway(null)
         up.unregisterApp(context)
     }
 
@@ -209,21 +215,21 @@ object UnifiedPushHelper {
     )
 
     fun storeCustomOrDefaultGateway(
-            context: Context,
             endpoint: String,
-            onDoneRunnable: Runnable? = null) {
+            onDoneRunnable: Runnable? = null
+    ) {
         // if we use the embedded distributor,
         // register app_id type upfcm on sygnal
         // the pushkey if FCM key
         if (up.getDistributor(context) == context.packageName) {
-            context.getString(R.string.pusher_http_url).let {
-                storePushGateway(context, it)
+            stringProvider.getString(R.string.pusher_http_url).let {
+                storePushGateway(it)
                 onDoneRunnable?.run()
                 return
             }
         }
         // else, unifiedpush, and pushkey is an endpoint
-        val gateway = context.getString(R.string.default_push_gateway_http_url)
+        val gateway = stringProvider.getString(R.string.default_push_gateway_http_url)
         val parsed = URL(endpoint)
         val custom = "${parsed.protocol}://${parsed.host}/_matrix/push/v1/notify"
         Timber.i("Testing $custom")
@@ -236,39 +242,39 @@ object UnifiedPushHelper {
                 val request = Request.Builder()
                         .url(custom)
                         .build()
-                    val sResponse = client.newCall(request).execute()
-                            .body?.string() ?: ""
-                    moshi.adapter(DiscoveryResponse::class.java)
-                            .fromJson(sResponse)?.let { response ->
-                                if (response.unifiedpush.gateway == "matrix") {
-                                    Timber.d("Using custom gateway")
-                                    storePushGateway(context, custom)
-                                    onDoneRunnable?.run()
-                                    return@launch
-                                }
+                val sResponse = client.newCall(request).execute()
+                        .body?.string() ?: ""
+                moshi.adapter(DiscoveryResponse::class.java)
+                        .fromJson(sResponse)?.let { response ->
+                            if (response.unifiedpush.gateway == "matrix") {
+                                Timber.d("Using custom gateway")
+                                storePushGateway(custom)
+                                onDoneRunnable?.run()
+                                return@launch
                             }
+                        }
             } catch (e: Exception) {
                 Timber.d("Cannot try custom gateway: $e")
             }
-            storePushGateway(context, gateway)
+            storePushGateway(gateway)
             onDoneRunnable?.run()
             return@launch
         }
         thread.start()
     }
 
-    fun getExternalDistributors(context: Context): List<String> {
-        val distributors =  up.getDistributors(context).toMutableList()
+    fun getExternalDistributors(): List<String> {
+        val distributors = up.getDistributors(context).toMutableList()
         distributors.remove(context.packageName)
         return distributors
     }
 
-    fun getCurrentDistributorName(context: Context): String {
-        if (isEmbeddedDistributor(context)) {
-            return context.getString(R.string.unifiedpush_distributor_fcm_fallback)
+    fun getCurrentDistributorName(): String {
+        if (isEmbeddedDistributor()) {
+            return stringProvider.getString(R.string.unifiedpush_distributor_fcm_fallback)
         }
-        if (isBackgroundSync(context)) {
-            return context.getString(R.string.unifiedpush_distributor_background_sync)
+        if (isBackgroundSync()) {
+            return stringProvider.getString(R.string.unifiedpush_distributor_background_sync)
         }
         val distributor = up.getDistributor(context)
         return try {
@@ -279,20 +285,20 @@ object UnifiedPushHelper {
         } as String
     }
 
-    fun isEmbeddedDistributor(context: Context): Boolean {
+    fun isEmbeddedDistributor(): Boolean {
         return (up.getDistributor(context) == context.packageName &&
                 FcmHelper.isPushSupported())
     }
 
-    fun isBackgroundSync(context: Context): Boolean {
+    fun isBackgroundSync(): Boolean {
         return (up.getDistributor(context) == context.packageName &&
                 !FcmHelper.isPushSupported())
     }
 
-    fun getPrivacyFriendlyUpEndpoint(context: Context): String? {
-        val endpoint = getEndpointOrToken(context)
+    fun getPrivacyFriendlyUpEndpoint(): String? {
+        val endpoint = getEndpointOrToken()
         if (endpoint.isNullOrEmpty()) return endpoint
-        if (isEmbeddedDistributor(context)) {
+        if (isEmbeddedDistributor()) {
             return endpoint
         }
         return try {

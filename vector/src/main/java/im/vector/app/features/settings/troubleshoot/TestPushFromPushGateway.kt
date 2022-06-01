@@ -17,7 +17,6 @@ package im.vector.app.features.settings.troubleshoot
 
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
-import androidx.fragment.app.FragmentActivity
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.error.ErrorFormatter
@@ -34,12 +33,12 @@ import javax.inject.Inject
 /**
  * Test Push by asking the Push Gateway to send a Push back.
  */
-class TestPushFromPushGateway @Inject constructor(private val context: FragmentActivity,
-                                                  private val stringProvider: StringProvider,
-                                                  private val errorFormatter: ErrorFormatter,
-                                                  private val pushersManager: PushersManager,
-                                                  private val activeSessionHolder: ActiveSessionHolder) :
-        TroubleshootTest(R.string.settings_troubleshoot_test_push_loop_title) {
+class TestPushFromPushGateway @Inject constructor(
+        private val stringProvider: StringProvider,
+        private val errorFormatter: ErrorFormatter,
+        private val pushersManager: PushersManager,
+        private val activeSessionHolder: ActiveSessionHolder,
+) : TroubleshootTest(R.string.settings_troubleshoot_test_push_loop_title) {
 
     private var action: Job? = null
     private var pushReceived: Boolean = false
@@ -47,7 +46,7 @@ class TestPushFromPushGateway @Inject constructor(private val context: FragmentA
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         pushReceived = false
         action = activeSessionHolder.getActiveSession().coroutineScope.launch {
-            val result = runCatching { pushersManager.testPush(context) }
+            val result = runCatching { pushersManager.testPush() }
 
             withContext(Dispatchers.Main) {
                 status = result

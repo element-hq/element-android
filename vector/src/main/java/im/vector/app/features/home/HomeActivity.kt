@@ -128,6 +128,7 @@ class HomeActivity :
     @Inject lateinit var avatarRenderer: AvatarRenderer
     @Inject lateinit var initSyncStepFormatter: InitSyncStepFormatter
     @Inject lateinit var appStateHandler: AppStateHandler
+    @Inject lateinit var unifiedPushHelper: UnifiedPushHelper
 
     private val createSpaceResultLauncher = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
@@ -188,8 +189,8 @@ class HomeActivity :
         super.onCreate(savedInstanceState)
         analyticsScreenName = MobileScreen.ScreenName.Home
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, false)
-        UnifiedPushHelper.register(this) {
-            if (UnifiedPushHelper.isEmbeddedDistributor(this)) {
+        unifiedPushHelper.register {
+            if (unifiedPushHelper.isEmbeddedDistributor()) {
                 FcmHelper.ensureFcmTokenIsRetrieved(
                         this,
                         pushManager,

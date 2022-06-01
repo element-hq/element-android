@@ -16,7 +16,6 @@
 
 package im.vector.app.core.pushers
 
-import android.content.Context
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.AppNameProvider
@@ -30,18 +29,19 @@ import kotlin.math.abs
 private const val DEFAULT_PUSHER_FILE_TAG = "mobile"
 
 class PushersManager @Inject constructor(
+        private val unifiedPushHelper: UnifiedPushHelper,
         private val activeSessionHolder: ActiveSessionHolder,
         private val localeProvider: LocaleProvider,
         private val stringProvider: StringProvider,
-        private val appNameProvider: AppNameProvider
+        private val appNameProvider: AppNameProvider,
 ) {
-    suspend fun testPush(context: Context) {
+    suspend fun testPush() {
         val currentSession = activeSessionHolder.getActiveSession()
 
         currentSession.pushersService().testPush(
-                UnifiedPushHelper.getPushGateway(context)!!,
+                unifiedPushHelper.getPushGateway()!!,
                 stringProvider.getString(R.string.pusher_app_id),
-                UnifiedPushHelper.getEndpointOrToken(context) ?: "",
+                unifiedPushHelper.getEndpointOrToken() ?: "",
                 TEST_EVENT_ID
         )
     }

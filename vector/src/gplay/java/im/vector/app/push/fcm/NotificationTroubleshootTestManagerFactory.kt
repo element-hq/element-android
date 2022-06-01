@@ -36,6 +36,7 @@ import im.vector.app.gplay.features.settings.troubleshoot.TestTokenRegistration
 import javax.inject.Inject
 
 class NotificationTroubleshootTestManagerFactory @Inject constructor(
+        private val unifiedPushHelper: UnifiedPushHelper,
         private val testSystemSettings: TestSystemSettings,
         private val testAccountSettings: TestAccountSettings,
         private val testDeviceSettings: TestDeviceSettings,
@@ -62,7 +63,7 @@ class NotificationTroubleshootTestManagerFactory @Inject constructor(
             mgr.addTest(testAvailableUnifiedPushDistributors)
             mgr.addTest(testCurrentUnifiedPushDistributor)
         }
-        if (UnifiedPushHelper.isEmbeddedDistributor(fragment.requireContext())) {
+        if (unifiedPushHelper.isEmbeddedDistributor()) {
             mgr.addTest(testPlayServices)
             mgr.addTest(testFirebaseToken)
             mgr.addTest(testTokenRegistration)
