@@ -105,7 +105,7 @@ jobs:
     # Skip in forks
     if: >
       github.repository == 'vector-im/element-android' &&
-      (contains(github.event.issue.labels.*.name, 'Team-Delight'))
+      (contains(github.event.issue.labels.*.name, 'Team: Delight'))
     steps:
       - uses: octokit/graphql-action@v2.x
         with:
