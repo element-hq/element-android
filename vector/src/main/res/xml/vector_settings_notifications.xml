@@ -51,6 +51,11 @@
         android:persistent="false"
         android:title="@string/settings_notification_configuration">
 
+        <im.vector.app.core.preference.VectorPreference
+            android:persistent="false"
+            android:key="SETTINGS_UNIFIED_PUSH_RE_REGISTER_KEY"
+            android:title="@string/settings_unifiedpush_reregister" />
+
         <!-- For API < 26 -->
         <im.vector.app.core.preference.VectorPreference
             android:dialogTitle="@string/settings_notification_ringtone"
@@ -76,11 +81,6 @@
             android:persistent="false"
             android:summary="@string/settings_system_preferences_summary"
             android:title="@string/settings_call_notifications_preferences" />
-
-        <im.vector.app.core.preference.VectorPreference
-            android:persistent="false"
-            android:key="SETTINGS_UNIFIED_PUSH_RE_REGISTER_KEY"
-            android:title="@string/settings_unifiedpush_reregister" />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
