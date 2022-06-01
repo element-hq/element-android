@@ -171,12 +171,8 @@ class UnifiedPushHelper @Inject constructor(
                         up.saveDistributor(context, distributor)
                         Timber.i("Saving distributor: $distributor")
                         up.registerApp(context)
-                        onDoneRunnable?.run()
                     }
                     .setOnDismissListener {
-                        onDoneRunnable?.run()
-                    }
-                    .setOnCancelListener {
                         onDoneRunnable?.run()
                     }
                     .show()
