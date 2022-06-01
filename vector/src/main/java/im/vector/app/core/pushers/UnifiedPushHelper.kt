@@ -41,6 +41,7 @@ import javax.inject.Inject
 class UnifiedPushHelper @Inject constructor(
         private val context: Context,
         private val stringProvider: StringProvider,
+        private val vectorPreferences: VectorPreferences,
         private val matrix: Matrix,
 ) {
     companion object {
@@ -105,14 +106,12 @@ class UnifiedPushHelper @Inject constructor(
     fun reRegister(
             activity: FragmentActivity,
             pushersManager: PushersManager,
-            vectorPreferences: VectorPreferences,
             onDoneRunnable: Runnable? = null
     ) {
         gRegister(
                 activity,
                 force = true,
                 pushersManager = pushersManager,
-                vectorPreferences = vectorPreferences,
                 onDoneRunnable = onDoneRunnable
         )
     }
@@ -121,7 +120,6 @@ class UnifiedPushHelper @Inject constructor(
             activity: FragmentActivity,
             force: Boolean = false,
             pushersManager: PushersManager? = null,
-            vectorPreferences: VectorPreferences? = null,
             onDoneRunnable: Runnable? = null
     ) {
         if (!BuildConfig.ALLOW_EXTERNAL_UNIFIEDPUSH_DISTRIB) {
@@ -132,7 +130,7 @@ class UnifiedPushHelper @Inject constructor(
         }
         if (force) {
             // Un-register first
-            unregister(pushersManager, vectorPreferences)
+            unregister(pushersManager)
         }
         if (up.getDistributor(context).isNotEmpty()) {
             up.registerApp(context)
@@ -186,12 +184,9 @@ class UnifiedPushHelper @Inject constructor(
         }
     }
 
-    fun unregister(
-            pushersManager: PushersManager? = null,
-            vectorPreferences: VectorPreferences? = null
-    ) {
+    fun unregister(pushersManager: PushersManager? = null) {
         val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME
-        vectorPreferences?.setFdroidSyncBackgroundMode(mode)
+        vectorPreferences.setFdroidSyncBackgroundMode(mode)
         runBlocking {
             try {
                 pushersManager?.unregisterPusher(getEndpointOrToken().orEmpty())

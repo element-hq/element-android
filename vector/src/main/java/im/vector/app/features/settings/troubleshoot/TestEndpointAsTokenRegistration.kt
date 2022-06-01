@@ -27,7 +27,6 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.pushers.UnifiedPushHelper
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.session.pushers.PusherState
 import javax.inject.Inject
 
@@ -35,7 +34,6 @@ class TestEndpointAsTokenRegistration @Inject constructor(
         private val context: FragmentActivity,
         private val stringProvider: StringProvider,
         private val pushersManager: PushersManager,
-        private val vectorPreferences: VectorPreferences,
         private val activeSessionHolder: ActiveSessionHolder,
         private val unifiedPushHelper: UnifiedPushHelper,
 ) : TroubleshootTest(R.string.settings_troubleshoot_test_endpoint_registration_title) {
@@ -62,8 +60,7 @@ class TestEndpointAsTokenRegistration @Inject constructor(
                 override fun doFix() {
                     unifiedPushHelper.reRegister(
                             context,
-                            pushersManager,
-                            vectorPreferences
+                            pushersManager
                     )
                     val workId = pushersManager.enqueueRegisterPusherWithFcmKey(endpoint)
                     WorkManager.getInstance(context).getWorkInfoByIdLiveData(workId).observe(context, Observer { workInfo ->

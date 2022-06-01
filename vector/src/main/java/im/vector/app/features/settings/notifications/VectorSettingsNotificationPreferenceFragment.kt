@@ -102,10 +102,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
                 if (isChecked) {
                     unifiedPushHelper.register(requireActivity())
                 } else {
-                    unifiedPushHelper.unregister(
-                            pushersManager,
-                            vectorPreferences
-                    )
+                    unifiedPushHelper.unregister(pushersManager)
                     session.pushersService().refreshPushers()
                 }
             }
@@ -154,8 +151,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
                 it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                     unifiedPushHelper.reRegister(
                             requireActivity(),
-                            pushersManager,
-                            vectorPreferences
+                            pushersManager
                     ) {
                         session.pushersService().refreshPushers()
                         refreshBackgroundSyncPrefs()
