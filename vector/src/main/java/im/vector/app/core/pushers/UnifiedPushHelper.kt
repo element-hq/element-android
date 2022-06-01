@@ -191,7 +191,7 @@ class UnifiedPushHelper @Inject constructor(
             try {
                 pushersManager?.unregisterPusher(getEndpointOrToken().orEmpty())
             } catch (e: Exception) {
-                Timber.d("Probably unregistering a non existant pusher")
+                Timber.d("Probably unregistering a non existing pusher")
             }
         }
         storeUpEndpoint(null)

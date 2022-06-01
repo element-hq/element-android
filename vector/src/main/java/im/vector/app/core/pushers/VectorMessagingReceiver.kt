@@ -194,7 +194,7 @@ class VectorMessagingReceiver : MessagingReceiver() {
             try {
                 pushersManager.unregisterPusher(unifiedPushHelper.getEndpointOrToken().orEmpty())
             } catch (e: Exception) {
-                Timber.tag(loggerTag.value).d("Probably unregistering a non existant pusher")
+                Timber.tag(loggerTag.value).d("Probably unregistering a non existing pusher")
             }
         }
     }
