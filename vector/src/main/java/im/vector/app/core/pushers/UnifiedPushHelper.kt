@@ -263,10 +263,10 @@ class UnifiedPushHelper @Inject constructor(
         val distributor = up.getDistributor(context)
         return try {
             val ai = context.packageManager.getApplicationInfo(distributor, 0)
-            context.packageManager.getApplicationLabel(ai)
+            context.packageManager.getApplicationLabel(ai).toString()
         } catch (e: PackageManager.NameNotFoundException) {
             distributor
-        } as String
+        }
     }
 
     fun isEmbeddedDistributor(): Boolean {
