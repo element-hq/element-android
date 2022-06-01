@@ -191,7 +191,7 @@ class UnifiedPushHelper @Inject constructor(
         vectorPreferences?.setFdroidSyncBackgroundMode(mode)
         runBlocking {
             try {
-                pushersManager?.unregisterPusher(getEndpointOrToken() ?: "")
+                pushersManager?.unregisterPusher(getEndpointOrToken().orEmpty())
             } catch (e: Exception) {
                 Timber.d("Probably unregistering a non existant pusher")
             }

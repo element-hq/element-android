@@ -41,7 +41,7 @@ class PushersManager @Inject constructor(
         currentSession.pushersService().testPush(
                 unifiedPushHelper.getPushGateway()!!,
                 stringProvider.getString(R.string.pusher_app_id),
-                unifiedPushHelper.getEndpointOrToken() ?: "",
+                unifiedPushHelper.getEndpointOrToken().orEmpty(),
                 TEST_EVENT_ID
         )
     }

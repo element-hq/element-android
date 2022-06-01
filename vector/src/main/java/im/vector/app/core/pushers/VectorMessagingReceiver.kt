@@ -192,7 +192,7 @@ class VectorMessagingReceiver : MessagingReceiver() {
         guardServiceStarter.start()
         runBlocking {
             try {
-                pushersManager.unregisterPusher(unifiedPushHelper.getEndpointOrToken() ?: "")
+                pushersManager.unregisterPusher(unifiedPushHelper.getEndpointOrToken().orEmpty())
             } catch (e: Exception) {
                 Timber.tag(loggerTag.value).d("Probably unregistering a non existant pusher")
             }
