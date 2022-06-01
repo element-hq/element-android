@@ -24,12 +24,14 @@ import android.widget.Toast
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.BuildConfig
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.network.WifiDetector
+import im.vector.app.core.pushers.model.PushData
+import im.vector.app.core.pushers.model.PushDataFcm
+import im.vector.app.core.pushers.model.PushDataUnifiedPush
+import im.vector.app.core.pushers.model.toPushData
 import im.vector.app.core.services.GuardServiceStarter
 import im.vector.app.features.notifications.NotifiableEventResolver
 import im.vector.app.features.notifications.NotificationDrawerManager
@@ -50,24 +52,6 @@ import org.matrix.android.sdk.api.util.MatrixJsonParser
 import org.unifiedpush.android.connector.MessagingReceiver
 import timber.log.Timber
 import javax.inject.Inject
-
-@JsonClass(generateAdapter = true)
-data class UnifiedPushMessage(
-        val notification: Notification = Notification()
-)
-
-@JsonClass(generateAdapter = true)
-data class Notification(
-        @Json(name = "event_id") val eventId: String = "",
-        @Json(name = "room_id") val roomId: String = "",
-        var unread: Int = 0,
-        val counts: Counts = Counts()
-)
-
-@JsonClass(generateAdapter = true)
-data class Counts(
-        val unread: Int = 0
-)
 
 private val loggerTag = LoggerTag("Push", LoggerTag.SYNC)
 
@@ -113,17 +97,14 @@ class VectorMessagingReceiver : MessagingReceiver() {
         }
 
         val moshi = MatrixJsonParser.getMoshi()
-        val notification: Notification = if (unifiedPushHelper.isEmbeddedDistributor()) {
-            moshi.adapter(Notification::class.java).fromJson(sMessage)
+        val pushData = if (unifiedPushHelper.isEmbeddedDistributor()) {
+            moshi.adapter(PushDataFcm::class.java).fromJson(sMessage)?.toPushData()
         } else {
-            val data = moshi.adapter(UnifiedPushMessage::class.java).fromJson(sMessage)
-            data?.notification?.also {
-                it.unread = it.counts.unread
-            }
-        } ?: return Unit.also { Timber.w("Invalid received data") }
+            moshi.adapter(PushDataUnifiedPush::class.java).fromJson(sMessage)?.toPushData()
+        } ?: return Unit.also { Timber.tag(loggerTag.value).w("Invalid received data Json format") }
 
         // Diagnostic Push
-        if (notification.eventId == PushersManager.TEST_EVENT_ID) {
+        if (pushData.eventId == PushersManager.TEST_EVENT_ID) {
             val intent = Intent(NotificationUtils.PUSH_ACTION)
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
             return
@@ -139,7 +120,7 @@ class VectorMessagingReceiver : MessagingReceiver() {
                 // we are in foreground, let the sync do the things?
                 Timber.tag(loggerTag.value).d("PUSH received in a foreground state, ignore")
             } else {
-                onMessageReceivedInternal(notification)
+                onMessageReceivedInternal(pushData)
             }
         }
     }
@@ -197,12 +178,12 @@ class VectorMessagingReceiver : MessagingReceiver() {
     /**
      * Internal receive method.
      *
-     * @param notification Notification containing message data.
+     * @param pushData Object containing message data.
      */
-    private fun onMessageReceivedInternal(notification: Notification) {
+    private fun onMessageReceivedInternal(pushData: PushData) {
         try {
             if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
-                Timber.tag(loggerTag.value).d("## onMessageReceivedInternal() : $notification")
+                Timber.tag(loggerTag.value).d("## onMessageReceivedInternal() : $pushData")
             } else {
                 Timber.tag(loggerTag.value).d("## onMessageReceivedInternal()")
             }
@@ -212,12 +193,12 @@ class VectorMessagingReceiver : MessagingReceiver() {
             if (session == null) {
                 Timber.tag(loggerTag.value).w("## Can't sync from push, no current session")
             } else {
-                if (isEventAlreadyKnown(notification.eventId, notification.roomId)) {
+                if (isEventAlreadyKnown(pushData.eventId, pushData.roomId)) {
                     Timber.tag(loggerTag.value).d("Ignoring push, event already known")
                 } else {
                     // Try to get the Event content faster
                     Timber.tag(loggerTag.value).d("Requesting event in fast lane")
-                    getEventFastLane(session, notification.roomId, notification.eventId)
+                    getEventFastLane(session, pushData.roomId, pushData.eventId)
 
                     Timber.tag(loggerTag.value).d("Requesting background sync")
                     session.syncService().requireBackgroundSync()
