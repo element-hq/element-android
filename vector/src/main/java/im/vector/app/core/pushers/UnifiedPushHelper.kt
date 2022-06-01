@@ -19,6 +19,7 @@ package im.vector.app.core.pushers
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.core.content.edit
+import androidx.fragment.app.FragmentActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.squareup.moshi.JsonClass
 import im.vector.app.BuildConfig
@@ -91,18 +92,24 @@ class UnifiedPushHelper @Inject constructor(
         }
     }
 
-    fun register(onDoneRunnable: Runnable? = null) {
+    fun register(
+            activity: FragmentActivity,
+            onDoneRunnable: Runnable? = null,
+    ) {
         gRegister(
+                activity,
                 onDoneRunnable = onDoneRunnable
         )
     }
 
     fun reRegister(
+            activity: FragmentActivity,
             pushersManager: PushersManager,
             vectorPreferences: VectorPreferences,
             onDoneRunnable: Runnable? = null
     ) {
         gRegister(
+                activity,
                 force = true,
                 pushersManager = pushersManager,
                 vectorPreferences = vectorPreferences,
@@ -111,6 +118,7 @@ class UnifiedPushHelper @Inject constructor(
     }
 
     private fun gRegister(
+            activity: FragmentActivity,
             force: Boolean = false,
             pushersManager: PushersManager? = null,
             vectorPreferences: VectorPreferences? = null,
@@ -163,7 +171,7 @@ class UnifiedPushHelper @Inject constructor(
                 }
             }.toTypedArray()
 
-            MaterialAlertDialogBuilder(context)
+            MaterialAlertDialogBuilder(activity)
                     .setTitle(stringProvider.getString(R.string.unifiedpush_getdistributors_dialog_title))
                     .setItems(distributorsNameArray) { _, which ->
                         val distributor = distributorsArray[which]

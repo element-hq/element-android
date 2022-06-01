@@ -189,7 +189,7 @@ class HomeActivity :
         super.onCreate(savedInstanceState)
         analyticsScreenName = MobileScreen.ScreenName.Home
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, false)
-        unifiedPushHelper.register {
+        unifiedPushHelper.register(this) {
             if (unifiedPushHelper.isEmbeddedDistributor()) {
                 FcmHelper.ensureFcmTokenIsRetrieved(
                         this,
