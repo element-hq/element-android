@@ -191,7 +191,7 @@ class UnifiedPushHelper @Inject constructor(
             try {
                 pushersManager?.unregisterPusher(getEndpointOrToken().orEmpty())
             } catch (e: Exception) {
-                Timber.d("Probably unregistering a non existing pusher")
+                Timber.d(e, "Probably unregistering a non existing pusher")
             }
         }
         storeUpEndpoint(null)
@@ -239,7 +239,7 @@ class UnifiedPushHelper @Inject constructor(
                         }
                     }
         } catch (e: Exception) {
-            Timber.d("Cannot try custom gateway: $e")
+            Timber.d(e, "Cannot try custom gateway")
         }
         storePushGateway(gateway)
         onDoneRunnable?.run()
@@ -287,7 +287,7 @@ class UnifiedPushHelper @Inject constructor(
             val parsed = URL(endpoint)
             "${parsed.protocol}://${parsed.host}/***"
         } catch (e: Exception) {
-            Timber.e("Error parsing unifiedpush endpoint: $e")
+            Timber.e(e, "Error parsing unifiedpush endpoint")
             null
         }
     }
