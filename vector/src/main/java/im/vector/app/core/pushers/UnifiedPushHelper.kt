@@ -144,8 +144,7 @@ class UnifiedPushHelper @Inject constructor(
                 }
         )
 
-        if (distributors.size == 1 &&
-                !force) {
+        if (distributors.size == 1 && !force) {
             up.saveDistributor(context, distributors.first())
             up.registerApp(context)
             onDoneRunnable?.run()
@@ -160,7 +159,7 @@ class UnifiedPushHelper @Inject constructor(
                         context.packageManager.getApplicationLabel(ai)
                     } catch (e: PackageManager.NameNotFoundException) {
                         it
-                    } as String
+                    }
                 }
             }.toTypedArray()
 
