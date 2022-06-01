@@ -31,19 +31,17 @@ class TestAvailableUnifiedPushDistributors @Inject constructor(
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         val distributors = unifiedPushHelper.getExternalDistributors()
-        if (distributors.isEmpty()) {
-            description = if (FcmHelper.isPushSupported()) {
-                stringProvider.getString(R.string.settings_troubleshoot_test_distributors_gplay)
-            } else {
-                stringProvider.getString(R.string.settings_troubleshoot_test_distributors_fdroid)
-            }
-            status = TestStatus.SUCCESS
-        } else {
-            description = stringProvider.getString(
-                    R.string.settings_troubleshoot_test_distributors_many,
-                    distributors.size + 1
+        description = if (distributors.isEmpty()) {
+            stringProvider.getString(
+                    if (FcmHelper.isPushSupported()) {
+                        R.string.settings_troubleshoot_test_distributors_gplay
+                    } else {
+                        R.string.settings_troubleshoot_test_distributors_fdroid
+                    }
             )
-            status = TestStatus.SUCCESS
+        } else {
+            stringProvider.getString(R.string.settings_troubleshoot_test_distributors_many, distributors.size + 1)
         }
+        status = TestStatus.SUCCESS
     }
 }

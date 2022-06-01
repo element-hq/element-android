@@ -136,11 +136,13 @@ class UnifiedPushHelper @Inject constructor(
         up.saveDistributor(context, context.packageName)
         val distributors = up.getDistributors(context).toMutableList()
 
-        val internalDistributorName = if (FcmHelper.isPushSupported()) {
-            stringProvider.getString(R.string.unifiedpush_distributor_fcm_fallback)
-        } else {
-            stringProvider.getString(R.string.unifiedpush_distributor_background_sync)
-        }
+        val internalDistributorName = stringProvider.getString(
+                if (FcmHelper.isPushSupported()) {
+                    R.string.unifiedpush_distributor_fcm_fallback
+                } else {
+                    R.string.unifiedpush_distributor_background_sync
+                }
+        )
 
         if (distributors.size == 1 &&
                 !force) {
@@ -217,11 +219,9 @@ class UnifiedPushHelper @Inject constructor(
         // register app_id type upfcm on sygnal
         // the pushkey if FCM key
         if (up.getDistributor(context) == context.packageName) {
-            stringProvider.getString(R.string.pusher_http_url).let {
-                storePushGateway(it)
-                onDoneRunnable?.run()
-                return
-            }
+            storePushGateway(stringProvider.getString(R.string.pusher_http_url))
+            onDoneRunnable?.run()
+            return
         }
         // else, unifiedpush, and pushkey is an endpoint
         val gateway = stringProvider.getString(R.string.default_push_gateway_http_url)
