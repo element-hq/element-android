@@ -162,9 +162,11 @@ class VectorMessagingReceiver : MessagingReceiver() {
             // or the gateway has changed
             if (unifiedPushHelper.getEndpointOrToken() != endpoint) {
                 unifiedPushHelper.storeUpEndpoint(endpoint)
-                unifiedPushHelper.storeCustomOrDefaultGateway(endpoint) {
-                    unifiedPushHelper.getPushGateway()?.let {
-                        pushersManager.enqueueRegisterPusher(endpoint, it)
+                coroutineScope.launch {
+                    unifiedPushHelper.storeCustomOrDefaultGateway(endpoint) {
+                        unifiedPushHelper.getPushGateway()?.let {
+                            pushersManager.enqueueRegisterPusher(endpoint, it)
+                        }
                     }
                 }
             } else {

@@ -22,8 +22,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.squareup.moshi.JsonClass
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
@@ -31,12 +29,10 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.settings.BackgroundSyncMode
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.push.fcm.FcmHelper
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import org.matrix.android.sdk.api.Matrix
+import org.matrix.android.sdk.api.cache.CacheStrategy
+import org.matrix.android.sdk.api.util.MatrixJsonParser
 import org.unifiedpush.android.connector.UnifiedPush
 import timber.log.Timber
 import java.net.URL
@@ -45,6 +41,7 @@ import javax.inject.Inject
 class UnifiedPushHelper @Inject constructor(
         private val context: Context,
         private val stringProvider: StringProvider,
+        private val matrix: Matrix,
 ) {
     companion object {
         private const val PREFS_ENDPOINT_OR_TOKEN = "UP_ENDPOINT_OR_TOKEN"
@@ -214,7 +211,7 @@ class UnifiedPushHelper @Inject constructor(
             val gateway: String = ""
     )
 
-    fun storeCustomOrDefaultGateway(
+    suspend fun storeCustomOrDefaultGateway(
             endpoint: String,
             onDoneRunnable: Runnable? = null
     ) {
@@ -233,34 +230,23 @@ class UnifiedPushHelper @Inject constructor(
         val parsed = URL(endpoint)
         val custom = "${parsed.protocol}://${parsed.host}/_matrix/push/v1/notify"
         Timber.i("Testing $custom")
-        val thread = CoroutineScope(SupervisorJob()).launch {
-            try {
-                val moshi: Moshi = Moshi.Builder()
-                        .add(KotlinJsonAdapterFactory())
-                        .build()
-                val client = OkHttpClient()
-                val request = Request.Builder()
-                        .url(custom)
-                        .build()
-                val sResponse = client.newCall(request).execute()
-                        .body?.string() ?: ""
-                moshi.adapter(DiscoveryResponse::class.java)
-                        .fromJson(sResponse)?.let { response ->
-                            if (response.unifiedpush.gateway == "matrix") {
-                                Timber.d("Using custom gateway")
-                                storePushGateway(custom)
-                                onDoneRunnable?.run()
-                                return@launch
-                            }
+        try {
+            val response = matrix.rawService().getUrl(custom, CacheStrategy.NoCache)
+            val moshi = MatrixJsonParser.getMoshi()
+            moshi.adapter(DiscoveryResponse::class.java).fromJson(response)
+                    ?.let { discoveryResponse ->
+                        if (discoveryResponse.unifiedpush.gateway == "matrix") {
+                            Timber.d("Using custom gateway")
+                            storePushGateway(custom)
+                            onDoneRunnable?.run()
+                            return
                         }
-            } catch (e: Exception) {
-                Timber.d("Cannot try custom gateway: $e")
-            }
-            storePushGateway(gateway)
-            onDoneRunnable?.run()
-            return@launch
+                    }
+        } catch (e: Exception) {
+            Timber.d("Cannot try custom gateway: $e")
         }
-        thread.start()
+        storePushGateway(gateway)
+        onDoneRunnable?.run()
     }
 
     fun getExternalDistributors(): List<String> {
