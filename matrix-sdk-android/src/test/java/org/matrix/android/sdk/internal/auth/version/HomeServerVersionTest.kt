@@ -27,7 +27,7 @@ class HomeServerVersionTest {
                 case("1.5", expected = aVersion(1, 5, 0)),
                 case("0.5.1", expected = aVersion(0, 5, 1)),
                 case("1.0.0", expected = aVersion(1, 0, 0)),
-                case("1.10.3", expected = aVersion(1, 10, 3))
+                case("1.10.3", expected = aVersion(1, 10, 3)),
         ).withPrefixes("v", "r")
 
         val unsupportedVersions = listOf(
@@ -37,7 +37,7 @@ class HomeServerVersionTest {
                 case("r1", expected = null),
                 case("a", expected = null),
                 case("1a.2b.3c", expected = null),
-                case("r", expected = null)
+                case("r", expected = null),
         )
 
         (supportedVersions + unsupportedVersions).forEach { (input, expected) ->
