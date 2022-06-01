@@ -238,7 +238,7 @@ class UnifiedPushHelper @Inject constructor(
                             return
                         }
                     }
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             Timber.d(e, "Cannot try custom gateway")
         }
         storePushGateway(gateway)
