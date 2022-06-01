@@ -26,7 +26,5 @@ import android.content.Intent
  * This class is used to declare this action.
  */
 class KeepInternalDistributor : BroadcastReceiver() {
-    override fun onReceive(p0: Context?, p1: Intent?) {
-        return
-    }
+    override fun onReceive(context: Context, intent: Intent) {}
 }
