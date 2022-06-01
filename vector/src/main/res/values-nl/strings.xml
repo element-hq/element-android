@@ -2138,9 +2138,7 @@
     <string name="login_a11y_captcha_container">Voer de captcha uitdaging uit</string>
     <string name="login_a11y_choose_other">Selecteer een aangepaste server</string>
     <string name="login_a11y_choose_modular">Selecteer Element Matrix Services</string>
-    <string name="login_signup_cancel_confirmation_content">Uw account is nog niet aangemaakt.
-\n
-\nHet registratieproces stoppen\?</string>
+    <string name="login_signup_cancel_confirmation_content">Uw account is nog niet aangemaakt. Het registratieproces stoppen\?</string>
     <string name="login_signup_error_user_in_use">Deze inlognaam is in gebruik</string>
     <string name="login_signin_username_hint">Inlognaam of e-mailadres</string>
     <string name="login_signup_to">Meld u aan bij %1$s</string>

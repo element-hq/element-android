@@ -891,9 +891,7 @@
     <string name="login_a11y_choose_other">Chọn một máy chủ khác</string>
     <string name="login_a11y_choose_modular">Chọn Dịch vụ Element Matrix</string>
     <string name="login_a11y_choose_matrix_org">Chọn matrix.org</string>
-    <string name="login_signup_cancel_confirmation_content">Tài khoản của bạn chưa được tạo.
-\n
-\nBạn muốn ngừng tiến trình đăng ký\?</string>
+    <string name="login_signup_cancel_confirmation_content">Tài khoản của bạn chưa được tạo. Bạn muốn ngừng tiến trình đăng ký\?</string>
     <string name="login_signup_cancel_confirmation_title">Cảnh báo</string>
     <string name="login_signup_error_user_in_use">Tên đăng nhập này đã được đăng ký</string>
     <string name="login_signup_submit">Tiếp</string>

@@ -1395,9 +1395,7 @@
     <string name="login_msisdn_notice">Ma ulac aɣilif seqdec amasal agreɣlan (uṭṭun n tiliɣri ilaq ad yebdu s \'+\')</string>
     <string name="login_msisdn_error_not_international">Uṭṭun n tiliɣri agreɣlan ilaq ad yebdu s \'+\'</string>
     <string name="login_msisdn_error_other">Uṭṭun n tiliɣri yettban-d d arameɣtu. Ma ulac aɣilif senqed-it</string>
-    <string name="login_signup_cancel_confirmation_content">Amiḍan-ik·im mazal ur yettwarna ara ar tura.
-\n
-\nSeḥbes akala n usekles\?</string>
+    <string name="login_signup_cancel_confirmation_content">Amiḍan-ik·im mazal ur yettwarna ara ar tura. Seḥbes akala n usekles\?</string>
     <string name="login_wait_for_email_notice">Aql-aɣ akken nuzen imayl ɣer %1$s.
 \nMa ulac aɣilif sit ɣef useɣwen i yellan deg-s i wakken ad tkemmleḍ timerna.</string>
     <string name="login_validation_code_is_not_correct">Tangalt yettwaskecmen d tarameɣtut. Ma ulac aɣilif senqed.</string>

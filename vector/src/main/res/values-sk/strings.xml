@@ -1913,9 +1913,7 @@
     <string name="verify_cancel_other">Ak to teraz zrušíte, neoveríte %1$s (%2$s). Začnite znova v ich používateľskom profile.</string>
     <string name="verify_cancel_self_verification_from_trusted">Ak to zrušíte, nebudete môcť čítať zašifrované správy v novom zariadení a ostatní používatelia mu nebudú dôverovať</string>
     <string name="verify_cancel_self_verification_from_untrusted">Ak to zrušíte, nebudete môcť čítať zašifrované správy v tomto zariadení a ostatní používatelia mu nebudú dôverovať</string>
-    <string name="login_signup_cancel_confirmation_content">Váš účet ešte nie je vytvorený.
-\n
-\nZastaviť proces registrácie\?</string>
+    <string name="login_signup_cancel_confirmation_content">Váš účet ešte nie je vytvorený. Zastaviť proces registrácie\?</string>
     <string name="login_reset_password_cancel_confirmation_content">Vaše heslo ešte nebolo zmenené.
 \n
 \nZastaviť proces zmeny hesla\?</string>

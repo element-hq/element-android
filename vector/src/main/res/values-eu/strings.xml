@@ -1396,9 +1396,7 @@ Errore hau ${app_name}-en kontroletik kanpo dago. Ez dago Google konturik gailua
     <string name="login_signup_submit">Hurrengoa</string>
     <string name="login_signup_error_user_in_use">Erabiltzaile-izen hori hartuta dago</string>
     <string name="login_signup_cancel_confirmation_title">Abisua</string>
-    <string name="login_signup_cancel_confirmation_content">Zure kontua ez da oraindik sortu.
-\n
-\nUtzi erregistratze prozesua\?</string>
+    <string name="login_signup_cancel_confirmation_content">Zure kontua ez da oraindik sortu. Utzi erregistratze prozesua\?</string>
 
     <string name="login_a11y_choose_matrix_org">Hautatu matrix.org</string>
     <string name="login_a11y_choose_modular">Hautatu Element Matrix Services</string>

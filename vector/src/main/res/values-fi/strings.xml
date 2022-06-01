@@ -1091,9 +1091,7 @@
     <string name="login_signup_submit">Seuraava</string>
     <string name="login_signup_error_user_in_use">Käyttäjätunnus on varattu</string>
     <string name="login_signup_cancel_confirmation_title">Varoitus</string>
-    <string name="login_signup_cancel_confirmation_content">Tunnustasi ei ole vielä luotu.
-\n
-\nPeru rekisteröintiprosessi\?</string>
+    <string name="login_signup_cancel_confirmation_content">Tunnustasi ei ole vielä luotu. Peru rekisteröintiprosessi\?</string>
     <string name="login_a11y_choose_matrix_org">Valitse matrix.org</string>
     <string name="login_a11y_choose_modular">Valitse Element Matrix Services</string>
     <string name="login_a11y_choose_other">Valitse muu kotipalvelin</string>

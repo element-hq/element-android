@@ -1132,9 +1132,7 @@
     <string name="login_signup_submit">Pasuesi</string>
     <string name="login_signup_error_user_in_use">Ai emër përdoruesi është i zënë</string>
     <string name="login_signup_cancel_confirmation_title">Kujdes</string>
-    <string name="login_signup_cancel_confirmation_content">Llogaria juaj s’është krijuar ende.
-\n
-\nTë ndalet procesi i regjistrimit\?</string>
+    <string name="login_signup_cancel_confirmation_content">Llogaria juaj s’është krijuar ende. Të ndalet procesi i regjistrimit\?</string>
     <string name="login_a11y_choose_matrix_org">Përzgjidhni matrix.org</string>
     <string name="login_a11y_choose_modular">Përzgjidhni Element Matrix Services</string>
     <string name="login_a11y_choose_other">Përzgjidhni një shërbyes Home vetjak</string>

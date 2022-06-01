@@ -1430,9 +1430,7 @@
     <string name="login_signup_submit">Nästa</string>
     <string name="login_signup_error_user_in_use">Det användarnamnet är upptaget</string>
     <string name="login_signup_cancel_confirmation_title">Varning</string>
-    <string name="login_signup_cancel_confirmation_content">Ditt konto är inte skapat än.
-\n
-\nVill du avbryta registreringsprocessen\?</string>
+    <string name="login_signup_cancel_confirmation_content">Ditt konto är inte skapat än. Vill du avbryta registreringsprocessen\?</string>
     <string name="login_a11y_choose_matrix_org">Välj matrix.org</string>
     <string name="login_a11y_choose_modular">Välj Element Matrix Services</string>
     <string name="login_a11y_choose_other">Välj en annan hemserver</string>
