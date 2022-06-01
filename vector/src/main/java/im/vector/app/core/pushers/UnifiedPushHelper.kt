@@ -18,7 +18,6 @@ package im.vector.app.core.pushers
 
 import android.content.Context
 import android.content.pm.PackageManager
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.squareup.moshi.JsonClass
@@ -149,9 +148,6 @@ class UnifiedPushHelper @Inject constructor(
             up.registerApp(context)
             onDoneRunnable?.run()
         } else {
-            val builder: AlertDialog.Builder = MaterialAlertDialogBuilder(context)
-            builder.setTitle(stringProvider.getString(R.string.unifiedpush_getdistributors_dialog_title))
-
             val distributorsArray = distributors.toTypedArray()
             val distributorsNameArray = distributorsArray.map {
                 if (it == context.packageName) {
@@ -165,21 +161,23 @@ class UnifiedPushHelper @Inject constructor(
                     } as String
                 }
             }.toTypedArray()
-            builder.setItems(distributorsNameArray) { _, which ->
-                val distributor = distributorsArray[which]
-                up.saveDistributor(context, distributor)
-                Timber.i("Saving distributor: $distributor")
-                up.registerApp(context)
-                onDoneRunnable?.run()
-            }
-            builder.setOnDismissListener {
-                onDoneRunnable?.run()
-            }
-            builder.setOnCancelListener {
-                onDoneRunnable?.run()
-            }
-            val dialog: AlertDialog = builder.create()
-            dialog.show()
+
+            MaterialAlertDialogBuilder(context)
+                    .setTitle(stringProvider.getString(R.string.unifiedpush_getdistributors_dialog_title))
+                    .setItems(distributorsNameArray) { _, which ->
+                        val distributor = distributorsArray[which]
+                        up.saveDistributor(context, distributor)
+                        Timber.i("Saving distributor: $distributor")
+                        up.registerApp(context)
+                        onDoneRunnable?.run()
+                    }
+                    .setOnDismissListener {
+                        onDoneRunnable?.run()
+                    }
+                    .setOnCancelListener {
+                        onDoneRunnable?.run()
+                    }
+                    .show()
         }
     }
 
