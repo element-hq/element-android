@@ -148,11 +148,13 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
 
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_UNIFIED_PUSH_RE_REGISTER_KEY)?.let {
             if (BuildConfig.ALLOW_EXTERNAL_UNIFIEDPUSH_DISTRIB) {
+                it.summary = unifiedPushHelper.getCurrentDistributorName()
                 it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                     unifiedPushHelper.reRegister(
                             requireActivity(),
                             pushersManager
                     ) {
+                        it.summary = unifiedPushHelper.getCurrentDistributorName()
                         session.pushersService().refreshPushers()
                         refreshBackgroundSyncPrefs()
                     }
