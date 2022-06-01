@@ -156,7 +156,9 @@ class AudioWaveformView @JvmOverloads constructor(
             val barHeight = max(fft.value / MAX_FFT * (height - verticalPadding * 2), barMinHeight)
             visibleBarHeights.add(FFT(barHeight, fft.color))
             if (visibleBarHeights.size > maxVisibleBarCount) {
-                visibleBarHeights = visibleBarHeights.subList(visibleBarHeights.size - maxVisibleBarCount, visibleBarHeights.size)
+                visibleBarHeights = mutableListOf<FFT>().apply {
+                    addAll(visibleBarHeights.subList(visibleBarHeights.size - maxVisibleBarCount, visibleBarHeights.size))
+                }
             }
         }
     }
