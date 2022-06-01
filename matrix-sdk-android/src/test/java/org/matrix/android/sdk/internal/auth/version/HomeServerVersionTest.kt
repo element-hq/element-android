@@ -32,6 +32,8 @@ class HomeServerVersionTest {
 
         val unsupportedVersions = listOf(
                 case("v-1.5.1", expected = null),
+                case("1.4.", expected = null),
+                case("1.5.1.", expected = null),
                 case("r1", expected = null),
                 case("a", expected = null),
                 case("1a.2b.3c", expected = null),
