@@ -246,9 +246,8 @@ class UnifiedPushHelper @Inject constructor(
     }
 
     fun getExternalDistributors(): List<String> {
-        val distributors = up.getDistributors(context).toMutableList()
-        distributors.remove(context.packageName)
-        return distributors
+        return up.getDistributors(context)
+                .filterNot { it == context.packageName }
     }
 
     fun getCurrentDistributorName(): String {
@@ -268,13 +267,11 @@ class UnifiedPushHelper @Inject constructor(
     }
 
     fun isEmbeddedDistributor(): Boolean {
-        return (up.getDistributor(context) == context.packageName &&
-                FcmHelper.isPushSupported())
+        return up.getDistributor(context) == context.packageName && FcmHelper.isPushSupported()
     }
 
     fun isBackgroundSync(): Boolean {
-        return (up.getDistributor(context) == context.packageName &&
-                !FcmHelper.isPushSupported())
+        return up.getDistributor(context) == context.packageName && !FcmHelper.isPushSupported()
     }
 
     fun getPrivacyFriendlyUpEndpoint(): String? {
