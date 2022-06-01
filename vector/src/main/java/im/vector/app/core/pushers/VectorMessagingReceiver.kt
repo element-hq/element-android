@@ -86,6 +86,7 @@ class VectorMessagingReceiver : MessagingReceiver() {
     @Inject lateinit var wifiDetector: WifiDetector
     @Inject lateinit var guardServiceStarter: GuardServiceStarter
     @Inject lateinit var unifiedPushHelper: UnifiedPushHelper
+    @Inject lateinit var unifiedPushStore: UnifiedPushStore
 
     private val coroutineScope = CoroutineScope(SupervisorJob())
 
@@ -160,11 +161,11 @@ class VectorMessagingReceiver : MessagingReceiver() {
         if (vectorPreferences.areNotificationEnabledForDevice() && activeSessionHolder.hasActiveSession()) {
             // If the endpoint has changed
             // or the gateway has changed
-            if (unifiedPushHelper.getEndpointOrToken() != endpoint) {
-                unifiedPushHelper.storeUpEndpoint(endpoint)
+            if (unifiedPushStore.getEndpointOrToken() != endpoint) {
+                unifiedPushStore.storeUpEndpoint(endpoint)
                 coroutineScope.launch {
                     unifiedPushHelper.storeCustomOrDefaultGateway(endpoint) {
-                        unifiedPushHelper.getPushGateway()?.let {
+                        unifiedPushStore.getPushGateway()?.let {
                             pushersManager.enqueueRegisterPusher(endpoint, it)
                         }
                     }
@@ -192,7 +193,7 @@ class VectorMessagingReceiver : MessagingReceiver() {
         guardServiceStarter.start()
         runBlocking {
             try {
-                pushersManager.unregisterPusher(unifiedPushHelper.getEndpointOrToken().orEmpty())
+                pushersManager.unregisterPusher(unifiedPushStore.getEndpointOrToken().orEmpty())
             } catch (e: Exception) {
                 Timber.tag(loggerTag.value).d("Probably unregistering a non existing pusher")
             }

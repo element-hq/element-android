@@ -18,13 +18,11 @@ package im.vector.app.core.pushers
 
 import android.content.Context
 import android.content.pm.PackageManager
-import androidx.core.content.edit
 import androidx.fragment.app.FragmentActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.squareup.moshi.JsonClass
 import im.vector.app.BuildConfig
 import im.vector.app.R
-import im.vector.app.core.di.DefaultSharedPreferences
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.settings.BackgroundSyncMode
 import im.vector.app.features.settings.VectorPreferences
@@ -40,58 +38,12 @@ import javax.inject.Inject
 
 class UnifiedPushHelper @Inject constructor(
         private val context: Context,
+        private val unifiedPushStore: UnifiedPushStore,
         private val stringProvider: StringProvider,
         private val vectorPreferences: VectorPreferences,
         private val matrix: Matrix,
 ) {
-    companion object {
-        private const val PREFS_ENDPOINT_OR_TOKEN = "UP_ENDPOINT_OR_TOKEN"
-        private const val PREFS_PUSH_GATEWAY = "PUSH_GATEWAY"
-    }
-
     private val up = UnifiedPush
-
-    /**
-     * Retrieves the UnifiedPush Endpoint.
-     *
-     * @return the UnifiedPush Endpoint or null if not received
-     */
-    fun getEndpointOrToken(): String? {
-        return DefaultSharedPreferences.getInstance(context).getString(PREFS_ENDPOINT_OR_TOKEN, null)
-    }
-
-    /**
-     * Store UnifiedPush Endpoint to the SharedPrefs.
-     * TODO Store in realm
-     *
-     * @param endpoint the endpoint to store
-     */
-    fun storeUpEndpoint(endpoint: String?) {
-        DefaultSharedPreferences.getInstance(context).edit {
-            putString(PREFS_ENDPOINT_OR_TOKEN, endpoint)
-        }
-    }
-
-    /**
-     * Retrieves the Push Gateway.
-     *
-     * @return the Push Gateway or null if not defined
-     */
-    fun getPushGateway(): String? {
-        return DefaultSharedPreferences.getInstance(context).getString(PREFS_PUSH_GATEWAY, null)
-    }
-
-    /**
-     * Store Push Gateway to the SharedPrefs.
-     * TODO Store in realm
-     *
-     * @param gateway the push gateway to store
-     */
-    private fun storePushGateway(gateway: String?) {
-        DefaultSharedPreferences.getInstance(context).edit {
-            putString(PREFS_PUSH_GATEWAY, gateway)
-        }
-    }
 
     fun register(
             activity: FragmentActivity,
@@ -189,13 +141,13 @@ class UnifiedPushHelper @Inject constructor(
         vectorPreferences.setFdroidSyncBackgroundMode(mode)
         runBlocking {
             try {
-                pushersManager?.unregisterPusher(getEndpointOrToken().orEmpty())
+                pushersManager?.unregisterPusher(unifiedPushStore.getEndpointOrToken().orEmpty())
             } catch (e: Exception) {
                 Timber.d(e, "Probably unregistering a non existing pusher")
             }
         }
-        storeUpEndpoint(null)
-        storePushGateway(null)
+        unifiedPushStore.storeUpEndpoint(null)
+        unifiedPushStore.storePushGateway(null)
         up.unregisterApp(context)
     }
 
@@ -217,7 +169,7 @@ class UnifiedPushHelper @Inject constructor(
         // register app_id type upfcm on sygnal
         // the pushkey if FCM key
         if (up.getDistributor(context) == context.packageName) {
-            storePushGateway(stringProvider.getString(R.string.pusher_http_url))
+            unifiedPushStore.storePushGateway(stringProvider.getString(R.string.pusher_http_url))
             onDoneRunnable?.run()
             return
         }
@@ -233,7 +185,7 @@ class UnifiedPushHelper @Inject constructor(
                     ?.let { discoveryResponse ->
                         if (discoveryResponse.unifiedpush.gateway == "matrix") {
                             Timber.d("Using custom gateway")
-                            storePushGateway(custom)
+                            unifiedPushStore.storePushGateway(custom)
                             onDoneRunnable?.run()
                             return
                         }
@@ -241,7 +193,7 @@ class UnifiedPushHelper @Inject constructor(
         } catch (e: Throwable) {
             Timber.d(e, "Cannot try custom gateway")
         }
-        storePushGateway(gateway)
+        unifiedPushStore.storePushGateway(gateway)
         onDoneRunnable?.run()
     }
 
@@ -275,7 +227,7 @@ class UnifiedPushHelper @Inject constructor(
     }
 
     fun getPrivacyFriendlyUpEndpoint(): String? {
-        val endpoint = getEndpointOrToken()
+        val endpoint = unifiedPushStore.getEndpointOrToken()
         if (endpoint.isNullOrEmpty()) return endpoint
         if (isEmbeddedDistributor()) {
             return endpoint
