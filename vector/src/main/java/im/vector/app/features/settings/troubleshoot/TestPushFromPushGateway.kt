@@ -32,7 +32,7 @@ import org.matrix.android.sdk.api.session.pushers.PushGatewayFailure
 import javax.inject.Inject
 
 /**
- * Test Push by asking the Push Gateway to send a Push back
+ * Test Push by asking the Push Gateway to send a Push back.
  */
 class TestPushFromPushGateway @Inject constructor(private val context: FragmentActivity,
                                                   private val stringProvider: StringProvider,

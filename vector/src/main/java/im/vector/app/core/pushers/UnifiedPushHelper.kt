@@ -55,7 +55,7 @@ object UnifiedPushHelper {
     }
 
     /**
-     * Store UnifiedPush Endpoint to the SharedPrefs
+     * Store UnifiedPush Endpoint to the SharedPrefs.
      * TODO Store in realm
      *
      * @param context android context
@@ -78,7 +78,7 @@ object UnifiedPushHelper {
     }
 
     /**
-     * Store Push Gateway to the SharedPrefs
+     * Store Push Gateway to the SharedPrefs.
      * TODO Store in realm
      *
      * @param context android context
