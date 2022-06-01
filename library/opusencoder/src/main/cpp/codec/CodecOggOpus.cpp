@@ -20,9 +20,13 @@
 int ret;
 
 int CodecOggOpus::encoderInit(char* filePath, int sampleRate) {
+    // Create default, empty comment header
     comments = ope_comments_create();
-    int numChannels = 1; // Mono audio
-    int family = 0; // Channel Mapping Family 0, used for mono/stereo streams
+    // Mono audio
+    int numChannels = 1;
+    // Channel Mapping Family 0, used for mono/stereo streams
+    int family = 0;
+    // Create encoder to encode PCM chunks and write the result to a file with the OggOpus framing
     encoder = ope_encoder_create_file(filePath, comments, sampleRate, numChannels, family, &ret);
     if (ret != OPE_OK) {
         LOGE(TAG, "Creation of OggOpusEnc failed.");
@@ -41,12 +45,16 @@ int CodecOggOpus::setBitrate(int bitrate) {
 }
 
 int CodecOggOpus::writeFrame(short* frame, int samplesPerChannel) {
+    // Encode the raw PCM-16 buffer to Opus and write it to the ogg file
     return ope_encoder_write(encoder, frame, samplesPerChannel);
 }
 
 void CodecOggOpus::encoderRelease() {
+    // Finish any pending encode/write operations
     ope_encoder_drain(encoder);
+    // De-init the encoder instance
     ope_encoder_destroy(encoder);
+    // De-init the comment header struct
     ope_comments_destroy(comments);
 }
 

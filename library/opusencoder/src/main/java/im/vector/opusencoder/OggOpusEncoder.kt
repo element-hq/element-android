@@ -20,6 +20,9 @@ import android.util.Log
 import androidx.annotation.IntRange
 import im.vector.opusencoder.configuration.SampleRate
 
+/**
+ * JNI bridge to CodecOggOpus in the native opuscodec library.
+ */
 class OggOpusEncoder {
 
     companion object {

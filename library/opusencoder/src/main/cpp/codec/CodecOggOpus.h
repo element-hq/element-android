@@ -18,7 +18,16 @@
 #define ELEMENT_ANDROID_CODECOGGOPUS_H
 
 #include <opusenc.h>
-
+/**
+ * This class is a wrapper around libopusenc, used to encode and write Opus frames into an Ogg file.
+ *
+ * The usual flow would be:
+ *
+ * 1. Use encoderInit to initialize the internal encoder with the sample rate and the path to write the encoded frames to.
+ * 2. (Optional) set the bitrate to use.
+ * 3. While recording, read PCM-16 chunks from the recorder, feed them to the encoder using writeFrame.
+ * 4. When finished, call encoderRelease to free some resources.
+ */
 class CodecOggOpus {
 
 private:
