@@ -165,6 +165,10 @@ android {
         buildConfigField "Boolean", "enableLocationSharing", "true"
         buildConfigField "String", "mapTilerKey", "\"fU3vlMsMn4Jb6dnEIFsx\""
 
+        // Set to false to prevent usage of UnifiedPush. For Gplay variant it means that only FCM will be used,
+        // And for F-Droid variant, it means that only background polling will be available to the user.
+        buildConfigField "boolean", "ALLOW_EXTERNAL_UNIFIEDPUSH_DISTRIB", "true"
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         // Keep abiFilter for the universalApk
@@ -282,7 +286,6 @@ android {
             buildConfigField "boolean", "ALLOW_FCM_USE", "true"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"G\""
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"GooglePlay\""
-            buildConfigField "boolean", "ALLOW_EXTERNAL_UNIFIEDPUSH_DISTRIB", "true"
         }
 
         fdroid {
@@ -294,7 +297,6 @@ android {
             buildConfigField "boolean", "ALLOW_FCM_USE", "false"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"F\""
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"FDroid\""
-            buildConfigField "boolean", "ALLOW_EXTERNAL_UNIFIEDPUSH_DISTRIB", "true"
         }
     }
 
