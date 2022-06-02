@@ -22,9 +22,9 @@ import androidx.fragment.app.FragmentActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.settings.BackgroundSyncMode
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.push.fcm.FcmHelper
@@ -43,6 +43,7 @@ class UnifiedPushHelper @Inject constructor(
         private val stringProvider: StringProvider,
         private val vectorPreferences: VectorPreferences,
         private val matrix: Matrix,
+        private val vectorFeatures: VectorFeatures,
 ) {
     private val up = UnifiedPush
 
@@ -75,7 +76,7 @@ class UnifiedPushHelper @Inject constructor(
             pushersManager: PushersManager? = null,
             onDoneRunnable: Runnable? = null
     ) {
-        if (!BuildConfig.ALLOW_EXTERNAL_UNIFIEDPUSH_DISTRIB) {
+        if (!vectorFeatures.allowExternalUnifiedPushDistributors()) {
             up.saveDistributor(context, context.packageName)
             up.registerApp(context)
             onDoneRunnable?.run()

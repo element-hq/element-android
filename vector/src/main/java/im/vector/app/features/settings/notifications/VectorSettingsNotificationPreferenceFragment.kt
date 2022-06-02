@@ -30,7 +30,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.map
 import androidx.preference.Preference
 import androidx.preference.SwitchPreference
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.registerStartForActivityResult
@@ -44,6 +43,7 @@ import im.vector.app.core.services.GuardServiceStarter
 import im.vector.app.core.utils.combineLatest
 import im.vector.app.core.utils.isIgnoringBatteryOptimizations
 import im.vector.app.core.utils.requestDisablingBatteryOptimization
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.settings.BackgroundSyncMode
@@ -67,7 +67,8 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
         private val pushersManager: PushersManager,
         private val activeSessionHolder: ActiveSessionHolder,
         private val vectorPreferences: VectorPreferences,
-        private val guardServiceStarter: GuardServiceStarter
+        private val guardServiceStarter: GuardServiceStarter,
+        private val vectorFeatures: VectorFeatures,
 ) : VectorSettingsBaseFragment(),
         BackgroundSyncModeChooserDialog.InteractionListener {
 
@@ -147,7 +148,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
         }
 
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_UNIFIED_PUSH_RE_REGISTER_KEY)?.let {
-            if (BuildConfig.ALLOW_EXTERNAL_UNIFIEDPUSH_DISTRIB) {
+            if (vectorFeatures.allowExternalUnifiedPushDistributors()) {
                 it.summary = unifiedPushHelper.getCurrentDistributorName()
                 it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                     unifiedPushHelper.reRegister(

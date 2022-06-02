@@ -16,8 +16,8 @@
 package im.vector.app.push.fcm
 
 import androidx.fragment.app.Fragment
-import im.vector.app.BuildConfig
 import im.vector.app.core.pushers.UnifiedPushHelper
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.settings.troubleshoot.NotificationTroubleshootTestManager
 import im.vector.app.features.settings.troubleshoot.TestAccountSettings
 import im.vector.app.features.settings.troubleshoot.TestAvailableUnifiedPushDistributors
@@ -50,7 +50,8 @@ class NotificationTroubleshootTestManagerFactory @Inject constructor(
         private val testAvailableUnifiedPushDistributors: TestAvailableUnifiedPushDistributors,
         private val testEndpointAsTokenRegistration: TestEndpointAsTokenRegistration,
         private val testPushFromPushGateway: TestPushFromPushGateway,
-        private val testNotification: TestNotification
+        private val testNotification: TestNotification,
+        private val vectorFeatures: VectorFeatures,
 ) {
 
     fun create(fragment: Fragment): NotificationTroubleshootTestManager {
@@ -59,7 +60,7 @@ class NotificationTroubleshootTestManagerFactory @Inject constructor(
         mgr.addTest(testAccountSettings)
         mgr.addTest(testDeviceSettings)
         mgr.addTest(testPushRulesSettings)
-        if (BuildConfig.ALLOW_EXTERNAL_UNIFIEDPUSH_DISTRIB) {
+        if (vectorFeatures.allowExternalUnifiedPushDistributors()) {
             mgr.addTest(testAvailableUnifiedPushDistributors)
             mgr.addTest(testCurrentUnifiedPushDistributor)
         }
