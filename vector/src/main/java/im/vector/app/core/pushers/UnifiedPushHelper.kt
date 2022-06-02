@@ -156,7 +156,7 @@ class UnifiedPushHelper @Inject constructor(
                 .setTitle(stringProvider.getString(R.string.unifiedpush_getdistributors_dialog_title))
                 .setItems(distributorsName.toTypedArray()) { _, which ->
                     val distributor = distributors[which]
-                    if (distributor == getCurrentDistributorName()) {
+                    if (distributor == up.getDistributor(context)) {
                         Timber.d("Same distributor selected again, no action")
                         return@setItems
                     }
@@ -169,12 +169,10 @@ class UnifiedPushHelper @Inject constructor(
                         up.saveDistributor(context, distributor)
                         Timber.i("Saving distributor: $distributor")
                         up.registerApp(context)
+                        onDoneRunnable?.run()
                     }
                 }
                 .setCancelable(cancellable)
-                .setOnDismissListener {
-                    onDoneRunnable?.run()
-                }
                 .show()
     }
 
