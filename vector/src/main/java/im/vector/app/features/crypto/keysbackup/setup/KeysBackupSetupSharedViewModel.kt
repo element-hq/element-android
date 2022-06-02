@@ -27,6 +27,7 @@ import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.LiveEvent
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.crypto.keysbackup.BackupRecoveryKey
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupService
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersion
 import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
@@ -71,7 +72,7 @@ class KeysBackupSetupSharedViewModel @Inject constructor(
     // Step 3
     // Var to ignore events from previous request(s) to generate a recovery key
     private var currentRequestId: MutableLiveData<Long> = MutableLiveData()
-    var recoveryKey: MutableLiveData<String?> = MutableLiveData(null)
+    var recoveryKey: MutableLiveData<BackupRecoveryKey?> = MutableLiveData(null)
     var prepareRecoverFailError: MutableLiveData<Throwable?> = MutableLiveData(null)
     var megolmBackupCreationInfo: MegolmBackupCreationInfo? = null
     var copyHasBeenMade = false

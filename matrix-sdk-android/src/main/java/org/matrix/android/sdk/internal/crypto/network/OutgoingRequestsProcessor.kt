@@ -34,10 +34,10 @@ import uniffi.olm.RequestType
 
 private val loggerTag = LoggerTag("OutgoingRequestsProcessor", LoggerTag.CRYPTO)
 
-internal class NetworkRequestsProcessor(private val requestSender: RequestSender,
-                                        private val coroutineScope: CoroutineScope,
-                                        private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
-                                        private val shieldComputer: ShieldComputer,) {
+internal class OutgoingRequestsProcessor(private val requestSender: RequestSender,
+                                         private val coroutineScope: CoroutineScope,
+                                         private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
+                                         private val shieldComputer: ShieldComputer,) {
 
     fun interface ShieldComputer {
         suspend fun compute(userIds: List<String>): RoomEncryptionTrustLevel

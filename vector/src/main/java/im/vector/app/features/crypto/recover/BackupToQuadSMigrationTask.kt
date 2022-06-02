@@ -23,6 +23,7 @@ import im.vector.app.core.resources.StringProvider
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
+import org.matrix.android.sdk.api.session.crypto.keysbackup.BackupRecoveryKey
 import org.matrix.android.sdk.api.session.crypto.keysbackup.computeRecoveryKey
 import org.matrix.android.sdk.api.session.crypto.keysbackup.extractCurveKeyFromRecoveryKey
 import org.matrix.android.sdk.api.session.securestorage.EmptyKeySigner
@@ -91,8 +92,8 @@ class BackupToQuadSMigrationTask @Inject constructor(
 
             reportProgress(params, R.string.bootstrap_progress_compute_curve_key)
             val recoveryKey = computeRecoveryKey(curveKey)
-
-            val isValid = keysBackupService.isValidRecoveryKeyForCurrentVersion(recoveryKey)
+            val backupRecoveryKey = BackupRecoveryKey.fromBase58(recoveryKey)
+            val isValid = keysBackupService.isValidRecoveryKeyForCurrentVersion(backupRecoveryKey)
 
             if (!isValid) return Result.InvalidRecoverySecret
 
@@ -143,7 +144,7 @@ class BackupToQuadSMigrationTask @Inject constructor(
             )
 
             // save for gossiping
-            keysBackupService.saveBackupRecoveryKey(recoveryKey, version.version)
+            keysBackupService.saveBackupRecoveryKey(backupRecoveryKey, version.version)
             // It's not a good idea to download the full backup, it might take very long
             // and use a lot of resources
             return Result.Success

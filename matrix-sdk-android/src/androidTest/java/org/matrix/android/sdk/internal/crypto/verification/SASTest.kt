@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.crypto.verification
 
 import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -40,10 +41,9 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationServic
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestHelper
-import org.matrix.android.sdk.internal.crypto.model.rest.toValue
 import timber.log.Timber
 import java.util.concurrent.CountDownLatch
 
@@ -322,8 +322,6 @@ class SASTest : InstrumentedTest {
          */
     }
 
-
-
     // any two devices may only have at most one key verification in flight at a time.
     // If a device has two verifications in progress with the same device, then it should cancel both verifications.
     @Test
@@ -449,7 +447,8 @@ class SASTest : InstrumentedTest {
             aliceSession.cryptoService().verificationService().beginKeyVerification(VerificationMethod.SAS, bobSession.myUserId, transactionId)
         }
         testHelper.await(latch)
-        val aliceTx = aliceSession.cryptoService().verificationService().getExistingTransaction(bobSession.myUserId, transactionId) as SasVerificationTransaction
+        val aliceTx =
+                aliceSession.cryptoService().verificationService().getExistingTransaction(bobSession.myUserId, transactionId) as SasVerificationTransaction
         val bobTx = bobSession.cryptoService().verificationService().getExistingTransaction(aliceSession.myUserId, transactionId) as SasVerificationTransaction
 
         assertEquals("Should have same SAS", aliceTx.getDecimalCodeRepresentation(), bobTx.getDecimalCodeRepresentation())
@@ -470,62 +469,71 @@ class SASTest : InstrumentedTest {
         val aliceVerificationService = aliceSession.cryptoService().verificationService()
         val bobVerificationService = bobSession!!.cryptoService().verificationService()
 
-        val aliceSASLatch = CountDownLatch(1)
+        val verifiedLatch = CountDownLatch(2)
         val aliceListener = object : VerificationService.Listener {
 
             override fun verificationRequestUpdated(pr: PendingVerificationRequest) {
                 Timber.v("RequestUpdated pr=$pr")
             }
 
-            var matchOnce = true
+            var matched = false
+            var verified = false
             override fun transactionUpdated(tx: VerificationTransaction) {
-                Timber.v("Alice transactionUpdated: ${tx.state}")
+                Timber.v("Alice transactionUpdated: ${tx.state} on thread:${Thread.currentThread()}")
                 if (tx !is SasVerificationTransaction) return
                 when (tx.state) {
-                    VerificationTxState.ShortCodeReady -> testHelper.runBlockingTest {
-                        tx.userHasVerifiedShortCode()
-                    }
-                    VerificationTxState.Verified       -> {
-                        if (matchOnce) {
-                            matchOnce = false
-                            aliceSASLatch.countDown()
+                    VerificationTxState.ShortCodeReady    -> testHelper.runBlockingTest {
+                        if (!matched) {
+                            matched = true
+                            delay(500)
+                            tx.userHasVerifiedShortCode()
                         }
                     }
-                    else                               -> Unit
+                    VerificationTxState.Verified          -> {
+                        if (!verified) {
+                            verified = true
+                            verifiedLatch.countDown()
+                        }
+                    }
+                    else                                  -> Unit
                 }
             }
         }
         aliceVerificationService.addListener(aliceListener)
 
-        val bobSASLatch = CountDownLatch(1)
         val bobListener = object : VerificationService.Listener {
-            var acceptOnce = true
-            var matchOnce = true
+            var accepted = false
+            var matched = false
+            var verified = false
 
             override fun verificationRequestUpdated(pr: PendingVerificationRequest) {
                 Timber.v("RequestUpdated: pr=$pr")
             }
 
             override fun transactionUpdated(tx: VerificationTransaction) {
-                Timber.v("Bob transactionUpdated: ${tx.state}")
+                Timber.v("Bob transactionUpdated: ${tx.state} on thread: ${Thread.currentThread()}")
                 if (tx !is SasVerificationTransaction) return
                 when (tx.state) {
-                    VerificationTxState.OnStarted      -> testHelper.runBlockingTest {
-                        if (acceptOnce) {
-                            acceptOnce = false
+                    VerificationTxState.OnStarted         -> testHelper.runBlockingTest {
+                        if (!accepted) {
+                            accepted = true
                             tx.acceptVerification()
                         }
                     }
-                    VerificationTxState.ShortCodeReady -> testHelper.runBlockingTest {
-                        if (matchOnce) {
-                            matchOnce = false
+                    VerificationTxState.ShortCodeReady    -> testHelper.runBlockingTest {
+                        if (!matched) {
+                            matched = true
+                            delay(500)
                             tx.userHasVerifiedShortCode()
                         }
                     }
-                    VerificationTxState.ShortCodeAccepted       -> {
-                        bobSASLatch.countDown()
+                    VerificationTxState.Verified          -> {
+                        if (!verified) {
+                            verified = true
+                            verifiedLatch.countDown()
+                        }
                     }
-                    else                               -> Unit
+                    else                                  -> Unit
                 }
             }
         }
@@ -538,8 +546,8 @@ class SASTest : InstrumentedTest {
         testHelper.runBlockingTest {
             aliceVerificationService.beginKeyVerification(VerificationMethod.SAS, bobUserId, transactionId)
         }
-        testHelper.await(aliceSASLatch)
-        testHelper.await(bobSASLatch)
+        Timber.v("Await after beginKey ${Thread.currentThread()}")
+        testHelper.await(verifiedLatch)
 
         // Assert that devices are verified
         val bobDeviceInfoFromAlicePOV: CryptoDeviceInfo? = testHelper.runBlockingTest {

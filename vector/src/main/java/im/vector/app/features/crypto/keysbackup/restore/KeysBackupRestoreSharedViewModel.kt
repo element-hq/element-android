@@ -31,6 +31,7 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.listeners.StepProgressListener
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
+import org.matrix.android.sdk.api.session.crypto.keysbackup.BackupRecoveryKey
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupService
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersionResult
 import org.matrix.android.sdk.api.session.crypto.keysbackup.computeRecoveryKey
@@ -88,7 +89,7 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
     private val progressObserver = object : StepProgressListener {
         override fun onStepProgress(step: StepProgressListener.Step) {
             when (step) {
-                is StepProgressListener.Step.ComputingKey  -> {
+                is StepProgressListener.Step.ComputingKey   -> {
                     loadingEvent.postValue(
                             WaitingViewData(
                                     stringProvider.getString(R.string.keys_backup_restoring_waiting_message) +
@@ -107,7 +108,7 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
                             )
                     )
                 }
-                is StepProgressListener.Step.ImportingKey  -> {
+                is StepProgressListener.Step.ImportingKey   -> {
                     Timber.d("backupKeys.ImportingKey.progress: ${step.progress}")
                     // Progress 0 can take a while, display an indeterminate progress in this case
                     if (step.progress == 0) {
@@ -131,14 +132,22 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
                 }
                 is StepProgressListener.Step.DecryptingKey  -> {
                     if (step.progress == 0) {
-                        loadingEvent.postValue(WaitingViewData(stringProvider.getString(R.string.keys_backup_restoring_waiting_message) +
-                                "\n" + stringProvider.getString(R.string.keys_backup_restoring_decrypting_keys_waiting_message),
-                                isIndeterminate = true))
+                        loadingEvent.postValue(
+                                WaitingViewData(
+                                        stringProvider.getString(R.string.keys_backup_restoring_waiting_message) +
+                                                "\n" + stringProvider.getString(R.string.keys_backup_restoring_decrypting_keys_waiting_message),
+                                        isIndeterminate = true
+                                )
+                        )
                     } else {
-                        loadingEvent.postValue(WaitingViewData(stringProvider.getString(R.string.keys_backup_restoring_waiting_message) +
-                                "\n" + stringProvider.getString(R.string.keys_backup_restoring_decrypting_keys_waiting_message),
-                                step.progress,
-                                step.total))
+                        loadingEvent.postValue(
+                                WaitingViewData(
+                                        stringProvider.getString(R.string.keys_backup_restoring_waiting_message) +
+                                                "\n" + stringProvider.getString(R.string.keys_backup_restoring_decrypting_keys_waiting_message),
+                                        step.progress,
+                                        step.total
+                                )
+                        )
                     }
                 }
             }
@@ -170,7 +179,7 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
                 )
                 // Go and use it!!
                 try {
-                    recoverUsingBackupRecoveryKey(computeRecoveryKey(savedSecret.recoveryKey.fromBase64()), version)
+                    recoverUsingBackupRecoveryKey(savedSecret.recoveryKey, version)
                 } catch (failure: Throwable) {
                     Timber.e(failure, "## recoverUsingBackupRecoveryKey FAILED")
                     keySourceModel.postValue(
@@ -212,7 +221,9 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
 
                 viewModelScope.launch(Dispatchers.IO) {
                     try {
-                        recoverUsingBackupRecoveryKey(computeRecoveryKey(secret.fromBase64()))
+                        val computedRecoveryKey = computeRecoveryKey(secret.fromBase64())
+                        val backupRecoveryKey = BackupRecoveryKey.fromBase58(computedRecoveryKey)
+                        recoverUsingBackupRecoveryKey(backupRecoveryKey)
                     } catch (failure: Throwable) {
                         _navigateEvent.postValue(
                                 LiveEvent(NAVIGATE_FAILED_TO_LOAD_4S)
@@ -234,7 +245,8 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
         loadingEvent.postValue(WaitingViewData(stringProvider.getString(R.string.loading)))
 
         try {
-            val result = keysBackup.restoreKeyBackupWithPassword(keyVersion,
+            val result = keysBackup.restoreKeyBackupWithPassword(
+                    keyVersion,
                     passphrase,
                     null,
                     session.myUserId,
@@ -249,7 +261,7 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
         }
     }
 
-    suspend fun recoverUsingBackupRecoveryKey(recoveryKey: String, keyVersion: KeysVersionResult? = null) {
+    suspend fun recoverUsingBackupRecoveryKey(recoveryKey: BackupRecoveryKey, keyVersion: KeysVersionResult? = null) {
         val keysBackup = session.cryptoService().keysBackupService()
         // This is badddddd
         val version = keyVersion ?: keyVersionResult.value ?: return
@@ -257,7 +269,8 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
         loadingEvent.postValue(WaitingViewData(stringProvider.getString(R.string.loading)))
 
         try {
-            val result = keysBackup.restoreKeysWithRecoveryKey(version,
+            val result = keysBackup.restoreKeysWithRecoveryKey(
+                    version,
                     recoveryKey,
                     null,
                     session.myUserId,

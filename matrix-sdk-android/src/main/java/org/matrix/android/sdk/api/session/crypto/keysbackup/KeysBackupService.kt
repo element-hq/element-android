@@ -142,8 +142,7 @@ interface KeysBackupService {
      * @param keysBackupVersion the backup version to check.
      * @param recoveryKey the recovery key to challenge with the key backup public key.
      */
-    suspend fun trustKeysBackupVersionWithRecoveryKey(keysBackupVersion: KeysVersionResult,
-                                              recoveryKey: String)
+    suspend fun trustKeysBackupVersionWithRecoveryKey(keysBackupVersion: KeysVersionResult, recoveryKey: BackupRecoveryKey)
 
     /**
      * Set trust on a keys backup version.
@@ -167,7 +166,7 @@ interface KeysBackupService {
      * @param callback             Callback. It provides the number of found keys and the number of successfully imported keys.
      */
     suspend fun restoreKeysWithRecoveryKey(keysVersionResult: KeysVersionResult,
-                                   recoveryKey: String, roomId: String?,
+                                   recoveryKey: BackupRecoveryKey, roomId: String?,
                                    sessionId: String?,
                                    stepProgressListener: StepProgressListener?): ImportRoomKeysResult
 
@@ -194,10 +193,10 @@ interface KeysBackupService {
     val state: KeysBackupState
 
     // For gossiping
-    fun saveBackupRecoveryKey(recoveryKey: String?, version: String?)
+    fun saveBackupRecoveryKey(recoveryKey: BackupRecoveryKey?, version: String?)
     suspend fun getKeyBackupRecoveryKeyInfo(): SavedKeyBackupKeyInfo?
 
-    suspend fun isValidRecoveryKeyForCurrentVersion(recoveryKey: String): Boolean
+    suspend fun isValidRecoveryKeyForCurrentVersion(recoveryKey: BackupRecoveryKey): Boolean
 
     fun computePrivateKey(passphrase: String,
                           privateKeySalt: String,

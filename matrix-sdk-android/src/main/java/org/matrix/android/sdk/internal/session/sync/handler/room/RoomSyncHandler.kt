@@ -520,10 +520,9 @@ internal class RoomSyncHandler @Inject constructor(
 
     private fun decryptIfNeeded(event: Event, roomId: String) {
         try {
-            // Event from sync does not have roomId, so add it to the event first
             // note: runBlocking should be used here while we are in realm single thread executor, to avoid thread switching
             val result = runBlocking {
-                cryptoService.decryptEvent(event.copy(roomId = roomId), "")
+                cryptoService.decryptEvent(event, "")
             }
             event.mxDecryptionResult = OlmDecryptionResult(
                     payload = result.clearEvent,

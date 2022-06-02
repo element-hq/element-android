@@ -65,7 +65,7 @@ import org.matrix.android.sdk.api.session.sync.model.DeviceListResponse
 import org.matrix.android.sdk.api.session.sync.model.DeviceOneTimeKeysCountSyncResponse
 import org.matrix.android.sdk.api.session.sync.model.ToDeviceSyncResponse
 import org.matrix.android.sdk.internal.crypto.keysbackup.RustKeyBackupService
-import org.matrix.android.sdk.internal.crypto.network.NetworkRequestsProcessor
+import org.matrix.android.sdk.internal.crypto.network.OutgoingRequestsProcessor
 import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.android.sdk.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
@@ -131,7 +131,7 @@ internal class DefaultCryptoService @Inject constructor(
 
     private val olmMachine by lazy { olmMachineProvider.olmMachine }
 
-    private val outgoingRequestsProcessor = NetworkRequestsProcessor(
+    private val outgoingRequestsProcessor = OutgoingRequestsProcessor(
             requestSender = requestSender,
             coroutineScope = cryptoCoroutineScope,
             cryptoSessionInfoProvider = cryptoSessionInfoProvider,

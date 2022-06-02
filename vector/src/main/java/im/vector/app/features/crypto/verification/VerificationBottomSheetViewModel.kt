@@ -37,6 +37,7 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NA
 import org.matrix.android.sdk.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.isVerified
+import org.matrix.android.sdk.api.session.crypto.keysbackup.BackupRecoveryKey
 import org.matrix.android.sdk.api.session.crypto.keysbackup.computeRecoveryKey
 import org.matrix.android.sdk.api.session.crypto.keysbackup.toKeysVersionResult
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
@@ -431,9 +432,10 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                 val version = session.cryptoService().keysBackupService().getCurrentVersion()?.toKeysVersionResult() ?: return@launch
 
                 val recoveryKey = computeRecoveryKey(secret.fromBase64())
-                val isValid = session.cryptoService().keysBackupService().isValidRecoveryKeyForCurrentVersion(recoveryKey)
+                val backupRecoveryKey = BackupRecoveryKey.fromBase58(recoveryKey)
+                val isValid = session.cryptoService().keysBackupService().isValidRecoveryKeyForCurrentVersion(backupRecoveryKey)
                 if (isValid) {
-                    session.cryptoService().keysBackupService().saveBackupRecoveryKey(recoveryKey, version.version)
+                    session.cryptoService().keysBackupService().saveBackupRecoveryKey(backupRecoveryKey, version.version)
                 }
                 session.cryptoService().keysBackupService().trustKeysBackupVersion(version, true)
             } catch (failure: Throwable) {
@@ -502,6 +504,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
     }
 
     override fun transactionUpdated(tx: VerificationTransaction) = withState { state ->
+        Timber.v("transactionUpdated: $tx")
         handleTransactionUpdate(state, tx)
     }
 
@@ -510,7 +513,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
     }
 
     override fun verificationRequestUpdated(pr: PendingVerificationRequest) = withState { state ->
-
+        Timber.v("VerificationRequestUpdated: $pr")
         if (state.selfVerificationMode && state.pendingRequest.invoke() == null && state.transactionId == null) {
             // is this an incoming with that user
             if (pr.isIncoming && pr.otherUserId == state.otherUserMxItem?.id) {

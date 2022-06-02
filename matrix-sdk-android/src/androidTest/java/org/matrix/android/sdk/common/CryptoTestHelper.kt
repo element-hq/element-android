@@ -38,6 +38,7 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_S
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
+import org.matrix.android.sdk.api.session.crypto.keysbackup.BackupRecoveryKey
 import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupAuthData
 import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
 import org.matrix.android.sdk.api.session.crypto.keysbackup.extractCurveKeyFromRecoveryKey
@@ -322,7 +323,7 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
         return MegolmBackupCreationInfo(
                 algorithm = MXCRYPTO_ALGORITHM_MEGOLM_BACKUP,
                 authData = createFakeMegolmBackupAuthData(),
-                recoveryKey = "fake"
+                recoveryKey = BackupRecoveryKey.fromBase58("3cnTdW")
         )
     }
 
@@ -518,7 +519,7 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
             // Save it for gossiping
             session.cryptoService().keysBackupService().saveBackupRecoveryKey(creationInfo.recoveryKey, version = version.version)
 
-            extractCurveKeyFromRecoveryKey(creationInfo.recoveryKey)?.toBase64NoPadding()?.let { secret ->
+            extractCurveKeyFromRecoveryKey(creationInfo.recoveryKey.toBase58())?.toBase64NoPadding()?.let { secret ->
                 ssssService.storeSecret(
                         KEYBACKUP_SECRET_SSSS_NAME,
                         secret,
