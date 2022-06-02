@@ -236,14 +236,11 @@ class UnifiedPushHelper @Inject constructor(
     }
 
     fun getCurrentDistributorName(): String {
-        if (isEmbeddedDistributor()) {
-            return stringProvider.getString(R.string.unifiedpush_distributor_fcm_fallback)
+        return when {
+            isEmbeddedDistributor() -> stringProvider.getString(R.string.unifiedpush_distributor_fcm_fallback)
+            isBackgroundSync()      -> stringProvider.getString(R.string.unifiedpush_distributor_background_sync)
+            else                    -> context.getApplicationLabel(up.getDistributor(context))
         }
-        if (isBackgroundSync()) {
-            return stringProvider.getString(R.string.unifiedpush_distributor_background_sync)
-        }
-        val distributor = up.getDistributor(context)
-        return context.getApplicationLabel(distributor)
     }
 
     fun isEmbeddedDistributor(): Boolean {
