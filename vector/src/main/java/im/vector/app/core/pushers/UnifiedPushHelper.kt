@@ -96,6 +96,38 @@ class UnifiedPushHelper @Inject constructor(
         up.saveDistributor(context, context.packageName)
         val distributors = up.getDistributors(context)
 
+        if (distributors.size == 1 && !force) {
+            up.saveDistributor(context, distributors.first())
+            up.registerApp(context)
+            onDoneRunnable?.run()
+        } else {
+            openDistributorDialogInternal(activity, pushersManager, onDoneRunnable, distributors, !force, !force)
+        }
+    }
+
+    fun openDistributorDialog(
+            activity: FragmentActivity,
+            pushersManager: PushersManager,
+            onDoneRunnable: Runnable,
+    ) {
+        val distributors = up.getDistributors(activity)
+        openDistributorDialogInternal(
+                activity,
+                pushersManager,
+                onDoneRunnable, distributors,
+                unregisterFirst = true,
+                cancellable = true,
+        )
+    }
+
+    private fun openDistributorDialogInternal(
+            activity: FragmentActivity,
+            pushersManager: PushersManager?,
+            onDoneRunnable: Runnable?,
+            distributors: List<String>,
+            unregisterFirst: Boolean,
+            cancellable: Boolean,
+    ) {
         val internalDistributorName = stringProvider.getString(
                 if (FcmHelper.isPushSupported()) {
                     R.string.unifiedpush_distributor_fcm_fallback
@@ -104,38 +136,36 @@ class UnifiedPushHelper @Inject constructor(
                 }
         )
 
-        if (distributors.size == 1 && !force) {
-            up.saveDistributor(context, distributors.first())
-            up.registerApp(context)
-            onDoneRunnable?.run()
-        } else {
-            val distributorsArray = distributors.toTypedArray()
-            val distributorsNameArray = distributorsArray.map {
-                if (it == context.packageName) {
-                    internalDistributorName
-                } else {
-                    try {
-                        val ai = context.packageManager.getApplicationInfo(it, 0)
-                        context.packageManager.getApplicationLabel(ai)
-                    } catch (e: PackageManager.NameNotFoundException) {
-                        it
-                    }
+        val distributorsName = distributors.map {
+            if (it == context.packageName) {
+                internalDistributorName
+            } else {
+                try {
+                    val ai = context.packageManager.getApplicationInfo(it, 0)
+                    context.packageManager.getApplicationLabel(ai)
+                } catch (e: PackageManager.NameNotFoundException) {
+                    it
                 }
-            }.toTypedArray()
-
-            MaterialAlertDialogBuilder(activity)
-                    .setTitle(stringProvider.getString(R.string.unifiedpush_getdistributors_dialog_title))
-                    .setItems(distributorsNameArray) { _, which ->
-                        val distributor = distributorsArray[which]
-                        up.saveDistributor(context, distributor)
-                        Timber.i("Saving distributor: $distributor")
-                        up.registerApp(context)
-                    }
-                    .setOnDismissListener {
-                        onDoneRunnable?.run()
-                    }
-                    .show()
+            }
         }
+
+        MaterialAlertDialogBuilder(activity)
+                .setTitle(stringProvider.getString(R.string.unifiedpush_getdistributors_dialog_title))
+                .setItems(distributorsName.toTypedArray()) { _, which ->
+                    if (unregisterFirst) {
+                        // Un-register first
+                        unregister(pushersManager)
+                    }
+                    val distributor = distributors[which]
+                    up.saveDistributor(context, distributor)
+                    Timber.i("Saving distributor: $distributor")
+                    up.registerApp(context)
+                }
+                .setCancelable(cancellable)
+                .setOnDismissListener {
+                    onDoneRunnable?.run()
+                }
+                .show()
     }
 
     fun unregister(pushersManager: PushersManager? = null) {
