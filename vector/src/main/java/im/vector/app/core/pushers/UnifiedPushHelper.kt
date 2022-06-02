@@ -17,7 +17,6 @@
 package im.vector.app.core.pushers
 
 import android.content.Context
-import android.content.pm.PackageManager
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -25,6 +24,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.utils.getApplicationLabel
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.settings.BackgroundSyncMode
 import im.vector.app.features.settings.VectorPreferences
@@ -143,12 +143,7 @@ class UnifiedPushHelper @Inject constructor(
             if (it == context.packageName) {
                 internalDistributorName
             } else {
-                try {
-                    val ai = context.packageManager.getApplicationInfo(it, 0)
-                    context.packageManager.getApplicationLabel(ai)
-                } catch (e: PackageManager.NameNotFoundException) {
-                    it
-                }
+                context.getApplicationLabel(it)
             }
         }
 
@@ -248,12 +243,7 @@ class UnifiedPushHelper @Inject constructor(
             return stringProvider.getString(R.string.unifiedpush_distributor_background_sync)
         }
         val distributor = up.getDistributor(context)
-        return try {
-            val ai = context.packageManager.getApplicationInfo(distributor, 0)
-            context.packageManager.getApplicationLabel(ai).toString()
-        } catch (e: PackageManager.NameNotFoundException) {
-            distributor
-        }
+        return context.getApplicationLabel(distributor)
     }
 
     fun isEmbeddedDistributor(): Boolean {
