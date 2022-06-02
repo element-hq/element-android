@@ -29,6 +29,7 @@ import com.squareup.moshi.JsonClass
  *     "prio":"high",
  * }
  * </pre>
+ * .
  */
 @JsonClass(generateAdapter = true)
 data class PushDataFcm(

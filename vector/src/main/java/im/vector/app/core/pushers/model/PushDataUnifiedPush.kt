@@ -33,6 +33,7 @@ import com.squareup.moshi.JsonClass
  *     }
  * }
  * </pre>
+ * .
  */
 @JsonClass(generateAdapter = true)
 data class PushDataUnifiedPush(
