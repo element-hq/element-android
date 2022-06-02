@@ -30,5 +30,4 @@ internal data class MessageVerificationAcceptContent(
 )  {
 
     val transactionId: String? = relatesTo?.eventId
-
 }

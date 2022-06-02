@@ -45,7 +45,6 @@ import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.session.permalinks.ViaParameterFinder
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryDataSource
 import org.matrix.android.sdk.internal.session.space.DefaultSpace
-import java.security.InvalidParameterException
 
 internal class DefaultRoom(
         override val roomId: String,
@@ -80,7 +79,6 @@ internal class DefaultRoom(
     override fun roomSummary(): RoomSummary? {
         return roomSummaryDataSource.getRoomSummary(roomId)
     }
-
 
     override fun asSpace(): Space? {
         if (roomSummary()?.roomType != RoomType.SPACE) return null

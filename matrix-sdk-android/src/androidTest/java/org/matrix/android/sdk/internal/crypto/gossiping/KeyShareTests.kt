@@ -140,13 +140,13 @@ class KeyShareTests : InstrumentedTest {
                     Log.v("TEST", "Incoming request Session 1 (looking for $outGoingRequestId)")
                     Log.v("TEST", "=========================")
                     it.forEach { keyRequest ->
-                        //Log.v("TEST", "[ts${keyRequest.localCreationTimestamp}] requestId ${keyRequest.requestId}, for sessionId ${keyRequest.requestBody?.sessionId} is ${keyRequest.state}")
+                        // Log.v("TEST", "[ts${keyRequest.localCreationTimestamp}] requestId ${keyRequest.requestId}, for sessionId ${keyRequest.requestBody?.sessionId} is ${keyRequest.state}")
                     }
                     Log.v("TEST", "=========================")
                 }
 
-                //val incoming = aliceSession.cryptoService().getIncomingRoomKeyRequests().firstOrNull { it.requestId == outGoingRequestId }
-                //incoming?.state == GossipingRequestState.REJECTED
+                // val incoming = aliceSession.cryptoService().getIncomingRoomKeyRequests().firstOrNull { it.requestId == outGoingRequestId }
+                // incoming?.state == GossipingRequestState.REJECTED
                 true
             }
         }
@@ -175,7 +175,7 @@ class KeyShareTests : InstrumentedTest {
                     Log.v("TEST", "Incoming request Session 1")
                     Log.v("TEST", "=========================")
                     it.forEach {
-                        //Log.v("TEST", "requestId ${it.requestId}, for sessionId ${it.requestBody?.sessionId} is ${it.state}")
+                        // Log.v("TEST", "requestId ${it.requestId}, for sessionId ${it.requestBody?.sessionId} is ${it.state}")
                     }
                     Log.v("TEST", "=========================")
 
@@ -189,7 +189,7 @@ class KeyShareTests : InstrumentedTest {
         commonTestHelper.waitWithLatch { latch ->
             commonTestHelper.retryPeriodicallyWithLatch(latch) {
                 aliceSession2.cryptoService().getOutgoingRoomKeyRequests().let {
-                    true//it.any { it.requestBody?.sessionId == eventMegolmSessionId && it.state == OutgoingGossipingRequestState.CANCELLED }
+                    true // it.any { it.requestBody?.sessionId == eventMegolmSessionId && it.state == OutgoingGossipingRequestState.CANCELLED }
                 }
             }
         }

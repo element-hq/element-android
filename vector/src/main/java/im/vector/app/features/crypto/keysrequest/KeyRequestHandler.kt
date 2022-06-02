@@ -66,6 +66,7 @@ class KeyRequestHandler @Inject constructor(
     var session: Session? = null
 
     var scope: CoroutineScope? = null
+
     // This functionality is disabled in element for now. As it could be prone to social attacks
     var enablePromptingForRequest = false
 

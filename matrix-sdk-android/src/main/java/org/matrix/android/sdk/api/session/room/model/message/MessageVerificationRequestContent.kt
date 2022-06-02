@@ -18,7 +18,6 @@ package org.matrix.android.sdk.api.session.room.model.message
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.session.events.model.Content
-import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 
 @JsonClass(generateAdapter = true)
@@ -36,4 +35,3 @@ data class MessageVerificationRequestContent(
         // Not parsed, but set after, using the eventId
         val transactionId: String? = null
 ) : MessageContent
-

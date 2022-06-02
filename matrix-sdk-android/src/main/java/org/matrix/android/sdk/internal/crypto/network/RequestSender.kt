@@ -227,7 +227,7 @@ internal class RequestSender @Inject constructor(
         getKeysBackupLastVersionTask.executeRetry(Unit, 3)
     }
 
-    private inline fun <reified T> getKeyBackupVersion(block: ()-> T?): T?{
+    private inline fun <reified T> getKeyBackupVersion(block: () -> T?): T? {
         return try {
             block()
         } catch (failure: Throwable) {

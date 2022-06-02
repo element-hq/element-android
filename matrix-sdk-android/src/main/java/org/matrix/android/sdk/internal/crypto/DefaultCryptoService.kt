@@ -759,7 +759,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     override suspend fun manuallyAcceptRoomKeyRequest(request: IncomingRoomKeyRequest) {
-        //TODO rust?
+        // TODO rust?
     }
 
     override fun getIncomingRoomKeyRequests(): List<IncomingRoomKeyRequest> {
