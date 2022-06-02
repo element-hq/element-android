@@ -253,7 +253,7 @@ class UnifiedPushHelper @Inject constructor(
 
     fun getPrivacyFriendlyUpEndpoint(): String? {
         val endpoint = unifiedPushStore.getEndpointOrToken()
-        if (endpoint.isNullOrEmpty()) return endpoint
+        if (endpoint.isNullOrEmpty()) return null
         if (isEmbeddedDistributor()) {
             return endpoint
         }

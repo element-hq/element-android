@@ -30,13 +30,10 @@ class TestUnifiedPushEndpoint @Inject constructor(
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         val endpoint = unifiedPushHelper.getPrivacyFriendlyUpEndpoint()
-        endpoint?.let {
-            description = stringProvider.getString(
-                    R.string.settings_troubleshoot_test_current_endpoint_success,
-                    unifiedPushHelper.getPrivacyFriendlyUpEndpoint()
-            )
+        if (endpoint != null) {
+            description = stringProvider.getString(R.string.settings_troubleshoot_test_current_endpoint_success, endpoint)
             status = TestStatus.SUCCESS
-        } ?: run {
+        } else {
             description = stringProvider.getString(R.string.settings_troubleshoot_test_current_endpoint_failed)
             status = TestStatus.FAILED
         }
