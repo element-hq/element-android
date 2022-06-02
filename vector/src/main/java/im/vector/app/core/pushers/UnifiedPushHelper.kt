@@ -20,6 +20,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import androidx.fragment.app.FragmentActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import im.vector.app.BuildConfig
 import im.vector.app.R
@@ -153,12 +154,12 @@ class UnifiedPushHelper @Inject constructor(
 
     @JsonClass(generateAdapter = true)
     internal data class DiscoveryResponse(
-            val unifiedpush: DiscoveryUnifiedPush = DiscoveryUnifiedPush()
+            @Json(name = "unifiedpush") val unifiedpush: DiscoveryUnifiedPush = DiscoveryUnifiedPush()
     )
 
     @JsonClass(generateAdapter = true)
     internal data class DiscoveryUnifiedPush(
-            val gateway: String = ""
+            @Json(name = "gateway") val gateway: String = ""
     )
 
     suspend fun storeCustomOrDefaultGateway(
