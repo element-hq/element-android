@@ -65,7 +65,7 @@ import org.matrix.android.sdk.api.session.sync.model.DeviceListResponse
 import org.matrix.android.sdk.api.session.sync.model.DeviceOneTimeKeysCountSyncResponse
 import org.matrix.android.sdk.api.session.sync.model.ToDeviceSyncResponse
 import org.matrix.android.sdk.internal.crypto.keysbackup.RustKeyBackupService
-import org.matrix.android.sdk.internal.crypto.network.NetworkRequestsProcessor
+import org.matrix.android.sdk.internal.crypto.network.OutgoingRequestsProcessor
 import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.android.sdk.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
@@ -131,7 +131,7 @@ internal class DefaultCryptoService @Inject constructor(
 
     private val olmMachine by lazy { olmMachineProvider.olmMachine }
 
-    private val outgoingRequestsProcessor = NetworkRequestsProcessor(
+    private val outgoingRequestsProcessor = OutgoingRequestsProcessor(
             requestSender = requestSender,
             coroutineScope = cryptoCoroutineScope,
             cryptoSessionInfoProvider = cryptoSessionInfoProvider,
@@ -486,7 +486,7 @@ internal class DefaultCryptoService @Inject constructor(
      */
     private fun onRoomMembershipEvent(roomId: String, event: Event) {
         // We only care about the memberships if this room is encrypted
-        if (isRoomEncrypted(roomId)) {
+        if (!isRoomEncrypted(roomId)) {
             return
         }
 
@@ -625,11 +625,11 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     override fun enableKeyGossiping(enable: Boolean) {
-        TODO("Not yet implemented")
+        cryptoStore.enableKeyGossiping(enable)
     }
 
     override fun isKeyGossipingEnabled(): Boolean {
-        TODO("Not yet implemented")
+        return cryptoStore.isKeyGossipingEnabled()
     }
 
     /**

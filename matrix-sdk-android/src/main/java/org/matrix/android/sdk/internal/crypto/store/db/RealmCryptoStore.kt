@@ -35,6 +35,7 @@ import org.matrix.android.sdk.api.session.crypto.OutgoingRoomKeyRequestState
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CryptoCrossSigningKey
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.session.crypto.crosssigning.PrivateKeysInfo
+import org.matrix.android.sdk.api.session.crypto.keysbackup.BackupRecoveryKey
 import org.matrix.android.sdk.api.session.crypto.keysbackup.SavedKeyBackupKeyInfo
 import org.matrix.android.sdk.api.session.crypto.model.AuditTrail
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
@@ -469,7 +470,8 @@ internal class RealmCryptoStore @Inject constructor(
                         val key = it.keyBackupRecoveryKey
                         val version = it.keyBackupRecoveryKeyVersion
                         if (!key.isNullOrBlank() && !version.isNullOrBlank()) {
-                            SavedKeyBackupKeyInfo(recoveryKey = key, version = version)
+                            val backupRecoveryKey = BackupRecoveryKey.fromBase58(key)
+                            SavedKeyBackupKeyInfo(recoveryKey = backupRecoveryKey, version = version)
                         } else {
                             null
                         }

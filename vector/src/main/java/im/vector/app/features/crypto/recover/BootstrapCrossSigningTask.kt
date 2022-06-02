@@ -236,7 +236,7 @@ class BootstrapCrossSigningTask @Inject constructor(
                 Timber.d("## BootstrapCrossSigningTask: Creating 4S - Save megolm backup key for gossiping")
                 session.cryptoService().keysBackupService().saveBackupRecoveryKey(creationInfo.recoveryKey, version = version.version)
 
-                extractCurveKeyFromRecoveryKey(creationInfo.recoveryKey)?.toBase64NoPadding()?.let { secret ->
+                extractCurveKeyFromRecoveryKey(creationInfo.recoveryKey.toBase58())?.toBase64NoPadding()?.let { secret ->
                     ssssService.storeSecret(
                             KEYBACKUP_SECRET_SSSS_NAME,
                             secret,
@@ -251,7 +251,7 @@ class BootstrapCrossSigningTask @Inject constructor(
                     val isValid = session.cryptoService().keysBackupService().isValidRecoveryKeyForCurrentVersion(knownMegolmSecret!!.recoveryKey)
                     if (isValid) {
                         Timber.d("## BootstrapCrossSigningTask: Creating 4S - Megolm key valid and known")
-                        extractCurveKeyFromRecoveryKey(knownMegolmSecret.recoveryKey)?.toBase64NoPadding()?.let { secret ->
+                        extractCurveKeyFromRecoveryKey(knownMegolmSecret.recoveryKey.toBase58())?.toBase64NoPadding()?.let { secret ->
                             ssssService.storeSecret(
                                     KEYBACKUP_SECRET_SSSS_NAME,
                                     secret,

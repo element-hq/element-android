@@ -23,6 +23,7 @@ import im.vector.app.core.platform.WaitingViewData
 import im.vector.app.core.resources.StringProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.session.crypto.keysbackup.BackupRecoveryKey
 import javax.inject.Inject
 
 class KeysBackupRestoreFromKeyViewModel @Inject constructor(
@@ -42,7 +43,7 @@ class KeysBackupRestoreFromKeyViewModel @Inject constructor(
         sharedViewModel.loadingEvent.postValue(WaitingViewData(stringProvider.getString(R.string.loading)))
         recoveryCodeErrorText.value = null
         viewModelScope.launch(Dispatchers.IO) {
-            val recoveryKey = recoveryCode.value!!
+            val recoveryKey = BackupRecoveryKey.fromBase58(recoveryCode.value!!)
             try {
                 sharedViewModel.recoverUsingBackupRecoveryKey(recoveryKey)
             } catch (failure: Throwable) {
