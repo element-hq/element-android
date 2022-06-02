@@ -152,11 +152,16 @@ class UnifiedPushHelper @Inject constructor(
         MaterialAlertDialogBuilder(activity)
                 .setTitle(stringProvider.getString(R.string.unifiedpush_getdistributors_dialog_title))
                 .setItems(distributorsName.toTypedArray()) { _, which ->
+                    val distributor = distributors[which]
+                    if (distributor == getCurrentDistributorName()) {
+                        Timber.d("Same distributor selected again, no action")
+                        return@setItems
+                    }
+
                     if (unregisterFirst) {
                         // Un-register first
                         unregister(pushersManager)
                     }
-                    val distributor = distributors[which]
                     up.saveDistributor(context, distributor)
                     Timber.i("Saving distributor: $distributor")
                     up.registerApp(context)
