@@ -94,7 +94,7 @@ class UnifiedPushHelper @Inject constructor(
 
         // By default, use internal solution (fcm/background sync)
         up.saveDistributor(context, context.packageName)
-        val distributors = up.getDistributors(context).toMutableList()
+        val distributors = up.getDistributors(context)
 
         val internalDistributorName = stringProvider.getString(
                 if (FcmHelper.isPushSupported()) {
