@@ -486,7 +486,7 @@ internal class DefaultCryptoService @Inject constructor(
      */
     private fun onRoomMembershipEvent(roomId: String, event: Event) {
         // We only care about the memberships if this room is encrypted
-        if (isRoomEncrypted(roomId)) {
+        if (!isRoomEncrypted(roomId)) {
             return
         }
 
