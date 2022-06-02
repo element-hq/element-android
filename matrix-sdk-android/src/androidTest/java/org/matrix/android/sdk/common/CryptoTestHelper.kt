@@ -50,7 +50,9 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.room.Room
+import org.matrix.android.sdk.api.session.room.failure.JoinRoomFailure
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
@@ -147,6 +149,76 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
 //        assertTrue(roomFromBobPOV.powerLevels.maySendMessage(bobSession.myUserId))
 
         return CryptoTestData(aliceRoomId, listOf(aliceSession, bobSession))
+    }
+
+    fun inviteNewUsersAndWaitForThemToJoin(session: Session, roomId: String, usernames: List<String>): List<Session> {
+        val newSessions = usernames.map { username ->
+            testHelper.createAccount(username, SessionTestParams(true)).also {
+                it.cryptoService().enableKeyGossiping(false)
+            }
+        }
+
+        val room = session.getRoom(roomId)!!
+
+        Log.v("#E2E TEST", "All accounts created")
+        // we want to invite them in the room
+        newSessions.forEach { newSession ->
+            testHelper.runBlockingTest {
+                Log.v("#E2E TEST", "${session.myUserId} invites ${newSession.myUserId}")
+                room.membershipService().invite(newSession.myUserId)
+            }
+        }
+
+        // All user should accept invite
+        newSessions.forEach { newSession ->
+            waitForAndAcceptInviteInRoom(newSession, roomId)
+            Log.v("#E2E TEST", "${newSession.myUserId} joined room $roomId")
+        }
+        ensureMembersHaveJoined(session, newSessions, roomId)
+        return newSessions
+    }
+
+    private fun ensureMembersHaveJoined(session: Session, invitedUserSessions: List<Session>, roomId: String) {
+        testHelper.waitWithLatch { latch ->
+            testHelper.retryPeriodicallyWithLatch(latch) {
+                invitedUserSessions.map { invitedUserSession ->
+                    session.roomService().getRoomMember(invitedUserSession.myUserId, roomId)?.membership
+                }.all {
+                    it == Membership.JOIN
+                }
+            }
+        }
+    }
+
+    private fun waitForAndAcceptInviteInRoom(session: Session, roomId: String) {
+        testHelper.waitWithLatch { latch ->
+            testHelper.retryPeriodicallyWithLatch(latch) {
+                val roomSummary = session.getRoomSummary(roomId)
+                (roomSummary != null && roomSummary.membership == Membership.INVITE).also {
+                    if (it) {
+                        Log.v("#E2E TEST", "${session.myUserId} can see the invite from ${roomSummary?.inviterId}")
+                    }
+                }
+            }
+        }
+
+        // not sure why it's taking so long :/
+        testHelper.runBlockingTest(90_000) {
+            Log.v("#E2E TEST", "${session.myUserId} tries to join room $roomId")
+            try {
+                session.roomService().joinRoom(roomId)
+            } catch (ex: JoinRoomFailure.JoinedWithTimeout) {
+                // it's ok we will wait after
+            }
+        }
+
+        Log.v("#E2E TEST", "${session.myUserId} waiting for join echo ...")
+        testHelper.waitWithLatch {
+            testHelper.retryPeriodicallyWithLatch(it) {
+                val roomSummary = session.getRoomSummary(roomId)
+                roomSummary != null && roomSummary.membership == Membership.JOIN
+            }
+        }
     }
 
     /**
@@ -320,7 +392,8 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
             aliceVerificationService.beginKeyVerification(
                     VerificationMethod.SAS,
                     roomId,
-                    bob.myUserId,)
+                    bob.myUserId,
+            )
         }
 
         // we should reach SHOW SAS on both

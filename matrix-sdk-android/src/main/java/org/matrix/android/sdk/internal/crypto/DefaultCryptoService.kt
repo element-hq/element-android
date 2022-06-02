@@ -625,11 +625,11 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     override fun enableKeyGossiping(enable: Boolean) {
-        TODO("Not yet implemented")
+        cryptoStore.enableKeyGossiping(enable)
     }
 
     override fun isKeyGossipingEnabled(): Boolean {
-        TODO("Not yet implemented")
+        return cryptoStore.isKeyGossipingEnabled()
     }
 
     /**
