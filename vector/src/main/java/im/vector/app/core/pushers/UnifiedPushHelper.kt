@@ -19,6 +19,7 @@ package im.vector.app.core.pushers
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -28,7 +29,7 @@ import im.vector.app.features.VectorFeatures
 import im.vector.app.features.settings.BackgroundSyncMode
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.push.fcm.FcmHelper
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.cache.CacheStrategy
 import org.matrix.android.sdk.api.util.MatrixJsonParser
@@ -76,32 +77,34 @@ class UnifiedPushHelper @Inject constructor(
             pushersManager: PushersManager? = null,
             onDoneRunnable: Runnable? = null
     ) {
-        if (!vectorFeatures.allowExternalUnifiedPushDistributors()) {
+        activity.lifecycleScope.launch {
+            if (!vectorFeatures.allowExternalUnifiedPushDistributors()) {
+                up.saveDistributor(context, context.packageName)
+                up.registerApp(context)
+                onDoneRunnable?.run()
+                return@launch
+            }
+            if (force) {
+                // Un-register first
+                unregister(pushersManager)
+            }
+            if (up.getDistributor(context).isNotEmpty()) {
+                up.registerApp(context)
+                onDoneRunnable?.run()
+                return@launch
+            }
+
+            // By default, use internal solution (fcm/background sync)
             up.saveDistributor(context, context.packageName)
-            up.registerApp(context)
-            onDoneRunnable?.run()
-            return
-        }
-        if (force) {
-            // Un-register first
-            unregister(pushersManager)
-        }
-        if (up.getDistributor(context).isNotEmpty()) {
-            up.registerApp(context)
-            onDoneRunnable?.run()
-            return
-        }
+            val distributors = up.getDistributors(context)
 
-        // By default, use internal solution (fcm/background sync)
-        up.saveDistributor(context, context.packageName)
-        val distributors = up.getDistributors(context)
-
-        if (distributors.size == 1 && !force) {
-            up.saveDistributor(context, distributors.first())
-            up.registerApp(context)
-            onDoneRunnable?.run()
-        } else {
-            openDistributorDialogInternal(activity, pushersManager, onDoneRunnable, distributors, !force, !force)
+            if (distributors.size == 1 && !force) {
+                up.saveDistributor(context, distributors.first())
+                up.registerApp(context)
+                onDoneRunnable?.run()
+            } else {
+                openDistributorDialogInternal(activity, pushersManager, onDoneRunnable, distributors, !force, !force)
+            }
         }
     }
 
@@ -158,13 +161,15 @@ class UnifiedPushHelper @Inject constructor(
                         return@setItems
                     }
 
-                    if (unregisterFirst) {
-                        // Un-register first
-                        unregister(pushersManager)
+                    activity.lifecycleScope.launch {
+                        if (unregisterFirst) {
+                            // Un-register first
+                            unregister(pushersManager)
+                        }
+                        up.saveDistributor(context, distributor)
+                        Timber.i("Saving distributor: $distributor")
+                        up.registerApp(context)
                     }
-                    up.saveDistributor(context, distributor)
-                    Timber.i("Saving distributor: $distributor")
-                    up.registerApp(context)
                 }
                 .setCancelable(cancellable)
                 .setOnDismissListener {
@@ -173,15 +178,13 @@ class UnifiedPushHelper @Inject constructor(
                 .show()
     }
 
-    fun unregister(pushersManager: PushersManager? = null) {
+    suspend fun unregister(pushersManager: PushersManager? = null) {
         val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME
         vectorPreferences.setFdroidSyncBackgroundMode(mode)
-        runBlocking {
-            try {
-                pushersManager?.unregisterPusher(unifiedPushStore.getEndpointOrToken().orEmpty())
-            } catch (e: Exception) {
-                Timber.d(e, "Probably unregistering a non existing pusher")
-            }
+        try {
+            pushersManager?.unregisterPusher(unifiedPushStore.getEndpointOrToken().orEmpty())
+        } catch (e: Exception) {
+            Timber.d(e, "Probably unregistering a non existing pusher")
         }
         unifiedPushStore.storeUpEndpoint(null)
         unifiedPushStore.storePushGateway(null)
