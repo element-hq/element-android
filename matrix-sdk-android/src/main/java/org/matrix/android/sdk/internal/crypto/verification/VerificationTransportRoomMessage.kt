@@ -164,8 +164,12 @@ internal class VerificationTransportRoomMessage(
         }
     }
 
-    override fun cancelTransaction(transactionId: String, otherUserId: String, otherUserDeviceIds: List<String>, code: CancelCode) =
-            cancelTransaction(transactionId, otherUserId, null, code)
+    override fun cancelTransaction(
+            transactionId: String,
+            otherUserId: String,
+            otherUserDeviceIds: List<String>,
+            code: CancelCode
+    ) = cancelTransaction(transactionId, otherUserId, null, code)
 
     override fun done(
             transactionId: String,

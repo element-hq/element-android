@@ -44,8 +44,8 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
-import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.QueryStringValue
+import org.matrix.android.sdk.api.query.SpaceFilter
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -111,9 +111,9 @@ class SpaceListViewModel @AssistedInject constructor(
         session.roomService().getPagedRoomSummariesLive(
                 roomSummaryQueryParams {
                     this.memberships = listOf(Membership.JOIN)
-                    this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null).takeIf {
+                    this.spaceFilter = SpaceFilter.OrphanRooms.takeIf {
                         !vectorPreferences.prefSpacesShowAllRoomInHome()
-                    } ?: ActiveSpaceFilter.None
+                    }
                 }, sortOrder = RoomSortOrder.NONE
         ).asFlow()
                 .sample(300)
@@ -128,9 +128,9 @@ class SpaceListViewModel @AssistedInject constructor(
                     val totalCount = session.roomService().getNotificationCountForRooms(
                             roomSummaryQueryParams {
                                 this.memberships = listOf(Membership.JOIN)
-                                this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null).takeIf {
+                                this.spaceFilter = SpaceFilter.OrphanRooms.takeIf {
                                     !vectorPreferences.prefSpacesShowAllRoomInHome()
-                                } ?: ActiveSpaceFilter.None
+                                }
                             }
                     )
                     val counts = RoomAggregateNotificationCount(

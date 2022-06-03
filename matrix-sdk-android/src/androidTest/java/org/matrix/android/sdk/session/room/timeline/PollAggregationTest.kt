@@ -38,8 +38,7 @@ import org.matrix.android.sdk.api.session.room.model.message.PollType
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
-import org.matrix.android.sdk.common.CommonTestHelper
-import org.matrix.android.sdk.common.CryptoTestHelper
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import java.util.concurrent.CountDownLatch
 
 @RunWith(JUnit4::class)
@@ -47,9 +46,7 @@ import java.util.concurrent.CountDownLatch
 class PollAggregationTest : InstrumentedTest {
 
     @Test
-    fun testAllPollUseCases() {
-        val commonTestHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
+    fun testAllPollUseCases() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(false)
 
         val aliceSession = cryptoTestData.firstSession
@@ -138,7 +135,6 @@ class PollAggregationTest : InstrumentedTest {
 
         aliceSession.stopSync()
         aliceTimeline.dispose()
-        cryptoTestData.cleanUp(commonTestHelper)
     }
 
     private fun testInitialPollConditions(pollContent: MessagePollContent, pollSummary: PollResponseAggregatedSummary?) {

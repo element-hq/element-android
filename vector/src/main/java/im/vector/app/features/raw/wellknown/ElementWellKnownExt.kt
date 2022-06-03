@@ -29,3 +29,22 @@ suspend fun RawService.getElementWellknown(sessionParams: SessionParams): Elemen
 }
 
 fun ElementWellKnown.isE2EByDefault() = elementE2E?.e2eDefault ?: riotE2E?.e2eDefault ?: true
+
+fun ElementWellKnown.isSecureBackupRequired() = elementE2E?.secureBackupRequired
+        ?: riotE2E?.secureBackupRequired
+        ?: false
+
+fun ElementWellKnown?.secureBackupMethod(): SecureBackupMethod {
+    val methodList = this?.elementE2E?.secureBackupSetupMethods
+            ?: this?.riotE2E?.secureBackupSetupMethods
+            ?: listOf("key", "passphrase")
+    return if (methodList.contains("key") && methodList.contains("passphrase")) {
+        SecureBackupMethod.KEY_OR_PASSPHRASE
+    } else if (methodList.contains("key")) {
+        SecureBackupMethod.KEY
+    } else if (methodList.contains("passphrase")) {
+        SecureBackupMethod.PASSPHRASE
+    } else {
+        SecureBackupMethod.KEY_OR_PASSPHRASE
+    }
+}

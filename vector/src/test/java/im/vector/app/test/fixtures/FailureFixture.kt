@@ -18,8 +18,11 @@ package im.vector.app.test.fixtures
 
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
+import java.net.UnknownHostException
 import javax.net.ssl.HttpsURLConnection
 
 fun a401ServerError() = Failure.ServerError(
         MatrixError(MatrixError.M_UNAUTHORIZED, ""), HttpsURLConnection.HTTP_UNAUTHORIZED
 )
+
+fun aHomeserverUnavailableError() = Failure.NetworkConnection(UnknownHostException())

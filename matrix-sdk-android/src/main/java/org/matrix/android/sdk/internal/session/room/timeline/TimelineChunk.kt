@@ -486,6 +486,31 @@ internal class TimelineChunk(
     private fun handleDatabaseChangeSet(results: RealmResults<TimelineEventEntity>, changeSet: OrderedCollectionChangeSet) {
         val insertions = changeSet.insertionRanges
         for (range in insertions) {
+            // Check if the insertion's displayIndices match our expectations - or skip this insertion.
+            // Inconsistencies (missing messages) can happen otherwise if we get insertions before having loaded all timeline events of the chunk.
+            if (builtEvents.isNotEmpty()) {
+                // Check consistency to item before insertions
+                if (range.startIndex > 0) {
+                    val firstInsertion = results[range.startIndex]!!
+                    val lastBeforeInsertion = builtEvents[range.startIndex - 1]
+                    if (firstInsertion.displayIndex + 1 != lastBeforeInsertion.displayIndex) {
+                        Timber.i("handleDatabaseChangeSet: skip insertion at ${range.startIndex}/${builtEvents.size}, " +
+                                "displayIndex mismatch at ${range.startIndex}: ${firstInsertion.displayIndex} -> ${lastBeforeInsertion.displayIndex}")
+                        continue
+                    }
+                }
+                // Check consistency to item after insertions
+                if (range.startIndex < builtEvents.size) {
+                    val lastInsertion = results[range.startIndex + range.length - 1]!!
+                    val firstAfterInsertion = builtEvents[range.startIndex]
+                    if (firstAfterInsertion.displayIndex + 1 != lastInsertion.displayIndex) {
+                        Timber.i("handleDatabaseChangeSet: skip insertion at ${range.startIndex}/${builtEvents.size}, " +
+                                "displayIndex mismatch at ${range.startIndex + range.length}: " +
+                                "${firstAfterInsertion.displayIndex} -> ${lastInsertion.displayIndex}")
+                        continue
+                    }
+                }
+            }
             val newItems = results
                     .subList(range.startIndex, range.startIndex + range.length)
                     .map { it.buildAndDecryptIfNeeded() }
@@ -503,8 +528,12 @@ internal class TimelineChunk(
         for (range in modifications) {
             for (modificationIndex in (range.startIndex until range.startIndex + range.length)) {
                 val updatedEntity = results[modificationIndex] ?: continue
+                val displayIndex = builtEventsIndexes[updatedEntity.eventId]
+                if (displayIndex == null) {
+                    continue
+                }
                 try {
-                    builtEvents[modificationIndex] = updatedEntity.buildAndDecryptIfNeeded()
+                    builtEvents[displayIndex] = updatedEntity.buildAndDecryptIfNeeded()
                 } catch (failure: Throwable) {
                     Timber.v("Fail to update items at index: $modificationIndex")
                 }

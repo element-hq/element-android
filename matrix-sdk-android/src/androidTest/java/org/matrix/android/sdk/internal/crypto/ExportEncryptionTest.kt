@@ -83,8 +83,8 @@ class ExportEncryptionTest {
     @Test
     fun checkExportDecrypt1() {
         val password = "password"
-        val input =
-                "-----BEGIN MEGOLM SESSION DATA-----\nAXNhbHRzYWx0c2FsdHNhbHSIiIiIiIiIiIiIiIiIiIiIAAAACmIRUW2OjZ3L2l6j9h0lHlV3M2dx\n" + "cissyYBxjsfsAndErh065A8=\n-----END MEGOLM SESSION DATA-----"
+        val input = "-----BEGIN MEGOLM SESSION DATA-----\nAXNhbHRzYWx0c2FsdHNhbHSIiIiIiIiIiIiIiIiIiIiIAAAACmIRUW2OjZ3L2l6j9h0lHlV3M2dx\n" +
+                "cissyYBxjsfsAndErh065A8=\n-----END MEGOLM SESSION DATA-----"
         val expectedString = "plain"
 
         var decodedString: String? = null
@@ -104,8 +104,8 @@ class ExportEncryptionTest {
     @Test
     fun checkExportDecrypt2() {
         val password = "betterpassword"
-        val input =
-                "-----BEGIN MEGOLM SESSION DATA-----\nAW1vcmVzYWx0bW9yZXNhbHT//////////wAAAAAAAAAAAAAD6KyBpe1Niv5M5NPm4ZATsJo5nghk\n" + "KYu63a0YQ5DRhUWEKk7CcMkrKnAUiZny\n-----END MEGOLM SESSION DATA-----"
+        val input = "-----BEGIN MEGOLM SESSION DATA-----\nAW1vcmVzYWx0bW9yZXNhbHT//////////wAAAAAAAAAAAAAD6KyBpe1Niv5M5NPm4ZATsJo5nghk\n" +
+                "KYu63a0YQ5DRhUWEKk7CcMkrKnAUiZny\n-----END MEGOLM SESSION DATA-----"
         val expectedString = "Hello, World"
 
         var decodedString: String? = null
@@ -125,8 +125,8 @@ class ExportEncryptionTest {
     @Test
     fun checkExportDecrypt3() {
         val password = "SWORDFISH"
-        val input =
-                "-----BEGIN MEGOLM SESSION DATA-----\nAXllc3NhbHR5Z29vZG5lc3P//////////wAAAAAAAAAAAAAD6OIW+Je7gwvjd4kYrb+49gKCfExw\n" + "MgJBMD4mrhLkmgAngwR1pHjbWXaoGybtiAYr0moQ93GrBQsCzPbvl82rZhaXO3iH5uHo/RCEpOqp\nPgg29363BGR+/Ripq/VCLKGNbw==\n-----END MEGOLM SESSION DATA-----"
+        val input = "-----BEGIN MEGOLM SESSION DATA-----\nAXllc3NhbHR5Z29vZG5lc3P//////////wAAAAAAAAAAAAAD6OIW+Je7gwvjd4kYrb+49gKCfExw\n" +
+                "MgJBMD4mrhLkmgAngwR1pHjbWXaoGybtiAYr0moQ93GrBQsCzPbvl82rZhaXO3iH5uHo/RCEpOqp\nPgg29363BGR+/Ripq/VCLKGNbw==\n-----END MEGOLM SESSION DATA-----"
         val expectedString = "alphanumericallyalphanumericallyalphanumericallyalphanumerically"
 
         var decodedString: String? = null
@@ -205,8 +205,8 @@ class ExportEncryptionTest {
 
     @Test
     fun checkExportEncrypt4() {
-        val password =
-                "passwordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpassword" + "passwordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpassword"
+        val password = "passwordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpassword" +
+                "passwordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpassword"
         val expectedString = "alphanumericallyalphanumericallyalphanumericallyalphanumerically"
         var decodedString: String? = null
 

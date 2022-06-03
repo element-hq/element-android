@@ -66,7 +66,7 @@ fun Session.startSyncing(context: Context) {
  */
 fun Session.hasUnsavedKeys(): Boolean {
     return cryptoService().inboundGroupSessionsCount(false) > 0 &&
-            cryptoService().keysBackupService().state != KeysBackupState.ReadyToBackUp
+            cryptoService().keysBackupService().getState() != KeysBackupState.ReadyToBackUp
 }
 
 fun Session.cannotLogoutSafely(): Boolean {

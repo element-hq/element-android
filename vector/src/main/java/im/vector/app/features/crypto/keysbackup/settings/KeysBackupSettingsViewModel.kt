@@ -61,7 +61,7 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(
     init {
         setState {
             this.copy(
-                    keysBackupState = keysBackupService.state,
+                    keysBackupState = keysBackupService.getState(),
                     keysBackupVersion = keysBackupService.keysBackupVersion
             )
         }
@@ -207,7 +207,7 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(
     }
 
     fun canExit(): Boolean {
-        val currentBackupState = keysBackupService.state
+        val currentBackupState = keysBackupService.getState()
 
         return currentBackupState == KeysBackupState.Unknown ||
                 currentBackupState == KeysBackupState.CheckingBackUpOnHomeserver

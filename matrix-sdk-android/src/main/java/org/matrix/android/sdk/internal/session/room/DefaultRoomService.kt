@@ -20,7 +20,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.paging.PagedList
 import com.zhuinden.monarchy.Monarchy
-import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.identity.model.SignInvitationResult
 import org.matrix.android.sdk.api.session.room.Room
@@ -91,6 +90,10 @@ internal class DefaultRoomService @Inject constructor(
         return roomSummaryDataSource.getRoomSummary(roomIdOrAlias)
     }
 
+    override fun getRoomSummaryLive(roomId: String): LiveData<Optional<RoomSummary>> {
+        return roomSummaryDataSource.getRoomSummaryLive(roomId)
+    }
+
     override fun getRoomSummaries(
             queryParams: RoomSummaryQueryParams,
             sortOrder: RoomSortOrder
@@ -99,12 +102,15 @@ internal class DefaultRoomService @Inject constructor(
     }
 
     override fun refreshJoinedRoomSummaryPreviews(roomId: String?) {
-        val roomSummaries = getRoomSummaries(roomSummaryQueryParams {
-            if (roomId != null) {
-                this.roomId = QueryStringValue.Equals(roomId)
-            }
-            memberships = listOf(Membership.JOIN)
-        })
+        val roomSummaries = if (roomId == null) {
+            getRoomSummaries(roomSummaryQueryParams {
+                memberships = listOf(Membership.JOIN)
+            })
+        } else {
+            listOfNotNull(
+                    getRoomSummary(roomId)?.takeIf { it.membership == Membership.JOIN }
+            )
+        }
 
         if (roomSummaries.isNotEmpty()) {
             monarchy.runTransactionSync { realm ->
@@ -135,7 +141,7 @@ internal class DefaultRoomService @Inject constructor(
             pagedListConfig: PagedList.Config,
             sortOrder: RoomSortOrder
     ): UpdatableLivePageResult {
-        return roomSummaryDataSource.getUpdatablePagedRoomSummariesLive(queryParams, pagedListConfig, sortOrder)
+        return roomSummaryDataSource.getUpdatablePagedRoomSummariesLive(queryParams, pagedListConfig, sortOrder, getFlattenedParents = true)
     }
 
     override fun getRoomCountLive(queryParams: RoomSummaryQueryParams): LiveData<Int> {

@@ -47,7 +47,8 @@ private typealias Summary = Pair<Int, TimelineEventEntity>?
  */
 internal fun Map<String, EventEntity>.updateThreadSummaryIfNeeded(
         roomId: String,
-        realm: Realm, currentUserId: String,
+        realm: Realm,
+        currentUserId: String,
         chunkEntity: ChunkEntity? = null,
         shouldUpdateNotifications: Boolean = true
 ) {

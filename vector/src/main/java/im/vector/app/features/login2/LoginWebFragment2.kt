@@ -125,7 +125,8 @@ class LoginWebFragment2 @Inject constructor(
 
         views.loginWebWebView.webViewClient = object : WebViewClient() {
             override fun onReceivedSslError(
-                    view: WebView, handler: SslErrorHandler,
+                    view: WebView,
+                    handler: SslErrorHandler,
                     error: SslError
             ) {
                 MaterialAlertDialogBuilder(requireActivity())

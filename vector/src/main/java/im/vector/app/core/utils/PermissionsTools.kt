@@ -19,7 +19,6 @@ package im.vector.app.core.utils
 import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
-import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -43,11 +42,6 @@ val PERMISSIONS_FOR_ROOM_AVATAR = listOf(Manifest.permission.CAMERA)
 val PERMISSIONS_FOR_WRITING_FILES = listOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 val PERMISSIONS_FOR_PICKING_CONTACT = listOf(Manifest.permission.READ_CONTACTS)
 val PERMISSIONS_FOR_FOREGROUND_LOCATION_SHARING = listOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
-val PERMISSIONS_FOR_BACKGROUND_LOCATION_SHARING = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-    listOf(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
-} else {
-    PERMISSIONS_EMPTY
-}
 
 // This is not ideal to store the value like that, but it works
 private var permissionDialogDisplayed = false

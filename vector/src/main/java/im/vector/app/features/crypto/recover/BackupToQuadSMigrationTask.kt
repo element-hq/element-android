@@ -26,8 +26,8 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_S
 import org.matrix.android.sdk.api.session.crypto.keysbackup.computeRecoveryKey
 import org.matrix.android.sdk.api.session.crypto.keysbackup.extractCurveKeyFromRecoveryKey
 import org.matrix.android.sdk.api.session.securestorage.EmptyKeySigner
+import org.matrix.android.sdk.api.session.securestorage.KeyRef
 import org.matrix.android.sdk.api.session.securestorage.RawBytesKeySpec
-import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
 import org.matrix.android.sdk.api.session.securestorage.SsssKeyCreationInfo
 import org.matrix.android.sdk.api.util.awaitCallback
 import org.matrix.android.sdk.api.util.toBase64NoPadding
@@ -142,7 +142,7 @@ class BackupToQuadSMigrationTask @Inject constructor(
             quadS.storeSecret(
                     KEYBACKUP_SECRET_SSSS_NAME,
                     curveKey.toBase64NoPadding(),
-                    listOf(SharedSecretStorageService.KeyRef(info.keyId, info.keySpec))
+                    listOf(KeyRef(info.keyId, info.keySpec))
             )
 
             // save for gossiping

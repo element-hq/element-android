@@ -70,7 +70,8 @@ class MessageItemAttributesFactory @Inject constructor(
                 threadSummaryFormatted = displayableEventFormatter.formatThreadSummary(threadDetails?.threadSummaryLatestEvent).toString(),
                 threadDetails = threadDetails,
                 reactionsSummaryEvents = reactionsSummaryEvents,
-                areThreadMessagesEnabled = preferencesProvider.areThreadMessagesEnabled()
+                areThreadMessagesEnabled = preferencesProvider.areThreadMessagesEnabled(),
+                autoplayAnimatedImages = preferencesProvider.autoplayAnimatedImages()
         )
     }
 }

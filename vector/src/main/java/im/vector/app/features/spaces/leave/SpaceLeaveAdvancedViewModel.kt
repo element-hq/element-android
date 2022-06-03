@@ -33,8 +33,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import okhttp3.internal.toImmutableList
-import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
+import org.matrix.android.sdk.api.query.SpaceFilter
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -93,7 +93,7 @@ class SpaceLeaveAdvancedViewModel @AssistedInject constructor(
                     roomSummaryQueryParams {
                         includeType = null
                         memberships = listOf(Membership.JOIN)
-                        activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(initialState.spaceId)
+                        spaceFilter = SpaceFilter.ActiveSpace(initialState.spaceId)
                         roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
                     }
             )

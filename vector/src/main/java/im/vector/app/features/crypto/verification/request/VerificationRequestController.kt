@@ -88,17 +88,19 @@ class VerificationRequestController @Inject constructor(
                 }
             }
 
-            bottomSheetDividerItem {
-                id("sep1")
-            }
+            if (!state.isVerificationRequired) {
+                bottomSheetDividerItem {
+                    id("sep1")
+                }
 
-            bottomSheetVerificationActionItem {
-                id("skip")
-                title(host.stringProvider.getString(R.string.action_skip))
-                titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
-                iconRes(R.drawable.ic_arrow_right)
-                iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
-                listener { host.listener?.onClickSkip() }
+                bottomSheetVerificationActionItem {
+                    id("skip")
+                    title(host.stringProvider.getString(R.string.action_skip))
+                    titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
+                    iconRes(R.drawable.ic_arrow_right)
+                    iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
+                    listener { host.listener?.onClickSkip() }
+                }
             }
         } else {
             val styledText =

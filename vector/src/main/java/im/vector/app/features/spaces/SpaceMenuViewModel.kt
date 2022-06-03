@@ -34,8 +34,8 @@ import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
+import org.matrix.android.sdk.api.query.SpaceFilter
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.getRoom
@@ -141,7 +141,7 @@ class SpaceMenuViewModel @AssistedInject constructor(
                     session.roomService().getRoomSummaries(
                             roomSummaryQueryParams {
                                 excludeType = null
-                                activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(initialState.spaceId)
+                                spaceFilter = SpaceFilter.ActiveSpace(initialState.spaceId)
                                 memberships = listOf(Membership.JOIN)
                                 roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
                             }

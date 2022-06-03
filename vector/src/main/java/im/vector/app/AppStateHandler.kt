@@ -72,6 +72,8 @@ class AppStateHandler @Inject constructor(
 
     val selectedRoomGroupingFlow = selectedSpaceDataSource.stream()
 
+    private val spaceBackstack = ArrayDeque<String?>()
+
     fun getCurrentRoomGroupingMethod(): RoomGroupingMethod? {
         // XXX we should somehow make it live :/ just a work around
         // For example just after creating a space and switching to it the
@@ -87,11 +89,15 @@ class AppStateHandler @Inject constructor(
         }
     }
 
-    fun setCurrentSpace(spaceId: String?, session: Session? = null, persistNow: Boolean = false) {
+    fun setCurrentSpace(spaceId: String?, session: Session? = null, persistNow: Boolean = false, isForwardNavigation: Boolean = true) {
+        val currentSpace = (selectedSpaceDataSource.currentValue?.orNull() as? RoomGroupingMethod.BySpace)?.space()
         val uSession = session ?: activeSessionHolder.getSafeActiveSession() ?: return
-        if (selectedSpaceDataSource.currentValue?.orNull() is RoomGroupingMethod.BySpace &&
-                spaceId == selectedSpaceDataSource.currentValue?.orNull()?.space()?.roomId) return
+        if (currentSpace != null && spaceId == currentSpace.roomId) return
         val spaceSum = spaceId?.let { uSession.getRoomSummary(spaceId) }
+
+        if (isForwardNavigation) {
+            spaceBackstack.addLast(currentSpace?.roomId)
+        }
 
         if (persistNow) {
             uiStateRepository.storeGroupingMethod(true, uSession.sessionId)
@@ -150,6 +156,8 @@ class AppStateHandler @Inject constructor(
                     analyticsTracker.updateUserProperties(UserProperties(numSpaces = spacesNumber))
                 }.launchIn(session.coroutineScope)
     }
+
+    fun getSpaceBackstack() = spaceBackstack
 
     fun safeActiveSpaceId(): String? {
         return (selectedSpaceDataSource.currentValue?.orNull() as? RoomGroupingMethod.BySpace)?.spaceSummary?.roomId

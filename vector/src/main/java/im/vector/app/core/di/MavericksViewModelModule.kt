@@ -54,6 +54,7 @@ import im.vector.app.features.home.room.list.RoomListViewModel
 import im.vector.app.features.homeserver.HomeServerCapabilitiesViewModel
 import im.vector.app.features.invite.InviteUsersToRoomViewModel
 import im.vector.app.features.location.LocationSharingViewModel
+import im.vector.app.features.location.live.map.LocationLiveMapViewModel
 import im.vector.app.features.login.LoginViewModel
 import im.vector.app.features.login2.LoginViewModel2
 import im.vector.app.features.login2.created.AccountCreatedViewModel
@@ -600,4 +601,9 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(VectorAttachmentViewerViewModel::class)
     fun vectorAttachmentViewerViewModelFactory(factory: VectorAttachmentViewerViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(LocationLiveMapViewModel::class)
+    fun locationLiveMapViewModelFactory(factory: LocationLiveMapViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 }
