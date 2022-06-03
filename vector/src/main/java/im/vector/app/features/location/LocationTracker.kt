@@ -41,8 +41,15 @@ class LocationTracker @Inject constructor(
     private val locationManager = context.getSystemService<LocationManager>()
 
     interface Callback {
+        /**
+         * Called on every location update.
+         */
         fun onLocationUpdate(locationData: LocationData)
-        fun onLocationProviderIsNotAvailable()
+
+        /**
+         * Called when no location provider is available to request location updates.
+         */
+        fun onNoLocationProviderAvailable()
     }
 
     private val callbacks = mutableListOf<Callback>()
@@ -56,24 +63,24 @@ class LocationTracker @Inject constructor(
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
     fun start() {
-        Timber.d("## LocationTracker. start()")
+        Timber.d("start()")
 
         if (locationManager == null) {
-            callbacks.forEach { it.onLocationProviderIsNotAvailable() }
-            Timber.v("## LocationTracker. LocationManager is not available")
+            callbacks.forEach { it.onNoLocationProviderAvailable() }
+            Timber.v("LocationManager is not available")
             return
         }
 
         val providers = locationManager.allProviders
 
         if (providers.isEmpty()) {
-            callbacks.forEach { it.onLocationProviderIsNotAvailable() }
-            Timber.v("## LocationTracker. There is no location provider available")
+            callbacks.forEach { it.onNoLocationProviderAvailable() }
+            Timber.v("There is no location provider available")
         } else {
             // Take GPS first
             providers.sortedByDescending { getProviderPriority(it) }
                     .mapNotNull { provider ->
-                        Timber.d("## LocationTracker. track location using $provider")
+                        Timber.d("track location using $provider")
 
                         locationManager.requestLocationUpdates(
                                 provider,
@@ -87,9 +94,9 @@ class LocationTracker @Inject constructor(
                     .maxByOrNull { location -> location.time }
                     ?.let { latestKnownLocation ->
                         if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
-                            Timber.d("## LocationTracker. lastKnownLocation: $latestKnownLocation")
+                            Timber.d("lastKnownLocation: $latestKnownLocation")
                         } else {
-                            Timber.d("## LocationTracker. lastKnownLocation: ${latestKnownLocation.provider}")
+                            Timber.d("lastKnownLocation: ${latestKnownLocation.provider}")
                         }
                         notifyLocation(latestKnownLocation)
                     }
@@ -98,7 +105,7 @@ class LocationTracker @Inject constructor(
 
     /**
      * Compute the priority of the given provider name.
-     * @return an integer representing the priority: the higher the value, the higher the priority is
+     * @return an integer representing the priority: the higher the value, the higher the priority is.
      */
     private fun getProviderPriority(provider: String): Int = when (provider) {
         LocationManager.FUSED_PROVIDER -> 2
@@ -108,7 +115,7 @@ class LocationTracker @Inject constructor(
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
     fun stop() {
-        Timber.d("## LocationTracker. stop()")
+        Timber.d("stop()")
         locationManager?.removeUpdates(this)
         callbacks.clear()
         debouncer.cancelAll()
@@ -139,9 +146,9 @@ class LocationTracker @Inject constructor(
 
     override fun onLocationChanged(location: Location) {
         if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
-            Timber.d("## LocationTracker. onLocationChanged: $location")
+            Timber.d("onLocationChanged: $location")
         } else {
-            Timber.d("## LocationTracker. onLocationChanged: ${location.provider}")
+            Timber.d("onLocationChanged: ${location.provider}")
         }
 
         when (location.provider) {
@@ -152,7 +159,7 @@ class LocationTracker @Inject constructor(
                 if (hasLocationFromFusedProvider) {
                     hasLocationFromGPSProvider = false
                     // Ignore this update
-                    Timber.d("## LocationTracker. ignoring location from ${location.provider}, we have location from fused provider")
+                    Timber.d("ignoring location from ${location.provider}, we have location from fused provider")
                     return
                 } else {
                     hasLocationFromGPSProvider = true
@@ -161,7 +168,7 @@ class LocationTracker @Inject constructor(
             else -> {
                 if (hasLocationFromFusedProvider || hasLocationFromGPSProvider) {
                     // Ignore this update
-                    Timber.d("## LocationTracker. ignoring location from ${location.provider}, we have location from GPS provider")
+                    Timber.d("ignoring location from ${location.provider}, we have location from GPS provider")
                     return
                 }
             }
@@ -174,9 +181,9 @@ class LocationTracker @Inject constructor(
 
     private fun notifyLocation(location: Location) {
         if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
-            Timber.d("## LocationTracker. notify location: $location")
+            Timber.d("notify location: $location")
         } else {
-            Timber.d("## LocationTracker. notify location: ${location.provider}")
+            Timber.d("notify location: ${location.provider}")
         }
 
         val locationData = location.toLocationData()
@@ -185,12 +192,17 @@ class LocationTracker @Inject constructor(
     }
 
     override fun onProviderDisabled(provider: String) {
-        Timber.d("## LocationTracker. onProviderDisabled: $provider")
+        Timber.d("onProviderDisabled: $provider")
         when (provider) {
             LocationManager.FUSED_PROVIDER -> hasLocationFromFusedProvider = false
             LocationManager.GPS_PROVIDER -> hasLocationFromGPSProvider = false
         }
-        callbacks.forEach { it.onLocationProviderIsNotAvailable() }
+
+        locationManager?.allProviders
+                ?.takeIf { it.isEmpty() }
+                ?.let {
+                    callbacks.forEach { it.onNoLocationProviderAvailable() }
+                }
     }
 
     private fun Location.toLocationData(): LocationData {
