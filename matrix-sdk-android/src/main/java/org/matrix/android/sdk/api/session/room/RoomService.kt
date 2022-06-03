@@ -227,11 +227,14 @@ interface RoomService {
 
     /**
      * TODO Doc.
+     * @param getFlattenParents When true, the list of known parent and grand parent summaries will be resolved.
+     * This can have significant impact on performance, better be used only on manageable list (filtered by displayName, ..).
      */
     fun getFilteredPagedRoomSummariesLive(
             queryParams: RoomSummaryQueryParams,
             pagedListConfig: PagedList.Config = defaultPagedListConfig,
-            sortOrder: RoomSortOrder = RoomSortOrder.ACTIVITY
+            sortOrder: RoomSortOrder = RoomSortOrder.ACTIVITY,
+            getFlattenParents: Boolean = false,
     ): UpdatableLivePageResult
 
     /**
