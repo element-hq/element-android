@@ -47,7 +47,8 @@ class LocationTracker @Inject constructor(
 
     private val callbacks = mutableListOf<Callback>()
 
-    private var hasGpsProviderLiveLocation = false
+    private var hasLocationFromFusedProvider = false
+    private var hasLocationFromGPSProvider = false
 
     private var lastLocation: LocationData? = null
 
@@ -70,7 +71,7 @@ class LocationTracker @Inject constructor(
             Timber.v("## LocationTracker. There is no location provider available")
         } else {
             // Take GPS first
-            providers.sortedByDescending { if (it == LocationManager.GPS_PROVIDER) 1 else 0 }
+            providers.sortedByDescending { getProviderPriority(it) }
                     .mapNotNull { provider ->
                         Timber.d("## LocationTracker. track location using $provider")
 
@@ -95,13 +96,24 @@ class LocationTracker @Inject constructor(
         }
     }
 
+    /**
+     * Compute the priority of the given provider name.
+     * @return an integer representing the priority: the higher the value, the higher the priority is
+     */
+    private fun getProviderPriority(provider: String): Int = when (provider) {
+        LocationManager.FUSED_PROVIDER -> 2
+        LocationManager.GPS_PROVIDER -> 1
+        else -> 0
+    }
+
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
     fun stop() {
         Timber.d("## LocationTracker. stop()")
         locationManager?.removeUpdates(this)
         callbacks.clear()
         debouncer.cancelAll()
-        hasGpsProviderLiveLocation = false
+        hasLocationFromGPSProvider = false
+        hasLocationFromFusedProvider = false
     }
 
     /**
@@ -133,13 +145,23 @@ class LocationTracker @Inject constructor(
         }
 
         when (location.provider) {
+            LocationManager.FUSED_PROVIDER -> {
+                hasLocationFromFusedProvider = true
+            }
             LocationManager.GPS_PROVIDER -> {
-                hasGpsProviderLiveLocation = true
+                if (hasLocationFromFusedProvider) {
+                    hasLocationFromGPSProvider = false
+                    // Ignore this update
+                    Timber.d("## LocationTracker. ignoring location from ${location.provider}, we have location from fused provider")
+                    return
+                } else {
+                    hasLocationFromGPSProvider = true
+                }
             }
             else -> {
-                if (hasGpsProviderLiveLocation) {
+                if (hasLocationFromFusedProvider || hasLocationFromGPSProvider) {
                     // Ignore this update
-                    Timber.d("## LocationTracker. ignoring location from ${location.provider}, we have gps live location")
+                    Timber.d("## LocationTracker. ignoring location from ${location.provider}, we have location from GPS provider")
                     return
                 }
             }
@@ -164,6 +186,10 @@ class LocationTracker @Inject constructor(
 
     override fun onProviderDisabled(provider: String) {
         Timber.d("## LocationTracker. onProviderDisabled: $provider")
+        when (provider) {
+            LocationManager.FUSED_PROVIDER -> hasLocationFromFusedProvider = false
+            LocationManager.GPS_PROVIDER -> hasLocationFromGPSProvider = false
+        }
         callbacks.forEach { it.onLocationProviderIsNotAvailable() }
     }
 
