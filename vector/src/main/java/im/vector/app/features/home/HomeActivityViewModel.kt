@@ -33,6 +33,7 @@ import im.vector.app.features.login.ReAuthHelper
 import im.vector.app.features.raw.wellknown.ElementWellKnown
 import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isSecureBackupRequired
+import im.vector.app.features.raw.wellknown.withElementWellKnown
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.Dispatchers
@@ -134,9 +135,8 @@ class HomeActivityViewModel @AssistedInject constructor(
                 .onEach { info ->
                     val isVerified = info.getOrNull()?.isTrusted() ?: false
                     if (!isVerified && onceTrusted) {
-                        viewModelScope.launch(Dispatchers.IO) {
-                            val elementWellKnown = rawService.getElementWellknown(safeActiveSession.sessionParams)
-                            sessionHasBeenUnverified(elementWellKnown)
+                        rawService.withElementWellKnown(viewModelScope, safeActiveSession.sessionParams) {
+                            sessionHasBeenUnverified(it)
                         }
                     }
                     onceTrusted = isVerified
