@@ -252,7 +252,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                 ?: session.roomService().getExistingDirectRoomWithUser(otherUserId)
 
         when (action) {
-            is VerificationAction.RequestVerificationByDM      -> {
+            is VerificationAction.RequestVerificationByDM -> {
                 if (roomId == null) {
                     val localId = LocalEcho.createLocalEchoId()
                     setState {
@@ -303,7 +303,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                 }
                 Unit
             }
-            is VerificationAction.StartSASVerification         -> {
+            is VerificationAction.StartSASVerification -> {
                 val request = session.cryptoService().verificationService().getExistingVerificationRequest(otherUserId, action.pendingRequestTransactionId)
                         ?: return@withState
                 val otherDevice = if (request.isIncoming) request.requestInfo?.fromDevice else request.readyInfo?.fromDevice
@@ -325,7 +325,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                 }
                 Unit
             }
-            is VerificationAction.RemoteQrCodeScanned          -> {
+            is VerificationAction.RemoteQrCodeScanned -> {
                 val existingTransaction = session.cryptoService().verificationService()
                         .getExistingTransaction(action.otherUserId, action.transactionId) as? QrCodeVerificationTransaction
                 existingTransaction
@@ -339,7 +339,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                 existingTransaction
                         ?.otherUserScannedMyQrCode()
             }
-            is VerificationAction.OtherUserDidNotScanned       -> {
+            is VerificationAction.OtherUserDidNotScanned -> {
                 val transactionId = state.transactionId ?: return@withState
 
                 val existingTransaction = session.cryptoService().verificationService()
@@ -347,18 +347,18 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                 existingTransaction
                         ?.otherUserDidNotScannedMyQrCode()
             }
-            is VerificationAction.SASMatchAction               -> {
+            is VerificationAction.SASMatchAction -> {
                 (session.cryptoService().verificationService()
                         .getExistingTransaction(action.otherUserId, action.sasTransactionId)
                         as? SasVerificationTransaction)?.userHasVerifiedShortCode()
             }
-            is VerificationAction.SASDoNotMatchAction          -> {
+            is VerificationAction.SASDoNotMatchAction -> {
                 (session.cryptoService().verificationService()
                         .getExistingTransaction(action.otherUserId, action.sasTransactionId)
                         as? SasVerificationTransaction)
                         ?.shortCodeDoesNotMatch()
             }
-            is VerificationAction.GotItConclusion              -> {
+            is VerificationAction.GotItConclusion -> {
                 if (state.isVerificationRequired && !action.verified) {
                     // we should go back to first screen
                     setState {
@@ -372,17 +372,17 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                     _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)
                 }
             }
-            is VerificationAction.SkipVerification             -> {
+            is VerificationAction.SkipVerification -> {
                 _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)
             }
-            is VerificationAction.VerifyFromPassphrase         -> {
+            is VerificationAction.VerifyFromPassphrase -> {
                 setState { copy(verifyingFrom4S = true) }
                 _viewEvents.post(VerificationBottomSheetViewEvents.AccessSecretStore)
             }
-            is VerificationAction.GotResultFromSsss            -> {
+            is VerificationAction.GotResultFromSsss -> {
                 handleSecretBackFromSSSS(action)
             }
-            VerificationAction.SecuredStorageHasBeenReset      -> {
+            VerificationAction.SecuredStorageHasBeenReset -> {
                 if (session.cryptoService().crossSigningService().allPrivateKeysKnown()) {
                     setState {
                         copy(quadSHasBeenReset = true, verifyingFrom4S = false)
@@ -390,7 +390,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                 }
                 Unit
             }
-            VerificationAction.CancelledFromSsss               -> {
+            VerificationAction.CancelledFromSsss -> {
                 setState {
                     copy(verifyingFrom4S = false)
                 }
@@ -510,7 +510,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
         }
 
         when (tx) {
-            is SasVerificationTransaction    -> {
+            is SasVerificationTransaction -> {
                 if (tx.transactionId == (state.pendingRequest.invoke()?.transactionId ?: state.transactionId)) {
                     // A SAS tx has been started following this request
                     setState {

@@ -31,7 +31,7 @@ class LoginFieldsValidation @Inject constructor(
     private fun validateUsernameOrId(usernameOrId: String): String? {
         val accountError = when {
             usernameOrId.isEmpty() -> stringProvider.getString(R.string.error_empty_field_enter_user_name)
-            else                   -> null
+            else -> null
         }
         return accountError
     }
@@ -39,7 +39,7 @@ class LoginFieldsValidation @Inject constructor(
     private fun validatePassword(password: String): String? {
         val passwordError = when {
             password.isEmpty() -> stringProvider.getString(R.string.error_empty_field_your_password)
-            else               -> null
+            else -> null
         }
         return passwordError
     }

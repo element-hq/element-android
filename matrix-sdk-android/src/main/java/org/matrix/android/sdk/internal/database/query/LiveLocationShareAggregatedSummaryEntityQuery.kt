@@ -33,8 +33,10 @@ internal fun LiveLocationShareAggregatedSummaryEntity.Companion.where(
             .equalTo(LiveLocationShareAggregatedSummaryEntityFields.EVENT_ID, eventId)
 }
 
-internal fun LiveLocationShareAggregatedSummaryEntity.Companion.whereRoomId(realm: Realm,
-                                                                            roomId: String): RealmQuery<LiveLocationShareAggregatedSummaryEntity> {
+internal fun LiveLocationShareAggregatedSummaryEntity.Companion.whereRoomId(
+        realm: Realm,
+        roomId: String
+): RealmQuery<LiveLocationShareAggregatedSummaryEntity> {
     return realm.where<LiveLocationShareAggregatedSummaryEntity>()
             .equalTo(LiveLocationShareAggregatedSummaryEntityFields.ROOM_ID, roomId)
 }

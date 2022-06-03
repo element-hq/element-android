@@ -74,19 +74,19 @@ class ReadReceiptsView @JvmOverloads constructor(
             views.receiptMore.visibility = View.GONE
         }
         contentDescription = when (readReceipts.size) {
-            1    ->
+            1 ->
                 if (displayNames.size == 1) {
                     context.getString(R.string.one_user_read, displayNames[0])
                 } else {
                     context.resources.getQuantityString(R.plurals.fallback_users_read, readReceipts.size)
                 }
-            2    ->
+            2 ->
                 if (displayNames.size == 2) {
                     context.getString(R.string.two_users_read, displayNames[0], displayNames[1])
                 } else {
                     context.resources.getQuantityString(R.plurals.fallback_users_read, readReceipts.size)
                 }
-            3    ->
+            3 ->
                 if (displayNames.size == 3) {
                     context.getString(R.string.three_users_read, displayNames[0], displayNames[1], displayNames[2])
                 } else {
@@ -96,12 +96,12 @@ class ReadReceiptsView @JvmOverloads constructor(
                 if (displayNames.size >= 2) {
                     val qty = readReceipts.size - 2
                     context.resources.getQuantityString(
-                                R.plurals.two_and_some_others_read,
+                            R.plurals.two_and_some_others_read,
                             qty,
                             displayNames[0],
                             displayNames[1],
                             qty
-                        )
+                    )
                 } else {
                     context.resources.getQuantityString(R.plurals.fallback_users_read, readReceipts.size)
                 }

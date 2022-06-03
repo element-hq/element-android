@@ -49,9 +49,9 @@ class LocationLiveMapViewModel @AssistedInject constructor(
 
     override fun handle(action: LocationLiveMapAction) {
         when (action) {
-            is LocationLiveMapAction.AddMapSymbol    -> handleAddMapSymbol(action)
+            is LocationLiveMapAction.AddMapSymbol -> handleAddMapSymbol(action)
             is LocationLiveMapAction.RemoveMapSymbol -> handleRemoveMapSymbol(action)
-            LocationLiveMapAction.StopSharing        -> handleStopSharing()
+            LocationLiveMapAction.StopSharing -> handleStopSharing()
         }
     }
 

@@ -494,8 +494,10 @@ internal class TimelineChunk(
                     val firstInsertion = results[range.startIndex]!!
                     val lastBeforeInsertion = builtEvents[range.startIndex - 1]
                     if (firstInsertion.displayIndex + 1 != lastBeforeInsertion.displayIndex) {
-                        Timber.i("handleDatabaseChangeSet: skip insertion at ${range.startIndex}/${builtEvents.size}, " +
-                                "displayIndex mismatch at ${range.startIndex}: ${firstInsertion.displayIndex} -> ${lastBeforeInsertion.displayIndex}")
+                        Timber.i(
+                                "handleDatabaseChangeSet: skip insertion at ${range.startIndex}/${builtEvents.size}, " +
+                                        "displayIndex mismatch at ${range.startIndex}: ${firstInsertion.displayIndex} -> ${lastBeforeInsertion.displayIndex}"
+                        )
                         continue
                     }
                 }
@@ -504,9 +506,11 @@ internal class TimelineChunk(
                     val lastInsertion = results[range.startIndex + range.length - 1]!!
                     val firstAfterInsertion = builtEvents[range.startIndex]
                     if (firstAfterInsertion.displayIndex + 1 != lastInsertion.displayIndex) {
-                        Timber.i("handleDatabaseChangeSet: skip insertion at ${range.startIndex}/${builtEvents.size}, " +
-                                "displayIndex mismatch at ${range.startIndex + range.length}: " +
-                                "${firstAfterInsertion.displayIndex} -> ${lastInsertion.displayIndex}")
+                        Timber.i(
+                                "handleDatabaseChangeSet: skip insertion at ${range.startIndex}/${builtEvents.size}, " +
+                                        "displayIndex mismatch at ${range.startIndex + range.length}: " +
+                                        "${firstAfterInsertion.displayIndex} -> ${lastInsertion.displayIndex}"
+                        )
                         continue
                     }
                 }

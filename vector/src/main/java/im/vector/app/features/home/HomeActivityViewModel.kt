@@ -167,7 +167,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                 vectorPreferences.userNotifiedAboutThreads()
             }
             // Migrate users with enabled lab settings
-            vectorPreferences.shouldNotifyUserAboutThreads() && vectorPreferences.shouldMigrateThreads()     -> {
+            vectorPreferences.shouldNotifyUserAboutThreads() && vectorPreferences.shouldMigrateThreads() -> {
                 Timber.i("----> Migrate threads with enabled labs")
                 // If user had io.element.thread enabled then enable the new thread support,
                 // clear cache to sync messages appropriately
@@ -177,7 +177,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                 _viewEvents.post(HomeActivityViewEvents.MigrateThreads(checkSession = false))
             }
             // Enable all users
-            vectorPreferences.shouldMigrateThreads() && vectorPreferences.areThreadMessagesEnabled()         -> {
+            vectorPreferences.shouldMigrateThreads() && vectorPreferences.areThreadMessagesEnabled() -> {
                 Timber.i("----> Try to migrate threads")
                 _viewEvents.post(HomeActivityViewEvents.MigrateThreads(checkSession = true))
             }
@@ -191,10 +191,10 @@ class HomeActivityViewModel @AssistedInject constructor(
                 .asFlow()
                 .onEach { status ->
                     when (status) {
-                        is SyncStatusService.Status.Idle                   -> {
+                        is SyncStatusService.Status.Idle -> {
                             maybeVerifyOrBootstrapCrossSigning()
                         }
-                        else                                               -> Unit
+                        else -> Unit
                     }
 
                     setState {
@@ -395,7 +395,7 @@ class HomeActivityViewModel @AssistedInject constructor(
             HomeActivityViewActions.PushPromptHasBeenReviewed -> {
                 vectorPreferences.setDidAskUserToEnableSessionPush()
             }
-            HomeActivityViewActions.ViewStarted               -> {
+            HomeActivityViewActions.ViewStarted -> {
                 initialize()
             }
         }

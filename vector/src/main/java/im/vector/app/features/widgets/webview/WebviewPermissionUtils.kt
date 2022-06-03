@@ -79,8 +79,8 @@ class WebviewPermissionUtils @Inject constructor(
     fun onPermissionResult(result: Map<String, Boolean>) {
         if (permissionRequest == null) {
             fatalError(
-                message = "permissionRequest was null! Make sure to call promptForPermissions first.",
-                failFast = vectorPreferences.failFast()
+                    message = "permissionRequest was null! Make sure to call promptForPermissions first.",
+                    failFast = vectorPreferences.failFast()
             )
             return
         }
@@ -121,7 +121,7 @@ class WebviewPermissionUtils @Inject constructor(
         return when (permission) {
             PermissionRequest.RESOURCE_AUDIO_CAPTURE -> Manifest.permission.RECORD_AUDIO
             PermissionRequest.RESOURCE_VIDEO_CAPTURE -> Manifest.permission.CAMERA
-            else                                     -> null
+            else -> null
         }
     }
 }
