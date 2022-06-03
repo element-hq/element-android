@@ -57,7 +57,7 @@ open class BehaviorDataSource<T>(private val defaultValue: T? = null) : MutableD
 /**
  * This datasource only emits all subsequent observed values to each subscriber.
  *
- * @property bufferSize number of buffered items before it starts dropping oldest. Should be at least 1
+ * bufferSize - number of buffered items before it starts dropping oldest. Should be at least 1
  */
 open class PublishDataSource<T>(bufferSize: Int = 10) : MutableDataSource<T> {
 
