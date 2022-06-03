@@ -56,7 +56,6 @@ class DataSourceTest {
         val expectedValues = listOf(2, 9)
         val publishDataSource = PublishDataSource<Int>(bufferSize = 1)
         publishDataSource.test(testScheduler, valuesToPost, expectedValues)
-
     }
 
     private suspend fun PublishDataSource<Int>.test(testScheduler: TestCoroutineScheduler, valuesToPost: List<Int>, expectedValues: List<Int>) {
