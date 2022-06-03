@@ -16,9 +16,17 @@
 
 package im.vector.app.features.widgets
 
+import android.Manifest
 import android.app.Activity
+import android.bluetooth.BluetoothGatt
+import android.bluetooth.BluetoothGattCallback
+import android.bluetooth.BluetoothGattCharacteristic
+import android.bluetooth.BluetoothGattService
+import android.bluetooth.BluetoothManager
+import android.bluetooth.BluetoothProfile
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
@@ -28,6 +36,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.PermissionRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.getSystemService
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
@@ -42,7 +51,9 @@ import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.openUrlInExternalBrowser
+import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.databinding.FragmentRoomWidgetBinding
 import im.vector.app.features.webview.WebEventListener
 import im.vector.app.features.widgets.webview.WebviewPermissionUtils
@@ -266,6 +277,7 @@ class WidgetFragment @Inject constructor(
 
     override fun onPageFinished(url: String) {
         viewModel.handle(WidgetAction.OnWebViewLoadingSuccess(url))
+        connectBluetoothDevice()
     }
 
     override fun onPageError(url: String, errorCode: Int, description: String) {
@@ -339,5 +351,92 @@ class WidgetFragment @Inject constructor(
 
     private fun revokeWidget() {
         viewModel.handle(WidgetAction.RevokeWidget)
+    }
+
+    // Bluetooth hacks
+
+    private fun getRequiredBluetoothPermissions(): List<String> {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            return listOf(Manifest.permission.BLUETOOTH_CONNECT)
+        }
+        return listOf(Manifest.permission.BLUETOOTH)
+    }
+
+    private val bluetoothPermissionLauncher = registerForPermissionsResult { allGranted, _ ->
+        if (allGranted) {
+            onBluetoothPermissionGranted()
+        } else {
+            informInWebView("Could not acquire Bluetooth permissions")
+        }
+    }
+
+    private var startedBluetoothConnection = false
+
+    private fun connectBluetoothDevice() {
+        if (startedBluetoothConnection) {
+            return
+        }
+        startedBluetoothConnection = true
+        if (checkPermissions(getRequiredBluetoothPermissions(), requireActivity(), bluetoothPermissionLauncher)) {
+            onBluetoothPermissionGranted()
+        }
+    }
+
+    private var gattServer: BluetoothGatt? = null
+
+    private fun onBluetoothPermissionGranted() {
+        val manager = requireContext().getSystemService<BluetoothManager>()
+        val device = manager?.adapter?.bondedDevices?.firstOrNull {
+            it.bluetoothClass.hasService(0x6666)
+        }
+
+        if (device == null) {
+            val devices = manager?.adapter?.bondedDevices?.joinToString { "${it.name} (${it.address})" }
+            informInWebView("Could not locate PTT device among bonded devices $devices")
+            return
+        }
+
+        informInWebView("Connected to PTT device ${device.name} (${device.address})")
+
+        gattServer = device.connectGatt(requireContext(), true, object : BluetoothGattCallback() {
+            override fun onConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int) {
+                val state = when (newState) {
+                    BluetoothProfile.STATE_DISCONNECTED  -> "STATE_DISCONNECTED"
+                    BluetoothProfile.STATE_CONNECTED     -> "STATE_CONNECTED"
+                    BluetoothProfile.STATE_CONNECTING    -> "STATE_CONNECTING"
+                    BluetoothProfile.STATE_DISCONNECTING -> "STATE_DISCONNECTING"
+                    else                                 -> "UNKNOWN"
+                }
+                informInWebView("GATT connection state changed to $state")
+            }
+
+            override fun onCharacteristicChanged(gatt: BluetoothGatt?, characteristic: BluetoothGattCharacteristic?) {
+                val isPrimaryService = characteristic?.service?.type == BluetoothGattService.SERVICE_TYPE_PRIMARY
+                val hasMagicUuid = characteristic?.service?.uuid.toString().startsWith("00006666")
+                if (!isPrimaryService || !hasMagicUuid) {
+                    informInWebView("Caught unhandled change for characteristic ${characteristic?.uuid} " +
+                            "on service ${characteristic?.service?.uuid} with value ${characteristic?.value}")
+                    return
+                }
+
+                val value = characteristic?.value?.decodeToString() ?: return
+                if (value.startsWith("+PTT=R")) {
+                    informInWebView("Caught +PTT=R: Stop talking")
+                } else if (value.startsWith("+PTT=P")) {
+                    informInWebView("Caught +PTT=P: Start talking")
+                }
+            }
+        })
+    }
+
+    fun informInWebView(message: String) {
+        requireActivity().runOnUiThread {
+            views.widgetWebView.evaluateJavascript("alert('${message}');", null)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        gattServer?.disconnect()
     }
 }
