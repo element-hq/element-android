@@ -71,7 +71,7 @@ class RoomListSectionBuilderGroup(
                         },
                         { qpm ->
                             val name = stringProvider.getString(R.string.bottom_action_rooms)
-                            val updatableFilterLivePageResult = session.roomService().getFilteredPagedRoomSummariesLive(qpm)
+                            val updatableFilterLivePageResult = session.roomService().getFilteredPagedRoomSummariesLive(qpm, getFlattenParents = true)
                             onUpdatable(updatableFilterLivePageResult)
 
                             val itemCountFlow = updatableFilterLivePageResult.livePagedList.asFlow()
