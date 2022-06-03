@@ -16,9 +16,13 @@
 
 package im.vector.app.features.widgets
 
+import android.Manifest
 import android.app.Activity
+import android.bluetooth.BluetoothManager
+import android.bluetooth.BluetoothSocket
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
@@ -28,6 +32,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.PermissionRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.getSystemService
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
@@ -42,16 +47,24 @@ import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.openUrlInExternalBrowser
+import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.databinding.FragmentRoomWidgetBinding
 import im.vector.app.features.webview.WebEventListener
 import im.vector.app.features.widgets.webview.WebviewPermissionUtils
 import im.vector.app.features.widgets.webview.clearAfterWidget
 import im.vector.app.features.widgets.webview.setupForWidget
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.terms.TermsService
 import timber.log.Timber
+import java.io.IOException
+import java.io.InputStream
 import java.net.URISyntaxException
+import java.util.UUID
 import javax.inject.Inject
 
 @Parcelize
@@ -266,6 +279,7 @@ class WidgetFragment @Inject constructor(
 
     override fun onPageFinished(url: String) {
         viewModel.handle(WidgetAction.OnWebViewLoadingSuccess(url))
+        connectBluetoothDevice()
     }
 
     override fun onPageError(url: String, errorCode: Int, description: String) {
@@ -339,5 +353,101 @@ class WidgetFragment @Inject constructor(
 
     private fun revokeWidget() {
         viewModel.handle(WidgetAction.RevokeWidget)
+    }
+
+    // Bluetooth hacks
+
+    private fun getRequiredBluetoothPermissions(): List<String> {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            return listOf(Manifest.permission.BLUETOOTH_CONNECT)
+        }
+        return listOf(Manifest.permission.BLUETOOTH)
+    }
+
+    private val bluetoothPermissionLauncher = registerForPermissionsResult { allGranted, _ ->
+        if (allGranted) {
+            onBluetoothPermissionGranted()
+        } else {
+            informInWebView("Could not acquire Bluetooth permissions")
+        }
+    }
+
+    private var startedBluetoothConnection = false
+
+    private fun connectBluetoothDevice() {
+        if (startedBluetoothConnection) {
+            return
+        }
+        startedBluetoothConnection = true
+        if (checkPermissions(getRequiredBluetoothPermissions(), requireActivity(), bluetoothPermissionLauncher)) {
+            onBluetoothPermissionGranted()
+        }
+    }
+
+    private var bluetoothSocket: BluetoothSocket? = null
+
+    private fun onBluetoothPermissionGranted() {
+        val manager = requireContext().getSystemService<BluetoothManager>()
+        val device = manager?.adapter?.bondedDevices?.firstOrNull {
+            it.bluetoothClass.hasService(0x6666)
+        }
+
+        if (device == null) {
+            val devices = manager?.adapter?.bondedDevices?.joinToString { "${it.name} (${it.address})" }
+            informInWebView("Could not locate PTT device among bonded devices $devices")
+            return
+        }
+
+        informInWebView("Connected to PTT device ${device.name} (${device.address})")
+
+        bluetoothSocket = device.createRfcommSocketToServiceRecord(UUID.fromString("00006666-0000-1000-8000-00805f9b34fb"));
+        // Alternatively: device.createInsecureRfcommSocketToServiceRecord(...)
+
+        runBlocking {
+            async(Dispatchers.IO) {
+                var inputStream: InputStream?
+                val inputBuffer = ByteArray(1024)
+
+                try {
+                    bluetoothSocket?.connect()
+                    inputStream = bluetoothSocket?.inputStream
+                }  catch (e: IOException){
+                    informInWebView("Failed to open RFCOMM socket: $e")
+                    bluetoothSocket = null
+                    return@async;
+                }
+
+                informInWebView("Opened RFCOMM socket")
+
+                while (true) {
+                    if (bluetoothSocket?.isConnected != true) {
+                        continue
+                    }
+
+                    try {
+                        inputStream?.read(inputBuffer)
+                    } catch (e: IOException) {
+                        continue
+                    }
+
+                    if (inputBuffer[5].toInt() == 80) {
+                        informInWebView("Start talking inferred from ${inputBuffer.slice(0..32)}...")
+                    } else {
+                        informInWebView("Stop talking inferred from ${inputBuffer.slice(0..32)}...")
+                    }
+                }
+            }
+        }
+    }
+
+    fun informInWebView(message: String) {
+        requireActivity().runOnUiThread {
+            views.widgetWebView.evaluateJavascript("alert('${message}');", null)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        bluetoothSocket?.close()
     }
 }
