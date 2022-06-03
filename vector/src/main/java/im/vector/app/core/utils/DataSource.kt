@@ -26,8 +26,6 @@ interface DataSource<T> {
 
 interface MutableDataSource<T> : DataSource<T> {
 
-    suspend fun emit(value: T)
-
     fun post(value: T)
 }
 
@@ -43,10 +41,6 @@ open class BehaviorDataSource<T>(private val defaultValue: T? = null) : MutableD
 
     override fun stream(): Flow<T> {
         return mutableFlow
-    }
-
-    override suspend fun emit(value: T) {
-        mutableFlow.emit(value)
     }
 
     override fun post(value: T) {
@@ -65,10 +59,6 @@ open class PublishDataSource<T>(bufferSize: Int = 10) : MutableDataSource<T> {
 
     override fun stream(): Flow<T> {
         return mutableFlow
-    }
-
-    override suspend fun emit(value: T) {
-        mutableFlow.emit(value)
     }
 
     override fun post(value: T) {
