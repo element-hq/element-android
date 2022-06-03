@@ -24,9 +24,14 @@ import androidx.annotation.RequiresPermission
 import androidx.core.content.getSystemService
 import androidx.core.location.LocationListenerCompat
 import im.vector.app.BuildConfig
+import im.vector.app.core.utils.Debouncer
+import im.vector.app.core.utils.createBackgroundHandler
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
+
+private const val BKG_HANDLER_NAME = "LocationTracker.BKG_HANDLER_NAME"
+private const val LOCATION_DEBOUNCE_ID = "LocationTracker.LOCATION_DEBOUNCE_ID"
 
 @Singleton
 class LocationTracker @Inject constructor(
@@ -44,14 +49,13 @@ class LocationTracker @Inject constructor(
 
     private var hasGpsProviderLiveLocation = false
 
-    private var lastLocationUpdateMillis: Long? = null
-
     private var lastLocation: LocationData? = null
+
+    private val debouncer = Debouncer(createBackgroundHandler(BKG_HANDLER_NAME))
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
     fun start() {
         Timber.d("## LocationTracker. start()")
-        hasGpsProviderLiveLocation = false
 
         if (locationManager == null) {
             callbacks.forEach { it.onLocationProviderIsNotAvailable() }
@@ -96,6 +100,8 @@ class LocationTracker @Inject constructor(
         Timber.d("## LocationTracker. stop()")
         locationManager?.removeUpdates(this)
         callbacks.clear()
+        debouncer.cancelAll()
+        hasGpsProviderLiveLocation = false
     }
 
     /**
@@ -139,18 +145,18 @@ class LocationTracker @Inject constructor(
             }
         }
 
-        val nowMillis = System.currentTimeMillis()
-        val elapsedMillis = nowMillis - (lastLocationUpdateMillis ?: 0)
-        if (elapsedMillis >= MIN_TIME_TO_UPDATE_LOCATION_MILLIS) {
-            lastLocationUpdateMillis = nowMillis
+        debouncer.debounce(LOCATION_DEBOUNCE_ID, MIN_TIME_TO_UPDATE_LOCATION_MILLIS) {
             notifyLocation(location)
-        } else {
-            Timber.d("## LocationTracker. ignoring location: update is too fast")
         }
     }
 
     private fun notifyLocation(location: Location) {
-        Timber.d("## LocationTracker. notify location")
+        if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
+            Timber.d("## LocationTracker. notify location: $location")
+        } else {
+            Timber.d("## LocationTracker. notify location: ${location.provider}")
+        }
+
         val locationData = location.toLocationData()
         lastLocation = locationData
         callbacks.forEach { it.onLocationUpdate(location.toLocationData()) }
