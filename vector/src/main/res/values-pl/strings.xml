@@ -2586,4 +2586,18 @@
     <string name="live_location_bottom_sheet_last_updated_at">Zaktualizowano %1$s temu</string>
     <string name="location_share_live_remaining_time">%1$s pozostało</string>
     <string name="location_share_live_until">Na żywo do %1$s</string>
+    <string name="live_location_bottom_sheet_stop_sharing">Przestań udostępniać</string>
+    <string name="labs_enable_live_location_summary">Tymczasowa implementacja: lokalizacje pozostaną w historii pokoju</string>
+    <string name="labs_enable_live_location">Włącz udostępnianie lokalizacji na żywo</string>
+    <string name="location_share_live_view">Pokaż lokalizację na żywo</string>
+    <string name="location_share_live_ended">Lokalizacja na żywo zakończona</string>
+    <string name="space_explore_filter_no_result_description">Niektóre przestrzenie mogły mogły zostać nieodnalezione, ponieważ są ustawione jako prywatne i wymagają zaproszenia.</string>
+    <string name="space_explore_filter_no_result_title">Brak wyników</string>
+    <string name="space_leave_radio_button_none">Nie opuszczaj żadnych</string>
+    <string name="space_leave_radio_button_all">Opuść wszystkie</string>
+    <string name="settings_autoplay_animated_images_summary">Odtwarzaj animowane obrazki na osi czasu od razu gdy są widoczne na ekranie</string>
+    <string name="settings_autoplay_animated_images_title">Autoodtwarzanie animowanych obrazków</string>
+    <string name="time_unit_second_short">sek</string>
+    <string name="time_unit_hour_short">godz</string>
+    <string name="time_unit_minute_short">min</string>
 </resources>
