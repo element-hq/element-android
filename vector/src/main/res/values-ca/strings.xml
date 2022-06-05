@@ -544,7 +544,7 @@
     <string name="option_send_voice">Envia veu</string>
     <string name="error_no_external_application_found">Ho sento, no s\'ha trobat cap aplicació externa per completar l\'acció.</string>
     <string name="e2e_re_request_encryption_key">Tornar a demanar les claus de xifrat de les teves altres sessions.</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Si us plau, obre ${app_name} a un altre dispositiu que pugui desxifrar el missatge de manera que pugui enviar les claus a aquesta sessió.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Obre ${app_name} a un altre dispositiu que pugui desxifrar el missatge de manera que pugui enviar les claus a aquesta sessió.</string>
     <string name="dialog_title_error">Error</string>
     <string name="system_alerts_header">Alertes de sistema</string>
     <string name="send_bug_report_description_in_english">Si és possible, escriu la descripció en anglès.</string>
