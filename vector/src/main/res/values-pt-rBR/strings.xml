@@ -2336,7 +2336,7 @@
     <string name="ftue_auth_carousel_secure_title">Tenha posse de suas conversas.</string>
     <string name="tooltip_attachment_location">Compartilhar localização</string>
     <string name="labs_render_locations_in_timeline">Render localizações de usuária(o) na timeline</string>
-    <string name="settings_enable_location_sharing_summary">Uma vez habilitada você vai ser capaz de enviar sua localização a qualquer sala</string>
+    <string name="settings_enable_location_sharing_summary">Uma vez habilitado você vai ser capaz de enviar sua localização a qualquer sala</string>
     <string name="settings_enable_location_sharing">Habilitar compartilhamento de localização</string>
     <string name="location_share_external">Abrir com</string>
     <string name="location_not_available_dialog_content">${app_name} não pôde acessar sua localização. Por favor tente de novo mais tarde.</string>
