@@ -209,13 +209,7 @@ class MessageItemFactory @Inject constructor(
             is MessageAudioContent               -> buildAudioContent(params, messageContent, informationData, highlight, attributes)
             is MessageVerificationRequestContent -> buildVerificationRequestMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessagePollContent                -> buildPollItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageLocationContent            -> {
-                if (vectorPreferences.labsRenderLocationsInTimeline()) {
-                    buildLocationItem(messageContent, informationData, highlight, attributes)
-                } else {
-                    buildMessageTextItem(messageContent.body, false, informationData, highlight, callback, attributes)
-                }
-            }
+            is MessageLocationContent            -> buildLocationItem(messageContent, informationData, highlight, attributes)
             is MessageBeaconInfoContent          -> liveLocationShareMessageItemFactory.create(params.event, highlight, attributes)
             else                                 -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
         }
