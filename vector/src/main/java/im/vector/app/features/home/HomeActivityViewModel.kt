@@ -426,7 +426,7 @@ class HomeActivityViewModel @AssistedInject constructor(
             HomeActivityViewActions.PushPromptHasBeenReviewed -> {
                 vectorPreferences.setDidAskUserToEnableSessionPush()
             }
-            is HomeActivityViewActions.ViewStarted            -> {
+            HomeActivityViewActions.ViewStarted               -> {
                 initialize()
             }
         }
