@@ -832,7 +832,7 @@
     <string name="settings_troubleshoot_test_play_services_success">Usługi Google Play są aktualne.</string>
     <string name="sas_got_it">Rozumiem</string>
     <string name="room_list_people_empty_body">Twoje rozmowy bezpośrednie będą wyświetlane tutaj. Naciśnij przycisk + żeby rozpocząć nową.</string>
-    <string name="room_list_rooms_empty_body">Twoje pokoje będą wyświetlane tutaj. Naciśnij przycisk +żeby znaleźć istniejące bądź utworzyć nowy.</string>
+    <string name="room_list_rooms_empty_body">Twoje pokoje będą wyświetlane tutaj. Naciśnij przycisk + znajdujący się na dole po prawej, aby znaleźć istniejące pokoje bądź utworzyć nowe.</string>
     <string name="malformed_message">Nieprawidłowe zdarzenie, nie można wyświetlić</string>
     <string name="keys_backup_unable_to_get_trust_info">Wystąpił błąd podczas otrzymywania zaufanych informacji</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Wystąpił błąd podczas uzyskiwania danych kluczy kopii zapasowej</string>
@@ -2583,4 +2583,7 @@
     <string name="settings_show_latest_profile_description">Pokazuj aktualny stan profilu (obraz i nazwa) w całej historii konwersacji.</string>
     <string name="settings_show_latest_profile">Pokazuj najnowsze informacje o użytkowniku</string>
     <string name="a11y_presence_busy">Zajęty</string>
+    <string name="live_location_bottom_sheet_last_updated_at">Zaktualizowano %1$s temu</string>
+    <string name="location_share_live_remaining_time">%1$s pozostało</string>
+    <string name="location_share_live_until">Na żywo do %1$s</string>
 </resources>
