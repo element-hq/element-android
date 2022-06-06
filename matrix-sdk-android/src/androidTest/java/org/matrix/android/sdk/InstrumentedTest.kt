@@ -27,7 +27,6 @@ interface InstrumentedTest {
     @Rule
     fun retryTestRule() = RetryTestRule(3)
 
-
     @Rule
     fun timberTestRule() = createTimberTestRule()
 
