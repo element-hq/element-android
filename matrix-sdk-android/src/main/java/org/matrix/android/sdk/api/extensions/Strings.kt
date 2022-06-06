@@ -27,3 +27,8 @@ fun CharSequence.ensurePrefix(prefix: CharSequence): CharSequence {
  * Append a new line and then the provided string.
  */
 fun StringBuilder.appendNl(str: String) = append("\n").append(str)
+
+/**
+ * Returns null if the string is empty.
+ */
+fun String.ensureNotEmpty() = ifEmpty { null }

@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.internal.auth.version
 
+import org.matrix.android.sdk.api.extensions.ensureNotEmpty
+
 /**
  * Values will take the form "rX.Y.Z".
  * Ref: https://matrix.org/docs/spec/client_server/latest#get-matrix-client-versions
@@ -45,7 +47,7 @@ internal data class HomeServerVersion(
             return HomeServerVersion(
                     major = result.groupValues[1].toInt(),
                     minor = result.groupValues[2].toInt(),
-                    patch = result.groupValues.getOptional(index = 3, default = "0").toInt()
+                    patch = result.groupValues.getOrNull(index = 3)?.ensureNotEmpty()?.toInt() ?: 0
             )
         }
 
@@ -59,5 +61,3 @@ internal data class HomeServerVersion(
         val v1_3_0 = HomeServerVersion(major = 1, minor = 3, patch = 0)
     }
 }
-
-private fun List<String>.getOptional(index: Int, default: String) = getOrNull(index)?.ifEmpty { default } ?: default
