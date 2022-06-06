@@ -162,18 +162,33 @@ class FtueAuthVariant(
                 )
             is OnboardingViewEvents.OnWebLoginError -> onWebLoginError(viewEvents)
             is OnboardingViewEvents.OnForgetPasswordClicked ->
-                activity.addFragmentToBackstack(
-                        views.loginFragmentContainer,
-                        FtueAuthResetPasswordFragment::class.java,
-                        option = commonOption
-                )
+                when {
+                    vectorFeatures.isOnboardingCombinedLoginEnabled() -> activity.addFragmentToBackstack(
+                            views.loginFragmentContainer,
+                            FtueAuthResetPasswordEmailEntryFragment::class.java,
+                            option = commonOption
+                    )
+                    else                                              -> activity.addFragmentToBackstack(
+                            views.loginFragmentContainer,
+                            FtueAuthResetPasswordFragment::class.java,
+                            option = commonOption
+                    )
+                }
             is OnboardingViewEvents.OnResetPasswordSendThreePidDone -> {
                 supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
-                activity.addFragmentToBackstack(
-                        views.loginFragmentContainer,
-                        FtueAuthResetPasswordMailConfirmationFragment::class.java,
-                        option = commonOption
-                )
+                when {
+                    vectorFeatures.isOnboardingCombinedLoginEnabled() -> activity.addFragmentToBackstack(
+                            views.loginFragmentContainer,
+                            FtueAuthResetPasswordBreakerFragment::class.java,
+                            FtueAuthResetPasswordBreakerArgument(viewEvents.email),
+                            option = commonOption
+                    )
+                    else -> activity.addFragmentToBackstack(
+                            views.loginFragmentContainer,
+                            FtueAuthResetPasswordMailConfirmationFragment::class.java,
+                            option = commonOption
+                    )
+                }
             }
             is OnboardingViewEvents.OnResetPasswordMailConfirmationSuccess -> {
                 supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)

@@ -451,7 +451,7 @@ class OnboardingViewModel @AssistedInject constructor(
                                     resetState = createResetState(action, state.selectedHomeserver)
                             )
                         }
-                        _viewEvents.post(OnboardingViewEvents.OnResetPasswordSendThreePidDone)
+                        _viewEvents.post(OnboardingViewEvents.OnResetPasswordSendThreePidDone(action.email))
                     },
                     onFailure = {
                         setState { copy(isLoading = false) }

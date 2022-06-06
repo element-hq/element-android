@@ -36,6 +36,8 @@
     <string name="ftue_auth_email_title">Enter your email address</string>
     <string name="ftue_auth_email_subtitle">This will help verify your account and enables password recovery.</string>
     <string name="ftue_auth_email_entry_title">Email Address</string>
+    <string name="ftue_auth_reset_password_email_subtitle">We will send you a verification link.</string>
+    <string name="ftue_auth_reset_password_breaker_title">Check your email.</string>
 
     <string name="ftue_auth_email_verification_title">Check your email to verify.</string>
     <!-- Note for translators, %s is the users email address -->
