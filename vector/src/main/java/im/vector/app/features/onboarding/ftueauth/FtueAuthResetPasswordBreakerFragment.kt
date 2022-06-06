@@ -27,7 +27,7 @@ import im.vector.app.R
 import im.vector.app.core.utils.colorTerminatingFullStop
 import im.vector.app.databinding.FragmentFtueResetPasswordBreakerBinding
 import im.vector.app.features.onboarding.OnboardingAction
-import im.vector.app.features.onboarding.RegisterAction
+import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.themes.ThemeProvider
 import im.vector.app.features.themes.ThemeUtils
 import kotlinx.parcelize.Parcelize
@@ -63,8 +63,9 @@ class FtueAuthResetPasswordBreakerFragment : AbstractFtueAuthFragment<FragmentFt
         views.emailVerificationTitle.text = getString(R.string.ftue_auth_reset_password_breaker_title)
                 .colorTerminatingFullStop(ThemeUtils.getColor(requireContext(), R.attr.colorSecondary))
         views.emailVerificationSubtitle.text = getString(R.string.ftue_auth_email_verification_subtitle, params.email)
-        views.emailVerificationResendEmail.debouncedClicks {
-            viewModel.handle(OnboardingAction.PostRegisterAction(RegisterAction.SendAgainThreePid))
+        views.emailVerificationResendEmail.debouncedClicks { viewModel.handle(OnboardingAction.ResendResetPassword) }
+        views.emailVerificationFooter.debouncedClicks {
+            viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnResetPasswordBreakerConfirmed))
         }
     }
 

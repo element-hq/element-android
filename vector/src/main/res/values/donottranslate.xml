@@ -38,6 +38,11 @@
     <string name="ftue_auth_email_entry_title">Email Address</string>
     <string name="ftue_auth_reset_password_email_subtitle">We will send you a verification link.</string>
     <string name="ftue_auth_reset_password_breaker_title">Check your email.</string>
+    <string name="ftue_auth_new_password_entry_title">New Password</string>
+    <string name="ftue_auth_new_password_title">Choose a new password</string>
+    <string name="ftue_auth_new_password_subtitle">Make sure it\'s 8 characters or more.</string>
+    <string name="ftue_auth_reset_password">Reset password</string>
+    <string name="ftue_auth_sign_out_all_devices">Sign out all devices</string>
 
     <string name="ftue_auth_email_verification_title">Check your email to verify.</string>
     <!-- Note for translators, %s is the users email address -->

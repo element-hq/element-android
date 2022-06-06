@@ -190,6 +190,14 @@ class FtueAuthVariant(
                     )
                 }
             }
+            OnboardingViewEvents.OnResetPasswordBreakerConfirmed -> {
+                supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
+                activity.addFragmentToBackstack(
+                        views.loginFragmentContainer,
+                        FtueAuthResetPasswordEntryFragment::class.java,
+                        option = commonOption
+                )
+            }
             is OnboardingViewEvents.OnResetPasswordMailConfirmationSuccess -> {
                 supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
                 activity.addFragmentToBackstack(
