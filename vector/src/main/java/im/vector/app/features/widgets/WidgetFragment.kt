@@ -22,6 +22,7 @@ import android.bluetooth.BluetoothManager
 import android.bluetooth.BluetoothSocket
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
@@ -31,7 +32,10 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.PermissionRequest
+import android.webkit.WebMessage
+import android.webkit.WebView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.core.content.getSystemService
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
@@ -55,15 +59,21 @@ import im.vector.app.features.webview.WebEventListener
 import im.vector.app.features.widgets.webview.WebviewPermissionUtils
 import im.vector.app.features.widgets.webview.clearAfterWidget
 import im.vector.app.features.widgets.webview.setupForWidget
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.parcelize.Parcelize
+import org.json.JSONObject
 import org.matrix.android.sdk.api.session.terms.TermsService
 import timber.log.Timber
 import java.io.IOException
 import java.io.InputStream
 import java.net.URISyntaxException
+import java.nio.ByteBuffer
+import java.nio.charset.StandardCharsets
 import java.util.UUID
 import javax.inject.Inject
 
@@ -93,6 +103,7 @@ class WidgetFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
+        WebView.setWebContentsDebuggingEnabled(true);
         views.widgetWebView.setupForWidget(this)
         if (fragmentArgs.kind.isAdmin()) {
             viewModel.getPostAPIMediator().setWebView(views.widgetWebView)
@@ -386,10 +397,12 @@ class WidgetFragment @Inject constructor(
 
     private var bluetoothSocket: BluetoothSocket? = null
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun onBluetoothPermissionGranted() {
         val manager = requireContext().getSystemService<BluetoothManager>()
         val device = manager?.adapter?.bondedDevices?.firstOrNull {
-            it.bluetoothClass.hasService(0x6666)
+            //it.bluetoothClass.hasService(0x6666)
+            it.name.contains("PTT") || it.name.contains("B01")
         }
 
         if (device == null) {
@@ -398,43 +411,83 @@ class WidgetFragment @Inject constructor(
             return
         }
 
-        informInWebView("Connected to PTT device ${device.name} (${device.address})")
+        //informInWebView("Connected to PTT device ${device.name} (${device.address})")
+        Timber.i("Connected to PTT device ${device.name} (${device.address})")
 
-        bluetoothSocket = device.createRfcommSocketToServiceRecord(UUID.fromString("00006666-0000-1000-8000-00805f9b34fb"));
+        bluetoothSocket = device.createRfcommSocketToServiceRecord(UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"));
         // Alternatively: device.createInsecureRfcommSocketToServiceRecord(...)
 
-        runBlocking {
+        bluetoothSocket?.connect()
+        //informInWebView("Opened RFCOMM socket")
+
+        //informInWebView("Created socket")
+
+
+
+        @OptIn(DelicateCoroutinesApi::class)
+        GlobalScope.launch {
             async(Dispatchers.IO) {
-                var inputStream: InputStream?
+                var inputStream = bluetoothSocket?.inputStream
                 val inputBuffer = ByteArray(1024)
 
-                try {
+                /*try {
                     bluetoothSocket?.connect()
                     inputStream = bluetoothSocket?.inputStream
                 }  catch (e: IOException){
                     informInWebView("Failed to open RFCOMM socket: $e")
                     bluetoothSocket = null
                     return@async;
-                }
+                }*/
 
-                informInWebView("Opened RFCOMM socket")
+                //informInWebView("Opened RFCOMM socket")
 
                 while (true) {
-                    if (bluetoothSocket?.isConnected != true) {
+                    /*if (bluetoothSocket?.isConnected != true) {
                         continue
-                    }
+                    }*/
 
                     try {
-                        inputStream?.read(inputBuffer)
+                        val numbytes = inputStream?.read(inputBuffer)
+                        val strData = StandardCharsets.UTF_8.decode(numbytes?.let { ByteBuffer.wrap(inputBuffer, 0, it) });
+                        //informInWebView("read $numbytes bytes: $strData, strdata is " + strData.length + " bytes, byte 6 is " + strData[6].code)
+
+                        val widgetUri = Uri.parse(fragmentArgs.baseUrl)
+                        //val widgetUri = Uri.EMPTY
+                        if (strData.startsWith("+PTT=P")) {
+                            //informInWebView("ptt down")
+
+                            //val msg = JSONObject()
+                            //msg.put("pttbutton", true)
+                            requireActivity().runOnUiThread {
+                                //views.widgetWebView.postWebMessage(WebMessage(msg.toString()), widgetUri)
+                                views.widgetWebView.postWebMessage(WebMessage("pttp"), widgetUri)
+                            }
+                        } else if (strData.startsWith("+PTT=R")) {
+                            //informInWebView("ptt up")
+                            //val msg = JSONObject()
+                            //msg.put("pttbutton", false)
+                            requireActivity().runOnUiThread {
+                                //views.widgetWebView.postWebMessage(WebMessage(msg.toString()), widgetUri)
+                                views.widgetWebView.postWebMessage(WebMessage("pttr"), widgetUri)
+                            }
+                        }
                     } catch (e: IOException) {
-                        continue
+                        informInWebView("Failed to read from socket: $e")
+                        break
                     }
 
-                    if (inputBuffer[5].toInt() == 80) {
+                    //informInWebView("data: " + inputBuffer.to)
+                    //val strData = StandardCharsets.UTF_8.decode(ByteBuffer.wrap(inputBuffer, 0, num));
+                    //informInWebView("<$strData>")
+
+
+                    //informInWebView("got data " + StandardCharsets.UTF_8.decode(ByteBuffer.wrap(inputBuffer)))
+
+                    /*if (inputBuffer[5].toInt() == 80) {
                         informInWebView("Start talking inferred from ${inputBuffer.slice(0..32)}...")
                     } else {
                         informInWebView("Stop talking inferred from ${inputBuffer.slice(0..32)}...")
-                    }
+                    }*/
                 }
             }
         }
