@@ -122,18 +122,19 @@ class HomeActivityViewModel @AssistedInject constructor(
                     }
                     .launchIn(viewModelScope)
 
-            initialState.authenticationDescription?.let { recentAuthentication ->
-                when (recentAuthentication) {
-                    is AuthenticationDescription.Register -> {
-                        viewModelScope.launch {
-                            analyticsStore.onUserGaveConsent {
-                                analyticsTracker.capture(Signup(authenticationType = recentAuthentication.type.toAnalyticsType()))
-                            }
+            when (val recentAuthentication = initialState.authenticationDescription) {
+                is AuthenticationDescription.Register -> {
+                    viewModelScope.launch {
+                        analyticsStore.onUserGaveConsent {
+                            analyticsTracker.capture(Signup(authenticationType = recentAuthentication.type.toAnalyticsType()))
                         }
                     }
-                    AuthenticationDescription.Login       -> {
-                        // do nothing
-                    }
+                }
+                AuthenticationDescription.Login       -> {
+                    // do nothing
+                }
+                null                                  -> {
+                    // do nothing
                 }
             }
         }
@@ -221,10 +222,10 @@ class HomeActivityViewModel @AssistedInject constructor(
                 .asFlow()
                 .onEach { status ->
                     when (status) {
-                        is SyncStatusService.Status.Idle                   -> {
+                        is SyncStatusService.Status.Idle -> {
                             maybeVerifyOrBootstrapCrossSigning()
                         }
-                        else                                               -> Unit
+                        else                             -> Unit
                     }
 
                     setState {
