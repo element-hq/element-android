@@ -22,6 +22,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNull
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.matrix.android.sdk.InstrumentedTest
@@ -35,6 +36,7 @@ import org.matrix.olm.OlmSession
 private const val DUMMY_DEVICE_KEY = "DeviceKey"
 
 @RunWith(AndroidJUnit4::class)
+@Ignore
 class CryptoStoreTest : InstrumentedTest {
 
     private val cryptoStoreHelper = CryptoStoreHelper()

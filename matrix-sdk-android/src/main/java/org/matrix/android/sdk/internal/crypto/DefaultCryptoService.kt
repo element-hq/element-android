@@ -752,7 +752,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     override fun getIncomingRoomKeyRequests(): List<IncomingRoomKeyRequest> {
-        return getIncomingRoomKeyRequests()
+        return emptyList()
     }
 
     override fun getGossipingEventsTrail(): LiveData<PagedList<AuditTrail>> {
