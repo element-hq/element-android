@@ -83,7 +83,7 @@ class FtueAuthSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOF
                 views.loginSignupSigninSocialLoginButtons.ssoIdentityProviders = state.selectedHomeserver.preferredLoginMode.ssoIdentityProviders()?.sorted()
                 views.loginSignupSigninSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
                     override fun onProviderSelected(provider: SsoIdentityProvider?) {
-                        viewModel.getSsoUrl(
+                        viewModel.fetchSsoUrl(
                                 redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                                 deviceId = state.deviceId,
                                 provider = provider
@@ -124,7 +124,7 @@ class FtueAuthSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOF
 
     private fun submit() = withState(viewModel) { state ->
         if (state.selectedHomeserver.preferredLoginMode is LoginMode.Sso) {
-            viewModel.getSsoUrl(
+            viewModel.fetchSsoUrl(
                     redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                     deviceId = state.deviceId,
                     provider = null

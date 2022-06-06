@@ -218,7 +218,7 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
                 views.loginSocialLoginButtons.ssoIdentityProviders = state.selectedHomeserver.preferredLoginMode.ssoIdentityProviders?.sorted()
                 views.loginSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
                     override fun onProviderSelected(provider: SsoIdentityProvider?) {
-                        viewModel.getSsoUrl(
+                        viewModel.fetchSsoUrl(
                                 redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                                 deviceId = state.deviceId,
                                 provider = provider

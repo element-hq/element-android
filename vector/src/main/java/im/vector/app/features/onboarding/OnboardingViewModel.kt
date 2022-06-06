@@ -754,7 +754,7 @@ class OnboardingViewModel @AssistedInject constructor(
         return loginConfig?.homeServerUrl
     }
 
-    fun getSsoUrl(redirectUrl: String, deviceId: String?, provider: SsoIdentityProvider?): String? {
+    fun fetchSsoUrl(redirectUrl: String, deviceId: String?, provider: SsoIdentityProvider?): String? {
         setState {
             val authDescription = AuthenticationDescription.Register(provider.toAuthenticationType())
             copy(selectedAuthenticationState = SelectedAuthenticationState(authDescription))

@@ -165,7 +165,7 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
     private fun renderSsoProviders(deviceId: String?, ssoProviders: List<SsoIdentityProvider>?) {
         views.ssoGroup.isVisible = ssoProviders?.isNotEmpty() == true
         views.ssoButtons.render(ssoProviders, SocialLoginButtonsView.Mode.MODE_CONTINUE) { provider ->
-            viewModel.getSsoUrl(
+            viewModel.fetchSsoUrl(
                     redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                     deviceId = deviceId,
                     provider = provider
