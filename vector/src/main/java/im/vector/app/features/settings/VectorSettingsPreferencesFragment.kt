@@ -24,7 +24,6 @@ import androidx.core.view.children
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.dialogs.PhotoOrVideoDialog
 import im.vector.app.core.extensions.restart
