@@ -49,6 +49,7 @@ jobs:
           emulator-build: 7425822
           script: ./gradlew theCodeCoverageReport --stacktrace $CI_GRADLE_ARG_PROPERTIES
       - run: ./gradlew sonarqube $CI_GRADLE_ARG_PROPERTIES
+        if: always() # upload even if test suite fails, will be missing coverage report (but will also report coverage drop and quality gate will kick in)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
