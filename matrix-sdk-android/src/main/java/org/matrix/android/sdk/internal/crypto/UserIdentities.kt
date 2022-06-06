@@ -25,7 +25,6 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.android.sdk.internal.crypto.verification.VerificationRequest
-import org.matrix.android.sdk.internal.crypto.verification.VerificationRequestFactory
 import org.matrix.android.sdk.internal.crypto.verification.prepareMethods
 import uniffi.olm.CryptoStoreException
 import uniffi.olm.OlmMachine
@@ -85,7 +84,7 @@ internal class OwnUserIdentity(
         private val innerMachine: OlmMachine,
         private val requestSender: RequestSender,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val verificationRequestFactory: VerificationRequestFactory,
+        private val verificationRequestFactory: VerificationRequest.Factory,
 ) : UserIdentities() {
     /**
      * Our own user id.
@@ -174,7 +173,7 @@ internal class UserIdentity(
         private val innerMachine: OlmMachine,
         private val requestSender: RequestSender,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val verificationRequestFactory: VerificationRequestFactory,
+        private val verificationRequestFactory: VerificationRequest.Factory,
 ) : UserIdentities() {
     /**
      * The unique ID of the user that this identity belongs to.

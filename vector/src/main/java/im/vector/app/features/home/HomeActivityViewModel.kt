@@ -243,7 +243,7 @@ class HomeActivityViewModel @AssistedInject constructor(
             val session = activeSessionHolder.getSafeActiveSession() ?: return@launch
 
             tryOrNull("## MaybeBootstrapCrossSigning: Failed to download keys") {
-                session.cryptoService().downloadKeys(listOf(session.myUserId), true)
+                session.cryptoService().downloadKeysIfNeeded(listOf(session.myUserId), true)
             }
 
             // From there we are up to date with server

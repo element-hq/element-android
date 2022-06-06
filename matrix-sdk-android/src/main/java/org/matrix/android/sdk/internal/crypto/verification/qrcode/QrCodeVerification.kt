@@ -16,37 +16,44 @@
 
 package org.matrix.android.sdk.internal.crypto.verification.qrcode
 
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.QrCodeVerificationTransaction
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.crypto.verification.safeValueOf
 import org.matrix.android.sdk.api.util.fromBase64
+import org.matrix.android.sdk.internal.crypto.OlmMachine
 import org.matrix.android.sdk.internal.crypto.network.RequestSender
-import org.matrix.android.sdk.internal.crypto.verification.UpdateDispatcher
+import org.matrix.android.sdk.internal.crypto.verification.VerificationListenersHolder
 import org.matrix.android.sdk.internal.crypto.verification.VerificationRequest
 import uniffi.olm.CryptoStoreException
-import uniffi.olm.OlmMachine
 import uniffi.olm.QrCode
 import uniffi.olm.Verification
 
 /** Class representing a QR code based verification flow */
-internal class QrCodeVerification(
-        private val machine: OlmMachine,
-        private var request: VerificationRequest,
-        private var inner: QrCode?,
+internal class QrCodeVerification @AssistedInject constructor(
+        @Assisted private var request: VerificationRequest,
+        @Assisted private var inner: QrCode?,
+        private val olmMachine: OlmMachine,
         private val sender: RequestSender,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        listeners: ArrayList<VerificationService.Listener>
+        private val verificationListenersHolder: VerificationListenersHolder,
 ) : QrCodeVerificationTransaction {
 
-    private val dispatcher = UpdateDispatcher(listeners)
+    @AssistedFactory
+    interface Factory {
+        fun create(request: VerificationRequest, inner: QrCode?): QrCodeVerification
+    }
+    
+    private val innerMachine = olmMachine.inner()
 
     private fun dispatchTxUpdated() {
         refreshData()
-        dispatcher.dispatchTxUpdated(this)
+        verificationListenersHolder.dispatchTxUpdated(this)
     }
 
     /** Generate, if possible, data that should be encoded as a QR code for QR code verification.
@@ -63,7 +70,7 @@ internal class QrCodeVerification(
      */
     override val qrCodeText: String?
         get() {
-            val data = inner?.let { machine.generateQrCode(it.otherUserId, it.flowId) }
+            val data = inner?.let { innerMachine.generateQrCode(it.otherUserId, it.flowId) }
 
             // TODO Why are we encoding this to ISO_8859_1? If we're going to encode, why not base64?
             return data?.fromBase64()?.toString(Charsets.ISO_8859_1)
@@ -176,7 +183,7 @@ internal class QrCodeVerification(
     @Throws(CryptoStoreException::class)
     private suspend fun confirm() {
         val result = withContext(coroutineDispatchers.io) {
-            machine.confirmVerification(request.otherUser(), request.flowId())
+            innerMachine.confirmVerification(request.otherUser(), request.flowId())
         }
 
         if (result != null) {
@@ -192,7 +199,7 @@ internal class QrCodeVerification(
     }
 
     private suspend fun cancelHelper(code: CancelCode) {
-        val request = machine.cancelVerification(request.otherUser(), request.flowId(), code.value)
+        val request = innerMachine.cancelVerification(request.otherUser(), request.flowId(), code.value)
 
         if (request != null) {
             sender.sendVerificationRequest(request)
@@ -202,7 +209,7 @@ internal class QrCodeVerification(
 
     /** Fetch fresh data from the Rust side for our verification flow */
     private fun refreshData() {
-        when (val verification = machine.getVerification(request.otherUser(), request.flowId())) {
+        when (val verification = innerMachine.getVerification(request.otherUser(), request.flowId())) {
             is Verification.QrCodeV1 -> {
                 inner = verification.qrcode
             }

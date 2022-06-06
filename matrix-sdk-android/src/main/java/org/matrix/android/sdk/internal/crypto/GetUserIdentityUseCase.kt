@@ -22,20 +22,22 @@ import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.model.rest.RestKeyInfo
 import org.matrix.android.sdk.internal.crypto.network.RequestSender
-import org.matrix.android.sdk.internal.crypto.verification.VerificationRequestFactory
+import org.matrix.android.sdk.internal.crypto.verification.VerificationRequest
 import uniffi.olm.CryptoStoreException
-import uniffi.olm.OlmMachine
+import javax.inject.Inject
+import javax.inject.Provider
 
-internal class GetUserIdentityUseCase(
-        private val innerMachine: OlmMachine,
+internal class GetUserIdentityUseCase @Inject constructor(
+        private val olmMachine: Provider<OlmMachine>,
         private val requestSender: RequestSender,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val moshi: Moshi,
-        private val verificationRequestFactory: VerificationRequestFactory
+        private val verificationRequestFactory: VerificationRequest.Factory
 ) {
 
     @Throws(CryptoStoreException::class)
     suspend operator fun invoke(userId: String): UserIdentities? {
+        val innerMachine = olmMachine.get().inner()
         val identity = withContext(coroutineDispatchers.io) {
             innerMachine.getIdentity(userId)
         }

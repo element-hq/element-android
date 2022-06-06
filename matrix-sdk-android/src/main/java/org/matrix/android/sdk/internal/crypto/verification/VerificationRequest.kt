@@ -16,8 +16,9 @@
 
 package org.matrix.android.sdk.internal.crypto.verification
 
-import android.os.Handler
-import android.os.Looper
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
@@ -25,16 +26,14 @@ import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificatio
 import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationInfoReady
 import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationInfoRequest
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.safeValueOf
 import org.matrix.android.sdk.api.util.toBase64NoPadding
+import org.matrix.android.sdk.internal.crypto.OlmMachine
 import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SCAN
 import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.android.sdk.internal.crypto.verification.qrcode.QrCodeVerification
 import org.matrix.android.sdk.internal.util.time.Clock
-import timber.log.Timber
-import uniffi.olm.OlmMachine
-import uniffi.olm.VerificationRequest
+import uniffi.olm.VerificationRequest as InnerVerificationRequest
 
 /** A verification request object
  *
@@ -43,26 +42,27 @@ import uniffi.olm.VerificationRequest
  * Once the VerificationRequest gets to a ready state users can transition into the different
  * concrete verification flows.
  */
-internal class VerificationRequest(
-        private val innerOlmMachine: OlmMachine,
-        private var innerVerificationRequest: VerificationRequest,
+internal class VerificationRequest @AssistedInject constructor(
+        @Assisted private var innerVerificationRequest: InnerVerificationRequest,
+        olmMachine: OlmMachine,
         private val requestSender: RequestSender,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val listeners: ArrayList<VerificationService.Listener>,
+        private val verificationListenersHolder: VerificationListenersHolder,
+        private val sasVerificationFactory: SasVerification.Factory,
+        private val qrCodeVerificationFactory: QrCodeVerification.Factory,
         private val clock: Clock,
 ) {
-    private val uiHandler = Handler(Looper.getMainLooper())
+
+    private val innerOlmMachine = olmMachine.inner()
+
+    @AssistedFactory
+    interface Factory {
+        fun create(innerVerificationRequest: InnerVerificationRequest): VerificationRequest
+    }
 
     internal fun dispatchRequestUpdated() {
-        uiHandler.post {
-            listeners.forEach {
-                try {
-                    it.verificationRequestUpdated(toPendingVerificationRequest())
-                } catch (e: Throwable) {
-                    Timber.e(e, "## Error while notifying listeners")
-                }
-            }
-        }
+        val tx = toPendingVerificationRequest()
+        verificationListenersHolder.dispatchRequestUpdated(tx)
     }
 
     /** Get the flow ID of this verification request
@@ -167,7 +167,7 @@ internal class VerificationRequest(
 
             if (result != null) {
                 requestSender.sendVerificationRequest(result.request)
-                SasVerification(innerOlmMachine, result.sas, requestSender, coroutineDispatchers, listeners)
+                sasVerificationFactory.create(result.sas)
             } else {
                 null
             }
@@ -194,7 +194,7 @@ internal class VerificationRequest(
         val result = innerOlmMachine.scanQrCode(otherUser(), flowId(), encodedData) ?: return null
 
         requestSender.sendVerificationRequest(result.request)
-        return QrCodeVerification(innerOlmMachine, this, result.qr, requestSender, coroutineDispatchers, listeners)
+        return qrCodeVerificationFactory.create(this, result.qr)
     }
 
     /** Transition into a QR code verification to display a QR code
@@ -216,16 +216,8 @@ internal class VerificationRequest(
      */
     internal fun startQrVerification(): QrCodeVerification? {
         val qrcode = innerOlmMachine.startQrVerification(innerVerificationRequest.otherUserId, innerVerificationRequest.flowId)
-
         return if (qrcode != null) {
-            QrCodeVerification(
-                    machine = innerOlmMachine,
-                    request = this,
-                    inner = qrcode,
-                    sender = requestSender,
-                    coroutineDispatchers = coroutineDispatchers,
-                    listeners = listeners,
-            )
+            qrCodeVerificationFactory.create(this, qrcode)
         } else {
             null
         }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,13 +21,20 @@ import android.os.Looper
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
+import org.matrix.android.sdk.internal.session.SessionScope
 import timber.log.Timber
+import javax.inject.Inject
 
-/** Class that implements some common methods to dispatch updates for the verification related classes */
-internal class UpdateDispatcher(private val listeners: ArrayList<VerificationService.Listener>) {
+@SessionScope
+internal class VerificationListenersHolder @Inject constructor() {
+
+    private val listeners = ArrayList<VerificationService.Listener>()
+
     private val uiHandler = Handler(Looper.getMainLooper())
 
-    internal fun addListener(listener: VerificationService.Listener) {
+    fun listeners(): List<VerificationService.Listener> = listeners
+
+    fun addListener(listener: VerificationService.Listener) {
         uiHandler.post {
             if (!this.listeners.contains(listener)) {
                 this.listeners.add(listener)
@@ -35,11 +42,11 @@ internal class UpdateDispatcher(private val listeners: ArrayList<VerificationSer
         }
     }
 
-    internal fun removeListener(listener: VerificationService.Listener) {
+    fun removeListener(listener: VerificationService.Listener) {
         uiHandler.post { this.listeners.remove(listener) }
     }
 
-    internal fun dispatchTxAdded(tx: VerificationTransaction) {
+    fun dispatchTxAdded(tx: VerificationTransaction) {
         uiHandler.post {
             this.listeners.forEach {
                 try {
@@ -51,7 +58,7 @@ internal class UpdateDispatcher(private val listeners: ArrayList<VerificationSer
         }
     }
 
-    internal fun dispatchTxUpdated(tx: VerificationTransaction) {
+    fun dispatchTxUpdated(tx: VerificationTransaction) {
         uiHandler.post {
             this.listeners.forEach {
                 try {
@@ -63,12 +70,24 @@ internal class UpdateDispatcher(private val listeners: ArrayList<VerificationSer
         }
     }
 
-    internal fun dispatchRequestAdded(tx: PendingVerificationRequest) {
-        Timber.v("## SAS dispatchRequestAdded txId:${tx.transactionId} $tx")
+    fun dispatchRequestAdded(verificationRequest: PendingVerificationRequest) {
+        Timber.v("## SAS dispatchRequestAdded txId:${verificationRequest.transactionId} $verificationRequest")
         uiHandler.post {
             this.listeners.forEach {
                 try {
-                    it.verificationRequestCreated(tx)
+                    it.verificationRequestCreated(verificationRequest)
+                } catch (e: Throwable) {
+                    Timber.e(e, "## Error while notifying listeners")
+                }
+            }
+        }
+    }
+
+    fun dispatchRequestUpdated(verificationRequest: PendingVerificationRequest) {
+        uiHandler.post {
+            listeners.forEach {
+                try {
+                    it.verificationRequestUpdated(verificationRequest)
                 } catch (e: Throwable) {
                     Timber.e(e, "## Error while notifying listeners")
                 }

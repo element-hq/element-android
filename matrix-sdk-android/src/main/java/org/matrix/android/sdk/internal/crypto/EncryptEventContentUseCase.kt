@@ -26,15 +26,15 @@ import javax.inject.Inject
 
 private val loggerTag = LoggerTag("EncryptEventContentUseCase", LoggerTag.CRYPTO)
 
-internal class EncryptEventContentUseCase @Inject constructor(olmMachineProvider: OlmMachineProvider,
-                                                              private val prepareToEncrypt: PrepareToEncryptUseCase,
-                                                              private val clock: Clock) {
+internal class EncryptEventContentUseCase @Inject constructor(
+        private val olmMachine: OlmMachine,
+        private val prepareToEncrypt: PrepareToEncryptUseCase,
+        private val clock: Clock) {
 
-    private val olmMachine = olmMachineProvider.olmMachine
-
-    suspend operator fun invoke(eventContent: Content,
-                                eventType: String,
-                                roomId: String): MXEncryptEventContentResult {
+    suspend operator fun invoke(
+            eventContent: Content,
+            eventType: String,
+            roomId: String): MXEncryptEventContentResult {
         val t0 = clock.epochMillis()
         prepareToEncrypt(roomId, ensureAllMembersAreLoaded = false)
         val content = olmMachine.encrypt(roomId, eventType, eventContent)

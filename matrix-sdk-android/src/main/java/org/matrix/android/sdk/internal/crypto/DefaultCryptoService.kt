@@ -66,7 +66,6 @@ import org.matrix.android.sdk.api.session.sync.model.DeviceOneTimeKeysCountSyncR
 import org.matrix.android.sdk.api.session.sync.model.ToDeviceSyncResponse
 import org.matrix.android.sdk.internal.crypto.keysbackup.RustKeyBackupService
 import org.matrix.android.sdk.internal.crypto.network.OutgoingRequestsProcessor
-import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.android.sdk.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.DeleteDeviceTask
@@ -99,7 +98,7 @@ private val loggerTag = LoggerTag("DefaultCryptoService", LoggerTag.CRYPTO)
 @SessionScope
 internal class DefaultCryptoService @Inject constructor(
         @UserId private val userId: String,
-        @DeviceId private val deviceId: String?,
+        @DeviceId private val deviceId: String,
         // the crypto store
         private val cryptoStore: IMXCryptoStore,
         // Set of parameters used to configure/customize the end-to-end crypto.
@@ -114,29 +113,20 @@ internal class DefaultCryptoService @Inject constructor(
         private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val cryptoCoroutineScope: CoroutineScope,
-        private val requestSender: RequestSender,
+        private val olmMachine: OlmMachine,
         private val crossSigningService: CrossSigningService,
         private val verificationService: RustVerificationService,
         private val keysBackupService: RustKeyBackupService,
         private val megolmSessionImportManager: MegolmSessionImportManager,
-        private val olmMachineProvider: OlmMachineProvider,
         private val liveEventManager: dagger.Lazy<StreamEventsManager>,
         private val prepareToEncrypt: PrepareToEncryptUseCase,
         private val encryptEventContent: EncryptEventContentUseCase,
         private val getRoomUserIds: GetRoomUserIdsUseCase,
+        private val outgoingRequestsProcessor: OutgoingRequestsProcessor,
 ) : CryptoService {
 
     private val isStarting = AtomicBoolean(false)
     private val isStarted = AtomicBoolean(false)
-
-    private val olmMachine by lazy { olmMachineProvider.olmMachine }
-
-    private val outgoingRequestsProcessor = OutgoingRequestsProcessor(
-            requestSender = requestSender,
-            coroutineScope = cryptoCoroutineScope,
-            cryptoSessionInfoProvider = cryptoSessionInfoProvider,
-            shieldComputer = crossSigningService::shieldForGroup
-    )
 
     fun onStateEvent(roomId: String, event: Event) {
         when (event.type) {
@@ -164,7 +154,7 @@ internal class DefaultCryptoService @Inject constructor(
         val params = SetDeviceNameTask.Params(deviceId, deviceName)
         setDeviceNameTask.execute(params)
         try {
-            downloadKeys(listOf(userId), true)
+            downloadKeysIfNeeded(listOf(userId), true)
         } catch (failure: Throwable) {
             Timber.tag(loggerTag.value).w(failure, "setDeviceName: Failed to refresh of crypto device")
         }
@@ -489,7 +479,6 @@ internal class DefaultCryptoService @Inject constructor(
         if (!isRoomEncrypted(roomId)) {
             return
         }
-
         event.stateKey?.let { userId ->
             val roomMember: RoomMemberContent? = event.content.toModel()
             val membership = roomMember?.membership
@@ -722,7 +711,7 @@ internal class DefaultCryptoService @Inject constructor(
         // TODO
     }
 
-    override suspend fun downloadKeys(userIds: List<String>, forceDownload: Boolean): MXUsersDevicesMap<CryptoDeviceInfo> {
+    override suspend fun downloadKeysIfNeeded(userIds: List<String>, forceDownload: Boolean): MXUsersDevicesMap<CryptoDeviceInfo> {
         return withContext(coroutineDispatchers.crypto) {
             olmMachine.ensureUserDevicesMap(userIds, forceDownload)
         }

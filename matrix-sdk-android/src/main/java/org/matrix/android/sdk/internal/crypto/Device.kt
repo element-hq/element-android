@@ -16,20 +16,20 @@
 
 package org.matrix.android.sdk.internal.crypto
 
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.UnsignedDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.android.sdk.internal.crypto.verification.SasVerification
 import org.matrix.android.sdk.internal.crypto.verification.VerificationRequest
-import org.matrix.android.sdk.internal.crypto.verification.VerificationRequestFactory
 import org.matrix.android.sdk.internal.crypto.verification.prepareMethods
 import uniffi.olm.CryptoStoreException
-import uniffi.olm.OlmMachine
 import uniffi.olm.SignatureException
 import uniffi.olm.Device as InnerDevice
 
@@ -38,14 +38,22 @@ import uniffi.olm.Device as InnerDevice
  * This class can be used to directly start a verification flow with the device
  * or to manually verify the device.
  */
-internal class Device(
-        private val innerMachine: OlmMachine,
-        private var innerDevice: InnerDevice,
+internal class Device @AssistedInject constructor(
+        @Assisted private var innerDevice: InnerDevice,
+        olmMachine: OlmMachine,
         private val requestSender: RequestSender,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val listeners: ArrayList<VerificationService.Listener>,
-        private val verificationRequestFactory: VerificationRequestFactory,
+        private val verificationRequestFactory: VerificationRequest.Factory,
+        private val sasVerificationFactory: SasVerification.Factory
 ) {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(innerDevice: InnerDevice): Device
+    }
+
+    private val innerMachine = olmMachine.inner()
+
     @Throws(CryptoStoreException::class)
     private suspend fun refreshData() {
         val device = withContext(coroutineDispatchers.io) {
@@ -99,13 +107,7 @@ internal class Device(
 
         return if (result != null) {
             requestSender.sendVerificationRequest(result.request)
-            SasVerification(
-                    machine = innerMachine,
-                    inner = result.sas,
-                    sender = requestSender,
-                    coroutineDispatchers = coroutineDispatchers,
-                    listeners = listeners
-            )
+            sasVerificationFactory.create(result.sas)
         } else {
             null
         }
@@ -173,6 +175,7 @@ internal class Device(
                 trustLevel = DeviceTrustLevel(crossSigningVerified = innerDevice.crossSigningTrusted, locallyVerified = innerDevice.locallyTrusted),
                 isBlocked = innerDevice.isBlocked,
                 // TODO
-                firstTimeSeenLocalTs = null)
+                firstTimeSeenLocalTs = null
+        )
     }
 }

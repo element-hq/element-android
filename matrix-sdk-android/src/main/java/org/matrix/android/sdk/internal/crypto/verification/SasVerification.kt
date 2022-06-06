@@ -16,34 +16,42 @@
 
 package org.matrix.android.sdk.internal.crypto.verification
 
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.EmojiRepresentation
 import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.crypto.verification.safeValueOf
+import org.matrix.android.sdk.internal.crypto.OlmMachine
 import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import uniffi.olm.CryptoStoreException
-import uniffi.olm.OlmMachine
 import uniffi.olm.Sas
 import uniffi.olm.Verification
 
 /** Class representing a short auth string verification flow */
-internal class SasVerification(
-        private val machine: OlmMachine,
-        private var inner: Sas,
+internal class SasVerification @AssistedInject constructor(
+        @Assisted private var inner: Sas,
+        private val olmMachine: OlmMachine,
         private val sender: RequestSender,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        listeners: ArrayList<VerificationService.Listener>
+        private val verificationListenersHolder: VerificationListenersHolder
 ) :
         SasVerificationTransaction {
-    private val dispatcher = UpdateDispatcher(listeners)
+
+    @AssistedFactory
+    interface Factory {
+        fun create(inner: Sas): SasVerification
+    }
+    
+    private val innerMachine = olmMachine.inner()
 
     private fun dispatchTxUpdated() {
         refreshData()
-        dispatcher.dispatchTxUpdated(this)
+        verificationListenersHolder.dispatchTxUpdated(this)
     }
 
     /** The user ID of the other user that is participating in this verification flow */
@@ -167,7 +175,7 @@ internal class SasVerification(
      * in a presentable state.
      */
     override fun getDecimalCodeRepresentation(): String {
-        val decimals = machine.getDecimals(inner.otherUserId, inner.flowId)
+        val decimals = innerMachine.getDecimals(inner.otherUserId, inner.flowId)
 
         return decimals?.joinToString(" ") ?: ""
     }
@@ -179,13 +187,13 @@ internal class SasVerification(
      * state.
      */
     override fun getEmojiCodeRepresentation(): List<EmojiRepresentation> {
-        val emojiIndex = machine.getEmojiIndex(inner.otherUserId, inner.flowId)
+        val emojiIndex = innerMachine.getEmojiIndex(inner.otherUserId, inner.flowId)
 
         return emojiIndex?.map { getEmojiForCode(it) } ?: listOf()
     }
 
     internal suspend fun accept() {
-        val request = machine.acceptSasVerification(inner.otherUserId, inner.flowId)
+        val request = innerMachine.acceptSasVerification(inner.otherUserId, inner.flowId)
 
         if (request != null) {
             sender.sendVerificationRequest(request)
@@ -196,7 +204,7 @@ internal class SasVerification(
     @Throws(CryptoStoreException::class)
     private suspend fun confirm() {
         val result = withContext(coroutineDispatchers.io) {
-            machine.confirmVerification(inner.otherUserId, inner.flowId)
+            innerMachine.confirmVerification(inner.otherUserId, inner.flowId)
         }
         if (result != null) {
             for (verificationRequest in result.requests) {
@@ -211,7 +219,7 @@ internal class SasVerification(
     }
 
     private suspend fun cancelHelper(code: CancelCode) {
-        val request = machine.cancelVerification(inner.otherUserId, inner.flowId, code.value)
+        val request = innerMachine.cancelVerification(inner.otherUserId, inner.flowId, code.value)
 
         if (request != null) {
             sender.sendVerificationRequest(request)
@@ -221,7 +229,7 @@ internal class SasVerification(
 
     /** Fetch fresh data from the Rust side for our verification flow */
     private fun refreshData() {
-        when (val verification = machine.getVerification(inner.otherUserId, inner.flowId)) {
+        when (val verification = innerMachine.getVerification(inner.otherUserId, inner.flowId)) {
             is Verification.SasV1 -> {
                 inner = verification.sas
             }

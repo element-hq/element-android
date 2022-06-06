@@ -32,7 +32,7 @@ import org.matrix.android.sdk.internal.util.time.Clock
 import javax.inject.Inject
 
 internal class MxCallFactory @Inject constructor(
-        @DeviceId private val deviceId: String?,
+        @DeviceId private val deviceId: String,
         private val localEchoEventFactory: LocalEchoEventFactory,
         private val eventSenderProcessor: EventSenderProcessor,
         private val matrixConfiguration: MatrixConfiguration,
@@ -48,7 +48,7 @@ internal class MxCallFactory @Inject constructor(
                 isOutgoing = false,
                 roomId = roomId,
                 userId = userId,
-                ourPartyId = deviceId ?: "",
+                ourPartyId = deviceId,
                 isVideoCall = content.isVideo(),
                 localEchoEventFactory = localEchoEventFactory,
                 eventSenderProcessor = eventSenderProcessor,
@@ -66,7 +66,7 @@ internal class MxCallFactory @Inject constructor(
                 isOutgoing = true,
                 roomId = roomId,
                 userId = userId,
-                ourPartyId = deviceId ?: "",
+                ourPartyId = deviceId,
                 isVideoCall = isVideoCall,
                 localEchoEventFactory = localEchoEventFactory,
                 eventSenderProcessor = eventSenderProcessor,
