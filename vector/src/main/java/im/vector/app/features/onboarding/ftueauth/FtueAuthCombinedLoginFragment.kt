@@ -131,10 +131,10 @@ class FtueAuthCombinedLoginFragment @Inject constructor(
         views.ssoGroup.isVisible = ssoProviders?.isNotEmpty() == true
         views.ssoButtonsHeader.isVisible = views.ssoGroup.isVisible && views.loginEntryGroup.isVisible
         views.ssoButtons.render(ssoProviders, SocialLoginButtonsView.Mode.MODE_CONTINUE) { id ->
-            viewModel.getSsoUrl(
+            viewModel.fetchSsoUrl(
                     redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                     deviceId = deviceId,
-                    providerId = id
+                    provider = id
             )?.let { openInCustomTab(it) }
         }
     }

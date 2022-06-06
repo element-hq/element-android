@@ -54,6 +54,7 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
+import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import org.matrix.android.sdk.api.auth.login.LoginWizard
 import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
@@ -255,7 +256,7 @@ class OnboardingViewModel @AssistedInject constructor(
             currentJob = viewModelScope.launch {
                 try {
                     val result = safeLoginWizard.loginWithToken(action.loginToken)
-                    onSessionCreated(result, isAccountCreated = false)
+                    onSessionCreated(result, authenticationDescription = AuthenticationDescription.Login)
                 } catch (failure: Throwable) {
                     setState { copy(isLoading = false) }
                     _viewEvents.post(OnboardingViewEvents.Failure(failure))
@@ -289,7 +290,11 @@ class OnboardingViewModel @AssistedInject constructor(
                                     // do nothing
                                 }
                                 else                   -> when (it) {
-                                    is RegistrationResult.Complete         -> onSessionCreated(it.session, isAccountCreated = true)
+                                    is RegistrationResult.Complete         -> onSessionCreated(
+                                            it.session,
+                                            authenticationDescription = awaitState().selectedAuthenticationState.description
+                                                    ?: AuthenticationDescription.Register(AuthenticationDescription.AuthenticationType.Other)
+                                    )
                                     is RegistrationResult.NextStep         -> onFlowResponse(it.flowResult, onNextRegistrationStepAction)
                                     is RegistrationResult.SendEmailSuccess -> _viewEvents.post(OnboardingViewEvents.OnSendEmailSuccess(it.email))
                                     is RegistrationResult.Error            -> _viewEvents.post(OnboardingViewEvents.Failure(it.cause))
@@ -319,6 +324,10 @@ class OnboardingViewModel @AssistedInject constructor(
     private fun OnboardingViewState.hasSelectedMatrixOrg() = selectedHomeserver.userFacingUrl == matrixOrgUrl
 
     private fun handleRegisterWith(action: AuthenticateAction.Register) {
+        setState {
+            val authDescription = AuthenticationDescription.Register(AuthenticationDescription.AuthenticationType.Password)
+            copy(selectedAuthenticationState = SelectedAuthenticationState(authDescription))
+        }
         reAuthHelper.data = action.password
         handleRegisterAction(
                 RegisterAction.CreateAccount(
@@ -499,7 +508,7 @@ class OnboardingViewModel @AssistedInject constructor(
         setState { copy(isLoading = true) }
         currentJob = viewModelScope.launch {
             directLoginUseCase.execute(action, homeServerConnectionConfig).fold(
-                    onSuccess = { onSessionCreated(it, isAccountCreated = false) },
+                    onSuccess = { onSessionCreated(it, authenticationDescription = AuthenticationDescription.Login) },
                     onFailure = {
                         setState { copy(isLoading = false) }
                         _viewEvents.post(OnboardingViewEvents.Failure(it))
@@ -524,7 +533,7 @@ class OnboardingViewModel @AssistedInject constructor(
                             action.initialDeviceName
                     )
                     reAuthHelper.data = action.password
-                    onSessionCreated(result, isAccountCreated = false)
+                    onSessionCreated(result, authenticationDescription = AuthenticationDescription.Login)
                 } catch (failure: Throwable) {
                     setState { copy(isLoading = false) }
                     _viewEvents.post(OnboardingViewEvents.Failure(failure))
@@ -553,7 +562,7 @@ class OnboardingViewModel @AssistedInject constructor(
         internalRegisterAction(RegisterAction.RegisterDummy, onNextRegistrationStepAction)
     }
 
-    private suspend fun onSessionCreated(session: Session, isAccountCreated: Boolean) {
+    private suspend fun onSessionCreated(session: Session, authenticationDescription: AuthenticationDescription) {
         val state = awaitState()
         state.useCase?.let { useCase ->
             session.vectorStore(applicationContext).setUseCase(useCase)
@@ -564,15 +573,15 @@ class OnboardingViewModel @AssistedInject constructor(
         authenticationService.reset()
         session.configureAndStart(applicationContext)
 
-        when (isAccountCreated) {
-            true  -> {
+        when (authenticationDescription) {
+            is AuthenticationDescription.Register -> {
                 val personalizationState = createPersonalizationState(session, state)
                 setState {
                     copy(isLoading = false, personalizationState = personalizationState)
                 }
                 _viewEvents.post(OnboardingViewEvents.OnAccountCreated)
             }
-            false -> {
+            AuthenticationDescription.Login       -> {
                 setState { copy(isLoading = false) }
                 _viewEvents.post(OnboardingViewEvents.OnAccountSignedIn)
             }
@@ -603,7 +612,7 @@ class OnboardingViewModel @AssistedInject constructor(
             currentJob = viewModelScope.launch {
                 try {
                     val result = authenticationService.createSessionFromSso(homeServerConnectionConfigFinal, action.credentials)
-                    onSessionCreated(result, isAccountCreated = false)
+                    onSessionCreated(result, authenticationDescription = AuthenticationDescription.Login)
                 } catch (failure: Throwable) {
                     setState { copy(isLoading = false) }
                 }
@@ -745,8 +754,12 @@ class OnboardingViewModel @AssistedInject constructor(
         return loginConfig?.homeServerUrl
     }
 
-    fun getSsoUrl(redirectUrl: String, deviceId: String?, providerId: String?): String? {
-        return authenticationService.getSsoUrl(redirectUrl, deviceId, providerId)
+    fun fetchSsoUrl(redirectUrl: String, deviceId: String?, provider: SsoIdentityProvider?): String? {
+        setState {
+            val authDescription = AuthenticationDescription.Register(provider.toAuthenticationType())
+            copy(selectedAuthenticationState = SelectedAuthenticationState(authDescription))
+        }
+        return authenticationService.getSsoUrl(redirectUrl, deviceId, provider?.id)
     }
 
     fun getFallbackUrl(forSignIn: Boolean, deviceId: String?): String? {

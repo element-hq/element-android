@@ -42,6 +42,7 @@ import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.login.terms.LoginTermsFragment
 import im.vector.app.features.login.terms.LoginTermsFragmentArgument
+import im.vector.app.features.onboarding.AuthenticationDescription
 import im.vector.app.features.pin.UnlockedActivity
 import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.Stage
@@ -218,10 +219,8 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
                 // change the screen name
                 analyticsScreenName = MobileScreen.ScreenName.Register
             }
-            val intent = HomeActivity.newIntent(
-                    this,
-                    accountCreation = loginViewState.signMode == SignMode.SignUp
-            )
+            val authDescription = inferAuthDescription(loginViewState)
+            val intent = HomeActivity.newIntent(this, authenticationDescription = authDescription)
             startActivity(intent)
             finish()
             return
@@ -229,6 +228,13 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
 
         // Loading
         views.loginLoading.isVisible = loginViewState.isLoading()
+    }
+
+    private fun inferAuthDescription(loginViewState: LoginViewState) = when (loginViewState.signMode) {
+        SignMode.Unknown            -> null
+        SignMode.SignUp             -> AuthenticationDescription.Register(type = AuthenticationDescription.AuthenticationType.Other)
+        SignMode.SignIn             -> AuthenticationDescription.Login
+        SignMode.SignInWithMatrixId -> AuthenticationDescription.Login
     }
 
     private fun onWebLoginError(onWebLoginError: LoginViewEvents.OnWebLoginError) {
