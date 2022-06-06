@@ -123,7 +123,7 @@ class XSigningTest : InstrumentedTest {
         }
 
         // Check that alice can see bob keys
-        testHelper.runBlockingTest { aliceSession.cryptoService().downloadKeys(listOf(bobSession.myUserId), true) }
+        testHelper.runBlockingTest { aliceSession.cryptoService().downloadKeysIfNeeded(listOf(bobSession.myUserId), true) }
 
         val bobKeysFromAlicePOV = testHelper.runBlockingTest {
             aliceSession.cryptoService().crossSigningService().getUserCrossSigningKeys(bobSession.myUserId)
@@ -178,7 +178,7 @@ class XSigningTest : InstrumentedTest {
 
         // Check that alice can see bob keys
         val bobUserId = bobSession.myUserId
-        testHelper.runBlockingTest { aliceSession.cryptoService().downloadKeys(listOf(bobUserId), true) }
+        testHelper.runBlockingTest { aliceSession.cryptoService().downloadKeysIfNeeded(listOf(bobUserId), true) }
 
         val bobKeysFromAlicePOV = testHelper.runBlockingTest {
             aliceSession.cryptoService().crossSigningService().getUserCrossSigningKeys(bobUserId)
@@ -197,7 +197,7 @@ class XSigningTest : InstrumentedTest {
 
         // Check that bob first session sees the new login
         val data = testHelper.runBlockingTest {
-            bobSession.cryptoService().downloadKeys(listOf(bobUserId), true)
+            bobSession.cryptoService().downloadKeysIfNeeded(listOf(bobUserId), true)
         }
 
         if (data.getUserDeviceIds(bobUserId)?.contains(bobSecondDeviceId) == false) {
@@ -216,7 +216,7 @@ class XSigningTest : InstrumentedTest {
 
         // Now alice should cross trust bob's second device
         val data2 = testHelper.runBlockingTest {
-            aliceSession.cryptoService().downloadKeys(listOf(bobUserId), true)
+            aliceSession.cryptoService().downloadKeysIfNeeded(listOf(bobUserId), true)
         }
 
         // check that the device is seen

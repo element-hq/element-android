@@ -264,7 +264,8 @@ class E2eeSanityTests : InstrumentedTest {
             }
         }
         // after initial sync events are not decrypted, so we have to try manually
-        cryptoTestHelper.ensureCannotDecrypt(sentEventIds, newBobSession, e2eRoomID, MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID)
+        // TODO CHANGE WHEN AVAILABLE FROM RUST
+        cryptoTestHelper.ensureCannotDecrypt(sentEventIds, newBobSession, e2eRoomID, MXCryptoError.ErrorType.UNABLE_TO_DECRYPT)//MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID)
 
         // Let's now import keys from backup
 

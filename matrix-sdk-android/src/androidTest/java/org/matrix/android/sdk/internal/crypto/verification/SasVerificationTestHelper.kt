@@ -30,8 +30,6 @@ class SasVerificationTestHelper(private val testHelper: CommonTestHelper, privat
     fun requestVerificationAndWaitForReadyState(cryptoTestData: CryptoTestData, supportedMethods: List<VerificationMethod>): String {
         val aliceSession = cryptoTestData.firstSession
         val bobSession = cryptoTestData.secondSession!!
-        cryptoTestHelper.initializeCrossSigning(aliceSession)
-        cryptoTestHelper.initializeCrossSigning(bobSession)
 
         val aliceVerificationService = aliceSession.cryptoService().verificationService()
         val bobVerificationService = bobSession.cryptoService().verificationService()

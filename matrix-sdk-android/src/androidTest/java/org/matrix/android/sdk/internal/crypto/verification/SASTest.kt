@@ -55,7 +55,7 @@ class SASTest : InstrumentedTest {
         val testHelper = CommonTestHelper(context())
         val cryptoTestHelper = CryptoTestHelper(testHelper)
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
-
+        cryptoTestData.initializeCrossSigning(cryptoTestHelper)
         val aliceSession = cryptoTestData.firstSession
         val bobSession = cryptoTestData.secondSession
 
@@ -74,7 +74,7 @@ class SASTest : InstrumentedTest {
             bobSession.cryptoService().getMyCryptoDevice()
         }
         val txID = testHelper.runBlockingTest {
-            aliceSession.cryptoService().downloadKeys(listOf(bobSession.myUserId), forceDownload = true)
+            aliceSession.cryptoService().downloadKeysIfNeeded(listOf(bobSession.myUserId), forceDownload = true)
             aliceVerificationService.beginDeviceVerification(bobSession.myUserId, bobDevice.deviceId)
         }
         assertNotNull("Alice should have a started transaction", txID)
@@ -357,7 +357,7 @@ class SASTest : InstrumentedTest {
             bobSession.cryptoService().getMyCryptoDevice().deviceId
         }
         testHelper.runBlockingTest {
-            aliceSession.cryptoService().downloadKeys(listOf(bobUserId), forceDownload = true)
+            aliceSession.cryptoService().downloadKeysIfNeeded(listOf(bobUserId), forceDownload = true)
             aliceVerificationService.beginDeviceVerification(bobUserId, bobDeviceId)
             aliceVerificationService.beginDeviceVerification(bobUserId, bobDeviceId)
         }
@@ -423,6 +423,7 @@ class SASTest : InstrumentedTest {
         val testHelper = CommonTestHelper(context())
         val cryptoTestHelper = CryptoTestHelper(testHelper)
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
+        cryptoTestData.initializeCrossSigning(cryptoTestHelper)
         val sasTestHelper = SasVerificationTestHelper(testHelper, cryptoTestHelper)
         val aliceSession = cryptoTestData.firstSession
         val bobSession = cryptoTestData.secondSession!!
@@ -461,6 +462,7 @@ class SASTest : InstrumentedTest {
         val testHelper = CommonTestHelper(context())
         val cryptoTestHelper = CryptoTestHelper(testHelper)
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
+        cryptoTestData.initializeCrossSigning(cryptoTestHelper)
         val sasVerificationTestHelper = SasVerificationTestHelper(testHelper, cryptoTestHelper)
         val transactionId = sasVerificationTestHelper.requestVerificationAndWaitForReadyState(cryptoTestData, listOf(VerificationMethod.SAS))
         val aliceSession = cryptoTestData.firstSession
@@ -566,12 +568,9 @@ class SASTest : InstrumentedTest {
         val testHelper = CommonTestHelper(context())
         val cryptoTestHelper = CryptoTestHelper(testHelper)
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
-
+        cryptoTestData.initializeCrossSigning(cryptoTestHelper)
         val aliceSession = cryptoTestData.firstSession
-        val bobSession = cryptoTestData.secondSession
-
-        cryptoTestHelper.initializeCrossSigning(aliceSession)
-        cryptoTestHelper.initializeCrossSigning(bobSession!!)
+        val bobSession = cryptoTestData.secondSession!!
 
         val aliceVerificationService = aliceSession.cryptoService().verificationService()
         val bobVerificationService = bobSession.cryptoService().verificationService()
