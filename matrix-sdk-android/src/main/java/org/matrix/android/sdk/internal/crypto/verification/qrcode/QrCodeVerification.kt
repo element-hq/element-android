@@ -48,7 +48,7 @@ internal class QrCodeVerification @AssistedInject constructor(
     interface Factory {
         fun create(request: VerificationRequest, inner: QrCode?): QrCodeVerification
     }
-    
+
     private val innerMachine = olmMachine.inner()
 
     private fun dispatchTxUpdated() {

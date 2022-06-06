@@ -36,10 +36,9 @@ data class CryptoTestData(val roomId: String,
         }
     }
 
-    fun initializeCrossSigning(testHelper: CryptoTestHelper){
+    fun initializeCrossSigning(testHelper: CryptoTestHelper) {
         sessions.forEach {
             testHelper.initializeCrossSigning(it)
         }
     }
-
 }

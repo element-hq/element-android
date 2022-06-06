@@ -269,7 +269,7 @@ class E2eeSanityTests : InstrumentedTest {
                 newBobSession,
                 e2eRoomID,
                 MXCryptoError.ErrorType.UNABLE_TO_DECRYPT
-        )//MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID)
+        ) // MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID)
 
         // Let's now import keys from backup
 

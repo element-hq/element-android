@@ -22,7 +22,6 @@ import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.internal.crypto.CryptoModule
-import org.matrix.android.sdk.internal.crypto.OlmMachine
 import org.matrix.android.sdk.internal.di.MatrixComponent
 import org.matrix.android.sdk.internal.federation.FederationModule
 import org.matrix.android.sdk.internal.network.NetworkConnectivityChecker
@@ -113,7 +112,7 @@ internal interface SessionComponent {
 
     fun networkConnectivityChecker(): NetworkConnectivityChecker
 
-    //fun olmMachine(): OlmMachine
+    // fun olmMachine(): OlmMachine
 
     fun taskExecutor(): TaskExecutor
 

@@ -46,7 +46,7 @@ internal class SasVerification @AssistedInject constructor(
     interface Factory {
         fun create(inner: Sas): SasVerification
     }
-    
+
     private val innerMachine = olmMachine.inner()
 
     private fun dispatchTxUpdated() {

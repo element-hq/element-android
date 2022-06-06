@@ -20,7 +20,6 @@ import dagger.Lazy
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.logger.LoggerTag
-import org.matrix.android.sdk.api.session.crypto.keysbackup.BackupRecoveryKey
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersionResult
 import org.matrix.android.sdk.api.session.crypto.keysbackup.SavedKeyBackupKeyInfo
 import org.matrix.android.sdk.internal.crypto.keysbackup.RustKeyBackupService
