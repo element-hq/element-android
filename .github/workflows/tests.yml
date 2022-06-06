@@ -51,7 +51,7 @@ jobs:
           script: ./gradlew theCodeCoverageReport --stacktrace $CI_GRADLE_ARG_PROPERTIES
       - name: Run all the codecoverage tests at once (retry if emulator failed)
         uses: reactivecircus/android-emulator-runner@v2
-        if: always() and steps.tests.outcome == 'failure' # don't run if previous step succeeded.
+        if: always() && steps.tests.outcome == 'failure' # don't run if previous step succeeded.
         with:
           api-level: 28
           arch: x86
