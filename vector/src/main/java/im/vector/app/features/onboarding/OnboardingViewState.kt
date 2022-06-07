@@ -39,7 +39,7 @@ data class OnboardingViewState(
         @PersistState
         val signMode: SignMode = SignMode.Unknown,
         @PersistState
-        val resetPasswordEmail: String? = null,
+        val resetState: ResetState = ResetState(),
 
         // For SSO session recovery
         @PersistState
@@ -83,6 +83,12 @@ data class PersonalizationState(
 
     fun supportsPersonalization() = supportsChangingDisplayName || supportsChangingProfilePicture
 }
+
+@Parcelize
+data class ResetState(
+        val email: String? = null,
+        val newPassword: String? = null,
+) : Parcelable
 
 @Parcelize
 data class SelectedAuthenticationState(

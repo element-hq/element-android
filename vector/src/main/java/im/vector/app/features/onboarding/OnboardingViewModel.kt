@@ -128,7 +128,7 @@ class OnboardingViewModel @AssistedInject constructor(
     val isRegistrationStarted: Boolean
         get() = authenticationService.isRegistrationStarted()
 
-    private val loginWizard: LoginWizard?
+    private val loginWizard: LoginWizard
         get() = authenticationService.getLoginWizard()
 
     private var loginConfig: LoginConfig? = null
@@ -246,21 +246,15 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private fun handleLoginWithToken(action: OnboardingAction.LoginWithToken) {
         val safeLoginWizard = loginWizard
+        setState { copy(isLoading = true) }
 
-        if (safeLoginWizard == null) {
-            setState { copy(isLoading = false) }
-            _viewEvents.post(OnboardingViewEvents.Failure(Throwable("Bad configuration")))
-        } else {
-            setState { copy(isLoading = true) }
-
-            currentJob = viewModelScope.launch {
-                try {
-                    val result = safeLoginWizard.loginWithToken(action.loginToken)
-                    onSessionCreated(result, authenticationDescription = AuthenticationDescription.Login)
-                } catch (failure: Throwable) {
-                    setState { copy(isLoading = false) }
-                    _viewEvents.post(OnboardingViewEvents.Failure(failure))
-                }
+        currentJob = viewModelScope.launch {
+            try {
+                val result = safeLoginWizard.loginWithToken(action.loginToken)
+                onSessionCreated(result, authenticationDescription = AuthenticationDescription.Login)
+            } catch (failure: Throwable) {
+                setState { copy(isLoading = false) }
+                _viewEvents.post(OnboardingViewEvents.Failure(failure))
             }
         }
     }
@@ -377,7 +371,7 @@ class OnboardingViewModel @AssistedInject constructor(
                 setState {
                     copy(
                             isLoading = false,
-                            resetPasswordEmail = null
+                            resetState = ResetState()
                     )
                 }
             }
@@ -447,59 +441,52 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private fun handleResetPassword(action: OnboardingAction.ResetPassword) {
         val safeLoginWizard = loginWizard
-
-        if (safeLoginWizard == null) {
-            setState { copy(isLoading = false) }
-            _viewEvents.post(OnboardingViewEvents.Failure(Throwable("Bad configuration")))
-        } else {
-            setState { copy(isLoading = true) }
-
-            currentJob = viewModelScope.launch {
-                try {
-                    safeLoginWizard.resetPassword(action.email, action.newPassword)
-                } catch (failure: Throwable) {
-                    setState { copy(isLoading = false) }
-                    _viewEvents.post(OnboardingViewEvents.Failure(failure))
-                    return@launch
-                }
-
-                setState {
-                    copy(
-                            isLoading = false,
-                            resetPasswordEmail = action.email
-                    )
-                }
-
-                _viewEvents.post(OnboardingViewEvents.OnResetPasswordSendThreePidDone)
-            }
+        setState { copy(isLoading = true) }
+        currentJob = viewModelScope.launch {
+            runCatching { safeLoginWizard.resetPassword(action.email) }.fold(
+                    onSuccess = {
+                        setState {
+                            copy(
+                                    isLoading = false,
+                                    resetState = ResetState(email = action.email, newPassword = action.newPassword)
+                            )
+                        }
+                        _viewEvents.post(OnboardingViewEvents.OnResetPasswordSendThreePidDone)
+                    },
+                    onFailure = {
+                        setState { copy(isLoading = false) }
+                        _viewEvents.post(OnboardingViewEvents.Failure(it))
+                    }
+            )
         }
     }
 
     private fun handleResetPasswordMailConfirmed() {
-        val safeLoginWizard = loginWizard
-
-        if (safeLoginWizard == null) {
-            setState { copy(isLoading = false) }
-            _viewEvents.post(OnboardingViewEvents.Failure(Throwable("Bad configuration")))
-        } else {
-            setState { copy(isLoading = false) }
-
-            currentJob = viewModelScope.launch {
-                try {
-                    safeLoginWizard.resetPasswordMailConfirmed()
-                } catch (failure: Throwable) {
+        setState { copy(isLoading = true) }
+        currentJob = viewModelScope.launch {
+            val resetState = awaitState().resetState
+            when (val newPassword = resetState.newPassword) {
+                null -> {
                     setState { copy(isLoading = false) }
-                    _viewEvents.post(OnboardingViewEvents.Failure(failure))
-                    return@launch
+                    _viewEvents.post(OnboardingViewEvents.Failure(IllegalStateException("Developer error - No new password has been set")))
                 }
-                setState {
-                    copy(
-                            isLoading = false,
-                            resetPasswordEmail = null
+                else -> {
+                    runCatching { loginWizard.resetPasswordMailConfirmed(newPassword) }.fold(
+                            onSuccess = {
+                                setState {
+                                    copy(
+                                            isLoading = false,
+                                            resetState = ResetState()
+                                    )
+                                }
+                                _viewEvents.post(OnboardingViewEvents.OnResetPasswordMailConfirmationSuccess)
+                            },
+                            onFailure = {
+                                setState { copy(isLoading = false) }
+                                _viewEvents.post(OnboardingViewEvents.Failure(it))
+                            }
                     )
                 }
-
-                _viewEvents.post(OnboardingViewEvents.OnResetPasswordMailConfirmationSuccess)
             }
         }
     }
@@ -519,25 +506,19 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private fun handleLogin(action: AuthenticateAction.Login) {
         val safeLoginWizard = loginWizard
-
-        if (safeLoginWizard == null) {
-            setState { copy(isLoading = false) }
-            _viewEvents.post(OnboardingViewEvents.Failure(Throwable("Bad configuration")))
-        } else {
-            setState { copy(isLoading = true) }
-            currentJob = viewModelScope.launch {
-                try {
-                    val result = safeLoginWizard.login(
-                            action.username,
-                            action.password,
-                            action.initialDeviceName
-                    )
-                    reAuthHelper.data = action.password
-                    onSessionCreated(result, authenticationDescription = AuthenticationDescription.Login)
-                } catch (failure: Throwable) {
-                    setState { copy(isLoading = false) }
-                    _viewEvents.post(OnboardingViewEvents.Failure(failure))
-                }
+        setState { copy(isLoading = true) }
+        currentJob = viewModelScope.launch {
+            try {
+                val result = safeLoginWizard.login(
+                        action.username,
+                        action.password,
+                        action.initialDeviceName
+                )
+                reAuthHelper.data = action.password
+                onSessionCreated(result, authenticationDescription = AuthenticationDescription.Login)
+            } catch (failure: Throwable) {
+                setState { copy(isLoading = false) }
+                _viewEvents.post(OnboardingViewEvents.Failure(failure))
             }
         }
     }

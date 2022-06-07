@@ -413,7 +413,8 @@ class LoginViewModel @AssistedInject constructor(
                     copy(
                             asyncResetPassword = Uninitialized,
                             asyncResetMailConfirmed = Uninitialized,
-                            resetPasswordEmail = null
+                            resetPasswordEmail = null,
+                            resetPasswordNewPassword = null
                     )
                 }
             }
@@ -488,7 +489,7 @@ class LoginViewModel @AssistedInject constructor(
 
             currentJob = viewModelScope.launch {
                 try {
-                    safeLoginWizard.resetPassword(action.email, action.newPassword)
+                    safeLoginWizard.resetPassword(action.email)
                 } catch (failure: Throwable) {
                     setState {
                         copy(
@@ -501,7 +502,8 @@ class LoginViewModel @AssistedInject constructor(
                 setState {
                     copy(
                             asyncResetPassword = Success(Unit),
-                            resetPasswordEmail = action.email
+                            resetPasswordEmail = action.email,
+                            resetPasswordNewPassword = action.newPassword
                     )
                 }
 
@@ -529,24 +531,35 @@ class LoginViewModel @AssistedInject constructor(
             }
 
             currentJob = viewModelScope.launch {
-                try {
-                    safeLoginWizard.resetPasswordMailConfirmed()
-                } catch (failure: Throwable) {
+                val state = awaitState()
+
+                if (state.resetPasswordNewPassword == null) {
                     setState {
                         copy(
-                                asyncResetMailConfirmed = Fail(failure)
+                                asyncResetPassword = Uninitialized,
+                                asyncResetMailConfirmed = Fail(Throwable("Developer error - New password not set"))
                         )
                     }
-                    return@launch
+                } else {
+                    try {
+                        safeLoginWizard.resetPasswordMailConfirmed(state.resetPasswordNewPassword)
+                    } catch (failure: Throwable) {
+                        setState {
+                            copy(
+                                    asyncResetMailConfirmed = Fail(failure)
+                            )
+                        }
+                        return@launch
+                    }
+                    setState {
+                        copy(
+                                asyncResetMailConfirmed = Success(Unit),
+                                resetPasswordEmail = null,
+                                resetPasswordNewPassword = null
+                        )
+                    }
+                    _viewEvents.post(LoginViewEvents.OnResetPasswordMailConfirmationSuccess)
                 }
-                setState {
-                    copy(
-                            asyncResetMailConfirmed = Success(Unit),
-                            resetPasswordEmail = null
-                    )
-                }
-
-                _viewEvents.post(LoginViewEvents.OnResetPasswordMailConfirmationSuccess)
             }
         }
     }

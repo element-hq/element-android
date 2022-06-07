@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,19 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.auth.login
+package im.vector.app.test.fakes
 
-import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.internal.auth.registration.AddThreePidRegistrationResponse
+import io.mockk.coJustRun
+import io.mockk.mockk
+import org.matrix.android.sdk.api.auth.login.LoginWizard
 
-/**
- * Container to store the data when a reset password is in the email validation step.
- */
-@JsonClass(generateAdapter = true)
-internal data class ResetPasswordData(
-        val addThreePidRegistrationResponse: AddThreePidRegistrationResponse
-)
+class FakeLoginWizard : LoginWizard by mockk() {
+
+    fun givenResetPasswordSuccess(email: String) {
+        coJustRun { resetPassword(email) }
+    }
+
+    fun givenConfirmResetPasswordSuccess(password: String) {
+        coJustRun { resetPasswordMailConfirmed(password) }
+    }
+}

@@ -31,6 +31,7 @@ import im.vector.app.test.fakes.FakeContext
 import im.vector.app.test.fakes.FakeDirectLoginUseCase
 import im.vector.app.test.fakes.FakeHomeServerConnectionConfigFactory
 import im.vector.app.test.fakes.FakeHomeServerHistoryService
+import im.vector.app.test.fakes.FakeLoginWizard
 import im.vector.app.test.fakes.FakeRegisterActionHandler
 import im.vector.app.test.fakes.FakeRegistrationWizard
 import im.vector.app.test.fakes.FakeSession
@@ -67,6 +68,8 @@ private val A_DIRECT_LOGIN = OnboardingAction.AuthenticateAction.LoginDirect("@a
 private const val A_HOMESERVER_URL = "https://edited-homeserver.org"
 private val A_HOMESERVER_CONFIG = HomeServerConnectionConfig(FakeUri().instance)
 private val SELECTED_HOMESERVER_STATE = SelectedHomeserverState(preferredLoginMode = LoginMode.Password)
+private const val AN_EMAIL = "hello@example.com"
+private const val A_PASSWORD = "a-password"
 
 class OnboardingViewModelTest {
 
@@ -85,6 +88,7 @@ class OnboardingViewModelTest {
     private val fakeHomeServerConnectionConfigFactory = FakeHomeServerConnectionConfigFactory()
     private val fakeStartAuthenticationFlowUseCase = FakeStartAuthenticationFlowUseCase()
     private val fakeHomeServerHistoryService = FakeHomeServerHistoryService()
+    private val fakeLoginWizard = FakeLoginWizard()
 
     private var initialState = OnboardingViewState()
     private lateinit var viewModel: OnboardingViewModel
@@ -463,6 +467,43 @@ class OnboardingViewModelTest {
         test
                 .assertStates(initialState)
                 .assertEvents(OnboardingViewEvents.OnPersonalizationComplete)
+                .finish()
+    }
+
+    @Test
+    fun `given can successfully reset password, when resetting password, then emits reset done event`() = runTest {
+        val test = viewModel.test()
+        fakeLoginWizard.givenResetPasswordSuccess(AN_EMAIL)
+        fakeAuthenticationService.givenLoginWizard(fakeLoginWizard)
+
+        viewModel.handle(OnboardingAction.ResetPassword(email = AN_EMAIL, newPassword = A_PASSWORD))
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false, resetState = ResetState(AN_EMAIL, A_PASSWORD)) }
+                )
+                .assertEvents(OnboardingViewEvents.OnResetPasswordSendThreePidDone)
+                .finish()
+    }
+
+    @Test
+    fun `given can successfully confirm reset password, when confirm reset password, then emits reset success`() = runTest {
+        viewModelWith(initialState.copy(resetState = ResetState(AN_EMAIL, A_PASSWORD)))
+        val test = viewModel.test()
+        fakeLoginWizard.givenConfirmResetPasswordSuccess(A_PASSWORD)
+        fakeAuthenticationService.givenLoginWizard(fakeLoginWizard)
+
+        viewModel.handle(OnboardingAction.ResetPasswordMailConfirmed)
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false, resetState = ResetState()) }
+                )
+                .assertEvents(OnboardingViewEvents.OnResetPasswordMailConfirmationSuccess)
                 .finish()
     }
 
