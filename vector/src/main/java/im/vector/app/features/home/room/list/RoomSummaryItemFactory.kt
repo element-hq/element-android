@@ -199,9 +199,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
 
     private fun getSearchResultSubtitle(roomSummary: RoomSummary): String {
         val userId = roomSummary.directUserId
-        val spaceName = roomSummary.flattenParents
-                .takeIf { it.isNotEmpty() }
-                ?.joinToString(", ") { it.name }
+        val spaceName = roomSummary.flattenParents.lastOrNull()?.name
         val canonicalAlias = roomSummary.canonicalAlias
 
         return (userId ?: spaceName ?: canonicalAlias).orEmpty()
