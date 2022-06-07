@@ -29,7 +29,6 @@ import im.vector.app.getString
 import im.vector.app.ui.robot.ElementRobot
 import im.vector.app.ui.robot.settings.labs.LabFeature
 import im.vector.app.ui.robot.withDeveloperMode
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -42,7 +41,6 @@ import java.util.concurrent.TimeUnit
  */
 @RunWith(AndroidJUnit4::class)
 @LargeTest
-@Ignore
 class UiAllScreensSanityTest {
 
     @get:Rule
