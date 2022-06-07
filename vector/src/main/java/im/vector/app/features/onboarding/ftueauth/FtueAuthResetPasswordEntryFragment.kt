@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.associateContentStateWith
@@ -29,6 +30,7 @@ import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.setOnImeDoneListener
 import im.vector.app.databinding.FragmentFtueResetPasswordInputBinding
 import im.vector.app.features.onboarding.OnboardingAction
+import im.vector.app.features.onboarding.OnboardingViewState
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import reactivecircus.flowbinding.android.widget.textChanges
@@ -59,12 +61,20 @@ class FtueAuthResetPasswordEntryFragment : AbstractFtueAuthFragment<FragmentFtue
     }
 
     private fun resetPassword() {
-        val password = views.emailEntryInput.content()
-        viewModel.handle(OnboardingAction.ConfirmNewPassword(newPassword = password))
+        viewModel.handle(
+                OnboardingAction.ConfirmNewPassword(
+                        newPassword = views.emailEntryInput.content(),
+                        signOutAllDevices = views.entrySignOutAll.isChecked
+                )
+        )
     }
 
     override fun onError(throwable: Throwable) {
         views.emailEntryInput.error = errorFormatter.toHumanReadable(throwable)
+    }
+
+    override fun updateWithState(state: OnboardingViewState) {
+        views.entrySignOutAll.isVisible = state.resetState.supportsLogoutAllDevices
     }
 
     override fun resetViewModel() {
