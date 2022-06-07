@@ -191,9 +191,7 @@ internal class RustKeyBackupService @Inject constructor(
 
     override fun saveBackupRecoveryKey(recoveryKey: BackupRecoveryKey?, version: String?) {
         cryptoCoroutineScope.launch {
-            val recoveryKeyStr = recoveryKey?.toBase64()
-            // TODO : change rust API to use BackupRecoveryKey
-            olmMachine.saveRecoveryKey(recoveryKeyStr, version)
+            olmMachine.saveRecoveryKey(recoveryKey?.inner, version)
         }
     }
 
@@ -729,9 +727,8 @@ internal class RustKeyBackupService @Inject constructor(
 
     override suspend fun getKeyBackupRecoveryKeyInfo(): SavedKeyBackupKeyInfo? {
         val info = olmMachine.getBackupKeys() ?: return null
-        // TODO change rust ffi to return BackupRecoveryKey instead of base64 string
-        val backupRecoveryKey = BackupRecoveryKey.fromBase64(info.recoveryKey)
-        return SavedKeyBackupKeyInfo(backupRecoveryKey, info.backupVersion)
+        val backupRecoveryKey = BackupRecoveryKey(info.recoveryKey())
+        return SavedKeyBackupKeyInfo(backupRecoveryKey, info.backupVersion())
     }
 
     /**
