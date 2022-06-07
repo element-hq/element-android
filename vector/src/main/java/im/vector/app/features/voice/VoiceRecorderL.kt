@@ -27,7 +27,6 @@ import im.vector.opusencoder.OggOpusEncoder
 import im.vector.opusencoder.configuration.SampleRate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -46,7 +45,7 @@ class VoiceRecorderL(
 ) : VoiceRecorder {
 
     companion object {
-        private val SAMPLE_RATE = SampleRate._48kHz
+        private val SAMPLE_RATE = SampleRate.Rate48kHz
         private const val BITRATE = 24 * 1024
     }
 
@@ -101,10 +100,6 @@ class VoiceRecorderL(
         initializeCodec(outputFile.absolutePath)
 
         recordingJob = recorderScope.launch {
-            while (audioRecorder?.state != AudioRecord.STATE_INITIALIZED) {
-                // If the recorder is not ready let's give it some extra time
-                delay(10L)
-            }
             audioRecorder?.startRecording()
 
             val buffer = ShortArray(bufferSizeInShorts)

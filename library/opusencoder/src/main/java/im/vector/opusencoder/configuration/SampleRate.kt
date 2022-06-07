@@ -20,9 +20,9 @@ package im.vector.opusencoder.configuration
  * Sampling rate of the input signal in Hz.
  */
 sealed class SampleRate private constructor(val value: Int) {
-    object _8khz : SampleRate(8000)
-    object _12kHz : SampleRate(12000)
-    object _16kHz : SampleRate(16000)
-    object _24KHz : SampleRate(24000)
-    object _48kHz : SampleRate(48000)
+    object Rate8khz : SampleRate(8000)
+    object Rate12kHz : SampleRate(12000)
+    object Rate16kHz : SampleRate(16000)
+    object Rate24KHz : SampleRate(24000)
+    object Rate48kHz : SampleRate(48000)
 }
