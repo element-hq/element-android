@@ -148,10 +148,6 @@ class MessageComposerView @JvmOverloads constructor(
     }
 
     fun setRoomEncrypted(isEncrypted: Boolean) {
-        if (isEncrypted) {
-            views.composerEditText.setHint(R.string.room_message_placeholder)
-        } else {
-            views.composerEditText.setHint(R.string.room_message_placeholder)
-        }
+        views.composerEditText.setHint(R.string.room_message_placeholder)
     }
 }
