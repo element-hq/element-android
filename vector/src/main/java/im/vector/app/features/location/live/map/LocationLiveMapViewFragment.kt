@@ -40,6 +40,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.addChildFragment
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.databinding.FragmentLocationLiveMapViewBinding
 import im.vector.app.features.location.UrlMapProvider
 import im.vector.app.features.location.zoomToBounds
@@ -58,6 +59,7 @@ class LocationLiveMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
 
     @Inject lateinit var urlMapProvider: UrlMapProvider
     @Inject lateinit var bottomSheetController: LiveLocationBottomSheetController
+    @Inject lateinit var dimensionConverter: DimensionConverter
 
     private val viewModel: LocationLiveMapViewModel by fragmentViewModel()
 
@@ -94,6 +96,12 @@ class LocationLiveMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
     private fun setupMap() {
         val mapFragment = getOrCreateSupportMapFragment()
         mapFragment.getMapAsync { mapboxMap ->
+            mapboxMap.uiSettings.apply {
+                // Place copyright above the user list bottom sheet
+                setLogoMargins(dimensionConverter.dpToPx(8), 0, 0, dimensionConverter.dpToPx(208))
+                setAttributionMargins(dimensionConverter.dpToPx(96), 0, 0, dimensionConverter.dpToPx(208))
+            }
+
             lifecycleScope.launch {
                 mapboxMap.setStyle(urlMapProvider.getMapUrl()) { style ->
                     mapStyle = style
