@@ -442,4 +442,10 @@
     <string name="notice_made_future_direct_room_visibility">%1$s padarė būsimas žinutes matomas %2$s</string>
     <string name="notice_made_future_room_visibility_by_you">Būsimą kambario istoriją padarėte matomą %1$s</string>
     <string name="notice_made_future_room_visibility">%1$s padarė būsimą kambario istoriją matomą %2$s</string>
+    <plurals name="missed_audio_call">
+        <item quantity="one">%d praleistas balso skambutis</item>
+        <item quantity="few">%d praleisti balso skambučiai</item>
+        <item quantity="other">%d praleistų balso skambučių</item>
+    </plurals>
+    <string name="call_ended">Skambutis baigtas</string>
 </resources>
