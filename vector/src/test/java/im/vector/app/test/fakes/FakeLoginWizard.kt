@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,19 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.crypto.keysrequest
+package im.vector.app.test.fakes
 
-enum class OutboundSessionKeySharingStrategy {
-    /**
-     * Keys will be sent for the first time when the first message is sent.
-     * This is handled by the Matrix SDK so there's no need to do it in Vector.
-     */
-    WhenSendingEvent,
+import io.mockk.coJustRun
+import io.mockk.mockk
+import org.matrix.android.sdk.api.auth.login.LoginWizard
 
-    /**
-     * Keys will be sent for the first time when the timeline displayed.
-     */
-    WhenEnteringRoom,
+class FakeLoginWizard : LoginWizard by mockk() {
 
-    /**
-     * Keys will be sent for the first time when a typing started.
-     */
-    WhenTyping
+    fun givenResetPasswordSuccess(email: String) {
+        coJustRun { resetPassword(email) }
+    }
+
+    fun givenConfirmResetPasswordSuccess(password: String) {
+        coJustRun { resetPasswordMailConfirmed(password) }
+    }
 }

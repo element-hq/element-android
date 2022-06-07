@@ -1,3 +1,11 @@
+Changes in Element 1.4.19 (2022-06-07)
+======================================
+
+Bugfixes 🐛
+----------
+ - Fix | performance regression on roomlist + proper display of space parents in explore rooms. ([#6233](https://github.com/vector-im/element-android/issues/6233))
+
+
 Changes in Element v1.4.18 (2022-05-31)
 =======================================
 
