@@ -3036,6 +3036,7 @@
     <string name="labs_enable_live_location_summary">Temporary implementation: locations persist in room history</string>
     <string name="live_location_bottom_sheet_stop_sharing">Stop sharing</string>
     <string name="live_location_bottom_sheet_last_updated_at">Updated %1$s ago</string>
+    <string name="location_map_view_copyright">© MapTiler © OpenStreetMap contributors</string>
 
     <string name="message_bubbles">Show Message bubbles</string>
 

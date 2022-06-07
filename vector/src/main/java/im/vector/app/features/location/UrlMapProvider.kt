@@ -63,10 +63,8 @@ class UrlMapProvider @Inject constructor(
             append(height)
             append(".png")
             append(keyParam)
-            if (!localeProvider.isRTL()) {
-                // On LTR languages we want the legal mentions to be displayed on the bottom left of the image
-                append("&attribution=bottomleft")
-            }
+            // Since the default copyright font is too small we put a custom one on map
+            append("&attribution=0")
         }
     }
 }
