@@ -500,6 +500,25 @@ class OnboardingViewModelTest {
     }
 
     @Test
+    fun `given reset state, when resending reset password email, then emits reset success`() = runTest {
+        viewModelWith(initialState.copy(resetState = ResetState(AN_EMAIL, A_PASSWORD)))
+        val test = viewModel.test()
+        fakeLoginWizard.givenResetPasswordSuccess(AN_EMAIL)
+        fakeAuthenticationService.givenLoginWizard(fakeLoginWizard)
+
+        viewModel.handle(OnboardingAction.ResendResetPassword)
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false) }
+                )
+                .assertNoEvents()
+                .finish()
+    }
+
+    @Test
     fun `given can successfully confirm reset password, when confirm reset password, then emits reset success`() = runTest {
         viewModelWith(initialState.copy(resetState = ResetState(AN_EMAIL, A_PASSWORD)))
         val test = viewModel.test()
