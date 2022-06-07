@@ -163,35 +163,24 @@ class FtueAuthVariant(
             is OnboardingViewEvents.OnWebLoginError -> onWebLoginError(viewEvents)
             is OnboardingViewEvents.OnForgetPasswordClicked ->
                 when {
-                    vectorFeatures.isOnboardingCombinedLoginEnabled() -> activity.addFragmentToBackstack(
-                            views.loginFragmentContainer,
-                            FtueAuthResetPasswordEmailEntryFragment::class.java,
-                            option = commonOption
-                    )
-                    else                                              -> activity.addFragmentToBackstack(
-                            views.loginFragmentContainer,
-                            FtueAuthResetPasswordFragment::class.java,
-                            option = commonOption
-                    )
+                    vectorFeatures.isOnboardingCombinedLoginEnabled() -> addLoginStageFragmentToBackstack(FtueAuthResetPasswordEmailEntryFragment::class.java)
+                    else                                              -> addLoginStageFragmentToBackstack(FtueAuthResetPasswordFragment::class.java)
                 }
             is OnboardingViewEvents.OnResetPasswordSendThreePidDone -> {
-                supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
+                supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 when {
-                    vectorFeatures.isOnboardingCombinedLoginEnabled() -> activity.addFragmentToBackstack(
-                            views.loginFragmentContainer,
+                    vectorFeatures.isOnboardingCombinedLoginEnabled() -> addLoginStageFragmentToBackstack(
                             FtueAuthResetPasswordBreakerFragment::class.java,
                             FtueAuthResetPasswordBreakerArgument(viewEvents.email),
-                            option = commonOption
                     )
                     else -> activity.addFragmentToBackstack(
                             views.loginFragmentContainer,
                             FtueAuthResetPasswordMailConfirmationFragment::class.java,
-                            option = commonOption
                     )
                 }
             }
             OnboardingViewEvents.OnResetPasswordBreakerConfirmed -> {
-                supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
+                supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 activity.addFragmentToBackstack(
                         views.loginFragmentContainer,
                         FtueAuthResetPasswordEntryFragment::class.java,
@@ -199,16 +188,12 @@ class FtueAuthVariant(
                 )
             }
             is OnboardingViewEvents.OnResetPasswordMailConfirmationSuccess -> {
-                supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
-                activity.addFragmentToBackstack(
-                        views.loginFragmentContainer,
-                        FtueAuthResetPasswordSuccessFragment::class.java,
-                        option = commonOption
-                )
+                supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                addLoginStageFragmentToBackstack(FtueAuthResetPasswordSuccessFragment::class.java)
             }
             is OnboardingViewEvents.OnResetPasswordMailConfirmationSuccessDone -> {
                 // Go back to the login fragment
-                supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
+                supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
             }
             is OnboardingViewEvents.OnSendEmailSuccess -> {
                 openWaitForEmailVerification(viewEvents.email)
@@ -516,6 +501,16 @@ class FtueAuthVariant(
                 fragmentClass,
                 params,
                 tag = FRAGMENT_REGISTRATION_STAGE_TAG,
+                option = commonOption
+        )
+    }
+
+    private fun addLoginStageFragmentToBackstack(fragmentClass: Class<out Fragment>, params: Parcelable? = null) {
+        activity.addFragmentToBackstack(
+                views.loginFragmentContainer,
+                fragmentClass,
+                params,
+                tag = FRAGMENT_LOGIN_TAG,
                 option = commonOption
         )
     }
