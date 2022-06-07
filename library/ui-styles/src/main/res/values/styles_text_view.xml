@@ -48,4 +48,9 @@
         <item name="lineHeight">16sp</item>
     </style>
 
+    <style name="Widget.Vector.TextView.Nano">
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Nano</item>
+        <item name="lineHeight">16sp</item>
+    </style>
+
 </resources>
