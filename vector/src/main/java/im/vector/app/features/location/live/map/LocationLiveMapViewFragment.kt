@@ -25,6 +25,7 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.geometry.LatLngBounds
 import com.mapbox.mapboxsdk.maps.MapView
@@ -96,10 +97,11 @@ class LocationLiveMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
     private fun setupMap() {
         val mapFragment = getOrCreateSupportMapFragment()
         mapFragment.getMapAsync { mapboxMap ->
+            val bottomSheetHeight = BottomSheetBehavior.from(views.bottomSheet).peekHeight
             mapboxMap.uiSettings.apply {
                 // Place copyright above the user list bottom sheet
-                setLogoMargins(dimensionConverter.dpToPx(8), 0, 0, dimensionConverter.dpToPx(208))
-                setAttributionMargins(dimensionConverter.dpToPx(96), 0, 0, dimensionConverter.dpToPx(208))
+                setLogoMargins(dimensionConverter.dpToPx(8), 0, 0, bottomSheetHeight + dimensionConverter.dpToPx(8))
+                setAttributionMargins(dimensionConverter.dpToPx(96), 0, 0, bottomSheetHeight + dimensionConverter.dpToPx(8))
             }
 
             lifecycleScope.launch {
