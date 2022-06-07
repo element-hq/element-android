@@ -56,9 +56,8 @@ task theCodeCoverageReport(type: JacocoReport) {
     }
     def projects = collectProjects { ['vector','matrix-sdk-android'].contains(it.name) }
     dependsOn {
-        [':vector:testGplayDebugUnitTest'] +
-        [':vector:connectedGplayDebugAndroidTest'] +
         [':matrix-sdk-android:testDebugUnitTest'] +
+        [':vector:testGplayDebugUnitTest'] +
         [':matrix-sdk-android:connectedDebugAndroidTest']
     }
     initializeReport(it, projects, excludes)
