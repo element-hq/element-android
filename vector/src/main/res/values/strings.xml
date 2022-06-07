@@ -3018,11 +3018,11 @@
     <string name="location_not_available_dialog_content">${app_name} could not access your location. Please try again later.</string>
     <string name="location_share_external">Open with</string>
     <!--TODO delete-->
-    <string name="settings_enable_location_sharing">Enable location sharing</string>
+    <string name="settings_enable_location_sharing" tools:ignore="UnusedResources">Enable location sharing</string>
     <!--TODO delete-->
-    <string name="settings_enable_location_sharing_summary">Once enabled you will be able to send your location to any room</string>
+    <string name="settings_enable_location_sharing_summary" tools:ignore="UnusedResources">Once enabled you will be able to send your location to any room</string>
     <!--TODO delete-->
-    <string name="labs_render_locations_in_timeline">Render user locations in the timeline</string>
+    <string name="labs_render_locations_in_timeline" tools:ignore="UnusedResources">Render user locations in the timeline</string>
     <string name="location_timeline_failed_to_load_map">Failed to load map</string>
     <string name="location_share_live_enabled">Live location enabled</string>
     <string name="location_share_live_started">Loading live location…</string>
