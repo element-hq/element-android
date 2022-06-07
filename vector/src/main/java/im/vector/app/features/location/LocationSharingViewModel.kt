@@ -114,6 +114,7 @@ class LocationSharingViewModel @AssistedInject constructor(
     override fun onCleared() {
         super.onCleared()
         locationTracker.removeCallback(this)
+        locationTracker.stop()
     }
 
     override fun handle(action: LocationSharingAction) {

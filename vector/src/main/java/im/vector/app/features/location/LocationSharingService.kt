@@ -205,6 +205,7 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
 
     private fun destroyMe() {
         locationTracker.removeCallback(this)
+        locationTracker.stop()
         timers.forEach { it.cancel() }
         timers.clear()
         stopSelf()

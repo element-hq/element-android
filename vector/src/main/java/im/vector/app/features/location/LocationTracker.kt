@@ -21,6 +21,7 @@ import android.content.Context
 import android.location.Location
 import android.location.LocationManager
 import androidx.annotation.RequiresPermission
+import androidx.annotation.VisibleForTesting
 import androidx.core.content.getSystemService
 import androidx.core.location.LocationListenerCompat
 import im.vector.app.BuildConfig
@@ -52,10 +53,14 @@ class LocationTracker @Inject constructor(
         fun onNoLocationProviderAvailable()
     }
 
-    private val callbacks = mutableListOf<Callback>()
+    @VisibleForTesting
+    val callbacks = mutableListOf<Callback>()
 
-    private var hasLocationFromFusedProvider = false
-    private var hasLocationFromGPSProvider = false
+    @VisibleForTesting
+    var hasLocationFromFusedProvider = false
+
+    @VisibleForTesting
+    var hasLocationFromGPSProvider = false
 
     private var lastLocation: LocationData? = null
 
@@ -139,9 +144,6 @@ class LocationTracker @Inject constructor(
 
     fun removeCallback(callback: Callback) {
         callbacks.remove(callback)
-        if (callbacks.size == 0) {
-            stop()
-        }
     }
 
     override fun onLocationChanged(location: Location) {
