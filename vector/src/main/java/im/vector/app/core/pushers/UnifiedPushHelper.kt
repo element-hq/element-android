@@ -45,6 +45,7 @@ class UnifiedPushHelper @Inject constructor(
         private val vectorPreferences: VectorPreferences,
         private val matrix: Matrix,
         private val vectorFeatures: VectorFeatures,
+        private val fcmHelper: FcmHelper,
 ) {
     private val up = UnifiedPush
 
@@ -132,7 +133,7 @@ class UnifiedPushHelper @Inject constructor(
             cancellable: Boolean,
     ) {
         val internalDistributorName = stringProvider.getString(
-                if (FcmHelper.isFirebaseAvailable()) {
+                if (fcmHelper.isFirebaseAvailable()) {
                     R.string.unifiedpush_distributor_fcm_fallback
                 } else {
                     R.string.unifiedpush_distributor_background_sync
@@ -244,11 +245,11 @@ class UnifiedPushHelper @Inject constructor(
     }
 
     fun isEmbeddedDistributor(): Boolean {
-        return up.getDistributor(context) == context.packageName && FcmHelper.isFirebaseAvailable()
+        return up.getDistributor(context) == context.packageName && fcmHelper.isFirebaseAvailable()
     }
 
     fun isBackgroundSync(): Boolean {
-        return up.getDistributor(context) == context.packageName && !FcmHelper.isFirebaseAvailable()
+        return up.getDistributor(context) == context.packageName && !fcmHelper.isFirebaseAvailable()
     }
 
     fun getPrivacyFriendlyUpEndpoint(): String? {

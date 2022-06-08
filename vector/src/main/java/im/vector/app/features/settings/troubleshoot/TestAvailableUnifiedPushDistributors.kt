@@ -27,13 +27,14 @@ import javax.inject.Inject
 class TestAvailableUnifiedPushDistributors @Inject constructor(
         private val unifiedPushHelper: UnifiedPushHelper,
         private val stringProvider: StringProvider,
+        private val fcmHelper: FcmHelper,
 ) : TroubleshootTest(R.string.settings_troubleshoot_test_distributors_title) {
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         val distributors = unifiedPushHelper.getExternalDistributors()
         description = if (distributors.isEmpty()) {
             stringProvider.getString(
-                    if (FcmHelper.isFirebaseAvailable()) {
+                    if (fcmHelper.isFirebaseAvailable()) {
                         R.string.settings_troubleshoot_test_distributors_gplay
                     } else {
                         R.string.settings_troubleshoot_test_distributors_fdroid
