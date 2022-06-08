@@ -44,7 +44,7 @@ class DataSourceTest {
     }
 
     @Test
-    fun `given PublishDataSource with a large enough buffer size, when posting values after observing, then only the latest values are observed`() = runTest {
+    fun `given PublishDataSource with a large enough buffer size, when posting values after observing, then all values are observed`() = runTest {
         val valuesToPost = listOf(2, 3, 4, 5, 6, 7, 8, 9)
         val publishDataSource = PublishDataSource<Int>(bufferSize = valuesToPost.size)
         publishDataSource.test(testScheduler, valuesToPost, valuesToPost)
