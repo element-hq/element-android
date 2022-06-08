@@ -27,11 +27,11 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
-import org.matrix.android.sdk.api.session.initsync.InitSyncStep
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.threads.model.ThreadSummaryUpdateType
+import org.matrix.android.sdk.api.session.sync.InitialSyncStep
 import org.matrix.android.sdk.api.session.sync.InitialSyncStrategy
 import org.matrix.android.sdk.api.session.sync.initialSyncStrategy
 import org.matrix.android.sdk.api.session.sync.model.InvitedRoomSync
@@ -67,17 +67,17 @@ import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.extensions.clearWith
 import org.matrix.android.sdk.internal.session.StreamEventsManager
 import org.matrix.android.sdk.internal.session.events.getFixedRoomMemberContent
-import org.matrix.android.sdk.internal.session.initsync.ProgressReporter
-import org.matrix.android.sdk.internal.session.initsync.mapWithProgress
-import org.matrix.android.sdk.internal.session.initsync.reportSubtask
 import org.matrix.android.sdk.internal.session.room.membership.RoomChangeMembershipStateDataSource
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberEventHandler
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryUpdater
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
 import org.matrix.android.sdk.internal.session.room.timeline.TimelineInput
 import org.matrix.android.sdk.internal.session.room.typing.TypingEventContent
+import org.matrix.android.sdk.internal.session.sync.ProgressReporter
 import org.matrix.android.sdk.internal.session.sync.SyncResponsePostTreatmentAggregator
+import org.matrix.android.sdk.internal.session.sync.mapWithProgress
 import org.matrix.android.sdk.internal.session.sync.parsing.RoomSyncAccountDataHandler
+import org.matrix.android.sdk.internal.session.sync.reportSubtask
 import org.matrix.android.sdk.internal.util.computeBestChunkSize
 import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
@@ -146,18 +146,18 @@ internal class RoomSyncHandler @Inject constructor(
                     // Rooms are already inserted, return an empty list
                     emptyList()
                 } else {
-                    handlingStrategy.data.mapWithProgress(reporter, InitSyncStep.ImportingAccountJoinedRooms, 0.6f) {
+                    handlingStrategy.data.mapWithProgress(reporter, InitialSyncStep.ImportingAccountJoinedRooms, 0.6f) {
                         handleJoinedRoom(realm, it.key, it.value, insertType, syncLocalTimeStampMillis, aggregator)
                     }
                 }
             }
             is HandlingStrategy.INVITED ->
-                handlingStrategy.data.mapWithProgress(reporter, InitSyncStep.ImportingAccountInvitedRooms, 0.1f) {
+                handlingStrategy.data.mapWithProgress(reporter, InitialSyncStep.ImportingAccountInvitedRooms, 0.1f) {
                     handleInvitedRoom(realm, it.key, it.value, insertType, syncLocalTimeStampMillis)
                 }
 
             is HandlingStrategy.LEFT    -> {
-                handlingStrategy.data.mapWithProgress(reporter, InitSyncStep.ImportingAccountLeftRooms, 0.3f) {
+                handlingStrategy.data.mapWithProgress(reporter, InitialSyncStep.ImportingAccountLeftRooms, 0.3f) {
                     handleLeftRoom(realm, it.key, it.value, insertType, syncLocalTimeStampMillis)
                 }
             }
@@ -178,7 +178,7 @@ internal class RoomSyncHandler @Inject constructor(
         )
 
         if (bestChunkSize.shouldChunk()) {
-            reportSubtask(reporter, InitSyncStep.ImportingAccountJoinedRooms, bestChunkSize.numberOfChunks, 0.6f) {
+            reportSubtask(reporter, InitialSyncStep.ImportingAccountJoinedRooms, bestChunkSize.numberOfChunks, 0.6f) {
                 Timber.d("INIT_SYNC ${handlingStrategy.data.keys.size} rooms to insert, split with $bestChunkSize")
                 // I cannot find a better way to chunk a map, so chunk the keys and then create new maps
                 handlingStrategy.data.keys
@@ -202,7 +202,7 @@ internal class RoomSyncHandler @Inject constructor(
             }
         } else {
             // No need to split
-            val rooms = handlingStrategy.data.mapWithProgress(reporter, InitSyncStep.ImportingAccountJoinedRooms, 0.6f) {
+            val rooms = handlingStrategy.data.mapWithProgress(reporter, InitialSyncStep.ImportingAccountJoinedRooms, 0.6f) {
                 handleJoinedRoom(realm, it.key, it.value, EventInsertType.INITIAL_SYNC, syncLocalTimeStampMillis, aggregator)
             }
             realm.insertOrUpdate(rooms)

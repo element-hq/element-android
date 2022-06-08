@@ -137,11 +137,11 @@ class CommonTestHelper private constructor(context: Context) {
     fun syncSession(session: Session, timeout: Long = TestConstants.timeOutMillis * 10) {
         val lock = CountDownLatch(1)
         coroutineScope.launch {
-            session.startSync(true)
-            val syncLiveData = session.getSyncStateLive()
+            session.syncService().startSync(true)
+            val syncLiveData = session.syncService().getSyncStateLive()
             val syncObserver = object : Observer<SyncState> {
                 override fun onChanged(t: SyncState?) {
-                    if (session.hasAlreadySynced()) {
+                    if (session.syncService().hasAlreadySynced()) {
                         lock.countDown()
                         syncLiveData.removeObserver(this)
                     }
@@ -160,10 +160,10 @@ class CommonTestHelper private constructor(context: Context) {
     fun clearCacheAndSync(session: Session, timeout: Long = TestConstants.timeOutMillis) {
         waitWithLatch(timeout) { latch ->
             session.clearCache()
-            val syncLiveData = session.getSyncStateLive()
+            val syncLiveData = session.syncService().getSyncStateLive()
             val syncObserver = object : Observer<SyncState> {
                 override fun onChanged(t: SyncState?) {
-                    if (session.hasAlreadySynced()) {
+                    if (session.syncService().hasAlreadySynced()) {
                         Timber.v("Clear cache and synced")
                         syncLiveData.removeObserver(this)
                         latch.countDown()
@@ -171,7 +171,7 @@ class CommonTestHelper private constructor(context: Context) {
                 }
             }
             syncLiveData.observeForever(syncObserver)
-            session.startSync(true)
+            session.syncService().startSync(true)
         }
     }
 

@@ -164,7 +164,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                     getEventFastLane(session, roomId, eventId)
 
                     Timber.tag(loggerTag.value).d("Requesting background sync")
-                    session.requireBackgroundSync()
+                    session.syncService().requireBackgroundSync()
                 }
             }
         } catch (e: Exception) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright (c) 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,20 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.home
+package org.matrix.android.sdk.internal.session
 
-import com.airbnb.mvrx.MavericksState
-import im.vector.app.features.onboarding.AuthenticationDescription
-import org.matrix.android.sdk.api.session.sync.SyncRequestState
+import javax.inject.Inject
 
-data class HomeActivityViewState(
-        val syncRequestState: SyncRequestState = SyncRequestState.Idle,
-        val authenticationDescription: AuthenticationDescription? = null
-) : MavericksState
+@SessionScope
+internal class SessionState @Inject constructor() {
+    var isOpen = false
+        private set
+
+    /**
+     * Set the new state. Throw if already in the new state.
+     */
+    fun setIsOpen(newState: Boolean) {
+        assert(newState != isOpen)
+        isOpen = newState
+    }
+}

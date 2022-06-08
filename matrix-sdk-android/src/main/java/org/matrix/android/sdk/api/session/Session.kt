@@ -17,8 +17,6 @@
 package org.matrix.android.sdk.api.session
 
 import androidx.annotation.MainThread
-import androidx.lifecycle.LiveData
-import kotlinx.coroutines.flow.SharedFlow
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.data.SessionParams
@@ -37,7 +35,6 @@ import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.group.GroupService
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 import org.matrix.android.sdk.api.session.identity.IdentityService
-import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
 import org.matrix.android.sdk.api.session.media.MediaService
 import org.matrix.android.sdk.api.session.openid.OpenIdService
@@ -55,8 +52,7 @@ import org.matrix.android.sdk.api.session.signout.SignOutService
 import org.matrix.android.sdk.api.session.space.SpaceService
 import org.matrix.android.sdk.api.session.statistics.StatisticsListener
 import org.matrix.android.sdk.api.session.sync.FilterService
-import org.matrix.android.sdk.api.session.sync.SyncState
-import org.matrix.android.sdk.api.session.sync.model.SyncResponse
+import org.matrix.android.sdk.api.session.sync.SyncService
 import org.matrix.android.sdk.api.session.terms.TermsService
 import org.matrix.android.sdk.api.session.thirdparty.ThirdPartyService
 import org.matrix.android.sdk.api.session.typing.TypingUsersTracker
@@ -99,57 +95,9 @@ interface Session {
     fun open()
 
     /**
-     * Requires a one time background sync.
-     */
-    fun requireBackgroundSync()
-
-    /**
-     * Launches infinite self rescheduling background syncs via the WorkManager.
-     *
-     * While dozing, syncs will only occur during maintenance windows.
-     * For reliability it's recommended to also start a long running foreground service
-     * along with disabling battery optimizations.
-     */
-    fun startAutomaticBackgroundSync(timeOutInSeconds: Long, repeatDelayInSeconds: Long)
-
-    fun stopAnyBackgroundSync()
-
-    /**
-     * This method start the sync thread.
-     */
-    fun startSync(fromForeground: Boolean)
-
-    /**
-     * This method stop the sync thread.
-     */
-    fun stopSync()
-
-    /**
      * Clear cache of the session.
      */
     suspend fun clearCache()
-
-    /**
-     * This method allows to listen the sync state.
-     * @return a [LiveData] of [SyncState].
-     */
-    fun getSyncStateLive(): LiveData<SyncState>
-
-    /**
-     * This method returns the current sync state.
-     * @return the current [SyncState].
-     */
-    fun getSyncState(): SyncState
-
-    /**
-     * This method returns a flow of SyncResponse. New value will be pushed through the sync thread.
-     */
-    fun syncFlow(): SharedFlow<SyncResponse>
-
-    /**
-     * This methods return true if an initial sync has been processed.
-     */
-    fun hasAlreadySynced(): Boolean
 
     /**
      * This method allow to close a session. It does stop some services.
@@ -247,9 +195,9 @@ interface Session {
     fun termsService(): TermsService
 
     /**
-     * Returns the SyncStatusService associated with the session.
+     * Returns the SyncService associated with the session.
      */
-    fun syncStatusService(): SyncStatusService
+    fun syncService(): SyncService
 
     /**
      * Returns the SecureStorageService associated with the session.

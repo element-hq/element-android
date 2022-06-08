@@ -71,7 +71,7 @@ class TimelineWithManyMembersTest : InstrumentedTest {
             val timelineForCurrentMember = roomForCurrentMember.timelineService().createTimeline(null, TimelineSettings(30))
             timelineForCurrentMember.start()
 
-            session.startSync(true)
+            session.syncService().startSync(true)
 
             run {
                 val lock = CountDownLatch(1)
@@ -92,7 +92,7 @@ class TimelineWithManyMembersTest : InstrumentedTest {
                 timelineForCurrentMember.addListener(eventsListener)
                 commonTestHelper.await(lock, 600_000)
             }
-            session.stopSync()
+            session.syncService().stopSync()
         }
     }
 }

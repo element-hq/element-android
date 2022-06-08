@@ -21,10 +21,10 @@ import okhttp3.ResponseBody
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.initsync.InitSyncStep
-import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.statistics.StatisticEvent
+import org.matrix.android.sdk.api.session.sync.InitialSyncStep
 import org.matrix.android.sdk.api.session.sync.InitialSyncStrategy
+import org.matrix.android.sdk.api.session.sync.SyncRequestState
 import org.matrix.android.sdk.api.session.sync.initialSyncStrategy
 import org.matrix.android.sdk.api.session.sync.model.LazyRoomSyncEphemeral
 import org.matrix.android.sdk.api.session.sync.model.SyncResponse
@@ -38,8 +38,6 @@ import org.matrix.android.sdk.internal.session.SessionListeners
 import org.matrix.android.sdk.internal.session.dispatchTo
 import org.matrix.android.sdk.internal.session.filter.FilterRepository
 import org.matrix.android.sdk.internal.session.homeserver.GetHomeServerCapabilitiesTask
-import org.matrix.android.sdk.internal.session.initsync.DefaultSyncStatusService
-import org.matrix.android.sdk.internal.session.initsync.reportSubtask
 import org.matrix.android.sdk.internal.session.sync.parsing.InitialSyncResponseParser
 import org.matrix.android.sdk.internal.session.user.UserStore
 import org.matrix.android.sdk.internal.task.Task
@@ -68,7 +66,7 @@ internal class DefaultSyncTask @Inject constructor(
         @UserId private val userId: String,
         private val filterRepository: FilterRepository,
         private val syncResponseHandler: SyncResponseHandler,
-        private val defaultSyncStatusService: DefaultSyncStatusService,
+        private val syncRequestStateTracker: SyncRequestStateTracker,
         private val syncTokenStore: SyncTokenStore,
         private val getHomeServerCapabilitiesTask: GetHomeServerCapabilitiesTask,
         private val userStore: UserStore,
@@ -115,7 +113,7 @@ internal class DefaultSyncTask @Inject constructor(
                     displayName = user?.displayName,
                     avatarUrl = user?.avatarUrl
             )
-            defaultSyncStatusService.startRoot(InitSyncStep.ImportingAccount, 100)
+            syncRequestStateTracker.startRoot(InitialSyncStep.ImportingAccount, 100)
         }
         // Maybe refresh the homeserver capabilities data we know
         getHomeServerCapabilitiesTask.execute(GetHomeServerCapabilitiesTask.Params(forceRefresh = false))
@@ -132,7 +130,7 @@ internal class DefaultSyncTask @Inject constructor(
                     roomSyncEphemeralTemporaryStore.reset()
                     workingDir.mkdirs()
                     val file = downloadInitSyncResponse(requestParams, syncStatisticsData)
-                    syncResponseToReturn = reportSubtask(defaultSyncStatusService, InitSyncStep.ImportingAccount, 1, 0.7F) {
+                    syncResponseToReturn = reportSubtask(syncRequestStateTracker, InitialSyncStep.ImportingAccount, 1, 0.7F) {
                         handleSyncFile(file, initSyncStrategy)
                     }
                     // Delete all files
@@ -150,15 +148,15 @@ internal class DefaultSyncTask @Inject constructor(
                     syncStatisticsData.requestInitSyncTime = SystemClock.elapsedRealtime()
                     syncStatisticsData.downloadInitSyncTime = syncStatisticsData.requestInitSyncTime
                     logDuration("INIT_SYNC Database insertion", loggerTag, clock) {
-                        syncResponseHandler.handleResponse(syncResponse, token, defaultSyncStatusService)
+                        syncResponseHandler.handleResponse(syncResponse, token, syncRequestStateTracker)
                     }
                     syncResponseToReturn = syncResponse
                 }
             }
-            defaultSyncStatusService.endAll()
+            syncRequestStateTracker.endAll()
         } else {
             Timber.tag(loggerTag.value).d("Start incremental sync request with since token $token")
-            defaultSyncStatusService.setStatus(SyncStatusService.Status.IncrementalSyncIdle)
+            syncRequestStateTracker.setSyncRequestState(SyncRequestState.IncrementalSyncIdle)
             val syncResponse = try {
                 executeRequest(globalErrorReceiver) {
                     syncAPI.sync(
@@ -168,7 +166,7 @@ internal class DefaultSyncTask @Inject constructor(
                 }
             } catch (throwable: Throwable) {
                 Timber.tag(loggerTag.value).e(throwable, "Incremental sync request error")
-                defaultSyncStatusService.setStatus(SyncStatusService.Status.IncrementalSyncError)
+                syncRequestStateTracker.setSyncRequestState(SyncRequestState.IncrementalSyncError)
                 throw throwable
             }
             val nbRooms = syncResponse.rooms?.invite.orEmpty().size + syncResponse.rooms?.join.orEmpty().size + syncResponse.rooms?.leave.orEmpty().size
@@ -177,8 +175,8 @@ internal class DefaultSyncTask @Inject constructor(
             Timber.tag(loggerTag.value).d(
                     "Incremental sync request parsing, $nbRooms room(s) $nbToDevice toDevice(s). Got nextBatch: $nextBatch"
             )
-            defaultSyncStatusService.setStatus(
-                    SyncStatusService.Status.IncrementalSyncParsing(
+            syncRequestStateTracker.setSyncRequestState(
+                    SyncRequestState.IncrementalSyncParsing(
                             rooms = nbRooms,
                             toDevice = nbToDevice
                     )
@@ -186,7 +184,7 @@ internal class DefaultSyncTask @Inject constructor(
             syncResponseHandler.handleResponse(syncResponse, token, null)
             syncResponseToReturn = syncResponse
             Timber.tag(loggerTag.value).d("Incremental sync done")
-            defaultSyncStatusService.setStatus(SyncStatusService.Status.IncrementalSyncDone)
+            syncRequestStateTracker.setSyncRequestState(SyncRequestState.IncrementalSyncDone)
         }
         syncStatisticsData.treatmentSyncTime = SystemClock.elapsedRealtime()
         syncStatisticsData.nbOfRooms = syncResponseToReturn?.rooms?.join?.size ?: 0
@@ -201,20 +199,20 @@ internal class DefaultSyncTask @Inject constructor(
         val status = initialSyncStatusRepository.getStep()
         if (workingFile.exists() && status >= InitialSyncStatus.STEP_DOWNLOADED) {
             Timber.tag(loggerTag.value).d("INIT_SYNC file is already here")
-            reportSubtask(defaultSyncStatusService, InitSyncStep.Downloading, 1, 0.3f) {
+            reportSubtask(syncRequestStateTracker, InitialSyncStep.Downloading, 1, 0.3f) {
                 // Empty task
             }
         } else {
             initialSyncStatusRepository.setStep(InitialSyncStatus.STEP_DOWNLOADING)
             val syncResponse = logDuration("INIT_SYNC Perform server request", loggerTag, clock) {
-                reportSubtask(defaultSyncStatusService, InitSyncStep.ServerComputing, 1, 0.2f) {
+                reportSubtask(syncRequestStateTracker, InitialSyncStep.ServerComputing, 1, 0.2f) {
                     getSyncResponse(requestParams, MAX_NUMBER_OF_RETRY_AFTER_TIMEOUT)
                 }
             }
             syncStatisticsData.requestInitSyncTime = SystemClock.elapsedRealtime()
             if (syncResponse.isSuccessful) {
                 logDuration("INIT_SYNC Download and save to file", loggerTag, clock) {
-                    reportSubtask(defaultSyncStatusService, InitSyncStep.Downloading, 1, 0.1f) {
+                    reportSubtask(syncRequestStateTracker, InitialSyncStep.Downloading, 1, 0.1f) {
                         syncResponse.body()?.byteStream()?.use { inputStream ->
                             workingFile.outputStream().use { outputStream ->
                                 inputStream.copyTo(outputStream)
@@ -263,7 +261,7 @@ internal class DefaultSyncTask @Inject constructor(
             Timber.tag(loggerTag.value).d("INIT_SYNC $nbOfJoinedRooms rooms, $nbOfJoinedRoomsInFile ephemeral stored into files")
 
             logDuration("INIT_SYNC Database insertion", loggerTag, clock) {
-                syncResponseHandler.handleResponse(syncResponse, null, defaultSyncStatusService)
+                syncResponseHandler.handleResponse(syncResponse, null, syncRequestStateTracker)
             }
             initialSyncStatusRepository.setStep(InitialSyncStatus.STEP_SUCCESS)
             syncResponse
