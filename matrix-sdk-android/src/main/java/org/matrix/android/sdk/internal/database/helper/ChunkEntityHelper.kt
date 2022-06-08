@@ -201,7 +201,7 @@ private fun handleReadReceipts(realm: Realm, roomId: String, eventEntity: EventE
 
 internal fun ChunkEntity.nextDisplayIndex(direction: PaginationDirection): Int {
     return when (direction) {
-        PaginationDirection.FORWARDS  -> {
+        PaginationDirection.FORWARDS -> {
             (timelineEvents.where().max(TimelineEventEntityFields.DISPLAY_INDEX)?.toInt() ?: 0) + 1
         }
         PaginationDirection.BACKWARDS -> {

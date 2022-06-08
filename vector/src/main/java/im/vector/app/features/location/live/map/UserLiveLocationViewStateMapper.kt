@@ -42,7 +42,7 @@ class UserLiveLocationViewStateMapper @Inject constructor(
                     userId.isNullOrEmpty() || locationData == null -> continuation.resume(null) {
                         // do nothing on cancellation
                     }
-                    else                                           -> {
+                    else -> {
                         locationPinProvider.create(userId) { pinDrawable ->
                             val session = activeSessionHolder.getActiveSession()
                             session.getUser(userId)?.toMatrixItem()?.let { matrixItem ->

@@ -57,7 +57,7 @@ class LocationSharingActivity : VectorBaseActivity<ActivityLocationSharingBindin
                             locationSharingArgs
                     )
                 }
-                LocationSharingMode.PREVIEW        -> {
+                LocationSharingMode.PREVIEW -> {
                     addFragment(
                             views.fragmentContainer,
                             LocationPreviewFragment::class.java,

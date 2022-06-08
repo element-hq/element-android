@@ -174,10 +174,10 @@ class RoomMemberListViewModel @AssistedInject constructor(
                     val userRole = powerLevelsHelper.getUserRole(roomMember.userId)
                     when {
                         roomMember.membership == Membership.INVITE -> invites.add(roomMember)
-                        userRole == Role.Admin                     -> admins.add(roomMember)
-                        userRole == Role.Moderator                 -> moderators.add(roomMember)
-                        userRole == Role.Default                   -> users.add(roomMember)
-                        else                                       -> customs.add(roomMember)
+                        userRole == Role.Admin -> admins.add(roomMember)
+                        userRole == Role.Moderator -> moderators.add(roomMember)
+                        userRole == Role.Default -> users.add(roomMember)
+                        else -> customs.add(roomMember)
                     }
                 }
 
@@ -193,7 +193,7 @@ class RoomMemberListViewModel @AssistedInject constructor(
     override fun handle(action: RoomMemberListAction) {
         when (action) {
             is RoomMemberListAction.RevokeThreePidInvite -> handleRevokeThreePidInvite(action)
-            is RoomMemberListAction.FilterMemberList     -> handleFilterMemberList(action)
+            is RoomMemberListAction.FilterMemberList -> handleFilterMemberList(action)
         }
     }
 

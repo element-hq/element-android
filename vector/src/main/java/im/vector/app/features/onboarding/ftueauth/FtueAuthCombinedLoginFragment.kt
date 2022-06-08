@@ -116,11 +116,11 @@ class FtueAuthCombinedLoginFragment @Inject constructor(
                 showUsernamePassword()
                 renderSsoProviders(state.deviceId, state.selectedHomeserver.preferredLoginMode.ssoIdentityProviders)
             }
-            is LoginMode.Sso            -> {
+            is LoginMode.Sso -> {
                 hideUsernamePassword()
                 renderSsoProviders(state.deviceId, state.selectedHomeserver.preferredLoginMode.ssoIdentityProviders)
             }
-            else                        -> {
+            else -> {
                 showUsernamePassword()
                 hideSsoProviders()
             }

@@ -31,7 +31,7 @@ internal enum class PaginationDirection(val value: String) {
 
     fun reversed(): PaginationDirection {
         return when (this) {
-            FORWARDS  -> BACKWARDS
+            FORWARDS -> BACKWARDS
             BACKWARDS -> FORWARDS
         }
     }

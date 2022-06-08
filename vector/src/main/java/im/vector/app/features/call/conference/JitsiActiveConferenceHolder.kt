@@ -37,9 +37,9 @@ class JitsiActiveConferenceHolder @Inject constructor(context: Context) {
 
     private fun onBroadcastEvent(conferenceEvent: ConferenceEvent) {
         when (conferenceEvent) {
-            is ConferenceEvent.Joined     -> activeConference = conferenceEvent.extractConferenceUrl()
+            is ConferenceEvent.Joined -> activeConference = conferenceEvent.extractConferenceUrl()
             is ConferenceEvent.Terminated -> activeConference = null
-            else                          -> Unit
+            else -> Unit
         }
     }
 }

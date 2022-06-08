@@ -198,15 +198,15 @@ class DevicesViewModel @AssistedInject constructor(
 
     override fun handle(action: DevicesAction) {
         return when (action) {
-            is DevicesAction.Refresh                -> queryRefreshDevicesList()
-            is DevicesAction.Delete                 -> handleDelete(action)
-            is DevicesAction.Rename                 -> handleRename(action)
-            is DevicesAction.PromptRename           -> handlePromptRename(action)
-            is DevicesAction.VerifyMyDevice         -> handleInteractiveVerification(action)
-            is DevicesAction.CompleteSecurity       -> handleCompleteSecurity()
+            is DevicesAction.Refresh -> queryRefreshDevicesList()
+            is DevicesAction.Delete -> handleDelete(action)
+            is DevicesAction.Rename -> handleRename(action)
+            is DevicesAction.PromptRename -> handlePromptRename(action)
+            is DevicesAction.VerifyMyDevice -> handleInteractiveVerification(action)
+            is DevicesAction.CompleteSecurity -> handleCompleteSecurity()
             is DevicesAction.MarkAsManuallyVerified -> handleVerifyManually(action)
             is DevicesAction.VerifyMyDeviceManually -> handleShowDeviceCryptoInfo(action)
-            is DevicesAction.SsoAuthDone            -> {
+            is DevicesAction.SsoAuthDone -> {
                 // we should use token based auth
                 // _viewEvents.post(CrossSigningSettingsViewEvents.ShowModalWaitingView(null))
                 // will release the interactive auth interceptor
@@ -218,7 +218,7 @@ class DevicesViewModel @AssistedInject constructor(
                 }
                 Unit
             }
-            is DevicesAction.PasswordAuthDone       -> {
+            is DevicesAction.PasswordAuthDone -> {
                 val decryptedPass = session.secureStorageService()
                         .loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
                 uiaContinuation?.resume(
@@ -230,7 +230,7 @@ class DevicesViewModel @AssistedInject constructor(
                 )
                 Unit
             }
-            DevicesAction.ReAuthCancelled           -> {
+            DevicesAction.ReAuthCancelled -> {
                 Timber.d("## UIA - Reauth cancelled")
 //                _viewEvents.post(DevicesViewEvents.Loading)
                 uiaContinuation?.resumeWithException(Exception())

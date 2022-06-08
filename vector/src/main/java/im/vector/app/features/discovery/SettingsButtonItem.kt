@@ -56,7 +56,7 @@ abstract class SettingsButtonItem : EpoxyModelWithHolder<SettingsButtonItem.Hold
         }
 
         when (buttonStyle) {
-            ButtonStyle.POSITIVE    -> {
+            ButtonStyle.POSITIVE -> {
                 holder.button.setTextColor(colorProvider.getColorFromAttribute(R.attr.colorPrimary))
             }
             ButtonStyle.DESTRUCTIVE -> {

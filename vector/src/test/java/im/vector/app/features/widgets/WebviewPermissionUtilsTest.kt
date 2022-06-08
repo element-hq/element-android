@@ -38,7 +38,8 @@ class WebviewPermissionUtilsTest {
     fun filterPermissionsToBeGranted_selectedAndGrantedNothing() {
         val permissions = utils.filterPermissionsToBeGranted(
                 selectedWebPermissions = listOf(),
-                androidPermissionResult = mapOf())
+                androidPermissionResult = mapOf()
+        )
         permissions shouldBeEqualTo listOf()
     }
 
@@ -46,7 +47,8 @@ class WebviewPermissionUtilsTest {
     fun filterPermissionsToBeGranted_selectedNothingGrantedCamera() {
         val permissions = utils.filterPermissionsToBeGranted(
                 selectedWebPermissions = listOf(),
-                androidPermissionResult = mapOf(Manifest.permission.CAMERA to true))
+                androidPermissionResult = mapOf(Manifest.permission.CAMERA to true)
+        )
         permissions shouldBeEqualTo listOf()
     }
 
@@ -54,7 +56,8 @@ class WebviewPermissionUtilsTest {
     fun filterPermissionsToBeGranted_selectedAndPreviouslyGrantedCamera() {
         val permissions = utils.filterPermissionsToBeGranted(
                 selectedWebPermissions = listOf(PermissionRequest.RESOURCE_VIDEO_CAPTURE),
-                androidPermissionResult = mapOf())
+                androidPermissionResult = mapOf()
+        )
         permissions shouldBeEqualTo listOf(PermissionRequest.RESOURCE_VIDEO_CAPTURE)
     }
 
@@ -62,7 +65,8 @@ class WebviewPermissionUtilsTest {
     fun filterPermissionsToBeGranted_selectedAndGrantedCamera() {
         val permissions = utils.filterPermissionsToBeGranted(
                 selectedWebPermissions = listOf(PermissionRequest.RESOURCE_VIDEO_CAPTURE),
-                androidPermissionResult = mapOf(Manifest.permission.CAMERA to true))
+                androidPermissionResult = mapOf(Manifest.permission.CAMERA to true)
+        )
         permissions shouldBeEqualTo listOf(PermissionRequest.RESOURCE_VIDEO_CAPTURE)
     }
 
@@ -70,7 +74,8 @@ class WebviewPermissionUtilsTest {
     fun filterPermissionsToBeGranted_selectedAndDeniedCamera() {
         val permissions = utils.filterPermissionsToBeGranted(
                 selectedWebPermissions = listOf(PermissionRequest.RESOURCE_VIDEO_CAPTURE),
-                androidPermissionResult = mapOf(Manifest.permission.CAMERA to false))
+                androidPermissionResult = mapOf(Manifest.permission.CAMERA to false)
+        )
         permissions shouldBeEqualTo listOf()
     }
 
@@ -78,7 +83,8 @@ class WebviewPermissionUtilsTest {
     fun filterPermissionsToBeGranted_selectedProtectedMediaGrantedNothing() {
         val permissions = utils.filterPermissionsToBeGranted(
                 selectedWebPermissions = listOf(PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID),
-                androidPermissionResult = mapOf(Manifest.permission.CAMERA to false))
+                androidPermissionResult = mapOf(Manifest.permission.CAMERA to false)
+        )
         permissions shouldBeEqualTo listOf(PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID)
     }
 }

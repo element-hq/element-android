@@ -66,13 +66,13 @@ class DevicesController @Inject constructor(
                 loadingItem {
                     id("loading")
                 }
-            is Fail          ->
+            is Fail ->
                 errorWithRetryItem {
                     id("error")
                     text(host.errorFormatter.toHumanReadable(devices.error))
                     listener { host.callback?.retry() }
                 }
-            is Success       ->
+            is Success ->
                 buildDevicesList(devices(), state.myDeviceId, !state.hasAccountCrossSigning, state.accountCrossSigningIsTrusted)
         }
     }

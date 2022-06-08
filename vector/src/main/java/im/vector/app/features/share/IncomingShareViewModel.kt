@@ -91,12 +91,12 @@ class IncomingShareViewModel @AssistedInject constructor(
 
     override fun handle(action: IncomingShareAction) {
         when (action) {
-            is IncomingShareAction.SelectRoom           -> handleSelectRoom(action)
+            is IncomingShareAction.SelectRoom -> handleSelectRoom(action)
             is IncomingShareAction.ShareToSelectedRooms -> handleShareToSelectedRooms()
-            is IncomingShareAction.ShareToRoom          -> handleShareToRoom(action)
-            is IncomingShareAction.ShareMedia           -> handleShareMediaToSelectedRooms(action)
-            is IncomingShareAction.FilterWith           -> handleFilter(action)
-            is IncomingShareAction.UpdateSharedData     -> handleUpdateSharedData(action)
+            is IncomingShareAction.ShareToRoom -> handleShareToRoom(action)
+            is IncomingShareAction.ShareMedia -> handleShareMediaToSelectedRooms(action)
+            is IncomingShareAction.FilterWith -> handleFilter(action)
+            is IncomingShareAction.UpdateSharedData -> handleUpdateSharedData(action)
         }
     }
 
@@ -117,7 +117,7 @@ class IncomingShareViewModel @AssistedInject constructor(
             _viewEvents.post(IncomingShareViewEvents.ShareToRoom(selectedRoom, sharedData, showAlert = false))
         } else {
             when (sharedData) {
-                is SharedData.Text        -> {
+                is SharedData.Text -> {
                     state.selectedRoomIds.forEach { roomId ->
                         val room = session.getRoom(roomId)
                         room?.sendService()?.sendTextMessage(sharedData.text)
@@ -201,7 +201,7 @@ class IncomingShareViewModel @AssistedInject constructor(
                     // Do not show alert if the shared data contains only previewable attachments, because the user will get another chance to cancel the share
                     sharedData.attachmentData.all { it.isPreviewable() }
                 }
-                is SharedData.Text        -> {
+                is SharedData.Text -> {
                     // Do not show alert when sharing text to one room, because it will just fill the composer
                     true
                 }

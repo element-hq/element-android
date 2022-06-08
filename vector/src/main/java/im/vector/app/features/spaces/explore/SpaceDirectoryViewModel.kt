@@ -192,40 +192,40 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
 
     override fun handle(action: SpaceDirectoryViewAction) {
         when (action) {
-            is SpaceDirectoryViewAction.ExploreSubSpace          -> {
+            is SpaceDirectoryViewAction.ExploreSubSpace -> {
                 handleExploreSubSpace(action)
             }
-            SpaceDirectoryViewAction.HandleBack                  -> {
+            SpaceDirectoryViewAction.HandleBack -> {
                 handleBack()
             }
-            is SpaceDirectoryViewAction.JoinOrOpen               -> {
+            is SpaceDirectoryViewAction.JoinOrOpen -> {
                 handleJoinOrOpen(action.spaceChildInfo)
             }
-            is SpaceDirectoryViewAction.NavigateToRoom           -> {
+            is SpaceDirectoryViewAction.NavigateToRoom -> {
                 _viewEvents.post(SpaceDirectoryViewEvents.NavigateToRoom(action.roomId))
             }
-            is SpaceDirectoryViewAction.ShowDetails              -> {
+            is SpaceDirectoryViewAction.ShowDetails -> {
                 // This is temporary for now to at least display something for the space beta
                 // It's not ideal as it's doing some peeking that is not needed.
                 session.permalinkService().createRoomPermalink(action.spaceChildInfo.childRoomId)?.let {
                     _viewEvents.post(SpaceDirectoryViewEvents.NavigateToMxToBottomSheet(it))
                 }
             }
-            SpaceDirectoryViewAction.Retry                       -> {
+            SpaceDirectoryViewAction.Retry -> {
                 handleRetry()
             }
-            is SpaceDirectoryViewAction.RefreshUntilFound        -> {
+            is SpaceDirectoryViewAction.RefreshUntilFound -> {
                 handleRefreshUntilFound(action.roomIdToFind)
             }
             SpaceDirectoryViewAction.LoadAdditionalItemsIfNeeded -> {
                 loadAdditionalItemsIfNeeded()
             }
-            is SpaceDirectoryViewAction.CreateNewRoom            -> {
+            is SpaceDirectoryViewAction.CreateNewRoom -> {
                 withState { state ->
                     _viewEvents.post(SpaceDirectoryViewEvents.NavigateToCreateNewRoom(state.currentRootSummary?.roomId ?: initialState.spaceId))
                 }
             }
-            is SpaceDirectoryViewAction.FilterRooms              -> {
+            is SpaceDirectoryViewAction.FilterRooms -> {
                 filter(action.query)
             }
         }
@@ -338,10 +338,10 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
         }
         val shouldLoad = when (state.apiResults[newRootId]) {
             Uninitialized -> true
-            is Loading    -> false
-            is Success    -> false
-            is Fail       -> true
-            null          -> true
+            is Loading -> false
+            is Success -> false
+            is Fail -> true
+            null -> true
         }
 
         if (shouldLoad) {

@@ -62,7 +62,7 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
                 EventType.REDACTION,
                 EventType.ENCRYPTED,
                 EventType.STATE_ROOM_MEMBER -> true
-                else                        -> false
+                else -> false
             }
         }.filter {
             it.senderId != userId

@@ -58,7 +58,7 @@ internal class WaveFormSanitizer @Inject constructor() {
                     }
                 }
             }
-            else                                 -> {
+            else -> {
                 sizeInRangeList.addAll(waveForm)
             }
         }

@@ -41,7 +41,7 @@ object TrustUtils {
                     }
                 }
             }
-            else          -> {
+            else -> {
                 if (legacyMode) {
                     // use local trust
                     if (deviceTrustLevel?.locallyVerified == true) {
@@ -55,8 +55,8 @@ object TrustUtils {
                         when {
                             deviceTrustLevel?.crossSigningVerified == true -> RoomEncryptionTrustLevel.Trusted
 
-                            deviceTrustLevel?.locallyVerified == true      -> RoomEncryptionTrustLevel.Default
-                            else                                           -> RoomEncryptionTrustLevel.Warning
+                            deviceTrustLevel?.locallyVerified == true -> RoomEncryptionTrustLevel.Default
+                            else -> RoomEncryptionTrustLevel.Warning
                         }
                     } else {
                         // The current session is untrusted, so displays others in black

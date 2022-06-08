@@ -138,30 +138,30 @@ class OnboardingViewModel @AssistedInject constructor(
 
     override fun handle(action: OnboardingAction) {
         when (action) {
-            is OnboardingAction.SplashAction               -> handleSplashAction(action)
-            is OnboardingAction.UpdateUseCase              -> handleUpdateUseCase(action)
-            OnboardingAction.ResetUseCase                  -> resetUseCase()
-            is OnboardingAction.UpdateServerType           -> handleUpdateServerType(action)
-            is OnboardingAction.UpdateSignMode             -> handleUpdateSignMode(action)
-            is OnboardingAction.InitWith                   -> handleInitWith(action)
-            is OnboardingAction.HomeServerChange           -> withAction(action) { handleHomeserverChange(action) }
-            is AuthenticateAction                          -> withAction(action) { handleAuthenticateAction(action) }
-            is OnboardingAction.LoginWithToken             -> handleLoginWithToken(action)
-            is OnboardingAction.WebLoginSuccess            -> handleWebLoginSuccess(action)
-            is OnboardingAction.ResetPassword              -> handleResetPassword(action)
+            is OnboardingAction.SplashAction -> handleSplashAction(action)
+            is OnboardingAction.UpdateUseCase -> handleUpdateUseCase(action)
+            OnboardingAction.ResetUseCase -> resetUseCase()
+            is OnboardingAction.UpdateServerType -> handleUpdateServerType(action)
+            is OnboardingAction.UpdateSignMode -> handleUpdateSignMode(action)
+            is OnboardingAction.InitWith -> handleInitWith(action)
+            is OnboardingAction.HomeServerChange -> withAction(action) { handleHomeserverChange(action) }
+            is AuthenticateAction -> withAction(action) { handleAuthenticateAction(action) }
+            is OnboardingAction.LoginWithToken -> handleLoginWithToken(action)
+            is OnboardingAction.WebLoginSuccess -> handleWebLoginSuccess(action)
+            is OnboardingAction.ResetPassword -> handleResetPassword(action)
             is OnboardingAction.ResetPasswordMailConfirmed -> handleResetPasswordMailConfirmed()
-            is OnboardingAction.PostRegisterAction         -> handleRegisterAction(action.registerAction, ::emitFlowResultViewEvent)
-            is OnboardingAction.ResetAction                -> handleResetAction(action)
-            is OnboardingAction.UserAcceptCertificate      -> handleUserAcceptCertificate(action)
-            OnboardingAction.ClearHomeServerHistory        -> handleClearHomeServerHistory()
-            is OnboardingAction.UpdateDisplayName          -> updateDisplayName(action.displayName)
-            OnboardingAction.UpdateDisplayNameSkipped      -> handleDisplayNameStepComplete()
-            OnboardingAction.UpdateProfilePictureSkipped   -> completePersonalization()
-            OnboardingAction.PersonalizeProfile            -> handlePersonalizeProfile()
-            is OnboardingAction.ProfilePictureSelected     -> handleProfilePictureSelected(action)
-            OnboardingAction.SaveSelectedProfilePicture    -> updateProfilePicture()
-            is OnboardingAction.PostViewEvent              -> _viewEvents.post(action.viewEvent)
-            OnboardingAction.StopEmailValidationCheck      -> cancelWaitForEmailValidation()
+            is OnboardingAction.PostRegisterAction -> handleRegisterAction(action.registerAction, ::emitFlowResultViewEvent)
+            is OnboardingAction.ResetAction -> handleResetAction(action)
+            is OnboardingAction.UserAcceptCertificate -> handleUserAcceptCertificate(action)
+            OnboardingAction.ClearHomeServerHistory -> handleClearHomeServerHistory()
+            is OnboardingAction.UpdateDisplayName -> updateDisplayName(action.displayName)
+            OnboardingAction.UpdateDisplayNameSkipped -> handleDisplayNameStepComplete()
+            OnboardingAction.UpdateProfilePictureSkipped -> completePersonalization()
+            OnboardingAction.PersonalizeProfile -> handlePersonalizeProfile()
+            is OnboardingAction.ProfilePictureSelected -> handleProfilePictureSelected(action)
+            OnboardingAction.SaveSelectedProfilePicture -> updateProfilePicture()
+            is OnboardingAction.PostViewEvent -> _viewEvents.post(action.viewEvent)
+            OnboardingAction.StopEmailValidationCheck -> cancelWaitForEmailValidation()
         }
     }
 
@@ -172,8 +172,8 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private fun handleAuthenticateAction(action: AuthenticateAction) {
         when (action) {
-            is AuthenticateAction.Register    -> handleRegisterWith(action)
-            is AuthenticateAction.Login       -> handleLogin(action)
+            is AuthenticateAction.Register -> handleRegisterWith(action)
+            is AuthenticateAction.Login -> handleLogin(action)
             is AuthenticateAction.LoginDirect -> handleDirectLogin(action, homeServerConnectionConfig = null)
         }
     }
@@ -185,7 +185,7 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private fun continueToPageAfterSplash(onboardingFlow: OnboardingFlow) {
         when (onboardingFlow) {
-            OnboardingFlow.SignUp       -> {
+            OnboardingFlow.SignUp -> {
                 _viewEvents.post(
                         if (vectorFeatures.isOnboardingUseCaseEnabled()) {
                             OnboardingViewEvents.OpenUseCaseSelection
@@ -194,11 +194,11 @@ class OnboardingViewModel @AssistedInject constructor(
                         }
                 )
             }
-            OnboardingFlow.SignIn       -> when {
+            OnboardingFlow.SignIn -> when {
                 vectorFeatures.isOnboardingCombinedLoginEnabled() -> {
                     handle(OnboardingAction.HomeServerChange.SelectHomeServer(deeplinkOrDefaultHomeserverUrl()))
                 }
-                else                                              -> openServerSelectionOrDeeplinkToOther()
+                else -> openServerSelectionOrDeeplinkToOther()
             }
 
             OnboardingFlow.SignInSignUp -> openServerSelectionOrDeeplinkToOther()
@@ -221,7 +221,7 @@ class OnboardingViewModel @AssistedInject constructor(
                         ?.let { it.copy(allowedFingerprints = it.allowedFingerprints + action.fingerprint) }
                         ?.let { startAuthenticationFlow(finalLastAction, it, serverTypeOverride = null) }
             }
-            is AuthenticateAction.LoginDirect                     ->
+            is AuthenticateAction.LoginDirect ->
                 handleDirectLogin(
                         finalLastAction,
                         HomeServerConnectionConfig.Builder()
@@ -230,7 +230,7 @@ class OnboardingViewModel @AssistedInject constructor(
                                 .withAllowedFingerPrints(listOf(action.fingerprint))
                                 .build()
                 )
-            else                                                  -> Unit
+            else -> Unit
         }
     }
 
@@ -271,7 +271,7 @@ class OnboardingViewModel @AssistedInject constructor(
         // Allow email verification polling to coexist with other jobs
         when (action) {
             is RegisterAction.CheckIfEmailHasBeenValidated -> emailVerificationPollingJob = job
-            else                                           -> currentJob = job
+            else -> currentJob = job
         }
     }
 
@@ -283,15 +283,15 @@ class OnboardingViewModel @AssistedInject constructor(
                                 action.ignoresResult() -> {
                                     // do nothing
                                 }
-                                else                   -> when (it) {
-                                    is RegistrationResult.Complete         -> onSessionCreated(
+                                else -> when (it) {
+                                    is RegistrationResult.Complete -> onSessionCreated(
                                             it.session,
                                             authenticationDescription = awaitState().selectedAuthenticationState.description
                                                     ?: AuthenticationDescription.Register(AuthenticationDescription.AuthenticationType.Other)
                                     )
-                                    is RegistrationResult.NextStep         -> onFlowResponse(it.flowResult, onNextRegistrationStepAction)
+                                    is RegistrationResult.NextStep -> onFlowResponse(it.flowResult, onNextRegistrationStepAction)
                                     is RegistrationResult.SendEmailSuccess -> _viewEvents.post(OnboardingViewEvents.OnSendEmailSuccess(it.email))
-                                    is RegistrationResult.Error            -> _viewEvents.post(OnboardingViewEvents.Failure(it.cause))
+                                    is RegistrationResult.Error -> _viewEvents.post(OnboardingViewEvents.Failure(it.cause))
                                 }
                             }
                         },
@@ -309,7 +309,7 @@ class OnboardingViewModel @AssistedInject constructor(
                 state.hasSelectedMatrixOrg() && vectorFeatures.isOnboardingCombinedRegisterEnabled() -> flowResult.copy(
                         missingStages = flowResult.missingStages.sortedWith(MatrixOrgRegistrationStagesComparator())
                 )
-                else                                                                                 -> flowResult
+                else -> flowResult
             }
             _viewEvents.post(OnboardingViewEvents.RegistrationFlowResult(orderedResult, isRegistrationStarted))
         }
@@ -339,10 +339,10 @@ class OnboardingViewModel @AssistedInject constructor(
         emailVerificationPollingJob = null
 
         when (action) {
-            OnboardingAction.ResetHomeServerType        -> {
+            OnboardingAction.ResetHomeServerType -> {
                 setState { copy(serverType = ServerType.Unknown) }
             }
-            OnboardingAction.ResetHomeServerUrl         -> {
+            OnboardingAction.ResetHomeServerUrl -> {
                 viewModelScope.launch {
                     authenticationService.reset()
                     setState {
@@ -353,7 +353,7 @@ class OnboardingViewModel @AssistedInject constructor(
                     }
                 }
             }
-            OnboardingAction.ResetSignMode              -> {
+            OnboardingAction.ResetSignMode -> {
                 setState {
                     copy(
                             isLoading = false,
@@ -367,7 +367,7 @@ class OnboardingViewModel @AssistedInject constructor(
                     setState { copy(isLoading = false) }
                 }
             }
-            OnboardingAction.ResetResetPassword         -> {
+            OnboardingAction.ResetResetPassword -> {
                 setState {
                     copy(
                             isLoading = false,
@@ -375,17 +375,17 @@ class OnboardingViewModel @AssistedInject constructor(
                     )
                 }
             }
-            OnboardingAction.ResetDeeplinkConfig        -> loginConfig = null
+            OnboardingAction.ResetDeeplinkConfig -> loginConfig = null
         }
     }
 
     private fun handleUpdateSignMode(action: OnboardingAction.UpdateSignMode) {
         updateSignMode(action.signMode)
         when (action.signMode) {
-            SignMode.SignUp             -> handleRegisterAction(RegisterAction.StartRegistration, ::emitFlowResultViewEvent)
-            SignMode.SignIn             -> startAuthenticationFlow()
+            SignMode.SignUp -> handleRegisterAction(RegisterAction.StartRegistration, ::emitFlowResultViewEvent)
+            SignMode.SignIn -> startAuthenticationFlow()
             SignMode.SignInWithMatrixId -> _viewEvents.post(OnboardingViewEvents.OnSignModeSelected(SignMode.SignInWithMatrixId))
-            SignMode.Unknown            -> Unit
+            SignMode.Unknown -> Unit
         }
     }
 
@@ -396,7 +396,7 @@ class OnboardingViewModel @AssistedInject constructor(
     private fun handleUpdateUseCase(action: OnboardingAction.UpdateUseCase) {
         setState { copy(useCase = action.useCase) }
         when (vectorFeatures.isOnboardingCombinedRegisterEnabled()) {
-            true  -> handle(OnboardingAction.HomeServerChange.SelectHomeServer(deeplinkOrDefaultHomeserverUrl()))
+            true -> handle(OnboardingAction.HomeServerChange.SelectHomeServer(deeplinkOrDefaultHomeserverUrl()))
             false -> _viewEvents.post(OnboardingViewEvents.OpenServerSelection)
         }
     }
@@ -415,12 +415,12 @@ class OnboardingViewModel @AssistedInject constructor(
         }
 
         when (action.serverType) {
-            ServerType.Unknown   -> Unit /* Should not happen */
+            ServerType.Unknown -> Unit /* Should not happen */
             ServerType.MatrixOrg ->
                 // Request login flow here
                 handle(OnboardingAction.HomeServerChange.SelectHomeServer(matrixOrgUrl))
             ServerType.EMS,
-            ServerType.Other     -> _viewEvents.post(OnboardingViewEvents.OnServerSelectionDone(action.serverType))
+            ServerType.Other -> _viewEvents.post(OnboardingViewEvents.OnServerSelectionDone(action.serverType))
         }
     }
 
@@ -562,7 +562,7 @@ class OnboardingViewModel @AssistedInject constructor(
                 }
                 _viewEvents.post(OnboardingViewEvents.OnAccountCreated)
             }
-            AuthenticationDescription.Login       -> {
+            AuthenticationDescription.Login -> {
                 setState { copy(isLoading = false) }
                 _viewEvents.post(OnboardingViewEvents.OnAccountSignedIn)
             }
@@ -579,7 +579,7 @@ class OnboardingViewModel @AssistedInject constructor(
                         supportsChangingProfilePicture = capabilityOverrides?.canChangeAvatar ?: homeServerCapabilities.canChangeAvatar
                 )
             }
-            else                                            -> state.personalizationState
+            else -> state.personalizationState
         }
     }
 
@@ -633,12 +633,12 @@ class OnboardingViewModel @AssistedInject constructor(
             error.isHomeserverUnavailable() && applicationContext.inferNoConnectivity(buildMeta) -> _viewEvents.post(
                     OnboardingViewEvents.Failure(error)
             )
-            deeplinkUrlIsUnavailable(error, trigger)                                             -> _viewEvents.post(
+            deeplinkUrlIsUnavailable(error, trigger) -> _viewEvents.post(
                     OnboardingViewEvents.DeeplinkAuthenticationFailure(
                             retryAction = (trigger as OnboardingAction.HomeServerChange.SelectHomeServer).resetToDefaultUrl()
                     )
             )
-            else                                                                                 -> _viewEvents.post(
+            else -> _viewEvents.post(
                     OnboardingViewEvents.Failure(error)
             )
         }
@@ -665,7 +665,7 @@ class OnboardingViewModel @AssistedInject constructor(
             is OnboardingAction.HomeServerChange.SelectHomeServer -> {
                 onHomeServerSelected(config, serverTypeOverride, authResult)
             }
-            is OnboardingAction.HomeServerChange.EditHomeServer   -> {
+            is OnboardingAction.HomeServerChange.EditHomeServer -> {
                 onHomeServerEdited(config, serverTypeOverride, authResult)
             }
         }
@@ -678,7 +678,7 @@ class OnboardingViewModel @AssistedInject constructor(
                 OnboardingFlow.SignIn -> {
                     updateSignMode(SignMode.SignIn)
                     when (vectorFeatures.isOnboardingCombinedLoginEnabled()) {
-                        true  -> _viewEvents.post(OnboardingViewEvents.OpenCombinedLogin)
+                        true -> _viewEvents.post(OnboardingViewEvents.OpenCombinedLogin)
                         false -> _viewEvents.post(OnboardingViewEvents.OnSignModeSelected(SignMode.SignIn))
                     }
                 }
@@ -687,7 +687,7 @@ class OnboardingViewModel @AssistedInject constructor(
                     internalRegisterAction(RegisterAction.StartRegistration, ::emitFlowResultViewEvent)
                 }
                 OnboardingFlow.SignInSignUp,
-                null                  -> {
+                null -> {
                     _viewEvents.post(OnboardingViewEvents.OnLoginFlowRetrieved)
                 }
             }
@@ -706,7 +706,7 @@ class OnboardingViewModel @AssistedInject constructor(
                 updateServerSelection(config, serverTypeOverride, authResult)
                 _viewEvents.post(OnboardingViewEvents.OnHomeserverEdited)
             }
-            else                  -> throw IllegalArgumentException("developer error")
+            else -> throw IllegalArgumentException("developer error")
         }
     }
 
@@ -770,9 +770,9 @@ class OnboardingViewModel @AssistedInject constructor(
     private fun handlePersonalizeProfile() {
         withPersonalisationState {
             when {
-                it.supportsChangingDisplayName    -> _viewEvents.post(OnboardingViewEvents.OnChooseDisplayName)
+                it.supportsChangingDisplayName -> _viewEvents.post(OnboardingViewEvents.OnChooseDisplayName)
                 it.supportsChangingProfilePicture -> _viewEvents.post(OnboardingViewEvents.OnChooseProfilePicture)
-                else                              -> {
+                else -> {
                     throw IllegalStateException("It should not be possible to personalize without supporting display name or avatar changing")
                 }
             }
@@ -783,7 +783,7 @@ class OnboardingViewModel @AssistedInject constructor(
         withPersonalisationState {
             when {
                 it.supportsChangingProfilePicture -> _viewEvents.post(OnboardingViewEvents.OnChooseProfilePicture)
-                else                              -> completePersonalization()
+                else -> completePersonalization()
             }
         }
     }
@@ -847,6 +847,6 @@ private fun LoginMode.supportsSignModeScreen(): Boolean {
         is LoginMode.SsoAndPassword -> true
         is LoginMode.Sso,
         LoginMode.Unknown,
-        LoginMode.Unsupported       -> false
+        LoginMode.Unsupported -> false
     }
 }

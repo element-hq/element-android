@@ -346,7 +346,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
                 // FIXME I cannot use this anymore :/
                 // finishActivity(PinActivity.PIN_REQUEST_CODE)
             }
-            else               -> {
+            else -> {
                 if (pinLocker.getLiveState().value != PinLocker.State.UNLOCKED) {
                     // Remove the task, to be sure that PIN code will be requested when resumed
                     finishAndRemoveTask()

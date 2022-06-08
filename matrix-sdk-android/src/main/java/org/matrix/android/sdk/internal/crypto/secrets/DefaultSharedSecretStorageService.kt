@@ -179,7 +179,7 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
                             throw SharedSecretStorageError.UnknownAlgorithm(key.keyInfo.content.algorithm ?: "")
                         }
                     }
-                    is KeyInfoResult.Error   -> throw key.error
+                    is KeyInfoResult.Error -> throw key.error
                 }
             }
 

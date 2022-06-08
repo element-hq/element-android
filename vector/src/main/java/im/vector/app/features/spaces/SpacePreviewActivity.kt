@@ -44,9 +44,9 @@ class SpacePreviewActivity : VectorBaseActivity<ActivitySimpleBinding>() {
                 .stream()
                 .onEach { action ->
                     when (action) {
-                        SpacePreviewSharedAction.DismissAction       -> finish()
-                        SpacePreviewSharedAction.ShowModalLoading    -> showWaitingView()
-                        SpacePreviewSharedAction.HideModalLoading    -> hideWaitingView()
+                        SpacePreviewSharedAction.DismissAction -> finish()
+                        SpacePreviewSharedAction.ShowModalLoading -> showWaitingView()
+                        SpacePreviewSharedAction.HideModalLoading -> hideWaitingView()
                         is SpacePreviewSharedAction.ShowErrorMessage -> action.error?.let { showSnackbar(it) }
                     }
                 }

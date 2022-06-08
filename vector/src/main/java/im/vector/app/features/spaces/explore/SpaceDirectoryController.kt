@@ -169,8 +169,8 @@ class SpaceDirectoryController @Inject constructor(
                             buttonLabel(
                                     when {
                                         error != null -> host.stringProvider.getString(R.string.global_retry)
-                                        isJoined      -> host.stringProvider.getString(R.string.action_open)
-                                        else          -> host.stringProvider.getString(R.string.action_join)
+                                        isJoined -> host.stringProvider.getString(R.string.action_open)
+                                        else -> host.stringProvider.getString(R.string.action_join)
                                     }
                             )
                             apply {

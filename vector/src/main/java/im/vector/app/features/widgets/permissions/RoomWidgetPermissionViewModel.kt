@@ -95,7 +95,7 @@ class RoomWidgetPermissionViewModel @AssistedInject constructor(
         when (action) {
             RoomWidgetPermissionActions.AllowWidget -> handleAllowWidget()
             RoomWidgetPermissionActions.BlockWidget -> handleRevokeWidget()
-            RoomWidgetPermissionActions.DoClose     -> Unit
+            RoomWidgetPermissionActions.DoClose -> Unit
         }
     }
 

@@ -183,7 +183,7 @@ class MessageActionsViewModel @AssistedInject constructor(
             } else {
                 when (timelineEvent.root.getClearType()) {
                     EventType.MESSAGE,
-                    EventType.STICKER       -> {
+                    EventType.STICKER -> {
                         val messageContent: MessageContent? = timelineEvent.getLastMessageContent()
                         if (messageContent is MessageTextContent && messageContent.format == MessageFormat.FORMAT_MATRIX_HTML) {
                             val html = messageContent.formattedBody
@@ -209,14 +209,14 @@ class MessageActionsViewModel @AssistedInject constructor(
                     EventType.CALL_INVITE,
                     EventType.CALL_CANDIDATES,
                     EventType.CALL_HANGUP,
-                    EventType.CALL_ANSWER   -> {
+                    EventType.CALL_ANSWER -> {
                         noticeEventFormatter.format(timelineEvent, room?.roomSummary()?.isDirect.orFalse())
                     }
                     in EventType.POLL_START -> {
                         timelineEvent.root.getClearContent().toModel<MessagePollContent>(catchError = true)
                                 ?.getBestPollCreationInfo()?.question?.getBestQuestion() ?: ""
                     }
-                    else                    -> null
+                    else -> null
                 }
             }
         } catch (failure: Throwable) {
@@ -255,16 +255,16 @@ class MessageActionsViewModel @AssistedInject constructor(
 
         return arrayListOf<EventSharedAction>().apply {
             when {
-                timelineEvent.root.sendState.hasFailed()         -> {
+                timelineEvent.root.sendState.hasFailed() -> {
                     addActionsForFailedState(timelineEvent, actionPermissions, messageContent, msgType)
                 }
-                timelineEvent.root.sendState.isSending()         -> {
+                timelineEvent.root.sendState.isSending() -> {
                     addActionsForSendingState(timelineEvent)
                 }
                 timelineEvent.root.sendState == SendState.SYNCED -> {
                     addActionsForSyncedState(timelineEvent, actionPermissions, messageContent, msgType)
                 }
-                timelineEvent.root.sendState == SendState.SENT   -> {
+                timelineEvent.root.sendState == SendState.SENT -> {
                     addActionsForSentNotSyncedState(timelineEvent)
                 }
             }
@@ -448,7 +448,7 @@ class MessageActionsViewModel @AssistedInject constructor(
             MessageType.MSGTYPE_FILE,
             MessageType.MSGTYPE_POLL_START,
             MessageType.MSGTYPE_LOCATION -> true
-            else                         -> false
+            else -> false
         }
     }
 
@@ -482,7 +482,7 @@ class MessageActionsViewModel @AssistedInject constructor(
             MessageType.MSGTYPE_FILE,
             MessageType.MSGTYPE_POLL_START,
             MessageType.MSGTYPE_STICKER_LOCAL -> true
-            else                              -> false
+            else -> false
         }
     }
 
@@ -510,7 +510,7 @@ class MessageActionsViewModel @AssistedInject constructor(
             MessageType.MSGTYPE_FILE,
             MessageType.MSGTYPE_POLL_START,
             MessageType.MSGTYPE_STICKER_LOCAL -> event.root.threadDetails?.isRootThread ?: false
-            else                              -> false
+            else -> false
         }
     }
 
@@ -525,7 +525,7 @@ class MessageActionsViewModel @AssistedInject constructor(
             MessageType.MSGTYPE_LOCATION -> {
                 true
             }
-            else                         -> false
+            else -> false
         }
     }
 
@@ -569,7 +569,7 @@ class MessageActionsViewModel @AssistedInject constructor(
             MessageType.MSGTYPE_NOTICE,
             MessageType.MSGTYPE_EMOTE,
             MessageType.MSGTYPE_LOCATION -> true
-            else                         -> false
+            else -> false
         }
     }
 
@@ -583,7 +583,7 @@ class MessageActionsViewModel @AssistedInject constructor(
             MessageType.MSGTYPE_AUDIO,
             MessageType.MSGTYPE_VIDEO,
             MessageType.MSGTYPE_FILE -> true
-            else                     -> false
+            else -> false
         }
     }
 
@@ -593,7 +593,7 @@ class MessageActionsViewModel @AssistedInject constructor(
             MessageType.MSGTYPE_AUDIO,
             MessageType.MSGTYPE_VIDEO,
             MessageType.MSGTYPE_FILE -> true
-            else                     -> false
+            else -> false
         }
     }
 

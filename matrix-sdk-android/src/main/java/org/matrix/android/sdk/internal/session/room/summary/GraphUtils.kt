@@ -101,11 +101,11 @@ internal class Graph {
                         // it's a candidate
                         destination = it.destination
                     }
-                    inPath     -> {
+                    inPath -> {
                         // Cycle!!
                         backwardEdges.add(it)
                     }
-                    completed  -> {
+                    completed -> {
                         // dead end
                     }
                 }

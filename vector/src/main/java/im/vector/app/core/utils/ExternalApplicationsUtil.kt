@@ -105,8 +105,8 @@ fun openUrlInChromeCustomTab(
                 .setColorScheme(
                         when {
                             ThemeUtils.isSystemTheme(context) -> CustomTabsIntent.COLOR_SCHEME_SYSTEM
-                            ThemeUtils.isLightTheme(context)  -> CustomTabsIntent.COLOR_SCHEME_LIGHT
-                            else                              -> CustomTabsIntent.COLOR_SCHEME_DARK
+                            ThemeUtils.isLightTheme(context) -> CustomTabsIntent.COLOR_SCHEME_LIGHT
+                            else -> CustomTabsIntent.COLOR_SCHEME_DARK
                         }
                 )
                 // Note: setting close button icon does not work
@@ -278,7 +278,7 @@ suspend fun saveMedia(
                 mediaMimeType?.isMimeTypeImage() == true -> MediaStore.Images.Media.EXTERNAL_CONTENT_URI
                 mediaMimeType?.isMimeTypeVideo() == true -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
                 mediaMimeType?.isMimeTypeAudio() == true -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-                else                                     -> MediaStore.Downloads.EXTERNAL_CONTENT_URI
+                else -> MediaStore.Downloads.EXTERNAL_CONTENT_URI
             }
 
             val uri = context.contentResolver.insert(externalContentUri, values)
@@ -326,7 +326,7 @@ private fun saveMediaLegacy(
         mediaMimeType?.isMimeTypeImage() == true -> Environment.DIRECTORY_PICTURES
         mediaMimeType?.isMimeTypeVideo() == true -> Environment.DIRECTORY_MOVIES
         mediaMimeType?.isMimeTypeAudio() == true -> Environment.DIRECTORY_MUSIC
-        else                                     -> Environment.DIRECTORY_DOWNLOADS
+        else -> Environment.DIRECTORY_DOWNLOADS
     }
     val downloadDir = Environment.getExternalStoragePublicDirectory(dest)
     try {

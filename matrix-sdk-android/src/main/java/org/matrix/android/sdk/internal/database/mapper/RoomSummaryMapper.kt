@@ -111,7 +111,7 @@ internal class RoomSummaryMapper @Inject constructor(
                     // I should probably use #hasEncryptorClassForAlgorithm but it says it supports
                     // OLM which is some legacy? Now only megolm allowed in rooms
                     MXCRYPTO_ALGORITHM_MEGOLM -> RoomEncryptionAlgorithm.Megolm
-                    else                      -> RoomEncryptionAlgorithm.UnsupportedAlgorithm(alg)
+                    else -> RoomEncryptionAlgorithm.UnsupportedAlgorithm(alg)
                 }
         )
     }

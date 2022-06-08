@@ -113,14 +113,14 @@ class RoomPermissionsViewModel @AssistedInject constructor(
                                     put(action.editablePermission.eventType, action.powerLevel)
                                 }
                         )
-                        is EditablePermission.DefaultRole                 -> currentPowerLevel.copy(usersDefault = action.powerLevel)
-                        is EditablePermission.SendMessages                -> currentPowerLevel.copy(eventsDefault = action.powerLevel)
-                        is EditablePermission.InviteUsers                 -> currentPowerLevel.copy(invite = action.powerLevel)
-                        is EditablePermission.ChangeSettings              -> currentPowerLevel.copy(stateDefault = action.powerLevel)
-                        is EditablePermission.KickUsers                   -> currentPowerLevel.copy(kick = action.powerLevel)
-                        is EditablePermission.BanUsers                    -> currentPowerLevel.copy(ban = action.powerLevel)
-                        is EditablePermission.RemoveMessagesSentByOthers  -> currentPowerLevel.copy(redact = action.powerLevel)
-                        is EditablePermission.NotifyEveryone              -> currentPowerLevel.copy(
+                        is EditablePermission.DefaultRole -> currentPowerLevel.copy(usersDefault = action.powerLevel)
+                        is EditablePermission.SendMessages -> currentPowerLevel.copy(eventsDefault = action.powerLevel)
+                        is EditablePermission.InviteUsers -> currentPowerLevel.copy(invite = action.powerLevel)
+                        is EditablePermission.ChangeSettings -> currentPowerLevel.copy(stateDefault = action.powerLevel)
+                        is EditablePermission.KickUsers -> currentPowerLevel.copy(kick = action.powerLevel)
+                        is EditablePermission.BanUsers -> currentPowerLevel.copy(ban = action.powerLevel)
+                        is EditablePermission.RemoveMessagesSentByOthers -> currentPowerLevel.copy(redact = action.powerLevel)
+                        is EditablePermission.NotifyEveryone -> currentPowerLevel.copy(
                                 notifications = currentPowerLevel.notifications.orEmpty().toMutableMap().apply {
                                     put(PowerLevelsContent.NOTIFICATIONS_ROOM_KEY, action.powerLevel)
                                 }

@@ -82,15 +82,15 @@ private class ContentMediaProgressUpdater(
 
     override fun onUpdate(state: ContentUploadStateTracker.State) {
         when (state) {
-            is ContentUploadStateTracker.State.Idle                -> handleIdle()
+            is ContentUploadStateTracker.State.Idle -> handleIdle()
             is ContentUploadStateTracker.State.EncryptingThumbnail -> handleEncryptingThumbnail()
-            is ContentUploadStateTracker.State.UploadingThumbnail  -> handleProgressThumbnail(state)
-            is ContentUploadStateTracker.State.Encrypting          -> handleEncrypting(state)
-            is ContentUploadStateTracker.State.Uploading           -> handleProgress(state)
-            is ContentUploadStateTracker.State.Failure             -> handleFailure(/*state*/)
-            is ContentUploadStateTracker.State.Success             -> handleSuccess()
-            is ContentUploadStateTracker.State.CompressingImage    -> handleCompressingImage()
-            is ContentUploadStateTracker.State.CompressingVideo    -> handleCompressingVideo(state)
+            is ContentUploadStateTracker.State.UploadingThumbnail -> handleProgressThumbnail(state)
+            is ContentUploadStateTracker.State.Encrypting -> handleEncrypting(state)
+            is ContentUploadStateTracker.State.Uploading -> handleProgress(state)
+            is ContentUploadStateTracker.State.Failure -> handleFailure(/*state*/)
+            is ContentUploadStateTracker.State.Success -> handleSuccess()
+            is ContentUploadStateTracker.State.CompressingImage -> handleCompressingImage()
+            is ContentUploadStateTracker.State.CompressingVideo -> handleCompressingVideo(state)
         }
     }
 

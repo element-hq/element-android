@@ -267,7 +267,7 @@ internal class LoadTimelineStrategy constructor(
 
     private fun getChunkEntity(realm: Realm): RealmResults<ChunkEntity> {
         return when (mode) {
-            is Mode.Live      -> {
+            is Mode.Live -> {
                 ChunkEntity.where(realm, roomId)
                         .equalTo(ChunkEntityFields.IS_LAST_FORWARD, true)
                         .findAll()
@@ -275,7 +275,7 @@ internal class LoadTimelineStrategy constructor(
             is Mode.Permalink -> {
                 ChunkEntity.findAllIncludingEvents(realm, listOf(mode.originEventId))
             }
-            is Mode.Thread    -> {
+            is Mode.Thread -> {
                 recreateThreadChunkEntity(realm, mode.rootThreadEventId)
                 ChunkEntity.where(realm, roomId)
                         .equalTo(ChunkEntityFields.ROOT_THREAD_EVENT_ID, mode.rootThreadEventId)

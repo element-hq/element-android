@@ -67,7 +67,7 @@ abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<V
     private fun handleOnboardingViewEvents(viewEvents: OnboardingViewEvents) {
         when (viewEvents) {
             is OnboardingViewEvents.Failure -> showFailure(viewEvents.throwable)
-            else                            ->
+            else ->
                 // This is handled by the Activity
                 Unit
         }
@@ -129,7 +129,7 @@ abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<V
 
                 true
             }
-            displayCancelDialog && isResetPasswordStarted          -> {
+            displayCancelDialog && isResetPasswordStarted -> {
                 // Ask for confirmation before cancelling the reset password
                 MaterialAlertDialogBuilder(requireActivity())
                         .setTitle(R.string.login_reset_password_cancel_confirmation_title)
@@ -143,7 +143,7 @@ abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<V
 
                 true
             }
-            else                                                   -> {
+            else -> {
                 resetViewModel()
                 // Do not consume the Back event
                 false

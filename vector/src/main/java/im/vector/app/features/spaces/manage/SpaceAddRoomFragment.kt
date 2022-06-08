@@ -140,11 +140,11 @@ class SpaceAddRoomFragment @Inject constructor(
                             .setNegativeButton(R.string.action_cancel, null)
                             .show()
                 }
-                is SpaceAddRoomsViewEvents.SaveFailed      -> {
+                is SpaceAddRoomsViewEvents.SaveFailed -> {
                     showErrorInSnackbar(it.reason)
                     invalidateOptionsMenu()
                 }
-                SpaceAddRoomsViewEvents.SavedDone          -> {
+                SpaceAddRoomsViewEvents.SavedDone -> {
                     sharedViewModel.handle(SpaceManagedSharedAction.HandleBack)
                 }
             }

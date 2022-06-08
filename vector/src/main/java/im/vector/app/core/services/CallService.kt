@@ -120,15 +120,15 @@ class CallService : VectorService() {
                 callRingPlayerOutgoing?.start()
                 displayOutgoingRingingCallNotification(intent)
             }
-            ACTION_ONGOING_CALL          -> {
+            ACTION_ONGOING_CALL -> {
                 callRingPlayerIncoming?.stop()
                 callRingPlayerOutgoing?.stop()
                 displayCallInProgressNotification(intent)
             }
-            ACTION_CALL_TERMINATED       -> {
+            ACTION_CALL_TERMINATED -> {
                 handleCallTerminated(intent)
             }
-            else                         -> {
+            else -> {
                 handleUnexpectedState(null)
             }
         }

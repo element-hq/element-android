@@ -140,13 +140,13 @@ class WidgetViewModel @AssistedInject constructor(
 
     override fun handle(action: WidgetAction) {
         when (action) {
-            is WidgetAction.OnWebViewLoadingError   -> handleWebViewLoadingError(action)
+            is WidgetAction.OnWebViewLoadingError -> handleWebViewLoadingError(action)
             is WidgetAction.OnWebViewLoadingSuccess -> handleWebViewLoadingSuccess(action)
-            is WidgetAction.OnWebViewStartedToLoad  -> handleWebViewStartLoading()
-            WidgetAction.LoadFormattedUrl           -> loadFormattedUrl(forceFetchToken = false)
-            WidgetAction.DeleteWidget               -> handleDeleteWidget()
-            WidgetAction.RevokeWidget               -> handleRevokeWidget()
-            WidgetAction.OnTermsReviewed            -> loadFormattedUrl(forceFetchToken = false)
+            is WidgetAction.OnWebViewStartedToLoad -> handleWebViewStartLoading()
+            WidgetAction.LoadFormattedUrl -> loadFormattedUrl(forceFetchToken = false)
+            WidgetAction.DeleteWidget -> handleDeleteWidget()
+            WidgetAction.RevokeWidget -> handleRevokeWidget()
+            WidgetAction.OnTermsReviewed -> loadFormattedUrl(forceFetchToken = false)
         }
     }
 

@@ -114,7 +114,7 @@ class LoginServerUrlFormFragment2 @Inject constructor() : AbstractLoginFragment2
             serverUrl.isBlank() -> {
                 views.loginServerUrlFormHomeServerUrlTil.error = getString(R.string.login_error_invalid_home_server)
             }
-            else                -> {
+            else -> {
                 views.loginServerUrlFormHomeServerUrl.setText(serverUrl, false /* to avoid completion dialog flicker*/)
                 loginViewModel.handle(LoginAction2.UpdateHomeServer(serverUrl))
             }

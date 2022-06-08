@@ -62,9 +62,9 @@ class SpaceLeaveAdvancedFragment @Inject constructor(
             state.spaceSummary?.let { summary ->
                 val warningMessage: CharSequence? = when {
                     summary.otherMemberIds.isEmpty() -> getString(R.string.space_leave_prompt_msg_only_you)
-                    state.isLastAdmin                -> getString(R.string.space_leave_prompt_msg_as_admin)
-                    !summary.isPublic                -> getString(R.string.space_leave_prompt_msg_private)
-                    else                             -> null
+                    state.isLastAdmin -> getString(R.string.space_leave_prompt_msg_as_admin)
+                    !summary.isPublic -> getString(R.string.space_leave_prompt_msg_private)
+                    else -> null
                 }
 
                 views.spaceLeavePromptDescription.isVisible = warningMessage != null
@@ -83,7 +83,7 @@ class SpaceLeaveAdvancedFragment @Inject constructor(
 
         views.spaceLeaveSelectGroup.setOnCheckedChangeListener { _, optionId ->
             when (optionId) {
-                R.id.spaceLeaveSelectAll  -> viewModel.handle(SpaceLeaveAdvanceViewAction.SelectAll)
+                R.id.spaceLeaveSelectAll -> viewModel.handle(SpaceLeaveAdvanceViewAction.SelectAll)
                 R.id.spaceLeaveSelectNone -> viewModel.handle(SpaceLeaveAdvanceViewAction.SelectNone)
             }
         }
@@ -131,9 +131,9 @@ class SpaceLeaveAdvancedFragment @Inject constructor(
     private fun updateRadioButtonsState(state: SpaceLeaveAdvanceViewState) {
         (state.allChildren as? Success)?.invoke()?.size?.let { allChildrenCount ->
             when (state.selectedRooms.size) {
-                0                -> views.spaceLeaveSelectNone.isChecked = true
+                0 -> views.spaceLeaveSelectNone.isChecked = true
                 allChildrenCount -> views.spaceLeaveSelectAll.isChecked = true
-                else             -> views.spaceLeaveSelectSemi.isChecked = true
+                else -> views.spaceLeaveSelectSemi.isChecked = true
             }
         }
     }

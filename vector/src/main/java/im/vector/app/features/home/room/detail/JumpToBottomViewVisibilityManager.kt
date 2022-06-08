@@ -50,7 +50,7 @@ class JumpToBottomViewVisibilityManager(
 
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 when (newState) {
-                    RecyclerView.SCROLL_STATE_IDLE     -> {
+                    RecyclerView.SCROLL_STATE_IDLE -> {
                         maybeShowJumpToBottomViewVisibilityWithDelay()
                     }
                     RecyclerView.SCROLL_STATE_DRAGGING,

@@ -64,11 +64,11 @@ private class ContentDownloadUpdater(private val holder: MessageFileItem.Holder)
 
     override fun onDownloadStateUpdate(state: ContentDownloadStateTracker.State) {
         when (state) {
-            ContentDownloadStateTracker.State.Idle           -> handleIdle()
+            ContentDownloadStateTracker.State.Idle -> handleIdle()
             is ContentDownloadStateTracker.State.Downloading -> handleProgress(state)
-            ContentDownloadStateTracker.State.Decrypting     -> handleDecrypting()
-            ContentDownloadStateTracker.State.Success        -> handleSuccess()
-            is ContentDownloadStateTracker.State.Failure     -> handleFailure()
+            ContentDownloadStateTracker.State.Decrypting -> handleDecrypting()
+            ContentDownloadStateTracker.State.Success -> handleSuccess()
+            is ContentDownloadStateTracker.State.Failure -> handleFailure()
         }
     }
 

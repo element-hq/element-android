@@ -164,7 +164,7 @@ class AvatarRenderer @Inject constructor(
                         is MatrixItem.SpaceItem -> {
                             it.transform(MultiTransformation(CenterCrop(), RoundedCorners(dimensionConverter.dpToPx(8))))
                         }
-                        else                    -> {
+                        else -> {
                             it.apply(RequestOptions.circleCropTransform())
                         }
                     }
@@ -277,7 +277,7 @@ class AvatarRenderer @Inject constructor(
                         is MatrixItem.SpaceItem -> {
                             it.buildRoundRect(matrixItem.firstLetterOfDisplayName(), avatarColor, dimensionConverter.dpToPx(8))
                         }
-                        else                    -> {
+                        else -> {
                             it.buildRound(matrixItem.firstLetterOfDisplayName(), avatarColor)
                         }
                     }

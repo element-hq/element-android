@@ -61,13 +61,13 @@ class HomeserverSettingsController @Inject constructor(
                 loadingItem {
                     id("loading")
                 }
-            is Fail          ->
+            is Fail ->
                 errorWithRetryItem {
                     id("error")
                     text(host.errorFormatter.toHumanReadable(federationVersion.error))
                     listener { host.callback?.retry() }
                 }
-            is Success       ->
+            is Success ->
                 buildFederationVersion(federationVersion())
         }
     }
@@ -155,7 +155,7 @@ class HomeserverSettingsController @Inject constructor(
                         value(
                                 host.stringProvider.getString(
                                         when (it.status) {
-                                            RoomVersionStatus.STABLE   -> R.string.settings_server_room_version_stable
+                                            RoomVersionStatus.STABLE -> R.string.settings_server_room_version_stable
                                             RoomVersionStatus.UNSTABLE -> R.string.settings_server_room_version_unstable
                                         }
                                 )

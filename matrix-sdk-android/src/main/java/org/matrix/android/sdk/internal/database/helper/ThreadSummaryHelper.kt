@@ -181,7 +181,7 @@ internal fun ThreadSummaryEntity.Companion.createOrUpdate(
 
             roomEntity.addIfNecessary(threadSummary)
         }
-        ThreadSummaryUpdateType.ADD     -> {
+        ThreadSummaryUpdateType.ADD -> {
             val rootThreadEventId = threadEventEntity?.rootThreadEventId ?: return
             Timber.i("###THREADS ThreadSummaryHelper ADD for root eventId:$rootThreadEventId")
 

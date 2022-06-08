@@ -60,7 +60,7 @@ class DeactivateAccountViewModel @AssistedInject constructor(
     override fun handle(action: DeactivateAccountAction) {
         when (action) {
             is DeactivateAccountAction.DeactivateAccount -> handleDeactivateAccount(action)
-            DeactivateAccountAction.SsoAuthDone          -> {
+            DeactivateAccountAction.SsoAuthDone -> {
                 Timber.d("## UIA - FallBack success")
                 _viewEvents.post(DeactivateAccountViewEvents.Loading())
                 if (pendingAuth != null) {
@@ -69,7 +69,7 @@ class DeactivateAccountViewModel @AssistedInject constructor(
                     uiaContinuation?.resumeWithException(IllegalArgumentException())
                 }
             }
-            is DeactivateAccountAction.PasswordAuthDone  -> {
+            is DeactivateAccountAction.PasswordAuthDone -> {
                 _viewEvents.post(DeactivateAccountViewEvents.Loading())
                 val decryptedPass = session.secureStorageService()
                         .loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
@@ -81,7 +81,7 @@ class DeactivateAccountViewModel @AssistedInject constructor(
                         )
                 )
             }
-            DeactivateAccountAction.ReAuthCancelled      -> {
+            DeactivateAccountAction.ReAuthCancelled -> {
                 Timber.d("## UIA - Reauth cancelled")
                 uiaContinuation?.resumeWithException(UiaCancelledException())
                 uiaContinuation = null

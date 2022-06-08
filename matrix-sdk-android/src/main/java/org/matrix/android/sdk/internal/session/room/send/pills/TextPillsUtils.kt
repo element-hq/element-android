@@ -90,7 +90,7 @@ internal class TextPillsUtils @Inject constructor(
             // test if there is an overlap
             if (b.start in a.start until a.end) {
                 when {
-                    b.end <= a.end                    ->
+                    b.end <= a.end ->
                         // b is inside a -> b should be removed
                         remove = i + 1
                     a.end - a.start > b.end - b.start ->

@@ -66,23 +66,23 @@ class SyncStateView @JvmOverloads constructor(context: Context, attrs: Attribute
 
     private fun SyncState.toHumanReadable(): String {
         return when (this) {
-            SyncState.Idle         -> "Idle"
+            SyncState.Idle -> "Idle"
             SyncState.InvalidToken -> "InvalidToken"
-            SyncState.Killed       -> "Killed"
-            SyncState.Killing      -> "Killing"
-            SyncState.NoNetwork    -> "NoNetwork"
-            SyncState.Paused       -> "Paused"
-            is SyncState.Running   -> "$this"
+            SyncState.Killed -> "Killed"
+            SyncState.Killing -> "Killing"
+            SyncState.NoNetwork -> "NoNetwork"
+            SyncState.Paused -> "Paused"
+            is SyncState.Running -> "$this"
         }
     }
 
     private fun SyncRequestState.IncrementalSyncRequestState.toHumanReadable(): String {
         return when (this) {
-            SyncRequestState.IncrementalSyncIdle       -> "Idle"
+            SyncRequestState.IncrementalSyncIdle -> "Idle"
             is SyncRequestState.IncrementalSyncParsing -> "Parsing ${this.rooms} room(s) ${this.toDevice} toDevice(s)"
-            SyncRequestState.IncrementalSyncError      -> "Error"
-            SyncRequestState.IncrementalSyncDone       -> "Done"
-            else                                       -> "?"
+            SyncRequestState.IncrementalSyncError -> "Error"
+            SyncRequestState.IncrementalSyncDone -> "Done"
+            else -> "?"
         }
     }
 }

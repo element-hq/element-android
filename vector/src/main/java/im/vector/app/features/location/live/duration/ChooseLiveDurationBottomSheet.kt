@@ -72,7 +72,7 @@ class ChooseLiveDurationBottomSheet :
             R.id.liveLocShareChooseDurationOption1 -> DURATION_IN_MS_OPTION_1
             R.id.liveLocShareChooseDurationOption2 -> DURATION_IN_MS_OPTION_2
             R.id.liveLocShareChooseDurationOption3 -> DURATION_IN_MS_OPTION_3
-            else                                   -> DURATION_IN_MS_OPTION_1
+            else -> DURATION_IN_MS_OPTION_1
         }
     }
 

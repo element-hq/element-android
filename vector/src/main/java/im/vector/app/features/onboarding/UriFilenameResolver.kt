@@ -28,7 +28,7 @@ class UriFilenameResolver @Inject constructor(private val context: Context) {
         val fallback = uri.path?.substringAfterLast('/')
         return when (uri.scheme) {
             "content" -> readResolvedDisplayName(uri) ?: fallback
-            else      -> fallback
+            else -> fallback
         }
     }
 

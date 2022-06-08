@@ -85,7 +85,7 @@ internal class RoomDecryptorProvider @Inject constructor(
                         }
                     }
                 }
-                else                      -> olmDecryptionFactory.create()
+                else -> olmDecryptionFactory.create()
             }
             if (!roomId.isNullOrEmpty()) {
                 synchronized(roomDecryptors) {

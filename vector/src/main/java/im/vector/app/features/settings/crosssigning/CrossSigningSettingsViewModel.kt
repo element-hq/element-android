@@ -123,7 +123,7 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
                 }
                 Unit
             }
-            is CrossSigningSettingsAction.SsoAuthDone         -> {
+            is CrossSigningSettingsAction.SsoAuthDone -> {
                 Timber.d("## UIA - FallBack success")
                 if (pendingAuth != null) {
                     uiaContinuation?.resume(pendingAuth!!)
@@ -131,7 +131,7 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
                     uiaContinuation?.resumeWithException(IllegalArgumentException())
                 }
             }
-            is CrossSigningSettingsAction.PasswordAuthDone    -> {
+            is CrossSigningSettingsAction.PasswordAuthDone -> {
                 val decryptedPass = session.secureStorageService()
                         .loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
                 uiaContinuation?.resume(
@@ -142,7 +142,7 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
                         )
                 )
             }
-            CrossSigningSettingsAction.ReAuthCancelled        -> {
+            CrossSigningSettingsAction.ReAuthCancelled -> {
                 Timber.d("## UIA - Reauth cancelled")
                 _viewEvents.post(CrossSigningSettingsViewEvents.HideModalWaitingView)
                 uiaContinuation?.resumeWithException(Exception())

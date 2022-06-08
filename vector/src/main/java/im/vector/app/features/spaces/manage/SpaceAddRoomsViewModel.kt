@@ -167,7 +167,7 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
 
     override fun handle(action: SpaceAddRoomActions) {
         when (action) {
-            is SpaceAddRoomActions.UpdateFilter    -> {
+            is SpaceAddRoomActions.UpdateFilter -> {
                 roomUpdatableLivePageResult.queryParams = roomUpdatableLivePageResult.queryParams.copy(
                         displayName = QueryStringValue.Contains(action.filter, QueryStringValue.Case.INSENSITIVE)
                 )
@@ -181,7 +181,7 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
                 selectionList[action.roomSummary.roomId] = (selectionList[action.roomSummary.roomId] ?: false).not()
                 selectionListLiveData.postValue(selectionList.toMap())
             }
-            SpaceAddRoomActions.Save               -> {
+            SpaceAddRoomActions.Save -> {
                 doAddSelectedRooms()
             }
         }

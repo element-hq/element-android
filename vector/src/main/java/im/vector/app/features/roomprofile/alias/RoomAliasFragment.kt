@@ -81,7 +81,7 @@ class RoomAliasFragment @Inject constructor(
         viewModel.observeViewEvents {
             when (it) {
                 is RoomAliasViewEvents.Failure -> showFailure(it.throwable)
-                RoomAliasViewEvents.Success    -> showSuccess()
+                RoomAliasViewEvents.Success -> showSuccess()
             }
         }
 
@@ -93,13 +93,13 @@ class RoomAliasFragment @Inject constructor(
 
     private fun handleAliasAction(action: RoomAliasBottomSheetSharedAction?) {
         when (action) {
-            is RoomAliasBottomSheetSharedAction.ShareAlias     -> shareAlias(action.matrixTo)
-            is RoomAliasBottomSheetSharedAction.PublishAlias   -> viewModel.handle(RoomAliasAction.PublishAlias(action.alias))
+            is RoomAliasBottomSheetSharedAction.ShareAlias -> shareAlias(action.matrixTo)
+            is RoomAliasBottomSheetSharedAction.PublishAlias -> viewModel.handle(RoomAliasAction.PublishAlias(action.alias))
             is RoomAliasBottomSheetSharedAction.UnPublishAlias -> unpublishAlias(action.alias)
-            is RoomAliasBottomSheetSharedAction.DeleteAlias    -> removeLocalAlias(action.alias)
-            is RoomAliasBottomSheetSharedAction.SetMainAlias   -> viewModel.handle(RoomAliasAction.SetCanonicalAlias(action.alias))
-            RoomAliasBottomSheetSharedAction.UnsetMainAlias    -> viewModel.handle(RoomAliasAction.SetCanonicalAlias(canonicalAlias = null))
-            null                                               -> Unit
+            is RoomAliasBottomSheetSharedAction.DeleteAlias -> removeLocalAlias(action.alias)
+            is RoomAliasBottomSheetSharedAction.SetMainAlias -> viewModel.handle(RoomAliasAction.SetCanonicalAlias(action.alias))
+            RoomAliasBottomSheetSharedAction.UnsetMainAlias -> viewModel.handle(RoomAliasAction.SetCanonicalAlias(canonicalAlias = null))
+            null -> Unit
         }
     }
 
