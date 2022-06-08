@@ -16,26 +16,37 @@
 
 package org.matrix.android.sdk.internal.session.room.aggregation.livelocation
 
+import androidx.work.OneTimeWorkRequest
+import io.mockk.verify
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.UnsignedData
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
+import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntity
+import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntityFields
 import org.matrix.android.sdk.test.fakes.FakeClock
 import org.matrix.android.sdk.test.fakes.FakeRealm
 import org.matrix.android.sdk.test.fakes.FakeWorkManagerProvider
+import org.matrix.android.sdk.test.fakes.givenEqualTo
+import org.matrix.android.sdk.test.fakes.givenFindAll
+import org.matrix.android.sdk.test.fakes.givenFindFirst
+import org.matrix.android.sdk.test.fakes.givenNotEqualTo
 
 private const val A_SESSION_ID = "session_id"
 private const val A_SENDER_ID = "sender_id"
 private const val AN_EVENT_ID = "event_id"
 private const val A_ROOM_ID = "room_id"
+private const val A_TIMESTAMP = 1654689143L
+private const val A_TIMEOUT_MILLIS = 15 * 60 * 1000L
 
 internal class LiveLocationAggregationProcessorTest {
 
     private val fakeWorkManagerProvider = FakeWorkManagerProvider()
     private val fakeClock = FakeClock()
     private val fakeRealm = FakeRealm()
+    private val fakeQuery = fakeRealm.givenWhere<LiveLocationShareAggregatedSummaryEntity>()
 
     private val liveLocationAggregationProcessor = LiveLocationAggregationProcessor(
             sessionId = A_SESSION_ID,
@@ -134,6 +145,85 @@ internal class LiveLocationAggregationProcessorTest {
     }
 
     @Test
+    fun `given beacon info and existing entity when beacon content is correct and active then it is aggregated`() {
+        val event = Event(
+                senderId = A_SENDER_ID,
+                eventId = AN_EVENT_ID
+        )
+        val beaconInfo = MessageBeaconInfoContent(
+                isLive = true,
+                unstableTimestampMillis = A_TIMESTAMP,
+                timeout = A_TIMEOUT_MILLIS
+        )
+        fakeClock.givenEpoch(A_TIMESTAMP + 5000)
+        val aggregatedEntity = mockLiveLocationShareAggregatedSummaryEntityForEvent()
+        val previousEntities = mockPreviousLiveLocationShareAggregatedSummaryEntities()
+
+        val result = liveLocationAggregationProcessor.handleBeaconInfo(
+                realm = fakeRealm.instance,
+                event = event,
+                content = beaconInfo,
+                roomId = A_ROOM_ID,
+                isLocalEcho = false
+        )
+
+        result shouldBeEqualTo true
+        aggregatedEntity.eventId shouldBeEqualTo AN_EVENT_ID
+        aggregatedEntity.roomId shouldBeEqualTo A_ROOM_ID
+        aggregatedEntity.userId shouldBeEqualTo A_SENDER_ID
+        aggregatedEntity.isActive shouldBeEqualTo true
+        aggregatedEntity.endOfLiveTimestampMillis shouldBeEqualTo A_TIMESTAMP + A_TIMEOUT_MILLIS
+        aggregatedEntity.lastLocationContent shouldBeEqualTo null
+        previousEntities.forEach { entity ->
+            entity.isActive shouldBeEqualTo false
+        }
+        val workManager = fakeWorkManagerProvider.instance.workManager
+        verify { workManager.enqueueUniqueWork(any(), any(), any<OneTimeWorkRequest>()) }
+    }
+
+    @Test
+    fun `given beacon info and existing entity when beacon content is correct and inactive then it is aggregated`() {
+        val unsignedData = UnsignedData(
+                age = 123,
+                replacesState = AN_EVENT_ID
+        )
+        val event = Event(
+                senderId = A_SENDER_ID,
+                eventId = "",
+                unsignedData = unsignedData
+        )
+        val beaconInfo = MessageBeaconInfoContent(
+                isLive = false,
+                unstableTimestampMillis = A_TIMESTAMP,
+                timeout = A_TIMEOUT_MILLIS
+        )
+        fakeClock.givenEpoch(A_TIMESTAMP + 5000)
+        val aggregatedEntity = mockLiveLocationShareAggregatedSummaryEntityForEvent()
+        val previousEntities = mockPreviousLiveLocationShareAggregatedSummaryEntities()
+
+        val result = liveLocationAggregationProcessor.handleBeaconInfo(
+                realm = fakeRealm.instance,
+                event = event,
+                content = beaconInfo,
+                roomId = A_ROOM_ID,
+                isLocalEcho = false
+        )
+
+        result shouldBeEqualTo true
+        aggregatedEntity.eventId shouldBeEqualTo AN_EVENT_ID
+        aggregatedEntity.roomId shouldBeEqualTo A_ROOM_ID
+        aggregatedEntity.userId shouldBeEqualTo A_SENDER_ID
+        aggregatedEntity.isActive shouldBeEqualTo false
+        aggregatedEntity.endOfLiveTimestampMillis shouldBeEqualTo A_TIMESTAMP + A_TIMEOUT_MILLIS
+        aggregatedEntity.lastLocationContent shouldBeEqualTo null
+        previousEntities.forEach { entity ->
+            entity.isActive shouldBeEqualTo false
+        }
+        val workManager = fakeWorkManagerProvider.instance.workManager
+        verify { workManager.cancelUniqueWork(any()) }
+    }
+
+    @Test
     fun `given beacon location data when it is local echo then it is ignored`() {
         val event = Event(senderId = A_SENDER_ID)
         val beaconLocationData = MessageBeaconLocationDataContent()
@@ -201,5 +291,35 @@ internal class LiveLocationAggregationProcessorTest {
 
         resultNoSenderId shouldBeEqualTo false
         resultEmptySenderId shouldBeEqualTo false
+    }
+
+    private fun mockLiveLocationShareAggregatedSummaryEntityForEvent(): LiveLocationShareAggregatedSummaryEntity {
+        val result = LiveLocationShareAggregatedSummaryEntity(
+                eventId = AN_EVENT_ID,
+                roomId = A_ROOM_ID
+        )
+        fakeQuery
+                .givenEqualTo(LiveLocationShareAggregatedSummaryEntityFields.EVENT_ID, AN_EVENT_ID)
+                .givenEqualTo(LiveLocationShareAggregatedSummaryEntityFields.ROOM_ID, A_ROOM_ID)
+                .givenFindFirst(result)
+        return result
+    }
+
+    private fun mockPreviousLiveLocationShareAggregatedSummaryEntities(): List<LiveLocationShareAggregatedSummaryEntity> {
+        val results = listOf(
+                LiveLocationShareAggregatedSummaryEntity(
+                        eventId = "",
+                        roomId = A_ROOM_ID,
+                        userId = A_SENDER_ID,
+                        isActive = true
+                )
+        )
+        fakeQuery
+                .givenEqualTo(LiveLocationShareAggregatedSummaryEntityFields.ROOM_ID, A_ROOM_ID)
+                .givenNotEqualTo(LiveLocationShareAggregatedSummaryEntityFields.EVENT_ID, AN_EVENT_ID)
+                .givenEqualTo(LiveLocationShareAggregatedSummaryEntityFields.USER_ID, A_SENDER_ID)
+                .givenEqualTo(LiveLocationShareAggregatedSummaryEntityFields.IS_ACTIVE, true)
+                .givenFindAll(results)
+        return results
     }
 }

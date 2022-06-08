@@ -84,6 +84,7 @@ internal fun LiveLocationShareAggregatedSummaryEntity.Companion.findActiveLiveIn
             .equalTo(LiveLocationShareAggregatedSummaryEntityFields.IS_ACTIVE, true)
             .notEqualTo(LiveLocationShareAggregatedSummaryEntityFields.EVENT_ID, ignoredEventId)
             .findAll()
+            .toList()
 }
 
 /**
