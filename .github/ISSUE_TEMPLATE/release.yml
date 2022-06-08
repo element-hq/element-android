@@ -54,6 +54,7 @@ body:
         - [ ] Copy the fastlane change to the GooglePlay console in the section en-GB.
         - [ ] Push to beta release to 100% of the users
         - [ ] Notify the F-Droid team so that they can schedule the publication on F-Droid
+        - [ ] The application is available to the PlayStore testers (live). Google can take between 1 hour and up to 7 days to approve the release.
 
         ### Once Live on PlayStore
 
@@ -67,6 +68,7 @@ body:
         - [ ] Check the Android Element room for any reported issues on the new version
         - [ ] If all is OK, push to production and notify Markus (Bubu) to release the F-Droid version
         - [ ] Ping the Android public room and update its topic with the new available version
+        - [ ] The application is available to the PlayStore users (live). Google can take (again!) between 1 hour and up to 7 days to approve the release.
 
         ### Android SDK2
 
