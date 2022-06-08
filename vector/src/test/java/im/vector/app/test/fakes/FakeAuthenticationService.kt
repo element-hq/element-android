@@ -41,10 +41,6 @@ class FakeAuthenticationService : AuthenticationService by mockk() {
         every { getLoginWizard() } returns loginWizard
     }
 
-    fun givenLoginWizard(loginWizard: LoginWizard) {
-        every { getLoginWizard() } returns loginWizard
-    }
-
     fun givenLoginFlow(config: HomeServerConnectionConfig, result: LoginFlowResult) {
         coEvery { getLoginFlow(config) } returns result
     }
