@@ -17,6 +17,7 @@
 package im.vector.app.test.fakes
 
 import io.mockk.coJustRun
+import io.mockk.coVerify
 import io.mockk.mockk
 import org.matrix.android.sdk.api.auth.login.LoginWizard
 
@@ -28,5 +29,9 @@ class FakeLoginWizard : LoginWizard by mockk() {
 
     fun givenConfirmResetPasswordSuccess(password: String) {
         coJustRun { resetPasswordMailConfirmed(password) }
+    }
+
+    fun verifyResetPassword(email: String) {
+        coVerify { resetPassword(email) }
     }
 }

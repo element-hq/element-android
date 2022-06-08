@@ -29,7 +29,6 @@ import androidx.fragment.app.FragmentTransaction
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
-import im.vector.app.core.extensions.POP_BACK_STACK_EXCLUSIVE
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.popBackstack
@@ -166,7 +165,7 @@ class FtueAuthVariant(
                     vectorFeatures.isOnboardingCombinedLoginEnabled() -> addLoginStageFragmentToBackstack(FtueAuthResetPasswordEmailEntryFragment::class.java)
                     else                                              -> addLoginStageFragmentToBackstack(FtueAuthResetPasswordFragment::class.java)
                 }
-            is OnboardingViewEvents.OnResetPasswordSendThreePidDone -> {
+            is OnboardingViewEvents.OnResetPasswordEmailConfirmationSent -> {
                 supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 when {
                     vectorFeatures.isOnboardingCombinedLoginEnabled() -> addLoginStageFragmentToBackstack(
@@ -187,12 +186,11 @@ class FtueAuthVariant(
                         option = commonOption
                 )
             }
-            is OnboardingViewEvents.OnResetPasswordMailConfirmationSuccess -> {
+            is OnboardingViewEvents.OpenResetPasswordComplete    -> {
                 supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 addLoginStageFragmentToBackstack(FtueAuthResetPasswordSuccessFragment::class.java)
             }
-            is OnboardingViewEvents.OnResetPasswordMailConfirmationSuccessDone -> {
-                // Go back to the login fragment
+            OnboardingViewEvents.OnResetPasswordComplete         -> {
                 supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
             }
             is OnboardingViewEvents.OnSendEmailSuccess -> {
