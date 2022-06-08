@@ -41,8 +41,9 @@ import org.matrix.android.sdk.api.util.awaitCallback
 import org.matrix.android.sdk.api.util.toBase64NoPadding
 import timber.log.Timber
 
-class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialState: KeysBackupSettingViewState,
-                                                              private val session: Session
+class KeysBackupSettingsViewModel @AssistedInject constructor(
+        @Assisted initialState: KeysBackupSettingViewState,
+        private val session: Session
 ) : VectorViewModel<KeysBackupSettingViewState, KeyBackupSettingsAction, KeysBackupViewEvents>(initialState),
         KeysBackupStateListener {
 
@@ -60,7 +61,7 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialS
     init {
         setState {
             this.copy(
-                    keysBackupState = keysBackupService.state,
+                    keysBackupState = keysBackupService.getState(),
                     keysBackupVersion = keysBackupService.keysBackupVersion
             )
         }
@@ -206,7 +207,7 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialS
     }
 
     fun canExit(): Boolean {
-        val currentBackupState = keysBackupService.state
+        val currentBackupState = keysBackupService.getState()
 
         return currentBackupState == KeysBackupState.Unknown ||
                 currentBackupState == KeysBackupState.CheckingBackUpOnHomeserver

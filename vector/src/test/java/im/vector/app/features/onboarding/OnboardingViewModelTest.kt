@@ -18,6 +18,8 @@ package im.vector.app.features.onboarding
 
 import android.net.Uri
 import com.airbnb.mvrx.test.MvRxTestRule
+import im.vector.app.R
+import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.ReAuthHelper
 import im.vector.app.features.login.SignMode
@@ -29,6 +31,7 @@ import im.vector.app.test.fakes.FakeContext
 import im.vector.app.test.fakes.FakeDirectLoginUseCase
 import im.vector.app.test.fakes.FakeHomeServerConnectionConfigFactory
 import im.vector.app.test.fakes.FakeHomeServerHistoryService
+import im.vector.app.test.fakes.FakeLoginWizard
 import im.vector.app.test.fakes.FakeRegisterActionHandler
 import im.vector.app.test.fakes.FakeRegistrationWizard
 import im.vector.app.test.fakes.FakeSession
@@ -38,6 +41,8 @@ import im.vector.app.test.fakes.FakeUri
 import im.vector.app.test.fakes.FakeUriFilenameResolver
 import im.vector.app.test.fakes.FakeVectorFeatures
 import im.vector.app.test.fakes.FakeVectorOverrides
+import im.vector.app.test.fakes.toTestString
+import im.vector.app.test.fixtures.aBuildMeta
 import im.vector.app.test.fixtures.aHomeServerCapabilities
 import im.vector.app.test.test
 import kotlinx.coroutines.test.runTest
@@ -59,10 +64,12 @@ private val A_RESULT_IGNORED_REGISTER_ACTION = RegisterAction.SendAgainThreePid
 private val A_HOMESERVER_CAPABILITIES = aHomeServerCapabilities(canChangeDisplayName = true, canChangeAvatar = true)
 private val AN_IGNORED_FLOW_RESULT = FlowResult(missingStages = emptyList(), completedStages = emptyList())
 private val ANY_CONTINUING_REGISTRATION_RESULT = RegistrationResult.NextStep(AN_IGNORED_FLOW_RESULT)
-private val A_LOGIN_OR_REGISTER_ACTION = OnboardingAction.LoginOrRegister("@a-user:id.org", "a-password", "a-device-name")
+private val A_DIRECT_LOGIN = OnboardingAction.AuthenticateAction.LoginDirect("@a-user:id.org", "a-password", "a-device-name")
 private const val A_HOMESERVER_URL = "https://edited-homeserver.org"
 private val A_HOMESERVER_CONFIG = HomeServerConnectionConfig(FakeUri().instance)
 private val SELECTED_HOMESERVER_STATE = SelectedHomeserverState(preferredLoginMode = LoginMode.Password)
+private const val AN_EMAIL = "hello@example.com"
+private const val A_PASSWORD = "a-password"
 
 class OnboardingViewModelTest {
 
@@ -81,6 +88,7 @@ class OnboardingViewModelTest {
     private val fakeHomeServerConnectionConfigFactory = FakeHomeServerConnectionConfigFactory()
     private val fakeStartAuthenticationFlowUseCase = FakeStartAuthenticationFlowUseCase()
     private val fakeHomeServerHistoryService = FakeHomeServerHistoryService()
+    private val fakeLoginWizard = FakeLoginWizard()
 
     private var initialState = OnboardingViewState()
     private lateinit var viewModel: OnboardingViewModel
@@ -142,11 +150,11 @@ class OnboardingViewModelTest {
     @Test
     fun `given has sign in with matrix id sign mode, when handling login or register action, then logs in directly`() = runTest {
         viewModelWith(initialState.copy(signMode = SignMode.SignInWithMatrixId))
-        fakeDirectLoginUseCase.givenSuccessResult(A_LOGIN_OR_REGISTER_ACTION, config = null, result = fakeSession)
+        fakeDirectLoginUseCase.givenSuccessResult(A_DIRECT_LOGIN, config = null, result = fakeSession)
         givenInitialisesSession(fakeSession)
         val test = viewModel.test()
 
-        viewModel.handle(A_LOGIN_OR_REGISTER_ACTION)
+        viewModel.handle(A_DIRECT_LOGIN)
 
         test
                 .assertStatesChanges(
@@ -161,11 +169,11 @@ class OnboardingViewModelTest {
     @Test
     fun `given has sign in with matrix id sign mode, when handling login or register action fails, then emits error`() = runTest {
         viewModelWith(initialState.copy(signMode = SignMode.SignInWithMatrixId))
-        fakeDirectLoginUseCase.givenFailureResult(A_LOGIN_OR_REGISTER_ACTION, config = null, cause = AN_ERROR)
+        fakeDirectLoginUseCase.givenFailureResult(A_DIRECT_LOGIN, config = null, cause = AN_ERROR)
         givenInitialisesSession(fakeSession)
         val test = viewModel.test()
 
-        viewModel.handle(A_LOGIN_OR_REGISTER_ACTION)
+        viewModel.handle(A_DIRECT_LOGIN)
 
         test
                 .assertStatesChanges(
@@ -239,6 +247,27 @@ class OnboardingViewModelTest {
                         { copy(isLoading = false) }
                 )
                 .assertNoEvents()
+                .finish()
+    }
+
+    @Test
+    fun `given unavailable deeplink, when selecting homeserver, then emits failure with default homeserver as retry action`() = runTest {
+        fakeContext.givenHasConnection()
+        fakeHomeServerConnectionConfigFactory.givenConfigFor(A_HOMESERVER_URL, A_HOMESERVER_CONFIG)
+        fakeStartAuthenticationFlowUseCase.givenHomeserverUnavailable(A_HOMESERVER_CONFIG)
+        val test = viewModel.test()
+
+        viewModel.handle(OnboardingAction.InitWith(LoginConfig(A_HOMESERVER_URL, null)))
+        viewModel.handle(OnboardingAction.HomeServerChange.SelectHomeServer(A_HOMESERVER_URL))
+
+        val expectedRetryAction = OnboardingAction.HomeServerChange.SelectHomeServer("${R.string.matrix_org_server_url.toTestString()}/")
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false) }
+                )
+                .assertEvents(OnboardingViewEvents.DeeplinkAuthenticationFailure(expectedRetryAction))
                 .finish()
     }
 
@@ -441,6 +470,43 @@ class OnboardingViewModelTest {
                 .finish()
     }
 
+    @Test
+    fun `given can successfully reset password, when resetting password, then emits reset done event`() = runTest {
+        val test = viewModel.test()
+        fakeLoginWizard.givenResetPasswordSuccess(AN_EMAIL)
+        fakeAuthenticationService.givenLoginWizard(fakeLoginWizard)
+
+        viewModel.handle(OnboardingAction.ResetPassword(email = AN_EMAIL, newPassword = A_PASSWORD))
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false, resetState = ResetState(AN_EMAIL, A_PASSWORD)) }
+                )
+                .assertEvents(OnboardingViewEvents.OnResetPasswordSendThreePidDone)
+                .finish()
+    }
+
+    @Test
+    fun `given can successfully confirm reset password, when confirm reset password, then emits reset success`() = runTest {
+        viewModelWith(initialState.copy(resetState = ResetState(AN_EMAIL, A_PASSWORD)))
+        val test = viewModel.test()
+        fakeLoginWizard.givenConfirmResetPasswordSuccess(A_PASSWORD)
+        fakeAuthenticationService.givenLoginWizard(fakeLoginWizard)
+
+        viewModel.handle(OnboardingAction.ResetPasswordMailConfirmed)
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false, resetState = ResetState()) }
+                )
+                .assertEvents(OnboardingViewEvents.OnResetPasswordMailConfirmationSuccess)
+                .finish()
+    }
+
     private fun viewModelWith(state: OnboardingViewState) {
         OnboardingViewModel(
                 state,
@@ -457,7 +523,8 @@ class OnboardingViewModelTest {
                 fakeRegisterActionHandler.instance,
                 fakeDirectLoginUseCase.instance,
                 fakeStartAuthenticationFlowUseCase.instance,
-                FakeVectorOverrides()
+                FakeVectorOverrides(),
+                aBuildMeta()
         ).also {
             viewModel = it
             initialState = state

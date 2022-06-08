@@ -31,8 +31,10 @@ class ContentDownloadStateTrackerBinder @Inject constructor(private val activeSe
 
     private val updateListeners = mutableMapOf<String, ContentDownloadUpdater>()
 
-    fun bind(mxcUrl: String,
-             holder: MessageFileItem.Holder) {
+    fun bind(
+            mxcUrl: String,
+            holder: MessageFileItem.Holder
+    ) {
         activeSessionHolder.getSafeActiveSession()?.also { session ->
             val downloadStateTracker = session.contentDownloadProgressTracker()
             val updateListener = ContentDownloadUpdater(holder)

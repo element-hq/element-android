@@ -19,8 +19,10 @@ package org.matrix.android.sdk.internal.crypto
 import org.matrix.android.sdk.api.auth.data.Credentials
 import javax.inject.Inject
 
-internal class ObjectSigner @Inject constructor(private val credentials: Credentials,
-                                                private val olmDevice: MXOlmDevice) {
+internal class ObjectSigner @Inject constructor(
+        private val credentials: Credentials,
+        private val olmDevice: MXOlmDevice
+) {
 
     /**
      * Sign Object.

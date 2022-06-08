@@ -43,9 +43,11 @@ class UnrecognizedCertificateDialog @Inject constructor(
      * @param unrecognizedFingerprint the fingerprint for the unknown certificate
      * @param callback callback to fire when the user makes a decision
      */
-    fun show(activity: Activity,
-             unrecognizedFingerprint: Fingerprint,
-             callback: Callback) {
+    fun show(
+            activity: Activity,
+            unrecognizedFingerprint: Fingerprint,
+            callback: Callback
+    ) {
         val userId = activeSessionHolder.getSafeActiveSession()?.myUserId
         val hsConfig = activeSessionHolder.getSafeActiveSession()?.sessionParams?.homeServerConnectionConfig ?: return
 
@@ -63,10 +65,12 @@ class UnrecognizedCertificateDialog @Inject constructor(
     /**
      * To use during login flow.
      */
-    fun show(activity: Activity,
-             unrecognizedFingerprint: Fingerprint,
-             homeServerUrl: String,
-             callback: Callback) {
+    fun show(
+            activity: Activity,
+            unrecognizedFingerprint: Fingerprint,
+            homeServerUrl: String,
+            callback: Callback
+    ) {
         internalShow(
                 activity = activity,
                 unrecognizedFingerprint = unrecognizedFingerprint,
@@ -89,13 +93,15 @@ class UnrecognizedCertificateDialog @Inject constructor(
      * @param homeServerUrl the homeserver url
      * @param homeServerConnectionConfigHasFingerprints true if the homeServerConnectionConfig has fingerprint
      */
-    private fun internalShow(activity: Activity,
-                             unrecognizedFingerprint: Fingerprint,
-                             existing: Boolean,
-                             callback: Callback,
-                             userId: String?,
-                             homeServerUrl: String,
-                             homeServerConnectionConfigHasFingerprints: Boolean) {
+    private fun internalShow(
+            activity: Activity,
+            unrecognizedFingerprint: Fingerprint,
+            existing: Boolean,
+            callback: Callback,
+            userId: String?,
+            homeServerUrl: String,
+            homeServerConnectionConfigHasFingerprints: Boolean
+    ) {
         val dialogId = userId ?: homeServerUrl + unrecognizedFingerprint.displayableHexRepr
 
         if (openDialogIds.contains(dialogId)) {

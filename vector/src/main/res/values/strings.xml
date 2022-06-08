@@ -973,6 +973,8 @@
     <string name="settings_show_read_receipts_summary">Click on the read receipts for a detailed list.</string>
     <string name="settings_chat_effects_title">Show chat effects</string>
     <string name="settings_chat_effects_description">Use /confetti command or send a message containing ❄️ or 🎉</string>
+    <string name="settings_autoplay_animated_images_title">Autoplay animated images</string>
+    <string name="settings_autoplay_animated_images_summary">Play animated images in the timeline as soon as they are visible</string>
     <string name="settings_show_join_leave_messages">Show join and leave events</string>
     <string name="settings_show_join_leave_messages_summary">Invites, removes, and bans are unaffected.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Show account events</string>
@@ -1422,7 +1424,7 @@
     <string name="merged_events_collapse">collapse</string>
 
     <string name="generic_label_and_value">%1$s: %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="no_valid_google_play_services_apk">No valid Google Play Services APK found. Notifications may not work properly.</string>
 
     <!-- Passphrase -->
@@ -1584,9 +1586,11 @@
     <string name="room_list_catchup_empty_title">You’re all caught up!</string>
     <string name="room_list_catchup_empty_body">You have no more unread messages</string>
     <string name="room_list_people_empty_title">Conversations</string>
-    <string name="room_list_people_empty_body">Your direct message conversations will be displayed here. Tap the + bottom right to start some.</string>
+    <!-- Note to translators: for RTL languages, the + will be at the bottom left. Please translate "bottom left" instead of "bottom right". Thanks! -->
+    <string name="room_list_people_empty_body">Your direct message conversations will be displayed here. Tap the + at the bottom right to start some.</string>
     <string name="room_list_rooms_empty_title">Rooms</string>
-    <string name="room_list_rooms_empty_body">Your rooms will be displayed here. Tap the + bottom right to find existing ones or start some of your own.</string>
+    <!-- Note to translators: for RTL languages, the + will be at the bottom left. Please translate "bottom left" instead of "bottom right". Thanks! -->
+    <string name="room_list_rooms_empty_body">Your rooms will be displayed here. Tap the + at the bottom right to find existing ones or start some of your own.</string>
 
     <string name="title_activity_emoji_reaction_picker">Reactions</string>
     <string name="message_add_reaction">Add Reaction</string>
@@ -2847,15 +2851,6 @@
     <string name="space_leave_prompt_msg_private">You won\'t be able to rejoin unless you are re-invited.</string>
     <string name="space_leave_prompt_msg_as_admin">You\'re the only admin of this space. Leaving it will mean no one has control over it.</string>
 
-    <!-- TODO delete -->
-    <string name="leave_all_rooms_and_spaces" tools:ignore="UnusedResources">Leave all rooms and spaces</string>
-    <!-- TODO delete -->
-    <string name="dont_leave_any" tools:ignore="UnusedResources">Don’t leave any rooms and spaces</string>
-    <!-- TODO delete -->
-    <string name="leave_specific_ones" tools:ignore="UnusedResources">Leave specific rooms and spaces…</string>
-    <!-- TODO delete -->
-    <string name="pick_tings_to_leave" tools:ignore="UnusedResources">Pick things to leave</string>
-
     <string name="space_explore_filter_no_result_title">No results found</string>
     <string name="space_explore_filter_no_result_description">Some results may be hidden because they’re private and you need an invite to them.</string>
 
@@ -3015,14 +3010,19 @@
     <string name="location_share_live_select_duration_option_1">15 minutes</string>
     <string name="location_share_live_select_duration_option_2">1 hour</string>
     <string name="location_share_live_select_duration_option_3">8 hours</string>
-    <string name="location_in_background_missing_permission_dialog_title">Allow access</string>
-    <string name="location_in_background_missing_permission_dialog_content">If you’d like to share your Live location, ${app_name} needs location access all the time when the app is in the background.\nWe will only access your location for the duration that you choose.</string>
+    <!--TODO delete-->
+    <string name="location_in_background_missing_permission_dialog_title" tools:ignore="UnusedResources">Allow access</string>
+    <!--TODO delete-->
+    <string name="location_in_background_missing_permission_dialog_content" xmlns:tools="http://schemas.android.com/tools" tools:ignore="UnusedResources">If you’d like to share your Live location, ${app_name} needs location access all the time when the app is in the background.\nWe will only access your location for the duration that you choose.</string>
     <string name="location_not_available_dialog_title">${app_name} could not access your location</string>
     <string name="location_not_available_dialog_content">${app_name} could not access your location. Please try again later.</string>
     <string name="location_share_external">Open with</string>
-    <string name="settings_enable_location_sharing">Enable location sharing</string>
-    <string name="settings_enable_location_sharing_summary">Once enabled you will be able to send your location to any room</string>
-    <string name="labs_render_locations_in_timeline">Render user locations in the timeline</string>
+    <!--TODO delete-->
+    <string name="settings_enable_location_sharing" tools:ignore="UnusedResources">Enable location sharing</string>
+    <!--TODO delete-->
+    <string name="settings_enable_location_sharing_summary" tools:ignore="UnusedResources">Once enabled you will be able to send your location to any room</string>
+    <!--TODO delete-->
+    <string name="labs_render_locations_in_timeline" tools:ignore="UnusedResources">Render user locations in the timeline</string>
     <string name="location_timeline_failed_to_load_map">Failed to load map</string>
     <string name="location_share_live_enabled">Live location enabled</string>
     <string name="location_share_live_started">Loading live location…</string>
@@ -3037,6 +3037,8 @@
     <string name="live_location_sharing_notification_description">Location sharing is in progress</string>
     <string name="labs_enable_live_location">Enable Live Location Sharing</string>
     <string name="labs_enable_live_location_summary">Temporary implementation: locations persist in room history</string>
+    <string name="live_location_bottom_sheet_stop_sharing">Stop sharing</string>
+    <string name="live_location_bottom_sheet_last_updated_at">Updated %1$s ago</string>
 
     <string name="message_bubbles">Show Message bubbles</string>
 

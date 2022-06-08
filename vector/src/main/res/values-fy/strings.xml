@@ -38,7 +38,6 @@
     <string name="action_revoke">Ynlûke</string>
     <string name="action_disconnect">Ferbining ferbrekke</string>
     <string name="report_content">Ynhâld melde</string>
-
     <string name="or">of</string>
     <string name="action_invite">Utnûgje</string>
     <string name="action_accept">Akseptearje</string>
@@ -70,7 +69,6 @@
     <string name="matrix_only_filter">Allinnich Matrix-kontakten</string>
     <string name="no_result_placeholder">Gjin resultaten</string>
     <string name="rooms_header">Petearen</string>
-
     <string name="groups_header">Mienskippen</string>
     <string name="send_bug_report_include_logs">Lochboek ferstjoere</string>
     <string name="send_bug_report_include_crash_logs">Ungeloklochboek ferstjoere</string>
@@ -365,7 +363,6 @@
     <string name="settings_home_server">Thússerver</string>
     <string name="settings_logged_in">Oanmeld as</string>
     <string name="devices_delete_dialog_title">Autentikaasje</string>
-
     <string name="devices_details_last_seen_title">Foar it letst sjoen</string>
     <string name="devices_details_device_name">Iepenbiere namme wizigje</string>
     <string name="devices_details_name_title">Iepenbiere namme</string>
@@ -382,8 +379,6 @@
     <string name="identity_server_set_alternative_submit">Ferstjoere</string>
     <string name="identity_server_not_defined">Jo brûke gjin identiteitsserver</string>
     <string name="sas_error_unknown">Unbekende flater</string>
-
-
     <string name="sas_incoming_request_notif_title">Ferifikaasjeoanfraach</string>
     <string name="sas_incoming_request_notif_content">%s wol jo sesje ferifiearje</string>
     <string name="sas_verified">Ferifiearre!</string>
@@ -680,7 +675,6 @@
     <string name="notice_room_guest_access_can_join">%1$s hat gasten tastien om dizze keamer binnen te gean.</string>
     <string name="system_theme">Systeemstandert</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">Jo hawwe end-to-end-fersifering ynskeakele (ûnbekend algoritme %1$s).</string>
-
     <plurals name="room_displayname_four_and_more_members">
         <item quantity="one">%1$s, %2$s, %3$s en %4$d oar</item>
         <item quantity="other">%1$s, %2$s, %3$s en %4$d oaren</item>
@@ -844,8 +838,6 @@
     <string name="login_error_ssl_peer_unverified">SSL-flater: de identiteit fan de oar is net befêstige.</string>
     <string name="login_error_homeserver_from_url_not_found_enter_manual">Thússerver kieze</string>
     <string name="auth_accept_policies">Graach it belied fan dizze thússerver lêze en oanfurdigje:</string>
-
-
     <string name="auth_msisdn_already_defined">Dit telefoannûmer is al definiearre.</string>
     <string name="auth_invalid_email">Dit is gjin jildich e-mailadres</string>
     <string name="auth_invalid_login_param">Ferkearde brûkersnamme en/of wachtwurd</string>
@@ -857,7 +849,6 @@
     <string name="call_failed_no_connection_description">Live ferbining opsetten mislearre.
 \nFreegje de behearder fan jo thússerver om in TURN-server te konfigurearjen, sadat oproppen betrouber wurkje.</string>
     <string name="call_failed_no_connection">${app_name} Oprop mislearre</string>
-
     <string name="start_video_call_prompt_msg">Binne jo wis dat jo in fideo-oprop begjinne wolle\?</string>
     <string name="start_voice_call_prompt_msg">Binne jo wis dat jo in spraakoprop begjinne wolle\?</string>
     <string name="send_bug_report_rage_shake">Skodzje om in probleem te melden</string>
@@ -893,20 +884,15 @@
         <item quantity="one">%1$s hat %2$s as alternatyf keameradres tafoege.</item>
         <item quantity="other">%1$s hat %2$s as alternative keameradressen tafoege.</item>
     </plurals>
-
     <string name="room_jump_to_first_unread">Gean nei net-lêzen</string>
     <string name="list_members">Ledelist</string>
     <string name="action_reject">Ofwize</string>
     <string name="permissions_denied_add_contact">Tagong jaan ta jo kontaktpersoanen.</string>
     <string name="permissions_denied_qr_code">Om de QR-koade te scannen moatte jo tagong ta de kamera jaan.</string>
-
     <string name="permissions_rationale_msg_camera_and_audio">${app_name} hat tagong nedich ta jo kamera en mikrofoan om fideo-oproppen te meitsjen.
 \n
 \nJou tagong op de folgjende pop-ups om de oprop te meitsjen.</string>
-
     <string name="permissions_rationale_msg_record_audio">${app_name} hat tagong nedich ta jo mikrofoan om spraakoproppen te meitsjen.</string>
-
-
     <string name="call_remove_jitsi_widget_progress">Oprop beëinigje…</string>
     <string name="call_error_user_not_responding">De oare kant hat net opnommen.</string>
     <string name="call_ended_invite_timeout_title">Gjin antwurd</string>
@@ -957,15 +943,10 @@
 \nBinne jo wis\?</string>
     <string name="room_participants_action_unban">Untballe</string>
     <string name="room_participants_leave_private_warning">Dit petear is net iepenbier. Jo kinne net opnij ta trede sûnder útnûging.</string>
-
-
-
-
     <plurals name="room_title_members">
         <item quantity="one">%d dielnimmer</item>
         <item quantity="other">%d dielnimmers</item>
     </plurals>
-
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Der binne ien of mear tests mislearre, probearje de oanrekommandearre oplossing(en).</string>
     <string name="settings_troubleshoot_diagnostic_success_status">Basisdiagnoaze is oké. As jo noch hieltyd gjin meldingen ûntfange, meitsje dan in bugmelding oan om ús te helpen ûndersykjen.</string>
     <string name="settings_troubleshoot_diagnostic">Diagnostyske probleemoplossingsynformaasje</string>
@@ -981,10 +962,7 @@
     <string name="shortcut_disabled_reason_room_left">De keamer is ferlitten!</string>
     <string name="room_settings_add_homescreen_shortcut">Fluchkeppeling oan startskerm tafoegje</string>
     <string name="room_settings_mention_and_keyword_only">Allinnich fermeldingen en kaaiwurden</string>
-
-
     <string name="search_banned_user_hint">Ferballe brûkers filterje</string>
-
     <string name="room_permissions_change_topic">Underwerp wizigje</string>
     <string name="room_permissions_upgrade_the_space">De romte opwurdearje</string>
     <string name="room_permissions_upgrade_the_room">De keamer opwurdearje</string>
@@ -1011,4 +989,7 @@
     <string name="room_one_user_is_typing">%s is oan it typen…</string>
     <string name="room_participants_unban_prompt_msg">Troch dizze brûker net mear te ferballen kin dy opnij oan it petear meidwaan.</string>
     <string name="space_participants_unban_prompt_msg">Troch dizze brûker net mear te ferballen kin dy opnij yn de romte komme.</string>
+    <string name="initial_sync_request_reason_unignored_users">- Beskate brûkers binne net mear negearre</string>
+    <string name="initial_sync_request_title">Inisjele syngronisaasje oanfreegje</string>
+    <string name="room_error_access_unauthorized">It is jo net tastien dizze keamer binnen te gean</string>
 </resources>

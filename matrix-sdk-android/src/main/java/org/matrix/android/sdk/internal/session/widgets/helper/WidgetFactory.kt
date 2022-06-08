@@ -33,11 +33,13 @@ import org.matrix.android.sdk.internal.session.user.UserDataSource
 import java.net.URLEncoder
 import javax.inject.Inject
 
-internal class WidgetFactory @Inject constructor(private val userDataSource: UserDataSource,
-                                                 private val realmSessionProvider: RealmSessionProvider,
-                                                 private val displayNameResolver: DisplayNameResolver,
-                                                 private val urlResolver: ContentUrlResolver,
-                                                 @UserId private val userId: String) {
+internal class WidgetFactory @Inject constructor(
+        private val userDataSource: UserDataSource,
+        private val realmSessionProvider: RealmSessionProvider,
+        private val displayNameResolver: DisplayNameResolver,
+        private val urlResolver: ContentUrlResolver,
+        @UserId private val userId: String
+) {
 
     fun create(widgetEvent: Event): Widget? {
         val widgetContent = widgetEvent.content.toModel<WidgetContent>()

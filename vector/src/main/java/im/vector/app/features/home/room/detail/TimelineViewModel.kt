@@ -29,7 +29,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.AppStateHandler
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
@@ -56,6 +55,8 @@ import im.vector.app.features.home.room.typing.TypingHelper
 import im.vector.app.features.location.LocationSharingServiceConnection
 import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
+import im.vector.app.features.raw.wellknown.getOutboundSessionKeySharingStrategyOrDefault
+import im.vector.app.features.raw.wellknown.withElementWellKnown
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorDataStore
 import im.vector.app.features.settings.VectorPreferences
@@ -76,6 +77,7 @@ import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.QueryStringValue
+import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -88,7 +90,6 @@ import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.getRoom
-import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.room.getStateEvent
 import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
@@ -103,6 +104,7 @@ import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.read.ReadService
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.api.session.sync.SyncRequestState
 import org.matrix.android.sdk.api.session.threads.ThreadNotificationBadgeState
 import org.matrix.android.sdk.api.session.threads.ThreadNotificationState
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
@@ -118,6 +120,7 @@ class TimelineViewModel @AssistedInject constructor(
         private val vectorDataStore: VectorDataStore,
         private val stringProvider: StringProvider,
         private val session: Session,
+        private val rawService: RawService,
         private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
         private val stickerPickerActionHandler: StickerPickerActionHandler,
         private val typingHelper: TypingHelper,
@@ -196,8 +199,13 @@ class TimelineViewModel @AssistedInject constructor(
         chatEffectManager.delegate = this
 
         // Ensure to share the outbound session keys with all members
-        if (OutboundSessionKeySharingStrategy.WhenEnteringRoom == BuildConfig.outboundSessionKeySharingStrategy && room.roomCryptoService().isEncrypted()) {
-            prepareForEncryption()
+        if (room.roomCryptoService().isEncrypted()) {
+            rawService.withElementWellKnown(viewModelScope, session.sessionParams) {
+                val strategy = it.getOutboundSessionKeySharingStrategyOrDefault()
+                if (strategy == OutboundSessionKeySharingStrategy.WhenEnteringRoom) {
+                    prepareForEncryption()
+                }
+            }
         }
 
         // If the user had already accepted the invitation in the room list
@@ -211,7 +219,8 @@ class TimelineViewModel @AssistedInject constructor(
             appStateHandler.getCurrentRoomGroupingMethod()?.space().let { currentSpace ->
                 val currentRoomSummary = room.roomSummary() ?: return@let
                 // nothing we are good
-                if (currentSpace == null || !currentRoomSummary.flattenParentIds.contains(currentSpace.roomId)) {
+                if ((currentSpace == null && !vectorPreferences.prefSpacesShowAllRoomInHome()) ||
+                        (currentSpace != null && !currentRoomSummary.flattenParentIds.contains(currentSpace.roomId))) {
                     // take first one or switch to home
                     appStateHandler.setCurrentSpace(
                             currentRoomSummary
@@ -666,10 +675,13 @@ class TimelineViewModel @AssistedInject constructor(
 
     private fun handleComposerFocusChange(action: RoomDetailAction.ComposerFocusChange) {
         // Ensure outbound session keys
-        if (OutboundSessionKeySharingStrategy.WhenTyping == BuildConfig.outboundSessionKeySharingStrategy && room.roomCryptoService().isEncrypted()) {
-            if (action.focused) {
-                // Should we add some rate limit here, or do it only once per model lifecycle?
-                prepareForEncryption()
+        if (room.roomCryptoService().isEncrypted()) {
+            rawService.withElementWellKnown(viewModelScope, session.sessionParams) {
+                val strategy = it.getOutboundSessionKeySharingStrategyOrDefault()
+                if (strategy == OutboundSessionKeySharingStrategy.WhenTyping && action.focused) {
+                    // Should we add some rate limit here, or do it only once per model lifecycle?
+                    prepareForEncryption()
+                }
             }
         }
     }
@@ -1118,11 +1130,11 @@ class TimelineViewModel @AssistedInject constructor(
                     copy(syncState = syncState)
                 }
 
-        session.syncStatusService().getSyncStatusLive()
+        session.syncService().getSyncRequestStateLive()
                 .asFlow()
-                .filterIsInstance<SyncStatusService.Status.IncrementalSyncStatus>()
+                .filterIsInstance<SyncRequestState.IncrementalSyncRequestState>()
                 .setOnEach {
-                    copy(incrementalSyncStatus = it)
+                    copy(incrementalSyncRequestState = it)
                 }
     }
 

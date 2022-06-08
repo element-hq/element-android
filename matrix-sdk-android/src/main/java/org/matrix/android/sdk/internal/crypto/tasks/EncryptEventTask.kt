@@ -31,10 +31,11 @@ import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
 
 internal interface EncryptEventTask : Task<EncryptEventTask.Params, Event> {
-    data class Params(val roomId: String,
-                      val event: Event,
-                      /**Do not encrypt these keys, keep them as is in encrypted content (e.g. m.relates_to)*/
-                      val keepKeys: List<String>? = null
+    data class Params(
+            val roomId: String,
+            val event: Event,
+            /**Do not encrypt these keys, keep them as is in encrypted content (e.g. m.relates_to)*/
+            val keepKeys: List<String>? = null
     )
 }
 

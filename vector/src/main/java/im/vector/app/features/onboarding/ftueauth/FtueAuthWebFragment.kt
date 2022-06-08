@@ -120,8 +120,10 @@ class FtueAuthWebFragment @Inject constructor(
         views.loginWebWebView.loadUrl(url)
 
         views.loginWebWebView.webViewClient = object : WebViewClient() {
-            override fun onReceivedSslError(view: WebView, handler: SslErrorHandler,
-                                            error: SslError) {
+            override fun onReceivedSslError(
+                    view: WebView, handler: SslErrorHandler,
+                    error: SslError
+            ) {
                 MaterialAlertDialogBuilder(requireActivity())
                         .setMessage(R.string.ssl_could_not_verify)
                         .setPositiveButton(R.string.ssl_trust) { _, _ -> handler.proceed() }

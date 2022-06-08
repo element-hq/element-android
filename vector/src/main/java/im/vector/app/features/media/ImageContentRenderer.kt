@@ -41,6 +41,7 @@ import im.vector.app.core.glide.GlideRequest
 import im.vector.app.core.glide.GlideRequests
 import im.vector.app.core.ui.model.Size
 import im.vector.app.core.utils.DimensionConverter
+import im.vector.app.features.settings.VectorPreferences
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
@@ -65,9 +66,12 @@ interface AttachmentData : Parcelable {
 private const val URL_PREVIEW_IMAGE_MIN_FULL_WIDTH_PX = 600
 private const val URL_PREVIEW_IMAGE_MIN_FULL_HEIGHT_PX = 315
 
-class ImageContentRenderer @Inject constructor(private val localFilesHelper: LocalFilesHelper,
-                                               private val activeSessionHolder: ActiveSessionHolder,
-                                               private val dimensionConverter: DimensionConverter) {
+class ImageContentRenderer @Inject constructor(
+        private val localFilesHelper: LocalFilesHelper,
+        private val activeSessionHolder: ActiveSessionHolder,
+        private val dimensionConverter: DimensionConverter,
+        private val vectorPreferences: VectorPreferences
+) {
 
     @Parcelize
     data class Data(
@@ -133,7 +137,10 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
         imageView.contentDescription = data.filename
 
         createGlideRequest(data, mode, imageView, size)
-                .dontAnimate()
+                .let {
+                    if (vectorPreferences.autoplayAnimatedImages()) it
+                    else it.dontAnimate()
+                }
                 .transform(cornerTransformation)
                 // .thumbnail(0.3f)
                 .into(imageView)
@@ -179,19 +186,23 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
 
         createGlideRequest(data, mode, imageView, size)
                 .listener(object : RequestListener<Drawable> {
-                    override fun onLoadFailed(e: GlideException?,
-                                              model: Any?,
-                                              target: Target<Drawable>?,
-                                              isFirstResource: Boolean): Boolean {
+                    override fun onLoadFailed(
+                            e: GlideException?,
+                            model: Any?,
+                            target: Target<Drawable>?,
+                            isFirstResource: Boolean
+                    ): Boolean {
                         callback?.invoke(false)
                         return false
                     }
 
-                    override fun onResourceReady(resource: Drawable?,
-                                                 model: Any?,
-                                                 target: Target<Drawable>?,
-                                                 dataSource: DataSource?,
-                                                 isFirstResource: Boolean): Boolean {
+                    override fun onResourceReady(
+                            resource: Drawable?,
+                            model: Any?,
+                            target: Target<Drawable>?,
+                            dataSource: DataSource?,
+                            isFirstResource: Boolean
+                    ): Boolean {
                         callback?.invoke(true)
                         return false
                     }
@@ -222,19 +233,23 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
         }
 
         req.listener(object : RequestListener<Drawable> {
-            override fun onLoadFailed(e: GlideException?,
-                                      model: Any?,
-                                      target: Target<Drawable>?,
-                                      isFirstResource: Boolean): Boolean {
+            override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    isFirstResource: Boolean
+            ): Boolean {
                 callback?.invoke(false)
                 return false
             }
 
-            override fun onResourceReady(resource: Drawable?,
-                                         model: Any?,
-                                         target: Target<Drawable>?,
-                                         dataSource: DataSource?,
-                                         isFirstResource: Boolean): Boolean {
+            override fun onResourceReady(
+                    resource: Drawable?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    dataSource: DataSource?,
+                    isFirstResource: Boolean
+            ): Boolean {
                 callback?.invoke(true)
                 return false
             }

@@ -2189,9 +2189,6 @@
     <string name="settings_mentions_and_keywords_encryption_notice">Auf deinem Mobilgerät wirst du keine Benachrichtigungen für Erwähnungen und Schlüsselwörter in verschlüsselten Räumen erhalten.</string>
     <string name="space_add_existing_spaces">Existierende Spaces hinzufügen</string>
     <string name="space_add_existing_rooms_only">Existierende Räume hinzufügen</string>
-    <string name="leave_specific_ones">Ausgewählte Räume oder Subspaces verlassen…</string>
-    <string name="dont_leave_any">Keine Räume und Subspaces verlassen</string>
-    <string name="leave_all_rooms_and_spaces">Alle Räume und Spaces verlassen</string>
     <string name="space_leave_prompt_msg_with_name">Willst du %s wirklich verlassen\?</string>
     <string name="invite_by_username_or_mail">Mit Benutzername oder E-Mail einladen</string>
     <string name="command_description_add_to_space">Zum ausgewählten Space hinzufügen</string>
@@ -2219,7 +2216,6 @@
 \n
 \nUm sie für immer zu entfernen, solltest du sie bannen.</string>
     <string name="a11y_stop_voice_message">Aufnahme beenden</string>
-    <string name="pick_tings_to_leave">Welche Räume willst du verlassen\?</string>
     <string name="finish_setup">Einrichtung beenden</string>
     <string name="a11y_presence_unavailable">Nicht stören</string>
     <string name="a11y_presence_offline">Offline</string>

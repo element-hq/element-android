@@ -261,9 +261,10 @@ internal class DefaultCrossSigningService @Inject constructor(
                 }
     }
 
-    override fun checkTrustFromPrivateKeys(masterKeyPrivateKey: String?,
-                                           uskKeyPrivateKey: String?,
-                                           sskPrivateKey: String?
+    override fun checkTrustFromPrivateKeys(
+            masterKeyPrivateKey: String?,
+            uskKeyPrivateKey: String?,
+            sskPrivateKey: String?
     ): UserTrustResult {
         val mxCrossSigningInfo = getMyCrossSigningKeys() ?: return UserTrustResult.CrossSigningNotConfigured(userId)
 

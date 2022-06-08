@@ -142,7 +142,7 @@ fun initialSyncIdlingResource(session: Session): IdlingResource {
         override fun getName() = "InitialSyncIdlingResource for ${session.myUserId}"
 
         override fun isIdleNow(): Boolean {
-            val isIdle = session.hasAlreadySynced()
+            val isIdle = session.syncService().hasAlreadySynced()
             return isIdle
         }
 
@@ -151,16 +151,16 @@ fun initialSyncIdlingResource(session: Session): IdlingResource {
         }
 
         override fun onChanged(t: SyncState?) {
-            val isIdle = session.hasAlreadySynced()
+            val isIdle = session.syncService().hasAlreadySynced()
             if (isIdle) {
                 callback?.onTransitionToIdle()
-                session.getSyncStateLive().removeObserver(this)
+                session.syncService().getSyncStateLive().removeObserver(this)
             }
         }
     }
 
     runOnUiThread {
-        session.getSyncStateLive().observeForever(res)
+        session.syncService().getSyncStateLive().observeForever(res)
     }
 
     return res

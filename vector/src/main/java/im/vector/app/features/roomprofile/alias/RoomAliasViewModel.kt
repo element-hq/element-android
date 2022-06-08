@@ -43,8 +43,10 @@ import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.mapOptional
 import org.matrix.android.sdk.flow.unwrap
 
-class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: RoomAliasViewState,
-                                                     private val session: Session) :
+class RoomAliasViewModel @AssistedInject constructor(
+        @Assisted initialState: RoomAliasViewState,
+        private val session: Session
+) :
         VectorViewModel<RoomAliasViewState, RoomAliasAction, RoomAliasViewEvents>(initialState) {
 
     @AssistedFactory

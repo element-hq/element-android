@@ -34,3 +34,14 @@ body:
       placeholder: Is there anything else you'd like to add?
     validations:
       required: false
+  - type: dropdown
+    id: pr
+    attributes:
+      label: Are you willing to provide a PR?
+      description:  |
+        Don't worry, it's still OK to answer 'No' :).
+      options:
+        - 'Yes'
+        - 'No'
+    validations:
+      required: true

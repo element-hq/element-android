@@ -33,7 +33,6 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.common.CommonTestHelper
-import org.matrix.android.sdk.common.CryptoTestHelper
 import org.matrix.android.sdk.common.checkSendOrder
 import timber.log.Timber
 import java.util.concurrent.CountDownLatch
@@ -48,9 +47,7 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
      */
 
     @Test
-    fun previousLastForwardTest() {
-        val commonTestHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
+    fun previousLastForwardTest() = CommonTestHelper.runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(false)
 
         val aliceSession = cryptoTestData.firstSession
@@ -91,7 +88,7 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
         }
 
         // Bob stop to sync
-        bobSession.stopSync()
+        bobSession.syncService().stopSync()
 
         val firstMessage = "First messages from Alice"
         // Alice sends 30 messages
@@ -104,7 +101,7 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
                 .eventId
 
         // Bob start to sync
-        bobSession.startSync(true)
+        bobSession.syncService().startSync(true)
 
         run {
             val lock = CountDownLatch(1)
@@ -128,7 +125,7 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
         }
 
         // Bob stop to sync
-        bobSession.stopSync()
+        bobSession.syncService().stopSync()
 
         val secondMessage = "Second messages from Alice"
         // Alice sends again 30 messages
@@ -139,7 +136,7 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
         )
 
         // Bob start to sync
-        bobSession.startSync(true)
+        bobSession.syncService().startSync(true)
 
         run {
             val lock = CountDownLatch(1)
@@ -242,7 +239,5 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
         }
 
         bobTimeline.dispose()
-
-        cryptoTestData.cleanUp(commonTestHelper)
     }
 }

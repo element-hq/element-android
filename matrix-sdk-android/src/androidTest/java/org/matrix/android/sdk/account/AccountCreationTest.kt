@@ -24,8 +24,8 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
-import org.matrix.android.sdk.common.CommonTestHelper
-import org.matrix.android.sdk.common.CryptoTestHelper
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSessionTest
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
 
@@ -34,32 +34,22 @@ import org.matrix.android.sdk.common.TestConstants
 @LargeTest
 class AccountCreationTest : InstrumentedTest {
 
-    private val commonTestHelper = CommonTestHelper(context())
-    private val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
-
     @Test
-    fun createAccountTest() {
-        val session = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = true))
-
-        commonTestHelper.signOutAndClose(session)
+    fun createAccountTest() = runSessionTest(context()) { commonTestHelper ->
+        commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = true))
     }
 
     @Test
     @Ignore("This test will be ignored until it is fixed")
-    fun createAccountAndLoginAgainTest() {
+    fun createAccountAndLoginAgainTest() = runSessionTest(context()) { commonTestHelper ->
         val session = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = true))
 
         // Log again to the same account
-        val session2 = commonTestHelper.logIntoAccount(session.myUserId, SessionTestParams(withInitialSync = true))
-
-        commonTestHelper.signOutAndClose(session)
-        commonTestHelper.signOutAndClose(session2)
+        commonTestHelper.logIntoAccount(session.myUserId, SessionTestParams(withInitialSync = true))
     }
 
     @Test
-    fun simpleE2eTest() {
-        val res = cryptoTestHelper.doE2ETestWithAliceInARoom()
-
-        res.cleanUp(commonTestHelper)
+    fun simpleE2eTest() = runCryptoTest(context()) { cryptoTestHelper, _ ->
+        cryptoTestHelper.doE2ETestWithAliceInARoom()
     }
 }

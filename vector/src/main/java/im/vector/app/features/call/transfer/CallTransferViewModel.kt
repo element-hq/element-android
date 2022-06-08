@@ -29,8 +29,10 @@ import im.vector.app.features.call.webrtc.WebRtcCallManager
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxCall
 
-class CallTransferViewModel @AssistedInject constructor(@Assisted initialState: CallTransferViewState,
-                                                        private val callManager: WebRtcCallManager) :
+class CallTransferViewModel @AssistedInject constructor(
+        @Assisted initialState: CallTransferViewState,
+        private val callManager: WebRtcCallManager
+) :
         VectorViewModel<CallTransferViewState, EmptyAction, CallTransferViewEvents>(initialState) {
 
     @AssistedFactory

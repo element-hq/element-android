@@ -45,6 +45,13 @@ import org.matrix.android.sdk.api.util.toOptional
 
 class FlowSession(private val session: Session) {
 
+    fun liveRoomSummary(roomId: String): Flow<Optional<RoomSummary>> {
+        return session.roomService().getRoomSummaryLive(roomId).asFlow()
+                .startWith(session.coroutineDispatchers.io) {
+                    session.roomService().getRoomSummary(roomId).toOptional()
+                }
+    }
+
     fun liveRoomSummaries(queryParams: RoomSummaryQueryParams, sortOrder: RoomSortOrder = RoomSortOrder.NONE): Flow<List<RoomSummary>> {
         return session.roomService().getRoomSummariesLive(queryParams, sortOrder).asFlow()
                 .startWith(session.coroutineDispatchers.io) {
@@ -81,7 +88,7 @@ class FlowSession(private val session: Session) {
     }
 
     fun liveSyncState(): Flow<SyncState> {
-        return session.getSyncStateLive().asFlow()
+        return session.syncService().getSyncStateLive().asFlow()
     }
 
     fun livePushers(): Flow<List<Pusher>> {

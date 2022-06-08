@@ -63,9 +63,11 @@ class PhotoOrVideoDialog(
         }
     }
 
-    private fun submit(views: DialogPhotoOrVideoBinding,
-                       vectorPreferences: VectorPreferences,
-                       listener: PhotoOrVideoDialogListener) {
+    private fun submit(
+            views: DialogPhotoOrVideoBinding,
+            vectorPreferences: VectorPreferences,
+            listener: PhotoOrVideoDialogListener
+    ) {
         val mode = if (views.dialogPhotoOrVideoPhoto.isChecked) {
             VectorPreferences.TAKE_PHOTO_VIDEO_MODE_PHOTO
         } else {

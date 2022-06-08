@@ -21,11 +21,13 @@ import org.matrix.android.sdk.internal.network.RequestExecutor
 
 internal class FakeRequestExecutor : RequestExecutor {
 
-    override suspend fun <DATA> executeRequest(globalErrorReceiver: GlobalErrorReceiver?,
-                                               canRetry: Boolean,
-                                               maxDelayBeforeRetry: Long,
-                                               maxRetriesCount: Int,
-                                               requestBlock: suspend () -> DATA): DATA {
+    override suspend fun <DATA> executeRequest(
+            globalErrorReceiver: GlobalErrorReceiver?,
+            canRetry: Boolean,
+            maxDelayBeforeRetry: Long,
+            maxRetriesCount: Int,
+            requestBlock: suspend () -> DATA
+    ): DATA {
         return requestBlock()
     }
 }

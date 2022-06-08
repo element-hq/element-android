@@ -33,10 +33,12 @@ import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import javax.inject.Inject
 
-internal class TimelineEventDataSource @Inject constructor(private val realmSessionProvider: RealmSessionProvider,
-                                                           private val timelineEventMapper: TimelineEventMapper,
-                                                           private val taskExecutor: TaskExecutor,
-                                                           @SessionDatabase private val monarchy: Monarchy) {
+internal class TimelineEventDataSource @Inject constructor(
+        private val realmSessionProvider: RealmSessionProvider,
+        private val timelineEventMapper: TimelineEventMapper,
+        private val taskExecutor: TaskExecutor,
+        @SessionDatabase private val monarchy: Monarchy
+) {
 
     fun getTimelineEvent(roomId: String, eventId: String): TimelineEvent? {
         return realmSessionProvider.withRealm { realm ->

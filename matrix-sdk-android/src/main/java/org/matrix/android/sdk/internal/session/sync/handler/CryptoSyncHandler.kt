@@ -29,14 +29,16 @@ import org.matrix.android.sdk.api.session.sync.model.SyncResponse
 import org.matrix.android.sdk.api.session.sync.model.ToDeviceSyncResponse
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
 import org.matrix.android.sdk.internal.crypto.verification.DefaultVerificationService
-import org.matrix.android.sdk.internal.session.initsync.ProgressReporter
+import org.matrix.android.sdk.internal.session.sync.ProgressReporter
 import timber.log.Timber
 import javax.inject.Inject
 
 private val loggerTag = LoggerTag("CryptoSyncHandler", LoggerTag.CRYPTO)
 
-internal class CryptoSyncHandler @Inject constructor(private val cryptoService: DefaultCryptoService,
-                                                     private val verificationService: DefaultVerificationService) {
+internal class CryptoSyncHandler @Inject constructor(
+        private val cryptoService: DefaultCryptoService,
+        private val verificationService: DefaultVerificationService
+) {
 
     suspend fun handleToDevice(toDevice: ToDeviceSyncResponse, progressReporter: ProgressReporter? = null) {
         val total = toDevice.events?.size ?: 0

@@ -54,7 +54,8 @@ internal fun ThreadSummaryEntity.updateThreadSummary(
         numberOfThreads: Int?,
         latestThreadEventEntity: EventEntity?,
         isUserParticipating: Boolean,
-        roomMemberContentsByUser: HashMap<String, RoomMemberContent?>) {
+        roomMemberContentsByUser: HashMap<String, RoomMemberContent?>
+) {
     updateThreadSummaryRootEvent(rootThreadEventEntity, roomMemberContentsByUser)
     updateThreadSummaryLatestEvent(latestThreadEventEntity, roomMemberContentsByUser)
     this.isUserParticipating = isUserParticipating

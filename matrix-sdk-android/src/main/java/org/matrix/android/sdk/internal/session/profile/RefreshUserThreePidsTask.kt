@@ -28,9 +28,11 @@ import javax.inject.Inject
 
 internal abstract class RefreshUserThreePidsTask : Task<Unit, Unit>
 
-internal class DefaultRefreshUserThreePidsTask @Inject constructor(private val profileAPI: ProfileAPI,
-                                                                   @SessionDatabase private val monarchy: Monarchy,
-                                                                   private val globalErrorReceiver: GlobalErrorReceiver) : RefreshUserThreePidsTask() {
+internal class DefaultRefreshUserThreePidsTask @Inject constructor(
+        private val profileAPI: ProfileAPI,
+        @SessionDatabase private val monarchy: Monarchy,
+        private val globalErrorReceiver: GlobalErrorReceiver
+) : RefreshUserThreePidsTask() {
 
     override suspend fun execute(params: Unit) {
         val accountThreePidsResponse = executeRequest(globalErrorReceiver) {

@@ -63,12 +63,14 @@ internal interface VerificationInfoAccept : VerificationInfo<ValidVerificationIn
 
 internal interface VerificationInfoAcceptFactory {
 
-    fun create(tid: String,
-               keyAgreementProtocol: String,
-               hash: String,
-               commitment: String,
-               messageAuthenticationCode: String,
-               shortAuthenticationStrings: List<String>): VerificationInfoAccept
+    fun create(
+            tid: String,
+            keyAgreementProtocol: String,
+            hash: String,
+            commitment: String,
+            messageAuthenticationCode: String,
+            shortAuthenticationStrings: List<String>
+    ): VerificationInfoAccept
 }
 
 internal data class ValidVerificationInfoAccept(

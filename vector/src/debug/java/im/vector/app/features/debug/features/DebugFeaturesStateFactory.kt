@@ -60,6 +60,11 @@ class DebugFeaturesStateFactory @Inject constructor(
                                 key = DebugFeatureKeys.onboardingCombinedRegister,
                                 factory = VectorFeatures::isOnboardingCombinedRegisterEnabled
                         ),
+                        createBooleanFeature(
+                                label = "FTUE Combined login",
+                                key = DebugFeatureKeys.onboardingCombinedLogin,
+                                factory = VectorFeatures::isOnboardingCombinedLoginEnabled
+                        ),
                 )
         )
     }

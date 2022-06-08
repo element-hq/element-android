@@ -41,10 +41,12 @@ internal object MXEncryptedAttachments {
     private const val SECRET_KEY_SPEC_ALGORITHM = "AES"
     private const val MESSAGE_DIGEST_ALGORITHM = "SHA-256"
 
-    fun encrypt(clearStream: InputStream,
-                outputFile: File,
-                clock: Clock,
-                progress: ((current: Int, total: Int) -> Unit)): EncryptedFileInfo {
+    fun encrypt(
+            clearStream: InputStream,
+            outputFile: File,
+            clock: Clock,
+            progress: ((current: Int, total: Int) -> Unit)
+    ): EncryptedFileInfo {
         val t0 = clock.epochMillis()
         val secureRandom = SecureRandom()
         val initVectorBytes = ByteArray(16) { 0.toByte() }
@@ -236,10 +238,11 @@ internal object MXEncryptedAttachments {
      * @param clock a clock to retrieve current time
      * @return true in case of success, false in case of error
      */
-    fun decryptAttachment(attachmentStream: InputStream?,
-                          elementToDecrypt: ElementToDecrypt?,
-                          outputStream: OutputStream,
-                          clock: Clock
+    fun decryptAttachment(
+            attachmentStream: InputStream?,
+            elementToDecrypt: ElementToDecrypt?,
+            outputStream: OutputStream,
+            clock: Clock
     ): Boolean {
         // sanity checks
         if (null == attachmentStream || elementToDecrypt == null) {

@@ -21,8 +21,9 @@ import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.util.Cancelable
 import java.util.UUID
 
-internal fun <PARAMS, RESULT> Task<PARAMS, RESULT>.configureWith(params: PARAMS,
-                                                                 init: (ConfigurableTask.Builder<PARAMS, RESULT>.() -> Unit) = {}
+internal fun <PARAMS, RESULT> Task<PARAMS, RESULT>.configureWith(
+        params: PARAMS,
+        init: (ConfigurableTask.Builder<PARAMS, RESULT>.() -> Unit) = {}
 ): ConfigurableTask<PARAMS, RESULT> {
     return ConfigurableTask.Builder(this, params).apply(init).build()
 }

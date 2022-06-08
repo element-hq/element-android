@@ -22,6 +22,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.FixMethodOrder
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
@@ -40,7 +41,7 @@ import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
 import org.matrix.android.sdk.api.session.space.JoinSpaceResult
-import org.matrix.android.sdk.common.CommonTestHelper
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSessionTest
 import org.matrix.android.sdk.common.SessionTestParams
 
 @RunWith(JUnit4::class)
@@ -49,8 +50,7 @@ import org.matrix.android.sdk.common.SessionTestParams
 class SpaceCreationTest : InstrumentedTest {
 
     @Test
-    fun createSimplePublicSpace() {
-        val commonTestHelper = CommonTestHelper(context())
+    fun createSimplePublicSpace() = runSessionTest(context()) { commonTestHelper ->
         val session = commonTestHelper.createAccount("Hubble", SessionTestParams(true))
         val roomName = "My Space"
         val topic = "A public space for test"
@@ -96,13 +96,11 @@ class SpaceCreationTest : InstrumentedTest {
                 ?.toModel<RoomHistoryVisibilityContent>()?.historyVisibility
 
         assertEquals("Public space room should be world readable", RoomHistoryVisibility.WORLD_READABLE, historyVisibility)
-
-        commonTestHelper.signOutAndClose(session)
     }
 
     @Test
-    fun testJoinSimplePublicSpace() {
-        val commonTestHelper = CommonTestHelper(context())
+    @Ignore
+    fun testJoinSimplePublicSpace() = runSessionTest(context()) { commonTestHelper ->
 
         val aliceSession = commonTestHelper.createAccount("alice", SessionTestParams(true))
         val bobSession = commonTestHelper.createAccount("bob", SessionTestParams(true))
@@ -134,8 +132,7 @@ class SpaceCreationTest : InstrumentedTest {
     }
 
     @Test
-    fun testSimplePublicSpaceWithChildren() {
-        val commonTestHelper = CommonTestHelper(context())
+    fun testSimplePublicSpaceWithChildren() = runSessionTest(context()) { commonTestHelper ->
         val aliceSession = commonTestHelper.createAccount("alice", SessionTestParams(true))
         val bobSession = commonTestHelper.createAccount("bob", SessionTestParams(true))
 
@@ -204,8 +201,5 @@ class SpaceCreationTest : InstrumentedTest {
 //        ).size
 //
 //        assertEquals("Unexpected number of joined children", 1, childCount)
-
-        commonTestHelper.signOutAndClose(aliceSession)
-        commonTestHelper.signOutAndClose(bobSession)
     }
 }

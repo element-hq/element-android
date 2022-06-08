@@ -29,11 +29,13 @@ class JitsiJWTFactory @Inject constructor() {
      * Create a JWT token for jitsi openidtoken-jwt authentication
      * See https://github.com/matrix-org/prosody-mod-auth-matrix-user-verification
      */
-    fun create(openIdToken: OpenIdToken,
-               jitsiServerDomain: String,
-               roomId: String,
-               userAvatarUrl: String,
-               userDisplayName: String): String {
+    fun create(
+            openIdToken: OpenIdToken,
+            jitsiServerDomain: String,
+            roomId: String,
+            userAvatarUrl: String,
+            userDisplayName: String
+    ): String {
         // The secret key here is irrelevant, we're only using the JWT to transport data to Prosody in the Jitsi stack.
         val key = Keys.secretKeyFor(SignatureAlgorithm.HS256)
         val context = mapOf(

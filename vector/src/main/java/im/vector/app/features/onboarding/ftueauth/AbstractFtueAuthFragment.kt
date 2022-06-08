@@ -80,11 +80,11 @@ abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<V
         }
 
         when (throwable) {
-            is CancellationException                  ->
+            is CancellationException ->
                 /* Ignore this error, user has cancelled the action */
                 Unit
             is Failure.UnrecognizedCertificateFailure -> showUnrecognizedCertificateFailure(throwable)
-            else                                      -> onError(throwable)
+            else -> onError(throwable)
         }
     }
 
@@ -153,7 +153,7 @@ abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<V
 
     final override fun invalidate() = withState(viewModel) { state ->
         // True when email is sent with success to the homeserver
-        isResetPasswordStarted = state.resetPasswordEmail.isNullOrBlank().not()
+        isResetPasswordStarted = state.resetState.email.isNullOrBlank().not()
 
         updateWithState(state)
     }

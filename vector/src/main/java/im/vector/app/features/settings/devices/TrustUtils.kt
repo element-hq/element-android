@@ -21,10 +21,12 @@ import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 
 object TrustUtils {
 
-    fun shieldForTrust(currentDevice: Boolean,
-                       trustMSK: Boolean,
-                       legacyMode: Boolean,
-                       deviceTrustLevel: DeviceTrustLevel?): RoomEncryptionTrustLevel {
+    fun shieldForTrust(
+            currentDevice: Boolean,
+            trustMSK: Boolean,
+            legacyMode: Boolean,
+            deviceTrustLevel: DeviceTrustLevel?
+    ): RoomEncryptionTrustLevel {
         return when {
             currentDevice -> {
                 if (legacyMode) {

@@ -50,11 +50,13 @@ import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.analytics.accountdata.AnalyticsAccountDataViewModel
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.analytics.plan.ViewRoom
+import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.disclaimer.showDisclaimerDialog
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.matrixto.OriginOfMatrixTo
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.notifications.NotificationDrawerManager
+import im.vector.app.features.onboarding.AuthenticationDescription
 import im.vector.app.features.permalink.NavigationInterceptor
 import im.vector.app.features.permalink.PermalinkHandler
 import im.vector.app.features.permalink.PermalinkHandler.Companion.MATRIX_TO_CUSTOM_SCHEME_URL_BASE
@@ -79,9 +81,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.sync.InitialSyncStrategy
+import org.matrix.android.sdk.api.session.sync.SyncRequestState
 import org.matrix.android.sdk.api.session.sync.initialSyncStrategy
 import org.matrix.android.sdk.api.util.MatrixItem
 import timber.log.Timber
@@ -90,7 +92,7 @@ import javax.inject.Inject
 @Parcelize
 data class HomeActivityArgs(
         val clearNotification: Boolean,
-        val accountCreation: Boolean,
+        val authenticationDescription: AuthenticationDescription? = null,
         val hasExistingSession: Boolean = false,
         val inviteNotificationRoomId: String? = null
 ) : Parcelable
@@ -199,43 +201,13 @@ class HomeActivity :
                     when (sharedAction) {
                         is HomeActivitySharedAction.OpenDrawer        -> views.drawerLayout.openDrawer(GravityCompat.START)
                         is HomeActivitySharedAction.CloseDrawer       -> views.drawerLayout.closeDrawer(GravityCompat.START)
-                        is HomeActivitySharedAction.OpenGroup         -> {
-                            views.drawerLayout.closeDrawer(GravityCompat.START)
-
-                            // Temporary
-                            // When switching from space to group or group to space, we need to reload the fragment
-                            // To be removed when dropping legacy groups
-                            if (sharedAction.clearFragment) {
-                                replaceFragment(views.homeDetailFragmentContainer, HomeDetailFragment::class.java, allowStateLoss = true)
-                            } else {
-                                // nop
-                            }
-                            // we might want to delay that to avoid having the drawer animation lagging
-                            // would be probably better to let the drawer do that? in the on closed callback?
-                        }
-                        is HomeActivitySharedAction.OpenSpacePreview  -> {
-                            startActivity(SpacePreviewActivity.newIntent(this, sharedAction.spaceId))
-                        }
-                        is HomeActivitySharedAction.AddSpace          -> {
-                            createSpaceResultLauncher.launch(SpaceCreationActivity.newIntent(this))
-                        }
-                        is HomeActivitySharedAction.ShowSpaceSettings -> {
-                            // open bottom sheet
-                            SpaceSettingsMenuBottomSheet
-                                    .newInstance(sharedAction.spaceId, object : SpaceSettingsMenuBottomSheet.InteractionListener {
-                                        override fun onShareSpaceSelected(spaceId: String) {
-                                            ShareSpaceBottomSheet.show(supportFragmentManager, spaceId)
-                                        }
-                                    })
-                                    .show(supportFragmentManager, "SPACE_SETTINGS")
-                        }
-                        is HomeActivitySharedAction.OpenSpaceInvite   -> {
-                            SpaceInviteBottomSheet.newInstance(sharedAction.spaceId)
-                                    .show(supportFragmentManager, "SPACE_INVITE")
-                        }
-                        HomeActivitySharedAction.SendSpaceFeedBack    -> {
-                            bugReporter.openBugReportScreen(this, ReportType.SPACE_BETA_FEEDBACK)
-                        }
+                        is HomeActivitySharedAction.OpenGroup         -> openGroup(sharedAction.shouldClearFragment)
+                        is HomeActivitySharedAction.OpenSpacePreview  -> startActivity(SpacePreviewActivity.newIntent(this, sharedAction.spaceId))
+                        is HomeActivitySharedAction.AddSpace          -> createSpaceResultLauncher.launch(SpaceCreationActivity.newIntent(this))
+                        is HomeActivitySharedAction.ShowSpaceSettings -> showSpaceSettings(sharedAction.spaceId)
+                        is HomeActivitySharedAction.OpenSpaceInvite   -> openSpaceInvite(sharedAction.spaceId)
+                        HomeActivitySharedAction.SendSpaceFeedBack    -> bugReporter.openBugReportScreen(this, ReportType.SPACE_BETA_FEEDBACK)
+                        HomeActivitySharedAction.CloseGroup           -> closeGroup()
                     }
                 }
                 .launchIn(lifecycleScope)
@@ -256,6 +228,14 @@ class HomeActivity :
                 is HomeActivityViewEvents.AskPasswordToInitCrossSigning -> handleAskPasswordToInitCrossSigning(it)
                 is HomeActivityViewEvents.OnNewSession                  -> handleOnNewSession(it)
                 HomeActivityViewEvents.PromptToEnableSessionPush        -> handlePromptToEnablePush()
+                HomeActivityViewEvents.StartRecoverySetupFlow           -> handleStartRecoverySetup()
+                is HomeActivityViewEvents.ForceVerification             ->  {
+                    if (it.sendRequest) {
+                        navigator.requestSelfSessionVerification(this)
+                    } else {
+                        navigator.waitSessionVerification(this)
+                    }
+                }
                 is HomeActivityViewEvents.OnCrossSignedInvalidated      -> handleCrossSigningInvalidated(it)
                 HomeActivityViewEvents.ShowAnalyticsOptIn               -> handleShowAnalyticsOptIn()
                 HomeActivityViewEvents.NotifyUserForThreadsMigration    -> handleNotifyUserForThreadsMigration()
@@ -270,6 +250,37 @@ class HomeActivity :
             handleIntent(intent)
         }
         homeActivityViewModel.handle(HomeActivityViewActions.ViewStarted)
+    }
+
+    private fun openGroup(shouldClearFragment: Boolean) {
+        views.drawerLayout.closeDrawer(GravityCompat.START)
+
+        // When switching from space to group or group to space, we need to reload the fragment
+        if (shouldClearFragment) {
+            replaceFragment(views.homeDetailFragmentContainer, HomeDetailFragment::class.java, allowStateLoss = true)
+        } else {
+            // do nothing
+        }
+    }
+
+    private fun showSpaceSettings(spaceId: String) {
+        // open bottom sheet
+        SpaceSettingsMenuBottomSheet
+                .newInstance(spaceId, object : SpaceSettingsMenuBottomSheet.InteractionListener {
+                    override fun onShareSpaceSelected(spaceId: String) {
+                        ShareSpaceBottomSheet.show(supportFragmentManager, spaceId)
+                    }
+                })
+                .show(supportFragmentManager, "SPACE_SETTINGS")
+    }
+
+    private fun openSpaceInvite(spaceId: String) {
+        SpaceInviteBottomSheet.newInstance(spaceId)
+                .show(supportFragmentManager, "SPACE_INVITE")
+    }
+
+    private fun closeGroup() {
+        views.drawerLayout.openDrawer(GravityCompat.START)
     }
 
     private fun handleShowAnalyticsOptIn() {
@@ -354,10 +365,17 @@ class HomeActivity :
         }
     }
 
+    private fun handleStartRecoverySetup() {
+        // To avoid IllegalStateException in case the transaction was executed after onSaveInstanceState
+        lifecycleScope.launchWhenResumed {
+            navigator.open4SSetup(this@HomeActivity, SetupMode.NORMAL)
+        }
+    }
+
     private fun renderState(state: HomeActivityViewState) {
-        when (val status = state.syncStatusServiceStatus) {
-            is SyncStatusService.Status.InitialSyncProgressing -> {
-                val initSyncStepStr = initSyncStepFormatter.format(status.initSyncStep)
+        when (val status = state.syncRequestState) {
+            is SyncRequestState.InitialSyncProgressing -> {
+                val initSyncStepStr = initSyncStepFormatter.format(status.initialSyncStep)
                 Timber.v("$initSyncStepStr ${status.percentProgress}")
                 views.waitingView.root.setOnClickListener {
                     // block interactions
@@ -374,7 +392,7 @@ class HomeActivity :
                 }
                 views.waitingView.root.isVisible = true
             }
-            else                                               -> {
+            else                                 -> {
                 // Idle or Incremental sync status
                 views.waitingView.root.isVisible = false
             }
@@ -592,15 +610,16 @@ class HomeActivity :
     }
 
     companion object {
-        fun newIntent(context: Context,
-                      clearNotification: Boolean = false,
-                      accountCreation: Boolean = false,
-                      existingSession: Boolean = false,
-                      inviteNotificationRoomId: String? = null
+        fun newIntent(
+                context: Context,
+                clearNotification: Boolean = false,
+                authenticationDescription: AuthenticationDescription? = null,
+                existingSession: Boolean = false,
+                inviteNotificationRoomId: String? = null
         ): Intent {
             val args = HomeActivityArgs(
                     clearNotification = clearNotification,
-                    accountCreation = accountCreation,
+                    authenticationDescription = authenticationDescription,
                     hasExistingSession = existingSession,
                     inviteNotificationRoomId = inviteNotificationRoomId
             )

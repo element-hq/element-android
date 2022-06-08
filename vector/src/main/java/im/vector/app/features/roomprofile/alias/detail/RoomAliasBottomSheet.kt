@@ -86,11 +86,13 @@ class RoomAliasBottomSheet :
     }
 
     companion object {
-        fun newInstance(alias: String,
-                        isPublished: Boolean,
-                        isMainAlias: Boolean,
-                        isLocal: Boolean,
-                        canEditCanonicalAlias: Boolean): RoomAliasBottomSheet {
+        fun newInstance(
+                alias: String,
+                isPublished: Boolean,
+                isMainAlias: Boolean,
+                isLocal: Boolean,
+                canEditCanonicalAlias: Boolean
+        ): RoomAliasBottomSheet {
             return RoomAliasBottomSheet().apply {
                 setArguments(
                         RoomAliasBottomSheetArgs(

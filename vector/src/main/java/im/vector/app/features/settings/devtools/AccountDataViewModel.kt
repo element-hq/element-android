@@ -36,8 +36,10 @@ data class AccountDataViewState(
         val accountData: Async<List<UserAccountDataEvent>> = Uninitialized
 ) : MavericksState
 
-class AccountDataViewModel @AssistedInject constructor(@Assisted initialState: AccountDataViewState,
-                                                       private val session: Session) :
+class AccountDataViewModel @AssistedInject constructor(
+        @Assisted initialState: AccountDataViewState,
+        private val session: Session
+) :
         VectorViewModel<AccountDataViewState, AccountDataAction, EmptyViewEvents>(initialState) {
 
     init {

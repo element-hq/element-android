@@ -60,11 +60,13 @@ fun TextView.setTextOrHide(newText: CharSequence?, hideWhenBlank: Boolean = true
  * @param underline true to also underline the text. Default to false
  * @param onClick attributes to handle click on the colored part if needed
  */
-fun TextView.setTextWithColoredPart(@StringRes fullTextRes: Int,
-                                    @StringRes coloredTextRes: Int,
-                                    @AttrRes colorAttribute: Int = R.attr.colorPrimary,
-                                    underline: Boolean = false,
-                                    onClick: (() -> Unit)? = null) {
+fun TextView.setTextWithColoredPart(
+        @StringRes fullTextRes: Int,
+        @StringRes coloredTextRes: Int,
+        @AttrRes colorAttribute: Int = R.attr.colorPrimary,
+        underline: Boolean = false,
+        onClick: (() -> Unit)? = null
+) {
     val coloredPart = resources.getString(coloredTextRes)
     // Insert colored part into the full text
     val fullText = resources.getString(fullTextRes, coloredPart)
@@ -80,11 +82,13 @@ fun TextView.setTextWithColoredPart(@StringRes fullTextRes: Int,
  * @param underline true to also underline the text. Default to false
  * @param onClick attributes to handle click on the colored part if needed
  */
-fun TextView.setTextWithColoredPart(fullText: String,
-                                    coloredPart: String,
-                                    @AttrRes colorAttribute: Int = R.attr.colorPrimary,
-                                    underline: Boolean = true,
-                                    onClick: (() -> Unit)? = null) {
+fun TextView.setTextWithColoredPart(
+        fullText: String,
+        coloredPart: String,
+        @AttrRes colorAttribute: Int = R.attr.colorPrimary,
+        underline: Boolean = true,
+        onClick: (() -> Unit)? = null
+) {
     val color = ThemeUtils.getColor(context, colorAttribute)
 
     val foregroundSpan = ForegroundColorSpan(color)

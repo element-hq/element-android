@@ -63,14 +63,16 @@ object FcmHelper {
 
     fun onEnterForeground(context: Context, activeSessionHolder: ActiveSessionHolder) {
         // try to stop all regardless of background mode
-        activeSessionHolder.getSafeActiveSession()?.stopAnyBackgroundSync()
+        activeSessionHolder.getSafeActiveSession()?.syncService()?.stopAnyBackgroundSync()
         AlarmSyncBroadcastReceiver.cancelAlarm(context)
     }
 
-    fun onEnterBackground(context: Context,
-                          vectorPreferences: VectorPreferences,
-                          activeSessionHolder: ActiveSessionHolder,
-                          clock: Clock) {
+    fun onEnterBackground(
+            context: Context,
+            vectorPreferences: VectorPreferences,
+            activeSessionHolder: ActiveSessionHolder,
+            clock: Clock
+    ) {
         BackgroundSyncStarter.start(context, vectorPreferences, activeSessionHolder, clock)
     }
 }

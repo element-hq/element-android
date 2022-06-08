@@ -62,9 +62,11 @@ class PreviewUrlView @JvmOverloads constructor(
      * @param imageContentRenderer the tool to render the image
      * @param force true to force refresh
      */
-    fun render(newState: PreviewUrlUiState,
-               imageContentRenderer: ImageContentRenderer,
-               force: Boolean = false) {
+    fun render(
+            newState: PreviewUrlUiState,
+            imageContentRenderer: ImageContentRenderer,
+            force: Boolean = false
+    ) {
         if (newState == state && !force) {
             return
         }

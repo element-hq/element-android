@@ -34,8 +34,10 @@ internal abstract class TermsModule {
         @Provides
         @JvmStatic
         @SessionScope
-        fun providesTermsAPI(@UnauthenticatedWithCertificate unauthenticatedOkHttpClient: Lazy<OkHttpClient>,
-                             retrofitFactory: RetrofitFactory): TermsAPI {
+        fun providesTermsAPI(
+                @UnauthenticatedWithCertificate unauthenticatedOkHttpClient: Lazy<OkHttpClient>,
+                retrofitFactory: RetrofitFactory
+        ): TermsAPI {
             val retrofit = retrofitFactory.create(unauthenticatedOkHttpClient, "https://foo.bar")
             return retrofit.create(TermsAPI::class.java)
         }

@@ -1,5 +1,43 @@
 # Pull requests
 
+<!--- TOC -->
+
+* [Introduction](#introduction)
+* [Who should read this document?](#who-should-read-this-document?)
+* [Submitting PR](#submitting-pr)
+  * [Who can submit pull requests?](#who-can-submit-pull-requests?)
+    * [Humans](#humans)
+      * [Draft PR?](#draft-pr?)
+      * [Base branch](#base-branch)
+      * [PR Review Assignment](#pr-review-assignment)
+      * [PR review time](#pr-review-time)
+      * [Re-request PR review](#re-request-pr-review)
+      * [When create split PR?](#when-create-split-pr?)
+      * [Avoid fixing other unrelated issue in a big PR](#avoid-fixing-other-unrelated-issue-in-a-big-pr)
+    * [Bots](#bots)
+      * [Dependabot](#dependabot)
+      * [Gradle wrapper](#gradle-wrapper)
+      * [Sync analytics plan](#sync-analytics-plan)
+* [Reviewing PR](#reviewing-pr)
+  * [Who can review pull requests?](#who-can-review-pull-requests?)
+  * [What to have in mind when reviewing a PR](#what-to-have-in-mind-when-reviewing-a-pr)
+  * [Rules](#rules)
+    * [Check the form](#check-the-form)
+      * [PR title](#pr-title)
+      * [PR description](#pr-description)
+      * [File change](#file-change)
+      * [Check the commit](#check-the-commit)
+      * [Check the substance](#check-the-substance)
+      * [Make a dedicated meeting to review the PR](#make-a-dedicated-meeting-to-review-the-pr)
+  * [What happen to the issue(s)?](#what-happen-to-the-issues?)
+  * [Merge conflict](#merge-conflict)
+  * [When and who can merge PR](#when-and-who-can-merge-pr)
+    * [Merge type](#merge-type)
+  * [Resolve conversation](#resolve-conversation)
+* [Responsibility](#responsibility)
+
+<!--- END -->
+
 ## Introduction
 
 This document gives some clue about how to efficiently manage Pull Requests (PR). This document is a first draft and may be improved later.

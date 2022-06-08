@@ -48,8 +48,10 @@ fun Spannable.tappableMatchingText(match: String, clickSpan: ClickableSpan): Spa
     return this
 }
 
-fun Span.bullet(text: CharSequence = "",
-                init: Span.() -> Unit = {}): Span = apply {
+fun Span.bullet(
+        text: CharSequence = "",
+        init: Span.() -> Unit = {}
+): Span = apply {
     append(Span(parent = this).apply {
         this.text = text
         this.spans.add(BulletSpan())

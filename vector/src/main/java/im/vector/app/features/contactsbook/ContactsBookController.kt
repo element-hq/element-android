@@ -35,7 +35,8 @@ import javax.inject.Inject
 class ContactsBookController @Inject constructor(
         private val stringProvider: StringProvider,
         private val avatarRenderer: AvatarRenderer,
-        private val errorFormatter: ErrorFormatter) : EpoxyController() {
+        private val errorFormatter: ErrorFormatter
+) : EpoxyController() {
 
     private var state: ContactsBookViewState? = null
 

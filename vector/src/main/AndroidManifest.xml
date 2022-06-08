@@ -45,8 +45,6 @@
     <!-- Location Sharing -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <!--  Debug only whilst live location sharing is WIP -->
-    <!--<uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />-->
 
     <!-- Jitsi SDK is now API23+ -->
     <uses-sdk tools:overrideLibrary="org.jitsi.meet.sdk,com.oney.WebRTCModule,com.learnium.RNDeviceInfo,com.reactnativecommunity.asyncstorage,com.ocetnik.timer,com.calendarevents,com.reactnativecommunity.netinfo,com.kevinresol.react_native_default_preference,com.rnimmersive,com.corbt.keepawake,com.BV.LinearGradient,com.horcrux.svg,com.oblador.performance,com.reactnativecommunity.slider,com.brentvatne.react,com.reactnativecommunity.clipboard,com.swmansion.gesturehandler.react,org.linusu,org.reactnative.maskedview,com.reactnativepagerview,com.swmansion.reanimated,com.th3rdwave.safeareacontext,com.swmansion.rnscreens,org.devio.rn.splashscreen,com.reactnativecommunity.webview" />
@@ -306,7 +304,9 @@
             android:supportsPictureInPicture="true" />
 
         <activity android:name=".features.terms.ReviewTermsActivity" />
-        <activity android:name=".features.widgets.WidgetActivity" />
+        <activity android:name=".features.widgets.WidgetActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation" />
+
         <activity android:name=".features.pin.PinActivity" />
         <activity android:name=".features.analytics.ui.consent.AnalyticsOptInActivity" />
         <activity android:name=".features.home.room.detail.search.SearchActivity" />
@@ -343,6 +343,7 @@
         <activity android:name=".features.spaces.leave.SpaceLeaveAdvancedActivity" />
         <activity android:name=".features.poll.create.CreatePollActivity" />
         <activity android:name=".features.location.LocationSharingActivity" />
+        <activity android:name=".features.location.live.map.LocationLiveMapViewActivity" />
 
         <!-- Services -->
 
@@ -357,7 +358,7 @@
 
         <!-- Add tools:ignore="Instantiatable" for the error reported only by Buildkite and for lintGplayRelease check :/ -->
         <service
-            android:name=".core.services.VectorSyncService"
+            android:name=".core.services.VectorSyncAndroidService"
             android:exported="false"
             tools:ignore="Instantiatable" />
 

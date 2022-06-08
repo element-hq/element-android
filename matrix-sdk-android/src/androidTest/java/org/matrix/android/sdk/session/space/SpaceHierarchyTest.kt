@@ -29,8 +29,8 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
-import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.QueryStringValue
+import org.matrix.android.sdk.api.query.SpaceFilter
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
@@ -48,6 +48,7 @@ import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.common.CommonTestHelper
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSessionTest
 import org.matrix.android.sdk.common.SessionTestParams
 
 @RunWith(JUnit4::class)
@@ -55,8 +56,7 @@ import org.matrix.android.sdk.common.SessionTestParams
 class SpaceHierarchyTest : InstrumentedTest {
 
     @Test
-    fun createCanonicalChildRelation() {
-        val commonTestHelper = CommonTestHelper(context())
+    fun createCanonicalChildRelation() = runSessionTest(context()) { commonTestHelper ->
 
         val session = commonTestHelper.createAccount("John", SessionTestParams(true))
         val spaceName = "My Space"
@@ -173,8 +173,7 @@ class SpaceHierarchyTest : InstrumentedTest {
 //    }
 
     @Test
-    fun testFilteringBySpace() {
-        val commonTestHelper = CommonTestHelper(context())
+    fun testFilteringBySpace() = CommonTestHelper.runSessionTest(context()) { commonTestHelper ->
         val session = commonTestHelper.createAccount("John", SessionTestParams(true))
 
         val spaceAInfo = createPublicSpace(
@@ -185,12 +184,12 @@ class SpaceHierarchyTest : InstrumentedTest {
         )
 
         /* val spaceBInfo = */ createPublicSpace(
-                session, "SpaceB", listOf(
-                Triple("B1", true /*auto-join*/, true/*canonical*/),
-                Triple("B2", true, true),
-                Triple("B3", true, true)
-        )
-        )
+            session, "SpaceB", listOf(
+            Triple("B1", true /*auto-join*/, true/*canonical*/),
+            Triple("B2", true, true),
+            Triple("B3", true, true)
+    )
+    )
 
         val spaceCInfo = createPublicSpace(
                 session, "SpaceC", listOf(
@@ -249,15 +248,14 @@ class SpaceHierarchyTest : InstrumentedTest {
 
         Thread.sleep(6_000)
         val orphansUpdate = session.roomService().getRoomSummaries(roomSummaryQueryParams {
-            activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null)
+            spaceFilter = SpaceFilter.OrphanRooms
         })
         assertEquals("Unexpected number of orphan rooms ${orphansUpdate.map { it.name }}", 2, orphansUpdate.size)
     }
 
     @Test
     @Ignore("This test will be ignored until it is fixed")
-    fun testBreakCycle() {
-        val commonTestHelper = CommonTestHelper(context())
+    fun testBreakCycle() = CommonTestHelper.runSessionTest(context()) { commonTestHelper ->
         val session = commonTestHelper.createAccount("John", SessionTestParams(true))
 
         val spaceAInfo = createPublicSpace(
@@ -302,8 +300,7 @@ class SpaceHierarchyTest : InstrumentedTest {
     }
 
     @Test
-    fun testLiveFlatChildren() {
-        val commonTestHelper = CommonTestHelper(context())
+    fun testLiveFlatChildren() = CommonTestHelper.runSessionTest(context()) { commonTestHelper ->
         val session = commonTestHelper.createAccount("John", SessionTestParams(true))
 
         val spaceAInfo = createPublicSpace(
@@ -390,84 +387,87 @@ class SpaceHierarchyTest : InstrumentedTest {
             val roomIds: List<String>
     )
 
-    private fun createPublicSpace(session: Session,
-                                  spaceName: String,
-                                  childInfo: List<Triple<String, Boolean, Boolean?>>
+    private fun createPublicSpace(
+            session: Session,
+            spaceName: String,
+            childInfo: List<Triple<String, Boolean, Boolean?>>
             /** Name, auto-join, canonical*/
     ): TestSpaceCreationResult {
-        val commonTestHelper = CommonTestHelper(context())
         var spaceId = ""
         var roomIds: List<String> = emptyList()
-        commonTestHelper.waitWithLatch { latch ->
-            spaceId = session.spaceService().createSpace(spaceName, "Test Topic", null, true)
-            val syncedSpace = session.spaceService().getSpace(spaceId)
-            val viaServers = listOf(session.sessionParams.homeServerHost ?: "")
+        runSessionTest(context()) { commonTestHelper ->
+            commonTestHelper.waitWithLatch { latch ->
+                spaceId = session.spaceService().createSpace(spaceName, "Test Topic", null, true)
+                val syncedSpace = session.spaceService().getSpace(spaceId)
+                val viaServers = listOf(session.sessionParams.homeServerHost ?: "")
 
-            roomIds = childInfo.map { entry ->
-                session.roomService().createRoom(CreateRoomParams().apply { name = entry.first })
-            }
-            roomIds.forEachIndexed { index, roomId ->
-                syncedSpace!!.addChildren(roomId, viaServers, null, childInfo[index].second)
-                val canonical = childInfo[index].third
-                if (canonical != null) {
-                    session.spaceService().setSpaceParent(roomId, spaceId, canonical, viaServers)
+                roomIds = childInfo.map { entry ->
+                    session.roomService().createRoom(CreateRoomParams().apply { name = entry.first })
                 }
+                roomIds.forEachIndexed { index, roomId ->
+                    syncedSpace!!.addChildren(roomId, viaServers, null, childInfo[index].second)
+                    val canonical = childInfo[index].third
+                    if (canonical != null) {
+                        session.spaceService().setSpaceParent(roomId, spaceId, canonical, viaServers)
+                    }
+                }
+                latch.countDown()
             }
-            latch.countDown()
         }
         return TestSpaceCreationResult(spaceId, roomIds)
     }
 
-    private fun createPrivateSpace(session: Session,
-                                   spaceName: String,
-                                   childInfo: List<Triple<String, Boolean, Boolean?>>
+    private fun createPrivateSpace(
+            session: Session,
+            spaceName: String,
+            childInfo: List<Triple<String, Boolean, Boolean?>>
             /** Name, auto-join, canonical*/
     ): TestSpaceCreationResult {
-        val commonTestHelper = CommonTestHelper(context())
         var spaceId = ""
         var roomIds: List<String> = emptyList()
-        commonTestHelper.waitWithLatch { latch ->
-            spaceId = session.spaceService().createSpace(spaceName, "My Private Space", null, false)
-            val syncedSpace = session.spaceService().getSpace(spaceId)
-            val viaServers = listOf(session.sessionParams.homeServerHost ?: "")
-            roomIds =
-                    childInfo.map { entry ->
-                        val homeServerCapabilities = session
-                                .homeServerCapabilitiesService()
-                                .getHomeServerCapabilities()
-                        session.roomService().createRoom(CreateRoomParams().apply {
-                            name = entry.first
-                            this.featurePreset = RestrictedRoomPreset(
-                                    homeServerCapabilities,
-                                    listOf(
-                                            RoomJoinRulesAllowEntry.restrictedToRoom(spaceId)
-                                    )
-                            )
-                        })
+        runSessionTest(context()) { commonTestHelper ->
+            commonTestHelper.waitWithLatch { latch ->
+                spaceId = session.spaceService().createSpace(spaceName, "My Private Space", null, false)
+                val syncedSpace = session.spaceService().getSpace(spaceId)
+                val viaServers = listOf(session.sessionParams.homeServerHost ?: "")
+                roomIds =
+                        childInfo.map { entry ->
+                            val homeServerCapabilities = session
+                                    .homeServerCapabilitiesService()
+                                    .getHomeServerCapabilities()
+                            session.roomService().createRoom(CreateRoomParams().apply {
+                                name = entry.first
+                                this.featurePreset = RestrictedRoomPreset(
+                                        homeServerCapabilities,
+                                        listOf(
+                                                RoomJoinRulesAllowEntry.restrictedToRoom(spaceId)
+                                        )
+                                )
+                            })
+                        }
+                roomIds.forEachIndexed { index, roomId ->
+                    syncedSpace!!.addChildren(roomId, viaServers, null, childInfo[index].second)
+                    val canonical = childInfo[index].third
+                    if (canonical != null) {
+                        session.spaceService().setSpaceParent(roomId, spaceId, canonical, viaServers)
                     }
-            roomIds.forEachIndexed { index, roomId ->
-                syncedSpace!!.addChildren(roomId, viaServers, null, childInfo[index].second)
-                val canonical = childInfo[index].third
-                if (canonical != null) {
-                    session.spaceService().setSpaceParent(roomId, spaceId, canonical, viaServers)
                 }
+                latch.countDown()
             }
-            latch.countDown()
         }
         return TestSpaceCreationResult(spaceId, roomIds)
     }
 
     @Test
-    fun testRootSpaces() {
-        val commonTestHelper = CommonTestHelper(context())
+    fun testRootSpaces() = runSessionTest(context()) { commonTestHelper ->
         val session = commonTestHelper.createAccount("John", SessionTestParams(true))
 
         /* val spaceAInfo = */ createPublicSpace(
-                session, "SpaceA", listOf(
-                Triple("A1", true /*auto-join*/, true/*canonical*/),
-                Triple("A2", true, true)
-        )
-        )
+            session, "SpaceA", listOf(
+            Triple("A1", true /*auto-join*/, true/*canonical*/),
+            Triple("A2", true, true)
+    )
+    )
 
         val spaceBInfo = createPublicSpace(
                 session, "SpaceB", listOf(
@@ -506,13 +506,10 @@ class SpaceHierarchyTest : InstrumentedTest {
         }
 
         assertEquals("Unexpected number of root spaces ${rootSpaces.map { it.name }}", 2, rootSpaces.size)
-
-        commonTestHelper.signOutAndClose(session)
     }
 
     @Test
-    fun testParentRelation() {
-        val commonTestHelper = CommonTestHelper(context())
+    fun testParentRelation() = runSessionTest(context()) { commonTestHelper ->
         val aliceSession = commonTestHelper.createAccount("Alice", SessionTestParams(true))
         val bobSession = commonTestHelper.createAccount("Bib", SessionTestParams(true))
 
@@ -604,8 +601,5 @@ class SpaceHierarchyTest : InstrumentedTest {
                 bobSession.getRoomSummary(bobRoomId)?.flattenParentIds?.contains(spaceAInfo.spaceId) == true
             }
         }
-
-        commonTestHelper.signOutAndClose(aliceSession)
-        commonTestHelper.signOutAndClose(bobSession)
     }
 }

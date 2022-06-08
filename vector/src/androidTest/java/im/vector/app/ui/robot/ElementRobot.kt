@@ -129,7 +129,7 @@ class ElementRobot {
                 // We need to wait for the initial sync to complete; but we can't
                 // use waitForHome() like login does.
 
-		// waitForHome() -- does not work because we have already fufilled the initialSync
+                // waitForHome() -- does not work because we have already fufilled the initialSync
                 // so we can racily have an IllegalStateException that we have transitioned from busy -> idle
                 // but never having sent the signal.
 

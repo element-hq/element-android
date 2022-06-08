@@ -62,8 +62,10 @@ data class RoomSettingsViewState(
     sealed class AvatarAction {
         object None : AvatarAction()
         object DeleteAvatar : AvatarAction()
-        data class UpdateAvatar(val newAvatarUri: Uri,
-                                val newAvatarFileName: String) : AvatarAction()
+        data class UpdateAvatar(
+                val newAvatarUri: Uri,
+                val newAvatarFileName: String
+        ) : AvatarAction()
     }
 
     data class NewJoinRule(

@@ -91,11 +91,11 @@ class LoginViewModel @AssistedInject constructor(
     private val matrixOrgUrl = stringProvider.getString(R.string.matrix_org_server_url).ensureTrailingSlash()
 
     val currentThreePid: String?
-        get() = registrationWizard?.currentThreePid
+        get() = registrationWizard?.getCurrentThreePid()
 
     // True when login and password has been sent with success to the homeserver
     val isRegistrationStarted: Boolean
-        get() = authenticationService.isRegistrationStarted
+        get() = authenticationService.isRegistrationStarted()
 
     private val registrationWizard: RegistrationWizard?
         get() = authenticationService.getRegistrationWizard()
@@ -261,8 +261,10 @@ class LoginViewModel @AssistedInject constructor(
         }
     }
 
-    private fun executeRegistrationStep(withLoading: Boolean = true,
-                                        block: suspend (RegistrationWizard) -> RegistrationResult): Job {
+    private fun executeRegistrationStep(
+            withLoading: Boolean = true,
+            block: suspend (RegistrationWizard) -> RegistrationResult
+    ): Job {
         if (withLoading) {
             setState { copy(asyncRegistration = Loading()) }
         }
@@ -411,7 +413,8 @@ class LoginViewModel @AssistedInject constructor(
                     copy(
                             asyncResetPassword = Uninitialized,
                             asyncResetMailConfirmed = Uninitialized,
-                            resetPasswordEmail = null
+                            resetPasswordEmail = null,
+                            resetPasswordNewPassword = null
                     )
                 }
             }
@@ -455,7 +458,7 @@ class LoginViewModel @AssistedInject constructor(
 
         // If there is a pending email validation continue on this step
         try {
-            if (registrationWizard?.isRegistrationStarted == true) {
+            if (registrationWizard?.isRegistrationStarted() == true) {
                 currentThreePid?.let {
                     handle(LoginAction.PostViewEvent(LoginViewEvents.OnSendEmailSuccess(it)))
                 }
@@ -486,7 +489,7 @@ class LoginViewModel @AssistedInject constructor(
 
             currentJob = viewModelScope.launch {
                 try {
-                    safeLoginWizard.resetPassword(action.email, action.newPassword)
+                    safeLoginWizard.resetPassword(action.email)
                 } catch (failure: Throwable) {
                     setState {
                         copy(
@@ -499,7 +502,8 @@ class LoginViewModel @AssistedInject constructor(
                 setState {
                     copy(
                             asyncResetPassword = Success(Unit),
-                            resetPasswordEmail = action.email
+                            resetPasswordEmail = action.email,
+                            resetPasswordNewPassword = action.newPassword
                     )
                 }
 
@@ -527,24 +531,35 @@ class LoginViewModel @AssistedInject constructor(
             }
 
             currentJob = viewModelScope.launch {
-                try {
-                    safeLoginWizard.resetPasswordMailConfirmed()
-                } catch (failure: Throwable) {
+                val state = awaitState()
+
+                if (state.resetPasswordNewPassword == null) {
                     setState {
                         copy(
-                                asyncResetMailConfirmed = Fail(failure)
+                                asyncResetPassword = Uninitialized,
+                                asyncResetMailConfirmed = Fail(Throwable("Developer error - New password not set"))
                         )
                     }
-                    return@launch
+                } else {
+                    try {
+                        safeLoginWizard.resetPasswordMailConfirmed(state.resetPasswordNewPassword)
+                    } catch (failure: Throwable) {
+                        setState {
+                            copy(
+                                    asyncResetMailConfirmed = Fail(failure)
+                            )
+                        }
+                        return@launch
+                    }
+                    setState {
+                        copy(
+                                asyncResetMailConfirmed = Success(Unit),
+                                resetPasswordEmail = null,
+                                resetPasswordNewPassword = null
+                        )
+                    }
+                    _viewEvents.post(LoginViewEvents.OnResetPasswordMailConfirmationSuccess)
                 }
-                setState {
-                    copy(
-                            asyncResetMailConfirmed = Success(Unit),
-                            resetPasswordEmail = null
-                    )
-                }
-
-                _viewEvents.post(LoginViewEvents.OnResetPasswordMailConfirmationSuccess)
             }
         }
     }
@@ -598,9 +613,11 @@ class LoginViewModel @AssistedInject constructor(
         _viewEvents.post(LoginViewEvents.Failure(Exception(stringProvider.getString(R.string.autodiscover_well_known_error))))
     }
 
-    private suspend fun onWellknownSuccess(action: LoginAction.LoginOrRegister,
-                                           wellKnownPrompt: WellknownResult.Prompt,
-                                           homeServerConnectionConfig: HomeServerConnectionConfig?) {
+    private suspend fun onWellknownSuccess(
+            action: LoginAction.LoginOrRegister,
+            wellKnownPrompt: WellknownResult.Prompt,
+            homeServerConnectionConfig: HomeServerConnectionConfig?
+    ) {
         val alteredHomeServerConnectionConfig = homeServerConnectionConfig
                 ?.copy(
                         homeServerUriBase = Uri.parse(wellKnownPrompt.homeServerUrl),
@@ -754,8 +771,10 @@ class LoginViewModel @AssistedInject constructor(
         }
     }
 
-    private fun getLoginFlow(homeServerConnectionConfig: HomeServerConnectionConfig,
-                             serverTypeOverride: ServerType? = null) {
+    private fun getLoginFlow(
+            homeServerConnectionConfig: HomeServerConnectionConfig,
+            serverTypeOverride: ServerType? = null
+    ) {
         currentHomeServerConnectionConfig = homeServerConnectionConfig
 
         currentJob = viewModelScope.launch {

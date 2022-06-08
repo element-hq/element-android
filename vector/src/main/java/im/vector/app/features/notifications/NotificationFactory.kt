@@ -81,10 +81,12 @@ class NotificationFactory @Inject constructor(
         }
     }
 
-    fun createSummaryNotification(roomNotifications: List<RoomNotification>,
-                                  invitationNotifications: List<OneShotNotification>,
-                                  simpleNotifications: List<OneShotNotification>,
-                                  useCompleteNotificationFormat: Boolean): SummaryNotification {
+    fun createSummaryNotification(
+            roomNotifications: List<RoomNotification>,
+            invitationNotifications: List<OneShotNotification>,
+            simpleNotifications: List<OneShotNotification>,
+            useCompleteNotificationFormat: Boolean
+    ): SummaryNotification {
         val roomMeta = roomNotifications.filterIsInstance<RoomNotification.Message>().map { it.meta }
         val invitationMeta = invitationNotifications.filterIsInstance<OneShotNotification.Append>().map { it.meta }
         val simpleMeta = simpleNotifications.filterIsInstance<OneShotNotification.Append>().map { it.meta }

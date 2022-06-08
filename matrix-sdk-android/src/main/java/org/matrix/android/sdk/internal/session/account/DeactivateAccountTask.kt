@@ -60,10 +60,10 @@ internal class DefaultDeactivateAccountTask @Inject constructor(
                         execute(params.copy(userAuthParam = authUpdate))
                     }
             )) {
-                UiaResult.SUCCESS   -> {
+                UiaResult.SUCCESS -> {
                     false
                 }
-                UiaResult.FAILURE   -> {
+                UiaResult.FAILURE -> {
                     Timber.d("## UIA: propagate failure")
                     throw throwable
                 }

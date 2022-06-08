@@ -43,8 +43,10 @@ data class DeactivateAccountViewState(
         val dummy: Boolean = false
 ) : MavericksState
 
-class DeactivateAccountViewModel @AssistedInject constructor(@Assisted private val initialState: DeactivateAccountViewState,
-                                                             private val session: Session) :
+class DeactivateAccountViewModel @AssistedInject constructor(
+        @Assisted private val initialState: DeactivateAccountViewState,
+        private val session: Session
+) :
         VectorViewModel<DeactivateAccountViewState, DeactivateAccountAction, DeactivateAccountViewEvents>(initialState) {
 
     @AssistedFactory

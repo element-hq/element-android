@@ -29,10 +29,12 @@ import org.matrix.android.sdk.api.session.room.powerlevels.Role
 
 object EditPowerLevelDialogs {
 
-    fun showChoice(activity: Activity,
-                   @StringRes titleRes: Int,
-                   currentRole: Role,
-                   listener: (Int) -> Unit) {
+    fun showChoice(
+            activity: Activity,
+            @StringRes titleRes: Int,
+            currentRole: Role,
+            listener: (Int) -> Unit
+    ) {
         val dialogLayout = activity.layoutInflater.inflate(R.layout.dialog_edit_power_level, null)
         val views = DialogEditPowerLevelBinding.bind(dialogLayout)
         views.powerLevelRadioGroup.setOnCheckedChangeListener { _, checkedId ->

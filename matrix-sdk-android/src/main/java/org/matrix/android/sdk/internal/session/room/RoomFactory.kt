@@ -25,6 +25,7 @@ import org.matrix.android.sdk.internal.session.room.alias.DefaultAliasService
 import org.matrix.android.sdk.internal.session.room.call.DefaultRoomCallService
 import org.matrix.android.sdk.internal.session.room.crypto.DefaultRoomCryptoService
 import org.matrix.android.sdk.internal.session.room.draft.DefaultDraftService
+import org.matrix.android.sdk.internal.session.room.location.DefaultLocationSharingService
 import org.matrix.android.sdk.internal.session.room.membership.DefaultMembershipService
 import org.matrix.android.sdk.internal.session.room.notification.DefaultRoomPushRuleService
 import org.matrix.android.sdk.internal.session.room.read.DefaultReadService
@@ -69,6 +70,7 @@ internal class DefaultRoomFactory @Inject constructor(
         private val roomVersionServiceFactory: DefaultRoomVersionService.Factory,
         private val roomAccountDataServiceFactory: DefaultRoomAccountDataService.Factory,
         private val viaParameterFinder: ViaParameterFinder,
+        private val locationSharingServiceFactory: DefaultLocationSharingService.Factory,
         private val coroutineDispatchers: MatrixCoroutineDispatchers
 ) : RoomFactory {
 
@@ -96,6 +98,7 @@ internal class DefaultRoomFactory @Inject constructor(
                 roomAccountDataService = roomAccountDataServiceFactory.create(roomId),
                 roomVersionService = roomVersionServiceFactory.create(roomId),
                 viaParameterFinder = viaParameterFinder,
+                locationSharingService = locationSharingServiceFactory.create(roomId),
                 coroutineDispatchers = coroutineDispatchers
         )
     }

@@ -26,7 +26,7 @@ import javax.inject.Inject
 class LocaleProvider @Inject constructor(private val resources: Resources) {
 
     fun current(): Locale {
-        return ConfigurationCompat.getLocales(resources.configuration)[0]
+        return ConfigurationCompat.getLocales(resources.configuration).get(0) ?: Locale.getDefault()
     }
 }
 

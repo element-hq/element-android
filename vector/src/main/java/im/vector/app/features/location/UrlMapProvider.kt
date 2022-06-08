@@ -44,10 +44,12 @@ class UrlMapProvider @Inject constructor(
         return upstreamMapUrl ?: fallbackMapUrl
     }
 
-    fun buildStaticMapUrl(locationData: LocationData,
-                          zoom: Double,
-                          width: Int,
-                          height: Int): String {
+    fun buildStaticMapUrl(
+            locationData: LocationData,
+            zoom: Double,
+            width: Int,
+            height: Int
+    ): String {
         return buildString {
             append(STATIC_MAP_BASE_URL)
             append(locationData.longitude)

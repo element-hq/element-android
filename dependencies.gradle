@@ -7,10 +7,13 @@ ext.versions = [
         'targetCompat'      : JavaVersion.VERSION_11,
 ]
 
-def gradle = "7.2.0"
+
+// Pinned to 7.1.3 because of https://github.com/vector-im/element-android/issues/6142
+// Please test carefully before upgrading again.
+def gradle = "7.1.3"
 // Ref: https://kotlinlang.org/releases.html
 def kotlin = "1.6.21"
-def kotlinCoroutines = "1.6.1"
+def kotlinCoroutines = "1.6.2"
 def dagger = "2.42"
 def retrofit = "2.9.0"
 def arrow = "0.8.2"
@@ -23,7 +26,7 @@ def mavericks = "2.6.1"
 def glide = "4.13.2"
 def bigImageViewer = "1.8.1"
 def jjwt = "0.11.5"
-def vanniktechEmoji = "0.9.0"
+def vanniktechEmoji = "0.15.0"
 
 // Testing
 def mockk = "1.12.4"
@@ -45,12 +48,13 @@ ext.libs = [
                 'coroutinesTest'          : "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinCoroutines"
         ],
         androidx    : [
-                'appCompat'               : "androidx.appcompat:appcompat:1.4.1",
-                'core'                    : "androidx.core:core-ktx:1.7.0",
+                'activity'                : "androidx.activity:activity:1.4.0",
+                'appCompat'               : "androidx.appcompat:appcompat:1.4.2",
+                'core'                    : "androidx.core:core-ktx:1.8.0",
                 'recyclerview'            : "androidx.recyclerview:recyclerview:1.2.1",
                 'exifinterface'           : "androidx.exifinterface:exifinterface:1.3.3",
                 'fragmentKtx'             : "androidx.fragment:fragment-ktx:1.4.1",
-                'constraintLayout'        : "androidx.constraintlayout:constraintlayout:2.1.3",
+                'constraintLayout'        : "androidx.constraintlayout:constraintlayout:2.1.4",
                 'work'                    : "androidx.work:work-runtime-ktx:2.7.1",
                 'autoFill'                : "androidx.autofill:autofill:1.1.0",
                 'preferenceKtx'           : "androidx.preference:preference-ktx:1.2.0",
@@ -69,10 +73,12 @@ ext.libs = [
                 'testRules'               : "androidx.test:rules:$androidxTest",
                 'espressoCore'            : "androidx.test.espresso:espresso-core:$espresso",
                 'espressoContrib'         : "androidx.test.espresso:espresso-contrib:$espresso",
-                'espressoIntents'         : "androidx.test.espresso:espresso-intents:$espresso"
+                'espressoIntents'         : "androidx.test.espresso:espresso-intents:$espresso",
+                'viewpager2'              : "androidx.viewpager2:viewpager2:1.0.0",
+                'transition'              : "androidx.transition:transition:1.2.0",
         ],
         google      : [
-                'material'                : "com.google.android.material:material:1.6.0"
+                'material'                : "com.google.android.material:material:1.6.1"
         ],
         dagger      : [
                 'dagger'                  : "com.google.dagger:dagger:$dagger",
@@ -81,7 +87,7 @@ ext.libs = [
                 'hiltCompiler'            : "com.google.dagger:hilt-compiler:$dagger"
         ],
         squareup    : [
-                'moshi'                  : "com.squareup.moshi:moshi-adapters:$moshi",
+                'moshi'                  : "com.squareup.moshi:moshi:$moshi",
                 'moshiKotlin'            : "com.squareup.moshi:moshi-kotlin-codegen:$moshi",
                 'retrofit'               : "com.squareup.retrofit2:retrofit:$retrofit",
                 'retrofitMoshi'          : "com.squareup.retrofit2:converter-moshi:$retrofit"
@@ -106,6 +112,10 @@ ext.libs = [
                 'epoxyPaging'            : "com.airbnb.android:epoxy-paging:$epoxy",
                 'mavericks'              : "com.airbnb.android:mavericks:$mavericks",
                 'mavericksTesting'       : "com.airbnb.android:mavericks-testing:$mavericks"
+        ],
+        maplibre    : [
+                'androidSdk'             : "org.maplibre.gl:android-sdk:9.5.2",
+                'pluginAnnotation'       : "org.maplibre.gl:android-plugin-annotation-v9:1.0.0"
         ],
         mockk      : [
                 'mockk'                   : "io.mockk:mockk:$mockk",

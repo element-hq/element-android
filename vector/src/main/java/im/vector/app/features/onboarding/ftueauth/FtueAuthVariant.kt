@@ -54,7 +54,6 @@ import im.vector.app.features.onboarding.OnboardingViewState
 import im.vector.app.features.onboarding.ftueauth.terms.FtueAuthLegacyStyleTermsFragment
 import im.vector.app.features.onboarding.ftueauth.terms.FtueAuthTermsFragment
 import im.vector.app.features.onboarding.ftueauth.terms.FtueAuthTermsLegacyStyleFragmentArgument
-import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.auth.toLocalizedLoginTerms
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -217,7 +216,7 @@ class FtueAuthVariant(
             is OnboardingViewEvents.OnAccountCreated                           -> onAccountCreated()
             OnboardingViewEvents.OnAccountSignedIn                             -> onAccountSignedIn()
             OnboardingViewEvents.OnChooseDisplayName                           -> onChooseDisplayName()
-            OnboardingViewEvents.OnTakeMeHome                                  -> navigateToHome(createdAccount = true)
+            OnboardingViewEvents.OnTakeMeHome                                  -> navigateToHome()
             OnboardingViewEvents.OnChooseProfilePicture                        -> onChooseProfilePicture()
             OnboardingViewEvents.OnPersonalizationComplete                     -> onPersonalizationComplete()
             OnboardingViewEvents.OnBack                                        -> activity.popBackstack()
@@ -229,21 +228,38 @@ class FtueAuthVariant(
                 )
             }
             OnboardingViewEvents.OnHomeserverEdited                            -> activity.popBackstack()
+            OnboardingViewEvents.OpenCombinedLogin                             -> onStartCombinedLogin()
+            is OnboardingViewEvents.DeeplinkAuthenticationFailure              -> onDeeplinkedHomeserverUnavailable(viewEvents)
         }
+    }
+
+    private fun onDeeplinkedHomeserverUnavailable(viewEvents: OnboardingViewEvents.DeeplinkAuthenticationFailure) {
+        showHomeserverUnavailableDialog(onboardingViewModel.getInitialHomeServerUrl().orEmpty()) {
+            onboardingViewModel.handle(OnboardingAction.ResetDeeplinkConfig)
+            onboardingViewModel.handle(viewEvents.retryAction)
+        }
+    }
+
+    private fun showHomeserverUnavailableDialog(url: String, action: () -> Unit) {
+        MaterialAlertDialogBuilder(activity)
+                .setTitle(R.string.dialog_title_error)
+                .setMessage(activity.getString(R.string.login_error_homeserver_from_url_not_found, url))
+                .setPositiveButton(R.string.login_error_homeserver_from_url_not_found_enter_manual) { _, _ -> action() }
+                .setNegativeButton(R.string.action_cancel, null)
+                .show()
+    }
+
+    private fun onStartCombinedLogin() {
+        addRegistrationStageFragmentToBackstack(FtueAuthCombinedLoginFragment::class.java)
     }
 
     private fun onRegistrationFlow(viewEvents: OnboardingViewEvents.RegistrationFlowResult) {
         when {
             registrationShouldFallback(viewEvents)               -> displayFallbackWebDialog()
-            viewEvents.isRegistrationStarted                     -> handleRegistrationNavigation(viewEvents.flowResult.orderedStages())
+            viewEvents.isRegistrationStarted                     -> handleRegistrationNavigation(viewEvents.flowResult.missingStages)
             vectorFeatures.isOnboardingCombinedRegisterEnabled() -> openStartCombinedRegister()
             else                                                 -> openAuthLoginFragmentWithTag(FRAGMENT_REGISTRATION_STAGE_TAG)
         }
-    }
-
-    private fun FlowResult.orderedStages() = when {
-        vectorFeatures.isOnboardingCombinedRegisterEnabled() -> missingStages.sortedWith(FtueMissingRegistrationStagesComparator())
-        else                                                 -> missingStages
     }
 
     private fun openStartCombinedRegister() {
@@ -451,7 +467,7 @@ class FtueAuthVariant(
     }
 
     private fun onAccountSignedIn() {
-        navigateToHome(createdAccount = false)
+        navigateToHome()
     }
 
     private fun onAccountCreated() {
@@ -463,10 +479,12 @@ class FtueAuthVariant(
         )
     }
 
-    private fun navigateToHome(createdAccount: Boolean) {
-        val intent = HomeActivity.newIntent(activity, accountCreation = createdAccount)
-        activity.startActivity(intent)
-        activity.finish()
+    private fun navigateToHome() {
+        withState(onboardingViewModel) {
+            val intent = HomeActivity.newIntent(activity, authenticationDescription = it.selectedAuthenticationState.description)
+            activity.startActivity(intent)
+            activity.finish()
+        }
     }
 
     private fun onChooseDisplayName() {

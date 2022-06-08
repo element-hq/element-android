@@ -22,6 +22,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.FixMethodOrder
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
@@ -40,6 +41,7 @@ import java.util.UUID
 @Suppress("SpellCheckingInspection")
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@Ignore
 class AttachmentEncryptionTest {
 
     private fun checkDecryption(input: String, encryptedFileInfo: EncryptedFileInfo): String {
