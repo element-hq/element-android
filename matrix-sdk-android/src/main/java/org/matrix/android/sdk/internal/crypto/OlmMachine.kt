@@ -25,7 +25,6 @@ import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
-import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
@@ -38,7 +37,6 @@ import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.api.session.crypto.model.MXEventDecryptionResult
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.api.session.crypto.model.UnsignedDeviceInfo
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -52,10 +50,13 @@ import org.matrix.android.sdk.internal.coroutines.builder.safeInvokeOnClose
 import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.android.sdk.internal.crypto.verification.SasVerification
 import org.matrix.android.sdk.internal.crypto.verification.VerificationRequest
-import org.matrix.android.sdk.internal.crypto.verification.VerificationRequestFactory
+import org.matrix.android.sdk.internal.crypto.verification.VerificationsProvider
 import org.matrix.android.sdk.internal.crypto.verification.qrcode.QrCodeVerification
+import org.matrix.android.sdk.internal.di.DeviceId
+import org.matrix.android.sdk.internal.di.SessionFilesDirectory
+import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.network.parsing.CheckNumberType
-import org.matrix.android.sdk.internal.util.time.Clock
+import org.matrix.android.sdk.internal.session.SessionScope
 import timber.log.Timber
 import uniffi.olm.BackupKeys
 import uniffi.olm.CrossSigningKeyExport
@@ -72,7 +73,7 @@ import uniffi.olm.RoomKeyCounts
 import uniffi.olm.setLogger
 import java.io.File
 import java.nio.charset.Charset
-import java.util.UUID
+import javax.inject.Inject
 import uniffi.olm.OlmMachine as InnerMachine
 import uniffi.olm.ProgressListener as RustProgressListener
 
@@ -105,20 +106,22 @@ fun setRustLogger() {
     setLogger(CryptoLogger() as Logger)
 }
 
-internal class OlmMachine(
-        user_id: String,
-        device_id: String,
-        path: File,
-        clock: Clock,
+@SessionScope
+internal class OlmMachine @Inject constructor(
+        @UserId userId: String,
+        @DeviceId deviceId: String,
+        @SessionFilesDirectory path: File,
         private val requestSender: RequestSender,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val moshi: Moshi,
+        private val verificationsProvider: VerificationsProvider,
+        private val deviceFactory: Device.Factory,
+        private val getUserIdentity: GetUserIdentityUseCase,
+        private val ensureUsersKeys: EnsureUsersKeysUseCase,
 ) {
 
-    private val inner: InnerMachine = InnerMachine(user_id, device_id, path.toString(), null)
-    val verificationListeners = ArrayList<VerificationService.Listener>()
-    private val verificationRequestFactory = VerificationRequestFactory(inner, requestSender, coroutineDispatchers, verificationListeners, clock)
-    private val getUserIdentity = GetUserIdentityUseCase(inner, requestSender, coroutineDispatchers, moshi, verificationRequestFactory)
+    private val inner: InnerMachine = InnerMachine(userId, deviceId, path.toString(), null)
+
     private val flowCollectors = FlowCollectors()
 
     /** Get our own user ID. */
@@ -525,13 +528,12 @@ internal class OlmMachine(
         val innerDevice = withContext(coroutineDispatchers.io) {
             inner.getDevice(userId, deviceId)
         } ?: return null
-
-        return innerDevice.wrap()
+        return deviceFactory.create(innerDevice)
     }
 
     suspend fun getUserDevices(userId: String): List<Device> {
         return withContext(coroutineDispatchers.io) {
-            inner.getUserDevices(userId).map { innerDevice -> innerDevice.wrap() }
+            inner.getUserDevices(userId).map(deviceFactory::create)
         }
     }
 
@@ -545,16 +547,6 @@ internal class OlmMachine(
     @Throws(CryptoStoreException::class)
     suspend fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo> {
         return getUserDevices(userId).map { it.toCryptoDeviceInfo() }
-/*
-        // EA doesn't differentiate much between our own and other devices of
-        // while the rust-sdk does, append our own device here.
-        if (userId == userId()) {
-            devices.add(ownDevice())
-        }
-
-        return devices
-
- */
     }
 
     /**
@@ -575,16 +567,7 @@ internal class OlmMachine(
         return plainDevices
     }
 
-    @Throws
-    suspend fun forceKeyDownload(userIds: List<String>) {
-        withContext(coroutineDispatchers.io) {
-            val requestId = UUID.randomUUID().toString()
-            val response = requestSender.queryKeys(Request.KeysQuery(requestId, userIds))
-            markRequestAsSent(requestId, RequestType.KEYS_QUERY, response)
-        }
-    }
-
-    suspend fun getUserDevicesMap(userIds: List<String>): MXUsersDevicesMap<CryptoDeviceInfo> {
+    private suspend fun getUserDevicesMap(userIds: List<String>): MXUsersDevicesMap<CryptoDeviceInfo> {
         val userMap = MXUsersDevicesMap<CryptoDeviceInfo>()
 
         for (user in userIds) {
@@ -616,18 +599,7 @@ internal class OlmMachine(
      * The key query request will be retried a few time in case of shaky connection, but could fail.
      */
     suspend fun ensureUsersKeys(userIds: List<String>, forceDownload: Boolean = false) {
-        val userIdsToFetchKeys = if (forceDownload) {
-            userIds
-        } else {
-            userIds.mapNotNull { userId ->
-                userId.takeIf { !isUserTracked(it) }
-            }.also {
-                updateTrackedUsers(it)
-            }
-        }
-        tryOrNull("Failed to download keys for $userIdsToFetchKeys") {
-            forceKeyDownload(userIdsToFetchKeys)
-        }
+        ensureUsersKeys.invoke(userIds, forceDownload)
     }
 
     fun getLiveUserIdentity(userId: String): Flow<Optional<MXCrossSigningInfo>> {
@@ -692,14 +664,12 @@ internal class OlmMachine(
      * @return The list of [VerificationRequest] that we share with the given user
      */
     fun getVerificationRequests(userId: String): List<VerificationRequest> {
-        return inner.getVerificationRequests(userId).map(verificationRequestFactory::create)
+        return verificationsProvider.getVerificationRequests(userId)
     }
 
     /** Get a verification request for the given user with the given flow ID */
     fun getVerificationRequest(userId: String, flowId: String): VerificationRequest? {
-        return inner.getVerificationRequest(userId, flowId)?.let { innerVerificationRequest ->
-            verificationRequestFactory.create(innerVerificationRequest)
-        }
+        return verificationsProvider.getVerificationRequest(userId, flowId)
     }
 
     /** Get an active verification for the given user and given flow ID.
@@ -708,48 +678,7 @@ internal class OlmMachine(
      * verification.
      */
     fun getVerification(userId: String, flowId: String): VerificationTransaction? {
-        return when (val verification = inner.getVerification(userId, flowId)) {
-            is uniffi.olm.Verification.QrCodeV1 -> {
-                val request = getVerificationRequest(userId, flowId) ?: return null
-                QrCodeVerification(
-                        machine = inner,
-                        request = request,
-                        inner = verification.qrcode,
-                        sender = requestSender,
-                        coroutineDispatchers = coroutineDispatchers,
-                        listeners = verificationListeners
-                )
-            }
-            is uniffi.olm.Verification.SasV1    -> {
-                SasVerification(
-                        machine = inner,
-                        inner = verification.sas,
-                        sender = requestSender,
-                        coroutineDispatchers = coroutineDispatchers,
-                        listeners = verificationListeners
-                )
-            }
-            null                                -> {
-                // This branch exists because scanning a QR code is tied to the QrCodeVerification,
-                // i.e. instead of branching into a scanned QR code verification from the verification request,
-                // like it's done for SAS verifications, the public API expects us to create an empty dummy
-                // QrCodeVerification object that gets populated once a QR code is scanned.
-                val request = getVerificationRequest(userId, flowId) ?: return null
-
-                if (request.canScanQrCodes()) {
-                    QrCodeVerification(
-                            machine = inner,
-                            request = request,
-                            inner = null,
-                            sender = requestSender,
-                            coroutineDispatchers = coroutineDispatchers,
-                            listeners = verificationListeners
-                    )
-                } else {
-                    null
-                }
-            }
-        }
+        return verificationsProvider.getVerification(userId, flowId)
     }
 
     suspend fun bootstrapCrossSigning(uiaInterceptor: UserInteractiveAuthInterceptor?) {
@@ -868,13 +797,4 @@ internal class OlmMachine(
             inner.verifyBackup(serializedAuthData)
         }
     }
-
-    private fun uniffi.olm.Device.wrap() = Device(
-            innerMachine = inner,
-            innerDevice = this,
-            requestSender = requestSender,
-            coroutineDispatchers = coroutineDispatchers,
-            listeners = verificationListeners,
-            verificationRequestFactory = verificationRequestFactory
-    )
 }

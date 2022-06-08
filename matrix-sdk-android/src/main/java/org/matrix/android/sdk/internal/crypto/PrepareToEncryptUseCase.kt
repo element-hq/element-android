@@ -39,16 +39,15 @@ import javax.inject.Inject
 private val loggerTag = LoggerTag("PrepareToEncryptUseCase", LoggerTag.CRYPTO)
 
 @SessionScope
-internal class PrepareToEncryptUseCase @Inject constructor(olmMachineProvider: OlmMachineProvider,
-                                                           private val coroutineDispatchers: MatrixCoroutineDispatchers,
-                                                           private val cryptoStore: IMXCryptoStore,
-                                                           private val getRoomUserIds: GetRoomUserIdsUseCase,
-                                                           private val requestSender: RequestSender,
-                                                           private val loadRoomMembersTask: LoadRoomMembersTask,
-                                                           private val keysBackupService: RustKeyBackupService
+internal class PrepareToEncryptUseCase @Inject constructor(
+        private val olmMachine: OlmMachine,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
+        private val cryptoStore: IMXCryptoStore,
+        private val getRoomUserIds: GetRoomUserIdsUseCase,
+        private val requestSender: RequestSender,
+        private val loadRoomMembersTask: LoadRoomMembersTask,
+        private val keysBackupService: RustKeyBackupService
 ) {
-
-    private val olmMachine = olmMachineProvider.olmMachine
 
     private val keyClaimLock: Mutex = Mutex()
     private val roomKeyShareLocks: ConcurrentHashMap<String, Mutex> = ConcurrentHashMap()
@@ -91,7 +90,7 @@ internal class PrepareToEncryptUseCase @Inject constructor(olmMachineProvider: O
                         is Request.ToDevice -> {
                             sharedKey = true
                             async {
-                                sendToDevice(it)
+                                sendToDevice(olmMachine, it)
                             }
                         }
                         else                -> {
@@ -113,7 +112,7 @@ internal class PrepareToEncryptUseCase @Inject constructor(olmMachineProvider: O
     }
 
     private suspend fun claimMissingKeys(roomMembers: List<String>) = keyClaimLock.withLock {
-        val request = this.olmMachine.getMissingSessions(roomMembers)
+        val request = olmMachine.getMissingSessions(roomMembers)
         // This request can only be a keys claim request.
         when (request) {
             is Request.KeysClaim -> {
@@ -124,7 +123,7 @@ internal class PrepareToEncryptUseCase @Inject constructor(olmMachineProvider: O
         }
     }
 
-    private suspend fun sendToDevice(request: Request.ToDevice) {
+    private suspend fun sendToDevice(olmMachine: OlmMachine, request: Request.ToDevice) {
         try {
             requestSender.sendToDevice(request)
             olmMachine.markRequestAsSent(request.requestId, RequestType.TO_DEVICE, "{}")

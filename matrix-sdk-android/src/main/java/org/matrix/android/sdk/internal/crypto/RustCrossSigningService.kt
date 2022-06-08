@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.crypto
 
 import kotlinx.coroutines.flow.Flow
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
-import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustResult
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
@@ -27,16 +26,12 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.UserTrustResult
 import org.matrix.android.sdk.api.session.crypto.crosssigning.isVerified
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.util.Optional
-import org.matrix.android.sdk.internal.di.UserId
 import javax.inject.Inject
 
 internal class RustCrossSigningService @Inject constructor(
-//        @SessionId private val sessionId: String,
-        @UserId private val myUserId: String,
-        private val olmMachineProvider: OlmMachineProvider
+        private val olmMachine: OlmMachine,
+        private val computeShieldForGroup: ComputeShieldForGroupUseCase
 ) : CrossSigningService {
-
-    val olmMachine = olmMachineProvider.olmMachine
 
     /**
      * Is our own device signed by our own cross signing identity
@@ -211,44 +206,6 @@ internal class RustCrossSigningService @Inject constructor(
     }
 
     override suspend fun shieldForGroup(userIds: List<String>): RoomEncryptionTrustLevel {
-        val myIdentity = olmMachine.getIdentity(myUserId)
-        val allTrustedUserIds = userIds
-                .filter { userId ->
-                    olmMachine.getIdentity(userId)?.verified() == true
-                }
-
-        return if (allTrustedUserIds.isEmpty()) {
-            RoomEncryptionTrustLevel.Default
-        } else {
-            // If one of the verified user as an untrusted device -> warning
-            // If all devices of all verified users are trusted -> green
-            // else -> black
-            allTrustedUserIds
-                    .map { userId ->
-                        olmMachineProvider.olmMachine.getUserDevices(userId)
-                    }
-                    .flatten()
-                    .let { allDevices ->
-                        if (myIdentity != null) {
-                            allDevices.any { !it.toCryptoDeviceInfo().trustLevel?.crossSigningVerified.orFalse() }
-                        } else {
-                            // TODO check that if myIdentity is null ean
-                            // Legacy method
-                            allDevices.any { !it.toCryptoDeviceInfo().isVerified }
-                        }
-                    }
-                    .let { hasWarning ->
-                        if (hasWarning) {
-                            RoomEncryptionTrustLevel.Warning
-                        } else {
-                            if (userIds.size == allTrustedUserIds.size) {
-                                // all users are trusted and all devices are verified
-                                RoomEncryptionTrustLevel.Trusted
-                            } else {
-                                RoomEncryptionTrustLevel.Default
-                            }
-                        }
-                    }
-        }
+        return computeShieldForGroup(olmMachine, userIds)
     }
 }

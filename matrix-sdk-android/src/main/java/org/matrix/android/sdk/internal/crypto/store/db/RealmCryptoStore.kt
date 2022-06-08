@@ -112,7 +112,7 @@ internal class RealmCryptoStore @Inject constructor(
         @CryptoDatabase private val realmConfiguration: RealmConfiguration,
         private val crossSigningKeysMapper: CrossSigningKeysMapper,
         @UserId private val userId: String,
-        @DeviceId private val deviceId: String?,
+        @DeviceId private val deviceId: String,
         private val clock: Clock,
 ) : IMXCryptoStore {
 
@@ -155,7 +155,7 @@ internal class RealmCryptoStore @Inject constructor(
                 // The device id may not have been provided in credentials.
                 // Check it only if provided, else trust the stored one.
                 if (currentMetadata.userId != userId ||
-                        (deviceId != null && deviceId != currentMetadata.deviceId)) {
+                        (deviceId != currentMetadata.deviceId)) {
                     Timber.w("## open() : Credentials do not match, close this store and delete data")
                     deleteAll = true
                     currentMetadata = null

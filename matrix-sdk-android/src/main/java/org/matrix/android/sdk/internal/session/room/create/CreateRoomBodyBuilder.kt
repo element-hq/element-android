@@ -180,7 +180,7 @@ internal class CreateRoomBodyBuilder @Inject constructor(
                 params.invite3pids.isEmpty() &&
                 params.invitedUserIds.isNotEmpty() &&
                 params.invitedUserIds.let { userIds ->
-                    val keys = cryptoService.downloadKeys(userIds, forceDownload = false)
+                    val keys = cryptoService.downloadKeysIfNeeded(userIds, forceDownload = false)
                     userIds.all { userId ->
                         keys.map[userId].let { deviceMap ->
                             if (deviceMap.isNullOrEmpty()) {

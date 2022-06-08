@@ -120,7 +120,7 @@ class KeyRequestHandler @Inject constructor(
 
         scope?.launch {
             try {
-                val data = session?.cryptoService()?.downloadKeys(listOf(userId), false)
+                val data = session?.cryptoService()?.downloadKeysIfNeeded(listOf(userId), false)
                         ?: return@launch
                 val deviceInfo = data.getObject(userId, deviceId)
 

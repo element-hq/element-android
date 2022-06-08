@@ -119,7 +119,7 @@ interface CryptoService {
 
     fun shouldEncryptForInvitedMembers(roomId: String): Boolean
 
-    suspend fun downloadKeys(userIds: List<String>, forceDownload: Boolean = false): MXUsersDevicesMap<CryptoDeviceInfo>
+    suspend fun downloadKeysIfNeeded(userIds: List<String>, forceDownload: Boolean = false): MXUsersDevicesMap<CryptoDeviceInfo>
 
     suspend fun getCryptoDeviceInfoList(userId: String): List<CryptoDeviceInfo>
 

@@ -18,38 +18,43 @@ package org.matrix.android.sdk.internal.crypto.network
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.matrix.android.sdk.api.logger.LoggerTag
-import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.internal.crypto.ComputeShieldForGroupUseCase
 import org.matrix.android.sdk.internal.crypto.CryptoSessionInfoProvider
 import org.matrix.android.sdk.internal.crypto.OlmMachine
+import org.matrix.android.sdk.internal.session.SessionScope
 import timber.log.Timber
 import uniffi.olm.Request
 import uniffi.olm.RequestType
+import javax.inject.Inject
 
 private val loggerTag = LoggerTag("OutgoingRequestsProcessor", LoggerTag.CRYPTO)
 
-internal class OutgoingRequestsProcessor(private val requestSender: RequestSender,
-                                         private val coroutineScope: CoroutineScope,
-                                         private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
-                                         private val shieldComputer: ShieldComputer,) {
-
-    fun interface ShieldComputer {
-        suspend fun compute(userIds: List<String>): RoomEncryptionTrustLevel
-    }
+@SessionScope
+internal class OutgoingRequestsProcessor @Inject constructor(
+        private val requestSender: RequestSender,
+        private val coroutineScope: CoroutineScope,
+        private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
+        private val computeShieldForGroup: ComputeShieldForGroupUseCase
+) {
 
     private val lock: Mutex = Mutex()
 
-    suspend fun processOutgoingRequests(olmMachine: OlmMachine) {
-        lock.withLock {
+    suspend fun processOutgoingRequests(olmMachine: OlmMachine,
+                                        filter: (Request) -> Boolean = { true }
+    ): Boolean {
+        return lock.withLock {
             coroutineScope {
-                Timber.v("OutgoingRequests: ${olmMachine.outgoingRequests()}")
-                olmMachine.outgoingRequests().map {
+                val outgoingRequests = olmMachine.outgoingRequests()
+                val filteredOutgoingRequests = outgoingRequests.filter(filter)
+                Timber.v("OutgoingRequests to process: $filteredOutgoingRequests}")
+                filteredOutgoingRequests.map {
                     when (it) {
                         is Request.KeysUpload      -> {
                             async {
@@ -85,10 +90,11 @@ internal class OutgoingRequestsProcessor(private val requestSender: RequestSende
                             async {
                                 // The rust-sdk won't ever produce KeysBackup requests here,
                                 // those only get explicitly created.
+                                true
                             }
                         }
                     }
-                }.joinAll()
+                }.awaitAll().all { it }
             }
         }
     }
@@ -112,66 +118,78 @@ internal class OutgoingRequestsProcessor(private val requestSender: RequestSende
         }
     }
 
-    private suspend fun uploadKeys(olmMachine: OlmMachine, request: Request.KeysUpload) {
-        try {
+    private suspend fun uploadKeys(olmMachine: OlmMachine, request: Request.KeysUpload): Boolean {
+        return try {
             val response = requestSender.uploadKeys(request)
             olmMachine.markRequestAsSent(request.requestId, RequestType.KEYS_UPLOAD, response)
+            true
         } catch (throwable: Throwable) {
             Timber.tag(loggerTag.value).e(throwable, "## uploadKeys(): error")
+            false
         }
     }
 
-    private suspend fun queryKeys(olmMachine: OlmMachine, request: Request.KeysQuery) {
-        try {
+    private suspend fun queryKeys(olmMachine: OlmMachine, request: Request.KeysQuery): Boolean {
+        return try {
             val response = requestSender.queryKeys(request)
             olmMachine.markRequestAsSent(request.requestId, RequestType.KEYS_QUERY, response)
-            coroutineScope.updateShields(request.users)
+            coroutineScope.updateShields(olmMachine, request.users)
+            true
         } catch (throwable: Throwable) {
             Timber.tag(loggerTag.value).e(throwable, "## queryKeys(): error")
+            false
         }
     }
 
-    private fun CoroutineScope.updateShields(userIds: List<String>) = launch {
+    private fun CoroutineScope.updateShields(olmMachine: OlmMachine, userIds: List<String>) = launch {
         cryptoSessionInfoProvider.getRoomsWhereUsersAreParticipating(userIds).forEach { roomId ->
             val userGroup = cryptoSessionInfoProvider.getUserListForShieldComputation(roomId)
-            val shield = shieldComputer.compute(userGroup)
+            val shield = computeShieldForGroup(olmMachine, userGroup)
             cryptoSessionInfoProvider.updateShieldForRoom(roomId, shield)
         }
     }
 
-    private suspend fun sendToDevice(olmMachine: OlmMachine, request: Request.ToDevice) {
-        try {
+    private suspend fun sendToDevice(olmMachine: OlmMachine, request: Request.ToDevice): Boolean {
+        return try {
             requestSender.sendToDevice(request)
             olmMachine.markRequestAsSent(request.requestId, RequestType.TO_DEVICE, "{}")
+            true
         } catch (throwable: Throwable) {
             Timber.tag(loggerTag.value).e(throwable, "## sendToDevice(): error")
+            false
         }
     }
 
-    private suspend fun claimKeys(olmMachine: OlmMachine, request: Request.KeysClaim) {
-        try {
+    private suspend fun claimKeys(olmMachine: OlmMachine, request: Request.KeysClaim): Boolean {
+        return try {
             val response = requestSender.claimKeys(request)
             olmMachine.markRequestAsSent(request.requestId, RequestType.KEYS_CLAIM, response)
+            true
         } catch (throwable: Throwable) {
             Timber.tag(loggerTag.value).e(throwable, "## claimKeys(): error")
+            false
         }
     }
 
-    private suspend fun signatureUpload(olmMachine: OlmMachine, request: Request.SignatureUpload) {
-        try {
+    private suspend fun signatureUpload(olmMachine: OlmMachine, request: Request.SignatureUpload): Boolean {
+        return try {
             val response = requestSender.sendSignatureUpload(request)
             olmMachine.markRequestAsSent(request.requestId, RequestType.SIGNATURE_UPLOAD, response)
+            true
         } catch (throwable: Throwable) {
             Timber.tag(loggerTag.value).e(throwable, "## signatureUpload(): error")
+            false
         }
     }
 
-    private suspend fun sendRoomMessage(olmMachine: OlmMachine, request: Request.RoomMessage) {
-        try {
+    private suspend fun sendRoomMessage(olmMachine: OlmMachine, request: Request.RoomMessage): Boolean {
+        return try {
             val response = requestSender.sendRoomMessage(request)
             olmMachine.markRequestAsSent(request.requestId, RequestType.ROOM_MESSAGE, response)
+            true
         } catch (throwable: Throwable) {
             Timber.tag(loggerTag.value).e(throwable, "## sendRoomMessage(): error")
+            false
         }
     }
 }

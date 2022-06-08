@@ -243,10 +243,10 @@ class KeyShareTests : InstrumentedTest {
 
         // force keys download
         commonTestHelper.runBlockingTest {
-            aliceSession1.cryptoService().downloadKeys(listOf(aliceSession1.myUserId), true)
+            aliceSession1.cryptoService().downloadKeysIfNeeded(listOf(aliceSession1.myUserId), true)
         }
         commonTestHelper.runBlockingTest {
-            aliceSession2.cryptoService().downloadKeys(listOf(aliceSession2.myUserId), true)
+            aliceSession2.cryptoService().downloadKeysIfNeeded(listOf(aliceSession2.myUserId), true)
         }
 
         var session1ShortCode: String? = null

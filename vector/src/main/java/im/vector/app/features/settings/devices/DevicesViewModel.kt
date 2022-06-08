@@ -155,7 +155,7 @@ class DevicesViewModel @AssistedInject constructor(
         refreshSource.stream().throttleFirst(4_000)
                 .onEach {
                     session.cryptoService().fetchDevicesList()
-                    session.cryptoService().downloadKeys(listOf(session.myUserId), true)
+                    session.cryptoService().downloadKeysIfNeeded(listOf(session.myUserId), true)
                 }
                 .launchIn(viewModelScope)
         // then force download
