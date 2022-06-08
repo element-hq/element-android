@@ -49,14 +49,14 @@ class FtueAuthResetPasswordEntryFragment : AbstractFtueAuthFragment<FragmentFtue
     }
 
     private fun setupViews() {
-        views.emailEntryInput.associateContentStateWith(button = views.emailEntrySubmit)
-        views.emailEntryInput.setOnImeDoneListener { resetPassword() }
-        views.emailEntrySubmit.debouncedClicks { resetPassword() }
+        views.newPasswordInput.associateContentStateWith(button = views.newPasswordSubmit)
+        views.newPasswordInput.setOnImeDoneListener { resetPassword() }
+        views.newPasswordSubmit.debouncedClicks { resetPassword() }
 
-        views.emailEntryInput.editText().textChanges()
+        views.newPasswordInput.editText().textChanges()
                 .onEach {
-                    views.emailEntryInput.error = null
-                    views.emailEntrySubmit.isEnabled = it.isEmail()
+                    views.newPasswordInput.error = null
+                    views.newPasswordSubmit.isEnabled = it.isEmail()
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
     }
@@ -64,21 +64,21 @@ class FtueAuthResetPasswordEntryFragment : AbstractFtueAuthFragment<FragmentFtue
     private fun resetPassword() {
         viewModel.handle(
                 OnboardingAction.ConfirmNewPassword(
-                        newPassword = views.emailEntryInput.content(),
+                        newPassword = views.newPasswordInput.content(),
                         signOutAllDevices = views.entrySignOutAll.isChecked
                 )
         )
     }
 
     override fun onError(throwable: Throwable) {
-        views.emailEntryInput.error = errorFormatter.toHumanReadable(throwable)
+        views.newPasswordInput.error = errorFormatter.toHumanReadable(throwable)
     }
 
     override fun updateWithState(state: OnboardingViewState) {
         views.signedOutAllGroup.isVisible = state.resetState.supportsLogoutAllDevices
 
         if (state.isLoading) {
-            views.emailEntryInput.editText().hidePassword()
+            views.newPasswordInput.editText().hidePassword()
         }
     }
 

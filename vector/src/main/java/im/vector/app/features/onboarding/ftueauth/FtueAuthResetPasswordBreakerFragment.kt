@@ -54,17 +54,17 @@ class FtueAuthResetPasswordBreakerFragment : AbstractFtueAuthFragment<FragmentFt
     }
 
     private fun setupUi() {
-        views.emailVerificationGradientContainer.setBackgroundResource(
+        views.resetPasswordBreakerGradientContainer.setBackgroundResource(
                 when (themeProvider.isLightTheme()) {
                     true  -> R.drawable.bg_waiting_for_email_verification
                     false -> R.drawable.bg_color_background
                 }
         )
-        views.emailVerificationTitle.text = getString(R.string.ftue_auth_reset_password_breaker_title)
+        views.resetPasswordBreakerTitle.text = getString(R.string.ftue_auth_reset_password_breaker_title)
                 .colorTerminatingFullStop(ThemeUtils.getColor(requireContext(), R.attr.colorSecondary))
-        views.emailVerificationSubtitle.text = getString(R.string.ftue_auth_email_verification_subtitle, params.email)
-        views.emailVerificationResendEmail.debouncedClicks { viewModel.handle(OnboardingAction.ResendResetPassword) }
-        views.emailVerificationFooter.debouncedClicks {
+        views.resetPasswordBreakerSubtitle.text = getString(R.string.ftue_auth_email_verification_subtitle, params.email)
+        views.resetPasswordBreakerResendEmail.debouncedClicks { viewModel.handle(OnboardingAction.ResendResetPassword) }
+        views.resetPasswordBreakerFooter.debouncedClicks {
             viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnResetPasswordBreakerConfirmed))
         }
     }
