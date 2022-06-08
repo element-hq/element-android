@@ -43,5 +43,5 @@
     <string name="ftue_auth_email_verification_footer">Did not receive an email?</string>
     <string name="ftue_auth_email_resend_email">Resend email</string>
 
-    <string name="location_map_view_copyright">© MapTiler © OpenStreetMap contributors</string>
+    <string name="location_map_view_copyright" translatable="false">© MapTiler © OpenStreetMap contributors</string>
 </resources>
