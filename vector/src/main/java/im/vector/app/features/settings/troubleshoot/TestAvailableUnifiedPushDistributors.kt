@@ -33,7 +33,7 @@ class TestAvailableUnifiedPushDistributors @Inject constructor(
         val distributors = unifiedPushHelper.getExternalDistributors()
         description = if (distributors.isEmpty()) {
             stringProvider.getString(
-                    if (FcmHelper.isPushSupported()) {
+                    if (FcmHelper.isFirebaseAvailable()) {
                         R.string.settings_troubleshoot_test_distributors_gplay
                     } else {
                         R.string.settings_troubleshoot_test_distributors_fdroid

@@ -31,7 +31,7 @@ import im.vector.app.features.settings.VectorPreferences
  */
 object FcmHelper {
 
-    fun isPushSupported(): Boolean = false
+    fun isFirebaseAvailable(): Boolean = false
 
     /**
      * Retrieves the FCM registration token.

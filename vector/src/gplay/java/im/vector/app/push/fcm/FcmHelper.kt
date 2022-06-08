@@ -37,7 +37,7 @@ import timber.log.Timber
 object FcmHelper {
     private val PREFS_KEY_FCM_TOKEN = "FCM_TOKEN"
 
-    fun isPushSupported(): Boolean = true
+    fun isFirebaseAvailable(): Boolean = true
 
     /**
      * Retrieves the FCM registration token.
