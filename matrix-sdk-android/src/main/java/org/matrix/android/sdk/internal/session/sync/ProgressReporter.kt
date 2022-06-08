@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.initsync
+package org.matrix.android.sdk.internal.session.sync
 
-import org.matrix.android.sdk.api.session.initsync.InitSyncStep
+import org.matrix.android.sdk.api.session.sync.InitialSyncStep
 
 internal interface ProgressReporter {
     fun startTask(
-            initSyncStep: InitSyncStep,
+            initialSyncStep: InitialSyncStep,
             totalProgress: Int,
             parentWeight: Float
     )

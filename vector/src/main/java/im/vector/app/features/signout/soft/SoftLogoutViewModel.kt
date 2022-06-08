@@ -211,7 +211,7 @@ class SoftLogoutViewModel @AssistedInject constructor(
     private fun onSessionRestored() {
         activeSessionHolder.setActiveSession(session)
         // Start the sync
-        session.startSync(true)
+        session.syncService().startSync(true)
 
         // TODO Configure and start ? Check that the push still works...
         setState {

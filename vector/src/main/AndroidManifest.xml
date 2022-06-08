@@ -358,7 +358,7 @@
 
         <!-- Add tools:ignore="Instantiatable" for the error reported only by Buildkite and for lintGplayRelease check :/ -->
         <service
-            android:name=".core.services.VectorSyncService"
+            android:name=".core.services.VectorSyncAndroidService"
             android:exported="false"
             tools:ignore="Instantiatable" />
 

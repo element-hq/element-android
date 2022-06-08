@@ -88,7 +88,7 @@ class FlowSession(private val session: Session) {
     }
 
     fun liveSyncState(): Flow<SyncState> {
-        return session.getSyncStateLive().asFlow()
+        return session.syncService().getSyncStateLive().asFlow()
     }
 
     fun livePushers(): Flow<List<Pusher>> {

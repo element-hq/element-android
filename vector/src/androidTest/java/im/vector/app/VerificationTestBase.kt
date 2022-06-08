@@ -116,14 +116,14 @@ abstract class VerificationTestBase {
 
         GlobalScope.launch(Dispatchers.Main) { session.open() }
 
-        session.startSync(true)
+        session.syncService().startSync(true)
 
         val syncLiveData = runBlocking(Dispatchers.Main) {
-            session.getSyncStateLive()
+            session.syncService().getSyncStateLive()
         }
         val syncObserver = object : Observer<SyncState> {
             override fun onChanged(t: SyncState?) {
-                if (session.hasAlreadySynced()) {
+                if (session.syncService().hasAlreadySynced()) {
                     lock.countDown()
                     syncLiveData.removeObserver(this)
                 }

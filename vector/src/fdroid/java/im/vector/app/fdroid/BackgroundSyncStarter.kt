@@ -37,7 +37,7 @@ object BackgroundSyncStarter {
                 BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY -> {
                     // we rely on periodic worker
                     Timber.i("## Sync: Work scheduled to periodically sync in ${vectorPreferences.backgroundSyncDelay()}s")
-                    activeSession.startAutomaticBackgroundSync(
+                    activeSession.syncService().startAutomaticBackgroundSync(
                             vectorPreferences.backgroundSyncTimeOut().toLong(),
                             vectorPreferences.backgroundSyncDelay().toLong()
                     )

@@ -17,16 +17,16 @@
 package org.matrix.android.sdk.internal.session.sync.handler
 
 import io.realm.Realm
-import org.matrix.android.sdk.api.session.initsync.InitSyncStep
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.sync.InitialSyncStep
 import org.matrix.android.sdk.api.session.sync.model.GroupsSyncResponse
 import org.matrix.android.sdk.api.session.sync.model.InvitedGroupSync
 import org.matrix.android.sdk.internal.database.model.GroupEntity
 import org.matrix.android.sdk.internal.database.model.GroupSummaryEntity
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.where
-import org.matrix.android.sdk.internal.session.initsync.ProgressReporter
-import org.matrix.android.sdk.internal.session.initsync.mapWithProgress
+import org.matrix.android.sdk.internal.session.sync.ProgressReporter
+import org.matrix.android.sdk.internal.session.sync.mapWithProgress
 import javax.inject.Inject
 
 internal class GroupSyncHandler @Inject constructor() {
@@ -51,18 +51,18 @@ internal class GroupSyncHandler @Inject constructor() {
 
     private fun handleGroupSync(realm: Realm, handlingStrategy: HandlingStrategy, reporter: ProgressReporter?) {
         val groups = when (handlingStrategy) {
-            is HandlingStrategy.JOINED ->
-                handlingStrategy.data.mapWithProgress(reporter, InitSyncStep.ImportingAccountGroups, 0.6f) {
+            is HandlingStrategy.JOINED  ->
+                handlingStrategy.data.mapWithProgress(reporter, InitialSyncStep.ImportingAccountGroups, 0.6f) {
                     handleJoinedGroup(realm, it.key)
                 }
 
             is HandlingStrategy.INVITED ->
-                handlingStrategy.data.mapWithProgress(reporter, InitSyncStep.ImportingAccountGroups, 0.3f) {
+                handlingStrategy.data.mapWithProgress(reporter, InitialSyncStep.ImportingAccountGroups, 0.3f) {
                     handleInvitedGroup(realm, it.key)
                 }
 
-            is HandlingStrategy.LEFT ->
-                handlingStrategy.data.mapWithProgress(reporter, InitSyncStep.ImportingAccountGroups, 0.1f) {
+            is HandlingStrategy.LEFT    ->
+                handlingStrategy.data.mapWithProgress(reporter, InitialSyncStep.ImportingAccountGroups, 0.1f) {
                     handleLeftGroup(realm, it.key)
                 }
         }

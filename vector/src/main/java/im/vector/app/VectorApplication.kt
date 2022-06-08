@@ -176,7 +176,7 @@ class VectorApplication :
                 Timber.i("App entered foreground")
                 FcmHelper.onEnterForeground(appContext, activeSessionHolder)
                 activeSessionHolder.getSafeActiveSession()?.also {
-                    it.stopAnyBackgroundSync()
+                    it.syncService().stopAnyBackgroundSync()
                 }
             }
 

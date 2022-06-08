@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.initsync
+package org.matrix.android.sdk.internal.session.sync
 
-import org.matrix.android.sdk.api.session.initsync.InitSyncStep
+import org.matrix.android.sdk.api.session.sync.InitialSyncStep
 
 internal inline fun <T> reportSubtask(
         reporter: ProgressReporter?,
-        initSyncStep: InitSyncStep,
+        initialSyncStep: InitialSyncStep,
         totalProgress: Int,
         parentWeight: Float,
         block: () -> T
 ): T {
-    reporter?.startTask(initSyncStep, totalProgress, parentWeight)
+    reporter?.startTask(initialSyncStep, totalProgress, parentWeight)
     return block().also {
         reporter?.endTask()
     }
@@ -33,12 +33,12 @@ internal inline fun <T> reportSubtask(
 
 internal inline fun <K, V, R> Map<out K, V>.mapWithProgress(
         reporter: ProgressReporter?,
-        initSyncStep: InitSyncStep,
+        initialSyncStep: InitialSyncStep,
         parentWeight: Float,
         transform: (Map.Entry<K, V>) -> R
 ): List<R> {
     var current = 0F
-    reporter?.startTask(initSyncStep, count() + 1, parentWeight)
+    reporter?.startTask(initialSyncStep, count() + 1, parentWeight)
     return map {
         reporter?.reportProgress(current)
         current++
