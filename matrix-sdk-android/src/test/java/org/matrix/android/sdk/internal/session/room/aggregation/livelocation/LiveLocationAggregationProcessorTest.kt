@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.session.room.aggregation.livelocation
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.events.model.UnsignedData
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
 import org.matrix.android.sdk.test.fakes.FakeClock
@@ -28,6 +29,7 @@ import org.matrix.android.sdk.test.fakes.FakeWorkManagerProvider
 private const val A_SESSION_ID = "session_id"
 private const val A_SENDER_ID = "sender_id"
 private const val AN_EVENT_ID = "event_id"
+private const val A_ROOM_ID = "room_id"
 
 internal class LiveLocationAggregationProcessorTest {
 
@@ -50,7 +52,7 @@ internal class LiveLocationAggregationProcessorTest {
                 realm = fakeRealm.instance,
                 event = event,
                 content = beaconInfo,
-                roomId = "",
+                roomId = A_ROOM_ID,
                 isLocalEcho = true
         )
 
@@ -67,19 +69,68 @@ internal class LiveLocationAggregationProcessorTest {
                 realm = fakeRealm.instance,
                 event = eventNoSenderId,
                 content = beaconInfo,
-                roomId = "",
+                roomId = A_ROOM_ID,
                 isLocalEcho = false
         )
         val resultEmptySenderId = liveLocationAggregationProcessor.handleBeaconInfo(
                 realm = fakeRealm.instance,
                 event = eventEmptySenderId,
                 content = beaconInfo,
-                roomId = "",
+                roomId = A_ROOM_ID,
                 isLocalEcho = false
         )
 
         resultNoSenderId shouldBeEqualTo false
         resultEmptySenderId shouldBeEqualTo false
+    }
+
+    @Test
+    fun `given beacon info when no target eventId is found then it is ignored`() {
+        val unsignedDataWithNoEventId = UnsignedData(
+                age = 123
+        )
+        val unsignedDataWithEmptyEventId = UnsignedData(
+                age = 123,
+                replacesState = ""
+        )
+        val eventWithNoEventId = Event(senderId = A_SENDER_ID, unsignedData = unsignedDataWithNoEventId)
+        val eventWithEmptyEventId = Event(senderId = A_SENDER_ID, eventId = "", unsignedData = unsignedDataWithEmptyEventId)
+        val beaconInfoLive = MessageBeaconInfoContent(isLive = true)
+        val beaconInfoNotLive = MessageBeaconInfoContent(isLive = false)
+
+        val resultLiveNoEventId = liveLocationAggregationProcessor.handleBeaconInfo(
+                realm = fakeRealm.instance,
+                event = eventWithNoEventId,
+                content = beaconInfoLive,
+                roomId = A_ROOM_ID,
+                isLocalEcho = false
+        )
+        val resultLiveEmptyEventId = liveLocationAggregationProcessor.handleBeaconInfo(
+                realm = fakeRealm.instance,
+                event = eventWithEmptyEventId,
+                content = beaconInfoLive,
+                roomId = A_ROOM_ID,
+                isLocalEcho = false
+        )
+        val resultNotLiveNoEventId = liveLocationAggregationProcessor.handleBeaconInfo(
+                realm = fakeRealm.instance,
+                event = eventWithNoEventId,
+                content = beaconInfoNotLive,
+                roomId = A_ROOM_ID,
+                isLocalEcho = false
+        )
+        val resultNotLiveEmptyEventId = liveLocationAggregationProcessor.handleBeaconInfo(
+                realm = fakeRealm.instance,
+                event = eventWithEmptyEventId,
+                content = beaconInfoNotLive,
+                roomId = A_ROOM_ID,
+                isLocalEcho = false
+        )
+
+        resultLiveNoEventId shouldBeEqualTo false
+        resultLiveEmptyEventId shouldBeEqualTo false
+        resultNotLiveNoEventId shouldBeEqualTo false
+        resultNotLiveEmptyEventId shouldBeEqualTo false
     }
 
     @Test
@@ -91,12 +142,38 @@ internal class LiveLocationAggregationProcessorTest {
                 realm = fakeRealm.instance,
                 event = event,
                 content = beaconLocationData,
-                roomId = "",
-                relatedEventId = "",
+                roomId = A_ROOM_ID,
+                relatedEventId = AN_EVENT_ID,
                 isLocalEcho = true
         )
 
         result shouldBeEqualTo false
+    }
+
+    @Test
+    fun `given beacon location data when relatedEventId is null or empty then it is ignored`() {
+        val event = Event(senderId = A_SENDER_ID)
+        val beaconLocationData = MessageBeaconLocationDataContent()
+
+        val resultNoRelatedEventId = liveLocationAggregationProcessor.handleBeaconLocationData(
+                realm = fakeRealm.instance,
+                event = event,
+                content = beaconLocationData,
+                roomId = A_ROOM_ID,
+                relatedEventId = null,
+                isLocalEcho = false
+        )
+        val resultEmptyRelatedEventId = liveLocationAggregationProcessor.handleBeaconLocationData(
+                realm = fakeRealm.instance,
+                event = event,
+                content = beaconLocationData,
+                roomId = A_ROOM_ID,
+                relatedEventId = "",
+                isLocalEcho = false
+        )
+
+        resultNoRelatedEventId shouldBeEqualTo false
+        resultEmptyRelatedEventId shouldBeEqualTo false
     }
 
     @Test
@@ -110,7 +187,7 @@ internal class LiveLocationAggregationProcessorTest {
                 event = eventNoSenderId,
                 content = beaconLocationData,
                 roomId = "",
-                relatedEventId = "",
+                relatedEventId = AN_EVENT_ID,
                 isLocalEcho = false
         )
         val resultEmptySenderId = liveLocationAggregationProcessor.handleBeaconLocationData(
@@ -118,7 +195,7 @@ internal class LiveLocationAggregationProcessorTest {
                 event = eventEmptySenderId,
                 content = beaconLocationData,
                 roomId = "",
-                relatedEventId = "",
+                relatedEventId = AN_EVENT_ID,
                 isLocalEcho = false
         )
 
