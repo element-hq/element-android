@@ -22,8 +22,12 @@ import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.UnsignedData
+import org.matrix.android.sdk.api.session.events.model.toContent
+import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.room.model.message.LocationInfo
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
+import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntity
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntityFields
 import org.matrix.android.sdk.test.fakes.FakeClock
@@ -40,6 +44,10 @@ private const val AN_EVENT_ID = "event_id"
 private const val A_ROOM_ID = "room_id"
 private const val A_TIMESTAMP = 1654689143L
 private const val A_TIMEOUT_MILLIS = 15 * 60 * 1000L
+private const val A_LATITUDE = 40.05
+private const val A_LONGITUDE = 29.24
+private const val A_UNCERTAINTY = 30.0
+private const val A_GEO_URI = "geo:$A_LATITUDE,$A_LONGITUDE;$A_UNCERTAINTY"
 
 internal class LiveLocationAggregationProcessorTest {
 
@@ -284,7 +292,7 @@ internal class LiveLocationAggregationProcessorTest {
                 realm = fakeRealm.instance,
                 event = eventEmptySenderId,
                 content = beaconLocationData,
-                roomId = "",
+                roomId = A_ROOM_ID,
                 relatedEventId = AN_EVENT_ID,
                 isLocalEcho = false
         )
@@ -293,10 +301,64 @@ internal class LiveLocationAggregationProcessorTest {
         resultEmptySenderId shouldBeEqualTo false
     }
 
-    private fun mockLiveLocationShareAggregatedSummaryEntityForEvent(): LiveLocationShareAggregatedSummaryEntity {
+    @Test
+    fun `given beacon location data when location is less recent than the saved one then it is ignored`() {
+        val event = Event(eventId = AN_EVENT_ID, senderId = A_SENDER_ID)
+        val beaconLocationData = MessageBeaconLocationDataContent(
+                unstableTimestampMillis = A_TIMESTAMP - 60_000
+        )
+        val lastBeaconLocationContent = MessageBeaconLocationDataContent(
+                unstableTimestampMillis = A_TIMESTAMP
+        )
+        mockLiveLocationShareAggregatedSummaryEntityForEvent(lastBeaconLocationContent = lastBeaconLocationContent)
+
+        val result = liveLocationAggregationProcessor.handleBeaconLocationData(
+                realm = fakeRealm.instance,
+                event = event,
+                content = beaconLocationData,
+                roomId = A_ROOM_ID,
+                relatedEventId = AN_EVENT_ID,
+                isLocalEcho = false
+        )
+
+        result shouldBeEqualTo false
+    }
+
+    @Test
+    fun `given beacon location data when location is more recent than the saved one then it is aggregated`() {
+        val event = Event(eventId = AN_EVENT_ID, senderId = A_SENDER_ID)
+        val locationInfo = LocationInfo(geoUri = A_GEO_URI)
+        val beaconLocationData = MessageBeaconLocationDataContent(
+                unstableTimestampMillis = A_TIMESTAMP,
+                unstableLocationInfo = locationInfo
+        )
+        val lastBeaconLocationContent = MessageBeaconLocationDataContent(
+                unstableTimestampMillis = A_TIMESTAMP - 60_000
+        )
+        val entity = mockLiveLocationShareAggregatedSummaryEntityForEvent(lastBeaconLocationContent = lastBeaconLocationContent)
+
+        val result = liveLocationAggregationProcessor.handleBeaconLocationData(
+                realm = fakeRealm.instance,
+                event = event,
+                content = beaconLocationData,
+                roomId = A_ROOM_ID,
+                relatedEventId = AN_EVENT_ID,
+                isLocalEcho = false
+        )
+
+        result shouldBeEqualTo true
+        val savedLocationData = ContentMapper.map(entity.lastLocationContent).toModel<MessageBeaconLocationDataContent>()
+        savedLocationData?.getBestTimestampMillis() shouldBeEqualTo A_TIMESTAMP
+        savedLocationData?.getBestLocationInfo()?.geoUri shouldBeEqualTo A_GEO_URI
+    }
+
+    private fun mockLiveLocationShareAggregatedSummaryEntityForEvent(
+            lastBeaconLocationContent: MessageBeaconLocationDataContent? = null
+    ): LiveLocationShareAggregatedSummaryEntity {
         val result = LiveLocationShareAggregatedSummaryEntity(
                 eventId = AN_EVENT_ID,
-                roomId = A_ROOM_ID
+                roomId = A_ROOM_ID,
+                lastLocationContent = ContentMapper.map(lastBeaconLocationContent?.toContent())
         )
         fakeQuery
                 .givenEqualTo(LiveLocationShareAggregatedSummaryEntityFields.EVENT_ID, AN_EVENT_ID)

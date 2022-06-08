@@ -151,12 +151,13 @@ internal class LiveLocationAggregationProcessor @Inject constructor(
                 ?.getBestTimestampMillis()
                 ?: 0
 
-        if (updatedLocationTimestamp.isMoreRecentThan(currentLocationTimestamp)) {
+        return if (updatedLocationTimestamp.isMoreRecentThan(currentLocationTimestamp)) {
             Timber.d("updating last location of the summary of id=$relatedEventId")
             aggregatedSummary.lastLocationContent = ContentMapper.map(content.toContent())
+            true
+        } else {
+            false
         }
-
-        return true
     }
 
     private fun deactivateAllPreviousBeacons(realm: Realm, roomId: String, userId: String, currentEventId: String) {
