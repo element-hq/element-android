@@ -236,7 +236,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                 }
                 .launchIn(viewModelScope)
 
-        if (session.hasAlreadySynced()) {
+        if (session.syncService().hasAlreadySynced()) {
             maybeVerifyOrBootstrapCrossSigning()
         }
     }
