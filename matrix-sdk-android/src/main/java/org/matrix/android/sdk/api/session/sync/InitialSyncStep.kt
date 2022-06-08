@@ -22,7 +22,6 @@ enum class InitialSyncStep {
     ImportingAccount,
     ImportingAccountCrypto,
     ImportingAccountRoom,
-    ImportingAccountGroups,
     ImportingAccountData,
     ImportingAccountJoinedRooms,
     ImportingAccountInvitedRooms,

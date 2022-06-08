@@ -34,8 +34,6 @@ import org.matrix.android.sdk.internal.session.content.ContentModule
 import org.matrix.android.sdk.internal.session.content.UploadContentWorker
 import org.matrix.android.sdk.internal.session.contentscanner.ContentScannerModule
 import org.matrix.android.sdk.internal.session.filter.FilterModule
-import org.matrix.android.sdk.internal.session.group.GetGroupDataWorker
-import org.matrix.android.sdk.internal.session.group.GroupModule
 import org.matrix.android.sdk.internal.session.homeserver.HomeServerCapabilitiesModule
 import org.matrix.android.sdk.internal.session.identity.IdentityModule
 import org.matrix.android.sdk.internal.session.integrationmanager.IntegrationManagerModule
@@ -73,10 +71,8 @@ import org.matrix.android.sdk.internal.util.system.SystemModule
             SyncModule::class,
             HomeServerCapabilitiesModule::class,
             SignOutModule::class,
-            GroupModule::class,
             UserModule::class,
             FilterModule::class,
-            GroupModule::class,
             ContentModule::class,
             CacheModule::class,
             MediaModule::class,
@@ -121,8 +117,6 @@ internal interface SessionComponent {
     fun inject(worker: MultipleEventSendingDispatcherWorker)
 
     fun inject(worker: RedactEventWorker)
-
-    fun inject(worker: GetGroupDataWorker)
 
     fun inject(worker: UploadContentWorker)
 

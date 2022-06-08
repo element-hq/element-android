@@ -29,7 +29,6 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.invite.showInvites
-import im.vector.app.space
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -65,7 +64,7 @@ class RoomListSectionBuilderSpace(
         private val onUpdatable: (UpdatableLivePageResult) -> Unit,
         private val suggestedRoomJoiningState: LiveData<Map<String, Async<Unit>>>,
         private val onlyOrphansInHome: Boolean = false
-) : RoomListSectionBuilder {
+) {
 
     private val pagedListConfig = PagedList.Config.Builder()
             .setPageSize(10)
@@ -74,7 +73,7 @@ class RoomListSectionBuilderSpace(
             .setPrefetchDistance(10)
             .build()
 
-    override fun buildSections(mode: RoomListDisplayMode): List<RoomsSection> {
+    fun buildSections(mode: RoomListDisplayMode): List<RoomsSection> {
         val sections = mutableListOf<RoomsSection>()
         val activeSpaceAwareQueries = mutableListOf<RoomListViewModel.ActiveSpaceQueryUpdater>()
         when (mode) {
@@ -95,10 +94,10 @@ class RoomListSectionBuilderSpace(
             }
         }
 
-        appStateHandler.selectedRoomGroupingFlow
+        appStateHandler.selectedSpaceFlow
                 .distinctUntilChanged()
-                .onEach { groupingMethod ->
-                    val selectedSpace = groupingMethod.orNull()?.space()
+                .onEach { selectedSpaceOption ->
+                    val selectedSpace = selectedSpaceOption.orNull()
                     activeSpaceAwareQueries.onEach { updater ->
                         updater.updateForSpaceId(selectedSpace?.roomId)
                     }
@@ -187,10 +186,10 @@ class RoomListSectionBuilderSpace(
 
         // add suggested rooms
         val suggestedRoomsFlow = // MutableLiveData<List<SpaceChildInfo>>()
-                appStateHandler.selectedRoomGroupingFlow
+                appStateHandler.selectedSpaceFlow
                         .distinctUntilChanged()
-                        .flatMapLatest { groupingMethod ->
-                            val selectedSpace = groupingMethod.orNull()?.space()
+                        .flatMapLatest { selectedSpaceOption ->
+                            val selectedSpace = selectedSpaceOption.orNull()
                             if (selectedSpace == null) {
                                 flowOf(emptyList())
                             } else {

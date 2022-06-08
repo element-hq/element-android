@@ -174,7 +174,8 @@
     <string name="initial_sync_start_importing_account_joined_rooms">Initial sync:\nLoading your conversations\nIf you\'ve joined lots of rooms, this might take a while</string>
     <string name="initial_sync_start_importing_account_invited_rooms">Initial sync:\nImporting invited rooms</string>
     <string name="initial_sync_start_importing_account_left_rooms">Initial sync:\nImporting left rooms</string>
-    <string name="initial_sync_start_importing_account_groups">Initial sync:\nImporting communities</string>
+    <!--TODO:remove-->
+    <string name="initial_sync_start_importing_account_groups" tools:ignore="UnusedResources">Initial sync:\nImporting communities</string>
     <string name="initial_sync_start_importing_account_data">Initial sync:\nImporting account data</string>
 
     <string name="initial_sync_request_title">Initial sync request</string>
@@ -441,7 +442,8 @@
     <string name="settings_room_directory_show_all_rooms_summary">Show all rooms in the room directory, including rooms with explicit content.</string>
 
     <!-- Groups fragment -->
-    <string name="groups_header">Communities</string>
+    <!--TODO: delete-->
+    <string name="groups_header" tools:ignore="UnusedResources">Communities</string>
 
     <string name="spaces_header">Spaces</string>
 
@@ -1609,7 +1611,8 @@
     <string name="error_no_network">No network. Please check your Internet connection.</string>
     <string name="change_room_directory_network">"Change network"</string>
     <string name="please_wait">"Please wait…"</string>
-    <string name="group_all_communities">"All Communities"</string>
+    <!--TODO: delete-->
+    <string name="group_all_communities" tools:ignore="UnusedResources">"All Communities"</string>
 
     <string name="room_preview_no_preview">"This room can't be previewed"</string>
     <string name="room_preview_not_found">This room is not accessible at this time.\nTry again later, or ask a room admin to check if you have access.</string>

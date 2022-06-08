@@ -201,13 +201,12 @@ class HomeActivity :
                     when (sharedAction) {
                         is HomeActivitySharedAction.OpenDrawer -> views.drawerLayout.openDrawer(GravityCompat.START)
                         is HomeActivitySharedAction.CloseDrawer -> views.drawerLayout.closeDrawer(GravityCompat.START)
-                        is HomeActivitySharedAction.OpenGroup -> openGroup(sharedAction.shouldClearFragment)
                         is HomeActivitySharedAction.OpenSpacePreview -> startActivity(SpacePreviewActivity.newIntent(this, sharedAction.spaceId))
                         is HomeActivitySharedAction.AddSpace -> createSpaceResultLauncher.launch(SpaceCreationActivity.newIntent(this))
                         is HomeActivitySharedAction.ShowSpaceSettings -> showSpaceSettings(sharedAction.spaceId)
                         is HomeActivitySharedAction.OpenSpaceInvite -> openSpaceInvite(sharedAction.spaceId)
                         HomeActivitySharedAction.SendSpaceFeedBack -> bugReporter.openBugReportScreen(this, ReportType.SPACE_BETA_FEEDBACK)
-                        HomeActivitySharedAction.CloseGroup -> closeGroup()
+                        HomeActivitySharedAction.OnCloseSpace      -> onCloseSpace()
                     }
                 }
                 .launchIn(lifecycleScope)
@@ -252,17 +251,6 @@ class HomeActivity :
         homeActivityViewModel.handle(HomeActivityViewActions.ViewStarted)
     }
 
-    private fun openGroup(shouldClearFragment: Boolean) {
-        views.drawerLayout.closeDrawer(GravityCompat.START)
-
-        // When switching from space to group or group to space, we need to reload the fragment
-        if (shouldClearFragment) {
-            replaceFragment(views.homeDetailFragmentContainer, HomeDetailFragment::class.java, allowStateLoss = true)
-        } else {
-            // do nothing
-        }
-    }
-
     private fun showSpaceSettings(spaceId: String) {
         // open bottom sheet
         SpaceSettingsMenuBottomSheet
@@ -279,7 +267,7 @@ class HomeActivity :
                 .show(supportFragmentManager, "SPACE_INVITE")
     }
 
-    private fun closeGroup() {
+    private fun onCloseSpace() {
         views.drawerLayout.openDrawer(GravityCompat.START)
     }
 

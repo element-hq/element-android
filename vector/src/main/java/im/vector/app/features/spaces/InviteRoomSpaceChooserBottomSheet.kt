@@ -22,6 +22,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentManager
 import com.airbnb.mvrx.args
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
@@ -91,6 +92,26 @@ class InviteRoomSpaceChooserBottomSheet : VectorBaseBottomSheetDialogFragment<Bo
                 this.interactionListener = interactionListener
                 setArguments(Args(spaceId, roomId))
             }
+        }
+
+        fun showInstance(
+                fragmentManager: FragmentManager,
+                spaceId: String,
+                roomId: String,
+                onItemSelected: (roomId: String) -> Unit
+        ) {
+            InviteRoomSpaceChooserBottomSheet().apply {
+                this.interactionListener = object : InteractionListener {
+                    override fun inviteToSpace(spaceId: String) {
+                        onItemSelected.invoke(spaceId)
+                    }
+
+                    override fun inviteToRoom(roomId: String) {
+                        onItemSelected.invoke(roomId)
+                    }
+                }
+                setArguments(Args(spaceId, roomId))
+            }.show(fragmentManager, InviteRoomSpaceChooserBottomSheet::class.java.name)
         }
     }
 }

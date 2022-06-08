@@ -32,11 +32,8 @@ import androidx.core.view.ViewCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.AppStateHandler
 import im.vector.app.R
-import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.error.fatalError
-import im.vector.app.core.platform.VectorBaseActivity
-import im.vector.app.core.utils.toast
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.VectorFeatures.OnboardingVariant
 import im.vector.app.features.analytics.AnalyticsTracker
@@ -105,7 +102,6 @@ import im.vector.app.features.spaces.people.SpacePeopleActivity
 import im.vector.app.features.terms.ReviewTermsActivity
 import im.vector.app.features.widgets.WidgetActivity
 import im.vector.app.features.widgets.WidgetArgsBuilder
-import im.vector.app.space
 import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerificationTransaction
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.getRoomSummary
@@ -169,7 +165,7 @@ class DefaultNavigator @Inject constructor(
             analyticsTracker.capture(
                     sessionHolder.getActiveSession().getRoomSummary(roomId).toAnalyticsViewRoom(
                             trigger = trigger,
-                            groupingMethod = appStateHandler.getCurrentRoomGroupingMethod()
+                            selectedSpace = appStateHandler.getCurrentSpace()
                     )
             )
         }
@@ -284,14 +280,6 @@ class DefaultNavigator @Inject constructor(
         }
     }
 
-    override fun openGroupDetail(groupId: String, context: Context, buildTask: Boolean) {
-        if (context is VectorBaseActivity<*>) {
-            context.notImplemented("Open group detail")
-        } else {
-            context.toast(R.string.not_implemented)
-        }
-    }
-
     override fun openRoomMemberProfile(userId: String, roomId: String?, context: Context, buildTask: Boolean) {
         val args = RoomMemberProfileArgs(userId = userId, roomId = roomId)
         val intent = RoomMemberProfileActivity.newIntent(context, args)
@@ -328,25 +316,10 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun openRoomDirectory(context: Context, initialFilter: String) {
-        when (val groupingMethod = appStateHandler.getCurrentRoomGroupingMethod()) {
-            is RoomGroupingMethod.ByLegacyGroup -> {
-                // TODO should open list of rooms of this group
-                val intent = RoomDirectoryActivity.getIntent(context, initialFilter)
-                context.startActivity(intent)
-            }
-            is RoomGroupingMethod.BySpace -> {
-                val selectedSpace = groupingMethod.space()
-                if (selectedSpace == null) {
-                    val intent = RoomDirectoryActivity.getIntent(context, initialFilter)
-                    context.startActivity(intent)
-                } else {
-                    SpaceExploreActivity.newIntent(context, selectedSpace.roomId).let {
-                        context.startActivity(it)
-                    }
-                }
-            }
-            null -> Unit
-        }
+        when (val currentSpace = appStateHandler.getCurrentSpace()) {
+            null -> RoomDirectoryActivity.getIntent(context, initialFilter)
+            else -> SpaceExploreActivity.newIntent(context, currentSpace.roomId)
+        }.start(context)
     }
 
     override fun openCreateRoom(context: Context, initialName: String, openAfterCreate: Boolean) {
@@ -355,54 +328,22 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun openCreateDirectRoom(context: Context) {
-        val intent = when (val currentGroupingMethod = appStateHandler.getCurrentRoomGroupingMethod()) {
-            is RoomGroupingMethod.ByLegacyGroup -> {
-                CreateDirectRoomActivity.getIntent(context)
-            }
-            is RoomGroupingMethod.BySpace -> {
-                if (currentGroupingMethod.spaceSummary != null) {
-                    SpacePeopleActivity.newIntent(context, currentGroupingMethod.spaceSummary.roomId)
-                } else {
-                    CreateDirectRoomActivity.getIntent(context)
-                }
-            }
-            else -> null
-        } ?: return
-        context.startActivity(intent)
+        when (val currentSpace = appStateHandler.getCurrentSpace()) {
+            null -> CreateDirectRoomActivity.getIntent(context)
+            else -> SpacePeopleActivity.newIntent(context, currentSpace.roomId)
+        }.start(context)
     }
 
     override fun openInviteUsersToRoom(context: Context, roomId: String) {
-        when (val currentGroupingMethod = appStateHandler.getCurrentRoomGroupingMethod()) {
-            is RoomGroupingMethod.ByLegacyGroup -> {
-                val intent = InviteUsersToRoomActivity.getIntent(context, roomId)
-                context.startActivity(intent)
-            }
-            is RoomGroupingMethod.BySpace -> {
-                if (currentGroupingMethod.spaceSummary != null) {
-                    // let user decides if he does it from space or room
-                    (context as? AppCompatActivity)?.supportFragmentManager?.let { fm ->
-                        InviteRoomSpaceChooserBottomSheet.newInstance(
-                                currentGroupingMethod.spaceSummary.roomId,
-                                roomId,
-                                object : InviteRoomSpaceChooserBottomSheet.InteractionListener {
-                                    override fun inviteToSpace(spaceId: String) {
-                                        val intent = InviteUsersToRoomActivity.getIntent(context, spaceId)
-                                        context.startActivity(intent)
-                                    }
-
-                                    override fun inviteToRoom(roomId: String) {
-                                        val intent = InviteUsersToRoomActivity.getIntent(context, roomId)
-                                        context.startActivity(intent)
-                                    }
-                                }
-                        ).show(fm, InviteRoomSpaceChooserBottomSheet::class.java.name)
+        when (val currentSpace = appStateHandler.getCurrentSpace()) {
+            null -> InviteUsersToRoomActivity.getIntent(context, roomId).start(context)
+            else -> {
+                (context as? AppCompatActivity)?.supportFragmentManager?.let { fragmentManager ->
+                    InviteRoomSpaceChooserBottomSheet.showInstance(fragmentManager, currentSpace.roomId, roomId) { itemId ->
+                        InviteUsersToRoomActivity.getIntent(context, itemId).start(context)
                     }
-                } else {
-                    val intent = InviteUsersToRoomActivity.getIntent(context, roomId)
-                    context.startActivity(intent)
                 }
             }
-            null -> Unit
         }
     }
 
@@ -447,6 +388,14 @@ class DefaultNavigator @Inject constructor(
 
     override fun openKeysBackupManager(context: Context) {
         context.startActivity(KeysBackupManageActivity.intent(context))
+    }
+
+    override fun showGroupsUnsupportedWarning(context: Context) {
+//        if (context is VectorBaseActivity<*>) {
+//            context.notImplemented("Open group detail")
+//        } else {
+//            context.toast(R.string.not_implemented)
+//        }
     }
 
     override fun openRoomProfile(context: Context, roomId: String, directAccess: Int?) {
@@ -657,5 +606,9 @@ class DefaultNavigator @Inject constructor(
             activityResultLauncher: ActivityResultLauncher<Intent>
     ) {
         activityResultLauncher.launch(screenCaptureIntent)
+    }
+
+    private fun Intent.start(context: Context) {
+        context.startActivity(this)
     }
 }

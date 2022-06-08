@@ -69,7 +69,6 @@ object PermalinkParser {
         return when {
             identifier.isNullOrEmpty() -> PermalinkData.FallbackLink(uri)
             MatrixPatterns.isUserId(identifier) -> PermalinkData.UserLink(userId = identifier)
-            MatrixPatterns.isGroupId(identifier) -> PermalinkData.GroupLink(groupId = identifier)
             MatrixPatterns.isRoomId(identifier) -> {
                 handleRoomIdCase(fragment, identifier, matrixToUri, extraParameter, viaQueryParameters)
             }
@@ -81,7 +80,7 @@ object PermalinkParser {
                         viaParameters = viaQueryParameters
                 )
             }
-            else -> PermalinkData.FallbackLink(uri)
+            else -> PermalinkData.FallbackLink(uri, isLegacyGroupLink = MatrixPatterns.isGroupId(identifier))
         }
     }
 
