@@ -26,6 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.associateContentStateWith
 import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.editText
+import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.setOnImeDoneListener
 import im.vector.app.databinding.FragmentFtueResetPasswordInputBinding
@@ -74,7 +75,11 @@ class FtueAuthResetPasswordEntryFragment : AbstractFtueAuthFragment<FragmentFtue
     }
 
     override fun updateWithState(state: OnboardingViewState) {
-        views.entrySignOutAll.isVisible = state.resetState.supportsLogoutAllDevices
+        views.signedOutAllGroup.isVisible = state.resetState.supportsLogoutAllDevices
+
+        if (state.isLoading) {
+            views.emailEntryInput.editText().hidePassword()
+        }
     }
 
     override fun resetViewModel() {
