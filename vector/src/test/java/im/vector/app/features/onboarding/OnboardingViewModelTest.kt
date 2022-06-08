@@ -31,8 +31,8 @@ import im.vector.app.test.fakes.FakeContext
 import im.vector.app.test.fakes.FakeDirectLoginUseCase
 import im.vector.app.test.fakes.FakeHomeServerConnectionConfigFactory
 import im.vector.app.test.fakes.FakeHomeServerHistoryService
-import im.vector.app.test.fakes.FakeRegistrationActionHandler
 import im.vector.app.test.fakes.FakeLoginWizard
+import im.vector.app.test.fakes.FakeRegistrationActionHandler
 import im.vector.app.test.fakes.FakeSession
 import im.vector.app.test.fakes.FakeStartAuthenticationFlowUseCase
 import im.vector.app.test.fakes.FakeStringProvider
@@ -316,7 +316,7 @@ class OnboardingViewModelTest {
     fun `given personalisation enabled, when registering account, then updates state and emits account created event`() = runTest {
         fakeVectorFeatures.givenPersonalisationEnabled()
         givenSuccessfullyCreatesAccount(A_HOMESERVER_CAPABILITIES)
-        givenRegistrationResultFor(RegisterAction.StartRegistration, RegistrationActionHandler.Result.Success(fakeSession))
+        givenRegistrationResultFor(RegisterAction.StartRegistration, RegistrationActionHandler.Result.RegistrationComplete(fakeSession))
         val test = viewModel.test()
 
         viewModel.handle(OnboardingAction.PostRegisterAction(RegisterAction.StartRegistration))

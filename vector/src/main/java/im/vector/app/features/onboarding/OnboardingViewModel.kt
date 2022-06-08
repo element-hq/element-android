@@ -273,39 +273,36 @@ class OnboardingViewModel @AssistedInject constructor(
     }
 
     private suspend fun internalRegisterAction(action: RegisterAction, overrideNextStage: (() -> Unit)? = null) {
-        runCatching { registrationActionHandler.processAction(awaitState().selectedHomeserver, action) }
-                .fold(
-                        onSuccess = {
-                            when (it) {
-                                RegistrationActionHandler.Result.Ignored             -> {
-                                    // do nothing
-                                }
-                                is RegistrationActionHandler.Result.NextStage        -> {
-                                    overrideNextStage?.invoke() ?: _viewEvents.post(OnboardingViewEvents.DisplayRegistrationStage(it.stage))
-                                }
-                                is RegistrationActionHandler.Result.Success          -> onSessionCreated(
-                                        it.session,
-                                        authenticationDescription = awaitState().selectedAuthenticationState.description
-                                                ?: AuthenticationDescription.Register(AuthenticationDescription.AuthenticationType.Other)
-                                )
-                                RegistrationActionHandler.Result.StartRegistration   -> _viewEvents.post(OnboardingViewEvents.DisplayStartRegistration)
-                                RegistrationActionHandler.Result.UnsupportedStage    -> _viewEvents.post(OnboardingViewEvents.DisplayRegistrationFallback)
-                                is RegistrationActionHandler.Result.SendEmailSuccess -> _viewEvents.post(OnboardingViewEvents.OnSendEmailSuccess(it.email))
-                                is RegistrationActionHandler.Result.Error            -> _viewEvents.post(OnboardingViewEvents.Failure(it.cause))
-                                RegistrationActionHandler.Result.MissingNextStage    -> {
-                                    _viewEvents.post(OnboardingViewEvents.Failure(IllegalStateException("No next registration stage found")))
-                                }
-                            }
-                        },
-                        onFailure = {
-                            if (it !is CancellationException) {
-                                _viewEvents.post(OnboardingViewEvents.Failure(it))
-                            }
+        runCatching { registrationActionHandler.processAction(awaitState().selectedHomeserver, action) }.fold(
+                onSuccess = {
+                    when (it) {
+                        RegistrationActionHandler.Result.Ignored                 -> {
+                            // do nothing
                         }
-                )
+                        is RegistrationActionHandler.Result.NextStage            -> {
+                            overrideNextStage?.invoke() ?: _viewEvents.post(OnboardingViewEvents.DisplayRegistrationStage(it.stage))
+                        }
+                        is RegistrationActionHandler.Result.RegistrationComplete -> onSessionCreated(
+                                it.session,
+                                authenticationDescription = awaitState().selectedAuthenticationState.description
+                                        ?: AuthenticationDescription.Register(AuthenticationDescription.AuthenticationType.Other)
+                        )
+                        RegistrationActionHandler.Result.StartRegistration       -> _viewEvents.post(OnboardingViewEvents.DisplayStartRegistration)
+                        RegistrationActionHandler.Result.UnsupportedStage        -> _viewEvents.post(OnboardingViewEvents.DisplayRegistrationFallback)
+                        is RegistrationActionHandler.Result.SendEmailSuccess     -> _viewEvents.post(OnboardingViewEvents.OnSendEmailSuccess(it.email))
+                        is RegistrationActionHandler.Result.Error                -> _viewEvents.post(OnboardingViewEvents.Failure(it.cause))
+                        RegistrationActionHandler.Result.MissingNextStage        -> {
+                            _viewEvents.post(OnboardingViewEvents.Failure(IllegalStateException("No next registration stage found")))
+                        }
+                    }
+                },
+                onFailure = {
+                    if (it !is CancellationException) {
+                        _viewEvents.post(OnboardingViewEvents.Failure(it))
+                    }
+                }
+        )
     }
-
-    private fun OnboardingViewState.hasSelectedMatrixOrg() = selectedHomeserver.userFacingUrl == matrixOrgUrl
 
     private fun handleRegisterWith(action: AuthenticateAction.Register) {
         setState {

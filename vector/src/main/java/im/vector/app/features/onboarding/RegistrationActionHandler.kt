@@ -45,7 +45,7 @@ class RegistrationActionHandler @Inject constructor(
         return when {
             action.ignoresResult() -> Result.Ignored
             else                   -> when (result) {
-                is RegistrationResult.Complete         -> Result.Success(result.session)
+                is RegistrationResult.Complete         -> Result.RegistrationComplete(result.session)
                 is RegistrationResult.NextStep         -> processFlowResult(result, state)
                 is RegistrationResult.SendEmailSuccess -> Result.SendEmailSuccess(result.email)
                 is RegistrationResult.Error            -> Result.Error(result.cause)
@@ -91,7 +91,7 @@ class RegistrationActionHandler @Inject constructor(
     private fun SelectedHomeserverState.hasSelectedMatrixOrg() = userFacingUrl == matrixOrgUrl
 
     sealed interface Result {
-        data class Success(val session: Session) : Result
+        data class RegistrationComplete(val session: Session) : Result
         data class NextStage(val stage: Stage) : Result
         data class Error(val cause: Throwable) : Result
         data class SendEmailSuccess(val email: String) : Result

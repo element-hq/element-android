@@ -61,12 +61,12 @@ class RegistrationActionHandlerTest {
     }
 
     @Test
-    fun `given wizard delegate returns success, when handling action, then returns success`() = runTest {
+    fun `given wizard delegate returns success, when handling action, then returns RegistrationComplete`() = runTest {
         fakeWizardActionDelegate.givenResultsFor(listOf(RegisterAction.StartRegistration to RegistrationResult.Complete(A_SESSION)))
 
         val result = registrationActionHandler.processAction(RegisterAction.StartRegistration)
 
-        result shouldBeEqualTo RegistrationActionHandler.Result.Success(A_SESSION)
+        result shouldBeEqualTo RegistrationActionHandler.Result.RegistrationComplete(A_SESSION)
     }
 
     @Test
@@ -154,7 +154,7 @@ class RegistrationActionHandlerTest {
 
         val result = registrationActionHandler.processAction(RegisterAction.StartRegistration)
 
-        result shouldBeEqualTo RegistrationActionHandler.Result.Success(A_SESSION)
+        result shouldBeEqualTo RegistrationActionHandler.Result.RegistrationComplete(A_SESSION)
     }
 
     private fun givenFlowResult(stages: List<Stage>) {
