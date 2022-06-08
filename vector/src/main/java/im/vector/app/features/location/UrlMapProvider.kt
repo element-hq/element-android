@@ -25,7 +25,6 @@ import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
 
 class UrlMapProvider @Inject constructor(
-        private val localeProvider: LocaleProvider,
         private val session: Session,
         private val rawService: RawService
 ) {
@@ -63,7 +62,7 @@ class UrlMapProvider @Inject constructor(
             append(".png")
             append(keyParam)
             // Since the default copyright font is too small we put a custom one on map
-            append("&attribution=0")
+            append("&attribution=false")
         }
     }
 }
