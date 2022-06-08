@@ -49,31 +49,34 @@ body:
 
         ### Once tested and validated internally
 
-        - [ ] Create a new beta release on the GooglePlay console and upload the 4 signed Apks.
+        - [ ] Create a new open testing release on the GooglePlay console and upload the 4 signed Apks.
         - [ ] Check that the version codes are correct
         - [ ] Copy the fastlane change to the GooglePlay console in the section en-GB.
-        - [ ] Push to beta release to 100% of the users
+        - [ ] Push the open testing release to 100% of the users
         - [ ] Notify the F-Droid team [here](https://matrix.to/#/!LAAuJLQXYHjMNWKrCK:matrix.org?via=matrix.org&via=bubu1.eu&via=lant.uk) so that they can schedule the publication on F-Droid
         - [ ] The application is available to the PlayStore testers (live). Google can take between 1 hour and up to 7 days to approve the release.
         - [ ] The application is available to the F-Droid users.
 
-        ### Once Live on PlayStore
+        ### Once open testing is live on PlayStore
 
         - [ ] Ping the Android public room and update its topic
-        - [ ] Add an entry in the internal diary
 
         ### Once Live on F-Droid
 
         - [ ] Update the Android public room topic
 
-        ### After at least 2 days
+        ### After at least 2 days (generally next Monday)
 
         - [ ] Check the [rageshakes](https://github.com/matrix-org/element-android-rageshakes/issues)
         - [ ] Check the crash reports on the GooglePlay console
         - [ ] Check the Android Element room for any reported issues on the new version
-        - [ ] If all is OK, push to production
-        - [ ] Ping the Android public room and update its topic with the new available version
+        - [ ] If all is OK, promote the open testing release to production. Generally using a 100% roll out, but can be a smaller value depending on the release content.
         - [ ] The application is available to the PlayStore users (live). Google can take (again!) between 1 hour and up to 7 days to approve the release.
+
+        ### Once production is live on PlayStore
+
+        - [ ] Ping the Android public room and update its topic
+        - [ ] Add an entry in the internal diary
 
         ### Android SDK2
 
