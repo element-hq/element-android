@@ -67,16 +67,18 @@ internal class LiveLocationAggregationProcessor @Inject constructor(
                 eventId = targetEventId
         )
 
-        Timber.d("updating summary of id=$targetEventId with isLive=${content.isLive}")
-
+        // remote event can stay with isLive == true while the local summary is no more active
+        val isActive = aggregatedSummary.isActive.orTrue() && isLive
         val endOfLiveTimestampMillis = content.getBestTimestampMillis()?.let { it + (content.timeout ?: 0) }
+        Timber.d("updating summary of id=$targetEventId with isActive=$isActive and endTimestamp=$endOfLiveTimestampMillis")
+
         aggregatedSummary.endOfLiveTimestampMillis = endOfLiveTimestampMillis
-        aggregatedSummary.isActive = isLive
+        aggregatedSummary.isActive = isActive
         aggregatedSummary.userId = event.senderId
 
         deactivateAllPreviousBeacons(realm, roomId, event.senderId, targetEventId)
 
-        if (isLive) {
+        if (isActive) {
             scheduleDeactivationAfterTimeout(targetEventId, roomId, endOfLiveTimestampMillis)
         } else {
             cancelDeactivationAfterTimeout(targetEventId, roomId)
@@ -90,6 +92,7 @@ internal class LiveLocationAggregationProcessor @Inject constructor(
         val workData = WorkerParamsFactory.toData(workParams)
         val workName = DeactivateLiveLocationShareWorker.getWorkName(eventId = eventId, roomId = roomId)
         val workDelayMillis = (endOfLiveTimestampMillis - clock.epochMillis()).coerceAtLeast(0)
+        Timber.d("scheduling deactivation of $eventId after $workDelayMillis millis")
         val workRequest = workManagerProvider.matrixOneTimeWorkRequestBuilder<DeactivateLiveLocationShareWorker>()
                 .setInitialDelay(workDelayMillis, TimeUnit.MILLISECONDS)
                 .setInputData(workData)
