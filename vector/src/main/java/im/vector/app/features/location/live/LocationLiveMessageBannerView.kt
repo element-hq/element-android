@@ -70,6 +70,7 @@ class LocationLiveMessageBannerView @JvmOverloads constructor(
 
         GlideApp.with(context)
                 .load(ColorDrawable(ThemeUtils.getColor(context, android.R.attr.colorBackground)))
+                .placeholder(binding.locationLiveMessageBannerBackground.drawable)
                 .transform(GranularRoundedCorners(0f, 0f, viewState.bottomEndCornerRadiusInDp, viewState.bottomStartCornerRadiusInDp))
                 .into(background)
     }
