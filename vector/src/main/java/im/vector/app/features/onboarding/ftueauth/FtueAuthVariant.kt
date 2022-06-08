@@ -178,7 +178,7 @@ class FtueAuthVariant(
                     )
                 }
             }
-            OnboardingViewEvents.OnResetPasswordBreakerConfirmed -> {
+            OnboardingViewEvents.OnResetPasswordBreakerConfirmed         -> {
                 supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 activity.addFragmentToBackstack(
                         views.loginFragmentContainer,
@@ -186,12 +186,12 @@ class FtueAuthVariant(
                         option = commonOption
                 )
             }
-            is OnboardingViewEvents.OpenResetPasswordComplete    -> {
+            is OnboardingViewEvents.OpenResetPasswordComplete            -> {
                 supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 addLoginStageFragmentToBackstack(FtueAuthResetPasswordSuccessFragment::class.java)
             }
-            OnboardingViewEvents.OnResetPasswordComplete         -> {
-                supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            OnboardingViewEvents.OnResetPasswordComplete                 -> {
+                activity.popBackstack()
             }
             is OnboardingViewEvents.OnSendEmailSuccess -> {
                 openWaitForEmailVerification(viewEvents.email)
