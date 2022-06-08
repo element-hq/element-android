@@ -59,6 +59,7 @@ import org.matrix.android.sdk.internal.network.parsing.CheckNumberType
 import org.matrix.android.sdk.internal.session.SessionScope
 import timber.log.Timber
 import uniffi.olm.BackupKeys
+import uniffi.olm.BackupRecoveryKey
 import uniffi.olm.CrossSigningKeyExport
 import uniffi.olm.CrossSigningStatus
 import uniffi.olm.CryptoStoreException
@@ -769,7 +770,7 @@ internal class OlmMachine @Inject constructor(
     }
 
     @Throws(CryptoStoreException::class)
-    suspend fun saveRecoveryKey(key: String?, version: String?) {
+    suspend fun saveRecoveryKey(key: BackupRecoveryKey?, version: String?) {
         withContext(coroutineDispatchers.computation) {
             inner.saveRecoveryKey(key, version)
         }
