@@ -48,6 +48,7 @@ import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewState
 import kotlinx.coroutines.flow.launchIn
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
+import org.matrix.android.sdk.api.failure.isHomeserverUnavailable
 import org.matrix.android.sdk.api.failure.isInvalidPassword
 import org.matrix.android.sdk.api.failure.isInvalidUsername
 import org.matrix.android.sdk.api.failure.isLoginEmailUnknown
@@ -132,6 +133,9 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
             }
             throwable.isWeakPassword() || throwable.isInvalidPassword() -> {
                 views.createAccountPasswordInput.error = errorFormatter.toHumanReadable(throwable)
+            }
+            throwable.isHomeserverUnavailable() -> {
+                views.createAccountInput.error = getString(R.string.login_error_homeserver_not_found)
             }
             throwable.isRegistrationDisabled() -> {
                 MaterialAlertDialogBuilder(requireActivity())
