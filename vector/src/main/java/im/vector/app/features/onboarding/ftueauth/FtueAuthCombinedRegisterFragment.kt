@@ -34,6 +34,7 @@ import im.vector.app.core.extensions.hasSurroundingSpaces
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.extensions.realignPercentagesToParent
+import im.vector.app.core.extensions.setOnFocusLostListener
 import im.vector.app.core.extensions.setOnImeDoneListener
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentFtueCombinedRegisterBinding
@@ -67,6 +68,9 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
         views.createAccountRoot.realignPercentagesToParent()
         views.editServerButton.debouncedClicks { viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.EditServerSelection)) }
         views.createAccountPasswordInput.setOnImeDoneListener { submit() }
+        views.createAccountInput.setOnFocusLostListener {
+            viewModel.handle(OnboardingAction.MaybeUpdateHomeserverFromMatrixId(views.createAccountInput.content()))
+        }
     }
 
     private fun setupSubmitButton() {

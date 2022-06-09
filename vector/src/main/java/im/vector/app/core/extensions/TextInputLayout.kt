@@ -57,3 +57,14 @@ fun TextInputLayout.setOnImeDoneListener(action: () -> Unit) {
         }
     }
 }
+
+fun TextInputLayout.setOnFocusLostListener(action: () -> Unit) {
+    editText().setOnFocusChangeListener { _, hasFocus ->
+        when (hasFocus) {
+            false -> action()
+            else -> {
+                // do nothing
+            }
+        }
+    }
+}
