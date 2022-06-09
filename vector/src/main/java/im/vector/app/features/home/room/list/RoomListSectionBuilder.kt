@@ -55,7 +55,7 @@ import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
 import timber.log.Timber
 
-class RoomListSectionBuilderSpace(
+class RoomListSectionBuilder(
         private val session: Session,
         private val stringProvider: StringProvider,
         private val appStateHandler: AppStateHandler,

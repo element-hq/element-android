@@ -124,7 +124,7 @@ class RoomListViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<RoomListViewModel, RoomListViewState> by hiltMavericksViewModelFactory()
 
-    private val roomListSectionBuilder = RoomListSectionBuilderSpace(
+    private val roomListSectionBuilder = RoomListSectionBuilder(
                 session,
                 stringProvider,
                 appStateHandler,
