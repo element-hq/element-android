@@ -36,7 +36,7 @@ internal interface StartLiveLocationShareTask : Task<StartLiveLocationShareTask.
 internal class DefaultStartLiveLocationShareTask @Inject constructor(
         @UserId private val userId: String,
         private val clock: Clock,
-        private val sendStateTask: SendStateTask
+        private val sendStateTask: SendStateTask,
 ) : StartLiveLocationShareTask {
 
     override suspend fun execute(params: StartLiveLocationShareTask.Params): String {

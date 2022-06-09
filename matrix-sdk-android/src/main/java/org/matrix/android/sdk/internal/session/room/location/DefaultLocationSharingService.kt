@@ -33,6 +33,7 @@ internal class DefaultLocationSharingService @AssistedInject constructor(
         @Assisted private val roomId: String,
         @SessionDatabase private val monarchy: Monarchy,
         private val startLiveLocationShareTask: StartLiveLocationShareTask,
+        private val stopLiveLocationShareTask: StopLiveLocationShareTask,
         private val liveLocationShareAggregatedSummaryMapper: LiveLocationShareAggregatedSummaryMapper,
 ) : LocationSharingService {
 
@@ -47,6 +48,13 @@ internal class DefaultLocationSharingService @AssistedInject constructor(
                 timeoutMillis = timeoutMillis
         )
         return startLiveLocationShareTask.execute(params)
+    }
+
+    override suspend fun stopLiveLocationShare() {
+        val params = StopLiveLocationShareTask.Params(
+                roomId = roomId,
+        )
+        return stopLiveLocationShareTask.execute(params)
     }
 
     override fun getRunningLiveLocationShareSummaries(): LiveData<List<LiveLocationShareAggregatedSummary>> {

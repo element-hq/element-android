@@ -31,6 +31,11 @@ interface LocationSharingService {
     suspend fun startLiveLocationShare(timeoutMillis: Long): String
 
     /**
+     * Stops sharing live location in the room.
+     */
+    suspend fun stopLiveLocationShare()
+
+    /**
      * Returns a LiveData on the list of current running live location shares.
      */
     fun getRunningLiveLocationShareSummaries(): LiveData<List<LiveLocationShareAggregatedSummary>>

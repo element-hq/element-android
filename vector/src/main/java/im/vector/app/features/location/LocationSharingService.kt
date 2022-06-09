@@ -147,7 +147,9 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
                 .getSafeActiveSession()
                 ?.let { session ->
                     session.coroutineScope.launch(session.coroutineDispatchers.io) {
-                        session.getRoom(roomId)?.stateService()?.stopLiveLocation(session.myUserId)
+                        session.getRoom(roomId)
+                                ?.locationSharingService()
+                                ?.stopLiveLocationShare()
                     }
                 }
     }
