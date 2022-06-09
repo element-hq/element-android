@@ -239,8 +239,8 @@ class UnifiedPushHelper @Inject constructor(
     fun getCurrentDistributorName(): String {
         return when {
             isEmbeddedDistributor() -> stringProvider.getString(R.string.unifiedpush_distributor_fcm_fallback)
-            isBackgroundSync()      -> stringProvider.getString(R.string.unifiedpush_distributor_background_sync)
-            else                    -> context.getApplicationLabel(up.getDistributor(context))
+            isBackgroundSync() -> stringProvider.getString(R.string.unifiedpush_distributor_background_sync)
+            else -> context.getApplicationLabel(up.getDistributor(context))
         }
     }
 

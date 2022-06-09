@@ -28,7 +28,8 @@
             android:enabled="true"
             android:exported="false" />
 
-        <receiver android:name=".fdroid.receiver.KeepInternalDistributor"
+        <receiver
+            android:name=".fdroid.receiver.KeepInternalDistributor"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
