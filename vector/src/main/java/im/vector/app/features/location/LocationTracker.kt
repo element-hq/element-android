@@ -83,7 +83,7 @@ class LocationTracker @Inject constructor(
             onNoLocationProviderAvailable()
         } else {
             // Take GPS first
-            providers.sortedByDescending { getProviderPriority(it) }
+            providers.sortedByDescending(::getProviderPriority)
                     .mapNotNull { provider ->
                         Timber.d("track location using $provider")
 
