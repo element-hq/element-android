@@ -18,11 +18,21 @@ package org.matrix.android.sdk.api.session.room.location
 
 import androidx.lifecycle.LiveData
 import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationShareAggregatedSummary
+import org.matrix.android.sdk.api.util.Cancelable
 
 /**
  * Manage all location sharing related features.
  */
 interface LocationSharingService {
+    /**
+     * Send a static location event to the room.
+     * @param latitude required latitude of the location
+     * @param longitude required longitude of the location
+     * @param uncertainty Accuracy of the location in meters
+     * @param isUserLocation indicates whether the location data corresponds to the user location or not (pinned location)
+     */
+    suspend fun sendStaticLocation(latitude: Double, longitude: Double, uncertainty: Double?, isUserLocation: Boolean): Cancelable
+
     /**
      * Starts sharing live location in the room.
      * @param timeoutMillis timeout of the live in milliseconds

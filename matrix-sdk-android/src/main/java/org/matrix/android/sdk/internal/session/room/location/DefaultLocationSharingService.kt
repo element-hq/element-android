@@ -23,6 +23,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import org.matrix.android.sdk.api.session.room.location.LocationSharingService
 import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationShareAggregatedSummary
+import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.internal.database.mapper.LiveLocationShareAggregatedSummaryMapper
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntity
 import org.matrix.android.sdk.internal.database.query.findRunningLiveInRoom
@@ -32,6 +33,7 @@ import org.matrix.android.sdk.internal.di.SessionDatabase
 internal class DefaultLocationSharingService @AssistedInject constructor(
         @Assisted private val roomId: String,
         @SessionDatabase private val monarchy: Monarchy,
+        private val sendStaticLocationTask: SendStaticLocationTask,
         private val startLiveLocationShareTask: StartLiveLocationShareTask,
         private val stopLiveLocationShareTask: StopLiveLocationShareTask,
         private val liveLocationShareAggregatedSummaryMapper: LiveLocationShareAggregatedSummaryMapper,
@@ -40,6 +42,17 @@ internal class DefaultLocationSharingService @AssistedInject constructor(
     @AssistedFactory
     interface Factory {
         fun create(roomId: String): DefaultLocationSharingService
+    }
+
+    override suspend fun sendStaticLocation(latitude: Double, longitude: Double, uncertainty: Double?, isUserLocation: Boolean): Cancelable {
+        val params = SendStaticLocationTask.Params(
+                roomId = roomId,
+                latitude = latitude,
+                longitude = longitude,
+                uncertainty = uncertainty,
+                isUserLocation = isUserLocation
+        )
+        return sendStaticLocationTask.execute(params)
     }
 
     override suspend fun startLiveLocationShare(timeoutMillis: Long): String {

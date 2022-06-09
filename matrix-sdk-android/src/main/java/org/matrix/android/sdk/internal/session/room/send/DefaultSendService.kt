@@ -129,12 +129,6 @@ internal class DefaultSendService @AssistedInject constructor(
                 .let { sendEvent(it) }
     }
 
-    override fun sendLocation(latitude: Double, longitude: Double, uncertainty: Double?, isUserLocation: Boolean): Cancelable {
-        return localEchoEventFactory.createLocationEvent(roomId, latitude, longitude, uncertainty, isUserLocation)
-                .also { createLocalEcho(it) }
-                .let { sendEvent(it) }
-    }
-
     override fun sendLiveLocation(beaconInfoEventId: String, latitude: Double, longitude: Double, uncertainty: Double?): Cancelable {
         return localEchoEventFactory.createLiveLocationEvent(beaconInfoEventId, roomId, latitude, longitude, uncertainty)
                 .also { createLocalEcho(it) }
