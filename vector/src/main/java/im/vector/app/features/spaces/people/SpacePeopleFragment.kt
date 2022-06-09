@@ -32,8 +32,6 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.core.resources.ColorProvider
-import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.databinding.FragmentRecyclerviewWithSearchBinding
 import im.vector.app.features.roomprofile.members.RoomMemberListAction
 import im.vector.app.features.roomprofile.members.RoomMemberListViewModel
@@ -45,8 +43,6 @@ import reactivecircus.flowbinding.appcompat.queryTextChanges
 import javax.inject.Inject
 
 class SpacePeopleFragment @Inject constructor(
-        private val drawableProvider: DrawableProvider,
-        private val colorProvider: ColorProvider,
         private val epoxyController: SpacePeopleListController
 ) : VectorBaseFragment<FragmentRecyclerviewWithSearchBinding>(),
         OnBackPressed, SpacePeopleListController.InteractionListener {

@@ -107,6 +107,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerific
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
 import org.matrix.android.sdk.api.session.terms.TermsService
 import org.matrix.android.sdk.api.session.widgets.model.Widget
@@ -338,12 +339,14 @@ class DefaultNavigator @Inject constructor(
     override fun openInviteUsersToRoom(context: Context, roomId: String) {
         when (val currentSpace = appStateHandler.getCurrentSpace()) {
             null -> InviteUsersToRoomActivity.getIntent(context, roomId).start(context)
-            else -> {
-                (context as? AppCompatActivity)?.supportFragmentManager?.let { fragmentManager ->
-                    InviteRoomSpaceChooserBottomSheet.showInstance(fragmentManager, currentSpace.roomId, roomId) { itemId ->
-                        InviteUsersToRoomActivity.getIntent(context, itemId).start(context)
-                    }
-                }
+            else -> showInviteToDialog(context, currentSpace, roomId)
+        }
+    }
+
+    private fun showInviteToDialog(context: Context, currentSpace: RoomSummary, roomId: String) {
+        (context as? AppCompatActivity)?.supportFragmentManager?.let { fragmentManager ->
+            InviteRoomSpaceChooserBottomSheet.showInstance(fragmentManager, currentSpace.roomId, roomId) { itemId ->
+                InviteUsersToRoomActivity.getIntent(context, itemId).start(context)
             }
         }
     }
