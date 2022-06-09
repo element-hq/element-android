@@ -224,7 +224,7 @@ class FtueAuthGenericTextInputFormFragment @Inject constructor() : AbstractFtueA
             TextInputFormFragmentMode.SetEmail -> {
                 views.loginGenericTextInputFormTil.error = errorFormatter.toHumanReadable(throwable)
             }
-            TextInputFormFragmentMode.SetMsisdn     -> {
+            TextInputFormFragmentMode.SetMsisdn -> {
                 views.loginGenericTextInputFormTil.error = errorFormatter.toHumanReadable(throwable)
             }
             TextInputFormFragmentMode.ConfirmMsisdn -> {

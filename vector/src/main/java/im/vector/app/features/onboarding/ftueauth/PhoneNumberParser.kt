@@ -27,7 +27,7 @@ class PhoneNumberParser @Inject constructor(
     fun parseInternationalNumber(rawPhoneNumber: String): Result {
         return when {
             rawPhoneNumber.doesNotStartWith("+") -> Result.ErrorMissingInternationalCode
-            else                                 -> parseNumber(rawPhoneNumber)
+            else -> parseNumber(rawPhoneNumber)
         }
     }
 

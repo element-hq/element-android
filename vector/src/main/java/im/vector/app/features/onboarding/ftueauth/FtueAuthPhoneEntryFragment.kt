@@ -68,9 +68,9 @@ class FtueAuthPhoneEntryFragment @Inject constructor(
         val number = views.phoneEntryInput.content()
 
         when (val result = phoneNumberParser.parseInternationalNumber(number)) {
-            PhoneNumberParser.Result.ErrorInvalidNumber            -> views.phoneEntryInput.error = getString(R.string.login_msisdn_error_other)
+            PhoneNumberParser.Result.ErrorInvalidNumber -> views.phoneEntryInput.error = getString(R.string.login_msisdn_error_other)
             PhoneNumberParser.Result.ErrorMissingInternationalCode -> views.phoneEntryInput.error = getString(R.string.login_msisdn_error_not_international)
-            is PhoneNumberParser.Result.Success                    -> {
+            is PhoneNumberParser.Result.Success -> {
                 val (countryCode, phoneNumber) = result
                 viewModel.handle(OnboardingAction.PostRegisterAction(RegisterAction.AddThreePid(RegisterThreePid.Msisdn(phoneNumber, countryCode))))
             }
