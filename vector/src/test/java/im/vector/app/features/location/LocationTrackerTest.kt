@@ -123,16 +123,24 @@ class LocationTrackerTest {
 
     @Test
     fun `when adding or removing a callback then it is added into or removed from the list of callbacks`() {
-        val callback = mockCallback()
+        val callback1 = mockCallback()
+        val callback2 = mockCallback()
 
-        locationTracker.addCallback(callback)
+        locationTracker.addCallback(callback1)
+        locationTracker.addCallback(callback2)
+
+        locationTracker.callbacks.size shouldBeEqualTo 2
+        locationTracker.callbacks.first() shouldBeEqualTo callback1
+        locationTracker.callbacks[1] shouldBeEqualTo callback2
+
+        locationTracker.removeCallback(callback1)
 
         locationTracker.callbacks.size shouldBeEqualTo 1
-        locationTracker.callbacks.first() shouldBeEqualTo callback
 
-        locationTracker.removeCallback(callback)
+        locationTracker.removeCallback(callback2)
 
         locationTracker.callbacks.size shouldBeEqualTo 0
+        verify { locationTracker.stop() }
     }
 
     @Test

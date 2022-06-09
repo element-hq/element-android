@@ -144,6 +144,9 @@ class LocationTracker @Inject constructor(
 
     fun removeCallback(callback: Callback) {
         callbacks.remove(callback)
+        if (callbacks.size == 0) {
+            stop()
+        }
     }
 
     override fun onLocationChanged(location: Location) {
