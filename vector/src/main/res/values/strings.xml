@@ -174,7 +174,7 @@
     <string name="initial_sync_start_importing_account_joined_rooms">Initial sync:\nLoading your conversations\nIf you\'ve joined lots of rooms, this might take a while</string>
     <string name="initial_sync_start_importing_account_invited_rooms">Initial sync:\nImporting invited rooms</string>
     <string name="initial_sync_start_importing_account_left_rooms">Initial sync:\nImporting left rooms</string>
-    <!--TODO:remove-->
+    <!--TODO:delete-->
     <string name="initial_sync_start_importing_account_groups" tools:ignore="UnusedResources">Initial sync:\nImporting communities</string>
     <string name="initial_sync_start_importing_account_data">Initial sync:\nImporting account data</string>
 
@@ -2079,6 +2079,7 @@
     <string name="soft_logout_sso_not_same_user_error">The current session is for user %1$s and you provide credentials for user %2$s. This is not supported by ${app_name}.\nPlease first clear data, then sign in again on another account.</string>
 
     <string name="permalink_malformed">Your matrix.to link was malformed</string>
+    <string name="permalink_unsupported_groups">You\'re trying to access a link to a community (+community:matrix.org). Communities are no longer supported and have been replaced by spaces.</string>
     <string name="bug_report_error_too_short">The description is too short</string>
 
     <string name="notification_initial_sync">Initial Sync…</string>

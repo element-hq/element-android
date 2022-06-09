@@ -34,6 +34,8 @@ import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.error.fatalError
+import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.core.utils.toast
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.VectorFeatures.OnboardingVariant
 import im.vector.app.features.analytics.AnalyticsTracker
@@ -391,11 +393,7 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun showGroupsUnsupportedWarning(context: Context) {
-//        if (context is VectorBaseActivity<*>) {
-//            context.notImplemented("Open group detail")
-//        } else {
-//            context.toast(R.string.not_implemented)
-//        }
+        context.toast(R.string.permalink_unsupported_groups)
     }
 
     override fun openRoomProfile(context: Context, roomId: String, directAccess: Int?) {
