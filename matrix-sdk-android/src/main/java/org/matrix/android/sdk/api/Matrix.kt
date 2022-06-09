@@ -29,6 +29,7 @@ import org.matrix.android.sdk.api.legacy.LegacySessionImporter
 import org.matrix.android.sdk.api.network.ApiInterceptorListener
 import org.matrix.android.sdk.api.network.ApiPath
 import org.matrix.android.sdk.api.raw.RawService
+import org.matrix.android.sdk.api.session.securestorage.SecureStorageService
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.di.DaggerMatrixComponent
@@ -62,6 +63,7 @@ class Matrix(context: Context, matrixConfiguration: MatrixConfiguration) {
     @Inject internal lateinit var apiInterceptor: ApiInterceptor
     @Inject internal lateinit var matrixWorkerFactory: MatrixWorkerFactory
     @Inject internal lateinit var lightweightSettingsStorage: LightweightSettingsStorage
+    @Inject internal lateinit var secureStorageService: SecureStorageService
 
     init {
         val appContext = context.applicationContext
@@ -107,6 +109,11 @@ class Matrix(context: Context, matrixConfiguration: MatrixConfiguration) {
      * Return the legacy session importer, useful if you want to migrate an app, which was using the legacy Matrix Android Sdk.
      */
     fun legacySessionImporter() = legacySessionImporter
+
+    /**
+     * Returns the SecureStorageService used to encrypt and decrypt sensitive data.
+     */
+    fun secureStorageService(): SecureStorageService = secureStorageService
 
     /**
      * Get the worker factory. The returned value has to be provided to `WorkConfiguration.Builder()`.

@@ -46,7 +46,6 @@ import org.matrix.android.sdk.api.session.pushrules.PushRuleService
 import org.matrix.android.sdk.api.session.room.RoomDirectoryService
 import org.matrix.android.sdk.api.session.room.RoomService
 import org.matrix.android.sdk.api.session.search.SearchService
-import org.matrix.android.sdk.api.session.securestorage.SecureStorageService
 import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
 import org.matrix.android.sdk.api.session.signout.SignOutService
 import org.matrix.android.sdk.api.session.space.SpaceService
@@ -198,11 +197,6 @@ interface Session {
      * Returns the SyncService associated with the session.
      */
     fun syncService(): SyncService
-
-    /**
-     * Returns the SecureStorageService associated with the session.
-     */
-    fun secureStorageService(): SecureStorageService
 
     /**
      * Returns the ProfileService associated with the session.
