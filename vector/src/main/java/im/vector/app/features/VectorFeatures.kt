@@ -17,6 +17,7 @@
 package im.vector.app.features
 
 import im.vector.app.BuildConfig
+import im.vector.app.config.Config
 
 interface VectorFeatures {
 
@@ -45,15 +46,6 @@ class DefaultVectorFeatures : VectorFeatures {
     override fun isOnboardingPersonalizeEnabled() = false
     override fun isOnboardingCombinedRegisterEnabled() = false
     override fun isOnboardingCombinedLoginEnabled() = false
-
-    /**
-     * Return false to prevent usage of external UnifiedPush distributors.
-     * - For Gplay variant it means that only FCM will be used;
-     * - For F-Droid variant, it means that only background polling will be available to the user.
-     * Return true to allow any available external UnifiedPush distributor to be chosen by the user.
-     * - For Gplay variant it means that FCM will be used by default, but user can choose another UnifiedPush distributor;
-     * - For F-Droid variant, it means that background polling will be used by default, but user can choose another UnifiedPush distributor.
-     */
-    override fun allowExternalUnifiedPushDistributors(): Boolean = true
+    override fun allowExternalUnifiedPushDistributors(): Boolean = Config.ALLOW_EXTERNAL_UNIFIED_PUSH_DISTRIBUTORS
     override fun isScreenSharingEnabled(): Boolean = true
 }
