@@ -87,21 +87,12 @@ class VectorMessagingReceiver : MessagingReceiver() {
      */
     override fun onMessage(context: Context, message: ByteArray, instance: String) {
         Timber.tag(loggerTag.value).d("## onMessage() received")
-        val sMessage = String(message)
-        if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
-            Timber.tag(loggerTag.value).d("## onMessage() %s", sMessage)
-        }
 
         runBlocking {
             vectorDataStore.incrementPushCounter()
         }
 
-        val moshi = MatrixJsonParser.getMoshi()
-        val pushData = if (unifiedPushHelper.isEmbeddedDistributor()) {
-            moshi.adapter(PushDataFcm::class.java).fromJson(sMessage)?.toPushData()
-        } else {
-            moshi.adapter(PushDataUnifiedPush::class.java).fromJson(sMessage)?.toPushData()
-        } ?: return Unit.also { Timber.tag(loggerTag.value).w("Invalid received data Json format") }
+        val pushData = parseData(message) ?: return Unit.also { Timber.tag(loggerTag.value).w("Invalid received data Json format") }
 
         // Diagnostic Push
         if (pushData.eventId == PushersManager.TEST_EVENT_ID) {
@@ -122,6 +113,35 @@ class VectorMessagingReceiver : MessagingReceiver() {
             } else {
                 onMessageReceivedInternal(pushData)
             }
+        }
+    }
+
+    /**
+     * Parse the received data from Push. Json format are different depending on the source.
+     *
+     * Notifications received by FCM are formatted by the matrix gateway [1]. The data send to FCM is the content
+     * of the "notification" attribute of the json sent to the gateway [2][3].
+     * On the other side, with UnifiedPush, the content of the message received is the content posted to the push
+     * gateway endpoint [3].
+     *
+     * *Note*: If we want to get the same content with FCM and unifiedpush, we can do a new sygnal pusher [4].
+     *
+     * [1] https://github.com/matrix-org/sygnal/blob/main/sygnal/gcmpushkin.py
+     * [2] https://github.com/matrix-org/sygnal/blob/main/sygnal/gcmpushkin.py#L366
+     * [3] https://spec.matrix.org/latest/push-gateway-api/
+     * [4] https://github.com/p1gp1g/sygnal/blob/unifiedpush/sygnal/upfcmpushkin.py (Not tested for a while)
+     */
+    private fun parseData(message: ByteArray): PushData? {
+        val sMessage = String(message)
+        if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
+            Timber.tag(loggerTag.value).d("## onMessage() $sMessage")
+        }
+
+        val moshi = MatrixJsonParser.getMoshi()
+        return if (unifiedPushHelper.isEmbeddedDistributor()) {
+            moshi.adapter(PushDataFcm::class.java).fromJson(sMessage)?.toPushData()
+        } else {
+            moshi.adapter(PushDataUnifiedPush::class.java).fromJson(sMessage)?.toPushData()
         }
     }
 
