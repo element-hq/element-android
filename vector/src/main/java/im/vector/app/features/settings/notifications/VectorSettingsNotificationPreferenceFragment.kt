@@ -101,7 +101,11 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
         findPreference<SwitchPreference>(VectorPreferences.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY)?.let {
             it.setTransactionalSwitchChangeListener(lifecycleScope) { isChecked ->
                 if (isChecked) {
-                    unifiedPushHelper.register(requireActivity())
+                    unifiedPushHelper.register(requireActivity()) {
+                        // Update the summary
+                        findPreference<VectorPreference>(VectorPreferences.SETTINGS_UNIFIED_PUSH_RE_REGISTER_KEY)
+                                ?.summary = unifiedPushHelper.getCurrentDistributorName()
+                    }
                 } else {
                     unifiedPushHelper.unregister(pushersManager)
                     session.pushersService().refreshPushers()
