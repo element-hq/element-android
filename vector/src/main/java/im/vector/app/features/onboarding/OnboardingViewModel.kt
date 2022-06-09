@@ -147,18 +147,18 @@ class OnboardingViewModel @AssistedInject constructor(
             is OnboardingAction.WebLoginSuccess -> handleWebLoginSuccess(action)
             is OnboardingAction.ResetPassword -> handleResetPassword(action)
             is OnboardingAction.ResetPasswordMailConfirmed -> handleResetPasswordMailConfirmed()
-            is OnboardingAction.PostRegisterAction         -> handleRegisterAction(action.registerAction)
-            is OnboardingAction.ResetAction                -> handleResetAction(action)
-            is OnboardingAction.UserAcceptCertificate      -> handleUserAcceptCertificate(action)
-            OnboardingAction.ClearHomeServerHistory        -> handleClearHomeServerHistory()
-            is OnboardingAction.UpdateDisplayName          -> updateDisplayName(action.displayName)
-            OnboardingAction.UpdateDisplayNameSkipped      -> handleDisplayNameStepComplete()
-            OnboardingAction.UpdateProfilePictureSkipped   -> completePersonalization()
-            OnboardingAction.PersonalizeProfile            -> handlePersonalizeProfile()
-            is OnboardingAction.ProfilePictureSelected     -> handleProfilePictureSelected(action)
-            OnboardingAction.SaveSelectedProfilePicture    -> updateProfilePicture()
-            is OnboardingAction.PostViewEvent              -> _viewEvents.post(action.viewEvent)
-            OnboardingAction.StopEmailValidationCheck      -> cancelWaitForEmailValidation()
+            is OnboardingAction.PostRegisterAction -> handleRegisterAction(action.registerAction)
+            is OnboardingAction.ResetAction -> handleResetAction(action)
+            is OnboardingAction.UserAcceptCertificate -> handleUserAcceptCertificate(action)
+            OnboardingAction.ClearHomeServerHistory -> handleClearHomeServerHistory()
+            is OnboardingAction.UpdateDisplayName -> updateDisplayName(action.displayName)
+            OnboardingAction.UpdateDisplayNameSkipped -> handleDisplayNameStepComplete()
+            OnboardingAction.UpdateProfilePictureSkipped -> completePersonalization()
+            OnboardingAction.PersonalizeProfile -> handlePersonalizeProfile()
+            is OnboardingAction.ProfilePictureSelected -> handleProfilePictureSelected(action)
+            OnboardingAction.SaveSelectedProfilePicture -> updateProfilePicture()
+            is OnboardingAction.PostViewEvent -> _viewEvents.post(action.viewEvent)
+            OnboardingAction.StopEmailValidationCheck -> cancelWaitForEmailValidation()
         }
     }
 
@@ -276,10 +276,10 @@ class OnboardingViewModel @AssistedInject constructor(
         runCatching { registrationActionHandler.processAction(awaitState().selectedHomeserver, action) }.fold(
                 onSuccess = {
                     when (it) {
-                        RegistrationActionHandler.Result.Ignored                 -> {
+                        RegistrationActionHandler.Result.Ignored -> {
                             // do nothing
                         }
-                        is RegistrationActionHandler.Result.NextStage            -> {
+                        is RegistrationActionHandler.Result.NextStage -> {
                             overrideNextStage?.invoke() ?: _viewEvents.post(OnboardingViewEvents.DisplayRegistrationStage(it.stage))
                         }
                         is RegistrationActionHandler.Result.RegistrationComplete -> onSessionCreated(
@@ -287,11 +287,11 @@ class OnboardingViewModel @AssistedInject constructor(
                                 authenticationDescription = awaitState().selectedAuthenticationState.description
                                         ?: AuthenticationDescription.Register(AuthenticationDescription.AuthenticationType.Other)
                         )
-                        RegistrationActionHandler.Result.StartRegistration       -> _viewEvents.post(OnboardingViewEvents.DisplayStartRegistration)
-                        RegistrationActionHandler.Result.UnsupportedStage        -> _viewEvents.post(OnboardingViewEvents.DisplayRegistrationFallback)
-                        is RegistrationActionHandler.Result.SendEmailSuccess     -> _viewEvents.post(OnboardingViewEvents.OnSendEmailSuccess(it.email))
-                        is RegistrationActionHandler.Result.Error                -> _viewEvents.post(OnboardingViewEvents.Failure(it.cause))
-                        RegistrationActionHandler.Result.MissingNextStage        -> {
+                        RegistrationActionHandler.Result.StartRegistration -> _viewEvents.post(OnboardingViewEvents.DisplayStartRegistration)
+                        RegistrationActionHandler.Result.UnsupportedStage -> _viewEvents.post(OnboardingViewEvents.DisplayRegistrationFallback)
+                        is RegistrationActionHandler.Result.SendEmailSuccess -> _viewEvents.post(OnboardingViewEvents.OnSendEmailSuccess(it.email))
+                        is RegistrationActionHandler.Result.Error -> _viewEvents.post(OnboardingViewEvents.Failure(it.cause))
+                        RegistrationActionHandler.Result.MissingNextStage -> {
                             _viewEvents.post(OnboardingViewEvents.Failure(IllegalStateException("No next registration stage found")))
                         }
                     }
@@ -368,8 +368,8 @@ class OnboardingViewModel @AssistedInject constructor(
     private fun handleUpdateSignMode(action: OnboardingAction.UpdateSignMode) {
         updateSignMode(action.signMode)
         when (action.signMode) {
-            SignMode.SignUp             -> handleRegisterAction(RegisterAction.StartRegistration)
-            SignMode.SignIn             -> startAuthenticationFlow()
+            SignMode.SignUp -> handleRegisterAction(RegisterAction.StartRegistration)
+            SignMode.SignIn -> startAuthenticationFlow()
             SignMode.SignInWithMatrixId -> _viewEvents.post(OnboardingViewEvents.OnSignModeSelected(SignMode.SignInWithMatrixId))
             SignMode.Unknown -> Unit
         }

@@ -36,15 +36,15 @@ class RegistrationWizardActionDelegate @Inject constructor(
 
     suspend fun executeAction(action: RegisterAction): RegistrationResult {
         return when (action) {
-            RegisterAction.StartRegistration               -> resultOf { registrationWizard.getRegistrationFlow() }
-            is RegisterAction.CaptchaDone                  -> resultOf { registrationWizard.performReCaptcha(action.captchaResponse) }
-            is RegisterAction.AcceptTerms                  -> resultOf { registrationWizard.acceptTerms() }
-            is RegisterAction.RegisterDummy                -> resultOf { registrationWizard.dummy() }
-            is RegisterAction.AddThreePid                  -> handleAddThreePid(registrationWizard, action)
-            is RegisterAction.SendAgainThreePid            -> resultOf { registrationWizard.sendAgainThreePid() }
-            is RegisterAction.ValidateThreePid             -> resultOf { registrationWizard.handleValidateThreePid(action.code) }
+            RegisterAction.StartRegistration -> resultOf { registrationWizard.getRegistrationFlow() }
+            is RegisterAction.CaptchaDone -> resultOf { registrationWizard.performReCaptcha(action.captchaResponse) }
+            is RegisterAction.AcceptTerms -> resultOf { registrationWizard.acceptTerms() }
+            is RegisterAction.RegisterDummy -> resultOf { registrationWizard.dummy() }
+            is RegisterAction.AddThreePid -> handleAddThreePid(registrationWizard, action)
+            is RegisterAction.SendAgainThreePid -> resultOf { registrationWizard.sendAgainThreePid() }
+            is RegisterAction.ValidateThreePid -> resultOf { registrationWizard.handleValidateThreePid(action.code) }
             is RegisterAction.CheckIfEmailHasBeenValidated -> handleCheckIfEmailIsValidated(registrationWizard, action.delayMillis)
-            is RegisterAction.CreateAccount                -> resultOf {
+            is RegisterAction.CreateAccount -> resultOf {
                 registrationWizard.createAccount(
                         action.username,
                         action.password,
@@ -60,7 +60,7 @@ class RegistrationWizardActionDelegate @Inject constructor(
                 onFailure = {
                     when {
                         action.threePid is RegisterThreePid.Email && it.is401() -> RegistrationResult.SendEmailSuccess(action.threePid.email)
-                        else                                                    -> RegistrationResult.Error(it)
+                        else -> RegistrationResult.Error(it)
                     }
                 }
         )
@@ -72,7 +72,7 @@ class RegistrationWizardActionDelegate @Inject constructor(
                 onFailure = {
                     when {
                         it.is401() -> null // recursively continue to check with a delay
-                        else       -> RegistrationResult.Error(it)
+                        else -> RegistrationResult.Error(it)
                     }
                 }
         ) ?: handleCheckIfEmailIsValidated(registrationWizard, 10_000)
@@ -88,7 +88,7 @@ private inline fun resultOf(block: () -> MatrixRegistrationResult): Registration
 
 private fun MatrixRegistrationResult.toRegistrationResult() = when (this) {
     is FlowResponse -> RegistrationResult.NextStep(flowResult)
-    is Success      -> RegistrationResult.Complete(session)
+    is Success -> RegistrationResult.Complete(session)
 }
 
 sealed interface RegistrationResult {
@@ -114,10 +114,10 @@ sealed interface RegisterAction {
 
 fun RegisterAction.ignoresResult() = when (this) {
     is RegisterAction.SendAgainThreePid -> true
-    else                                -> false
+    else -> false
 }
 
 fun RegisterAction.hasLoadingState() = when (this) {
     is RegisterAction.CheckIfEmailHasBeenValidated -> false
-    else                                           -> true
+    else -> true
 }

@@ -44,11 +44,11 @@ class RegistrationActionHandler @Inject constructor(
         val result = registrationWizardActionDelegate.executeAction(action)
         return when {
             action.ignoresResult() -> Result.Ignored
-            else                   -> when (result) {
-                is RegistrationResult.Complete         -> Result.RegistrationComplete(result.session)
-                is RegistrationResult.NextStep         -> processFlowResult(result, state)
+            else -> when (result) {
+                is RegistrationResult.Complete -> Result.RegistrationComplete(result.session)
+                is RegistrationResult.NextStep -> processFlowResult(result, state)
                 is RegistrationResult.SendEmailSuccess -> Result.SendEmailSuccess(result.email)
-                is RegistrationResult.Error            -> Result.Error(result.cause)
+                is RegistrationResult.Error -> Result.Error(result.cause)
             }
         }
     }
@@ -66,9 +66,9 @@ class RegistrationActionHandler @Inject constructor(
 
     private suspend fun handleNextStep(state: SelectedHomeserverState, flowResult: FlowResult): Result {
         return when {
-            flowResult.registrationShouldFallback()       -> Result.UnsupportedStage
+            flowResult.registrationShouldFallback() -> Result.UnsupportedStage
             authenticationService.isRegistrationStarted() -> findNextStage(state, flowResult)
-            else                                          -> Result.StartRegistration
+            else -> Result.StartRegistration
         }
     }
 
@@ -77,7 +77,7 @@ class RegistrationActionHandler @Inject constructor(
             state.hasSelectedMatrixOrg() && vectorFeatures.isOnboardingCombinedRegisterEnabled() -> flowResult.copy(
                     missingStages = flowResult.missingStages.sortedWith(MatrixOrgRegistrationStagesComparator())
             )
-            else                                                                                 -> flowResult
+            else -> flowResult
         }
         return orderedResult.findNextRegistrationStage()
                 ?.let { Result.NextStage(it) }

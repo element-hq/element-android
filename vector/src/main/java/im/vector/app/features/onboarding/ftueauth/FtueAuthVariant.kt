@@ -128,7 +128,7 @@ class FtueAuthVariant(
 
     private fun handleOnboardingViewEvents(viewEvents: OnboardingViewEvents) {
         when (viewEvents) {
-            is OnboardingViewEvents.OutdatedHomeserver                         -> {
+            is OnboardingViewEvents.OutdatedHomeserver -> {
                 MaterialAlertDialogBuilder(activity)
                         .setTitle(R.string.login_error_outdated_homeserver_title)
                         .setMessage(R.string.login_error_outdated_homeserver_warning_content)
@@ -223,14 +223,14 @@ class FtueAuthVariant(
                         option = commonOption
                 )
             }
-            OnboardingViewEvents.OnHomeserverEdited                            -> activity.popBackstack()
-            OnboardingViewEvents.OpenCombinedLogin                             -> onStartCombinedLogin()
-            is OnboardingViewEvents.DeeplinkAuthenticationFailure              -> onDeeplinkedHomeserverUnavailable(viewEvents)
-            OnboardingViewEvents.DisplayRegistrationFallback                   -> displayFallbackWebDialog()
-            is OnboardingViewEvents.DisplayRegistrationStage                   -> doStage(viewEvents.stage)
-            OnboardingViewEvents.DisplayStartRegistration                      -> when {
+            OnboardingViewEvents.OnHomeserverEdited -> activity.popBackstack()
+            OnboardingViewEvents.OpenCombinedLogin -> onStartCombinedLogin()
+            is OnboardingViewEvents.DeeplinkAuthenticationFailure -> onDeeplinkedHomeserverUnavailable(viewEvents)
+            OnboardingViewEvents.DisplayRegistrationFallback -> displayFallbackWebDialog()
+            is OnboardingViewEvents.DisplayRegistrationStage -> doStage(viewEvents.stage)
+            OnboardingViewEvents.DisplayStartRegistration -> when {
                 vectorFeatures.isOnboardingCombinedRegisterEnabled() -> openStartCombinedRegister()
-                else                                                 -> openAuthLoginFragmentWithTag(FRAGMENT_REGISTRATION_STAGE_TAG)
+                else -> openAuthLoginFragmentWithTag(FRAGMENT_REGISTRATION_STAGE_TAG)
             }
         }
     }
