@@ -59,6 +59,7 @@ import org.matrix.android.sdk.internal.crypto.tasks.UploadKeysTask
 import org.matrix.android.sdk.internal.crypto.tasks.UploadSignaturesTask
 import org.matrix.android.sdk.internal.crypto.tasks.UploadSigningKeysTask
 import org.matrix.android.sdk.internal.di.MoshiProvider
+import org.matrix.android.sdk.internal.network.DEFAULT_REQUEST_RETRY_COUNT
 import org.matrix.android.sdk.internal.network.parsing.CheckNumberType
 import org.matrix.android.sdk.internal.session.room.send.SendResponse
 import timber.log.Timber
@@ -87,13 +88,10 @@ internal class RequestSender @Inject constructor(
         private val getRoomSessionDataTask: GetRoomSessionDataTask,
         private val moshi: Moshi,
 ) {
-    companion object {
-        const val REQUEST_RETRY_COUNT = 3
-    }
 
     suspend fun claimKeys(request: Request.KeysClaim): String {
         val claimParams = ClaimOneTimeKeysForUsersDeviceTask.Params(request.oneTimeKeys)
-        val response = oneTimeKeysForUsersDeviceTask.executeRetry(claimParams, REQUEST_RETRY_COUNT)
+        val response = oneTimeKeysForUsersDeviceTask.execute(claimParams)
         val adapter = MoshiProvider
                 .providesMoshi()
                 .adapter(KeysClaimResponse::class.java)
@@ -102,7 +100,7 @@ internal class RequestSender @Inject constructor(
 
     suspend fun queryKeys(request: Request.KeysQuery): String {
         val params = DownloadKeysForUsersTask.Params(request.users, null)
-        val response = downloadKeysForUsersTask.executeRetry(params, REQUEST_RETRY_COUNT)
+        val response = downloadKeysForUsersTask.execute(params)
         val adapter = moshi.adapter(KeysQueryResponse::class.java)
         return adapter.toJson(response)!!
     }
@@ -111,35 +109,35 @@ internal class RequestSender @Inject constructor(
         val body = moshi.adapter<JsonDict>(Map::class.java).fromJson(request.body)!!
         val params = UploadKeysTask.Params(body)
 
-        val response = uploadKeysTask.executeRetry(params, REQUEST_RETRY_COUNT)
+        val response = uploadKeysTask.execute(params)
         val adapter = moshi.adapter(KeysUploadResponse::class.java)
 
         return adapter.toJson(response)!!
     }
 
-    suspend fun sendVerificationRequest(request: OutgoingVerificationRequest) {
+    suspend fun sendVerificationRequest(request: OutgoingVerificationRequest, retryCount: Int = DEFAULT_REQUEST_RETRY_COUNT) {
         when (request) {
-            is OutgoingVerificationRequest.InRoom   -> sendRoomMessage(request)
-            is OutgoingVerificationRequest.ToDevice -> sendToDevice(request)
+            is OutgoingVerificationRequest.InRoom -> sendRoomMessage(request, retryCount)
+            is OutgoingVerificationRequest.ToDevice -> sendToDevice(request, retryCount)
         }
     }
 
-    private suspend fun sendRoomMessage(request: OutgoingVerificationRequest.InRoom): SendResponse {
-        return sendRoomMessage(request.eventType, request.roomId, request.content, request.requestId)
+    private suspend fun sendRoomMessage(request: OutgoingVerificationRequest.InRoom, retryCount: Int): SendResponse {
+        return sendRoomMessage(request.eventType, request.roomId, request.content, request.requestId, retryCount)
     }
 
-    suspend fun sendRoomMessage(request: Request.RoomMessage): String {
-        val sendResponse = sendRoomMessage(request.eventType, request.roomId, request.content, request.requestId)
+    suspend fun sendRoomMessage(request: Request.RoomMessage, retryCount: Int = DEFAULT_REQUEST_RETRY_COUNT): String {
+        val sendResponse = sendRoomMessage(request.eventType, request.roomId, request.content, request.requestId, retryCount)
         val responseAdapter = moshi.adapter(SendResponse::class.java)
         return responseAdapter.toJson(sendResponse)
     }
 
-    suspend fun sendRoomMessage(eventType: String, roomId: String, content: String, transactionId: String): SendResponse {
+    suspend fun sendRoomMessage(eventType: String, roomId: String, content: String, transactionId: String, retryCount: Int = DEFAULT_REQUEST_RETRY_COUNT): SendResponse {
         val paramsAdapter = moshi.adapter<Content>(Map::class.java)
         val jsonContent = paramsAdapter.fromJson(content)
         val event = Event(eventType, transactionId, jsonContent, roomId = roomId)
-        val params = SendVerificationMessageTask.Params(event)
-        return sendVerificationMessageTask.get().executeRetry(params, REQUEST_RETRY_COUNT)
+        val params = SendVerificationMessageTask.Params(event, retryCount)
+        return sendVerificationMessageTask.get().execute(params)
     }
 
     suspend fun sendSignatureUpload(request: Request.SignatureUpload): String {
@@ -154,7 +152,7 @@ internal class RequestSender @Inject constructor(
         val paramsAdapter = moshi.adapter<Map<String, Map<String, Any>>>(Map::class.java)
         val signatures = paramsAdapter.fromJson(body)!!
         val params = UploadSignaturesTask.Params(signatures)
-        val response = signaturesUploadTask.executeRetry(params, REQUEST_RETRY_COUNT)
+        val response = signaturesUploadTask.execute(params)
         val responseAdapter = moshi.adapter(SignatureUploadResponse::class.java)
         return responseAdapter.toJson(response)!!
     }
@@ -183,9 +181,8 @@ internal class RequestSender @Inject constructor(
                             failure = failure,
                             interceptor = interactiveAuthInterceptor,
                             retryBlock = { authUpdate ->
-                                uploadSigningKeysTask.executeRetry(
-                                        uploadSigningKeysParams.copy(userAuthParam = authUpdate),
-                                        REQUEST_RETRY_COUNT
+                                uploadSigningKeysTask.execute(
+                                        uploadSigningKeysParams.copy(userAuthParam = authUpdate)
                                 )
                             }
                     ) != UiaResult.SUCCESS
@@ -196,15 +193,15 @@ internal class RequestSender @Inject constructor(
         }
     }
 
-    suspend fun sendToDevice(request: Request.ToDevice) {
-        sendToDevice(request.eventType, request.body, request.requestId)
+    suspend fun sendToDevice(request: Request.ToDevice, retryCount: Int = DEFAULT_REQUEST_RETRY_COUNT) {
+        sendToDevice(request.eventType, request.body, request.requestId, retryCount)
     }
 
-    suspend fun sendToDevice(request: OutgoingVerificationRequest.ToDevice) {
-        sendToDevice(request.eventType, request.body, request.requestId)
+    suspend fun sendToDevice(request: OutgoingVerificationRequest.ToDevice, retryCount: Int = DEFAULT_REQUEST_RETRY_COUNT) {
+        sendToDevice(request.eventType, request.body, request.requestId, retryCount)
     }
 
-    suspend fun sendToDevice(eventType: String, body: String, transactionId: String) {
+    private suspend fun sendToDevice(eventType: String, body: String, transactionId: String, retryCount: Int) {
         val adapter = moshi
                 .newBuilder()
                 .add(CheckNumberType.JSON_ADAPTER_FACTORY)
@@ -215,16 +212,16 @@ internal class RequestSender @Inject constructor(
         val userMap = MXUsersDevicesMap<Any>()
         userMap.join(jsonBody)
 
-        val sendToDeviceParams = SendToDeviceTask.Params(eventType, userMap, transactionId)
-        sendToDeviceTask.executeRetry(sendToDeviceParams, REQUEST_RETRY_COUNT)
+        val sendToDeviceParams = SendToDeviceTask.Params(eventType, userMap, transactionId, retryCount)
+        sendToDeviceTask.execute(sendToDeviceParams)
     }
 
     suspend fun getKeyBackupVersion(version: String): KeysVersionResult? = getKeyBackupVersion {
-        getKeysBackupVersionTask.executeRetry(version, 3)
+        getKeysBackupVersionTask.execute(version)
     }
 
     suspend fun getKeyBackupLastVersion(): KeysBackupLastVersionResult? = getKeyBackupVersion {
-        getKeysBackupLastVersionTask.executeRetry(Unit, 3)
+        getKeysBackupLastVersionTask.execute(Unit)
     }
 
     private inline fun <reified T> getKeyBackupVersion(block: () -> T?): T? {
@@ -261,27 +258,32 @@ internal class RequestSender @Inject constructor(
                                 Map::class.java,
                                 String::class.java,
                                 RoomKeysBackupData::class.java
-                        ))
+                        )
+                )
         val keys = adapter.fromJson(request.rooms)!!
         val params = StoreSessionsDataTask.Params(request.version, KeysBackupData(keys))
-        val response = backupRoomKeysTask.executeRetry(params, REQUEST_RETRY_COUNT)
+        val response = backupRoomKeysTask.execute(params)
         val responseAdapter = moshi.adapter(BackupKeysResult::class.java)
         return responseAdapter.toJson(response)!!
     }
 
     suspend fun updateBackup(keysBackupVersion: KeysVersionResult, body: UpdateKeysBackupVersionBody) {
         val params = UpdateKeysBackupVersionTask.Params(keysBackupVersion.version, body)
-        updateKeysBackupVersionTask.executeRetry(params, REQUEST_RETRY_COUNT)
+        updateKeysBackupVersionTask.execute(params)
     }
 
     suspend fun downloadBackedUpKeys(version: String, roomId: String, sessionId: String): KeysBackupData {
         val data = getRoomSessionDataTask.execute(GetRoomSessionDataTask.Params(roomId, sessionId, version))
 
-        return KeysBackupData(mutableMapOf(
-                roomId to RoomKeysBackupData(mutableMapOf(
-                        sessionId to data
-                ))
-        ))
+        return KeysBackupData(
+                mutableMapOf(
+                        roomId to RoomKeysBackupData(
+                                mutableMapOf(
+                                        sessionId to data
+                                )
+                        )
+                )
+        )
     }
 
     suspend fun downloadBackedUpKeys(version: String, roomId: String): KeysBackupData {

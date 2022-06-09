@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.crypto.tasks
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.crypto.CryptoSessionInfoProvider
+import org.matrix.android.sdk.internal.network.DEFAULT_REQUEST_RETRY_COUNT
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
@@ -29,7 +30,10 @@ import javax.inject.Inject
 
 internal interface SendVerificationMessageTask : Task<SendVerificationMessageTask.Params, SendResponse> {
     data class Params(
-            val event: Event
+            // The event to sent
+            val event: Event,
+            // Number of retry before failing
+            val retryCount: Int = DEFAULT_REQUEST_RETRY_COUNT
     )
 }
 
@@ -45,7 +49,7 @@ internal class DefaultSendVerificationMessageTask @Inject constructor(
         val localId = event.eventId!!
         try {
             localEchoRepository.updateSendState(localId, event.roomId, SendState.SENDING)
-            val response = executeRequest(globalErrorReceiver) {
+            val response = executeRequest(globalErrorReceiver, canRetry = true, maxRetriesCount = params.retryCount) {
                 roomAPI.send(
                         txId = localId,
                         roomId = event.roomId ?: "",

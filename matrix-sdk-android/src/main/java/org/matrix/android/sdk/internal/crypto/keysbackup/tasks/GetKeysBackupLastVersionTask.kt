@@ -33,7 +33,7 @@ internal class DefaultGetKeysBackupLastVersionTask @Inject constructor(
 
     override suspend fun execute(params: Unit): KeysBackupLastVersionResult {
         return try {
-            val keysVersionResult = executeRequest(globalErrorReceiver) {
+            val keysVersionResult = executeRequest(globalErrorReceiver, canRetry = true) {
                 roomKeysApi.getKeysBackupLastVersion()
             }
             KeysBackupLastVersionResult.KeysBackup(keysVersionResult)

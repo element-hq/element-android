@@ -36,7 +36,7 @@ internal class DefaultUpdateKeysBackupVersionTask @Inject constructor(
 ) : UpdateKeysBackupVersionTask {
 
     override suspend fun execute(params: UpdateKeysBackupVersionTask.Params) {
-        return executeRequest(globalErrorReceiver) {
+        return executeRequest(globalErrorReceiver, canRetry = true) {
             roomKeysApi.updateKeysBackupVersion(params.version, params.keysBackupVersionBody)
         }
     }

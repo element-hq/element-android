@@ -241,7 +241,7 @@ internal class SecretShareManager @Inject constructor(
         )
         try {
             withContext(coroutineDispatchers.io) {
-                sendToDeviceTask.executeRetry(params, 3)
+                sendToDeviceTask.execute(params)
             }
             Timber.tag(loggerTag.value)
                     .d("Secret request sent for $secretName to ${cryptoDeviceInfo.shortDebugString()}")

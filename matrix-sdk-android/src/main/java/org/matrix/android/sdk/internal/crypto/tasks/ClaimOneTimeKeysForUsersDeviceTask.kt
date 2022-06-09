@@ -39,7 +39,7 @@ internal class DefaultClaimOneTimeKeysForUsersDevice @Inject constructor(
     override suspend fun execute(params: ClaimOneTimeKeysForUsersDeviceTask.Params): KeysClaimResponse {
         val body = KeysClaimBody(oneTimeKeys = params.usersDevicesKeyTypesMap)
 
-        return executeRequest(globalErrorReceiver) {
+        return executeRequest(globalErrorReceiver, canRetry = true) {
             cryptoApi.claimOneTimeKeysForUsersDevices(body)
         }
     }
