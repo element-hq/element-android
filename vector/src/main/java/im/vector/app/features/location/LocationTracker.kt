@@ -71,16 +71,16 @@ class LocationTracker @Inject constructor(
         Timber.d("start()")
 
         if (locationManager == null) {
-            callbacks.forEach { it.onNoLocationProviderAvailable() }
             Timber.v("LocationManager is not available")
+            onNoLocationProviderAvailable()
             return
         }
 
         val providers = locationManager.allProviders
 
         if (providers.isEmpty()) {
-            callbacks.forEach { it.onNoLocationProviderAvailable() }
             Timber.v("There is no location provider available")
+            onNoLocationProviderAvailable()
         } else {
             // Take GPS first
             providers.sortedByDescending { getProviderPriority(it) }
@@ -133,7 +133,7 @@ class LocationTracker @Inject constructor(
      * Please ensure adding a callback to receive the value.
      */
     fun requestLastKnownLocation() {
-        lastLocation?.let { location -> callbacks.forEach { it.onLocationUpdate(location) } }
+        lastLocation?.let { locationData -> onLocationUpdate(locationData) }
     }
 
     fun addCallback(callback: Callback) {
@@ -190,7 +190,7 @@ class LocationTracker @Inject constructor(
 
         val locationData = location.toLocationData()
         lastLocation = locationData
-        callbacks.forEach { it.onLocationUpdate(location.toLocationData()) }
+        onLocationUpdate(locationData)
     }
 
     override fun onProviderDisabled(provider: String) {
@@ -203,8 +203,29 @@ class LocationTracker @Inject constructor(
         locationManager?.allProviders
                 ?.takeIf { it.isEmpty() }
                 ?.let {
-                    callbacks.forEach { it.onNoLocationProviderAvailable() }
+                    Timber.e("all providers have been disabled")
+                    onNoLocationProviderAvailable()
                 }
+    }
+
+    private fun onNoLocationProviderAvailable() {
+        callbacks.forEach {
+            try {
+                it.onNoLocationProviderAvailable()
+            } catch (error: Exception) {
+                Timber.e(error, "error in onNoLocationProviderAvailable callback $it")
+            }
+        }
+    }
+
+    private fun onLocationUpdate(locationData: LocationData) {
+        callbacks.forEach {
+            try {
+                it.onLocationUpdate(locationData)
+            } catch (error: Exception) {
+                Timber.e(error, "error in onLocationUpdate callback $it")
+            }
+        }
     }
 
     private fun Location.toLocationData(): LocationData {
