@@ -19,8 +19,10 @@ package org.matrix.android.sdk.internal.crypto.verification.qrcode
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.QrCodeVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
@@ -184,9 +186,9 @@ internal class QrCodeVerification @AssistedInject constructor(
     private suspend fun confirm() {
         val result = withContext(coroutineDispatchers.io) {
             innerMachine.confirmVerification(request.otherUser(), request.flowId())
-        }
-
-        if (result != null) {
+        } ?: return
+        dispatchTxUpdated()
+        try {
             for (verificationRequest in result.requests) {
                 sender.sendVerificationRequest(verificationRequest)
             }
@@ -194,16 +196,16 @@ internal class QrCodeVerification @AssistedInject constructor(
             if (signatureRequest != null) {
                 sender.sendSignatureUpload(signatureRequest)
             }
-            dispatchTxUpdated()
+        } catch (failure: Throwable) {
+            cancelHelper(CancelCode.UserError)
         }
     }
 
-    private suspend fun cancelHelper(code: CancelCode) {
-        val request = innerMachine.cancelVerification(request.otherUser(), request.flowId(), code.value)
-
-        if (request != null) {
-            sender.sendVerificationRequest(request)
-            dispatchTxUpdated()
+    private suspend fun cancelHelper(code: CancelCode) = withContext(NonCancellable) {
+        val request = innerMachine.cancelVerification(request.otherUser(), request.flowId(), code.value) ?: return@withContext
+        dispatchTxUpdated()
+        tryOrNull("Fail to send cancel verification request") {
+            sender.sendVerificationRequest(request, retryCount = Int.MAX_VALUE)
         }
     }
 

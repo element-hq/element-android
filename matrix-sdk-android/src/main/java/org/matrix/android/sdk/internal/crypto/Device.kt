@@ -24,6 +24,7 @@ import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.UnsignedDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.android.sdk.internal.crypto.verification.SasVerification
@@ -83,8 +84,13 @@ internal class Device @AssistedInject constructor(
             innerMachine.requestVerificationWithDevice(innerDevice.userId, innerDevice.deviceId, stringMethods)
         }
         return if (result != null) {
-            requestSender.sendVerificationRequest(result.request)
-            verificationRequestFactory.create(result.verification)
+            try {
+                requestSender.sendVerificationRequest(result.request)
+                verificationRequestFactory.create(result.verification)
+            } catch (failure: Throwable) {
+                innerMachine.cancelVerification(result.verification.otherUserId, result.verification.flowId, CancelCode.UserError.value)
+                null
+            }
         } else {
             null
         }
@@ -104,10 +110,14 @@ internal class Device @AssistedInject constructor(
         val result = withContext(coroutineDispatchers.io) {
             innerMachine.startSasWithDevice(innerDevice.userId, innerDevice.deviceId)
         }
-
         return if (result != null) {
-            requestSender.sendVerificationRequest(result.request)
-            sasVerificationFactory.create(result.sas)
+            try {
+                requestSender.sendVerificationRequest(result.request)
+                sasVerificationFactory.create(result.sas)
+            }catch (failure: Throwable){
+                innerMachine.cancelVerification(result.sas.otherUserId, result.sas.flowId, CancelCode.UserError.value)
+                null
+            }
         } else {
             null
         }
@@ -140,9 +150,7 @@ internal class Device @AssistedInject constructor(
         val request = withContext(coroutineDispatchers.io) {
             innerMachine.verifyDevice(innerDevice.userId, innerDevice.deviceId)
         }
-
         requestSender.sendSignatureUpload(request)
-
         return true
     }
 

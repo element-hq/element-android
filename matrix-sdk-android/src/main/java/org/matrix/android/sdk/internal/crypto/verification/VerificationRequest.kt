@@ -19,8 +19,10 @@ package org.matrix.android.sdk.internal.crypto.verification
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
 import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationInfoReady
@@ -140,11 +142,13 @@ internal class VerificationRequest @AssistedInject constructor(
                 innerVerificationRequest.otherUserId,
                 innerVerificationRequest.flowId,
                 stringMethods
-        )
+        ) ?: return
 
-        if (request != null) {
-            requestSender.sendVerificationRequest(request)
+        try {
             dispatchRequestUpdated()
+            requestSender.sendVerificationRequest(request)
+        } catch (failure: Throwable) {
+            cancel(CancelCode.UserError)
         }
     }
 
@@ -163,12 +167,12 @@ internal class VerificationRequest @AssistedInject constructor(
      */
     internal suspend fun startSasVerification(): SasVerification? {
         return withContext(coroutineDispatchers.io) {
-            val result = innerOlmMachine.startSasVerification(innerVerificationRequest.otherUserId, innerVerificationRequest.flowId)
-
-            if (result != null) {
+            val result = innerOlmMachine.startSasVerification(innerVerificationRequest.otherUserId, innerVerificationRequest.flowId) ?: return@withContext null
+            try {
                 requestSender.sendVerificationRequest(result.request)
                 sasVerificationFactory.create(result.sas)
-            } else {
+            } catch (failure: Throwable) {
+                cancel(CancelCode.UserError)
                 null
             }
         }
@@ -192,8 +196,12 @@ internal class VerificationRequest @AssistedInject constructor(
         val byteArray = data.toByteArray(Charsets.ISO_8859_1)
         val encodedData = byteArray.toBase64NoPadding()
         val result = innerOlmMachine.scanQrCode(otherUser(), flowId(), encodedData) ?: return null
-
-        requestSender.sendVerificationRequest(result.request)
+        try {
+            requestSender.sendVerificationRequest(result.request)
+        } catch (failure: Throwable) {
+            cancel(CancelCode.UserError)
+            return null
+        }
         return qrCodeVerificationFactory.create(this, result.qr)
     }
 
@@ -233,16 +241,15 @@ internal class VerificationRequest @AssistedInject constructor(
      *
      * The method turns into a noop, if the verification flow has already been cancelled.
      */
-    internal suspend fun cancel() {
+    internal suspend fun cancel(cancelCode: CancelCode = CancelCode.User) = withContext(NonCancellable) {
         val request = innerOlmMachine.cancelVerification(
                 innerVerificationRequest.otherUserId,
                 innerVerificationRequest.flowId,
-                CancelCode.User.value
-        )
-
-        if (request != null) {
-            requestSender.sendVerificationRequest(request)
-            dispatchRequestUpdated()
+                cancelCode.value
+        ) ?: return@withContext
+        dispatchRequestUpdated()
+        tryOrNull("Fail to send cancel request") {
+            requestSender.sendVerificationRequest(request, retryCount = Int.MAX_VALUE)
         }
     }
 
