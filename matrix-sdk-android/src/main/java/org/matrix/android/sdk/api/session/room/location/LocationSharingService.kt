@@ -23,5 +23,15 @@ import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationSh
  * Manage all location sharing related features.
  */
 interface LocationSharingService {
+    /**
+     * Starts sharing live location in the room.
+     * @param timeoutMillis timeout of the live in milliseconds
+     * @return the id of the created beacon info event
+     */
+    suspend fun startLiveLocationShare(timeoutMillis: Long): String
+
+    /**
+     * Returns a LiveData on the list of current running live location shares.
+     */
     fun getRunningLiveLocationShareSummaries(): LiveData<List<LiveLocationShareAggregatedSummary>>
 }

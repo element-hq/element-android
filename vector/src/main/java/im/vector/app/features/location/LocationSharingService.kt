@@ -23,16 +23,12 @@ import android.os.Parcelable
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.services.VectorService
-import im.vector.app.core.time.Clock
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.getRoom
-import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
 import timber.log.Timber
 import java.util.Timer
 import java.util.TimerTask
@@ -51,7 +47,6 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
     @Inject lateinit var notificationUtils: NotificationUtils
     @Inject lateinit var locationTracker: LocationTracker
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
-    @Inject lateinit var clock: Clock
 
     private val binder = LocalBinder()
 
@@ -97,21 +92,10 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
     }
 
     private suspend fun sendStartingLiveBeaconInfo(session: Session, roomArgs: RoomArgs) {
-        val beaconContent = MessageBeaconInfoContent(
-                timeout = roomArgs.durationMillis,
-                isLive = true,
-                unstableTimestampMillis = clock.epochMillis()
-        ).toContent()
-
-        val stateKey = session.myUserId
         val beaconEventId = session
                 .getRoom(roomArgs.roomId)
-                ?.stateService()
-                ?.sendStateEvent(
-                        eventType = EventType.STATE_ROOM_BEACON_INFO.first(),
-                        stateKey = stateKey,
-                        body = beaconContent
-                )
+                ?.locationSharingService()
+                ?.startLiveLocationShare(timeoutMillis = roomArgs.durationMillis)
 
         beaconEventId
                 ?.takeUnless { it.isEmpty() }

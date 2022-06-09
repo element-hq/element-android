@@ -32,12 +32,21 @@ import org.matrix.android.sdk.internal.di.SessionDatabase
 internal class DefaultLocationSharingService @AssistedInject constructor(
         @Assisted private val roomId: String,
         @SessionDatabase private val monarchy: Monarchy,
+        private val startLiveLocationShareTask: StartLiveLocationShareTask,
         private val liveLocationShareAggregatedSummaryMapper: LiveLocationShareAggregatedSummaryMapper,
 ) : LocationSharingService {
 
     @AssistedFactory
     interface Factory {
         fun create(roomId: String): DefaultLocationSharingService
+    }
+
+    override suspend fun startLiveLocationShare(timeoutMillis: Long): String {
+        val params = StartLiveLocationShareTask.Params(
+                roomId = roomId,
+                timeoutMillis = timeoutMillis
+        )
+        return startLiveLocationShareTask.execute(params)
     }
 
     override fun getRunningLiveLocationShareSummaries(): LiveData<List<LiveLocationShareAggregatedSummary>> {
