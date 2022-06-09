@@ -34,6 +34,16 @@ interface LocationSharingService {
     suspend fun sendStaticLocation(latitude: Double, longitude: Double, uncertainty: Double?, isUserLocation: Boolean): Cancelable
 
     /**
+     * Send a live location event to the room.
+     * To get the beacon info event id, [startLiveLocationShare] must be called before sending live location updates.
+     * @param beaconInfoEventId event id of the initial beacon info state event
+     * @param latitude required latitude of the location
+     * @param longitude required longitude of the location
+     * @param uncertainty Accuracy of the location in meters
+     */
+    suspend fun sendLiveLocation(beaconInfoEventId: String, latitude: Double, longitude: Double, uncertainty: Double?): Cancelable
+
+    /**
      * Starts sharing live location in the room.
      * @param timeoutMillis timeout of the live in milliseconds
      * @return the id of the created beacon info event

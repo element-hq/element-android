@@ -34,6 +34,7 @@ internal class DefaultLocationSharingService @AssistedInject constructor(
         @Assisted private val roomId: String,
         @SessionDatabase private val monarchy: Monarchy,
         private val sendStaticLocationTask: SendStaticLocationTask,
+        private val sendLiveLocationTask: SendLiveLocationTask,
         private val startLiveLocationShareTask: StartLiveLocationShareTask,
         private val stopLiveLocationShareTask: StopLiveLocationShareTask,
         private val liveLocationShareAggregatedSummaryMapper: LiveLocationShareAggregatedSummaryMapper,
@@ -50,9 +51,20 @@ internal class DefaultLocationSharingService @AssistedInject constructor(
                 latitude = latitude,
                 longitude = longitude,
                 uncertainty = uncertainty,
-                isUserLocation = isUserLocation
+                isUserLocation = isUserLocation,
         )
         return sendStaticLocationTask.execute(params)
+    }
+
+    override suspend fun sendLiveLocation(beaconInfoEventId: String, latitude: Double, longitude: Double, uncertainty: Double?): Cancelable {
+        val params = SendLiveLocationTask.Params(
+                beaconInfoEventId = beaconInfoEventId,
+                roomId = roomId,
+                latitude = latitude,
+                longitude = longitude,
+                uncertainty = uncertainty,
+        )
+        return sendLiveLocationTask.execute(params)
     }
 
     override suspend fun startLiveLocationShare(timeoutMillis: Long): String {
