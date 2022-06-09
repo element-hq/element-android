@@ -29,6 +29,8 @@ import org.junit.Test
 
 private const val A_VALID_PASSWORD = "11111111"
 private const val A_FORMATTED_ERROR_MESSAGE = "error message"
+private const val ANOTHER_FORMATTED_ERROR_MESSAGE = "error message 2"
+private val AN_ERROR = RuntimeException()
 
 class LoginErrorParserTest {
 
@@ -98,5 +100,75 @@ class LoginErrorParserTest {
                 passwordError = R.string.auth_invalid_login_param_space_in_password.toTestString()
         )
     }
+
+    @Test
+    fun `given an error result with no known errors, then is unknown`() {
+        val errorResult = LoginErrorParser.LoginErrorResult(AN_ERROR, usernameOrIdError = null, passwordError = null)
+        val captures = Captures(expectUnknownError = true)
+
+        errorResult.callOnMethods(captures)
+
+        captures.unknownResult shouldBeEqualTo AN_ERROR
+    }
+
+    @Test
+    fun `given an error result with only username error, then is username or id error`() {
+        val errorResult = LoginErrorParser.LoginErrorResult(AN_ERROR, usernameOrIdError = A_FORMATTED_ERROR_MESSAGE, passwordError = null)
+        val captures = Captures(expectUsernameOrIdError = true)
+
+        errorResult.callOnMethods(captures)
+
+        captures.usernameOrIdError shouldBeEqualTo A_FORMATTED_ERROR_MESSAGE
+    }
+
+    @Test
+    fun `given an error result with only password error, then is password error`() {
+        val errorResult = LoginErrorParser.LoginErrorResult(AN_ERROR, usernameOrIdError = null, passwordError = A_FORMATTED_ERROR_MESSAGE)
+        val captures = Captures(expectPasswordError = true)
+
+        errorResult.callOnMethods(captures)
+
+        captures.passwordError shouldBeEqualTo A_FORMATTED_ERROR_MESSAGE
+    }
+
+    @Test
+    fun `given an error result with username and password error, then triggers both username and password error`() {
+        val errorResult = LoginErrorParser.LoginErrorResult(
+                AN_ERROR,
+                usernameOrIdError = A_FORMATTED_ERROR_MESSAGE,
+                passwordError = ANOTHER_FORMATTED_ERROR_MESSAGE
+        )
+        val captures = Captures(expectPasswordError = true, expectUsernameOrIdError = true)
+
+        errorResult.callOnMethods(captures)
+
+        captures.usernameOrIdError shouldBeEqualTo A_FORMATTED_ERROR_MESSAGE
+        captures.passwordError shouldBeEqualTo ANOTHER_FORMATTED_ERROR_MESSAGE
+    }
 }
 
+private fun LoginErrorParser.LoginErrorResult.callOnMethods(captures: Captures) {
+    onUnknown(captures.onUnknown)
+    onUsernameOrIdError(captures.onUsernameOrIdError)
+    onPasswordError(captures.onPasswordError)
+}
+
+private class Captures(
+        val expectUnknownError: Boolean = false,
+        val expectUsernameOrIdError: Boolean = false,
+        val expectPasswordError: Boolean = false,
+) {
+    var unknownResult: Throwable? = null
+    var usernameOrIdError: String? = null
+    var passwordError: String? = null
+
+    val onUnknown: (Throwable) -> Unit = {
+        if (expectUnknownError) unknownResult = it else throw IllegalStateException("Not expected to be called")
+    }
+    val onUsernameOrIdError: (String) -> Unit = {
+        if (expectUsernameOrIdError) usernameOrIdError = it else throw IllegalStateException("Not expected to be called")
+    }
+    val onPasswordError: (String) -> Unit = {
+        if (expectPasswordError) passwordError = it else throw IllegalStateException("Not expected to be called")
+    }
+}
