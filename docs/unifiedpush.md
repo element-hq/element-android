@@ -16,11 +16,13 @@
 
 The recently started UnifiedPush project is an Android protocol and library for apps to be able to receive distributor-agnostic push notifications.
 
-The *Gplay* variant of Element Android use the UnifiedPush library to still receive push notifications from FCM, but also alternatively from other non-Google distributor systems that the user can have installed on their device. Currently available are Gotify, a server and app that receives push notifications via a websocket, NoProvider2Push, a peer-to-peer system, and others. This would make it possible to have push notifications without depending on Google services or libraries.
+The *F-Droid* and *Gplay* flavors of Element Android support UnifiedPush, so the user can use any distributor installed on their devices. This would make it possible to have push notifications without depending on Google services or libraries. Currently, the main distributors are [ntfy](https://ntfy.sh) which does not require any setup (like manual registration) to use the public server and [NextPush](https://github.com/UP-NextPush/android), available as a nextcloud application.
 
-The UnifiedPush library comes in two variations: the FCM-added version of the library, which basically comes with the FCM distributor built into the library (so a user doesn't need to do anything other than install the app to get FCM notifications), and the main version of the library, which doesn't come with FCM embedded (so a user has to separately install the FCM, Gotify, or other distributor as an app on their phone to get push notifications).
+The *Gplay* variant uses a UnifiedPush library which basically embed a FCM distributor built into the application (so a user doesn't need to do anything other than install the app to get FCM notifications). This variant uses Google Services to receive notifications if the user has not installed any distributor.
 
-These two versions of the library are used in the Google Play version and F-Droid version of the app respectively, to be able to publish an easy-to-use no-setup-needed version of the app to Google Play, and a version that doesn't depend on any Google code to F-Droid.
+The *F-Droid* variant does not use this library to avoid any proprietary blob. It will use a polling service if the user has not installed any distributor.
+
+In all cases, if there are other distributors available, the user will have to opt-in to one of them in the preferences.
 
 ## Configuration in Element-Android and their forks
 
