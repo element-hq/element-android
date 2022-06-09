@@ -35,7 +35,7 @@ internal interface SendToDeviceTask : Task<SendToDeviceTask.Params, Unit> {
             // the transactionId. If not provided, a transactionId will be created by the task
             val transactionId: String? = null,
             // Number of retry before failing
-            val retryCount:Int = DEFAULT_REQUEST_RETRY_COUNT
+            val retryCount: Int = DEFAULT_REQUEST_RETRY_COUNT
     )
 }
 

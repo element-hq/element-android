@@ -132,7 +132,12 @@ internal class RequestSender @Inject constructor(
         return responseAdapter.toJson(sendResponse)
     }
 
-    suspend fun sendRoomMessage(eventType: String, roomId: String, content: String, transactionId: String, retryCount: Int = DEFAULT_REQUEST_RETRY_COUNT): SendResponse {
+    suspend fun sendRoomMessage(eventType: String,
+                                roomId: String,
+                                content: String,
+                                transactionId: String,
+                                retryCount: Int = DEFAULT_REQUEST_RETRY_COUNT
+    ): SendResponse {
         val paramsAdapter = moshi.adapter<Content>(Map::class.java)
         val jsonContent = paramsAdapter.fromJson(content)
         val event = Event(eventType, transactionId, jsonContent, roomId = roomId)

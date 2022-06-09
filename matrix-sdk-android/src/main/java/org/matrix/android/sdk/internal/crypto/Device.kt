@@ -114,7 +114,7 @@ internal class Device @AssistedInject constructor(
             try {
                 requestSender.sendVerificationRequest(result.request)
                 sasVerificationFactory.create(result.sas)
-            }catch (failure: Throwable){
+            } catch (failure: Throwable) {
                 innerMachine.cancelVerification(result.sas.otherUserId, result.sas.flowId, CancelCode.UserError.value)
                 null
             }
