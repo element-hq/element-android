@@ -2008,7 +2008,7 @@ class TimelineFragment @Inject constructor(
                 activity = requireActivity(),
                 roomId = timelineArgs.roomId,
                 mediaData = mediaData,
-                view = view
+                view = view,
         ) { pairs ->
             pairs.add(Pair(views.roomToolbar, ViewCompat.getTransitionName(views.roomToolbar) ?: ""))
             pairs.add(Pair(views.composerLayout, ViewCompat.getTransitionName(views.composerLayout) ?: ""))

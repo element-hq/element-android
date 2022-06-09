@@ -112,7 +112,7 @@ class RoomUploadsMediaFragment @Inject constructor(
                 roomId = state.roomId,
                 mediaData = mediaData,
                 view = view,
-                inMemory = inMemory
+                inMemory = inMemory,
         ) { pairs ->
             trickFindAppBar()?.let {
                 pairs.add(Pair(it, ViewCompat.getTransitionName(it) ?: ""))
@@ -129,11 +129,12 @@ class RoomUploadsMediaFragment @Inject constructor(
                             filename = content.body,
                             mimeType = content.mimeType,
                             url = content.getFileUrl(),
+                            filesize = content.info?.size,
                             elementToDecrypt = content.encryptedFileInfo?.toElementToDecrypt(),
                             maxHeight = -1,
                             maxWidth = -1,
                             width = null,
-                            height = null
+                            height = null,
                     )
                 }
                 is MessageVideoContent -> {
@@ -142,17 +143,19 @@ class RoomUploadsMediaFragment @Inject constructor(
                             filename = content.body,
                             mimeType = content.mimeType,
                             url = content.videoInfo?.getThumbnailUrl(),
+                            filesize = content.videoInfo?.size,
                             elementToDecrypt = content.videoInfo?.thumbnailFile?.toElementToDecrypt(),
                             height = content.videoInfo?.height,
                             maxHeight = -1,
                             width = content.videoInfo?.width,
-                            maxWidth = -1
+                            maxWidth = -1,
                     )
                     VideoContentRenderer.Data(
                             eventId = it.eventId,
                             filename = content.body,
                             mimeType = content.mimeType,
                             url = content.getFileUrl(),
+                            filesize = content.videoInfo?.size,
                             elementToDecrypt = content.encryptedFileInfo?.toElementToDecrypt(),
                             thumbnailMediaData = thumbnailData
                     )
@@ -169,7 +172,7 @@ class RoomUploadsMediaFragment @Inject constructor(
                 roomId = state.roomId,
                 mediaData = mediaData,
                 view = view,
-                inMemory = inMemory
+                inMemory = inMemory,
         ) { pairs ->
             trickFindAppBar()?.let {
                 pairs.add(Pair(it, ViewCompat.getTransitionName(it) ?: ""))

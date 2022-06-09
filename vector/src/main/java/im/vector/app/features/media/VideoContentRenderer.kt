@@ -51,6 +51,7 @@ class VideoContentRenderer @Inject constructor(
             override val filename: String,
             override val mimeType: String?,
             override val url: String?,
+            override val filesize: Long?,
             override val elementToDecrypt: ElementToDecrypt?,
             val thumbnailMediaData: ImageContentRenderer.Data,
             // If true will load non mxc url, be careful to set it only for video sent by you

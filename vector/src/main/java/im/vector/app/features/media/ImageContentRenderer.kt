@@ -57,6 +57,7 @@ interface AttachmentData : Parcelable {
     val filename: String
     val mimeType: String?
     val url: String?
+    val filesize: Long?
     val elementToDecrypt: ElementToDecrypt?
 
     // If true will load non mxc url, be careful to set it only for attachments sent by you
@@ -79,6 +80,7 @@ class ImageContentRenderer @Inject constructor(
             override val filename: String,
             override val mimeType: String?,
             override val url: String?,
+            override val filesize: Long?,
             override val elementToDecrypt: ElementToDecrypt?,
             val height: Int?,
             val maxHeight: Int,
@@ -254,7 +256,6 @@ class ImageContentRenderer @Inject constructor(
                 return false
             }
         })
-                .onlyRetrieveFromCache(true)
                 .fitCenter()
                 .into(imageView)
     }

@@ -515,6 +515,7 @@ class MessageItemFactory @Inject constructor(
                 filename = messageContent.body,
                 mimeType = messageContent.mimeType,
                 url = messageContent.getFileUrl(),
+                filesize = messageContent.info?.size,
                 elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt(),
                 height = messageContent.info?.height,
                 maxHeight = maxHeight,
@@ -557,6 +558,7 @@ class MessageItemFactory @Inject constructor(
                 filename = messageContent.body,
                 mimeType = messageContent.mimeType,
                 url = messageContent.videoInfo?.getThumbnailUrl(),
+                filesize = messageContent.videoInfo?.size,
                 elementToDecrypt = messageContent.videoInfo?.thumbnailFile?.toElementToDecrypt(),
                 height = messageContent.videoInfo?.height,
                 maxHeight = maxHeight,
@@ -570,6 +572,7 @@ class MessageItemFactory @Inject constructor(
                 filename = messageContent.body,
                 mimeType = messageContent.mimeType,
                 url = messageContent.getFileUrl(),
+                filesize = messageContent.videoInfo?.size,
                 elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt(),
                 thumbnailMediaData = thumbnailData
         )

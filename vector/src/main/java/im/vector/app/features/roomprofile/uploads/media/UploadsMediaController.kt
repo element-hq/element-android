@@ -111,11 +111,12 @@ class UploadsMediaController @Inject constructor(
                 filename = messageContent.body,
                 url = messageContent.getFileUrl(),
                 mimeType = messageContent.mimeType,
+                filesize = messageContent.info?.size,
                 elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt(),
                 height = messageContent.info?.height,
                 maxHeight = itemSize,
                 width = messageContent.info?.width,
-                maxWidth = itemSize
+                maxWidth = itemSize,
         )
     }
 
@@ -127,11 +128,12 @@ class UploadsMediaController @Inject constructor(
                 filename = messageContent.body,
                 mimeType = messageContent.mimeType,
                 url = messageContent.videoInfo?.getThumbnailUrl(),
+                filesize = messageContent.videoInfo?.size,
                 elementToDecrypt = messageContent.videoInfo?.thumbnailFile?.toElementToDecrypt(),
                 height = messageContent.videoInfo?.height,
                 maxHeight = itemSize,
                 width = messageContent.videoInfo?.width,
-                maxWidth = itemSize
+                maxWidth = itemSize,
         )
 
         return VideoContentRenderer.Data(
@@ -139,6 +141,7 @@ class UploadsMediaController @Inject constructor(
                 filename = messageContent.body,
                 mimeType = messageContent.mimeType,
                 url = messageContent.getFileUrl(),
+                filesize = messageContent.videoInfo?.size,
                 elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt(),
                 thumbnailMediaData = thumbnailData
         )

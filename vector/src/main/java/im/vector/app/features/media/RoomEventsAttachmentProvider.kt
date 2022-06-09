@@ -63,6 +63,7 @@ class RoomEventsAttachmentProvider(
                         filename = content.body,
                         mimeType = content.mimeType,
                         url = content.getFileUrl(),
+                        filesize = content.info?.size,
                         elementToDecrypt = content.encryptedFileInfo?.toElementToDecrypt(),
                         maxHeight = -1,
                         maxWidth = -1,
@@ -90,6 +91,7 @@ class RoomEventsAttachmentProvider(
                         filename = content.body,
                         mimeType = content.mimeType,
                         url = content.getFileUrl(),
+                        filesize = content.info?.size,
                         elementToDecrypt = content.encryptedFileInfo?.toElementToDecrypt(),
                         maxHeight = -1,
                         maxWidth = -1,
@@ -117,6 +119,7 @@ class RoomEventsAttachmentProvider(
                         filename = content.body,
                         mimeType = content.mimeType,
                         url = content.videoInfo?.getThumbnailUrl(),
+                        filesize = content.videoInfo?.size,
                         elementToDecrypt = content.videoInfo?.thumbnailFile?.toElementToDecrypt(),
                         height = content.videoInfo?.height,
                         maxHeight = -1,
@@ -131,6 +134,7 @@ class RoomEventsAttachmentProvider(
                         url = content.getFileUrl(),
                         elementToDecrypt = content.encryptedFileInfo?.toElementToDecrypt(),
                         thumbnailMediaData = thumbnailData,
+                        filesize = content.videoInfo?.size,
                         allowNonMxcUrls = it.root.sendState.isSending()
                 )
                 AttachmentInfo.Video(
@@ -154,7 +158,7 @@ class RoomEventsAttachmentProvider(
         }
     }
 
-    override fun getTimelineEventAtPosition(position: Int): TimelineEvent? {
+    override fun getTimelineEventAtPosition(position: Int): TimelineEvent {
         return getItem(position)
     }
 

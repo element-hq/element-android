@@ -76,6 +76,7 @@ import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.matrixto.OriginOfMatrixTo
 import im.vector.app.features.media.AttachmentData
 import im.vector.app.features.media.BigImageViewerActivity
+import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VectorAttachmentViewerActivity
 import im.vector.app.features.onboarding.OnboardingActivity
 import im.vector.app.features.pin.PinActivity
@@ -539,14 +540,18 @@ class DefaultNavigator @Inject constructor(
             inMemory: List<AttachmentData>,
             options: ((MutableList<Pair<View, String>>) -> Unit)?
     ) {
-        VectorAttachmentViewerActivity.newIntent(
+        val intent = VectorAttachmentViewerActivity.newIntent(
                 activity,
                 mediaData,
                 roomId,
                 mediaData.eventId,
                 inMemory,
                 ViewCompat.getTransitionName(view)
-        ).let { intent ->
+        )
+
+
+        val shouldTransition = mediaData !is ImageContentRenderer.Data || (mediaData.filesize ?: 0) < 1000000
+        if (shouldTransition) {
             val pairs = ArrayList<Pair<View, String>>()
             activity.window.decorView.findViewById<View>(android.R.id.statusBarBackground)?.let {
                 pairs.add(Pair(it, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME))
@@ -560,6 +565,8 @@ class DefaultNavigator @Inject constructor(
 
             val bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, *pairs.toTypedArray()).toBundle()
             activity.startActivity(intent, bundle)
+        } else {
+            activity.startActivity(intent)
         }
     }
 
