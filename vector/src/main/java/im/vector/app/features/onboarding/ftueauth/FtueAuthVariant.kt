@@ -59,6 +59,7 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 
 private const val FRAGMENT_REGISTRATION_STAGE_TAG = "FRAGMENT_REGISTRATION_STAGE_TAG"
 private const val FRAGMENT_LOGIN_TAG = "FRAGMENT_LOGIN_TAG"
+private const val FRAGMENT_EDIT_HOMESERVER_TAG = "FRAGMENT_EDIT_HOMESERVER"
 
 class FtueAuthVariant(
         private val views: ActivityLoginBinding,
@@ -220,10 +221,14 @@ class FtueAuthVariant(
                 activity.addFragmentToBackstack(
                         views.loginFragmentContainer,
                         FtueAuthCombinedServerSelectionFragment::class.java,
-                        option = commonOption
+                        option = commonOption,
+                        tag = FRAGMENT_EDIT_HOMESERVER_TAG
                 )
             }
-            OnboardingViewEvents.OnHomeserverEdited -> activity.popBackstack()
+            OnboardingViewEvents.OnHomeserverEdited -> supportFragmentManager.popBackStack(
+                    FRAGMENT_EDIT_HOMESERVER_TAG,
+                    FragmentManager.POP_BACK_STACK_INCLUSIVE
+            )
             OnboardingViewEvents.OpenCombinedLogin -> onStartCombinedLogin()
             is OnboardingViewEvents.DeeplinkAuthenticationFailure -> onDeeplinkedHomeserverUnavailable(viewEvents)
             OnboardingViewEvents.DisplayRegistrationFallback -> displayFallbackWebDialog()
