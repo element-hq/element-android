@@ -164,8 +164,17 @@ internal class LiveLocationAggregationProcessorTest {
         )
         fakeClock.givenEpoch(A_TIMESTAMP + 5000)
         fakeWorkManagerProvider.fakeWorkManager.expectEnqueueUniqueWork()
-        val aggregatedEntity = mockLiveLocationShareAggregatedSummaryEntityForEvent()
-        val previousEntities = mockPreviousLiveLocationShareAggregatedSummaryEntities()
+        val aggregatedEntity = givenLastSummaryQueryReturns(eventId = AN_EVENT_ID, roomId = A_ROOM_ID)
+        val previousEntities = givenActiveSummaryListQueryReturns(
+                listOf(
+                        LiveLocationShareAggregatedSummaryEntity(
+                                eventId = "${AN_EVENT_ID}1",
+                                roomId = A_ROOM_ID,
+                                userId = A_SENDER_ID,
+                                isActive = true
+                        )
+                )
+        )
 
         val result = liveLocationAggregationProcessor.handleBeaconInfo(
                 realm = fakeRealm.instance,
@@ -209,8 +218,18 @@ internal class LiveLocationAggregationProcessorTest {
         )
         fakeClock.givenEpoch(A_TIMESTAMP + 5000)
         fakeWorkManagerProvider.fakeWorkManager.expectCancelUniqueWork()
-        val aggregatedEntity = mockLiveLocationShareAggregatedSummaryEntityForEvent()
-        val previousEntities = mockPreviousLiveLocationShareAggregatedSummaryEntities()
+        val aggregatedEntity = givenLastSummaryQueryReturns(eventId = AN_EVENT_ID, roomId = A_ROOM_ID)
+        val previousEntities = givenActiveSummaryListQueryReturns(
+                listOf(
+                        LiveLocationShareAggregatedSummaryEntity(
+                                eventId = "${AN_EVENT_ID}1",
+                                roomId = A_ROOM_ID,
+                                userId = A_SENDER_ID,
+                                isActive = true
+                        )
+                )
+
+        )
 
         val result = liveLocationAggregationProcessor.handleBeaconInfo(
                 realm = fakeRealm.instance,
@@ -314,7 +333,11 @@ internal class LiveLocationAggregationProcessorTest {
         val lastBeaconLocationContent = MessageBeaconLocationDataContent(
                 unstableTimestampMillis = A_TIMESTAMP
         )
-        mockLiveLocationShareAggregatedSummaryEntityForEvent(lastBeaconLocationContent = lastBeaconLocationContent)
+        givenLastSummaryQueryReturns(
+                eventId = AN_EVENT_ID,
+                roomId = A_ROOM_ID,
+                beaconLocationContent = lastBeaconLocationContent
+        )
 
         val result = liveLocationAggregationProcessor.handleBeaconLocationData(
                 realm = fakeRealm.instance,
@@ -339,7 +362,11 @@ internal class LiveLocationAggregationProcessorTest {
         val lastBeaconLocationContent = MessageBeaconLocationDataContent(
                 unstableTimestampMillis = A_TIMESTAMP - 60_000
         )
-        val entity = mockLiveLocationShareAggregatedSummaryEntityForEvent(lastBeaconLocationContent = lastBeaconLocationContent)
+        val entity = givenLastSummaryQueryReturns(
+                eventId = AN_EVENT_ID,
+                roomId = A_ROOM_ID,
+                beaconLocationContent = lastBeaconLocationContent
+        )
 
         val result = liveLocationAggregationProcessor.handleBeaconLocationData(
                 realm = fakeRealm.instance,
@@ -356,36 +383,32 @@ internal class LiveLocationAggregationProcessorTest {
         savedLocationData?.getBestLocationInfo()?.geoUri shouldBeEqualTo A_GEO_URI
     }
 
-    private fun mockLiveLocationShareAggregatedSummaryEntityForEvent(
-            lastBeaconLocationContent: MessageBeaconLocationDataContent? = null
+    private fun givenLastSummaryQueryReturns(
+            eventId: String,
+            roomId: String,
+            beaconLocationContent: MessageBeaconLocationDataContent? = null
     ): LiveLocationShareAggregatedSummaryEntity {
         val result = LiveLocationShareAggregatedSummaryEntity(
-                eventId = AN_EVENT_ID,
-                roomId = A_ROOM_ID,
-                lastLocationContent = ContentMapper.map(lastBeaconLocationContent?.toContent())
+                eventId = eventId,
+                roomId = roomId,
+                lastLocationContent = ContentMapper.map(beaconLocationContent?.toContent())
         )
         fakeQuery
-                .givenEqualTo(LiveLocationShareAggregatedSummaryEntityFields.EVENT_ID, AN_EVENT_ID)
-                .givenEqualTo(LiveLocationShareAggregatedSummaryEntityFields.ROOM_ID, A_ROOM_ID)
+                .givenEqualTo(LiveLocationShareAggregatedSummaryEntityFields.EVENT_ID, eventId)
+                .givenEqualTo(LiveLocationShareAggregatedSummaryEntityFields.ROOM_ID, roomId)
                 .givenFindFirst(result)
         return result
     }
 
-    private fun mockPreviousLiveLocationShareAggregatedSummaryEntities(): List<LiveLocationShareAggregatedSummaryEntity> {
-        val results = listOf(
-                LiveLocationShareAggregatedSummaryEntity(
-                        eventId = "",
-                        roomId = A_ROOM_ID,
-                        userId = A_SENDER_ID,
-                        isActive = true
-                )
-        )
+    private fun givenActiveSummaryListQueryReturns(
+            summaryList: List<LiveLocationShareAggregatedSummaryEntity>
+    ): List<LiveLocationShareAggregatedSummaryEntity> {
         fakeQuery
                 .givenEqualTo(LiveLocationShareAggregatedSummaryEntityFields.ROOM_ID, A_ROOM_ID)
                 .givenNotEqualTo(LiveLocationShareAggregatedSummaryEntityFields.EVENT_ID, AN_EVENT_ID)
                 .givenEqualTo(LiveLocationShareAggregatedSummaryEntityFields.USER_ID, A_SENDER_ID)
                 .givenEqualTo(LiveLocationShareAggregatedSummaryEntityFields.IS_ACTIVE, true)
-                .givenFindAll(results)
-        return results
+                .givenFindAll(summaryList)
+        return summaryList
     }
 }
