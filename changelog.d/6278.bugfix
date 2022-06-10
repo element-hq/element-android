@@ -1,0 +1,1 @@
+Fix regression on EventInsertLiveObserver getting blocked so there is no event being processed anymore.
