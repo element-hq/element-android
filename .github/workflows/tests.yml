@@ -214,8 +214,6 @@ jobs:
       - detekt
       - ktlint
       - apk-lint
-      - android-lint
-      - dependency-analysis
       - knit
       - check
     steps:
@@ -291,6 +289,8 @@ jobs:
     name: Danger JS
     runs-on: ubuntu-latest
     needs:
+      - dependency-analysis # this is a slow one, so letting it run in parallel
+      - android-lint # also a slow one
       - tests
     steps:
       - uses: actions/checkout@v1
