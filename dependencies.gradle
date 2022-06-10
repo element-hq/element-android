@@ -29,7 +29,7 @@ def jjwt = "0.11.5"
 def vanniktechEmoji = "0.15.0"
 
 // Testing
-def mockk = "1.12.4"
+def mockk = "1.12.3"
 def espresso = "3.4.0"
 def androidxTest = "1.4.0"
 def androidxOrchestrator = "1.4.1"

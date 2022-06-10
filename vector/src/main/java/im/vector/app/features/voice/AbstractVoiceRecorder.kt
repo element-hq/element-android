@@ -27,7 +27,7 @@ import java.util.UUID
 
 abstract class AbstractVoiceRecorder(
         private val context: Context,
-        internal val filenameExt: String
+        private val filenameExt: String,
 ) : VoiceRecorder {
     private val outputDirectory: File by lazy { ensureAudioDirectory(context) }
 
