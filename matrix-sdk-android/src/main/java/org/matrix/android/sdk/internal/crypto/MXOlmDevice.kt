@@ -815,27 +815,12 @@ internal class MXOlmDevice @Inject constructor(
             throw MXCryptoError.Base(MXCryptoError.ErrorType.BAD_DECRYPTED_FORMAT, MXCryptoError.BAD_DECRYPTED_FORMAT_TEXT_REASON)
         }
 
-            inboundGroupSessionStore.storeInBoundGroupSession(sessionHolder, sessionId, senderKey)
-            val payload = try {
-                val adapter = MoshiProvider.providesMoshi().adapter<JsonDict>(JSON_DICT_PARAMETERIZED_TYPE)
-                val payloadString = convertFromUTF8(decryptResult.mDecryptedMessage)
-                adapter.fromJson(payloadString)
-            } catch (e: Exception) {
-                Timber.tag(loggerTag.value).e("## decryptGroupMessage() : fails to parse the payload")
-                throw MXCryptoError.Base(MXCryptoError.ErrorType.BAD_DECRYPTED_FORMAT, MXCryptoError.BAD_DECRYPTED_FORMAT_TEXT_REASON)
-            }
-
-            return OlmDecryptionResult(
-                    payload,
-                    wrapper.sessionData.keysClaimed,
-                    senderKey,
-                    wrapper.sessionData.forwardingCurve25519KeyChain
-            )
-        } else {
-            val reason = String.format(MXCryptoError.INBOUND_SESSION_MISMATCH_ROOM_ID_REASON, roomId, wrapper.roomId)
-            Timber.tag(loggerTag.value).e("## decryptGroupMessage() : $reason")
-            throw MXCryptoError.Base(MXCryptoError.ErrorType.INBOUND_SESSION_MISMATCH_ROOM_ID, reason)
-        }
+        return OlmDecryptionResult(
+                payload,
+                wrapper.sessionData.keysClaimed,
+                senderKey,
+                wrapper.sessionData.forwardingCurve25519KeyChain
+        )
     }
 
     /**
