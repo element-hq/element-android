@@ -16,20 +16,15 @@
 
 package org.matrix.android.sdk.test.fakes
 
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkManager
 import io.mockk.every
 import io.mockk.mockk
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
 
-internal class FakeWorkManagerProvider {
+internal class FakeWorkManagerProvider(
+        val fakeWorkManager: FakeWorkManager = FakeWorkManager(),
+) {
 
-    val instance = mockk<WorkManagerProvider>()
-
-    init {
-        val workManager = mockk<WorkManager>()
-        every { workManager.enqueueUniqueWork(any(), any(), any<OneTimeWorkRequest>()) } returns mockk()
-        every { workManager.cancelUniqueWork(any()) } returns mockk()
-        every { instance.workManager } returns workManager
+    val instance = mockk<WorkManagerProvider>().also {
+        every { it.workManager } returns fakeWorkManager.instance
     }
 }

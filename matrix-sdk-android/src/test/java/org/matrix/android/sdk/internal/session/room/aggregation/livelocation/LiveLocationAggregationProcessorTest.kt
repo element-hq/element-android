@@ -16,8 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.room.aggregation.livelocation
 
-import androidx.work.OneTimeWorkRequest
-import io.mockk.verify
+import androidx.work.ExistingWorkPolicy
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -164,6 +163,7 @@ internal class LiveLocationAggregationProcessorTest {
                 timeout = A_TIMEOUT_MILLIS
         )
         fakeClock.givenEpoch(A_TIMESTAMP + 5000)
+        fakeWorkManagerProvider.fakeWorkManager.expectEnqueueUniqueWork()
         val aggregatedEntity = mockLiveLocationShareAggregatedSummaryEntityForEvent()
         val previousEntities = mockPreviousLiveLocationShareAggregatedSummaryEntities()
 
@@ -185,8 +185,10 @@ internal class LiveLocationAggregationProcessorTest {
         previousEntities.forEach { entity ->
             entity.isActive shouldBeEqualTo false
         }
-        val workManager = fakeWorkManagerProvider.instance.workManager
-        verify { workManager.enqueueUniqueWork(any(), any(), any<OneTimeWorkRequest>()) }
+        fakeWorkManagerProvider.fakeWorkManager.verifyEnqueueUniqueWork(
+                workName = DeactivateLiveLocationShareWorker.getWorkName(eventId = AN_EVENT_ID, roomId = A_ROOM_ID),
+                policy = ExistingWorkPolicy.REPLACE
+        )
     }
 
     @Test
@@ -206,6 +208,7 @@ internal class LiveLocationAggregationProcessorTest {
                 timeout = A_TIMEOUT_MILLIS
         )
         fakeClock.givenEpoch(A_TIMESTAMP + 5000)
+        fakeWorkManagerProvider.fakeWorkManager.expectCancelUniqueWork()
         val aggregatedEntity = mockLiveLocationShareAggregatedSummaryEntityForEvent()
         val previousEntities = mockPreviousLiveLocationShareAggregatedSummaryEntities()
 
@@ -227,8 +230,9 @@ internal class LiveLocationAggregationProcessorTest {
         previousEntities.forEach { entity ->
             entity.isActive shouldBeEqualTo false
         }
-        val workManager = fakeWorkManagerProvider.instance.workManager
-        verify { workManager.cancelUniqueWork(any()) }
+        fakeWorkManagerProvider.fakeWorkManager.verifyCancelUniqueWork(
+                workName = DeactivateLiveLocationShareWorker.getWorkName(eventId = AN_EVENT_ID, roomId = A_ROOM_ID)
+        )
     }
 
     @Test
