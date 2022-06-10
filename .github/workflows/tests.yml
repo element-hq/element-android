@@ -219,7 +219,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Danger
-        uses: danger/danger-js@10.1.7
+        uses: danger/danger-js@11.0.7
         with:
           args: "--dangerfile dangerfile-lite.js"
         env:
