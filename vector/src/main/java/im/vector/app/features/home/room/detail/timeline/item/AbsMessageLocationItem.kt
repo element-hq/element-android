@@ -85,6 +85,7 @@ abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder> : AbsMe
                     ): Boolean {
                         holder.staticMapPinImageView.setImageResource(R.drawable.ic_location_pin_failed)
                         holder.staticMapErrorTextView.isVisible = true
+                        holder.staticMapCopyrightTextView.isVisible = false
                         return false
                     }
 
@@ -100,6 +101,7 @@ abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder> : AbsMe
                             holder.staticMapPinImageView.setImageDrawable(pinDrawable)
                         }
                         holder.staticMapErrorTextView.isVisible = false
+                        holder.staticMapCopyrightTextView.isVisible = true
                         return false
                     }
                 })
@@ -111,5 +113,6 @@ abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder> : AbsMe
         val staticMapImageView by bind<ImageView>(R.id.staticMapImageView)
         val staticMapPinImageView by bind<ImageView>(R.id.staticMapPinImageView)
         val staticMapErrorTextView by bind<TextView>(R.id.staticMapErrorTextView)
+        val staticMapCopyrightTextView by bind<TextView>(R.id.staticMapCopyrightTextView)
     }
 }

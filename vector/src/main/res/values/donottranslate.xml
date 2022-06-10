@@ -42,4 +42,6 @@
     <string name="ftue_auth_email_verification_subtitle">To confirm your email address, tap the button in the email we just sent to %s</string>
     <string name="ftue_auth_email_verification_footer">Did not receive an email?</string>
     <string name="ftue_auth_email_resend_email">Resend email</string>
+
+    <string name="location_map_view_copyright" translatable="false">© MapTiler © OpenStreetMap contributors</string>
 </resources>
