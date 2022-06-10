@@ -221,9 +221,11 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Danger
-    uses: danger/danger-js@9.1.6
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: danger/danger-js@10.1.7
+        with:
+          args: "--dangerfile dangerfile-lite.js"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   tests:
     name: Runs all tests
     needs:
@@ -293,9 +295,11 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Danger
-    uses: docker://danger/danger-js@11.0.7
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: docker://danger/danger-js@11.0.7
+        with:
+          args: "--dangerfile allPRs.ts"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 # can't be run on macos due to containers.
 #      - name: Publish Unit Test Results
