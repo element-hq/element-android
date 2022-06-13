@@ -28,6 +28,7 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.extensions.getResTintedDrawable
 import im.vector.app.core.extensions.getTintedDrawable
@@ -57,6 +58,9 @@ class FtueAuthUseCaseFragment @Inject constructor(
     }
 
     private fun setupViews() {
+        // Connect to server relies on https://github.com/vector-im/element-android/issues/5782
+        views.useCaseConnectToServerGroup.isVisible = false
+
         views.useCaseOptionOne.renderUseCase(
                 useCase = FtueUseCase.FRIENDS_FAMILY,
                 label = R.string.ftue_auth_use_case_option_one,
