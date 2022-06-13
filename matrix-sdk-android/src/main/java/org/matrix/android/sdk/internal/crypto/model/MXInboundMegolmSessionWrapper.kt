@@ -46,11 +46,11 @@ data class MXInboundMegolmSessionWrapper(
             MegolmSessionData(
                     senderClaimedEd25519Key = sessionData.keysClaimed?.get("ed25519"),
                     forwardingCurve25519KeyChain = sessionData.forwardingCurve25519KeyChain?.toList().orEmpty(),
-                    senderKey = session.export(index ?: session.firstKnownIndex),
+                    sessionKey = session.export(wantedIndex),
                     senderClaimedKeys = keysClaimed,
                     roomId = sessionData.roomId,
                     sessionId = session.sessionIdentifier(),
-                    sessionKey = session.export(wantedIndex),
+                    senderKey = senderKey,
                     algorithm = MXCRYPTO_ALGORITHM_MEGOLM,
                     sharedHistory = sessionData.sharedHistory
             )
