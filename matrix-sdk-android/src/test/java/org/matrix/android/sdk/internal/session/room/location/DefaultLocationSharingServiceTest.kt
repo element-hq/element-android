@@ -16,12 +16,17 @@
 
 package org.matrix.android.sdk.internal.session.room.location
 
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
 import io.mockk.unmockkAll
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.After
 import org.junit.Test
 import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationShareAggregatedSummary
+import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.internal.database.mapper.LiveLocationShareAggregatedSummaryMapper
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntity
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntityFields
@@ -31,7 +36,11 @@ import org.matrix.android.sdk.test.fakes.givenIsNotEmpty
 import org.matrix.android.sdk.test.fakes.givenIsNotNull
 
 private const val A_ROOM_ID = "room_id"
+private const val A_LATITUDE = 1.4
+private const val A_LONGITUDE = 40.0
+private const val AN_UNCERTAINTY = 5.0
 
+@ExperimentalCoroutinesApi
 internal class DefaultLocationSharingServiceTest {
 
     private val fakeRoomId = A_ROOM_ID
@@ -55,6 +64,42 @@ internal class DefaultLocationSharingServiceTest {
     @After
     fun tearDown() {
         unmockkAll()
+    }
+
+    @Test
+    fun `static location can be sent`() = runTest {
+        val isUserLocation = true
+        val cancelable = mockk<Cancelable>()
+        coEvery { sendStaticLocationTask.execute(any()) } returns cancelable
+
+        val result = defaultLocationSharingService.sendStaticLocation(
+                latitude = A_LATITUDE,
+                longitude = A_LONGITUDE,
+                uncertainty = AN_UNCERTAINTY,
+                isUserLocation = isUserLocation
+        )
+
+        result shouldBeEqualTo cancelable
+        val expectedParams = SendStaticLocationTask.Params(
+                roomId = A_ROOM_ID,
+                latitude = A_LATITUDE,
+                longitude = A_LONGITUDE,
+                uncertainty = AN_UNCERTAINTY,
+                isUserLocation = isUserLocation,
+        )
+        coVerify { sendStaticLocationTask.execute(expectedParams) }
+    }
+
+    @Test
+    fun `live location can be sent`() {
+    }
+
+    @Test
+    fun `live location share can be started with a given timeout`() {
+    }
+
+    @Test
+    fun `live location share can be stopped`() {
     }
 
     @Test
