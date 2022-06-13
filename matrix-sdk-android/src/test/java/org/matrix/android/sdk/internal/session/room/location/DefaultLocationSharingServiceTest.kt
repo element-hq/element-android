@@ -18,7 +18,9 @@ package org.matrix.android.sdk.internal.session.room.location
 
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import io.mockk.unmockkAll
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -40,6 +42,7 @@ private const val AN_EVENT_ID = "event_id"
 private const val A_LATITUDE = 1.4
 private const val A_LONGITUDE = 40.0
 private const val AN_UNCERTAINTY = 5.0
+private const val A_TIMEOUT = 15_000L
 
 @ExperimentalCoroutinesApi
 internal class DefaultLocationSharingServiceTest {
@@ -115,11 +118,29 @@ internal class DefaultLocationSharingServiceTest {
     }
 
     @Test
-    fun `live location share can be started with a given timeout`() {
+    fun `live location share can be started with a given timeout`() = runTest {
+        coEvery { startLiveLocationShareTask.execute(any()) } returns AN_EVENT_ID
+
+        val eventId = defaultLocationSharingService.startLiveLocationShare(A_TIMEOUT)
+
+        eventId shouldBeEqualTo AN_EVENT_ID
+        val expectedParams = StartLiveLocationShareTask.Params(
+                roomId = A_ROOM_ID,
+                timeoutMillis = A_TIMEOUT
+        )
+        coVerify { startLiveLocationShareTask.execute(expectedParams) }
     }
 
     @Test
-    fun `live location share can be stopped`() {
+    fun `live location share can be stopped`() = runTest {
+        coEvery { stopLiveLocationShareTask.execute(any()) } just runs
+
+        defaultLocationSharingService.stopLiveLocationShare()
+
+        val expectedParams = StopLiveLocationShareTask.Params(
+                roomId = A_ROOM_ID
+        )
+        coVerify { stopLiveLocationShareTask.execute(expectedParams) }
     }
 
     @Test
