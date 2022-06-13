@@ -48,7 +48,7 @@ internal class EventInsertLiveObserver @Inject constructor(
         observerScope.launch {
             lock.withLock {
                 if (!results.isLoaded || results.isEmpty()) {
-                    return@launch
+                    return@withLock
                 }
                 val idsToDeleteAfterProcess = ArrayList<String>()
                 val filteredEvents = ArrayList<EventInsertEntity>(results.size)
