@@ -32,7 +32,7 @@ import javax.inject.Inject
 
 class SpaceSummaryController @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
-        private val stringProvider: StringProvider
+        private val stringProvider: StringProvider,
 ) : EpoxyController() {
 
     var callback: Callback? = null

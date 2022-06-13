@@ -40,7 +40,7 @@ class UserCodeSharedViewModel @AssistedInject constructor(
         @Assisted val initialState: UserCodeState,
         private val session: Session,
         private val stringProvider: StringProvider,
-        private val directRoomHelper: DirectRoomHelper
+        private val directRoomHelper: DirectRoomHelper,
 ) : VectorViewModel<UserCodeState, UserCodeActions, UserCodeShareViewEvents>(initialState) {
 
     companion object : MavericksViewModelFactory<UserCodeSharedViewModel, UserCodeState> by hiltMavericksViewModelFactory()
