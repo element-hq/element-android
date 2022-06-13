@@ -427,3 +427,6 @@ fun Event.getPollContent(): MessagePollContent? {
 
 fun Event.supportsNotification() =
         this.getClearType() in EventType.MESSAGE + EventType.POLL_START + EventType.STATE_ROOM_BEACON_INFO
+
+fun Event.isContentReportable() =
+        this.getClearType() in EventType.MESSAGE + EventType.STATE_ROOM_BEACON_INFO
