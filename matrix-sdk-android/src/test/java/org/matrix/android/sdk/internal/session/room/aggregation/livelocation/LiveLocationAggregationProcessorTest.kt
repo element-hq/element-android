@@ -77,78 +77,71 @@ internal class LiveLocationAggregationProcessorTest {
         result shouldBeEqualTo false
     }
 
-    @Test
-    fun `given beacon info and event when senderId is null or empty then it is ignored`() {
-        val eventNoSenderId = Event(eventId = AN_EVENT_ID)
-        val eventEmptySenderId = Event(eventId = AN_EVENT_ID, senderId = "")
-        val beaconInfo = MessageBeaconInfoContent()
-
-        val resultNoSenderId = liveLocationAggregationProcessor.handleBeaconInfo(
-                realm = fakeRealm.instance,
-                event = eventNoSenderId,
-                content = beaconInfo,
-                roomId = A_ROOM_ID,
-                isLocalEcho = false
-        )
-        val resultEmptySenderId = liveLocationAggregationProcessor.handleBeaconInfo(
-                realm = fakeRealm.instance,
-                event = eventEmptySenderId,
-                content = beaconInfo,
-                roomId = A_ROOM_ID,
-                isLocalEcho = false
-        )
-
-        resultNoSenderId shouldBeEqualTo false
-        resultEmptySenderId shouldBeEqualTo false
-    }
+    private data class IgnoredBeaconInfoEvent(
+            val event: Event,
+            val beaconInfo: MessageBeaconInfoContent
+    )
 
     @Test
-    fun `given beacon info when no target eventId is found then it is ignored`() {
-        val unsignedDataWithNoEventId = UnsignedData(
-                age = 123
+    fun `given beacon info and event when some values are missing then it is ignored`() {
+        val ignoredInfoEvents = listOf(
+                // missing senderId
+                IgnoredBeaconInfoEvent(
+                        event = Event(eventId = AN_EVENT_ID, senderId = null),
+                        beaconInfo = MessageBeaconInfoContent()
+                ),
+                // empty senderId
+                IgnoredBeaconInfoEvent(
+                        event = Event(eventId = AN_EVENT_ID, senderId = ""),
+                        beaconInfo = MessageBeaconInfoContent()
+                ),
+                // beacon is live and no eventId
+                IgnoredBeaconInfoEvent(
+                        event = Event(eventId = null, senderId = A_SENDER_ID),
+                        beaconInfo = MessageBeaconInfoContent(isLive = true)
+                ),
+                // beacon is live and eventId is empty
+                IgnoredBeaconInfoEvent(
+                        event = Event(eventId = "", senderId = A_SENDER_ID),
+                        beaconInfo = MessageBeaconInfoContent(isLive = true)
+                ),
+                // beacon is not live and replaced event id is null
+                IgnoredBeaconInfoEvent(
+                        event = Event(
+                                eventId = AN_EVENT_ID,
+                                senderId = A_SENDER_ID,
+                                unsignedData = UnsignedData(
+                                        age = 123,
+                                        replacesState = null
+                                )
+                        ),
+                        beaconInfo = MessageBeaconInfoContent(isLive = false)
+                ),
+                // beacon is not live and replaced event id is empty
+                IgnoredBeaconInfoEvent(
+                        event = Event(
+                                eventId = AN_EVENT_ID,
+                                senderId = A_SENDER_ID,
+                                unsignedData = UnsignedData(
+                                        age = 123,
+                                        replacesState = ""
+                                )
+                        ),
+                        beaconInfo = MessageBeaconInfoContent(isLive = false)
+                ),
         )
-        val unsignedDataWithEmptyEventId = UnsignedData(
-                age = 123,
-                replacesState = ""
-        )
-        val eventWithNoEventId = Event(senderId = A_SENDER_ID, unsignedData = unsignedDataWithNoEventId)
-        val eventWithEmptyEventId = Event(senderId = A_SENDER_ID, eventId = "", unsignedData = unsignedDataWithEmptyEventId)
-        val beaconInfoLive = MessageBeaconInfoContent(isLive = true)
-        val beaconInfoNotLive = MessageBeaconInfoContent(isLive = false)
 
-        val resultLiveNoEventId = liveLocationAggregationProcessor.handleBeaconInfo(
-                realm = fakeRealm.instance,
-                event = eventWithNoEventId,
-                content = beaconInfoLive,
-                roomId = A_ROOM_ID,
-                isLocalEcho = false
-        )
-        val resultLiveEmptyEventId = liveLocationAggregationProcessor.handleBeaconInfo(
-                realm = fakeRealm.instance,
-                event = eventWithEmptyEventId,
-                content = beaconInfoLive,
-                roomId = A_ROOM_ID,
-                isLocalEcho = false
-        )
-        val resultNotLiveNoEventId = liveLocationAggregationProcessor.handleBeaconInfo(
-                realm = fakeRealm.instance,
-                event = eventWithNoEventId,
-                content = beaconInfoNotLive,
-                roomId = A_ROOM_ID,
-                isLocalEcho = false
-        )
-        val resultNotLiveEmptyEventId = liveLocationAggregationProcessor.handleBeaconInfo(
-                realm = fakeRealm.instance,
-                event = eventWithEmptyEventId,
-                content = beaconInfoNotLive,
-                roomId = A_ROOM_ID,
-                isLocalEcho = false
-        )
+        ignoredInfoEvents.forEach {
+            val result = liveLocationAggregationProcessor.handleBeaconInfo(
+                    realm = fakeRealm.instance,
+                    event = it.event,
+                    content = it.beaconInfo,
+                    roomId = A_ROOM_ID,
+                    isLocalEcho = false
+            )
 
-        resultLiveNoEventId shouldBeEqualTo false
-        resultLiveEmptyEventId shouldBeEqualTo false
-        resultNotLiveNoEventId shouldBeEqualTo false
-        resultNotLiveEmptyEventId shouldBeEqualTo false
+            result shouldBeEqualTo false
+        }
     }
 
     @Test
@@ -271,57 +264,55 @@ internal class LiveLocationAggregationProcessorTest {
         result shouldBeEqualTo false
     }
 
+    private data class IgnoredBeaconLocationDataEvent(
+            val event: Event,
+            val beaconLocationData: MessageBeaconLocationDataContent
+    )
+
+    @Test
+    fun `given event and beacon location data when some values are missing then it is ignored`() {
+        val ignoredLocationDataEvents = listOf(
+                // missing sender id
+                IgnoredBeaconLocationDataEvent(
+                        event = Event(eventId = AN_EVENT_ID),
+                        beaconLocationData = MessageBeaconLocationDataContent()
+                ),
+                // empty sender id
+                IgnoredBeaconLocationDataEvent(
+                        event = Event(eventId = AN_EVENT_ID, senderId = ""),
+                        beaconLocationData = MessageBeaconLocationDataContent()
+                ),
+        )
+
+        ignoredLocationDataEvents.forEach {
+            val result = liveLocationAggregationProcessor.handleBeaconLocationData(
+                    realm = fakeRealm.instance,
+                    event = it.event,
+                    content = it.beaconLocationData,
+                    roomId = A_ROOM_ID,
+                    relatedEventId = "",
+                    isLocalEcho = false
+            )
+            result shouldBeEqualTo false
+        }
+    }
+
     @Test
     fun `given beacon location data when relatedEventId is null or empty then it is ignored`() {
         val event = Event(senderId = A_SENDER_ID)
         val beaconLocationData = MessageBeaconLocationDataContent()
 
-        val resultNoRelatedEventId = liveLocationAggregationProcessor.handleBeaconLocationData(
-                realm = fakeRealm.instance,
-                event = event,
-                content = beaconLocationData,
-                roomId = A_ROOM_ID,
-                relatedEventId = null,
-                isLocalEcho = false
-        )
-        val resultEmptyRelatedEventId = liveLocationAggregationProcessor.handleBeaconLocationData(
-                realm = fakeRealm.instance,
-                event = event,
-                content = beaconLocationData,
-                roomId = A_ROOM_ID,
-                relatedEventId = "",
-                isLocalEcho = false
-        )
-
-        resultNoRelatedEventId shouldBeEqualTo false
-        resultEmptyRelatedEventId shouldBeEqualTo false
-    }
-
-    @Test
-    fun `given beacon location data and event when senderId is null or empty then it is ignored`() {
-        val eventNoSenderId = Event(eventId = AN_EVENT_ID)
-        val eventEmptySenderId = Event(eventId = AN_EVENT_ID, senderId = "")
-        val beaconLocationData = MessageBeaconLocationDataContent()
-
-        val resultNoSenderId = liveLocationAggregationProcessor.handleBeaconLocationData(
-                realm = fakeRealm.instance,
-                event = eventNoSenderId,
-                content = beaconLocationData,
-                roomId = "",
-                relatedEventId = AN_EVENT_ID,
-                isLocalEcho = false
-        )
-        val resultEmptySenderId = liveLocationAggregationProcessor.handleBeaconLocationData(
-                realm = fakeRealm.instance,
-                event = eventEmptySenderId,
-                content = beaconLocationData,
-                roomId = A_ROOM_ID,
-                relatedEventId = AN_EVENT_ID,
-                isLocalEcho = false
-        )
-
-        resultNoSenderId shouldBeEqualTo false
-        resultEmptySenderId shouldBeEqualTo false
+        listOf(null, "").forEach {
+            val result = liveLocationAggregationProcessor.handleBeaconLocationData(
+                    realm = fakeRealm.instance,
+                    event = event,
+                    content = beaconLocationData,
+                    roomId = A_ROOM_ID,
+                    relatedEventId = it,
+                    isLocalEcho = false
+            )
+            result shouldBeEqualTo false
+        }
     }
 
     @Test
