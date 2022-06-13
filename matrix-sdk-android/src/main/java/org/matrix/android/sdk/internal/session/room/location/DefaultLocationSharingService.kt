@@ -29,7 +29,6 @@ import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationS
 import org.matrix.android.sdk.internal.database.query.findRunningLiveInRoom
 import org.matrix.android.sdk.internal.di.SessionDatabase
 
-// TODO add unit tests
 internal class DefaultLocationSharingService @AssistedInject constructor(
         @Assisted private val roomId: String,
         @SessionDatabase private val monarchy: Monarchy,
@@ -85,7 +84,7 @@ internal class DefaultLocationSharingService @AssistedInject constructor(
     override fun getRunningLiveLocationShareSummaries(): LiveData<List<LiveLocationShareAggregatedSummary>> {
         return monarchy.findAllMappedWithChanges(
                 { LiveLocationShareAggregatedSummaryEntity.findRunningLiveInRoom(it, roomId = roomId) },
-                { liveLocationShareAggregatedSummaryMapper.map(it) }
+                liveLocationShareAggregatedSummaryMapper
         )
     }
 }
