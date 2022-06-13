@@ -157,12 +157,14 @@ class PermalinkHandler @Inject constructor(
         return true
     }
 
-    private fun handleFallbackLink(
+    private suspend fun handleFallbackLink(
             permalinkData: PermalinkData.FallbackLink,
             context: Context
     ): Boolean {
         return if (permalinkData.isLegacyGroupLink) {
-            navigator.showGroupsUnsupportedWarning(context)
+            withContext(Dispatchers.Main) {
+                navigator.showGroupsUnsupportedWarning(context)
+            }
             true
         } else {
             false

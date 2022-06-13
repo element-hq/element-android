@@ -23,6 +23,7 @@ import android.net.Uri
 import android.os.Build
 import android.view.View
 import android.view.Window
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
@@ -34,7 +35,6 @@ import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.error.fatalError
-import im.vector.app.core.utils.toast
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.VectorFeatures.OnboardingVariant
 import im.vector.app.features.analytics.AnalyticsTracker
@@ -395,7 +395,7 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun showGroupsUnsupportedWarning(context: Context) {
-        context.toast(R.string.permalink_unsupported_groups)
+        Toast.makeText(context, context.getString(R.string.permalink_unsupported_groups), Toast.LENGTH_LONG).show()
     }
 
     override fun openRoomProfile(context: Context, roomId: String, directAccess: Int?) {

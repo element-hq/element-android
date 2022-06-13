@@ -97,9 +97,9 @@ internal class PermalinkFactory @Inject constructor(
             url.startsWith(MATRIX_TO_URL_BASE) -> url.substring(MATRIX_TO_URL_BASE.length)
             clientBaseUrl != null && url.startsWith(clientBaseUrl) -> {
                 when (PermalinkParser.parse(url)) {
-                    is PermalinkData.RoomLink  -> url.substring(clientBaseUrl.length + ROOM_PATH.length)
-                    is PermalinkData.UserLink  -> url.substring(clientBaseUrl.length + USER_PATH.length)
-                    else                       -> null
+                    is PermalinkData.RoomLink -> url.substring(clientBaseUrl.length + ROOM_PATH.length)
+                    is PermalinkData.UserLink -> url.substring(clientBaseUrl.length + USER_PATH.length)
+                    else -> null
                 }
             }
             else -> null

@@ -98,7 +98,7 @@ internal class SyncResponseHandler @Inject constructor(
             // IMPORTANT nothing should be suspend here as we are accessing the realm instance (thread local)
             measureTimeMillis {
                 Timber.v("Handle rooms")
-                reportSubtask(reporter, InitialSyncStep.ImportingAccountRoom, 1, 0.7f) {
+                reportSubtask(reporter, InitialSyncStep.ImportingAccountRoom, 1, 0.8f) {
                     if (syncResponse.rooms != null) {
                         roomSyncHandler.handle(realm, syncResponse.rooms, isInitialSync, aggregator, reporter)
                     }
