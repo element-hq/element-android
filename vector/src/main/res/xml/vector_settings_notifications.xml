@@ -53,7 +53,7 @@
 
         <im.vector.app.core.preference.VectorPreference
             android:dependency="SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
-            android:key="SETTINGS_UNIFIED_PUSH_RE_REGISTER_KEY"
+            android:key="SETTINGS_NOTIFICATION_METHOD_KEY"
             android:persistent="false"
             android:title="@string/settings_notification_method" />
 

@@ -103,7 +103,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
                 if (isChecked) {
                     unifiedPushHelper.register(requireActivity()) {
                         // Update the summary
-                        findPreference<VectorPreference>(VectorPreferences.SETTINGS_UNIFIED_PUSH_RE_REGISTER_KEY)
+                        findPreference<VectorPreference>(VectorPreferences.SETTINGS_NOTIFICATION_METHOD_KEY)
                                 ?.summary = unifiedPushHelper.getCurrentDistributorName()
                     }
                 } else {
@@ -151,7 +151,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
             }
         }
 
-        findPreference<VectorPreference>(VectorPreferences.SETTINGS_UNIFIED_PUSH_RE_REGISTER_KEY)?.let {
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_NOTIFICATION_METHOD_KEY)?.let {
             if (vectorFeatures.allowExternalUnifiedPushDistributors()) {
                 it.summary = unifiedPushHelper.getCurrentDistributorName()
                 it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
