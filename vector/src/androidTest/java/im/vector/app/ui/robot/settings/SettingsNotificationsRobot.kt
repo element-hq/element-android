@@ -42,6 +42,8 @@ class SettingsNotificationsRobot {
         pressBack()
          */
         clickOnPreference(R.string.settings_notification_troubleshoot)
+        // Give time for the tests to perform
+        Thread.sleep(12_000)
         pressBack()
     }
 }
