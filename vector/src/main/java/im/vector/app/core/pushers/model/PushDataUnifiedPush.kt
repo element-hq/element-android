@@ -29,7 +29,7 @@ import com.squareup.moshi.JsonClass
  *         "counts":{
  *             "unread":1
  *         },
- *         "prio":"high",
+ *         "prio":"high"
  *     }
  * }
  * </pre>
@@ -37,23 +37,27 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class PushDataUnifiedPush(
-        @Json(name = "notification") val notification: PushDataUnifiedPushNotification = PushDataUnifiedPushNotification()
+        @Json(name = "notification") val notification: PushDataUnifiedPushNotification
 )
 
 @JsonClass(generateAdapter = true)
 data class PushDataUnifiedPushNotification(
-        @Json(name = "event_id") val eventId: String = "",
-        @Json(name = "room_id") val roomId: String = "",
-        @Json(name = "counts") var counts: PushDataUnifiedPushCounts = PushDataUnifiedPushCounts(),
+        @Json(name = "event_id") val eventId: String,
+        @Json(name = "room_id") val roomId: String,
+        @Json(name = "counts") var counts: PushDataUnifiedPushCounts,
 )
 
 @JsonClass(generateAdapter = true)
 data class PushDataUnifiedPushCounts(
-        @Json(name = "unread") val unread: Int = 0
+        @Json(name = "unread") val unread: Int
 )
 
-fun PushDataUnifiedPush.toPushData() = PushData(
-        eventId = notification.eventId,
-        roomId = notification.roomId,
-        unread = notification.counts.unread
-)
+fun PushDataUnifiedPush.toPushData(): PushData? {
+    if (notification.eventId.isEmpty()) return null
+    if (notification.roomId.isEmpty()) return null
+    return PushData(
+            eventId = notification.eventId,
+            roomId = notification.roomId,
+            unread = notification.counts.unread
+    )
+}

@@ -26,20 +26,24 @@ import com.squareup.moshi.JsonClass
  *     "event_id":"$anEventId",
  *     "room_id":"!aRoomId",
  *     "unread":"1",
- *     "prio":"high",
+ *     "prio":"high"
  * }
  * </pre>
  * .
  */
 @JsonClass(generateAdapter = true)
 data class PushDataFcm(
-        @Json(name = "event_id") val eventId: String = "",
-        @Json(name = "room_id") val roomId: String = "",
-        @Json(name = "unread") var unread: Int = 0,
+        @Json(name = "event_id") val eventId: String,
+        @Json(name = "room_id") val roomId: String,
+        @Json(name = "unread") var unread: Int,
 )
 
-fun PushDataFcm.toPushData() = PushData(
-        eventId = eventId,
-        roomId = roomId,
-        unread = unread
-)
+fun PushDataFcm.toPushData(): PushData? {
+    if (eventId.isEmpty()) return null
+    if (roomId.isEmpty()) return null
+    return PushData(
+            eventId = eventId,
+            roomId = roomId,
+            unread = unread
+    )
+}

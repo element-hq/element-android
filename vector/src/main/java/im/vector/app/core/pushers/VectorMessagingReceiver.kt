@@ -29,9 +29,6 @@ import im.vector.app.BuildConfig
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.network.WifiDetector
 import im.vector.app.core.pushers.model.PushData
-import im.vector.app.core.pushers.model.PushDataFcm
-import im.vector.app.core.pushers.model.PushDataUnifiedPush
-import im.vector.app.core.pushers.model.toPushData
 import im.vector.app.core.services.GuardServiceStarter
 import im.vector.app.features.notifications.NotifiableEventResolver
 import im.vector.app.features.notifications.NotificationDrawerManager
@@ -48,7 +45,6 @@ import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.getTimelineEvent
-import org.matrix.android.sdk.api.util.MatrixJsonParser
 import org.unifiedpush.android.connector.MessagingReceiver
 import timber.log.Timber
 import javax.inject.Inject
@@ -70,6 +66,7 @@ class VectorMessagingReceiver : MessagingReceiver() {
     @Inject lateinit var guardServiceStarter: GuardServiceStarter
     @Inject lateinit var unifiedPushHelper: UnifiedPushHelper
     @Inject lateinit var unifiedPushStore: UnifiedPushStore
+    @Inject lateinit var pushParser: PushParser
 
     private val coroutineScope = CoroutineScope(SupervisorJob())
 
@@ -88,11 +85,17 @@ class VectorMessagingReceiver : MessagingReceiver() {
     override fun onMessage(context: Context, message: ByteArray, instance: String) {
         Timber.tag(loggerTag.value).d("## onMessage() received")
 
+        val sMessage = String(message)
+        if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
+            Timber.tag(loggerTag.value).d("## onMessage() $sMessage")
+        }
+
         runBlocking {
             vectorDataStore.incrementPushCounter()
         }
 
-        val pushData = parseData(message) ?: return Unit.also { Timber.tag(loggerTag.value).w("Invalid received data Json format") }
+        val pushData = pushParser.parseData(sMessage, unifiedPushHelper.isEmbeddedDistributor())
+                ?: return Unit.also { Timber.tag(loggerTag.value).w("Invalid received data Json format") }
 
         // Diagnostic Push
         if (pushData.eventId == PushersManager.TEST_EVENT_ID) {
@@ -113,35 +116,6 @@ class VectorMessagingReceiver : MessagingReceiver() {
             } else {
                 onMessageReceivedInternal(pushData)
             }
-        }
-    }
-
-    /**
-     * Parse the received data from Push. Json format are different depending on the source.
-     *
-     * Notifications received by FCM are formatted by the matrix gateway [1]. The data send to FCM is the content
-     * of the "notification" attribute of the json sent to the gateway [2][3].
-     * On the other side, with UnifiedPush, the content of the message received is the content posted to the push
-     * gateway endpoint [3].
-     *
-     * *Note*: If we want to get the same content with FCM and unifiedpush, we can do a new sygnal pusher [4].
-     *
-     * [1] https://github.com/matrix-org/sygnal/blob/main/sygnal/gcmpushkin.py
-     * [2] https://github.com/matrix-org/sygnal/blob/main/sygnal/gcmpushkin.py#L366
-     * [3] https://spec.matrix.org/latest/push-gateway-api/
-     * [4] https://github.com/p1gp1g/sygnal/blob/unifiedpush/sygnal/upfcmpushkin.py (Not tested for a while)
-     */
-    private fun parseData(message: ByteArray): PushData? {
-        val sMessage = String(message)
-        if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
-            Timber.tag(loggerTag.value).d("## onMessage() $sMessage")
-        }
-
-        val moshi = MatrixJsonParser.getMoshi()
-        return if (unifiedPushHelper.isEmbeddedDistributor()) {
-            moshi.adapter(PushDataFcm::class.java).fromJson(sMessage)?.toPushData()
-        } else {
-            moshi.adapter(PushDataUnifiedPush::class.java).fromJson(sMessage)?.toPushData()
         }
     }
 

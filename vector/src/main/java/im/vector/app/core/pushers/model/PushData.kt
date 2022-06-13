@@ -19,5 +19,5 @@ package im.vector.app.core.pushers.model
 data class PushData(
         val eventId: String,
         val roomId: String,
-        var unread: Int,
+        val unread: Int,
 )
