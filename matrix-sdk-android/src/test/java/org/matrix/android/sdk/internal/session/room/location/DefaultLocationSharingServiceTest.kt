@@ -36,6 +36,7 @@ import org.matrix.android.sdk.test.fakes.givenIsNotEmpty
 import org.matrix.android.sdk.test.fakes.givenIsNotNull
 
 private const val A_ROOM_ID = "room_id"
+private const val AN_EVENT_ID = "event_id"
 private const val A_LATITUDE = 1.4
 private const val A_LONGITUDE = 40.0
 private const val AN_UNCERTAINTY = 5.0
@@ -91,7 +92,26 @@ internal class DefaultLocationSharingServiceTest {
     }
 
     @Test
-    fun `live location can be sent`() {
+    fun `live location can be sent`() = runTest {
+        val cancelable = mockk<Cancelable>()
+        coEvery { sendLiveLocationTask.execute(any()) } returns cancelable
+
+        val result = defaultLocationSharingService.sendLiveLocation(
+                beaconInfoEventId = AN_EVENT_ID,
+                latitude = A_LATITUDE,
+                longitude = A_LONGITUDE,
+                uncertainty = AN_UNCERTAINTY
+        )
+
+        result shouldBeEqualTo cancelable
+        val expectedParams = SendLiveLocationTask.Params(
+                roomId = A_ROOM_ID,
+                beaconInfoEventId = AN_EVENT_ID,
+                latitude = A_LATITUDE,
+                longitude = A_LONGITUDE,
+                uncertainty = AN_UNCERTAINTY
+        )
+        coVerify { sendLiveLocationTask.execute(expectedParams) }
     }
 
     @Test
