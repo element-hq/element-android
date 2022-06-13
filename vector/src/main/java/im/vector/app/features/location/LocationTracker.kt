@@ -122,7 +122,9 @@ class LocationTracker @Inject constructor(
     fun stop() {
         Timber.d("stop()")
         locationManager?.removeUpdates(this)
-        callbacks.clear()
+        synchronized(this) {
+            callbacks.clear()
+        }
         debouncer.cancelAll()
         hasLocationFromGPSProvider = false
         hasLocationFromFusedProvider = false
@@ -136,12 +138,14 @@ class LocationTracker @Inject constructor(
         lastLocation?.let { locationData -> onLocationUpdate(locationData) }
     }
 
+    @Synchronized
     fun addCallback(callback: Callback) {
         if (!callbacks.contains(callback)) {
             callbacks.add(callback)
         }
     }
 
+    @Synchronized
     fun removeCallback(callback: Callback) {
         callbacks.remove(callback)
         if (callbacks.size == 0) {
@@ -211,6 +215,7 @@ class LocationTracker @Inject constructor(
                 }
     }
 
+    @Synchronized
     private fun onNoLocationProviderAvailable() {
         callbacks.forEach {
             try {
@@ -221,6 +226,7 @@ class LocationTracker @Inject constructor(
         }
     }
 
+    @Synchronized
     private fun onLocationUpdate(locationData: LocationData) {
         callbacks.forEach {
             try {
