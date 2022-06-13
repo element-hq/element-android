@@ -25,6 +25,7 @@ import im.vector.app.features.poll.create.CreatePollViewStates.fakeQuestion
 import im.vector.app.features.poll.create.CreatePollViewStates.initialCreatePollViewState
 import im.vector.app.features.poll.create.CreatePollViewStates.pollViewStateWithOnlyQuestion
 import im.vector.app.features.poll.create.CreatePollViewStates.pollViewStateWithQuestionAndNotEnoughOptions
+import im.vector.app.features.poll.create.CreatePollViewStates.pollViewStateWithoutQuestionAndEnoughOptions
 import im.vector.app.test.fakes.FakeSession
 import im.vector.app.test.test
 import org.junit.Rule
@@ -77,6 +78,19 @@ class CreatePollViewModelTest {
         createPollViewModel
                 .test()
                 .assertState(pollViewStateWithQuestionAndNotEnoughOptions)
+                .finish()
+    }
+
+    @Test
+    fun `given there is not a question when enough options are added then poll cannot be created and options can be added`() {
+        val createPollViewModel = createPollViewModel(PollMode.CREATE)
+        repeat(CreatePollViewModel.MIN_OPTIONS_COUNT) {
+            createPollViewModel.handle(CreatePollAction.OnOptionChanged(it, fakeOptions[it]))
+        }
+
+        createPollViewModel
+                .test()
+                .assertState(pollViewStateWithoutQuestionAndEnoughOptions)
                 .finish()
     }
 }
