@@ -37,7 +37,7 @@ internal class DefaultStoreSessionsDataTask @Inject constructor(
 ) : StoreSessionsDataTask {
 
     override suspend fun execute(params: StoreSessionsDataTask.Params): BackupKeysResult {
-        return executeRequest(globalErrorReceiver) {
+        return executeRequest(globalErrorReceiver, canRetry = true) {
             roomKeysApi.storeSessionsData(
                     params.version,
                     params.keysBackupData

@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.crypto.tasks
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.api.CryptoApi
 import org.matrix.android.sdk.internal.crypto.model.rest.SendToDeviceBody
+import org.matrix.android.sdk.internal.network.DEFAULT_REQUEST_RETRY_COUNT
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
@@ -32,7 +33,9 @@ internal interface SendToDeviceTask : Task<SendToDeviceTask.Params, Unit> {
             // the content to send. Map from user_id to device_id to content dictionary.
             val contentMap: MXUsersDevicesMap<Any>,
             // the transactionId. If not provided, a transactionId will be created by the task
-            val transactionId: String? = null
+            val transactionId: String? = null,
+            // Number of retry before failing
+            val retryCount: Int = DEFAULT_REQUEST_RETRY_COUNT
     )
 }
 
@@ -54,7 +57,7 @@ internal class DefaultSendToDeviceTask @Inject constructor(
         return executeRequest(
                 globalErrorReceiver,
                 canRetry = true,
-                maxRetriesCount = 3
+                maxRetriesCount = params.retryCount
         ) {
             cryptoApi.sendToDevice(
                     eventType = params.eventType,

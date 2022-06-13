@@ -37,13 +37,12 @@ internal class DefaultToDeviceService @Inject constructor(
     }
 
     override suspend fun sendToDevice(eventType: String, contentMap: MXUsersDevicesMap<Any>, txnId: String?) {
-        sendToDeviceTask.executeRetry(
+        sendToDeviceTask.execute(
                 SendToDeviceTask.Params(
                         eventType = eventType,
                         contentMap = contentMap,
                         transactionId = txnId
-                ),
-                3
+                )
         )
     }
 
