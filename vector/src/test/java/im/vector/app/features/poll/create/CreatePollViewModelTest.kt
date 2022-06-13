@@ -17,6 +17,7 @@
 package im.vector.app.features.poll.create
 
 import com.airbnb.mvrx.test.MvRxTestRule
+import im.vector.app.features.login.SignMode
 import im.vector.app.features.poll.PollMode
 import im.vector.app.features.poll.create.CreatePollViewStates.createPollArgs
 import im.vector.app.features.poll.create.CreatePollViewStates.editPollArgs
@@ -24,13 +25,14 @@ import im.vector.app.features.poll.create.CreatePollViewStates.fakeOptions
 import im.vector.app.features.poll.create.CreatePollViewStates.fakeQuestion
 import im.vector.app.features.poll.create.CreatePollViewStates.initialCreatePollViewState
 import im.vector.app.features.poll.create.CreatePollViewStates.pollViewStateWithOnlyQuestion
+import im.vector.app.features.poll.create.CreatePollViewStates.pollViewStateWithQuestionAndEnoughOptions
 import im.vector.app.features.poll.create.CreatePollViewStates.pollViewStateWithQuestionAndNotEnoughOptions
 import im.vector.app.features.poll.create.CreatePollViewStates.pollViewStateWithoutQuestionAndEnoughOptions
 import im.vector.app.test.fakes.FakeSession
 import im.vector.app.test.test
+import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
-import kotlin.random.Random
 
 class CreatePollViewModelTest {
 
@@ -48,7 +50,7 @@ class CreatePollViewModelTest {
     }
 
     @Test
-    fun `given the view model is initialized then poll cannot be created and options can be added`() {
+    fun `given the view model is initialized then poll cannot be created and more options can be added`() = runTest {
         val createPollViewModel = createPollViewModel(PollMode.CREATE)
         createPollViewModel
                 .test()
@@ -57,7 +59,7 @@ class CreatePollViewModelTest {
     }
 
     @Test
-    fun `given there is not any options when the question is added then poll cannot be created and options can be added`() {
+    fun `given there is not any options when the question is added then poll cannot be created and more options can be added`() = runTest {
         val createPollViewModel = createPollViewModel(PollMode.CREATE)
         createPollViewModel.handle(CreatePollAction.OnQuestionChanged(fakeQuestion))
 
@@ -68,7 +70,7 @@ class CreatePollViewModelTest {
     }
 
     @Test
-    fun `given there is not enough options when the question is added then poll cannot be created and options can be added`() {
+    fun `given there is not enough options when the question is added then poll cannot be created and more options can be added`() = runTest {
         val createPollViewModel = createPollViewModel(PollMode.CREATE)
         createPollViewModel.handle(CreatePollAction.OnQuestionChanged(fakeQuestion))
         repeat(CreatePollViewModel.MIN_OPTIONS_COUNT - 1) {
@@ -82,7 +84,7 @@ class CreatePollViewModelTest {
     }
 
     @Test
-    fun `given there is not a question when enough options are added then poll cannot be created and options can be added`() {
+    fun `given there is not a question when enough options are added then poll cannot be created and more options can be added`() = runTest {
         val createPollViewModel = createPollViewModel(PollMode.CREATE)
         repeat(CreatePollViewModel.MIN_OPTIONS_COUNT) {
             createPollViewModel.handle(CreatePollAction.OnOptionChanged(it, fakeOptions[it]))
@@ -91,6 +93,20 @@ class CreatePollViewModelTest {
         createPollViewModel
                 .test()
                 .assertState(pollViewStateWithoutQuestionAndEnoughOptions)
+                .finish()
+    }
+
+    @Test
+    fun `given there is a question when enough options are added then poll can be created and more options can be added`() = runTest {
+        val createPollViewModel = createPollViewModel(PollMode.CREATE)
+        createPollViewModel.handle(CreatePollAction.OnQuestionChanged(fakeQuestion))
+        repeat(CreatePollViewModel.MIN_OPTIONS_COUNT) {
+            createPollViewModel.handle(CreatePollAction.OnOptionChanged(it, fakeOptions[it]))
+        }
+
+        createPollViewModel
+                .test()
+                .assertState(pollViewStateWithQuestionAndEnoughOptions)
                 .finish()
     }
 }
