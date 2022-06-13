@@ -31,8 +31,7 @@ import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.slot
-import io.mockk.unmockkConstructor
-import io.mockk.unmockkStatic
+import io.mockk.unmockkAll
 import io.mockk.verify
 import io.mockk.verifyOrder
 import org.amshove.kluent.shouldBeEqualTo
@@ -47,8 +46,15 @@ private const val AN_ACCURACY = 5.0f
 class LocationTrackerTest {
 
     private val fakeHandler = FakeHandler()
+    private val fakeLocationManager = FakeLocationManager()
+    private val fakeContext = FakeContext().also {
+        it.givenService(Context.LOCATION_SERVICE, android.location.LocationManager::class.java, fakeLocationManager.instance)
+    }
 
-    init {
+    private lateinit var locationTracker: LocationTracker
+
+    @Before
+    fun setUp() {
         mockkConstructor(Debouncer::class)
         every { anyConstructed<Debouncer>().cancelAll() } just runs
         val runnable = slot<Runnable>()
@@ -58,24 +64,13 @@ class LocationTrackerTest {
         }
         mockkStatic("im.vector.app.core.utils.HandlerKt")
         every { createBackgroundHandler(any()) } returns fakeHandler.instance
-    }
-
-    private val fakeLocationManager = FakeLocationManager()
-    private val fakeContext = FakeContext().also {
-        it.givenService(Context.LOCATION_SERVICE, android.location.LocationManager::class.java, fakeLocationManager.instance)
-    }
-
-    private val locationTracker = LocationTracker(fakeContext.instance)
-
-    @Before
-    fun setUp() {
+        locationTracker = LocationTracker(fakeContext.instance)
         fakeLocationManager.givenRemoveUpdates(locationTracker)
     }
 
     @After
     fun tearDown() {
-        unmockkStatic("im.vector.app.core.utils.HandlerKt")
-        unmockkConstructor(Debouncer::class)
+        unmockkAll()
     }
 
     @Test
