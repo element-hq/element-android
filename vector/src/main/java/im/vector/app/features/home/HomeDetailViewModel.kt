@@ -289,7 +289,7 @@ class HomeDetailViewModel @AssistedInject constructor(
                 .launchIn(viewModelScope)
     }
 
-    private fun RoomGroupingMethod.BySpace.toActiveSpaceOrOrphanRooms(): SpaceFilter? {
-        return spaceSummary?.roomId?.toActiveSpaceOrOrphanRooms()
+    private fun RoomGroupingMethod.BySpace.toActiveSpaceOrOrphanRooms(): SpaceFilter {
+        return spaceSummary?.roomId.toActiveSpaceOrOrphanRooms()
     }
 }

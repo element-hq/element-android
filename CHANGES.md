@@ -1,3 +1,12 @@
+Changes in Element 1.4.20 (2022-06-13)
+======================================
+
+Bugfixes 🐛
+----------
+ - Fix: All rooms are shown in Home regardless of the switch state. ([#6272](https://github.com/vector-im/element-android/issues/6272))
+ - Fix regression on EventInsertLiveObserver getting blocked so there is no event being processed anymore. ([#6278](https://github.com/vector-im/element-android/issues/6278))
+
+
 Changes in Element 1.4.19 (2022-06-07)
 ======================================
 
