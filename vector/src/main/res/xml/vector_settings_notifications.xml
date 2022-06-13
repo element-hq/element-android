@@ -55,7 +55,7 @@
             android:dependency="SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
             android:key="SETTINGS_UNIFIED_PUSH_RE_REGISTER_KEY"
             android:persistent="false"
-            android:title="@string/settings_unifiedpush_reregister" />
+            android:title="@string/settings_notification_method" />
 
         <!-- For API < 26 -->
         <im.vector.app.core.preference.VectorPreference

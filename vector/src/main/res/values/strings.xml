@@ -3073,7 +3073,7 @@
     <string name="unifiedpush_getdistributors_dialog_title">Choose how to receive notifications</string>
     <string name="unifiedpush_distributor_fcm_fallback">Google Services</string>
     <string name="unifiedpush_distributor_background_sync">Background synchronization</string>
-    <string name="settings_unifiedpush_reregister">Notification method</string>
+    <string name="settings_notification_method">Notification method</string>
     <string name="settings_troubleshoot_test_distributors_title">Available methods</string>
     <string name="settings_troubleshoot_test_distributors_gplay">No other method than Google Play Service found.</string>
     <string name="settings_troubleshoot_test_distributors_fdroid">No other method than background synchronization found.</string>
