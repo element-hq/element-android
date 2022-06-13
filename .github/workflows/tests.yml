@@ -28,7 +28,7 @@ jobs:
           distribution: 'adopt'
           java-version: '11'
       - uses: gradle/gradle-build-action@v2
-      - uses: actions/setup-python@v3
+      - uses: actions/setup-python@v4
         with:
           python-version: 3.8
       - uses: michaelkaye/setup-matrix-synapse@v1.0.3
