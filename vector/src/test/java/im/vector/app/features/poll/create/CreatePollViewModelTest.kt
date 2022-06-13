@@ -54,4 +54,29 @@ class CreatePollViewModelTest {
                 .assertState(initialCreatePollViewState)
                 .finish()
     }
+
+    @Test
+    fun `given there is not any options when the question is added then poll cannot be created and options can be added`() {
+        val createPollViewModel = createPollViewModel(PollMode.CREATE)
+        createPollViewModel.handle(CreatePollAction.OnQuestionChanged(fakeQuestion))
+
+        createPollViewModel
+                .test()
+                .assertState(pollViewStateWithOnlyQuestion)
+                .finish()
+    }
+
+    @Test
+    fun `given there is not enough options when the question is added then poll cannot be created and options can be added`() {
+        val createPollViewModel = createPollViewModel(PollMode.CREATE)
+        createPollViewModel.handle(CreatePollAction.OnQuestionChanged(fakeQuestion))
+        repeat(CreatePollViewModel.MIN_OPTIONS_COUNT - 1) {
+            createPollViewModel.handle(CreatePollAction.OnOptionChanged(it, fakeOptions[it]))
+        }
+
+        createPollViewModel
+                .test()
+                .assertState(pollViewStateWithQuestionAndNotEnoughOptions)
+                .finish()
+    }
 }
