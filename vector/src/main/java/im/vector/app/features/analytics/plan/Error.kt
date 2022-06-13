@@ -35,6 +35,7 @@ data class Error(
 
     enum class Domain {
         E2EE,
+        TO_DEVICE,
         VOIP,
     }
 
@@ -42,6 +43,7 @@ data class Error(
         OlmIndexError,
         OlmKeysNotSentError,
         OlmUnspecifiedError,
+        ToDeviceFailedToDecrypt,
         UnknownError,
         VoipIceFailed,
         VoipIceTimeout,
