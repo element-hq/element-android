@@ -31,7 +31,9 @@ object Config {
      * - For Gplay variant it means that only FCM will be used;
      * - For F-Droid variant, it means that only background polling will be available to the user.
      *
-     * *Note*: Changing the value from `true` to `false` when the app is already installed on users' phone may have unexpected behavior.
+     * *Note*: When the app is already installed on users' phone:
+     * - Changing the value from `false` to `true` will let the user be able to select an external UnifiedPush distributor;
+     * - Changing the value from `true` to `false` will force the app to return to the background sync / Firebase Push.
      */
     const val ALLOW_EXTERNAL_UNIFIED_PUSH_DISTRIBUTORS = true
 }
