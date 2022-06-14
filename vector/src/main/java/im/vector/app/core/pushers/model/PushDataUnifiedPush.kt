@@ -18,6 +18,7 @@ package im.vector.app.core.pushers.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import org.matrix.android.sdk.api.extensions.ensureNotEmpty
 
 /**
  * In this case, the format is:
@@ -37,27 +38,23 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class PushDataUnifiedPush(
-        @Json(name = "notification") val notification: PushDataUnifiedPushNotification
+        @Json(name = "notification") val notification: PushDataUnifiedPushNotification?
 )
 
 @JsonClass(generateAdapter = true)
 data class PushDataUnifiedPushNotification(
-        @Json(name = "event_id") val eventId: String,
-        @Json(name = "room_id") val roomId: String,
-        @Json(name = "counts") var counts: PushDataUnifiedPushCounts,
+        @Json(name = "event_id") val eventId: String?,
+        @Json(name = "room_id") val roomId: String?,
+        @Json(name = "counts") var counts: PushDataUnifiedPushCounts?,
 )
 
 @JsonClass(generateAdapter = true)
 data class PushDataUnifiedPushCounts(
-        @Json(name = "unread") val unread: Int
+        @Json(name = "unread") val unread: Int?
 )
 
-fun PushDataUnifiedPush.toPushData(): PushData? {
-    if (notification.eventId.isEmpty()) return null
-    if (notification.roomId.isEmpty()) return null
-    return PushData(
-            eventId = notification.eventId,
-            roomId = notification.roomId,
-            unread = notification.counts.unread
-    )
-}
+fun PushDataUnifiedPush.toPushData() = PushData(
+        eventId = notification?.eventId?.ensureNotEmpty(),
+        roomId = notification?.roomId?.ensureNotEmpty(),
+        unread = notification?.counts?.unread
+)

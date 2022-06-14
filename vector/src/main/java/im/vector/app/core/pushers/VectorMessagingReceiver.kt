@@ -187,12 +187,12 @@ class VectorMessagingReceiver : MessagingReceiver() {
             if (session == null) {
                 Timber.tag(loggerTag.value).w("## Can't sync from push, no current session")
             } else {
-                if (isEventAlreadyKnown(pushData.eventId, pushData.roomId)) {
+                if (isEventAlreadyKnown(pushData)) {
                     Timber.tag(loggerTag.value).d("Ignoring push, event already known")
                 } else {
                     // Try to get the Event content faster
                     Timber.tag(loggerTag.value).d("Requesting event in fast lane")
-                    getEventFastLane(session, pushData.roomId, pushData.eventId)
+                    getEventFastLane(session, pushData)
 
                     Timber.tag(loggerTag.value).d("Requesting background sync")
                     session.syncService().requireBackgroundSync()
@@ -203,12 +203,12 @@ class VectorMessagingReceiver : MessagingReceiver() {
         }
     }
 
-    private fun getEventFastLane(session: Session, roomId: String?, eventId: String?) {
-        roomId?.takeIf { it.isNotEmpty() } ?: return
-        eventId?.takeIf { it.isNotEmpty() } ?: return
+    private fun getEventFastLane(session: Session, pushData: PushData) {
+        pushData.roomId ?: return
+        pushData.eventId ?: return
 
         // If the room is currently displayed, we will not show a notification, so no need to get the Event faster
-        if (notificationDrawerManager.shouldIgnoreMessageEventInRoom(roomId)) {
+        if (notificationDrawerManager.shouldIgnoreMessageEventInRoom(pushData.roomId)) {
             return
         }
 
@@ -219,7 +219,7 @@ class VectorMessagingReceiver : MessagingReceiver() {
 
         coroutineScope.launch {
             Timber.tag(loggerTag.value).d("Fast lane: start request")
-            val event = tryOrNull { session.eventService().getEvent(roomId, eventId) } ?: return@launch
+            val event = tryOrNull { session.eventService().getEvent(pushData.roomId, pushData.eventId) } ?: return@launch
 
             val resolvedEvent = notifiableEventResolver.resolveInMemoryEvent(session, event, canBeReplaced = true)
 
@@ -233,12 +233,12 @@ class VectorMessagingReceiver : MessagingReceiver() {
 
     // check if the event was not yet received
     // a previous catchup might have already retrieved the notified event
-    private fun isEventAlreadyKnown(eventId: String?, roomId: String?): Boolean {
-        if (null != eventId && null != roomId) {
+    private fun isEventAlreadyKnown(pushData: PushData): Boolean {
+        if (pushData.eventId != null && pushData.roomId != null) {
             try {
                 val session = activeSessionHolder.getSafeActiveSession() ?: return false
-                val room = session.getRoom(roomId) ?: return false
-                return room.getTimelineEvent(eventId) != null
+                val room = session.getRoom(pushData.roomId) ?: return false
+                return room.getTimelineEvent(pushData.eventId) != null
             } catch (e: Exception) {
                 Timber.tag(loggerTag.value).e(e, "## isEventAlreadyKnown() : failed to check if the event was already defined")
             }

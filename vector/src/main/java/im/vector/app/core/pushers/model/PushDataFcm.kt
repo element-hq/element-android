@@ -18,6 +18,7 @@ package im.vector.app.core.pushers.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import org.matrix.android.sdk.api.MatrixPatterns
 
 /**
  * In this case, the format is:
@@ -33,17 +34,13 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class PushDataFcm(
-        @Json(name = "event_id") val eventId: String,
-        @Json(name = "room_id") val roomId: String,
-        @Json(name = "unread") var unread: Int,
+        @Json(name = "event_id") val eventId: String?,
+        @Json(name = "room_id") val roomId: String?,
+        @Json(name = "unread") var unread: Int?,
 )
 
-fun PushDataFcm.toPushData(): PushData? {
-    if (eventId.isEmpty()) return null
-    if (roomId.isEmpty()) return null
-    return PushData(
-            eventId = eventId,
-            roomId = roomId,
-            unread = unread
-    )
-}
+fun PushDataFcm.toPushData() = PushData(
+        eventId = eventId?.takeIf { MatrixPatterns.isEventId(it) },
+        roomId = roomId?.takeIf { MatrixPatterns.isRoomId(it) },
+        unread = unread
+)
