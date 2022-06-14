@@ -16,9 +16,68 @@
 
 package org.matrix.android.sdk.internal.session.room.location
 
+import io.mockk.unmockkAll
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
+import org.amshove.kluent.shouldBeEqualTo
+import org.junit.After
+import org.junit.Test
+import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.toContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
+import org.matrix.android.sdk.internal.session.room.state.SendStateTask
+import org.matrix.android.sdk.test.fakes.FakeClock
+import org.matrix.android.sdk.test.fakes.FakeSendStateTask
+
 private const val A_USER_ID = "user-id"
+private const val A_ROOM_ID = "room-id"
+private const val AN_EVENT_ID = "event-id"
+private const val A_TIMEOUT = 15_000L
+private const val AN_EPOCH = 1655210176L
 
-class DefaultStartLiveLocationShareTaskTest {
+@ExperimentalCoroutinesApi
+internal class DefaultStartLiveLocationShareTaskTest {
 
-    private val fakeClock = FakeClock
+    private val fakeClock = FakeClock()
+    private val fakeSendStateTask = FakeSendStateTask()
+
+    private val defaultStartLiveLocationShareTask = DefaultStartLiveLocationShareTask(
+            userId = A_USER_ID,
+            clock = fakeClock,
+            sendStateTask = fakeSendStateTask
+    )
+
+    @After
+    fun tearDown() {
+        unmockkAll()
+    }
+
+    @Test
+    fun `given parameters when calling the task then it is correctly executed`() = runTest {
+        val params = StartLiveLocationShareTask.Params(
+                roomId = A_ROOM_ID,
+                timeoutMillis = A_TIMEOUT
+        )
+        fakeClock.givenEpoch(AN_EPOCH)
+        fakeSendStateTask.givenExecuteRetryReturns(AN_EVENT_ID)
+
+        val result = defaultStartLiveLocationShareTask.execute(params)
+
+        result shouldBeEqualTo AN_EVENT_ID
+        val expectedBeaconContent = MessageBeaconInfoContent(
+                timeout = params.timeoutMillis,
+                isLive = true,
+                unstableTimestampMillis = AN_EPOCH
+        ).toContent()
+        val expectedParams = SendStateTask.Params(
+                roomId = params.roomId,
+                stateKey = A_USER_ID,
+                eventType = EventType.STATE_ROOM_BEACON_INFO.first(),
+                body = expectedBeaconContent
+        )
+        fakeSendStateTask.verifyExecuteRetry(
+                params = expectedParams,
+                remainingRetry = 3
+        )
+    }
 }
