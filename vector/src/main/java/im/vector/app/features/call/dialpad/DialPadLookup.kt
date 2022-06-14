@@ -22,8 +22,8 @@ import im.vector.app.features.call.vectorCallService
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.createdirect.DirectRoomHelper
 import org.matrix.android.sdk.api.session.Session
-import javax.inject.Inject
 import timber.log.Timber
+import javax.inject.Inject
 
 class DialPadLookup @Inject constructor(
         private val session: Session,
