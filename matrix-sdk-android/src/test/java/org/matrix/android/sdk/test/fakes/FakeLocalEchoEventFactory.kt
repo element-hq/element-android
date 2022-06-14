@@ -46,6 +46,24 @@ internal class FakeLocalEchoEventFactory {
         return event
     }
 
+    fun givenCreateLiveLocationEvent(withLocalEcho: Boolean): Event {
+        val event = Event()
+        every {
+            instance.createLiveLocationEvent(
+                    beaconInfoEventId = any(),
+                    roomId = any(),
+                    latitude = any(),
+                    longitude = any(),
+                    uncertainty = any()
+            )
+        } returns event
+
+        if (withLocalEcho) {
+            every { instance.createLocalEcho(event) } just runs
+        }
+        return event
+    }
+
     fun verifyCreateLocationEvent(
             roomId: String,
             latitude: Double,
@@ -60,6 +78,24 @@ internal class FakeLocalEchoEventFactory {
                     longitude = longitude,
                     uncertainty = uncertainty,
                     isUserLocation = isUserLocation
+            )
+        }
+    }
+
+    fun verifyCreateLiveLocationEvent(
+            roomId: String,
+            beaconInfoEventId: String,
+            latitude: Double,
+            longitude: Double,
+            uncertainty: Double?
+    ) {
+        verify {
+            instance.createLiveLocationEvent(
+                    roomId = roomId,
+                    beaconInfoEventId = beaconInfoEventId,
+                    latitude = latitude,
+                    longitude = longitude,
+                    uncertainty = uncertainty
             )
         }
     }

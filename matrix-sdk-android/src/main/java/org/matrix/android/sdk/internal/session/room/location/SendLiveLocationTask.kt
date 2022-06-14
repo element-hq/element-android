@@ -32,7 +32,6 @@ internal interface SendLiveLocationTask : Task<SendLiveLocationTask.Params, Canc
     )
 }
 
-// TODO add unit tests
 internal class DefaultSendLiveLocationTask @Inject constructor(
         private val localEchoEventFactory: LocalEchoEventFactory,
         private val eventSenderProcessor: EventSenderProcessor,
