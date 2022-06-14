@@ -984,9 +984,7 @@
     <string name="login_signup_submit">Dalej</string>
     <string name="login_signup_error_user_in_use">Nazwa użytkownika zajęta</string>
     <string name="login_signup_cancel_confirmation_title">Ostrzeżenie</string>
-    <string name="login_signup_cancel_confirmation_content">Twoje konto wciąż nie zostalo utworzone.
-\n
-\nZatrzymać proces rejestracji\?</string>
+    <string name="login_signup_cancel_confirmation_content">Twoje konto wciąż nie zostalo utworzone. Zatrzymać proces rejestracji\?</string>
     <string name="login_a11y_choose_matrix_org">Wybierz matrix.org</string>
     <string name="login_a11y_choose_modular">Wybierz Element Matrix Services</string>
     <string name="login_a11y_choose_other">Wybierz niestandardowy serwer domowy</string>

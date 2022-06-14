@@ -2007,9 +2007,7 @@
     <string name="login_error_outdated_homeserver_warning_content">Цей домашній сервер працює давній версії. Попросіть адміністратора домашнього сервера оновити його. Ви можете продовжити, але деякі функції не працюватимуть.</string>
     <string name="login_wait_for_email_notice">Ми щойно надіслали листа на %1$s
 \nНатисніть на посилання, яке він містить, щоб продовжити створення облікового запису.</string>
-    <string name="login_signup_cancel_confirmation_content">Ваш обліковий запис ще не створено.
-\n
-\nЗупинити процес реєстрації\?</string>
+    <string name="login_signup_cancel_confirmation_content">Ваш обліковий запис ще не створено. Зупинити процес реєстрації\?</string>
     <string name="delete_event_dialog_title">Підтвердити вилучення</string>
     <string name="settings_key_requests">Запити ключів</string>
     <string name="login_default_session_public_name">${app_name} Android</string>

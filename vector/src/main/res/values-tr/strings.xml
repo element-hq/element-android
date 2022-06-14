@@ -1088,9 +1088,7 @@
     <string name="login_a11y_choose_other">Özel bir ana sunucu seçin</string>
     <string name="login_a11y_choose_modular">Element Matric Hizmetleri\'ni seç</string>
     <string name="login_a11y_choose_matrix_org">Matrix.org sunucusunu seç</string>
-    <string name="login_signup_cancel_confirmation_content">Hesabınız henüz oluşturulmadı.
-\n
-\nKayıt işlemini durdurmak istiyor musunuz\?</string>
+    <string name="login_signup_cancel_confirmation_content">Hesabınız henüz oluşturulmadı. Kayıt işlemini durdurmak istiyor musunuz\?</string>
     <string name="login_signup_cancel_confirmation_title">Uyarı</string>
     <string name="login_signup_error_user_in_use">Bu kullanıcı adı alınmış</string>
     <string name="login_signup_submit">İleri</string>

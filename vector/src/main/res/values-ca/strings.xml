@@ -1602,9 +1602,7 @@
     <string name="login_a11y_choose_other">Selecciona un servidor local personalitzat</string>
     <string name="login_a11y_choose_modular">Selecciona Serveis Matrix d\'Element</string>
     <string name="login_a11y_choose_matrix_org">Selecciona matrix.org</string>
-    <string name="login_signup_cancel_confirmation_content">El teu compte encara s\'ha creat.
-\n
-\nVols aturar el procés de registre\?</string>
+    <string name="login_signup_cancel_confirmation_content">El teu compte encara s\'ha creat. Vols aturar el procés de registre\?</string>
     <string name="login_signup_cancel_confirmation_title">Atenció</string>
     <string name="login_signup_error_user_in_use">Aquest nom d\'usuari ja està agafat</string>
     <string name="login_set_msisdn_notice">Estableix un número de telèfon per, opcionalment, permetre que la gent que coneixes et pugui trobar.</string>

@@ -1242,9 +1242,7 @@
     <string name="login_signup_submit">Järgmine</string>
     <string name="login_signup_error_user_in_use">Selline kasutajanimi on juba olemas</string>
     <string name="login_signup_cancel_confirmation_title">Hoiatus</string>
-    <string name="login_signup_cancel_confirmation_content">Sinu kasutajakonto pole veel loodud.
-\n
-\nKas katkestame konto registreerimise\?</string>
+    <string name="login_signup_cancel_confirmation_content">Sinu kasutajakonto pole veel loodud. Kas katkestame konto registreerimise\?</string>
     <string name="login_a11y_choose_matrix_org">Vali matrix.org</string>
     <string name="login_a11y_choose_modular">Vali teenusepakkujaks Element Matrix Services</string>
     <string name="login_a11y_choose_other">Vali mõni muu koduserver</string>

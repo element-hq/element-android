@@ -573,9 +573,7 @@
     <string name="login_a11y_choose_other">Elekti propran hejmservilon</string>
     <string name="login_a11y_choose_modular">Elekti Element Matrix Services</string>
     <string name="login_a11y_choose_matrix_org">Elekti matrix.org</string>
-    <string name="login_signup_cancel_confirmation_content">Via konto ankoraŭ ne estas kreita.
-\n
-\nĈu haltigi la registriĝon\?</string>
+    <string name="login_signup_cancel_confirmation_content">Via konto ankoraŭ ne estas kreita. Ĉu haltigi la registriĝon\?</string>
     <string name="login_signup_cancel_confirmation_title">Averto</string>
     <string name="login_signup_error_user_in_use">Tiu uzantonomo jam estas prenita</string>
     <string name="login_signup_submit">Pluen</string>

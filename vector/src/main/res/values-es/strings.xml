@@ -1411,9 +1411,7 @@
     <string name="login_signup_submit">Siguiente</string>
     <string name="login_signup_error_user_in_use">Ese nombre de usuario está siendo usado</string>
     <string name="login_signup_cancel_confirmation_title">Advertencia</string>
-    <string name="login_signup_cancel_confirmation_content">Tu cuenta aún no está creada.
-\n
-\n ¿Detener el proceso de registro\?</string>
+    <string name="login_signup_cancel_confirmation_content">Tu cuenta aún no está creada. ¿Detener el proceso de registro\?</string>
     <string name="login_a11y_choose_matrix_org">Seleccione matrix.org</string>
     <string name="login_a11y_choose_modular">Seleccionar servicios de matriz de elementos</string>
     <string name="login_a11y_choose_other">Seleccione un servidor doméstico personalizado</string>

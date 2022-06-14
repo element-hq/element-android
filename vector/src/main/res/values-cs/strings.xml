@@ -1164,9 +1164,7 @@
     <string name="login_signup_username_hint">Uživatelské jméno</string>
     <string name="login_signup_error_user_in_use">Toto uživatelské jméno je již obsazeno</string>
     <string name="login_signup_cancel_confirmation_title">Varování</string>
-    <string name="login_signup_cancel_confirmation_content">Váš účet nebyl ještě založen.
-\n
-\nZastavit registrační proces\?</string>
+    <string name="login_signup_cancel_confirmation_content">Váš účet nebyl ještě založen. Zastavit registrační proces\?</string>
     <string name="login_a11y_choose_matrix_org">Vybrat matrix.org</string>
     <string name="login_a11y_choose_modular">Vybrat Element Matrix Services</string>
     <string name="login_a11y_choose_other">Vybrat vlastní domovský server</string>

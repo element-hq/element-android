@@ -1615,9 +1615,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="login_a11y_choose_other">Pilih homeserver kustom</string>
     <string name="login_a11y_choose_modular">Pilih Element Matrix Services</string>
     <string name="login_a11y_choose_matrix_org">Pilih matrix.org</string>
-    <string name="login_signup_cancel_confirmation_content">Akun Anda belum dibuat.
-\n
-\nBatalkan proses pendaftaran\?</string>
+    <string name="login_signup_cancel_confirmation_content">Akun Anda belum dibuat. Batalkan proses pendaftaran\?</string>
     <string name="login_signup_cancel_confirmation_title">Peringatan</string>
     <string name="login_signup_error_user_in_use">Nama pengguna itu telah diambil</string>
     <string name="login_signup_submit">Lanjut</string>

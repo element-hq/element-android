@@ -1224,9 +1224,7 @@
     <string name="login_signup_submit">Próximo</string>
     <string name="login_signup_error_user_in_use">Esse nome de usuária(o) está tomado</string>
     <string name="login_signup_cancel_confirmation_title">Aviso</string>
-    <string name="login_signup_cancel_confirmation_content">Sua conta não foi criada ainda.
-\n
-\nParar o processo de registro\?</string>
+    <string name="login_signup_cancel_confirmation_content">Sua conta não foi criada ainda. Parar o processo de registro\?</string>
     <string name="login_a11y_choose_matrix_org">Selecionar matrix.org</string>
     <string name="login_a11y_choose_modular">Selecionar Element Matrix Services</string>
     <string name="login_a11y_choose_other">Selecionar um servidorcasa personalizado</string>

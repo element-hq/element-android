@@ -1139,9 +1139,7 @@
     <string name="login_signup_submit">Avanti</string>
     <string name="login_signup_error_user_in_use">Questo nome utente è già in uso</string>
     <string name="login_signup_cancel_confirmation_title">Attenzione</string>
-    <string name="login_signup_cancel_confirmation_content">Il tuo account non è ancora stato creato.
-\n
-\nFermare il processo di registrazione\?</string>
+    <string name="login_signup_cancel_confirmation_content">Il tuo account non è ancora stato creato. Fermare il processo di registrazione\?</string>
     <string name="login_a11y_choose_matrix_org">Seleziona matrix.org</string>
     <string name="login_a11y_choose_modular">Seleziona Element Matrix Services</string>
     <string name="login_a11y_choose_other">Seleziona un server personalizzato</string>
