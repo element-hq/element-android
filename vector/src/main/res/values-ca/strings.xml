@@ -646,7 +646,7 @@
     <string name="markdown_has_been_enabled">S\'ha habilitat el Markdown.</string>
     <string name="markdown_has_been_disabled">S\'ha inhabilitat el Markdown.</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="no_valid_google_play_services_apk">No s\'ha trobat cap APK de Google Play Services vàlid. Les notificacions poden no funcionar correctament.</string>
     <string name="title_activity_keys_backup_setup">Còpia de seguretat de les claus</string>
     <string name="title_activity_keys_backup_restore">Utilitza la còpia de seguretat de les claus</string>
