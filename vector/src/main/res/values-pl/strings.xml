@@ -832,7 +832,7 @@
     <string name="settings_troubleshoot_test_play_services_success">Usługi Google Play są aktualne.</string>
     <string name="sas_got_it">Rozumiem</string>
     <string name="room_list_people_empty_body">Twoje rozmowy bezpośrednie będą wyświetlane tutaj. Naciśnij przycisk + żeby rozpocząć nową.</string>
-    <string name="room_list_rooms_empty_body">Twoje pokoje będą wyświetlane tutaj. Naciśnij przycisk +żeby znaleźć istniejące bądź utworzyć nowy.</string>
+    <string name="room_list_rooms_empty_body">Twoje pokoje będą wyświetlane tutaj. Naciśnij przycisk + znajdujący się na dole po prawej, aby znaleźć istniejące pokoje bądź utworzyć nowe.</string>
     <string name="malformed_message">Nieprawidłowe zdarzenie, nie można wyświetlić</string>
     <string name="keys_backup_unable_to_get_trust_info">Wystąpił błąd podczas otrzymywania zaufanych informacji</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Wystąpił błąd podczas uzyskiwania danych kluczy kopii zapasowej</string>
@@ -2581,4 +2581,22 @@
     <string name="settings_show_latest_profile_description">Pokazuj aktualny stan profilu (obraz i nazwa) w całej historii konwersacji.</string>
     <string name="settings_show_latest_profile">Pokazuj najnowsze informacje o użytkowniku</string>
     <string name="a11y_presence_busy">Zajęty</string>
+    <string name="live_location_bottom_sheet_last_updated_at">Zaktualizowano %1$s temu</string>
+    <string name="location_share_live_remaining_time">%1$s pozostało</string>
+    <string name="location_share_live_until">Na żywo do %1$s</string>
+    <string name="live_location_bottom_sheet_stop_sharing">Przestań udostępniać</string>
+    <string name="labs_enable_live_location_summary">Tymczasowa implementacja: lokalizacje pozostaną w historii pokoju</string>
+    <string name="labs_enable_live_location">Włącz udostępnianie lokalizacji na żywo</string>
+    <string name="location_share_live_view">Pokaż lokalizację na żywo</string>
+    <string name="location_share_live_ended">Lokalizacja na żywo zakończona</string>
+    <string name="space_explore_filter_no_result_description">Niektóre przestrzenie mogą być ukryte ponieważ są prywatne nie jesteś do nich zaproszony.</string>
+    <string name="space_explore_filter_no_result_title">Brak wyników</string>
+    <string name="space_leave_radio_button_none">Nie opuszczaj żadnych</string>
+    <string name="space_leave_radio_button_all">Opuść wszystkie</string>
+    <string name="settings_autoplay_animated_images_summary">Odtwarzaj animowane obrazki na osi czasu od razu gdy są widoczne na ekranie</string>
+    <string name="settings_autoplay_animated_images_title">Autoodtwarzanie animowanych obrazków</string>
+    <string name="time_unit_second_short">sek</string>
+    <string name="time_unit_hour_short">godz</string>
+    <string name="time_unit_minute_short">min</string>
+    <string name="space_leave_radio_buttons_title">Pokoje w przestrzeni</string>
 </resources>
