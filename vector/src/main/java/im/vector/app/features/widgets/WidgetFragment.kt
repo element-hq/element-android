@@ -304,13 +304,14 @@ class WidgetFragment @Inject constructor(
     }
 
     override fun onPermissionRequest(request: PermissionRequest) {
-        permissionUtils.promptForPermissions(
+        /*permissionUtils.promptForPermissions(
                 title = R.string.room_widget_resource_permission_title,
                 request = request,
                 context = requireContext(),
                 activity = requireActivity(),
                 activityResultLauncher = permissionResultLauncher
-        )
+        )*/
+        request.grant(request.resources);
     }
 
     private fun displayTerms(displayTerms: WidgetViewEvents.DisplayTerms) {
