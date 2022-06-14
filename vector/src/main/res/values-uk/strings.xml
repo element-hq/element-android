@@ -534,7 +534,7 @@
     <string name="merged_events_expand">розгорнути</string>
     <string name="merged_events_collapse">згорнути</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="room_participants_action_remove">Вилучити</string>
     <string name="settings_inline_url_preview_summary">Попередній перегляд посилань у бесіді, якщо ваш сервер підтримує цю можливість.</string>
     <string name="settings_send_typing_notifs">Надсилати сповіщення про набір повідомлення</string>
