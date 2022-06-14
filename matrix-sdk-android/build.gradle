@@ -5,6 +5,10 @@ apply plugin: 'kotlin-parcelize'
 apply plugin: 'realm-android'
 apply plugin: "org.jetbrains.dokka"
 
+if (project.hasProperty("coverage")) {
+    apply plugin: 'jacoco'
+}
+
 buildscript {
     repositories {
         // Do not use `mavenCentral()`, it prevents Dependabot from working properly
@@ -74,7 +78,10 @@ android {
 
     buildTypes {
         debug {
-            testCoverageEnabled true
+            if (project.hasProperty("coverage")) {
+                println(coverage)
+                testCoverageEnabled = coverage.enableTestCoverage
+            }
             // Set to true to log privacy or sensible data, such as token
             buildConfigField "boolean", "LOG_PRIVATE_DATA", project.property("vector.debugPrivateData")
             // Set to BODY instead of NONE to enable logging
