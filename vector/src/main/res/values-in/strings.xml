@@ -1148,7 +1148,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="error_attachment">Ada kesalahan terjadi saat menerima lampiran.</string>
     <string name="attachment_type_dialog_title">Tambahkan gambar dari</string>
     <string name="attachment_type_file">File</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
     <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
     <string name="labs_show_unread_notifications_as_tab">Tambahkan tab terdedikasi untuk notifikasi yang belum dibaca di layar utama.</string>
