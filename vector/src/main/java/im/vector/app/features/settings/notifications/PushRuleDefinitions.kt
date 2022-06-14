@@ -20,78 +20,78 @@ import org.matrix.android.sdk.api.session.pushrules.RuleIds
 
 fun getStandardAction(ruleId: String, index: NotificationIndex): StandardActions? {
     return when (ruleId) {
-        RuleIds.RULE_ID_CONTAIN_DISPLAY_NAME        ->
+        RuleIds.RULE_ID_CONTAIN_DISPLAY_NAME ->
             when (index) {
-                NotificationIndex.OFF    -> StandardActions.Disabled
+                NotificationIndex.OFF -> StandardActions.Disabled
                 NotificationIndex.SILENT -> StandardActions.Notify
-                NotificationIndex.NOISY  -> StandardActions.HighlightDefaultSound
+                NotificationIndex.NOISY -> StandardActions.HighlightDefaultSound
             }
-        RuleIds.RULE_ID_CONTAIN_USER_NAME           ->
+        RuleIds.RULE_ID_CONTAIN_USER_NAME ->
             when (index) {
-                NotificationIndex.OFF    -> StandardActions.Disabled
+                NotificationIndex.OFF -> StandardActions.Disabled
                 NotificationIndex.SILENT -> StandardActions.Notify
-                NotificationIndex.NOISY  -> StandardActions.HighlightDefaultSound
+                NotificationIndex.NOISY -> StandardActions.HighlightDefaultSound
             }
-        RuleIds.RULE_ID_ROOM_NOTIF                  ->
+        RuleIds.RULE_ID_ROOM_NOTIF ->
             when (index) {
-                NotificationIndex.OFF    -> StandardActions.Disabled
+                NotificationIndex.OFF -> StandardActions.Disabled
                 NotificationIndex.SILENT -> StandardActions.Notify
-                NotificationIndex.NOISY  -> StandardActions.Highlight
+                NotificationIndex.NOISY -> StandardActions.Highlight
             }
-        RuleIds.RULE_ID_ONE_TO_ONE_ROOM             ->
+        RuleIds.RULE_ID_ONE_TO_ONE_ROOM ->
             when (index) {
-                NotificationIndex.OFF    -> StandardActions.DontNotify
+                NotificationIndex.OFF -> StandardActions.DontNotify
                 NotificationIndex.SILENT -> StandardActions.Notify
-                NotificationIndex.NOISY  -> StandardActions.NotifyDefaultSound
+                NotificationIndex.NOISY -> StandardActions.NotifyDefaultSound
             }
-        RuleIds.RULE_ID_ONE_TO_ONE_ENCRYPTED_ROOM   ->
+        RuleIds.RULE_ID_ONE_TO_ONE_ENCRYPTED_ROOM ->
             when (index) {
-                NotificationIndex.OFF    -> StandardActions.DontNotify
+                NotificationIndex.OFF -> StandardActions.DontNotify
                 NotificationIndex.SILENT -> StandardActions.Notify
-                NotificationIndex.NOISY  -> StandardActions.NotifyDefaultSound
+                NotificationIndex.NOISY -> StandardActions.NotifyDefaultSound
             }
-        RuleIds.RULE_ID_ALL_OTHER_MESSAGES_ROOMS    ->
+        RuleIds.RULE_ID_ALL_OTHER_MESSAGES_ROOMS ->
             when (index) {
-                NotificationIndex.OFF    -> StandardActions.DontNotify
+                NotificationIndex.OFF -> StandardActions.DontNotify
                 NotificationIndex.SILENT -> StandardActions.Notify
-                NotificationIndex.NOISY  -> StandardActions.NotifyDefaultSound
+                NotificationIndex.NOISY -> StandardActions.NotifyDefaultSound
             }
-        RuleIds.RULE_ID_ENCRYPTED                   ->
+        RuleIds.RULE_ID_ENCRYPTED ->
             when (index) {
-                NotificationIndex.OFF    -> StandardActions.DontNotify
+                NotificationIndex.OFF -> StandardActions.DontNotify
                 NotificationIndex.SILENT -> StandardActions.Notify
-                NotificationIndex.NOISY  -> StandardActions.NotifyDefaultSound
+                NotificationIndex.NOISY -> StandardActions.NotifyDefaultSound
             }
-        RuleIds.RULE_ID_INVITE_ME                   ->
+        RuleIds.RULE_ID_INVITE_ME ->
             when (index) {
-                NotificationIndex.OFF    -> StandardActions.Disabled
+                NotificationIndex.OFF -> StandardActions.Disabled
                 NotificationIndex.SILENT -> StandardActions.Notify
-                NotificationIndex.NOISY  -> StandardActions.NotifyDefaultSound
+                NotificationIndex.NOISY -> StandardActions.NotifyDefaultSound
             }
-        RuleIds.RULE_ID_CALL                        ->
+        RuleIds.RULE_ID_CALL ->
             when (index) {
-                NotificationIndex.OFF    -> StandardActions.Disabled
+                NotificationIndex.OFF -> StandardActions.Disabled
                 NotificationIndex.SILENT -> StandardActions.Notify
-                NotificationIndex.NOISY  -> StandardActions.NotifyRingSound
+                NotificationIndex.NOISY -> StandardActions.NotifyRingSound
             }
         RuleIds.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS ->
             when (index) {
-                NotificationIndex.OFF    -> StandardActions.DontNotify
+                NotificationIndex.OFF -> StandardActions.DontNotify
                 NotificationIndex.SILENT -> StandardActions.Disabled
-                NotificationIndex.NOISY  -> StandardActions.NotifyDefaultSound
+                NotificationIndex.NOISY -> StandardActions.NotifyDefaultSound
             }
-        RuleIds.RULE_ID_TOMBSTONE                   ->
+        RuleIds.RULE_ID_TOMBSTONE ->
             when (index) {
-                NotificationIndex.OFF    -> StandardActions.Disabled
+                NotificationIndex.OFF -> StandardActions.Disabled
                 NotificationIndex.SILENT -> StandardActions.Notify
-                NotificationIndex.NOISY  -> StandardActions.Highlight
+                NotificationIndex.NOISY -> StandardActions.Highlight
             }
-        RuleIds.RULE_ID_KEYWORDS                    ->
+        RuleIds.RULE_ID_KEYWORDS ->
             when (index) {
-                NotificationIndex.OFF    -> StandardActions.Disabled
+                NotificationIndex.OFF -> StandardActions.Disabled
                 NotificationIndex.SILENT -> StandardActions.Notify
-                NotificationIndex.NOISY  -> StandardActions.HighlightDefaultSound
+                NotificationIndex.NOISY -> StandardActions.HighlightDefaultSound
             }
-        else                                        -> null
+        else -> null
     }
 }

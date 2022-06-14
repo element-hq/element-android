@@ -41,11 +41,12 @@ import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.session.content.FileUploader
 import org.matrix.android.sdk.internal.session.permalinks.ViaParameterFinder
 
-internal class DefaultStateService @AssistedInject constructor(@Assisted private val roomId: String,
-                                                               private val stateEventDataSource: StateEventDataSource,
-                                                               private val sendStateTask: SendStateTask,
-                                                               private val fileUploader: FileUploader,
-                                                               private val viaParameterFinder: ViaParameterFinder
+internal class DefaultStateService @AssistedInject constructor(
+        @Assisted private val roomId: String,
+        private val stateEventDataSource: StateEventDataSource,
+        private val sendStateTask: SendStateTask,
+        private val fileUploader: FileUploader,
+        private val viaParameterFinder: ViaParameterFinder
 ) : StateService {
 
     @AssistedFactory
@@ -87,7 +88,7 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
         // Safe treatment for PowerLevelContent
         return when (eventType) {
             EventType.STATE_ROOM_POWER_LEVELS -> toSafePowerLevelsContentDict()
-            else                              -> this
+            else -> this
         }
     }
 

@@ -59,9 +59,10 @@ fun Context.getResTintedDrawable(@DrawableRes drawableRes: Int, @ColorRes tint: 
     return getTintedDrawable(drawableRes, ContextCompat.getColor(this, tint), alpha)
 }
 
-fun Context.getTintedDrawable(@DrawableRes drawableRes: Int,
-                              @ColorInt tint: Int,
-                              @FloatRange(from = 0.0, to = 1.0) alpha: Float = 1f
+fun Context.getTintedDrawable(
+        @DrawableRes drawableRes: Int,
+        @ColorInt tint: Int,
+        @FloatRange(from = 0.0, to = 1.0) alpha: Float = 1f
 ) = ContextCompat.getDrawable(this, drawableRes)
         ?.mutate()
         ?.also { drawable ->
@@ -98,16 +99,16 @@ fun Context.inferNoConnectivity(buildMeta: BuildMeta): Boolean {
         val networkCapabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
         when {
             networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) == true -> false
-            networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true     -> false
-            networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_VPN) == true      -> false
-            else                                                                              -> true
+            networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true -> false
+            networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_VPN) == true -> false
+            else -> true
         }
     } else {
         when (connectivityManager.activeNetworkInfo?.type) {
-            ConnectivityManager.TYPE_WIFI   -> false
+            ConnectivityManager.TYPE_WIFI -> false
             ConnectivityManager.TYPE_MOBILE -> false
-            ConnectivityManager.TYPE_VPN    -> false
-            else                            -> true
+            ConnectivityManager.TYPE_VPN -> false
+            else -> true
         }
     }
 }

@@ -13,52 +13,51 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.matrix.android.sdk.internal.session.initsync
 
-import androidx.lifecycle.LiveData
+package org.matrix.android.sdk.internal.session.sync
+
 import androidx.lifecycle.MutableLiveData
-import org.matrix.android.sdk.api.session.initsync.InitSyncStep
-import org.matrix.android.sdk.api.session.initsync.SyncStatusService
+import org.matrix.android.sdk.api.session.sync.InitialSyncStep
+import org.matrix.android.sdk.api.session.sync.SyncRequestState
 import org.matrix.android.sdk.internal.session.SessionScope
 import javax.inject.Inject
 
 @SessionScope
-internal class DefaultSyncStatusService @Inject constructor() :
-        SyncStatusService,
+internal class SyncRequestStateTracker @Inject constructor() :
         ProgressReporter {
 
-    private val status = MutableLiveData<SyncStatusService.Status>()
+    val syncRequestState = MutableLiveData<SyncRequestState>()
 
     private var rootTask: TaskInfo? = null
 
-    override fun getSyncStatusLive(): LiveData<SyncStatusService.Status> {
-        return status
-    }
-
     // Only to be used for incremental sync
-    fun setStatus(newStatus: SyncStatusService.Status.IncrementalSyncStatus) {
-        status.postValue(newStatus)
+    fun setSyncRequestState(newSyncRequestState: SyncRequestState.IncrementalSyncRequestState) {
+        syncRequestState.postValue(newSyncRequestState)
     }
 
     /**
      * Create a rootTask.
      */
-    fun startRoot(initSyncStep: InitSyncStep,
-                  totalProgress: Int) {
+    fun startRoot(
+            initialSyncStep: InitialSyncStep,
+            totalProgress: Int
+    ) {
         endAll()
-        rootTask = TaskInfo(initSyncStep, totalProgress, null, 1F)
+        rootTask = TaskInfo(initialSyncStep, totalProgress, null, 1F)
         reportProgress(0F)
     }
 
     /**
      * Add a child to the leaf.
      */
-    override fun startTask(initSyncStep: InitSyncStep,
-                           totalProgress: Int,
-                           parentWeight: Float) {
+    override fun startTask(
+            initialSyncStep: InitialSyncStep,
+            totalProgress: Int,
+            parentWeight: Float
+    ) {
         val currentLeaf = rootTask?.leaf() ?: return
         currentLeaf.child = TaskInfo(
-                initSyncStep = initSyncStep,
+                initialSyncStep = initialSyncStep,
                 totalProgress = totalProgress,
                 parent = currentLeaf,
                 parentWeight = parentWeight
@@ -72,7 +71,7 @@ internal class DefaultSyncStatusService @Inject constructor() :
                 // Update the progress of the leaf and all its parents
                 leaf.setProgress(progress)
                 // Then update the live data using leaf wording and root progress
-                status.postValue(SyncStatusService.Status.InitialSyncProgressing(leaf.initSyncStep, root.currentProgress.toInt()))
+                syncRequestState.postValue(SyncRequestState.InitialSyncProgressing(leaf.initialSyncStep, root.currentProgress.toInt()))
             }
         }
     }
@@ -87,13 +86,13 @@ internal class DefaultSyncStatusService @Inject constructor() :
                 // And close it
                 endedTask.parent.child = null
             } else {
-                status.postValue(SyncStatusService.Status.Idle)
+                syncRequestState.postValue(SyncRequestState.Idle)
             }
         }
     }
 
     fun endAll() {
         rootTask = null
-        status.postValue(SyncStatusService.Status.Idle)
+        syncRequestState.postValue(SyncRequestState.Idle)
     }
 }

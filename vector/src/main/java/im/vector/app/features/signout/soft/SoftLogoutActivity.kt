@@ -59,7 +59,7 @@ class SoftLogoutActivity : LoginActivity() {
 
     private fun handleSoftLogoutViewEvents(softLogoutViewEvents: SoftLogoutViewEvents) {
         when (softLogoutViewEvents) {
-            is SoftLogoutViewEvents.Failure          ->
+            is SoftLogoutViewEvents.Failure ->
                 showError(errorFormatter.toHumanReadable(softLogoutViewEvents.throwable))
             is SoftLogoutViewEvents.ErrorNotSameUser -> {
                 // Pop the backstack
@@ -74,7 +74,7 @@ class SoftLogoutActivity : LoginActivity() {
                         )
                 )
             }
-            is SoftLogoutViewEvents.ClearData        -> {
+            is SoftLogoutViewEvents.ClearData -> {
                 MainActivity.restartApp(this, MainActivityArgs(clearCredentials = true))
             }
         }

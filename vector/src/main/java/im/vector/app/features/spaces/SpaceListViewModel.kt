@@ -63,12 +63,13 @@ import org.matrix.android.sdk.api.session.space.model.TopLevelSpaceComparator
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.flow.flow
 
-class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: SpaceListViewState,
-                                                     private val appStateHandler: AppStateHandler,
-                                                     private val session: Session,
-                                                     private val vectorPreferences: VectorPreferences,
-                                                     private val autoAcceptInvites: AutoAcceptInvites,
-                                                     private val analyticsTracker: AnalyticsTracker
+class SpaceListViewModel @AssistedInject constructor(
+        @Assisted initialState: SpaceListViewState,
+        private val appStateHandler: AppStateHandler,
+        private val session: Session,
+        private val vectorPreferences: VectorPreferences,
+        private val autoAcceptInvites: AutoAcceptInvites,
+        private val analyticsTracker: AnalyticsTracker
 ) : VectorViewModel<SpaceListViewState, SpaceListAction, SpaceListViewEvents>(initialState) {
 
     @AssistedFactory
@@ -148,15 +149,15 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
 
     override fun handle(action: SpaceListAction) {
         when (action) {
-            is SpaceListAction.SelectSpace       -> handleSelectSpace(action)
-            is SpaceListAction.LeaveSpace        -> handleLeaveSpace(action)
-            SpaceListAction.AddSpace             -> handleAddSpace()
-            is SpaceListAction.ToggleExpand      -> handleToggleExpand(action)
-            is SpaceListAction.OpenSpaceInvite   -> handleSelectSpaceInvite(action)
+            is SpaceListAction.SelectSpace -> handleSelectSpace(action)
+            is SpaceListAction.LeaveSpace -> handleLeaveSpace(action)
+            SpaceListAction.AddSpace -> handleAddSpace()
+            is SpaceListAction.ToggleExpand -> handleToggleExpand(action)
+            is SpaceListAction.OpenSpaceInvite -> handleSelectSpaceInvite(action)
             is SpaceListAction.SelectLegacyGroup -> handleSelectGroup(action)
-            is SpaceListAction.MoveSpace         -> handleMoveSpace(action)
-            is SpaceListAction.OnEndDragging     -> handleEndDragging()
-            is SpaceListAction.OnStartDragging   -> handleStartDragging()
+            is SpaceListAction.MoveSpace -> handleMoveSpace(action)
+            is SpaceListAction.OnEndDragging -> handleEndDragging()
+            is SpaceListAction.OnStartDragging -> handleStartDragging()
         }
     }
 

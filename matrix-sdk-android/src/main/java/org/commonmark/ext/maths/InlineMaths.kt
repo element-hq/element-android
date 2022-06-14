@@ -26,14 +26,14 @@ internal class InlineMaths(private val delimiter: InlineDelimiter) : CustomNode(
 
     override fun getOpeningDelimiter(): String {
         return when (delimiter) {
-            InlineDelimiter.SINGLE_DOLLAR         -> "$"
+            InlineDelimiter.SINGLE_DOLLAR -> "$"
             InlineDelimiter.ROUND_BRACKET_ESCAPED -> "\\("
         }
     }
 
     override fun getClosingDelimiter(): String {
         return when (delimiter) {
-            InlineDelimiter.SINGLE_DOLLAR         -> "$"
+            InlineDelimiter.SINGLE_DOLLAR -> "$"
             InlineDelimiter.ROUND_BRACKET_ESCAPED -> "\\)"
         }
     }

@@ -88,7 +88,7 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
         }
 
         // Bob stop to sync
-        bobSession.stopSync()
+        bobSession.syncService().stopSync()
 
         val firstMessage = "First messages from Alice"
         // Alice sends 30 messages
@@ -101,7 +101,7 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
                 .eventId
 
         // Bob start to sync
-        bobSession.startSync(true)
+        bobSession.syncService().startSync(true)
 
         run {
             val lock = CountDownLatch(1)
@@ -125,7 +125,7 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
         }
 
         // Bob stop to sync
-        bobSession.stopSync()
+        bobSession.syncService().stopSync()
 
         val secondMessage = "Second messages from Alice"
         // Alice sends again 30 messages
@@ -136,7 +136,7 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
         )
 
         // Bob start to sync
-        bobSession.startSync(true)
+        bobSession.syncService().startSync(true)
 
         run {
             val lock = CountDownLatch(1)

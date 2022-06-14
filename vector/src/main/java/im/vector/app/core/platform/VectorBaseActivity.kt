@@ -261,11 +261,11 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
     private fun handleGlobalError(globalError: GlobalError) {
         when (globalError) {
-            is GlobalError.InvalidToken         -> handleInvalidToken(globalError)
+            is GlobalError.InvalidToken -> handleInvalidToken(globalError)
             is GlobalError.ConsentNotGivenError -> displayConsentNotGivenDialog(globalError)
-            is GlobalError.CertificateError     -> handleCertificateError(globalError)
-            GlobalError.ExpiredAccount          -> Unit // TODO Handle account expiration
-            is GlobalError.InitialSyncRequest   -> handleInitialSyncRequest(globalError)
+            is GlobalError.CertificateError -> handleCertificateError(globalError)
+            GlobalError.ExpiredAccount -> Unit // TODO Handle account expiration
+            is GlobalError.InitialSyncRequest -> handleInitialSyncRequest(globalError)
         }
     }
 
@@ -346,7 +346,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
                 // FIXME I cannot use this anymore :/
                 // finishActivity(PinActivity.PIN_REQUEST_CODE)
             }
-            else               -> {
+            else -> {
                 if (pinLocker.getLiveState().value != PinLocker.State.UNLOCKED) {
                     // Remove the task, to be sure that PIN code will be requested when resumed
                     finishAndRemoveTask()

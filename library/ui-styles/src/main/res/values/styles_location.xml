@@ -40,4 +40,9 @@
         <item name="android:gravity">center</item>
     </style>
 
+    <style name="Widget.Vector.TextView.Nano.Copyright">
+        <!-- Static map view is always light in both light and dark theme. So we need to use a static dark color -->
+        <item name="android:textColor">@color/element_content_primary_light</item>
+    </style>
+
 </resources>

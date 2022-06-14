@@ -34,10 +34,12 @@ import javax.inject.Inject
  * Displays a String reaction (emoji), with a count, and that can be selected or not (toggle)
  */
 @AndroidEntryPoint
-class ReactionButton @JvmOverloads constructor(context: Context,
-                                               attrs: AttributeSet? = null,
-                                               defStyleAttr: Int = 0,
-                                               defStyleRes: Int = R.style.TimelineReactionView) :
+class ReactionButton @JvmOverloads constructor(
+        context: Context,
+        attrs: AttributeSet? = null,
+        defStyleAttr: Int = 0,
+        defStyleRes: Int = R.style.TimelineReactionView
+) :
         LinearLayout(context, attrs, defStyleAttr, defStyleRes), View.OnClickListener, View.OnLongClickListener {
 
     @Inject lateinit var emojiSpanify: EmojiSpanify

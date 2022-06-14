@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.initsync
+package org.matrix.android.sdk.internal.session.sync
 
-import org.matrix.android.sdk.api.session.initsync.InitSyncStep
+import org.matrix.android.sdk.api.session.sync.InitialSyncStep
 import timber.log.Timber
 
-internal class TaskInfo(val initSyncStep: InitSyncStep,
-                        val totalProgress: Int,
-                        val parent: TaskInfo?,
-                        val parentWeight: Float) {
+internal class TaskInfo(
+        val initialSyncStep: InitialSyncStep,
+        val totalProgress: Int,
+        val parent: TaskInfo?,
+        val parentWeight: Float
+) {
     var child: TaskInfo? = null
     var currentProgress = 0F
         private set

@@ -28,9 +28,11 @@ import org.matrix.android.sdk.api.session.Session
  * This interface defines methods to authenticate or to create an account to a matrix server.
  */
 interface AuthenticationService {
+
     /**
      * Request the supported login flows for this homeserver.
-     * This is the first method to call to be able to get a wizard to login or to create an account
+     * This is the first method to call to be able to get a wizard to login or to create an account.
+     * @param homeServerConnectionConfig contains the homeserver URL to login to, a wellKnown lookup will be attempted.
      */
     suspend fun getLoginFlow(homeServerConnectionConfig: HomeServerConnectionConfig): LoginFlowResult
 
@@ -93,14 +95,18 @@ interface AuthenticationService {
     /**
      * Create a session after a SSO successful login.
      */
-    suspend fun createSessionFromSso(homeServerConnectionConfig: HomeServerConnectionConfig,
-                                     credentials: Credentials): Session
+    suspend fun createSessionFromSso(
+            homeServerConnectionConfig: HomeServerConnectionConfig,
+            credentials: Credentials
+    ): Session
 
     /**
      * Perform a wellknown request, using the domain from the matrixId.
      */
-    suspend fun getWellKnownData(matrixId: String,
-                                 homeServerConnectionConfig: HomeServerConnectionConfig?): WellknownResult
+    suspend fun getWellKnownData(
+            matrixId: String,
+            homeServerConnectionConfig: HomeServerConnectionConfig?
+    ): WellknownResult
 
     /**
      * Authenticate with a matrixId and a password.
@@ -111,9 +117,11 @@ interface AuthenticationService {
      * @param initialDeviceName the initial device name
      * @param deviceId the device id, optional. If not provided or null, the server will generate one.
      */
-    suspend fun directAuthentication(homeServerConnectionConfig: HomeServerConnectionConfig,
-                                     matrixId: String,
-                                     password: String,
-                                     initialDeviceName: String,
-                                     deviceId: String? = null): Session
+    suspend fun directAuthentication(
+            homeServerConnectionConfig: HomeServerConnectionConfig,
+            matrixId: String,
+            password: String,
+            initialDeviceName: String,
+            deviceId: String? = null
+    ): Session
 }

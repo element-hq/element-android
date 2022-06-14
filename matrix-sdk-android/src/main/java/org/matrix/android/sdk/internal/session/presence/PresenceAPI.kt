@@ -31,8 +31,10 @@ internal interface PresenceAPI {
      * Ref: https://matrix.org/docs/spec/client_server/latest#put-matrix-client-r0-presence-userid-status
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "presence/{userId}/status")
-    suspend fun setPresence(@Path("userId") userId: String,
-                            @Body body: SetPresenceBody)
+    suspend fun setPresence(
+            @Path("userId") userId: String,
+            @Body body: SetPresenceBody
+    )
 
     /**
      * Get the given user's presence state.

@@ -30,9 +30,10 @@ import org.matrix.android.sdk.internal.session.widgets.token.GetScalarTokenTask
 import javax.inject.Inject
 
 @SessionScope
-internal class DefaultWidgetURLFormatter @Inject constructor(private val integrationManager: IntegrationManager,
-                                                             private val getScalarTokenTask: GetScalarTokenTask,
-                                                             private val matrixConfiguration: MatrixConfiguration
+internal class DefaultWidgetURLFormatter @Inject constructor(
+        private val integrationManager: IntegrationManager,
+        private val getScalarTokenTask: GetScalarTokenTask,
+        private val matrixConfiguration: MatrixConfiguration
 ) : IntegrationManagerService.Listener, WidgetURLFormatter, SessionLifecycleObserver {
 
     private lateinit var currentConfig: IntegrationManagerConfig

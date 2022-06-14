@@ -21,10 +21,12 @@ import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 
 object TrustUtils {
 
-    fun shieldForTrust(currentDevice: Boolean,
-                       trustMSK: Boolean,
-                       legacyMode: Boolean,
-                       deviceTrustLevel: DeviceTrustLevel?): RoomEncryptionTrustLevel {
+    fun shieldForTrust(
+            currentDevice: Boolean,
+            trustMSK: Boolean,
+            legacyMode: Boolean,
+            deviceTrustLevel: DeviceTrustLevel?
+    ): RoomEncryptionTrustLevel {
         return when {
             currentDevice -> {
                 if (legacyMode) {
@@ -39,7 +41,7 @@ object TrustUtils {
                     }
                 }
             }
-            else          -> {
+            else -> {
                 if (legacyMode) {
                     // use local trust
                     if (deviceTrustLevel?.locallyVerified == true) {
@@ -53,8 +55,8 @@ object TrustUtils {
                         when {
                             deviceTrustLevel?.crossSigningVerified == true -> RoomEncryptionTrustLevel.Trusted
 
-                            deviceTrustLevel?.locallyVerified == true      -> RoomEncryptionTrustLevel.Default
-                            else                                           -> RoomEncryptionTrustLevel.Warning
+                            deviceTrustLevel?.locallyVerified == true -> RoomEncryptionTrustLevel.Default
+                            else -> RoomEncryptionTrustLevel.Warning
                         }
                     } else {
                         // The current session is untrusted, so displays others in black

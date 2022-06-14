@@ -1143,9 +1143,7 @@
     <string name="login_signup_submit">Далее</string>
     <string name="login_signup_error_user_in_use">Это имя пользователя занято</string>
     <string name="login_signup_cancel_confirmation_title">Предупреждение</string>
-    <string name="login_signup_cancel_confirmation_content">Ваш аккаунт еще не создан.
-\n
-\nОстановить процесс регистрации\?</string>
+    <string name="login_signup_cancel_confirmation_content">Ваш аккаунт еще не создан. Остановить процесс регистрации\?</string>
     <string name="login_a11y_choose_matrix_org">Выбрать matrix.org</string>
     <string name="login_a11y_choose_modular">Выбрать Element Matrix Services</string>
     <string name="login_a11y_choose_other">Выбрать пользовательский домашний сервер</string>

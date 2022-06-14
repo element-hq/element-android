@@ -42,18 +42,18 @@ class AttachmentsAdapter : RecyclerView.Adapter<BaseViewHolder>() {
         val inflater = LayoutInflater.from(parent.context)
         val itemView = inflater.inflate(viewType, parent, false)
         return when (viewType) {
-            R.layout.item_image_attachment          -> ZoomableImageViewHolder(itemView)
+            R.layout.item_image_attachment -> ZoomableImageViewHolder(itemView)
             R.layout.item_animated_image_attachment -> AnimatedImageViewHolder(itemView)
-            R.layout.item_video_attachment          -> VideoViewHolder(itemView)
-            else                                    -> UnsupportedViewHolder(itemView)
+            R.layout.item_video_attachment -> VideoViewHolder(itemView)
+            else -> UnsupportedViewHolder(itemView)
         }
     }
 
     override fun getItemViewType(position: Int): Int {
         val info = attachmentSourceProvider!!.getAttachmentInfoAt(position)
         return when (info) {
-            is AttachmentInfo.Image         -> R.layout.item_image_attachment
-            is AttachmentInfo.Video         -> R.layout.item_video_attachment
+            is AttachmentInfo.Image -> R.layout.item_image_attachment
+            is AttachmentInfo.Video -> R.layout.item_video_attachment
             is AttachmentInfo.AnimatedImage -> R.layout.item_animated_image_attachment
 //            is AttachmentInfo.Audio         -> TODO()
 //            is AttachmentInfo.File          -> TODO()
@@ -68,13 +68,13 @@ class AttachmentsAdapter : RecyclerView.Adapter<BaseViewHolder>() {
         attachmentSourceProvider?.getAttachmentInfoAt(position)?.let {
             holder.bind(it)
             when (it) {
-                is AttachmentInfo.Image         -> {
+                is AttachmentInfo.Image -> {
                     attachmentSourceProvider?.loadImage((holder as ZoomableImageViewHolder).target, it)
                 }
                 is AttachmentInfo.AnimatedImage -> {
                     attachmentSourceProvider?.loadImage((holder as AnimatedImageViewHolder).target, it)
                 }
-                is AttachmentInfo.Video         -> {
+                is AttachmentInfo.Video -> {
                     attachmentSourceProvider?.loadVideo((holder as VideoViewHolder).target, it)
                 }
 //                else                            -> {

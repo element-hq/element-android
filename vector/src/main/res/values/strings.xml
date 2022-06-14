@@ -1424,7 +1424,7 @@
     <string name="merged_events_collapse">collapse</string>
 
     <string name="generic_label_and_value">%1$s: %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="no_valid_google_play_services_apk">No valid Google Play Services APK found. Notifications may not work properly.</string>
 
     <!-- Passphrase -->
@@ -2025,7 +2025,7 @@
     <string name="login_signup_submit">Next</string>
     <string name="login_signup_error_user_in_use">That username is taken</string>
     <string name="login_signup_cancel_confirmation_title">Warning</string>
-    <string name="login_signup_cancel_confirmation_content">Your account is not created yet.\n\nStop the registration process?</string>
+    <string name="login_signup_cancel_confirmation_content">Your account is not created yet. Stop the registration process?</string>
 
     <string name="login_a11y_choose_matrix_org">Select matrix.org</string>
     <string name="login_a11y_choose_modular">Select Element Matrix Services</string>
@@ -3017,9 +3017,12 @@
     <string name="location_not_available_dialog_title">${app_name} could not access your location</string>
     <string name="location_not_available_dialog_content">${app_name} could not access your location. Please try again later.</string>
     <string name="location_share_external">Open with</string>
-    <string name="settings_enable_location_sharing">Enable location sharing</string>
-    <string name="settings_enable_location_sharing_summary">Once enabled you will be able to send your location to any room</string>
-    <string name="labs_render_locations_in_timeline">Render user locations in the timeline</string>
+    <!--TODO delete-->
+    <string name="settings_enable_location_sharing" tools:ignore="UnusedResources">Enable location sharing</string>
+    <!--TODO delete-->
+    <string name="settings_enable_location_sharing_summary" tools:ignore="UnusedResources">Once enabled you will be able to send your location to any room</string>
+    <!--TODO delete-->
+    <string name="labs_render_locations_in_timeline" tools:ignore="UnusedResources">Render user locations in the timeline</string>
     <string name="location_timeline_failed_to_load_map">Failed to load map</string>
     <string name="location_share_live_enabled">Live location enabled</string>
     <string name="location_share_live_started">Loading live location…</string>

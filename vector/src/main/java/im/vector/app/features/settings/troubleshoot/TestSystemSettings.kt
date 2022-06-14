@@ -27,8 +27,10 @@ import javax.inject.Inject
 /**
  * Checks if notifications are enable in the system settings for this app.
  */
-class TestSystemSettings @Inject constructor(private val context: FragmentActivity,
-                                             private val stringProvider: StringProvider) :
+class TestSystemSettings @Inject constructor(
+        private val context: FragmentActivity,
+        private val stringProvider: StringProvider
+) :
         TroubleshootTest(R.string.settings_troubleshoot_test_system_settings_title) {
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {

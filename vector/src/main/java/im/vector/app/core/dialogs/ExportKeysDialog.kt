@@ -35,7 +35,7 @@ class ExportKeysDialog {
         val textWatcher = object : SimpleTextWatcher() {
             override fun afterTextChanged(s: Editable) {
                 when {
-                    views.exportDialogEt.text.isNullOrEmpty()                                           -> {
+                    views.exportDialogEt.text.isNullOrEmpty() -> {
                         views.exportDialogSubmit.isEnabled = false
                         views.exportDialogTilConfirm.error = null
                     }
@@ -43,7 +43,7 @@ class ExportKeysDialog {
                         views.exportDialogSubmit.isEnabled = true
                         views.exportDialogTilConfirm.error = null
                     }
-                    else                                                                                -> {
+                    else -> {
                         views.exportDialogSubmit.isEnabled = false
                         views.exportDialogTilConfirm.error = activity.getString(R.string.passphrase_passphrase_does_not_match)
                     }

@@ -54,9 +54,11 @@ interface RegistrationWizard {
      * @param password the desired password
      * @param initialDeviceDisplayName the device display name
      */
-    suspend fun createAccount(userName: String?,
-                              password: String?,
-                              initialDeviceDisplayName: String?): RegistrationResult
+    suspend fun createAccount(
+            userName: String?,
+            password: String?,
+            initialDeviceDisplayName: String?
+    ): RegistrationResult
 
     /**
      * Perform the "m.login.recaptcha" stage.

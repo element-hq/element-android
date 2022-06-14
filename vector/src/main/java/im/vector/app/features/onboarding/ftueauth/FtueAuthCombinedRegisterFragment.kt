@@ -117,26 +117,26 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
         // Trick to display the error without text.
         views.createAccountInput.error = " "
         when {
-            throwable.isUsernameInUse() || throwable.isInvalidUsername()                             -> {
+            throwable.isUsernameInUse() || throwable.isInvalidUsername() -> {
                 views.createAccountInput.error = errorFormatter.toHumanReadable(throwable)
             }
-            throwable.isLoginEmailUnknown()                                                          -> {
+            throwable.isLoginEmailUnknown() -> {
                 views.createAccountInput.error = getString(R.string.login_login_with_email_error)
             }
             throwable.isInvalidPassword() && views.createAccountPasswordInput.hasSurroundingSpaces() -> {
                 views.createAccountPasswordInput.error = getString(R.string.auth_invalid_login_param_space_in_password)
             }
-            throwable.isWeakPassword() || throwable.isInvalidPassword()                              -> {
+            throwable.isWeakPassword() || throwable.isInvalidPassword() -> {
                 views.createAccountPasswordInput.error = errorFormatter.toHumanReadable(throwable)
             }
-            throwable.isRegistrationDisabled()                                                       -> {
+            throwable.isRegistrationDisabled() -> {
                 MaterialAlertDialogBuilder(requireActivity())
                         .setTitle(R.string.dialog_title_error)
                         .setMessage(getString(R.string.login_registration_disabled))
                         .setPositiveButton(R.string.ok, null)
                         .show()
             }
-            else                                                                                     -> {
+            else -> {
                 super.onError(throwable)
             }
         }
@@ -158,17 +158,17 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
     private fun setupUi(state: OnboardingViewState) {
         when (state.selectedHomeserver.preferredLoginMode) {
             is LoginMode.SsoAndPassword -> renderSsoProviders(state.deviceId, state.selectedHomeserver.preferredLoginMode.ssoIdentityProviders)
-            else                        -> hideSsoProviders()
+            else -> hideSsoProviders()
         }
     }
 
     private fun renderSsoProviders(deviceId: String?, ssoProviders: List<SsoIdentityProvider>?) {
         views.ssoGroup.isVisible = ssoProviders?.isNotEmpty() == true
-        views.ssoButtons.render(ssoProviders, SocialLoginButtonsView.Mode.MODE_CONTINUE) { id ->
-            viewModel.getSsoUrl(
+        views.ssoButtons.render(ssoProviders, SocialLoginButtonsView.Mode.MODE_CONTINUE) { provider ->
+            viewModel.fetchSsoUrl(
                     redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                     deviceId = deviceId,
-                    providerId = id
+                    provider = provider
             )?.let { openInCustomTab(it) }
         }
     }

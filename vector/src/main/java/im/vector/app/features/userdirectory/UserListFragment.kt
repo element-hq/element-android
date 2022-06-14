@@ -102,8 +102,8 @@ class UserListFragment @Inject constructor(
                             extraTitle = getString(R.string.invite_friends_rich_title)
                     )
                 }
-                is UserListViewEvents.Failure               -> showFailure(it.throwable)
-                is UserListViewEvents.OnPoliciesRetrieved   -> showConsentDialog(it)
+                is UserListViewEvents.Failure -> showFailure(it.throwable)
+                is UserListViewEvents.OnPoliciesRetrieved -> showConsentDialog(it)
             }
         }
     }

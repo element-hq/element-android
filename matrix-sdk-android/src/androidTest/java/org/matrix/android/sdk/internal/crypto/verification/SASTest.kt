@@ -52,6 +52,7 @@ import java.util.concurrent.CountDownLatch
 
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@Ignore
 class SASTest : InstrumentedTest {
 
     @Test
@@ -264,14 +265,16 @@ class SASTest : InstrumentedTest {
         assertEquals("Request should be cancelled with m.unknown_method", CancelCode.UnknownMethod.value, cancelReq.code)
     }
 
-    private fun fakeBobStart(bobSession: Session,
-                             aliceUserID: String?,
-                             aliceDevice: String?,
-                             tid: String,
-                             protocols: List<String> = SASDefaultVerificationTransaction.KNOWN_AGREEMENT_PROTOCOLS,
-                             hashes: List<String> = SASDefaultVerificationTransaction.KNOWN_HASHES,
-                             mac: List<String> = SASDefaultVerificationTransaction.KNOWN_MACS,
-                             codes: List<String> = SASDefaultVerificationTransaction.KNOWN_SHORT_CODES) {
+    private fun fakeBobStart(
+            bobSession: Session,
+            aliceUserID: String?,
+            aliceDevice: String?,
+            tid: String,
+            protocols: List<String> = SASDefaultVerificationTransaction.KNOWN_AGREEMENT_PROTOCOLS,
+            hashes: List<String> = SASDefaultVerificationTransaction.KNOWN_HASHES,
+            mac: List<String> = SASDefaultVerificationTransaction.KNOWN_MACS,
+            codes: List<String> = SASDefaultVerificationTransaction.KNOWN_SHORT_CODES
+    ) {
         val startMessage = KeyVerificationStart(
                 fromDevice = bobSession.cryptoService().getMyDevice().deviceId,
                 method = VerificationMethod.SAS.toValue(),
@@ -412,7 +415,7 @@ class SASTest : InstrumentedTest {
                     OutgoingSasVerificationTransaction.UxState.SHOW_SAS -> {
                         aliceSASLatch.countDown()
                     }
-                    else                                                -> Unit
+                    else -> Unit
                 }
             }
         }
@@ -426,7 +429,7 @@ class SASTest : InstrumentedTest {
                     IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT -> {
                         tx.performAccept()
                     }
-                    else                                                   -> Unit
+                    else -> Unit
                 }
                 if (uxState === IncomingSasVerificationTransaction.UxState.SHOW_SAS) {
                     bobSASLatch.countDown()
@@ -476,7 +479,7 @@ class SASTest : InstrumentedTest {
                             aliceSASLatch.countDown()
                         }
                     }
-                    else                                                -> Unit
+                    else -> Unit
                 }
             }
         }
@@ -496,16 +499,16 @@ class SASTest : InstrumentedTest {
                             tx.performAccept()
                         }
                     }
-                    IncomingSasVerificationTransaction.UxState.SHOW_SAS    -> {
+                    IncomingSasVerificationTransaction.UxState.SHOW_SAS -> {
                         if (matchOnce) {
                             matchOnce = false
                             tx.userHasVerifiedShortCode()
                         }
                     }
-                    IncomingSasVerificationTransaction.UxState.VERIFIED    -> {
+                    IncomingSasVerificationTransaction.UxState.VERIFIED -> {
                         bobSASLatch.countDown()
                     }
-                    else                                                   -> Unit
+                    else -> Unit
                 }
             }
         }

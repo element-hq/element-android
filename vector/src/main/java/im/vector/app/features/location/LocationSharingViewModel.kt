@@ -118,10 +118,10 @@ class LocationSharingViewModel @AssistedInject constructor(
 
     override fun handle(action: LocationSharingAction) {
         when (action) {
-            LocationSharingAction.CurrentUserLocationSharing  -> handleCurrentUserLocationSharingAction()
-            is LocationSharingAction.PinnedLocationSharing    -> handlePinnedLocationSharingAction(action)
-            is LocationSharingAction.LocationTargetChange     -> handleLocationTargetChangeAction(action)
-            LocationSharingAction.ZoomToUserLocation          -> handleZoomToUserLocationAction()
+            LocationSharingAction.CurrentUserLocationSharing -> handleCurrentUserLocationSharingAction()
+            is LocationSharingAction.PinnedLocationSharing -> handlePinnedLocationSharingAction(action)
+            is LocationSharingAction.LocationTargetChange -> handleLocationTargetChangeAction(action)
+            LocationSharingAction.ZoomToUserLocation -> handleZoomToUserLocationAction()
             is LocationSharingAction.StartLiveLocationSharing -> handleStartLiveLocationSharingAction(action.durationMillis)
         }
     }

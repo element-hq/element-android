@@ -875,9 +875,7 @@
     <string name="login_reset_password_cancel_confirmation_content">Passordet ditt er ikke endret ennå.
 \n
 \nStoppe passordendringsprosessen\?</string>
-    <string name="login_signup_cancel_confirmation_content">Kontoen din er ikke opprettet ennå.
-\n
-\nStoppe registreringsprosessen\?</string>
+    <string name="login_signup_cancel_confirmation_content">Kontoen din er ikke opprettet ennå. Stoppe registreringsprosessen\?</string>
     <string name="login_a11y_choose_other">Velg en tilpasset hjemmeserver</string>
     <string name="login_a11y_captcha_container">Vennligst utfør captcha-utfordringen</string>
     <string name="login_wait_for_email_notice">Vi har nettopp sendt en e-post til %1$s.

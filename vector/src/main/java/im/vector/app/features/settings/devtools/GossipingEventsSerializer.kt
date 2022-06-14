@@ -55,7 +55,7 @@ class GossipingEventsSerializer {
                             append("chainIndex: ${it.chainIndex} ")
                         }
                     }
-                    else                         -> {
+                    else -> {
                         append("??")
                     }
                 }

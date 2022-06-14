@@ -37,9 +37,11 @@ import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.threads.ThreadTimelineEvent
 import org.matrix.android.sdk.flow.flow
 
-class ThreadListViewModel @AssistedInject constructor(@Assisted val initialState: ThreadListViewState,
-                                                      private val analyticsTracker: AnalyticsTracker,
-                                                      private val session: Session) :
+class ThreadListViewModel @AssistedInject constructor(
+        @Assisted val initialState: ThreadListViewState,
+        private val analyticsTracker: AnalyticsTracker,
+        private val session: Session
+) :
         VectorViewModel<ThreadListViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     private val room = session.getRoom(initialState.roomId)
@@ -69,7 +71,7 @@ class ThreadListViewModel @AssistedInject constructor(@Assisted val initialState
      */
     private fun fetchAndObserveThreads() {
         when (session.homeServerCapabilitiesService().getHomeServerCapabilities().canUseThreading) {
-            true  -> {
+            true -> {
                 fetchThreadList()
                 observeThreadSummaries()
             }

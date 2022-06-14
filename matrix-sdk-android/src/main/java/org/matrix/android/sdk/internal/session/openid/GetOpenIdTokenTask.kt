@@ -28,7 +28,8 @@ internal interface GetOpenIdTokenTask : Task<Unit, OpenIdToken>
 internal class DefaultGetOpenIdTokenTask @Inject constructor(
         @UserId private val userId: String,
         private val openIdAPI: OpenIdAPI,
-        private val globalErrorReceiver: GlobalErrorReceiver) : GetOpenIdTokenTask {
+        private val globalErrorReceiver: GlobalErrorReceiver
+) : GetOpenIdTokenTask {
 
     override suspend fun execute(params: Unit): OpenIdToken {
         return executeRequest(globalErrorReceiver) {

@@ -77,25 +77,31 @@ abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder> : AbsMe
                 .apply(RequestOptions.centerCropTransform())
                 .placeholder(holder.staticMapImageView.drawable)
                 .listener(object : RequestListener<Drawable> {
-                    override fun onLoadFailed(e: GlideException?,
-                                              model: Any?,
-                                              target: Target<Drawable>?,
-                                              isFirstResource: Boolean): Boolean {
+                    override fun onLoadFailed(
+                            e: GlideException?,
+                            model: Any?,
+                            target: Target<Drawable>?,
+                            isFirstResource: Boolean
+                    ): Boolean {
                         holder.staticMapPinImageView.setImageResource(R.drawable.ic_location_pin_failed)
                         holder.staticMapErrorTextView.isVisible = true
+                        holder.staticMapCopyrightTextView.isVisible = false
                         return false
                     }
 
-                    override fun onResourceReady(resource: Drawable?,
-                                                 model: Any?,
-                                                 target: Target<Drawable>?,
-                                                 dataSource: DataSource?,
-                                                 isFirstResource: Boolean): Boolean {
+                    override fun onResourceReady(
+                            resource: Drawable?,
+                            model: Any?,
+                            target: Target<Drawable>?,
+                            dataSource: DataSource?,
+                            isFirstResource: Boolean
+                    ): Boolean {
                         locationPinProvider?.create(locationUserId) { pinDrawable ->
                             // we are not using Glide since it does not display it correctly when there is no user photo
                             holder.staticMapPinImageView.setImageDrawable(pinDrawable)
                         }
                         holder.staticMapErrorTextView.isVisible = false
+                        holder.staticMapCopyrightTextView.isVisible = true
                         return false
                     }
                 })
@@ -107,5 +113,6 @@ abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder> : AbsMe
         val staticMapImageView by bind<ImageView>(R.id.staticMapImageView)
         val staticMapPinImageView by bind<ImageView>(R.id.staticMapPinImageView)
         val staticMapErrorTextView by bind<TextView>(R.id.staticMapErrorTextView)
+        val staticMapCopyrightTextView by bind<TextView>(R.id.staticMapCopyrightTextView)
     }
 }

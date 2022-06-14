@@ -44,7 +44,7 @@ class FtueAuthResetPasswordMailConfirmationFragment @Inject constructor() : Abst
     }
 
     private fun setupUi(state: OnboardingViewState) {
-        views.resetPasswordMailConfirmationNotice.text = getString(R.string.login_reset_password_mail_confirmation_notice, state.resetPasswordEmail)
+        views.resetPasswordMailConfirmationNotice.text = getString(R.string.login_reset_password_mail_confirmation_notice, state.resetState.email)
     }
 
     private fun submit() {

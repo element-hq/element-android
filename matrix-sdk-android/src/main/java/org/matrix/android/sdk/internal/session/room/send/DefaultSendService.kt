@@ -198,7 +198,7 @@ internal class DefaultSendService @AssistedInject constructor(
                     localEchoRepository.updateSendState(localEcho.eventId, roomId, SendState.UNSENT)
                     internalSendMedia(listOf(localEcho.root), attachmentData, true)
                 }
-                is MessageFileContent  -> {
+                is MessageFileContent -> {
                     val attachmentData = ContentAttachmentData(
                             size = messageContent.info!!.size,
                             mimeType = messageContent.mimeType,
@@ -222,7 +222,7 @@ internal class DefaultSendService @AssistedInject constructor(
                     localEchoRepository.updateSendState(localEcho.eventId, roomId, SendState.UNSENT)
                     internalSendMedia(listOf(localEcho.root), attachmentData, true)
                 }
-                else                   -> NoOpCancellable
+                else -> NoOpCancellable
             }
         }
         return NoOpCancellable
@@ -265,10 +265,11 @@ internal class DefaultSendService @AssistedInject constructor(
         }
     }
 
-    override fun sendMedias(attachments: List<ContentAttachmentData>,
-                            compressBeforeSending: Boolean,
-                            roomIds: Set<String>,
-                            rootThreadEventId: String?
+    override fun sendMedias(
+            attachments: List<ContentAttachmentData>,
+            compressBeforeSending: Boolean,
+            roomIds: Set<String>,
+            rootThreadEventId: String?
     ): Cancelable {
         return attachments.mapTo(CancelableBag()) {
             sendMedia(
@@ -280,10 +281,11 @@ internal class DefaultSendService @AssistedInject constructor(
         }
     }
 
-    override fun sendMedia(attachment: ContentAttachmentData,
-                           compressBeforeSending: Boolean,
-                           roomIds: Set<String>,
-                           rootThreadEventId: String?
+    override fun sendMedia(
+            attachment: ContentAttachmentData,
+            compressBeforeSending: Boolean,
+            roomIds: Set<String>,
+            rootThreadEventId: String?
     ): Cancelable {
         // Ensure that the event will not be send in a thread if we are a different flow.
         // Like sending files to multiple rooms
@@ -354,10 +356,12 @@ internal class DefaultSendService @AssistedInject constructor(
         return "${roomId}_$identifier"
     }
 
-    private fun createUploadMediaWork(allLocalEchos: List<Event>,
-                                      attachment: ContentAttachmentData,
-                                      isRoomEncrypted: Boolean,
-                                      compressBeforeSending: Boolean): OneTimeWorkRequest {
+    private fun createUploadMediaWork(
+            allLocalEchos: List<Event>,
+            attachment: ContentAttachmentData,
+            isRoomEncrypted: Boolean,
+            compressBeforeSending: Boolean
+    ): OneTimeWorkRequest {
         val localEchoIds = allLocalEchos.map {
             LocalEchoIdentifiers(it.roomId!!, it.eventId!!)
         }

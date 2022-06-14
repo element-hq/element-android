@@ -83,7 +83,7 @@ class ThreadMessagingTest : InstrumentedTest {
         val timeline = aliceRoom.timelineService().createTimeline(null, TimelineSettings(30))
         timeline.start()
 
-        aliceSession.startSync(true)
+        aliceSession.syncService().startSync(true)
         run {
             val lock = CountDownLatch(1)
             val eventsListener = commonTestHelper.createEventListener(lock) { snapshot ->
@@ -97,7 +97,7 @@ class ThreadMessagingTest : InstrumentedTest {
             timeline.addListener(eventsListener)
             commonTestHelper.await(lock, 600_000)
         }
-        aliceSession.stopSync()
+        aliceSession.syncService().stopSync()
     }
 
     @Test
@@ -144,7 +144,7 @@ class ThreadMessagingTest : InstrumentedTest {
         val timeline = aliceRoom.timelineService().createTimeline(null, TimelineSettings(30))
         timeline.start()
 
-        aliceSession.startSync(true)
+        aliceSession.syncService().startSync(true)
         run {
             val lock = CountDownLatch(1)
             val eventsListener = commonTestHelper.createEventListener(lock) { snapshot ->
@@ -156,9 +156,9 @@ class ThreadMessagingTest : InstrumentedTest {
             timeline.addListener(eventsListener)
             commonTestHelper.await(lock, 600_000)
         }
-        aliceSession.stopSync()
+        aliceSession.syncService().stopSync()
 
-        bobSession.startSync(true)
+        bobSession.syncService().startSync(true)
         run {
             val lock = CountDownLatch(1)
             val eventsListener = commonTestHelper.createEventListener(lock) { snapshot ->
@@ -170,7 +170,7 @@ class ThreadMessagingTest : InstrumentedTest {
             timeline.addListener(eventsListener)
             commonTestHelper.await(lock, 600_000)
         }
-        bobSession.stopSync()
+        bobSession.syncService().stopSync()
     }
 
     @Test
@@ -217,7 +217,7 @@ class ThreadMessagingTest : InstrumentedTest {
         val timeline = aliceRoom.timelineService().createTimeline(null, TimelineSettings(30))
         timeline.start()
 
-        aliceSession.startSync(true)
+        aliceSession.syncService().startSync(true)
         run {
             val lock = CountDownLatch(1)
             val eventsListener = commonTestHelper.createEventListener(lock) { snapshot ->
@@ -233,7 +233,7 @@ class ThreadMessagingTest : InstrumentedTest {
             timeline.addListener(eventsListener)
             commonTestHelper.await(lock, 600_000)
         }
-        aliceSession.stopSync()
+        aliceSession.syncService().stopSync()
     }
 
     @Test
@@ -314,7 +314,7 @@ class ThreadMessagingTest : InstrumentedTest {
         val timeline = aliceRoom.timelineService().createTimeline(null, TimelineSettings(30))
         timeline.start()
 
-        aliceSession.startSync(true)
+        aliceSession.syncService().startSync(true)
         run {
             val lock = CountDownLatch(1)
             val eventsListener = commonTestHelper.createEventListener(lock) { snapshot ->
@@ -338,6 +338,6 @@ class ThreadMessagingTest : InstrumentedTest {
             timeline.addListener(eventsListener)
             commonTestHelper.await(lock, 600_000)
         }
-        aliceSession.stopSync()
+        aliceSession.syncService().stopSync()
     }
 }

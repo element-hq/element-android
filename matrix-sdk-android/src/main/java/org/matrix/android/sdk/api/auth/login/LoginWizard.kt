@@ -39,10 +39,12 @@ interface LoginWizard {
      * @param deviceId the device id, optional. If not provided or null, the server will generate one.
      * @return a [Session] if the login is successful
      */
-    suspend fun login(login: String,
-                      password: String,
-                      initialDeviceName: String,
-                      deviceId: String? = null): Session
+    suspend fun login(
+            login: String,
+            password: String,
+            initialDeviceName: String,
+            deviceId: String? = null
+    ): Session
 
     /**
      * Exchange a login token to an access token.
@@ -63,14 +65,14 @@ interface LoginWizard {
      * [resetPasswordMailConfirmed] is successfully called.
      *
      * @param email an email previously associated to the account the user wants the password to be reset.
-     * @param newPassword the desired new password
      */
-    suspend fun resetPassword(email: String,
-                              newPassword: String)
+    suspend fun resetPassword(email: String)
 
     /**
      * Confirm the new password, once the user has checked their email
      * When this method succeed, tha account password will be effectively modified.
+     *
+     * @param newPassword the desired new password
      */
-    suspend fun resetPasswordMailConfirmed()
+    suspend fun resetPasswordMailConfirmed(newPassword: String)
 }

@@ -31,14 +31,15 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ActiveSessionHolder @Inject constructor(private val activeSessionDataSource: ActiveSessionDataSource,
-                                              private val keyRequestHandler: KeyRequestHandler,
-                                              private val incomingVerificationRequestHandler: IncomingVerificationRequestHandler,
-                                              private val callManager: WebRtcCallManager,
-                                              private val pushRuleTriggerListener: PushRuleTriggerListener,
-                                              private val sessionListener: SessionListener,
-                                              private val imageManager: ImageManager,
-                                              private val guardServiceStarter: GuardServiceStarter
+class ActiveSessionHolder @Inject constructor(
+        private val activeSessionDataSource: ActiveSessionDataSource,
+        private val keyRequestHandler: KeyRequestHandler,
+        private val incomingVerificationRequestHandler: IncomingVerificationRequestHandler,
+        private val callManager: WebRtcCallManager,
+        private val pushRuleTriggerListener: PushRuleTriggerListener,
+        private val sessionListener: SessionListener,
+        private val imageManager: ImageManager,
+        private val guardServiceStarter: GuardServiceStarter
 ) {
 
     private var activeSession: AtomicReference<Session?> = AtomicReference()

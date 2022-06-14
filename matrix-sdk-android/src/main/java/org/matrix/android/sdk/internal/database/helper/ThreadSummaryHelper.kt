@@ -54,7 +54,8 @@ internal fun ThreadSummaryEntity.updateThreadSummary(
         numberOfThreads: Int?,
         latestThreadEventEntity: EventEntity?,
         isUserParticipating: Boolean,
-        roomMemberContentsByUser: HashMap<String, RoomMemberContent?>) {
+        roomMemberContentsByUser: HashMap<String, RoomMemberContent?>
+) {
     updateThreadSummaryRootEvent(rootThreadEventEntity, roomMemberContentsByUser)
     updateThreadSummaryLatestEvent(latestThreadEventEntity, roomMemberContentsByUser)
     this.isUserParticipating = isUserParticipating
@@ -180,7 +181,7 @@ internal fun ThreadSummaryEntity.Companion.createOrUpdate(
 
             roomEntity.addIfNecessary(threadSummary)
         }
-        ThreadSummaryUpdateType.ADD     -> {
+        ThreadSummaryUpdateType.ADD -> {
             val rootThreadEventId = threadEventEntity?.rootThreadEventId ?: return
             Timber.i("###THREADS ThreadSummaryHelper ADD for root eventId:$rootThreadEventId")
 

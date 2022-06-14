@@ -47,9 +47,11 @@ private typealias Summary = Pair<Int, TimelineEventEntity>?
  */
 internal fun Map<String, EventEntity>.updateThreadSummaryIfNeeded(
         roomId: String,
-        realm: Realm, currentUserId: String,
+        realm: Realm,
+        currentUserId: String,
         chunkEntity: ChunkEntity? = null,
-        shouldUpdateNotifications: Boolean = true) {
+        shouldUpdateNotifications: Boolean = true
+) {
     for ((rootThreadEventId, eventEntity) in this) {
         eventEntity.threadSummaryInThread(eventEntity.realm, rootThreadEventId, chunkEntity)?.let { threadSummary ->
 
@@ -87,7 +89,8 @@ internal fun EventEntity.findRootThreadEvent(): EventEntity? =
  */
 internal fun EventEntity.markEventAsRoot(
         inThreadMessages: Int,
-        latestMessageTimelineEventEntity: TimelineEventEntity?) {
+        latestMessageTimelineEventEntity: TimelineEventEntity?
+) {
     isRootThread = true
     numberOfThreads = inThreadMessages
     threadSummaryLatestMessage = latestMessageTimelineEventEntity

@@ -273,7 +273,7 @@ class WebRtcCallManager @Inject constructor(
             // did we start background sync? so we should stop it
             if (isInBackground) {
                 if (FcmHelper.isPushSupported()) {
-                    currentSession?.stopAnyBackgroundSync()
+                    currentSession?.syncService()?.stopAnyBackgroundSync()
                 } else {
                     // for fdroid we should not stop, it should continue syncing
                     // maybe we should restore default timeout/delay though?
@@ -380,7 +380,7 @@ class WebRtcCallManager @Inject constructor(
         if (isInBackground) {
             if (FcmHelper.isPushSupported()) {
                 // only for push version as fdroid version is already doing it?
-                currentSession?.startAutomaticBackgroundSync(30, 0)
+                currentSession?.syncService()?.startAutomaticBackgroundSync(30, 0)
             } else {
                 // Maybe increase sync freq? but how to set back to default values?
             }

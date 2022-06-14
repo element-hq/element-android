@@ -116,9 +116,9 @@ class SoftLogoutViewModel @AssistedInject constructor(
                 // SSO login is taken first
                 data.supportedLoginTypes.contains(LoginFlowTypes.SSO) &&
                         data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
-                data.supportedLoginTypes.contains(LoginFlowTypes.SSO)              -> LoginMode.Sso(data.ssoIdentityProviders)
-                data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)         -> LoginMode.Password
-                else                                                               -> LoginMode.Unsupported
+                data.supportedLoginTypes.contains(LoginFlowTypes.SSO) -> LoginMode.Sso(data.ssoIdentityProviders)
+                data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.Password
+                else -> LoginMode.Unsupported
             }
 
             setState {
@@ -131,11 +131,11 @@ class SoftLogoutViewModel @AssistedInject constructor(
 
     override fun handle(action: SoftLogoutAction) {
         when (action) {
-            is SoftLogoutAction.RetryLoginFlow  -> getSupportedLoginFlow()
+            is SoftLogoutAction.RetryLoginFlow -> getSupportedLoginFlow()
             is SoftLogoutAction.PasswordChanged -> handlePasswordChange(action)
-            is SoftLogoutAction.SignInAgain     -> handleSignInAgain(action)
+            is SoftLogoutAction.SignInAgain -> handleSignInAgain(action)
             is SoftLogoutAction.WebLoginSuccess -> handleWebLoginSuccess(action)
-            is SoftLogoutAction.ClearData       -> handleClearData()
+            is SoftLogoutAction.ClearData -> handleClearData()
         }
     }
 
@@ -211,7 +211,7 @@ class SoftLogoutViewModel @AssistedInject constructor(
     private fun onSessionRestored() {
         activeSessionHolder.setActiveSession(session)
         // Start the sync
-        session.startSync(true)
+        session.syncService().startSync(true)
 
         // TODO Configure and start ? Check that the push still works...
         setState {

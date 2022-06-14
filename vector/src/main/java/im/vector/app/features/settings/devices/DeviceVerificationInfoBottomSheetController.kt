@@ -34,7 +34,8 @@ import javax.inject.Inject
 
 class DeviceVerificationInfoBottomSheetController @Inject constructor(
         private val stringProvider: StringProvider,
-        private val colorProvider: ColorProvider) :
+        private val colorProvider: ColorProvider
+) :
         TypedEpoxyController<DeviceVerificationInfoBottomSheetViewState>() {
 
     var callback: Callback? = null
@@ -42,7 +43,7 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
     override fun buildModels(data: DeviceVerificationInfoBottomSheetViewState?) {
         val cryptoDeviceInfo = data?.cryptoDeviceInfo?.invoke()
         when {
-            cryptoDeviceInfo != null           -> {
+            cryptoDeviceInfo != null -> {
                 // It's a E2E capable device
                 handleE2ECapableDevice(data, cryptoDeviceInfo)
             }
@@ -50,7 +51,7 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
                 // It's a non E2E capable device
                 handleNonE2EDevice(data)
             }
-            else                               -> {
+            else -> {
                 loadingItem {
                     id("loading")
                 }

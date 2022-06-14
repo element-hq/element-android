@@ -77,7 +77,7 @@ class SpacePreviewController @Inject constructor(
                     is Success -> {
                         buildChildren(child.children.invoke(), depth + 1)
                     }
-                    else       -> {
+                    else -> {
                     }
                 }
             } else {

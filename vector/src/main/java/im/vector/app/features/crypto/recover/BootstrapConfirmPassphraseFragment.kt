@@ -92,11 +92,11 @@ class BootstrapConfirmPassphraseFragment @Inject constructor() :
         }
         val passphrase = views.ssssPassphraseEnterEdittext.text?.toString()
         when {
-            passphrase.isNullOrBlank()     ->
+            passphrase.isNullOrBlank() ->
                 views.ssssPassphraseEnterTil.error = getString(R.string.passphrase_empty_error_message)
             passphrase != state.passphrase ->
                 views.ssssPassphraseEnterTil.error = getString(R.string.passphrase_passphrase_does_not_match)
-            else                           -> {
+            else -> {
                 view?.hideKeyboard()
                 sharedViewModel.handle(BootstrapActions.DoInitialize(passphrase))
             }

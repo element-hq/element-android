@@ -42,6 +42,7 @@ import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.login.terms.LoginTermsFragment
 import im.vector.app.features.login.terms.LoginTermsFragmentArgument
+import im.vector.app.features.onboarding.AuthenticationDescription
 import im.vector.app.features.pin.UnlockedActivity
 import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.Stage
@@ -106,7 +107,7 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
 
     private fun handleLoginViewEvents(loginViewEvents: LoginViewEvents) {
         when (loginViewEvents) {
-            is LoginViewEvents.RegistrationFlowResult                     -> {
+            is LoginViewEvents.RegistrationFlowResult -> {
                 // Check that all flows are supported by the application
                 if (loginViewEvents.flowResult.missingStages.any { !it.isSupported() }) {
                     // Display a popup to propose use web fallback
@@ -128,7 +129,7 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
                     }
                 }
             }
-            is LoginViewEvents.OutdatedHomeserver                         -> {
+            is LoginViewEvents.OutdatedHomeserver -> {
                 MaterialAlertDialogBuilder(this)
                         .setTitle(R.string.login_error_outdated_homeserver_title)
                         .setMessage(R.string.login_error_outdated_homeserver_warning_content)
@@ -136,7 +137,7 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
                         .show()
                 Unit
             }
-            is LoginViewEvents.OpenServerSelection                        ->
+            is LoginViewEvents.OpenServerSelection ->
                 addFragmentToBackstack(views.loginFragmentContainer,
                         LoginServerSelectionFragment::class.java,
                         option = { ft ->
@@ -148,22 +149,22 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
                             // TODO Disabled because it provokes a flickering
                             // ft.setCustomAnimations(enterAnim, exitAnim, popEnterAnim, popExitAnim)
                         })
-            is LoginViewEvents.OnServerSelectionDone                      -> onServerSelectionDone(loginViewEvents)
-            is LoginViewEvents.OnSignModeSelected                         -> onSignModeSelected(loginViewEvents)
-            is LoginViewEvents.OnLoginFlowRetrieved                       ->
+            is LoginViewEvents.OnServerSelectionDone -> onServerSelectionDone(loginViewEvents)
+            is LoginViewEvents.OnSignModeSelected -> onSignModeSelected(loginViewEvents)
+            is LoginViewEvents.OnLoginFlowRetrieved ->
                 addFragmentToBackstack(
                         views.loginFragmentContainer,
                         LoginSignUpSignInSelectionFragment::class.java,
                         option = commonOption
                 )
-            is LoginViewEvents.OnWebLoginError                            -> onWebLoginError(loginViewEvents)
-            is LoginViewEvents.OnForgetPasswordClicked                    ->
+            is LoginViewEvents.OnWebLoginError -> onWebLoginError(loginViewEvents)
+            is LoginViewEvents.OnForgetPasswordClicked ->
                 addFragmentToBackstack(
                         views.loginFragmentContainer,
                         LoginResetPasswordFragment::class.java,
                         option = commonOption
                 )
-            is LoginViewEvents.OnResetPasswordSendThreePidDone            -> {
+            is LoginViewEvents.OnResetPasswordSendThreePidDone -> {
                 supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
                 addFragmentToBackstack(
                         views.loginFragmentContainer,
@@ -171,7 +172,7 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
                         option = commonOption
                 )
             }
-            is LoginViewEvents.OnResetPasswordMailConfirmationSuccess     -> {
+            is LoginViewEvents.OnResetPasswordMailConfirmationSuccess -> {
                 supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
                 addFragmentToBackstack(
                         views.loginFragmentContainer,
@@ -183,7 +184,7 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
                 // Go back to the login fragment
                 supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
             }
-            is LoginViewEvents.OnSendEmailSuccess                         -> {
+            is LoginViewEvents.OnSendEmailSuccess -> {
                 // Pop the enter email Fragment
                 supportFragmentManager.popBackStack(FRAGMENT_REGISTRATION_STAGE_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 addFragmentToBackstack(
@@ -194,7 +195,7 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
                         option = commonOption
                 )
             }
-            is LoginViewEvents.OnSendMsisdnSuccess                        -> {
+            is LoginViewEvents.OnSendMsisdnSuccess -> {
                 // Pop the enter Msisdn Fragment
                 supportFragmentManager.popBackStack(FRAGMENT_REGISTRATION_STAGE_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 addFragmentToBackstack(
@@ -206,7 +207,7 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
                 )
             }
             is LoginViewEvents.Failure,
-            is LoginViewEvents.Loading                                    ->
+            is LoginViewEvents.Loading ->
                 // This is handled by the Fragments
                 Unit
         }
@@ -218,10 +219,8 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
                 // change the screen name
                 analyticsScreenName = MobileScreen.ScreenName.Register
             }
-            val intent = HomeActivity.newIntent(
-                    this,
-                    accountCreation = loginViewState.signMode == SignMode.SignUp
-            )
+            val authDescription = inferAuthDescription(loginViewState)
+            val intent = HomeActivity.newIntent(this, authenticationDescription = authDescription)
             startActivity(intent)
             finish()
             return
@@ -229,6 +228,13 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
 
         // Loading
         views.loginLoading.isVisible = loginViewState.isLoading()
+    }
+
+    private fun inferAuthDescription(loginViewState: LoginViewState) = when (loginViewState.signMode) {
+        SignMode.Unknown            -> null
+        SignMode.SignUp             -> AuthenticationDescription.Register(type = AuthenticationDescription.AuthenticationType.Other)
+        SignMode.SignIn             -> AuthenticationDescription.Login
+        SignMode.SignInWithMatrixId -> AuthenticationDescription.Login
     }
 
     private fun onWebLoginError(onWebLoginError: LoginViewEvents.OnWebLoginError) {
@@ -247,29 +253,29 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
         when (loginViewEvents.serverType) {
             ServerType.MatrixOrg -> Unit // In this case, we wait for the login flow
             ServerType.EMS,
-            ServerType.Other     -> addFragmentToBackstack(
+            ServerType.Other -> addFragmentToBackstack(
                     views.loginFragmentContainer,
                     LoginServerUrlFormFragment::class.java,
                     option = commonOption
             )
-            ServerType.Unknown   -> Unit /* Should not happen */
+            ServerType.Unknown -> Unit /* Should not happen */
         }
     }
 
     private fun onSignModeSelected(loginViewEvents: LoginViewEvents.OnSignModeSelected) = withState(loginViewModel) { state ->
         // state.signMode could not be ready yet. So use value from the ViewEvent
         when (loginViewEvents.signMode) {
-            SignMode.Unknown            -> error("Sign mode has to be set before calling this method")
-            SignMode.SignUp             -> {
+            SignMode.Unknown -> error("Sign mode has to be set before calling this method")
+            SignMode.SignUp -> {
                 // This is managed by the LoginViewEvents
             }
-            SignMode.SignIn             -> {
+            SignMode.SignIn -> {
                 // It depends on the LoginMode
                 when (state.loginMode) {
                     LoginMode.Unknown,
-                    is LoginMode.Sso      -> error("Developer error")
+                    is LoginMode.Sso -> error("Developer error")
                     is LoginMode.SsoAndPassword,
-                    LoginMode.Password    -> addFragmentToBackstack(
+                    LoginMode.Password -> addFragmentToBackstack(
                             views.loginFragmentContainer,
                             LoginFragment::class.java,
                             tag = FRAGMENT_LOGIN_TAG,
@@ -361,28 +367,28 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
                     tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                     option = commonOption
             )
-            is Stage.Email     -> addFragmentToBackstack(
+            is Stage.Email -> addFragmentToBackstack(
                     views.loginFragmentContainer,
                     LoginGenericTextInputFormFragment::class.java,
                     LoginGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.SetEmail, stage.mandatory),
                     tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                     option = commonOption
             )
-            is Stage.Msisdn    -> addFragmentToBackstack(
+            is Stage.Msisdn -> addFragmentToBackstack(
                     views.loginFragmentContainer,
                     LoginGenericTextInputFormFragment::class.java,
                     LoginGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.SetMsisdn, stage.mandatory),
                     tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                     option = commonOption
             )
-            is Stage.Terms     -> addFragmentToBackstack(
+            is Stage.Terms -> addFragmentToBackstack(
                     views.loginFragmentContainer,
                     LoginTermsFragment::class.java,
                     LoginTermsFragmentArgument(stage.policies.toLocalizedLoginTerms(getString(R.string.resources_language))),
                     tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                     option = commonOption
             )
-            else               -> Unit // Should not happen
+            else -> Unit // Should not happen
         }
     }
 

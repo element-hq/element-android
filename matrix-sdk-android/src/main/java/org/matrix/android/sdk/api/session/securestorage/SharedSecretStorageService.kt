@@ -44,10 +44,12 @@ interface SharedSecretStorageService {
      *
      * @return key creation info
      */
-    suspend fun generateKey(keyId: String,
-                            key: SsssKeySpec?,
-                            keyName: String,
-                            keySigner: KeySigner?): SsssKeyCreationInfo
+    suspend fun generateKey(
+            keyId: String,
+            key: SsssKeySpec?,
+            keyName: String,
+            keySigner: KeySigner?
+    ): SsssKeyCreationInfo
 
     /**
      * Generates a SSSS key using the given passphrase.
@@ -61,11 +63,13 @@ interface SharedSecretStorageService {
      *
      * @return key creation info
      */
-    suspend fun generateKeyWithPassphrase(keyId: String,
-                                          keyName: String,
-                                          passphrase: String,
-                                          keySigner: KeySigner,
-                                          progressListener: ProgressListener?): SsssKeyCreationInfo
+    suspend fun generateKeyWithPassphrase(
+            keyId: String,
+            keyName: String,
+            passphrase: String,
+            keySigner: KeySigner,
+            progressListener: ProgressListener?
+    ): SsssKeyCreationInfo
 
     fun getKey(keyId: String): KeyInfoResult
 

@@ -51,12 +51,12 @@ internal class DefaultRegistrationWizard(
 
     override fun getCurrentThreePid(): String? {
         return when (val threePid = pendingSessionData.currentThreePidData?.threePid) {
-            is RegisterThreePid.Email  -> threePid.email
+            is RegisterThreePid.Email -> threePid.email
             is RegisterThreePid.Msisdn -> {
                 // Take formatted msisdn if provided by the server
                 pendingSessionData.currentThreePidData?.addThreePidRegistrationResponse?.formattedMsisdn?.takeIf { it.isNotBlank() } ?: threePid.msisdn
             }
-            null                       -> null
+            null -> null
         }
     }
 
@@ -67,9 +67,11 @@ internal class DefaultRegistrationWizard(
         return performRegistrationRequest(params)
     }
 
-    override suspend fun createAccount(userName: String?,
-                                       password: String?,
-                                       initialDeviceDisplayName: String?): RegistrationResult {
+    override suspend fun createAccount(
+            userName: String?,
+            password: String?,
+            initialDeviceDisplayName: String?
+    ): RegistrationResult {
         val params = RegistrationParams(
                 username = userName,
                 password = password,

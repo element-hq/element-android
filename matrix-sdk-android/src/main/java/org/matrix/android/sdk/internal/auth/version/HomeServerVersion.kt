@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.internal.auth.version
 
+import org.matrix.android.sdk.api.extensions.ensureNotEmpty
+
 /**
  * Values will take the form "rX.Y.Z".
  * Ref: https://matrix.org/docs/spec/client_server/latest#get-matrix-client-versions
@@ -33,19 +35,19 @@ internal data class HomeServerVersion(
             minor < other.minor -> -1
             patch > other.patch -> 1
             patch < other.patch -> -1
-            else                -> 0
+            else -> 0
         }
     }
 
     companion object {
-        internal val pattern = Regex("""[r|v](\d+)\.(\d+)\.(\d+)""")
+        internal val pattern = Regex("""[r|v](\d+)\.(\d+)(?:\.(\d+))?""")
 
         internal fun parse(value: String): HomeServerVersion? {
             val result = pattern.matchEntire(value) ?: return null
             return HomeServerVersion(
                     major = result.groupValues[1].toInt(),
                     minor = result.groupValues[2].toInt(),
-                    patch = result.groupValues[3].toInt()
+                    patch = result.groupValues.getOrNull(index = 3)?.ensureNotEmpty()?.toInt() ?: 0
             )
         }
 

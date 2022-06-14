@@ -93,16 +93,18 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
 
         viewModel.observeViewEvents {
             when (it) {
-                is VerificationBottomSheetViewEvents.Dismiss           -> dismiss()
+                is VerificationBottomSheetViewEvents.Dismiss -> dismiss()
                 is VerificationBottomSheetViewEvents.AccessSecretStore -> {
-                    secretStartForActivityResult.launch(SharedSecureStorageActivity.newReadIntent(
-                            requireContext(),
-                            null, // use default key
-                            listOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME, KEYBACKUP_SECRET_SSSS_NAME),
-                            SharedSecureStorageActivity.DEFAULT_RESULT_KEYSTORE_ALIAS
-                    ))
+                    secretStartForActivityResult.launch(
+                            SharedSecureStorageActivity.newReadIntent(
+                                    requireContext(),
+                                    null, // use default key
+                                    listOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME, KEYBACKUP_SECRET_SSSS_NAME),
+                                    SharedSecureStorageActivity.DEFAULT_RESULT_KEYSTORE_ALIAS
+                            )
+                    )
                 }
-                is VerificationBottomSheetViewEvents.ModalError        -> {
+                is VerificationBottomSheetViewEvents.ModalError -> {
                     MaterialAlertDialogBuilder(requireContext())
                             .setTitle(getString(R.string.dialog_title_error))
                             .setMessage(it.errorMessage)
@@ -111,7 +113,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
                             .show()
                     Unit
                 }
-                VerificationBottomSheetViewEvents.GoToSettings         -> {
+                VerificationBottomSheetViewEvents.GoToSettings -> {
                     dismiss()
                     (activity as? VectorBaseActivity<*>)?.let { activity ->
                         activity.navigator.openSettings(activity, VectorSettingsActivity.EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY)
@@ -240,7 +242,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
                             )
                     )
                 }
-                is VerificationTxState.Verified  -> {
+                is VerificationTxState.Verified -> {
                     showFragment(
                             VerificationConclusionFragment::class,
                             VerificationConclusionFragment.Args(true, null, state.isMe)
@@ -252,14 +254,14 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
                             VerificationConclusionFragment.Args(false, state.sasTransactionState.cancelCode.value, state.isMe)
                     )
                 }
-                else                             -> Unit
+                else -> Unit
             }
 
             return@withState
         }
 
         when (state.qrTransactionState) {
-            is VerificationTxState.QrScannedByOther               -> {
+            is VerificationTxState.QrScannedByOther -> {
                 showFragment(VerificationQrScannedByOtherFragment::class)
                 return@withState
             }
@@ -274,21 +276,21 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
                 )
                 return@withState
             }
-            is VerificationTxState.Verified                       -> {
+            is VerificationTxState.Verified -> {
                 showFragment(
                         VerificationConclusionFragment::class,
                         VerificationConclusionFragment.Args(true, null, state.isMe)
                 )
                 return@withState
             }
-            is VerificationTxState.Cancelled                      -> {
+            is VerificationTxState.Cancelled -> {
                 showFragment(
                         VerificationConclusionFragment::class,
                         VerificationConclusionFragment.Args(false, state.qrTransactionState.cancelCode.value, state.isMe)
                 )
                 return@withState
             }
-            else                                                  -> Unit
+            else -> Unit
         }
 
         // At this point there is no SAS transaction for this request

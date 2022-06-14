@@ -34,7 +34,7 @@ fun StatisticEvent.toListOfPerformanceTimer(): List<PerformanceTimer> {
                             itemCount = nbOfJoinedRooms
                     )
             )
-        is StatisticEvent.SyncTreatment      ->
+        is StatisticEvent.SyncTreatment ->
             if (afterPause) {
                 listOf(
                         PerformanceTimer(

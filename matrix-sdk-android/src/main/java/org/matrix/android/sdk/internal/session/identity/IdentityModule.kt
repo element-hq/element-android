@@ -47,8 +47,10 @@ internal abstract class IdentityModule {
         @Provides
         @SessionScope
         @AuthenticatedIdentity
-        fun providesOkHttpClient(@UnauthenticatedWithCertificate okHttpClient: OkHttpClient,
-                                 @AuthenticatedIdentity accessTokenProvider: AccessTokenProvider): OkHttpClient {
+        fun providesOkHttpClient(
+                @UnauthenticatedWithCertificate okHttpClient: OkHttpClient,
+                @AuthenticatedIdentity accessTokenProvider: AccessTokenProvider
+        ): OkHttpClient {
             return okHttpClient
                     .newBuilder()
                     .addAccessTokenInterceptor(accessTokenProvider)
@@ -59,10 +61,12 @@ internal abstract class IdentityModule {
         @Provides
         @IdentityDatabase
         @SessionScope
-        fun providesIdentityRealmConfiguration(realmKeysUtils: RealmKeysUtils,
-                                               realmIdentityStoreMigration: RealmIdentityStoreMigration,
-                                               @SessionFilesDirectory directory: File,
-                                               @UserMd5 userMd5: String): RealmConfiguration {
+        fun providesIdentityRealmConfiguration(
+                realmKeysUtils: RealmKeysUtils,
+                realmIdentityStoreMigration: RealmIdentityStoreMigration,
+                @SessionFilesDirectory directory: File,
+                @UserMd5 userMd5: String
+        ): RealmConfiguration {
             return RealmConfiguration.Builder()
                     .directory(directory)
                     .name("matrix-sdk-identity.realm")

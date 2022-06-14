@@ -79,11 +79,13 @@ internal fun ChunkEntity.addStateEvent(roomId: String, stateEvent: EventEntity, 
     }
 }
 
-internal fun ChunkEntity.addTimelineEvent(roomId: String,
-                                          eventEntity: EventEntity,
-                                          direction: PaginationDirection,
-                                          ownedByThreadChunk: Boolean = false,
-                                          roomMemberContentsByUser: Map<String, RoomMemberContent?>? = null): TimelineEventEntity? {
+internal fun ChunkEntity.addTimelineEvent(
+        roomId: String,
+        eventEntity: EventEntity,
+        direction: PaginationDirection,
+        ownedByThreadChunk: Boolean = false,
+        roomMemberContentsByUser: Map<String, RoomMemberContent?>? = null
+): TimelineEventEntity? {
     val eventId = eventEntity.eventId
     if (timelineEvents.find(eventId) != null) {
         return null
@@ -199,7 +201,7 @@ private fun handleReadReceipts(realm: Realm, roomId: String, eventEntity: EventE
 
 internal fun ChunkEntity.nextDisplayIndex(direction: PaginationDirection): Int {
     return when (direction) {
-        PaginationDirection.FORWARDS  -> {
+        PaginationDirection.FORWARDS -> {
             (timelineEvents.where().max(TimelineEventEntityFields.DISPLAY_INDEX)?.toInt() ?: 0) + 1
         }
         PaginationDirection.BACKWARDS -> {

@@ -42,9 +42,11 @@ import org.matrix.android.sdk.api.session.widgets.WidgetPostAPIMediator
 import org.matrix.android.sdk.api.util.JsonDict
 import timber.log.Timber
 
-class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roomId: String,
-                                                       private val stringProvider: StringProvider,
-                                                       private val session: Session) : WidgetPostAPIMediator.Handler {
+class WidgetPostAPIHandler @AssistedInject constructor(
+        @Assisted private val roomId: String,
+        private val stringProvider: StringProvider,
+        private val session: Session
+) : WidgetPostAPIMediator.Handler {
 
     @AssistedFactory
     interface Factory {
@@ -63,20 +65,20 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     override fun handleWidgetRequest(mediator: WidgetPostAPIMediator, eventData: JsonDict): Boolean {
         return when (eventData["action"] as String?) {
             "integration_manager_open" -> handleIntegrationManagerOpenAction(eventData).run { true }
-            "bot_options"              -> getBotOptions(mediator, eventData).run { true }
-            "can_send_event"           -> canSendEvent(mediator, eventData).run { true }
-            "close_scalar"             -> handleCloseScalar().run { true }
-            "get_membership_count"     -> getMembershipCount(mediator, eventData).run { true }
-            "get_widgets"              -> getWidgets(mediator, eventData).run { true }
-            "invite"                   -> inviteUser(mediator, eventData).run { true }
-            "join_rules_state"         -> getJoinRules(mediator, eventData).run { true }
-            "membership_state"         -> getMembershipState(mediator, eventData).run { true }
-            "set_bot_options"          -> setBotOptions(mediator, eventData).run { true }
-            "set_bot_power"            -> setBotPower(mediator, eventData).run { true }
-            "set_plumbing_state"       -> setPlumbingState(mediator, eventData).run { true }
-            "set_widget"               -> setWidget(mediator, eventData).run { true }
-            "m.sticker"                -> pickStickerData(mediator, eventData).run { true }
-            else                       -> false
+            "bot_options" -> getBotOptions(mediator, eventData).run { true }
+            "can_send_event" -> canSendEvent(mediator, eventData).run { true }
+            "close_scalar" -> handleCloseScalar().run { true }
+            "get_membership_count" -> getMembershipCount(mediator, eventData).run { true }
+            "get_widgets" -> getWidgets(mediator, eventData).run { true }
+            "invite" -> inviteUser(mediator, eventData).run { true }
+            "join_rules_state" -> getJoinRules(mediator, eventData).run { true }
+            "membership_state" -> getMembershipState(mediator, eventData).run { true }
+            "set_bot_options" -> setBotOptions(mediator, eventData).run { true }
+            "set_bot_power" -> setBotPower(mediator, eventData).run { true }
+            "set_plumbing_state" -> setPlumbingState(mediator, eventData).run { true }
+            "set_widget" -> setWidget(mediator, eventData).run { true }
+            "m.sticker" -> pickStickerData(mediator, eventData).run { true }
+            else -> false
         }
     }
 

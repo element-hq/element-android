@@ -68,7 +68,7 @@ internal interface VerificationInfoStart : VerificationInfo<ValidVerificationInf
         val validFromDevice = fromDevice?.takeIf { it.isNotEmpty() } ?: return null
 
         return when (method) {
-            VERIFICATION_METHOD_SAS         -> {
+            VERIFICATION_METHOD_SAS -> {
                 val validKeyAgreementProtocols = keyAgreementProtocols?.takeIf { it.isNotEmpty() } ?: return null
                 val validHashes = hashes?.takeIf { it.contains("sha256") } ?: return null
                 val validMessageAuthenticationCodes = messageAuthenticationCodes
@@ -98,14 +98,15 @@ internal interface VerificationInfoStart : VerificationInfo<ValidVerificationInf
                         validSharedSecret
                 )
             }
-            else                            -> null
+            else -> null
         }
     }
 }
 
 internal sealed class ValidVerificationInfoStart(
         open val transactionId: String,
-        open val fromDevice: String) {
+        open val fromDevice: String
+) {
     data class SasVerificationInfoStart(
             override val transactionId: String,
             override val fromDevice: String,

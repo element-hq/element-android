@@ -85,16 +85,20 @@ internal class RoomSummaryDataSource @Inject constructor(
         }
     }
 
-    fun getRoomSummaries(queryParams: RoomSummaryQueryParams,
-                         sortOrder: RoomSortOrder = RoomSortOrder.NONE): List<RoomSummary> {
+    fun getRoomSummaries(
+            queryParams: RoomSummaryQueryParams,
+            sortOrder: RoomSortOrder = RoomSortOrder.NONE
+    ): List<RoomSummary> {
         return monarchy.fetchAllMappedSync(
                 { roomSummariesQuery(it, queryParams).process(sortOrder) },
                 { roomSummaryMapper.map(it) }
         )
     }
 
-    fun getRoomSummariesLive(queryParams: RoomSummaryQueryParams,
-                             sortOrder: RoomSortOrder = RoomSortOrder.NONE): LiveData<List<RoomSummary>> {
+    fun getRoomSummariesLive(
+            queryParams: RoomSummaryQueryParams,
+            sortOrder: RoomSortOrder = RoomSortOrder.NONE
+    ): LiveData<List<RoomSummary>> {
         return monarchy.findAllMappedWithChanges(
                 {
                     roomSummariesQuery(it, queryParams).process(sortOrder)
@@ -103,8 +107,10 @@ internal class RoomSummaryDataSource @Inject constructor(
         )
     }
 
-    fun getSpaceSummariesLive(queryParams: SpaceSummaryQueryParams,
-                              sortOrder: RoomSortOrder = RoomSortOrder.NONE): LiveData<List<RoomSummary>> {
+    fun getSpaceSummariesLive(
+            queryParams: SpaceSummaryQueryParams,
+            sortOrder: RoomSortOrder = RoomSortOrder.NONE
+    ): LiveData<List<RoomSummary>> {
         return getRoomSummariesLive(queryParams, sortOrder)
     }
 
@@ -129,8 +135,10 @@ internal class RoomSummaryDataSource @Inject constructor(
         }
     }
 
-    fun getSpaceSummaries(spaceSummaryQueryParams: SpaceSummaryQueryParams,
-                          sortOrder: RoomSortOrder = RoomSortOrder.NONE): List<RoomSummary> {
+    fun getSpaceSummaries(
+            spaceSummaryQueryParams: SpaceSummaryQueryParams,
+            sortOrder: RoomSortOrder = RoomSortOrder.NONE
+    ): List<RoomSummary> {
         return getRoomSummaries(spaceSummaryQueryParams, sortOrder)
     }
 
@@ -171,9 +179,11 @@ internal class RoomSummaryDataSource @Inject constructor(
                 .sort(RoomSummaryEntityFields.BREADCRUMBS_INDEX)
     }
 
-    fun getSortedPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams,
-                                        pagedListConfig: PagedList.Config,
-                                        sortOrder: RoomSortOrder): LiveData<PagedList<RoomSummary>> {
+    fun getSortedPagedRoomSummariesLive(
+            queryParams: RoomSummaryQueryParams,
+            pagedListConfig: PagedList.Config,
+            sortOrder: RoomSortOrder
+    ): LiveData<PagedList<RoomSummary>> {
         val realmDataSourceFactory = monarchy.createDataSourceFactory { realm ->
             roomSummariesQuery(realm, queryParams).process(sortOrder)
         }
@@ -186,10 +196,12 @@ internal class RoomSummaryDataSource @Inject constructor(
         )
     }
 
-    fun getUpdatablePagedRoomSummariesLive(queryParams: RoomSummaryQueryParams,
-                                           pagedListConfig: PagedList.Config,
-                                           sortOrder: RoomSortOrder,
-                                           getFlattenedParents: Boolean = false): UpdatableLivePageResult {
+    fun getUpdatablePagedRoomSummariesLive(
+            queryParams: RoomSummaryQueryParams,
+            pagedListConfig: PagedList.Config,
+            sortOrder: RoomSortOrder,
+            getFlattenedParents: Boolean = false
+    ): UpdatableLivePageResult {
         val realmDataSourceFactory = monarchy.createDataSourceFactory { realm ->
             roomSummariesQuery(realm, queryParams).process(sortOrder)
         }
@@ -293,19 +305,19 @@ internal class RoomSummaryDataSource @Inject constructor(
             query.equalTo(RoomSummaryEntityFields.ROOM_TYPE, it)
         }
         when (queryParams.roomCategoryFilter) {
-            RoomCategoryFilter.ONLY_DM                 -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
-            RoomCategoryFilter.ONLY_ROOMS              -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
+            RoomCategoryFilter.ONLY_DM -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
+            RoomCategoryFilter.ONLY_ROOMS -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
             RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS -> query.greaterThan(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0)
-            null                                       -> Unit
+            null -> Unit
         }
 
         // Timber.w("VAL: activeSpaceId : ${queryParams.activeSpaceId}")
         when (queryParams.spaceFilter) {
-            SpaceFilter.OrphanRooms     -> {
+            SpaceFilter.OrphanRooms -> {
                 // orphan rooms
                 query.isNull(RoomSummaryEntityFields.FLATTEN_PARENT_IDS)
             }
-            is SpaceFilter.ActiveSpace  -> {
+            is SpaceFilter.ActiveSpace -> {
                 // It's annoying but for now realm java does not support querying in primitive list :/
                 // https://github.com/realm/realm-java/issues/5361
                 query.contains(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, queryParams.spaceFilter.spaceId)
@@ -313,7 +325,7 @@ internal class RoomSummaryDataSource @Inject constructor(
             is SpaceFilter.ExcludeSpace -> {
                 query.not().contains(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, queryParams.spaceFilter.spaceId)
             }
-            null                        -> Unit // nop
+            null -> Unit // nop
         }
 
         queryParams.activeGroupId?.let { activeGroupId ->
@@ -424,11 +436,13 @@ internal class RoomSummaryDataSource @Inject constructor(
         }
     }
 
-    fun flattenSubSpace(current: RoomSummary,
-                        parenting: List<String>,
-                        output: MutableList<RoomSummary>,
-                        memberShips: List<Membership>,
-                        includeCurrent: Boolean = true) {
+    fun flattenSubSpace(
+            current: RoomSummary,
+            parenting: List<String>,
+            output: MutableList<RoomSummary>,
+            memberShips: List<Membership>,
+            includeCurrent: Boolean = true
+    ) {
         if (includeCurrent) {
             output.add(current)
         }

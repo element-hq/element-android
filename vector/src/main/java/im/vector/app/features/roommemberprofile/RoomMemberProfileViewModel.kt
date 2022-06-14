@@ -159,16 +159,16 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
 
     override fun handle(action: RoomMemberProfileAction) {
         when (action) {
-            is RoomMemberProfileAction.RetryFetchingInfo      -> handleRetryFetchProfileInfo()
-            is RoomMemberProfileAction.IgnoreUser             -> handleIgnoreAction()
-            is RoomMemberProfileAction.VerifyUser             -> prepareVerification()
+            is RoomMemberProfileAction.RetryFetchingInfo -> handleRetryFetchProfileInfo()
+            is RoomMemberProfileAction.IgnoreUser -> handleIgnoreAction()
+            is RoomMemberProfileAction.VerifyUser -> prepareVerification()
             is RoomMemberProfileAction.ShareRoomMemberProfile -> handleShareRoomMemberProfile()
-            is RoomMemberProfileAction.SetPowerLevel          -> handleSetPowerLevel(action)
-            is RoomMemberProfileAction.BanOrUnbanUser         -> handleBanOrUnbanAction(action)
-            is RoomMemberProfileAction.KickUser               -> handleKickAction(action)
-            RoomMemberProfileAction.InviteUser                -> handleInviteAction()
-            is RoomMemberProfileAction.SetUserColorOverride   -> handleSetUserColorOverride(action)
-            is RoomMemberProfileAction.OpenOrCreateDm         -> handleOpenOrCreateDm(action)
+            is RoomMemberProfileAction.SetPowerLevel -> handleSetPowerLevel(action)
+            is RoomMemberProfileAction.BanOrUnbanUser -> handleBanOrUnbanAction(action)
+            is RoomMemberProfileAction.KickUser -> handleKickAction(action)
+            RoomMemberProfileAction.InviteUser -> handleInviteAction()
+            is RoomMemberProfileAction.SetUserColorOverride -> handleSetUserColorOverride(action)
+            is RoomMemberProfileAction.OpenOrCreateDm -> handleOpenOrCreateDm(action)
         }
     }
 
@@ -311,12 +311,12 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
                 .unwrap()
                 .execute {
                     when (it) {
-                        is Loading       -> copy(userMatrixItem = Loading(), asyncMembership = Loading())
-                        is Success       -> copy(
+                        is Loading -> copy(userMatrixItem = Loading(), asyncMembership = Loading())
+                        is Success -> copy(
                                 userMatrixItem = Success(it().toMatrixItem()),
                                 asyncMembership = Success(it().membership)
                         )
-                        is Fail          -> copy(userMatrixItem = Fail(it.error), asyncMembership = Fail(it.error))
+                        is Fail -> copy(userMatrixItem = Fail(it.error), asyncMembership = Fail(it.error))
                         is Uninitialized -> this
                     }
                 }
@@ -374,9 +374,9 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
             val roomName = roomSummary.toMatrixItem().getBestName()
             val powerLevelsHelper = PowerLevelsHelper(powerLevelsContent)
             when (val userPowerLevel = powerLevelsHelper.getUserRole(initialState.userId)) {
-                Role.Admin     -> stringProvider.getString(R.string.room_member_power_level_admin_in, roomName)
+                Role.Admin -> stringProvider.getString(R.string.room_member_power_level_admin_in, roomName)
                 Role.Moderator -> stringProvider.getString(R.string.room_member_power_level_moderator_in, roomName)
-                Role.Default   -> stringProvider.getString(R.string.room_member_power_level_default_in, roomName)
+                Role.Default -> stringProvider.getString(R.string.room_member_power_level_default_in, roomName)
                 is Role.Custom -> stringProvider.getString(R.string.room_member_power_level_custom_in, userPowerLevel.value, roomName)
             }
         }.execute {

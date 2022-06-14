@@ -46,7 +46,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  * in order to be able to perform a sync even if the app is not running.
  * The <receiver> and <service> must be declared in the Manifest or the app using the SDK
  */
-abstract class SyncService : Service() {
+abstract class SyncAndroidService : Service() {
 
     private var sessionId: String? = null
     private var mIsSelfDestroyed: Boolean = false
@@ -84,7 +84,7 @@ abstract class SyncService : Service() {
                     stopMe()
                 }
             }
-            else        -> {
+            else -> {
                 val isInit = initialize(intent)
                 onStart(isInitialSync)
                 if (isInit) {
@@ -158,9 +158,9 @@ abstract class SyncService : Service() {
             // never do that in foreground, let the syncThread work
             syncTask.execute(params)
             // Start sync if we were doing an initial sync and the syncThread is not launched yet
-            if (isInitialSync && session.getSyncState() == SyncState.Idle) {
+            if (isInitialSync && session.syncService().getSyncState() == SyncState.Idle) {
                 val isForeground = !backgroundDetectionObserver.isInBackground
-                session.startSync(isForeground)
+                session.syncService().startSync(isForeground)
             }
             stopMe()
         } catch (throwable: Throwable) {
@@ -210,7 +210,7 @@ abstract class SyncService : Service() {
             session = sessionComponent.session()
             sessionId = safeSessionId
             syncTask = sessionComponent.syncTask()
-            isInitialSync = !session.hasAlreadySynced()
+            isInitialSync = !session.syncService().hasAlreadySynced()
             networkConnectivityChecker = sessionComponent.networkConnectivityChecker()
             taskExecutor = sessionComponent.taskExecutor()
             coroutineDispatchers = sessionComponent.coroutineDispatchers()

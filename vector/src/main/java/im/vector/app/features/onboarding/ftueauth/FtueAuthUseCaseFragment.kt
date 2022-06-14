@@ -28,12 +28,14 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
+import androidx.core.view.isGone
 import im.vector.app.R
 import im.vector.app.core.extensions.getResTintedDrawable
 import im.vector.app.core.extensions.getTintedDrawable
 import im.vector.app.core.extensions.setLeftDrawable
 import im.vector.app.core.extensions.setTextWithColoredPart
 import im.vector.app.databinding.FragmentFtueAuthUseCaseBinding
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.onboarding.FtueUseCase
 import im.vector.app.features.onboarding.OnboardingAction
@@ -45,6 +47,7 @@ private const val LIGHT_MODE_ICON_BACKGROUND_ALPHA = 0.15f
 
 class FtueAuthUseCaseFragment @Inject constructor(
         private val themeProvider: ThemeProvider,
+        private val vectorFeatures: VectorFeatures,
 ) : AbstractFtueAuthFragment<FragmentFtueAuthUseCaseBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueAuthUseCaseBinding {
@@ -57,6 +60,9 @@ class FtueAuthUseCaseFragment @Inject constructor(
     }
 
     private fun setupViews() {
+        // Connect to server relies on https://github.com/vector-im/element-android/issues/5782
+        views.useCaseConnectToServerGroup.isGone = vectorFeatures.isOnboardingCombinedRegisterEnabled()
+
         views.useCaseOptionOne.renderUseCase(
                 useCase = FtueUseCase.FRIENDS_FAMILY,
                 label = R.string.ftue_auth_use_case_option_one,

@@ -25,7 +25,7 @@ buildscript {
         classpath libs.gradle.kotlinPlugin
         classpath libs.gradle.hiltPlugin
         classpath 'com.google.gms:google-services:4.3.10'
-        classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.3'
+        classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.4.0.2513'
         classpath 'com.google.android.gms:oss-licenses-plugin:0.10.5'
         classpath "com.likethesalad.android:stem-plugin:2.1.1"
         classpath 'org.owasp:dependency-check-gradle:7.1.0.1'
@@ -43,7 +43,7 @@ plugins {
     id "io.gitlab.arturbosch.detekt" version "1.20.0"
 
     // Dependency Analysis
-    id 'com.autonomousapps.dependency-analysis' version "1.4.0"
+    id 'com.autonomousapps.dependency-analysis' version "1.5.0"
 }
 
 // https://github.com/jeremylong/DependencyCheck
@@ -180,8 +180,8 @@ apply plugin: 'org.sonarqube'
 
 sonarqube {
     properties {
-        property "sonar.projectName", "Element-Android"
-        property "sonar.projectKey", "im.vector.app.android"
+        property "sonar.projectName", "element-android"
+        property "sonar.projectKey", "vector-im_element-android"
         property "sonar.host.url", "https://sonarcloud.io"
         property "sonar.projectVersion", project(":vector").android.defaultConfig.versionName
         property "sonar.sourceEncoding", "UTF-8"
@@ -191,7 +191,7 @@ sonarqube {
         property "sonar.links.issue", "https://github.com/vector-im/element-android/issues"
         property "sonar.organization", "new_vector_ltd_organization"
         property "sonar.java.coveragePlugin", "jacoco"
-        property "sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/reports/jacoco/allCodeCoverageReport/allCodeCoverageReport.xml"
+        property "sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/reports/jacoco/theCodeCoverageReport/theCodeCoverageReport.xml"
         property "sonar.login", project.hasProperty("SONAR_LOGIN") ? SONAR_LOGIN : "invalid"
     }
 }

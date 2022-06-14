@@ -94,7 +94,7 @@ class CreateRoomFragment @Inject constructor(
                 .allowBack(useCross = true)
         viewModel.observeViewEvents {
             when (it) {
-                CreateRoomViewEvents.Quit       -> vectorBaseActivity.onBackPressed()
+                CreateRoomViewEvents.Quit -> vectorBaseActivity.onBackPressed()
                 is CreateRoomViewEvents.Failure -> showFailure(it.throwable)
             }
         }

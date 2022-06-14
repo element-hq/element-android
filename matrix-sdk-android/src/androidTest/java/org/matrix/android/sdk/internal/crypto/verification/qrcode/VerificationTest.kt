@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.crypto.verification.qrcode
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.amshove.kluent.shouldBe
 import org.junit.FixMethodOrder
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
@@ -41,6 +42,7 @@ import kotlin.coroutines.resume
 
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
+@Ignore
 class VerificationTest : InstrumentedTest {
 
     data class ExpectedResult(
@@ -151,10 +153,12 @@ class VerificationTest : InstrumentedTest {
 
     // TODO Add tests without SAS
 
-    private fun doTest(aliceSupportedMethods: List<VerificationMethod>,
-                       bobSupportedMethods: List<VerificationMethod>,
-                       expectedResultForAlice: ExpectedResult,
-                       expectedResultForBob: ExpectedResult) = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    private fun doTest(
+            aliceSupportedMethods: List<VerificationMethod>,
+            bobSupportedMethods: List<VerificationMethod>,
+            expectedResultForAlice: ExpectedResult,
+            expectedResultForBob: ExpectedResult
+    ) = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession

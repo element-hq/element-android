@@ -49,8 +49,8 @@ internal class RoomEncryptorsStore @Inject constructor(
             } else {
                 val alg: IMXEncrypting? = when (cryptoStore.getRoomAlgorithm(roomId)) {
                     MXCRYPTO_ALGORITHM_MEGOLM -> megolmEncryptionFactory.create(roomId)
-                    MXCRYPTO_ALGORITHM_OLM    -> olmEncryptionFactory.create(roomId)
-                    else                      -> null
+                    MXCRYPTO_ALGORITHM_OLM -> olmEncryptionFactory.create(roomId)
+                    else -> null
                 }
                 alg?.let { roomEncryptors.put(roomId, it) }
                 return@synchronized alg

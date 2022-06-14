@@ -38,11 +38,13 @@ class SpaceCardRenderer @Inject constructor(
         private val stringProvider: StringProvider
 ) {
 
-    fun render(spaceSummary: RoomSummary?,
-               peopleYouKnow: List<User>,
-               matrixLinkCallback: TimelineEventController.UrlClickCallback?,
-               inCard: FragmentMatrixToRoomSpaceCardBinding,
-               showDescription: Boolean) {
+    fun render(
+            spaceSummary: RoomSummary?,
+            peopleYouKnow: List<User>,
+            matrixLinkCallback: TimelineEventController.UrlClickCallback?,
+            inCard: FragmentMatrixToRoomSpaceCardBinding,
+            showDescription: Boolean
+    ) {
         if (spaceSummary == null) {
             inCard.matrixToCardContentVisibility.isVisible = false
             inCard.matrixToCardButtonLoading.isVisible = true
@@ -87,10 +89,12 @@ class SpaceCardRenderer @Inject constructor(
         })
     }
 
-    fun render(spaceChildInfo: SpaceChildInfo?,
-               peopleYouKnow: List<User>,
-               matrixLinkCallback: TimelineEventController.UrlClickCallback?,
-               inCard: FragmentMatrixToRoomSpaceCardBinding) {
+    fun render(
+            spaceChildInfo: SpaceChildInfo?,
+            peopleYouKnow: List<User>,
+            matrixLinkCallback: TimelineEventController.UrlClickCallback?,
+            inCard: FragmentMatrixToRoomSpaceCardBinding
+    ) {
         if (spaceChildInfo == null) {
             inCard.matrixToCardContentVisibility.isVisible = false
             inCard.matrixToCardButtonLoading.isVisible = true

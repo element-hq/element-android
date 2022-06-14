@@ -168,16 +168,18 @@ class BugReporter @Inject constructor(
      * @param listener the listener
      */
     @SuppressLint("StaticFieldLeak")
-    fun sendBugReport(reportType: ReportType,
-                      withDevicesLogs: Boolean,
-                      withCrashLogs: Boolean,
-                      withKeyRequestHistory: Boolean,
-                      withScreenshot: Boolean,
-                      theBugDescription: String,
-                      serverVersion: String,
-                      canContact: Boolean = false,
-                      customFields: Map<String, String>? = null,
-                      listener: IMXBugReportListener?) {
+    fun sendBugReport(
+            reportType: ReportType,
+            withDevicesLogs: Boolean,
+            withCrashLogs: Boolean,
+            withKeyRequestHistory: Boolean,
+            withScreenshot: Boolean,
+            theBugDescription: String,
+            serverVersion: String,
+            canContact: Boolean = false,
+            customFields: Map<String, String>? = null,
+            listener: IMXBugReportListener?
+    ) {
         // enumerate files to delete
         val mBugReportFiles: MutableList<File> = ArrayList()
 
@@ -259,12 +261,12 @@ class BugReporter @Inject constructor(
 
                 if (!mIsCancelled) {
                     val text = when (reportType) {
-                        ReportType.BUG_REPORT            -> "[Element] $bugDescription"
-                        ReportType.SUGGESTION            -> "[Element] [Suggestion] $bugDescription"
-                        ReportType.SPACE_BETA_FEEDBACK   -> "[Element] [spaces-feedback] $bugDescription"
+                        ReportType.BUG_REPORT -> "[Element] $bugDescription"
+                        ReportType.SUGGESTION -> "[Element] [Suggestion] $bugDescription"
+                        ReportType.SPACE_BETA_FEEDBACK -> "[Element] [spaces-feedback] $bugDescription"
                         ReportType.THREADS_BETA_FEEDBACK -> "[Element] [threads-feedback] $bugDescription"
                         ReportType.AUTO_UISI_SENDER,
-                        ReportType.AUTO_UISI             -> bugDescription
+                        ReportType.AUTO_UISI -> bugDescription
                     }
 
                     // build the multi part request
@@ -345,18 +347,18 @@ class BugReporter @Inject constructor(
                     builder.addFormDataPart("label", "[Element]")
 
                     when (reportType) {
-                        ReportType.BUG_REPORT            -> {
+                        ReportType.BUG_REPORT -> {
                             /* nop */
                         }
-                        ReportType.SUGGESTION            -> builder.addFormDataPart("label", "[Suggestion]")
-                        ReportType.SPACE_BETA_FEEDBACK   -> builder.addFormDataPart("label", "spaces-feedback")
+                        ReportType.SUGGESTION -> builder.addFormDataPart("label", "[Suggestion]")
+                        ReportType.SPACE_BETA_FEEDBACK -> builder.addFormDataPart("label", "spaces-feedback")
                         ReportType.THREADS_BETA_FEEDBACK -> builder.addFormDataPart("label", "threads-feedback")
-                        ReportType.AUTO_UISI             -> {
+                        ReportType.AUTO_UISI -> {
                             builder.addFormDataPart("label", "Z-UISI")
                             builder.addFormDataPart("label", "android")
                             builder.addFormDataPart("label", "uisi-recipient")
                         }
-                        ReportType.AUTO_UISI_SENDER      -> {
+                        ReportType.AUTO_UISI_SENDER -> {
                             builder.addFormDataPart("label", "Z-UISI")
                             builder.addFormDataPart("label", "android")
                             builder.addFormDataPart("label", "uisi-sender")
@@ -507,7 +509,7 @@ class BugReporter @Inject constructor(
                 when (reportType) {
                     ReportType.AUTO_UISI_SENDER,
                     ReportType.AUTO_UISI -> R.string.bug_report_auto_uisi_app_name
-                    else                 -> R.string.bug_report_app_name
+                    else -> R.string.bug_report_app_name
                 }
         )
     }

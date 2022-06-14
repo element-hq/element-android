@@ -69,12 +69,14 @@ internal data class KeyVerificationAccept(
     override fun toSendToDeviceObject() = this
 
     companion object : VerificationInfoAcceptFactory {
-        override fun create(tid: String,
-                            keyAgreementProtocol: String,
-                            hash: String,
-                            commitment: String,
-                            messageAuthenticationCode: String,
-                            shortAuthenticationStrings: List<String>): VerificationInfoAccept {
+        override fun create(
+                tid: String,
+                keyAgreementProtocol: String,
+                hash: String,
+                commitment: String,
+                messageAuthenticationCode: String,
+                shortAuthenticationStrings: List<String>
+        ): VerificationInfoAccept {
             return KeyVerificationAccept(
                     transactionId = tid,
                     keyAgreementProtocol = keyAgreementProtocol,

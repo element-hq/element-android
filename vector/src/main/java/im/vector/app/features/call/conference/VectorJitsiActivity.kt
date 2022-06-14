@@ -73,11 +73,11 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
 
         jitsiViewModel.observeViewEvents {
             when (it) {
-                is JitsiCallViewEvents.JoinConference             -> configureJitsiView(it)
+                is JitsiCallViewEvents.JoinConference -> configureJitsiView(it)
                 is JitsiCallViewEvents.ConfirmSwitchingConference -> handleConfirmSwitching(it)
-                JitsiCallViewEvents.FailJoiningConference         -> handleFailJoining()
-                JitsiCallViewEvents.Finish                        -> finish()
-                JitsiCallViewEvents.LeaveConference               -> handleLeaveConference()
+                JitsiCallViewEvents.FailJoiningConference -> handleFailJoining()
+                JitsiCallViewEvents.Finish -> finish()
+                JitsiCallViewEvents.LeaveConference -> handleLeaveConference()
             }
         }
         lifecycle.addObserver(ConferenceEventObserver(this, this::onBroadcastEvent))
@@ -138,8 +138,10 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
                 .show()
     }
 
-    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean,
-                                               newConfig: Configuration) {
+    override fun onPictureInPictureModeChanged(
+            isInPictureInPictureMode: Boolean,
+            newConfig: Configuration
+    ) {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
         checkIfActivityShouldBeFinished()
         Timber.w("onPictureInPictureModeChanged($isInPictureInPictureMode)")
@@ -155,12 +157,12 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
 
     private fun renderState(viewState: JitsiCallViewState) {
         when (viewState.widget) {
-            is Fail    -> finish()
+            is Fail -> finish()
             is Success -> {
                 views.jitsiProgressLayout.isVisible = false
                 jitsiMeetView?.isVisible = true
             }
-            else       -> {
+            else -> {
                 jitsiMeetView?.isVisible = false
                 views.jitsiProgressLayout.isVisible = true
             }
@@ -220,7 +222,7 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
         Timber.v("Broadcast received: $event")
         when (event) {
             is ConferenceEvent.Terminated -> onConferenceTerminated(event.data)
-            else                          -> Unit
+            else -> Unit
         }
     }
 

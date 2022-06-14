@@ -36,9 +36,11 @@ suspend fun Session.fetchHomeserverWithTerms(userLanguage: String): ServerAndPol
     return buildServerAndPolicies(homeserverUrl, terms, userLanguage)
 }
 
-private fun buildServerAndPolicies(serviceUrl: String,
-                                   termsResponse: TermsResponse,
-                                   userLanguage: String): ServerAndPolicies {
+private fun buildServerAndPolicies(
+        serviceUrl: String,
+        termsResponse: TermsResponse,
+        userLanguage: String
+): ServerAndPolicies {
     val terms = termsResponse.getLocalizedTerms(userLanguage)
     val policyUrls = terms.mapNotNull {
         val name = it.localizedName ?: it.policyName

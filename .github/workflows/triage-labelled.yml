@@ -9,15 +9,15 @@ jobs:
     name: Add Z-Labs label for features behind labs flags
     runs-on: ubuntu-latest
     if: >
-        contains(github.event.issue.labels.*.name, 'A-Maths') ||
-        contains(github.event.issue.labels.*.name, 'A-Message-Pinning') ||
-        contains(github.event.issue.labels.*.name, 'A-Polls') ||
-        contains(github.event.issue.labels.*.name, 'A-Location-Sharing') ||
-        contains(github.event.issue.labels.*.name, 'A-Message-Bubbles') ||
-        contains(github.event.issue.labels.*.name, 'Z-IA') ||
-        contains(github.event.issue.labels.*.name, 'A-Themes-Custom') ||
-        contains(github.event.issue.labels.*.name, 'A-E2EE-Dehydration') ||
-        contains(github.event.issue.labels.*.name, 'A-Tags')
+      contains(github.event.issue.labels.*.name, 'A-Maths') ||
+      contains(github.event.issue.labels.*.name, 'A-Message-Pinning') ||
+      contains(github.event.issue.labels.*.name, 'A-Polls') ||
+      contains(github.event.issue.labels.*.name, 'A-Location-Sharing') ||
+      contains(github.event.issue.labels.*.name, 'A-Message-Bubbles') ||
+      contains(github.event.issue.labels.*.name, 'Z-IA') ||
+      contains(github.event.issue.labels.*.name, 'A-Themes-Custom') ||
+      contains(github.event.issue.labels.*.name, 'A-E2EE-Dehydration') ||
+      contains(github.event.issue.labels.*.name, 'A-Tags')
     steps:
       - uses: actions/github-script@v5
         with:
@@ -79,7 +79,7 @@ jobs:
     name: X-Needs-Product to Design project board
     runs-on: ubuntu-latest
     if: >
-        contains(github.event.issue.labels.*.name, 'X-Needs-Product')
+      contains(github.event.issue.labels.*.name, 'X-Needs-Product')
     steps:
       - uses: octokit/graphql-action@v2.x
         id: add_to_project
@@ -105,10 +105,7 @@ jobs:
     # Skip in forks
     if: >
       github.repository == 'vector-im/element-android' &&
-      (contains(github.event.issue.labels.*.name, 'A-Spaces') ||
-        contains(github.event.issue.labels.*.name, 'A-Space-Settings') ||
-        contains(github.event.issue.labels.*.name, 'A-Subspaces') ||
-        contains(github.event.issue.labels.*.name, 'Z-IA'))
+      (contains(github.event.issue.labels.*.name, 'Team: Delight'))
     steps:
       - uses: octokit/graphql-action@v2.x
         with:
@@ -201,7 +198,7 @@ jobs:
         env:
           PROJECT_ID: "PN_kwDOAM0swc3m-g"
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
- 
+
   move_ftue_issues:
     name: Z-FTUE to Mobile FTUE board
     runs-on: ubuntu-latest

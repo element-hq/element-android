@@ -28,17 +28,25 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.extensions.toAnalyticsType
+import im.vector.app.features.analytics.plan.Signup
 import im.vector.app.features.analytics.store.AnalyticsStore
 import im.vector.app.features.login.ReAuthHelper
+import im.vector.app.features.onboarding.AuthenticationDescription
 import im.vector.app.features.raw.wellknown.ElementWellKnown
 import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isSecureBackupRequired
+import im.vector.app.features.raw.wellknown.withElementWellKnown
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
@@ -52,10 +60,10 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningServic
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.api.session.getUser
-import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.pushrules.RuleIds
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
+import org.matrix.android.sdk.api.session.sync.SyncRequestState
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import org.matrix.android.sdk.api.util.awaitCallback
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -72,7 +80,8 @@ class HomeActivityViewModel @AssistedInject constructor(
         private val reAuthHelper: ReAuthHelper,
         private val analyticsStore: AnalyticsStore,
         private val lightweightSettingsStorage: LightweightSettingsStorage,
-        private val vectorPreferences: VectorPreferences
+        private val vectorPreferences: VectorPreferences,
+        private val analyticsTracker: AnalyticsTracker
 ) : VectorViewModel<HomeActivityViewState, HomeActivityViewActions, HomeActivityViewEvents>(initialState) {
 
     @AssistedFactory
@@ -84,7 +93,7 @@ class HomeActivityViewModel @AssistedInject constructor(
         override fun initialState(viewModelContext: ViewModelContext): HomeActivityViewState? {
             val activity: HomeActivity = viewModelContext.activity()
             val args: HomeActivityArgs? = activity.intent.getParcelableExtra(Mavericks.KEY_ARG)
-            return args?.let { HomeActivityViewState(accountCreation = it.accountCreation) }
+            return args?.let { HomeActivityViewState(authenticationDescription = it.authenticationDescription) }
                     ?: super.initialState(viewModelContext)
         }
     }
@@ -113,7 +122,30 @@ class HomeActivityViewModel @AssistedInject constructor(
                         }
                     }
                     .launchIn(viewModelScope)
+
+            when (val recentAuthentication = initialState.authenticationDescription) {
+                is AuthenticationDescription.Register -> {
+                    viewModelScope.launch {
+                        analyticsStore.onUserGaveConsent {
+                            analyticsTracker.capture(Signup(authenticationType = recentAuthentication.type.toAnalyticsType()))
+                        }
+                    }
+                }
+                AuthenticationDescription.Login -> {
+                    // do nothing
+                }
+                null -> {
+                    // do nothing
+                }
+            }
         }
+    }
+
+    private suspend fun AnalyticsStore.onUserGaveConsent(action: () -> Unit) {
+        userConsentFlow
+                .takeWhile { !it }
+                .onCompletion { action() }
+                .collect()
     }
 
     private fun cleanupFiles() {
@@ -134,9 +166,8 @@ class HomeActivityViewModel @AssistedInject constructor(
                 .onEach { info ->
                     val isVerified = info.getOrNull()?.isTrusted() ?: false
                     if (!isVerified && onceTrusted) {
-                        viewModelScope.launch(Dispatchers.IO) {
-                            val elementWellKnown = rawService.getElementWellknown(safeActiveSession.sessionParams)
-                            sessionHasBeenUnverified(elementWellKnown)
+                        rawService.withElementWellKnown(viewModelScope, safeActiveSession.sessionParams) {
+                            sessionHasBeenUnverified(it)
                         }
                     }
                     onceTrusted = isVerified
@@ -167,7 +198,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                 vectorPreferences.userNotifiedAboutThreads()
             }
             // Migrate users with enabled lab settings
-            vectorPreferences.shouldNotifyUserAboutThreads() && vectorPreferences.shouldMigrateThreads()     -> {
+            vectorPreferences.shouldNotifyUserAboutThreads() && vectorPreferences.shouldMigrateThreads() -> {
                 Timber.i("----> Migrate threads with enabled labs")
                 // If user had io.element.thread enabled then enable the new thread support,
                 // clear cache to sync messages appropriately
@@ -177,7 +208,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                 _viewEvents.post(HomeActivityViewEvents.MigrateThreads(checkSession = false))
             }
             // Enable all users
-            vectorPreferences.shouldMigrateThreads() && vectorPreferences.areThreadMessagesEnabled()         -> {
+            vectorPreferences.shouldMigrateThreads() && vectorPreferences.areThreadMessagesEnabled() -> {
                 Timber.i("----> Try to migrate threads")
                 _viewEvents.post(HomeActivityViewEvents.MigrateThreads(checkSession = true))
             }
@@ -187,25 +218,25 @@ class HomeActivityViewModel @AssistedInject constructor(
     private fun observeInitialSync() {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
 
-        session.syncStatusService().getSyncStatusLive()
+        session.syncService().getSyncRequestStateLive()
                 .asFlow()
                 .onEach { status ->
                     when (status) {
-                        is SyncStatusService.Status.Idle                   -> {
+                        is SyncRequestState.Idle -> {
                             maybeVerifyOrBootstrapCrossSigning()
                         }
-                        else                                               -> Unit
+                        else -> Unit
                     }
 
                     setState {
                         copy(
-                                syncStatusServiceStatus = status
+                                syncRequestState = status
                         )
                     }
                 }
                 .launchIn(viewModelScope)
 
-        if (session.hasAlreadySynced()) {
+        if (session.syncService().hasAlreadySynced()) {
             maybeVerifyOrBootstrapCrossSigning()
         }
     }
@@ -285,7 +316,7 @@ class HomeActivityViewModel @AssistedInject constructor(
             val isSecureBackupRequired = elementWellKnown?.isSecureBackupRequired() ?: false
 
             // In case of account creation, it is already done before
-            if (initialState.accountCreation) {
+            if (initialState.authenticationDescription is AuthenticationDescription.Register) {
                 if (isSecureBackupRequired) {
                     _viewEvents.post(HomeActivityViewEvents.StartRecoverySetupFlow)
                 } else {
@@ -395,7 +426,7 @@ class HomeActivityViewModel @AssistedInject constructor(
             HomeActivityViewActions.PushPromptHasBeenReviewed -> {
                 vectorPreferences.setDidAskUserToEnableSessionPush()
             }
-            HomeActivityViewActions.ViewStarted               -> {
+            HomeActivityViewActions.ViewStarted -> {
                 initialize()
             }
         }

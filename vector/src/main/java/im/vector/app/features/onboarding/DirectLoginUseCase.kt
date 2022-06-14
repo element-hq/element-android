@@ -53,7 +53,7 @@ class DirectLoginUseCase @Inject constructor(
         val isMissingInformationToLogin = data.homeServerUrl == null || data.wellKnown == null
         return when {
             isMissingInformationToLogin -> onWellKnownError()
-            else                        -> loginDirect(action, WellknownResult.Prompt(data.homeServerUrl!!, null, data.wellKnown!!), config)
+            else -> loginDirect(action, WellknownResult.Prompt(data.homeServerUrl!!, null, data.wellKnown!!), config)
         }
     }
 

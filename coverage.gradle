@@ -1,8 +1,33 @@
-def excludes = [ ]
+def excludes = [
+// dependency injection graph
+'**/*Module.*',
+'**/*Module*.*',
+
+// Framework entry points
+'**/*Activity*',
+'**/*Fragment*',
+'**/*Application*',
+
+// We would like to exclude android widgets as well but our naming is inconsistent
+
+// Proof of concept
+'**/*Login2*',
+
+// Generated
+'**/*JsonAdapter*',
+'**/*Item.*',
+'**/*$Holder.*',
+'**/*ViewHolder.*',
+'**/*View.*',
+'**/*BottomSheet.*'
+]
 
 def initializeReport(report, projects, classExcludes) {
     projects.each { project -> project.apply plugin: 'jacoco' }
-    report.executionData { fileTree(rootProject.rootDir.absolutePath).include("**/build/jacoco/*.exec") }
+    report.executionData { fileTree(rootProject.rootDir.absolutePath).include(
+        "**/build/outputs/unit_test_code_coverage/**/*.exec",
+        "**/build/outputs/code_coverage/**/coverage.ec"
+    ) }
 
     report.reports {
         xml.enabled true
@@ -18,11 +43,13 @@ def initializeReport(report, projects, classExcludes) {
             switch (project) {
                 case { project.plugins.hasPlugin("com.android.application") }:
                     androidClassDirs.add("${project.buildDir}/tmp/kotlin-classes/gplayDebug")
+                    androidSourceDirs.add("${project.buildDir}/generated/source/kapt/gplayDebug")
                     androidSourceDirs.add("${project.projectDir}/src/main/kotlin")
                     androidSourceDirs.add("${project.projectDir}/src/main/java")
                     break
                 case { project.plugins.hasPlugin("com.android.library") }:
                     androidClassDirs.add("${project.buildDir}/tmp/kotlin-classes/debug")
+                    androidSourceDirs.add("${project.buildDir}/generated/source/kapt/debug")
                     androidSourceDirs.add("${project.projectDir}/src/main/kotlin")
                     androidSourceDirs.add("${project.projectDir}/src/main/java")
                     break
@@ -43,13 +70,18 @@ def collectProjects(predicate) {
     return subprojects.findAll { it.buildFile.isFile() && predicate(it) }
 }
 
-task allCodeCoverageReport(type: JacocoReport) {
+task theCodeCoverageReport(type: JacocoReport) {
     outputs.upToDateWhen { false }
     rootProject.apply plugin: 'jacoco'
-    // to limit projects in a specific report, add
-    // def excludedProjects = [ ... ]
-    // def projects = collectProjects { !excludedProjects.contains(it.name) }
-    def projects = collectProjects { true }
-    dependsOn { projects*.test }
+    tasks.withType(Test) {
+        jacoco.includeNoLocationClasses = true
+    }
+    def projects = collectProjects { ['vector','matrix-sdk-android'].contains(it.name) }
+    dependsOn {
+        [':vector:testGplayDebugUnitTest'] +
+        [':vector:connectedGplayDebugAndroidTest'] +
+        [':matrix-sdk-android:testDebugUnitTest'] +
+        [':matrix-sdk-android:connectedDebugAndroidTest']
+    }
     initializeReport(it, projects, excludes)
 }

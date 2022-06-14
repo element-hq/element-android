@@ -53,7 +53,7 @@ import org.matrix.android.sdk.api.session.room.model.Membership
         views.removeJitsiSlidingContainer.setOnTouchListener { _, event ->
             val currentState = state
             return@setOnTouchListener when (event.action) {
-                MotionEvent.ACTION_DOWN   -> {
+                MotionEvent.ACTION_DOWN -> {
                     if (currentState == State.Idle) {
                         val initialX = views.removeJitsiSlidingContainer.x - event.rawX
                         updateState(State.Sliding(initialX, 0f, false))
@@ -71,7 +71,7 @@ import org.matrix.android.sdk.api.session.room.model.Membership
                     }
                     true
                 }
-                MotionEvent.ACTION_MOVE   -> {
+                MotionEvent.ACTION_MOVE -> {
                     if (currentState is State.Sliding) {
                         val translationX = (currentState.initialX + event.rawX).coerceAtLeast(0f)
                         val hasReachedActivationThreshold = translationX >= views.root.width / 4
@@ -79,7 +79,7 @@ import org.matrix.android.sdk.api.session.room.model.Membership
                     }
                     true
                 }
-                else                      -> false
+                else -> false
             }
         }
         renderInternalState(state)
@@ -119,12 +119,12 @@ import org.matrix.android.sdk.api.session.room.model.Membership
     private fun renderInternalState(state: State) {
         isVisible = state != State.Unmount
         when (state) {
-            State.Progress   -> {
+            State.Progress -> {
                 isVisible = true
                 views.updateVisibilities(true)
                 views.updateHangupColors(true)
             }
-            State.Idle       -> {
+            State.Idle -> {
                 isVisible = true
                 views.updateVisibilities(false)
                 views.removeJitsiSlidingContainer.translationX = 0f
@@ -136,7 +136,7 @@ import org.matrix.android.sdk.api.session.room.model.Membership
                 views.removeJitsiSlidingContainer.translationX = state.translationX
                 views.updateHangupColors(state.hasReachedActivationThreshold)
             }
-            else             -> Unit
+            else -> Unit
         }
     }
 

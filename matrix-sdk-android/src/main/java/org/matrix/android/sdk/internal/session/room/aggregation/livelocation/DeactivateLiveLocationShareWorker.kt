@@ -75,6 +75,7 @@ internal class DeactivateLiveLocationShareWorker(context: Context, params: Worke
 
     private suspend fun deactivateLiveLocationShare(params: Params) {
         awaitTransaction(realmConfiguration) { realm ->
+            Timber.d("deactivating live with id=${params.eventId}")
             val aggregatedSummary = LiveLocationShareAggregatedSummaryEntity.get(
                     realm = realm,
                     roomId = params.roomId,

@@ -23,8 +23,10 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupVersionTrust
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersionResult
 
-data class KeysBackupSettingViewState(val keysBackupVersionTrust: Async<KeysBackupVersionTrust> = Uninitialized,
-                                      val keysBackupState: KeysBackupState? = null,
-                                      val keysBackupVersion: KeysVersionResult? = null,
-                                      val deleteBackupRequest: Async<Unit> = Uninitialized) :
+data class KeysBackupSettingViewState(
+        val keysBackupVersionTrust: Async<KeysBackupVersionTrust> = Uninitialized,
+        val keysBackupState: KeysBackupState? = null,
+        val keysBackupVersion: KeysVersionResult? = null,
+        val deleteBackupRequest: Async<Unit> = Uninitialized
+) :
         MavericksState

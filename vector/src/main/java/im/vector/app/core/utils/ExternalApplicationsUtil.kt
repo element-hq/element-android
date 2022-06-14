@@ -89,9 +89,11 @@ fun openUrlInExternalBrowser(context: Context, uri: Uri?) {
  * If several compatible browsers are installed, the user will be proposed to choose one.
  * Ref: https://developer.chrome.com/multidevice/android/customtabs.
  */
-fun openUrlInChromeCustomTab(context: Context,
-                             session: CustomTabsSession?,
-                             url: String) {
+fun openUrlInChromeCustomTab(
+        context: Context,
+        session: CustomTabsSession?,
+        url: String
+) {
     try {
         CustomTabsIntent.Builder()
                 .setDefaultColorSchemeParams(
@@ -103,8 +105,8 @@ fun openUrlInChromeCustomTab(context: Context,
                 .setColorScheme(
                         when {
                             ThemeUtils.isSystemTheme(context) -> CustomTabsIntent.COLOR_SCHEME_SYSTEM
-                            ThemeUtils.isLightTheme(context)  -> CustomTabsIntent.COLOR_SCHEME_LIGHT
-                            else                              -> CustomTabsIntent.COLOR_SCHEME_DARK
+                            ThemeUtils.isLightTheme(context) -> CustomTabsIntent.COLOR_SCHEME_LIGHT
+                            else -> CustomTabsIntent.COLOR_SCHEME_DARK
                         }
                 )
                 // Note: setting close button icon does not work
@@ -122,10 +124,12 @@ fun openUrlInChromeCustomTab(context: Context,
 /**
  * Open file selection activity.
  */
-fun openFileSelection(activity: Activity,
-                      activityResultLauncher: ActivityResultLauncher<Intent>?,
-                      allowMultipleSelection: Boolean,
-                      requestCode: Int) {
+fun openFileSelection(
+        activity: Activity,
+        activityResultLauncher: ActivityResultLauncher<Intent>?,
+        allowMultipleSelection: Boolean,
+        requestCode: Int
+) {
     val fileIntent = Intent(Intent.ACTION_GET_CONTENT)
     fileIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, allowMultipleSelection)
 
@@ -251,12 +255,14 @@ private fun appendTimeToFilename(name: String): String {
     return """${filename}_$dateExtension.$fileExtension"""
 }
 
-suspend fun saveMedia(context: Context,
-                      file: File,
-                      title: String,
-                      mediaMimeType: String?,
-                      notificationUtils: NotificationUtils,
-                      currentTimeMillis: Long) {
+suspend fun saveMedia(
+        context: Context,
+        file: File,
+        title: String,
+        mediaMimeType: String?,
+        notificationUtils: NotificationUtils,
+        currentTimeMillis: Long
+) {
     withContext(Dispatchers.IO) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             val filename = appendTimeToFilename(title)
@@ -272,7 +278,7 @@ suspend fun saveMedia(context: Context,
                 mediaMimeType?.isMimeTypeImage() == true -> MediaStore.Images.Media.EXTERNAL_CONTENT_URI
                 mediaMimeType?.isMimeTypeVideo() == true -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
                 mediaMimeType?.isMimeTypeAudio() == true -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-                else                                     -> MediaStore.Downloads.EXTERNAL_CONTENT_URI
+                else -> MediaStore.Downloads.EXTERNAL_CONTENT_URI
             }
 
             val uri = context.contentResolver.insert(externalContentUri, values)
@@ -303,11 +309,13 @@ suspend fun saveMedia(context: Context,
 }
 
 @Suppress("DEPRECATION")
-private fun saveMediaLegacy(context: Context,
-                            mediaMimeType: String?,
-                            title: String,
-                            file: File,
-                            currentTimeMillis: Long) {
+private fun saveMediaLegacy(
+        context: Context,
+        mediaMimeType: String?,
+        title: String,
+        file: File,
+        currentTimeMillis: Long
+) {
     val state = Environment.getExternalStorageState()
     if (Environment.MEDIA_MOUNTED != state) {
         context.toast(context.getString(R.string.error_saving_media_file))
@@ -318,7 +326,7 @@ private fun saveMediaLegacy(context: Context,
         mediaMimeType?.isMimeTypeImage() == true -> Environment.DIRECTORY_PICTURES
         mediaMimeType?.isMimeTypeVideo() == true -> Environment.DIRECTORY_MOVIES
         mediaMimeType?.isMimeTypeAudio() == true -> Environment.DIRECTORY_MUSIC
-        else                                     -> Environment.DIRECTORY_DOWNLOADS
+        else -> Environment.DIRECTORY_DOWNLOADS
     }
     val downloadDir = Environment.getExternalStoragePublicDirectory(dest)
     try {

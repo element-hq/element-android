@@ -35,7 +35,8 @@ import org.matrix.android.sdk.api.session.getRoomSummary
 class MigrateRoomViewModel @AssistedInject constructor(
         @Assisted initialState: MigrateRoomViewState,
         private val session: Session,
-        private val upgradeRoomViewModelTask: UpgradeRoomViewModelTask) :
+        private val upgradeRoomViewModelTask: UpgradeRoomViewModelTask
+) :
         VectorViewModel<MigrateRoomViewState, MigrateRoomAction, EmptyViewEvents>(initialState) {
 
     init {

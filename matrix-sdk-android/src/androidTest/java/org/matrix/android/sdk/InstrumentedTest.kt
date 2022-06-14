@@ -19,9 +19,13 @@ package org.matrix.android.sdk
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import org.junit.Rule
+import org.matrix.android.sdk.common.RetryTestRule
 import org.matrix.android.sdk.test.shared.createTimberTestRule
 
 interface InstrumentedTest {
+
+    @Rule
+    fun retryTestRule() = RetryTestRule(3)
 
     @Rule
     fun timberTestRule() = createTimberTestRule()

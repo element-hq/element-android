@@ -28,7 +28,7 @@ internal const val VERIFICATION_METHOD_RECIPROCATE = "m.reciprocate.v1"
 
 internal fun VerificationMethod.toValue(): String {
     return when (this) {
-        VerificationMethod.SAS          -> VERIFICATION_METHOD_SAS
+        VerificationMethod.SAS -> VERIFICATION_METHOD_SAS
         VerificationMethod.QR_CODE_SCAN -> VERIFICATION_METHOD_QR_CODE_SCAN
         VerificationMethod.QR_CODE_SHOW -> VERIFICATION_METHOD_QR_CODE_SHOW
     }

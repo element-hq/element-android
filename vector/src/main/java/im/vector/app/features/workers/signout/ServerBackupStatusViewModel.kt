@@ -62,8 +62,10 @@ sealed class BannerState {
     object BackingUp : BannerState()
 }
 
-class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialState: ServerBackupStatusViewState,
-                                                              private val session: Session) :
+class ServerBackupStatusViewModel @AssistedInject constructor(
+        @Assisted initialState: ServerBackupStatusViewState,
+        private val session: Session
+) :
         VectorViewModel<ServerBackupStatusViewState, EmptyAction, EmptyViewEvents>(initialState), KeysBackupStateListener {
 
     @AssistedFactory
@@ -91,7 +93,7 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
                 // 4S is already setup sp we should not display anything
                 return@combine when (keyBackupState) {
                     KeysBackupState.BackingUp -> BannerState.BackingUp
-                    else                      -> BannerState.Hidden
+                    else -> BannerState.Hidden
                 }
             }
 

@@ -37,8 +37,10 @@ import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
 
-class RoomPermissionsViewModel @AssistedInject constructor(@Assisted initialState: RoomPermissionsViewState,
-                                                           private val session: Session) :
+class RoomPermissionsViewModel @AssistedInject constructor(
+        @Assisted initialState: RoomPermissionsViewState,
+        private val session: Session
+) :
         VectorViewModel<RoomPermissionsViewState, RoomPermissionsAction, RoomPermissionsViewEvents>(initialState) {
 
     @AssistedFactory
@@ -88,7 +90,7 @@ class RoomPermissionsViewModel @AssistedInject constructor(@Assisted initialStat
 
     override fun handle(action: RoomPermissionsAction) {
         when (action) {
-            is RoomPermissionsAction.UpdatePermission      -> updatePermission(action)
+            is RoomPermissionsAction.UpdatePermission -> updatePermission(action)
             RoomPermissionsAction.ToggleShowAllPermissions -> toggleShowAllPermissions()
         }
     }
@@ -111,14 +113,14 @@ class RoomPermissionsViewModel @AssistedInject constructor(@Assisted initialStat
                                     put(action.editablePermission.eventType, action.powerLevel)
                                 }
                         )
-                        is EditablePermission.DefaultRole                 -> currentPowerLevel.copy(usersDefault = action.powerLevel)
-                        is EditablePermission.SendMessages                -> currentPowerLevel.copy(eventsDefault = action.powerLevel)
-                        is EditablePermission.InviteUsers                 -> currentPowerLevel.copy(invite = action.powerLevel)
-                        is EditablePermission.ChangeSettings              -> currentPowerLevel.copy(stateDefault = action.powerLevel)
-                        is EditablePermission.KickUsers                   -> currentPowerLevel.copy(kick = action.powerLevel)
-                        is EditablePermission.BanUsers                    -> currentPowerLevel.copy(ban = action.powerLevel)
-                        is EditablePermission.RemoveMessagesSentByOthers  -> currentPowerLevel.copy(redact = action.powerLevel)
-                        is EditablePermission.NotifyEveryone              -> currentPowerLevel.copy(
+                        is EditablePermission.DefaultRole -> currentPowerLevel.copy(usersDefault = action.powerLevel)
+                        is EditablePermission.SendMessages -> currentPowerLevel.copy(eventsDefault = action.powerLevel)
+                        is EditablePermission.InviteUsers -> currentPowerLevel.copy(invite = action.powerLevel)
+                        is EditablePermission.ChangeSettings -> currentPowerLevel.copy(stateDefault = action.powerLevel)
+                        is EditablePermission.KickUsers -> currentPowerLevel.copy(kick = action.powerLevel)
+                        is EditablePermission.BanUsers -> currentPowerLevel.copy(ban = action.powerLevel)
+                        is EditablePermission.RemoveMessagesSentByOthers -> currentPowerLevel.copy(redact = action.powerLevel)
+                        is EditablePermission.NotifyEveryone -> currentPowerLevel.copy(
                                 notifications = currentPowerLevel.notifications.orEmpty().toMutableMap().apply {
                                     put(PowerLevelsContent.NOTIFICATIONS_ROOM_KEY, action.powerLevel)
                                 }

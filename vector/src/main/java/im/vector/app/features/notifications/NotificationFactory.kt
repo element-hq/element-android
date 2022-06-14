@@ -31,7 +31,7 @@ class NotificationFactory @Inject constructor(
         return map { (roomId, events) ->
             when {
                 events.hasNoEventsToDisplay() -> RoomNotification.Removed(roomId)
-                else                          -> {
+                else -> {
                     val messageEvents = events.onlyKeptEvents().filterNot { it.isRedacted }
                     roomGroupMessageCreator.createRoomMessage(messageEvents, roomId, myUserDisplayName, myUserAvatarUrl)
                 }
@@ -50,7 +50,7 @@ class NotificationFactory @Inject constructor(
         return map { (processed, event) ->
             when (processed) {
                 ProcessedEvent.Type.REMOVE -> OneShotNotification.Removed(key = event.roomId)
-                ProcessedEvent.Type.KEEP   -> OneShotNotification.Append(
+                ProcessedEvent.Type.KEEP -> OneShotNotification.Append(
                         notificationUtils.buildRoomInvitationNotification(event, myUserId),
                         OneShotNotification.Append.Meta(
                                 key = event.roomId,
@@ -68,7 +68,7 @@ class NotificationFactory @Inject constructor(
         return map { (processed, event) ->
             when (processed) {
                 ProcessedEvent.Type.REMOVE -> OneShotNotification.Removed(key = event.eventId)
-                ProcessedEvent.Type.KEEP   -> OneShotNotification.Append(
+                ProcessedEvent.Type.KEEP -> OneShotNotification.Append(
                         notificationUtils.buildSimpleEventNotification(event, myUserId),
                         OneShotNotification.Append.Meta(
                                 key = event.eventId,
@@ -81,16 +81,18 @@ class NotificationFactory @Inject constructor(
         }
     }
 
-    fun createSummaryNotification(roomNotifications: List<RoomNotification>,
-                                  invitationNotifications: List<OneShotNotification>,
-                                  simpleNotifications: List<OneShotNotification>,
-                                  useCompleteNotificationFormat: Boolean): SummaryNotification {
+    fun createSummaryNotification(
+            roomNotifications: List<RoomNotification>,
+            invitationNotifications: List<OneShotNotification>,
+            simpleNotifications: List<OneShotNotification>,
+            useCompleteNotificationFormat: Boolean
+    ): SummaryNotification {
         val roomMeta = roomNotifications.filterIsInstance<RoomNotification.Message>().map { it.meta }
         val invitationMeta = invitationNotifications.filterIsInstance<OneShotNotification.Append>().map { it.meta }
         val simpleMeta = simpleNotifications.filterIsInstance<OneShotNotification.Append>().map { it.meta }
         return when {
             roomMeta.isEmpty() && invitationMeta.isEmpty() && simpleMeta.isEmpty() -> SummaryNotification.Removed
-            else                                                                   -> SummaryNotification.Update(
+            else -> SummaryNotification.Update(
                     summaryGroupMessageCreator.createSummaryNotification(
                             roomNotifications = roomMeta,
                             invitationNotifications = invitationMeta,

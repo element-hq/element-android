@@ -117,7 +117,7 @@ class SignoutCheckViewModel @AssistedInject constructor(
 
     override fun handle(action: Actions) {
         when (action) {
-            is Actions.ExportKeys                   -> handleExportKeys(action)
+            is Actions.ExportKeys -> handleExportKeys(action)
             Actions.KeySuccessfullyManuallyExported -> {
                 setState {
                     copy(hasBeenExportedToFile = Success(true))

@@ -387,9 +387,10 @@ class SpaceHierarchyTest : InstrumentedTest {
             val roomIds: List<String>
     )
 
-    private fun createPublicSpace(session: Session,
-                                  spaceName: String,
-                                  childInfo: List<Triple<String, Boolean, Boolean?>>
+    private fun createPublicSpace(
+            session: Session,
+            spaceName: String,
+            childInfo: List<Triple<String, Boolean, Boolean?>>
             /** Name, auto-join, canonical*/
     ): TestSpaceCreationResult {
         var spaceId = ""
@@ -416,9 +417,10 @@ class SpaceHierarchyTest : InstrumentedTest {
         return TestSpaceCreationResult(spaceId, roomIds)
     }
 
-    private fun createPrivateSpace(session: Session,
-                                   spaceName: String,
-                                   childInfo: List<Triple<String, Boolean, Boolean?>>
+    private fun createPrivateSpace(
+            session: Session,
+            spaceName: String,
+            childInfo: List<Triple<String, Boolean, Boolean?>>
             /** Name, auto-join, canonical*/
     ): TestSpaceCreationResult {
         var spaceId = ""

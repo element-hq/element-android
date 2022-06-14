@@ -31,11 +31,13 @@ interface Space {
      */
     fun spaceSummary(): RoomSummary?
 
-    suspend fun addChildren(roomId: String,
-                            viaServers: List<String>?,
-                            order: String?,
+    suspend fun addChildren(
+            roomId: String,
+            viaServers: List<String>?,
+            order: String?,
 //                            autoJoin: Boolean = false,
-                            suggested: Boolean? = false)
+            suggested: Boolean? = false
+    )
 
     fun getChildInfo(roomId: String): SpaceChildContent?
 

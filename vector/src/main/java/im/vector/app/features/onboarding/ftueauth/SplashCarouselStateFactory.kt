@@ -74,7 +74,7 @@ class SplashCarouselStateFactory @Inject constructor(
     private fun collaborationTitle(): Int {
         return when {
             localeProvider.isEnglishSpeaking() -> R.string.cut_the_slack_from_teams
-            else                               -> R.string.ftue_auth_carousel_workplace_title
+            else -> R.string.ftue_auth_carousel_workplace_title
         }
     }
 

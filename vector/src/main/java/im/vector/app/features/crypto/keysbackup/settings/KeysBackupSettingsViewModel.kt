@@ -41,8 +41,9 @@ import org.matrix.android.sdk.api.util.awaitCallback
 import org.matrix.android.sdk.api.util.toBase64NoPadding
 import timber.log.Timber
 
-class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialState: KeysBackupSettingViewState,
-                                                              private val session: Session
+class KeysBackupSettingsViewModel @AssistedInject constructor(
+        @Assisted initialState: KeysBackupSettingViewState,
+        private val session: Session
 ) : VectorViewModel<KeysBackupSettingViewState, KeyBackupSettingsAction, KeysBackupViewEvents>(initialState),
         KeysBackupStateListener {
 
@@ -70,14 +71,14 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialS
 
     override fun handle(action: KeyBackupSettingsAction) {
         when (action) {
-            KeyBackupSettingsAction.Init                -> init()
-            KeyBackupSettingsAction.GetKeyBackupTrust   -> getKeysBackupTrust()
-            KeyBackupSettingsAction.DeleteKeyBackup     -> deleteCurrentBackup()
-            KeyBackupSettingsAction.SetUpKeyBackup      -> viewModelScope.launch {
+            KeyBackupSettingsAction.Init -> init()
+            KeyBackupSettingsAction.GetKeyBackupTrust -> getKeysBackupTrust()
+            KeyBackupSettingsAction.DeleteKeyBackup -> deleteCurrentBackup()
+            KeyBackupSettingsAction.SetUpKeyBackup -> viewModelScope.launch {
                 setUpKeyBackup()
             }
             KeyBackupSettingsAction.StoreIn4SReset,
-            KeyBackupSettingsAction.StoreIn4SFailure    -> {
+            KeyBackupSettingsAction.StoreIn4SFailure -> {
                 pendingBackupCreationInfo = null
                 // nothing to do just stay on fragment
             }

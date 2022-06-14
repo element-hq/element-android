@@ -38,7 +38,8 @@ internal interface SpaceApi {
             @Query("suggested_only") suggestedOnly: Boolean?,
             @Query("limit") limit: Int?,
             @Query("max_depth") maxDepth: Int?,
-            @Query("from") from: String?): SpacesResponse
+            @Query("from") from: String?
+    ): SpacesResponse
 
     /**
      * Unstable version of [getSpaceHierarchy].
@@ -49,5 +50,6 @@ internal interface SpaceApi {
             @Query("suggested_only") suggestedOnly: Boolean?,
             @Query("limit") limit: Int?,
             @Query("max_depth") maxDepth: Int?,
-            @Query("from") from: String?): SpacesResponse
+            @Query("from") from: String?
+    ): SpacesResponse
 }

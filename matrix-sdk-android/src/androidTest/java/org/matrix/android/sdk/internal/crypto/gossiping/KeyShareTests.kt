@@ -25,6 +25,7 @@ import org.amshove.kluent.internal.assertEquals
 import org.junit.Assert
 import org.junit.Assert.assertNull
 import org.junit.FixMethodOrder
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -50,6 +51,7 @@ import org.matrix.android.sdk.mustFail
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
 @LargeTest
+@Ignore
 class KeyShareTests : InstrumentedTest {
 
     @get:Rule val rule = RetryTestRule(3)
@@ -422,7 +424,7 @@ class KeyShareTests : InstrumentedTest {
 
         // /!\ Stop initial alice session syncing so that it can't reply
         aliceSession.cryptoService().enableKeyGossiping(false)
-        aliceSession.stopSync()
+        aliceSession.syncService().stopSync()
 
         // Let's now try to request
         aliceNewSession.cryptoService().reRequestRoomKeyForEvent(sentEvents.first().root)
@@ -445,7 +447,7 @@ class KeyShareTests : InstrumentedTest {
 
         // let's wake up alice
         aliceSession.cryptoService().enableKeyGossiping(true)
-        aliceSession.startSync(true)
+        aliceSession.syncService().startSync(true)
 
         // We should now get a reply from first session
         commonTestHelper.waitWithLatch { latch ->

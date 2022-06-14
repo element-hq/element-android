@@ -79,8 +79,8 @@ class WebviewPermissionUtils @Inject constructor(
     fun onPermissionResult(result: Map<String, Boolean>) {
         if (permissionRequest == null) {
             fatalError(
-                message = "permissionRequest was null! Make sure to call promptForPermissions first.",
-                failFast = vectorPreferences.failFast()
+                    message = "permissionRequest was null! Make sure to call promptForPermissions first.",
+                    failFast = vectorPreferences.failFast()
             )
             return
         }
@@ -110,10 +110,10 @@ class WebviewPermissionUtils @Inject constructor(
 
     private fun webPermissionToHumanReadable(permission: String, context: Context): String {
         return when (permission) {
-            PermissionRequest.RESOURCE_AUDIO_CAPTURE      -> context.getString(R.string.room_widget_webview_access_microphone)
-            PermissionRequest.RESOURCE_VIDEO_CAPTURE      -> context.getString(R.string.room_widget_webview_access_camera)
+            PermissionRequest.RESOURCE_AUDIO_CAPTURE -> context.getString(R.string.room_widget_webview_access_microphone)
+            PermissionRequest.RESOURCE_VIDEO_CAPTURE -> context.getString(R.string.room_widget_webview_access_camera)
             PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID -> context.getString(R.string.room_widget_webview_read_protected_media)
-            else                                          -> permission
+            else -> permission
         }
     }
 
@@ -121,7 +121,7 @@ class WebviewPermissionUtils @Inject constructor(
         return when (permission) {
             PermissionRequest.RESOURCE_AUDIO_CAPTURE -> Manifest.permission.RECORD_AUDIO
             PermissionRequest.RESOURCE_VIDEO_CAPTURE -> Manifest.permission.CAMERA
-            else                                     -> null
+            else -> null
         }
     }
 }

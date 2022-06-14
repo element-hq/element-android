@@ -55,11 +55,13 @@ data class CountInfo(
         val otherCount: RoomAggregateNotificationCount
 )
 
-class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initialState: UnreadMessagesState,
-                                                                session: Session,
-                                                                private val vectorPreferences: VectorPreferences,
-                                                                appStateHandler: AppStateHandler,
-                                                                private val autoAcceptInvites: AutoAcceptInvites) :
+class UnreadMessagesSharedViewModel @AssistedInject constructor(
+        @Assisted initialState: UnreadMessagesState,
+        session: Session,
+        private val vectorPreferences: VectorPreferences,
+        appStateHandler: AppStateHandler,
+        private val autoAcceptInvites: AutoAcceptInvites
+) :
         VectorViewModel<UnreadMessagesState, EmptyAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
@@ -126,7 +128,7 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                             RoomAggregateNotificationCount(0, 0)
                     )
                 }
-                is RoomGroupingMethod.BySpace       -> {
+                is RoomGroupingMethod.BySpace -> {
                     val selectedSpace = appStateHandler.safeActiveSpaceId()
 
                     val inviteCount = if (autoAcceptInvites.hideInvites) {
@@ -178,7 +180,7 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                             )
                     )
                 }
-                null                                -> {
+                null -> {
                     CountInfo(
                             RoomAggregateNotificationCount(0, 0),
                             RoomAggregateNotificationCount(0, 0)

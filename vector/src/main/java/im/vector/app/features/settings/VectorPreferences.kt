@@ -191,9 +191,6 @@ class VectorPreferences @Inject constructor(
 
         private const val DID_ASK_TO_ENABLE_SESSION_PUSH = "DID_ASK_TO_ENABLE_SESSION_PUSH"
 
-        // Location Sharing
-        const val SETTINGS_PREF_ENABLE_LOCATION_SHARING = "SETTINGS_PREF_ENABLE_LOCATION_SHARING"
-
         private const val MEDIA_SAVING_3_DAYS = 0
         private const val MEDIA_SAVING_1_WEEK = 1
         private const val MEDIA_SAVING_1_MONTH = 2
@@ -203,7 +200,6 @@ class VectorPreferences @Inject constructor(
 
         private const val TAKE_PHOTO_VIDEO_MODE = "TAKE_PHOTO_VIDEO_MODE"
 
-        private const val SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE = "SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE"
         private const val SETTINGS_LABS_ENABLE_LIVE_LOCATION = "SETTINGS_LABS_ENABLE_LIVE_LOCATION"
 
         // This key will be used to identify clients with the old thread support enabled io.element.thread
@@ -672,11 +668,11 @@ class VectorPreferences @Inject constructor(
      */
     fun getMinMediasLastAccessTime(): Long {
         return when (getSelectedMediasSavingPeriod()) {
-            MEDIA_SAVING_3_DAYS  -> clock.epochMillis() / 1000 - 3 * 24 * 60 * 60
-            MEDIA_SAVING_1_WEEK  -> clock.epochMillis() / 1000 - 7 * 24 * 60 * 60
+            MEDIA_SAVING_3_DAYS -> clock.epochMillis() / 1000 - 3 * 24 * 60 * 60
+            MEDIA_SAVING_1_WEEK -> clock.epochMillis() / 1000 - 7 * 24 * 60 * 60
             MEDIA_SAVING_1_MONTH -> clock.epochMillis() / 1000 - 30 * 24 * 60 * 60
             MEDIA_SAVING_FOREVER -> 0
-            else                 -> 0
+            else -> 0
         }
     }
 
@@ -687,11 +683,11 @@ class VectorPreferences @Inject constructor(
      */
     fun getSelectedMediasSavingPeriodString(): String {
         return when (getSelectedMediasSavingPeriod()) {
-            MEDIA_SAVING_3_DAYS  -> context.getString(R.string.media_saving_period_3_days)
-            MEDIA_SAVING_1_WEEK  -> context.getString(R.string.media_saving_period_1_week)
+            MEDIA_SAVING_3_DAYS -> context.getString(R.string.media_saving_period_3_days)
+            MEDIA_SAVING_1_WEEK -> context.getString(R.string.media_saving_period_1_week)
             MEDIA_SAVING_1_MONTH -> context.getString(R.string.media_saving_period_1_month)
             MEDIA_SAVING_FOREVER -> context.getString(R.string.media_saving_period_forever)
-            else                 -> "?"
+            else -> "?"
         }
     }
 
@@ -1042,14 +1038,6 @@ class VectorPreferences @Inject constructor(
         return defaultPrefs.edit {
             putInt(TAKE_PHOTO_VIDEO_MODE, mode)
         }
-    }
-
-    fun isLocationSharingEnabled(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_PREF_ENABLE_LOCATION_SHARING, false) && BuildConfig.enableLocationSharing
-    }
-
-    fun labsRenderLocationsInTimeline(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE, true)
     }
 
     fun labsEnableLiveLocation(): Boolean {

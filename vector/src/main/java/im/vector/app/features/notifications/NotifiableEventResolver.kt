@@ -78,7 +78,7 @@ class NotifiableEventResolver @Inject constructor(
             EventType.ENCRYPTED -> {
                 resolveMessageEvent(timelineEvent, session, canBeReplaced = false, isNoisy = isNoisy)
             }
-            else                -> {
+            else -> {
                 // If the event can be displayed, display it as is
                 Timber.w("NotifiableEventResolver Received an unsupported event matching a bing rule")
                 // TODO Better event text display
@@ -198,7 +198,7 @@ class NotifiableEventResolver @Inject constructor(
                             soundName = null
                     )
                 }
-                else                                -> null
+                else -> null
             }
         }
     }
@@ -223,8 +223,8 @@ class NotifiableEventResolver @Inject constructor(
     private suspend fun TimelineEvent.fetchImageIfPresent(session: Session): Uri? {
         return when {
             root.isEncrypted() && root.mxDecryptionResult == null -> null
-            root.isImageMessage()                                 -> downloadAndExportImage(session)
-            else                                                  -> null
+            root.isImageMessage() -> downloadAndExportImage(session)
+            else -> null
         }
     }
 

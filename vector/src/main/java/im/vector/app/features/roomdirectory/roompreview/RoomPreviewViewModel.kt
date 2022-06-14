@@ -112,7 +112,7 @@ class RoomPreviewViewModel @AssistedInject constructor(
             }
 
             when (peekResult) {
-                is PeekResult.Success           -> {
+                is PeekResult.Success -> {
                     setState {
                         // Do not override what we had from the permalink
                         val newHomeServers = if (homeServers.isEmpty()) {
@@ -147,7 +147,7 @@ class RoomPreviewViewModel @AssistedInject constructor(
                     }
                 }
                 PeekResult.UnknownAlias,
-                null                            -> {
+                null -> {
                     setState {
                         copy(
                                 peekingState = Success(PeekingState.NOT_FOUND)
@@ -189,10 +189,10 @@ class RoomPreviewViewModel @AssistedInject constructor(
                 .onEach {
                     val changeMembership = it[initialState.roomId] ?: ChangeMembershipState.Unknown
                     val joinState = when (changeMembership) {
-                        is ChangeMembershipState.Joining       -> JoinState.JOINING
+                        is ChangeMembershipState.Joining -> JoinState.JOINING
                         is ChangeMembershipState.FailedJoining -> JoinState.JOINING_ERROR
                         // Other cases are handled by room summary
-                        else                                   -> null
+                        else -> null
                     }
                     if (joinState != null) {
                         setState { copy(roomJoinState = joinState) }
@@ -203,7 +203,7 @@ class RoomPreviewViewModel @AssistedInject constructor(
 
     override fun handle(action: RoomPreviewAction) {
         when (action) {
-            is RoomPreviewAction.Join        -> handleJoinRoom()
+            is RoomPreviewAction.Join -> handleJoinRoom()
             RoomPreviewAction.JoinThirdParty -> handleJoinRoomThirdParty()
         }
     }

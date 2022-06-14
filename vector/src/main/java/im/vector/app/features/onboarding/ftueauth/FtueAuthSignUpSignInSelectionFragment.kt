@@ -34,6 +34,7 @@ import im.vector.app.features.login.SocialLoginButtonsView
 import im.vector.app.features.login.ssoIdentityProviders
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewState
+import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import javax.inject.Inject
 
 /**
@@ -63,17 +64,17 @@ class FtueAuthSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOF
                     title = getString(R.string.login_connect_to, state.selectedHomeserver.userFacingUrl.toReducedUrl()),
                     subtitle = getString(R.string.login_server_matrix_org_text)
             )
-            ServerType.EMS       -> renderServerInformation(
+            ServerType.EMS -> renderServerInformation(
                     icon = R.drawable.ic_logo_element_matrix_services,
                     title = getString(R.string.login_connect_to_modular),
                     subtitle = state.selectedHomeserver.userFacingUrl.toReducedUrl()
             )
-            ServerType.Other     -> renderServerInformation(
+            ServerType.Other -> renderServerInformation(
                     icon = null,
                     title = getString(R.string.login_server_other_title),
                     subtitle = getString(R.string.login_connect_to, state.selectedHomeserver.userFacingUrl.toReducedUrl())
             )
-            ServerType.Unknown   -> Unit /* Should not happen */
+            ServerType.Unknown -> Unit /* Should not happen */
         }
 
         when (state.selectedHomeserver.preferredLoginMode) {
@@ -81,17 +82,17 @@ class FtueAuthSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOF
                 views.loginSignupSigninSignInSocialLoginContainer.isVisible = true
                 views.loginSignupSigninSocialLoginButtons.ssoIdentityProviders = state.selectedHomeserver.preferredLoginMode.ssoIdentityProviders()?.sorted()
                 views.loginSignupSigninSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
-                    override fun onProviderSelected(id: String?) {
-                        viewModel.getSsoUrl(
+                    override fun onProviderSelected(provider: SsoIdentityProvider?) {
+                        viewModel.fetchSsoUrl(
                                 redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                                 deviceId = state.deviceId,
-                                providerId = id
+                                provider = provider
                         )
                                 ?.let { openInCustomTab(it) }
                     }
                 }
             }
-            else                        -> {
+            else -> {
                 // SSO only is managed without container as well as No sso
                 views.loginSignupSigninSignInSocialLoginContainer.isVisible = false
                 views.loginSignupSigninSocialLoginButtons.ssoIdentityProviders = null
@@ -114,7 +115,7 @@ class FtueAuthSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOF
                 views.loginSignupSigninSubmit.text = getString(R.string.login_signin_sso)
                 views.loginSignupSigninSignIn.isVisible = false
             }
-            else             -> {
+            else -> {
                 views.loginSignupSigninSubmit.text = getString(R.string.login_signup)
                 views.loginSignupSigninSignIn.isVisible = true
             }
@@ -123,10 +124,10 @@ class FtueAuthSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOF
 
     private fun submit() = withState(viewModel) { state ->
         if (state.selectedHomeserver.preferredLoginMode is LoginMode.Sso) {
-            viewModel.getSsoUrl(
+            viewModel.fetchSsoUrl(
                     redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                     deviceId = state.deviceId,
-                    providerId = null
+                    provider = null
             )
                     ?.let { openInCustomTab(it) }
         } else {
