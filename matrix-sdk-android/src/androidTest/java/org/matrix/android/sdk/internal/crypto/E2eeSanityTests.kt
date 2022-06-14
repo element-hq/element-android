@@ -70,7 +70,7 @@ import java.util.concurrent.CountDownLatch
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
 @LargeTest
-@Ignore("This test fails with an unhandled exception thrown from a coroutine which terminates the entire test run.")
+//@Ignore("This test fails with an unhandled exception thrown from a coroutine which terminates the entire test run.")
 class E2eeSanityTests : InstrumentedTest {
 
     @get:Rule val rule = RetryTestRule(3)
