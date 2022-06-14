@@ -24,11 +24,6 @@ import javax.inject.Inject
 class UnifiedPushStore @Inject constructor(
         context: Context,
 ) {
-    companion object {
-        private const val PREFS_ENDPOINT_OR_TOKEN = "UP_ENDPOINT_OR_TOKEN"
-        private const val PREFS_PUSH_GATEWAY = "PUSH_GATEWAY"
-    }
-
     private val defaultPrefs = DefaultSharedPreferences.getInstance(context)
 
     /**
@@ -69,5 +64,10 @@ class UnifiedPushStore @Inject constructor(
         defaultPrefs.edit {
             putString(PREFS_PUSH_GATEWAY, gateway)
         }
+    }
+
+    companion object {
+        private const val PREFS_ENDPOINT_OR_TOKEN = "UP_ENDPOINT_OR_TOKEN"
+        private const val PREFS_PUSH_GATEWAY = "PUSH_GATEWAY"
     }
 }

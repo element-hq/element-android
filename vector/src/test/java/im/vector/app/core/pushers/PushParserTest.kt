@@ -22,13 +22,6 @@ import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
 
 class PushParserTest {
-    companion object {
-        private const val UNIFIED_PUSH_DATA =
-                "{\"notification\":{\"event_id\":\"\$anEventId\",\"room_id\":\"!aRoomId\",\"counts\":{\"unread\":1},\"prio\":\"high\"}}"
-        private const val FIREBASE_PUSH_DATA =
-                "{\"event_id\":\"\$anEventId\",\"room_id\":\"!aRoomId\",\"unread\":\"1\",\"prio\":\"high\"}"
-    }
-
     private val validData = PushData(
             eventId = "\$anEventId",
             roomId = "!aRoomId",
@@ -103,5 +96,12 @@ class PushParserTest {
 
         pushParser.parseData(FIREBASE_PUSH_DATA.replace("\$anEventId", "anEventId"), true) shouldBeEqualTo validData.copy(eventId = null)
         pushParser.parseData(UNIFIED_PUSH_DATA.replace("\$anEventId", "anEventId"), false) shouldBeEqualTo validData.copy(eventId = null)
+    }
+
+    companion object {
+        private const val UNIFIED_PUSH_DATA =
+                "{\"notification\":{\"event_id\":\"\$anEventId\",\"room_id\":\"!aRoomId\",\"counts\":{\"unread\":1},\"prio\":\"high\"}}"
+        private const val FIREBASE_PUSH_DATA =
+                "{\"event_id\":\"\$anEventId\",\"room_id\":\"!aRoomId\",\"unread\":\"1\",\"prio\":\"high\"}"
     }
 }
