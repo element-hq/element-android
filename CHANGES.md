@@ -1,3 +1,43 @@
+Changes in Element v1.4.22 (2022-06-14)
+=======================================
+
+Features ✨
+----------
+ - Make read receipt avatar list more compact ([#5970](https://github.com/vector-im/element-android/issues/5970))
+ - Allow .well-known configuration to override key sharing mode ([#6147](https://github.com/vector-im/element-android/issues/6147))
+ - Re-organize location settings flags ([#6244](https://github.com/vector-im/element-android/issues/6244))
+ - Add report action for live location messages ([#6280](https://github.com/vector-im/element-android/issues/6280))
+
+Bugfixes 🐛
+----------
+ - Fix cases of missing, swapped, or duplicated messages ([#5528](https://github.com/vector-im/element-android/issues/5528))
+ - Fix wrong status of live location sharing in timeline ([#6209](https://github.com/vector-im/element-android/issues/6209))
+ - Fix StackOverflowError while recording voice message ([#6222](https://github.com/vector-im/element-android/issues/6222))
+ - Text cropped: "Secure backup" ([#6232](https://github.com/vector-im/element-android/issues/6232))
+ - Fix copyright attributions of map views ([#6247](https://github.com/vector-im/element-android/issues/6247))
+ - Fix flickering bottom bar of live location item ([#6264](https://github.com/vector-im/element-android/issues/6264))
+
+In development 🚧
+----------------
+ - FTUE - Adds Sign Up tracking ([#5285](https://github.com/vector-im/element-android/issues/5285))
+
+SDK API changes ⚠️
+------------------
+ - Some methods from `Session` have been moved to a new `SyncService`, that you can retrieve from a `Session`.
+  - `SyncStatusService` method has been moved to the new `SyncService`
+  - `InitSyncStep` have been moved and renamed to `InitialSyncStep`
+  - `SyncStatusService.Status` has been renamed to `SyncRequestState`
+  - The existing `SyncService` has been renamed to `SyncAndroidService` because of name clash with the new SDK Service ([#6029](https://github.com/vector-im/element-android/issues/6029))
+ - Allows `AuthenticationService.getLoginFlow` to fail without resetting state from previously successful calls ([#6093](https://github.com/vector-im/element-android/issues/6093))
+ - Allows new passwords to be passed at the point of confirmation when resetting a password ([#6169](https://github.com/vector-im/element-android/issues/6169))
+
+Other changes
+-------------
+ - Adds support for parsing homeserver versions without a patch number ([#6017](https://github.com/vector-im/element-android/issues/6017))
+ - Updating exit onboarding dialog copy formatting to match iOS ([#6087](https://github.com/vector-im/element-android/issues/6087))
+ - Disables when arrow alignment in code style ([#6126](https://github.com/vector-im/element-android/issues/6126))
+
+
 Changes in Element 1.4.20 (2022-06-13)
 ======================================
 
