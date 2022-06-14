@@ -472,7 +472,7 @@ class WidgetFragment @Inject constructor(
                         }
                     } catch (e: IOException) {
                         yield()
-                        informInWebView("Failed to read from socket: $e")
+//                        informInWebView("Failed to read from socket: $e")
                         break
                     }
 
