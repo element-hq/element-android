@@ -167,7 +167,9 @@ class ImageContentRenderer @Inject constructor(
                     .load(resolvedUrl)
         }
 
-        req.fitCenter().into(target)
+        req
+                .fitCenter()
+                .into(target)
     }
 
     fun renderForSharedElementTransition(data: Data, imageView: ImageView, callback: ((Boolean) -> Unit)? = null) {
