@@ -1062,7 +1062,7 @@
     <string name="merged_events_expand">laienda</string>
     <string name="merged_events_collapse">ahenda</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="no_valid_google_play_services_apk">Ühtegi Google Play teenuste rakendusefaili ei leidunud. Teavitused ei pruugi korralikult toimida.</string>
     <string name="passphrase_create_passphrase">Loo paroolifraas</string>
     <string name="passphrase_confirm_passphrase">Sisesta paroolifraas veel üks kord</string>
