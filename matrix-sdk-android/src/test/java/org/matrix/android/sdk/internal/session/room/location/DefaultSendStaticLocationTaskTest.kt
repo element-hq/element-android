@@ -16,11 +16,14 @@
 
 package org.matrix.android.sdk.internal.session.room.location
 
+import io.mockk.mockk
 import io.mockk.unmockkAll
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import org.amshove.kluent.shouldBeEqualTo
 import org.junit.After
 import org.junit.Test
+import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.test.fakes.FakeEventSenderProcessor
 import org.matrix.android.sdk.test.fakes.FakeLocalEchoEventFactory
 
@@ -54,13 +57,15 @@ internal class DefaultSendStaticLocationTaskTest {
                 uncertainty = AN_UNCERTAINTY,
                 isUserLocation = true
         )
-
         val event = fakeLocalEchoEventFactory.givenCreateStaticLocationEvent(
                 withLocalEcho = true
         )
+        val cancelable = mockk<Cancelable>()
+        fakeEventSenderProcessor.givenPostEventReturns(event, cancelable)
 
-        defaultSendStaticLocationTask.execute(params)
+        val result = defaultSendStaticLocationTask.execute(params)
 
+        result shouldBeEqualTo cancelable
         fakeLocalEchoEventFactory.verifyCreateStaticLocationEvent(
                 roomId = params.roomId,
                 latitude = params.latitude,
