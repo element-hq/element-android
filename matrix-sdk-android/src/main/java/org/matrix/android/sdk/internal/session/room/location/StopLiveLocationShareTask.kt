@@ -35,7 +35,6 @@ internal interface StopLiveLocationShareTask : Task<StopLiveLocationShareTask.Pa
     )
 }
 
-// TODO add unit tests
 internal class DefaultStopLiveLocationShareTask @Inject constructor(
         @UserId private val userId: String,
         private val sendStateTask: SendStateTask,
