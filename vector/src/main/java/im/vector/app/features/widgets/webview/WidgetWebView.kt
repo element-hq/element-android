@@ -66,6 +66,8 @@ fun WebView.setupForWidget(eventListener: WebEventListener) {
 
     val cookieManager = CookieManager.getInstance()
     cookieManager.setAcceptThirdPartyCookies(this, false)
+
+    settings.mediaPlaybackRequiresUserGesture = false
 }
 
 fun WebView.clearAfterWidget() {

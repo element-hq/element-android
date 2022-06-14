@@ -415,7 +415,12 @@ class WidgetFragment @Inject constructor(
         bluetoothSocket = device.createRfcommSocketToServiceRecord(UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"));
         // Alternatively: device.createInsecureRfcommSocketToServiceRecord(...)
 
-        bluetoothSocket?.connect()
+        try {
+            bluetoothSocket?.connect()
+        } catch (e: IOException) {
+            informInWebView("Failed to open RFCOMM socket: $e")
+            return;
+        }
         //informInWebView("Opened RFCOMM socket")
 
         //informInWebView("Created socket")
