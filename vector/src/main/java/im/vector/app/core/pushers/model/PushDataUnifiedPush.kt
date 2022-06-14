@@ -18,7 +18,7 @@ package im.vector.app.core.pushers.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.api.extensions.ensureNotEmpty
+import org.matrix.android.sdk.api.MatrixPatterns
 
 /**
  * In this case, the format is:
@@ -54,7 +54,7 @@ data class PushDataUnifiedPushCounts(
 )
 
 fun PushDataUnifiedPush.toPushData() = PushData(
-        eventId = notification?.eventId?.ensureNotEmpty(),
-        roomId = notification?.roomId?.ensureNotEmpty(),
+        eventId = notification?.eventId?.takeIf { MatrixPatterns.isEventId(it) },
+        roomId = notification?.roomId?.takeIf { MatrixPatterns.isRoomId(it) },
         unread = notification?.counts?.unread
 )

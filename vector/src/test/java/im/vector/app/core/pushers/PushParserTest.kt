@@ -24,7 +24,7 @@ import org.junit.Test
 class PushParserTest {
     private val validData = PushData(
             eventId = "\$anEventId",
-            roomId = "!aRoomId",
+            roomId = "!aRoomId:domain",
             unread = 1
     )
 
@@ -70,16 +70,16 @@ class PushParserTest {
     fun `test empty roomId`() {
         val pushParser = PushParser()
 
-        pushParser.parseData(FIREBASE_PUSH_DATA.replace("!aRoomId", ""), true) shouldBeEqualTo validData.copy(roomId = null)
-        pushParser.parseData(UNIFIED_PUSH_DATA.replace("!aRoomId", ""), false) shouldBeEqualTo validData.copy(roomId = null)
+        pushParser.parseData(FIREBASE_PUSH_DATA.replace("!aRoomId:domain", ""), true) shouldBeEqualTo validData.copy(roomId = null)
+        pushParser.parseData(UNIFIED_PUSH_DATA.replace("!aRoomId:domain", ""), false) shouldBeEqualTo validData.copy(roomId = null)
     }
 
     @Test
     fun `test invalid roomId`() {
         val pushParser = PushParser()
 
-        pushParser.parseData(FIREBASE_PUSH_DATA.replace("!aRoomId", "aRoomId"), true) shouldBeEqualTo validData.copy(roomId = null)
-        pushParser.parseData(UNIFIED_PUSH_DATA.replace("!aRoomId", "aRoomId"), false) shouldBeEqualTo validData.copy(roomId = null)
+        pushParser.parseData(FIREBASE_PUSH_DATA.replace("!aRoomId:domain", "aRoomId:domain"), true) shouldBeEqualTo validData.copy(roomId = null)
+        pushParser.parseData(UNIFIED_PUSH_DATA.replace("!aRoomId:domain", "aRoomId:domain"), false) shouldBeEqualTo validData.copy(roomId = null)
     }
 
     @Test
@@ -100,8 +100,8 @@ class PushParserTest {
 
     companion object {
         private const val UNIFIED_PUSH_DATA =
-                "{\"notification\":{\"event_id\":\"\$anEventId\",\"room_id\":\"!aRoomId\",\"counts\":{\"unread\":1},\"prio\":\"high\"}}"
+                "{\"notification\":{\"event_id\":\"\$anEventId\",\"room_id\":\"!aRoomId:domain\",\"counts\":{\"unread\":1},\"prio\":\"high\"}}"
         private const val FIREBASE_PUSH_DATA =
-                "{\"event_id\":\"\$anEventId\",\"room_id\":\"!aRoomId\",\"unread\":\"1\",\"prio\":\"high\"}"
+                "{\"event_id\":\"\$anEventId\",\"room_id\":\"!aRoomId:domain\",\"unread\":\"1\",\"prio\":\"high\"}"
     }
 }
