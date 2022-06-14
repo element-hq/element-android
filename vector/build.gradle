@@ -9,6 +9,10 @@ apply plugin: 'com.likethesalad.stem'
 apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: 'kotlinx-knit'
 
+if (project.hasProperty("coverage")) {
+    apply plugin: 'jacoco'
+}
+
 kapt {
     correctErrorTypes = true
 }
@@ -119,8 +123,6 @@ ext.abiVersionCodes = ["armeabi-v7a": 1, "arm64-v8a": 2, "x86": 3, "x86_64": 4].
 def buildNumber = System.env.BUILDKITE_BUILD_NUMBER as Integer ?: 0
 
 android {
-
-
     // Due to a bug introduced in Android gradle plugin 3.6.0, we have to specify the ndk version to use
     // Ref: https://issuetracker.google.com/issues/144111441
     ndkVersion "21.3.6528147"
@@ -145,7 +147,7 @@ android {
         versionName "${versionMajor}.${versionMinor}.${versionPatch}-sonar"
 
         // Generate a random app task affinity
-        manifestPlaceholders = [appTaskAffinitySuffix:"H_${gitRevision()}"]
+        manifestPlaceholders = [appTaskAffinitySuffix: "H_${gitRevision()}"]
 
         buildConfigField "String", "GIT_REVISION", "\"${gitRevision()}\""
         buildConfigField "String", "GIT_REVISION_DATE", "\"${gitRevisionDate()}\""
@@ -244,7 +246,10 @@ android {
             buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
 
             signingConfig signingConfigs.debug
-            testCoverageEnabled true
+
+            if (project.hasProperty("coverage")) {
+                testCoverageEnabled = coverage.enableTestCoverage
+            }
         }
 
         release {
