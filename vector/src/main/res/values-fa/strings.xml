@@ -1397,9 +1397,7 @@
     <string name="login_a11y_choose_other">گزینش یک کارساز خانگی سفارشی</string>
     <string name="login_a11y_choose_modular">گزینش خدمات ماتریکس المنت</string>
     <string name="login_a11y_choose_matrix_org">انتخاب matrix.org</string>
-    <string name="login_signup_cancel_confirmation_content">حساب شما هنوز ایجاد نشده‌است.
-\n
-\nفرآیند ثبت‌نام متوقف شود؟</string>
+    <string name="login_signup_cancel_confirmation_content">حسابتان هنوز ایجاد نشده. توقّف فرآیند ثبت‌نام؟</string>
     <string name="login_signin_username_hint">نام‌کاربری یا ایمیل</string>
     <string name="login_signup_to">ثبت نام در %1$s</string>
     <string name="login_msisdn_error_other">شماره تلفن نامعتبر است. لطفا آن را بررسی کنید</string>
@@ -1595,7 +1593,7 @@
     <string name="passphrase_confirm_passphrase">تأیید عبارت عبور</string>
     <string name="passphrase_create_passphrase">ایجاد عبارت عبور</string>
     <string name="no_valid_google_play_services_apk">بستهٔ اندرویدی معتبر خدمات پلی گوگل پیدا نشد. ممکن است آگاهی‌ها درست کار نکنند.</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
     <string name="merged_events_collapse">جمع کردن</string>
     <string name="merged_events_expand">گستردن</string>
