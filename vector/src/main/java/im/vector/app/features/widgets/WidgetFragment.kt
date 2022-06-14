@@ -39,6 +39,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.getSystemService
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
@@ -59,18 +60,15 @@ import im.vector.app.features.webview.WebEventListener
 import im.vector.app.features.widgets.webview.WebviewPermissionUtils
 import im.vector.app.features.widgets.webview.clearAfterWidget
 import im.vector.app.features.widgets.webview.setupForWidget
-import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.yield
 import kotlinx.parcelize.Parcelize
-import org.json.JSONObject
 import org.matrix.android.sdk.api.session.terms.TermsService
 import timber.log.Timber
 import java.io.IOException
-import java.io.InputStream
 import java.net.URISyntaxException
 import java.nio.ByteBuffer
 import java.nio.charset.StandardCharsets
@@ -424,9 +422,8 @@ class WidgetFragment @Inject constructor(
 
 
 
-        @OptIn(DelicateCoroutinesApi::class)
-        GlobalScope.launch {
-            async(Dispatchers.IO) {
+        lifecycleScope.launch {
+            withContext(Dispatchers.IO) {
                 var inputStream = bluetoothSocket?.inputStream
                 val inputBuffer = ByteArray(1024)
 
@@ -441,7 +438,7 @@ class WidgetFragment @Inject constructor(
 
                 //informInWebView("Opened RFCOMM socket")
 
-                while (true) {
+                while (isActive) {
                     /*if (bluetoothSocket?.isConnected != true) {
                         continue
                     }*/
@@ -458,6 +455,7 @@ class WidgetFragment @Inject constructor(
 
                             //val msg = JSONObject()
                             //msg.put("pttbutton", true)
+                            yield()
                             requireActivity().runOnUiThread {
                                 //views.widgetWebView.postWebMessage(WebMessage(msg.toString()), widgetUri)
                                 views.widgetWebView.postWebMessage(WebMessage("pttp"), widgetUri)
@@ -466,12 +464,14 @@ class WidgetFragment @Inject constructor(
                             //informInWebView("ptt up")
                             //val msg = JSONObject()
                             //msg.put("pttbutton", false)
+                            yield()
                             requireActivity().runOnUiThread {
                                 //views.widgetWebView.postWebMessage(WebMessage(msg.toString()), widgetUri)
                                 views.widgetWebView.postWebMessage(WebMessage("pttr"), widgetUri)
                             }
                         }
                     } catch (e: IOException) {
+                        yield()
                         informInWebView("Failed to read from socket: $e")
                         break
                     }
