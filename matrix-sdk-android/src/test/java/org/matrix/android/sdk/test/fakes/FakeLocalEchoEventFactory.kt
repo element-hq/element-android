@@ -28,10 +28,10 @@ internal class FakeLocalEchoEventFactory {
 
     val instance = mockk<LocalEchoEventFactory>()
 
-    fun givenCreateLocationEvent(withLocalEcho: Boolean): Event {
+    fun givenCreateStaticLocationEvent(withLocalEcho: Boolean): Event {
         val event = Event()
         every {
-            instance.createLocationEvent(
+            instance.createStaticLocationEvent(
                     roomId = any(),
                     latitude = any(),
                     longitude = any(),
@@ -64,7 +64,7 @@ internal class FakeLocalEchoEventFactory {
         return event
     }
 
-    fun verifyCreateLocationEvent(
+    fun verifyCreateStaticLocationEvent(
             roomId: String,
             latitude: Double,
             longitude: Double,
@@ -72,7 +72,7 @@ internal class FakeLocalEchoEventFactory {
             isUserLocation: Boolean
     ) {
         verify {
-            instance.createLocationEvent(
+            instance.createStaticLocationEvent(
                     roomId = roomId,
                     latitude = latitude,
                     longitude = longitude,

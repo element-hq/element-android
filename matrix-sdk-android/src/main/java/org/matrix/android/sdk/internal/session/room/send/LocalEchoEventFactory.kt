@@ -244,7 +244,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         )
     }
 
-    fun createLocationEvent(
+    fun createStaticLocationEvent(
             roomId: String,
             latitude: Double,
             longitude: Double,

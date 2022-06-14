@@ -38,7 +38,7 @@ internal class DefaultSendStaticLocationTask @Inject constructor(
 ) : SendStaticLocationTask {
 
     override suspend fun execute(params: SendStaticLocationTask.Params): Cancelable {
-        val event = localEchoEventFactory.createLocationEvent(
+        val event = localEchoEventFactory.createStaticLocationEvent(
                 roomId = params.roomId,
                 latitude = params.latitude,
                 longitude = params.longitude,

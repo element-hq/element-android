@@ -55,13 +55,13 @@ internal class DefaultSendStaticLocationTaskTest {
                 isUserLocation = true
         )
 
-        val event = fakeLocalEchoEventFactory.givenCreateLocationEvent(
+        val event = fakeLocalEchoEventFactory.givenCreateStaticLocationEvent(
                 withLocalEcho = true
         )
 
         defaultSendStaticLocationTask.execute(params)
 
-        fakeLocalEchoEventFactory.verifyCreateLocationEvent(
+        fakeLocalEchoEventFactory.verifyCreateStaticLocationEvent(
                 roomId = params.roomId,
                 latitude = params.latitude,
                 longitude = params.longitude,
