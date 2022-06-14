@@ -95,6 +95,9 @@ internal object NetworkModule {
                     matrixConfiguration.proxy?.let {
                         proxy(it)
                     }
+                    matrixConfiguration.networkInterceptors.forEach {
+                        addInterceptor(it)
+                    }
                 }
                 .connectionSpecs(Collections.singletonList(spec))
                 .build()

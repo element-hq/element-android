@@ -60,6 +60,7 @@ import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.version.VersionProvider
+import im.vector.app.flipper.FlipperProxy
 import im.vector.app.push.fcm.FcmHelper
 import org.jitsi.meet.sdk.log.JitsiMeetDefaultLogHandler
 import org.matrix.android.sdk.api.Matrix
@@ -99,6 +100,7 @@ class VectorApplication :
     @Inject lateinit var autoRageShaker: AutoRageShaker
     @Inject lateinit var vectorFileLogger: VectorFileLogger
     @Inject lateinit var vectorAnalytics: VectorAnalytics
+    @Inject lateinit var flipperProxy: FlipperProxy
     @Inject lateinit var matrix: Matrix
 
     // font thread handler
@@ -117,6 +119,7 @@ class VectorApplication :
         enableStrictModeIfNeeded()
         super.onCreate()
         appContext = this
+        flipperProxy.init(matrix)
         vectorAnalytics.init()
         invitesAcceptor.initialize()
         autoRageShaker.initialize()
