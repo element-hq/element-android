@@ -17,10 +17,14 @@
 package im.vector.app.features.voice
 
 import android.Manifest
+import android.os.Build
+import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import io.mockk.spyk
 import io.mockk.verify
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import org.amshove.kluent.shouldBeNull
 import org.amshove.kluent.shouldExist
 import org.amshove.kluent.shouldNotBeNull
@@ -29,6 +33,7 @@ import org.junit.Rule
 import org.junit.Test
 import java.io.File
 
+@SdkSuppress(minSdkVersion = Build.VERSION_CODES.Q)
 class VoiceRecorderQTests {
 
     @get:Rule
@@ -38,38 +43,50 @@ class VoiceRecorderQTests {
     private val recorder = spyk(VoiceRecorderQ(context))
 
     @Test
-    fun startRecordCreatesOggFile() = with(recorder) {
-        getVoiceMessageFile().shouldBeNull()
+    fun startRecordCreatesOggFile() = runBlocking {
+        with(recorder) {
+            getVoiceMessageFile().shouldBeNull()
 
-        startRecord("some_room_id")
+            startRecord("some_room_id")
+            waitForRecording()
 
-        getVoiceMessageFile().shouldNotBeNullAndExist()
+            getVoiceMessageFile().shouldNotBeNullAndExist()
 
-        stopRecord()
+            stopRecord()
+        }
     }
 
     @Test
-    fun stopRecordKeepsFile() = with(recorder) {
-        getVoiceMessageFile().shouldBeNull()
+    fun stopRecordKeepsFile() = runBlocking {
+        with(recorder) {
+            getVoiceMessageFile().shouldBeNull()
 
-        startRecord("some_room_id")
-        stopRecord()
+            startRecord("some_room_id")
+            waitForRecording()
+            stopRecord()
 
-        getVoiceMessageFile().shouldNotBeNullAndExist()
+            getVoiceMessageFile().shouldNotBeNullAndExist()
+        }
     }
 
     @Test
-    fun cancelRecordRemovesFileAfterStopping() = with(recorder) {
-        startRecord("some_room_id")
-        val file = recorder.getVoiceMessageFile()
-        file.shouldNotBeNullAndExist()
+    fun cancelRecordRemovesFileAfterStopping() = runBlocking {
+        with(recorder) {
+            startRecord("some_room_id")
+            val file = recorder.getVoiceMessageFile()
+            file.shouldNotBeNullAndExist()
 
-        cancelRecord()
+            waitForRecording()
+            cancelRecord()
 
-        verify { stopRecord() }
-        getVoiceMessageFile().shouldBeNull()
-        file!!.shouldNotExist()
+            verify { stopRecord() }
+            getVoiceMessageFile().shouldBeNull()
+            file!!.shouldNotExist()
+        }
     }
+
+    // Give MediaRecorder some time to actually start recording
+    private suspend fun waitForRecording() = delay(10)
 }
 
 private fun File?.shouldNotBeNullAndExist() {

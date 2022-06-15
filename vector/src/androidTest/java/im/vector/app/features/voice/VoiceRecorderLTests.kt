@@ -20,7 +20,6 @@ import android.Manifest
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import io.mockk.spyk
-import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import org.amshove.kluent.shouldBeNull
 import org.amshove.kluent.shouldExist
@@ -60,14 +59,13 @@ class VoiceRecorderLTests {
     }
 
     @Test
-    fun cancelRecordRemovesFileAfterStopping() = with(recorder) {
+    fun cancelRecordRemovesFile() = with(recorder) {
         startRecord("some_room_id")
         val file = recorder.getVoiceMessageFile()
         file.shouldNotBeNullAndExist()
 
         cancelRecord()
 
-        verify { stopRecord() }
         getVoiceMessageFile().shouldBeNull()
         file!!.shouldNotExist()
     }

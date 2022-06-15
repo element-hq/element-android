@@ -337,7 +337,6 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: "libs", include: ["*.aar", "*.jar"])
     implementation project(':library:opusencoder')
 
     implementation project(":vector-config")
