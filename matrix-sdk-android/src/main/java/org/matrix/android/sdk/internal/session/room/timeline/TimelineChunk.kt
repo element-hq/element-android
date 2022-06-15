@@ -70,6 +70,7 @@ internal class TimelineChunk(
 
     private val isLastForward = AtomicBoolean(chunkEntity.isLastForward)
     private val isLastBackward = AtomicBoolean(chunkEntity.isLastBackward)
+    private val nextToken = chunkEntity.nextToken
     private var prevChunkLatch: CompletableDeferred<Unit>? = null
     private var nextChunkLatch: CompletableDeferred<Unit>? = null
 
@@ -136,8 +137,10 @@ internal class TimelineChunk(
             val prevEvents = prevChunk?.builtItems(includesNext = false, includesPrev = true).orEmpty()
             deepBuiltItems.addAll(prevEvents)
         }
-
-        return deepBuiltItems
+        // In some scenario (permalink) we might end up with duplicate timeline events, so we want to be sure we only expose one.
+        return deepBuiltItems.distinctBy {
+            it.eventId
+        }
     }
 
     /**
@@ -154,10 +157,6 @@ internal class TimelineChunk(
         val loadFromStorage = loadFromStorage(count, direction).also {
             logLoadedFromStorage(it, direction)
         }
-        if (loadFromStorage.numberOfEvents == 6) {
-            Timber.i("here")
-        }
-
         val offsetCount = count - loadFromStorage.numberOfEvents
 
         return if (offsetCount == 0) {
@@ -251,10 +250,6 @@ internal class TimelineChunk(
     }
 
     fun getBuiltEventIndex(eventId: String, searchInNext: Boolean, searchInPrev: Boolean): Int? {
-        val builtEventIndex = builtEventsIndexes[eventId]
-        if (builtEventIndex != null) {
-            return getOffsetIndex() + builtEventIndex
-        }
         if (searchInNext) {
             val nextBuiltEventIndex = nextChunk?.getBuiltEventIndex(eventId, searchInNext = true, searchInPrev = false)
             if (nextBuiltEventIndex != null) {
@@ -267,7 +262,12 @@ internal class TimelineChunk(
                 return prevBuiltEventIndex
             }
         }
-        return null
+        val builtEventIndex = builtEventsIndexes[eventId]
+        return if (builtEventIndex != null) {
+            getOffsetIndex() + builtEventIndex
+        } else {
+            null
+        }
     }
 
     fun getBuiltEvent(eventId: String, searchInNext: Boolean, searchInPrev: Boolean): TimelineEvent? {
@@ -445,7 +445,7 @@ internal class TimelineChunk(
             Timber.e(failure, "Failed to fetch from server")
             LoadMoreResult.FAILURE
         }
-        return if (loadMoreResult == LoadMoreResult.SUCCESS) {
+        return if (loadMoreResult != LoadMoreResult.FAILURE) {
             latch?.await()
             loadMore(count, direction, fetchOnServerIfNeeded = false)
         } else {
@@ -470,11 +470,15 @@ internal class TimelineChunk(
     }
 
     private fun getOffsetIndex(): Int {
+        if (nextToken == null) return 0
         var offset = 0
         var currentNextChunk = nextChunk
         while (currentNextChunk != null) {
             offset += currentNextChunk.builtEvents.size
-            currentNextChunk = currentNextChunk.nextChunk
+            currentNextChunk = currentNextChunk.nextChunk?.takeIf {
+                // In case of permalink we can end up with a linked nextChunk (which is the lastForward Chunk) but no nextToken
+                it.nextToken != null
+            }
         }
         return offset
     }
