@@ -62,7 +62,7 @@ internal class RealmSessionStoreMigration @Inject constructor(
     override fun equals(other: Any?) = other is RealmSessionStoreMigration
     override fun hashCode() = 1000
 
-    val schemaVersion = 29L
+    val schemaVersion = 30L
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
         Timber.d("Migrating Realm Session from $oldVersion to $newVersion")
