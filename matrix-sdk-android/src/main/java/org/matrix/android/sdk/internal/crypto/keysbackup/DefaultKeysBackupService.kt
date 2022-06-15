@@ -1469,7 +1469,7 @@ internal class DefaultKeysBackupService @Inject constructor(
     }
 
     /**
-     * Returns boolean shared key flag, if enabled with respect to matrix configuration
+     * Returns boolean shared key flag, if enabled with respect to matrix configuration.
      */
     private fun MXInboundMegolmSessionWrapper.getSharedKey(): Boolean {
         if (!cryptoStore.isShareKeysOnInviteEnabled()) return false

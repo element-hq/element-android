@@ -72,8 +72,7 @@ data class ForwardedRoomKeyContent(
         val senderClaimedEd25519Key: String? = null,
 
         /**
-         * MSC3061
-         * Identifies keys that were sent when the room's visibility setting was set to world_readable or shared
+         * MSC3061 Identifies keys that were sent when the room's visibility setting was set to world_readable or shared.
          */
         @Json(name = "org.matrix.msc3061.shared_history")
         val sharedHistory: Boolean? = false,

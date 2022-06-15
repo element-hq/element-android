@@ -34,7 +34,7 @@ data class MXInboundMegolmSessionWrapper(
     val safeSessionId = tryOrNull("Fail to get megolm session Id") { session.sessionIdentifier() }
 
     /**
-     * Export the inbound group session keys
+     * Export the inbound group session keys.
      * @param index the index to export. If null, the first known index will be used
      * @return the inbound group session as MegolmSessionData if the operation succeeds
      */

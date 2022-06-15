@@ -67,7 +67,7 @@ internal interface IMXCryptoStore {
     fun getInboundGroupSessions(): List<MXInboundMegolmSessionWrapper>
 
     /**
-     * Retrieve the known inbound group sessions for the specified room
+     * Retrieve the known inbound group sessions for the specified room.
      *
      * @param roomId The roomId that the sessions will be returned
      * @return the list of all known group sessions, for the provided roomId
@@ -276,7 +276,7 @@ internal interface IMXCryptoStore {
 
     /**
      * Sets a boolean flag that will determine whether or not room history (existing inbound sessions)
-     * will be shared to new user invites
+     * will be shared to new user invites.
      *
      * @param roomId the room id
      * @param shouldShareHistory The boolean flag
@@ -345,7 +345,7 @@ internal interface IMXCryptoStore {
     fun getInboundGroupSession(sessionId: String, senderKey: String, sharedHistory: Boolean): MXInboundMegolmSessionWrapper?
 
     /**
-     * Get the current outbound group session for this encrypted room
+     * Get the current outbound group session for this encrypted room.
      */
     fun getCurrentOutboundGroupSessionForRoom(roomId: String): OutboundGroupSessionWrapper?
 
@@ -355,7 +355,7 @@ internal interface IMXCryptoStore {
     fun storeCurrentOutboundGroupSessionForRoom(roomId: String, outboundGroupSession: OlmOutboundGroupSession?)
 
     /**
-     * Remove an inbound group session
+     * Remove an inbound group session.
      *
      * @param sessionId the session identifier.
      * @param senderKey the base64-encoded curve25519 key of the sender.

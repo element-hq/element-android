@@ -54,7 +54,7 @@ internal data class KeyBackupData(
 
         /**
          * Flag that indicates whether or not the current inboundSession will be shared to
-         * invited users to decrypt past messages
+         * invited users to decrypt past messages.
          */
         @Json(name = "org.matrix.msc3061.shared_history")
         val sharedHistory: Boolean = false

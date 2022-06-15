@@ -107,8 +107,8 @@ internal class OlmInboundGroupSessionWrapper2 : Serializable {
 
     /**
      * Export the inbound group session keys.
-     * @param index the index to export. If null, the first known index will be used
      * @param sharedHistory the flag that indicates whether or not the session can be shared
+     * @param index the index to export. If null, the first known index will be used
      * @return the inbound group session as MegolmSessionData if the operation succeeds
      */
     fun exportKeys(sharedHistory: Boolean = false, index: Long? = null): MegolmSessionData? {

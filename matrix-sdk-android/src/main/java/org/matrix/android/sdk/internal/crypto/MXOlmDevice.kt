@@ -601,6 +601,7 @@ internal class MXOlmDevice @Inject constructor(
      * @param forwardingCurve25519KeyChain Devices involved in forwarding this session to us.
      * @param keysClaimed Other keys the sender claims.
      * @param exportFormat true if the megolm keys are in export format
+     * @param sharedHistory MSC3061, this key is sharable on invite
      * @return true if the operation succeeds.
      */
     fun addInboundGroupSession(sessionId: String,

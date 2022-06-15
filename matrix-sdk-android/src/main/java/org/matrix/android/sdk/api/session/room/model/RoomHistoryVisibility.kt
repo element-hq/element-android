@@ -50,7 +50,7 @@ enum class RoomHistoryVisibility {
 }
 
 /**
- * Room history should be shared only if room visibility is world_readable or shared
+ * Room history should be shared only if room visibility is world_readable or shared.
  */
 internal fun RoomHistoryVisibility.shouldShareHistory() =
         this == RoomHistoryVisibility.WORLD_READABLE || this == RoomHistoryVisibility.SHARED

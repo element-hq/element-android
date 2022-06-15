@@ -73,7 +73,7 @@ internal data class MegolmSessionData(
 
         /**
          * Flag that indicates whether or not the current inboundSession will be shared to
-         * invited users to decrypt past messages
+         * invited users to decrypt past messages.
          */
         // When this feature lands in spec name = shared_history should be used
         @Json(name = "org.matrix.msc3061.shared_history")

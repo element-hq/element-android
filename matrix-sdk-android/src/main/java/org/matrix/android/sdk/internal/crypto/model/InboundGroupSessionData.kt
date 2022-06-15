@@ -43,9 +43,9 @@ data class InboundGroupSessionData(
 
         /**
          * Flag that indicates whether or not the current inboundSession will be shared to
-         *invited users to decrypt past messages
+         * invited users to decrypt past messages.
          */
         @Json(name = "shared_history")
         val sharedHistory: Boolean = false,
 
-)
+        )
