@@ -91,12 +91,12 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
     }
 
     private suspend fun sendStartingLiveBeaconInfo(session: Session, roomArgs: RoomArgs) {
-        val beaconEventId = session
+        val updateLiveResult = session
                 .getRoom(roomArgs.roomId)
                 ?.locationSharingService()
                 ?.startLiveLocationShare(timeoutMillis = roomArgs.durationMillis)
 
-        beaconEventId
+        updateLiveResult
                 ?.let { result ->
                     when (result) {
                         is UpdateLiveLocationShareResult.Success -> {
