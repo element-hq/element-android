@@ -206,7 +206,7 @@ class RoomSummaryItemFactory @Inject constructor(
             .itemClickListener { onClick?.invoke(roomSummary) }
 
     private fun getSearchResultSubtitle(roomSummary: RoomSummary): String {
-        val userId = roomSummary.directParentName
+        val userId = roomSummary.directUserId
         val directParent = roomSummary.directParentName
         val canonicalAlias = roomSummary.canonicalAlias
 
