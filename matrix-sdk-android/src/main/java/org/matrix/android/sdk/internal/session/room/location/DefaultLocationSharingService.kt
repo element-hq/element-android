@@ -22,6 +22,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import org.matrix.android.sdk.api.session.room.location.LocationSharingService
+import org.matrix.android.sdk.api.session.room.location.UpdateLiveLocationShareResult
 import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationShareAggregatedSummary
 import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.internal.database.mapper.LiveLocationShareAggregatedSummaryMapper
@@ -66,7 +67,7 @@ internal class DefaultLocationSharingService @AssistedInject constructor(
         return sendLiveLocationTask.execute(params)
     }
 
-    override suspend fun startLiveLocationShare(timeoutMillis: Long): String {
+    override suspend fun startLiveLocationShare(timeoutMillis: Long): UpdateLiveLocationShareResult {
         val params = StartLiveLocationShareTask.Params(
                 roomId = roomId,
                 timeoutMillis = timeoutMillis

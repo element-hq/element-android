@@ -41,6 +41,7 @@ internal class DefaultStopLiveLocationShareTask @Inject constructor(
         private val stateEventDataSource: StateEventDataSource,
 ) : StopLiveLocationShareTask {
 
+    @Throws
     override suspend fun execute(params: StopLiveLocationShareTask.Params) {
         val beaconInfoStateEvent = getLiveLocationBeaconInfoForUser(userId, params.roomId) ?: return
         val stateKey = beaconInfoStateEvent.stateKey ?: return

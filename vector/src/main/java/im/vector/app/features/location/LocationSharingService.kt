@@ -30,6 +30,7 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.room.location.UpdateLiveLocationShareResult
 import timber.log.Timber
 import java.util.Timer
 import java.util.TimerTask
@@ -95,13 +96,20 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
                 ?.startLiveLocationShare(timeoutMillis = roomArgs.durationMillis)
 
         beaconEventId
-                ?.takeUnless { it.isEmpty() }
-                ?.let {
-                    roomArgsMap[it] = roomArgs
-                    locationTracker.requestLastKnownLocation()
+                ?.let { result ->
+                    when (result) {
+                        is UpdateLiveLocationShareResult.Success -> {
+                            roomArgsMap[result.beaconEventId] = roomArgs
+                            locationTracker.requestLastKnownLocation()
+                        }
+                        is UpdateLiveLocationShareResult.Failure -> {
+                            tryToDestroyMe()
+                        }
+                    }
                 }
                 ?: run {
                     Timber.w("### LocationSharingService.sendStartingLiveBeaconInfo error, no received beacon info id")
+                    tryToDestroyMe()
                 }
     }
 
@@ -132,10 +140,7 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
                     .map { it.key }
             beaconIds.forEach { roomArgsMap.remove(it) }
 
-            if (roomArgsMap.isEmpty()) {
-                Timber.i("### LocationSharingService. Destroying self, time is up for all rooms")
-                destroyMe()
-            }
+            tryToDestroyMe()
         }
     }
 
@@ -176,6 +181,13 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
     override fun onNoLocationProviderAvailable() {
         stopForeground(true)
         stopSelf()
+    }
+
+    private fun tryToDestroyMe() {
+        if (roomArgsMap.isEmpty()) {
+            Timber.i("### LocationSharingService. Destroying self, time is up for all rooms")
+            destroyMe()
+        }
     }
 
     private fun destroyMe() {
