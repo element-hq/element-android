@@ -97,62 +97,6 @@ internal class ChunkEntityTest : InstrumentedTest {
         }
     }
 
-    @Test
-    fun merge_shouldAddEvents_whenMergingBackward() {
-        monarchy.runTransactionSync { realm ->
-            val chunk1: ChunkEntity = realm.createObject()
-            val chunk2: ChunkEntity = realm.createObject()
-            chunk1.addAll(ROOM_ID, createFakeListOfEvents(30), PaginationDirection.BACKWARDS)
-            chunk2.addAll(ROOM_ID, createFakeListOfEvents(30), PaginationDirection.BACKWARDS)
-            chunk1.merge(ROOM_ID, chunk2, PaginationDirection.BACKWARDS)
-            chunk1.timelineEvents.size shouldBeEqualTo 60
-        }
-    }
-
-    @Test
-    fun merge_shouldAddOnlyDifferentEvents_whenMergingBackward() {
-        monarchy.runTransactionSync { realm ->
-            val chunk1: ChunkEntity = realm.createObject()
-            val chunk2: ChunkEntity = realm.createObject()
-            val eventsForChunk1 = createFakeListOfEvents(30)
-            val eventsForChunk2 = eventsForChunk1 + createFakeListOfEvents(10)
-            chunk1.isLastForward = true
-            chunk2.isLastForward = false
-            chunk1.addAll(ROOM_ID, eventsForChunk1, PaginationDirection.FORWARDS)
-            chunk2.addAll(ROOM_ID, eventsForChunk2, PaginationDirection.BACKWARDS)
-            chunk1.merge(ROOM_ID, chunk2, PaginationDirection.BACKWARDS)
-            chunk1.timelineEvents.size shouldBeEqualTo 40
-            chunk1.isLastForward.shouldBeTrue()
-        }
-    }
-
-    @Test
-    fun merge_shouldPrevTokenMerged_whenMergingForwards() {
-        monarchy.runTransactionSync { realm ->
-            val chunk1: ChunkEntity = realm.createObject()
-            val chunk2: ChunkEntity = realm.createObject()
-            val prevToken = "prev_token"
-            chunk1.prevToken = prevToken
-            chunk1.addAll(ROOM_ID, createFakeListOfEvents(30), PaginationDirection.BACKWARDS)
-            chunk2.addAll(ROOM_ID, createFakeListOfEvents(30), PaginationDirection.BACKWARDS)
-            chunk1.merge(ROOM_ID, chunk2, PaginationDirection.FORWARDS)
-            chunk1.prevToken shouldBeEqualTo prevToken
-        }
-    }
-
-    @Test
-    fun merge_shouldNextTokenMerged_whenMergingBackwards() {
-        monarchy.runTransactionSync { realm ->
-            val chunk1: ChunkEntity = realm.createObject()
-            val chunk2: ChunkEntity = realm.createObject()
-            val nextToken = "next_token"
-            chunk1.nextToken = nextToken
-            chunk1.addAll(ROOM_ID, createFakeListOfEvents(30), PaginationDirection.BACKWARDS)
-            chunk2.addAll(ROOM_ID, createFakeListOfEvents(30), PaginationDirection.BACKWARDS)
-            chunk1.merge(ROOM_ID, chunk2, PaginationDirection.BACKWARDS)
-            chunk1.nextToken shouldBeEqualTo nextToken
-        }
-    }
 
     private fun ChunkEntity.addAll(
             roomId: String,
