@@ -21,13 +21,13 @@ import kotlin.random.Random
 
 object CreatePollViewStates {
 
-    val fakeRoomId = "fakeRoomId"
-    val fakeEventId = "fakeEventId"
+    const val fakeRoomId = "fakeRoomId"
+    const val fakeEventId = "fakeEventId"
 
     val createPollArgs = CreatePollArgs(fakeRoomId, null, PollMode.CREATE)
     val editPollArgs = CreatePollArgs(fakeRoomId, fakeEventId, PollMode.EDIT)
 
-    val fakeQuestion = "What is your favourite coffee?"
+    const val fakeQuestion = "What is your favourite coffee?"
     val fakeOptions = List(CreatePollViewModel.MAX_OPTIONS_COUNT + 1) { "Coffee No${Random.nextInt()}" }
 
     val initialCreatePollViewState = CreatePollViewState(createPollArgs).copy(
