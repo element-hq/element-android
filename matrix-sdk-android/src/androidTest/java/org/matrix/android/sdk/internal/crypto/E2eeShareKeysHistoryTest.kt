@@ -85,12 +85,16 @@ class E2eeShareKeysHistoryTest : InstrumentedTest {
                 val e2eRoomID = cryptoTestData.roomId
 
                 // Alice
-                val aliceSession = cryptoTestData.firstSession
+                val aliceSession = cryptoTestData.firstSession.also {
+                    it.cryptoService().enableShareKeyOnInvite(true)
+                }
                 val aliceRoomPOV = aliceSession.roomService().getRoom(e2eRoomID)!!
 
                 // Bob
-                val bobSession = cryptoTestData.secondSession
-                val bobRoomPOV = bobSession!!.roomService().getRoom(e2eRoomID)!!
+                val bobSession = cryptoTestData.secondSession!!.also {
+                    it.cryptoService().enableShareKeyOnInvite(true)
+                }
+                val bobRoomPOV = bobSession.roomService().getRoom(e2eRoomID)!!
 
                 assertEquals(bobRoomPOV.roomSummary()?.joinedMembersCount, 2)
                 Log.v("#E2E TEST", "Alice and Bob are in roomId: $e2eRoomID")
@@ -114,7 +118,9 @@ class E2eeShareKeysHistoryTest : InstrumentedTest {
                 }
 
                 // Create a new user
-                val arisSession = testHelper.createAccount("aris", SessionTestParams(true))
+                val arisSession = testHelper.createAccount("aris", SessionTestParams(true)).also {
+                    it.cryptoService().enableShareKeyOnInvite(true)
+                }
                 Log.v("#E2E TEST", "Aris user created")
 
                 // Alice invites new user to the room

@@ -303,7 +303,7 @@ internal class MXMegolmDecryption(
      * Returns boolean shared key flag, if enabled with respect to matrix configuration
      */
     private fun RoomKeyContent.getSharedKey(): Boolean {
-        if (!matrixConfiguration.cryptoConfig.shouldShareKeyHistory) return false
+        if (!cryptoStore.isShareKeysOnInviteEnabled()) return false
         return sharedHistory ?: false
     }
 

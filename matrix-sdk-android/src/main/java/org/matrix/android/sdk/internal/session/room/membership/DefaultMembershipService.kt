@@ -152,7 +152,7 @@ internal class DefaultMembershipService @AssistedInject constructor(
     }
 
     private suspend fun sendShareHistoryKeysIfNeeded(userId: String) {
-        if (!matrixConfiguration.cryptoConfig.shouldShareKeyHistory) return
+        if (!cryptoService.isShareKeysOnInviteEnabled()) return
         // TODO not sure it's the right way to get the latest messages in a room
         val sessionInfo = Realm.getInstance(monarchy.realmConfiguration).use {
             ChunkEntity.findLatestSessionInfo(it, roomId)

@@ -660,7 +660,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun shouldShareHistory(roomId: String): Boolean {
-        if (!matrixConfiguration.cryptoConfig.shouldShareKeyHistory) return false
+        if (!isShareKeysOnInviteEnabled()) return false
         return doWithRealm(realmConfiguration) {
             CryptoRoomEntity.getById(it, roomId)?.shouldShareHistory
         }
@@ -1007,6 +1007,18 @@ internal class RealmCryptoStore @Inject constructor(
         return doWithRealm(realmConfiguration) {
             it.where<CryptoMetadataEntity>().findFirst()?.globalBlacklistUnverifiedDevices
         } ?: false
+    }
+
+    override fun isShareKeysOnInviteEnabled(): Boolean {
+        return doWithRealm(realmConfiguration) {
+            it.where<CryptoMetadataEntity>().findFirst()?.enableKeyForwardingOnInvite
+        } ?: false
+    }
+
+    override fun enableShareKeyOnInvite(enable: Boolean) {
+        doRealmTransaction(realmConfiguration) {
+            it.where<CryptoMetadataEntity>().findFirst()?.enableKeyForwardingOnInvite = enable
+        }
     }
 
     override fun setDeviceKeysUploaded(uploaded: Boolean) {

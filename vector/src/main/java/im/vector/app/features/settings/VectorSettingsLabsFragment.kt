@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.widget.TextView
 import androidx.preference.Preference
+import androidx.preference.SwitchPreference
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.preference.VectorSwitchPreference
@@ -55,6 +56,16 @@ class VectorSettingsLabsFragment @Inject constructor(
             vectorPref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 onThreadsPreferenceClickedInterceptor(vectorPref)
                 false
+            }
+        }
+
+        findPreference<SwitchPreference>(VectorPreferences.SETTINGS_LABS_MSC3061_SHARE_KEYS_HISTORY)?.let { pref ->
+            // ensure correct default
+            pref.isChecked = session.cryptoService().isShareKeysOnInviteEnabled()
+
+            pref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                session.cryptoService().enableShareKeyOnInvite(pref.isChecked)
+                true
             }
         }
     }

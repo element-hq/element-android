@@ -18,12 +18,15 @@ package org.matrix.android.sdk.common
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -38,7 +41,10 @@ import org.matrix.android.sdk.api.auth.registration.RegistrationResult
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.room.Room
+import org.matrix.android.sdk.api.session.room.failure.JoinRoomFailure
+import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
@@ -47,6 +53,7 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.api.session.sync.SyncState
 import timber.log.Timber
 import java.util.UUID
+import java.util.concurrent.CancellationException
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
@@ -241,6 +248,37 @@ class CommonTestHelper internal constructor(context: Context) {
         return sentEvents
     }
 
+    fun waitForAndAcceptInviteInRoom(otherSession: Session, roomID: String) {
+        waitWithLatch { latch ->
+            retryPeriodicallyWithLatch(latch) {
+                val roomSummary = otherSession.getRoomSummary(roomID)
+                (roomSummary != null && roomSummary.membership == Membership.INVITE).also {
+                    if (it) {
+                        Log.v("# TEST", "${otherSession.myUserId} can see the invite")
+                    }
+                }
+            }
+        }
+
+        // not sure why it's taking so long :/
+        runBlockingTest(90_000) {
+            Log.v("#E2E TEST", "${otherSession.myUserId} tries to join room $roomID")
+            try {
+                otherSession.roomService().joinRoom(roomID)
+            } catch (ex: JoinRoomFailure.JoinedWithTimeout) {
+                // it's ok we will wait after
+            }
+        }
+
+        Log.v("#E2E TEST", "${otherSession.myUserId} waiting for join echo ...")
+        waitWithLatch {
+            retryPeriodicallyWithLatch(it) {
+                val roomSummary = otherSession.getRoomSummary(roomID)
+                roomSummary != null && roomSummary.membership == Membership.JOIN
+            }
+        }
+    }
+
     /**
      * Reply in a thread
      * @param room the room where to send the messages
@@ -285,6 +323,8 @@ class CommonTestHelper internal constructor(context: Context) {
         )
         assertNotNull(session)
         return session.also {
+            // most of the test was created pre-MSC3061 so ensure compatibility
+            it.cryptoService().enableShareKeyOnInvite(false)
             trackedSessions.add(session)
         }
     }
@@ -428,16 +468,26 @@ class CommonTestHelper internal constructor(context: Context) {
      * @param latch
      * @throws InterruptedException
      */
-    fun await(latch: CountDownLatch, timeout: Long? = TestConstants.timeOutMillis) {
+    fun await(latch: CountDownLatch, timeout: Long? = TestConstants.timeOutMillis, job: Job? = null) {
         assertTrue(
                 "Timed out after " + timeout + "ms waiting for something to happen. See stacktrace for cause.",
-                latch.await(timeout ?: TestConstants.timeOutMillis, TimeUnit.MILLISECONDS)
+                latch.await(timeout ?: TestConstants.timeOutMillis, TimeUnit.MILLISECONDS).also {
+                    if (!it) {
+                        // cancel job on timeout
+                        job?.cancel("Await timeout")
+                    }
+                }
         )
     }
 
     suspend fun retryPeriodicallyWithLatch(latch: CountDownLatch, condition: (() -> Boolean)) {
         while (true) {
-            delay(1000)
+            try {
+                delay(1000)
+            } catch (ex: CancellationException) {
+                // the job was canceled, just stop
+                return
+            }
             if (condition()) {
                 latch.countDown()
                 return
@@ -447,10 +497,10 @@ class CommonTestHelper internal constructor(context: Context) {
 
     fun waitWithLatch(timeout: Long? = TestConstants.timeOutMillis, dispatcher: CoroutineDispatcher = Dispatchers.Main, block: suspend (CountDownLatch) -> Unit) {
         val latch = CountDownLatch(1)
-        coroutineScope.launch(dispatcher) {
+        val job = coroutineScope.launch(dispatcher) {
             block(latch)
         }
-        await(latch, timeout)
+        await(latch, timeout, job)
     }
 
     fun <T> runBlockingTest(timeout: Long = TestConstants.timeOutMillis, block: suspend () -> T): T {

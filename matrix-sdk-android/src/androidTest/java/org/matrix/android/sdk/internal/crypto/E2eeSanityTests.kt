@@ -23,7 +23,6 @@ import org.amshove.kluent.fail
 import org.amshove.kluent.internal.assertEquals
 import org.junit.Assert
 import org.junit.FixMethodOrder
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -49,9 +48,7 @@ import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventCon
 import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
-import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.room.Room
-import org.matrix.android.sdk.api.session.room.failure.JoinRoomFailure
 import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
@@ -67,10 +64,10 @@ import org.matrix.android.sdk.common.TestMatrixCallback
 import org.matrix.android.sdk.mustFail
 import java.util.concurrent.CountDownLatch
 
+// @Ignore("This test fails with an unhandled exception thrown from a coroutine which terminates the entire test run.")
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
 @LargeTest
-//@Ignore("This test fails with an unhandled exception thrown from a coroutine which terminates the entire test run.")
 class E2eeSanityTests : InstrumentedTest {
 
     @get:Rule val rule = RetryTestRule(3)
@@ -115,7 +112,7 @@ class E2eeSanityTests : InstrumentedTest {
 
         // All user should accept invite
         otherAccounts.forEach { otherSession ->
-            waitForAndAcceptInviteInRoom(testHelper, otherSession, e2eRoomID)
+            testHelper.waitForAndAcceptInviteInRoom(otherSession, e2eRoomID)
             Log.v("#E2E TEST", "${otherSession.myUserId} joined room $e2eRoomID")
         }
 
@@ -156,7 +153,7 @@ class E2eeSanityTests : InstrumentedTest {
         }
 
         newAccount.forEach {
-            waitForAndAcceptInviteInRoom(testHelper, it, e2eRoomID)
+            testHelper.waitForAndAcceptInviteInRoom(it, e2eRoomID)
         }
 
         ensureMembersHaveJoined(testHelper, aliceSession, newAccount, e2eRoomID)
@@ -166,7 +163,7 @@ class E2eeSanityTests : InstrumentedTest {
             delay(3_000)
         }
 
-        // Due to the new shared keys implementation, invited user should be able to decrypt messages
+        // check that messages are encrypted (uisi)
         newAccount.forEach { otherSession ->
             testHelper.waitWithLatch { latch ->
                 testHelper.retryPeriodicallyWithLatch(latch) {
@@ -174,7 +171,8 @@ class E2eeSanityTests : InstrumentedTest {
                         Log.v("#E2E TEST", "Event seen by new user ${it?.root?.getClearType()}|${it?.root?.mCryptoError}")
                     }
                     timelineEvent != null &&
-                            timelineEvent.root.getClearType() == EventType.MESSAGE
+                            timelineEvent.root.getClearType() == EventType.ENCRYPTED &&
+                            timelineEvent.root.mCryptoError == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID
                 }
             }
         }
@@ -735,37 +733,6 @@ class E2eeSanityTests : InstrumentedTest {
                 }.all {
                     it == Membership.JOIN
                 }
-            }
-        }
-    }
-
-    private fun waitForAndAcceptInviteInRoom(testHelper: CommonTestHelper, otherSession: Session, e2eRoomID: String) {
-        testHelper.waitWithLatch { latch ->
-            testHelper.retryPeriodicallyWithLatch(latch) {
-                val roomSummary = otherSession.getRoomSummary(e2eRoomID)
-                (roomSummary != null && roomSummary.membership == Membership.INVITE).also {
-                    if (it) {
-                        Log.v("#E2E TEST", "${otherSession.myUserId} can see the invite from alice")
-                    }
-                }
-            }
-        }
-
-        // not sure why it's taking so long :/
-        testHelper.runBlockingTest(90_000) {
-            Log.v("#E2E TEST", "${otherSession.myUserId} tries to join room $e2eRoomID")
-            try {
-                otherSession.roomService().joinRoom(e2eRoomID)
-            } catch (ex: JoinRoomFailure.JoinedWithTimeout) {
-                // it's ok we will wait after
-            }
-        }
-
-        Log.v("#E2E TEST", "${otherSession.myUserId} waiting for join echo ...")
-        testHelper.waitWithLatch {
-            testHelper.retryPeriodicallyWithLatch(it) {
-                val roomSummary = otherSession.getRoomSummary(e2eRoomID)
-                roomSummary != null && roomSummary.membership == Membership.JOIN
             }
         }
     }

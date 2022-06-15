@@ -2958,6 +2958,9 @@
     <string name="labs_enable_latex_maths">Enable LaTeX mathematics</string>
     <string name="restart_the_application_to_apply_changes">Restart the application for the change to take effect.</string>
 
+    <string name="labs_enable_msc3061_share_history">MSC3061: Sharing room keys for past messages</string>
+    <string name="labs_enable_msc3061_share_history_desc">When inviting in an encrypted room that is sharing history, encrypted history will be visible.</string>
+
     <!-- Poll -->
     <string name="create_poll_title">Create Poll</string>
     <string name="create_poll_question_title">Poll question or topic</string>

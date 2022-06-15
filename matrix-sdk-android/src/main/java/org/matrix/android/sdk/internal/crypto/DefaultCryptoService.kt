@@ -110,7 +110,6 @@ import org.matrix.olm.OlmManager
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
-import kotlin.coroutines.coroutineContext
 import kotlin.math.max
 
 /**
@@ -1117,6 +1116,10 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     override fun isKeyGossipingEnabled() = cryptoStore.isKeyGossipingEnabled()
+
+    override fun isShareKeysOnInviteEnabled() = cryptoStore.isShareKeysOnInviteEnabled()
+
+    override fun enableShareKeyOnInvite(enable: Boolean) = cryptoStore.enableShareKeyOnInvite(enable)
 
     /**
      * Tells whether the client should ever send encrypted messages to unverified devices.

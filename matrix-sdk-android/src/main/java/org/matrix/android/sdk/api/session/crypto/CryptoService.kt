@@ -85,6 +85,20 @@ interface CryptoService {
 
     fun isKeyGossipingEnabled(): Boolean
 
+    /**
+     * As per MSC3061.
+     * If true will make it possible to share part of e2ee room history
+     * on invite depending on the room visibility setting.
+     */
+    fun enableShareKeyOnInvite(enable: Boolean)
+
+    /**
+     * As per MSC3061.
+     * If true will make it possible to share part of e2ee room history
+     * on invite depending on the room visibility setting.
+     */
+    fun isShareKeysOnInviteEnabled(): Boolean
+
     fun setRoomUnBlacklistUnverifiedDevices(roomId: String)
 
     fun getDeviceTrackingStatus(userId: String): Int
