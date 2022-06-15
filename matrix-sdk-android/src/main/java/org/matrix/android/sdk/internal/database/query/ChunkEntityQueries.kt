@@ -31,7 +31,7 @@ internal fun ChunkEntity.Companion.where(realm: Realm, roomId: String): RealmQue
 
 internal fun ChunkEntity.Companion.find(realm: Realm, roomId: String, prevToken: String? = null, nextToken: String? = null): ChunkEntity? {
     val query = where(realm, roomId)
-    if(prevToken == null && nextToken == null) return null
+    if (prevToken == null && nextToken == null) return null
     if (prevToken != null) {
         query.equalTo(ChunkEntityFields.PREV_TOKEN, prevToken)
     }

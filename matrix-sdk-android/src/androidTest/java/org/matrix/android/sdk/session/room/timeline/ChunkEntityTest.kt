@@ -22,7 +22,6 @@ import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.kotlin.createObject
 import org.amshove.kluent.shouldBeEqualTo
-import org.amshove.kluent.shouldBeTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -30,13 +29,11 @@ import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.database.helper.addTimelineEvent
-import org.matrix.android.sdk.internal.database.helper.merge
 import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.SessionRealmModule
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
 import org.matrix.android.sdk.internal.util.time.DefaultClock
-import org.matrix.android.sdk.session.room.timeline.RoomDataHelper.createFakeListOfEvents
 import org.matrix.android.sdk.session.room.timeline.RoomDataHelper.createFakeMessageEvent
 
 @RunWith(AndroidJUnit4::class)
@@ -96,7 +93,6 @@ internal class ChunkEntityTest : InstrumentedTest {
             chunk.timelineEvents.size shouldBeEqualTo 1
         }
     }
-
 
     private fun ChunkEntity.addAll(
             roomId: String,
