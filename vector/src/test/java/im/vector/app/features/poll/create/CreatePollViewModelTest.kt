@@ -22,25 +22,38 @@ import im.vector.app.features.poll.create.CreatePollViewStates.createPollArgs
 import im.vector.app.features.poll.create.CreatePollViewStates.editPollArgs
 import im.vector.app.features.poll.create.CreatePollViewStates.fakeOptions
 import im.vector.app.features.poll.create.CreatePollViewStates.fakeQuestion
+import im.vector.app.features.poll.create.CreatePollViewStates.fakeRoomId
 import im.vector.app.features.poll.create.CreatePollViewStates.initialCreatePollViewState
 import im.vector.app.features.poll.create.CreatePollViewStates.pollViewStateWithOnlyQuestion
 import im.vector.app.features.poll.create.CreatePollViewStates.pollViewStateWithQuestionAndEnoughOptions
 import im.vector.app.features.poll.create.CreatePollViewStates.pollViewStateWithQuestionAndMaxOptions
 import im.vector.app.features.poll.create.CreatePollViewStates.pollViewStateWithQuestionAndNotEnoughOptions
 import im.vector.app.features.poll.create.CreatePollViewStates.pollViewStateWithoutQuestionAndEnoughOptions
-import im.vector.app.test.fakes.FakeSession
 import im.vector.app.test.test
+import io.mockk.every
+import io.mockk.mockk
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest
+import org.amshove.kluent.shouldBe
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.room.Room
+import org.matrix.android.sdk.api.session.room.model.message.PollType
+import org.matrix.android.sdk.api.session.room.send.SendService
+import org.matrix.android.sdk.api.util.Cancelable
 
 class CreatePollViewModelTest {
 
     @get:Rule
     val mvrxTestRule = MvRxTestRule()
 
-    private val fakeSession = FakeSession()
+    private val fakeSession = mockk<Session>()
+    private val fakeRoom = mockk<Room>()
+    private val fakeSendService = mockk<SendService>()
+    private val fakeCancellable = mockk<Cancelable>()
 
     private fun createPollViewModel(pollMode: PollMode): CreatePollViewModel {
         return if (pollMode == PollMode.EDIT) {
@@ -48,6 +61,13 @@ class CreatePollViewModelTest {
         } else {
             CreatePollViewModel(CreatePollViewState(createPollArgs), fakeSession)
         }
+    }
+
+    @Before
+    fun setup() {
+        every { fakeSession.getRoom(fakeRoomId) } returns fakeRoom
+        every { fakeRoom.sendService() } returns fakeSendService
+        every { fakeSendService.sendPoll(any(), fakeQuestion, any()) } returns fakeCancellable
     }
 
     @Test
@@ -132,5 +152,51 @@ class CreatePollViewModelTest {
                 .test()
                 .assertState(pollViewStateWithQuestionAndMaxOptions)
                 .finish()
+    }
+
+    @Test
+    fun `given an initial poll state when poll type is changed then view state is updated accordingly`() = runTest {
+        val createPollViewModel = createPollViewModel(PollMode.CREATE)
+        createPollViewModel.handle(CreatePollAction.OnPollTypeChanged(PollType.DISCLOSED))
+        createPollViewModel.awaitState().pollType shouldBe PollType.DISCLOSED
+        createPollViewModel.handle(CreatePollAction.OnPollTypeChanged(PollType.UNDISCLOSED))
+        createPollViewModel.awaitState().pollType shouldBe PollType.UNDISCLOSED
+    }
+
+    @Test
+    fun `given there is not a question and enough options when create poll is requested then error view events are post`() = runTest {
+        val createPollViewModel = createPollViewModel(PollMode.CREATE)
+        val test = createPollViewModel.test()
+
+        createPollViewModel.handle(CreatePollAction.OnCreatePoll)
+
+        createPollViewModel.handle(CreatePollAction.OnQuestionChanged(fakeQuestion))
+        createPollViewModel.handle(CreatePollAction.OnCreatePoll)
+
+        createPollViewModel.handle(CreatePollAction.OnOptionChanged(0, fakeOptions[0]))
+        createPollViewModel.handle(CreatePollAction.OnCreatePoll)
+
+        test
+                .assertEvents(
+                        CreatePollViewEvents.EmptyQuestionError,
+                        CreatePollViewEvents.NotEnoughOptionsError(requiredOptionsCount = CreatePollViewModel.MIN_OPTIONS_COUNT),
+                        CreatePollViewEvents.NotEnoughOptionsError(requiredOptionsCount = CreatePollViewModel.MIN_OPTIONS_COUNT)
+                )
+    }
+
+    @Test
+    fun `given there is a question and enough options when create poll is requested then success view event is post`() = runTest {
+        val createPollViewModel = createPollViewModel(PollMode.CREATE)
+        val test = createPollViewModel.test()
+
+        createPollViewModel.handle(CreatePollAction.OnQuestionChanged(fakeQuestion))
+        createPollViewModel.handle(CreatePollAction.OnOptionChanged(0, fakeOptions[0]))
+        createPollViewModel.handle(CreatePollAction.OnOptionChanged(1, fakeOptions[1]))
+        createPollViewModel.handle(CreatePollAction.OnCreatePoll)
+
+        test
+                .assertEvents(
+                        CreatePollViewEvents.Success
+                )
     }
 }
