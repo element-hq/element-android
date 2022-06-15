@@ -366,24 +366,20 @@ internal class RoomSummaryUpdater @Inject constructor(
                     .forEach { entry ->
                         val parent = RoomSummaryEntity.where(realm, entry.key.roomId).findFirst()
                         if (parent != null) {
-//                            Timber.v("## SPACES: check hierarchy of ${parent.name} id ${parent.roomId}")
-//                            Timber.v("## SPACES: flat known parents of ${parent.name} are ${flattenSpaceParents[parent.roomId]}")
                             val flattenParentsIds = (flattenSpaceParents[parent.roomId] ?: emptyList()) + listOf(parent.roomId)
-//                            Timber.v("## SPACES: flatten known parents of children of ${parent.name} are ${flattenParentsIds}")
+
                             entry.value.forEach { child ->
                                 RoomSummaryEntity.where(realm, child.roomId).findFirst()?.let { childSum ->
+                                    childSum.directParentName = parent.displayName()
 
-//                                    Timber.w("## SPACES: ${childSum.name} is ${childSum.roomId} fc: ${childSum.flattenParentIds}")
-//                                    var allParents = childSum.flattenParentIds ?: ""
-                                    if (childSum.flattenParentIds == null) childSum.flattenParentIds = ""
+                                    if (childSum.flattenParentIds == null) {
+                                        childSum.flattenParentIds = ""
+                                    }
                                     flattenParentsIds.forEach {
                                         if (childSum.flattenParentIds?.contains(it) != true) {
                                             childSum.flattenParentIds += "|$it"
                                         }
                                     }
-//                                    childSum.flattenParentIds = "$allParents|"
-
-//                                    Timber.v("## SPACES: flatten of ${childSum.name} is ${childSum.flattenParentIds}")
                                 }
                             }
                         }

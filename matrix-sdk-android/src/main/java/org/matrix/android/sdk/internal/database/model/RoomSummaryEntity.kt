@@ -235,6 +235,11 @@ internal open class RoomSummaryEntity(
             if (value != field) field = value
         }
 
+    var directParentName: String? = null
+        set(value) {
+            if (value != field) field = value
+        }
+
     var flattenParentIds: String? = null
         set(value) {
             if (value != field) field = value
