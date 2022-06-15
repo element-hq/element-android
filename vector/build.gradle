@@ -463,9 +463,9 @@ dependencies {
 
     // gplay flavor only
     gplayImplementation('com.google.firebase:firebase-messaging:23.0.0') {
-        exclude group: 'com.google.firebase', module: 'firebase-core'
-        exclude group: 'com.google.firebase', module: 'firebase-analytics'
-        exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'
+        // exclude group: 'com.google.firebase', module: 'firebase-core'
+        // exclude group: 'com.google.firebase', module: 'firebase-analytics'
+        // exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'
     }
 
     // OSS License, gplay flavor only
