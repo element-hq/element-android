@@ -24,6 +24,7 @@ import org.junit.After
 import org.junit.Test
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
+import org.matrix.android.sdk.api.session.room.location.UpdateLiveLocationShareResult
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
 import org.matrix.android.sdk.internal.session.room.state.SendStateTask
 import org.matrix.android.sdk.test.fakes.FakeClock
@@ -53,7 +54,7 @@ internal class DefaultStartLiveLocationShareTaskTest {
     }
 
     @Test
-    fun `given parameters when calling the task then it is correctly executed`() = runTest {
+    fun `given parameters an no error when calling the task then it is correctly executed`() = runTest {
         val params = StartLiveLocationShareTask.Params(
                 roomId = A_ROOM_ID,
                 timeoutMillis = A_TIMEOUT
@@ -63,7 +64,7 @@ internal class DefaultStartLiveLocationShareTaskTest {
 
         val result = defaultStartLiveLocationShareTask.execute(params)
 
-        result shouldBeEqualTo AN_EVENT_ID
+        result shouldBeEqualTo UpdateLiveLocationShareResult.Success(AN_EVENT_ID)
         val expectedBeaconContent = MessageBeaconInfoContent(
                 timeout = params.timeoutMillis,
                 isLive = true,

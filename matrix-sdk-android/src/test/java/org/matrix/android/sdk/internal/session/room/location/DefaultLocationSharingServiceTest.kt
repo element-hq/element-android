@@ -27,6 +27,7 @@ import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.After
 import org.junit.Test
+import org.matrix.android.sdk.api.session.room.location.UpdateLiveLocationShareResult
 import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationShareAggregatedSummary
 import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.internal.database.mapper.LiveLocationShareAggregatedSummaryMapper
@@ -119,11 +120,11 @@ internal class DefaultLocationSharingServiceTest {
 
     @Test
     fun `live location share can be started with a given timeout`() = runTest {
-        coEvery { startLiveLocationShareTask.execute(any()) } returns AN_EVENT_ID
+        coEvery { startLiveLocationShareTask.execute(any()) } returns UpdateLiveLocationShareResult.Success(AN_EVENT_ID)
 
-        val eventId = defaultLocationSharingService.startLiveLocationShare(A_TIMEOUT)
+        val result = defaultLocationSharingService.startLiveLocationShare(A_TIMEOUT)
 
-        eventId shouldBeEqualTo AN_EVENT_ID
+        result shouldBeEqualTo UpdateLiveLocationShareResult.Success(AN_EVENT_ID)
         val expectedParams = StartLiveLocationShareTask.Params(
                 roomId = A_ROOM_ID,
                 timeoutMillis = A_TIMEOUT
@@ -133,10 +134,11 @@ internal class DefaultLocationSharingServiceTest {
 
     @Test
     fun `live location share can be stopped`() = runTest {
-        coEvery { stopLiveLocationShareTask.execute(any()) } just runs
+        coEvery { stopLiveLocationShareTask.execute(any()) } returns UpdateLiveLocationShareResult.Success(AN_EVENT_ID)
 
-        defaultLocationSharingService.stopLiveLocationShare()
+        val result = defaultLocationSharingService.stopLiveLocationShare()
 
+        result shouldBeEqualTo UpdateLiveLocationShareResult.Success(AN_EVENT_ID)
         val expectedParams = StopLiveLocationShareTask.Params(
                 roomId = A_ROOM_ID
         )

@@ -19,11 +19,13 @@ package org.matrix.android.sdk.internal.session.room.location
 import io.mockk.unmockkAll
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import org.amshove.kluent.shouldBeEqualTo
 import org.junit.After
 import org.junit.Test
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
+import org.matrix.android.sdk.api.session.room.location.UpdateLiveLocationShareResult
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
 import org.matrix.android.sdk.internal.session.room.state.SendStateTask
 import org.matrix.android.sdk.test.fakes.FakeSendStateTask
@@ -66,8 +68,9 @@ class DefaultStopLiveLocationShareTaskTest {
         fakeStateEventDataSource.givenGetStateEventReturns(currentStateEvent)
         fakeSendStateTask.givenExecuteRetryReturns(AN_EVENT_ID)
 
-        defaultStopLiveLocationShareTask.execute(params)
+        val result = defaultStopLiveLocationShareTask.execute(params)
 
+        result shouldBeEqualTo UpdateLiveLocationShareResult.Success(AN_EVENT_ID)
         val expectedBeaconContent = MessageBeaconInfoContent(
                 timeout = A_TIMEOUT,
                 isLive = false,
