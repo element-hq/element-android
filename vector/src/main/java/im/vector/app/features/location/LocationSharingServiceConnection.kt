@@ -28,6 +28,7 @@ class LocationSharingServiceConnection @Inject constructor(
 ) : ServiceConnection {
 
     interface Callback {
+        // TODO add onLocationServiceError()
         fun onLocationServiceRunning()
         fun onLocationServiceStopped()
     }

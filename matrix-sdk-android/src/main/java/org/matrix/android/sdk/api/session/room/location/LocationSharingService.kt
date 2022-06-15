@@ -53,7 +53,7 @@ interface LocationSharingService {
     /**
      * Stops sharing live location in the room.
      */
-    suspend fun stopLiveLocationShare()
+    suspend fun stopLiveLocationShare(): UpdateLiveLocationShareResult
 
     /**
      * Returns a LiveData on the list of current running live location shares.
