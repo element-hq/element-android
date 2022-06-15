@@ -20,18 +20,15 @@ import android.content.Context
 import android.media.MediaRecorder
 import android.os.Build
 import androidx.annotation.RequiresApi
-import java.io.File
 
+/**
+ * VoiceRecorder to be used on Android versions >= [Build.VERSION_CODES.Q]. It uses the native OPUS support on Android 10+.
+ */
 @RequiresApi(Build.VERSION_CODES.Q)
 class VoiceRecorderQ(context: Context) : AbstractVoiceRecorder(context, "ogg") {
     override fun setOutputFormat(mediaRecorder: MediaRecorder) {
         // We can directly use OGG here
         mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.OGG)
         mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.OPUS)
-    }
-
-    override fun convertFile(recordedFile: File?): File? {
-        // Nothing to do here
-        return recordedFile
     }
 }

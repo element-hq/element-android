@@ -39,7 +39,6 @@ import im.vector.app.features.home.room.detail.toMessageType
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
-import im.vector.app.features.voice.VoicePlayerHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
@@ -80,7 +79,6 @@ class MessageComposerViewModel @AssistedInject constructor(
         private val rainbowGenerator: RainbowGenerator,
         private val audioMessageHelper: AudioMessageHelper,
         private val analyticsTracker: AnalyticsTracker,
-        private val voicePlayerHelper: VoicePlayerHelper
 ) : VectorViewModel<MessageComposerViewState, MessageComposerAction, MessageComposerViewEvents>(initialState) {
 
     private val room = session.getRoom(initialState.roomId)!!
@@ -856,7 +854,7 @@ class MessageComposerViewModel @AssistedInject constructor(
         if (isCancelled) {
             audioMessageHelper.deleteRecording()
         } else {
-            audioMessageHelper.stopRecording(convertForSending = true)?.let { audioType ->
+            audioMessageHelper.stopRecording()?.let { audioType ->
                 if (audioType.duration > 1000) {
                     room.sendService().sendMedia(
                             attachment = audioType.toContentAttachmentData(isVoiceMessage = true),
@@ -877,10 +875,8 @@ class MessageComposerViewModel @AssistedInject constructor(
             try {
                 // Download can fail
                 val audioFile = session.fileService().downloadFile(action.messageAudioContent)
-                // Conversion can fail, fallback to the original file in this case and let the player fail for us
-                val convertedFile = voicePlayerHelper.convertFile(audioFile) ?: audioFile
                 // Play can fail
-                audioMessageHelper.startOrPausePlayback(action.eventId, convertedFile)
+                audioMessageHelper.startOrPausePlayback(action.eventId, audioFile)
             } catch (failure: Throwable) {
                 _viewEvents.post(MessageComposerViewEvents.VoicePlaybackOrRecordingFailure(failure))
             }
