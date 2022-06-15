@@ -16,8 +16,8 @@
     <string name="notice_display_name_removed">%1$s a supprimé son nom d’affichage (précédemment %2$s)</string>
     <string name="notice_room_topic_changed">%1$s a changé le sujet en : %2$s</string>
     <string name="notice_room_name_changed">%1$s a changé le nom du salon en : %2$s</string>
-    <string name="notice_placed_video_call">%s a passé un appel vidéo.</string>
-    <string name="notice_placed_voice_call">%s a passé un appel audio.</string>
+    <string name="notice_placed_video_call">%s a lancé un appel vidéo.</string>
+    <string name="notice_placed_voice_call">%s a lancé un appel audio.</string>
     <string name="notice_answered_call">%s a répondu à l’appel.</string>
     <string name="notice_ended_call">%s a raccroché.</string>
     <string name="notice_made_future_room_visibility">%1$s a rendu l’historique futur du salon visible pour %2$s</string>
@@ -159,8 +159,8 @@
     <string name="notice_answered_call_by_you">Vous avez répondu à l’appel.</string>
     <string name="notice_call_candidates_by_you">Vous avez envoyé les données pour configurer l’appel.</string>
     <string name="notice_call_candidates">%s a envoyé les données pour configurer l’appel.</string>
-    <string name="notice_placed_voice_call_by_you">Vous avez passé un appel audio.</string>
-    <string name="notice_placed_video_call_by_you">Vous avez passé un appel vidéo.</string>
+    <string name="notice_placed_voice_call_by_you">Vous avez lancé un appel audio.</string>
+    <string name="notice_placed_video_call_by_you">Vous avez lancé un appel vidéo.</string>
     <string name="notice_room_name_changed_by_you">Vous avez changé le nom du salon en : %1$s</string>
     <string name="notice_room_avatar_changed_by_you">Vous avez modifié l’avatar du salon</string>
     <string name="notice_room_avatar_changed">%1$s a modifié l’avatar du salon</string>
