@@ -29,6 +29,7 @@ import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.internal.network.ApiInterceptor
 import org.matrix.android.sdk.internal.network.TimeOutInterceptor
 import org.matrix.android.sdk.internal.network.UserAgentInterceptor
+import org.matrix.android.sdk.internal.network.httpclient.applyMatrixConfiguration
 import org.matrix.android.sdk.internal.network.interceptors.CurlLoggingInterceptor
 import org.matrix.android.sdk.internal.network.interceptors.FormattedJsonHttpLogger
 import java.util.Collections
@@ -92,14 +93,9 @@ internal object NetworkModule {
                     if (BuildConfig.LOG_PRIVATE_DATA) {
                         addInterceptor(curlLoggingInterceptor)
                     }
-                    matrixConfiguration.proxy?.let {
-                        proxy(it)
-                    }
-                    matrixConfiguration.networkInterceptors.forEach {
-                        addInterceptor(it)
-                    }
                 }
                 .connectionSpecs(Collections.singletonList(spec))
+                .applyMatrixConfiguration(matrixConfiguration)
                 .build()
     }
 

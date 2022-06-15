@@ -73,6 +73,7 @@ import org.matrix.android.sdk.internal.network.PreferredNetworkCallbackStrategy
 import org.matrix.android.sdk.internal.network.RetrofitFactory
 import org.matrix.android.sdk.internal.network.httpclient.addAccessTokenInterceptor
 import org.matrix.android.sdk.internal.network.httpclient.addSocketFactory
+import org.matrix.android.sdk.internal.network.httpclient.applyMatrixConfiguration
 import org.matrix.android.sdk.internal.network.interceptors.CurlLoggingInterceptor
 import org.matrix.android.sdk.internal.network.token.AccessTokenProvider
 import org.matrix.android.sdk.internal.network.token.HomeserverAccessTokenProvider
@@ -212,7 +213,7 @@ internal abstract class SessionModule {
         @UnauthenticatedWithCertificate
         fun providesOkHttpClientWithCertificate(
                 @Unauthenticated okHttpClient: OkHttpClient,
-                homeServerConnectionConfig: HomeServerConnectionConfig
+                homeServerConnectionConfig: HomeServerConnectionConfig,
         ): OkHttpClient {
             return okHttpClient
                     .newBuilder()
@@ -228,7 +229,8 @@ internal abstract class SessionModule {
                 @UnauthenticatedWithCertificate okHttpClient: OkHttpClient,
                 @Authenticated accessTokenProvider: AccessTokenProvider,
                 @SessionId sessionId: String,
-                @MockHttpInterceptor testInterceptor: TestInterceptor?
+                @MockHttpInterceptor testInterceptor: TestInterceptor?,
+                matrixConfiguration: MatrixConfiguration,
         ): OkHttpClient {
             return okHttpClient
                     .newBuilder()
@@ -239,6 +241,7 @@ internal abstract class SessionModule {
                             addInterceptor(testInterceptor)
                         }
                     }
+                    .applyMatrixConfiguration(matrixConfiguration)
                     .build()
         }
 
@@ -248,9 +251,11 @@ internal abstract class SessionModule {
         @UnauthenticatedWithCertificateWithProgress
         fun providesProgressOkHttpClient(
                 @UnauthenticatedWithCertificate okHttpClient: OkHttpClient,
-                downloadProgressInterceptor: DownloadProgressInterceptor
+                downloadProgressInterceptor: DownloadProgressInterceptor,
+                matrixConfiguration: MatrixConfiguration,
         ): OkHttpClient {
-            return okHttpClient.newBuilder()
+            return okHttpClient
+                    .newBuilder()
                     .apply {
                         // Remove the previous CurlLoggingInterceptor, to add it after the accessTokenInterceptor
                         val existingCurlInterceptors = interceptors().filterIsInstance<CurlLoggingInterceptor>()
@@ -262,7 +267,9 @@ internal abstract class SessionModule {
                         existingCurlInterceptors.forEach {
                             addInterceptor(it)
                         }
-                    }.build()
+                    }
+                    .applyMatrixConfiguration(matrixConfiguration)
+                    .build()
         }
 
         @JvmStatic

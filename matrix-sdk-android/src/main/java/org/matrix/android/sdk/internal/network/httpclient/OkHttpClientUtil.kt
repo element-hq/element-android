@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.network.httpclient
 
 import okhttp3.OkHttpClient
+import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.internal.network.AccessTokenInterceptor
 import org.matrix.android.sdk.internal.network.interceptors.CurlLoggingInterceptor
@@ -47,6 +48,20 @@ internal fun OkHttpClient.Builder.addSocketFactory(homeServerConnectionConfig: H
         connectionSpecs(CertUtil.newConnectionSpecs(homeServerConnectionConfig))
     } catch (e: Exception) {
         Timber.e(e, "addSocketFactory failed")
+    }
+
+    return this
+}
+
+internal fun OkHttpClient.Builder.applyMatrixConfiguration(matrixConfiguration: MatrixConfiguration): OkHttpClient.Builder {
+    matrixConfiguration.proxy?.let {
+        proxy(it)
+    }
+
+    // Move networkInterceptors provided in the configuration after all the others
+    interceptors().removeAll(matrixConfiguration.networkInterceptors)
+    matrixConfiguration.networkInterceptors.forEach {
+        addInterceptor(it)
     }
 
     return this
