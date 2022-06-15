@@ -52,6 +52,7 @@ interface LocationSharingService {
 
     /**
      * Stops sharing live location in the room.
+     * @return the result of the update of the live
      */
     suspend fun stopLiveLocationShare(): UpdateLiveLocationShareResult
 
