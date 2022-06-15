@@ -80,4 +80,8 @@ class LocationLiveMapViewModel @AssistedInject constructor(
     override fun onLocationServiceStopped() {
         // NOOP
     }
+
+    override fun onLocationServiceError(error: Throwable) {
+        // TODO
+    }
 }

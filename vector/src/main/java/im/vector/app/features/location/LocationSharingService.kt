@@ -55,8 +55,9 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
     /**
      * Keep track of a map between beacon event Id starting the live and RoomArgs.
      */
-    private var roomArgsMap = mutableMapOf<String, RoomArgs>()
-    private var timers = mutableListOf<Timer>()
+    private val roomArgsMap = mutableMapOf<String, RoomArgs>()
+    private val timers = mutableListOf<Timer>()
+    var callback: Callback? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -103,6 +104,7 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
                             locationTracker.requestLastKnownLocation()
                         }
                         is UpdateLiveLocationShareResult.Failure -> {
+                            callback?.onServiceError(result.error)
                             tryToDestroyMe()
                         }
                     }
@@ -132,8 +134,7 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
         Timber.i("### LocationSharingService.stopSharingLocation for $roomId")
 
         launchInIO { session ->
-            // Send a new beacon info state by setting live field as false
-            when (sendStoppedBeaconInfo(session, roomId)) {
+            when (val result = sendStoppedBeaconInfo(session, roomId)) {
                 is UpdateLiveLocationShareResult.Success -> {
                     synchronized(roomArgsMap) {
                         val beaconIds = roomArgsMap
@@ -144,6 +145,7 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
                         tryToDestroyMe()
                     }
                 }
+                is UpdateLiveLocationShareResult.Failure -> callback?.onServiceError(result.error)
                 else -> Unit
             }
         }
@@ -222,6 +224,10 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
 
     inner class LocalBinder : Binder() {
         fun getService(): LocationSharingService = this@LocationSharingService
+    }
+
+    interface Callback {
+        fun onServiceError(error: Throwable)
     }
 
     companion object {
