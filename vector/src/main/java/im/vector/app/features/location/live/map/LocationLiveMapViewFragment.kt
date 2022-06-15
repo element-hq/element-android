@@ -93,7 +93,7 @@ class LocationLiveMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
 
     private fun observeViewEvents() {
         viewModel.observeViewEvents { viewEvent ->
-            when(viewEvent) {
+            when (viewEvent) {
                 is LocationLiveMapViewEvents.Error -> displayErrorDialog(viewEvent.error)
             }
         }

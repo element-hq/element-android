@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,6 @@ package org.matrix.android.sdk.api.session.room.location
  * Represents the result of an update of live location share like a start or a stop.
  */
 sealed interface UpdateLiveLocationShareResult {
-    /**
-     * @param beaconEventId event id of the updated state event
-     */
     data class Success(val beaconEventId: String) : UpdateLiveLocationShareResult
-
-    /**
-     * @param error thrown during the update
-     */
     data class Failure(val error: Throwable) : UpdateLiveLocationShareResult
 }
