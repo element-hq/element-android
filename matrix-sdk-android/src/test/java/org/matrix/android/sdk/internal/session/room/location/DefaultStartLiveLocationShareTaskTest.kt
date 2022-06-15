@@ -20,6 +20,7 @@ import io.mockk.unmockkAll
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
+import org.amshove.kluent.shouldBeInstanceOf
 import org.junit.After
 import org.junit.Test
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -54,7 +55,7 @@ internal class DefaultStartLiveLocationShareTaskTest {
     }
 
     @Test
-    fun `given parameters an no error when calling the task then it is correctly executed`() = runTest {
+    fun `given parameters and no error when calling the task then result is success`() = runTest {
         val params = StartLiveLocationShareTask.Params(
                 roomId = A_ROOM_ID,
                 timeoutMillis = A_TIMEOUT
@@ -80,5 +81,34 @@ internal class DefaultStartLiveLocationShareTaskTest {
                 params = expectedParams,
                 remainingRetry = 3
         )
+    }
+
+    @Test
+    fun `given parameters and an empty returned event id when calling the task then result is failure`() = runTest {
+        val params = StartLiveLocationShareTask.Params(
+                roomId = A_ROOM_ID,
+                timeoutMillis = A_TIMEOUT
+        )
+        fakeClock.givenEpoch(AN_EPOCH)
+        fakeSendStateTask.givenExecuteRetryReturns("")
+
+        val result = defaultStartLiveLocationShareTask.execute(params)
+
+        result shouldBeInstanceOf UpdateLiveLocationShareResult.Failure::class
+    }
+
+    @Test
+    fun `given parameters and error during event sending when calling the task then result is failure`() = runTest {
+        val params = StartLiveLocationShareTask.Params(
+                roomId = A_ROOM_ID,
+                timeoutMillis = A_TIMEOUT
+        )
+        fakeClock.givenEpoch(AN_EPOCH)
+        val error = Throwable()
+        fakeSendStateTask.givenExecuteRetryThrows(error)
+
+        val result = defaultStartLiveLocationShareTask.execute(params)
+
+        result shouldBeEqualTo UpdateLiveLocationShareResult.Failure(error)
     }
 }

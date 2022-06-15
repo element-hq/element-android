@@ -33,7 +33,6 @@ internal interface StartLiveLocationShareTask : Task<StartLiveLocationShareTask.
     )
 }
 
-// TODO update unit test
 internal class DefaultStartLiveLocationShareTask @Inject constructor(
         @UserId private val userId: String,
         private val clock: Clock,
