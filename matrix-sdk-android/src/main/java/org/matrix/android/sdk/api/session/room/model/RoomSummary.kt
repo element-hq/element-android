@@ -164,7 +164,7 @@ data class RoomSummary(
          */
         val spaceChildren: List<SpaceChildInfo>? = null,
         /**
-         * The name of the room's direct space parent if any
+         * The name of the room's direct space parent if any.
          */
         val directParentName: String? = null,
         /**
