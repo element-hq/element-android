@@ -294,7 +294,7 @@ class TimelineViewModel @AssistedInject constructor(
         session.flow()
                 .liveRoomWidgets(
                         roomId = initialState.roomId,
-                        widgetId = QueryStringValue.NoCondition
+                        widgetId = QueryStringValue.IsNotNull
                 )
                 .map { widgets ->
                     widgets.filter { it.isActive }
@@ -1239,7 +1239,7 @@ class TimelineViewModel @AssistedInject constructor(
                     setState { copy(asyncInviter = Success(it)) }
                 }
             }
-            room.getStateEvent(EventType.STATE_ROOM_TOMBSTONE)?.also {
+            room.getStateEvent(EventType.STATE_ROOM_TOMBSTONE, QueryStringValue.IsEmpty)?.also {
                 setState { copy(tombstoneEvent = it) }
             }
         }

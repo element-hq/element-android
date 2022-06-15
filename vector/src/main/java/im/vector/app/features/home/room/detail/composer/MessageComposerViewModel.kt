@@ -683,7 +683,7 @@ class MessageComposerViewModel @AssistedInject constructor(
     }
 
     private fun handleSetUserPowerLevel(setUserPowerLevel: ParsedCommand.SetUserPowerLevel) {
-        val newPowerLevelsContent = room.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS)
+        val newPowerLevelsContent = room.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
                 ?.content
                 ?.toModel<PowerLevelsContent>()
                 ?.setUserPowerLevel(setUserPowerLevel.userId, setUserPowerLevel.powerLevel)

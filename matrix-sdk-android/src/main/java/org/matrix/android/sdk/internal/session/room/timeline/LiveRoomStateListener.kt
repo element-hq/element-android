@@ -46,7 +46,7 @@ internal class LiveRoomStateListener(
         stateEventDataSource.getStateEventsLive(
                 roomId = roomId,
                 eventTypes = setOf(EventType.STATE_ROOM_MEMBER),
-                stateKey = QueryStringValue.NoCondition,
+                stateKey = QueryStringValue.IsNotNull,
         )
     }
 
