@@ -257,7 +257,7 @@ internal abstract class SessionModule {
             return okHttpClient
                     .newBuilder()
                     .apply {
-                        // Remove the previous CurlLoggingInterceptor, to add it after the accessTokenInterceptor
+                        // Remove the previous CurlLoggingInterceptor, to add it after the downloadProgressInterceptor
                         val existingCurlInterceptors = interceptors().filterIsInstance<CurlLoggingInterceptor>()
                         interceptors().removeAll(existingCurlInterceptors)
 
