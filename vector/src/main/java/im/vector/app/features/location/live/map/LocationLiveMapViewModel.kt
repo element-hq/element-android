@@ -82,6 +82,6 @@ class LocationLiveMapViewModel @AssistedInject constructor(
     }
 
     override fun onLocationServiceError(error: Throwable) {
-        // TODO
+        _viewEvents.post(LocationLiveMapViewEvents.Error(error))
     }
 }

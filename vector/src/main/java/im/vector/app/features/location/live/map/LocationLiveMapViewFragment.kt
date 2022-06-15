@@ -76,6 +76,8 @@ class LocationLiveMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        observeViewEvents()
+
         views.liveLocationBottomSheetRecyclerView.configureWith(bottomSheetController, hasFixedSize = false, disableItemAnimation = true)
 
         bottomSheetController.callback = object : LiveLocationBottomSheetController.Callback {
@@ -85,6 +87,14 @@ class LocationLiveMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
 
             override fun onStopLocationClicked() {
                 viewModel.handle(LocationLiveMapAction.StopSharing)
+            }
+        }
+    }
+
+    private fun observeViewEvents() {
+        viewModel.observeViewEvents { viewEvent ->
+            when(viewEvent) {
+                is LocationLiveMapViewEvents.Error -> displayErrorDialog(viewEvent.error)
             }
         }
     }

@@ -1294,7 +1294,7 @@ class TimelineViewModel @AssistedInject constructor(
     }
 
     override fun onLocationServiceError(error: Throwable) {
-        _viewEvents.post(RoomDetailViewEvents.Failure(error))
+        _viewEvents.post(RoomDetailViewEvents.Failure(throwable = error, showInDialog = true))
     }
 
     override fun onCleared() {
