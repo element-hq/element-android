@@ -79,7 +79,6 @@ android {
     buildTypes {
         debug {
             if (project.hasProperty("coverage")) {
-                println(coverage)
                 testCoverageEnabled = coverage.enableTestCoverage
             }
             // Set to true to log privacy or sensible data, such as token
