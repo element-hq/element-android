@@ -35,10 +35,8 @@ import im.vector.app.test.fakes.FakeCreatePollViewStates.pollViewStateWithoutQue
 import im.vector.app.test.fakes.FakeSession
 import im.vector.app.test.test
 import io.mockk.unmockkAll
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
-import org.amshove.kluent.shouldBe
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -47,9 +45,11 @@ import org.matrix.android.sdk.api.session.room.model.message.PollType
 
 class CreatePollViewModelTest {
 
+    private val testDispatcher = UnconfinedTestDispatcher()
+
     @get:Rule
-    val mvrxTestRule = MvRxTestRule(
-            testDispatcher = UnconfinedTestDispatcher() // See https://github.com/airbnb/mavericks/issues/599
+    val mvRxTestRule = MvRxTestRule(
+            testDispatcher = testDispatcher // See https://github.com/airbnb/mavericks/issues/599
     )
 
     private val fakeSession = FakeSession()
@@ -79,71 +79,74 @@ class CreatePollViewModelTest {
     @Test
     fun `given the view model is initialized then poll cannot be created and more options can be added`() = runTest {
         val createPollViewModel = createPollViewModel(PollMode.CREATE)
-        createPollViewModel
-                .test()
-                .assertState(initialCreatePollViewState)
+        val test = createPollViewModel.test()
+
+        test
+                .assertLatestState(initialCreatePollViewState)
                 .finish()
     }
 
     @Test
     fun `given there is not any options when the question is added then poll cannot be created and more options can be added`() = runTest {
         val createPollViewModel = createPollViewModel(PollMode.CREATE)
+        val test = createPollViewModel.test()
+
         createPollViewModel.handle(CreatePollAction.OnQuestionChanged(A_FAKE_QUESTION))
 
-        // We need to wait for createPollViewModel.onChange is triggered
-        delay(10)
-        createPollViewModel
-                .test()
-                .assertState(pollViewStateWithOnlyQuestion)
+        test
+                .assertLatestState(pollViewStateWithOnlyQuestion)
                 .finish()
     }
 
     @Test
     fun `given there is not enough options when the question is added then poll cannot be created and more options can be added`() = runTest {
         val createPollViewModel = createPollViewModel(PollMode.CREATE)
+        val test = createPollViewModel.test()
+
         createPollViewModel.handle(CreatePollAction.OnQuestionChanged(A_FAKE_QUESTION))
         repeat(CreatePollViewModel.MIN_OPTIONS_COUNT - 1) {
             createPollViewModel.handle(CreatePollAction.OnOptionChanged(it, A_FAKE_OPTIONS[it]))
         }
 
-        delay(10)
-        createPollViewModel
-                .test()
-                .assertState(pollViewStateWithQuestionAndNotEnoughOptions)
+        test
+                .assertLatestState(pollViewStateWithQuestionAndNotEnoughOptions)
                 .finish()
     }
 
     @Test
     fun `given there is not a question when enough options are added then poll cannot be created and more options can be added`() = runTest {
         val createPollViewModel = createPollViewModel(PollMode.CREATE)
+        val test = createPollViewModel.test()
+
         repeat(CreatePollViewModel.MIN_OPTIONS_COUNT) {
             createPollViewModel.handle(CreatePollAction.OnOptionChanged(it, A_FAKE_OPTIONS[it]))
         }
 
-        delay(10)
-        createPollViewModel
-                .test()
-                .assertState(pollViewStateWithoutQuestionAndEnoughOptions)
+        test
+                .assertLatestState(pollViewStateWithoutQuestionAndEnoughOptions)
                 .finish()
     }
 
     @Test
     fun `given there is a question when enough options are added then poll can be created and more options can be added`() = runTest {
         val createPollViewModel = createPollViewModel(PollMode.CREATE)
+        val test = createPollViewModel.test()
+
         createPollViewModel.handle(CreatePollAction.OnQuestionChanged(A_FAKE_QUESTION))
         repeat(CreatePollViewModel.MIN_OPTIONS_COUNT) {
             createPollViewModel.handle(CreatePollAction.OnOptionChanged(it, A_FAKE_OPTIONS[it]))
         }
 
-        //delay(10)
-        createPollViewModel.test()
-                .assertState(pollViewStateWithQuestionAndEnoughOptions)
+        test
+                .assertLatestState(pollViewStateWithQuestionAndEnoughOptions)
                 .finish()
     }
 
     @Test
     fun `given there is a question when max number of options are added then poll can be created and more options cannot be added`() = runTest {
         val createPollViewModel = createPollViewModel(PollMode.CREATE)
+        val test = createPollViewModel.test()
+
         createPollViewModel.handle(CreatePollAction.OnQuestionChanged(A_FAKE_QUESTION))
         repeat(CreatePollViewModel.MAX_OPTIONS_COUNT) {
             if (it >= CreatePollViewModel.MIN_OPTIONS_COUNT) {
@@ -152,20 +155,26 @@ class CreatePollViewModelTest {
             createPollViewModel.handle(CreatePollAction.OnOptionChanged(it, A_FAKE_OPTIONS[it]))
         }
 
-        delay(10)
-        createPollViewModel
-                .test()
-                .assertState(pollViewStateWithQuestionAndMaxOptions)
+        test
+                .assertLatestState(pollViewStateWithQuestionAndMaxOptions)
                 .finish()
     }
 
     @Test
     fun `given an initial poll state when poll type is changed then view state is updated accordingly`() = runTest {
         val createPollViewModel = createPollViewModel(PollMode.CREATE)
-        createPollViewModel.handle(CreatePollAction.OnPollTypeChanged(PollType.DISCLOSED))
-        createPollViewModel.awaitState().pollType shouldBe PollType.DISCLOSED
+        val test = createPollViewModel.test()
+
         createPollViewModel.handle(CreatePollAction.OnPollTypeChanged(PollType.UNDISCLOSED))
-        createPollViewModel.awaitState().pollType shouldBe PollType.UNDISCLOSED
+        createPollViewModel.handle(CreatePollAction.OnPollTypeChanged(PollType.DISCLOSED))
+
+        test
+                .assertStatesChanges(
+                        initialCreatePollViewState,
+                        { copy(pollType = PollType.UNDISCLOSED) },
+                        { copy(pollType = PollType.DISCLOSED) },
+                )
+                .finish()
     }
 
     @Test
@@ -185,7 +194,7 @@ class CreatePollViewModelTest {
                 .assertEvents(
                         CreatePollViewEvents.EmptyQuestionError,
                         CreatePollViewEvents.NotEnoughOptionsError(requiredOptionsCount = CreatePollViewModel.MIN_OPTIONS_COUNT),
-                        CreatePollViewEvents.NotEnoughOptionsError(requiredOptionsCount = CreatePollViewModel.MIN_OPTIONS_COUNT)
+                        CreatePollViewEvents.NotEnoughOptionsError(requiredOptionsCount = CreatePollViewModel.MIN_OPTIONS_COUNT),
                 )
     }
 
@@ -201,29 +210,31 @@ class CreatePollViewModelTest {
 
         test
                 .assertEvents(
-                        CreatePollViewEvents.Success
+                        CreatePollViewEvents.Success,
                 )
     }
 
     @Test
     fun `given there is a question and enough options when the last option is deleted then view state should be updated accordingly`() = runTest {
         val createPollViewModel = createPollViewModel(PollMode.CREATE)
+        val test = createPollViewModel.test()
 
         createPollViewModel.handle(CreatePollAction.OnQuestionChanged(A_FAKE_QUESTION))
         createPollViewModel.handle(CreatePollAction.OnOptionChanged(0, A_FAKE_OPTIONS[0]))
         createPollViewModel.handle(CreatePollAction.OnOptionChanged(1, A_FAKE_OPTIONS[1]))
         createPollViewModel.handle(CreatePollAction.OnDeleteOption(1))
 
-        delay(10)
-        createPollViewModel.test().assertState(pollViewStateWithQuestionAndEnoughOptionsButDeletedLastOption)
+        test.assertLatestState(pollViewStateWithQuestionAndEnoughOptionsButDeletedLastOption)
     }
 
     @Test
     fun `given an edited poll event when question and options are changed then view state is updated accordingly`() = runTest {
         val createPollViewModel = createPollViewModel(PollMode.EDIT)
+        val test = createPollViewModel.test()
 
-        delay(10)
-        createPollViewModel.test().assertState(editedPollViewState)
+        test
+                .assertState(editedPollViewState)
+                .finish()
     }
 
     @Test
@@ -235,7 +246,7 @@ class CreatePollViewModelTest {
 
         test
                 .assertEvents(
-                        CreatePollViewEvents.Success
+                        CreatePollViewEvents.Success,
                 )
     }
 }
