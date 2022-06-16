@@ -126,6 +126,11 @@ abstract class VectorBaseBottomSheetDialogFragment<VB : ViewBinding> : BottomShe
         super.onDestroy()
     }
 
+    @CallSuper
+    override fun onCancel(dialog: DialogInterface) {
+        super.onCancel(dialog)
+    }
+
     override fun onAttach(context: Context) {
         val activityEntryPoint = EntryPointAccessors.fromActivity(vectorBaseActivity, ActivityEntryPoint::class.java)
         viewModelFactory = activityEntryPoint.viewModelFactory()
