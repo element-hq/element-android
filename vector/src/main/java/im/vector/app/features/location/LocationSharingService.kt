@@ -132,29 +132,14 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
 
     fun stopSharingLocation(roomId: String) {
         Timber.i("### LocationSharingService.stopSharingLocation for $roomId")
+        synchronized(roomArgsMap) {
+            val beaconIds = roomArgsMap
+                    .filter { it.value.roomId == roomId }
+                    .map { it.key }
+            beaconIds.forEach { roomArgsMap.remove(it) }
 
-        launchInIO { session ->
-            when (val result = sendStoppedBeaconInfo(session, roomId)) {
-                is UpdateLiveLocationShareResult.Success -> {
-                    synchronized(roomArgsMap) {
-                        val beaconIds = roomArgsMap
-                                .filter { it.value.roomId == roomId }
-                                .map { it.key }
-                        beaconIds.forEach { roomArgsMap.remove(it) }
-
-                        tryToDestroyMe()
-                    }
-                }
-                is UpdateLiveLocationShareResult.Failure -> callback?.onServiceError(result.error)
-                else -> Unit
-            }
+            tryToDestroyMe()
         }
-    }
-
-    private suspend fun sendStoppedBeaconInfo(session: Session, roomId: String): UpdateLiveLocationShareResult? {
-        return session.getRoom(roomId)
-                ?.locationSharingService()
-                ?.stopLiveLocationShare()
     }
 
     override fun onLocationUpdate(locationData: LocationData) {

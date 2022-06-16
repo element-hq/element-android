@@ -24,6 +24,7 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.unmockkAll
 import io.mockk.unmockkStatic
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
@@ -55,7 +56,7 @@ class GetListOfUserLiveLocationUseCaseTest {
 
     @After
     fun tearDown() {
-        unmockkStatic("androidx.lifecycle.FlowLiveDataConversions")
+        unmockkAll()
     }
 
     @Test
