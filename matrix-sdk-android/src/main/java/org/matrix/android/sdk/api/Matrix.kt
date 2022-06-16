@@ -25,6 +25,7 @@ import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
+import org.matrix.android.sdk.api.debug.DebugService
 import org.matrix.android.sdk.api.legacy.LegacySessionImporter
 import org.matrix.android.sdk.api.network.ApiInterceptorListener
 import org.matrix.android.sdk.api.network.ApiPath
@@ -54,6 +55,7 @@ class Matrix(context: Context, matrixConfiguration: MatrixConfiguration) {
     @Inject internal lateinit var legacySessionImporter: LegacySessionImporter
     @Inject internal lateinit var authenticationService: AuthenticationService
     @Inject internal lateinit var rawService: RawService
+    @Inject internal lateinit var debugService: DebugService
     @Inject internal lateinit var userAgentHolder: UserAgentHolder
     @Inject internal lateinit var backgroundDetectionObserver: BackgroundDetectionObserver
     @Inject internal lateinit var olmManager: OlmManager
@@ -92,6 +94,11 @@ class Matrix(context: Context, matrixConfiguration: MatrixConfiguration) {
      * Return the RawService.
      */
     fun rawService() = rawService
+
+    /**
+     * Return the DebugService.
+     */
+    fun debugService() = debugService
 
     /**
      * Return the LightweightSettingsStorage.
