@@ -24,19 +24,18 @@ class MatrixPatternsTest {
 
     @Test
     fun `given user id cases, when checking isUserId, then returns expected`() {
-            val cases = listOf(
-                    UserIdCase("foobar", isUserId = false),
-                    UserIdCase("@foobar", isUserId = false),
-                    UserIdCase("foobar@matrix.org", isUserId = false),
-                    UserIdCase("@foobar: matrix.org", isUserId = false),
-                    UserIdCase("@foobar:matrix.org", isUserId = true),
-            )
+        val cases = listOf(
+                UserIdCase("foobar", isUserId = false),
+                UserIdCase("@foobar", isUserId = false),
+                UserIdCase("foobar@matrix.org", isUserId = false),
+                UserIdCase("@foobar: matrix.org", isUserId = false),
+                UserIdCase("@foobar:matrix.org", isUserId = true),
+        )
 
-            cases.forEach { (input, expected) ->
-                MatrixPatterns.isUserId(input) shouldBeEqualTo expected
-            }
+        cases.forEach { (input, expected) ->
+            MatrixPatterns.isUserId(input) shouldBeEqualTo expected
+        }
     }
-
 }
 
 private data class UserIdCase(val input: String, val isUserId: Boolean)
