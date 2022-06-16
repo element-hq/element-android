@@ -348,7 +348,6 @@ dependencies {
     implementation project(":library:multipicker")
     implementation 'androidx.multidex:multidex:2.0.1'
 
-    implementation libs.jetbrains.kotlinReflect
     implementation libs.jetbrains.coroutinesCore
     implementation libs.jetbrains.coroutinesAndroid
 
