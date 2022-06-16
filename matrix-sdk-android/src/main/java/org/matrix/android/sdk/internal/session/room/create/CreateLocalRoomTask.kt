@@ -41,6 +41,7 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.sync.model.RoomSyncSummary
 import org.matrix.android.sdk.api.session.user.UserService
 import org.matrix.android.sdk.api.session.user.model.User
+import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
 import org.matrix.android.sdk.internal.database.awaitNotEmptyResult
 import org.matrix.android.sdk.internal.database.helper.addTimelineEvent
 import org.matrix.android.sdk.internal.database.mapper.asDomain
@@ -77,6 +78,7 @@ internal class DefaultCreateLocalRoomTask @Inject constructor(
         @SessionDatabase private val realmConfiguration: RealmConfiguration,
         private val createRoomBodyBuilder: CreateRoomBodyBuilder,
         private val userService: UserService,
+        private val cryptoService: DefaultCryptoService,
         private val clock: Clock,
 ) : CreateLocalRoomTask {
 
@@ -169,6 +171,9 @@ internal class DefaultCreateLocalRoomTask @Inject constructor(
                     roomMemberContentsByUser[event.stateKey] = event.getFixedRoomMemberContent()
                     roomMemberEventHandler.handle(realm, roomId, event, false)
                 }
+
+                // Give info to crypto module
+                cryptoService.onStateEvent(roomId, event)
             }
 
             roomMemberContentsByUser.getOrPut(event.senderId) {

@@ -22,6 +22,7 @@ import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
+import kotlinx.coroutines.TimeoutCancellationException
 import org.matrix.android.sdk.api.extensions.ensurePrefix
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -29,6 +30,7 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.identity.ThreePid
+import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomAliasesContent
 import org.matrix.android.sdk.api.session.room.model.RoomAvatarContent
@@ -44,11 +46,15 @@ import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
 import org.matrix.android.sdk.api.session.room.model.tombstone.RoomTombstoneContent
 import org.matrix.android.sdk.api.session.room.send.SendState
+import org.matrix.android.sdk.internal.database.awaitNotEmptyResult
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
 import org.matrix.android.sdk.internal.database.model.EventEntity
+import org.matrix.android.sdk.internal.database.model.EventEntityFields
 import org.matrix.android.sdk.internal.database.model.EventInsertType
+import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
+import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.database.query.copyToRealmOrIgnore
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.where
@@ -60,6 +66,7 @@ import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.awaitTransaction
 import org.matrix.android.sdk.internal.util.time.Clock
 import java.util.UUID
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /**
@@ -81,8 +88,11 @@ internal class DefaultCreateRoomFromLocalRoomTask @Inject constructor(
         private val clock: Clock,
 ) : CreateRoomFromLocalRoomTask {
 
+    private val realmConfiguration
+        get() = monarchy.realmConfiguration
+
     override suspend fun execute(params: CreateRoomFromLocalRoomTask.Params): String {
-        val replacementRoomId = stateEventDataSource.getStateEvent(params.localRoomId, EventType.STATE_ROOM_TOMBSTONE, QueryStringValue.NoCondition)
+        val replacementRoomId = stateEventDataSource.getStateEvent(params.localRoomId, EventType.STATE_ROOM_TOMBSTONE, QueryStringValue.IsEmpty)
                 ?.content?.toModel<RoomTombstoneContent>()
                 ?.replacementRoomId
 
@@ -92,6 +102,30 @@ internal class DefaultCreateRoomFromLocalRoomTask @Inject constructor(
 
         val createRoomParams = getCreateRoomParams(params)
         val roomId = createRoomTask.execute(createRoomParams)
+
+        try {
+            awaitNotEmptyResult(realmConfiguration, TimeUnit.MINUTES.toMillis(1L)) { realm ->
+                realm.where(RoomSummaryEntity::class.java)
+                        .equalTo(RoomSummaryEntityFields.ROOM_ID, roomId)
+                        .equalTo(
+                                RoomSummaryEntityFields.INVITED_MEMBERS_COUNT,
+                                createRoomParams.invitedUserIds.size.minus(1) + createRoomParams.invite3pids.size
+                        )
+            }
+            awaitNotEmptyResult(realmConfiguration, TimeUnit.MINUTES.toMillis(1L)) { realm ->
+                EventEntity.whereRoomId(realm, roomId)
+                        .equalTo(EventEntityFields.TYPE, EventType.STATE_ROOM_HISTORY_VISIBILITY)
+            }
+            if (createRoomParams.algorithm != null) {
+                awaitNotEmptyResult(realmConfiguration, TimeUnit.MINUTES.toMillis(1L)) { realm ->
+                    EventEntity.whereRoomId(realm, roomId)
+                            .equalTo(EventEntityFields.TYPE, EventType.STATE_ROOM_ENCRYPTION)
+                }
+            }
+        } catch (exception: TimeoutCancellationException) {
+            throw CreateRoomFailure.CreatedWithTimeout(roomId)
+        }
+
         createTombstoneEvent(params, roomId)
         return roomId
     }
@@ -105,19 +139,19 @@ internal class DefaultCreateRoomFromLocalRoomTask @Inject constructor(
             val stateEvents = CurrentStateEventEntity.whereRoomId(realm, params.localRoomId).findAll()
             stateEvents.forEach { event ->
                 createRoomParams = when (event.type) {
-                    EventType.STATE_ROOM_MEMBER             -> handleRoomMemberEvent(realm, event, createRoomParams)
+                    EventType.STATE_ROOM_MEMBER -> handleRoomMemberEvent(realm, event, createRoomParams)
                     EventType.STATE_ROOM_HISTORY_VISIBILITY -> handleRoomHistoryVisibilityEvent(realm, event, createRoomParams)
-                    EventType.STATE_ROOM_ALIASES            -> handleRoomAliasesEvent(realm, event, createRoomParams)
-                    EventType.STATE_ROOM_AVATAR             -> handleRoomAvatarEvent(realm, event, createRoomParams)
-                    EventType.STATE_ROOM_CANONICAL_ALIAS    -> handleRoomCanonicalAliasEvent(realm, event, createRoomParams)
-                    EventType.STATE_ROOM_GUEST_ACCESS       -> handleRoomGuestAccessEvent(realm, event, createRoomParams)
-                    EventType.STATE_ROOM_ENCRYPTION         -> handleRoomEncryptionEvent(createRoomParams)
-                    EventType.STATE_ROOM_POWER_LEVELS       -> handleRoomPowerRoomLevelsEvent(realm, event, createRoomParams)
-                    EventType.STATE_ROOM_NAME               -> handleRoomNameEvent(realm, event, createRoomParams)
-                    EventType.STATE_ROOM_TOPIC              -> handleRoomTopicEvent(realm, event, createRoomParams)
+                    EventType.STATE_ROOM_ALIASES -> handleRoomAliasesEvent(realm, event, createRoomParams)
+                    EventType.STATE_ROOM_AVATAR -> handleRoomAvatarEvent(realm, event, createRoomParams)
+                    EventType.STATE_ROOM_CANONICAL_ALIAS -> handleRoomCanonicalAliasEvent(realm, event, createRoomParams)
+                    EventType.STATE_ROOM_GUEST_ACCESS -> handleRoomGuestAccessEvent(realm, event, createRoomParams)
+                    EventType.STATE_ROOM_ENCRYPTION -> handleRoomEncryptionEvent(createRoomParams)
+                    EventType.STATE_ROOM_POWER_LEVELS -> handleRoomPowerRoomLevelsEvent(realm, event, createRoomParams)
+                    EventType.STATE_ROOM_NAME -> handleRoomNameEvent(realm, event, createRoomParams)
+                    EventType.STATE_ROOM_TOPIC -> handleRoomTopicEvent(realm, event, createRoomParams)
                     EventType.STATE_ROOM_THIRD_PARTY_INVITE -> handleRoomThirdPartyInviteEvent(event, createRoomParams)
-                    EventType.STATE_ROOM_JOIN_RULES         -> handleRoomJoinRulesEvent(realm, event, createRoomParams)
-                    else                                    -> createRoomParams
+                    EventType.STATE_ROOM_JOIN_RULES -> handleRoomJoinRulesEvent(realm, event, createRoomParams)
+                    else -> createRoomParams
                 }
             }
         }
@@ -209,7 +243,7 @@ internal class DefaultCreateRoomFromLocalRoomTask @Inject constructor(
 
     private fun handleRoomThirdPartyInviteEvent(event: CurrentStateEventEntity, params: CreateRoomParams): CreateRoomParams = params.apply {
         when {
-            event.stateKey.isEmail()  -> invite3pids.add(ThreePid.Email(event.stateKey))
+            event.stateKey.isEmail() -> invite3pids.add(ThreePid.Email(event.stateKey))
             event.stateKey.isMsisdn() -> invite3pids.add(ThreePid.Msisdn(event.stateKey))
         }
     }
@@ -219,9 +253,9 @@ internal class DefaultCreateRoomFromLocalRoomTask @Inject constructor(
         preset = when {
             // If preset has already been set for direct chat, keep it
             preset == CreateRoomPreset.PRESET_TRUSTED_PRIVATE_CHAT -> CreateRoomPreset.PRESET_TRUSTED_PRIVATE_CHAT
-            content.joinRules == RoomJoinRules.PUBLIC              -> CreateRoomPreset.PRESET_PUBLIC_CHAT
-            content.joinRules == RoomJoinRules.INVITE              -> CreateRoomPreset.PRESET_PRIVATE_CHAT
-            else                                                   -> null
+            content.joinRules == RoomJoinRules.PUBLIC -> CreateRoomPreset.PRESET_PUBLIC_CHAT
+            content.joinRules == RoomJoinRules.INVITE -> CreateRoomPreset.PRESET_PRIVATE_CHAT
+            else -> null
         }
     }
 
