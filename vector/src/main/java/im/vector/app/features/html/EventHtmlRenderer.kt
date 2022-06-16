@@ -65,7 +65,8 @@ class EventHtmlRenderer @Inject constructor(
                             if (url.isMxcUrl()) {
                                 val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
                                 val imageUrl = contentUrlResolver.resolveFullSize(url)
-                                return Glide.with(context).load(imageUrl)
+                                // Override size to avoid crashes for huge pictures
+                                return Glide.with(context).load(imageUrl).override(500)
                             }
                             // We don't want to support other url schemes here, so just return a request for null
                             return Glide.with(context).load(null as String?)
