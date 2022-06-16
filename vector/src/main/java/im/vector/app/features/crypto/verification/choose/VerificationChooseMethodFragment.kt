@@ -100,6 +100,18 @@ class VerificationChooseMethodFragment @Inject constructor(
         sharedViewModel.itWasNotMe()
     }
 
+    override fun acceptRequest() {
+        withState(viewModel) {
+            sharedViewModel.handle(VerificationAction.ReadyPendingVerification)
+        }
+    }
+
+    override fun declineRequest() {
+        withState(viewModel) {
+            sharedViewModel.handle(VerificationAction.CancelPendingVerification)
+        }
+    }
+
     private fun doOpenQRCodeScanner() {
         QrCodeScannerActivity.startForResult(requireActivity(), scanActivityResultLauncher)
     }
