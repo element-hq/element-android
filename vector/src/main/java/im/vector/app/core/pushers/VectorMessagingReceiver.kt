@@ -119,12 +119,6 @@ class VectorMessagingReceiver : MessagingReceiver() {
         }
     }
 
-    /**
-     * Called if InstanceID token is updated. This may occur if the security of
-     * the previous token had been compromised. Note that this is also called
-     * when the InstanceID token is initially generated, so this is where
-     * you retrieve the token.
-     */
     override fun onNewEndpoint(context: Context, endpoint: String, instance: String) {
         Timber.tag(loggerTag.value).i("onNewEndpoint: adding $endpoint")
         if (vectorPreferences.areNotificationEnabledForDevice() && activeSessionHolder.hasActiveSession()) {
