@@ -20,6 +20,7 @@ import io.realm.DynamicRealm
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.internal.crypto.model.InboundGroupSessionData
 import org.matrix.android.sdk.internal.crypto.store.db.deserializeFromRealm
+import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoMetadataEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoRoomEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.OlmInboundGroupSessionEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.serializeForRealm
@@ -28,14 +29,25 @@ import org.matrix.android.sdk.internal.util.database.RealmMigrator
 import timber.log.Timber
 
 /**
- * Version 17L enhance OlmInboundGroupSessionEntity to support shared history for MSC3061
- * Also migrates how megolm session are stored to avoid additional serialized frozen class
+ * Version 17L enhance OlmInboundGroupSessionEntity to support shared history for MSC3061.
+ * Also migrates how megolm session are stored to avoid additional serialized frozen class.
  */
 internal class MigrateCryptoTo017(realm: DynamicRealm) : RealmMigrator(realm, 17) {
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.get("CryptoRoomEntity")
-                ?.addField(CryptoRoomEntityFields.SHOULD_SHARE_HISTORY, Boolean::class.java)
+                ?.addField(CryptoRoomEntityFields.SHOULD_SHARE_HISTORY, Boolean::class.java)?.transform {
+                    // We don't have access to the session database to check for the state here and set the good value.
+                    // But for now as it's behind a lab flag, will set to false and force initial sync when enabled
+                    it.setBoolean(CryptoRoomEntityFields.SHOULD_SHARE_HISTORY, false)
+                }
+
+        realm.schema.get("CryptoMetadataEntity")
+                ?.addField(CryptoMetadataEntityFields.ENABLE_KEY_FORWARDING_ON_INVITE, Boolean::class.java)
+                ?.transform { obj ->
+                    // default to false
+                    obj.setBoolean(CryptoMetadataEntityFields.ENABLE_KEY_FORWARDING_ON_INVITE, false)
+                }
 
         val moshiAdapter = MoshiProvider.providesMoshi().adapter(InboundGroupSessionData::class.java)
 

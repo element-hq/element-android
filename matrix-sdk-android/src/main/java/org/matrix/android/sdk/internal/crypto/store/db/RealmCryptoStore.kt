@@ -26,7 +26,6 @@ import io.realm.RealmConfiguration
 import io.realm.Sort
 import io.realm.kotlin.createObject
 import io.realm.kotlin.where
-import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.logger.LoggerTag
@@ -112,7 +111,6 @@ internal class RealmCryptoStore @Inject constructor(
         private val crossSigningKeysMapper: CrossSigningKeysMapper,
         @UserId private val userId: String,
         @DeviceId private val deviceId: String?,
-        private val matrixConfiguration: MatrixConfiguration,
         private val clock: Clock,
 ) : IMXCryptoStore {
 

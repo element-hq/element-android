@@ -65,6 +65,7 @@ class VectorSettingsLabsFragment @Inject constructor(
 
             pref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 session.cryptoService().enableShareKeyOnInvite(pref.isChecked)
+                MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCache = true))
                 true
             }
         }
