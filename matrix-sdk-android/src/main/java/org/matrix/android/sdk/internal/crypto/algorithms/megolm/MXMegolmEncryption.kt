@@ -247,7 +247,7 @@ internal class MXMegolmEncryption(
     /**
      * Share the device keys of a an user.
      *
-     * @param session the session info
+     * @param sessionInfo the session info
      * @param devicesByUser the devices map
      */
     private suspend fun shareUserDevicesKey(sessionInfo: MXOutboundSessionInfo,
