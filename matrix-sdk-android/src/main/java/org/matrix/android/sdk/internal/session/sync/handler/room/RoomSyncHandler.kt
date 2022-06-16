@@ -387,7 +387,7 @@ internal class RoomSyncHandler @Inject constructor(
         } else {
             // Delete all chunks of the room in case of gap.
             ChunkEntity.findAll(realm, roomId).forEach {
-                it.deleteOnCascade(false, canDeleteRoot = true)
+                it.deleteOnCascade(deleteStateEvents = false, canDeleteRoot = true)
             }
             realm.createObject<ChunkEntity>().apply {
                 this.prevToken = prevToken
