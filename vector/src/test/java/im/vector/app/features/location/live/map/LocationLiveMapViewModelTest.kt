@@ -18,37 +18,45 @@ package im.vector.app.features.location.live.map
 
 import com.airbnb.mvrx.test.MvRxTestRule
 import im.vector.app.features.location.LocationData
-import im.vector.app.features.location.LocationSharingServiceConnection
+import im.vector.app.features.location.live.StopLiveLocationShareUseCase
+import im.vector.app.test.fakes.FakeLocationSharingServiceConnection
 import im.vector.app.test.test
 import io.mockk.every
-import io.mockk.just
 import io.mockk.mockk
-import io.mockk.runs
-import io.mockk.verify
+import io.mockk.unmockkAll
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Rule
 import org.junit.Test
 import org.matrix.android.sdk.api.util.MatrixItem
 
+private const val A_ROOM_ID = "room_id"
+
 class LocationLiveMapViewModelTest {
 
     @get:Rule
-    val mvrxTestRule = MvRxTestRule()
+    val mvRxTestRule = MvRxTestRule(testDispatcher = UnconfinedTestDispatcher())
 
-    private val fakeRoomId = ""
-
-    private val args = LocationLiveMapViewArgs(roomId = fakeRoomId)
+    private val args = LocationLiveMapViewArgs(roomId = A_ROOM_ID)
 
     private val getListOfUserLiveLocationUseCase = mockk<GetListOfUserLiveLocationUseCase>()
-    private val locationServiceConnection = mockk<LocationSharingServiceConnection>()
+    private val locationServiceConnection = FakeLocationSharingServiceConnection()
+    private val stopLiveLocationShareUseCase = mockk<StopLiveLocationShareUseCase>()
 
     private fun createViewModel(): LocationLiveMapViewModel {
         return LocationLiveMapViewModel(
                 LocationLiveMapViewState(args),
                 getListOfUserLiveLocationUseCase,
-                locationServiceConnection
+                locationServiceConnection.instance,
+                stopLiveLocationShareUseCase
         )
+    }
+
+    @After
+    fun tearDown() {
+        unmockkAll()
     }
 
     @Test
@@ -63,8 +71,8 @@ class LocationLiveMapViewModelTest {
                         showStopSharingButton = false
                 )
         )
-        every { locationServiceConnection.bind(any()) } just runs
-        every { getListOfUserLiveLocationUseCase.execute(fakeRoomId) } returns flowOf(userLocations)
+        locationServiceConnection.givenBind()
+        every { getListOfUserLiveLocationUseCase.execute(A_ROOM_ID) } returns flowOf(userLocations)
 
         val viewModel = createViewModel()
         viewModel
@@ -76,6 +84,6 @@ class LocationLiveMapViewModelTest {
                 )
                 .finish()
 
-        verify { locationServiceConnection.bind(viewModel) }
+        locationServiceConnection.verifyBind(viewModel)
     }
 }

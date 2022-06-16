@@ -46,15 +46,30 @@ class StopLiveLocationShareUseCaseTest {
     @Test
     fun `given a room id when calling use case then the current live is stopped with success`() = runTest {
         fakeLocationSharingServiceConnection.givenStopLiveLocationSharing()
+        val updateLiveResult = UpdateLiveLocationShareResult.Success(AN_EVENT_ID)
+        fakeSession.roomService()
+                .getRoom(A_ROOM_ID)
+                .locationSharingService()
+                .givenStopLiveLocationShareReturns(updateLiveResult)
 
         val result = stopLiveLocationShareUseCase.execute(A_ROOM_ID)
 
-        result shouldBeEqualTo UpdateLiveLocationShareResult.Success(AN_EVENT_ID)
+        result shouldBeEqualTo updateLiveResult
         fakeLocationSharingServiceConnection.verifyStopLiveLocationSharing(A_ROOM_ID)
     }
 
     @Test
     fun `given a room id and error during the process when calling use case then result is failure`() = runTest {
+        val error = Throwable()
+        val updateLiveResult = UpdateLiveLocationShareResult.Failure(error)
+        fakeSession.roomService()
+                .getRoom(A_ROOM_ID)
+                .locationSharingService()
+                .givenStopLiveLocationShareReturns(updateLiveResult)
 
+        val result = stopLiveLocationShareUseCase.execute(A_ROOM_ID)
+
+        result shouldBeEqualTo updateLiveResult
+        fakeLocationSharingServiceConnection.verifyStopLiveLocationSharingNotCalled(A_ROOM_ID)
     }
 }
