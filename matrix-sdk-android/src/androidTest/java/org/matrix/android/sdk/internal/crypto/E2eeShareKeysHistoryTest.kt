@@ -38,10 +38,7 @@ import org.matrix.android.sdk.api.session.room.failure.JoinRoomFailure
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibilityContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.shouldShareHistory
-import org.matrix.android.sdk.api.session.room.send.SendState
-import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import org.matrix.android.sdk.common.CryptoTestHelper
@@ -380,26 +377,7 @@ class E2eeShareKeysHistoryTest : InstrumentedTest {
     }
 
     private fun sendMessageInRoom(aliceRoomPOV: Room, text: String, testHelper: CommonTestHelper): String? {
-        val timeline = aliceRoomPOV.timelineService().createTimeline(null, TimelineSettings(60))
-        timeline.start()
-        aliceRoomPOV.sendService().sendTextMessage(text)
-        var sentEventId: String? = null
-        testHelper.waitWithLatch { latch ->
-            testHelper.retryPeriodicallyWithLatch(latch) {
-                val decryptedMsg = timeline.getSnapshot()
-                        .filter { it.root.isEncrypted() || it.root.getClearType() == EventType.MESSAGE }
-                        .also { list ->
-                            val message = list.joinToString(",", "[", "]") { "${it.root.type}|${it.root.sendState}" }
-                            Log.v("#E2E TEST", "Timeline snapshot is $message")
-                        }
-                        .filter { it.root.sendState == SendState.SYNCED }
-                        .firstOrNull { it.root.getClearContent().toModel<MessageContent>()?.body?.startsWith(text) == true }
-                sentEventId = decryptedMsg?.eventId
-                decryptedMsg != null
-            }
-        }
-        timeline.dispose()
-        return sentEventId
+        return testHelper.sendTextMessage(aliceRoomPOV, text, 1).firstOrNull()?.eventId
     }
 
     private fun ensureMembersHaveJoined(aliceSession: Session, otherAccounts: List<Session>, e2eRoomID: String, testHelper: CommonTestHelper) {
