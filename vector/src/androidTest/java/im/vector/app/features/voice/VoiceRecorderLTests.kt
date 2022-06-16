@@ -21,6 +21,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import io.mockk.spyk
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import org.amshove.kluent.shouldBeNull
 import org.amshove.kluent.shouldExist
 import org.amshove.kluent.shouldNotBeNull
@@ -42,8 +43,7 @@ class VoiceRecorderLTests {
         getVoiceMessageFile().shouldBeNull()
 
         startRecord("some_room_id")
-
-        getVoiceMessageFile().shouldNotBeNullAndExist()
+        runBlocking { waitUntilRecordingFileExists() }
 
         stopRecord()
     }
@@ -53,6 +53,7 @@ class VoiceRecorderLTests {
         getVoiceMessageFile().shouldBeNull()
 
         startRecord("some_room_id")
+        runBlocking { waitUntilRecordingFileExists() }
         stopRecord()
 
         getVoiceMessageFile().shouldNotBeNullAndExist()
@@ -61,8 +62,7 @@ class VoiceRecorderLTests {
     @Test
     fun cancelRecordRemovesFile() = with(recorder) {
         startRecord("some_room_id")
-        val file = recorder.getVoiceMessageFile()
-        file.shouldNotBeNullAndExist()
+        val file = runBlocking { waitUntilRecordingFileExists() }
 
         cancelRecord()
 

@@ -19,6 +19,7 @@ package im.vector.app.features.voice
 import android.content.Context
 import android.media.MediaRecorder
 import android.os.Build
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.util.md5
 import java.io.File
@@ -80,7 +81,7 @@ abstract class AbstractVoiceRecorder(
     override fun stopRecord() {
         // Can throw when the record is less than 1 second.
         mediaRecorder?.let {
-            it.stop()
+            tryOrNull { it.stop() }
             it.reset()
             it.release()
         }
