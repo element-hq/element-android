@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package org.matrix.android.sdk.api
 
 import org.amshove.kluent.shouldBeEqualTo
@@ -33,7 +32,7 @@ class MatrixPatternsTest {
         )
 
         cases.forEach { (input, expected) ->
-            MatrixPatterns.isUserId(input) shouldBeEqualTo expected
+            MatrixPatterns.isUserId2(input) shouldBeEqualTo expected
         }
     }
 }

@@ -103,6 +103,10 @@ object MatrixPatterns {
         return str != null && str matches PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER
     }
 
+    fun isUserId2(str: String?): Boolean {
+        return str != null && str matches PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER
+    }
+
     /**
      * Tells if a string is a valid room id.
      *
