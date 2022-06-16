@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package org.matrix.android.sdk.api
 
 import org.amshove.kluent.shouldBeEqualTo
