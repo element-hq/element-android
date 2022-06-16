@@ -1,6 +1,5 @@
 /*
- * Copyright 2018 New Vector Ltd
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,20 +19,12 @@ package im.vector.app.fdroid.receiver
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.fdroid.BackgroundSyncStarter
-import timber.log.Timber
-import javax.inject.Inject
 
-@AndroidEntryPoint
-class OnApplicationUpgradeOrRebootReceiver : BroadcastReceiver() {
-
-    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
-    @Inject lateinit var backgroundSyncStarter: BackgroundSyncStarter
-
-    override fun onReceive(context: Context, intent: Intent) {
-        Timber.v("## onReceive() ${intent.action}")
-        backgroundSyncStarter.start(activeSessionHolder)
-    }
+/**
+ * UnifiedPush lib tracks an action to check installed and uninstalled distributors.
+ * We declare it to keep the background sync as an internal unifiedpush distributor.
+ * This class is used to declare this action.
+ */
+class KeepInternalDistributor : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {}
 }

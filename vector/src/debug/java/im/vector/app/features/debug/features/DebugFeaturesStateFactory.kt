@@ -65,6 +65,11 @@ class DebugFeaturesStateFactory @Inject constructor(
                                 key = DebugFeatureKeys.onboardingCombinedLogin,
                                 factory = VectorFeatures::isOnboardingCombinedLoginEnabled
                         ),
+                        createBooleanFeature(
+                                label = "Allow external UnifiedPush distributors",
+                                key = DebugFeatureKeys.allowExternalUnifiedPushDistributors,
+                                factory = VectorFeatures::allowExternalUnifiedPushDistributors
+                        ),
                 )
         )
     }
