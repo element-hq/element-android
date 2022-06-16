@@ -36,6 +36,7 @@ import im.vector.app.test.fakes.FakeSession
 import im.vector.app.test.test
 import io.mockk.unmockkAll
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBe
 import org.junit.After
@@ -47,7 +48,9 @@ import org.matrix.android.sdk.api.session.room.model.message.PollType
 class CreatePollViewModelTest {
 
     @get:Rule
-    val mvrxTestRule = MvRxTestRule()
+    val mvrxTestRule = MvRxTestRule(
+            testDispatcher = UnconfinedTestDispatcher() // See https://github.com/airbnb/mavericks/issues/599
+    )
 
     private val fakeSession = FakeSession()
 
@@ -132,9 +135,8 @@ class CreatePollViewModelTest {
             createPollViewModel.handle(CreatePollAction.OnOptionChanged(it, A_FAKE_OPTIONS[it]))
         }
 
-        delay(10)
-        createPollViewModel
-                .test()
+        //delay(10)
+        createPollViewModel.test()
                 .assertState(pollViewStateWithQuestionAndEnoughOptions)
                 .finish()
     }
