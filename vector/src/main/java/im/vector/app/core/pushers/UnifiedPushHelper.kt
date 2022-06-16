@@ -51,7 +51,7 @@ class UnifiedPushHelper @Inject constructor(
             activity: FragmentActivity,
             onDoneRunnable: Runnable? = null,
     ) {
-        gRegister(
+        registerInternal(
                 activity,
                 onDoneRunnable = onDoneRunnable
         )
@@ -62,7 +62,7 @@ class UnifiedPushHelper @Inject constructor(
             pushersManager: PushersManager,
             onDoneRunnable: Runnable? = null
     ) {
-        gRegister(
+        registerInternal(
                 activity,
                 force = true,
                 pushersManager = pushersManager,
@@ -70,7 +70,7 @@ class UnifiedPushHelper @Inject constructor(
         )
     }
 
-    private fun gRegister(
+    private fun registerInternal(
             activity: FragmentActivity,
             force: Boolean = false,
             pushersManager: PushersManager? = null,
