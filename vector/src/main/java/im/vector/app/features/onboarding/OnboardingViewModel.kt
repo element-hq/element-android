@@ -50,6 +50,8 @@ import im.vector.app.features.onboarding.StartAuthenticationFlowUseCase.StartAut
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.MatrixPatterns
+import org.matrix.android.sdk.api.MatrixPatterns.getServerName
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
@@ -142,6 +144,7 @@ class OnboardingViewModel @AssistedInject constructor(
             is OnboardingAction.UpdateSignMode -> handleUpdateSignMode(action)
             is OnboardingAction.InitWith -> handleInitWith(action)
             is OnboardingAction.HomeServerChange -> withAction(action) { handleHomeserverChange(action) }
+            is OnboardingAction.MaybeUpdateHomeserverFromMatrixId -> handleMaybeUpdateHomeserver(action)
             is AuthenticateAction -> withAction(action) { handleAuthenticateAction(action) }
             is OnboardingAction.LoginWithToken -> handleLoginWithToken(action)
             is OnboardingAction.WebLoginSuccess -> handleWebLoginSuccess(action)
@@ -159,6 +162,16 @@ class OnboardingViewModel @AssistedInject constructor(
             OnboardingAction.SaveSelectedProfilePicture -> updateProfilePicture()
             is OnboardingAction.PostViewEvent -> _viewEvents.post(action.viewEvent)
             OnboardingAction.StopEmailValidationCheck -> cancelWaitForEmailValidation()
+        }
+    }
+
+    private fun handleMaybeUpdateHomeserver(action: OnboardingAction.MaybeUpdateHomeserverFromMatrixId) {
+        val isFullMatrixId = MatrixPatterns.isUserId(action.userId)
+        if (isFullMatrixId) {
+            val domain = action.userId.getServerName().substringBeforeLast(":").ensureProtocol()
+            handleHomeserverChange(OnboardingAction.HomeServerChange.EditHomeServer(domain))
+        } else {
+            // ignore the action
         }
     }
 

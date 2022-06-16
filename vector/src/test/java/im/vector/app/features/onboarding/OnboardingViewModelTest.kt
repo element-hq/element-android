@@ -271,10 +271,7 @@ class OnboardingViewModelTest {
     @Test
     fun `given in the sign up flow, when editing homeserver, then updates selected homeserver state and emits edited event`() = runTest {
         viewModelWith(initialState.copy(onboardingFlow = OnboardingFlow.SignUp))
-        fakeHomeServerConnectionConfigFactory.givenConfigFor(A_HOMESERVER_URL, A_HOMESERVER_CONFIG)
-        fakeStartAuthenticationFlowUseCase.givenResult(A_HOMESERVER_CONFIG, StartAuthenticationResult(isHomeserverOutdated = false, SELECTED_HOMESERVER_STATE))
-        givenRegistrationResultFor(RegisterAction.StartRegistration, ANY_CONTINUING_REGISTRATION_RESULT)
-        fakeHomeServerHistoryService.expectUrlToBeAdded(A_HOMESERVER_CONFIG.homeServerUri.toString())
+        givenCanSuccessfullyUpdateHomeserver(A_HOMESERVER_URL, SELECTED_HOMESERVER_STATE)
         val test = viewModel.test()
 
         viewModel.handle(OnboardingAction.HomeServerChange.EditHomeServer(A_HOMESERVER_URL))
@@ -292,12 +289,44 @@ class OnboardingViewModelTest {
     }
 
     @Test
+    fun `given a full matrix id, when maybe updating homeserver, then updates selected homeserver state and emits edited event`() = runTest {
+        viewModelWith(initialState.copy(onboardingFlow = OnboardingFlow.SignUp))
+        givenCanSuccessfullyUpdateHomeserver(A_HOMESERVER_URL, SELECTED_HOMESERVER_STATE)
+        val test = viewModel.test()
+        val fullMatrixId = "@a-user:${A_HOMESERVER_URL.removePrefix("https://")}"
+
+        viewModel.handle(OnboardingAction.MaybeUpdateHomeserverFromMatrixId(fullMatrixId))
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = true) },
+                        { copy(selectedHomeserver = SELECTED_HOMESERVER_STATE) },
+                        { copy(isLoading = false) }
+
+                )
+                .assertEvents(OnboardingViewEvents.OnHomeserverEdited)
+                .finish()
+    }
+
+    @Test
+    fun `given a username, when maybe updating homeserver, then does nothing`() = runTest {
+        viewModelWith(initialState.copy(onboardingFlow = OnboardingFlow.SignUp))
+        val test = viewModel.test()
+        val onlyUsername = "a-username"
+
+        viewModel.handle(OnboardingAction.MaybeUpdateHomeserverFromMatrixId(onlyUsername))
+
+        test
+                .assertStates(initialState)
+                .assertNoEvents()
+                .finish()
+    }
+
+    @Test
     fun `given in the sign up flow, when editing homeserver errors, then does not update the selected homeserver state and emits error`() = runTest {
         viewModelWith(initialState.copy(onboardingFlow = OnboardingFlow.SignUp))
-        fakeHomeServerConnectionConfigFactory.givenConfigFor(A_HOMESERVER_URL, A_HOMESERVER_CONFIG)
-        fakeStartAuthenticationFlowUseCase.givenResult(A_HOMESERVER_CONFIG, StartAuthenticationResult(isHomeserverOutdated = false, SELECTED_HOMESERVER_STATE))
-        givenRegistrationActionErrors(RegisterAction.StartRegistration, AN_ERROR)
-        fakeHomeServerHistoryService.expectUrlToBeAdded(A_HOMESERVER_CONFIG.homeServerUri.toString())
+        givenUpdatingHomeserverErrors(A_HOMESERVER_URL, SELECTED_HOMESERVER_STATE, AN_ERROR)
         val test = viewModel.test()
 
         viewModel.handle(OnboardingAction.HomeServerChange.EditHomeServer(A_HOMESERVER_URL))
@@ -552,8 +581,18 @@ class OnboardingViewModelTest {
         fakeRegistrationActionHandler.givenResultsFor(results)
     }
 
-    private fun givenRegistrationActionErrors(action: RegisterAction, cause: Throwable) {
-        fakeRegistrationActionHandler.givenThrows(action, cause)
+    private fun givenCanSuccessfullyUpdateHomeserver(homeserverUrl: String, resultingState: SelectedHomeserverState) {
+        fakeHomeServerConnectionConfigFactory.givenConfigFor(homeserverUrl, A_HOMESERVER_CONFIG)
+        fakeStartAuthenticationFlowUseCase.givenResult(A_HOMESERVER_CONFIG, StartAuthenticationResult(isHomeserverOutdated = false, resultingState))
+        givenRegistrationResultFor(RegisterAction.StartRegistration, ANY_CONTINUING_REGISTRATION_RESULT)
+        fakeHomeServerHistoryService.expectUrlToBeAdded(A_HOMESERVER_CONFIG.homeServerUri.toString())
+    }
+
+    private fun givenUpdatingHomeserverErrors(homeserverUrl: String, resultingState: SelectedHomeserverState, error: Throwable) {
+        fakeHomeServerConnectionConfigFactory.givenConfigFor(homeserverUrl, A_HOMESERVER_CONFIG)
+        fakeStartAuthenticationFlowUseCase.givenResult(A_HOMESERVER_CONFIG, StartAuthenticationResult(isHomeserverOutdated = false, resultingState))
+        givenRegistrationResultFor(RegisterAction.StartRegistration, RegistrationActionHandler.Result.Error(error))
+        fakeHomeServerHistoryService.expectUrlToBeAdded(A_HOMESERVER_CONFIG.homeServerUri.toString())
     }
 }
 
