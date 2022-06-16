@@ -142,7 +142,7 @@ internal class TokenChunkEventPersistor @Inject constructor(
         val now = clock.epochMillis()
 
         stateEvents?.forEach { stateEvent ->
-            val ageLocalTs = stateEvent.unsignedData?.age?.let { now - it }
+            val ageLocalTs = stateEvent.unsignedData?.age?.let { now - it } ?: now
             val stateEventEntity = stateEvent.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
             currentChunk.addStateEvent(roomId, stateEventEntity, direction)
             if (stateEvent.type == EventType.STATE_ROOM_MEMBER && stateEvent.stateKey != null) {
@@ -155,7 +155,7 @@ internal class TokenChunkEventPersistor @Inject constructor(
                 if (event.eventId == null || event.senderId == null) {
                     return@forEach
                 }
-                val ageLocalTs = event.unsignedData?.age?.let { now - it }
+                val ageLocalTs = event.unsignedData?.age?.let { now - it } ?: now
                 val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
                 if (event.type == EventType.STATE_ROOM_MEMBER && event.stateKey != null) {
                     val contentToUse = if (direction == PaginationDirection.BACKWARDS) {

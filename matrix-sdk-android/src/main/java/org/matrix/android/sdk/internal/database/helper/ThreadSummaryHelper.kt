@@ -271,7 +271,7 @@ private fun HashMap<String, RoomMemberContent?>.addSenderState(realm: Realm, roo
  * Create an EventEntity for the root thread event or get an existing one.
  */
 private fun createEventEntity(realm: Realm, roomId: String, event: Event, currentTimeMillis: Long): EventEntity {
-    val ageLocalTs = event.unsignedData?.age?.let { currentTimeMillis - it }
+    val ageLocalTs = event.unsignedData?.age?.let { currentTimeMillis - it } ?: currentTimeMillis
     return event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
 }
 

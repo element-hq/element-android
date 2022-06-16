@@ -53,6 +53,7 @@ import org.matrix.android.sdk.internal.session.permalinks.PermalinkFactory
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
 import org.matrix.android.sdk.internal.session.room.timeline.GetEventTask
 import org.matrix.android.sdk.internal.util.awaitTransaction
+import org.matrix.android.sdk.internal.util.time.Clock
 import javax.inject.Inject
 
 /**
@@ -64,7 +65,8 @@ internal class ThreadsAwarenessHandler @Inject constructor(
         private val permalinkFactory: PermalinkFactory,
         @SessionDatabase private val monarchy: Monarchy,
         private val lightweightSettingsStorage: LightweightSettingsStorage,
-        private val getEventTask: GetEventTask
+        private val getEventTask: GetEventTask,
+        private val clock: Clock,
 ) {
 
     // This caching is responsible to improve the performance when we receive a root event
@@ -120,7 +122,7 @@ internal class ThreadsAwarenessHandler @Inject constructor(
     private suspend fun fetchThreadsEvents(threadsToFetch: Map<String, String>) {
         val eventEntityList = threadsToFetch.mapNotNull { (eventId, roomId) ->
             fetchEvent(eventId, roomId)?.let {
-                it.toEntity(roomId, SendState.SYNCED, it.ageLocalTs)
+                it.toEntity(roomId, SendState.SYNCED, it.ageLocalTs ?: clock.epochMillis())
             }
         }
 
