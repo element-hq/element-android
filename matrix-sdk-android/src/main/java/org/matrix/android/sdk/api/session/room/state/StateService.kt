@@ -18,7 +18,7 @@ package org.matrix.android.sdk.api.session.room.state
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
-import org.matrix.android.sdk.api.query.QueryStringValue
+import org.matrix.android.sdk.api.query.QueryStateEventValue
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
@@ -93,28 +93,28 @@ interface StateService {
      * @param eventType An eventType.
      * @param stateKey the query which will be done on the stateKey
      */
-    fun getStateEvent(eventType: String, stateKey: QueryStringValue = QueryStringValue.NoCondition): Event?
+    fun getStateEvent(eventType: String, stateKey: QueryStateEventValue): Event?
 
     /**
      * Get a live state event of the room.
      * @param eventType An eventType.
      * @param stateKey the query which will be done on the stateKey
      */
-    fun getStateEventLive(eventType: String, stateKey: QueryStringValue = QueryStringValue.NoCondition): LiveData<Optional<Event>>
+    fun getStateEventLive(eventType: String, stateKey: QueryStateEventValue): LiveData<Optional<Event>>
 
     /**
      * Get state events of the room.
      * @param eventTypes Set of eventType. If empty, all state events will be returned
      * @param stateKey the query which will be done on the stateKey
      */
-    fun getStateEvents(eventTypes: Set<String>, stateKey: QueryStringValue = QueryStringValue.NoCondition): List<Event>
+    fun getStateEvents(eventTypes: Set<String>, stateKey: QueryStateEventValue): List<Event>
 
     /**
      * Get live state events of the room.
      * @param eventTypes Set of eventType to observe. If empty, all state events will be observed
      * @param stateKey the query which will be done on the stateKey
      */
-    fun getStateEventsLive(eventTypes: Set<String>, stateKey: QueryStringValue = QueryStringValue.NoCondition): LiveData<List<Event>>
+    fun getStateEventsLive(eventTypes: Set<String>, stateKey: QueryStateEventValue): LiveData<List<Event>>
 
     suspend fun setJoinRulePublic()
     suspend fun setJoinRuleInviteOnly()

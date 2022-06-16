@@ -15,6 +15,7 @@
  */
 package org.matrix.android.sdk.internal.session.pushers
 
+import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -55,7 +56,7 @@ internal class DefaultConditionResolver @Inject constructor(
         val roomId = event.roomId ?: return false
         val room = roomGetter.getRoom(roomId) ?: return false
 
-        val powerLevelsContent = room.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS)
+        val powerLevelsContent = room.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
                 ?.content
                 ?.toModel<PowerLevelsContent>()
                 ?: PowerLevelsContent()

@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.internal.session.widgets
 
 import androidx.lifecycle.LiveData
-import org.matrix.android.sdk.api.query.QueryStringValue
+import org.matrix.android.sdk.api.query.QueryStateEventValue
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.widgets.WidgetPostAPIMediator
 import org.matrix.android.sdk.api.session.widgets.WidgetService
@@ -43,7 +43,7 @@ internal class DefaultWidgetService @Inject constructor(
 
     override fun getRoomWidgets(
             roomId: String,
-            widgetId: QueryStringValue,
+            widgetId: QueryStateEventValue,
             widgetTypes: Set<String>?,
             excludedTypes: Set<String>?
     ): List<Widget> {
@@ -56,7 +56,7 @@ internal class DefaultWidgetService @Inject constructor(
 
     override fun getRoomWidgetsLive(
             roomId: String,
-            widgetId: QueryStringValue,
+            widgetId: QueryStateEventValue,
             widgetTypes: Set<String>?,
             excludedTypes: Set<String>?
     ): LiveData<List<Widget>> {

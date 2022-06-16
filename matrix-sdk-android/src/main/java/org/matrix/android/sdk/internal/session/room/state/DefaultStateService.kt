@@ -22,6 +22,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.query.QueryStateEventValue
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -54,19 +55,19 @@ internal class DefaultStateService @AssistedInject constructor(
         fun create(roomId: String): DefaultStateService
     }
 
-    override fun getStateEvent(eventType: String, stateKey: QueryStringValue): Event? {
+    override fun getStateEvent(eventType: String, stateKey: QueryStateEventValue): Event? {
         return stateEventDataSource.getStateEvent(roomId, eventType, stateKey)
     }
 
-    override fun getStateEventLive(eventType: String, stateKey: QueryStringValue): LiveData<Optional<Event>> {
+    override fun getStateEventLive(eventType: String, stateKey: QueryStateEventValue): LiveData<Optional<Event>> {
         return stateEventDataSource.getStateEventLive(roomId, eventType, stateKey)
     }
 
-    override fun getStateEvents(eventTypes: Set<String>, stateKey: QueryStringValue): List<Event> {
+    override fun getStateEvents(eventTypes: Set<String>, stateKey: QueryStateEventValue): List<Event> {
         return stateEventDataSource.getStateEvents(roomId, eventTypes, stateKey)
     }
 
-    override fun getStateEventsLive(eventTypes: Set<String>, stateKey: QueryStringValue): LiveData<List<Event>> {
+    override fun getStateEventsLive(eventTypes: Set<String>, stateKey: QueryStateEventValue): LiveData<List<Event>> {
         return stateEventDataSource.getStateEventsLive(roomId, eventTypes, stateKey)
     }
 

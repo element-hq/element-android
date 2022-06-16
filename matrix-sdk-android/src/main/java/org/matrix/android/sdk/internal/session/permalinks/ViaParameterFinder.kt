@@ -101,7 +101,7 @@ internal class ViaParameterFinder @Inject constructor(
     }
 
     fun userCanInvite(userId: String, roomId: String): Boolean {
-        val powerLevelsHelper = stateEventDataSource.getStateEvent(roomId, EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
+        val powerLevelsHelper = stateEventDataSource.getStateEvent(roomId, EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
                 ?.content?.toModel<PowerLevelsContent>()
                 ?.let { PowerLevelsHelper(it) }
 
