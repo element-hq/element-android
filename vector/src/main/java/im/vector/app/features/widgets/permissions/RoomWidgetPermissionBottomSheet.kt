@@ -102,9 +102,9 @@ class RoomWidgetPermissionBottomSheet :
     }
 
     override fun onCancel(dialog: DialogInterface) {
+        viewModel.handle(RoomWidgetPermissionActions.BlockWidget)
+        directListener?.invoke(false)
         super.onCancel(dialog)
-        doDecline()
-        viewModel.handle(RoomWidgetPermissionActions.DoClose)
     }
 
     companion object {
