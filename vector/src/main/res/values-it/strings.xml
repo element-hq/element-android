@@ -607,7 +607,7 @@
     <string name="merged_events_expand">espandi</string>
     <string name="merged_events_collapse">riduci</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="room_participants_action_remove">Butta fuori</string>
     <string name="settings_inline_url_preview_summary">Se il tuo Home Server supporta questa funzione, all\'interno delle chat verrà visualizzata un\'anteprima dei link postati.</string>
     <string name="settings_send_typing_notifs">Invia notifiche di digitazione</string>
