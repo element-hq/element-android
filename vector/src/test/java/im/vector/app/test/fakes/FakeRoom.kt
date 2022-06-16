@@ -21,7 +21,16 @@ import org.matrix.android.sdk.api.session.room.Room
 
 class FakeRoom(
         private val fakeLocationSharingService: FakeLocationSharingService = FakeLocationSharingService(),
+        private val fakeSendService: FakeSendService = FakeSendService(),
+        private val fakeTimelineService: FakeTimelineService = FakeTimelineService(),
+        private val fakeRelationService: FakeRelationService = FakeRelationService(),
 ) : Room by mockk() {
 
     override fun locationSharingService() = fakeLocationSharingService
+
+    override fun sendService() = fakeSendService
+
+    override fun timelineService() = fakeTimelineService
+
+    override fun relationService() = fakeRelationService
 }
