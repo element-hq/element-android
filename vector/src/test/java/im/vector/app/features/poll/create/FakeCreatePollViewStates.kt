@@ -108,6 +108,12 @@ object FakeCreatePollViewStates {
             canAddMoreOptions = true
     )
 
+    val pollViewStateWithQuestionAndEnoughOptionsButDeletedLastOption = pollViewStateWithQuestionAndEnoughOptions.copy(
+            options = A_FAKE_OPTIONS.take(CreatePollViewModel.MIN_OPTIONS_COUNT).toMutableList().apply { removeLast() },
+            canCreatePoll = false,
+            canAddMoreOptions = true
+    )
+
     val pollViewStateWithQuestionAndMaxOptions = initialCreatePollViewState.copy(
             question = A_FAKE_QUESTION,
             options = A_FAKE_OPTIONS.take(CreatePollViewModel.MAX_OPTIONS_COUNT),

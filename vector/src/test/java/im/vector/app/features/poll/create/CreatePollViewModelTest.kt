@@ -28,6 +28,7 @@ import im.vector.app.features.poll.create.FakeCreatePollViewStates.editedPollVie
 import im.vector.app.features.poll.create.FakeCreatePollViewStates.initialCreatePollViewState
 import im.vector.app.features.poll.create.FakeCreatePollViewStates.pollViewStateWithOnlyQuestion
 import im.vector.app.features.poll.create.FakeCreatePollViewStates.pollViewStateWithQuestionAndEnoughOptions
+import im.vector.app.features.poll.create.FakeCreatePollViewStates.pollViewStateWithQuestionAndEnoughOptionsButDeletedLastOption
 import im.vector.app.features.poll.create.FakeCreatePollViewStates.pollViewStateWithQuestionAndMaxOptions
 import im.vector.app.features.poll.create.FakeCreatePollViewStates.pollViewStateWithQuestionAndNotEnoughOptions
 import im.vector.app.features.poll.create.FakeCreatePollViewStates.pollViewStateWithoutQuestionAndEnoughOptions
@@ -41,7 +42,6 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.model.message.PollType
 
 class CreatePollViewModelTest {
@@ -201,6 +201,19 @@ class CreatePollViewModelTest {
                 .assertEvents(
                         CreatePollViewEvents.Success
                 )
+    }
+
+    @Test
+    fun `given there is a question and enough options when the last option is deleted then view state should be updated accordingly`() = runTest {
+        val createPollViewModel = createPollViewModel(PollMode.CREATE)
+
+        createPollViewModel.handle(CreatePollAction.OnQuestionChanged(A_FAKE_QUESTION))
+        createPollViewModel.handle(CreatePollAction.OnOptionChanged(0, A_FAKE_OPTIONS[0]))
+        createPollViewModel.handle(CreatePollAction.OnOptionChanged(1, A_FAKE_OPTIONS[1]))
+        createPollViewModel.handle(CreatePollAction.OnDeleteOption(1))
+
+        delay(10)
+        createPollViewModel.test().assertState(pollViewStateWithQuestionAndEnoughOptionsButDeletedLastOption)
     }
 
     @Test
