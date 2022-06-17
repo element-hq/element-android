@@ -199,8 +199,7 @@ class HomeDetailViewModel @AssistedInject constructor(
                     copy(syncState = syncState)
                 }
 
-        session.syncService().getSyncRequestStateLive()
-                .asFlow()
+        session.syncService().getSyncRequestStateFlow()
                 .filterIsInstance<SyncRequestState.IncrementalSyncRequestState>()
                 .setOnEach {
                     copy(incrementalSyncRequestState = it)

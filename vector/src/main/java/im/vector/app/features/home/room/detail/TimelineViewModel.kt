@@ -18,7 +18,6 @@ package im.vector.app.features.home.room.detail
 
 import android.net.Uri
 import androidx.annotation.IdRes
-import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -1130,8 +1129,7 @@ class TimelineViewModel @AssistedInject constructor(
                     copy(syncState = syncState)
                 }
 
-        session.syncService().getSyncRequestStateLive()
-                .asFlow()
+        session.syncService().getSyncRequestStateFlow()
                 .filterIsInstance<SyncRequestState.IncrementalSyncRequestState>()
                 .setOnEach {
                     copy(incrementalSyncRequestState = it)
