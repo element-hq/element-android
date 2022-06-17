@@ -53,5 +53,6 @@ https://fbflipper.com/docs/getting-started/troubleshooting/android/ may help.
 
 ## Links
 
-- https://fbflipper.com
+- Official Flipper website: https://fbflipper.com
 - Realm Plugin for Flipper: https://github.com/kamgurgul/Flipper-Realm
+- Dedicated Matrix room: https://matrix.to/#/#unifiedpush:matrix.org
