@@ -121,7 +121,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(
         }
         val userId = eventData["user_id"] as String
         Timber.d("Received request to get options for bot $userId in room $roomId requested")
-        val stateEvents = room.stateService().getStateEvents(setOf(EventType.BOT_OPTIONS))
+        val stateEvents = room.stateService().getStateEvents(setOf(EventType.BOT_OPTIONS), QueryStringValue.IsNotNull)
         var botOptionsEvent: Event? = null
         val stateKey = "_$userId"
         for (stateEvent in stateEvents) {
@@ -155,7 +155,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(
 
         Timber.d("## canSendEvent() : eventType $eventType isState $isState")
 
-        val powerLevelsEvent = room.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS)
+        val powerLevelsEvent = room.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
         val powerLevelsContent = powerLevelsEvent?.content?.toModel<PowerLevelsContent>()
         val canSend = if (powerLevelsContent == null) {
             false
@@ -202,7 +202,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(
             return
         }
         Timber.d("Received request join rules  in room $roomId")
-        val joinedEvents = room.stateService().getStateEvents(setOf(EventType.STATE_ROOM_JOIN_RULES))
+        val joinedEvents = room.stateService().getStateEvents(setOf(EventType.STATE_ROOM_JOIN_RULES), QueryStringValue.IsEmpty)
         if (joinedEvents.isNotEmpty()) {
             widgetPostAPIMediator.sendObjectResponse(Event::class.java, joinedEvents.last(), eventData)
         } else {
@@ -222,7 +222,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(
         }
         Timber.d("Received request to get widget in room $roomId")
         val responseData = ArrayList<JsonDict>()
-        val allWidgets = session.widgetService().getRoomWidgets(roomId) + session.widgetService().getUserWidgets()
+        val allWidgets = session.widgetService().getRoomWidgets(roomId, QueryStringValue.IsNotNull) + session.widgetService().getUserWidgets()
         for (widget in allWidgets) {
             val map = widget.event.toContent()
             responseData.add(map)

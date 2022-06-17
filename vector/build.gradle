@@ -366,6 +366,7 @@ dependencies {
     implementation "com.gabrielittner.threetenbp:lazythreetenbp:0.10.0"
 
     implementation libs.squareup.moshi
+    implementation libs.squareup.moshiKt
     kapt libs.squareup.moshiKotlin
 
     // Lifecycle
@@ -461,8 +462,10 @@ dependencies {
     // Analytics
     implementation 'com.posthog.android:posthog:1.1.2'
 
-    // gplay flavor only
-    gplayImplementation('com.google.firebase:firebase-messaging:23.0.0') {
+    // UnifiedPush
+    implementation 'com.github.UnifiedPush:android-connector:2.0.0'
+    // UnifiedPush gplay flavor only
+    gplayImplementation('com.github.UnifiedPush:android-embedded_fcm_distributor:2.0.0') {
         // exclude group: 'com.google.firebase', module: 'firebase-core'
         // exclude group: 'com.google.firebase', module: 'firebase-analytics'
         // exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'
@@ -524,6 +527,16 @@ dependencies {
     testImplementation(libs.jetbrains.coroutinesTest) {
         exclude group: "org.jetbrains.kotlinx", module: "kotlinx-coroutines-debug"
     }
+
+    // Flipper, debug builds only
+    debugImplementation('com.facebook.flipper:flipper:0.149.0') {
+        exclude group: 'com.facebook.fbjni', module: 'fbjni'
+    }
+    debugImplementation('com.facebook.flipper:flipper-network-plugin:0.149.0') {
+        exclude group: 'com.facebook.fbjni', module: 'fbjni'
+    }
+    debugImplementation 'com.facebook.soloader:soloader:0.10.3'
+    debugImplementation "com.kgurgul.flipper:flipper-realm-android:2.1.0"
 
     // Activate when you want to check for leaks, from time to time.
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.3'

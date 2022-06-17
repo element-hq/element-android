@@ -29,40 +29,47 @@ import kotlin.math.abs
 private const val DEFAULT_PUSHER_FILE_TAG = "mobile"
 
 class PushersManager @Inject constructor(
+        private val unifiedPushStore: UnifiedPushStore,
         private val activeSessionHolder: ActiveSessionHolder,
         private val localeProvider: LocaleProvider,
         private val stringProvider: StringProvider,
-        private val appNameProvider: AppNameProvider
+        private val appNameProvider: AppNameProvider,
 ) {
-    suspend fun testPush(pushKey: String) {
+    suspend fun testPush() {
         val currentSession = activeSessionHolder.getActiveSession()
 
         currentSession.pushersService().testPush(
-                stringProvider.getString(R.string.pusher_http_url),
+                unifiedPushStore.getPushGateway()!!,
                 stringProvider.getString(R.string.pusher_app_id),
-                pushKey,
+                unifiedPushStore.getEndpointOrToken().orEmpty(),
                 TEST_EVENT_ID
         )
     }
 
     fun enqueueRegisterPusherWithFcmKey(pushKey: String): UUID {
-        val currentSession = activeSessionHolder.getActiveSession()
-        return currentSession.pushersService().enqueueAddHttpPusher(createHttpPusher(pushKey))
+        return enqueueRegisterPusher(pushKey, stringProvider.getString(R.string.pusher_http_url))
     }
 
-    suspend fun registerPusherWithFcmKey(pushKey: String) {
+    fun enqueueRegisterPusher(
+            pushKey: String,
+            gateway: String
+    ): UUID {
         val currentSession = activeSessionHolder.getActiveSession()
-        currentSession.pushersService().addHttpPusher(createHttpPusher(pushKey))
+        val pusher = createHttpPusher(pushKey, gateway)
+        return currentSession.pushersService().enqueueAddHttpPusher(pusher)
     }
 
-    private fun createHttpPusher(pushKey: String) = HttpPusher(
+    private fun createHttpPusher(
+            pushKey: String,
+            gateway: String
+    ) = HttpPusher(
             pushKey,
             stringProvider.getString(R.string.pusher_app_id),
             profileTag = DEFAULT_PUSHER_FILE_TAG + "_" + abs(activeSessionHolder.getActiveSession().myUserId.hashCode()),
             localeProvider.current().language,
             appNameProvider.getAppName(),
             activeSessionHolder.getActiveSession().sessionParams.deviceId ?: "MOBILE",
-            stringProvider.getString(R.string.pusher_http_url),
+            gateway,
             append = false,
             withEventIdOnly = true
     )

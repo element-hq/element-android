@@ -18,6 +18,7 @@ package im.vector.app.core.di
 
 import arrow.core.Option
 import im.vector.app.ActiveSessionDataSource
+import im.vector.app.core.pushers.UnifiedPushHelper
 import im.vector.app.core.services.GuardServiceStarter
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.crypto.keysrequest.KeyRequestHandler
@@ -39,6 +40,7 @@ class ActiveSessionHolder @Inject constructor(
         private val pushRuleTriggerListener: PushRuleTriggerListener,
         private val sessionListener: SessionListener,
         private val imageManager: ImageManager,
+        private val unifiedPushHelper: UnifiedPushHelper,
         private val guardServiceStarter: GuardServiceStarter
 ) {
 
@@ -58,7 +60,7 @@ class ActiveSessionHolder @Inject constructor(
         guardServiceStarter.start()
     }
 
-    fun clearActiveSession() {
+    suspend fun clearActiveSession() {
         // Do some cleanup first
         getSafeActiveSession()?.let {
             Timber.w("clearActiveSession of ${it.myUserId}")
@@ -72,6 +74,8 @@ class ActiveSessionHolder @Inject constructor(
         keyRequestHandler.stop()
         incomingVerificationRequestHandler.stop()
         pushRuleTriggerListener.stop()
+        // No need to unregister the pusher, the sign out will (should?) do it server side.
+        unifiedPushHelper.unregister(pushersManager = null)
         guardServiceStarter.stop()
     }
 

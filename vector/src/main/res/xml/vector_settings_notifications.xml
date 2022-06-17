@@ -51,6 +51,12 @@
         android:persistent="false"
         android:title="@string/settings_notification_configuration">
 
+        <im.vector.app.core.preference.VectorPreference
+            android:dependency="SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
+            android:key="SETTINGS_NOTIFICATION_METHOD_KEY"
+            android:persistent="false"
+            android:title="@string/settings_notification_method" />
+
         <!-- For API < 26 -->
         <im.vector.app.core.preference.VectorPreference
             android:dialogTitle="@string/settings_notification_ringtone"

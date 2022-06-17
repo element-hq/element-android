@@ -40,6 +40,13 @@ internal class SessionManager @Inject constructor(
         return getOrCreateSessionComponent(sessionParams)
     }
 
+    fun getLastSession(): Session? {
+        val sessionParams = sessionParamsStore.getLast()
+        return sessionParams?.let {
+            getOrCreateSession(it)
+        }
+    }
+
     fun getOrCreateSession(sessionParams: SessionParams): Session {
         return getOrCreateSessionComponent(sessionParams).session()
     }

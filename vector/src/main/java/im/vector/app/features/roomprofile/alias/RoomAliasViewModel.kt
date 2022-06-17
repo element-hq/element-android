@@ -167,7 +167,7 @@ class RoomAliasViewModel @AssistedInject constructor(
      */
     private fun observeRoomCanonicalAlias() {
         room.flow()
-                .liveStateEvent(EventType.STATE_ROOM_CANONICAL_ALIAS, QueryStringValue.NoCondition)
+                .liveStateEvent(EventType.STATE_ROOM_CANONICAL_ALIAS, QueryStringValue.IsEmpty)
                 .mapOptional { it.content.toModel<RoomCanonicalAliasContent>() }
                 .unwrap()
                 .setOnEach {

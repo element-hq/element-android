@@ -158,7 +158,7 @@ class RoomSettingsViewModel @AssistedInject constructor(
 
     private fun observeRoomHistoryVisibility() {
         room.flow()
-                .liveStateEvent(EventType.STATE_ROOM_HISTORY_VISIBILITY, QueryStringValue.NoCondition)
+                .liveStateEvent(EventType.STATE_ROOM_HISTORY_VISIBILITY, QueryStringValue.IsEmpty)
                 .mapOptional { it.content.toModel<RoomHistoryVisibilityContent>() }
                 .unwrap()
                 .mapNotNull { it.historyVisibility }
@@ -169,7 +169,7 @@ class RoomSettingsViewModel @AssistedInject constructor(
 
     private fun observeJoinRule() {
         room.flow()
-                .liveStateEvent(EventType.STATE_ROOM_JOIN_RULES, QueryStringValue.NoCondition)
+                .liveStateEvent(EventType.STATE_ROOM_JOIN_RULES, QueryStringValue.IsEmpty)
                 .mapOptional { it.content.toModel<RoomJoinRulesContent>() }
                 .unwrap()
                 .mapNotNull { it.joinRules }
@@ -180,7 +180,7 @@ class RoomSettingsViewModel @AssistedInject constructor(
 
     private fun observeGuestAccess() {
         room.flow()
-                .liveStateEvent(EventType.STATE_ROOM_GUEST_ACCESS, QueryStringValue.NoCondition)
+                .liveStateEvent(EventType.STATE_ROOM_GUEST_ACCESS, QueryStringValue.IsEmpty)
                 .mapOptional { it.content.toModel<RoomGuestAccessContent>() }
                 .unwrap()
                 .mapNotNull { it.guestAccess }
@@ -194,7 +194,7 @@ class RoomSettingsViewModel @AssistedInject constructor(
      */
     private fun observeRoomAvatar() {
         room.flow()
-                .liveStateEvent(EventType.STATE_ROOM_AVATAR, QueryStringValue.NoCondition)
+                .liveStateEvent(EventType.STATE_ROOM_AVATAR, QueryStringValue.IsEmpty)
                 .mapOptional { it.content.toModel<RoomAvatarContent>() }
                 .unwrap()
                 .setOnEach {

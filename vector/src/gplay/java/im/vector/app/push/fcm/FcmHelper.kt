@@ -26,40 +26,41 @@ import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.DefaultSharedPreferences
 import im.vector.app.core.pushers.PushersManager
-import im.vector.app.core.time.Clock
-import im.vector.app.features.settings.VectorPreferences
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * This class store the FCM token in SharedPrefs and ensure this token is retrieved.
  * It has an alter ego in the fdroid variant.
  */
-object FcmHelper {
-    private val PREFS_KEY_FCM_TOKEN = "FCM_TOKEN"
+class FcmHelper @Inject constructor(
+        context: Context,
+) {
+    companion object {
+        private const val PREFS_KEY_FCM_TOKEN = "FCM_TOKEN"
+    }
 
-    fun isPushSupported(): Boolean = true
+    private val sharedPrefs = DefaultSharedPreferences.getInstance(context)
+
+    fun isFirebaseAvailable(): Boolean = true
 
     /**
      * Retrieves the FCM registration token.
      *
      * @return the FCM token or null if not received from FCM
      */
-    fun getFcmToken(context: Context): String? {
-        return DefaultSharedPreferences.getInstance(context).getString(PREFS_KEY_FCM_TOKEN, null)
+    fun getFcmToken(): String? {
+        return sharedPrefs.getString(PREFS_KEY_FCM_TOKEN, null)
     }
 
     /**
      * Store FCM token to the SharedPrefs
      * TODO Store in realm
      *
-     * @param context android context
      * @param token the token to store
      */
-    fun storeFcmToken(
-            context: Context,
-            token: String?
-    ) {
-        DefaultSharedPreferences.getInstance(context).edit {
+    fun storeFcmToken(token: String?) {
+        sharedPrefs.edit {
             putString(PREFS_KEY_FCM_TOKEN, token)
         }
     }
@@ -76,7 +77,7 @@ object FcmHelper {
             try {
                 FirebaseMessaging.getInstance().token
                         .addOnSuccessListener { token ->
-                            storeFcmToken(activity, token)
+                            storeFcmToken(token)
                             if (registerPusher) {
                                 pushersManager.enqueueRegisterPusherWithFcmKey(token)
                             }
@@ -98,24 +99,19 @@ object FcmHelper {
      * it doesn't, display a dialog that allows users to download the APK from
      * the Google Play Store or enable it in the device's system settings.
      */
-    private fun checkPlayServices(activity: Activity): Boolean {
+    private fun checkPlayServices(context: Context): Boolean {
         val apiAvailability = GoogleApiAvailability.getInstance()
-        val resultCode = apiAvailability.isGooglePlayServicesAvailable(activity)
+        val resultCode = apiAvailability.isGooglePlayServicesAvailable(context)
         return resultCode == ConnectionResult.SUCCESS
     }
 
     @Suppress("UNUSED_PARAMETER")
-    fun onEnterForeground(context: Context, activeSessionHolder: ActiveSessionHolder) {
+    fun onEnterForeground(activeSessionHolder: ActiveSessionHolder) {
         // No op
     }
 
     @Suppress("UNUSED_PARAMETER")
-    fun onEnterBackground(
-            context: Context,
-            vectorPreferences: VectorPreferences,
-            activeSessionHolder: ActiveSessionHolder,
-            clock: Clock
-    ) {
+    fun onEnterBackground(activeSessionHolder: ActiveSessionHolder) {
         // No op
     }
 }

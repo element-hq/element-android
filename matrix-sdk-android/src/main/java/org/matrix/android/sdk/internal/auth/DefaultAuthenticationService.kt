@@ -73,10 +73,7 @@ internal class DefaultAuthenticationService @Inject constructor(
     }
 
     override fun getLastAuthenticatedSession(): Session? {
-        val sessionParams = sessionParamsStore.getLast()
-        return sessionParams?.let {
-            sessionManager.getOrCreateSession(it)
-        }
+        return sessionManager.getLastSession()
     }
 
     override suspend fun getLoginFlowOfSession(sessionId: String): LoginFlowResult {
