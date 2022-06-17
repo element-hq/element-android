@@ -230,6 +230,7 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
             bobTimeline.addListener(eventsListener)
 
             bobTimeline.paginate(Timeline.Direction.FORWARDS, 50)
+            bobTimeline.paginate(Timeline.Direction.FORWARDS, 50)
 
             commonTestHelper.await(lock)
             bobTimeline.removeAllListeners()
