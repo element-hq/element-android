@@ -19,17 +19,18 @@ package im.vector.app.core.utils
 import org.amshove.kluent.shouldBe
 import org.junit.Test
 import java.lang.Thread.sleep
+import kotlin.time.Duration.Companion.milliseconds
 
 class TemporaryStoreTest {
 
     @Test
     fun testTemporaryStore() {
         // Keep the data 300 millis
-        val store = TemporaryStore<String>(300)
+        val store = TemporaryStore<String>(300.milliseconds)
 
         store.data = "test"
         store.data shouldBe "test"
-        sleep(10)
+        sleep(100)
         store.data shouldBe "test"
         sleep(300)
         store.data shouldBe null

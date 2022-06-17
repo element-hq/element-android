@@ -113,13 +113,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Dependency analysis
-        run: ./gradlew buildHealth $CI_GRADLE_ARG_PROPERTIES
+        run: ./gradlew dependencyCheckAnalyze $CI_GRADLE_ARG_PROPERTIES
       - name: Upload dependency analysis
         if: always()
         uses: actions/upload-artifact@v3
         with:
           name: dependency-analysis
-          path: build/reports/dependency-analysis/build-health-report.txt
+          path: build/reports/dependency-check-report.html
 
 # Lint for main module
   android-lint:

@@ -60,7 +60,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Assemble GPlay unsigned apk
-        run: ./gradlew clean assembleGplayRelease $CI_GRADLE_ARG_PROPERTIES  --stacktrace
+        run: ./gradlew clean assembleGplayRelease $CI_GRADLE_ARG_PROPERTIES --stacktrace
       - name: Upload Gplay unsigned APKs
         uses: actions/upload-artifact@v3
         with:
@@ -88,6 +88,6 @@ jobs:
         with:
           name: exodus.json
           path: |
-           exodus.json
+            exodus.json
       - name: Check for trackers
         run: "jq -e '.trackers == []' exodus.json > /dev/null || { echo '::error static analysis identified user tracking library' ; exit 1; }"
