@@ -182,7 +182,7 @@ class LocationSharingViewModel @AssistedInject constructor(
         }
     }
 
-    override fun onLocationProviderIsNotAvailable() {
+    override fun onNoLocationProviderAvailable() {
         _viewEvents.post(LocationSharingViewEvents.LocationNotAvailableError)
     }
 }

@@ -198,7 +198,7 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
         )
     }
 
-    override fun onLocationProviderIsNotAvailable() {
+    override fun onNoLocationProviderAvailable() {
         stopForeground(true)
         stopSelf()
     }

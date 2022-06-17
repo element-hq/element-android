@@ -56,7 +56,7 @@ class FakeContext(
         givenService(Context.CONNECTIVITY_SERVICE, ConnectivityManager::class.java, connectivityManager.instance)
     }
 
-    private fun <T> givenService(name: String, klass: Class<T>, service: T) {
+    fun <T> givenService(name: String, klass: Class<T>, service: T) {
         every { instance.getSystemService(name) } returns service
         every { instance.getSystemService(klass) } returns service
     }
