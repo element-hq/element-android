@@ -30,7 +30,7 @@ class TemporaryStoreTest {
 
         store.data = "test"
         store.data shouldBe "test"
-        sleep(10)
+        sleep(100)
         store.data shouldBe "test"
         sleep(300)
         store.data shouldBe null
