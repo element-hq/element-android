@@ -76,7 +76,7 @@ internal fun LiveLocationShareAggregatedSummaryEntity.Companion.findActiveLiveIn
         realm: Realm,
         roomId: String,
         userId: String,
-        ignoredEventId: String
+        ignoredEventId: String,
 ): List<LiveLocationShareAggregatedSummaryEntity> {
     return LiveLocationShareAggregatedSummaryEntity
             .whereRoomId(realm, roomId = roomId)
@@ -99,4 +99,15 @@ internal fun LiveLocationShareAggregatedSummaryEntity.Companion.findRunningLiveI
             .equalTo(LiveLocationShareAggregatedSummaryEntityFields.IS_ACTIVE, true)
             .isNotEmpty(LiveLocationShareAggregatedSummaryEntityFields.USER_ID)
             .isNotNull(LiveLocationShareAggregatedSummaryEntityFields.LAST_LOCATION_CONTENT)
+}
+
+internal fun LiveLocationShareAggregatedSummaryEntity.Companion.findLiveInRoom(
+        realm: Realm,
+        roomId: String,
+        eventIds: List<String>,
+): RealmQuery<LiveLocationShareAggregatedSummaryEntity> {
+    return LiveLocationShareAggregatedSummaryEntity
+            .whereRoomId(realm, roomId = roomId)
+            .isNotEmpty(LiveLocationShareAggregatedSummaryEntityFields.USER_ID)
+            .`in`(LiveLocationShareAggregatedSummaryEntityFields.EVENT_ID, eventIds.toTypedArray())
 }

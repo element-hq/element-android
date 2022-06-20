@@ -33,6 +33,7 @@ import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationS
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntityFields
 import org.matrix.android.sdk.test.fakes.FakeMonarchy
 import org.matrix.android.sdk.test.fakes.givenEqualTo
+import org.matrix.android.sdk.test.fakes.givenIn
 import org.matrix.android.sdk.test.fakes.givenIsNotEmpty
 import org.matrix.android.sdk.test.fakes.givenIsNotNull
 
@@ -165,6 +166,32 @@ internal class DefaultLocationSharingServiceTest {
         )
 
         val result = defaultLocationSharingService.getRunningLiveLocationShareSummaries().value
+
+        result shouldBeEqualTo listOf(summary)
+    }
+
+    @Test
+    fun `given a list of event ids livedata on live summaries is correctly computed`() {
+        val eventIds = listOf("event_id_1", "event_id_2", "event_id_3")
+        val entity = LiveLocationShareAggregatedSummaryEntity()
+        val summary = LiveLocationShareAggregatedSummary(
+                userId = "",
+                isActive = true,
+                endOfLiveTimestampMillis = 123,
+                lastLocationDataContent = null
+        )
+
+        fakeMonarchy.givenWhere<LiveLocationShareAggregatedSummaryEntity>()
+                .givenEqualTo(LiveLocationShareAggregatedSummaryEntityFields.ROOM_ID, fakeRoomId)
+                .givenIsNotEmpty(LiveLocationShareAggregatedSummaryEntityFields.USER_ID)
+                .givenIn(LiveLocationShareAggregatedSummaryEntityFields.EVENT_ID, eventIds)
+        fakeMonarchy.givenFindAllMappedWithChangesReturns(
+                realmEntities = listOf(entity),
+                mappedResult = listOf(summary),
+                fakeLiveLocationShareAggregatedSummaryMapper
+        )
+
+        val result = defaultLocationSharingService.getLiveLocationShareSummaries(eventIds).value
 
         result shouldBeEqualTo listOf(summary)
     }

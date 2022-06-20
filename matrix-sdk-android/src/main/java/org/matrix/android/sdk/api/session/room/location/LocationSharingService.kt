@@ -60,4 +60,10 @@ interface LocationSharingService {
      * Returns a LiveData on the list of current running live location shares.
      */
     fun getRunningLiveLocationShareSummaries(): LiveData<List<LiveLocationShareAggregatedSummary>>
+
+    /**
+     * Returns a LiveData on the list of live location shares with the given eventIds.
+     * @param eventIds the list of event ids
+     */
+    fun getLiveLocationShareSummaries(eventIds: List<String>): LiveData<List<LiveLocationShareAggregatedSummary>>
 }

@@ -27,6 +27,7 @@ import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationSh
 import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.internal.database.mapper.LiveLocationShareAggregatedSummaryMapper
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntity
+import org.matrix.android.sdk.internal.database.query.findLiveInRoom
 import org.matrix.android.sdk.internal.database.query.findRunningLiveInRoom
 import org.matrix.android.sdk.internal.di.SessionDatabase
 
@@ -85,6 +86,13 @@ internal class DefaultLocationSharingService @AssistedInject constructor(
     override fun getRunningLiveLocationShareSummaries(): LiveData<List<LiveLocationShareAggregatedSummary>> {
         return monarchy.findAllMappedWithChanges(
                 { LiveLocationShareAggregatedSummaryEntity.findRunningLiveInRoom(it, roomId = roomId) },
+                liveLocationShareAggregatedSummaryMapper
+        )
+    }
+
+    override fun getLiveLocationShareSummaries(eventIds: List<String>): LiveData<List<LiveLocationShareAggregatedSummary>> {
+        return monarchy.findAllMappedWithChanges(
+                { LiveLocationShareAggregatedSummaryEntity.findLiveInRoom(it, roomId = roomId, eventIds = eventIds) },
                 liveLocationShareAggregatedSummaryMapper
         )
     }
