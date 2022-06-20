@@ -51,6 +51,14 @@ import org.matrix.android.sdk.internal.session.room.directory.DefaultSetRoomDire
 import org.matrix.android.sdk.internal.session.room.directory.GetPublicRoomTask
 import org.matrix.android.sdk.internal.session.room.directory.GetRoomDirectoryVisibilityTask
 import org.matrix.android.sdk.internal.session.room.directory.SetRoomDirectoryVisibilityTask
+import org.matrix.android.sdk.internal.session.room.location.DefaultSendLiveLocationTask
+import org.matrix.android.sdk.internal.session.room.location.DefaultSendStaticLocationTask
+import org.matrix.android.sdk.internal.session.room.location.DefaultStartLiveLocationShareTask
+import org.matrix.android.sdk.internal.session.room.location.DefaultStopLiveLocationShareTask
+import org.matrix.android.sdk.internal.session.room.location.SendLiveLocationTask
+import org.matrix.android.sdk.internal.session.room.location.SendStaticLocationTask
+import org.matrix.android.sdk.internal.session.room.location.StartLiveLocationShareTask
+import org.matrix.android.sdk.internal.session.room.location.StopLiveLocationShareTask
 import org.matrix.android.sdk.internal.session.room.membership.DefaultLoadRoomMembersTask
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
 import org.matrix.android.sdk.internal.session.room.membership.admin.DefaultMembershipAdminTask
@@ -299,4 +307,16 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindFetchThreadSummariesTask(task: DefaultFetchThreadSummariesTask): FetchThreadSummariesTask
+
+    @Binds
+    abstract fun bindStartLiveLocationShareTask(task: DefaultStartLiveLocationShareTask): StartLiveLocationShareTask
+
+    @Binds
+    abstract fun bindStopLiveLocationShareTask(task: DefaultStopLiveLocationShareTask): StopLiveLocationShareTask
+
+    @Binds
+    abstract fun bindSendStaticLocationTask(task: DefaultSendStaticLocationTask): SendStaticLocationTask
+
+    @Binds
+    abstract fun bindSendLiveLocationTask(task: DefaultSendLiveLocationTask): SendLiveLocationTask
 }

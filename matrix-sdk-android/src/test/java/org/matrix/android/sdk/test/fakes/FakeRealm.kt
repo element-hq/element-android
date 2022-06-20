@@ -16,8 +16,10 @@
 
 package org.matrix.android.sdk.test.fakes
 
+import io.mockk.MockKVerificationScope
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import io.realm.Realm
 import io.realm.RealmModel
 import io.realm.RealmQuery
@@ -32,6 +34,10 @@ internal class FakeRealm {
         val query = mockk<RealmQuery<T>>()
         every { instance.where<T>() } returns query
         return query
+    }
+
+    inline fun <reified T : RealmModel> verifyInsertOrUpdate(crossinline verification: MockKVerificationScope.() -> T) {
+        verify { instance.insertOrUpdate(verification()) }
     }
 }
 
@@ -75,5 +81,19 @@ inline fun <reified T : RealmModel> RealmQuery<T>.givenNotEqualTo(
         value: String
 ): RealmQuery<T> {
     every { notEqualTo(fieldName, value) } returns this
+    return this
+}
+
+inline fun <reified T : RealmModel> RealmQuery<T>.givenIsNotEmpty(
+        fieldName: String
+): RealmQuery<T> {
+    every { isNotEmpty(fieldName) } returns this
+    return this
+}
+
+inline fun <reified T : RealmModel> RealmQuery<T>.givenIsNotNull(
+        fieldName: String
+): RealmQuery<T> {
+    every { isNotNull(fieldName) } returns this
     return this
 }
