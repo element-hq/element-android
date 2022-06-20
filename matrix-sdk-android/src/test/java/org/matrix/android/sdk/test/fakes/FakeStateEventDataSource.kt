@@ -37,12 +37,12 @@ internal class FakeStateEventDataSource {
         } returns event
     }
 
-    fun verifyGetStateEvent(roomId: String, eventType: String, stateKey: QueryStringValue) {
+    fun verifyGetStateEvent(roomId: String, eventType: String, stateKey: String) {
         verify {
             instance.getStateEvent(
                     roomId = roomId,
                     eventType = eventType,
-                    stateKey = stateKey
+                    stateKey = QueryStringValue.Equals(stateKey)
             )
         }
     }

@@ -21,7 +21,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Test
-import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
@@ -87,7 +86,7 @@ class DefaultStopLiveLocationShareTaskTest {
         fakeStateEventDataSource.verifyGetStateEvent(
                 roomId = params.roomId,
                 eventType = EventType.STATE_ROOM_BEACON_INFO.first(),
-                stateKey = QueryStringValue.Equals(A_USER_ID)
+                stateKey = A_USER_ID
         )
     }
 }
