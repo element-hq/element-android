@@ -41,7 +41,6 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import im.vector.app.features.location.live.duration.ChooseLiveDurationBottomSheet
 import im.vector.app.features.location.option.LocationSharingOption
-import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.util.MatrixItem
 import java.lang.ref.WeakReference
 import javax.inject.Inject
@@ -53,7 +52,6 @@ class LocationSharingFragment @Inject constructor(
         private val urlMapProvider: UrlMapProvider,
         private val avatarRenderer: AvatarRenderer,
         private val matrixItemColorProvider: MatrixItemColorProvider,
-        private val vectorPreferences: VectorPreferences,
 ) : VectorBaseFragment<FragmentLocationSharingBinding>(),
         LocationTargetChangeListener,
         VectorBaseBottomSheetDialogFragment.ResultListener {
@@ -223,13 +221,7 @@ class LocationSharingFragment @Inject constructor(
     private fun updateMap(state: LocationSharingViewState) {
         // first, update the options view
         val options: Set<LocationSharingOption> = when (state.areTargetAndUserLocationEqual) {
-            true -> {
-                if (vectorPreferences.labsEnableLiveLocation()) {
-                    setOf(LocationSharingOption.USER_CURRENT, LocationSharingOption.USER_LIVE)
-                } else {
-                    setOf(LocationSharingOption.USER_CURRENT)
-                }
-            }
+            true -> setOf(LocationSharingOption.USER_CURRENT, LocationSharingOption.USER_LIVE)
             false -> setOf(LocationSharingOption.PINNED)
             else -> emptySet()
         }
