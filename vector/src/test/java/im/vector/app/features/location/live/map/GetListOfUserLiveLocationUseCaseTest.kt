@@ -17,7 +17,6 @@
 package im.vector.app.features.location.live.map
 
 import androidx.lifecycle.asFlow
-import com.airbnb.mvrx.test.MvRxTestRule
 import im.vector.app.features.location.LocationData
 import im.vector.app.test.fakes.FakeSession
 import io.mockk.coEvery
@@ -25,15 +24,12 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
-import io.mockk.unmockkStatic
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.amshove.kluent.internal.assertEquals
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.After
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationShareAggregatedSummary
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
@@ -85,7 +81,7 @@ class GetListOfUserLiveLocationUseCaseTest {
         val liveData = fakeSession.roomService()
                 .getRoom(A_ROOM_ID)
                 .locationSharingService()
-                .givenRunningLiveLocationShareSummaries(summaries)
+                .givenRunningLiveLocationShareSummariesReturns(summaries)
 
         every { liveData.asFlow() } returns flowOf(summaries)
 

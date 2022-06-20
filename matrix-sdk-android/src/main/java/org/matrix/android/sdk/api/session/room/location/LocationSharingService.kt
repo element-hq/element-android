@@ -19,6 +19,7 @@ package org.matrix.android.sdk.api.session.room.location
 import androidx.lifecycle.LiveData
 import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationShareAggregatedSummary
 import org.matrix.android.sdk.api.util.Cancelable
+import org.matrix.android.sdk.api.util.Optional
 
 /**
  * Manage all location sharing related features.
@@ -62,8 +63,8 @@ interface LocationSharingService {
     fun getRunningLiveLocationShareSummaries(): LiveData<List<LiveLocationShareAggregatedSummary>>
 
     /**
-     * Returns a LiveData on the list of live location shares with the given eventIds.
-     * @param eventIds the list of event ids
+     * Returns a LiveData on the live location share summary with the given eventId.
+     * @param beaconInfoEventId event id of the initial beacon info state event
      */
-    fun getLiveLocationShareSummaries(eventIds: List<String>): LiveData<List<LiveLocationShareAggregatedSummary>>
+    fun getLiveLocationShareSummary(beaconInfoEventId: String): LiveData<Optional<LiveLocationShareAggregatedSummary>>
 }

@@ -30,14 +30,16 @@ import org.junit.Before
 import org.junit.Test
 import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationShareAggregatedSummary
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
+import org.matrix.android.sdk.api.util.Optional
 
 private const val A_ROOM_ID = "room_id"
+private const val AN_EVENT_ID = "event_id"
 
-class GetLiveLocationShareSummariesUseCaseTest {
+class GetLiveLocationShareSummaryUseCaseTest {
 
     private val fakeSession = FakeSession()
 
-    private val getLiveLocationShareSummariesUseCase = GetLiveLocationShareSummariesUseCase(
+    private val getLiveLocationShareSummaryUseCase = GetLiveLocationShareSummaryUseCase(
             session = fakeSession
     )
 
@@ -52,35 +54,21 @@ class GetLiveLocationShareSummariesUseCaseTest {
     }
 
     @Test
-    fun `given a room id when calling use case then the current live is stopped with success`() = runTest {
-        val eventIds = listOf("event_id_1", "event_id_2", "event_id_3")
-        val summary1 = LiveLocationShareAggregatedSummary(
-                userId = "userId1",
+    fun `given a room id and event id when calling use case then live data on summary is returned`() = runTest {
+        val summary = LiveLocationShareAggregatedSummary(
+                userId = "userId",
                 isActive = true,
                 endOfLiveTimestampMillis = 123,
                 lastLocationDataContent = MessageBeaconLocationDataContent()
         )
-        val summary2 = LiveLocationShareAggregatedSummary(
-                userId = "userId2",
-                isActive = true,
-                endOfLiveTimestampMillis = 1234,
-                lastLocationDataContent = MessageBeaconLocationDataContent()
-        )
-        val summary3 = LiveLocationShareAggregatedSummary(
-                userId = "userId3",
-                isActive = true,
-                endOfLiveTimestampMillis = 1234,
-                lastLocationDataContent = MessageBeaconLocationDataContent()
-        )
-        val summaries = listOf(summary1, summary2, summary3)
         val liveData = fakeSession.roomService()
                 .getRoom(A_ROOM_ID)
                 .locationSharingService()
-                .givenLiveLocationShareSummaries(eventIds, summaries)
-        every { liveData.asFlow() } returns flowOf(summaries)
+                .givenLiveLocationShareSummaryReturns(AN_EVENT_ID, summary)
+        every { liveData.asFlow() } returns flowOf(Optional(summary))
 
-        val result = getLiveLocationShareSummariesUseCase.execute(A_ROOM_ID, eventIds).first()
+        val result = getLiveLocationShareSummaryUseCase.execute(A_ROOM_ID, AN_EVENT_ID).first()
 
-        result shouldBeEqualTo listOf(summary1, summary2, summary3)
+        result shouldBeEqualTo summary
     }
 }

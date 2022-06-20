@@ -19,20 +19,22 @@ package im.vector.app.features.location.live
 import androidx.lifecycle.asFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.mapNotNull
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationShareAggregatedSummary
 import javax.inject.Inject
 
-class GetLiveLocationShareSummariesUseCase @Inject constructor(
+class GetLiveLocationShareSummaryUseCase @Inject constructor(
         private val session: Session,
 ) {
 
-    fun execute(roomId: String, eventIds: List<String>): Flow<List<LiveLocationShareAggregatedSummary>> {
+    fun execute(roomId: String, eventId: String): Flow<LiveLocationShareAggregatedSummary> {
         return session.getRoom(roomId)
                 ?.locationSharingService()
-                ?.getLiveLocationShareSummaries(eventIds)
+                ?.getLiveLocationShareSummary(eventId)
                 ?.asFlow()
+                ?.mapNotNull { it.getOrNull() }
                 ?: emptyFlow()
     }
 }

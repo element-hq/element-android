@@ -97,11 +97,3 @@ inline fun <reified T : RealmModel> RealmQuery<T>.givenIsNotNull(
     every { isNotNull(fieldName) } returns this
     return this
 }
-
-inline fun <reified T : RealmModel> RealmQuery<T>.givenIn(
-        fieldName: String,
-        values: List<String>
-): RealmQuery<T> {
-    every { `in`(fieldName, values.toTypedArray()) } returns this
-    return this
-}

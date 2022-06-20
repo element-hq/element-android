@@ -100,14 +100,3 @@ internal fun LiveLocationShareAggregatedSummaryEntity.Companion.findRunningLiveI
             .isNotEmpty(LiveLocationShareAggregatedSummaryEntityFields.USER_ID)
             .isNotNull(LiveLocationShareAggregatedSummaryEntityFields.LAST_LOCATION_CONTENT)
 }
-
-internal fun LiveLocationShareAggregatedSummaryEntity.Companion.findLiveInRoom(
-        realm: Realm,
-        roomId: String,
-        eventIds: List<String>,
-): RealmQuery<LiveLocationShareAggregatedSummaryEntity> {
-    return LiveLocationShareAggregatedSummaryEntity
-            .whereRoomId(realm, roomId = roomId)
-            .isNotEmpty(LiveLocationShareAggregatedSummaryEntityFields.USER_ID)
-            .`in`(LiveLocationShareAggregatedSummaryEntityFields.EVENT_ID, eventIds.toTypedArray())
-}
