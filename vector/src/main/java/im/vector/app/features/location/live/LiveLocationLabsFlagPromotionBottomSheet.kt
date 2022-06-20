@@ -27,8 +27,10 @@ import im.vector.app.databinding.BottomSheetLiveLocationLabsFlagPromotionBinding
  * Bottom sheet to warn users that feature is still in active development. Users are able to enable labs flag by using the switch in this bottom sheet.
  * This should not be shown if the user already enabled the labs flag.
  */
-class LiveLocationLabsFlagPromotionBottomSheet
-    : VectorBaseBottomSheetDialogFragment<BottomSheetLiveLocationLabsFlagPromotionBinding>() {
+class LiveLocationLabsFlagPromotionBottomSheet :
+    VectorBaseBottomSheetDialogFragment<BottomSheetLiveLocationLabsFlagPromotionBinding>() {
+
+    override val showExpanded = true
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetLiveLocationLabsFlagPromotionBinding {
         return BottomSheetLiveLocationLabsFlagPromotionBinding.inflate(inflater, container, false)

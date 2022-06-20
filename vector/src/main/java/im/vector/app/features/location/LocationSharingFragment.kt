@@ -39,8 +39,10 @@ import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.databinding.FragmentLocationSharingBinding
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
+import im.vector.app.features.location.live.LiveLocationLabsFlagPromotionBottomSheet
 import im.vector.app.features.location.live.duration.ChooseLiveDurationBottomSheet
 import im.vector.app.features.location.option.LocationSharingOption
+import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.util.MatrixItem
 import java.lang.ref.WeakReference
 import javax.inject.Inject
@@ -52,6 +54,7 @@ class LocationSharingFragment @Inject constructor(
         private val urlMapProvider: UrlMapProvider,
         private val avatarRenderer: AvatarRenderer,
         private val matrixItemColorProvider: MatrixItemColorProvider,
+        private val vectorPreferences: VectorPreferences,
 ) : VectorBaseFragment<FragmentLocationSharingBinding>(),
         LocationTargetChangeListener,
         VectorBaseBottomSheetDialogFragment.ResultListener {
@@ -192,6 +195,25 @@ class LocationSharingFragment @Inject constructor(
         }
     }
 
+    private val liveLocationLabsFlagPromotionListener = object : VectorBaseBottomSheetDialogFragment.ResultListener {
+        override fun onBottomSheetResult(resultCode: Int, data: Any?) {
+            // Check if the user wants to enable the labs flag
+            if (resultCode == VectorBaseBottomSheetDialogFragment.ResultListener.RESULT_OK && (data as? Boolean) == true) {
+                vectorPreferences.setLiveLocationLabsEnabled()
+                startLiveLocationSharing()
+            }
+        }
+    }
+
+    private fun tryStartLiveLocationSharing() {
+        if (vectorPreferences.labsEnableLiveLocation()) {
+            startLiveLocationSharing()
+        } else {
+            LiveLocationLabsFlagPromotionBottomSheet.newInstance(liveLocationLabsFlagPromotionListener)
+                    .show(requireActivity().supportFragmentManager, "DISPLAY_LIVE_LOCATION_LABS_FLAG_PROMOTION")
+        }
+    }
+
     private val foregroundLocationResultLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
         if (allGranted) {
             startLiveLocationSharing()
@@ -200,16 +222,12 @@ class LocationSharingFragment @Inject constructor(
         }
     }
 
-    private fun tryStartLiveLocationSharing() {
+    private fun startLiveLocationSharing() {
         // we need to re-check foreground location to be sure it has not changed after landing on this screen
         if (checkPermissions(PERMISSIONS_FOR_FOREGROUND_LOCATION_SHARING, requireActivity(), foregroundLocationResultLauncher)) {
-            startLiveLocationSharing()
+            ChooseLiveDurationBottomSheet.newInstance(this)
+                    .show(requireActivity().supportFragmentManager, "DISPLAY_CHOOSE_DURATION_OPTIONS")
         }
-    }
-
-    private fun startLiveLocationSharing() {
-        ChooseLiveDurationBottomSheet.newInstance(this)
-                .show(requireActivity().supportFragmentManager, "DISPLAY_CHOOSE_DURATION_OPTIONS")
     }
 
     override fun onBottomSheetResult(resultCode: Int, data: Any?) {

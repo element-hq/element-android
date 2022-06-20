@@ -1047,6 +1047,12 @@ class VectorPreferences @Inject constructor(
         return defaultPrefs.getBoolean(SETTINGS_LABS_ENABLE_LIVE_LOCATION, false)
     }
 
+    fun setLiveLocationLabsEnabled() {
+        defaultPrefs.edit {
+            putBoolean(SETTINGS_LABS_ENABLE_LIVE_LOCATION, true)
+        }
+    }
+
     /**
      * Indicates whether or not thread messages are enabled.
      */
