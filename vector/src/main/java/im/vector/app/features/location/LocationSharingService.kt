@@ -100,7 +100,7 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
                 ?.let { result ->
                     when (result) {
                         is UpdateLiveLocationShareResult.Success -> {
-                            roomArgsMap[result.beaconEventId] = roomArgs
+                            addRoomArgs(result.beaconEventId, roomArgs)
                             locationTracker.requestLastKnownLocation()
                         }
                         is UpdateLiveLocationShareResult.Failure -> {
@@ -132,21 +132,16 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
 
     fun stopSharingLocation(roomId: String) {
         Timber.i("### LocationSharingService.stopSharingLocation for $roomId")
-        synchronized(roomArgsMap) {
-            val beaconIds = roomArgsMap
-                    .filter { it.value.roomId == roomId }
-                    .map { it.key }
-            beaconIds.forEach { roomArgsMap.remove(it) }
-
-            tryToDestroyMe()
-        }
+        removeRoomArgs(roomId)
+        tryToDestroyMe()
     }
 
+    @Synchronized
     override fun onLocationUpdate(locationData: LocationData) {
         Timber.i("### LocationSharingService.onLocationUpdate. Uncertainty: ${locationData.uncertainty}")
 
         // Emit location update to all rooms in which live location sharing is active
-        roomArgsMap.toMap().forEach { item ->
+        roomArgsMap.forEach { item ->
             sendLiveLocation(item.value.roomId, item.key, locationData)
         }
     }
@@ -173,6 +168,7 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
         stopSelf()
     }
 
+    @Synchronized
     private fun tryToDestroyMe() {
         if (roomArgsMap.isEmpty()) {
             Timber.i("### LocationSharingService. Destroying self, time is up for all rooms")
@@ -191,6 +187,19 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
         super.onDestroy()
         Timber.i("### LocationSharingService.onDestroy")
         destroyMe()
+    }
+
+    @Synchronized
+    private fun addRoomArgs(beaconEventId: String, roomArgs: RoomArgs) {
+        roomArgsMap[beaconEventId] = roomArgs
+    }
+
+    @Synchronized
+    private fun removeRoomArgs(roomId: String) {
+        val beaconIds = roomArgsMap
+                .filter { it.value.roomId == roomId }
+                .map { it.key }
+        beaconIds.forEach { roomArgsMap.remove(it) }
     }
 
     private fun launchInIO(block: suspend CoroutineScope.(Session) -> Unit) =
