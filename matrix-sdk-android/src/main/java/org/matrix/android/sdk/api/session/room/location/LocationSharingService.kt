@@ -46,14 +46,15 @@ interface LocationSharingService {
     /**
      * Starts sharing live location in the room.
      * @param timeoutMillis timeout of the live in milliseconds
-     * @return the id of the created beacon info event
+     * @return the result of the update of the live
      */
-    suspend fun startLiveLocationShare(timeoutMillis: Long): String
+    suspend fun startLiveLocationShare(timeoutMillis: Long): UpdateLiveLocationShareResult
 
     /**
      * Stops sharing live location in the room.
+     * @return the result of the update of the live
      */
-    suspend fun stopLiveLocationShare()
+    suspend fun stopLiveLocationShare(): UpdateLiveLocationShareResult
 
     /**
      * Returns a LiveData on the list of current running live location shares.

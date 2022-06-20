@@ -27,6 +27,10 @@ internal class FakeSendStateTask : SendStateTask by mockk() {
         coEvery { executeRetry(any(), any()) } returns eventId
     }
 
+    fun givenExecuteRetryThrows(error: Throwable) {
+        coEvery { executeRetry(any(), any()) } throws error
+    }
+
     fun verifyExecuteRetry(params: SendStateTask.Params, remainingRetry: Int) {
         coVerify { executeRetry(params, remainingRetry) }
     }

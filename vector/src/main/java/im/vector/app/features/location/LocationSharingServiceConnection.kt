@@ -25,11 +25,12 @@ import javax.inject.Inject
 
 class LocationSharingServiceConnection @Inject constructor(
         private val context: Context
-) : ServiceConnection {
+) : ServiceConnection, LocationSharingService.Callback {
 
     interface Callback {
         fun onLocationServiceRunning()
         fun onLocationServiceStopped()
+        fun onLocationServiceError(error: Throwable)
     }
 
     private var callback: Callback? = null
@@ -57,14 +58,21 @@ class LocationSharingServiceConnection @Inject constructor(
     }
 
     override fun onServiceConnected(className: ComponentName, binder: IBinder) {
-        locationSharingService = (binder as LocationSharingService.LocalBinder).getService()
+        locationSharingService = (binder as LocationSharingService.LocalBinder).getService().also {
+            it.callback = this
+        }
         isBound = true
         callback?.onLocationServiceRunning()
     }
 
     override fun onServiceDisconnected(className: ComponentName) {
         isBound = false
+        locationSharingService?.callback = null
         locationSharingService = null
         callback?.onLocationServiceStopped()
+    }
+
+    override fun onServiceError(error: Throwable) {
+        callback?.onLocationServiceError(error)
     }
 }

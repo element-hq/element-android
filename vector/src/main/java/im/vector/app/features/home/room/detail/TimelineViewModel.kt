@@ -1293,6 +1293,10 @@ class TimelineViewModel @AssistedInject constructor(
         locationSharingServiceConnection.bind(this)
     }
 
+    override fun onLocationServiceError(error: Throwable) {
+        _viewEvents.post(RoomDetailViewEvents.Failure(throwable = error, showInDialog = true))
+    }
+
     override fun onCleared() {
         timeline.dispose()
         timeline.removeAllListeners()

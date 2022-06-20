@@ -30,6 +30,7 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.room.location.UpdateLiveLocationShareResult
 import timber.log.Timber
 import java.util.Timer
 import java.util.TimerTask
@@ -54,8 +55,9 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
     /**
      * Keep track of a map between beacon event Id starting the live and RoomArgs.
      */
-    private var roomArgsMap = mutableMapOf<String, RoomArgs>()
-    private var timers = mutableListOf<Timer>()
+    private val roomArgsMap = mutableMapOf<String, RoomArgs>()
+    private val timers = mutableListOf<Timer>()
+    var callback: Callback? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -89,19 +91,27 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
     }
 
     private suspend fun sendStartingLiveBeaconInfo(session: Session, roomArgs: RoomArgs) {
-        val beaconEventId = session
+        val updateLiveResult = session
                 .getRoom(roomArgs.roomId)
                 ?.locationSharingService()
                 ?.startLiveLocationShare(timeoutMillis = roomArgs.durationMillis)
 
-        beaconEventId
-                ?.takeUnless { it.isEmpty() }
-                ?.let {
-                    roomArgsMap[it] = roomArgs
-                    locationTracker.requestLastKnownLocation()
+        updateLiveResult
+                ?.let { result ->
+                    when (result) {
+                        is UpdateLiveLocationShareResult.Success -> {
+                            roomArgsMap[result.beaconEventId] = roomArgs
+                            locationTracker.requestLastKnownLocation()
+                        }
+                        is UpdateLiveLocationShareResult.Failure -> {
+                            callback?.onServiceError(result.error)
+                            tryToDestroyMe()
+                        }
+                    }
                 }
                 ?: run {
                     Timber.w("### LocationSharingService.sendStartingLiveBeaconInfo error, no received beacon info id")
+                    tryToDestroyMe()
                 }
     }
 
@@ -123,28 +133,28 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
     fun stopSharingLocation(roomId: String) {
         Timber.i("### LocationSharingService.stopSharingLocation for $roomId")
 
-        // Send a new beacon info state by setting live field as false
-        sendStoppedBeaconInfo(roomId)
+        launchInIO { session ->
+            when (val result = sendStoppedBeaconInfo(session, roomId)) {
+                is UpdateLiveLocationShareResult.Success -> {
+                    synchronized(roomArgsMap) {
+                        val beaconIds = roomArgsMap
+                                .filter { it.value.roomId == roomId }
+                                .map { it.key }
+                        beaconIds.forEach { roomArgsMap.remove(it) }
 
-        synchronized(roomArgsMap) {
-            val beaconIds = roomArgsMap
-                    .filter { it.value.roomId == roomId }
-                    .map { it.key }
-            beaconIds.forEach { roomArgsMap.remove(it) }
-
-            if (roomArgsMap.isEmpty()) {
-                Timber.i("### LocationSharingService. Destroying self, time is up for all rooms")
-                destroyMe()
+                        tryToDestroyMe()
+                    }
+                }
+                is UpdateLiveLocationShareResult.Failure -> callback?.onServiceError(result.error)
+                else -> Unit
             }
         }
     }
 
-    private fun sendStoppedBeaconInfo(roomId: String) {
-        launchInIO { session ->
-            session.getRoom(roomId)
-                    ?.locationSharingService()
-                    ?.stopLiveLocationShare()
-        }
+    private suspend fun sendStoppedBeaconInfo(session: Session, roomId: String): UpdateLiveLocationShareResult? {
+        return session.getRoom(roomId)
+                ?.locationSharingService()
+                ?.stopLiveLocationShare()
     }
 
     override fun onLocationUpdate(locationData: LocationData) {
@@ -178,6 +188,13 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
         stopSelf()
     }
 
+    private fun tryToDestroyMe() {
+        if (roomArgsMap.isEmpty()) {
+            Timber.i("### LocationSharingService. Destroying self, time is up for all rooms")
+            destroyMe()
+        }
+    }
+
     private fun destroyMe() {
         locationTracker.removeCallback(this)
         timers.forEach { it.cancel() }
@@ -207,6 +224,10 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
 
     inner class LocalBinder : Binder() {
         fun getService(): LocationSharingService = this@LocationSharingService
+    }
+
+    interface Callback {
+        fun onServiceError(error: Throwable)
     }
 
     companion object {

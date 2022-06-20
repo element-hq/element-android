@@ -27,7 +27,7 @@ internal class FakeStateEventDataSource {
 
     val instance: StateEventDataSource = mockk()
 
-    fun givenGetStateEventReturns(event: Event) {
+    fun givenGetStateEventReturns(event: Event?) {
         every {
             instance.getStateEvent(
                     roomId = any(),
