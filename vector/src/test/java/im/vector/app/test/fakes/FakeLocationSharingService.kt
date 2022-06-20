@@ -27,10 +27,20 @@ import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationSh
 
 class FakeLocationSharingService : LocationSharingService by mockk() {
 
-    fun givenRunningLiveLocationShareSummaries(summaries: List<LiveLocationShareAggregatedSummary>):
-            LiveData<List<LiveLocationShareAggregatedSummary>> {
+    fun givenRunningLiveLocationShareSummaries(
+            summaries: List<LiveLocationShareAggregatedSummary>
+    ): LiveData<List<LiveLocationShareAggregatedSummary>> {
         return MutableLiveData(summaries).also {
             every { getRunningLiveLocationShareSummaries() } returns it
+        }
+    }
+
+    fun givenLiveLocationShareSummaries(
+            eventIds: List<String>,
+            summaries: List<LiveLocationShareAggregatedSummary>
+    ): LiveData<List<LiveLocationShareAggregatedSummary>> {
+        return MutableLiveData(summaries).also {
+            every { getLiveLocationShareSummaries(eventIds) } returns it
         }
     }
 
