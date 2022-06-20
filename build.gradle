@@ -43,7 +43,7 @@ plugins {
     id "io.gitlab.arturbosch.detekt" version "1.20.0"
 
     // Dependency Analysis
-    id 'com.autonomousapps.dependency-analysis' version "1.5.0"
+    id 'com.autonomousapps.dependency-analysis' version "1.6.0"
 }
 
 // https://github.com/jeremylong/DependencyCheck
