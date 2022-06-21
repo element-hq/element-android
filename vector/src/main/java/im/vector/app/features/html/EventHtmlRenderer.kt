@@ -26,12 +26,17 @@ import im.vector.app.features.settings.VectorPreferences
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
 import io.noties.markwon.MarkwonPlugin
+import io.noties.markwon.MarkwonPlugin.Registry
 import io.noties.markwon.PrecomputedFutureTextSetterCompat
 import io.noties.markwon.ext.latex.JLatexMathPlugin
 import io.noties.markwon.ext.latex.JLatexMathTheme
 import io.noties.markwon.html.HtmlPlugin
+import io.noties.markwon.inlineparser.HtmlInlineProcessor
+import io.noties.markwon.inlineparser.MarkwonInlineParser
 import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin
+import java.util.Collections
 import org.commonmark.node.Node
+import org.commonmark.parser.Parser
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -63,14 +68,28 @@ class EventHtmlRenderer @Inject constructor(
                                 }
                     }
                 })
-                .usePlugin(MarkwonInlineParserPlugin.create())
                 .usePlugin(JLatexMathPlugin.create(44F) { builder ->
                     builder.inlinesEnabled(true)
                     builder.theme().inlinePadding(JLatexMathTheme.Padding.symmetric(24, 8))
                 })
     } else {
         builder
-    }.textSetter(PrecomputedFutureTextSetterCompat.create()).build()
+    }
+        .usePlugin(MarkwonInlineParserPlugin.create(MarkwonInlineParser.factoryBuilderNoDefaults()))
+        .usePlugin(object : AbstractMarkwonPlugin() {
+            override fun configure(registry: Registry) {
+                registry.require(MarkwonInlineParserPlugin::class.java, { plugin: MarkwonInlineParserPlugin ->
+                    plugin.factoryBuilder().addInlineProcessor(HtmlInlineProcessor())
+                })
+            }
+        })
+        .usePlugin(object : AbstractMarkwonPlugin() {
+            override fun configureParser(builder: Parser.Builder) {
+                builder.enabledBlockTypes(Collections.emptySet())
+            }
+        })
+        .textSetter(PrecomputedFutureTextSetterCompat.create())
+        .build()
 
     val plugins: List<MarkwonPlugin> = markwon.plugins
 
