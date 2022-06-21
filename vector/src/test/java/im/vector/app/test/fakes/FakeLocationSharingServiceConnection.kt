@@ -34,16 +34,4 @@ class FakeLocationSharingServiceConnection {
     fun verifyBind(callback: LocationSharingServiceConnection.Callback) {
         verify { instance.bind(callback) }
     }
-
-    fun givenStopLiveLocationSharing() {
-        every { instance.stopLiveLocationSharing(any()) } just runs
-    }
-
-    fun verifyStopLiveLocationSharing(roomId: String) {
-        verify { instance.stopLiveLocationSharing(roomId) }
-    }
-
-    fun verifyStopLiveLocationSharingNotCalled(roomId: String) {
-        verify(inverse = true) { instance.stopLiveLocationSharing(roomId) }
-    }
 }

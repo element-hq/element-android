@@ -16,7 +16,6 @@
 
 package im.vector.app.features.location.live
 
-import im.vector.app.test.fakes.FakeLocationSharingServiceConnection
 import im.vector.app.test.fakes.FakeSession
 import io.mockk.unmockkAll
 import kotlinx.coroutines.test.runTest
@@ -30,11 +29,9 @@ private const val AN_EVENT_ID = "event_id"
 
 class StopLiveLocationShareUseCaseTest {
 
-    private val fakeLocationSharingServiceConnection = FakeLocationSharingServiceConnection()
     private val fakeSession = FakeSession()
 
     private val stopLiveLocationShareUseCase = StopLiveLocationShareUseCase(
-            locationSharingServiceConnection = fakeLocationSharingServiceConnection.instance,
             session = fakeSession
     )
 
@@ -45,7 +42,6 @@ class StopLiveLocationShareUseCaseTest {
 
     @Test
     fun `given a room id when calling use case then the current live is stopped with success`() = runTest {
-        fakeLocationSharingServiceConnection.givenStopLiveLocationSharing()
         val updateLiveResult = UpdateLiveLocationShareResult.Success(AN_EVENT_ID)
         fakeSession.roomService()
                 .getRoom(A_ROOM_ID)
@@ -55,7 +51,6 @@ class StopLiveLocationShareUseCaseTest {
         val result = stopLiveLocationShareUseCase.execute(A_ROOM_ID)
 
         result shouldBeEqualTo updateLiveResult
-        fakeLocationSharingServiceConnection.verifyStopLiveLocationSharing(A_ROOM_ID)
     }
 
     @Test
@@ -70,6 +65,5 @@ class StopLiveLocationShareUseCaseTest {
         val result = stopLiveLocationShareUseCase.execute(A_ROOM_ID)
 
         result shouldBeEqualTo updateLiveResult
-        fakeLocationSharingServiceConnection.verifyStopLiveLocationSharingNotCalled(A_ROOM_ID)
     }
 }

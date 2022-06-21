@@ -55,10 +55,6 @@ class LocationSharingServiceConnection @Inject constructor(
         removeCallback(callback)
     }
 
-    fun stopLiveLocationSharing(roomId: String) {
-        locationSharingService?.stopSharingLocation(roomId)
-    }
-
     override fun onServiceConnected(className: ComponentName, binder: IBinder) {
         locationSharingService = (binder as LocationSharingService.LocalBinder).getService().also {
             it.callback = this

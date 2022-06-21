@@ -18,22 +18,27 @@ package im.vector.app.features.location
 
 import android.content.Intent
 import android.os.Binder
+import android.os.Handler
 import android.os.IBinder
 import android.os.Parcelable
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.services.VectorService
+import im.vector.app.features.location.live.GetLiveLocationShareSummaryUseCase
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.location.UpdateLiveLocationShareResult
 import timber.log.Timber
-import java.util.Timer
-import java.util.TimerTask
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -49,6 +54,7 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
     @Inject lateinit var notificationUtils: NotificationUtils
     @Inject lateinit var locationTracker: LocationTracker
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
+    @Inject lateinit var getLiveLocationShareSummaryUseCase: GetLiveLocationShareSummaryUseCase
 
     private val binder = LocalBinder()
 
@@ -56,8 +62,9 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
      * Keep track of a map between beacon event Id starting the live and RoomArgs.
      */
     private val roomArgsMap = mutableMapOf<String, RoomArgs>()
-    private val timers = mutableListOf<Timer>()
     var callback: Callback? = null
+    private val jobs = mutableListOf<Job>()
+    private val mainHandler by lazy { Handler(mainLooper) }
 
     override fun onCreate() {
         super.onCreate()
@@ -77,9 +84,6 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
             // Show a sticky notification
             val notification = notificationUtils.buildLiveLocationSharingNotification()
             startForeground(roomArgs.roomId.hashCode(), notification)
-
-            // Schedule a timer to stop sharing
-            scheduleTimer(roomArgs.roomId, roomArgs.durationMillis)
 
             // Send beacon info state event
             launchInIO { session ->
@@ -101,6 +105,7 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
                     when (result) {
                         is UpdateLiveLocationShareResult.Success -> {
                             addRoomArgs(result.beaconEventId, roomArgs)
+                            listenForLiveSummaryChanges(roomArgs.roomId, result.beaconEventId)
                             locationTracker.requestLastKnownLocation()
                         }
                         is UpdateLiveLocationShareResult.Failure -> {
@@ -115,22 +120,7 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
                 }
     }
 
-    private fun scheduleTimer(roomId: String, durationMillis: Long) {
-        Timer()
-                .apply {
-                    schedule(object : TimerTask() {
-                        override fun run() {
-                            stopSharingLocation(roomId)
-                            timers.remove(this@apply)
-                        }
-                    }, durationMillis)
-                }
-                .also {
-                    timers.add(it)
-                }
-    }
-
-    fun stopSharingLocation(roomId: String) {
+    private fun stopSharingLocation(roomId: String) {
         Timber.i("### LocationSharingService.stopSharingLocation for $roomId")
         removeRoomArgs(roomId)
         tryToDestroyMe()
@@ -177,9 +167,9 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
     }
 
     private fun destroyMe() {
+        jobs.forEach { it.cancel() }
+        jobs.clear()
         locationTracker.removeCallback(this)
-        timers.forEach { it.cancel() }
-        timers.clear()
         stopSelf()
     }
 
@@ -200,6 +190,21 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
                 .filter { it.value.roomId == roomId }
                 .map { it.key }
         beaconIds.forEach { roomArgsMap.remove(it) }
+    }
+
+    private fun listenForLiveSummaryChanges(roomId: String, eventId: String) {
+        activeSessionHolder
+                .getSafeActiveSession()
+                ?.let { session ->
+                    mainHandler.post {
+                        val job = getLiveLocationShareSummaryUseCase.execute(roomId, eventId)
+                                .distinctUntilChangedBy { it.isActive }
+                                .filter { it.isActive == false }
+                                .onEach { stopSharingLocation(roomId) }
+                                .launchIn(session.coroutineScope)
+                        jobs.add(job)
+                    }
+                }
     }
 
     private fun launchInIO(block: suspend CoroutineScope.(Session) -> Unit) =

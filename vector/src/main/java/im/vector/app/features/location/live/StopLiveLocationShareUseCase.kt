@@ -16,24 +16,17 @@
 
 package im.vector.app.features.location.live
 
-import im.vector.app.features.location.LocationSharingServiceConnection
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.location.UpdateLiveLocationShareResult
 import javax.inject.Inject
 
 class StopLiveLocationShareUseCase @Inject constructor(
-        private val locationSharingServiceConnection: LocationSharingServiceConnection,
         private val session: Session
 ) {
 
     suspend fun execute(roomId: String): UpdateLiveLocationShareResult? {
-        val result = sendStoppedBeaconInfo(session, roomId)
-        when (result) {
-            is UpdateLiveLocationShareResult.Success -> locationSharingServiceConnection.stopLiveLocationSharing(roomId)
-            else -> Unit
-        }
-        return result
+        return sendStoppedBeaconInfo(session, roomId)
     }
 
     private suspend fun sendStoppedBeaconInfo(session: Session, roomId: String): UpdateLiveLocationShareResult? {
