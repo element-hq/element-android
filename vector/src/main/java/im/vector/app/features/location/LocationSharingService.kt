@@ -63,10 +63,11 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
     private val roomArgsMap = mutableMapOf<String, RoomArgs>()
     var callback: Callback? = null
     private val jobs = mutableListOf<Job>()
+    private var startInProgress = false
 
     override fun onCreate() {
         super.onCreate()
-        Timber.i("### LocationSharingService.onCreate")
+        Timber.i("onCreate")
 
         initLocationTracking()
     }
@@ -85,9 +86,11 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        startInProgress = true
+
         val roomArgs = intent?.getParcelableExtra(EXTRA_ROOM_ARGS) as? RoomArgs
 
-        Timber.i("### LocationSharingService.onStartCommand. sessionId - roomId ${roomArgs?.sessionId} - ${roomArgs?.roomId}")
+        Timber.i("onStartCommand. sessionId - roomId ${roomArgs?.sessionId} - ${roomArgs?.roomId}")
 
         if (roomArgs != null) {
             // Show a sticky notification
@@ -99,6 +102,8 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
                 sendStartingLiveBeaconInfo(session, roomArgs)
             }
         }
+
+        startInProgress = false
 
         return START_STICKY
     }
@@ -124,19 +129,19 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
                     }
                 }
                 ?: run {
-                    Timber.w("### LocationSharingService.sendStartingLiveBeaconInfo error, no received beacon info id")
+                    Timber.w("sendStartingLiveBeaconInfo error, no received beacon info id")
                     tryToDestroyMe()
                 }
     }
 
-    private fun stopSharingLocation(roomId: String) {
-        Timber.i("### LocationSharingService.stopSharingLocation for $roomId")
-        removeRoomArgs(roomId)
+    private fun stopSharingLocation(beaconEventId: String) {
+        Timber.i("stopSharingLocation for beacon $beaconEventId")
+        removeRoomArgs(beaconEventId)
         tryToDestroyMe()
     }
 
     private fun onLocationUpdate(locationData: LocationData) {
-        Timber.i("### LocationSharingService.onLocationUpdate. Uncertainty: ${locationData.uncertainty}")
+        Timber.i("onLocationUpdate. Uncertainty: ${locationData.uncertainty}")
 
         // Emit location update to all rooms in which live location sharing is active
         roomArgsMap.toMap().forEach { item ->
@@ -167,7 +172,7 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
     }
 
     private fun tryToDestroyMe() {
-        if (roomArgsMap.isEmpty()) {
+        if (startInProgress.not() && roomArgsMap.isEmpty()) {
             Timber.i("### LocationSharingService. Destroying self, time is up for all rooms")
             stopSelf()
         }
@@ -182,21 +187,21 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
     }
 
     private fun addRoomArgs(beaconEventId: String, roomArgs: RoomArgs) {
+        Timber.i("adding roomArgs for beaconEventId: $beaconEventId")
         roomArgsMap[beaconEventId] = roomArgs
     }
 
-    private fun removeRoomArgs(roomId: String) {
-        roomArgsMap.toMap()
-                .filter { it.value.roomId == roomId }
-                .forEach { roomArgsMap.remove(it.key) }
+    private fun removeRoomArgs(beaconEventId: String) {
+        Timber.i("removing roomArgs for beaconEventId: $beaconEventId")
+        roomArgsMap.remove(beaconEventId)
     }
 
-    private fun listenForLiveSummaryChanges(roomId: String, eventId: String) {
+    private fun listenForLiveSummaryChanges(roomId: String, beaconEventId: String) {
         launchWithActiveSession { session ->
-            val job = getLiveLocationShareSummaryUseCase.execute(roomId, eventId)
+            val job = getLiveLocationShareSummaryUseCase.execute(roomId, beaconEventId)
                     .distinctUntilChangedBy { it.isActive }
                     .filter { it.isActive == false }
-                    .onEach { stopSharingLocation(roomId) }
+                    .onEach { stopSharingLocation(beaconEventId) }
                     .launchIn(session.coroutineScope)
             jobs.add(job)
         }

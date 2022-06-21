@@ -16,17 +16,13 @@
 
 package org.matrix.android.sdk.internal.session.room.location
 
-import org.matrix.android.sdk.api.extensions.orFalse
-import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.location.UpdateLiveLocationShareResult
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
-import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.room.state.SendStateTask
-import org.matrix.android.sdk.internal.session.room.state.StateEventDataSource
 import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
 
@@ -36,14 +32,14 @@ internal interface StopLiveLocationShareTask : Task<StopLiveLocationShareTask.Pa
     )
 }
 
+// TODO update unit tests
 internal class DefaultStopLiveLocationShareTask @Inject constructor(
-        @UserId private val userId: String,
         private val sendStateTask: SendStateTask,
-        private val stateEventDataSource: StateEventDataSource,
+        private val getActiveBeaconInfoForUserTask: GetActiveBeaconInfoForUserTask,
 ) : StopLiveLocationShareTask {
 
     override suspend fun execute(params: StopLiveLocationShareTask.Params): UpdateLiveLocationShareResult {
-        val beaconInfoStateEvent = getLiveLocationBeaconInfoForUser(userId, params.roomId) ?: return getResultForIncorrectBeaconInfoEvent()
+        val beaconInfoStateEvent = getActiveLiveLocationBeaconInfoForUser(params.roomId) ?: return getResultForIncorrectBeaconInfoEvent()
         val stateKey = beaconInfoStateEvent.stateKey ?: return getResultForIncorrectBeaconInfoEvent()
         val content = beaconInfoStateEvent.getClearContent()?.toModel<MessageBeaconInfoContent>() ?: return getResultForIncorrectBeaconInfoEvent()
         val updatedContent = content.copy(isLive = false).toContent()
@@ -68,17 +64,10 @@ internal class DefaultStopLiveLocationShareTask @Inject constructor(
     private fun getResultForIncorrectBeaconInfoEvent() =
             UpdateLiveLocationShareResult.Failure(Exception("incorrect last beacon info event"))
 
-    private fun getLiveLocationBeaconInfoForUser(userId: String, roomId: String): Event? {
-        return EventType.STATE_ROOM_BEACON_INFO
-                .mapNotNull {
-                    stateEventDataSource.getStateEvent(
-                            roomId = roomId,
-                            eventType = it,
-                            stateKey = QueryStringValue.Equals(userId)
-                    )
-                }
-                .firstOrNull { beaconInfoEvent ->
-                    beaconInfoEvent.getClearContent()?.toModel<MessageBeaconInfoContent>()?.isLive.orFalse()
-                }
+    private suspend fun getActiveLiveLocationBeaconInfoForUser(roomId: String): Event? {
+        val params = GetActiveBeaconInfoForUserTask.Params(
+                roomId = roomId
+        )
+        return getActiveBeaconInfoForUserTask.execute(params)
     }
 }

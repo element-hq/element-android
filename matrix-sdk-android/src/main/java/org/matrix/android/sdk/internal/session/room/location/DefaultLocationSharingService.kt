@@ -41,6 +41,7 @@ internal class DefaultLocationSharingService @AssistedInject constructor(
         private val sendLiveLocationTask: SendLiveLocationTask,
         private val startLiveLocationShareTask: StartLiveLocationShareTask,
         private val stopLiveLocationShareTask: StopLiveLocationShareTask,
+        private val stopCheckIfExistingActiveLiveTask: CheckIfExistingActiveLiveTask,
         private val liveLocationShareAggregatedSummaryMapper: LiveLocationShareAggregatedSummaryMapper,
 ) : LocationSharingService {
 
@@ -72,11 +73,22 @@ internal class DefaultLocationSharingService @AssistedInject constructor(
     }
 
     override suspend fun startLiveLocationShare(timeoutMillis: Long): UpdateLiveLocationShareResult {
+        // Ensure to stop any active live before starting a new one
+        if (checkIfExistingActiveLive()) {
+            stopLiveLocationShare()
+        }
         val params = StartLiveLocationShareTask.Params(
                 roomId = roomId,
                 timeoutMillis = timeoutMillis
         )
         return startLiveLocationShareTask.execute(params)
+    }
+
+    private suspend fun checkIfExistingActiveLive(): Boolean {
+        val params = CheckIfExistingActiveLiveTask.Params(
+                roomId = roomId
+        )
+        return stopCheckIfExistingActiveLiveTask.execute(params)
     }
 
     override suspend fun stopLiveLocationShare(): UpdateLiveLocationShareResult {
