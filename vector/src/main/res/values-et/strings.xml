@@ -612,7 +612,7 @@
         <item quantity="other">%d suhtluskeelu saanud kasutajat</item>
     </plurals>
     <string name="room_settings_category_advanced_title">Lisaseadistused</string>
-    <string name="room_settings_room_internal_id">Selle jututoa sisemine tunnus</string>
+    <string name="room_settings_room_internal_id">Selle jututoa tehniline tunnus</string>
     <string name="room_settings_labs_pref_title">Katsed</string>
     <string name="room_settings_labs_warning_message">Need on alles katsejärgus olevad funktsionaalsused. Ole kasutamisel ettevaatlik.</string>
     <string name="encryption_information_decryption_error">Dekrüptimise viga</string>
@@ -1543,8 +1543,8 @@
     <string name="room_profile_section_more_settings">Jututubade seadistused</string>
     <string name="room_profile_section_more_notifications">Teavitused</string>
     <plurals name="room_profile_section_more_member_list">
-        <item quantity="one">Üks inimene</item>
-        <item quantity="other">%1$d inimest</item>
+        <item quantity="one">Üks osaleja</item>
+        <item quantity="other">%1$d osalejat</item>
     </plurals>
     <string name="room_profile_section_more_uploads">Üleslaaditud failid</string>
     <string name="room_profile_section_more_leave">Lahku jututoast</string>
