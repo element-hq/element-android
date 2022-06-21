@@ -56,7 +56,8 @@ internal class TimelineEventDataSource @Inject constructor(
         // TODO pretty bad query.. maybe we should denormalize clear type in base?
         return realmSessionProvider.withRealm { realm ->
             TimelineEventEntity.whereRoomId(realm, roomId)
-                    .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.ASCENDING)
+                    .sort(TimelineEventEntityFields.ROOT.ORIGIN_SERVER_TS, Sort.ASCENDING)
+                    .distinct(TimelineEventEntityFields.EVENT_ID)
                     .findAll()
                     ?.mapNotNull { timelineEventMapper.map(it).takeIf { it.root.isImageMessage() || it.root.isVideoMessage() } }
                     .orEmpty()

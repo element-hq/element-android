@@ -163,6 +163,8 @@ class TimelineForwardPaginationTest : InstrumentedTest {
             // Ask for a forward pagination
             val snapshot = runBlocking {
                 aliceTimeline.awaitPaginate(Timeline.Direction.FORWARDS, 50)
+                // We should paginate one more time to check we are at the end now that chunks are not merged.
+                aliceTimeline.awaitPaginate(Timeline.Direction.FORWARDS, 50)
             }
             // 7 for room creation item (backward pagination),and numberOfMessagesToSend (all the message of the room)
             snapshot.size == 7 + numberOfMessagesToSend &&

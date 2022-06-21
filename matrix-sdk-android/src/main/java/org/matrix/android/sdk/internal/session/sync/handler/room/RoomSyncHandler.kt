@@ -57,6 +57,7 @@ import org.matrix.android.sdk.internal.database.model.deleteOnCascade
 import org.matrix.android.sdk.internal.database.model.threads.ThreadSummaryEntity
 import org.matrix.android.sdk.internal.database.query.copyToRealmOrIgnore
 import org.matrix.android.sdk.internal.database.query.find
+import org.matrix.android.sdk.internal.database.query.findAll
 import org.matrix.android.sdk.internal.database.query.findLastForwardChunkOfRoom
 import org.matrix.android.sdk.internal.database.query.findLastForwardChunkOfThread
 import org.matrix.android.sdk.internal.database.query.getOrCreate
@@ -381,12 +382,13 @@ internal class RoomSyncHandler @Inject constructor(
             aggregator: SyncResponsePostTreatmentAggregator
     ): ChunkEntity {
         val lastChunk = ChunkEntity.findLastForwardChunkOfRoom(realm, roomEntity.roomId)
-        if (isLimited && lastChunk != null) {
-            lastChunk.deleteOnCascade(deleteStateEvents = false, canDeleteRoot = true)
-        }
         val chunkEntity = if (!isLimited && lastChunk != null) {
             lastChunk
         } else {
+            // Delete all chunks of the room in case of gap.
+            ChunkEntity.findAll(realm, roomId).forEach {
+                it.deleteOnCascade(deleteStateEvents = false, canDeleteRoot = true)
+            }
             realm.createObject<ChunkEntity>().apply {
                 this.prevToken = prevToken
                 this.isLastForward = true
