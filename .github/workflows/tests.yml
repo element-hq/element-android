@@ -49,7 +49,10 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           emulator-build: 7425822
-          script: ./gradlew theCodeCoverageReport -Pandroid.testInstrumentationRunnerArguments.notPackage=im.vector.app.ui --stacktrace $CI_GRADLE_ARG_PROPERTIES
+          script: | 
+            ./gradlew unitTestsWithCoverage --stacktrace $CI_GRADLE_ARG_PROPERTIES
+            ./gradlew instrumentationTestsWithCoverage --stacktrace $CI_GRADLE_ARG_PROPERTIES
+            ./gradlew generateCoverageReport --stacktrace $CI_GRADLE_ARG_PROPERTIES
 # NB: continue-on-error marks steps.tests.conclusion = 'success' but leaves stes.tests.outcome = 'failure'
       - name: Run all the codecoverage tests at once (retry if emulator failed)
         uses: reactivecircus/android-emulator-runner@v2
@@ -62,7 +65,10 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           emulator-build: 7425822
-          script: ./gradlew theCodeCoverageReport -Pandroid.testInstrumentationRunnerArguments.notPackage=im.vector.app.ui --stacktrace $CI_GRADLE_ARG_PROPERTIES
+          script: |
+            ./gradlew unitTestsWithCoverage --stacktrace $CI_GRADLE_ARG_PROPERTIES
+            ./gradlew instrumentationTestsWithCoverage --stacktrace $CI_GRADLE_ARG_PROPERTIES
+            ./gradlew generateCoverageReport --stacktrace $CI_GRADLE_ARG_PROPERTIES
       - run: ./gradlew sonarqube $CI_GRADLE_ARG_PROPERTIES
         if: always() # we may have failed a previous step and retried, that's OK
         env:
