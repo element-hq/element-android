@@ -37,7 +37,8 @@ internal class MigrateSessionTo030(realm: DynamicRealm) : RealmMigrator(realm, 3
         chunks.forEach { chunk ->
             chunk.getList(ChunkEntityFields.TIMELINE_EVENTS.`$`).clearWith { timelineEvent ->
                 // Don't delete state events
-                if (timelineEvent.isNull(TimelineEventEntityFields.ROOT.STATE_KEY)) {
+                val stateField = TimelineEventEntityFields.ROOT.STATE_KEY
+                if (timelineEvent.hasField(stateField) && timelineEvent.isNull(stateField)) {
                     timelineEvent.getObject(TimelineEventEntityFields.ROOT.`$`)?.deleteFromRealm()
                     timelineEvent.deleteFromRealm()
                 }
