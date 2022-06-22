@@ -241,4 +241,28 @@ class PollItemFactoryTest {
                     }
         }
     }
+
+    @Test
+    fun `given an ended poll then all option view states is Ended`() = runTest {
+        with(pollItemFactory) {
+            A_POLL_CONTENT
+                    .getBestPollCreationInfo()
+                    ?.answers
+                    ?.mapToOptions(PollState.Ended, A_MESSAGE_INFORMATION_DATA)
+                    ?.forEachIndexed { index, pollOptionViewState ->
+                        A_POLL_CONTENT.getBestPollCreationInfo()?.answers?.get(index)?.let { option ->
+                            val voteSummary = A_MESSAGE_INFORMATION_DATA.pollResponseAggregatedSummary?.votes?.get(option.id)
+                            val voteCount = A_MESSAGE_INFORMATION_DATA.pollResponseAggregatedSummary?.totalVotes ?: 0
+                            val winnerVoteCount = A_MESSAGE_INFORMATION_DATA.pollResponseAggregatedSummary?.winnerVoteCount ?: 0
+                            pollOptionViewState shouldBeEqualTo PollOptionViewState.PollEnded(
+                                    optionId = option.id ?: "",
+                                    optionAnswer = option.getBestAnswer() ?: "",
+                                    voteCount = voteCount,
+                                    votePercentage = voteSummary?.percentage ?: 0.0,
+                                    isWinner = winnerVoteCount != 0 && voteCount == winnerVoteCount,
+                            )
+                        }
+                    }
+        }
+    }
 }
