@@ -154,4 +154,19 @@ class PollItemFactoryTest {
                 pollContent = disclosedPollContent,
         ) shouldBeEqualTo PollState.Voted(1)
     }
+
+    @Test
+    fun `given a sent poll when poll type is disclosed then PollState is Ready`() = runTest {
+        val disclosedPollContent = A_POLL_CONTENT.copy(
+                unstablePollCreationInfo = A_POLL_CONTENT.getBestPollCreationInfo()?.copy(
+                        kind = PollType.DISCLOSED_UNSTABLE
+                )
+        )
+
+        pollItemFactory.createPollState(
+                informationData = A_MESSAGE_INFORMATION_DATA,
+                pollResponseSummary = A_POLL_RESPONSE_DATA,
+                pollContent = disclosedPollContent,
+        ) shouldBe PollState.Ready
+    }
 }
