@@ -200,4 +200,26 @@ class PollItemFactoryTest {
                     }
         }
     }
+
+    @Test
+    fun `given a sent poll when a vote is cast then all option view states is PollVoted`() = runTest {
+        with(pollItemFactory) {
+            A_POLL_CONTENT
+                    .getBestPollCreationInfo()
+                    ?.answers
+                    ?.mapToOptions(PollState.Voted(1), A_MESSAGE_INFORMATION_DATA)
+                    ?.forEachIndexed { index, pollOptionViewState ->
+                        A_POLL_CONTENT.getBestPollCreationInfo()?.answers?.get(index)?.let { option ->
+                            val voteSummary = A_MESSAGE_INFORMATION_DATA.pollResponseAggregatedSummary?.votes?.get(option.id)
+                            pollOptionViewState shouldBeEqualTo PollOptionViewState.PollVoted(
+                                    optionId = option.id ?: "",
+                                    optionAnswer = option.getBestAnswer() ?: "",
+                                    voteCount = A_MESSAGE_INFORMATION_DATA.pollResponseAggregatedSummary?.totalVotes ?: 0,
+                                    votePercentage = voteSummary?.percentage ?: 0.0,
+                                    isSelected = A_MESSAGE_INFORMATION_DATA.pollResponseAggregatedSummary?.myVote == option.id,
+                            )
+                        }
+                    }
+        }
+    }
 }
