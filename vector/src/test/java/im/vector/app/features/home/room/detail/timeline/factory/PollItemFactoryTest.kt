@@ -20,14 +20,17 @@ import com.airbnb.mvrx.test.MvRxTestRule
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.app.features.home.room.detail.timeline.item.ReactionsSummaryData
 import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
+import im.vector.app.features.poll.PollState
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
+import org.amshove.kluent.shouldBe
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.send.SendState
 
 private val A_MESSAGE_INFORMATION_DATA = MessageInformationData(
@@ -69,7 +72,11 @@ class PollItemFactoryTest {
     }
 
     @Test
-    fun `given ` = runTest {
-
+    fun `given a sending poll state then returns PollState as Sending`() = runTest {
+        pollItemFactory.createPollState(
+                informationData = A_MESSAGE_INFORMATION_DATA,
+                pollResponseSummary = null,
+                pollContent = MessagePollContent()
+        ) shouldBe PollState.Sending
     }
 }

@@ -73,8 +73,8 @@ class PollItemFactory @Inject constructor(
                 .callback(callback)
     }
 
-    @VisibleForTesting
-    private fun createPollState(
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    internal fun createPollState(
             informationData: MessageInformationData,
             pollResponseSummary: PollResponseData?,
             pollContent: MessagePollContent,
@@ -86,8 +86,8 @@ class PollItemFactory @Inject constructor(
         else -> PollState.Ready
     }
 
-    @VisibleForTesting
-    private fun List<PollAnswer>.mapToOptions(
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    internal fun List<PollAnswer>.mapToOptions(
             pollState: PollState,
             informationData: MessageInformationData,
     ) = map { answer ->
