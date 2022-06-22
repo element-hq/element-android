@@ -33,7 +33,6 @@ internal interface GetActiveBeaconInfoForUserTask : Task<GetActiveBeaconInfoForU
     )
 }
 
-// TODO unit tests
 internal class DefaultGetActiveBeaconInfoForUserTask @Inject constructor(
         @UserId private val userId: String,
         private val stateEventDataSource: StateEventDataSource,

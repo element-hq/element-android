@@ -60,6 +60,7 @@ internal class DefaultLocationSharingServiceTest {
     private val sendLiveLocationTask = mockk<SendLiveLocationTask>()
     private val startLiveLocationShareTask = mockk<StartLiveLocationShareTask>()
     private val stopLiveLocationShareTask = mockk<StopLiveLocationShareTask>()
+    private val checkIfExistingActiveLiveTask = mockk<CheckIfExistingActiveLiveTask>()
     private val fakeLiveLocationShareAggregatedSummaryMapper = mockk<LiveLocationShareAggregatedSummaryMapper>()
 
     private val defaultLocationSharingService = DefaultLocationSharingService(
@@ -69,6 +70,7 @@ internal class DefaultLocationSharingServiceTest {
             sendLiveLocationTask = sendLiveLocationTask,
             startLiveLocationShareTask = startLiveLocationShareTask,
             stopLiveLocationShareTask = stopLiveLocationShareTask,
+            checkIfExistingActiveLiveTask = checkIfExistingActiveLiveTask,
             liveLocationShareAggregatedSummaryMapper = fakeLiveLocationShareAggregatedSummaryMapper
     )
 
@@ -130,17 +132,65 @@ internal class DefaultLocationSharingServiceTest {
     }
 
     @Test
-    fun `live location share can be started with a given timeout`() = runTest {
+    fun `given existing active live can be stopped when starting a live then the current live is stopped and the new live is started`() = runTest {
+        coEvery { checkIfExistingActiveLiveTask.execute(any()) } returns true
+        coEvery { stopLiveLocationShareTask.execute(any()) } returns UpdateLiveLocationShareResult.Success("stopped-event-id")
         coEvery { startLiveLocationShareTask.execute(any()) } returns UpdateLiveLocationShareResult.Success(AN_EVENT_ID)
 
         val result = defaultLocationSharingService.startLiveLocationShare(A_TIMEOUT)
 
         result shouldBeEqualTo UpdateLiveLocationShareResult.Success(AN_EVENT_ID)
-        val expectedParams = StartLiveLocationShareTask.Params(
+        val expectedCheckExistingParams = CheckIfExistingActiveLiveTask.Params(
+                roomId = A_ROOM_ID
+        )
+        coVerify { checkIfExistingActiveLiveTask.execute(expectedCheckExistingParams) }
+        val expectedStopParams = StopLiveLocationShareTask.Params(
+                roomId = A_ROOM_ID
+        )
+        coVerify { stopLiveLocationShareTask.execute(expectedStopParams) }
+        val expectedStartParams = StartLiveLocationShareTask.Params(
                 roomId = A_ROOM_ID,
                 timeoutMillis = A_TIMEOUT
         )
-        coVerify { startLiveLocationShareTask.execute(expectedParams) }
+        coVerify { startLiveLocationShareTask.execute(expectedStartParams) }
+    }
+
+    @Test
+    fun `given existing active live cannot be stopped when starting a live then the result is failure`() = runTest {
+        coEvery { checkIfExistingActiveLiveTask.execute(any()) } returns true
+        val error = Throwable()
+        coEvery { stopLiveLocationShareTask.execute(any()) } returns UpdateLiveLocationShareResult.Failure(error)
+
+        val result = defaultLocationSharingService.startLiveLocationShare(A_TIMEOUT)
+
+        result shouldBeEqualTo UpdateLiveLocationShareResult.Failure(error)
+        val expectedCheckExistingParams = CheckIfExistingActiveLiveTask.Params(
+                roomId = A_ROOM_ID
+        )
+        coVerify { checkIfExistingActiveLiveTask.execute(expectedCheckExistingParams) }
+        val expectedStopParams = StopLiveLocationShareTask.Params(
+                roomId = A_ROOM_ID
+        )
+        coVerify { stopLiveLocationShareTask.execute(expectedStopParams) }
+    }
+
+    @Test
+    fun `given no existing active live when starting a live then the new live is started`() = runTest {
+        coEvery { checkIfExistingActiveLiveTask.execute(any()) } returns false
+        coEvery { startLiveLocationShareTask.execute(any()) } returns UpdateLiveLocationShareResult.Success(AN_EVENT_ID)
+
+        val result = defaultLocationSharingService.startLiveLocationShare(A_TIMEOUT)
+
+        result shouldBeEqualTo UpdateLiveLocationShareResult.Success(AN_EVENT_ID)
+        val expectedCheckExistingParams = CheckIfExistingActiveLiveTask.Params(
+                roomId = A_ROOM_ID
+        )
+        coVerify { checkIfExistingActiveLiveTask.execute(expectedCheckExistingParams) }
+        val expectedStartParams = StartLiveLocationShareTask.Params(
+                roomId = A_ROOM_ID,
+                timeoutMillis = A_TIMEOUT
+        )
+        coVerify { startLiveLocationShareTask.execute(expectedStartParams) }
     }
 
     @Test

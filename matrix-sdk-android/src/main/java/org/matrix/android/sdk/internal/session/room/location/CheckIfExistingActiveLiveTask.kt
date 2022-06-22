@@ -28,7 +28,6 @@ internal interface CheckIfExistingActiveLiveTask : Task<CheckIfExistingActiveLiv
     )
 }
 
-// TODO unit tests
 internal class DefaultCheckIfExistingActiveLiveTask @Inject constructor(
         private val getActiveBeaconInfoForUserTask: GetActiveBeaconInfoForUserTask,
 ) : CheckIfExistingActiveLiveTask {

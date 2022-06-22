@@ -32,7 +32,6 @@ internal interface StopLiveLocationShareTask : Task<StopLiveLocationShareTask.Pa
     )
 }
 
-// TODO update unit tests
 internal class DefaultStopLiveLocationShareTask @Inject constructor(
         private val sendStateTask: SendStateTask,
         private val getActiveBeaconInfoForUserTask: GetActiveBeaconInfoForUserTask,
