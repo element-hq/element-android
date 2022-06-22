@@ -32,6 +32,10 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
+import org.matrix.android.sdk.api.session.room.model.message.PollAnswer
+import org.matrix.android.sdk.api.session.room.model.message.PollCreationInfo
+import org.matrix.android.sdk.api.session.room.model.message.PollQuestion
+import org.matrix.android.sdk.api.session.room.model.message.PollType
 import org.matrix.android.sdk.api.session.room.send.SendState
 
 private val A_MESSAGE_INFORMATION_DATA = MessageInformationData(
@@ -48,6 +52,30 @@ private val A_MESSAGE_INFORMATION_DATA = MessageInformationData(
 private val A_POLL_RESPONSE_DATA = PollResponseData(
         myVote = null,
         votes = emptyMap(),
+)
+
+private val A_POLL_CONTENT = MessagePollContent(
+        unstablePollCreationInfo = PollCreationInfo(
+                question = PollQuestion(
+                        unstableQuestion = "What is your favourite coffee?"
+                ),
+                kind = PollType.UNDISCLOSED_UNSTABLE,
+                maxSelections = 1,
+                answers = listOf(
+                        PollAnswer(
+                                id = "5ef5f7b0-c9a1-49cf-a0b3-374729a43e76",
+                                unstableAnswer = "Double Espresso"
+                        ),
+                        PollAnswer(
+                                id = "ec1a4db0-46d8-4d7a-9bb6-d80724715938",
+                                unstableAnswer = "Macchiato"
+                        ),
+                        PollAnswer(
+                                id = "3677ca8e-061b-40ab-bffe-b22e4e88fcad",
+                                unstableAnswer = "Iced Coffee"
+                        ),
+                )
+        )
 )
 
 class PollItemFactoryTest {
@@ -83,7 +111,7 @@ class PollItemFactoryTest {
         pollItemFactory.createPollState(
                 informationData = sendingPollInformationData,
                 pollResponseSummary = A_POLL_RESPONSE_DATA,
-                pollContent = MessagePollContent()
+                pollContent = A_POLL_CONTENT
         ) shouldBe PollState.Sending
     }
 
@@ -94,7 +122,16 @@ class PollItemFactoryTest {
         pollItemFactory.createPollState(
                 informationData = A_MESSAGE_INFORMATION_DATA,
                 pollResponseSummary = closedPollSummary,
-                pollContent = MessagePollContent()
+                pollContent = A_POLL_CONTENT
         ) shouldBe PollState.Ended
+    }
+
+    @Test
+    fun `given a sent poll when undisclosed poll type is selected then PollState is Undisclosed`() = runTest {
+        pollItemFactory.createPollState(
+                informationData = A_MESSAGE_INFORMATION_DATA,
+                pollResponseSummary = A_POLL_RESPONSE_DATA,
+                pollContent = A_POLL_CONTENT
+        ) shouldBe PollState.Undisclosed
     }
 }

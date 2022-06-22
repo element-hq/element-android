@@ -81,7 +81,7 @@ class PollItemFactory @Inject constructor(
     ): PollState = when {
         !informationData.sendState.isSent() -> PollState.Sending
         pollResponseSummary?.isClosed.orFalse() -> PollState.Ended
-        pollContent.getBestPollCreationInfo()?.kind == PollType.UNDISCLOSED -> PollState.Undisclosed
+        pollContent.getBestPollCreationInfo()?.isUndisclosed().orFalse() -> PollState.Undisclosed
         pollResponseSummary?.myVote?.isNotEmpty().orFalse() -> PollState.Voted(pollResponseSummary?.totalVotes ?: 0)
         else -> PollState.Ready
     }
