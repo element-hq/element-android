@@ -222,4 +222,23 @@ class PollItemFactoryTest {
                     }
         }
     }
+
+    @Test
+    fun `given a sent poll when the poll is undisclosed then all option view states is PollUndisclosed`() = runTest {
+        with(pollItemFactory) {
+            A_POLL_CONTENT
+                    .getBestPollCreationInfo()
+                    ?.answers
+                    ?.mapToOptions(PollState.Undisclosed, A_MESSAGE_INFORMATION_DATA)
+                    ?.forEachIndexed { index, pollOptionViewState ->
+                        A_POLL_CONTENT.getBestPollCreationInfo()?.answers?.get(index)?.let { option ->
+                            pollOptionViewState shouldBeEqualTo PollOptionViewState.PollUndisclosed(
+                                    optionId = option.id ?: "",
+                                    optionAnswer = option.getBestAnswer() ?: "",
+                                    isSelected = A_MESSAGE_INFORMATION_DATA.pollResponseAggregatedSummary?.myVote == option.id,
+                            )
+                        }
+                    }
+        }
+    }
 }
