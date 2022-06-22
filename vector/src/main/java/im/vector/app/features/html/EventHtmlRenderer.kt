@@ -34,10 +34,10 @@ import io.noties.markwon.html.HtmlPlugin
 import io.noties.markwon.inlineparser.HtmlInlineProcessor
 import io.noties.markwon.inlineparser.MarkwonInlineParser
 import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin
-import java.util.Collections
 import org.commonmark.node.Node
 import org.commonmark.parser.Parser
 import timber.log.Timber
+import java.util.Collections
 import javax.inject.Inject
 import javax.inject.Singleton
 
