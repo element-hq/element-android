@@ -185,4 +185,19 @@ class PollItemFactoryTest {
                     }
         }
     }
+
+    @Test
+    fun `given a sent poll then all option view states is PollReady`() = runTest {
+        with(pollItemFactory) {
+            A_POLL_CONTENT
+                    .getBestPollCreationInfo()
+                    ?.answers
+                    ?.mapToOptions(PollState.Sending, A_MESSAGE_INFORMATION_DATA)
+                    ?.forEachIndexed { index, pollOptionViewState ->
+                        A_POLL_CONTENT.getBestPollCreationInfo()?.answers?.get(index)?.let { option ->
+                            pollOptionViewState shouldBeEqualTo PollOptionViewState.PollSending(option.id ?: "", option.getBestAnswer() ?: "")
+                        }
+                    }
+        }
+    }
 }
