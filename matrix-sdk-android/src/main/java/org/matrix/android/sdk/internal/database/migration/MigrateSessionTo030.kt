@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.database.migration
 
 import io.realm.DynamicRealm
 import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
+import org.matrix.android.sdk.internal.database.model.EventEntityFields
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import org.matrix.android.sdk.internal.extensions.clearWith
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
@@ -37,8 +38,9 @@ internal class MigrateSessionTo030(realm: DynamicRealm) : RealmMigrator(realm, 3
         chunks.forEach { chunk ->
             chunk.getList(ChunkEntityFields.TIMELINE_EVENTS.`$`).clearWith { timelineEvent ->
                 // Don't delete state events
-                if (timelineEvent.isNull(TimelineEventEntityFields.ROOT.STATE_KEY)) {
-                    timelineEvent.getObject(TimelineEventEntityFields.ROOT.`$`)?.deleteFromRealm()
+                val event = timelineEvent.getObject(TimelineEventEntityFields.ROOT.`$`)
+                if (event?.isNull(EventEntityFields.STATE_KEY) == true) {
+                    event.deleteFromRealm()
                     timelineEvent.deleteFromRealm()
                 }
             }
