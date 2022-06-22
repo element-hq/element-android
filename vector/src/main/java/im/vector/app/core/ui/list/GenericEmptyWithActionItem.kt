@@ -27,6 +27,7 @@ import androidx.core.widget.ImageViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
@@ -35,7 +36,7 @@ import im.vector.app.core.extensions.setTextOrHide
 /**
  * A generic list item to display when there is no results, with an optional CTA.
  */
-@EpoxyModelClass(layout = R.layout.item_generic_empty_state)
+@EpoxyModelClass(layout = R2.layout.item_generic_empty_state)
 abstract class GenericEmptyWithActionItem : VectorEpoxyModel<GenericEmptyWithActionItem.Holder>() {
 
     @EpoxyAttribute

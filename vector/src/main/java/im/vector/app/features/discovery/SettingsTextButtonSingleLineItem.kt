@@ -28,6 +28,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import com.google.android.material.switchmaterial.SwitchMaterial
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.attributes.ButtonStyle
@@ -39,7 +40,7 @@ import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.themes.ThemeUtils
 
-@EpoxyModelClass(layout = R.layout.item_settings_button_single_line)
+@EpoxyModelClass(layout = R2.layout.item_settings_button_single_line)
 abstract class SettingsTextButtonSingleLineItem : EpoxyModelWithHolder<SettingsTextButtonSingleLineItem.Holder>() {
 
     @EpoxyAttribute

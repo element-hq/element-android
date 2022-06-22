@@ -25,6 +25,7 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.bumptech.glide.request.RequestOptions
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
@@ -43,7 +44,7 @@ import org.matrix.android.sdk.api.util.MatrixItem
 /**
  * A message preview for bottom sheet.
  */
-@EpoxyModelClass(layout = R.layout.item_bottom_sheet_message_preview)
+@EpoxyModelClass(layout = R2.layout.item_bottom_sheet_message_preview)
 abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessagePreviewItem.Holder>() {
 
     @EpoxyAttribute

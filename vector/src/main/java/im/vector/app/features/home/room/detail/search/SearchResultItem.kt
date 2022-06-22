@@ -23,6 +23,7 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
@@ -34,7 +35,7 @@ import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
 import org.matrix.android.sdk.api.session.threads.ThreadDetails
 import org.matrix.android.sdk.api.util.MatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_search_result)
+@EpoxyModelClass(layout = R2.layout.item_search_result)
 abstract class SearchResultItem : VectorEpoxyModel<SearchResultItem.Holder>() {
 
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer

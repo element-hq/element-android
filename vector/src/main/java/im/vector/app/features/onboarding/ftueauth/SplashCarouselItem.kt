@@ -21,10 +21,11 @@ import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 
-@EpoxyModelClass(layout = R.layout.item_splash_carousel)
+@EpoxyModelClass(layout = R2.layout.item_splash_carousel)
 abstract class SplashCarouselItem : VectorEpoxyModel<SplashCarouselItem.Holder>() {
 
     @EpoxyAttribute

@@ -23,13 +23,14 @@ import androidx.core.graphics.drawable.DrawableCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.features.themes.ThemeUtils
 
-@EpoxyModelClass(layout = R.layout.item_room_category)
+@EpoxyModelClass(layout = R2.layout.item_room_category)
 abstract class RoomCategoryItem : VectorEpoxyModel<RoomCategoryItem.Holder>() {
 
     @EpoxyAttribute lateinit var title: String

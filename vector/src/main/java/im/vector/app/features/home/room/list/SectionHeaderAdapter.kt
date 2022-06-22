@@ -23,6 +23,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.databinding.ItemRoomCategoryBinding
@@ -62,7 +63,7 @@ class SectionHeaderAdapter constructor(
 
     override fun getItemId(position: Int) = roomsSectionData.hashCode().toLong()
 
-    override fun getItemViewType(position: Int) = R.layout.item_room_category
+    override fun getItemViewType(position: Int) = R2.layout.item_room_category
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
         return VH.create(parent, onClickAction)
@@ -85,9 +86,9 @@ class SectionHeaderAdapter constructor(
 
         fun bind(roomsSectionData: RoomsSectionData) {
             binding.roomCategoryTitleView.text = roomsSectionData.name
-            val tintColor = ThemeUtils.getColor(binding.root.context, R.attr.vctr_content_secondary)
+            val tintColor = ThemeUtils.getColor(binding.root.context, R2.attr.vctr_content_secondary)
             val collapsableArrowDrawable: Drawable? = if (roomsSectionData.isCollapsable) {
-                val expandedArrowDrawableRes = if (roomsSectionData.isExpanded) R.drawable.ic_expand_more else R.drawable.ic_expand_less
+                val expandedArrowDrawableRes = if (roomsSectionData.isExpanded) R2.drawable.ic_expand_more else R2.drawable.ic_expand_less
                 ContextCompat.getDrawable(binding.root.context, expandedArrowDrawableRes)?.also {
                     DrawableCompat.setTint(it, tintColor)
                 }

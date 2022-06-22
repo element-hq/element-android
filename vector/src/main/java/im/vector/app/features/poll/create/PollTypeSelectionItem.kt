@@ -20,11 +20,12 @@ import android.widget.RadioGroup
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import org.matrix.android.sdk.api.session.room.model.message.PollType
 
-@EpoxyModelClass(layout = R.layout.item_poll_type_selection)
+@EpoxyModelClass(layout = R2.layout.item_poll_type_selection)
 abstract class PollTypeSelectionItem : VectorEpoxyModel<PollTypeSelectionItem.Holder>() {
 
     @EpoxyAttribute

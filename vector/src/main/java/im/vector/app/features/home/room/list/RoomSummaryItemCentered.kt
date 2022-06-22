@@ -25,7 +25,7 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.amulyakhare.textdrawable.TextDrawable
-import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
@@ -40,7 +40,7 @@ import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.presence.model.UserPresence
 import org.matrix.android.sdk.api.util.MatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_room_centered)
+@EpoxyModelClass(layout = R2.layout.item_room_centered)
 abstract class RoomSummaryItemCentered : VectorEpoxyModel<RoomSummaryItemCentered.Holder>() {
 
     @EpoxyAttribute
@@ -112,7 +112,7 @@ abstract class RoomSummaryItemCentered : VectorEpoxyModel<RoomSummaryItemCentere
     private fun renderSelection(holder: Holder, isSelected: Boolean) {
         if (isSelected) {
             holder.avatarCheckedImageView.visibility = View.VISIBLE
-            val backgroundColor = ThemeUtils.getColor(holder.view.context, R.attr.colorPrimary)
+            val backgroundColor = ThemeUtils.getColor(holder.view.context, R2.attr.colorPrimary)
             val backgroundDrawable = TextDrawable.builder().buildRound("", backgroundColor)
             holder.avatarImageView.setImageDrawable(backgroundDrawable)
         } else {
@@ -122,13 +122,13 @@ abstract class RoomSummaryItemCentered : VectorEpoxyModel<RoomSummaryItemCentere
     }
 
     class Holder : VectorEpoxyHolder() {
-        val titleView by bind<TextView>(R.id.roomNameView)
-        val avatarCheckedImageView by bind<ImageView>(R.id.roomAvatarCheckedImageView)
-        val avatarImageView by bind<ImageView>(R.id.roomAvatarImageView)
-        val roomAvatarDecorationImageView by bind<ShieldImageView>(R.id.roomAvatarDecorationImageView)
-        val roomAvatarPublicDecorationImageView by bind<ImageView>(R.id.roomAvatarPublicDecorationImageView)
-        val roomAvatarFailSendingImageView by bind<ImageView>(R.id.roomAvatarFailSendingImageView)
-        val roomAvatarPresenceImageView by bind<PresenceStateImageView>(R.id.roomAvatarPresenceImageView)
-        val rootView by bind<ConstraintLayout>(R.id.itemRoomLayout)
+        val titleView by bind<TextView>(R2.id.roomNameView)
+        val avatarCheckedImageView by bind<ImageView>(R2.id.roomAvatarCheckedImageView)
+        val avatarImageView by bind<ImageView>(R2.id.roomAvatarImageView)
+        val roomAvatarDecorationImageView by bind<ShieldImageView>(R2.id.roomAvatarDecorationImageView)
+        val roomAvatarPublicDecorationImageView by bind<ImageView>(R2.id.roomAvatarPublicDecorationImageView)
+        val roomAvatarFailSendingImageView by bind<ImageView>(R2.id.roomAvatarFailSendingImageView)
+        val roomAvatarPresenceImageView by bind<PresenceStateImageView>(R2.id.roomAvatarPresenceImageView)
+        val rootView by bind<ConstraintLayout>(R2.id.itemRoomLayout)
     }
 }

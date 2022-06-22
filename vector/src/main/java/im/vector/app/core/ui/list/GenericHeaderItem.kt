@@ -20,6 +20,7 @@ import androidx.annotation.ColorInt
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.extensions.setTextOrHide
@@ -28,7 +29,7 @@ import im.vector.app.features.themes.ThemeUtils
 /**
  * A generic list item header left aligned with notice color.
  */
-@EpoxyModelClass(layout = R.layout.item_generic_header)
+@EpoxyModelClass(layout = R2.layout.item_generic_header)
 abstract class GenericHeaderItem : VectorEpoxyModel<GenericHeaderItem.Holder>() {
 
     @EpoxyAttribute

@@ -26,6 +26,7 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
@@ -34,7 +35,7 @@ import im.vector.app.core.platform.CheckableConstraintLayout
 import im.vector.app.features.home.room.list.UnreadCounterBadgeView
 import im.vector.app.features.themes.ThemeUtils
 
-@EpoxyModelClass(layout = R.layout.item_space)
+@EpoxyModelClass(layout = R2.layout.item_space)
 abstract class HomeSpaceSummaryItem : VectorEpoxyModel<HomeSpaceSummaryItem.Holder>() {
 
     @EpoxyAttribute var selected: Boolean = false

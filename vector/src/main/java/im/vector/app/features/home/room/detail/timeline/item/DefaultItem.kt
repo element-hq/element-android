@@ -22,9 +22,10 @@ import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.features.home.AvatarRenderer
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_base_noinfo)
+@EpoxyModelClass(layout = R2.layout.item_timeline_event_base_noinfo)
 abstract class DefaultItem : BaseEventItem<DefaultItem.Holder>() {
 
     @EpoxyAttribute
@@ -61,6 +62,6 @@ abstract class DefaultItem : BaseEventItem<DefaultItem.Holder>() {
     )
 
     companion object {
-        private const val STUB_ID = R.id.messageContentDefaultStub
+        private val STUB_ID = R.id.messageContentDefaultStub
     }
 }

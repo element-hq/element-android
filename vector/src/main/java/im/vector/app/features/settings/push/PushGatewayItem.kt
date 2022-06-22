@@ -22,11 +22,12 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.extensions.setTextOrHide
 import org.matrix.android.sdk.api.session.pushers.Pusher
 
-@EpoxyModelClass(layout = R.layout.item_pushgateway)
+@EpoxyModelClass(layout = R2.layout.item_pushgateway)
 abstract class PushGatewayItem : EpoxyModelWithHolder<PushGatewayItem.Holder>() {
 
     @EpoxyAttribute

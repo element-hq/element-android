@@ -20,6 +20,7 @@ import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.extensions.setTextOrHide
@@ -27,7 +28,7 @@ import im.vector.app.core.extensions.setTextOrHide
 /**
  * A title for bottom sheet, with an optional subtitle. It does not include the bottom separator.
  */
-@EpoxyModelClass(layout = R.layout.item_bottom_sheet_title)
+@EpoxyModelClass(layout = R2.layout.item_bottom_sheet_title)
 abstract class BottomSheetTitleItem : VectorEpoxyModel<BottomSheetTitleItem.Holder>() {
 
     @EpoxyAttribute

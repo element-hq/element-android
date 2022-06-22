@@ -21,6 +21,7 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.google.android.material.button.MaterialButton
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
@@ -29,7 +30,7 @@ import im.vector.app.core.epoxy.onClick
 /**
  * A generic button list item.
  */
-@EpoxyModelClass(layout = R.layout.item_positive_button)
+@EpoxyModelClass(layout = R2.layout.item_positive_button)
 abstract class GenericPositiveButtonItem : VectorEpoxyModel<GenericPositiveButtonItem.Holder>() {
 
     @EpoxyAttribute

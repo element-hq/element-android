@@ -20,11 +20,12 @@ import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.extensions.setTextOrHide
 
-@EpoxyModelClass(layout = R.layout.item_space_top_summary)
+@EpoxyModelClass(layout = R2.layout.item_space_top_summary)
 abstract class SpaceTopSummaryItem : VectorEpoxyModel<SpaceTopSummaryItem.Holder>() {
 
     @EpoxyAttribute

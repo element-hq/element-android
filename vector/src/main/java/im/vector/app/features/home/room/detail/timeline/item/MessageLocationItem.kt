@@ -18,8 +18,9 @@ package im.vector.app.features.home.room.detail.timeline.item
 
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_base)
+@EpoxyModelClass(layout = R2.layout.item_timeline_event_base)
 abstract class MessageLocationItem : AbsMessageLocationItem<MessageLocationItem.Holder>() {
 
     override fun getViewStubId() = STUB_ID
@@ -27,6 +28,6 @@ abstract class MessageLocationItem : AbsMessageLocationItem<MessageLocationItem.
     class Holder : AbsMessageLocationItem.Holder(STUB_ID)
 
     companion object {
-        private const val STUB_ID = R.id.messageContentLocationStub
+        private val STUB_ID = R.id.messageContentLocationStub
     }
 }

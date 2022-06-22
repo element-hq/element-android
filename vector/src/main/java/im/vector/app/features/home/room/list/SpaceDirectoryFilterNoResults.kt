@@ -17,11 +17,11 @@
 package im.vector.app.features.home.room.list
 
 import com.airbnb.epoxy.EpoxyModelClass
-import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 
-@EpoxyModelClass(layout = R.layout.item_space_directory_filter_no_results)
+@EpoxyModelClass(layout = R2.layout.item_space_directory_filter_no_results)
 abstract class SpaceDirectoryFilterNoResults : VectorEpoxyModel<SpaceDirectoryFilterNoResults.Holder>() {
     class Holder : VectorEpoxyHolder()
 }

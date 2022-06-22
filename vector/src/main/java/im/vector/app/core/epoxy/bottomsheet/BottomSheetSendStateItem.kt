@@ -23,13 +23,14 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 
 /**
  * A send state for bottom sheet.
  */
-@EpoxyModelClass(layout = R.layout.item_bottom_sheet_message_status)
+@EpoxyModelClass(layout = R2.layout.item_bottom_sheet_message_status)
 abstract class BottomSheetSendStateItem : VectorEpoxyModel<BottomSheetSendStateItem.Holder>() {
 
     @EpoxyAttribute

@@ -26,12 +26,13 @@ import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_base_state)
+@EpoxyModelClass(layout = R2.layout.item_timeline_event_base_state)
 abstract class StatusTileTimelineItem : AbsBaseMessageItem<StatusTileTimelineItem.Holder>() {
 
     override val baseAttributes: AbsBaseMessageItem.Attributes
@@ -76,7 +77,7 @@ abstract class StatusTileTimelineItem : AbsBaseMessageItem<StatusTileTimelineIte
     }
 
     companion object {
-        private const val STUB_ID = R.id.messageVerificationDoneStub
+        private val STUB_ID = R.id.messageVerificationDoneStub
     }
 
     /**

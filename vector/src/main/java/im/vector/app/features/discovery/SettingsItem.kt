@@ -23,12 +23,13 @@ import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import com.google.android.material.switchmaterial.SwitchMaterial
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 
-@EpoxyModelClass(layout = R.layout.item_settings_simple_item)
+@EpoxyModelClass(layout = R2.layout.item_settings_simple_item)
 abstract class SettingsItem : EpoxyModelWithHolder<SettingsItem.Holder>() {
 
     @EpoxyAttribute

@@ -20,8 +20,9 @@ import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 
-@EpoxyModelClass(layout = R.layout.item_help_footer)
+@EpoxyModelClass(layout = R2.layout.item_help_footer)
 abstract class HelpFooterItem : VectorEpoxyModel<HelpFooterItem.Holder>() {
 
     @EpoxyAttribute

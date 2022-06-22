@@ -20,6 +20,7 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.resources.toTimestamp
@@ -30,7 +31,7 @@ import im.vector.app.features.location.live.LocationLiveMessageBannerView
 import im.vector.app.features.location.live.LocationLiveMessageBannerViewState
 import org.threeten.bp.LocalDateTime
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_base)
+@EpoxyModelClass(layout = R2.layout.item_timeline_event_base)
 abstract class MessageLiveLocationItem : AbsMessageLocationItem<MessageLiveLocationItem.Holder>() {
 
     @EpoxyAttribute
@@ -116,6 +117,6 @@ abstract class MessageLiveLocationItem : AbsMessageLocationItem<MessageLiveLocat
     }
 
     companion object {
-        private const val STUB_ID = R.id.messageContentLiveLocationStub
+        private val STUB_ID = R.id.messageContentLiveLocationStub
     }
 }

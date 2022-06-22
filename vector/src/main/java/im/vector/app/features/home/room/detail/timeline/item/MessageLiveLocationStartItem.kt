@@ -20,8 +20,9 @@ import android.widget.ImageView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_base)
+@EpoxyModelClass(layout = R2.layout.item_timeline_event_base)
 abstract class MessageLiveLocationStartItem :
         AbsMessageItem<MessageLiveLocationStartItem.Holder>(),
         LiveLocationShareStatusItem by DefaultLiveLocationShareStatusItem() {
@@ -47,6 +48,6 @@ abstract class MessageLiveLocationStartItem :
     }
 
     companion object {
-        private const val STUB_ID = R.id.messageContentLiveLocationStartStub
+        private val STUB_ID = R.id.messageContentLiveLocationStartStub
     }
 }

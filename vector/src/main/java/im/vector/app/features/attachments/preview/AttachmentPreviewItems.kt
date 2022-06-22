@@ -23,7 +23,7 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.platform.CheckableImageView
@@ -42,7 +42,7 @@ abstract class AttachmentPreviewItem<H : AttachmentPreviewItem.Holder> : VectorE
                     .apply(RequestOptions().frame(0))
                     .into(holder.imageView)
         } else {
-            holder.imageView.setImageResource(R.drawable.filetype_attachment)
+            holder.imageView.setImageResource(R2.drawable.filetype_attachment)
             holder.imageView.scaleType = ImageView.ScaleType.FIT_CENTER
         }
     }
@@ -52,7 +52,7 @@ abstract class AttachmentPreviewItem<H : AttachmentPreviewItem.Holder> : VectorE
     }
 }
 
-@EpoxyModelClass(layout = R.layout.item_attachment_miniature_preview)
+@EpoxyModelClass(layout = R2.layout.item_attachment_miniature_preview)
 abstract class AttachmentMiniaturePreviewItem : AttachmentPreviewItem<AttachmentMiniaturePreviewItem.Holder>() {
 
     @EpoxyAttribute override lateinit var attachment: ContentAttachmentData
@@ -73,12 +73,12 @@ abstract class AttachmentMiniaturePreviewItem : AttachmentPreviewItem<Attachment
     class Holder : AttachmentPreviewItem.Holder() {
         override val imageView: CheckableImageView
             get() = miniatureImageView
-        private val miniatureImageView by bind<CheckableImageView>(R.id.attachmentMiniatureImageView)
-        val miniatureVideoIndicator by bind<ImageView>(R.id.attachmentMiniatureVideoIndicator)
+        private val miniatureImageView by bind<CheckableImageView>(R2.id.attachmentMiniatureImageView)
+        val miniatureVideoIndicator by bind<ImageView>(R2.id.attachmentMiniatureVideoIndicator)
     }
 }
 
-@EpoxyModelClass(layout = R.layout.item_attachment_big_preview)
+@EpoxyModelClass(layout = R2.layout.item_attachment_big_preview)
 abstract class AttachmentBigPreviewItem : AttachmentPreviewItem<AttachmentBigPreviewItem.Holder>() {
 
     @EpoxyAttribute override lateinit var attachment: ContentAttachmentData
@@ -86,6 +86,6 @@ abstract class AttachmentBigPreviewItem : AttachmentPreviewItem<AttachmentBigPre
     class Holder : AttachmentPreviewItem.Holder() {
         override val imageView: ImageView
             get() = bigImageView
-        private val bigImageView by bind<ImageView>(R.id.attachmentBigImageView)
+        private val bigImageView by bind<ImageView>(R2.id.attachmentBigImageView)
     }
 }

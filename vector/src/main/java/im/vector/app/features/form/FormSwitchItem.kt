@@ -21,12 +21,13 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.google.android.material.switchmaterial.SwitchMaterial
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.setValueOnce
 import im.vector.app.core.extensions.setTextOrHide
 
-@EpoxyModelClass(layout = R.layout.item_form_switch)
+@EpoxyModelClass(layout = R2.layout.item_form_switch)
 abstract class FormSwitchItem : VectorEpoxyModel<FormSwitchItem.Holder>() {
 
     @EpoxyAttribute

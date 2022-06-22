@@ -23,6 +23,7 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
@@ -37,7 +38,7 @@ import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 /**
  * A list item for Device.
  */
-@EpoxyModelClass(layout = R.layout.item_device)
+@EpoxyModelClass(layout = R2.layout.item_device)
 abstract class DeviceItem : VectorEpoxyModel<DeviceItem.Holder>() {
 
     @EpoxyAttribute

@@ -35,7 +35,7 @@ import javax.inject.Inject
 private val useAdaptiveIcon = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 private const val adaptiveIconSizeDp = 108
 private const val adaptiveIconOuterSidesDp = 18
-private const val directShareCategory = BuildConfig.APPLICATION_ID + ".SHORTCUT_SHARE"
+private val directShareCategory = BuildConfig.APPLICATION_ID + ".SHORTCUT_SHARE"
 
 class ShortcutCreator @Inject constructor(
         private val context: Context,

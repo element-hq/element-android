@@ -24,6 +24,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import com.bumptech.glide.request.RequestOptions
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.onClick
@@ -31,7 +32,7 @@ import im.vector.app.core.glide.GlideApp
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.util.MatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_editable_avatar)
+@EpoxyModelClass(layout = R2.layout.item_editable_avatar)
 abstract class FormEditableAvatarItem : EpoxyModelWithHolder<FormEditableAvatarItem.Holder>() {
 
     @EpoxyAttribute

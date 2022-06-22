@@ -23,6 +23,7 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
@@ -34,7 +35,7 @@ import im.vector.lib.core.utils.timer.CountUpTimer
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.threeten.bp.Duration
 
-@EpoxyModelClass(layout = R.layout.item_live_location_users_bottom_sheet)
+@EpoxyModelClass(layout = R2.layout.item_live_location_users_bottom_sheet)
 abstract class LiveLocationUserItem : VectorEpoxyModel<LiveLocationUserItem.Holder>() {
 
     interface Callback {

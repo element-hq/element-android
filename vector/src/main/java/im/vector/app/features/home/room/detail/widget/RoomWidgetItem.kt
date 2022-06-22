@@ -24,6 +24,7 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.onClick
@@ -31,7 +32,7 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import java.net.URL
 
-@EpoxyModelClass(layout = R.layout.item_room_widget)
+@EpoxyModelClass(layout = R2.layout.item_room_widget)
 abstract class RoomWidgetItem : EpoxyModelWithHolder<RoomWidgetItem.Holder>() {
 
     @EpoxyAttribute lateinit var widget: Widget

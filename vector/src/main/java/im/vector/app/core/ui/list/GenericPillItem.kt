@@ -25,6 +25,7 @@ import androidx.core.widget.ImageViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
@@ -36,7 +37,7 @@ import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
 /**
  * A generic list item with a rounded corner background and an optional icon.
  */
-@EpoxyModelClass(layout = R.layout.item_generic_pill_footer)
+@EpoxyModelClass(layout = R2.layout.item_generic_pill_footer)
 abstract class GenericPillItem : VectorEpoxyModel<GenericPillItem.Holder>() {
 
     @EpoxyAttribute

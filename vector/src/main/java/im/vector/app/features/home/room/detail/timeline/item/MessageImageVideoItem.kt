@@ -25,6 +25,7 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.files.LocalFilesHelper
@@ -36,7 +37,7 @@ import im.vector.app.features.home.room.detail.timeline.style.granularRoundedCor
 import im.vector.app.features.media.ImageContentRenderer
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_base)
+@EpoxyModelClass(layout = R2.layout.item_timeline_event_base)
 abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Holder>() {
 
     @EpoxyAttribute
@@ -113,6 +114,6 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
     }
 
     companion object {
-        private const val STUB_ID = R.id.messageContentMediaStub
+        private val STUB_ID = R.id.messageContentMediaStub
     }
 }

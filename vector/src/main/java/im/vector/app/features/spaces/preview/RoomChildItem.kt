@@ -21,13 +21,14 @@ import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.util.MatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_space_roomchild)
+@EpoxyModelClass(layout = R2.layout.item_space_roomchild)
 abstract class RoomChildItem : VectorEpoxyModel<RoomChildItem.Holder>() {
 
     @EpoxyAttribute

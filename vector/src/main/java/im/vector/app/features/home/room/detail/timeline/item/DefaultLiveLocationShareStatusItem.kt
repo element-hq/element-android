@@ -23,6 +23,7 @@ import androidx.core.view.updateLayoutParams
 import com.bumptech.glide.load.resource.bitmap.GranularRoundedCorners
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout

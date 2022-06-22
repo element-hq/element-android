@@ -21,9 +21,10 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 
-@EpoxyModelClass(layout = R.layout.item_settings_information)
+@EpoxyModelClass(layout = R2.layout.item_settings_information)
 abstract class SettingsInformationItem : EpoxyModelWithHolder<SettingsInformationItem.Holder>() {
 
     @EpoxyAttribute

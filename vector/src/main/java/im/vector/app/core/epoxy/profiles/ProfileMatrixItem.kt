@@ -22,11 +22,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.ui.views.PresenceStateImageView
 import im.vector.app.core.ui.views.ShieldImageView
 
-@EpoxyModelClass(layout = R.layout.item_profile_matrix_item)
+@EpoxyModelClass(layout = R2.layout.item_profile_matrix_item)
 abstract class ProfileMatrixItem : BaseProfileMatrixItem<ProfileMatrixItem.Holder>() {
 
     open class Holder : VectorEpoxyHolder() {

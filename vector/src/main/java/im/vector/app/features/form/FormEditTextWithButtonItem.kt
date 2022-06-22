@@ -23,6 +23,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.TextListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
@@ -32,7 +33,7 @@ import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.epoxy.setValueOnce
 import im.vector.app.core.platform.SimpleTextWatcher
 
-@EpoxyModelClass(layout = R.layout.item_form_text_input_with_button)
+@EpoxyModelClass(layout = R2.layout.item_form_text_input_with_button)
 abstract class FormEditTextWithButtonItem : VectorEpoxyModel<FormEditTextWithButtonItem.Holder>() {
 
     @EpoxyAttribute

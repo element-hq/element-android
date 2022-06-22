@@ -25,6 +25,7 @@ import androidx.core.widget.TextViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.epoxy.onLongClickIgnoringLinks
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
@@ -37,7 +38,7 @@ import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
 import io.noties.markwon.MarkwonPlugin
 import org.matrix.android.sdk.api.extensions.orFalse
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_base)
+@EpoxyModelClass(layout = R2.layout.item_timeline_event_base)
 abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
 
     @EpoxyAttribute
@@ -144,6 +145,6 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
     }
 
     companion object {
-        private const val STUB_ID = R.id.messageContentTextStub
+        private val STUB_ID = R.id.messageContentTextStub
     }
 }

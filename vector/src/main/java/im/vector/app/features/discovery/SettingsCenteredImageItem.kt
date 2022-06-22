@@ -21,9 +21,10 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 
-@EpoxyModelClass(layout = R.layout.item_settings_centered_image)
+@EpoxyModelClass(layout = R2.layout.item_settings_centered_image)
 abstract class SettingsCenteredImageItem : EpoxyModelWithHolder<SettingsCenteredImageItem.Holder>() {
 
     @EpoxyAttribute

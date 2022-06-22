@@ -25,9 +25,10 @@ import androidx.core.view.children
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.features.home.AvatarRenderer
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_base_noinfo)
+@EpoxyModelClass(layout = R2.layout.item_timeline_event_base_noinfo)
 abstract class MergedSimilarEventsItem : BasedMergedItem<MergedSimilarEventsItem.Holder>() {
 
     override fun getViewStubId() = STUB_ID
@@ -63,7 +64,7 @@ abstract class MergedSimilarEventsItem : BasedMergedItem<MergedSimilarEventsItem
     }
 
     companion object {
-        private const val STUB_ID = R.id.messageContentMergedHeaderStub
+        private val STUB_ID = R.id.messageContentMergedHeaderStub
     }
 
     data class Attributes(

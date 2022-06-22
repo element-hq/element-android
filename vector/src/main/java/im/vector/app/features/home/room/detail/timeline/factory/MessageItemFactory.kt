@@ -25,7 +25,7 @@ import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.view.View
 import dagger.Lazy
-import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.files.LocalFilesHelper
@@ -179,7 +179,7 @@ class MessageItemFactory @Inject constructor(
 
         val messageContent = event.getLastMessageContent()
         if (messageContent == null) {
-            val malformedText = stringProvider.getString(R.string.malformed_message)
+            val malformedText = stringProvider.getString(R2.string.malformed_message)
             return defaultItemFactory.create(malformedText, informationData, highlight, callback)
         }
         if (messageContent.relatesTo?.type == RelationType.REPLACE ||
@@ -323,11 +323,11 @@ class MessageItemFactory @Inject constructor(
     ): String {
         val votes = pollResponseSummary?.totalVotes ?: 0
         return when {
-            pollState is Ended -> stringProvider.getQuantityString(R.plurals.poll_total_vote_count_after_ended, votes, votes)
+            pollState is Ended -> stringProvider.getQuantityString(R2.plurals.poll_total_vote_count_after_ended, votes, votes)
             pollState is Undisclosed -> ""
-            pollState is Voted -> stringProvider.getQuantityString(R.plurals.poll_total_vote_count_before_ended_and_voted, votes, votes)
-            votes == 0 -> stringProvider.getString(R.string.poll_no_votes_cast)
-            else -> stringProvider.getQuantityString(R.plurals.poll_total_vote_count_before_ended_and_not_voted, votes, votes)
+            pollState is Voted -> stringProvider.getQuantityString(R2.plurals.poll_total_vote_count_before_ended_and_voted, votes, votes)
+            votes == 0 -> stringProvider.getString(R2.string.poll_no_votes_cast)
+            else -> stringProvider.getQuantityString(R2.plurals.poll_total_vote_count_before_ended_and_not_voted, votes, votes)
         }
     }
 
@@ -475,7 +475,7 @@ class MessageItemFactory @Inject constructor(
                 .contentDownloadStateTrackerBinder(contentDownloadStateTrackerBinder)
                 .highlighted(highlight)
                 .filename(messageContent.body)
-                .iconRes(R.drawable.ic_paperclip)
+                .iconRes(R2.drawable.ic_paperclip)
     }
 
     private fun buildAudioContent(
@@ -582,7 +582,7 @@ class MessageItemFactory @Inject constructor(
                 .playable(true)
                 .highlighted(highlight)
                 .mediaData(thumbnailData)
-                .clickListener { view -> callback?.onVideoMessageClicked(messageContent, videoData, view.findViewById(R.id.messageThumbnailView)) }
+                .clickListener { view -> callback?.onVideoMessageClicked(messageContent, videoData, view.findViewById(R2.id.messageThumbnailView)) }
     }
 
     private fun buildItemForTextContent(
@@ -652,9 +652,9 @@ class MessageItemFactory @Inject constructor(
     ): Spannable {
         val spannable = SpannableStringBuilder()
         spannable.append(linkifiedBody)
-        val editedSuffix = stringProvider.getString(R.string.edited_suffix)
+        val editedSuffix = stringProvider.getString(R2.string.edited_suffix)
         spannable.append(" ").append(editedSuffix)
-        val color = colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
+        val color = colorProvider.getColorFromAttribute(R2.attr.vctr_content_secondary)
         val editStart = spannable.lastIndexOf(editedSuffix)
         val editEnd = editStart + editedSuffix.length
         spannable.setSpan(
@@ -700,7 +700,7 @@ class MessageItemFactory @Inject constructor(
         val htmlBody = messageContent.getHtmlBody()
         val formattedBody = span {
             text = htmlBody
-            textColor = colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
+            textColor = colorProvider.getColorFromAttribute(R2.attr.vctr_content_secondary)
             textStyle = "italic"
         }
 

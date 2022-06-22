@@ -22,9 +22,10 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.extensions.setTextOrHide
 
-@EpoxyModelClass(layout = R.layout.item_loading)
+@EpoxyModelClass(layout = R2.layout.item_loading)
 abstract class LoadingItem : VectorEpoxyModel<LoadingItem.Holder>() {
 
     @EpoxyAttribute var loadingText: String? = null

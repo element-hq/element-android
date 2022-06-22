@@ -29,6 +29,7 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.app.features.home.room.detail.timeline.helper.ContentDownloadStateTrackerBinder
@@ -37,7 +38,7 @@ import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLay
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.voice.AudioWaveformView
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_base)
+@EpoxyModelClass(layout = R2.layout.item_timeline_event_base)
 abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
 
     interface WaveformTouchListener {
@@ -179,6 +180,6 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
     }
 
     companion object {
-        private const val STUB_ID = R.id.messageContentVoiceStub
+        private val STUB_ID = R.id.messageContentVoiceStub
     }
 }

@@ -26,6 +26,7 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
@@ -36,7 +37,7 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.list.UnreadCounterBadgeView
 import org.matrix.android.sdk.api.util.MatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_space)
+@EpoxyModelClass(layout = R2.layout.item_space)
 abstract class SpaceSummaryItem : VectorEpoxyModel<SpaceSummaryItem.Holder>() {
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) lateinit var avatarRenderer: AvatarRenderer

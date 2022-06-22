@@ -31,6 +31,7 @@ import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.utils.tappableMatchingText
@@ -42,7 +43,7 @@ import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.util.toMatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_base_noinfo)
+@EpoxyModelClass(layout = R2.layout.item_timeline_event_base_noinfo)
 abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.Holder>() {
 
     @EpoxyAttribute
@@ -219,7 +220,7 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
     }
 
     companion object {
-        private const val STUB_ID = R.id.messageContentMergedCreationStub
+        private val STUB_ID = R.id.messageContentMergedCreationStub
     }
 
     data class Attributes(

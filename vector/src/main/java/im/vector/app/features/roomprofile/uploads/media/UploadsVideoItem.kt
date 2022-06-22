@@ -21,6 +21,7 @@ import androidx.core.view.ViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
@@ -28,7 +29,7 @@ import im.vector.app.core.epoxy.onClick
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
 
-@EpoxyModelClass(layout = R.layout.item_uploads_video)
+@EpoxyModelClass(layout = R2.layout.item_uploads_video)
 abstract class UploadsVideoItem : VectorEpoxyModel<UploadsVideoItem.Holder>() {
 
     @EpoxyAttribute lateinit var imageContentRenderer: ImageContentRenderer

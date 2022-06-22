@@ -23,6 +23,7 @@ import androidx.annotation.IdRes
 import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.platform.CheckableView

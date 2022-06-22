@@ -30,6 +30,7 @@ import androidx.core.widget.ImageViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
@@ -39,7 +40,7 @@ import im.vector.app.features.themes.ThemeUtils
 /**
  * A action for bottom sheet.
  */
-@EpoxyModelClass(layout = R.layout.item_bottom_sheet_action)
+@EpoxyModelClass(layout = R2.layout.item_bottom_sheet_action)
 abstract class BottomSheetActionItem : VectorEpoxyModel<BottomSheetActionItem.Holder>() {
 
     @EpoxyAttribute

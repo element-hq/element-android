@@ -23,11 +23,12 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.onClick
 
-@EpoxyModelClass(layout = R.layout.item_tos)
+@EpoxyModelClass(layout = R2.layout.item_tos)
 abstract class TermItem : EpoxyModelWithHolder<TermItem.Holder>() {
 
     @EpoxyAttribute

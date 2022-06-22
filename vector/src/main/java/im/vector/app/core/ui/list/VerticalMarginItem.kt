@@ -20,13 +20,14 @@ import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 
 /**
  * A generic item with empty space.
  */
-@EpoxyModelClass(layout = R.layout.item_vertical_margin)
+@EpoxyModelClass(layout = R2.layout.item_vertical_margin)
 abstract class VerticalMarginItem : VectorEpoxyModel<VerticalMarginItem.Holder>() {
 
     @EpoxyAttribute

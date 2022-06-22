@@ -25,6 +25,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.TextListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
@@ -35,7 +36,7 @@ import im.vector.app.core.epoxy.setValueOnce
 import im.vector.app.core.platform.SimpleTextWatcher
 import im.vector.app.core.resources.StringProvider
 
-@EpoxyModelClass(layout = R.layout.item_login_password_form)
+@EpoxyModelClass(layout = R2.layout.item_login_password_form)
 abstract class LoginPasswordFormItem : VectorEpoxyModel<LoginPasswordFormItem.Holder>() {
 
     @EpoxyAttribute var passwordValue: String = ""

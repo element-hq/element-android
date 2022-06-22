@@ -22,7 +22,7 @@ import com.airbnb.epoxy.VisibilityState
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Uninitialized
-import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.epoxy.loadingItem
@@ -81,17 +81,17 @@ class SpaceDirectoryController @Inject constructor(
             if (failure is Failure.ServerError && failure.error.code == M_UNRECOGNIZED) {
                 genericPillItem {
                     id("hs_no_support")
-                    imageRes(R.drawable.error)
+                    imageRes(R2.drawable.error)
                     tintIcon(false)
                     text(
                             span {
-                                span(host.stringProvider.getString(R.string.spaces_no_server_support_title)) {
+                                span(host.stringProvider.getString(R2.string.spaces_no_server_support_title)) {
                                     textStyle = "bold"
-                                    textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary)
+                                    textColor = host.colorProvider.getColorFromAttribute(R2.attr.vctr_content_primary)
                                 }
                                 +"\n\n"
-                                span(host.stringProvider.getString(R.string.spaces_no_server_support_description)) {
-                                    textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
+                                span(host.stringProvider.getString(R2.string.spaces_no_server_support_description)) {
+                                    textColor = host.colorProvider.getColorFromAttribute(R2.attr.vctr_content_secondary)
                                 }
                             }.toEpoxyCharSequence()
                     )
@@ -115,15 +115,15 @@ class SpaceDirectoryController @Inject constructor(
             if (flattenChildInfo.isEmpty()) {
                 genericEmptyWithActionItem {
                     id("empty_res")
-                    title(host.stringProvider.getString(R.string.this_space_has_no_rooms))
-                    iconRes(R.drawable.ic_empty_icon_room)
-                    iconTint(host.colorProvider.getColorFromAttribute(R.attr.vctr_reaction_background_on))
+                    title(host.stringProvider.getString(R2.string.this_space_has_no_rooms))
+                    iconRes(R2.drawable.ic_empty_icon_room)
+                    iconTint(host.colorProvider.getColorFromAttribute(R2.attr.vctr_reaction_background_on))
                     apply {
                         if (data?.canAddRooms == true) {
-                            description(host.stringProvider.getString(R.string.this_space_has_no_rooms_admin))
+                            description(host.stringProvider.getString(R2.string.this_space_has_no_rooms_admin))
                             buttonAction(
                                     Action(
-                                            title = host.stringProvider.getString(R.string.space_add_existing_rooms),
+                                            title = host.stringProvider.getString(R2.string.space_add_existing_rooms),
                                             listener = object : ClickListener {
                                                 override fun invoke(p1: View) {
                                                     host.listener?.addExistingRooms(data.spaceId)
@@ -131,7 +131,7 @@ class SpaceDirectoryController @Inject constructor(
                                             }
                                     ))
                         } else {
-                            description(host.stringProvider.getString(R.string.this_space_has_no_rooms_not_admin))
+                            description(host.stringProvider.getString(R2.string.this_space_has_no_rooms_not_admin))
                         }
                     }
                 }
@@ -161,16 +161,16 @@ class SpaceDirectoryController @Inject constructor(
                             suggested(info.suggested.orFalse())
                             errorLabel(
                                     error?.let {
-                                        host.stringProvider.getString(R.string.error_failed_to_join_room, host.errorFormatter.toHumanReadable(it))
+                                        host.stringProvider.getString(R2.string.error_failed_to_join_room, host.errorFormatter.toHumanReadable(it))
                                     }
                             )
                             memberCount(info.activeMemberCount ?: 0)
                             loading(isLoading)
                             buttonLabel(
                                     when {
-                                        error != null -> host.stringProvider.getString(R.string.global_retry)
-                                        isJoined -> host.stringProvider.getString(R.string.action_open)
-                                        else -> host.stringProvider.getString(R.string.action_join)
+                                        error != null -> host.stringProvider.getString(R2.string.global_retry)
+                                        isJoined -> host.stringProvider.getString(R2.string.action_open)
+                                        else -> host.stringProvider.getString(R2.string.action_join)
                                     }
                             )
                             apply {

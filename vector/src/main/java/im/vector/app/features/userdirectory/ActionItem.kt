@@ -22,13 +22,14 @@ import androidx.annotation.DrawableRes
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 
-@EpoxyModelClass(layout = R.layout.item_contact_action)
+@EpoxyModelClass(layout = R2.layout.item_contact_action)
 abstract class ActionItem : VectorEpoxyModel<ActionItem.Holder>() {
 
     @EpoxyAttribute var title: String? = null

@@ -24,6 +24,7 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
@@ -33,7 +34,7 @@ import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.util.MatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_bottom_sheet_joinrule_restricted)
+@EpoxyModelClass(layout = R2.layout.item_bottom_sheet_joinrule_restricted)
 abstract class SpaceJoinRuleItem : VectorEpoxyModel<SpaceJoinRuleItem.Holder>() {
 
     @EpoxyAttribute

@@ -25,11 +25,12 @@ import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.extensions.showKeyboard
 
-@EpoxyModelClass(layout = R.layout.item_settings_edit_text)
+@EpoxyModelClass(layout = R2.layout.item_settings_edit_text)
 abstract class SettingsEditTextItem : EpoxyModelWithHolder<SettingsEditTextItem.Holder>() {
 
     @EpoxyAttribute var hint: String? = null

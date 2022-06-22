@@ -97,16 +97,16 @@ class NotificationUtils @Inject constructor(
          * IDs for actions
          * ========================================================================================== */
 
-        const val JOIN_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.JOIN_ACTION"
-        const val REJECT_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.REJECT_ACTION"
-        private const val QUICK_LAUNCH_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.QUICK_LAUNCH_ACTION"
-        const val MARK_ROOM_READ_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.MARK_ROOM_READ_ACTION"
-        const val SMART_REPLY_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.SMART_REPLY_ACTION"
-        const val DISMISS_SUMMARY_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.DISMISS_SUMMARY_ACTION"
-        const val DISMISS_ROOM_NOTIF_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.DISMISS_ROOM_NOTIF_ACTION"
-        private const val TAP_TO_VIEW_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.TAP_TO_VIEW_ACTION"
-        const val DIAGNOSTIC_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.DIAGNOSTIC"
-        const val PUSH_ACTION = "${BuildConfig.APPLICATION_ID}.PUSH"
+        val JOIN_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.JOIN_ACTION"
+        val REJECT_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.REJECT_ACTION"
+        private val QUICK_LAUNCH_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.QUICK_LAUNCH_ACTION"
+        val MARK_ROOM_READ_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.MARK_ROOM_READ_ACTION"
+        val SMART_REPLY_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.SMART_REPLY_ACTION"
+        val DISMISS_SUMMARY_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.DISMISS_SUMMARY_ACTION"
+        val DISMISS_ROOM_NOTIF_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.DISMISS_ROOM_NOTIF_ACTION"
+        private val TAP_TO_VIEW_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.TAP_TO_VIEW_ACTION"
+        val DIAGNOSTIC_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.DIAGNOSTIC"
+        val PUSH_ACTION = "${BuildConfig.APPLICATION_ID}.PUSH"
 
         /* ==========================================================================================
          * IDs for channels

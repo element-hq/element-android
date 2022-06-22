@@ -22,6 +22,7 @@ import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.ui.views.ShieldImageView
@@ -30,7 +31,7 @@ import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_base_noinfo)
+@EpoxyModelClass(layout = R2.layout.item_timeline_event_base_noinfo)
 abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
 
     @EpoxyAttribute
@@ -83,6 +84,6 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
     )
 
     companion object {
-        private const val STUB_ID = R.id.messageContentNoticeStub
+        private val STUB_ID = R.id.messageContentNoticeStub
     }
 }

@@ -29,6 +29,7 @@ import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.time.Clock
@@ -39,7 +40,7 @@ import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationState
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_base_state)
+@EpoxyModelClass(layout = R2.layout.item_timeline_event_base_state)
 abstract class VerificationRequestItem : AbsBaseMessageItem<VerificationRequestItem.Holder>() {
 
     override val baseAttributes: AbsBaseMessageItem.Attributes
@@ -137,7 +138,7 @@ abstract class VerificationRequestItem : AbsBaseMessageItem<VerificationRequestI
     }
 
     companion object {
-        private const val STUB_ID = R.id.messageVerificationRequestStub
+        private val STUB_ID = R.id.messageVerificationRequestStub
     }
 
     /**

@@ -22,11 +22,12 @@ import androidx.core.view.children
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_base)
+@EpoxyModelClass(layout = R2.layout.item_timeline_event_base)
 abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
 
     @EpoxyAttribute
@@ -92,6 +93,6 @@ abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
     }
 
     companion object {
-        private const val STUB_ID = R.id.messageContentPollStub
+        private val STUB_ID = R.id.messageContentPollStub
     }
 }

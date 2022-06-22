@@ -21,12 +21,13 @@ import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.contacts.MappedContact
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.features.home.AvatarRenderer
 
-@EpoxyModelClass(layout = R.layout.item_contact_main)
+@EpoxyModelClass(layout = R2.layout.item_contact_main)
 abstract class ContactItem : VectorEpoxyModel<ContactItem.Holder>() {
 
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer

@@ -20,6 +20,7 @@ import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
@@ -27,7 +28,7 @@ import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
 /**
  * A action for bottom sheet.
  */
-@EpoxyModelClass(layout = R.layout.item_verification_notice)
+@EpoxyModelClass(layout = R2.layout.item_verification_notice)
 abstract class BottomSheetVerificationNoticeItem : VectorEpoxyModel<BottomSheetVerificationNoticeItem.Holder>() {
 
     @EpoxyAttribute

@@ -28,6 +28,7 @@ import androidx.core.content.ContextCompat.getDrawable
 import androidx.core.view.isVisible
 import androidx.core.widget.TextViewCompat
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.getDrawableAsSpannable
@@ -145,9 +146,9 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
     }
 
     private fun createReactionTextView(holder: H): TextView {
-        return TextView(ContextThemeWrapper(holder.view.context, R.style.TimelineReactionView)).apply {
+        return TextView(ContextThemeWrapper(holder.view.context, R2.style.TimelineReactionView)).apply {
             background = getDrawable(context, R.drawable.reaction_rounded_rect_shape_off)
-            TextViewCompat.setTextAppearance(this, R.style.TextAppearance_Vector_Micro)
+            TextViewCompat.setTextAppearance(this, R2.style.TextAppearance_Vector_Micro)
             setTypeface(typeface, Typeface.BOLD)
             setTextColor(ThemeUtils.getColor(context, R.attr.vctr_content_secondary))
         }

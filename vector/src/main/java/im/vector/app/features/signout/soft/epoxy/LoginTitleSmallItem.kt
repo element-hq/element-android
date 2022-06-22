@@ -20,11 +20,12 @@ import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.extensions.setTextOrHide
 
-@EpoxyModelClass(layout = R.layout.item_login_title_small)
+@EpoxyModelClass(layout = R2.layout.item_login_title_small)
 abstract class LoginTitleSmallItem : VectorEpoxyModel<LoginTitleSmallItem.Holder>() {
 
     @EpoxyAttribute var text: String? = null

@@ -24,6 +24,7 @@ import android.widget.FrameLayout
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.databinding.ViewButtonStateBinding
@@ -48,7 +49,7 @@ class ButtonStateView @JvmOverloads constructor(context: Context, attrs: Attribu
     private val views: ViewButtonStateBinding
 
     init {
-        inflate(context, R.layout.view_button_state, this)
+        inflate(context, R2.layout.view_button_state, this)
         views = ViewButtonStateBinding.bind(this)
 
         layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
@@ -66,7 +67,7 @@ class ButtonStateView @JvmOverloads constructor(context: Context, attrs: Attribu
         )
                 .apply {
                     try {
-                        if (getBoolean(R.styleable.ButtonStateView_bsv_use_flat_button, true)) {
+                        if (getBoolean(R2.styleable.ButtonStateView_bsv_use_flat_button, true)) {
                             button = views.buttonStateButtonFlat
                             views.buttonStateButtonBig.isVisible = false
                         } else {
@@ -74,8 +75,8 @@ class ButtonStateView @JvmOverloads constructor(context: Context, attrs: Attribu
                             views.buttonStateButtonFlat.isVisible = false
                         }
 
-                        button.text = getString(R.styleable.ButtonStateView_bsv_button_text)
-                        views.buttonStateLoaded.setImageDrawable(getDrawable(R.styleable.ButtonStateView_bsv_loaded_image_src))
+                        button.text = getString(R2.styleable.ButtonStateView_bsv_button_text)
+                        views.buttonStateLoaded.setImageDrawable(getDrawable(R2.styleable.ButtonStateView_bsv_loaded_image_src))
                     } finally {
                         recycle()
                     }

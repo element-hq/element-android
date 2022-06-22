@@ -21,9 +21,10 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_day_separator)
+@EpoxyModelClass(layout = R2.layout.item_timeline_event_day_separator)
 abstract class DaySeparatorItem : EpoxyModelWithHolder<DaySeparatorItem.Holder>() {
 
     @EpoxyAttribute lateinit var formattedDay: String

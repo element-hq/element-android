@@ -23,6 +23,7 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.onClick
@@ -30,7 +31,7 @@ import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.util.MatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_display_read_receipt)
+@EpoxyModelClass(layout = R2.layout.item_display_read_receipt)
 abstract class DisplayReadReceiptItem : EpoxyModelWithHolder<DisplayReadReceiptItem.Holder>() {
 
     @EpoxyAttribute lateinit var matrixItem: MatrixItem

@@ -22,6 +22,7 @@ import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
@@ -34,7 +35,7 @@ import im.vector.app.features.invite.InviteButtonStateBinder
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.util.MatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_room_invitation)
+@EpoxyModelClass(layout = R2.layout.item_room_invitation)
 abstract class RoomInvitationItem : VectorEpoxyModel<RoomInvitationItem.Holder>() {
 
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer

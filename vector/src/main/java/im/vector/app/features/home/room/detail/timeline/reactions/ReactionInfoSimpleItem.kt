@@ -22,6 +22,7 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.onClick
@@ -30,7 +31,7 @@ import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
 /**
  * Item displaying an emoji reaction (single line with emoji, author, time).
  */
-@EpoxyModelClass(layout = R.layout.item_simple_reaction_info)
+@EpoxyModelClass(layout = R2.layout.item_simple_reaction_info)
 abstract class ReactionInfoSimpleItem : EpoxyModelWithHolder<ReactionInfoSimpleItem.Holder>() {
 
     @EpoxyAttribute

@@ -25,6 +25,7 @@ import androidx.core.widget.ImageViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
@@ -39,7 +40,7 @@ import org.matrix.android.sdk.api.util.MatrixItem
 /**
  * A room preview for bottom sheet.
  */
-@EpoxyModelClass(layout = R.layout.item_bottom_sheet_room_preview)
+@EpoxyModelClass(layout = R2.layout.item_bottom_sheet_room_preview)
 abstract class BottomSheetRoomPreviewItem : VectorEpoxyModel<BottomSheetRoomPreviewItem.Holder>() {
 
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer

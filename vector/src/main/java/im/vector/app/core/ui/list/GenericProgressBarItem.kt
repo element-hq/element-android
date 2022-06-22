@@ -19,13 +19,14 @@ import android.widget.ProgressBar
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 
 /**
  * A generic progress bar item.
  */
-@EpoxyModelClass(layout = R.layout.item_generic_progress)
+@EpoxyModelClass(layout = R2.layout.item_generic_progress)
 abstract class GenericProgressBarItem : VectorEpoxyModel<GenericProgressBarItem.Holder>() {
 
     @EpoxyAttribute

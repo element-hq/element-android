@@ -22,8 +22,9 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 
-@EpoxyModelClass(layout = R.layout.item_error_retry)
+@EpoxyModelClass(layout = R2.layout.item_error_retry)
 abstract class ErrorWithRetryItem : VectorEpoxyModel<ErrorWithRetryItem.Holder>() {
 
     @EpoxyAttribute

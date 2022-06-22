@@ -20,9 +20,10 @@ import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.features.home.room.detail.timeline.item.ItemWithEvents
 
-@EpoxyModelClass(layout = R.layout.item_timeline_empty)
+@EpoxyModelClass(layout = R2.layout.item_timeline_empty)
 abstract class TimelineEmptyItem : VectorEpoxyModel<TimelineEmptyItem.Holder>(), ItemWithEvents {
 
     @EpoxyAttribute lateinit var eventId: String

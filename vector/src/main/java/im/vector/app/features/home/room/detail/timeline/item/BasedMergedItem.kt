@@ -20,6 +20,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.annotation.IdRes
 import im.vector.app.R
+import im.vector.app.R2
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.util.MatrixItem
 
