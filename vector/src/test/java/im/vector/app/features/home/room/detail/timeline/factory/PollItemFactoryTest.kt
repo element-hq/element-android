@@ -18,6 +18,7 @@ package im.vector.app.features.home.room.detail.timeline.factory
 
 import com.airbnb.mvrx.test.MvRxTestRule
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
+import im.vector.app.features.home.room.detail.timeline.item.PollOptionViewState
 import im.vector.app.features.home.room.detail.timeline.item.PollResponseData
 import im.vector.app.features.home.room.detail.timeline.item.ReactionsSummaryData
 import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
@@ -168,5 +169,20 @@ class PollItemFactoryTest {
                 pollResponseSummary = A_POLL_RESPONSE_DATA,
                 pollContent = disclosedPollContent,
         ) shouldBe PollState.Ready
+    }
+
+    @Test
+    fun `given a sending poll then all option view states is PollSending`() = runTest {
+        with(pollItemFactory) {
+            A_POLL_CONTENT
+                    .getBestPollCreationInfo()
+                    ?.answers
+                    ?.mapToOptions(PollState.Sending, A_MESSAGE_INFORMATION_DATA)
+                    ?.forEachIndexed { index, pollOptionViewState ->
+                        A_POLL_CONTENT.getBestPollCreationInfo()?.answers?.get(index)?.let { option ->
+                            pollOptionViewState shouldBeEqualTo PollOptionViewState.PollSending(option.id ?: "", option.getBestAnswer() ?: "")
+                        }
+                    }
+        }
     }
 }

@@ -35,7 +35,6 @@ import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.PollAnswer
-import org.matrix.android.sdk.api.session.room.model.message.PollType
 import javax.inject.Inject
 
 class PollItemFactory @Inject constructor(
