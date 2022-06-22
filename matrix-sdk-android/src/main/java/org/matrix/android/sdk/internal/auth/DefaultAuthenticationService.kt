@@ -102,7 +102,8 @@ internal class DefaultAuthenticationService @Inject constructor(
                 appendParamToUrl("device_id", it)
             }
 
-             appendParamToUrl("action", action.toString())
+            // MSC3824 action param
+            appendParamToUrl("org.matrix.msc3824.action", action.toString())
         }
     }
 
