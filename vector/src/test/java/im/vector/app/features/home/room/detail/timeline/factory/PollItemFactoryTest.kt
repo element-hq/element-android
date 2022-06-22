@@ -27,6 +27,7 @@ import io.mockk.unmockkAll
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBe
+import org.amshove.kluent.shouldBeEqualTo
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -107,11 +108,11 @@ class PollItemFactoryTest {
 
     @Test
     fun `given a sending poll state then PollState is Sending`() = runTest {
-        val sendingPollInformationData = A_MESSAGE_INFORMATION_DATA.copy(sendState = SendState.SENT)
+        val sendingPollInformationData = A_MESSAGE_INFORMATION_DATA.copy(sendState = SendState.SENDING)
         pollItemFactory.createPollState(
                 informationData = sendingPollInformationData,
                 pollResponseSummary = A_POLL_RESPONSE_DATA,
-                pollContent = A_POLL_CONTENT
+                pollContent = A_POLL_CONTENT,
         ) shouldBe PollState.Sending
     }
 
@@ -122,7 +123,7 @@ class PollItemFactoryTest {
         pollItemFactory.createPollState(
                 informationData = A_MESSAGE_INFORMATION_DATA,
                 pollResponseSummary = closedPollSummary,
-                pollContent = A_POLL_CONTENT
+                pollContent = A_POLL_CONTENT,
         ) shouldBe PollState.Ended
     }
 
@@ -131,7 +132,26 @@ class PollItemFactoryTest {
         pollItemFactory.createPollState(
                 informationData = A_MESSAGE_INFORMATION_DATA,
                 pollResponseSummary = A_POLL_RESPONSE_DATA,
-                pollContent = A_POLL_CONTENT
+                pollContent = A_POLL_CONTENT,
         ) shouldBe PollState.Undisclosed
+    }
+
+    @Test
+    fun `given a sent poll when my vote exists then PollState is Voted`() = runTest {
+        val votedPollData = A_POLL_RESPONSE_DATA.copy(
+                totalVotes = 1,
+                myVote = "5ef5f7b0-c9a1-49cf-a0b3-374729a43e76",
+        )
+        val disclosedPollContent = A_POLL_CONTENT.copy(
+                unstablePollCreationInfo = A_POLL_CONTENT.getBestPollCreationInfo()?.copy(
+                        kind = PollType.DISCLOSED_UNSTABLE
+                )
+        )
+
+        pollItemFactory.createPollState(
+                informationData = A_MESSAGE_INFORMATION_DATA,
+                pollResponseSummary = votedPollData,
+                pollContent = disclosedPollContent,
+        ) shouldBeEqualTo PollState.Voted(1)
     }
 }
