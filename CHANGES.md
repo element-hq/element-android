@@ -1,4 +1,4 @@
-Changes in Element v1.4.23 (2022-06-21)
+Changes in Element v1.4.24 (2022-06-21)
 =======================================
 
 Bugfixes 🐛
