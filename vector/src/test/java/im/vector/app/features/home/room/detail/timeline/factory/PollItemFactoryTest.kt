@@ -18,6 +18,7 @@ package im.vector.app.features.home.room.detail.timeline.factory
 
 import com.airbnb.mvrx.test.MvRxTestRule
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
+import im.vector.app.features.home.room.detail.timeline.item.PollResponseData
 import im.vector.app.features.home.room.detail.timeline.item.ReactionsSummaryData
 import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
 import im.vector.app.features.poll.PollState
@@ -38,10 +39,15 @@ private val A_MESSAGE_INFORMATION_DATA = MessageInformationData(
         senderId = "senderId",
         ageLocalTS = 0,
         avatarUrl = "",
-        sendState = SendState.SENDING,
+        sendState = SendState.SENT,
         messageLayout = TimelineMessageLayout.Default(showAvatar = true, showDisplayName = true, showTimestamp = true),
         reactionsSummary = ReactionsSummaryData(),
         sentByMe = true,
+)
+
+private val A_POLL_RESPONSE_DATA = PollResponseData(
+        myVote = null,
+        votes = emptyMap(),
 )
 
 class PollItemFactoryTest {
@@ -72,11 +78,23 @@ class PollItemFactoryTest {
     }
 
     @Test
-    fun `given a sending poll state then returns PollState as Sending`() = runTest {
+    fun `given a sending poll state then PollState is Sending`() = runTest {
+        val sendingPollInformationData = A_MESSAGE_INFORMATION_DATA.copy(sendState = SendState.SENT)
         pollItemFactory.createPollState(
-                informationData = A_MESSAGE_INFORMATION_DATA,
-                pollResponseSummary = null,
+                informationData = sendingPollInformationData,
+                pollResponseSummary = A_POLL_RESPONSE_DATA,
                 pollContent = MessagePollContent()
         ) shouldBe PollState.Sending
+    }
+
+    @Test
+    fun `given a sent poll state when poll is closed then PollState is Ended`() = runTest {
+        val closedPollSummary = A_POLL_RESPONSE_DATA.copy(isClosed = true)
+
+        pollItemFactory.createPollState(
+                informationData = A_MESSAGE_INFORMATION_DATA,
+                pollResponseSummary = closedPollSummary,
+                pollContent = MessagePollContent()
+        ) shouldBe PollState.Ended
     }
 }
