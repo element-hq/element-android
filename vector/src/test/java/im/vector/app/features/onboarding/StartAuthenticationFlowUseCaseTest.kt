@@ -128,7 +128,8 @@ class StartAuthenticationFlowUseCaseTest {
             ssoIdentityProviders = SSO_IDENTITY_PROVIDERS,
             isLoginAndRegistrationSupported = true,
             homeServerUrl = A_DECLARED_HOMESERVER_URL,
-            isOutdatedHomeserver = false
+            isOutdatedHomeserver = false,
+            hasOidcCompatibilityFlow = false
     )
 
     private fun expectedResult(
@@ -144,7 +145,8 @@ class StartAuthenticationFlowUseCaseTest {
                     userFacingUrl = homeserverSourceUrl,
                     upstreamUrl = A_DECLARED_HOMESERVER_URL,
                     preferredLoginMode = preferredLoginMode,
-                    supportedLoginTypes = supportedLoginTypes
+                    supportedLoginTypes = supportedLoginTypes,
+                    hasOidcCompatibilityFlow = false
             )
     )
 

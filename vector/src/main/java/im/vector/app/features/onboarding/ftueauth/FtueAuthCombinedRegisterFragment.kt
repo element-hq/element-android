@@ -39,6 +39,7 @@ import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentFtueCombinedRegisterBinding
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.SSORedirectRouterActivity
+import im.vector.app.features.login.SignMode
 import im.vector.app.features.login.SocialLoginButtonsView
 import im.vector.app.features.login.render
 import im.vector.app.features.onboarding.OnboardingAction
@@ -53,6 +54,7 @@ import org.matrix.android.sdk.api.failure.isLoginEmailUnknown
 import org.matrix.android.sdk.api.failure.isRegistrationDisabled
 import org.matrix.android.sdk.api.failure.isUsernameInUse
 import org.matrix.android.sdk.api.failure.isWeakPassword
+import org.matrix.android.sdk.internal.auth.SSOAction
 import javax.inject.Inject
 
 class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAuthFragment<FragmentFtueCombinedRegisterBinding>() {
@@ -168,7 +170,8 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
             viewModel.fetchSsoUrl(
                     redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                     deviceId = deviceId,
-                    provider = provider
+                    provider = provider,
+                    action = SSOAction.register
             )?.let { openInCustomTab(it) }
         }
     }

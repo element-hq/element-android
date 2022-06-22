@@ -25,6 +25,8 @@ import im.vector.app.R
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentLoginSsoOnly2Binding
 import im.vector.app.features.login.SSORedirectRouterActivity
+import im.vector.app.features.login.SignMode
+import org.matrix.android.sdk.internal.auth.SSOAction
 import javax.inject.Inject
 
 /**
@@ -54,7 +56,8 @@ class LoginSsoOnlyFragment2 @Inject constructor() : AbstractSSOLoginFragment2<Fr
         loginViewModel.getSsoUrl(
                 redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                 deviceId = state.deviceId,
-                providerId = null
+                providerId = null,
+                action = if (state.signMode == SignMode2.SignUp) SSOAction.register else SSOAction.login
         )
                 ?.let { openInCustomTab(it) }
     }

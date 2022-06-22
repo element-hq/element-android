@@ -86,7 +86,7 @@ internal class DefaultAuthenticationService @Inject constructor(
         return getLoginFlow(homeServerConnectionConfig)
     }
 
-    override fun getSsoUrl(redirectUrl: String, deviceId: String?, providerId: String?): String? {
+    override fun getSsoUrl(redirectUrl: String, deviceId: String?, providerId: String?, action: SSOAction): String? {
         val homeServerUrlBase = getHomeServerUrlBase() ?: return null
 
         return buildString {
@@ -101,6 +101,8 @@ internal class DefaultAuthenticationService @Inject constructor(
                 // But https://github.com/matrix-org/synapse/issues/5755
                 appendParamToUrl("device_id", it)
             }
+
+             appendParamToUrl("action", action.toString())
         }
     }
 
@@ -290,12 +292,18 @@ internal class DefaultAuthenticationService @Inject constructor(
         val loginFlowResponse = executeRequest(null) {
             authAPI.getLoginFlows()
         }
+
+        // If an m.login.sso flow is present that is flagged as being for MSC3824 OIDC compatibility then we only return that flow
+        val oidcCompatibilityFlow = loginFlowResponse.flows.orEmpty().firstOrNull { it.type == "m.login.sso" && it.delegatedOidcCompatibilty == true }
+        val flows = if (oidcCompatibilityFlow != null) listOf(oidcCompatibilityFlow) else loginFlowResponse.flows
+
         return LoginFlowResult(
-                supportedLoginTypes = loginFlowResponse.flows.orEmpty().mapNotNull { it.type },
-                ssoIdentityProviders = loginFlowResponse.flows.orEmpty().firstOrNull { it.type == LoginFlowTypes.SSO }?.ssoIdentityProvider,
+                supportedLoginTypes = flows.orEmpty().mapNotNull { it.type },
+                ssoIdentityProviders = flows.orEmpty().firstOrNull { it.type == LoginFlowTypes.SSO }?.ssoIdentityProvider,
                 isLoginAndRegistrationSupported = versions.isLoginAndRegistrationSupportedBySdk(),
                 homeServerUrl = homeServerUrl,
-                isOutdatedHomeserver = !versions.isSupportedBySdk()
+                isOutdatedHomeserver = !versions.isSupportedBySdk(),
+                hasOidcCompatibilityFlow = oidcCompatibilityFlow != null
         )
     }
 

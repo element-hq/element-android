@@ -41,6 +41,7 @@ import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.failure.isInvalidPassword
+import org.matrix.android.sdk.internal.auth.SSOAction
 import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
@@ -207,7 +208,8 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
                         loginViewModel.getSsoUrl(
                                 redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                                 deviceId = state.deviceId,
-                                providerId = provider?.id
+                                providerId = provider?.id,
+                                action = if (state.signMode == SignMode.SignUp) SSOAction.register else SSOAction.login
                         )
                                 ?.let { openInCustomTab(it) }
                     }

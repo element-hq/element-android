@@ -52,6 +52,7 @@ import org.matrix.android.sdk.api.failure.isLoginEmailUnknown
 import org.matrix.android.sdk.api.failure.isRegistrationDisabled
 import org.matrix.android.sdk.api.failure.isUsernameInUse
 import org.matrix.android.sdk.api.failure.isWeakPassword
+import org.matrix.android.sdk.internal.auth.SSOAction
 import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
@@ -221,7 +222,8 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
                         viewModel.fetchSsoUrl(
                                 redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                                 deviceId = state.deviceId,
-                                provider = provider
+                                provider = provider,
+                                action = if (state.signMode == SignMode.SignUp) SSOAction.register else SSOAction.login
                         )
                                 ?.let { openInCustomTab(it) }
                     }

@@ -31,11 +31,13 @@ import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentLoginSignupUsername2Binding
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.SSORedirectRouterActivity
+import im.vector.app.features.login.SignMode
 import im.vector.app.features.login.SocialLoginButtonsView
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
+import org.matrix.android.sdk.internal.auth.SSOAction
 import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
@@ -101,7 +103,8 @@ class LoginFragmentSignupUsername2 @Inject constructor() : AbstractSSOLoginFragm
                     loginViewModel.getSsoUrl(
                             redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                             deviceId = state.deviceId,
-                            providerId = provider?.id
+                            providerId = provider?.id,
+                            action = if (state.signMode == SignMode2.SignUp) SSOAction.register else SSOAction.login
                     )
                             ?.let { openInCustomTab(it) }
                 }

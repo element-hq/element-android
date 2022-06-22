@@ -26,6 +26,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentLoginSignupSigninSelectionBinding
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
+import org.matrix.android.sdk.internal.auth.SSOAction
 import javax.inject.Inject
 
 /**
@@ -79,7 +80,8 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOLogi
                         loginViewModel.getSsoUrl(
                                 redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                                 deviceId = state.deviceId,
-                                providerId = provider?.id
+                                providerId = provider?.id,
+                                action = if (state.signMode == SignMode.SignUp) SSOAction.register else SSOAction.login
                         )
                                 ?.let { openInCustomTab(it) }
                     }
@@ -112,7 +114,8 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOLogi
             loginViewModel.getSsoUrl(
                     redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                     deviceId = state.deviceId,
-                    providerId = null
+                    providerId = null,
+                    action = if (state.signMode == SignMode.SignUp) SSOAction.register else SSOAction.login
             )
                     ?.let { openInCustomTab(it) }
         } else {

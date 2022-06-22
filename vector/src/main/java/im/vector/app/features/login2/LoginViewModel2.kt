@@ -36,6 +36,8 @@ import im.vector.app.features.login.HomeServerConnectionConfigFactory
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.ReAuthHelper
+import im.vector.app.features.login.SignMode
+import im.vector.app.features.onboarding.OnboardingFlow
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixPatterns.getServerName
@@ -51,6 +53,7 @@ import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.internal.auth.SSOAction
 import timber.log.Timber
 import java.util.concurrent.CancellationException
 
@@ -819,8 +822,8 @@ class LoginViewModel2 @AssistedInject constructor(
         return loginConfig?.homeServerUrl
     }
 
-    fun getSsoUrl(redirectUrl: String, deviceId: String?, providerId: String?): String? {
-        return authenticationService.getSsoUrl(redirectUrl, deviceId, providerId)
+    fun getSsoUrl(redirectUrl: String, deviceId: String?, providerId: String?, action: SSOAction): String? {
+        return authenticationService.getSsoUrl(redirectUrl, deviceId, providerId, action)
     }
 
     fun getFallbackUrl(forSignIn: Boolean, deviceId: String?): String? {

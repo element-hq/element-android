@@ -23,6 +23,7 @@ import org.matrix.android.sdk.api.auth.login.LoginWizard
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.internal.auth.SSOAction
 
 /**
  * This interface defines methods to authenticate or to create an account to a matrix server.
@@ -44,7 +45,7 @@ interface AuthenticationService {
     /**
      * Get a SSO url.
      */
-    fun getSsoUrl(redirectUrl: String, deviceId: String?, providerId: String?): String?
+    fun getSsoUrl(redirectUrl: String, deviceId: String?, providerId: String?, action: SSOAction): String?
 
     /**
      * Get the sign in or sign up fallback URL.

@@ -32,6 +32,7 @@ import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentLoginSigninToAny2Binding
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.SSORedirectRouterActivity
+import im.vector.app.features.login.SignMode
 import im.vector.app.features.login.SocialLoginButtonsView
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
@@ -41,6 +42,7 @@ import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.failure.isInvalidPassword
+import org.matrix.android.sdk.internal.auth.SSOAction
 import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
@@ -128,7 +130,8 @@ class LoginFragmentToAny2 @Inject constructor() : AbstractSSOLoginFragment2<Frag
                     loginViewModel.getSsoUrl(
                             redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                             deviceId = state.deviceId,
-                            providerId = provider?.id
+                            providerId = provider?.id,
+                            action = if (state.signMode == SignMode2.SignUp) SSOAction.register else SSOAction.login
                     )
                             ?.let { openInCustomTab(it) }
                 }

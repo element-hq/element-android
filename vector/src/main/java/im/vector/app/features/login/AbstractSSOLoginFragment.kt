@@ -24,6 +24,7 @@ import androidx.browser.customtabs.CustomTabsSession
 import androidx.viewbinding.ViewBinding
 import com.airbnb.mvrx.withState
 import im.vector.app.core.utils.openUrlInChromeCustomTab
+import org.matrix.android.sdk.internal.auth.SSOAction
 
 abstract class AbstractSSOLoginFragment<VB : ViewBinding> : AbstractLoginFragment<VB>() {
 
@@ -90,7 +91,8 @@ abstract class AbstractSSOLoginFragment<VB : ViewBinding> : AbstractLoginFragmen
                 loginViewModel.getSsoUrl(
                         redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                         deviceId = state.deviceId,
-                        providerId = null
+                        providerId = null,
+                        action = if (state.signMode == SignMode.SignUp) SSOAction.register else SSOAction.login
                 )
                         ?.let { prefetchUrl(it) }
             }

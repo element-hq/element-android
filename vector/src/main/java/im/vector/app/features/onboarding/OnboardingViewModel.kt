@@ -61,6 +61,7 @@ import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.failure.isHomeserverUnavailable
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.internal.auth.SSOAction
 import timber.log.Timber
 import java.util.UUID
 import java.util.concurrent.CancellationException
@@ -735,12 +736,12 @@ class OnboardingViewModel @AssistedInject constructor(
         return loginConfig?.homeServerUrl
     }
 
-    fun fetchSsoUrl(redirectUrl: String, deviceId: String?, provider: SsoIdentityProvider?): String? {
+    fun fetchSsoUrl(redirectUrl: String, deviceId: String?, provider: SsoIdentityProvider?, action: SSOAction): String? {
         setState {
             val authDescription = AuthenticationDescription.Register(provider.toAuthenticationType())
             copy(selectedAuthenticationState = SelectedAuthenticationState(authDescription))
         }
-        return authenticationService.getSsoUrl(redirectUrl, deviceId, provider?.id)
+        return authenticationService.getSsoUrl(redirectUrl, deviceId, provider?.id, action)
     }
 
     fun getFallbackUrl(forSignIn: Boolean, deviceId: String?): String? {

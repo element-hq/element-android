@@ -33,8 +33,10 @@ import im.vector.app.features.login.SignMode
 import im.vector.app.features.login.SocialLoginButtonsView
 import im.vector.app.features.login.ssoIdentityProviders
 import im.vector.app.features.onboarding.OnboardingAction
+import im.vector.app.features.onboarding.OnboardingFlow
 import im.vector.app.features.onboarding.OnboardingViewState
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
+import org.matrix.android.sdk.internal.auth.SSOAction
 import javax.inject.Inject
 
 /**
@@ -86,7 +88,8 @@ class FtueAuthSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOF
                         viewModel.fetchSsoUrl(
                                 redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                                 deviceId = state.deviceId,
-                                provider = provider
+                                provider = provider,
+                                action = if (state.signMode == SignMode.SignUp) SSOAction.register else SSOAction.login
                         )
                                 ?.let { openInCustomTab(it) }
                     }
@@ -112,7 +115,7 @@ class FtueAuthSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOF
         when (state.selectedHomeserver.preferredLoginMode) {
             is LoginMode.Sso -> {
                 // change to only one button that is sign in with sso
-                views.loginSignupSigninSubmit.text = getString(R.string.login_signin_sso)
+                views.loginSignupSigninSubmit.text = if (state.selectedHomeserver.hasOidcCompatibilityFlow) getString(R.string.login_continue) else getString(R.string.login_signin_sso)
                 views.loginSignupSigninSignIn.isVisible = false
             }
             else -> {
@@ -127,7 +130,8 @@ class FtueAuthSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOF
             viewModel.fetchSsoUrl(
                     redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                     deviceId = state.deviceId,
-                    provider = null
+                    provider = null,
+                    action = if (state.onboardingFlow == OnboardingFlow.SignUp) SSOAction.register else SSOAction.login
             )
                     ?.let { openInCustomTab(it) }
         } else {
@@ -146,5 +150,7 @@ class FtueAuthSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOF
     override fun updateWithState(state: OnboardingViewState) {
         render(state)
         setupButtons(state)
+        // if talking to OIDC enabled homeserver in compatibility mode then immediately start SSO
+        if (state.selectedHomeserver.hasOidcCompatibilityFlow) submit()
     }
 }

@@ -25,8 +25,10 @@ import androidx.viewbinding.ViewBinding
 import com.airbnb.mvrx.withState
 import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.features.login.SSORedirectRouterActivity
+import im.vector.app.features.login.SignMode
 import im.vector.app.features.login.hasSso
 import im.vector.app.features.login.ssoIdentityProviders
+import org.matrix.android.sdk.internal.auth.SSOAction
 
 abstract class AbstractSSOLoginFragment2<VB : ViewBinding> : AbstractLoginFragment2<VB>() {
 
@@ -93,7 +95,8 @@ abstract class AbstractSSOLoginFragment2<VB : ViewBinding> : AbstractLoginFragme
                 loginViewModel.getSsoUrl(
                         redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                         deviceId = state.deviceId,
-                        providerId = null
+                        providerId = null,
+                        action = if (state.signMode == SignMode2.SignUp) SSOAction.register else SSOAction.login
                 )
                         ?.let { prefetchUrl(it) }
             }

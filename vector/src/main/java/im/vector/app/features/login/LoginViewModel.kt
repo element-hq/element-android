@@ -50,6 +50,7 @@ import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixIdFailure
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.internal.auth.SSOAction
 import timber.log.Timber
 import java.util.concurrent.CancellationException
 
@@ -844,8 +845,8 @@ class LoginViewModel @AssistedInject constructor(
         return loginConfig?.homeServerUrl
     }
 
-    fun getSsoUrl(redirectUrl: String, deviceId: String?, providerId: String?): String? {
-        return authenticationService.getSsoUrl(redirectUrl, deviceId, providerId)
+    fun getSsoUrl(redirectUrl: String, deviceId: String?, providerId: String?, action: SSOAction): String? {
+        return authenticationService.getSsoUrl(redirectUrl, deviceId, providerId, action)
     }
 
     fun getFallbackUrl(forSignIn: Boolean, deviceId: String?): String? {
