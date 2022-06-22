@@ -265,4 +265,18 @@ class PollItemFactoryTest {
                     }
         }
     }
+
+    @Test
+    fun `given a poll state when it is not Sending and not Ended then the poll is votable`() = runTest {
+        val sendingPollState = PollState.Sending
+        sendingPollState.isVotable() shouldBe false
+        val readyPollState = PollState.Ready
+        readyPollState.isVotable() shouldBe true
+        val votedPollState = PollState.Voted(1)
+        votedPollState.isVotable() shouldBe true
+        val undisclosedPollState = PollState.Undisclosed
+        undisclosedPollState.isVotable() shouldBe true
+        var endedPollState = PollState.Ended
+        endedPollState.isVotable() shouldBe false
+    }
 }
