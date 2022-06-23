@@ -708,7 +708,7 @@ internal class LocalEchoEventFactory @Inject constructor(
     }
 
     /**
-     * Returns RFC5870 formatted geo uri 'geo:latitude,longitude;uncertainty' like 'geo:40.05,29.24;30'
+     * Returns RFC5870 formatted geo uri 'geo:latitude,longitude;u=uncertainty' like 'geo:40.05,29.24;u=30'
      * Uncertainty of the location is in meters and not required.
      */
     private fun buildGeoUri(latitude: Double, longitude: Double, uncertainty: Double?): String {
@@ -718,7 +718,7 @@ internal class LocalEchoEventFactory @Inject constructor(
             append(",")
             append(longitude)
             uncertainty?.let {
-                append(";")
+                append(";u=")
                 append(it)
             }
         }
