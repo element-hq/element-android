@@ -125,6 +125,23 @@
         android:textStyle=""
         tools:text="event_id_only" />
 
+    <TextView
+        android:id="@+id/pushGatewayProfileTag"
+        style="@style/Widget.Vector.TextView.Body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:text="@string/push_gateway_item_profile_tag"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/pushGatewayProfileTagValue"
+        style="@style/Widget.Vector.TextView.Body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:textStyle="" />
+
     <Button
         android:id="@+id/pushGatewayDeleteButton"
         android:layout_width="wrap_content"
