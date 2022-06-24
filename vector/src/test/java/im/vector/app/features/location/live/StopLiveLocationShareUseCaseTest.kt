@@ -16,7 +16,7 @@
 
 package im.vector.app.features.location.live
 
-import im.vector.app.test.fakes.FakeSession
+import im.vector.app.test.fakes.FakeActiveSessionHolder
 import io.mockk.unmockkAll
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
@@ -29,10 +29,10 @@ private const val AN_EVENT_ID = "event_id"
 
 class StopLiveLocationShareUseCaseTest {
 
-    private val fakeSession = FakeSession()
+    private val fakeActiveSessionHolder = FakeActiveSessionHolder()
 
     private val stopLiveLocationShareUseCase = StopLiveLocationShareUseCase(
-            session = fakeSession
+            activeSessionHolder = fakeActiveSessionHolder.instance
     )
 
     @After
@@ -43,7 +43,9 @@ class StopLiveLocationShareUseCaseTest {
     @Test
     fun `given a room id when calling use case then the current live is stopped with success`() = runTest {
         val updateLiveResult = UpdateLiveLocationShareResult.Success(AN_EVENT_ID)
-        fakeSession.roomService()
+        fakeActiveSessionHolder
+                .fakeSession
+                .roomService()
                 .getRoom(A_ROOM_ID)
                 .locationSharingService()
                 .givenStopLiveLocationShareReturns(updateLiveResult)
@@ -57,7 +59,9 @@ class StopLiveLocationShareUseCaseTest {
     fun `given a room id and error during the process when calling use case then result is failure`() = runTest {
         val error = Throwable()
         val updateLiveResult = UpdateLiveLocationShareResult.Failure(error)
-        fakeSession.roomService()
+        fakeActiveSessionHolder
+                .fakeSession
+                .roomService()
                 .getRoom(A_ROOM_ID)
                 .locationSharingService()
                 .givenStopLiveLocationShareReturns(updateLiveResult)
