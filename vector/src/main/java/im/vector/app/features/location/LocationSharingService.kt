@@ -186,10 +186,9 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
 
     @Synchronized
     private fun removeRoomArgs(roomId: String) {
-        val beaconIds = roomArgsMap
+        roomArgsMap
                 .filter { it.value.roomId == roomId }
-                .map { it.key }
-        beaconIds.forEach { roomArgsMap.remove(it) }
+                .forEach { roomArgsMap.remove(it.key) }
     }
 
     private fun listenForLiveSummaryChanges(roomId: String, eventId: String) {
