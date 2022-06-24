@@ -74,22 +74,18 @@ class LocationSharingServiceConnection @Inject constructor(
         forwardErrorToCallbacks(error)
     }
 
-    @Synchronized
     private fun addCallback(callback: Callback) {
         callbacks.add(callback)
     }
 
-    @Synchronized
     private fun removeCallback(callback: Callback) {
         callbacks.remove(callback)
     }
 
-    @Synchronized
     private fun onCallbackActionNoArg(action: Callback.() -> Unit) {
         callbacks.forEach(action)
     }
 
-    @Synchronized
     private fun forwardErrorToCallbacks(error: Throwable) {
         callbacks.forEach { it.onLocationServiceError(error) }
     }
