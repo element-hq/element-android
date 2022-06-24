@@ -286,7 +286,7 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
             throwable.isWeakPassword() || throwable.isInvalidPassword() -> {
                 views.passwordFieldTil.error = errorFormatter.toHumanReadable(throwable)
             }
-            throwable.isRegistrationDisabled() -> {
+            isSignupMode && throwable.isRegistrationDisabled() -> {
                 MaterialAlertDialogBuilder(requireActivity())
                         .setTitle(R.string.dialog_title_error)
                         .setMessage(getString(R.string.login_registration_disabled))
