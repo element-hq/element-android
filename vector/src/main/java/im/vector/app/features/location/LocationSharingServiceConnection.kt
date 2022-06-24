@@ -83,10 +83,10 @@ class LocationSharingServiceConnection @Inject constructor(
     }
 
     private fun onCallbackActionNoArg(action: Callback.() -> Unit) {
-        callbacks.forEach(action)
+        callbacks.toList().forEach(action)
     }
 
     private fun forwardErrorToCallbacks(error: Throwable) {
-        callbacks.forEach { it.onLocationServiceError(error) }
+        callbacks.toList().forEach { it.onLocationServiceError(error) }
     }
 }

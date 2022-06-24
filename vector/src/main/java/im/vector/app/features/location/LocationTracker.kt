@@ -217,7 +217,7 @@ class LocationTracker @Inject constructor(
 
     @Synchronized
     private fun onNoLocationProviderAvailable() {
-        callbacks.forEach {
+        callbacks.toList().forEach {
             try {
                 it.onNoLocationProviderAvailable()
             } catch (error: Exception) {
@@ -228,7 +228,7 @@ class LocationTracker @Inject constructor(
 
     @Synchronized
     private fun onLocationUpdate(locationData: LocationData) {
-        callbacks.forEach {
+        callbacks.toList().forEach {
             try {
                 it.onLocationUpdate(locationData)
             } catch (error: Exception) {
