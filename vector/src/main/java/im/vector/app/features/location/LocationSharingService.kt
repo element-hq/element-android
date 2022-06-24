@@ -18,7 +18,6 @@ package im.vector.app.features.location
 
 import android.content.Intent
 import android.os.Binder
-import android.os.Handler
 import android.os.IBinder
 import android.os.Parcelable
 import dagger.hilt.android.AndroidEntryPoint
@@ -64,7 +63,6 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
     private val roomArgsMap = mutableMapOf<String, RoomArgs>()
     var callback: Callback? = null
     private val jobs = mutableListOf<Job>()
-    private val mainHandler by lazy { Handler(mainLooper) }
 
     override fun onCreate() {
         super.onCreate()
@@ -86,7 +84,7 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
             startForeground(roomArgs.roomId.hashCode(), notification)
 
             // Send beacon info state event
-            launchInIO { session ->
+            launchWithActiveSession { session ->
                 sendStartingLiveBeaconInfo(session, roomArgs)
             }
         }
@@ -141,7 +139,7 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
             beaconInfoEventId: String,
             locationData: LocationData
     ) {
-        launchInIO { session ->
+        launchWithActiveSession { session ->
             session.getRoom(roomId)
                     ?.locationSharingService()
                     ?.sendLiveLocation(
@@ -195,23 +193,20 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
         activeSessionHolder
                 .getSafeActiveSession()
                 ?.let { session ->
-                    mainHandler.post {
-                        val job = getLiveLocationShareSummaryUseCase.execute(roomId, eventId)
-                                .distinctUntilChangedBy { it.isActive }
-                                .filter { it.isActive == false }
-                                .onEach { stopSharingLocation(roomId) }
-                                .launchIn(session.coroutineScope)
-                        jobs.add(job)
-                    }
+                    val job = getLiveLocationShareSummaryUseCase.execute(roomId, eventId)
+                            .distinctUntilChangedBy { it.isActive }
+                            .filter { it.isActive == false }
+                            .onEach { stopSharingLocation(roomId) }
+                            .launchIn(session.coroutineScope)
+                    jobs.add(job)
                 }
     }
 
-    private fun launchInIO(block: suspend CoroutineScope.(Session) -> Unit) =
+    private fun launchWithActiveSession(block: suspend CoroutineScope.(Session) -> Unit) =
             activeSessionHolder
                     .getSafeActiveSession()
                     ?.let { session ->
                         session.coroutineScope.launch(
-                                context = session.coroutineDispatchers.io,
                                 block = { block(session) }
                         )
                     }
