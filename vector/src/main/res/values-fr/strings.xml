@@ -582,7 +582,7 @@
     <string name="merged_events_expand">développer</string>
     <string name="merged_events_collapse">réduire</string>
     <string name="generic_label_and_value">%1$s : %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="room_participants_action_remove">Expulser</string>
     <string name="settings_inline_url_preview_summary">Afficher un aperçu des liens dans la discussion quand votre serveur d’accueil le permet.</string>
     <string name="settings_send_typing_notifs">Envoyer des notifications de saisie</string>
