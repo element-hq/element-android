@@ -17,10 +17,9 @@
 package im.vector.app.features.poll
 
 import im.vector.app.features.home.room.detail.timeline.item.PollOptionViewState
-import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
 
 data class PollViewState(
-    val question: EpoxyCharSequence,
+    val question: String,
     val totalVotes: String,
     val canVote: Boolean,
     val optionViewStates: List<PollOptionViewState>?,

@@ -238,7 +238,7 @@ class MessageItemFactory @Inject constructor(
         return PollItem_()
                 .attributes(attributes)
                 .eventId(informationData.eventId)
-                .pollQuestion(pollViewState.question)
+                .pollQuestion(createPollQuestion(informationData, pollViewState.question, callback))
                 .canVote(pollViewState.canVote)
                 .totalVotesText(pollViewState.totalVotes)
                 .optionViewStates(pollViewState.optionViewStates)
@@ -247,6 +247,16 @@ class MessageItemFactory @Inject constructor(
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .callback(callback)
     }
+
+    private fun createPollQuestion(
+            informationData: MessageInformationData,
+            question: String,
+            callback: TimelineEventController.Callback?,
+    ) = if (informationData.hasBeenEdited) {
+        annotateWithEdited(stringProvider, colorProvider, dimensionConverter, question, callback, informationData)
+    } else {
+        question
+    }.toEpoxyCharSequence()
 
     private fun buildAudioMessageItem(
             params: TimelineItemFactoryParams,

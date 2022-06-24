@@ -17,17 +17,12 @@
 package im.vector.app.features.home.room.detail.timeline.factory
 
 import im.vector.app.R
-import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
-import im.vector.app.features.home.room.detail.timeline.factory.MessageItemFactoryHelper.annotateWithEdited
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.app.features.home.room.detail.timeline.item.PollOptionViewState
 import im.vector.app.features.home.room.detail.timeline.item.PollResponseData
 import im.vector.app.features.poll.PollViewState
-import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
-import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.PollCreationInfo
@@ -35,8 +30,6 @@ import javax.inject.Inject
 
 class PollItemViewStateFactory @Inject constructor(
         private val stringProvider: StringProvider,
-        private val colorProvider: ColorProvider,
-        private val dimensionConverter: DimensionConverter,
 ) {
 
     fun create(
@@ -46,8 +39,7 @@ class PollItemViewStateFactory @Inject constructor(
     ): PollViewState {
         val pollCreationInfo = pollContent.getBestPollCreationInfo()
 
-        val questionText = pollCreationInfo?.question?.getBestQuestion().orEmpty()
-        val question = createPollQuestion(informationData, questionText, callback)
+        val question = pollCreationInfo?.question?.getBestQuestion().orEmpty()
 
         val pollResponseSummary = informationData.pollResponseAggregatedSummary
         val winnerVoteCount = pollResponseSummary?.winnerVoteCount
@@ -72,7 +64,7 @@ class PollItemViewStateFactory @Inject constructor(
         }
     }
 
-    private fun createSendingPollViewState(question: EpoxyCharSequence, pollCreationInfo: PollCreationInfo?): PollViewState {
+    private fun createSendingPollViewState(question: String, pollCreationInfo: PollCreationInfo?): PollViewState {
         return PollViewState(
                 question = question,
                 totalVotes = stringProvider.getString(R.string.poll_no_votes_cast),
@@ -87,7 +79,7 @@ class PollItemViewStateFactory @Inject constructor(
     }
 
     private fun createEndedPollViewState(
-            question: EpoxyCharSequence,
+            question: String,
             pollCreationInfo: PollCreationInfo?,
             pollResponseSummary: PollResponseData?,
             totalVotes: Int,
@@ -111,7 +103,7 @@ class PollItemViewStateFactory @Inject constructor(
     }
 
     private fun createUndisclosedPollViewState(
-            question: EpoxyCharSequence,
+            question: String,
             pollCreationInfo: PollCreationInfo?,
             pollResponseSummary: PollResponseData?
     ): PollViewState {
@@ -131,7 +123,7 @@ class PollItemViewStateFactory @Inject constructor(
     }
 
     private fun createVotedPollViewState(
-            question: EpoxyCharSequence,
+            question: String,
             pollCreationInfo: PollCreationInfo?,
             pollResponseSummary: PollResponseData?,
             totalVotes: Int
@@ -154,7 +146,7 @@ class PollItemViewStateFactory @Inject constructor(
         )
     }
 
-    private fun createReadyPollViewState(question: EpoxyCharSequence, pollCreationInfo: PollCreationInfo?, totalVotes: Int): PollViewState {
+    private fun createReadyPollViewState(question: String, pollCreationInfo: PollCreationInfo?, totalVotes: Int): PollViewState {
         val totalVotesText = if (totalVotes == 0) {
             stringProvider.getString(R.string.poll_no_votes_cast)
         } else {
@@ -172,14 +164,4 @@ class PollItemViewStateFactory @Inject constructor(
                 },
         )
     }
-
-    private fun createPollQuestion(
-            informationData: MessageInformationData,
-            question: String,
-            callback: TimelineEventController.Callback?,
-    ) = if (informationData.hasBeenEdited) {
-        annotateWithEdited(stringProvider, colorProvider, dimensionConverter, question, callback, informationData)
-    } else {
-        question
-    }.toEpoxyCharSequence()
 }
