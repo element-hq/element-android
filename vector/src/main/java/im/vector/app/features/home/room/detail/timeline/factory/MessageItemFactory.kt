@@ -53,6 +53,8 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageTextItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageTextItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceItem_
+import im.vector.app.features.home.room.detail.timeline.item.PollItem
+import im.vector.app.features.home.room.detail.timeline.item.PollItem_
 import im.vector.app.features.home.room.detail.timeline.item.RedactedMessageItem
 import im.vector.app.features.home.room.detail.timeline.item.RedactedMessageItem_
 import im.vector.app.features.home.room.detail.timeline.item.VerificationRequestItem
@@ -128,7 +130,7 @@ class MessageItemFactory @Inject constructor(
         private val vectorPreferences: VectorPreferences,
         private val urlMapProvider: UrlMapProvider,
         private val liveLocationShareMessageItemFactory: LiveLocationShareMessageItemFactory,
-        private val pollItemFactory: PollItemFactory,
+        private val pollItemViewStateFactory: PollItemViewStateFactory,
 ) {
 
     // TODO inject this properly?
@@ -188,7 +190,7 @@ class MessageItemFactory @Inject constructor(
             is MessageFileContent -> buildFileMessageItem(messageContent, highlight, attributes)
             is MessageAudioContent -> buildAudioContent(params, messageContent, informationData, highlight, attributes)
             is MessageVerificationRequestContent -> buildVerificationRequestMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessagePollContent -> pollItemFactory.create(messageContent, informationData, highlight, callback, attributes)
+            is MessagePollContent -> buildPollItem(messageContent, informationData, highlight, callback, attributes)
             is MessageLocationContent -> buildLocationItem(messageContent, informationData, highlight, attributes)
             is MessageBeaconInfoContent -> liveLocationShareMessageItemFactory.create(params.event, highlight, attributes)
             else -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
@@ -222,6 +224,28 @@ class MessageItemFactory @Inject constructor(
                 .locationPinProvider(locationPinProvider)
                 .highlighted(highlight)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
+    }
+
+    private fun buildPollItem(
+            pollContent: MessagePollContent,
+            informationData: MessageInformationData,
+            highlight: Boolean,
+            callback: TimelineEventController.Callback?,
+            attributes: AbsMessageItem.Attributes,
+    ): PollItem {
+        val pollViewState = pollItemViewStateFactory.create(pollContent, informationData, callback)
+
+        return PollItem_()
+                .attributes(attributes)
+                .eventId(informationData.eventId)
+                .pollQuestion(pollViewState.question)
+                .canVote(pollViewState.canVote)
+                .totalVotesText(pollViewState.totalVotes)
+                .optionViewStates(pollViewState.optionViewStates)
+                .edited(informationData.hasBeenEdited)
+                .highlighted(highlight)
+                .leftGuideline(avatarSizeProvider.leftGuideline)
+                .callback(callback)
     }
 
     private fun buildAudioMessageItem(
