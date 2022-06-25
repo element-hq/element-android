@@ -26,7 +26,6 @@ import im.vector.app.features.settings.VectorPreferences
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
 import io.noties.markwon.MarkwonPlugin
-import io.noties.markwon.MarkwonPlugin.Registry
 import io.noties.markwon.PrecomputedFutureTextSetterCompat
 import io.noties.markwon.ext.latex.JLatexMathPlugin
 import io.noties.markwon.ext.latex.JLatexMathTheme
@@ -37,7 +36,6 @@ import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin
 import org.commonmark.node.Node
 import org.commonmark.parser.Parser
 import timber.log.Timber
-import java.util.Collections
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -75,17 +73,14 @@ class EventHtmlRenderer @Inject constructor(
     } else {
         builder
     }
-        .usePlugin(MarkwonInlineParserPlugin.create(MarkwonInlineParser.factoryBuilderNoDefaults()))
-        .usePlugin(object : AbstractMarkwonPlugin() {
-            override fun configure(registry: Registry) {
-                registry.require(MarkwonInlineParserPlugin::class.java, { plugin: MarkwonInlineParserPlugin ->
-                    plugin.factoryBuilder().addInlineProcessor(HtmlInlineProcessor())
-                })
-            }
-        })
+        .usePlugin(
+            MarkwonInlineParserPlugin.create(
+                MarkwonInlineParser.factoryBuilderNoDefaults().addInlineProcessor(HtmlInlineProcessor())
+            )
+        )
         .usePlugin(object : AbstractMarkwonPlugin() {
             override fun configureParser(builder: Parser.Builder) {
-                builder.enabledBlockTypes(Collections.emptySet())
+                builder.enabledBlockTypes(kotlin.collections.emptySet())
             }
         })
         .textSetter(PrecomputedFutureTextSetterCompat.create())
