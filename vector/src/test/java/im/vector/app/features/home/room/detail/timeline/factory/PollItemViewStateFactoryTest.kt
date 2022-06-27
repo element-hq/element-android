@@ -70,7 +70,7 @@ private val A_POLL_CONTENT = MessagePollContent(
                                 unstableAnswer = "Double Espresso"
                         ),
                         PollAnswer(
-                                id =A_POLL_OPTION_IDS[1],
+                                id = A_POLL_OPTION_IDS[1],
                                 unstableAnswer = "Macchiato"
                         ),
                         PollAnswer(
@@ -228,115 +228,4 @@ class PollItemViewStateFactoryTest {
                 },
         )
     }
-
-    /*
-    @Test
-    fun `given a sending poll then all option view states is PollSending`() = runTest {
-        with(pollItemViewStateFactory) {
-            A_POLL_CONTENT
-                    .getBestPollCreationInfo()
-                    ?.answers
-                    ?.mapToOptions(PollState.Sending, A_MESSAGE_INFORMATION_DATA)
-                    ?.forEachIndexed { index, pollOptionViewState ->
-                        A_POLL_CONTENT.getBestPollCreationInfo()?.answers?.get(index)?.let { option ->
-                            pollOptionViewState shouldBeEqualTo PollOptionViewState.PollSending(option.id ?: "", option.getBestAnswer() ?: "")
-                        }
-                    }
-        }
-    }
-
-    @Test
-    fun `given a sent poll then all option view states is PollReady`() = runTest {
-        with(pollItemViewStateFactory) {
-            A_POLL_CONTENT
-                    .getBestPollCreationInfo()
-                    ?.answers
-                    ?.mapToOptions(PollState.Sending, A_MESSAGE_INFORMATION_DATA)
-                    ?.forEachIndexed { index, pollOptionViewState ->
-                        A_POLL_CONTENT.getBestPollCreationInfo()?.answers?.get(index)?.let { option ->
-                            pollOptionViewState shouldBeEqualTo PollOptionViewState.PollSending(option.id ?: "", option.getBestAnswer() ?: "")
-                        }
-                    }
-        }
-    }
-
-    @Test
-    fun `given a sent poll when a vote is cast then all option view states is PollVoted`() = runTest {
-        with(pollItemViewStateFactory) {
-            A_POLL_CONTENT
-                    .getBestPollCreationInfo()
-                    ?.answers
-                    ?.mapToOptions(PollState.Voted(1), A_MESSAGE_INFORMATION_DATA)
-                    ?.forEachIndexed { index, pollOptionViewState ->
-                        A_POLL_CONTENT.getBestPollCreationInfo()?.answers?.get(index)?.let { option ->
-                            val voteSummary = A_MESSAGE_INFORMATION_DATA.pollResponseAggregatedSummary?.votes?.get(option.id)
-                            pollOptionViewState shouldBeEqualTo PollOptionViewState.PollVoted(
-                                    optionId = option.id ?: "",
-                                    optionAnswer = option.getBestAnswer() ?: "",
-                                    voteCount = A_MESSAGE_INFORMATION_DATA.pollResponseAggregatedSummary?.totalVotes ?: 0,
-                                    votePercentage = voteSummary?.percentage ?: 0.0,
-                                    isSelected = A_MESSAGE_INFORMATION_DATA.pollResponseAggregatedSummary?.myVote == option.id,
-                            )
-                        }
-                    }
-        }
-    }
-
-    @Test
-    fun `given a sent poll when the poll is undisclosed then all option view states is PollUndisclosed`() = runTest {
-        with(pollItemViewStateFactory) {
-            A_POLL_CONTENT
-                    .getBestPollCreationInfo()
-                    ?.answers
-                    ?.mapToOptions(PollState.Undisclosed, A_MESSAGE_INFORMATION_DATA)
-                    ?.forEachIndexed { index, pollOptionViewState ->
-                        A_POLL_CONTENT.getBestPollCreationInfo()?.answers?.get(index)?.let { option ->
-                            pollOptionViewState shouldBeEqualTo PollOptionViewState.PollUndisclosed(
-                                    optionId = option.id ?: "",
-                                    optionAnswer = option.getBestAnswer() ?: "",
-                                    isSelected = A_MESSAGE_INFORMATION_DATA.pollResponseAggregatedSummary?.myVote == option.id,
-                            )
-                        }
-                    }
-        }
-    }
-
-    @Test
-    fun `given an ended poll then all option view states is Ended`() = runTest {
-        with(pollItemViewStateFactory) {
-            A_POLL_CONTENT
-                    .getBestPollCreationInfo()
-                    ?.answers
-                    ?.mapToOptions(PollState.Ended, A_MESSAGE_INFORMATION_DATA)
-                    ?.forEachIndexed { index, pollOptionViewState ->
-                        A_POLL_CONTENT.getBestPollCreationInfo()?.answers?.get(index)?.let { option ->
-                            val voteSummary = A_MESSAGE_INFORMATION_DATA.pollResponseAggregatedSummary?.votes?.get(option.id)
-                            val voteCount = A_MESSAGE_INFORMATION_DATA.pollResponseAggregatedSummary?.totalVotes ?: 0
-                            val winnerVoteCount = A_MESSAGE_INFORMATION_DATA.pollResponseAggregatedSummary?.winnerVoteCount ?: 0
-                            pollOptionViewState shouldBeEqualTo PollOptionViewState.PollEnded(
-                                    optionId = option.id ?: "",
-                                    optionAnswer = option.getBestAnswer() ?: "",
-                                    voteCount = voteCount,
-                                    votePercentage = voteSummary?.percentage ?: 0.0,
-                                    isWinner = winnerVoteCount != 0 && voteCount == winnerVoteCount,
-                            )
-                        }
-                    }
-        }
-    }
-
-    @Test
-    fun `given a poll state when it is not Sending and not Ended then the poll is votable`() = runTest {
-        val sendingPollState = PollState.Sending
-        sendingPollState.isVotable() shouldBe false
-        val readyPollState = PollState.Ready
-        readyPollState.isVotable() shouldBe true
-        val votedPollState = PollState.Voted(1)
-        votedPollState.isVotable() shouldBe true
-        val undisclosedPollState = PollState.Undisclosed
-        undisclosedPollState.isVotable() shouldBe true
-        var endedPollState = PollState.Ended
-        endedPollState.isVotable() shouldBe false
-    }
-     */
 }
