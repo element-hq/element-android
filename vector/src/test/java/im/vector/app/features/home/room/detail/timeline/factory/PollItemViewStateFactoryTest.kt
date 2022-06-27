@@ -26,7 +26,6 @@ import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLay
 import im.vector.app.features.poll.PollViewState
 import im.vector.app.test.fakes.FakeStringProvider
 import org.amshove.kluent.shouldBeEqualTo
-import org.junit.Before
 import org.junit.Test
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.PollAnswer
@@ -79,20 +78,11 @@ private val A_POLL_CONTENT = MessagePollContent(
 
 class PollItemViewStateFactoryTest {
 
-    private lateinit var pollItemViewStateFactory: PollItemViewStateFactory
-
-    private val stringProvider = FakeStringProvider()
-
-    @Before
-    fun setup() {
-        // We are not going to test any UI related code
-        pollItemViewStateFactory = PollItemViewStateFactory(
-                stringProvider = stringProvider.instance,
-        )
-    }
-
     @Test
     fun `given a sending poll state then poll is not votable and option states are PollSending`() {
+        val stringProvider = FakeStringProvider()
+        val pollItemViewStateFactory = PollItemViewStateFactory(stringProvider.instance)
+
         val sendingPollInformationData = A_MESSAGE_INFORMATION_DATA.copy(sendState = SendState.SENDING)
         val pollViewState = pollItemViewStateFactory.create(
                 pollContent = A_POLL_CONTENT,
@@ -114,6 +104,9 @@ class PollItemViewStateFactoryTest {
 
     @Test
     fun `given a sent poll state when poll is closed then poll is not votable and option states are Ended`() {
+        val stringProvider = FakeStringProvider()
+        val pollItemViewStateFactory = PollItemViewStateFactory(stringProvider.instance)
+
         val closedPollSummary = A_POLL_RESPONSE_DATA.copy(isClosed = true)
         val closedPollInformationData = A_MESSAGE_INFORMATION_DATA.copy(pollResponseAggregatedSummary = closedPollSummary)
 
@@ -140,6 +133,9 @@ class PollItemViewStateFactoryTest {
 
     @Test
     fun `given a sent poll when undisclosed poll type is selected then poll is votable and option states are PollUndisclosed`() {
+        val stringProvider = FakeStringProvider()
+        val pollItemViewStateFactory = PollItemViewStateFactory(stringProvider.instance)
+
         val pollViewState = pollItemViewStateFactory.create(
                 pollContent = A_POLL_CONTENT,
                 informationData = A_MESSAGE_INFORMATION_DATA,
@@ -161,6 +157,9 @@ class PollItemViewStateFactoryTest {
 
     @Test
     fun `given a sent poll when my vote exists then poll is still votable and options states are PollVoted`() {
+        val stringProvider = FakeStringProvider()
+        val pollItemViewStateFactory = PollItemViewStateFactory(stringProvider.instance)
+
         val votedPollData = A_POLL_RESPONSE_DATA.copy(
                 totalVotes = 1,
                 myVote = A_POLL_OPTION_IDS[0],
@@ -196,6 +195,9 @@ class PollItemViewStateFactoryTest {
 
     @Test
     fun `given a sent poll when poll type is disclosed then poll is votable and option view states are PollReady`() {
+        val stringProvider = FakeStringProvider()
+        val pollItemViewStateFactory = PollItemViewStateFactory(stringProvider.instance)
+
         val disclosedPollContent = A_POLL_CONTENT.copy(
                 unstablePollCreationInfo = A_POLL_CONTENT.getBestPollCreationInfo()?.copy(
                         kind = PollType.DISCLOSED_UNSTABLE
