@@ -32,6 +32,10 @@ class LocationDataTest {
                 LocationData(latitude = 12.34, longitude = 56.78, uncertainty = 13.56)
         parseGeo("geo:12.34,56.78") shouldBeEqualTo
                 LocationData(latitude = 12.34, longitude = 56.78, uncertainty = null)
+    }
+
+    @Test
+    fun lenientCases() {
         // Error is ignored in case of invalid uncertainty
         parseGeo("geo:12.34,56.78;u=13.5z6") shouldBeEqualTo
                 LocationData(latitude = 12.34, longitude = 56.78, uncertainty = null)
@@ -80,7 +84,7 @@ class LocationDataTest {
 
     @Test
     fun unstablePrefixTest() {
-        val geoUri = "geo :12.34,56.78;u=13.56"
+        val geoUri = "aGeoUri"
 
         val contentWithUnstablePrefixes = MessageLocationContent(body = "", geoUri = "", unstableLocationInfo = LocationInfo(geoUri = geoUri))
         contentWithUnstablePrefixes.getBestLocationInfo()?.geoUri.shouldBeEqualTo(geoUri)
