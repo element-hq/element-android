@@ -68,9 +68,20 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
         super.onCreate()
         Timber.i("### LocationSharingService.onCreate")
 
+        initLocationTracking()
+    }
+
+    private fun initLocationTracking() {
         // Start tracking location
         locationTracker.addCallback(this)
         locationTracker.start()
+
+        launchWithActiveSession { session ->
+            val job = locationTracker.locations
+                    .onEach(this@LocationSharingService::onLocationUpdate)
+                    .launchIn(session.coroutineScope)
+            jobs.add(job)
+        }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -124,8 +135,7 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
         tryToDestroyMe()
     }
 
-    @Synchronized
-    override fun onLocationUpdate(locationData: LocationData) {
+    private fun onLocationUpdate(locationData: LocationData) {
         Timber.i("### LocationSharingService.onLocationUpdate. Uncertainty: ${locationData.uncertainty}")
 
         // Emit location update to all rooms in which live location sharing is active
@@ -156,7 +166,6 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
         stopSelf()
     }
 
-    @Synchronized
     private fun tryToDestroyMe() {
         if (roomArgsMap.isEmpty()) {
             Timber.i("### LocationSharingService. Destroying self, time is up for all rooms")
@@ -177,12 +186,10 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
         destroyMe()
     }
 
-    @Synchronized
     private fun addRoomArgs(beaconEventId: String, roomArgs: RoomArgs) {
         roomArgsMap[beaconEventId] = roomArgs
     }
 
-    @Synchronized
     private fun removeRoomArgs(roomId: String) {
         roomArgsMap.toMap()
                 .filter { it.value.roomId == roomId }
