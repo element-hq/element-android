@@ -204,22 +204,32 @@ class PollItemViewStateFactoryTest {
         )
     }
 
-    /*
     @Test
-    fun `given a sent poll when poll type is disclosed then PollState is Ready`() = runTest {
+    fun `given a sent poll when poll type is disclosed then poll is votable and option view states are PollReady`() = runTest {
         val disclosedPollContent = A_POLL_CONTENT.copy(
                 unstablePollCreationInfo = A_POLL_CONTENT.getBestPollCreationInfo()?.copy(
                         kind = PollType.DISCLOSED_UNSTABLE
                 )
         )
-
-        pollItemViewStateFactory.createPollState(
-                informationData = A_MESSAGE_INFORMATION_DATA,
-                pollResponseSummary = A_POLL_RESPONSE_DATA,
+        val pollViewState = pollItemViewStateFactory.create(
                 pollContent = disclosedPollContent,
-        ) shouldBe PollState.Ready
+                informationData = A_MESSAGE_INFORMATION_DATA,
+        )
+
+        pollViewState shouldBeEqualTo PollViewState(
+                question = A_POLL_CONTENT.getBestPollCreationInfo()?.question?.getBestQuestion() ?: "",
+                totalVotes = stringProvider.instance.getString(R.string.poll_no_votes_cast),
+                canVote = true,
+                optionViewStates = A_POLL_CONTENT.getBestPollCreationInfo()?.answers?.map { answer ->
+                    PollOptionViewState.PollReady(
+                            optionId = answer.id ?: "",
+                            optionAnswer = answer.getBestAnswer() ?: ""
+                    )
+                },
+        )
     }
 
+    /*
     @Test
     fun `given a sending poll then all option view states is PollSending`() = runTest {
         with(pollItemViewStateFactory) {
