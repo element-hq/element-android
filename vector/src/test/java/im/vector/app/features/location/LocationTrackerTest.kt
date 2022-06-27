@@ -203,7 +203,7 @@ class LocationTrackerTest {
     }
 
     @Test
-    fun `when location updates are received from network provider then network locations are taken if none are received from fused or gps provider`() = runTest {
+    fun `when location updates are received from network provider then network locations are taken if none are received from fused, gps provider`() = runTest {
         every { fakeActiveSessionHolder.fakeSession.coroutineScope } returns this
         val providers = listOf(LocationManager.GPS_PROVIDER, LocationManager.FUSED_PROVIDER, LocationManager.NETWORK_PROVIDER)
         mockAvailableProviders(providers)

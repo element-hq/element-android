@@ -64,7 +64,7 @@ class LocationTracker @Inject constructor(
     private val _locations = MutableSharedFlow<Location>(replay = 1)
 
     /**
-     * SharedFlow to collect location updates
+     * SharedFlow to collect location updates.
      */
     val locations = _locations.asSharedFlow()
             .onEach { Timber.d("new location emitted") }
