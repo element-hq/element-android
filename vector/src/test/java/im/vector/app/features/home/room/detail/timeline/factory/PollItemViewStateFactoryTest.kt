@@ -145,16 +145,28 @@ class PollItemViewStateFactoryTest {
         )
     }
 
-    /*
     @Test
-    fun `given a sent poll when undisclosed poll type is selected then PollState is Undisclosed`() = runTest {
-        pollItemViewStateFactory.createPollState(
-                informationData = A_MESSAGE_INFORMATION_DATA,
-                pollResponseSummary = A_POLL_RESPONSE_DATA,
+    fun `given a sent poll when undisclosed poll type is selected then poll is votable and option states are PollUndisclosed`() = runTest {
+        val pollViewState = pollItemViewStateFactory.create(
                 pollContent = A_POLL_CONTENT,
-        ) shouldBe PollState.Undisclosed
+                informationData = A_MESSAGE_INFORMATION_DATA,
+        )
+
+        pollViewState shouldBeEqualTo PollViewState(
+                question = A_POLL_CONTENT.getBestPollCreationInfo()?.question?.getBestQuestion() ?: "",
+                totalVotes = "",
+                canVote = true,
+                optionViewStates = A_POLL_CONTENT.getBestPollCreationInfo()?.answers?.map { answer ->
+                    PollOptionViewState.PollUndisclosed(
+                            optionId = answer.id ?: "",
+                            optionAnswer = answer.getBestAnswer() ?: "",
+                            isSelected = false
+                    )
+                },
+        )
     }
 
+    /*
     @Test
     fun `given a sent poll when my vote exists then PollState is Voted`() = runTest {
         val votedPollData = A_POLL_RESPONSE_DATA.copy(
