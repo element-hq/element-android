@@ -233,7 +233,7 @@ class MessageItemFactory @Inject constructor(
             callback: TimelineEventController.Callback?,
             attributes: AbsMessageItem.Attributes,
     ): PollItem {
-        val pollViewState = pollItemViewStateFactory.create(pollContent, informationData, callback)
+        val pollViewState = pollItemViewStateFactory.create(pollContent, informationData)
 
         return PollItem_()
                 .attributes(attributes)

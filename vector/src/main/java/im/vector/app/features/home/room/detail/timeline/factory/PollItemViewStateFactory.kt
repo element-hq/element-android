@@ -18,7 +18,6 @@ package im.vector.app.features.home.room.detail.timeline.factory
 
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.app.features.home.room.detail.timeline.item.PollOptionViewState
 import im.vector.app.features.home.room.detail.timeline.item.PollResponseData
@@ -35,7 +34,6 @@ class PollItemViewStateFactory @Inject constructor(
     fun create(
             pollContent: MessagePollContent,
             informationData: MessageInformationData,
-            callback: TimelineEventController.Callback?,
     ): PollViewState {
         val pollCreationInfo = pollContent.getBestPollCreationInfo()
 
