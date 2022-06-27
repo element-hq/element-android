@@ -1,4 +1,18 @@
-Changes in Element v1.4.24 (2022-06-21)
+Changes in Element v1.4.25 (2022-06-27)
+=======================================
+
+Bugfixes 🐛
+----------
+- Second attempt to fix session database migration to version 30.
+
+Changes in Element v1.4.24 (2022-06-22)
+=======================================
+
+Bugfixes 🐛
+----------
+- First attempt to fix session database migration to version 30.
+
+Changes in Element v1.4.23 (2022-06-21)
 =======================================
 
 Bugfixes 🐛
