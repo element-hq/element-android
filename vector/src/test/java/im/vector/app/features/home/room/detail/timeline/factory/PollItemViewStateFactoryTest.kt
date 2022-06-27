@@ -21,6 +21,7 @@ import im.vector.app.R
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.app.features.home.room.detail.timeline.item.PollOptionViewState
 import im.vector.app.features.home.room.detail.timeline.item.PollResponseData
+import im.vector.app.features.home.room.detail.timeline.item.PollVoteSummaryData
 import im.vector.app.features.home.room.detail.timeline.item.ReactionsSummaryData
 import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
 import im.vector.app.features.poll.PollViewState
@@ -54,6 +55,8 @@ private val A_POLL_RESPONSE_DATA = PollResponseData(
         votes = emptyMap(),
 )
 
+private val A_POLL_OPTION_IDS = listOf("5ef5f7b0-c9a1-49cf-a0b3-374729a43e76", "ec1a4db0-46d8-4d7a-9bb6-d80724715938", "3677ca8e-061b-40ab-bffe-b22e4e88fcad")
+
 private val A_POLL_CONTENT = MessagePollContent(
         unstablePollCreationInfo = PollCreationInfo(
                 question = PollQuestion(
@@ -63,15 +66,15 @@ private val A_POLL_CONTENT = MessagePollContent(
                 maxSelections = 1,
                 answers = listOf(
                         PollAnswer(
-                                id = "5ef5f7b0-c9a1-49cf-a0b3-374729a43e76",
+                                id = A_POLL_OPTION_IDS[0],
                                 unstableAnswer = "Double Espresso"
                         ),
                         PollAnswer(
-                                id = "ec1a4db0-46d8-4d7a-9bb6-d80724715938",
+                                id =A_POLL_OPTION_IDS[1],
                                 unstableAnswer = "Macchiato"
                         ),
                         PollAnswer(
-                                id = "3677ca8e-061b-40ab-bffe-b22e4e88fcad",
+                                id = A_POLL_OPTION_IDS[2],
                                 unstableAnswer = "Iced Coffee"
                         ),
                 )
@@ -166,26 +169,42 @@ class PollItemViewStateFactoryTest {
         )
     }
 
-    /*
     @Test
-    fun `given a sent poll when my vote exists then PollState is Voted`() = runTest {
+    fun `given a sent poll when my vote exists then poll is still votable and options states are PollVoted`() = runTest {
         val votedPollData = A_POLL_RESPONSE_DATA.copy(
                 totalVotes = 1,
-                myVote = "5ef5f7b0-c9a1-49cf-a0b3-374729a43e76",
+                myVote = A_POLL_OPTION_IDS[0],
+                votes = mapOf(A_POLL_OPTION_IDS[0] to PollVoteSummaryData(total = 1, percentage = 1.0))
         )
         val disclosedPollContent = A_POLL_CONTENT.copy(
                 unstablePollCreationInfo = A_POLL_CONTENT.getBestPollCreationInfo()?.copy(
                         kind = PollType.DISCLOSED_UNSTABLE
-                )
+                ),
+        )
+        val votedInformationData = A_MESSAGE_INFORMATION_DATA.copy(pollResponseAggregatedSummary = votedPollData)
+
+        val pollViewState = pollItemViewStateFactory.create(
+                pollContent = disclosedPollContent,
+                informationData = votedInformationData,
         )
 
-        pollItemViewStateFactory.createPollState(
-                informationData = A_MESSAGE_INFORMATION_DATA,
-                pollResponseSummary = votedPollData,
-                pollContent = disclosedPollContent,
-        ) shouldBeEqualTo PollState.Voted(1)
+        pollViewState shouldBeEqualTo PollViewState(
+                question = A_POLL_CONTENT.getBestPollCreationInfo()?.question?.getBestQuestion() ?: "",
+                totalVotes = stringProvider.instance.getQuantityString(R.plurals.poll_total_vote_count_before_ended_and_voted, 1, 1),
+                canVote = true,
+                optionViewStates = A_POLL_CONTENT.getBestPollCreationInfo()?.answers?.mapIndexed { index, answer ->
+                    PollOptionViewState.PollVoted(
+                            optionId = answer.id ?: "",
+                            optionAnswer = answer.getBestAnswer() ?: "",
+                            voteCount = if (index == 0) 1 else 0,
+                            votePercentage = if (index == 0) 1.0 else 0.0,
+                            isSelected = index == 0
+                    )
+                },
+        )
     }
 
+    /*
     @Test
     fun `given a sent poll when poll type is disclosed then PollState is Ready`() = runTest {
         val disclosedPollContent = A_POLL_CONTENT.copy(
