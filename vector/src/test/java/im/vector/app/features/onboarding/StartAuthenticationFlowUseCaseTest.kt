@@ -129,7 +129,8 @@ class StartAuthenticationFlowUseCaseTest {
             isLoginAndRegistrationSupported = true,
             homeServerUrl = A_DECLARED_HOMESERVER_URL,
             isOutdatedHomeserver = false,
-            hasOidcCompatibilityFlow = false
+            hasOidcCompatibilityFlow = false,
+            isLogoutDevicesSupported = false
     )
 
     private fun expectedResult(

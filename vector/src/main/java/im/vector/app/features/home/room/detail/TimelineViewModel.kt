@@ -294,7 +294,7 @@ class TimelineViewModel @AssistedInject constructor(
         session.flow()
                 .liveRoomWidgets(
                         roomId = initialState.roomId,
-                        widgetId = QueryStringValue.NoCondition
+                        widgetId = QueryStringValue.IsNotNull
                 )
                 .map { widgets ->
                     widgets.filter { it.isActive }
@@ -1239,7 +1239,7 @@ class TimelineViewModel @AssistedInject constructor(
                     setState { copy(asyncInviter = Success(it)) }
                 }
             }
-            room.getStateEvent(EventType.STATE_ROOM_TOMBSTONE)?.also {
+            room.getStateEvent(EventType.STATE_ROOM_TOMBSTONE, QueryStringValue.IsEmpty)?.also {
                 setState { copy(tombstoneEvent = it) }
             }
         }
@@ -1291,6 +1291,10 @@ class TimelineViewModel @AssistedInject constructor(
         _viewEvents.post(RoomDetailViewEvents.ChangeLocationIndicator(isVisible = false))
         // Bind again in case user decides to share live location without leaving the room
         locationSharingServiceConnection.bind(this)
+    }
+
+    override fun onLocationServiceError(error: Throwable) {
+        _viewEvents.post(RoomDetailViewEvents.Failure(throwable = error, showInDialog = true))
     }
 
     override fun onCleared() {

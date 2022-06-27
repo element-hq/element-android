@@ -40,6 +40,7 @@ import org.matrix.android.sdk.internal.auth.login.DefaultLoginWizard
 import org.matrix.android.sdk.internal.auth.login.DirectLoginTask
 import org.matrix.android.sdk.internal.auth.registration.DefaultRegistrationWizard
 import org.matrix.android.sdk.internal.auth.version.Versions
+import org.matrix.android.sdk.internal.auth.version.doesServerSupportLogoutDevices
 import org.matrix.android.sdk.internal.auth.version.isLoginAndRegistrationSupportedBySdk
 import org.matrix.android.sdk.internal.auth.version.isSupportedBySdk
 import org.matrix.android.sdk.internal.di.Unauthenticated
@@ -73,10 +74,7 @@ internal class DefaultAuthenticationService @Inject constructor(
     }
 
     override fun getLastAuthenticatedSession(): Session? {
-        val sessionParams = sessionParamsStore.getLast()
-        return sessionParams?.let {
-            sessionManager.getOrCreateSession(it)
-        }
+        return sessionManager.getLastSession()
     }
 
     override suspend fun getLoginFlowOfSession(sessionId: String): LoginFlowResult {
@@ -304,7 +302,8 @@ internal class DefaultAuthenticationService @Inject constructor(
                 isLoginAndRegistrationSupported = versions.isLoginAndRegistrationSupportedBySdk(),
                 homeServerUrl = homeServerUrl,
                 isOutdatedHomeserver = !versions.isSupportedBySdk(),
-                hasOidcCompatibilityFlow = oidcCompatibilityFlow != null
+                hasOidcCompatibilityFlow = oidcCompatibilityFlow != null,
+                isLogoutDevicesSupported = versions.doesServerSupportLogoutDevices()
         )
     }
 

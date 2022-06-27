@@ -18,4 +18,6 @@ package im.vector.app.features.location.live.map
 
 import im.vector.app.core.platform.VectorViewEvents
 
-sealed interface LocationLiveMapViewEvents : VectorViewEvents
+sealed interface LocationLiveMapViewEvents : VectorViewEvents {
+    data class Error(val error: Throwable) : LocationLiveMapViewEvents
+}

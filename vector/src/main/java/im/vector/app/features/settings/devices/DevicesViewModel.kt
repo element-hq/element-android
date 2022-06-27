@@ -43,6 +43,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.auth.UIABaseAuth
@@ -90,7 +91,8 @@ class DevicesViewModel @AssistedInject constructor(
         @Assisted initialState: DevicesViewState,
         private val session: Session,
         private val reAuthHelper: ReAuthHelper,
-        private val stringProvider: StringProvider
+        private val stringProvider: StringProvider,
+        private val matrix: Matrix,
 ) : VectorViewModel<DevicesViewState, DevicesAction, DevicesViewEvents>(initialState), VerificationService.Listener {
 
     var uiaContinuation: Continuation<UIABaseAuth>? = null
@@ -219,7 +221,7 @@ class DevicesViewModel @AssistedInject constructor(
                 Unit
             }
             is DevicesAction.PasswordAuthDone -> {
-                val decryptedPass = session.secureStorageService()
+                val decryptedPass = matrix.secureStorageService()
                         .loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
                 uiaContinuation?.resume(
                         UserPasswordAuth(

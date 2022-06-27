@@ -45,6 +45,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
+import org.matrix.android.sdk.api.session.events.model.isContentReportable
 import org.matrix.android.sdk.api.session.events.model.isTextMessage
 import org.matrix.android.sdk.api.session.events.model.isThread
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -421,7 +422,7 @@ class MessageActionsViewModel @AssistedInject constructor(
         add(EventSharedAction.CopyPermalink(eventId))
         if (session.myUserId != timelineEvent.root.senderId) {
             // not sent by me
-            if (timelineEvent.root.getClearType() == EventType.MESSAGE) {
+            if (timelineEvent.root.isContentReportable()) {
                 add(EventSharedAction.ReportContent(eventId, timelineEvent.root.senderId))
             }
 

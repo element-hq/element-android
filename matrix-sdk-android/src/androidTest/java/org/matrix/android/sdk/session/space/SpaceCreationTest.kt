@@ -28,6 +28,7 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
+import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.getStateEvent
@@ -73,27 +74,37 @@ class SpaceCreationTest : InstrumentedTest {
         // assertEquals(topic, syncedSpace.asRoom().roomSummary()?., "Room topic should be set")
 
         assertNotNull("Space should be found by Id", syncedSpace)
-        val creationEvent = syncedSpace!!.asRoom().getStateEvent(EventType.STATE_ROOM_CREATE)
-        val createContent = creationEvent?.content.toModel<RoomCreateContent>()
+        val createContent = syncedSpace!!.asRoom()
+                .getStateEvent(EventType.STATE_ROOM_CREATE, QueryStringValue.IsEmpty)
+                ?.content
+                ?.toModel<RoomCreateContent>()
         assertEquals("Room type should be space", RoomType.SPACE, createContent?.type)
 
         var powerLevelsContent: PowerLevelsContent? = null
         commonTestHelper.waitWithLatch { latch ->
             commonTestHelper.retryPeriodicallyWithLatch(latch) {
-                val toModel = syncedSpace.asRoom().getStateEvent(EventType.STATE_ROOM_POWER_LEVELS)?.content.toModel<PowerLevelsContent>()
-                powerLevelsContent = toModel
-                toModel != null
+                powerLevelsContent = syncedSpace.asRoom()
+                        .getStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
+                        ?.content
+                        ?.toModel<PowerLevelsContent>()
+                powerLevelsContent != null
             }
         }
         assertEquals("Space-rooms should be created with a power level for events_default of 100", 100, powerLevelsContent?.eventsDefault)
 
-        val guestAccess = syncedSpace.asRoom().getStateEvent(EventType.STATE_ROOM_GUEST_ACCESS)?.content
-                ?.toModel<RoomGuestAccessContent>()?.guestAccess
+        val guestAccess = syncedSpace.asRoom()
+                .getStateEvent(EventType.STATE_ROOM_GUEST_ACCESS, QueryStringValue.IsEmpty)
+                ?.content
+                ?.toModel<RoomGuestAccessContent>()
+                ?.guestAccess
 
         assertEquals("Public space room should be peekable by guest", GuestAccess.CanJoin, guestAccess)
 
-        val historyVisibility = syncedSpace.asRoom().getStateEvent(EventType.STATE_ROOM_HISTORY_VISIBILITY)?.content
-                ?.toModel<RoomHistoryVisibilityContent>()?.historyVisibility
+        val historyVisibility = syncedSpace.asRoom()
+                .getStateEvent(EventType.STATE_ROOM_HISTORY_VISIBILITY, QueryStringValue.IsEmpty)
+                ?.content
+                ?.toModel<RoomHistoryVisibilityContent>()
+                ?.historyVisibility
 
         assertEquals("Public space room should be world readable", RoomHistoryVisibility.WORLD_READABLE, historyVisibility)
     }

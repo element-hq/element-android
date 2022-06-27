@@ -23,10 +23,12 @@ import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
 import org.matrix.android.sdk.api.session.pushers.PusherState
 import org.matrix.android.sdk.internal.database.model.PusherEntity
+import org.matrix.android.sdk.internal.database.model.PusherEntityFields
 import org.matrix.android.sdk.test.fakes.FakeGlobalErrorReceiver
 import org.matrix.android.sdk.test.fakes.FakeMonarchy
 import org.matrix.android.sdk.test.fakes.FakePushersAPI
 import org.matrix.android.sdk.test.fakes.FakeRequestExecutor
+import org.matrix.android.sdk.test.fakes.givenEqualTo
 import java.net.SocketException
 
 private val A_JSON_PUSHER = JsonPusher(
@@ -56,6 +58,7 @@ class DefaultAddPusherTaskTest {
     @Test
     fun `given no persisted pusher when adding Pusher then updates api and inserts result with Registered state`() {
         monarchy.givenWhereReturns<PusherEntity>(result = null)
+                .givenEqualTo(PusherEntityFields.PUSH_KEY, A_JSON_PUSHER.pushKey)
 
         runTest { addPusherTask.execute(AddPusherTask.Params(A_JSON_PUSHER)) }
 
@@ -71,6 +74,7 @@ class DefaultAddPusherTaskTest {
     fun `given a persisted pusher when adding Pusher then updates api and mutates persisted result with Registered state`() {
         val realmResult = PusherEntity(appDisplayName = null)
         monarchy.givenWhereReturns(result = realmResult)
+                .givenEqualTo(PusherEntityFields.PUSH_KEY, A_JSON_PUSHER.pushKey)
 
         runTest { addPusherTask.execute(AddPusherTask.Params(A_JSON_PUSHER)) }
 
@@ -84,6 +88,7 @@ class DefaultAddPusherTaskTest {
     fun `given a persisted push entity and SetPush API fails when adding Pusher then mutates persisted result with Failed registration state and rethrows`() {
         val realmResult = PusherEntity()
         monarchy.givenWhereReturns(result = realmResult)
+                .givenEqualTo(PusherEntityFields.PUSH_KEY, A_JSON_PUSHER.pushKey)
         pushersAPI.givenSetPusherErrors(SocketException())
 
         assertFailsWith<SocketException> {
@@ -96,6 +101,7 @@ class DefaultAddPusherTaskTest {
     @Test
     fun `given no persisted push entity and SetPush API fails when adding Pusher then rethrows error`() {
         monarchy.givenWhereReturns<PusherEntity>(result = null)
+                .givenEqualTo(PusherEntityFields.PUSH_KEY, A_JSON_PUSHER.pushKey)
         pushersAPI.givenSetPusherErrors(SocketException())
 
         assertFailsWith<SocketException> {

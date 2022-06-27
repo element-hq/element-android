@@ -136,13 +136,15 @@ class LocationSharingViewModel @AssistedInject constructor(
 
     private fun shareLocation(locationData: LocationData?, isUserLocation: Boolean) {
         locationData?.let { location ->
-            room.sendService().sendLocation(
-                    latitude = location.latitude,
-                    longitude = location.longitude,
-                    uncertainty = location.uncertainty,
-                    isUserLocation = isUserLocation
-            )
-            _viewEvents.post(LocationSharingViewEvents.Close)
+            viewModelScope.launch {
+                room.locationSharingService().sendStaticLocation(
+                        latitude = location.latitude,
+                        longitude = location.longitude,
+                        uncertainty = location.uncertainty,
+                        isUserLocation = isUserLocation
+                )
+                _viewEvents.post(LocationSharingViewEvents.Close)
+            }
         } ?: run {
             _viewEvents.post(LocationSharingViewEvents.LocationNotAvailableError)
         }
@@ -182,7 +184,7 @@ class LocationSharingViewModel @AssistedInject constructor(
         }
     }
 
-    override fun onLocationProviderIsNotAvailable() {
+    override fun onNoLocationProviderAvailable() {
         _viewEvents.post(LocationSharingViewEvents.LocationNotAvailableError)
     }
 }

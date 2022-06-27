@@ -25,6 +25,7 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.auth.ReAuthActivity
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.UserPasswordAuth
@@ -45,7 +46,8 @@ data class DeactivateAccountViewState(
 
 class DeactivateAccountViewModel @AssistedInject constructor(
         @Assisted private val initialState: DeactivateAccountViewState,
-        private val session: Session
+        private val session: Session,
+        private val matrix: Matrix,
 ) :
         VectorViewModel<DeactivateAccountViewState, DeactivateAccountAction, DeactivateAccountViewEvents>(initialState) {
 
@@ -71,7 +73,7 @@ class DeactivateAccountViewModel @AssistedInject constructor(
             }
             is DeactivateAccountAction.PasswordAuthDone -> {
                 _viewEvents.post(DeactivateAccountViewEvents.Loading())
-                val decryptedPass = session.secureStorageService()
+                val decryptedPass = matrix.secureStorageService()
                         .loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
                 uiaContinuation?.resume(
                         UserPasswordAuth(

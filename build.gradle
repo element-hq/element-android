@@ -28,7 +28,7 @@ buildscript {
         classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.4.0.2513'
         classpath 'com.google.android.gms:oss-licenses-plugin:0.10.5'
         classpath "com.likethesalad.android:stem-plugin:2.1.1"
-        classpath 'org.owasp:dependency-check-gradle:7.1.0.1'
+        classpath 'org.owasp:dependency-check-gradle:7.1.1'
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:1.6.21"
         classpath "org.jetbrains.kotlinx:kotlinx-knit:0.4.0"
         // NOTE: Do not place your application dependencies here; they belong
@@ -43,7 +43,7 @@ plugins {
     id "io.gitlab.arturbosch.detekt" version "1.20.0"
 
     // Dependency Analysis
-    id 'com.autonomousapps.dependency-analysis' version "1.5.0"
+    id 'com.autonomousapps.dependency-analysis' version "1.8.0"
 }
 
 // https://github.com/jeremylong/DependencyCheck
@@ -168,7 +168,7 @@ def launchTask = getGradle()
         .toString()
         .toLowerCase()
 
-if (launchTask.contains("codeCoverageReport".toLowerCase())) {
+if (launchTask.contains("coverage".toLowerCase())) {
     apply from: 'coverage.gradle'
 }
 
@@ -191,7 +191,7 @@ sonarqube {
         property "sonar.links.issue", "https://github.com/vector-im/element-android/issues"
         property "sonar.organization", "new_vector_ltd_organization"
         property "sonar.java.coveragePlugin", "jacoco"
-        property "sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/reports/jacoco/theCodeCoverageReport/theCodeCoverageReport.xml"
+        property "sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/reports/jacoco/generateCoverageReport/generateCoverageReport.xml"
         property "sonar.login", project.hasProperty("SONAR_LOGIN") ? SONAR_LOGIN : "invalid"
     }
 }
@@ -252,11 +252,7 @@ dependencyAnalysis {
                 exclude("org.json:json") // Used in unit tests, overwrites the one bundled into Android
             }
         }
-        project(":library:ui-styles") {
-            onUnusedDependencies {
-                exclude("com.github.vector-im:PFLockScreen-Android") // False positive
-            }
-        }
+        project(":library:ui-styles")
         project(":matrix-sdk-android") {
             onUnusedDependencies {
                 exclude("io.reactivex.rxjava2:rxkotlin") // Transitively required for mocking realm as monarchy doesn't expose Rx

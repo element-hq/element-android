@@ -54,7 +54,12 @@ data class HomeServerCapabilities(
         /**
          * True if the home server support threading.
          */
-        val canUseThreading: Boolean = false
+        val canUseThreading: Boolean = false,
+
+        /**
+         * True if the home server supports controlling the logout of all devices when changing password.
+         */
+        val canControlLogoutDevices: Boolean = false
 ) {
 
     enum class RoomCapabilitySupport {

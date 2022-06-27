@@ -34,6 +34,7 @@ import im.vector.app.core.extensions.hasSurroundingSpaces
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.extensions.realignPercentagesToParent
+import im.vector.app.core.extensions.setOnFocusLostListener
 import im.vector.app.core.extensions.setOnImeDoneListener
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentFtueCombinedRegisterBinding
@@ -48,6 +49,7 @@ import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewState
 import kotlinx.coroutines.flow.launchIn
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
+import org.matrix.android.sdk.api.failure.isHomeserverUnavailable
 import org.matrix.android.sdk.api.failure.isInvalidPassword
 import org.matrix.android.sdk.api.failure.isInvalidUsername
 import org.matrix.android.sdk.api.failure.isLoginEmailUnknown
@@ -69,6 +71,9 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
         views.createAccountRoot.realignPercentagesToParent()
         views.editServerButton.debouncedClicks { viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.EditServerSelection)) }
         views.createAccountPasswordInput.setOnImeDoneListener { submit() }
+        views.createAccountInput.setOnFocusLostListener {
+            viewModel.handle(OnboardingAction.MaybeUpdateHomeserverFromMatrixId(views.createAccountInput.content()))
+        }
     }
 
     private fun setupSubmitButton() {
@@ -130,6 +135,9 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
             }
             throwable.isWeakPassword() || throwable.isInvalidPassword() -> {
                 views.createAccountPasswordInput.error = errorFormatter.toHumanReadable(throwable)
+            }
+            throwable.isHomeserverUnavailable() -> {
+                views.createAccountInput.error = getString(R.string.login_error_homeserver_not_found)
             }
             throwable.isRegistrationDisabled() -> {
                 MaterialAlertDialogBuilder(requireActivity())

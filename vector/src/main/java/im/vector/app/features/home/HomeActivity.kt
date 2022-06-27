@@ -44,6 +44,7 @@ import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.extensions.validateBackPressed
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.pushers.PushersManager
+import im.vector.app.core.pushers.UnifiedPushHelper
 import im.vector.app.databinding.ActivityHomeBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
@@ -127,6 +128,8 @@ class HomeActivity :
     @Inject lateinit var avatarRenderer: AvatarRenderer
     @Inject lateinit var initSyncStepFormatter: InitSyncStepFormatter
     @Inject lateinit var appStateHandler: AppStateHandler
+    @Inject lateinit var unifiedPushHelper: UnifiedPushHelper
+    @Inject lateinit var fcmHelper: FcmHelper
 
     private val createSpaceResultLauncher = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
@@ -187,7 +190,15 @@ class HomeActivity :
         super.onCreate(savedInstanceState)
         analyticsScreenName = MobileScreen.ScreenName.Home
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, false)
-        FcmHelper.ensureFcmTokenIsRetrieved(this, pushManager, vectorPreferences.areNotificationEnabledForDevice())
+        unifiedPushHelper.register(this) {
+            if (unifiedPushHelper.isEmbeddedDistributor()) {
+                fcmHelper.ensureFcmTokenIsRetrieved(
+                        this,
+                        pushManager,
+                        vectorPreferences.areNotificationEnabledForDevice()
+                )
+            }
+        }
         sharedActionViewModel = viewModelProvider.get(HomeSharedActionViewModel::class.java)
         views.drawerLayout.addDrawerListener(drawerListener)
         if (isFirstCreation()) {

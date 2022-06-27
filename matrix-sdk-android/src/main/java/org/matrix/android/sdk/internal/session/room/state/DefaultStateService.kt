@@ -21,32 +21,27 @@ import androidx.lifecycle.LiveData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import org.matrix.android.sdk.api.extensions.orFalse
-import org.matrix.android.sdk.api.query.QueryStringValue
+import org.matrix.android.sdk.api.query.QueryStateEventValue
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
-import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.RoomCanonicalAliasContent
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesAllowEntry
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
 import org.matrix.android.sdk.api.session.room.state.StateService
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.session.content.FileUploader
-import org.matrix.android.sdk.internal.session.permalinks.ViaParameterFinder
 
 internal class DefaultStateService @AssistedInject constructor(
         @Assisted private val roomId: String,
         private val stateEventDataSource: StateEventDataSource,
         private val sendStateTask: SendStateTask,
         private val fileUploader: FileUploader,
-        private val viaParameterFinder: ViaParameterFinder
 ) : StateService {
 
     @AssistedFactory
@@ -54,19 +49,19 @@ internal class DefaultStateService @AssistedInject constructor(
         fun create(roomId: String): DefaultStateService
     }
 
-    override fun getStateEvent(eventType: String, stateKey: QueryStringValue): Event? {
+    override fun getStateEvent(eventType: String, stateKey: QueryStateEventValue): Event? {
         return stateEventDataSource.getStateEvent(roomId, eventType, stateKey)
     }
 
-    override fun getStateEventLive(eventType: String, stateKey: QueryStringValue): LiveData<Optional<Event>> {
+    override fun getStateEventLive(eventType: String, stateKey: QueryStateEventValue): LiveData<Optional<Event>> {
         return stateEventDataSource.getStateEventLive(roomId, eventType, stateKey)
     }
 
-    override fun getStateEvents(eventTypes: Set<String>, stateKey: QueryStringValue): List<Event> {
+    override fun getStateEvents(eventTypes: Set<String>, stateKey: QueryStateEventValue): List<Event> {
         return stateEventDataSource.getStateEvents(roomId, eventTypes, stateKey)
     }
 
-    override fun getStateEventsLive(eventTypes: Set<String>, stateKey: QueryStringValue): LiveData<List<Event>> {
+    override fun getStateEventsLive(eventTypes: Set<String>, stateKey: QueryStateEventValue): LiveData<List<Event>> {
         return stateEventDataSource.getStateEventsLive(roomId, eventTypes, stateKey)
     }
 
@@ -189,36 +184,5 @@ internal class DefaultStateService @AssistedInject constructor(
             RoomJoinRulesAllowEntry.restrictedToRoom(spaceId)
         }
         updateJoinRule(RoomJoinRules.RESTRICTED, null, allowEntries)
-    }
-
-    override suspend fun stopLiveLocation(userId: String) {
-        getLiveLocationBeaconInfo(userId, true)?.let { beaconInfoStateEvent ->
-            beaconInfoStateEvent.getClearContent()?.toModel<MessageBeaconInfoContent>()?.let { content ->
-                val updatedContent = content.copy(isLive = false).toContent()
-
-                beaconInfoStateEvent.stateKey?.let {
-                    sendStateEvent(
-                            eventType = EventType.STATE_ROOM_BEACON_INFO.first(),
-                            body = updatedContent,
-                            stateKey = it
-                    )
-                }
-            }
-        }
-    }
-
-    override suspend fun getLiveLocationBeaconInfo(userId: String, filterOnlyLive: Boolean): Event? {
-        return EventType.STATE_ROOM_BEACON_INFO
-                .mapNotNull {
-                    stateEventDataSource.getStateEvent(
-                            roomId = roomId,
-                            eventType = it,
-                            stateKey = QueryStringValue.Equals(userId)
-                    )
-                }
-                .firstOrNull { beaconInfoEvent ->
-                    !filterOnlyLive ||
-                            beaconInfoEvent.getClearContent()?.toModel<MessageBeaconInfoContent>()?.isLive.orFalse()
-                }
     }
 }

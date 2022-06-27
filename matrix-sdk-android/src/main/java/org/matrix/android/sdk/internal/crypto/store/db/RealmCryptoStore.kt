@@ -88,7 +88,6 @@ import org.matrix.android.sdk.internal.crypto.store.db.query.get
 import org.matrix.android.sdk.internal.crypto.store.db.query.getById
 import org.matrix.android.sdk.internal.crypto.store.db.query.getOrCreate
 import org.matrix.android.sdk.internal.crypto.util.RequestIdHelper
-import org.matrix.android.sdk.internal.database.tools.RealmDebugTools
 import org.matrix.android.sdk.internal.di.CryptoDatabase
 import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.MoshiProvider
@@ -1708,12 +1707,5 @@ internal class RealmCryptoStore @Inject constructor(
 
             // Can we do something for WithHeldSessionEntity?
         }
-    }
-
-    /**
-     * Prints out database info.
-     */
-    override fun logDbUsageInfo() {
-        RealmDebugTools(realmConfiguration).logInfo("Crypto")
     }
 }

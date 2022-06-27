@@ -70,7 +70,7 @@ class RoomJoinRuleChooseRestrictedViewModel @AssistedInject constructor(
     private fun initializeForRoom(roomId: String) {
         room = session.getRoom(roomId)!!
         session.getRoomSummary(roomId)?.let { roomSummary ->
-            val joinRulesContent = room.getStateEvent(EventType.STATE_ROOM_JOIN_RULES, QueryStringValue.NoCondition)
+            val joinRulesContent = room.getStateEvent(EventType.STATE_ROOM_JOIN_RULES, QueryStringValue.IsEmpty)
                     ?.content
                     ?.toModel<RoomJoinRulesContent>()
             val initialAllowList = joinRulesContent?.allowList

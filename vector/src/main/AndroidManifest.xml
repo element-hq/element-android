@@ -304,7 +304,8 @@
             android:supportsPictureInPicture="true" />
 
         <activity android:name=".features.terms.ReviewTermsActivity" />
-        <activity android:name=".features.widgets.WidgetActivity"
+        <activity
+            android:name=".features.widgets.WidgetActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation" />
 
         <activity android:name=".features.pin.PinActivity" />
@@ -407,6 +408,20 @@
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </receiver>
+
+        <!-- UnifiedPush -->
+        <receiver
+            android:exported="true"
+            android:enabled="true"
+            android:name=".core.pushers.VectorMessagingReceiver">
+            <intent-filter>
+                <action android:name="org.unifiedpush.android.connector.MESSAGE" />
+                <action android:name="org.unifiedpush.android.connector.UNREGISTERED" />
+                <action android:name="org.unifiedpush.android.connector.NEW_ENDPOINT" />
+                <action android:name="org.unifiedpush.android.connector.REGISTRATION_FAILED" />
+                <action android:name="org.unifiedpush.android.connector.REGISTRATION_REFUSED" />
             </intent-filter>
         </receiver>
 

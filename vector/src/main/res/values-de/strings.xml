@@ -1118,9 +1118,7 @@
     <string name="login_signin_username_hint">Benutzername oder E-Mail-Adresse</string>
     <string name="login_signup_password_hint">Passwort</string>
     <string name="login_signup_error_user_in_use">Dieser Benutzername ist bereits belegt</string>
-    <string name="login_signup_cancel_confirmation_content">Dein Benutzerkonto ist noch nicht erstellt.
-\n
-\nMöchtest du die Registrierung stoppen\?</string>
+    <string name="login_signup_cancel_confirmation_content">Dein Benutzerkonto ist noch nicht erstellt. Möchtest du die Registrierung stoppen\?</string>
     <string name="login_a11y_choose_matrix_org">matrix.org auswählen</string>
     <string name="login_a11y_choose_modular">modular auswählen</string>
     <string name="login_a11y_choose_other">Benutzerdefinierten Server auswählen</string>

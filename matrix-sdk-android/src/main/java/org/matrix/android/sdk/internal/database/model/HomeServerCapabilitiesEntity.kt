@@ -29,7 +29,8 @@ internal open class HomeServerCapabilitiesEntity(
         var lastVersionIdentityServerSupported: Boolean = false,
         var defaultIdentityServerUrl: String? = null,
         var lastUpdatedTimestamp: Long = 0L,
-        var canUseThreading: Boolean = false
+        var canUseThreading: Boolean = false,
+        var canControlLogoutDevices: Boolean = false
 ) : RealmObject() {
 
     companion object
