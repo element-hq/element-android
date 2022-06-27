@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home.room.detail.timeline.factory
 
-import com.airbnb.mvrx.test.MvRxTestRule
 import im.vector.app.R
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.app.features.home.room.detail.timeline.item.PollOptionViewState
@@ -26,11 +25,8 @@ import im.vector.app.features.home.room.detail.timeline.item.ReactionsSummaryDat
 import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
 import im.vector.app.features.poll.PollViewState
 import im.vector.app.test.fakes.FakeStringProvider
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.PollAnswer
@@ -83,12 +79,6 @@ private val A_POLL_CONTENT = MessagePollContent(
 
 class PollItemViewStateFactoryTest {
 
-    private val testDispatcher = UnconfinedTestDispatcher()
-
-    @get:Rule
-    val mvRxTestRule = MvRxTestRule(
-            testDispatcher = testDispatcher // See https://github.com/airbnb/mavericks/issues/599
-    )
     private lateinit var pollItemViewStateFactory: PollItemViewStateFactory
 
     private val stringProvider = FakeStringProvider()
@@ -102,7 +92,7 @@ class PollItemViewStateFactoryTest {
     }
 
     @Test
-    fun `given a sending poll state then poll is not votable and option states are PollSending`() = runTest {
+    fun `given a sending poll state then poll is not votable and option states are PollSending`() {
         val sendingPollInformationData = A_MESSAGE_INFORMATION_DATA.copy(sendState = SendState.SENDING)
         val pollViewState = pollItemViewStateFactory.create(
                 pollContent = A_POLL_CONTENT,
@@ -123,7 +113,7 @@ class PollItemViewStateFactoryTest {
     }
 
     @Test
-    fun `given a sent poll state when poll is closed then poll is not votable and option states are Ended`() = runTest {
+    fun `given a sent poll state when poll is closed then poll is not votable and option states are Ended`() {
         val closedPollSummary = A_POLL_RESPONSE_DATA.copy(isClosed = true)
         val closedPollInformationData = A_MESSAGE_INFORMATION_DATA.copy(pollResponseAggregatedSummary = closedPollSummary)
 
@@ -149,7 +139,7 @@ class PollItemViewStateFactoryTest {
     }
 
     @Test
-    fun `given a sent poll when undisclosed poll type is selected then poll is votable and option states are PollUndisclosed`() = runTest {
+    fun `given a sent poll when undisclosed poll type is selected then poll is votable and option states are PollUndisclosed`() {
         val pollViewState = pollItemViewStateFactory.create(
                 pollContent = A_POLL_CONTENT,
                 informationData = A_MESSAGE_INFORMATION_DATA,
@@ -170,7 +160,7 @@ class PollItemViewStateFactoryTest {
     }
 
     @Test
-    fun `given a sent poll when my vote exists then poll is still votable and options states are PollVoted`() = runTest {
+    fun `given a sent poll when my vote exists then poll is still votable and options states are PollVoted`() {
         val votedPollData = A_POLL_RESPONSE_DATA.copy(
                 totalVotes = 1,
                 myVote = A_POLL_OPTION_IDS[0],
@@ -205,7 +195,7 @@ class PollItemViewStateFactoryTest {
     }
 
     @Test
-    fun `given a sent poll when poll type is disclosed then poll is votable and option view states are PollReady`() = runTest {
+    fun `given a sent poll when poll type is disclosed then poll is votable and option view states are PollReady`() {
         val disclosedPollContent = A_POLL_CONTENT.copy(
                 unstablePollCreationInfo = A_POLL_CONTENT.getBestPollCreationInfo()?.copy(
                         kind = PollType.DISCLOSED_UNSTABLE

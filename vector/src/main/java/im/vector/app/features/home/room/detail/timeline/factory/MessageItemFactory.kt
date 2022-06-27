@@ -16,8 +16,13 @@
 
 package im.vector.app.features.home.room.detail.timeline.factory
 
+import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.Spanned
+import android.text.TextPaint
+import android.text.style.AbsoluteSizeSpan
+import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
 import android.view.View
 import dagger.Lazy
 import im.vector.app.R
@@ -30,7 +35,6 @@ import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.containsOnlyEmojis
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
-import im.vector.app.features.home.room.detail.timeline.factory.MessageItemFactoryHelper.annotateWithEdited
 import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.app.features.home.room.detail.timeline.helper.ContentDownloadStateTrackerBinder
@@ -253,7 +257,7 @@ class MessageItemFactory @Inject constructor(
             question: String,
             callback: TimelineEventController.Callback?,
     ) = if (informationData.hasBeenEdited) {
-        annotateWithEdited(stringProvider, colorProvider, dimensionConverter, question, callback, informationData)
+        annotateWithEdited(question, callback, informationData)
     } else {
         question
     }.toEpoxyCharSequence()
@@ -554,7 +558,7 @@ class MessageItemFactory @Inject constructor(
         return MessageTextItem_()
                 .message(
                         if (informationData.hasBeenEdited) {
-                            annotateWithEdited(stringProvider, colorProvider, dimensionConverter, linkifiedBody, callback, informationData)
+                            annotateWithEdited(linkifiedBody, callback, informationData)
                         } else {
                             linkifiedBody
                         }.toEpoxyCharSequence()
@@ -570,6 +574,50 @@ class MessageItemFactory @Inject constructor(
                 .attributes(attributes)
                 .highlighted(highlight)
                 .movementMethod(createLinkMovementMethod(callback))
+    }
+
+    private fun annotateWithEdited(
+            linkifiedBody: CharSequence,
+            callback: TimelineEventController.Callback?,
+            informationData: MessageInformationData,
+    ): Spannable {
+        val spannable = SpannableStringBuilder()
+        spannable.append(linkifiedBody)
+        val editedSuffix = stringProvider.getString(R.string.edited_suffix)
+        spannable.append(" ").append(editedSuffix)
+        val color = colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
+        val editStart = spannable.lastIndexOf(editedSuffix)
+        val editEnd = editStart + editedSuffix.length
+        spannable.setSpan(
+                ForegroundColorSpan(color),
+                editStart,
+                editEnd,
+                Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+        )
+
+        // Note: text size is set to 14sp
+        spannable.setSpan(
+                AbsoluteSizeSpan(dimensionConverter.spToPx(13)),
+                editStart,
+                editEnd,
+                Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+        )
+
+        spannable.setSpan(
+                object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        callback?.onEditedDecorationClicked(informationData)
+                    }
+
+                    override fun updateDrawState(ds: TextPaint) {
+                        // nop
+                    }
+                },
+                editStart,
+                editEnd,
+                Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+        )
+        return spannable
     }
 
     private fun buildNoticeMessageItem(
@@ -618,7 +666,7 @@ class MessageItemFactory @Inject constructor(
         return MessageTextItem_()
                 .message(
                         if (informationData.hasBeenEdited) {
-                            annotateWithEdited(stringProvider, colorProvider, dimensionConverter, message, callback, informationData)
+                            annotateWithEdited(message, callback, informationData)
                         } else {
                             message
                         }.toEpoxyCharSequence()
