@@ -21,7 +21,7 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.bottomSheetDividerItem
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.ui.list.genericButtonItem
+import im.vector.app.core.ui.list.buttonPositiveDestructiveButtonBarItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationNoticeItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationQrCodeItem
@@ -111,17 +111,12 @@ class VerificationChooseMethodController @Inject constructor(
             }
         } else if (!state.isReadied) {
             // a bit of a special case, if you tapped on the timeline cell but not on a button
-            genericButtonItem {
-                id("accept_request")
-                textColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
-                text(host.stringProvider.getString(R.string.action_accept))
-                buttonClickAction { host.listener?.acceptRequest() }
-            }
-            genericButtonItem {
-                id("decline_request")
-                textColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
-                text(host.stringProvider.getString(R.string.action_decline))
-                buttonClickAction { host.listener?.declineRequest() }
+            buttonPositiveDestructiveButtonBarItem {
+                id("accept_decline")
+                positiveText(host.stringProvider.getString(R.string.action_accept).toEpoxyCharSequence())
+                destructiveText(host.stringProvider.getString(R.string.action_decline).toEpoxyCharSequence())
+                positiveButtonClickAction { host.listener?.acceptRequest() }
+                destructiveButtonClickAction { host.listener?.declineRequest() }
             }
         }
 
