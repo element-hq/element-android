@@ -17,11 +17,12 @@
 package org.matrix.android.sdk.internal.database.migration
 
 import io.realm.DynamicRealm
+import io.realm.DynamicRealmObject
 import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
 import org.matrix.android.sdk.internal.database.model.EventEntityFields
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
-import org.matrix.android.sdk.internal.extensions.clearWith
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
+import timber.log.Timber
 
 /**
  * Migrating to:
@@ -35,16 +36,23 @@ internal class MigrateSessionTo030(realm: DynamicRealm) : RealmMigrator(realm, 3
                 .equalTo(ChunkEntityFields.IS_LAST_FORWARD, false)
                 .findAll()
 
+        var nbOfDeletedObjects = 0
         chunks.forEach { chunk ->
-            chunk.getList(ChunkEntityFields.TIMELINE_EVENTS.`$`).clearWith { timelineEvent ->
+            val realmObjectToDelete = mutableListOf<DynamicRealmObject>()
+            chunk.getList(ChunkEntityFields.TIMELINE_EVENTS.`$`).forEach { timelineEvent ->
                 // Don't delete state events
                 val event = timelineEvent.getObject(TimelineEventEntityFields.ROOT.`$`)
                 if (event?.isNull(EventEntityFields.STATE_KEY) == true) {
-                    event.deleteFromRealm()
-                    timelineEvent.deleteFromRealm()
+                    realmObjectToDelete.add(event)
+                    realmObjectToDelete.add(timelineEvent)
                 }
+            }
+            nbOfDeletedObjects += realmObjectToDelete.size
+            realmObjectToDelete.forEach {
+                it.deleteFromRealm()
             }
             chunk.deleteFromRealm()
         }
+        Timber.d("MigrateSessionTo030: $nbOfDeletedObjects deleted object(s).")
     }
 }
