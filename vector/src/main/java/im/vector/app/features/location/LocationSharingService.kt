@@ -169,21 +169,16 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
     private fun tryToDestroyMe() {
         if (roomArgsMap.isEmpty()) {
             Timber.i("### LocationSharingService. Destroying self, time is up for all rooms")
-            destroyMe()
+            stopSelf()
         }
-    }
-
-    private fun destroyMe() {
-        jobs.forEach { it.cancel() }
-        jobs.clear()
-        locationTracker.removeCallback(this)
-        stopSelf()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         Timber.i("### LocationSharingService.onDestroy")
-        destroyMe()
+        jobs.forEach { it.cancel() }
+        jobs.clear()
+        locationTracker.removeCallback(this)
     }
 
     private fun addRoomArgs(beaconEventId: String, roomArgs: RoomArgs) {
