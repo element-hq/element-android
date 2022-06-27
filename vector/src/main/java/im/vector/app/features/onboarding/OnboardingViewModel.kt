@@ -444,10 +444,11 @@ class OnboardingViewModel @AssistedInject constructor(
         currentJob = viewModelScope.launch {
             runCatching { safeLoginWizard.resetPassword(action.email) }.fold(
                     onSuccess = {
+                        val state = awaitState()
                         setState {
                             copy(
                                     isLoading = false,
-                                    resetState = ResetState(email = action.email, newPassword = action.newPassword)
+                                    resetState = createResetState(action, state.selectedHomeserver)
                             )
                         }
                         _viewEvents.post(OnboardingViewEvents.OnResetPasswordSendThreePidDone)
@@ -459,6 +460,12 @@ class OnboardingViewModel @AssistedInject constructor(
             )
         }
     }
+
+    private fun createResetState(action: OnboardingAction.ResetPassword, selectedHomeserverState: SelectedHomeserverState) = ResetState(
+            email = action.email,
+            newPassword = action.newPassword,
+            supportsLogoutAllDevices = selectedHomeserverState.isLogoutDevicesSupported
+    )
 
     private fun handleResetPasswordMailConfirmed() {
         setState { copy(isLoading = true) }

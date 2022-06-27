@@ -53,7 +53,8 @@ class StartAuthenticationFlowUseCase @Inject constructor(
             userFacingUrl = config.homeServerUri.toString(),
             upstreamUrl = authFlow.homeServerUrl,
             preferredLoginMode = preferredLoginMode,
-            supportedLoginTypes = authFlow.supportedLoginTypes
+            supportedLoginTypes = authFlow.supportedLoginTypes,
+            isLogoutDevicesSupported = authFlow.isLogoutDevicesSupported
     )
 
     private fun matrixOrgUrl() = stringProvider.getString(R.string.matrix_org_server_url).ensureTrailingSlash()
