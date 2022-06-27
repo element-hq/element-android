@@ -119,18 +119,33 @@ class PollItemViewStateFactoryTest {
         )
     }
 
-    /*
     @Test
-    fun `given a sent poll state when poll is closed then PollState is Ended`() = runTest {
+    fun `given a sent poll state when poll is closed then poll is not votable and option states are Ended`() = runTest {
         val closedPollSummary = A_POLL_RESPONSE_DATA.copy(isClosed = true)
+        val closedPollInformationData = A_MESSAGE_INFORMATION_DATA.copy(pollResponseAggregatedSummary = closedPollSummary)
 
-        pollItemViewStateFactory.createPollState(
-                informationData = A_MESSAGE_INFORMATION_DATA,
-                pollResponseSummary = closedPollSummary,
+        val pollViewState = pollItemViewStateFactory.create(
                 pollContent = A_POLL_CONTENT,
-        ) shouldBe PollState.Ended
+                informationData = closedPollInformationData,
+        )
+
+        pollViewState shouldBeEqualTo PollViewState(
+                question = A_POLL_CONTENT.getBestPollCreationInfo()?.question?.getBestQuestion() ?: "",
+                totalVotes = stringProvider.instance.getQuantityString(R.plurals.poll_total_vote_count_after_ended, 0, 0),
+                canVote = false,
+                optionViewStates = A_POLL_CONTENT.getBestPollCreationInfo()?.answers?.map { answer ->
+                    PollOptionViewState.PollEnded(
+                            optionId = answer.id ?: "",
+                            optionAnswer = answer.getBestAnswer() ?: "",
+                            voteCount = 0,
+                            votePercentage = 0.0,
+                            isWinner = false
+                    )
+                },
+        )
     }
 
+    /*
     @Test
     fun `given a sent poll when undisclosed poll type is selected then PollState is Undisclosed`() = runTest {
         pollItemViewStateFactory.createPollState(
