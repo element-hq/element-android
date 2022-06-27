@@ -35,6 +35,7 @@ internal class MigrateSessionTo030(realm: DynamicRealm) : RealmMigrator(realm, 3
                 .equalTo(ChunkEntityFields.IS_LAST_FORWARD, false)
                 .findAll()
 
+        val nbOfDeletedChunks = chunks.size
         var nbOfDeletedTimelineEvents = 0
         var nbOfDeletedEvents = 0
         chunks.forEach { chunk ->
@@ -49,8 +50,8 @@ internal class MigrateSessionTo030(realm: DynamicRealm) : RealmMigrator(realm, 3
             }
             nbOfDeletedTimelineEvents += timelineEvents.size
             timelineEvents.deleteAllFromRealm()
-            chunk.deleteFromRealm()
         }
-        Timber.d("MigrateSessionTo030: $nbOfDeletedTimelineEvents deleted TimelineEvent(s) and $nbOfDeletedEvents deleted Event(s).")
+        chunks.deleteAllFromRealm()
+        Timber.d("MigrateSessionTo030: $nbOfDeletedChunks deleted chunk(s), $nbOfDeletedTimelineEvents deleted TimelineEvent(s) and $nbOfDeletedEvents deleted Event(s).")
     }
 }
