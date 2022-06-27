@@ -61,7 +61,6 @@ class LocationTracker @Inject constructor(
     @VisibleForTesting
     var hasLocationFromGPSProvider = false
 
-    // TODO update unit tests
     private val _locations = MutableSharedFlow<Location>(replay = 1)
 
     /**

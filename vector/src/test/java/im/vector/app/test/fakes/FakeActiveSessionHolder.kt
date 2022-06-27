@@ -27,6 +27,7 @@ class FakeActiveSessionHolder(
 ) {
     val instance = mockk<ActiveSessionHolder> {
         every { getActiveSession() } returns fakeSession
+        every { getSafeActiveSession() } returns fakeSession
     }
 
     fun expectSetsActiveSession(session: Session) {
