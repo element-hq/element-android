@@ -19,7 +19,6 @@ package im.vector.app.features.media.domain.usecase
 import android.content.Context
 import android.net.Uri
 import androidx.core.net.toUri
-import com.airbnb.mvrx.test.MvRxTestRule
 import im.vector.app.core.intent.getMimeTypeFromUri
 import im.vector.app.core.utils.saveMedia
 import im.vector.app.features.notifications.NotificationUtils
@@ -42,13 +41,9 @@ import io.mockk.verifyAll
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 
 class DownloadMediaUseCaseTest {
-
-    @get:Rule
-    val mvRxTestRule = MvRxTestRule()
 
     @MockK
     lateinit var appContext: Context
