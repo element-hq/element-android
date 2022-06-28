@@ -173,14 +173,14 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
 
     private fun tryToDestroyMe() {
         if (startInProgress.not() && roomArgsMap.isEmpty()) {
-            Timber.i("### LocationSharingService. Destroying self, time is up for all rooms")
+            Timber.i("Destroying self, time is up for all rooms")
             stopSelf()
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Timber.i("### LocationSharingService.onDestroy")
+        Timber.i("onDestroy")
         jobs.forEach { it.cancel() }
         jobs.clear()
         locationTracker.removeCallback(this)
