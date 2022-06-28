@@ -24,8 +24,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -70,37 +69,21 @@ class LocationSharingFragment @Inject constructor(
 
     private var hasRenderedUserAvatar = false
 
-    private val liveLocationLabsFlagPromotionListener = object : VectorBaseBottomSheetDialogFragment.ResultListener {
-        override fun onBottomSheetResult(resultCode: Int, data: Any?) {
-            handleLiveLocationLabsFlagPromotionResult(resultCode, data)
-        }
-    }
-
-    private val fragmentLifecycleCallbacks = object : FragmentManager.FragmentLifecycleCallbacks() {
-        override fun onFragmentResumed(fm: FragmentManager, f: Fragment) {
-            if (f is LiveLocationLabsFlagPromotionBottomSheet) {
-                f.resultListener = liveLocationLabsFlagPromotionListener
-            }
-            super.onFragmentResumed(fm, f)
-
-        }
-
-        override fun onFragmentPaused(fm: FragmentManager, f: Fragment) {
-            if (f is LiveLocationLabsFlagPromotionBottomSheet) {
-                f.resultListener = null
-            }
-            super.onFragmentPaused(fm, f)
-        }
-    }
-
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLocationSharingBinding {
         return FragmentLocationSharingBinding.inflate(inflater, container, false)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setFragmentResultListener(LiveLocationLabsFlagPromotionBottomSheet.REQUEST_KEY) { _, bundle ->
+            val isApproved = bundle.getBoolean(LiveLocationLabsFlagPromotionBottomSheet.BUNDLE_KEY_LABS_APPROVAL)
+            handleLiveLocationLabsFlagPromotionResult(isApproved)
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        activity?.supportFragmentManager?.registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, false)
 
         mapView = WeakReference(views.mapView)
         views.mapView.onCreate(savedInstanceState)
@@ -222,8 +205,8 @@ class LocationSharingFragment @Inject constructor(
         }
     }
 
-    private fun handleLiveLocationLabsFlagPromotionResult(resultCode: Int, data: Any?) {
-        if (resultCode == VectorBaseBottomSheetDialogFragment.ResultListener.RESULT_OK && (data as? Boolean) == true) {
+    private fun handleLiveLocationLabsFlagPromotionResult(isApproved: Boolean) {
+        if (isApproved) {
             vectorPreferences.setLiveLocationLabsEnabled(isEnabled = true)
             startLiveLocationSharing()
         }

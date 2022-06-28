@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.setFragmentResult
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetLiveLocationLabsFlagPromotionBinding
 
@@ -44,12 +45,18 @@ class LiveLocationLabsFlagPromotionBottomSheet :
     private fun initOkButton() {
         views.promoteLiveLocationFlagOkButton.debouncedClicks {
             val enableLabsFlag = views.promoteLiveLocationFlagSwitch.isChecked
-            resultListener?.onBottomSheetResult(ResultListener.RESULT_OK, enableLabsFlag)
+            setFragmentResult(REQUEST_KEY, Bundle().apply {
+                putBoolean(BUNDLE_KEY_LABS_APPROVAL, enableLabsFlag)
+            })
             dismiss()
         }
     }
 
     companion object {
+
+        const val REQUEST_KEY = "LiveLocationLabsFlagPromotionBottomSheetRequest"
+        const val BUNDLE_KEY_LABS_APPROVAL = "BUNDLE_KEY_LABS_APPROVAL"
+
         fun newInstance(): LiveLocationLabsFlagPromotionBottomSheet {
             return LiveLocationLabsFlagPromotionBottomSheet()
         }
