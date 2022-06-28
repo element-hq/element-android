@@ -30,7 +30,11 @@ internal fun RealmObject.assertIsManaged() {
  */
 internal fun <T> RealmList<T>.clearWith(delete: (T) -> Unit) {
     while (!isEmpty()) {
+        val previousSize = size
         first()?.let { delete.invoke(it) }
+        if (previousSize != size + 1) {
+            error("`clearWith` MUST delete all elements of the RealmList")
+        }
     }
 }
 
