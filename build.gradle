@@ -267,6 +267,8 @@ dependencyAnalysis {
             onUnusedDependencies {
                 // False positives
                 exclude(
+                        "androidx.fragment:fragment-testing",
+                        "com.facebook.soloader:soloader",
                         "com.vanniktech:emoji-google",
                         "com.vanniktech:emoji-material",
                         "org.maplibre.gl:android-plugin-annotation-v9",

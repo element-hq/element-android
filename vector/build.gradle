@@ -372,7 +372,6 @@ dependencies {
     implementation "com.gabrielittner.threetenbp:lazythreetenbp:0.10.0"
 
     implementation libs.squareup.moshi
-    implementation libs.squareup.moshiKt
     kapt libs.squareup.moshiKotlin
 
     // Lifecycle
