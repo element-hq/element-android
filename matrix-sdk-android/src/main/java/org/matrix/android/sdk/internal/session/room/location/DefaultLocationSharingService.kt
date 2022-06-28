@@ -72,7 +72,7 @@ internal class DefaultLocationSharingService @AssistedInject constructor(
         return sendLiveLocationTask.execute(params)
     }
 
-    override suspend fun startLiveLocationShare(timeoutMillis: Long): UpdateLiveLocationShareResult {
+    override suspend fun startLiveLocationShare(timeoutMillis: Long, description: String): UpdateLiveLocationShareResult {
         // Ensure to stop any active live before starting a new one
         if (checkIfExistingActiveLive()) {
             val result = stopLiveLocationShare()
@@ -82,7 +82,8 @@ internal class DefaultLocationSharingService @AssistedInject constructor(
         }
         val params = StartLiveLocationShareTask.Params(
                 roomId = roomId,
-                timeoutMillis = timeoutMillis
+                timeoutMillis = timeoutMillis,
+                description = description
         )
         return startLiveLocationShareTask.execute(params)
     }
