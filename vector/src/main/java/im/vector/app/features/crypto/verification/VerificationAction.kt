@@ -30,6 +30,8 @@ sealed class VerificationAction : VectorViewModelAction {
     data class GotItConclusion(val verified: Boolean) : VerificationAction()
     object SkipVerification : VerificationAction()
     object VerifyFromPassphrase : VerificationAction()
+    object ReadyPendingVerification : VerificationAction()
+    object CancelPendingVerification : VerificationAction()
     data class GotResultFromSsss(val cypherData: String, val alias: String) : VerificationAction()
     object CancelledFromSsss : VerificationAction()
     object SecuredStorageHasBeenReset : VerificationAction()
