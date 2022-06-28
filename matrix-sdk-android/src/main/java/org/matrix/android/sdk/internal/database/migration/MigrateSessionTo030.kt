@@ -52,6 +52,10 @@ internal class MigrateSessionTo030(realm: DynamicRealm) : RealmMigrator(realm, 3
             timelineEvents.deleteAllFromRealm()
         }
         chunks.deleteAllFromRealm()
-        Timber.d("MigrateSessionTo030: $nbOfDeletedChunks deleted chunk(s), $nbOfDeletedTimelineEvents deleted TimelineEvent(s) and $nbOfDeletedEvents deleted Event(s).")
+        Timber.d(
+                "MigrateSessionTo030: $nbOfDeletedChunks deleted chunk(s)," +
+                        " $nbOfDeletedTimelineEvents deleted TimelineEvent(s)" +
+                        " and $nbOfDeletedEvents deleted Event(s)."
+        )
     }
 }
