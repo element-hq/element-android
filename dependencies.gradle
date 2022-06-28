@@ -21,6 +21,7 @@ def markwon = "4.6.2"
 def moshi = "1.13.0"
 def lifecycle = "2.4.1"
 def flowBinding = "1.2.0"
+def flipper = "0.151.1"
 def epoxy = "4.6.2"
 def mavericks = "2.7.0"
 def glide = "4.13.2"
@@ -90,6 +91,10 @@ ext.libs = [
                 'hilt'                    : "com.google.dagger:hilt-android:$dagger",
                 'hiltAndroidTesting'      : "com.google.dagger:hilt-android-testing:$dagger",
                 'hiltCompiler'            : "com.google.dagger:hilt-compiler:$dagger"
+        ],
+        flipper     : [
+                'flipper'                 : "com.facebook.flipper:flipper:$flipper",
+                'flipperNetworkPlugin'    : "com.facebook.flipper:flipper-network-plugin:$flipper",
         ],
         squareup    : [
                 'moshi'                  : "com.squareup.moshi:moshi:$moshi",

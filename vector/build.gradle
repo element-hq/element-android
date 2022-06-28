@@ -534,10 +534,10 @@ dependencies {
     }
 
     // Flipper, debug builds only
-    debugImplementation('com.facebook.flipper:flipper:0.151.1') {
+    debugImplementation(libs.flipper.flipper) {
         exclude group: 'com.facebook.fbjni', module: 'fbjni'
     }
-    debugImplementation('com.facebook.flipper:flipper-network-plugin:0.151.1') {
+    debugImplementation(libs.flipper.flipperNetworkPlugin) {
         exclude group: 'com.facebook.fbjni', module: 'fbjni'
     }
     debugImplementation 'com.facebook.soloader:soloader:0.10.3'
