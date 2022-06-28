@@ -16,16 +16,14 @@
 
 package im.vector.app.features.location.live.map
 
-import androidx.lifecycle.asFlow
 import im.vector.app.features.location.LocationData
+import im.vector.app.test.fakes.FakeFlowLiveDataConversions
 import im.vector.app.test.fakes.FakeSession
+import im.vector.app.test.fakes.givenAsFlowReturns
 import io.mockk.coEvery
-import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.After
@@ -41,6 +39,7 @@ class GetListOfUserLiveLocationUseCaseTest {
 
     private val fakeSession = FakeSession()
     private val viewStateMapper = mockk<UserLiveLocationViewStateMapper>()
+    private val fakeFlowLiveDataConversions = FakeFlowLiveDataConversions()
 
     private val getListOfUserLiveLocationUseCase = GetListOfUserLiveLocationUseCase(
             session = fakeSession,
@@ -49,7 +48,7 @@ class GetListOfUserLiveLocationUseCaseTest {
 
     @Before
     fun setUp() {
-        mockkStatic("androidx.lifecycle.FlowLiveDataConversions")
+        fakeFlowLiveDataConversions.setup()
     }
 
     @After
@@ -78,12 +77,11 @@ class GetListOfUserLiveLocationUseCaseTest {
                 lastLocationDataContent = MessageBeaconLocationDataContent()
         )
         val summaries = listOf(summary1, summary2, summary3)
-        val liveData = fakeSession.roomService()
+        fakeSession.roomService()
                 .getRoom(A_ROOM_ID)
                 .locationSharingService()
                 .givenRunningLiveLocationShareSummariesReturns(summaries)
-
-        every { liveData.asFlow() } returns flowOf(summaries)
+                .givenAsFlowReturns(summaries)
 
         val viewState1 = UserLiveLocationViewState(
                 matrixItem = MatrixItem.UserItem(id = "@userId1:matrix.org", displayName = "User 1", avatarUrl = ""),

@@ -16,13 +16,11 @@
 
 package im.vector.app.features.location.live
 
-import androidx.lifecycle.asFlow
+import im.vector.app.test.fakes.FakeFlowLiveDataConversions
 import im.vector.app.test.fakes.FakeSession
-import io.mockk.every
-import io.mockk.mockkStatic
+import im.vector.app.test.fakes.givenAsFlowReturns
 import io.mockk.unmockkAll
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.After
@@ -38,6 +36,7 @@ private const val AN_EVENT_ID = "event_id"
 class GetLiveLocationShareSummaryUseCaseTest {
 
     private val fakeSession = FakeSession()
+    private val fakeFlowLiveDataConversions = FakeFlowLiveDataConversions()
 
     private val getLiveLocationShareSummaryUseCase = GetLiveLocationShareSummaryUseCase(
             session = fakeSession
@@ -45,7 +44,7 @@ class GetLiveLocationShareSummaryUseCaseTest {
 
     @Before
     fun setUp() {
-        mockkStatic("androidx.lifecycle.FlowLiveDataConversions")
+        fakeFlowLiveDataConversions.setup()
     }
 
     @After
@@ -61,11 +60,11 @@ class GetLiveLocationShareSummaryUseCaseTest {
                 endOfLiveTimestampMillis = 123,
                 lastLocationDataContent = MessageBeaconLocationDataContent()
         )
-        val liveData = fakeSession.roomService()
+        fakeSession.roomService()
                 .getRoom(A_ROOM_ID)
                 .locationSharingService()
                 .givenLiveLocationShareSummaryReturns(AN_EVENT_ID, summary)
-        every { liveData.asFlow() } returns flowOf(Optional(summary))
+                .givenAsFlowReturns(Optional(summary))
 
         val result = getLiveLocationShareSummaryUseCase.execute(A_ROOM_ID, AN_EVENT_ID).first()
 
