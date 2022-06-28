@@ -50,10 +50,8 @@ class LiveLocationLabsFlagPromotionBottomSheet :
     }
 
     companion object {
-        fun newInstance(resultListener: ResultListener): LiveLocationLabsFlagPromotionBottomSheet {
-            return LiveLocationLabsFlagPromotionBottomSheet().also {
-                it.resultListener = resultListener
-            }
+        fun newInstance(): LiveLocationLabsFlagPromotionBottomSheet {
+            return LiveLocationLabsFlagPromotionBottomSheet()
         }
     }
 }
