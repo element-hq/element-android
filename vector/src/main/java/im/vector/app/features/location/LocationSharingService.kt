@@ -192,16 +192,14 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
     }
 
     private fun listenForLiveSummaryChanges(roomId: String, eventId: String) {
-        activeSessionHolder
-                .getSafeActiveSession()
-                ?.let { session ->
-                    val job = getLiveLocationShareSummaryUseCase.execute(roomId, eventId)
-                            .distinctUntilChangedBy { it.isActive }
-                            .filter { it.isActive == false }
-                            .onEach { stopSharingLocation(roomId) }
-                            .launchIn(session.coroutineScope)
-                    jobs.add(job)
-                }
+        launchWithActiveSession { session ->
+            val job = getLiveLocationShareSummaryUseCase.execute(roomId, eventId)
+                    .distinctUntilChangedBy { it.isActive }
+                    .filter { it.isActive == false }
+                    .onEach { stopSharingLocation(roomId) }
+                    .launchIn(session.coroutineScope)
+            jobs.add(job)
+        }
     }
 
     private fun launchWithActiveSession(block: suspend CoroutineScope.(Session) -> Unit) =
