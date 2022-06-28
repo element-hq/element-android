@@ -336,7 +336,7 @@ class E2eeShareKeysHistoryTest : InstrumentedTest {
             testHelper.retryPeriodicallyWithLatch(latch) {
                 val roomVisibility = aliceSession.getRoom(e2eRoomID)!!
                         .stateService()
-                        .getStateEvent(EventType.STATE_ROOM_HISTORY_VISIBILITY)
+                        .getStateEvent(EventType.STATE_ROOM_HISTORY_VISIBILITY, QueryStringValue.IsEmpty)
                         ?.content
                         ?.toModel<RoomHistoryVisibilityContent>()
                 Log.v("#E2E TEST ROTATION", "Room visibility changed from: ${initRoomHistoryVisibility.name} to: ${roomVisibility?.historyVisibility?.name}")
