@@ -45,7 +45,7 @@ data class VerificationChooseMethodViewState(
         val sasModeAvailable: Boolean = false,
         val isMe: Boolean = false,
         val canCrossSign: Boolean = false,
-        val isReadied: Boolean = false
+        val isReadySent: Boolean = false
 ) : MavericksState
 
 class VerificationChooseMethodViewModel @AssistedInject constructor(
@@ -83,7 +83,7 @@ class VerificationChooseMethodViewModel @AssistedInject constructor(
                     otherCanShowQrCode = pvr?.otherCanShowQrCode().orFalse(),
                     otherCanScanQrCode = pvr?.otherCanScanQrCode().orFalse(),
                     sasModeAvailable = pvr?.isSasSupported().orFalse(),
-                    isReadied = pvr?.isReady ?: false,
+                    isReadySent = pvr?.isReady.orFalse(),
             )
         }
     }

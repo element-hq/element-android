@@ -109,7 +109,7 @@ class VerificationChooseMethodController @Inject constructor(
                 iconColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
                 listener { host.listener?.doVerifyBySas() }
             }
-        } else if (!state.isReadied) {
+        } else if (!state.isReadySent) {
             // a bit of a special case, if you tapped on the timeline cell but not on a button
             buttonPositiveDestructiveButtonBarItem {
                 id("accept_decline")

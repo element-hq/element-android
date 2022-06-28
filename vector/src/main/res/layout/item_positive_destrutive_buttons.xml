@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
-    android:orientation="horizontal"
-    tools:visibility="visible">
+    android:orientation="horizontal">
 
     <Button
         android:id="@+id/destructive_button"
@@ -13,13 +12,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:text="@string/action_decline" />
+        tools:text="@string/action_decline" />
 
     <Button
         android:id="@+id/positive_button"
         style="@style/Widget.Vector.Button.Positive"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/action_accept" />
+        tools:text="@string/action_accept" />
 
 </LinearLayout>
