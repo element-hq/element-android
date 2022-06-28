@@ -65,7 +65,7 @@ data class TimelineEvent(
 
     init {
         if (BuildConfig.DEBUG) {
-            assert(eventId == root.eventId)
+//            assert(eventId == root.eventId)
         }
     }
 

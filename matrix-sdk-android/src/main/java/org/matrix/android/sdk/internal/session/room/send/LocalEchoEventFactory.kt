@@ -681,7 +681,7 @@ internal class LocalEchoEventFactory @Inject constructor(
      * In case of an edit of a reply the last content is not
      * himself a reply, but it will contain the fallbacks, so we have to trim them.
      */
-    private fun bodyForReply(content: MessageContent?, isReply: Boolean): TextContent {
+    fun bodyForReply(content: MessageContent?, isReply: Boolean): TextContent {
         when (content?.msgType) {
             MessageType.MSGTYPE_EMOTE,
             MessageType.MSGTYPE_TEXT,

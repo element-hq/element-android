@@ -27,21 +27,30 @@ import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
+import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
+import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
+import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
+import org.matrix.android.sdk.api.session.room.timeline.isEdition
+import org.matrix.android.sdk.api.session.room.timeline.isReply
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.database.helper.addIfNecessary
+import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomEntity
+import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.deleteAndClearThreadEvents
 import org.matrix.android.sdk.internal.database.query.findAllIncludingEvents
 import org.matrix.android.sdk.internal.database.query.findLastForwardChunkOfThread
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadTimelineTask
+import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
 import org.matrix.android.sdk.internal.session.room.state.StateEventDataSource
 import org.matrix.android.sdk.internal.session.sync.handler.room.ThreadsAwarenessHandler
 import org.matrix.android.sdk.internal.util.time.Clock
@@ -105,6 +114,7 @@ internal class LoadTimelineStrategy constructor(
             val onNewTimelineEvents: (List<String>) -> Unit,
             val stateEventDataSource: StateEventDataSource,
             val matrixCoroutineDispatchers: MatrixCoroutineDispatchers,
+            val localEchoEventFactory: LocalEchoEventFactory
     )
 
     private var getContextLatch: CompletableDeferred<Unit>? = null
@@ -240,10 +250,47 @@ internal class LoadTimelineStrategy constructor(
 
     fun buildSnapshot(): List<TimelineEvent> {
         val events = buildSendingEvents() + timelineChunk?.builtItems(includesNext = true, includesPrev = true).orEmpty()
+        val eventsUpdated = updateRepliedEventIfNeeded(events)
         return if (dependencies.timelineSettings.useLiveSenderInfo) {
-            events.map(this::applyLiveRoomState)
+            eventsUpdated.map(this::applyLiveRoomState)
         } else {
-            events
+            eventsUpdated
+        }
+    }
+
+    private fun updateRepliedEventIfNeeded(events: List<TimelineEvent>): List<TimelineEvent> {
+        return events.mapNotNull {
+            if (it.isReply()) {
+                if (it.isEncrypted()) {
+                    createNewRepliedEvent(it)?.let { newEvent ->
+                        it.copy(root = newEvent)
+                    } ?: it
+                } else it
+            } else it
+        }
+    }
+
+    private fun createNewRepliedEvent(currentTimelineEvent: TimelineEvent): Event? {
+        return currentTimelineEvent.root.content.toModel<EncryptedEventContent>()?.relatesTo?.inReplyTo?.eventId?.let { eventId ->
+            val timeLineEventEntity = TimelineEventEntity.where(
+                    dependencies.realm.get(),
+                    roomId,
+                    eventId
+            ).findFirst()
+
+            val replyText = dependencies
+                    .localEchoEventFactory
+                    .bodyForReply(currentTimelineEvent.getLastMessageContent(), true).formattedText ?: ""
+
+            timeLineEventEntity?.let { timelineEventEntity ->
+                    dependencies.localEchoEventFactory.createReplyTextEvent(
+                            roomId,
+                            dependencies.timelineEventMapper.map(timelineEventEntity),
+                            replyText,
+                            false,
+                            showInThread = false
+                    )
+            }
         }
     }
 
