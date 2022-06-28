@@ -21,8 +21,6 @@
     <color name="vctr_notice_secondary_alpha12">#1E61708B</color>
 
     <!-- Other useful color -->
-    <!-- Emoji text has to use a black text color -->
-    <color name="emoji_color">@android:color/black</color>
     <color name="join_conference_animated_color">#0BAC7E</color>
 
     <color name="half_transparent_status_bar">#80000000</color>

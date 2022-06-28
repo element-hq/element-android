@@ -23,7 +23,7 @@
         android:gravity="center"
         android:maxEms="10"
         android:singleLine="true"
-        android:textColor="@color/emoji_color"
+        android:textColor="?vctr_content_primary"
         tools:text="* Party Parrot Again * 👀" />
 
     <TextView
