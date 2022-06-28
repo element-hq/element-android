@@ -197,11 +197,14 @@ class LocationSharingFragment @Inject constructor(
 
     private val liveLocationLabsFlagPromotionListener = object : VectorBaseBottomSheetDialogFragment.ResultListener {
         override fun onBottomSheetResult(resultCode: Int, data: Any?) {
-            // Check if the user wants to enable the labs flag
-            if (resultCode == VectorBaseBottomSheetDialogFragment.ResultListener.RESULT_OK && (data as? Boolean) == true) {
-                vectorPreferences.setLiveLocationLabsEnabled()
-                startLiveLocationSharing()
-            }
+            handleLiveLocationLabsFlagPromotionResult(resultCode, data)
+        }
+    }
+
+    private fun handleLiveLocationLabsFlagPromotionResult(resultCode: Int, data: Any?) {
+        if (resultCode == VectorBaseBottomSheetDialogFragment.ResultListener.RESULT_OK && (data as? Boolean) == true) {
+            vectorPreferences.setLiveLocationLabsEnabled(isEnabled = true)
+            startLiveLocationSharing()
         }
     }
 

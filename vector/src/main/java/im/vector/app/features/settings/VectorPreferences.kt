@@ -1047,9 +1047,9 @@ class VectorPreferences @Inject constructor(
         return defaultPrefs.getBoolean(SETTINGS_LABS_ENABLE_LIVE_LOCATION, false)
     }
 
-    fun setLiveLocationLabsEnabled() {
+    fun setLiveLocationLabsEnabled(isEnabled: Boolean) {
         defaultPrefs.edit {
-            putBoolean(SETTINGS_LABS_ENABLE_LIVE_LOCATION, true)
+            putBoolean(SETTINGS_LABS_ENABLE_LIVE_LOCATION, isEnabled)
         }
     }
 
