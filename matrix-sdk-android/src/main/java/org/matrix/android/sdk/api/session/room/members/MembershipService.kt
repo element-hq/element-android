@@ -41,7 +41,7 @@ interface MembershipService {
     suspend fun areAllMembersLoaded(): Boolean
 
     /**
-     * Live version for [areAllMembersLoaded]
+     * Live version for [areAllMembersLoaded].
      */
     fun areAllMembersLoadedLive(): LiveData<Optional<Boolean>>
 
