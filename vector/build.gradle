@@ -539,7 +539,7 @@ dependencies {
     debugImplementation(libs.flipper.flipperNetworkPlugin) {
         exclude group: 'com.facebook.fbjni', module: 'fbjni'
     }
-    debugImplementation 'com.facebook.soloader:soloader:0.10.3'
+    debugImplementation 'com.facebook.soloader:soloader:0.10.4'
     debugImplementation "com.kgurgul.flipper:flipper-realm-android:2.2.0"
 
     // Activate when you want to check for leaks, from time to time.
