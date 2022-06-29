@@ -21,20 +21,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.associateContentStateWith
+import im.vector.app.core.extensions.clearErrorOnChange
 import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.editText
 import im.vector.app.core.extensions.hidePassword
-import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.setOnImeDoneListener
 import im.vector.app.databinding.FragmentFtueResetPasswordInputBinding
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewState
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import reactivecircus.flowbinding.android.widget.textChanges
 
 @AndroidEntryPoint
 class FtueAuthResetPasswordEntryFragment : AbstractFtueAuthFragment<FragmentFtueResetPasswordInputBinding>() {
@@ -51,9 +47,7 @@ class FtueAuthResetPasswordEntryFragment : AbstractFtueAuthFragment<FragmentFtue
     private fun setupViews() {
         views.newPasswordInput.associateContentStateWith(button = views.newPasswordSubmit)
         views.newPasswordInput.setOnImeDoneListener { resetPassword() }
-        views.newPasswordInput.editText().textChanges()
-                .onEach { views.newPasswordInput.error = null }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+        views.newPasswordInput.clearErrorOnChange(viewLifecycleOwner)
         views.newPasswordSubmit.debouncedClicks { resetPassword() }
     }
 

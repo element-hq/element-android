@@ -20,18 +20,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.associateContentStateWith
+import im.vector.app.core.extensions.clearErrorOnChange
 import im.vector.app.core.extensions.content
-import im.vector.app.core.extensions.editText
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.setOnImeDoneListener
 import im.vector.app.databinding.FragmentFtueResetPasswordEmailInputBinding
 import im.vector.app.features.onboarding.OnboardingAction
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import reactivecircus.flowbinding.android.widget.textChanges
 
 @AndroidEntryPoint
 class FtueAuthResetPasswordEmailEntryFragment : AbstractFtueAuthFragment<FragmentFtueResetPasswordEmailInputBinding>() {
@@ -46,14 +42,9 @@ class FtueAuthResetPasswordEmailEntryFragment : AbstractFtueAuthFragment<Fragmen
     }
 
     private fun setupViews() {
-        views.emailEntryInput.associateContentStateWith(button = views.emailEntrySubmit)
+        views.emailEntryInput.associateContentStateWith(button = views.emailEntrySubmit, enabledPredicate = { it.isEmail() })
         views.emailEntryInput.setOnImeDoneListener { startPasswordReset() }
-        views.emailEntryInput.editText().textChanges()
-                .onEach {
-                    views.emailEntryInput.error = null
-                    views.emailEntrySubmit.isEnabled = it.isEmail()
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+        views.emailEntryInput.clearErrorOnChange(viewLifecycleOwner)
         views.emailEntrySubmit.debouncedClicks { startPasswordReset() }
     }
 
