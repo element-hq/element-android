@@ -59,7 +59,9 @@ import org.matrix.android.sdk.internal.session.room.location.SendLiveLocationTas
 import org.matrix.android.sdk.internal.session.room.location.SendStaticLocationTask
 import org.matrix.android.sdk.internal.session.room.location.StartLiveLocationShareTask
 import org.matrix.android.sdk.internal.session.room.location.StopLiveLocationShareTask
+import org.matrix.android.sdk.internal.session.room.membership.DefaultGetRoomMembersLoadStatusTask
 import org.matrix.android.sdk.internal.session.room.membership.DefaultLoadRoomMembersTask
+import org.matrix.android.sdk.internal.session.room.membership.GetRoomMembersLoadStatusTask
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
 import org.matrix.android.sdk.internal.session.room.membership.admin.DefaultMembershipAdminTask
 import org.matrix.android.sdk.internal.session.room.membership.admin.MembershipAdminTask
@@ -226,6 +228,9 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindLoadRoomMembersTask(task: DefaultLoadRoomMembersTask): LoadRoomMembersTask
+
+    @Binds
+    abstract fun bindGetRoomMembersLoadStatusTask(task: DefaultGetRoomMembersLoadStatusTask): GetRoomMembersLoadStatusTask
 
     @Binds
     abstract fun bindSetReadMarkersTask(task: DefaultSetReadMarkersTask): SetReadMarkersTask

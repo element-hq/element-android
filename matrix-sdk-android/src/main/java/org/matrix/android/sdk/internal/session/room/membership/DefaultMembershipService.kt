@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.session.room.membership
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import com.zhuinden.monarchy.Monarchy
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -28,9 +29,14 @@ import org.matrix.android.sdk.api.session.room.members.MembershipService
 import org.matrix.android.sdk.api.session.room.members.RoomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
+import org.matrix.android.sdk.api.util.Optional
+import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.database.mapper.asDomain
+import org.matrix.android.sdk.internal.database.model.RoomEntity
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFields
+import org.matrix.android.sdk.internal.database.model.RoomMembersLoadStatusType
+import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.query.QueryStringValueProcessor
@@ -47,6 +53,7 @@ internal class DefaultMembershipService @AssistedInject constructor(
         private val inviteTask: InviteTask,
         private val inviteThreePidTask: InviteThreePidTask,
         private val membershipAdminTask: MembershipAdminTask,
+        private val getRoomMembersLoadStatusTask: GetRoomMembersLoadStatusTask,
         @UserId
         private val userId: String,
         private val queryStringValueProcessor: QueryStringValueProcessor
@@ -60,6 +67,26 @@ internal class DefaultMembershipService @AssistedInject constructor(
     override suspend fun loadRoomMembersIfNeeded() {
         val params = LoadRoomMembersTask.Params(roomId, Membership.LEAVE)
         loadRoomMembersTask.execute(params)
+    }
+
+    override suspend fun areAllMembersLoaded(): Boolean {
+        val status = getRoomMembersLoadStatusTask.execute(GetRoomMembersLoadStatusTask.Params(roomId))
+        return status == RoomMembersLoadStatusType.LOADED
+    }
+
+    override fun areAllMembersLoadedLive(): LiveData<Optional<Boolean>> {
+        val liveData = monarchy.findAllMappedWithChanges(
+                {
+                    RoomEntity.where(it, roomId)
+                },
+                {
+                    it.membersLoadStatus == RoomMembersLoadStatusType.LOADED
+                }
+        )
+
+        return Transformations.map(liveData) { results ->
+            results.firstOrNull().toOptional()
+        }
     }
 
     override fun getRoomMember(userId: String): RoomMemberSummary? {

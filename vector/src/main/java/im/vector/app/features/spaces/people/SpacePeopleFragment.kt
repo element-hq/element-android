@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -32,8 +33,6 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.core.resources.ColorProvider
-import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.databinding.FragmentRecyclerviewWithSearchBinding
 import im.vector.app.features.roomprofile.members.RoomMemberListAction
 import im.vector.app.features.roomprofile.members.RoomMemberListViewModel
@@ -45,8 +44,6 @@ import reactivecircus.flowbinding.appcompat.queryTextChanges
 import javax.inject.Inject
 
 class SpacePeopleFragment @Inject constructor(
-        private val drawableProvider: DrawableProvider,
-        private val colorProvider: ColorProvider,
         private val epoxyController: SpacePeopleListController
 ) : VectorBaseFragment<FragmentRecyclerviewWithSearchBinding>(),
         OnBackPressed, SpacePeopleListController.InteractionListener {
@@ -64,6 +61,7 @@ class SpacePeopleFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(membersViewModel) { memberListState ->
+        views.progressBar.isGone = memberListState.areAllMembersLoaded
         val memberCount = (memberListState.roomSummary.invoke()?.otherMemberIds?.size ?: 0) + 1
 
         toolbar?.subtitle = resources.getQuantityString(R.plurals.room_title_members, memberCount, memberCount)

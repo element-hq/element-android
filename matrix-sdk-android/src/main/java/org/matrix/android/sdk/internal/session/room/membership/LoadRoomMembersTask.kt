@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.session.room.membership
 
 import com.zhuinden.monarchy.Monarchy
-import io.realm.Realm
 import io.realm.kotlin.createObject
 import kotlinx.coroutines.TimeoutCancellationException
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -57,6 +56,7 @@ internal interface LoadRoomMembersTask : Task<LoadRoomMembersTask.Params, Unit> 
 internal class DefaultLoadRoomMembersTask @Inject constructor(
         private val roomAPI: RoomAPI,
         @SessionDatabase private val monarchy: Monarchy,
+        private val getRoomMembersLoadStatusTask: GetRoomMembersLoadStatusTask,
         private val syncTokenStore: SyncTokenStore,
         private val roomSummaryUpdater: RoomSummaryUpdater,
         private val roomMemberEventHandler: RoomMemberEventHandler,
@@ -67,7 +67,7 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
 ) : LoadRoomMembersTask {
 
     override suspend fun execute(params: LoadRoomMembersTask.Params) {
-        when (getRoomMembersLoadStatus(params.roomId)) {
+        when (getRoomMembersLoadStatusTask.execute(GetRoomMembersLoadStatusTask.Params(params.roomId))) {
             RoomMembersLoadStatusType.NONE -> doRequest(params)
             RoomMembersLoadStatusType.LOADING -> waitPreviousRequestToFinish(params)
             RoomMembersLoadStatusType.LOADED -> Unit
@@ -134,14 +134,6 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
         if (cryptoSessionInfoProvider.isRoomEncrypted(roomId)) {
             deviceListManager.onRoomMembersLoadedFor(roomId)
         }
-    }
-
-    private fun getRoomMembersLoadStatus(roomId: String): RoomMembersLoadStatusType {
-        var result: RoomMembersLoadStatusType?
-        Realm.getInstance(monarchy.realmConfiguration).use {
-            result = RoomEntity.where(it, roomId).findFirst()?.membersLoadStatus
-        }
-        return result ?: RoomMembersLoadStatusType.NONE
     }
 
     private suspend fun setRoomMembersLoadStatus(roomId: String, status: RoomMembersLoadStatusType) {
