@@ -257,13 +257,11 @@ internal class LoadTimelineStrategy constructor(
     }
 
     private fun updateRepliedEventIfNeeded(events: List<TimelineEvent>): List<TimelineEvent> {
-        return events.mapNotNull {
-            if (it.isReply()) {
-                if (it.isEncrypted()) {
+        return events.map {
+            if (it.isReply() && it.isEncrypted()) {
                     createNewRepliedEvent(it)?.let { newEvent ->
                         it.copy(root = newEvent)
                     } ?: it
-                } else it
             } else it
         }
     }
