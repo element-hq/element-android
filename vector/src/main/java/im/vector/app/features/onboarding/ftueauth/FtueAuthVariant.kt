@@ -163,7 +163,7 @@ class FtueAuthVariant(
             is OnboardingViewEvents.OnForgetPasswordClicked ->
                 when {
                     vectorFeatures.isOnboardingCombinedLoginEnabled() -> addLoginStageFragmentToBackstack(FtueAuthResetPasswordEmailEntryFragment::class.java)
-                    else                                              -> addLoginStageFragmentToBackstack(FtueAuthResetPasswordFragment::class.java)
+                    else -> addLoginStageFragmentToBackstack(FtueAuthResetPasswordFragment::class.java)
                 }
             is OnboardingViewEvents.OnResetPasswordEmailConfirmationSent -> {
                 supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
@@ -178,7 +178,7 @@ class FtueAuthVariant(
                     )
                 }
             }
-            OnboardingViewEvents.OnResetPasswordBreakerConfirmed         -> {
+            OnboardingViewEvents.OnResetPasswordBreakerConfirmed -> {
                 supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 activity.addFragmentToBackstack(
                         views.loginFragmentContainer,
@@ -186,11 +186,11 @@ class FtueAuthVariant(
                         option = commonOption
                 )
             }
-            is OnboardingViewEvents.OpenResetPasswordComplete            -> {
+            is OnboardingViewEvents.OpenResetPasswordComplete -> {
                 supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 addLoginStageFragmentToBackstack(FtueAuthResetPasswordSuccessFragment::class.java)
             }
-            OnboardingViewEvents.OnResetPasswordComplete                 -> {
+            OnboardingViewEvents.OnResetPasswordComplete -> {
                 activity.popBackstack()
             }
             is OnboardingViewEvents.OnSendEmailSuccess -> {
