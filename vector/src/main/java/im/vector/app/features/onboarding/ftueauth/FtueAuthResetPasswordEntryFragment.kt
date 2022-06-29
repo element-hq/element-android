@@ -51,14 +51,13 @@ class FtueAuthResetPasswordEntryFragment : AbstractFtueAuthFragment<FragmentFtue
     private fun setupViews() {
         views.newPasswordInput.associateContentStateWith(button = views.newPasswordSubmit)
         views.newPasswordInput.setOnImeDoneListener { resetPassword() }
-        views.newPasswordSubmit.debouncedClicks { resetPassword() }
-
         views.newPasswordInput.editText().textChanges()
                 .onEach {
                     views.newPasswordInput.error = null
                     views.newPasswordSubmit.isEnabled = it.isEmail()
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
+        views.newPasswordSubmit.debouncedClicks { resetPassword() }
     }
 
     private fun resetPassword() {
