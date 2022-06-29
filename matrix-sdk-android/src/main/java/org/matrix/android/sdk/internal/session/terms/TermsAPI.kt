@@ -37,15 +37,19 @@ internal interface TermsAPI {
      * This request requires authentication.
      */
     @POST
-    suspend fun agreeToTerms(@Url url: String,
-                             @Body params: AcceptTermsBody,
-                             @Header(HttpHeaders.Authorization) token: String)
+    suspend fun agreeToTerms(
+            @Url url: String,
+            @Body params: AcceptTermsBody,
+            @Header(HttpHeaders.Authorization) token: String
+    )
 
     /**
      * API to retrieve the terms for a homeserver. The API /terms does not exist yet, so retrieve the terms from the login flow.
      * We do not care about the result (Credentials).
      */
     @POST
-    suspend fun register(@Url url: String,
-                         @Body body: JsonDict = emptyJsonDict)
+    suspend fun register(
+            @Url url: String,
+            @Body body: JsonDict = emptyJsonDict
+    )
 }

@@ -42,9 +42,11 @@ import org.matrix.android.sdk.api.session.widgets.WidgetPostAPIMediator
 import org.matrix.android.sdk.api.util.JsonDict
 import timber.log.Timber
 
-class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roomId: String,
-                                                       private val stringProvider: StringProvider,
-                                                       private val session: Session) : WidgetPostAPIMediator.Handler {
+class WidgetPostAPIHandler @AssistedInject constructor(
+        @Assisted private val roomId: String,
+        private val stringProvider: StringProvider,
+        private val session: Session
+) : WidgetPostAPIMediator.Handler {
 
     @AssistedFactory
     interface Factory {
@@ -63,20 +65,20 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     override fun handleWidgetRequest(mediator: WidgetPostAPIMediator, eventData: JsonDict): Boolean {
         return when (eventData["action"] as String?) {
             "integration_manager_open" -> handleIntegrationManagerOpenAction(eventData).run { true }
-            "bot_options"              -> getBotOptions(mediator, eventData).run { true }
-            "can_send_event"           -> canSendEvent(mediator, eventData).run { true }
-            "close_scalar"             -> handleCloseScalar().run { true }
-            "get_membership_count"     -> getMembershipCount(mediator, eventData).run { true }
-            "get_widgets"              -> getWidgets(mediator, eventData).run { true }
-            "invite"                   -> inviteUser(mediator, eventData).run { true }
-            "join_rules_state"         -> getJoinRules(mediator, eventData).run { true }
-            "membership_state"         -> getMembershipState(mediator, eventData).run { true }
-            "set_bot_options"          -> setBotOptions(mediator, eventData).run { true }
-            "set_bot_power"            -> setBotPower(mediator, eventData).run { true }
-            "set_plumbing_state"       -> setPlumbingState(mediator, eventData).run { true }
-            "set_widget"               -> setWidget(mediator, eventData).run { true }
-            "m.sticker"                -> pickStickerData(mediator, eventData).run { true }
-            else                       -> false
+            "bot_options" -> getBotOptions(mediator, eventData).run { true }
+            "can_send_event" -> canSendEvent(mediator, eventData).run { true }
+            "close_scalar" -> handleCloseScalar().run { true }
+            "get_membership_count" -> getMembershipCount(mediator, eventData).run { true }
+            "get_widgets" -> getWidgets(mediator, eventData).run { true }
+            "invite" -> inviteUser(mediator, eventData).run { true }
+            "join_rules_state" -> getJoinRules(mediator, eventData).run { true }
+            "membership_state" -> getMembershipState(mediator, eventData).run { true }
+            "set_bot_options" -> setBotOptions(mediator, eventData).run { true }
+            "set_bot_power" -> setBotPower(mediator, eventData).run { true }
+            "set_plumbing_state" -> setPlumbingState(mediator, eventData).run { true }
+            "set_widget" -> setWidget(mediator, eventData).run { true }
+            "m.sticker" -> pickStickerData(mediator, eventData).run { true }
+            else -> false
         }
     }
 
@@ -110,6 +112,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     /**
      * Retrieve the latest botOptions event.
      *
+     * @param widgetPostAPIMediator the post api mediator
      * @param eventData the modular data
      */
     private fun getBotOptions(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
@@ -118,7 +121,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
         }
         val userId = eventData["user_id"] as String
         Timber.d("Received request to get options for bot $userId in room $roomId requested")
-        val stateEvents = room.stateService().getStateEvents(setOf(EventType.BOT_OPTIONS))
+        val stateEvents = room.stateService().getStateEvents(setOf(EventType.BOT_OPTIONS), QueryStringValue.IsNotNull)
         var botOptionsEvent: Event? = null
         val stateKey = "_$userId"
         for (stateEvent in stateEvents) {
@@ -152,7 +155,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
 
         Timber.d("## canSendEvent() : eventType $eventType isState $isState")
 
-        val powerLevelsEvent = room.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS)
+        val powerLevelsEvent = room.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
         val powerLevelsContent = powerLevelsEvent?.content?.toModel<PowerLevelsContent>()
         val canSend = if (powerLevelsContent == null) {
             false
@@ -171,6 +174,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     /**
      * Provides the membership state.
      *
+     * @param widgetPostAPIMediator the post api mediator
      * @param eventData the modular data
      */
     private fun getMembershipState(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
@@ -190,6 +194,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     /**
      * Request the latest joined room event.
      *
+     * @param widgetPostAPIMediator the post api mediator
      * @param eventData the modular data
      */
     private fun getJoinRules(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
@@ -197,7 +202,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
             return
         }
         Timber.d("Received request join rules  in room $roomId")
-        val joinedEvents = room.stateService().getStateEvents(setOf(EventType.STATE_ROOM_JOIN_RULES))
+        val joinedEvents = room.stateService().getStateEvents(setOf(EventType.STATE_ROOM_JOIN_RULES), QueryStringValue.IsEmpty)
         if (joinedEvents.isNotEmpty()) {
             widgetPostAPIMediator.sendObjectResponse(Event::class.java, joinedEvents.last(), eventData)
         } else {
@@ -208,6 +213,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     /**
      * Provide the widgets list.
      *
+     * @param widgetPostAPIMediator the post api mediator
      * @param eventData the modular data
      */
     private fun getWidgets(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
@@ -216,7 +222,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
         }
         Timber.d("Received request to get widget in room $roomId")
         val responseData = ArrayList<JsonDict>()
-        val allWidgets = session.widgetService().getRoomWidgets(roomId) + session.widgetService().getUserWidgets()
+        val allWidgets = session.widgetService().getRoomWidgets(roomId, QueryStringValue.IsNotNull) + session.widgetService().getUserWidgets()
         for (widget in allWidgets) {
             val map = widget.event.toContent()
             responseData.add(map)
@@ -228,6 +234,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     /**
      * Set a new widget.
      *
+     * @param widgetPostAPIMediator the post api mediator
      * @param eventData the modular data
      */
     private fun setWidget(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
@@ -303,6 +310,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     /**
      * Update the 'plumbing state".
      *
+     * @param widgetPostAPIMediator the post api mediator
      * @param eventData the modular data
      */
     private fun setPlumbingState(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
@@ -328,6 +336,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     /**
      * Update the bot options.
      *
+     * @param widgetPostAPIMediator the post api mediator
      * @param eventData the modular data
      */
     @Suppress("UNCHECKED_CAST")
@@ -353,6 +362,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     /**
      * Update the bot power levels.
      *
+     * @param widgetPostAPIMediator the post api mediator
      * @param eventData the modular data
      */
     private fun setBotPower(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
@@ -375,6 +385,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     /**
      * Invite an user to this room.
      *
+     * @param widgetPostAPIMediator the post api mediator
      * @param eventData the modular data
      */
     private fun inviteUser(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
@@ -397,6 +408,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     /**
      * Provides the number of members in the rooms.
      *
+     * @param widgetPostAPIMediator the post api mediator
      * @param eventData the modular data
      */
     private fun getMembershipCount(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {

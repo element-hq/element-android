@@ -32,8 +32,10 @@ import kotlin.math.min
  * This view is responsible for drawing big circle that will pulse when clicked
  * As describe in http://frogermcs.github.io/twitters-like-animation-in-android-alternative/
  */
-class CircleView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null,
-                                           defStyleAttr: Int = 0) : View(context, attrs, defStyleAttr) {
+class CircleView @JvmOverloads constructor(
+        context: Context, attrs: AttributeSet? = null,
+        defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
 
     var startColor = -0xa8de
     var endColor = -0x3ef9

@@ -38,6 +38,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 
 class RoomListSectionBuilderGroup(
         private val coroutineScope: CoroutineScope,
@@ -54,15 +55,15 @@ class RoomListSectionBuilderGroup(
         val actualGroupId = appStateHandler.safeActiveGroupId()
 
         when (mode) {
-            RoomListDisplayMode.PEOPLE        -> {
+            RoomListDisplayMode.PEOPLE -> {
                 // 4 sections Invites / Fav / Dms / Low Priority
                 buildPeopleSections(sections, activeGroupAwareQueries, actualGroupId)
             }
-            RoomListDisplayMode.ROOMS         -> {
+            RoomListDisplayMode.ROOMS -> {
                 // 5 sections invites / Fav / Rooms / Low Priority / Server notice
                 buildRoomsSections(sections, activeGroupAwareQueries, actualGroupId)
             }
-            RoomListDisplayMode.FILTERED      -> {
+            RoomListDisplayMode.FILTERED -> {
                 // Used when searching for rooms
                 withQueryParams(
                         {
@@ -70,7 +71,7 @@ class RoomListSectionBuilderGroup(
                         },
                         { qpm ->
                             val name = stringProvider.getString(R.string.bottom_action_rooms)
-                            val updatableFilterLivePageResult = session.roomService().getFilteredPagedRoomSummariesLive(qpm)
+                            val updatableFilterLivePageResult = session.roomService().getFilteredPagedRoomSummariesLive(qpm, getFlattenParents = true)
                             onUpdatable(updatableFilterLivePageResult)
 
                             val itemCountFlow = updatableFilterLivePageResult.livePagedList.asFlow()
@@ -96,7 +97,6 @@ class RoomListSectionBuilderGroup(
                             true
                     ) {
                         it.memberships = listOf(Membership.INVITE)
-                        it.roomCategoryFilter = RoomCategoryFilter.ALL
                         it.activeGroupId = actualGroupId
                     }
                 }
@@ -126,9 +126,11 @@ class RoomListSectionBuilderGroup(
         return sections
     }
 
-    private fun buildRoomsSections(sections: MutableList<RoomsSection>,
-                                   activeSpaceAwareQueries: MutableList<UpdatableLivePageResult>,
-                                   actualGroupId: String?) {
+    private fun buildRoomsSections(
+            sections: MutableList<RoomsSection>,
+            activeSpaceAwareQueries: MutableList<UpdatableLivePageResult>,
+            actualGroupId: String?
+    ) {
         if (autoAcceptInvites.showInvites()) {
             addSection(
                     sections,
@@ -246,11 +248,13 @@ class RoomListSectionBuilderGroup(
         }
     }
 
-    private fun addSection(sections: MutableList<RoomsSection>,
-                           activeSpaceUpdaters: MutableList<UpdatableLivePageResult>,
-                           @StringRes nameRes: Int,
-                           notifyOfLocalEcho: Boolean = false,
-                           query: (RoomSummaryQueryParams.Builder) -> Unit) {
+    private fun addSection(
+            sections: MutableList<RoomsSection>,
+            activeSpaceUpdaters: MutableList<UpdatableLivePageResult>,
+            @StringRes nameRes: Int,
+            notifyOfLocalEcho: Boolean = false,
+            query: (RoomSummaryQueryParams.Builder) -> Unit
+    ) {
         withQueryParams(query) { roomQueryParams ->
             val name = stringProvider.getString(nameRes)
             session.roomService().getFilteredPagedRoomSummariesLive(roomQueryParams)
@@ -281,9 +285,6 @@ class RoomListSectionBuilderGroup(
     }
 
     private fun withQueryParams(builder: (RoomSummaryQueryParams.Builder) -> Unit, block: (RoomSummaryQueryParams) -> Unit) {
-        RoomSummaryQueryParams.Builder()
-                .apply { builder.invoke(this) }
-                .build()
-                .let { block(it) }
+        block(roomSummaryQueryParams { builder.invoke(this) })
     }
 }

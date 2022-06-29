@@ -22,8 +22,10 @@ import im.vector.app.core.resources.LocaleProvider
 import org.threeten.bp.format.DateTimeFormatter
 import javax.inject.Inject
 
-class DefaultDateFormatterProvider @Inject constructor(private val context: Context,
-                                                       private val localeProvider: LocaleProvider) :
+class DefaultDateFormatterProvider @Inject constructor(
+        private val context: Context,
+        private val localeProvider: LocaleProvider
+) :
         DateFormatterProvider {
 
     override val dateWithMonthFormatter: DateTimeFormatter by lazy {

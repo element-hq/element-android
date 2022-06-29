@@ -53,8 +53,8 @@ sealed interface CanSendStatus {
 
 fun CanSendStatus.boolean(): Boolean {
     return when (this) {
-        CanSendStatus.Allowed                    -> true
-        CanSendStatus.NoPermission               -> false
+        CanSendStatus.Allowed -> true
+        CanSendStatus.NoPermission -> false
         is CanSendStatus.UnSupportedE2eAlgorithm -> false
     }
 }
@@ -70,7 +70,7 @@ data class MessageComposerViewState(
 ) : MavericksState {
 
     val isVoiceRecording = when (voiceRecordingUiState) {
-        VoiceMessageRecorderView.RecordingUiState.Idle         -> false
+        VoiceMessageRecorderView.RecordingUiState.Idle -> false
         is VoiceMessageRecorderView.RecordingUiState.Locked,
         VoiceMessageRecorderView.RecordingUiState.Draft,
         is VoiceMessageRecorderView.RecordingUiState.Recording -> true

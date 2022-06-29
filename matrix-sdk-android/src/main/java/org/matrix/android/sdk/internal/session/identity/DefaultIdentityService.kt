@@ -283,8 +283,8 @@ internal class DefaultIdentityService @Inject constructor(
                     identityStore.setToken(null)
                     lookUpInternal(false, threePids)
                 }
-                throwable.isTermsNotSigned()           -> throw IdentityServiceError.TermsNotSignedException
-                else                                   -> throw throwable
+                throwable.isTermsNotSigned() -> throw IdentityServiceError.TermsNotSignedException
+                else -> throw throwable
             }
         }
     }

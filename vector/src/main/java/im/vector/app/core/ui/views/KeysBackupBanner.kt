@@ -54,6 +54,7 @@ class KeysBackupBanner @JvmOverloads constructor(
      * This methods is responsible for rendering the view according to the newState.
      *
      * @param newState the newState representing the view
+     * @param force true to force the rendering of the view
      */
     fun render(newState: State, force: Boolean = false) {
         if (newState == state && !force) {
@@ -66,28 +67,28 @@ class KeysBackupBanner @JvmOverloads constructor(
 
         hideAll()
         when (newState) {
-            State.Initial    -> renderInitial()
-            State.Hidden     -> renderHidden()
-            is State.Setup   -> renderSetup(newState.numberOfKeys)
+            State.Initial -> renderInitial()
+            State.Hidden -> renderHidden()
+            is State.Setup -> renderSetup(newState.numberOfKeys)
             is State.Recover -> renderRecover(newState.version)
-            is State.Update  -> renderUpdate(newState.version)
-            State.BackingUp  -> renderBackingUp()
+            is State.Update -> renderUpdate(newState.version)
+            State.BackingUp -> renderBackingUp()
         }
     }
 
     override fun onClick(v: View?) {
         when (state) {
-            is State.Setup   -> delegate?.setupKeysBackup()
+            is State.Setup -> delegate?.setupKeysBackup()
             is State.Update,
             is State.Recover -> delegate?.recoverKeysBackup()
-            else             -> Unit
+            else -> Unit
         }
     }
 
     private fun onCloseClicked() {
         state.let {
             when (it) {
-                is State.Setup   -> {
+                is State.Setup -> {
                     DefaultSharedPreferences.getInstance(context).edit {
                         putBoolean(BANNER_SETUP_DO_NOT_SHOW_AGAIN, true)
                     }
@@ -97,12 +98,12 @@ class KeysBackupBanner @JvmOverloads constructor(
                         putString(BANNER_RECOVER_DO_NOT_SHOW_FOR_VERSION, it.version)
                     }
                 }
-                is State.Update  -> {
+                is State.Update -> {
                     DefaultSharedPreferences.getInstance(context).edit {
                         putString(BANNER_UPDATE_DO_NOT_SHOW_FOR_VERSION, it.version)
                     }
                 }
-                else             -> {
+                else -> {
                     // Should not happen, close button is not displayed in other cases
                 }
             }

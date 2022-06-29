@@ -21,6 +21,7 @@ import dagger.Module
 import dagger.Provides
 import io.realm.RealmConfiguration
 import okhttp3.OkHttpClient
+import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.session.identity.IdentityService
 import org.matrix.android.sdk.internal.database.RealmKeysUtils
 import org.matrix.android.sdk.internal.di.AuthenticatedIdentity
@@ -29,6 +30,7 @@ import org.matrix.android.sdk.internal.di.SessionFilesDirectory
 import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificate
 import org.matrix.android.sdk.internal.di.UserMd5
 import org.matrix.android.sdk.internal.network.httpclient.addAccessTokenInterceptor
+import org.matrix.android.sdk.internal.network.httpclient.applyMatrixConfiguration
 import org.matrix.android.sdk.internal.network.token.AccessTokenProvider
 import org.matrix.android.sdk.internal.session.SessionModule
 import org.matrix.android.sdk.internal.session.SessionScope
@@ -47,11 +49,15 @@ internal abstract class IdentityModule {
         @Provides
         @SessionScope
         @AuthenticatedIdentity
-        fun providesOkHttpClient(@UnauthenticatedWithCertificate okHttpClient: OkHttpClient,
-                                 @AuthenticatedIdentity accessTokenProvider: AccessTokenProvider): OkHttpClient {
+        fun providesOkHttpClient(
+                @UnauthenticatedWithCertificate okHttpClient: OkHttpClient,
+                @AuthenticatedIdentity accessTokenProvider: AccessTokenProvider,
+                matrixConfiguration: MatrixConfiguration,
+        ): OkHttpClient {
             return okHttpClient
                     .newBuilder()
                     .addAccessTokenInterceptor(accessTokenProvider)
+                    .applyMatrixConfiguration(matrixConfiguration)
                     .build()
         }
 
@@ -59,10 +65,12 @@ internal abstract class IdentityModule {
         @Provides
         @IdentityDatabase
         @SessionScope
-        fun providesIdentityRealmConfiguration(realmKeysUtils: RealmKeysUtils,
-                                               realmIdentityStoreMigration: RealmIdentityStoreMigration,
-                                               @SessionFilesDirectory directory: File,
-                                               @UserMd5 userMd5: String): RealmConfiguration {
+        fun providesIdentityRealmConfiguration(
+                realmKeysUtils: RealmKeysUtils,
+                realmIdentityStoreMigration: RealmIdentityStoreMigration,
+                @SessionFilesDirectory directory: File,
+                @UserMd5 userMd5: String
+        ): RealmConfiguration {
             return RealmConfiguration.Builder()
                     .directory(directory)
                     .name("matrix-sdk-identity.realm")

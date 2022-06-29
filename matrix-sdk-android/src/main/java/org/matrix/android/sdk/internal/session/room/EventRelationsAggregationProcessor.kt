@@ -16,7 +16,6 @@
 package org.matrix.android.sdk.internal.session.room
 
 import io.realm.Realm
-import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationState
 import org.matrix.android.sdk.api.session.events.model.AggregatedAnnotation
@@ -28,23 +27,16 @@ import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventCon
 import org.matrix.android.sdk.api.session.events.model.getRelationContent
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.room.getTimelineEvent
-import org.matrix.android.sdk.api.session.room.model.PollSummaryContent
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.ReferencesAggregatedContent
-import org.matrix.android.sdk.api.session.room.model.VoteInfo
-import org.matrix.android.sdk.api.session.room.model.VoteSummary
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageEndPollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollResponseContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageRelationContent
 import org.matrix.android.sdk.api.session.room.model.relation.ReactionContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
-import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
-import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.crypto.verification.toState
 import org.matrix.android.sdk.internal.database.helper.findRootThreadEvent
@@ -55,7 +47,6 @@ import org.matrix.android.sdk.internal.database.model.EditionOfEvent
 import org.matrix.android.sdk.internal.database.model.EventAnnotationsSummaryEntity
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.EventInsertType
-import org.matrix.android.sdk.internal.database.model.PollResponseAggregatedSummaryEntity
 import org.matrix.android.sdk.internal.database.model.ReactionAggregatedSummaryEntity
 import org.matrix.android.sdk.internal.database.model.ReactionAggregatedSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.ReferencesAggregatedSummaryEntity
@@ -68,6 +59,7 @@ import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.EventInsertLiveProcessor
 import org.matrix.android.sdk.internal.session.room.aggregation.livelocation.LiveLocationAggregationProcessor
+import org.matrix.android.sdk.internal.session.room.aggregation.poll.PollAggregationProcessor
 import org.matrix.android.sdk.internal.session.room.state.StateEventDataSource
 import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
@@ -79,6 +71,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
         @SessionId private val sessionId: String,
         private val sessionManager: SessionManager,
         private val liveLocationAggregationProcessor: LiveLocationAggregationProcessor,
+        private val pollAggregationProcessor: PollAggregationProcessor,
         private val clock: Clock,
 ) : EventInsertLiveProcessor {
 
@@ -110,12 +103,12 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
             }
             val isLocalEcho = LocalEcho.isLocalEchoId(event.eventId ?: "")
             when (event.type) {
-                EventType.REACTION                  -> {
+                EventType.REACTION -> {
                     // we got a reaction!!
                     Timber.v("###REACTION in room $roomId , reaction eventID ${event.eventId}")
                     handleReaction(realm, event, roomId, isLocalEcho)
                 }
-                EventType.MESSAGE                   -> {
+                EventType.MESSAGE -> {
                     if (event.unsignedData?.relations?.annotations != null) {
                         Timber.v("###REACTION Aggregation in room $roomId for event ${event.eventId}")
                         handleInitialAggregatedRelations(realm, event, roomId, event.unsignedData.relations.annotations)
@@ -141,7 +134,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                 EventType.KEY_VERIFICATION_START,
                 EventType.KEY_VERIFICATION_MAC,
                 EventType.KEY_VERIFICATION_READY,
-                EventType.KEY_VERIFICATION_KEY      -> {
+                EventType.KEY_VERIFICATION_KEY -> {
                     Timber.v("## SAS REF in room $roomId for event ${event.eventId}")
                     event.content.toModel<MessageRelationContent>()?.relatesTo?.let {
                         if (it.type == RelationType.REFERENCE && it.eventId != null) {
@@ -150,7 +143,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                     }
                 }
 
-                EventType.ENCRYPTED                 -> {
+                EventType.ENCRYPTED -> {
                     // Relation type is in clear
                     val encryptedEventContent = event.content.toModel<EncryptedEventContent>()
                     if (encryptedEventContent?.relatesTo?.type == RelationType.REPLACE ||
@@ -162,9 +155,8 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                                 // A replace!
                                 handleReplace(realm, event, it, roomId, isLocalEcho, encryptedEventContent.relatesTo.eventId)
                             } else if (event.getClearType() in EventType.POLL_RESPONSE) {
-                                event.getClearContent().toModel<MessagePollResponseContent>(catchError = true)?.let { pollResponseContent ->
-                                    Timber.v("###RESPONSE in room $roomId for event ${event.eventId}")
-                                    handleResponse(realm, event, pollResponseContent, roomId, isLocalEcho, encryptedEventContent.relatesTo.eventId)
+                                sessionManager.getSessionComponent(sessionId)?.session()?.let { session ->
+                                    pollAggregationProcessor.handlePollResponseEvent(session, realm, event)
                                 }
                             }
                         }
@@ -176,26 +168,28 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                             EventType.KEY_VERIFICATION_START,
                             EventType.KEY_VERIFICATION_MAC,
                             EventType.KEY_VERIFICATION_READY,
-                            EventType.KEY_VERIFICATION_KEY    -> {
+                            EventType.KEY_VERIFICATION_KEY -> {
                                 Timber.v("## SAS REF in room $roomId for event ${event.eventId}")
                                 encryptedEventContent.relatesTo.eventId?.let {
                                     handleVerification(realm, event, roomId, isLocalEcho, it)
                                 }
                             }
-                            in EventType.POLL_RESPONSE        -> {
+                            in EventType.POLL_RESPONSE -> {
                                 event.getClearContent().toModel<MessagePollResponseContent>(catchError = true)?.let {
-                                    handleResponse(realm, event, it, roomId, isLocalEcho, event.getRelationContent()?.eventId)
+                                    sessionManager.getSessionComponent(sessionId)?.session()?.let { session ->
+                                        pollAggregationProcessor.handlePollResponseEvent(session, realm, event)
+                                    }
                                 }
                             }
-                            in EventType.POLL_END             -> {
-                                event.content.toModel<MessageEndPollContent>(catchError = true)?.let {
-                                    handleEndPoll(realm, event, it, roomId, isLocalEcho)
+                            in EventType.POLL_END -> {
+                                sessionManager.getSessionComponent(sessionId)?.session()?.let { session ->
+                                    getPowerLevelsHelper(event.roomId)?.let {
+                                        pollAggregationProcessor.handlePollEndEvent(session, it, realm, event)
+                                    }
                                 }
                             }
                             in EventType.BEACON_LOCATION_DATA -> {
-                                event.getClearContent().toModel<MessageBeaconLocationDataContent>(catchError = true)?.let {
-                                    liveLocationAggregationProcessor.handleBeaconLocationData(realm, event, it, roomId, isLocalEcho)
-                                }
+                                handleBeaconLocationData(event, realm, roomId, isLocalEcho)
                             }
                         }
                     } else if (encryptedEventContent?.relatesTo?.type == RelationType.ANNOTATION) {
@@ -217,11 +211,11 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
 //                                 }
 //                    }
                 }
-                EventType.REDACTION                 -> {
+                EventType.REDACTION -> {
                     val eventToPrune = event.redacts?.let { EventEntity.where(realm, eventId = it).findFirst() }
                             ?: return
                     when (eventToPrune.type) {
-                        EventType.MESSAGE  -> {
+                        EventType.MESSAGE -> {
                             Timber.d("REDACTION for message ${eventToPrune.eventId}")
 //                                val unsignedData = EventMapper.map(eventToPrune).unsignedData
 //                                        ?: UnsignedData(null, null)
@@ -237,7 +231,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                         }
                     }
                 }
-                in EventType.POLL_START             -> {
+                in EventType.POLL_START -> {
                     val content: MessagePollContent? = event.content.toModel()
                     if (content?.relatesTo?.type == RelationType.REPLACE) {
                         Timber.v("###REPLACE in room $roomId for event ${event.eventId}")
@@ -245,14 +239,18 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                         handleReplace(realm, event, content, roomId, isLocalEcho)
                     }
                 }
-                in EventType.POLL_RESPONSE          -> {
+                in EventType.POLL_RESPONSE -> {
                     event.content.toModel<MessagePollResponseContent>(catchError = true)?.let {
-                        handleResponse(realm, event, it, roomId, isLocalEcho)
+                        sessionManager.getSessionComponent(sessionId)?.session()?.let { session ->
+                            pollAggregationProcessor.handlePollResponseEvent(session, realm, event)
+                        }
                     }
                 }
-                in EventType.POLL_END               -> {
-                    event.content.toModel<MessageEndPollContent>(catchError = true)?.let {
-                        handleEndPoll(realm, event, it, roomId, isLocalEcho)
+                in EventType.POLL_END -> {
+                    sessionManager.getSessionComponent(sessionId)?.session()?.let { session ->
+                        getPowerLevelsHelper(event.roomId)?.let {
+                            pollAggregationProcessor.handlePollEndEvent(session, it, realm, event)
+                        }
                     }
                 }
                 in EventType.STATE_ROOM_BEACON_INFO -> {
@@ -260,7 +258,10 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                         liveLocationAggregationProcessor.handleBeaconInfo(realm, event, it, roomId, isLocalEcho)
                     }
                 }
-                else                                -> Timber.v("UnHandled event ${event.eventId}")
+                in EventType.BEACON_LOCATION_DATA -> {
+                    handleBeaconLocationData(event, realm, roomId, isLocalEcho)
+                }
+                else -> Timber.v("UnHandled event ${event.eventId}")
             }
         } catch (t: Throwable) {
             Timber.e(t, "## Should not happen ")
@@ -270,12 +271,14 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
     // OPT OUT serer aggregation until API mature enough
     private val SHOULD_HANDLE_SERVER_AGREGGATION = false // should be true to work with e2e
 
-    private fun handleReplace(realm: Realm,
-                              event: Event,
-                              content: MessageContent,
-                              roomId: String,
-                              isLocalEcho: Boolean,
-                              relatedEventId: String? = null) {
+    private fun handleReplace(
+            realm: Realm,
+            event: Event,
+            content: MessageContent,
+            roomId: String,
+            isLocalEcho: Boolean,
+            relatedEventId: String? = null
+    ) {
         val eventId = event.eventId ?: return
         val targetEventId = relatedEventId ?: content.relatesTo?.eventId ?: return
         val newContent = content.newContent ?: return
@@ -317,22 +320,6 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                 return
             }
 
-            ContentMapper
-                    .map(eventAnnotationsSummaryEntity.pollResponseSummary?.aggregatedContent)
-                    ?.toModel<PollSummaryContent>()
-                    ?.let { existingPollSummaryContent ->
-                        eventAnnotationsSummaryEntity.pollResponseSummary?.aggregatedContent = ContentMapper.map(
-                                PollSummaryContent(
-                                        myVote = existingPollSummaryContent.myVote,
-                                        votes = emptyList(),
-                                        votesSummary = emptyMap(),
-                                        totalVotes = 0,
-                                        winnerVoteCount = 0,
-                                )
-                                        .toContent()
-                        )
-                    }
-
             val txId = event.unsignedData?.transactionId
             // is it a remote echo?
             if (!isLocalEcho && existingSummary.editions.any { it.eventId == txId }) {
@@ -362,6 +349,10 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
             }
         }
 
+        if (event.getClearType() in EventType.POLL_START) {
+            pollAggregationProcessor.handlePollStartEvent(realm, event)
+        }
+
         if (!isLocalEcho) {
             val replaceEvent = TimelineEventEntity
                     .where(realm, roomId, eventId)
@@ -375,10 +366,13 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
      * Check if the edition is on the latest thread event, and update it accordingly.
      * @param editedEvent The event that will be changed
      * @param replaceEvent The new event
+     * @param editions list of edition of event
      */
-    private fun handleThreadSummaryEdition(editedEvent: EventEntity?,
-                                           replaceEvent: TimelineEventEntity?,
-                                           editions: List<EditionOfEvent>?) {
+    private fun handleThreadSummaryEdition(
+            editedEvent: EventEntity?,
+            replaceEvent: TimelineEventEntity?,
+            editions: List<EditionOfEvent>?
+    ) {
         replaceEvent ?: return
         editedEvent ?: return
         editedEvent.findRootThreadEvent()?.apply {
@@ -391,179 +385,18 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
         }
     }
 
-    private fun handleResponse(realm: Realm,
-                               event: Event,
-                               content: MessagePollResponseContent,
-                               roomId: String,
-                               isLocalEcho: Boolean,
-                               relatedEventId: String? = null) {
-        val eventId = event.eventId ?: return
-        val senderId = event.senderId ?: return
-        val targetEventId = relatedEventId ?: content.relatesTo?.eventId ?: return
-        val eventTimestamp = event.originServerTs ?: return
-
-        val targetPollContent = getPollContent(roomId, targetEventId) ?: return
-
-        // ok, this is a poll response
-        var existing = EventAnnotationsSummaryEntity.where(realm, roomId, targetEventId).findFirst()
-        if (existing == null) {
-            Timber.v("## POLL creating new relation summary for $targetEventId")
-            existing = EventAnnotationsSummaryEntity.create(realm, roomId, targetEventId)
-        }
-
-        // we have it
-        val existingPollSummary = existing.pollResponseSummary
-                ?: realm.createObject(PollResponseAggregatedSummaryEntity::class.java).also {
-                    existing.pollResponseSummary = it
-                }
-
-        val closedTime = existingPollSummary.closedTime
-        if (closedTime != null && eventTimestamp > closedTime) {
-            Timber.v("## POLL is closed ignore event poll:$targetEventId, event :${event.eventId}")
-            return
-        }
-
-        val currentModel = ContentMapper.map(existingPollSummary.aggregatedContent).toModel<PollSummaryContent>()
-
-        if (existingPollSummary.sourceEvents.contains(eventId)) {
-            // ignore this event, we already know it (??)
-            Timber.v("## POLL  ignoring event for summary, it's known eventId:$eventId")
-            return
-        }
-        val txId = event.unsignedData?.transactionId
-        // is it a remote echo?
-        if (!isLocalEcho && existingPollSummary.sourceLocalEchoEvents.contains(txId)) {
-            // ok it has already been managed
-            Timber.v("## POLL  Receiving remote echo of response eventId:$eventId")
-            existingPollSummary.sourceLocalEchoEvents.remove(txId)
-            existingPollSummary.sourceEvents.add(event.eventId)
-            return
-        }
-
-        val option = content.getBestResponse()?.answers?.first() ?: return Unit.also {
-            Timber.d("## POLL Ignoring malformed response no option eventId:$eventId content: ${event.content}")
-        }
-
-        // Check if this option is in available options
-        if (!targetPollContent.getBestPollCreationInfo()?.answers?.map { it.id }?.contains(option).orFalse()) {
-            Timber.v("## POLL $targetEventId doesn't contain option $option")
-            return
-        }
-
-        val votes = currentModel?.votes.orEmpty().toMutableList()
-
-        var myVote: String? = null
-        val existingVoteIndex = votes.indexOfFirst { it.userId == senderId }
-        if (existingVoteIndex != -1) {
-            // Is the vote newer?
-            val existingVote = votes[existingVoteIndex]
-            if (existingVote.voteTimestamp < eventTimestamp) {
-                // Take the new one
-                votes[existingVoteIndex] = VoteInfo(senderId, option, eventTimestamp)
-                if (userId == senderId) {
-                    myVote = option
-                }
-                Timber.v("## POLL adding vote $option for user $senderId in poll :$targetEventId ")
-            } else {
-                Timber.v("## POLL Ignoring vote (older than known one)  eventId:$eventId ")
-            }
-        } else {
-            votes.add(VoteInfo(senderId, option, eventTimestamp))
-            if (userId == senderId) {
-                myVote = option
-            }
-            Timber.v("## POLL adding vote $option for user $senderId in poll :$targetEventId ")
-        }
-
-        // Precompute the percentage of votes for all options
-        val totalVotes = votes.size
-        val newVotesSummary = votes
-                .groupBy({ it.option }, { it.userId })
-                .mapValues {
-                    VoteSummary(
-                            total = it.value.size,
-                            percentage = if (totalVotes == 0 && it.value.isEmpty()) 0.0 else it.value.size.toDouble() / totalVotes
-                    )
-                }
-        val newWinnerVoteCount = newVotesSummary.maxOf { it.value.total }
-
-        if (isLocalEcho) {
-            existingPollSummary.sourceLocalEchoEvents.add(eventId)
-        } else {
-            existingPollSummary.sourceEvents.add(eventId)
-        }
-
-        val newSumModel = PollSummaryContent(
-                myVote = myVote,
-                votes = votes,
-                votesSummary = newVotesSummary,
-                totalVotes = totalVotes,
-                winnerVoteCount = newWinnerVoteCount
-        )
-
-        existingPollSummary.aggregatedContent = ContentMapper.map(newSumModel.toContent())
-    }
-
-    private fun handleEndPoll(realm: Realm,
-                              event: Event,
-                              content: MessageEndPollContent,
-                              roomId: String,
-                              isLocalEcho: Boolean) {
-        val pollEventId = content.relatesTo?.eventId ?: return
-        val pollOwnerId = getPollEvent(roomId, pollEventId)?.root?.senderId
-        val isPollOwner = pollOwnerId == event.senderId
-        val powerLevelsHelper = stateEventDataSource.getStateEvent(roomId, EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
+    private fun getPowerLevelsHelper(roomId: String): PowerLevelsHelper? {
+        return stateEventDataSource.getStateEvent(roomId, EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
                 ?.content?.toModel<PowerLevelsContent>()
                 ?.let { PowerLevelsHelper(it) }
-
-        if (!isPollOwner && !powerLevelsHelper?.isUserAbleToRedact(event.senderId ?: "").orFalse()) {
-            Timber.v("## Received poll.end event $pollEventId but user ${event.senderId} doesn't have enough power level in room $roomId")
-            return
-        }
-
-        var existingPoll = EventAnnotationsSummaryEntity.where(realm, roomId, pollEventId).findFirst()
-        if (existingPoll == null) {
-            Timber.v("## POLL creating new relation summary for $pollEventId")
-            existingPoll = EventAnnotationsSummaryEntity.create(realm, roomId, pollEventId)
-        }
-
-        // we have it
-        val existingPollSummary = existingPoll.pollResponseSummary
-                ?: realm.createObject(PollResponseAggregatedSummaryEntity::class.java).also {
-                    existingPoll.pollResponseSummary = it
-                }
-
-        val txId = event.unsignedData?.transactionId
-        existingPollSummary.closedTime = event.originServerTs
-
-        // is it a remote echo?
-        if (!isLocalEcho && existingPollSummary.sourceLocalEchoEvents.contains(txId)) {
-            // ok it has already been managed
-            Timber.v("## POLL  Receiving remote echo of response eventId:$pollEventId")
-            existingPollSummary.sourceLocalEchoEvents.remove(txId)
-            existingPollSummary.sourceEvents.add(event.eventId)
-        }
     }
 
-    private fun getPollEvent(roomId: String, eventId: String): TimelineEvent? {
-        val session = sessionManager.getSessionComponent(sessionId)?.session()
-        return session?.roomService()?.getRoom(roomId)?.getTimelineEvent(eventId) ?: return null.also {
-            Timber.v("## POLL target poll event $eventId not found in room $roomId")
-        }
-    }
-
-    private fun getPollContent(roomId: String, eventId: String): MessagePollContent? {
-        val pollEvent = getPollEvent(roomId, eventId) ?: return null
-
-        return pollEvent.getLastMessageContent() as? MessagePollContent ?: return null.also {
-            Timber.v("## POLL target poll event $eventId content is malformed")
-        }
-    }
-
-    private fun handleInitialAggregatedRelations(realm: Realm,
-                                                 event: Event,
-                                                 roomId: String,
-                                                 aggregation: AggregatedAnnotation) {
+    private fun handleInitialAggregatedRelations(
+            realm: Realm,
+            event: Event,
+            roomId: String,
+            aggregation: AggregatedAnnotation
+    ) {
         if (SHOULD_HANDLE_SERVER_AGREGGATION) {
             aggregation.chunk?.forEach {
                 if (it.type == EventType.REACTION) {
@@ -585,10 +418,12 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
         }
     }
 
-    private fun handleReaction(realm: Realm,
-                               event: Event,
-                               roomId: String,
-                               isLocalEcho: Boolean) {
+    private fun handleReaction(
+            realm: Realm,
+            event: Event,
+            roomId: String,
+            isLocalEcho: Boolean
+    ) {
         val content = event.content.toModel<ReactionContent>()
         if (content == null) {
             Timber.e("Malformed reaction content ${event.content}")
@@ -653,9 +488,11 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
     /**
      * Called when an event is deleted.
      */
-    private fun handleRedactionOfReplace(realm: Realm,
-                                         redacted: EventEntity,
-                                         relatedEventId: String) {
+    private fun handleRedactionOfReplace(
+            realm: Realm,
+            redacted: EventEntity,
+            relatedEventId: String
+    ) {
         Timber.d("Handle redaction of m.replace")
         val eventSummary = EventAnnotationsSummaryEntity.where(realm, redacted.roomId, relatedEventId).findFirst()
         if (eventSummary == null) {
@@ -671,8 +508,10 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
         sourceToDiscard.deleteFromRealm()
     }
 
-    private fun handleReactionRedact(realm: Realm,
-                                     eventToPrune: EventEntity) {
+    private fun handleReactionRedact(
+            realm: Realm,
+            eventToPrune: EventEntity
+    ) {
         Timber.v("REDACTION of reaction ${eventToPrune.eventId}")
         // delete a reaction, need to update the annotation summary if any
         val reactionContent: ReactionContent = EventMapper.map(eventToPrune).content.toModel() ?: return
@@ -733,7 +572,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                 EventType.KEY_VERIFICATION_ACCEPT,
                 EventType.KEY_VERIFICATION_READY,
                 EventType.KEY_VERIFICATION_KEY,
-                EventType.KEY_VERIFICATION_MAC    -> currentState.toState(VerificationState.WAITING)
+                EventType.KEY_VERIFICATION_MAC -> currentState.toState(VerificationState.WAITING)
                 EventType.KEY_VERIFICATION_CANCEL -> currentState.toState(
                         if (event.senderId == userId) {
                             VerificationState.CANCELED_BY_ME
@@ -741,8 +580,8 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                             VerificationState.CANCELED_BY_OTHER
                         }
                 )
-                EventType.KEY_VERIFICATION_DONE   -> currentState.toState(VerificationState.DONE)
-                else                              -> VerificationState.REQUEST
+                EventType.KEY_VERIFICATION_DONE -> currentState.toState(VerificationState.DONE)
+                else -> VerificationState.REQUEST
             }
 
             data = data.copy(verificationState = newState)
@@ -754,6 +593,19 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
         } else {
             verifSummary.sourceLocalEcho.remove(txId)
             verifSummary.sourceEvents.add(event.eventId)
+        }
+    }
+
+    private fun handleBeaconLocationData(event: Event, realm: Realm, roomId: String, isLocalEcho: Boolean) {
+        event.getClearContent().toModel<MessageBeaconLocationDataContent>(catchError = true)?.let {
+            liveLocationAggregationProcessor.handleBeaconLocationData(
+                    realm,
+                    event,
+                    it,
+                    roomId,
+                    event.getRelationContent()?.eventId,
+                    isLocalEcho
+            )
         }
     }
 }

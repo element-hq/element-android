@@ -32,8 +32,10 @@ internal class VideoCompressor @Inject constructor(
         private val temporaryFileCreator: TemporaryFileCreator
 ) {
 
-    suspend fun compress(videoFile: File,
-                         progressListener: ProgressListener?): VideoCompressionResult {
+    suspend fun compress(
+            videoFile: File,
+            progressListener: ProgressListener?
+    ): VideoCompressionResult {
         val destinationFile = temporaryFileCreator.create()
 
         val job = Job()
@@ -111,7 +113,7 @@ internal class VideoCompressor @Inject constructor(
                 deleteFile(destinationFile)
                 VideoCompressionResult.CompressionNotNeeded
             }
-            else                          -> {
+            else -> {
                 // Should not happen...
                 // Delete now the temporary file
                 deleteFile(destinationFile)

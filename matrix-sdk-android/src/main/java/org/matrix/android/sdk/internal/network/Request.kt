@@ -32,6 +32,7 @@ import java.io.IOException
  * Execute a request from the requestBlock and handle some of the Exception it could generate
  * Ref: https://github.com/matrix-org/matrix-js-sdk/blob/develop/src/scheduler.js#L138-L175
  *
+ * @param DATA type of data return by the [requestBlock]
  * @param globalErrorReceiver will be use to notify error such as invalid token error. See [GlobalError]
  * @param canRetry if set to true, the request will be executed again in case of error, after a delay
  * @param maxDelayBeforeRetry the max delay to wait before a retry. Note that in the case of a 429, if the provided delay exceeds this value, the error will
@@ -39,11 +40,13 @@ import java.io.IOException
  * @param maxRetriesCount the max number of retries
  * @param requestBlock a suspend lambda to perform the network request
  */
-internal suspend inline fun <DATA> executeRequest(globalErrorReceiver: GlobalErrorReceiver?,
-                                                  canRetry: Boolean = false,
-                                                  maxDelayBeforeRetry: Long = 32_000L,
-                                                  maxRetriesCount: Int = 4,
-                                                  noinline requestBlock: suspend () -> DATA): DATA {
+internal suspend inline fun <DATA> executeRequest(
+        globalErrorReceiver: GlobalErrorReceiver?,
+        canRetry: Boolean = false,
+        maxDelayBeforeRetry: Long = 32_000L,
+        maxRetriesCount: Int = 4,
+        noinline requestBlock: suspend () -> DATA
+): DATA {
     var currentRetryCount = 0
     var currentDelay = 1_000L
 
@@ -53,8 +56,8 @@ internal suspend inline fun <DATA> executeRequest(globalErrorReceiver: GlobalErr
         } catch (throwable: Throwable) {
             val exception = when (throwable) {
                 is KotlinNullPointerException -> IllegalStateException("The request returned a null body")
-                is HttpException              -> throwable.toFailure(globalErrorReceiver)
-                else                          -> throwable
+                is HttpException -> throwable.toFailure(globalErrorReceiver)
+                else -> throwable
             }
 
             // Log some details about the request which has failed.
@@ -91,11 +94,11 @@ internal suspend inline fun <DATA> executeRequest(globalErrorReceiver: GlobalErr
                 // Try again (loop)
             } else {
                 throw when (exception) {
-                    is IOException           -> Failure.NetworkConnection(exception)
+                    is IOException -> Failure.NetworkConnection(exception)
                     is Failure.ServerError,
                     is Failure.OtherServerError,
                     is CancellationException -> exception
-                    else                     -> Failure.Unknown(exception)
+                    else -> Failure.Unknown(exception)
                 }
             }
         }

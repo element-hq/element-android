@@ -49,16 +49,21 @@ internal interface DirectoryAPI {
      * @param body the body containing the new directory visibility
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "directory/list/room/{roomId}")
-    suspend fun setRoomDirectoryVisibility(@Path("roomId") roomId: String,
-                                           @Body body: RoomDirectoryVisibilityJson)
+    suspend fun setRoomDirectoryVisibility(
+            @Path("roomId") roomId: String,
+            @Body body: RoomDirectoryVisibilityJson
+    )
 
     /**
      * Add alias to the room.
      * @param roomAlias the room alias.
+     * @param body the Json body
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "directory/room/{roomAlias}")
-    suspend fun addRoomAlias(@Path("roomAlias") roomAlias: String,
-                             @Body body: AddRoomAliasBody)
+    suspend fun addRoomAlias(
+            @Path("roomAlias") roomAlias: String,
+            @Body body: AddRoomAliasBody
+    )
 
     /**
      * Delete a room alias.

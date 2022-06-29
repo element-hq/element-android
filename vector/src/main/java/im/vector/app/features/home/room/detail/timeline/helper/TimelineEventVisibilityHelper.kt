@@ -36,6 +36,8 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
      * @param index the index to start computing (inclusive)
      * @param minSize the minimum number of same type events to have sequentially, otherwise will return an empty list
      * @param eventIdToHighlight used to compute visibility
+     * @param rootThreadEventId the root thread event id if in a thread timeline
+     * @param isFromThreadTimeline true if the timeline is a thread
      *
      * @return a list of timeline events which have sequentially the same type following the next direction.
      */
@@ -45,7 +47,8 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
             minSize: Int,
             eventIdToHighlight: String?,
             rootThreadEventId: String?,
-            isFromThreadTimeline: Boolean): List<TimelineEvent> {
+            isFromThreadTimeline: Boolean
+    ): List<TimelineEvent> {
         if (index >= timelineEvents.size - 1) {
             return emptyList()
         }
@@ -86,6 +89,8 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
      * @param index the index to start computing (inclusive)
      * @param minSize the minimum number of same type events to have sequentially, otherwise will return an empty list
      * @param eventIdToHighlight used to compute visibility
+     * @param rootThreadEventId the root thread eventId
+     * @param isFromThreadTimeline true if the timeline is a thread
      *
      * @return a list of timeline events which have sequentially the same type following the prev direction.
      */
@@ -95,7 +100,8 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
             minSize: Int,
             eventIdToHighlight: String?,
             rootThreadEventId: String?,
-            isFromThreadTimeline: Boolean): List<TimelineEvent> {
+            isFromThreadTimeline: Boolean
+    ): List<TimelineEvent> {
         val prevSub = timelineEvents.subList(0, index + 1)
         return prevSub
                 .reversed()
@@ -107,6 +113,7 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
     /**
      * @param timelineEvent the event to check for visibility
      * @param highlightedEventId can be checked to force visibility to true
+     * @param isFromThreadTimeline true if the timeline is a thread
      * @param rootThreadEventId if this param is null it means we are in the original timeline
      * @return true if the event should be shown in the timeline.
      */

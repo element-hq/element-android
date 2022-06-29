@@ -21,13 +21,16 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import im.vector.app.R
-import im.vector.app.databinding.FragmentLoginWaitForEmailBinding
+import im.vector.app.core.utils.colorTerminatingFullStop
+import im.vector.app.databinding.FragmentFtueWaitForEmailVerificationBinding
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.RegisterAction
+import im.vector.app.features.themes.ThemeProvider
+import im.vector.app.features.themes.ThemeUtils
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.api.failure.is401
 import javax.inject.Inject
 
 @Parcelize
@@ -38,43 +41,55 @@ data class FtueAuthWaitForEmailFragmentArgument(
 /**
  * In this screen, the user is asked to check their emails.
  */
-class FtueAuthWaitForEmailFragment @Inject constructor() : AbstractFtueAuthFragment<FragmentLoginWaitForEmailBinding>() {
+class FtueAuthWaitForEmailFragment @Inject constructor(
+        private val themeProvider: ThemeProvider
+) : AbstractFtueAuthFragment<FragmentFtueWaitForEmailVerificationBinding>() {
 
     private val params: FtueAuthWaitForEmailFragmentArgument by args()
+    private var inferHasLeftAndReturnedToScreen = false
 
-    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginWaitForEmailBinding {
-        return FragmentLoginWaitForEmailBinding.inflate(inflater, container, false)
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueWaitForEmailVerificationBinding {
+        return FragmentFtueWaitForEmailVerificationBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupUi()
+    }
+
+    private fun setupUi() {
+        views.emailVerificationGradientContainer.setBackgroundResource(
+                when (themeProvider.isLightTheme()) {
+                    true -> R.drawable.bg_waiting_for_email_verification
+                    false -> R.drawable.bg_color_background
+                }
+        )
+        views.emailVerificationTitle.text = getString(R.string.ftue_auth_email_verification_title)
+                .colorTerminatingFullStop(ThemeUtils.getColor(requireContext(), R.attr.colorSecondary))
+        views.emailVerificationSubtitle.text = getString(R.string.ftue_auth_email_verification_subtitle, params.email)
+        views.emailVerificationResendEmail.debouncedClicks {
+            viewModel.handle(OnboardingAction.PostRegisterAction(RegisterAction.SendAgainThreePid))
+        }
     }
 
     override fun onResume() {
         super.onResume()
-
+        showLoadingIfReturningToScreen()
         viewModel.handle(OnboardingAction.PostRegisterAction(RegisterAction.CheckIfEmailHasBeenValidated(0)))
+    }
+
+    private fun showLoadingIfReturningToScreen() {
+        when (inferHasLeftAndReturnedToScreen) {
+            true -> views.emailVerificationWaiting.isVisible = true
+            false -> {
+                inferHasLeftAndReturnedToScreen = true
+            }
+        }
     }
 
     override fun onPause() {
         super.onPause()
-
         viewModel.handle(OnboardingAction.StopEmailValidationCheck)
-    }
-
-    private fun setupUi() {
-        views.loginWaitForEmailNotice.text = getString(R.string.login_wait_for_email_notice, params.email)
-    }
-
-    override fun onError(throwable: Throwable) {
-        if (throwable.is401()) {
-            // Try again, with a delay
-            viewModel.handle(OnboardingAction.PostRegisterAction(RegisterAction.CheckIfEmailHasBeenValidated(10_000)))
-        } else {
-            super.onError(throwable)
-        }
     }
 
     override fun resetViewModel() {

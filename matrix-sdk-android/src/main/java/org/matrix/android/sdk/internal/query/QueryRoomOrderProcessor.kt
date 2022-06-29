@@ -24,10 +24,10 @@ import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 
 internal fun RealmQuery<RoomSummaryEntity>.process(sortOrder: RoomSortOrder): RealmQuery<RoomSummaryEntity> {
     when (sortOrder) {
-        RoomSortOrder.NAME                  -> {
+        RoomSortOrder.NAME -> {
             sort(RoomSummaryEntityFields.DISPLAY_NAME, Sort.ASCENDING)
         }
-        RoomSortOrder.ACTIVITY              -> {
+        RoomSortOrder.ACTIVITY -> {
             sort(RoomSummaryEntityFields.LAST_ACTIVITY_TIME, Sort.DESCENDING)
         }
         RoomSortOrder.PRIORITY_AND_ACTIVITY -> {
@@ -40,7 +40,7 @@ internal fun RealmQuery<RoomSummaryEntity>.process(sortOrder: RoomSortOrder): Re
                     arrayOf(Sort.DESCENDING, Sort.ASCENDING, Sort.DESCENDING)
             )
         }
-        RoomSortOrder.NONE                  -> {
+        RoomSortOrder.NONE -> {
         }
     }
     return this

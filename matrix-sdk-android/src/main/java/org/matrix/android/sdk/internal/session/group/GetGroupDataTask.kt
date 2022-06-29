@@ -58,7 +58,7 @@ internal class DefaultGetGroupDataTask @Inject constructor(
             is GetGroupDataTask.Params.FetchAllActive -> {
                 getActiveGroupIds()
             }
-            is GetGroupDataTask.Params.FetchWithIds   -> {
+            is GetGroupDataTask.Params.FetchWithIds -> {
                 params.groupIds
             }
         }

@@ -32,7 +32,7 @@ internal object MXCryptoAlgorithms {
         return when (algorithm) {
             MXCRYPTO_ALGORITHM_MEGOLM,
             MXCRYPTO_ALGORITHM_OLM -> true
-            else                   -> false
+            else -> false
         }
     }
 
@@ -47,7 +47,7 @@ internal object MXCryptoAlgorithms {
         return when (algorithm) {
             MXCRYPTO_ALGORITHM_MEGOLM,
             MXCRYPTO_ALGORITHM_OLM -> true
-            else                   -> false
+            else -> false
         }
     }
 

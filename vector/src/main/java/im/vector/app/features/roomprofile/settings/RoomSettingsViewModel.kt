@@ -46,9 +46,11 @@ import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.mapOptional
 import org.matrix.android.sdk.flow.unwrap
 
-class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: RoomSettingsViewState,
-                                                        private val vectorPreferences: VectorPreferences,
-                                                        private val session: Session) :
+class RoomSettingsViewModel @AssistedInject constructor(
+        @Assisted initialState: RoomSettingsViewState,
+        private val vectorPreferences: VectorPreferences,
+        private val session: Session
+) :
         VectorViewModel<RoomSettingsViewState, RoomSettingsAction, RoomSettingsViewEvents>(initialState) {
 
     @AssistedFactory
@@ -156,7 +158,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
 
     private fun observeRoomHistoryVisibility() {
         room.flow()
-                .liveStateEvent(EventType.STATE_ROOM_HISTORY_VISIBILITY, QueryStringValue.NoCondition)
+                .liveStateEvent(EventType.STATE_ROOM_HISTORY_VISIBILITY, QueryStringValue.IsEmpty)
                 .mapOptional { it.content.toModel<RoomHistoryVisibilityContent>() }
                 .unwrap()
                 .mapNotNull { it.historyVisibility }
@@ -167,7 +169,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
 
     private fun observeJoinRule() {
         room.flow()
-                .liveStateEvent(EventType.STATE_ROOM_JOIN_RULES, QueryStringValue.NoCondition)
+                .liveStateEvent(EventType.STATE_ROOM_JOIN_RULES, QueryStringValue.IsEmpty)
                 .mapOptional { it.content.toModel<RoomJoinRulesContent>() }
                 .unwrap()
                 .mapNotNull { it.joinRules }
@@ -178,7 +180,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
 
     private fun observeGuestAccess() {
         room.flow()
-                .liveStateEvent(EventType.STATE_ROOM_GUEST_ACCESS, QueryStringValue.NoCondition)
+                .liveStateEvent(EventType.STATE_ROOM_GUEST_ACCESS, QueryStringValue.IsEmpty)
                 .mapOptional { it.content.toModel<RoomGuestAccessContent>() }
                 .unwrap()
                 .mapNotNull { it.guestAccess }
@@ -192,7 +194,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
      */
     private fun observeRoomAvatar() {
         room.flow()
-                .liveStateEvent(EventType.STATE_ROOM_AVATAR, QueryStringValue.NoCondition)
+                .liveStateEvent(EventType.STATE_ROOM_AVATAR, QueryStringValue.IsEmpty)
                 .mapOptional { it.content.toModel<RoomAvatarContent>() }
                 .unwrap()
                 .setOnEach {
@@ -202,14 +204,14 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
 
     override fun handle(action: RoomSettingsAction) {
         when (action) {
-            is RoomSettingsAction.SetAvatarAction          -> handleSetAvatarAction(action)
-            is RoomSettingsAction.SetRoomName              -> setState { copy(newName = action.newName) }
-            is RoomSettingsAction.SetRoomTopic             -> setState { copy(newTopic = action.newTopic) }
+            is RoomSettingsAction.SetAvatarAction -> handleSetAvatarAction(action)
+            is RoomSettingsAction.SetRoomName -> setState { copy(newName = action.newName) }
+            is RoomSettingsAction.SetRoomTopic -> setState { copy(newTopic = action.newTopic) }
             is RoomSettingsAction.SetRoomHistoryVisibility -> setState { copy(newHistoryVisibility = action.visibility) }
-            is RoomSettingsAction.SetRoomJoinRule          -> handleSetRoomJoinRule(action)
-            is RoomSettingsAction.SetRoomGuestAccess       -> handleSetGuestAccess(action)
-            is RoomSettingsAction.Save                     -> saveSettings()
-            is RoomSettingsAction.Cancel                   -> cancel()
+            is RoomSettingsAction.SetRoomJoinRule -> handleSetRoomJoinRule(action)
+            is RoomSettingsAction.SetRoomGuestAccess -> handleSetGuestAccess(action)
+            is RoomSettingsAction.Save -> saveSettings()
+            is RoomSettingsAction.Cancel -> cancel()
         }
     }
 
@@ -256,8 +258,8 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
         val summary = state.roomSummary.invoke()
 
         when (val avatarAction = state.avatarAction) {
-            RoomSettingsViewState.AvatarAction.None            -> Unit
-            RoomSettingsViewState.AvatarAction.DeleteAvatar    -> {
+            RoomSettingsViewState.AvatarAction.None -> Unit
+            RoomSettingsViewState.AvatarAction.DeleteAvatar -> {
                 operationList.add { room.stateService().deleteAvatar() }
             }
             is RoomSettingsViewState.AvatarAction.UpdateAvatar -> {

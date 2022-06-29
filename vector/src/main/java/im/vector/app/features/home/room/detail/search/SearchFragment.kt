@@ -92,7 +92,7 @@ class SearchFragment @Inject constructor(
                 is Loading -> {
                     views.stateView.state = StateView.State.Loading
                 }
-                is Fail    -> {
+                is Fail -> {
                     views.stateView.state = StateView.State.Error(errorFormatter.toHumanReadable(state.asyncSearchRequest.error))
                 }
                 is Success -> {
@@ -101,7 +101,7 @@ class SearchFragment @Inject constructor(
                             image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_search_no_results)
                     )
                 }
-                else       -> Unit
+                else -> Unit
             }
         } else {
             controller.setData(state)

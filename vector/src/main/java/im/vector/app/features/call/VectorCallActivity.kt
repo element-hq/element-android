@@ -267,7 +267,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             is CallState.Idle,
             is CallState.CreateOffer,
             is CallState.LocalRinging,
-            is CallState.Dialing   -> {
+            is CallState.Dialing -> {
                 views.fullscreenRenderer.isVisible = false
                 views.pipRendererWrapper.isVisible = false
                 views.callInfoGroup.isVisible = true
@@ -333,14 +333,14 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                     toolbar?.setSubtitle(R.string.call_connecting)
                 }
             }
-            is CallState.Ended     -> {
+            is CallState.Ended -> {
                 views.fullscreenRenderer.isVisible = false
                 views.pipRendererWrapper.isVisible = false
                 views.callInfoGroup.isVisible = true
                 toolbar?.setSubtitle(R.string.call_ended)
                 configureCallInfo(state)
             }
-            else                   -> {
+            else -> {
                 views.fullscreenRenderer.isVisible = false
                 views.pipRendererWrapper.isVisible = false
                 views.callInfoGroup.isInvisible = true
@@ -380,7 +380,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                     views.callInfoGroup.isVisible = false
                 }
             }
-            else                   -> {
+            else -> {
                 views.fullscreenRenderer.isVisible = false
                 views.callInfoGroup.isVisible = false
             }
@@ -395,13 +395,13 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             startActivity(startIntent)
         }
         when (callState.reason) {
-            EndCallReason.USER_BUSY      -> {
+            EndCallReason.USER_BUSY -> {
                 showEndCallDialog(R.string.call_ended_user_busy_title, R.string.call_ended_user_busy_description)
             }
             EndCallReason.INVITE_TIMEOUT -> {
                 showEndCallDialog(R.string.call_ended_invite_timeout_title, R.string.call_error_user_not_responding)
             }
-            else                         -> {
+            else -> {
                 finish()
             }
         }
@@ -522,22 +522,22 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     private fun handleViewEvents(event: VectorCallViewEvents?) {
         Timber.tag(loggerTag.value).v("handleViewEvents $event")
         when (event) {
-            is VectorCallViewEvents.ConnectionTimeout                 -> {
+            is VectorCallViewEvents.ConnectionTimeout -> {
                 onErrorTimoutConnect(event.turn)
             }
-            is VectorCallViewEvents.ShowDialPad                       -> {
+            is VectorCallViewEvents.ShowDialPad -> {
                 CallDialPadBottomSheet.newInstance(false).apply {
                     callback = dialPadCallback
                 }.show(supportFragmentManager, FRAGMENT_DIAL_PAD_TAG)
             }
-            is VectorCallViewEvents.ShowCallTransferScreen            -> {
+            is VectorCallViewEvents.ShowCallTransferScreen -> {
                 val callId = withState(callViewModel) { it.callId }
                 navigator.openCallTransfer(this, callTransferActivityResultLauncher, callId)
             }
-            is VectorCallViewEvents.FailToTransfer                    -> showSnackbar(getString(R.string.call_transfer_failure))
+            is VectorCallViewEvents.FailToTransfer -> showSnackbar(getString(R.string.call_transfer_failure))
             is VectorCallViewEvents.ShowScreenSharingPermissionDialog -> handleShowScreenSharingPermissionDialog()
-            is VectorCallViewEvents.StopScreenSharingService          -> handleStopScreenSharingService()
-            else                                                      -> Unit
+            is VectorCallViewEvents.StopScreenSharingService -> handleStopScreenSharingService()
+            else -> Unit
         }
     }
 
@@ -546,7 +546,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             Activity.RESULT_CANCELED -> {
                 callViewModel.handle(VectorCallViewActions.CallTransferSelectionCancelled)
             }
-            Activity.RESULT_OK       -> {
+            Activity.RESULT_OK -> {
                 CallTransferActivity.getCallTransferResult(activityResult.data)
                         ?.let { callViewModel.handle(VectorCallViewActions.CallTransferSelectionResult(it)) }
             }
@@ -706,13 +706,15 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             }
         }
 
-        fun newIntent(context: Context,
-                      callId: String,
-                      signalingRoomId: String,
-                      otherUserId: String,
-                      isIncomingCall: Boolean,
-                      isVideoCall: Boolean,
-                      mode: String?): Intent {
+        fun newIntent(
+                context: Context,
+                callId: String,
+                signalingRoomId: String,
+                otherUserId: String,
+                isIncomingCall: Boolean,
+                isVideoCall: Boolean,
+                mode: String?
+        ): Intent {
             val callArgs = CallArgs(signalingRoomId, callId, otherUserId, isIncomingCall, isVideoCall)
             return Intent(context, VectorCallActivity::class.java).apply {
                 // what could be the best flags?

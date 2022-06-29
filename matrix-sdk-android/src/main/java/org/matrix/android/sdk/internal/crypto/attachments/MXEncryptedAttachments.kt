@@ -41,10 +41,12 @@ internal object MXEncryptedAttachments {
     private const val SECRET_KEY_SPEC_ALGORITHM = "AES"
     private const val MESSAGE_DIGEST_ALGORITHM = "SHA-256"
 
-    fun encrypt(clearStream: InputStream,
-                outputFile: File,
-                clock: Clock,
-                progress: ((current: Int, total: Int) -> Unit)): EncryptedFileInfo {
+    fun encrypt(
+            clearStream: InputStream,
+            outputFile: File,
+            clock: Clock,
+            progress: ((current: Int, total: Int) -> Unit)
+    ): EncryptedFileInfo {
         val t0 = clock.epochMillis()
         val secureRandom = SecureRandom()
         val initVectorBytes = ByteArray(16) { 0.toByte() }
@@ -159,6 +161,7 @@ internal object MXEncryptedAttachments {
      * Encrypt an attachment stream.
      * DO NOT USE for big files, it will load all in memory
      * @param attachmentStream the attachment stream. Will be closed after this method call.
+     * @param clock a clock to retrieve current time
      * @return the encryption file info
      */
     fun encryptAttachment(attachmentStream: InputStream, clock: Clock): EncryptionResult {
@@ -231,13 +234,15 @@ internal object MXEncryptedAttachments {
      *
      * @param attachmentStream the attachment stream. Will be closed after this method call.
      * @param elementToDecrypt the elementToDecrypt info
-     * @param outputStream     the outputStream where the decrypted attachment will be write.
+     * @param outputStream the outputStream where the decrypted attachment will be write.
+     * @param clock a clock to retrieve current time
      * @return true in case of success, false in case of error
      */
-    fun decryptAttachment(attachmentStream: InputStream?,
-                          elementToDecrypt: ElementToDecrypt?,
-                          outputStream: OutputStream,
-                          clock: Clock
+    fun decryptAttachment(
+            attachmentStream: InputStream?,
+            elementToDecrypt: ElementToDecrypt?,
+            outputStream: OutputStream,
+            clock: Clock
     ): Boolean {
         // sanity checks
         if (null == attachmentStream || elementToDecrypt == null) {

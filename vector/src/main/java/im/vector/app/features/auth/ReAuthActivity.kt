@@ -86,10 +86,10 @@ class ReAuthActivity : SimpleFragmentActivity() {
 
         sharedViewModel.observeViewEvents {
             when (it) {
-                is ReAuthEvents.OpenSsoURl            -> {
+                is ReAuthEvents.OpenSsoURl -> {
                     openInCustomTab(it.url)
                 }
-                ReAuthEvents.Dismiss                  -> {
+                ReAuthEvents.Dismiss -> {
                     setResult(RESULT_CANCELED)
                     finish()
                 }
@@ -196,19 +196,21 @@ class ReAuthActivity : SimpleFragmentActivity() {
         const val RESULT_VALUE = "RESULT_VALUE"
         const val DEFAULT_RESULT_KEYSTORE_ALIAS = "ReAuthActivity"
 
-        fun newIntent(context: Context,
-                      fromError: RegistrationFlowResponse,
-                      lastErrorCode: String?,
-                      reasonTitle: String?,
-                      resultKeyStoreAlias: String = DEFAULT_RESULT_KEYSTORE_ALIAS): Intent {
+        fun newIntent(
+                context: Context,
+                fromError: RegistrationFlowResponse,
+                lastErrorCode: String?,
+                reasonTitle: String?,
+                resultKeyStoreAlias: String = DEFAULT_RESULT_KEYSTORE_ALIAS
+        ): Intent {
             val authType = when (fromError.nextUncompletedStage()) {
                 LoginFlowTypes.PASSWORD -> {
                     LoginFlowTypes.PASSWORD
                 }
-                LoginFlowTypes.SSO      -> {
+                LoginFlowTypes.SSO -> {
                     LoginFlowTypes.SSO
                 }
-                else                    -> {
+                else -> {
                     // TODO, support more auth type?
                     null
                 }

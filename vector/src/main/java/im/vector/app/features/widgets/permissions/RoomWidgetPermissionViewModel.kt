@@ -35,8 +35,10 @@ import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
 import java.net.URL
 
-class RoomWidgetPermissionViewModel @AssistedInject constructor(@Assisted val initialState: RoomWidgetPermissionViewState,
-                                                                private val session: Session) :
+class RoomWidgetPermissionViewModel @AssistedInject constructor(
+        @Assisted val initialState: RoomWidgetPermissionViewState,
+        private val session: Session
+) :
         VectorViewModel<RoomWidgetPermissionViewState, RoomWidgetPermissionActions, RoomWidgetPermissionViewEvents>(initialState) {
 
     private val widgetService = session.widgetService()
@@ -93,7 +95,6 @@ class RoomWidgetPermissionViewModel @AssistedInject constructor(@Assisted val in
         when (action) {
             RoomWidgetPermissionActions.AllowWidget -> handleAllowWidget()
             RoomWidgetPermissionActions.BlockWidget -> handleRevokeWidget()
-            RoomWidgetPermissionActions.DoClose     -> Unit
         }
     }
 

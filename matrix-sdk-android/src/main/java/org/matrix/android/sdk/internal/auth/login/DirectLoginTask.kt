@@ -74,7 +74,7 @@ internal class DefaultDirectLoginTask @Inject constructor(
                         homeServerUrl,
                         throwable.fingerprint
                 )
-                else                                -> throwable
+                else -> throwable
             }
         }
 

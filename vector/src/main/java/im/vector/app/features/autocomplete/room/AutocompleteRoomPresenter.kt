@@ -26,9 +26,10 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import javax.inject.Inject
 
-class AutocompleteRoomPresenter @Inject constructor(context: Context,
-                                                    private val controller: AutocompleteRoomController,
-                                                    private val session: Session
+class AutocompleteRoomPresenter @Inject constructor(
+        context: Context,
+        private val controller: AutocompleteRoomController,
+        private val session: Session
 ) : RecyclerViewPresenter<RoomSummary>(context), AutocompleteClickListener<RoomSummary> {
 
     init {

@@ -44,10 +44,12 @@ interface SharedSecretStorageService {
      *
      * @return key creation info
      */
-    suspend fun generateKey(keyId: String,
-                            key: SsssKeySpec?,
-                            keyName: String,
-                            keySigner: KeySigner?): SsssKeyCreationInfo
+    suspend fun generateKey(
+            keyId: String,
+            key: SsssKeySpec?,
+            keyName: String,
+            keySigner: KeySigner?
+    ): SsssKeyCreationInfo
 
     /**
      * Generates a SSSS key using the given passphrase.
@@ -61,11 +63,13 @@ interface SharedSecretStorageService {
      *
      * @return key creation info
      */
-    suspend fun generateKeyWithPassphrase(keyId: String,
-                                          keyName: String,
-                                          passphrase: String,
-                                          keySigner: KeySigner,
-                                          progressListener: ProgressListener?): SsssKeyCreationInfo
+    suspend fun generateKeyWithPassphrase(
+            keyId: String,
+            keyName: String,
+            passphrase: String,
+            keySigner: KeySigner,
+            progressListener: ProgressListener?
+    ): SsssKeyCreationInfo
 
     fun getKey(keyId: String): KeyInfoResult
 
@@ -92,7 +96,7 @@ interface SharedSecretStorageService {
      * Clients MUST ensure that the key is trusted before using it to encrypt secrets.
      *
      * @param name The name of the secret
-     * @param secret The secret contents.
+     * @param secretBase64 The secret contents.
      * @param keys The list of (ID,privateKey) of the keys to use to encrypt the secret.
      */
     suspend fun storeSecret(name: String, secretBase64: String, keys: List<KeyRef>)
@@ -132,9 +136,4 @@ interface SharedSecretStorageService {
     fun checkShouldBeAbleToAccessSecrets(secretNames: List<String>, keyId: String?): IntegrityResult
 
     suspend fun requestSecret(name: String, myOtherDeviceId: String)
-
-    data class KeyRef(
-            val keyId: String?,
-            val keySpec: SsssKeySpec?
-    )
 }

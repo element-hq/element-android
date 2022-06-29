@@ -26,7 +26,7 @@ data class RequestReply(
 )
 
 sealed class RequestResult {
-    data class  Success(val chainIndex: Int) : RequestResult()
+    data class Success(val chainIndex: Int) : RequestResult()
     data class Failure(val code: WithHeldCode) : RequestResult()
 }
 

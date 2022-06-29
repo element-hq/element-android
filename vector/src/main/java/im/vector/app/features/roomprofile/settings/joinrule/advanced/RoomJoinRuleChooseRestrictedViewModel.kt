@@ -70,7 +70,7 @@ class RoomJoinRuleChooseRestrictedViewModel @AssistedInject constructor(
     private fun initializeForRoom(roomId: String) {
         room = session.getRoom(roomId)!!
         session.getRoomSummary(roomId)?.let { roomSummary ->
-            val joinRulesContent = room.getStateEvent(EventType.STATE_ROOM_JOIN_RULES, QueryStringValue.NoCondition)
+            val joinRulesContent = room.getStateEvent(EventType.STATE_ROOM_JOIN_RULES, QueryStringValue.IsEmpty)
                     ?.content
                     ?.toModel<RoomJoinRulesContent>()
             val initialAllowList = joinRulesContent?.allowList
@@ -177,11 +177,11 @@ class RoomJoinRuleChooseRestrictedViewModel @AssistedInject constructor(
 
     override fun handle(action: RoomJoinRuleChooseRestrictedActions) {
         when (action) {
-            is RoomJoinRuleChooseRestrictedActions.FilterWith                 -> handleFilter(action)
-            is RoomJoinRuleChooseRestrictedActions.ToggleSelection            -> handleToggleSelection(action)
-            is RoomJoinRuleChooseRestrictedActions.SelectJoinRules            -> handleSelectRule(action)
+            is RoomJoinRuleChooseRestrictedActions.FilterWith -> handleFilter(action)
+            is RoomJoinRuleChooseRestrictedActions.ToggleSelection -> handleToggleSelection(action)
+            is RoomJoinRuleChooseRestrictedActions.SelectJoinRules -> handleSelectRule(action)
             is RoomJoinRuleChooseRestrictedActions.SwitchToRoomAfterMigration -> handleSwitchToRoom(action)
-            RoomJoinRuleChooseRestrictedActions.DoUpdateJoinRules             -> handleSubmit()
+            RoomJoinRuleChooseRestrictedActions.DoUpdateJoinRules -> handleSubmit()
         }
         checkForChanges()
     }
@@ -192,12 +192,12 @@ class RoomJoinRuleChooseRestrictedViewModel @AssistedInject constructor(
         viewModelScope.launch {
             try {
                 when (state.currentRoomJoinRules) {
-                    RoomJoinRules.PUBLIC     -> room.stateService().setJoinRulePublic()
-                    RoomJoinRules.INVITE     -> room.stateService().setJoinRuleInviteOnly()
+                    RoomJoinRules.PUBLIC -> room.stateService().setJoinRulePublic()
+                    RoomJoinRules.INVITE -> room.stateService().setJoinRuleInviteOnly()
                     RoomJoinRules.RESTRICTED -> room.stateService().setJoinRuleRestricted(state.updatedAllowList.map { it.id })
                     RoomJoinRules.KNOCK,
                     RoomJoinRules.PRIVATE,
-                    null                     -> {
+                    null -> {
                         throw UnsupportedOperationException()
                     }
                 }

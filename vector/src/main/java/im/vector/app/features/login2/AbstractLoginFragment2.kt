@@ -63,7 +63,7 @@ abstract class AbstractLoginFragment2<VB : ViewBinding> : VectorBaseFragment<VB>
     private fun handleLoginViewEvents(loginViewEvents: LoginViewEvents2) {
         when (loginViewEvents) {
             is LoginViewEvents2.Failure -> showFailure(loginViewEvents.throwable)
-            else                        ->
+            else ->
                 // This is handled by the Activity
                 Unit
         }
@@ -76,12 +76,12 @@ abstract class AbstractLoginFragment2<VB : ViewBinding> : VectorBaseFragment<VB>
         }
 
         when (throwable) {
-            is CancellationException                  ->
+            is CancellationException ->
                 /* Ignore this error, user has cancelled the action */
                 Unit
             is Failure.UnrecognizedCertificateFailure ->
                 showUnrecognizedCertificateFailure(throwable)
-            else                                      ->
+            else ->
                 onError(throwable)
         }
     }
@@ -127,7 +127,7 @@ abstract class AbstractLoginFragment2<VB : ViewBinding> : VectorBaseFragment<VB>
 
                 true
             }
-            displayCancelDialog && isResetPasswordStarted               -> {
+            displayCancelDialog && isResetPasswordStarted -> {
                 // Ask for confirmation before cancelling the reset password
                 MaterialAlertDialogBuilder(requireActivity())
                         .setTitle(R.string.login_reset_password_cancel_confirmation_title)
@@ -141,7 +141,7 @@ abstract class AbstractLoginFragment2<VB : ViewBinding> : VectorBaseFragment<VB>
 
                 true
             }
-            else                                                        -> {
+            else -> {
                 resetViewModel()
                 // Do not consume the Back event
                 false

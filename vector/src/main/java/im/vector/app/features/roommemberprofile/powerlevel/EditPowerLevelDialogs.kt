@@ -29,10 +29,12 @@ import org.matrix.android.sdk.api.session.room.powerlevels.Role
 
 object EditPowerLevelDialogs {
 
-    fun showChoice(activity: Activity,
-                   @StringRes titleRes: Int,
-                   currentRole: Role,
-                   listener: (Int) -> Unit) {
+    fun showChoice(
+            activity: Activity,
+            @StringRes titleRes: Int,
+            currentRole: Role,
+            listener: (Int) -> Unit
+    ) {
         val dialogLayout = activity.layoutInflater.inflate(R.layout.dialog_edit_power_level, null)
         val views = DialogEditPowerLevelBinding.bind(dialogLayout)
         views.powerLevelRadioGroup.setOnCheckedChangeListener { _, checkedId ->
@@ -41,10 +43,10 @@ object EditPowerLevelDialogs {
         views.powerLevelCustomEdit.setText(currentRole.value.toString())
 
         when (currentRole) {
-            Role.Admin     -> views.powerLevelAdminRadio.isChecked = true
+            Role.Admin -> views.powerLevelAdminRadio.isChecked = true
             Role.Moderator -> views.powerLevelModeratorRadio.isChecked = true
-            Role.Default   -> views.powerLevelDefaultRadio.isChecked = true
-            else           -> views.powerLevelCustomRadio.isChecked = true
+            Role.Default -> views.powerLevelDefaultRadio.isChecked = true
+            else -> views.powerLevelCustomRadio.isChecked = true
         }
 
         MaterialAlertDialogBuilder(activity)
@@ -52,10 +54,10 @@ object EditPowerLevelDialogs {
                 .setView(dialogLayout)
                 .setPositiveButton(R.string.edit) { _, _ ->
                     val newValue = when (views.powerLevelRadioGroup.checkedRadioButtonId) {
-                        R.id.powerLevelAdminRadio     -> Role.Admin.value
+                        R.id.powerLevelAdminRadio -> Role.Admin.value
                         R.id.powerLevelModeratorRadio -> Role.Moderator.value
-                        R.id.powerLevelDefaultRadio   -> Role.Default.value
-                        else                          -> {
+                        R.id.powerLevelDefaultRadio -> Role.Default.value
+                        else -> {
                             views.powerLevelCustomEdit.text?.toString()?.toInt() ?: currentRole.value
                         }
                     }

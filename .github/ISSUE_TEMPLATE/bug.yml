@@ -73,3 +73,14 @@ body:
         - 'No'
     validations:
       required: true
+  - type: dropdown
+    id: pr
+    attributes:
+      label: Are you willing to provide a PR?
+      description:  |
+        Providing a PR can drastically speed up the process of fixing this bug. Don't worry, it's still OK to answer 'No' :).
+      options:
+        - 'Yes'
+        - 'No'
+    validations:
+      required: true

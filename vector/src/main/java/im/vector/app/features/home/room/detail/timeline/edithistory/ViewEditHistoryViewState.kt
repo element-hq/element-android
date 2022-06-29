@@ -26,7 +26,8 @@ data class ViewEditHistoryViewState(
         val eventId: String,
         val roomId: String,
         val isOriginalAReply: Boolean = false,
-        val editList: Async<List<Event>> = Uninitialized) :
+        val editList: Async<List<Event>> = Uninitialized
+) :
         MavericksState {
 
     constructor(args: TimelineEventFragmentArgs) : this(roomId = args.roomId, eventId = args.eventId)

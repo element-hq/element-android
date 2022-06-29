@@ -59,12 +59,6 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceItem_
 import im.vector.app.features.home.room.detail.timeline.item.PollItem
 import im.vector.app.features.home.room.detail.timeline.item.PollItem_
-import im.vector.app.features.home.room.detail.timeline.item.PollOptionViewState.PollEnded
-import im.vector.app.features.home.room.detail.timeline.item.PollOptionViewState.PollReady
-import im.vector.app.features.home.room.detail.timeline.item.PollOptionViewState.PollSending
-import im.vector.app.features.home.room.detail.timeline.item.PollOptionViewState.PollUndisclosed
-import im.vector.app.features.home.room.detail.timeline.item.PollOptionViewState.PollVoted
-import im.vector.app.features.home.room.detail.timeline.item.PollResponseData
 import im.vector.app.features.home.room.detail.timeline.item.RedactedMessageItem
 import im.vector.app.features.home.room.detail.timeline.item.RedactedMessageItem_
 import im.vector.app.features.home.room.detail.timeline.item.VerificationRequestItem
@@ -81,18 +75,11 @@ import im.vector.app.features.location.UrlMapProvider
 import im.vector.app.features.location.toLocationData
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
-import im.vector.app.features.poll.PollState
-import im.vector.app.features.poll.PollState.Ended
-import im.vector.app.features.poll.PollState.Ready
-import im.vector.app.features.poll.PollState.Sending
-import im.vector.app.features.poll.PollState.Undisclosed
-import im.vector.app.features.poll.PollState.Voted
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.voice.AudioWaveformView
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
-import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.attachments.toElementToDecrypt
 import org.matrix.android.sdk.api.session.events.model.RelationType
@@ -113,8 +100,6 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationRequestContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
-import org.matrix.android.sdk.api.session.room.model.message.PollAnswer
-import org.matrix.android.sdk.api.session.room.model.message.PollType
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
 import org.matrix.android.sdk.api.session.room.model.message.getThumbnailUrl
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
@@ -148,7 +133,8 @@ class MessageItemFactory @Inject constructor(
         private val locationPinProvider: LocationPinProvider,
         private val vectorPreferences: VectorPreferences,
         private val urlMapProvider: UrlMapProvider,
-        private val liveLocationMessageItemFactory: LiveLocationMessageItemFactory,
+        private val liveLocationShareMessageItemFactory: LiveLocationShareMessageItemFactory,
+        private val pollItemViewStateFactory: PollItemViewStateFactory,
 ) {
 
     // TODO inject this properly?
@@ -200,24 +186,18 @@ class MessageItemFactory @Inject constructor(
         //        val all = event.root.toContent()
         //        val ev = all.toModel<Event>()
         val messageItem = when (messageContent) {
-            is MessageEmoteContent               -> buildEmoteMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageTextContent                -> buildItemForTextContent(messageContent, informationData, highlight, callback, attributes)
-            is MessageImageInfoContent           -> buildImageMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageNoticeContent              -> buildNoticeMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageVideoContent               -> buildVideoMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageFileContent                -> buildFileMessageItem(messageContent, highlight, attributes)
-            is MessageAudioContent               -> buildAudioContent(params, messageContent, informationData, highlight, attributes)
+            is MessageEmoteContent -> buildEmoteMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageTextContent -> buildItemForTextContent(messageContent, informationData, highlight, callback, attributes)
+            is MessageImageInfoContent -> buildImageMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageNoticeContent -> buildNoticeMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageVideoContent -> buildVideoMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageFileContent -> buildFileMessageItem(messageContent, highlight, attributes)
+            is MessageAudioContent -> buildAudioContent(params, messageContent, informationData, highlight, attributes)
             is MessageVerificationRequestContent -> buildVerificationRequestMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessagePollContent                -> buildPollItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageLocationContent            -> {
-                if (vectorPreferences.labsRenderLocationsInTimeline()) {
-                    buildLocationItem(messageContent, informationData, highlight, attributes)
-                } else {
-                    buildMessageTextItem(messageContent.body, false, informationData, highlight, callback, attributes)
-                }
-            }
-            is MessageBeaconInfoContent          -> liveLocationMessageItemFactory.create(messageContent, highlight, attributes)
-            else                                 -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessagePollContent -> buildPollItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageLocationContent -> buildLocationItem(messageContent, informationData, highlight, attributes)
+            is MessageBeaconInfoContent -> liveLocationShareMessageItemFactory.create(params.event, highlight, attributes)
+            else -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
         }
         return messageItem?.apply {
             layout(informationData.messageLayout.layoutRes)
@@ -237,14 +217,14 @@ class MessageItemFactory @Inject constructor(
             urlMapProvider.buildStaticMapUrl(it, INITIAL_MAP_ZOOM_IN_TIMELINE, width, height)
         }
 
-        val userId = if (locationContent.isSelfLocation()) informationData.senderId else null
+        val locationUserId = if (locationContent.isSelfLocation()) informationData.senderId else null
 
         return MessageLocationItem_()
                 .attributes(attributes)
                 .locationUrl(locationUrl)
                 .mapWidth(width)
                 .mapHeight(height)
-                .userId(userId)
+                .locationUserId(locationUserId)
                 .locationPinProvider(locationPinProvider)
                 .highlighted(highlight)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
@@ -257,60 +237,19 @@ class MessageItemFactory @Inject constructor(
             callback: TimelineEventController.Callback?,
             attributes: AbsMessageItem.Attributes,
     ): PollItem {
-        val pollResponseSummary = informationData.pollResponseAggregatedSummary
-        val pollState = createPollState(informationData, pollResponseSummary, pollContent)
-        val pollCreationInfo = pollContent.getBestPollCreationInfo()
-        val questionText = pollCreationInfo?.question?.getBestQuestion().orEmpty()
-        val question = createPollQuestion(informationData, questionText, callback)
-        val optionViewStates = pollCreationInfo?.answers?.mapToOptions(pollState, informationData)
-        val totalVotesText = createTotalVotesText(pollState, pollResponseSummary)
+        val pollViewState = pollItemViewStateFactory.create(pollContent, informationData)
 
         return PollItem_()
                 .attributes(attributes)
                 .eventId(informationData.eventId)
-                .pollQuestion(question)
-                .canVote(pollState.isVotable())
-                .totalVotesText(totalVotesText)
-                .optionViewStates(optionViewStates)
+                .pollQuestion(createPollQuestion(informationData, pollViewState.question, callback))
+                .canVote(pollViewState.canVote)
+                .totalVotesText(pollViewState.totalVotes)
+                .optionViewStates(pollViewState.optionViewStates)
                 .edited(informationData.hasBeenEdited)
                 .highlighted(highlight)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .callback(callback)
-    }
-
-    private fun createPollState(
-            informationData: MessageInformationData,
-            pollResponseSummary: PollResponseData?,
-            pollContent: MessagePollContent,
-    ): PollState = when {
-        !informationData.sendState.isSent()                                 -> Sending
-        pollResponseSummary?.isClosed.orFalse()                             -> Ended
-        pollContent.getBestPollCreationInfo()?.kind == PollType.UNDISCLOSED -> Undisclosed
-        pollResponseSummary?.myVote?.isNotEmpty().orFalse()                 -> Voted(pollResponseSummary?.totalVotes ?: 0)
-        else                                                                -> Ready
-    }
-
-    private fun List<PollAnswer>.mapToOptions(
-            pollState: PollState,
-            informationData: MessageInformationData,
-    ) = map { answer ->
-        val pollResponseSummary = informationData.pollResponseAggregatedSummary
-        val winnerVoteCount = pollResponseSummary?.winnerVoteCount
-        val optionId = answer.id ?: ""
-        val optionAnswer = answer.getBestAnswer() ?: ""
-        val voteSummary = pollResponseSummary?.votes?.get(answer.id)
-        val voteCount = voteSummary?.total ?: 0
-        val votePercentage = voteSummary?.percentage ?: 0.0
-        val isMyVote = pollResponseSummary?.myVote == answer.id
-        val isWinner = winnerVoteCount != 0 && voteCount == winnerVoteCount
-
-        when (pollState) {
-            Sending     -> PollSending(optionId, optionAnswer)
-            Ready       -> PollReady(optionId, optionAnswer)
-            is Voted    -> PollVoted(optionId, optionAnswer, voteCount, votePercentage, isMyVote)
-            Undisclosed -> PollUndisclosed(optionId, optionAnswer, isMyVote)
-            Ended       -> PollEnded(optionId, optionAnswer, voteCount, votePercentage, isWinner)
-        }
     }
 
     private fun createPollQuestion(
@@ -322,20 +261,6 @@ class MessageItemFactory @Inject constructor(
     } else {
         question
     }.toEpoxyCharSequence()
-
-    private fun createTotalVotesText(
-            pollState: PollState,
-            pollResponseSummary: PollResponseData?,
-    ): String {
-        val votes = pollResponseSummary?.totalVotes ?: 0
-        return when {
-            pollState is Ended       -> stringProvider.getQuantityString(R.plurals.poll_total_vote_count_after_ended, votes, votes)
-            pollState is Undisclosed -> ""
-            pollState is Voted       -> stringProvider.getQuantityString(R.plurals.poll_total_vote_count_before_ended_and_voted, votes, votes)
-            votes == 0               -> stringProvider.getString(R.string.poll_no_votes_cast)
-            else                     -> stringProvider.getQuantityString(R.plurals.poll_total_vote_count_before_ended_and_not_voted, votes, votes)
-        }
-    }
 
     private fun buildAudioMessageItem(
             params: TimelineItemFactoryParams,
@@ -501,7 +426,8 @@ class MessageItemFactory @Inject constructor(
             informationData: MessageInformationData,
             highlight: Boolean,
             callback: TimelineEventController.Callback?,
-            attributes: AbsMessageItem.Attributes): MessageTextItem? {
+            attributes: AbsMessageItem.Attributes
+    ): MessageTextItem? {
         // For compatibility reason we should display the body
         return buildMessageTextItem(messageContent.body, false, informationData, highlight, callback, attributes)
     }

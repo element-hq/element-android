@@ -101,9 +101,9 @@ class RoomDirectoryViewModel @AssistedInject constructor(
     override fun handle(action: RoomDirectoryAction) {
         when (action) {
             is RoomDirectoryAction.SetRoomDirectoryData -> setRoomDirectoryData(action)
-            is RoomDirectoryAction.FilterWith           -> filterWith(action)
-            RoomDirectoryAction.LoadMore                -> loadMore()
-            is RoomDirectoryAction.JoinRoom             -> joinRoom(action)
+            is RoomDirectoryAction.FilterWith -> filterWith(action)
+            RoomDirectoryAction.LoadMore -> loadMore()
+            is RoomDirectoryAction.JoinRoom -> joinRoom(action)
         }
     }
 

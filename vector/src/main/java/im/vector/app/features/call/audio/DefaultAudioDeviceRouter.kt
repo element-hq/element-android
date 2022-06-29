@@ -22,8 +22,9 @@ import androidx.media.AudioFocusRequestCompat
 import androidx.media.AudioManagerCompat
 import timber.log.Timber
 
-class DefaultAudioDeviceRouter(private val audioManager: AudioManager,
-                               private val callAudioManager: CallAudioManager
+class DefaultAudioDeviceRouter(
+        private val audioManager: AudioManager,
+        private val callAudioManager: CallAudioManager
 ) : CallAudioManager.AudioDeviceRouter, AudioManager.OnAudioFocusChangeListener {
 
     private var audioFocusLost = false
@@ -95,7 +96,7 @@ class DefaultAudioDeviceRouter(private val audioManager: AudioManager,
     override fun onAudioFocusChange(focusChange: Int) {
         callAudioManager.runInAudioThread {
             when (focusChange) {
-                AudioManager.AUDIOFOCUS_GAIN                                                                                          -> {
+                AudioManager.AUDIOFOCUS_GAIN -> {
                     Timber.d(" Audio focus gained")
                     if (audioFocusLost) {
                         callAudioManager.resetAudioRoute()

@@ -57,7 +57,7 @@ class VectorUncaughtExceptionHandler @Inject constructor(
     /**
      * An uncaught exception has been triggered.
      *
-     * @param thread    the thread
+     * @param thread the thread
      * @param throwable the throwable
      * @return the exception description
      */

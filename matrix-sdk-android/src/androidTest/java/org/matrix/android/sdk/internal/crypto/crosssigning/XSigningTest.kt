@@ -38,8 +38,8 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.isCrossSignedVerif
 import org.matrix.android.sdk.api.session.crypto.crosssigning.isVerified
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
-import org.matrix.android.sdk.common.CommonTestHelper
-import org.matrix.android.sdk.common.CryptoTestHelper
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSessionTest
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
 import kotlin.coroutines.Continuation
@@ -48,13 +48,11 @@ import kotlin.coroutines.resume
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @LargeTest
+@Ignore
 class XSigningTest : InstrumentedTest {
 
-    private val testHelper = CommonTestHelper(context())
-    private val cryptoTestHelper = CryptoTestHelper(testHelper)
-
     @Test
-    fun test_InitializeAndStoreKeys() {
+    fun test_InitializeAndStoreKeys() = runSessionTest(context()) { testHelper ->
         val aliceSession = testHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(true))
 
         testHelper.doSync<Unit> {
@@ -88,7 +86,7 @@ class XSigningTest : InstrumentedTest {
     }
 
     @Test
-    fun test_CrossSigningCheckBobSeesTheKeys() {
+    fun test_CrossSigningCheckBobSeesTheKeys() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession
@@ -138,13 +136,10 @@ class XSigningTest : InstrumentedTest {
         )
 
         assertFalse("Bob keys from alice pov should not be trusted", bobKeysFromAlicePOV.isTrusted())
-
-        cryptoTestData.cleanUp(testHelper)
     }
 
     @Test
-    @Ignore("This test will be ignored until it is fixed")
-    fun test_CrossSigningTestAliceTrustBobNewDevice() {
+    fun test_CrossSigningTestAliceTrustBobNewDevice() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession
@@ -218,9 +213,5 @@ class XSigningTest : InstrumentedTest {
 
         val result = aliceSession.cryptoService().crossSigningService().checkDeviceTrust(bobUserId, bobSecondDeviceId, null)
         assertTrue("Bob second device should be trusted from alice POV", result.isCrossSignedVerified())
-
-        testHelper.signOutAndClose(aliceSession)
-        testHelper.signOutAndClose(bobSession)
-        testHelper.signOutAndClose(bobSession2)
     }
 }

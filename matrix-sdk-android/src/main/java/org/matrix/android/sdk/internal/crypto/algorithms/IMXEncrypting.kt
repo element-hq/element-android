@@ -27,8 +27,8 @@ internal interface IMXEncrypting {
      * Encrypt an event content according to the configuration of the room.
      *
      * @param eventContent the content of the event.
-     * @param eventType    the type of the event.
-     * @param userIds      the room members the event will be sent to.
+     * @param eventType the type of the event.
+     * @param userIds the room members the event will be sent to.
      * @return the encrypted content
      */
     suspend fun encryptEventContent(eventContent: Content, eventType: String, userIds: List<String>): Content

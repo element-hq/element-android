@@ -21,6 +21,7 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import im.vector.app.ActiveSessionDataSource
 import im.vector.app.BuildConfig
+import im.vector.app.core.pushers.UnifiedPushHelper
 import im.vector.app.core.services.CallService
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.plan.CallEnded
@@ -32,7 +33,6 @@ import im.vector.app.features.call.lookup.CallUserMapper
 import im.vector.app.features.call.utils.EglUtils
 import im.vector.app.features.call.vectorCallService
 import im.vector.app.features.session.coroutineScope
-import im.vector.app.push.fcm.FcmHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asCoroutineDispatcher
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -72,7 +72,8 @@ private val loggerTag = LoggerTag("WebRtcCallManager", LoggerTag.VOIP)
 class WebRtcCallManager @Inject constructor(
         private val context: Context,
         private val activeSessionDataSource: ActiveSessionDataSource,
-        private val analyticsTracker: AnalyticsTracker
+        private val analyticsTracker: AnalyticsTracker,
+        private val unifiedPushHelper: UnifiedPushHelper,
 ) : CallListener,
         DefaultLifecycleObserver {
 
@@ -272,8 +273,8 @@ class WebRtcCallManager @Inject constructor(
             audioManager.setMode(CallAudioManager.Mode.DEFAULT)
             // did we start background sync? so we should stop it
             if (isInBackground) {
-                if (FcmHelper.isPushSupported()) {
-                    currentSession?.stopAnyBackgroundSync()
+                if (!unifiedPushHelper.isBackgroundSync()) {
+                    currentSession?.syncService()?.stopAnyBackgroundSync()
                 } else {
                     // for fdroid we should not stop, it should continue syncing
                     // maybe we should restore default timeout/delay though?
@@ -378,9 +379,9 @@ class WebRtcCallManager @Inject constructor(
         // and thus won't be able to received events. For example if the call is
         // accepted on an other session this device will continue ringing
         if (isInBackground) {
-            if (FcmHelper.isPushSupported()) {
+            if (!unifiedPushHelper.isBackgroundSync()) {
                 // only for push version as fdroid version is already doing it?
-                currentSession?.startAutomaticBackgroundSync(30, 0)
+                currentSession?.syncService()?.startAutomaticBackgroundSync(30, 0)
             } else {
                 // Maybe increase sync freq? but how to set back to default values?
             }

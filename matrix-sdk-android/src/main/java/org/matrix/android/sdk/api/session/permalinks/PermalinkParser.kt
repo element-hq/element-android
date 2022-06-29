@@ -67,10 +67,10 @@ object PermalinkParser {
         val identifier = params.getOrNull(0)
         val extraParameter = params.getOrNull(1)
         return when {
-            identifier.isNullOrEmpty()             -> PermalinkData.FallbackLink(uri)
-            MatrixPatterns.isUserId(identifier)    -> PermalinkData.UserLink(userId = identifier)
-            MatrixPatterns.isGroupId(identifier)   -> PermalinkData.GroupLink(groupId = identifier)
-            MatrixPatterns.isRoomId(identifier)    -> {
+            identifier.isNullOrEmpty() -> PermalinkData.FallbackLink(uri)
+            MatrixPatterns.isUserId(identifier) -> PermalinkData.UserLink(userId = identifier)
+            MatrixPatterns.isGroupId(identifier) -> PermalinkData.GroupLink(groupId = identifier)
+            MatrixPatterns.isRoomId(identifier) -> {
                 handleRoomIdCase(fragment, identifier, matrixToUri, extraParameter, viaQueryParameters)
             }
             MatrixPatterns.isRoomAlias(identifier) -> {
@@ -81,7 +81,7 @@ object PermalinkParser {
                         viaParameters = viaQueryParameters
                 )
             }
-            else                                   -> PermalinkData.FallbackLink(uri)
+            else -> PermalinkData.FallbackLink(uri)
         }
     }
 

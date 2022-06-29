@@ -53,6 +53,7 @@ import org.matrix.android.sdk.internal.session.permalinks.PermalinkFactory
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
 import org.matrix.android.sdk.internal.session.room.timeline.GetEventTask
 import org.matrix.android.sdk.internal.util.awaitTransaction
+import org.matrix.android.sdk.internal.util.time.Clock
 import javax.inject.Inject
 
 /**
@@ -64,7 +65,8 @@ internal class ThreadsAwarenessHandler @Inject constructor(
         private val permalinkFactory: PermalinkFactory,
         @SessionDatabase private val monarchy: Monarchy,
         private val lightweightSettingsStorage: LightweightSettingsStorage,
-        private val getEventTask: GetEventTask
+        private val getEventTask: GetEventTask,
+        private val clock: Clock,
 ) {
 
     // This caching is responsible to improve the performance when we receive a root event
@@ -120,7 +122,7 @@ internal class ThreadsAwarenessHandler @Inject constructor(
     private suspend fun fetchThreadsEvents(threadsToFetch: Map<String, String>) {
         val eventEntityList = threadsToFetch.mapNotNull { (eventId, roomId) ->
             fetchEvent(eventId, roomId)?.let {
-                it.toEntity(roomId, SendState.SYNCED, it.ageLocalTs)
+                it.toEntity(roomId, SendState.SYNCED, it.ageLocalTs ?: clock.epochMillis())
             }
         }
 
@@ -156,10 +158,12 @@ internal class ThreadsAwarenessHandler @Inject constructor(
      * Handle events mainly coming from the RoomSyncHandler.
      * @return The content to inject in the roomSyncHandler live events
      */
-    fun makeEventThreadAware(realm: Realm,
-                             roomId: String?,
-                             event: Event?,
-                             eventEntity: EventEntity? = null): String? {
+    fun makeEventThreadAware(
+            realm: Realm,
+            roomId: String?,
+            event: Event?,
+            eventEntity: EventEntity? = null
+    ): String? {
         event ?: return null
         roomId ?: return null
         if (lightweightSettingsStorage.areThreadMessagesEnabled() && !isReplyEvent(event)) return null
@@ -206,6 +210,8 @@ internal class ThreadsAwarenessHandler @Inject constructor(
     /**
      * Handle for not thread events that we have marked them as root.
      * Find relations and inject them accordingly
+     * @param realm the realm instance
+     * @param roomId the current room Id
      * @param eventEntity the current eventEntity received
      * @param event the current event received
      * @return The content to inject in the roomSyncHandler live events
@@ -229,9 +235,12 @@ internal class ThreadsAwarenessHandler @Inject constructor(
      * This function is responsible to check if there is any event that relates to our current event.
      * This is useful when we receive an event that relates to a missing parent, so when later we receive the parent
      * we can update the child as well.
+     * @param realm the realm instance
+     * @param roomId the current room Id
      * @param event the current event that we examine
      * @param eventBody the current body of the event
      * @param isFromCache determines whether or not we already know this is root thread event
+     * @param threadRelation the information about thread
      * @return The content to inject in the roomSyncHandler live events
      */
     private fun handleEventsThatRelatesTo(
@@ -266,10 +275,12 @@ internal class ThreadsAwarenessHandler @Inject constructor(
      * Actual update the eventEntity with the new payload.
      * @return the content to inject when this is executed by RoomSyncHandler
      */
-    private fun updateEventEntity(event: Event,
-                                  eventEntity: EventEntity?,
-                                  eventPayload: MutableMap<String, Any>,
-                                  messageTextContent: Content): String? {
+    private fun updateEventEntity(
+            event: Event,
+            eventEntity: EventEntity?,
+            eventPayload: MutableMap<String, Any>,
+            messageTextContent: Content
+    ): String? {
         eventPayload["content"] = messageTextContent
 
         if (event.isEncrypted()) {
@@ -291,16 +302,20 @@ internal class ThreadsAwarenessHandler @Inject constructor(
     }
 
     /**
-     * Injecting $eventToInject decrypted content as a reply to $event.
-     * @param eventToInject the event that will inject
+     * Injecting [eventToInject] decrypted content as a reply to event.
+     * @param roomId the room id
      * @param eventBody the actual event body
+     * @param eventToInject the event that will inject
+     * @param eventToInjectBody the event body to inject
+     * @param threadRelation the information about thread
      * @return The final content with the injected event
      */
-    private fun injectEvent(roomId: String,
-                            eventBody: String,
-                            eventToInject: Event,
-                            eventToInjectBody: String,
-                            threadRelation: RelationDefaultContent?
+    private fun injectEvent(
+            roomId: String,
+            eventBody: String,
+            eventToInject: Event,
+            eventToInjectBody: String,
+            threadRelation: RelationDefaultContent?
     ): Content? {
         val eventToInjectId = eventToInject.eventId ?: return null
         val eventIdToInjectSenderId = eventToInject.senderId.orEmpty()
@@ -326,11 +341,13 @@ internal class ThreadsAwarenessHandler @Inject constructor(
     /**
      * Integrate fallback Quote reply.
      */
-    private fun injectFallbackIndicator(event: Event,
-                                        eventBody: String,
-                                        eventEntity: EventEntity?,
-                                        eventPayload: MutableMap<String, Any>,
-                                        threadRelation: RelationDefaultContent?): String? {
+    private fun injectFallbackIndicator(
+            event: Event,
+            eventBody: String,
+            eventEntity: EventEntity?,
+            eventPayload: MutableMap<String, Any>,
+            threadRelation: RelationDefaultContent?
+    ): String? {
         val replyFormatted = LocalEchoEventFactory.QUOTE_PATTERN.format(
                 "In reply to a thread",
                 eventBody

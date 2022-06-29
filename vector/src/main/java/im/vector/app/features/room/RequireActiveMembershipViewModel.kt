@@ -51,7 +51,8 @@ import org.matrix.android.sdk.flow.unwrap
 class RequireActiveMembershipViewModel @AssistedInject constructor(
         @Assisted initialState: RequireActiveMembershipViewState,
         private val stringProvider: StringProvider,
-        private val session: Session) :
+        private val session: Session
+) :
         VectorViewModel<RequireActiveMembershipViewState, RequireActiveMembershipAction, RequireActiveMembershipViewEvents>(initialState) {
 
     @AssistedFactory
@@ -109,13 +110,13 @@ class RequireActiveMembershipViewModel @AssistedInject constructor(
                 }
                 RequireActiveMembershipViewEvents.RoomLeft(message)
             }
-            Membership.BAN   -> {
+            Membership.BAN -> {
                 val message = senderDisplayName?.let {
                     stringProvider.getString(R.string.has_been_banned, roomSummary.displayName, it)
                 }
                 RequireActiveMembershipViewEvents.RoomLeft(message)
             }
-            else             -> null
+            else -> null
         }
         return Optional.from(viewEvent)
     }

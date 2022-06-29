@@ -35,7 +35,8 @@ class StartCallActionsHandler(
         private val timelineViewModel: TimelineViewModel,
         private val startCallActivityResultLauncher: ActivityResultLauncher<Array<String>>,
         private val showDialogWithMessage: (String) -> Unit,
-        private val onTapToReturnToCall: () -> Unit) {
+        private val onTapToReturnToCall: () -> Unit
+) {
 
     fun onVideoCallClicked() {
         handleCallRequest(true)
@@ -48,7 +49,7 @@ class StartCallActionsHandler(
     private fun handleCallRequest(isVideoCall: Boolean) = withState(timelineViewModel) { state ->
         val roomSummary = state.asyncRoomSummary.invoke() ?: return@withState
         when (roomSummary.joinedMembersCount) {
-            1    -> {
+            1 -> {
                 val pendingInvite = roomSummary.invitedMembersCount ?: 0 > 0
                 if (pendingInvite) {
                     // wait for other to join
@@ -58,7 +59,7 @@ class StartCallActionsHandler(
                     showDialogWithMessage(fragment.getString(R.string.cannot_call_yourself))
                 }
             }
-            2    -> {
+            2 -> {
                 val currentCall = callManager.getCurrentCall()
                 if (currentCall?.signalingRoomId == roomId) {
                     onTapToReturnToCall()

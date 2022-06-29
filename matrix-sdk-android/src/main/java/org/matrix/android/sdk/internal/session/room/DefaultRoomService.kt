@@ -20,7 +20,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.paging.PagedList
 import com.zhuinden.monarchy.Monarchy
-import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.identity.model.SignInvitationResult
 import org.matrix.android.sdk.api.session.room.Room
@@ -91,18 +90,27 @@ internal class DefaultRoomService @Inject constructor(
         return roomSummaryDataSource.getRoomSummary(roomIdOrAlias)
     }
 
-    override fun getRoomSummaries(queryParams: RoomSummaryQueryParams,
-                                  sortOrder: RoomSortOrder): List<RoomSummary> {
+    override fun getRoomSummaryLive(roomId: String): LiveData<Optional<RoomSummary>> {
+        return roomSummaryDataSource.getRoomSummaryLive(roomId)
+    }
+
+    override fun getRoomSummaries(
+            queryParams: RoomSummaryQueryParams,
+            sortOrder: RoomSortOrder
+    ): List<RoomSummary> {
         return roomSummaryDataSource.getRoomSummaries(queryParams, sortOrder)
     }
 
     override fun refreshJoinedRoomSummaryPreviews(roomId: String?) {
-        val roomSummaries = getRoomSummaries(roomSummaryQueryParams {
-            if (roomId != null) {
-                this.roomId = QueryStringValue.Equals(roomId)
-            }
-            memberships = listOf(Membership.JOIN)
-        })
+        val roomSummaries = if (roomId == null) {
+            getRoomSummaries(roomSummaryQueryParams {
+                memberships = listOf(Membership.JOIN)
+            })
+        } else {
+            listOfNotNull(
+                    getRoomSummary(roomId)?.takeIf { it.membership == Membership.JOIN }
+            )
+        }
 
         if (roomSummaries.isNotEmpty()) {
             monarchy.runTransactionSync { realm ->
@@ -113,21 +121,28 @@ internal class DefaultRoomService @Inject constructor(
         }
     }
 
-    override fun getRoomSummariesLive(queryParams: RoomSummaryQueryParams,
-                                      sortOrder: RoomSortOrder): LiveData<List<RoomSummary>> {
+    override fun getRoomSummariesLive(
+            queryParams: RoomSummaryQueryParams,
+            sortOrder: RoomSortOrder
+    ): LiveData<List<RoomSummary>> {
         return roomSummaryDataSource.getRoomSummariesLive(queryParams, sortOrder)
     }
 
-    override fun getPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams,
-                                           pagedListConfig: PagedList.Config,
-                                           sortOrder: RoomSortOrder): LiveData<PagedList<RoomSummary>> {
+    override fun getPagedRoomSummariesLive(
+            queryParams: RoomSummaryQueryParams,
+            pagedListConfig: PagedList.Config,
+            sortOrder: RoomSortOrder
+    ): LiveData<PagedList<RoomSummary>> {
         return roomSummaryDataSource.getSortedPagedRoomSummariesLive(queryParams, pagedListConfig, sortOrder)
     }
 
-    override fun getFilteredPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams,
-                                                   pagedListConfig: PagedList.Config,
-                                                   sortOrder: RoomSortOrder): UpdatableLivePageResult {
-        return roomSummaryDataSource.getUpdatablePagedRoomSummariesLive(queryParams, pagedListConfig, sortOrder)
+    override fun getFilteredPagedRoomSummariesLive(
+            queryParams: RoomSummaryQueryParams,
+            pagedListConfig: PagedList.Config,
+            sortOrder: RoomSortOrder,
+            getFlattenParents: Boolean
+    ): UpdatableLivePageResult {
+        return roomSummaryDataSource.getUpdatablePagedRoomSummariesLive(queryParams, pagedListConfig, sortOrder, getFlattenParents)
     }
 
     override fun getRoomCountLive(queryParams: RoomSummaryQueryParams): LiveData<Int> {
@@ -154,9 +169,11 @@ internal class DefaultRoomService @Inject constructor(
         joinRoomTask.execute(JoinRoomTask.Params(roomIdOrAlias, reason, viaServers))
     }
 
-    override suspend fun joinRoom(roomId: String,
-                                  reason: String?,
-                                  thirdPartySigned: SignInvitationResult) {
+    override suspend fun joinRoom(
+            roomId: String,
+            reason: String?,
+            thirdPartySigned: SignInvitationResult
+    ) {
         joinRoomTask.execute(JoinRoomTask.Params(roomId, reason, thirdPartySigned = thirdPartySigned))
     }
 

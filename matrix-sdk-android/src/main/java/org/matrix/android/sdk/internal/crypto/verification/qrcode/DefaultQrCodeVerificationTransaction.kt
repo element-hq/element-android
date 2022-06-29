@@ -94,7 +94,7 @@ internal class DefaultQrCodeVerificationTransaction(
 
         // Check the other device view of my MSK
         when (otherQrCodeData) {
-            is QrCodeData.VerifyingAnotherUser             -> {
+            is QrCodeData.VerifyingAnotherUser -> {
                 // key2 (aka otherUserMasterCrossSigningPublicKey) is what the one displaying the QR code (other user) think my MSK is.
                 // Let's check that it's correct
                 // If not -> Cancel
@@ -104,7 +104,7 @@ internal class DefaultQrCodeVerificationTransaction(
                     return
                 } else Unit
             }
-            is QrCodeData.SelfVerifyingMasterKeyTrusted    -> {
+            is QrCodeData.SelfVerifyingMasterKeyTrusted -> {
                 // key1 (aka userMasterCrossSigningPublicKey) is the session displaying the QR code view of our MSK.
                 // Let's check that I see the same MSK
                 // If not -> Cancel
@@ -135,7 +135,7 @@ internal class DefaultQrCodeVerificationTransaction(
 
         // Let's now check the other user/device key material
         when (otherQrCodeData) {
-            is QrCodeData.VerifyingAnotherUser             -> {
+            is QrCodeData.VerifyingAnotherUser -> {
                 // key1(aka userMasterCrossSigningPublicKey) is the MSK of the one displaying the QR code (i.e other user)
                 // Let's check that it matches what I think it should be
                 if (otherQrCodeData.userMasterCrossSigningPublicKey
@@ -149,7 +149,7 @@ internal class DefaultQrCodeVerificationTransaction(
                     Unit
                 }
             }
-            is QrCodeData.SelfVerifyingMasterKeyTrusted    -> {
+            is QrCodeData.SelfVerifyingMasterKeyTrusted -> {
                 // key2 (aka otherDeviceKey) is my current device key in POV of the one displaying the QR code (i.e other device)
                 // Let's check that it's correct
                 if (otherQrCodeData.otherDeviceKey
@@ -259,11 +259,11 @@ internal class DefaultQrCodeVerificationTransaction(
 
     override fun otherUserScannedMyQrCode() {
         when (qrCodeData) {
-            is QrCodeData.VerifyingAnotherUser             -> {
+            is QrCodeData.VerifyingAnotherUser -> {
                 // Alice telling Bob that the code was scanned successfully is sufficient for Bob to trust Alice's key,
                 trust(true, emptyList(), false)
             }
-            is QrCodeData.SelfVerifyingMasterKeyTrusted    -> {
+            is QrCodeData.SelfVerifyingMasterKeyTrusted -> {
                 // I now know that I have the correct device key for other session,
                 // and can sign it with the self-signing key and upload the signature
                 trust(false, listOf(otherDeviceId ?: ""), false)
@@ -272,7 +272,7 @@ internal class DefaultQrCodeVerificationTransaction(
                 // I now know that i can trust my MSK
                 trust(true, emptyList(), true)
             }
-            null                                           -> Unit
+            null -> Unit
         }
     }
 

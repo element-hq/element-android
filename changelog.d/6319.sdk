@@ -1,0 +1,1 @@
+Create `QueryStateEventValue` to do query on `stateKey` for State Event. Also remove the default parameter values for those type.

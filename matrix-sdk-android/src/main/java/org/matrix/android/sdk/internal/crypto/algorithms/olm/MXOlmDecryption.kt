@@ -38,7 +38,8 @@ internal class MXOlmDecryption(
         // The olm device interface
         private val olmDevice: MXOlmDevice,
         // the matrix userId
-        private val userId: String) :
+        private val userId: String
+) :
         IMXDecrypting {
 
     @Throws(MXCryptoError::class)
@@ -180,8 +181,8 @@ internal class MXOlmDecryption(
     /**
      * Attempt to decrypt an Olm message.
      *
+     * @param message message object, with 'type' and 'body' fields.
      * @param theirDeviceIdentityKey the Curve25519 identity key of the sender.
-     * @param message                message object, with 'type' and 'body' fields.
      * @return payload, if decrypted successfully.
      */
     private suspend fun decryptMessage(message: JsonDict, theirDeviceIdentityKey: String): String? {
@@ -190,9 +191,9 @@ internal class MXOlmDecryption(
         val messageBody = message["body"] as? String ?: return null
         val messageType = when (val typeAsVoid = message["type"]) {
             is Double -> typeAsVoid.toInt()
-            is Int    -> typeAsVoid
-            is Long   -> typeAsVoid.toInt()
-            else      -> return null
+            is Int -> typeAsVoid
+            is Long -> typeAsVoid.toInt()
+            else -> return null
         }
 
         // Try each session in turn

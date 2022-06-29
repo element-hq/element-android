@@ -9,6 +9,7 @@
     <dimen name="layout_vertical_margin_big">32dp</dimen>
 
     <dimen name="profile_avatar_size">50dp</dimen>
+    <dimen name="typing_avatar_size">20dp</dimen>
     <dimen name="item_event_message_state_size">16dp</dimen>
 
     <dimen name="item_event_message_media_button_size">32dp</dimen>

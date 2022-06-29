@@ -144,9 +144,9 @@ abstract class MessageAudioItem : AbsMessageItem<MessageAudioItem.Holder>() {
         audioMessagePlaybackTracker.track(attributes.informationData.eventId, object : AudioMessagePlaybackTracker.Listener {
             override fun onUpdate(state: AudioMessagePlaybackTracker.Listener.State) {
                 when (state) {
-                    is AudioMessagePlaybackTracker.Listener.State.Idle      -> renderIdleState(holder)
-                    is AudioMessagePlaybackTracker.Listener.State.Playing   -> renderPlayingState(holder, state)
-                    is AudioMessagePlaybackTracker.Listener.State.Paused    -> renderPausedState(holder, state)
+                    is AudioMessagePlaybackTracker.Listener.State.Idle -> renderIdleState(holder)
+                    is AudioMessagePlaybackTracker.Listener.State.Playing -> renderPlayingState(holder, state)
+                    is AudioMessagePlaybackTracker.Listener.State.Paused -> renderPausedState(holder, state)
                     is AudioMessagePlaybackTracker.Listener.State.Recording -> Unit
                 }
             }

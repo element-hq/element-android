@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+
+    <stroke
+        android:color="@color/lockscreen_code"
+        android:width="1px"/>
+
+    <solid
+        android:color="@color/lockscreen_code"/>
+
+    <size
+        android:width="@dimen/lockscreen_code_size"
+        android:height="@dimen/lockscreen_code_size"/>
+</shape>

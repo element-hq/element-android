@@ -16,7 +16,11 @@
 
 package im.vector.app.core.extensions
 
+import android.text.Editable
+import android.view.View
+import android.view.inputmethod.EditorInfo
 import com.google.android.material.textfield.TextInputLayout
+import im.vector.app.core.platform.SimpleTextWatcher
 import kotlinx.coroutines.flow.map
 import reactivecircus.flowbinding.android.widget.textChanges
 
@@ -30,3 +34,37 @@ fun TextInputLayout.hasSurroundingSpaces() = editText().text.toString().let { it
 fun TextInputLayout.hasContentFlow(mapper: (CharSequence) -> CharSequence = { it }) = editText().textChanges().map { mapper(it).isNotEmpty() }
 
 fun TextInputLayout.content() = editText().text.toString()
+
+fun TextInputLayout.hasContent() = !editText().text.isNullOrEmpty()
+
+fun TextInputLayout.associateContentStateWith(button: View) {
+    editText().addTextChangedListener(object : SimpleTextWatcher() {
+        override fun afterTextChanged(s: Editable) {
+            val newContent = s.toString()
+            button.isEnabled = newContent.isNotEmpty()
+        }
+    })
+}
+
+fun TextInputLayout.setOnImeDoneListener(action: () -> Unit) {
+    editText().setOnEditorActionListener { _, actionId, _ ->
+        when (actionId) {
+            EditorInfo.IME_ACTION_DONE -> {
+                action()
+                true
+            }
+            else -> false
+        }
+    }
+}
+
+fun TextInputLayout.setOnFocusLostListener(action: () -> Unit) {
+    editText().setOnFocusChangeListener { _, hasFocus ->
+        when (hasFocus) {
+            false -> action()
+            else -> {
+                // do nothing
+            }
+        }
+    }
+}

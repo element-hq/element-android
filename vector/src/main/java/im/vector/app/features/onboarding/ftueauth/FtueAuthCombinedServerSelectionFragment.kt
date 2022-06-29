@@ -68,7 +68,7 @@ class FtueAuthCombinedServerSelectionFragment @Inject constructor() : AbstractFt
         views.chooseServerSubmit.debouncedClicks { updateServerUrl() }
         views.chooseServerInput.editText().textChanges()
                 .onEach { views.chooseServerInput.error = null }
-                .launchIn(lifecycleScope)
+                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun updateServerUrl() {
@@ -89,7 +89,7 @@ class FtueAuthCombinedServerSelectionFragment @Inject constructor() : AbstractFt
     override fun onError(throwable: Throwable) {
         views.chooseServerInput.error = when {
             throwable.isHomeserverUnavailable() -> getString(R.string.login_error_homeserver_not_found)
-            else                                -> errorFormatter.toHumanReadable(throwable)
+            else -> errorFormatter.toHumanReadable(throwable)
         }
     }
 

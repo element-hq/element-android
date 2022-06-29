@@ -44,7 +44,7 @@ class PromptFragment : VectorBaseFragment<FragmentReauthConfirmBinding>() {
 
     private fun onButtonClicked() = withState(viewModel) { state ->
         when (state.flowType) {
-            LoginFlowTypes.SSO      -> {
+            LoginFlowTypes.SSO -> {
                 viewModel.handle(ReAuthActions.StartSSOFallback)
             }
             LoginFlowTypes.PASSWORD -> {
@@ -57,7 +57,7 @@ class PromptFragment : VectorBaseFragment<FragmentReauthConfirmBinding>() {
                     viewModel.handle(ReAuthActions.ReAuthWithPass(password))
                 }
             }
-            else                    -> {
+            else -> {
                 // not supported
             }
         }
@@ -65,7 +65,7 @@ class PromptFragment : VectorBaseFragment<FragmentReauthConfirmBinding>() {
 
     override fun invalidate() = withState(viewModel) {
         when (it.flowType) {
-            LoginFlowTypes.SSO      -> {
+            LoginFlowTypes.SSO -> {
                 views.passwordFieldTil.isVisible = false
                 views.reAuthConfirmButton.text = getString(R.string.auth_login_sso)
             }
@@ -73,21 +73,21 @@ class PromptFragment : VectorBaseFragment<FragmentReauthConfirmBinding>() {
                 views.passwordFieldTil.isVisible = true
                 views.reAuthConfirmButton.text = getString(R.string._continue)
             }
-            else                    -> {
+            else -> {
                 // This login flow is not supported, you should use web?
             }
         }
 
         if (it.lastErrorCode != null) {
             when (it.flowType) {
-                LoginFlowTypes.SSO      -> {
+                LoginFlowTypes.SSO -> {
                     views.genericErrorText.isVisible = true
                     views.genericErrorText.text = getString(R.string.authentication_error)
                 }
                 LoginFlowTypes.PASSWORD -> {
                     views.passwordFieldTil.error = getString(R.string.authentication_error)
                 }
-                else                    -> {
+                else -> {
                     // nop
                 }
             }

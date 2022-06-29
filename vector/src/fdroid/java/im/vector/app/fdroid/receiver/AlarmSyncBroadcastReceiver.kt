@@ -26,9 +26,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.platform.PendingIntentCompat
-import im.vector.app.core.services.VectorSyncService
+import im.vector.app.core.services.VectorSyncAndroidService
 import im.vector.app.core.time.Clock
-import org.matrix.android.sdk.api.session.sync.job.SyncService
+import org.matrix.android.sdk.api.session.sync.job.SyncAndroidService
 import timber.log.Timber
 
 class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
@@ -43,8 +43,8 @@ class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
         val vectorPreferences = singletonEntryPoint.vectorPreferences()
         val clock = singletonEntryPoint.clock()
 
-        val sessionId = intent.getStringExtra(SyncService.EXTRA_SESSION_ID) ?: return
-        VectorSyncService.newPeriodicIntent(
+        val sessionId = intent.getStringExtra(SyncAndroidService.EXTRA_SESSION_ID) ?: return
+        VectorSyncAndroidService.newPeriodicIntent(
                 context = context,
                 sessionId = sessionId,
                 syncTimeoutSeconds = vectorPreferences.backgroundSyncTimeOut(),
@@ -69,8 +69,8 @@ class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
             // Reschedule
             Timber.v("## Sync: Scheduling alarm for background sync in $delayInSeconds seconds")
             val intent = Intent(context, AlarmSyncBroadcastReceiver::class.java).apply {
-                putExtra(SyncService.EXTRA_SESSION_ID, sessionId)
-                putExtra(SyncService.EXTRA_PERIODIC, true)
+                putExtra(SyncAndroidService.EXTRA_SESSION_ID, sessionId)
+                putExtra(SyncAndroidService.EXTRA_PERIODIC, true)
             }
             val pIntent = PendingIntent.getBroadcast(
                     context,
@@ -100,7 +100,7 @@ class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
             alarmMgr.cancel(pIntent)
 
             // Stop current service to restart
-            VectorSyncService.stopIntent(context).let {
+            VectorSyncAndroidService.stopIntent(context).let {
                 try {
                     ContextCompat.startForegroundService(context, it)
                 } catch (ex: Throwable) {

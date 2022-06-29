@@ -43,6 +43,7 @@ import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.login.terms.LoginTermsFragment
 import im.vector.app.features.login.terms.LoginTermsFragmentArgument
+import im.vector.app.features.onboarding.AuthenticationDescription
 import im.vector.app.features.pin.UnlockedActivity
 import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.Stage
@@ -69,11 +70,11 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
     private val commonOption: (FragmentTransaction) -> Unit = { ft ->
         // Find the loginLogo on the current Fragment, this should not return null
         (topFragment?.view as? ViewGroup)
-            // Find findViewById does not work, I do not know why
-            // findViewById<View?>(R.id.loginLogo)
-            ?.children
-            ?.firstOrNull { it.id == R.id.loginLogo }
-            ?.let { ft.addSharedElement(it, ViewCompat.getTransitionName(it) ?: "") }
+                // Find findViewById does not work, I do not know why
+                // findViewById<View?>(R.id.loginLogo)
+                ?.children
+                ?.firstOrNull { it.id == R.id.loginLogo }
+                ?.let { ft.addSharedElement(it, ViewCompat.getTransitionName(it) ?: "") }
         ft.setCustomAnimations(enterAnim, exitAnim, popEnterAnim, popExitAnim)
     }
 
@@ -131,10 +132,10 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
             }
             is LoginViewEvents.OutdatedHomeserver -> {
                 MaterialAlertDialogBuilder(this)
-                    .setTitle(R.string.login_error_outdated_homeserver_title)
-                    .setMessage(R.string.login_error_outdated_homeserver_warning_content)
-                    .setPositiveButton(R.string.ok, null)
-                    .show()
+                        .setTitle(R.string.login_error_outdated_homeserver_title)
+                        .setMessage(R.string.login_error_outdated_homeserver_warning_content)
+                        .setPositiveButton(R.string.ok, null)
+                        .show()
                 Unit
             }
             is LoginViewEvents.OpenServerSelection ->
@@ -149,22 +150,22 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
                             // TODO Disabled because it provokes a flickering
                             // ft.setCustomAnimations(enterAnim, exitAnim, popEnterAnim, popExitAnim)
                         })
-            is LoginViewEvents.OnServerSelectionDone                      -> onServerSelectionDone(loginViewEvents)
-            is LoginViewEvents.OnSignModeSelected                         -> onSignModeSelected(loginViewEvents)
-            is LoginViewEvents.OnLoginFlowRetrieved                       ->
+            is LoginViewEvents.OnServerSelectionDone -> onServerSelectionDone(loginViewEvents)
+            is LoginViewEvents.OnSignModeSelected -> onSignModeSelected(loginViewEvents)
+            is LoginViewEvents.OnLoginFlowRetrieved ->
                 addFragmentToBackstack(
                         views.loginFragmentContainer,
                         LoginSignUpSignInSelectionFragment::class.java,
                         option = commonOption
                 )
-            is LoginViewEvents.OnWebLoginError                            -> onWebLoginError(loginViewEvents)
-            is LoginViewEvents.OnForgetPasswordClicked                    ->
+            is LoginViewEvents.OnWebLoginError -> onWebLoginError(loginViewEvents)
+            is LoginViewEvents.OnForgetPasswordClicked ->
                 addFragmentToBackstack(
                         views.loginFragmentContainer,
                         LoginResetPasswordFragment::class.java,
                         option = commonOption
                 )
-            is LoginViewEvents.OnResetPasswordSendThreePidDone            -> {
+            is LoginViewEvents.OnResetPasswordSendThreePidDone -> {
                 supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
                 addFragmentToBackstack(
                         views.loginFragmentContainer,
@@ -219,10 +220,8 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
                 // change the screen name
                 analyticsScreenName = MobileScreen.ScreenName.Register
             }
-            val intent = HomeActivity.newIntent(
-                this,
-                accountCreation = loginViewState.signMode == SignMode.SignUp
-            )
+            val authDescription = inferAuthDescription(loginViewState)
+            val intent = HomeActivity.newIntent(this, authenticationDescription = authDescription)
             startActivity(intent)
             finish()
             return
@@ -232,28 +231,35 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
         views.loginLoading.isVisible = loginViewState.isLoading()
     }
 
+    private fun inferAuthDescription(loginViewState: LoginViewState) = when (loginViewState.signMode) {
+        SignMode.Unknown -> null
+        SignMode.SignUp -> AuthenticationDescription.Register(type = AuthenticationDescription.AuthenticationType.Other)
+        SignMode.SignIn -> AuthenticationDescription.Login
+        SignMode.SignInWithMatrixId -> AuthenticationDescription.Login
+    }
+
     private fun onWebLoginError(onWebLoginError: LoginViewEvents.OnWebLoginError) {
         // Pop the backstack
         supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
         // And inform the user
         MaterialAlertDialogBuilder(this)
-            .setTitle(R.string.dialog_title_error)
-            .setMessage(getString(R.string.login_sso_error_message, onWebLoginError.description, onWebLoginError.errorCode))
-            .setPositiveButton(R.string.ok, null)
-            .show()
+                .setTitle(R.string.dialog_title_error)
+                .setMessage(getString(R.string.login_sso_error_message, onWebLoginError.description, onWebLoginError.errorCode))
+                .setPositiveButton(R.string.ok, null)
+                .show()
     }
 
     private fun onServerSelectionDone(loginViewEvents: LoginViewEvents.OnServerSelectionDone) {
         when (loginViewEvents.serverType) {
             ServerType.MatrixOrg -> Unit // In this case, we wait for the login flow
             ServerType.EMS,
-            ServerType.Other     -> addFragmentToBackstack(
+            ServerType.Other -> addFragmentToBackstack(
                     views.loginFragmentContainer,
                     LoginServerUrlFormFragment::class.java,
                     option = commonOption
             )
-            ServerType.Unknown   -> Unit /* Should not happen */
+            ServerType.Unknown -> Unit /* Should not happen */
         }
     }
 
@@ -270,7 +276,7 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
                     LoginMode.Unknown -> error("Developer error")
                     is LoginMode.Sso -> launchSsoFlow()
                     is LoginMode.SsoAndPassword,
-                    LoginMode.Password    -> addFragmentToBackstack(
+                    LoginMode.Password -> addFragmentToBackstack(
                             views.loginFragmentContainer,
                             LoginFragment::class.java,
                             tag = FRAGMENT_LOGIN_TAG,
@@ -290,9 +296,9 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
 
     private fun launchSsoFlow() = withState(loginViewModel) { state ->
         loginViewModel.getSsoUrl(
-            redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
-            deviceId = state.deviceId,
-            providerId = null,
+                redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
+                deviceId = state.deviceId,
+                providerId = null,
         )?.let { ssoUrl ->
             openUrlInChromeCustomTab(this, null, ssoUrl)
         }
@@ -305,8 +311,8 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
         super.onNewIntent(intent)
 
         intent?.data
-            ?.let { tryOrNull { it.getQueryParameter("loginToken") } }
-            ?.let { loginViewModel.handle(LoginAction.LoginWithToken(it)) }
+                ?.let { tryOrNull { it.getQueryParameter("loginToken") } }
+                ?.let { loginViewModel.handle(LoginAction.LoginWithToken(it)) }
     }
 
     override fun onBackPressed() {
@@ -372,28 +378,28 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
                     tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                     option = commonOption
             )
-            is Stage.Email     -> addFragmentToBackstack(
+            is Stage.Email -> addFragmentToBackstack(
                     views.loginFragmentContainer,
                     LoginGenericTextInputFormFragment::class.java,
                     LoginGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.SetEmail, stage.mandatory),
                     tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                     option = commonOption
             )
-            is Stage.Msisdn    -> addFragmentToBackstack(
+            is Stage.Msisdn -> addFragmentToBackstack(
                     views.loginFragmentContainer,
                     LoginGenericTextInputFormFragment::class.java,
                     LoginGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.SetMsisdn, stage.mandatory),
                     tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                     option = commonOption
             )
-            is Stage.Terms     -> addFragmentToBackstack(
+            is Stage.Terms -> addFragmentToBackstack(
                     views.loginFragmentContainer,
                     LoginTermsFragment::class.java,
                     LoginTermsFragmentArgument(stage.policies.toLocalizedLoginTerms(getString(R.string.resources_language))),
                     tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                     option = commonOption
             )
-            else               -> Unit // Should not happen
+            else -> Unit // Should not happen
         }
     }
 

@@ -47,6 +47,10 @@ class FlowTestObserver<T>(
         return this
     }
 
+    fun assertLatestValue(value: T) {
+        assertTrue(values.last() == value)
+    }
+
     fun assertValues(values: List<T>): FlowTestObserver<T> {
         assertEquals(values, this.values)
         return this

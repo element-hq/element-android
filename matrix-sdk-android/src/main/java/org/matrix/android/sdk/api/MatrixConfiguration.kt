@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.api
 
 import okhttp3.ConnectionSpec
+import okhttp3.Interceptor
 import org.matrix.android.sdk.api.crypto.MXCryptoConfig
 import java.net.Proxy
 
@@ -65,4 +66,8 @@ data class MatrixConfiguration(
          * Thread messages default enable/disabled value.
          */
         val threadMessagesEnabledDefault: Boolean = false,
+        /**
+         * List of network interceptors, they will be added when building an OkHttp client.
+         */
+        val networkInterceptors: List<Interceptor> = emptyList(),
 )

@@ -72,12 +72,6 @@
             android:title="@string/option_take_photo_video"
             tools:summary="@string/option_always_ask" />
 
-        <im.vector.app.core.preference.VectorSwitchPreference
-            android:defaultValue="false"
-            android:key="SETTINGS_PREF_ENABLE_LOCATION_SHARING"
-            android:summary="@string/settings_enable_location_sharing_summary"
-            android:title="@string/settings_enable_location_sharing" />
-
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
     <im.vector.app.core.preference.VectorPreferenceCategory android:title="@string/settings_category_timeline">
@@ -139,6 +133,12 @@
             android:key="SETTINGS_ENABLE_CHAT_EFFECTS"
             android:summary="@string/settings_chat_effects_description"
             android:title="@string/settings_chat_effects_title" />
+
+        <im.vector.app.core.preference.VectorSwitchPreference
+            android:defaultValue="false"
+            android:key="SETTINGS_AUTOPLAY_ANIMATED_IMAGES"
+            android:summary="@string/settings_autoplay_animated_images_summary"
+            android:title="@string/settings_autoplay_animated_images_title" />
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:key="SETTINGS_VIBRATE_ON_MENTION_KEY"

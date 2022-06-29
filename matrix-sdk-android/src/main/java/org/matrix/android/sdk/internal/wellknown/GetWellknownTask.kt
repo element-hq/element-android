@@ -75,7 +75,8 @@ internal class DefaultGetWellknownTask @Inject constructor(
      * - validate homeserver url and identity server url if provide in .well-known result
      * - return action and .well-known data
      *
-     * @param domain: homeserver domain, deduced from mx userId (ex: "matrix.org" from userId "@user:matrix.org")
+     * @param domain homeserver domain, deduced from mx userId (ex: "matrix.org" from userId "@user:matrix.org")
+     * @param client Http client to perform the request
      */
     private suspend fun findClientConfig(domain: String, client: OkHttpClient): WellknownResult {
         val wellKnownAPI = retrofitFactory.create(client, "https://dummy.org")
@@ -100,25 +101,25 @@ internal class DefaultGetWellknownTask @Inject constructor(
             }
         } catch (throwable: Throwable) {
             when (throwable) {
-                is UnrecognizedCertificateException        -> {
+                is UnrecognizedCertificateException -> {
                     throw Failure.UnrecognizedCertificateFailure(
                             "https://$domain",
                             throwable.fingerprint
                     )
                 }
-                is Failure.NetworkConnection               -> {
+                is Failure.NetworkConnection -> {
                     WellknownResult.Ignore
                 }
-                is Failure.OtherServerError                -> {
+                is Failure.OtherServerError -> {
                     when (throwable.httpCode) {
                         HttpsURLConnection.HTTP_NOT_FOUND -> WellknownResult.Ignore
-                        else                              -> WellknownResult.FailPrompt(null, null)
+                        else -> WellknownResult.FailPrompt(null, null)
                     }
                 }
                 is MalformedJsonException, is EOFException -> {
                     WellknownResult.FailPrompt(null, null)
                 }
-                else                                       -> {
+                else -> {
                     throw throwable
                 }
             }

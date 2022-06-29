@@ -22,11 +22,13 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.FixMethodOrder
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
+import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.getStateEvent
@@ -40,7 +42,7 @@ import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
 import org.matrix.android.sdk.api.session.space.JoinSpaceResult
-import org.matrix.android.sdk.common.CommonTestHelper
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSessionTest
 import org.matrix.android.sdk.common.SessionTestParams
 
 @RunWith(JUnit4::class)
@@ -49,8 +51,7 @@ import org.matrix.android.sdk.common.SessionTestParams
 class SpaceCreationTest : InstrumentedTest {
 
     @Test
-    fun createSimplePublicSpace() {
-        val commonTestHelper = CommonTestHelper(context())
+    fun createSimplePublicSpace() = runSessionTest(context()) { commonTestHelper ->
         val session = commonTestHelper.createAccount("Hubble", SessionTestParams(true))
         val roomName = "My Space"
         val topic = "A public space for test"
@@ -73,36 +74,44 @@ class SpaceCreationTest : InstrumentedTest {
         // assertEquals(topic, syncedSpace.asRoom().roomSummary()?., "Room topic should be set")
 
         assertNotNull("Space should be found by Id", syncedSpace)
-        val creationEvent = syncedSpace!!.asRoom().getStateEvent(EventType.STATE_ROOM_CREATE)
-        val createContent = creationEvent?.content.toModel<RoomCreateContent>()
+        val createContent = syncedSpace!!.asRoom()
+                .getStateEvent(EventType.STATE_ROOM_CREATE, QueryStringValue.IsEmpty)
+                ?.content
+                ?.toModel<RoomCreateContent>()
         assertEquals("Room type should be space", RoomType.SPACE, createContent?.type)
 
         var powerLevelsContent: PowerLevelsContent? = null
         commonTestHelper.waitWithLatch { latch ->
             commonTestHelper.retryPeriodicallyWithLatch(latch) {
-                val toModel = syncedSpace.asRoom().getStateEvent(EventType.STATE_ROOM_POWER_LEVELS)?.content.toModel<PowerLevelsContent>()
-                powerLevelsContent = toModel
-                toModel != null
+                powerLevelsContent = syncedSpace.asRoom()
+                        .getStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
+                        ?.content
+                        ?.toModel<PowerLevelsContent>()
+                powerLevelsContent != null
             }
         }
         assertEquals("Space-rooms should be created with a power level for events_default of 100", 100, powerLevelsContent?.eventsDefault)
 
-        val guestAccess = syncedSpace.asRoom().getStateEvent(EventType.STATE_ROOM_GUEST_ACCESS)?.content
-                ?.toModel<RoomGuestAccessContent>()?.guestAccess
+        val guestAccess = syncedSpace.asRoom()
+                .getStateEvent(EventType.STATE_ROOM_GUEST_ACCESS, QueryStringValue.IsEmpty)
+                ?.content
+                ?.toModel<RoomGuestAccessContent>()
+                ?.guestAccess
 
         assertEquals("Public space room should be peekable by guest", GuestAccess.CanJoin, guestAccess)
 
-        val historyVisibility = syncedSpace.asRoom().getStateEvent(EventType.STATE_ROOM_HISTORY_VISIBILITY)?.content
-                ?.toModel<RoomHistoryVisibilityContent>()?.historyVisibility
+        val historyVisibility = syncedSpace.asRoom()
+                .getStateEvent(EventType.STATE_ROOM_HISTORY_VISIBILITY, QueryStringValue.IsEmpty)
+                ?.content
+                ?.toModel<RoomHistoryVisibilityContent>()
+                ?.historyVisibility
 
         assertEquals("Public space room should be world readable", RoomHistoryVisibility.WORLD_READABLE, historyVisibility)
-
-        commonTestHelper.signOutAndClose(session)
     }
 
     @Test
-    fun testJoinSimplePublicSpace() {
-        val commonTestHelper = CommonTestHelper(context())
+    @Ignore
+    fun testJoinSimplePublicSpace() = runSessionTest(context()) { commonTestHelper ->
 
         val aliceSession = commonTestHelper.createAccount("alice", SessionTestParams(true))
         val bobSession = commonTestHelper.createAccount("bob", SessionTestParams(true))
@@ -134,8 +143,7 @@ class SpaceCreationTest : InstrumentedTest {
     }
 
     @Test
-    fun testSimplePublicSpaceWithChildren() {
-        val commonTestHelper = CommonTestHelper(context())
+    fun testSimplePublicSpaceWithChildren() = runSessionTest(context()) { commonTestHelper ->
         val aliceSession = commonTestHelper.createAccount("alice", SessionTestParams(true))
         val bobSession = commonTestHelper.createAccount("bob", SessionTestParams(true))
 
@@ -204,8 +212,5 @@ class SpaceCreationTest : InstrumentedTest {
 //        ).size
 //
 //        assertEquals("Unexpected number of joined children", 1, childCount)
-
-        commonTestHelper.signOutAndClose(aliceSession)
-        commonTestHelper.signOutAndClose(bobSession)
     }
 }

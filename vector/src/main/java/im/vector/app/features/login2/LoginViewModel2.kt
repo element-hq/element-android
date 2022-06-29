@@ -38,7 +38,7 @@ import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.ReAuthHelper
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.MatrixPatterns.getDomain
+import org.matrix.android.sdk.api.MatrixPatterns.getServerName
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
@@ -92,11 +92,11 @@ class LoginViewModel2 @AssistedInject constructor(
     private val matrixOrgUrl = stringProvider.getString(R.string.matrix_org_server_url).ensureTrailingSlash()
 
     val currentThreePid: String?
-        get() = registrationWizard?.currentThreePid
+        get() = registrationWizard?.getCurrentThreePid()
 
     // True when login and password has been sent with success to the homeserver
     val isRegistrationStarted: Boolean
-        get() = authenticationService.isRegistrationStarted
+        get() = authenticationService.isRegistrationStarted()
 
     private val registrationWizard: RegistrationWizard?
         get() = authenticationService.getRegistrationWizard()
@@ -115,26 +115,26 @@ class LoginViewModel2 @AssistedInject constructor(
 
     override fun handle(action: LoginAction2) {
         when (action) {
-            is LoginAction2.EnterServerUrl             -> handleEnterServerUrl()
-            is LoginAction2.ChooseAServerForSignin     -> handleChooseAServerForSignin()
-            is LoginAction2.UpdateSignMode             -> handleUpdateSignMode(action)
-            is LoginAction2.InitWith                   -> handleInitWith(action)
-            is LoginAction2.ChooseDefaultHomeServer    -> handle(LoginAction2.UpdateHomeServer(matrixOrgUrl))
-            is LoginAction2.UpdateHomeServer           -> handleUpdateHomeserver(action).also { lastAction = action }
-            is LoginAction2.SetUserName                -> handleSetUserName(action).also { lastAction = action }
-            is LoginAction2.SetUserPassword            -> handleSetUserPassword(action).also { lastAction = action }
-            is LoginAction2.LoginWith                  -> handleLoginWith(action).also { lastAction = action }
-            is LoginAction2.LoginWithToken             -> handleLoginWithToken(action)
-            is LoginAction2.WebLoginSuccess            -> handleWebLoginSuccess(action)
-            is LoginAction2.ResetPassword              -> handleResetPassword(action)
+            is LoginAction2.EnterServerUrl -> handleEnterServerUrl()
+            is LoginAction2.ChooseAServerForSignin -> handleChooseAServerForSignin()
+            is LoginAction2.UpdateSignMode -> handleUpdateSignMode(action)
+            is LoginAction2.InitWith -> handleInitWith(action)
+            is LoginAction2.ChooseDefaultHomeServer -> handle(LoginAction2.UpdateHomeServer(matrixOrgUrl))
+            is LoginAction2.UpdateHomeServer -> handleUpdateHomeserver(action).also { lastAction = action }
+            is LoginAction2.SetUserName -> handleSetUserName(action).also { lastAction = action }
+            is LoginAction2.SetUserPassword -> handleSetUserPassword(action).also { lastAction = action }
+            is LoginAction2.LoginWith -> handleLoginWith(action).also { lastAction = action }
+            is LoginAction2.LoginWithToken -> handleLoginWithToken(action)
+            is LoginAction2.WebLoginSuccess -> handleWebLoginSuccess(action)
+            is LoginAction2.ResetPassword -> handleResetPassword(action)
             is LoginAction2.ResetPasswordMailConfirmed -> handleResetPasswordMailConfirmed()
-            is LoginAction2.RegisterAction             -> handleRegisterAction(action)
-            is LoginAction2.ResetAction                -> handleResetAction(action)
+            is LoginAction2.RegisterAction -> handleRegisterAction(action)
+            is LoginAction2.ResetAction -> handleResetAction(action)
             is LoginAction2.SetupSsoForSessionRecovery -> handleSetupSsoForSessionRecovery(action)
-            is LoginAction2.UserAcceptCertificate      -> handleUserAcceptCertificate(action)
-            LoginAction2.ClearHomeServerHistory        -> handleClearHomeServerHistory()
-            is LoginAction2.PostViewEvent              -> _viewEvents.post(action.viewEvent)
-            is LoginAction2.Finish                     -> handleFinish()
+            is LoginAction2.UserAcceptCertificate -> handleUserAcceptCertificate(action)
+            LoginAction2.ClearHomeServerHistory -> handleClearHomeServerHistory()
+            is LoginAction2.PostViewEvent -> _viewEvents.post(action.viewEvent)
+            is LoginAction2.Finish -> handleFinish()
         }
     }
 
@@ -157,7 +157,7 @@ class LoginViewModel2 @AssistedInject constructor(
                         ?.let { it.copy(allowedFingerprints = it.allowedFingerprints + action.fingerprint) }
                         ?.let { getLoginFlow(it) }
             }
-            is LoginAction2.SetUserName      ->
+            is LoginAction2.SetUserName ->
                 handleSetUserNameForSignIn(
                         finalLastAction,
                         HomeServerConnectionConfig.Builder()
@@ -166,11 +166,11 @@ class LoginViewModel2 @AssistedInject constructor(
                                 .withAllowedFingerPrints(listOf(action.fingerprint))
                                 .build()
                 )
-            is LoginAction2.SetUserPassword  ->
+            is LoginAction2.SetUserPassword ->
                 handleSetUserPassword(finalLastAction)
-            is LoginAction2.LoginWith        ->
+            is LoginAction2.LoginWith ->
                 handleLoginWith(finalLastAction)
-            else                             -> Unit
+            else -> Unit
         }
     }
 
@@ -220,14 +220,14 @@ class LoginViewModel2 @AssistedInject constructor(
 
     private fun handleRegisterAction(action: LoginAction2.RegisterAction) {
         when (action) {
-            is LoginAction2.CaptchaDone                  -> handleCaptchaDone(action)
-            is LoginAction2.AcceptTerms                  -> handleAcceptTerms()
-            is LoginAction2.RegisterDummy                -> handleRegisterDummy()
-            is LoginAction2.AddThreePid                  -> handleAddThreePid(action)
-            is LoginAction2.SendAgainThreePid            -> handleSendAgainThreePid()
-            is LoginAction2.ValidateThreePid             -> handleValidateThreePid(action)
+            is LoginAction2.CaptchaDone -> handleCaptchaDone(action)
+            is LoginAction2.AcceptTerms -> handleAcceptTerms()
+            is LoginAction2.RegisterDummy -> handleRegisterDummy()
+            is LoginAction2.AddThreePid -> handleAddThreePid(action)
+            is LoginAction2.SendAgainThreePid -> handleSendAgainThreePid()
+            is LoginAction2.ValidateThreePid -> handleValidateThreePid(action)
             is LoginAction2.CheckIfEmailHasBeenValidated -> handleCheckIfEmailHasBeenValidated(action)
-            is LoginAction2.StopEmailValidationCheck     -> handleStopEmailValidationCheck()
+            is LoginAction2.StopEmailValidationCheck -> handleStopEmailValidationCheck()
         }
     }
 
@@ -248,8 +248,10 @@ class LoginViewModel2 @AssistedInject constructor(
         }
     }
 
-    private fun executeRegistrationStep(withLoading: Boolean = true,
-                                        block: suspend (RegistrationWizard) -> RegistrationResult): Job {
+    private fun executeRegistrationStep(
+            withLoading: Boolean = true,
+            block: suspend (RegistrationWizard) -> RegistrationResult
+    ): Job {
         if (withLoading) {
             setState { copy(isLoading = true) }
         }
@@ -264,7 +266,7 @@ class LoginViewModel2 @AssistedInject constructor(
             }
                     ?.let { data ->
                         when (data) {
-                            is RegistrationResult.Success      -> onSessionCreated(data.session)
+                            is RegistrationResult.Success -> onSessionCreated(data.session)
                             is RegistrationResult.FlowResponse -> onFlowResponse(data.flowResult)
                         }
                     }
@@ -321,7 +323,7 @@ class LoginViewModel2 @AssistedInject constructor(
             val available = safeRegistrationWizard.registrationAvailable(action.username)
 
             val event = when (available) {
-                RegistrationAvailability.Available       -> {
+                RegistrationAvailability.Available -> {
                     // Ask for a password
                     LoginViewEvents2.OpenSignupPasswordScreen
                 }
@@ -358,7 +360,7 @@ class LoginViewModel2 @AssistedInject constructor(
                     }
                 }
             }
-            LoginAction2.ResetSignMode      -> {
+            LoginAction2.ResetSignMode -> {
                 setState {
                     copy(
                             signMode = SignMode2.Unknown,
@@ -366,7 +368,7 @@ class LoginViewModel2 @AssistedInject constructor(
                     )
                 }
             }
-            LoginAction2.ResetSignin        -> {
+            LoginAction2.ResetSignin -> {
                 viewModelScope.launch {
                     authenticationService.cancelPendingLoginOrRegistration()
                     setState {
@@ -375,7 +377,7 @@ class LoginViewModel2 @AssistedInject constructor(
                 }
                 _viewEvents.post(LoginViewEvents2.CancelRegistration)
             }
-            LoginAction2.ResetSignup        -> {
+            LoginAction2.ResetSignup -> {
                 viewModelScope.launch {
                     authenticationService.cancelPendingLoginOrRegistration()
                     setState {
@@ -390,7 +392,8 @@ class LoginViewModel2 @AssistedInject constructor(
             LoginAction2.ResetResetPassword -> {
                 setState {
                     copy(
-                            resetPasswordEmail = null
+                            resetPasswordEmail = null,
+                            resetPasswordNewPassword = null
                     )
                 }
             }
@@ -405,8 +408,8 @@ class LoginViewModel2 @AssistedInject constructor(
         }
 
         when (action.signMode) {
-            SignMode2.SignUp  -> _viewEvents.post(LoginViewEvents2.OpenServerSelection)
-            SignMode2.SignIn  -> _viewEvents.post(LoginViewEvents2.OpenSignInEnterIdentifierScreen)
+            SignMode2.SignUp -> _viewEvents.post(LoginViewEvents2.OpenServerSelection)
+            SignMode2.SignIn -> _viewEvents.post(LoginViewEvents2.OpenSignInEnterIdentifierScreen)
             SignMode2.Unknown -> Unit
         }
     }
@@ -420,7 +423,7 @@ class LoginViewModel2 @AssistedInject constructor(
 
         // If there is a pending email validation continue on this step
         try {
-            if (registrationWizard?.isRegistrationStarted == true) {
+            if (registrationWizard?.isRegistrationStarted() == true) {
                 currentThreePid?.let {
                     handle(LoginAction2.PostViewEvent(LoginViewEvents2.OnSendEmailSuccess(it)))
                 }
@@ -441,7 +444,7 @@ class LoginViewModel2 @AssistedInject constructor(
 
             currentJob = viewModelScope.launch {
                 try {
-                    safeLoginWizard.resetPassword(action.email, action.newPassword)
+                    safeLoginWizard.resetPassword(action.email)
                 } catch (failure: Throwable) {
                     _viewEvents.post(LoginViewEvents2.Failure(failure))
                     setState { copy(isLoading = false) }
@@ -451,7 +454,8 @@ class LoginViewModel2 @AssistedInject constructor(
                 setState {
                     copy(
                             isLoading = false,
-                            resetPasswordEmail = action.email
+                            resetPasswordEmail = action.email,
+                            resetPasswordNewPassword = action.newPassword
                     )
                 }
 
@@ -470,7 +474,8 @@ class LoginViewModel2 @AssistedInject constructor(
 
             currentJob = viewModelScope.launch {
                 try {
-                    safeLoginWizard.resetPasswordMailConfirmed()
+                    val state = awaitState()
+                    safeLoginWizard.resetPasswordMailConfirmed(state.resetPasswordNewPassword!!)
                 } catch (failure: Throwable) {
                     _viewEvents.post(LoginViewEvents2.Failure(failure))
                     setState { copy(isLoading = false) }
@@ -479,7 +484,8 @@ class LoginViewModel2 @AssistedInject constructor(
                 setState {
                     copy(
                             isLoading = false,
-                            resetPasswordEmail = null
+                            resetPasswordEmail = null,
+                            resetPasswordNewPassword = null
                     )
                 }
 
@@ -497,16 +503,16 @@ class LoginViewModel2 @AssistedInject constructor(
 
         when (state.signMode) {
             SignMode2.Unknown -> error("Developer error, invalid sign mode")
-            SignMode2.SignIn  -> handleSetUserNameForSignIn(action, null)
-            SignMode2.SignUp  -> handleSetUserNameForSignUp(action)
+            SignMode2.SignIn -> handleSetUserNameForSignIn(action, null)
+            SignMode2.SignUp -> handleSetUserNameForSignUp(action)
         }
     }
 
     private fun handleSetUserPassword(action: LoginAction2.SetUserPassword) = withState { state ->
         when (state.signMode) {
             SignMode2.Unknown -> error("Developer error, invalid sign mode")
-            SignMode2.SignIn  -> handleSignInWithPassword(action)
-            SignMode2.SignUp  -> handleRegisterWithPassword(action)
+            SignMode2.SignIn -> handleSignInWithPassword(action)
+            SignMode2.SignUp -> handleRegisterWithPassword(action)
         }
     }
 
@@ -575,7 +581,7 @@ class LoginViewModel2 @AssistedInject constructor(
                 return@launch
             }
             when (data) {
-                is WellknownResult.Prompt     ->
+                is WellknownResult.Prompt ->
                     onWellknownSuccess(action, data, homeServerConnectionConfig)
                 is WellknownResult.FailPrompt ->
                     // Relax on IS discovery if homeserver is valid
@@ -584,7 +590,7 @@ class LoginViewModel2 @AssistedInject constructor(
                     } else {
                         onWellKnownError()
                     }
-                else                          -> {
+                else -> {
                     onWellKnownError()
                 }
             }
@@ -596,9 +602,11 @@ class LoginViewModel2 @AssistedInject constructor(
         setState { copy(isLoading = false) }
     }
 
-    private suspend fun onWellknownSuccess(action: LoginAction2.SetUserName,
-                                           wellKnownPrompt: WellknownResult.Prompt,
-                                           homeServerConnectionConfig: HomeServerConnectionConfig?) {
+    private suspend fun onWellknownSuccess(
+            action: LoginAction2.SetUserName,
+            wellKnownPrompt: WellknownResult.Prompt,
+            homeServerConnectionConfig: HomeServerConnectionConfig?
+    ) {
         val alteredHomeServerConnectionConfig = homeServerConnectionConfig
                 ?.copy(
                         homeServerUriBase = Uri.parse(wellKnownPrompt.homeServerUrl),
@@ -620,9 +628,9 @@ class LoginViewModel2 @AssistedInject constructor(
         val loginMode = when {
             data.supportedLoginTypes.contains(LoginFlowTypes.SSO) &&
                     data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
-            data.supportedLoginTypes.contains(LoginFlowTypes.SSO)              -> LoginMode.Sso(data.ssoIdentityProviders)
-            data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)         -> LoginMode.Password
-            else                                                               -> LoginMode.Unsupported
+            data.supportedLoginTypes.contains(LoginFlowTypes.SSO) -> LoginMode.Sso(data.ssoIdentityProviders)
+            data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.Password
+            else -> LoginMode.Unsupported
         }
 
         val viewEvent = when (loginMode) {
@@ -632,15 +640,15 @@ class LoginViewModel2 @AssistedInject constructor(
                 // We can navigate to the password screen
                 LoginViewEvents2.OpenSigninPasswordScreen
             }
-            is LoginMode.Sso            -> {
+            is LoginMode.Sso -> {
                 LoginViewEvents2.OpenSsoOnlyScreen
             }
-            LoginMode.Unsupported       -> LoginViewEvents2.OnLoginModeNotSupported(data.supportedLoginTypes.toList())
-            LoginMode.Unknown           -> null
+            LoginMode.Unsupported -> LoginViewEvents2.OnLoginModeNotSupported(data.supportedLoginTypes.toList())
+            LoginMode.Unknown -> null
         }
         viewEvent?.let { _viewEvents.post(it) }
 
-        val urlFromUser = action.username.getDomain()
+        val urlFromUser = action.username.getServerName()
         setState {
             copy(
                     isLoading = false,
@@ -747,9 +755,9 @@ class LoginViewModel2 @AssistedInject constructor(
             val loginMode = when {
                 data.supportedLoginTypes.contains(LoginFlowTypes.SSO) &&
                         data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
-                data.supportedLoginTypes.contains(LoginFlowTypes.SSO)              -> LoginMode.Sso(data.ssoIdentityProviders)
-                data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)         -> LoginMode.Password
-                else                                                               -> LoginMode.Unsupported
+                data.supportedLoginTypes.contains(LoginFlowTypes.SSO) -> LoginMode.Sso(data.ssoIdentityProviders)
+                data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.Password
+                else -> LoginMode.Unsupported
             }
 
             val viewEvent = when (loginMode) {
@@ -757,7 +765,7 @@ class LoginViewModel2 @AssistedInject constructor(
                 is LoginMode.SsoAndPassword -> {
                     when (state.signMode) {
                         SignMode2.Unknown -> null
-                        SignMode2.SignUp  -> {
+                        SignMode2.SignUp -> {
                             // Check that registration is possible on this server
                             try {
                                 registrationWizard?.getRegistrationFlow()
@@ -779,14 +787,14 @@ class LoginViewModel2 @AssistedInject constructor(
                                 LoginViewEvents2.Failure(throwable)
                             }
                         }
-                        SignMode2.SignIn  -> LoginViewEvents2.OpenSignInWithAnythingScreen
+                        SignMode2.SignIn -> LoginViewEvents2.OpenSignInWithAnythingScreen
                     }
                 }
-                is LoginMode.Sso            -> {
+                is LoginMode.Sso -> {
                     LoginViewEvents2.OpenSsoOnlyScreen
                 }
-                LoginMode.Unsupported       -> LoginViewEvents2.OnLoginModeNotSupported(data.supportedLoginTypes.toList())
-                LoginMode.Unknown           -> null
+                LoginMode.Unsupported -> LoginViewEvents2.OnLoginModeNotSupported(data.supportedLoginTypes.toList())
+                LoginMode.Unknown -> null
             }
             viewEvent?.let { _viewEvents.post(it) }
 

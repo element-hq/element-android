@@ -26,8 +26,9 @@ import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.util.MatrixItem
 
-class IncomingCallAlert(uid: String,
-                        override val shouldBeDisplayedIn: ((Activity) -> Boolean) = { true }
+class IncomingCallAlert(
+        uid: String,
+        override val shouldBeDisplayedIn: ((Activity) -> Boolean) = { true }
 ) : DefaultVectorAlert(uid, "", "", 0, shouldBeDisplayedIn) {
 
     override val priority = PopupAlertManager.INCOMING_CALL_PRIORITY
@@ -36,11 +37,13 @@ class IncomingCallAlert(uid: String,
     override val dismissOnClick: Boolean = false
     override val isLight: Boolean = true
 
-    class ViewBinder(private val matrixItem: MatrixItem?,
-                     private val avatarRenderer: AvatarRenderer,
-                     private val isVideoCall: Boolean,
-                     private val onAccept: () -> Unit,
-                     private val onReject: () -> Unit) : VectorAlert.ViewBinder {
+    class ViewBinder(
+            private val matrixItem: MatrixItem?,
+            private val avatarRenderer: AvatarRenderer,
+            private val isVideoCall: Boolean,
+            private val onAccept: () -> Unit,
+            private val onReject: () -> Unit
+    ) : VectorAlert.ViewBinder {
 
         override fun bind(view: View) {
             val views = AlerterIncomingCallLayoutBinding.bind(view)

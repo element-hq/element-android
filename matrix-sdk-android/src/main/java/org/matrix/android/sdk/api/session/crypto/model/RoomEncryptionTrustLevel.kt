@@ -20,15 +20,23 @@ package org.matrix.android.sdk.api.session.crypto.model
  * RoomEncryptionTrustLevel represents the trust level in an encrypted room.
  */
 enum class RoomEncryptionTrustLevel {
-    // No one in the room has been verified -> Black shield
+    /**
+     * No one in the room has been verified -> Black shield.
+     */
     Default,
 
-    // There are one or more device un-verified -> the app should display a red shield
+    /**
+     * There are one or more device un-verified -> the app should display a red shield.
+     */
     Warning,
 
-    // All devices in the room are verified -> the app should display a green shield
+    /**
+     * All devices in the room are verified -> the app should display a green shield.
+     */
     Trusted,
 
-    // e2e is active but with an unsupported algorithm
+    /**
+     * e2e is active but with an unsupported algorithm.
+     */
     E2EWithUnsupportedAlgorithm
 }

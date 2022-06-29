@@ -103,17 +103,17 @@ class CallControlsView @JvmOverloads constructor(
             CallState.Idle,
             is CallState.Connected,
             is CallState.Dialing,
-            is CallState.Answering    -> {
+            is CallState.Answering -> {
                 views.ringingControls.isVisible = false
                 views.connectedControls.isVisible = true
                 views.videoToggleIcon.isVisible = state.isVideoCall
                 views.moreIcon.isVisible = callState is CallState.Connected && callState.iceConnectionState == MxPeerConnectionState.CONNECTED
             }
-            is CallState.Ended        -> {
+            is CallState.Ended -> {
                 views.ringingControls.isVisible = false
                 views.connectedControls.isVisible = false
             }
-            null                      -> Unit
+            null -> Unit
         }
     }
 

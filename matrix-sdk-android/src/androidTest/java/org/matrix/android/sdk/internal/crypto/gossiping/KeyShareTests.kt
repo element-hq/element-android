@@ -21,11 +21,12 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import junit.framework.TestCase.assertNotNull
 import junit.framework.TestCase.assertTrue
-import junit.framework.TestCase.fail
 import org.amshove.kluent.internal.assertEquals
 import org.junit.Assert
 import org.junit.Assert.assertNull
 import org.junit.FixMethodOrder
+import org.junit.Ignore
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
@@ -41,20 +42,22 @@ import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
-import org.matrix.android.sdk.common.CommonTestHelper
-import org.matrix.android.sdk.common.CryptoTestHelper
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
+import org.matrix.android.sdk.common.RetryTestRule
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
+import org.matrix.android.sdk.mustFail
 
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
 @LargeTest
+@Ignore
 class KeyShareTests : InstrumentedTest {
 
+    @get:Rule val rule = RetryTestRule(3)
+
     @Test
-    fun test_DoNotSelfShareIfNotTrusted() {
-        val commonTestHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
+    fun test_DoNotSelfShareIfNotTrusted() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
 
         val aliceSession = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(true))
         Log.v("TEST", "=======> AliceSession 1 is ${aliceSession.sessionParams.deviceId}")
@@ -91,12 +94,10 @@ class KeyShareTests : InstrumentedTest {
         assertNotNull(receivedEvent)
         assert(receivedEvent!!.isEncrypted())
 
-        try {
-            commonTestHelper.runBlockingTest {
+        commonTestHelper.runBlockingTest {
+            mustFail {
                 aliceSession2.cryptoService().decryptEvent(receivedEvent.root, "foo")
             }
-            fail("should fail")
-        } catch (failure: Throwable) {
         }
 
         val outgoingRequestsBefore = aliceSession2.cryptoService().getOutgoingRoomKeyRequests()
@@ -164,12 +165,10 @@ class KeyShareTests : InstrumentedTest {
             }
         }
 
-        try {
-            commonTestHelper.runBlockingTest {
+        commonTestHelper.runBlockingTest {
+            mustFail {
                 aliceSession2.cryptoService().decryptEvent(receivedEvent.root, "foo")
             }
-            fail("should fail")
-        } catch (failure: Throwable) {
         }
 
         // Mark the device as trusted
@@ -194,9 +193,7 @@ class KeyShareTests : InstrumentedTest {
      * if the key was originally shared with him
      */
     @Test
-    fun test_reShareIfWasIntendedToBeShared() {
-        val commonTestHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
+    fun test_reShareIfWasIntendedToBeShared() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
 
         val testData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true)
         val aliceSession = testData.firstSession
@@ -227,9 +224,7 @@ class KeyShareTests : InstrumentedTest {
      * if the key was originally shared with him
      */
     @Test
-    fun test_reShareToUnverifiedIfWasIntendedToBeShared() {
-        val commonTestHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
+    fun test_reShareToUnverifiedIfWasIntendedToBeShared() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
 
         val testData = cryptoTestHelper.doE2ETestWithAliceInARoom(true)
         val aliceSession = testData.firstSession
@@ -266,9 +261,7 @@ class KeyShareTests : InstrumentedTest {
      * Tests that keys reshared with own verified session are done from the earliest known index
      */
     @Test
-    fun test_reShareFromTheEarliestKnownIndexWithOwnVerifiedSession() {
-        val commonTestHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
+    fun test_reShareFromTheEarliestKnownIndexWithOwnVerifiedSession() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
 
         val testData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true)
         val aliceSession = testData.firstSession
@@ -388,10 +381,7 @@ class KeyShareTests : InstrumentedTest {
      * Tests that we don't cancel a request to early on first forward if the index is not good enough
      */
     @Test
-    fun test_dontCancelToEarly() {
-        val commonTestHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
-
+    fun test_dontCancelToEarly() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
         val testData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true)
         val aliceSession = testData.firstSession
         val bobSession = testData.secondSession!!
@@ -434,7 +424,7 @@ class KeyShareTests : InstrumentedTest {
 
         // /!\ Stop initial alice session syncing so that it can't reply
         aliceSession.cryptoService().enableKeyGossiping(false)
-        aliceSession.stopSync()
+        aliceSession.syncService().stopSync()
 
         // Let's now try to request
         aliceNewSession.cryptoService().reRequestRoomKeyForEvent(sentEvents.first().root)
@@ -442,7 +432,7 @@ class KeyShareTests : InstrumentedTest {
         // Should get a reply from bob and not from alice
         commonTestHelper.waitWithLatch { latch ->
             commonTestHelper.retryPeriodicallyWithLatch(latch) {
-              //  Log.d("#TEST", "outgoing key requests :${aliceNewSession.cryptoService().getOutgoingRoomKeyRequests().joinToString { it.sessionId ?: "?" }}")
+                //  Log.d("#TEST", "outgoing key requests :${aliceNewSession.cryptoService().getOutgoingRoomKeyRequests().joinToString { it.sessionId ?: "?" }}")
                 val outgoing = aliceNewSession.cryptoService().getOutgoingRoomKeyRequests().firstOrNull { it.sessionId == sentEventMegolmSession }
                 val bobReply = outgoing?.results?.firstOrNull { it.userId == bobSession.myUserId }
                 val result = bobReply?.result
@@ -457,7 +447,7 @@ class KeyShareTests : InstrumentedTest {
 
         // let's wake up alice
         aliceSession.cryptoService().enableKeyGossiping(true)
-        aliceSession.startSync(true)
+        aliceSession.syncService().startSync(true)
 
         // We should now get a reply from first session
         commonTestHelper.waitWithLatch { latch ->

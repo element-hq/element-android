@@ -84,9 +84,11 @@ internal class MXMegolmEncryption(
     private var sessionRotationPeriodMsgs: Int = 100
     private var sessionRotationPeriodMs: Int = 7 * 24 * 3600 * 1000
 
-    override suspend fun encryptEventContent(eventContent: Content,
-                                             eventType: String,
-                                             userIds: List<String>): Content {
+    override suspend fun encryptEventContent(
+            eventContent: Content,
+            eventType: String,
+            userIds: List<String>
+    ): Content {
         val ts = clock.epochMillis()
         Timber.tag(loggerTag.value).v("encryptEventContent : getDevicesInRoom")
         val devices = getDevicesInRoom(userIds)
@@ -198,11 +200,13 @@ internal class MXMegolmEncryption(
     /**
      * Share the device key to a list of users.
      *
-     * @param session        the session info
+     * @param session the session info
      * @param devicesByUsers the devices map
      */
-    private suspend fun shareKey(session: MXOutboundSessionInfo,
-                                 devicesByUsers: Map<String, List<CryptoDeviceInfo>>) {
+    private suspend fun shareKey(
+            session: MXOutboundSessionInfo,
+            devicesByUsers: Map<String, List<CryptoDeviceInfo>>
+    ) {
         // nothing to send, the task is done
         if (devicesByUsers.isEmpty()) {
             Timber.tag(loggerTag.value).v("shareKey() : nothing more to do")
@@ -227,11 +231,13 @@ internal class MXMegolmEncryption(
     /**
      * Share the device keys of a an user.
      *
-     * @param session       the session info
+     * @param session the session info
      * @param devicesByUser the devices map
      */
-    private suspend fun shareUserDevicesKey(session: MXOutboundSessionInfo,
-                                            devicesByUser: Map<String, List<CryptoDeviceInfo>>) {
+    private suspend fun shareUserDevicesKey(
+            session: MXOutboundSessionInfo,
+            devicesByUser: Map<String, List<CryptoDeviceInfo>>
+    ) {
         val sessionKey = olmDevice.getSessionKey(session.sessionId)
         val chainIndex = olmDevice.getMessageIndex(session.sessionId)
 
@@ -321,10 +327,12 @@ internal class MXMegolmEncryption(
         }
     }
 
-    private suspend fun notifyKeyWithHeld(targets: List<UserDevice>,
-                                          sessionId: String,
-                                          senderKey: String?,
-                                          code: WithHeldCode) {
+    private suspend fun notifyKeyWithHeld(
+            targets: List<UserDevice>,
+            sessionId: String,
+            senderKey: String?,
+            code: WithHeldCode
+    ) {
         Timber.tag(loggerTag.value).d(
                 "notifyKeyWithHeld() :sending withheld for session:$sessionId and code $code to" +
                         " ${targets.joinToString { "${it.userId}|${it.deviceId}" }}"
@@ -387,7 +395,7 @@ internal class MXMegolmEncryption(
      * Get the list of devices which can encrypt data to.
      * This method must be called in getDecryptingThreadHandler() thread.
      *
-     * @param userIds  the user ids whose devices must be checked.
+     * @param userIds the user ids whose devices must be checked.
      */
     private suspend fun getDevicesInRoom(userIds: List<String>): DeviceInRoomInfo {
         // We are happy to use a cached version here: we assume that if we already
@@ -435,10 +443,12 @@ internal class MXMegolmEncryption(
         }
     }
 
-    override suspend fun reshareKey(groupSessionId: String,
-                                    userId: String,
-                                    deviceId: String,
-                                    senderKey: String): Boolean {
+    override suspend fun reshareKey(
+            groupSessionId: String,
+            userId: String,
+            deviceId: String,
+            senderKey: String
+    ): Boolean {
         Timber.tag(loggerTag.value).i("process reshareKey for $groupSessionId to $userId:$deviceId")
         val deviceInfo = cryptoStore.getUserDevice(userId, deviceId) ?: return false
                 .also { Timber.tag(loggerTag.value).w("reshareKey: Device not found") }

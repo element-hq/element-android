@@ -62,10 +62,12 @@ internal class FileUploader @Inject constructor(
     private val uploadUrl = contentUrlResolver.uploadUrl
     private val responseAdapter = moshi.adapter(ContentUploadResponse::class.java)
 
-    suspend fun uploadFile(file: File,
-                           filename: String?,
-                           mimeType: String?,
-                           progressListener: ProgressRequestBody.Listener? = null): ContentUploadResponse {
+    suspend fun uploadFile(
+            file: File,
+            filename: String?,
+            mimeType: String?,
+            progressListener: ProgressRequestBody.Listener? = null
+    ): ContentUploadResponse {
         // Check size limit
         val maxUploadFileSize = homeServerCapabilitiesService.getHomeServerCapabilities().maxUploadFileSize
 
@@ -99,18 +101,22 @@ internal class FileUploader @Inject constructor(
         return upload(uploadBody, filename, progressListener)
     }
 
-    suspend fun uploadByteArray(byteArray: ByteArray,
-                                filename: String?,
-                                mimeType: String?,
-                                progressListener: ProgressRequestBody.Listener? = null): ContentUploadResponse {
+    suspend fun uploadByteArray(
+            byteArray: ByteArray,
+            filename: String?,
+            mimeType: String?,
+            progressListener: ProgressRequestBody.Listener? = null
+    ): ContentUploadResponse {
         val uploadBody = byteArray.toRequestBody(mimeType?.toMediaTypeOrNull())
         return upload(uploadBody, filename, progressListener)
     }
 
-    suspend fun uploadFromUri(uri: Uri,
-                              filename: String?,
-                              mimeType: String?,
-                              progressListener: ProgressRequestBody.Listener? = null): ContentUploadResponse {
+    suspend fun uploadFromUri(
+            uri: Uri,
+            filename: String?,
+            mimeType: String?,
+            progressListener: ProgressRequestBody.Listener? = null
+    ): ContentUploadResponse {
         val workingFile = context.copyUriToTempFile(uri)
         return uploadFile(workingFile, filename, mimeType, progressListener).also {
             tryOrNull { workingFile.delete() }
@@ -128,9 +134,11 @@ internal class FileUploader @Inject constructor(
         }
     }
 
-    private suspend fun upload(uploadBody: RequestBody,
-                               filename: String?,
-                               progressListener: ProgressRequestBody.Listener?): ContentUploadResponse {
+    private suspend fun upload(
+            uploadBody: RequestBody,
+            filename: String?,
+            progressListener: ProgressRequestBody.Listener?
+    ): ContentUploadResponse {
         val urlBuilder = uploadUrl.toHttpUrlOrNull()?.newBuilder() ?: throw RuntimeException()
 
         val httpUrl = urlBuilder

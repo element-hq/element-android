@@ -54,11 +54,38 @@ import java.util.concurrent.TimeUnit
  * This class exposes methods to be used in common cases
  * Registration, login, Sync, Sending messages...
  */
-class CommonTestHelper(context: Context) {
+class CommonTestHelper private constructor(context: Context) {
+
+    companion object {
+        internal fun runSessionTest(context: Context, autoSignoutOnClose: Boolean = true, block: (CommonTestHelper) -> Unit) {
+            val testHelper = CommonTestHelper(context)
+            return try {
+                block(testHelper)
+            } finally {
+                if (autoSignoutOnClose) {
+                    testHelper.cleanUpOpenedSessions()
+                }
+            }
+        }
+
+        internal fun runCryptoTest(context: Context, autoSignoutOnClose: Boolean = true, block: (CryptoTestHelper, CommonTestHelper) -> Unit) {
+            val testHelper = CommonTestHelper(context)
+            val cryptoTestHelper = CryptoTestHelper(testHelper)
+            return try {
+                block(cryptoTestHelper, testHelper)
+            } finally {
+                if (autoSignoutOnClose) {
+                    testHelper.cleanUpOpenedSessions()
+                }
+            }
+        }
+    }
 
     internal val matrix: TestMatrix
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     private var accountNumber = 0
+
+    private val trackedSessions = mutableListOf<Session>()
 
     fun getTestInterceptor(session: Session): MockOkHttpInterceptor? = TestModule.interceptorForSession(session.sessionId) as? MockOkHttpInterceptor
 
@@ -84,6 +111,15 @@ class CommonTestHelper(context: Context) {
         return logIntoAccount(userId, TestConstants.PASSWORD, testParams)
     }
 
+    fun cleanUpOpenedSessions() {
+        trackedSessions.forEach {
+            runBlockingTest {
+                it.signOutService().signOut(true)
+            }
+        }
+        trackedSessions.clear()
+    }
+
     /**
      * Create a homeserver configuration, with Http connection allowed for test
      */
@@ -96,16 +132,16 @@ class CommonTestHelper(context: Context) {
     /**
      * This methods init the event stream and check for initial sync
      *
-     * @param session    the session to sync
+     * @param session the session to sync
      */
     fun syncSession(session: Session, timeout: Long = TestConstants.timeOutMillis * 10) {
         val lock = CountDownLatch(1)
         coroutineScope.launch {
-            session.startSync(true)
-            val syncLiveData = session.getSyncStateLive()
+            session.syncService().startSync(true)
+            val syncLiveData = session.syncService().getSyncStateLive()
             val syncObserver = object : Observer<SyncState> {
                 override fun onChanged(t: SyncState?) {
-                    if (session.hasAlreadySynced()) {
+                    if (session.syncService().hasAlreadySynced()) {
                         lock.countDown()
                         syncLiveData.removeObserver(this)
                     }
@@ -119,15 +155,15 @@ class CommonTestHelper(context: Context) {
     /**
      * This methods clear the cache and waits for initialSync
      *
-     * @param session    the session to sync
+     * @param session the session to sync
      */
     fun clearCacheAndSync(session: Session, timeout: Long = TestConstants.timeOutMillis) {
         waitWithLatch(timeout) { latch ->
             session.clearCache()
-            val syncLiveData = session.getSyncStateLive()
+            val syncLiveData = session.syncService().getSyncStateLive()
             val syncObserver = object : Observer<SyncState> {
                 override fun onChanged(t: SyncState?) {
-                    if (session.hasAlreadySynced()) {
+                    if (session.syncService().hasAlreadySynced()) {
                         Timber.v("Clear cache and synced")
                         syncLiveData.removeObserver(this)
                         latch.countDown()
@@ -135,15 +171,15 @@ class CommonTestHelper(context: Context) {
                 }
             }
             syncLiveData.observeForever(syncObserver)
-            session.startSync(true)
+            session.syncService().startSync(true)
         }
     }
 
     /**
      * Sends text messages in a room
      *
-     * @param room         the room where to send the messages
-     * @param message      the message to send
+     * @param room the room where to send the messages
+     * @param message the message to send
      * @param nbOfMessages the number of time the message will be sent
      */
     fun sendTextMessage(room: Room, message: String, nbOfMessages: Int, timeout: Long = TestConstants.timeOutMillis): List<TimelineEvent> {
@@ -207,8 +243,8 @@ class CommonTestHelper(context: Context) {
 
     /**
      * Reply in a thread
-     * @param room         the room where to send the messages
-     * @param message      the message to send
+     * @param room the room where to send the messages
+     * @param message the message to send
      * @param numberOfMessages the number of time the message will be sent
      */
     fun replyInThreadMessage(
@@ -216,7 +252,8 @@ class CommonTestHelper(context: Context) {
             message: String,
             numberOfMessages: Int,
             rootThreadEventId: String,
-            timeout: Long = TestConstants.timeOutMillis): List<TimelineEvent> {
+            timeout: Long = TestConstants.timeOutMillis
+    ): List<TimelineEvent> {
         val timeline = room.timelineService().createTimeline(null, TimelineSettings(10))
         timeline.start()
         val sentEvents = sendTextMessagesBatched(timeline, room, message, numberOfMessages, timeout, rootThreadEventId)
@@ -232,48 +269,58 @@ class CommonTestHelper(context: Context) {
      * Creates a unique account
      *
      * @param userNamePrefix the user name prefix
-     * @param password       the password
-     * @param testParams     test params about the session
+     * @param password the password
+     * @param testParams test params about the session
      * @return the session associated with the newly created account
      */
-    private fun createAccount(userNamePrefix: String,
-                              password: String,
-                              testParams: SessionTestParams): Session {
+    private fun createAccount(
+            userNamePrefix: String,
+            password: String,
+            testParams: SessionTestParams
+    ): Session {
         val session = createAccountAndSync(
                 userNamePrefix + "_" + accountNumber++ + "_" + UUID.randomUUID(),
                 password,
                 testParams
         )
         assertNotNull(session)
-        return session
+        return session.also {
+            trackedSessions.add(session)
+        }
     }
 
     /**
      * Logs into an existing account
      *
-     * @param userId     the userId to log in
-     * @param password   the password to log in
+     * @param userId the userId to log in
+     * @param password the password to log in
      * @param testParams test params about the session
      * @return the session associated with the existing account
      */
-    fun logIntoAccount(userId: String,
-                       password: String,
-                       testParams: SessionTestParams): Session {
+    fun logIntoAccount(
+            userId: String,
+            password: String,
+            testParams: SessionTestParams
+    ): Session {
         val session = logAccountAndSync(userId, password, testParams)
         assertNotNull(session)
-        return session
+        return session.also {
+            trackedSessions.add(session)
+        }
     }
 
     /**
      * Create an account and a dedicated session
      *
-     * @param userName          the account username
-     * @param password          the password
+     * @param userName the account username
+     * @param password the password
      * @param sessionTestParams parameters for the test
      */
-    private fun createAccountAndSync(userName: String,
-                                     password: String,
-                                     sessionTestParams: SessionTestParams): Session {
+    private fun createAccountAndSync(
+            userName: String,
+            password: String,
+            sessionTestParams: SessionTestParams
+    ): Session {
         val hs = createHomeServerConfig()
 
         runBlockingTest {
@@ -297,7 +344,7 @@ class CommonTestHelper(context: Context) {
         val session = (registrationResult as RegistrationResult.Success).session
         session.open()
         if (sessionTestParams.withInitialSync) {
-            syncSession(session, 60_000)
+            syncSession(session, 120_000)
         }
         return session
     }
@@ -305,13 +352,15 @@ class CommonTestHelper(context: Context) {
     /**
      * Start an account login
      *
-     * @param userName          the account username
-     * @param password          the password
+     * @param userName the account username
+     * @param password the password
      * @param sessionTestParams session test params
      */
-    private fun logAccountAndSync(userName: String,
-                                  password: String,
-                                  sessionTestParams: SessionTestParams): Session {
+    private fun logAccountAndSync(
+            userName: String,
+            password: String,
+            sessionTestParams: SessionTestParams
+    ): Session {
         val hs = createHomeServerConfig()
 
         runBlockingTest {
@@ -337,8 +386,10 @@ class CommonTestHelper(context: Context) {
      * @param userName the account username
      * @param password the password
      */
-    fun logAccountWithError(userName: String,
-                            password: String): Throwable {
+    fun logAccountWithError(
+            userName: String,
+            password: String
+    ): Throwable {
         val hs = createHomeServerConfig()
 
         runBlockingTest {
@@ -378,7 +429,10 @@ class CommonTestHelper(context: Context) {
      * @throws InterruptedException
      */
     fun await(latch: CountDownLatch, timeout: Long? = TestConstants.timeOutMillis) {
-        assertTrue(latch.await(timeout ?: TestConstants.timeOutMillis, TimeUnit.MILLISECONDS))
+        assertTrue(
+                "Timed out after " + timeout + "ms waiting for something to happen. See stacktrace for cause.",
+                latch.await(timeout ?: TestConstants.timeOutMillis, TimeUnit.MILLISECONDS)
+        )
     }
 
     suspend fun retryPeriodicallyWithLatch(latch: CountDownLatch, condition: (() -> Boolean)) {
@@ -433,6 +487,7 @@ class CommonTestHelper(context: Context) {
     fun Iterable<Session>.signOutAndClose() = forEach { signOutAndClose(it) }
 
     fun signOutAndClose(session: Session) {
+        trackedSessions.remove(session)
         runBlockingTest(timeout = 60_000) {
             session.signOutService().signOut(true)
         }

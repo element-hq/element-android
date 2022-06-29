@@ -390,7 +390,6 @@
 \n
 \nИмайте предвид, че това действие ще рестартира приложението, което може да отнеме известно време.</string>
     <string name="settings_select_country">Избор на държава</string>
-    <string name="settings_flair">Значка</string>
     <string name="media_saving_period_3_days">3 дни</string>
     <string name="media_saving_period_1_week">1 седмица</string>
     <string name="media_saving_period_1_month">1 месец</string>
@@ -1131,9 +1130,7 @@
     <string name="login_signup_submit">Напред</string>
     <string name="login_signup_error_user_in_use">Това потребителско име е заето</string>
     <string name="login_signup_cancel_confirmation_title">Внимание</string>
-    <string name="login_signup_cancel_confirmation_content">Профила ви все още не е създаден.
-\n
-\nПрекратяване на процеса на регистрация\?</string>
+    <string name="login_signup_cancel_confirmation_content">Профила ви все още не е създаден. Прекратяване на процеса на регистрация\?</string>
     <string name="login_a11y_choose_matrix_org">Избери matrix.org</string>
     <string name="login_a11y_choose_modular">Избери Element Matrix Services</string>
     <string name="login_a11y_choose_other">Избери собствен сървър</string>

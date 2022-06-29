@@ -21,6 +21,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import org.junit.Assert
 import org.junit.FixMethodOrder
+import org.junit.Ignore
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
@@ -35,21 +37,23 @@ import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.getTimelineEvent
-import org.matrix.android.sdk.common.CommonTestHelper
-import org.matrix.android.sdk.common.CryptoTestHelper
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import org.matrix.android.sdk.common.MockOkHttpInterceptor
+import org.matrix.android.sdk.common.RetryTestRule
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
+import org.matrix.android.sdk.mustFail
 
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
 @LargeTest
+@Ignore
 class WithHeldTests : InstrumentedTest {
 
+    @get:Rule val rule = RetryTestRule(3)
+
     @Test
-    fun test_WithHeldUnverifiedReason() {
-        val testHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(testHelper)
+    fun test_WithHeldUnverifiedReason() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
 
         // =============================
         // ARRANGE
@@ -92,17 +96,19 @@ class WithHeldTests : InstrumentedTest {
         // =============================
 
         // Bob should not be able to decrypt because the keys is withheld
-        try {
-            // .. might need to wait a bit for stability?
-            testHelper.runBlockingTest {
+        // .. might need to wait a bit for stability?
+        testHelper.runBlockingTest {
+            mustFail(
+                    message = "This session should not be able to decrypt",
+                    failureBlock = { failure ->
+                        val type = (failure as MXCryptoError.Base).errorType
+                        val technicalMessage = failure.technicalMessage
+                        Assert.assertEquals("Error should be withheld", MXCryptoError.ErrorType.KEYS_WITHHELD, type)
+                        Assert.assertEquals("Cause should be unverified", WithHeldCode.UNVERIFIED.value, technicalMessage)
+                    }
+            ) {
                 bobUnverifiedSession.cryptoService().decryptEvent(eventBobPOV.root, "")
             }
-            Assert.fail("This session should not be able to decrypt")
-        } catch (failure: Throwable) {
-            val type = (failure as MXCryptoError.Base).errorType
-            val technicalMessage = failure.technicalMessage
-            Assert.assertEquals("Error should be withheld", MXCryptoError.ErrorType.KEYS_WITHHELD, type)
-            Assert.assertEquals("Cause should be unverified", WithHeldCode.UNAUTHORISED.value, technicalMessage)
         }
 
         // Let's see if the reply we got from bob first session is unverified
@@ -133,28 +139,23 @@ class WithHeldTests : InstrumentedTest {
         }
 
         // Previous message should still be undecryptable (partially withheld session)
-        try {
-            // .. might need to wait a bit for stability?
-            testHelper.runBlockingTest {
+        // .. might need to wait a bit for stability?
+        testHelper.runBlockingTest {
+            mustFail(
+                    message = "This session should not be able to decrypt",
+                    failureBlock = { failure ->
+                        val type = (failure as MXCryptoError.Base).errorType
+                        val technicalMessage = failure.technicalMessage
+                        Assert.assertEquals("Error should be withheld", MXCryptoError.ErrorType.KEYS_WITHHELD, type)
+                        Assert.assertEquals("Cause should be unverified", WithHeldCode.UNVERIFIED.value, technicalMessage)
+                    }) {
                 bobUnverifiedSession.cryptoService().decryptEvent(eventBobPOV.root, "")
             }
-            Assert.fail("This session should not be able to decrypt")
-        } catch (failure: Throwable) {
-            val type = (failure as MXCryptoError.Base).errorType
-            val technicalMessage = failure.technicalMessage
-            Assert.assertEquals("Error should be withheld", MXCryptoError.ErrorType.KEYS_WITHHELD, type)
-            Assert.assertEquals("Cause should be unverified", WithHeldCode.UNAUTHORISED.value, technicalMessage)
         }
-
-        testHelper.signOutAndClose(aliceSession)
-        testHelper.signOutAndClose(bobSession)
-        testHelper.signOutAndClose(bobUnverifiedSession)
     }
 
     @Test
-    fun test_WithHeldNoOlm() {
-        val testHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(testHelper)
+    fun test_WithHeldNoOlm() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
 
         val testData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
         val aliceSession = testData.firstSession
@@ -186,17 +187,18 @@ class WithHeldTests : InstrumentedTest {
 
         // Previous message should still be undecryptable (partially withheld session)
         val eventBobPOV = bobSession.getRoom(testData.roomId)?.getTimelineEvent(eventId)
-        try {
-            // .. might need to wait a bit for stability?
-            testHelper.runBlockingTest {
+        // .. might need to wait a bit for stability?
+        testHelper.runBlockingTest {
+            mustFail(
+                    message = "This session should not be able to decrypt",
+                    failureBlock = { failure ->
+                        val type = (failure as MXCryptoError.Base).errorType
+                        val technicalMessage = failure.technicalMessage
+                        Assert.assertEquals("Error should be withheld", MXCryptoError.ErrorType.KEYS_WITHHELD, type)
+                        Assert.assertEquals("Cause should be unverified", WithHeldCode.NO_OLM.value, technicalMessage)
+                    }) {
                 bobSession.cryptoService().decryptEvent(eventBobPOV!!.root, "")
             }
-            Assert.fail("This session should not be able to decrypt")
-        } catch (failure: Throwable) {
-            val type = (failure as MXCryptoError.Base).errorType
-            val technicalMessage = failure.technicalMessage
-            Assert.assertEquals("Error should be withheld", MXCryptoError.ErrorType.KEYS_WITHHELD, type)
-            Assert.assertEquals("Cause should be unverified", WithHeldCode.NO_OLM.value, technicalMessage)
         }
 
         // Ensure that alice has marked the session to be shared with bob
@@ -230,14 +232,10 @@ class WithHeldTests : InstrumentedTest {
         Assert.assertEquals("Alice should have marked bob's device for this session", 1, chainIndex2)
 
         aliceInterceptor.clearRules()
-        testData.cleanUp(testHelper)
-        testHelper.signOutAndClose(bobSecondSession)
     }
 
     @Test
-    fun test_WithHeldKeyRequest() {
-        val testHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(testHelper)
+    fun test_WithHeldKeyRequest() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
 
         val testData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
         val aliceSession = testData.firstSession
@@ -284,8 +282,5 @@ class WithHeldTests : InstrumentedTest {
                 wc?.code == WithHeldCode.UNAUTHORISED
             }
         }
-
-        testHelper.signOutAndClose(aliceSession)
-        testHelper.signOutAndClose(bobSecondSession)
     }
 }

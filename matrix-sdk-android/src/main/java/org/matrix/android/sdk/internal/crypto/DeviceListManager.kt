@@ -170,7 +170,7 @@ internal class DeviceListManager @Inject constructor(
      * Update the devices list statuses.
      *
      * @param changed the user ids list which have new devices
-     * @param left    the user ids list which left a room
+     * @param left the user ids list which left a room
      */
     fun handleDeviceListsChanges(changed: Collection<String>, left: Collection<String>) {
         Timber.v("## CRYPTO: handleDeviceListsChanges changed: ${changed.logLimit()} / left: ${left.logLimit()}")
@@ -223,7 +223,7 @@ internal class DeviceListManager @Inject constructor(
     /**
      * The keys download succeeded.
      *
-     * @param userIds  the userIds list
+     * @param userIds the userIds list
      * @param failures the failure map.
      */
     private fun onKeysDownloadSucceed(userIds: List<String>, failures: Map<String, Map<String, Any>>?): MXUsersDevicesMap<CryptoDeviceInfo> {
@@ -231,8 +231,8 @@ internal class DeviceListManager @Inject constructor(
             for ((k, value) in failures) {
                 val statusCode = when (val status = value["status"]) {
                     is Double -> status.toInt()
-                    is Int    -> status.toInt()
-                    else      -> 0
+                    is Int -> status.toInt()
+                    else -> 0
                 }
                 if (statusCode == 503) {
                     synchronized(notReadyToRetryHS) {
@@ -276,7 +276,7 @@ internal class DeviceListManager @Inject constructor(
      * Download the device keys for a list of users and stores the keys in the MXStore.
      * It must be called in getEncryptingThreadHandler() thread.
      *
-     * @param userIds       The users to fetch.
+     * @param userIds The users to fetch.
      * @param forceDownload Always download the keys even if cached.
      */
     suspend fun downloadKeys(userIds: List<String>?, forceDownload: Boolean): MXUsersDevicesMap<CryptoDeviceInfo> {
@@ -421,9 +421,9 @@ internal class DeviceListManager @Inject constructor(
      * Validate device keys.
      * This method must called on getEncryptingThreadHandler() thread.
      *
-     * @param deviceKeys                 the device keys to validate.
-     * @param userId                     the id of the user of the device.
-     * @param deviceId                   the id of the device.
+     * @param deviceKeys the device keys to validate.
+     * @param userId the id of the user of the device.
+     * @param deviceId the id of the device.
      * @param previouslyStoredDeviceKeys the device keys we received before for this device
      * @return true if succeeds
      */

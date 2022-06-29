@@ -79,10 +79,12 @@ class OnboardingRobot {
         initSession(false, userId, password, homeServerUrl)
     }
 
-    private fun initSession(createAccount: Boolean,
-                            userId: String,
-                            password: String,
-                            homeServerUrl: String) {
+    private fun initSession(
+            createAccount: Boolean,
+            userId: String,
+            password: String,
+            homeServerUrl: String
+    ) {
         waitUntilViewVisible(withId(R.id.loginSplashSubmit))
         assertDisplayed(R.id.loginSplashSubmit, R.string.login_splash_create_account)
         if (createAccount) {

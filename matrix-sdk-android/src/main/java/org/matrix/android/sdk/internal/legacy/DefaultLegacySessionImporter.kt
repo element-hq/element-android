@@ -133,7 +133,7 @@ internal class DefaultLegacySessionImporter @Inject constructor(
                                     bytes = it.bytes,
                                     hashType = when (it.type) {
                                         LegacyFingerprint.HashType.SHA1,
-                                        null                              -> Fingerprint.HashType.SHA1
+                                        null -> Fingerprint.HashType.SHA1
                                         LegacyFingerprint.HashType.SHA256 -> Fingerprint.HashType.SHA256
                                     }
                             )

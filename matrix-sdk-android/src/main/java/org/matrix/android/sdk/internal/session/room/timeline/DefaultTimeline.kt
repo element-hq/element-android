@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.room.timeline
 
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.android.asCoroutineDispatcher
@@ -235,11 +236,15 @@ internal class DefaultTimeline(
         val loadMoreResult = try {
             strategy.loadMore(count, direction, fetchOnServerIfNeeded)
         } catch (throwable: Throwable) {
-            // Timeline could not be loaded with a (likely) permanent issue, such as the
-            // server now knowing the initialEventId, so we want to show an error message
-            // and possibly restart without initialEventId.
-            onTimelineFailure(throwable)
-            return false
+            if (throwable is CancellationException) {
+                LoadMoreResult.FAILURE
+            } else {
+                // Timeline could not be loaded with a (likely) permanent issue, such as the
+                // server now knowing the initialEventId, so we want to show an error message
+                // and possibly restart without initialEventId.
+                onTimelineFailure(throwable)
+                return false
+            }
         }
         Timber.v("$baseLogMessage: result $loadMoreResult")
         val hasMoreToLoad = loadMoreResult != LoadMoreResult.REACHED_END
@@ -259,8 +264,8 @@ internal class DefaultTimeline(
 
         strategy = when {
             rootThreadEventId != null -> buildStrategy(LoadTimelineStrategy.Mode.Thread(rootThreadEventId))
-            eventId == null           -> buildStrategy(LoadTimelineStrategy.Mode.Live)
-            else                      -> buildStrategy(LoadTimelineStrategy.Mode.Permalink(eventId))
+            eventId == null -> buildStrategy(LoadTimelineStrategy.Mode.Live)
+            else -> buildStrategy(LoadTimelineStrategy.Mode.Permalink(eventId))
         }
 
         rootThreadEventId?.let {
@@ -344,7 +349,7 @@ internal class DefaultTimeline(
 
     private fun updateState(direction: Timeline.Direction, update: (Timeline.PaginationState) -> Timeline.PaginationState) {
         val stateReference = when (direction) {
-            Timeline.Direction.FORWARDS  -> forwardState
+            Timeline.Direction.FORWARDS -> forwardState
             Timeline.Direction.BACKWARDS -> backwardState
         }
         val currentValue = stateReference.get()

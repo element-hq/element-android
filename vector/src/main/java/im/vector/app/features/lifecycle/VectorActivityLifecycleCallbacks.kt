@@ -66,7 +66,7 @@ class VectorActivityLifecycleCallbacks constructor(private val popupAlertManager
             } catch (failure: Throwable) {
                 when (failure) {
                     // The task was not found. We can ignore it.
-                    is IllegalArgumentException             -> {
+                    is IllegalArgumentException -> {
                         Timber.e("The task was not found: ${failure.localizedMessage}")
                         false
                     }
@@ -74,7 +74,7 @@ class VectorActivityLifecycleCallbacks constructor(private val popupAlertManager
                         Timber.e("Package manager error: ${failure.localizedMessage}")
                         true
                     }
-                    else                                    -> throw failure
+                    else -> throw failure
                 }
             }
 
@@ -136,7 +136,7 @@ class VectorActivityLifecycleCallbacks constructor(private val popupAlertManager
      * Detect potential malicious activity.
      * Check if the activity running in app task is declared in app manifest.
      *
-     * @param activity      the activity of the task
+     * @param activity the activity of the task
      * @return true if the activity is potentially malicious
      */
     private fun isPotentialMaliciousActivity(activity: ComponentName): Boolean = activitiesInfo.none { it.name == activity.className }

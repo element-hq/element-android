@@ -92,17 +92,17 @@ class MigrateRoomBottomSheet :
                 when (val result = state.upgradingStatus.invoke()) {
                     is UpgradeRoomViewModelTask.Result.Failure -> {
                         val errorText = when (result) {
-                            is UpgradeRoomViewModelTask.Result.UnknownRoom  -> {
+                            is UpgradeRoomViewModelTask.Result.UnknownRoom -> {
                                 // should not happen
                                 getString(R.string.unknown_error)
                             }
-                            is UpgradeRoomViewModelTask.Result.NotAllowed   -> {
+                            is UpgradeRoomViewModelTask.Result.NotAllowed -> {
                                 getString(R.string.upgrade_room_no_power_to_manage)
                             }
                             is UpgradeRoomViewModelTask.Result.ErrorFailure -> {
                                 errorFormatter.toHumanReadable(result.throwable)
                             }
-                            else                                            -> null
+                            else -> null
                         }
                         views.inlineError.setTextOrHide(errorText)
                         views.button.isVisible = true
@@ -116,7 +116,7 @@ class MigrateRoomBottomSheet :
                     }
                 }
             }
-            else       -> {
+            else -> {
                 views.button.isVisible = true
                 views.button.text = getString(R.string.upgrade)
             }
@@ -149,9 +149,10 @@ class MigrateRoomBottomSheet :
         const val REQUEST_KEY = "MigrateRoomBottomSheetRequest"
         const val BUNDLE_KEY_REPLACEMENT_ROOM = "BUNDLE_KEY_REPLACEMENT_ROOM"
 
-        fun newInstance(roomId: String, newVersion: String,
-                        reason: MigrationReason = MigrationReason.MANUAL,
-                        customDescription: CharSequence? = null
+        fun newInstance(
+                roomId: String, newVersion: String,
+                reason: MigrationReason = MigrationReason.MANUAL,
+                customDescription: CharSequence? = null
         ): MigrateRoomBottomSheet {
             return MigrateRoomBottomSheet().apply {
                 setArguments(Args(roomId, newVersion, reason, customDescription))

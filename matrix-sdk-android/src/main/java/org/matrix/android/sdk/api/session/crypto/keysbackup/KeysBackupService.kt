@@ -34,10 +34,12 @@ interface KeysBackupService {
      * Create a new keys backup version and enable it, using the information return from [prepareKeysBackupVersion].
      *
      * @param keysBackupCreationInfo the info object from [prepareKeysBackupVersion].
-     * @param callback               Asynchronous callback
+     * @param callback Asynchronous callback
      */
-    fun createKeysBackupVersion(keysBackupCreationInfo: MegolmBackupCreationInfo,
-                                callback: MatrixCallback<KeysVersion>)
+    fun createKeysBackupVersion(
+            keysBackupCreationInfo: MegolmBackupCreationInfo,
+            callback: MatrixCallback<KeysVersion>
+    )
 
     /**
      * Facility method to get the total number of locally stored keys.
@@ -55,8 +57,10 @@ interface KeysBackupService {
      * @param progressListener the callback to follow the progress
      * @param callback the main callback
      */
-    fun backupAllGroupSessions(progressListener: ProgressListener?,
-                               callback: MatrixCallback<Unit>?)
+    fun backupAllGroupSessions(
+            progressListener: ProgressListener?,
+            callback: MatrixCallback<Unit>?
+    )
 
     /**
      * Check trust on a key backup version.
@@ -64,8 +68,10 @@ interface KeysBackupService {
      * @param keysBackupVersion the backup version to check.
      * @param callback block called when the operations completes.
      */
-    fun getKeysBackupTrust(keysBackupVersion: KeysVersionResult,
-                           callback: MatrixCallback<KeysBackupVersionTrust>)
+    fun getKeysBackupTrust(
+            keysBackupVersion: KeysVersionResult,
+            callback: MatrixCallback<KeysBackupVersionTrust>
+    )
 
     /**
      * Return the current progress of the backup.
@@ -79,8 +85,10 @@ interface KeysBackupService {
      * @param version the backup version
      * @param callback
      */
-    fun getVersion(version: String,
-                   callback: MatrixCallback<KeysVersionResult?>)
+    fun getVersion(
+            version: String,
+            callback: MatrixCallback<KeysVersionResult?>
+    )
 
     /**
      * This method fetches the last backup version on the server, then compare to the currently backup version use.
@@ -114,19 +122,23 @@ interface KeysBackupService {
      * @param progressListener a progress listener, as generating private key from password may take a while
      * @param callback Asynchronous callback
      */
-    fun prepareKeysBackupVersion(password: String?,
-                                 progressListener: ProgressListener?,
-                                 callback: MatrixCallback<MegolmBackupCreationInfo>)
+    fun prepareKeysBackupVersion(
+            password: String?,
+            progressListener: ProgressListener?,
+            callback: MatrixCallback<MegolmBackupCreationInfo>
+    )
 
     /**
      * Delete a keys backup version. It will delete all backed up keys on the server, and the backup itself.
      * If we are backing up to this version. Backup will be stopped.
      *
-     * @param version  the backup version to delete.
+     * @param version the backup version to delete.
      * @param callback Asynchronous callback
      */
-    fun deleteBackup(version: String,
-                     callback: MatrixCallback<Unit>?)
+    fun deleteBackup(
+            version: String,
+            callback: MatrixCallback<Unit>?
+    )
 
     /**
      * Ask if the backup on the server contains keys that we may do not have locally.
@@ -142,9 +154,11 @@ interface KeysBackupService {
      * @param trust the trust to set to the keys backup.
      * @param callback block called when the operations completes.
      */
-    fun trustKeysBackupVersion(keysBackupVersion: KeysVersionResult,
-                               trust: Boolean,
-                               callback: MatrixCallback<Unit>)
+    fun trustKeysBackupVersion(
+            keysBackupVersion: KeysVersionResult,
+            trust: Boolean,
+            callback: MatrixCallback<Unit>
+    )
 
     /**
      * Set trust on a keys backup version.
@@ -153,9 +167,11 @@ interface KeysBackupService {
      * @param recoveryKey the recovery key to challenge with the key backup public key.
      * @param callback block called when the operations completes.
      */
-    fun trustKeysBackupVersionWithRecoveryKey(keysBackupVersion: KeysVersionResult,
-                                              recoveryKey: String,
-                                              callback: MatrixCallback<Unit>)
+    fun trustKeysBackupVersionWithRecoveryKey(
+            keysBackupVersion: KeysVersionResult,
+            recoveryKey: String,
+            callback: MatrixCallback<Unit>
+    )
 
     /**
      * Set trust on a keys backup version.
@@ -164,27 +180,30 @@ interface KeysBackupService {
      * @param password the pass phrase to challenge with the keyBackupVersion public key.
      * @param callback block called when the operations completes.
      */
-    fun trustKeysBackupVersionWithPassphrase(keysBackupVersion: KeysVersionResult,
-                                             password: String,
-                                             callback: MatrixCallback<Unit>)
-
-    fun onSecretKeyGossip(secret: String)
+    fun trustKeysBackupVersionWithPassphrase(
+            keysBackupVersion: KeysVersionResult,
+            password: String,
+            callback: MatrixCallback<Unit>
+    )
 
     /**
      * Restore a backup with a recovery key from a given backup version stored on the homeserver.
      *
-     * @param keysVersionResult    the backup version to restore from.
-     * @param recoveryKey          the recovery key to decrypt the retrieved backup.
-     * @param roomId               the id of the room to get backup data from.
-     * @param sessionId            the id of the session to restore.
+     * @param keysVersionResult the backup version to restore from.
+     * @param recoveryKey the recovery key to decrypt the retrieved backup.
+     * @param roomId the id of the room to get backup data from.
+     * @param sessionId the id of the session to restore.
      * @param stepProgressListener the step progress listener
-     * @param callback             Callback. It provides the number of found keys and the number of successfully imported keys.
+     * @param callback Callback. It provides the number of found keys and the number of successfully imported keys.
      */
-    fun restoreKeysWithRecoveryKey(keysVersionResult: KeysVersionResult,
-                                   recoveryKey: String, roomId: String?,
-                                   sessionId: String?,
-                                   stepProgressListener: StepProgressListener?,
-                                   callback: MatrixCallback<ImportRoomKeysResult>)
+    fun restoreKeysWithRecoveryKey(
+            keysVersionResult: KeysVersionResult,
+            recoveryKey: String,
+            roomId: String?,
+            sessionId: String?,
+            stepProgressListener: StepProgressListener?,
+            callback: MatrixCallback<ImportRoomKeysResult>
+    )
 
     /**
      * Restore a backup with a password from a given backup version stored on the homeserver.
@@ -196,18 +215,23 @@ interface KeysBackupService {
      * @param stepProgressListener the step progress listener
      * @param callback Callback. It provides the number of found keys and the number of successfully imported keys.
      */
-    fun restoreKeyBackupWithPassword(keysBackupVersion: KeysVersionResult,
-                                     password: String,
-                                     roomId: String?,
-                                     sessionId: String?,
-                                     stepProgressListener: StepProgressListener?,
-                                     callback: MatrixCallback<ImportRoomKeysResult>)
+    fun restoreKeyBackupWithPassword(
+            keysBackupVersion: KeysVersionResult,
+            password: String,
+            roomId: String?,
+            sessionId: String?,
+            stepProgressListener: StepProgressListener?,
+            callback: MatrixCallback<ImportRoomKeysResult>
+    )
 
     val keysBackupVersion: KeysVersionResult?
+
     val currentBackupVersion: String?
-    val isEnabled: Boolean
-    val isStucked: Boolean
-    val state: KeysBackupState
+        get() = keysBackupVersion?.version
+
+    fun isEnabled(): Boolean
+    fun isStuck(): Boolean
+    fun getState(): KeysBackupState
 
     // For gossiping
     fun saveBackupRecoveryKey(recoveryKey: String?, version: String?)
@@ -215,8 +239,10 @@ interface KeysBackupService {
 
     fun isValidRecoveryKeyForCurrentVersion(recoveryKey: String, callback: MatrixCallback<Boolean>)
 
-    fun computePrivateKey(passphrase: String,
-                          privateKeySalt: String,
-                          privateKeyIterations: Int,
-                          progressListener: ProgressListener): ByteArray
+    fun computePrivateKey(
+            passphrase: String,
+            privateKeySalt: String,
+            privateKeyIterations: Int,
+            progressListener: ProgressListener
+    ): ByteArray
 }

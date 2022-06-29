@@ -60,10 +60,12 @@ class VectorGlideModelLoader(private val context: Context) :
     }
 }
 
-class VectorGlideDataFetcher(context: Context,
-                             private val data: ImageContentRenderer.Data,
-                             private val width: Int,
-                             private val height: Int) :
+class VectorGlideDataFetcher(
+        context: Context,
+        private val data: ImageContentRenderer.Data,
+        private val width: Int,
+        private val height: Int
+) :
         DataFetcher<InputStream> {
 
     private val localFilesHelper = LocalFilesHelper(context)

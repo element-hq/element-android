@@ -32,7 +32,8 @@ internal class MXOlmEncryption(
         private val cryptoStore: IMXCryptoStore,
         private val messageEncrypter: MessageEncrypter,
         private val deviceListManager: DeviceListManager,
-        private val ensureOlmSessionsForUsersAction: EnsureOlmSessionsForUsersAction) :
+        private val ensureOlmSessionsForUsersAction: EnsureOlmSessionsForUsersAction
+) :
         IMXEncrypting {
 
     override suspend fun encryptEventContent(eventContent: Content, eventType: String, userIds: List<String>): Content {
@@ -70,7 +71,7 @@ internal class MXOlmEncryption(
     /**
      * Ensure that the session.
      *
-     * @param users    the user ids list
+     * @param users the user ids list
      */
     private suspend fun ensureSession(users: List<String>) {
         deviceListManager.downloadKeys(users, false)

@@ -29,8 +29,10 @@ import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.model.presence.toUserPresence
 import javax.inject.Inject
 
-internal class RoomSummaryMapper @Inject constructor(private val timelineEventMapper: TimelineEventMapper,
-                                                     private val typingUsersTracker: TypingUsersTracker) {
+internal class RoomSummaryMapper @Inject constructor(
+        private val timelineEventMapper: TimelineEventMapper,
+        private val typingUsersTracker: TypingUsersTracker
+) {
 
     fun map(roomSummaryEntity: RoomSummaryEntity): RoomSummary {
         val tags = roomSummaryEntity.tags().map {
@@ -109,7 +111,7 @@ internal class RoomSummaryMapper @Inject constructor(private val timelineEventMa
                     // I should probably use #hasEncryptorClassForAlgorithm but it says it supports
                     // OLM which is some legacy? Now only megolm allowed in rooms
                     MXCRYPTO_ALGORITHM_MEGOLM -> RoomEncryptionAlgorithm.Megolm
-                    else                      -> RoomEncryptionAlgorithm.UnsupportedAlgorithm(alg)
+                    else -> RoomEncryptionAlgorithm.UnsupportedAlgorithm(alg)
                 }
         )
     }

@@ -26,6 +26,7 @@ import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageStickerContent
@@ -211,13 +212,13 @@ data class Event(
 
         return when {
             isReplyRenderedInThread() || isQuote() -> ContentUtils.extractUsefulTextFromReply(text)
-            isFileMessage()                        -> "sent a file."
-            isAudioMessage()                       -> "sent an audio file."
-            isImageMessage()                       -> "sent an image."
-            isVideoMessage()                       -> "sent a video."
-            isSticker()                            -> "sent a sticker"
-            isPoll()                               -> getPollQuestion() ?: "created a poll."
-            else                                   -> text
+            isFileMessage() -> "sent a file."
+            isAudioMessage() -> "sent an audio file."
+            isImageMessage() -> "sent an image."
+            isVideoMessage() -> "sent a video."
+            isSticker() -> "sent a sticker"
+            isPoll() -> getPollQuestion() ?: "created a poll."
+            else -> text
         }
     }
 
@@ -317,35 +318,35 @@ fun Event.isTextMessage(): Boolean {
         MessageType.MSGTYPE_TEXT,
         MessageType.MSGTYPE_EMOTE,
         MessageType.MSGTYPE_NOTICE -> true
-        else                       -> false
+        else -> false
     }
 }
 
 fun Event.isImageMessage(): Boolean {
     return when (getMsgType()) {
         MessageType.MSGTYPE_IMAGE -> true
-        else                      -> false
+        else -> false
     }
 }
 
 fun Event.isVideoMessage(): Boolean {
     return when (getMsgType()) {
         MessageType.MSGTYPE_VIDEO -> true
-        else                      -> false
+        else -> false
     }
 }
 
 fun Event.isAudioMessage(): Boolean {
     return when (getMsgType()) {
         MessageType.MSGTYPE_AUDIO -> true
-        else                      -> false
+        else -> false
     }
 }
 
 fun Event.isFileMessage(): Boolean {
     return when (getMsgType()) {
         MessageType.MSGTYPE_FILE -> true
-        else                     -> false
+        else -> false
     }
 }
 
@@ -355,14 +356,14 @@ fun Event.isAttachmentMessage(): Boolean {
         MessageType.MSGTYPE_AUDIO,
         MessageType.MSGTYPE_VIDEO,
         MessageType.MSGTYPE_FILE -> true
-        else                     -> false
+        else -> false
     }
 }
 
 fun Event.isLocationMessage(): Boolean {
     return when (getMsgType()) {
         MessageType.MSGTYPE_LOCATION -> true
-        else                         -> false
+        else -> false
     }
 }
 
@@ -375,11 +376,11 @@ fun Event.getRelationContent(): RelationDefaultContent? {
         content.toModel<EncryptedEventContent>()?.relatesTo
     } else {
         content.toModel<MessageContent>()?.relatesTo ?: run {
-            // Special case to handle stickers, while there is only a local msgtype for stickers
-            if (getClearType() == EventType.STICKER) {
-                getClearContent().toModel<MessageStickerContent>()?.relatesTo
-            } else {
-                null
+            // Special cases when there is only a local msgtype for some event types
+            when (getClearType()) {
+                EventType.STICKER -> getClearContent().toModel<MessageStickerContent>()?.relatesTo
+                in EventType.BEACON_LOCATION_DATA -> getClearContent().toModel<MessageBeaconLocationDataContent>()?.relatesTo
+                else -> null
             }
         }
     }
@@ -426,3 +427,6 @@ fun Event.getPollContent(): MessagePollContent? {
 
 fun Event.supportsNotification() =
         this.getClearType() in EventType.MESSAGE + EventType.POLL_START + EventType.STATE_ROOM_BEACON_INFO
+
+fun Event.isContentReportable() =
+        this.getClearType() in EventType.MESSAGE + EventType.STATE_ROOM_BEACON_INFO

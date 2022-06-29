@@ -33,11 +33,12 @@ internal abstract class BindThreePidsTask : Task<BindThreePidsTask.Params, Unit>
     )
 }
 
-internal class DefaultBindThreePidsTask @Inject constructor(private val profileAPI: ProfileAPI,
-                                                            private val identityStore: IdentityStore,
-                                                            @AuthenticatedIdentity
-                                                            private val accessTokenProvider: AccessTokenProvider,
-                                                            private val globalErrorReceiver: GlobalErrorReceiver) : BindThreePidsTask() {
+internal class DefaultBindThreePidsTask @Inject constructor(
+        private val profileAPI: ProfileAPI,
+        private val identityStore: IdentityStore,
+        @AuthenticatedIdentity private val accessTokenProvider: AccessTokenProvider,
+        private val globalErrorReceiver: GlobalErrorReceiver
+) : BindThreePidsTask() {
     override suspend fun execute(params: Params) {
         val identityServerUrlWithoutProtocol = identityStore.getIdentityServerUrlWithoutProtocol() ?: throw IdentityServiceError.NoIdentityServerConfigured
         val identityServerAccessToken = accessTokenProvider.getToken() ?: throw IdentityServiceError.NoIdentityServerConfigured

@@ -160,10 +160,10 @@ class ContactsBookViewModel @AssistedInject constructor(
 
     override fun handle(action: ContactsBookAction) {
         when (action) {
-            is ContactsBookAction.FilterWith        -> handleFilterWith(action)
+            is ContactsBookAction.FilterWith -> handleFilterWith(action)
             is ContactsBookAction.OnlyBoundContacts -> handleOnlyBoundContacts(action)
-            ContactsBookAction.UserConsentGranted   -> handleUserConsentGranted()
-            ContactsBookAction.UserConsentRequest   -> handleUserConsentRequest()
+            ContactsBookAction.UserConsentGranted -> handleUserConsentGranted()
+            ContactsBookAction.UserConsentRequest -> handleUserConsentRequest()
         }
     }
 

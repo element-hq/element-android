@@ -59,8 +59,10 @@ internal class WorkManagerProvider @Inject constructor(
     /**
      * Create a PeriodicWorkRequestBuilder, with the Matrix SDK tag.
      */
-    inline fun <reified W : ListenableWorker> matrixPeriodicWorkRequestBuilder(repeatInterval: Long,
-                                                                               repeatIntervalTimeUnit: TimeUnit) =
+    inline fun <reified W : ListenableWorker> matrixPeriodicWorkRequestBuilder(
+            repeatInterval: Long,
+            repeatIntervalTimeUnit: TimeUnit
+    ) =
             PeriodicWorkRequestBuilder<W>(repeatInterval, repeatIntervalTimeUnit)
                     .addTag(tag)
 

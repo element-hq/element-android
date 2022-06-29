@@ -71,7 +71,8 @@ internal class OutgoingKeyRequestManager @Inject constructor(
         private val inboundGroupSessionStore: InboundGroupSessionStore,
         private val sendToDeviceTask: SendToDeviceTask,
         private val deviceListManager: DeviceListManager,
-        private val perSessionBackupQueryRateLimiter: PerSessionBackupQueryRateLimiter) {
+        private val perSessionBackupQueryRateLimiter: PerSessionBackupQueryRateLimiter
+) {
 
     private val dispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
     private val outgoingRequestScope = CoroutineScope(SupervisorJob() + dispatcher)
@@ -180,13 +181,15 @@ internal class OutgoingKeyRequestManager @Inject constructor(
         }
     }
 
-    fun onRoomKeyForwarded(sessionId: String,
-                           algorithm: String,
-                           roomId: String,
-                           senderKey: String,
-                           fromDevice: String?,
-                           fromIndex: Int,
-                           event: Event) {
+    fun onRoomKeyForwarded(
+            sessionId: String,
+            algorithm: String,
+            roomId: String,
+            senderKey: String,
+            fromDevice: String?,
+            fromIndex: Int,
+            event: Event
+    ) {
         Timber.tag(loggerTag.value).d("Key forwarded for $sessionId from ${event.senderId}|$fromDevice at index $fromIndex")
         outgoingRequestScope.launch {
             sequencer.post {
@@ -208,12 +211,14 @@ internal class OutgoingKeyRequestManager @Inject constructor(
         }
     }
 
-    fun onRoomKeyWithHeld(sessionId: String,
-                          algorithm: String,
-                          roomId: String,
-                          senderKey: String,
-                          fromDevice: String?,
-                          event: Event) {
+    fun onRoomKeyWithHeld(
+            sessionId: String,
+            algorithm: String,
+            roomId: String,
+            senderKey: String,
+            fromDevice: String?,
+            event: Event
+    ) {
         outgoingRequestScope.launch {
             sequencer.post {
                 Timber.tag(loggerTag.value).d("Withheld received for $sessionId from ${event.senderId}|$fromDevice")
@@ -294,19 +299,19 @@ internal class OutgoingKeyRequestManager @Inject constructor(
         }
         knownRequest.forEach { request ->
             when (request.state) {
-                OutgoingRoomKeyRequestState.UNSENT                               -> {
+                OutgoingRoomKeyRequestState.UNSENT -> {
                     if (request.fromIndex >= localKnownChainIndex) {
                         // we have a good index we can cancel
                         cryptoStore.deleteOutgoingRoomKeyRequest(request.requestId)
                     }
                 }
-                OutgoingRoomKeyRequestState.SENT                                 -> {
+                OutgoingRoomKeyRequestState.SENT -> {
                     // It was already sent, and index satisfied we can cancel
                     if (request.fromIndex >= localKnownChainIndex) {
                         cryptoStore.updateOutgoingRoomKeyRequestState(request.requestId, OutgoingRoomKeyRequestState.CANCELLATION_PENDING)
                     }
                 }
-                OutgoingRoomKeyRequestState.CANCELLATION_PENDING                 -> {
+                OutgoingRoomKeyRequestState.CANCELLATION_PENDING -> {
                     // It is already marked to be cancelled
                 }
                 OutgoingRoomKeyRequestState.CANCELLATION_PENDING_AND_WILL_RESEND -> {
@@ -315,7 +320,7 @@ internal class OutgoingKeyRequestManager @Inject constructor(
                         cryptoStore.updateOutgoingRoomKeyRequestState(request.requestId, OutgoingRoomKeyRequestState.CANCELLATION_PENDING)
                     }
                 }
-                OutgoingRoomKeyRequestState.SENT_THEN_CANCELED                   -> {
+                OutgoingRoomKeyRequestState.SENT_THEN_CANCELED -> {
                     // was already canceled
                     // if we need a better index, should we resend?
                 }
@@ -346,14 +351,14 @@ internal class OutgoingKeyRequestManager @Inject constructor(
         val existing = cryptoStore.getOutgoingRoomKeyRequest(requestBody)
         Timber.tag(loggerTag.value).v("Queueing key request exiting is ${existing?.state}")
         when (existing?.state) {
-            null                                                             -> {
+            null -> {
                 // create a new one
                 cryptoStore.getOrAddOutgoingRoomKeyRequest(requestBody, recipients, fromIndex)
             }
-            OutgoingRoomKeyRequestState.UNSENT                               -> {
+            OutgoingRoomKeyRequestState.UNSENT -> {
                 // nothing it's new or not yet handled
             }
-            OutgoingRoomKeyRequestState.SENT                                 -> {
+            OutgoingRoomKeyRequestState.SENT -> {
                 // it was already requested
                 Timber.tag(loggerTag.value).d("The session ${requestBody.sessionId} is already requested")
                 if (force) {
@@ -366,7 +371,7 @@ internal class OutgoingKeyRequestManager @Inject constructor(
                     }
                 }
             }
-            OutgoingRoomKeyRequestState.CANCELLATION_PENDING                 -> {
+            OutgoingRoomKeyRequestState.CANCELLATION_PENDING -> {
                 // request is canceled only if I got the keys so what to do here...
                 if (force) {
                     cryptoStore.updateOutgoingRoomKeyRequestState(existing.requestId, OutgoingRoomKeyRequestState.CANCELLATION_PENDING_AND_WILL_RESEND)
@@ -375,7 +380,7 @@ internal class OutgoingKeyRequestManager @Inject constructor(
             OutgoingRoomKeyRequestState.CANCELLATION_PENDING_AND_WILL_RESEND -> {
                 // It's already going to resend
             }
-            OutgoingRoomKeyRequestState.SENT_THEN_CANCELED                   -> {
+            OutgoingRoomKeyRequestState.SENT_THEN_CANCELED -> {
                 if (force) {
                     cryptoStore.deleteOutgoingRoomKeyRequest(existing.requestId)
                     cryptoStore.getOrAddOutgoingRoomKeyRequest(requestBody, recipients, fromIndex)
@@ -396,11 +401,11 @@ internal class OutgoingKeyRequestManager @Inject constructor(
         measureTimeMillis {
             toProcess.forEach {
                 when (it.state) {
-                    OutgoingRoomKeyRequestState.UNSENT                               -> handleUnsentRequest(it)
-                    OutgoingRoomKeyRequestState.CANCELLATION_PENDING                 -> handleRequestToCancel(it)
+                    OutgoingRoomKeyRequestState.UNSENT -> handleUnsentRequest(it)
+                    OutgoingRoomKeyRequestState.CANCELLATION_PENDING -> handleRequestToCancel(it)
                     OutgoingRoomKeyRequestState.CANCELLATION_PENDING_AND_WILL_RESEND -> handleRequestToCancelWillResend(it)
                     OutgoingRoomKeyRequestState.SENT_THEN_CANCELED,
-                    OutgoingRoomKeyRequestState.SENT                                 -> {
+                    OutgoingRoomKeyRequestState.SENT -> {
                         // these are filtered out
                     }
                 }

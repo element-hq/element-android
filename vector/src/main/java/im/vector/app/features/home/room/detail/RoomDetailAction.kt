@@ -60,7 +60,8 @@ sealed class RoomDetailAction : VectorViewModelAction {
             val senderId: String?,
             val reason: String,
             val spam: Boolean = false,
-            val inappropriate: Boolean = false) : RoomDetailAction()
+            val inappropriate: Boolean = false
+    ) : RoomDetailAction()
 
     data class IgnoreUser(val userId: String?) : RoomDetailAction()
 
@@ -86,9 +87,11 @@ sealed class RoomDetailAction : VectorViewModelAction {
     object JoinJitsiCall : RoomDetailAction()
     object LeaveJitsiCall : RoomDetailAction()
 
-    data class EnsureNativeWidgetAllowed(val widget: Widget,
-                                         val userJustAccepted: Boolean,
-                                         val grantedEvents: RoomDetailViewEvents) : RoomDetailAction()
+    data class EnsureNativeWidgetAllowed(
+            val widget: Widget,
+            val userJustAccepted: Boolean,
+            val grantedEvents: RoomDetailViewEvents
+    ) : RoomDetailAction()
 
     data class UpdateJoinJitsiCallStatus(val conferenceEvent: ConferenceEvent) : RoomDetailAction()
 

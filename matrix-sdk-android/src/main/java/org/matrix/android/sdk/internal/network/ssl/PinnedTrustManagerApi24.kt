@@ -28,16 +28,16 @@ import javax.net.ssl.X509ExtendedTrustManager
 /**
  * Implements a TrustManager that checks Certificates against an explicit list of known
  * fingerprints.
- */
-
-/**
- * @param fingerprints        An array of SHA256 cert fingerprints
- * @param defaultTrustManager Optional trust manager to fall back on if cert does not match
+ *
+ * @property fingerprints An array of SHA256 cert fingerprints
+ * @property defaultTrustManager Optional trust manager to fall back on if cert does not match
  * any of the fingerprints. Can be null.
  */
 @RequiresApi(Build.VERSION_CODES.N)
-internal class PinnedTrustManagerApi24(private val fingerprints: List<Fingerprint>,
-                                       private val defaultTrustManager: X509ExtendedTrustManager?) : X509ExtendedTrustManager() {
+internal class PinnedTrustManagerApi24(
+        private val fingerprints: List<Fingerprint>,
+        private val defaultTrustManager: X509ExtendedTrustManager?
+) : X509ExtendedTrustManager() {
 
     @Throws(CertificateException::class)
     override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String, engine: SSLEngine?) {

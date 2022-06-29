@@ -37,14 +37,18 @@ interface CrossSigningService {
      * Initialize cross signing for this user.
      * Users needs to enter credentials
      */
-    fun initializeCrossSigning(uiaInterceptor: UserInteractiveAuthInterceptor?,
-                               callback: MatrixCallback<Unit>)
+    fun initializeCrossSigning(
+            uiaInterceptor: UserInteractiveAuthInterceptor?,
+            callback: MatrixCallback<Unit>
+    )
 
     fun isCrossSigningInitialized(): Boolean = getMyCrossSigningKeys() != null
 
-    fun checkTrustFromPrivateKeys(masterKeyPrivateKey: String?,
-                                  uskKeyPrivateKey: String?,
-                                  sskPrivateKey: String?): UserTrustResult
+    fun checkTrustFromPrivateKeys(
+            masterKeyPrivateKey: String?,
+            uskKeyPrivateKey: String?,
+            sskPrivateKey: String?
+    ): UserTrustResult
 
     fun getUserCrossSigningKeys(otherUserId: String): MXCrossSigningInfo?
 
@@ -60,20 +64,26 @@ interface CrossSigningService {
 
     fun allPrivateKeysKnown(): Boolean
 
-    fun trustUser(otherUserId: String,
-                  callback: MatrixCallback<Unit>)
+    fun trustUser(
+            otherUserId: String,
+            callback: MatrixCallback<Unit>
+    )
 
     fun markMyMasterKeyAsTrusted()
 
     /**
      * Sign one of your devices and upload the signature.
      */
-    fun trustDevice(deviceId: String,
-                    callback: MatrixCallback<Unit>)
+    fun trustDevice(
+            deviceId: String,
+            callback: MatrixCallback<Unit>
+    )
 
-    fun checkDeviceTrust(otherUserId: String,
-                         otherDeviceId: String,
-                         locallyTrusted: Boolean?): DeviceTrustResult
+    fun checkDeviceTrust(
+            otherUserId: String,
+            otherDeviceId: String,
+            locallyTrusted: Boolean?
+    ): DeviceTrustResult
 
     // FIXME Those method do not have to be in the service
     fun onSecretMSKGossip(mskPrivateKey: String)

@@ -17,6 +17,7 @@
 package im.vector.app.features
 
 import im.vector.app.BuildConfig
+import im.vector.app.config.Config
 
 interface VectorFeatures {
 
@@ -26,7 +27,8 @@ interface VectorFeatures {
     fun isOnboardingUseCaseEnabled(): Boolean
     fun isOnboardingPersonalizeEnabled(): Boolean
     fun isOnboardingCombinedRegisterEnabled(): Boolean
-    fun isLiveLocationEnabled(): Boolean
+    fun isOnboardingCombinedLoginEnabled(): Boolean
+    fun allowExternalUnifiedPushDistributors(): Boolean
     fun isScreenSharingEnabled(): Boolean
 
     enum class OnboardingVariant {
@@ -43,6 +45,7 @@ class DefaultVectorFeatures : VectorFeatures {
     override fun isOnboardingUseCaseEnabled() = true
     override fun isOnboardingPersonalizeEnabled() = false
     override fun isOnboardingCombinedRegisterEnabled() = false
-    override fun isLiveLocationEnabled(): Boolean = false
+    override fun isOnboardingCombinedLoginEnabled() = false
+    override fun allowExternalUnifiedPushDistributors(): Boolean = Config.ALLOW_EXTERNAL_UNIFIED_PUSH_DISTRIBUTORS
     override fun isScreenSharingEnabled(): Boolean = true
 }

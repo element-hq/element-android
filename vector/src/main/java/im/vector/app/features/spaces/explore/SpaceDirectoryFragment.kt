@@ -23,6 +23,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
@@ -44,7 +45,6 @@ import im.vector.app.core.utils.openUrlInExternalBrowser
 import im.vector.app.databinding.FragmentSpaceDirectoryBinding
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
-import im.vector.app.features.matrixto.SpaceCardRenderer
 import im.vector.app.features.permalink.PermalinkHandler
 import im.vector.app.features.spaces.manage.ManageType
 import im.vector.app.features.spaces.manage.SpaceAddRoomSpaceChooserBottomSheet
@@ -63,7 +63,6 @@ data class SpaceDirectoryArgs(
 class SpaceDirectoryFragment @Inject constructor(
         private val epoxyController: SpaceDirectoryController,
         private val permalinkHandler: PermalinkHandler,
-        private val spaceCardRenderer: SpaceCardRenderer,
         private val colorProvider: ColorProvider
 ) : VectorBaseFragment<FragmentSpaceDirectoryBinding>(),
         SpaceDirectoryController.InteractionListener,
@@ -86,16 +85,16 @@ class SpaceDirectoryFragment @Inject constructor(
             bundle.getString(SpaceAddRoomSpaceChooserBottomSheet.BUNDLE_KEY_ACTION)?.let { action ->
                 val spaceId = withState(viewModel) { it.spaceId }
                 when (action) {
-                    SpaceAddRoomSpaceChooserBottomSheet.ACTION_ADD_ROOMS   -> {
+                    SpaceAddRoomSpaceChooserBottomSheet.ACTION_ADD_ROOMS -> {
                         addExistingRoomActivityResult.launch(SpaceManageActivity.newIntent(requireContext(), spaceId, ManageType.AddRooms))
                     }
-                    SpaceAddRoomSpaceChooserBottomSheet.ACTION_ADD_SPACES  -> {
+                    SpaceAddRoomSpaceChooserBottomSheet.ACTION_ADD_SPACES -> {
                         addExistingRoomActivityResult.launch(SpaceManageActivity.newIntent(requireContext(), spaceId, ManageType.AddRoomsOnlySpaces))
                     }
                     SpaceAddRoomSpaceChooserBottomSheet.ACTION_CREATE_ROOM -> {
                         viewModel.handle(SpaceDirectoryViewAction.CreateNewRoom)
                     }
-                    else                                                   -> {
+                    else -> {
                         // nop
                     }
                 }
@@ -123,9 +122,6 @@ class SpaceDirectoryFragment @Inject constructor(
             }
         }
 
-        views.spaceCard.matrixToCardMainButton.isVisible = false
-        views.spaceCard.matrixToCardSecondaryButton.isVisible = false
-
         // Hide FAB when list is scrolling
         views.spaceDirectoryList.addOnScrollListener(
                 object : RecyclerView.OnScrollListener() {
@@ -133,7 +129,7 @@ class SpaceDirectoryFragment @Inject constructor(
                         views.addOrCreateChatRoomButton.removeCallbacks(showFabRunnable)
 
                         when (newState) {
-                            RecyclerView.SCROLL_STATE_IDLE     -> {
+                            RecyclerView.SCROLL_STATE_IDLE -> {
                                 views.addOrCreateChatRoomButton.postDelayed(showFabRunnable, 250)
                             }
                             RecyclerView.SCROLL_STATE_DRAGGING,
@@ -167,24 +163,43 @@ class SpaceDirectoryFragment @Inject constructor(
             // it's the root
             toolbar?.setTitle(R.string.space_explore_activity_title)
         } else {
-            toolbar?.title = state.currentRootSummary?.name
+            val spaceName = state.currentRootSummary?.name
                     ?: state.currentRootSummary?.canonicalAlias
-                            ?: getString(R.string.space_explore_activity_title)
+
+            if (spaceName != null) {
+                toolbar?.title = spaceName
+                toolbar?.subtitle = getString(R.string.space_explore_activity_title)
+            } else {
+                toolbar?.title = getString(R.string.space_explore_activity_title)
+            }
         }
 
-        spaceCardRenderer.render(state.currentRootSummary, emptyList(), this, views.spaceCard, showDescription = false)
         views.addOrCreateChatRoomButton.isVisible = state.canAddRooms
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) = withState(viewModel) { state ->
         menu.findItem(R.id.spaceAddRoom)?.isVisible = state.canAddRooms
         menu.findItem(R.id.spaceCreateRoom)?.isVisible = false // Not yet implemented
+
+        menu.findItem(R.id.spaceSearch)?.let { searchItem ->
+            val searchView = searchItem.actionView as SearchView
+            searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    onFilterQueryChanged(newText)
+                    return true
+                }
+            })
+        }
         super.onPrepareOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.spaceAddRoom    -> {
+            R.id.spaceAddRoom -> {
                 withState(viewModel) { state ->
                     addExistingRooms(state.spaceId)
                 }
@@ -196,6 +211,10 @@ class SpaceDirectoryFragment @Inject constructor(
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onFilterQueryChanged(query: String?) {
+        viewModel.handle(SpaceDirectoryViewAction.FilterRooms(query))
     }
 
     override fun onButtonClick(spaceChildInfo: SpaceChildInfo) {

@@ -1,5 +1,18 @@
 # Integration tests
 
+<!--- TOC -->
+
+* [Pre requirements](#pre-requirements)
+* [Install and run Synapse](#install-and-run-synapse)
+* [Run the test](#run-the-test)
+* [Stop Synapse](#stop-synapse)
+* [Troubleshoot](#troubleshoot)
+  * [Android Emulator does cannot reach the homeserver](#android-emulator-does-cannot-reach-the-homeserver)
+  * [Tests partially run but some fail with "Unable to contact localhost:8080"](#tests-partially-run-but-some-fail-with-"unable-to-contact-localhost:8080")
+  * [virtualenv command fails](#virtualenv-command-fails)
+
+<!--- END -->
+
 Integration tests are useful to ensure that the code works well for any use cases.
 
 They can also be used as sample on how to use the Matrix SDK.

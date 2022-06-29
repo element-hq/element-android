@@ -35,7 +35,8 @@ import kotlin.reflect.KMutableProperty0
 class MergedTimelines(
         private val coroutineScope: CoroutineScope,
         private val mainTimeline: Timeline,
-        private val secondaryTimelineParams: SecondaryTimelineParams) : Timeline by mainTimeline {
+        private val secondaryTimelineParams: SecondaryTimelineParams
+) : Timeline by mainTimeline {
 
     data class SecondaryTimelineParams(
             val timeline: Timeline,

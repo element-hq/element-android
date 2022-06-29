@@ -29,6 +29,7 @@ object MatrixLinkify {
      * Find the matrix spans i.e matrix id , user id ... to display them as URL.
      *
      * @param spannable the text in which the matrix items has to be clickable.
+     * @param callback listener to be notified when the span is clicked
      */
     @Suppress("UNUSED_PARAMETER")
     fun addLinks(spannable: Spannable, callback: MatrixPermalinkSpan.Callback?): Boolean {

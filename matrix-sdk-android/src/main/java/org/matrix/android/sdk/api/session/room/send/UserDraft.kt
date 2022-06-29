@@ -33,7 +33,7 @@ sealed interface UserDraft {
     fun isValid(): Boolean {
         return when (this) {
             is Regular -> content.isNotBlank()
-            else       -> true
+            else -> true
         }
     }
 }

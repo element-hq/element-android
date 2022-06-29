@@ -96,10 +96,12 @@ class AttachmentsHelper(val context: Context, val callback: Callback) : Restorab
     /**
      * Starts the process for handling image/video capture. Can open a dialog
      */
-    fun openCamera(activity: Activity,
-                   vectorPreferences: VectorPreferences,
-                   cameraActivityResultLauncher: ActivityResultLauncher<Intent>,
-                   cameraVideoActivityResultLauncher: ActivityResultLauncher<Intent>) {
+    fun openCamera(
+            activity: Activity,
+            vectorPreferences: VectorPreferences,
+            cameraActivityResultLauncher: ActivityResultLauncher<Intent>,
+            cameraVideoActivityResultLauncher: ActivityResultLauncher<Intent>
+    ) {
         PhotoOrVideoDialog(activity, vectorPreferences).show(object : PhotoOrVideoDialog.PhotoOrVideoDialogListener {
             override fun takePhoto() {
                 captureUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(context, cameraActivityResultLauncher)
@@ -212,7 +214,7 @@ class AttachmentsHelper(val context: Context, val callback: Callback) : Restorab
                         it.toContentAttachmentData()
                     }
             )
-        } else if (type.startsWith("application") || type.startsWith("file") || type.startsWith("*")) {
+        } else if (type.startsWith("application") || type.startsWith("file") || type.startsWith("text") || type.startsWith("*")) {
             callback.onContentAttachmentsReady(
                     MultiPicker.get(MultiPicker.FILE).getIncomingFiles(context, intent).map {
                         it.toContentAttachmentData()

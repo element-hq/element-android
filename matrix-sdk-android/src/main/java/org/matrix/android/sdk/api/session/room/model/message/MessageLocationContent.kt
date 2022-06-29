@@ -35,7 +35,7 @@ data class MessageLocationContent(
         @Json(name = "body") override val body: String,
 
         /**
-         * Required. RFC5870 formatted geo uri 'geo:latitude,longitude;uncertainty' like 'geo:40.05,29.24;30' representing this location.
+         * Required. RFC5870 formatted geo uri 'geo:latitude,longitude;u=uncertainty' like 'geo:40.05,29.24;u=30' representing this location.
          */
         @Json(name = "geo_uri") val geoUri: String,
 

@@ -23,11 +23,11 @@ import im.vector.app.R
 import im.vector.app.core.resources.LocaleProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.resources.isEnglishSpeaking
+import im.vector.app.core.utils.colorTerminatingFullStop
 import im.vector.app.features.themes.ThemeProvider
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
-import me.gujun.android.span.span
 import javax.inject.Inject
 
 class SplashCarouselStateFactory @Inject constructor(
@@ -39,7 +39,7 @@ class SplashCarouselStateFactory @Inject constructor(
 
     fun create(): SplashCarouselState {
         val lightTheme = themeProvider.isLightTheme()
-        fun background(@DrawableRes lightDrawable: Int) = if (lightTheme) lightDrawable else R.drawable.bg_carousel_page_dark
+        fun background(@DrawableRes lightDrawable: Int) = if (lightTheme) lightDrawable else R.drawable.bg_color_background
         fun hero(@DrawableRes lightDrawable: Int, @DrawableRes darkDrawable: Int) = if (lightTheme) lightDrawable else darkDrawable
         return SplashCarouselState(
                 listOf(
@@ -74,23 +74,13 @@ class SplashCarouselStateFactory @Inject constructor(
     private fun collaborationTitle(): Int {
         return when {
             localeProvider.isEnglishSpeaking() -> R.string.cut_the_slack_from_teams
-            else                               -> R.string.ftue_auth_carousel_workplace_title
+            else -> R.string.ftue_auth_carousel_workplace_title
         }
     }
 
     private fun Int.colorTerminatingFullStop(@AttrRes color: Int): EpoxyCharSequence {
-        val string = stringProvider.getString(this)
-        val fullStop = "."
-        val charSequence = if (string.endsWith(fullStop)) {
-            span {
-                +string.removeSuffix(fullStop)
-                span(fullStop) {
-                    textColor = ThemeUtils.getColor(context, color)
-                }
-            }
-        } else {
-            string
-        }
-        return charSequence.toEpoxyCharSequence()
+        return stringProvider.getString(this)
+                .colorTerminatingFullStop(ThemeUtils.getColor(context, color))
+                .toEpoxyCharSequence()
     }
 }

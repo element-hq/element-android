@@ -23,6 +23,7 @@ import io.mockk.mockk
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.LoginFlowResult
+import org.matrix.android.sdk.api.auth.login.LoginWizard
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
 
@@ -33,7 +34,11 @@ class FakeAuthenticationService : AuthenticationService by mockk() {
     }
 
     fun givenRegistrationStarted(started: Boolean) {
-        every { isRegistrationStarted } returns started
+        every { isRegistrationStarted() } returns started
+    }
+
+    fun givenLoginWizard(loginWizard: LoginWizard) {
+        every { getLoginWizard() } returns loginWizard
     }
 
     fun givenLoginFlow(config: HomeServerConnectionConfig, result: LoginFlowResult) {

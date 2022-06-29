@@ -33,7 +33,7 @@ class SwipeDirectionDetector(
 
     fun handleTouchEvent(event: MotionEvent) {
         when (event.action) {
-            MotionEvent.ACTION_DOWN                          -> {
+            MotionEvent.ACTION_DOWN -> {
                 startX = event.x
                 startY = event.y
             }
@@ -45,7 +45,7 @@ class SwipeDirectionDetector(
                 startX = startY
                 isDetected = false
             }
-            MotionEvent.ACTION_MOVE                          -> if (!isDetected && getEventDistance(event) > touchSlop) {
+            MotionEvent.ACTION_MOVE -> if (!isDetected && getEventDistance(event) > touchSlop) {
                 isDetected = true
                 onDirectionDetected(getDirection(startX, startY, event.x, event.y))
             }

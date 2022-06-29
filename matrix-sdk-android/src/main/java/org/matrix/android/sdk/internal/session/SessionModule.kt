@@ -39,10 +39,8 @@ import org.matrix.android.sdk.api.session.ToDeviceService
 import org.matrix.android.sdk.api.session.accountdata.SessionAccountDataService
 import org.matrix.android.sdk.api.session.events.EventService
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
-import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.openid.OpenIdService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
-import org.matrix.android.sdk.api.session.securestorage.SecureStorageService
 import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
 import org.matrix.android.sdk.api.session.typing.TypingUsersTracker
 import org.matrix.android.sdk.api.util.md5
@@ -74,6 +72,7 @@ import org.matrix.android.sdk.internal.network.PreferredNetworkCallbackStrategy
 import org.matrix.android.sdk.internal.network.RetrofitFactory
 import org.matrix.android.sdk.internal.network.httpclient.addAccessTokenInterceptor
 import org.matrix.android.sdk.internal.network.httpclient.addSocketFactory
+import org.matrix.android.sdk.internal.network.httpclient.applyMatrixConfiguration
 import org.matrix.android.sdk.internal.network.interceptors.CurlLoggingInterceptor
 import org.matrix.android.sdk.internal.network.token.AccessTokenProvider
 import org.matrix.android.sdk.internal.network.token.HomeserverAccessTokenProvider
@@ -82,19 +81,17 @@ import org.matrix.android.sdk.internal.session.download.DownloadProgressIntercep
 import org.matrix.android.sdk.internal.session.events.DefaultEventService
 import org.matrix.android.sdk.internal.session.homeserver.DefaultHomeServerCapabilitiesService
 import org.matrix.android.sdk.internal.session.identity.DefaultIdentityService
-import org.matrix.android.sdk.internal.session.initsync.DefaultSyncStatusService
 import org.matrix.android.sdk.internal.session.integrationmanager.IntegrationManager
 import org.matrix.android.sdk.internal.session.openid.DefaultOpenIdService
 import org.matrix.android.sdk.internal.session.permalinks.DefaultPermalinkService
 import org.matrix.android.sdk.internal.session.room.EventRelationsAggregationProcessor
-import org.matrix.android.sdk.internal.session.room.aggregation.livelocation.DefaultLiveLocationAggregationProcessor
-import org.matrix.android.sdk.internal.session.room.aggregation.livelocation.LiveLocationAggregationProcessor
+import org.matrix.android.sdk.internal.session.room.aggregation.poll.DefaultPollAggregationProcessor
+import org.matrix.android.sdk.internal.session.room.aggregation.poll.PollAggregationProcessor
 import org.matrix.android.sdk.internal.session.room.create.RoomCreateEventProcessor
 import org.matrix.android.sdk.internal.session.room.prune.RedactionEventProcessor
 import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
 import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessorCoroutine
 import org.matrix.android.sdk.internal.session.room.tombstone.RoomTombstoneEventProcessor
-import org.matrix.android.sdk.internal.session.securestorage.DefaultSecureStorageService
 import org.matrix.android.sdk.internal.session.typing.DefaultTypingUsersTracker
 import org.matrix.android.sdk.internal.session.user.accountdata.DefaultSessionAccountDataService
 import org.matrix.android.sdk.internal.session.widgets.DefaultWidgetURLFormatter
@@ -166,9 +163,11 @@ internal abstract class SessionModule {
         @Provides
         @SessionFilesDirectory
         @SessionScope
-        fun providesFilesDir(@UserMd5 userMd5: String,
-                             @SessionId sessionId: String,
-                             context: Context): File {
+        fun providesFilesDir(
+                @UserMd5 userMd5: String,
+                @SessionId sessionId: String,
+                context: Context
+        ): File {
             // Temporary code for migration
             val old = File(context.filesDir, userMd5)
             if (old.exists()) {
@@ -181,8 +180,10 @@ internal abstract class SessionModule {
         @JvmStatic
         @Provides
         @SessionDownloadsDirectory
-        fun providesDownloadsCacheDir(@SessionId sessionId: String,
-                                      @CacheDirectory cacheFile: File): File {
+        fun providesDownloadsCacheDir(
+                @SessionId sessionId: String,
+                @CacheDirectory cacheFile: File
+        ): File {
             return File(cacheFile, "downloads/$sessionId")
         }
 
@@ -208,8 +209,10 @@ internal abstract class SessionModule {
         @Provides
         @SessionScope
         @UnauthenticatedWithCertificate
-        fun providesOkHttpClientWithCertificate(@Unauthenticated okHttpClient: OkHttpClient,
-                                                homeServerConnectionConfig: HomeServerConnectionConfig): OkHttpClient {
+        fun providesOkHttpClientWithCertificate(
+                @Unauthenticated okHttpClient: OkHttpClient,
+                homeServerConnectionConfig: HomeServerConnectionConfig,
+        ): OkHttpClient {
             return okHttpClient
                     .newBuilder()
                     .addSocketFactory(homeServerConnectionConfig)
@@ -220,10 +223,13 @@ internal abstract class SessionModule {
         @Provides
         @SessionScope
         @Authenticated
-        fun providesOkHttpClient(@UnauthenticatedWithCertificate okHttpClient: OkHttpClient,
-                                 @Authenticated accessTokenProvider: AccessTokenProvider,
-                                 @SessionId sessionId: String,
-                                 @MockHttpInterceptor testInterceptor: TestInterceptor?): OkHttpClient {
+        fun providesOkHttpClient(
+                @UnauthenticatedWithCertificate okHttpClient: OkHttpClient,
+                @Authenticated accessTokenProvider: AccessTokenProvider,
+                @SessionId sessionId: String,
+                @MockHttpInterceptor testInterceptor: TestInterceptor?,
+                matrixConfiguration: MatrixConfiguration,
+        ): OkHttpClient {
             return okHttpClient
                     .newBuilder()
                     .addAccessTokenInterceptor(accessTokenProvider)
@@ -233,6 +239,7 @@ internal abstract class SessionModule {
                             addInterceptor(testInterceptor)
                         }
                     }
+                    .applyMatrixConfiguration(matrixConfiguration)
                     .build()
         }
 
@@ -240,11 +247,15 @@ internal abstract class SessionModule {
         @Provides
         @SessionScope
         @UnauthenticatedWithCertificateWithProgress
-        fun providesProgressOkHttpClient(@UnauthenticatedWithCertificate okHttpClient: OkHttpClient,
-                                         downloadProgressInterceptor: DownloadProgressInterceptor): OkHttpClient {
-            return okHttpClient.newBuilder()
+        fun providesProgressOkHttpClient(
+                @UnauthenticatedWithCertificate okHttpClient: OkHttpClient,
+                downloadProgressInterceptor: DownloadProgressInterceptor,
+                matrixConfiguration: MatrixConfiguration,
+        ): OkHttpClient {
+            return okHttpClient
+                    .newBuilder()
                     .apply {
-                        // Remove the previous CurlLoggingInterceptor, to add it after the accessTokenInterceptor
+                        // Remove the previous CurlLoggingInterceptor, to add it after the downloadProgressInterceptor
                         val existingCurlInterceptors = interceptors().filterIsInstance<CurlLoggingInterceptor>()
                         interceptors().removeAll(existingCurlInterceptors)
 
@@ -254,15 +265,19 @@ internal abstract class SessionModule {
                         existingCurlInterceptors.forEach {
                             addInterceptor(it)
                         }
-                    }.build()
+                    }
+                    .applyMatrixConfiguration(matrixConfiguration)
+                    .build()
         }
 
         @JvmStatic
         @Provides
         @SessionScope
-        fun providesRetrofit(@Authenticated okHttpClient: Lazy<OkHttpClient>,
-                             sessionParams: SessionParams,
-                             retrofitFactory: RetrofitFactory): Retrofit {
+        fun providesRetrofit(
+                @Authenticated okHttpClient: Lazy<OkHttpClient>,
+                sessionParams: SessionParams,
+                retrofitFactory: RetrofitFactory
+        ): Retrofit {
             return retrofitFactory
                     .create(okHttpClient, sessionParams.homeServerConnectionConfig.homeServerUriBase.toString())
         }
@@ -270,8 +285,9 @@ internal abstract class SessionModule {
         @JvmStatic
         @Provides
         @SessionScope
-        fun providesNetworkCallbackStrategy(fallbackNetworkCallbackStrategy: Provider<FallbackNetworkCallbackStrategy>,
-                                            preferredNetworkCallbackStrategy: Provider<PreferredNetworkCallbackStrategy>
+        fun providesNetworkCallbackStrategy(
+                fallbackNetworkCallbackStrategy: Provider<FallbackNetworkCallbackStrategy>,
+                preferredNetworkCallbackStrategy: Provider<PreferredNetworkCallbackStrategy>
         ): NetworkCallbackStrategy {
             return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 preferredNetworkCallbackStrategy.get()
@@ -350,12 +366,6 @@ internal abstract class SessionModule {
     abstract fun bindEventSenderProcessorAsSessionLifecycleObserver(processor: EventSenderProcessorCoroutine): SessionLifecycleObserver
 
     @Binds
-    abstract fun bindSyncStatusService(service: DefaultSyncStatusService): SyncStatusService
-
-    @Binds
-    abstract fun bindSecureStorageService(service: DefaultSecureStorageService): SecureStorageService
-
-    @Binds
     abstract fun bindHomeServerCapabilitiesService(service: DefaultHomeServerCapabilitiesService): HomeServerCapabilitiesService
 
     @Binds
@@ -389,5 +399,5 @@ internal abstract class SessionModule {
     abstract fun bindEventSenderProcessor(processor: EventSenderProcessorCoroutine): EventSenderProcessor
 
     @Binds
-    abstract fun bindLiveLocationAggregationProcessor(processor: DefaultLiveLocationAggregationProcessor): LiveLocationAggregationProcessor
+    abstract fun bindPollAggregationProcessor(processor: DefaultPollAggregationProcessor): PollAggregationProcessor
 }

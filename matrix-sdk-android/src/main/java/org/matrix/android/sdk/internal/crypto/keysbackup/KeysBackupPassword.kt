@@ -44,12 +44,14 @@ internal data class GeneratePrivateKeyResult(
  * Compute a private key from a password.
  *
  * @param password the password to use.
+ * @param progressListener a listener to track progress
  *
  * @return a {privateKey, salt, iterations} tuple.
  */
 @WorkerThread
-internal fun generatePrivateKeyWithPassword(password: String,
-                                            progressListener: ProgressListener?
+internal fun generatePrivateKeyWithPassword(
+        password: String,
+        progressListener: ProgressListener?
 ): GeneratePrivateKeyResult {
     val salt = generateSalt()
     val iterations = DEFAULT_ITERATION
@@ -69,10 +71,12 @@ internal fun generatePrivateKeyWithPassword(password: String,
  * @return a private key.
  */
 @WorkerThread
-internal fun retrievePrivateKeyWithPassword(password: String,
-                                            salt: String,
-                                            iterations: Int,
-                                            progressListener: ProgressListener? = null): ByteArray {
+internal fun retrievePrivateKeyWithPassword(
+        password: String,
+        salt: String,
+        iterations: Int,
+        progressListener: ProgressListener? = null
+): ByteArray {
     return deriveKey(password, salt, iterations, progressListener)
 }
 
@@ -87,10 +91,12 @@ internal fun retrievePrivateKeyWithPassword(password: String,
  * @return a private key.
  */
 @WorkerThread
-internal fun deriveKey(password: String,
-                       salt: String,
-                       iterations: Int,
-                       progressListener: ProgressListener?): ByteArray {
+internal fun deriveKey(
+        password: String,
+        salt: String,
+        iterations: Int,
+        progressListener: ProgressListener?
+): ByteArray {
     // Note: copied and adapted from MXMegolmExportEncryption
     // based on https://en.wikipedia.org/wiki/PBKDF2 algorithm
     // it is simpler than the generic algorithm because the expected key length is equal to the mac key length.

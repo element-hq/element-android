@@ -76,7 +76,7 @@ class SignoutCheckViewModel @AssistedInject constructor(
 
         val quad4SIsSetup = session.sharedSecretStorageService().isRecoverySetup()
         val allKeysKnown = session.cryptoService().crossSigningService().allPrivateKeysKnown()
-        val backupState = session.cryptoService().keysBackupService().state
+        val backupState = session.cryptoService().keysBackupService().getState()
         setState {
             copy(
                     userId = session.myUserId,
@@ -117,7 +117,7 @@ class SignoutCheckViewModel @AssistedInject constructor(
 
     override fun handle(action: Actions) {
         when (action) {
-            is Actions.ExportKeys                   -> handleExportKeys(action)
+            is Actions.ExportKeys -> handleExportKeys(action)
             Actions.KeySuccessfullyManuallyExported -> {
                 setState {
                     copy(hasBeenExportedToFile = Success(true))

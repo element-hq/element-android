@@ -20,6 +20,7 @@ import androidx.test.filters.LargeTest
 import kotlinx.coroutines.runBlocking
 import org.amshove.kluent.internal.assertEquals
 import org.junit.FixMethodOrder
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
@@ -32,19 +33,17 @@ import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
-import org.matrix.android.sdk.common.CommonTestHelper
-import org.matrix.android.sdk.common.CryptoTestHelper
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import org.matrix.android.sdk.common.TestConstants
 
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
 @LargeTest
+@Ignore
 class TimelineSimpleBackPaginationTest : InstrumentedTest {
 
     @Test
-    fun timeline_backPaginate_shouldReachEndOfTimeline() {
-        val commonTestHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
+    fun timeline_backPaginate_shouldReachEndOfTimeline() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
         val numberOfMessagesToSent = 200
 
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(false)
@@ -102,6 +101,5 @@ class TimelineSimpleBackPaginationTest : InstrumentedTest {
         assertEquals(numberOfMessagesToSent, onlySentEvents.size)
 
         bobTimeline.dispose()
-        cryptoTestData.cleanUp(commonTestHelper)
     }
 }

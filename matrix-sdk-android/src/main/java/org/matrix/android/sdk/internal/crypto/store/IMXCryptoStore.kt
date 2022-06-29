@@ -164,16 +164,14 @@ internal interface IMXCryptoStore {
 
     /**
      * Store the end to end account for the logged-in user.
-     *
-     * @param account the account to save
      */
     fun saveOlmAccount()
 
     /**
      * Retrieve a device for a user.
      *
+     * @param userId the user's id.
      * @param deviceId the device id.
-     * @param userId   the user's id.
      * @return the device
      */
     fun getUserDevice(userId: String, deviceId: String): CryptoDeviceInfo?
@@ -189,15 +187,17 @@ internal interface IMXCryptoStore {
     /**
      * Store the known devices for a user.
      *
-     * @param userId  The user's id.
+     * @param userId The user's id.
      * @param devices A map from device id to 'MXDevice' object for the device.
      */
     fun storeUserDevices(userId: String, devices: Map<String, CryptoDeviceInfo>?)
 
-    fun storeUserCrossSigningKeys(userId: String,
-                                  masterKey: CryptoCrossSigningKey?,
-                                  selfSigningKey: CryptoCrossSigningKey?,
-                                  userSigningKey: CryptoCrossSigningKey?)
+    fun storeUserCrossSigningKeys(
+            userId: String,
+            masterKey: CryptoCrossSigningKey?,
+            selfSigningKey: CryptoCrossSigningKey?,
+            userSigningKey: CryptoCrossSigningKey?
+    )
 
     /**
      * Retrieve the known devices for a user.
@@ -225,7 +225,7 @@ internal interface IMXCryptoStore {
     /**
      * Store the crypto algorithm for a room.
      *
-     * @param roomId    the id of the room.
+     * @param roomId the id of the room.
      * @param algorithm the algorithm.
      */
     fun storeRoomAlgorithm(roomId: String, algorithm: String?)
@@ -253,7 +253,7 @@ internal interface IMXCryptoStore {
     /**
      * Store a session between the logged-in user and another device.
      *
-     * @param olmSessionWrapper   the end-to-end session.
+     * @param olmSessionWrapper the end-to-end session.
      * @param deviceKey the public key of the other device.
      */
     fun storeSession(olmSessionWrapper: OlmSessionWrapper, deviceKey: String)
@@ -331,7 +331,7 @@ internal interface IMXCryptoStore {
     /**
      * Mark inbound group sessions as backed up on the user homeserver.
      *
-     * @param sessions the sessions
+     * @param olmInboundGroupSessionWrappers the sessions
      */
     fun markBackupDoneForInboundGroupSessions(olmInboundGroupSessionWrappers: List<OlmInboundGroupSessionWrapper2>)
 
@@ -361,7 +361,7 @@ internal interface IMXCryptoStore {
     /**
      * Get the tracking status of a specified userId devices.
      *
-     * @param userId       the user id
+     * @param userId the user id
      * @param defaultValue the default value
      * @return the tracking status
      */
@@ -380,7 +380,9 @@ internal interface IMXCryptoStore {
     /**
      * Look for an existing outgoing room key request, and if none is found, add a new one.
      *
-     * @param request the request
+     * @param requestBody the request
+     * @param recipients list of recipients
+     * @param fromIndex start index
      * @return either the same instance as passed in, or the existing one.
      */
     fun getOrAddOutgoingRoomKeyRequest(requestBody: RoomKeyRequestBody, recipients: Map<String, List<String>>, fromIndex: Int): OutgoingKeyRequest
@@ -392,7 +394,8 @@ internal interface IMXCryptoStore {
             algorithm: String,
             senderKey: String,
             fromDevice: String?,
-            event: Event)
+            event: Event
+    )
 
     fun deleteOutgoingRoomKeyRequest(requestId: String)
     fun deleteOutgoingRoomKeyRequestInState(state: OutgoingRoomKeyRequestState)
@@ -479,8 +482,14 @@ internal interface IMXCryptoStore {
     fun addWithHeldMegolmSession(withHeldContent: RoomKeyWithHeldContent)
     fun getWithHeldMegolmSession(roomId: String, sessionId: String): RoomKeyWithHeldContent?
 
-    fun markedSessionAsShared(roomId: String?, sessionId: String, userId: String, deviceId: String,
-                              deviceIdentityKey: String, chainIndex: Int)
+    fun markedSessionAsShared(
+            roomId: String?,
+            sessionId: String,
+            userId: String,
+            deviceId: String,
+            deviceIdentityKey: String,
+            chainIndex: Int
+    )
 
     /**
      * Query for information on this session sharing history.
@@ -504,6 +513,5 @@ internal interface IMXCryptoStore {
     fun setDeviceKeysUploaded(uploaded: Boolean)
     fun areDeviceKeysUploaded(): Boolean
     fun tidyUpDataBase()
-    fun logDbUsageInfo()
     fun getOutgoingRoomKeyRequests(inStates: Set<OutgoingRoomKeyRequestState>): List<OutgoingKeyRequest>
 }

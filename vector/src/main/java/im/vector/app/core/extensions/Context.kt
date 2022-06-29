@@ -16,9 +16,13 @@
 
 package im.vector.app.core.extensions
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.Uri
+import android.os.Build
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ImageSpan
@@ -27,11 +31,13 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.FloatRange
 import androidx.core.content.ContextCompat
+import androidx.core.content.getSystemService
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import dagger.hilt.EntryPoints
 import im.vector.app.core.datastore.dataStoreProvider
 import im.vector.app.core.di.SingletonEntryPoint
+import im.vector.app.core.resources.BuildMeta
 import java.io.OutputStream
 import kotlin.math.roundToInt
 
@@ -53,9 +59,10 @@ fun Context.getResTintedDrawable(@DrawableRes drawableRes: Int, @ColorRes tint: 
     return getTintedDrawable(drawableRes, ContextCompat.getColor(this, tint), alpha)
 }
 
-fun Context.getTintedDrawable(@DrawableRes drawableRes: Int,
-                              @ColorInt tint: Int,
-                              @FloatRange(from = 0.0, to = 1.0) alpha: Float = 1f
+fun Context.getTintedDrawable(
+        @DrawableRes drawableRes: Int,
+        @ColorInt tint: Int,
+        @FloatRange(from = 0.0, to = 1.0) alpha: Float = 1f
 ) = ContextCompat.getDrawable(this, drawableRes)
         ?.mutate()
         ?.also { drawable ->
@@ -76,4 +83,32 @@ val Context.dataStoreProvider: (String) -> DataStore<Preferences> by dataStorePr
  */
 fun Context.safeOpenOutputStream(uri: Uri): OutputStream? {
     return contentResolver.openOutputStream(uri, "wt")
+}
+
+/**
+ * Checks for an active connection to infer if the device is offline.
+ * This is useful for breaking down UnknownHost exceptions and should not be used to determine if a valid connection is present
+ *
+ * @return true if no active connection is found
+ */
+@Suppress("deprecation")
+@SuppressLint("NewApi") // false positive
+fun Context.inferNoConnectivity(buildMeta: BuildMeta): Boolean {
+    val connectivityManager = getSystemService<ConnectivityManager>()!!
+    return if (buildMeta.sdkInt > Build.VERSION_CODES.M) {
+        val networkCapabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+        when {
+            networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) == true -> false
+            networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true -> false
+            networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_VPN) == true -> false
+            else -> true
+        }
+    } else {
+        when (connectivityManager.activeNetworkInfo?.type) {
+            ConnectivityManager.TYPE_WIFI -> false
+            ConnectivityManager.TYPE_MOBILE -> false
+            ConnectivityManager.TYPE_VPN -> false
+            else -> true
+        }
+    }
 }

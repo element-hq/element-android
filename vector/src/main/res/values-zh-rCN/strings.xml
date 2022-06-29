@@ -475,7 +475,6 @@
         <item quantity="other">%d 条未读消息</item>
     </plurals>
     <string name="list_members">显示成员</string>
-    <string name="settings_flair">徽章</string>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="other">%d 个聊天室</item>
     </plurals>
@@ -2163,10 +2162,6 @@
     <string name="space_add_space_to_any_space_you_manage">将一个空间添加到您管理的任何空间。</string>
     <string name="space_add_existing_spaces">添加现有空间</string>
     <string name="space_add_existing_rooms_only">添加现有聊天室</string>
-    <string name="pick_tings_to_leave">选择要离开的项目</string>
-    <string name="leave_specific_ones">离开特定聊天室和空间…</string>
-    <string name="dont_leave_any">不要离开任何聊天室和空间</string>
-    <string name="leave_all_rooms_and_spaces">离开所有聊天室和空间</string>
     <string name="space_leave_prompt_msg_with_name">你确定要离开 %s 吗？</string>
     <string name="discovery_section">发现 (%s)</string>
     <string name="finish_setup">完成设置</string>
@@ -2294,4 +2289,5 @@
     <string name="room_threads_filter">在房间中筛选子区</string>
     <string name="action_thread_copy_link_to_thread">复制子区的链接</string>
     <string name="action_thread_view_in_room">在房间中查看</string>
+    <string name="room_message_autocomplete_notification">群组通知</string>
 </resources>

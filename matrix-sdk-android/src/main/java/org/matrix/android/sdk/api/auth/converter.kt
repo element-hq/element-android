@@ -41,8 +41,10 @@ import org.matrix.android.sdk.api.auth.registration.TermPolicies
  * @param userLanguage the user language
  * @param defaultLanguage the default language to use if the user language is not found for a policy in registrationFlowResponse
  */
-fun TermPolicies.toLocalizedLoginTerms(userLanguage: String,
-                                       defaultLanguage: String = "en"): List<LocalizedFlowDataLoginTerms> {
+fun TermPolicies.toLocalizedLoginTerms(
+        userLanguage: String,
+        defaultLanguage: String = "en"
+): List<LocalizedFlowDataLoginTerms> {
     val result = ArrayList<LocalizedFlowDataLoginTerms>()
 
     val policies = get("policies")
@@ -67,8 +69,8 @@ fun TermPolicies.toLocalizedLoginTerms(userLanguage: String,
                 // Search for language
                 policy.keys.forEach { policyKey ->
                     when (policyKey) {
-                        "version"       -> Unit // Ignore
-                        userLanguage    -> {
+                        "version" -> Unit // Ignore
+                        userLanguage -> {
                             // We found the data for the user language
                             userLanguageUrlAndName = extractUrlAndName(policy[policyKey])
                         }
@@ -76,7 +78,7 @@ fun TermPolicies.toLocalizedLoginTerms(userLanguage: String,
                             // We found default language
                             defaultLanguageUrlAndName = extractUrlAndName(policy[policyKey])
                         }
-                        else            -> {
+                        else -> {
                             if (firstUrlAndName == null) {
                                 // Get at least some data
                                 firstUrlAndName = extractUrlAndName(policy[policyKey])
@@ -87,7 +89,7 @@ fun TermPolicies.toLocalizedLoginTerms(userLanguage: String,
 
                 // Copy found language data by priority
                 when {
-                    userLanguageUrlAndName != null    -> {
+                    userLanguageUrlAndName != null -> {
                         localizedFlowDataLoginTermsLocalizedUrl = userLanguageUrlAndName!!.url
                         localizedFlowDataLoginTermsLocalizedName = userLanguageUrlAndName!!.name
                     }
@@ -95,7 +97,7 @@ fun TermPolicies.toLocalizedLoginTerms(userLanguage: String,
                         localizedFlowDataLoginTermsLocalizedUrl = defaultLanguageUrlAndName!!.url
                         localizedFlowDataLoginTermsLocalizedName = defaultLanguageUrlAndName!!.name
                     }
-                    firstUrlAndName != null           -> {
+                    firstUrlAndName != null -> {
                         localizedFlowDataLoginTermsLocalizedUrl = firstUrlAndName!!.url
                         localizedFlowDataLoginTermsLocalizedName = firstUrlAndName!!.name
                     }

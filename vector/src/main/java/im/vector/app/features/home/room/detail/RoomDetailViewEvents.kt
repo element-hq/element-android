@@ -75,9 +75,11 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
 
     object OpenIntegrationManager : RoomDetailViewEvents()
     object OpenActiveWidgetBottomSheet : RoomDetailViewEvents()
-    data class RequestNativeWidgetPermission(val widget: Widget,
-                                             val domain: String,
-                                             val grantedEvents: RoomDetailViewEvents) : RoomDetailViewEvents()
+    data class RequestNativeWidgetPermission(
+            val widget: Widget,
+            val domain: String,
+            val grantedEvents: RoomDetailViewEvents
+    ) : RoomDetailViewEvents()
 
     data class StartChatEffect(val type: ChatEffect) : RoomDetailViewEvents()
     object StopChatEffects : RoomDetailViewEvents()
