@@ -30,6 +30,7 @@ import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
@@ -258,16 +259,21 @@ internal class LoadTimelineStrategy constructor(
 
     private fun updateRepliedEventIfNeeded(events: List<TimelineEvent>): List<TimelineEvent> {
         return events.map {
-            if (it.isReply() && it.isEncrypted()) {
-                    createNewRepliedEvent(it)?.let { newEvent ->
+            if (it.isReply()) {
+                    createNewEncryptedRepliedEvent(it)?.let { newEvent ->
                         it.copy(root = newEvent)
                     } ?: it
             } else it
         }
     }
 
-    private fun createNewRepliedEvent(currentTimelineEvent: TimelineEvent): Event? {
-        return currentTimelineEvent.root.content.toModel<EncryptedEventContent>()?.relatesTo?.inReplyTo?.eventId?.let { eventId ->
+    private fun createNewEncryptedRepliedEvent(currentTimelineEvent: TimelineEvent): Event? {
+        val relatesEventId = if (currentTimelineEvent.isEncrypted()) {
+            currentTimelineEvent.root.content.toModel<EncryptedEventContent>()?.relatesTo?.inReplyTo?.eventId
+        } else {
+            currentTimelineEvent.root.content.toModel<MessageContent>()?.relatesTo?.inReplyTo?.eventId
+        }
+        return relatesEventId?.let { eventId ->
             val timeLineEventEntity = TimelineEventEntity.where(
                     dependencies.realm.get(),
                     roomId,
