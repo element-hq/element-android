@@ -30,8 +30,8 @@ import im.vector.app.features.location.live.LocationLiveMessageBannerView
 import im.vector.app.features.location.live.LocationLiveMessageBannerViewState
 import org.threeten.bp.LocalDateTime
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_base)
-abstract class MessageLiveLocationItem : AbsMessageLocationItem<MessageLiveLocationItem.Holder>() {
+@EpoxyModelClass
+abstract class MessageLiveLocationItem : AbsMessageLocationItem<MessageLiveLocationItem.Holder>(R.layout.item_timeline_event_base) {
 
     @EpoxyAttribute
     var currentUserId: String? = null

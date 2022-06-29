@@ -23,12 +23,13 @@ import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
+import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.features.reactions.data.EmojiItem
 
-@EpoxyModelClass(layout = R.layout.item_emoji_result)
-abstract class EmojiSearchResultItem : EpoxyModelWithHolder<EmojiSearchResultItem.Holder>() {
+@EpoxyModelClass
+abstract class EmojiSearchResultItem : VectorEpoxyModel<EmojiSearchResultItem.Holder>(R.layout.item_emoji_result) {
 
     @EpoxyAttribute
     lateinit var emojiItem: EmojiItem

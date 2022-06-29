@@ -20,6 +20,7 @@ import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.IdRes
+import androidx.annotation.LayoutRes
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
@@ -36,7 +37,7 @@ import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvid
 import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
 import im.vector.app.features.home.room.detail.timeline.style.granularRoundedCorners
 
-abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder> : AbsMessageItem<H>() {
+abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder>(@LayoutRes layoutId: Int) : AbsMessageItem<H>(layoutId) {
 
     @EpoxyAttribute
     var locationUrl: String? = null

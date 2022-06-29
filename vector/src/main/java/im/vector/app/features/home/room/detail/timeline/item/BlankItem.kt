@@ -20,7 +20,7 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_blank_stub)
-abstract class BlankItem : VectorEpoxyModel<BlankItem.BlankHolder>() {
+@EpoxyModelClass
+abstract class BlankItem : VectorEpoxyModel<BlankItem.BlankHolder>(R.layout.item_timeline_event_blank_stub) {
     class BlankHolder : VectorEpoxyHolder()
 }

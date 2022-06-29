@@ -35,8 +35,8 @@ import im.vector.app.core.epoxy.setValueOnce
 import im.vector.app.core.platform.SimpleTextWatcher
 import im.vector.app.core.resources.StringProvider
 
-@EpoxyModelClass(layout = R.layout.item_login_password_form)
-abstract class LoginPasswordFormItem : VectorEpoxyModel<LoginPasswordFormItem.Holder>() {
+@EpoxyModelClass
+abstract class LoginPasswordFormItem : VectorEpoxyModel<LoginPasswordFormItem.Holder>(R.layout.item_login_password_form) {
 
     @EpoxyAttribute var passwordValue: String = ""
     @EpoxyAttribute var submitEnabled: Boolean = false

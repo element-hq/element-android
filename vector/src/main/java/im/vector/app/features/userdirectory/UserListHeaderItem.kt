@@ -23,8 +23,8 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 
-@EpoxyModelClass(layout = R.layout.item_user_list_header)
-abstract class UserListHeaderItem : VectorEpoxyModel<UserListHeaderItem.Holder>() {
+@EpoxyModelClass
+abstract class UserListHeaderItem : VectorEpoxyModel<UserListHeaderItem.Holder>(R.layout.item_user_list_header) {
 
     @EpoxyAttribute var header: String = ""
 

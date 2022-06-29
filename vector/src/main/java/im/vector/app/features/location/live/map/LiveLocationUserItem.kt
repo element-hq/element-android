@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.location.live.map.bottomsheet
+package im.vector.app.features.location.live.map
 
 import android.widget.Button
 import android.widget.ImageView
@@ -34,8 +34,8 @@ import im.vector.lib.core.utils.timer.CountUpTimer
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.threeten.bp.Duration
 
-@EpoxyModelClass(layout = R.layout.item_live_location_users_bottom_sheet)
-abstract class LiveLocationUserItem : VectorEpoxyModel<LiveLocationUserItem.Holder>() {
+@EpoxyModelClass
+abstract class LiveLocationUserItem : VectorEpoxyModel<LiveLocationUserItem.Holder>(R.layout.item_live_location_users_bottom_sheet) {
 
     interface Callback {
         fun onUserSelected(userId: String)

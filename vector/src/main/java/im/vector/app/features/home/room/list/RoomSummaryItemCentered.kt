@@ -40,8 +40,8 @@ import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.presence.model.UserPresence
 import org.matrix.android.sdk.api.util.MatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_room_centered)
-abstract class RoomSummaryItemCentered : VectorEpoxyModel<RoomSummaryItemCentered.Holder>() {
+@EpoxyModelClass
+abstract class RoomSummaryItemCentered : VectorEpoxyModel<RoomSummaryItemCentered.Holder>(R.layout.item_room_centered) {
 
     @EpoxyAttribute
     lateinit var avatarRenderer: AvatarRenderer

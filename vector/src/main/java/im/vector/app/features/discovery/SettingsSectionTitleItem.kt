@@ -19,13 +19,13 @@ import android.widget.TextView
 import androidx.annotation.StringRes
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
-import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
+import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.extensions.setTextOrHide
 
-@EpoxyModelClass(layout = R.layout.item_settings_section_title)
-abstract class SettingsSectionTitleItem : EpoxyModelWithHolder<SettingsSectionTitleItem.Holder>() {
+@EpoxyModelClass
+abstract class SettingsSectionTitleItem : VectorEpoxyModel<SettingsSectionTitleItem.Holder>(R.layout.item_settings_section_title) {
 
     @EpoxyAttribute
     var title: String? = null

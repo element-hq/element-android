@@ -22,7 +22,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import org.matrix.android.sdk.api.session.presence.model.UserPresence
 
-@EpoxyModelClass(layout = R.layout.item_profile_matrix_item)
+@EpoxyModelClass
 abstract class ProfileMatrixItemWithPowerLevelWithPresence : ProfileMatrixItemWithPowerLevel() {
 
     @EpoxyAttribute var showPresence: Boolean = true

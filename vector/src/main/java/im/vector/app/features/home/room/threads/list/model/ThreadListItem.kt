@@ -37,8 +37,8 @@ import im.vector.app.features.themes.ThemeUtils
 import org.matrix.android.sdk.api.session.threads.ThreadNotificationState
 import org.matrix.android.sdk.api.util.MatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_thread)
-abstract class ThreadListItem : VectorEpoxyModel<ThreadListItem.Holder>() {
+@EpoxyModelClass
+abstract class ThreadListItem : VectorEpoxyModel<ThreadListItem.Holder>(R.layout.item_thread) {
 
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem

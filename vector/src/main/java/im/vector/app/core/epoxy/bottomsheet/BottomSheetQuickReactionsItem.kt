@@ -29,8 +29,8 @@ import im.vector.app.core.epoxy.onClick
 /**
  * A quick reaction list for bottom sheet.
  */
-@EpoxyModelClass(layout = R.layout.item_bottom_sheet_quick_reaction)
-abstract class BottomSheetQuickReactionsItem : VectorEpoxyModel<BottomSheetQuickReactionsItem.Holder>() {
+@EpoxyModelClass
+abstract class BottomSheetQuickReactionsItem : VectorEpoxyModel<BottomSheetQuickReactionsItem.Holder>(R.layout.item_bottom_sheet_quick_reaction) {
 
     @EpoxyAttribute
     lateinit var fontProvider: EmojiCompatFontProvider

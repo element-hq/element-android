@@ -21,9 +21,9 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_base)
+@EpoxyModelClass
 abstract class MessageLiveLocationStartItem :
-        AbsMessageItem<MessageLiveLocationStartItem.Holder>(),
+        AbsMessageItem<MessageLiveLocationStartItem.Holder>(R.layout.item_timeline_event_base),
         LiveLocationShareStatusItem by DefaultLiveLocationShareStatusItem() {
 
     @EpoxyAttribute
