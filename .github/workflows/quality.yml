@@ -9,6 +9,8 @@ on:
 env:
   CI_GRADLE_ARG_PROPERTIES: >
     -Porg.gradle.jvmargs=-Xmx4g
+    -Porg.gradle.parallel=false
+    --no-daemon
 
 jobs:
   check:
@@ -113,13 +115,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Dependency analysis
-        run: ./gradlew buildHealth $CI_GRADLE_ARG_PROPERTIES
+        run: ./gradlew dependencyCheckAnalyze $CI_GRADLE_ARG_PROPERTIES
       - name: Upload dependency analysis
         if: always()
         uses: actions/upload-artifact@v3
         with:
           name: dependency-analysis
-          path: build/reports/dependency-analysis/build-health-report.txt
+          path: build/reports/dependency-check-report.html
 
 # Lint for main module
   android-lint:
@@ -140,7 +142,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Lint analysis
-        run: ./gradlew clean :vector:lint --stacktrace
+        run: ./gradlew clean :vector:lint --stacktrace $CI_GRADLE_ARG_PROPERTIES
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@v3
@@ -173,7 +175,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Lint ${{ matrix.target }} release
-        run: ./gradlew clean lint${{ matrix.target }}Release --stacktrace
+        run: ./gradlew clean lint${{ matrix.target }}Release --stacktrace $CI_GRADLE_ARG_PROPERTIES
       - name: Upload ${{ matrix.target }} linting report
         if: always()
         uses: actions/upload-artifact@v3
@@ -193,7 +195,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Run detekt
         run: |
-          ./gradlew detekt
+          ./gradlew detekt $CI_GRADLE_ARG_PROPERTIES
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@v3

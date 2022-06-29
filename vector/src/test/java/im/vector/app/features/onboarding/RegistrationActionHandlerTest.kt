@@ -16,108 +16,165 @@
 
 package im.vector.app.features.onboarding
 
-import im.vector.app.test.fakes.FakeRegistrationWizard
+import im.vector.app.R
+import im.vector.app.test.fakes.FakeAuthenticationService
+import im.vector.app.test.fakes.FakeRegistrationWizardActionDelegate
 import im.vector.app.test.fakes.FakeSession
-import im.vector.app.test.fixtures.a401ServerError
-import io.mockk.coVerifyAll
+import im.vector.app.test.fakes.FakeStringProvider
+import im.vector.app.test.fakes.FakeVectorFeatures
+import im.vector.app.test.fakes.FakeVectorOverrides
+import im.vector.app.test.fixtures.SelectedHomeserverStateFixture.aSelectedHomeserverState
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
-import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
-import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
-import org.matrix.android.sdk.api.auth.registration.RegistrationResult as SdkResult
+import org.matrix.android.sdk.api.auth.registration.FlowResult
+import org.matrix.android.sdk.api.auth.registration.Stage
 
-private const val IGNORED_DELAY = 0L
-private val AN_ERROR = RuntimeException()
 private val A_SESSION = FakeSession()
-private val AN_EXPECTED_RESULT = RegistrationResult.Complete(A_SESSION)
-private const val A_USERNAME = "a username"
-private const val A_PASSWORD = "a password"
-private const val AN_INITIAL_DEVICE_NAME = "a device name"
-private const val A_CAPTCHA_RESPONSE = "a captcha response"
-private const val A_PID_CODE = "a pid code"
-private const val EMAIL_VALIDATED_DELAY = 10000L
-private val A_PID_TO_REGISTER = RegisterThreePid.Email("an email")
 
 class RegistrationActionHandlerTest {
 
-    private val fakeRegistrationWizard = FakeRegistrationWizard()
-    private val registrationActionHandler = RegistrationActionHandler()
-
-    @Test
-    fun `when handling register action then delegates to wizard`() = runTest {
-        val cases = listOf(
-                case(RegisterAction.StartRegistration) { getRegistrationFlow() },
-                case(RegisterAction.CaptchaDone(A_CAPTCHA_RESPONSE)) { performReCaptcha(A_CAPTCHA_RESPONSE) },
-                case(RegisterAction.AcceptTerms) { acceptTerms() },
-                case(RegisterAction.RegisterDummy) { dummy() },
-                case(RegisterAction.AddThreePid(A_PID_TO_REGISTER)) { addThreePid(A_PID_TO_REGISTER) },
-                case(RegisterAction.SendAgainThreePid) { sendAgainThreePid() },
-                case(RegisterAction.ValidateThreePid(A_PID_CODE)) { handleValidateThreePid(A_PID_CODE) },
-                case(RegisterAction.CheckIfEmailHasBeenValidated(EMAIL_VALIDATED_DELAY)) { checkIfEmailHasBeenValidated(EMAIL_VALIDATED_DELAY) },
-                case(RegisterAction.CreateAccount(A_USERNAME, A_PASSWORD, AN_INITIAL_DEVICE_NAME)) {
-                    createAccount(A_USERNAME, A_PASSWORD, AN_INITIAL_DEVICE_NAME)
-                }
-        )
-
-        cases.forEach { testSuccessfulActionDelegation(it) }
+    private val fakeWizardActionDelegate = FakeRegistrationWizardActionDelegate()
+    private val fakeAuthenticationService = FakeAuthenticationService()
+    private val vectorOverrides = FakeVectorOverrides()
+    private val vectorFeatures = FakeVectorFeatures()
+    private val fakeStringProvider = FakeStringProvider().also {
+        it.given(R.string.matrix_org_server_url, "https://matrix.org")
     }
 
+    private val registrationActionHandler = RegistrationActionHandler(
+            fakeWizardActionDelegate.instance,
+            fakeAuthenticationService,
+            vectorOverrides,
+            vectorFeatures,
+            fakeStringProvider.instance
+    )
+
     @Test
-    fun `given adding an email ThreePid fails with 401, when handling register action, then infer EmailSuccess`() = runTest {
-        fakeRegistrationWizard.givenAddEmailThreePidErrors(
-                cause = a401ServerError(),
-                email = A_PID_TO_REGISTER.email
-        )
+    fun `when processing SendAgainThreePid, then ignores result`() = runTest {
+        val sendAgainThreePid = RegisterAction.SendAgainThreePid
+        fakeWizardActionDelegate.givenResultsFor(listOf(sendAgainThreePid to RegistrationResult.Complete(A_SESSION)))
 
-        val result = registrationActionHandler.handleRegisterAction(fakeRegistrationWizard, RegisterAction.AddThreePid(A_PID_TO_REGISTER))
+        val result = registrationActionHandler.processAction(sendAgainThreePid)
 
-        result shouldBeEqualTo RegistrationResult.SendEmailSuccess(A_PID_TO_REGISTER.email)
+        result shouldBeEqualTo RegistrationActionHandler.Result.Ignored
     }
 
     @Test
-    fun `given email verification errors with 401 then fatal error, when checking email validation, then continues to poll until non 401 error`() = runTest {
-        val errorsToThrow = listOf(
-                a401ServerError(),
-                a401ServerError(),
-                a401ServerError(),
-                AN_ERROR
-        )
-        fakeRegistrationWizard.givenCheckIfEmailHasBeenValidatedErrors(errorsToThrow)
+    fun `given wizard delegate returns success, when handling action, then returns RegistrationComplete`() = runTest {
+        fakeWizardActionDelegate.givenResultsFor(listOf(RegisterAction.StartRegistration to RegistrationResult.Complete(A_SESSION)))
 
-        val result = registrationActionHandler.handleRegisterAction(fakeRegistrationWizard, RegisterAction.CheckIfEmailHasBeenValidated(IGNORED_DELAY))
+        val result = registrationActionHandler.processAction(RegisterAction.StartRegistration)
 
-        fakeRegistrationWizard.verifyCheckedEmailedVerification(times = errorsToThrow.size)
-        result shouldBeEqualTo RegistrationResult.Error(AN_ERROR)
+        result shouldBeEqualTo RegistrationActionHandler.Result.RegistrationComplete(A_SESSION)
     }
 
     @Test
-    fun `given email verification errors with 401 and succeeds, when checking email validation, then continues to poll until success`() = runTest {
-        val errorsToThrow = listOf(
-                a401ServerError(),
-                a401ServerError(),
-                a401ServerError()
+    fun `given flow result contains unsupported stages, when handling action, then returns UnsupportedStage`() = runTest {
+        fakeAuthenticationService.givenRegistrationStarted(false)
+        fakeWizardActionDelegate.givenResultsFor(listOf(RegisterAction.StartRegistration to anUnsupportedResult()))
+
+        val result = registrationActionHandler.processAction(RegisterAction.StartRegistration)
+
+        result shouldBeEqualTo RegistrationActionHandler.Result.UnsupportedStage
+    }
+
+    @Test
+    fun `given flow result with mandatory and optional stages, when handling action, then returns mandatory stage`() = runTest {
+        val mandatoryStage = Stage.ReCaptcha(mandatory = true, "ignored-key")
+        val mixedStages = listOf(Stage.Email(mandatory = false), mandatoryStage)
+        givenFlowResult(mixedStages)
+
+        val result = registrationActionHandler.processAction(RegisterAction.StartRegistration)
+
+        result shouldBeEqualTo RegistrationActionHandler.Result.NextStage(mandatoryStage)
+    }
+
+    @Test
+    fun `given flow result with only optional stages, when handling action, then returns optional stage`() = runTest {
+        val optionalStage = Stage.ReCaptcha(mandatory = false, "ignored-key")
+        givenFlowResult(listOf(optionalStage))
+
+        val result = registrationActionHandler.processAction(RegisterAction.StartRegistration)
+
+        result shouldBeEqualTo RegistrationActionHandler.Result.NextStage(optionalStage)
+    }
+
+    @Test
+    fun `given flow result with missing stages, when handling action, then returns MissingNextStage`() = runTest {
+        givenFlowResult(emptyList())
+
+        val result = registrationActionHandler.processAction(RegisterAction.StartRegistration)
+
+        result shouldBeEqualTo RegistrationActionHandler.Result.MissingNextStage
+    }
+
+    @Test
+    fun `given flow result with only optional dummy stage, when handling action, then returns MissingNextStage`() = runTest {
+        givenFlowResult(listOf(Stage.Dummy(mandatory = false)))
+
+        val result = registrationActionHandler.processAction(RegisterAction.StartRegistration)
+
+        result shouldBeEqualTo RegistrationActionHandler.Result.MissingNextStage
+    }
+
+    @Test
+    fun `given non matrix org homeserver and flow result with missing mandatory stages, when handling action, then returns first item`() = runTest {
+        val firstStage = Stage.ReCaptcha(mandatory = true, "ignored-key")
+        val orderedStages = listOf(firstStage, Stage.Email(mandatory = true), Stage.Msisdn(mandatory = true))
+        givenFlowResult(orderedStages)
+
+        val result = registrationActionHandler.processAction(RegisterAction.StartRegistration)
+
+        result shouldBeEqualTo RegistrationActionHandler.Result.NextStage(firstStage)
+    }
+
+    @Test
+    fun `given matrix org homeserver and flow result with missing mandatory stages, when handling action, then returns email item first`() = runTest {
+        vectorFeatures.givenCombinedRegisterEnabled()
+        val expectedFirstItem = Stage.Email(mandatory = true)
+        val orderedStages = listOf(Stage.ReCaptcha(mandatory = true, "ignored-key"), expectedFirstItem, Stage.Msisdn(mandatory = true))
+        givenFlowResult(orderedStages)
+
+        val result = registrationActionHandler.processAction(state = aSelectedHomeserverState("https://matrix.org/"), RegisterAction.StartRegistration)
+
+        result shouldBeEqualTo RegistrationActionHandler.Result.NextStage(expectedFirstItem)
+    }
+
+    @Test
+    fun `given password already sent and missing mandatory dummy stage, when handling action, then fast tracks the dummy stage`() = runTest {
+        val stages = listOf(Stage.ReCaptcha(mandatory = true, "ignored-key"), Stage.Email(mandatory = true), Stage.Dummy(mandatory = true))
+        fakeAuthenticationService.givenRegistrationStarted(true)
+        fakeWizardActionDelegate.givenResultsFor(
+                listOf(
+                        RegisterAction.StartRegistration to aFlowResult(stages),
+                        RegisterAction.RegisterDummy to RegistrationResult.Complete(A_SESSION)
+                )
         )
-        fakeRegistrationWizard.givenCheckIfEmailHasBeenValidatedErrors(errorsToThrow, finally = SdkResult.Success(A_SESSION))
 
-        val result = registrationActionHandler.handleRegisterAction(fakeRegistrationWizard, RegisterAction.CheckIfEmailHasBeenValidated(IGNORED_DELAY))
+        val result = registrationActionHandler.processAction(RegisterAction.StartRegistration)
 
-        fakeRegistrationWizard.verifyCheckedEmailedVerification(times = errorsToThrow.size + 1)
-        result shouldBeEqualTo RegistrationResult.Complete(A_SESSION)
+        result shouldBeEqualTo RegistrationActionHandler.Result.RegistrationComplete(A_SESSION)
     }
 
-    private suspend fun testSuccessfulActionDelegation(case: Case) {
-        val fakeRegistrationWizard = FakeRegistrationWizard()
-        val registrationActionHandler = RegistrationActionHandler()
-        fakeRegistrationWizard.givenSuccessFor(result = A_SESSION, case.expect)
-
-        val result = registrationActionHandler.handleRegisterAction(fakeRegistrationWizard, case.action)
-
-        coVerifyAll { case.expect(fakeRegistrationWizard) }
-        result shouldBeEqualTo AN_EXPECTED_RESULT
+    private fun givenFlowResult(stages: List<Stage>) {
+        fakeAuthenticationService.givenRegistrationStarted(true)
+        fakeWizardActionDelegate.givenResultsFor(listOf(RegisterAction.StartRegistration to aFlowResult(stages)))
     }
+
+    private fun aFlowResult(missingStages: List<Stage>) = RegistrationResult.NextStep(
+            FlowResult(
+                    missingStages = missingStages,
+                    completedStages = emptyList()
+            )
+    )
+
+    private fun anUnsupportedResult() = RegistrationResult.NextStep(
+            FlowResult(
+                    missingStages = listOf(Stage.Other(mandatory = true, "ignored-type", emptyMap<String, String>())),
+                    completedStages = emptyList()
+            )
+    )
+
+    private suspend fun RegistrationActionHandler.processAction(action: RegisterAction) = processAction(aSelectedHomeserverState(), action)
 }
-
-private fun case(action: RegisterAction, expect: suspend RegistrationWizard.() -> SdkResult) = Case(action, expect)
-
-private class Case(val action: RegisterAction, val expect: suspend RegistrationWizard.() -> SdkResult)

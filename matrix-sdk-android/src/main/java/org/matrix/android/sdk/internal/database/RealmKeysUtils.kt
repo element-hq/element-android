@@ -21,7 +21,7 @@ import androidx.core.content.edit
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import org.matrix.android.sdk.BuildConfig
-import org.matrix.android.sdk.internal.session.securestorage.SecretStoringUtils
+import org.matrix.android.sdk.api.securestorage.SecretStoringUtils
 import timber.log.Timber
 import java.security.SecureRandom
 import javax.inject.Inject
@@ -40,7 +40,7 @@ import javax.inject.Inject
  */
 internal class RealmKeysUtils @Inject constructor(
         context: Context,
-        private val secretStoringUtils: SecretStoringUtils
+        private val secretStoringUtils: SecretStoringUtils,
 ) {
 
     private val rng = SecureRandom()
@@ -71,7 +71,7 @@ internal class RealmKeysUtils @Inject constructor(
     private fun createAndSaveKeyForDatabase(alias: String): ByteArray {
         val key = generateKeyForRealm()
         val encodedKey = Base64.encodeToString(key, Base64.NO_PADDING)
-        val toStore = secretStoringUtils.securelyStoreString(encodedKey, alias)
+        val toStore = secretStoringUtils.securelyStoreBytes(encodedKey.toByteArray(), alias)
         sharedPreferences.edit {
             putString("${ENCRYPTED_KEY_PREFIX}_$alias", Base64.encodeToString(toStore, Base64.NO_PADDING))
         }
@@ -85,7 +85,7 @@ internal class RealmKeysUtils @Inject constructor(
     private fun extractKeyForDatabase(alias: String): ByteArray {
         val encryptedB64 = sharedPreferences.getString("${ENCRYPTED_KEY_PREFIX}_$alias", null)
         val encryptedKey = Base64.decode(encryptedB64, Base64.NO_PADDING)
-        val b64 = secretStoringUtils.loadSecureSecret(encryptedKey, alias)
+        val b64 = secretStoringUtils.loadSecureSecretBytes(encryptedKey, alias)
         return Base64.decode(b64, Base64.NO_PADDING)
     }
 

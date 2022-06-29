@@ -23,6 +23,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
@@ -57,6 +58,18 @@ fun Context.isAirplaneModeOn(): Boolean {
 
 fun Context.isAnimationEnabled(): Boolean {
     return Settings.Global.getFloat(contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f) != 0f
+}
+
+/**
+ * Return the application label of the provided package. If not found, the package is returned.
+ */
+fun Context.getApplicationLabel(packageName: String): String {
+    return try {
+        val ai = packageManager.getApplicationInfo(packageName, 0)
+        packageManager.getApplicationLabel(ai).toString()
+    } catch (e: PackageManager.NameNotFoundException) {
+        packageName
+    }
 }
 
 /**

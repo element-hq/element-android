@@ -50,6 +50,7 @@ sealed interface OnboardingAction : VectorViewModelAction {
     data class ResetPassword(val email: String, val newPassword: String) : OnboardingAction
     object ResetPasswordMailConfirmed : OnboardingAction
 
+    data class MaybeUpdateHomeserverFromMatrixId(val userId: String) : OnboardingAction
     sealed interface AuthenticateAction : OnboardingAction {
         data class Register(val username: String, val password: String, val initialDeviceName: String) : AuthenticateAction
         data class Login(val username: String, val password: String, val initialDeviceName: String) : AuthenticateAction

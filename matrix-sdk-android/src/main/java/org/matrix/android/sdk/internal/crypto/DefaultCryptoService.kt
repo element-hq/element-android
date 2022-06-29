@@ -1298,10 +1298,6 @@ internal class DefaultCryptoService @Inject constructor(
         return cryptoStore.getWithHeldMegolmSession(roomId, sessionId)
     }
 
-    override fun logDbUsageInfo() {
-        cryptoStore.logDbUsageInfo()
-    }
-
     override fun prepareToEncrypt(roomId: String, callback: MatrixCallback<Unit>) {
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             Timber.tag(loggerTag.value).d("prepareToEncrypt() roomId:$roomId Check room members up to date")

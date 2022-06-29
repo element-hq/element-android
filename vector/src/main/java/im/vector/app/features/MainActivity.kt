@@ -195,7 +195,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
             vectorPreferences.clearPreferences()
             uiStateRepository.reset()
             pinLocker.unlock()
-            pinCodeStore.deleteEncodedPin()
+            pinCodeStore.deletePinCode()
             vectorAnalytics.onSignOut()
             vectorSessionStore.clear()
         }

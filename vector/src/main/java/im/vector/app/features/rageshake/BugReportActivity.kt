@@ -259,7 +259,7 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
     }
 
     private fun onSendScreenshotChanged() {
-        views.bugReportScreenshotPreview.isVisible = views.bugReportButtonIncludeScreenshot.isChecked && bugReporter.screenshot != null
+        views.bugReportScreenshotPreview.isVisible = bugReporter.screenshot != null
     }
 
     override fun onBackPressed() {

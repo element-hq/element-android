@@ -22,17 +22,23 @@ import androidx.preference.SwitchPreference
 import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.preference.VectorPreference
+import im.vector.app.core.utils.toast
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.pin.PinCodeStore
 import im.vector.app.features.pin.PinMode
+import im.vector.app.features.pin.lockscreen.biometrics.BiometricHelper
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.extensions.orFalse
+import timber.log.Timber
 import javax.inject.Inject
 
 class VectorSettingsPinFragment @Inject constructor(
         private val pinCodeStore: PinCodeStore,
         private val navigator: Navigator,
-        private val notificationDrawerManager: NotificationDrawerManager
+        private val notificationDrawerManager: NotificationDrawerManager,
+        private val biometricHelper: BiometricHelper,
 ) : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.settings_security_application_protection_screen_title
@@ -50,14 +56,67 @@ class VectorSettingsPinFragment @Inject constructor(
         findPreference<SwitchPreference>(VectorPreferences.SETTINGS_SECURITY_USE_COMPLETE_NOTIFICATIONS_FLAG)!!
     }
 
+    private val useBiometricPref by lazy {
+        findPreference<SwitchPreference>(VectorPreferences.SETTINGS_SECURITY_USE_BIOMETRICS_FLAG)!!
+    }
+
+    private fun shouldCheckBiometricPref(isPinCodeChecked: Boolean): Boolean {
+        return isPinCodeChecked && // Biometric auth depends on PIN auth
+                biometricHelper.isSystemAuthEnabledAndValid &&
+                biometricHelper.isSystemKeyValid
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        useBiometricPref.isEnabled = usePinCodePref.isChecked
+        useBiometricPref.isChecked = shouldCheckBiometricPref(usePinCodePref.isChecked)
+    }
+
     override fun bindPref() {
         refreshPinCodeStatus()
+
+        usePinCodePref.setOnPreferenceChangeListener { _, value ->
+            val isChecked = (value as? Boolean).orFalse()
+            useBiometricPref.isEnabled = isChecked
+            useBiometricPref.isChecked = shouldCheckBiometricPref(isChecked)
+            if (!isChecked) {
+                disableBiometricAuthentication()
+            }
+            true
+        }
 
         useCompleteNotificationPref.setOnPreferenceChangeListener { _, _ ->
             // Refresh the drawer for an immediate effect of this change
             notificationDrawerManager.notificationStyleChanged()
             true
         }
+
+        useBiometricPref.setOnPreferenceChangeListener { _, newValue ->
+            if (newValue as? Boolean == true) {
+                viewLifecycleOwner.lifecycleScope.launch {
+                    runCatching {
+                        // If previous system key existed, delete it
+                        if (biometricHelper.hasSystemKey) {
+                            biometricHelper.disableAuthentication()
+                        }
+                        biometricHelper.enableAuthentication(requireActivity()).collect()
+                    }.onFailure {
+                        showEnableBiometricErrorMessage()
+                    }
+                    useBiometricPref.isChecked = shouldCheckBiometricPref(usePinCodePref.isChecked)
+                }
+                false
+            } else {
+                disableBiometricAuthentication()
+                true
+            }
+        }
+    }
+
+    private fun disableBiometricAuthentication() {
+        runCatching { biometricHelper.disableAuthentication() }
+                .onFailure { Timber.e(it) }
     }
 
     private fun refreshPinCodeStatus() {
@@ -67,7 +126,7 @@ class VectorSettingsPinFragment @Inject constructor(
             usePinCodePref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 if (hasPinCode) {
                     lifecycleScope.launch {
-                        pinCodeStore.deleteEncodedPin()
+                        pinCodeStore.deletePinCode()
                         refreshPinCodeStatus()
                     }
                 } else {
@@ -91,6 +150,10 @@ class VectorSettingsPinFragment @Inject constructor(
                 true
             }
         }
+    }
+
+    private fun showEnableBiometricErrorMessage() {
+        context?.toast(R.string.settings_security_pin_code_use_biometrics_error)
     }
 
     private val pinActivityResultLauncher = registerStartForActivityResult {

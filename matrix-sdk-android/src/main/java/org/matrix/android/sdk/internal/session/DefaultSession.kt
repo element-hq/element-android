@@ -55,7 +55,6 @@ import org.matrix.android.sdk.api.session.pushrules.PushRuleService
 import org.matrix.android.sdk.api.session.room.RoomDirectoryService
 import org.matrix.android.sdk.api.session.room.RoomService
 import org.matrix.android.sdk.api.session.search.SearchService
-import org.matrix.android.sdk.api.session.securestorage.SecureStorageService
 import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
 import org.matrix.android.sdk.api.session.signout.SignOutService
 import org.matrix.android.sdk.api.session.space.SpaceService
@@ -71,6 +70,9 @@ import org.matrix.android.sdk.internal.auth.SSO_UIA_FALLBACK_PATH
 import org.matrix.android.sdk.internal.auth.SessionParamsStore
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
 import org.matrix.android.sdk.internal.database.tools.RealmDebugTools
+import org.matrix.android.sdk.internal.di.ContentScannerDatabase
+import org.matrix.android.sdk.internal.di.CryptoDatabase
+import org.matrix.android.sdk.internal.di.IdentityDatabase
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificate
@@ -88,6 +90,9 @@ internal class DefaultSession @Inject constructor(
         override val sessionId: String,
         override val coroutineDispatchers: MatrixCoroutineDispatchers,
         @SessionDatabase private val realmConfiguration: RealmConfiguration,
+        @CryptoDatabase private val realmConfigurationCrypto: RealmConfiguration,
+        @IdentityDatabase private val realmConfigurationIdentity: RealmConfiguration,
+        @ContentScannerDatabase private val realmConfigurationContentScanner: RealmConfiguration,
         private val lifecycleObservers: Set<@JvmSuppressWildcards SessionLifecycleObserver>,
         private val sessionListeners: SessionListeners,
         private val roomService: Lazy<RoomService>,
@@ -105,7 +110,6 @@ internal class DefaultSession @Inject constructor(
         private val cryptoService: Lazy<DefaultCryptoService>,
         private val defaultFileService: Lazy<FileService>,
         private val permalinkService: Lazy<PermalinkService>,
-        private val secureStorageService: Lazy<SecureStorageService>,
         private val profileService: Lazy<ProfileService>,
         private val syncService: Lazy<SyncService>,
         private val mediaService: Lazy<MediaService>,
@@ -214,7 +218,6 @@ internal class DefaultSession @Inject constructor(
     override fun eventService(): EventService = eventService.get()
     override fun termsService(): TermsService = termsService.get()
     override fun syncService(): SyncService = syncService.get()
-    override fun secureStorageService(): SecureStorageService = secureStorageService.get()
     override fun profileService(): ProfileService = profileService.get()
     override fun presenceService(): PresenceService = presenceService.get()
     override fun accountService(): AccountService = accountService.get()
@@ -265,5 +268,17 @@ internal class DefaultSession @Inject constructor(
 
     override fun logDbUsageInfo() {
         RealmDebugTools(realmConfiguration).logInfo("Session")
+        RealmDebugTools(realmConfigurationCrypto).logInfo("Crypto")
+        RealmDebugTools(realmConfigurationIdentity).logInfo("Identity")
+        RealmDebugTools(realmConfigurationContentScanner).logInfo("ContentScanner")
+    }
+
+    override fun getRealmConfigurations(): List<RealmConfiguration> {
+        return listOf(
+                realmConfiguration,
+                realmConfigurationCrypto,
+                realmConfigurationIdentity,
+                realmConfigurationContentScanner,
+        )
     }
 }

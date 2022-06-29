@@ -41,7 +41,6 @@ import org.matrix.android.sdk.api.session.events.EventService
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 import org.matrix.android.sdk.api.session.openid.OpenIdService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
-import org.matrix.android.sdk.api.session.securestorage.SecureStorageService
 import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
 import org.matrix.android.sdk.api.session.typing.TypingUsersTracker
 import org.matrix.android.sdk.api.util.md5
@@ -73,6 +72,7 @@ import org.matrix.android.sdk.internal.network.PreferredNetworkCallbackStrategy
 import org.matrix.android.sdk.internal.network.RetrofitFactory
 import org.matrix.android.sdk.internal.network.httpclient.addAccessTokenInterceptor
 import org.matrix.android.sdk.internal.network.httpclient.addSocketFactory
+import org.matrix.android.sdk.internal.network.httpclient.applyMatrixConfiguration
 import org.matrix.android.sdk.internal.network.interceptors.CurlLoggingInterceptor
 import org.matrix.android.sdk.internal.network.token.AccessTokenProvider
 import org.matrix.android.sdk.internal.network.token.HomeserverAccessTokenProvider
@@ -92,7 +92,6 @@ import org.matrix.android.sdk.internal.session.room.prune.RedactionEventProcesso
 import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
 import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessorCoroutine
 import org.matrix.android.sdk.internal.session.room.tombstone.RoomTombstoneEventProcessor
-import org.matrix.android.sdk.internal.session.securestorage.DefaultSecureStorageService
 import org.matrix.android.sdk.internal.session.typing.DefaultTypingUsersTracker
 import org.matrix.android.sdk.internal.session.user.accountdata.DefaultSessionAccountDataService
 import org.matrix.android.sdk.internal.session.widgets.DefaultWidgetURLFormatter
@@ -212,7 +211,7 @@ internal abstract class SessionModule {
         @UnauthenticatedWithCertificate
         fun providesOkHttpClientWithCertificate(
                 @Unauthenticated okHttpClient: OkHttpClient,
-                homeServerConnectionConfig: HomeServerConnectionConfig
+                homeServerConnectionConfig: HomeServerConnectionConfig,
         ): OkHttpClient {
             return okHttpClient
                     .newBuilder()
@@ -228,7 +227,8 @@ internal abstract class SessionModule {
                 @UnauthenticatedWithCertificate okHttpClient: OkHttpClient,
                 @Authenticated accessTokenProvider: AccessTokenProvider,
                 @SessionId sessionId: String,
-                @MockHttpInterceptor testInterceptor: TestInterceptor?
+                @MockHttpInterceptor testInterceptor: TestInterceptor?,
+                matrixConfiguration: MatrixConfiguration,
         ): OkHttpClient {
             return okHttpClient
                     .newBuilder()
@@ -239,6 +239,7 @@ internal abstract class SessionModule {
                             addInterceptor(testInterceptor)
                         }
                     }
+                    .applyMatrixConfiguration(matrixConfiguration)
                     .build()
         }
 
@@ -248,11 +249,13 @@ internal abstract class SessionModule {
         @UnauthenticatedWithCertificateWithProgress
         fun providesProgressOkHttpClient(
                 @UnauthenticatedWithCertificate okHttpClient: OkHttpClient,
-                downloadProgressInterceptor: DownloadProgressInterceptor
+                downloadProgressInterceptor: DownloadProgressInterceptor,
+                matrixConfiguration: MatrixConfiguration,
         ): OkHttpClient {
-            return okHttpClient.newBuilder()
+            return okHttpClient
+                    .newBuilder()
                     .apply {
-                        // Remove the previous CurlLoggingInterceptor, to add it after the accessTokenInterceptor
+                        // Remove the previous CurlLoggingInterceptor, to add it after the downloadProgressInterceptor
                         val existingCurlInterceptors = interceptors().filterIsInstance<CurlLoggingInterceptor>()
                         interceptors().removeAll(existingCurlInterceptors)
 
@@ -262,7 +265,9 @@ internal abstract class SessionModule {
                         existingCurlInterceptors.forEach {
                             addInterceptor(it)
                         }
-                    }.build()
+                    }
+                    .applyMatrixConfiguration(matrixConfiguration)
+                    .build()
         }
 
         @JvmStatic
@@ -359,9 +364,6 @@ internal abstract class SessionModule {
     @Binds
     @IntoSet
     abstract fun bindEventSenderProcessorAsSessionLifecycleObserver(processor: EventSenderProcessorCoroutine): SessionLifecycleObserver
-
-    @Binds
-    abstract fun bindSecureStorageService(service: DefaultSecureStorageService): SecureStorageService
 
     @Binds
     abstract fun bindHomeServerCapabilitiesService(service: DefaultHomeServerCapabilitiesService): HomeServerCapabilitiesService

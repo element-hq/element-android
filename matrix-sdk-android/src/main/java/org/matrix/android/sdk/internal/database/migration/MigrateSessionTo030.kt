@@ -17,14 +17,45 @@
 package org.matrix.android.sdk.internal.database.migration
 
 import io.realm.DynamicRealm
-import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
+import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
+import org.matrix.android.sdk.internal.database.model.EventEntityFields
+import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
+import timber.log.Timber
 
+/**
+ * Migrating to:
+ * Cleaning old chunks which may have broken links.
+ */
 internal class MigrateSessionTo030(realm: DynamicRealm) : RealmMigrator(realm, 30) {
 
     override fun doMigrate(realm: DynamicRealm) {
-        realm.schema.get("RoomSummaryEntity")
-                ?.addField(RoomSummaryEntityFields.DIRECT_PARENT_NAME, String::class.java)
-                ?.transform { it.setString(RoomSummaryEntityFields.DIRECT_PARENT_NAME, "") }
+        // Delete all previous chunks
+        val chunks = realm.where("ChunkEntity")
+                .equalTo(ChunkEntityFields.IS_LAST_FORWARD, false)
+                .findAll()
+
+        val nbOfDeletedChunks = chunks.size
+        var nbOfDeletedTimelineEvents = 0
+        var nbOfDeletedEvents = 0
+        chunks.forEach { chunk ->
+            val timelineEvents = chunk.getList(ChunkEntityFields.TIMELINE_EVENTS.`$`)
+            timelineEvents.forEach { timelineEvent ->
+                // Don't delete state events
+                val event = timelineEvent.getObject(TimelineEventEntityFields.ROOT.`$`)
+                if (event?.isNull(EventEntityFields.STATE_KEY) == true) {
+                    nbOfDeletedEvents++
+                    event.deleteFromRealm()
+                }
+            }
+            nbOfDeletedTimelineEvents += timelineEvents.size
+            timelineEvents.deleteAllFromRealm()
+        }
+        chunks.deleteAllFromRealm()
+        Timber.d(
+                "MigrateSessionTo030: $nbOfDeletedChunks deleted chunk(s)," +
+                        " $nbOfDeletedTimelineEvents deleted TimelineEvent(s)" +
+                        " and $nbOfDeletedEvents deleted Event(s)."
+        )
     }
 }

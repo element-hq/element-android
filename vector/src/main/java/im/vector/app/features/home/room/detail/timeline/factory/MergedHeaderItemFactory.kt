@@ -222,7 +222,7 @@ class MergedHeaderItemFactory @Inject constructor(
             }
             val mergeId = mergedEventIds.joinToString(separator = "_") { it.toString() }
             val powerLevelsHelper = activeSessionHolder.getSafeActiveSession()?.getRoom(event.roomId)
-                    ?.let { it.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)?.content?.toModel<PowerLevelsContent>() }
+                    ?.let { it.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)?.content?.toModel<PowerLevelsContent>() }
                     ?.let { PowerLevelsHelper(it) }
             val currentUserId = activeSessionHolder.getSafeActiveSession()?.myUserId ?: ""
             val attributes = MergedRoomCreationItem.Attributes(

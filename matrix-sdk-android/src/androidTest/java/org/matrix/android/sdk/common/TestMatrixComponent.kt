@@ -20,7 +20,9 @@ import android.content.Context
 import dagger.BindsInstance
 import dagger.Component
 import org.matrix.android.sdk.api.MatrixConfiguration
+import org.matrix.android.sdk.api.securestorage.SecureStorageModule
 import org.matrix.android.sdk.internal.auth.AuthModule
+import org.matrix.android.sdk.internal.debug.DebugModule
 import org.matrix.android.sdk.internal.di.MatrixComponent
 import org.matrix.android.sdk.internal.di.MatrixModule
 import org.matrix.android.sdk.internal.di.MatrixScope
@@ -36,8 +38,10 @@ import org.matrix.android.sdk.internal.util.system.SystemModule
             NetworkModule::class,
             AuthModule::class,
             RawModule::class,
+            DebugModule::class,
             SettingsModule::class,
-            SystemModule::class
+            SystemModule::class,
+            SecureStorageModule::class,
         ]
 )
 @MatrixScope
@@ -49,7 +53,7 @@ internal interface TestMatrixComponent : MatrixComponent {
     interface Factory {
         fun create(
                 @BindsInstance context: Context,
-                @BindsInstance matrixConfiguration: MatrixConfiguration
+                @BindsInstance matrixConfiguration: MatrixConfiguration,
         ): TestMatrixComponent
     }
 }

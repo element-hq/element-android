@@ -32,7 +32,8 @@ import javax.inject.Inject
  */
 class TestFirebaseToken @Inject constructor(
         private val context: FragmentActivity,
-        private val stringProvider: StringProvider
+        private val stringProvider: StringProvider,
+        private val fcmHelper: FcmHelper,
 ) : TroubleshootTest(R.string.settings_troubleshoot_test_fcm_title) {
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
@@ -68,7 +69,7 @@ class TestFirebaseToken @Inject constructor(
                                 description = stringProvider.getString(R.string.settings_troubleshoot_test_fcm_success, tok)
                                 Timber.e("Retrieved FCM token success [$tok].")
                                 // Ensure it is well store in our local storage
-                                FcmHelper.storeFcmToken(context, token)
+                                fcmHelper.storeFcmToken(token)
                             }
                             status = TestStatus.SUCCESS
                         }

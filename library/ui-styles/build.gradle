@@ -56,8 +56,6 @@ dependencies {
     implementation libs.google.material
     // Pref theme
     implementation libs.androidx.preferenceKtx
-    // PFLockScreen attrs
-    implementation 'com.github.vector-im:PFLockScreen-Android:1.0.0-beta12'
     // dialpad dimen
     implementation 'im.dlg:android-dialer:1.2.5'
 }

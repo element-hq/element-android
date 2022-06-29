@@ -178,9 +178,10 @@ class VectorSettingsGeneralFragment @Inject constructor(
             }
         }
 
+        val homeServerCapabilities = session.homeServerCapabilitiesService().getHomeServerCapabilities()
         // Password
         // Hide the preference if password can not be updated
-        if (session.homeServerCapabilitiesService().getHomeServerCapabilities().canChangePassword) {
+        if (homeServerCapabilities.canChangePassword) {
             mPasswordPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 onPasswordUpdateClick()
                 false

@@ -84,7 +84,7 @@ class RoomMemberListViewModel @AssistedInject constructor(
         combine(
                 room.flow().liveRoomMembers(roomMemberQueryParams),
                 room.flow()
-                        .liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
+                        .liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
                         .mapOptional { it.content.toModel<PowerLevelsContent>() }
                         .unwrap()
         ) { roomMembers, powerLevelsContent ->
@@ -146,7 +146,8 @@ class RoomMemberListViewModel @AssistedInject constructor(
     }
 
     private fun observeThirdPartyInvites() {
-        room.flow().liveStateEvents(setOf(EventType.STATE_ROOM_THIRD_PARTY_INVITE))
+        room.flow()
+                .liveStateEvents(setOf(EventType.STATE_ROOM_THIRD_PARTY_INVITE), QueryStringValue.IsNotNull)
                 .execute { async ->
                     copy(threePidInvites = async)
                 }
