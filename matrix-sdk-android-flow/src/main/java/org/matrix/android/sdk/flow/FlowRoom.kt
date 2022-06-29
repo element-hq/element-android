@@ -53,10 +53,10 @@ class FlowRoom(private val room: Room) {
                 }
     }
 
-    fun liveAreAllMembersLoaded(): Flow<Optional<Boolean>> {
+    fun liveAreAllMembersLoaded(): Flow<Boolean> {
         return room.membershipService().areAllMembersLoadedLive().asFlow()
                 .startWith(room.coroutineDispatchers.io) {
-                    room.membershipService().areAllMembersLoaded().toOptional()
+                    room.membershipService().areAllMembersLoaded()
                 }
     }
 

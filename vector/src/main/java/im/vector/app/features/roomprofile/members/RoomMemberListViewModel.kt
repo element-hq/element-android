@@ -97,7 +97,6 @@ class RoomMemberListViewModel @AssistedInject constructor(
                 }
 
         roomFlow.liveAreAllMembersLoaded()
-                .unwrap()
                 .distinctUntilChanged()
                 .onEach {
                     setState {

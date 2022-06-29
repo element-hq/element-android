@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,32 +14,42 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.room.membership
+package org.matrix.android.sdk.internal.session.room
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.internal.database.model.RoomEntity
 import org.matrix.android.sdk.internal.database.model.RoomMembersLoadStatusType
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
-import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
 
-internal interface GetRoomMembersLoadStatusTask : Task<GetRoomMembersLoadStatusTask.Params, RoomMembersLoadStatusType> {
-    data class Params(
-            val roomId: String,
-    )
-}
-
-internal class DefaultGetRoomMembersLoadStatusTask @Inject constructor(
+internal class RoomDataSource @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
-) : GetRoomMembersLoadStatusTask {
-
-    override suspend fun execute(params: GetRoomMembersLoadStatusTask.Params): RoomMembersLoadStatusType {
+) {
+    fun getRoomMembersLoadStatus(roomId: String): RoomMembersLoadStatusType {
         var result: RoomMembersLoadStatusType?
         Realm.getInstance(monarchy.realmConfiguration).use {
-            result = RoomEntity.where(it, params.roomId).findFirst()?.membersLoadStatus
+            result = RoomEntity.where(it, roomId).findFirst()?.membersLoadStatus
         }
         return result ?: RoomMembersLoadStatusType.NONE
+    }
+
+    fun getRoomMembersLoadStatusLive(roomId: String): LiveData<Boolean> {
+        val liveData = monarchy.findAllMappedWithChanges(
+                {
+                    RoomEntity.where(it, roomId)
+                },
+                {
+                    it.membersLoadStatus == RoomMembersLoadStatusType.LOADED
+                }
+        )
+
+        return Transformations.map(liveData) { results ->
+            results.firstOrNull().orFalse()
+        }
     }
 }

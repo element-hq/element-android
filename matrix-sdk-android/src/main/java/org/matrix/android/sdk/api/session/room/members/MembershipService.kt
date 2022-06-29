@@ -43,7 +43,7 @@ interface MembershipService {
     /**
      * Live version for [areAllMembersLoaded].
      */
-    fun areAllMembersLoadedLive(): LiveData<Optional<Boolean>>
+    fun areAllMembersLoadedLive(): LiveData<Boolean>
 
     /**
      * Return the roomMember with userId or null.

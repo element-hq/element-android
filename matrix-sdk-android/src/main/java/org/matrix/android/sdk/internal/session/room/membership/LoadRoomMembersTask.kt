@@ -37,6 +37,7 @@ import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
+import org.matrix.android.sdk.internal.session.room.RoomDataSource
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryUpdater
 import org.matrix.android.sdk.internal.session.sync.SyncTokenStore
 import org.matrix.android.sdk.internal.task.Task
@@ -56,7 +57,7 @@ internal interface LoadRoomMembersTask : Task<LoadRoomMembersTask.Params, Unit> 
 internal class DefaultLoadRoomMembersTask @Inject constructor(
         private val roomAPI: RoomAPI,
         @SessionDatabase private val monarchy: Monarchy,
-        private val getRoomMembersLoadStatusTask: GetRoomMembersLoadStatusTask,
+        private val roomDataSource: RoomDataSource,
         private val syncTokenStore: SyncTokenStore,
         private val roomSummaryUpdater: RoomSummaryUpdater,
         private val roomMemberEventHandler: RoomMemberEventHandler,
@@ -67,7 +68,7 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
 ) : LoadRoomMembersTask {
 
     override suspend fun execute(params: LoadRoomMembersTask.Params) {
-        when (getRoomMembersLoadStatusTask.execute(GetRoomMembersLoadStatusTask.Params(params.roomId))) {
+        when (roomDataSource.getRoomMembersLoadStatus(params.roomId)) {
             RoomMembersLoadStatusType.NONE -> doRequest(params)
             RoomMembersLoadStatusType.LOADING -> waitPreviousRequestToFinish(params)
             RoomMembersLoadStatusType.LOADED -> Unit
