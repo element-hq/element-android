@@ -40,11 +40,13 @@ import java.io.IOException
  * @param maxRetriesCount the max number of retries
  * @param requestBlock a suspend lambda to perform the network request
  */
-internal suspend inline fun <DATA> executeRequest(globalErrorReceiver: GlobalErrorReceiver?,
-                                                  canRetry: Boolean = false,
-                                                  maxDelayBeforeRetry: Long = 32_000L,
-                                                  maxRetriesCount: Int = 4,
-                                                  noinline requestBlock: suspend () -> DATA): DATA {
+internal suspend inline fun <DATA> executeRequest(
+        globalErrorReceiver: GlobalErrorReceiver?,
+        canRetry: Boolean = false,
+        maxDelayBeforeRetry: Long = 32_000L,
+        maxRetriesCount: Int = 4,
+        noinline requestBlock: suspend () -> DATA
+): DATA {
     var currentRetryCount = 0
     var currentDelay = 1_000L
 
@@ -54,8 +56,8 @@ internal suspend inline fun <DATA> executeRequest(globalErrorReceiver: GlobalErr
         } catch (throwable: Throwable) {
             val exception = when (throwable) {
                 is KotlinNullPointerException -> IllegalStateException("The request returned a null body")
-                is HttpException              -> throwable.toFailure(globalErrorReceiver)
-                else                          -> throwable
+                is HttpException -> throwable.toFailure(globalErrorReceiver)
+                else -> throwable
             }
 
             // Log some details about the request which has failed.
@@ -92,11 +94,11 @@ internal suspend inline fun <DATA> executeRequest(globalErrorReceiver: GlobalErr
                 // Try again (loop)
             } else {
                 throw when (exception) {
-                    is IOException           -> Failure.NetworkConnection(exception)
+                    is IOException -> Failure.NetworkConnection(exception)
                     is Failure.ServerError,
                     is Failure.OtherServerError,
                     is CancellationException -> exception
-                    else                     -> Failure.Unknown(exception)
+                    else -> Failure.Unknown(exception)
                 }
             }
         }

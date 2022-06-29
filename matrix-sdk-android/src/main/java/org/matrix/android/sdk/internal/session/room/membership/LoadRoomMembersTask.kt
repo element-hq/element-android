@@ -68,9 +68,9 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
 
     override suspend fun execute(params: LoadRoomMembersTask.Params) {
         when (getRoomMembersLoadStatus(params.roomId)) {
-            RoomMembersLoadStatusType.NONE    -> doRequest(params)
+            RoomMembersLoadStatusType.NONE -> doRequest(params)
             RoomMembersLoadStatusType.LOADING -> waitPreviousRequestToFinish(params)
-            RoomMembersLoadStatusType.LOADED  -> Unit
+            RoomMembersLoadStatusType.LOADED -> Unit
         }
     }
 
@@ -114,7 +114,7 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
                 if (roomMemberEvent.eventId == null || roomMemberEvent.stateKey == null || roomMemberEvent.type == null) {
                     continue
                 }
-                val ageLocalTs = roomMemberEvent.unsignedData?.age?.let { now - it }
+                val ageLocalTs = now - (roomMemberEvent.unsignedData?.age ?: 0)
                 val eventEntity = roomMemberEvent.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
                 CurrentStateEventEntity.getOrCreate(
                         realm,

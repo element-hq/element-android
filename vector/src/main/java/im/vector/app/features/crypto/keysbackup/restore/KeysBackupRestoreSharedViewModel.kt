@@ -25,6 +25,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.LiveEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.listeners.StepProgressListener
 import org.matrix.android.sdk.api.session.Session
@@ -42,7 +43,8 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class KeysBackupRestoreSharedViewModel @Inject constructor(
-        private val stringProvider: StringProvider
+        private val stringProvider: StringProvider,
+        private val matrix: Matrix,
 ) : ViewModel() {
 
     data class KeySource(
@@ -83,7 +85,7 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
     val progressObserver = object : StepProgressListener {
         override fun onStepProgress(step: StepProgressListener.Step) {
             when (step) {
-                is StepProgressListener.Step.ComputingKey  -> {
+                is StepProgressListener.Step.ComputingKey -> {
                     loadingEvent.postValue(
                             WaitingViewData(
                                     stringProvider.getString(R.string.keys_backup_restoring_waiting_message) +
@@ -102,7 +104,7 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
                             )
                     )
                 }
-                is StepProgressListener.Step.ImportingKey  -> {
+                is StepProgressListener.Step.ImportingKey -> {
                     Timber.d("backupKeys.ImportingKey.progress: ${step.progress}")
                     // Progress 0 can take a while, display an indeterminate progress in this case
                     if (step.progress == 0) {
@@ -186,7 +188,7 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
     fun handleGotSecretFromSSSS(cipherData: String, alias: String) {
         try {
             cipherData.fromBase64().inputStream().use { ins ->
-                val res = session.secureStorageService().loadSecureSecret<Map<String, String>>(ins, alias)
+                val res = matrix.secureStorageService().loadSecureSecret<Map<String, String>>(ins, alias)
                 val secret = res?.get(KEYBACKUP_SECRET_SSSS_NAME)
                 if (secret == null) {
                     _navigateEvent.postValue(

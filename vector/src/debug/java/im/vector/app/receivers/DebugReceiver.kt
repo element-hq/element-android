@@ -36,8 +36,8 @@ class DebugReceiver : BroadcastReceiver() {
 
         intent.action?.let {
             when {
-                it.endsWith(DEBUG_ACTION_DUMP_FILESYSTEM)    -> lsFiles(context)
-                it.endsWith(DEBUG_ACTION_DUMP_PREFERENCES)   -> dumpPreferences(context)
+                it.endsWith(DEBUG_ACTION_DUMP_FILESYSTEM) -> lsFiles(context)
+                it.endsWith(DEBUG_ACTION_DUMP_PREFERENCES) -> dumpPreferences(context)
                 it.endsWith(DEBUG_ACTION_ALTER_SCALAR_TOKEN) -> alterScalarToken(context)
             }
         }

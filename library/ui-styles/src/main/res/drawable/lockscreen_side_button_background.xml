@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/lockscreen_white_selector">
+
+    <item android:id="@android:id/mask">
+        <shape android:shape="oval">
+            <padding android:padding="1dp" />
+            <corners android:radius="5dp" />
+            <solid android:color="@color/lockscreen_white_selector"/>
+        </shape>
+    </item>
+
+    <item>
+        <selector>
+            <item android:state_selected="true">
+                <color android:color="@android:color/darker_gray"/>
+            </item>
+
+            <item android:state_activated="true">
+                <color android:color="@android:color/white"/>
+            </item>
+
+            <item>
+                <color android:color="@android:color/transparent"/>
+            </item>
+        </selector>
+    </item>
+</ripple>

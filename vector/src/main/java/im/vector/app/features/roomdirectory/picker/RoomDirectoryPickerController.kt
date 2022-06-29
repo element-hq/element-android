@@ -76,7 +76,7 @@ class RoomDirectoryPickerController @Inject constructor(
                     id("loading")
                 }
             }
-            is Fail    -> {
+            is Fail -> {
                 errorWithRetryItem {
                     id("error")
                     text(host.errorFormatter.toHumanReadable(asyncThirdPartyProtocol.error))
@@ -125,9 +125,9 @@ class RoomDirectoryPickerController @Inject constructor(
                 }
                 when (data.addServerAsync) {
                     Uninitialized -> enabled(true)
-                    is Loading    -> enabled(false)
-                    is Success    -> enabled(false)
-                    is Fail       -> {
+                    is Loading -> enabled(false)
+                    is Success -> enabled(false)
+                    is Fail -> {
                         enabled(true)
                         errorMessage(host.getErrorMessage(data.addServerAsync.error))
                     }
@@ -135,7 +135,7 @@ class RoomDirectoryPickerController @Inject constructor(
             }
             when (data.addServerAsync) {
                 Uninitialized,
-                is Fail    -> settingsContinueCancelItem {
+                is Fail -> settingsContinueCancelItem {
                     id("continueCancel")
                     continueText(host.stringProvider.getString(R.string.ok))
                     canContinue(data.enteredServer.isNotEmpty())

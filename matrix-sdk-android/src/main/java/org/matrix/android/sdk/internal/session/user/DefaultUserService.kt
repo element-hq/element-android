@@ -26,10 +26,12 @@ import org.matrix.android.sdk.internal.session.user.accountdata.UpdateIgnoredUse
 import org.matrix.android.sdk.internal.session.user.model.SearchUserTask
 import javax.inject.Inject
 
-internal class DefaultUserService @Inject constructor(private val userDataSource: UserDataSource,
-                                                      private val searchUserTask: SearchUserTask,
-                                                      private val updateIgnoredUserIdsTask: UpdateIgnoredUserIdsTask,
-                                                      private val getProfileInfoTask: GetProfileInfoTask) : UserService {
+internal class DefaultUserService @Inject constructor(
+        private val userDataSource: UserDataSource,
+        private val searchUserTask: SearchUserTask,
+        private val updateIgnoredUserIdsTask: UpdateIgnoredUserIdsTask,
+        private val getProfileInfoTask: GetProfileInfoTask
+) : UserService {
 
     override fun getUser(userId: String): User? {
         return userDataSource.getUser(userId)
@@ -59,9 +61,11 @@ internal class DefaultUserService @Inject constructor(private val userDataSource
         return userDataSource.getIgnoredUsersLive()
     }
 
-    override suspend fun searchUsersDirectory(search: String,
-                                              limit: Int,
-                                              excludedUserIds: Set<String>): List<User> {
+    override suspend fun searchUsersDirectory(
+            search: String,
+            limit: Int,
+            excludedUserIds: Set<String>
+    ): List<User> {
         val params = SearchUserTask.Params(limit, search, excludedUserIds)
         return searchUserTask.execute(params)
     }

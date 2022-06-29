@@ -19,10 +19,9 @@ package org.matrix.android.sdk.internal.database
 import com.zhuinden.monarchy.Monarchy
 import io.realm.RealmConfiguration
 import io.realm.RealmResults
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.EventInsertEntity
@@ -33,69 +32,64 @@ import org.matrix.android.sdk.internal.session.EventInsertLiveProcessor
 import timber.log.Timber
 import javax.inject.Inject
 
-internal class EventInsertLiveObserver @Inject constructor(@SessionDatabase realmConfiguration: RealmConfiguration,
-                                                           private val processors: Set<@JvmSuppressWildcards EventInsertLiveProcessor>) :
+internal class EventInsertLiveObserver @Inject constructor(
+        @SessionDatabase realmConfiguration: RealmConfiguration,
+        private val processors: Set<@JvmSuppressWildcards EventInsertLiveProcessor>
+) :
         RealmLiveEntityObserver<EventInsertEntity>(realmConfiguration) {
+
+    private val lock = Mutex()
 
     override val query = Monarchy.Query {
         it.where(EventInsertEntity::class.java).equalTo(EventInsertEntityFields.CAN_BE_PROCESSED, true)
     }
 
-    private val onResultsChangedFlow = MutableSharedFlow<RealmResults<EventInsertEntity>>()
-
-    init {
-        onResultsChangedFlow
-                .onEach { handleChange(it) }
-                .launchIn(observerScope)
-    }
-
     override fun onChange(results: RealmResults<EventInsertEntity>) {
-        if (!results.isLoaded || results.isEmpty()) {
-            return
-        }
-        observerScope.launch { onResultsChangedFlow.emit(results) }
-    }
-
-    private suspend fun handleChange(results: RealmResults<EventInsertEntity>) {
-        val idsToDeleteAfterProcess = ArrayList<String>()
-        val filteredEvents = ArrayList<EventInsertEntity>(results.size)
-        Timber.v("EventInsertEntity updated with ${results.size} results in db")
-        results.forEach {
-            if (shouldProcess(it)) {
-                // don't use copy from realm over there
-                val copiedEvent = EventInsertEntity(
-                        eventId = it.eventId,
-                        eventType = it.eventType
-                ).apply {
-                    insertType = it.insertType
+        observerScope.launch {
+            lock.withLock {
+                if (!results.isLoaded || results.isEmpty()) {
+                    return@withLock
                 }
-                filteredEvents.add(copiedEvent)
+                val idsToDeleteAfterProcess = ArrayList<String>()
+                val filteredEvents = ArrayList<EventInsertEntity>(results.size)
+                Timber.v("EventInsertEntity updated with ${results.size} results in db")
+                results.forEach {
+                    if (shouldProcess(it)) {
+                        // don't use copy from realm over there
+                        val copiedEvent = EventInsertEntity(
+                                eventId = it.eventId,
+                                eventType = it.eventType
+                        ).apply {
+                            insertType = it.insertType
+                        }
+                        filteredEvents.add(copiedEvent)
+                    }
+                    idsToDeleteAfterProcess.add(it.eventId)
+                }
+                awaitTransaction(realmConfiguration) { realm ->
+                    Timber.v("##Transaction: There are ${filteredEvents.size} events to process ")
+                    filteredEvents.forEach { eventInsert ->
+                        val eventId = eventInsert.eventId
+                        val event = EventEntity.where(realm, eventId).findFirst()
+                        if (event == null) {
+                            Timber.v("Event $eventId not found")
+                            return@forEach
+                        }
+                        val domainEvent = event.asDomain()
+                        processors.filter {
+                            it.shouldProcess(eventId, domainEvent.getClearType(), eventInsert.insertType)
+                        }.forEach {
+                            it.process(realm, domainEvent)
+                        }
+                    }
+                    realm.where(EventInsertEntity::class.java)
+                            .`in`(EventInsertEntityFields.EVENT_ID, idsToDeleteAfterProcess.toTypedArray())
+                            .findAll()
+                            .deleteAllFromRealm()
+                }
+                processors.forEach { it.onPostProcess() }
             }
-            idsToDeleteAfterProcess.add(it.eventId)
         }
-
-        awaitTransaction(realmConfiguration) { realm ->
-            Timber.v("##Transaction: There are ${filteredEvents.size} events to process ")
-            filteredEvents.forEach { eventInsert ->
-                val eventId = eventInsert.eventId
-                val event = EventEntity.where(realm, eventId).findFirst()
-                if (event == null) {
-                    Timber.v("Event $eventId not found")
-                    return@forEach
-                }
-                val domainEvent = event.asDomain()
-                processors.filter {
-                    it.shouldProcess(eventId, domainEvent.getClearType(), eventInsert.insertType)
-                }.forEach {
-                    it.process(realm, domainEvent)
-                }
-            }
-            realm.where(EventInsertEntity::class.java)
-                    .`in`(EventInsertEntityFields.EVENT_ID, idsToDeleteAfterProcess.toTypedArray())
-                    .findAll()
-                    .deleteAllFromRealm()
-        }
-        processors.forEach { it.onPostProcess() }
     }
 
     private fun shouldProcess(eventInsertEntity: EventInsertEntity): Boolean {

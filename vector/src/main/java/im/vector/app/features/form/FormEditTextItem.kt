@@ -133,7 +133,7 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
     private fun configureInputType(holder: Holder) {
         val newInputType =
                 inputType ?: when (singleLine) {
-                    true  -> InputType.TYPE_CLASS_TEXT
+                    true -> InputType.TYPE_CLASS_TEXT
                     false -> InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
                 }
 
@@ -151,7 +151,7 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
     private fun configureImeOptions(holder: Holder) {
         holder.textInputEditText.imeOptions =
                 imeOptions ?: when (singleLine) {
-                    true  -> EditorInfo.IME_ACTION_NEXT
+                    true -> EditorInfo.IME_ACTION_NEXT
                     false -> EditorInfo.IME_ACTION_NONE
                 }
     }

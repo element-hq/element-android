@@ -52,7 +52,7 @@ abstract class EnumFeatureItem : VectorEpoxyModel<EnumFeatureItem.Holder>() {
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     when (position) {
-                        0    -> listener?.onEnumOptionSelected(option = null, feature)
+                        0 -> listener?.onEnumOptionSelected(option = null, feature)
                         else -> feature.onOptionSelected(position - 1)
                     }
                 }

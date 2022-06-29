@@ -891,9 +891,7 @@
     <string name="login_a11y_choose_other">Chọn một máy chủ khác</string>
     <string name="login_a11y_choose_modular">Chọn Dịch vụ Element Matrix</string>
     <string name="login_a11y_choose_matrix_org">Chọn matrix.org</string>
-    <string name="login_signup_cancel_confirmation_content">Tài khoản của bạn chưa được tạo.
-\n
-\nBạn muốn ngừng tiến trình đăng ký\?</string>
+    <string name="login_signup_cancel_confirmation_content">Tài khoản của bạn chưa được tạo. Bạn muốn ngừng tiến trình đăng ký\?</string>
     <string name="login_signup_cancel_confirmation_title">Cảnh báo</string>
     <string name="login_signup_error_user_in_use">Tên đăng nhập này đã được đăng ký</string>
     <string name="login_signup_submit">Tiếp</string>
@@ -1270,10 +1268,6 @@
     <string name="space_add_existing_spaces">Thêm Space hiện có</string>
     <string name="space_add_existing_rooms_only">Thêm các phòng hiện có</string>
     <string name="space_add_existing_rooms">Thêm các phòng và Space hiện có</string>
-    <string name="pick_tings_to_leave">Chọn những thứ để rời khỏi</string>
-    <string name="leave_specific_ones">Để lại các phòng và Space cụ thể…</string>
-    <string name="dont_leave_any">Không rời bất kỳ phòng và Space nào</string>
-    <string name="leave_all_rooms_and_spaces">Rời khỏi tất cả phòng và Space</string>
     <string name="space_leave_prompt_msg_as_admin">Bạn là quản trị viên duy nhất của không gian này. Rời khỏi nó sẽ có nghĩa là không ai có quyền kiểm soát nó.</string>
     <string name="space_leave_prompt_msg_private">Bạn sẽ không thể tham gia lại trừ khi bạn được mời lại.</string>
     <string name="space_leave_prompt_msg_only_you">Bạn là người duy nhất ở đây. Nếu bạn rời đi, sẽ không ai có thể tham gia trong tương lai, kể cả bạn</string>

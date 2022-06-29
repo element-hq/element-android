@@ -119,12 +119,14 @@ internal class LocalEchoEventFactory @Inject constructor(
         return createMessageEvent(roomId, textContent.toMessageTextContent(msgType))
     }
 
-    fun createReplaceTextEvent(roomId: String,
-                               targetEventId: String,
-                               newBodyText: CharSequence,
-                               newBodyAutoMarkdown: Boolean,
-                               msgType: String,
-                               compatibilityText: String): Event {
+    fun createReplaceTextEvent(
+            roomId: String,
+            targetEventId: String,
+            newBodyText: CharSequence,
+            newBodyAutoMarkdown: Boolean,
+            msgType: String,
+            compatibilityText: String
+    ): Event {
         return createMessageEvent(
                 roomId,
                 MessageTextContent(
@@ -138,9 +140,11 @@ internal class LocalEchoEventFactory @Inject constructor(
         )
     }
 
-    private fun createPollContent(question: String,
-                                  options: List<String>,
-                                  pollType: PollType): MessagePollContent {
+    private fun createPollContent(
+            question: String,
+            options: List<String>,
+            pollType: PollType
+    ): MessagePollContent {
         return MessagePollContent(
                 unstablePollCreationInfo = PollCreationInfo(
                         question = PollQuestion(unstableQuestion = question),
@@ -152,11 +156,13 @@ internal class LocalEchoEventFactory @Inject constructor(
         )
     }
 
-    fun createPollReplaceEvent(roomId: String,
-                               pollType: PollType,
-                               targetEventId: String,
-                               question: String,
-                               options: List<String>): Event {
+    fun createPollReplaceEvent(
+            roomId: String,
+            pollType: PollType,
+            targetEventId: String,
+            question: String,
+            options: List<String>
+    ): Event {
         val newContent = MessagePollContent(
                 relatesTo = RelationDefaultContent(RelationType.REPLACE, targetEventId),
                 newContent = createPollContent(question, options, pollType).toContent()
@@ -172,9 +178,11 @@ internal class LocalEchoEventFactory @Inject constructor(
         )
     }
 
-    fun createPollReplyEvent(roomId: String,
-                             pollEventId: String,
-                             answerId: String): Event {
+    fun createPollReplyEvent(
+            roomId: String,
+            pollEventId: String,
+            answerId: String
+    ): Event {
         val content = MessagePollResponseContent(
                 body = answerId,
                 relatesTo = RelationDefaultContent(
@@ -195,10 +203,12 @@ internal class LocalEchoEventFactory @Inject constructor(
         )
     }
 
-    fun createPollEvent(roomId: String,
-                        pollType: PollType,
-                        question: String,
-                        options: List<String>): Event {
+    fun createPollEvent(
+            roomId: String,
+            pollType: PollType,
+            question: String,
+            options: List<String>
+    ): Event {
         val content = createPollContent(question, options, pollType)
         val localId = LocalEcho.createLocalEchoId()
         return Event(
@@ -212,8 +222,10 @@ internal class LocalEchoEventFactory @Inject constructor(
         )
     }
 
-    fun createEndPollEvent(roomId: String,
-                           eventId: String): Event {
+    fun createEndPollEvent(
+            roomId: String,
+            eventId: String
+    ): Event {
         val content = MessageEndPollContent(
                 relatesTo = RelationDefaultContent(
                         type = RelationType.REFERENCE,
@@ -232,11 +244,13 @@ internal class LocalEchoEventFactory @Inject constructor(
         )
     }
 
-    fun createLocationEvent(roomId: String,
-                            latitude: Double,
-                            longitude: Double,
-                            uncertainty: Double?,
-                            isUserLocation: Boolean): Event {
+    fun createStaticLocationEvent(
+            roomId: String,
+            latitude: Double,
+            longitude: Double,
+            uncertainty: Double?,
+            isUserLocation: Boolean
+    ): Event {
         val geoUri = buildGeoUri(latitude, longitude, uncertainty)
         val assetType = if (isUserLocation) LocationAssetType.SELF else LocationAssetType.PIN
         val content = MessageLocationContent(
@@ -250,11 +264,13 @@ internal class LocalEchoEventFactory @Inject constructor(
         return createMessageEvent(roomId, content)
     }
 
-    fun createLiveLocationEvent(beaconInfoEventId: String,
-                                roomId: String,
-                                latitude: Double,
-                                longitude: Double,
-                                uncertainty: Double?): Event {
+    fun createLiveLocationEvent(
+            beaconInfoEventId: String,
+            roomId: String,
+            latitude: Double,
+            longitude: Double,
+            uncertainty: Double?
+    ): Event {
         val geoUri = buildGeoUri(latitude, longitude, uncertainty)
         val content = MessageBeaconLocationDataContent(
                 body = geoUri,
@@ -277,13 +293,15 @@ internal class LocalEchoEventFactory @Inject constructor(
         )
     }
 
-    fun createReplaceTextOfReply(roomId: String,
-                                 eventReplaced: TimelineEvent,
-                                 originalEvent: TimelineEvent,
-                                 newBodyText: String,
-                                 autoMarkdown: Boolean,
-                                 msgType: String,
-                                 compatibilityText: String): Event {
+    fun createReplaceTextOfReply(
+            roomId: String,
+            eventReplaced: TimelineEvent,
+            originalEvent: TimelineEvent,
+            newBodyText: String,
+            autoMarkdown: Boolean,
+            msgType: String,
+            compatibilityText: String
+    ): Event {
         val permalink = permalinkFactory.createPermalink(roomId, originalEvent.root.eventId ?: "", false)
         val userLink = originalEvent.root.senderId?.let { permalinkFactory.createPermalink(it, false) } ?: ""
 
@@ -321,16 +339,17 @@ internal class LocalEchoEventFactory @Inject constructor(
         )
     }
 
-    fun createMediaEvent(roomId: String,
-                         attachment: ContentAttachmentData,
-                         rootThreadEventId: String?
+    fun createMediaEvent(
+            roomId: String,
+            attachment: ContentAttachmentData,
+            rootThreadEventId: String?
     ): Event {
         return when (attachment.type) {
-            ContentAttachmentData.Type.IMAGE         -> createImageEvent(roomId, attachment, rootThreadEventId)
-            ContentAttachmentData.Type.VIDEO         -> createVideoEvent(roomId, attachment, rootThreadEventId)
-            ContentAttachmentData.Type.AUDIO         -> createAudioEvent(roomId, attachment, isVoiceMessage = false, rootThreadEventId = rootThreadEventId)
+            ContentAttachmentData.Type.IMAGE -> createImageEvent(roomId, attachment, rootThreadEventId)
+            ContentAttachmentData.Type.VIDEO -> createVideoEvent(roomId, attachment, rootThreadEventId)
+            ContentAttachmentData.Type.AUDIO -> createAudioEvent(roomId, attachment, isVoiceMessage = false, rootThreadEventId = rootThreadEventId)
             ContentAttachmentData.Type.VOICE_MESSAGE -> createAudioEvent(roomId, attachment, isVoiceMessage = true, rootThreadEventId = rootThreadEventId)
-            ContentAttachmentData.Type.FILE          -> createFileEvent(roomId, attachment, rootThreadEventId)
+            ContentAttachmentData.Type.FILE -> createFileEvent(roomId, attachment, rootThreadEventId)
         }
     }
 
@@ -435,10 +454,11 @@ internal class LocalEchoEventFactory @Inject constructor(
         return createMessageEvent(roomId, content)
     }
 
-    private fun createAudioEvent(roomId: String,
-                                 attachment: ContentAttachmentData,
-                                 isVoiceMessage: Boolean,
-                                 rootThreadEventId: String?
+    private fun createAudioEvent(
+            roomId: String,
+            attachment: ContentAttachmentData,
+            isVoiceMessage: Boolean,
+            rootThreadEventId: String?
     ): Event {
         val content = MessageAudioContent(
                 msgType = MessageType.MSGTYPE_AUDIO,
@@ -534,7 +554,8 @@ internal class LocalEchoEventFactory @Inject constructor(
             text: CharSequence,
             msgType: String,
             autoMarkdown: Boolean,
-            formattedText: String?): Event {
+            formattedText: String?
+    ): Event {
         val content = formattedText?.let { TextContent(text.toString(), it) } ?: createTextContent(text, autoMarkdown)
         return createEvent(
                 roomId,
@@ -555,12 +576,14 @@ internal class LocalEchoEventFactory @Inject constructor(
     /**
      * Creates a reply to a regular timeline Event or a thread Event if needed.
      */
-    fun createReplyTextEvent(roomId: String,
-                             eventReplied: TimelineEvent,
-                             replyText: CharSequence,
-                             autoMarkdown: Boolean,
-                             rootThreadEventId: String? = null,
-                             showInThread: Boolean): Event? {
+    fun createReplyTextEvent(
+            roomId: String,
+            eventReplied: TimelineEvent,
+            replyText: CharSequence,
+            autoMarkdown: Boolean,
+            rootThreadEventId: String? = null,
+            showInThread: Boolean
+    ): Event? {
         // Fallbacks and event representation
         // TODO Add error/warning logs when any of this is null
         val permalink = permalinkFactory.createPermalink(eventReplied.root, false) ?: return null
@@ -662,7 +685,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         when (content?.msgType) {
             MessageType.MSGTYPE_EMOTE,
             MessageType.MSGTYPE_TEXT,
-            MessageType.MSGTYPE_NOTICE     -> {
+            MessageType.MSGTYPE_NOTICE -> {
                 var formattedText: String? = null
                 if (content is MessageContentWithFormattedBody) {
                     formattedText = content.matrixFormattedBody
@@ -673,19 +696,19 @@ internal class LocalEchoEventFactory @Inject constructor(
                     TextContent(content.body, formattedText)
                 }
             }
-            MessageType.MSGTYPE_FILE       -> return TextContent("sent a file.")
-            MessageType.MSGTYPE_AUDIO      -> return TextContent("sent an audio file.")
-            MessageType.MSGTYPE_IMAGE      -> return TextContent("sent an image.")
-            MessageType.MSGTYPE_VIDEO      -> return TextContent("sent a video.")
+            MessageType.MSGTYPE_FILE -> return TextContent("sent a file.")
+            MessageType.MSGTYPE_AUDIO -> return TextContent("sent an audio file.")
+            MessageType.MSGTYPE_IMAGE -> return TextContent("sent an image.")
+            MessageType.MSGTYPE_VIDEO -> return TextContent("sent a video.")
             MessageType.MSGTYPE_POLL_START -> {
                 return TextContent((content as? MessagePollContent)?.getBestPollCreationInfo()?.question?.getBestQuestion() ?: "")
             }
-            else                           -> return TextContent(content?.body ?: "")
+            else -> return TextContent(content?.body ?: "")
         }
     }
 
     /**
-     * Returns RFC5870 formatted geo uri 'geo:latitude,longitude;uncertainty' like 'geo:40.05,29.24;30'
+     * Returns RFC5870 formatted geo uri 'geo:latitude,longitude;u=uncertainty' like 'geo:40.05,29.24;u=30'
      * Uncertainty of the location is in meters and not required.
      */
     private fun buildGeoUri(latitude: Double, longitude: Double, uncertainty: Double?): String {
@@ -695,7 +718,7 @@ internal class LocalEchoEventFactory @Inject constructor(
             append(",")
             append(longitude)
             uncertainty?.let {
-                append(";")
+                append(";u=")
                 append(it)
             }
         }

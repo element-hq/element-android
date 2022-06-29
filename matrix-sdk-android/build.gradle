@@ -5,6 +5,10 @@ apply plugin: 'kotlin-parcelize'
 apply plugin: 'realm-android'
 apply plugin: "org.jetbrains.dokka"
 
+if (project.hasProperty("coverage")) {
+    apply plugin: 'jacoco'
+}
+
 buildscript {
     repositories {
         // Do not use `mavenCentral()`, it prevents Dependabot from working properly
@@ -56,7 +60,7 @@ android {
         // that the app's state is completely cleared between tests.
         testInstrumentationRunnerArguments clearPackageData: 'true'
 
-        buildConfigField "String", "SDK_VERSION", "\"1.4.18\""
+        buildConfigField "String", "SDK_VERSION", "\"1.4.26\""
 
         buildConfigField "String", "GIT_SDK_REVISION", "\"${gitRevision()}\""
         buildConfigField "String", "GIT_SDK_REVISION_UNIX_DATE", "\"${gitRevisionUnixDate()}\""
@@ -74,6 +78,9 @@ android {
 
     buildTypes {
         debug {
+            if (project.hasProperty("coverage")) {
+                testCoverageEnabled = coverage.enableTestCoverage
+            }
             // Set to true to log privacy or sensible data, such as token
             buildConfigField "boolean", "LOG_PRIVATE_DATA", project.property("vector.debugPrivateData")
             // Set to BODY instead of NONE to enable logging
@@ -136,7 +143,6 @@ dependencies {
     implementation libs.jetbrains.coroutinesCore
     implementation libs.jetbrains.coroutinesAndroid
 
-    implementation libs.androidx.appCompat
     implementation libs.androidx.core
 
     // Lifecycle
@@ -152,15 +158,14 @@ dependencies {
     // - https://github.com/square/okhttp/issues/3278
     // - https://github.com/square/okhttp/issues/4455
     // - https://github.com/square/okhttp/issues/3146
-    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.9.3"))
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.10.0"))
     implementation 'com.squareup.okhttp3:okhttp'
     implementation 'com.squareup.okhttp3:logging-interceptor'
-    implementation 'com.squareup.okhttp3:okhttp-urlconnection'
 
     implementation libs.squareup.moshi
     kapt libs.squareup.moshiKotlin
 
-    implementation libs.markwon.core
+    api "com.atlassian.commonmark:commonmark:0.13.0"
 
     // Image
     implementation libs.androidx.exifinterface
@@ -176,12 +181,8 @@ dependencies {
     // Work
     implementation libs.androidx.work
 
-    // FP
-    implementation libs.arrow.core
-    implementation libs.arrow.instances
-
     // olm lib is now hosted in MavenCentral
-    implementation 'org.matrix.android:olm-sdk:3.2.11'
+    implementation 'org.matrix.android:olm-sdk:3.2.12'
 
     // DI
     implementation libs.dagger.dagger
@@ -198,11 +199,9 @@ dependencies {
     implementation libs.apache.commonsImaging
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.48'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.50'
 
     testImplementation libs.tests.junit
-    testImplementation 'org.robolectric:robolectric:4.7.3'
-    //testImplementation 'org.robolectric:shadows-support-v4:3.0'
     // Note: version sticks to 1.9.2 due to https://github.com/mockk/mockk/issues/281
     testImplementation libs.mockk.mockk
     testImplementation libs.tests.kluent

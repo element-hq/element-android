@@ -103,12 +103,12 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
             }
             val isLocalEcho = LocalEcho.isLocalEchoId(event.eventId ?: "")
             when (event.type) {
-                EventType.REACTION                  -> {
+                EventType.REACTION -> {
                     // we got a reaction!!
                     Timber.v("###REACTION in room $roomId , reaction eventID ${event.eventId}")
                     handleReaction(realm, event, roomId, isLocalEcho)
                 }
-                EventType.MESSAGE                   -> {
+                EventType.MESSAGE -> {
                     if (event.unsignedData?.relations?.annotations != null) {
                         Timber.v("###REACTION Aggregation in room $roomId for event ${event.eventId}")
                         handleInitialAggregatedRelations(realm, event, roomId, event.unsignedData.relations.annotations)
@@ -134,7 +134,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                 EventType.KEY_VERIFICATION_START,
                 EventType.KEY_VERIFICATION_MAC,
                 EventType.KEY_VERIFICATION_READY,
-                EventType.KEY_VERIFICATION_KEY      -> {
+                EventType.KEY_VERIFICATION_KEY -> {
                     Timber.v("## SAS REF in room $roomId for event ${event.eventId}")
                     event.content.toModel<MessageRelationContent>()?.relatesTo?.let {
                         if (it.type == RelationType.REFERENCE && it.eventId != null) {
@@ -143,7 +143,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                     }
                 }
 
-                EventType.ENCRYPTED                 -> {
+                EventType.ENCRYPTED -> {
                     // Relation type is in clear
                     val encryptedEventContent = event.content.toModel<EncryptedEventContent>()
                     if (encryptedEventContent?.relatesTo?.type == RelationType.REPLACE ||
@@ -168,20 +168,20 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                             EventType.KEY_VERIFICATION_START,
                             EventType.KEY_VERIFICATION_MAC,
                             EventType.KEY_VERIFICATION_READY,
-                            EventType.KEY_VERIFICATION_KEY    -> {
+                            EventType.KEY_VERIFICATION_KEY -> {
                                 Timber.v("## SAS REF in room $roomId for event ${event.eventId}")
                                 encryptedEventContent.relatesTo.eventId?.let {
                                     handleVerification(realm, event, roomId, isLocalEcho, it)
                                 }
                             }
-                            in EventType.POLL_RESPONSE        -> {
+                            in EventType.POLL_RESPONSE -> {
                                 event.getClearContent().toModel<MessagePollResponseContent>(catchError = true)?.let {
                                     sessionManager.getSessionComponent(sessionId)?.session()?.let { session ->
                                         pollAggregationProcessor.handlePollResponseEvent(session, realm, event)
                                     }
                                 }
                             }
-                            in EventType.POLL_END             -> {
+                            in EventType.POLL_END -> {
                                 sessionManager.getSessionComponent(sessionId)?.session()?.let { session ->
                                     getPowerLevelsHelper(event.roomId)?.let {
                                         pollAggregationProcessor.handlePollEndEvent(session, it, realm, event)
@@ -211,11 +211,11 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
 //                                 }
 //                    }
                 }
-                EventType.REDACTION                 -> {
+                EventType.REDACTION -> {
                     val eventToPrune = event.redacts?.let { EventEntity.where(realm, eventId = it).findFirst() }
                             ?: return
                     when (eventToPrune.type) {
-                        EventType.MESSAGE  -> {
+                        EventType.MESSAGE -> {
                             Timber.d("REDACTION for message ${eventToPrune.eventId}")
 //                                val unsignedData = EventMapper.map(eventToPrune).unsignedData
 //                                        ?: UnsignedData(null, null)
@@ -231,7 +231,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                         }
                     }
                 }
-                in EventType.POLL_START             -> {
+                in EventType.POLL_START -> {
                     val content: MessagePollContent? = event.content.toModel()
                     if (content?.relatesTo?.type == RelationType.REPLACE) {
                         Timber.v("###REPLACE in room $roomId for event ${event.eventId}")
@@ -239,14 +239,14 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                         handleReplace(realm, event, content, roomId, isLocalEcho)
                     }
                 }
-                in EventType.POLL_RESPONSE          -> {
+                in EventType.POLL_RESPONSE -> {
                     event.content.toModel<MessagePollResponseContent>(catchError = true)?.let {
                         sessionManager.getSessionComponent(sessionId)?.session()?.let { session ->
                             pollAggregationProcessor.handlePollResponseEvent(session, realm, event)
                         }
                     }
                 }
-                in EventType.POLL_END               -> {
+                in EventType.POLL_END -> {
                     sessionManager.getSessionComponent(sessionId)?.session()?.let { session ->
                         getPowerLevelsHelper(event.roomId)?.let {
                             pollAggregationProcessor.handlePollEndEvent(session, it, realm, event)
@@ -261,7 +261,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                 in EventType.BEACON_LOCATION_DATA -> {
                     handleBeaconLocationData(event, realm, roomId, isLocalEcho)
                 }
-                else                                -> Timber.v("UnHandled event ${event.eventId}")
+                else -> Timber.v("UnHandled event ${event.eventId}")
             }
         } catch (t: Throwable) {
             Timber.e(t, "## Should not happen ")
@@ -271,12 +271,14 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
     // OPT OUT serer aggregation until API mature enough
     private val SHOULD_HANDLE_SERVER_AGREGGATION = false // should be true to work with e2e
 
-    private fun handleReplace(realm: Realm,
-                              event: Event,
-                              content: MessageContent,
-                              roomId: String,
-                              isLocalEcho: Boolean,
-                              relatedEventId: String? = null) {
+    private fun handleReplace(
+            realm: Realm,
+            event: Event,
+            content: MessageContent,
+            roomId: String,
+            isLocalEcho: Boolean,
+            relatedEventId: String? = null
+    ) {
         val eventId = event.eventId ?: return
         val targetEventId = relatedEventId ?: content.relatesTo?.eventId ?: return
         val newContent = content.newContent ?: return
@@ -366,9 +368,11 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
      * @param replaceEvent The new event
      * @param editions list of edition of event
      */
-    private fun handleThreadSummaryEdition(editedEvent: EventEntity?,
-                                           replaceEvent: TimelineEventEntity?,
-                                           editions: List<EditionOfEvent>?) {
+    private fun handleThreadSummaryEdition(
+            editedEvent: EventEntity?,
+            replaceEvent: TimelineEventEntity?,
+            editions: List<EditionOfEvent>?
+    ) {
         replaceEvent ?: return
         editedEvent ?: return
         editedEvent.findRootThreadEvent()?.apply {
@@ -382,15 +386,17 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
     }
 
     private fun getPowerLevelsHelper(roomId: String): PowerLevelsHelper? {
-        return stateEventDataSource.getStateEvent(roomId, EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
+        return stateEventDataSource.getStateEvent(roomId, EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
                 ?.content?.toModel<PowerLevelsContent>()
                 ?.let { PowerLevelsHelper(it) }
     }
 
-    private fun handleInitialAggregatedRelations(realm: Realm,
-                                                 event: Event,
-                                                 roomId: String,
-                                                 aggregation: AggregatedAnnotation) {
+    private fun handleInitialAggregatedRelations(
+            realm: Realm,
+            event: Event,
+            roomId: String,
+            aggregation: AggregatedAnnotation
+    ) {
         if (SHOULD_HANDLE_SERVER_AGREGGATION) {
             aggregation.chunk?.forEach {
                 if (it.type == EventType.REACTION) {
@@ -412,10 +418,12 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
         }
     }
 
-    private fun handleReaction(realm: Realm,
-                               event: Event,
-                               roomId: String,
-                               isLocalEcho: Boolean) {
+    private fun handleReaction(
+            realm: Realm,
+            event: Event,
+            roomId: String,
+            isLocalEcho: Boolean
+    ) {
         val content = event.content.toModel<ReactionContent>()
         if (content == null) {
             Timber.e("Malformed reaction content ${event.content}")
@@ -480,9 +488,11 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
     /**
      * Called when an event is deleted.
      */
-    private fun handleRedactionOfReplace(realm: Realm,
-                                         redacted: EventEntity,
-                                         relatedEventId: String) {
+    private fun handleRedactionOfReplace(
+            realm: Realm,
+            redacted: EventEntity,
+            relatedEventId: String
+    ) {
         Timber.d("Handle redaction of m.replace")
         val eventSummary = EventAnnotationsSummaryEntity.where(realm, redacted.roomId, relatedEventId).findFirst()
         if (eventSummary == null) {
@@ -498,8 +508,10 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
         sourceToDiscard.deleteFromRealm()
     }
 
-    private fun handleReactionRedact(realm: Realm,
-                                     eventToPrune: EventEntity) {
+    private fun handleReactionRedact(
+            realm: Realm,
+            eventToPrune: EventEntity
+    ) {
         Timber.v("REDACTION of reaction ${eventToPrune.eventId}")
         // delete a reaction, need to update the annotation summary if any
         val reactionContent: ReactionContent = EventMapper.map(eventToPrune).content.toModel() ?: return
@@ -560,7 +572,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                 EventType.KEY_VERIFICATION_ACCEPT,
                 EventType.KEY_VERIFICATION_READY,
                 EventType.KEY_VERIFICATION_KEY,
-                EventType.KEY_VERIFICATION_MAC    -> currentState.toState(VerificationState.WAITING)
+                EventType.KEY_VERIFICATION_MAC -> currentState.toState(VerificationState.WAITING)
                 EventType.KEY_VERIFICATION_CANCEL -> currentState.toState(
                         if (event.senderId == userId) {
                             VerificationState.CANCELED_BY_ME
@@ -568,8 +580,8 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                             VerificationState.CANCELED_BY_OTHER
                         }
                 )
-                EventType.KEY_VERIFICATION_DONE   -> currentState.toState(VerificationState.DONE)
-                else                              -> VerificationState.REQUEST
+                EventType.KEY_VERIFICATION_DONE -> currentState.toState(VerificationState.DONE)
+                else -> VerificationState.REQUEST
             }
 
             data = data.copy(verificationState = newState)

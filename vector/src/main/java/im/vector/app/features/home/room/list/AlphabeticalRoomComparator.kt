@@ -24,8 +24,8 @@ class AlphabeticalRoomComparator @Inject constructor() : Comparator<RoomSummary>
     override fun compare(leftRoomSummary: RoomSummary?, rightRoomSummary: RoomSummary?): Int {
         return when {
             rightRoomSummary?.displayName == null -> -1
-            leftRoomSummary?.displayName == null  -> 1
-            else                                  -> leftRoomSummary.displayName.compareTo(rightRoomSummary.displayName)
+            leftRoomSummary?.displayName == null -> 1
+            else -> leftRoomSummary.displayName.compareTo(rightRoomSummary.displayName)
         }
     }
 }

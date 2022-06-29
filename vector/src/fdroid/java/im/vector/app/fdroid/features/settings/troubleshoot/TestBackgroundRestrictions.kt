@@ -26,8 +26,10 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.settings.troubleshoot.TroubleshootTest
 import javax.inject.Inject
 
-class TestBackgroundRestrictions @Inject constructor(private val context: FragmentActivity,
-                                                     private val stringProvider: StringProvider) :
+class TestBackgroundRestrictions @Inject constructor(
+        private val context: FragmentActivity,
+        private val stringProvider: StringProvider
+) :
         TroubleshootTest(R.string.settings_troubleshoot_test_bg_restricted_title) {
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
@@ -36,7 +38,7 @@ class TestBackgroundRestrictions @Inject constructor(private val context: Fragme
             if (isActiveNetworkMetered) {
                 // Checks user’s Data Saver settings.
                 when (ConnectivityManagerCompat.getRestrictBackgroundStatus(this)) {
-                    ConnectivityManagerCompat.RESTRICT_BACKGROUND_STATUS_ENABLED     -> {
+                    ConnectivityManagerCompat.RESTRICT_BACKGROUND_STATUS_ENABLED -> {
                         // Background data usage is blocked for this app. Wherever possible,
                         // the app should also use less data in the foreground.
                         description = stringProvider.getString(
@@ -56,7 +58,7 @@ class TestBackgroundRestrictions @Inject constructor(private val context: Fragme
                         status = TestStatus.SUCCESS
                         quickFix = null
                     }
-                    ConnectivityManagerCompat.RESTRICT_BACKGROUND_STATUS_DISABLED    -> {
+                    ConnectivityManagerCompat.RESTRICT_BACKGROUND_STATUS_DISABLED -> {
                         // Data Saver is disabled. Since the device is connected to a
                         // metered network, the app should use less data wherever possible.
                         description = stringProvider.getString(

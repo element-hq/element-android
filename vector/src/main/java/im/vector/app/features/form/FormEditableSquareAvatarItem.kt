@@ -59,7 +59,7 @@ abstract class FormEditableSquareAvatarItem : EpoxyModelWithHolder<FormEditableS
         super.bind(holder)
         holder.imageContainer.onClick(clickListener?.takeIf { enabled })
         when {
-            imageUri != null   -> {
+            imageUri != null -> {
                 val corner = TypedValue.applyDimension(
                         TypedValue.COMPLEX_UNIT_DIP,
                         8f,
@@ -73,7 +73,7 @@ abstract class FormEditableSquareAvatarItem : EpoxyModelWithHolder<FormEditableS
             matrixItem != null -> {
                 avatarRenderer?.render(matrixItem!!, holder.image)
             }
-            else               -> {
+            else -> {
                 avatarRenderer?.clear(holder.image)
             }
         }

@@ -231,8 +231,8 @@ internal class DeviceListManager @Inject constructor(
             for ((k, value) in failures) {
                 val statusCode = when (val status = value["status"]) {
                     is Double -> status.toInt()
-                    is Int    -> status.toInt()
-                    else      -> 0
+                    is Int -> status.toInt()
+                    else -> 0
                 }
                 if (statusCode == 503) {
                     synchronized(notReadyToRetryHS) {

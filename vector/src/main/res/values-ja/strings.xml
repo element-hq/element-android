@@ -1653,7 +1653,6 @@
     <string name="login_a11y_choose_matrix_org">matrix.orgを選択</string>
     <string name="space_add_existing_spaces">既存のスペースを追加</string>
     <string name="space_add_existing_rooms_only">既存のルームを追加</string>
-    <string name="leave_all_rooms_and_spaces">全てのルームとスペースから退出</string>
     <string name="finish_setup">セットアップを終了</string>
     <string name="create_spaces_default_public_random_room_name">ランダム</string>
     <string name="create_spaces_loading_message">スペースを作成しています…</string>
@@ -1879,8 +1878,6 @@
     </plurals>
     <string name="invite_to_space">%sに招待</string>
     <string name="invite_by_username_or_mail">ユーザー名かメールアドレスで招待</string>
-    <string name="dont_leave_any">どのルームやスペースからも退出しない</string>
-    <string name="pick_tings_to_leave">退出するルームとスペースを選択</string>
     <string name="space_leave_prompt_msg_with_name">%sを退出してよろしいですか？</string>
     <string name="spaces_beta_welcome_to_spaces_desc">スペースは、ルームや連絡先をグループ化する新しい方法です。</string>
     <string name="you_are_invited">招待されています</string>
@@ -1939,7 +1936,6 @@
     <string name="login_server_url_form_modular_hint">Element Matrix Servicesのアドレス</string>
     <string name="login_signin_to">%1$sにサインイン</string>
     <string name="ftue_auth_use_case_title">誰と最もよく会話しますか？</string>
-    <string name="leave_specific_ones">特定のルームとスペースから退出…</string>
     <string name="this_space_has_no_rooms_not_admin">非公開で招待が必要なルームは表示されていません。
 \nルームを追加する権限はありません。</string>
     <string name="this_space_has_no_rooms_admin">非公開で招待が必要なルームは表示されていません。</string>

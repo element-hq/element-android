@@ -18,9 +18,9 @@ package org.matrix.android.sdk.internal.session.sync
 
 import androidx.work.ExistingPeriodicWorkPolicy
 import com.zhuinden.monarchy.Monarchy
-import org.matrix.android.sdk.api.session.initsync.InitSyncStep
 import org.matrix.android.sdk.api.session.pushrules.PushRuleService
 import org.matrix.android.sdk.api.session.pushrules.RuleScope
+import org.matrix.android.sdk.api.session.sync.InitialSyncStep
 import org.matrix.android.sdk.api.session.sync.model.GroupsSyncResponse
 import org.matrix.android.sdk.api.session.sync.model.RoomsSyncResponse
 import org.matrix.android.sdk.api.session.sync.model.SyncResponse
@@ -32,8 +32,6 @@ import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.session.SessionListeners
 import org.matrix.android.sdk.internal.session.dispatchTo
 import org.matrix.android.sdk.internal.session.group.GetGroupDataWorker
-import org.matrix.android.sdk.internal.session.initsync.ProgressReporter
-import org.matrix.android.sdk.internal.session.initsync.reportSubtask
 import org.matrix.android.sdk.internal.session.pushrules.ProcessEventForPushTask
 import org.matrix.android.sdk.internal.session.sync.handler.CryptoSyncHandler
 import org.matrix.android.sdk.internal.session.sync.handler.GroupSyncHandler
@@ -68,9 +66,11 @@ internal class SyncResponseHandler @Inject constructor(
         private val presenceSyncHandler: PresenceSyncHandler
 ) {
 
-    suspend fun handleResponse(syncResponse: SyncResponse,
-                               fromToken: String?,
-                               reporter: ProgressReporter?) {
+    suspend fun handleResponse(
+            syncResponse: SyncResponse,
+            fromToken: String?,
+            reporter: ProgressReporter?
+    ) {
         val isInitialSync = fromToken == null
         Timber.v("Start handling sync, is InitialSync: $isInitialSync")
 
@@ -88,7 +88,7 @@ internal class SyncResponseHandler @Inject constructor(
         // to ensure to decrypt them properly
         measureTimeMillis {
             Timber.v("Handle toDevice")
-            reportSubtask(reporter, InitSyncStep.ImportingAccountCrypto, 100, 0.1f) {
+            reportSubtask(reporter, InitialSyncStep.ImportingAccountCrypto, 100, 0.1f) {
                 if (syncResponse.toDevice != null) {
                     cryptoSyncHandler.handleToDevice(syncResponse.toDevice, reporter)
                 }
@@ -109,7 +109,7 @@ internal class SyncResponseHandler @Inject constructor(
             // IMPORTANT nothing should be suspend here as we are accessing the realm instance (thread local)
             measureTimeMillis {
                 Timber.v("Handle rooms")
-                reportSubtask(reporter, InitSyncStep.ImportingAccountRoom, 1, 0.7f) {
+                reportSubtask(reporter, InitialSyncStep.ImportingAccountRoom, 1, 0.7f) {
                     if (syncResponse.rooms != null) {
                         roomSyncHandler.handle(realm, syncResponse.rooms, isInitialSync, aggregator, reporter)
                     }
@@ -119,7 +119,7 @@ internal class SyncResponseHandler @Inject constructor(
             }
 
             measureTimeMillis {
-                reportSubtask(reporter, InitSyncStep.ImportingAccountGroups, 1, 0.1f) {
+                reportSubtask(reporter, InitialSyncStep.ImportingAccountGroups, 1, 0.1f) {
                     Timber.v("Handle groups")
                     if (syncResponse.groups != null) {
                         groupSyncHandler.handle(realm, syncResponse.groups, reporter)
@@ -130,7 +130,7 @@ internal class SyncResponseHandler @Inject constructor(
             }
 
             measureTimeMillis {
-                reportSubtask(reporter, InitSyncStep.ImportingAccountData, 1, 0.1f) {
+                reportSubtask(reporter, InitialSyncStep.ImportingAccountData, 1, 0.1f) {
                     Timber.v("Handle accountData")
                     userAccountDataSyncHandler.handle(realm, syncResponse.accountData)
                 }

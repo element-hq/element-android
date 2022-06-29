@@ -35,8 +35,10 @@ data class PushGatewayViewState(
         val pushGateways: Async<List<Pusher>> = Uninitialized
 ) : MavericksState
 
-class PushGatewaysViewModel @AssistedInject constructor(@Assisted initialState: PushGatewayViewState,
-                                                        private val session: Session) :
+class PushGatewaysViewModel @AssistedInject constructor(
+        @Assisted initialState: PushGatewayViewState,
+        private val session: Session
+) :
         VectorViewModel<PushGatewayViewState, PushGatewayAction, PushGatewayViewEvents>(initialState) {
 
     @AssistedFactory
@@ -62,7 +64,7 @@ class PushGatewaysViewModel @AssistedInject constructor(@Assisted initialState: 
 
     override fun handle(action: PushGatewayAction) {
         when (action) {
-            is PushGatewayAction.Refresh      -> handleRefresh()
+            is PushGatewayAction.Refresh -> handleRefresh()
             is PushGatewayAction.RemovePusher -> removePusher(action.pusher)
         }
     }

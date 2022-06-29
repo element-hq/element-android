@@ -45,14 +45,15 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
+import org.matrix.android.sdk.api.query.SpaceFilter
+import org.matrix.android.sdk.api.query.toActiveSpaceOrOrphanRooms
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.NewSessionListener
-import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
+import org.matrix.android.sdk.api.session.sync.SyncRequestState
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
@@ -125,8 +126,8 @@ class HomeDetailViewModel @AssistedInject constructor(
 
     override fun handle(action: HomeDetailAction) {
         when (action) {
-            is HomeDetailAction.SwitchTab                -> handleSwitchTab(action)
-            HomeDetailAction.MarkAllRoomsRead            -> handleMarkAllRoomsRead()
+            is HomeDetailAction.SwitchTab -> handleSwitchTab(action)
+            HomeDetailAction.MarkAllRoomsRead -> handleMarkAllRoomsRead()
             is HomeDetailAction.StartCallWithPhoneNumber -> handleStartCallWithPhoneNumber(action)
         }
     }
@@ -198,11 +199,11 @@ class HomeDetailViewModel @AssistedInject constructor(
                     copy(syncState = syncState)
                 }
 
-        session.syncStatusService().getSyncStatusLive()
+        session.syncService().getSyncRequestStateLive()
                 .asFlow()
-                .filterIsInstance<SyncStatusService.Status.IncrementalSyncStatus>()
+                .filterIsInstance<SyncRequestState.IncrementalSyncRequestState>()
                 .setOnEach {
-                    copy(incrementalSyncStatus = it)
+                    copy(incrementalSyncRequestState = it)
                 }
     }
 
@@ -232,7 +233,7 @@ class HomeDetailViewModel @AssistedInject constructor(
                         is RoomGroupingMethod.ByLegacyGroup -> {
                             // TODO!!
                         }
-                        is RoomGroupingMethod.BySpace       -> {
+                        is RoomGroupingMethod.BySpace -> {
                             val activeSpaceRoomId = groupingMethod.spaceSummary?.roomId
                             var dmInvites = 0
                             var roomsInvite = 0
@@ -241,7 +242,7 @@ class HomeDetailViewModel @AssistedInject constructor(
                                         roomSummaryQueryParams {
                                             memberships = listOf(Membership.INVITE)
                                             roomCategoryFilter = RoomCategoryFilter.ONLY_DM
-                                            activeSpaceFilter = activeSpaceRoomId?.let { ActiveSpaceFilter.ActiveSpace(it) } ?: ActiveSpaceFilter.None
+                                            spaceFilter = activeSpaceRoomId?.let { SpaceFilter.ActiveSpace(it) }
                                         }
                                 ).size
 
@@ -249,7 +250,7 @@ class HomeDetailViewModel @AssistedInject constructor(
                                         roomSummaryQueryParams {
                                             memberships = listOf(Membership.INVITE)
                                             roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-                                            activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(groupingMethod.spaceSummary?.roomId)
+                                            spaceFilter = groupingMethod.toActiveSpaceOrOrphanRooms()
                                         }
                                 ).size
                             }
@@ -258,7 +259,7 @@ class HomeDetailViewModel @AssistedInject constructor(
                                     roomSummaryQueryParams {
                                         memberships = listOf(Membership.JOIN)
                                         roomCategoryFilter = RoomCategoryFilter.ONLY_DM
-                                        activeSpaceFilter = activeSpaceRoomId?.let { ActiveSpaceFilter.ActiveSpace(it) } ?: ActiveSpaceFilter.None
+                                        spaceFilter = activeSpaceRoomId?.let { SpaceFilter.ActiveSpace(it) }
                                     }
                             )
 
@@ -266,7 +267,7 @@ class HomeDetailViewModel @AssistedInject constructor(
                                     roomSummaryQueryParams {
                                         memberships = listOf(Membership.JOIN)
                                         roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-                                        activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(groupingMethod.spaceSummary?.roomId)
+                                        spaceFilter = groupingMethod.toActiveSpaceOrOrphanRooms()
                                     }
                             )
 
@@ -282,9 +283,13 @@ class HomeDetailViewModel @AssistedInject constructor(
                                 )
                             }
                         }
-                        null                                -> Unit
+                        null -> Unit
                     }
                 }
                 .launchIn(viewModelScope)
+    }
+
+    private fun RoomGroupingMethod.BySpace.toActiveSpaceOrOrphanRooms(): SpaceFilter {
+        return spaceSummary?.roomId.toActiveSpaceOrOrphanRooms()
     }
 }

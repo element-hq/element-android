@@ -30,8 +30,7 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
-import org.matrix.android.sdk.common.CommonTestHelper
-import org.matrix.android.sdk.common.CryptoTestHelper
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import java.util.concurrent.CountDownLatch
 
 /** !! Not working with the new timeline
@@ -47,15 +46,12 @@ class TimelineWithManyMembersTest : InstrumentedTest {
         private const val NUMBER_OF_MEMBERS = 6
     }
 
-    private val commonTestHelper = CommonTestHelper(context())
-    private val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
-
     /**
      * Ensures when someone sends a message to a crowded room, everyone can decrypt the message.
      */
 
     @Test
-    fun everyone_should_decrypt_message_in_a_crowded_room() {
+    fun everyone_should_decrypt_message_in_a_crowded_room() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithManyMembers(NUMBER_OF_MEMBERS)
 
         val sessionForFirstMember = cryptoTestData.firstSession
@@ -75,7 +71,7 @@ class TimelineWithManyMembersTest : InstrumentedTest {
             val timelineForCurrentMember = roomForCurrentMember.timelineService().createTimeline(null, TimelineSettings(30))
             timelineForCurrentMember.start()
 
-            session.startSync(true)
+            session.syncService().startSync(true)
 
             run {
                 val lock = CountDownLatch(1)
@@ -96,7 +92,7 @@ class TimelineWithManyMembersTest : InstrumentedTest {
                 timelineForCurrentMember.addListener(eventsListener)
                 commonTestHelper.await(lock, 600_000)
             }
-            session.stopSync()
+            session.syncService().stopSync()
         }
     }
 }

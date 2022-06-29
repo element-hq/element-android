@@ -19,7 +19,7 @@ package org.matrix.android.sdk.flow
 import androidx.lifecycle.asFlow
 import androidx.paging.PagedList
 import kotlinx.coroutines.flow.Flow
-import org.matrix.android.sdk.api.query.QueryStringValue
+import org.matrix.android.sdk.api.query.QueryStateEventValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
@@ -44,6 +44,13 @@ import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
 
 class FlowSession(private val session: Session) {
+
+    fun liveRoomSummary(roomId: String): Flow<Optional<RoomSummary>> {
+        return session.roomService().getRoomSummaryLive(roomId).asFlow()
+                .startWith(session.coroutineDispatchers.io) {
+                    session.roomService().getRoomSummary(roomId).toOptional()
+                }
+    }
 
     fun liveRoomSummaries(queryParams: RoomSummaryQueryParams, sortOrder: RoomSortOrder = RoomSortOrder.NONE): Flow<List<RoomSummary>> {
         return session.roomService().getRoomSummariesLive(queryParams, sortOrder).asFlow()
@@ -81,7 +88,7 @@ class FlowSession(private val session: Session) {
     }
 
     fun liveSyncState(): Flow<SyncState> {
-        return session.getSyncStateLive().asFlow()
+        return session.syncService().getSyncStateLive().asFlow()
     }
 
     fun livePushers(): Flow<List<Pusher>> {
@@ -172,7 +179,7 @@ class FlowSession(private val session: Session) {
 
     fun liveRoomWidgets(
             roomId: String,
-            widgetId: QueryStringValue,
+            widgetId: QueryStateEventValue,
             widgetTypes: Set<String>? = null,
             excludedTypes: Set<String>? = null
     ): Flow<List<Widget>> {

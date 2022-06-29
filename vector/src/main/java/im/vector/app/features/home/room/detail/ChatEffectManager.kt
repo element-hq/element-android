@@ -117,17 +117,17 @@ class ChatEffectManager @Inject constructor(
             MessageType.MSGTYPE_CONFETTI -> ChatEffect.CONFETTI
             MessageType.MSGTYPE_SNOWFALL -> ChatEffect.SNOWFALL
             MessageType.MSGTYPE_EMOTE,
-            MessageType.MSGTYPE_TEXT     -> {
+            MessageType.MSGTYPE_TEXT -> {
                 event.root.getClearContent().toModel<MessageContent>()?.body
                         ?.let { text ->
                             when {
                                 EMOJIS_FOR_CONFETTI.any { text.contains(it) } -> ChatEffect.CONFETTI
                                 EMOJIS_FOR_SNOWFALL.any { text.contains(it) } -> ChatEffect.SNOWFALL
-                                else                                          -> null
+                                else -> null
                             }
                         }
             }
-            else                         -> null
+            else -> null
         }
     }
 

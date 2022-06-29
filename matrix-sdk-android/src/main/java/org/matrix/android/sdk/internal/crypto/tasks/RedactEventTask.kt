@@ -32,7 +32,8 @@ internal interface RedactEventTask : Task<RedactEventTask.Params, String> {
 
 internal class DefaultRedactEventTask @Inject constructor(
         private val roomAPI: RoomAPI,
-        private val globalErrorReceiver: GlobalErrorReceiver) : RedactEventTask {
+        private val globalErrorReceiver: GlobalErrorReceiver
+) : RedactEventTask {
 
     override suspend fun execute(params: RedactEventTask.Params): String {
         val response = executeRequest(globalErrorReceiver) {

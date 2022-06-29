@@ -34,8 +34,7 @@ import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
-import org.matrix.android.sdk.common.CommonTestHelper
-import org.matrix.android.sdk.common.CryptoTestHelper
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import org.matrix.android.sdk.common.checkSendOrder
 import timber.log.Timber
 import java.util.concurrent.CountDownLatch
@@ -53,9 +52,7 @@ class TimelineForwardPaginationTest : InstrumentedTest {
      * This test ensure that if we click to permalink, we will be able to go back to the live
      */
     @Test
-    fun forwardPaginationTest() {
-        val commonTestHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
+    fun forwardPaginationTest() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
         val numberOfMessagesToSend = 90
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceInARoom(false)
 
@@ -166,6 +163,8 @@ class TimelineForwardPaginationTest : InstrumentedTest {
             // Ask for a forward pagination
             val snapshot = runBlocking {
                 aliceTimeline.awaitPaginate(Timeline.Direction.FORWARDS, 50)
+                // We should paginate one more time to check we are at the end now that chunks are not merged.
+                aliceTimeline.awaitPaginate(Timeline.Direction.FORWARDS, 50)
             }
             // 7 for room creation item (backward pagination),and numberOfMessagesToSend (all the message of the room)
             snapshot.size == 7 + numberOfMessagesToSend &&
@@ -177,7 +176,5 @@ class TimelineForwardPaginationTest : InstrumentedTest {
         }
 
         aliceTimeline.dispose()
-
-        cryptoTestData.cleanUp(commonTestHelper)
     }
 }

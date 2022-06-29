@@ -82,7 +82,7 @@ class RoomUploadsFragment @Inject constructor(
                 is RoomUploadsViewEvents.FileReadyForSharing -> {
                     shareMedia(requireContext(), it.file, getMimeTypeFromUri(requireContext(), it.file.toUri()))
                 }
-                is RoomUploadsViewEvents.FileReadyForSaving  -> {
+                is RoomUploadsViewEvents.FileReadyForSaving -> {
                     lifecycleScope.launch {
                         runCatching {
                             saveMedia(
@@ -100,7 +100,7 @@ class RoomUploadsFragment @Inject constructor(
                     }
                     Unit
                 }
-                is RoomUploadsViewEvents.Failure             -> showFailure(it.throwable)
+                is RoomUploadsViewEvents.Failure -> showFailure(it.throwable)
             }
         }
     }

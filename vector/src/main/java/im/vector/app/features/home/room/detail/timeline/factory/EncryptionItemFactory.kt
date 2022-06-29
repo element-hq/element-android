@@ -38,7 +38,8 @@ class EncryptionItemFactory @Inject constructor(
         private val stringProvider: StringProvider,
         private val informationDataFactory: MessageInformationDataFactory,
         private val avatarSizeProvider: AvatarSizeProvider,
-        private val session: Session) {
+        private val session: Session
+) {
 
     fun create(params: TimelineItemFactoryParams): StatusTileTimelineItem? {
         val event = params.event

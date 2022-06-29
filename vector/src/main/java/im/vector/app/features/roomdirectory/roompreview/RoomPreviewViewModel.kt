@@ -35,7 +35,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
-import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.identity.SharedState
@@ -43,8 +42,8 @@ import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.peeking.PeekResult
-import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.unwrap
 import timber.log.Timber
 
 class RoomPreviewViewModel @AssistedInject constructor(
@@ -113,7 +112,7 @@ class RoomPreviewViewModel @AssistedInject constructor(
             }
 
             when (peekResult) {
-                is PeekResult.Success           -> {
+                is PeekResult.Success -> {
                     setState {
                         // Do not override what we had from the permalink
                         val newHomeServers = if (homeServers.isEmpty()) {
@@ -148,7 +147,7 @@ class RoomPreviewViewModel @AssistedInject constructor(
                     }
                 }
                 PeekResult.UnknownAlias,
-                null                            -> {
+                null -> {
                     setState {
                         copy(
                                 peekingState = Success(PeekingState.NOT_FOUND)
@@ -160,24 +159,25 @@ class RoomPreviewViewModel @AssistedInject constructor(
     }
 
     private fun observeRoomSummary() {
-        val queryParams = roomSummaryQueryParams {
-            roomId = QueryStringValue.Equals(initialState.roomId)
-            excludeType = null
-        }
         session
                 .flow()
-                .liveRoomSummaries(queryParams)
-                .onEach { list ->
-                    val isRoomJoined = list.any {
-                        it.membership == Membership.JOIN
-                    }
-                    list.firstOrNull { it.roomId == initialState.roomId }?.roomType?.let {
-                        setState {
-                            copy(roomType = it)
-                        }
-                    }
+                .liveRoomSummary(initialState.roomId)
+                .unwrap()
+                .onEach { roomSummary ->
+                    val isRoomJoined = roomSummary.membership == Membership.JOIN
                     if (isRoomJoined) {
-                        setState { copy(roomJoinState = JoinState.JOINED) }
+                        setState {
+                            copy(
+                                    roomType = roomSummary.roomType,
+                                    roomJoinState = JoinState.JOINED
+                            )
+                        }
+                    } else {
+                        setState {
+                            copy(
+                                    roomType = roomSummary.roomType
+                            )
+                        }
                     }
                 }
                 .launchIn(viewModelScope)
@@ -189,10 +189,10 @@ class RoomPreviewViewModel @AssistedInject constructor(
                 .onEach {
                     val changeMembership = it[initialState.roomId] ?: ChangeMembershipState.Unknown
                     val joinState = when (changeMembership) {
-                        is ChangeMembershipState.Joining       -> JoinState.JOINING
+                        is ChangeMembershipState.Joining -> JoinState.JOINING
                         is ChangeMembershipState.FailedJoining -> JoinState.JOINING_ERROR
                         // Other cases are handled by room summary
-                        else                                   -> null
+                        else -> null
                     }
                     if (joinState != null) {
                         setState { copy(roomJoinState = joinState) }
@@ -203,7 +203,7 @@ class RoomPreviewViewModel @AssistedInject constructor(
 
     override fun handle(action: RoomPreviewAction) {
         when (action) {
-            is RoomPreviewAction.Join        -> handleJoinRoom()
+            is RoomPreviewAction.Join -> handleJoinRoom()
             RoomPreviewAction.JoinThirdParty -> handleJoinRoomThirdParty()
         }
     }

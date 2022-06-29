@@ -24,9 +24,9 @@ class AttachmentsPreviewViewModel(initialState: AttachmentsPreviewViewState) :
 
     override fun handle(action: AttachmentsPreviewAction) {
         when (action) {
-            is AttachmentsPreviewAction.SetCurrentAttachment          -> handleSetCurrentAttachment(action)
+            is AttachmentsPreviewAction.SetCurrentAttachment -> handleSetCurrentAttachment(action)
             is AttachmentsPreviewAction.UpdatePathOfCurrentAttachment -> handleUpdatePathOfCurrentAttachment(action)
-            AttachmentsPreviewAction.RemoveCurrentAttachment          -> handleRemoveCurrentAttachment()
+            AttachmentsPreviewAction.RemoveCurrentAttachment -> handleRemoveCurrentAttachment()
         }
     }
 

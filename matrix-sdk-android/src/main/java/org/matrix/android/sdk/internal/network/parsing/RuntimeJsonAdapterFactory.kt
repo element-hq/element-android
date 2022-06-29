@@ -70,11 +70,13 @@ internal class RuntimeJsonAdapterFactory<T>(
     }
 
     @Suppress("UNCHECKED_CAST")
-    internal class RuntimeJsonAdapter(val labelKey: String,
-                                      val labelToAdapter: Map<String, JsonAdapter<Any>>,
-                                      val typeToLabel: Map<Type, String>,
-                                      val objectJsonAdapter: JsonAdapter<Any>,
-                                      val fallbackAdapter: JsonAdapter<Any>) : JsonAdapter<Any?>() {
+    internal class RuntimeJsonAdapter(
+            val labelKey: String,
+            val labelToAdapter: Map<String, JsonAdapter<Any>>,
+            val typeToLabel: Map<Type, String>,
+            val objectJsonAdapter: JsonAdapter<Any>,
+            val fallbackAdapter: JsonAdapter<Any>
+    ) : JsonAdapter<Any?>() {
         @Throws(IOException::class)
         override fun fromJson(reader: JsonReader): Any? {
             val peekedToken = reader.peek()

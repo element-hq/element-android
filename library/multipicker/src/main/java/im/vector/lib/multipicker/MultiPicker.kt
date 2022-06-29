@@ -31,15 +31,15 @@ class MultiPicker<T> private constructor() {
         @Suppress("UNCHECKED_CAST")
         fun <T> get(type: MultiPicker<T>): T {
             return when (type) {
-                IMAGE        -> ImagePicker() as T
-                VIDEO        -> VideoPicker() as T
-                MEDIA        -> MediaPicker() as T
-                FILE         -> FilePicker() as T
-                AUDIO        -> AudioPicker() as T
-                CONTACT      -> ContactPicker() as T
-                CAMERA       -> CameraPicker() as T
+                IMAGE -> ImagePicker() as T
+                VIDEO -> VideoPicker() as T
+                MEDIA -> MediaPicker() as T
+                FILE -> FilePicker() as T
+                AUDIO -> AudioPicker() as T
+                CONTACT -> ContactPicker() as T
+                CAMERA -> CameraPicker() as T
                 CAMERA_VIDEO -> CameraVideoPicker() as T
-                else         -> throw IllegalArgumentException("Unsupported type $type")
+                else -> throw IllegalArgumentException("Unsupported type $type")
             }
         }
     }

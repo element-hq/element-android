@@ -92,7 +92,7 @@ class SpacePeopleFragment @Inject constructor(
             when (it.createAndInviteState) {
                 is Loading -> sharedActionViewModel.post(SpacePeopleSharedAction.ShowModalLoading)
                 Uninitialized,
-                is Fail    -> sharedActionViewModel.post(SpacePeopleSharedAction.HideModalLoading)
+                is Fail -> sharedActionViewModel.post(SpacePeopleSharedAction.HideModalLoading)
                 is Success -> {
                     // don't hide on success, it will navigate out. If not the loading goes out before navigation
                 }
@@ -123,7 +123,7 @@ class SpacePeopleFragment @Inject constructor(
 
     private fun handleViewEvents(events: SpacePeopleViewEvents) {
         when (events) {
-            is SpacePeopleViewEvents.OpenRoom      -> {
+            is SpacePeopleViewEvents.OpenRoom -> {
                 sharedActionViewModel.post(SpacePeopleSharedAction.NavigateToRoom(events.roomId))
             }
             is SpacePeopleViewEvents.InviteToSpace -> {

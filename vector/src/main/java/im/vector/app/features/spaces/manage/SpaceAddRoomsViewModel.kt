@@ -35,9 +35,9 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
+import org.matrix.android.sdk.api.query.SpaceFilter
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
@@ -72,7 +72,7 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
                     this.memberships = listOf(Membership.JOIN)
                     this.excludeType = null
                     this.includeType = listOf(RoomType.SPACE)
-                    this.activeSpaceFilter = ActiveSpaceFilter.ExcludeSpace(initialState.spaceId)
+                    this.spaceFilter = SpaceFilter.ExcludeSpace(initialState.spaceId)
                     this.displayName = QueryStringValue.Contains(initialState.currentFilter, QueryStringValue.Case.INSENSITIVE)
                 },
                 pagedListConfig = PagedList.Config.Builder()
@@ -98,7 +98,7 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
                     this.excludeType = listOf(RoomType.SPACE)
                     this.includeType = null
                     this.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-                    this.activeSpaceFilter = ActiveSpaceFilter.ExcludeSpace(initialState.spaceId)
+                    this.spaceFilter = SpaceFilter.ExcludeSpace(initialState.spaceId)
                     this.displayName = QueryStringValue.Contains(initialState.currentFilter, QueryStringValue.Case.INSENSITIVE)
                 },
                 pagedListConfig = PagedList.Config.Builder()
@@ -124,7 +124,7 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
                     this.excludeType = listOf(RoomType.SPACE)
                     this.includeType = null
                     this.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
-                    this.activeSpaceFilter = ActiveSpaceFilter.ExcludeSpace(initialState.spaceId)
+                    this.spaceFilter = SpaceFilter.ExcludeSpace(initialState.spaceId)
                     this.displayName = QueryStringValue.Contains(initialState.currentFilter, QueryStringValue.Case.INSENSITIVE)
                 },
                 pagedListConfig = PagedList.Config.Builder()
@@ -167,10 +167,7 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
 
     override fun handle(action: SpaceAddRoomActions) {
         when (action) {
-            is SpaceAddRoomActions.UpdateFilter    -> {
-                roomUpdatableLivePageResult.queryParams = roomUpdatableLivePageResult.queryParams.copy(
-                        displayName = QueryStringValue.Contains(action.filter, QueryStringValue.Case.INSENSITIVE)
-                )
+            is SpaceAddRoomActions.UpdateFilter -> {
                 roomUpdatableLivePageResult.queryParams = roomUpdatableLivePageResult.queryParams.copy(
                         displayName = QueryStringValue.Contains(action.filter, QueryStringValue.Case.INSENSITIVE)
                 )
@@ -184,7 +181,7 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
                 selectionList[action.roomSummary.roomId] = (selectionList[action.roomSummary.roomId] ?: false).not()
                 selectionListLiveData.postValue(selectionList.toMap())
             }
-            SpaceAddRoomActions.Save               -> {
+            SpaceAddRoomActions.Save -> {
                 doAddSelectedRooms()
             }
         }

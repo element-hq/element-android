@@ -121,7 +121,7 @@ object VectorLinkify {
                     remove = if (a.important) i + 1 else i
                 } else {
                     when {
-                        b.end <= a.end                    ->
+                        b.end <= a.end ->
                             // b is inside a -> b should be removed
                             remove = i + 1
                         a.end - a.start > b.end - b.start ->
@@ -143,10 +143,12 @@ object VectorLinkify {
         }
     }
 
-    private data class LinkSpec(val span: URLSpan,
-                                val start: Int,
-                                val end: Int,
-                                val important: Boolean = false)
+    private data class LinkSpec(
+            val span: URLSpan,
+            val start: Int,
+            val end: Int,
+            val important: Boolean = false
+    )
 
     private val COMPARATOR = Comparator<LinkSpec> { (_, startA, endA), (_, startB, endB) ->
         if (startA < startB) {

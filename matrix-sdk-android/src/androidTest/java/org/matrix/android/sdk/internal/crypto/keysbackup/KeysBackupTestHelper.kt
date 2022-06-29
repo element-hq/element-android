@@ -33,7 +33,8 @@ import java.util.concurrent.CountDownLatch
 
 internal class KeysBackupTestHelper(
         private val testHelper: CommonTestHelper,
-        private val cryptoTestHelper: CryptoTestHelper) {
+        private val cryptoTestHelper: CryptoTestHelper
+) {
 
     fun waitForKeybackUpBatching() {
         Thread.sleep(400)
@@ -96,8 +97,10 @@ internal class KeysBackupTestHelper(
         )
     }
 
-    fun prepareAndCreateKeysBackupData(keysBackup: KeysBackupService,
-                                       password: String? = null): PrepareKeysBackupDataResult {
+    fun prepareAndCreateKeysBackupData(
+            keysBackup: KeysBackupService,
+            password: String? = null
+    ): PrepareKeysBackupDataResult {
         val stateObserver = StateObserver(keysBackup)
 
         val megolmBackupCreationInfo = testHelper.doSync<MegolmBackupCreationInfo> {
@@ -106,7 +109,7 @@ internal class KeysBackupTestHelper(
 
         Assert.assertNotNull(megolmBackupCreationInfo)
 
-        Assert.assertFalse("Key backup should not be enabled before creation", keysBackup.isEnabled)
+        Assert.assertFalse("Key backup should not be enabled before creation", keysBackup.isEnabled())
 
         // Create the version
         val keysVersion = testHelper.doSync<KeysVersion> {
@@ -116,7 +119,7 @@ internal class KeysBackupTestHelper(
         Assert.assertNotNull("Key backup version should not be null", keysVersion.version)
 
         // Backup must be enable now
-        Assert.assertTrue(keysBackup.isEnabled)
+        Assert.assertTrue(keysBackup.isEnabled())
 
         stateObserver.stopAndCheckStates(null)
         return PrepareKeysBackupDataResult(megolmBackupCreationInfo, keysVersion.version)
@@ -128,7 +131,7 @@ internal class KeysBackupTestHelper(
      */
     fun waitForKeysBackupToBeInState(session: Session, state: KeysBackupState) {
         // If already in the wanted state, return
-        if (session.cryptoService().keysBackupService().state == state) {
+        if (session.cryptoService().keysBackupService().getState() == state) {
             return
         }
 
@@ -169,9 +172,11 @@ internal class KeysBackupTestHelper(
      * - The new device must have the same count of megolm keys
      * - Alice must have the same keys on both devices
      */
-    fun checkRestoreSuccess(testData: KeysBackupScenarioData,
-                            total: Int,
-                            imported: Int) {
+    fun checkRestoreSuccess(
+            testData: KeysBackupScenarioData,
+            total: Int,
+            imported: Int
+    ) {
         // - Imported keys number must be correct
         Assert.assertEquals(testData.aliceKeys.size, total)
         Assert.assertEquals(total, imported)

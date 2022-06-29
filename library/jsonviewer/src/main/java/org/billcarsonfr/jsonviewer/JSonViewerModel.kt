@@ -82,7 +82,7 @@ internal object ModelParser {
                 }
                 parent.addChild(objectComposed)
             }
-            is JSONArray  -> {
+            is JSONArray -> {
                 val objectComposed = JSonViewerArray(key, index, obj)
                         .apply { isExpanded = initialOpenDepth == -1 || depth <= initialOpenDepth }
                 objectComposed.depth = depth
@@ -91,25 +91,25 @@ internal object ModelParser {
                 }
                 parent.addChild(objectComposed)
             }
-            is String     -> {
+            is String -> {
                 JSonViewerLeaf(key, index, obj, JSONType.STRING).let {
                     it.depth = depth
                     parent.addChild(it)
                 }
             }
-            is Number     -> {
+            is Number -> {
                 JSonViewerLeaf(key, index, obj.toString(), JSONType.NUMBER).let {
                     it.depth = depth
                     parent.addChild(it)
                 }
             }
-            is Boolean    -> {
+            is Boolean -> {
                 JSonViewerLeaf(key, index, obj.toString(), JSONType.BOOLEAN).let {
                     it.depth = depth
                     parent.addChild(it)
                 }
             }
-            else          -> {
+            else -> {
                 if (obj == JSONObject.NULL) {
                     JSonViewerLeaf(key, index, "null", JSONType.NULL).let {
                         it.depth = depth

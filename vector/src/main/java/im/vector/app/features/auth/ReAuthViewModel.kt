@@ -23,6 +23,7 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
+import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.util.toBase64NoPadding
@@ -30,7 +31,8 @@ import java.io.ByteArrayOutputStream
 
 class ReAuthViewModel @AssistedInject constructor(
         @Assisted val initialState: ReAuthState,
-        private val session: Session
+        private val session: Session,
+        private val matrix: Matrix,
 ) : VectorViewModel<ReAuthState, ReAuthActions, ReAuthEvents>(initialState) {
 
     @AssistedFactory
@@ -42,7 +44,7 @@ class ReAuthViewModel @AssistedInject constructor(
 
     override fun handle(action: ReAuthActions) = withState { state ->
         when (action) {
-            ReAuthActions.StartSSOFallback   -> {
+            ReAuthActions.StartSSOFallback -> {
                 if (state.flowType == LoginFlowTypes.SSO) {
                     setState { copy(ssoFallbackPageWasShown = true) }
                     val ssoURL = session.getUiaSsoFallbackUrl(initialState.session ?: "")
@@ -55,10 +57,10 @@ class ReAuthViewModel @AssistedInject constructor(
             ReAuthActions.FallBackPageClosed -> {
                 // Should we do something here?
             }
-            is ReAuthActions.ReAuthWithPass  -> {
+            is ReAuthActions.ReAuthWithPass -> {
                 val safeForIntentCypher = ByteArrayOutputStream().also {
                     it.use {
-                        session.secureStorageService().securelyStoreObject(action.password, initialState.resultKeyStoreAlias, it)
+                        matrix.secureStorageService().securelyStoreObject(action.password, initialState.resultKeyStoreAlias, it)
                     }
                 }.toByteArray().toBase64NoPadding()
                 _viewEvents.post(ReAuthEvents.PasswordFinishSuccess(safeForIntentCypher))

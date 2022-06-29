@@ -30,8 +30,9 @@ import kotlin.reflect.KMutableProperty0
 
 private const val DEFAULT_PREFETCH_THRESHOLD = 30
 
-class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMutableProperty0<Int?>,
-                                          private val adapterPositionMapping: MutableMap<String, Int>
+class TimelineControllerInterceptorHelper(
+        private val positionOfReadMarker: KMutableProperty0<Int?>,
+        private val adapterPositionMapping: MutableMap<String, Int>
 ) {
 
     private var previousModelsSize = 0

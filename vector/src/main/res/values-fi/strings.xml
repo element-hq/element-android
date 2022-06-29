@@ -358,8 +358,8 @@
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Ketkä saavat nähdä huoneen historian\?</string>
     <string name="room_settings_read_history_entry_anyone">Kuka tahansa</string>
     <string name="room_settings_read_history_entry_members_only_option_time_shared">Vain jäsenet (tämän asetuksen valitsemisesta alkaen)</string>
-    <string name="room_settings_read_history_entry_members_only_invited">Vain jäsenet (heidän kutsumisestaan alkaen)</string>
-    <string name="room_settings_read_history_entry_members_only_joined">Vain jäsenet (heidän liittymisestään alkaen)</string>
+    <string name="room_settings_read_history_entry_members_only_invited">Vain jäsenet (kutsumisestaan alkaen)</string>
+    <string name="room_settings_read_history_entry_members_only_joined">Vain jäsenet (liittymisestään alkaen)</string>
     <string name="room_settings_banned_users_title">Porttikiellon saaneet käyttäjät</string>
     <string name="room_settings_category_advanced_title">Lisäasetukset</string>
     <string name="room_settings_room_internal_id">Tämän huoneen sisäinen ID</string>
@@ -780,7 +780,7 @@
     <string name="notification_new_invitation">Uusi kutsu</string>
     <string name="notification_sender_me">Minä</string>
     <string name="notification_inline_reply_failed">** Lähetys epäonnistui — avaathan huoneen</string>
-    <string name="error_jitsi_not_supported_on_old_device">Valitettavasti konferenssipuhelut Jitsin kanssa eivät toimi vanhoissa laitteissa (laitteet, joissa on Android 6.0 tai vanhempi)</string>
+    <string name="error_jitsi_not_supported_on_old_device">Valitettavasti ryhmäpuhelut Jitsillä eivät toimi vanhoissa laitteissa (laitteet, joissa on Android 6.0 tai vanhempi)</string>
     <string name="encryption_information_unknown_ip">tuntematon IP-osoite</string>
     <string name="you_added_a_new_device_with_info">Uusi istunto pyytää salausavaimia.
 \nIstunnon nimi: %1$s
@@ -1091,9 +1091,7 @@
     <string name="login_signup_submit">Seuraava</string>
     <string name="login_signup_error_user_in_use">Käyttäjätunnus on varattu</string>
     <string name="login_signup_cancel_confirmation_title">Varoitus</string>
-    <string name="login_signup_cancel_confirmation_content">Tunnustasi ei ole vielä luotu.
-\n
-\nPeru rekisteröintiprosessi\?</string>
+    <string name="login_signup_cancel_confirmation_content">Tunnustasi ei ole vielä luotu. Peru rekisteröintiprosessi\?</string>
     <string name="login_a11y_choose_matrix_org">Valitse matrix.org</string>
     <string name="login_a11y_choose_modular">Valitse Element Matrix Services</string>
     <string name="login_a11y_choose_other">Valitse muu kotipalvelin</string>
@@ -2063,8 +2061,6 @@
     <string name="location_share_option_user_current">Jaa nykyinen sijaintini</string>
     <string name="restart_the_application_to_apply_changes">Käynnistä sovellus uudelleen, jotta muutos tulee voimaan.</string>
     <string name="space_add_existing_rooms">Lisää olemassa olevia huoneita ja avaruuksia</string>
-    <string name="dont_leave_any">Älä poistu mistään huoneesta ja avaruudesta</string>
-    <string name="leave_all_rooms_and_spaces">Poistu kaikista huoneista ja avaruuksista</string>
     <string name="use_latest_app">Käytä ${app_name}in uusinta versiota muilla laitteillasi:</string>
     <string name="ftue_personalize_skip_this_step">Ohita tämä vaihe</string>
     <string name="ftue_personalize_submit">Tallenna ja jatka</string>
@@ -2085,7 +2081,7 @@
     <string name="settings_discovery_no_policy_provided">Identiteettipalvelin ei tarjoa käytäntöä</string>
     <string name="settings_discovery_hide_identity_server_policy_title">Piilota identiteettipalvelimen käytäntö</string>
     <string name="settings_discovery_show_identity_server_policy_title">Näytä identiteettipalvelimen käytäntö</string>
-    <string name="error_jitsi_join_conf">Valitettavasti konfrenssiin liityttäessä ilmeni virhe</string>
+    <string name="error_jitsi_join_conf">Valitettavasti ryhmäpuheluun liityttäessä ilmeni virhe</string>
     <string name="legals_no_policy_provided">Tämä palvelin ei tarjoa mitään käytäntöä.</string>
     <string name="legals_identity_server_title">Identiteettipalvelimesi käytäntö</string>
     <string name="legals_home_server_title">Kotipalvelimesi käytäntö</string>
@@ -2100,4 +2096,31 @@
 \n
 \nLue käyttöehdot %s.</string>
     <string name="analytics_opt_in_title">Auta parantamaan ${app_name}iä</string>
+    <string name="verify_not_me_self_verification">Jokin seuraavista voi olla vaarantunut:
+\n
+\n- Salasanasi
+\n- Kotipalvelimesi
+\n- Tämä laite tai vastapuolen laite
+\n- Jomman kumman laitteen käyttämä internet-yhteys
+\n
+\nSuosittelemme, että vaihdat salasanasi ja palautusavaimesi välittömästi asetuksista.</string>
+    <string name="room_alias_address_empty">Ei vielä muita julkaistuja osoitteita.</string>
+    <string name="settings_presence_user_always_appears_offline">Yhteydetön tila</string>
+    <string name="settings_presence">Läsnäolo</string>
+    <string name="error_threepid_auth_failed">Varmista, että olet napsauttanut linkkiä saamassasi sähköpostissa.</string>
+    <string name="call_stop_screen_sharing">Lopeta näytön jako</string>
+    <string name="call_start_screen_sharing">Jaa näyttö</string>
+    <string name="action_learn_more">Lue lisää</string>
+    <string name="action_try_it_out">Kokeile</string>
+    <string name="time_unit_hour_short">t</string>
+    <string name="time_unit_second_short">s</string>
+    <string name="time_unit_minute_short">min</string>
+    <string name="notice_room_canonical_alias_no_change_by_you">Muutit tämän huoneen osoitteita.</string>
+    <string name="notice_room_canonical_alias_no_change">%1$s muutti tämän huoneen osoitteita.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">Muutit tämän huoneen pää- ja vaihtoehtoisia osoitteita.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$s muutti tämän huoneen pää- ja vaihtoehtoisia osoitteita.</string>
+    <string name="notice_room_canonical_alias_alternative_changed_by_you">Muutit tämän huoneen vaihtoehtoisia osoitteita.</string>
+    <string name="notice_room_canonical_alias_alternative_changed">%1$s muutti tämän huoneen vaihtoehtoisia osoitteita.</string>
+    <string name="initial_sync_request_title">Alkusynkronointipyyntö</string>
+    <string name="room_alias_action_unpublish">Poista tämän osoitteen julkaisu</string>
 </resources>

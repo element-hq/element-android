@@ -40,7 +40,8 @@ class CallItemFactory @Inject constructor(
         private val messageInformationDataFactory: MessageInformationDataFactory,
         private val messageItemAttributesFactory: MessageItemAttributesFactory,
         private val avatarSizeProvider: AvatarSizeProvider,
-        private val noticeItemFactory: NoticeItemFactory) {
+        private val noticeItemFactory: NoticeItemFactory
+) {
 
     fun create(params: TimelineItemFactoryParams): VectorEpoxyModel<*>? {
         val event = params.event
@@ -119,7 +120,7 @@ class CallItemFactory @Inject constructor(
                         reactionsSummaryEvents = params.reactionsSummaryEvents
                 )
             }
-            else                  -> null
+            else -> null
         }
         return if (callItem == null && showHiddenEvents) {
             // Fallback to notice item for showing hidden events

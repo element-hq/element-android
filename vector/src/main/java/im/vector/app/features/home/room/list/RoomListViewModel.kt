@@ -156,16 +156,16 @@ class RoomListViewModel @AssistedInject constructor(
 
     override fun handle(action: RoomListAction) {
         when (action) {
-            is RoomListAction.SelectRoom                  -> handleSelectRoom(action)
-            is RoomListAction.AcceptInvitation            -> handleAcceptInvitation(action)
-            is RoomListAction.RejectInvitation            -> handleRejectInvitation(action)
-            is RoomListAction.FilterWith                  -> handleFilter(action)
-            is RoomListAction.LeaveRoom                   -> handleLeaveRoom(action)
+            is RoomListAction.SelectRoom -> handleSelectRoom(action)
+            is RoomListAction.AcceptInvitation -> handleAcceptInvitation(action)
+            is RoomListAction.RejectInvitation -> handleRejectInvitation(action)
+            is RoomListAction.FilterWith -> handleFilter(action)
+            is RoomListAction.LeaveRoom -> handleLeaveRoom(action)
             is RoomListAction.ChangeRoomNotificationState -> handleChangeNotificationMode(action)
-            is RoomListAction.ToggleTag                   -> handleToggleTag(action)
-            is RoomListAction.ToggleSection               -> handleToggleSection(action.section)
-            is RoomListAction.JoinSuggestedRoom           -> handleJoinSuggestedRoom(action)
-            is RoomListAction.ShowRoomDetails             -> handleShowRoomDetails(action)
+            is RoomListAction.ToggleTag -> handleToggleTag(action)
+            is RoomListAction.ToggleSection -> handleToggleSection(action.section)
+            is RoomListAction.JoinSuggestedRoom -> handleJoinSuggestedRoom(action)
+            is RoomListAction.ShowRoomDetails -> handleShowRoomDetails(action)
         }
     }
 
@@ -316,9 +316,9 @@ class RoomListViewModel @AssistedInject constructor(
 
     private fun String.otherTag(): String? {
         return when (this) {
-            RoomTag.ROOM_TAG_FAVOURITE    -> RoomTag.ROOM_TAG_LOW_PRIORITY
+            RoomTag.ROOM_TAG_FAVOURITE -> RoomTag.ROOM_TAG_LOW_PRIORITY
             RoomTag.ROOM_TAG_LOW_PRIORITY -> RoomTag.ROOM_TAG_FAVOURITE
-            else                          -> null
+            else -> null
         }
     }
 

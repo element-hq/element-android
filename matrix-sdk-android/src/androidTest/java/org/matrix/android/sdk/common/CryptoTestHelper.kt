@@ -58,7 +58,7 @@ import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.securestorage.EmptyKeySigner
-import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
+import org.matrix.android.sdk.api.session.securestorage.KeyRef
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.awaitCallback
 import org.matrix.android.sdk.api.util.toBase64NoPadding
@@ -66,7 +66,7 @@ import java.util.UUID
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 
-class CryptoTestHelper(private val testHelper: CommonTestHelper) {
+class CryptoTestHelper(val testHelper: CommonTestHelper) {
 
     private val messagesFromAlice: List<String> = listOf("0 - Hello I'm Alice!", "4 - Go!")
     private val messagesFromBob: List<String> = listOf("1 - Hello I'm Bob!", "2 - Isn't life grand?", "3 - Let's go to the opera.")
@@ -361,19 +361,19 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
             ssssService.storeSecret(
                     MASTER_KEY_SSSS_NAME,
                     session.cryptoService().crossSigningService().getCrossSigningPrivateKeys()!!.master!!,
-                    listOf(SharedSecretStorageService.KeyRef(keyInfo.keyId, keyInfo.keySpec))
+                    listOf(KeyRef(keyInfo.keyId, keyInfo.keySpec))
             )
 
             ssssService.storeSecret(
                     SELF_SIGNING_KEY_SSSS_NAME,
                     session.cryptoService().crossSigningService().getCrossSigningPrivateKeys()!!.selfSigned!!,
-                    listOf(SharedSecretStorageService.KeyRef(keyInfo.keyId, keyInfo.keySpec))
+                    listOf(KeyRef(keyInfo.keyId, keyInfo.keySpec))
             )
 
             ssssService.storeSecret(
                     USER_SIGNING_KEY_SSSS_NAME,
                     session.cryptoService().crossSigningService().getCrossSigningPrivateKeys()!!.user!!,
-                    listOf(SharedSecretStorageService.KeyRef(keyInfo.keyId, keyInfo.keySpec))
+                    listOf(KeyRef(keyInfo.keyId, keyInfo.keySpec))
             )
 
             // set up megolm backup
@@ -390,7 +390,7 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
                 ssssService.storeSecret(
                         KEYBACKUP_SECRET_SSSS_NAME,
                         secret,
-                        listOf(SharedSecretStorageService.KeyRef(keyInfo.keyId, keyInfo.keySpec))
+                        listOf(KeyRef(keyInfo.keyId, keyInfo.keySpec))
                 )
             }
         }

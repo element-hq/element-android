@@ -48,21 +48,22 @@ class StartAuthenticationFlowUseCase @Inject constructor(
     ) = SelectedHomeserverState(
             description = when (config.homeServerUri.toString()) {
                 matrixOrgUrl() -> stringProvider.getString(R.string.ftue_auth_create_account_matrix_dot_org_server_description)
-                else           -> null
+                else -> null
             },
             userFacingUrl = config.homeServerUri.toString(),
             upstreamUrl = authFlow.homeServerUrl,
             preferredLoginMode = preferredLoginMode,
-            supportedLoginTypes = authFlow.supportedLoginTypes
+            supportedLoginTypes = authFlow.supportedLoginTypes,
+            isLogoutDevicesSupported = authFlow.isLogoutDevicesSupported
     )
 
     private fun matrixOrgUrl() = stringProvider.getString(R.string.matrix_org_server_url).ensureTrailingSlash()
 
     private fun LoginFlowResult.findPreferredLoginMode() = when {
         supportedLoginTypes.containsAllItems(LoginFlowTypes.SSO, LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(ssoIdentityProviders)
-        supportedLoginTypes.contains(LoginFlowTypes.SSO)                                  -> LoginMode.Sso(ssoIdentityProviders)
-        supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)                             -> LoginMode.Password
-        else                                                                              -> LoginMode.Unsupported
+        supportedLoginTypes.contains(LoginFlowTypes.SSO) -> LoginMode.Sso(ssoIdentityProviders)
+        supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.Password
+        else -> LoginMode.Unsupported
     }
 
     data class StartAuthenticationResult(

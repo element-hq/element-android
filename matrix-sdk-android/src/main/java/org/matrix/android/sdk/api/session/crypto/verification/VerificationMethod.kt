@@ -20,12 +20,18 @@ package org.matrix.android.sdk.api.session.crypto.verification
  * Verification methods.
  */
 enum class VerificationMethod {
-    // Use it when your application supports the SAS verification method
+    /**
+     * Use it when your application supports the SAS verification method.
+     */
     SAS,
 
-    // Use it if your application is able to display QR codes
+    /**
+     * Use it if your application is able to display QR codes.
+     */
     QR_CODE_SHOW,
 
-    // Use it if your application is able to scan QR codes
+    /**
+     * Use it if your application is able to scan QR codes.
+     */
     QR_CODE_SCAN
 }

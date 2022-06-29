@@ -32,9 +32,9 @@ import com.mapbox.mapboxsdk.maps.MapView
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.core.utils.PERMISSIONS_FOR_BACKGROUND_LOCATION_SHARING
 import im.vector.app.core.utils.PERMISSIONS_FOR_FOREGROUND_LOCATION_SHARING
 import im.vector.app.core.utils.checkPermissions
+import im.vector.app.core.utils.onPermissionDeniedDialog
 import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.databinding.FragmentLocationSharingBinding
 import im.vector.app.features.home.AvatarRenderer
@@ -89,9 +89,9 @@ class LocationSharingFragment @Inject constructor(
 
         viewModel.observeViewEvents {
             when (it) {
-                LocationSharingViewEvents.Close                       -> locationSharingNavigator.quit()
-                LocationSharingViewEvents.LocationNotAvailableError   -> handleLocationNotAvailableError()
-                is LocationSharingViewEvents.ZoomToUserLocation       -> handleZoomToUserLocationEvent(it)
+                LocationSharingViewEvents.Close -> locationSharingNavigator.quit()
+                LocationSharingViewEvents.LocationNotAvailableError -> handleLocationNotAvailableError()
+                is LocationSharingViewEvents.ZoomToUserLocation -> handleZoomToUserLocationEvent(it)
                 is LocationSharingViewEvents.StartLiveLocationService -> handleStartLiveLocationService(it)
             }
         }
@@ -100,11 +100,6 @@ class LocationSharingFragment @Inject constructor(
     override fun onResume() {
         super.onResume()
         views.mapView.onResume()
-        if (locationSharingNavigator.goingToAppSettings) {
-            locationSharingNavigator.goingToAppSettings = false
-            // retry to start live location
-            tryStartLiveLocationSharing()
-        }
     }
 
     override fun onPause() {
@@ -162,18 +157,6 @@ class LocationSharingFragment @Inject constructor(
                 .show()
     }
 
-    private fun handleMissingBackgroundLocationPermission() {
-        MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(R.string.location_in_background_missing_permission_dialog_title)
-                .setMessage(R.string.location_in_background_missing_permission_dialog_content)
-                .setPositiveButton(R.string.settings) { _, _ ->
-                    locationSharingNavigator.goToAppSettings()
-                }
-                .setNegativeButton(R.string.action_not_now, null)
-                .setCancelable(false)
-                .show()
-    }
-
     private fun initLocateButton() {
         views.mapView.locateButton.setOnClickListener {
             viewModel.handle(LocationSharingAction.ZoomToUserLocation)
@@ -181,7 +164,7 @@ class LocationSharingFragment @Inject constructor(
     }
 
     private fun handleZoomToUserLocationEvent(event: LocationSharingViewEvents.ZoomToUserLocation) {
-        views.mapView.zoomToLocation(event.userLocation.latitude, event.userLocation.longitude)
+        views.mapView.zoomToLocation(event.userLocation)
     }
 
     private fun handleStartLiveLocationService(event: LocationSharingViewEvents.StartLiveLocationService) {
@@ -212,30 +195,16 @@ class LocationSharingFragment @Inject constructor(
     }
 
     private val foregroundLocationResultLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
-        if (allGranted && checkPermissions(PERMISSIONS_FOR_BACKGROUND_LOCATION_SHARING, requireActivity(), backgroundLocationResultLauncher)) {
-            startLiveLocationSharing()
-        } else if (deniedPermanently) {
-            handleMissingBackgroundLocationPermission()
-        }
-    }
-
-    private val backgroundLocationResultLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
         if (allGranted) {
             startLiveLocationSharing()
         } else if (deniedPermanently) {
-            handleMissingBackgroundLocationPermission()
+            activity?.onPermissionDeniedDialog(R.string.denied_permission_generic)
         }
     }
 
     private fun tryStartLiveLocationSharing() {
         // we need to re-check foreground location to be sure it has not changed after landing on this screen
-        if (checkPermissions(PERMISSIONS_FOR_FOREGROUND_LOCATION_SHARING, requireActivity(), foregroundLocationResultLauncher) &&
-                checkPermissions(
-                        PERMISSIONS_FOR_BACKGROUND_LOCATION_SHARING,
-                        requireActivity(),
-                        backgroundLocationResultLauncher,
-                        R.string.location_in_background_missing_permission_dialog_content
-                )) {
+        if (checkPermissions(PERMISSIONS_FOR_FOREGROUND_LOCATION_SHARING, requireActivity(), foregroundLocationResultLauncher)) {
             startLiveLocationSharing()
         }
     }
@@ -254,7 +223,7 @@ class LocationSharingFragment @Inject constructor(
     private fun updateMap(state: LocationSharingViewState) {
         // first, update the options view
         val options: Set<LocationSharingOption> = when (state.areTargetAndUserLocationEqual) {
-            true  -> {
+            true -> {
                 if (vectorPreferences.labsEnableLiveLocation()) {
                     setOf(LocationSharingOption.USER_CURRENT, LocationSharingOption.USER_LIVE)
                 } else {
@@ -262,7 +231,7 @@ class LocationSharingFragment @Inject constructor(
                 }
             }
             false -> setOf(LocationSharingOption.PINNED)
-            else  -> emptySet()
+            else -> emptySet()
         }
         views.shareLocationOptionsPicker.render(options)
 

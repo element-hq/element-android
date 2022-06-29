@@ -85,7 +85,7 @@ abstract class FormEditTextWithDeleteItem : VectorEpoxyModel<FormEditTextWithDel
 
         holder.textInputEditText.imeOptions =
                 imeOptions ?: when (singleLine) {
-                    true  -> EditorInfo.IME_ACTION_NEXT
+                    true -> EditorInfo.IME_ACTION_NEXT
                     false -> EditorInfo.IME_ACTION_NONE
                 }
 

@@ -20,7 +20,7 @@ package im.vector.app.features.onboarding
 import im.vector.app.core.platform.VectorViewEvents
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
-import org.matrix.android.sdk.api.auth.registration.FlowResult
+import org.matrix.android.sdk.api.auth.registration.Stage
 
 /**
  * Transient events for Login.
@@ -28,8 +28,11 @@ import org.matrix.android.sdk.api.auth.registration.FlowResult
 sealed class OnboardingViewEvents : VectorViewEvents {
     data class Loading(val message: CharSequence? = null) : OnboardingViewEvents()
     data class Failure(val throwable: Throwable) : OnboardingViewEvents()
+    data class DeeplinkAuthenticationFailure(val retryAction: OnboardingAction) : OnboardingViewEvents()
 
-    data class RegistrationFlowResult(val flowResult: FlowResult, val isRegistrationStarted: Boolean) : OnboardingViewEvents()
+    object DisplayRegistrationFallback : OnboardingViewEvents()
+    data class DisplayRegistrationStage(val stage: Stage) : OnboardingViewEvents()
+    object DisplayStartRegistration : OnboardingViewEvents()
     object OutdatedHomeserver : OnboardingViewEvents()
 
     // Navigation event
@@ -37,6 +40,7 @@ sealed class OnboardingViewEvents : VectorViewEvents {
     object OpenUseCaseSelection : OnboardingViewEvents()
     object OpenServerSelection : OnboardingViewEvents()
     object OpenCombinedRegister : OnboardingViewEvents()
+    object OpenCombinedLogin : OnboardingViewEvents()
     object EditServerSelection : OnboardingViewEvents()
     data class OnServerSelectionDone(val serverType: ServerType) : OnboardingViewEvents()
     object OnLoginFlowRetrieved : OnboardingViewEvents()

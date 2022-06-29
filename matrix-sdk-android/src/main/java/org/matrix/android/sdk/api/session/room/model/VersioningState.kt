@@ -16,9 +16,23 @@
 
 package org.matrix.android.sdk.api.session.room.model
 
+/**
+ * Enum for the versioning state of a room.
+ */
 enum class VersioningState {
+    /**
+     * The room is not versioned.
+     */
     NONE,
+
+    /**
+     * The room has been upgraded, but the new room is not joined yet.
+     */
     UPGRADED_ROOM_NOT_JOINED,
+
+    /**
+     * The room has been upgraded, and the new room has been joined.
+     */
     UPGRADED_ROOM_JOINED;
 
     fun isUpgraded() = this != NONE

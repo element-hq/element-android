@@ -71,7 +71,7 @@ class KeysBackupManageActivity : SimpleFragmentActivity() {
         // Observe the deletion of keys backup
         viewModel.onEach(KeysBackupSettingViewState::deleteBackupRequest) { asyncDelete ->
             when (asyncDelete) {
-                is Fail    -> {
+                is Fail -> {
                     updateWaitingView(null)
 
                     MaterialAlertDialogBuilder(this)
@@ -84,7 +84,7 @@ class KeysBackupManageActivity : SimpleFragmentActivity() {
                 is Loading -> {
                     updateWaitingView(WaitingViewData(getString(R.string.keys_backup_settings_deleting_backup)))
                 }
-                else       -> {
+                else -> {
                     updateWaitingView(null)
                 }
             }
@@ -92,7 +92,7 @@ class KeysBackupManageActivity : SimpleFragmentActivity() {
 
         viewModel.observeViewEvents {
             when (it) {
-                KeysBackupViewEvents.OpenLegacyCreateBackup  -> {
+                KeysBackupViewEvents.OpenLegacyCreateBackup -> {
                     startActivity(KeysBackupSetupActivity.intent(this, false))
                 }
                 is KeysBackupViewEvents.RequestStore4SSecret -> {

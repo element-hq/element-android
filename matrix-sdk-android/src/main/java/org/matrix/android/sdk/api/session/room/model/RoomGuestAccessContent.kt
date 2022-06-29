@@ -30,9 +30,9 @@ data class RoomGuestAccessContent(
         @Json(name = "guest_access") val guestAccessStr: String? = null
 ) {
     val guestAccess: GuestAccess? = when (guestAccessStr) {
-        "can_join"  -> GuestAccess.CanJoin
+        "can_join" -> GuestAccess.CanJoin
         "forbidden" -> GuestAccess.Forbidden
-        else        -> {
+        else -> {
             Timber.w("Invalid value for GuestAccess: `$guestAccessStr`")
             null
         }

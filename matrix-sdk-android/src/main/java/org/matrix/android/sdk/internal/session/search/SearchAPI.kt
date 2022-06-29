@@ -30,6 +30,8 @@ internal interface SearchAPI {
      * Ref: https://matrix.org/docs/spec/client_server/r0.6.1#post-matrix-client-r0-search
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "search")
-    suspend fun search(@Query("next_batch") nextBatch: String?,
-                       @Body body: SearchRequestBody): SearchResponse
+    suspend fun search(
+            @Query("next_batch") nextBatch: String?,
+            @Body body: SearchRequestBody
+    ): SearchResponse
 }

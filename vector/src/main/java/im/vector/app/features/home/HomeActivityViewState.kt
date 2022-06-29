@@ -17,8 +17,10 @@
 package im.vector.app.features.home
 
 import com.airbnb.mvrx.MavericksState
-import org.matrix.android.sdk.api.session.initsync.SyncStatusService
+import im.vector.app.features.onboarding.AuthenticationDescription
+import org.matrix.android.sdk.api.session.sync.SyncRequestState
 
 data class HomeActivityViewState(
-        val syncStatusServiceStatus: SyncStatusService.Status = SyncStatusService.Status.Idle
+        val syncRequestState: SyncRequestState = SyncRequestState.Idle,
+        val authenticationDescription: AuthenticationDescription? = null
 ) : MavericksState

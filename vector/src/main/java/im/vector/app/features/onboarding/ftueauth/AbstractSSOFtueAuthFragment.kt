@@ -90,10 +90,10 @@ abstract class AbstractSSOFtueAuthFragment<VB : ViewBinding> : AbstractFtueAuthF
         withState(viewModel) { state ->
             if (state.selectedHomeserver.preferredLoginMode.hasSso() && state.selectedHomeserver.preferredLoginMode.ssoIdentityProviders().isNullOrEmpty()) {
                 // in this case we can prefetch (not other cases for privacy concerns)
-                viewModel.getSsoUrl(
+                viewModel.fetchSsoUrl(
                         redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                         deviceId = state.deviceId,
-                        providerId = null
+                        provider = null
                 )
                         ?.let { prefetchUrl(it) }
             }

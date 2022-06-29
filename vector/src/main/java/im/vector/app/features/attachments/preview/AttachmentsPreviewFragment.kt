@@ -103,11 +103,11 @@ class AttachmentsPreviewFragment @Inject constructor(
                 handleRemoveAction()
                 true
             }
-            R.id.attachmentsPreviewEditAction   -> {
+            R.id.attachmentsPreviewEditAction -> {
                 handleEditAction()
                 true
             }
-            else                                -> {
+            else -> {
                 super.onOptionsItemSelected(item)
             }
         }
@@ -152,7 +152,7 @@ class AttachmentsPreviewFragment @Inject constructor(
         return when {
             nbVideos == 0 -> resources.getQuantityString(R.plurals.send_images_with_original_size, nbImages)
             nbImages == 0 -> resources.getQuantityString(R.plurals.send_videos_with_original_size, nbVideos)
-            else          -> getString(R.string.send_images_and_video_with_original_size)
+            else -> getString(R.string.send_images_and_video_with_original_size)
         }
     }
 

@@ -27,14 +27,14 @@ sealed class PendingSelection {
 
     fun getBestName(): String {
         return when (this) {
-            is UserPendingSelection     -> user.toMatrixItem().getBestName()
+            is UserPendingSelection -> user.toMatrixItem().getBestName()
             is ThreePidPendingSelection -> threePid.value
         }
     }
 
     fun getMxId(): String {
         return when (this) {
-            is UserPendingSelection     -> user.userId
+            is UserPendingSelection -> user.userId
             is ThreePidPendingSelection -> threePid.value
         }
     }

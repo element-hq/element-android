@@ -53,7 +53,26 @@ data class E2EWellKnownConfig(
          * (as it was before) for various environments where this is desired.
          */
         @Json(name = "default")
-        val e2eDefault: Boolean? = null
+        val e2eDefault: Boolean? = null,
+
+        @Json(name = "secure_backup_required")
+        val secureBackupRequired: Boolean? = null,
+
+        /**
+         * The new field secure_backup_setup_methods is an array listing the methods the client should display.
+         * Supported values currently include key and passphrase.
+         * If the secure_backup_setup_methods field is not present or exists but does not contain any supported methods,
+         * clients should fallback to the default value of: ["key", "passphrase"].
+         */
+        @Json(name = "secure_backup_setup_methods")
+        val secureBackupSetupMethods: List<String>? = null,
+
+        /**
+         * Configuration for sharing keys strategy which should be used instead of [im.vector.app.BuildConfig.outboundSessionKeySharingStrategy].
+         * One of on_room_opening, on_typing or disabled.
+         */
+        @Json(name = "outbound_keys_pre_sharing_mode")
+        val outboundsKeyPreSharingMode: String? = null,
 )
 
 @JsonClass(generateAdapter = true)

@@ -44,7 +44,7 @@ class CrossSigningSettingsController @Inject constructor(
         if (data == null) return
         val host = this
         when {
-            data.xSigningKeyCanSign        -> {
+            data.xSigningKeyCanSign -> {
                 genericItem {
                     id("can")
                     titleIconResourceId(R.drawable.ic_shield_trusted)
@@ -58,7 +58,7 @@ class CrossSigningSettingsController @Inject constructor(
                     }
                 }
             }
-            data.xSigningKeysAreTrusted    -> {
+            data.xSigningKeysAreTrusted -> {
                 genericItem {
                     id("trusted")
                     titleIconResourceId(R.drawable.ic_shield_custom)
@@ -86,7 +86,7 @@ class CrossSigningSettingsController @Inject constructor(
                     }
                 }
             }
-            else                           -> {
+            else -> {
                 genericItem {
                     id("not")
                     title(host.stringProvider.getString(R.string.encryption_information_dg_xsigning_disabled).toEpoxyCharSequence())

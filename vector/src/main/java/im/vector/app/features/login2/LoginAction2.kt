@@ -77,9 +77,11 @@ sealed class LoginAction2 : VectorViewModelAction {
     object ClearHomeServerHistory : LoginAction2()
 
     // For the soft logout case
-    data class SetupSsoForSessionRecovery(val homeServerUrl: String,
-                                          val deviceId: String,
-                                          val ssoIdentityProviders: List<SsoIdentityProvider>?) : LoginAction2()
+    data class SetupSsoForSessionRecovery(
+            val homeServerUrl: String,
+            val deviceId: String,
+            val ssoIdentityProviders: List<SsoIdentityProvider>?
+    ) : LoginAction2()
 
     data class PostViewEvent(val viewEvent: LoginViewEvents2) : LoginAction2()
 

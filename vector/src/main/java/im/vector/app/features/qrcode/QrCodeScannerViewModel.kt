@@ -42,8 +42,8 @@ class QrCodeScannerViewModel @AssistedInject constructor(
         _viewEvents.post(
                 when (action) {
                     is QrCodeScannerAction.CodeDecoded -> QrCodeScannerEvents.CodeParsed(action.result, action.isQrCode)
-                    is QrCodeScannerAction.SwitchMode  -> QrCodeScannerEvents.SwitchMode
-                    is QrCodeScannerAction.ScanFailed  -> QrCodeScannerEvents.ParseFailed
+                    is QrCodeScannerAction.SwitchMode -> QrCodeScannerEvents.SwitchMode
+                    is QrCodeScannerAction.ScanFailed -> QrCodeScannerEvents.ParseFailed
                 }
         )
     }

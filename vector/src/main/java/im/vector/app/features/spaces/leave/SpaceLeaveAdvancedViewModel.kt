@@ -33,8 +33,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import okhttp3.internal.toImmutableList
-import org.matrix.android.sdk.api.query.ActiveSpaceFilter
+import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
+import org.matrix.android.sdk.api.query.SpaceFilter
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -59,7 +60,7 @@ class SpaceLeaveAdvancedViewModel @AssistedInject constructor(
         val space = session.getRoom(initialState.spaceId)
         val spaceSummary = space?.roomSummary()
 
-        val powerLevelsEvent = space?.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS)
+        val powerLevelsEvent = space?.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
         powerLevelsEvent?.content?.toModel<PowerLevelsContent>()?.let { powerLevelsContent ->
             val powerLevelsHelper = PowerLevelsHelper(powerLevelsContent)
             val isAdmin = powerLevelsHelper.getUserRole(session.myUserId) is Role.Admin
@@ -93,7 +94,7 @@ class SpaceLeaveAdvancedViewModel @AssistedInject constructor(
                     roomSummaryQueryParams {
                         includeType = null
                         memberships = listOf(Membership.JOIN)
-                        activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(initialState.spaceId)
+                        spaceFilter = SpaceFilter.ActiveSpace(initialState.spaceId)
                         roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
                     }
             )

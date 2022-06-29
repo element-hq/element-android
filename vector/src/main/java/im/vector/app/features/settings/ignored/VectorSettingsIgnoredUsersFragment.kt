@@ -60,7 +60,7 @@ class VectorSettingsIgnoredUsersFragment @Inject constructor(
             when (it) {
                 is IgnoredUsersViewEvents.Loading -> showLoading(it.message)
                 is IgnoredUsersViewEvents.Failure -> showFailure(it.throwable)
-                IgnoredUsersViewEvents.Success    -> Unit
+                IgnoredUsersViewEvents.Success -> Unit
             }
         }
     }

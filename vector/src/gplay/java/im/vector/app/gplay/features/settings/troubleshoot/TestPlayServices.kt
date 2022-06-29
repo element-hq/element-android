@@ -29,8 +29,10 @@ import javax.inject.Inject
 /*
 * Check that the play services APK is available an up-to-date. If needed provide quick fix to install it.
  */
-class TestPlayServices @Inject constructor(private val context: FragmentActivity,
-                                           private val stringProvider: StringProvider) :
+class TestPlayServices @Inject constructor(
+        private val context: FragmentActivity,
+        private val stringProvider: StringProvider
+) :
         TroubleshootTest(R.string.settings_troubleshoot_test_play_services_title) {
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
@@ -44,7 +46,7 @@ class TestPlayServices @Inject constructor(private val context: FragmentActivity
             if (apiAvailability.isUserResolvableError(resultCode)) {
                 quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_play_services_quickfix) {
                     override fun doFix() {
-                        apiAvailability.getErrorDialog(context, resultCode, 9000 /*hey does the magic number*/).show()
+                        apiAvailability.getErrorDialog(context, resultCode, 9000 /*hey does the magic number*/)?.show()
                     }
                 }
                 Timber.e("Play Services apk error $resultCode -> ${apiAvailability.getErrorString(resultCode)}.")

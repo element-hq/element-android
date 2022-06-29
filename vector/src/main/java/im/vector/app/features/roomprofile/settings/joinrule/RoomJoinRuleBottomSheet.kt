@@ -69,12 +69,13 @@ class RoomJoinRuleBottomSheet : BottomSheetGeneric<RoomJoinRuleState, RoomJoinRu
     }
 
     companion object {
-        fun newInstance(currentRoomJoinRule: RoomJoinRules,
-                        allowedJoinedRules: List<JoinRulesOptionSupport> = listOf(
-                                RoomJoinRules.INVITE, RoomJoinRules.PUBLIC
-                        ).map { it.toOption(true) },
-                        isSpace: Boolean = false,
-                        parentSpaceName: String? = null
+        fun newInstance(
+                currentRoomJoinRule: RoomJoinRules,
+                allowedJoinedRules: List<JoinRulesOptionSupport> = listOf(
+                        RoomJoinRules.INVITE, RoomJoinRules.PUBLIC
+                ).map { it.toOption(true) },
+                isSpace: Boolean = false,
+                parentSpaceName: String? = null
         ): RoomJoinRuleBottomSheet {
             return RoomJoinRuleBottomSheet().apply {
                 setArguments(

@@ -22,13 +22,13 @@
     </style>
 
     <style name="PinCodeDeleteButtonStyle">
-        <item name="android:src">@drawable/delete_lockscreen_pf</item>
+        <item name="android:src">@drawable/lockscreen_delete</item>
         <item name="android:tint">?vctr_content_primary</item>
         <item name="background">@drawable/bg_pin_key</item>
     </style>
 
     <style name="PinCodeFingerprintButtonStyle">
-        <item name="android:src">@drawable/fingerprint_lockscreen_pf</item>
+        <item name="android:src">@drawable/lockscreen_fingerprint</item>
         <item name="android:tint">?vctr_content_primary</item>
         <item name="background">@drawable/bg_pin_key</item>
     </style>

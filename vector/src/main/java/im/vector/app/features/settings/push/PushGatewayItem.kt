@@ -38,9 +38,9 @@ abstract class PushGatewayItem : EpoxyModelWithHolder<PushGatewayItem.Holder>() 
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.kind.text = when (pusher.kind) {
-            Pusher.KIND_HTTP  -> "Http Pusher"
+            Pusher.KIND_HTTP -> "Http Pusher"
             Pusher.KIND_EMAIL -> "Email Pusher"
-            else              -> pusher.kind
+            else -> pusher.kind
         }
 
         holder.appId.text = pusher.appId
@@ -48,6 +48,7 @@ abstract class PushGatewayItem : EpoxyModelWithHolder<PushGatewayItem.Holder>() 
         holder.appName.text = pusher.appDisplayName
         holder.url.setTextOrHide(pusher.data.url, hideWhenBlank = true, holder.urlTitle)
         holder.format.setTextOrHide(pusher.data.format, hideWhenBlank = true, holder.formatTitle)
+        holder.profileTag.setTextOrHide(pusher.profileTag, hideWhenBlank = true, holder.profileTagTitle)
         holder.deviceName.text = pusher.deviceDisplayName
         holder.removeButton.setOnClickListener {
             interactions.onRemovePushTapped(pusher)
@@ -60,6 +61,8 @@ abstract class PushGatewayItem : EpoxyModelWithHolder<PushGatewayItem.Holder>() 
         val deviceName by bind<TextView>(R.id.pushGatewayDeviceNameValue)
         val formatTitle by bind<View>(R.id.pushGatewayFormat)
         val format by bind<TextView>(R.id.pushGatewayFormatValue)
+        val profileTagTitle by bind<TextView>(R.id.pushGatewayProfileTag)
+        val profileTag by bind<TextView>(R.id.pushGatewayProfileTagValue)
         val urlTitle by bind<View>(R.id.pushGatewayURL)
         val url by bind<TextView>(R.id.pushGatewayURLValue)
         val appName by bind<TextView>(R.id.pushGatewayAppNameValue)

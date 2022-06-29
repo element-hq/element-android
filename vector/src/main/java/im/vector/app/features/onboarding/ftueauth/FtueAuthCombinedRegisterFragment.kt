@@ -21,7 +21,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
 import androidx.autofill.HintConstants
 import androidx.core.text.isDigitsOnly
 import androidx.core.view.isVisible
@@ -31,23 +30,25 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.editText
-import im.vector.app.core.extensions.hasContentFlow
 import im.vector.app.core.extensions.hasSurroundingSpaces
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.extensions.realignPercentagesToParent
+import im.vector.app.core.extensions.setOnFocusLostListener
+import im.vector.app.core.extensions.setOnImeDoneListener
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentFtueCombinedRegisterBinding
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.SSORedirectRouterActivity
 import im.vector.app.features.login.SocialLoginButtonsView
+import im.vector.app.features.login.render
 import im.vector.app.features.onboarding.OnboardingAction
+import im.vector.app.features.onboarding.OnboardingAction.AuthenticateAction
 import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewState
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
+import org.matrix.android.sdk.api.failure.isHomeserverUnavailable
 import org.matrix.android.sdk.api.failure.isInvalidPassword
 import org.matrix.android.sdk.api.failure.isInvalidUsername
 import org.matrix.android.sdk.api.failure.isLoginEmailUnknown
@@ -66,35 +67,18 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
         super.onViewCreated(view, savedInstanceState)
         setupSubmitButton()
         views.createAccountRoot.realignPercentagesToParent()
-        views.editServerButton.debouncedClicks {
-            viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.EditServerSelection))
-        }
-
-        views.createAccountPasswordInput.editText().setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                submit()
-                return@setOnEditorActionListener true
-            }
-            return@setOnEditorActionListener false
+        views.editServerButton.debouncedClicks { viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.EditServerSelection)) }
+        views.createAccountPasswordInput.setOnImeDoneListener { submit() }
+        views.createAccountInput.setOnFocusLostListener {
+            viewModel.handle(OnboardingAction.MaybeUpdateHomeserverFromMatrixId(views.createAccountInput.content()))
         }
     }
 
     private fun setupSubmitButton() {
         views.createAccountSubmit.setOnClickListener { submit() }
-        observeInputFields()
-                .onEach {
-                    views.createAccountPasswordInput.error = null
-                    views.createAccountInput.error = null
-                    views.createAccountSubmit.isEnabled = it
-                }
+        observeContentChangesAndResetErrors(views.createAccountInput, views.createAccountPasswordInput, views.createAccountSubmit)
                 .launchIn(viewLifecycleOwner.lifecycleScope)
     }
-
-    private fun observeInputFields() = combine(
-            views.createAccountInput.hasContentFlow { it.trim() },
-            views.createAccountPasswordInput.hasContentFlow(),
-            transform = { isLoginNotEmpty, isPasswordNotEmpty -> isLoginNotEmpty && isPasswordNotEmpty }
-    )
 
     private fun submit() {
         withState(viewModel) { state ->
@@ -119,7 +103,7 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
             }
 
             if (error == 0) {
-                viewModel.handle(OnboardingAction.Register(login, password, getString(R.string.login_default_session_public_name)))
+                viewModel.handle(AuthenticateAction.Register(login, password, getString(R.string.login_default_session_public_name)))
             }
         }
     }
@@ -138,26 +122,29 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
         // Trick to display the error without text.
         views.createAccountInput.error = " "
         when {
-            throwable.isUsernameInUse() || throwable.isInvalidUsername()                             -> {
+            throwable.isUsernameInUse() || throwable.isInvalidUsername() -> {
                 views.createAccountInput.error = errorFormatter.toHumanReadable(throwable)
             }
-            throwable.isLoginEmailUnknown()                                                          -> {
+            throwable.isLoginEmailUnknown() -> {
                 views.createAccountInput.error = getString(R.string.login_login_with_email_error)
             }
             throwable.isInvalidPassword() && views.createAccountPasswordInput.hasSurroundingSpaces() -> {
                 views.createAccountPasswordInput.error = getString(R.string.auth_invalid_login_param_space_in_password)
             }
-            throwable.isWeakPassword() || throwable.isInvalidPassword()                              -> {
+            throwable.isWeakPassword() || throwable.isInvalidPassword() -> {
                 views.createAccountPasswordInput.error = errorFormatter.toHumanReadable(throwable)
             }
-            throwable.isRegistrationDisabled()                                                       -> {
+            throwable.isHomeserverUnavailable() -> {
+                views.createAccountInput.error = getString(R.string.login_error_homeserver_not_found)
+            }
+            throwable.isRegistrationDisabled() -> {
                 MaterialAlertDialogBuilder(requireActivity())
                         .setTitle(R.string.dialog_title_error)
                         .setMessage(getString(R.string.login_registration_disabled))
                         .setPositiveButton(R.string.ok, null)
                         .show()
             }
-            else                                                                                     -> {
+            else -> {
                 super.onError(throwable)
             }
         }
@@ -179,19 +166,17 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
     private fun setupUi(state: OnboardingViewState) {
         when (state.selectedHomeserver.preferredLoginMode) {
             is LoginMode.SsoAndPassword -> renderSsoProviders(state.deviceId, state.selectedHomeserver.preferredLoginMode.ssoIdentityProviders)
-            else                        -> hideSsoProviders()
+            else -> hideSsoProviders()
         }
     }
 
     private fun renderSsoProviders(deviceId: String?, ssoProviders: List<SsoIdentityProvider>?) {
         views.ssoGroup.isVisible = ssoProviders?.isNotEmpty() == true
-        views.ssoButtons.mode = SocialLoginButtonsView.Mode.MODE_CONTINUE
-        views.ssoButtons.ssoIdentityProviders = ssoProviders?.sorted()
-        views.ssoButtons.listener = SocialLoginButtonsView.InteractionListener { id ->
-            viewModel.getSsoUrl(
+        views.ssoButtons.render(ssoProviders, SocialLoginButtonsView.Mode.MODE_CONTINUE) { provider ->
+            viewModel.fetchSsoUrl(
                     redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                     deviceId = deviceId,
-                    providerId = id
+                    provider = provider
             )?.let { openInCustomTab(it) }
         }
     }

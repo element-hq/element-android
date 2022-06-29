@@ -36,7 +36,7 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toContent
-import org.matrix.android.sdk.api.session.initsync.SyncStatusService
+import org.matrix.android.sdk.api.session.sync.SyncRequestState
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -260,11 +260,11 @@ class AutoRageShaker @Inject constructor(
         }
         this.currentActiveSessionId = sessionId
 
-        hasSynced = session.hasAlreadySynced()
-        session.syncStatusService().getSyncStatusLive()
+        hasSynced = session.syncService().hasAlreadySynced()
+        session.syncService().getSyncRequestStateLive()
                 .asFlow()
                 .onEach {
-                    hasSynced = it !is SyncStatusService.Status.InitialSyncProgressing
+                    hasSynced = it !is SyncRequestState.InitialSyncProgressing
                 }
                 .launchIn(session.coroutineScope)
         activeSessionIds.add(sessionId)

@@ -188,8 +188,8 @@ internal class DefaultCryptoService @Inject constructor(
 
     fun onStateEvent(roomId: String, event: Event) {
         when (event.type) {
-            EventType.STATE_ROOM_ENCRYPTION         -> onRoomEncryptionEvent(roomId, event)
-            EventType.STATE_ROOM_MEMBER             -> onRoomMembershipEvent(roomId, event)
+            EventType.STATE_ROOM_ENCRYPTION -> onRoomEncryptionEvent(roomId, event)
+            EventType.STATE_ROOM_MEMBER -> onRoomMembershipEvent(roomId, event)
             EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
         }
     }
@@ -198,8 +198,8 @@ internal class DefaultCryptoService @Inject constructor(
         // handle state events
         if (event.isStateEvent()) {
             when (event.type) {
-                EventType.STATE_ROOM_ENCRYPTION         -> onRoomEncryptionEvent(roomId, event)
-                EventType.STATE_ROOM_MEMBER             -> onRoomMembershipEvent(roomId, event)
+                EventType.STATE_ROOM_ENCRYPTION -> onRoomEncryptionEvent(roomId, event)
+                EventType.STATE_ROOM_MEMBER -> onRoomMembershipEvent(roomId, event)
                 EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
             }
         }
@@ -592,10 +592,12 @@ internal class DefaultCryptoService @Inject constructor(
      * @param membersId list of members to start tracking their devices
      * @return true if the operation succeeds.
      */
-    private suspend fun setEncryptionInRoom(roomId: String,
-                                            algorithm: String?,
-                                            inhibitDeviceQuery: Boolean,
-                                            membersId: List<String>): Boolean {
+    private suspend fun setEncryptionInRoom(
+            roomId: String,
+            algorithm: String?,
+            inhibitDeviceQuery: Boolean,
+            membersId: List<String>
+    ): Boolean {
         // If we already have encryption in this room, we should ignore this event
         // (for now at least. Maybe we should alert the user somehow?)
         val existingAlgorithm = cryptoStore.getRoomAlgorithm(roomId)
@@ -618,8 +620,8 @@ internal class DefaultCryptoService @Inject constructor(
 
         val alg: IMXEncrypting? = when (algorithm) {
             MXCRYPTO_ALGORITHM_MEGOLM -> megolmEncryptionFactory.create(roomId)
-            MXCRYPTO_ALGORITHM_OLM    -> olmEncryptionFactory.create(roomId)
-            else                      -> null
+            MXCRYPTO_ALGORITHM_OLM -> olmEncryptionFactory.create(roomId)
+            else -> null
         }
 
         if (alg != null) {
@@ -691,10 +693,12 @@ internal class DefaultCryptoService @Inject constructor(
      * @param roomId the room identifier the event will be sent.
      * @param callback the asynchronous callback
      */
-    override fun encryptEventContent(eventContent: Content,
-                                     eventType: String,
-                                     roomId: String,
-                                     callback: MatrixCallback<MXEncryptEventContentResult>) {
+    override fun encryptEventContent(
+            eventContent: Content,
+            eventType: String,
+            roomId: String,
+            callback: MatrixCallback<MXEncryptEventContentResult>
+    ) {
         // moved to crypto scope to have uptodate values
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             val userIds = getRoomUserIds(roomId)
@@ -796,10 +800,10 @@ internal class DefaultCryptoService @Inject constructor(
                     // Keys are imported directly, not waiting for end of sync
                     onRoomKeyEvent(event)
                 }
-                EventType.REQUEST_SECRET                         -> {
+                EventType.REQUEST_SECRET -> {
                     secretShareManager.handleSecretRequest(event)
                 }
-                EventType.ROOM_KEY_REQUEST                       -> {
+                EventType.ROOM_KEY_REQUEST -> {
                     event.getClearContent().toModel<RoomKeyShareRequest>()?.let { req ->
                         // We'll always get these because we send room key requests to
                         // '*' (ie. 'all devices') which includes the sending device,
@@ -811,13 +815,13 @@ internal class DefaultCryptoService @Inject constructor(
                         }
                     }
                 }
-                EventType.SEND_SECRET                            -> {
+                EventType.SEND_SECRET -> {
                     onSecretSendReceived(event)
                 }
-                EventType.ROOM_KEY_WITHHELD                      -> {
+                EventType.ROOM_KEY_WITHHELD -> {
                     onKeyWithHeldReceived(event)
                 }
-                else                                             -> {
+                else -> {
                     // ignore
                 }
             }
@@ -879,10 +883,12 @@ internal class DefaultCryptoService @Inject constructor(
     /**
      * Returns true if handled by SDK, otherwise should be sent to application layer.
      */
-    private fun handleSDKLevelGossip(secretName: String?,
-                                     secretValue: String): Boolean {
+    private fun handleSDKLevelGossip(
+            secretName: String?,
+            secretValue: String
+    ): Boolean {
         return when (secretName) {
-            MASTER_KEY_SSSS_NAME       -> {
+            MASTER_KEY_SSSS_NAME -> {
                 crossSigningService.onSecretMSKGossip(secretValue)
                 true
             }
@@ -898,7 +904,7 @@ internal class DefaultCryptoService @Inject constructor(
                 keysBackupService.onSecretKeyGossip(secretValue)
                 true
             }
-            else                       -> false
+            else -> false
         }
     }
 
@@ -1022,9 +1028,11 @@ internal class DefaultCryptoService @Inject constructor(
      * @param progressListener the progress listener
      * @return the result ImportRoomKeysResult
      */
-    override suspend fun importRoomKeys(roomKeysAsArray: ByteArray,
-                                        password: String,
-                                        progressListener: ProgressListener?): ImportRoomKeysResult {
+    override suspend fun importRoomKeys(
+            roomKeysAsArray: ByteArray,
+            password: String,
+            progressListener: ProgressListener?
+    ): ImportRoomKeysResult {
         return withContext(coroutineDispatchers.crypto) {
             Timber.tag(loggerTag.value).v("importRoomKeys starts")
 
@@ -1288,10 +1296,6 @@ internal class DefaultCryptoService @Inject constructor(
 
     override fun getWithHeldMegolmSession(roomId: String, sessionId: String): RoomKeyWithHeldContent? {
         return cryptoStore.getWithHeldMegolmSession(roomId, sessionId)
-    }
-
-    override fun logDbUsageInfo() {
-        cryptoStore.logDbUsageInfo()
     }
 
     override fun prepareToEncrypt(roomId: String, callback: MatrixCallback<Unit>) {

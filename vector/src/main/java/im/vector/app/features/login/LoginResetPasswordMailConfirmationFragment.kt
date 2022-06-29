@@ -72,7 +72,7 @@ class LoginResetPasswordMailConfirmationFragment @Inject constructor() : Abstrac
                         .setPositiveButton(R.string.ok, null)
                         .show()
             }
-            else    -> Unit
+            else -> Unit
         }
     }
 }

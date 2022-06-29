@@ -35,8 +35,10 @@ internal class DefaultRoomDirectoryService @Inject constructor(
         private val roomAliasAvailabilityChecker: RoomAliasAvailabilityChecker
 ) : RoomDirectoryService {
 
-    override suspend fun getPublicRooms(server: String?,
-                                        publicRoomsParams: PublicRoomsParams): PublicRoomsResponse {
+    override suspend fun getPublicRooms(
+            server: String?,
+            publicRoomsParams: PublicRoomsParams
+    ): PublicRoomsResponse {
         return getPublicRoomTask.execute(GetPublicRoomTask.Params(server, publicRoomsParams))
     }
 

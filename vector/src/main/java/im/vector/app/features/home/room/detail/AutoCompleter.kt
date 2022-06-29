@@ -134,12 +134,12 @@ class AutoCompleter @AssistedInject constructor(
                 .with(object : AutocompleteCallback<AutocompleteMemberItem> {
                     override fun onPopupItemClicked(editable: Editable, item: AutocompleteMemberItem): Boolean {
                         return when (item) {
-                            is AutocompleteMemberItem.Header     -> false // do nothing header is not clickable
+                            is AutocompleteMemberItem.Header -> false // do nothing header is not clickable
                             is AutocompleteMemberItem.RoomMember -> {
                                 insertMatrixItem(editText, editable, TRIGGER_AUTO_COMPLETE_MEMBERS, item.roomMemberSummary.toMatrixItem())
                                 true
                             }
-                            is AutocompleteMemberItem.Everyone   -> {
+                            is AutocompleteMemberItem.Everyone -> {
                                 insertMatrixItem(editText, editable, TRIGGER_AUTO_COMPLETE_MEMBERS, item.roomSummary.toEveryoneInRoomMatrixItem())
                                 true
                             }

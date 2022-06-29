@@ -36,12 +36,12 @@ data class RoomJoinRulesContent(
         @Json(name = "allow") val allowList: List<RoomJoinRulesAllowEntry>? = null
 ) {
     val joinRules: RoomJoinRules? = when (joinRulesStr) {
-        "public"     -> RoomJoinRules.PUBLIC
-        "invite"     -> RoomJoinRules.INVITE
-        "knock"      -> RoomJoinRules.KNOCK
-        "private"    -> RoomJoinRules.PRIVATE
+        "public" -> RoomJoinRules.PUBLIC
+        "invite" -> RoomJoinRules.INVITE
+        "knock" -> RoomJoinRules.KNOCK
+        "private" -> RoomJoinRules.PRIVATE
         "restricted" -> RoomJoinRules.RESTRICTED
-        else         -> {
+        else -> {
             Timber.w("Invalid value for RoomJoinRules: `$joinRulesStr`")
             null
         }

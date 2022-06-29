@@ -1,0 +1,17 @@
+<resources>
+    <string name="lockscreen_cancel">Cancel</string>
+    <string name="lockscreen_use_pin">Use pin</string>
+    <string name="lockscreen_sign_in">Sign in</string>
+    <string name="lockscreen_next">Next</string>
+    <string name="lockscreen_forgot">Forgot?</string>
+    <string name="lockscreen_title">Input pin code or use biometric authentication</string>
+    <string name="lockscreen_fingerprint_not_recognized">Fingerprint not recognized. Try again</string>
+    <string name="lockscreen_fingerprint_success">Fingerprint recognized</string>
+
+    <string name="lockscreen_fingerprint_description">Confirm fingerprint to continue</string>
+    <string name="lockscreen_fingerprint_hint">Touch sensor</string>
+    <string name="lockscreen_description_fingerprint_icon">Fingerprint icon</string>
+    <string name="lockscreen_confirm_pin">Confirm PIN</string>
+    <string name="lockscreen_description_logo">Logo</string>
+
+</resources>

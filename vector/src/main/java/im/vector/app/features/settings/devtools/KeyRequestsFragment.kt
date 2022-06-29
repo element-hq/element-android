@@ -77,7 +77,7 @@ class KeyRequestsFragment @Inject constructor(
     override fun invalidate() = withState(viewModel) {
         when (it.exporting) {
             is Loading -> views.exportWaitingView.isVisible = true
-            else       -> views.exportWaitingView.isVisible = false
+            else -> views.exportWaitingView.isVisible = false
         }
     }
 
@@ -151,10 +151,10 @@ class KeyRequestsFragment @Inject constructor(
 
         override fun createFragment(position: Int): Fragment {
             return when (position) {
-                0    -> {
+                0 -> {
                     childFragmentManager.fragmentFactory.instantiate(requireContext().classLoader, OutgoingKeyRequestListFragment::class.java.name)
                 }
-                1    -> {
+                1 -> {
                     childFragmentManager.fragmentFactory.instantiate(requireContext().classLoader, IncomingKeyRequestListFragment::class.java.name)
                 }
                 else -> {

@@ -34,10 +34,10 @@ class VectorRoomDisplayNameFallbackProvider @Inject constructor(
             context.getString(R.string.room_displayname_empty_room)
         } else {
             val was = when (val size = leftMemberNames.size) {
-                1    -> getNameFor1member(leftMemberNames[0])
-                2    -> getNameFor2members(leftMemberNames[0], leftMemberNames[1])
-                3    -> getNameFor3members(leftMemberNames[0], leftMemberNames[1], leftMemberNames[2])
-                4    -> getNameFor4members(leftMemberNames[0], leftMemberNames[1], leftMemberNames[2], leftMemberNames[3])
+                1 -> getNameFor1member(leftMemberNames[0])
+                2 -> getNameFor2members(leftMemberNames[0], leftMemberNames[1])
+                3 -> getNameFor3members(leftMemberNames[0], leftMemberNames[1], leftMemberNames[2])
+                4 -> getNameFor4members(leftMemberNames[0], leftMemberNames[1], leftMemberNames[2], leftMemberNames[3])
                 else -> getNameFor4membersAndMore(leftMemberNames[0], leftMemberNames[1], leftMemberNames[2], size - 3)
             }
             context.getString(R.string.room_displayname_empty_room_was, was)

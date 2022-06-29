@@ -99,7 +99,7 @@ class CaptchaWebview @Inject constructor(
                     request.url.toString().endsWith("favicon.ico") -> {
                         // ignore favicon errors
                     }
-                    else                                           -> onError(errorResponse.toText())
+                    else -> onError(errorResponse.toText())
                 }
             }
 

@@ -51,9 +51,11 @@ import org.matrix.android.sdk.flow.mapOptional
 import org.matrix.android.sdk.flow.unwrap
 import timber.log.Timber
 
-class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState: RoomMemberListViewState,
-                                                          private val roomMemberSummaryComparator: RoomMemberSummaryComparator,
-                                                          private val session: Session) :
+class RoomMemberListViewModel @AssistedInject constructor(
+        @Assisted initialState: RoomMemberListViewState,
+        private val roomMemberSummaryComparator: RoomMemberSummaryComparator,
+        private val session: Session
+) :
         VectorViewModel<RoomMemberListViewState, RoomMemberListAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
@@ -82,7 +84,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
         combine(
                 room.flow().liveRoomMembers(roomMemberQueryParams),
                 room.flow()
-                        .liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
+                        .liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
                         .mapOptional { it.content.toModel<PowerLevelsContent>() }
                         .unwrap()
         ) { roomMembers, powerLevelsContent ->
@@ -144,7 +146,8 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
     }
 
     private fun observeThirdPartyInvites() {
-        room.flow().liveStateEvents(setOf(EventType.STATE_ROOM_THIRD_PARTY_INVITE))
+        room.flow()
+                .liveStateEvents(setOf(EventType.STATE_ROOM_THIRD_PARTY_INVITE), QueryStringValue.IsNotNull)
                 .execute { async ->
                     copy(threePidInvites = async)
                 }
@@ -172,10 +175,10 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
                     val userRole = powerLevelsHelper.getUserRole(roomMember.userId)
                     when {
                         roomMember.membership == Membership.INVITE -> invites.add(roomMember)
-                        userRole == Role.Admin                     -> admins.add(roomMember)
-                        userRole == Role.Moderator                 -> moderators.add(roomMember)
-                        userRole == Role.Default                   -> users.add(roomMember)
-                        else                                       -> customs.add(roomMember)
+                        userRole == Role.Admin -> admins.add(roomMember)
+                        userRole == Role.Moderator -> moderators.add(roomMember)
+                        userRole == Role.Default -> users.add(roomMember)
+                        else -> customs.add(roomMember)
                     }
                 }
 
@@ -191,7 +194,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
     override fun handle(action: RoomMemberListAction) {
         when (action) {
             is RoomMemberListAction.RevokeThreePidInvite -> handleRevokeThreePidInvite(action)
-            is RoomMemberListAction.FilterMemberList     -> handleFilterMemberList(action)
+            is RoomMemberListAction.FilterMemberList -> handleFilterMemberList(action)
         }
     }
 

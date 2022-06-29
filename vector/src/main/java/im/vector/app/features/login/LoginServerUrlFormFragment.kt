@@ -90,7 +90,7 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment<F
                 views.loginServerUrlFormHomeServerUrlTil.hint = getText(R.string.login_server_url_form_modular_hint)
                 views.loginServerUrlFormNotice.text = getString(R.string.login_server_url_form_modular_notice)
             }
-            else           -> {
+            else -> {
                 views.loginServerUrlFormIcon.isVisible = false
                 views.loginServerUrlFormTitle.text = getString(R.string.login_server_other_title)
                 views.loginServerUrlFormText.text = getString(R.string.login_connect_to_a_custom_server)
@@ -135,7 +135,7 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment<F
             serverUrl.isBlank() -> {
                 views.loginServerUrlFormHomeServerUrlTil.error = getString(R.string.login_error_invalid_home_server)
             }
-            else                -> {
+            else -> {
                 views.loginServerUrlFormHomeServerUrl.setText(serverUrl, false /* to avoid completion dialog flicker*/)
                 loginViewModel.handle(LoginAction.UpdateHomeServer(serverUrl))
             }

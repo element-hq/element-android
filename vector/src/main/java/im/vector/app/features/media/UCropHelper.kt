@@ -23,10 +23,12 @@ import com.yalantis.ucrop.UCropActivity
 import im.vector.app.R
 import im.vector.app.core.resources.ColorProvider
 
-fun createUCropWithDefaultSettings(colorProvider: ColorProvider,
-                                   source: Uri,
-                                   destination: Uri,
-                                   toolbarTitle: String?): UCrop {
+fun createUCropWithDefaultSettings(
+        colorProvider: ColorProvider,
+        source: Uri,
+        destination: Uri,
+        toolbarTitle: String?
+): UCrop {
     return UCrop.of(source, destination)
             .withOptions(
                     UCrop.Options()

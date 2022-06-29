@@ -573,9 +573,7 @@
     <string name="login_a11y_choose_other">Elekti propran hejmservilon</string>
     <string name="login_a11y_choose_modular">Elekti Element Matrix Services</string>
     <string name="login_a11y_choose_matrix_org">Elekti matrix.org</string>
-    <string name="login_signup_cancel_confirmation_content">Via konto ankoraŭ ne estas kreita.
-\n
-\nĈu haltigi la registriĝon\?</string>
+    <string name="login_signup_cancel_confirmation_content">Via konto ankoraŭ ne estas kreita. Ĉu haltigi la registriĝon\?</string>
     <string name="login_signup_cancel_confirmation_title">Averto</string>
     <string name="login_signup_error_user_in_use">Tiu uzantonomo jam estas prenita</string>
     <string name="login_signup_submit">Pluen</string>
@@ -2141,10 +2139,6 @@
     <string name="denied_permission_generic">Iuj permesoj necesaj por ĉi tiu ago mankas. Bonvolu doni la permesojn per la sistemaj agordoj.</string>
     <string name="space_add_existing_spaces">Aldoni jamajn arojn</string>
     <string name="space_add_existing_rooms_only">Aldoni jamajn ĉambrojn</string>
-    <string name="pick_tings_to_leave">Elektu, de kie vi foriru</string>
-    <string name="leave_specific_ones">Foriri de iuj ĉambroj kaj aroj…</string>
-    <string name="dont_leave_any">Foriri de neniuj ĉambroj kaj aroj</string>
-    <string name="leave_all_rooms_and_spaces">Foriri de ĉiuj ĉambroj kaj aroj</string>
     <string name="space_leave_prompt_msg_with_name">Ĉu vi certe volas foriri de %s\?</string>
     <string name="discovery_section">Trovado (%s)</string>
     <string name="invite_by_username_or_mail">Inviti laŭ uzantonomo aŭ retpoŝtadreso</string>

@@ -33,12 +33,14 @@ interface SearchService {
      * @param afterLimit how many events after the result are returned.
      * @param includeProfile requests that the server returns the historic profile information for the users that sent the events that were returned.
      */
-    suspend fun search(searchTerm: String,
-                       roomId: String,
-                       nextBatch: String?,
-                       orderByRecent: Boolean,
-                       limit: Int,
-                       beforeLimit: Int,
-                       afterLimit: Int,
-                       includeProfile: Boolean): SearchResult
+    suspend fun search(
+            searchTerm: String,
+            roomId: String,
+            nextBatch: String?,
+            orderByRecent: Boolean,
+            limit: Int,
+            beforeLimit: Int,
+            afterLimit: Int,
+            includeProfile: Boolean
+    ): SearchResult
 }

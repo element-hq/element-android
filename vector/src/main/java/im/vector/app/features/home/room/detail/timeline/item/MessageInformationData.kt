@@ -43,6 +43,7 @@ data class MessageInformationData(
         val sendStateDecoration: SendStateDecoration = SendStateDecoration.NONE,
         val isFirstFromThisSender: Boolean = false,
         val isLastFromThisSender: Boolean = false,
+        val messageType: String? = null
 ) : Parcelable {
 
     val matrixItem: MatrixItem
@@ -90,7 +91,10 @@ data class PollResponseData(
         val totalVotes: Int = 0,
         val winnerVoteCount: Int = 0,
         val isClosed: Boolean = false
-) : Parcelable
+) : Parcelable {
+
+    fun getVoteSummaryOfAnOption(optionId: String) = votes?.get(optionId)
+}
 
 @Parcelize
 data class PollVoteSummaryData(

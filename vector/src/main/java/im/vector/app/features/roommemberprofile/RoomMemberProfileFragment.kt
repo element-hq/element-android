@@ -122,18 +122,18 @@ class RoomMemberProfileFragment @Inject constructor(
         views.matrixProfileAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener)
         viewModel.observeViewEvents {
             when (it) {
-                is RoomMemberProfileViewEvents.Loading                     -> showLoading(it.message)
-                is RoomMemberProfileViewEvents.Failure                     -> showFailure(it.throwable)
-                is RoomMemberProfileViewEvents.StartVerification           -> handleStartVerification(it)
-                is RoomMemberProfileViewEvents.ShareRoomMemberProfile      -> handleShareRoomMemberProfile(it.permalink)
-                is RoomMemberProfileViewEvents.ShowPowerLevelValidation    -> handleShowPowerLevelAdminWarning(it)
+                is RoomMemberProfileViewEvents.Loading -> showLoading(it.message)
+                is RoomMemberProfileViewEvents.Failure -> showFailure(it.throwable)
+                is RoomMemberProfileViewEvents.StartVerification -> handleStartVerification(it)
+                is RoomMemberProfileViewEvents.ShareRoomMemberProfile -> handleShareRoomMemberProfile(it.permalink)
+                is RoomMemberProfileViewEvents.ShowPowerLevelValidation -> handleShowPowerLevelAdminWarning(it)
                 is RoomMemberProfileViewEvents.ShowPowerLevelDemoteWarning -> handleShowPowerLevelDemoteWarning(it)
-                is RoomMemberProfileViewEvents.OpenRoom                    -> handleOpenRoom(it)
-                is RoomMemberProfileViewEvents.OnKickActionSuccess         -> Unit
-                is RoomMemberProfileViewEvents.OnSetPowerLevelSuccess      -> Unit
-                is RoomMemberProfileViewEvents.OnBanActionSuccess          -> Unit
-                is RoomMemberProfileViewEvents.OnIgnoreActionSuccess       -> Unit
-                is RoomMemberProfileViewEvents.OnInviteActionSuccess       -> Unit
+                is RoomMemberProfileViewEvents.OpenRoom -> handleOpenRoom(it)
+                is RoomMemberProfileViewEvents.OnKickActionSuccess -> Unit
+                is RoomMemberProfileViewEvents.OnSetPowerLevelSuccess -> Unit
+                is RoomMemberProfileViewEvents.OnBanActionSuccess -> Unit
+                is RoomMemberProfileViewEvents.OnIgnoreActionSuccess -> Unit
+                is RoomMemberProfileViewEvents.OnInviteActionSuccess -> Unit
             }
         }
         setupLongClicks()
@@ -205,7 +205,7 @@ class RoomMemberProfileFragment @Inject constructor(
                 avatarRenderer.render(MatrixItem.UserItem(state.userId, null, null), views.matrixProfileToolbarAvatarImageView)
                 headerViews.memberProfileStateView.state = StateView.State.Loading
             }
-            is Fail    -> {
+            is Fail -> {
                 avatarRenderer.render(MatrixItem.UserItem(state.userId, null, null), views.matrixProfileToolbarAvatarImageView)
                 views.matrixProfileToolbarTitleView.text = state.userId
                 val failureMessage = errorFormatter.toHumanReadable(asyncUserMatrixItem.error)

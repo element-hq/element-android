@@ -24,10 +24,12 @@ interface TermsService {
 
     suspend fun getTerms(serviceType: ServiceType, baseUrl: String): GetTermsResponse
 
-    suspend fun agreeToTerms(serviceType: ServiceType,
-                             baseUrl: String,
-                             agreedUrls: List<String>,
-                             token: String?)
+    suspend fun agreeToTerms(
+            serviceType: ServiceType,
+            baseUrl: String,
+            agreedUrls: List<String>,
+            token: String?
+    )
 
     /**
      * Get the homeserver terms, from the register API.

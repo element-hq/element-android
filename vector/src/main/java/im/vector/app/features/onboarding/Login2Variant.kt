@@ -124,7 +124,7 @@ class Login2Variant(
 
     private fun handleLoginViewEvents(event: LoginViewEvents2) {
         when (event) {
-            is LoginViewEvents2.RegistrationFlowResult                     -> {
+            is LoginViewEvents2.RegistrationFlowResult -> {
                 // Check that all flows are supported by the application
                 if (event.flowResult.missingStages.any { !it.isSupported() }) {
                     // Display a popup to propose use web fallback
@@ -148,7 +148,7 @@ class Login2Variant(
                     }
                 }
             }
-            is LoginViewEvents2.OutdatedHomeserver                         -> {
+            is LoginViewEvents2.OutdatedHomeserver -> {
                 MaterialAlertDialogBuilder(activity)
                         .setTitle(R.string.login_error_outdated_homeserver_title)
                         .setMessage(R.string.login_error_outdated_homeserver_warning_content)
@@ -156,7 +156,7 @@ class Login2Variant(
                         .show()
                 Unit
             }
-            is LoginViewEvents2.OpenServerSelection                        ->
+            is LoginViewEvents2.OpenServerSelection ->
                 activity.addFragmentToBackstack(views.loginFragmentContainer,
                         LoginServerSelectionFragment2::class.java,
                         option = { ft ->
@@ -168,14 +168,14 @@ class Login2Variant(
                             // TODO Disabled because it provokes a flickering
                             // ft.setCustomAnimations(enterAnim, exitAnim, popEnterAnim, popExitAnim)
                         })
-            is LoginViewEvents2.OpenHomeServerUrlFormScreen                -> {
+            is LoginViewEvents2.OpenHomeServerUrlFormScreen -> {
                 activity.addFragmentToBackstack(
                         views.loginFragmentContainer,
                         LoginServerUrlFormFragment2::class.java,
                         option = commonOption
                 )
             }
-            is LoginViewEvents2.OpenSignInEnterIdentifierScreen            -> {
+            is LoginViewEvents2.OpenSignInEnterIdentifierScreen -> {
                 activity.addFragmentToBackstack(views.loginFragmentContainer,
                         LoginFragmentSigninUsername2::class.java,
                         option = { ft ->
@@ -188,21 +188,21 @@ class Login2Variant(
                             // ft.setCustomAnimations(enterAnim, exitAnim, popEnterAnim, popExitAnim)
                         })
             }
-            is LoginViewEvents2.OpenSsoOnlyScreen                          -> {
+            is LoginViewEvents2.OpenSsoOnlyScreen -> {
                 activity.addFragmentToBackstack(
                         views.loginFragmentContainer,
                         LoginSsoOnlyFragment2::class.java,
                         option = commonOption
                 )
             }
-            is LoginViewEvents2.OnWebLoginError                            -> onWebLoginError(event)
-            is LoginViewEvents2.OpenResetPasswordScreen                    ->
+            is LoginViewEvents2.OnWebLoginError -> onWebLoginError(event)
+            is LoginViewEvents2.OpenResetPasswordScreen ->
                 activity.addFragmentToBackstack(
                         views.loginFragmentContainer,
                         LoginResetPasswordFragment2::class.java,
                         option = commonOption
                 )
-            is LoginViewEvents2.OnResetPasswordSendThreePidDone            -> {
+            is LoginViewEvents2.OnResetPasswordSendThreePidDone -> {
                 supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
                 activity.addFragmentToBackstack(
                         views.loginFragmentContainer,
@@ -210,7 +210,7 @@ class Login2Variant(
                         option = commonOption
                 )
             }
-            is LoginViewEvents2.OnResetPasswordMailConfirmationSuccess     -> {
+            is LoginViewEvents2.OnResetPasswordMailConfirmationSuccess -> {
                 supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
                 activity.addFragmentToBackstack(
                         views.loginFragmentContainer,
@@ -222,7 +222,7 @@ class Login2Variant(
                 // Go back to the login fragment
                 supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
             }
-            is LoginViewEvents2.OnSendEmailSuccess                         ->
+            is LoginViewEvents2.OnSendEmailSuccess ->
                 activity.addFragmentToBackstack(
                         views.loginFragmentContainer,
                         LoginWaitForEmailFragment2::class.java,
@@ -230,7 +230,7 @@ class Login2Variant(
                         tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                         option = commonOption
                 )
-            is LoginViewEvents2.OpenSigninPasswordScreen                   -> {
+            is LoginViewEvents2.OpenSigninPasswordScreen -> {
                 activity.addFragmentToBackstack(
                         views.loginFragmentContainer,
                         LoginFragmentSigninPassword2::class.java,
@@ -238,7 +238,7 @@ class Login2Variant(
                         option = commonOption
                 )
             }
-            is LoginViewEvents2.OpenSignupPasswordScreen                   -> {
+            is LoginViewEvents2.OpenSignupPasswordScreen -> {
                 activity.addFragmentToBackstack(
                         views.loginFragmentContainer,
                         LoginFragmentSignupPassword2::class.java,
@@ -246,7 +246,7 @@ class Login2Variant(
                         option = commonOption
                 )
             }
-            is LoginViewEvents2.OpenSignUpChooseUsernameScreen             -> {
+            is LoginViewEvents2.OpenSignUpChooseUsernameScreen -> {
                 activity.addFragmentToBackstack(
                         views.loginFragmentContainer,
                         LoginFragmentSignupUsername2::class.java,
@@ -254,7 +254,7 @@ class Login2Variant(
                         option = commonOption
                 )
             }
-            is LoginViewEvents2.OpenSignInWithAnythingScreen               -> {
+            is LoginViewEvents2.OpenSignInWithAnythingScreen -> {
                 activity.addFragmentToBackstack(
                         views.loginFragmentContainer,
                         LoginFragmentToAny2::class.java,
@@ -262,7 +262,7 @@ class Login2Variant(
                         option = commonOption
                 )
             }
-            is LoginViewEvents2.OnSendMsisdnSuccess                        ->
+            is LoginViewEvents2.OnSendMsisdnSuccess ->
                 activity.addFragmentToBackstack(
                         views.loginFragmentContainer,
                         LoginGenericTextInputFormFragment2::class.java,
@@ -270,14 +270,14 @@ class Login2Variant(
                         tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                         option = commonOption
                 )
-            is LoginViewEvents2.Failure                                    ->
+            is LoginViewEvents2.Failure ->
                 // This is handled by the Fragments
                 Unit
-            is LoginViewEvents2.OnLoginModeNotSupported                    ->
+            is LoginViewEvents2.OnLoginModeNotSupported ->
                 onLoginModeNotSupported(event.supportedTypes)
-            is LoginViewEvents2.OnSessionCreated                           -> handleOnSessionCreated(event)
-            is LoginViewEvents2.Finish                                     -> terminate(true)
-            is LoginViewEvents2.CancelRegistration                         -> handleCancelRegistration()
+            is LoginViewEvents2.OnSessionCreated -> handleOnSessionCreated(event)
+            is LoginViewEvents2.Finish -> terminate()
+            is LoginViewEvents2.CancelRegistration -> handleCancelRegistration()
         }
     }
 
@@ -296,14 +296,13 @@ class Login2Variant(
                     option = commonOption
             )
         } else {
-            terminate(false)
+            terminate()
         }
     }
 
-    private fun terminate(newAccount: Boolean) {
+    private fun terminate() {
         val intent = HomeActivity.newIntent(
-                activity,
-                accountCreation = newAccount
+                activity
         )
         activity.startActivity(intent)
         activity.finish()
@@ -399,28 +398,28 @@ class Login2Variant(
                     tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                     option = commonOption
             )
-            is Stage.Email     -> activity.addFragmentToBackstack(
+            is Stage.Email -> activity.addFragmentToBackstack(
                     views.loginFragmentContainer,
                     LoginGenericTextInputFormFragment2::class.java,
                     LoginGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.SetEmail, stage.mandatory),
                     tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                     option = commonOption
             )
-            is Stage.Msisdn    -> activity.addFragmentToBackstack(
+            is Stage.Msisdn -> activity.addFragmentToBackstack(
                     views.loginFragmentContainer,
                     LoginGenericTextInputFormFragment2::class.java,
                     LoginGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.SetMsisdn, stage.mandatory),
                     tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                     option = commonOption
             )
-            is Stage.Terms     -> activity.addFragmentToBackstack(
+            is Stage.Terms -> activity.addFragmentToBackstack(
                     views.loginFragmentContainer,
                     LoginTermsFragment2::class.java,
                     LoginTermsFragmentArgument(stage.policies.toLocalizedLoginTerms(activity.getString(R.string.resources_language))),
                     tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                     option = commonOption
             )
-            else               -> Unit // Should not happen
+            else -> Unit // Should not happen
         }
     }
 }

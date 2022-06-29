@@ -37,9 +37,9 @@ internal class ForceToBooleanJsonAdapter {
     @ForceToBoolean
     fun fromJson(reader: JsonReader): Boolean {
         return when (val token = reader.peek()) {
-            JsonReader.Token.NUMBER  -> reader.nextInt() != 0
+            JsonReader.Token.NUMBER -> reader.nextInt() != 0
             JsonReader.Token.BOOLEAN -> reader.nextBoolean()
-            else                     -> {
+            else -> {
                 Timber.e("Expecting a boolean or a int but get: $token")
                 reader.skipValue()
                 false

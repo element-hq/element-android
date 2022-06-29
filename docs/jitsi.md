@@ -1,20 +1,32 @@
 # Jitsi in Element Android
 
+<!--- TOC -->
+
+* [Native Jitsi SDK](#native-jitsi-sdk)
+  * [How to build the Jitsi Meet SDK](#how-to-build-the-jitsi-meet-sdk)
+    * [Jitsi version](#jitsi-version)
+    * [Run the build script](#run-the-build-script)
+    * [Link with the new generated library](#link-with-the-new-generated-library)
+    * [Sanity tests](#sanity-tests)
+    * [Export the build library](#export-the-build-library)
+
+<!--- END -->
+
 Native Jitsi support has been added to Element Android by the PR [#1914](https://github.com/vector-im/element-android/pull/1914). The description of the PR contains some documentation about the behaviour in each possible room configuration.
 
 Also, ensure to have a look on [the documentation from Element Web](https://github.com/vector-im/element-web/blob/develop/docs/jitsi.md)
 
 The official documentation about how to integrate the Jitsi SDK in an Android app is available here: https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-android-sdk.
 
-# Native Jitsi SDK
+## Native Jitsi SDK
 
 The Jitsi SDK is built by ourselves with the flag LIBRE_BUILD, to be able to be integrated on the F-Droid version of Element Android.
 
 The generated maven repository is then host in the project https://github.com/vector-im/jitsi_libre_maven
 
-## How to build the Jitsi Meet SDK
+### How to build the Jitsi Meet SDK
 
-### Jitsi version
+#### Jitsi version
 
 Update the script `./tools/jitsi/build_jisti_libs.sh` with the tag of the project `https://github.com/jitsi/jitsi-meet`.
 
@@ -22,7 +34,7 @@ Latest tag can be found from this page: https://github.com/jitsi/jitsi-meet-rele
 
 Currently we are building the version with the tag `android-sdk-3.10.0`.
 
-### Run the build script
+#### Run the build script
 
 At the root of the Element Android, run the following script:
 
@@ -32,7 +44,7 @@ At the root of the Element Android, run the following script:
 
 It will build the Jitsi Meet Android library and put every generated files in the folder `/tmp/jitsi`
 
-### Link with the new generated library
+#### Link with the new generated library
 
 - Update the file `./build.gradle` to use the previously created local Maven repository. Currently we have this line:
 
@@ -57,7 +69,7 @@ implementation('com.facebook.react:react-native-webrtc:1.92.1-jitsi-9093212@aar'
 - Perform a gradle sync and build the project
 - Perform test
 
-### Sanity tests
+#### Sanity tests
 
 In order to validate that the upgrade of the Jitsi and WebRTC dependency does not break anything, the following sanity tests have to be performed, using two devices:
 - Make 1-1 audio call (so using WebRTC)
@@ -65,7 +77,7 @@ In order to validate that the upgrade of the Jitsi and WebRTC dependency does no
 - Create and join a conference call with audio only (so using Jitsi library). Leave the conference. Join it again.
 - Create and join a conference call with audio and video (so using Jitsi library) Leave the conference. Join it again.
 
-### Export the build library
+#### Export the build library
 
 If all the tests are passed, you can export the generated Jitsi library to our Maven repository.
 

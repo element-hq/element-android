@@ -22,8 +22,8 @@ import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.R
 import im.vector.app.RoomGroupingMethod
-import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.sync.SyncRequestState
 import org.matrix.android.sdk.api.session.sync.SyncState
 import org.matrix.android.sdk.api.util.MatrixItem
 
@@ -40,7 +40,7 @@ data class HomeDetailViewState(
         val notificationHighlightRooms: Boolean = false,
         val hasUnreadMessages: Boolean = false,
         val syncState: SyncState = SyncState.Idle,
-        val incrementalSyncStatus: SyncStatusService.Status.IncrementalSyncStatus = SyncStatusService.Status.IncrementalSyncIdle,
+        val incrementalSyncRequestState: SyncRequestState.IncrementalSyncRequestState = SyncRequestState.IncrementalSyncIdle,
         val pushCounter: Int = 0,
         val pstnSupportFlag: Boolean = false,
         val forceDialPadTab: Boolean = false

@@ -24,9 +24,11 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageInformationD
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent
 
-sealed class EventSharedAction(@StringRes val titleRes: Int,
-                               @DrawableRes val iconResId: Int,
-                               val destructive: Boolean = false) : VectorSharedAction {
+sealed class EventSharedAction(
+        @StringRes val titleRes: Int,
+        @DrawableRes val iconResId: Int,
+        val destructive: Boolean = false
+) : VectorSharedAction {
     object Separator :
             EventSharedAction(0, 0)
 
@@ -52,7 +54,7 @@ sealed class EventSharedAction(@StringRes val titleRes: Int,
             EventSharedAction(R.string.reply_in_thread, R.drawable.ic_reply_in_thread)
 
     object ViewInRoom :
-            EventSharedAction(R.string.view_in_room, R.drawable.ic_thread_view_in_room_menu_item)
+            EventSharedAction(R.string.view_in_room, R.drawable.ic_threads_view_in_room_24)
 
     data class Share(val eventId: String, val messageContent: MessageContent) :
             EventSharedAction(R.string.action_share, R.drawable.ic_share)

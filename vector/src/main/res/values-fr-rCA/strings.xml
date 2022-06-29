@@ -892,9 +892,7 @@
     <string name="login_a11y_choose_other">Sélectionner un serveur d’accueil personnalisé</string>
     <string name="login_a11y_choose_modular">Sélectionner Element Matrix Services</string>
     <string name="login_a11y_choose_matrix_org">Sélectionner matrix.org</string>
-    <string name="login_signup_cancel_confirmation_content">Votre compte n’est pas encore crée.
-\n
-\nArrêter le processus de création \?</string>
+    <string name="login_signup_cancel_confirmation_content">Votre compte n’est pas encore crée. Arrêter le processus de création \?</string>
     <string name="login_signup_cancel_confirmation_title">Attention</string>
     <string name="login_signup_error_user_in_use">Ce nom d’utilisateur est déjà pris</string>
     <string name="login_signup_submit">Suivant</string>

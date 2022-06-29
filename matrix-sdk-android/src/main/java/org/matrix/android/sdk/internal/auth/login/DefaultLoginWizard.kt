@@ -52,10 +52,12 @@ internal class DefaultLoginWizard(
         return getProfileTask.execute(GetProfileTask.Params(matrixId))
     }
 
-    override suspend fun login(login: String,
-                               password: String,
-                               initialDeviceName: String,
-                               deviceId: String?): Session {
+    override suspend fun login(
+            login: String,
+            password: String,
+            initialDeviceName: String,
+            deviceId: String?
+    ): Session {
         val loginParams = if (Patterns.EMAIL_ADDRESS.matcher(login).matches()) {
             PasswordLoginParams.thirdPartyIdentifier(
                     medium = ThreePidMedium.EMAIL,
@@ -101,7 +103,7 @@ internal class DefaultLoginWizard(
         return sessionCreator.createSession(credentials, pendingSessionData.homeServerConnectionConfig)
     }
 
-    override suspend fun resetPassword(email: String, newPassword: String) {
+    override suspend fun resetPassword(email: String) {
         val param = RegisterAddThreePidTask.Params(
                 RegisterThreePid.Email(email),
                 pendingSessionData.clientSecret,
@@ -115,18 +117,17 @@ internal class DefaultLoginWizard(
             authAPI.resetPassword(AddThreePidRegistrationParams.from(param))
         }
 
-        pendingSessionData = pendingSessionData.copy(resetPasswordData = ResetPasswordData(newPassword, result))
+        pendingSessionData = pendingSessionData.copy(resetPasswordData = ResetPasswordData(result))
                 .also { pendingSessionStore.savePendingSessionData(it) }
     }
 
-    override suspend fun resetPasswordMailConfirmed() {
-        val safeResetPasswordData = pendingSessionData.resetPasswordData
-                ?: throw IllegalStateException("developer error, no reset password in progress")
-
+    override suspend fun resetPasswordMailConfirmed(newPassword: String, logoutAllDevices: Boolean) {
+        val resetPasswordData = pendingSessionData.resetPasswordData ?: throw IllegalStateException("Developer error - Must call resetPassword first")
         val param = ResetPasswordMailConfirmed.create(
                 pendingSessionData.clientSecret,
-                safeResetPasswordData.addThreePidRegistrationResponse.sid,
-                safeResetPasswordData.newPassword
+                resetPasswordData.addThreePidRegistrationResponse.sid,
+                newPassword,
+                logoutAllDevices
         )
 
         executeRequest(null) {

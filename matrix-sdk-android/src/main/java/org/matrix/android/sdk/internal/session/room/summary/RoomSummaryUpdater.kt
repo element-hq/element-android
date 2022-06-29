@@ -85,13 +85,15 @@ internal class RoomSummaryUpdater @Inject constructor(
         }
     }
 
-    fun update(realm: Realm,
-               roomId: String,
-               membership: Membership? = null,
-               roomSummary: RoomSyncSummary? = null,
-               unreadNotifications: RoomSyncUnreadNotifications? = null,
-               updateMembers: Boolean = false,
-               inviterId: String? = null) {
+    fun update(
+            realm: Realm,
+            roomId: String,
+            membership: Membership? = null,
+            roomSummary: RoomSyncSummary? = null,
+            unreadNotifications: RoomSyncUnreadNotifications? = null,
+            updateMembers: Boolean = false,
+            inviterId: String? = null
+    ) {
         val roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, roomId)
         if (roomSummary != null) {
             if (roomSummary.heroes.isNotEmpty()) {
