@@ -16,18 +16,27 @@
 
 package org.matrix.android.sdk.internal.session.room.location
 
+import androidx.arch.core.util.Function
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.slot
 import io.mockk.unmockkAll
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.After
+import org.junit.Before
 import org.junit.Test
 import org.matrix.android.sdk.api.session.room.location.UpdateLiveLocationShareResult
 import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationShareAggregatedSummary
 import org.matrix.android.sdk.api.util.Cancelable
+import org.matrix.android.sdk.api.util.Optional
+import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.database.mapper.LiveLocationShareAggregatedSummaryMapper
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntity
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntityFields
@@ -46,7 +55,6 @@ private const val A_TIMEOUT = 15_000L
 @ExperimentalCoroutinesApi
 internal class DefaultLocationSharingServiceTest {
 
-    private val fakeRoomId = A_ROOM_ID
     private val fakeMonarchy = FakeMonarchy()
     private val sendStaticLocationTask = mockk<SendStaticLocationTask>()
     private val sendLiveLocationTask = mockk<SendLiveLocationTask>()
@@ -55,7 +63,7 @@ internal class DefaultLocationSharingServiceTest {
     private val fakeLiveLocationShareAggregatedSummaryMapper = mockk<LiveLocationShareAggregatedSummaryMapper>()
 
     private val defaultLocationSharingService = DefaultLocationSharingService(
-            roomId = fakeRoomId,
+            roomId = A_ROOM_ID,
             monarchy = fakeMonarchy.instance,
             sendStaticLocationTask = sendStaticLocationTask,
             sendLiveLocationTask = sendLiveLocationTask,
@@ -63,6 +71,11 @@ internal class DefaultLocationSharingServiceTest {
             stopLiveLocationShareTask = stopLiveLocationShareTask,
             liveLocationShareAggregatedSummaryMapper = fakeLiveLocationShareAggregatedSummaryMapper
     )
+
+    @Before
+    fun setUp() {
+        mockkStatic("androidx.lifecycle.Transformations")
+    }
 
     @After
     fun tearDown() {
@@ -154,7 +167,7 @@ internal class DefaultLocationSharingServiceTest {
         )
 
         fakeMonarchy.givenWhere<LiveLocationShareAggregatedSummaryEntity>()
-                .givenEqualTo(LiveLocationShareAggregatedSummaryEntityFields.ROOM_ID, fakeRoomId)
+                .givenEqualTo(LiveLocationShareAggregatedSummaryEntityFields.ROOM_ID, A_ROOM_ID)
                 .givenEqualTo(LiveLocationShareAggregatedSummaryEntityFields.IS_ACTIVE, true)
                 .givenIsNotEmpty(LiveLocationShareAggregatedSummaryEntityFields.USER_ID)
                 .givenIsNotNull(LiveLocationShareAggregatedSummaryEntityFields.LAST_LOCATION_CONTENT)
@@ -167,5 +180,39 @@ internal class DefaultLocationSharingServiceTest {
         val result = defaultLocationSharingService.getRunningLiveLocationShareSummaries().value
 
         result shouldBeEqualTo listOf(summary)
+    }
+
+    @Test
+    fun `given an event id when getting livedata on corresponding live summary then it is correctly computed`() {
+        val entity = LiveLocationShareAggregatedSummaryEntity()
+        val summary = LiveLocationShareAggregatedSummary(
+                userId = "",
+                isActive = true,
+                endOfLiveTimestampMillis = 123,
+                lastLocationDataContent = null
+        )
+
+        fakeMonarchy.givenWhere<LiveLocationShareAggregatedSummaryEntity>()
+                .givenEqualTo(LiveLocationShareAggregatedSummaryEntityFields.ROOM_ID, A_ROOM_ID)
+                .givenEqualTo(LiveLocationShareAggregatedSummaryEntityFields.EVENT_ID, AN_EVENT_ID)
+        val liveData = fakeMonarchy.givenFindAllMappedWithChangesReturns(
+                realmEntities = listOf(entity),
+                mappedResult = listOf(summary),
+                fakeLiveLocationShareAggregatedSummaryMapper
+        )
+        val mapper = slot<Function<List<LiveLocationShareAggregatedSummary>, Optional<LiveLocationShareAggregatedSummary>>>()
+        every {
+            Transformations.map(
+                    liveData,
+                    capture(mapper)
+            )
+        } answers {
+            val value = secondArg<Function<List<LiveLocationShareAggregatedSummary>, Optional<LiveLocationShareAggregatedSummary>>>().apply(listOf(summary))
+            MutableLiveData(value)
+        }
+
+        val result = defaultLocationSharingService.getLiveLocationShareSummary(AN_EVENT_ID).value
+
+        result shouldBeEqualTo summary.toOptional()
     }
 }

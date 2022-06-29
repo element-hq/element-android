@@ -16,21 +16,22 @@
 
 package im.vector.app.test.fakes
 
-import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.features.location.LocationSharingServiceConnection
 import io.mockk.every
-import io.mockk.justRun
+import io.mockk.just
 import io.mockk.mockk
-import org.matrix.android.sdk.api.session.Session
+import io.mockk.runs
+import io.mockk.verify
 
-class FakeActiveSessionHolder(
-        val fakeSession: FakeSession = FakeSession()
-) {
-    val instance = mockk<ActiveSessionHolder> {
-        every { getActiveSession() } returns fakeSession
-        every { getSafeActiveSession() } returns fakeSession
+class FakeLocationSharingServiceConnection {
+
+    val instance = mockk<LocationSharingServiceConnection>()
+
+    fun givenBind() {
+        every { instance.bind(any()) } just runs
     }
 
-    fun expectSetsActiveSession(session: Session) {
-        justRun { instance.setActiveSession(session) }
+    fun verifyBind(callback: LocationSharingServiceConnection.Callback) {
+        verify { instance.bind(callback) }
     }
 }

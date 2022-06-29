@@ -44,11 +44,11 @@ class ActiveSessionHolder @Inject constructor(
         private val guardServiceStarter: GuardServiceStarter
 ) {
 
-    private var activeSession: AtomicReference<Session?> = AtomicReference()
+    private var activeSessionReference: AtomicReference<Session?> = AtomicReference()
 
     fun setActiveSession(session: Session) {
         Timber.w("setActiveSession of ${session.myUserId}")
-        activeSession.set(session)
+        activeSessionReference.set(session)
         activeSessionDataSource.post(Option.just(session))
 
         keyRequestHandler.start(session)
@@ -68,7 +68,7 @@ class ActiveSessionHolder @Inject constructor(
             it.removeListener(sessionListener)
         }
 
-        activeSession.set(null)
+        activeSessionReference.set(null)
         activeSessionDataSource.post(Option.empty())
 
         keyRequestHandler.stop()
@@ -80,15 +80,15 @@ class ActiveSessionHolder @Inject constructor(
     }
 
     fun hasActiveSession(): Boolean {
-        return activeSession.get() != null
+        return activeSessionReference.get() != null
     }
 
     fun getSafeActiveSession(): Session? {
-        return activeSession.get()
+        return activeSessionReference.get()
     }
 
     fun getActiveSession(): Session {
-        return activeSession.get()
+        return activeSessionReference.get()
                 ?: throw IllegalStateException("You should authenticate before using this")
     }
 

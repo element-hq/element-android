@@ -23,17 +23,21 @@ import android.os.Parcelable
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.services.VectorService
+import im.vector.app.features.location.live.GetLiveLocationShareSummaryUseCase
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.location.UpdateLiveLocationShareResult
 import timber.log.Timber
-import java.util.Timer
-import java.util.TimerTask
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -49,6 +53,7 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
     @Inject lateinit var notificationUtils: NotificationUtils
     @Inject lateinit var locationTracker: LocationTracker
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
+    @Inject lateinit var getLiveLocationShareSummaryUseCase: GetLiveLocationShareSummaryUseCase
 
     private val binder = LocalBinder()
 
@@ -56,16 +61,27 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
      * Keep track of a map between beacon event Id starting the live and RoomArgs.
      */
     private val roomArgsMap = mutableMapOf<String, RoomArgs>()
-    private val timers = mutableListOf<Timer>()
     var callback: Callback? = null
+    private val jobs = mutableListOf<Job>()
 
     override fun onCreate() {
         super.onCreate()
         Timber.i("### LocationSharingService.onCreate")
 
+        initLocationTracking()
+    }
+
+    private fun initLocationTracking() {
         // Start tracking location
         locationTracker.addCallback(this)
         locationTracker.start()
+
+        launchWithActiveSession { session ->
+            val job = locationTracker.locations
+                    .onEach(this@LocationSharingService::onLocationUpdate)
+                    .launchIn(session.coroutineScope)
+            jobs.add(job)
+        }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -78,11 +94,8 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
             val notification = notificationUtils.buildLiveLocationSharingNotification()
             startForeground(roomArgs.roomId.hashCode(), notification)
 
-            // Schedule a timer to stop sharing
-            scheduleTimer(roomArgs.roomId, roomArgs.durationMillis)
-
             // Send beacon info state event
-            launchInIO { session ->
+            launchWithActiveSession { session ->
                 sendStartingLiveBeaconInfo(session, roomArgs)
             }
         }
@@ -100,7 +113,8 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
                 ?.let { result ->
                     when (result) {
                         is UpdateLiveLocationShareResult.Success -> {
-                            roomArgsMap[result.beaconEventId] = roomArgs
+                            addRoomArgs(result.beaconEventId, roomArgs)
+                            listenForLiveSummaryChanges(roomArgs.roomId, result.beaconEventId)
                             locationTracker.requestLastKnownLocation()
                         }
                         is UpdateLiveLocationShareResult.Failure -> {
@@ -115,49 +129,13 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
                 }
     }
 
-    private fun scheduleTimer(roomId: String, durationMillis: Long) {
-        Timer()
-                .apply {
-                    schedule(object : TimerTask() {
-                        override fun run() {
-                            stopSharingLocation(roomId)
-                            timers.remove(this@apply)
-                        }
-                    }, durationMillis)
-                }
-                .also {
-                    timers.add(it)
-                }
-    }
-
-    fun stopSharingLocation(roomId: String) {
+    private fun stopSharingLocation(roomId: String) {
         Timber.i("### LocationSharingService.stopSharingLocation for $roomId")
-
-        launchInIO { session ->
-            when (val result = sendStoppedBeaconInfo(session, roomId)) {
-                is UpdateLiveLocationShareResult.Success -> {
-                    synchronized(roomArgsMap) {
-                        val beaconIds = roomArgsMap
-                                .filter { it.value.roomId == roomId }
-                                .map { it.key }
-                        beaconIds.forEach { roomArgsMap.remove(it) }
-
-                        tryToDestroyMe()
-                    }
-                }
-                is UpdateLiveLocationShareResult.Failure -> callback?.onServiceError(result.error)
-                else -> Unit
-            }
-        }
+        removeRoomArgs(roomId)
+        tryToDestroyMe()
     }
 
-    private suspend fun sendStoppedBeaconInfo(session: Session, roomId: String): UpdateLiveLocationShareResult? {
-        return session.getRoom(roomId)
-                ?.locationSharingService()
-                ?.stopLiveLocationShare()
-    }
-
-    override fun onLocationUpdate(locationData: LocationData) {
+    private fun onLocationUpdate(locationData: LocationData) {
         Timber.i("### LocationSharingService.onLocationUpdate. Uncertainty: ${locationData.uncertainty}")
 
         // Emit location update to all rooms in which live location sharing is active
@@ -171,7 +149,7 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
             beaconInfoEventId: String,
             locationData: LocationData
     ) {
-        launchInIO { session ->
+        launchWithActiveSession { session ->
             session.getRoom(roomId)
                     ?.locationSharingService()
                     ?.sendLiveLocation(
@@ -191,29 +169,44 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
     private fun tryToDestroyMe() {
         if (roomArgsMap.isEmpty()) {
             Timber.i("### LocationSharingService. Destroying self, time is up for all rooms")
-            destroyMe()
+            stopSelf()
         }
-    }
-
-    private fun destroyMe() {
-        locationTracker.removeCallback(this)
-        timers.forEach { it.cancel() }
-        timers.clear()
-        stopSelf()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         Timber.i("### LocationSharingService.onDestroy")
-        destroyMe()
+        jobs.forEach { it.cancel() }
+        jobs.clear()
+        locationTracker.removeCallback(this)
     }
 
-    private fun launchInIO(block: suspend CoroutineScope.(Session) -> Unit) =
+    private fun addRoomArgs(beaconEventId: String, roomArgs: RoomArgs) {
+        roomArgsMap[beaconEventId] = roomArgs
+    }
+
+    private fun removeRoomArgs(roomId: String) {
+        roomArgsMap.toMap()
+                .filter { it.value.roomId == roomId }
+                .forEach { roomArgsMap.remove(it.key) }
+    }
+
+    private fun listenForLiveSummaryChanges(roomId: String, eventId: String) {
+        launchWithActiveSession { session ->
+            val job = getLiveLocationShareSummaryUseCase.execute(roomId, eventId)
+                    .distinctUntilChangedBy { it.isActive }
+                    .filter { it.isActive == false }
+                    .onEach { stopSharingLocation(roomId) }
+                    .launchIn(session.coroutineScope)
+            jobs.add(job)
+        }
+    }
+
+    private fun launchWithActiveSession(block: suspend CoroutineScope.(Session) -> Unit) =
             activeSessionHolder
                     .getSafeActiveSession()
                     ?.let { session ->
                         session.coroutineScope.launch(
-                                context = session.coroutineDispatchers.io,
                                 block = { block(session) }
                         )
                     }

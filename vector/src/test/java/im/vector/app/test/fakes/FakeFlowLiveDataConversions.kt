@@ -16,21 +16,18 @@
 
 package im.vector.app.test.fakes
 
-import im.vector.app.core.di.ActiveSessionHolder
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.asFlow
 import io.mockk.every
-import io.mockk.justRun
-import io.mockk.mockk
-import org.matrix.android.sdk.api.session.Session
+import io.mockk.mockkStatic
+import kotlinx.coroutines.flow.flowOf
 
-class FakeActiveSessionHolder(
-        val fakeSession: FakeSession = FakeSession()
-) {
-    val instance = mockk<ActiveSessionHolder> {
-        every { getActiveSession() } returns fakeSession
-        every { getSafeActiveSession() } returns fakeSession
+class FakeFlowLiveDataConversions {
+    fun setup() {
+        mockkStatic("androidx.lifecycle.FlowLiveDataConversions")
     }
+}
 
-    fun expectSetsActiveSession(session: Session) {
-        justRun { instance.setActiveSession(session) }
-    }
+fun <T> LiveData<T>.givenAsFlowReturns(value: T) {
+    every { asFlow() } returns flowOf(value)
 }
