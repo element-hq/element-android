@@ -19,7 +19,6 @@ package im.vector.app.core.epoxy.profiles
 
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
-import im.vector.app.R
 import org.matrix.android.sdk.api.session.presence.model.UserPresence
 
 @EpoxyModelClass
