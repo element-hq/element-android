@@ -9,6 +9,8 @@ on:
 env:
   CI_GRADLE_ARG_PROPERTIES: >
     -Porg.gradle.jvmargs=-Xmx4g
+    -Porg.gradle.parallel=false
+    --no-daemon
 
 jobs:
   check:

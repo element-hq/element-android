@@ -39,6 +39,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.getUser
 import org.matrix.android.sdk.api.util.toMatrixItem
+import timber.log.Timber
 
 /**
  * Sampling period to compare target location and user location.
@@ -65,11 +66,18 @@ class LocationSharingViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<LocationSharingViewModel, LocationSharingViewState> by hiltMavericksViewModelFactory()
 
     init {
-        locationTracker.addCallback(this)
-        locationTracker.start()
+        initLocationTracking()
         setUserItem()
         updatePin()
         compareTargetAndUserLocation()
+    }
+
+    private fun initLocationTracking() {
+        locationTracker.addCallback(this)
+        locationTracker.locations
+                .onEach(::onLocationUpdate)
+                .launchIn(viewModelScope)
+        locationTracker.start()
     }
 
     private fun setUserItem() {
@@ -172,7 +180,8 @@ class LocationSharingViewModel @AssistedInject constructor(
         )
     }
 
-    override fun onLocationUpdate(locationData: LocationData) {
+    private fun onLocationUpdate(locationData: LocationData) {
+        Timber.d("onLocationUpdate()")
         setState {
             copy(lastKnownUserLocation = locationData)
         }

@@ -53,6 +53,7 @@ import im.vector.app.features.home.room.detail.timeline.factory.TimelineFactory
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.typing.TypingHelper
 import im.vector.app.features.location.LocationSharingServiceConnection
+import im.vector.app.features.location.live.StopLiveLocationShareUseCase
 import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.raw.wellknown.getOutboundSessionKeySharingStrategyOrDefault
@@ -92,6 +93,7 @@ import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.getStateEvent
 import org.matrix.android.sdk.api.session.room.getTimelineEvent
+import org.matrix.android.sdk.api.session.room.location.UpdateLiveLocationShareResult
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -133,8 +135,9 @@ class TimelineViewModel @AssistedInject constructor(
         private val decryptionFailureTracker: DecryptionFailureTracker,
         private val notificationDrawerManager: NotificationDrawerManager,
         private val locationSharingServiceConnection: LocationSharingServiceConnection,
+        private val stopLiveLocationShareUseCase: StopLiveLocationShareUseCase,
         timelineFactory: TimelineFactory,
-        appStateHandler: AppStateHandler
+        appStateHandler: AppStateHandler,
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState),
         Timeline.Listener, ChatEffectManager.Delegate, CallProtocolsChecker.Listener, LocationSharingServiceConnection.Callback {
 
@@ -1139,7 +1142,12 @@ class TimelineViewModel @AssistedInject constructor(
     }
 
     private fun handleStopLiveLocationSharing() {
-        locationSharingServiceConnection.stopLiveLocationSharing(room.roomId)
+        viewModelScope.launch {
+            val result = stopLiveLocationShareUseCase.execute(room.roomId)
+            if (result is UpdateLiveLocationShareResult.Failure) {
+                _viewEvents.post(RoomDetailViewEvents.Failure(throwable = result.error, showInDialog = true))
+            }
+        }
     }
 
     private fun observeRoomSummary() {
@@ -1310,7 +1318,7 @@ class TimelineViewModel @AssistedInject constructor(
         // we should also mark it as read here, for the scenario that the user
         // is already in the thread timeline
         markThreadTimelineAsReadLocal()
-        locationSharingServiceConnection.unbind()
+        locationSharingServiceConnection.unbind(this)
         super.onCleared()
     }
 }

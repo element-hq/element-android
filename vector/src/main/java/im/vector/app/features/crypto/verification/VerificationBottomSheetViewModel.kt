@@ -360,6 +360,27 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                         as? SasVerificationTransaction)
                         ?.shortCodeDoesNotMatch()
             }
+            is VerificationAction.ReadyPendingVerification -> {
+                state.pendingRequest.invoke()?.let { request ->
+                    // will only be there for dm verif
+                    if (state.roomId != null) {
+                        session.cryptoService().verificationService()
+                                .readyPendingVerificationInDMs(
+                                        supportedVerificationMethodsProvider.provide(),
+                                        state.otherUserId,
+                                        state.roomId,
+                                        request.transactionId ?: ""
+                                )
+                    }
+                }
+            }
+            is VerificationAction.CancelPendingVerification -> {
+                state.pendingRequest.invoke()?.let {
+                    session.cryptoService().verificationService()
+                            .cancelVerificationRequest(it)
+                }
+                _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)
+            }
             is VerificationAction.GotItConclusion -> {
                 if (state.isVerificationRequired && !action.verified) {
                     // we should go back to first screen

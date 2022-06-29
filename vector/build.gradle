@@ -372,7 +372,6 @@ dependencies {
     implementation "com.gabrielittner.threetenbp:lazythreetenbp:0.10.0"
 
     implementation libs.squareup.moshi
-    implementation libs.squareup.moshiKt
     kapt libs.squareup.moshiKotlin
 
     // Lifecycle
@@ -534,10 +533,10 @@ dependencies {
     }
 
     // Flipper, debug builds only
-    debugImplementation('com.facebook.flipper:flipper:0.150.0') {
+    debugImplementation(libs.flipper.flipper) {
         exclude group: 'com.facebook.fbjni', module: 'fbjni'
     }
-    debugImplementation('com.facebook.flipper:flipper-network-plugin:0.150.0') {
+    debugImplementation(libs.flipper.flipperNetworkPlugin) {
         exclude group: 'com.facebook.fbjni', module: 'fbjni'
     }
     debugImplementation 'com.facebook.soloader:soloader:0.10.3'

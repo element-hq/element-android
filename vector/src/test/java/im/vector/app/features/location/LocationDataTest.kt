@@ -28,19 +28,26 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageLocationCont
 class LocationDataTest {
     @Test
     fun validCases() {
-        parseGeo("geo:12.34,56.78;13.56") shouldBeEqualTo
+        parseGeo("geo:12.34,56.78;u=13.56") shouldBeEqualTo
                 LocationData(latitude = 12.34, longitude = 56.78, uncertainty = 13.56)
         parseGeo("geo:12.34,56.78") shouldBeEqualTo
                 LocationData(latitude = 12.34, longitude = 56.78, uncertainty = null)
+    }
+
+    @Test
+    fun lenientCases() {
         // Error is ignored in case of invalid uncertainty
-        parseGeo("geo:12.34,56.78;13.5z6") shouldBeEqualTo
+        parseGeo("geo:12.34,56.78;u=13.5z6") shouldBeEqualTo
                 LocationData(latitude = 12.34, longitude = 56.78, uncertainty = null)
-        parseGeo("geo:12.34,56.78;13. 56") shouldBeEqualTo
+        parseGeo("geo:12.34,56.78;u=13. 56") shouldBeEqualTo
                 LocationData(latitude = 12.34, longitude = 56.78, uncertainty = null)
         // Space are ignored (trim)
-        parseGeo("geo: 12.34,56.78;13.56") shouldBeEqualTo
+        parseGeo("geo: 12.34,56.78;u=13.56") shouldBeEqualTo
                 LocationData(latitude = 12.34, longitude = 56.78, uncertainty = 13.56)
-        parseGeo("geo:12.34,56.78; 13.56") shouldBeEqualTo
+        parseGeo("geo:12.34,56.78; u=13.56") shouldBeEqualTo
+                LocationData(latitude = 12.34, longitude = 56.78, uncertainty = 13.56)
+        // missing "u=" for uncertainty is ignored
+        parseGeo("geo:12.34,56.78;13.56") shouldBeEqualTo
                 LocationData(latitude = 12.34, longitude = 56.78, uncertainty = 13.56)
     }
 
@@ -50,17 +57,17 @@ class LocationDataTest {
         parseGeo("geo").shouldBeNull()
         parseGeo("geo:").shouldBeNull()
         parseGeo("geo:12.34").shouldBeNull()
-        parseGeo("geo:12.34;13.56").shouldBeNull()
-        parseGeo("gea:12.34,56.78;13.56").shouldBeNull()
-        parseGeo("geo:12.x34,56.78;13.56").shouldBeNull()
-        parseGeo("geo:12.34,56.7y8;13.56").shouldBeNull()
+        parseGeo("geo:12.34;u=13.56").shouldBeNull()
+        parseGeo("gea:12.34,56.78;u=13.56").shouldBeNull()
+        parseGeo("geo:12.x34,56.78;u=13.56").shouldBeNull()
+        parseGeo("geo:12.34,56.7y8;u=13.56").shouldBeNull()
         // Spaces are not ignored if inside the numbers
-        parseGeo("geo:12.3 4,56.78;13.56").shouldBeNull()
-        parseGeo("geo:12.34,56.7 8;13.56").shouldBeNull()
+        parseGeo("geo:12.3 4,56.78;u=13.56").shouldBeNull()
+        parseGeo("geo:12.34,56.7 8;u=13.56").shouldBeNull()
         // Or in the protocol part
-        parseGeo(" geo:12.34,56.78;13.56").shouldBeNull()
-        parseGeo("ge o:12.34,56.78;13.56").shouldBeNull()
-        parseGeo("geo :12.34,56.78;13.56").shouldBeNull()
+        parseGeo(" geo:12.34,56.78;u=13.56").shouldBeNull()
+        parseGeo("ge o:12.34,56.78;u=13.56").shouldBeNull()
+        parseGeo("geo :12.34,56.78;u=13.56").shouldBeNull()
     }
 
     @Test
@@ -77,7 +84,7 @@ class LocationDataTest {
 
     @Test
     fun unstablePrefixTest() {
-        val geoUri = "geo :12.34,56.78;13.56"
+        val geoUri = "aGeoUri"
 
         val contentWithUnstablePrefixes = MessageLocationContent(body = "", geoUri = "", unstableLocationInfo = LocationInfo(geoUri = geoUri))
         contentWithUnstablePrefixes.getBestLocationInfo()?.geoUri.shouldBeEqualTo(geoUri)

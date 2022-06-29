@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.test.fakes
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.zhuinden.monarchy.Monarchy
 import io.mockk.MockKVerificationScope
@@ -60,10 +61,11 @@ internal class FakeMonarchy {
             realmEntities: List<T>,
             mappedResult: List<R>,
             mapper: Monarchy.Mapper<R, T>
-    ) {
+    ): LiveData<List<R>> {
         every { mapper.map(any()) } returns mockk()
         val monarchyQuery = slot<Monarchy.Query<T>>()
         val monarchyMapper = slot<Monarchy.Mapper<R, T>>()
+        val result = MutableLiveData(mappedResult)
         every {
             instance.findAllMappedWithChanges(capture(monarchyQuery), capture(monarchyMapper))
         } answers {
@@ -71,7 +73,8 @@ internal class FakeMonarchy {
             realmEntities.forEach {
                 monarchyMapper.captured.map(it)
             }
-            MutableLiveData(mappedResult)
+            result
         }
+        return result
     }
 }

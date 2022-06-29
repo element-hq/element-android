@@ -25,28 +25,27 @@ import androidx.annotation.VisibleForTesting
 import androidx.core.content.getSystemService
 import androidx.core.location.LocationListenerCompat
 import im.vector.app.BuildConfig
-import im.vector.app.core.utils.Debouncer
-import im.vector.app.core.utils.createBackgroundHandler
+import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.features.session.coroutineScope
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
-private const val BKG_HANDLER_NAME = "LocationTracker.BKG_HANDLER_NAME"
-private const val LOCATION_DEBOUNCE_ID = "LocationTracker.LOCATION_DEBOUNCE_ID"
-
 @Singleton
 class LocationTracker @Inject constructor(
-        context: Context
+        context: Context,
+        private val activeSessionHolder: ActiveSessionHolder
 ) : LocationListenerCompat {
 
     private val locationManager = context.getSystemService<LocationManager>()
 
     interface Callback {
-        /**
-         * Called on every location update.
-         */
-        fun onLocationUpdate(locationData: LocationData)
-
         /**
          * Called when no location provider is available to request location updates.
          */
@@ -62,9 +61,16 @@ class LocationTracker @Inject constructor(
     @VisibleForTesting
     var hasLocationFromGPSProvider = false
 
-    private var lastLocation: LocationData? = null
+    private val _locations = MutableSharedFlow<Location>(replay = 1)
 
-    private val debouncer = Debouncer(createBackgroundHandler(BKG_HANDLER_NAME))
+    /**
+     * SharedFlow to collect location updates.
+     */
+    val locations = _locations.asSharedFlow()
+            .onEach { Timber.d("new location emitted") }
+            .debounce(MIN_TIME_TO_UPDATE_LOCATION_MILLIS)
+            .onEach { Timber.d("new location emitted after debounce") }
+            .map { it.toLocationData() }
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
     fun start() {
@@ -119,33 +125,35 @@ class LocationTracker @Inject constructor(
     }
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
+    @VisibleForTesting
     fun stop() {
         Timber.d("stop()")
         locationManager?.removeUpdates(this)
-        synchronized(this) {
-            callbacks.clear()
-        }
-        debouncer.cancelAll()
+        callbacks.clear()
         hasLocationFromGPSProvider = false
         hasLocationFromFusedProvider = false
     }
 
     /**
-     * Request the last known location. It will be given async through Callback.
-     * Please ensure adding a callback to receive the value.
+     * Request the last known location. It will be given async through corresponding flow.
+     * Please ensure collecting the flow before calling this method.
      */
     fun requestLastKnownLocation() {
-        lastLocation?.let { locationData -> onLocationUpdate(locationData) }
+        Timber.d("requestLastKnownLocation")
+        activeSessionHolder.getSafeActiveSession()?.coroutineScope?.launch {
+            _locations.replayCache.firstOrNull()?.let {
+                Timber.d("emitting last location from cache")
+                _locations.emit(it)
+            }
+        }
     }
 
-    @Synchronized
     fun addCallback(callback: Callback) {
         if (!callbacks.contains(callback)) {
             callbacks.add(callback)
         }
     }
 
-    @Synchronized
     fun removeCallback(callback: Callback) {
         callbacks.remove(callback)
         if (callbacks.size == 0) {
@@ -183,21 +191,19 @@ class LocationTracker @Inject constructor(
             }
         }
 
-        debouncer.debounce(LOCATION_DEBOUNCE_ID, MIN_TIME_TO_UPDATE_LOCATION_MILLIS) {
-            notifyLocation(location)
-        }
+        notifyLocation(location)
     }
 
     private fun notifyLocation(location: Location) {
-        if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
-            Timber.d("notify location: $location")
-        } else {
-            Timber.d("notify location: ${location.provider}")
-        }
+        activeSessionHolder.getSafeActiveSession()?.coroutineScope?.launch {
+            if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
+                Timber.d("notify location: $location")
+            } else {
+                Timber.d("notify location: ${location.provider}")
+            }
 
-        val locationData = location.toLocationData()
-        lastLocation = locationData
-        onLocationUpdate(locationData)
+            _locations.emit(location)
+        }
     }
 
     override fun onProviderDisabled(provider: String) {
@@ -215,24 +221,12 @@ class LocationTracker @Inject constructor(
                 }
     }
 
-    @Synchronized
     private fun onNoLocationProviderAvailable() {
-        callbacks.forEach {
+        callbacks.toList().forEach {
             try {
                 it.onNoLocationProviderAvailable()
             } catch (error: Exception) {
                 Timber.e(error, "error in onNoLocationProviderAvailable callback $it")
-            }
-        }
-    }
-
-    @Synchronized
-    private fun onLocationUpdate(locationData: LocationData) {
-        callbacks.forEach {
-            try {
-                it.onLocationUpdate(locationData)
-            } catch (error: Exception) {
-                Timber.e(error, "error in onLocationUpdate callback $it")
             }
         }
     }

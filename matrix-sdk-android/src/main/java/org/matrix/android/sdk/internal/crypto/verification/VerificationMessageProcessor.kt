@@ -62,7 +62,7 @@ internal class VerificationMessageProcessor @Inject constructor(
         // If the request is in the future by more than 5 minutes or more than 10 minutes in the past,
         // the message should be ignored by the receiver.
 
-        if (event.ageLocalTs != null && !VerificationService.isValidRequest(event.ageLocalTs, clock.epochMillis())) return Unit.also {
+        if (!VerificationService.isValidRequest(event.ageLocalTs, clock.epochMillis())) return Unit.also {
             Timber.d("## SAS Verification live observer: msgId: ${event.eventId} is outdated age:$event.ageLocalTs ms")
         }
 
