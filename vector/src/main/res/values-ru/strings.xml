@@ -498,7 +498,7 @@
     <string name="settings_containing_my_user_name">Сообщения, содержащие мое имя пользователя</string>
     <string name="you_added_a_new_device">Вы добавили новою сессию \'%s\', запрашивающую ключи шифрования.</string>
     <string name="your_unverified_device_requesting">Ваше непроверенная сессия \'%s\' запрашивает ключи шифрования.</string>
-    <string name="settings_containing_my_display_name">Сообщения, содержащие мое отображаемое имя</string>
+    <string name="settings_containing_my_display_name">Сообщения, содержащие моё отображаемое имя</string>
     <string name="start_verification">Начать проверку</string>
     <string name="notification_noisy_notifications">Звуковые уведомления</string>
     <string name="notification_silent_notifications">Беззвучные уведомления</string>
@@ -568,9 +568,9 @@
         <item quantity="many">%d непрочитанных уведомлений</item>
         <item quantity="other"/>
     </plurals>
-    <string name="title_activity_choose_sticker">Отправить стикер</string>
-    <string name="option_send_sticker">Отправить стикер</string>
-    <string name="no_sticker_application_dialog_content">У вас сейчас нет доступных стикеров. 
+    <string name="title_activity_choose_sticker">Отправить наклейку</string>
+    <string name="option_send_sticker">Отправить наклейку</string>
+    <string name="no_sticker_application_dialog_content">У вас сейчас нет доступных наклеек.
 \n
 \nДобавить сейчас\?</string>
     <string name="settings_deactivate_account_section">Деактивация аккаунта</string>
@@ -709,7 +709,7 @@
     <string name="settings_show_avatar_display_name_changes_messages_summary">Включает изменения аватара и отображаемого имени.</string>
     <string name="settings_labs_native_camera_summary">Использовать системную камеру вместо камеры Element.</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="no_valid_google_play_services_apk">Не найден APK сервисов Google Play. Уведомления могут работать неправильно.</string>
     <string name="settings_show_join_leave_messages_summary">Не влияет на приглашения, изгнания и блокировки.</string>
     <string name="title_activity_keys_backup_setup">Резервное копирование ключей</string>
@@ -899,9 +899,9 @@
     <string name="room_list_catchup_empty_title">Вы в теме!</string>
     <string name="room_list_catchup_empty_body">У вас больше нет непрочитанных сообщений</string>
     <string name="room_list_people_empty_title">Беседы</string>
-    <string name="room_list_people_empty_body">Здесь будут ваши диалоги. Нажмите кнопку «+» внизу справа, чтобы начать беседу.</string>
+    <string name="room_list_people_empty_body">Здесь будут отображаться ваши личные сообщения. Нажмите «+» в правом нижнем углу, чтобы начать беседу.</string>
     <string name="room_list_rooms_empty_title">Комнаты</string>
-    <string name="room_list_rooms_empty_body">Здесь будут отображаться ваши комнаты. Коснитесь + внизу справа, чтобы найти существующие или создать свои.</string>
+    <string name="room_list_rooms_empty_body">Здесь будут отображаться ваши комнаты. Нажмите + в правом нижнем углу, чтобы найти существующие комнаты или создать свою.</string>
     <string name="title_activity_emoji_reaction_picker">Реакции</string>
     <string name="action_agree">Принять</string>
     <string name="message_add_reaction">Добавить реакцию</string>
@@ -975,7 +975,7 @@
     <string name="settings_push_gateway_no_pushers">Нет зарегистрированных push-шлюзов</string>
     <string name="terms_of_service">Условия использования</string>
     <string name="terms_description_for_identity_server">Быть видимым для других</string>
-    <string name="terms_description_for_integration_manager">Используйте ботов, мосты, виджеты и наборы стикеров</string>
+    <string name="terms_description_for_integration_manager">Используйте ботов, мосты, виджеты и наклейки</string>
     <string name="none">Никто</string>
     <string name="action_revoke">Отмена</string>
     <string name="action_disconnect">Отключить</string>
@@ -1060,7 +1060,7 @@
     <string name="a11y_create_menu_close">Закройте меню создание комнаты…</string>
     <string name="a11y_jump_to_bottom">Вниз</string>
     <string name="attachment_type_contact">Контакт</string>
-    <string name="attachment_type_sticker">Стикер</string>
+    <string name="attachment_type_sticker">Наклейка</string>
     <string name="report_content_custom_hint">Причина жалобы на это содержимое</string>
     <string name="report_content_custom_submit">ЖАЛОБА</string>
     <string name="block_user">ИГНОРИРОВАТЬ ПОЛЬЗОВАТЕЛЯ</string>
@@ -1146,7 +1146,7 @@
     <string name="login_signup_cancel_confirmation_content">Ваш аккаунт еще не создан. Остановить процесс регистрации\?</string>
     <string name="login_a11y_choose_matrix_org">Выбрать matrix.org</string>
     <string name="login_a11y_choose_modular">Выбрать Element Matrix Services</string>
-    <string name="login_a11y_choose_other">Выбрать пользовательский домашний сервер</string>
+    <string name="login_a11y_choose_other">Выбрать другой сервер</string>
     <string name="login_a11y_captcha_container">Пожалуйста, пройдите проверку капчей</string>
     <string name="login_terms_title">Примите условия для продолжения</string>
     <string name="login_wait_for_email_title">Пожалуйста, проверьте ваш электронный почтовый ящик</string>
@@ -1388,7 +1388,7 @@
     <string name="sent_an_image">Изображение.</string>
     <string name="sent_an_audio_file">Аудио</string>
     <string name="sent_a_file">Файл</string>
-    <string name="send_a_sticker">Стикер</string>
+    <string name="send_a_sticker">Наклейка</string>
     <string name="verification_request_waiting">Ожидание…</string>
     <string name="verification_request_other_cancelled">%s отменено</string>
     <string name="verification_request_you_cancelled">Вы отменили</string>
@@ -1843,7 +1843,7 @@
     <string name="room_created_summary_no_topic_creation_text">%s чтобы люди знали, о чём эта комната.</string>
     <string name="this_is_the_beginning_of_dm">Это начало вашей истории диалога с %s.</string>
     <string name="settings_export_trail">Экспорт аудита</string>
-    <string name="room_member_open_or_create_dm">Диалог</string>
+    <string name="room_member_open_or_create_dm">Личное сообщение</string>
     <string name="settings_discovery_consent_title">Отправить электронную почту и номера телефонов</string>
     <string name="settings_security_pin_code_change_pin_summary">Изменить текущий PIN-код</string>
     <string name="settings_security_pin_code_change_pin_title">Изменить PIN-код</string>
@@ -2024,7 +2024,7 @@
     <string name="this_space_has_no_rooms_not_admin">Некоторые комнаты могут быть скрыты, потому что они приватные, и вам нужно приглашение.
 \nУ вас нет разрешения на добавление комнат.</string>
     <string name="this_space_has_no_rooms">В этом пространстве нет комнат</string>
-    <string name="spaces_no_server_support_description">Для получения дополнительной информации обратитесь к администратору вашего домашнего сервера</string>
+    <string name="spaces_no_server_support_description">Для получения дополнительной информации обратитесь к администратору домашнего сервера</string>
     <string name="spaces_no_server_support_title">Похоже, что ваш домашний сервер пока не поддерживает Пространства</string>
     <string name="spaces_feeling_experimental_subspace">Чувствуете себя экспериментатором\?
 \nВы можете добавить существующие пространства в пространство.</string>
@@ -2041,7 +2041,7 @@
     <string name="space_leave_prompt_msg_as_admin">Вы единственный администратор этого пространства. Если вы его покинете, то никто не сможет управлять им.</string>
     <string name="space_leave_prompt_msg_private">Вы сможете присоединиться только после повторного приглашения.</string>
     <string name="space_leave_prompt_msg_only_you">Вы здесь единственный человек. Если вы уйдёте, никто не сможет присоединиться в будущем, включая вас.</string>
-    <string name="leave_space">Покинуть пространство</string>
+    <string name="leave_space">Покинуть</string>
     <string name="space_add_child_title">Добавить комнаты</string>
     <string name="space_explore_activity_title">Исследуйте комнаты</string>
     <plurals name="space_people_you_know">
@@ -2203,7 +2203,7 @@
     <string name="settings_encrypted_direct_messages">Зашифрованных диалогах</string>
     <string name="settings_messages_direct_messages">Диалогах</string>
     <string name="settings_messages_containing_username">Мое имя пользователя</string>
-    <string name="settings_messages_containing_display_name">Мое отображаемое имя</string>
+    <string name="settings_messages_containing_display_name">Моё отображаемое имя</string>
     <string name="settings_notification_notify_me_for">Уведомлять меня о</string>
     <string name="settings_notification_other">Другое</string>
     <string name="settings_notification_mentions_and_keywords">Упоминания и ключевые слова</string>
@@ -2315,12 +2315,12 @@
     <string name="tooltip_attachment_location">Поделиться местоположением</string>
     <string name="tooltip_attachment_poll">Создать опрос</string>
     <string name="tooltip_attachment_contact">Открыть контакты</string>
-    <string name="tooltip_attachment_sticker">Отправить стикер</string>
+    <string name="tooltip_attachment_sticker">Отправить наклейку</string>
     <string name="tooltip_attachment_file">Загрузить файл</string>
     <string name="tooltip_attachment_gallery">Отправить изображения и видео</string>
     <string name="tooltip_attachment_photo">Открыть камеру</string>
     <string name="labs_render_locations_in_timeline">Показывать местоположения пользователя в ленте сообщений</string>
-    <string name="settings_enable_location_sharing_summary">После включения вы сможете отправить свое местоположение в любую комнату</string>
+    <string name="settings_enable_location_sharing_summary">После включения вы сможете отправить своё местоположение в любую комнату</string>
     <string name="settings_enable_location_sharing">Включить отправку местоположения</string>
     <string name="location_share_external">Открыть с помощью</string>
     <string name="location_not_available_dialog_content">${app_name} не смог получить доступ к вашему местоположению. Пожалуйста, повторите попытку позже.</string>
@@ -2387,7 +2387,7 @@
     <string name="labs_auto_report_uisi_desc">Ваша система будет автоматически отправлять журналы при возникновении ошибки невозможности расшифровки</string>
     <string name="labs_auto_report_uisi">Автоматически сообщать об ошибках расшифровки.</string>
     <string name="encryption_misconfigured">Шифрование неправильно настроено</string>
-    <string name="room_member_override_nick_color">Изменить цвет ника</string>
+    <string name="room_member_override_nick_color">Изменить цвет отображаемого имени</string>
     <string name="room_profile_section_restore_security">Восстановить шифрование</string>
     <string name="contact_admin_to_restore_encryption">Обратитесь к администратору, чтобы восстановить шифрование до рабочего состояния.</string>
     <string name="encryption_has_been_misconfigured">Шифрование настроено неправильно.</string>
@@ -2415,7 +2415,7 @@
     <string name="legals_no_policy_provided">Этот сервер не предоставляет никакой политики.</string>
     <string name="legals_third_party_notices">Сторонние библиотеки</string>
     <string name="legals_identity_server_title">Политика вашего сервера опознавания</string>
-    <string name="legals_home_server_title">Политика вашего домашнего сервера</string>
+    <string name="legals_home_server_title">Политика домашнего сервера</string>
     <string name="legals_application_title">Политика ${app_name}</string>
     <string name="analytics_opt_in_list_item_3">Вы можете отключить это в любое время в настройках</string>
     <string name="analytics_opt_in_list_item_2">Мы <b>не</b> передаем информацию третьим лицам</string>
@@ -2435,7 +2435,7 @@
     <string name="action_enable">Включить</string>
     <string name="notification_listening_for_notifications">Ожидание уведомлений</string>
     <string name="room_error_access_unauthorized">Вам не разрешено подключаться к этой комнате</string>
-    <string name="thread_list_empty_title">Организуйте обсуждение с помощью веток</string>
+    <string name="thread_list_empty_title">Организуйте обсуждения с помощью обсуждений</string>
     <string name="thread_list_modal_my_threads_subtitle">Показать все обсуждения, в которых вы участвуете</string>
     <string name="thread_list_modal_all_threads_title">Все обсуждения</string>
     <string name="action_view_threads">Посмотреть обсуждения</string>
@@ -2457,10 +2457,10 @@
     <string name="navigate_to_thread_when_already_in_the_thread">Вы уже просматриваете это обсуждение!</string>
     <string name="view_in_room">Просмотр в Комнате</string>
     <string name="reply_in_thread">Обсудить</string>
-    <string name="command_not_supported_in_threads">Команда «%s» распознается, но не поддерживается в обсуждениях.</string>
+    <string name="command_not_supported_in_threads">Команда «%s» распознаётся, но не поддерживается в обсуждениях.</string>
     <string name="search_thread_from_a_thread">Из обсуждения</string>
     <string name="thread_list_empty_notice">Совет: нажмите и удерживайте сообщение и используйте «%s».</string>
-    <string name="thread_list_empty_subtitle">Обсуждения помогают не терять нить беседы, и за ними легко следить.</string>
+    <string name="thread_list_empty_subtitle">Обсуждения помогают поддерживать и легко отслеживать тематику бесед.</string>
     <string name="thread_list_modal_my_threads_title">Мои обсуждения</string>
     <string name="thread_list_modal_all_threads_subtitle">Показать все обсуждения этой комнаты</string>
     <string name="thread_list_modal_title">Фильтр</string>
@@ -2489,10 +2489,10 @@
     <string name="ftue_personalize_lets_go">Поехали!</string>
     <string name="ftue_profile_picture_subtitle">Его можно изменить позже</string>
     <string name="ftue_profile_picture_title">Добавить аватар</string>
-    <string name="ftue_display_name_entry_footer">Его можно изменить позже</string>
+    <string name="ftue_display_name_entry_footer">Вы сможете изменить это позже</string>
     <string name="ftue_display_name_entry_title">Отображаемое имя</string>
     <string name="ftue_display_name_subtitle">Показывается, когда вы отправляете сообщения.</string>
-    <string name="ftue_display_name_title">Выберите имя для показа</string>
+    <string name="ftue_display_name_title">Выберите отображаемое имя</string>
     <string name="ftue_account_created_subtitle">Ваш аккаунт «%s» создан.</string>
     <string name="ftue_account_created_congratulations_title">Поздравляем!</string>
     <string name="ftue_account_created_take_me_home">Домой</string>
@@ -2513,24 +2513,24 @@
     <string name="action_disable">Отключить</string>
     <string name="initial_sync_request_reason_unignored_users">- Несколько пользователей больше не игнорируются</string>
     <string name="initial_sync_request_title">Начальный запрос на синхронизацию</string>
-    <string name="threads_beta_enable_notice_message">Обсуждения помогают не терять нить беседы, и за ними легко следить.%sВключение обсуждений обновит приложение. Может занять продолжительное время.</string>
-    <string name="live_location_sharing_notification_description">Отправка местоположения</string>
+    <string name="threads_beta_enable_notice_message">Обсуждения помогают поддерживать и легко отслеживать тематику бесед.%sВключение обсуждений обновит приложение. Может занять продолжительное время.</string>
+    <string name="live_location_sharing_notification_description">Идёт отправка местоположения</string>
     <string name="location_share_live_remaining_time">Осталось %1$s</string>
-    <string name="location_in_background_missing_permission_dialog_content" tools:ignore="UnusedResources">Если вы хотите поделиться своим актуальным местоположением, тогда ${app_name} должен иметь доступ к местоположению всё время, даже когда приложение находится в фоновом режиме.
+    <string name="location_in_background_missing_permission_dialog_content" tools:ignore="UnusedResources">Если вы хотите поделиться трансляцией местоположения, тогда ${app_name} должен иметь доступ к местоположению всё время, даже когда приложение находится в фоновом режиме.
 \nМы получим доступ к вашему местоположению только на то время, которое вы выберете.</string>
     <string name="live_location_bottom_sheet_last_updated_at">Обновлено %1$s назад</string>
     <string name="live_location_bottom_sheet_stop_sharing">Остановить трансляцию</string>
-    <string name="labs_enable_live_location">Включить трансляцию актуального местоположения</string>
+    <string name="labs_enable_live_location">Включить отправку трансляции местоположения</string>
     <string name="live_location_sharing_notification_title">${app_name} Трансляция местоположения</string>
     <string name="location_share_live_until">Транслировать до %1$s</string>
-    <string name="location_share_live_ended">Трансляция актуального местоположения окончена</string>
-    <string name="location_share_live_enabled">Актуальное местоположение включено</string>
+    <string name="location_share_live_ended">Трансляция местоположения окончена</string>
+    <string name="location_share_live_enabled">Трансляция местоположения включена</string>
     <string name="a11y_location_share_option_user_current_icon">Поделиться текущим местоположением</string>
-    <string name="location_share_live_started">Загрузка актуального местоположения…</string>
-    <string name="location_share_live_select_duration_title">Поделиться своим актуальным местоположением на</string>
-    <string name="a11y_location_share_option_user_live_icon">Поделиться актуальным местоположением</string>
-    <string name="sent_live_location">Поделились своим актуальным местоположением</string>
-    <string name="location_share_option_user_live">Поделиться актуальным местоположением</string>
+    <string name="location_share_live_started">Загрузка трансляции местоположения…</string>
+    <string name="location_share_live_select_duration_title">Поделиться трансляцией местоположения на</string>
+    <string name="a11y_location_share_option_user_live_icon">Поделиться трансляцией местоположения</string>
+    <string name="sent_live_location">Поделились трансляцией местоположения</string>
+    <string name="location_share_option_user_live">Поделиться трансляцией местоположения</string>
     <string name="space_explore_filter_no_result_description">Некоторые результаты могут быть скрыты, поскольку они являются приватными и для их просмотра необходимо приглашение.</string>
     <string name="time_unit_minute_short">мин</string>
     <string name="time_unit_hour_short">ч</string>
@@ -2547,12 +2547,12 @@
     <string name="a11y_location_share_option_pinned_icon">Поделиться этим местоположением</string>
     <string name="location_share_option_pinned">Поделиться этим местоположением</string>
     <string name="a11y_location_share_locate_button">Увеличить масштаб до текущего местоположения</string>
-    <string name="location_share_option_user_current">Поделиться своим текущим местоположением</string>
+    <string name="location_share_option_user_current">Поделиться текущим местоположением</string>
     <string name="a11y_location_share_pin_on_map">Закрепить выбранное место на карте</string>
     <string name="settings_show_latest_profile_description">Отображать последнюю информацию о профиле (аватар и отображаемое имя) для всех сообщений.</string>
     <string name="settings_show_latest_profile">Отображать последнюю информацию о пользователе</string>
     <string name="space_explore_filter_no_result_title">Не найдено</string>
-    <string name="a11y_presence_busy">Занято</string>
+    <string name="a11y_presence_busy">Занят</string>
     <string name="error_forbidden_digits_only_username">Домашний сервер не принимает имя пользователя, состоящее только из цифр.</string>
     <string name="ftue_personalize_skip_this_step">Пропустить этот шаг</string>
     <string name="ftue_personalize_submit">Сохранить и продолжить</string>
@@ -2570,4 +2570,16 @@
 \nГотовясь к этому, мы должны внести некоторые изменения: обсуждения, созданные до этого момента, будут отображаться как обычные ответы.
 \n
 \nЭто будет однократный переход, поскольку Обсуждения теперь являются частью спецификации Matrix.</string>
+    <string name="error_audio_message_unable_to_play">Невозможно воспроизвести %1$s</string>
+    <string name="a11y_pause_audio_message">Пауза %1$s</string>
+    <string name="a11y_play_audio_message">Играть %1$s</string>
+    <string name="audio_message_file_size">(%1$s)</string>
+    <string name="audio_message_reply_content">%1$s (%2$s)</string>
+    <string name="a11y_audio_playback_duration">%1$d минут %2$d секунд</string>
+    <string name="a11y_audio_message_item">%1$s, %2$s, %3$s</string>
+    <string name="space_leave_radio_button_none">Не выходить</string>
+    <string name="space_leave_radio_button_all">Выйти из всех</string>
+    <string name="settings_presence">Присутствие</string>
+    <string name="screen_sharing_notification_title">${app_name} Демонстрация экрана</string>
+    <string name="screen_sharing_notification_description">Идёт демонстрация экрана</string>
 </resources>
