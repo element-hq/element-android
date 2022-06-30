@@ -1,0 +1,1 @@
+Add `android:hasFragileUserData="true"` in the manifest
