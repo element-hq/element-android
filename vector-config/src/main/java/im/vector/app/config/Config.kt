@@ -38,6 +38,11 @@ object Config {
     const val ALLOW_EXTERNAL_UNIFIED_PUSH_DISTRIBUTORS = true
 
     /**
+     * The maximum length of voice messages in milliseconds.
+     */
+    const val VOICE_MESSAGE_LIMIT = 120_000L
+
+    /**
      * The analytics configuration to use for the Debug build type.
      * Can be disabled by providing Analytics.Disabled
      */

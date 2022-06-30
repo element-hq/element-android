@@ -47,6 +47,7 @@ import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.analytics.impl.DefaultVectorAnalytics
+import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageConfig
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.invite.CompileTimeAutoAcceptInvites
 import im.vector.app.features.navigation.DefaultNavigator
@@ -227,6 +228,11 @@ object VectorStaticModule {
 
     @Provides
     fun providesPhoneNumberUtil(): PhoneNumberUtil = PhoneNumberUtil.getInstance()
+
+    @Provides
+    fun providesVoiceMessageConfig() = VoiceMessageConfig(
+            lengthLimitMs = Config.VOICE_MESSAGE_LIMIT
+    )
 
     @Provides
     @Singleton
