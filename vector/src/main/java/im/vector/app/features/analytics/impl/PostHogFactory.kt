@@ -19,10 +19,10 @@ package im.vector.app.features.analytics.impl
 import android.content.Context
 import com.posthog.android.PostHog
 import im.vector.app.BuildConfig
-import im.vector.app.config.analyticsConfig
+import im.vector.app.features.analytics.AnalyticsConfig
 import javax.inject.Inject
 
-class PostHogFactory @Inject constructor(private val context: Context) {
+class PostHogFactory @Inject constructor(private val context: Context, private val analyticsConfig: AnalyticsConfig) {
 
     fun createPosthog(): PostHog {
         return PostHog.Builder(context, analyticsConfig.postHogApiKey, analyticsConfig.postHogHost)

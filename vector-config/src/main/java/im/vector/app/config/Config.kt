@@ -36,4 +36,61 @@ object Config {
      * - Changing the value from `true` to `false` will force the app to return to the background sync / Firebase Push.
      */
     const val ALLOW_EXTERNAL_UNIFIED_PUSH_DISTRIBUTORS = true
+
+    /**
+     * The analytics configuration to use for the Debug build type.
+     * Can be disabled by providing Analytics.Disabled
+     */
+    val DEBUG_ANALYTICS_CONFIG = Analytics.PostHog(
+            postHogHost = "https://posthog.element.dev",
+            postHogApiKey = "phc_VtA1L35nw3aeAtHIx1ayrGdzGkss7k1xINeXcoIQzXN",
+            policyLink = "https://element.io/cookie-policy",
+    )
+
+    /**
+     * The analytics configuration to use for the Release build type.
+     * Can be disabled by providing Analytics.Disabled
+     */
+    val RELEASE_ANALYTICS_CONFIG = Analytics.PostHog(
+            postHogHost = "https://posthog.hss.element.io",
+            postHogApiKey = "phc_Jzsm6DTm6V2705zeU5dcNvQDlonOR68XvX2sh1sEOHO",
+            policyLink = "https://element.io/cookie-policy",
+    )
+
+    /**
+     * The analytics configuration to use for the Nightly build type.
+     * Can be disabled by providing Analytics.Disabled
+     */
+    val NIGHTLY_ANALYTICS_CONFIG = RELEASE_ANALYTICS_CONFIG
+}
+
+/**
+ * The types of analytics Element currently supports
+ */
+sealed interface Analytics {
+
+    /**
+     * Disables the analytics integrations.
+     */
+    object Disabled : Analytics
+
+    /**
+     * Analytics integration via PostHog.
+     */
+    data class PostHog(
+            /**
+             * The PostHog instance url.
+             */
+            val postHogHost: String,
+
+            /**
+             * The PostHog instance API key.
+             */
+            val postHogApiKey: String,
+
+            /**
+             * A URL to more information about the analytics collection.
+             */
+            val policyLink: String,
+    ) : Analytics
 }

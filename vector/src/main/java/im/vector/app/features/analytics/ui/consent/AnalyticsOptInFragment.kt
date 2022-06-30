@@ -22,17 +22,17 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
 import im.vector.app.R
-import im.vector.app.config.analyticsConfig
 import im.vector.app.core.extensions.setTextWithColoredPart
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.databinding.FragmentAnalyticsOptinBinding
+import im.vector.app.features.analytics.AnalyticsConfig
 import javax.inject.Inject
 
-class AnalyticsOptInFragment @Inject constructor() :
-        VectorBaseFragment<FragmentAnalyticsOptinBinding>(),
-        OnBackPressed {
+class AnalyticsOptInFragment @Inject constructor(
+        private val analyticsConfig: AnalyticsConfig,
+) : VectorBaseFragment<FragmentAnalyticsOptinBinding>(), OnBackPressed {
 
     // Share the view model with the Activity so that the Activity
     // can decide what to do when the data has been saved
