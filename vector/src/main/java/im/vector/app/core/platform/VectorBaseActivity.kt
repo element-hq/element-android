@@ -63,6 +63,7 @@ import im.vector.app.core.extensions.restart
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.extensions.toMvRxBundle
+import im.vector.app.core.utils.SystemSettingsProviderImpl
 import im.vector.app.core.utils.ToolbarConfig
 import im.vector.app.core.utils.toast
 import im.vector.app.features.MainActivity
@@ -79,7 +80,8 @@ import im.vector.app.features.rageshake.BugReportActivity
 import im.vector.app.features.rageshake.BugReporter
 import im.vector.app.features.rageshake.RageShake
 import im.vector.app.features.session.SessionListener
-import im.vector.app.features.settings.FontScale
+import im.vector.app.features.settings.FontScalePreferences
+import im.vector.app.features.settings.FontScalePreferencesImpl
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.themes.ThemeUtils
@@ -150,6 +152,10 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
     @Inject
     lateinit var rageShake: RageShake
+
+    @Inject
+    lateinit var fontScalePreferences: FontScalePreferences
+
     lateinit var navigator: Navigator
         private set
     private lateinit var fragmentFactory: FragmentFactory
@@ -168,7 +174,8 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     private val restorables = ArrayList<Restorable>()
 
     override fun attachBaseContext(base: Context) {
-        val vectorConfiguration = VectorConfiguration(this)
+        val fontScalePreferences = FontScalePreferencesImpl(this, SystemSettingsProviderImpl(this))
+        val vectorConfiguration = VectorConfiguration(this, fontScalePreferences)
         super.attachBaseContext(vectorConfiguration.getLocalisedContext(base))
     }
 
@@ -253,7 +260,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
      * This method has to be called for the font size setting be supported correctly.
      */
     private fun applyFontSize() {
-        resources.configuration.fontScale = FontScale.getFontScaleValue(this).scale
+        resources.configuration.fontScale = fontScalePreferences.getResolvedFontScaleValue().scale
 
         @Suppress("DEPRECATION")
         resources.updateConfiguration(resources.configuration, resources.displayMetrics)

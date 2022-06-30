@@ -1261,6 +1261,10 @@
     <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
 
     <!-- text size selection -->
+    <string name="font_size_title">Choose font size</string>
+    <string name="font_size_section_auto">Set automatically</string>
+    <string name="font_size_section_manually">Choose manually</string>
+    <string name="font_size_use_system">Use system default</string>
     <string name="font_size">Font size</string>
     <string name="tiny">Tiny</string>
     <string name="small">Small</string>
