@@ -16,4 +16,7 @@
     <string name="settings_troubleshoot_test_battery_success">${app_name} is not affected by Battery Optimisation.</string>
     <string name="settings_troubleshoot_test_battery_title">Battery Optimisation</string>
     <string name="error_unauthorized">Unauthorised, missing valid authentication credentials</string>
+    <string name="command_description_rainbow_emote">Sends the given emote coloured as a rainbow</string>
+    <string name="command_description_rainbow">Sends the given message coloured as a rainbow</string>
+    <string name="settings_system_preferences_summary">Choose LED colour, vibration, sound…</string>
 </resources>

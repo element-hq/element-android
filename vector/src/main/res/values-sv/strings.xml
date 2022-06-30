@@ -1238,7 +1238,7 @@
     <string name="merged_events_expand">expandera</string>
     <string name="merged_events_collapse">kollapsa</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="passphrase_create_passphrase">Skapa lösenfras</string>
     <string name="passphrase_confirm_passphrase">Bekräfta lösenfras</string>
     <string name="passphrase_enter_passphrase">Skriv lösenfras</string>

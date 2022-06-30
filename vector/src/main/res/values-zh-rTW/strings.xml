@@ -608,7 +608,7 @@
     <string name="markdown_has_been_enabled">Markdown 已啟用。</string>
     <string name="markdown_has_been_disabled">Markdown 已停用。</string>
     <string name="generic_label_and_value">%1$s：%2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="settings_call_category">通話</string>
     <string name="settings_call_ringtone_use_app_ringtone">為來電使用預設的 ${app_name} 鈴聲</string>
     <string name="settings_call_ringtone_title">來電鈴聲</string>
@@ -1121,9 +1121,7 @@
     <string name="login_signup_submit">下一個</string>
     <string name="login_signup_error_user_in_use">使用者名稱已被使用</string>
     <string name="login_signup_cancel_confirmation_title">警告</string>
-    <string name="login_signup_cancel_confirmation_content">尚未建立您的帳號。
-\n
-\n停止註冊程序？</string>
+    <string name="login_signup_cancel_confirmation_content">尚未建立您的帳號。停止註冊流程？</string>
     <string name="login_a11y_choose_matrix_org">選取 matrix.org</string>
     <string name="login_a11y_choose_modular">選取 Element Matrix Services</string>
     <string name="login_a11y_choose_other">選取自訂的家伺服器</string>
