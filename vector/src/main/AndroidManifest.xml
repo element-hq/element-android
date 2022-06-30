@@ -415,9 +415,9 @@
 
         <!-- UnifiedPush -->
         <receiver
-            android:exported="true"
+            android:name=".core.pushers.VectorMessagingReceiver"
             android:enabled="true"
-            android:name=".core.pushers.VectorMessagingReceiver">
+            android:exported="true">
             <intent-filter>
                 <action android:name="org.unifiedpush.android.connector.MESSAGE" />
                 <action android:name="org.unifiedpush.android.connector.UNREGISTERED" />
