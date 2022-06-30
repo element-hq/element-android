@@ -149,6 +149,8 @@ class OnboardingViewModel @AssistedInject constructor(
             is OnboardingAction.LoginWithToken -> handleLoginWithToken(action)
             is OnboardingAction.WebLoginSuccess -> handleWebLoginSuccess(action)
             is OnboardingAction.ResetPassword -> handleResetPassword(action)
+            OnboardingAction.ResendResetPassword -> handleResendResetPassword()
+            is OnboardingAction.ConfirmNewPassword -> handleResetPasswordConfirmed(action)
             is OnboardingAction.ResetPasswordMailConfirmed -> handleResetPasswordMailConfirmed()
             is OnboardingAction.PostRegisterAction -> handleRegisterAction(action.registerAction)
             is OnboardingAction.ResetAction -> handleResetAction(action)
@@ -439,25 +441,9 @@ class OnboardingViewModel @AssistedInject constructor(
     }
 
     private fun handleResetPassword(action: OnboardingAction.ResetPassword) {
-        val safeLoginWizard = loginWizard
-        setState { copy(isLoading = true) }
-        currentJob = viewModelScope.launch {
-            runCatching { safeLoginWizard.resetPassword(action.email) }.fold(
-                    onSuccess = {
-                        val state = awaitState()
-                        setState {
-                            copy(
-                                    isLoading = false,
-                                    resetState = createResetState(action, state.selectedHomeserver)
-                            )
-                        }
-                        _viewEvents.post(OnboardingViewEvents.OnResetPasswordSendThreePidDone)
-                    },
-                    onFailure = {
-                        setState { copy(isLoading = false) }
-                        _viewEvents.post(OnboardingViewEvents.Failure(it))
-                    }
-            )
+        startResetPasswordFlow(action.email) {
+            setState { copy(isLoading = false, resetState = createResetState(action, selectedHomeserver)) }
+            _viewEvents.post(OnboardingViewEvents.OnResetPasswordEmailConfirmationSent(action.email))
         }
     }
 
@@ -466,6 +452,41 @@ class OnboardingViewModel @AssistedInject constructor(
             newPassword = action.newPassword,
             supportsLogoutAllDevices = selectedHomeserverState.isLogoutDevicesSupported
     )
+
+    private fun handleResendResetPassword() {
+        withState { state ->
+            val resetState = state.resetState
+            when (resetState.email) {
+                null -> _viewEvents.post(OnboardingViewEvents.Failure(IllegalStateException("Developer error - No reset email has been set")))
+                else -> {
+                    startResetPasswordFlow(resetState.email) {
+                        setState { copy(isLoading = false) }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun startResetPasswordFlow(email: String, onSuccess: suspend () -> Unit) {
+        val safeLoginWizard = loginWizard
+        setState { copy(isLoading = true) }
+        currentJob = viewModelScope.launch {
+            runCatching { safeLoginWizard.resetPassword(email) }.fold(
+                    onSuccess = { onSuccess.invoke() },
+                    onFailure = {
+                        setState { copy(isLoading = false) }
+                        _viewEvents.post(OnboardingViewEvents.Failure(it))
+                    }
+            )
+        }
+    }
+
+    private fun handleResetPasswordConfirmed(action: OnboardingAction.ConfirmNewPassword) {
+        setState { copy(isLoading = true) }
+        currentJob = viewModelScope.launch {
+            confirmPasswordReset(action.newPassword, action.signOutAllDevices)
+        }
+    }
 
     private fun handleResetPasswordMailConfirmed() {
         setState { copy(isLoading = true) }
@@ -476,25 +497,26 @@ class OnboardingViewModel @AssistedInject constructor(
                     setState { copy(isLoading = false) }
                     _viewEvents.post(OnboardingViewEvents.Failure(IllegalStateException("Developer error - No new password has been set")))
                 }
-                else -> {
-                    runCatching { loginWizard.resetPasswordMailConfirmed(newPassword) }.fold(
-                            onSuccess = {
-                                setState {
-                                    copy(
-                                            isLoading = false,
-                                            resetState = ResetState()
-                                    )
-                                }
-                                _viewEvents.post(OnboardingViewEvents.OnResetPasswordMailConfirmationSuccess)
-                            },
-                            onFailure = {
-                                setState { copy(isLoading = false) }
-                                _viewEvents.post(OnboardingViewEvents.Failure(it))
-                            }
-                    )
-                }
+                else -> confirmPasswordReset(newPassword, logoutAllDevices = true)
             }
         }
+    }
+
+    private suspend fun confirmPasswordReset(newPassword: String, logoutAllDevices: Boolean) {
+        runCatching { loginWizard.resetPasswordMailConfirmed(newPassword, logoutAllDevices = logoutAllDevices) }.fold(
+                onSuccess = {
+                    setState { copy(isLoading = false, resetState = ResetState()) }
+                    val nextEvent = when {
+                        vectorFeatures.isOnboardingCombinedLoginEnabled() -> OnboardingViewEvents.OnResetPasswordComplete
+                        else                                              -> OnboardingViewEvents.OpenResetPasswordComplete
+                    }
+                    _viewEvents.post(nextEvent)
+                },
+                onFailure = {
+                    setState { copy(isLoading = false) }
+                    _viewEvents.post(OnboardingViewEvents.Failure(it))
+                }
+        )
     }
 
     private fun handleDirectLogin(action: AuthenticateAction.LoginDirect, homeServerConnectionConfig: HomeServerConnectionConfig?) {
