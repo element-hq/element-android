@@ -21,15 +21,15 @@ import android.widget.CompoundButton
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
-import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
+import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setHorizontalPadding
 
 @EpoxyModelClass
-abstract class PolicyItem : EpoxyModelWithHolder<PolicyItem.Holder>() {
+abstract class PolicyItem : VectorEpoxyModel<PolicyItem.Holder>(R.layout.item_policy) {
     @EpoxyAttribute
     var checked: Boolean = false
 
@@ -47,8 +47,6 @@ abstract class PolicyItem : EpoxyModelWithHolder<PolicyItem.Holder>() {
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var clickListener: ClickListener? = null
-
-    override fun getDefaultLayout() = R.layout.item_policy
 
     override fun bind(holder: Holder) {
         super.bind(holder)
