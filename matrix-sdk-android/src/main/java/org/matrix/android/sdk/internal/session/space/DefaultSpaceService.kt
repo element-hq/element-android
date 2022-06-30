@@ -252,7 +252,7 @@ internal class DefaultSpaceService @Inject constructor(
             val powerLevelsEvent = stateEventDataSource.getStateEvent(
                     roomId = parentSpaceId,
                     eventType = EventType.STATE_ROOM_POWER_LEVELS,
-                    stateKey = QueryStringValue.NoCondition
+                    stateKey = QueryStringValue.IsEmpty
             )
             val powerLevelsContent = powerLevelsEvent?.content?.toModel<PowerLevelsContent>()
                     ?: throw UnsupportedOperationException("Cannot add canonical child, missing powerlevel")

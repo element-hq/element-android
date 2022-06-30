@@ -16,13 +16,15 @@
 
 package im.vector.app.test
 
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 
+private val testDispatcher = UnconfinedTestDispatcher()
+
 internal val testCoroutineDispatchers = MatrixCoroutineDispatchers(
-        io = Dispatchers.Main,
-        computation = Dispatchers.Main,
-        main = Dispatchers.Main,
-        crypto = Dispatchers.Main,
-        dmVerif = Dispatchers.Main
+        io = testDispatcher,
+        computation = testDispatcher,
+        main = testDispatcher,
+        crypto = testDispatcher,
+        dmVerif = testDispatcher
 )

@@ -492,11 +492,7 @@ class BugReporter @Inject constructor(
      */
     fun openBugReportScreen(activity: FragmentActivity, reportType: ReportType = ReportType.BUG_REPORT) {
         screenshot = takeScreenshot(activity)
-        activeSessionHolder.getSafeActiveSession()?.let {
-            it.logDbUsageInfo()
-            it.cryptoService().logDbUsageInfo()
-        }
-
+        matrix.debugService().logDbUsageInfo()
         activity.startActivity(BugReportActivity.intent(activity, reportType))
     }
 

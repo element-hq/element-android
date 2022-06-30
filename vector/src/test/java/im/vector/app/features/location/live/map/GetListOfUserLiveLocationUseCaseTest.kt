@@ -16,52 +16,48 @@
 
 package im.vector.app.features.location.live.map
 
-import androidx.lifecycle.asFlow
-import com.airbnb.mvrx.test.MvRxTestRule
 import im.vector.app.features.location.LocationData
+import im.vector.app.test.fakes.FakeFlowLiveDataConversions
 import im.vector.app.test.fakes.FakeSession
+import im.vector.app.test.fakes.givenAsFlowReturns
 import io.mockk.coEvery
-import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
-import io.mockk.unmockkStatic
+import io.mockk.unmockkAll
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.amshove.kluent.internal.assertEquals
+import org.amshove.kluent.shouldBeEqualTo
 import org.junit.After
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationShareAggregatedSummary
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
 import org.matrix.android.sdk.api.util.MatrixItem
 
+private const val A_ROOM_ID = "room_id"
+
 class GetListOfUserLiveLocationUseCaseTest {
 
-    @get:Rule
-    val mvRxTestRule = MvRxTestRule()
-
     private val fakeSession = FakeSession()
-
     private val viewStateMapper = mockk<UserLiveLocationViewStateMapper>()
+    private val fakeFlowLiveDataConversions = FakeFlowLiveDataConversions()
 
-    private val getListOfUserLiveLocationUseCase = GetListOfUserLiveLocationUseCase(fakeSession, viewStateMapper)
+    private val getListOfUserLiveLocationUseCase = GetListOfUserLiveLocationUseCase(
+            session = fakeSession,
+            userLiveLocationViewStateMapper = viewStateMapper
+    )
 
     @Before
     fun setUp() {
-        mockkStatic("androidx.lifecycle.FlowLiveDataConversions")
+        fakeFlowLiveDataConversions.setup()
     }
 
     @After
     fun tearDown() {
-        unmockkStatic("androidx.lifecycle.FlowLiveDataConversions")
+        unmockkAll()
     }
 
     @Test
     fun `given a room id then the correct flow of view states list is collected`() = runTest {
-        val roomId = "roomId"
-
         val summary1 = LiveLocationShareAggregatedSummary(
                 userId = "userId1",
                 isActive = true,
@@ -81,12 +77,11 @@ class GetListOfUserLiveLocationUseCaseTest {
                 lastLocationDataContent = MessageBeaconLocationDataContent()
         )
         val summaries = listOf(summary1, summary2, summary3)
-        val liveData = fakeSession.roomService()
-                .getRoom(roomId)
+        fakeSession.roomService()
+                .getRoom(A_ROOM_ID)
                 .locationSharingService()
-                .givenRunningLiveLocationShareSummaries(summaries)
-
-        every { liveData.asFlow() } returns flowOf(summaries)
+                .givenRunningLiveLocationShareSummariesReturns(summaries)
+                .givenAsFlowReturns(summaries)
 
         val viewState1 = UserLiveLocationViewState(
                 matrixItem = MatrixItem.UserItem(id = "@userId1:matrix.org", displayName = "User 1", avatarUrl = ""),
@@ -108,8 +103,8 @@ class GetListOfUserLiveLocationUseCaseTest {
         coEvery { viewStateMapper.map(summary2) } returns viewState2
         coEvery { viewStateMapper.map(summary3) } returns null
 
-        val viewStates = getListOfUserLiveLocationUseCase.execute(roomId).first()
+        val viewStates = getListOfUserLiveLocationUseCase.execute(A_ROOM_ID).first()
 
-        assertEquals(listOf(viewState1, viewState2), viewStates)
+        viewStates shouldBeEqualTo listOf(viewState1, viewState2)
     }
 }

@@ -397,6 +397,7 @@
     <string name="action_dismiss">Dismiss</string>
     <string name="action_reset">Reset</string>
     <string name="action_learn_more">Learn more</string>
+    <string name="action_next">Next</string>
 
     <string name="copied_to_clipboard">Copied to clipboard</string>
 
@@ -854,6 +855,10 @@
     <string name="settings_troubleshoot_test_token_registration_title">Token Registration</string>
     <string name="settings_troubleshoot_test_token_registration_success">FCM token successfully registered to homeserver.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">Failed to register FCM token to homeserver:\n%1$s</string>
+
+    <string name="settings_troubleshoot_test_endpoint_registration_title">Endpoint Registration</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">Endpoint successfully registered to homeserver.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">Failed to register endpoint token to homeserver:\n%1$s</string>
 
     <string name="settings_troubleshoot_test_push_loop_title">Test Push</string>
     <string name="settings_troubleshoot_test_push_loop_waiting_for_push">The application is waiting for the PUSH</string>
@@ -1652,6 +1657,7 @@
     <string name="push_gateway_item_device_name">session_name:</string>
     <string name="push_gateway_item_url">Url:</string>
     <string name="push_gateway_item_format">Format:</string>
+    <string name="push_gateway_item_profile_tag">Profile tag:</string>
 
     <string name="preference_voice_and_video">Voice &amp; Video</string>
     <string name="preference_root_help_about">Help &amp; About</string>
@@ -1664,6 +1670,8 @@
     <string name="preference_system_settings">System settings</string>
 
     <string name="settings_troubleshoot_test_token_registration_quick_fix">Register token</string>
+
+    <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">Reset notification method</string>
 
     <string name="send_suggestion">Make a suggestion</string>
     <string name="send_suggestion_content">Please write your suggestion below.</string>
@@ -2633,6 +2641,7 @@
     <string name="auth_pin_reset_title">Reset PIN</string>
     <string name="auth_pin_new_pin_action">New PIN</string>
     <string name="auth_pin_reset_content">To reset your PIN, you\'ll need to re-login and create a new one.</string>
+    <string name="auth_biometric_key_invalidated_message">Biometric authentication was disabled because a new biometric authentication method was recently added. You can enable it again in Settings.</string>
     <string name="settings_security_application_protection_title">Protect access</string>
     <string name="settings_security_application_protection_summary">Protect access using PIN and biometrics.</string>
     <string name="settings_security_application_protection_screen_title">Configure protection</string>
@@ -2642,6 +2651,7 @@
     <string name="settings_security_pin_code_use_biometrics_summary_on">Enable device specific biometrics, like fingerprints and face recognition.</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
     <string name="settings_security_pin_code_use_biometrics_summary_off">PIN code is the only way to unlock ${app_name}.</string>
+    <string name="settings_security_pin_code_use_biometrics_error">Could not enable biometric authentication.</string>
     <string name="settings_security_pin_code_notifications_title">Show content in notifications</string>
     <string name="settings_security_pin_code_notifications_summary_on">Show details like room names and message content.</string>
     <string name="settings_security_pin_code_notifications_summary_off">Only display number of unread messages in a simple notification.</string>
@@ -3010,19 +3020,9 @@
     <string name="location_share_live_select_duration_option_1">15 minutes</string>
     <string name="location_share_live_select_duration_option_2">1 hour</string>
     <string name="location_share_live_select_duration_option_3">8 hours</string>
-    <!--TODO delete-->
-    <string name="location_in_background_missing_permission_dialog_title" tools:ignore="UnusedResources">Allow access</string>
-    <!--TODO delete-->
-    <string name="location_in_background_missing_permission_dialog_content" xmlns:tools="http://schemas.android.com/tools" tools:ignore="UnusedResources">If you’d like to share your Live location, ${app_name} needs location access all the time when the app is in the background.\nWe will only access your location for the duration that you choose.</string>
     <string name="location_not_available_dialog_title">${app_name} could not access your location</string>
     <string name="location_not_available_dialog_content">${app_name} could not access your location. Please try again later.</string>
     <string name="location_share_external">Open with</string>
-    <!--TODO delete-->
-    <string name="settings_enable_location_sharing" tools:ignore="UnusedResources">Enable location sharing</string>
-    <!--TODO delete-->
-    <string name="settings_enable_location_sharing_summary" tools:ignore="UnusedResources">Once enabled you will be able to send your location to any room</string>
-    <!--TODO delete-->
-    <string name="labs_render_locations_in_timeline" tools:ignore="UnusedResources">Render user locations in the timeline</string>
     <string name="location_timeline_failed_to_load_map">Failed to load map</string>
     <string name="location_share_live_enabled">Live location enabled</string>
     <string name="location_share_live_started">Loading live location…</string>
@@ -3063,4 +3063,29 @@
     <!-- Screen sharing -->
     <string name="screen_sharing_notification_title">${app_name} Screen Sharing</string>
     <string name="screen_sharing_notification_description">Screen sharing is in progress</string>
+
+    <string name="unifiedpush_getdistributors_dialog_title">Choose how to receive notifications</string>
+    <string name="unifiedpush_distributor_fcm_fallback">Google Services</string>
+    <string name="unifiedpush_distributor_background_sync">Background synchronization</string>
+    <string name="settings_notification_method">Notification method</string>
+    <string name="settings_troubleshoot_test_distributors_title">Available methods</string>
+    <string name="settings_troubleshoot_test_distributors_gplay">No other method than Google Play Service found.</string>
+    <string name="settings_troubleshoot_test_distributors_fdroid">No other method than background synchronization found.</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="one">Found %d method.</item>
+        <item quantity="other">Found %d methods.</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_current_distributor_title">Method</string>
+    <string name="settings_troubleshoot_test_current_distributor">Currently using %s.</string>
+    <string name="settings_troubleshoot_test_current_endpoint_title">Endpoint</string>
+    <string name="settings_troubleshoot_test_current_endpoint_success">Current endpoint: %s</string>
+    <string name="settings_troubleshoot_test_current_endpoint_failed">Cannot find the endpoint.</string>
+    <string name="settings_troubleshoot_test_current_gateway_title">Gateway</string>
+    <string name="settings_troubleshoot_test_current_gateway">Current gateway: %s</string>
+
+    <!-- Live Location Sharing Labs Flag Promotional BottomSheet -->
+    <string name="live_location_labs_promotion_title">Live location sharing</string>
+    <string name="live_location_labs_promotion_description">Please note: this is a labs feature using a temporary implementation. This means you will not be able to delete your location history, and advanced users will be able to see your location history even after you stop sharing your live location with this room.</string>
+    <string name="live_location_labs_promotion_switch_title">Enable location sharing</string>
+
 </resources>

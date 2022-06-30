@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="lockscreen_key_button_theme" format="reference|integer"/>
+    <attr name="lockscreen_theme" format="reference|integer"/>
+    <attr name="lockscreen_fingerprint_button_theme" format="reference|integer"/>
+    <attr name="lockscreen_delete_button_theme" format="reference|integer"/>
+    <attr name="lockscreen_code_view_theme" format="reference|integer"/>
+    <attr name="lockscreen_title_theme" format="reference|integer"/>
+    <attr name="lockscreen_subtitle_theme" format="reference|integer"/>
+    <attr name="lockscreen_hint_theme" format="reference|integer"/>
+    <attr name="lockscreen_next_theme" format="reference|integer"/>
+</resources>

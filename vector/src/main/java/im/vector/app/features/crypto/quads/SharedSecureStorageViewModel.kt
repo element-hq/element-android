@@ -36,6 +36,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.securestorage.IntegrityResult
@@ -86,7 +87,8 @@ data class SharedSecureStorageViewState(
 class SharedSecureStorageViewModel @AssistedInject constructor(
         @Assisted private val initialState: SharedSecureStorageViewState,
         private val stringProvider: StringProvider,
-        private val session: Session
+        private val session: Session,
+        private val matrix: Matrix,
 ) :
         VectorViewModel<SharedSecureStorageViewState, SharedSecureStorageAction, SharedSecureStorageViewEvent>(initialState) {
 
@@ -249,7 +251,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                 _viewEvents.post(SharedSecureStorageViewEvent.HideModalLoading)
                 val safeForIntentCypher = ByteArrayOutputStream().also {
                     it.use {
-                        session.secureStorageService().securelyStoreObject(decryptedSecretMap as Map<String, String>, initialState.resultKeyStoreAlias, it)
+                        matrix.secureStorageService().securelyStoreObject(decryptedSecretMap as Map<String, String>, initialState.resultKeyStoreAlias, it)
                     }
                 }.toByteArray().toBase64NoPadding()
                 _viewEvents.post(SharedSecureStorageViewEvent.FinishSuccess(safeForIntentCypher))
@@ -345,7 +347,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                 _viewEvents.post(SharedSecureStorageViewEvent.HideModalLoading)
                 val safeForIntentCypher = ByteArrayOutputStream().also {
                     it.use {
-                        session.secureStorageService().securelyStoreObject(decryptedSecretMap as Map<String, String>, initialState.resultKeyStoreAlias, it)
+                        matrix.secureStorageService().securelyStoreObject(decryptedSecretMap as Map<String, String>, initialState.resultKeyStoreAlias, it)
                     }
                 }.toByteArray().toBase64NoPadding()
                 _viewEvents.post(SharedSecureStorageViewEvent.FinishSuccess(safeForIntentCypher))

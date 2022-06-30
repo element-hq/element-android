@@ -23,10 +23,11 @@ import io.mockk.mockk
 import org.matrix.android.sdk.api.session.Session
 
 class FakeActiveSessionHolder(
-        private val fakeSession: FakeSession = FakeSession()
+        val fakeSession: FakeSession = FakeSession()
 ) {
     val instance = mockk<ActiveSessionHolder> {
         every { getActiveSession() } returns fakeSession
+        every { getSafeActiveSession() } returns fakeSession
     }
 
     fun expectSetsActiveSession(session: Session) {

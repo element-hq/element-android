@@ -21,6 +21,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
+import org.matrix.android.sdk.api.query.QueryStateEventValue
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.SessionLifecycleObserver
@@ -71,7 +72,7 @@ internal class WidgetManager @Inject constructor(
 
     fun getRoomWidgetsLive(
             roomId: String,
-            widgetId: QueryStringValue = QueryStringValue.NoCondition,
+            widgetId: QueryStateEventValue,
             widgetTypes: Set<String>? = null,
             excludedTypes: Set<String>? = null
     ): LiveData<List<Widget>> {
@@ -88,7 +89,7 @@ internal class WidgetManager @Inject constructor(
 
     fun getRoomWidgets(
             roomId: String,
-            widgetId: QueryStringValue = QueryStringValue.NoCondition,
+            widgetId: QueryStateEventValue,
             widgetTypes: Set<String>? = null,
             excludedTypes: Set<String>? = null
     ): List<Widget> {
@@ -199,7 +200,7 @@ internal class WidgetManager @Inject constructor(
         val powerLevelsEvent = stateEventDataSource.getStateEvent(
                 roomId = roomId,
                 eventType = EventType.STATE_ROOM_POWER_LEVELS,
-                stateKey = QueryStringValue.NoCondition
+                stateKey = QueryStringValue.IsEmpty
         )
         val powerLevelsContent = powerLevelsEvent?.content?.toModel<PowerLevelsContent>() ?: return false
         return PowerLevelsHelper(powerLevelsContent).isUserAllowedToSend(userId, true, EventType.STATE_ROOM_WIDGET_LEGACY)

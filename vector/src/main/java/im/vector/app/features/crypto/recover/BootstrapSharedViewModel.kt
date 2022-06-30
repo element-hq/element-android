@@ -39,6 +39,7 @@ import im.vector.app.features.raw.wellknown.isSecureBackupRequired
 import im.vector.app.features.raw.wellknown.secureBackupMethod
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.UserPasswordAuth
@@ -70,6 +71,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
         private val rawService: RawService,
         private val bootstrapTask: BootstrapCrossSigningTask,
         private val migrationTask: BackupToQuadSMigrationTask,
+        private val matrix: Matrix,
 ) : VectorViewModel<BootstrapViewState, BootstrapActions, BootstrapViewEvents>(initialState) {
 
     private var doesKeyBackupExist: Boolean = false
@@ -274,7 +276,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                 uiaContinuation?.resume(DefaultBaseAuth(session = pendingAuth?.session ?: ""))
             }
             is BootstrapActions.PasswordAuthDone -> {
-                val decryptedPass = session.secureStorageService()
+                val decryptedPass = matrix.secureStorageService()
                         .loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
                 uiaContinuation?.resume(
                         UserPasswordAuth(

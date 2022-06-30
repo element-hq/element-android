@@ -174,7 +174,7 @@
                 android:layout_height="match_parent"
                 android:imeOptions="actionNext"
                 android:nextFocusForward="@id/createAccountPasswordInput"
-                android:inputType="text"
+                android:inputType="textNoSuggestions"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>

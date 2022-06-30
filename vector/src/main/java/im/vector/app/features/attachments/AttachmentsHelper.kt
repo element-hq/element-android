@@ -214,7 +214,7 @@ class AttachmentsHelper(val context: Context, val callback: Callback) : Restorab
                         it.toContentAttachmentData()
                     }
             )
-        } else if (type.startsWith("application") || type.startsWith("file") || type.startsWith("*")) {
+        } else if (type.startsWith("application") || type.startsWith("file") || type.startsWith("text") || type.startsWith("*")) {
             callback.onContentAttachmentsReady(
                     MultiPicker.get(MultiPicker.FILE).getIncomingFiles(context, intent).map {
                         it.toContentAttachmentData()

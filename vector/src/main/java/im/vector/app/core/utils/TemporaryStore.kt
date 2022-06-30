@@ -18,15 +18,14 @@ package im.vector.app.core.utils
 
 import java.util.Timer
 import java.util.TimerTask
-
-const val THREE_MINUTES = 3 * 60_000L
+import kotlin.time.Duration
 
 /**
  * Store an object T for a specific period of time.
  * @param T type of the data to store
- * @property delay delay to keep the data, in millis
+ * @property delay delay to keep the data
  */
-open class TemporaryStore<T>(private val delay: Long = THREE_MINUTES) {
+open class TemporaryStore<T>(private val delay: Duration) {
 
     private var timer: Timer? = null
 
@@ -40,7 +39,7 @@ open class TemporaryStore<T>(private val delay: Long = THREE_MINUTES) {
                         override fun run() {
                             field = null
                         }
-                    }, delay)
+                    }, delay.inWholeMilliseconds)
                 }
             }
         }

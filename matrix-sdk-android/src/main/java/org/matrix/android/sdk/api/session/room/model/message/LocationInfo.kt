@@ -22,7 +22,7 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class LocationInfo(
         /**
-         * Required. RFC5870 formatted geo uri 'geo:latitude,longitude;uncertainty' like 'geo:40.05,29.24;30' representing this location.
+         * Required. RFC5870 formatted geo uri 'geo:latitude,longitude;u=uncertainty' like 'geo:40.05,29.24;u=30' representing this location.
          */
         @Json(name = "uri") val geoUri: String? = null,
 

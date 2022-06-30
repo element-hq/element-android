@@ -46,7 +46,7 @@ private const val A_LOCATION_TIMESTAMP = 122L
 private const val A_LATITUDE = 40.05
 private const val A_LONGITUDE = 29.24
 private const val A_UNCERTAINTY = 30.0
-private const val A_GEO_URI = "geo:$A_LATITUDE,$A_LONGITUDE;$A_UNCERTAINTY"
+private const val A_GEO_URI = "geo:$A_LATITUDE,$A_LONGITUDE;u=$A_UNCERTAINTY"
 
 class UserLiveLocationViewStateMapperTest {
 

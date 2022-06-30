@@ -92,7 +92,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/layout_vertical_margin_big"
+        android:layout_marginTop="@dimen/layout_vertical_margin"
         android:gravity="end"
         android:orientation="horizontal">
 

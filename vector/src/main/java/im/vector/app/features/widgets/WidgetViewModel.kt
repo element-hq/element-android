@@ -111,7 +111,7 @@ class WidgetViewModel @AssistedInject constructor(
         if (room == null) {
             return
         }
-        room.flow().liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
+        room.flow().liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
                 .mapOptional { it.content.toModel<PowerLevelsContent>() }
                 .unwrap()
                 .map {

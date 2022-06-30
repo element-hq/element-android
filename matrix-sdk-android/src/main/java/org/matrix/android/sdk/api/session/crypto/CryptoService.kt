@@ -171,8 +171,6 @@ interface CryptoService {
     fun getSharedWithInfo(roomId: String?, sessionId: String): MXUsersDevicesMap<Int>
     fun getWithHeldMegolmSession(roomId: String, sessionId: String): RoomKeyWithHeldContent?
 
-    fun logDbUsageInfo()
-
     /**
      * Perform any background tasks that can be done before a message is ready to
      * send, in order to speed up sending of the message.
