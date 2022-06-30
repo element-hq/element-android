@@ -107,7 +107,7 @@ class PollItemViewStateFactory @Inject constructor(
     ): PollViewState {
         return PollViewState(
                 question = question,
-                totalVotes = "",
+                totalVotes = stringProvider.getString(R.string.poll_undisclosed_not_ended),
                 canVote = true,
                 optionViewStates = pollCreationInfo?.answers?.map { answer ->
                     val isMyVote = pollResponseSummary?.myVote == answer.id

@@ -143,7 +143,7 @@ class PollItemViewStateFactoryTest {
 
         pollViewState shouldBeEqualTo PollViewState(
                 question = A_POLL_CONTENT.getBestPollCreationInfo()?.question?.getBestQuestion() ?: "",
-                totalVotes = "",
+                totalVotes = stringProvider.instance.getString(R.string.poll_undisclosed_not_ended),
                 canVote = true,
                 optionViewStates = A_POLL_CONTENT.getBestPollCreationInfo()?.answers?.map { answer ->
                     PollOptionViewState.PollUndisclosed(
