@@ -208,6 +208,9 @@ object VectorStaticModule {
     }
 
     @Provides
+    fun providesPhoneNumberUtil(): PhoneNumberUtil = PhoneNumberUtil.getInstance()
+
+    @Provides
     fun providesAnalyticsConfig(): AnalyticsConfig {
         val config: Analytics = when (BuildConfig.BUILD_TYPE) {
             "debug" -> Config.DEBUG_ANALYTICS_CONFIG
@@ -225,9 +228,6 @@ object VectorStaticModule {
             )
         }
     }
-
-    @Provides
-    fun providesPhoneNumberUtil(): PhoneNumberUtil = PhoneNumberUtil.getInstance()
 
     @Provides
     fun providesVoiceMessageConfig() = VoiceMessageConfig(

@@ -43,6 +43,11 @@ object Config {
     const val VOICE_MESSAGE_LIMIT_MS = 120_000L
 
     /**
+     * The strategy for sharing device keys
+     */
+    val KEY_SHARING_STRATEGY = KeySharingStrategy.WhenTyping
+
+    /**
      * The onboarding flow
      */
     val ONBOARDING_VARIANT = OnboardingVariant.FTUE_AUTH
@@ -110,4 +115,22 @@ enum class OnboardingVariant {
     LEGACY,
     LOGIN_2,
     FTUE_AUTH
+}
+
+enum class KeySharingStrategy {
+    /**
+     * Keys will be sent for the first time when the first message is sent.
+     * This is handled by the Matrix SDK so there's no need to do it in Vector.
+     */
+    WhenSendingEvent,
+
+    /**
+     * Keys will be sent for the first time when the timeline displayed.
+     */
+    WhenEnteringRoom,
+
+    /**
+     * Keys will be sent for the first time when a typing started.
+     */
+    WhenTyping
 }
