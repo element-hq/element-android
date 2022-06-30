@@ -563,7 +563,7 @@
     <string name="merged_events_expand">Rozbaliť</string>
     <string name="merged_events_collapse">Zbaliť</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="action_accept">Prijať</string>
     <string name="auth_accept_policies">Prosím prečítajte si a odsúhlaste zmluvné podmienky tohoto domovského servera:</string>
     <string name="settings_call_category">Hovory</string>
