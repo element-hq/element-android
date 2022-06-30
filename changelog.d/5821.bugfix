@@ -1,1 +1,0 @@
-Fixes concurrent modification crash when signing out or launching the app
