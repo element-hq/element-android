@@ -50,6 +50,7 @@
     <string name="ftue_auth_email_verification_footer">Did not receive an email?</string>
     <string name="ftue_auth_email_resend_email">Resend email</string>
     <string name="ftue_auth_forgot_password">Forgot password</string>
+    <string name="ftue_auth_password_reset_confirmation">Password reset</string>
 
     <string name="location_map_view_copyright" translatable="false">© MapTiler © OpenStreetMap contributors</string>
 </resources>

@@ -20,6 +20,7 @@ import android.content.Intent
 import android.os.Parcelable
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.core.view.children
 import androidx.core.view.isVisible
@@ -191,6 +192,7 @@ class FtueAuthVariant(
                 addLoginStageFragmentToBackstack(FtueAuthResetPasswordSuccessFragment::class.java)
             }
             OnboardingViewEvents.OnResetPasswordComplete -> {
+                Toast.makeText(activity, R.string.ftue_auth_password_reset_confirmation, Toast.LENGTH_SHORT).show()
                 activity.popBackstack()
             }
             is OnboardingViewEvents.OnSendEmailSuccess -> {
