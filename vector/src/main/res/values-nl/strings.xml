@@ -2333,9 +2333,6 @@
     <string name="ftue_auth_carousel_encrypted_title">Veilig berichtenverkeer.</string>
     <string name="ftue_auth_carousel_control_title">U heeft de controle.</string>
     <string name="tooltip_attachment_location">Deel locatie</string>
-    <string name="labs_render_locations_in_timeline">Persoonslocaties in de tijdlijn weergeven</string>
-    <string name="settings_enable_location_sharing_summary">Eenmaal ingeschakeld, kun je je locatie naar elke kamer sturen</string>
-    <string name="settings_enable_location_sharing">Locatie delen inschakelen</string>
     <string name="location_share_external">Open met</string>
     <string name="location_not_available_dialog_content">${app_name} kan geen toegang krijgen tot uw locatie. Probeer het later opnieuw.</string>
     <string name="location_not_available_dialog_title">${app_name} heeft geen toegang tot uw locatie</string>
@@ -2407,9 +2404,6 @@
     <string name="live_location_sharing_notification_title">${app_name} Live locatie</string>
     <string name="location_share_live_stop">Stop</string>
     <string name="location_share_live_enabled">Live locatie ingeschakeld</string>
-    <string name="location_in_background_missing_permission_dialog_content">Als u de Live-locatie wilt delen, heeft ${app_name} altijd locatietoegang nodig als de app op de achtergrond actief is.
-\nWe hebben alleen toegang tot uw locatie voor de duur die u kiest.</string>
-    <string name="location_in_background_missing_permission_dialog_title">Toegang te verlenen</string>
     <string name="a11y_location_share_option_pinned_icon">Deel deze locatie</string>
     <string name="location_share_option_pinned">Deel deze locatie</string>
     <string name="a11y_location_share_option_user_live_icon">Live locatie delen</string>

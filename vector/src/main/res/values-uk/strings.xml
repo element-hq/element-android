@@ -2421,9 +2421,6 @@
     <string name="ftue_auth_carousel_control_title">Ви контролюєте все.</string>
     <string name="ftue_auth_carousel_secure_title">Володійте своїми розмовами.</string>
     <string name="tooltip_attachment_location">Поділитися місцеперебуванням</string>
-    <string name="labs_render_locations_in_timeline">Зображувати місцеперебування користувача у стрічці</string>
-    <string name="settings_enable_location_sharing_summary">Після увімкнення ви зможете надіслати своє місцеперебування до будь-якої кімнати</string>
-    <string name="settings_enable_location_sharing">Увімкнути надсилання місцеперебування</string>
     <string name="location_share_external">Відкрити за допомогою</string>
     <string name="location_not_available_dialog_content">${app_name} не може отримати доступ до вашого місцеперебування. Спробуйте пізніше.</string>
     <string name="location_not_available_dialog_title">${app_name} не може отримати доступ до вашого місцеперебування</string>
@@ -2502,9 +2499,6 @@
     <string name="room_notification_two_users_are_typing">%1$s і %2$s</string>
     <string name="location_share_live_stop">Зупинити</string>
     <string name="location_share_live_enabled">Місцеперебування поширюється наживо</string>
-    <string name="location_in_background_missing_permission_dialog_content">Якщо бажаєте поширювати місцеперебування наживо, ${app_name} потребує доступу до місцеперебування протягом усієї фонової роботи застосунку.
-\nМи отримуватимемо ваше місцеперебування лише протягом обраного вами терміну.</string>
-    <string name="location_in_background_missing_permission_dialog_title">Дозвольте доступ</string>
     <string name="a11y_location_share_option_pinned_icon">Поширити ці координати</string>
     <string name="location_share_option_pinned">Поширити ці координати</string>
     <string name="a11y_location_share_pin_on_map">Маркер обраних координат на карті</string>

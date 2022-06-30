@@ -2333,9 +2333,6 @@
     <string name="ftue_auth_carousel_control_title">Você está em controle.</string>
     <string name="ftue_auth_carousel_secure_title">Tenha posse de suas conversas.</string>
     <string name="tooltip_attachment_location">Compartilhar localização</string>
-    <string name="labs_render_locations_in_timeline">Render localizações de usuária(o) na timeline</string>
-    <string name="settings_enable_location_sharing_summary">Uma vez habilitado você vai ser capaz de enviar sua localização a qualquer sala</string>
-    <string name="settings_enable_location_sharing">Habilitar compartilhamento de localização</string>
     <string name="location_share_external">Abrir com</string>
     <string name="location_not_available_dialog_content">${app_name} não pôde acessar sua localização. Por favor tente de novo mais tarde.</string>
     <string name="location_not_available_dialog_title">${app_name} não pôde acessar sua localização</string>
@@ -2409,8 +2406,6 @@
     <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s e outras(os)</string>
     <string name="room_notification_two_users_are_typing">%1$s e %2$s</string>
     <string name="location_share_live_enabled">Localização ao vivo habilitada</string>
-    <string name="location_in_background_missing_permission_dialog_content">Se você gostaria de compartilhar sua localização Ao Vivo, ${app_name} precisa de acesso de localização todo o tempo quando o app está no background.
-\nNós vamos somente acessar sua localização pela duração que você escolher.</string>
     <string name="a11y_location_share_option_pinned_icon">Compartilhar esta localização</string>
     <string name="location_share_option_pinned">Compartilhar esta localização</string>
     <string name="a11y_location_share_option_user_live_icon">Compartilhar localização ao vivo</string>
@@ -2420,7 +2415,6 @@
     <string name="a11y_location_share_locate_button">Zoom para localização atual</string>
     <string name="a11y_location_share_pin_on_map">Pin de localização selecionada em mapa</string>
     <string name="location_share_live_stop">Parar</string>
-    <string name="location_in_background_missing_permission_dialog_title">Permitir acesso</string>
     <string name="threads_notice_migration_message">Nós estamos ficando mais perto de lançar uma Beta pública para Threads.
 \n
 \nEnquanto nos preparamos para isso, nós precisamos fazer algumas mudanças: threads criadas antes deste ponto vão ser exibidas como respostas regulares.

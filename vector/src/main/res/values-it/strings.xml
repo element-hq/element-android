@@ -2324,9 +2324,6 @@
     <string name="ftue_auth_carousel_control_title">Tu hai il controllo.</string>
     <string name="ftue_auth_carousel_secure_title">Prendi il controllo delle tue conversazioni.</string>
     <string name="tooltip_attachment_location">Condividi posizione</string>
-    <string name="labs_render_locations_in_timeline">Mostra le posizioni dell\'utente nella linea temporale</string>
-    <string name="settings_enable_location_sharing_summary">Una volta attivata, potrai inviare la tua posizione in qualsiasi stanza</string>
-    <string name="settings_enable_location_sharing">Attiva condivisione posizione</string>
     <string name="location_share_external">Apri con</string>
     <string name="location_not_available_dialog_content">${app_name} non ha potuto rilevare la tua posizione. Riprova più tardi.</string>
     <string name="location_not_available_dialog_title">${app_name} non ha potuto rilevare la tua posizione</string>
@@ -2401,9 +2398,6 @@
     <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s e altri</string>
     <string name="location_share_live_stop">Ferma</string>
     <string name="location_share_live_enabled">Posizione in tempo reale attivata</string>
-    <string name="location_in_background_missing_permission_dialog_content">Se vuoi condividere la tua posizione in tempo reale, ${app_name} richiede l\'accesso alla posizione costantemente quando l\'app è in secondo piano.
-\nAccederemo alla tua posizione solo per la durata che scegli.</string>
-    <string name="location_in_background_missing_permission_dialog_title">Permetti accesso</string>
     <string name="a11y_location_share_option_pinned_icon">Condividi questa posizione</string>
     <string name="location_share_option_pinned">Condividi questa posizione</string>
     <string name="a11y_location_share_option_user_live_icon">Condividi posizione in tempo reale</string>

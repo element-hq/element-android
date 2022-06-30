@@ -2333,9 +2333,6 @@
     <string name="ftue_auth_carousel_control_title">Sul on kontroll oma andmete üle.</string>
     <string name="ftue_auth_carousel_secure_title">Vestlused, mida sa tegelikult ka omad.</string>
     <string name="tooltip_attachment_location">Jaga asukohta</string>
-    <string name="labs_render_locations_in_timeline">Kuva ajajoonel kasutaja asukohti</string>
-    <string name="settings_enable_location_sharing_summary">Kui see seadistus on kasutusel, siis sa saad oma asukohta jagada igas jututoas</string>
-    <string name="settings_enable_location_sharing">Luba asukohta jagada</string>
     <string name="location_share_external">Ava muu rakendusega</string>
     <string name="location_not_available_dialog_content">${app_name} ei saanud asukohta tuvastada. Palun proovi hiljem uuesti.</string>
     <string name="location_not_available_dialog_title">${app_name} ei saanud asukohta tuvastada</string>
@@ -2410,9 +2407,6 @@
     <string name="room_notification_two_users_are_typing">%1$s ja %2$s</string>
     <string name="location_share_live_stop">Lõpeta asukoha jagamine</string>
     <string name="location_share_live_enabled">Reaalajas asukoha jagamine on kasutusel</string>
-    <string name="location_in_background_missing_permission_dialog_content">Kui sa soovid reaalajas oma asukohta jagada, siis ${app_name} vajab alati õigus asukohta tuvastada. Seda ka siis kui rakendus töötab taustal.
-\nLigipääs asukohale on saadaval vaid sinu valitud ajavahemiku vältel.</string>
-    <string name="location_in_background_missing_permission_dialog_title">Luba ligipääs asukohale</string>
     <string name="a11y_location_share_option_pinned_icon">Jaga seda asukohta</string>
     <string name="location_share_option_pinned">Jaga seda asukohta</string>
     <string name="a11y_location_share_option_user_live_icon">Jaga asukohta reaalajas</string>

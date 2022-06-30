@@ -845,7 +845,6 @@
     <string name="disconnect_identity_server">Aftengja auðkennisþjón</string>
     <string name="send_feedback_space_title">Umsagnir um svæði</string>
     <string name="settings_show_redacted_summary">Birta frátökutákn fyrir fjarlægð skilaboð</string>
-    <string name="settings_enable_location_sharing_summary">Eftir að þetta hefur verið virkjað, muntu geta sent staðsetninguna þína á hvaða spjallrás sem er</string>
     <string name="closed_poll_option_description">Niðurstöður birtast einungis eftir að þú hefur lokað könnuninni</string>
     <string name="open_poll_option_description">Kjósendur sjá niðurstöðurnar þegar þeir hafa kosið</string>
     <plurals name="poll_total_vote_count_after_ended">
@@ -868,8 +867,6 @@
     </plurals>
     <string name="message_bubbles">Birta skilaboðablöðrur</string>
     <string name="location_timeline_failed_to_load_map">Mistókst að hlaða inn landakorti</string>
-    <string name="labs_render_locations_in_timeline">Myndgera staðsetningu notenda á tímalínunni</string>
-    <string name="settings_enable_location_sharing">Virkja deilingu staðsetninga</string>
     <string name="location_not_available_dialog_content">${app_name} gat ekki fengið staðsetninguna þína. Reyndu aftur síðar.</string>
     <string name="location_not_available_dialog_title">${app_name} gat ekki fengið staðsetninguna þína</string>
     <string name="closed_poll_option_title">Lokuð könnun</string>
@@ -1567,7 +1564,6 @@
     <string name="a11y_create_menu_close">Loka valmyndinni til að útbúa spjallrás…</string>
     <string name="location_share_live_stop">Stöðva</string>
     <string name="location_share_live_enabled">Staðsetning í rauntíma virkjuð</string>
-    <string name="location_in_background_missing_permission_dialog_title">Leyfa aðgang</string>
     <string name="a11y_location_share_option_pinned_icon">Deila þessari staðsetningu</string>
     <string name="location_share_option_pinned">Deila þessari staðsetningu</string>
     <string name="a11y_location_share_option_user_live_icon">Deila staðsetningu í rauntíma</string>

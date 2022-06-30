@@ -2089,13 +2089,9 @@
     <string name="location_share_live_started">Carregant ubicació en directe…</string>
     <string name="location_share_live_enabled">Compartició d\'ubicació en directe activada</string>
     <string name="location_timeline_failed_to_load_map">No s\'ha pogut carregar el mapa</string>
-    <string name="labs_render_locations_in_timeline">Mostra les ubicacions dels usuaris a la cronologia</string>
-    <string name="settings_enable_location_sharing_summary">Si està activat, podràs enviar la teva ubicació a qualsevol sala</string>
-    <string name="settings_enable_location_sharing">Activa la compartició d\'ubicació</string>
     <string name="location_share_external">Obre amb</string>
     <string name="location_not_available_dialog_content">${app_name} no ha pogut accedir a la teva ubicació. Torna-ho a provar més tard.</string>
     <string name="location_not_available_dialog_title">${app_name} no ha pogut accedir a la teva ubicació</string>
-    <string name="location_in_background_missing_permission_dialog_title">Permet l\'accés</string>
     <string name="location_share_live_select_duration_option_3">8 hores</string>
     <string name="location_share_live_select_duration_option_2">1 hora</string>
     <string name="location_share_live_select_duration_option_1">15 minuts</string>
@@ -2137,8 +2133,6 @@
     <string name="room_settings_room_access_restricted_description">Qualsevol a un espai amb aquesta sala podrà trobar-la i unir-s\'hi. Només els administradors d\'aquesta sala poden afegir-la a un espai.</string>
     <string name="upgrade_room_for_restricted">Qualsevol a·%s podrà trobar i unir-se a aquesta sala; no caldrà convidar tothom manualment. Podràs canviar-ho a la configuració de sala en qualsevol moment.</string>
     <string name="upgrade_room_for_restricted_no_param">Qualsevol persona d\'un espai principal podrà trobar i unir-se a aquesta sala; no caldrà convidar tothom manualment. Podràs canviar-ho a la configuració de sala en qualsevol moment.</string>
-    <string name="location_in_background_missing_permission_dialog_content">Per compartir la teva ubicació en directe, ${app_name} necessita accedir a la teva ubicació mentre l\'aplicació està en segon pla.
-\nNomés s\'accedirà a la teva ubicació durant el temps que escullis.</string>
     <string name="command_description_ignore_user">Ignora un usuari i amaga els seus missatges</string>
     <string name="space_you_know_that_contains_this_room">Espai que saps que conté aquesta sala</string>
     <string name="decide_which_spaces_can_access">Tria quins espais poden accedir a aquesta sala. Si se selecciona un espai, els seus membres podran trobar i unir-se a la sala.</string>

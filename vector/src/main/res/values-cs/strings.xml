@@ -2378,9 +2378,6 @@
     <string name="ftue_auth_carousel_control_title">Máte vše pod kontrolou.</string>
     <string name="ftue_auth_carousel_secure_title">Vlastněte své konverzace.</string>
     <string name="tooltip_attachment_location">Sdílet polohu</string>
-    <string name="labs_render_locations_in_timeline">Zobrazit polohy uživatele na časové ose</string>
-    <string name="settings_enable_location_sharing_summary">Po zapnutí budete moci odeslat svou polohu do libovolné místnosti</string>
-    <string name="settings_enable_location_sharing">Povolit sdílení polohy</string>
     <string name="location_share_external">Otevřít v</string>
     <string name="location_not_available_dialog_content">${app_name} nemohl získat přístup k vaší poloze. Zkuste to prosím později.</string>
     <string name="location_not_available_dialog_title">${app_name} nemohl získat přístup k vaší poloze</string>
@@ -2457,9 +2454,6 @@
     <string name="room_notification_two_users_are_typing">%1$s a %2$s</string>
     <string name="location_share_live_stop">Zastavit</string>
     <string name="location_share_live_enabled">Poloha živě povolena</string>
-    <string name="location_in_background_missing_permission_dialog_content">Pokud chcete sdílet svou polohu živě, ${název_aplikace} potřebuje přístup k poloze po celou dobu, kdy je aplikace na pozadí.
-\nK vaší poloze budeme mít přístup pouze po dobu, kterou si zvolíte.</string>
-    <string name="location_in_background_missing_permission_dialog_title">Povolit přístup</string>
     <string name="a11y_location_share_option_pinned_icon">Sdílet tuto polohu</string>
     <string name="location_share_option_pinned">Sdílet tuto polohu</string>
     <string name="a11y_location_share_option_user_live_icon">Sdílet polohu živě</string>

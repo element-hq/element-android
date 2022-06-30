@@ -2335,9 +2335,6 @@
     <string name="ftue_auth_carousel_control_body">Choisissez où vos conversations sont stockées, vous avez le contrôle et êtes indépendant. Connecté via Matrix.</string>
     <string name="room_unsupported_e2e_algorithm">Le chiffrement a été mal configuré ce qui vous empêche d’envoyer des messages. Veuillez contacter un administrateur pour remettre le chiffrement en état de marche.</string>
     <string name="tooltip_attachment_location">Partager la localisation</string>
-    <string name="labs_render_locations_in_timeline">Afficher les localisations de l\'utilisateur dans le temps</string>
-    <string name="settings_enable_location_sharing_summary">Une fois activé il vous sera possible d\'envoyer votre localisation dans n\'importe quel salon</string>
-    <string name="settings_enable_location_sharing">Activer le partage de localisation</string>
     <string name="location_share_external">Ouvrir avec</string>
     <string name="location_not_available_dialog_content">${app_name} n\'a pas pu accéder à votre localisation. Veuillez réessayer plus tard.</string>
     <string name="location_not_available_dialog_title">${app_name} n\'a pas pu accéder à votre localisation</string>
@@ -2412,9 +2409,6 @@
     <string name="live_location_sharing_notification_title">Position en temps réel de ${app_name}</string>
     <string name="location_share_live_stop">Arrêter</string>
     <string name="location_share_live_enabled">Position en temps réel activée</string>
-    <string name="location_in_background_missing_permission_dialog_content">Si vous souhaitez partager votre position en temps réel, ${app_name} a besoin de l’autorisation d’accès permanent à la position quand l’application est en arrière-plan.
-\nNous accèderons à votre position seulement pendant la durée que vous définissez.</string>
-    <string name="location_in_background_missing_permission_dialog_title">Autoriser l’accès</string>
     <string name="a11y_location_share_option_pinned_icon">Partager cet emplacement</string>
     <string name="location_share_option_pinned">Partager cet emplacement</string>
     <string name="a11y_location_share_option_user_live_icon">Partager la position en temps réel</string>

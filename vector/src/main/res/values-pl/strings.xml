@@ -2501,15 +2501,9 @@
     <string name="location_share_live_stop">Zatrzymaj</string>
     <string name="location_share_live_enabled">Włączona lokalizacja na żywo</string>
     <string name="location_timeline_failed_to_load_map">Nie udało się wczytać mapy</string>
-    <string name="labs_render_locations_in_timeline">Renderuj lokalizacje użytkowników na osi czasu</string>
-    <string name="settings_enable_location_sharing_summary">Po włączeniu będziesz mógł wysłać swoją lokalizację do dowolnego pokoju</string>
-    <string name="settings_enable_location_sharing">Włącz udostępnianie lokalizacji</string>
     <string name="location_share_external">Otwórz za pomocą</string>
     <string name="location_not_available_dialog_content">${app_name} nie może uzyskać dostępu do Twojej lokalizacji. Spróbuj ponownie później.</string>
     <string name="location_not_available_dialog_title">${app_name} nie może uzyskać dostępu do Twojej lokalizacji</string>
-    <string name="location_in_background_missing_permission_dialog_content">Jeśli chcesz udostępniać swoją lokalizację na żywo, ${app_name} potrzebuje dostępu do lokalizacji przez cały czas, gdy aplikacja działa w tle.
-\n Będziemy mieć dostęp do Twojej lokalizacji tylko przez wybrany przez Ciebie okres.</string>
-    <string name="location_in_background_missing_permission_dialog_title">Zgoda na dostęp</string>
     <string name="a11y_location_share_option_pinned_icon">Udostępnij tę lokalizację</string>
     <string name="location_share_option_pinned">Udostępnij tę lokalizację</string>
     <string name="a11y_location_share_option_user_live_icon">Udostępnij lokalizację na żywo</string>

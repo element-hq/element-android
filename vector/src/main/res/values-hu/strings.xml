@@ -2333,9 +2333,6 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="ftue_auth_carousel_encrypted_title">Biztonságos üzenetküldés.</string>
     <string name="ftue_auth_carousel_control_title">Te irányítasz.</string>
     <string name="tooltip_attachment_location">Tartózkodási hely megosztása</string>
-    <string name="labs_render_locations_in_timeline">A felhasználó földrajzi helyzetének megjelenítése az idővonalon</string>
-    <string name="settings_enable_location_sharing_summary">A beállítás után bármelyik szobában megoszthatod a földrajzi helyzetedet</string>
-    <string name="settings_enable_location_sharing">Földrajzi hely megosztás engedélyezése</string>
     <string name="location_share_external">Megnyitás ezzel</string>
     <string name="location_not_available_dialog_content">Az ${app_name} nem fér hozzá a tartózkodási helyedhez. Próbáld újra később.</string>
     <string name="location_not_available_dialog_title">Az ${app_name} nem tudott hozzáférni a tartózkodási helyedhez</string>
@@ -2408,8 +2405,6 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     </plurals>
     <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s és mások</string>
     <string name="room_notification_two_users_are_typing">%1$s és %2$s</string>
-    <string name="location_in_background_missing_permission_dialog_content">Ha folyamatosan meg akarod osztani a földrajzi pozíciódat ahhoz a(z) ${app_name} alkalmazásnak hozzá kell férnie a helyadatokhoz akkor is ha a háttérben fut.
-\nCsak az általad megadott idő intervallumban férünk hozzá a helyadatokhoz.</string>
     <string name="threads_notice_migration_message">Egyre közelebb kerülünk ahhoz, hogy publikus béta állapotba kerüljenek az üzenetszálak.
 \n
 \nAz előkészületekkel be kell vezetnünk pár változtatást: az eddig a pontig készített üzenetszálak hagyományos válaszokként fognak megjelenni.
@@ -2417,7 +2412,6 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 \nEz egy egyszeri változtatás ahogy az üzenetszálak ezentúl a Matrix specifikáció részét képezik.</string>
     <string name="location_share_live_stop">Állj</string>
     <string name="location_share_live_enabled">Folyamatos pozíció megosztás engedélyezve</string>
-    <string name="location_in_background_missing_permission_dialog_title">Hozzáférés engedélyezése</string>
     <string name="a11y_location_share_option_pinned_icon">Ennek a földrajzi helynek a megosztása</string>
     <string name="location_share_option_pinned">Ennek a földrajzi helynek a megosztása</string>
     <string name="a11y_location_share_option_user_live_icon">Pozícióm folyamatos megosztása</string>

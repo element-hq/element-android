@@ -2290,9 +2290,6 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="ftue_auth_carousel_control_title">Anda dalam kendali.</string>
     <string name="ftue_auth_carousel_secure_title">Miliki percakapan Anda.</string>
     <string name="tooltip_attachment_location">Bagikan lokasi</string>
-    <string name="labs_render_locations_in_timeline">Tampilkan lokasi pengguna di linimasa</string>
-    <string name="settings_enable_location_sharing_summary">Setelah diaktifkan Anda akan dapat mengirim lokasi Anda ke ruangan apa saja</string>
-    <string name="settings_enable_location_sharing">Aktifkan pembagian lokasi</string>
     <string name="location_share_external">Buka dengan</string>
     <string name="location_not_available_dialog_content">${app_name} tidak dapat mengakses lokasi Anda. Silakan coba lagi nanti.</string>
     <string name="location_not_available_dialog_title">${app_name} tidak dapat mengakses lokasi Anda</string>
@@ -2365,9 +2362,6 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="room_notification_two_users_are_typing">%1$s dan %2$s</string>
     <string name="location_share_live_stop">Berhenti</string>
     <string name="location_share_live_enabled">Lokasi langsung diaktifkan</string>
-    <string name="location_in_background_missing_permission_dialog_content">Jika Anda ingin membagikan lokasi langsung Anda, ${app_name} membutuhkan akses ke lokasi selama aplikasinya di latar belakang.
-\nKami hanya akan mengakses lokasi Anda untuk durasi yang Anda pilih.</string>
-    <string name="location_in_background_missing_permission_dialog_title">Perbolehkan akses</string>
     <string name="a11y_location_share_option_pinned_icon">Bagikan lokasi ini</string>
     <string name="location_share_option_pinned">Bagikan lokasi ini</string>
     <string name="a11y_location_share_option_user_live_icon">Bagikan lokasi langsung</string>

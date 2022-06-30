@@ -2333,9 +2333,6 @@
     <string name="ftue_auth_carousel_secure_title">Äg dina konversationer.</string>
     <string name="room_error_access_unauthorized">Du får inte gå med i det här rummet</string>
     <string name="tooltip_attachment_location">Dela plats</string>
-    <string name="labs_render_locations_in_timeline">Visa användarplatser i tidslinjen</string>
-    <string name="settings_enable_location_sharing_summary">När det har aktiverats så kan du skicka din plats till vilket rum som helst</string>
-    <string name="settings_enable_location_sharing">Aktivera platsdelning</string>
     <string name="location_share_external">Öppna med</string>
     <string name="location_not_available_dialog_content">${app_name} kunde inte komma åt din plats. Försök igen senare.</string>
     <string name="location_not_available_dialog_title">${app_name} kunde inte komma åt din plats</string>
@@ -2411,9 +2408,6 @@
     <string name="threads_notice_migration_title">Trådar närmar sig beta 🎉</string>
     <string name="location_share_live_stop">Stoppa</string>
     <string name="location_share_live_enabled">Plats i realtid aktiverad</string>
-    <string name="location_in_background_missing_permission_dialog_content">Om du vill dela din plats i realtid så behöver ${app_name} åtkomst till din plats hela tiden när appen är i bakgrunden.
-\nVi kommer bara använda din plats under tiden du väljer.</string>
-    <string name="location_in_background_missing_permission_dialog_title">Tillåt åtkomst</string>
     <string name="a11y_location_share_option_pinned_icon">Dela den här platsen</string>
     <string name="location_share_option_pinned">Dela den här platsen</string>
     <string name="a11y_location_share_option_user_live_icon">Dela plats i realtid</string>
