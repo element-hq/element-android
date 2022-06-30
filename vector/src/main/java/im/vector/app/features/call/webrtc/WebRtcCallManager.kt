@@ -74,6 +74,7 @@ class WebRtcCallManager @Inject constructor(
         private val activeSessionDataSource: ActiveSessionDataSource,
         private val analyticsTracker: AnalyticsTracker,
         private val unifiedPushHelper: UnifiedPushHelper,
+        private val voipConfig: VoipConfig,
 ) : CallListener,
         DefaultLifecycleObserver {
 
@@ -444,7 +445,7 @@ class WebRtcCallManager @Inject constructor(
     }
 
     override fun onCallAssertedIdentityReceived(callAssertedIdentityContent: CallAssertedIdentityContent) {
-        if (!BuildConfig.handleCallAssertedIdentityEvents) {
+        if (!voipConfig.handleCallAssertedIdentityEvents) {
             return
         }
         val call = callsByCallId[callAssertedIdentityContent.callId]

@@ -56,6 +56,12 @@ object Config {
     val ONBOARDING_VARIANT = OnboardingVariant.FTUE_AUTH
 
     /**
+     * If set, MSC3086 asserted identity messages sent on VoIP calls will cause the call to appear in the room corresponding to the asserted identity.
+     * This *must* only be set in trusted environments.
+     */
+    const val HANDLE_CALL_ASSERTED_IDENTITY_EVENTS = false
+
+    /**
      * The analytics configuration to use for the Debug build type.
      * Can be disabled by providing Analytics.Disabled
      */
@@ -112,7 +118,6 @@ sealed interface Analytics {
             val policyLink: String,
     ) : Analytics
 }
-
 
 enum class OnboardingVariant {
     LEGACY,
