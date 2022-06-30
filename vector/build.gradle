@@ -9,6 +9,10 @@ apply plugin: 'com.likethesalad.stem'
 apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: 'kotlinx-knit'
 
+if (project.hasProperty("coverage")) {
+    apply plugin: 'jacoco'
+}
+
 kapt {
     correctErrorTypes = true
 }
@@ -31,7 +35,7 @@ ext.versionMinor = 4
 // Note: even values are reserved for regular release, odd values for hotfix release.
 // When creating a hotfix, you should decrease the value, since the current value
 // is the value for the next regular release.
-ext.versionPatch = 24
+ext.versionPatch = 26
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -119,8 +123,6 @@ ext.abiVersionCodes = ["armeabi-v7a": 1, "arm64-v8a": 2, "x86": 3, "x86_64": 4].
 def buildNumber = System.env.BUILDKITE_BUILD_NUMBER as Integer ?: 0
 
 android {
-
-
     // Due to a bug introduced in Android gradle plugin 3.6.0, we have to specify the ndk version to use
     // Ref: https://issuetracker.google.com/issues/144111441
     ndkVersion "21.3.6528147"
@@ -145,7 +147,7 @@ android {
         versionName "${versionMajor}.${versionMinor}.${versionPatch}-sonar"
 
         // Generate a random app task affinity
-        manifestPlaceholders = [appTaskAffinitySuffix:"H_${gitRevision()}"]
+        manifestPlaceholders = [appTaskAffinitySuffix: "H_${gitRevision()}"]
 
         buildConfigField "String", "GIT_REVISION", "\"${gitRevision()}\""
         buildConfigField "String", "GIT_REVISION_DATE", "\"${gitRevisionDate()}\""
@@ -244,7 +246,10 @@ android {
             buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
 
             signingConfig signingConfigs.debug
-            testCoverageEnabled true
+
+            if (project.hasProperty("coverage")) {
+                testCoverageEnabled = coverage.enableTestCoverage
+            }
         }
 
         release {
@@ -361,12 +366,12 @@ dependencies {
     implementation libs.androidx.core
     implementation "androidx.media:media:1.6.0"
     implementation "androidx.transition:transition:1.4.1"
+    implementation libs.androidx.biometric
 
     implementation "org.threeten:threetenbp:1.4.0:no-tzdb"
     implementation "com.gabrielittner.threetenbp:lazythreetenbp:0.10.0"
 
     implementation libs.squareup.moshi
-    implementation libs.squareup.moshiKt
     kapt libs.squareup.moshiKotlin
 
     // Lifecycle
@@ -384,7 +389,7 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.6.0'
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.50'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.51'
 
     // FlowBinding
     implementation libs.github.flowBinding
@@ -421,7 +426,6 @@ dependencies {
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
     implementation libs.androidx.autoFill
     implementation 'jp.wasabeef:glide-transformations:4.3.0'
-    implementation 'com.github.vector-im:PFLockScreen-Android:1.0.0-beta12'
     implementation 'com.github.hyuwah:DraggableView:1.0.0'
 
     // Custom Tab
@@ -465,7 +469,7 @@ dependencies {
     // UnifiedPush
     implementation 'com.github.UnifiedPush:android-connector:2.0.0'
     // UnifiedPush gplay flavor only
-    gplayImplementation('com.github.UnifiedPush:android-embedded_fcm_distributor:2.0.0') {
+    gplayImplementation('com.github.UnifiedPush:android-embedded_fcm_distributor:2.1.1') {
         exclude group: 'com.google.firebase', module: 'firebase-core'
         exclude group: 'com.google.firebase', module: 'firebase-analytics'
         exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'
@@ -529,14 +533,14 @@ dependencies {
     }
 
     // Flipper, debug builds only
-    debugImplementation('com.facebook.flipper:flipper:0.149.0') {
+    debugImplementation(libs.flipper.flipper) {
         exclude group: 'com.facebook.fbjni', module: 'fbjni'
     }
-    debugImplementation('com.facebook.flipper:flipper-network-plugin:0.149.0') {
+    debugImplementation(libs.flipper.flipperNetworkPlugin) {
         exclude group: 'com.facebook.fbjni', module: 'fbjni'
     }
-    debugImplementation 'com.facebook.soloader:soloader:0.10.3'
-    debugImplementation "com.kgurgul.flipper:flipper-realm-android:2.1.0"
+    debugImplementation 'com.facebook.soloader:soloader:0.10.4'
+    debugImplementation "com.kgurgul.flipper:flipper-realm-android:2.2.0"
 
     // Activate when you want to check for leaks, from time to time.
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.3'
@@ -561,4 +565,5 @@ dependencies {
     }
     androidTestImplementation libs.mockk.mockkAndroid
     androidTestUtil libs.androidx.orchestrator
+    debugImplementation libs.androidx.fragmentTesting
 }

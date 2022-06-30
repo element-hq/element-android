@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.room.timeline
 
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.android.asCoroutineDispatcher
@@ -32,6 +33,7 @@ import kotlinx.coroutines.withContext
 import okhttp3.internal.closeQuietly
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.localecho.RoomLocalEcho
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
@@ -236,11 +238,15 @@ internal class DefaultTimeline(
         val loadMoreResult = try {
             strategy.loadMore(count, direction, fetchOnServerIfNeeded)
         } catch (throwable: Throwable) {
-            // Timeline could not be loaded with a (likely) permanent issue, such as the
-            // server now knowing the initialEventId, so we want to show an error message
-            // and possibly restart without initialEventId.
-            onTimelineFailure(throwable)
-            return false
+            if (throwable is CancellationException) {
+                LoadMoreResult.FAILURE
+            } else {
+                // Timeline could not be loaded with a (likely) permanent issue, such as the
+                // server now knowing the initialEventId, so we want to show an error message
+                // and possibly restart without initialEventId.
+                onTimelineFailure(throwable)
+                return false
+            }
         }
         Timber.v("$baseLogMessage: result $loadMoreResult")
         val hasMoreToLoad = loadMoreResult != LoadMoreResult.REACHED_END
@@ -385,7 +391,7 @@ internal class DefaultTimeline(
 
     private suspend fun loadRoomMembersIfNeeded() {
         if (RoomLocalEcho.isLocalEchoId(roomId)) return
-        val loadRoomMembersParam = LoadRoomMembersTask.Params(roomId)
+        val loadRoomMembersParam = LoadRoomMembersTask.Params(roomId, excludeMembership = Membership.LEAVE)
         try {
             loadRoomMembersTask.execute(loadRoomMembersParam)
         } catch (failure: Throwable) {

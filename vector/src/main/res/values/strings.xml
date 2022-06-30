@@ -397,6 +397,7 @@
     <string name="action_dismiss">Dismiss</string>
     <string name="action_reset">Reset</string>
     <string name="action_learn_more">Learn more</string>
+    <string name="action_next">Next</string>
 
     <string name="copied_to_clipboard">Copied to clipboard</string>
 
@@ -1657,6 +1658,7 @@
     <string name="push_gateway_item_device_name">session_name:</string>
     <string name="push_gateway_item_url">Url:</string>
     <string name="push_gateway_item_format">Format:</string>
+    <string name="push_gateway_item_profile_tag">Profile tag:</string>
 
     <string name="preference_voice_and_video">Voice &amp; Video</string>
     <string name="preference_root_help_about">Help &amp; About</string>
@@ -2642,6 +2644,7 @@
     <string name="auth_pin_reset_title">Reset PIN</string>
     <string name="auth_pin_new_pin_action">New PIN</string>
     <string name="auth_pin_reset_content">To reset your PIN, you\'ll need to re-login and create a new one.</string>
+    <string name="auth_biometric_key_invalidated_message">Biometric authentication was disabled because a new biometric authentication method was recently added. You can enable it again in Settings.</string>
     <string name="settings_security_application_protection_title">Protect access</string>
     <string name="settings_security_application_protection_summary">Protect access using PIN and biometrics.</string>
     <string name="settings_security_application_protection_screen_title">Configure protection</string>
@@ -2651,6 +2654,7 @@
     <string name="settings_security_pin_code_use_biometrics_summary_on">Enable device specific biometrics, like fingerprints and face recognition.</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
     <string name="settings_security_pin_code_use_biometrics_summary_off">PIN code is the only way to unlock ${app_name}.</string>
+    <string name="settings_security_pin_code_use_biometrics_error">Could not enable biometric authentication.</string>
     <string name="settings_security_pin_code_notifications_title">Show content in notifications</string>
     <string name="settings_security_pin_code_notifications_summary_on">Show details like room names and message content.</string>
     <string name="settings_security_pin_code_notifications_summary_off">Only display number of unread messages in a simple notification.</string>
@@ -3091,4 +3095,10 @@
     <string name="settings_troubleshoot_test_current_endpoint_failed">Cannot find the endpoint.</string>
     <string name="settings_troubleshoot_test_current_gateway_title">Gateway</string>
     <string name="settings_troubleshoot_test_current_gateway">Current gateway: %s</string>
+
+    <!-- Live Location Sharing Labs Flag Promotional BottomSheet -->
+    <string name="live_location_labs_promotion_title">Live location sharing</string>
+    <string name="live_location_labs_promotion_description">Please note: this is a labs feature using a temporary implementation. This means you will not be able to delete your location history, and advanced users will be able to see your location history even after you stop sharing your live location with this room.</string>
+    <string name="live_location_labs_promotion_switch_title">Enable location sharing</string>
+
 </resources>

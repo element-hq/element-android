@@ -5,6 +5,10 @@ apply plugin: 'kotlin-parcelize'
 apply plugin: 'realm-android'
 apply plugin: "org.jetbrains.dokka"
 
+if (project.hasProperty("coverage")) {
+    apply plugin: 'jacoco'
+}
+
 buildscript {
     repositories {
         // Do not use `mavenCentral()`, it prevents Dependabot from working properly
@@ -56,7 +60,7 @@ android {
         // that the app's state is completely cleared between tests.
         testInstrumentationRunnerArguments clearPackageData: 'true'
 
-        buildConfigField "String", "SDK_VERSION", "\"1.4.24\""
+        buildConfigField "String", "SDK_VERSION", "\"1.4.26\""
 
         buildConfigField "String", "GIT_SDK_REVISION", "\"${gitRevision()}\""
         buildConfigField "String", "GIT_SDK_REVISION_UNIX_DATE", "\"${gitRevisionUnixDate()}\""
@@ -74,7 +78,9 @@ android {
 
     buildTypes {
         debug {
-            testCoverageEnabled true
+            if (project.hasProperty("coverage")) {
+                testCoverageEnabled = coverage.enableTestCoverage
+            }
             // Set to true to log privacy or sensible data, such as token
             buildConfigField "boolean", "LOG_PRIVATE_DATA", project.property("vector.debugPrivateData")
             // Set to BODY instead of NONE to enable logging
@@ -193,7 +199,7 @@ dependencies {
     implementation libs.apache.commonsImaging
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.50'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.51'
 
     testImplementation libs.tests.junit
     // Note: version sticks to 1.9.2 due to https://github.com/mockk/mockk/issues/281

@@ -16,4 +16,4 @@
 /fastlane/private
 /fastlane/report.xml
 
-/library/build
+/**/build

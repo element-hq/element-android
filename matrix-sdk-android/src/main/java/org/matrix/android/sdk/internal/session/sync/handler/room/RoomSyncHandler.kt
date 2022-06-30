@@ -57,6 +57,7 @@ import org.matrix.android.sdk.internal.database.model.deleteOnCascade
 import org.matrix.android.sdk.internal.database.model.threads.ThreadSummaryEntity
 import org.matrix.android.sdk.internal.database.query.copyToRealmOrIgnore
 import org.matrix.android.sdk.internal.database.query.find
+import org.matrix.android.sdk.internal.database.query.findAll
 import org.matrix.android.sdk.internal.database.query.findLastForwardChunkOfRoom
 import org.matrix.android.sdk.internal.database.query.findLastForwardChunkOfThread
 import org.matrix.android.sdk.internal.database.query.getOrCreate
@@ -243,7 +244,7 @@ internal class RoomSyncHandler @Inject constructor(
                 if (event.eventId == null || event.stateKey == null || event.type == null) {
                     continue
                 }
-                val ageLocalTs = event.unsignedData?.age?.let { syncLocalTimestampMillis - it }
+                val ageLocalTs = syncLocalTimestampMillis - (event.unsignedData?.age ?: 0)
                 val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, insertType)
                 Timber.v("## received state event ${event.type} and key ${event.stateKey}")
                 CurrentStateEventEntity.getOrCreate(realm, roomId, event.stateKey, event.type).apply {
@@ -305,7 +306,7 @@ internal class RoomSyncHandler @Inject constructor(
                 if (event.stateKey == null || event.type == null) {
                     return@forEach
                 }
-                val ageLocalTs = event.unsignedData?.age?.let { syncLocalTimestampMillis - it }
+                val ageLocalTs = syncLocalTimestampMillis - (event.unsignedData?.age ?: 0)
                 val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, insertType)
                 CurrentStateEventEntity.getOrCreate(realm, roomId, event.stateKey, event.type).apply {
                     eventId = eventEntity.eventId
@@ -335,7 +336,7 @@ internal class RoomSyncHandler @Inject constructor(
             if (event.eventId == null || event.stateKey == null || event.type == null) {
                 continue
             }
-            val ageLocalTs = event.unsignedData?.age?.let { syncLocalTimestampMillis - it }
+            val ageLocalTs = syncLocalTimestampMillis - (event.unsignedData?.age ?: 0)
             val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, insertType)
             CurrentStateEventEntity.getOrCreate(realm, roomId, event.stateKey, event.type).apply {
                 eventId = event.eventId
@@ -347,7 +348,7 @@ internal class RoomSyncHandler @Inject constructor(
             if (event.eventId == null || event.senderId == null || event.type == null) {
                 continue
             }
-            val ageLocalTs = event.unsignedData?.age?.let { syncLocalTimestampMillis - it }
+            val ageLocalTs = syncLocalTimestampMillis - (event.unsignedData?.age ?: 0)
             val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, insertType)
             if (event.stateKey != null) {
                 CurrentStateEventEntity.getOrCreate(realm, roomId, event.stateKey, event.type).apply {
@@ -381,12 +382,13 @@ internal class RoomSyncHandler @Inject constructor(
             aggregator: SyncResponsePostTreatmentAggregator
     ): ChunkEntity {
         val lastChunk = ChunkEntity.findLastForwardChunkOfRoom(realm, roomEntity.roomId)
-        if (isLimited && lastChunk != null) {
-            lastChunk.deleteOnCascade(deleteStateEvents = false, canDeleteRoot = true)
-        }
         val chunkEntity = if (!isLimited && lastChunk != null) {
             lastChunk
         } else {
+            // Delete all chunks of the room in case of gap.
+            ChunkEntity.findAll(realm, roomId).forEach {
+                it.deleteOnCascade(deleteStateEvents = false, canDeleteRoot = true)
+            }
             realm.createObject<ChunkEntity>().apply {
                 this.prevToken = prevToken
                 this.isLastForward = true
@@ -399,7 +401,10 @@ internal class RoomSyncHandler @Inject constructor(
         for (rawEvent in eventList) {
             // It's annoying roomId is not there, but lot of code rely on it.
             // And had to do it now as copy would delete all decryption results..
-            val event = rawEvent.copy(roomId = roomId)
+            val ageLocalTs = syncLocalTimestampMillis - (rawEvent.unsignedData?.age ?: 0)
+            val event = rawEvent.copy(roomId = roomId).also {
+                it.ageLocalTs = ageLocalTs
+            }
             if (event.eventId == null || event.senderId == null || event.type == null) {
                 continue
             }
@@ -421,7 +426,6 @@ internal class RoomSyncHandler @Inject constructor(
                 contentToInject = threadsAwarenessHandler.makeEventThreadAware(realm, roomId, event)
             }
 
-            val ageLocalTs = event.unsignedData?.age?.let { syncLocalTimestampMillis - it }
             val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs, contentToInject).copyToRealmOrIgnore(realm, insertType)
             if (event.stateKey != null) {
                 CurrentStateEventEntity.getOrCreate(realm, roomId, event.stateKey, event.type).apply {
