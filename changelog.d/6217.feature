@@ -1,1 +1,0 @@
-Improve lock screen implementation.
