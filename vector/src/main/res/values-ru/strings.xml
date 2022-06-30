@@ -2516,7 +2516,7 @@
     <string name="threads_beta_enable_notice_message">Обсуждения помогают поддерживать и легко отслеживать тематику бесед.%sВключение обсуждений обновит приложение. Может занять продолжительное время.</string>
     <string name="live_location_sharing_notification_description">Идёт отправка местоположения</string>
     <string name="location_share_live_remaining_time">Осталось %1$s</string>
-    <string name="location_in_background_missing_permission_dialog_content" tools:ignore="UnusedResources">Если вы хотите поделиться трансляцией местоположения, тогда ${app_name} должен иметь доступ к местоположению всё время, даже когда приложение находится в фоновом режиме.
+    <string name="location_in_background_missing_permission_dialog_content">Если вы хотите поделиться трансляцией местоположения, тогда ${app_name} должен иметь доступ к местоположению всё время, даже когда приложение находится в фоновом режиме.
 \nМы получим доступ к вашему местоположению только на то время, которое вы выберете.</string>
     <string name="live_location_bottom_sheet_last_updated_at">Обновлено %1$s назад</string>
     <string name="live_location_bottom_sheet_stop_sharing">Остановить трансляцию</string>
