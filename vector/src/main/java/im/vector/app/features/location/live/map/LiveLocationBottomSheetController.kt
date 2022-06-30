@@ -26,8 +26,6 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.resources.toTimestamp
 import im.vector.app.core.time.Clock
 import im.vector.app.features.home.AvatarRenderer
-import im.vector.app.features.location.live.map.bottomsheet.LiveLocationUserItem
-import im.vector.app.features.location.live.map.bottomsheet.liveLocationUserItem
 import javax.inject.Inject
 
 class LiveLocationBottomSheetController @Inject constructor(

@@ -19,11 +19,12 @@ package im.vector.app.features.home.room.detail.timeline.item
 import android.view.View
 import android.widget.TextView
 import androidx.annotation.IdRes
+import androidx.annotation.LayoutRes
 import im.vector.app.R
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.util.MatrixItem
 
-abstract class BasedMergedItem<H : BasedMergedItem.Holder> : BaseEventItem<H>() {
+abstract class BasedMergedItem<H : BasedMergedItem.Holder>(@LayoutRes layoutId: Int) : BaseEventItem<H>(layoutId) {
 
     abstract val attributes: Attributes
 

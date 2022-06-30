@@ -30,8 +30,8 @@ import im.vector.app.core.platform.CheckableConstraintLayout
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.util.MatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_group)
-abstract class GroupSummaryItem : VectorEpoxyModel<GroupSummaryItem.Holder>() {
+@EpoxyModelClass
+abstract class GroupSummaryItem : VectorEpoxyModel<GroupSummaryItem.Holder>(R.layout.item_group) {
 
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem

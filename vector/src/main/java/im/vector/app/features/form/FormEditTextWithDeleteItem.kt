@@ -34,8 +34,8 @@ import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextIfDifferent
 import im.vector.app.core.platform.SimpleTextWatcher
 
-@EpoxyModelClass(layout = R.layout.item_form_text_input_with_delete)
-abstract class FormEditTextWithDeleteItem : VectorEpoxyModel<FormEditTextWithDeleteItem.Holder>() {
+@EpoxyModelClass
+abstract class FormEditTextWithDeleteItem : VectorEpoxyModel<FormEditTextWithDeleteItem.Holder>(R.layout.item_form_text_input_with_delete) {
 
     @EpoxyAttribute
     var hint: String? = null

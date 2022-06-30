@@ -27,8 +27,8 @@ import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 /**
  * A action for bottom sheet.
  */
-@EpoxyModelClass(layout = R.layout.item_verification_big_image)
-abstract class BottomSheetVerificationBigImageItem : VectorEpoxyModel<BottomSheetVerificationBigImageItem.Holder>() {
+@EpoxyModelClass
+abstract class BottomSheetVerificationBigImageItem : VectorEpoxyModel<BottomSheetVerificationBigImageItem.Holder>(R.layout.item_verification_big_image) {
 
     @EpoxyAttribute
     lateinit var roomEncryptionTrustLevel: RoomEncryptionTrustLevel

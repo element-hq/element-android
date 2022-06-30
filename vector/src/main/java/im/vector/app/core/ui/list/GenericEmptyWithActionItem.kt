@@ -35,8 +35,8 @@ import im.vector.app.core.extensions.setTextOrHide
 /**
  * A generic list item to display when there is no results, with an optional CTA.
  */
-@EpoxyModelClass(layout = R.layout.item_generic_empty_state)
-abstract class GenericEmptyWithActionItem : VectorEpoxyModel<GenericEmptyWithActionItem.Holder>() {
+@EpoxyModelClass
+abstract class GenericEmptyWithActionItem : VectorEpoxyModel<GenericEmptyWithActionItem.Holder>(R.layout.item_generic_empty_state) {
 
     @EpoxyAttribute
     var title: String? = null

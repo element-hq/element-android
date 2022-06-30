@@ -24,8 +24,8 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
 
-@EpoxyModelClass(layout = R.layout.item_loading)
-abstract class LoadingItem : VectorEpoxyModel<LoadingItem.Holder>() {
+@EpoxyModelClass
+abstract class LoadingItem : VectorEpoxyModel<LoadingItem.Holder>(R.layout.item_loading) {
 
     @EpoxyAttribute var loadingText: String? = null
     @EpoxyAttribute var showLoader: Boolean = true

@@ -21,8 +21,8 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 
-@EpoxyModelClass(layout = R.layout.item_autocomplete_more_result)
-abstract class AutocompleteMoreResultItem : VectorEpoxyModel<AutocompleteMoreResultItem.Holder>() {
+@EpoxyModelClass
+abstract class AutocompleteMoreResultItem : VectorEpoxyModel<AutocompleteMoreResultItem.Holder>(R.layout.item_autocomplete_more_result) {
 
     class Holder : VectorEpoxyHolder()
 }

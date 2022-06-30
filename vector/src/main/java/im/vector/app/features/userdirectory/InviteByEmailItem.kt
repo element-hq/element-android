@@ -27,8 +27,8 @@ import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.features.home.AvatarRenderer
 
-@EpoxyModelClass(layout = R.layout.item_invite_by_mail)
-abstract class InviteByEmailItem : VectorEpoxyModel<InviteByEmailItem.Holder>() {
+@EpoxyModelClass
+abstract class InviteByEmailItem : VectorEpoxyModel<InviteByEmailItem.Holder>(R.layout.item_invite_by_mail) {
 
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var foundItem: ThreePidUser

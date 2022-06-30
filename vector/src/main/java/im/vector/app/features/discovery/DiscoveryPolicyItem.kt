@@ -19,15 +19,15 @@ package im.vector.app.features.discovery
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
-import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
+import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 
-@EpoxyModelClass(layout = R.layout.item_discovery_policy)
-abstract class DiscoveryPolicyItem : EpoxyModelWithHolder<DiscoveryPolicyItem.Holder>() {
+@EpoxyModelClass
+abstract class DiscoveryPolicyItem : VectorEpoxyModel<DiscoveryPolicyItem.Holder>(R.layout.item_discovery_policy) {
 
     @EpoxyAttribute
     var name: String? = null

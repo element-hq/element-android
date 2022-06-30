@@ -19,8 +19,8 @@ package im.vector.app.core.epoxy
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 
-@EpoxyModelClass(layout = R.layout.item_loading_square)
-abstract class SquareLoadingItem : VectorEpoxyModel<SquareLoadingItem.Holder>() {
+@EpoxyModelClass
+abstract class SquareLoadingItem : VectorEpoxyModel<SquareLoadingItem.Holder>(R.layout.item_loading_square) {
 
     class Holder : VectorEpoxyHolder()
 }

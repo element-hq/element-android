@@ -25,8 +25,8 @@ import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.extensions.setTextOrHide
 
-@EpoxyModelClass(layout = R.layout.item_uploads_file)
-abstract class UploadsFileItem : VectorEpoxyModel<UploadsFileItem.Holder>() {
+@EpoxyModelClass
+abstract class UploadsFileItem : VectorEpoxyModel<UploadsFileItem.Holder>(R.layout.item_uploads_file) {
 
     @EpoxyAttribute var title: String? = null
     @EpoxyAttribute var subtitle: String? = null

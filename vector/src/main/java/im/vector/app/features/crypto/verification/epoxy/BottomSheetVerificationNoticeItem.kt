@@ -27,8 +27,8 @@ import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
 /**
  * A action for bottom sheet.
  */
-@EpoxyModelClass(layout = R.layout.item_verification_notice)
-abstract class BottomSheetVerificationNoticeItem : VectorEpoxyModel<BottomSheetVerificationNoticeItem.Holder>() {
+@EpoxyModelClass
+abstract class BottomSheetVerificationNoticeItem : VectorEpoxyModel<BottomSheetVerificationNoticeItem.Holder>(R.layout.item_verification_notice) {
 
     @EpoxyAttribute
     lateinit var notice: EpoxyCharSequence

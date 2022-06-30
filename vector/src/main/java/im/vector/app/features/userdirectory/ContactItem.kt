@@ -26,8 +26,8 @@ import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.features.home.AvatarRenderer
 
-@EpoxyModelClass(layout = R.layout.item_contact_main)
-abstract class ContactItem : VectorEpoxyModel<ContactItem.Holder>() {
+@EpoxyModelClass
+abstract class ContactItem : VectorEpoxyModel<ContactItem.Holder>(R.layout.item_contact_main) {
 
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var mappedContact: MappedContact

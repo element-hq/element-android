@@ -29,8 +29,8 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setAttributeTintedImageResource
 
-@EpoxyModelClass(layout = R.layout.item_radio)
-abstract class RadioButtonItem : VectorEpoxyModel<RadioButtonItem.Holder>() {
+@EpoxyModelClass
+abstract class RadioButtonItem : VectorEpoxyModel<RadioButtonItem.Holder>(R.layout.item_radio) {
 
     @EpoxyAttribute
     var title: String? = null

@@ -18,6 +18,7 @@ package im.vector.app.features.attachments.preview
 
 import android.view.View
 import android.widget.ImageView
+import androidx.annotation.LayoutRes
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
@@ -29,7 +30,7 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.platform.CheckableImageView
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 
-abstract class AttachmentPreviewItem<H : AttachmentPreviewItem.Holder> : VectorEpoxyModel<H>() {
+abstract class AttachmentPreviewItem<H : AttachmentPreviewItem.Holder>(@LayoutRes layoutId: Int) : VectorEpoxyModel<H>(layoutId) {
 
     abstract val attachment: ContentAttachmentData
 
@@ -52,8 +53,8 @@ abstract class AttachmentPreviewItem<H : AttachmentPreviewItem.Holder> : VectorE
     }
 }
 
-@EpoxyModelClass(layout = R.layout.item_attachment_miniature_preview)
-abstract class AttachmentMiniaturePreviewItem : AttachmentPreviewItem<AttachmentMiniaturePreviewItem.Holder>() {
+@EpoxyModelClass
+abstract class AttachmentMiniaturePreviewItem : AttachmentPreviewItem<AttachmentMiniaturePreviewItem.Holder>(R.layout.item_attachment_miniature_preview) {
 
     @EpoxyAttribute override lateinit var attachment: ContentAttachmentData
 
@@ -78,8 +79,8 @@ abstract class AttachmentMiniaturePreviewItem : AttachmentPreviewItem<Attachment
     }
 }
 
-@EpoxyModelClass(layout = R.layout.item_attachment_big_preview)
-abstract class AttachmentBigPreviewItem : AttachmentPreviewItem<AttachmentBigPreviewItem.Holder>() {
+@EpoxyModelClass
+abstract class AttachmentBigPreviewItem : AttachmentPreviewItem<AttachmentBigPreviewItem.Holder>(R.layout.item_attachment_big_preview) {
 
     @EpoxyAttribute override lateinit var attachment: ContentAttachmentData
 
