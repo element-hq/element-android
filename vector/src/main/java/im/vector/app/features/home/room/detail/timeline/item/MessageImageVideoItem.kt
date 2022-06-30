@@ -37,7 +37,7 @@ import im.vector.app.features.media.ImageContentRenderer
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 
 @EpoxyModelClass
-abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Holder>(R.layout.item_timeline_event_base) {
+abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Holder>() {
 
     @EpoxyAttribute
     lateinit var mediaData: ImageContentRenderer.Data

@@ -20,7 +20,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 
 @EpoxyModelClass
-abstract class MessageLocationItem : AbsMessageLocationItem<MessageLocationItem.Holder>(R.layout.item_timeline_event_base) {
+abstract class MessageLocationItem : AbsMessageLocationItem<MessageLocationItem.Holder>() {
 
     override fun getViewStubId() = STUB_ID
 

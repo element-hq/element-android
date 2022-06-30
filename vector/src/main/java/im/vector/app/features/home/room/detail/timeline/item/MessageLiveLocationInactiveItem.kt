@@ -23,7 +23,7 @@ import im.vector.app.R
 
 @EpoxyModelClass
 abstract class MessageLiveLocationInactiveItem :
-        AbsMessageItem<MessageLiveLocationInactiveItem.Holder>(R.layout.item_timeline_event_base),
+        AbsMessageItem<MessageLiveLocationInactiveItem.Holder>(),
         LiveLocationShareStatusItem by DefaultLiveLocationShareStatusItem() {
 
     @EpoxyAttribute

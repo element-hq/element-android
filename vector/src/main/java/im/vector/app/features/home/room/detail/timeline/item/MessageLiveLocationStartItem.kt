@@ -23,7 +23,7 @@ import im.vector.app.R
 
 @EpoxyModelClass
 abstract class MessageLiveLocationStartItem :
-        AbsMessageItem<MessageLiveLocationStartItem.Holder>(R.layout.item_timeline_event_base),
+        AbsMessageItem<MessageLiveLocationStartItem.Holder>(),
         LiveLocationShareStatusItem by DefaultLiveLocationShareStatusItem() {
 
     @EpoxyAttribute

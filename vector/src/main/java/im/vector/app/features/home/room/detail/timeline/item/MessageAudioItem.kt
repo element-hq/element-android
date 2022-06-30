@@ -38,7 +38,7 @@ import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLay
 import im.vector.app.features.themes.ThemeUtils
 
 @EpoxyModelClass
-abstract class MessageAudioItem : AbsMessageItem<MessageAudioItem.Holder>(R.layout.item_timeline_event_base) {
+abstract class MessageAudioItem : AbsMessageItem<MessageAudioItem.Holder>() {
 
     @EpoxyAttribute
     var filename: String = ""

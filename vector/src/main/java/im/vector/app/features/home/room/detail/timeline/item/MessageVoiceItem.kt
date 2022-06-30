@@ -38,7 +38,7 @@ import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.voice.AudioWaveformView
 
 @EpoxyModelClass
-abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>(R.layout.item_timeline_event_base) {
+abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
 
     interface WaveformTouchListener {
         fun onWaveformTouchedUp(percentage: Float)

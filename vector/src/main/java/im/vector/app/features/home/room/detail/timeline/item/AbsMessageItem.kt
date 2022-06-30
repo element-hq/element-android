@@ -43,7 +43,9 @@ import org.matrix.android.sdk.api.util.MatrixItem
  * Base timeline item that adds an optional information bar with the sender avatar, name, time, send state.
  * Adds associated click listeners (on avatar, displayname).
  */
-abstract class AbsMessageItem<H : AbsMessageItem.Holder>(@LayoutRes layoutId: Int) : AbsBaseMessageItem<H>(layoutId) {
+abstract class AbsMessageItem<H : AbsMessageItem.Holder>(
+        @LayoutRes layoutId: Int = R.layout.item_timeline_event_base
+) : AbsBaseMessageItem<H>(layoutId) {
 
     override val baseAttributes: AbsBaseMessageItem.Attributes
         get() = attributes

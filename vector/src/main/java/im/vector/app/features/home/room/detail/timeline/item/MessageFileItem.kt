@@ -35,7 +35,7 @@ import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLay
 import im.vector.app.features.themes.ThemeUtils
 
 @EpoxyModelClass
-abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>(R.layout.item_timeline_event_base) {
+abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
 
     @EpoxyAttribute
     var filename: String = ""

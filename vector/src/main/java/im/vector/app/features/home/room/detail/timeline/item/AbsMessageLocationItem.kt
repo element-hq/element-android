@@ -37,7 +37,9 @@ import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvid
 import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
 import im.vector.app.features.home.room.detail.timeline.style.granularRoundedCorners
 
-abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder>(@LayoutRes layoutId: Int) : AbsMessageItem<H>(layoutId) {
+abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder>(
+        @LayoutRes layoutId: Int = R.layout.item_timeline_event_base
+) : AbsMessageItem<H>(layoutId) {
 
     @EpoxyAttribute
     var locationUrl: String? = null

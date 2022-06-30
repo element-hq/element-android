@@ -38,7 +38,7 @@ import io.noties.markwon.MarkwonPlugin
 import org.matrix.android.sdk.api.extensions.orFalse
 
 @EpoxyModelClass
-abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>(R.layout.item_timeline_event_base) {
+abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
 
     @EpoxyAttribute
     var searchForPills: Boolean = false
