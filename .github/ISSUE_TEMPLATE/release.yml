@@ -100,12 +100,20 @@ body:
 
         ##### Release on MavenCentral
 
+        - [ ] Checkout the branch `main`
         - [ ] Run the command `./gradlew publish --no-daemon --no-parallel`. You'll need some non-public element to do so
+        - [ ] Run the command `./gradlew closeAndReleaseRepository`. If it is working well, you can jump directly to the final step of this section.
+
+        If `./gradlew closeAndReleaseRepository` fails (for instance, several repositories are waiting to be handled), you have to close and release the repository manually. Do the following steps:
+
         - [ ] Connect to https://s01.oss.sonatype.org
         - [ ] Click on Staging Repositories and check the the files have been uploaded
         - [ ] Click on close
         - [ ] Wait (check Activity tab until step "Repository closed" is displayed)
         - [ ] Click on release. The staging repository will disappear
+
+        Final step
+
         - [ ] Check that the release is available in https://repo1.maven.org/maven2/org/matrix/android/matrix-android-sdk2/ (it can take a few minutes)
 
         ##### Release on GitHub
