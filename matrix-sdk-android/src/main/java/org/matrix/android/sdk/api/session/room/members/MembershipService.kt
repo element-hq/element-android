@@ -19,7 +19,6 @@ package org.matrix.android.sdk.api.session.room.members
 import androidx.lifecycle.LiveData
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
-import org.matrix.android.sdk.api.util.Optional
 
 /**
  * This interface defines methods to handling membership. It's implemented at the room level.
