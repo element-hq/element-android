@@ -2592,4 +2592,36 @@
     <string name="time_unit_second_short">с</string>
     <string name="time_unit_minute_short">хв</string>
     <string name="time_unit_hour_short">г</string>
+    <string name="live_location_labs_promotion_switch_title">Увімкнути надсилання місцеперебування</string>
+    <string name="live_location_labs_promotion_description">Зверніть увагу: це експериментальна функція, яка використовує тимчасову імплементацію. Це означає, що ви не зможете видалити свою історію місцеперебування, а досвідчені користувачі зможуть переглядати вашу історію місцеперебування, навіть якщо ви припините ділитися ним із цією кімнатою.</string>
+    <string name="live_location_labs_promotion_title">Надсилання місцеперебування наживо</string>
+    <string name="settings_troubleshoot_test_current_gateway">Поточний шлюз: %s</string>
+    <string name="settings_troubleshoot_test_current_gateway_title">Шлюз</string>
+    <string name="settings_troubleshoot_test_current_endpoint_failed">Не вдалося знайти кінцеву точку.</string>
+    <string name="settings_troubleshoot_test_current_endpoint_success">Поточна кінцева точка: %s</string>
+    <string name="settings_troubleshoot_test_current_endpoint_title">Кінцева точка</string>
+    <string name="settings_troubleshoot_test_current_distributor">Зараз використовується %s.</string>
+    <string name="settings_troubleshoot_test_current_distributor_title">Метод</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="one">Знайдений %d метод.</item>
+        <item quantity="few">Знайдені %d методи.</item>
+        <item quantity="many">Знайдені %d методів.</item>
+        <item quantity="other">Знайдені %d методів.</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_distributors_fdroid">Не знайдено іншого методу, крім фонової синхронізації.</string>
+    <string name="settings_troubleshoot_test_distributors_gplay">Іншого методу, крім служби Google Play, не знайдено.</string>
+    <string name="settings_troubleshoot_test_distributors_title">Доступні методи</string>
+    <string name="settings_notification_method">Метод сповіщення</string>
+    <string name="unifiedpush_distributor_background_sync">Фонова синхронізація</string>
+    <string name="unifiedpush_distributor_fcm_fallback">Служби Google</string>
+    <string name="unifiedpush_getdistributors_dialog_title">Виберіть, як отримувати сповіщення</string>
+    <string name="settings_security_pin_code_use_biometrics_error">Не вдалось увімкнути біометричне розпізнавання.</string>
+    <string name="auth_biometric_key_invalidated_message">Біометричне розпізнавання було вимкнено, оскільки нещодавно було додано новий метод біометричного розпізнавання. Ви можете знову ввімкнути його в налаштуваннях.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">Скинути метод сповіщень</string>
+    <string name="push_gateway_item_profile_tag">Мітка профілю:</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">Не вдалося зареєструвати токен кінцевої точки на домашньому сервері:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">Кінцеву точку успішно зареєстровано на домашньому сервері.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_title">Реєстрація кінцевої точки</string>
+    <string name="action_next">Далі</string>
 </resources>
