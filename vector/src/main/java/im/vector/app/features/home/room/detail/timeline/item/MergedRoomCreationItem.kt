@@ -27,6 +27,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
+import androidx.core.widget.TextViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
@@ -37,6 +38,7 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.tools.linkify
+import im.vector.app.features.themes.ThemeUtils
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.localecho.RoomLocalEcho
@@ -201,26 +203,26 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
 
     private fun renderRoomDescription(holder: Holder) {
         val roomDisplayName = roomSummary?.displayName
-        when {
+        val resources = holder.roomDescriptionText.resources
+        val description = when {
             isDirectRoom -> {
                 if (attributes.isLocalRoom) {
-                    holder.roomDescriptionText.text = holder.view.resources.getString(
-                            R.string.send_your_first_msg_to_invite,
-                            roomSummary?.displayName.orEmpty()
-                    )
+                    resources.getString(R.string.send_your_first_msg_to_invite, roomSummary?.displayName.orEmpty())
                 } else {
-                    holder.roomDescriptionText.text = holder.view.resources.getString(
-                            R.string.this_is_the_beginning_of_dm,
-                            roomSummary?.displayName.orEmpty()
-                    )
+                    resources.getString(R.string.this_is_the_beginning_of_dm, roomSummary?.displayName.orEmpty())
                 }
             }
             roomDisplayName.isNullOrBlank() || roomSummary?.name.isNullOrBlank() -> {
-                holder.roomDescriptionText.text = holder.view.resources.getString(R.string.this_is_the_beginning_of_room_no_name)
+                holder.view.resources.getString(R.string.this_is_the_beginning_of_room_no_name)
             }
             else -> {
-                holder.roomDescriptionText.text = holder.view.resources.getString(R.string.this_is_the_beginning_of_room, roomDisplayName)
+                holder.view.resources.getString(R.string.this_is_the_beginning_of_room, roomDisplayName)
             }
+        }
+        holder.roomDescriptionText.text = description
+        if (isDirectRoom && attributes.isLocalRoom) {
+            TextViewCompat.setTextAppearance(holder.roomDescriptionText, R.style.TextAppearance_Vector_Subtitle)
+            holder.roomDescriptionText.setTextColor(ThemeUtils.getColor(holder.roomDescriptionText.context, R.attr.vctr_content_primary))
         }
     }
 
