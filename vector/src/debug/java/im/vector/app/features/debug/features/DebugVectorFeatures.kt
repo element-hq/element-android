@@ -67,6 +67,9 @@ class DebugVectorFeatures(
     override fun isScreenSharingEnabled(): Boolean = read(DebugFeatureKeys.screenSharing)
             ?: vectorFeatures.isScreenSharingEnabled()
 
+    override fun isLocationSharingEnabled(): Boolean = read(DebugFeatureKeys.liveLocationSharing)
+            ?: vectorFeatures.isLocationSharingEnabled()
+
     override fun forceUsageOfOpusEncoder(): Boolean = read(DebugFeatureKeys.forceUsageOfOpusEncoder)
             ?: vectorFeatures.forceUsageOfOpusEncoder()
 

@@ -67,7 +67,6 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.vanniktech.emoji.EmojiPopup
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.animations.play
 import im.vector.app.core.dialogs.ConfirmationDialogBuilder
@@ -125,6 +124,7 @@ import im.vector.app.core.utils.startInstallFromSourceIntent
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.DialogReportContentBinding
 import im.vector.app.databinding.FragmentTimelineBinding
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.extensions.toAnalyticsInteraction
 import im.vector.app.features.analytics.plan.Interaction
 import im.vector.app.features.analytics.plan.MobileScreen
@@ -275,7 +275,8 @@ class TimelineFragment @Inject constructor(
         private val callManager: WebRtcCallManager,
         private val audioMessagePlaybackTracker: AudioMessagePlaybackTracker,
         private val shareIntentHandler: ShareIntentHandler,
-        private val clock: Clock
+        private val clock: Clock,
+        private val vectorFeatures: VectorFeatures,
 ) :
         VectorBaseFragment<FragmentTimelineBinding>(),
         TimelineEventController.Callback,
@@ -1559,7 +1560,7 @@ class TimelineFragment @Inject constructor(
                     attachmentTypeSelector = AttachmentTypeSelectorView(vectorBaseActivity, vectorBaseActivity.layoutInflater, this@TimelineFragment)
                     attachmentTypeSelector.setAttachmentVisibility(
                             AttachmentTypeSelectorView.Type.LOCATION,
-                            BuildConfig.enableLocationSharing
+                            vectorFeatures.isLocationSharingEnabled(),
                     )
                     attachmentTypeSelector.setAttachmentVisibility(
                             AttachmentTypeSelectorView.Type.POLL, !isThreadTimeLine()
