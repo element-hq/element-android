@@ -27,6 +27,7 @@ import im.vector.app.config.KeySharingStrategy
 import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageConfig
+import im.vector.app.features.location.LocationSharingConfig
 import im.vector.app.features.raw.wellknown.CryptoConfig
 
 @InstallIn(SingletonComponent::class)
@@ -40,7 +41,7 @@ object ConfigurationModule {
             false -> Config.RELEASE_ANALYTICS_CONFIG
         }
         return when (config) {
-            Analytics.Disabled   -> AnalyticsConfig(isEnabled = false, "", "", "")
+            Analytics.Disabled -> AnalyticsConfig(isEnabled = false, "", "", "")
             is Analytics.PostHog -> AnalyticsConfig(
                     isEnabled = true,
                     postHogHost = config.postHogHost,
@@ -60,7 +61,12 @@ object ConfigurationModule {
             fallbackKeySharingStrategy = when (Config.KEY_SHARING_STRATEGY) {
                 KeySharingStrategy.WhenSendingEvent -> OutboundSessionKeySharingStrategy.WhenSendingEvent
                 KeySharingStrategy.WhenEnteringRoom -> OutboundSessionKeySharingStrategy.WhenSendingEvent
-                KeySharingStrategy.WhenTyping       -> OutboundSessionKeySharingStrategy.WhenSendingEvent
+                KeySharingStrategy.WhenTyping -> OutboundSessionKeySharingStrategy.WhenSendingEvent
             }
+    )
+
+    @Provides
+    fun providesLocationSharingConfig() = LocationSharingConfig(
+            mapTilerKey = Config.LOCATION_MAP_TILER_KEY,
     )
 }

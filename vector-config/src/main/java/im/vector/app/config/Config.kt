@@ -38,6 +38,7 @@ object Config {
     const val ALLOW_EXTERNAL_UNIFIED_PUSH_DISTRIBUTORS = true
 
     const val ENABLE_LOCATION_SHARING = true
+    const val LOCATION_MAP_TILER_KEY = "fU3vlMsMn4Jb6dnEIFsx"
 
     /**
      * The maximum length of voice messages in milliseconds.
