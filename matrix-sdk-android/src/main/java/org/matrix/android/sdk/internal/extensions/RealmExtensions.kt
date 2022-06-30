@@ -39,7 +39,7 @@ internal fun <T> RealmList<T>.clearWith(delete: (T) -> Unit) {
         lambda.invoke()
     }
 
-    if (!isEmpty()) {
+    if (isNotEmpty()) {
         fatalError("`clearWith` MUST delete all elements of the RealmList")
     }
 }
