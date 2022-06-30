@@ -24,6 +24,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import im.vector.app.config.OnboardingVariant
 import im.vector.app.features.DefaultVectorFeatures
 import im.vector.app.features.VectorFeatures
 import kotlinx.coroutines.flow.first
@@ -39,8 +40,8 @@ class DebugVectorFeatures(
 
     private val dataStore = context.dataStore
 
-    override fun onboardingVariant(): VectorFeatures.OnboardingVariant {
-        return readPreferences().getEnum<VectorFeatures.OnboardingVariant>() ?: vectorFeatures.onboardingVariant()
+    override fun onboardingVariant(): OnboardingVariant {
+        return readPreferences().getEnum<OnboardingVariant>() ?: vectorFeatures.onboardingVariant()
     }
 
     override fun isOnboardingAlreadyHaveAccountSplashEnabled(): Boolean = read(DebugFeatureKeys.onboardingAlreadyHaveAnAccount)

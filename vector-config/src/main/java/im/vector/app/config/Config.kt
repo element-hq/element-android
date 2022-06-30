@@ -40,7 +40,12 @@ object Config {
     /**
      * The maximum length of voice messages in milliseconds.
      */
-    const val VOICE_MESSAGE_LIMIT = 120_000L
+    const val VOICE_MESSAGE_LIMIT_MS = 120_000L
+
+    /**
+     * The onboarding flow
+     */
+    val ONBOARDING_VARIANT = OnboardingVariant.FTUE_AUTH
 
     /**
      * The analytics configuration to use for the Debug build type.
@@ -70,7 +75,7 @@ object Config {
 }
 
 /**
- * The types of analytics Element currently supports
+ * The types of analytics Element currently supports.
  */
 sealed interface Analytics {
 
@@ -98,4 +103,11 @@ sealed interface Analytics {
              */
             val policyLink: String,
     ) : Analytics
+}
+
+
+enum class OnboardingVariant {
+    LEGACY,
+    LOGIN_2,
+    FTUE_AUTH
 }

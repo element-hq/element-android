@@ -231,7 +231,7 @@ object VectorStaticModule {
 
     @Provides
     fun providesVoiceMessageConfig() = VoiceMessageConfig(
-            lengthLimitMs = Config.VOICE_MESSAGE_LIMIT
+            lengthLimitMs = Config.VOICE_MESSAGE_LIMIT_MS
     )
 
     @Provides

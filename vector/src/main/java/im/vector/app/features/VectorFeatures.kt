@@ -16,8 +16,8 @@
 
 package im.vector.app.features
 
-import im.vector.app.BuildConfig
 import im.vector.app.config.Config
+import im.vector.app.config.OnboardingVariant
 
 interface VectorFeatures {
 
@@ -33,16 +33,10 @@ interface VectorFeatures {
     fun forceUsageOfOpusEncoder(): Boolean
     fun shouldStartDmOnFirstMessage(): Boolean
     fun isNewAppLayoutEnabled(): Boolean
-
-    enum class OnboardingVariant {
-        LEGACY,
-        LOGIN_2,
-        FTUE_AUTH
-    }
 }
 
 class DefaultVectorFeatures : VectorFeatures {
-    override fun onboardingVariant(): VectorFeatures.OnboardingVariant = BuildConfig.ONBOARDING_VARIANT
+    override fun onboardingVariant() = Config.ONBOARDING_VARIANT
     override fun isOnboardingAlreadyHaveAccountSplashEnabled() = true
     override fun isOnboardingSplashCarouselEnabled() = true
     override fun isOnboardingUseCaseEnabled() = true
