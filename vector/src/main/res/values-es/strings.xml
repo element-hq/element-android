@@ -2331,8 +2331,6 @@
     <string name="location_share_live_select_duration_option_3">8 horas</string>
     <string name="location_share_live_select_duration_option_2">1 hora</string>
     <string name="location_share_live_select_duration_option_1">15 minutos</string>
-    <string name="location_in_background_missing_permission_dialog_title">Permitir acceso</string>
-    <string name="labs_render_locations_in_timeline">Mostrar ubicaciónes de usuarios en la línea de tiempo</string>
     <string name="location_share_live_enabled">Ubicación en vivo activada</string>
     <string name="location_share_live_started">Cargando ubicación en vivo…</string>
     <string name="location_share_live_stop">Parar</string>
@@ -2369,13 +2367,9 @@
     <string name="room_message_notify_everyone">Notificar a toda la sala</string>
     <string name="live_location_sharing_notification_description">La compartición de ubicación está en progreso</string>
     <string name="live_location_sharing_notification_title">${app_name} Ubicación en directo</string>
-    <string name="settings_enable_location_sharing_summary">Cuando se active serás capaz de enviar tu ubicación a cualquier sala</string>
-    <string name="settings_enable_location_sharing">Activar compartir ubicación</string>
     <string name="location_share_external">Abrir con</string>
     <string name="location_not_available_dialog_content">${app_name} no ha podido acceder a tu ubicación. Por favor, inténtalo de nuevo más tarde.</string>
     <string name="location_not_available_dialog_title">${app_name} no ha podido acceder a tu ubicación</string>
-    <string name="location_in_background_missing_permission_dialog_content">Si te gustaría compartir tu ubicación en tiempo real, ${app_name} necesita permiso de ubicación siempre y cuando la aplicación esté en segundo plano.
-\nSolo acederemos a tu ubicación durante el tiempo que escogas.</string>
     <string name="location_share_live_select_duration_title">Compartir tu ubicación en directo para</string>
     <string name="location_share_option_pinned">Compartir esta ubicación</string>
     <string name="location_share_option_user_live">Compartir ubicación en directo</string>
@@ -2488,14 +2482,14 @@
     <string name="live_location_bottom_sheet_stop_sharing">Dejar de compartir</string>
     <string name="labs_enable_live_location_summary">Implementación temporal: las ubicaciones persisten en el historial de la sala</string>
     <string name="labs_enable_live_location">Activar compartir ubicación en tiempo real</string>
-    <string name="location_share_live_remaining_time">%1$s dejado</string>
+    <string name="location_share_live_remaining_time">Queda %1$s</string>
     <string name="location_share_live_until">Compartiendo hasta %1$s</string>
     <string name="location_share_live_view">Ver ubicación en tiempo real</string>
     <string name="location_share_live_ended">La ubicación en tiempo real ha terminado</string>
     <string name="space_explore_filter_no_result_description">Algunos resultados podrían estar ocultos por que son privados y necesitarías una invitación.</string>
-    <string name="space_explore_filter_no_result_title">No se han encontrado resultados</string>
-    <string name="space_leave_radio_button_none">Dejar ninguno</string>
-    <string name="space_leave_radio_button_all">Dejar todo</string>
+    <string name="space_explore_filter_no_result_title">Ningún resultado</string>
+    <string name="space_leave_radio_button_none">No salir de ninguno</string>
+    <string name="space_leave_radio_button_all">Salir de todo</string>
     <string name="space_leave_radio_buttons_title">Cosas en este espacio</string>
     <string name="settings_autoplay_animated_images_summary">Reproducir imágenes animadas en la línea temporal tan pronto como sean visibles</string>
     <string name="settings_autoplay_animated_images_title">Autoreproducir imágenes animadas</string>

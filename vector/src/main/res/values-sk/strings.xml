@@ -563,7 +563,7 @@
     <string name="merged_events_expand">Rozbaliť</string>
     <string name="merged_events_collapse">Zbaliť</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="action_accept">Prijať</string>
     <string name="auth_accept_policies">Prosím prečítajte si a odsúhlaste zmluvné podmienky tohoto domovského servera:</string>
     <string name="settings_call_category">Hovory</string>
@@ -1569,9 +1569,6 @@
     <string name="location_not_available_dialog_title">${app_name} nemohol získať prístup k vašej polohe</string>
     <string name="location_not_available_dialog_content">${app_name} nemohol získať prístup k vašej polohe. Skúste to prosím neskôr.</string>
     <string name="location_share_external">Otvoriť s</string>
-    <string name="settings_enable_location_sharing">Povoliť zdieľanie polohy</string>
-    <string name="settings_enable_location_sharing_summary">Po zapnutí tejto funkcie budete môcť odoslať svoju polohu do ľubovoľnej miestnosti</string>
-    <string name="labs_render_locations_in_timeline">Vykresliť umiestnenie používateľa na časovej osi</string>
     <string name="tooltip_attachment_location">Zdieľať polohu</string>
     <string name="login_server_url_form_modular_text">Prémiový hosting pre organizácie</string>
     <string name="login_signin_to">Prihlásiť sa do %1$s</string>
@@ -2457,9 +2454,6 @@
     <string name="call_transfer_connect_action">Pripojiť</string>
     <string name="location_share_live_stop">Zastaviť</string>
     <string name="location_share_live_enabled">Poloha v reálnom čase zapnutá</string>
-    <string name="location_in_background_missing_permission_dialog_content">Ak chcete zdieľať svoju polohu v reálnom čase, ${app_name} potrebuje prístup k polohe po celý čas, kým je aplikácia na pozadí.
-\nPrístup k vašej polohe bude len počas obdobia, ktoré si zvolíte.</string>
-    <string name="location_in_background_missing_permission_dialog_title">Povoliť prístup</string>
     <string name="a11y_location_share_option_pinned_icon">Zdieľať túto polohu</string>
     <string name="location_share_option_pinned">Zdieľať túto polohu</string>
     <string name="a11y_location_share_option_user_live_icon">Zdieľať polohu v reálnom čase</string>
