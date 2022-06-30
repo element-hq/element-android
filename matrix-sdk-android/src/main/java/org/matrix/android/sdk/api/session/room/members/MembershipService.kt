@@ -31,6 +31,20 @@ interface MembershipService {
     suspend fun loadRoomMembersIfNeeded()
 
     /**
+     * All the room members can be not loaded, for instance after an initial sync.
+     * All the members will be loaded when calling [loadRoomMembersIfNeeded], or when sending an encrypted
+     * event to the room.
+     * The fun let the app know if all the members have been loaded for this room.
+     * @return true if all the members are loaded, or false elsewhere.
+     */
+    suspend fun areAllMembersLoaded(): Boolean
+
+    /**
+     * Live version for [areAllMembersLoaded].
+     */
+    fun areAllMembersLoadedLive(): LiveData<Boolean>
+
+    /**
      * Return the roomMember with userId or null.
      * @param userId the userId param to look for
      *

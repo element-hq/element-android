@@ -32,6 +32,7 @@ data class RoomMemberListViewState(
         val roomId: String,
         val roomSummary: Async<RoomSummary> = Uninitialized,
         val roomMemberSummaries: Async<RoomMemberSummaries> = Uninitialized,
+        val areAllMembersLoaded: Boolean = false,
         val ignoredUserIds: List<String> = emptyList(),
         val filter: String = "",
         val threePidInvites: Async<List<Event>> = Uninitialized,
