@@ -22,7 +22,6 @@ import android.app.PictureInPictureParams
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
-import android.content.res.Configuration
 import android.graphics.Color
 import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
@@ -35,8 +34,10 @@ import android.view.View
 import android.view.WindowManager
 import androidx.activity.result.ActivityResult
 import androidx.annotation.StringRes
+import androidx.core.app.PictureInPictureModeChangedInfo
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
+import androidx.core.util.Consumer
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
@@ -128,6 +129,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         window.statusBarColor = Color.TRANSPARENT
         window.navigationBarColor = Color.BLACK
         super.onCreate(savedInstanceState)
+        addOnPictureInPictureModeChangedListener(pictureInPictureModeChangedInfoConsumer)
 
         Timber.tag(loggerTag.value).v("EXTRA_MODE is ${intent.getStringExtra(EXTRA_MODE)}")
         if (intent.getStringExtra(EXTRA_MODE) == INCOMING_RINGING) {
@@ -210,8 +212,10 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && isInPictureInPictureMode
     }
 
-    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration) = withState(callViewModel) {
-        renderState(it)
+    private val pictureInPictureModeChangedInfoConsumer = Consumer<PictureInPictureModeChangedInfo> {
+        withState(callViewModel) {
+            renderState(it)
+        }
     }
 
     override fun handleMenuItemSelected(item: MenuItem): Boolean {
@@ -232,6 +236,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     override fun onDestroy() {
         detachRenderersIfNeeded()
         turnScreenOffAndKeyguardOn()
+        removeOnPictureInPictureModeChangedListener(pictureInPictureModeChangedInfoConsumer)
         super.onDestroy()
     }
 
