@@ -112,6 +112,8 @@ internal class OlmInboundGroupSessionWrapper2 : Serializable {
      * @return the inbound group session as MegolmSessionData if the operation succeeds
      */
     fun exportKeys(index: Long? = null): MegolmSessionData? {
+        Timber.d("Modifying a frozen class!")
+
         return try {
             if (null == forwardingCurve25519KeyChain) {
                 forwardingCurve25519KeyChain = ArrayList()
