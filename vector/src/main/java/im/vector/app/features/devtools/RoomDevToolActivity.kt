@@ -174,8 +174,8 @@ class RoomDevToolActivity : SimpleFragmentActivity(), FragmentManager.OnBackStac
         super.onDestroy()
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu?): Boolean = withState(viewModel) { state ->
-        menu?.forEach {
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean = withState(viewModel) { state ->
+        menu.forEach {
             val isVisible = when (it.itemId) {
                 R.id.menuItemEdit -> {
                     state.displayMode is RoomDevToolViewState.Mode.StateEventDetail
