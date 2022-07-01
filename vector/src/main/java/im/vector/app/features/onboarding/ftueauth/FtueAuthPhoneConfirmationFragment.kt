@@ -25,6 +25,7 @@ import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.args
 import im.vector.app.R
 import im.vector.app.core.extensions.associateContentStateWith
+import im.vector.app.core.extensions.clearErrorOnChange
 import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.editText
 import im.vector.app.core.extensions.setOnImeDoneListener
@@ -60,15 +61,8 @@ class FtueAuthPhoneConfirmationFragment @Inject constructor() : AbstractFtueAuth
         views.phoneConfirmationHeaderSubtitle.text = getString(R.string.ftue_auth_phone_confirmation_subtitle, params.msisdn)
         views.phoneConfirmationInput.associateContentStateWith(button = views.phoneConfirmationSubmit)
         views.phoneConfirmationInput.setOnImeDoneListener { submitConfirmationCode() }
+        views.phoneConfirmationInput.clearErrorOnChange(viewLifecycleOwner)
         views.phoneConfirmationSubmit.debouncedClicks { submitConfirmationCode() }
-
-        views.phoneConfirmationInput.editText().textChanges()
-                .onEach {
-                    views.phoneConfirmationInput.error = null
-                    views.phoneConfirmationSubmit.isEnabled = it.isNotBlank()
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
-
         views.phoneConfirmationResend.debouncedClicks { viewModel.handle(OnboardingAction.PostRegisterAction(RegisterAction.SendAgainThreePid)) }
     }
 
@@ -81,7 +75,7 @@ class FtueAuthPhoneConfirmationFragment @Inject constructor() : AbstractFtueAuth
         when (throwable) {
             // The entered code is not correct
             is Failure.SuccessError -> views.phoneConfirmationInput.error = getString(R.string.login_validation_code_is_not_correct)
-            else                    -> views.phoneConfirmationInput.error = errorFormatter.toHumanReadable(throwable)
+            else -> views.phoneConfirmationInput.error = errorFormatter.toHumanReadable(throwable)
         }
     }
 
