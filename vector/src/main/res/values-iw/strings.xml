@@ -1880,9 +1880,6 @@
     <string name="tooltip_attachment_photo">פתח מצלמה</string>
     <string name="message_bubbles">הצג בועות הודעה</string>
     <string name="location_timeline_failed_to_load_map">טעינת המפה נכשלה</string>
-    <string name="labs_render_locations_in_timeline">מיפוי מיקומי משתמשים בציר הזמן</string>
-    <string name="settings_enable_location_sharing_summary">לאחר ההפעלה, תוכל לשלוח את המיקום שלך לכל חדר</string>
-    <string name="settings_enable_location_sharing">אפשר שיתוף מיקום</string>
     <string name="location_share_external">פתח באמצעות</string>
     <string name="location_not_available_dialog_content">${app_name} לא הצליח לגשת למיקום שלך. אנא נסה שוב מאוחר יותר.</string>
     <string name="location_not_available_dialog_title">${app_name} לא הצליח לגשת למיקום שלך</string>
@@ -2494,9 +2491,6 @@
         <item quantity="other">נדרשות %1$s אפשרויות לפחות</item>
     </plurals>
     <string name="link_this_email_with_your_account">%s בהגדרות כדי לקבל הזמנות ישירות ב-${app_name}.</string>
-    <string name="location_in_background_missing_permission_dialog_content">אם תרצה לשתף את המיקום החי שלך, ${app_name} זקוק לגישה למיקום כל הזמן כשהאפליקציה נמצאת ברקע.
-\nאנו ניגשים למיקום שלך רק למשך הזמן שתבחר.</string>
-    <string name="location_in_background_missing_permission_dialog_title">אפשר גישה</string>
     <string name="a11y_location_share_option_pinned_icon">שתף מיקום זה</string>
     <string name="location_share_option_pinned">שתף מיקום זה</string>
     <string name="a11y_location_share_option_user_live_icon">שתף מיקום בזמן אמת</string>

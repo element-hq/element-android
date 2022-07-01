@@ -39,8 +39,8 @@ import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import org.matrix.android.sdk.api.util.MatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_base_state)
-abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Holder>() {
+@EpoxyModelClass
+abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Holder>(R.layout.item_timeline_event_base_state) {
 
     override val baseAttributes: AbsBaseMessageItem.Attributes
         get() = attributes

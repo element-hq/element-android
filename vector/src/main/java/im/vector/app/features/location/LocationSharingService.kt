@@ -21,6 +21,7 @@ import android.os.Binder
 import android.os.IBinder
 import android.os.Parcelable
 import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.services.VectorService
 import im.vector.app.features.location.live.GetLiveLocationShareSummaryUseCase
@@ -112,7 +113,10 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
         val updateLiveResult = session
                 .getRoom(roomArgs.roomId)
                 ?.locationSharingService()
-                ?.startLiveLocationShare(timeoutMillis = roomArgs.durationMillis)
+                ?.startLiveLocationShare(
+                        timeoutMillis = roomArgs.durationMillis,
+                        description = getString(R.string.sent_live_location)
+                )
 
         updateLiveResult
                 ?.let { result ->

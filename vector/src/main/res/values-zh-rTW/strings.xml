@@ -608,7 +608,7 @@
     <string name="markdown_has_been_enabled">Markdown 已啟用。</string>
     <string name="markdown_has_been_disabled">Markdown 已停用。</string>
     <string name="generic_label_and_value">%1$s：%2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="settings_call_category">通話</string>
     <string name="settings_call_ringtone_use_app_ringtone">為來電使用預設的 ${app_name} 鈴聲</string>
     <string name="settings_call_ringtone_title">來電鈴聲</string>
@@ -1121,9 +1121,7 @@
     <string name="login_signup_submit">下一個</string>
     <string name="login_signup_error_user_in_use">使用者名稱已被使用</string>
     <string name="login_signup_cancel_confirmation_title">警告</string>
-    <string name="login_signup_cancel_confirmation_content">尚未建立您的帳號。
-\n
-\n停止註冊程序？</string>
+    <string name="login_signup_cancel_confirmation_content">尚未建立您的帳號。停止註冊流程？</string>
     <string name="login_a11y_choose_matrix_org">選取 matrix.org</string>
     <string name="login_a11y_choose_modular">選取 Element Matrix Services</string>
     <string name="login_a11y_choose_other">選取自訂的家伺服器</string>
@@ -2290,9 +2288,6 @@
     <string name="ftue_auth_carousel_control_title">您已掌控了您的資料。</string>
     <string name="ftue_auth_carousel_secure_title">擁有您的對話。</string>
     <string name="tooltip_attachment_location">分享位置</string>
-    <string name="labs_render_locations_in_timeline">在時間軸中繪製使用者位置</string>
-    <string name="settings_enable_location_sharing_summary">啟用後，您就能將您的位置傳送至任何聊天室</string>
-    <string name="settings_enable_location_sharing">啟用位置分享</string>
     <string name="location_share_external">開啟以</string>
     <string name="location_not_available_dialog_content">${app_name} 無法存取您的位置。請稍後再試。</string>
     <string name="location_not_available_dialog_title">${app_name} 無法存取您的位置</string>
@@ -2365,9 +2360,6 @@
     <string name="room_notification_more_than_two_users_are_typing">%1$s、%2$s 與其他人</string>
     <string name="location_share_live_stop">停止</string>
     <string name="location_share_live_enabled">即時位置已啟用</string>
-    <string name="location_in_background_missing_permission_dialog_content">若您想要分享您的即時位置，${app_name} 需要當應用程式在背景時隨時存取位置的權限。
-\n我們將只會在您選擇的期間內存取您的位置。</string>
-    <string name="location_in_background_missing_permission_dialog_title">允許存取</string>
     <string name="a11y_location_share_option_pinned_icon">分享此位置</string>
     <string name="location_share_option_pinned">分享此位置</string>
     <string name="a11y_location_share_option_user_live_icon">分享即時位置</string>

@@ -37,8 +37,8 @@ import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 /**
  * A list item for Device.
  */
-@EpoxyModelClass(layout = R.layout.item_device)
-abstract class DeviceItem : VectorEpoxyModel<DeviceItem.Holder>() {
+@EpoxyModelClass
+abstract class DeviceItem : VectorEpoxyModel<DeviceItem.Holder>(R.layout.item_device) {
 
     @EpoxyAttribute
     lateinit var deviceInfo: DeviceInfo

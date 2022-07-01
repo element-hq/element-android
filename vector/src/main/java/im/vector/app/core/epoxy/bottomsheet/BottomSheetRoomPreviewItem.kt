@@ -39,8 +39,8 @@ import org.matrix.android.sdk.api.util.MatrixItem
 /**
  * A room preview for bottom sheet.
  */
-@EpoxyModelClass(layout = R.layout.item_bottom_sheet_room_preview)
-abstract class BottomSheetRoomPreviewItem : VectorEpoxyModel<BottomSheetRoomPreviewItem.Holder>() {
+@EpoxyModelClass
+abstract class BottomSheetRoomPreviewItem : VectorEpoxyModel<BottomSheetRoomPreviewItem.Holder>(R.layout.item_bottom_sheet_room_preview) {
 
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem

@@ -22,8 +22,8 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.features.home.room.detail.timeline.item.ItemWithEvents
 
-@EpoxyModelClass(layout = R.layout.item_timeline_empty)
-abstract class TimelineEmptyItem : VectorEpoxyModel<TimelineEmptyItem.Holder>(), ItemWithEvents {
+@EpoxyModelClass
+abstract class TimelineEmptyItem : VectorEpoxyModel<TimelineEmptyItem.Holder>(R.layout.item_timeline_empty), ItemWithEvents {
 
     @EpoxyAttribute lateinit var eventId: String
     @EpoxyAttribute var notBlank: Boolean = false

@@ -41,7 +41,7 @@ class FtueAuthResetPasswordSuccessFragment @Inject constructor() : AbstractFtueA
     }
 
     private fun submit() {
-        viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnResetPasswordMailConfirmationSuccessDone))
+        viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnResetPasswordComplete))
     }
 
     override fun resetViewModel() {

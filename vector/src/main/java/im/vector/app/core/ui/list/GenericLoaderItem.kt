@@ -24,8 +24,8 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 /**
  * A generic list item header left aligned with notice color.
  */
-@EpoxyModelClass(layout = R.layout.item_generic_loader)
-abstract class GenericLoaderItem : VectorEpoxyModel<GenericLoaderItem.Holder>() {
+@EpoxyModelClass
+abstract class GenericLoaderItem : VectorEpoxyModel<GenericLoaderItem.Holder>(R.layout.item_generic_loader) {
 
     // Maybe/Later add some style configuration, SMALL/BIG ?
 

@@ -34,8 +34,8 @@ import im.vector.app.core.platform.CheckableConstraintLayout
 import im.vector.app.features.home.room.list.UnreadCounterBadgeView
 import im.vector.app.features.themes.ThemeUtils
 
-@EpoxyModelClass(layout = R.layout.item_space)
-abstract class HomeSpaceSummaryItem : VectorEpoxyModel<HomeSpaceSummaryItem.Holder>() {
+@EpoxyModelClass
+abstract class HomeSpaceSummaryItem : VectorEpoxyModel<HomeSpaceSummaryItem.Holder>(R.layout.item_space) {
 
     @EpoxyAttribute var selected: Boolean = false
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var listener: ClickListener? = null

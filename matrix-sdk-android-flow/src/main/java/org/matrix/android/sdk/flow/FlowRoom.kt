@@ -53,6 +53,13 @@ class FlowRoom(private val room: Room) {
                 }
     }
 
+    fun liveAreAllMembersLoaded(): Flow<Boolean> {
+        return room.membershipService().areAllMembersLoadedLive().asFlow()
+                .startWith(room.coroutineDispatchers.io) {
+                    room.membershipService().areAllMembersLoaded()
+                }
+    }
+
     fun liveAnnotationSummary(eventId: String): Flow<Optional<EventAnnotationsSummary>> {
         return room.relationService().getEventAnnotationsSummaryLive(eventId).asFlow()
                 .startWith(room.coroutineDispatchers.io) {

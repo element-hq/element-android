@@ -18,9 +18,11 @@ package im.vector.app.features.onboarding.ftueauth
 
 import android.widget.Button
 import com.google.android.material.textfield.TextInputLayout
+import im.vector.app.R
 import im.vector.app.core.extensions.hasContentFlow
 import im.vector.app.features.login.SignMode
 import im.vector.app.features.onboarding.OnboardingAction
+import im.vector.app.features.themes.ThemeProvider
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.onEach
@@ -48,4 +50,9 @@ fun observeContentChangesAndResetErrors(username: TextInputLayout, password: Tex
         password.error = null
         submit.isEnabled = it
     }
+}
+
+fun ThemeProvider.ftueBreakerBackground() = when (isLightTheme()) {
+    true  -> R.drawable.bg_gradient_ftue_breaker
+    false -> R.drawable.bg_color_background
 }

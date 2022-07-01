@@ -31,10 +31,12 @@ import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFields
+import org.matrix.android.sdk.internal.database.model.RoomMembersLoadStatusType
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.query.QueryStringValueProcessor
 import org.matrix.android.sdk.internal.query.process
+import org.matrix.android.sdk.internal.session.room.RoomDataSource
 import org.matrix.android.sdk.internal.session.room.membership.admin.MembershipAdminTask
 import org.matrix.android.sdk.internal.session.room.membership.joining.InviteTask
 import org.matrix.android.sdk.internal.session.room.membership.threepid.InviteThreePidTask
@@ -47,6 +49,7 @@ internal class DefaultMembershipService @AssistedInject constructor(
         private val inviteTask: InviteTask,
         private val inviteThreePidTask: InviteThreePidTask,
         private val membershipAdminTask: MembershipAdminTask,
+        private val roomDataSource: RoomDataSource,
         @UserId
         private val userId: String,
         private val queryStringValueProcessor: QueryStringValueProcessor
@@ -58,8 +61,17 @@ internal class DefaultMembershipService @AssistedInject constructor(
     }
 
     override suspend fun loadRoomMembersIfNeeded() {
-        val params = LoadRoomMembersTask.Params(roomId, Membership.LEAVE)
+        val params = LoadRoomMembersTask.Params(roomId, excludeMembership = Membership.LEAVE)
         loadRoomMembersTask.execute(params)
+    }
+
+    override suspend fun areAllMembersLoaded(): Boolean {
+        val status = roomDataSource.getRoomMembersLoadStatus(roomId)
+        return status == RoomMembersLoadStatusType.LOADED
+    }
+
+    override fun areAllMembersLoadedLive(): LiveData<Boolean> {
+        return roomDataSource.getRoomMembersLoadStatusLive(roomId)
     }
 
     override fun getRoomMember(userId: String): RoomMemberSummary? {

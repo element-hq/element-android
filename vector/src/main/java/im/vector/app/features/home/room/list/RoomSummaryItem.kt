@@ -43,8 +43,8 @@ import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.presence.model.UserPresence
 import org.matrix.android.sdk.api.util.MatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_room)
-abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
+@EpoxyModelClass
+abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>(R.layout.item_room) {
 
     @EpoxyAttribute
     lateinit var typingMessage: String

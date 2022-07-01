@@ -20,6 +20,7 @@ import android.view.ViewStub
 import android.widget.RelativeLayout
 import androidx.annotation.CallSuper
 import androidx.annotation.IdRes
+import androidx.annotation.LayoutRes
 import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
 import im.vector.app.R
@@ -30,7 +31,7 @@ import im.vector.app.core.platform.CheckableView
 /**
  * Children must override getViewType().
  */
-abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>(), ItemWithEvents {
+abstract class BaseEventItem<H : BaseEventItem.BaseHolder>(@LayoutRes layoutId: Int) : VectorEpoxyModel<H>(layoutId), ItemWithEvents {
 
     // To use for instance when opening a permalink with an eventId
     @EpoxyAttribute

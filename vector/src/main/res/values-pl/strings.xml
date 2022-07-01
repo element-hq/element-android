@@ -1737,7 +1737,7 @@
     <string name="room_settings_space_access_title">Dostęp do Przestrzeni</string>
     <string name="room_settings_access_rules_pref_dialog_title">Kto powinien mieć dostęp \?</string>
     <string name="room_settings_room_notifications_account_settings">Ustawienia konta</string>
-    <string name="room_settings_room_notifications_manage_notifications">Możesz zarządzać notyfikacjami w %1$s.</string>
+    <string name="room_settings_room_notifications_manage_notifications">Możesz zarządzać powiadomieniami w %1$s.</string>
     <string name="room_settings_room_notifications_encryption_notice">Proszę zwrócić uwagę, że powiadomienia o wzmiankach i słowach kluczowych nie są dostępne w zaszyfrowanych pokojach na urządzeniach mobilnych.</string>
     <string name="room_settings_room_notifications_notify_me">Powiadamiaj mnie o</string>
     <string name="settings_secure_backup_reset">Zresetuj bezpieczną kopię zapasową</string>
@@ -1929,7 +1929,7 @@
     <string name="settings_notification_other">Inne</string>
     <string name="settings_notification_mentions_and_keywords">Wzmianki i słowa kluczowe</string>
     <string name="settings_notification_default">Domyślne powiadomienia</string>
-    <string name="settings_notification_emails_no_emails">Aby otrzymywać emaile z notyfikacjami, proszę przypisać email do swojego konta Matrix</string>
+    <string name="settings_notification_emails_no_emails">Aby otrzymywać e-maile z powiadomieniami, proszę przypisać adres e-mail do swojego konta Matrix</string>
     <string name="voice_message_reply_content">Wiadomość głosowa (%1$s)</string>
     <string name="error_voice_message_cannot_reply_or_edit">Nie można odpowiadać lub edytować kiedy wiadomość głosowa jest aktywna</string>
     <string name="error_voice_message_unable_to_record">Nie udało się nagrać wiadomości głosowej</string>
@@ -2501,15 +2501,9 @@
     <string name="location_share_live_stop">Zatrzymaj</string>
     <string name="location_share_live_enabled">Włączona lokalizacja na żywo</string>
     <string name="location_timeline_failed_to_load_map">Nie udało się wczytać mapy</string>
-    <string name="labs_render_locations_in_timeline">Renderuj lokalizacje użytkowników na osi czasu</string>
-    <string name="settings_enable_location_sharing_summary">Po włączeniu będziesz mógł wysłać swoją lokalizację do dowolnego pokoju</string>
-    <string name="settings_enable_location_sharing">Włącz udostępnianie lokalizacji</string>
     <string name="location_share_external">Otwórz za pomocą</string>
     <string name="location_not_available_dialog_content">${app_name} nie może uzyskać dostępu do Twojej lokalizacji. Spróbuj ponownie później.</string>
     <string name="location_not_available_dialog_title">${app_name} nie może uzyskać dostępu do Twojej lokalizacji</string>
-    <string name="location_in_background_missing_permission_dialog_content">Jeśli chcesz udostępniać swoją lokalizację na żywo, ${app_name} potrzebuje dostępu do lokalizacji przez cały czas, gdy aplikacja działa w tle.
-\n Będziemy mieć dostęp do Twojej lokalizacji tylko przez wybrany przez Ciebie okres.</string>
-    <string name="location_in_background_missing_permission_dialog_title">Zgoda na dostęp</string>
     <string name="a11y_location_share_option_pinned_icon">Udostępnij tę lokalizację</string>
     <string name="location_share_option_pinned">Udostępnij tę lokalizację</string>
     <string name="a11y_location_share_option_user_live_icon">Udostępnij lokalizację na żywo</string>

@@ -38,7 +38,8 @@ private const val AN_INITIAL_DEVICE_NAME = "a device name"
 private const val A_CAPTCHA_RESPONSE = "a captcha response"
 private const val A_PID_CODE = "a pid code"
 private const val EMAIL_VALIDATED_DELAY = 10000L
-private val A_PID_TO_REGISTER = RegisterThreePid.Email("an email")
+private val AN_EMAIL_PID_TO_REGISTER = RegisterThreePid.Email("an email")
+private val A_PHONE_PID_TO_REGISTER = RegisterThreePid.Msisdn("+11111111111", countryCode = "GB")
 
 class RegistrationWizardActionDelegateTest {
 
@@ -55,7 +56,7 @@ class RegistrationWizardActionDelegateTest {
                 case(RegisterAction.CaptchaDone(A_CAPTCHA_RESPONSE)) { performReCaptcha(A_CAPTCHA_RESPONSE) },
                 case(RegisterAction.AcceptTerms) { acceptTerms() },
                 case(RegisterAction.RegisterDummy) { dummy() },
-                case(RegisterAction.AddThreePid(A_PID_TO_REGISTER)) { addThreePid(A_PID_TO_REGISTER) },
+                case(RegisterAction.AddThreePid(AN_EMAIL_PID_TO_REGISTER)) { addThreePid(AN_EMAIL_PID_TO_REGISTER) },
                 case(RegisterAction.SendAgainThreePid) { sendAgainThreePid() },
                 case(RegisterAction.ValidateThreePid(A_PID_CODE)) { handleValidateThreePid(A_PID_CODE) },
                 case(RegisterAction.CheckIfEmailHasBeenValidated(EMAIL_VALIDATED_DELAY)) { checkIfEmailHasBeenValidated(EMAIL_VALIDATED_DELAY) },
@@ -69,14 +70,14 @@ class RegistrationWizardActionDelegateTest {
 
     @Test
     fun `given adding an email ThreePid fails with 401, when handling register action, then infer EmailSuccess`() = runTest {
-        fakeRegistrationWizard.givenAddEmailThreePidErrors(
+        fakeRegistrationWizard.givenAddThreePidErrors(
                 cause = a401ServerError(),
-                email = A_PID_TO_REGISTER.email
+                threePid = AN_EMAIL_PID_TO_REGISTER
         )
 
-        val result = registrationActionHandler.executeAction(RegisterAction.AddThreePid(A_PID_TO_REGISTER))
+        val result = registrationActionHandler.executeAction(RegisterAction.AddThreePid(AN_EMAIL_PID_TO_REGISTER))
 
-        result shouldBeEqualTo RegistrationResult.SendEmailSuccess(A_PID_TO_REGISTER.email)
+        result shouldBeEqualTo RegistrationResult.SendEmailSuccess(AN_EMAIL_PID_TO_REGISTER)
     }
 
     @Test
@@ -108,6 +109,18 @@ class RegistrationWizardActionDelegateTest {
 
         fakeRegistrationWizard.verifyCheckedEmailedVerification(times = errorsToThrow.size + 1)
         result shouldBeEqualTo RegistrationResult.Complete(A_SESSION)
+    }
+
+    @Test
+    fun `given adding an Msisdn ThreePid fails with 401, when handling register action, then infer EmailSuccess`() = runTest {
+        fakeRegistrationWizard.givenAddThreePidErrors(
+                cause = a401ServerError(),
+                threePid = A_PHONE_PID_TO_REGISTER
+        )
+
+        val result = registrationActionHandler.executeAction(RegisterAction.AddThreePid(A_PHONE_PID_TO_REGISTER))
+
+        result shouldBeEqualTo RegistrationResult.SendMsisdnSuccess(A_PHONE_PID_TO_REGISTER)
     }
 
     private suspend fun testSuccessfulActionDelegation(case: Case) {
