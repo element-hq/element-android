@@ -30,6 +30,7 @@ import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.getAllChildFragments
 import im.vector.app.core.extensions.toOnOff
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.devtools.GossipingEventsSerializer
@@ -74,7 +75,8 @@ class BugReporter @Inject constructor(
         private val vectorPreferences: VectorPreferences,
         private val vectorFileLogger: VectorFileLogger,
         private val systemLocaleProvider: SystemLocaleProvider,
-        private val matrix: Matrix
+        private val matrix: Matrix,
+        private val buildMeta: BuildMeta,
 ) {
     var inMultiWindowMode = false
 
@@ -278,14 +280,14 @@ class BugReporter @Inject constructor(
                             .addFormDataPart("can_contact", canContact.toString())
                             .addFormDataPart("device_id", deviceId)
                             .addFormDataPart("version", versionProvider.getVersion(longFormat = true, useBuildNumber = false))
-                            .addFormDataPart("branch_name", BuildConfig.GIT_BRANCH_NAME)
+                            .addFormDataPart("branch_name", buildMeta.gitBranchName)
                             .addFormDataPart("matrix_sdk_version", Matrix.getSdkVersion())
                             .addFormDataPart("olm_version", olmVersion)
                             .addFormDataPart("device", Build.MODEL.trim())
                             .addFormDataPart("verbose_log", vectorPreferences.labAllowedExtendedLogging().toOnOff())
                             .addFormDataPart("multi_window", inMultiWindowMode.toOnOff())
                             .addFormDataPart(
-                                    "os", Build.VERSION.RELEASE + " (API " + Build.VERSION.SDK_INT + ") " +
+                                    "os", Build.VERSION.RELEASE + " (API " + buildMeta.sdkInt + ") " +
                                     Build.VERSION.INCREMENTAL + "-" + Build.VERSION.CODENAME
                             )
                             .addFormDataPart("locale", Locale.getDefault().toString())
@@ -299,7 +301,7 @@ class BugReporter @Inject constructor(
                                 }
                             }
 
-                    val buildNumber = BuildConfig.BUILD_NUMBER
+                    val buildNumber = buildMeta.buildNumber
                     if (buildNumber.isNotEmpty() && buildNumber != "0") {
                         builder.addFormDataPart("build_number", buildNumber)
                     }
@@ -339,9 +341,9 @@ class BugReporter @Inject constructor(
                     screenshot = null
 
                     // add some github labels
-                    builder.addFormDataPart("label", BuildConfig.VERSION_NAME)
+                    builder.addFormDataPart("label", buildMeta.versionName)
                     builder.addFormDataPart("label", BuildConfig.FLAVOR_DESCRIPTION)
-                    builder.addFormDataPart("label", BuildConfig.GIT_BRANCH_NAME)
+                    builder.addFormDataPart("label", buildMeta.gitBranchName)
 
                     // Special for Element
                     builder.addFormDataPart("label", "[Element]")

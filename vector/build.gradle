@@ -237,9 +237,6 @@ android {
             resValue "string", "app_name", "Element dbg"
             resValue "color", "launcher_background", "#0DBD8B"
 
-            // Set to true if you want to enable strict mode in debug
-            buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
-
             signingConfig signingConfigs.debug
 
             if (project.hasProperty("coverage")) {
@@ -251,9 +248,6 @@ android {
             resValue "string", "app_name", "Element"
             resValue "color", "launcher_background", "#0DBD8B"
 
-            buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
-
-            // When updating this block, please also update the same block in the `nightly` buildType below
             postprocessing {
                 removeUnusedCode true
                 removeUnusedResources true

@@ -24,4 +24,10 @@ fun aBuildMeta() = BuildMeta(
         sdkInt = Build.VERSION_CODES.O,
         applicationId = "im.vector",
         lowPrivacyLoggingEnabled = false,
+        enableStrictModeLogs = false,
+        versionName = "app-version-name",
+        gitRevision = "abcdef",
+        gitRevisionDate = "01-01-01",
+        gitBranchName = "a-branch-name",
+        buildNumber = "100",
 )

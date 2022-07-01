@@ -70,7 +70,7 @@ class VectorSettingsHelpAboutFragment @Inject constructor(
                 append(versionProvider.getVersion(longFormat = false, useBuildNumber = true))
                 if (buildMeta.isDebug) {
                     append(" ")
-                    append(BuildConfig.GIT_BRANCH_NAME)
+                    append(buildMeta.gitBranchName)
                 }
             }
 

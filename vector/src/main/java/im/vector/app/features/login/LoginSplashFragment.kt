@@ -62,9 +62,9 @@ class LoginSplashFragment @Inject constructor(
         if (buildMeta.isDebug || vectorPreferences.developerMode()) {
             views.loginSplashVersion.isVisible = true
             @SuppressLint("SetTextI18n")
-            views.loginSplashVersion.text = "Version : ${BuildConfig.VERSION_NAME}\n" +
-                    "Branch: ${BuildConfig.GIT_BRANCH_NAME}\n" +
-                    "Build: ${BuildConfig.BUILD_NUMBER}"
+            views.loginSplashVersion.text = "Version : ${buildMeta.versionName}\n" +
+                    "Branch: ${buildMeta.gitBranchName}\n" +
+                    "Build: ${buildMeta.buildNumber}"
             views.loginSplashVersion.debouncedClicks { navigator.openDebug(requireContext()) }
         }
     }

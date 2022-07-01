@@ -198,7 +198,7 @@ class VectorApplication :
     }
 
     private fun enableStrictModeIfNeeded() {
-        if (BuildConfig.ENABLE_STRICT_MODE_LOGS) {
+        if (buildMeta.enableStrictModeLogs) {
             StrictMode.setThreadPolicy(
                     StrictMode.ThreadPolicy.Builder()
                             .detectAll()

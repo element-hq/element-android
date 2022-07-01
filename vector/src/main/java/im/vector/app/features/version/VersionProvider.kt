@@ -17,10 +17,14 @@
 package im.vector.app.features.version
 
 import im.vector.app.BuildConfig
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.resources.VersionCodeProvider
 import javax.inject.Inject
 
-class VersionProvider @Inject constructor(private val versionCodeProvider: VersionCodeProvider) {
+class VersionProvider @Inject constructor(
+        private val versionCodeProvider: VersionCodeProvider,
+        private val buildMeta: BuildMeta,
+) {
 
     fun getVersion(longFormat: Boolean, useBuildNumber: Boolean): String {
         var result = "${BuildConfig.VERSION_NAME} [${versionCodeProvider.getVersionCode()}]"
@@ -31,9 +35,9 @@ class VersionProvider @Inject constructor(private val versionCodeProvider: Versi
             flavor += "-"
         }
 
-        var gitVersion = BuildConfig.GIT_REVISION
-        val gitRevisionDate = BuildConfig.GIT_REVISION_DATE
-        val buildNumber = BuildConfig.BUILD_NUMBER
+        var gitVersion = buildMeta.gitRevision
+        val gitRevisionDate = buildMeta.gitRevisionDate
+        val buildNumber = buildMeta.buildNumber
 
         var useLongFormat = longFormat
 

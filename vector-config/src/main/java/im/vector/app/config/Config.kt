@@ -62,6 +62,7 @@ object Config {
     const val HANDLE_CALL_ASSERTED_IDENTITY_EVENTS = false
 
     const val LOW_PRIVACY_LOG_ENABLE = false
+    const val ENABLE_STRICT_MODE_LOGS = false
 
     /**
      * The analytics configuration to use for the Debug build type.
