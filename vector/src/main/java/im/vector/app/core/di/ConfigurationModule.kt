@@ -37,10 +37,12 @@ import im.vector.app.features.raw.wellknown.CryptoConfig
 object ConfigurationModule {
 
     @Provides
-    fun providesAnalyticsConfig(buildMeta: BuildMeta): AnalyticsConfig {
-        val config: Analytics = when (buildMeta.isDebug) {
-            true -> Config.DEBUG_ANALYTICS_CONFIG
-            false -> Config.RELEASE_ANALYTICS_CONFIG
+    fun providesAnalyticsConfig(): AnalyticsConfig {
+        val config: Analytics = when (BuildConfig.BUILD_TYPE) {
+            "debug" -> Config.DEBUG_ANALYTICS_CONFIG
+            "nightly" -> Config.NIGHTLY_ANALYTICS_CONFIG
+            "release" -> Config.RELEASE_ANALYTICS_CONFIG
+            else -> throw IllegalStateException("Unhandled build type: ${BuildConfig.BUILD_TYPE}")
         }
         return when (config) {
             Analytics.Disabled -> AnalyticsConfig(isEnabled = false, "", "", "")

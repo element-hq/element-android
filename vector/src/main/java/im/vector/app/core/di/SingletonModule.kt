@@ -212,30 +212,6 @@ object VectorStaticModule {
     fun providesPhoneNumberUtil(): PhoneNumberUtil = PhoneNumberUtil.getInstance()
 
     @Provides
-    fun providesAnalyticsConfig(): AnalyticsConfig {
-        val config: Analytics = when (BuildConfig.BUILD_TYPE) {
-            "debug" -> Config.DEBUG_ANALYTICS_CONFIG
-            "nightly" -> Config.NIGHTLY_ANALYTICS_CONFIG
-            "release" -> Config.RELEASE_ANALYTICS_CONFIG
-            else -> throw IllegalStateException("Unhandled build type: ${BuildConfig.BUILD_TYPE}")
-        }
-        return when (config) {
-            Analytics.Disabled -> AnalyticsConfig(isEnabled = false, "", "", "")
-            is Analytics.PostHog -> AnalyticsConfig(
-                    isEnabled = true,
-                    postHogHost = config.postHogHost,
-                    postHogApiKey = config.postHogApiKey,
-                    policyLink = config.policyLink
-            )
-        }
-    }
-
-    @Provides
-    fun providesVoiceMessageConfig() = VoiceMessageConfig(
-            lengthLimitMs = Config.VOICE_MESSAGE_LIMIT_MS
-    )
-
-    @Provides
     @Singleton
     fun providesBuildMeta() = BuildMeta(
             isDebug = BuildConfig.DEBUG,
