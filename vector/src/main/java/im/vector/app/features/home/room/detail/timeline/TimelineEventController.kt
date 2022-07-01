@@ -605,7 +605,6 @@ class TimelineEventController @Inject constructor(
 
     private fun wantsDateSeparator(event: TimelineEvent, nextEvent: TimelineEvent?): Boolean {
         return when {
-            RoomLocalEcho.isLocalEchoId(partialState.roomSummary?.roomId.orEmpty()) -> false
             hasReachedInvite && hasUTD                                              -> true
             else                                                                    -> {
                 val date = event.root.localDateTime()
