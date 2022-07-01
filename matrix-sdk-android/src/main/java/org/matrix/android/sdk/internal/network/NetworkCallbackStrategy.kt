@@ -71,7 +71,7 @@ internal class PreferredNetworkCallbackStrategy @Inject constructor(context: Con
     override fun register(hasChanged: () -> Unit) {
         hasChangedCallback = hasChanged
         // Add a try catch for safety
-        // TODO: It happens when running all tests in CI, at some points we reach a limit here causing TooManyRequestsException
+        // XXX: It happens when running all tests in CI, at some points we reach a limit here causing TooManyRequestsException
         // and crashing the sync thread. We might have problem here, would need some investigation
         // for now adding a catch to allow CI to continue running
         try {
