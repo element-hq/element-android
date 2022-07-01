@@ -34,8 +34,11 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
+import org.matrix.android.sdk.api.session.room.model.RoomThirdPartyInviteContent
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
+import org.matrix.android.sdk.api.session.room.model.localecho.LocalRoomThirdPartyInviteContent
+import org.matrix.android.sdk.api.session.room.model.localecho.LocalThreePid
 import org.matrix.android.sdk.api.session.room.model.localecho.RoomLocalEcho
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.sync.model.RoomSyncSummary
@@ -204,6 +207,7 @@ internal class DefaultCreateLocalRoomTask @Inject constructor(
         val myUser = userService.getUser(userId) ?: User(userId)
         val invitedUsers = createRoomBody.invitedUserIds.orEmpty()
                 .mapNotNull { tryOrNull { userService.resolveUser(it) } }
+        val invited3Pids = createRoomBody.invite3pids.orEmpty()
 
         val createRoomEvent = createLocalEvent(
                 type = EventType.STATE_ROOM_CREATE,
@@ -233,11 +237,40 @@ internal class DefaultCreateLocalRoomTask @Inject constructor(
             )
         }
 
+        val localRoomThreePidEvents = invited3Pids.map { body ->
+            createLocalEvent(
+                    type = EventType.LOCAL_STATE_ROOM_THIRD_PARTY_INVITE,
+                    content = LocalRoomThirdPartyInviteContent(
+                            isDirect = createRoomBody.isDirect.orFalse(),
+                            membership = Membership.INVITE,
+                            displayName = body.address,
+                            thirdPartyInvite = LocalThreePid(
+                                    msisdn = body.address.takeIf { body.medium == "msisdn" },
+                                    email = body.address.takeIf { body.medium == "email" }
+                            )
+                    ).toContent()
+            )
+        }
+
+        val roomThreePidEvents = invited3Pids.map { body ->
+            createLocalEvent(
+                    type = EventType.STATE_ROOM_THIRD_PARTY_INVITE,
+                    content = RoomThirdPartyInviteContent(
+                            displayName = body.address,
+                            keyValidityUrl = null,
+                            publicKey = null,
+                            publicKeys = null
+                    ).toContent()
+            )
+        }
+
         return buildList {
             add(createRoomEvent)
             add(myRoomMemberEvent)
             addAll(createRoomBody.initialStates.orEmpty().map { createLocalEvent(it.type, it.content, it.stateKey) })
             addAll(roomMemberEvents)
+            addAll(roomThreePidEvents)
+            addAll(localRoomThreePidEvents)
         }
     }
 

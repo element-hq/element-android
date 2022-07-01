@@ -44,6 +44,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomNameContent
 import org.matrix.android.sdk.api.session.room.model.RoomTopicContent
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
+import org.matrix.android.sdk.api.session.room.model.localecho.LocalRoomThirdPartyInviteContent
 import org.matrix.android.sdk.api.session.room.model.tombstone.RoomTombstoneContent
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.database.awaitNotEmptyResult
@@ -104,13 +105,11 @@ internal class DefaultCreateRoomFromLocalRoomTask @Inject constructor(
         val roomId = createRoomTask.execute(createRoomParams)
 
         try {
+            // Wait for all the room events before triggering the replacement room
             awaitNotEmptyResult(realmConfiguration, TimeUnit.MINUTES.toMillis(1L)) { realm ->
                 realm.where(RoomSummaryEntity::class.java)
                         .equalTo(RoomSummaryEntityFields.ROOM_ID, roomId)
-                        .equalTo(
-                                RoomSummaryEntityFields.INVITED_MEMBERS_COUNT,
-                                createRoomParams.invitedUserIds.size.minus(1) + createRoomParams.invite3pids.size
-                        )
+                        .equalTo(RoomSummaryEntityFields.INVITED_MEMBERS_COUNT, createRoomParams.invitedUserIds.size.minus(1))
             }
             awaitNotEmptyResult(realmConfiguration, TimeUnit.MINUTES.toMillis(1L)) { realm ->
                 EventEntity.whereRoomId(realm, roomId)
@@ -140,6 +139,7 @@ internal class DefaultCreateRoomFromLocalRoomTask @Inject constructor(
             stateEvents.forEach { event ->
                 createRoomParams = when (event.type) {
                     EventType.STATE_ROOM_MEMBER -> handleRoomMemberEvent(realm, event, createRoomParams)
+                    EventType.LOCAL_STATE_ROOM_THIRD_PARTY_INVITE -> handleLocalRoomThirdPartyInviteEvent(realm, event, createRoomParams)
                     EventType.STATE_ROOM_HISTORY_VISIBILITY -> handleRoomHistoryVisibilityEvent(realm, event, createRoomParams)
                     EventType.STATE_ROOM_ALIASES -> handleRoomAliasesEvent(realm, event, createRoomParams)
                     EventType.STATE_ROOM_AVATAR -> handleRoomAvatarEvent(realm, event, createRoomParams)
@@ -191,6 +191,19 @@ internal class DefaultCreateRoomFromLocalRoomTask @Inject constructor(
     private fun handleRoomMemberEvent(realm: Realm, event: CurrentStateEventEntity, params: CreateRoomParams): CreateRoomParams = params.apply {
         val content = getEventContent<RoomMemberContent>(realm, event.eventId) ?: return@apply
         invitedUserIds.add(event.stateKey)
+        if (content.isDirect) {
+            setDirectMessage()
+        }
+    }
+
+    private fun handleLocalRoomThirdPartyInviteEvent(realm: Realm, event: CurrentStateEventEntity, params: CreateRoomParams): CreateRoomParams = params.apply {
+        val content = getEventContent<LocalRoomThirdPartyInviteContent>(realm, event.eventId) ?: return@apply
+        val threePid = when {
+            content.thirdPartyInvite?.email != null -> ThreePid.Email(content.thirdPartyInvite.email)
+            content.thirdPartyInvite?.msisdn != null -> ThreePid.Msisdn(content.thirdPartyInvite.msisdn)
+            else -> return@apply
+        }
+        invite3pids.add(threePid)
         if (content.isDirect) {
             setDirectMessage()
         }
