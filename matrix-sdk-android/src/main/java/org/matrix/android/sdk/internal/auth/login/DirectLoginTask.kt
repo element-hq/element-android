@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.auth.login
 
 import dagger.Lazy
 import okhttp3.OkHttpClient
+import org.matrix.android.sdk.api.auth.LoginType
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
@@ -77,7 +78,7 @@ internal class DefaultDirectLoginTask @Inject constructor(
             }
         }
 
-        return sessionCreator.createSession(credentials, params.homeServerConnectionConfig)
+        return sessionCreator.createSession(credentials, params.homeServerConnectionConfig, LoginType.DIRECT)
     }
 
     private fun buildClient(homeServerConnectionConfig: HomeServerConnectionConfig): OkHttpClient {
