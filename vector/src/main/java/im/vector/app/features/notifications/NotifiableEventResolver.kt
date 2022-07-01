@@ -19,6 +19,7 @@ import android.net.Uri
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.extensions.takeAs
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.time.Clock
 import im.vector.app.features.displayname.getBestName
@@ -62,6 +63,7 @@ class NotifiableEventResolver @Inject constructor(
         private val noticeEventFormatter: NoticeEventFormatter,
         private val displayableEventFormatter: DisplayableEventFormatter,
         private val clock: Clock,
+        private val buildMeta: BuildMeta,
 ) {
 
     // private val eventDisplay = RiotEventDisplay(context)
@@ -264,7 +266,7 @@ class NotifiableEventResolver @Inject constructor(
             )
         } else {
             Timber.e("## unsupported notifiable event for eventId [${event.eventId}]")
-            if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
+            if (buildMeta.lowPrivacyLoggingEnabled) {
                 Timber.e("## unsupported notifiable event for event [$event]")
             }
             // TODO generic handling?

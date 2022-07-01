@@ -22,6 +22,7 @@ import androidx.annotation.WorkerThread
 import im.vector.app.ActiveSessionDataSource
 import im.vector.app.BuildConfig
 import im.vector.app.R
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.utils.FirstThrottler
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.settings.VectorPreferences
@@ -46,7 +47,8 @@ class NotificationDrawerManager @Inject constructor(
         private val activeSessionDataSource: ActiveSessionDataSource,
         private val notifiableEventProcessor: NotifiableEventProcessor,
         private val notificationRenderer: NotificationRenderer,
-        private val notificationEventPersistence: NotificationEventPersistence
+        private val notificationEventPersistence: NotificationEventPersistence,
+        private val buildMeta: BuildMeta,
 ) {
 
     private val handlerThread: HandlerThread = HandlerThread("NotificationDrawerManager", Thread.MIN_PRIORITY)
@@ -92,7 +94,7 @@ class NotificationDrawerManager @Inject constructor(
         }
         // If we support multi session, event list should be per userId
         // Currently only manage single session
-        if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
+        if (buildMeta.lowPrivacyLoggingEnabled) {
             Timber.d("onNotifiableEventReceived(): $notifiableEvent")
         } else {
             Timber.d("onNotifiableEventReceived(): is push: ${notifiableEvent.canBeReplaced}")

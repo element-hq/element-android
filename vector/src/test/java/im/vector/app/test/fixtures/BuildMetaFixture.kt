@@ -19,4 +19,9 @@ package im.vector.app.test.fixtures
 import android.os.Build
 import im.vector.app.core.resources.BuildMeta
 
-fun aBuildMeta() = BuildMeta(Build.VERSION_CODES.O)
+fun aBuildMeta() = BuildMeta(
+        isDebug = false,
+        sdkInt = Build.VERSION_CODES.O,
+        applicationId = "im.vector",
+        lowPrivacyLoggingEnabled = false,
+)

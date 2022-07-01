@@ -26,6 +26,7 @@ import androidx.core.content.getSystemService
 import androidx.core.location.LocationListenerCompat
 import im.vector.app.BuildConfig
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -40,7 +41,8 @@ import javax.inject.Singleton
 @Singleton
 class LocationTracker @Inject constructor(
         context: Context,
-        private val activeSessionHolder: ActiveSessionHolder
+        private val activeSessionHolder: ActiveSessionHolder,
+        private val buildMeta: BuildMeta,
 ) : LocationListenerCompat {
 
     private val locationManager = context.getSystemService<LocationManager>()
@@ -104,7 +106,7 @@ class LocationTracker @Inject constructor(
                     }
                     .maxByOrNull { location -> location.time }
                     ?.let { latestKnownLocation ->
-                        if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
+                        if (buildMeta.lowPrivacyLoggingEnabled) {
                             Timber.d("lastKnownLocation: $latestKnownLocation")
                         } else {
                             Timber.d("lastKnownLocation: ${latestKnownLocation.provider}")
@@ -162,7 +164,7 @@ class LocationTracker @Inject constructor(
     }
 
     override fun onLocationChanged(location: Location) {
-        if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
+        if (buildMeta.lowPrivacyLoggingEnabled) {
             Timber.d("onLocationChanged: $location")
         } else {
             Timber.d("onLocationChanged: ${location.provider}")
@@ -196,7 +198,7 @@ class LocationTracker @Inject constructor(
 
     private fun notifyLocation(location: Location) {
         activeSessionHolder.getSafeActiveSession()?.coroutineScope?.launch {
-            if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
+            if (buildMeta.lowPrivacyLoggingEnabled) {
                 Timber.d("notify location: $location")
             } else {
                 Timber.d("notify location: ${location.provider}")

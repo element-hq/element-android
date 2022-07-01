@@ -32,7 +32,6 @@ import dagger.hilt.components.SingletonComponent
 import im.vector.app.BuildConfig
 import im.vector.app.EmojiCompatWrapper
 import im.vector.app.EmojiSpanify
-import im.vector.app.config.Analytics
 import im.vector.app.config.Config
 import im.vector.app.SpaceStateHandler
 import im.vector.app.SpaceStateHandlerImpl
@@ -44,11 +43,9 @@ import im.vector.app.core.time.Clock
 import im.vector.app.core.time.DefaultClock
 import im.vector.app.core.utils.AndroidSystemSettingsProvider
 import im.vector.app.core.utils.SystemSettingsProvider
-import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.analytics.impl.DefaultVectorAnalytics
-import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageConfig
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.invite.CompileTimeAutoAcceptInvites
 import im.vector.app.features.navigation.DefaultNavigator
@@ -217,6 +214,7 @@ object VectorStaticModule {
             isDebug = BuildConfig.DEBUG,
             sdkInt = Build.VERSION.SDK_INT,
             applicationId = BuildConfig.APPLICATION_ID,
+            lowPrivacyLoggingEnabled = Config.LOW_PRIVACY_LOG_ENABLE,
     )
 
     @Provides
