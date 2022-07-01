@@ -156,7 +156,8 @@ internal class DefaultCreateLocalRoomTask @Inject constructor(
                 continue
             }
 
-            val eventEntity = event.toEntity(roomId, SendState.SYNCED, null).copyToRealmOrIgnore(realm, EventInsertType.INCREMENTAL_SYNC)
+            val now = clock.epochMillis()
+            val eventEntity = event.toEntity(roomId, SendState.SYNCED, now).copyToRealmOrIgnore(realm, EventInsertType.INCREMENTAL_SYNC)
             if (event.stateKey != null) {
                 CurrentStateEventEntity.getOrCreate(realm, roomId, event.stateKey, event.type).apply {
                     eventId = event.eventId
