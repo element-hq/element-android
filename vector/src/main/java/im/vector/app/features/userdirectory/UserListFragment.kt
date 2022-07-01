@@ -23,7 +23,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ScrollView
-import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
@@ -114,19 +113,23 @@ class UserListFragment @Inject constructor(
     }
 
     override fun handlePrepareMenu(menu: Menu) {
+        if (args.submitMenuItemId == -1) return
         withState(viewModel) {
             val showMenuItem = it.pendingSelections.isNotEmpty()
-            menu.forEach { menuItem ->
-                menuItem.isVisible = showMenuItem
-            }
+            menu.findItem(args.submitMenuItemId).isVisible = showMenuItem
         }
     }
 
     override fun handleMenuItemSelected(item: MenuItem): Boolean {
-        withState(viewModel) {
-            sharedActionViewModel.post(UserListSharedAction.OnMenuItemSelected(item.itemId, it.pendingSelections))
+        return when (item.itemId) {
+            args.submitMenuItemId -> {
+                withState(viewModel) {
+                    sharedActionViewModel.post(UserListSharedAction.OnMenuItemSubmitClick(it.pendingSelections))
+                }
+                true
+            }
+            else -> false
         }
-        return true
     }
 
     private fun setupRecyclerView() {
