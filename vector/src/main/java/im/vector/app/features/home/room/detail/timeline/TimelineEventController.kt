@@ -69,7 +69,6 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.ReadReceipt
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import org.matrix.android.sdk.api.session.room.model.localecho.RoomLocalEcho
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageInfoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
@@ -605,8 +604,8 @@ class TimelineEventController @Inject constructor(
 
     private fun wantsDateSeparator(event: TimelineEvent, nextEvent: TimelineEvent?): Boolean {
         return when {
-            hasReachedInvite && hasUTD                                              -> true
-            else                                                                    -> {
+            hasReachedInvite && hasUTD -> true
+            else -> {
                 val date = event.root.localDateTime()
                 val nextDate = nextEvent?.root?.localDateTime()
                 date.toLocalDate() != nextDate?.toLocalDate()
