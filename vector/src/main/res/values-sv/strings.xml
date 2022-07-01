@@ -2500,4 +2500,5 @@
     <string name="time_unit_second_short">sek</string>
     <string name="time_unit_minute_short">min</string>
     <string name="time_unit_hour_short">t</string>
+    <string name="action_next">Nästa</string>
 </resources>
