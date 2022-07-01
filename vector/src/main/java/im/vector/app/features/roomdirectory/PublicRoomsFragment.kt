@@ -105,14 +105,13 @@ class PublicRoomsFragment @Inject constructor(
         super.onDestroyView()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_room_directory_change_protocol -> {
                 sharedActionViewModel.post(RoomDirectorySharedAction.ChangeProtocol)
                 true
             }
-            else ->
-                super.onOptionsItemSelected(item)
+            else -> false
         }
     }
 

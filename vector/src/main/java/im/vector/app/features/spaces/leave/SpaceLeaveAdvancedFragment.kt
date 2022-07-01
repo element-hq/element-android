@@ -89,7 +89,7 @@ class SpaceLeaveAdvancedFragment @Inject constructor(
         }
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
+    override fun handlePrepareMenu(menu: Menu) {
         menu.findItem(R.id.menu_space_leave_search)?.let { searchItem ->
             searchItem.bind(
                     onExpanded = { viewModel.handle(SpaceLeaveAdvanceViewAction.SetFilteringEnabled(isEnabled = true)) },
@@ -97,7 +97,6 @@ class SpaceLeaveAdvancedFragment @Inject constructor(
                     onTextChanged = { viewModel.handle(SpaceLeaveAdvanceViewAction.UpdateFilter(it)) }
             )
         }
-        super.onPrepareOptionsMenu(menu)
     }
 
     override fun onDestroyView() {

@@ -24,6 +24,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowInsetsController
@@ -36,10 +37,12 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
@@ -199,6 +202,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
         supportFragmentManager.fragmentFactory = fragmentFactory
         viewModelFactory = activityEntryPoint.viewModelFactory()
         super.onCreate(savedInstanceState)
+        setupMenu()
         configurationViewModel = viewModelProvider.get(ConfigurationViewModel::class.java)
         bugReporter = singletonEntryPoint.bugReporter()
         pinLocker = singletonEntryPoint.pinLocker()
@@ -247,6 +251,30 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
                 setTitle(titleRes)
             }
         }
+    }
+
+    private fun setupMenu() {
+        // Always add a MenuProvider to handle the back action from the Toolbar
+        addMenuProvider(
+                object : MenuProvider {
+                    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                        getMenuRes()
+                                .takeIf { it != -1 }
+                                ?.let { menuInflater.inflate(it, menu) }
+                        handlePostCreateMenu(menu)
+                    }
+
+                    override fun onPrepareMenu(menu: Menu) {
+                        handlePrepareMenu(menu)
+                    }
+
+                    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                        return handleMenuItemSelected(menuItem)
+                    }
+                },
+                this,
+                Lifecycle.State.RESUMED
+        )
     }
 
     /**
@@ -467,24 +495,24 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
      * MENU MANAGEMENT
      * ========================================================================================== */
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val menuRes = getMenuRes()
+    @MenuRes
+    open fun getMenuRes() = -1
 
-        if (menuRes != -1) {
-            menuInflater.inflate(menuRes, menu)
-            return true
+    // No op by default
+    open fun handlePostCreateMenu(menu: Menu) = Unit
+
+    // No op by default
+    open fun handlePrepareMenu(menu: Menu) = Unit
+
+    @CallSuper
+    open fun handleMenuItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed(true)
+                true
+            }
+            else -> false
         }
-
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            onBackPressed(true)
-            return true
-        }
-
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onBackPressed() {
@@ -586,9 +614,6 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
     @StringRes
     open fun getTitleRes() = -1
-
-    @MenuRes
-    open fun getMenuRes() = -1
 
     /**
      * Return a object containing other themes for this activity.

@@ -170,14 +170,14 @@ class RoomProfileFragment @Inject constructor(
         headerViews.roomProfileAliasView.copyOnLongClick()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             R.id.roomProfileShareAction -> {
                 roomProfileViewModel.handle(RoomProfileAction.ShareRoomProfile)
-                return true
+                true
             }
+            else -> false
         }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun handleQuickActions(action: RoomListQuickActionsSharedAction) = when (action) {

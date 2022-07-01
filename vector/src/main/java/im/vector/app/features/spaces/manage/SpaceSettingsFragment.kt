@@ -111,18 +111,20 @@ class SpaceSettingsFragment @Inject constructor(
         super.onDestroyView()
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
+    override fun handlePrepareMenu(menu: Menu) {
         withState(viewModel) { state ->
             menu.findItem(R.id.roomSettingsSaveAction).isVisible = state.showSaveAction
         }
-        super.onPrepareOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.roomSettingsSaveAction) {
-            viewModel.handle(RoomSettingsAction.Save)
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.roomSettingsSaveAction -> {
+                viewModel.handle(RoomSettingsAction.Save)
+                true
+            }
+            else -> false
         }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun renderRoomSummary(state: RoomSettingsViewState) {

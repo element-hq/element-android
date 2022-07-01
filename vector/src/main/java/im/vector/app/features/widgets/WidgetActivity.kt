@@ -64,8 +64,6 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
 
     override fun getBinding() = ActivityWidgetBinding.inflate(layoutInflater)
 
-    override fun getMenuRes() = R.menu.menu_widget
-
     override fun getTitleRes() = R.string.room_widget_activity_title
 
     override fun initUiAndData() {

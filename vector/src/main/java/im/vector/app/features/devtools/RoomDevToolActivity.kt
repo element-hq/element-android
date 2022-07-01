@@ -133,16 +133,18 @@ class RoomDevToolActivity : SimpleFragmentActivity(), FragmentManager.OnBackStac
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menuItemEdit) {
-            viewModel.handle(RoomDevToolAction.MenuEdit)
-            return true
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menuItemEdit -> {
+                viewModel.handle(RoomDevToolAction.MenuEdit)
+                true
+            }
+            R.id.menuItemSend -> {
+                viewModel.handle(RoomDevToolAction.MenuItemSend)
+                true
+            }
+            else -> super.handleMenuItemSelected(item)
         }
-        if (item.itemId == R.id.menuItemSend) {
-            viewModel.handle(RoomDevToolAction.MenuItemSend)
-            return true
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onBackPressed() {
@@ -174,21 +176,22 @@ class RoomDevToolActivity : SimpleFragmentActivity(), FragmentManager.OnBackStac
         super.onDestroy()
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean = withState(viewModel) { state ->
-        menu.forEach {
-            val isVisible = when (it.itemId) {
-                R.id.menuItemEdit -> {
-                    state.displayMode is RoomDevToolViewState.Mode.StateEventDetail
+    override fun handlePrepareMenu(menu: Menu) {
+        withState(viewModel) { state ->
+            menu.forEach {
+                val isVisible = when (it.itemId) {
+                    R.id.menuItemEdit -> {
+                        state.displayMode is RoomDevToolViewState.Mode.StateEventDetail
+                    }
+                    R.id.menuItemSend -> {
+                        state.displayMode is RoomDevToolViewState.Mode.EditEventContent ||
+                                state.displayMode is RoomDevToolViewState.Mode.SendEventForm
+                    }
+                    else -> true
                 }
-                R.id.menuItemSend -> {
-                    state.displayMode is RoomDevToolViewState.Mode.EditEventContent ||
-                            state.displayMode is RoomDevToolViewState.Mode.SendEventForm
-                }
-                else -> true
+                it.isVisible = isVisible
             }
-            it.isVisible = isVisible
         }
-        return@withState true
     }
 
     companion object {

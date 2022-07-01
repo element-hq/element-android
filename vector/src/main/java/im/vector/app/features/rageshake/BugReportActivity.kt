@@ -120,29 +120,27 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
 
     override fun getMenuRes() = R.menu.bug_report
 
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+    override fun handlePrepareMenu(menu: Menu) {
         menu.findItem(R.id.ic_action_send_bug_report)?.let {
             val isValid = !views.bugReportMaskView.isVisible
 
             it.isEnabled = isValid
             it.icon.alpha = if (isValid) 255 else 100
         }
-
-        return super.onPrepareOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             R.id.ic_action_send_bug_report -> {
                 if (views.bugReportEditText.text.toString().trim().length >= 10) {
                     sendBugReport()
                 } else {
                     views.bugReportTextInputLayout.error = getString(R.string.bug_report_error_too_short)
                 }
-                return true
+                true
             }
+            else -> super.handleMenuItemSelected(item)
         }
-        return super.onOptionsItemSelected(item)
     }
 
     /**

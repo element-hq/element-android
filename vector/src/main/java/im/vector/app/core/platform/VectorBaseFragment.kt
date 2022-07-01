@@ -22,12 +22,16 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.annotation.MainThread
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
@@ -126,9 +130,7 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (getMenuRes() != -1) {
-            setHasOptionsMenu(true)
-        }
+        Timber.i("onCreate Fragment ${javaClass.simpleName}")
     }
 
     final override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -158,6 +160,30 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Timber.i("onViewCreated Fragment ${javaClass.simpleName}")
+        setupMenu()
+    }
+
+    private fun setupMenu() {
+        val menuRes = getMenuRes().takeIf { it != -1 } ?: return
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(
+                object : MenuProvider {
+                    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                        menuInflater.inflate(menuRes, menu)
+                        handlePostCreateMenu(menu)
+                    }
+
+                    override fun onPrepareMenu(menu: Menu) {
+                        handlePrepareMenu(menu)
+                    }
+
+                    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                        return handleMenuItemSelected(menuItem)
+                    }
+                },
+                viewLifecycleOwner,
+                Lifecycle.State.RESUMED
+        )
     }
 
     open fun showLoading(message: CharSequence?) {
@@ -272,12 +298,14 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
 
     open fun getMenuRes() = -1
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        val menuRes = getMenuRes()
+    // No op by default
+    open fun handlePostCreateMenu(menu: Menu) = Unit
 
-        if (menuRes != -1) {
-            inflater.inflate(menuRes, menu)
-        }
+    // No op by default
+    open fun handlePrepareMenu(menu: Menu) = Unit
+
+    open fun handleMenuItemSelected(item: MenuItem): Boolean {
+        throw NotImplementedError("You must override this method to handle click on menu item")
     }
 
     // This should be provided by the framework

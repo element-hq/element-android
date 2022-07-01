@@ -46,14 +46,13 @@ class PushGatewaysFragment @Inject constructor(
 
     override fun getMenuRes() = R.menu.menu_push_gateways
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.refresh -> {
                 viewModel.handle(PushGatewayAction.Refresh)
                 true
             }
-            else ->
-                super.onOptionsItemSelected(item)
+            else -> false
         }
     }
 

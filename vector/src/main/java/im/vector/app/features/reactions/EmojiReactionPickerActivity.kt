@@ -138,10 +138,7 @@ class EmojiReactionPickerActivity : VectorBaseActivity<ActivityEmojiReactionPick
         super.onDestroy()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater: MenuInflater = menuInflater
-        inflater.inflate(getMenuRes(), menu)
-
+    override fun handlePostCreateMenu(menu: Menu) {
         val searchItem = menu.findItem(R.id.search)
         (searchItem.actionView as? SearchView)?.let { searchView ->
             searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
@@ -175,7 +172,6 @@ class EmojiReactionPickerActivity : VectorBaseActivity<ActivityEmojiReactionPick
                     .launchIn(lifecycleScope)
         }
         searchItem.expandActionView()
-        return true
     }
 
     // TODO move to ThemeUtils when core module is created

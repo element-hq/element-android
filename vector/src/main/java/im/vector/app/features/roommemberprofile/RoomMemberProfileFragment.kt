@@ -160,14 +160,14 @@ class RoomMemberProfileFragment @Inject constructor(
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             R.id.roomMemberProfileShareAction -> {
                 viewModel.handle(RoomMemberProfileAction.ShareRoomMemberProfile)
-                return true
+                true
             }
+            else -> false
         }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun handleStartVerification(startVerification: RoomMemberProfileViewEvents.StartVerification) {

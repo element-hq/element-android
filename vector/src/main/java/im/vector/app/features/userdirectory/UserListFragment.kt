@@ -113,19 +113,20 @@ class UserListFragment @Inject constructor(
         super.onDestroyView()
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
+    override fun handlePrepareMenu(menu: Menu) {
         withState(viewModel) {
             val showMenuItem = it.pendingSelections.isNotEmpty()
             menu.forEach { menuItem ->
                 menuItem.isVisible = showMenuItem
             }
         }
-        super.onPrepareOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean = withState(viewModel) {
-        sharedActionViewModel.post(UserListSharedAction.OnMenuItemSelected(item.itemId, it.pendingSelections))
-        return@withState true
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
+        withState(viewModel) {
+            sharedActionViewModel.post(UserListSharedAction.OnMenuItemSelected(item.itemId, it.pendingSelections))
+        }
+        return true
     }
 
     private fun setupRecyclerView() {

@@ -187,16 +187,6 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
         }
     }
 
-//    I think this code is useful, but it violates the code quality rules
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        if (item.itemId == android .R. id.  home) {
-//            onBackPressed()
-//            return true
-//        }
-//
-//        return super.onOptionsItemSelected(item)
-//    }
-
     companion object {
         const val KEYS_VERSION = "KEYS_VERSION"
         const val MANUAL_EXPORT = "MANUAL_EXPORT"

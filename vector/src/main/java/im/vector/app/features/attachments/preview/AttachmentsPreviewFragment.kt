@@ -97,7 +97,7 @@ class AttachmentsPreviewFragment @Inject constructor(
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.attachmentsPreviewRemoveAction -> {
                 handleRemoveAction()
@@ -107,20 +107,16 @@ class AttachmentsPreviewFragment @Inject constructor(
                 handleEditAction()
                 true
             }
-            else -> {
-                super.onOptionsItemSelected(item)
-            }
+            else -> false
         }
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
+    override fun handlePrepareMenu(menu: Menu) {
         withState(viewModel) { state ->
             val editMenuItem = menu.findItem(R.id.attachmentsPreviewEditAction)
             val showEditMenuItem = state.attachments.getOrNull(state.currentAttachmentIndex)?.isEditable().orFalse()
             editMenuItem.setVisible(showEditMenuItem)
         }
-
-        super.onPrepareOptionsMenu(menu)
     }
 
     override fun getMenuRes() = R.menu.vector_attachments_preview

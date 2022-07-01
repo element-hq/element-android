@@ -151,17 +151,18 @@ class SpaceAddRoomFragment @Inject constructor(
         }
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        super.onPrepareOptionsMenu(menu)
+    override fun handlePrepareMenu(menu: Menu) {
         menu.findItem(R.id.spaceAddRoomSaveItem).isVisible = saveNeeded
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.spaceAddRoomSaveItem) {
-            viewModel.handle(SpaceAddRoomActions.Save)
-            return true
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.spaceAddRoomSaveItem -> {
+                viewModel.handle(SpaceAddRoomActions.Save)
+                true
+            }
+            else -> false
         }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onDestroyView() {

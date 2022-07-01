@@ -99,14 +99,14 @@ class LocationPreviewFragment @Inject constructor(
 
     override fun getMenuRes() = R.menu.menu_location_preview
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             R.id.share_external -> {
                 onShareLocationExternal()
-                return true
+                true
             }
+            else -> false
         }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun onShareLocationExternal() {

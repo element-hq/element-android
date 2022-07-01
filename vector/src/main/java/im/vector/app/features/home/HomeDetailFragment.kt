@@ -91,23 +91,21 @@ class HomeDetailFragment @Inject constructor(
 
     override fun getMenuRes() = R.menu.room_list
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             R.id.menu_home_mark_all_as_read -> {
                 viewModel.handle(HomeDetailAction.MarkAllRoomsRead)
-                return true
+                true
             }
+            else -> false
         }
-
-        return super.onOptionsItemSelected(item)
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
+    override fun handlePrepareMenu(menu: Menu) {
         withState(viewModel) { state ->
             val isRoomList = state.currentTab is HomeTab.RoomList
             menu.findItem(R.id.menu_home_mark_all_as_read).isVisible = isRoomList && hasUnreadRooms
         }
-        super.onPrepareOptionsMenu(menu)
     }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentHomeDetailBinding {

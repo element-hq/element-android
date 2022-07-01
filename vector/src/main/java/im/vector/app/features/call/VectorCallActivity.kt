@@ -214,16 +214,19 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         renderState(it)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menu_call_open_chat) {
-            returnToChat()
-            return true
-        } else if (item.itemId == android.R.id.home) {
-            // We check here as we want PiP in some cases
-            onBackPressed()
-            return true
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_call_open_chat -> {
+                returnToChat()
+                true
+            }
+            android.R.id.home -> {
+                // We check here as we want PiP in some cases
+                onBackPressed()
+                true
+            }
+            else -> super.handleMenuItemSelected(item)
         }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onDestroy() {
