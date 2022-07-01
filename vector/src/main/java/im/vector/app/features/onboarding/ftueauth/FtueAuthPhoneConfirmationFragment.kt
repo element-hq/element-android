@@ -21,22 +21,17 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.args
 import im.vector.app.R
 import im.vector.app.core.extensions.associateContentStateWith
 import im.vector.app.core.extensions.clearErrorOnChange
 import im.vector.app.core.extensions.content
-import im.vector.app.core.extensions.editText
 import im.vector.app.core.extensions.setOnImeDoneListener
 import im.vector.app.databinding.FragmentFtuePhoneConfirmationBinding
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.RegisterAction
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.failure.Failure
-import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
 @Parcelize
