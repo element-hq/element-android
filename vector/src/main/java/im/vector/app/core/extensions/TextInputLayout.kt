@@ -19,9 +19,13 @@ package im.vector.app.core.extensions
 import android.text.Editable
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.core.platform.SimpleTextWatcher
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import reactivecircus.flowbinding.android.widget.textChanges
 
 fun TextInputLayout.editText() = this.editText!!
@@ -37,11 +41,18 @@ fun TextInputLayout.content() = editText().text.toString()
 
 fun TextInputLayout.hasContent() = !editText().text.isNullOrEmpty()
 
-fun TextInputLayout.associateContentStateWith(button: View) {
+fun TextInputLayout.clearErrorOnChange(lifecycleOwner: LifecycleOwner) {
+    editText().textChanges()
+            .onEach { error = null }
+            .launchIn(lifecycleOwner.lifecycleScope)
+}
+
+fun TextInputLayout.associateContentStateWith(button: View, enabledPredicate: (String) -> Boolean = { it.isNotEmpty() }) {
+    button.isEnabled = enabledPredicate(content())
     editText().addTextChangedListener(object : SimpleTextWatcher() {
         override fun afterTextChanged(s: Editable) {
             val newContent = s.toString()
-            button.isEnabled = newContent.isNotEmpty()
+            button.isEnabled = enabledPredicate(newContent)
         }
     })
 }

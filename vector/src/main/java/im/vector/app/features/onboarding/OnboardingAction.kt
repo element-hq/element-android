@@ -47,7 +47,9 @@ sealed interface OnboardingAction : VectorViewModelAction {
     data class LoginWithToken(val loginToken: String) : OnboardingAction
     data class WebLoginSuccess(val credentials: Credentials) : OnboardingAction
     data class InitWith(val loginConfig: LoginConfig?) : OnboardingAction
-    data class ResetPassword(val email: String, val newPassword: String) : OnboardingAction
+    data class ResetPassword(val email: String, val newPassword: String?) : OnboardingAction
+    data class ConfirmNewPassword(val newPassword: String, val signOutAllDevices: Boolean) : OnboardingAction
+    object ResendResetPassword : OnboardingAction
     object ResetPasswordMailConfirmed : OnboardingAction
 
     data class MaybeUpdateHomeserverFromMatrixId(val userId: String) : OnboardingAction

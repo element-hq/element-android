@@ -32,8 +32,8 @@ import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.epoxy.setValueOnce
 import im.vector.app.core.platform.SimpleTextWatcher
 
-@EpoxyModelClass(layout = R.layout.item_form_text_input_with_button)
-abstract class FormEditTextWithButtonItem : VectorEpoxyModel<FormEditTextWithButtonItem.Holder>() {
+@EpoxyModelClass
+abstract class FormEditTextWithButtonItem : VectorEpoxyModel<FormEditTextWithButtonItem.Holder>(R.layout.item_form_text_input_with_button) {
 
     @EpoxyAttribute
     var hint: String? = null

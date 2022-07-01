@@ -39,8 +39,8 @@ import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationState
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_base_state)
-abstract class VerificationRequestItem : AbsBaseMessageItem<VerificationRequestItem.Holder>() {
+@EpoxyModelClass
+abstract class VerificationRequestItem : AbsBaseMessageItem<VerificationRequestItem.Holder>(R.layout.item_timeline_event_base_state) {
 
     override val baseAttributes: AbsBaseMessageItem.Attributes
         get() = attributes

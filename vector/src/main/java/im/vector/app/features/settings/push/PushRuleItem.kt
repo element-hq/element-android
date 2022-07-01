@@ -25,16 +25,16 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
-import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
+import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.features.notifications.toNotificationAction
 import im.vector.app.features.themes.ThemeUtils
 import org.matrix.android.sdk.api.session.pushrules.getActions
 import org.matrix.android.sdk.api.session.pushrules.rest.PushRule
 
-@EpoxyModelClass(layout = R.layout.item_pushrule_raw)
-abstract class PushRuleItem : EpoxyModelWithHolder<PushRuleItem.Holder>() {
+@EpoxyModelClass
+abstract class PushRuleItem : VectorEpoxyModel<PushRuleItem.Holder>(R.layout.item_pushrule_raw) {
 
     @EpoxyAttribute
     lateinit var pushRule: PushRule

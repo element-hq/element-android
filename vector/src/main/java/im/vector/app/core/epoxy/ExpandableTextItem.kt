@@ -28,8 +28,8 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.extensions.copyOnLongClick
 
-@EpoxyModelClass(layout = R.layout.item_expandable_textview)
-abstract class ExpandableTextItem : VectorEpoxyModel<ExpandableTextItem.Holder>() {
+@EpoxyModelClass
+abstract class ExpandableTextItem : VectorEpoxyModel<ExpandableTextItem.Holder>(R.layout.item_expandable_textview) {
 
     @EpoxyAttribute
     lateinit var content: String

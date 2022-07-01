@@ -29,8 +29,8 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 /**
  * A send state for bottom sheet.
  */
-@EpoxyModelClass(layout = R.layout.item_bottom_sheet_message_status)
-abstract class BottomSheetSendStateItem : VectorEpoxyModel<BottomSheetSendStateItem.Holder>() {
+@EpoxyModelClass
+abstract class BottomSheetSendStateItem : VectorEpoxyModel<BottomSheetSendStateItem.Holder>(R.layout.item_bottom_sheet_message_status) {
 
     @EpoxyAttribute
     var showProgress: Boolean = false

@@ -3023,19 +3023,9 @@
     <string name="location_share_live_select_duration_option_1">15 minutes</string>
     <string name="location_share_live_select_duration_option_2">1 hour</string>
     <string name="location_share_live_select_duration_option_3">8 hours</string>
-    <!--TODO delete-->
-    <string name="location_in_background_missing_permission_dialog_title" tools:ignore="UnusedResources">Allow access</string>
-    <!--TODO delete-->
-    <string name="location_in_background_missing_permission_dialog_content" xmlns:tools="http://schemas.android.com/tools" tools:ignore="UnusedResources">If you’d like to share your Live location, ${app_name} needs location access all the time when the app is in the background.\nWe will only access your location for the duration that you choose.</string>
     <string name="location_not_available_dialog_title">${app_name} could not access your location</string>
     <string name="location_not_available_dialog_content">${app_name} could not access your location. Please try again later.</string>
     <string name="location_share_external">Open with</string>
-    <!--TODO delete-->
-    <string name="settings_enable_location_sharing" tools:ignore="UnusedResources">Enable location sharing</string>
-    <!--TODO delete-->
-    <string name="settings_enable_location_sharing_summary" tools:ignore="UnusedResources">Once enabled you will be able to send your location to any room</string>
-    <!--TODO delete-->
-    <string name="labs_render_locations_in_timeline" tools:ignore="UnusedResources">Render user locations in the timeline</string>
     <string name="location_timeline_failed_to_load_map">Failed to load map</string>
     <string name="location_share_live_enabled">Live location enabled</string>
     <string name="location_share_live_started">Loading live location…</string>

@@ -22,17 +22,17 @@ import androidx.annotation.DrawableRes
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
-import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
+import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import java.net.URL
 
-@EpoxyModelClass(layout = R.layout.item_room_widget)
-abstract class RoomWidgetItem : EpoxyModelWithHolder<RoomWidgetItem.Holder>() {
+@EpoxyModelClass
+abstract class RoomWidgetItem : VectorEpoxyModel<RoomWidgetItem.Holder>(R.layout.item_room_widget) {
 
     @EpoxyAttribute lateinit var widget: Widget
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var widgetClicked: ClickListener? = null

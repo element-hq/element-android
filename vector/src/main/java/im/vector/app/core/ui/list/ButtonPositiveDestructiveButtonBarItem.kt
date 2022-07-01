@@ -28,8 +28,10 @@ import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
 /**
  * A generic button list item.
  */
-@EpoxyModelClass(layout = R.layout.item_positive_destrutive_buttons)
-abstract class ButtonPositiveDestructiveButtonBarItem : VectorEpoxyModel<ButtonPositiveDestructiveButtonBarItem.Holder>() {
+@EpoxyModelClass
+abstract class ButtonPositiveDestructiveButtonBarItem : VectorEpoxyModel<ButtonPositiveDestructiveButtonBarItem.Holder>(
+        R.layout.item_positive_destrutive_buttons
+) {
 
     @EpoxyAttribute
     var positiveText: EpoxyCharSequence? = null

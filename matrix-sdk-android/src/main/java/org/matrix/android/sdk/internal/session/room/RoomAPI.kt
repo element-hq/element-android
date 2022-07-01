@@ -377,7 +377,7 @@ internal interface RoomAPI {
      * Get a list of aliases maintained by the local server for the given room.
      * Ref: https://matrix.org/docs/spec/client_server/r0.6.1#get-matrix-client-r0-rooms-roomid-aliases
      */
-    @GET(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "org.matrix.msc2432/rooms/{roomId}/aliases")
+    @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/aliases")
     suspend fun getAliases(@Path("roomId") roomId: String): GetAliasesResponse
 
     /**
