@@ -19,7 +19,6 @@ package im.vector.app.core.platform
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
-import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
@@ -36,7 +35,9 @@ import androidx.annotation.MenuRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.app.MultiWindowModeChangedInfo
 import androidx.core.content.ContextCompat
+import androidx.core.util.Consumer
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -202,6 +203,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
         supportFragmentManager.fragmentFactory = fragmentFactory
         viewModelFactory = activityEntryPoint.viewModelFactory()
         super.onCreate(savedInstanceState)
+        addOnMultiWindowModeChangedListener(onMultiWindowModeChangedListener)
         setupMenu()
         configurationViewModel = viewModelProvider.get(ConfigurationViewModel::class.java)
         bugReporter = singletonEntryPoint.bugReporter()
@@ -360,6 +362,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     }
 
     override fun onDestroy() {
+        removeOnMultiWindowModeChangedListener(onMultiWindowModeChangedListener)
         super.onDestroy()
         Timber.i("onDestroy Activity ${javaClass.simpleName}")
     }
@@ -445,11 +448,9 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
         }
     }
 
-    override fun onMultiWindowModeChanged(isInMultiWindowMode: Boolean, newConfig: Configuration) {
-        super.onMultiWindowModeChanged(isInMultiWindowMode, newConfig)
-
-        Timber.w("onMultiWindowModeChanged. isInMultiWindowMode: $isInMultiWindowMode")
-        bugReporter.inMultiWindowMode = isInMultiWindowMode
+    private val onMultiWindowModeChangedListener = Consumer<MultiWindowModeChangedInfo> {
+        Timber.w("onMultiWindowModeChanged. isInMultiWindowMode: ${it.isInMultiWindowMode}")
+        bugReporter.inMultiWindowMode = it.isInMultiWindowMode
     }
 
     protected fun createFragment(fragmentClass: Class<out Fragment>, argsParcelable: Parcelable? = null): Fragment {
