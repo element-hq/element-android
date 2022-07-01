@@ -351,15 +351,9 @@ internal class RoomSummaryUpdater @Inject constructor(
             }
 
             val acyclicGraph = graph.withoutEdges(backEdges)
-//            Timber.v("## SPACES: acyclicGraph $acyclicGraph")
             val flattenSpaceParents = acyclicGraph.flattenDestination().map {
                 it.key.name to it.value.map { it.name }
             }.toMap()
-//            Timber.v("## SPACES: flattenSpaceParents ${flattenSpaceParents.map { it.key.name to it.value.map { it.name } }.joinToString("\n") {
-//                it.first + ": [" + it.second.joinToString(",") + "]"
-//            }}")
-
-//            Timber.v("## SPACES: lookup map ${lookupMap.map { it.key.name to it.value.map { it.name } }.toMap()}")
 
             lookupMap.entries
                     .filter { it.key.roomType == RoomType.SPACE && it.key.membership == Membership.JOIN }
@@ -370,7 +364,7 @@ internal class RoomSummaryUpdater @Inject constructor(
 
                             entry.value.forEach { child ->
                                 RoomSummaryEntity.where(realm, child.roomId).findFirst()?.let { childSum ->
-                                    childSum.directParentName = parent.displayName()
+                                    childSum.directParentNames.add(parent.displayName())
 
                                     if (childSum.flattenParentIds == null) {
                                         childSum.flattenParentIds = ""
