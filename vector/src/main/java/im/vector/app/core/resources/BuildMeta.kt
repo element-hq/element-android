@@ -16,8 +16,8 @@
 
 package im.vector.app.core.resources
 
-import android.os.Build
-
 data class BuildMeta(
-        val sdkInt: Int = Build.VERSION.SDK_INT
+        val isDebug: Boolean,
+        val sdkInt: Int,
+        val applicationId: String,
 )

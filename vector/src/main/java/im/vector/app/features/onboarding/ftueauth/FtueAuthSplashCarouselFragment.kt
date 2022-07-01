@@ -31,6 +31,7 @@ import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.extensions.incrementByOneAndWrap
 import im.vector.app.core.extensions.setCurrentItem
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.databinding.FragmentFtueSplashCarouselBinding
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.onboarding.OnboardingAction
@@ -48,7 +49,8 @@ class FtueAuthSplashCarouselFragment @Inject constructor(
         private val vectorPreferences: VectorPreferences,
         private val vectorFeatures: VectorFeatures,
         private val carouselController: SplashCarouselController,
-        private val carouselStateFactory: SplashCarouselStateFactory
+        private val carouselStateFactory: SplashCarouselStateFactory,
+        private val buildMeta: BuildMeta,
 ) : AbstractFtueAuthFragment<FragmentFtueSplashCarouselBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueSplashCarouselBinding {
@@ -76,7 +78,7 @@ class FtueAuthSplashCarouselFragment @Inject constructor(
             debouncedClicks { alreadyHaveAnAccount() }
         }
 
-        if (BuildConfig.DEBUG || vectorPreferences.developerMode()) {
+        if (buildMeta.isDebug || vectorPreferences.developerMode()) {
             views.loginSplashVersion.isVisible = true
             @SuppressLint("SetTextI18n")
             views.loginSplashVersion.text = "Version : ${BuildConfig.VERSION_NAME}#${BuildConfig.BUILD_NUMBER}\n" +

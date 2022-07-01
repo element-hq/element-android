@@ -53,7 +53,6 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.EntryPointAccessors
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ActivityEntryPoint
@@ -67,6 +66,7 @@ import im.vector.app.core.extensions.restart
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.extensions.toMvRxBundle
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.utils.AndroidSystemSettingsProvider
 import im.vector.app.core.utils.ToolbarConfig
 import im.vector.app.core.utils.toast
@@ -155,11 +155,9 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     protected lateinit var bugReporter: BugReporter
     private lateinit var pinLocker: PinLocker
 
-    @Inject
-    lateinit var rageShake: RageShake
-
-    @Inject
-    lateinit var fontScalePreferences: FontScalePreferences
+    @Inject lateinit var rageShake: RageShake
+    @Inject lateinit var buildMeta: BuildMeta
+    @Inject lateinit var fontScalePreferences: FontScalePreferences
 
     lateinit var navigator: Navigator
         private set
@@ -409,7 +407,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
         }
         DebugReceiver
                 .getIntentFilter(this)
-                .takeIf { BuildConfig.DEBUG }
+                .takeIf { buildMeta.isDebug }
                 ?.let {
                     debugReceiver = DebugReceiver()
                     registerReceiver(debugReceiver, it)

@@ -41,6 +41,7 @@ import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.google.GoogleEmojiProvider
 import dagger.hilt.android.HiltAndroidApp
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.configuration.VectorConfiguration
@@ -99,6 +100,7 @@ class VectorApplication :
     @Inject lateinit var flipperProxy: FlipperProxy
     @Inject lateinit var matrix: Matrix
     @Inject lateinit var fcmHelper: FcmHelper
+    @Inject lateinit var buildMeta: BuildMeta
 
     // font thread handler
     private var fontThreadHandler: Handler? = null
@@ -127,12 +129,12 @@ class VectorApplication :
                 .filterIsInstance(JitsiMeetDefaultLogHandler::class.java)
                 .forEach { Timber.uproot(it) }
 
-        if (BuildConfig.DEBUG) {
+        if (buildMeta.isDebug) {
             Timber.plant(Timber.DebugTree())
         }
         Timber.plant(vectorFileLogger)
 
-        if (BuildConfig.DEBUG) {
+        if (buildMeta.isDebug) {
             Stetho.initializeWithDefaults(this)
         }
         logInfo()
@@ -148,7 +150,7 @@ class VectorApplication :
                 R.array.com_google_android_gms_fonts_certs
         )
         FontsContractCompat.requestFont(this, fontRequest, emojiCompatFontProvider, getFontThreadHandler())
-        VectorLocale.init(this)
+        VectorLocale.init(this, buildMeta)
         ThemeUtils.init(this)
         vectorConfiguration.applyToApplicationContext()
 

@@ -19,10 +19,15 @@ package im.vector.app.features.analytics.impl
 import android.content.Context
 import com.posthog.android.PostHog
 import im.vector.app.BuildConfig
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.features.analytics.AnalyticsConfig
 import javax.inject.Inject
 
-class PostHogFactory @Inject constructor(private val context: Context, private val analyticsConfig: AnalyticsConfig) {
+class PostHogFactory @Inject constructor(
+        private val context: Context,
+        private val analyticsConfig: AnalyticsConfig,
+        private val buildMeta: BuildMeta,
+) {
 
     fun createPosthog(): PostHog {
         return PostHog.Builder(context, analyticsConfig.postHogApiKey, analyticsConfig.postHogHost)
@@ -43,7 +48,7 @@ class PostHogFactory @Inject constructor(private val context: Context, private v
     }
 
     private fun getLogLevel(): PostHog.LogLevel {
-        return if (BuildConfig.DEBUG) {
+        return if (buildMeta.isDebug) {
             PostHog.LogLevel.DEBUG
         } else {
             PostHog.LogLevel.INFO

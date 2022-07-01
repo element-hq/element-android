@@ -26,9 +26,9 @@ import android.widget.ArrayAdapter
 import androidx.core.view.isInvisible
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputLayout
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.utils.ensureProtocol
 import im.vector.app.databinding.FragmentLoginServerUrlForm2Binding
 import kotlinx.coroutines.flow.launchIn
@@ -43,7 +43,9 @@ import javax.net.ssl.HttpsURLConnection
 /**
  * In this screen, the user is prompted to enter a homeserver url.
  */
-class LoginServerUrlFormFragment2 @Inject constructor() : AbstractLoginFragment2<FragmentLoginServerUrlForm2Binding>() {
+class LoginServerUrlFormFragment2 @Inject constructor(
+        private val buildMeta: BuildMeta,
+) : AbstractLoginFragment2<FragmentLoginServerUrlForm2Binding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginServerUrlForm2Binding {
         return FragmentLoginServerUrlForm2Binding.inflate(inflater, container, false)
@@ -80,7 +82,7 @@ class LoginServerUrlFormFragment2 @Inject constructor() : AbstractLoginFragment2
     }
 
     private fun setupUi(state: LoginViewState2) {
-        val completions = state.knownCustomHomeServersUrls + if (BuildConfig.DEBUG) listOf("http://10.0.2.2:8080") else emptyList()
+        val completions = state.knownCustomHomeServersUrls + if (buildMeta.isDebug) listOf("http://10.0.2.2:8080") else emptyList()
         views.loginServerUrlFormHomeServerUrl.setAdapter(
                 ArrayAdapter(
                         requireContext(),

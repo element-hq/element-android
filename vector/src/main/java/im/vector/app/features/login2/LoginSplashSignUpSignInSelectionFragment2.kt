@@ -23,6 +23,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import im.vector.app.BuildConfig
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.databinding.FragmentLoginSplash2Binding
 import im.vector.app.features.settings.VectorPreferences
 import javax.inject.Inject
@@ -32,7 +33,8 @@ import javax.inject.Inject
  * This is the new splash screen.
  */
 class LoginSplashSignUpSignInSelectionFragment2 @Inject constructor(
-        private val vectorPreferences: VectorPreferences
+        private val vectorPreferences: VectorPreferences,
+        private val buildMeta: BuildMeta,
 ) : AbstractLoginFragment2<FragmentLoginSplash2Binding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginSplash2Binding {
@@ -49,7 +51,7 @@ class LoginSplashSignUpSignInSelectionFragment2 @Inject constructor(
         views.loginSignupSigninSignUp.setOnClickListener { signUp() }
         views.loginSignupSigninSignIn.setOnClickListener { signIn() }
 
-        if (BuildConfig.DEBUG || vectorPreferences.developerMode()) {
+        if (buildMeta.isDebug || vectorPreferences.developerMode()) {
             views.loginSplashVersion.isVisible = true
             @SuppressLint("SetTextI18n")
             views.loginSplashVersion.text = "Version : ${BuildConfig.VERSION_NAME}\n" +

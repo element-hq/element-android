@@ -21,6 +21,7 @@ import android.media.AudioAttributes
 import android.media.MediaPlayer
 import androidx.core.content.FileProvider
 import im.vector.app.BuildConfig
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.app.features.voice.VoiceFailure
 import im.vector.app.features.voice.VoiceRecorder
@@ -43,6 +44,7 @@ import javax.inject.Inject
 class AudioMessageHelper @Inject constructor(
         private val context: Context,
         private val playbackTracker: AudioMessagePlaybackTracker,
+        private val buildMeta: BuildMeta,
         voiceRecorderProvider: VoiceRecorderProvider
 ) {
     private var mediaPlayer: MediaPlayer? = null
@@ -88,7 +90,7 @@ class AudioMessageHelper @Inject constructor(
 
         try {
             voiceMessageFile?.let {
-                val outputFileUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", it, "Voice message.${it.extension}")
+                val outputFileUri = FileProvider.getUriForFile(context, buildMeta.applicationId + ".fileProvider", it, "Voice message.${it.extension}")
                 return outputFileUri
                         .toMultiPickerAudioType(context)
                         ?.apply {

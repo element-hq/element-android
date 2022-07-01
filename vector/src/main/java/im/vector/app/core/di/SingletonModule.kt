@@ -23,6 +23,7 @@ import android.content.SharedPreferences
 import android.content.res.Resources
 import androidx.preference.PreferenceManager
 import com.google.i18n.phonenumbers.PhoneNumberUtil
+import android.os.Build
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -236,7 +237,11 @@ object VectorStaticModule {
 
     @Provides
     @Singleton
-    fun providesBuildMeta() = BuildMeta()
+    fun providesBuildMeta() = BuildMeta(
+            isDebug = BuildConfig.DEBUG,
+            sdkInt = Build.VERSION.SDK_INT,
+            applicationId = BuildConfig.APPLICATION_ID,
+    )
 
     @Provides
     @Singleton

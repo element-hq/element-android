@@ -26,6 +26,7 @@ import com.squareup.seismic.ShakeDetector
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.time.Clock
 import im.vector.app.features.disclaimer.SHARED_PREF_KEY
 import im.vector.app.features.home.ShortcutsHandler
@@ -38,6 +39,7 @@ import javax.inject.Inject
 class VectorPreferences @Inject constructor(
         private val context: Context,
         private val clock: Clock,
+        private val buildMeta: BuildMeta,
 ) {
 
     companion object {
@@ -364,7 +366,7 @@ class VectorPreferences @Inject constructor(
     }
 
     fun failFast(): Boolean {
-        return BuildConfig.DEBUG || (developerMode() && defaultPrefs.getBoolean(SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY, false))
+        return buildMeta.isDebug || (developerMode() && defaultPrefs.getBoolean(SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY, false))
     }
 
     fun didAskUserToEnableSessionPush(): Boolean {
