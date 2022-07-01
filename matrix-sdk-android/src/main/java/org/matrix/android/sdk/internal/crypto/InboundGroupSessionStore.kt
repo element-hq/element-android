@@ -23,7 +23,7 @@ import kotlinx.coroutines.sync.Mutex
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.logger.LoggerTag
-import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper2
+import org.matrix.android.sdk.internal.crypto.model.MXInboundMegolmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import timber.log.Timber
 import java.util.Timer
@@ -31,7 +31,7 @@ import java.util.TimerTask
 import javax.inject.Inject
 
 internal data class InboundGroupSessionHolder(
-        val wrapper: OlmInboundGroupSessionWrapper2,
+        val wrapper: MXInboundMegolmSessionWrapper,
         val mutex: Mutex = Mutex()
 )
 
@@ -58,7 +58,7 @@ internal class InboundGroupSessionStore @Inject constructor(
                 cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
                     Timber.tag(loggerTag.value).v("## Inbound: entryRemoved ${oldValue.wrapper.roomId}-${oldValue.wrapper.senderKey}")
                     store.storeInboundGroupSessions(listOf(oldValue).map { it.wrapper })
-                    oldValue.wrapper.olmInboundGroupSession?.releaseSession()
+                    oldValue.wrapper.session.releaseSession()
                 }
             }
         }
@@ -67,7 +67,7 @@ internal class InboundGroupSessionStore @Inject constructor(
     private val timer = Timer()
     private var timerTask: TimerTask? = null
 
-    private val dirtySession = mutableListOf<OlmInboundGroupSessionWrapper2>()
+    private val dirtySession = mutableListOf<InboundGroupSessionHolder>()
 
     @Synchronized
     fun clear() {
@@ -90,12 +90,12 @@ internal class InboundGroupSessionStore @Inject constructor(
     @Synchronized
     fun replaceGroupSession(old: InboundGroupSessionHolder, new: InboundGroupSessionHolder, sessionId: String, senderKey: String) {
         Timber.tag(loggerTag.value).v("## Replacing outdated session ${old.wrapper.roomId}-${old.wrapper.senderKey}")
-        dirtySession.remove(old.wrapper)
+        dirtySession.remove(old)
         store.removeInboundGroupSession(sessionId, senderKey)
         sessionCache.remove(CacheKey(sessionId, senderKey))
 
         // release removed session
-        old.wrapper.olmInboundGroupSession?.releaseSession()
+        old.wrapper.session.releaseSession()
 
         internalStoreGroupSession(new, sessionId, senderKey)
     }
@@ -108,7 +108,7 @@ internal class InboundGroupSessionStore @Inject constructor(
     private fun internalStoreGroupSession(holder: InboundGroupSessionHolder, sessionId: String, senderKey: String) {
         Timber.tag(loggerTag.value).v("## Inbound: getInboundGroupSession mark as dirty ${holder.wrapper.roomId}-${holder.wrapper.senderKey}")
         // We want to batch this a bit for performances
-        dirtySession.add(holder.wrapper)
+        dirtySession.add(holder)
 
         if (sessionCache[CacheKey(sessionId, senderKey)] == null) {
             // first time seen, put it in memory cache while waiting for batch insert
@@ -127,12 +127,12 @@ internal class InboundGroupSessionStore @Inject constructor(
 
     @Synchronized
     private fun batchSave() {
-        val toSave = mutableListOf<OlmInboundGroupSessionWrapper2>().apply { addAll(dirtySession) }
+        val toSave = mutableListOf<InboundGroupSessionHolder>().apply { addAll(dirtySession) }
         dirtySession.clear()
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             Timber.tag(loggerTag.value).v("## Inbound: getInboundGroupSession batching save of ${toSave.size}")
             tryOrNull {
-                store.storeInboundGroupSessions(toSave)
+                store.storeInboundGroupSessions(toSave.map { it.wrapper })
             }
         }
     }

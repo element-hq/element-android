@@ -35,7 +35,7 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.content.RoomKeyWithHeldContent
 import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
 import org.matrix.android.sdk.api.util.Optional
-import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper2
+import org.matrix.android.sdk.internal.crypto.model.MXInboundMegolmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.model.OlmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.model.OutboundGroupSessionWrapper
 import org.matrix.android.sdk.internal.crypto.store.db.model.KeysBackupDataEntity
@@ -64,7 +64,15 @@ internal interface IMXCryptoStore {
      *
      * @return the list of all known group sessions, to export them.
      */
-    fun getInboundGroupSessions(): List<OlmInboundGroupSessionWrapper2>
+    fun getInboundGroupSessions(): List<MXInboundMegolmSessionWrapper>
+
+    /**
+     * Retrieve the known inbound group sessions for the specified room.
+     *
+     * @param roomId The roomId that the sessions will be returned
+     * @return the list of all known group sessions, for the provided roomId
+     */
+    fun getInboundGroupSessions(roomId: String): List<MXInboundMegolmSessionWrapper>
 
     /**
      * @return true to unilaterally blacklist all unverified devices.
@@ -89,6 +97,20 @@ internal interface IMXCryptoStore {
     fun enableKeyGossiping(enable: Boolean)
 
     fun isKeyGossipingEnabled(): Boolean
+
+    /**
+     * As per MSC3061.
+     * If true will make it possible to share part of e2ee room history
+     * on invite depending on the room visibility setting.
+     */
+    fun enableShareKeyOnInvite(enable: Boolean)
+
+    /**
+     * As per MSC3061.
+     * If true will make it possible to share part of e2ee room history
+     * on invite depending on the room visibility setting.
+     */
+    fun isShareKeysOnInviteEnabled(): Boolean
 
     /**
      * Provides the rooms ids list in which the messages are not encrypted for the unverified devices.
@@ -250,6 +272,17 @@ internal interface IMXCryptoStore {
 
     fun setShouldEncryptForInvitedMembers(roomId: String, shouldEncryptForInvitedMembers: Boolean)
 
+    fun shouldShareHistory(roomId: String): Boolean
+
+    /**
+     * Sets a boolean flag that will determine whether or not room history (existing inbound sessions)
+     * will be shared to new user invites.
+     *
+     * @param roomId the room id
+     * @param shouldShareHistory The boolean flag
+     */
+    fun setShouldShareHistory(roomId: String, shouldShareHistory: Boolean)
+
     /**
      * Store a session between the logged-in user and another device.
      *
@@ -290,7 +323,7 @@ internal interface IMXCryptoStore {
      *
      * @param sessions the inbound group sessions to store.
      */
-    fun storeInboundGroupSessions(sessions: List<OlmInboundGroupSessionWrapper2>)
+    fun storeInboundGroupSessions(sessions: List<MXInboundMegolmSessionWrapper>)
 
     /**
      * Retrieve an inbound group session.
@@ -299,7 +332,17 @@ internal interface IMXCryptoStore {
      * @param senderKey the base64-encoded curve25519 key of the sender.
      * @return an inbound group session.
      */
-    fun getInboundGroupSession(sessionId: String, senderKey: String): OlmInboundGroupSessionWrapper2?
+    fun getInboundGroupSession(sessionId: String, senderKey: String): MXInboundMegolmSessionWrapper?
+
+    /**
+     * Retrieve an inbound group session, filtering shared history.
+     *
+     * @param sessionId the session identifier.
+     * @param senderKey the base64-encoded curve25519 key of the sender.
+     * @param sharedHistory filter inbound session with respect to shared history field
+     * @return an inbound group session.
+     */
+    fun getInboundGroupSession(sessionId: String, senderKey: String, sharedHistory: Boolean): MXInboundMegolmSessionWrapper?
 
     /**
      * Get the current outbound group session for this encrypted room.
@@ -333,7 +376,7 @@ internal interface IMXCryptoStore {
      *
      * @param olmInboundGroupSessionWrappers the sessions
      */
-    fun markBackupDoneForInboundGroupSessions(olmInboundGroupSessionWrappers: List<OlmInboundGroupSessionWrapper2>)
+    fun markBackupDoneForInboundGroupSessions(olmInboundGroupSessionWrappers: List<MXInboundMegolmSessionWrapper>)
 
     /**
      * Retrieve inbound group sessions that are not yet backed up.
@@ -341,7 +384,7 @@ internal interface IMXCryptoStore {
      * @param limit the maximum number of sessions to return.
      * @return an array of non backed up inbound group sessions.
      */
-    fun inboundGroupSessionsToBackup(limit: Int): List<OlmInboundGroupSessionWrapper2>
+    fun inboundGroupSessionsToBackup(limit: Int): List<MXInboundMegolmSessionWrapper>
 
     /**
      * Number of stored inbound group sessions.

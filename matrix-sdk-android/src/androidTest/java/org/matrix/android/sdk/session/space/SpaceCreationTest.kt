@@ -56,19 +56,17 @@ class SpaceCreationTest : InstrumentedTest {
         val roomName = "My Space"
         val topic = "A public space for test"
         var spaceId: String = ""
-        commonTestHelper.waitWithLatch {
+        commonTestHelper.runBlockingTest {
             spaceId = session.spaceService().createSpace(roomName, topic, null, true)
-            // wait a bit to let the summary update it self :/
-            it.countDown()
         }
-        Thread.sleep(4_000)
 
-        val syncedSpace = session.spaceService().getSpace(spaceId)
         commonTestHelper.waitWithLatch {
             commonTestHelper.retryPeriodicallyWithLatch(it) {
-                syncedSpace?.asRoom()?.roomSummary()?.name != null
+                session.spaceService().getSpace(spaceId)?.asRoom()?.roomSummary()?.name != null
             }
         }
+
+        val syncedSpace = session.spaceService().getSpace(spaceId)
         assertEquals("Room name should be set", roomName, syncedSpace?.asRoom()?.roomSummary()?.name)
         assertEquals("Room topic should be set", topic, syncedSpace?.asRoom()?.roomSummary()?.topic)
         // assertEquals(topic, syncedSpace.asRoom().roomSummary()?., "Room topic should be set")

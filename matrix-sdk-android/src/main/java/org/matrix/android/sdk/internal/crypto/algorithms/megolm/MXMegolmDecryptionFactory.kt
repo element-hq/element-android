@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.crypto.algorithms.megolm
 
 import dagger.Lazy
+import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.internal.crypto.MXOlmDevice
 import org.matrix.android.sdk.internal.crypto.OutgoingKeyRequestManager
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
@@ -27,6 +28,7 @@ internal class MXMegolmDecryptionFactory @Inject constructor(
         private val olmDevice: MXOlmDevice,
         private val outgoingKeyRequestManager: OutgoingKeyRequestManager,
         private val cryptoStore: IMXCryptoStore,
+        private val matrixConfiguration: MatrixConfiguration,
         private val eventsManager: Lazy<StreamEventsManager>
 ) {
 
@@ -35,7 +37,7 @@ internal class MXMegolmDecryptionFactory @Inject constructor(
                 olmDevice,
                 outgoingKeyRequestManager,
                 cryptoStore,
-                eventsManager
-        )
+                matrixConfiguration,
+                eventsManager)
     }
 }
