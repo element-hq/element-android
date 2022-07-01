@@ -23,6 +23,7 @@ import org.matrix.android.sdk.internal.crypto.store.db.deserializeFromRealm
 import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoMetadataEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoRoomEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.OlmInboundGroupSessionEntityFields
+import org.matrix.android.sdk.internal.crypto.store.db.model.OutboundGroupSessionInfoEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.serializeForRealm
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
@@ -40,6 +41,13 @@ internal class MigrateCryptoTo017(realm: DynamicRealm) : RealmMigrator(realm, 17
                     // We don't have access to the session database to check for the state here and set the good value.
                     // But for now as it's behind a lab flag, will set to false and force initial sync when enabled
                     it.setBoolean(CryptoRoomEntityFields.SHOULD_SHARE_HISTORY, false)
+                }
+
+        realm.schema.get("OutboundGroupSessionInfoEntity")
+                ?.addField(OutboundGroupSessionInfoEntityFields.SHOULD_SHARE_HISTORY, Boolean::class.java)?.transform {
+                    // We don't have access to the session database to check for the state here and set the good value.
+                    // But for now as it's behind a lab flag, will set to false and force initial sync when enabled
+                    it.setBoolean(OutboundGroupSessionInfoEntityFields.SHOULD_SHARE_HISTORY, false)
                 }
 
         realm.schema.get("CryptoMetadataEntity")

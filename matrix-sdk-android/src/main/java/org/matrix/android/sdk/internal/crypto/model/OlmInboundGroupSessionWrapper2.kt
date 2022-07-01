@@ -107,11 +107,11 @@ internal class OlmInboundGroupSessionWrapper2 : Serializable {
 
     /**
      * Export the inbound group session keys.
-     * @param sharedHistory the flag that indicates whether or not the session can be shared
      * @param index the index to export. If null, the first known index will be used
+     *
      * @return the inbound group session as MegolmSessionData if the operation succeeds
      */
-    fun exportKeys(sharedHistory: Boolean = false, index: Long? = null): MegolmSessionData? {
+    fun exportKeys(index: Long? = null): MegolmSessionData? {
         return try {
             if (null == forwardingCurve25519KeyChain) {
                 forwardingCurve25519KeyChain = ArrayList()
@@ -133,8 +133,7 @@ internal class OlmInboundGroupSessionWrapper2 : Serializable {
                     roomId = roomId,
                     sessionId = safeOlmInboundGroupSession.sessionIdentifier(),
                     sessionKey = safeOlmInboundGroupSession.export(wantedIndex),
-                    algorithm = MXCRYPTO_ALGORITHM_MEGOLM,
-                    sharedHistory = sharedHistory
+                    algorithm = MXCRYPTO_ALGORITHM_MEGOLM
             )
         } catch (e: Exception) {
             Timber.e(e, "## export() : senderKey $senderKey failed")
