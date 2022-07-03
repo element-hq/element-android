@@ -40,7 +40,7 @@
     <string name="room_displayname_two_members">%1$s и %2$s</string>
     <string name="room_displayname_empty_room">Пустая комната</string>
     <string name="initial_sync_start_importing_account">Начальная синхронизация:
-\nИмпорт учетной записи…</string>
+\nИмпорт учётной записи…</string>
     <string name="initial_sync_start_importing_account_crypto">Начальная синхронизация:
 \nИмпорт криптографии</string>
     <string name="initial_sync_start_importing_account_rooms">Начальная синхронизация:
@@ -99,9 +99,9 @@
     <string name="notice_room_ban_by_you">Вы забанили %1$s</string>
     <string name="notice_room_withdraw_by_you">Вы отозвали приглашение %1$s</string>
     <string name="notice_avatar_url_changed_by_you">Вы сменили свой аватар</string>
-    <string name="notice_display_name_set_by_you">Вы сменили своё отображаемое имя на %1$s</string>
-    <string name="notice_display_name_changed_from_by_you">Вы сменили своё отображаемое имя с %1$s на %2$s</string>
-    <string name="notice_display_name_removed_by_you">Вы удалили своё отображаемое имя (%1$s)</string>
+    <string name="notice_display_name_set_by_you">Вы сменили отображаемое имя на %1$s</string>
+    <string name="notice_display_name_changed_from_by_you">Вы сменили отображаемое имя с %1$s на %2$s</string>
+    <string name="notice_display_name_removed_by_you">Вы удалили отображаемое имя (%1$s)</string>
     <string name="notice_room_topic_changed_by_you">Вы сменили тему на: %1$s</string>
     <string name="notice_room_name_changed_by_you">Вы сменили название комнаты на: %1$s</string>
     <string name="notice_placed_video_call_by_you">Вы начали видеозвонок.</string>
@@ -1361,7 +1361,7 @@
     <string name="login_validation_code_is_not_correct">Введенный код неверен. Пожалуйста, проверьте.</string>
     <string name="login_connect_using_matrix_id_submit">Войти с Matrix ID</string>
     <string name="login_signin_matrix_id_title">Войти с Matrix ID</string>
-    <string name="login_signin_matrix_id_notice">Если вы создаете учетную запись на домашнем сервере, используйте свой матричный идентификатор (например, @user:domain.com) и пароль ниже.</string>
+    <string name="login_signin_matrix_id_notice">Если вы создаёте учётную запись на домашнем сервере, используйте свой матричный идентификатор (например, @user:domain.com) и пароль ниже.</string>
     <string name="login_signin_matrix_id_hint">Matrix ID</string>
     <string name="login_signin_matrix_id_password_notice">Если вы не знаете свой пароль, вернитесь, чтобы сбросить его.</string>
     <string name="login_signin_matrix_id_error_invalid_matrix_id">Это недопустимый идентификатор пользователя. Ожидаемый формат: \'@user:homeserver.org\'</string>
@@ -2305,7 +2305,7 @@
     <string name="command_description_whois">Отображает информацию о пользователе</string>
     <string name="command_description_avatar_for_room">Изменяет ваш аватар только в этой текущей комнате</string>
     <string name="command_description_room_avatar">Меняет аватар текущей комнаты</string>
-    <string name="command_description_nick_for_room">Изменяет ваш отображаемое имя только в текущей комнате</string>
+    <string name="command_description_nick_for_room">Изменяет ваше отображаемое имя только в текущей комнате</string>
     <string name="command_description_room_name">Устанавливает имя комнаты</string>
     <string name="command_description_unignore_user">Прекращение игнорирования пользователя, показывает его сообщения в дальнейшем</string>
     <string name="command_description_ignore_user">Игнорирует пользователя, скрывая его сообщения от вас</string>
@@ -2389,8 +2389,8 @@
     <string name="contact_admin_to_restore_encryption">Обратитесь к администратору, чтобы восстановить шифрование до рабочего состояния.</string>
     <string name="encryption_has_been_misconfigured">Шифрование настроено неправильно.</string>
     <string name="sent_location">Поделились своим местоположением</string>
-    <string name="login_splash_already_have_account">У меня уже есть учетная запись</string>
-    <string name="login_splash_create_account">Создать учетную запись</string>
+    <string name="login_splash_already_have_account">У меня уже есть учётная запись</string>
+    <string name="login_splash_create_account">Создать учётную запись</string>
     <string name="ftue_auth_carousel_workplace_title">Обмен сообщениями для вашей команды.</string>
     <string name="ftue_auth_carousel_encrypted_body">Сквозное шифрование не требующее номера телефона. Нет рекламы или сбора данных.</string>
     <string name="ftue_auth_carousel_control_body">Решайте самостоятельно и независимо, где хранить беседы. Благодаря Matrix.</string>
@@ -2583,4 +2583,23 @@
     <string name="settings_security_pin_code_use_biometrics_error">Не удалось включить вход по биометрии.</string>
     <string name="auth_biometric_key_invalidated_message">Вход по биометрии был отключён, так как недавно был добавлен новый метод входа по биометрии. Вы можете снова включить его в настройках.</string>
     <string name="push_gateway_item_profile_tag">Метка профиля:</string>
+    <string name="live_location_labs_promotion_switch_title">Разрешить отправку местоположения</string>
+    <string name="live_location_labs_promotion_title">Трансляция местоположения</string>
+    <string name="live_location_labs_promotion_description">Обратите внимание: это временная реализация функции. Это означает, что вы не сможете удалить свою историю местоположений, а опытные пользователи смогут просмотреть вашу историю местоположений даже после того, как вы перестанете делиться своим местоположением в этой комнате.</string>
+    <string name="settings_troubleshoot_test_current_distributor">Сейчас используется %s.</string>
+    <string name="settings_troubleshoot_test_current_distributor_title">Способ</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="one">Найден %d способ.</item>
+        <item quantity="few">Найдено %d способа.</item>
+        <item quantity="many">Найдено %d способов.</item>
+        <item quantity="other">Найдено %d способов.</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_distributors_fdroid">Другого способа, кроме фоновой синхронизации, не найдено.</string>
+    <string name="settings_troubleshoot_test_distributors_gplay">Другого способа, кроме Google Play Service, не найдено.</string>
+    <string name="settings_troubleshoot_test_distributors_title">Доступные способы</string>
+    <string name="settings_notification_method">Способ оповещения</string>
+    <string name="unifiedpush_getdistributors_dialog_title">Выберите способ получения уведомлений</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">Сбросить способ оповещения</string>
+    <string name="unifiedpush_distributor_background_sync">Фоновая синхронизация</string>
+    <string name="action_next">Далее</string>
 </resources>
