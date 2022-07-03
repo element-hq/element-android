@@ -75,7 +75,13 @@ class EventHtmlRenderer @Inject constructor(
     }
         .usePlugin(
             MarkwonInlineParserPlugin.create(
-                MarkwonInlineParser.factoryBuilderNoDefaults().addInlineProcessor(HtmlInlineProcessor())
+                /* Configuring the Markwon inline formatting processor.
+                 * Default settings are all Markdown features. Turn those off, only using the
+                 * inline HTML processor and HTML entities processor.
+                 */
+                MarkwonInlineParser.factoryBuilderNoDefaults()
+                    .addInlineProcessor(HtmlInlineProcessor()) // use inline HTML processor
+                    .addInlineProcessor(EntityInlineProcessor()) // use HTML entities processor
             )
         )
         .usePlugin(object : AbstractMarkwonPlugin() {
