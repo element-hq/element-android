@@ -32,6 +32,7 @@ import android.view.ViewGroup
 import android.webkit.PermissionRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
@@ -50,6 +51,7 @@ import im.vector.app.core.utils.openUrlInExternalBrowser
 import im.vector.app.databinding.FragmentRoomWidgetBinding
 import im.vector.app.features.webview.WebEventListener
 import im.vector.app.features.widgets.ptt.BluetoothLowEnergyDeviceScanner
+import im.vector.app.features.widgets.ptt.BluetoothLowEnergyService
 import im.vector.app.features.widgets.webview.WebviewPermissionUtils
 import im.vector.app.features.widgets.webview.clearAfterWidget
 import im.vector.app.features.widgets.webview.setupForWidget
@@ -104,6 +106,7 @@ class WidgetFragment @Inject constructor(
                 is WidgetViewEvents.DisplayIntegrationManager -> displayIntegrationManager(it)
                 is WidgetViewEvents.Failure -> displayErrorDialog(it.throwable)
                 is WidgetViewEvents.Close -> Unit
+                is WidgetViewEvents.OnBluetoothDeviceData -> handleBluetoothDeviceData(it)
             }
         }
         viewModel.handle(WidgetAction.LoadFormattedUrl)
@@ -377,6 +380,16 @@ class WidgetFragment @Inject constructor(
     }
 
     private fun onBluetoothDeviceSelected(device: BluetoothDevice) {
-        
+        viewModel.handle(WidgetAction.ConnectToBluetoothDevice(device))
+
+        Intent(requireContext(), BluetoothLowEnergyService::class.java).also {
+            ContextCompat.startForegroundService(requireContext(), it)
+        }
+    }
+
+    private fun handleBluetoothDeviceData(event: WidgetViewEvents.OnBluetoothDeviceData) {
+        activity?.let {
+            views.widgetWebView.evaluateJavascript("alert(${event.data})", null)
+        }
     }
 }

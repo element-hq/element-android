@@ -19,17 +19,35 @@ package im.vector.app.features.widgets.ptt
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCallback
+import android.bluetooth.BluetoothGattCharacteristic
 import android.bluetooth.BluetoothManager
 import android.bluetooth.BluetoothProfile
+import android.content.Intent
+import android.os.Binder
+import android.os.IBinder
 import im.vector.app.core.services.VectorService
 import androidx.core.content.getSystemService
+import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.features.notifications.NotificationUtils
 import timber.log.Timber
+import javax.inject.Inject
+import kotlin.random.Random
 
+@AndroidEntryPoint
 class BluetoothLowEnergyService : VectorService() {
 
-    private val bluetoothManager = getSystemService<BluetoothManager>()
+    interface Callback {
+        fun onCharacteristicRead(data: String)
+    }
+
+    @Inject lateinit var notificationUtils: NotificationUtils
+
     private var bluetoothAdapter: BluetoothAdapter? = null
     private var bluetoothGatt: BluetoothGatt? = null
+
+    private val binder = LocalBinder()
+
+    var callback: Callback? = null
 
     private val gattCallback = object : BluetoothGattCallback() {
         override fun onConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int) {
@@ -43,15 +61,31 @@ class BluetoothLowEnergyService : VectorService() {
                 BluetoothProfile.STATE_DISCONNECTED -> Timber.d("### BluetoothLowEnergyService.newState: STATE_DISCONNECTED")
             }
         }
+
+        override fun onCharacteristicRead(gatt: BluetoothGatt, characteristic: BluetoothGattCharacteristic, status: Int) {
+            if (status == BluetoothGatt.GATT_SUCCESS) {
+                onCharacteristicRead(characteristic)
+            }
+        }
+
+        override fun onCharacteristicChanged(gatt: BluetoothGatt, characteristic: BluetoothGattCharacteristic) {
+            onCharacteristicRead(characteristic)
+        }
     }
 
     override fun onCreate() {
         super.onCreate()
-
         initializeBluetoothAdapter()
     }
 
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        val notification = notificationUtils.buildBluetoothLowEnergyNotification()
+        startForeground(Random.nextInt(), notification)
+        return START_STICKY
+    }
+
     private fun initializeBluetoothAdapter() {
+        val bluetoothManager = getSystemService<BluetoothManager>()
         bluetoothAdapter = bluetoothManager?.adapter
     }
 
@@ -59,5 +93,24 @@ class BluetoothLowEnergyService : VectorService() {
         bluetoothGatt = bluetoothAdapter
                 ?.getRemoteDevice(address)
                 ?.connectGatt(applicationContext, false, gattCallback)
+    }
+
+    private fun onCharacteristicRead(characteristic: BluetoothGattCharacteristic) {
+        val data = characteristic.value
+        if (data.isNotEmpty()) {
+            val stringBuilder = StringBuilder()
+            data.forEach {
+                stringBuilder.append(String.format("%02X ", it))
+            }
+            callback?.onCharacteristicRead(stringBuilder.toString())
+        }
+    }
+
+    override fun onBind(intent: Intent?): IBinder {
+        return binder
+    }
+
+    inner class LocalBinder : Binder() {
+        fun getService(): BluetoothLowEnergyService = this@BluetoothLowEnergyService
     }
 }

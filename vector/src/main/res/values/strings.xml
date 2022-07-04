@@ -3091,5 +3091,9 @@
     <string name="live_location_labs_promotion_title">Live location sharing</string>
     <string name="live_location_labs_promotion_description">Please note: this is a labs feature using a temporary implementation. This means you will not be able to delete your location history, and advanced users will be able to see your location history even after you stop sharing your live location with this room.</string>
     <string name="live_location_labs_promotion_switch_title">Enable location sharing</string>
+    
+    <!-- Element Call Widget - Push to Talk -->
+    <string name="push_to_talk_notification_title">${app_name} Push to Talk</string>
+    <string name="push_to_talk_notification_description">A service is running to communicate with BLE device</string>
 
 </resources>

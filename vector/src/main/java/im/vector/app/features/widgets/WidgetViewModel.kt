@@ -29,6 +29,7 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.widgets.permissions.WidgetPermissionsHelper
+import im.vector.app.features.widgets.ptt.BluetoothLowEnergyServiceConnection
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -52,11 +53,12 @@ class WidgetViewModel @AssistedInject constructor(
         @Assisted val initialState: WidgetViewState,
         widgetPostAPIHandlerFactory: WidgetPostAPIHandler.Factory,
         private val stringProvider: StringProvider,
-        private val session: Session
+        private val session: Session,
+        private val bluetoothLowEnergyServiceConnection: BluetoothLowEnergyServiceConnection,
 ) :
         VectorViewModel<WidgetViewState, WidgetAction, WidgetViewEvents>(initialState),
         WidgetPostAPIHandler.NavigationCallback,
-        IntegrationManagerService.Listener {
+        IntegrationManagerService.Listener, BluetoothLowEnergyServiceConnection.Callback {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<WidgetViewModel, WidgetViewState> {
@@ -147,7 +149,12 @@ class WidgetViewModel @AssistedInject constructor(
             WidgetAction.DeleteWidget -> handleDeleteWidget()
             WidgetAction.RevokeWidget -> handleRevokeWidget()
             WidgetAction.OnTermsReviewed -> loadFormattedUrl(forceFetchToken = false)
+            is WidgetAction.ConnectToBluetoothDevice -> handleConnectToBluetoothDevice(action)
         }
+    }
+
+    private fun handleConnectToBluetoothDevice(action: WidgetAction.ConnectToBluetoothDevice) {
+        bluetoothLowEnergyServiceConnection.bind(action.device, this)
     }
 
     private fun handleRevokeWidget() {
@@ -295,5 +302,9 @@ class WidgetViewModel @AssistedInject constructor(
 
     override fun openIntegrationManager(integId: String?, integType: String?) {
         _viewEvents.post(WidgetViewEvents.DisplayIntegrationManager(integId, integType))
+    }
+
+    override fun onCharacteristicRead(data: String) {
+        _viewEvents.post(WidgetViewEvents.OnBluetoothDeviceData(data))
     }
 }
