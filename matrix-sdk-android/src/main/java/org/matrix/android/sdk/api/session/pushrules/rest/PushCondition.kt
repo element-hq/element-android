@@ -63,7 +63,7 @@ data class PushCondition(
         return when (Kind.fromString(kind)) {
             Kind.EventMatch -> {
                 if (key != null && pattern != null) {
-                    EventMatchCondition(key, pattern, rule.ruleId == RuleIds.RULE_ID_CONTAIN_USER_NAME)
+                    EventMatchCondition(key, pattern)
                 } else {
                     Timber.e("Malformed Event match condition")
                     null

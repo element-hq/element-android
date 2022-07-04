@@ -67,7 +67,7 @@ class PushRulesConditionTest : MatrixTest {
         )
 
         assert(condition.isSatisfied(simpleTextEvent))
-        assert(!condition.isSatisfied(simpleRoomMemberEvent))
+        assertFalse(condition.isSatisfied(simpleRoomMemberEvent))
     }
 
     @Test
@@ -98,7 +98,7 @@ class PushRulesConditionTest : MatrixTest {
         val condition = EventMatchCondition("content.body", "cake", false)
 
         assert(condition.isSatisfied(createSimpleTextEvent("How was the cake?")))
-        assert(condition.isSatisfied(createSimpleTextEvent("Howwasthecake?")))
+        assertFalse(condition.isSatisfied(createSimpleTextEvent("Howwasthecake?")))
     }
 
     @Test
@@ -122,6 +122,21 @@ class PushRulesConditionTest : MatrixTest {
         assert(condition.isSatisfied(createSimpleTextEvent("hello ben!")))
         assert(condition.isSatisfied(createSimpleTextEvent("hello Ben!")))
         assert(condition.isSatisfied(createSimpleTextEvent("BEN")))
+    }
+
+    @Test
+    fun test_eventmatch_at_room_condition() {
+        val condition = EventMatchCondition("content.body", "@room", true)
+
+        assertFalse(condition.isSatisfied(createSimpleTextEvent("@roomba")))
+        assertFalse(condition.isSatisfied(createSimpleTextEvent("room benoit")))
+        assertFalse(condition.isSatisfied(createSimpleTextEvent("abc@roomba")))
+
+        assert(condition.isSatisfied(createSimpleTextEvent("@room")))
+        assert(condition.isSatisfied(createSimpleTextEvent("@room, ben")))
+        assert(condition.isSatisfied(createSimpleTextEvent("@ROOM")))
+        assert(condition.isSatisfied(createSimpleTextEvent("Use:@room")))
+        assert(condition.isSatisfied(createSimpleTextEvent("Don't ping @room!")))
     }
 
     @Test
