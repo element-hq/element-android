@@ -2577,4 +2577,10 @@
     <string name="screen_sharing_notification_title">${app_name} Демонстрация экрана</string>
     <string name="screen_sharing_notification_description">Идёт демонстрация экрана</string>
     <string name="location_share_live_view">Посмотреть трансляцию местоположения</string>
+    <string name="settings_troubleshoot_test_current_gateway">Текущий шлюз: %s</string>
+    <string name="settings_troubleshoot_test_current_gateway_title">Шлюз</string>
+    <string name="unifiedpush_distributor_fcm_fallback">Сервисы Google</string>
+    <string name="settings_security_pin_code_use_biometrics_error">Не удалось включить вход по биометрии.</string>
+    <string name="auth_biometric_key_invalidated_message">Вход по биометрии был отключён, так как недавно был добавлен новый метод входа по биометрии. Вы можете снова включить его в настройках.</string>
+    <string name="push_gateway_item_profile_tag">Метка профиля:</string>
 </resources>
