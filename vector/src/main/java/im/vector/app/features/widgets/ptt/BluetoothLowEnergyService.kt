@@ -17,6 +17,7 @@
 package im.vector.app.features.widgets.ptt
 
 import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCallback
 import android.bluetooth.BluetoothGattCharacteristic
@@ -24,6 +25,7 @@ import android.bluetooth.BluetoothManager
 import android.bluetooth.BluetoothProfile
 import android.content.Intent
 import android.os.Binder
+import android.os.Build
 import android.os.IBinder
 import im.vector.app.core.services.VectorService
 import androidx.core.content.getSystemService
@@ -90,9 +92,11 @@ class BluetoothLowEnergyService : VectorService() {
     }
 
     fun connect(address: String) {
-        bluetoothGatt = bluetoothAdapter
-                ?.getRemoteDevice(address)
-                ?.connectGatt(applicationContext, false, gattCallback)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            bluetoothGatt = bluetoothAdapter
+                    ?.getRemoteDevice(address)
+                    ?.connectGatt(applicationContext, false, gattCallback, BluetoothDevice.TRANSPORT_LE)
+        }
     }
 
     private fun onCharacteristicRead(characteristic: BluetoothGattCharacteristic) {
