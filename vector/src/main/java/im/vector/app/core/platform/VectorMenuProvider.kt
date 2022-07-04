@@ -28,10 +28,10 @@ interface VectorMenuProvider {
     fun getMenuRes(): Int
 
     // No op by default
-    fun handlePostCreateMenu(menu: Menu) = Unit
+    fun handlePostCreateMenu(menu: Menu) {}
 
     // No op by default
-    fun handlePrepareMenu(menu: Menu) = Unit
+    fun handlePrepareMenu(menu: Menu) {}
 
     fun handleMenuItemSelected(item: MenuItem): Boolean
 }
