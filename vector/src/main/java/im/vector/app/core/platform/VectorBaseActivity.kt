@@ -31,7 +31,6 @@ import android.view.WindowManager
 import android.widget.TextView
 import androidx.annotation.CallSuper
 import androidx.annotation.MainThread
-import androidx.annotation.MenuRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -90,6 +89,7 @@ import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.receivers.DebugReceiver
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.failure.InitialSyncRequestReason
@@ -257,21 +257,23 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
     private fun setupMenu() {
         // Always add a MenuProvider to handle the back action from the Toolbar
+        val vectorMenuProvider = this as? VectorMenuProvider
         addMenuProvider(
                 object : MenuProvider {
                     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                        getMenuRes()
-                                .takeIf { it != -1 }
-                                ?.let { menuInflater.inflate(it, menu) }
-                        handlePostCreateMenu(menu)
+                        vectorMenuProvider?.let {
+                            menuInflater.inflate(it.getMenuRes(), menu)
+                            it.handlePostCreateMenu(menu)
+                        }
                     }
 
                     override fun onPrepareMenu(menu: Menu) {
-                        handlePrepareMenu(menu)
+                        vectorMenuProvider?.handlePrepareMenu(menu)
                     }
 
                     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                        return handleMenuItemSelected(menuItem)
+                        return vectorMenuProvider?.handleMenuItemSelected(menuItem).orFalse() ||
+                                handleMenuItemHome(menuItem)
                     }
                 },
                 this,
@@ -492,21 +494,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
         }
     }
 
-    /* ==========================================================================================
-     * MENU MANAGEMENT
-     * ========================================================================================== */
-
-    @MenuRes
-    open fun getMenuRes() = -1
-
-    // No op by default
-    open fun handlePostCreateMenu(menu: Menu) = Unit
-
-    // No op by default
-    open fun handlePrepareMenu(menu: Menu) = Unit
-
-    @CallSuper
-    open fun handleMenuItemSelected(item: MenuItem): Boolean {
+    private fun handleMenuItemHome(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
                 onBackPressed(true)

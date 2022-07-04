@@ -43,6 +43,7 @@ import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.extensions.validateBackPressed
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.pushers.UnifiedPushHelper
 import im.vector.app.databinding.ActivityHomeBinding
@@ -103,7 +104,8 @@ class HomeActivity :
         VectorBaseActivity<ActivityHomeBinding>(),
         NavigationInterceptor,
         SpaceInviteBottomSheet.InteractionListener,
-        MatrixToBottomSheet.InteractionListener {
+        MatrixToBottomSheet.InteractionListener,
+        VectorMenuProvider {
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
 
@@ -584,7 +586,7 @@ class HomeActivity :
                 navigator.openSettings(this)
                 true
             }
-            else -> super.handleMenuItemSelected(item)
+            else -> false
         }
     }
 

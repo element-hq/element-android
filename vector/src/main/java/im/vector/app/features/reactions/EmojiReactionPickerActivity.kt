@@ -32,6 +32,7 @@ import im.vector.app.EmojiCompatFontProvider
 import im.vector.app.R
 import im.vector.app.core.extensions.observeEvent
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.databinding.ActivityEmojiReactionPickerBinding
 import im.vector.app.features.reactions.data.EmojiDataSource
 import im.vector.lib.core.utils.flow.throttleFirst
@@ -47,12 +48,16 @@ import javax.inject.Inject
  * TODO Finish Refactor to vector base activity
  */
 @AndroidEntryPoint
-class EmojiReactionPickerActivity : VectorBaseActivity<ActivityEmojiReactionPickerBinding>(),
-        EmojiCompatFontProvider.FontProviderListener {
+class EmojiReactionPickerActivity :
+        VectorBaseActivity<ActivityEmojiReactionPickerBinding>(),
+        EmojiCompatFontProvider.FontProviderListener,
+        VectorMenuProvider {
 
     lateinit var viewModel: EmojiChooserViewModel
 
     override fun getMenuRes() = R.menu.menu_emoji_reaction_picker
+
+    override fun handleMenuItemSelected(item: MenuItem) = false
 
     override fun getBinding() = ActivityEmojiReactionPickerBinding.inflate(layoutInflater)
 

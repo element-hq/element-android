@@ -28,6 +28,7 @@ import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.databinding.ActivityBugReportBinding
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import timber.log.Timber
@@ -36,7 +37,9 @@ import timber.log.Timber
  * Form to send a bug report.
  */
 @AndroidEntryPoint
-class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
+class BugReportActivity :
+        VectorBaseActivity<ActivityBugReportBinding>(),
+        VectorMenuProvider {
 
     override fun getBinding() = ActivityBugReportBinding.inflate(layoutInflater)
 
@@ -139,7 +142,7 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
                 }
                 true
             }
-            else -> super.handleMenuItemSelected(item)
+            else -> false
         }
     }
 

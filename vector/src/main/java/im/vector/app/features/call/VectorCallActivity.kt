@@ -51,6 +51,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.utils.PERMISSIONS_FOR_AUDIO_IP_CALL
 import im.vector.app.core.utils.PERMISSIONS_FOR_VIDEO_IP_CALL
 import im.vector.app.core.utils.checkPermissions
@@ -95,7 +96,10 @@ data class CallArgs(
 private val loggerTag = LoggerTag("VectorCallActivity", LoggerTag.VOIP)
 
 @AndroidEntryPoint
-class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallControlsView.InteractionListener {
+class VectorCallActivity :
+        VectorBaseActivity<ActivityCallBinding>(),
+        CallControlsView.InteractionListener,
+        VectorMenuProvider {
 
     override fun getBinding() = ActivityCallBinding.inflate(layoutInflater)
 
@@ -229,7 +233,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                 onBackPressed()
                 true
             }
-            else -> super.handleMenuItemSelected(item)
+            else -> false
         }
     }
 

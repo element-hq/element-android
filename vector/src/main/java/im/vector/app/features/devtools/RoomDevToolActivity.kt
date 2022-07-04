@@ -36,6 +36,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.SimpleFragmentActivity
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.createJSonViewerStyleProvider
 import kotlinx.parcelize.Parcelize
@@ -43,7 +44,10 @@ import org.billcarsonfr.jsonviewer.JSonViewerFragment
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class RoomDevToolActivity : SimpleFragmentActivity(), FragmentManager.OnBackStackChangedListener {
+class RoomDevToolActivity :
+        SimpleFragmentActivity(),
+        FragmentManager.OnBackStackChangedListener,
+        VectorMenuProvider {
 
     @Inject lateinit var colorProvider: ColorProvider
 
@@ -143,7 +147,7 @@ class RoomDevToolActivity : SimpleFragmentActivity(), FragmentManager.OnBackStac
                 viewModel.handle(RoomDevToolAction.MenuItemSend)
                 true
             }
-            else -> super.handleMenuItemSelected(item)
+            else -> false
         }
     }
 
