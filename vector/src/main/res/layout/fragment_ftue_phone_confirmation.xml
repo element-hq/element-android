@@ -92,7 +92,7 @@
             android:id="@+id/phoneConfirmationInput"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="@string/ftue_auth_phone_entry_title"
+            android:hint="@string/ftue_auth_phone_confirmation_entry_title"
             app:endIconMode="clear_text"
             app:layout_constraintBottom_toTopOf="@id/phoneConfirmationResend"
             app:layout_constraintEnd_toEndOf="@id/phoneConfirmationGutterEnd"
