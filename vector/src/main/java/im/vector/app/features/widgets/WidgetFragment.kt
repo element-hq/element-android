@@ -17,6 +17,9 @@
 package im.vector.app.features.widgets
 
 import android.app.Activity
+import android.bluetooth.BluetoothDevice
+import android.bluetooth.le.ScanCallback
+import android.bluetooth.le.ScanResult
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -28,6 +31,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.PermissionRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
@@ -45,10 +49,12 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.openUrlInExternalBrowser
 import im.vector.app.databinding.FragmentRoomWidgetBinding
 import im.vector.app.features.webview.WebEventListener
+import im.vector.app.features.widgets.ptt.BluetoothLowEnergyDeviceScanner
 import im.vector.app.features.widgets.webview.WebviewPermissionUtils
 import im.vector.app.features.widgets.webview.clearAfterWidget
 import im.vector.app.features.widgets.webview.setupForWidget
 import kotlinx.parcelize.Parcelize
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.terms.TermsService
 import timber.log.Timber
 import java.net.URISyntaxException
@@ -64,7 +70,8 @@ data class WidgetArgs(
 ) : Parcelable
 
 class WidgetFragment @Inject constructor(
-        private val permissionUtils: WebviewPermissionUtils
+        private val permissionUtils: WebviewPermissionUtils,
+        private val bluetoothLowEnergyDeviceScanner: BluetoothLowEnergyDeviceScanner,
 ) :
         VectorBaseFragment<FragmentRoomWidgetBinding>(),
         WebEventListener,
@@ -84,6 +91,11 @@ class WidgetFragment @Inject constructor(
         if (fragmentArgs.kind.isAdmin()) {
             viewModel.getPostAPIMediator().setWebView(views.widgetWebView)
         }
+
+        if (fragmentArgs.kind == WidgetKind.ELEMENT_CALL) {
+            startBluetoothScanning()
+        }
+
         viewModel.observeViewEvents {
             Timber.v("Observed view events: $it")
             when (it) {
@@ -125,14 +137,6 @@ class WidgetFragment @Inject constructor(
         views.widgetWebView.let {
             it.resumeTimers()
             it.onResume()
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        views.widgetWebView.let {
-            it.pauseTimers()
-            it.onPause()
         }
     }
 
@@ -339,5 +343,40 @@ class WidgetFragment @Inject constructor(
 
     private fun revokeWidget() {
         viewModel.handle(WidgetAction.RevokeWidget)
+    }
+
+    private var deviceListDialog: AlertDialog? = null
+
+    private fun startBluetoothScanning() {
+        val deviceListDialogBuilder = MaterialAlertDialogBuilder(requireContext())
+        val bluetoothDevices = mutableListOf<BluetoothDevice>()
+
+        bluetoothLowEnergyDeviceScanner.callback = object : ScanCallback() {
+            override fun onScanResult(callbackType: Int, result: ScanResult) {
+                super.onScanResult(callbackType, result)
+                Timber.d("### WidgetFragment. New BLE device found: " + result.device.name + " - " + result.device.address)
+                if (result.device.name == null) {
+                    return
+                }
+                bluetoothDevices.add(result.device)
+
+                deviceListDialogBuilder.setItems(
+                        bluetoothDevices.map { it.name + " " + it.address }.toTypedArray()
+                ) { _, which ->
+                    Timber.d("### WidgetFragment. $which selected")
+                    onBluetoothDeviceSelected(bluetoothDevices[which])
+                }
+
+                if (deviceListDialog?.isShowing.orFalse()) {
+                    deviceListDialog?.dismiss()
+                }
+                deviceListDialog = deviceListDialogBuilder.show()
+            }
+        }
+        bluetoothLowEnergyDeviceScanner.startScanning()
+    }
+
+    private fun onBluetoothDeviceSelected(device: BluetoothDevice) {
+        
     }
 }

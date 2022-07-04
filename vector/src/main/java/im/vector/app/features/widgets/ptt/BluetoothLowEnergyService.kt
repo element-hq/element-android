@@ -29,12 +29,16 @@ class BluetoothLowEnergyService : VectorService() {
 
     private val bluetoothManager = getSystemService<BluetoothManager>()
     private var bluetoothAdapter: BluetoothAdapter? = null
+    private var bluetoothGatt: BluetoothGatt? = null
 
     private val gattCallback = object : BluetoothGattCallback() {
         override fun onConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int) {
             when (newState) {
                 BluetoothProfile.STATE_CONNECTING -> Timber.d("### BluetoothLowEnergyService.newState: STATE_CONNECTING")
-                BluetoothProfile.STATE_CONNECTED -> Timber.d("### BluetoothLowEnergyService.newState: STATE_CONNECTED")
+                BluetoothProfile.STATE_CONNECTED -> {
+                    Timber.d("### BluetoothLowEnergyService.newState: STATE_CONNECTED")
+                    bluetoothGatt?.discoverServices()
+                }
                 BluetoothProfile.STATE_DISCONNECTING -> Timber.d("### BluetoothLowEnergyService.newState: STATE_DISCONNECTING")
                 BluetoothProfile.STATE_DISCONNECTED -> Timber.d("### BluetoothLowEnergyService.newState: STATE_DISCONNECTED")
             }
@@ -52,8 +56,8 @@ class BluetoothLowEnergyService : VectorService() {
     }
 
     fun connect(address: String) {
-        bluetoothAdapter
+        bluetoothGatt = bluetoothAdapter
                 ?.getRemoteDevice(address)
-                ?.connectGatt(applicationContext, true, gattCallback)
+                ?.connectGatt(applicationContext, false, gattCallback)
     }
 }
