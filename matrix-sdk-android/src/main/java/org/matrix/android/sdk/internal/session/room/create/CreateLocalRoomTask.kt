@@ -44,6 +44,7 @@ import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
 import org.matrix.android.sdk.internal.database.model.EventInsertType
 import org.matrix.android.sdk.internal.database.model.RoomEntity
+import org.matrix.android.sdk.internal.database.model.RoomMembersLoadStatusType
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.query.copyToRealmOrIgnore
 import org.matrix.android.sdk.internal.database.query.getOrCreate
@@ -94,6 +95,7 @@ internal class DefaultCreateLocalRoomTask @Inject constructor(
         RoomEntity.getOrCreate(realm, roomId).apply {
             membership = Membership.JOIN
             chunks.add(createLocalRoomChunk(realm, roomId, createRoomBody))
+            membersLoadStatus = RoomMembersLoadStatusType.LOADED
         }
     }
 

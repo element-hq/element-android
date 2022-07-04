@@ -34,7 +34,6 @@ import okhttp3.internal.closeQuietly
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.room.model.Membership
-import org.matrix.android.sdk.api.session.room.model.localecho.RoomLocalEcho
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
@@ -390,7 +389,6 @@ internal class DefaultTimeline(
     }
 
     private suspend fun loadRoomMembersIfNeeded() {
-        if (RoomLocalEcho.isLocalEchoId(roomId)) return
         val loadRoomMembersParam = LoadRoomMembersTask.Params(roomId, excludeMembership = Membership.LEAVE)
         try {
             loadRoomMembersTask.execute(loadRoomMembersParam)
