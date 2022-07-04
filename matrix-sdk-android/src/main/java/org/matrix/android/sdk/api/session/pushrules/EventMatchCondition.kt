@@ -56,7 +56,8 @@ class EventMatchCondition(
         // word boundary.
         return try {
             if (key == 'content.body') {
-                value.caseInsensitiveFind(pattern)
+                val regex = Regex("(\\W|^)"+pattern.simpleGlobToRegExp() + "(\\W|$)", setOf(RegexOption.DOT_MATCHES_ALL, RegexOption.IGNORE_CASE))
+                regex.containsMatchIn(value)
             } else {
                 val regex = Regex(pattern.simpleGlobToRegExp(), setOf(RegexOption.DOT_MATCHES_ALL, RegexOption.IGNORE_CASE))
                 regex.matches(value)
