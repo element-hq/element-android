@@ -74,6 +74,7 @@ import im.vector.app.core.animations.play
 import im.vector.app.core.dialogs.ConfirmationDialogBuilder
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.epoxy.LayoutManagerStateRestorer
+import im.vector.app.core.error.fatalError
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.containsRtLOverride
 import im.vector.app.core.extensions.ensureEndsLeftToRight
@@ -130,6 +131,7 @@ import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.attachments.AttachmentTypeSelectorView
 import im.vector.app.features.attachments.AttachmentsHelper
 import im.vector.app.features.attachments.ContactAttachment
+import im.vector.app.features.attachments.ShareIntentHandler
 import im.vector.app.features.attachments.preview.AttachmentsPreviewActivity
 import im.vector.app.features.attachments.preview.AttachmentsPreviewArgs
 import im.vector.app.features.attachments.toGroupedContentAttachmentData
@@ -272,6 +274,7 @@ class TimelineFragment @Inject constructor(
         private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
         private val callManager: WebRtcCallManager,
         private val audioMessagePlaybackTracker: AudioMessagePlaybackTracker,
+        private val shareIntentHandler: ShareIntentHandler,
         private val clock: Clock
 ) :
         VectorBaseFragment<FragmentTimelineBinding>(),
@@ -1615,7 +1618,9 @@ class TimelineFragment @Inject constructor(
 
     private fun sendUri(uri: Uri): Boolean {
         val shareIntent = Intent(Intent.ACTION_SEND, uri)
-        val isHandled = attachmentsHelper.handleShareIntent(requireContext(), shareIntent)
+        val isHandled = shareIntentHandler.handleIncomingShareIntent(requireContext(), shareIntent, ::onContentAttachmentsReady, onPlainText = {
+            fatalError("Should not happen as we're generating a File based share Intent", vectorPreferences.failFast())
+        })
         if (!isHandled) {
             Toast.makeText(requireContext(), R.string.error_handling_incoming_share, Toast.LENGTH_SHORT).show()
         }
@@ -2620,10 +2625,6 @@ class TimelineFragment @Inject constructor(
             val intent = AttachmentsPreviewActivity.newIntent(requireContext(), AttachmentsPreviewArgs(grouped.previewables))
             contentAttachmentActivityResultLauncher.launch(intent)
         }
-    }
-
-    override fun onAttachmentsProcessFailed() {
-        Toast.makeText(requireContext(), R.string.error_attachment, Toast.LENGTH_SHORT).show()
     }
 
     override fun onContactAttachmentReady(contactAttachment: ContactAttachment) {
