@@ -61,7 +61,7 @@ internal class DefaultDeleteLocalRoomTask @Inject constructor(
                         ?.also { Timber.i("## DeleteLocalRoomTask - TimelineEventEntity - delete ${it.size} entries") }
                         ?.deleteAllFromRealm()
                 ChunkEntity.where(realm, roomId = roomId).findAll()
-                        ?.also { Timber.i("## DeleteLocalRoomTask - RoomMemberSummaryEntity - delete ${it.size} entries") }
+                        ?.also { Timber.i("## DeleteLocalRoomTask - ChunkEntity - delete ${it.size} entries") }
                         ?.deleteAllFromRealm()
                 RoomSummaryEntity.where(realm, roomId = roomId).findAll()
                         ?.also { Timber.i("## DeleteLocalRoomTask - RoomSummaryEntity - delete ${it.size} entries") }
@@ -71,7 +71,7 @@ internal class DefaultDeleteLocalRoomTask @Inject constructor(
                         ?.deleteAllFromRealm()
             }
         } else {
-            Timber.i("## DeleteLocalRoomTask - Failed to remove room id $roomId: not a local room")
+            Timber.i("## DeleteLocalRoomTask - Failed to remove room with id $roomId: not a local room")
         }
     }
 }
