@@ -106,6 +106,7 @@ class PushRulesConditionTest : MatrixTest {
         val condition = EventMatchCondition("content.body", "cake*lie", false)
 
         assert(condition.isSatisfied(createSimpleTextEvent("How was the cakeisalie?")))
+        assertFalse(condition.isSatisfied(createSimpleTextEvent("How was the notcakeisalie?")))
     }
 
     @Test
