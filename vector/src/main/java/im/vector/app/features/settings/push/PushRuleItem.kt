@@ -73,7 +73,7 @@ abstract class PushRuleItem : VectorEpoxyModel<PushRuleItem.Holder>(R.layout.ite
             pushRule.conditions?.forEachIndexed { i, condition ->
                 if (i > 0) description.append("\n")
                 description.append(
-                        condition.asExecutableCondition(pushRule)?.technicalDescription()
+                        condition.asExecutableCondition()?.technicalDescription()
                                 ?: "UNSUPPORTED"
                 )
             }
