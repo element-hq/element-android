@@ -22,7 +22,6 @@ import org.matrix.android.sdk.api.session.pushrules.ContainsDisplayNameCondition
 import org.matrix.android.sdk.api.session.pushrules.EventMatchCondition
 import org.matrix.android.sdk.api.session.pushrules.Kind
 import org.matrix.android.sdk.api.session.pushrules.RoomMemberCountCondition
-import org.matrix.android.sdk.api.session.pushrules.RuleIds
 import org.matrix.android.sdk.api.session.pushrules.SenderNotificationPermissionCondition
 import timber.log.Timber
 

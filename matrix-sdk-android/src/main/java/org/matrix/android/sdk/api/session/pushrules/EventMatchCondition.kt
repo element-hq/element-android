@@ -17,8 +17,6 @@ package org.matrix.android.sdk.api.session.pushrules
 
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.internal.di.MoshiProvider
-import org.matrix.android.sdk.internal.util.caseInsensitiveFind
-import org.matrix.android.sdk.internal.util.hasSpecialGlobChar
 import org.matrix.android.sdk.internal.util.simpleGlobToRegExp
 import timber.log.Timber
 
