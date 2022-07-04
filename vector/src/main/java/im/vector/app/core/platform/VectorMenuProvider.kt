@@ -21,7 +21,7 @@ import android.view.MenuItem
 import androidx.annotation.MenuRes
 
 /**
- * Let your Activity of Fragment implement this interface if they provide a Menu
+ * Let your Activity of Fragment implement this interface if they provide a Menu.
  */
 interface VectorMenuProvider {
     @MenuRes
