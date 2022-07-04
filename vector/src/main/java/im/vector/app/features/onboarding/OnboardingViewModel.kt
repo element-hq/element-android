@@ -302,7 +302,9 @@ class OnboardingViewModel @AssistedInject constructor(
                                 authenticationDescription = awaitState().selectedAuthenticationState.description
                                         ?: AuthenticationDescription.Register(AuthenticationDescription.AuthenticationType.Other)
                         )
-                        RegistrationActionHandler.Result.StartRegistration -> _viewEvents.post(OnboardingViewEvents.DisplayStartRegistration)
+                        RegistrationActionHandler.Result.StartRegistration -> {
+                            overrideNextStage?.invoke() ?: _viewEvents.post(OnboardingViewEvents.DisplayStartRegistration)
+                        }
                         RegistrationActionHandler.Result.UnsupportedStage -> _viewEvents.post(OnboardingViewEvents.DisplayRegistrationFallback)
                         is RegistrationActionHandler.Result.SendEmailSuccess -> _viewEvents.post(OnboardingViewEvents.OnSendEmailSuccess(it.email))
                         is RegistrationActionHandler.Result.SendMsisdnSuccess -> _viewEvents.post(OnboardingViewEvents.OnSendMsisdnSuccess(it.msisdn.msisdn))
