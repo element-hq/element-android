@@ -21,7 +21,6 @@ import android.content.Intent
 import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuItem
-import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.airbnb.mvrx.Fail
@@ -182,19 +181,9 @@ class RoomDevToolActivity :
 
     override fun handlePrepareMenu(menu: Menu) {
         withState(viewModel) { state ->
-            menu.forEach {
-                val isVisible = when (it.itemId) {
-                    R.id.menuItemEdit -> {
-                        state.displayMode is RoomDevToolViewState.Mode.StateEventDetail
-                    }
-                    R.id.menuItemSend -> {
-                        state.displayMode is RoomDevToolViewState.Mode.EditEventContent ||
-                                state.displayMode is RoomDevToolViewState.Mode.SendEventForm
-                    }
-                    else -> true
-                }
-                it.isVisible = isVisible
-            }
+            menu.findItem(R.id.menuItemEdit).isVisible = state.displayMode == RoomDevToolViewState.Mode.StateEventDetail
+            menu.findItem(R.id.menuItemSend).isVisible = state.displayMode == RoomDevToolViewState.Mode.EditEventContent ||
+                    state.displayMode is RoomDevToolViewState.Mode.SendEventForm
         }
     }
 
