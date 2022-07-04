@@ -24,6 +24,7 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.LocalEcho
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -58,7 +59,6 @@ import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.awaitTransaction
 import org.matrix.android.sdk.internal.util.time.Clock
-import java.util.UUID
 import javax.inject.Inject
 
 internal interface CreateLocalRoomTask : Task<CreateRoomParams, String>
@@ -185,13 +185,13 @@ internal class DefaultCreateLocalRoomTask @Inject constructor(
         val invitedUsers = createRoomBody.invitedUserIds.orEmpty()
                 .mapNotNull { tryOrNull { userService.resolveUser(it) } }
 
-        val createRoomEvent = createFakeEvent(
+        val createRoomEvent = createLocalEvent(
                 type = EventType.STATE_ROOM_CREATE,
                 content = RoomCreateContent(
                         creator = userId
                 ).toContent()
         )
-        val myRoomMemberEvent = createFakeEvent(
+        val myRoomMemberEvent = createLocalEvent(
                 type = EventType.STATE_ROOM_MEMBER,
                 content = RoomMemberContent(
                         membership = Membership.JOIN,
@@ -201,7 +201,7 @@ internal class DefaultCreateLocalRoomTask @Inject constructor(
                 stateKey = userId
         )
         val roomMemberEvents = invitedUsers.map {
-            createFakeEvent(
+            createLocalEvent(
                     type = EventType.STATE_ROOM_MEMBER,
                     content = RoomMemberContent(
                             isDirect = createRoomBody.isDirect.orFalse(),
@@ -216,7 +216,7 @@ internal class DefaultCreateLocalRoomTask @Inject constructor(
         return buildList {
             add(createRoomEvent)
             add(myRoomMemberEvent)
-            addAll(createRoomBody.initialStates.orEmpty().map { createFakeEvent(it.type, it.content, it.stateKey) })
+            addAll(createRoomBody.initialStates.orEmpty().map { createLocalEvent(it.type, it.content, it.stateKey) })
             addAll(roomMemberEvents)
         }
     }
@@ -230,14 +230,14 @@ internal class DefaultCreateLocalRoomTask @Inject constructor(
      *
      * @return a fake event
      */
-    private fun createFakeEvent(type: String?, content: Content?, stateKey: String? = ""): Event {
+    private fun createLocalEvent(type: String?, content: Content?, stateKey: String? = ""): Event {
         return Event(
                 type = type,
                 senderId = userId,
                 stateKey = stateKey,
                 content = content,
                 originServerTs = clock.epochMillis(),
-                eventId = UUID.randomUUID().toString()
+                eventId = LocalEcho.createLocalEchoId()
         )
     }
 
