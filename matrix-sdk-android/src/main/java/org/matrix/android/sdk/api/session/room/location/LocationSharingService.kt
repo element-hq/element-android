@@ -62,13 +62,11 @@ interface LocationSharingService {
     /**
      * Returns a LiveData on the list of current running live location shares.
      */
-    @MainThread
     fun getRunningLiveLocationShareSummaries(): LiveData<List<LiveLocationShareAggregatedSummary>>
 
     /**
      * Returns a LiveData on the live location share summary with the given eventId.
      * @param beaconInfoEventId event id of the initial beacon info state event
      */
-    @MainThread
     fun getLiveLocationShareSummary(beaconInfoEventId: String): LiveData<Optional<LiveLocationShareAggregatedSummary>>
 }
