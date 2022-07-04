@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.internal.task
 
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.delay
@@ -31,8 +33,8 @@ class CoroutineSequencersTest : MatrixTest {
 
     private val dispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
 
+    @OptIn(DelicateCoroutinesApi::class, ExperimentalCoroutinesApi::class)
     @Test
-    @Suppress("EXPERIMENTAL_API_USAGE")
     fun sequencer_should_run_sequential() {
         val sequencer = SemaphoreCoroutineSequencer()
         val results = ArrayList<String>()
@@ -60,8 +62,8 @@ class CoroutineSequencersTest : MatrixTest {
         assertEquals(results[2], "#3")
     }
 
+    @OptIn(DelicateCoroutinesApi::class, ExperimentalCoroutinesApi::class)
     @Test
-    @Suppress("EXPERIMENTAL_API_USAGE")
     fun sequencer_should_run_parallel() {
         val sequencer1 = SemaphoreCoroutineSequencer()
         val sequencer2 = SemaphoreCoroutineSequencer()
@@ -87,8 +89,8 @@ class CoroutineSequencersTest : MatrixTest {
         assertEquals(3, results.size)
     }
 
+    @OptIn(DelicateCoroutinesApi::class, ExperimentalCoroutinesApi::class)
     @Test
-    @Suppress("EXPERIMENTAL_API_USAGE")
     fun sequencer_should_jump_to_next_when_current_job_canceled() {
         val sequencer = SemaphoreCoroutineSequencer()
         val results = ArrayList<String>()

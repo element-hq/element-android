@@ -19,7 +19,7 @@ import androidx.work.Data
 import androidx.work.InputMerger
 
 /**
- * InputMerger which takes only the first input, to ensure an appended work will only have the specified parameters
+ * InputMerger which takes only the first input, to ensure an appended work will only have the specified parameters.
  */
 internal class NoMerger : InputMerger() {
     override fun merge(inputs: MutableList<Data>): Data {

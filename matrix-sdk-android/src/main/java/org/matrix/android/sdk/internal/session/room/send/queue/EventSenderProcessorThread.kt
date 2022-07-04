@@ -180,7 +180,7 @@ internal class EventSenderProcessorThread @Inject constructor(
                                         waitForNetwork()
                                     }
                                 }
-                                (exception.isLimitExceededError())                                 -> {
+                                (exception.isLimitExceededError()) -> {
                                     if (task.retryCount.getAndIncrement() >= 3) task.onTaskFailed()
                                     Timber.v("## SendThread retryLoop retryable error for $task reason: ${exception.localizedMessage}")
                                     // wait a bit
@@ -188,17 +188,17 @@ internal class EventSenderProcessorThread @Inject constructor(
                                     sleep(3_000)
                                     continue@retryLoop
                                 }
-                                exception.isTokenError()                                           -> {
+                                exception.isTokenError() -> {
                                     Timber.v("## SendThread retryLoop retryable TOKEN error, interrupt")
                                     // we can exit the loop
                                     task.onTaskFailed()
                                     throw InterruptedException()
                                 }
-                                exception is CancellationException                                 -> {
+                                exception is CancellationException -> {
                                     Timber.v("## SendThread task has been cancelled")
                                     break@retryLoop
                                 }
-                                else                                                               -> {
+                                else -> {
                                     Timber.v("## SendThread retryLoop Un-Retryable error, try next task")
                                     // this task is in error, check next one?
                                     task.onTaskFailed()

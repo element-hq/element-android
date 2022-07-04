@@ -28,7 +28,7 @@ import im.vector.app.features.login.EMS_LINK
 import javax.inject.Inject
 
 /**
- * In this screen, the user will choose between matrix.org, or other type of homeserver
+ * In this screen, the user will choose between matrix.org, or other type of homeserver.
  */
 class LoginServerSelectionFragment2 @Inject constructor() : AbstractLoginFragment2<FragmentLoginServerSelection2Binding>() {
 
@@ -59,10 +59,10 @@ class LoginServerSelectionFragment2 @Inject constructor() : AbstractLoginFragmen
     private fun updateUi(state: LoginViewState2) {
         when (state.signMode) {
             SignMode2.Unknown -> Unit
-            SignMode2.SignUp  -> {
+            SignMode2.SignUp -> {
                 views.loginServerTitle.setText(R.string.login_please_choose_a_server)
             }
-            SignMode2.SignIn  -> {
+            SignMode2.SignIn -> {
                 views.loginServerTitle.setText(R.string.login_please_select_your_server)
             }
         }

@@ -26,7 +26,7 @@ import org.matrix.android.sdk.api.util.JsonDict
 @JsonClass(generateAdapter = true)
 data class OlmDecryptionResult(
         /**
-         * The decrypted payload (with properties 'type', 'content')
+         * The decrypted payload (with properties 'type', 'content').
          */
         @Json(name = "payload") val payload: JsonDict? = null,
 

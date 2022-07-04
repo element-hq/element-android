@@ -19,8 +19,8 @@ package im.vector.app.features.onboarding
 import im.vector.app.R
 import im.vector.app.core.extensions.andThen
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.features.onboarding.OnboardingAction.LoginOrRegister
-import org.matrix.android.sdk.api.MatrixPatterns.getDomain
+import im.vector.app.features.onboarding.OnboardingAction.AuthenticateAction.LoginDirect
+import org.matrix.android.sdk.api.MatrixPatterns.getServerName
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
@@ -33,8 +33,8 @@ class DirectLoginUseCase @Inject constructor(
         private val uriFactory: UriFactory
 ) {
 
-    suspend fun execute(action: LoginOrRegister, homeServerConnectionConfig: HomeServerConnectionConfig?): Result<Session> {
-        return fetchWellKnown(action.username, homeServerConnectionConfig)
+    suspend fun execute(action: LoginDirect, homeServerConnectionConfig: HomeServerConnectionConfig?): Result<Session> {
+        return fetchWellKnown(action.matrixId, homeServerConnectionConfig)
                 .andThen { wellKnown -> createSessionFor(wellKnown, action, homeServerConnectionConfig) }
     }
 
@@ -42,27 +42,27 @@ class DirectLoginUseCase @Inject constructor(
         authenticationService.getWellKnownData(matrixId, config)
     }
 
-    private suspend fun createSessionFor(data: WellknownResult, action: LoginOrRegister, config: HomeServerConnectionConfig?) = when (data) {
-        is WellknownResult.Prompt     -> loginDirect(action, data, config)
+    private suspend fun createSessionFor(data: WellknownResult, action: LoginDirect, config: HomeServerConnectionConfig?) = when (data) {
+        is WellknownResult.Prompt -> loginDirect(action, data, config)
         is WellknownResult.FailPrompt -> handleFailPrompt(data, action, config)
-        else                          -> onWellKnownError()
+        else -> onWellKnownError()
     }
 
-    private suspend fun handleFailPrompt(data: WellknownResult.FailPrompt, action: LoginOrRegister, config: HomeServerConnectionConfig?): Result<Session> {
+    private suspend fun handleFailPrompt(data: WellknownResult.FailPrompt, action: LoginDirect, config: HomeServerConnectionConfig?): Result<Session> {
         // Relax on IS discovery if homeserver is valid
         val isMissingInformationToLogin = data.homeServerUrl == null || data.wellKnown == null
         return when {
             isMissingInformationToLogin -> onWellKnownError()
-            else                        -> loginDirect(action, WellknownResult.Prompt(data.homeServerUrl!!, null, data.wellKnown!!), config)
+            else -> loginDirect(action, WellknownResult.Prompt(data.homeServerUrl!!, null, data.wellKnown!!), config)
         }
     }
 
-    private suspend fun loginDirect(action: LoginOrRegister, wellKnownPrompt: WellknownResult.Prompt, config: HomeServerConnectionConfig?): Result<Session> {
+    private suspend fun loginDirect(action: LoginDirect, wellKnownPrompt: WellknownResult.Prompt, config: HomeServerConnectionConfig?): Result<Session> {
         val alteredHomeServerConnectionConfig = config?.updateWith(wellKnownPrompt) ?: fallbackConfig(action, wellKnownPrompt)
         return runCatching {
             authenticationService.directAuthentication(
                     alteredHomeServerConnectionConfig,
-                    action.username,
+                    action.matrixId,
                     action.password,
                     action.initialDeviceName
             )
@@ -74,8 +74,8 @@ class DirectLoginUseCase @Inject constructor(
             identityServerUri = wellKnownPrompt.identityServerUrl?.let { uriFactory.parse(it) }
     )
 
-    private fun fallbackConfig(action: LoginOrRegister, wellKnownPrompt: WellknownResult.Prompt) = HomeServerConnectionConfig(
-            homeServerUri = uriFactory.parse("https://${action.username.getDomain()}"),
+    private fun fallbackConfig(action: LoginDirect, wellKnownPrompt: WellknownResult.Prompt) = HomeServerConnectionConfig(
+            homeServerUri = uriFactory.parse("https://${action.matrixId.getServerName()}"),
             homeServerUriBase = uriFactory.parse(wellKnownPrompt.homeServerUrl),
             identityServerUri = wellKnownPrompt.identityServerUrl?.let { uriFactory.parse(it) }
     )

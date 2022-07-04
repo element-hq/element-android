@@ -65,7 +65,7 @@ class VoiceMessageViews(
                 MotionEvent.ACTION_DOWN -> {
                     actions.onWaveformClicked()
                 }
-                MotionEvent.ACTION_UP   -> {
+                MotionEvent.ACTION_UP -> {
                     val percentage = getTouchedPositionPercentage(motionEvent, view)
                     actions.onVoiceWaveformTouchedUp(percentage)
                 }
@@ -95,7 +95,7 @@ class VoiceMessageViews(
                     actions.onRequestRecording()
                     true
                 }
-                MotionEvent.ACTION_UP   -> {
+                MotionEvent.ACTION_UP -> {
                     actions.onMicButtonReleased()
                     true
                 }
@@ -103,7 +103,7 @@ class VoiceMessageViews(
                     actions.onMicButtonDrag { currentState -> draggableStateProcessor.process(event, currentState) }
                     true
                 }
-                else                    -> false
+                else -> false
             }
         }
     }
@@ -345,10 +345,10 @@ class VoiceMessageViews(
         }
     }
 
-    fun renderRecordingWaveform(amplitudeList: Array<Int>) {
+    fun renderRecordingWaveform(amplitudeList: List<Int>) {
         views.voicePlaybackWaveform.doOnLayout { waveFormView ->
             val waveformColor = ThemeUtils.getColor(waveFormView.context, R.attr.vctr_content_quaternary)
-            amplitudeList.iterator().forEach {
+            amplitudeList.forEach {
                 (waveFormView as AudioWaveformView).add(AudioWaveformView.FFT(it.toFloat(), waveformColor))
             }
         }

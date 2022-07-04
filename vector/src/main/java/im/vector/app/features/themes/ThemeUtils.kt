@@ -76,7 +76,7 @@ object ThemeUtils {
     }
 
     /**
-     * Provides the selected application theme
+     * Provides the selected application theme.
      *
      * @param context the context
      * @return the selected application theme
@@ -106,8 +106,9 @@ object ThemeUtils {
     }
 
     /**
-     * Update the application theme
+     * Update the application theme.
      *
+     * @param context the Android context
      * @param aTheme the new theme
      */
     fun setApplicationTheme(context: Context, aTheme: String) {
@@ -115,9 +116,9 @@ object ThemeUtils {
         context.setTheme(
                 when (aTheme) {
                     SYSTEM_THEME_VALUE -> if (isSystemDarkTheme(context.resources)) R.style.Theme_Vector_Dark else R.style.Theme_Vector_Light
-                    THEME_DARK_VALUE   -> R.style.Theme_Vector_Dark
-                    THEME_BLACK_VALUE  -> R.style.Theme_Vector_Black
-                    else               -> R.style.Theme_Vector_Light
+                    THEME_DARK_VALUE -> R.style.Theme_Vector_Dark
+                    THEME_BLACK_VALUE -> R.style.Theme_Vector_Black
+                    else -> R.style.Theme_Vector_Light
                 }
         )
 
@@ -126,24 +127,26 @@ object ThemeUtils {
     }
 
     /**
-     * Set the activity theme according to the selected one.
+     * Set the activity theme according to the selected one. Default is Light, so if this is the current
+     * theme, the theme is not changed.
      *
      * @param activity the activity
+     * @param otherThemes themes to apply for dark and black theme
      */
     fun setActivityTheme(activity: Activity, otherThemes: ActivityOtherThemes) {
         when (getApplicationTheme(activity)) {
             SYSTEM_THEME_VALUE -> if (isSystemDarkTheme(activity.resources)) activity.setTheme(otherThemes.dark)
-            THEME_DARK_VALUE   -> activity.setTheme(otherThemes.dark)
-            THEME_BLACK_VALUE  -> activity.setTheme(otherThemes.black)
+            THEME_DARK_VALUE -> activity.setTheme(otherThemes.dark)
+            THEME_BLACK_VALUE -> activity.setTheme(otherThemes.black)
         }
 
         mColorByAttr.clear()
     }
 
     /**
-     * Translates color attributes to colors
+     * Translates color attributes to colors.
      *
-     * @param c              Context
+     * @param c Context
      * @param colorAttribute Color Attribute
      * @return Requested Color
      */
@@ -173,10 +176,10 @@ object ThemeUtils {
     }
 
     /**
-     * Tint the drawable with a theme attribute
+     * Tint the drawable with a theme attribute.
      *
-     * @param context   the context
-     * @param drawable  the drawable to tint
+     * @param context the context
+     * @param drawable the drawable to tint
      * @param attribute the theme color
      * @return the tinted drawable
      */
@@ -185,10 +188,10 @@ object ThemeUtils {
     }
 
     /**
-     * Tint the drawable with a color integer
+     * Tint the drawable with a color integer.
      *
      * @param drawable the drawable to tint
-     * @param color    the color
+     * @param color the color
      * @return the tinted drawable
      */
     fun tintDrawableWithColor(drawable: Drawable, @ColorInt color: Int): Drawable {

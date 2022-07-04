@@ -661,8 +661,6 @@
     <string name="media_source_choose">চয়ন</string>
     <string name="settings_play_shutter_sound">শাটার শব্দ চালান</string>
 
-    <string name="settings_flair">ফ্লেয়ার</string>
-
     <string name="media_saving_period_3_days">৩ দিন</string>
     <string name="media_saving_period_1_week">১ সপ্তা</string>
     <string name="media_saving_period_1_month">১ মাস</string>

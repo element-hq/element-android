@@ -4,6 +4,20 @@ This document describes the flow of registration to a homeserver. Examples come 
 
 *Ref*: https://matrix.org/docs/spec/client_server/latest#account-registration-and-management
 
+<!--- TOC -->
+
+* [Sign up flows](#sign-up-flows)
+  * [First step](#first-step)
+  * [Step 1: entering user name and password](#step-1:-entering-user-name-and-password)
+    * [If username already exists](#if-username-already-exists)
+  * [Step 2: entering email](#step-2:-entering-email)
+  * [Step 2 bis: user enters an email](#step-2-bis:-user-enters-an-email)
+  * [Step 3: Accepting T&C](#step-3:-accepting-t&c)
+  * [Step 4: Captcha](#step-4:-captcha)
+  * [Step 5: MSISDN](#step-5:-msisdn)
+
+<!--- END -->
+
 ## Sign up flows
 
 ### First step

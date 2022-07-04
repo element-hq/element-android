@@ -60,6 +60,7 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
 
     @Inject
     lateinit var activeSessionHolder: ActiveSessionHolder
+
     @Inject
     lateinit var clock: Clock
 
@@ -246,8 +247,10 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
 
     private val qrStartForActivityResult = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
-            toast("QrCode: " + QrCodeScannerActivity.getResultText(activityResult.data) +
-                    " is QRCode: " + QrCodeScannerActivity.getResultIsQrCode(activityResult.data))
+            toast(
+                    "QrCode: " + QrCodeScannerActivity.getResultText(activityResult.data) +
+                            " is QRCode: " + QrCodeScannerActivity.getResultIsQrCode(activityResult.data)
+            )
 
             // Also update the current QR Code (reverse operation)
             // renderQrCode(QrCodeScannerActivity.getResultText(data) ?: "")

@@ -52,7 +52,7 @@ internal class PresenceSyncHandler @Inject constructor(private val matrixConfigu
     }
 
     /**
-     * Store user presence to DB and update Direct Rooms and Room Member Summaries accordingly
+     * Store user presence to DB and update Direct Rooms and Room Member Summaries accordingly.
      */
     private fun storePresenceToDB(realm: Realm, userPresenceEntity: UserPresenceEntity) =
             realm.copyToRealmOrUpdate(userPresenceEntity)?.apply {

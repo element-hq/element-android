@@ -24,7 +24,7 @@ import im.vector.lib.multipicker.utils.toMultiPickerImageType
 import im.vector.lib.multipicker.utils.toMultiPickerVideoType
 
 /**
- * Image/Video Picker implementation
+ * Image/Video Picker implementation.
  */
 class MediaPicker : Picker<MultiPickerBaseMediaType>() {
 
@@ -49,7 +49,7 @@ class MediaPicker : Picker<MultiPickerBaseMediaType>() {
         return Intent(Intent.ACTION_GET_CONTENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
             putExtra(Intent.EXTRA_ALLOW_MULTIPLE, !single)
-            type = "video/*, image/*"
+            type = "*/*"
             val mimeTypes = arrayOf("image/*", "video/*")
             putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
         }

@@ -3,11 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:gravity="end"
     tools:parentTag="android.widget.LinearLayout">
 
     <TextView
         android:id="@+id/receiptMore"
-        style="@style/Widget.Vector.TextView.Caption"
+        style="@style/TimelineFixedSizeCaptionStyle"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/item_event_message_state_size"
         android:background="@drawable/pill_receipt"
@@ -19,52 +20,39 @@
         tools:text="999+" />
 
     <ImageView
-        android:id="@+id/receiptAvatar5"
-        android:layout_width="@dimen/item_event_message_state_size"
-        android:layout_height="@dimen/item_event_message_state_size"
-        android:layout_marginStart="2dp"
-        android:adjustViewBounds="true"
-        android:importantForAccessibility="no"
-        android:scaleType="centerCrop"
-        tools:src="@sample/user_round_avatars" />
-
-    <ImageView
-        android:id="@+id/receiptAvatar4"
-        android:layout_width="@dimen/item_event_message_state_size"
-        android:layout_height="@dimen/item_event_message_state_size"
-        android:layout_marginStart="2dp"
-        android:adjustViewBounds="true"
-        android:importantForAccessibility="no"
-        android:scaleType="centerCrop"
-        tools:src="@sample/user_round_avatars" />
-
-    <ImageView
         android:id="@+id/receiptAvatar3"
         android:layout_width="@dimen/item_event_message_state_size"
         android:layout_height="@dimen/item_event_message_state_size"
         android:layout_marginStart="2dp"
+        android:layout_marginEnd="-6dp"
         android:adjustViewBounds="true"
         android:importantForAccessibility="no"
+        android:padding="1dp"
         android:scaleType="centerCrop"
+        tools:ignore="NegativeMargin"
         tools:src="@sample/user_round_avatars" />
 
     <ImageView
         android:id="@+id/receiptAvatar2"
         android:layout_width="@dimen/item_event_message_state_size"
         android:layout_height="@dimen/item_event_message_state_size"
-        android:layout_marginStart="2dp"
+        android:layout_marginEnd="-6dp"
         android:adjustViewBounds="true"
+        android:background="@drawable/pill_receipt"
         android:importantForAccessibility="no"
+        android:padding="1dp"
         android:scaleType="centerCrop"
+        tools:ignore="NegativeMargin"
         tools:src="@sample/user_round_avatars" />
 
     <ImageView
         android:id="@+id/receiptAvatar1"
         android:layout_width="@dimen/item_event_message_state_size"
         android:layout_height="@dimen/item_event_message_state_size"
-        android:layout_marginStart="2dp"
         android:adjustViewBounds="true"
+        android:background="@drawable/pill_receipt"
         android:importantForAccessibility="no"
+        android:padding="1dp"
         android:scaleType="centerCrop"
         tools:src="@sample/user_round_avatars" />
 

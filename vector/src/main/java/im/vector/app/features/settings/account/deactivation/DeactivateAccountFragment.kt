@@ -48,14 +48,14 @@ class DeactivateAccountFragment @Inject constructor() : VectorBaseFragment<Fragm
     private val reAuthActivityResultLauncher = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
             when (activityResult.data?.extras?.getString(ReAuthActivity.RESULT_FLOW_TYPE)) {
-                LoginFlowTypes.SSO      -> {
+                LoginFlowTypes.SSO -> {
                     viewModel.handle(DeactivateAccountAction.SsoAuthDone)
                 }
                 LoginFlowTypes.PASSWORD -> {
                     val password = activityResult.data?.extras?.getString(ReAuthActivity.RESULT_VALUE) ?: ""
                     viewModel.handle(DeactivateAccountAction.PasswordAuthDone(password))
                 }
-                else                    -> {
+                else -> {
                     viewModel.handle(DeactivateAccountAction.ReAuthCancelled)
                 }
             }
@@ -95,8 +95,10 @@ class DeactivateAccountFragment @Inject constructor() : VectorBaseFragment<Fragm
 
     private fun setupViewListeners() {
         views.deactivateAccountSubmit.debouncedClicks {
-            viewModel.handle(DeactivateAccountAction.DeactivateAccount(
-                    views.deactivateAccountEraseCheckbox.isChecked)
+            viewModel.handle(
+                    DeactivateAccountAction.DeactivateAccount(
+                            views.deactivateAccountEraseCheckbox.isChecked
+                    )
             )
         }
     }
@@ -104,26 +106,27 @@ class DeactivateAccountFragment @Inject constructor() : VectorBaseFragment<Fragm
     private fun observeViewEvents() {
         viewModel.observeViewEvents {
             when (it) {
-                is DeactivateAccountViewEvents.Loading       -> {
+                is DeactivateAccountViewEvents.Loading -> {
                     settingsActivity?.ignoreInvalidTokenError = true
                     showLoadingDialog(it.message)
                 }
-                DeactivateAccountViewEvents.InvalidAuth      -> {
+                DeactivateAccountViewEvents.InvalidAuth -> {
                     dismissLoadingDialog()
                     settingsActivity?.ignoreInvalidTokenError = false
                 }
-                is DeactivateAccountViewEvents.OtherFailure  -> {
+                is DeactivateAccountViewEvents.OtherFailure -> {
                     settingsActivity?.ignoreInvalidTokenError = false
                     dismissLoadingDialog()
                     if (it.throwable !is UiaCancelledException) {
                         displayErrorDialog(it.throwable)
                     }
                 }
-                DeactivateAccountViewEvents.Done             -> {
+                DeactivateAccountViewEvents.Done -> {
                     MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCredentials = true, isAccountDeactivated = true))
                 }
                 is DeactivateAccountViewEvents.RequestReAuth -> {
-                    ReAuthActivity.newIntent(requireContext(),
+                    ReAuthActivity.newIntent(
+                            requireContext(),
                             it.registrationFlowResponse,
                             it.lastErrorCode,
                             getString(R.string.deactivate_account_title)

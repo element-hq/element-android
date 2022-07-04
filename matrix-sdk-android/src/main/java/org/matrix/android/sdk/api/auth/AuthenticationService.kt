@@ -28,9 +28,11 @@ import org.matrix.android.sdk.api.session.Session
  * This interface defines methods to authenticate or to create an account to a matrix server.
  */
 interface AuthenticationService {
+
     /**
      * Request the supported login flows for this homeserver.
-     * This is the first method to call to be able to get a wizard to login or to create an account
+     * This is the first method to call to be able to get a wizard to login or to create an account.
+     * @param homeServerConnectionConfig contains the homeserver URL to login to, a wellKnown lookup will be attempted.
      */
     suspend fun getLoginFlow(homeServerConnectionConfig: HomeServerConnectionConfig): LoginFlowResult
 
@@ -40,12 +42,12 @@ interface AuthenticationService {
     suspend fun getLoginFlowOfSession(sessionId: String): LoginFlowResult
 
     /**
-     * Get a SSO url
+     * Get a SSO url.
      */
     fun getSsoUrl(redirectUrl: String, deviceId: String?, providerId: String?): String?
 
     /**
-     * Get the sign in or sign up fallback URL
+     * Get the sign in or sign up fallback URL.
      */
     fun getFallbackUrl(forSignIn: Boolean, deviceId: String?): String?
 
@@ -64,17 +66,17 @@ interface AuthenticationService {
     fun getRegistrationWizard(): RegistrationWizard
 
     /**
-     * True when login and password has been sent with success to the homeserver
+     * True when login and password has been sent with success to the homeserver.
      */
-    val isRegistrationStarted: Boolean
+    fun isRegistrationStarted(): Boolean
 
     /**
-     * Cancel pending login or pending registration
+     * Cancel pending login or pending registration.
      */
     suspend fun cancelPendingLoginOrRegistration()
 
     /**
-     * Reset all pending settings, including current HomeServerConnectionConfig
+     * Reset all pending settings, including current HomeServerConnectionConfig.
      */
     suspend fun reset()
 
@@ -91,29 +93,35 @@ interface AuthenticationService {
     fun getLastAuthenticatedSession(): Session?
 
     /**
-     * Create a session after a SSO successful login
+     * Create a session after a SSO successful login.
      */
-    suspend fun createSessionFromSso(homeServerConnectionConfig: HomeServerConnectionConfig,
-                                     credentials: Credentials): Session
+    suspend fun createSessionFromSso(
+            homeServerConnectionConfig: HomeServerConnectionConfig,
+            credentials: Credentials
+    ): Session
 
     /**
-     * Perform a wellknown request, using the domain from the matrixId
+     * Perform a wellknown request, using the domain from the matrixId.
      */
-    suspend fun getWellKnownData(matrixId: String,
-                                 homeServerConnectionConfig: HomeServerConnectionConfig?): WellknownResult
+    suspend fun getWellKnownData(
+            matrixId: String,
+            homeServerConnectionConfig: HomeServerConnectionConfig?
+    ): WellknownResult
 
     /**
-     * Authenticate with a matrixId and a password
-     * Usually call this after a successful call to getWellKnownData()
+     * Authenticate with a matrixId and a password.
+     * Usually call this after a successful call to getWellKnownData().
      * @param homeServerConnectionConfig the information about the homeserver and other configuration
      * @param matrixId the matrixId of the user
      * @param password the password of the account
      * @param initialDeviceName the initial device name
      * @param deviceId the device id, optional. If not provided or null, the server will generate one.
      */
-    suspend fun directAuthentication(homeServerConnectionConfig: HomeServerConnectionConfig,
-                                     matrixId: String,
-                                     password: String,
-                                     initialDeviceName: String,
-                                     deviceId: String? = null): Session
+    suspend fun directAuthentication(
+            homeServerConnectionConfig: HomeServerConnectionConfig,
+            matrixId: String,
+            password: String,
+            initialDeviceName: String,
+            deviceId: String? = null
+    ): Session
 }

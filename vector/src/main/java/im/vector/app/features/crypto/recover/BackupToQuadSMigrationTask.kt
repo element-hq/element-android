@@ -20,15 +20,14 @@ import im.vector.app.R
 import im.vector.app.core.platform.ViewModelTask
 import im.vector.app.core.platform.WaitingViewData
 import im.vector.app.core.resources.StringProvider
-import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.keysbackup.computeRecoveryKey
 import org.matrix.android.sdk.api.session.crypto.keysbackup.extractCurveKeyFromRecoveryKey
 import org.matrix.android.sdk.api.session.securestorage.EmptyKeySigner
+import org.matrix.android.sdk.api.session.securestorage.KeyRef
 import org.matrix.android.sdk.api.session.securestorage.RawBytesKeySpec
-import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
 import org.matrix.android.sdk.api.session.securestorage.SsssKeyCreationInfo
 import org.matrix.android.sdk.api.util.awaitCallback
 import org.matrix.android.sdk.api.util.toBase64NoPadding
@@ -77,10 +76,14 @@ class BackupToQuadSMigrationTask @Inject constructor(
                                     authData.privateKeyIterations!!,
                                     object : ProgressListener {
                                         override fun onProgress(progress: Int, total: Int) {
-                                            params.progressListener?.onProgress(WaitingViewData(
-                                                    stringProvider.getString(R.string.bootstrap_progress_checking_backup_with_info,
-                                                            "$progress/$total")
-                                            ))
+                                            params.progressListener?.onProgress(
+                                                    WaitingViewData(
+                                                            stringProvider.getString(
+                                                                    R.string.bootstrap_progress_checking_backup_with_info,
+                                                                    "$progress/$total"
+                                                            )
+                                                    )
+                                            )
                                         }
                                     })
                         }
@@ -111,13 +114,15 @@ class BackupToQuadSMigrationTask @Inject constructor(
                                                     WaitingViewData(
                                                             stringProvider.getString(
                                                                     R.string.bootstrap_progress_generating_ssss_with_info,
-                                                                    "$progress/$total")
-                                                    ))
+                                                                    "$progress/$total"
+                                                            )
+                                                    )
+                                            )
                                         }
                                     }
                             )
                         }
-                        params.recoveryKey != null              -> {
+                        params.recoveryKey != null -> {
                             reportProgress(params, R.string.bootstrap_progress_generating_ssss_recovery)
                             quadS.generateKey(
                                     UUID.randomUUID().toString(),
@@ -126,7 +131,7 @@ class BackupToQuadSMigrationTask @Inject constructor(
                                     EmptyKeySigner()
                             )
                         }
-                        else                                    -> {
+                        else -> {
                             return Result.IllegalParams
                         }
                     }
@@ -137,21 +142,14 @@ class BackupToQuadSMigrationTask @Inject constructor(
             quadS.storeSecret(
                     KEYBACKUP_SECRET_SSSS_NAME,
                     curveKey.toBase64NoPadding(),
-                    listOf(SharedSecretStorageService.KeyRef(info.keyId, info.keySpec))
+                    listOf(KeyRef(info.keyId, info.keySpec))
             )
 
             // save for gossiping
             keysBackupService.saveBackupRecoveryKey(recoveryKey, version.version)
 
-            // while we are there let's restore, but do not block
-            session.cryptoService().keysBackupService().restoreKeysWithRecoveryKey(
-                    version,
-                    recoveryKey,
-                    null,
-                    null,
-                    null,
-                    NoOpMatrixCallback()
-            )
+            // It's not a good idea to download the full backup, it might take very long
+            // and use a lot of resources
 
             return Result.Success
         } catch (failure: Throwable) {

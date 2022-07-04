@@ -24,7 +24,7 @@ internal fun Job.toCancelable(): Cancelable {
 }
 
 /**
- * Private, use the extension above
+ * Private, use the extension above.
  */
 private class CancelableCoroutine(private val job: Job) : Cancelable {
 

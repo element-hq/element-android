@@ -39,7 +39,7 @@ import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
 /**
- * In this screen, the user is asked for email and new password to reset his password
+ * In this screen, the user is asked for email and new password to reset his password.
  */
 class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<FragmentLoginResetPasswordBinding>() {
 
@@ -125,10 +125,10 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<F
                 // Ensure new password is hidden
                 views.passwordField.hidePassword()
             }
-            is Fail    -> {
+            is Fail -> {
                 views.resetPasswordEmailTil.error = errorFormatter.toHumanReadable(state.asyncResetPassword.error)
             }
-            else       -> Unit
+            else -> Unit
         }
     }
 }

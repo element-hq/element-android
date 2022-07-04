@@ -47,7 +47,7 @@ import javax.inject.Inject
 
 /**
  * In this screen:
- * - the account has been created and we propose the user to set an avatar and a display name
+ * - the account has been created and we propose the user to set an avatar and a display name.
  */
 class AccountCreatedFragment @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
@@ -115,9 +115,11 @@ class AccountCreatedFragment @Inject constructor(
 
     override fun onImageReady(uri: Uri?) {
         uri ?: return
-        viewModel.handle(AccountCreatedAction.SetAvatar(
-                avatarUri = uri,
-                filename = getFilenameFromUri(requireContext(), uri) ?: UUID.randomUUID().toString())
+        viewModel.handle(
+                AccountCreatedAction.SetAvatar(
+                        avatarUri = uri,
+                        filename = getFilenameFromUri(requireContext(), uri) ?: UUID.randomUUID().toString()
+                )
         )
     }
 

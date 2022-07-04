@@ -62,7 +62,8 @@ class ButtonStateView @JvmOverloads constructor(context: Context, attrs: Attribu
         context.theme.obtainStyledAttributes(
                 attrs,
                 R.styleable.ButtonStateView,
-                0, 0)
+                0, 0
+        )
                 .apply {
                     try {
                         if (getBoolean(R.styleable.ButtonStateView_bsv_use_flat_button, true)) {

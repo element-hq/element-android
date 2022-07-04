@@ -1,1 +1,0 @@
-Improve management of ignored users

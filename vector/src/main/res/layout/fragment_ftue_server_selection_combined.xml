@@ -151,6 +151,13 @@
             app:layout_constraintHeight_percent="0.02"
             app:layout_constraintTop_toBottomOf="@id/chooseServerSubmit" />
 
+        <!-- EMS section is temporarily hidden whilst we sync with marketing -->
+        <androidx.constraintlayout.widget.Group
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:constraint_referenced_ids="chooseServerEmsContainer,emsTopSpacing,chooseServerEmsIcon,chooseServerEmsTitle,chooseServerEmsSubtitle,chooseServerGetInTouch,emsCtaSpacing" />
+
         <View
             android:id="@+id/chooseServerEmsContainer"
             android:layout_width="0dp"

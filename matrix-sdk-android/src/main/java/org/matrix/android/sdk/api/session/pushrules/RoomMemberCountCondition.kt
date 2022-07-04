@@ -47,8 +47,8 @@ class RoomMemberCountCondition(
         val numMembers = room.membershipService().getNumberOfJoinedMembers()
 
         return when (prefix) {
-            "<"  -> numMembers < count
-            ">"  -> numMembers > count
+            "<" -> numMembers < count
+            ">" -> numMembers > count
             "<=" -> numMembers <= count
             ">=" -> numMembers >= count
             else -> numMembers == count

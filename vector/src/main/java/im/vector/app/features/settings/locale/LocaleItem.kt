@@ -26,8 +26,8 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 
-@EpoxyModelClass(layout = R.layout.item_locale)
-abstract class LocaleItem : VectorEpoxyModel<LocaleItem.Holder>() {
+@EpoxyModelClass
+abstract class LocaleItem : VectorEpoxyModel<LocaleItem.Holder>(R.layout.item_locale) {
 
     @EpoxyAttribute var title: String? = null
     @EpoxyAttribute var subtitle: String? = null

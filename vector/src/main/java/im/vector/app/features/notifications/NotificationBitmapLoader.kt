@@ -33,7 +33,7 @@ import javax.inject.Singleton
 class NotificationBitmapLoader @Inject constructor(private val context: Context) {
 
     /**
-     * Get icon of a room
+     * Get icon of a room.
      */
     @WorkerThread
     fun getRoomBitmap(path: String?): Bitmap? {

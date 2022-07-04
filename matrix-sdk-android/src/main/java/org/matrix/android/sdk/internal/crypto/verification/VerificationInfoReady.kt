@@ -27,12 +27,12 @@ import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationI
 
 internal interface VerificationInfoReady : VerificationInfo<ValidVerificationInfoReady> {
     /**
-     * The ID of the device that sent the m.key.verification.ready message
+     * The ID of the device that sent the m.key.verification.ready message.
      */
     val fromDevice: String?
 
     /**
-     * An array of verification methods that the device supports
+     * An array of verification methods that the device supports.
      */
     val methods: List<String>?
 

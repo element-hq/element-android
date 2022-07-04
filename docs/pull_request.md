@@ -1,5 +1,43 @@
 # Pull requests
 
+<!--- TOC -->
+
+* [Introduction](#introduction)
+* [Who should read this document?](#who-should-read-this-document?)
+* [Submitting PR](#submitting-pr)
+  * [Who can submit pull requests?](#who-can-submit-pull-requests?)
+    * [Humans](#humans)
+      * [Draft PR?](#draft-pr?)
+      * [Base branch](#base-branch)
+      * [PR Review Assignment](#pr-review-assignment)
+      * [PR review time](#pr-review-time)
+      * [Re-request PR review](#re-request-pr-review)
+      * [When create split PR?](#when-create-split-pr?)
+      * [Avoid fixing other unrelated issue in a big PR](#avoid-fixing-other-unrelated-issue-in-a-big-pr)
+    * [Bots](#bots)
+      * [Dependabot](#dependabot)
+      * [Gradle wrapper](#gradle-wrapper)
+      * [Sync analytics plan](#sync-analytics-plan)
+* [Reviewing PR](#reviewing-pr)
+  * [Who can review pull requests?](#who-can-review-pull-requests?)
+  * [What to have in mind when reviewing a PR](#what-to-have-in-mind-when-reviewing-a-pr)
+  * [Rules](#rules)
+    * [Check the form](#check-the-form)
+      * [PR title](#pr-title)
+      * [PR description](#pr-description)
+      * [File change](#file-change)
+      * [Check the commit](#check-the-commit)
+      * [Check the substance](#check-the-substance)
+      * [Make a dedicated meeting to review the PR](#make-a-dedicated-meeting-to-review-the-pr)
+  * [What happen to the issue(s)?](#what-happen-to-the-issues?)
+  * [Merge conflict](#merge-conflict)
+  * [When and who can merge PR](#when-and-who-can-merge-pr)
+    * [Merge type](#merge-type)
+  * [Resolve conversation](#resolve-conversation)
+* [Responsibility](#responsibility)
+
+<!--- END -->
+
 ## Introduction
 
 This document gives some clue about how to efficiently manage Pull Requests (PR). This document is a first draft and may be improved later.
@@ -30,17 +68,31 @@ In any case, it is better to explicitly declare in the description why the PR is
 
 Also, draft PR should not stay indefinitely in this state. It may be removed if it is the case and the submitter does not update it after a few days.
 
+##### Base branch
+
+The `develop` branch is generally the base branch for every PRs.
+
+Exceptions can occur:
+
+- if a feature implementation is split into multiple PRs. We can have a chain of PRs in this case. PR can be merged one by one on develop, and GitHub change the target branch to `develop` for the next PR automatically.
+- we want to merge a PR from the community, but there is still work to do, and the PR is not updated by the submitter. First, we can kindly ask the submitter if they will update their PR, by commenting it. If there is no answer after a few days (including a week-end), we can create a new branch, push it, and change the target branch of the PR to this new branch. The PR can then be merged, and we can add more commits to fix the issues. After that a new PR can be created with `develop` as a target branch.
+
+**Important notice 1:** Releases are created from the `develop` branch. So `develop` branch should always contain a "releasable" source code. So when a feature is being implemented with several PRs, it has to be disabled by default (using a feature flag for instance), until the feature is fully implemented. A last PR to enable the feature can then be created.
+
+**Important notice 2:** Database migration: some developers and some people from the community are using the nightly build from `develop`. Multiple database migrations should be properly handled for them. This is OK to have multiple migrations between 2 releases, this is not OK to add steps to the pending database migration on `develop`. So for instance `develop` users will migrate from version 11 to version 12, then 13, then 14, and `main` users will do all those steps after they get the app upgrade.
+
 ##### PR Review Assignment
 
-We use automatic assignment for PR reviews. A PR is automatically routed by GitHub to 2 team members using the round robin algorithm. The process is the following:
+We use automatic assignment for PR reviews. **A PR is automatically routed by GitHub to one team member** using the round robin algorithm. Additional reviewers can be used for complex changes or when the first reviewer is not confident enough on the changes.
+The process is the following:
 
-- The PR creator can assign specific people if they have another Android developer in their team or they think a specific reviewer should take a look at the PR.
-- If there are missing reviewers, the PR creator assigns the [element-android-reviewers](https://github.com/orgs/vector-im/teams/element-android-reviewers) team as a reviewer.
-- GitHub automatically assigns other reviewers. If one of the chosen reviewers is not available (holiday, etc.), remove them and set again the team, GitHub will select another reviewer.
+- The PR creator selects the [element-android-reviewers](https://github.com/orgs/vector-im/teams/element-android-reviewers) team as a reviewer.
+- GitHub automatically assign the reviewer. If the reviewer is not available (holiday, etc.), remove them and set again the team, GitHub will select another reviewer.
+- Alternatively, the PR creator can directly assign specific people if they have another Android developer in their team or they think a specific reviewer should take a look at their PR.
 - Reviewers get a notification to make the review: they review the code following the good practice (see the rest of this document).
 - After making their own review, if they feel not confident enough, they can ask another person for a full review, or they can tag someone within a PR comment to check specific lines.
 
-For PRs coming from the community, the issue wrangler can assign either the team [element-android-reviewers](https://github.com/orgs/vector-im/teams/element-android-reviewers) or any members directly.
+For PRs coming from the community, the issue wrangler can assign either the team [element-android-reviewers](https://github.com/orgs/vector-im/teams/element-android-reviewers) or any member directly.
 
 ##### PR review time
 
@@ -51,6 +103,7 @@ Some tips to achieve it:
 - Set up your GH notifications correctly
 - Check your pulls page: [https://github.com/pulls](https://github.com/pulls)
 - Check your pending assigned PRs before starting or resuming your day to day tasks
+- If you are busy with high priority tasks, inform the author. They will find another developer
 
 It is hard to define a deadline for a review. It depends on the PR size and the complexity. Let's start with a goal of 24h (working day!) for a PR smaller than 500 lines. If bigger, the submitter and the reviewer should discuss.
 
@@ -103,7 +156,7 @@ Review such PR is the same recipe than for PR from Dependabot
 ##### Sync analytics plan
 
 This tools imports any update in the analytics plan. See instruction in the PR itself to handle it.
-More info can be found in the file [analytics.md]
+More info can be found in the file [analytics.md](./analytics.md)
 
 ## Reviewing PR
 

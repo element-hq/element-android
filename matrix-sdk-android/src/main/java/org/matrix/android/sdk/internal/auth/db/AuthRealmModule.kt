@@ -19,11 +19,13 @@ package org.matrix.android.sdk.internal.auth.db
 import io.realm.annotations.RealmModule
 
 /**
- * Realm module for authentication classes
+ * Realm module for authentication classes.
  */
-@RealmModule(library = true,
+@RealmModule(
+        library = true,
         classes = [
             SessionParamsEntity::class,
             PendingSessionEntity::class
-        ])
+        ]
+)
 internal class AuthRealmModule

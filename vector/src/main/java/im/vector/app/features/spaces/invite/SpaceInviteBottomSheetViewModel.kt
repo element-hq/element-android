@@ -68,7 +68,7 @@ class SpaceInviteBottomSheetViewModel @AssistedInject constructor(
     }
 
     /**
-     * Try to request the room summary api to get more info
+     * Try to request the room summary api to get more info.
      */
     private fun getLatestRoomSummary(roomSummary: RoomSummary) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -101,7 +101,7 @@ class SpaceInviteBottomSheetViewModel @AssistedInject constructor(
 
     override fun handle(action: SpaceInviteBottomSheetAction) {
         when (action) {
-            SpaceInviteBottomSheetAction.DoJoin   -> {
+            SpaceInviteBottomSheetAction.DoJoin -> {
                 setState { copy(joinActionState = Loading()) }
                 session.coroutineScope.launch(Dispatchers.IO) {
                     try {

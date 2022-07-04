@@ -26,6 +26,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.PermissionRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
@@ -42,7 +44,8 @@ import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.openUrlInExternalBrowser
 import im.vector.app.databinding.FragmentRoomWidgetBinding
-import im.vector.app.features.webview.WebViewEventListener
+import im.vector.app.features.webview.WebEventListener
+import im.vector.app.features.widgets.webview.WebviewPermissionUtils
 import im.vector.app.features.widgets.webview.clearAfterWidget
 import im.vector.app.features.widgets.webview.setupForWidget
 import kotlinx.parcelize.Parcelize
@@ -60,9 +63,11 @@ data class WidgetArgs(
         val urlParams: Map<String, String> = emptyMap()
 ) : Parcelable
 
-class WidgetFragment @Inject constructor() :
+class WidgetFragment @Inject constructor(
+        private val permissionUtils: WebviewPermissionUtils
+) :
         VectorBaseFragment<FragmentRoomWidgetBinding>(),
-        WebViewEventListener,
+        WebEventListener,
         OnBackPressed {
 
     private val fragmentArgs: WidgetArgs by args()
@@ -82,11 +87,11 @@ class WidgetFragment @Inject constructor() :
         viewModel.observeViewEvents {
             Timber.v("Observed view events: $it")
             when (it) {
-                is WidgetViewEvents.DisplayTerms              -> displayTerms(it)
-                is WidgetViewEvents.OnURLFormatted            -> loadFormattedUrl(it)
+                is WidgetViewEvents.DisplayTerms -> displayTerms(it)
+                is WidgetViewEvents.OnURLFormatted -> loadFormattedUrl(it)
                 is WidgetViewEvents.DisplayIntegrationManager -> displayIntegrationManager(it)
-                is WidgetViewEvents.Failure                   -> displayErrorDialog(it.throwable)
-                is WidgetViewEvents.Close                     -> Unit
+                is WidgetViewEvents.Failure -> displayErrorDialog(it.throwable)
+                is WidgetViewEvents.Close -> Unit
             }
         }
         viewModel.handle(WidgetAction.LoadFormattedUrl)
@@ -150,20 +155,21 @@ class WidgetFragment @Inject constructor() :
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = withState(viewModel) { state ->
         when (item.itemId) {
-            R.id.action_edit            -> {
+            R.id.action_edit -> {
                 navigator.openIntegrationManager(
                         requireContext(),
                         integrationManagerActivityResultLauncher,
                         state.roomId,
                         state.widgetId,
-                        state.widgetKind.screenId)
+                        state.widgetKind.screenId
+                )
                 return@withState true
             }
-            R.id.action_delete          -> {
+            R.id.action_delete -> {
                 deleteWidget()
                 return@withState true
             }
-            R.id.action_refresh         -> if (state.formattedURL.complete) {
+            R.id.action_refresh -> if (state.formattedURL.complete) {
                 views.widgetWebView.reload()
                 return@withState true
             }
@@ -171,7 +177,7 @@ class WidgetFragment @Inject constructor() :
                 openUrlInExternalBrowser(requireContext(), state.formattedURL.invoke())
                 return@withState true
             }
-            R.id.action_revoke          -> if (state.status == WidgetStatus.WIDGET_ALLOWED) {
+            R.id.action_revoke -> if (state.status == WidgetStatus.WIDGET_ALLOWED) {
                 revokeWidget()
                 return@withState true
             }
@@ -205,24 +211,24 @@ class WidgetFragment @Inject constructor() :
                     Uninitialized -> {
                         views.widgetWebView.isInvisible = true
                     }
-                    is Loading    -> {
+                    is Loading -> {
                         setStateError(null)
                         views.widgetWebView.isInvisible = false
                         views.widgetProgressBar.isIndeterminate = true
                         views.widgetProgressBar.isVisible = true
                     }
-                    is Success    -> {
+                    is Success -> {
                         views.widgetWebView.isInvisible = false
                         views.widgetProgressBar.isVisible = false
                         setStateError(null)
                     }
-                    is Fail       -> {
+                    is Fail -> {
                         views.widgetProgressBar.isInvisible = true
                         setStateError(state.webviewLoadedUrl.error.message)
                     }
                 }
             }
-            is Fail    -> {
+            is Fail -> {
                 // we need to show Error
                 views.widgetWebView.isInvisible = true
                 views.widgetProgressBar.isVisible = false
@@ -268,6 +274,20 @@ class WidgetFragment @Inject constructor() :
 
     override fun onHttpError(url: String, errorCode: Int, description: String) {
         viewModel.handle(WidgetAction.OnWebViewLoadingError(url, true, errorCode, description))
+    }
+
+    private val permissionResultLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
+        permissionUtils.onPermissionResult(result)
+    }
+
+    override fun onPermissionRequest(request: PermissionRequest) {
+        permissionUtils.promptForPermissions(
+                title = R.string.room_widget_resource_permission_title,
+                request = request,
+                context = requireContext(),
+                activity = requireActivity(),
+                activityResultLauncher = permissionResultLauncher
+        )
     }
 
     private fun displayTerms(displayTerms: WidgetViewEvents.DisplayTerms) {

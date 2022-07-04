@@ -27,15 +27,17 @@ interface Space {
     val spaceId: String
 
     /**
-     * A current snapshot of [RoomSummary] associated with the space
+     * A current snapshot of [RoomSummary] associated with the space.
      */
     fun spaceSummary(): RoomSummary?
 
-    suspend fun addChildren(roomId: String,
-                            viaServers: List<String>?,
-                            order: String?,
+    suspend fun addChildren(
+            roomId: String,
+            viaServers: List<String>?,
+            order: String?,
 //                            autoJoin: Boolean = false,
-                            suggested: Boolean? = false)
+            suggested: Boolean? = false
+    )
 
     fun getChildInfo(roomId: String): SpaceChildContent?
 

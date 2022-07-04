@@ -31,7 +31,7 @@ internal data class KeysUploadResponse(
         val oneTimeKeyCounts: Map<String, Int>? = null
 ) {
     /**
-     * Helper methods to extract information from 'oneTimeKeyCounts'
+     * Helper methods to extract information from 'oneTimeKeyCounts'.
      *
      * @param algorithm the expected algorithm
      * @return the time key counts

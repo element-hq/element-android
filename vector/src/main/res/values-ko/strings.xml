@@ -414,7 +414,6 @@
     <string name="settings_default_media_source">기본 미디어 소스</string>
     <string name="media_source_choose">선택</string>
     <string name="settings_play_shutter_sound">셔터 소리 재생하기</string>
-    <string name="settings_flair">재능</string>
     <string name="media_saving_period_3_days">3일</string>
     <string name="media_saving_period_1_week">1주</string>
     <string name="media_saving_period_1_month">1달</string>

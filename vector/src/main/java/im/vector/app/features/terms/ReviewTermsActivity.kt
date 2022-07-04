@@ -58,7 +58,7 @@ class ReviewTermsActivity : SimpleFragmentActivity() {
                             .show()
                     Unit
                 }
-                ReviewTermsViewEvents.Success    -> {
+                ReviewTermsViewEvents.Success -> {
                     setResult(Activity.RESULT_OK)
                     finish()
                 }

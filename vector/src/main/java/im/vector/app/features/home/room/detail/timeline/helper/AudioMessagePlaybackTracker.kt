@@ -63,7 +63,7 @@ class AudioMessagePlaybackTracker @Inject constructor() {
     }
 
     /**
-     * Set state and notify the listeners
+     * Set state and notify the listeners.
      */
     private fun setState(key: String, state: Listener.State) {
         states[key] = state
@@ -121,18 +121,18 @@ class AudioMessagePlaybackTracker @Inject constructor() {
     fun getPlaybackTime(id: String): Int {
         return when (val state = states[id]) {
             is Listener.State.Playing -> state.playbackTime
-            is Listener.State.Paused  -> state.playbackTime
+            is Listener.State.Paused -> state.playbackTime
             /* Listener.State.Idle, */
-            else                      -> 0
+            else -> 0
         }
     }
 
     private fun getPercentage(id: String): Float {
         return when (val state = states[id]) {
             is Listener.State.Playing -> state.percentage
-            is Listener.State.Paused  -> state.percentage
+            is Listener.State.Paused -> state.percentage
             /* Listener.State.Idle, */
-            else                      -> 0f
+            else -> 0f
         }
     }
 

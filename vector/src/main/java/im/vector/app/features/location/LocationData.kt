@@ -29,12 +29,21 @@ data class LocationData(
 ) : Parcelable
 
 /**
- * Creates location data from a LocationContent
- * "geo:40.05,29.24;30" -> LocationData(40.05, 29.24, 30)
+ * Creates location data from a MessageLocationContent.
+ * "geo:40.05,29.24;u=30" -> LocationData(40.05, 29.24, 30)
  * @return location data or null if geo uri is not valid
  */
 fun MessageLocationContent.toLocationData(): LocationData? {
     return parseGeo(getBestGeoUri())
+}
+
+/**
+ * Creates location data from a geoUri String.
+ * "geo:40.05,29.24;u=30" -> LocationData(40.05, 29.24, 30)
+ * @return location data or null if geo uri is null or not valid
+ */
+fun String?.toLocationData(): LocationData? {
+    return this?.let { parseGeo(it) }
 }
 
 @VisibleForTesting

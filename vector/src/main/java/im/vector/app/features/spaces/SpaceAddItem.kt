@@ -24,8 +24,8 @@ import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
 
-@EpoxyModelClass(layout = R.layout.item_space_add)
-abstract class SpaceAddItem : VectorEpoxyModel<SpaceAddItem.Holder>() {
+@EpoxyModelClass
+abstract class SpaceAddItem : VectorEpoxyModel<SpaceAddItem.Holder>(R.layout.item_space_add) {
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var listener: ClickListener? = null
 

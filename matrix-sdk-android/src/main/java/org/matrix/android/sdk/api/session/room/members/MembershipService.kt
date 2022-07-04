@@ -31,6 +31,20 @@ interface MembershipService {
     suspend fun loadRoomMembersIfNeeded()
 
     /**
+     * All the room members can be not loaded, for instance after an initial sync.
+     * All the members will be loaded when calling [loadRoomMembersIfNeeded], or when sending an encrypted
+     * event to the room.
+     * The fun let the app know if all the members have been loaded for this room.
+     * @return true if all the members are loaded, or false elsewhere.
+     */
+    suspend fun areAllMembersLoaded(): Boolean
+
+    /**
+     * Live version for [areAllMembersLoaded].
+     */
+    fun areAllMembersLoadedLive(): LiveData<Boolean>
+
+    /**
      * Return the roomMember with userId or null.
      * @param userId the userId param to look for
      *
@@ -39,14 +53,14 @@ interface MembershipService {
     fun getRoomMember(userId: String): RoomMemberSummary?
 
     /**
-     * Return all the roomMembers of the room with params
+     * Return all the roomMembers of the room with params.
      * @param queryParams the params to query for
      * @return a roomMember list.
      */
     fun getRoomMembers(queryParams: RoomMemberQueryParams): List<RoomMemberSummary>
 
     /**
-     * Return all the roomMembers of the room filtered by memberships
+     * Return all the roomMembers of the room filtered by memberships.
      * @param queryParams the params to query for
      * @return a [LiveData] of roomMember list.
      */
@@ -55,27 +69,27 @@ interface MembershipService {
     fun getNumberOfJoinedMembers(): Int
 
     /**
-     * Invite a user in the room
+     * Invite a user in the room.
      */
     suspend fun invite(userId: String, reason: String? = null)
 
     /**
-     * Invite a user with email or phone number in the room
+     * Invite a user with email or phone number in the room.
      */
     suspend fun invite3pid(threePid: ThreePid)
 
     /**
-     * Ban a user from the room
+     * Ban a user from the room.
      */
     suspend fun ban(userId: String, reason: String? = null)
 
     /**
-     * Unban a user from the room
+     * Unban a user from the room.
      */
     suspend fun unban(userId: String, reason: String? = null)
 
     /**
-     * Remove a user from the room
+     * Remove a user from the room.
      */
     suspend fun remove(userId: String, reason: String? = null)
 

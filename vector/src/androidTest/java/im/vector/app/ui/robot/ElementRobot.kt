@@ -120,8 +120,28 @@ class ElementRobot {
                                 .perform(ViewActions.closeSoftKeyboard(), click())
                     }
                 }
+                // at this point we are in a race with the app restarting. The steps that happen are:
+                // - (initially) app has started, app has initial synched
+                // - (restart) app has strted, app has not initial synched
+                // - (racey) app shows some UI but overlays with initial sync ui
+                // - (initial sync finishes) app has started, has initial synched
+
+                // We need to wait for the initial sync to complete; but we can't
+                // use waitForHome() like login does.
+
+                // waitForHome() -- does not work because we have already fufilled the initialSync
+                // so we can racily have an IllegalStateException that we have transitioned from busy -> idle
+                // but never having sent the signal.
+
+                // So we need to not start waiting for an initial sync until we have restarted
+                // then we do need to wait for the sync to complete.
+
+                // Which is convoluted especially as it involves the app state refreshing
+                // so; in order to make this be more stable
+                // I hereby cheat and write:
+                Thread.sleep(30_000)
             }
-            else                       -> {
+            else -> {
             }
         }
     }

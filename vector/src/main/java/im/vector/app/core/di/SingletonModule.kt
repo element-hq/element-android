@@ -21,6 +21,7 @@ import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.content.res.Resources
+import com.google.i18n.phonenumbers.PhoneNumberUtil
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -33,6 +34,7 @@ import im.vector.app.config.analyticsConfig
 import im.vector.app.core.dispatchers.CoroutineDispatchers
 import im.vector.app.core.error.DefaultErrorFormatter
 import im.vector.app.core.error.ErrorFormatter
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.time.Clock
 import im.vector.app.core.time.DefaultClock
 import im.vector.app.features.analytics.AnalyticsConfig
@@ -49,7 +51,9 @@ import im.vector.app.features.room.VectorRoomDisplayNameFallbackProvider
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.ui.SharedPreferencesUiStateRepository
 import im.vector.app.features.ui.UiStateRepository
+import im.vector.app.flipper.FlipperProxy
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.SupervisorJob
@@ -117,23 +121,28 @@ object VectorStaticModule {
     @Provides
     fun providesMatrixConfiguration(
             vectorPreferences: VectorPreferences,
-            vectorRoomDisplayNameFallbackProvider: VectorRoomDisplayNameFallbackProvider): MatrixConfiguration {
+            vectorRoomDisplayNameFallbackProvider: VectorRoomDisplayNameFallbackProvider,
+            flipperProxy: FlipperProxy,
+    ): MatrixConfiguration {
         return MatrixConfiguration(
                 applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
                 roomDisplayNameFallbackProvider = vectorRoomDisplayNameFallbackProvider,
                 threadMessagesEnabledDefault = vectorPreferences.areThreadMessagesEnabled(),
+                networkInterceptors = listOfNotNull(
+                        flipperProxy.getNetworkInterceptor(),
+                )
         )
     }
 
     @Provides
     @Singleton
     fun providesMatrix(context: Context, configuration: MatrixConfiguration): Matrix {
-        return Matrix.createInstance(context, configuration)
+        return Matrix(context, configuration)
     }
 
     @Provides
     fun providesCurrentSession(activeSessionHolder: ActiveSessionHolder): Session {
-        // TODO: handle session injection better
+        // TODO handle session injection better
         return activeSessionHolder.getActiveSession()
     }
 
@@ -173,7 +182,7 @@ object VectorStaticModule {
         return CoroutineDispatchers(io = Dispatchers.IO, computation = Dispatchers.Default)
     }
 
-    @Suppress("EXPERIMENTAL_API_USAGE")
+    @OptIn(DelicateCoroutinesApi::class)
     @Provides
     @NamedGlobalScope
     fun providesGlobalScope(): CoroutineScope {
@@ -184,4 +193,11 @@ object VectorStaticModule {
     fun providesAnalyticsConfig(): AnalyticsConfig {
         return analyticsConfig
     }
+
+    @Provides
+    fun providesPhoneNumberUtil(): PhoneNumberUtil = PhoneNumberUtil.getInstance()
+
+    @Provides
+    @Singleton
+    fun providesBuildMeta() = BuildMeta()
 }

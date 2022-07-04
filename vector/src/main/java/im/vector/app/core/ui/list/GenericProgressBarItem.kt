@@ -25,8 +25,8 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 /**
  * A generic progress bar item.
  */
-@EpoxyModelClass(layout = R.layout.item_generic_progress)
-abstract class GenericProgressBarItem : VectorEpoxyModel<GenericProgressBarItem.Holder>() {
+@EpoxyModelClass
+abstract class GenericProgressBarItem : VectorEpoxyModel<GenericProgressBarItem.Holder>(R.layout.item_generic_progress) {
 
     @EpoxyAttribute
     var progress: Int = 0

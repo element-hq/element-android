@@ -67,7 +67,7 @@ private fun MultiPickerBaseType.mapType(): ContentAttachmentData.Type {
         mimeType?.isMimeTypeImage() == true -> ContentAttachmentData.Type.IMAGE
         mimeType?.isMimeTypeVideo() == true -> ContentAttachmentData.Type.VIDEO
         mimeType?.isMimeTypeAudio() == true -> ContentAttachmentData.Type.AUDIO
-        else                                -> ContentAttachmentData.Type.FILE
+        else -> ContentAttachmentData.Type.FILE
     }
 }
 
@@ -76,8 +76,8 @@ fun MultiPickerBaseType.toContentAttachmentData(): ContentAttachmentData {
         is MultiPickerImageType -> toContentAttachmentData()
         is MultiPickerVideoType -> toContentAttachmentData()
         is MultiPickerAudioType -> toContentAttachmentData(isVoiceMessage = false)
-        is MultiPickerFileType  -> toContentAttachmentData()
-        else                    -> throw IllegalStateException("Unknown file type")
+        is MultiPickerFileType -> toContentAttachmentData()
+        else -> throw IllegalStateException("Unknown file type")
     }
 }
 
@@ -85,7 +85,7 @@ fun MultiPickerBaseMediaType.toContentAttachmentData(): ContentAttachmentData {
     return when (this) {
         is MultiPickerImageType -> toContentAttachmentData()
         is MultiPickerVideoType -> toContentAttachmentData()
-        else                    -> throw IllegalStateException("Unknown media type")
+        else -> throw IllegalStateException("Unknown media type")
     }
 }
 

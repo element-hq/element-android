@@ -26,6 +26,7 @@ import com.squareup.moshi.JsonClass
  *     "base_url": "https://vector.im"
  * }
  * </pre>
+ * .
  */
 @JsonClass(generateAdapter = true)
 data class WellKnownBaseConfig(

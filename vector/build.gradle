@@ -7,9 +7,26 @@ apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.likethesalad.stem'
 apply plugin: 'dagger.hilt.android.plugin'
+apply plugin: 'kotlinx-knit'
+
+if (project.hasProperty("coverage")) {
+    apply plugin: 'jacoco'
+}
 
 kapt {
     correctErrorTypes = true
+}
+
+knit {
+    files = fileTree(project.rootDir) {
+        include '**/*.md'
+        include '**/*.kt'
+        include '**/*.kts'
+        exclude '**/build/**'
+        exclude '**/.gradle/**'
+        exclude '**/towncrier/template.md'
+        exclude '**/CHANGES.md'
+    }
 }
 
 // Note: 2 digits max for each value
@@ -18,7 +35,7 @@ ext.versionMinor = 4
 // Note: even values are reserved for regular release, odd values for hotfix release.
 // When creating a hotfix, you should decrease the value, since the current value
 // is the value for the next regular release.
-ext.versionPatch = 14
+ext.versionPatch = 28
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -106,8 +123,6 @@ ext.abiVersionCodes = ["armeabi-v7a": 1, "arm64-v8a": 2, "x86": 3, "x86_64": 4].
 def buildNumber = System.env.BUILDKITE_BUILD_NUMBER as Integer ?: 0
 
 android {
-
-
     // Due to a bug introduced in Android gradle plugin 3.6.0, we have to specify the ndk version to use
     // Ref: https://issuetracker.google.com/issues/144111441
     ndkVersion "21.3.6528147"
@@ -132,7 +147,7 @@ android {
         versionName "${versionMajor}.${versionMinor}.${versionPatch}-sonar"
 
         // Generate a random app task affinity
-        manifestPlaceholders = [appTaskAffinitySuffix:"H_${gitRevision()}"]
+        manifestPlaceholders = [appTaskAffinitySuffix: "H_${gitRevision()}"]
 
         buildConfigField "String", "GIT_REVISION", "\"${gitRevision()}\""
         buildConfigField "String", "GIT_REVISION_DATE", "\"${gitRevisionDate()}\""
@@ -231,6 +246,10 @@ android {
             buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
 
             signingConfig signingConfigs.debug
+
+            if (project.hasProperty("coverage")) {
+                testCoverageEnabled = coverage.enableTestCoverage
+            }
         }
 
         release {
@@ -297,14 +316,14 @@ android {
     kotlinOptions {
         jvmTarget = "11"
         freeCompilerArgs += [
-                "-Xopt-in=kotlin.RequiresOptIn",
+                "-opt-in=kotlin.RequiresOptIn",
                 // Fixes false positive "This is an internal Mavericks API. It is not intended for external use."
                 // of MvRx `by viewModel()` calls. Maybe due to the inlining of code... This is a temporary fix...
-                "-Xopt-in=com.airbnb.mvrx.InternalMavericksApi",
+                "-opt-in=com.airbnb.mvrx.InternalMavericksApi",
                 // Opt in for kotlinx.coroutines.FlowPreview too
-                "-Xopt-in=kotlinx.coroutines.FlowPreview",
+                "-opt-in=kotlinx.coroutines.FlowPreview",
                 // Opt in for kotlinx.coroutines.ExperimentalCoroutinesApi too
-                "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
         ]
     }
 
@@ -323,6 +342,8 @@ android {
 }
 
 dependencies {
+    implementation project(':library:opusencoder')
+
     implementation project(":vector-config")
     implementation project(":matrix-sdk-android")
     implementation project(":matrix-sdk-android-flow")
@@ -343,11 +364,12 @@ dependencies {
     implementation libs.androidx.constraintLayout
     implementation "androidx.sharetarget:sharetarget:1.1.0"
     implementation libs.androidx.core
-    implementation "androidx.media:media:1.4.3"
+    implementation "androidx.media:media:1.6.0"
     implementation "androidx.transition:transition:1.4.1"
+    implementation libs.androidx.biometric
 
     implementation "org.threeten:threetenbp:1.4.0:no-tzdb"
-    implementation "com.gabrielittner.threetenbp:lazythreetenbp:0.9.0"
+    implementation "com.gabrielittner.threetenbp:lazythreetenbp:0.10.0"
 
     implementation libs.squareup.moshi
     kapt libs.squareup.moshiKotlin
@@ -357,7 +379,6 @@ dependencies {
     implementation libs.androidx.lifecycleProcess
     implementation libs.androidx.lifecycleRuntimeKtx
 
-    implementation libs.androidx.datastore
     implementation libs.androidx.datastorepreferences
 
 
@@ -368,12 +389,11 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.6.0'
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.47'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.51'
 
     // FlowBinding
     implementation libs.github.flowBinding
     implementation libs.github.flowBindingAppcompat
-    implementation libs.github.flowBindingMaterial
 
     implementation libs.airbnb.epoxy
     implementation libs.airbnb.epoxyGlide
@@ -407,17 +427,13 @@ dependencies {
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
     implementation libs.androidx.autoFill
     implementation 'jp.wasabeef:glide-transformations:4.3.0'
-    implementation 'com.github.vector-im:PFLockScreen-Android:1.0.0-beta12'
     implementation 'com.github.hyuwah:DraggableView:1.0.0'
 
     // Custom Tab
     implementation 'androidx.browser:browser:1.4.0'
 
     // Passphrase strength helper
-    implementation 'com.nulab-inc:zxcvbn:1.5.2'
-
-    // To convert voice message on old platforms
-    implementation 'com.arthenica:ffmpeg-kit-audio:4.5.LTS'
+    implementation 'com.nulab-inc:zxcvbn:1.7.0'
 
     // Alerter
     implementation 'com.github.tapadoo:alerter:7.2.4'
@@ -440,9 +456,6 @@ dependencies {
     kapt libs.github.glideCompiler
     implementation 'com.github.yalantis:ucrop:2.2.8'
 
-    // Badge for compatibility
-    implementation 'me.leolin:ShortcutBadger:1.1.22@aar'
-
     // Chat effects
     implementation 'nl.dionsegijn:konfetti-xml:2.0.2'
 
@@ -454,8 +467,10 @@ dependencies {
     // Analytics
     implementation 'com.posthog.android:posthog:1.1.2'
 
-    // gplay flavor only
-    gplayImplementation('com.google.firebase:firebase-messaging:23.0.0') {
+    // UnifiedPush
+    implementation 'com.github.UnifiedPush:android-connector:2.0.0'
+    // UnifiedPush gplay flavor only
+    gplayImplementation('com.github.UnifiedPush:android-embedded_fcm_distributor:2.1.1') {
         exclude group: 'com.google.firebase', module: 'firebase-core'
         exclude group: 'com.google.firebase', module: 'firebase-analytics'
         exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'
@@ -464,7 +479,7 @@ dependencies {
     // OSS License, gplay flavor only
     gplayImplementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
 
-    implementation "androidx.emoji2:emoji2:1.0.1"
+    implementation "androidx.emoji2:emoji2:1.1.0"
 
     // WebRTC
     // org.webrtc:google-webrtc is for development purposes only
@@ -498,9 +513,14 @@ dependencies {
     implementation 'commons-codec:commons-codec:1.15'
 
     // MapTiler
-    implementation 'org.maplibre.gl:android-sdk:9.5.2'
-    implementation 'org.maplibre.gl:android-plugin-annotation-v9:1.0.0'
-
+    fdroidImplementation(libs.maplibre.androidSdk) {
+        exclude group: 'com.google.android.gms', module: 'play-services-location'
+    }
+    fdroidImplementation(libs.maplibre.pluginAnnotation) {
+        exclude group: 'com.google.android.gms', module: 'play-services-location'
+    }
+    gplayImplementation libs.maplibre.androidSdk
+    gplayImplementation libs.maplibre.pluginAnnotation
 
     // TESTS
     testImplementation libs.tests.junit
@@ -512,6 +532,16 @@ dependencies {
     testImplementation(libs.jetbrains.coroutinesTest) {
         exclude group: "org.jetbrains.kotlinx", module: "kotlinx-coroutines-debug"
     }
+
+    // Flipper, debug builds only
+    debugImplementation(libs.flipper.flipper) {
+        exclude group: 'com.facebook.fbjni', module: 'fbjni'
+    }
+    debugImplementation(libs.flipper.flipperNetworkPlugin) {
+        exclude group: 'com.facebook.fbjni', module: 'fbjni'
+    }
+    debugImplementation 'com.facebook.soloader:soloader:0.10.4'
+    debugImplementation "com.kgurgul.flipper:flipper-realm-android:2.2.0"
 
     // Activate when you want to check for leaks, from time to time.
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.3'
@@ -534,5 +564,7 @@ dependencies {
     androidTestImplementation('com.adevinta.android:barista:4.2.0') {
         exclude group: 'org.jetbrains.kotlin'
     }
+    androidTestImplementation libs.mockk.mockkAndroid
     androidTestUtil libs.androidx.orchestrator
+    debugImplementation libs.androidx.fragmentTesting
 }

@@ -48,8 +48,9 @@ class SharedSecureStorageActivity :
     @Parcelize
     data class Args(
             val keyId: String?,
-            val requestedSecrets: List<String>,
-            val resultKeyStoreAlias: String
+            val requestedSecrets: List<String> = emptyList(),
+            val resultKeyStoreAlias: String,
+            val writeSecrets: List<Pair<String, String>> = emptyList(),
     ) : Parcelable
 
     private val viewModel: SharedSecureStorageViewModel by viewModel()
@@ -80,8 +81,8 @@ class SharedSecureStorageActivity :
         val fragment =
                 when (state.step) {
                     SharedSecureStorageViewState.Step.EnterPassphrase -> SharedSecuredStoragePassphraseFragment::class
-                    SharedSecureStorageViewState.Step.EnterKey        -> SharedSecuredStorageKeyFragment::class
-                    SharedSecureStorageViewState.Step.ResetAll        -> SharedSecuredStorageResetAllFragment::class
+                    SharedSecureStorageViewState.Step.EnterKey -> SharedSecuredStorageKeyFragment::class
+                    SharedSecureStorageViewState.Step.ResetAll -> SharedSecuredStorageResetAllFragment::class
                 }
 
         showFragment(fragment)
@@ -89,10 +90,10 @@ class SharedSecureStorageActivity :
 
     private fun observeViewEvents(it: SharedSecureStorageViewEvent?) {
         when (it) {
-            is SharedSecureStorageViewEvent.Dismiss              -> {
+            is SharedSecureStorageViewEvent.Dismiss -> {
                 finish()
             }
-            is SharedSecureStorageViewEvent.Error                -> {
+            is SharedSecureStorageViewEvent.Error -> {
                 MaterialAlertDialogBuilder(this)
                         .setTitle(getString(R.string.dialog_title_error))
                         .setMessage(it.message)
@@ -104,16 +105,16 @@ class SharedSecureStorageActivity :
                         }
                         .show()
             }
-            is SharedSecureStorageViewEvent.ShowModalLoading     -> {
+            is SharedSecureStorageViewEvent.ShowModalLoading -> {
                 showWaitingView()
             }
-            is SharedSecureStorageViewEvent.HideModalLoading     -> {
+            is SharedSecureStorageViewEvent.HideModalLoading -> {
                 hideWaitingView()
             }
-            is SharedSecureStorageViewEvent.UpdateLoadingState   -> {
+            is SharedSecureStorageViewEvent.UpdateLoadingState -> {
                 updateWaitingView(it.waitingData)
             }
-            is SharedSecureStorageViewEvent.FinishSuccess        -> {
+            is SharedSecureStorageViewEvent.FinishSuccess -> {
                 val dataResult = Intent()
                 dataResult.putExtra(EXTRA_DATA_RESULT, it.cypherResult)
                 setResult(RESULT_OK, dataResult)
@@ -122,7 +123,7 @@ class SharedSecureStorageActivity :
             is SharedSecureStorageViewEvent.ShowResetBottomSheet -> {
                 navigator.open4SSetup(this, SetupMode.HARD_RESET)
             }
-            else                                                 -> Unit
+            else -> Unit
         }
     }
 
@@ -148,17 +149,41 @@ class SharedSecureStorageActivity :
         const val EXTRA_DATA_RESET = "EXTRA_DATA_RESET"
         const val DEFAULT_RESULT_KEYSTORE_ALIAS = "SharedSecureStorageActivity"
 
-        fun newIntent(context: Context,
-                      keyId: String? = null,
-                      requestedSecrets: List<String>,
-                      resultKeyStoreAlias: String = DEFAULT_RESULT_KEYSTORE_ALIAS): Intent {
+        fun newReadIntent(
+                context: Context,
+                keyId: String? = null,
+                requestedSecrets: List<String>,
+                resultKeyStoreAlias: String = DEFAULT_RESULT_KEYSTORE_ALIAS
+        ): Intent {
             require(requestedSecrets.isNotEmpty())
             return Intent(context, SharedSecureStorageActivity::class.java).also {
-                it.putExtra(Mavericks.KEY_ARG, Args(
-                        keyId,
-                        requestedSecrets,
-                        resultKeyStoreAlias
-                ))
+                it.putExtra(
+                        Mavericks.KEY_ARG,
+                        Args(
+                                keyId = keyId,
+                                requestedSecrets = requestedSecrets,
+                                resultKeyStoreAlias = resultKeyStoreAlias
+                        )
+                )
+            }
+        }
+
+        fun newWriteIntent(
+                context: Context,
+                keyId: String? = null,
+                writeSecrets: List<Pair<String, String>>,
+                resultKeyStoreAlias: String = DEFAULT_RESULT_KEYSTORE_ALIAS
+        ): Intent {
+            require(writeSecrets.isNotEmpty())
+            return Intent(context, SharedSecureStorageActivity::class.java).also {
+                it.putExtra(
+                        Mavericks.KEY_ARG,
+                        Args(
+                                keyId = keyId,
+                                writeSecrets = writeSecrets,
+                                resultKeyStoreAlias = resultKeyStoreAlias
+                        )
+                )
             }
         }
     }

@@ -39,7 +39,7 @@ data class OnboardingViewState(
         @PersistState
         val signMode: SignMode = SignMode.Unknown,
         @PersistState
-        val resetPasswordEmail: String? = null,
+        val resetState: ResetState = ResetState(),
 
         // For SSO session recovery
         @PersistState
@@ -50,6 +50,9 @@ data class OnboardingViewState(
 
         @PersistState
         val selectedHomeserver: SelectedHomeserverState = SelectedHomeserverState(),
+
+        @PersistState
+        val selectedAuthenticationState: SelectedAuthenticationState = SelectedAuthenticationState(),
 
         @PersistState
         val personalizationState: PersonalizationState = PersonalizationState()
@@ -68,6 +71,7 @@ data class SelectedHomeserverState(
         val upstreamUrl: String? = null,
         val preferredLoginMode: LoginMode = LoginMode.Unknown,
         val supportedLoginTypes: List<String> = emptyList(),
+        val isLogoutDevicesSupported: Boolean = false,
 ) : Parcelable
 
 @Parcelize
@@ -80,3 +84,15 @@ data class PersonalizationState(
 
     fun supportsPersonalization() = supportsChangingDisplayName || supportsChangingProfilePicture
 }
+
+@Parcelize
+data class ResetState(
+        val email: String? = null,
+        val newPassword: String? = null,
+        val supportsLogoutAllDevices: Boolean = false
+) : Parcelable
+
+@Parcelize
+data class SelectedAuthenticationState(
+        val description: AuthenticationDescription? = null,
+) : Parcelable

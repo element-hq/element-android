@@ -35,7 +35,8 @@ class StartCallActionsHandler(
         private val timelineViewModel: TimelineViewModel,
         private val startCallActivityResultLauncher: ActivityResultLauncher<Array<String>>,
         private val showDialogWithMessage: (String) -> Unit,
-        private val onTapToReturnToCall: () -> Unit) {
+        private val onTapToReturnToCall: () -> Unit
+) {
 
     fun onVideoCallClicked() {
         handleCallRequest(true)
@@ -48,7 +49,7 @@ class StartCallActionsHandler(
     private fun handleCallRequest(isVideoCall: Boolean) = withState(timelineViewModel) { state ->
         val roomSummary = state.asyncRoomSummary.invoke() ?: return@withState
         when (roomSummary.joinedMembersCount) {
-            1    -> {
+            1 -> {
                 val pendingInvite = roomSummary.invitedMembersCount ?: 0 > 0
                 if (pendingInvite) {
                     // wait for other to join
@@ -58,17 +59,19 @@ class StartCallActionsHandler(
                     showDialogWithMessage(fragment.getString(R.string.cannot_call_yourself))
                 }
             }
-            2    -> {
+            2 -> {
                 val currentCall = callManager.getCurrentCall()
                 if (currentCall?.signalingRoomId == roomId) {
                     onTapToReturnToCall()
                 } else if (!state.isAllowedToStartWebRTCCall) {
-                    showDialogWithMessage(fragment.getString(
-                            if (state.isDm()) {
-                                R.string.no_permissions_to_start_webrtc_call_in_direct_room
-                            } else {
-                                R.string.no_permissions_to_start_webrtc_call
-                            })
+                    showDialogWithMessage(
+                            fragment.getString(
+                                    if (state.isDm()) {
+                                        R.string.no_permissions_to_start_webrtc_call_in_direct_room
+                                    } else {
+                                        R.string.no_permissions_to_start_webrtc_call
+                                    }
+                            )
                     )
                 } else {
                     safeStartCall(isVideoCall)
@@ -79,13 +82,15 @@ class StartCallActionsHandler(
                 // can you add widgets??
                 if (!state.isAllowedToManageWidgets) {
                     // You do not have permission to start a conference call in this room
-                    showDialogWithMessage(fragment.getString(
-                            if (state.isDm()) {
-                                R.string.no_permissions_to_start_conf_call_in_direct_room
-                            } else {
-                                R.string.no_permissions_to_start_conf_call
-                            }
-                    ))
+                    showDialogWithMessage(
+                            fragment.getString(
+                                    if (state.isDm()) {
+                                        R.string.no_permissions_to_start_conf_call_in_direct_room
+                                    } else {
+                                        R.string.no_permissions_to_start_conf_call
+                                    }
+                            )
+                    )
                 } else {
                     if (state.hasActiveJitsiWidget()) {
                         // A conference is already in progress, return
@@ -123,18 +128,22 @@ class StartCallActionsHandler(
         val startCallAction = RoomDetailAction.StartCall(isVideoCall)
         timelineViewModel.pendingAction = startCallAction
         if (isVideoCall) {
-            if (checkPermissions(PERMISSIONS_FOR_VIDEO_IP_CALL,
+            if (checkPermissions(
+                            PERMISSIONS_FOR_VIDEO_IP_CALL,
                             fragment.requireActivity(),
                             startCallActivityResultLauncher,
-                            R.string.permissions_rationale_msg_camera_and_audio)) {
+                            R.string.permissions_rationale_msg_camera_and_audio
+                    )) {
                 timelineViewModel.pendingAction = null
                 timelineViewModel.handle(startCallAction)
             }
         } else {
-            if (checkPermissions(PERMISSIONS_FOR_AUDIO_IP_CALL,
+            if (checkPermissions(
+                            PERMISSIONS_FOR_AUDIO_IP_CALL,
                             fragment.requireActivity(),
                             startCallActivityResultLauncher,
-                            R.string.permissions_rationale_msg_record_audio)) {
+                            R.string.permissions_rationale_msg_record_audio
+                    )) {
                 timelineViewModel.pendingAction = null
                 timelineViewModel.handle(startCallAction)
             }

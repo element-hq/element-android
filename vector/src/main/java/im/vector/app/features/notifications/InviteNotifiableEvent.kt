@@ -28,5 +28,6 @@ data class InviteNotifiableEvent(
         val type: String?,
         val timestamp: Long,
         val soundName: String?,
-        override val isRedacted: Boolean = false
+        override val isRedacted: Boolean = false,
+        override val isUpdated: Boolean = false
 ) : NotifiableEvent

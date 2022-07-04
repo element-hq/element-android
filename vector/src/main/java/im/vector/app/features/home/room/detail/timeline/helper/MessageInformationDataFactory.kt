@@ -32,6 +32,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationState
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
+import org.matrix.android.sdk.api.session.events.model.getMsgType
 import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.ReferencesAggregatedContent
@@ -44,13 +45,14 @@ import org.matrix.android.sdk.api.session.room.timeline.hasBeenEdited
 import javax.inject.Inject
 
 /**
- * TODO Update this comment
- * This class compute if data of an event (such has avatar, display name, ...) should be displayed, depending on the previous event in the timeline
+ * This class is responsible of building extra information data associated to a given event.
  */
-class MessageInformationDataFactory @Inject constructor(private val session: Session,
-                                                        private val dateFormatter: VectorDateFormatter,
-                                                        private val messageLayoutFactory: TimelineMessageLayoutFactory,
-                                                        private val reactionsSummaryFactory: ReactionsSummaryFactory) {
+class MessageInformationDataFactory @Inject constructor(
+        private val session: Session,
+        private val dateFormatter: VectorDateFormatter,
+        private val messageLayoutFactory: TimelineMessageLayoutFactory,
+        private val reactionsSummaryFactory: ReactionsSummaryFactory
+) {
 
     fun create(params: TimelineItemFactoryParams): MessageInformationData {
         val event = params.event
@@ -119,13 +121,16 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                 isFirstFromThisSender = isFirstFromThisSender,
                 isLastFromThisSender = isLastFromThisSender,
                 e2eDecoration = e2eDecoration,
-                sendStateDecoration = sendStateDecoration
+                sendStateDecoration = sendStateDecoration,
+                messageType = event.root.getMsgType()
         )
     }
 
-    private fun getSendStateDecoration(event: TimelineEvent,
-                                       lastSentEventWithoutReadReceipts: String?,
-                                       isMedia: Boolean): SendStateDecoration {
+    private fun getSendStateDecoration(
+            event: TimelineEvent,
+            lastSentEventWithoutReadReceipts: String?,
+            isMedia: Boolean
+    ): SendStateDecoration {
         val eventSendState = event.root.sendState
         return if (eventSendState.isSending()) {
             if (isMedia) SendStateDecoration.SENDING_MEDIA else SendStateDecoration.SENDING_NON_MEDIA
@@ -158,18 +163,18 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                                 session.cryptoService().getDeviceInfo(event.root.senderId ?: "", deviceId)
                             }
                     when {
-                        sendingDevice == null                            -> {
+                        sendingDevice == null -> {
                             // For now do not decorate this with warning
                             // maybe it's a deleted session
                             E2EDecoration.NONE
                         }
-                        sendingDevice.trustLevel == null                 -> {
+                        sendingDevice.trustLevel == null -> {
                             E2EDecoration.WARN_SENT_BY_UNKNOWN
                         }
                         sendingDevice.trustLevel?.isVerified().orFalse() -> {
                             E2EDecoration.NONE
                         }
-                        else                                             -> {
+                        else -> {
                             E2EDecoration.WARN_SENT_BY_UNVERIFIED
                         }
                     }
@@ -190,16 +195,16 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
 
     /**
      * Tiles type message never show the sender information (like verification request), so we should repeat it for next message
-     * even if same sender
+     * even if same sender.
      */
     private fun isTileTypeMessage(event: TimelineEvent?): Boolean {
         return when (event?.root?.getClearType()) {
             EventType.KEY_VERIFICATION_DONE,
             EventType.KEY_VERIFICATION_CANCEL -> true
-            EventType.MESSAGE                 -> {
+            EventType.MESSAGE -> {
                 event.getLastMessageContent() is MessageVerificationRequestContent
             }
-            else                              -> false
+            else -> false
         }
     }
 }

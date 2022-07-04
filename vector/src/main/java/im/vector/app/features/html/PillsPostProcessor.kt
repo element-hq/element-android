@@ -34,10 +34,12 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 
-class PillsPostProcessor @AssistedInject constructor(@Assisted private val roomId: String?,
-                                                     private val context: Context,
-                                                     private val avatarRenderer: AvatarRenderer,
-                                                     private val sessionHolder: ActiveSessionHolder) :
+class PillsPostProcessor @AssistedInject constructor(
+        @Assisted private val roomId: String?,
+        private val context: Context,
+        private val avatarRenderer: AvatarRenderer,
+        private val sessionHolder: ActiveSessionHolder
+) :
         EventHtmlRenderer.PostProcessor {
 
     /* ==========================================================================================
@@ -90,10 +92,10 @@ class PillsPostProcessor @AssistedInject constructor(@Assisted private val roomI
 
     private fun LinkSpan.createPillSpan(roomId: String?): PillImageSpan? {
         val matrixItem = when (val permalinkData = PermalinkParser.parse(url)) {
-            is PermalinkData.UserLink  -> permalinkData.toMatrixItem(roomId)
-            is PermalinkData.RoomLink  -> permalinkData.toMatrixItem()
+            is PermalinkData.UserLink -> permalinkData.toMatrixItem(roomId)
+            is PermalinkData.RoomLink -> permalinkData.toMatrixItem()
             is PermalinkData.GroupLink -> permalinkData.toMatrixItem()
-            else                       -> null
+            else -> null
         } ?: return null
         return createPillImageSpan(matrixItem)
     }
@@ -110,7 +112,7 @@ class PillsPostProcessor @AssistedInject constructor(@Assisted private val roomI
                 val room: RoomSummary? = sessionHolder.getSafeActiveSession()?.getRoomSummary(roomIdOrAlias)
                 when {
                     isRoomAlias -> MatrixItem.RoomAliasItem(roomIdOrAlias, room?.displayName, room?.avatarUrl)
-                    else        -> MatrixItem.RoomItem(roomIdOrAlias, room?.displayName, room?.avatarUrl)
+                    else -> MatrixItem.RoomItem(roomIdOrAlias, room?.displayName, room?.avatarUrl)
                 }
             } else {
                 // Exclude event link (used in reply events, we do not want to pill the "in reply to")

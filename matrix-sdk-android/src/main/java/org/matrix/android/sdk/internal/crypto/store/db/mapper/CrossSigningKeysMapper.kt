@@ -27,11 +27,13 @@ import javax.inject.Inject
 
 internal class CrossSigningKeysMapper @Inject constructor(moshi: Moshi) {
 
-    private val signaturesAdapter = moshi.adapter<Map<String, Map<String, String>>>(Types.newParameterizedType(
-            Map::class.java,
-            String::class.java,
-            Any::class.java
-    ))
+    private val signaturesAdapter = moshi.adapter<Map<String, Map<String, String>>>(
+            Types.newParameterizedType(
+                    Map::class.java,
+                    String::class.java,
+                    Any::class.java
+            )
+    )
 
     fun update(keyInfo: KeyInfoEntity, cryptoCrossSigningKey: CryptoCrossSigningKey) {
         // update signatures?

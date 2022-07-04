@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="notice_room_leave">%1$s ha marxat de la sala</string>
     <string name="notice_room_join">%1$s s\'ha unit a la sala</string>
     <string name="medium_phone_number">Número de telèfon</string>
@@ -10,7 +10,7 @@
     <string name="notice_room_reject">%1$s ha rebutjat la invitació</string>
     <string name="notice_room_remove">%1$s ha expulsat %2$s</string>
     <string name="notice_display_name_changed_from">%1$s ha canviat el seu àlies de %2$s a %3$s</string>
-    <string name="notice_display_name_removed">%1$s ha eliminat el àlies (era %2$s)</string>
+    <string name="notice_display_name_removed">%1$s ha eliminat l\'àlies (era %2$s)</string>
     <string name="notice_room_topic_changed">%1$s ha canviat el tema a: %2$s</string>
     <string name="notice_room_name_changed">%1$s ha canviat el nom de la sala a: %2$s</string>
     <string name="notice_answered_call">%s ha respost a la trucada.</string>
@@ -20,11 +20,11 @@
     <string name="notice_room_unban">%1$s ha tret el vet a %2$s</string>
     <string name="notice_room_ban">%1$s ha vetat %2$s</string>
     <string name="notice_room_withdraw">%1$s ha retirat la invitació de %2$s</string>
-    <string name="notice_avatar_url_changed">%1$s ha canviat la seva icona</string>
+    <string name="notice_avatar_url_changed">%1$s ha canviat la seva foto</string>
     <string name="notice_made_future_room_visibility">%1$s ha establert la visibilitat de l\'històric futur de la sala a %2$s</string>
     <string name="notice_room_visibility_joined">tots els participants de la sala, des de que s\'hi uneixen.</string>
     <string name="notice_room_visibility_world_readable">qualsevol.</string>
-    <string name="notice_avatar_changed_too">(també ha canviat la icona)</string>
+    <string name="notice_avatar_changed_too">(també ha canviat la foto)</string>
     <string name="notice_room_name_removed">%1$s ha eliminat el nom de la sala</string>
     <string name="notice_room_topic_removed">%1$s ha eliminat el tema de la sala</string>
     <string name="notice_room_third_party_invite">%1$s ha enviat una invitació a %2$s perquè s\'uneixi a la sala</string>
@@ -36,10 +36,9 @@
     <string name="notice_display_name_set">%1$s a canviat el seu àlies a %2$s</string>
     <string name="notice_placed_video_call">%s ha realitzat una videotrucada.</string>
     <string name="notice_placed_voice_call">%s ha realitzat una trucada de veu.</string>
-    <string name="room_displayname_room_invite">Convida a la sala</string>
+    <string name="room_displayname_room_invite">Invitació de sala</string>
     <string name="room_displayname_two_members">%1$s i %2$s</string>
     <string name="room_displayname_empty_room">Sala buida</string>
-
     <string name="notice_direct_room_update">%s s\'ha actualitzat aquí.</string>
     <string name="notice_direct_room_update_by_you">Ho has actualitzat aquí.</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">Has activat el xifrat d\'extrem a extrem (algorisme %1$s no reconegut).</string>
@@ -116,7 +115,7 @@
     <string name="initial_sync_start_importing_account_groups">Sincronització inicial:
 \nImportant comunitats</string>
     <string name="initial_sync_start_importing_account_left_rooms">Sincronització inicial:
-\nImportant sales que deixat</string>
+\nImportant sales que n\'has marxat</string>
     <string name="initial_sync_start_importing_account">Sincronització inicial:
 \nImportant compte…</string>
     <string name="initial_sync_start_importing_account_crypto">Sincronització inicial:
@@ -124,9 +123,10 @@
     <string name="initial_sync_start_importing_account_rooms">Sincronització inicial:
 \nImportant sales</string>
     <string name="initial_sync_start_importing_account_invited_rooms">Sincronització inicial:
-\nImportant sales on hi estàs convidat</string>
+\nImportant sales que se t\'ha convidat</string>
     <string name="initial_sync_start_importing_account_joined_rooms">Sincronització inicial:
-\nImportant sales on hi estàs unit</string>
+\nCarregant les teves converses
+\nSi t\'has unit a moles sales, això pot tardar una estona</string>
     <string name="notice_power_level_diff">%1$s de %2$s a %3$s</string>
     <string name="notice_power_level_changed">%1$s ha canviat el nivell d\'autoritat de %2$s.</string>
     <string name="notice_power_level_changed_by_you">Has canviat el nivell d\'autoritat de %1$s.</string>
@@ -145,8 +145,8 @@
     <string name="notice_direct_room_third_party_invite_by_you">Has convidat a %1$s</string>
     <string name="notice_direct_room_third_party_invite">%1$s ha convidat a %2$s</string>
     <string name="notice_room_third_party_invite_by_you">Has enviat una invitació a %1$s perquè s\'uneixi a la sala</string>
-    <string name="notice_room_avatar_removed_by_you">Has eliminat la icona de la sala</string>
-    <string name="notice_room_avatar_removed">%1$s ha eliminat la icona de la sala</string>
+    <string name="notice_room_avatar_removed_by_you">Has eliminat la foto de la sala</string>
+    <string name="notice_room_avatar_removed">%1$s ha eliminat la foto de la sala</string>
     <string name="notice_room_topic_removed_by_you">Has eliminat el tema de la sala</string>
     <string name="notice_room_name_removed_by_you">Has eliminat el nom de la sala</string>
     <string name="notice_room_update_by_you">Has actualitzat aquesta sala.</string>
@@ -161,13 +161,13 @@
     <string name="notice_placed_voice_call_by_you">Has realitzat una trucada de veu.</string>
     <string name="notice_placed_video_call_by_you">Has realitzat una videotrucada.</string>
     <string name="notice_room_name_changed_by_you">Has canviat el nom de la sala a: %1$s</string>
-    <string name="notice_room_avatar_changed_by_you">Has canviat la icona de la sala</string>
-    <string name="notice_room_avatar_changed">%1$s ha canviat la icona de la sala</string>
+    <string name="notice_room_avatar_changed_by_you">Has canviat la foto de la sala</string>
+    <string name="notice_room_avatar_changed">%1$s ha canviat la foto de la sala</string>
     <string name="notice_room_topic_changed_by_you">Has canviat el tema a: %1$s</string>
     <string name="notice_display_name_removed_by_you">Has eliminat el teu àlies (era %1$s)</string>
     <string name="notice_display_name_changed_from_by_you">Has canviat el teu àlies de %1$s a %2$s</string>
     <string name="notice_display_name_set_by_you">Has canviat el teu àlies a %1$s</string>
-    <string name="notice_avatar_url_changed_by_you">Has canviat la teva icona</string>
+    <string name="notice_avatar_url_changed_by_you">Has canviat la teva foto</string>
     <string name="notice_room_withdraw_by_you">Has retirat la invitació de %1$s</string>
     <string name="notice_room_unban_by_you">Has tret el vet a %1$s</string>
     <string name="notice_room_reject_by_you">Has rebutjat la invitació</string>
@@ -180,16 +180,16 @@
     <string name="notice_room_created_by_you">Has creat la sala</string>
     <string name="notice_room_created">%1$s ha creat la sala</string>
     <string name="notice_room_invite_no_invitee_by_you">La teva invitació</string>
-    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Servidors coincidents amb literals IP ara estan vetats.</string>
-    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Servidors coincidents amb literals IP ara estan permesos.</string>
-    <string name="notice_room_server_acl_updated_was_allowed">• Servidors coincidents amb %s han estat eliminats de la llista de permesos.</string>
-    <string name="notice_room_server_acl_updated_allowed">• Servidors coincidents amb %s ara estan permesos.</string>
-    <string name="notice_room_server_acl_updated_was_banned">• Servidors coincidents amb %s han estat eliminats del llista de vetats.</string>
-    <string name="notice_room_server_acl_updated_banned">• Servidors coincidents amb %s ara estan vetats.</string>
-    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Servidors coincidents amb literals IP estan vetats.</string>
-    <string name="notice_room_server_acl_set_ip_literals_allowed">• Servidors coincidents amb literals IP estan permesos.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Els servidors coincidents amb literals IP ara estan vetats.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Els servidors coincidents amb literals IP ara estan permesos.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• Els servidors coincidents amb %s s\'han eliminat de la llista de permesos.</string>
+    <string name="notice_room_server_acl_updated_allowed">• Els servidors coincidents amb %s ara estan permesos.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• Els servidors coincidents amb %s s\'han tret del llista de vetats.</string>
+    <string name="notice_room_server_acl_updated_banned">• Els servidors coincidents amb %s ara estan vetats.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Els servidors coincidents amb literals IP estan vetats.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• Els servidors coincidents amb literals IP estan permesos.</string>
     <string name="notice_room_server_acl_set_allowed">• Servidors coincidents amb %s estan permesos.</string>
-    <string name="notice_room_server_acl_set_banned">• Servidors coincidents amb %s estan vetats.</string>
+    <string name="notice_room_server_acl_set_banned">• Els servidors coincidents amb %s estan vetats.</string>
     <string name="notice_room_canonical_alias_no_change_by_you">Has canviat les adreces d\'aquesta sala.</string>
     <string name="notice_room_canonical_alias_no_change">%1$s ha canviat les adreces d\'aquesta sala.</string>
     <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">Has canviat l\'adreça principal i les adreces alternatives d\'aquesta sala.</string>
@@ -243,11 +243,10 @@
     <string name="later">Més tard</string>
     <string name="permalink">Enllaç permanent</string>
     <string name="view_source">Visualitza el codi font</string>
-    <string name="view_decrypted_source">Visualitza el codi font desencriptat</string>
+    <string name="view_decrypted_source">Visualitza el codi font desxifrat</string>
     <string name="action_delete">Elimina</string>
     <string name="action_rename">Canvia el nom</string>
     <string name="report_content">Informa del contingut</string>
-
     <string name="or">o</string>
     <string name="action_invite">Convida</string>
     <string name="action_sign_out">Tanca la sessió</string>
@@ -270,7 +269,6 @@
     <string name="matrix_only_filter">Només contactes de Matrix</string>
     <string name="no_result_placeholder">Sense resultats</string>
     <string name="rooms_header">Sales</string>
-
     <string name="groups_header">Comunitats</string>
     <string name="send_bug_report_include_logs">Envia els registres</string>
     <string name="send_bug_report_include_crash_logs">Envia els registres de fallada</string>
@@ -303,11 +301,9 @@
     <string name="auth_invalid_email">"El correu electrònic no és vàlid"</string>
     <string name="auth_email_already_defined">Aquest correu electrònic ja existeix.</string>
     <string name="auth_forgot_password">Contrasenya oblidada\?</string>
-
-    <string name="auth_recaptcha_message">Aquest servidor es vol assegurar que no sou un robot</string>
+    <string name="auth_recaptcha_message">Aquest servidor vol assegurar-se que no ets cap robot</string>
     <string name="auth_reset_password_missing_email">Heu d\'introduir el correu electrònic associat al vostre compte.</string>
     <string name="auth_reset_password_error_unauthorized">No s\'ha pogut verificar l\'adreça del correu electrònic: assegureu-vos que heu fet clic a l\'enllaç del correu electrònic</string>
-
     <string name="login_error_invalid_home_server">Introduïu una URL vàlida</string>
     <string name="login_error_bad_json">JSON mal format</string>
     <string name="login_error_not_json">No contenia un JSON vàlid</string>
@@ -324,14 +320,10 @@
     <string name="call_in_progress">Trucada en curs…</string>
     <string name="call_error_user_not_responding">No s\'està responent a la trucada.</string>
     <string name="permissions_rationale_popup_title">Informació</string>
-
-
     <string name="permissions_rationale_msg_record_audio">Per tal de fer trucades de veu, ${app_name} necessita permís per accedir al micròfon.</string>
-
     <string name="permissions_rationale_msg_camera_and_audio">Per tal de fer videotrucades, ${app_name} necessita permís per accedir a la càmera i al micròfon.
 \n
 \nPermet-li l\'accés en la següent finestra emergent per tal de poder fer la trucada.</string>
-
     <string name="yes">SÍ</string>
     <string name="no">NO</string>
     <string name="_continue">Continua</string>
@@ -339,10 +331,9 @@
     <string name="action_join">Uneix-te</string>
     <string name="action_reject">Rebutja</string>
     <string name="room_jump_to_first_unread">Vés fins al primer no llegit</string>
-
     <string name="room_participants_leave_prompt_title">Marxa de la sala</string>
     <string name="room_participants_leave_prompt_msg">Estàs segur que vols marxar de la sala\?</string>
-    <string name="room_participants_header_direct_chats">Xats personals</string>
+    <string name="room_participants_header_direct_chats">Xats directes</string>
     <string name="room_participants_action_invite">Convida</string>
     <string name="room_participants_action_ban">Veta</string>
     <string name="room_participants_action_unban">Treu el vet</string>
@@ -351,7 +342,7 @@
     <string name="room_participants_action_mention">Menciona</string>
     <string name="room_participants_power_level_prompt">No podràs desfer aquest canvi ja que estàs donant a l\'usuari el mateix nivell d\'autoritat que el teu.
 \nN\'estàs segur\?</string>
-    <string name="room_participants_ban_prompt_msg">Si vetes un usuari, se l\'expulsarà d\'aquesta sala i no podrà tornar a unir-s\'hi.</string>
+    <string name="room_participants_ban_prompt_msg">Si vetes un usuari, se l\'expulsarà de la sala i no s\'hi podrà tornar a unir.</string>
     <string name="room_one_user_is_typing">%s està escrivint…</string>
     <string name="room_two_users_are_typing">%1$s &amp; %2$s estan escrivint…</string>
     <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; altres estan escrivint…</string>
@@ -367,7 +358,6 @@
     <string name="ssl_unexpected_existing_expl">El certificat ha canviat respecte aquell en el qual el telefon confia. Això NO ÉS GENS HABITUAL. Es recomana que NO ACCEPTEU el certificat nou.</string>
     <string name="ssl_expected_existing_expl">El certificat en el que confiàveu ha canviat per un en el que no confieu. El servidor pot haver renovat el certificat. Contacteu amb l\'administrador del servidor per saber l\'empremta digital esperada.</string>
     <string name="ssl_only_accept">Només accepteu el certificat si l\'administrador del servidor ha publicat una empremta digital que coincideixi amb l\'anterior.</string>
-
     <string name="search_hint">Cerca</string>
     <string name="search_members_hint">Filtra els participants de la sala</string>
     <string name="search_no_results">No hi ha resultats</string>
@@ -439,11 +429,8 @@
     <string name="settings_new_password">Contrasenya nova</string>
     <string name="settings_fail_to_update_password">No s\'ha pogut actualitzar la contrasenya</string>
     <string name="settings_password_updated">La contrasenya s\'ha actualitzat</string>
-    <string name="settings_unignore_user">Mostra tots els missatges de %s\?
-\n
-\nTingues en compte que aquesta acció reiniciarà l\'aplicació i pot trigar una estona.</string>
+    <string name="settings_unignore_user">Mostrar tots els missatges de %s\?</string>
     <string name="settings_select_country">Escull un país</string>
-    <string name="settings_flair">Insígnia</string>
     <string name="media_saving_period_3_days">Tres dies</string>
     <string name="media_saving_period_1_week">Una setmana</string>
     <string name="media_saving_period_1_month">Un mes</string>
@@ -462,7 +449,6 @@
     <string name="room_settings_labs_warning_message">Aquestes característiques són experimentals i poden fallar de forma inesperada. Useu amb precaució.</string>
     <string name="room_settings_set_main_address">Estableix com a adreça principal</string>
     <string name="room_settings_unset_main_address">Treu com a adreça principal</string>
-
     <string name="settings_theme">Tema</string>
     <string name="encryption_information_decryption_error">Error al desxifrar</string>
     <string name="encryption_information_device_name">Nom públic</string>
@@ -474,7 +460,6 @@
     <string name="encryption_export_export">Exporta</string>
     <string name="passphrase_enter_passphrase">Introduïu una contrasenya</string>
     <string name="passphrase_confirm_passphrase">Confirmeu la contrasenya</string>
-
     <string name="encryption_import_e2e_room_keys">Importa les claus E2E de la sala</string>
     <string name="encryption_import_room_keys">Importa les claus de la sala</string>
     <string name="encryption_import_room_keys_summary">Importa les claus de la sala des d\'un fitxer local</string>
@@ -486,9 +471,8 @@
     <string name="encryption_information_verify">Verifica</string>
     <string name="encryption_information_verify_device_warning">Verifica comparant el següent amb la configuració d\'usuari de la teva altra sessió:</string>
     <string name="encryption_information_verify_device_warning2">Si no coincideixen pot ser que la seguretat de la comunicació estigui compromesa.</string>
-
     <string name="select_room_directory">Tria un directori de sales</string>
-    <string name="directory_server_placeholder">URL del servidor base</string>
+    <string name="directory_server_placeholder">URL del servidor</string>
     <string name="directory_server_all_rooms_on_server">Totes les sales del servidor %s</string>
     <string name="directory_server_native_rooms">Totes les sales natives de %s</string>
     <string name="font_size">Mida de la font</string>
@@ -521,15 +505,14 @@
     <string name="create">Crea</string>
     <string name="group_details_home">Inici</string>
     <string name="rooms">Sales</string>
-    <string name="invited">Ha sigut convidat</string>
+    <string name="invited">Convidat</string>
     <string name="has_been_removed">%2$s t\'ha expulsat de %1$s</string>
     <string name="has_been_banned">%2$s l\'ha expulsat de la sala %1$s</string>
     <string name="reason_colon">Raó: %1$s</string>
     <string name="loading">Carregant…</string>
     <string name="room_settings_all_messages">Tots els missatges</string>
     <string name="send_bug_report_rage_shake">Sacseja el dispositiu amb ràbia per informar d\'un error</string>
-    <string name="list_members">Llista de membres</string>
-
+    <string name="list_members">Membres</string>
     <plurals name="room_title_members">
         <item quantity="one">%d membre</item>
         <item quantity="other">%d membres</item>
@@ -538,13 +521,10 @@
         <item quantity="one">%d missatge nou</item>
         <item quantity="other">%d missatges nous</item>
     </plurals>
-
-
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="one">%d sala</item>
         <item quantity="other">%d sales</item>
     </plurals>
-
     <plurals name="membership_changes">
         <item quantity="one">%d canvi de membres</item>
         <item quantity="other">%d canvis de membres</item>
@@ -564,17 +544,13 @@
     <string name="option_send_voice">Envia veu</string>
     <string name="error_no_external_application_found">Ho sento, no s\'ha trobat cap aplicació externa per completar l\'acció.</string>
     <string name="e2e_re_request_encryption_key">Tornar a demanar les claus de xifrat de les teves altres sessions.</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Si us plau, obre ${app_name} a un altre dispositiu que pugui desxifrar el missatge de manera que pugui enviar les claus a aquesta sessió.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Obre ${app_name} a un altre dispositiu que pugui desxifrar el missatge de manera que pugui enviar les claus a aquesta sessió.</string>
     <string name="dialog_title_error">Error</string>
     <string name="system_alerts_header">Alertes de sistema</string>
     <string name="send_bug_report_description_in_english">Si és possible, escriu la descripció en anglès.</string>
     <string name="no_sticker_application_dialog_content">Encara no tens cap paquet d\'adhesius activat.
 \n
 \nEn vols afegir algun\?</string>
-
-
-
-
     <plurals name="room_details_selected">
         <item quantity="one">%d seleccionat</item>
         <item quantity="other">%d seleccionats</item>
@@ -594,16 +570,14 @@
     <string name="command_description_op_user">Defineix el nivell d\'autoritat d\'un usuari</string>
     <string name="command_description_deop_user">Baixa el nivell d\'autoritat de l\'usuari amb l\'ID proporcionat</string>
     <string name="command_description_invite_user">Convida a la sala actual l\'usuari amb l\'ID proporcionat</string>
-    <string name="command_description_join_room">Entra a la sala amb l\'àlies donat</string>
+    <string name="command_description_join_room">T\'uneix a sales amb l\'adreça corresponent</string>
     <string name="command_description_part_room">Marxa de la sala</string>
     <string name="command_description_topic">Defineix el tema de la sala</string>
     <string name="command_description_remove_user">Expulsa l\'usuari amb l\'ID proporcionat</string>
     <string name="command_description_nick">Canvia l\'àlies</string>
     <string name="command_description_markdown">Activa/Desactiva el markdown</string>
     <string name="command_description_clear_scalar_token">Arreglar la gestió de les Apps de Matrix</string>
-
-
-    <string name="avatar">Icona</string>
+    <string name="avatar">Foto</string>
     <string name="dialog_user_consent_content">Per poder continuar utilitzant el servidor local %1$s has de revisar i acceptar els termes i condicions.</string>
     <string name="dialog_user_consent_submit">Revisa ara</string>
     <string name="deactivate_account_title">Desactiva el compte</string>
@@ -640,10 +614,10 @@
     <string name="settings_send_typing_notifs_summary">Feu saber a altres usuaris que esteu escrivint.</string>
     <string name="settings_send_markdown">Format en Markdown</string>
     <string name="settings_send_markdown_summary">Dóna format a missatges utilitzant la sintaxi Markdown abans d\'enviar-los. Això et permet l\'ús de format avançat com ara l\'ús d\'asteriscs per mostrar un text en cursiva.</string>
-    <string name="settings_show_join_leave_messages_summary">No afecta invitacions, expulsions i bloquejos.</string>
+    <string name="settings_show_join_leave_messages_summary">No afecta a invitacions, expulsions i vetos.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Mostra els esdeveniments del compte</string>
     <string name="auth_accept_policies">Reviseu i accepteu les polítiques d\'aquest servidor base:</string>
-    <string name="video_call_in_progress">Videotrucada en procés…</string>
+    <string name="video_call_in_progress">Videotrucada en curs…</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Executa les proves</string>
     <string name="settings_troubleshoot_diagnostic_running_status">S\'està executant… (%1$d de %2$d)</string>
     <string name="settings_troubleshoot_diagnostic_success_status">El diagnòstic bàsic és correcte. Si encara no reps notificacions, envia un informe d\'errors per ajudar-nos a investigar-ho.</string>
@@ -667,13 +641,12 @@
     <string name="settings_troubleshoot_test_battery_title">Optimització de bateria</string>
     <string name="settings_troubleshoot_test_battery_success">El ${app_name} no està afectat per l\'optimització de bateria.</string>
     <string name="settings_show_join_leave_messages">Mostra els esdeveniments d\'unió i sortida</string>
-    <string name="settings_show_avatar_display_name_changes_messages_summary">Inclou els canvis d\'icona i d\'àlies.</string>
-
+    <string name="settings_show_avatar_display_name_changes_messages_summary">Inclou els canvis de fotos i d\'àlies.</string>
     <string name="settings_password">Contrasenya</string>
     <string name="markdown_has_been_enabled">S\'ha habilitat el Markdown.</string>
     <string name="markdown_has_been_disabled">S\'ha inhabilitat el Markdown.</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="no_valid_google_play_services_apk">No s\'ha trobat cap APK de Google Play Services vàlid. Les notificacions poden no funcionar correctament.</string>
     <string name="title_activity_keys_backup_setup">Còpia de seguretat de les claus</string>
     <string name="title_activity_keys_backup_restore">Utilitza la còpia de seguretat de les claus</string>
@@ -702,8 +675,8 @@
 \nAquest error està fora del control d\'${app_name} i, segons Google, aquest error indica que aquest dispositiu té massa aplicacions registrades amb FCM. L\'error només ocorre en casos en què hi ha un nombre extrem d\'aplicacions i, per tant, no hauria d\'afectar els usuari normals.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Afegeix un compte</string>
     <string name="settings_troubleshoot_test_token_registration_title">Registre de token</string>
-    <string name="settings_troubleshoot_test_token_registration_success">El token FCM s\'ha registrat correctament al servidor local.</string>
-    <string name="settings_troubleshoot_test_token_registration_failed">No s\'ha pogut registrar el token FCM al servidor local:
+    <string name="settings_troubleshoot_test_token_registration_success">El token FCM s\'ha registrat correctament al servidor.</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">No s\'ha pogut registrar el token FCM al servidor:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_service_boot_success">El servei s\'iniciarà quan es reiniciï el dispositiu.</string>
     <string name="settings_troubleshoot_test_service_boot_failed">El servei no s\'iniciarà quan el dispositiu es reiniciï, per tant, no rebràs notificacions fins que ${app_name} no s\'hagi obert per primera vegada.</string>
@@ -732,7 +705,6 @@
     <string name="keys_backup_setup_step3_button_title">Fet</string>
     <string name="keys_backup_setup_step3_copy_button_title">Desa la clau de recuperació</string>
     <string name="keys_backup_setup_step3_save_button_title">Desa com a un fitxer</string>
-
     <string name="keys_backup_setup_step3_please_make_copy">Feu una còpia</string>
     <string name="keys_backup_setup_step3_share_intent_chooser_title">Comparteix la clau de recuperació amb…</string>
     <string name="recovery_key">Clau de recuperació</string>
@@ -831,7 +803,6 @@
     <string name="keys_backup_restoring_downloading_backup_waiting_message">S\'estan baixant les claus…</string>
     <string name="keys_backup_restoring_importing_keys_waiting_message">S\'estan important les claus…</string>
     <string name="keys_backup_settings_untrusted_backup">Per utilitzar la còpia de seguretat de clau en aquesta sessió, recupera amb la frase o la clau de recuperació, ara.</string>
-
     <string name="action_ignore">Ignora</string>
     <string name="auth_login_sso">Inicia sessió amb la inscripció única (SSO)</string>
     <string name="settings_send_message_with_enter">Envia missatges amb retorn</string>
@@ -872,16 +843,13 @@
     <string name="share_without_verifying_short_label">Compartir</string>
     <string name="key_share_request">Sol·licituds d\'intercanvi de claus</string>
     <string name="ignore_request_short_label">Ignorar</string>
-    <string name="keys_backup_setup_override_backup_prompt_tile">Ja existeix una còpia de seguretat al teu servidor local</string>
+    <string name="keys_backup_setup_override_backup_prompt_tile">Ja existeix una còpia de seguretat al teu servidor</string>
     <string name="keys_backup_setup_override_backup_prompt_description">Sembla que ja has configurat una còpia de seguretat de claus des d\'una altra sessió. Vols reemplaçar-la amb la que estàs creant\?</string>
     <string name="keys_backup_setup_override_replace">Reemplaçar</string>
-    <string name="keys_backup_setup_override_stop">Aturar</string>
+    <string name="keys_backup_setup_override_stop">Atura</string>
     <string name="keys_backup_settings_checking_backup_state">Comprovant l\'estat de la còpia de seguretat</string>
-
     <string name="sas_verified">Verificat!</string>
     <string name="sas_got_it">Entesos</string>
-
-
     <string name="sas_incoming_request_notif_title">Sol·licitud de verificació</string>
     <string name="sas_incoming_request_notif_content">%s vol verificar la teva sessió</string>
     <string name="sas_error_unknown">Error desconegut</string>
@@ -893,7 +861,7 @@
     <string name="room_list_catchup_empty_title">Estàs al dia!</string>
     <string name="room_list_catchup_empty_body">No tens més missatges sense llegir</string>
     <string name="room_list_people_empty_title">Xats</string>
-    <string name="room_list_people_empty_body">Els teus xats personals es mostraran aquí. Clica el + de la part inferior dreta per iniciar-ne algun.</string>
+    <string name="room_list_people_empty_body">Els teus xats directes es mostraran aquí. Clica el + de la part inferior dreta per crear-ne algun.</string>
     <string name="room_list_rooms_empty_title">Sales</string>
     <string name="room_list_rooms_empty_body">Les teves sales es mostraran aquí. Clica el + de la part inferior dreta per buscar-ne d\'existents o per crear-ne una.</string>
     <string name="title_activity_emoji_reaction_picker">Reaccions</string>
@@ -912,7 +880,7 @@
     <string name="group_all_communities">Totes les comunitats</string>
     <string name="room_preview_no_preview">Aquesta sala no es pot pre-visualitzar</string>
     <string name="fab_menu_create_room">Sales</string>
-    <string name="fab_menu_create_chat">Xats personals</string>
+    <string name="fab_menu_create_chat">Xats directes</string>
     <string name="create_room_action_create">CREAR</string>
     <string name="create_room_name_hint">Nom</string>
     <string name="create_room_public_title">Públic</string>
@@ -944,8 +912,8 @@
     <string name="delete_event_dialog_content">Estàs segur que vols eliminar aquest esdeveniment\? Tingues en compte que, si suprimeixes un nom de sala o es canvia el tema, es podria revertir el canvi.</string>
     <string name="room_settings_enable_encryption_dialog_content">Una vegada activat, el xifrat d\'una sala no es pot desactivar. El servidor no pot llegir els missatges enviats en una sala xifrada, només els poden llegir els participants. L\'activació del xifrat pot fer que molts bots i enllaços no funcionin correctament.</string>
     <string name="room_profile_section_more_notifications">Notificacions</string>
-    <string name="direct_room_profile_not_encrypted_subtitle">Els missatges aquí NO estan xifrats d\'extrem a extrem.</string>
-    <string name="room_profile_not_encrypted_subtitle">Els missatges d\'aquesta sala NO estan encriptats d\'extrem a extrem.</string>
+    <string name="direct_room_profile_not_encrypted_subtitle">Els missatges d\'aquí NO estan xifrats d\'extrem a extrem.</string>
+    <string name="room_profile_not_encrypted_subtitle">Els missatges d\'aquesta sala NO estan xifrats d\'extrem a extrem.</string>
     <string name="create_room_encryption_description">Una vegada activat, el xifrat no es pot desactivar.</string>
     <string name="login_reset_password_warning_content">Si canvies la contrasenya es restabliran les claus de xifrat d\'extrem a extrem de totes les teves sessions de manera que l\'històric del xat no es podrà llegir. Fes una còpia de seguretat de les claus o exporta les teves claus de sala d\'una altra sessió abans de fer el canvi de contrasenya.</string>
     <string name="room_join_rules_public_by_you">Has fet la sala accessible per a qualsevol que tingui l\'enllaç.</string>
@@ -961,7 +929,7 @@
 \n%s</string>
     <string name="room_no_active_widgets">No hi ha ginys actius</string>
     <string name="notification_unread_notified_messages_in_room_and_invitation">%1$s s %2$s i %3$s</string>
-    <string name="room_participants_action_unignore_prompt_msg">Si deixes d\'ignorar aquest usuari, tornaràs a veure tots els seus missatges.</string>
+    <string name="room_participants_action_unignore_prompt_msg">Si deixes d\'ignorar aquest usuari, es tornaran a veure tots els seus missatges.</string>
     <string name="room_participants_action_unignore_title">Deixa d\'ignorar</string>
     <string name="room_participants_action_ignore_prompt_msg">Si ignores aquest usuari s\'eliminaran els seus missatges de les sales que compartiu.
 \n
@@ -1068,7 +1036,7 @@
     <string name="no_message_edits_found">No s\'han trobat edicions</string>
     <string name="message_edits">Edicions de missatges</string>
     <string name="edited_suffix">(editat)</string>
-    <string name="room_profile_encrypted_subtitle">Els missatges d\'aquesta sala estan encriptats d\'extrem a extrem.
+    <string name="room_profile_encrypted_subtitle">Els missatges d\'aquesta sala estan xifrats d\'extrem a extrem.
 \n
 \nEls missatges estan protegits i només tu i el destinatari teniu les úniques claus per poder desxifrar-los.</string>
     <string name="sent_a_file">Fitxer</string>
@@ -1089,15 +1057,15 @@
     <string name="login_splash_title">Aquest xat és teu. Apropia-te\'n.</string>
     <string name="room_filtering_filter_hint">Filtra xats…</string>
     <string name="this_is_the_beginning_of_dm">Inici de l\'històric del xat personal amb %s.</string>
-    <string name="settings_hs_admin_e2e_disabled">L\'administrador del servidor ha desactivat el xifrat d\'extrem a extrem per defecte en sales privades i xats personals.</string>
+    <string name="settings_hs_admin_e2e_disabled">L\'administrador del servidor ha desactivat el xifrat d\'extrem a extrem per defecte en sales privades i en xats directes.</string>
     <string name="room_member_open_or_create_dm">Xat personal</string>
-    <string name="direct_room_profile_encrypted_subtitle">Els missatges aquí estan xifrats d\'extrem a extrem.
+    <string name="direct_room_profile_encrypted_subtitle">Els missatges d\'aquí estan xifrats d\'extrem a extrem.
 \n
-\nEls missatges estan protegits i només tu i el destinatari teniu les úniques claus per poder desxifrar-los.</string>
+\nEls missatges estan protegits i només tu i el destinatari teniu les claus úniques per poder desxifrar-los.</string>
     <string name="a11y_create_direct_message">Crea un nou xat personal</string>
     <string name="room_filtering_footer_create_new_direct_message">Envia un nou missatge</string>
-    <string name="bottom_action_people_x">Xats personals</string>
-    <string name="direct_room_encryption_enabled_tile_description">Els missatges en aquesta sala estan xifrats d\'extrem a extrem.</string>
+    <string name="bottom_action_people_x">Xats directes</string>
+    <string name="direct_room_encryption_enabled_tile_description">Els missatges d\'aquesta sala estan xifrats d\'extrem a extrem.</string>
     <string name="settings_labs_show_hidden_events_in_timeline">Mostra els esdeveniments amagats a la cronologia</string>
     <string name="send_suggestion_failed">No s\'ha pogut enviat el suggeriment (%s)</string>
     <string name="send_suggestion_sent">Gràcies, el suggeriment s\'ha enviat correctament</string>
@@ -1157,14 +1125,13 @@
     <string name="settings_chat_effects_description">Utilitza la comanda /confetti o envia un missatge amb ❄️ or 🎉</string>
     <string name="settings_chat_effects_title">Mostra els efectes del xat</string>
     <string name="terms_description_for_integration_manager">Utilitza bots, enllaços, ginys i paquets d\'adhesius</string>
-    <string name="settings_integrations_summary">Utilitza els gestors d\'integracions per a gestionar bots, enllaços, ginys i paquets d\'adhesius.
+    <string name="settings_integrations_summary">Utilitza un gestor d\'integracions per a configurar bots, enllaços, ginys i paquets d\'adhesius.
 \nEls gestors d\'integracions reben dades de configuració i poden modificar ginys, enviar invitacions a sales i configurar els nivells d\'autoritat per tu.</string>
     <string name="settings_integrations">Integracions</string>
     <plurals name="seconds">
         <item quantity="one">%d segon</item>
         <item quantity="other">%d segons</item>
     </plurals>
-
     <string name="settings_background_fdroid_sync_mode_disabled_description">No se\'t notificarà de missatges entrants quan l\'aplicació es trobi en segon pla.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Sense sincronització en segon pla</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} farà la sincronització en segon pla periòdicament en instants de temps precisos (configurable).
@@ -1211,14 +1178,14 @@
     <string name="room_permissions_change_history_visibility">Canviar la visibilitat de l\'històric</string>
     <string name="room_permissions_enable_room_encryption">Activar el xifrat de la sala</string>
     <string name="room_permissions_change_main_address_for_the_room">Canviar l\'adreça principal de la sala</string>
-    <string name="room_permissions_change_room_avatar">Canviar la icona de la sala</string>
+    <string name="room_permissions_change_room_avatar">Canvia la foto de la sala</string>
     <string name="room_permissions_modify_widgets">Modificar ginys</string>
     <string name="room_permissions_notify_everyone">Notificar a tothom</string>
     <string name="room_permissions_remove_messages_sent_by_others">Eliminar missatges enviats per altres</string>
     <string name="room_permissions_ban_users">Vetar usuaris</string>
     <string name="room_permissions_remove_users">Expulsar usuaris</string>
     <string name="room_permissions_change_settings">Canviar la configuració</string>
-    <string name="room_permissions_invite_users">Convidar usuaris</string>
+    <string name="room_permissions_invite_users">Convida usuaris</string>
     <string name="room_permissions_send_messages">Enviar missatges</string>
     <string name="room_permissions_default_role">Rol predeterminat</string>
     <string name="room_permissions_notice_read_only">No tens permisos per modificar els rols necessaris per canviar les diferents parts de la sala</string>
@@ -1232,7 +1199,6 @@
     <string name="room_participants_leave_private_warning">Aquesta sala no és pública. No podràs tornar-t\'hi a unir sense una invitació.</string>
     <string name="call_failed_no_connection_description">No s\'ha pogut establir una connexió en temps real.
 \nDemana a l\'administrador del servidor local que configuri un servidor TURN perquè les trucades funcionin correctament.</string>
-
     <string name="encryption_enabled">Xifrat activat</string>
     <string name="alert_push_are_disabled_title">Les notificacions estan desactivades</string>
     <string name="login_reset_password_success_notice_2">Se t\'ha desconnectat de totes les teves sessions i no rebràs més notificacions. Per reactivar les notificacions, torna a iniciar sessió a cada dispositiu.</string>
@@ -1302,7 +1268,6 @@
     <string name="autodiscover_well_known_error">No s\'ha pogut trobar un servidor local vàlid. Comprova l\'identificador</string>
     <string name="settings_agree_to_terms">Accepta els termes de servei del servidor d\'identitat (%s) per poder ser trobat mitjançant l\'adreça de correu electrònic o el número de telèfon.</string>
     <string name="settings_discovery_enter_identity_server">Introdueix l\'URL d\'un servidor d\'identitat</string>
-
     <string name="settings_discovery_consent_notice_on">Has donat el teu consentiment per poder enviar correus electrònics i números de telèfon a aquest servidor d\'identitat per trobar altres usuaris dels teus contactes.</string>
     <string name="settings_discovery_msisdn_title">Números de telèfon perquè et trobin</string>
     <string name="settings_discovery_disconnect_identity_server_info">Si et desconnectes del servidor d\'identitat no podràs ser trobat per altres usuaris ni convidar-los mitjançant el correu electrònic o el número de telèfon.</string>
@@ -1325,9 +1290,9 @@
     <string name="bootstrap_dont_reuse_pwd">No utilitzis la contrasenya del teu compte.</string>
     <string name="bootstrap_crosssigning_save_usb">Desa-ho en una clau USB o una unitat de seguretat</string>
     <string name="bootstrap_crosssigning_save_cloud">Copia-ho al teu emmagatzematge al núvol</string>
-    <string name="bootstrap_crosssigning_progress_save_usk">Sincronitzant la clau d\'usuari</string>
-    <string name="bootstrap_crosssigning_progress_save_ssk">Sincronitzant la clau d\'autosignatura</string>
-    <string name="bootstrap_crosssigning_progress_save_msk">Sincronitzant la clau mestra</string>
+    <string name="bootstrap_crosssigning_progress_save_usk">Sincronitzant clau d\'usuari</string>
+    <string name="bootstrap_crosssigning_progress_save_ssk">Sincronitzant clau d\'autosignatura</string>
+    <string name="bootstrap_crosssigning_progress_save_msk">Sincronitzant clau mestra</string>
     <string name="bootstrap_crosssigning_progress_pbkdf2">Generant clau segura a partir de la frase</string>
     <string name="bootstrap_crosssigning_progress_key_backup">Configurant còpia de seguretat de les claus</string>
     <string name="bootstrap_crosssigning_progress_initializing">Publicant claus d\'identitat creades</string>
@@ -1371,7 +1336,6 @@
     <string name="room_permissions_send_m_room_server_acl_events">Enviar esdeveniments m.room.server_acl</string>
     <string name="room_permissions_change_permissions">Canviar els permisos</string>
     <string name="room_permissions_change_room_name">Canviar el nom de la sala</string>
-
     <string name="content_reported_as_inappropriate_content">Aquest contingut ha estat com a inadequat.
 \n
 \nSi no vols veure cap més contingut d\'aquest usuari pots ignorar-lo per ocultar els seus missatges.</string>
@@ -1420,8 +1384,8 @@
     <string name="room_participants_unban_title">Treu el vet a l\'usuari</string>
     <string name="push_gateway_item_app_display_name">app_display_name:</string>
     <string name="room_widget_permission_display_name">El teu àlies</string>
-    <string name="room_settings_set_avatar">Estableix la icona</string>
-    <string name="room_widget_permission_avatar_url">URL de la icona</string>
+    <string name="room_settings_set_avatar">Estableix la foto</string>
+    <string name="room_widget_permission_avatar_url">URL de la teva foto</string>
     <string name="power_level_title">Rol</string>
     <string name="power_level_edit_title">Defineix rol</string>
     <string name="room_member_power_level_custom_in">Personalitzat (%1$d) a %2$s</string>
@@ -1503,7 +1467,7 @@
     <string name="no_connectivity_to_the_server_indicator">S\'ha perdut la connexió amb el servidor</string>
     <string name="qr_code_scanned_by_other_no">No</string>
     <string name="qr_code_scanned_by_other_yes">Sí</string>
-    <string name="qr_code_scanned_by_other_notice">Quasi bé ja has acabat! %s mostra el mateix escut\?</string>
+    <string name="qr_code_scanned_by_other_notice">Quasi bé ja has acabat! %s mostra un símbol de verificació\?</string>
     <string name="settings_key_requests">Sol·licituds de claus</string>
     <string name="settings_developer_mode_fail_fast_title">Fallada ràpida</string>
     <string name="settings_security_prevent_screenshots_summary">Si actives aquesta opció, s\'afegirà el FLAG_SECURE a totes les activitats de l\'aplicació. Reinicia l\'aplicació per aplicar els canvis.</string>
@@ -1532,7 +1496,7 @@
     <string name="message_key">Clau de missatge</string>
     <string name="recovery_passphrase">Frase de recuperació</string>
     <string name="verification_cancelled">Verificació cancel·lada</string>
-    <string name="verify_cancelled_notice">Verifica els teus dispositius des de la configuració.</string>
+    <string name="verify_cancelled_notice">S\'ha cancel·lat la verificació. Pots iniciar-la una altra vegada.</string>
     <string name="verify_not_me_self_verification">Alguna de les següents pot haver estat compromesa:
 \n
 \n- La teva contrasenya
@@ -1638,9 +1602,7 @@
     <string name="login_a11y_choose_other">Selecciona un servidor local personalitzat</string>
     <string name="login_a11y_choose_modular">Selecciona Serveis Matrix d\'Element</string>
     <string name="login_a11y_choose_matrix_org">Selecciona matrix.org</string>
-    <string name="login_signup_cancel_confirmation_content">El teu compte encara s\'ha creat.
-\n
-\nVols aturar el procés de registre\?</string>
+    <string name="login_signup_cancel_confirmation_content">El teu compte encara s\'ha creat. Vols aturar el procés de registre\?</string>
     <string name="login_signup_cancel_confirmation_title">Atenció</string>
     <string name="login_signup_error_user_in_use">Aquest nom d\'usuari ja està agafat</string>
     <string name="login_set_msisdn_notice">Estableix un número de telèfon per, opcionalment, permetre que la gent que coneixes et pugui trobar.</string>
@@ -1669,9 +1631,9 @@
     <string name="user_code_info_text">Comparteix aquest codi amb la gent perquè puguin escanejar-lo, afegir-te i començar a xatejar amb tu.</string>
     <string name="identity_server_user_consent_not_provided">L\'usuari no s\'ha acceptat el consentiment.</string>
     <string name="command_confetti">Envia el missatge proporcionat amb confetis</string>
-    <string name="command_snow">Envia el missatge proporcionat amb neu</string>
-    <string name="default_message_emote_confetti">envia confetis 🎉</string>
-    <string name="default_message_emote_snow">envia neu ❄️</string>
+    <string name="command_snow">Envia el missatge proporcionat amb una nevada</string>
+    <string name="default_message_emote_confetti">ha enviat confetis 🎉</string>
+    <string name="default_message_emote_snow">ha enviat una nevada ❄️</string>
     <string name="user_code_my_code">El meu codi</string>
     <string name="user_code_share">Comparteix el meu codi</string>
     <string name="user_code_scan">Escaneja un codi QR</string>
@@ -1687,8 +1649,8 @@
     <string name="room_settings_enable_encryption_no_permission">No tens permís per activar el xifrat en aquesta sala.</string>
     <string name="room_settings_enable_encryption">Activa el xifrat d\'extrem a extrem…</string>
     <string name="settings_category_composer">Editor de missatges</string>
-    <string name="command_description_rainbow_emote">Envia l\'emoticona proporcionat pintat amb un arc de Sant Martí</string>
-    <string name="command_description_rainbow">Envia el missatge proporcionat pintat amb un arc de Sant Martí</string>
+    <string name="command_description_rainbow_emote">Envia l\'emoticona proporcionat pintat en arc de Sant Martí</string>
+    <string name="command_description_rainbow">Envia el missatge proporcionat pintat en arc de Sant Martí</string>
     <string name="signed_out_notice">Pot ser causat per diferents motius:
 \n
 \n• Has canviat la teva contrasenya des d\'una altra sessió.
@@ -1725,7 +1687,7 @@
     <string name="error_failed_to_import_keys">No s\'han pogut importar les claus</string>
     <string name="qr_code_scanned_verif_waiting">Esperant %s…</string>
     <string name="qr_code_scanned_verif_waiting_notice">Ja gairebé has acabat! Esperant la confirmació…</string>
-    <string name="qr_code_scanned_self_verif_notice">Ja gairebé has acabat! Veus el mateix escut a l\'altre dispositiu\?</string>
+    <string name="qr_code_scanned_self_verif_notice">Ja gairebé has acabat! Veus el mateix símbol de verificació a l\'altre dispositiu\?</string>
     <string name="direct_room_created_summary_item_by_you">T\'hi has unit.</string>
     <string name="direct_room_created_summary_item">%s s\'ha unit.</string>
     <string name="room_created_summary_item_by_you">Has creat i configurat la sala.</string>
@@ -1735,7 +1697,6 @@
     <string name="bootstrap_loading_text">Això pot tardar uns segons, un moment, si us plau.</string>
     <string name="verification_profile_device_new_signing">%1$s (%2$s) ha entrat amb una nova sessió:</string>
     <string name="not_trusted">No és de confiança</string>
-
     <string name="authentication_error">Ha fallat l\'autenticació</string>
     <string name="wrong_pin_message_last_remaining_attempt">Atenció! Últim intent disponible abans de tancar la sessió!</string>
     <plurals name="wrong_pin_message_remaining_attempts">
@@ -1804,7 +1765,7 @@
     <string name="verification_request_waiting">Esperant…</string>
     <string name="sent_verification_conclusion">Conclusió de la verificació</string>
     <string name="sent_a_reaction">Ha reaccionat amb: %s</string>
-    <string name="sent_a_poll">Votació</string>
+    <string name="sent_a_poll">Enquesta</string>
     <string name="send_a_sticker">Adhesiu</string>
     <string name="sent_an_image">Imatge.</string>
     <string name="sent_a_video">Vídeo.</string>
@@ -1900,7 +1861,6 @@
     <string name="bootstrap_cancel_text">Si t\'atures ara, pot ser que perdis dades i missatges xifrats en cas de que perdis l\'accés a les teves sessions.
 \n
 \nTambé pots configurar una copia de seguretat de seguretat i gestionar les teves claus a la configuració.</string>
-
     <string name="bootstrap_cross_signing_success">La teva %2$s i %1$s s\'han configurat.
 \n
 \nGuarda-les en un lloc segur! Les necessitaràs per desbloquejar missatges xifrats i informació protegida en cas de que perdis l\'accés a totes les teves sessions actives.</string>
@@ -1912,8 +1872,6 @@
     <string name="call_transfer_title">Transferència</string>
     <string name="call_transfer_connect_action">Connecta</string>
     <string name="call_transfer_consult_first">Consulta primer</string>
-
-
     <string name="call_only_active">Trucada activa (%1$s)</string>
     <string name="call_dial_pad_lookup_error">S\'ha produït un error al cercar el número de telèfon</string>
     <string name="call_dial_pad_title">Teclat</string>
@@ -1975,9 +1933,9 @@
     <string name="a11y_trust_level_warning">Nivell de confiança d\'alerta</string>
     <string name="a11y_trust_level_default">Nivell de confiança predeterminat</string>
     <string name="a11y_selected">Seleccionats</string>
-    <string name="a11y_unsent_draft">La sala conté un esborrany no enviat</string>
-    <string name="a11y_delete_avatar">Elimina la icona</string>
-    <string name="a11y_change_avatar">Canvia la icona</string>
+    <string name="a11y_unsent_draft">conté un esborrany no enviat</string>
+    <string name="a11y_delete_avatar">Elimina la foto</string>
+    <string name="a11y_change_avatar">Canvia la foto</string>
     <string name="settings_server_upload_size_content">El servidor local accepta fitxers adjunts (fotos, fitxers, etc) de fins a una mida de %s.</string>
     <string name="settings_category_room_directory">Directori de sales</string>
     <string name="settings_room_directory_show_all_rooms_summary">Mostra totes les sales al directori de sales, incloses aquelles amb contingut explícit.</string>
@@ -1997,6 +1955,549 @@
     <string name="room_settings_room_access_public_title">Públic</string>
     <string name="room_settings_room_access_private_description">Només els convidats poden trobar-la i unir-s\'hi</string>
     <string name="room_settings_room_access_entry_knock">Qualsevol pot demanar entrar a la sala, els participants poden acceptar-ho o rebutjar-ho</string>
-    <string name="room_settings_guest_access_title">Permet als convidats unir-se</string>
+    <string name="room_settings_guest_access_title">Permet que els convidats s\'uneixin</string>
     <string name="suggested_header">Sales suggerides</string>
+    <string name="settings_notification_emails_enable_for_email">Activa les notificacions per correu de %s</string>
+    <string name="settings_notification_emails_category">Notificacions per correu</string>
+    <string name="thread_list_modal_my_threads_subtitle">Mostra tots els fils en que has participat</string>
+    <string name="thread_list_modal_my_threads_title">Els meus fils</string>
+    <string name="thread_list_modal_all_threads_subtitle">Mostra tots els fils de la sala actual</string>
+    <string name="thread_list_modal_all_threads_title">Tots els fils</string>
+    <string name="thread_list_modal_title">Filtra</string>
+    <string name="thread_list_title">Fils</string>
+    <string name="thread_timeline_title">Fil</string>
+    <string name="room_permissions_upgrade_the_space">Actualitza l\'espai</string>
+    <string name="room_permissions_change_space_name">Canvia el nom de l\'espài</string>
+    <string name="room_permissions_enable_space_encryption">Activa els xifrat de l\'espai</string>
+    <string name="create_space">Crea espai</string>
+    <string name="create_space_topic_hint">Descripció</string>
+    <string name="create_spaces_loading_message">Creant espai…</string>
+    <string name="create_spaces_default_public_random_room_name">Aleatori</string>
+    <string name="create_spaces_default_public_room_name">General</string>
+    <string name="activity_create_space_title">Crea un espai</string>
+    <string name="create_spaces_me_and_teammates">Jo i els meus col·legues</string>
+    <string name="create_spaces_just_me">Només jo</string>
+    <string name="create_spaces_who_are_you_working_with">Amb qui estàs treballant\?</string>
+    <string name="create_spaces_join_info_help">Per unir-te a un espai, necessites una invitació.</string>
+    <string name="create_spaces_you_can_change_later">Pots canviar-ho més tard</string>
+    <string name="create_spaces_choose_type_label">Quin tipus d\'espai vols crear\?</string>
+    <string name="command_description_create_space">Crea un espai</string>
+    <string name="create_space_in_progress">Creant espai…</string>
+    <string name="create_space_alias_hint">Adreça de l\'espai</string>
+    <string name="create_new_space">Crea un nou espai</string>
+    <string name="spaces_beta_welcome_to_spaces_desc">Els espais són una nova manera d\'agrupar sales i gent.</string>
+    <string name="command_description_avatar_for_room">Canvia la teva foto només en la sala actual</string>
+    <string name="command_description_room_avatar">Canvia la foto de la sala actual</string>
+    <string name="room_permissions_change_space_avatar">Canvia la foto de l\'espai</string>
+    <string name="space_permissions_notice">Selecciona els rols necessaris per modificar diferents parts d\'aquest espai</string>
+    <string name="space_settings_permissions_subtitle">Visualitza i actualitza els rols necessaris per modificar diferents parts de l\'espai.</string>
+    <string name="space_settings_permissions_title">Permisos de l\'espai</string>
+    <string name="room_unsupported_e2e_algorithm_as_admin">El xifrat no s\'ha configurat correctament per tant no pots enviar missatges. Clica per obrir la configuració.</string>
+    <string name="room_unsupported_e2e_algorithm">El xifrat no s\'ha configurat correctament per tant no pots enviar missatges. Contacta amb un administrador per restablir el xifrat a un estat vàlid.</string>
+    <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s i altres</string>
+    <string name="room_notification_two_users_are_typing">%1$s i %2$s</string>
+    <string name="space_participants_unban_prompt_msg">Si deixes de vetar un usuari, es podrà tornar a unir a l\'espai.</string>
+    <string name="space_participants_ban_prompt_msg">Si vetes un usuari, se l\'expulsarà de l\'espai i no s\'hi podrà tornar a unir.</string>
+    <string name="space_participants_remove_prompt_msg">L\'usuari s\'eliminarà d\'aquest espai.
+\n
+\nPer evitar que tornin a unir-se, els hauries de vetar.</string>
+    <string name="call_ringing">Trucant…</string>
+    <string name="call_remove_jitsi_widget_progress">Finalitzant trucada…</string>
+    <string name="call_ended_invite_timeout_title">Sense resposta</string>
+    <string name="call_ended_user_busy_description">L\'usuari que has trucat està ocupat.</string>
+    <string name="call_ended_user_busy_title">Usuari ocupat</string>
+    <string name="audio_call_with_participant">Trucada amb %s</string>
+    <string name="video_call_with_participant">Videotrucada amb %s</string>
+    <plurals name="missed_video_call">
+        <item quantity="one">Videotrucada perduda</item>
+        <item quantity="other">%d videotrucades perdudes</item>
+    </plurals>
+    <plurals name="missed_audio_call">
+        <item quantity="one">Trucada perduda</item>
+        <item quantity="other">%d trucades perdudes</item>
+    </plurals>
+    <string name="login_error_homeserver_from_url_not_found_enter_manual">Tria el servidor</string>
+    <string name="login_error_homeserver_from_url_not_found">No s\'ha pogut arribar a cap servidor a l\'URL %s. Comprova l\'enllaç o escull un servidor manualment.</string>
+    <string name="use_as_default_and_do_not_ask_again">Utilitza com a predeterminat i no ho preguntis més</string>
+    <string name="option_always_ask">Pregunta sempre</string>
+    <string name="call_stop_screen_sharing">Deixa de compartir pantalla</string>
+    <string name="call_start_screen_sharing">Comparteix pantalla</string>
+    <string name="hs_client_url">URL de l\'API del servidor</string>
+    <string name="spaces_header">Espais</string>
+    <string name="action_thread_copy_link_to_thread">Copia l\'enllaç al fil</string>
+    <string name="action_thread_view_in_room">Mostra a la sala</string>
+    <string name="action_learn_more">Més informació</string>
+    <string name="action_try_it_out">Prova-ho</string>
+    <string name="action_not_now">Ara no</string>
+    <string name="action_disable">Desactiva</string>
+    <string name="action_enable">Activa</string>
+    <string name="action_view_threads">Mostra els fils</string>
+    <string name="missing_permissions_title">Falten permisos</string>
+    <string name="denied_permission_voice_message">Per enviar missatges de veu, concedeix el permís per poder utilitzar el micròfon.</string>
+    <string name="denied_permission_camera">Per dur a terme aquesta acció, concedeix el permís de càmera des de la configuració del sistema.</string>
+    <string name="denied_permission_generic">Falten alguns permisos per dur a terme aquesta acció, concedeix-los des de la configuració del sistema.</string>
+    <string name="spaces">Espais</string>
+    <string name="notification_listening_for_notifications">Escoltant notificacions</string>
+    <string name="initial_sync_request_reason_unignored_users">- Alguns usuaris ja no s\'ignoren</string>
+    <string name="initial_sync_request_content">${app_name} ha d\'esborrar la memòria cau per actualitzar-se, pel motiu següent:
+\n%s
+\n
+\nTingues en compte que aquesta acció reiniciarà l\'aplicació i pot tardar una estona.</string>
+    <string name="initial_sync_request_title">Sol·licitud de sincronització inicial</string>
+    <string name="room_error_access_unauthorized">No tens permís per unir-te a aquesta sala</string>
+    <plurals name="notice_room_server_acl_changes">
+        <item quantity="one">%d canvi a l\'ACL del servidor</item>
+        <item quantity="other">%d canvis a l\'ACL del servidor</item>
+    </plurals>
+    <string name="space_type_private">Privat</string>
+    <string name="space_type_public">Públic</string>
+    <string name="create_spaces_organise_rooms">Espai privat per organitzar les teves sales</string>
+    <string name="your_public_space">Espai públic (teu)</string>
+    <string name="your_private_space">Espai privat (teu)</string>
+    <string name="add_space">Afegeix espai</string>
+    <string name="private_space">Espai privat</string>
+    <string name="public_space">Espai públic</string>
+    <string name="command_description_upgrade_room">Actualitza una sala a una nova versió</string>
+    <string name="a11y_presence_unavailable">A fora</string>
+    <string name="a11y_presence_busy">Ocupat</string>
+    <string name="a11y_presence_offline">Fora de línia</string>
+    <string name="a11y_pause_audio_message">Pausa %1$s</string>
+    <string name="a11y_pause_voice_message">Pausa missatge de veu</string>
+    <string name="command_description_unignore_user">Deixa d\'ignorar un usuari, es mostraran els nous missatges</string>
+    <string name="a11y_play_audio_message">Reprodueix %1$s</string>
+    <string name="a11y_audio_playback_duration">%1$d minuts %2$d segons</string>
+    <string name="a11y_audio_message_item">%1$s, %2$s, %3$s</string>
+    <string name="voice_message_reply_content">Missatge de veu (%1$s)</string>
+    <string name="error_voice_message_cannot_reply_or_edit">No pots respondre o editar mentre el missatge de veu està actiu</string>
+    <string name="error_voice_message_unable_to_record">No es pot enregistrar missatge de veu</string>
+    <string name="error_voice_message_unable_to_play">Aquest missatge de veu no es pot reproduir</string>
+    <string name="voice_message_tap_to_stop_toast">Clica l\'enregistrament per aturar-lo o escoltar-lo</string>
+    <string name="voice_message_n_seconds_warning_toast">%1$ds restants</string>
+    <string name="voice_message_release_to_send_toast">Manté per enregistrar, deixa anar per enviar</string>
+    <string name="a11y_delete_recorded_voice_message">Elimina enregistrament</string>
+    <string name="a11y_recording_voice_message">Enregistrant missatge de veu</string>
+    <string name="a11y_stop_voice_message">Atura l\'enregistrament</string>
+    <string name="a11y_play_voice_message">Reprodueix missatge de veu</string>
+    <string name="voice_message_slide_to_cancel">Llisca per cancel·lar</string>
+    <string name="a11y_start_voice_message">Enregistra missatge de veu</string>
+    <string name="error_failed_to_join_room">S\'ha produït un error en provar d\'entrar a: %s</string>
+    <string name="room_upgrade_to_recommended_version">Actualitza a la versió de sala recomanada</string>
+    <string name="room_using_unstable_room_version">Aquesta sala té la versió %s, la qual està marcada com a no estable pel servidor.</string>
+    <string name="space_type_private_desc">Només amb invitació, per tu o per equips</string>
+    <string name="live_location_sharing_notification_title">${app_name} Ubicació en directe</string>
+    <string name="location_share_live_stop">Atura</string>
+    <string name="location_share_live_started">Carregant ubicació en directe…</string>
+    <string name="location_share_live_enabled">Compartició d\'ubicació en directe activada</string>
+    <string name="location_timeline_failed_to_load_map">No s\'ha pogut carregar el mapa</string>
+    <string name="location_share_external">Obre amb</string>
+    <string name="location_not_available_dialog_content">${app_name} no ha pogut accedir a la teva ubicació. Torna-ho a provar més tard.</string>
+    <string name="location_not_available_dialog_title">${app_name} no ha pogut accedir a la teva ubicació</string>
+    <string name="location_share_live_select_duration_option_3">8 hores</string>
+    <string name="location_share_live_select_duration_option_2">1 hora</string>
+    <string name="location_share_live_select_duration_option_1">15 minuts</string>
+    <string name="location_share_live_select_duration_title">Comparteix la teva ubicació en directe durant</string>
+    <string name="a11y_location_share_option_pinned_icon">Comparteix la ubicació</string>
+    <string name="location_share_option_pinned">Comparteix la ubicació</string>
+    <string name="invite_people_to_your_space">Convida gent al teu espai</string>
+    <string name="invite_people_menu">Convida gent</string>
+    <string name="create_space_error_empty_field_space_name">Posa-li un nom per continuar.</string>
+    <string name="settings_messages_direct_messages">Xats directes</string>
+    <string name="settings_encrypted_direct_messages">Xats directes xifrats</string>
+    <string name="create_spaces_invite_public_header">Qui son els teus companys\?</string>
+    <string name="a11y_unchecked">Sense marcar</string>
+    <string name="you_may_contact_me">Pots contactar amb mi si tens més preguntes al respecte</string>
+    <string name="a11y_location_share_pin_on_map">Pin d\'ubicació seleccionada al mapa</string>
+    <string name="upgrade_room_warning">L\'actualització d\'una sala és una acció avançada i normalment es recomana si la sala és inestable per culpa d\'errors, funcions que falten o vulnerabilitats de seguretat.
+\nNormalment això només afecta a com es processa la sala al servidor.</string>
+    <string name="joining_replacement_room">Uneix-te a la sala substituta</string>
+    <string name="this_space_has_no_rooms_not_admin">Algunes sales poden estar amagades perquè són privades i necessites invitació prèvia.
+\nNo tens permís per afegir sales.</string>
+    <string name="spaces_no_server_support_description">Posa\'t en contacte amb l\'administrador del teu servidor per obtenir més informació</string>
+    <string name="looking_for_someone_not_in_space">Busques algú que no està a %s\?</string>
+    <string name="user_invites_you">%s t\'ha convidat</string>
+    <string name="settings_show_latest_profile_description">Mostra la informació de perfil més recent per a tots els missatges (foto i àlies).</string>
+    <string name="you_are_invited">T\'han convidat</string>
+    <string name="finish_setting_up_discovery">Acaba de configurar el descobriment.</string>
+    <string name="create_space_identity_server_info_none">Actualment no estàs utilitzant un servidor d\'identitat. Per convidar persones i poder ser descobert per elles, configura\'n un a continuació.</string>
+    <string name="room_alias_preview_not_found">Aquest àlies no està accessible ara mateix.
+\nTorna-ho a provar més tard o demana a un administrador de la sala que en comprovi l\'accés.</string>
+    <string name="invite_people_to_your_space_desc">De moment només hi ets tu. %s serà encara millor amb altres persones.</string>
+    <string name="create_spaces_room_private_header_desc">Crearem una sala per a cadascun d\'ells. També pots afegir-ne més després, incloses les ja existents.</string>
+    <string name="create_spaces_invite_public_header_desc">Assegura\'t que les persones adequades tinguin accés a %s. Pots convidar-ne més després.</string>
+    <string name="create_spaces_make_sure_access">Assegura\'t que les persones adequades tinguin accés a %s.</string>
+    <string name="send_images_and_video_with_original_size">Envia multimèdia a mida real</string>
+    <string name="identity_server_consent_dialog_content_3">Per descobrir contactes existents, s\'ha d\'enviar informació de contacte (correus i números de telèfon) al servidor d\'identitat utilitzat. Es fa un \'hash\' de les dades abans d\'enviar-les per privacitat.</string>
+    <string name="identity_server_consent_dialog_title_2">Envia correus i números de telèfon a %s</string>
+    <string name="settings_discovery_consent_notice_off_2">Els teus contactes són privats. Per descobrir els usuaris dels teus contactes, necessitem permís per enviar informació dels contactes al servidor d\'identitat que estiguis utilitzant.</string>
+    <string name="send_feedback_space_info">Estàs utilitzant una versió beta dels espais. Els teus comentaris ajudaran a les properes versions. S\'anotaran la teva plataforma i nom d\'usuari per poder utilitzar els teus comentaris tant bé com puguem.</string>
+    <string name="room_settings_room_access_restricted_description">Qualsevol a un espai amb aquesta sala podrà trobar-la i unir-s\'hi. Només els administradors d\'aquesta sala poden afegir-la a un espai.</string>
+    <string name="upgrade_room_for_restricted">Qualsevol a·%s podrà trobar i unir-se a aquesta sala; no caldrà convidar tothom manualment. Podràs canviar-ho a la configuració de sala en qualsevol moment.</string>
+    <string name="upgrade_room_for_restricted_no_param">Qualsevol persona d\'un espai principal podrà trobar i unir-se a aquesta sala; no caldrà convidar tothom manualment. Podràs canviar-ho a la configuració de sala en qualsevol moment.</string>
+    <string name="command_description_ignore_user">Ignora un usuari i amaga els seus missatges</string>
+    <string name="space_you_know_that_contains_this_room">Espai que saps que conté aquesta sala</string>
+    <string name="decide_which_spaces_can_access">Tria quins espais poden accedir a aquesta sala. Si se selecciona un espai, els seus membres podran trobar i unir-se a la sala.</string>
+    <string name="spaces_which_can_access">Espais als quals es pot accedir</string>
+    <string name="allow_space_member_to_find_and_access">Permet als membres de l\'espai trobar i accedir-hi.</string>
+    <string name="upgrade_room_for_restricted_note">Tingues en compte que l\'actualització crearà una nova versió de la sala. Tots els missatges actuals romandran a aquesta sala arxivada.</string>
+    <string name="this_invite_to_this_room_was_sent">La invitació a aquesta sala s\'ha enviat a %s que no està associat al teu compte</string>
+    <string name="this_invite_to_this_space_was_sent">La invitació a aquest espai s\'ha enviat a %s que no està associat al teu compte</string>
+    <string name="link_this_email_with_your_account">%s a la configuració per rebre invitacions directament a ${app_name}.</string>
+    <string name="screen_sharing_notification_title">Compartició de pantalla ${app_name}</string>
+    <string name="room_message_autocomplete_notification">Notificació de sala</string>
+    <string name="room_message_notify_everyone">Notifica a tota la sala</string>
+    <string name="room_message_autocomplete_users">Usuaris</string>
+    <string name="a11y_location_share_option_user_live_icon">Comparteix ubicació en directe</string>
+    <string name="location_share_option_user_live">Comparteix ubicació en directe</string>
+    <string name="a11y_location_share_option_user_current_icon">Comparteix la meva ubicació actual</string>
+    <string name="location_share_option_user_current">Comparteix la meva ubicació actual</string>
+    <string name="a11y_location_share_locate_button">Fes zoom a la ubicació actual</string>
+    <string name="a11y_static_map_image">Mapa</string>
+    <string name="location_activity_title_preview">Ubicació</string>
+    <string name="location_activity_title_static_sharing">Comparteix ubicació</string>
+    <string name="restart_the_application_to_apply_changes">Reinicia l\'aplicació per aplicar els canvis.</string>
+    <string name="labs_enable_latex_maths">Activa format matemàtic amb LaTeX</string>
+    <string name="link_this_email_settings_link">Enllaça aquest correu amb el teu compte</string>
+    <string name="audio_message_file_size">(%1$s)</string>
+    <string name="audio_message_reply_content">%1$s (%2$s)</string>
+    <string name="error_audio_message_unable_to_play">No s\'ha pogut reproduir %1$s</string>
+    <string name="upgrade_room_no_power_to_manage">Necessites permisos per actualitzar la sala</string>
+    <string name="upgrade_room_update_parent_space">Actualitza automàticament l\'espai principal</string>
+    <string name="upgrade_room_auto_invite">Convida usuaris automàticament</string>
+    <string name="upgrade_public_room_from_to">Actualitzaràs la sala de %1$s a %2$s.</string>
+    <string name="upgrade_private_room">Actualitza sala privada</string>
+    <string name="upgrade_public_room">Actualitza sala pública</string>
+    <string name="upgrade_required">Actualització necessària</string>
+    <string name="upgrade">Actualitza</string>
+    <string name="it_may_take_some_time">Tingues paciència, pot trigar una estona.</string>
+    <string name="unnamed_room">Sala sense nom</string>
+    <string name="this_space_has_no_rooms_admin">Algunes sales poden estar amagades perquè són privades i necessites invitació prèvia.</string>
+    <string name="this_space_has_no_rooms">L\'espai no conté sales</string>
+    <string name="spaces_no_server_support_title">Sembla que el servidor actual encara no admet els espais</string>
+    <string name="spaces_feeling_experimental_subspace">Amb ganes d\'experimentar\?
+\nPots afegir espais a un espai.</string>
+    <string name="all_rooms_youre_in_will_be_shown_in_home">Totes les sales en què et trobes es mostraran a l\'inici.</string>
+    <string name="preference_show_all_rooms_in_home">Mostra totes les sales a l\'inici</string>
+    <string name="space_manage_rooms_and_spaces">Gestiona sales i espais</string>
+    <string name="space_mark_as_not_suggested">Marca com a no suggerit</string>
+    <string name="space_mark_as_suggested">Marca com a suggerit</string>
+    <string name="space_suggested">Suggerit</string>
+    <string name="space_settings_manage_rooms">Gestiona les sales</string>
+    <string name="settings_show_latest_profile">Mostra la informació d\'usuari més recent</string>
+    <plurals name="space_people_you_know">
+        <item quantity="one">%d persona que coneixes ja s\'ha unit</item>
+        <item quantity="other">%d persones que coneixes ja s\'han unit</item>
+    </plurals>
+    <string name="discovery_section">Descobriment (%s)</string>
+    <string name="finish_setup">Acaba la configuració</string>
+    <string name="discovery_invite">Convida per correu, busca contactes i més…</string>
+    <string name="join_anyway">Uneix-te de totes maneres</string>
+    <string name="join_space">Uneix-te a l\'espai</string>
+    <string name="skip_for_now">Omet per ara</string>
+    <string name="share_space_link_message">Uneix-te al meu espai %1$s·%2$s</string>
+    <string name="invite_just_to_this_room_desc">No formaran part de %s</string>
+    <string name="invite_just_to_this_room">Només aquesta sala</string>
+    <string name="invite_to_space_with_name_desc">Podran veure %s</string>
+    <string name="invite_to_space_with_name">Invitació per %s</string>
+    <string name="invite_by_link">Comparteix enllaç</string>
+    <string name="invite_by_email">Convida mitjançant correu electrònic</string>
+    <string name="invite_by_username_or_mail">Convida mitjançant de nom d\'usuari o correu</string>
+    <string name="invite_to_space">Invitació per %s</string>
+    <string name="create_spaces_room_private_header">En quines coses esteu treballant\?</string>
+    <string name="create_spaces_room_public_header_desc">Crearem sales per ells. També en podràs afegir després.</string>
+    <string name="create_spaces_room_public_header">De què podrien ser alguns temes dels que parleu a %s\?</string>
+    <string name="create_spaces_details_private_header">Afegeix alguns detalls per ajudar la gent a identificar-lo Pots canviar-ho en qualsevol moment.</string>
+    <string name="create_spaces_details_public_header">Afegeix alguns detalls per ajudar a destacar-lo. Pots canviar-ho en qualsevol moment.</string>
+    <string name="create_spaces_private_teammates">Un espai privat per tu i els teus</string>
+    <string name="space_type_public_desc">Obert a tothom, perfecte per a comunitats</string>
+    <string name="ftue_display_name_subtitle">Es mostrarà quan enviïs missatges.</string>
+    <string name="ftue_display_name_title">Escull un àlies</string>
+    <string name="ftue_account_created_subtitle">El teu compte %s s\'ha creat.</string>
+    <string name="ftue_account_created_congratulations_title">Felicitats!</string>
+    <string name="ftue_account_created_take_me_home">Torna a l\'inici</string>
+    <string name="ftue_account_created_personalize">Personalitza el perfil</string>
+    <string name="ftue_auth_use_case_connect_to_server">Connectat al servidor</string>
+    <string name="ftue_auth_use_case_join_existing_server">Vols unir-te a un servidor existent\?</string>
+    <string name="ftue_auth_use_case_skip_partial">ometre aquesta pregunta</string>
+    <string name="ftue_auth_use_case_skip">Encara no n\'estàs segur\? Pots %s</string>
+    <string name="ftue_auth_use_case_option_three">Comunitats</string>
+    <string name="ftue_auth_use_case_option_two">Equips</string>
+    <string name="ftue_auth_use_case_option_one">Família i amics</string>
+    <string name="ftue_auth_use_case_subtitle">T\'ajudarem a connectar-te.</string>
+    <string name="ftue_auth_use_case_title">Amb qui parlaràs més sovint\?</string>
+    <string name="ftue_auth_carousel_workplace_body">${app_name} també és ideal per a la feina. Les organitzacions més segures del món hi confien.</string>
+    <string name="identity_server_consent_dialog_content_question">Estàs d\'acord amb enviar aquesta informació\?</string>
+    <string name="error_file_too_big_simple">El fitxer és massa gran per carregar-lo.</string>
+    <string name="attachment_type_location">Ubicació</string>
+    <string name="ftue_auth_carousel_encrypted_body">Xifrat d\'extrem a extrem i sense haver de donar cap número de telèfon. Sense anuncis ni extracció de dades.</string>
+    <string name="ftue_auth_carousel_control_body">Tria on es desen les teves converses, donant-te control i independència. Connectat a través de Matrix.</string>
+    <string name="ftue_auth_carousel_secure_body">Comunicació segura i independent que t\'ofereix el mateix nivell de privadesa que una conversa cara a cara a casa teva.</string>
+    <string name="ftue_auth_carousel_workplace_title">Missatgeria pel teu equip.</string>
+    <string name="ftue_auth_carousel_encrypted_title">Missatgeria segura.</string>
+    <string name="ftue_auth_carousel_secure_title">Ets propietari de les teves converses.</string>
+    <string name="ftue_auth_carousel_control_title">Tu tens el control.</string>
+    <string name="call_tile_voice_call_has_ended">Trucada finalitzada • %1$s</string>
+    <string name="call_tile_video_active">Videotrucada activa</string>
+    <string name="call_tile_voice_active">Trucada activa</string>
+    <string name="call_tile_video_incoming">Videotrucada entrant</string>
+    <string name="call_tile_voice_incoming">Trucada entrant</string>
+    <string name="call_tile_you_declined_this_call">Has rebutjat la trucada</string>
+    <string name="error_forbidden_digits_only_username">Els servidor no accepta noms d\'usuari amb només dígits.</string>
+    <string name="ftue_personalize_skip_this_step">Omet aquest pas</string>
+    <string name="ftue_personalize_submit">Desa i continua</string>
+    <string name="ftue_personalize_complete_subtitle">Les teves preferències s\'han desat.</string>
+    <string name="ftue_personalize_complete_title">Tot a punt!</string>
+    <string name="ftue_personalize_lets_go">Som-hi</string>
+    <string name="ftue_profile_picture_subtitle">Ho pots canviar en qualsevol moment.</string>
+    <string name="ftue_display_name_entry_footer">Ho podràs canviar després</string>
+    <string name="ftue_profile_picture_title">Afegeix foto de perfil</string>
+    <string name="ftue_display_name_entry_title">Àlies</string>
+    <string name="labs_enable_thread_messages_desc">Avís: l\'aplicació es reiniciarà</string>
+    <string name="labs_enable_thread_messages">Activa missatges de fil</string>
+    <string name="labs_auto_report_uisi_desc">El sistema enviarà automàticament registres quan es produeixi un error de desxifrat</string>
+    <string name="labs_auto_report_uisi">Informa automàticament d\'errors de desxifrat.</string>
+    <string name="space_add_space_to_any_space_you_manage">Afegeix espai a un espai gestionat per tu.</string>
+    <string name="space_add_existing_spaces">Afegeix espais existents</string>
+    <string name="space_add_existing_rooms_only">Afegeix sales existents</string>
+    <string name="space_add_existing_rooms">Afegeix sales i espais existents</string>
+    <string name="space_leave_prompt_msg_as_admin">Ets l\'únic administrador d\'aquest espai. Si marxes ningú en podrà tenir el control.</string>
+    <string name="space_leave_prompt_msg_private">No podràs tornar a unir-t\'hi mentre no t\'hi tornin a convidar.</string>
+    <string name="space_leave_prompt_msg_only_you">Ets l\'única persona aquí. Si marxes, ningú podrà unir-s\'hi en el futur, incloent-te a tu.</string>
+    <string name="space_leave_prompt_msg_with_name">Estàs segur que vols marxar %s\?</string>
+    <string name="leave_space">Marxa</string>
+    <string name="space_add_child_title">Afegeix sales</string>
+    <string name="space_explore_activity_title">Explora sales</string>
+    <string name="command_description_leave_room">Marxa de la sala amb l\'ID especificat (o la sala actual si és \'null\')</string>
+    <string name="command_description_join_space">Uneix-te a l\'espai amb l\'ID especificat</string>
+    <string name="command_description_add_to_space">Afegeix a l\'espai especificat</string>
+    <string name="a11y_presence_online">En línia</string>
+    <string name="a11y_public_room">Sala pública</string>
+    <string name="call_slide_to_end_conference">Llisca per finalitzar la trucada</string>
+    <string name="call_transfer_unknown_person">Persona desconeguda</string>
+    <string name="call_transfer_transfer_to_title">Transferència a %1$s</string>
+    <string name="call_transfer_consulting_with">Consultant amb %1$s</string>
+    <string name="call_tap_to_return">%1$s Clica per tornar</string>
+    <string name="call_one_active">Trucada activa (%1$s) ·</string>
+    <plurals name="call_active_status">
+        <item quantity="one">Trucada activa ·</item>
+        <item quantity="other">%1$d trucades actives ·</item>
+    </plurals>
+    <string name="call_tile_no_answer">Sense resposta</string>
+    <string name="call_tile_video_missed">Videotrucada perduda</string>
+    <string name="call_tile_voice_missed">Trucada perduda</string>
+    <string name="call_tile_video_declined">Videotrucada rebutjada</string>
+    <string name="call_tile_voice_declined">Trucada rebutjada</string>
+    <string name="call_tile_video_call_has_ended">Videotrucada finalitzada • %1$s</string>
+    <string name="closed_poll_option_description">Els resultats només es mostraran quan acabi l\'enquesta</string>
+    <string name="closed_poll_option_title">Enquesta tancada</string>
+    <string name="open_poll_option_description">Els votants veuran els resultats actuals tan bon punt hagin votat</string>
+    <string name="open_poll_option_title">Enquesta oberta</string>
+    <string name="poll_type_title">Tipus d\'enquesta</string>
+    <string name="edit_poll_title">Edita l\'enquesta</string>
+    <string name="delete_poll_dialog_content">Estàs segur que vols eliminar l\'enquesta\? No la podràs recuperar un cop eliminada.</string>
+    <string name="delete_poll_dialog_title">Elimina l\'enquesta</string>
+    <string name="poll_end_room_list_preview">S\'ha acabat l\'enquesta</string>
+    <string name="poll_response_room_list_preview">Vot emès</string>
+    <string name="end_poll_confirmation_approve_button">Acaba l\'enquesta</string>
+    <string name="end_poll_confirmation_description">Això impedirà que la gent pugui votar i es mostraran els resultats finals de l\'enquesta.</string>
+    <string name="end_poll_confirmation_title">Vols acabar l\'enquesta\?</string>
+    <string name="a11y_poll_winner_option">opció guanyadora</string>
+    <plurals name="create_poll_not_enough_options_error">
+        <item quantity="one">Es necessita almenys %1$s opció</item>
+        <item quantity="other">Es necessiten almenys %1$s opcions</item>
+    </plurals>
+    <string name="create_poll_empty_question_error">La pregunta no pot estar buida</string>
+    <string name="create_poll_button">CREA ENQUESTA</string>
+    <string name="create_poll_add_option">AFEGEIX OPCIÓ</string>
+    <string name="create_poll_options_hint">Opció %1$d</string>
+    <string name="create_poll_options_title">Crea opcions</string>
+    <string name="create_poll_question_hint">Pregunta o tema</string>
+    <string name="create_poll_question_title">Pregunta o tema de l\'enquesta</string>
+    <string name="create_poll_title">Crea enquesta</string>
+    <string name="attachment_type_poll">Enquesta</string>
+    <string name="poll_end_action">Acaba l\'enquesta</string>
+    <plurals name="poll_total_vote_count_after_ended">
+        <item quantity="one">Resultat final basat en %1$d vot</item>
+        <item quantity="other">Resultat final basat en %1$d vots</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_not_voted">
+        <item quantity="one">%1$d vot emès. Vota per veure els resultats</item>
+        <item quantity="other">%1$d vots emesos. Vota per veure els resultats</item>
+    </plurals>
+    <string name="poll_no_votes_cast">No s\'han emès vots</string>
+    <plurals name="poll_total_vote_count_before_ended_and_voted">
+        <item quantity="one">Basat en %1$d vot</item>
+        <item quantity="other">Basat en %1$d vots</item>
+    </plurals>
+    <plurals name="poll_option_vote_count">
+        <item quantity="one">%1$d vot</item>
+        <item quantity="other">%1$d vots</item>
+    </plurals>
+    <string name="encryption_misconfigured">Xifrat mal configurat</string>
+    <plurals name="send_videos_with_original_size">
+        <item quantity="one">Envia vídeo a mida real</item>
+        <item quantity="other">Envia vídeos a mida real</item>
+    </plurals>
+    <string name="settings_server_room_version_unstable">inestable</string>
+    <string name="settings_server_room_version_stable">estable</string>
+    <string name="settings_server_default_room_version">Versió per defecte</string>
+    <string name="settings_server_room_versions">Versions de sala 👓</string>
+    <string name="room_member_override_nick_color">Canvia el color de l\'àlies</string>
+    <string name="room_profile_section_restore_security">Restableix xifrat</string>
+    <string name="contact_admin_to_restore_encryption">Contacta amb un administrador per restablir el xifrat a un estat vàlid.</string>
+    <string name="encryption_has_been_misconfigured">El xifrat s\'ha configurat malament.</string>
+    <string name="verification_scan_self_emoji_subtitle">Fes la verificació comparant emoticones</string>
+    <string name="verification_scan_with_this_device">Escaneja amb aquest dispositiu</string>
+    <string name="verification_scan_self_notice">Escaneja el codi amb un altre dispositiu o canvia i fes l\'escaneig amb aquest dispositiu</string>
+    <string name="sent_live_location">Ha compartit la seva ubicació en directe</string>
+    <string name="sent_location">Ha compartit la seva ubicació</string>
+    <string name="sent_a_voice_message">Veu</string>
+    <string name="command_description_lenny">Afegeix ( ͡° ͜ʖ ͡°) abans d\'un missatge de text</string>
+    <string name="settings_developer_mode_show_info_on_screen_summary">Mostra informació útil per ajudar a depurar l\'aplicació</string>
+    <string name="settings_developer_mode_show_info_on_screen_title">Mostra la informació de depuració a la pantalla</string>
+    <string name="does_not_look_like_valid_email">Sembla que l\'adreça de correu no és vàlida</string>
+    <string name="login_splash_already_have_account">Ja tinc un compte</string>
+    <string name="login_splash_create_account">Crea compte</string>
+    <string name="settings_discovery_no_policy_provided">El servidor d\'identitat no ha proporcionat cap política</string>
+    <string name="settings_discovery_hide_identity_server_policy_title">Amaga les polítiques del servidor d\'identitat</string>
+    <string name="settings_discovery_show_identity_server_policy_title">Mostra les polítiques del servidor d\'identitat</string>
+    <string name="open_discovery_settings">Obre la configuració de descobriment</string>
+    <string name="user_directory_search_hint_2">Cerca per nom, ID o correu</string>
+    <string name="send_file_step_compressing_video">Comprimint vídeo %d%%</string>
+    <string name="send_file_step_compressing_image">Comprimint imatge…</string>
+    <string name="beta">BETA</string>
+    <string name="send_feedback_threads_info">Els fils encara s\'estan implementant amb noves i emocionants funcionalitats, com per exemple notificacions millorades. Ens encantaria saber la teva opinió!</string>
+    <string name="send_feedback_threads_title">Comentaris de la beta de fils</string>
+    <string name="give_feedback_threads">Envia comentaris</string>
+    <string name="give_feedback" tools:ignore="UnusedResources">Envia comentaris</string>
+    <string name="feedback_failed">No s\'han pogut enviar els teus comentaris (%s)</string>
+    <string name="feedback_sent">Gràcies, els teus comentaris s\'han enviat correctament</string>
+    <string name="feedback">Comentaris</string>
+    <string name="send_feedback_space_title">Comentaris sobre els espais</string>
+    <string name="beta_title_bottom_sheet_action">BETA</string>
+    <string name="preference_system_settings">Configuració del sistema</string>
+    <string name="preference_versions">Versions</string>
+    <string name="preference_help_summary">Obté ajuda sobre com utilitzar ${app_name}</string>
+    <string name="preference_help_title">Ajuda i suport</string>
+    <string name="preference_help">Ajuda</string>
+    <string name="preference_root_legals">Legal</string>
+    <string name="navigate_to_thread_when_already_in_the_thread">Ja estàs visualitzant aquest fil!</string>
+    <string name="view_in_room">Mostra-ho a la sala</string>
+    <string name="reply_in_thread">Respon en un fil</string>
+    <string name="keys_backup_settings_signature_from_this_user">La còpia de seguretat conté una signatura vàlida d\'aquest usuari.</string>
+    <string name="command_description_whois">Mostra informació d\'un usuari</string>
+    <string name="command_description_nick_for_room">Canvia el teu l\'àlies només dins la sala actual</string>
+    <string name="command_description_room_name">Estableix el nom de la sala</string>
+    <string name="command_not_supported_in_threads">La comanda \"%s\" s\'ha reconegut però no s\'admet als fils.</string>
+    <string name="error_jitsi_join_conf">S\'ha produït un error en intentar unir-se a la conferència</string>
+    <string name="directory_add_a_new_server_error_already_added">Aquest servidor ja es troba a la llista</string>
+    <string name="directory_add_a_new_server_error">No s\'ha pogut trobar el servidor o la seva llista de sales</string>
+    <string name="directory_add_a_new_server_prompt">Introdueix el nom d\'un servidor nou que vulguis visitar.</string>
+    <string name="directory_add_a_new_server">Afegeix un nou servidor</string>
+    <string name="directory_your_server">El teu servidor</string>
+    <string name="other_spaces_or_rooms_you_might_not_know">Altres espais o sales que potser no coneixes</string>
+    <string name="decide_who_can_find_and_join">Tria qui pot trobar i unir-se a la sala.</string>
+    <string name="tap_to_edit_spaces">Clica per editar els espais</string>
+    <string name="select_spaces">Selecciona espais</string>
+    <string name="room_create_member_of_space_name_can_join">Les persones de l\'espai %s poden trobar-la, veure-la i unir-s\'hi.</string>
+    <string name="room_settings_room_access_restricted_title">Només persones de l\'espai</string>
+    <string name="room_settings_space_access_public_description">Qualsevol pot trobar l\'espai i unir-s\'hi</string>
+    <string name="room_settings_room_access_private_invite_only_title">Privada (només amb invitació)</string>
+    <string name="room_settings_room_access_entry_unknown">Configuració d\'accés desconeguda (%s)</string>
+    <string name="space_settings_alias_subtitle">Mostra i gestiona les adreces de l\'espai.</string>
+    <string name="space_settings_alias_title">Adreces de l\'espai</string>
+    <string name="room_settings_space_access_title">Accés a l\'espai</string>
+    <string name="room_settings_access_rules_pref_dialog_title">Qui hi pot accedir\?</string>
+    <string name="room_settings_room_notifications_account_settings">Configuració del compte</string>
+    <string name="room_settings_room_notifications_manage_notifications">Pots gestionar les notificacions a %1$s.</string>
+    <string name="settings_mentions_and_keywords_encryption_notice">No rebràs notificacions al mòbil de mencions ni paraules clau a sales xifrades.</string>
+    <string name="room_settings_room_notifications_encryption_notice">Tingues en compte que les notificacions al mòbil de mencions i paraules clau no estan disponibles en sales xifrades.</string>
+    <string name="room_settings_room_notifications_notify_me">Notifica\'m de</string>
+    <string name="settings_presence_user_always_appears_offline_summary">Si ho actives, sempre apareixeràs fora de línia pels altres usuaris, encara que estiguis utilitzant l\'aplicació.</string>
+    <string name="settings_presence_user_always_appears_offline">Mode fora de línia</string>
+    <string name="settings_presence">Presència</string>
+    <string name="legals_no_policy_provided">El servidor no ha proporcionat cap política.</string>
+    <string name="legals_third_party_notices">Llibreries de tercers</string>
+    <string name="legals_identity_server_title">Polítiques del servidor d\'identitat</string>
+    <string name="legals_home_server_title">Polítiques del servidor</string>
+    <string name="legals_application_title">Polítiques d\'${app_name}</string>
+    <string name="analytics_opt_in_list_item_3">Pots desactivar-ho en qualsevol moment, a la configuració</string>
+    <string name="analytics_opt_in_list_item_2">&lt;b&gt;No&lt;/b&gt; compartim informació a tercers</string>
+    <string name="analytics_opt_in_list_item_1">&lt;b&gt;No&lt;/b&gt; recopilem o tractem dades del teu compte</string>
+    <string name="analytics_opt_in_content_link">aquí</string>
+    <string name="analytics_opt_in_content">Ajuda\'ns a identificar problemes i millorar ${app_name} compartint dades d\'ús anònimes. Per entendre com la gent utilitza diversos dispositius, generarem un identificador aleatori compartit pels teus dispositius.
+\n
+\nPots llegir tots els nostres termes %s.</string>
+    <string name="analytics_opt_in_title">Ajuda a millorar ${app_name}</string>
+    <string name="settings_room_upgrades">Actualitzacions de sala</string>
+    <string name="settings_messages_by_bot">Missatges de bot</string>
+    <string name="settings_room_invitations">Invitacions a la sala</string>
+    <string name="settings_messages_containing_keywords">Paraules clau</string>
+    <string name="settings_mentions_at_room">\@sala</string>
+    <string name="settings_group_messages">Missatges de grup</string>
+    <string name="settings_encrypted_group_messages">Missatges de grup xifrats</string>
+    <string name="settings_messages_containing_display_name">Àlies</string>
+    <string name="settings_messages_containing_username">Nom d\'usuari</string>
+    <string name="settings_notification_keyword_contains_invalid_character">Les paraules clau no poden contenir \'%s\'</string>
+    <string name="settings_notification_keyword_contains_dot">Les paraules clau no poden començar amb \'.\'</string>
+    <string name="settings_notification_new_keyword">Afegeix nova paraula clau</string>
+    <string name="settings_notification_your_keywords">Paraules clau</string>
+    <string name="settings_notification_notify_me_for">Notifica\'m de</string>
+    <string name="settings_notification_other">Altres</string>
+    <string name="settings_notification_mentions_and_keywords">Mencions i paraules clau</string>
+    <string name="settings_notification_default">Notificacions per defecte</string>
+    <string name="settings_notification_emails_no_emails">Per rebre notificacions per correu, has d\'associar un correu electrònic amb el teu compte de Matrix</string>
+    <string name="shortcut_disabled_reason_sign_out">S\'ha tancat la sessió!</string>
+    <string name="shortcut_disabled_reason_room_left">La sala ha estat abandonada!</string>
+    <string name="room_settings_none">Cap</string>
+    <string name="room_settings_mention_and_keyword_only">Només mencions i paraules clau</string>
+    <string name="threads_labs_enable_notice_message">El servidor actual no admet els fils, per tant aquesta funcionalitat pot ser poc fiable. És possible que alguns missatges dels fils no estiguin disponibles. %sVols activar els fils igualment\?</string>
+    <string name="threads_labs_enable_notice_title">Fils beta</string>
+    <string name="thread_list_empty_title">Manté els xats organitzats mitjançant fils</string>
+    <string name="room_threads_filter">Filtra fils de la sala</string>
+    <string name="threads_beta_enable_notice_message">Els fils ajuden a mantenir el tema de les converses i fer-les més fàcils de seguir. %sSi actives els fils, l\'aplicació s\'actualitzarà. Això pot tardar més en alguns comptes.</string>
+    <string name="threads_notice_migration_title">Els fils ja quasi estan en beta 🎉</string>
+    <string name="threads_beta_enable_notice_title">Fils beta</string>
+    <string name="threads_notice_migration_message">Estem a prop del llançament d\'una versió beta pública dels Fils (Threads).
+\n
+\nMentre ens preparem, hem de fer alguns canvis: els fils creats abans d\'aquest punt es mostraran com a respostes regulars.
+\n
+\nSerà una transició única, ja que els fils ara formen part de l\'especificació de Matrix.</string>
+    <string name="search_thread_from_a_thread">D\'un fil</string>
+    <string name="thread_list_empty_notice">Consell: manté premut un missatge i utilitza “%s”.</string>
+    <string name="thread_list_empty_subtitle">Els fils ajuden a mantenir el tema de les converses i fer-les més fàcils de seguir.</string>
+    <string name="room_permissions_change_main_address_for_the_space">Canvia l\'adreça principal de l\'espai</string>
+    <string name="space_permissions_notice_read_only">No tens permís per actualitzar els rols necessaris per canviar algunes parts d\'aquest espai</string>
+    <string name="screen_sharing_notification_description">Compartició de pantalla en curs</string>
+    <string name="live_location_sharing_notification_description">Compartició d\'ubicació en curs</string>
+    <plurals name="message_reaction_show_more">
+        <item quantity="one">%1$d més</item>
+        <item quantity="other">%1$d més</item>
+    </plurals>
+    <string name="message_reaction_show_less">Mostra menys</string>
+    <string name="tooltip_attachment_location">Comparteix ubicació</string>
+    <string name="tooltip_attachment_poll">Crea enquesta</string>
+    <string name="tooltip_attachment_contact">Obre contactes</string>
+    <string name="tooltip_attachment_sticker">Envia adhesiu</string>
+    <string name="tooltip_attachment_file">Puja fitxer</string>
+    <string name="tooltip_attachment_gallery">Envia imatges i vídeos</string>
+    <string name="tooltip_attachment_photo">Obre càmera</string>
+    <string name="message_bubbles">Mostra els contorns dels missatges</string>
+    <string name="live_location_bottom_sheet_last_updated_at">Actualitzada fa %1$s</string>
+    <string name="labs_enable_live_location_summary">Implementació temporal: les ubicacions persisteixen a l\'historial de la sala</string>
+    <string name="space_leave_radio_buttons_title">Coses en aquest espai</string>
+    <string name="settings_autoplay_animated_images_summary">Reprodueix immediatament les imatges animades a la cronologia</string>
+    <string name="live_location_bottom_sheet_stop_sharing">Deixa de compartir</string>
+    <string name="labs_enable_live_location">Activa la compartició d\'ubicació en directe</string>
+    <string name="location_share_live_remaining_time">%1$s restants</string>
+    <string name="location_share_live_until">En directe fins %1$s</string>
+    <string name="location_share_live_view">Mostra la ubicació en directe</string>
+    <string name="location_share_live_ended">Compartició d\'ubicació en directe finalitzada</string>
+    <string name="settings_autoplay_animated_images_title">Reprodueix automàticament imatges animades</string>
+    <string name="space_explore_filter_no_result_description">Alguns resultats poden estar amagats perquè són privats i necessites invitació prèvia.</string>
+    <string name="space_explore_filter_no_result_title">Sense resultats</string>
+    <string name="space_leave_radio_button_all">Marxa de tot arreu</string>
+    <string name="space_leave_radio_button_none">No marxis d\'enlloc</string>
+    <string name="time_unit_second_short">s</string>
+    <string name="time_unit_minute_short">min</string>
+    <string name="time_unit_hour_short">h</string>
 </resources>

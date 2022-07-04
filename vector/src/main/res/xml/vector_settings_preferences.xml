@@ -72,12 +72,6 @@
             android:title="@string/option_take_photo_video"
             tools:summary="@string/option_always_ask" />
 
-        <im.vector.app.core.preference.VectorSwitchPreference
-            android:defaultValue="false"
-            android:key="SETTINGS_PREF_ENABLE_LOCATION_SHARING"
-            android:summary="@string/settings_enable_location_sharing_summary"
-            android:title="@string/settings_enable_location_sharing" />
-
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
     <im.vector.app.core.preference.VectorPreferenceCategory android:title="@string/settings_category_timeline">
@@ -87,6 +81,13 @@
             android:key="SETTINGS_INTERFACE_BUBBLE_KEY"
             android:title="@string/message_bubbles"
             app:isPreferenceVisible="@bool/settings_interface_bubble_visible" />
+
+        <im.vector.app.core.preference.VectorSwitchPreference
+            android:defaultValue="@bool/settings_timeline_show_live_sender_info_default"
+            app:isPreferenceVisible="@bool/settings_timeline_show_live_sender_info_visible"
+            android:key="SETTINGS_TIMELINE_SHOW_LIVE_SENDER_INFO"
+            android:summary="@string/settings_show_latest_profile_description"
+            android:title="@string/settings_show_latest_profile" />
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="true"
@@ -132,6 +133,12 @@
             android:key="SETTINGS_ENABLE_CHAT_EFFECTS"
             android:summary="@string/settings_chat_effects_description"
             android:title="@string/settings_chat_effects_title" />
+
+        <im.vector.app.core.preference.VectorSwitchPreference
+            android:defaultValue="false"
+            android:key="SETTINGS_AUTOPLAY_ANIMATED_IMAGES"
+            android:summary="@string/settings_autoplay_animated_images_summary"
+            android:title="@string/settings_autoplay_animated_images_title" />
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:key="SETTINGS_VIBRATE_ON_MENTION_KEY"

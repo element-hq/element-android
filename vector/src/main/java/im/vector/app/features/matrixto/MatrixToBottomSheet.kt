@@ -67,16 +67,16 @@ class MatrixToBottomSheet :
     override fun invalidate() = withState(viewModel) { state ->
         super.invalidate()
         when (state.linkType) {
-            is PermalinkData.RoomLink            -> {
+            is PermalinkData.RoomLink -> {
                 views.matrixToCardContentLoading.isVisible = state.roomPeekResult is Incomplete
                 showFragment(MatrixToRoomSpaceFragment::class, Bundle())
             }
-            is PermalinkData.UserLink            -> {
+            is PermalinkData.UserLink -> {
                 views.matrixToCardContentLoading.isVisible = state.matrixItem is Incomplete
                 showFragment(MatrixToUserFragment::class, Bundle())
             }
-            is PermalinkData.GroupLink           -> Unit
-            is PermalinkData.FallbackLink        -> Unit
+            is PermalinkData.GroupLink -> Unit
+            is PermalinkData.FallbackLink -> Unit
             is PermalinkData.RoomEmailInviteLink -> Unit
         }
     }
@@ -84,7 +84,8 @@ class MatrixToBottomSheet :
     private fun showFragment(fragmentClass: KClass<out Fragment>, bundle: Bundle) {
         if (childFragmentManager.findFragmentByTag(fragmentClass.simpleName) == null) {
             childFragmentManager.commitTransaction {
-                replace(views.matrixToCardFragmentContainer.id,
+                replace(
+                        views.matrixToCardFragmentContainer.id,
                         fragmentClass.java,
                         bundle,
                         fragmentClass.simpleName
@@ -98,18 +99,18 @@ class MatrixToBottomSheet :
 
         viewModel.observeViewEvents {
             when (it) {
-                is MatrixToViewEvents.NavigateToRoom  -> {
+                is MatrixToViewEvents.NavigateToRoom -> {
                     withState(viewModel) { state ->
                         interactionListener?.mxToBottomSheetNavigateToRoom(it.roomId, state.origin.toViewRoomTrigger())
                     }
                     dismiss()
                 }
-                MatrixToViewEvents.Dismiss            -> dismiss()
+                MatrixToViewEvents.Dismiss -> dismiss()
                 is MatrixToViewEvents.NavigateToSpace -> {
                     interactionListener?.mxToBottomSheetSwitchToSpace(it.spaceId)
                     dismiss()
                 }
-                is MatrixToViewEvents.ShowModalError  -> {
+                is MatrixToViewEvents.ShowModalError -> {
                     MaterialAlertDialogBuilder(requireContext())
                             .setMessage(it.error)
                             .setPositiveButton(getString(R.string.ok), null)

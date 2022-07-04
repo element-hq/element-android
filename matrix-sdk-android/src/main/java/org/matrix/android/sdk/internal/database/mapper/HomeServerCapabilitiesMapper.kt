@@ -28,7 +28,7 @@ import org.matrix.android.sdk.internal.session.homeserver.RoomVersions
 import org.matrix.android.sdk.internal.session.room.version.DefaultRoomVersionService
 
 /**
- * HomeServerCapabilitiesEntity -> HomeSeverCapabilities
+ * HomeServerCapabilitiesEntity -> HomeSeverCapabilities.
  */
 internal object HomeServerCapabilitiesMapper {
 
@@ -42,7 +42,8 @@ internal object HomeServerCapabilitiesMapper {
                 lastVersionIdentityServerSupported = entity.lastVersionIdentityServerSupported,
                 defaultIdentityServerUrl = entity.defaultIdentityServerUrl,
                 roomVersions = mapRoomVersion(entity.roomVersionsJson),
-                canUseThreading = entity.canUseThreading
+                canUseThreading = entity.canUseThreading,
+                canControlLogoutDevices = entity.canControlLogoutDevices
         )
     }
 

@@ -1,1 +1,0 @@
-- Add return type to RoomApi.sendStateEvent() to retrieve the created event id

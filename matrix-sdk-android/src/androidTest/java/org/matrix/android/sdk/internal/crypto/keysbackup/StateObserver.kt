@@ -27,9 +27,11 @@ import java.util.concurrent.CountDownLatch
  * This class observe the state change of a KeysBackup object and provide a method to check the several state change
  * It checks all state transitions and detected forbidden transition
  */
-internal class StateObserver(private val keysBackup: KeysBackupService,
-                             private val latch: CountDownLatch? = null,
-                             private val expectedStateChange: Int = -1) : KeysBackupStateListener {
+internal class StateObserver(
+        private val keysBackup: KeysBackupService,
+        private val latch: CountDownLatch? = null,
+        private val expectedStateChange: Int = -1
+) : KeysBackupStateListener {
 
     private val allowedStateTransitions = listOf(
             KeysBackupState.BackingUp to KeysBackupState.ReadyToBackUp,

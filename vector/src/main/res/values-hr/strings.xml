@@ -38,7 +38,6 @@
     <string name="action_revoke">Opozovi</string>
     <string name="action_disconnect">Odspoji se</string>
     <string name="report_content">Prijavi sadržaj</string>
-
     <string name="or">ili</string>
     <string name="action_invite">Pozovi</string>
     <string name="action_accept">Prihvati</string>
@@ -70,7 +69,6 @@
     <string name="matrix_only_filter">Samo kontakti u Matrixu</string>
     <string name="no_result_placeholder">Nema rezultata</string>
     <string name="rooms_header">Sobe</string>
-
     <string name="groups_header">Zajednice</string>
     <string name="send_bug_report_include_logs">Pošalji zapise</string>
     <string name="send_bug_report_include_crash_logs">Pošalji zapise o rušenju</string>
@@ -96,7 +94,6 @@
     <string name="option_send_voice">Šalji glas</string>
     <string name="start_voice_call_prompt_msg">Jeste li sigurni da želite započeti novi glasovni poziv\?</string>
     <string name="start_video_call_prompt_msg">Jeste li sigurni da želite započeti novi video poziv\?</string>
-
     <string name="option_send_files">Pošalji datoteke</string>
     <string name="option_send_sticker">Pošalji naljepnicu</string>
     <string name="option_take_photo_video">Napravi fotografiju ili video zapis</string>
@@ -115,7 +112,6 @@
     <string name="auth_recaptcha_message">Vaš poslužitelj želi provjeriti jeste li robot</string>
     <string name="auth_reset_password_missing_email">Nužan je unos adrese e-pošte vezane za Vaš račun.</string>
     <string name="auth_reset_password_error_unauthorized">Neuspješna provjera adrese e-pošte: pobrinite se kliknuti na poveznicu u e-pošti</string>
-
     <string name="auth_accept_policies">Pročitajte i prihvatite pravila ovog poslužitelja:</string>
     <string name="login_error_invalid_home_server">Unesite ispravan URL</string>
     <string name="login_error_no_homeserver_found">Ovo nije ispravna adresa poslužitelja Matrixa</string>
@@ -147,14 +143,10 @@
     <string name="video_call_in_progress">Video poziv u tijeku…</string>
     <string name="call_error_user_not_responding">Druga strana se nije javila.</string>
     <string name="permissions_rationale_popup_title">Informacije</string>
-
-
     <string name="permissions_rationale_msg_record_audio">${app_name} treba dozvolu pristupa Vašem mikrofonu za obavljanje zvučnih poziva.</string>
-
     <string name="permissions_rationale_msg_camera_and_audio">${app_name} treba dozvolu pristupa Vašoj kameri i mikrofonu za obavljanje video poziva.
 \n
 \nOmogućite pristup putem sljedećih skočnih prozora kako biste mogli uspostaviti poziv.</string>
-
     <string name="yes">DA</string>
     <string name="no">NE</string>
     <string name="_continue">Nastavi</string>
@@ -163,17 +155,11 @@
     <string name="action_reject">Odbij</string>
     <string name="list_members">Nabroji članove</string>
     <string name="room_jump_to_first_unread">Idi na prvu nepročitanu poruku.</string>
-
-
     <plurals name="room_title_members">
         <item quantity="one">%d član</item>
         <item quantity="few">%d člana</item>
         <item quantity="other">%d članova</item>
     </plurals>
-
-
-
-
     <string name="room_participants_leave_prompt_title">Napusti sobu</string>
     <string name="room_participants_leave_prompt_msg">Jeste li sigurni da želite napustiti sobu\?</string>
     <string name="room_participants_header_direct_chats">IZRAVNA ĆASKANJA</string>
@@ -205,12 +191,9 @@
         <item quantity="few">%d označena</item>
         <item quantity="other">%d označenih</item>
     </plurals>
-
     <string name="search_hint">Traži</string>
     <string name="search_members_hint">Izdvoji članove sobe</string>
     <string name="search_no_results">Nema rezultata</string>
-
-
     <string name="room_settings_all_messages">Sve poruke</string>
     <string name="room_settings_add_homescreen_shortcut">Dodaj prečac na početni zaslon</string>
     <string name="settings_profile_picture">Profilna slika</string>
@@ -315,7 +298,6 @@
     <string name="settings_background_fdroid_sync_mode_disabled_description">Nećete primati obavijesti o dolaznim porukama kada je aplikacija u pozadini.</string>
     <string name="settings_start_on_boot">Pokreni pri podizanju sustava</string>
     <string name="settings_set_sync_timeout">Istekao je sinkronizacijski zahtjev</string>
-
     <string name="settings_set_sync_delay">Razmak između dvije sinkronizacije</string>
     <string name="settings_version">Inačica</string>
     <string name="settings_olm_version">Inačica olm-a</string>
@@ -363,7 +345,6 @@
     <string name="settings_deactivate_my_account">Deaktiviraj moj račun</string>
     <string name="settings_discovery_category">Pronalaženje</string>
     <string name="settings_discovery_manage">Upravljajte Vašim postavkama za pronalaženje.</string>
-
     <string name="settings_analytics">Analitika</string>
     <string name="settings_opt_in_of_analytics">Pošalji analitičke podatke</string>
     <string name="settings_opt_in_of_analytics_summary">${app_name} skuplja anonimnu analitiku kako bi se unaprijedila aplikacija.</string>
@@ -372,7 +353,6 @@
     <string name="devices_details_device_name">Promijeni javno ime</string>
     <string name="devices_details_last_seen_title">Posljednji put viđen/a</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-
     <string name="devices_delete_dialog_title">Ovjera</string>
     <string name="settings_logged_in">Prijavljen/a kao</string>
     <string name="settings_home_server">Vaš poslužitelj</string>
@@ -465,8 +445,6 @@
     <string name="create">Formiraj</string>
     <string name="rooms">Sobe</string>
     <string name="invited">Pozvan/a</string>
-
-
     <string name="has_been_removed">Izbačeni ste iz %1$s od strane %2$s</string>
     <string name="has_been_banned">Korisnik %2$s Vam je zabranio pristup sobi %1$s</string>
     <string name="reason_colon">Razlog: %1$s</string>
@@ -579,10 +557,8 @@
     <string name="a11y_create_direct_message">Započni novi izravni razgovor</string>
     <string name="a11y_create_room">Izradi novu sobu</string>
     <string name="settings_rageshake">Gnjevno drmanje</string>
-
     <string name="settings_integrations_summary">Koristite upravitelja integracijama kako biste rukovali botovima, mostovima, grafičkim elementima i paketima naljepnica.
 \nUpravitelji integracijama primaju konfiguracijske podatke i mogu mijenjati grafičke elemente, slati pozivnice za pridruživanje u sobe i postavljati razine upravljanja u Vaše ime.</string>
-    <string name="settings_flair">Sklonost</string>
     <string name="room_settings_room_read_history_rules_pref_title">Čitljivost sobne povijesti</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Tko može čitati povijest\?</string>
     <string name="room_settings_read_history_entry_anyone">Bilo tko</string>
@@ -606,7 +582,6 @@
     <string name="encryption_export_room_keys_summary">Izvezi ključeve u lokalnu datoteku</string>
     <string name="encryption_export_export">Izvezi</string>
     <string name="encryption_export_notice">Napravite fraza-lozinku za šifriranje izvedenih ključeva. Ista fraza-lozinka trebat će Vam za uvoz ključeva.</string>
-
     <string name="encryption_message_recovery">Povrat šifriranih poruka</string>
     <string name="encryption_import_e2e_room_keys">Uvezi sobne ključeve za E2E</string>
     <string name="encryption_import_room_keys">Uvezi sobne ključeve</string>
@@ -629,7 +604,6 @@
         <item quantity="few">%d nepročitane obavijesne poruke</item>
         <item quantity="other">%d nepročitanih obavijesnih poruka</item>
     </plurals>
-
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="one">%d soba</item>
         <item quantity="few">%d sobe</item>
@@ -769,7 +743,6 @@
     <string name="command_description_shrug">Ubacuje ¯\\_(ツ)_/¯ prije početka tekstualne poruke</string>
     <string name="verification_verified_user">%s potvrđen/a</string>
     <string name="verification_request_waiting_for">Čekanje na %s…</string>
-
     <string name="room_profile_not_encrypted_subtitle">Poruke u ovoj sobi nisu šifrirane s kraja na kraj.</string>
     <string name="room_profile_encrypted_subtitle">Poruke u ovoj sobi su šifrirane s kraja na kraj.
 \n
@@ -854,4 +827,26 @@
     <string name="message_action_item_redact">Ukloni…</string>
     <string name="delete_event_dialog_title">Potvrda uklanjanja</string>
     <string name="delete_event_dialog_content">Jeste li sigurni da želite ukloniti (izbrisati) ovaj događaj\? Ukoliko izbrišete naziv sobe ili promjenu teme, to može poništiti promjenu.</string>
+    <string name="notice_avatar_url_changed_by_you">Ti si promijenio svoj avatar</string>
+    <string name="notice_avatar_url_changed">%1$s je promijenio svoj avatar</string>
+    <string name="notice_room_remove_by_you">Ti si maknuo %1$s</string>
+    <string name="notice_room_remove">%1$s je maknuo %2$s</string>
+    <string name="notice_room_reject_by_you">Ti si odbio pozivnicu</string>
+    <string name="notice_room_reject">%1$s je odbio pozivnicu</string>
+    <string name="notice_direct_room_leave_by_you">Ti si napustio sobu</string>
+    <string name="notice_direct_room_leave">%1$s je napustio sobu</string>
+    <string name="notice_room_leave_by_you">Ti si napustio sobu</string>
+    <string name="notice_room_leave">%1$s je napustio sobu</string>
+    <string name="notice_direct_room_join_by_you">Ti si ušao</string>
+    <string name="notice_direct_room_join">%1$s je ušao</string>
+    <string name="notice_room_join_by_you">Ti si ušao u sobu</string>
+    <string name="notice_room_join">%1$s je ušao u sobu</string>
+    <string name="notice_room_invite_you">%1$s te je pozvao</string>
+    <string name="notice_room_invite_by_you">Ti si pozvao %1$s</string>
+    <string name="notice_room_invite">%1$s je pozvao %2$s</string>
+    <string name="notice_direct_room_created_by_you">Ti si kreirao razgovor</string>
+    <string name="notice_direct_room_created">%1$s je kreirao razgovor</string>
+    <string name="notice_room_created_by_you">Ti si kreirao sobu</string>
+    <string name="notice_room_created">%1$s je kreirao sobu</string>
+    <string name="notice_room_invite_no_invitee_by_you">Tvoja pozivnica</string>
 </resources>

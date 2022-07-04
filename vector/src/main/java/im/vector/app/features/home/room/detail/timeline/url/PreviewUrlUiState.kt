@@ -19,7 +19,7 @@ package im.vector.app.features.home.room.detail.timeline.url
 import org.matrix.android.sdk.api.session.media.PreviewUrlData
 
 /**
- * The state representing a preview url UI state for an Event
+ * The state representing a preview url UI state for an Event.
  */
 sealed class PreviewUrlUiState {
     // No info
@@ -35,7 +35,9 @@ sealed class PreviewUrlUiState {
     data class Error(val throwable: Throwable) : PreviewUrlUiState()
 
     // PreviewUrl data
-    data class Data(val eventId: String,
-                    val url: String,
-                    val previewUrlData: PreviewUrlData) : PreviewUrlUiState()
+    data class Data(
+            val eventId: String,
+            val url: String,
+            val previewUrlData: PreviewUrlData
+    ) : PreviewUrlUiState()
 }

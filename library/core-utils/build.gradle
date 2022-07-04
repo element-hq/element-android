@@ -44,12 +44,11 @@ android {
     kotlinOptions {
         jvmTarget = "11"
         freeCompilerArgs += [
-                "-Xopt-in=kotlin.RequiresOptIn"
+                "-opt-in=kotlin.RequiresOptIn"
         ]
     }
 }
 
 dependencies {
-    implementation libs.androidx.appCompat
     implementation libs.jetbrains.coroutinesAndroid
 }

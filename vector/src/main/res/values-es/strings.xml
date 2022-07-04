@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="notice_room_invite_no_invitee">la invitación de %s</string>
     <string name="notice_room_invite">%1$s invitó a %2$s</string>
     <string name="notice_room_invite_you">%1$s te ha invitado</string>
@@ -317,7 +317,7 @@
     <string name="action_remove">Eliminar</string>
     <string name="action_join">Unirse</string>
     <string name="action_reject">Rechazar</string>
-    <string name="room_jump_to_first_unread">Mensajes no leídos.</string>
+    <string name="room_jump_to_first_unread">Ir a mensajes no leídos</string>
     <string name="room_participants_leave_prompt_title">Salir de la sala</string>
     <string name="room_participants_leave_prompt_msg">¿Seguro que quieres salir de la sala?</string>
     <string name="room_participants_header_direct_chats">CONVERSACIONES DIRECTAS</string>
@@ -332,7 +332,7 @@
     <string name="room_one_user_is_typing">%s está escribiendo…</string>
     <string name="room_two_users_are_typing">%1$s y %2$s están escribiendo…</string>
     <string name="room_many_users_are_typing">%1$s y %2$s y otros están escribiendo…</string>
-    <string name="room_do_not_have_permission_to_post">No tienes permiso para publicar en esta sala</string>
+    <string name="room_do_not_have_permission_to_post">No tienes permiso para publicar en esta sala.</string>
     <string name="ssl_trust">Confiar</string>
     <string name="ssl_do_not_trust">No confiar</string>
     <string name="ssl_logout_account">Cerrar Sesión</string>
@@ -400,9 +400,7 @@
     <string name="settings_new_password">Contraseña nueva</string>
     <string name="settings_fail_to_update_password">No se pudo actualizar la contraseña</string>
     <string name="settings_password_updated">Tu contraseña ha sido actualizada</string>
-    <string name="settings_unignore_user">¿Mostrar todos los mensajes de %s\?
-\n
-\nTen en cuenta que esta acción reiniciará la aplicación y puede tomar algo de tiempo.</string>
+    <string name="settings_unignore_user">¿Mostrar todos los mensajes de %s\?</string>
     <string name="settings_select_country">Elige un país</string>
     <string name="room_settings_topic">Tema</string>
     <string name="room_settings_room_read_history_rules_pref_title">Legibilidad del Historial de la Sala</string>
@@ -506,7 +504,6 @@
     <string name="room_settings_add_homescreen_shortcut">Añadir a la Pantalla de Inicio</string>
     <string name="settings_inline_url_preview">Vistas previas de URL en línea</string>
     <string name="settings_vibrate_on_mention">Vibrar al mencionar un usuario</string>
-    <string name="settings_flair">Insignia</string>
     <string name="create">Crear</string>
     <string name="group_details_home">Inicio</string>
     <string name="rooms">Salas</string>
@@ -574,7 +571,7 @@
     <string name="command_description_unban_user">Quita el veto al usuario con la ID dada</string>
     <string name="command_description_op_user">Define el nivel de autoridad de un usuario</string>
     <string name="command_description_invite_user">Invita al usuario con la ID dada a la sala actual</string>
-    <string name="command_description_join_room">Se une a la sala con el alias dado</string>
+    <string name="command_description_join_room">Se une a la sala con la dirección dada</string>
     <string name="command_description_part_room">Salir de la sala</string>
     <string name="command_description_topic">Establecer el tema de la sala</string>
     <string name="command_description_remove_user">Expulsa al usuario con la ID dada</string>
@@ -582,7 +579,7 @@
     <string name="command_description_markdown">Activar/Desactivar markdown</string>
     <string name="command_description_clear_scalar_token">Para reparar la gestión de las Aplicaciones de Matrix</string>
     <string name="settings_preview_media_before_sending">Vista previa de medios antes de enviar</string>
-    <string name="room_tombstone_versioned_description">Esta sala ha sido reemplazada y ya no está activa</string>
+    <string name="room_tombstone_versioned_description">Esta sala ha sido reemplazada y ya no está activa.</string>
     <string name="room_tombstone_continuation_link">La conversación continúa aquí</string>
     <string name="room_tombstone_continuation_description">Esta sala es una continuación de otra conversación</string>
     <string name="room_tombstone_predecessor_link">Haz clic aquí para ver mensajes más antiguos</string>
@@ -972,7 +969,7 @@
     <string name="room_filtering_footer_create_new_direct_message">Enviar un nuevo mensaje directo</string>
     <string name="room_filtering_footer_open_room_directory">Ver el directorio de la sala</string>
     <string name="room_directory_search_hint">Nombre o ID (#ejemplo:servidor.org)</string>
-    <string name="labs_swipe_to_reply_in_timeline">Habilitar \"desplazar para contestar\" en la línea de tiempo</string>
+    <string name="labs_swipe_to_reply_in_timeline">Habilitar \"deslizar para contestar\" en la línea de tiempo</string>
     <string name="link_copied_to_clipboard">Enlace copiado al portapapeles</string>
     <string name="creating_direct_room">Creando sala…</string>
     <string name="message_view_edit_history">Ver historial de modificaciones</string>
@@ -1414,9 +1411,7 @@
     <string name="login_signup_submit">Siguiente</string>
     <string name="login_signup_error_user_in_use">Ese nombre de usuario está siendo usado</string>
     <string name="login_signup_cancel_confirmation_title">Advertencia</string>
-    <string name="login_signup_cancel_confirmation_content">Tu cuenta aún no está creada.
-\n
-\n ¿Detener el proceso de registro\?</string>
+    <string name="login_signup_cancel_confirmation_content">Tu cuenta aún no está creada. ¿Detener el proceso de registro\?</string>
     <string name="login_a11y_choose_matrix_org">Seleccione matrix.org</string>
     <string name="login_a11y_choose_modular">Seleccionar servicios de matriz de elementos</string>
     <string name="login_a11y_choose_other">Seleccione un servidor doméstico personalizado</string>
@@ -1482,7 +1477,7 @@
     <string name="room_settings_enable_encryption_dialog_content">Una vez habilitado, el cifrado de una sala no se puede deshabilitar. Los mensajes enviados en una sala cifrada no pueden ser vistos por el servidor, solo por los participantes de la sala. Habilitar el cifrado puede impedir que muchos bots y puentes funcionen correctamente.</string>
     <string name="verification_request_notice">Para estar seguro, verifique %s comprobando un código de un solo uso.</string>
     <string name="verification_request_start_notice">Para estar seguro, hágalo en persona o use otra forma de comunicarse.</string>
-    <string name="verification_emoji_notice">Compare los emoji únicos, asegurándose de que aparezcan en el mismo orden.</string>
+    <string name="verification_emoji_notice">Verifica si los mismos emojis aparecen en el mismo orden en ambos usuarios.</string>
     <string name="verification_code_notice">Compare el código con el que se muestra en la pantalla del otro usuario.</string>
     <string name="verification_conclusion_ok_notice">Los mensajes con este usuario están cifrados Extremo-a-Extremo y no pueden ser leídos por terceros.</string>
     <string name="verification_conclusion_ok_self_notice">Su nueva sesión ahora está verificada. Tiene acceso a sus mensajes cifrados y otros usuarios lo verán como de confianza.</string>
@@ -1505,7 +1500,7 @@
     <string name="verification_profile_device_verified_because">Esta sesión es de confianza para mensajería segura porque %1$s (%2$s) la ha verificado:</string>
     <string name="verification_profile_device_new_signing">%1$s (%2$s) iniciado sesión con una nueva sesión:</string>
     <string name="verification_profile_device_untrust_info">Hasta que este usuario confíe en esta sesión, los mensajes enviados hacia y desde ella se etiquetan con advertencias. Alternativamente, puede verificarlo manualmente.</string>
-    <string name="qr_code_scanned_by_other_notice">¡Casi ahí! ¿Es %s muestra el mismo escudo\?</string>
+    <string name="qr_code_scanned_by_other_notice">¡Casi estamos! ¿Muestra %s el mismo tick\?</string>
     <string name="verification_cannot_access_other_session">Use una contraseña o clave de recuperación</string>
     <string name="verification_use_passphrase">Si no puede acceder a una sesión existente</string>
     <string name="enter_secret_storage_invalid">No puedo encontrar secretos almacenados</string>
@@ -1560,7 +1555,7 @@
     <string name="encryption_not_enabled">Cifrado no habilitado</string>
     <string name="encryption_unknown_algorithm_tile_description">El cifrado usado por esta sala no es compatible</string>
     <string name="room_created_summary_item">%s creado y configurado la sala.</string>
-    <string name="qr_code_scanned_self_verif_notice">¡Casi ahí! ¿El otro dispositivo muestra el mismo escudo\?</string>
+    <string name="qr_code_scanned_self_verif_notice">¡Casi estamos! ¿El otro dispositivo muestra el mismo tick\?</string>
     <string name="qr_code_scanned_verif_waiting_notice">¡Casi ahí! Esperando confirmación…</string>
     <string name="error_failed_to_import_keys">No se pudieron importar las claves</string>
     <string name="settings_messages_at_room">Mensajes que contienen @room</string>
@@ -1822,8 +1817,8 @@
     <string name="call_resume_action">Continuar</string>
     <string name="spaces_beta_welcome_to_spaces_desc">Los espacios son una nueva manera para agrupar salas y personas.</string>
     <string name="join_space">Únete a un Espacio</string>
-    <string name="create_space">Crea un Espacio</string>
-    <string name="add_space">Añade un Espacio</string>
+    <string name="create_space">Crear espacio</string>
+    <string name="add_space">Añadir espacio</string>
     <string name="command_description_create_space">Crea un Espacio</string>
     <string name="activity_create_space_title">Crear un espacio</string>
     <string name="initial_sync_start_server_computing">Sincronización inicial:
@@ -1991,7 +1986,7 @@
     <string name="room_settings_room_access_private_description">Solo la gente invitada puede encontrar y unirse a l sala</string>
     <string name="room_settings_room_access_private_invite_only_title">Privada (solo mediante invitación)</string>
     <string name="room_settings_room_access_entry_knock">Cualquiera puede solicitar entrar en la sala, serán los miembros quienes decidan aceptar o rechazar la solicitud</string>
-    <string name="room_alias_local_address_subtitle">Configurar las direcciones para esta sala de forma que otros usuarios puedan encontrarla mediante tu homeserver (%1$s).</string>
+    <string name="room_alias_local_address_subtitle">Configurar las direcciones para esta sala de forma que otros usuarios puedan encontrarla mediante tu servidor doméstico (%1$s)</string>
     <string name="room_alias_address_empty_can_add">Ninguna dirección publicada aún, añade una debajo.</string>
     <string name="room_alias_published_alias_subtitle">Las direcciones publicadas pueden ser usadas por cualquiera en cualquier servidor para unirse a tu sala. Para publicar una dirección es necesario configurarla previamente como dirección local.</string>
     <string name="space_settings_alias_subtitle">Ver y gestionar direcciones de este espacio.</string>
@@ -2018,7 +2013,7 @@
         <item quantity="one">Llamada de audio perdida</item>
         <item quantity="other">%d llamadas de audio perdidas</item>
     </plurals>
-    <string name="hs_client_url">Homeserver API URL</string>
+    <string name="hs_client_url">URL de API del servidor doméstico</string>
     <string name="missing_permissions_title">Faltan permisos</string>
     <string name="denied_permission_voice_message">Para enviar mensajes de voz has de otorgar el permiso de Micrófono.</string>
     <string name="denied_permission_camera">Para llevar a cabo esta acción has de otorgar el permiso de Cámara en las preferencias del sistema.</string>
@@ -2036,7 +2031,7 @@
     <string name="other_spaces_or_rooms_you_might_not_know">Otros espacios o habitaciones que puede que no conozcas</string>
     <string name="joining_replacement_room">Unirse a la sala de repuesto</string>
     <string name="a11y_unsent_draft">Tiene borradores sin enviar</string>
-    <string name="you_may_contact_me">Puedes contactarme si tienes dudas de seguimiento</string>
+    <string name="you_may_contact_me">Puedes contactarme si tienes alguna duda</string>
     <string name="upgrade_room_no_power_to_manage">Necesitas permiso para actualizar una sala</string>
     <string name="upgrade_room_update_parent_space">Actualizar el espacio padre automáticamente</string>
     <string name="upgrade_room_auto_invite">Invitar usuarios automáticamente</string>
@@ -2077,7 +2072,7 @@
     <string name="create_spaces_details_public_header">Añade algunos detalles para ayudarlo a destacar. Puedes cambiar esto en cualquier momento.</string>
     <string name="create_spaces_private_teammates">Un espacio privado para ti y tus compañeros de equipo</string>
     <string name="create_spaces_organise_rooms">Un espacio privado para organizar tus salas</string>
-    <string name="create_spaces_make_sure_access">Asegúrate de que son las personas correctas las que tienen acceso a %s. Puedes cambiar esto más tarde.</string>
+    <string name="create_spaces_make_sure_access">Asegúrate de que las personas correctas tienen acceso a %s.</string>
     <string name="create_spaces_who_are_you_working_with">¿Con quién estás trabajando\?</string>
     <string name="create_spaces_join_info_help">Para unirte a un espacio existente necesitas una invitación.</string>
     <string name="create_spaces_you_can_change_later">Puedes cambiar esto más tarde</string>
@@ -2113,10 +2108,6 @@
     <string name="send_images_and_video_with_original_size">Enviar contenido multimedia con su tamaño original</string>
     <string name="settings_server_room_version_unstable">inestable</string>
     <string name="space_add_existing_rooms_only">Agregar salas existentes</string>
-    <string name="pick_tings_to_leave">Elige cosas para dar</string>
-    <string name="leave_specific_ones">Dejar salas y espacios específicos…</string>
-    <string name="dont_leave_any">No dejes salas y espacios</string>
-    <string name="leave_all_rooms_and_spaces">Deja todas las habitaciones y espacios</string>
     <string name="space_leave_prompt_msg_with_name">¿Estás seguro de que quieres irte %s\?</string>
     <string name="discovery_section">Descubrimiento (%s)</string>
     <string name="finish_setup">Terminar la configuración</string>
@@ -2178,7 +2169,7 @@
     <string name="command_description_room_avatar">Cambiar el avatar de la sala actual</string>
     <string name="command_description_nick_for_room">Cambiar su apodo para mostrar solo en la sala actual</string>
     <string name="command_description_room_name">Establecer el nombre de la sala</string>
-    <string name="command_description_unignore_user">Deja de ignorar a un usuario, muestra sus mensajes en el futuro.</string>
+    <string name="command_description_unignore_user">Deja de ignorar a un usuario, muestra sus mensajes en el futuro</string>
     <string name="command_description_ignore_user">Ignorar a un usuario, ocultándole sus mensajes</string>
     <string name="space_you_know_that_contains_this_room">Espacio que sabes que contiene esta sala</string>
     <string name="room_settings_space_access_public_description">Cualquiera puede encontrar el espacio y unirse</string>
@@ -2304,4 +2295,205 @@
     <string name="thread_list_modal_title">Filtrar</string>
     <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s y otros</string>
     <string name="action_thread_copy_link_to_thread">Copiar enlace al hilo</string>
+    <string name="tooltip_attachment_sticker">Enviar sticker</string>
+    <string name="location_timeline_failed_to_load_map">Ocurrió un error al cargar el mapa</string>
+    <string name="ftue_personalize_complete_title">¡Estás listo!</string>
+    <string name="search_thread_from_a_thread">Desde un hilo</string>
+    <string name="thread_list_empty_subtitle">Los hilos ayudan a mantener sus conversaciones en el tema fijado y son fáciles de organizar.</string>
+    <string name="analytics_opt_in_list_item_3">Puedes apagar esto en cualquier momento en configuración</string>
+    <string name="threads_labs_enable_notice_message">Tu servidor doméstico actualmente no soporta hilos, por lo tanto esta función podría ser poco fiable. Algunos mensajes en hilos puede que no estén disponibles de forma fiable. %s ¿Deseas activar la función de hilos de todas formas\?</string>
+    <string name="threads_beta_enable_notice_title">Beta de hilos</string>
+    <string name="threads_notice_migration_message">Nos estamos acercando a el lanzamiento de una beta pública para hilos.
+\n
+\nMientras nos preparamos, tenemos que hacer algunos cambios: los hilos creados a partir de ahora se mostrarán como respuestas normales.
+\n
+\nEsto será una transición debido a que los hilos son ahora parte de la especificación Matrix.</string>
+    <string name="threads_notice_migration_title">Hilos acercándose a versión beta 🎉</string>
+    <string name="login_splash_already_have_account">Ya tengo una cuenta</string>
+    <string name="login_splash_create_account">Crear cuenta</string>
+    <string name="ftue_personalize_skip_this_step">Saltar este paso</string>
+    <string name="ftue_personalize_submit">Guardar y continuar</string>
+    <string name="ftue_personalize_complete_subtitle">Tus preferencias han sido guardadas.</string>
+    <string name="ftue_personalize_lets_go">Vámonos</string>
+    <string name="ftue_profile_picture_title">Añadir una foto de perfil</string>
+    <string name="ftue_display_name_entry_footer">Puedes cambiar esto más tarde</string>
+    <string name="ftue_display_name_entry_title">Nombre público</string>
+    <string name="ftue_display_name_title">Escoger un nombre público</string>
+    <string name="ftue_account_created_subtitle">Tu cuenta %s ha sido creada.</string>
+    <string name="ftue_account_created_congratulations_title">¡Felicidades!</string>
+    <string name="give_feedback_threads">Dar opinión</string>
+    <string name="beta_title_bottom_sheet_action">BETA</string>
+    <string name="settings_presence_user_always_appears_offline">Modo fuera de línea</string>
+    <string name="settings_presence">Presencia</string>
+    <string name="analytics_opt_in_list_item_2">Nosotros <b> no </b> compartimos información con terceros</string>
+    <string name="analytics_opt_in_list_item_1">Nosotros <b> no </b> grabamos o perfilamos ningún dato de cuenta</string>
+    <string name="analytics_opt_in_title">Ayudar a mejorar ${app_name}</string>
+    <string name="location_share_live_select_duration_option_3">8 horas</string>
+    <string name="location_share_live_select_duration_option_2">1 hora</string>
+    <string name="location_share_live_select_duration_option_1">15 minutos</string>
+    <string name="location_share_live_enabled">Ubicación en vivo activada</string>
+    <string name="location_share_live_started">Cargando ubicación en vivo…</string>
+    <string name="location_share_live_stop">Parar</string>
+    <string name="message_bubbles">Mostrar burbujas de mensajes</string>
+    <string name="tooltip_attachment_photo">Abrir cámara</string>
+    <string name="tooltip_attachment_gallery">Enviar imágenes y vídeos</string>
+    <string name="tooltip_attachment_file">Subir archivo</string>
+    <string name="tooltip_attachment_contact">Abrir contactos</string>
+    <plurals name="message_reaction_show_more">
+        <item quantity="one">%1$d más</item>
+        <item quantity="other">%1$d más</item>
+    </plurals>
+    <string name="message_reaction_show_less">Mostrar menos</string>
+    <string name="tooltip_attachment_location">Compartir ubicación</string>
+    <string name="tooltip_attachment_poll">Crear encuesta</string>
+    <string name="analytics_opt_in_content_link">aquí</string>
+    <string name="action_learn_more">Aprender más</string>
+    <string name="action_try_it_out">Pruébalo</string>
+    <string name="action_disable">Deshabilitar</string>
+    <plurals name="notice_room_server_acl_changes">
+        <item quantity="one">%d cambio de ACL del servidor</item>
+        <item quantity="other">%d cambios de ALC de los servidores</item>
+    </plurals>
+    <string name="a11y_location_share_option_pinned_icon">Compartir esta ubicación</string>
+    <string name="a11y_location_share_option_user_live_icon">Compartir ubicación en tiempo real</string>
+    <string name="a11y_location_share_option_user_current_icon">Compartir mi ubicación actual</string>
+    <string name="ftue_auth_carousel_workplace_body">${app_name} también es estupenda para el trabajo. Es confiada por las organizaciones más seguras del mundo.</string>
+    <string name="identity_server_consent_dialog_content_3">Para descubrir contactos ya existentes, tendrás que enviar información de contacto (emails y números de teléfono) a tu servidor de identidad. Aplicamos hashes en tus datos antes de enviarlos por privacidad.</string>
+    <string name="send_feedback_threads_info">Los hilos son un proyecto en progreso con nuevas y excitantes características nuevas, como notificaciones mejoradas. ¡Nos encantaría escuchar tus comentarios!</string>
+    <string name="settings_presence_user_always_appears_offline_summary">Si se activa, siempre aparecerás como fuera de línea para otros usuarios, incluso cuando uses la aplicación.</string>
+    <string name="threads_beta_enable_notice_message">Los hilos ayudan a mantener tus conversaciones en el asunto y las hacen más fáciles de rastrear. %sHabilitar la función de hilos refrescará la aplicación. Esto podría tardar más en algunas cuentas.</string>
+    <string name="room_message_autocomplete_notification">Notificación de sala</string>
+    <string name="room_message_autocomplete_users">Usuarios</string>
+    <string name="room_message_notify_everyone">Notificar a toda la sala</string>
+    <string name="live_location_sharing_notification_description">La compartición de ubicación está en progreso</string>
+    <string name="live_location_sharing_notification_title">${app_name} Ubicación en directo</string>
+    <string name="location_share_external">Abrir con</string>
+    <string name="location_not_available_dialog_content">${app_name} no ha podido acceder a tu ubicación. Por favor, inténtalo de nuevo más tarde.</string>
+    <string name="location_not_available_dialog_title">${app_name} no ha podido acceder a tu ubicación</string>
+    <string name="location_share_live_select_duration_title">Compartir tu ubicación en directo para</string>
+    <string name="location_share_option_pinned">Compartir esta ubicación</string>
+    <string name="location_share_option_user_live">Compartir ubicación en directo</string>
+    <string name="location_share_option_user_current">Compartir mi ubicación actual</string>
+    <string name="a11y_location_share_locate_button">Hacer zoom a ubicación actual</string>
+    <string name="a11y_location_share_pin_on_map">Pin de ubicación selecionada en el mapa</string>
+    <string name="a11y_static_map_image">Mapa</string>
+    <string name="location_activity_title_preview">Ubicación</string>
+    <string name="location_activity_title_static_sharing">Compartir ubicación</string>
+    <string name="closed_poll_option_description">Los resultados solo se revelan cuando finalices la encuesta</string>
+    <string name="closed_poll_option_title">Encuesta cerrada</string>
+    <string name="open_poll_option_description">Los votantes verán los resultados tan pronto como hayan votado</string>
+    <string name="open_poll_option_title">Encuesta abierta</string>
+    <string name="poll_type_title">Tipo de encuesta</string>
+    <string name="edit_poll_title">Editar encuesta</string>
+    <string name="delete_poll_dialog_content">¿Estás seguro de que quieres eliminar esta encuesta\? No podrás recuperarla cuando se elimine.</string>
+    <string name="delete_poll_dialog_title">Eliminar encuesta</string>
+    <string name="poll_end_room_list_preview">Encuesta finalizada</string>
+    <string name="poll_response_room_list_preview">Voto enviado</string>
+    <string name="end_poll_confirmation_approve_button">Finalizar encuesta</string>
+    <string name="end_poll_confirmation_description">Esto evitará que las personas puedan votar y mostrará los resultados finales de la encuesta.</string>
+    <string name="end_poll_confirmation_title">¿Finalizar encuesta\?</string>
+    <string name="a11y_poll_winner_option">opción ganadora</string>
+    <string name="poll_end_action">Finalizar encuesta</string>
+    <plurals name="poll_total_vote_count_after_ended">
+        <item quantity="one">Resultado final basado en %1$d voto</item>
+        <item quantity="other">Resultado final basado en %1$d votos</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_not_voted">
+        <item quantity="one">%1$d voto enviado. Vota para ver los resultados</item>
+        <item quantity="other">%1$d votos enviados. Vota para ver los resultados</item>
+    </plurals>
+    <string name="poll_no_votes_cast">No hay ningún voto</string>
+    <plurals name="poll_total_vote_count_before_ended_and_voted">
+        <item quantity="one">Basado en %1$d voto</item>
+        <item quantity="other">Basado en %1$d votos</item>
+    </plurals>
+    <plurals name="poll_option_vote_count">
+        <item quantity="one">%1$d voto</item>
+        <item quantity="other">%1$d votos</item>
+    </plurals>
+    <plurals name="create_poll_not_enough_options_error">
+        <item quantity="one">Al menos %1$s opción es requerida</item>
+        <item quantity="other">Al menos %1$s opciones son requeridas</item>
+    </plurals>
+    <string name="create_poll_empty_question_error">La pregunta no puede estar vacía</string>
+    <string name="create_poll_button">CREAR ENCUESTA</string>
+    <string name="create_poll_add_option">AÑADIR OPCIÓN</string>
+    <string name="create_poll_options_hint">Opción %1$d</string>
+    <string name="create_poll_options_title">Crear opciones</string>
+    <string name="create_poll_question_hint">Pregunta o asunto</string>
+    <string name="create_poll_question_title">Pregunta o asunto de encuesta</string>
+    <string name="create_poll_title">Crear Encuesta</string>
+    <string name="restart_the_application_to_apply_changes">Reinicia la aplicación para que el cambio surta efecto.</string>
+    <string name="analytics_opt_in_content">Ayúdanos a identificar problemas y a mejorar ${app_name} compartiendo datos de uso anónimos. Para comprender como las personas usan múltiples dispositivos, generaremos un identificador aleatorio, compartido por tus dispositivos.
+\n
+\nPuedes leer todos nuestros términos en %s.</string>
+    <string name="labs_enable_latex_maths">Habilitar matemáticas con LaTeX</string>
+    <string name="audio_message_file_size">(%1$s)</string>
+    <string name="audio_message_reply_content">%1$s (%2$s)</string>
+    <string name="error_audio_message_unable_to_play">Ocurrió un error al reproducir %1$s</string>
+    <string name="a11y_pause_audio_message">Pausar %1$s</string>
+    <string name="a11y_play_audio_message">Reproducir %1$s</string>
+    <string name="a11y_audio_playback_duration">%1$d minutos %2$d segundos</string>
+    <string name="a11y_audio_message_item">%1$s,%2$s,%3$s</string>
+    <string name="labs_enable_thread_messages_desc">Nota: la applicación se reiniciará</string>
+    <string name="labs_enable_thread_messages">Activar mensajes en hilo</string>
+    <string name="labs_auto_report_uisi_desc">Tu sistema automáticamente enviará registros cuando ocurra un fallo al desencriptar</string>
+    <string name="labs_auto_report_uisi">Reportar errores de desencriptado automáticamente.</string>
+    <string name="a11y_presence_unavailable">No disponible</string>
+    <string name="a11y_presence_offline">Fuera de línea</string>
+    <string name="a11y_presence_online">En línea</string>
+    <string name="error_forbidden_digits_only_username">El servidor doméstico no acepta nombres de usuario con únicamente dígitos.</string>
+    <string name="encryption_misconfigured">La encriptación está configurada de manera incorrecta</string>
+    <string name="room_member_override_nick_color">Sobreescribir color del nick</string>
+    <string name="room_profile_section_restore_security">Restaurar Encriptación</string>
+    <string name="contact_admin_to_restore_encryption">Por favor, contacta con un administrador para restablecer la encriptación a un estado válido.</string>
+    <string name="encryption_has_been_misconfigured">La encriptación ha sido configurada de forma incorrecta.</string>
+    <string name="sent_live_location">Compartieron su localización en vivo</string>
+    <string name="sent_location">Compartieron su localización</string>
+    <string name="ftue_profile_picture_subtitle">Puedes cambiar esto en todo momento.</string>
+    <string name="ftue_display_name_subtitle">Esto se mostrará cuando mandes mensajes.</string>
+    <string name="ftue_account_created_take_me_home">Llévame a casa</string>
+    <string name="ftue_account_created_personalize">Personalizar perfil</string>
+    <string name="ftue_auth_use_case_connect_to_server">Conectar a servidor</string>
+    <string name="ftue_auth_use_case_join_existing_server">¿Querías unirte a un servidor ya existente\?</string>
+    <string name="ftue_auth_carousel_encrypted_body">Encriptado extremo-a-extremo, sin requerir un número de teléfono. Sin anuncios o minado de datos.</string>
+    <string name="ftue_auth_carousel_control_body">Elige dónde se almacenan tus conversaciones, dándote control e independencia. Conectado mediante Matrix.</string>
+    <string name="ftue_auth_carousel_secure_body">La comunicación segura e independiente que te da el mismo nivel de privacidad que una conversación cara a cara en tu propio hogar.</string>
+    <string name="identity_server_consent_dialog_title_2">Enviar emials y números de teléfono a %s</string>
+    <string name="settings_discovery_consent_notice_off_2">Tus contactos son privados. Para descubrir usuarios desde tus contactos, necesitamos tu permiso para enviar información de contactos a tu servidor de identidad.</string>
+    <string name="beta">BETA</string>
+    <string name="send_feedback_threads_title">Comentarios de la beta de hilos</string>
+    <string name="threads_labs_enable_notice_title">Beta de hilos</string>
+    <string name="initial_sync_request_reason_unignored_users">- Algunos usuarios han sido dejados de ignorar</string>
+    <string name="screen_sharing_notification_description">La compartición de pantalla está en progreso</string>
+    <string name="screen_sharing_notification_title">${app_name} Compartición de pantalla</string>
+    <string name="call_stop_screen_sharing">Dejar de compartir pantalla</string>
+    <string name="call_start_screen_sharing">Compartir pantalla</string>
+    <string name="initial_sync_request_content">${app_name} necesita realizar una limpieza de caché para mantenerse actualizado por la siguiente razón:
+\n%s
+\n
+\nTen en cuenta que esta acción reiniciará la aplicación y podría tardar algo de tiempo.</string>
+    <string name="initial_sync_request_title">Petición inicial de sincronización</string>
+    <string name="keys_backup_settings_signature_from_this_user">La copia de seguridad tiene una firma válida de este usuario.</string>
+    <string name="settings_show_latest_profile_description">Mostrar la última información del perfil (avatar y nick) para todos los mensajes.</string>
+    <string name="settings_show_latest_profile">Mostrar última información del usuario</string>
+    <string name="a11y_presence_busy">Ocupado</string>
+    <string name="live_location_bottom_sheet_last_updated_at">Actualizado hace %1$s</string>
+    <string name="live_location_bottom_sheet_stop_sharing">Dejar de compartir</string>
+    <string name="labs_enable_live_location_summary">Implementación temporal: las ubicaciones persisten en el historial de la sala</string>
+    <string name="labs_enable_live_location">Activar compartir ubicación en tiempo real</string>
+    <string name="location_share_live_remaining_time">Queda %1$s</string>
+    <string name="location_share_live_until">Compartiendo hasta %1$s</string>
+    <string name="location_share_live_view">Ver ubicación en tiempo real</string>
+    <string name="location_share_live_ended">La ubicación en tiempo real ha terminado</string>
+    <string name="space_explore_filter_no_result_description">Algunos resultados podrían estar ocultos por que son privados y necesitarías una invitación.</string>
+    <string name="space_explore_filter_no_result_title">Ningún resultado</string>
+    <string name="space_leave_radio_button_none">No salir de ninguno</string>
+    <string name="space_leave_radio_button_all">Salir de todo</string>
+    <string name="space_leave_radio_buttons_title">Cosas en este espacio</string>
+    <string name="settings_autoplay_animated_images_summary">Reproducir imágenes animadas en la línea temporal tan pronto como sean visibles</string>
+    <string name="settings_autoplay_animated_images_title">Autoreproducir imágenes animadas</string>
+    <string name="time_unit_second_short">sec</string>
+    <string name="time_unit_minute_short">min</string>
+    <string name="time_unit_hour_short">h</string>
 </resources>

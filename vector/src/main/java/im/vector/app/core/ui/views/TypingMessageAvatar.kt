@@ -22,7 +22,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
-import im.vector.app.core.utils.DimensionConverter
+import im.vector.app.R
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.session.room.sender.SenderInfo
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -34,8 +34,11 @@ class TypingMessageAvatar @JvmOverloads constructor(
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
     companion object {
-        const val AVATAR_SIZE_DP = 20
         const val OVERLAP_FACT0R = -3 // =~ 30% to left
+    }
+
+    private val typingAvatarSize by lazy(LazyThreadSafetyMode.NONE) {
+        context.resources.getDimension(R.dimen.typing_avatar_size).toInt()
     }
 
     fun render(typingUsers: List<SenderInfo>, avatarRenderer: AvatarRenderer) {
@@ -44,9 +47,9 @@ class TypingMessageAvatar @JvmOverloads constructor(
             val avatar = ImageView(context)
             avatar.id = View.generateViewId()
             val layoutParams = MarginLayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-            if (index != 0) layoutParams.marginStart = DimensionConverter(resources).dpToPx(AVATAR_SIZE_DP / OVERLAP_FACT0R)
-            layoutParams.width = DimensionConverter(resources).dpToPx(AVATAR_SIZE_DP)
-            layoutParams.height = DimensionConverter(resources).dpToPx(AVATAR_SIZE_DP)
+            if (index != 0) layoutParams.marginStart = typingAvatarSize / OVERLAP_FACT0R
+            layoutParams.width = typingAvatarSize
+            layoutParams.height = typingAvatarSize
             avatar.layoutParams = layoutParams
             avatarRenderer.render(value.toMatrixItem(), avatar)
             addView(avatar)

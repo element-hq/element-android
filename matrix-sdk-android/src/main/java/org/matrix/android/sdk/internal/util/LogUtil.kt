@@ -33,10 +33,12 @@ internal fun <T> Collection<T>.logLimit(maxQuantity: Int = 5): String {
     }
 }
 
-internal suspend fun <T> logDuration(message: String,
-                                     loggerTag: LoggerTag,
-                                     clock: Clock,
-                                     block: suspend () -> T): T {
+internal suspend fun <T> logDuration(
+        message: String,
+        loggerTag: LoggerTag,
+        clock: Clock,
+        block: suspend () -> T
+): T {
     Timber.tag(loggerTag.value).d("$message -- BEGIN")
     val start = clock.epochMillis()
     val result = logRamUsage(message) {

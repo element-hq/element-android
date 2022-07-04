@@ -36,13 +36,16 @@ class MessageItemAttributesFactory @Inject constructor(
         private val stringProvider: StringProvider,
         private val displayableEventFormatter: DisplayableEventFormatter,
         private val preferencesProvider: UserPreferencesProvider,
-        private val emojiCompatFontProvider: EmojiCompatFontProvider) {
+        private val emojiCompatFontProvider: EmojiCompatFontProvider
+) {
 
-    fun create(messageContent: Any?,
-               informationData: MessageInformationData,
-               callback: TimelineEventController.Callback?,
-               reactionsSummaryEvents: ReactionsSummaryEvents?,
-               threadDetails: ThreadDetails? = null): AbsMessageItem.Attributes {
+    fun create(
+            messageContent: Any?,
+            informationData: MessageInformationData,
+            callback: TimelineEventController.Callback?,
+            reactionsSummaryEvents: ReactionsSummaryEvents?,
+            threadDetails: ThreadDetails? = null
+    ): AbsMessageItem.Attributes {
         return AbsMessageItem.Attributes(
                 avatarSize = avatarSizeProvider.avatarSize,
                 informationData = informationData,
@@ -57,6 +60,7 @@ class MessageItemAttributesFactory @Inject constructor(
                 memberClickListener = {
                     callback?.onMemberNameClicked(informationData)
                 },
+                callback = callback,
                 reactionPillCallback = callback,
                 avatarCallback = callback,
                 threadCallback = callback,
@@ -66,7 +70,8 @@ class MessageItemAttributesFactory @Inject constructor(
                 threadSummaryFormatted = displayableEventFormatter.formatThreadSummary(threadDetails?.threadSummaryLatestEvent).toString(),
                 threadDetails = threadDetails,
                 reactionsSummaryEvents = reactionsSummaryEvents,
-                areThreadMessagesEnabled = preferencesProvider.areThreadMessagesEnabled()
+                areThreadMessagesEnabled = preferencesProvider.areThreadMessagesEnabled(),
+                autoplayAnimatedImages = preferencesProvider.autoplayAnimatedImages()
         )
     }
 }

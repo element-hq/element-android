@@ -50,13 +50,13 @@ class EventDetailsFormatter @Inject constructor(
             event.isImageMessage() -> formatForImageMessage(event)
             event.isVideoMessage() -> formatForVideoMessage(event)
             event.isAudioMessage() -> formatForAudioMessage(event)
-            event.isFileMessage()  -> formatForFileMessage(event)
-            else                   -> null
+            event.isFileMessage() -> formatForFileMessage(event)
+            else -> null
         }
     }
 
     /**
-     * Example: "1024 x 720 - 670 kB"
+     * Example: "1024 x 720 - 670 kB".
      */
     private fun formatForImageMessage(event: Event): CharSequence? {
         return event.getClearContent().toModel<MessageImageContent>()?.info
@@ -64,7 +64,7 @@ class EventDetailsFormatter @Inject constructor(
     }
 
     /**
-     * Example: "02:45 - 1024 x 720 - 670 kB"
+     * Example: "02:45 - 1024 x 720 - 670 kB".
      */
     private fun formatForVideoMessage(event: Event): CharSequence? {
         return event.getClearContent().toModel<MessageVideoContent>()?.videoInfo
@@ -72,7 +72,7 @@ class EventDetailsFormatter @Inject constructor(
     }
 
     /**
-     * Example: "02:45 - 670 kB"
+     * Example: "02:45 - 670 kB".
      */
     private fun formatForAudioMessage(event: Event): CharSequence? {
         return event.getClearContent().toModel<MessageAudioContent>()?.audioInfo
@@ -84,7 +84,7 @@ class EventDetailsFormatter @Inject constructor(
     }
 
     /**
-     * Example: "670 kB - application/pdf"
+     * Example: "670 kB - application/pdf".
      */
     private fun formatForFileMessage(event: Event): CharSequence? {
         return event.getClearContent().toModel<MessageFileContent>()?.info

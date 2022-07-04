@@ -38,20 +38,22 @@ import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.configureWith
 import javax.inject.Inject
 
-internal class DefaultProfileService @Inject constructor(private val taskExecutor: TaskExecutor,
-                                                         @SessionDatabase private val monarchy: Monarchy,
-                                                         private val coroutineDispatchers: MatrixCoroutineDispatchers,
-                                                         private val refreshUserThreePidsTask: RefreshUserThreePidsTask,
-                                                         private val getProfileInfoTask: GetProfileInfoTask,
-                                                         private val setDisplayNameTask: SetDisplayNameTask,
-                                                         private val setAvatarUrlTask: SetAvatarUrlTask,
-                                                         private val addThreePidTask: AddThreePidTask,
-                                                         private val validateSmsCodeTask: ValidateSmsCodeTask,
-                                                         private val finalizeAddingThreePidTask: FinalizeAddingThreePidTask,
-                                                         private val deleteThreePidTask: DeleteThreePidTask,
-                                                         private val pendingThreePidMapper: PendingThreePidMapper,
-                                                         private val userStore: UserStore,
-                                                         private val fileUploader: FileUploader) : ProfileService {
+internal class DefaultProfileService @Inject constructor(
+        private val taskExecutor: TaskExecutor,
+        @SessionDatabase private val monarchy: Monarchy,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
+        private val refreshUserThreePidsTask: RefreshUserThreePidsTask,
+        private val getProfileInfoTask: GetProfileInfoTask,
+        private val setDisplayNameTask: SetDisplayNameTask,
+        private val setAvatarUrlTask: SetAvatarUrlTask,
+        private val addThreePidTask: AddThreePidTask,
+        private val validateSmsCodeTask: ValidateSmsCodeTask,
+        private val finalizeAddingThreePidTask: FinalizeAddingThreePidTask,
+        private val deleteThreePidTask: DeleteThreePidTask,
+        private val pendingThreePidMapper: PendingThreePidMapper,
+        private val userStore: UserStore,
+        private val fileUploader: FileUploader
+) : ProfileService {
 
     override suspend fun getDisplayName(userId: String): Optional<String> {
         val params = GetProfileInfoTask.Params(userId)
@@ -132,24 +134,30 @@ internal class DefaultProfileService @Inject constructor(private val taskExecuto
         validateSmsCodeTask.execute(ValidateSmsCodeTask.Params(threePid, code))
     }
 
-    override suspend fun finalizeAddingThreePid(threePid: ThreePid,
-                                                userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor) {
+    override suspend fun finalizeAddingThreePid(
+            threePid: ThreePid,
+            userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor
+    ) {
         finalizeAddingThreePidTask
-                .execute(FinalizeAddingThreePidTask.Params(
-                        threePid = threePid,
-                        userInteractiveAuthInterceptor = userInteractiveAuthInterceptor,
-                        userWantsToCancel = false
-                ))
+                .execute(
+                        FinalizeAddingThreePidTask.Params(
+                                threePid = threePid,
+                                userInteractiveAuthInterceptor = userInteractiveAuthInterceptor,
+                                userWantsToCancel = false
+                        )
+                )
         refreshThreePids()
     }
 
     override suspend fun cancelAddingThreePid(threePid: ThreePid) {
         finalizeAddingThreePidTask
-                .execute(FinalizeAddingThreePidTask.Params(
-                        threePid = threePid,
-                        userInteractiveAuthInterceptor = null,
-                        userWantsToCancel = true
-                ))
+                .execute(
+                        FinalizeAddingThreePidTask.Params(
+                                threePid = threePid,
+                                userInteractiveAuthInterceptor = null,
+                                userWantsToCancel = true
+                        )
+                )
         refreshThreePids()
     }
 
@@ -161,8 +169,8 @@ internal class DefaultProfileService @Inject constructor(private val taskExecuto
 
 private fun UserThreePidEntity.asDomain(): ThreePid {
     return when (medium) {
-        ThirdPartyIdentifier.MEDIUM_EMAIL  -> ThreePid.Email(address)
+        ThirdPartyIdentifier.MEDIUM_EMAIL -> ThreePid.Email(address)
         ThirdPartyIdentifier.MEDIUM_MSISDN -> ThreePid.Msisdn(address)
-        else                               -> error("Invalid medium type")
+        else -> error("Invalid medium type")
     }
 }

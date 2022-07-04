@@ -70,6 +70,7 @@ internal class TimelineChunk(
 
     private val isLastForward = AtomicBoolean(chunkEntity.isLastForward)
     private val isLastBackward = AtomicBoolean(chunkEntity.isLastBackward)
+    private val nextToken = chunkEntity.nextToken
     private var prevChunkLatch: CompletableDeferred<Unit>? = null
     private var nextChunkLatch: CompletableDeferred<Unit>? = null
 
@@ -136,7 +137,10 @@ internal class TimelineChunk(
             val prevEvents = prevChunk?.builtItems(includesNext = false, includesPrev = true).orEmpty()
             deepBuiltItems.addAll(prevEvents)
         }
-        return deepBuiltItems
+        // In some scenario (permalink) we might end up with duplicate timeline events, so we want to be sure we only expose one.
+        return deepBuiltItems.distinctBy {
+            it.eventId
+        }
     }
 
     /**
@@ -153,10 +157,6 @@ internal class TimelineChunk(
         val loadFromStorage = loadFromStorage(count, direction).also {
             logLoadedFromStorage(it, direction)
         }
-        if (loadFromStorage.numberOfEvents == 6) {
-            Timber.i("here")
-        }
-
         val offsetCount = count - loadFromStorage.numberOfEvents
 
         return if (offsetCount == 0) {
@@ -180,12 +180,14 @@ internal class TimelineChunk(
         val rootThreadEventId = timelineSettings.rootThreadEventId ?: return LoadMoreResult.FAILURE
         return if (direction == Timeline.Direction.BACKWARDS) {
             try {
-                fetchThreadTimelineTask.execute(FetchThreadTimelineTask.Params(
-                        roomId,
-                        rootThreadEventId,
-                        chunkEntity.prevToken,
-                        count
-                )).toLoadMoreResult()
+                fetchThreadTimelineTask.execute(
+                        FetchThreadTimelineTask.Params(
+                                roomId,
+                                rootThreadEventId,
+                                chunkEntity.prevToken,
+                                count
+                        )
+                ).toLoadMoreResult()
             } catch (failure: Throwable) {
                 Timber.e(failure, "Failed to fetch thread timeline events from the server")
                 LoadMoreResult.FAILURE
@@ -210,7 +212,7 @@ internal class TimelineChunk(
                 fetchFromServerIfNeeded -> {
                     fetchFromServer(offsetCount, chunkEntity.nextToken, direction)
                 }
-                else                    -> {
+                else -> {
                     LoadMoreResult.SUCCESS
                 }
             }
@@ -228,7 +230,7 @@ internal class TimelineChunk(
                 fetchFromServerIfNeeded -> {
                     fetchFromServer(offsetCount, chunkEntity.prevToken, direction)
                 }
-                else                    -> {
+                else -> {
                     LoadMoreResult.SUCCESS
                 }
             }
@@ -236,20 +238,18 @@ internal class TimelineChunk(
     }
 
     /**
-     * Simple log that displays the number and timeline of loaded events
+     * Simple log that displays the number and timeline of loaded events.
      */
     private fun logLoadedFromStorage(loadedFromStorage: LoadedFromStorage, direction: Timeline.Direction) {
-        Timber.v("[" +
-                "${if (timelineSettings.isThreadTimeline()) "ThreadTimeLine" else "Timeline"}] Has loaded " +
-                "${loadedFromStorage.numberOfEvents} items from storage in $direction " +
-                if (timelineSettings.isThreadTimeline() && loadedFromStorage.threadReachedEnd) "[Reached End]" else "")
+        Timber.v(
+                "[" +
+                        "${if (timelineSettings.isThreadTimeline()) "ThreadTimeLine" else "Timeline"}] Has loaded " +
+                        "${loadedFromStorage.numberOfEvents} items from storage in $direction " +
+                        if (timelineSettings.isThreadTimeline() && loadedFromStorage.threadReachedEnd) "[Reached End]" else ""
+        )
     }
 
     fun getBuiltEventIndex(eventId: String, searchInNext: Boolean, searchInPrev: Boolean): Int? {
-        val builtEventIndex = builtEventsIndexes[eventId]
-        if (builtEventIndex != null) {
-            return getOffsetIndex() + builtEventIndex
-        }
         if (searchInNext) {
             val nextBuiltEventIndex = nextChunk?.getBuiltEventIndex(eventId, searchInNext = true, searchInPrev = false)
             if (nextBuiltEventIndex != null) {
@@ -262,7 +262,12 @@ internal class TimelineChunk(
                 return prevBuiltEventIndex
             }
         }
-        return null
+        val builtEventIndex = builtEventsIndexes[eventId]
+        return if (builtEventIndex != null) {
+            getOffsetIndex() + builtEventIndex
+        } else {
+            null
+        }
     }
 
     fun getBuiltEvent(eventId: String, searchInNext: Boolean, searchInPrev: Boolean): TimelineEvent? {
@@ -361,7 +366,8 @@ internal class TimelineChunk(
                 }
         return LoadedFromStorage(
                 threadReachedEnd = threadReachedEnd(timelineEvents),
-                numberOfEvents = timelineEvents.size)
+                numberOfEvents = timelineEvents.size
+        )
     }
 
     /**
@@ -375,7 +381,7 @@ internal class TimelineChunk(
 
     /**
      * This function is responsible to fetch and store the root event of a thread event
-     * in order to be able to display the event to the user appropriately
+     * in order to be able to display the event to the user appropriately.
      */
     private suspend fun fetchRootThreadEventsIfNeeded(offsetResults: List<TimelineEventEntity>) {
         val eventEntityList = offsetResults
@@ -439,7 +445,7 @@ internal class TimelineChunk(
             Timber.e(failure, "Failed to fetch from server")
             LoadMoreResult.FAILURE
         }
-        return if (loadMoreResult == LoadMoreResult.SUCCESS) {
+        return if (loadMoreResult != LoadMoreResult.FAILURE) {
             latch?.await()
             loadMore(count, direction, fetchOnServerIfNeeded = false)
         } else {
@@ -451,7 +457,7 @@ internal class TimelineChunk(
         return when (this) {
             TokenChunkEventPersistor.Result.REACHED_END -> LoadMoreResult.REACHED_END
             TokenChunkEventPersistor.Result.SHOULD_FETCH_MORE,
-            TokenChunkEventPersistor.Result.SUCCESS     -> LoadMoreResult.SUCCESS
+            TokenChunkEventPersistor.Result.SUCCESS -> LoadMoreResult.SUCCESS
         }
     }
 
@@ -459,16 +465,20 @@ internal class TimelineChunk(
         return when (this) {
             DefaultFetchThreadTimelineTask.Result.REACHED_END -> LoadMoreResult.REACHED_END
             DefaultFetchThreadTimelineTask.Result.SHOULD_FETCH_MORE,
-            DefaultFetchThreadTimelineTask.Result.SUCCESS     -> LoadMoreResult.SUCCESS
+            DefaultFetchThreadTimelineTask.Result.SUCCESS -> LoadMoreResult.SUCCESS
         }
     }
 
     private fun getOffsetIndex(): Int {
+        if (nextToken == null) return 0
         var offset = 0
         var currentNextChunk = nextChunk
         while (currentNextChunk != null) {
             offset += currentNextChunk.builtEvents.size
-            currentNextChunk = currentNextChunk.nextChunk
+            currentNextChunk = currentNextChunk.nextChunk?.takeIf {
+                // In case of permalink we can end up with a linked nextChunk (which is the lastForward Chunk) but no nextToken
+                it.nextToken != null
+            }
         }
         return offset
     }
@@ -480,6 +490,35 @@ internal class TimelineChunk(
     private fun handleDatabaseChangeSet(results: RealmResults<TimelineEventEntity>, changeSet: OrderedCollectionChangeSet) {
         val insertions = changeSet.insertionRanges
         for (range in insertions) {
+            // Check if the insertion's displayIndices match our expectations - or skip this insertion.
+            // Inconsistencies (missing messages) can happen otherwise if we get insertions before having loaded all timeline events of the chunk.
+            if (builtEvents.isNotEmpty()) {
+                // Check consistency to item before insertions
+                if (range.startIndex > 0) {
+                    val firstInsertion = results[range.startIndex]!!
+                    val lastBeforeInsertion = builtEvents[range.startIndex - 1]
+                    if (firstInsertion.displayIndex + 1 != lastBeforeInsertion.displayIndex) {
+                        Timber.i(
+                                "handleDatabaseChangeSet: skip insertion at ${range.startIndex}/${builtEvents.size}, " +
+                                        "displayIndex mismatch at ${range.startIndex}: ${firstInsertion.displayIndex} -> ${lastBeforeInsertion.displayIndex}"
+                        )
+                        continue
+                    }
+                }
+                // Check consistency to item after insertions
+                if (range.startIndex < builtEvents.size) {
+                    val lastInsertion = results[range.startIndex + range.length - 1]!!
+                    val firstAfterInsertion = builtEvents[range.startIndex]
+                    if (firstAfterInsertion.displayIndex + 1 != lastInsertion.displayIndex) {
+                        Timber.i(
+                                "handleDatabaseChangeSet: skip insertion at ${range.startIndex}/${builtEvents.size}, " +
+                                        "displayIndex mismatch at ${range.startIndex + range.length}: " +
+                                        "${firstAfterInsertion.displayIndex} -> ${lastInsertion.displayIndex}"
+                        )
+                        continue
+                    }
+                }
+            }
             val newItems = results
                     .subList(range.startIndex, range.startIndex + range.length)
                     .map { it.buildAndDecryptIfNeeded() }
@@ -497,8 +536,12 @@ internal class TimelineChunk(
         for (range in modifications) {
             for (modificationIndex in (range.startIndex until range.startIndex + range.length)) {
                 val updatedEntity = results[modificationIndex] ?: continue
+                val displayIndex = builtEventsIndexes[updatedEntity.eventId]
+                if (displayIndex == null) {
+                    continue
+                }
                 try {
-                    builtEvents[modificationIndex] = updatedEntity.buildAndDecryptIfNeeded()
+                    builtEvents[displayIndex] = updatedEntity.buildAndDecryptIfNeeded()
                 } catch (failure: Throwable) {
                     Timber.v("Fail to update items at index: $modificationIndex")
                 }

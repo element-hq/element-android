@@ -92,15 +92,16 @@ class SearchFragment @Inject constructor(
                 is Loading -> {
                     views.stateView.state = StateView.State.Loading
                 }
-                is Fail    -> {
+                is Fail -> {
                     views.stateView.state = StateView.State.Error(errorFormatter.toHumanReadable(state.asyncSearchRequest.error))
                 }
                 is Success -> {
                     views.stateView.state = StateView.State.Empty(
                             title = getString(R.string.search_no_results),
-                            image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_search_no_results))
+                            image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_search_no_results)
+                    )
                 }
-                else       -> Unit
+                else -> Unit
             }
         } else {
             controller.setData(state)
@@ -120,20 +121,32 @@ class SearchFragment @Inject constructor(
     override fun onItemClicked(event: Event) =
             navigateToEvent(event)
 
+    override fun onThreadSummaryClicked(event: Event) {
+        navigateToEvent(event, true)
+    }
+
     /**
      * Navigate and highlight the event. If this is a thread event,
      * user will be redirected to the appropriate thread room
      * @param event the event to navigate and highlight
+     * @param forceNavigateToThread force navigate within the thread (ex. when user clicks on thread summary)
      */
-    private fun navigateToEvent(event: Event) {
+    private fun navigateToEvent(event: Event, forceNavigateToThread: Boolean = false) {
         val roomId = event.roomId ?: return
-        event.getRootThreadEventId()?.let {
+        val rootThreadEventId = if (forceNavigateToThread) {
+            event.eventId
+        } else {
+            event.getRootThreadEventId()
+        }
+
+        rootThreadEventId?.let {
             val threadTimelineArgs = ThreadTimelineArgs(
                     roomId = roomId,
                     displayName = fragmentArgs.roomDisplayName,
                     avatarUrl = fragmentArgs.roomAvatarUrl,
                     roomEncryptionTrustLevel = null,
-                    rootThreadEventId = it)
+                    rootThreadEventId = it
+            )
             navigator.openThread(requireContext(), threadTimelineArgs, event.eventId)
         } ?: openRoom(roomId, event.eventId)
     }

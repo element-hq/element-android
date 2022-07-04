@@ -17,11 +17,11 @@
 package im.vector.app.core.platform
 
 /**
- * Interface for View Events
+ * Interface for View Events.
  */
 interface VectorViewEvents
 
 /**
- * To use when no view events is associated to the ViewModel
+ * To use when no view events is associated to the ViewModel.
  */
 object EmptyViewEvents : VectorViewEvents

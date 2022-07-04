@@ -174,9 +174,11 @@ class NotificationUtils @Inject constructor(
          * Default notification importance: shows everywhere, makes noise, but does not visually
          * intrude.
          */
-        notificationManager.createNotificationChannel(NotificationChannel(NOISY_NOTIFICATION_CHANNEL_ID,
+        notificationManager.createNotificationChannel(NotificationChannel(
+                NOISY_NOTIFICATION_CHANNEL_ID,
                 stringProvider.getString(R.string.notification_noisy_notifications).ifEmpty { "Noisy notifications" },
-                NotificationManager.IMPORTANCE_DEFAULT)
+                NotificationManager.IMPORTANCE_DEFAULT
+        )
                 .apply {
                     description = stringProvider.getString(R.string.notification_noisy_notifications)
                     enableVibration(true)
@@ -187,9 +189,11 @@ class NotificationUtils @Inject constructor(
         /**
          * Low notification importance: shows everywhere, but is not intrusive.
          */
-        notificationManager.createNotificationChannel(NotificationChannel(SILENT_NOTIFICATION_CHANNEL_ID,
+        notificationManager.createNotificationChannel(NotificationChannel(
+                SILENT_NOTIFICATION_CHANNEL_ID,
                 stringProvider.getString(R.string.notification_silent_notifications).ifEmpty { "Silent notifications" },
-                NotificationManager.IMPORTANCE_LOW)
+                NotificationManager.IMPORTANCE_LOW
+        )
                 .apply {
                     description = stringProvider.getString(R.string.notification_silent_notifications)
                     setSound(null, null)
@@ -197,18 +201,22 @@ class NotificationUtils @Inject constructor(
                     lightColor = accentColor
                 })
 
-        notificationManager.createNotificationChannel(NotificationChannel(LISTENING_FOR_EVENTS_NOTIFICATION_CHANNEL_ID,
+        notificationManager.createNotificationChannel(NotificationChannel(
+                LISTENING_FOR_EVENTS_NOTIFICATION_CHANNEL_ID,
                 stringProvider.getString(R.string.notification_listening_for_events).ifEmpty { "Listening for events" },
-                NotificationManager.IMPORTANCE_MIN)
+                NotificationManager.IMPORTANCE_MIN
+        )
                 .apply {
                     description = stringProvider.getString(R.string.notification_listening_for_events)
                     setSound(null, null)
                     setShowBadge(false)
                 })
 
-        notificationManager.createNotificationChannel(NotificationChannel(CALL_NOTIFICATION_CHANNEL_ID,
+        notificationManager.createNotificationChannel(NotificationChannel(
+                CALL_NOTIFICATION_CHANNEL_ID,
                 stringProvider.getString(R.string.call).ifEmpty { "Call" },
-                NotificationManager.IMPORTANCE_HIGH)
+                NotificationManager.IMPORTANCE_HIGH
+        )
                 .apply {
                     description = stringProvider.getString(R.string.call)
                     setSound(null, null)
@@ -222,9 +230,10 @@ class NotificationUtils @Inject constructor(
     }
 
     /**
-     * Build a polling thread listener notification
+     * Build a polling thread listener notification.
      *
      * @param subTitleResId subtitle string resource Id of the notification
+     * @param withProgress true to show indeterminate progress on the notification
      * @return the polling thread listener notification
      */
     @SuppressLint("NewApi")
@@ -266,11 +275,13 @@ class NotificationUtils @Inject constructor(
             // reflection at runtime, to avoid compiler error: "Cannot resolve method.."
             try {
                 val deprecatedMethod = notification.javaClass
-                        .getMethod("setLatestEventInfo",
+                        .getMethod(
+                                "setLatestEventInfo",
                                 Context::class.java,
                                 CharSequence::class.java,
                                 CharSequence::class.java,
-                                PendingIntent::class.java)
+                                PendingIntent::class.java
+                        )
                 deprecatedMethod.invoke(notification, context, stringProvider.getString(R.string.app_name), stringProvider.getString(subTitleResId), pi)
             } catch (ex: Exception) {
                 Timber.e(ex, "## buildNotification(): Exception - setLatestEventInfo() Msg=")
@@ -288,17 +299,17 @@ class NotificationUtils @Inject constructor(
      * Build an incoming call notification.
      * This notification starts the VectorHomeActivity which is in charge of centralizing the incoming call flow.
      *
-     * @param isVideo  true if this is a video call, false for voice call
-     * @param roomName the room name in which the call is pending.
-     * @param matrixId the matrix id
-     * @param callId   the call id.
+     * @param call information about the call
+     * @param title title of the notification
      * @param fromBg true if the app is in background when posting the notification
      * @return the call notification.
      */
     @SuppressLint("NewApi")
-    fun buildIncomingCallNotification(call: WebRtcCall,
-                                      title: String,
-                                      fromBg: Boolean): Notification {
+    fun buildIncomingCallNotification(
+            call: WebRtcCall,
+            title: String,
+            fromBg: Boolean
+    ): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         val notificationChannel = if (fromBg) CALL_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
         val builder = NotificationCompat.Builder(context, notificationChannel)
@@ -369,8 +380,10 @@ class NotificationUtils @Inject constructor(
         return builder.build()
     }
 
-    fun buildOutgoingRingingCallNotification(call: WebRtcCall,
-                                             title: String): Notification {
+    fun buildOutgoingRingingCallNotification(
+            call: WebRtcCall,
+            title: String
+    ): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         val builder = NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(ensureTitleNotEmpty(title))
@@ -390,7 +403,8 @@ class NotificationUtils @Inject constructor(
         val contentIntent = VectorCallActivity.newIntent(
                 context = context,
                 call = call,
-                mode = null).apply {
+                mode = null
+        ).apply {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
             data = createIgnoredUri(call.callId)
         }
@@ -417,18 +431,17 @@ class NotificationUtils @Inject constructor(
     }
 
     /**
-     * Build a pending call notification
+     * Build a pending call notification.
      *
-     * @param isVideo  true if this is a video call, false for voice call
-     * @param roomName the room name in which the call is pending.
-     * @param roomId   the room Id
-     * @param matrixId the matrix id
-     * @param callId   the call id.
+     * @param call information about the call
+     * @param title title of the notification
      * @return the call notification.
      */
     @SuppressLint("NewApi")
-    fun buildPendingCallNotification(call: WebRtcCall,
-                                     title: String): Notification {
+    fun buildPendingCallNotification(
+            call: WebRtcCall,
+            title: String
+    ): Notification {
         val builder = NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(ensureTitleNotEmpty(title))
                 .apply {
@@ -478,7 +491,7 @@ class NotificationUtils @Inject constructor(
     }
 
     /**
-     * Build a temporary (because service will be stopped just after) notification for the CallService, when a call is ended
+     * Build a temporary (because service will be stopped just after) notification for the CallService, when a call is ended.
      */
     fun buildCallEndedNotification(isVideoCall: Boolean): Notification {
         return NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
@@ -497,7 +510,7 @@ class NotificationUtils @Inject constructor(
     }
 
     /**
-     * Build notification for the CallService, when a call is missed
+     * Build notification for the CallService, when a call is missed.
      */
     fun buildCallMissedNotification(callInformation: CallService.CallInformation): Notification {
         val builder = NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
@@ -577,14 +590,16 @@ class NotificationUtils @Inject constructor(
     }
 
     /**
-     * Build a notification for a Room
+     * Build a notification for a Room.
      */
-    fun buildMessagesListNotification(messageStyle: NotificationCompat.MessagingStyle,
-                                      roomInfo: RoomEventGroupInfo,
-                                      largeIcon: Bitmap?,
-                                      lastMessageTimestamp: Long,
-                                      senderDisplayNameForReplyCompat: String?,
-                                      tickerText: String): Notification {
+    fun buildMessagesListNotification(
+            messageStyle: NotificationCompat.MessagingStyle,
+            roomInfo: RoomEventGroupInfo,
+            largeIcon: Bitmap?,
+            lastMessageTimestamp: Long,
+            senderDisplayNameForReplyCompat: String?,
+            tickerText: String
+    ): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         // Build the pending intent for when the notification is clicked
         val openRoomIntent = buildOpenRoomIntent(roomInfo.roomId)
@@ -592,7 +607,7 @@ class NotificationUtils @Inject constructor(
 
         val channelID = if (roomInfo.shouldBing) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
         return NotificationCompat.Builder(context, channelID)
-                .setOnlyAlertOnce(true)
+                .setOnlyAlertOnce(roomInfo.isUpdated)
                 .setWhen(lastMessageTimestamp)
                 // MESSAGING_STYLE sets title and content for API 16 and above devices.
                 .setStyle(messageStyle)
@@ -645,8 +660,10 @@ class NotificationUtils @Inject constructor(
                             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
                     )
 
-                    NotificationCompat.Action.Builder(R.drawable.ic_material_done_all_white,
-                            stringProvider.getString(R.string.action_mark_room_read), markRoomReadPendingIntent)
+                    NotificationCompat.Action.Builder(
+                            R.drawable.ic_material_done_all_white,
+                            stringProvider.getString(R.string.action_mark_room_read), markRoomReadPendingIntent
+                    )
                             .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_MARK_AS_READ)
                             .setShowsUserInterface(false)
                             .build()
@@ -658,8 +675,10 @@ class NotificationUtils @Inject constructor(
                             val remoteInput = RemoteInput.Builder(NotificationBroadcastReceiver.KEY_TEXT_REPLY)
                                     .setLabel(stringProvider.getString(R.string.action_quick_reply))
                                     .build()
-                            NotificationCompat.Action.Builder(R.drawable.vector_notification_quick_reply,
-                                    stringProvider.getString(R.string.action_quick_reply), replyPendingIntent)
+                            NotificationCompat.Action.Builder(
+                                    R.drawable.vector_notification_quick_reply,
+                                    stringProvider.getString(R.string.action_quick_reply), replyPendingIntent
+                            )
                                     .addRemoteInput(remoteInput)
                                     .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_REPLY)
                                     .setShowsUserInterface(false)
@@ -691,8 +710,10 @@ class NotificationUtils @Inject constructor(
                 .build()
     }
 
-    fun buildRoomInvitationNotification(inviteNotifiableEvent: InviteNotifiableEvent,
-                                        matrixId: String): Notification {
+    fun buildRoomInvitationNotification(
+            inviteNotifiableEvent: InviteNotifiableEvent,
+            matrixId: String
+    ): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         // Build the pending intent for when the notification is clicked
         val smallIcon = R.drawable.ic_status_bar
@@ -765,8 +786,10 @@ class NotificationUtils @Inject constructor(
                 .build()
     }
 
-    fun buildSimpleEventNotification(simpleNotifiableEvent: SimpleNotifiableEvent,
-                                     matrixId: String): Notification {
+    fun buildSimpleEventNotification(
+            simpleNotifiableEvent: SimpleNotifiableEvent,
+            matrixId: String
+    ): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         // Build the pending intent for when the notification is clicked
         val smallIcon = R.drawable.ic_status_bar
@@ -874,12 +897,14 @@ class NotificationUtils @Inject constructor(
 
     // // Number of new notifications for API <24 (M and below) devices.
     /**
-     * Build the summary notification
+     * Build the summary notification.
      */
-    fun buildSummaryListNotification(style: NotificationCompat.InboxStyle?,
-                                     compatSummary: String,
-                                     noisy: Boolean,
-                                     lastMessageTimestamp: Long): Notification {
+    fun buildSummaryListNotification(
+            style: NotificationCompat.InboxStyle?,
+            compatSummary: String,
+            noisy: Boolean,
+            lastMessageTimestamp: Long
+    ): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         val smallIcon = R.drawable.ic_status_bar
 
@@ -936,14 +961,14 @@ class NotificationUtils @Inject constructor(
     }
 
     /**
-     * Cancel the foreground notification service
+     * Cancel the foreground notification service.
      */
     fun cancelNotificationForegroundService() {
         notificationManager.cancel(NOTIFICATION_ID_FOREGROUND_SERVICE)
     }
 
     /**
-     * Cancel all the notification
+     * Cancel all the notification.
      */
     fun cancelAllNotifications() {
         // Keep this try catch (reported by GA)
@@ -992,7 +1017,7 @@ class NotificationUtils @Inject constructor(
     }
 
     /**
-     * Return true it the user has enabled the do not disturb mode
+     * Return true it the user has enabled the do not disturb mode.
      */
     fun isDoNotDisturbModeOn(): Boolean {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {

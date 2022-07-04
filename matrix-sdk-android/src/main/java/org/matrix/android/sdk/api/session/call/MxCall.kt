@@ -35,7 +35,7 @@ interface MxCallDetail {
 }
 
 /**
- * Define both an incoming call and on outgoing call
+ * Define both an incoming call and on outgoing call.
  */
 interface MxCall : MxCallDetail {
 
@@ -46,13 +46,13 @@ interface MxCall : MxCallDetail {
     var state: CallState
 
     /**
-     * Pick Up the incoming call
-     * It has no effect on outgoing call
+     * Pick Up the incoming call.
+     * It has no effect on outgoing call.
      */
     fun accept(sdpString: String)
 
     /**
-     * SDP negotiation for media pause, hold/resume, ICE restarts and voice/video call up/downgrading
+     * SDP negotiation for media pause, hold/resume, ICE restarts and voice/video call up/downgrading.
      */
     fun negotiate(sdpString: String, type: SdpType)
 
@@ -62,17 +62,17 @@ interface MxCall : MxCallDetail {
     fun selectAnswer()
 
     /**
-     * Reject an incoming call
+     * Reject an incoming call.
      */
     fun reject()
 
     /**
-     * End the call
+     * End the call.
      */
     fun hangUp(reason: EndCallReason? = null)
 
     /**
-     * Start a call
+     * Start a call.
      * Send offer SDP to the other participant.
      */
     fun offerSdp(sdpString: String)
@@ -91,10 +91,12 @@ interface MxCall : MxCallDetail {
      * Send a m.call.replaces event to initiate call transfer.
      * See [org.matrix.android.sdk.api.session.room.model.call.CallReplacesContent] for documentation about the parameters
      */
-    suspend fun transfer(targetUserId: String,
-                         targetRoomId: String?,
-                         createCallId: String?,
-                         awaitCallId: String?)
+    suspend fun transfer(
+            targetUserId: String,
+            targetRoomId: String?,
+            createCallId: String?,
+            awaitCallId: String?
+    )
 
     fun addListener(listener: StateListener)
     fun removeListener(listener: StateListener)

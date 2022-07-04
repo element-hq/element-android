@@ -100,8 +100,8 @@ class RoomSettingsFragment @Inject constructor(
         viewModel.observeViewEvents {
             when (it) {
                 is RoomSettingsViewEvents.Failure -> showFailure(it.throwable)
-                RoomSettingsViewEvents.Success    -> showSuccess()
-                RoomSettingsViewEvents.GoBack     -> {
+                RoomSettingsViewEvents.Success -> showSuccess()
+                RoomSettingsViewEvents.GoBack -> {
                     ignoreChanges = true
                     vectorBaseActivity.onBackPressed()
                 }
@@ -209,10 +209,10 @@ class RoomSettingsFragment @Inject constructor(
     override fun onAvatarDelete() {
         withState(viewModel) {
             when (it.avatarAction) {
-                RoomSettingsViewState.AvatarAction.None            -> {
+                RoomSettingsViewState.AvatarAction.None -> {
                     viewModel.handle(RoomSettingsAction.SetAvatarAction(RoomSettingsViewState.AvatarAction.DeleteAvatar))
                 }
-                RoomSettingsViewState.AvatarAction.DeleteAvatar    -> {
+                RoomSettingsViewState.AvatarAction.DeleteAvatar -> {
                     /* Should not happen */
                 }
                 is RoomSettingsViewState.AvatarAction.UpdateAvatar -> {

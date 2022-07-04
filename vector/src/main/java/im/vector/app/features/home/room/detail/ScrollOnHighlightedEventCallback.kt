@@ -25,9 +25,11 @@ import java.util.concurrent.atomic.AtomicReference
 /**
  * This handles scrolling to an event which wasn't yet loaded when scheduled.
  */
-class ScrollOnHighlightedEventCallback(private val recyclerView: RecyclerView,
-                                       private val layoutManager: LinearLayoutManager,
-                                       private val timelineEventController: TimelineEventController) : DefaultListUpdateCallback {
+class ScrollOnHighlightedEventCallback(
+        private val recyclerView: RecyclerView,
+        private val layoutManager: LinearLayoutManager,
+        private val timelineEventController: TimelineEventController
+) : DefaultListUpdateCallback {
 
     private val scheduledEventId = AtomicReference<String?>()
 

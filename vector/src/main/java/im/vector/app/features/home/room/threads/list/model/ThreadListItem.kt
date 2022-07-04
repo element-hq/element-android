@@ -37,8 +37,8 @@ import im.vector.app.features.themes.ThemeUtils
 import org.matrix.android.sdk.api.session.threads.ThreadNotificationState
 import org.matrix.android.sdk.api.util.MatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_thread)
-abstract class ThreadListItem : VectorEpoxyModel<ThreadListItem.Holder>() {
+@EpoxyModelClass
+abstract class ThreadListItem : VectorEpoxyModel<ThreadListItem.Holder>(R.layout.item_thread) {
 
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
@@ -81,7 +81,7 @@ abstract class ThreadListItem : VectorEpoxyModel<ThreadListItem.Holder>() {
 
     private fun renderNotificationState(holder: Holder) {
         when (threadNotificationState) {
-            ThreadNotificationState.NEW_MESSAGE             -> {
+            ThreadNotificationState.NEW_MESSAGE -> {
                 holder.unreadImageView.isVisible = true
                 holder.unreadImageView.setColorFilter(ContextCompat.getColor(holder.view.context, R.color.palette_gray_200))
             }
@@ -89,7 +89,7 @@ abstract class ThreadListItem : VectorEpoxyModel<ThreadListItem.Holder>() {
                 holder.unreadImageView.isVisible = true
                 holder.unreadImageView.setColorFilter(ContextCompat.getColor(holder.view.context, R.color.palette_vermilion))
             }
-            else                                            -> {
+            else -> {
                 holder.unreadImageView.isVisible = false
             }
         }

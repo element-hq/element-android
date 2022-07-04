@@ -48,7 +48,7 @@ import javax.inject.Inject
 
 /**
  * What can be improved:
- * - When filtering more (when entering new chars), we could filter on result we already have, during the new server request, to avoid empty screen effect
+ * - When filtering more (when entering new chars), we could filter on result we already have, during the new server request, to avoid empty screen effect.
  */
 class PublicRoomsFragment @Inject constructor(
         private val publicRoomsController: PublicRoomsController,
@@ -111,7 +111,7 @@ class PublicRoomsFragment @Inject constructor(
                 sharedActionViewModel.post(RoomDirectorySharedAction.ChangeProtocol)
                 true
             }
-            else                                     ->
+            else ->
                 super.onOptionsItemSelected(item)
         }
     }
@@ -150,7 +150,7 @@ class PublicRoomsFragment @Inject constructor(
                             trigger = ViewRoom.Trigger.RoomDirectory
                     )
                 }
-                else             -> {
+                else -> {
                     // ROOM PREVIEW
                     navigator.openRoomPreview(requireActivity(), publicRoom, state.roomDirectoryData)
                 }

@@ -21,8 +21,8 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 
-@EpoxyModelClass(layout = R.layout.item_no_result)
-abstract class NoResultItem : VectorEpoxyModel<NoResultItem.Holder>() {
+@EpoxyModelClass
+abstract class NoResultItem : VectorEpoxyModel<NoResultItem.Holder>(R.layout.item_no_result) {
 
     @EpoxyAttribute
     var text: String? = null

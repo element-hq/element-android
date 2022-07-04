@@ -21,7 +21,7 @@ import android.widget.TextView
 import im.vector.app.core.utils.DebouncedClickListener
 
 /**
- * View.OnClickListener lambda
+ * View.OnClickListener lambda.
  */
 typealias ClickListener = (View) -> Unit
 
@@ -46,7 +46,7 @@ fun TextView.onLongClickIgnoringLinks(listener: View.OnLongClickListener?) {
             }
 
             /**
-             * Infer that a Clickable span has been click by the presence of a selection
+             * Infer that a Clickable span has been click by the presence of a selection.
              */
             private fun hasLongPressedLink() = selectionStart != -1 || selectionEnd != -1
         })
@@ -54,6 +54,6 @@ fun TextView.onLongClickIgnoringLinks(listener: View.OnLongClickListener?) {
 }
 
 /**
- * Simple Text listener lambda
+ * Simple Text listener lambda.
  */
 typealias TextListener = (String) -> Unit

@@ -18,26 +18,28 @@ package im.vector.app.features.notifications
 
 class NotificationState(
         /**
-         * The notifiable events queued for rendering or currently rendered
+         * The notifiable events queued for rendering or currently rendered.
          *
-         * this is our source of truth for notifications, any changes to this list will be rendered as notifications
-         * when events are removed the previously rendered notifications will be cancelled
-         * when adding or updating, the notifications will be notified
+         * This is our source of truth for notifications, any changes to this list will be rendered as notifications.
+         * When events are removed the previously rendered notifications will be cancelled.
+         * When adding or updating, the notifications will be notified.
          *
-         * Events are unique by their properties, we should be careful not to insert multiple events with the same event-id
+         * Events are unique by their properties, we should be careful not to insert multiple events with the same event-id.
          */
         private val queuedEvents: NotificationEventQueue,
 
         /**
-         * The last known rendered notifiable events
-         * we keep track of them in order to know which events have been removed from the eventList
+         * The last known rendered notifiable events.
+         * We keep track of them in order to know which events have been removed from the eventList
          * allowing us to cancel any notifications previous displayed by now removed events
          */
         private val renderedEvents: MutableList<ProcessedEvent<NotifiableEvent>>,
 ) {
 
-    fun <T> updateQueuedEvents(drawerManager: NotificationDrawerManager,
-                               action: NotificationDrawerManager.(NotificationEventQueue, List<ProcessedEvent<NotifiableEvent>>) -> T): T {
+    fun <T> updateQueuedEvents(
+            drawerManager: NotificationDrawerManager,
+            action: NotificationDrawerManager.(NotificationEventQueue, List<ProcessedEvent<NotifiableEvent>>) -> T
+    ): T {
         return synchronized(queuedEvents) {
             action(drawerManager, queuedEvents, renderedEvents)
         }

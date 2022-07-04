@@ -29,8 +29,8 @@ import im.vector.app.core.epoxy.onClick
 /**
  * A generic button list item.
  */
-@EpoxyModelClass(layout = R.layout.item_positive_button)
-abstract class GenericPositiveButtonItem : VectorEpoxyModel<GenericPositiveButtonItem.Holder>() {
+@EpoxyModelClass
+abstract class GenericPositiveButtonItem : VectorEpoxyModel<GenericPositiveButtonItem.Holder>(R.layout.item_positive_button) {
 
     @EpoxyAttribute
     var text: String? = null

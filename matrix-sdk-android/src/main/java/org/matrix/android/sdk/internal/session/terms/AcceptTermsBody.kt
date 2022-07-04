@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * This class represent a list of urls of terms the user wants to accept
+ * This class represent a list of urls of terms the user wants to accept.
  */
 @JsonClass(generateAdapter = true)
 internal data class AcceptTermsBody(

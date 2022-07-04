@@ -40,7 +40,7 @@ import javax.inject.Singleton
  */
 @Singleton
 class NotificationDrawerManager @Inject constructor(
-        private val context: Context,
+        context: Context,
         private val notificationDisplayer: NotificationDisplayer,
         private val vectorPreferences: VectorPreferences,
         private val activeSessionDataSource: ActiveSessionDataSource,
@@ -57,7 +57,7 @@ class NotificationDrawerManager @Inject constructor(
         get() = activeSessionDataSource.currentValue?.orNull()
 
     /**
-     * Lazily initializes the NotificationState as we rely on having a current session in order to fetch the persisted queue of events
+     * Lazily initializes the NotificationState as we rely on having a current session in order to fetch the persisted queue of events.
      */
     private val notificationState by lazy { createInitialNotificationState() }
     private val avatarSize = context.resources.getDimensionPixelSize(R.dimen.profile_avatar_size)
@@ -72,7 +72,7 @@ class NotificationDrawerManager @Inject constructor(
     }
 
     private fun createInitialNotificationState(): NotificationState {
-        val queuedEvents = notificationEventPersistence.loadEvents(currentSession, factory = { rawEvents ->
+        val queuedEvents = notificationEventPersistence.loadEvents(factory = { rawEvents ->
             NotificationEventQueue(rawEvents.toMutableList(), seenEventIds = CircularCache.create(cacheSize = 25))
         })
         val renderedEvents = queuedEvents.rawEvents().map { ProcessedEvent(ProcessedEvent.Type.KEEP, it) }.toMutableList()
@@ -102,7 +102,7 @@ class NotificationDrawerManager @Inject constructor(
     }
 
     /**
-     * Clear all known events and refresh the notification drawer
+     * Clear all known events and refresh the notification drawer.
      */
     fun clearAllEvents() {
         updateEvents { it.clear() }
@@ -155,7 +155,8 @@ class NotificationDrawerManager @Inject constructor(
                         Timber.w(throwable, "refreshNotificationDrawerBg failure")
                     }
                 },
-                canHandle.waitMillis())
+                canHandle.waitMillis()
+        )
     }
 
     @WorkerThread
@@ -173,13 +174,13 @@ class NotificationDrawerManager @Inject constructor(
             notificationState.clearAndAddRenderedEvents(eventsToRender)
             val session = currentSession ?: return
             renderEvents(session, eventsToRender)
-            persistEvents(session)
+            persistEvents()
         }
     }
 
-    private fun persistEvents(session: Session) {
+    private fun persistEvents() {
         notificationState.queuedEvents { queuedEvents ->
-            notificationEventPersistence.persistEvents(queuedEvents, session)
+            notificationEventPersistence.persistEvents(queuedEvents)
         }
     }
 

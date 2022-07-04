@@ -24,7 +24,7 @@ fun roomMemberQueryParams(init: (RoomMemberQueryParams.Builder.() -> Unit) = {})
 }
 
 /**
- * This class can be used to filter room members
+ * This class can be used to filter room members.
  */
 data class RoomMemberQueryParams(
         val displayName: QueryStringValue,

@@ -28,8 +28,8 @@ import im.vector.app.databinding.ViewKeysBackupBannerBinding
 import timber.log.Timber
 
 /**
- * The view used in VectorHomeActivity to show some information about the keys backup state
- * It does have a unique render method
+ * The view used in VectorHomeActivity to show some information about the keys backup state.
+ * It does have a unique render method.
  */
 class KeysBackupBanner @JvmOverloads constructor(
         context: Context,
@@ -51,9 +51,10 @@ class KeysBackupBanner @JvmOverloads constructor(
     }
 
     /**
-     * This methods is responsible for rendering the view according to the newState
+     * This methods is responsible for rendering the view according to the newState.
      *
      * @param newState the newState representing the view
+     * @param force true to force the rendering of the view
      */
     fun render(newState: State, force: Boolean = false) {
         if (newState == state && !force) {
@@ -66,28 +67,28 @@ class KeysBackupBanner @JvmOverloads constructor(
 
         hideAll()
         when (newState) {
-            State.Initial    -> renderInitial()
-            State.Hidden     -> renderHidden()
-            is State.Setup   -> renderSetup(newState.numberOfKeys)
+            State.Initial -> renderInitial()
+            State.Hidden -> renderHidden()
+            is State.Setup -> renderSetup(newState.numberOfKeys)
             is State.Recover -> renderRecover(newState.version)
-            is State.Update  -> renderUpdate(newState.version)
-            State.BackingUp  -> renderBackingUp()
+            is State.Update -> renderUpdate(newState.version)
+            State.BackingUp -> renderBackingUp()
         }
     }
 
     override fun onClick(v: View?) {
         when (state) {
-            is State.Setup   -> delegate?.setupKeysBackup()
+            is State.Setup -> delegate?.setupKeysBackup()
             is State.Update,
             is State.Recover -> delegate?.recoverKeysBackup()
-            else             -> Unit
+            else -> Unit
         }
     }
 
     private fun onCloseClicked() {
         state.let {
             when (it) {
-                is State.Setup   -> {
+                is State.Setup -> {
                     DefaultSharedPreferences.getInstance(context).edit {
                         putBoolean(BANNER_SETUP_DO_NOT_SHOW_AGAIN, true)
                     }
@@ -97,12 +98,12 @@ class KeysBackupBanner @JvmOverloads constructor(
                         putString(BANNER_RECOVER_DO_NOT_SHOW_FOR_VERSION, it.version)
                     }
                 }
-                is State.Update  -> {
+                is State.Update -> {
                     DefaultSharedPreferences.getInstance(context).edit {
                         putString(BANNER_UPDATE_DO_NOT_SHOW_FOR_VERSION, it.version)
                     }
                 }
-                else             -> {
+                else -> {
                     // Should not happen, close button is not displayed in other cases
                 }
             }
@@ -182,7 +183,7 @@ class KeysBackupBanner @JvmOverloads constructor(
     }
 
     /**
-     * Hide all views that are not visible in all state
+     * Hide all views that are not visible in all state.
      */
     private fun hideAll() {
         views.viewKeysBackupBannerText2.isVisible = false
@@ -191,8 +192,8 @@ class KeysBackupBanner @JvmOverloads constructor(
     }
 
     /**
-     * The state representing the view
-     * It can take one state at a time
+     * The state representing the view.
+     * It can take one state at a time.
      */
     sealed class State {
         // Not yet rendered
@@ -215,7 +216,7 @@ class KeysBackupBanner @JvmOverloads constructor(
     }
 
     /**
-     * An interface to delegate some actions to another object
+     * An interface to delegate some actions to another object.
      */
     interface Delegate {
         fun setupKeysBackup()
@@ -239,7 +240,7 @@ class KeysBackupBanner @JvmOverloads constructor(
         private const val BANNER_UPDATE_DO_NOT_SHOW_FOR_VERSION = "BANNER_UPDATE_DO_NOT_SHOW_FOR_VERSION"
 
         /**
-         * Inform the banner that a Recover has been done for this version, so do not show the Recover banner for this version
+         * Inform the banner that a Recover has been done for this version, so do not show the Recover banner for this version.
          */
         fun onRecoverDoneForVersion(context: Context, version: String) {
             DefaultSharedPreferences.getInstance(context).edit {

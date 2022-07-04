@@ -86,7 +86,7 @@ class DecryptionFailureTracker @Inject constructor(
 
     /**
      * Can be called when the timeline is disposed in order
-     * to grace those events as they are not anymore displayed on screen
+     * to grace those events as they are not anymore displayed on screen.
      * */
     fun onTimeLineDisposed(roomId: String) {
         scope.launch(Dispatchers.Default) {
@@ -147,10 +147,10 @@ class DecryptionFailureTracker @Inject constructor(
         val detailed = "$name | mxc_crypto_error_type"
         val errorName = when (this) {
             MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID,
-            MXCryptoError.ErrorType.KEYS_WITHHELD         -> Error.Name.OlmKeysNotSentError
-            MXCryptoError.ErrorType.OLM                   -> Error.Name.OlmUnspecifiedError
+            MXCryptoError.ErrorType.KEYS_WITHHELD -> Error.Name.OlmKeysNotSentError
+            MXCryptoError.ErrorType.OLM -> Error.Name.OlmUnspecifiedError
             MXCryptoError.ErrorType.UNKNOWN_MESSAGE_INDEX -> Error.Name.OlmIndexError
-            else                                          -> Error.Name.UnknownError
+            else -> Error.Name.UnknownError
         }
         return DetailedErrorName(detailed, errorName)
     }

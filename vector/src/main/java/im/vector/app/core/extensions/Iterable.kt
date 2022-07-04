@@ -36,7 +36,7 @@ inline fun <T, R : Comparable<R>> Iterable<T>.lastMinBy(selector: (T) -> R): T? 
 }
 
 /**
- * Call each for each item, and between between each items
+ * Call each for each item, and between between each items.
  */
 inline fun <T> Collection<T>.join(each: (Int, T) -> Unit, between: (Int, T) -> Unit) {
     val lastIndex = size - 1

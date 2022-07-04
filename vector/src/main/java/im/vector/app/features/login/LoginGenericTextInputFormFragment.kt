@@ -57,7 +57,7 @@ data class LoginGenericTextInputFormFragmentArgument(
 ) : Parcelable
 
 /**
- * In this screen, the user is asked for a text input
+ * In this screen, the user is asked for a text input.
  */
 class LoginGenericTextInputFormFragment @Inject constructor() : AbstractLoginFragment<FragmentLoginGenericTextInputFormBinding>() {
 
@@ -86,8 +86,8 @@ class LoginGenericTextInputFormFragment @Inject constructor() : AbstractLoginFra
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             views.loginGenericTextInputFormTextInput.setAutofillHints(
                     when (params.mode) {
-                        TextInputFormFragmentMode.SetEmail      -> HintConstants.AUTOFILL_HINT_EMAIL_ADDRESS
-                        TextInputFormFragmentMode.SetMsisdn     -> HintConstants.AUTOFILL_HINT_PHONE_NUMBER
+                        TextInputFormFragmentMode.SetEmail -> HintConstants.AUTOFILL_HINT_EMAIL_ADDRESS
+                        TextInputFormFragmentMode.SetMsisdn -> HintConstants.AUTOFILL_HINT_PHONE_NUMBER
                         TextInputFormFragmentMode.ConfirmMsisdn -> HintConstants.AUTOFILL_HINT_SMS_OTP
                     }
             )
@@ -104,7 +104,7 @@ class LoginGenericTextInputFormFragment @Inject constructor() : AbstractLoginFra
 
     private fun setupUi() {
         when (params.mode) {
-            TextInputFormFragmentMode.SetEmail      -> {
+            TextInputFormFragmentMode.SetEmail -> {
                 views.loginGenericTextInputFormTitle.text = getString(R.string.login_set_email_title)
                 views.loginGenericTextInputFormNotice.text = getString(R.string.login_set_email_notice)
                 views.loginGenericTextInputFormNotice2.setTextOrHide(null)
@@ -114,7 +114,7 @@ class LoginGenericTextInputFormFragment @Inject constructor() : AbstractLoginFra
                 views.loginGenericTextInputFormOtherButton.isVisible = false
                 views.loginGenericTextInputFormSubmit.text = getString(R.string.login_set_email_submit)
             }
-            TextInputFormFragmentMode.SetMsisdn     -> {
+            TextInputFormFragmentMode.SetMsisdn -> {
                 views.loginGenericTextInputFormTitle.text = getString(R.string.login_set_msisdn_title)
                 views.loginGenericTextInputFormNotice.text = getString(R.string.login_set_msisdn_notice)
                 views.loginGenericTextInputFormNotice2.setTextOrHide(getString(R.string.login_set_msisdn_notice2))
@@ -143,7 +143,7 @@ class LoginGenericTextInputFormFragment @Inject constructor() : AbstractLoginFra
             TextInputFormFragmentMode.ConfirmMsisdn -> {
                 loginViewModel.handle(LoginAction.SendAgainThreePid)
             }
-            else                                    -> {
+            else -> {
                 // Should not happen, button is not displayed
             }
         }
@@ -158,10 +158,10 @@ class LoginGenericTextInputFormFragment @Inject constructor() : AbstractLoginFra
             loginViewModel.handle(LoginAction.RegisterDummy)
         } else {
             when (params.mode) {
-                TextInputFormFragmentMode.SetEmail      -> {
+                TextInputFormFragmentMode.SetEmail -> {
                     loginViewModel.handle(LoginAction.AddThreePid(RegisterThreePid.Email(text)))
                 }
-                TextInputFormFragmentMode.SetMsisdn     -> {
+                TextInputFormFragmentMode.SetMsisdn -> {
                     getCountryCodeOrShowError(text)?.let { countryCode ->
                         loginViewModel.handle(LoginAction.AddThreePid(RegisterThreePid.Msisdn(text, countryCode)))
                     }
@@ -209,10 +209,10 @@ class LoginGenericTextInputFormFragment @Inject constructor() : AbstractLoginFra
             true
         } else {
             when (params.mode) {
-                TextInputFormFragmentMode.SetEmail      -> {
+                TextInputFormFragmentMode.SetEmail -> {
                     input.isEmail()
                 }
-                TextInputFormFragmentMode.SetMsisdn     -> {
+                TextInputFormFragmentMode.SetMsisdn -> {
                     input.isNotBlank()
                 }
                 TextInputFormFragmentMode.ConfirmMsisdn -> {
@@ -224,7 +224,7 @@ class LoginGenericTextInputFormFragment @Inject constructor() : AbstractLoginFra
 
     override fun onError(throwable: Throwable) {
         when (params.mode) {
-            TextInputFormFragmentMode.SetEmail      -> {
+            TextInputFormFragmentMode.SetEmail -> {
                 if (throwable.is401()) {
                     // This is normal use case, we go to the mail waiting screen
                     loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnSendEmailSuccess(loginViewModel.currentThreePid ?: "")))
@@ -232,7 +232,7 @@ class LoginGenericTextInputFormFragment @Inject constructor() : AbstractLoginFra
                     views.loginGenericTextInputFormTil.error = errorFormatter.toHumanReadable(throwable)
                 }
             }
-            TextInputFormFragmentMode.SetMsisdn     -> {
+            TextInputFormFragmentMode.SetMsisdn -> {
                 if (throwable.is401()) {
                     // This is normal use case, we go to the enter code screen
                     loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnSendMsisdnSuccess(loginViewModel.currentThreePid ?: "")))
@@ -245,10 +245,10 @@ class LoginGenericTextInputFormFragment @Inject constructor() : AbstractLoginFra
                     throwable is Failure.SuccessError ->
                         // The entered code is not correct
                         views.loginGenericTextInputFormTil.error = getString(R.string.login_validation_code_is_not_correct)
-                    throwable.is401()                 ->
+                    throwable.is401() ->
                         // It can happen if user request again the 3pid
                         Unit
-                    else                              ->
+                    else ->
                         views.loginGenericTextInputFormTil.error = errorFormatter.toHumanReadable(throwable)
                 }
             }

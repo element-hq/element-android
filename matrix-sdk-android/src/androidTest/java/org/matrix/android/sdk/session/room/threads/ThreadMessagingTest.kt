@@ -34,8 +34,7 @@ import org.matrix.android.sdk.api.session.events.model.isThread
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
-import org.matrix.android.sdk.common.CommonTestHelper
-import org.matrix.android.sdk.common.CryptoTestHelper
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import java.util.concurrent.CountDownLatch
 
 @RunWith(JUnit4::class)
@@ -44,9 +43,7 @@ import java.util.concurrent.CountDownLatch
 class ThreadMessagingTest : InstrumentedTest {
 
     @Test
-    fun reply_in_thread_should_create_a_thread() {
-        val commonTestHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
+    fun reply_in_thread_should_create_a_thread() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceInARoom(false)
 
         val aliceSession = cryptoTestData.firstSession
@@ -59,7 +56,8 @@ class ThreadMessagingTest : InstrumentedTest {
         val sentMessages = commonTestHelper.sendTextMessage(
                 room = aliceRoom,
                 message = textMessage,
-                nbOfMessages = 1)
+                nbOfMessages = 1
+        )
 
         val initMessage = sentMessages.first()
 
@@ -73,7 +71,8 @@ class ThreadMessagingTest : InstrumentedTest {
                 room = aliceRoom,
                 message = "Reply In the above thread",
                 numberOfMessages = 1,
-                rootThreadEventId = initMessage.root.eventId.orEmpty())
+                rootThreadEventId = initMessage.root.eventId.orEmpty()
+        )
 
         val replyInThread = repliesInThread.first()
         replyInThread.root.isThread().shouldBeTrue()
@@ -84,7 +83,7 @@ class ThreadMessagingTest : InstrumentedTest {
         val timeline = aliceRoom.timelineService().createTimeline(null, TimelineSettings(30))
         timeline.start()
 
-        aliceSession.startSync(true)
+        aliceSession.syncService().startSync(true)
         run {
             val lock = CountDownLatch(1)
             val eventsListener = commonTestHelper.createEventListener(lock) { snapshot ->
@@ -98,13 +97,11 @@ class ThreadMessagingTest : InstrumentedTest {
             timeline.addListener(eventsListener)
             commonTestHelper.await(lock, 600_000)
         }
-        aliceSession.stopSync()
+        aliceSession.syncService().stopSync()
     }
 
     @Test
-    fun reply_in_thread_should_create_a_thread_from_other_user() {
-        val commonTestHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
+    fun reply_in_thread_should_create_a_thread_from_other_user() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(false)
 
         val aliceSession = cryptoTestData.firstSession
@@ -116,7 +113,8 @@ class ThreadMessagingTest : InstrumentedTest {
         val sentMessages = commonTestHelper.sendTextMessage(
                 room = aliceRoom,
                 message = textMessage,
-                nbOfMessages = 1)
+                nbOfMessages = 1
+        )
 
         val initMessage = sentMessages.first()
 
@@ -134,7 +132,8 @@ class ThreadMessagingTest : InstrumentedTest {
                 room = bobRoom,
                 message = "Reply In the above thread",
                 numberOfMessages = 1,
-                rootThreadEventId = initMessage.root.eventId.orEmpty())
+                rootThreadEventId = initMessage.root.eventId.orEmpty()
+        )
 
         val replyInThread = repliesInThread.first()
         replyInThread.root.isThread().shouldBeTrue()
@@ -145,7 +144,7 @@ class ThreadMessagingTest : InstrumentedTest {
         val timeline = aliceRoom.timelineService().createTimeline(null, TimelineSettings(30))
         timeline.start()
 
-        aliceSession.startSync(true)
+        aliceSession.syncService().startSync(true)
         run {
             val lock = CountDownLatch(1)
             val eventsListener = commonTestHelper.createEventListener(lock) { snapshot ->
@@ -157,9 +156,9 @@ class ThreadMessagingTest : InstrumentedTest {
             timeline.addListener(eventsListener)
             commonTestHelper.await(lock, 600_000)
         }
-        aliceSession.stopSync()
+        aliceSession.syncService().stopSync()
 
-        bobSession.startSync(true)
+        bobSession.syncService().startSync(true)
         run {
             val lock = CountDownLatch(1)
             val eventsListener = commonTestHelper.createEventListener(lock) { snapshot ->
@@ -171,13 +170,11 @@ class ThreadMessagingTest : InstrumentedTest {
             timeline.addListener(eventsListener)
             commonTestHelper.await(lock, 600_000)
         }
-        bobSession.stopSync()
+        bobSession.syncService().stopSync()
     }
 
     @Test
-    fun reply_in_thread_to_timeline_message_multiple_times() {
-        val commonTestHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
+    fun reply_in_thread_to_timeline_message_multiple_times() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceInARoom(false)
 
         val aliceSession = cryptoTestData.firstSession
@@ -190,7 +187,8 @@ class ThreadMessagingTest : InstrumentedTest {
         val sentMessages = commonTestHelper.sendTextMessage(
                 room = aliceRoom,
                 message = textMessage,
-                nbOfMessages = 5)
+                nbOfMessages = 5
+        )
 
         sentMessages.forEach {
             it.root.isThread().shouldBeFalse()
@@ -206,7 +204,8 @@ class ThreadMessagingTest : InstrumentedTest {
                 room = aliceRoom,
                 message = "Reply In the above thread",
                 numberOfMessages = 40,
-                rootThreadEventId = selectedInitMessage.root.eventId.orEmpty())
+                rootThreadEventId = selectedInitMessage.root.eventId.orEmpty()
+        )
 
         repliesInThread.forEach {
             it.root.isThread().shouldBeTrue()
@@ -218,7 +217,7 @@ class ThreadMessagingTest : InstrumentedTest {
         val timeline = aliceRoom.timelineService().createTimeline(null, TimelineSettings(30))
         timeline.start()
 
-        aliceSession.startSync(true)
+        aliceSession.syncService().startSync(true)
         run {
             val lock = CountDownLatch(1)
             val eventsListener = commonTestHelper.createEventListener(lock) { snapshot ->
@@ -234,13 +233,11 @@ class ThreadMessagingTest : InstrumentedTest {
             timeline.addListener(eventsListener)
             commonTestHelper.await(lock, 600_000)
         }
-        aliceSession.stopSync()
+        aliceSession.syncService().stopSync()
     }
 
     @Test
-    fun thread_summary_advanced_validation_after_multiple_messages_in_multiple_threads() {
-        val commonTestHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
+    fun thread_summary_advanced_validation_after_multiple_messages_in_multiple_threads() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(false)
 
         val aliceSession = cryptoTestData.firstSession
@@ -253,7 +250,8 @@ class ThreadMessagingTest : InstrumentedTest {
         val sentMessages = commonTestHelper.sendTextMessage(
                 room = aliceRoom,
                 message = textMessage,
-                nbOfMessages = 5)
+                nbOfMessages = 5
+        )
 
         sentMessages.forEach {
             it.root.isThread().shouldBeFalse()
@@ -270,7 +268,8 @@ class ThreadMessagingTest : InstrumentedTest {
                 room = aliceRoom,
                 message = "Alice reply In the above second thread message",
                 numberOfMessages = 35,
-                rootThreadEventId = secondMessage.root.eventId.orEmpty())
+                rootThreadEventId = secondMessage.root.eventId.orEmpty()
+        )
 
         // Let's reply in timeline to that message from another user
         val bobSession = cryptoTestData.secondSession!!
@@ -282,14 +281,16 @@ class ThreadMessagingTest : InstrumentedTest {
                 room = bobRoom,
                 message = "Bob reply In the above first thread message",
                 numberOfMessages = 42,
-                rootThreadEventId = firstMessage.root.eventId.orEmpty())
+                rootThreadEventId = firstMessage.root.eventId.orEmpty()
+        )
 
         // Bob will also reply in second thread 5 times
         val bobThreadRepliesInSecondMessage = commonTestHelper.replyInThreadMessage(
                 room = bobRoom,
                 message = "Another Bob reply In the above second thread message",
                 numberOfMessages = 20,
-                rootThreadEventId = secondMessage.root.eventId.orEmpty())
+                rootThreadEventId = secondMessage.root.eventId.orEmpty()
+        )
 
         aliceThreadRepliesInSecondMessage.forEach {
             it.root.isThread().shouldBeTrue()
@@ -313,7 +314,7 @@ class ThreadMessagingTest : InstrumentedTest {
         val timeline = aliceRoom.timelineService().createTimeline(null, TimelineSettings(30))
         timeline.start()
 
-        aliceSession.startSync(true)
+        aliceSession.syncService().startSync(true)
         run {
             val lock = CountDownLatch(1)
             val eventsListener = commonTestHelper.createEventListener(lock) { snapshot ->
@@ -337,6 +338,6 @@ class ThreadMessagingTest : InstrumentedTest {
             timeline.addListener(eventsListener)
             commonTestHelper.await(lock, 600_000)
         }
-        aliceSession.stopSync()
+        aliceSession.syncService().stopSync()
     }
 }

@@ -44,7 +44,7 @@ import java.util.Calendar
 import javax.inject.Inject
 
 /**
- * Epoxy controller for edit history list
+ * Epoxy controller for edit history list.
  */
 class ViewEditHistoryEpoxyController @Inject constructor(
         private val stringProvider: StringProvider,
@@ -63,7 +63,7 @@ class ViewEditHistoryEpoxyController @Inject constructor(
                     id("Spinner")
                 }
             }
-            is Fail    -> {
+            is Fail -> {
                 genericFooterItem {
                     id("failure")
                     text(host.stringProvider.getString(R.string.unknown_error).toEpoxyCharSequence())
@@ -127,7 +127,7 @@ class ViewEditHistoryEpoxyController @Inject constructor(
                                         textColor = colorProvider.getColor(R.color.palette_element_green)
                                     }
                                 }
-                                else                              -> {
+                                else -> {
                                     span {
                                         text = it.text
                                     }

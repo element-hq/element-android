@@ -24,7 +24,7 @@ fun groupSummaryQueryParams(init: (GroupSummaryQueryParams.Builder.() -> Unit) =
 }
 
 /**
- * This class can be used to filter group summaries
+ * This class can be used to filter group summaries.
  */
 data class GroupSummaryQueryParams(
         val displayName: QueryStringValue,

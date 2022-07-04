@@ -25,7 +25,7 @@ import timber.log.Timber
 private const val KEY_DIALOG_IS_DISPLAYED = "DialogLocker.KEY_DIALOG_IS_DISPLAYED"
 
 /**
- * Class to avoid displaying twice the same dialog
+ * Class to avoid displaying twice the same dialog.
  */
 class DialogLocker(savedInstanceState: Bundle?) : Restorable {
 

@@ -37,6 +37,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.failure.isInvalidPassword
@@ -123,11 +124,11 @@ class LoginFragmentToAny2 @Inject constructor() : AbstractSSOLoginFragment2<Frag
             views.loginSocialLoginContainer.isVisible = true
             views.loginSocialLoginButtons.ssoIdentityProviders = state.loginMode.ssoIdentityProviders?.sorted()
             views.loginSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
-                override fun onProviderSelected(id: String?) {
+                override fun onProviderSelected(provider: SsoIdentityProvider?) {
                     loginViewModel.getSsoUrl(
                             redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                             deviceId = state.deviceId,
-                            providerId = id
+                            providerId = provider?.id
                     )
                             ?.let { openInCustomTab(it) }
                 }
@@ -195,7 +196,7 @@ class LoginFragmentToAny2 @Inject constructor() : AbstractSSOLoginFragment2<Frag
     }
 
     /**
-     * Detect if password ends or starts with spaces
+     * Detect if password ends or starts with spaces.
      */
     private fun spaceInPassword() = views.passwordField.text.toString().let { it.trim() != it }
 }

@@ -48,7 +48,7 @@ internal class RoomSyncEphemeralTemporaryStoreFile @Inject constructor(
     private val roomSyncEphemeralAdapter = moshi.adapter(RoomSyncEphemeral::class.java)
 
     /**
-     * Write RoomSyncEphemeral to a file
+     * Write RoomSyncEphemeral to a file.
      */
     override fun write(roomId: String, roomSyncEphemeralJson: String) {
         Timber.w("INIT_SYNC Store ephemeral events for room $roomId")
@@ -56,7 +56,7 @@ internal class RoomSyncEphemeralTemporaryStoreFile @Inject constructor(
     }
 
     /**
-     * Read RoomSyncEphemeral from a file, or null if there is no file to read
+     * Read RoomSyncEphemeral from a file, or null if there is no file to read.
      */
     override fun read(roomId: String): RoomSyncEphemeral? {
         return getFile(roomId)

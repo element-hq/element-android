@@ -17,6 +17,8 @@
 package org.matrix.android.sdk.api
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.work.Configuration
 import androidx.work.WorkManager
@@ -25,10 +27,12 @@ import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
+import org.matrix.android.sdk.api.debug.DebugService
 import org.matrix.android.sdk.api.legacy.LegacySessionImporter
 import org.matrix.android.sdk.api.network.ApiInterceptorListener
 import org.matrix.android.sdk.api.network.ApiPath
 import org.matrix.android.sdk.api.raw.RawService
+import org.matrix.android.sdk.api.securestorage.SecureStorageService
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.di.DaggerMatrixComponent
@@ -38,19 +42,23 @@ import org.matrix.android.sdk.internal.util.BackgroundDetectionObserver
 import org.matrix.android.sdk.internal.worker.MatrixWorkerFactory
 import org.matrix.olm.OlmManager
 import java.util.concurrent.Executors
-import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
 /**
  * This is the main entry point to the matrix sdk.
  * <br/>
- * See [Companion.createInstance] to create an instance. The app should create and manage the instance itself.
+ *
+ * The constructor creates a new instance of Matrix, it's recommended to manage this instance as a singleton.
+ *
+ * @param context the application context
+ * @param matrixConfiguration global configuration that will be used for every [org.matrix.android.sdk.api.session.Session]
  */
-class Matrix private constructor(context: Context, matrixConfiguration: MatrixConfiguration) {
+class Matrix(context: Context, matrixConfiguration: MatrixConfiguration) {
 
     @Inject internal lateinit var legacySessionImporter: LegacySessionImporter
     @Inject internal lateinit var authenticationService: AuthenticationService
     @Inject internal lateinit var rawService: RawService
+    @Inject internal lateinit var debugService: DebugService
     @Inject internal lateinit var userAgentHolder: UserAgentHolder
     @Inject internal lateinit var backgroundDetectionObserver: BackgroundDetectionObserver
     @Inject internal lateinit var olmManager: OlmManager
@@ -59,89 +67,89 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
     @Inject internal lateinit var apiInterceptor: ApiInterceptor
     @Inject internal lateinit var matrixWorkerFactory: MatrixWorkerFactory
     @Inject internal lateinit var lightweightSettingsStorage: LightweightSettingsStorage
+    @Inject internal lateinit var secureStorageService: SecureStorageService
+
+    private val uiHandler = Handler(Looper.getMainLooper())
 
     init {
-        Monarchy.init(context)
-        DaggerMatrixComponent.factory().create(context, matrixConfiguration).inject(this)
-        if (context.applicationContext !is Configuration.Provider) {
+        val appContext = context.applicationContext
+        Monarchy.init(appContext)
+        DaggerMatrixComponent.factory().create(appContext, matrixConfiguration).inject(this)
+        if (appContext !is Configuration.Provider) {
             val configuration = Configuration.Builder()
                     .setExecutor(Executors.newCachedThreadPool())
                     .setWorkerFactory(matrixWorkerFactory)
                     .build()
-            WorkManager.initialize(context, configuration)
+            WorkManager.initialize(appContext, configuration)
         }
-        ProcessLifecycleOwner.get().lifecycle.addObserver(backgroundDetectionObserver)
+        uiHandler.post {
+            ProcessLifecycleOwner.get().lifecycle.addObserver(backgroundDetectionObserver)
+        }
     }
 
+    /**
+     * Return the User Agent used for any request that the SDK is making to the homeserver.
+     * There is no way to change the user agent at the moment.
+     */
     fun getUserAgent() = userAgentHolder.userAgent
 
+    /**
+     * Return the AuthenticationService.
+     */
     fun authenticationService() = authenticationService
 
+    /**
+     * Return the RawService.
+     */
     fun rawService() = rawService
 
+    /**
+     * Return the DebugService.
+     */
+    fun debugService() = debugService
+
+    /**
+     * Return the LightweightSettingsStorage.
+     */
     fun lightweightSettingsStorage() = lightweightSettingsStorage
 
+    /**
+     * Return the HomeServerHistoryService.
+     */
     fun homeServerHistoryService() = homeServerHistoryService
 
+    /**
+     * Return the legacy session importer, useful if you want to migrate an app, which was using the legacy Matrix Android Sdk.
+     */
     fun legacySessionImporter() = legacySessionImporter
 
-    fun workerFactory(): WorkerFactory = matrixWorkerFactory
+    /**
+     * Returns the SecureStorageService used to encrypt and decrypt sensitive data.
+     */
+    fun secureStorageService(): SecureStorageService = secureStorageService
 
+    /**
+     * Get the worker factory. The returned value has to be provided to `WorkConfiguration.Builder()`.
+     */
+    fun getWorkerFactory(): WorkerFactory = matrixWorkerFactory
+
+    /**
+     * Register an API interceptor, to be able to be notified when the specified API got a response.
+     */
     fun registerApiInterceptorListener(path: ApiPath, listener: ApiInterceptorListener) {
         apiInterceptor.addListener(path, listener)
     }
 
+    /**
+     * Un-register an API interceptor.
+     */
     fun unregisterApiInterceptorListener(path: ApiPath, listener: ApiInterceptorListener) {
         apiInterceptor.removeListener(path, listener)
     }
 
     companion object {
-
-        private lateinit var instance: Matrix
-        private val isInit = AtomicBoolean(false)
-
         /**
-         * Creates a new instance of Matrix, it's recommended to manage this instance as a singleton.
-         * To make use of the built in singleton use Matrix.initialize() and/or Matrix.getInstance(context) instead
-         **/
-        fun createInstance(context: Context, matrixConfiguration: MatrixConfiguration): Matrix {
-            return Matrix(context.applicationContext, matrixConfiguration)
-        }
-
-        /**
-         * Initializes a singleton instance of Matrix for the given MatrixConfiguration
-         * This instance will be returned by Matrix.getInstance(context)
-         */
-        @Deprecated("Use Matrix.createInstance and manage the instance manually")
-        fun initialize(context: Context, matrixConfiguration: MatrixConfiguration) {
-            if (isInit.compareAndSet(false, true)) {
-                instance = Matrix(context.applicationContext, matrixConfiguration)
-            }
-        }
-
-        /**
-         * Either provides an already initialized singleton Matrix instance or queries the application context for a MatrixConfiguration.Provider
-         * to lazily create and store the instance.
-         */
-        @Suppress("deprecation") // suppressing warning as this method is unused but is still provided for SDK clients
-        @Deprecated("Use Matrix.createInstance and manage the instance manually")
-        fun getInstance(context: Context): Matrix {
-            if (isInit.compareAndSet(false, true)) {
-                val appContext = context.applicationContext
-                if (appContext is MatrixConfiguration.Provider) {
-                    val matrixConfiguration = (appContext as MatrixConfiguration.Provider).providesMatrixConfiguration()
-                    instance = Matrix(appContext, matrixConfiguration)
-                } else {
-                    throw IllegalStateException("Matrix is not initialized properly." +
-                            " If you want to manage your own Matrix instance use Matrix.createInstance" +
-                            " otherwise you should call Matrix.initialize or let your application implement MatrixConfiguration.Provider.")
-                }
-            }
-            return instance
-        }
-
-        /**
-         * @return a String with details about the Matrix SDK version
+         * @return a String with details about the Matrix SDK version.
          */
         fun getSdkVersion(): String {
             return BuildConfig.SDK_VERSION + " (" + BuildConfig.GIT_SDK_REVISION + ")"

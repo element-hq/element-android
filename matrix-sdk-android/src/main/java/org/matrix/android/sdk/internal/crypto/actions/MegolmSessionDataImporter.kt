@@ -17,12 +17,13 @@
 package org.matrix.android.sdk.internal.crypto.actions
 
 import androidx.annotation.WorkerThread
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.listeners.ProgressListener
+import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
-import org.matrix.android.sdk.api.session.crypto.model.RoomKeyRequestBody
 import org.matrix.android.sdk.internal.crypto.MXOlmDevice
 import org.matrix.android.sdk.internal.crypto.MegolmSessionData
-import org.matrix.android.sdk.internal.crypto.OutgoingGossipingRequestManager
+import org.matrix.android.sdk.internal.crypto.OutgoingKeyRequestManager
 import org.matrix.android.sdk.internal.crypto.RoomDecryptorProvider
 import org.matrix.android.sdk.internal.crypto.algorithms.megolm.MXMegolmDecryption
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
@@ -30,10 +31,12 @@ import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import javax.inject.Inject
 
+private val loggerTag = LoggerTag("MegolmSessionDataImporter", LoggerTag.CRYPTO)
+
 internal class MegolmSessionDataImporter @Inject constructor(
         private val olmDevice: MXOlmDevice,
         private val roomDecryptorProvider: RoomDecryptorProvider,
-        private val outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
+        private val outgoingKeyRequestManager: OutgoingKeyRequestManager,
         private val cryptoStore: IMXCryptoStore,
         private val clock: Clock,
 ) {
@@ -43,14 +46,16 @@ internal class MegolmSessionDataImporter @Inject constructor(
      * Must be call on the crypto coroutine thread
      *
      * @param megolmSessionsData megolm sessions.
-     * @param fromBackup         true if the imported keys are already backed up on the server.
-     * @param progressListener   the progress listener
+     * @param fromBackup true if the imported keys are already backed up on the server.
+     * @param progressListener the progress listener
      * @return import room keys result
      */
     @WorkerThread
-    fun handle(megolmSessionsData: List<MegolmSessionData>,
-               fromBackup: Boolean,
-               progressListener: ProgressListener?): ImportRoomKeysResult {
+    fun handle(
+            megolmSessionsData: List<MegolmSessionData>,
+            fromBackup: Boolean,
+            progressListener: ProgressListener?
+    ): ImportRoomKeysResult {
         val t0 = clock.epochMillis()
 
         val totalNumbersOfKeys = megolmSessionsData.size
@@ -66,19 +71,24 @@ internal class MegolmSessionDataImporter @Inject constructor(
             if (null != decrypting) {
                 try {
                     val sessionId = megolmSessionData.sessionId
-                    Timber.v("## importRoomKeys retrieve senderKey " + megolmSessionData.senderKey + " sessionId " + sessionId)
+                    Timber.tag(loggerTag.value).v("## importRoomKeys retrieve senderKey ${megolmSessionData.senderKey} sessionId $sessionId")
 
                     totalNumbersOfImportedKeys++
 
                     // cancel any outstanding room key requests for this session
-                    val roomKeyRequestBody = RoomKeyRequestBody(
-                            algorithm = megolmSessionData.algorithm,
-                            roomId = megolmSessionData.roomId,
-                            senderKey = megolmSessionData.senderKey,
-                            sessionId = megolmSessionData.sessionId
-                    )
 
-                    outgoingGossipingRequestManager.cancelRoomKeyRequest(roomKeyRequestBody)
+                    Timber.tag(loggerTag.value).d("Imported megolm session $sessionId from backup=$fromBackup in ${megolmSessionData.roomId}")
+                    outgoingKeyRequestManager.postCancelRequestForSessionIfNeeded(
+                            megolmSessionData.sessionId ?: "",
+                            megolmSessionData.roomId ?: "",
+                            megolmSessionData.senderKey ?: "",
+                            tryOrNull {
+                                olmInboundGroupSessionWrappers
+                                        .firstOrNull { it.session.sessionIdentifier() == megolmSessionData.sessionId }
+                                        ?.session?.firstKnownIndex
+                                        ?.toInt()
+                            } ?: 0
+                    )
 
                     // Have another go at decrypting events sent with this session
                     when (decrypting) {
@@ -87,7 +97,7 @@ internal class MegolmSessionDataImporter @Inject constructor(
                         }
                     }
                 } catch (e: Exception) {
-                    Timber.e(e, "## importRoomKeys() : onNewSession failed")
+                    Timber.tag(loggerTag.value).e(e, "## importRoomKeys() : onNewSession failed")
                 }
             }
 
@@ -109,7 +119,7 @@ internal class MegolmSessionDataImporter @Inject constructor(
 
         val t1 = clock.epochMillis()
 
-        Timber.v("## importMegolmSessionsData : sessions import " + (t1 - t0) + " ms (" + megolmSessionsData.size + " sessions)")
+        Timber.tag(loggerTag.value).v("## importMegolmSessionsData : sessions import " + (t1 - t0) + " ms (" + megolmSessionsData.size + " sessions)")
 
         return ImportRoomKeysResult(totalNumbersOfKeys, totalNumbersOfImportedKeys)
     }

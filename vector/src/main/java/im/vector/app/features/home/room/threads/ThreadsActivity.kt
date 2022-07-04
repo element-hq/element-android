@@ -59,13 +59,13 @@ class ThreadsActivity : VectorBaseActivity<ActivityThreadsBinding>() {
     private fun initFragment() {
         if (isFirstCreation()) {
             when (val fragment = fragmentToNavigate()) {
-                is DisplayFragment.ThreadList     -> {
+                is DisplayFragment.ThreadList -> {
                     initThreadListFragment(fragment.threadListArgs)
                 }
                 is DisplayFragment.ThreadTimeLine -> {
                     initThreadTimelineFragment(fragment.threadTimelineArgs)
                 }
-                is DisplayFragment.ErrorFragment  -> {
+                is DisplayFragment.ErrorFragment -> {
                     finish()
                 }
             }
@@ -76,7 +76,8 @@ class ThreadsActivity : VectorBaseActivity<ActivityThreadsBinding>() {
         replaceFragment(
                 views.threadsActivityFragmentContainer,
                 ThreadListFragment::class.java,
-                threadListArgs)
+                threadListArgs
+        )
     }
 
     private fun initThreadTimelineFragment(threadTimelineArgs: ThreadTimelineArgs) =
@@ -87,7 +88,8 @@ class ThreadsActivity : VectorBaseActivity<ActivityThreadsBinding>() {
                             roomId = threadTimelineArgs.roomId,
                             eventId = getEventIdToNavigate(),
                             threadTimelineArgs = threadTimelineArgs
-                    ))
+                    )
+            )
 
     /**
      * This function is used to navigate to the selected thread timeline.
@@ -100,7 +102,8 @@ class ThreadsActivity : VectorBaseActivity<ActivityThreadsBinding>() {
                     R.anim.animation_slide_in_right,
                     R.anim.animation_slide_out_left,
                     R.anim.animation_slide_in_left,
-                    R.anim.animation_slide_out_right)
+                    R.anim.animation_slide_out_right
+            )
         }
         addFragmentToBackstack(
                 container = views.threadsActivityFragmentContainer,
@@ -114,7 +117,7 @@ class ThreadsActivity : VectorBaseActivity<ActivityThreadsBinding>() {
     }
 
     /**
-     * Determine in witch fragment we should navigate
+     * Determine in witch fragment we should navigate.
      */
     private fun fragmentToNavigate(): DisplayFragment {
         getThreadTimelineArgs()?.let {

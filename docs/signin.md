@@ -2,6 +2,27 @@
 
 This document describes the flow of signin to a homeserver, and also the flow when user want to reset his password. Examples come from the `matrix.org` homeserver.
 
+<!--- TOC -->
+
+* [Sign in flows](#sign-in-flows)
+  * [Get the flow](#get-the-flow)
+  * [Login with username](#login-with-username)
+    * [Incorrect password](#incorrect-password)
+    * [Correct password:](#correct-password:)
+  * [Login with email](#login-with-email)
+    * [Unknown email](#unknown-email)
+    * [Known email, wrong password](#known-email-wrong-password)
+      * [Known email, correct password](#known-email-correct-password)
+  * [Login with Msisdn](#login-with-msisdn)
+  * [Login with SSO](#login-with-sso)
+* [Reset password](#reset-password)
+  * [Send email](#send-email)
+    * [When the email is not known](#when-the-email-is-not-known)
+    * [When the email is known](#when-the-email-is-known)
+  * [User clicks on the link](#user-clicks-on-the-link)
+
+<!--- END -->
+
 ## Sign in flows
 
 ### Get the flow

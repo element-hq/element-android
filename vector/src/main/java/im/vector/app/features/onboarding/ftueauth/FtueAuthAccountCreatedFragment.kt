@@ -24,6 +24,7 @@ import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.animations.play
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.utils.isAnimationEnabled
 import im.vector.app.databinding.FragmentFtueAccountCreatedBinding
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewEvents
@@ -57,7 +58,7 @@ class FtueAuthAccountCreatedFragment @Inject constructor(
         views.personalizeButtonGroup.isVisible = canPersonalize
         views.takeMeHomeButtonGroup.isVisible = !canPersonalize
 
-        if (!hasPlayedConfetti && !canPersonalize) {
+        if (!hasPlayedConfetti && requireContext().isAnimationEnabled()) {
             hasPlayedConfetti = true
             views.viewKonfetti.isVisible = true
             views.viewKonfetti.play()

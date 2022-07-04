@@ -29,13 +29,15 @@ import org.matrix.android.sdk.api.session.presence.model.PresenceEnum
 internal enum class SyncPresence(val value: String) {
     Offline("offline"),
     Online("online"),
+    Busy("busy"),
     Unavailable("unavailable");
 
     companion object {
         fun from(presenceEnum: PresenceEnum): SyncPresence {
             return when (presenceEnum) {
-                PresenceEnum.ONLINE      -> Online
-                PresenceEnum.OFFLINE     -> Offline
+                PresenceEnum.ONLINE -> Online
+                PresenceEnum.OFFLINE -> Offline
+                PresenceEnum.BUSY -> Busy
                 PresenceEnum.UNAVAILABLE -> Unavailable
             }
         }

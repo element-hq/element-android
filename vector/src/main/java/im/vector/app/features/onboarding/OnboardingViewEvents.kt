@@ -20,16 +20,19 @@ package im.vector.app.features.onboarding
 import im.vector.app.core.platform.VectorViewEvents
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
-import org.matrix.android.sdk.api.auth.registration.FlowResult
+import org.matrix.android.sdk.api.auth.registration.Stage
 
 /**
- * Transient events for Login
+ * Transient events for Login.
  */
 sealed class OnboardingViewEvents : VectorViewEvents {
     data class Loading(val message: CharSequence? = null) : OnboardingViewEvents()
     data class Failure(val throwable: Throwable) : OnboardingViewEvents()
+    data class DeeplinkAuthenticationFailure(val retryAction: OnboardingAction) : OnboardingViewEvents()
 
-    data class RegistrationFlowResult(val flowResult: FlowResult, val isRegistrationStarted: Boolean) : OnboardingViewEvents()
+    object DisplayRegistrationFallback : OnboardingViewEvents()
+    data class DisplayRegistrationStage(val stage: Stage) : OnboardingViewEvents()
+    object DisplayStartRegistration : OnboardingViewEvents()
     object OutdatedHomeserver : OnboardingViewEvents()
 
     // Navigation event
@@ -37,15 +40,18 @@ sealed class OnboardingViewEvents : VectorViewEvents {
     object OpenUseCaseSelection : OnboardingViewEvents()
     object OpenServerSelection : OnboardingViewEvents()
     object OpenCombinedRegister : OnboardingViewEvents()
+    object OpenCombinedLogin : OnboardingViewEvents()
     object EditServerSelection : OnboardingViewEvents()
     data class OnServerSelectionDone(val serverType: ServerType) : OnboardingViewEvents()
     object OnLoginFlowRetrieved : OnboardingViewEvents()
     object OnHomeserverEdited : OnboardingViewEvents()
     data class OnSignModeSelected(val signMode: SignMode) : OnboardingViewEvents()
     object OnForgetPasswordClicked : OnboardingViewEvents()
-    object OnResetPasswordSendThreePidDone : OnboardingViewEvents()
-    object OnResetPasswordMailConfirmationSuccess : OnboardingViewEvents()
-    object OnResetPasswordMailConfirmationSuccessDone : OnboardingViewEvents()
+
+    data class OnResetPasswordEmailConfirmationSent(val email: String) : OnboardingViewEvents()
+    object OpenResetPasswordComplete : OnboardingViewEvents()
+    object OnResetPasswordBreakerConfirmed : OnboardingViewEvents()
+    object OnResetPasswordComplete : OnboardingViewEvents()
 
     data class OnSendEmailSuccess(val email: String) : OnboardingViewEvents()
     data class OnSendMsisdnSuccess(val msisdn: String) : OnboardingViewEvents()

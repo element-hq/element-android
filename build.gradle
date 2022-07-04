@@ -5,9 +5,16 @@ buildscript {
     apply from: 'dependencies_groups.gradle'
 
     repositories {
-        google()
+        // Do not use `google()`, it prevents Dependabot from working properly
+        maven {
+            url 'https://maven.google.com'
+        }
         maven {
             url "https://plugins.gradle.org/m2/"
+        }
+        // Do not use `mavenCentral()`, it prevents Dependabot from working properly
+        maven {
+            url 'https://repo1.maven.org/maven2'
         }
     }
 
@@ -17,20 +24,26 @@ buildscript {
         classpath libs.gradle.gradlePlugin
         classpath libs.gradle.kotlinPlugin
         classpath libs.gradle.hiltPlugin
-        classpath 'com.google.gms:google-services:4.3.10'
-        classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.3'
+        classpath 'com.google.gms:google-services:4.3.13'
+        classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.4.0.2513'
         classpath 'com.google.android.gms:oss-licenses-plugin:0.10.5'
-        classpath "com.likethesalad.android:stem-plugin:2.0.0"
-        classpath 'org.owasp:dependency-check-gradle:7.1.0.1'
-        classpath "org.jetbrains.dokka:dokka-gradle-plugin:1.6.21"
+        classpath "com.likethesalad.android:stem-plugin:2.1.1"
+        classpath 'org.owasp:dependency-check-gradle:7.1.1'
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:1.7.0"
+        classpath "org.jetbrains.kotlinx:kotlinx-knit:0.4.0"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
 }
 
-// ktlint Plugin
 plugins {
+    // ktlint Plugin
     id "org.jlleitschuh.gradle.ktlint" version "10.3.0"
+    // Detekt
+    id "io.gitlab.arturbosch.detekt" version "1.20.0"
+
+    // Dependency Analysis
+    id 'com.autonomousapps.dependency-analysis' version "1.9.0"
 }
 
 // https://github.com/jeremylong/DependencyCheck
@@ -45,9 +58,12 @@ dependencyCheck {
 
 allprojects {
     apply plugin: "org.jlleitschuh.gradle.ktlint"
+    apply plugin: "io.gitlab.arturbosch.detekt"
 
     repositories {
-        mavenCentral {
+        // Do not use `mavenCentral()`, it prevents Dependabot from working properly
+        maven {
+            url 'https://repo1.maven.org/maven2'
             content {
                 groups.mavenCentral.regex.each { includeGroupByRegex it }
                 groups.mavenCentral.group.each { includeGroup it }
@@ -70,14 +86,18 @@ allprojects {
                 groups.jitsi.group.each { includeGroup it }
             }
         }
-        google {
+        // Do not use `google()`, it prevents Dependabot from working properly
+        maven {
+            url 'https://maven.google.com'
             content {
                 groups.google.regex.each { includeGroupByRegex it }
                 groups.google.group.each { includeGroup it }
             }
         }
         //noinspection JcenterRepositoryObsolete
-        jcenter {
+        // Do not use `jcenter`, it prevents Dependabot from working properly
+        maven {
+            url 'https://jcenter.bintray.com'
             content {
                 groups.jcenter.regex.each { includeGroupByRegex it }
                 groups.jcenter.group.each { includeGroup it }
@@ -106,7 +126,7 @@ allprojects {
         // display the corresponding rule
         verbose = true
         disabledRules = [
-                // TODO: Re-enable these 4 rules after reformatting project
+                // TODO Re-enable these 4 rules after reformatting project
                 "indent",
                 "experimental:argument-list-wrapping",
                 "max-line-length",
@@ -127,6 +147,15 @@ allprojects {
                 "experimental:kdoc-wrapping",
         ]
     }
+
+    detekt {
+        // preconfigure defaults
+        buildUponDefaultConfig = true
+        // activate all available (even unstable) rules.
+        allRules = true
+        // point to your custom config defining rules to run, overwriting default behavior
+        config = files("$rootDir/tools/detekt/detekt.yml")
+    }
 }
 
 task clean(type: Delete) {
@@ -139,7 +168,7 @@ def launchTask = getGradle()
         .toString()
         .toLowerCase()
 
-if (launchTask.contains("codeCoverageReport".toLowerCase())) {
+if (launchTask.contains("coverage".toLowerCase())) {
     apply from: 'coverage.gradle'
 }
 
@@ -151,8 +180,8 @@ apply plugin: 'org.sonarqube'
 
 sonarqube {
     properties {
-        property "sonar.projectName", "Element-Android"
-        property "sonar.projectKey", "im.vector.app.android"
+        property "sonar.projectName", "element-android"
+        property "sonar.projectKey", "vector-im_element-android"
         property "sonar.host.url", "https://sonarcloud.io"
         property "sonar.projectVersion", project(":vector").android.defaultConfig.versionName
         property "sonar.sourceEncoding", "UTF-8"
@@ -162,7 +191,7 @@ sonarqube {
         property "sonar.links.issue", "https://github.com/vector-im/element-android/issues"
         property "sonar.organization", "new_vector_ltd_organization"
         property "sonar.java.coveragePlugin", "jacoco"
-        property "sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/reports/jacoco/allCodeCoverageReport/allCodeCoverageReport.xml"
+        property "sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/reports/jacoco/generateCoverageReport/generateCoverageReport.xml"
         property "sonar.login", project.hasProperty("SONAR_LOGIN") ? SONAR_LOGIN : "invalid"
     }
 }
@@ -193,3 +222,59 @@ project(":library:diff-match-patch") {
 //        }
 //    }
 //}
+
+dependencyAnalysis {
+    dependencies {
+        bundle("kotlin-stdlib") {
+            includeGroup("org.jetbrains.kotlin")
+        }
+        bundle("react") {
+            includeGroup("com.facebook.react")
+        }
+    }
+    issues {
+        all {
+            ignoreKtx(true)
+            onUsedTransitiveDependencies {
+                // Transitively used dependencies that should be declared directly
+                severity("ignore")
+            }
+            onUnusedDependencies {
+                severity("fail")
+            }
+            onUnusedAnnotationProcessors {
+                severity("fail")
+                exclude("com.airbnb.android:epoxy-processor", "com.google.dagger:hilt-compiler") // False positives
+            }
+        }
+        project(":library:jsonviewer") {
+            onUnusedDependencies {
+                exclude("org.json:json") // Used in unit tests, overwrites the one bundled into Android
+            }
+        }
+        project(":library:ui-styles")
+        project(":matrix-sdk-android") {
+            onUnusedDependencies {
+                exclude("io.reactivex.rxjava2:rxkotlin") // Transitively required for mocking realm as monarchy doesn't expose Rx
+            }
+        }
+        project(":matrix-sdk-android-flow") {
+            onUnusedDependencies {
+                exclude("androidx.paging:paging-runtime-ktx") // False positive
+            }
+        }
+        project(":vector") {
+            onUnusedDependencies {
+                // False positives
+                exclude(
+                        "androidx.fragment:fragment-testing",
+                        "com.facebook.soloader:soloader",
+                        "com.vanniktech:emoji-google",
+                        "com.vanniktech:emoji-material",
+                        "org.maplibre.gl:android-plugin-annotation-v9",
+                        "org.maplibre.gl:android-sdk",
+                )
+            }
+        }
+    }
+}

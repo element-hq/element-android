@@ -33,8 +33,8 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.themes.ThemeUtils
 import org.matrix.android.sdk.api.util.MatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_profile_action)
-abstract class ProfileActionItem : VectorEpoxyModel<ProfileActionItem.Holder>() {
+@EpoxyModelClass
+abstract class ProfileActionItem : VectorEpoxyModel<ProfileActionItem.Holder>(R.layout.item_profile_action) {
 
     @EpoxyAttribute
     lateinit var title: String

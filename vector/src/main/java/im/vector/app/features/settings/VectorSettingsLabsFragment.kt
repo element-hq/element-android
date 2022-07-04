@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.widget.TextView
 import androidx.preference.Preference
+import androidx.preference.SwitchPreference
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.preference.VectorSwitchPreference
@@ -57,10 +58,21 @@ class VectorSettingsLabsFragment @Inject constructor(
                 false
             }
         }
+
+        findPreference<SwitchPreference>(VectorPreferences.SETTINGS_LABS_MSC3061_SHARE_KEYS_HISTORY)?.let { pref ->
+            // ensure correct default
+            pref.isChecked = session.cryptoService().isShareKeysOnInviteEnabled()
+
+            pref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                session.cryptoService().enableShareKeyOnInvite(pref.isChecked)
+                MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCache = true))
+                true
+            }
+        }
     }
 
     /**
-     * Intercept the click to display a user friendly dialog when their homeserver do not support threads
+     * Intercept the click to display a user friendly dialog when their homeserver do not support threads.
      */
     private fun onThreadsPreferenceClickedInterceptor(vectorSwitchPreference: VectorSwitchPreference) {
         val userEnabledThreads = vectorPreferences.areThreadMessagesEnabled()
@@ -89,7 +101,7 @@ class VectorSettingsLabsFragment @Inject constructor(
     }
 
     /**
-     * Action when threads preference switch is actually clicked
+     * Action when threads preference switch is actually clicked.
      */
     private fun onThreadsPreferenceClicked() {
         // We should migrate threads only if threads are disabled

@@ -30,7 +30,7 @@ class KeysExporter @Inject constructor(
         private val dispatchers: CoroutineDispatchers
 ) {
     /**
-     * Export keys and write them to the provided uri
+     * Export keys and write them to the provided uri.
      */
     suspend fun export(password: String, uri: Uri) {
         withContext(dispatchers.io) {
@@ -45,7 +45,7 @@ class KeysExporter @Inject constructor(
     private fun verifyExportedKeysOutputFileSize(uri: Uri, expectedSize: Long) {
         val output = context.contentResolver.openFileDescriptor(uri, "r", null)
         when {
-            output == null                  -> throw IllegalStateException("Exported file not found")
+            output == null -> throw IllegalStateException("Exported file not found")
             output.statSize != expectedSize -> {
                 throw UnexpectedExportKeysFileSizeException(
                         expectedFileSize = expectedSize,

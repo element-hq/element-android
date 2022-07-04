@@ -117,7 +117,8 @@ class DiscoverySettingsFragment @Inject constructor(
                     termsActivityResultLauncher,
                     TermsService.ServiceType.IdentityService,
                     state.identityServer()?.serverUrl?.ensureProtocol() ?: "",
-                    null)
+                    null
+            )
         }
     }
 

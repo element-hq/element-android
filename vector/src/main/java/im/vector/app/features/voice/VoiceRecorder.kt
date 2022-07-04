@@ -16,6 +16,8 @@
 
 package im.vector.app.features.voice
 
+import android.content.Context
+import android.net.Uri
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import java.io.File
 
@@ -27,30 +29,42 @@ interface VoiceRecorder {
     fun initializeRecord(attachmentData: ContentAttachmentData)
 
     /**
-     * Start the recording
+     * Start the recording.
      * @param roomId id of the room to start record
      */
     fun startRecord(roomId: String)
 
     /**
-     * Stop the recording
+     * Stop the recording.
      */
     fun stopRecord()
 
     /**
-     * Remove the file
+     * Remove the file.
      */
     fun cancelRecord()
 
     fun getMaxAmplitude(): Int
 
     /**
-     * Not guaranteed to be a ogg file
-     */
-    fun getCurrentRecord(): File?
-
-    /**
-     * Guaranteed to be a ogg file
+     * Guaranteed to be a ogg file.
      */
     fun getVoiceMessageFile(): File?
+}
+
+/**
+ * Ensures a voice records directory exists and returns it.
+ */
+internal fun VoiceRecorder.ensureAudioDirectory(context: Context): File {
+    return File(context.cacheDir, "voice_records").also {
+        it.mkdirs()
+    }
+}
+
+internal fun ContentAttachmentData.findVoiceFile(baseDirectory: File): File {
+    return File(baseDirectory, queryUri.takePathAfter(baseDirectory.name))
+}
+
+private fun Uri.takePathAfter(after: String): String {
+    return pathSegments.takeLastWhile { it != after }.joinToString(separator = "/") { it }
 }

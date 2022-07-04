@@ -26,6 +26,7 @@ import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageStickerContent
@@ -62,7 +63,7 @@ inline fun <reified T> Content?.toModel(catchError: Boolean = true): T? {
 }
 
 /**
- * This methods is a facility method to map a model to a json Content
+ * This methods is a facility method to map a model to a json Content.
  */
 @Suppress("UNCHECKED_CAST")
 inline fun <reified T> T.toContent(): Content {
@@ -123,7 +124,7 @@ data class Event(
     var ageLocalTs: Long? = null
 
     /**
-     * Copy all fields, including transient fields
+     * Copy all fields, including transient fields.
      */
     fun copyAll(): Event {
         return copy().also {
@@ -211,13 +212,13 @@ data class Event(
 
         return when {
             isReplyRenderedInThread() || isQuote() -> ContentUtils.extractUsefulTextFromReply(text)
-            isFileMessage()                        -> "sent a file."
-            isAudioMessage()                       -> "sent an audio file."
-            isImageMessage()                       -> "sent an image."
-            isVideoMessage()                       -> "sent a video."
-            isSticker()                            -> "sent a sticker"
-            isPoll()                               -> getPollQuestion() ?: "created a poll."
-            else                                   -> text
+            isFileMessage() -> "sent a file."
+            isAudioMessage() -> "sent an audio file."
+            isImageMessage() -> "sent an image."
+            isVideoMessage() -> "sent a video."
+            isSticker() -> "sent a sticker"
+            isPoll() -> getPollQuestion() ?: "created a poll."
+            else -> text
         }
     }
 
@@ -227,14 +228,14 @@ data class Event(
     }
 
     /**
-     * Determines whether or not current event has mentioned the user
+     * Determines whether or not current event has mentioned the user.
      */
     fun isUserMentioned(userId: String): Boolean {
         return getDecryptedValue("formatted_body")?.contains(userId) ?: false
     }
 
     /**
-     * Decrypt the message, or return the pure payload value if there is no encryption
+     * Decrypt the message, or return the pure payload value if there is no encryption.
      */
     private fun getDecryptedValue(key: String = "body"): String? {
         return if (isEncrypted()) {
@@ -247,7 +248,7 @@ data class Event(
     }
 
     /**
-     * Tells if the event is redacted
+     * Tells if the event is redacted.
      */
     fun isRedacted() = unsignedData?.redactedEvent != null
 
@@ -305,7 +306,7 @@ data class Event(
 
 /**
  * Return the value of "content.msgtype", if the Event type is "m.room.message"
- * and if the content has it, and if it is a String
+ * and if the content has it, and if it is a String.
  */
 fun Event.getMsgType(): String? {
     if (getClearType() != EventType.MESSAGE) return null
@@ -317,35 +318,35 @@ fun Event.isTextMessage(): Boolean {
         MessageType.MSGTYPE_TEXT,
         MessageType.MSGTYPE_EMOTE,
         MessageType.MSGTYPE_NOTICE -> true
-        else                       -> false
+        else -> false
     }
 }
 
 fun Event.isImageMessage(): Boolean {
     return when (getMsgType()) {
         MessageType.MSGTYPE_IMAGE -> true
-        else                      -> false
+        else -> false
     }
 }
 
 fun Event.isVideoMessage(): Boolean {
     return when (getMsgType()) {
         MessageType.MSGTYPE_VIDEO -> true
-        else                      -> false
+        else -> false
     }
 }
 
 fun Event.isAudioMessage(): Boolean {
     return when (getMsgType()) {
         MessageType.MSGTYPE_AUDIO -> true
-        else                      -> false
+        else -> false
     }
 }
 
 fun Event.isFileMessage(): Boolean {
     return when (getMsgType()) {
         MessageType.MSGTYPE_FILE -> true
-        else                     -> false
+        else -> false
     }
 }
 
@@ -355,14 +356,14 @@ fun Event.isAttachmentMessage(): Boolean {
         MessageType.MSGTYPE_AUDIO,
         MessageType.MSGTYPE_VIDEO,
         MessageType.MSGTYPE_FILE -> true
-        else                     -> false
+        else -> false
     }
 }
 
 fun Event.isLocationMessage(): Boolean {
     return when (getMsgType()) {
         MessageType.MSGTYPE_LOCATION -> true
-        else                         -> false
+        else -> false
     }
 }
 
@@ -375,24 +376,24 @@ fun Event.getRelationContent(): RelationDefaultContent? {
         content.toModel<EncryptedEventContent>()?.relatesTo
     } else {
         content.toModel<MessageContent>()?.relatesTo ?: run {
-            // Special case to handle stickers, while there is only a local msgtype for stickers
-            if (getClearType() == EventType.STICKER) {
-                getClearContent().toModel<MessageStickerContent>()?.relatesTo
-            } else {
-                null
+            // Special cases when there is only a local msgtype for some event types
+            when (getClearType()) {
+                EventType.STICKER -> getClearContent().toModel<MessageStickerContent>()?.relatesTo
+                in EventType.BEACON_LOCATION_DATA -> getClearContent().toModel<MessageBeaconLocationDataContent>()?.relatesTo
+                else -> null
             }
         }
     }
 }
 
 /**
- * Returns the poll question or null otherwise
+ * Returns the poll question or null otherwise.
  */
 fun Event.getPollQuestion(): String? =
         getPollContent()?.getBestPollCreationInfo()?.question?.getBestQuestion()
 
 /**
- * Returns the relation content for a specific type or null otherwise
+ * Returns the relation content for a specific type or null otherwise.
  */
 fun Event.getRelationContentForType(type: String): RelationDefaultContent? =
         getRelationContent()?.takeIf { it.type == type }
@@ -426,3 +427,6 @@ fun Event.getPollContent(): MessagePollContent? {
 
 fun Event.supportsNotification() =
         this.getClearType() in EventType.MESSAGE + EventType.POLL_START + EventType.STATE_ROOM_BEACON_INFO
+
+fun Event.isContentReportable() =
+        this.getClearType() in EventType.MESSAGE + EventType.STATE_ROOM_BEACON_INFO

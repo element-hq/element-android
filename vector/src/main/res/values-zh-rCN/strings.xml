@@ -475,7 +475,6 @@
         <item quantity="other">%d 条未读消息</item>
     </plurals>
     <string name="list_members">显示成员</string>
-    <string name="settings_flair">徽章</string>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="other">%d 个聊天室</item>
     </plurals>
@@ -867,7 +866,9 @@
 \n
 \n你随时可以在通用设置中反转此操作。</string>
     <string name="room_participants_action_unignore_title">取消忽略用户</string>
-    <string name="room_participants_action_unignore_prompt_msg">取消忽略此用户将重新显示来自他们的全部消息。</string>
+    <string name="room_participants_action_unignore_prompt_msg">取消忽略此用户将重新显示来自他们的全部消息。
+\n
+\n请注意：此操作将重新启动应用程序，并且可能需要一些时间。</string>
     <string name="room_participants_action_cancel_invite_title">取消邀请</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">你确定想要取消邀请此用户吗？</string>
     <string name="room_participants_remove_title">踢掉用户</string>
@@ -2161,10 +2162,6 @@
     <string name="space_add_space_to_any_space_you_manage">将一个空间添加到您管理的任何空间。</string>
     <string name="space_add_existing_spaces">添加现有空间</string>
     <string name="space_add_existing_rooms_only">添加现有聊天室</string>
-    <string name="pick_tings_to_leave">选择要离开的项目</string>
-    <string name="leave_specific_ones">离开特定聊天室和空间…</string>
-    <string name="dont_leave_any">不要离开任何聊天室和空间</string>
-    <string name="leave_all_rooms_and_spaces">离开所有聊天室和空间</string>
     <string name="space_leave_prompt_msg_with_name">你确定要离开 %s 吗？</string>
     <string name="discovery_section">发现 (%s)</string>
     <string name="finish_setup">完成设置</string>
@@ -2284,4 +2281,13 @@
     <plurals name="notice_room_server_acl_changes">
         <item quantity="other">修改服务器 %d 的 ACLs</item>
     </plurals>
+    <string name="thread_list_empty_subtitle">子区有助于保持您的对话主题并易于跟踪</string>
+    <string name="thread_list_modal_all_threads_subtitle">显示当前房间的所有子区</string>
+    <string name="thread_list_modal_all_threads_title">所有子区</string>
+    <string name="thread_list_modal_title">筛选器</string>
+    <string name="thread_timeline_title">子区</string>
+    <string name="room_threads_filter">在房间中筛选子区</string>
+    <string name="action_thread_copy_link_to_thread">复制子区的链接</string>
+    <string name="action_thread_view_in_room">在房间中查看</string>
+    <string name="room_message_autocomplete_notification">群组通知</string>
 </resources>

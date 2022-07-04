@@ -30,6 +30,7 @@
         <item name="vctr_toolbar_background">@color/element_system_dark</item>
         <item name="vctr_message_bubble_inbound">@color/vctr_message_bubble_inbound_dark</item>
         <item name="vctr_message_bubble_outbound">@color/vctr_message_bubble_outbound_dark</item>
+        <item name="vctr_badge_color_border">@color/vctr_badge_color_border_dark</item>
 
         <!-- room message colors -->
         <item name="vctr_notice_secondary">#61708B</item>
@@ -44,6 +45,8 @@
         <!-- Presence Indicator colors -->
         <item name="vctr_presence_indicator_offline">@color/vctr_presence_indicator_offline_dark</item>
         <item name="vctr_presence_indicator_online">@color/vctr_presence_indicator_online_dark</item>
+        <item name="vctr_presence_indicator_busy">@color/vctr_presence_indicator_busy_dark</item>
+        <item name="vctr_presence_indicator_away">@color/vctr_presence_indicator_away_dark</item>
 
         <!-- Some aliases -->
         <item name="vctr_header_background">?vctr_system</item>
@@ -108,14 +111,14 @@
 
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
 
-        <item name="pf_lock_screen">@style/PinCodeScreenStyle</item>
-        <item name="pf_key_button">@style/PinCodeKeyButtonStyle</item>
-        <item name="pf_title">@style/PinCodeTitleStyle</item>
-        <item name="pf_hint">@style/PinCodeHintStyle</item>
-        <item name="pf_code_view">@style/PinCodeDotsViewStyle</item>
-        <item name="pf_delete_button">@style/PinCodeDeleteButtonStyle</item>
-        <item name="pf_fingerprint_button">@style/PinCodeFingerprintButtonStyle</item>
-        <item name="pf_next">@style/PinCodeNextButtonStyle</item>
+        <item name="lockscreen_theme">@style/PinCodeScreenStyle</item>
+        <item name="lockscreen_key_button_theme">@style/PinCodeKeyButtonStyle</item>
+        <item name="lockscreen_title_theme">@style/PinCodeTitleStyle</item>
+        <item name="lockscreen_hint_theme">@style/PinCodeHintStyle</item>
+        <item name="lockscreen_code_view_theme">@style/PinCodeDotsViewStyle</item>
+        <item name="lockscreen_delete_button_theme">@style/PinCodeDeleteButtonStyle</item>
+        <item name="lockscreen_fingerprint_button_theme">@style/PinCodeFingerprintButtonStyle</item>
+        <item name="lockscreen_next_theme">@style/PinCodeNextButtonStyle</item>
 
         <item name="android:statusBarColor">@color/android_status_bar_background_dark</item>
         <item name="android:navigationBarColor">@color/android_navigation_bar_background_dark</item>

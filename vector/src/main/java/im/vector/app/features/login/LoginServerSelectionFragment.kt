@@ -27,7 +27,7 @@ import me.gujun.android.span.span
 import javax.inject.Inject
 
 /**
- * In this screen, the user will choose between matrix.org, modular or other type of homeserver
+ * In this screen, the user will choose between matrix.org, modular or other type of homeserver.
  */
 class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment<FragmentLoginServerSelectionBinding>() {
 

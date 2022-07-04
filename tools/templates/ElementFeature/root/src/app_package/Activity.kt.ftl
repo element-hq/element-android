@@ -8,7 +8,7 @@ import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 
-//TODO: add this activity to manifest
+//TODO add this activity to manifest
 class ${activityClass} : VectorBaseActivity(), ToolbarConfigurable {
 
     companion object {

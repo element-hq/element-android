@@ -26,6 +26,8 @@ import java.io.Serializable
  * This class adds more context to a OlmInboundGroupSession object.
  * This allows additional checks. The class implements Serializable so that the context can be stored.
  */
+// Note used anymore, just for database migration
+// Deprecated("Use MXInboundMegolmSessionWrapper")
 internal class OlmInboundGroupSessionWrapper2 : Serializable {
 
     // The associated olm inbound group session.
@@ -57,7 +59,7 @@ internal class OlmInboundGroupSessionWrapper2 : Serializable {
         }
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param sessionKey the session key
      * @param isImported true if it is an imported session key
@@ -104,7 +106,7 @@ internal class OlmInboundGroupSessionWrapper2 : Serializable {
     }
 
     /**
-     * Export the inbound group session keys
+     * Export the inbound group session keys.
      * @param index the index to export. If null, the first known index will be used
      *
      * @return the inbound group session as MegolmSessionData if the operation succeeds

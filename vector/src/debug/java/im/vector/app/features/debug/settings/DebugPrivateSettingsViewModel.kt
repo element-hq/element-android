@@ -57,19 +57,21 @@ class DebugPrivateSettingsViewModel @AssistedInject constructor(
         debugVectorOverrides.forceHomeserverCapabilities.setOnEach {
             val activeDisplayNameOption = BooleanHomeserverCapabilitiesOverride.from(it.canChangeDisplayName)
             val activeAvatarOption = BooleanHomeserverCapabilitiesOverride.from(it.canChangeAvatar)
-            copy(homeserverCapabilityOverrides = homeserverCapabilityOverrides.copy(
-                    displayName = homeserverCapabilityOverrides.displayName.copy(activeOption = activeDisplayNameOption),
-                    avatar = homeserverCapabilityOverrides.avatar.copy(activeOption = activeAvatarOption),
-            ))
+            copy(
+                    homeserverCapabilityOverrides = homeserverCapabilityOverrides.copy(
+                            displayName = homeserverCapabilityOverrides.displayName.copy(activeOption = activeDisplayNameOption),
+                            avatar = homeserverCapabilityOverrides.avatar.copy(activeOption = activeAvatarOption),
+                    )
+            )
         }
     }
 
     override fun handle(action: DebugPrivateSettingsViewActions) {
         when (action) {
-            is DebugPrivateSettingsViewActions.SetDialPadVisibility         -> handleSetDialPadVisibility(action)
+            is DebugPrivateSettingsViewActions.SetDialPadVisibility -> handleSetDialPadVisibility(action)
             is DebugPrivateSettingsViewActions.SetForceLoginFallbackEnabled -> handleSetForceLoginFallbackEnabled(action)
-            is SetDisplayNameCapabilityOverride                             -> handleSetDisplayNameCapabilityOverride(action)
-            is SetAvatarCapabilityOverride                                  -> handleSetAvatarCapabilityOverride(action)
+            is SetDisplayNameCapabilityOverride -> handleSetDisplayNameCapabilityOverride(action)
+            is SetAvatarCapabilityOverride -> handleSetAvatarCapabilityOverride(action)
         }
     }
 

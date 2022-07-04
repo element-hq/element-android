@@ -54,9 +54,11 @@ class KeysBackupPasswordTest : InstrumentedTest {
         assertEquals(OlmPkDecryption.privateKeyLength(), generatePrivateKeyResult.privateKey.size)
 
         // Reverse operation
-        val retrievedPrivateKey = retrievePrivateKeyWithPassword(PASSWORD,
+        val retrievedPrivateKey = retrievePrivateKeyWithPassword(
+                PASSWORD,
                 generatePrivateKeyResult.salt,
-                generatePrivateKeyResult.iterations)
+                generatePrivateKeyResult.iterations
+        )
 
         assertEquals(OlmPkDecryption.privateKeyLength(), retrievedPrivateKey.size)
         assertArrayEquals(generatePrivateKeyResult.privateKey, retrievedPrivateKey)
@@ -102,9 +104,11 @@ class KeysBackupPasswordTest : InstrumentedTest {
         assertEquals(OlmPkDecryption.privateKeyLength(), generatePrivateKeyResult.privateKey.size)
 
         // Reverse operation, with bad password
-        val retrievedPrivateKey = retrievePrivateKeyWithPassword(BAD_PASSWORD,
+        val retrievedPrivateKey = retrievePrivateKeyWithPassword(
+                BAD_PASSWORD,
                 generatePrivateKeyResult.salt,
-                generatePrivateKeyResult.iterations)
+                generatePrivateKeyResult.iterations
+        )
 
         assertEquals(OlmPkDecryption.privateKeyLength(), retrievedPrivateKey.size)
         assertByteArrayNotEqual(generatePrivateKeyResult.privateKey, retrievedPrivateKey)
@@ -122,9 +126,11 @@ class KeysBackupPasswordTest : InstrumentedTest {
         assertEquals(OlmPkDecryption.privateKeyLength(), generatePrivateKeyResult.privateKey.size)
 
         // Reverse operation, with bad iteration
-        val retrievedPrivateKey = retrievePrivateKeyWithPassword(PASSWORD,
+        val retrievedPrivateKey = retrievePrivateKeyWithPassword(
+                PASSWORD,
                 generatePrivateKeyResult.salt,
-                500_001)
+                500_001
+        )
 
         assertEquals(OlmPkDecryption.privateKeyLength(), retrievedPrivateKey.size)
         assertByteArrayNotEqual(generatePrivateKeyResult.privateKey, retrievedPrivateKey)
@@ -142,9 +148,11 @@ class KeysBackupPasswordTest : InstrumentedTest {
         assertEquals(OlmPkDecryption.privateKeyLength(), generatePrivateKeyResult.privateKey.size)
 
         // Reverse operation, with bad iteration
-        val retrievedPrivateKey = retrievePrivateKeyWithPassword(PASSWORD,
+        val retrievedPrivateKey = retrievePrivateKeyWithPassword(
+                PASSWORD,
                 BAD_SALT,
-                generatePrivateKeyResult.iterations)
+                generatePrivateKeyResult.iterations
+        )
 
         assertEquals(OlmPkDecryption.privateKeyLength(), retrievedPrivateKey.size)
         assertByteArrayNotEqual(generatePrivateKeyResult.privateKey, retrievedPrivateKey)
@@ -168,7 +176,8 @@ class KeysBackupPasswordTest : InstrumentedTest {
                 116.toByte(), 224.toByte(), 229.toByte(), 224.toByte(), 9.toByte(), 3.toByte(), 178.toByte(), 162.toByte(),
                 120.toByte(), 23.toByte(), 108.toByte(), 218.toByte(), 22.toByte(), 61.toByte(), 241.toByte(), 200.toByte(),
                 235.toByte(), 173.toByte(), 236.toByte(), 100.toByte(), 115.toByte(), 247.toByte(), 33.toByte(), 132.toByte(),
-                195.toByte(), 154.toByte(), 64.toByte(), 158.toByte(), 184.toByte(), 148.toByte(), 20.toByte(), 85.toByte())
+                195.toByte(), 154.toByte(), 64.toByte(), 158.toByte(), 184.toByte(), 148.toByte(), 20.toByte(), 85.toByte()
+        )
 
         assertArrayEquals(privateKeyBytes, retrievedPrivateKey)
     }

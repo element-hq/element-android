@@ -182,6 +182,15 @@ class RoomMemberProfileController @Inject constructor(
         // More
         buildProfileSection(stringProvider.getString(R.string.room_profile_section_more))
 
+        if (!state.isMine) {
+            buildProfileAction(
+                    id = "direct",
+                    editable = false,
+                    title = stringProvider.getString(R.string.room_member_open_or_create_dm),
+                    action = { callback?.onOpenDmClicked() }
+            )
+        }
+
         buildProfileAction(
                 id = "overrideColor",
                 editable = false,
@@ -193,13 +202,6 @@ class RoomMemberProfileController @Inject constructor(
 
         if (!state.isMine) {
             val membership = state.asyncMembership() ?: return
-
-            buildProfileAction(
-                    id = "direct",
-                    editable = false,
-                    title = stringProvider.getString(R.string.room_member_open_or_create_dm),
-                    action = { callback?.onOpenDmClicked() }
-            )
 
             if (!state.isSpace && state.hasReadReceipt) {
                 buildProfileAction(
@@ -276,7 +278,7 @@ class RoomMemberProfileController @Inject constructor(
 
         if (canKick) {
             when (membership) {
-                Membership.JOIN   -> {
+                Membership.JOIN -> {
                     buildProfileAction(
                             id = "kick",
                             editable = false,
@@ -296,7 +298,7 @@ class RoomMemberProfileController @Inject constructor(
                             action = { callback?.onCancelInviteClicked() }
                     )
                 }
-                else              -> Unit
+                else -> Unit
             }
         }
         if (canBan) {

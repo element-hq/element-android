@@ -45,9 +45,9 @@ class ReviewTermsViewModel @AssistedInject constructor(
 
     override fun handle(action: ReviewTermsAction) {
         when (action) {
-            is ReviewTermsAction.LoadTerms          -> loadTerms(action)
+            is ReviewTermsAction.LoadTerms -> loadTerms(action)
             is ReviewTermsAction.MarkTermAsAccepted -> markTermAsAccepted(action)
-            ReviewTermsAction.Accept                -> acceptTerms()
+            ReviewTermsAction.Accept -> acceptTerms()
         }
     }
 
@@ -111,7 +111,8 @@ class ReviewTermsViewModel @AssistedInject constructor(
             try {
                 val data = session.termsService().getTerms(termsArgs.type, termsArgs.baseURL)
                 val terms = data.serverResponse.getLocalizedTerms(action.preferredLanguageCode).map {
-                    Term(it.localizedUrl ?: "",
+                    Term(
+                            it.localizedUrl ?: "",
                             it.localizedName ?: "",
                             it.version,
                             accepted = data.alreadyAcceptedTermUrls.contains(it.localizedUrl)

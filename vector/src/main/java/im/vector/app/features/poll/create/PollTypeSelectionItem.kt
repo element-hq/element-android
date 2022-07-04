@@ -24,8 +24,8 @@ import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import org.matrix.android.sdk.api.session.room.model.message.PollType
 
-@EpoxyModelClass(layout = R.layout.item_poll_type_selection)
-abstract class PollTypeSelectionItem : VectorEpoxyModel<PollTypeSelectionItem.Holder>() {
+@EpoxyModelClass
+abstract class PollTypeSelectionItem : VectorEpoxyModel<PollTypeSelectionItem.Holder>(R.layout.item_poll_type_selection) {
 
     @EpoxyAttribute
     var pollType: PollType = PollType.DISCLOSED_UNSTABLE
@@ -38,7 +38,7 @@ abstract class PollTypeSelectionItem : VectorEpoxyModel<PollTypeSelectionItem.Ho
 
         holder.pollTypeRadioGroup.check(
                 when (pollType) {
-                    PollType.DISCLOSED_UNSTABLE, PollType.DISCLOSED     -> R.id.openPollTypeRadioButton
+                    PollType.DISCLOSED_UNSTABLE, PollType.DISCLOSED -> R.id.openPollTypeRadioButton
                     PollType.UNDISCLOSED_UNSTABLE, PollType.UNDISCLOSED -> R.id.closedPollTypeRadioButton
                 }
         )

@@ -25,7 +25,7 @@ import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
 import org.matrix.android.sdk.internal.session.room.membership.threepid.ThreePidInviteBody
 
 /**
- * Parameter to create a room
+ * Parameter to create a room.
  */
 @JsonClass(generateAdapter = true)
 internal data class CreateRoomBody(
@@ -108,7 +108,7 @@ internal data class CreateRoomBody(
         val isDirect: Boolean?,
 
         /**
-         * The power level content to override in the default power level event
+         * The power level content to override in the default power level event.
          */
         @Json(name = "power_level_content_override")
         val powerLevelContentOverride: PowerLevelsContent?,

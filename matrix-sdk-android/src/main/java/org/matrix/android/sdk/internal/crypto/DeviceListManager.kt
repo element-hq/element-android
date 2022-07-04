@@ -102,7 +102,7 @@ internal class DeviceListManager @Inject constructor(
     }
 
     /**
-     * Tells if the key downloads should be tried
+     * Tells if the key downloads should be tried.
      *
      * @param userId the userId
      * @return true if the keys download can be retrieved
@@ -124,7 +124,7 @@ internal class DeviceListManager @Inject constructor(
     }
 
     /**
-     * Clear the unavailable server lists
+     * Clear the unavailable server lists.
      */
     private fun clearUnavailableServersList() {
         synchronized(notReadyToRetryHS) {
@@ -167,10 +167,10 @@ internal class DeviceListManager @Inject constructor(
     }
 
     /**
-     * Update the devices list statuses
+     * Update the devices list statuses.
      *
      * @param changed the user ids list which have new devices
-     * @param left    the user ids list which left a room
+     * @param left the user ids list which left a room
      */
     fun handleDeviceListsChanges(changed: Collection<String>, left: Collection<String>) {
         Timber.v("## CRYPTO: handleDeviceListsChanges changed: ${changed.logLimit()} / left: ${left.logLimit()}")
@@ -203,15 +203,14 @@ internal class DeviceListManager @Inject constructor(
     }
 
     /**
-     * This will flag each user whose devices we are tracking as in need of an
-     * + update
+     * This will flag each user whose devices we are tracking as in need of an update.
      */
     fun invalidateAllDeviceLists() {
         handleDeviceListsChanges(cryptoStore.getDeviceTrackingStatuses().keys, emptyList())
     }
 
     /**
-     * The keys download failed
+     * The keys download failed.
      *
      * @param userIds the user ids list
      */
@@ -224,7 +223,7 @@ internal class DeviceListManager @Inject constructor(
     /**
      * The keys download succeeded.
      *
-     * @param userIds  the userIds list
+     * @param userIds the userIds list
      * @param failures the failure map.
      */
     private fun onKeysDownloadSucceed(userIds: List<String>, failures: Map<String, Map<String, Any>>?): MXUsersDevicesMap<CryptoDeviceInfo> {
@@ -232,8 +231,8 @@ internal class DeviceListManager @Inject constructor(
             for ((k, value) in failures) {
                 val statusCode = when (val status = value["status"]) {
                     is Double -> status.toInt()
-                    is Int    -> status.toInt()
-                    else      -> 0
+                    is Int -> status.toInt()
+                    else -> 0
                 }
                 if (statusCode == 503) {
                     synchronized(notReadyToRetryHS) {
@@ -277,7 +276,7 @@ internal class DeviceListManager @Inject constructor(
      * Download the device keys for a list of users and stores the keys in the MXStore.
      * It must be called in getEncryptingThreadHandler() thread.
      *
-     * @param userIds       The users to fetch.
+     * @param userIds The users to fetch.
      * @param forceDownload Always download the keys even if cached.
      */
     suspend fun downloadKeys(userIds: List<String>?, forceDownload: Boolean): MXUsersDevicesMap<CryptoDeviceInfo> {
@@ -315,10 +314,19 @@ internal class DeviceListManager @Inject constructor(
         } else {
             Timber.v("## CRYPTO | downloadKeys() : starts")
             val t0 = clock.epochMillis()
-            val result = doKeyDownloadForUsers(downloadUsers)
-            Timber.v("## CRYPTO | downloadKeys() : doKeyDownloadForUsers succeeds after ${clock.epochMillis() - t0} ms")
-            result.also {
-                it.addEntriesFromMap(stored)
+            try {
+                val result = doKeyDownloadForUsers(downloadUsers)
+                Timber.v("## CRYPTO | downloadKeys() : doKeyDownloadForUsers succeeds after ${clock.epochMillis() - t0} ms")
+                result.also {
+                    it.addEntriesFromMap(stored)
+                }
+            } catch (failure: Throwable) {
+                Timber.w(failure, "## CRYPTO | downloadKeys() : doKeyDownloadForUsers failed after ${clock.epochMillis() - t0} ms")
+                if (forceDownload) {
+                    throw failure
+                } else {
+                    stored
+                }
             }
         }
     }
@@ -413,9 +421,9 @@ internal class DeviceListManager @Inject constructor(
      * Validate device keys.
      * This method must called on getEncryptingThreadHandler() thread.
      *
-     * @param deviceKeys                 the device keys to validate.
-     * @param userId                     the id of the user of the device.
-     * @param deviceId                   the id of the device.
+     * @param deviceKeys the device keys to validate.
+     * @param userId the id of the user of the device.
+     * @param deviceId the id of the device.
      * @param previouslyStoredDeviceKeys the device keys we received before for this device
      * @return true if succeeds
      */
@@ -543,7 +551,7 @@ internal class DeviceListManager @Inject constructor(
     companion object {
 
         /**
-         * State transition diagram for DeviceList.deviceTrackingStatus
+         * State transition diagram for DeviceList.deviceTrackingStatus.
          * <pre>
          *
          *                                   |

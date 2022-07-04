@@ -29,7 +29,7 @@ import java.util.IllformedLocaleException
 import java.util.Locale
 
 /**
- * Object to manage the Locale choice of the user
+ * Object to manage the Locale choice of the user.
  */
 object VectorLocale {
     private const val APPLICATION_LOCALE_COUNTRY_KEY = "APPLICATION_LOCALE_COUNTRY_KEY"
@@ -42,12 +42,12 @@ object VectorLocale {
     private const val ISO_15924_LATN = "Latn"
 
     /**
-     * The cache of supported application languages
+     * The cache of supported application languages.
      */
     private val supportedLocales = mutableListOf<Locale>()
 
     /**
-     * Provides the current application locale
+     * Provides the current application locale.
      */
     var applicationLocale = defaultLocale
         private set
@@ -55,14 +55,15 @@ object VectorLocale {
     private lateinit var context: Context
 
     /**
-     * Init this object
+     * Init this object.
      */
     fun init(context: Context) {
         this.context = context
         val preferences = DefaultSharedPreferences.getInstance(context)
 
         if (preferences.contains(APPLICATION_LOCALE_LANGUAGE_KEY)) {
-            applicationLocale = Locale(preferences.getString(APPLICATION_LOCALE_LANGUAGE_KEY, "")!!,
+            applicationLocale = Locale(
+                    preferences.getString(APPLICATION_LOCALE_LANGUAGE_KEY, "")!!,
                     preferences.getString(APPLICATION_LOCALE_COUNTRY_KEY, "")!!,
                     preferences.getString(APPLICATION_LOCALE_VARIANT_KEY, "")!!
             )
@@ -117,10 +118,10 @@ object VectorLocale {
     }
 
     /**
-     * Get String from a locale
+     * Get String from a locale.
      *
-     * @param context    the context
-     * @param locale     the locale
+     * @param context the context
+     * @param locale the locale
      * @param resourceId the string resource id
      * @return the localized string
      */
@@ -137,7 +138,7 @@ object VectorLocale {
     }
 
     /**
-     * Init the supported application locales list
+     * Init the supported application locales list.
      */
     private fun initApplicationLocales() {
         val knownLocalesSet = HashSet<Triple<String, String, String>>()
@@ -188,7 +189,7 @@ object VectorLocale {
     }
 
     /**
-     * Convert a locale to a string
+     * Convert a locale to a string.
      *
      * @param locale the locale to convert
      * @return the string
@@ -211,7 +212,7 @@ object VectorLocale {
     }
 
     /**
-     * Information about the locale in the current locale
+     * Information about the locale in the current locale.
      *
      * @param locale the locale to get info from
      * @return the string

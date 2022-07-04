@@ -26,7 +26,7 @@ import org.matrix.android.sdk.MatrixTest
 class BinaryStringTest : MatrixTest {
 
     /**
-     * I want to put bytes to a String, and vice versa
+     * I want to put bytes to a String, and vice versa.
      */
     @Test
     fun testNominalCase() {

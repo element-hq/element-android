@@ -44,8 +44,8 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
-import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.QueryStringValue
+import org.matrix.android.sdk.api.query.SpaceFilter
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -63,12 +63,13 @@ import org.matrix.android.sdk.api.session.space.model.TopLevelSpaceComparator
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.flow.flow
 
-class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: SpaceListViewState,
-                                                     private val appStateHandler: AppStateHandler,
-                                                     private val session: Session,
-                                                     private val vectorPreferences: VectorPreferences,
-                                                     private val autoAcceptInvites: AutoAcceptInvites,
-                                                     private val analyticsTracker: AnalyticsTracker
+class SpaceListViewModel @AssistedInject constructor(
+        @Assisted initialState: SpaceListViewState,
+        private val appStateHandler: AppStateHandler,
+        private val session: Session,
+        private val vectorPreferences: VectorPreferences,
+        private val autoAcceptInvites: AutoAcceptInvites,
+        private val analyticsTracker: AnalyticsTracker
 ) : VectorViewModel<SpaceListViewState, SpaceListAction, SpaceListViewEvents>(initialState) {
 
     @AssistedFactory
@@ -110,9 +111,9 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
         session.roomService().getPagedRoomSummariesLive(
                 roomSummaryQueryParams {
                     this.memberships = listOf(Membership.JOIN)
-                    this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null).takeIf {
+                    this.spaceFilter = SpaceFilter.OrphanRooms.takeIf {
                         !vectorPreferences.prefSpacesShowAllRoomInHome()
-                    } ?: ActiveSpaceFilter.None
+                    }
                 }, sortOrder = RoomSortOrder.NONE
         ).asFlow()
                 .sample(300)
@@ -127,9 +128,9 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
                     val totalCount = session.roomService().getNotificationCountForRooms(
                             roomSummaryQueryParams {
                                 this.memberships = listOf(Membership.JOIN)
-                                this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null).takeIf {
+                                this.spaceFilter = SpaceFilter.OrphanRooms.takeIf {
                                     !vectorPreferences.prefSpacesShowAllRoomInHome()
-                                } ?: ActiveSpaceFilter.None
+                                }
                             }
                     )
                     val counts = RoomAggregateNotificationCount(
@@ -148,15 +149,15 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
 
     override fun handle(action: SpaceListAction) {
         when (action) {
-            is SpaceListAction.SelectSpace       -> handleSelectSpace(action)
-            is SpaceListAction.LeaveSpace        -> handleLeaveSpace(action)
-            SpaceListAction.AddSpace             -> handleAddSpace()
-            is SpaceListAction.ToggleExpand      -> handleToggleExpand(action)
-            is SpaceListAction.OpenSpaceInvite   -> handleSelectSpaceInvite(action)
+            is SpaceListAction.SelectSpace -> handleSelectSpace(action)
+            is SpaceListAction.LeaveSpace -> handleLeaveSpace(action)
+            SpaceListAction.AddSpace -> handleAddSpace()
+            is SpaceListAction.ToggleExpand -> handleToggleExpand(action)
+            is SpaceListAction.OpenSpaceInvite -> handleSelectSpaceInvite(action)
             is SpaceListAction.SelectLegacyGroup -> handleSelectGroup(action)
-            is SpaceListAction.MoveSpace         -> handleMoveSpace(action)
-            is SpaceListAction.OnEndDragging     -> handleEndDragging()
-            is SpaceListAction.OnStartDragging   -> handleStartDragging()
+            is SpaceListAction.MoveSpace -> handleMoveSpace(action)
+            is SpaceListAction.OnEndDragging -> handleEndDragging()
+            is SpaceListAction.OnStartDragging -> handleStartDragging()
         }
     }
 

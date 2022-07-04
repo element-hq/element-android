@@ -53,12 +53,13 @@ import java.io.File
 import javax.inject.Inject
 
 /**
- * This helper centralise ways to retrieve avatar into ImageView or even generic Target<Drawable>
+ * This helper centralise ways to retrieve avatar into ImageView or even generic Target<Drawable>.
  */
-
-class AvatarRenderer @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
-                                         private val matrixItemColorProvider: MatrixItemColorProvider,
-                                         private val dimensionConverter: DimensionConverter) {
+class AvatarRenderer @Inject constructor(
+        private val activeSessionHolder: ActiveSessionHolder,
+        private val matrixItemColorProvider: MatrixItemColorProvider,
+        private val dimensionConverter: DimensionConverter
+) {
 
     companion object {
         private const val THUMBNAIL_SIZE = 250
@@ -66,9 +67,11 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
 
     @UiThread
     fun render(matrixItem: MatrixItem, imageView: ImageView) {
-        render(GlideApp.with(imageView),
+        render(
+                GlideApp.with(imageView),
                 matrixItem,
-                DrawableImageViewTarget(imageView))
+                DrawableImageViewTarget(imageView)
+        )
     }
 
 //    fun renderSpace(matrixItem: MatrixItem, imageView: ImageView) {
@@ -97,9 +100,11 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
 
     @UiThread
     fun render(matrixItem: MatrixItem, imageView: ImageView, glideRequests: GlideRequests) {
-        render(glideRequests,
+        render(
+                glideRequests,
                 matrixItem,
-                DrawableImageViewTarget(imageView))
+                DrawableImageViewTarget(imageView)
+        )
     }
 
     @UiThread
@@ -147,9 +152,11 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
     }
 
     @UiThread
-    fun render(glideRequests: GlideRequests,
-               matrixItem: MatrixItem,
-               target: Target<Drawable>) {
+    fun render(
+            glideRequests: GlideRequests,
+            matrixItem: MatrixItem,
+            target: Target<Drawable>
+    ) {
         val placeholder = getPlaceholderDrawable(matrixItem)
         glideRequests.loadResolvedUrl(matrixItem.avatarUrl)
                 .let {
@@ -157,7 +164,7 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
                         is MatrixItem.SpaceItem -> {
                             it.transform(MultiTransformation(CenterCrop(), RoundedCorners(dimensionConverter.dpToPx(8))))
                         }
-                        else                    -> {
+                        else -> {
                             it.apply(RequestOptions.circleCropTransform())
                         }
                     }
@@ -179,10 +186,12 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
 
     @AnyThread
     @Throws
-    fun adaptiveShortcutDrawable(glideRequests: GlideRequests,
-                                 matrixItem: MatrixItem, iconSize: Int,
-                                 adaptiveIconSize: Int,
-                                 adaptiveIconOuterSides: Float): Bitmap {
+    fun adaptiveShortcutDrawable(
+            glideRequests: GlideRequests,
+            matrixItem: MatrixItem, iconSize: Int,
+            adaptiveIconSize: Int,
+            adaptiveIconOuterSides: Float
+    ): Bitmap {
         return glideRequests
                 .asBitmap()
                 .avatarOrText(matrixItem, iconSize)
@@ -200,23 +209,27 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
                 it.load(resolvedUrl)
             } else {
                 val avatarColor = matrixItemColorProvider.getColor(matrixItem)
-                it.load(TextDrawable.builder()
-                        .beginConfig()
-                        .bold()
-                        .endConfig()
-                        .buildRect(matrixItem.firstLetterOfDisplayName(), avatarColor)
-                        .toBitmap(width = iconSize, height = iconSize))
+                it.load(
+                        TextDrawable.builder()
+                                .beginConfig()
+                                .bold()
+                                .endConfig()
+                                .buildRect(matrixItem.firstLetterOfDisplayName(), avatarColor)
+                                .toBitmap(width = iconSize, height = iconSize)
+                )
             }
         }
     }
 
     @UiThread
-    fun renderBlur(matrixItem: MatrixItem,
-                   imageView: ImageView,
-                   sampling: Int,
-                   rounded: Boolean,
-                   @ColorInt colorFilter: Int? = null,
-                   addPlaceholder: Boolean) {
+    fun renderBlur(
+            matrixItem: MatrixItem,
+            imageView: ImageView,
+            sampling: Int,
+            rounded: Boolean,
+            @ColorInt colorFilter: Int? = null,
+            addPlaceholder: Boolean
+    ) {
         val transformations = mutableListOf<Transformation<Bitmap>>(
                 BlurTransformation(20, sampling)
         )
@@ -264,7 +277,7 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
                         is MatrixItem.SpaceItem -> {
                             it.buildRoundRect(matrixItem.firstLetterOfDisplayName(), avatarColor, dimensionConverter.dpToPx(8))
                         }
-                        else                    -> {
+                        else -> {
                             it.buildRound(matrixItem.firstLetterOfDisplayName(), avatarColor)
                         }
                     }

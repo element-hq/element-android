@@ -46,12 +46,13 @@ import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
 
 /**
- * This ViewModel observe a room summary and notify when the room is left
+ * This ViewModel observe a room summary and notify when the room is left.
  */
 class RequireActiveMembershipViewModel @AssistedInject constructor(
         @Assisted initialState: RequireActiveMembershipViewState,
         private val stringProvider: StringProvider,
-        private val session: Session) :
+        private val session: Session
+) :
         VectorViewModel<RequireActiveMembershipViewState, RequireActiveMembershipAction, RequireActiveMembershipViewEvents>(initialState) {
 
     @AssistedFactory
@@ -109,13 +110,13 @@ class RequireActiveMembershipViewModel @AssistedInject constructor(
                 }
                 RequireActiveMembershipViewEvents.RoomLeft(message)
             }
-            Membership.BAN   -> {
+            Membership.BAN -> {
                 val message = senderDisplayName?.let {
                     stringProvider.getString(R.string.has_been_banned, roomSummary.displayName, it)
                 }
                 RequireActiveMembershipViewEvents.RoomLeft(message)
             }
-            else             -> null
+            else -> null
         }
         return Optional.from(viewEvent)
     }

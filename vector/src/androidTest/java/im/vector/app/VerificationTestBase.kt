@@ -19,6 +19,7 @@ package im.vector.app
 import android.net.Uri
 import androidx.lifecycle.Observer
 import im.vector.app.ui.robot.OnboardingRobot
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -41,10 +42,12 @@ abstract class VerificationTestBase {
 
     protected val uiTestBase = OnboardingRobot()
 
-    fun createAccountAndSync(matrix: Matrix,
-                             userName: String,
-                             password: String,
-                             withInitialSync: Boolean): Session {
+    fun createAccountAndSync(
+            matrix: Matrix,
+            userName: String,
+            password: String,
+            withInitialSync: Boolean
+    ): Session {
         val hs = createHomeServerConfig()
 
         runBlockingTest {
@@ -107,20 +110,20 @@ abstract class VerificationTestBase {
         return result!!
     }
 
-    @Suppress("EXPERIMENTAL_API_USAGE")
+    @OptIn(DelicateCoroutinesApi::class)
     private fun syncSession(session: Session) {
         val lock = CountDownLatch(1)
 
         GlobalScope.launch(Dispatchers.Main) { session.open() }
 
-        session.startSync(true)
+        session.syncService().startSync(true)
 
         val syncLiveData = runBlocking(Dispatchers.Main) {
-            session.getSyncStateLive()
+            session.syncService().getSyncStateLive()
         }
         val syncObserver = object : Observer<SyncState> {
             override fun onChanged(t: SyncState?) {
-                if (session.hasAlreadySynced()) {
+                if (session.syncService().hasAlreadySynced()) {
                     lock.countDown()
                     syncLiveData.removeObserver(this)
                 }

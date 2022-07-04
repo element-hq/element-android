@@ -51,9 +51,10 @@ private const val ANIMATION_DURATION = 250
  * It will return result through [Callback].
  */
 
-class AttachmentTypeSelectorView(context: Context,
-                                 inflater: LayoutInflater,
-                                 var callback: Callback?
+class AttachmentTypeSelectorView(
+        context: Context,
+        inflater: LayoutInflater,
+        var callback: Callback?
 ) : PopupWindow(context) {
 
     interface Callback {
@@ -126,12 +127,12 @@ class AttachmentTypeSelectorView(context: Context,
 
     fun setAttachmentVisibility(type: Type, isVisible: Boolean) {
         when (type) {
-            Type.CAMERA   -> views.attachmentCameraButton
-            Type.GALLERY  -> views.attachmentGalleryButton
-            Type.FILE     -> views.attachmentFileButton
-            Type.STICKER  -> views.attachmentStickersButton
-            Type.CONTACT  -> views.attachmentContactButton
-            Type.POLL     -> views.attachmentPollButton
+            Type.CAMERA -> views.attachmentCameraButton
+            Type.GALLERY -> views.attachmentGalleryButton
+            Type.FILE -> views.attachmentFileButton
+            Type.STICKER -> views.attachmentStickersButton
+            Type.CONTACT -> views.attachmentContactButton
+            Type.POLL -> views.attachmentPollButton
             Type.LOCATION -> views.attachmentLocationButton
         }.let {
             it.isVisible = isVisible
@@ -140,22 +141,26 @@ class AttachmentTypeSelectorView(context: Context,
 
     private fun animateWindowInCircular(anchor: View, contentView: View) {
         val coordinates = getClickCoordinates(anchor, contentView)
-        val animator = ViewAnimationUtils.createCircularReveal(contentView,
+        val animator = ViewAnimationUtils.createCircularReveal(
+                contentView,
                 coordinates.first,
                 coordinates.second,
                 0f,
-                max(contentView.width, contentView.height).toFloat())
+                max(contentView.width, contentView.height).toFloat()
+        )
         animator.duration = ANIMATION_DURATION.toLong()
         animator.start()
     }
 
     private fun animateWindowOutCircular(anchor: View, contentView: View) {
         val coordinates = getClickCoordinates(anchor, contentView)
-        val animator = ViewAnimationUtils.createCircularReveal(getContentView(),
+        val animator = ViewAnimationUtils.createCircularReveal(
+                getContentView(),
                 coordinates.first,
                 coordinates.second,
                 max(getContentView().width, getContentView().height).toFloat(),
-                0f)
+                0f
+        )
 
         animator.duration = ANIMATION_DURATION.toLong()
         animator.addListener(object : AnimatorListenerAdapter() {
@@ -207,7 +212,7 @@ class AttachmentTypeSelectorView(context: Context,
     }
 
     /**
-     * The all possible types to pick with their required permissions and tooltip resource
+     * The all possible types to pick with their required permissions and tooltip resource.
      */
     enum class Type(val permissions: List<String>, @StringRes val tooltipRes: Int) {
         CAMERA(PERMISSIONS_FOR_TAKING_PHOTO, R.string.tooltip_attachment_photo),

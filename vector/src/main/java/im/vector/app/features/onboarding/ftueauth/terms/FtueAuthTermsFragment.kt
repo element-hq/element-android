@@ -41,7 +41,7 @@ import javax.inject.Inject
 import kotlin.math.roundToInt
 
 /**
- * LoginTermsFragment displays the list of policies the user has to accept
+ * LoginTermsFragment displays the list of policies the user has to accept.
  */
 class FtueAuthTermsFragment @Inject constructor(
         private val policyController: PolicyController

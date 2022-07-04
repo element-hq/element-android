@@ -24,5 +24,5 @@ sealed interface KeysBackupLastVersionResult {
 
 fun KeysBackupLastVersionResult.toKeysVersionResult(): KeysVersionResult? = when (this) {
     is KeysBackupLastVersionResult.KeysBackup -> keysVersionResult
-    KeysBackupLastVersionResult.NoKeysBackup  -> null
+    KeysBackupLastVersionResult.NoKeysBackup -> null
 }

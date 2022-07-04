@@ -26,5 +26,5 @@ fun getMatrixInstance(): Matrix {
     val configuration = MatrixConfiguration(
             roomDisplayNameFallbackProvider = VectorRoomDisplayNameFallbackProvider(context)
     )
-    return Matrix.createInstance(context, configuration)
+    return Matrix(context, configuration)
 }

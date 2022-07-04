@@ -33,12 +33,18 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import okhttp3.internal.toImmutableList
-import org.matrix.android.sdk.api.query.ActiveSpaceFilter
+import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
+import org.matrix.android.sdk.api.query.SpaceFilter
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
-import org.matrix.android.sdk.api.session.getRoomSummary
+import org.matrix.android.sdk.api.session.room.getStateEvent
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
+import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
+import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
@@ -50,52 +56,24 @@ class SpaceLeaveAdvancedViewModel @AssistedInject constructor(
         private val appStateHandler: AppStateHandler
 ) : VectorViewModel<SpaceLeaveAdvanceViewState, SpaceLeaveAdvanceViewAction, EmptyViewEvents>(initialState) {
 
-    override fun handle(action: SpaceLeaveAdvanceViewAction) = withState { state ->
-        when (action) {
-            is SpaceLeaveAdvanceViewAction.ToggleSelection -> {
-                val existing = state.selectedRooms.toMutableList()
-                if (existing.contains(action.roomId)) {
-                    existing.remove(action.roomId)
-                } else {
-                    existing.add(action.roomId)
-                }
-                setState {
-                    copy(
-                            selectedRooms = existing.toImmutableList()
-                    )
-                }
-            }
-            is SpaceLeaveAdvanceViewAction.UpdateFilter    -> {
-                setState { copy(currentFilter = action.filter) }
-            }
-            SpaceLeaveAdvanceViewAction.DoLeave            -> {
-                setState { copy(leaveState = Loading()) }
-                viewModelScope.launch {
-                    try {
-                        state.selectedRooms.forEach {
-                            try {
-                                session.roomService().leaveRoom(it)
-                            } catch (failure: Throwable) {
-                                // silently ignore?
-                                Timber.e(failure, "Fail to leave sub rooms/spaces")
-                            }
-                        }
+    init {
+        val space = session.getRoom(initialState.spaceId)
+        val spaceSummary = space?.roomSummary()
 
-                        session.spaceService().leaveSpace(initialState.spaceId)
-                        // We observe the membership and to dismiss when we have remote echo of leaving
-                    } catch (failure: Throwable) {
-                        setState { copy(leaveState = Fail(failure)) }
-                    }
-                }
-            }
-            SpaceLeaveAdvanceViewAction.ClearError         -> {
-                setState { copy(leaveState = Uninitialized) }
+        val powerLevelsEvent = space?.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
+        powerLevelsEvent?.content?.toModel<PowerLevelsContent>()?.let { powerLevelsContent ->
+            val powerLevelsHelper = PowerLevelsHelper(powerLevelsContent)
+            val isAdmin = powerLevelsHelper.getUserRole(session.myUserId) is Role.Admin
+            val otherAdminCount = spaceSummary?.otherMemberIds
+                    ?.map { powerLevelsHelper.getUserRole(it) }
+                    ?.count { it is Role.Admin }
+                    ?: 0
+            val isLastAdmin = isAdmin && otherAdminCount == 0
+            setState {
+                copy(isLastAdmin = isLastAdmin)
             }
         }
-    }
 
-    init {
-        val spaceSummary = session.getRoomSummary(initialState.spaceId)
         setState { copy(spaceSummary = spaceSummary) }
         session.getRoom(initialState.spaceId)?.let { room ->
             room.flow().liveRoomSummary()
@@ -116,7 +94,7 @@ class SpaceLeaveAdvancedViewModel @AssistedInject constructor(
                     roomSummaryQueryParams {
                         includeType = null
                         memberships = listOf(Membership.JOIN)
-                        activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(initialState.spaceId)
+                        spaceFilter = SpaceFilter.ActiveSpace(initialState.spaceId)
                         roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
                     }
             )
@@ -124,6 +102,62 @@ class SpaceLeaveAdvancedViewModel @AssistedInject constructor(
             setState {
                 copy(allChildren = Success(children))
             }
+        }
+    }
+
+    override fun handle(action: SpaceLeaveAdvanceViewAction) {
+        when (action) {
+            is SpaceLeaveAdvanceViewAction.UpdateFilter -> setState { copy(currentFilter = action.filter) }
+            SpaceLeaveAdvanceViewAction.ClearError -> setState { copy(leaveState = Uninitialized) }
+            SpaceLeaveAdvanceViewAction.SelectNone -> setState { copy(selectedRooms = emptyList()) }
+            is SpaceLeaveAdvanceViewAction.SetFilteringEnabled -> setState { copy(isFilteringEnabled = action.isEnabled) }
+            is SpaceLeaveAdvanceViewAction.ToggleSelection -> handleSelectionToggle(action)
+            SpaceLeaveAdvanceViewAction.DoLeave -> handleLeave()
+            SpaceLeaveAdvanceViewAction.SelectAll -> handleSelectAll()
+        }
+    }
+
+    private fun handleSelectAll() = withState { state ->
+        val filteredRooms = (state.allChildren as? Success)?.invoke()?.filter {
+            it.name.contains(state.currentFilter, true)
+        }
+        filteredRooms?.let {
+            setState { copy(selectedRooms = it.map { it.roomId }) }
+        }
+    }
+
+    private fun handleLeave() = withState { state ->
+        setState { copy(leaveState = Loading()) }
+        viewModelScope.launch {
+            try {
+                state.selectedRooms.forEach {
+                    try {
+                        session.roomService().leaveRoom(it)
+                    } catch (failure: Throwable) {
+                        // silently ignore?
+                        Timber.e(failure, "Fail to leave sub rooms/spaces")
+                    }
+                }
+
+                session.spaceService().leaveSpace(initialState.spaceId)
+                // We observe the membership and to dismiss when we have remote echo of leaving
+            } catch (failure: Throwable) {
+                setState { copy(leaveState = Fail(failure)) }
+            }
+        }
+    }
+
+    private fun handleSelectionToggle(action: SpaceLeaveAdvanceViewAction.ToggleSelection) = withState { state ->
+        val existing = state.selectedRooms.toMutableList()
+        if (existing.contains(action.roomId)) {
+            existing.remove(action.roomId)
+        } else {
+            existing.add(action.roomId)
+        }
+        setState {
+            copy(
+                    selectedRooms = existing.toImmutableList(),
+            )
         }
     }
 

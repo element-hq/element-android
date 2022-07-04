@@ -27,34 +27,34 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 interface ThreadsLocalService {
 
     /**
-     * Returns a [LiveData] list of all the thread root TimelineEvents that exists at the room level
+     * Returns a [LiveData] list of all the thread root TimelineEvents that exists at the room level.
      */
     fun getAllThreadsLive(): LiveData<List<TimelineEvent>>
 
     /**
-     * Returns a list of all the thread root TimelineEvents that exists at the room level
+     * Returns a list of all the thread root TimelineEvents that exists at the room level.
      */
     fun getAllThreads(): List<TimelineEvent>
 
     /**
-     * Returns a [LiveData] list of all the marked unread threads that exists at the room level
+     * Returns a [LiveData] list of all the marked unread threads that exists at the room level.
      */
     fun getMarkedThreadNotificationsLive(): LiveData<List<TimelineEvent>>
 
     /**
-     * Returns a list of all the marked unread threads that exists at the room level
+     * Returns a list of all the marked unread threads that exists at the room level.
      */
     fun getMarkedThreadNotifications(): List<TimelineEvent>
 
     /**
-     * Returns whether or not the current user is participating in the thread
-     * @param rootThreadEventId the eventId of the current thread
+     * Returns whether or not the current user is participating in the thread.
+     * @param rootThreadEventId the eventId of the current thread.
      */
     fun isUserParticipatingInThread(rootThreadEventId: String): Boolean
 
     /**
      * Enhance the provided root thread TimelineEvent [List] by adding the latest
-     * message edition for that thread
+     * message edition for that thread.
      * @return the enhanced [List] with edited updates
      */
     fun mapEventsWithEdition(threads: List<TimelineEvent>): List<TimelineEvent>

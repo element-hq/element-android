@@ -29,7 +29,7 @@ import java.util.Locale
 import javax.inject.Inject
 
 /**
- * Handle locale configuration change, such as theme, font size and locale chosen by the user
+ * Handle locale configuration change, such as theme, font size and locale chosen by the user.
  */
 class VectorConfiguration @Inject constructor(private val context: Context) {
 
@@ -57,7 +57,7 @@ class VectorConfiguration @Inject constructor(private val context: Context) {
     }
 
     /**
-     * Compute a localised context
+     * Compute a localised context.
      *
      * @param context the context
      * @return the localised context
@@ -100,7 +100,7 @@ class VectorConfiguration @Inject constructor(private val context: Context) {
     }
 
     /**
-     * Compute the locale status value
+     * Compute the locale status value.
      * @return the local status value
      */
     fun getHash(): String {

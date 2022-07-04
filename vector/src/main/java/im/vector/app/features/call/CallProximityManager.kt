@@ -85,7 +85,7 @@ class CallProximityManager @Inject constructor(
     }
 
     /**
-     * Recommending naming convention for WakeLock tags is "app:tag"
+     * Recommending naming convention for WakeLock tags is "app:tag".
      */
     private fun generateWakeLockTag() = "${stringProvider.getString(R.string.app_name)}:$PROXIMITY_WAKE_LOCK_TAG"
 

@@ -90,10 +90,10 @@ class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), Matrix
 
         sharedViewModel.observeViewEvents {
             when (it) {
-                SpaceDirectoryViewEvents.Dismiss                      -> {
+                SpaceDirectoryViewEvents.Dismiss -> {
                     finish()
                 }
-                is SpaceDirectoryViewEvents.NavigateToRoom            -> {
+                is SpaceDirectoryViewEvents.NavigateToRoom -> {
                     navigator.openRoom(
                             context = this,
                             roomId = it.roomId,
@@ -103,12 +103,14 @@ class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), Matrix
                 is SpaceDirectoryViewEvents.NavigateToMxToBottomSheet -> {
                     MatrixToBottomSheet.withLink(it.link, OriginOfMatrixTo.SPACE_EXPLORE).show(supportFragmentManager, "ShowChild")
                 }
-                is SpaceDirectoryViewEvents.NavigateToCreateNewRoom   -> {
-                    createRoomResultLauncher.launch(CreateRoomActivity.getIntent(
-                            this,
-                            openAfterCreate = false,
-                            currentSpaceId = it.currentSpaceId
-                    ))
+                is SpaceDirectoryViewEvents.NavigateToCreateNewRoom -> {
+                    createRoomResultLauncher.launch(
+                            CreateRoomActivity.getIntent(
+                                    this,
+                                    openAfterCreate = false,
+                                    currentSpaceId = it.currentSpaceId
+                            )
+                    )
                 }
             }
         }

@@ -31,7 +31,7 @@ import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import javax.inject.Inject
 
 /**
- * Display some information about the homeserver
+ * Display some information about the homeserver.
  */
 class HomeserverSettingsFragment @Inject constructor(
         private val homeserverSettingsController: HomeserverSettingsController

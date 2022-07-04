@@ -89,6 +89,8 @@ class CallControlsView @JvmOverloads constructor(
             views.videoToggleIcon.setImageResource(R.drawable.ic_video_off)
             views.videoToggleIcon.contentDescription = resources.getString(R.string.a11y_start_camera)
         }
+        views.videoToggleIcon.isEnabled = !state.isSharingScreen
+        views.videoToggleIcon.alpha = if (state.isSharingScreen) 0.5f else 1f
 
         when (callState) {
             is CallState.LocalRinging -> {
@@ -101,17 +103,17 @@ class CallControlsView @JvmOverloads constructor(
             CallState.Idle,
             is CallState.Connected,
             is CallState.Dialing,
-            is CallState.Answering    -> {
+            is CallState.Answering -> {
                 views.ringingControls.isVisible = false
                 views.connectedControls.isVisible = true
                 views.videoToggleIcon.isVisible = state.isVideoCall
                 views.moreIcon.isVisible = callState is CallState.Connected && callState.iceConnectionState == MxPeerConnectionState.CONNECTED
             }
-            is CallState.Ended        -> {
+            is CallState.Ended -> {
                 views.ringingControls.isVisible = false
                 views.connectedControls.isVisible = false
             }
-            null                      -> Unit
+            null -> Unit
         }
     }
 

@@ -41,7 +41,7 @@ import javax.inject.Inject
 import javax.net.ssl.HttpsURLConnection
 
 /**
- * In this screen, the user is prompted to enter a homeserver url
+ * In this screen, the user is prompted to enter a homeserver url.
  */
 class LoginServerUrlFormFragment2 @Inject constructor() : AbstractLoginFragment2<FragmentLoginServerUrlForm2Binding>() {
 
@@ -81,11 +81,13 @@ class LoginServerUrlFormFragment2 @Inject constructor() : AbstractLoginFragment2
 
     private fun setupUi(state: LoginViewState2) {
         val completions = state.knownCustomHomeServersUrls + if (BuildConfig.DEBUG) listOf("http://10.0.2.2:8080") else emptyList()
-        views.loginServerUrlFormHomeServerUrl.setAdapter(ArrayAdapter(
-                requireContext(),
-                R.layout.item_completion_homeserver,
-                completions
-        ))
+        views.loginServerUrlFormHomeServerUrl.setAdapter(
+                ArrayAdapter(
+                        requireContext(),
+                        R.layout.item_completion_homeserver,
+                        completions
+                )
+        )
         views.loginServerUrlFormHomeServerUrlTil.endIconMode = TextInputLayout.END_ICON_DROPDOWN_MENU
                 .takeIf { completions.isNotEmpty() }
                 ?: TextInputLayout.END_ICON_NONE
@@ -112,7 +114,7 @@ class LoginServerUrlFormFragment2 @Inject constructor() : AbstractLoginFragment2
             serverUrl.isBlank() -> {
                 views.loginServerUrlFormHomeServerUrlTil.error = getString(R.string.login_error_invalid_home_server)
             }
-            else                -> {
+            else -> {
                 views.loginServerUrlFormHomeServerUrl.setText(serverUrl, false /* to avoid completion dialog flicker*/)
                 loginViewModel.handle(LoginAction2.UpdateHomeServer(serverUrl))
             }

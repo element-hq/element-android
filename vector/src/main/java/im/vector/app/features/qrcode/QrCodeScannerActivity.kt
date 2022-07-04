@@ -29,7 +29,7 @@ import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
 
 @AndroidEntryPoint
-class QrCodeScannerActivity() : VectorBaseActivity<ActivitySimpleBinding>() {
+class QrCodeScannerActivity : VectorBaseActivity<ActivitySimpleBinding>() {
 
     override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
 
@@ -42,14 +42,14 @@ class QrCodeScannerActivity() : VectorBaseActivity<ActivitySimpleBinding>() {
 
         qrViewModel.observeViewEvents {
             when (it) {
-                is QrCodeScannerEvents.CodeParsed  -> {
+                is QrCodeScannerEvents.CodeParsed -> {
                     setResultAndFinish(it.result, it.isQrCode)
                 }
                 is QrCodeScannerEvents.ParseFailed -> {
                     Toast.makeText(this, R.string.qr_code_not_scanned, Toast.LENGTH_SHORT).show()
                     finish()
                 }
-                else                               -> Unit
+                else -> Unit
             }
         }
 

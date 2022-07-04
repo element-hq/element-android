@@ -128,7 +128,8 @@ class StartAuthenticationFlowUseCaseTest {
             ssoIdentityProviders = SSO_IDENTITY_PROVIDERS,
             isLoginAndRegistrationSupported = true,
             homeServerUrl = A_DECLARED_HOMESERVER_URL,
-            isOutdatedHomeserver = false
+            isOutdatedHomeserver = false,
+            isLogoutDevicesSupported = false
     )
 
     private fun expectedResult(

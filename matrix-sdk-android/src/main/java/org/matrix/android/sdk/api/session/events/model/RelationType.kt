@@ -16,7 +16,7 @@
 package org.matrix.android.sdk.api.session.events.model
 
 /**
- * Constants defining known event relation types from Matrix specifications
+ * Constants defining known event relation types from Matrix specifications.
  */
 object RelationType {
     /** Lets you define an event which annotates an existing event.*/

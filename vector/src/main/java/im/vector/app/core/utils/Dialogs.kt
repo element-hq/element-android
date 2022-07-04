@@ -30,7 +30,7 @@ import me.gujun.android.span.span
 /**
  * Open a web view above the current activity.
  *
- * @param url     the url to open
+ * @param url the url to open
  */
 fun Context.displayInWebView(url: String) {
     val wv = WebView(this)
@@ -45,8 +45,10 @@ fun Context.displayInWebView(url: String) {
             .show()
 }
 
-fun Context.showIdentityServerConsentDialog(identityServerWithTerms: ServerAndPolicies?,
-                                            consentCallBack: (() -> Unit)) {
+fun Context.showIdentityServerConsentDialog(
+        identityServerWithTerms: ServerAndPolicies?,
+        consentCallBack: (() -> Unit)
+) {
     // Build the message
     val content = span {
         +getString(R.string.identity_server_consent_dialog_content_3)

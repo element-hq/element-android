@@ -28,43 +28,50 @@ class DebugFeaturesStateFactory @Inject constructor(
 ) {
 
     fun create(): FeaturesState {
-        return FeaturesState(listOf(
-                createEnumFeature(
-                        label = "Onboarding variant",
-                        featureOverride = debugFeatures.onboardingVariant(),
-                        featureDefault = defaultFeatures.onboardingVariant()
-                ),
-                createBooleanFeature(
-                        label = "FTUE Splash - I already have an account",
-                        key = DebugFeatureKeys.onboardingAlreadyHaveAnAccount,
-                        factory = VectorFeatures::isOnboardingAlreadyHaveAccountSplashEnabled
-                ),
-                createBooleanFeature(
-                        label = "FTUE Splash - carousel",
-                        key = DebugFeatureKeys.onboardingSplashCarousel,
-                        factory = VectorFeatures::isOnboardingSplashCarouselEnabled
-                ),
-                createBooleanFeature(
-                        label = "FTUE Use Case",
-                        key = DebugFeatureKeys.onboardingUseCase,
-                        factory = VectorFeatures::isOnboardingUseCaseEnabled
-                ),
-                createBooleanFeature(
-                        label = "FTUE Personalize profile",
-                        key = DebugFeatureKeys.onboardingPersonalize,
-                        factory = VectorFeatures::isOnboardingPersonalizeEnabled
-                ),
-                createBooleanFeature(
-                        label = "FTUE Combined register",
-                        key = DebugFeatureKeys.onboardingCombinedRegister,
-                        factory = VectorFeatures::isOnboardingCombinedRegisterEnabled
-                ),
-                createBooleanFeature(
-                        label = "Live location sharing",
-                        key = DebugFeatureKeys.liveLocationSharing,
-                        factory = VectorFeatures::isLiveLocationEnabled
-                ),
-        ))
+        return FeaturesState(
+                listOf(
+                        createEnumFeature(
+                                label = "Onboarding variant",
+                                featureOverride = debugFeatures.onboardingVariant(),
+                                featureDefault = defaultFeatures.onboardingVariant()
+                        ),
+                        createBooleanFeature(
+                                label = "FTUE Splash - I already have an account",
+                                key = DebugFeatureKeys.onboardingAlreadyHaveAnAccount,
+                                factory = VectorFeatures::isOnboardingAlreadyHaveAccountSplashEnabled
+                        ),
+                        createBooleanFeature(
+                                label = "FTUE Splash - carousel",
+                                key = DebugFeatureKeys.onboardingSplashCarousel,
+                                factory = VectorFeatures::isOnboardingSplashCarouselEnabled
+                        ),
+                        createBooleanFeature(
+                                label = "FTUE Use Case",
+                                key = DebugFeatureKeys.onboardingUseCase,
+                                factory = VectorFeatures::isOnboardingUseCaseEnabled
+                        ),
+                        createBooleanFeature(
+                                label = "FTUE Personalize profile",
+                                key = DebugFeatureKeys.onboardingPersonalize,
+                                factory = VectorFeatures::isOnboardingPersonalizeEnabled
+                        ),
+                        createBooleanFeature(
+                                label = "FTUE Combined register",
+                                key = DebugFeatureKeys.onboardingCombinedRegister,
+                                factory = VectorFeatures::isOnboardingCombinedRegisterEnabled
+                        ),
+                        createBooleanFeature(
+                                label = "FTUE Combined login",
+                                key = DebugFeatureKeys.onboardingCombinedLogin,
+                                factory = VectorFeatures::isOnboardingCombinedLoginEnabled
+                        ),
+                        createBooleanFeature(
+                                label = "Allow external UnifiedPush distributors",
+                                key = DebugFeatureKeys.allowExternalUnifiedPushDistributors,
+                                factory = VectorFeatures::allowExternalUnifiedPushDistributors
+                        ),
+                )
+        )
     }
 
     private fun createBooleanFeature(key: Preferences.Key<Boolean>, label: String, factory: KFunction1<VectorFeatures, Boolean>): Feature {

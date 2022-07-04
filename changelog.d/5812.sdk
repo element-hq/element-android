@@ -1,1 +1,0 @@
-Move package `org.matrix.android.sdk.api.pushrules` to `org.matrix.android.sdk.api.session.pushrules`

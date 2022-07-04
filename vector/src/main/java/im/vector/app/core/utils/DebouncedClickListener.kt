@@ -21,8 +21,8 @@ import timber.log.Timber
 import java.util.WeakHashMap
 
 /**
- * Simple Debounced OnClickListener
- * Safe to use in different views
+ * Simple Debounced OnClickListener.
+ * Safe to use in different views.
  */
 class DebouncedClickListener(
         val original: View.OnClickListener,

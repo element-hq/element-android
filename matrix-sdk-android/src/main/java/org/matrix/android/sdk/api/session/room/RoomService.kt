@@ -36,12 +36,12 @@ import org.matrix.android.sdk.api.util.Optional
 interface RoomService {
 
     /**
-     * Create a room asynchronously
+     * Create a room asynchronously.
      */
     suspend fun createRoom(createRoomParams: CreateRoomParams): String
 
     /**
-     * Create a direct room asynchronously. This is a facility method to create a direct room with the necessary parameters
+     * Create a direct room asynchronously. This is a facility method to create a direct room with the necessary parameters.
      */
     suspend fun createDirectRoom(otherUserId: String): String {
         return createRoom(
@@ -55,14 +55,16 @@ interface RoomService {
     }
 
     /**
-     * Join a room by id
+     * Join a room by id.
      * @param roomIdOrAlias the roomId or the room alias of the room to join
      * @param reason optional reason for joining the room
      * @param viaServers the servers to attempt to join the room through. One of the servers must be participating in the room.
      */
-    suspend fun joinRoom(roomIdOrAlias: String,
-                         reason: String? = null,
-                         viaServers: List<String> = emptyList())
+    suspend fun joinRoom(
+            roomIdOrAlias: String,
+            reason: String? = null,
+            viaServers: List<String> = emptyList()
+    )
 
     /**
      * @param roomId the roomId of the room to join
@@ -84,42 +86,52 @@ interface RoomService {
     suspend fun leaveRoom(roomId: String, reason: String? = null)
 
     /**
-     * Get a room from a roomId
+     * Get a room from a roomId.
      * @param roomId the roomId to look for.
      * @return a room with roomId or null
      */
     fun getRoom(roomId: String): Room?
 
     /**
-     * Get a roomSummary from a roomId or a room alias
+     * Get a roomSummary from a roomId or a room alias.
      * @param roomIdOrAlias the roomId or the alias of a room to look for.
      * @return a matching room summary or null
      */
     fun getRoomSummary(roomIdOrAlias: String): RoomSummary?
 
     /**
+     * A live [RoomSummary] associated with the room with id [roomId].
+     * You can observe this summary to get dynamic data from this room, even if the room is not joined yet
+     */
+    fun getRoomSummaryLive(roomId: String): LiveData<Optional<RoomSummary>>
+
+    /**
      * Get a snapshot list of room summaries.
      * @return the immutable list of [RoomSummary]
      */
-    fun getRoomSummaries(queryParams: RoomSummaryQueryParams,
-                         sortOrder: RoomSortOrder = RoomSortOrder.NONE): List<RoomSummary>
+    fun getRoomSummaries(
+            queryParams: RoomSummaryQueryParams,
+            sortOrder: RoomSortOrder = RoomSortOrder.NONE
+    ): List<RoomSummary>
 
     /**
      * Get a live list of room summaries. This list is refreshed as soon as the data changes.
      * @return the [LiveData] of List[RoomSummary]
      */
-    fun getRoomSummariesLive(queryParams: RoomSummaryQueryParams,
-                             sortOrder: RoomSortOrder = RoomSortOrder.ACTIVITY): LiveData<List<RoomSummary>>
+    fun getRoomSummariesLive(
+            queryParams: RoomSummaryQueryParams,
+            sortOrder: RoomSortOrder = RoomSortOrder.ACTIVITY
+    ): LiveData<List<RoomSummary>>
 
     /**
-     * Get a snapshot list of Breadcrumbs
+     * Get a snapshot list of Breadcrumbs.
      * @param queryParams parameters to query the room summaries. It can be use to keep only joined rooms, for instance.
      * @return the immutable list of [RoomSummary]
      */
     fun getBreadcrumbs(queryParams: RoomSummaryQueryParams): List<RoomSummary>
 
     /**
-     * Get a live list of Breadcrumbs
+     * Get a live list of Breadcrumbs.
      * @param queryParams parameters to query the room summaries. It can be use to keep only joined rooms, for instance.
      * @return the [LiveData] of [RoomSummary]
      */
@@ -132,18 +144,20 @@ interface RoomService {
     suspend fun onRoomDisplayed(roomId: String)
 
     /**
-     * Mark all rooms as read
+     * Mark all rooms as read.
      */
     suspend fun markAllAsRead(roomIds: List<String>)
 
     /**
      * Resolve a room alias to a room ID.
      */
-    suspend fun getRoomIdByAlias(roomAlias: String,
-                                 searchOnServer: Boolean): Optional<RoomAliasDescription>
+    suspend fun getRoomIdByAlias(
+            roomAlias: String,
+            searchOnServer: Boolean
+    ): Optional<RoomAliasDescription>
 
     /**
-     * Delete a room alias
+     * Delete a room alias.
      */
     suspend fun deleteRoomAlias(roomAlias: String)
 
@@ -162,7 +176,7 @@ interface RoomService {
     fun getChangeMembershipsLive(): LiveData<Map<String, ChangeMembershipState>>
 
     /**
-     * Return the roomId of an existing DM with the other user, or null if such room does not exist
+     * Return the roomId of an existing DM with the other user, or null if such room does not exist.
      * A room is a DM if:
      *  - it is listed in the `m.direct` account data
      *  - the current user has joined the room
@@ -175,7 +189,7 @@ interface RoomService {
     fun getExistingDirectRoomWithUser(otherUserId: String): String?
 
     /**
-     * Get a room member for the tuple {userId,roomId}
+     * Get a room member for the tuple {userId,roomId}.
      * @param userId the userId to look for.
      * @param roomId the roomId to look for.
      * @return the room member or null
@@ -183,7 +197,7 @@ interface RoomService {
     fun getRoomMember(userId: String, roomId: String): RoomMemberSummary?
 
     /**
-     * Observe a live room member for the tuple {userId,roomId}
+     * Observe a live room member for the tuple {userId,roomId}.
      * @param userId the userId to look for.
      * @param roomId the roomId to look for.
      * @return a LiveData of the optional found room member
@@ -191,39 +205,50 @@ interface RoomService {
     fun getRoomMemberLive(userId: String, roomId: String): LiveData<Optional<RoomMemberSummary>>
 
     /**
-     * Get some state events about a room
+     * Get some state events about a room.
      */
     suspend fun getRoomState(roomId: String): List<Event>
 
     /**
-     * Use this if you want to get information from a room that you are not yet in (or invited)
-     * It might be possible to get some information on this room if it is public or if guest access is allowed
-     * This call will try to gather some information on this room, but it could fail and get nothing more
+     * Use this if you want to get information from a room that you are not yet in (or invited).
+     * It might be possible to get some information on this room if it is public or if guest access is allowed.
+     * This call will try to gather some information on this room, but it could fail and get nothing more.
      */
     suspend fun peekRoom(roomIdOrAlias: String): PeekResult
 
     /**
-     * TODO Doc
+     * TODO Doc.
      */
-    fun getPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams,
-                                  pagedListConfig: PagedList.Config = defaultPagedListConfig,
-                                  sortOrder: RoomSortOrder = RoomSortOrder.ACTIVITY): LiveData<PagedList<RoomSummary>>
+    fun getPagedRoomSummariesLive(
+            queryParams: RoomSummaryQueryParams,
+            pagedListConfig: PagedList.Config = defaultPagedListConfig,
+            sortOrder: RoomSortOrder = RoomSortOrder.ACTIVITY
+    ): LiveData<PagedList<RoomSummary>>
 
     /**
-     * TODO Doc
+     * Get's a live paged list from a filter that can be dynamically updated.
+     *
+     * @param queryParams The filter to use
+     * @param pagedListConfig The paged list configuration (page size, initial load, prefetch distance...)
+     * @param sortOrder defines how to sort the results
+     * @param getFlattenParents When true, the list of known parents and grand parents summaries will be resolved.
+     * This can have significant impact on performance, better be used only on manageable list (filtered by displayName, ..).
      */
-    fun getFilteredPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams,
-                                          pagedListConfig: PagedList.Config = defaultPagedListConfig,
-                                          sortOrder: RoomSortOrder = RoomSortOrder.ACTIVITY): UpdatableLivePageResult
+    fun getFilteredPagedRoomSummariesLive(
+            queryParams: RoomSummaryQueryParams,
+            pagedListConfig: PagedList.Config = defaultPagedListConfig,
+            sortOrder: RoomSortOrder = RoomSortOrder.ACTIVITY,
+            getFlattenParents: Boolean = false,
+    ): UpdatableLivePageResult
 
     /**
-     * Return a LiveData on the number of rooms
+     * Return a LiveData on the number of rooms.
      * @param queryParams parameters to query the room summaries. It can be use to keep only joined rooms, for instance.
      */
     fun getRoomCountLive(queryParams: RoomSummaryQueryParams): LiveData<Int>
 
     /**
-     * TODO Doc
+     * TODO Doc.
      */
     fun getNotificationCountForRooms(queryParams: RoomSummaryQueryParams): RoomAggregateNotificationCount
 
@@ -238,16 +263,18 @@ interface RoomService {
     fun getFlattenRoomSummaryChildrenOf(spaceId: String?, memberships: List<Membership> = Membership.activeMemberships()): List<RoomSummary>
 
     /**
-     * Returns all the children of this space, as LiveData
+     * Returns all the children of this space, as LiveData.
      */
-    fun getFlattenRoomSummaryChildrenOfLive(spaceId: String?,
-                                            memberships: List<Membership> = Membership.activeMemberships()): LiveData<List<RoomSummary>>
+    fun getFlattenRoomSummaryChildrenOfLive(
+            spaceId: String?,
+            memberships: List<Membership> = Membership.activeMemberships()
+    ): LiveData<List<RoomSummary>>
 
     /**
-     * Refreshes the RoomSummary LatestPreviewContent for the given @param roomId
-     * If the roomId is null, all rooms are updated
+     * Refreshes the RoomSummary LatestPreviewContent for the given @param roomId.
+     * If the roomId is null, all rooms are updated.
      *
-     * This is useful for refreshing summary content with encrypted messages after receiving new room keys
+     * This is useful for refreshing summary content with encrypted messages after receiving new room keys.
      */
     fun refreshJoinedRoomSummaryPreviews(roomId: String?)
 }

@@ -32,7 +32,7 @@ import im.vector.lib.multipicker.utils.toMultiPickerImageType
 import im.vector.lib.multipicker.utils.toMultiPickerVideoType
 
 /**
- * Implementation of selecting any type of files
+ * Implementation of selecting any type of files.
  */
 class FilePicker : Picker<MultiPickerBaseType>() {
 
@@ -48,7 +48,7 @@ class FilePicker : Picker<MultiPickerBaseType>() {
                 type.isMimeTypeVideo() -> selectedUri.toMultiPickerVideoType(context)
                 type.isMimeTypeImage() -> selectedUri.toMultiPickerImageType(context)
                 type.isMimeTypeAudio() -> selectedUri.toMultiPickerAudioType(context)
-                else                   -> {
+                else -> {
                     // Other files
                     context.contentResolver.query(selectedUri, null, null, null, null)
                             ?.use { cursor ->

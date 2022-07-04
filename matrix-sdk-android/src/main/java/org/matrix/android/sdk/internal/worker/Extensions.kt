@@ -20,7 +20,7 @@ import androidx.work.OneTimeWorkRequest
 import org.matrix.android.sdk.internal.session.room.send.NoMerger
 
 /**
- * If startChain parameter is true, the builder will have a inputMerger set to [NoMerger]
+ * If startChain parameter is true, the builder will have a inputMerger set to [NoMerger].
  */
 internal fun OneTimeWorkRequest.Builder.startChain(startChain: Boolean): OneTimeWorkRequest.Builder {
     if (startChain) {

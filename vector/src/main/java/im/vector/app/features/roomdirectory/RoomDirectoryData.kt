@@ -21,28 +21,28 @@ package im.vector.app.features.roomdirectory
  */
 data class RoomDirectoryData(
         /**
-         * The server name (might be null)
+         * The server name (might be null).
          * Set null when the server is the current user's homeserver.
          */
         val homeServer: String? = null,
 
         /**
-         * The display name (the server description)
+         * The display name (the server description).
          */
         val displayName: String = MATRIX_PROTOCOL_NAME,
 
         /**
-         * the avatar url
+         * The avatar url.
          */
         val avatarUrl: String? = null,
 
         /**
-         * The third party server identifier
+         * The third party server identifier.
          */
         val thirdPartyInstanceId: String? = null,
 
         /**
-         * Tell if all the federated servers must be included
+         * Tell if all the federated servers must be included.
          */
         val includeAllNetworks: Boolean = false
 ) {

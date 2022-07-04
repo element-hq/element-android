@@ -109,8 +109,10 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
         return handleRelationsResponse(response, params)
     }
 
-    private suspend fun handleRelationsResponse(response: RelationsResponse,
-                                                params: FetchThreadTimelineTask.Params): Result {
+    private suspend fun handleRelationsResponse(
+            response: RelationsResponse,
+            params: FetchThreadTimelineTask.Params
+    ): Result {
         val threadList = response.chunks
         val threadRootEvent = response.originalEvent
         val hasReachEnd = response.nextBatch == null
@@ -192,7 +194,7 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
 
     // TODO Reuse this function to all the app
     /**
-     * If we don't have any new state on this user, get it from db
+     * If we don't have any new state on this user, get it from db.
      */
     private fun HashMap<String, RoomMemberContent?>.addSenderState(realm: Realm, roomId: String, senderId: String) {
         getOrPut(senderId) {
@@ -204,15 +206,16 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
     }
 
     /**
-     * Create an EventEntity to be added in the TimelineEventEntity
+     * Create an EventEntity to be added in the TimelineEventEntity.
      */
     private fun createEventEntity(roomId: String, event: Event, realm: Realm): EventEntity {
-        val ageLocalTs = event.unsignedData?.age?.let { clock.epochMillis() - it }
+        val now = clock.epochMillis()
+        val ageLocalTs = now - (event.unsignedData?.age ?: 0)
         return event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
     }
 
     /**
-     * Invoke the event decryption mechanism for a specific event
+     * Invoke the event decryption mechanism for a specific event.
      */
     private suspend fun decryptIfNeeded(event: Event, roomId: String) {
         try {
@@ -232,9 +235,11 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
         }
     }
 
-    private fun handleReaction(realm: Realm,
-                               event: Event,
-                               roomId: String) {
+    private fun handleReaction(
+            realm: Realm,
+            event: Event,
+            roomId: String
+    ) {
         val unsignedData = event.unsignedData ?: return
         val relatedEventId = event.eventId ?: return
 

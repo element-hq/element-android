@@ -93,16 +93,16 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
                 KeysBackupRestoreSharedViewModel.NAVIGATE_TO_RECOVER_WITH_KEY -> {
                     addFragmentToBackstack(views.container, KeysBackupRestoreFromKeyFragment::class.java, allowStateLoss = true)
                 }
-                KeysBackupRestoreSharedViewModel.NAVIGATE_TO_SUCCESS          -> {
+                KeysBackupRestoreSharedViewModel.NAVIGATE_TO_SUCCESS -> {
                     viewModel.keyVersionResult.value?.version?.let {
                         KeysBackupBanner.onRecoverDoneForVersion(this, it)
                     }
                     replaceFragment(views.container, KeysBackupRestoreSuccessFragment::class.java, allowStateLoss = true)
                 }
-                KeysBackupRestoreSharedViewModel.NAVIGATE_TO_4S               -> {
+                KeysBackupRestoreSharedViewModel.NAVIGATE_TO_4S -> {
                     launch4SActivity()
                 }
-                KeysBackupRestoreSharedViewModel.NAVIGATE_FAILED_TO_LOAD_4S   -> {
+                KeysBackupRestoreSharedViewModel.NAVIGATE_FAILED_TO_LOAD_4S -> {
                     MaterialAlertDialogBuilder(this)
                             .setTitle(R.string.unknown_error)
                             .setMessage(R.string.error_failed_to_import_keys)
@@ -128,7 +128,7 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
     }
 
     private fun launch4SActivity() {
-        SharedSecureStorageActivity.newIntent(
+        SharedSecureStorageActivity.newReadIntent(
                 context = this,
                 keyId = null, // default key
                 requestedSecrets = listOf(KEYBACKUP_SECRET_SSSS_NAME),

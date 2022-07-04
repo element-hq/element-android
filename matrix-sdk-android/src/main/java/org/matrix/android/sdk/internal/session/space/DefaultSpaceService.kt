@@ -99,13 +99,17 @@ internal class DefaultSpaceService @Inject constructor(
         return spaceGetter.get(spaceId)
     }
 
-    override fun getSpaceSummariesLive(queryParams: SpaceSummaryQueryParams,
-                                       sortOrder: RoomSortOrder): LiveData<List<RoomSummary>> {
+    override fun getSpaceSummariesLive(
+            queryParams: SpaceSummaryQueryParams,
+            sortOrder: RoomSortOrder
+    ): LiveData<List<RoomSummary>> {
         return roomSummaryDataSource.getSpaceSummariesLive(queryParams, sortOrder)
     }
 
-    override fun getSpaceSummaries(spaceSummaryQueryParams: SpaceSummaryQueryParams,
-                                   sortOrder: RoomSortOrder): List<RoomSummary> {
+    override fun getSpaceSummaries(
+            spaceSummaryQueryParams: SpaceSummaryQueryParams,
+            sortOrder: RoomSortOrder
+    ): List<RoomSummary> {
         return roomSummaryDataSource.getSpaceSummaries(spaceSummaryQueryParams, sortOrder)
     }
 
@@ -221,9 +225,11 @@ internal class DefaultSpaceService @Inject constructor(
             worldReadable = summary.isWorldReadable
     )
 
-    override suspend fun joinSpace(spaceIdOrAlias: String,
-                                   reason: String?,
-                                   viaServers: List<String>): JoinSpaceResult {
+    override suspend fun joinSpace(
+            spaceIdOrAlias: String,
+            reason: String?,
+            viaServers: List<String>
+    ): JoinSpaceResult {
         return joinSpaceTask.execute(JoinSpaceTask.Params(spaceIdOrAlias, reason, viaServers))
     }
 
@@ -246,7 +252,7 @@ internal class DefaultSpaceService @Inject constructor(
             val powerLevelsEvent = stateEventDataSource.getStateEvent(
                     roomId = parentSpaceId,
                     eventType = EventType.STATE_ROOM_POWER_LEVELS,
-                    stateKey = QueryStringValue.NoCondition
+                    stateKey = QueryStringValue.IsEmpty
             )
             val powerLevelsContent = powerLevelsEvent?.content?.toModel<PowerLevelsContent>()
                     ?: throw UnsupportedOperationException("Cannot add canonical child, missing powerlevel")

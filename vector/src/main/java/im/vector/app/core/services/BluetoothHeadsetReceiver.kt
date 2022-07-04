@@ -37,9 +37,10 @@ class BluetoothHeadsetReceiver : BroadcastReceiver() {
             val plugged: Boolean,
             val headsetName: String?,
             /**
-             * BluetoothClass.Device.AUDIO_VIDEO_HANDSFREE
-             * BluetoothClass.Device.AUDIO_VIDEO_CAR_AUDIO
-             * AUDIO_VIDEO_WEARABLE_HEADSET
+             * Can be:
+             * - BluetoothClass.Device.AUDIO_VIDEO_HANDSFREE
+             * - BluetoothClass.Device.AUDIO_VIDEO_CAR_AUDIO
+             * - AUDIO_VIDEO_WEARABLE_HEADSET.
              */
             val deviceClass: Int
     )
@@ -53,9 +54,9 @@ class BluetoothHeadsetReceiver : BroadcastReceiver() {
         // STATE_DISCONNECTED}, STATE_CONNECTING, STATE_CONNECTED, STATE_DISCONNECTING
 
         val headsetConnected = when (intent?.getIntExtra(BluetoothAdapter.EXTRA_CONNECTION_STATE, -1)) {
-            BluetoothAdapter.STATE_CONNECTED    -> true
+            BluetoothAdapter.STATE_CONNECTED -> true
             BluetoothAdapter.STATE_DISCONNECTED -> false
-            else                                -> return // ignore intermediate states
+            else -> return // ignore intermediate states
         }
 
         val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
@@ -73,7 +74,7 @@ class BluetoothHeadsetReceiver : BroadcastReceiver() {
                         )
                 )
             }
-            else                                               -> return
+            else -> return
         }
     }
 

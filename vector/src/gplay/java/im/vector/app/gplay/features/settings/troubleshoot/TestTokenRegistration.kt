@@ -33,15 +33,18 @@ import javax.inject.Inject
 /**
  * Force registration of the token to HomeServer
  */
-class TestTokenRegistration @Inject constructor(private val context: FragmentActivity,
-                                                private val stringProvider: StringProvider,
-                                                private val pushersManager: PushersManager,
-                                                private val activeSessionHolder: ActiveSessionHolder) :
+class TestTokenRegistration @Inject constructor(
+        private val context: FragmentActivity,
+        private val stringProvider: StringProvider,
+        private val pushersManager: PushersManager,
+        private val activeSessionHolder: ActiveSessionHolder,
+        private val fcmHelper: FcmHelper,
+) :
         TroubleshootTest(R.string.settings_troubleshoot_test_token_registration_title) {
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         // Check if we have a registered pusher for this token
-        val fcmToken = FcmHelper.getFcmToken(context) ?: run {
+        val fcmToken = fcmHelper.getFcmToken() ?: run {
             status = TestStatus.FAILED
             return
         }
@@ -53,8 +56,10 @@ class TestTokenRegistration @Inject constructor(private val context: FragmentAct
             it.pushKey == fcmToken && it.state == PusherState.REGISTERED
         }
         if (pushers.isEmpty()) {
-            description = stringProvider.getString(R.string.settings_troubleshoot_test_token_registration_failed,
-                    stringProvider.getString(R.string.sas_error_unknown))
+            description = stringProvider.getString(
+                    R.string.settings_troubleshoot_test_token_registration_failed,
+                    stringProvider.getString(R.string.sas_error_unknown)
+            )
             quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_token_registration_quick_fix) {
                 override fun doFix() {
                     val workId = pushersManager.enqueueRegisterPusherWithFcmKey(fcmToken)

@@ -201,7 +201,7 @@ internal class LocalEchoRepository @Inject constructor(
                                             // need to resend the attachment
                                             true
                                         }
-                                        else                      -> {
+                                        else -> {
                                             Timber.e("Cannot resend message ${event.root.getClearType()} / ${content.msgType}")
                                             false
                                         }
@@ -211,7 +211,7 @@ internal class LocalEchoRepository @Inject constructor(
                                     false
                                 }
                             }
-                            else               -> {
+                            else -> {
                                 Timber.e("Unsupported message to resend ${event.root.getClearType()}")
                                 false
                             }
@@ -221,7 +221,7 @@ internal class LocalEchoRepository @Inject constructor(
     }
 
     /**
-     * Returns the latest known thread event message, or the rootThreadEventId if no other event found
+     * Returns the latest known thread event message, or the rootThreadEventId if no other event found.
      */
     fun getLatestThreadEvent(rootThreadEventId: String): String {
         return realmSessionProvider.withRealm { realm ->

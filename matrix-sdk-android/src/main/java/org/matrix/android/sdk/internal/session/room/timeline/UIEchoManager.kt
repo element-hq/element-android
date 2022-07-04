@@ -44,7 +44,7 @@ internal class UIEchoManager(
     }
 
     /**
-     * Due to lag of DB updates, we keep some UI echo of some properties to update timeline faster
+     * Due to lag of DB updates, we keep some UI echo of some properties to update timeline faster.
      */
     private val inMemorySendingStates = Collections.synchronizedMap<String, SendState>(HashMap())
 
@@ -74,7 +74,7 @@ internal class UIEchoManager(
         when (timelineEvent.root.getClearType()) {
             EventType.REDACTION -> {
             }
-            EventType.REACTION  -> {
+            EventType.REACTION -> {
                 val content: ReactionContent? = timelineEvent.root.content?.toModel<ReactionContent>()
                 if (RelationType.ANNOTATION == content?.relatesTo?.type) {
                     val reaction = content.relatesTo.key

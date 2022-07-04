@@ -22,7 +22,7 @@ import android.os.IBinder
 import timber.log.Timber
 
 /**
- * Parent class for all services
+ * Parent class for all services.
  */
 abstract class VectorService : Service() {
 

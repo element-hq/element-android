@@ -97,7 +97,7 @@ class TimelineEventController @Inject constructor(
 ) : EpoxyController(backgroundHandler, backgroundHandler), Timeline.Listener, EpoxyController.Interceptor {
 
     /**
-     * This is a partial state of the RoomDetailViewState
+     * This is a partial state of the RoomDetailViewState.
      */
     data class PartialState(
             val unreadState: UnreadState = UnreadState.Unknown,
@@ -131,10 +131,12 @@ class TimelineEventController @Inject constructor(
         fun onEventVisible(event: TimelineEvent)
         fun onRoomCreateLinkClicked(url: String)
         fun onEncryptedMessageClicked(informationData: MessageInformationData, view: View)
-        fun onImageMessageClicked(messageImageContent: MessageImageInfoContent,
-                                  mediaData: ImageContentRenderer.Data,
-                                  view: View,
-                                  inMemory: List<AttachmentData>)
+        fun onImageMessageClicked(
+                messageImageContent: MessageImageInfoContent,
+                mediaData: ImageContentRenderer.Data,
+                view: View,
+                inMemory: List<AttachmentData>
+        )
 
         fun onVideoMessageClicked(messageVideoContent: MessageVideoContent, mediaData: VideoContentRenderer.Data, view: View)
 
@@ -474,10 +476,12 @@ class TimelineEventController @Inject constructor(
         )
     }
 
-    private fun CacheItemData.enrichWithModels(event: TimelineEvent,
-                                               nextEvent: TimelineEvent?,
-                                               position: Int,
-                                               receiptsByEvents: Map<String, List<ReadReceipt>>): CacheItemData {
+    private fun CacheItemData.enrichWithModels(
+            event: TimelineEvent,
+            nextEvent: TimelineEvent?,
+            position: Int,
+            receiptsByEvents: Map<String, List<ReadReceipt>>
+    ): CacheItemData {
         val wantsDateSeparator = wantsDateSeparator(event, nextEvent)
         val mergedHeaderModel = mergedHeaderItemFactory.create(
                 event,
@@ -609,7 +613,7 @@ class TimelineEventController @Inject constructor(
     }
 
     /**
-     * Return true if added
+     * Return true if added.
      */
     private fun LoadingItem_.addWhenLoading(direction: Timeline.Direction): Boolean {
         val host = this@TimelineEventController

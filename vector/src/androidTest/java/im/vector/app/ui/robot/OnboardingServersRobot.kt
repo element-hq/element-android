@@ -83,7 +83,7 @@ class OnboardingServersRobot {
     private fun assetMatrixSignInOptions(isSignUp: Boolean) {
         waitUntilViewVisible(ViewMatchers.withId(R.id.loginTitle))
         when (isSignUp) {
-            true  -> BaristaVisibilityAssertions.assertDisplayed(R.id.loginTitle, "Sign up to matrix.org")
+            true -> BaristaVisibilityAssertions.assertDisplayed(R.id.loginTitle, "Sign up to matrix.org")
             false -> BaristaVisibilityAssertions.assertDisplayed(R.id.loginTitle, "Connect to matrix.org")
         }
     }

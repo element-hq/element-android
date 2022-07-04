@@ -28,7 +28,7 @@ interface MessageContentWithFormattedBody : MessageContent {
     val formattedBody: String?
 
     /**
-     * Get the formattedBody, only if not blank and if the format is equal to "org.matrix.custom.html"
+     * Get the formattedBody, only if not blank and if the format is equal to "org.matrix.custom.html".
      */
     val matrixFormattedBody: String?
         get() = formattedBody?.takeIf { it.isNotBlank() && format == MessageFormat.FORMAT_MATRIX_HTML }

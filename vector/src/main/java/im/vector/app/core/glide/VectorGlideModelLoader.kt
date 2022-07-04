@@ -60,10 +60,12 @@ class VectorGlideModelLoader(private val context: Context) :
     }
 }
 
-class VectorGlideDataFetcher(context: Context,
-                             private val data: ImageContentRenderer.Data,
-                             private val width: Int,
-                             private val height: Int) :
+class VectorGlideDataFetcher(
+        context: Context,
+        private val data: ImageContentRenderer.Data,
+        private val width: Int,
+        private val height: Int
+) :
         DataFetcher<InputStream> {
 
     private val localFilesHelper = LocalFilesHelper(context)
@@ -121,7 +123,8 @@ class VectorGlideDataFetcher(context: Context,
                         fileName = data.filename,
                         mimeType = data.mimeType,
                         url = data.url,
-                        elementToDecrypt = data.elementToDecrypt)
+                        elementToDecrypt = data.elementToDecrypt
+                )
             }
             withContext(Dispatchers.Main) {
                 result.fold(

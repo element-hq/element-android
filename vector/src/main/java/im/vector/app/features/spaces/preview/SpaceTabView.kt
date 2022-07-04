@@ -21,9 +21,11 @@ import android.util.AttributeSet
 import android.widget.LinearLayout
 import im.vector.app.R
 
-class SpaceTabView constructor(context: Context,
-                               attrs: AttributeSet? = null,
-                               defStyleAttr: Int = 0) :
+class SpaceTabView constructor(
+        context: Context,
+        attrs: AttributeSet? = null,
+        defStyleAttr: Int = 0
+) :
         LinearLayout(context, attrs, defStyleAttr) {
 
     constructor(context: Context, attrs: AttributeSet) : this(context, attrs, 0) {}

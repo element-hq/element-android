@@ -33,15 +33,19 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import javax.inject.Inject
 
 @ActivityScoped
-class ContentUploadStateTrackerBinder @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
-                                                          private val messageColorProvider: MessageColorProvider,
-                                                          private val errorFormatter: ErrorFormatter) {
+class ContentUploadStateTrackerBinder @Inject constructor(
+        private val activeSessionHolder: ActiveSessionHolder,
+        private val messageColorProvider: MessageColorProvider,
+        private val errorFormatter: ErrorFormatter
+) {
 
     private val updateListeners = mutableMapOf<String, ContentUploadStateTracker.UpdateListener>()
 
-    fun bind(eventId: String,
-             isLocalFile: Boolean,
-             progressLayout: ViewGroup) {
+    fun bind(
+            eventId: String,
+            isLocalFile: Boolean,
+            progressLayout: ViewGroup
+    ) {
         activeSessionHolder.getSafeActiveSession()?.also { session ->
             val uploadStateTracker = session.contentUploadProgressTracker()
             val updateListener = ContentMediaProgressUpdater(progressLayout, isLocalFile, messageColorProvider, errorFormatter)
@@ -66,25 +70,27 @@ class ContentUploadStateTrackerBinder @Inject constructor(private val activeSess
     }
 }
 
-private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
-                                          private val isLocalFile: Boolean,
-                                          private val messageColorProvider: MessageColorProvider,
-                                          private val errorFormatter: ErrorFormatter) : ContentUploadStateTracker.UpdateListener {
+private class ContentMediaProgressUpdater(
+        private val progressLayout: ViewGroup,
+        private val isLocalFile: Boolean,
+        private val messageColorProvider: MessageColorProvider,
+        private val errorFormatter: ErrorFormatter
+) : ContentUploadStateTracker.UpdateListener {
 
     private val progressBar: ProgressBar = progressLayout.findViewById(R.id.mediaProgressBar)
     private val progressTextView: TextView = progressLayout.findViewById(R.id.mediaProgressTextView)
 
     override fun onUpdate(state: ContentUploadStateTracker.State) {
         when (state) {
-            is ContentUploadStateTracker.State.Idle                -> handleIdle()
+            is ContentUploadStateTracker.State.Idle -> handleIdle()
             is ContentUploadStateTracker.State.EncryptingThumbnail -> handleEncryptingThumbnail()
-            is ContentUploadStateTracker.State.UploadingThumbnail  -> handleProgressThumbnail(state)
-            is ContentUploadStateTracker.State.Encrypting          -> handleEncrypting(state)
-            is ContentUploadStateTracker.State.Uploading           -> handleProgress(state)
-            is ContentUploadStateTracker.State.Failure             -> handleFailure(/*state*/)
-            is ContentUploadStateTracker.State.Success             -> handleSuccess()
-            is ContentUploadStateTracker.State.CompressingImage    -> handleCompressingImage()
-            is ContentUploadStateTracker.State.CompressingVideo    -> handleCompressingVideo(state)
+            is ContentUploadStateTracker.State.UploadingThumbnail -> handleProgressThumbnail(state)
+            is ContentUploadStateTracker.State.Encrypting -> handleEncrypting(state)
+            is ContentUploadStateTracker.State.Uploading -> handleProgress(state)
+            is ContentUploadStateTracker.State.Failure -> handleFailure(/*state*/)
+            is ContentUploadStateTracker.State.Success -> handleSuccess()
+            is ContentUploadStateTracker.State.CompressingImage -> handleCompressingImage()
+            is ContentUploadStateTracker.State.CompressingVideo -> handleCompressingVideo(state)
         }
     }
 
@@ -156,9 +162,11 @@ private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
         progressBar.isIndeterminate = false
         progressBar.progress = percent.toInt()
         progressTextView.isVisible = true
-        progressTextView.text = progressLayout.context.getString(resId,
+        progressTextView.text = progressLayout.context.getString(
+                resId,
                 TextUtils.formatFileSize(progressLayout.context, current, true),
-                TextUtils.formatFileSize(progressLayout.context, total, true))
+                TextUtils.formatFileSize(progressLayout.context, total, true)
+        )
         progressTextView.setTextColor(messageColorProvider.getMessageTextColor(SendState.SENDING))
     }
 

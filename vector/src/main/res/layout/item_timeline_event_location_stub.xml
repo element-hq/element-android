@@ -21,13 +21,13 @@
         android:layout_width="51dp"
         android:layout_height="55dp"
         android:layout_gravity="center"
-        android:layout_marginBottom="28dp"
         android:importantForAccessibility="no"
         android:src="@drawable/bg_map_user_pin"
-        app:layout_constraintBottom_toBottomOf="@id/staticMapImageView"
+        app:layout_constraintBottom_toTopOf="@id/staticMapVerticalCenter"
         app:layout_constraintEnd_toEndOf="@id/staticMapImageView"
         app:layout_constraintStart_toStartOf="@id/staticMapImageView"
-        app:layout_constraintTop_toTopOf="@id/staticMapImageView" />
+        app:layout_constraintTop_toTopOf="@id/staticMapImageView"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/staticMapErrorTextView"
@@ -44,5 +44,32 @@
         app:layout_constraintStart_toStartOf="@id/staticMapPinImageView"
         app:layout_constraintTop_toBottomOf="@id/staticMapPinImageView"
         tools:visibility="visible" />
+
+    <im.vector.app.features.location.live.LocationLiveMessageBannerView
+        android:id="@+id/locationLiveMessageBanner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/staticMapImageView"
+        app:layout_constraintEnd_toEndOf="@id/staticMapImageView"
+        app:layout_constraintStart_toStartOf="@id/staticMapImageView"
+        tools:visibility="visible" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/staticMapVerticalCenter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <TextView
+        android:id="@+id/staticMapCopyrightTextView"
+        style="@style/Widget.Vector.TextView.Nano.Copyright"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:text="@string/location_map_view_copyright"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -58,10 +58,12 @@ abstract class VectorSettingsPushRuleNotificationPreferenceFragment :
 
         lifecycleScope.launch {
             val result = runCatching {
-                session.pushRuleService().updatePushRuleActions(kind,
+                session.pushRuleService().updatePushRuleActions(
+                        kind,
                         ruleId,
                         enabled,
-                        newActions)
+                        newActions
+                )
             }
             hideLoadingView()
             if (!isAdded) {

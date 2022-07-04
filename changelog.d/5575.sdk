@@ -1,2 +1,0 @@
-- Added registrationCustom into RegistrationWizard to send custom auth params for sign up
-- Moved terms converter into api package to make it accessible in sdk

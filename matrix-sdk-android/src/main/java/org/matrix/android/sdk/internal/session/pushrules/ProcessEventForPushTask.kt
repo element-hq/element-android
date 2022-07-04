@@ -62,13 +62,15 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
                 EventType.REDACTION,
                 EventType.ENCRYPTED,
                 EventType.STATE_ROOM_MEMBER -> true
-                else                        -> false
+                else -> false
             }
         }.filter {
             it.senderId != userId
         }
-        Timber.v("[PushRules] Found ${allEvents.size} out of ${(newJoinEvents + inviteEvents).size}" +
-                " to check for push rules with ${params.rules.size} rules")
+        Timber.v(
+                "[PushRules] Found ${allEvents.size} out of ${(newJoinEvents + inviteEvents).size}" +
+                        " to check for push rules with ${params.rules.size} rules"
+        )
         val matchedEvents = allEvents.mapNotNull { event ->
             pushRuleFinder.fulfilledBingRule(event, params.rules)?.let {
                 Timber.v("[PushRules] Rule $it match for event ${event.eventId}")

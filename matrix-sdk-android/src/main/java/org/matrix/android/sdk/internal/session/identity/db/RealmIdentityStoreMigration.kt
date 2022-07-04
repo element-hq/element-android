@@ -24,8 +24,8 @@ import javax.inject.Inject
 
 internal class RealmIdentityStoreMigration @Inject constructor() : RealmMigration {
     /**
-     * Forces all RealmIdentityStoreMigration instances to be equal
-     * Avoids Realm throwing when multiple instances of the migration are set
+     * Forces all RealmIdentityStoreMigration instances to be equal.
+     * Avoids Realm throwing when multiple instances of the migration are set.
      */
     override fun equals(other: Any?) = other is RealmIdentityStoreMigration
     override fun hashCode() = 3000

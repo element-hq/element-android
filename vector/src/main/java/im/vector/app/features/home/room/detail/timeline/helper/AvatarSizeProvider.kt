@@ -21,8 +21,10 @@ import im.vector.app.features.home.room.detail.timeline.style.TimelineLayoutSett
 import im.vector.app.features.home.room.detail.timeline.style.TimelineLayoutSettingsProvider
 import javax.inject.Inject
 
-class AvatarSizeProvider @Inject constructor(private val dimensionConverter: DimensionConverter,
-                                             private val layoutSettingsProvider: TimelineLayoutSettingsProvider) {
+class AvatarSizeProvider @Inject constructor(
+        private val dimensionConverter: DimensionConverter,
+        private val layoutSettingsProvider: TimelineLayoutSettingsProvider
+) {
 
     private val avatarStyle by lazy {
         when (layoutSettingsProvider.getLayoutSettings()) {

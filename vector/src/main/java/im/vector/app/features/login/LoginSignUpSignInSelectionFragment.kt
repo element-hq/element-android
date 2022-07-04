@@ -25,10 +25,11 @@ import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentLoginSignupSigninSelectionBinding
+import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import javax.inject.Inject
 
 /**
- * In this screen, the user is asked to sign up or to sign in to the homeserver
+ * In this screen, the user is asked to sign up or to sign in to the homeserver.
  */
 class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLoginSignupSigninSelectionBinding>() {
 
@@ -55,18 +56,18 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOLogi
                 views.loginSignupSigninTitle.text = getString(R.string.login_connect_to, state.homeServerUrlFromUser.toReducedUrl())
                 views.loginSignupSigninText.text = getString(R.string.login_server_matrix_org_text)
             }
-            ServerType.EMS       -> {
+            ServerType.EMS -> {
                 views.loginSignupSigninServerIcon.setImageResource(R.drawable.ic_logo_element_matrix_services)
                 views.loginSignupSigninServerIcon.isVisible = true
                 views.loginSignupSigninTitle.text = getString(R.string.login_connect_to_modular)
                 views.loginSignupSigninText.text = state.homeServerUrlFromUser.toReducedUrl()
             }
-            ServerType.Other     -> {
+            ServerType.Other -> {
                 views.loginSignupSigninServerIcon.isVisible = false
                 views.loginSignupSigninTitle.text = getString(R.string.login_server_other_title)
                 views.loginSignupSigninText.text = getString(R.string.login_connect_to, state.homeServerUrlFromUser.toReducedUrl())
             }
-            ServerType.Unknown   -> Unit /* Should not happen */
+            ServerType.Unknown -> Unit /* Should not happen */
         }
 
         when (state.loginMode) {
@@ -74,17 +75,17 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOLogi
                 views.loginSignupSigninSignInSocialLoginContainer.isVisible = true
                 views.loginSignupSigninSocialLoginButtons.ssoIdentityProviders = state.loginMode.ssoIdentityProviders()?.sorted()
                 views.loginSignupSigninSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
-                    override fun onProviderSelected(id: String?) {
+                    override fun onProviderSelected(provider: SsoIdentityProvider?) {
                         loginViewModel.getSsoUrl(
                                 redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                                 deviceId = state.deviceId,
-                                providerId = id
+                                providerId = provider?.id
                         )
                                 ?.let { openInCustomTab(it) }
                     }
                 }
             }
-            else                        -> {
+            else -> {
                 // SSO only is managed without container as well as No sso
                 views.loginSignupSigninSignInSocialLoginContainer.isVisible = false
                 views.loginSignupSigninSocialLoginButtons.ssoIdentityProviders = null
@@ -99,7 +100,7 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOLogi
                 views.loginSignupSigninSubmit.text = getString(R.string.login_signin_sso)
                 views.loginSignupSigninSignIn.isVisible = false
             }
-            else             -> {
+            else -> {
                 views.loginSignupSigninSubmit.text = getString(R.string.login_signup)
                 views.loginSignupSigninSignIn.isVisible = true
             }

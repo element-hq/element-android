@@ -37,10 +37,12 @@ import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import javax.inject.Inject
 
-class DeviceListEpoxyController @Inject constructor(private val stringProvider: StringProvider,
-                                                    private val colorProvider: ColorProvider,
-                                                    private val dimensionConverter: DimensionConverter,
-                                                    private val vectorPreferences: VectorPreferences) :
+class DeviceListEpoxyController @Inject constructor(
+        private val stringProvider: StringProvider,
+        private val colorProvider: ColorProvider,
+        private val dimensionConverter: DimensionConverter,
+        private val vectorPreferences: VectorPreferences
+) :
         TypedEpoxyController<DeviceListViewState>() {
 
     interface InteractionListener {
@@ -55,13 +57,13 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
         when (data.cryptoDevices) {
             Uninitialized -> {
             }
-            is Loading    -> {
+            is Loading -> {
                 loadingItem {
                     id("loading")
                     loadingText(host.stringProvider.getString(R.string.loading))
                 }
             }
-            is Success    -> {
+            is Success -> {
                 val deviceList = data.cryptoDevices.invoke().sortedBy {
                     it.isVerified
                 }
@@ -139,7 +141,7 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
                     }
                 }
             }
-            is Fail       -> {
+            is Fail -> {
                 errorWithRetryItem {
                     id("error")
                     text(host.stringProvider.getString(R.string.room_member_profile_failed_to_get_devices))

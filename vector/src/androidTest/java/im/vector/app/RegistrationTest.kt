@@ -29,8 +29,10 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import im.vector.app.features.MainActivity
+import im.vector.app.features.analytics.ui.consent.AnalyticsOptInActivity
 import im.vector.app.features.home.HomeActivity
 import org.hamcrest.CoreMatchers.not
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -38,6 +40,7 @@ import kotlin.random.Random
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
+@Ignore
 class RegistrationTest {
 
     @get:Rule
@@ -103,6 +106,12 @@ class RegistrationTest {
         onView(withId(R.id.loginSubmit))
                 .check(matches(isEnabled()))
                 .perform(closeSoftKeyboard(), click())
+
+        withIdlingResource(activityIdlingResource(AnalyticsOptInActivity::class.java)) {
+            onView(withId(R.id.later))
+                    .check(matches(isDisplayed()))
+                    .perform(click())
+        }
 
         withIdlingResource(activityIdlingResource(HomeActivity::class.java)) {
             onView(withId(R.id.roomListContainer))

@@ -19,7 +19,7 @@ package im.vector.app.features.home.room.detail
 import im.vector.app.core.platform.VectorSharedAction
 
 /**
- * Supported navigation actions for [RoomDetailActivity]
+ * Supported navigation actions for [RoomDetailActivity].
  */
 sealed class RoomDetailSharedAction : VectorSharedAction {
     data class SwitchToRoom(val roomId: String) : RoomDetailSharedAction()

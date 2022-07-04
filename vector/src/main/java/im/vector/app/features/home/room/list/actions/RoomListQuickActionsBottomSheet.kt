@@ -47,7 +47,7 @@ data class RoomListActionsArgs(
 ) : Parcelable
 
 /**
- * Bottom sheet fragment that shows room information with list of contextual actions
+ * Bottom sheet fragment that shows room information with list of contextual actions.
  */
 @AndroidEntryPoint
 class RoomListQuickActionsBottomSheet :
@@ -107,8 +107,8 @@ class RoomListQuickActionsBottomSheet :
         // Do not dismiss for all the actions
         when (quickAction) {
             is RoomListQuickActionsSharedAction.LowPriority -> Unit
-            is RoomListQuickActionsSharedAction.Favorite    -> Unit
-            else                                            -> dismiss()
+            is RoomListQuickActionsSharedAction.Favorite -> Unit
+            else -> dismiss()
         }
     }
 

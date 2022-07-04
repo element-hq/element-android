@@ -19,12 +19,12 @@ package im.vector.app.features.ui
 import im.vector.app.features.home.RoomListDisplayMode
 
 /**
- * This interface is used to persist UI state across application restart
+ * This interface is used to persist UI state across application restart.
  */
 interface UiStateRepository {
 
     /**
-     * Reset all the saved data
+     * Reset all the saved data.
      */
     fun reset()
 

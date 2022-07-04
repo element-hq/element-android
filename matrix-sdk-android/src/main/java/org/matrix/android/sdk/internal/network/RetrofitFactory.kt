@@ -29,7 +29,7 @@ import javax.inject.Inject
 internal class RetrofitFactory @Inject constructor(private val moshi: Moshi) {
 
     /**
-     * Use only for authentication service
+     * Use only for authentication service.
      */
     fun create(okHttpClient: OkHttpClient, baseUrl: String): Retrofit {
         return Retrofit.Builder()

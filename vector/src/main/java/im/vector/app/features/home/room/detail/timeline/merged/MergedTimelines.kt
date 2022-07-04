@@ -35,7 +35,8 @@ import kotlin.reflect.KMutableProperty0
 class MergedTimelines(
         private val coroutineScope: CoroutineScope,
         private val mainTimeline: Timeline,
-        private val secondaryTimelineParams: SecondaryTimelineParams) : Timeline by mainTimeline {
+        private val secondaryTimelineParams: SecondaryTimelineParams
+) : Timeline by mainTimeline {
 
     data class SecondaryTimelineParams(
             val timeline: Timeline,
@@ -81,14 +82,16 @@ class MergedTimelines(
                 timeline = mainTimeline,
                 wrappedListener = listener,
                 shouldFilterTypes = false,
-                allowedTypes = emptyList()) {
+                allowedTypes = emptyList()
+        ) {
             processTimelineUpdates(::mainIsInit, mainTimelineEvents, it)
         }
         val secondaryTimelineListener = ListenerInterceptor(
                 timeline = secondaryTimeline,
                 wrappedListener = listener,
                 shouldFilterTypes = secondaryTimelineParams.shouldFilterTypes,
-                allowedTypes = secondaryTimelineParams.allowedTypes) {
+                allowedTypes = secondaryTimelineParams.allowedTypes
+        ) {
             processTimelineUpdates(::secondaryIsInit, secondaryTimelineEvents, it)
         }
         listenersMapping[listener] = listOf(mainTimelineListener, secondaryTimelineListener)

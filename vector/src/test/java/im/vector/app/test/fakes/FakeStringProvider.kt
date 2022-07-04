@@ -27,6 +27,10 @@ class FakeStringProvider {
         every { instance.getString(any()) } answers {
             "test-${args[0]}"
         }
+
+        every { instance.getQuantityString(any(), any(), any()) } answers {
+            "test-${args[0]}-${args[1]}"
+        }
     }
 
     fun given(id: Int, result: String) {

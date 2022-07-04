@@ -21,7 +21,7 @@ import org.matrix.android.sdk.internal.util.replaceSpaceChars
 data class SenderInfo(
         val userId: String,
         /**
-         * Consider using [disambiguatedDisplayName]
+         * Consider using [disambiguatedDisplayName].
          */
         val displayName: String?,
         val isUniqueDisplayName: Boolean,
@@ -29,9 +29,9 @@ data class SenderInfo(
 ) {
     val disambiguatedDisplayName: String
         get() = when {
-            displayName == null                       -> userId
+            displayName == null -> userId
             displayName.replaceSpaceChars().isBlank() -> "$displayName ($userId)"
-            isUniqueDisplayName                       -> displayName
-            else                                      -> "$displayName ($userId)"
+            isUniqueDisplayName -> displayName
+            else -> "$displayName ($userId)"
         }
 }

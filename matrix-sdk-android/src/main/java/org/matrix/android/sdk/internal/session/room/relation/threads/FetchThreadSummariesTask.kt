@@ -77,8 +77,10 @@ internal class DefaultFetchThreadSummariesTask @Inject constructor(
         return handleResponse(response, params)
     }
 
-    private suspend fun handleResponse(response: PaginationResponse,
-                                       params: FetchThreadSummariesTask.Params): Result {
+    private suspend fun handleResponse(
+            response: PaginationResponse,
+            params: FetchThreadSummariesTask.Params
+    ): Result {
         val rootThreadList = response.events
         monarchy.awaitTransaction { realm ->
             val roomEntity = RoomEntity.where(realm, roomId = params.roomId).findFirst() ?: return@awaitTransaction

@@ -35,7 +35,8 @@ import org.matrix.android.sdk.api.session.getRoomSummary
 class MigrateRoomViewModel @AssistedInject constructor(
         @Assisted initialState: MigrateRoomViewState,
         private val session: Session,
-        private val upgradeRoomViewModelTask: UpgradeRoomViewModelTask) :
+        private val upgradeRoomViewModelTask: UpgradeRoomViewModelTask
+) :
         VectorViewModel<MigrateRoomViewState, MigrateRoomAction, EmptyViewEvents>(initialState) {
 
     init {
@@ -60,7 +61,7 @@ class MigrateRoomViewModel @AssistedInject constructor(
 
     override fun handle(action: MigrateRoomAction) {
         when (action) {
-            is MigrateRoomAction.SetAutoInvite             -> {
+            is MigrateRoomAction.SetAutoInvite -> {
                 setState {
                     copy(shouldIssueInvites = action.autoInvite)
                 }
@@ -70,7 +71,7 @@ class MigrateRoomViewModel @AssistedInject constructor(
                     copy(shouldUpdateKnownParents = action.update)
                 }
             }
-            MigrateRoomAction.UpgradeRoom                  -> {
+            MigrateRoomAction.UpgradeRoom -> {
                 handleUpgradeRoom()
             }
         }

@@ -40,7 +40,8 @@ internal class DefaultStoreSessionsDataTask @Inject constructor(
         return executeRequest(globalErrorReceiver) {
             roomKeysApi.storeSessionsData(
                     params.version,
-                    params.keysBackupData)
+                    params.keysBackupData
+            )
         }
     }
 }

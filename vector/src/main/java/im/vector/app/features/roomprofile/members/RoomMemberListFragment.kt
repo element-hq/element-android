@@ -21,6 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.args
@@ -79,7 +80,7 @@ class RoomMemberListFragment @Inject constructor(
                 object : RecyclerView.OnScrollListener() {
                     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                         when (newState) {
-                            RecyclerView.SCROLL_STATE_IDLE     -> {
+                            RecyclerView.SCROLL_STATE_IDLE -> {
                                 if (withState(viewModel) { it.actionsPermissions.canInvite }) {
                                     views.inviteUsersButton.show()
                                 }
@@ -114,6 +115,7 @@ class RoomMemberListFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(viewModel) { viewState ->
+        views.roomSettingGeneric.progressBar.isGone = viewState.areAllMembersLoaded
         roomMemberListController.setData(viewState)
         renderRoomSummary(viewState)
         views.inviteUsersButton.isVisible = viewState.actionsPermissions.canInvite

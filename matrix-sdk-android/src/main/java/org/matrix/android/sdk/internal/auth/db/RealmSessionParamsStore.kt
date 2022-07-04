@@ -28,9 +28,10 @@ import org.matrix.android.sdk.internal.di.AuthDatabase
 import timber.log.Timber
 import javax.inject.Inject
 
-internal class RealmSessionParamsStore @Inject constructor(private val mapper: SessionParamsMapper,
-                                                           @AuthDatabase
-                                                           private val realmConfiguration: RealmConfiguration
+internal class RealmSessionParamsStore @Inject constructor(
+        private val mapper: SessionParamsMapper,
+        @AuthDatabase
+        private val realmConfiguration: RealmConfiguration
 ) : SessionParamsStore {
 
     override fun getLast(): SessionParams? {

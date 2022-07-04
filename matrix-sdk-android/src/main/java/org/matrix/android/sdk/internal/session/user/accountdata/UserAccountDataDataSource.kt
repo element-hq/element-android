@@ -31,9 +31,11 @@ import org.matrix.android.sdk.internal.database.model.UserAccountDataEntityField
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import javax.inject.Inject
 
-internal class UserAccountDataDataSource @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
-                                                             private val realmSessionProvider: RealmSessionProvider,
-                                                             private val accountDataMapper: AccountDataMapper) {
+internal class UserAccountDataDataSource @Inject constructor(
+        @SessionDatabase private val monarchy: Monarchy,
+        private val realmSessionProvider: RealmSessionProvider,
+        private val accountDataMapper: AccountDataMapper
+) {
 
     fun getAccountDataEvent(type: String): UserAccountDataEvent? {
         return getAccountDataEvents(setOf(type)).firstOrNull()

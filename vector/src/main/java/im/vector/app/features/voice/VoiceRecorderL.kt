@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,55 +17,143 @@
 package im.vector.app.features.voice
 
 import android.content.Context
+import android.media.AudioFormat
+import android.media.AudioRecord
 import android.media.MediaRecorder
-import com.arthenica.ffmpegkit.FFmpegKit
-import com.arthenica.ffmpegkit.FFmpegKitConfig
-import com.arthenica.ffmpegkit.Level
-import com.arthenica.ffmpegkit.ReturnCode
-import im.vector.app.BuildConfig
-import im.vector.app.core.time.Clock
-import timber.log.Timber
+import android.media.audiofx.AutomaticGainControl
+import android.media.audiofx.NoiseSuppressor
+import android.os.Build
+import im.vector.opusencoder.OggOpusEncoder
+import im.vector.opusencoder.configuration.SampleRate
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.session.content.ContentAttachmentData
+import org.matrix.android.sdk.api.util.md5
 import java.io.File
+import java.util.UUID
+import kotlin.coroutines.CoroutineContext
 
+/**
+ * VoiceRecorder to be used on Android versions < [Build.VERSION_CODES.Q]. It uses libopus to record ogg files.
+ */
 class VoiceRecorderL(
         context: Context,
-        private val clock: Clock,
-) : AbstractVoiceRecorder(context, "mp4") {
-    override fun setOutputFormat(mediaRecorder: MediaRecorder) {
-        // Use AAC/MP4 format here
-        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
-        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+        coroutineContext: CoroutineContext,
+) : VoiceRecorder {
+
+    companion object {
+        private val SAMPLE_RATE = SampleRate.Rate48kHz
+        private const val BITRATE = 24 * 1024
     }
 
-    override fun convertFile(recordedFile: File?): File? {
-        if (BuildConfig.DEBUG) {
-            FFmpegKitConfig.setLogLevel(Level.AV_LOG_INFO)
-        }
-        recordedFile ?: return null
-        // Convert to OGG
-        val targetFile = File(recordedFile.path.removeSuffix("mp4") + "ogg")
-        if (targetFile.exists()) {
-            targetFile.delete()
-        }
-        val start = clock.epochMillis()
-        val session = FFmpegKit.execute("-i \"${recordedFile.path}\" -c:a libvorbis \"${targetFile.path}\"")
-        val duration = clock.epochMillis() - start
-        Timber.d("Convert to ogg in $duration ms. Size in bytes from ${recordedFile.length()} to ${targetFile.length()}")
-        return when {
-            ReturnCode.isSuccess(session.returnCode) -> {
-                // SUCCESS
-                targetFile
-            }
-            ReturnCode.isCancel(session.returnCode)  -> {
-                // CANCEL
-                null
-            }
-            else                                     -> {
-                // FAILURE
-                Timber.e("Command failed with state ${session.state} and rc ${session.returnCode}.${session.failStackTrace}")
-                // TODO throw?
-                null
+    private val outputDirectory: File by lazy { ensureAudioDirectory(context) }
+    private var outputFile: File? = null
+
+    private val recorderScope = CoroutineScope(coroutineContext)
+    private var recordingJob: Job? = null
+
+    private var audioRecorder: AudioRecord? = null
+    private var noiseSuppressor: NoiseSuppressor? = null
+    private var automaticGainControl: AutomaticGainControl? = null
+    private val codec = OggOpusEncoder()
+
+    // Size of the audio buffer for Short values
+    private var bufferSizeInShorts = 0
+    private var maxAmplitude = 0
+
+    private fun initializeCodec(filePath: String) {
+        codec.init(filePath, SAMPLE_RATE)
+        codec.setBitrate(BITRATE)
+
+        createAudioRecord()
+
+        val recorder = this.audioRecorder ?: return
+
+        if (NoiseSuppressor.isAvailable()) {
+            noiseSuppressor = tryOrNull {
+                NoiseSuppressor.create(recorder.audioSessionId).also { it.enabled = true }
             }
         }
+
+        if (AutomaticGainControl.isAvailable()) {
+            automaticGainControl = tryOrNull {
+                AutomaticGainControl.create(recorder.audioSessionId).also { it.enabled = true }
+            }
+        }
+    }
+
+    override fun initializeRecord(attachmentData: ContentAttachmentData) {
+        outputFile = attachmentData.findVoiceFile(outputDirectory)
+    }
+
+    override fun startRecord(roomId: String) {
+        val fileName = "${UUID.randomUUID()}.ogg"
+        val outputDirectoryForRoom = File(outputDirectory, roomId.md5()).apply {
+            mkdirs()
+        }
+        val outputFile = File(outputDirectoryForRoom, fileName)
+        this.outputFile = outputFile
+
+        initializeCodec(outputFile.absolutePath)
+
+        recordingJob = recorderScope.launch {
+            audioRecorder?.startRecording()
+
+            val buffer = ShortArray(bufferSizeInShorts)
+            while (isActive) {
+                val read = audioRecorder?.read(buffer, 0, bufferSizeInShorts) ?: -1
+                calculateMaxAmplitude(buffer)
+                if (read <= 0) continue
+                codec.encode(buffer, read)
+            }
+        }
+    }
+
+    override fun stopRecord() {
+        val recorder = this.audioRecorder ?: return
+        recordingJob?.cancel()
+
+        if (recorder.state == AudioRecord.STATE_INITIALIZED) {
+            recorder.stop()
+        }
+        recorder.release()
+        audioRecorder = null
+
+        noiseSuppressor?.release()
+        noiseSuppressor = null
+
+        automaticGainControl?.release()
+        automaticGainControl = null
+
+        codec.release()
+    }
+
+    override fun cancelRecord() {
+        outputFile?.delete()
+        outputFile = null
+    }
+
+    override fun getMaxAmplitude(): Int {
+        return maxAmplitude
+    }
+
+    override fun getVoiceMessageFile(): File? {
+        return outputFile
+    }
+
+    private fun createAudioRecord() {
+        val channelConfig = AudioFormat.CHANNEL_IN_MONO
+        val format = AudioFormat.ENCODING_PCM_16BIT
+        bufferSizeInShorts = AudioRecord.getMinBufferSize(SAMPLE_RATE.value, channelConfig, format)
+        // Buffer is created as a ShortArray, but AudioRecord needs the size in bytes
+        val bufferSizeInBytes = bufferSizeInShorts * 2
+        audioRecorder = AudioRecord(MediaRecorder.AudioSource.MIC, SAMPLE_RATE.value, channelConfig, format, bufferSizeInBytes)
+    }
+
+    private fun calculateMaxAmplitude(buffer: ShortArray) {
+        maxAmplitude = buffer.maxOf { it }.toInt()
     }
 }

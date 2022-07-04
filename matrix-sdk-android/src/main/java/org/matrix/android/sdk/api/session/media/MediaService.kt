@@ -36,7 +36,7 @@ interface MediaService {
     suspend fun getRawPreviewUrl(url: String, timestamp: Long?): JsonDict
 
     /**
-     * Get Url Preview data from the homeserver, or from cache, depending on the cache strategy
+     * Get Url Preview data from the homeserver, or from cache, depending on the cache strategy.
      * @param url The url to get the preview data from
      * @param timestamp The optional timestamp. Note that this parameter is not taken into account
      * if the data is already in cache and the cache strategy allow to use it
@@ -45,7 +45,7 @@ interface MediaService {
     suspend fun getPreviewUrl(url: String, timestamp: Long?, cacheStrategy: CacheStrategy): PreviewUrlData
 
     /**
-     * Clear the cache of all retrieved UrlPreview data
+     * Clear the cache of all retrieved UrlPreview data.
      */
     suspend fun clearCache()
 }

@@ -19,7 +19,7 @@ package org.matrix.android.sdk.api.session.room.model.relation
 import org.matrix.android.sdk.api.session.events.model.RelationType
 
 interface RelationContent {
-    /** See [RelationType] for known possible values */
+    /** See [RelationType] for known possible values. */
     val type: String?
     val eventId: String?
     val inReplyTo: ReplyToContent?
@@ -27,7 +27,7 @@ interface RelationContent {
 
     /**
      * This flag indicates that the message should be rendered as a reply
-     * fallback, when isFallingBack = false
+     * fallback, when isFallingBack = false.
      */
     val isFallingBack: Boolean?
 }

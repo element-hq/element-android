@@ -53,6 +53,7 @@ class IncomingKeyRequestPagedController @Inject constructor(
                             textStyle = "bold"
                         }
                         span("${roomKeyRequest.userId}")
+                        +"\n"
                         +host.vectorDateFormatter.format(roomKeyRequest.localCreationTimestamp, DateFormatKind.DEFAULT_DATE_AND_TIME)
                         span("\nsessionId:") {
                             textStyle = "bold"
@@ -62,10 +63,6 @@ class IncomingKeyRequestPagedController @Inject constructor(
                             textStyle = "bold"
                         }
                         +"${roomKeyRequest.deviceId}"
-                        span("\nstate: ") {
-                            textStyle = "bold"
-                        }
-                        +roomKeyRequest.state.name
                     }.toEpoxyCharSequence()
             )
         }

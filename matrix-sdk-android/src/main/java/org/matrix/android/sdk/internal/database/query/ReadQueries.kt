@@ -24,10 +24,12 @@ import org.matrix.android.sdk.internal.database.model.ReadMarkerEntity
 import org.matrix.android.sdk.internal.database.model.ReadReceiptEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 
-internal fun isEventRead(realmConfiguration: RealmConfiguration,
-                         userId: String?,
-                         roomId: String?,
-                         eventId: String?): Boolean {
+internal fun isEventRead(
+        realmConfiguration: RealmConfiguration,
+        userId: String?,
+        roomId: String?,
+        eventId: String?
+): Boolean {
     if (userId.isNullOrBlank() || roomId.isNullOrBlank() || eventId.isNullOrBlank()) {
         return false
     }
@@ -39,12 +41,12 @@ internal fun isEventRead(realmConfiguration: RealmConfiguration,
         val eventToCheck = TimelineEventEntity.where(realm, roomId, eventId).findFirst()
         when {
             // The event doesn't exist locally, let's assume it hasn't been read
-            eventToCheck == null                                          -> false
-            eventToCheck.root?.sender == userId                           -> true
+            eventToCheck == null -> false
+            eventToCheck.root?.sender == userId -> true
             // If new event exists and the latest event is from ourselves we can infer the event is read
-            latestEventIsFromSelf(realm, roomId, userId)                  -> true
+            latestEventIsFromSelf(realm, roomId, userId) -> true
             eventToCheck.isBeforeLatestReadReceipt(realm, roomId, userId) -> true
-            else                                                          -> false
+            else -> false
         }
     }
 }
@@ -61,7 +63,7 @@ private fun TimelineEventEntity.isBeforeLatestReadReceipt(realm: Realm, roomId: 
 
 /**
  * Missing events can be caused by the latest timeline chunk no longer contain an older event or
- * by fast lane eagerly displaying events before the database has finished updating
+ * by fast lane eagerly displaying events before the database has finished updating.
  */
 private fun hasReadMissingEvent(realm: Realm, latestChunkEntity: ChunkEntity, roomId: String, userId: String, eventId: String): Boolean {
     return realm.doesEventExistInChunkHistory(eventId) && realm.hasReadReceiptInLatestChunk(latestChunkEntity, roomId, userId)
@@ -77,9 +79,11 @@ private fun Realm.hasReadReceiptInLatestChunk(latestChunkEntity: ChunkEntity, ro
     } != null
 }
 
-internal fun isReadMarkerMoreRecent(realmConfiguration: RealmConfiguration,
-                                    roomId: String?,
-                                    eventId: String?): Boolean {
+internal fun isReadMarkerMoreRecent(
+        realmConfiguration: RealmConfiguration,
+        roomId: String?,
+        eventId: String?
+): Boolean {
     if (roomId.isNullOrBlank() || eventId.isNullOrBlank()) {
         return false
     }

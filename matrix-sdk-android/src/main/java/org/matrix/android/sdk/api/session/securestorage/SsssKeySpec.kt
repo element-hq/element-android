@@ -20,7 +20,7 @@ import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.crypto.keysbackup.extractCurveKeyFromRecoveryKey
 import org.matrix.android.sdk.internal.crypto.keysbackup.deriveKey
 
-/** Tag class */
+/** Tag class. */
 interface SsssKeySpec
 
 data class RawBytesKeySpec(

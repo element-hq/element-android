@@ -31,11 +31,13 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
 import javax.inject.Inject
 
-class RageShake @Inject constructor(private val activity: FragmentActivity,
-                                    private val bugReporter: BugReporter,
-                                    private val navigator: Navigator,
-                                    private val sessionHolder: ActiveSessionHolder,
-                                    private val vectorPreferences: VectorPreferences) : ShakeDetector.Listener {
+class RageShake @Inject constructor(
+        private val activity: FragmentActivity,
+        private val bugReporter: BugReporter,
+        private val navigator: Navigator,
+        private val sessionHolder: ActiveSessionHolder,
+        private val vectorPreferences: VectorPreferences
+) : ShakeDetector.Listener {
 
     private var shakeDetector: ShakeDetector? = null
 
@@ -105,7 +107,7 @@ class RageShake @Inject constructor(private val activity: FragmentActivity,
 
     companion object {
         /**
-         * Check if the feature is available
+         * Check if the feature is available.
          */
         fun isAvailable(context: Context): Boolean {
             return context.getSystemService<SensorManager>()?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null

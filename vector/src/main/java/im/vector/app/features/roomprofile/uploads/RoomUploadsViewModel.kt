@@ -107,9 +107,9 @@ class RoomUploadsViewModel @AssistedInject constructor(
     override fun handle(action: RoomUploadsAction) {
         when (action) {
             is RoomUploadsAction.Download -> handleDownload(action)
-            is RoomUploadsAction.Share    -> handleShare(action)
-            RoomUploadsAction.Retry       -> handleLoadMore()
-            RoomUploadsAction.LoadMore    -> handleLoadMore()
+            is RoomUploadsAction.Share -> handleShare(action)
+            RoomUploadsAction.Retry -> handleLoadMore()
+            RoomUploadsAction.LoadMore -> handleLoadMore()
         }
     }
 
@@ -117,7 +117,8 @@ class RoomUploadsViewModel @AssistedInject constructor(
         viewModelScope.launch {
             val event = try {
                 val file = session.fileService().downloadFile(
-                        messageContent = action.uploadEvent.contentWithAttachmentContent)
+                        messageContent = action.uploadEvent.contentWithAttachmentContent
+                )
                 RoomUploadsViewEvents.FileReadyForSharing(file)
             } catch (failure: Throwable) {
                 RoomUploadsViewEvents.Failure(failure)
@@ -130,7 +131,8 @@ class RoomUploadsViewModel @AssistedInject constructor(
         viewModelScope.launch {
             val event = try {
                 val file = session.fileService().downloadFile(
-                        messageContent = action.uploadEvent.contentWithAttachmentContent)
+                        messageContent = action.uploadEvent.contentWithAttachmentContent
+                )
                 RoomUploadsViewEvents.FileReadyForSaving(file, action.uploadEvent.contentWithAttachmentContent.body)
             } catch (failure: Throwable) {
                 RoomUploadsViewEvents.Failure(failure)

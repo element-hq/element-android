@@ -38,7 +38,7 @@ import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.features.themes.ThemeUtils
 
 /**
- * Set a text in the TextView, or set visibility to GONE if the text is null
+ * Set a text in the TextView, or set visibility to GONE if the text is null.
  */
 fun TextView.setTextOrHide(newText: CharSequence?, hideWhenBlank: Boolean = true, vararg relatedViews: View = emptyArray()) {
     if (newText == null ||
@@ -53,18 +53,20 @@ fun TextView.setTextOrHide(newText: CharSequence?, hideWhenBlank: Boolean = true
 }
 
 /**
- * Set text with a colored part
+ * Set text with a colored part.
  * @param fullTextRes the resource id of the full text. Value MUST contains a parameter for string, which will be replaced by the colored part
  * @param coloredTextRes the resource id of the colored part of the text
  * @param colorAttribute attribute of the color. Default to colorPrimary
  * @param underline true to also underline the text. Default to false
  * @param onClick attributes to handle click on the colored part if needed
  */
-fun TextView.setTextWithColoredPart(@StringRes fullTextRes: Int,
-                                    @StringRes coloredTextRes: Int,
-                                    @AttrRes colorAttribute: Int = R.attr.colorPrimary,
-                                    underline: Boolean = false,
-                                    onClick: (() -> Unit)? = null) {
+fun TextView.setTextWithColoredPart(
+        @StringRes fullTextRes: Int,
+        @StringRes coloredTextRes: Int,
+        @AttrRes colorAttribute: Int = R.attr.colorPrimary,
+        underline: Boolean = false,
+        onClick: (() -> Unit)? = null
+) {
     val coloredPart = resources.getString(coloredTextRes)
     // Insert colored part into the full text
     val fullText = resources.getString(fullTextRes, coloredPart)
@@ -73,18 +75,20 @@ fun TextView.setTextWithColoredPart(@StringRes fullTextRes: Int,
 }
 
 /**
- * Set text with a colored part
+ * Set text with a colored part.
  * @param fullText The full text.
  * @param coloredPart The colored part of the text
  * @param colorAttribute attribute of the color. Default to colorPrimary
  * @param underline true to also underline the text. Default to false
  * @param onClick attributes to handle click on the colored part if needed
  */
-fun TextView.setTextWithColoredPart(fullText: String,
-                                    coloredPart: String,
-                                    @AttrRes colorAttribute: Int = R.attr.colorPrimary,
-                                    underline: Boolean = true,
-                                    onClick: (() -> Unit)? = null) {
+fun TextView.setTextWithColoredPart(
+        fullText: String,
+        coloredPart: String,
+        @AttrRes colorAttribute: Int = R.attr.colorPrimary,
+        underline: Boolean = true,
+        onClick: (() -> Unit)? = null
+) {
     val color = ThemeUtils.getColor(context, colorAttribute)
 
     val foregroundSpan = ForegroundColorSpan(color)
@@ -134,7 +138,7 @@ fun TextView.clearDrawables() {
 }
 
 /**
- * Set long click listener to copy the current text of the TextView to the clipboard and show a Snackbar
+ * Set long click listener to copy the current text of the TextView to the clipboard and show a Snackbar.
  */
 fun TextView.copyOnLongClick() {
     setOnLongClickListener { view ->

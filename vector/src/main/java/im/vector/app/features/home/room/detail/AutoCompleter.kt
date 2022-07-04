@@ -53,7 +53,7 @@ class AutoCompleter @AssistedInject constructor(
         @Assisted val isInThreadTimeline: Boolean,
         private val avatarRenderer: AvatarRenderer,
         private val commandAutocompletePolicy: CommandAutocompletePolicy,
-        AutocompleteCommandPresenterFactory: AutocompleteCommandPresenter.Factory,
+        autocompleteCommandPresenterFactory: AutocompleteCommandPresenter.Factory,
         private val autocompleteMemberPresenterFactory: AutocompleteMemberPresenter.Factory,
         private val autocompleteRoomPresenter: AutocompleteRoomPresenter,
         private val autocompleteGroupPresenter: AutocompleteGroupPresenter,
@@ -68,7 +68,7 @@ class AutoCompleter @AssistedInject constructor(
     }
 
     private val autocompleteCommandPresenter: AutocompleteCommandPresenter by lazy {
-        AutocompleteCommandPresenterFactory.create(isInThreadTimeline)
+        autocompleteCommandPresenterFactory.create(isInThreadTimeline)
     }
 
     private var editText: EditText? = null
@@ -134,12 +134,12 @@ class AutoCompleter @AssistedInject constructor(
                 .with(object : AutocompleteCallback<AutocompleteMemberItem> {
                     override fun onPopupItemClicked(editable: Editable, item: AutocompleteMemberItem): Boolean {
                         return when (item) {
-                            is AutocompleteMemberItem.Header     -> false // do nothing header is not clickable
+                            is AutocompleteMemberItem.Header -> false // do nothing header is not clickable
                             is AutocompleteMemberItem.RoomMember -> {
                                 insertMatrixItem(editText, editable, TRIGGER_AUTO_COMPLETE_MEMBERS, item.roomMemberSummary.toMatrixItem())
                                 true
                             }
-                            is AutocompleteMemberItem.Everyone   -> {
+                            is AutocompleteMemberItem.Everyone -> {
                                 insertMatrixItem(editText, editable, TRIGGER_AUTO_COMPLETE_MEMBERS, item.roomSummary.toEveryoneInRoomMatrixItem())
                                 true
                             }

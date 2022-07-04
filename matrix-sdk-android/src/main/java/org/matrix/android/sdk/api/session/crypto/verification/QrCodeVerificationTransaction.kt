@@ -19,22 +19,22 @@ package org.matrix.android.sdk.api.session.crypto.verification
 interface QrCodeVerificationTransaction : VerificationTransaction {
 
     /**
-     * To use to display a qr code, for the other user to scan it
+     * To use to display a qr code, for the other user to scan it.
      */
     val qrCodeText: String?
 
     /**
-     * Call when you have scan the other user QR code
+     * Call when you have scan the other user QR code.
      */
     fun userHasScannedOtherQrCode(otherQrCodeText: String)
 
     /**
-     * Call when you confirm that other user has scanned your QR code
+     * Call when you confirm that other user has scanned your QR code.
      */
     fun otherUserScannedMyQrCode()
 
     /**
-     * Call when you do not confirm that other user has scanned your QR code
+     * Call when you do not confirm that other user has scanned your QR code.
      */
     fun otherUserDidNotScannedMyQrCode()
 }

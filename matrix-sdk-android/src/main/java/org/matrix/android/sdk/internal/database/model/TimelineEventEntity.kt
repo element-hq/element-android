@@ -22,20 +22,21 @@ import io.realm.annotations.Index
 import io.realm.annotations.LinkingObjects
 import org.matrix.android.sdk.internal.extensions.assertIsManaged
 
-internal open class TimelineEventEntity(var localId: Long = 0,
-                                        @Index var eventId: String = "",
-                                        @Index var roomId: String = "",
-                                        @Index var displayIndex: Int = 0,
-                                        var root: EventEntity? = null,
-                                        var annotations: EventAnnotationsSummaryEntity? = null,
-                                        var senderName: String? = null,
-                                        var isUniqueDisplayName: Boolean = false,
-                                        var senderAvatar: String? = null,
-                                        var senderMembershipEventId: String? = null,
+internal open class TimelineEventEntity(
+        var localId: Long = 0,
+        @Index var eventId: String = "",
+        @Index var roomId: String = "",
+        @Index var displayIndex: Int = 0,
+        var root: EventEntity? = null,
+        var annotations: EventAnnotationsSummaryEntity? = null,
+        var senderName: String? = null,
+        var isUniqueDisplayName: Boolean = false,
+        var senderAvatar: String? = null,
+        var senderMembershipEventId: String? = null,
         // ownedByThreadChunk indicates that the current TimelineEventEntity belongs
         // to a thread chunk and is a temporarily event.
-                                        var ownedByThreadChunk: Boolean = false,
-                                        var readReceipts: ReadReceiptsSummaryEntity? = null
+        var ownedByThreadChunk: Boolean = false,
+        var readReceipts: ReadReceiptsSummaryEntity? = null
 ) : RealmObject() {
 
     @LinkingObjects("timelineEvents")

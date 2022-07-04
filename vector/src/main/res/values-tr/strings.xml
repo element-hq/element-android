@@ -377,7 +377,6 @@
 \n
 \nNot bu eylem uygulamayı yeniden başlatacak ve biraz zaman alabilir.</string>
     <string name="settings_select_country">Ülke seç</string>
-    <string name="settings_flair">Kabiliyet</string>
     <string name="media_saving_period_3_days">3 gün</string>
     <string name="media_saving_period_1_week">1 hafta</string>
     <string name="media_saving_period_1_month">1 ay</string>
@@ -1089,9 +1088,7 @@
     <string name="login_a11y_choose_other">Özel bir ana sunucu seçin</string>
     <string name="login_a11y_choose_modular">Element Matric Hizmetleri\'ni seç</string>
     <string name="login_a11y_choose_matrix_org">Matrix.org sunucusunu seç</string>
-    <string name="login_signup_cancel_confirmation_content">Hesabınız henüz oluşturulmadı.
-\n
-\nKayıt işlemini durdurmak istiyor musunuz\?</string>
+    <string name="login_signup_cancel_confirmation_content">Hesabınız henüz oluşturulmadı. Kayıt işlemini durdurmak istiyor musunuz\?</string>
     <string name="login_signup_cancel_confirmation_title">Uyarı</string>
     <string name="login_signup_error_user_in_use">Bu kullanıcı adı alınmış</string>
     <string name="login_signup_submit">İleri</string>

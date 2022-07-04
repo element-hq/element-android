@@ -32,7 +32,7 @@ import kotlin.math.min
 import kotlin.system.measureTimeMillis
 
 /**
- * Utility class to import/export the crypto data
+ * Utility class to import/export the crypto data.
  */
 internal object MXMegolmExportEncryption {
     private const val HEADER_LINE = "-----BEGIN MEGOLM SESSION DATA-----"
@@ -66,9 +66,9 @@ internal object MXMegolmExportEncryption {
     }
 
     /**
-     * Decrypt a megolm key file
+     * Decrypt a megolm key file.
      *
-     * @param data     the data to decrypt
+     * @param data the data to decrypt
      * @param password the password.
      * @return the decrypted output.
      * @throws Exception the failure reason
@@ -138,9 +138,9 @@ internal object MXMegolmExportEncryption {
     /**
      * Encrypt a string into the megolm export format.
      *
-     * @param data       the data to encrypt.
-     * @param password   the password
-     * @param kdf_rounds the iteration count
+     * @param data the data to encrypt.
+     * @param password the password
+     * @param kdfRounds the iteration count
      * @return the encrypted data
      * @throws Exception the failure reason
      */
@@ -209,8 +209,8 @@ internal object MXMegolmExportEncryption {
     }
 
     /**
-     * Unbase64 an ascii-armoured megolm key file
-     * Strips the header and trailer lines, and unbase64s the content
+     * Unbase64 an ascii-armoured megolm key file.
+     * Strips the header and trailer lines, and unbase64s the content.
      *
      * @param data the input data
      * @return unbase64ed content
@@ -302,11 +302,11 @@ internal object MXMegolmExportEncryption {
     }
 
     /**
-     * Derive the AES and HMAC-SHA-256 keys for the file
+     * Derive the AES and HMAC-SHA-256 keys for the file.
      *
-     * @param salt       salt for pbkdf
+     * @param salt salt for pbkdf
      * @param iterations number of pbkdf iterations
-     * @param password   password
+     * @param password password
      * @return the derived keys
      */
     @Throws(Exception::class)

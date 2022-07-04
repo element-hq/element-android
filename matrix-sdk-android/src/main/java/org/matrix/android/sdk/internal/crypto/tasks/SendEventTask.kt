@@ -38,7 +38,8 @@ internal class DefaultSendEventTask @Inject constructor(
         private val encryptEventTask: EncryptEventTask,
         private val loadRoomMembersTask: LoadRoomMembersTask,
         private val roomAPI: RoomAPI,
-        private val globalErrorReceiver: GlobalErrorReceiver) : SendEventTask {
+        private val globalErrorReceiver: GlobalErrorReceiver
+) : SendEventTask {
 
     override suspend fun execute(params: SendEventTask.Params): String {
         try {
@@ -46,7 +47,13 @@ internal class DefaultSendEventTask @Inject constructor(
             params.event.roomId
                     ?.takeIf { params.encrypt }
                     ?.let { roomId ->
-                        loadRoomMembersTask.execute(LoadRoomMembersTask.Params(roomId))
+                        try {
+                            loadRoomMembersTask.execute(LoadRoomMembersTask.Params(roomId))
+                        } catch (failure: Throwable) {
+                            // send any way?
+                            // the result is that some users won't probably be able to decrypt :/
+                            Timber.w(failure, "SendEvent: failed to load members in room ${params.event.roomId}")
+                        }
                     }
 
             val event = handleEncryption(params)
@@ -66,6 +73,7 @@ internal class DefaultSendEventTask @Inject constructor(
             }
         } catch (e: Throwable) {
 //            localEchoRepository.updateSendState(params.event.eventId!!, SendState.UNDELIVERED)
+            Timber.w(e, "Unable to send the Event")
             throw e
         }
     }
@@ -73,11 +81,13 @@ internal class DefaultSendEventTask @Inject constructor(
     @Throws
     private suspend fun handleEncryption(params: SendEventTask.Params): Event {
         if (params.encrypt && !params.event.isEncrypted()) {
-            return encryptEventTask.execute(EncryptEventTask.Params(
-                    params.event.roomId ?: "",
-                    params.event,
-                    listOf("m.relates_to")
-            ))
+            return encryptEventTask.execute(
+                    EncryptEventTask.Params(
+                            params.event.roomId ?: "",
+                            params.event,
+                            listOf("m.relates_to")
+                    )
+            )
         }
         return params.event
     }

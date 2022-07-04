@@ -20,7 +20,7 @@ import com.squareup.moshi.Moshi
 import org.matrix.android.sdk.internal.di.MoshiProvider
 
 /**
- * Entry point to get a Json parser
+ * Entry point to get a Json parser.
  */
 object MatrixJsonParser {
     /**

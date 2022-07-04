@@ -48,7 +48,7 @@ import javax.inject.Inject
 private val loggerTag = LoggerTag("CallService", LoggerTag.VOIP)
 
 /**
- * Foreground service to manage calls
+ * Foreground service to manage calls.
  */
 @AndroidEntryPoint
 class CallService : VectorService() {
@@ -120,15 +120,15 @@ class CallService : VectorService() {
                 callRingPlayerOutgoing?.start()
                 displayOutgoingRingingCallNotification(intent)
             }
-            ACTION_ONGOING_CALL          -> {
+            ACTION_ONGOING_CALL -> {
                 callRingPlayerIncoming?.stop()
                 callRingPlayerOutgoing?.stop()
                 displayCallInProgressNotification(intent)
             }
-            ACTION_CALL_TERMINATED       -> {
+            ACTION_CALL_TERMINATED -> {
                 handleCallTerminated(intent)
             }
-            else                         -> {
+            else -> {
                 handleUnexpectedState(null)
             }
         }
@@ -321,9 +321,11 @@ class CallService : VectorService() {
         private const val EXTRA_END_CALL_REJECTED = "EXTRA_END_CALL_REJECTED"
         private const val EXTRA_END_CALL_REASON = "EXTRA_END_CALL_REASON"
 
-        fun onIncomingCallRinging(context: Context,
-                                  callId: String,
-                                  isInBackground: Boolean) {
+        fun onIncomingCallRinging(
+                context: Context,
+                callId: String,
+                isInBackground: Boolean
+        ) {
             val intent = Intent(context, CallService::class.java)
                     .apply {
                         action = ACTION_INCOMING_RINGING_CALL
@@ -333,8 +335,10 @@ class CallService : VectorService() {
             ContextCompat.startForegroundService(context, intent)
         }
 
-        fun onOutgoingCallRinging(context: Context,
-                                  callId: String) {
+        fun onOutgoingCallRinging(
+                context: Context,
+                callId: String
+        ) {
             val intent = Intent(context, CallService::class.java)
                     .apply {
                         action = ACTION_OUTGOING_RINGING_CALL
@@ -343,8 +347,10 @@ class CallService : VectorService() {
             ContextCompat.startForegroundService(context, intent)
         }
 
-        fun onPendingCall(context: Context,
-                          callId: String) {
+        fun onPendingCall(
+                context: Context,
+                callId: String
+        ) {
             val intent = Intent(context, CallService::class.java)
                     .apply {
                         action = ACTION_ONGOING_CALL
@@ -353,10 +359,12 @@ class CallService : VectorService() {
             ContextCompat.startForegroundService(context, intent)
         }
 
-        fun onCallTerminated(context: Context,
-                             callId: String,
-                             endCallReason: EndCallReason,
-                             rejected: Boolean) {
+        fun onCallTerminated(
+                context: Context,
+                callId: String,
+                endCallReason: EndCallReason,
+                rejected: Boolean
+        ) {
             val intent = Intent(context, CallService::class.java)
                     .apply {
                         action = ACTION_CALL_TERMINATED

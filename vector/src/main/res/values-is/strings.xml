@@ -179,9 +179,7 @@
     <string name="settings_new_password">Nýtt lykilorð</string>
     <string name="settings_fail_to_update_password">Mistókst að uppfæra lykilorð</string>
     <string name="settings_password_updated">Lykilorðið þitt hefur verið uppfært</string>
-    <string name="settings_unignore_user">Sýna öll skilaboð frá %s\?
-\n
-\nAthugaðu að þessi aðgerð mun endurræsa forritið og það getur tekið nokkurn tíma.</string>
+    <string name="settings_unignore_user">Sýna öll skilaboð frá %s\?</string>
     <string name="settings_select_country">Veldu land</string>
     <string name="media_saving_period_3_days">3 dagar</string>
     <string name="media_saving_period_1_week">1 vika</string>
@@ -251,7 +249,6 @@
     <string name="settings_labs_native_camera">Nota innbyggða myndavél</string>
     <string name="room_participants_action_mention">Minnst á</string>
     <string name="settings_vibrate_on_mention">Titra þegar minnst er á</string>
-    <string name="settings_flair">Hlutverksmerki</string>
     <string name="room_settings_room_read_history_rules_pref_title">Lesanleiki ferilskrár spjallrásar</string>
     <string name="encryption_export_e2e_room_keys">Flytja út E2E dulritunarlykla spjallrásar</string>
     <string name="encryption_export_room_keys">Flytja út dulritunarlykla spjallrásar</string>
@@ -848,7 +845,6 @@
     <string name="disconnect_identity_server">Aftengja auðkennisþjón</string>
     <string name="send_feedback_space_title">Umsagnir um svæði</string>
     <string name="settings_show_redacted_summary">Birta frátökutákn fyrir fjarlægð skilaboð</string>
-    <string name="settings_enable_location_sharing_summary">Eftir að þetta hefur verið virkjað, muntu geta sent staðsetninguna þína á hvaða spjallrás sem er</string>
     <string name="closed_poll_option_description">Niðurstöður birtast einungis eftir að þú hefur lokað könnuninni</string>
     <string name="open_poll_option_description">Kjósendur sjá niðurstöðurnar þegar þeir hafa kosið</string>
     <plurals name="poll_total_vote_count_after_ended">
@@ -871,8 +867,6 @@
     </plurals>
     <string name="message_bubbles">Birta skilaboðablöðrur</string>
     <string name="location_timeline_failed_to_load_map">Mistókst að hlaða inn landakorti</string>
-    <string name="labs_render_locations_in_timeline">Myndgera staðsetningu notenda á tímalínunni</string>
-    <string name="settings_enable_location_sharing">Virkja deilingu staðsetninga</string>
     <string name="location_not_available_dialog_content">${app_name} gat ekki fengið staðsetninguna þína. Reyndu aftur síðar.</string>
     <string name="location_not_available_dialog_title">${app_name} gat ekki fengið staðsetninguna þína</string>
     <string name="closed_poll_option_title">Lokuð könnun</string>
@@ -1026,9 +1020,7 @@
     <string name="tooltip_attachment_gallery">Senda myndir og myndskeið</string>
     <string name="tooltip_attachment_photo">Opna myndavél</string>
     <string name="location_share_external">Opna með</string>
-    <string name="location_share">Deila staðsetningu</string>
     <string name="a11y_static_map_image">Landakort</string>
-    <string name="a11y_location_share_icon">Deila staðsetningu</string>
     <string name="location_activity_title_preview">Staðsetning</string>
     <string name="location_activity_title_static_sharing">Deila staðsetningu</string>
     <string name="poll_type_title">Tegund könnunar</string>
@@ -1065,7 +1057,7 @@
     <string name="dev_tools_form_hint_type">Tegund</string>
     <string name="dev_tools_send_custom_event">Senda sérsniðinn atburð</string>
     <string name="dev_tools_explore_room_state">Skoða stöðu spjallrásar</string>
-    <string name="a11y_presence_unavailable">Ekki tiltækt</string>
+    <string name="a11y_presence_unavailable">Fjarverandi</string>
     <string name="a11y_presence_offline">Ónettengt</string>
     <string name="a11y_presence_online">Nettengt</string>
     <string name="a11y_rule_notify_off">Ekki tilkynna</string>
@@ -1350,7 +1342,7 @@
     <string name="settings_messages_by_bot">Skilaboð frá vélmennum</string>
     <string name="settings_room_invitations">Boð á spjallrás</string>
     <string name="settings_messages_containing_keywords">Stikkorð</string>
-    <string name="settings_mentions_at_room">\@spjallrás</string>
+    <string name="settings_mentions_at_room">\@room</string>
     <string name="settings_group_messages">Hópskilaboð</string>
     <string name="settings_messages_direct_messages">Bein skilaboð</string>
     <string name="settings_messages_containing_username">Notandanafnið mitt</string>
@@ -1446,7 +1438,7 @@
     <string name="room_settings_room_notifications_notify_me">Láta mig vita fyrir</string>
     <string name="settings_discovery_category">Uppgötvun</string>
     <string name="settings_room_upgrades">Uppfærslur spjallrásar</string>
-    <string name="settings_messages_at_room">Skilaboð sem innihalda @spjallrás</string>
+    <string name="settings_messages_at_room">Skilaboð sem innihalda @room</string>
     <string name="settings_when_rooms_are_upgraded">Þegar spjallrásir eru uppfærðar</string>
     <string name="space_settings_permissions_title">Heimildir svæðis</string>
     <string name="room_participants_ban_reason">Ástæða fyrir banni</string>
@@ -1572,7 +1564,6 @@
     <string name="a11y_create_menu_close">Loka valmyndinni til að útbúa spjallrás…</string>
     <string name="location_share_live_stop">Stöðva</string>
     <string name="location_share_live_enabled">Staðsetning í rauntíma virkjuð</string>
-    <string name="location_in_background_missing_permission_dialog_title">Leyfa aðgang</string>
     <string name="a11y_location_share_option_pinned_icon">Deila þessari staðsetningu</string>
     <string name="location_share_option_pinned">Deila þessari staðsetningu</string>
     <string name="a11y_location_share_option_user_live_icon">Deila staðsetningu í rauntíma</string>
@@ -1729,7 +1720,6 @@
     <string name="settings_troubleshoot_test_play_services_title">Athugun á Play-þjónustum</string>
     <string name="upgrade_private_room">Uppfæra einkaspjallrás</string>
     <string name="upgrade_public_room">Uppfæra almenningsspjallrás</string>
-    <string name="leave_all_rooms_and_spaces">Yfirgefa allar spjallrásir og svæði</string>
     <string name="invite_by_email">Bjóða með tölvupósti</string>
     <string name="create_spaces_organise_rooms">Einkasvæði til að skipuleggja spjallrásirnar þínar</string>
     <string name="create_spaces_who_are_you_working_with">Hverjum ertu að vinna með\?</string>
@@ -1937,9 +1927,6 @@
     <string name="labs_auto_report_uisi">Tilkynna afkóðunarvillur sjálfvirkt.</string>
     <string name="space_add_space_to_any_space_you_manage">Bættu svæði við eitthvað svæði sem þú stýrir.</string>
     <string name="space_add_existing_rooms">Bæta við fyrirliggjandi spjallrásum og svæði</string>
-    <string name="pick_tings_to_leave">Veldu það sem á að yfirgefa</string>
-    <string name="leave_specific_ones">Yfirgefa tilteknar spjallrásir og svæði…</string>
-    <string name="dont_leave_any">Ekki yfirgefa neinar spjallrásir eða svæði</string>
     <string name="space_leave_prompt_msg_with_name">Ertu viss um að þú viljir yfirgefa %s\?</string>
     <string name="create_spaces_private_teammates">Einkasvæði fyrir þig og félaga í teyminu þínu</string>
     <string name="command_description_add_to_space">Bæta við í uppgefið svæði</string>
@@ -1981,4 +1968,54 @@
     <string name="threads_notice_migration_title">Spjallþræðir í bráðlegri Beta-útgáfu 🎉</string>
     <string name="call_transfer_consulting_with">Ráðfæri við %1$s</string>
     <string name="call_transfer_consult_first">Ráðfæra fyrst</string>
+    <string name="screen_sharing_notification_description">Deiling á skjá er í vinnslu</string>
+    <string name="screen_sharing_notification_title">${app_name} skjádeiling</string>
+    <string name="live_location_sharing_notification_description">Deiling staðsetningar er í vinnslu</string>
+    <string name="live_location_sharing_notification_title">${app_name} rauntímastaðsetning</string>
+    <string name="location_share_live_started">Hleð inn rauntímastaðsetningu…</string>
+    <string name="location_share_live_select_duration_option_3">8 klukkustundir</string>
+    <string name="location_share_live_select_duration_option_2">1 klukkustund</string>
+    <string name="location_share_live_select_duration_option_1">15 mínútur</string>
+    <string name="location_share_live_select_duration_title">Deildu rauntímastaðsetningu þinni í</string>
+    <string name="audio_message_file_size">(%1$s)</string>
+    <string name="audio_message_reply_content">%1$s (%2$s)</string>
+    <string name="error_audio_message_unable_to_play">Gat ekki spilað %1$s</string>
+    <string name="a11y_pause_audio_message">Setja %1$s í bið</string>
+    <string name="a11y_play_audio_message">Spila %1$s</string>
+    <string name="a11y_audio_playback_duration">%1$d mínútur %2$d sekúndur</string>
+    <string name="a11y_audio_message_item">%1$s, %2$s, %3$s</string>
+    <string name="a11y_presence_busy">Upptekinn</string>
+    <string name="call_transfer_transfer_to_title">Flytja yfir í %1$s</string>
+    <string name="bootstrap_progress_generating_ssss_recovery">Útbý SSSS-lykil úr endurheimtulykli</string>
+    <string name="bootstrap_progress_generating_ssss_with_info">Útbý SSSS-lykil úr lykilsetningu (%s)</string>
+    <string name="bootstrap_progress_generating_ssss">Útbý SSSS-lykil úr lykilsetningu</string>
+    <string name="bootstrap_progress_checking_backup_with_info">Athuga öryggisafritunarlykil (%s)</string>
+    <string name="bootstrap_finish_title">Þú ert búin/n!</string>
+    <string name="sent_live_location">Deildu raunstaðsetningu sinni</string>
+    <string name="notification_initial_sync">Upphafleg samstilling…</string>
+    <string name="seen_by">Séð af</string>
+    <string name="ftue_personalize_skip_this_step">Sleppa þessu skrefi</string>
+    <string name="ftue_personalize_submit">Vista og halda áfram</string>
+    <string name="ftue_personalize_complete_subtitle">Kjörstillingarnar þínar hafa verið vistaðar.</string>
+    <string name="ftue_personalize_complete_title">Nú ertu tilbúin(n)!</string>
+    <string name="ftue_personalize_lets_go">Hefjumst handa</string>
+    <string name="ftue_profile_picture_subtitle">Þú getur breytt þessu hvenær sem er.</string>
+    <string name="ftue_profile_picture_title">Bættu við auðkennismynd</string>
+    <string name="ftue_display_name_entry_footer">Þú getur breytt þessu síðar</string>
+    <string name="ftue_display_name_entry_title">Birtingarnafn</string>
+    <string name="ftue_display_name_title">Veldu birtingarnafn</string>
+    <string name="ftue_account_created_congratulations_title">Til hamingju!</string>
+    <string name="labs_allow_extended_logging">Virkja ítarlega atvikaskráningu.</string>
+    <string name="beta">BETA-prófunarútgáfa</string>
+    <string name="give_feedback_threads">Gefðu umsögn</string>
+    <string name="beta_title_bottom_sheet_action">BETA-prófunarútgáfa</string>
+    <string name="keys_backup_restore_is_getting_backup_version">Næ í útgáfu öryggisafrits…</string>
+    <string name="settings_presence_user_always_appears_offline">Ónettengdur hamur</string>
+    <string name="settings_presence">Viðvera</string>
+    <string name="call_stop_screen_sharing">Hætta skjádeilingu</string>
+    <string name="call_start_screen_sharing">Deila skjá</string>
+    <string name="action_learn_more">Kanna nánar</string>
+    <string name="action_try_it_out">Prófaðu það</string>
+    <string name="action_disable">Gera óvirkt</string>
+    <string name="initial_sync_request_title">Upphafleg samstillingarbeiðni</string>
 </resources>

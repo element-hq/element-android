@@ -67,8 +67,10 @@ class SetIdentityServerFragment @Inject constructor(
                     state.defaultIdentityServerUrl.toReducedUrl()
             )
                     .toSpannable()
-                    .colorizeMatchingText(state.defaultIdentityServerUrl.toReducedUrl(),
-                            colorProvider.getColorFromAttribute(R.attr.vctr_content_tertiary))
+                    .colorizeMatchingText(
+                            state.defaultIdentityServerUrl.toReducedUrl(),
+                            colorProvider.getColorFromAttribute(R.attr.vctr_content_tertiary)
+                    )
 
             views.identityServerSetDefaultNotice.isVisible = true
             views.identityServerSetDefaultSubmit.isVisible = true
@@ -108,10 +110,10 @@ class SetIdentityServerFragment @Inject constructor(
 
         viewModel.observeViewEvents {
             when (it) {
-                is SetIdentityServerViewEvents.Loading       -> showLoading(it.message)
-                is SetIdentityServerViewEvents.Failure       -> handleFailure(it)
-                is SetIdentityServerViewEvents.OtherFailure  -> showFailure(it.failure)
-                is SetIdentityServerViewEvents.NoTerms       -> {
+                is SetIdentityServerViewEvents.Loading -> showLoading(it.message)
+                is SetIdentityServerViewEvents.Failure -> handleFailure(it)
+                is SetIdentityServerViewEvents.OtherFailure -> showFailure(it.failure)
+                is SetIdentityServerViewEvents.NoTerms -> {
                     MaterialAlertDialogBuilder(requireActivity())
                             .setTitle(R.string.settings_discovery_no_terms_title)
                             .setMessage(R.string.settings_discovery_no_terms)
@@ -123,13 +125,14 @@ class SetIdentityServerFragment @Inject constructor(
                     Unit
                 }
                 is SetIdentityServerViewEvents.TermsAccepted -> processIdentityServerChange()
-                is SetIdentityServerViewEvents.ShowTerms     -> {
+                is SetIdentityServerViewEvents.ShowTerms -> {
                     navigator.openTerms(
                             requireContext(),
                             termsActivityResultLauncher,
                             TermsService.ServiceType.IdentityService,
                             it.identityServerUrl,
-                            null)
+                            null
+                    )
                 }
             }
         }

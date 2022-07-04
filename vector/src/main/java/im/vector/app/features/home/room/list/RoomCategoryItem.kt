@@ -29,8 +29,8 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.features.themes.ThemeUtils
 
-@EpoxyModelClass(layout = R.layout.item_room_category)
-abstract class RoomCategoryItem : VectorEpoxyModel<RoomCategoryItem.Holder>() {
+@EpoxyModelClass
+abstract class RoomCategoryItem : VectorEpoxyModel<RoomCategoryItem.Holder>(R.layout.item_room_category) {
 
     @EpoxyAttribute lateinit var title: String
     @EpoxyAttribute var itemCount: Int = 0

@@ -21,9 +21,11 @@ import com.airbnb.mvrx.test.MvRxTestRule
 import im.vector.app.test.fakes.FakeSession
 import im.vector.app.test.fakes.FakeStringProvider
 import im.vector.app.test.test
+import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
+import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.session.securestorage.IntegrityResult
 import org.matrix.android.sdk.api.session.securestorage.KeyInfo
 import org.matrix.android.sdk.api.session.securestorage.KeyInfoResult
@@ -44,6 +46,7 @@ class SharedSecureStorageViewModelTest {
 
     private val stringProvider = FakeStringProvider()
     private val fakeSession = FakeSession()
+    private val matrix: Matrix = mockk()
     val args = SharedSecureStorageActivity.Args(keyId = null, emptyList(), "alias")
 
     @Test
@@ -52,10 +55,12 @@ class SharedSecureStorageViewModelTest {
         val viewModel = createViewModel()
         viewModel
                 .test()
-                .assertState(aViewState(
-                        hasPassphrase = true,
-                        step = SharedSecureStorageViewState.Step.EnterPassphrase
-                ))
+                .assertState(
+                        aViewState(
+                                hasPassphrase = true,
+                                step = SharedSecureStorageViewState.Step.EnterPassphrase
+                        )
+                )
                 .finish()
     }
 
@@ -67,10 +72,12 @@ class SharedSecureStorageViewModelTest {
 
         viewModel
                 .test()
-                .assertState(aViewState(
-                        hasPassphrase = false,
-                        step = SharedSecureStorageViewState.Step.EnterKey
-                ))
+                .assertState(
+                        aViewState(
+                                hasPassphrase = false,
+                                step = SharedSecureStorageViewState.Step.EnterKey
+                        )
+                )
                 .finish()
     }
 
@@ -152,7 +159,8 @@ class SharedSecureStorageViewModelTest {
         return SharedSecureStorageViewModel(
                 SharedSecureStorageViewState(args),
                 stringProvider.instance,
-                fakeSession
+                fakeSession,
+                matrix,
         )
     }
 

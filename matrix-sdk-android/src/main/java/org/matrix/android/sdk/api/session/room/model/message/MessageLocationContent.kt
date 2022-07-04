@@ -35,19 +35,19 @@ data class MessageLocationContent(
         @Json(name = "body") override val body: String,
 
         /**
-         * Required. RFC5870 formatted geo uri 'geo:latitude,longitude;uncertainty' like 'geo:40.05,29.24;30' representing this location.
+         * Required. RFC5870 formatted geo uri 'geo:latitude,longitude;u=uncertainty' like 'geo:40.05,29.24;u=30' representing this location.
          */
         @Json(name = "geo_uri") val geoUri: String,
 
         @Json(name = "m.relates_to") override val relatesTo: RelationDefaultContent? = null,
         @Json(name = "m.new_content") override val newContent: Content? = null,
         /**
-         * See [MSC3488](https://github.com/matrix-org/matrix-doc/blob/matthew/location/proposals/3488-location.md)
+         * See [MSC3488](https://github.com/matrix-org/matrix-doc/blob/matthew/location/proposals/3488-location.md).
          */
         @Json(name = "org.matrix.msc3488.location") val unstableLocationInfo: LocationInfo? = null,
         @Json(name = "m.location") val locationInfo: LocationInfo? = null,
         /**
-         * Exact time that the data in the event refers to (milliseconds since the UNIX epoch)
+         * Exact time that the data in the event refers to (milliseconds since the UNIX epoch).
          */
         @Json(name = "org.matrix.msc3488.ts") val unstableTimestampMillis: Long? = null,
         @Json(name = "m.ts") val timestampMillis: Long? = null,

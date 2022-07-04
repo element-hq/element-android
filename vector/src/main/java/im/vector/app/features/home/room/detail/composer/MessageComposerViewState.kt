@@ -25,11 +25,11 @@ import kotlin.random.Random
 
 /**
  * Describes the current send mode:
- * REGULAR: sends the text as a regular message
- * QUOTE: User is currently quoting a message
- * EDIT: User is currently editing an existing message
+ * REGULAR: sends the text as a regular message;
+ * QUOTE: User is currently quoting a message;
+ * EDIT: User is currently editing an existing message.
  *
- * Depending on the state the bottom toolbar will change (icons/preview/actions...)
+ * Depending on the state the bottom toolbar will change (icons/preview/actions...).
  */
 sealed interface SendMode {
     data class Regular(
@@ -53,8 +53,8 @@ sealed interface CanSendStatus {
 
 fun CanSendStatus.boolean(): Boolean {
     return when (this) {
-        CanSendStatus.Allowed                    -> true
-        CanSendStatus.NoPermission               -> false
+        CanSendStatus.Allowed -> true
+        CanSendStatus.NoPermission -> false
         is CanSendStatus.UnSupportedE2eAlgorithm -> false
     }
 }
@@ -70,7 +70,7 @@ data class MessageComposerViewState(
 ) : MavericksState {
 
     val isVoiceRecording = when (voiceRecordingUiState) {
-        VoiceMessageRecorderView.RecordingUiState.Idle         -> false
+        VoiceMessageRecorderView.RecordingUiState.Idle -> false
         is VoiceMessageRecorderView.RecordingUiState.Locked,
         VoiceMessageRecorderView.RecordingUiState.Draft,
         is VoiceMessageRecorderView.RecordingUiState.Recording -> true

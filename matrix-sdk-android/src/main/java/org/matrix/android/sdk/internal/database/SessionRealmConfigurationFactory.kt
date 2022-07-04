@@ -44,7 +44,8 @@ internal class SessionRealmConfigurationFactory @Inject constructor(
         @SessionFilesDirectory val directory: File,
         @SessionId val sessionId: String,
         @UserMd5 val userMd5: String,
-        context: Context) {
+        context: Context
+) {
 
     // Keep legacy preferences name for compatibility reason
     private val sharedPreferences = context.getSharedPreferences("im.vector.matrix.android.realm", Context.MODE_PRIVATE)

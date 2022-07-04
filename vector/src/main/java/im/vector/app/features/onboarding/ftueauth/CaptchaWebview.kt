@@ -99,16 +99,18 @@ class CaptchaWebview @Inject constructor(
                     request.url.toString().endsWith("favicon.ico") -> {
                         // ignore favicon errors
                     }
-                    else                                           -> onError(errorResponse.toText())
+                    else -> onError(errorResponse.toText())
                 }
             }
 
+            @Deprecated("Deprecated in Java")
             override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {
                 @Suppress("DEPRECATION")
                 super.onReceivedError(view, errorCode, description, failingUrl)
                 onError(description)
             }
 
+            @Deprecated("Deprecated in Java")
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
                 if (url?.startsWith("js:") == true) {
                     val javascriptResponse = parseJsonFromUrl(url)

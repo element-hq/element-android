@@ -145,9 +145,10 @@ class VectorCallViewModel @AssistedInject constructor(
         override fun onCallEnded(callId: String) {
             withState { state ->
                 if (state.otherKnownCallInfo?.callId == callId) {
-                    setState { copy(otherKnownCallInfo = null) }
+                    setState { copy(otherKnownCallInfo = null, isSharingScreen = false) }
                 }
             }
+            _viewEvents.post(VectorCallViewEvents.StopScreenSharingService)
         }
 
         override fun onCurrentCallChange(call: WebRtcCall?) {
@@ -156,9 +157,10 @@ class VectorCallViewModel @AssistedInject constructor(
             }
         }
 
-        override fun onAudioDevicesChange() {
-            val currentSoundDevice = callManager.audioManager.selectedDevice ?: return
-            if (currentSoundDevice == CallAudioManager.Device.Phone) {
+        override fun onAudioDevicesChange() = withState { state ->
+            val currentSoundDevice = callManager.audioManager.selectedDevice ?: return@withState
+            val webRtcCall = callManager.getCallById(state.callId)
+            if (webRtcCall != null && shouldActivateProximitySensor(webRtcCall)) {
                 proximityManager.start()
             } else {
                 proximityManager.stop()
@@ -205,7 +207,7 @@ class VectorCallViewModel @AssistedInject constructor(
             callManager.addListener(callManagerListener)
             webRtcCall.addListener(callListener)
             val currentSoundDevice = callManager.audioManager.selectedDevice
-            if (currentSoundDevice == CallAudioManager.Device.Phone) {
+            if (shouldActivateProximitySensor(webRtcCall)) {
                 proximityManager.start()
             }
             setState {
@@ -224,11 +226,16 @@ class VectorCallViewModel @AssistedInject constructor(
                         formattedDuration = webRtcCall.formattedDuration(),
                         isHD = webRtcCall.mxCall.isVideoCall && webRtcCall.currentCaptureFormat() is CaptureFormat.HD,
                         canOpponentBeTransferred = webRtcCall.mxCall.capabilities.supportCallTransfer(),
-                        transferee = computeTransfereeState(webRtcCall.mxCall)
+                        transferee = computeTransfereeState(webRtcCall.mxCall),
+                        isSharingScreen = webRtcCall.isSharingScreen()
                 )
             }
             updateOtherKnownCall(webRtcCall)
         }
+    }
+
+    private fun shouldActivateProximitySensor(webRtcCall: WebRtcCall): Boolean {
+        return callManager.audioManager.selectedDevice == CallAudioManager.Device.Phone && !webRtcCall.isSharingScreen()
     }
 
     private fun WebRtcCall.extractCallInfo(): VectorCallViewState.CallInfo {
@@ -257,30 +264,30 @@ class VectorCallViewModel @AssistedInject constructor(
 
     override fun handle(action: VectorCallViewActions) = withState { state ->
         when (action) {
-            VectorCallViewActions.EndCall                        -> {
+            VectorCallViewActions.EndCall -> {
                 call?.endCall()
                 _viewEvents.post(VectorCallViewEvents.StopScreenSharingService)
             }
-            VectorCallViewActions.AcceptCall                     -> {
+            VectorCallViewActions.AcceptCall -> {
                 setState {
                     copy(callState = Loading())
                 }
                 call?.acceptIncomingCall()
             }
-            VectorCallViewActions.DeclineCall                    -> {
+            VectorCallViewActions.DeclineCall -> {
                 setState {
                     copy(callState = Loading())
                 }
                 call?.endCall()
             }
-            VectorCallViewActions.ToggleMute                     -> {
+            VectorCallViewActions.ToggleMute -> {
                 val muted = state.isAudioMuted
                 call?.muteCall(!muted)
                 setState {
                     copy(isAudioMuted = !muted)
                 }
             }
-            VectorCallViewActions.ToggleVideo                    -> {
+            VectorCallViewActions.ToggleVideo -> {
                 if (state.isVideoCall) {
                     val videoEnabled = state.isVideoEnabled
                     call?.enableVideo(!videoEnabled)
@@ -290,19 +297,19 @@ class VectorCallViewModel @AssistedInject constructor(
                 }
                 Unit
             }
-            VectorCallViewActions.ToggleHoldResume               -> {
+            VectorCallViewActions.ToggleHoldResume -> {
                 val isRemoteOnHold = state.isRemoteOnHold
                 call?.updateRemoteOnHold(!isRemoteOnHold)
             }
-            is VectorCallViewActions.ChangeAudioDevice           -> {
+            is VectorCallViewActions.ChangeAudioDevice -> {
                 callManager.audioManager.setAudioDevice(action.device)
             }
-            VectorCallViewActions.SwitchSoundDevice              -> {
+            VectorCallViewActions.SwitchSoundDevice -> {
                 _viewEvents.post(
                         VectorCallViewEvents.ShowSoundDeviceChooser(state.availableDevices, state.device)
                 )
             }
-            VectorCallViewActions.HeadSetButtonPressed           -> {
+            VectorCallViewActions.HeadSetButtonPressed -> {
                 if (state.callState.invoke() is CallState.LocalRinging) {
                     // accept call
                     call?.acceptIncomingCall()
@@ -313,20 +320,20 @@ class VectorCallViewModel @AssistedInject constructor(
                 }
                 Unit
             }
-            VectorCallViewActions.ToggleCamera                   -> {
+            VectorCallViewActions.ToggleCamera -> {
                 call?.switchCamera()
             }
-            VectorCallViewActions.ToggleHDSD                     -> {
+            VectorCallViewActions.ToggleHDSD -> {
                 if (!state.isVideoCall) return@withState
                 call?.setCaptureFormat(if (state.isHD) CaptureFormat.SD else CaptureFormat.HD)
             }
-            VectorCallViewActions.OpenDialPad                    -> {
+            VectorCallViewActions.OpenDialPad -> {
                 _viewEvents.post(VectorCallViewEvents.ShowDialPad)
             }
-            is VectorCallViewActions.SendDtmfDigit               -> {
+            is VectorCallViewActions.SendDtmfDigit -> {
                 call?.sendDtmfDigit(action.digit)
             }
-            VectorCallViewActions.InitiateCallTransfer           -> {
+            VectorCallViewActions.InitiateCallTransfer -> {
                 call?.updateRemoteOnHold(true)
                 _viewEvents.post(
                         VectorCallViewEvents.ShowCallTransferScreen
@@ -338,18 +345,19 @@ class VectorCallViewModel @AssistedInject constructor(
             is VectorCallViewActions.CallTransferSelectionResult -> {
                 handleCallTransferSelectionResult(action.callTransferResult)
             }
-            VectorCallViewActions.TransferCall                   -> {
+            VectorCallViewActions.TransferCall -> {
                 handleCallTransfer()
             }
-            is VectorCallViewActions.SwitchCall                  -> {
+            is VectorCallViewActions.SwitchCall -> {
                 setState { VectorCallViewState(action.callArgs) }
                 setupCallWithCurrentState()
             }
-            is VectorCallViewActions.ToggleScreenSharing         -> {
+            is VectorCallViewActions.ToggleScreenSharing -> {
                 handleToggleScreenSharing(state.isSharingScreen)
             }
-            is VectorCallViewActions.StartScreenSharing          -> {
-                call?.startSharingScreen()
+            is VectorCallViewActions.StartScreenSharing -> {
+                call?.startSharingScreen(action.videoCapturer)
+                proximityManager.stop()
                 setState {
                     copy(isSharingScreen = true)
                 }
@@ -366,6 +374,9 @@ class VectorCallViewModel @AssistedInject constructor(
             _viewEvents.post(
                     VectorCallViewEvents.StopScreenSharingService
             )
+            if (callManager.audioManager.selectedDevice == CallAudioManager.Device.Phone) {
+                proximityManager.start()
+            }
         } else {
             _viewEvents.post(
                     VectorCallViewEvents.ShowScreenSharingPermissionDialog
@@ -383,7 +394,7 @@ class VectorCallViewModel @AssistedInject constructor(
 
     private fun handleCallTransferSelectionResult(result: CallTransferResult) {
         when (result) {
-            is CallTransferResult.ConnectWithUserId      -> connectWithUserId(result)
+            is CallTransferResult.ConnectWithUserId -> connectWithUserId(result)
             is CallTransferResult.ConnectWithPhoneNumber -> connectWithPhoneNumber(result)
         }
     }

@@ -39,11 +39,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.abs
 
-/**
- *
- * TODO: Configure Span using available width and emoji size
- * TODO: Performances
- * TODO: Scroll to section - Find a way to snap section to the top
+/*
+ * TODO Configure Span using available width and emoji size
+ * TODO Performances
+ * TODO Scroll to section - Find a way to snap section to the top
  */
 class EmojiRecyclerAdapter @Inject constructor() :
         RecyclerView.Adapter<EmojiRecyclerAdapter.ViewHolder>() {
@@ -139,7 +138,7 @@ class EmojiRecyclerAdapter @Inject constructor() :
         itemView.setOnClickListener(itemClickListener)
         val viewHolder = when (viewType) {
             R.layout.grid_section_header -> SectionViewHolder(itemView)
-            else                         -> EmojiViewHolder(itemView)
+            else -> EmojiViewHolder(itemView)
         }
         Trace.endSection()
         return viewHolder
@@ -289,10 +288,10 @@ class EmojiRecyclerAdapter @Inject constructor() :
         override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
             super.onScrollStateChanged(recyclerView, newState)
             scrollState = when (newState) {
-                RecyclerView.SCROLL_STATE_IDLE     -> ScrollState.IDLE
+                RecyclerView.SCROLL_STATE_IDLE -> ScrollState.IDLE
                 RecyclerView.SCROLL_STATE_SETTLING -> ScrollState.SETTLING
                 RecyclerView.SCROLL_STATE_DRAGGING -> ScrollState.DRAGGING
-                else                               -> ScrollState.UNKNOWN
+                else -> ScrollState.UNKNOWN
             }
 
             // TODO better
