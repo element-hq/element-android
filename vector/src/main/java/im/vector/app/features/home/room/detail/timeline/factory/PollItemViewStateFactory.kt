@@ -65,7 +65,7 @@ class PollItemViewStateFactory @Inject constructor(
     private fun createSendingPollViewState(question: String, pollCreationInfo: PollCreationInfo?): PollViewState {
         return PollViewState(
                 question = question,
-                totalVotes = stringProvider.getString(R.string.poll_no_votes_cast),
+                votesStatus = stringProvider.getString(R.string.poll_no_votes_cast),
                 canVote = false,
                 optionViewStates = pollCreationInfo?.answers?.map { answer ->
                     PollOptionViewState.PollSending(
@@ -85,7 +85,7 @@ class PollItemViewStateFactory @Inject constructor(
     ): PollViewState {
         return PollViewState(
                 question = question,
-                totalVotes = stringProvider.getQuantityString(R.plurals.poll_total_vote_count_after_ended, totalVotes, totalVotes),
+                votesStatus = stringProvider.getQuantityString(R.plurals.poll_total_vote_count_after_ended, totalVotes, totalVotes),
                 canVote = false,
                 optionViewStates = pollCreationInfo?.answers?.map { answer ->
                     val voteSummary = pollResponseSummary?.getVoteSummaryOfAnOption(answer.id ?: "")
@@ -107,7 +107,7 @@ class PollItemViewStateFactory @Inject constructor(
     ): PollViewState {
         return PollViewState(
                 question = question,
-                totalVotes = "",
+                votesStatus = stringProvider.getString(R.string.poll_undisclosed_not_ended),
                 canVote = true,
                 optionViewStates = pollCreationInfo?.answers?.map { answer ->
                     val isMyVote = pollResponseSummary?.myVote == answer.id
@@ -128,7 +128,7 @@ class PollItemViewStateFactory @Inject constructor(
     ): PollViewState {
         return PollViewState(
                 question = question,
-                totalVotes = stringProvider.getQuantityString(R.plurals.poll_total_vote_count_before_ended_and_voted, totalVotes, totalVotes),
+                votesStatus = stringProvider.getQuantityString(R.plurals.poll_total_vote_count_before_ended_and_voted, totalVotes, totalVotes),
                 canVote = true,
                 optionViewStates = pollCreationInfo?.answers?.map { answer ->
                     val isMyVote = pollResponseSummary?.myVote == answer.id
@@ -152,7 +152,7 @@ class PollItemViewStateFactory @Inject constructor(
         }
         return PollViewState(
                 question = question,
-                totalVotes = totalVotesText,
+                votesStatus = totalVotesText,
                 canVote = true,
                 optionViewStates = pollCreationInfo?.answers?.map { answer ->
                     PollOptionViewState.PollReady(
