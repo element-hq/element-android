@@ -465,6 +465,9 @@ class DefaultNavigator @Inject constructor(
                 val enableVideo = options?.get(JitsiCallViewModel.ENABLE_VIDEO_OPTION) == true
                 context.startActivity(VectorJitsiActivity.newIntent(context, roomId = roomId, widgetId = widget.widgetId, enableVideo = enableVideo))
             }
+        } else if (widget.type is WidgetType.ElementCall) {
+            val widgetArgs = widgetArgsBuilder.buildElementCallWidgetArgs(roomId, widget)
+            context.startActivity(WidgetActivity.newIntent(context, widgetArgs))
         } else {
             val widgetArgs = widgetArgsBuilder.buildRoomWidgetArgs(roomId, widget)
             context.startActivity(WidgetActivity.newIntent(context, widgetArgs))
