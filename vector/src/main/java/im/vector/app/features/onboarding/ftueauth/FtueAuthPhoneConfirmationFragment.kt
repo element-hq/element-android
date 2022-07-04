@@ -67,10 +67,10 @@ class FtueAuthPhoneConfirmationFragment @Inject constructor() : AbstractFtueAuth
     }
 
     override fun onError(throwable: Throwable) {
-        when (throwable) {
+        views.phoneConfirmationInput.error = when (throwable) {
             // The entered code is not correct
-            is Failure.SuccessError -> views.phoneConfirmationInput.error = getString(R.string.login_validation_code_is_not_correct)
-            else -> views.phoneConfirmationInput.error = errorFormatter.toHumanReadable(throwable)
+            is Failure.SuccessError -> getString(R.string.login_validation_code_is_not_correct)
+            else -> errorFormatter.toHumanReadable(throwable)
         }
     }
 
