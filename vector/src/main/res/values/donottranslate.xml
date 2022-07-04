@@ -39,6 +39,7 @@
     <string name="ftue_auth_phone_title">Enter your phone number</string>
     <string name="ftue_auth_phone_subtitle">This will help verify your account and enables password recovery.</string>
     <string name="ftue_auth_phone_entry_title">Phone Number</string>
+    <string name="ftue_auth_phone_confirmation_entry_title">Confirmation code</string>
 
     <string name="ftue_auth_reset_password_email_subtitle">We will send you a verification link.</string>
     <string name="ftue_auth_reset_password_breaker_title">Check your email.</string>
@@ -47,6 +48,11 @@
     <string name="ftue_auth_new_password_subtitle">Make sure it\'s 8 characters or more.</string>
     <string name="ftue_auth_reset_password">Reset password</string>
     <string name="ftue_auth_sign_out_all_devices">Sign out all devices</string>
+
+    <string name="ftue_auth_phone_confirmation_title">Confirm your phone number</string>
+    <!-- Note for translators, %s is the users international phone number -->
+    <string name="ftue_auth_phone_confirmation_subtitle">We just sent a code to %s. Enter it below to verify it\'s you.</string>
+    <string name="ftue_auth_phone_confirmation_resend_code">Resend code</string>
 
     <string name="ftue_auth_email_verification_title">Check your email to verify.</string>
     <!-- Note for translators, %s is the users email address -->
