@@ -164,12 +164,13 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
     }
 
     private fun setupMenu() {
-        val menuRes = getMenuRes().takeIf { it != -1 } ?: return
+        if (this !is VectorMenuProvider) return
+        if (getMenuRes() == -1) return
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(
                 object : MenuProvider {
                     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                        menuInflater.inflate(menuRes, menu)
+                        menuInflater.inflate(getMenuRes(), menu)
                         handlePostCreateMenu(menu)
                     }
 
@@ -295,18 +296,6 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
     /* ==========================================================================================
      * MENU MANAGEMENT
      * ========================================================================================== */
-
-    open fun getMenuRes() = -1
-
-    // No op by default
-    open fun handlePostCreateMenu(menu: Menu) = Unit
-
-    // No op by default
-    open fun handlePrepareMenu(menu: Menu) = Unit
-
-    open fun handleMenuItemSelected(item: MenuItem): Boolean {
-        throw NotImplementedError("You must override this method to handle click on menu item")
-    }
 
     // This should be provided by the framework
     protected fun invalidateOptionsMenu() = requireActivity().invalidateOptionsMenu()

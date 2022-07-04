@@ -34,6 +34,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.safeOpenOutputStream
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.selectTxtFileToWrite
 import im.vector.app.databinding.FragmentDevtoolKeyrequestsBinding
@@ -42,7 +43,8 @@ import javax.inject.Inject
 
 class KeyRequestsFragment @Inject constructor(
         private val clock: Clock,
-) : VectorBaseFragment<FragmentDevtoolKeyrequestsBinding>() {
+) : VectorBaseFragment<FragmentDevtoolKeyrequestsBinding>(),
+        VectorMenuProvider {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentDevtoolKeyrequestsBinding {
         return FragmentDevtoolKeyrequestsBinding.inflate(inflater, container, false)

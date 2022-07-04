@@ -44,6 +44,7 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.insertBeforeLast
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.OnSnapPositionChangeListener
@@ -67,7 +68,9 @@ class AttachmentsPreviewFragment @Inject constructor(
         private val attachmentBigPreviewController: AttachmentBigPreviewController,
         private val colorProvider: ColorProvider,
         private val clock: Clock,
-) : VectorBaseFragment<FragmentAttachmentsPreviewBinding>(), AttachmentMiniaturePreviewController.Callback {
+) : VectorBaseFragment<FragmentAttachmentsPreviewBinding>(),
+        AttachmentMiniaturePreviewController.Callback,
+        VectorMenuProvider {
 
     private val fragmentArgs: AttachmentsPreviewArgs by args()
     private val viewModel: AttachmentsPreviewViewModel by fragmentViewModel()

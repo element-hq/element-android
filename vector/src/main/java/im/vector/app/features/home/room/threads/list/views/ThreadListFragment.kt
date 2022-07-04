@@ -30,6 +30,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.databinding.FragmentThreadListBinding
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.AvatarRenderer
@@ -53,7 +54,8 @@ class ThreadListFragment @Inject constructor(
         private val threadListController: ThreadListController,
         val threadListViewModelFactory: ThreadListViewModel.Factory
 ) : VectorBaseFragment<FragmentThreadListBinding>(),
-        ThreadListController.Listener {
+        ThreadListController.Listener,
+        VectorMenuProvider {
 
     private val threadListViewModel: ThreadListViewModel by fragmentViewModel()
 

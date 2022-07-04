@@ -29,6 +29,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import org.matrix.android.sdk.api.session.pushers.Pusher
 import javax.inject.Inject
@@ -36,7 +37,8 @@ import javax.inject.Inject
 // Referenced in vector_settings_notifications.xml
 class PushGatewaysFragment @Inject constructor(
         private val epoxyController: PushGateWayController
-) : VectorBaseFragment<FragmentGenericRecyclerBinding>() {
+) : VectorBaseFragment<FragmentGenericRecyclerBinding>(),
+        VectorMenuProvider {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericRecyclerBinding {
         return FragmentGenericRecyclerBinding.inflate(inflater, container, false)

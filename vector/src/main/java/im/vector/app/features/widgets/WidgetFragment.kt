@@ -42,6 +42,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.utils.openUrlInExternalBrowser
 import im.vector.app.databinding.FragmentRoomWidgetBinding
 import im.vector.app.features.webview.WebEventListener
@@ -68,7 +69,8 @@ class WidgetFragment @Inject constructor(
 ) :
         VectorBaseFragment<FragmentRoomWidgetBinding>(),
         WebEventListener,
-        OnBackPressed {
+        OnBackPressed,
+        VectorMenuProvider {
 
     private val fragmentArgs: WidgetArgs by args()
     private val viewModel: WidgetViewModel by activityViewModel()

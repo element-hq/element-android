@@ -38,6 +38,7 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.colorizeMatchingText
 import im.vector.app.core.utils.isValidUrl
@@ -67,7 +68,8 @@ class SpaceDirectoryFragment @Inject constructor(
 ) : VectorBaseFragment<FragmentSpaceDirectoryBinding>(),
         SpaceDirectoryController.InteractionListener,
         TimelineEventController.UrlClickCallback,
-        OnBackPressed {
+        OnBackPressed,
+        VectorMenuProvider {
 
     override fun getMenuRes() = R.menu.menu_space_directory
 
