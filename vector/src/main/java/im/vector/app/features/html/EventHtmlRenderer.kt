@@ -60,26 +60,24 @@ class EventHtmlRenderer @Inject constructor(
     }
 
     private val builder = Markwon.builder(context)
-            .usePlugins(listOf(
-                    HtmlPlugin.create(htmlConfigure),
-                    GlideImagesPlugin.create(object : GlideImagesPlugin.GlideStore {
-                        override fun load(drawable: AsyncDrawable): RequestBuilder<Drawable> {
-                            val url = drawable.destination
-                            if (url.isMxcUrl()) {
-                                val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
-                                val imageUrl = contentUrlResolver.resolveFullSize(url)
-                                // Override size to avoid crashes for huge pictures
-                                return Glide.with(context).load(imageUrl).override(500)
-                            }
-                            // We don't want to support other url schemes here, so just return a request for null
-                            return Glide.with(context).load(null as String?)
-                        }
+            .usePlugin(HtmlPlugin.create(htmlConfigure))
+            .usePlugin(GlideImagesPlugin.create(object : GlideImagesPlugin.GlideStore {
+                override fun load(drawable: AsyncDrawable): RequestBuilder<Drawable> {
+                    val url = drawable.destination
+                    if (url.isMxcUrl()) {
+                        val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
+                        val imageUrl = contentUrlResolver.resolveFullSize(url)
+                        // Override size to avoid crashes for huge pictures
+                        return Glide.with(context).load(imageUrl).override(500)
+                    }
+                    // We don't want to support other url schemes here, so just return a request for null
+                    return Glide.with(context).load(null as String?)
+                }
 
-                        override fun cancel(target: Target<*>) {
-                            Glide.with(context).clear(target)
-                        }
-                    })
-            ))
+                override fun cancel(target: Target<*>) {
+                    Glide.with(context).clear(target)
+                }
+            }))
 
     private val markwon = if (vectorPreferences.latexMathsIsEnabled()) {
         builder
