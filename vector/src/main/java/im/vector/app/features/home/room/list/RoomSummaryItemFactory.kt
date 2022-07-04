@@ -207,7 +207,7 @@ class RoomSummaryItemFactory @Inject constructor(
 
     private fun getSearchResultSubtitle(roomSummary: RoomSummary): String {
         val userId = roomSummary.directUserId
-        val directParent = roomSummary.directParentNames.lastOrNull()
+        val directParent = roomSummary.directParentNames.takeIf { it.isNotEmpty() }?.joinToString()
         val canonicalAlias = roomSummary.canonicalAlias
 
         return (userId ?: directParent ?: canonicalAlias).orEmpty()

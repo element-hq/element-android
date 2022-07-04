@@ -224,6 +224,7 @@ internal class RoomSummaryUpdater @Inject constructor(
                     .sort(RoomSummaryEntityFields.ROOM_ID)
                     .findAll().map {
                         it.flattenParentIds = null
+                        it.directParentNames.clear()
                         it to emptyList<RoomSummaryEntity>().toMutableSet()
                     }
                     .toMap()
