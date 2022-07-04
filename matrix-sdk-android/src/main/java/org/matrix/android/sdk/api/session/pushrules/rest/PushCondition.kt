@@ -58,7 +58,7 @@ data class PushCondition(
         val iz: String? = null
 ) {
 
-    fun asExecutableCondition(rule: PushRule): Condition? {
+    fun asExecutableCondition(): Condition? {
         return when (Kind.fromString(kind)) {
             Kind.EventMatch -> {
                 if (key != null && pattern != null) {
