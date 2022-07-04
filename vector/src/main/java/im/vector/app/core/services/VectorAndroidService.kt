@@ -22,9 +22,9 @@ import android.os.IBinder
 import timber.log.Timber
 
 /**
- * Parent class for all services.
+ * Parent class for all Android Services.
  */
-abstract class VectorService : Service() {
+abstract class VectorAndroidService : Service() {
 
     /**
      * Tells if the service self destroyed.
