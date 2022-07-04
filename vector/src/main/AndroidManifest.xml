@@ -385,6 +385,10 @@
             android:foregroundServiceType="mediaProjection"
             tools:targetApi="Q" />
 
+        <service
+            android:name=".features.widgets.ptt.BluetoothLowEnergyService"
+            android:exported="false" />
+
         <!-- Receivers -->
 
         <receiver
