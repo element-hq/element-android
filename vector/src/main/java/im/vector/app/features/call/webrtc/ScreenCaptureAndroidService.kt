@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,30 +13,46 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.app.fdroid.service
+
+package im.vector.app.features.call.webrtc
 
 import android.content.Intent
+import android.os.Binder
+import android.os.IBinder
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
-import im.vector.app.core.services.VectorService
+import im.vector.app.core.services.VectorAndroidService
+import im.vector.app.core.time.Clock
 import im.vector.app.features.notifications.NotificationUtils
 import javax.inject.Inject
 
-/**
- * This no-op foreground service acts as a deterrent to the system eagerly killing the app process.
- *
- * Keeping the app process alive avoids some OEMs ignoring scheduled WorkManager and AlarmManager tasks
- * when the app is not in the foreground.
- */
 @AndroidEntryPoint
-class GuardService : VectorService() {
+class ScreenCaptureAndroidService : VectorAndroidService() {
 
     @Inject lateinit var notificationUtils: NotificationUtils
+    @Inject lateinit var clock: Clock
+    private val binder = LocalBinder()
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val notificationSubtitleRes = R.string.notification_listening_for_notifications
-        val notification = notificationUtils.buildForegroundServiceNotification(notificationSubtitleRes, false)
-        startForeground(NotificationUtils.NOTIFICATION_ID_FOREGROUND_SERVICE, notification)
+        showStickyNotification()
+
         return START_STICKY
+    }
+
+    private fun showStickyNotification() {
+        val notificationId = clock.epochMillis().toInt()
+        val notification = notificationUtils.buildScreenSharingNotification()
+        startForeground(notificationId, notification)
+    }
+
+    override fun onBind(intent: Intent?): IBinder {
+        return binder
+    }
+
+    fun stopService() {
+        stopSelf()
+    }
+
+    inner class LocalBinder : Binder() {
+        fun getService(): ScreenCaptureAndroidService = this@ScreenCaptureAndroidService
     }
 }

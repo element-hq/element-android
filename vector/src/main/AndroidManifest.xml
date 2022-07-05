@@ -351,7 +351,7 @@
         <!-- Services -->
 
         <service
-            android:name=".core.services.CallService"
+            android:name=".core.services.CallAndroidService"
             android:exported="false">
             <!-- in order to get headset button events -->
             <intent-filter>
@@ -366,7 +366,7 @@
             tools:ignore="Instantiatable" />
 
         <service
-            android:name=".features.call.telecom.VectorConnectionService"
+            android:name=".features.call.telecom.VectorConnectionAndroidService"
             android:exported="false"
             android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE">
             <intent-filter>
@@ -375,12 +375,12 @@
         </service>
 
         <service
-            android:name=".features.location.LocationSharingService"
+            android:name=".features.location.LocationSharingAndroidService"
             android:exported="false"
             android:foregroundServiceType="location" />
 
         <service
-            android:name=".features.call.webrtc.ScreenCaptureService"
+            android:name=".features.call.webrtc.ScreenCaptureAndroidService"
             android:exported="false"
             android:foregroundServiceType="mediaProjection"
             tools:targetApi="Q" />

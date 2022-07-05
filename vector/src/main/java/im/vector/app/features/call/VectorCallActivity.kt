@@ -59,7 +59,7 @@ import im.vector.app.features.call.dialpad.CallDialPadBottomSheet
 import im.vector.app.features.call.dialpad.DialPadFragment
 import im.vector.app.features.call.transfer.CallTransferActivity
 import im.vector.app.features.call.utils.EglUtils
-import im.vector.app.features.call.webrtc.ScreenCaptureService
+import im.vector.app.features.call.webrtc.ScreenCaptureAndroidService
 import im.vector.app.features.call.webrtc.ScreenCaptureServiceConnection
 import im.vector.app.features.call.webrtc.WebRtcCall
 import im.vector.app.features.call.webrtc.WebRtcCallManager
@@ -663,7 +663,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     private fun startScreenSharingService(activityResult: ActivityResult) {
         ContextCompat.startForegroundService(
                 this,
-                Intent(this, ScreenCaptureService::class.java)
+                Intent(this, ScreenCaptureAndroidService::class.java)
         )
         bindToScreenCaptureService(activityResult)
     }
