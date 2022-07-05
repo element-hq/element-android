@@ -194,7 +194,9 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
                     }
                 }
             }
-        } else if (!isMine) {
+        } else
+        /** if (!isMine) **/
+        {
             if (currentSessionIsTrusted) {
                 // we can propose to verify it
                 val isVerified = cryptoDeviceInfo.trustLevel?.crossSigningVerified.orFalse()
