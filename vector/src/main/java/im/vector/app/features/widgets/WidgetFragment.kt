@@ -389,7 +389,8 @@ class WidgetFragment @Inject constructor(
 
     private fun handleBluetoothDeviceData(event: WidgetViewEvents.OnBluetoothDeviceData) {
         activity?.let {
-            views.widgetWebView.evaluateJavascript("alert('${event.data}');", null)
+            val message = String(event.data)
+            views.widgetWebView.evaluateJavascript("alert('${message}');", null)
         }
     }
 }

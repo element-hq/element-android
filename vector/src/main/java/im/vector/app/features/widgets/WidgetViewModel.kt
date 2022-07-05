@@ -304,7 +304,7 @@ class WidgetViewModel @AssistedInject constructor(
         _viewEvents.post(WidgetViewEvents.DisplayIntegrationManager(integId, integType))
     }
 
-    override fun onCharacteristicRead(data: String) {
+    override fun onCharacteristicRead(data: ByteArray) {
         _viewEvents.post(WidgetViewEvents.OnBluetoothDeviceData(data))
     }
 }

@@ -39,7 +39,7 @@ import kotlin.random.Random
 class BluetoothLowEnergyService : VectorService() {
 
     interface Callback {
-        fun onCharacteristicRead(data: String)
+        fun onCharacteristicRead(data: ByteArray)
     }
 
     @Inject lateinit var notificationUtils: NotificationUtils
@@ -111,11 +111,7 @@ class BluetoothLowEnergyService : VectorService() {
         val data = characteristic.value
         Timber.d("### BluetoothLowEnergyService. $data")
         if (data.isNotEmpty()) {
-            val stringBuilder = StringBuilder()
-            data.forEach {
-                stringBuilder.append(String.format("%02X ", it))
-            }
-            callback?.onCharacteristicRead(stringBuilder.toString())
+            callback?.onCharacteristicRead(data)
         }
     }
 

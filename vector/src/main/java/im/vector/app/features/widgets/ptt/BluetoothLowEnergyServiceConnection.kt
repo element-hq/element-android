@@ -29,7 +29,7 @@ class BluetoothLowEnergyServiceConnection @Inject constructor(
 ) : ServiceConnection, BluetoothLowEnergyService.Callback {
 
     interface Callback {
-        fun onCharacteristicRead(data: String)
+        fun onCharacteristicRead(data: ByteArray)
     }
 
     private var isBound = false
@@ -65,7 +65,7 @@ class BluetoothLowEnergyServiceConnection @Inject constructor(
         bluetoothLowEnergyService = null
     }
 
-    override fun onCharacteristicRead(data: String) {
+    override fun onCharacteristicRead(data: ByteArray) {
         callback?.onCharacteristicRead(data)
     }
 }
