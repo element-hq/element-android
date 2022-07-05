@@ -18,11 +18,12 @@ package im.vector.app.features.attachments
 
 import android.content.Context
 import android.content.Intent
-import im.vector.lib.multipicker.MultiPicker
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import javax.inject.Inject
 
-class ShareIntentHandler @Inject constructor() {
+class ShareIntentHandler @Inject constructor(
+        private val multiPickerIncomingFiles: MultiPickerIncomingFiles,
+) {
 
     /**
      * This methods aims to handle incoming share intents.
@@ -33,38 +34,11 @@ class ShareIntentHandler @Inject constructor() {
         val type = intent.resolveType(context) ?: return false
         return when {
             type == "text/plain" -> handlePlainText(intent, onPlainText)
-            type.startsWith("image") -> {
-                onFile(
-                        MultiPicker.get(MultiPicker.IMAGE).getIncomingFiles(context, intent).map {
-                            it.toContentAttachmentData()
-                        }
-                )
-                true
-            }
-            type.startsWith("video") -> {
-                onFile(
-                        MultiPicker.get(MultiPicker.VIDEO).getIncomingFiles(context, intent).map {
-                            it.toContentAttachmentData()
-                        }
-                )
-                true
-            }
-            type.startsWith("audio") -> {
-                onFile(
-                        MultiPicker.get(MultiPicker.AUDIO).getIncomingFiles(context, intent).map {
-                            it.toContentAttachmentData()
-                        }
-                )
-                true
-            }
-
+            type.startsWith("image") -> onFile(multiPickerIncomingFiles.image(intent)).let { true }
+            type.startsWith("video") -> onFile(multiPickerIncomingFiles.video(intent)).let { true }
+            type.startsWith("audio") -> onFile(multiPickerIncomingFiles.audio(intent)).let { true }
             type.startsWith("application") || type.startsWith("file") || type.startsWith("text") || type.startsWith("*") -> {
-                onFile(
-                        MultiPicker.get(MultiPicker.FILE).getIncomingFiles(context, intent).map {
-                            it.toContentAttachmentData()
-                        }
-                )
-                true
+                onFile(multiPickerIncomingFiles.file(intent)).let { true }
             }
             else -> false
         }
