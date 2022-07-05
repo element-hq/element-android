@@ -32,6 +32,6 @@ class MultiPickerIncomingFiles @Inject constructor(
     fun media(intent: Intent) = MultiPicker.get(MultiPicker.MEDIA).getIncomingFiles(context, intent).map { it.toContentAttachmentData() }
 
     fun file(intent: Intent) = MultiPicker.get(MultiPicker.FILE).getIncomingFiles(context, intent).map { it.toContentAttachmentData() }
-    
+
     fun audio(intent: Intent) = MultiPicker.get(MultiPicker.AUDIO).getIncomingFiles(context, intent).map { it.toContentAttachmentData() }
 }
