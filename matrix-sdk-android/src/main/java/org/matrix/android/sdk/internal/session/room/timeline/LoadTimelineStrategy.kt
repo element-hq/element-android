@@ -32,6 +32,7 @@ import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
+import org.matrix.android.sdk.internal.database.awaitTransaction
 import org.matrix.android.sdk.internal.database.helper.addIfNecessary
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
@@ -265,7 +266,7 @@ internal class LoadTimelineStrategy constructor(
         }
     }
 
-    private fun getChunkEntity(realm: Realm): RealmResults<ChunkEntity> {
+    private suspend fun getChunkEntity(realm: Realm): RealmResults<ChunkEntity> {
         return when (mode) {
             is Mode.Live -> {
                 ChunkEntity.where(realm, roomId)
@@ -289,8 +290,8 @@ internal class LoadTimelineStrategy constructor(
      * Clear any existing thread chunk entity and create a new one, with the
      * rootThreadEventId included.
      */
-    private fun recreateThreadChunkEntity(realm: Realm, rootThreadEventId: String) {
-        realm.executeTransaction {
+    private suspend fun recreateThreadChunkEntity(realm: Realm, rootThreadEventId: String) {
+        awaitTransaction(realm.configuration) {
             // Lets delete the chunk and start a new one
             ChunkEntity.findLastForwardChunkOfThread(it, roomId, rootThreadEventId)?.deleteAndClearThreadEvents()?.let {
                 Timber.i("###THREADS LoadTimelineStrategy [onStart] thread chunk cleared..")
@@ -309,8 +310,8 @@ internal class LoadTimelineStrategy constructor(
     /**
      * Clear any existing thread chunk.
      */
-    private fun clearThreadChunkEntity(realm: Realm, rootThreadEventId: String) {
-        realm.executeTransaction {
+    private suspend fun clearThreadChunkEntity(realm: Realm, rootThreadEventId: String) {
+        awaitTransaction(realm.configuration) {
             ChunkEntity.findLastForwardChunkOfThread(it, roomId, rootThreadEventId)?.deleteAndClearThreadEvents()?.let {
                 Timber.i("###THREADS LoadTimelineStrategy [onStop] thread chunk cleared..")
             }
