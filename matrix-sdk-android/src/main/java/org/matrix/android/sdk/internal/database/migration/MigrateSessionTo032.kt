@@ -24,7 +24,7 @@ internal class MigrateSessionTo032(realm: DynamicRealm) : RealmMigrator(realm, 3
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.get("RoomSummaryEntity")
-                ?.addField(RoomSummaryEntityFields.DIRECT_PARENT_NAMES.`$`, String::class.java)
+                ?.addRealmListField(RoomSummaryEntityFields.DIRECT_PARENT_NAMES.`$`, String::class.java)
                 ?.transform { it.setString(RoomSummaryEntityFields.DIRECT_PARENT_NAMES.`$`, "") }
     }
 }

@@ -34,7 +34,8 @@ internal open class RoomSummaryEntity(
         @PrimaryKey var roomId: String = "",
         var roomType: String? = null,
         var parents: RealmList<SpaceParentSummaryEntity> = RealmList(),
-        var children: RealmList<SpaceChildSummaryEntity> = RealmList()
+        var children: RealmList<SpaceChildSummaryEntity> = RealmList(),
+        var directParentNames: RealmList<String> = RealmList(),
 ) : RealmObject() {
 
     private var displayName: String? = ""
@@ -234,8 +235,6 @@ internal open class RoomSummaryEntity(
         set(value) {
             if (value != field) field = value
         }
-
-    var directParentNames: RealmList<String> = RealmList()
 
     var flattenParentIds: String? = null
         set(value) {
