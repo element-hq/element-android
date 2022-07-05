@@ -60,6 +60,13 @@ interface LocationSharingService {
     suspend fun stopLiveLocationShare(): UpdateLiveLocationShareResult
 
     /**
+     * Redact (delete) the live associated to the given beacon info event id.
+     * @param beaconInfoEventId event id of the initial beacon info state event
+     * @param reason Optional reason string
+     */
+    suspend fun redactLiveLocationShare(beaconInfoEventId: String, reason: String?)
+
+    /**
      * Returns a LiveData on the list of current running live location shares.
      */
     fun getRunningLiveLocationShareSummaries(): LiveData<List<LiveLocationShareAggregatedSummary>>
