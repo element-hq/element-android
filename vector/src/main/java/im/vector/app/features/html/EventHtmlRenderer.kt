@@ -152,7 +152,6 @@ class EventHtmlRenderer @Inject constructor(
 class MatrixHtmlPluginConfigure @Inject constructor(private val colorProvider: ColorProvider, private val resources: Resources) : HtmlPlugin.HtmlConfigure {
 
     override fun configureHtml(plugin: HtmlPlugin) {
-
         plugin
                 .addHandler(ListHandlerWithInitialStart())
                 .addHandler(FontTagHandler())
