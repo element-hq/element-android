@@ -74,6 +74,7 @@ internal class RedactionEventProcessor @Inject constructor() : EventInsertLivePr
             when (typeToPrune) {
                 EventType.ENCRYPTED,
                 EventType.MESSAGE,
+                in EventType.STATE_ROOM_BEACON_INFO,
                 in EventType.POLL_START -> {
                     Timber.d("REDACTION for message ${eventToPrune.eventId}")
                     val unsignedData = EventMapper.map(eventToPrune).unsignedData
