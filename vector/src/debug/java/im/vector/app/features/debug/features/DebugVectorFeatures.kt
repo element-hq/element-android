@@ -116,7 +116,7 @@ private fun <T : Enum<T>> enumPreferencesKey(type: KClass<T>) = stringPreference
 object DebugFeatureKeys {
     val onboardingAlreadyHaveAnAccount = booleanPreferencesKey("onboarding-already-have-an-account")
     val onboardingSplashCarousel = booleanPreferencesKey("onboarding-splash-carousel")
-    val onboardingUseCase = booleanPreferencesKey("onboarding-splash-carousel")
+    val onboardingUseCase = booleanPreferencesKey("onboarding-use-case")
     val onboardingPersonalize = booleanPreferencesKey("onboarding-personalize")
     val onboardingCombinedRegister = booleanPreferencesKey("onboarding-combined-register")
     val onboardingCombinedLogin = booleanPreferencesKey("onboarding-combined-login")
