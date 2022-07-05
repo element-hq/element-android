@@ -19,8 +19,11 @@ package im.vector.app.test.fakes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import org.matrix.android.sdk.api.session.room.location.LocationSharingService
 import org.matrix.android.sdk.api.session.room.location.UpdateLiveLocationShareResult
 import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationShareAggregatedSummary
@@ -47,5 +50,13 @@ class FakeLocationSharingService : LocationSharingService by mockk() {
 
     fun givenStopLiveLocationShareReturns(result: UpdateLiveLocationShareResult) {
         coEvery { stopLiveLocationShare() } returns result
+    }
+
+    fun givenRedactLiveLocationShare(beaconInfoEventId: String, reason: String?) {
+        coEvery { redactLiveLocationShare(beaconInfoEventId, reason) } just runs
+    }
+
+    fun verifyRedactLiveLocationShare(beaconInfoEventId: String, reason: String?) {
+        coVerify { redactLiveLocationShare(beaconInfoEventId, reason) }
     }
 }

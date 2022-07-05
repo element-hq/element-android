@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.api.session.room.location
 
-import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationShareAggregatedSummary
 import org.matrix.android.sdk.api.util.Cancelable
