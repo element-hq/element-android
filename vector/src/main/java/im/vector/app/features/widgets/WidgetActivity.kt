@@ -17,8 +17,11 @@
 package im.vector.app.features.widgets
 
 import android.app.Activity
+import android.app.PictureInPictureParams
 import android.content.Context
 import android.content.Intent
+import android.os.Build
+import android.util.Rational
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
@@ -116,6 +119,24 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
 
         viewModel.onEach(WidgetViewState::canManageWidgets) {
             invalidateOptionsMenu()
+        }
+    }
+
+    override fun onUserLeaveHint() {
+        super.onUserLeaveHint()
+        val widgetArgs: WidgetArgs? = intent?.extras?.getParcelable(Mavericks.KEY_ARG)
+        if (widgetArgs?.kind == WidgetKind.ELEMENT_CALL) {
+            enterPictureInPicture()
+        }
+    }
+
+    private fun enterPictureInPicture() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val aspectRatio = Rational(resources.getDimensionPixelSize(R.dimen.call_pip_width), resources.getDimensionPixelSize(R.dimen.call_pip_height))
+            val params = PictureInPictureParams.Builder()
+                    .setAspectRatio(aspectRatio)
+                    .build()
+            enterPictureInPictureMode(params)
         }
     }
 
