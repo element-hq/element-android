@@ -64,6 +64,14 @@ class BluetoothLowEnergyService : VectorService() {
             }
         }
 
+        override fun onServicesDiscovered(gatt: BluetoothGatt, status: Int) {
+            gatt.services.forEach { service ->
+                service.characteristics.forEach { characteristic ->
+                    gatt.setCharacteristicNotification(characteristic, true)
+                }
+            }
+        }
+
         override fun onCharacteristicRead(gatt: BluetoothGatt, characteristic: BluetoothGattCharacteristic, status: Int) {
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 onCharacteristicRead(characteristic)
@@ -101,6 +109,7 @@ class BluetoothLowEnergyService : VectorService() {
 
     private fun onCharacteristicRead(characteristic: BluetoothGattCharacteristic) {
         val data = characteristic.value
+        Timber.d("### BluetoothLowEnergyService. $data")
         if (data.isNotEmpty()) {
             val stringBuilder = StringBuilder()
             data.forEach {
