@@ -22,6 +22,8 @@ import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
@@ -30,6 +32,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.PermissionRequest
+import android.webkit.WebMessage
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -387,10 +390,18 @@ class WidgetFragment @Inject constructor(
         }
     }
 
+    // 0x01: pressed, 0x00: released
     private fun handleBluetoothDeviceData(event: WidgetViewEvents.OnBluetoothDeviceData) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
+
         activity?.let {
-            val message = String(event.data)
-            views.widgetWebView.evaluateJavascript("alert('${message}');", null)
+            val widgetUri = Uri.parse(fragmentArgs.baseUrl)
+
+            if (event.data contentEquals byteArrayOf(0x00)) {
+                views.widgetWebView.postWebMessage(WebMessage("pttr"), widgetUri)
+            } else if (event.data contentEquals byteArrayOf(0x01)) {
+                views.widgetWebView.postWebMessage(WebMessage("pttp"), widgetUri)
+            }
         }
     }
 }
