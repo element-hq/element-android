@@ -58,11 +58,13 @@ import org.matrix.android.sdk.internal.session.room.directory.SetRoomDirectoryVi
 import org.matrix.android.sdk.internal.session.room.location.CheckIfExistingActiveLiveTask
 import org.matrix.android.sdk.internal.session.room.location.DefaultCheckIfExistingActiveLiveTask
 import org.matrix.android.sdk.internal.session.room.location.DefaultGetActiveBeaconInfoForUserTask
+import org.matrix.android.sdk.internal.session.room.location.DefaultRedactLiveLocationShareTask
 import org.matrix.android.sdk.internal.session.room.location.DefaultSendLiveLocationTask
 import org.matrix.android.sdk.internal.session.room.location.DefaultSendStaticLocationTask
 import org.matrix.android.sdk.internal.session.room.location.DefaultStartLiveLocationShareTask
 import org.matrix.android.sdk.internal.session.room.location.DefaultStopLiveLocationShareTask
 import org.matrix.android.sdk.internal.session.room.location.GetActiveBeaconInfoForUserTask
+import org.matrix.android.sdk.internal.session.room.location.RedactLiveLocationShareTask
 import org.matrix.android.sdk.internal.session.room.location.SendLiveLocationTask
 import org.matrix.android.sdk.internal.session.room.location.SendStaticLocationTask
 import org.matrix.android.sdk.internal.session.room.location.StartLiveLocationShareTask
@@ -339,4 +341,7 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindCheckIfExistingActiveLiveTask(task: DefaultCheckIfExistingActiveLiveTask): CheckIfExistingActiveLiveTask
+
+    @Binds
+    abstract fun bindRedactLiveLocationShareTask(task: DefaultRedactLiveLocationShareTask): RedactLiveLocationShareTask
 }
