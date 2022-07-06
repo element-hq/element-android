@@ -205,7 +205,7 @@ jobs:
             */build/reports/detekt/detekt.html
 
   towncrier:
-    name: Check that there is at least one file for the changelog
+    name: Towncrier check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
