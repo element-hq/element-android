@@ -50,7 +50,11 @@ import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.utils.PERMISSIONS_FOR_BLUETOOTH
+import im.vector.app.core.utils.checkPermissions
+import im.vector.app.core.utils.onPermissionDeniedDialog
 import im.vector.app.core.utils.openUrlInExternalBrowser
+import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.databinding.FragmentRoomWidgetBinding
 import im.vector.app.features.webview.WebEventListener
 import im.vector.app.features.widgets.ptt.BluetoothLowEnergyDeviceScanner
@@ -85,6 +89,15 @@ class WidgetFragment @Inject constructor(
     private val fragmentArgs: WidgetArgs by args()
     private val viewModel: WidgetViewModel by activityViewModel()
 
+
+    private val scanBluetoothResultLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
+        if (allGranted) {
+            startBluetoothScanning()
+        } else if (deniedPermanently) {
+            activity?.onPermissionDeniedDialog(R.string.denied_permission_bluetooth)
+        }
+    }
+
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomWidgetBinding {
         return FragmentRoomWidgetBinding.inflate(inflater, container, false)
     }
@@ -98,7 +111,9 @@ class WidgetFragment @Inject constructor(
         }
 
         if (fragmentArgs.kind == WidgetKind.ELEMENT_CALL) {
-            startBluetoothScanning()
+            if (checkPermissions(PERMISSIONS_FOR_BLUETOOTH, requireActivity(), scanBluetoothResultLauncher)) {
+                startBluetoothScanning()
+            }
         }
 
         viewModel.observeViewEvents {
