@@ -19,6 +19,14 @@ package im.vector.app.features.attachments
 import android.content.Context
 import android.content.Intent
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
+import org.matrix.android.sdk.api.util.MimeTypes
+import org.matrix.android.sdk.api.util.MimeTypes.isMimeTypeAny
+import org.matrix.android.sdk.api.util.MimeTypes.isMimeTypeApplication
+import org.matrix.android.sdk.api.util.MimeTypes.isMimeTypeAudio
+import org.matrix.android.sdk.api.util.MimeTypes.isMimeTypeFile
+import org.matrix.android.sdk.api.util.MimeTypes.isMimeTypeImage
+import org.matrix.android.sdk.api.util.MimeTypes.isMimeTypeText
+import org.matrix.android.sdk.api.util.MimeTypes.isMimeTypeVideo
 import javax.inject.Inject
 
 class ShareIntentHandler @Inject constructor(
@@ -34,11 +42,11 @@ class ShareIntentHandler @Inject constructor(
     fun handleIncomingShareIntent(intent: Intent, onFile: (List<ContentAttachmentData>) -> Unit, onPlainText: (String) -> Unit): Boolean {
         val type = intent.resolveType(context) ?: return false
         return when {
-            type == "text/plain" -> handlePlainText(intent, onPlainText)
-            type.startsWith("image") -> onFile(multiPickerIncomingFiles.image(intent)).let { true }
-            type.startsWith("video") -> onFile(multiPickerIncomingFiles.video(intent)).let { true }
-            type.startsWith("audio") -> onFile(multiPickerIncomingFiles.audio(intent)).let { true }
-            type.startsWith("application") || type.startsWith("file") || type.startsWith("text") || type.startsWith("*") -> {
+            type == MimeTypes.PlainText -> handlePlainText(intent, onPlainText)
+            type.isMimeTypeImage() -> onFile(multiPickerIncomingFiles.image(intent)).let { true }
+            type.isMimeTypeVideo() -> onFile(multiPickerIncomingFiles.video(intent)).let { true }
+            type.isMimeTypeAudio() -> onFile(multiPickerIncomingFiles.audio(intent)).let { true }
+            type.isMimeTypeApplication() || type.isMimeTypeFile() || type.isMimeTypeText() || type.isMimeTypeAny() -> {
                 onFile(multiPickerIncomingFiles.file(intent)).let { true }
             }
             else -> false
