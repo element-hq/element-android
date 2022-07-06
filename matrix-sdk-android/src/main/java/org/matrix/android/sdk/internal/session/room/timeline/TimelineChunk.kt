@@ -431,7 +431,7 @@ internal class TimelineChunk(
             createNewEncryptedRepliedEvent(it)?.let { newEvent ->
                 it.copy(root = newEvent)
             } ?: it
-        } else  it
+        } else it
     }
 
     private fun createNewEncryptedRepliedEvent(currentTimelineEvent: TimelineEvent): Event? {
@@ -456,7 +456,9 @@ internal class TimelineChunk(
                         timelineEventMapper.map(timelineEventEntity),
                         replyText,
                         false,
-                        showInThread = false
+                        showInThread = false,
+                        currentEventId = currentTimelineEvent.eventId
+
                 )
             }
         }

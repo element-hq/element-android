@@ -507,13 +507,13 @@ internal class LocalEchoEventFactory @Inject constructor(
         return createMessageEvent(roomId, content)
     }
 
-    private fun createMessageEvent(roomId: String, content: MessageContent? = null): Event {
-        return createEvent(roomId, EventType.MESSAGE, content.toContent())
+    private fun createMessageEvent(roomId: String, content: MessageContent? = null, currentEventId: String? = null): Event {
+        return createEvent(roomId, EventType.MESSAGE, content.toContent(), currentEventId)
     }
 
-    fun createEvent(roomId: String, type: String, content: Content?): Event {
+    fun createEvent(roomId: String, type: String, content: Content?, currentEventId: String? = null): Event {
         val newContent = enhanceStickerIfNeeded(type, content) ?: content
-        val localId = LocalEcho.createLocalEchoId()
+        val localId = currentEventId ?: LocalEcho.createLocalEchoId()
         return Event(
                 roomId = roomId,
                 originServerTs = dummyOriginServerTs(),
@@ -582,7 +582,8 @@ internal class LocalEchoEventFactory @Inject constructor(
             replyText: CharSequence,
             autoMarkdown: Boolean,
             rootThreadEventId: String? = null,
-            showInThread: Boolean
+            showInThread: Boolean,
+            currentEventId: String? = null
     ): Event? {
         // Fallbacks and event representation
         // TODO Add error/warning logs when any of this is null
@@ -609,7 +610,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         val replyFallback = buildReplyFallback(body, userId, replyText.toString())
 
         val eventId = eventReplied.root.eventId ?: return null
-        val content = MessageTextContent(
+        val event =  MessageTextContent(
                 msgType = MessageType.MSGTYPE_TEXT,
                 format = MessageFormat.FORMAT_MATRIX_HTML,
                 body = replyFallback,
@@ -620,7 +621,8 @@ internal class LocalEchoEventFactory @Inject constructor(
                         showInThread = showInThread
                 )
         )
-        return createMessageEvent(roomId, content)
+
+        return createMessageEvent(roomId, event, currentEventId)
     }
 
     /**
