@@ -105,7 +105,7 @@ class WidgetFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
-        views.widgetWebView.setupForWidget(this)
+        views.widgetWebView.setupForWidget(requireActivity(), this)
         if (fragmentArgs.kind.isAdmin()) {
             viewModel.getPostAPIMediator().setWebView(views.widgetWebView)
         }
