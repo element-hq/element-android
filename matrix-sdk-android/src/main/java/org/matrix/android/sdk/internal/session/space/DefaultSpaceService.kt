@@ -246,7 +246,7 @@ internal class DefaultSpaceService @Inject constructor(
         // and if client want to bypass, it could use sendStateEvent directly?
         if (canonical) {
             // check that we can send m.child in the parent room
-            if (roomSummaryDataSource.getRoomSummary(parentSpaceId)?.membership != Membership.JOIN) {
+            if (roomSummaryDataSource.awaitRoomSummary(parentSpaceId)?.membership != Membership.JOIN) {
                 throw UnsupportedOperationException("Cannot add canonical child if not member of parent")
             }
             val powerLevelsEvent = stateEventDataSource.getStateEvent(

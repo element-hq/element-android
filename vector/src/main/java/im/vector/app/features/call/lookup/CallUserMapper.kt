@@ -58,7 +58,7 @@ class CallUserMapper(private val session: Session, private val protocolsChecker:
         protocolsChecker.awaitCheckProtocols()
         if (!protocolsChecker.supportVirtualRooms) return
         val invitedRoom = session.getRoom(invitedRoomId) ?: return
-        val inviterId = invitedRoom.roomSummary()?.inviterId ?: return
+        val inviterId = invitedRoom.awaitRoomSummary()?.inviterId ?: return
         val nativeLookup = session.sipNativeLookup(inviterId).firstOrNull() ?: return
         if (nativeLookup.fields.containsKey("is_virtual")) {
             val nativeUser = nativeLookup.userId

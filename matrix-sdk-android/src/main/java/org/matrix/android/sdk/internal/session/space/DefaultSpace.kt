@@ -53,7 +53,7 @@ internal class DefaultSpace(
     ) {
         // Find best via
         val bestVia = viaServers
-                ?: (spaceSummaryDataSource.getRoomSummary(roomId)
+                ?: (spaceSummaryDataSource.awaitRoomSummary(roomId)
                         ?.takeIf { it.joinRules == RoomJoinRules.RESTRICTED }
                         ?.let {
                             // for restricted room, best to take via from users that can invite in the

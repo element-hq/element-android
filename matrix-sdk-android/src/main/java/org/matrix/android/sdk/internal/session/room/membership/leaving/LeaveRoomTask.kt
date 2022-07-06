@@ -51,7 +51,7 @@ internal class DefaultLeaveRoomTask @Inject constructor(
     }
 
     private suspend fun leaveRoom(roomId: String, reason: String?) {
-        val roomSummary = roomSummaryDataSource.getRoomSummary(roomId)
+        val roomSummary = roomSummaryDataSource.awaitRoomSummary(roomId)
         if (roomSummary?.membership?.isActive() == false) {
             Timber.v("Room $roomId is not joined so can't be left")
             return

@@ -122,7 +122,7 @@ class InvitesAcceptor @Inject constructor(
                 // if we got 404 on invites, the inviting user have left or the hs is off.
                 if (failure is Failure.ServerError && failure.httpCode == 404) {
                     val room = getRoom(roomId) ?: return
-                    val inviterId = room.roomSummary()?.inviterId
+                    val inviterId = room.awaitRoomSummary()?.inviterId
                     // if the inviting user is on the same HS, there can only be one cause: they left, so we try to reject the invite.
                     if (inviterId?.endsWith(sessionParams.credentials.homeServer.orEmpty()).orFalse()) {
                         shouldRejectRoomIds.add(roomId)

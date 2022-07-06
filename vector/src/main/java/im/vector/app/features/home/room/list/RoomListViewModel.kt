@@ -294,7 +294,7 @@ class RoomListViewModel @AssistedInject constructor(
         session.getRoom(action.roomId)?.let { room ->
             viewModelScope.launch(Dispatchers.IO) {
                 try {
-                    if (room.roomSummary()?.hasTag(action.tag) == false) {
+                    if (room.awaitRoomSummary()?.hasTag(action.tag) == false) {
                         // Favorite and low priority tags are exclusive, so maybe delete the other tag first
                         action.tag.otherTag()
                                 ?.takeIf { room.roomSummary()?.hasTag(it).orFalse() }
