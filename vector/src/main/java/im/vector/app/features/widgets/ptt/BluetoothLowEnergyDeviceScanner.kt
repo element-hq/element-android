@@ -52,7 +52,7 @@ class BluetoothLowEnergyDeviceScanner @Inject constructor(
         bluetoothManager
                 ?.adapter
                 ?.bondedDevices
-                ?.firstOrNull { it.name == "PPT-Z" }
+                ?.firstOrNull { it.name == "PTT-Z" }
                 ?.let { bluetoothDevice ->
                     callback?.onPairedDeviceFound(bluetoothDevice)
                 }
