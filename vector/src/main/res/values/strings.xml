@@ -762,6 +762,8 @@
     <string name="search_members_hint">Filter room members</string>
     <string name="search_banned_user_hint">Filter banned users</string>
     <string name="search_no_results">No results</string>
+    <string name="search_space_two_parents">%1$s and %2$s</string>
+    <string name="search_space_multiple_parents">%1$s and %2$d others</string>
 
     <!-- home room settings -->
     <string name="room_settings_all_messages">All messages</string>
