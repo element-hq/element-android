@@ -21,6 +21,7 @@ import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCallback
 import android.bluetooth.BluetoothGattCharacteristic
+import android.bluetooth.BluetoothGattDescriptor
 import android.bluetooth.BluetoothManager
 import android.bluetooth.BluetoothProfile
 import android.content.Intent
@@ -32,6 +33,7 @@ import androidx.core.content.getSystemService
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.features.notifications.NotificationUtils
 import timber.log.Timber
+import java.util.UUID
 import javax.inject.Inject
 import kotlin.random.Random
 
@@ -67,7 +69,12 @@ class BluetoothLowEnergyService : VectorService() {
         override fun onServicesDiscovered(gatt: BluetoothGatt, status: Int) {
             gatt.services.forEach { service ->
                 service.characteristics.forEach { characteristic ->
-                    gatt.setCharacteristicNotification(characteristic, true)
+                    if (characteristic.uuid.equals(UUID.fromString("0000ffe1-0000-1000-8000-00805f9b34fb"))) {
+                        gatt.setCharacteristicNotification(characteristic, true)
+                        val descriptor = characteristic.getDescriptor(UUID.fromString("00002902-0000-1000-8000-00805f9b34fb"))
+                        descriptor.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
+                        gatt.writeDescriptor(descriptor)
+                    }
                 }
             }
         }
