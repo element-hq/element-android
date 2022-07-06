@@ -610,7 +610,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         val replyFallback = buildReplyFallback(body, userId, replyText.toString())
 
         val eventId = eventReplied.root.eventId ?: return null
-        val event =  MessageTextContent(
+        val content =  MessageTextContent(
                 msgType = MessageType.MSGTYPE_TEXT,
                 format = MessageFormat.FORMAT_MATRIX_HTML,
                 body = replyFallback,
@@ -621,8 +621,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                         showInThread = showInThread
                 )
         )
-
-        return createMessageEvent(roomId, event, currentEventId)
+        return createMessageEvent(roomId, content, currentEventId)
     }
 
     /**

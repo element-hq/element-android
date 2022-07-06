@@ -255,35 +255,6 @@ internal class LoadTimelineStrategy constructor(
         }
     }
 
-    private fun createNewEncryptedRepliedEvent(currentTimelineEvent: TimelineEvent): Event? {
-        val relatesEventId = if (currentTimelineEvent.isEncrypted()) {
-            currentTimelineEvent.root.content.toModel<EncryptedEventContent>()?.relatesTo?.inReplyTo?.eventId
-        } else {
-            currentTimelineEvent.root.content.toModel<MessageContent>()?.relatesTo?.inReplyTo?.eventId
-        }
-        return relatesEventId?.let { eventId ->
-            val timeLineEventEntity = TimelineEventEntity.where(
-                    dependencies.realm.get(),
-                    roomId,
-                    eventId
-            ).findFirst()
-
-            val replyText = dependencies
-                    .localEchoEventFactory
-                    .bodyForReply(currentTimelineEvent.getLastMessageContent(), true).formattedText ?: ""
-
-            timeLineEventEntity?.let { timelineEventEntity ->
-                dependencies.localEchoEventFactory.createReplyTextEvent(
-                        roomId,
-                        dependencies.timelineEventMapper.map(timelineEventEntity),
-                        replyText,
-                        false,
-                        showInThread = false
-                )
-            }
-        }
-    }
-
     private fun applyLiveRoomState(event: TimelineEvent): TimelineEvent {
         val updatedState = liveRoomStateListener.getLiveState(event.senderInfo.userId)
         return if (updatedState != null) {
