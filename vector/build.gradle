@@ -279,11 +279,22 @@ android {
         }
 
         nightly {
-            initWith release
             applicationIdSuffix ".nightly"
             versionNameSuffix "-nightly"
             resValue "string", "app_name", "Element nightly"
             resValue "color", "launcher_background", "#07007E"
+
+            buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
+            buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
+
+            postprocessing {
+                removeUnusedCode true
+                removeUnusedResources true
+                // We do not activate obfuscation as it makes it hard then to read crash reports, and it's a bit useless on an open source project :)
+                obfuscate false
+                optimizeCode true
+                proguardFiles 'proguard-rules.pro'
+            }
             matchingFallbacks = ['release']
             signingConfig signingConfigs.nightly
             firebaseAppDistribution {
