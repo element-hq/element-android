@@ -93,6 +93,13 @@ interface RoomService {
     fun getRoom(roomId: String): Room?
 
     /**
+     * Suspending version of [getRoom] method.
+     * @param roomId the roomId to look for.
+     * @return a room with roomId or null
+     */
+    suspend fun awaitRoom(roomId: String): Room?
+
+    /**
      * Get a roomSummary from a roomId or a room alias.
      * @param roomIdOrAlias the roomId or the alias of a room to look for.
      * @return a matching room summary or null

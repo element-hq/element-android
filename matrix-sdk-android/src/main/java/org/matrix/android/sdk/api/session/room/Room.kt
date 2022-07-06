@@ -66,6 +66,11 @@ interface Room {
     fun roomSummary(): RoomSummary?
 
     /**
+     * Suspending version of [roomSummary] method
+     */
+    suspend fun awaitRoomSummary(): RoomSummary?
+
+    /**
      * Use this room as a Space, if the type is correct.
      */
     fun asSpace(): Space?

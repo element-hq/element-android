@@ -26,6 +26,8 @@ import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.kotlin.where
+import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.query.SpaceFilter
@@ -58,6 +60,7 @@ internal class RoomSummaryDataSource @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
         private val roomSummaryMapper: RoomSummaryMapper,
         private val queryStringValueProcessor: QueryStringValueProcessor,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
 ) {
 
     fun getRoomSummary(roomIdOrAlias: String): RoomSummary? {
@@ -73,6 +76,10 @@ internal class RoomSummaryDataSource @Inject constructor(
                 }, { entity, _ ->
                     roomSummaryMapper.map(entity)
                 })
+    }
+
+    suspend fun awaitRoomSummary(roomIdOrAlias: String) = withContext(coroutineDispatchers.io) {
+        getRoomSummary(roomIdOrAlias)
     }
 
     fun getRoomSummaryLive(roomId: String): LiveData<Optional<RoomSummary>> {

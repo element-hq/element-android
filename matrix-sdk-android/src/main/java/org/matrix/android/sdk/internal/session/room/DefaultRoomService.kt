@@ -82,6 +82,10 @@ internal class DefaultRoomService @Inject constructor(
         return roomGetter.getRoom(roomId)
     }
 
+    override suspend fun awaitRoom(roomId: String): Room? {
+        return roomGetter.awaitRoom(roomId)
+    }
+
     override fun getExistingDirectRoomWithUser(otherUserId: String): String? {
         return roomGetter.getDirectRoomWith(otherUserId)
     }

@@ -82,6 +82,10 @@ internal class DefaultRoom(
         return roomSummaryDataSource.getRoomSummary(roomId)
     }
 
+    override suspend fun awaitRoomSummary(): RoomSummary? {
+        return roomSummaryDataSource.awaitRoomSummary(roomId)
+    }
+
     override fun asSpace(): Space? {
         if (roomSummary()?.roomType != RoomType.SPACE) return null
         return DefaultSpace(this, roomSummaryDataSource, viaParameterFinder)

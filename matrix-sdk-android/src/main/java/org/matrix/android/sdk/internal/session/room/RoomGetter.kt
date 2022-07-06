@@ -17,6 +17,8 @@
 package org.matrix.android.sdk.internal.session.room
 
 import io.realm.Realm
+import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.internal.database.RealmSessionProvider
@@ -30,19 +32,26 @@ import javax.inject.Inject
 internal interface RoomGetter {
     fun getRoom(roomId: String): Room?
 
+    suspend fun awaitRoom(roomId: String): Room?
+
     fun getDirectRoomWith(otherUserId: String): String?
 }
 
 @SessionScope
 internal class DefaultRoomGetter @Inject constructor(
         private val realmSessionProvider: RealmSessionProvider,
-        private val roomFactory: RoomFactory
+        private val roomFactory: RoomFactory,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
 ) : RoomGetter {
 
     override fun getRoom(roomId: String): Room? {
         return realmSessionProvider.withRealm { realm ->
             createRoom(realm, roomId)
         }
+    }
+
+    override suspend fun awaitRoom(roomId: String) = withContext(coroutineDispatchers.io) {
+        getRoom(roomId)
     }
 
     override fun getDirectRoomWith(otherUserId: String): String? {
