@@ -26,6 +26,7 @@ import com.airbnb.mvrx.args
 import com.mapbox.mapboxsdk.maps.MapView
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.utils.openLocation
 import im.vector.app.databinding.FragmentLocationPreviewBinding
 import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
@@ -38,7 +39,8 @@ import javax.inject.Inject
 class LocationPreviewFragment @Inject constructor(
         private val urlMapProvider: UrlMapProvider,
         private val locationPinProvider: LocationPinProvider
-) : VectorBaseFragment<FragmentLocationPreviewBinding>() {
+) : VectorBaseFragment<FragmentLocationPreviewBinding>(),
+        VectorMenuProvider {
 
     private val args: LocationSharingArgs by args()
 
@@ -99,14 +101,14 @@ class LocationPreviewFragment @Inject constructor(
 
     override fun getMenuRes() = R.menu.menu_location_preview
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             R.id.share_external -> {
                 onShareLocationExternal()
-                return true
+                true
             }
+            else -> false
         }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun onShareLocationExternal() {

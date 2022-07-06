@@ -26,8 +26,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import androidx.viewpager2.widget.ViewPager2
-import androidx.viewpager2.widget.ViewPager2.SCROLL_STATE_IDLE
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -36,6 +34,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.safeOpenOutputStream
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.selectTxtFileToWrite
 import im.vector.app.databinding.FragmentDevtoolKeyrequestsBinding
@@ -44,7 +43,8 @@ import javax.inject.Inject
 
 class KeyRequestsFragment @Inject constructor(
         private val clock: Clock,
-) : VectorBaseFragment<FragmentDevtoolKeyrequestsBinding>() {
+) : VectorBaseFragment<FragmentDevtoolKeyrequestsBinding>(),
+        VectorMenuProvider {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentDevtoolKeyrequestsBinding {
         return FragmentDevtoolKeyrequestsBinding.inflate(inflater, container, false)
@@ -61,19 +61,6 @@ class KeyRequestsFragment @Inject constructor(
 
     override fun getMenuRes(): Int = R.menu.menu_audit
 
-    private val pageAdapterListener = object : ViewPager2.OnPageChangeCallback() {
-        override fun onPageSelected(position: Int) {
-            invalidateOptionsMenu()
-        }
-
-        override fun onPageScrollStateChanged(state: Int) {
-            childFragmentManager.fragments.forEach {
-                it.setHasOptionsMenu(state == SCROLL_STATE_IDLE)
-            }
-            invalidateOptionsMenu()
-        }
-    }
-
     override fun invalidate() = withState(viewModel) {
         when (it.exporting) {
             is Loading -> views.exportWaitingView.isVisible = true
@@ -81,16 +68,10 @@ class KeyRequestsFragment @Inject constructor(
         }
     }
 
-    override fun onDestroy() {
-        invalidateOptionsMenu()
-        super.onDestroy()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mPagerAdapter = KeyReqPagerAdapter(this)
         views.devToolKeyRequestPager.adapter = mPagerAdapter
-        views.devToolKeyRequestPager.registerOnPageChangeCallback(pageAdapterListener)
 
         TabLayoutMediator(views.devToolKeyRequestTabs, views.devToolKeyRequestPager) { tab, position ->
             when (position) {
@@ -119,25 +100,26 @@ class KeyRequestsFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        views.devToolKeyRequestPager.unregisterOnPageChangeCallback(pageAdapterListener)
         mPagerAdapter = null
         super.onDestroyView()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.audit_export) {
-            selectTxtFileToWrite(
-                    activity = requireActivity(),
-                    activityResultLauncher = epxortAuditForActivityResult,
-                    defaultFileName = "audit-export_${clock.epochMillis()}.txt",
-                    chooserHint = "Export Audit"
-            )
-            return true
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.audit_export -> {
+                selectTxtFileToWrite(
+                        activity = requireActivity(),
+                        activityResultLauncher = exportAuditForActivityResult,
+                        defaultFileName = "audit-export_${clock.epochMillis()}.txt",
+                        chooserHint = "Export Audit"
+                )
+                true
+            }
+            else -> false
         }
-        return super.onOptionsItemSelected(item)
     }
 
-    private val epxortAuditForActivityResult = registerStartForActivityResult { activityResult ->
+    private val exportAuditForActivityResult = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
             val uri = activityResult.data?.data
             if (uri != null) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,24 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.userdirectory
+package im.vector.app.core.platform
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import android.view.Menu
+import android.view.MenuItem
+import androidx.annotation.MenuRes
 
-@Parcelize
-data class UserListFragmentArgs(
-        val title: String,
-        val menuResId: Int,
-        val submitMenuItemId: Int,
-        val excludedUserIds: Set<String>? = null,
-        val singleSelection: Boolean = false,
-        val showInviteActions: Boolean = true,
-        val showContactBookAction: Boolean = true,
-        val showToolbar: Boolean = true
-) : Parcelable
+/**
+ * Let your Activity of Fragment implement this interface if they provide a Menu.
+ */
+interface VectorMenuProvider {
+    @MenuRes
+    fun getMenuRes(): Int
+
+    // No op by default
+    fun handlePostCreateMenu(menu: Menu) {}
+
+    // No op by default
+    fun handlePrepareMenu(menu: Menu) {}
+
+    fun handleMenuItemSelected(item: MenuItem): Boolean
+}
