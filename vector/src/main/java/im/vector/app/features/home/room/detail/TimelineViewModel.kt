@@ -576,7 +576,10 @@ class TimelineViewModel @AssistedInject constructor(
     }
 
     private fun handleManageIntegrations() = withState { state ->
-        if (state.activeRoomWidgets().isNullOrEmpty()) {
+        val isOnlyElementCallWidget = state.activeRoomWidgets()?.size == 1 && state.hasActiveElementCallWidget()
+        if (isOnlyElementCallWidget) {
+            _viewEvents.post(RoomDetailViewEvents.OpenElementCallWidget)
+        } else if (state.activeRoomWidgets().isNullOrEmpty()) {
             // Directly open integration manager screen
             handleOpenIntegrationManager()
         } else {

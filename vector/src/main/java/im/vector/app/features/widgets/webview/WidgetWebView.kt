@@ -58,6 +58,8 @@ fun WebView.setupForWidget(activity: Activity, eventListener: WebEventListener) 
 
     settings.displayZoomControls = false
 
+    settings.mediaPlaybackRequiresUserGesture = false
+
     // Permission requests
     webChromeClient = object : WebChromeClient() {
         override fun onPermissionRequest(request: PermissionRequest) {

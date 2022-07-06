@@ -86,4 +86,6 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
     object RoomReplacementStarted : RoomDetailViewEvents()
 
     data class ChangeLocationIndicator(val isVisible: Boolean) : RoomDetailViewEvents()
+
+    object OpenElementCallWidget : RoomDetailViewEvents()
 }

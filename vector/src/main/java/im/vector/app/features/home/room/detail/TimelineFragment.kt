@@ -495,6 +495,7 @@ class TimelineFragment @Inject constructor(
                 is RoomDetailViewEvents.DisplayAndAcceptCall -> acceptIncomingCall(it)
                 RoomDetailViewEvents.RoomReplacementStarted -> handleRoomReplacement()
                 is RoomDetailViewEvents.ChangeLocationIndicator -> handleChangeLocationIndicator(it)
+                RoomDetailViewEvents.OpenElementCallWidget -> handleOpenElementCallWidget()
             }
         }
 
@@ -1099,7 +1100,17 @@ class TimelineFragment @Inject constructor(
             val matrixAppsMenuItem = menu.findItem(R.id.open_matrix_apps)
             val widgetsCount = state.activeRoomWidgets.invoke()?.size ?: 0
             val hasOnlyJitsiWidget = widgetsCount == 1 && state.hasActiveJitsiWidget()
-            if (widgetsCount == 0 || hasOnlyJitsiWidget) {
+            val hasOnlyElementCallWidget = widgetsCount == 1 && state.hasActiveElementCallWidget()
+            if (hasOnlyElementCallWidget) {
+                val actionView = matrixAppsMenuItem.actionView
+                actionView.findViewById<TextView>(R.id.cart_badge).isVisible = false
+                actionView
+                        .findViewById<ImageView>(R.id.action_view_icon_image)
+                        .apply {
+                            setImageResource(R.drawable.ic_phone)
+                            setColorFilter(ThemeUtils.getColor(requireContext(), R.attr.colorPrimary))
+                        }
+            } else if (widgetsCount == 0 || hasOnlyJitsiWidget) {
                 // icon should be default color no badge
                 val actionView = matrixAppsMenuItem.actionView
                 actionView
@@ -2636,6 +2647,15 @@ class TimelineFragment @Inject constructor(
     private fun onViewWidgetsClicked() {
         RoomWidgetsBottomSheet.newInstance()
                 .show(childFragmentManager, "ROOM_WIDGETS_BOTTOM_SHEET")
+    }
+
+    private fun handleOpenElementCallWidget() = withState(timelineViewModel) { state ->
+        state
+                .activeRoomWidgets()
+                ?.find { it.type == WidgetType.ElementCall }
+                ?.also { widget ->
+                    navigator.openRoomWidget(requireContext(), state.roomId, widget)
+                }
     }
 
     override fun onTapToReturnToCall() {
