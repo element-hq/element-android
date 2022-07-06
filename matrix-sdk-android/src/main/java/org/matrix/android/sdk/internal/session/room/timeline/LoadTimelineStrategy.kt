@@ -22,6 +22,7 @@ import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.RealmResults
 import io.realm.kotlin.createObject
+import io.realm.kotlin.executeTransactionAwait
 import kotlinx.coroutines.CompletableDeferred
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -32,7 +33,6 @@ import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
-import org.matrix.android.sdk.internal.database.awaitTransaction
 import org.matrix.android.sdk.internal.database.helper.addIfNecessary
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
@@ -291,7 +291,7 @@ internal class LoadTimelineStrategy constructor(
      * rootThreadEventId included.
      */
     private suspend fun recreateThreadChunkEntity(realm: Realm, rootThreadEventId: String) {
-        awaitTransaction(realm.configuration) {
+        realm.executeTransactionAwait {
             // Lets delete the chunk and start a new one
             ChunkEntity.findLastForwardChunkOfThread(it, roomId, rootThreadEventId)?.deleteAndClearThreadEvents()?.let {
                 Timber.i("###THREADS LoadTimelineStrategy [onStart] thread chunk cleared..")
@@ -311,7 +311,7 @@ internal class LoadTimelineStrategy constructor(
      * Clear any existing thread chunk.
      */
     private suspend fun clearThreadChunkEntity(realm: Realm, rootThreadEventId: String) {
-        awaitTransaction(realm.configuration) {
+        realm.executeTransactionAwait {
             ChunkEntity.findLastForwardChunkOfThread(it, roomId, rootThreadEventId)?.deleteAndClearThreadEvents()?.let {
                 Timber.i("###THREADS LoadTimelineStrategy [onStop] thread chunk cleared..")
             }
