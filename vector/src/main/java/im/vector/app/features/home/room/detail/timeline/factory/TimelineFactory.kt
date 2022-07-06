@@ -20,6 +20,7 @@ import im.vector.app.features.call.vectorCallService
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineSettingsFactory
 import im.vector.app.features.home.room.detail.timeline.merged.MergedTimelines
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.getRoom
@@ -36,14 +37,14 @@ private val secondaryTimelineAllowedTypes = listOf(
 
 class TimelineFactory @Inject constructor(private val session: Session, private val timelineSettingsFactory: TimelineSettingsFactory) {
 
-    fun createTimeline(
+    suspend fun createTimeline(
             coroutineScope: CoroutineScope,
-            mainRoom: Room,
+            room: Deferred<Room>,
             eventId: String?,
             rootThreadEventId: String?
     ): Timeline {
         val settings = timelineSettingsFactory.create(rootThreadEventId)
-
+        val mainRoom = room.await()
         if (!session.vectorCallService.protocolChecker.supportVirtualRooms) {
             return mainRoom.timelineService().createTimeline(eventId, settings)
         }

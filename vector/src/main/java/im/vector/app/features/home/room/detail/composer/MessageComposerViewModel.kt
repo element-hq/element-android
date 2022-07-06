@@ -23,6 +23,7 @@ import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
+import im.vector.app.core.dispatchers.CoroutineDispatchers
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.analytics.AnalyticsTracker
@@ -39,9 +40,11 @@ import im.vector.app.features.home.room.detail.toMessageType
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
@@ -71,7 +74,7 @@ import org.matrix.android.sdk.flow.unwrap
 import timber.log.Timber
 
 class MessageComposerViewModel @AssistedInject constructor(
-        @Assisted initialState: MessageComposerViewState,
+        @Assisted private val initialState: MessageComposerViewState,
         private val session: Session,
         private val stringProvider: StringProvider,
         private val vectorPreferences: VectorPreferences,
@@ -79,41 +82,48 @@ class MessageComposerViewModel @AssistedInject constructor(
         private val rainbowGenerator: RainbowGenerator,
         private val audioMessageHelper: AudioMessageHelper,
         private val analyticsTracker: AnalyticsTracker,
+        private val coroutineDispatchers: CoroutineDispatchers,
 ) : VectorViewModel<MessageComposerViewState, MessageComposerAction, MessageComposerViewEvents>(initialState) {
 
-    private val room = session.getRoom(initialState.roomId)!!
+    private val room = viewModelScope.async(start = CoroutineStart.LAZY) {
+        session.roomService().awaitRoom(initialState.roomId)!!
+    }
 
     // Keep it out of state to avoid invalidate being called
     private var currentComposerText: CharSequence = ""
 
     init {
-        loadDraftIfAny()
-        observePowerLevelAndEncryption()
+        viewModelScope.launch {
+            loadDraftIfAny()
+            observePowerLevelAndEncryption()
+        }
         subscribeToStateInternal()
     }
 
     override fun handle(action: MessageComposerAction) {
-        when (action) {
-            is MessageComposerAction.EnterEditMode -> handleEnterEditMode(action)
-            is MessageComposerAction.EnterQuoteMode -> handleEnterQuoteMode(action)
-            is MessageComposerAction.EnterRegularMode -> handleEnterRegularMode(action)
-            is MessageComposerAction.EnterReplyMode -> handleEnterReplyMode(action)
-            is MessageComposerAction.SendMessage -> handleSendMessage(action)
-            is MessageComposerAction.UserIsTyping -> handleUserIsTyping(action)
-            is MessageComposerAction.OnTextChanged -> handleOnTextChanged(action)
-            is MessageComposerAction.OnVoiceRecordingUiStateChanged -> handleOnVoiceRecordingUiStateChanged(action)
-            is MessageComposerAction.StartRecordingVoiceMessage -> handleStartRecordingVoiceMessage()
-            is MessageComposerAction.EndRecordingVoiceMessage -> handleEndRecordingVoiceMessage(action.isCancelled, action.rootThreadEventId)
-            is MessageComposerAction.PlayOrPauseVoicePlayback -> handlePlayOrPauseVoicePlayback(action)
-            MessageComposerAction.PauseRecordingVoiceMessage -> handlePauseRecordingVoiceMessage()
-            MessageComposerAction.PlayOrPauseRecordingPlayback -> handlePlayOrPauseRecordingPlayback()
-            is MessageComposerAction.EndAllVoiceActions -> handleEndAllVoiceActions(action.deleteRecord)
-            is MessageComposerAction.InitializeVoiceRecorder -> handleInitializeVoiceRecorder(action.attachmentData)
-            is MessageComposerAction.OnEntersBackground -> handleEntersBackground(action.composerText)
-            is MessageComposerAction.VoiceWaveformTouchedUp -> handleVoiceWaveformTouchedUp(action)
-            is MessageComposerAction.VoiceWaveformMovedTo -> handleVoiceWaveformMovedTo(action)
-            is MessageComposerAction.AudioSeekBarMovedTo -> handleAudioSeekBarMovedTo(action)
-            is MessageComposerAction.SlashCommandConfirmed -> handleSlashCommandConfirmed(action)
+        viewModelScope.launch {
+            when (action) {
+                is MessageComposerAction.EnterEditMode -> handleEnterEditMode(action)
+                is MessageComposerAction.EnterQuoteMode -> handleEnterQuoteMode(action)
+                is MessageComposerAction.EnterRegularMode -> handleEnterRegularMode(action)
+                is MessageComposerAction.EnterReplyMode -> handleEnterReplyMode(action)
+                is MessageComposerAction.SendMessage -> handleSendMessage(action)
+                is MessageComposerAction.UserIsTyping -> handleUserIsTyping(action)
+                is MessageComposerAction.OnTextChanged -> handleOnTextChanged(action)
+                is MessageComposerAction.OnVoiceRecordingUiStateChanged -> handleOnVoiceRecordingUiStateChanged(action)
+                is MessageComposerAction.StartRecordingVoiceMessage -> handleStartRecordingVoiceMessage()
+                is MessageComposerAction.EndRecordingVoiceMessage -> handleEndRecordingVoiceMessage(action.isCancelled, action.rootThreadEventId)
+                is MessageComposerAction.PlayOrPauseVoicePlayback -> handlePlayOrPauseVoicePlayback(action)
+                MessageComposerAction.PauseRecordingVoiceMessage -> handlePauseRecordingVoiceMessage()
+                MessageComposerAction.PlayOrPauseRecordingPlayback -> handlePlayOrPauseRecordingPlayback()
+                is MessageComposerAction.EndAllVoiceActions -> handleEndAllVoiceActions(action.deleteRecord)
+                is MessageComposerAction.InitializeVoiceRecorder -> handleInitializeVoiceRecorder(action.attachmentData)
+                is MessageComposerAction.OnEntersBackground -> handleEntersBackground(action.composerText)
+                is MessageComposerAction.VoiceWaveformTouchedUp -> handleVoiceWaveformTouchedUp(action)
+                is MessageComposerAction.VoiceWaveformMovedTo -> handleVoiceWaveformMovedTo(action)
+                is MessageComposerAction.AudioSeekBarMovedTo -> handleAudioSeekBarMovedTo(action)
+                is MessageComposerAction.SlashCommandConfirmed -> handleSlashCommandConfirmed(action)
+            }
         }
     }
 
@@ -148,13 +158,14 @@ class MessageComposerViewModel @AssistedInject constructor(
         copy(sendMode = SendMode.Regular(action.text, action.fromSharing))
     }
 
-    private fun handleEnterEditMode(action: MessageComposerAction.EnterEditMode) {
-        room.getTimelineEvent(action.eventId)?.let { timelineEvent ->
+    private suspend fun handleEnterEditMode(action: MessageComposerAction.EnterEditMode) {
+        room.await().getTimelineEvent(action.eventId)?.let { timelineEvent ->
             setState { copy(sendMode = SendMode.Edit(timelineEvent, timelineEvent.getTextEditableContent())) }
         }
     }
 
-    private fun observePowerLevelAndEncryption() {
+    private suspend fun observePowerLevelAndEncryption() {
+        val room = room.await()
         combine(
                 PowerLevelsFlowFactory(room).createFlow(),
                 room.flow().liveRoomSummary().unwrap()
@@ -180,439 +191,435 @@ class MessageComposerViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleEnterQuoteMode(action: MessageComposerAction.EnterQuoteMode) {
-        room.getTimelineEvent(action.eventId)?.let { timelineEvent ->
+    private suspend fun handleEnterQuoteMode(action: MessageComposerAction.EnterQuoteMode) {
+        room.await().getTimelineEvent(action.eventId)?.let { timelineEvent ->
             setState { copy(sendMode = SendMode.Quote(timelineEvent, action.text)) }
         }
     }
 
-    private fun handleEnterReplyMode(action: MessageComposerAction.EnterReplyMode) {
-        room.getTimelineEvent(action.eventId)?.let { timelineEvent ->
+    private suspend fun handleEnterReplyMode(action: MessageComposerAction.EnterReplyMode) {
+        room.await().getTimelineEvent(action.eventId)?.let { timelineEvent ->
             setState { copy(sendMode = SendMode.Reply(timelineEvent, action.text)) }
         }
     }
 
-    private fun handleSendMessage(action: MessageComposerAction.SendMessage) {
-        withState { state ->
-            analyticsTracker.capture(state.toAnalyticsComposer()).also {
-                setState { copy(startsThread = false) }
-            }
-            when (state.sendMode) {
-                is SendMode.Regular -> {
-                    when (val parsedCommand = commandParser.parseSlashCommand(
-                            textMessage = action.text,
-                            isInThreadTimeline = state.isInThreadTimeline()
-                    )) {
-                        is ParsedCommand.ErrorNotACommand -> {
-                            // Send the text message to the room
-                            if (state.rootThreadEventId != null) {
-                                room.relationService().replyInThread(
-                                        rootThreadEventId = state.rootThreadEventId,
-                                        replyInThreadText = action.text,
-                                        autoMarkdown = action.autoMarkdown
-                                )
-                            } else {
-                                room.sendService().sendTextMessage(action.text, autoMarkdown = action.autoMarkdown)
-                            }
+    private suspend fun handleSendMessage(action: MessageComposerAction.SendMessage) {
+        val state = awaitState()
+        analyticsTracker.capture(state.toAnalyticsComposer())
+        setState { copy(startsThread = false) }
+        when (state.sendMode) {
+            is SendMode.Regular -> {
+                when (val parsedCommand = commandParser.parseSlashCommand(
+                        textMessage = action.text,
+                        isInThreadTimeline = state.isInThreadTimeline()
+                )) {
+                    is ParsedCommand.ErrorNotACommand -> {
+                        // Send the text message to the room
+                        if (state.rootThreadEventId != null) {
+                            room.await().relationService().replyInThread(
+                                    rootThreadEventId = state.rootThreadEventId,
+                                    replyInThreadText = action.text,
+                                    autoMarkdown = action.autoMarkdown
+                            )
+                        } else {
+                            room.await().sendService().sendTextMessage(action.text, autoMarkdown = action.autoMarkdown)
+                        }
 
-                            _viewEvents.post(MessageComposerViewEvents.MessageSent)
-                            popDraft()
+                        _viewEvents.post(MessageComposerViewEvents.MessageSent)
+                        popDraft()
+                    }
+                    is ParsedCommand.ErrorSyntax -> {
+                        _viewEvents.post(MessageComposerViewEvents.SlashCommandError(parsedCommand.command))
+                    }
+                    is ParsedCommand.ErrorEmptySlashCommand -> {
+                        _viewEvents.post(MessageComposerViewEvents.SlashCommandUnknown("/"))
+                    }
+                    is ParsedCommand.ErrorUnknownSlashCommand -> {
+                        _viewEvents.post(MessageComposerViewEvents.SlashCommandUnknown(parsedCommand.slashCommand))
+                    }
+                    is ParsedCommand.ErrorCommandNotSupportedInThreads -> {
+                        _viewEvents.post(MessageComposerViewEvents.SlashCommandNotSupportedInThreads(parsedCommand.command))
+                    }
+                    is ParsedCommand.SendPlainText -> {
+                        // Send the text message to the room, without markdown
+                        if (state.rootThreadEventId != null) {
+                            room.await().relationService().replyInThread(
+                                    rootThreadEventId = state.rootThreadEventId,
+                                    replyInThreadText = parsedCommand.message,
+                                    autoMarkdown = false
+                            )
+                        } else {
+                            room.await().sendService().sendTextMessage(parsedCommand.message, autoMarkdown = false)
                         }
-                        is ParsedCommand.ErrorSyntax -> {
-                            _viewEvents.post(MessageComposerViewEvents.SlashCommandError(parsedCommand.command))
+                        _viewEvents.post(MessageComposerViewEvents.MessageSent)
+                        popDraft()
+                    }
+                    is ParsedCommand.ChangeRoomName -> {
+                        handleChangeRoomNameSlashCommand(parsedCommand)
+                    }
+                    is ParsedCommand.Invite -> {
+                        handleInviteSlashCommand(parsedCommand)
+                    }
+                    is ParsedCommand.Invite3Pid -> {
+                        handleInvite3pidSlashCommand(parsedCommand)
+                    }
+                    is ParsedCommand.SetUserPowerLevel -> {
+                        handleSetUserPowerLevel(parsedCommand)
+                    }
+                    is ParsedCommand.ClearScalarToken -> {
+                        // TODO
+                        _viewEvents.post(MessageComposerViewEvents.SlashCommandNotImplemented)
+                    }
+                    is ParsedCommand.SetMarkdown -> {
+                        vectorPreferences.setMarkdownEnabled(parsedCommand.enable)
+                        _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
+                        popDraft()
+                    }
+                    is ParsedCommand.BanUser -> {
+                        handleBanSlashCommand(parsedCommand)
+                    }
+                    is ParsedCommand.UnbanUser -> {
+                        handleUnbanSlashCommand(parsedCommand)
+                    }
+                    is ParsedCommand.IgnoreUser -> {
+                        handleIgnoreSlashCommand(parsedCommand)
+                    }
+                    is ParsedCommand.UnignoreUser -> {
+                        handleUnignoreSlashCommand(parsedCommand)
+                    }
+                    is ParsedCommand.RemoveUser -> {
+                        handleRemoveSlashCommand(parsedCommand)
+                    }
+                    is ParsedCommand.JoinRoom -> {
+                        handleJoinToAnotherRoomSlashCommand(parsedCommand)
+                        popDraft()
+                    }
+                    is ParsedCommand.PartRoom -> {
+                        handlePartSlashCommand(parsedCommand)
+                    }
+                    is ParsedCommand.SendEmote -> {
+                        if (state.rootThreadEventId != null) {
+                            room.await().relationService().replyInThread(
+                                    rootThreadEventId = state.rootThreadEventId,
+                                    replyInThreadText = parsedCommand.message,
+                                    msgType = MessageType.MSGTYPE_EMOTE,
+                                    autoMarkdown = action.autoMarkdown
+                            )
+                        } else {
+                            room.await().sendService().sendTextMessage(
+                                    text = parsedCommand.message,
+                                    msgType = MessageType.MSGTYPE_EMOTE,
+                                    autoMarkdown = action.autoMarkdown
+                            )
                         }
-                        is ParsedCommand.ErrorEmptySlashCommand -> {
-                            _viewEvents.post(MessageComposerViewEvents.SlashCommandUnknown("/"))
+                        _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
+                        popDraft()
+                    }
+                    is ParsedCommand.SendRainbow -> {
+                        val message = parsedCommand.message.toString()
+                        if (state.rootThreadEventId != null) {
+                            room.await().relationService().replyInThread(
+                                    rootThreadEventId = state.rootThreadEventId,
+                                    replyInThreadText = parsedCommand.message,
+                                    formattedText = rainbowGenerator.generate(message)
+                            )
+                        } else {
+                            room.await().sendService().sendFormattedTextMessage(message, rainbowGenerator.generate(message))
                         }
-                        is ParsedCommand.ErrorUnknownSlashCommand -> {
-                            _viewEvents.post(MessageComposerViewEvents.SlashCommandUnknown(parsedCommand.slashCommand))
+                        _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
+                        popDraft()
+                    }
+                    is ParsedCommand.SendRainbowEmote -> {
+                        val message = parsedCommand.message.toString()
+                        if (state.rootThreadEventId != null) {
+                            room.await().relationService().replyInThread(
+                                    rootThreadEventId = state.rootThreadEventId,
+                                    replyInThreadText = parsedCommand.message,
+                                    msgType = MessageType.MSGTYPE_EMOTE,
+                                    formattedText = rainbowGenerator.generate(message)
+                            )
+                        } else {
+                            room.await().sendService().sendFormattedTextMessage(message, rainbowGenerator.generate(message), MessageType.MSGTYPE_EMOTE)
                         }
-                        is ParsedCommand.ErrorCommandNotSupportedInThreads -> {
-                            _viewEvents.post(MessageComposerViewEvents.SlashCommandNotSupportedInThreads(parsedCommand.command))
-                        }
-                        is ParsedCommand.SendPlainText -> {
-                            // Send the text message to the room, without markdown
-                            if (state.rootThreadEventId != null) {
-                                room.relationService().replyInThread(
-                                        rootThreadEventId = state.rootThreadEventId,
-                                        replyInThreadText = parsedCommand.message,
-                                        autoMarkdown = false
-                                )
-                            } else {
-                                room.sendService().sendTextMessage(parsedCommand.message, autoMarkdown = false)
-                            }
-                            _viewEvents.post(MessageComposerViewEvents.MessageSent)
-                            popDraft()
-                        }
-                        is ParsedCommand.ChangeRoomName -> {
-                            handleChangeRoomNameSlashCommand(parsedCommand)
-                        }
-                        is ParsedCommand.Invite -> {
-                            handleInviteSlashCommand(parsedCommand)
-                        }
-                        is ParsedCommand.Invite3Pid -> {
-                            handleInvite3pidSlashCommand(parsedCommand)
-                        }
-                        is ParsedCommand.SetUserPowerLevel -> {
-                            handleSetUserPowerLevel(parsedCommand)
-                        }
-                        is ParsedCommand.ClearScalarToken -> {
-                            // TODO
-                            _viewEvents.post(MessageComposerViewEvents.SlashCommandNotImplemented)
-                        }
-                        is ParsedCommand.SetMarkdown -> {
-                            vectorPreferences.setMarkdownEnabled(parsedCommand.enable)
-                            _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
-                            popDraft()
-                        }
-                        is ParsedCommand.BanUser -> {
-                            handleBanSlashCommand(parsedCommand)
-                        }
-                        is ParsedCommand.UnbanUser -> {
-                            handleUnbanSlashCommand(parsedCommand)
-                        }
-                        is ParsedCommand.IgnoreUser -> {
-                            handleIgnoreSlashCommand(parsedCommand)
-                        }
-                        is ParsedCommand.UnignoreUser -> {
-                            handleUnignoreSlashCommand(parsedCommand)
-                        }
-                        is ParsedCommand.RemoveUser -> {
-                            handleRemoveSlashCommand(parsedCommand)
-                        }
-                        is ParsedCommand.JoinRoom -> {
-                            handleJoinToAnotherRoomSlashCommand(parsedCommand)
-                            popDraft()
-                        }
-                        is ParsedCommand.PartRoom -> {
-                            handlePartSlashCommand(parsedCommand)
-                        }
-                        is ParsedCommand.SendEmote -> {
-                            if (state.rootThreadEventId != null) {
-                                room.relationService().replyInThread(
-                                        rootThreadEventId = state.rootThreadEventId,
-                                        replyInThreadText = parsedCommand.message,
-                                        msgType = MessageType.MSGTYPE_EMOTE,
-                                        autoMarkdown = action.autoMarkdown
-                                )
-                            } else {
-                                room.sendService().sendTextMessage(
-                                        text = parsedCommand.message,
-                                        msgType = MessageType.MSGTYPE_EMOTE,
-                                        autoMarkdown = action.autoMarkdown
-                                )
-                            }
-                            _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
-                            popDraft()
-                        }
-                        is ParsedCommand.SendRainbow -> {
-                            val message = parsedCommand.message.toString()
-                            if (state.rootThreadEventId != null) {
-                                room.relationService().replyInThread(
-                                        rootThreadEventId = state.rootThreadEventId,
-                                        replyInThreadText = parsedCommand.message,
-                                        formattedText = rainbowGenerator.generate(message)
-                                )
-                            } else {
-                                room.sendService().sendFormattedTextMessage(message, rainbowGenerator.generate(message))
-                            }
-                            _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
-                            popDraft()
-                        }
-                        is ParsedCommand.SendRainbowEmote -> {
-                            val message = parsedCommand.message.toString()
-                            if (state.rootThreadEventId != null) {
-                                room.relationService().replyInThread(
-                                        rootThreadEventId = state.rootThreadEventId,
-                                        replyInThreadText = parsedCommand.message,
-                                        msgType = MessageType.MSGTYPE_EMOTE,
-                                        formattedText = rainbowGenerator.generate(message)
-                                )
-                            } else {
-                                room.sendService().sendFormattedTextMessage(message, rainbowGenerator.generate(message), MessageType.MSGTYPE_EMOTE)
-                            }
 
+                        _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
+                        popDraft()
+                    }
+                    is ParsedCommand.SendSpoiler -> {
+                        val text = "[${stringProvider.getString(R.string.spoiler)}](${parsedCommand.message})"
+                        val formattedText = "<span data-mx-spoiler>${parsedCommand.message}</span>"
+                        if (state.rootThreadEventId != null) {
+                            room.await().relationService().replyInThread(
+                                    rootThreadEventId = state.rootThreadEventId,
+                                    replyInThreadText = text,
+                                    formattedText = formattedText
+                            )
+                        } else {
+                            room.await().sendService().sendFormattedTextMessage(
+                                    text,
+                                    formattedText
+                            )
+                        }
+                        _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
+                        popDraft()
+                    }
+                    is ParsedCommand.SendShrug -> {
+                        sendPrefixedMessage("¯\\_(ツ)_/¯", parsedCommand.message, state.rootThreadEventId)
+                        _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
+                        popDraft()
+                    }
+                    is ParsedCommand.SendLenny -> {
+                        sendPrefixedMessage("( ͡° ͜ʖ ͡°)", parsedCommand.message, state.rootThreadEventId)
+                        _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
+                        popDraft()
+                    }
+                    is ParsedCommand.SendChatEffect -> {
+                        sendChatEffect(parsedCommand)
+                        _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
+                        popDraft()
+                    }
+                    is ParsedCommand.ChangeTopic -> {
+                        handleChangeTopicSlashCommand(parsedCommand)
+                    }
+                    is ParsedCommand.ChangeDisplayName -> {
+                        handleChangeDisplayNameSlashCommand(parsedCommand)
+                    }
+                    is ParsedCommand.ChangeDisplayNameForRoom -> {
+                        handleChangeDisplayNameForRoomSlashCommand(parsedCommand)
+                    }
+                    is ParsedCommand.ChangeRoomAvatar -> {
+                        handleChangeRoomAvatarSlashCommand(parsedCommand)
+                    }
+                    is ParsedCommand.ChangeAvatarForRoom -> {
+                        handleChangeAvatarForRoomSlashCommand(parsedCommand)
+                    }
+                    is ParsedCommand.ShowUser -> {
+                        _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
+                        handleWhoisSlashCommand(parsedCommand)
+                        popDraft()
+                    }
+                    is ParsedCommand.DiscardSession -> {
+                        if (room.await().roomCryptoService().isEncrypted()) {
+                            session.cryptoService().discardOutboundSession(room.await().roomId)
                             _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
                             popDraft()
-                        }
-                        is ParsedCommand.SendSpoiler -> {
-                            val text = "[${stringProvider.getString(R.string.spoiler)}](${parsedCommand.message})"
-                            val formattedText = "<span data-mx-spoiler>${parsedCommand.message}</span>"
-                            if (state.rootThreadEventId != null) {
-                                room.relationService().replyInThread(
-                                        rootThreadEventId = state.rootThreadEventId,
-                                        replyInThreadText = text,
-                                        formattedText = formattedText
-                                )
-                            } else {
-                                room.sendService().sendFormattedTextMessage(
-                                        text,
-                                        formattedText
-                                )
-                            }
+                        } else {
                             _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
-                            popDraft()
-                        }
-                        is ParsedCommand.SendShrug -> {
-                            sendPrefixedMessage("¯\\_(ツ)_/¯", parsedCommand.message, state.rootThreadEventId)
-                            _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
-                            popDraft()
-                        }
-                        is ParsedCommand.SendLenny -> {
-                            sendPrefixedMessage("( ͡° ͜ʖ ͡°)", parsedCommand.message, state.rootThreadEventId)
-                            _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
-                            popDraft()
-                        }
-                        is ParsedCommand.SendChatEffect -> {
-                            sendChatEffect(parsedCommand)
-                            _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
-                            popDraft()
-                        }
-                        is ParsedCommand.ChangeTopic -> {
-                            handleChangeTopicSlashCommand(parsedCommand)
-                        }
-                        is ParsedCommand.ChangeDisplayName -> {
-                            handleChangeDisplayNameSlashCommand(parsedCommand)
-                        }
-                        is ParsedCommand.ChangeDisplayNameForRoom -> {
-                            handleChangeDisplayNameForRoomSlashCommand(parsedCommand)
-                        }
-                        is ParsedCommand.ChangeRoomAvatar -> {
-                            handleChangeRoomAvatarSlashCommand(parsedCommand)
-                        }
-                        is ParsedCommand.ChangeAvatarForRoom -> {
-                            handleChangeAvatarForRoomSlashCommand(parsedCommand)
-                        }
-                        is ParsedCommand.ShowUser -> {
-                            _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
-                            handleWhoisSlashCommand(parsedCommand)
-                            popDraft()
-                        }
-                        is ParsedCommand.DiscardSession -> {
-                            if (room.roomCryptoService().isEncrypted()) {
-                                session.cryptoService().discardOutboundSession(room.roomId)
-                                _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
-                                popDraft()
-                            } else {
-                                _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
-                                _viewEvents.post(
-                                        MessageComposerViewEvents
-                                                .ShowMessage(stringProvider.getString(R.string.command_description_discard_session_not_handled))
-                                )
-                            }
-                        }
-                        is ParsedCommand.CreateSpace -> {
-                            _viewEvents.post(MessageComposerViewEvents.SlashCommandLoading)
-                            viewModelScope.launch(Dispatchers.IO) {
-                                try {
-                                    val params = CreateSpaceParams().apply {
-                                        name = parsedCommand.name
-                                        invitedUserIds.addAll(parsedCommand.invitees)
-                                    }
-                                    val spaceId = session.spaceService().createSpace(params)
-                                    session.spaceService().getSpace(spaceId)
-                                            ?.addChildren(
-                                                    state.roomId,
-                                                    null,
-                                                    null,
-                                                    true
-                                            )
-                                    popDraft()
-                                    _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
-                                } catch (failure: Throwable) {
-                                    _viewEvents.post(MessageComposerViewEvents.SlashCommandResultError(failure))
-                                }
-                            }
-                            Unit
-                        }
-                        is ParsedCommand.AddToSpace -> {
-                            _viewEvents.post(MessageComposerViewEvents.SlashCommandLoading)
-                            viewModelScope.launch(Dispatchers.IO) {
-                                try {
-                                    session.spaceService().getSpace(parsedCommand.spaceId)
-                                            ?.addChildren(
-                                                    room.roomId,
-                                                    null,
-                                                    null,
-                                                    false
-                                            )
-                                    popDraft()
-                                    _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
-                                } catch (failure: Throwable) {
-                                    _viewEvents.post(MessageComposerViewEvents.SlashCommandResultError(failure))
-                                }
-                            }
-                            Unit
-                        }
-                        is ParsedCommand.JoinSpace -> {
-                            _viewEvents.post(MessageComposerViewEvents.SlashCommandLoading)
-                            viewModelScope.launch(Dispatchers.IO) {
-                                try {
-                                    session.spaceService().joinSpace(parsedCommand.spaceIdOrAlias)
-                                    popDraft()
-                                    _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
-                                } catch (failure: Throwable) {
-                                    _viewEvents.post(MessageComposerViewEvents.SlashCommandResultError(failure))
-                                }
-                            }
-                            Unit
-                        }
-                        is ParsedCommand.LeaveRoom -> {
-                            viewModelScope.launch(Dispatchers.IO) {
-                                try {
-                                    session.roomService().leaveRoom(parsedCommand.roomId)
-                                    popDraft()
-                                    _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
-                                } catch (failure: Throwable) {
-                                    _viewEvents.post(MessageComposerViewEvents.SlashCommandResultError(failure))
-                                }
-                            }
-                            Unit
-                        }
-                        is ParsedCommand.UpgradeRoom -> {
                             _viewEvents.post(
-                                    MessageComposerViewEvents.ShowRoomUpgradeDialog(
-                                            parsedCommand.newVersion,
-                                            room.roomSummary()?.isPublic ?: false
-                                    )
+                                    MessageComposerViewEvents
+                                            .ShowMessage(stringProvider.getString(R.string.command_description_discard_session_not_handled))
                             )
-                            _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
-                            popDraft()
                         }
                     }
-                }
-                is SendMode.Edit -> {
-                    // is original event a reply?
-                    val relationContent = state.sendMode.timelineEvent.getRelationContent()
-                    val inReplyTo = if (state.rootThreadEventId != null) {
-                        // Thread event
-                        if (relationContent?.shouldRenderInThread() == true) {
-                            // Reply within a thread event
-                            relationContent.inReplyTo?.eventId
-                        } else {
-                            // Normal thread event
-                            null
-                        }
-                    } else {
-                        // Normal event
-                        relationContent?.inReplyTo?.eventId
-                    }
-
-                    if (inReplyTo != null) {
-                        // TODO check if same content?
-                        room.getTimelineEvent(inReplyTo)?.let {
-                            room.relationService().editReply(state.sendMode.timelineEvent, it, action.text.toString())
-                        }
-                    } else {
-                        val messageContent = state.sendMode.timelineEvent.getLastMessageContent()
-                        val existingBody = messageContent?.body ?: ""
-                        if (existingBody != action.text) {
-                            room.relationService().editTextMessage(
-                                    state.sendMode.timelineEvent,
-                                    messageContent?.msgType ?: MessageType.MSGTYPE_TEXT,
-                                    action.text,
-                                    action.autoMarkdown
-                            )
-                        } else {
-                            Timber.w("Same message content, do not send edition")
+                    is ParsedCommand.CreateSpace -> {
+                        _viewEvents.post(MessageComposerViewEvents.SlashCommandLoading)
+                        withContext(coroutineDispatchers.io) {
+                            try {
+                                val params = CreateSpaceParams().apply {
+                                    name = parsedCommand.name
+                                    invitedUserIds.addAll(parsedCommand.invitees)
+                                }
+                                val spaceId = session.spaceService().createSpace(params)
+                                session.spaceService().getSpace(spaceId)
+                                        ?.addChildren(
+                                                state.roomId,
+                                                null,
+                                                null,
+                                                true
+                                        )
+                                popDraft()
+                                _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
+                            } catch (failure: Throwable) {
+                                _viewEvents.post(MessageComposerViewEvents.SlashCommandResultError(failure))
+                            }
                         }
                     }
-                    _viewEvents.post(MessageComposerViewEvents.MessageSent)
-                    popDraft()
-                }
-                is SendMode.Quote -> {
-                    room.sendService().sendQuotedTextMessage(
-                            quotedEvent = state.sendMode.timelineEvent,
-                            text = action.text.toString(),
-                            autoMarkdown = action.autoMarkdown,
-                            rootThreadEventId = state.rootThreadEventId
-                    )
-                    _viewEvents.post(MessageComposerViewEvents.MessageSent)
-                    popDraft()
-                }
-                is SendMode.Reply -> {
-                    val timelineEvent = state.sendMode.timelineEvent
-                    val showInThread = state.sendMode.timelineEvent.root.isThread() && state.rootThreadEventId == null
-                    // If threads are disabled this will make the fallback replies visible to clients with threads enabled
-                    val rootThreadEventId = if (showInThread) timelineEvent.root.getRootThreadEventId() else null
-                    state.rootThreadEventId?.let {
-                        room.relationService().replyInThread(
-                                rootThreadEventId = it,
-                                replyInThreadText = action.text.toString(),
-                                autoMarkdown = action.autoMarkdown,
-                                eventReplied = timelineEvent
+                    is ParsedCommand.AddToSpace -> {
+                        _viewEvents.post(MessageComposerViewEvents.SlashCommandLoading)
+                        withContext(coroutineDispatchers.io) {
+                            try {
+                                session.spaceService().getSpace(parsedCommand.spaceId)
+                                        ?.addChildren(
+                                                room.await().roomId,
+                                                null,
+                                                null,
+                                                false
+                                        )
+                                popDraft()
+                                _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
+                            } catch (failure: Throwable) {
+                                _viewEvents.post(MessageComposerViewEvents.SlashCommandResultError(failure))
+                            }
+                        }
+                    }
+                    is ParsedCommand.JoinSpace -> {
+                        _viewEvents.post(MessageComposerViewEvents.SlashCommandLoading)
+                        withContext(coroutineDispatchers.io) {
+                            try {
+                                session.spaceService().joinSpace(parsedCommand.spaceIdOrAlias)
+                                popDraft()
+                                _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
+                            } catch (failure: Throwable) {
+                                _viewEvents.post(MessageComposerViewEvents.SlashCommandResultError(failure))
+                            }
+                        }
+                    }
+                    is ParsedCommand.LeaveRoom -> {
+                        withContext(coroutineDispatchers.io) {
+                            try {
+                                session.roomService().leaveRoom(parsedCommand.roomId)
+                                popDraft()
+                                _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
+                            } catch (failure: Throwable) {
+                                _viewEvents.post(MessageComposerViewEvents.SlashCommandResultError(failure))
+                            }
+                        }
+                    }
+                    is ParsedCommand.UpgradeRoom -> {
+                        _viewEvents.post(
+                                MessageComposerViewEvents.ShowRoomUpgradeDialog(
+                                        parsedCommand.newVersion,
+                                        room.await().awaitRoomSummary()?.isPublic ?: false
+                                )
                         )
-                    } ?: room.relationService().replyToMessage(
-                            eventReplied = timelineEvent,
-                            replyText = action.text.toString(),
-                            autoMarkdown = action.autoMarkdown,
-                            showInThread = showInThread,
-                            rootThreadEventId = rootThreadEventId
-                    )
+                        _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
+                        popDraft()
+                    }
+                }
+            }
+            is SendMode.Edit -> {
+                // is original event a reply?
+                val relationContent = state.sendMode.timelineEvent.getRelationContent()
+                val inReplyTo = if (state.rootThreadEventId != null) {
+                    // Thread event
+                    if (relationContent?.shouldRenderInThread() == true) {
+                        // Reply within a thread event
+                        relationContent.inReplyTo?.eventId
+                    } else {
+                        // Normal thread event
+                        null
+                    }
+                } else {
+                    // Normal event
+                    relationContent?.inReplyTo?.eventId
+                }
 
-                    _viewEvents.post(MessageComposerViewEvents.MessageSent)
-                    popDraft()
+                if (inReplyTo != null) {
+                    // TODO check if same content?
+                    room.await().getTimelineEvent(inReplyTo)?.let {
+                        room.await().relationService().editReply(state.sendMode.timelineEvent, it, action.text.toString())
+                    }
+                } else {
+                    val messageContent = state.sendMode.timelineEvent.getLastMessageContent()
+                    val existingBody = messageContent?.body ?: ""
+                    if (existingBody != action.text) {
+                        room.await().relationService().editTextMessage(
+                                state.sendMode.timelineEvent,
+                                messageContent?.msgType ?: MessageType.MSGTYPE_TEXT,
+                                action.text,
+                                action.autoMarkdown
+                        )
+                    } else {
+                        Timber.w("Same message content, do not send edition")
+                    }
                 }
-                is SendMode.Voice -> {
-                    // do nothing
-                }
+                _viewEvents.post(MessageComposerViewEvents.MessageSent)
+                popDraft()
+            }
+            is SendMode.Quote -> {
+                room.await().sendService().sendQuotedTextMessage(
+                        quotedEvent = state.sendMode.timelineEvent,
+                        text = action.text.toString(),
+                        autoMarkdown = action.autoMarkdown,
+                        rootThreadEventId = state.rootThreadEventId
+                )
+                _viewEvents.post(MessageComposerViewEvents.MessageSent)
+                popDraft()
+            }
+            is SendMode.Reply -> {
+                val timelineEvent = state.sendMode.timelineEvent
+                val showInThread = state.sendMode.timelineEvent.root.isThread() && state.rootThreadEventId == null
+                // If threads are disabled this will make the fallback replies visible to clients with threads enabled
+                val rootThreadEventId = if (showInThread) timelineEvent.root.getRootThreadEventId() else null
+                state.rootThreadEventId?.let {
+                    room.await().relationService().replyInThread(
+                            rootThreadEventId = it,
+                            replyInThreadText = action.text.toString(),
+                            autoMarkdown = action.autoMarkdown,
+                            eventReplied = timelineEvent
+                    )
+                } ?: room.await().relationService().replyToMessage(
+                        eventReplied = timelineEvent,
+                        replyText = action.text.toString(),
+                        autoMarkdown = action.autoMarkdown,
+                        showInThread = showInThread,
+                        rootThreadEventId = rootThreadEventId
+                )
+
+                _viewEvents.post(MessageComposerViewEvents.MessageSent)
+                popDraft()
+            }
+            is SendMode.Voice -> {
+                // do nothing
             }
         }
     }
 
-    private fun popDraft() = withState {
-        if (it.sendMode is SendMode.Regular && it.sendMode.fromSharing) {
+    private suspend fun popDraft() = withContext(coroutineDispatchers.computation) {
+        val state = awaitState()
+        if (state.sendMode is SendMode.Regular && state.sendMode.fromSharing) {
             // If we were sharing, we want to get back our last value from draft
             loadDraftIfAny()
         } else {
             // Otherwise we clear the composer and remove the draft from db
             setState { copy(sendMode = SendMode.Regular("", false)) }
-            viewModelScope.launch {
-                room.draftService().deleteDraft()
-            }
+            room.await().draftService().deleteDraft()
         }
     }
 
-    private fun loadDraftIfAny() {
-        val currentDraft = room.draftService().getDraft()
+    private suspend fun loadDraftIfAny() {
+        val currentDraft = withContext(coroutineDispatchers.computation) {
+            room.await().draftService().getDraft()
+        }
+        val sendMode = when (currentDraft) {
+            is UserDraft.Regular -> SendMode.Regular(currentDraft.content, false)
+            is UserDraft.Quote -> {
+                room.await().getTimelineEvent(currentDraft.linkedEventId)?.let { timelineEvent ->
+                    SendMode.Quote(timelineEvent, currentDraft.content)
+                }
+            }
+            is UserDraft.Reply -> {
+                room.await().getTimelineEvent(currentDraft.linkedEventId)?.let { timelineEvent ->
+                    SendMode.Reply(timelineEvent, currentDraft.content)
+                }
+            }
+            is UserDraft.Edit -> {
+                room.await().getTimelineEvent(currentDraft.linkedEventId)?.let { timelineEvent ->
+                    SendMode.Edit(timelineEvent, currentDraft.content)
+                }
+            }
+            is UserDraft.Voice -> SendMode.Voice(currentDraft.content)
+            else -> null
+        } ?: SendMode.Regular("", fromSharing = false)
         setState {
             copy(
                     // Create a sendMode from a draft and retrieve the TimelineEvent
-                    sendMode = when (currentDraft) {
-                        is UserDraft.Regular -> SendMode.Regular(currentDraft.content, false)
-                        is UserDraft.Quote -> {
-                            room.getTimelineEvent(currentDraft.linkedEventId)?.let { timelineEvent ->
-                                SendMode.Quote(timelineEvent, currentDraft.content)
-                            }
-                        }
-                        is UserDraft.Reply -> {
-                            room.getTimelineEvent(currentDraft.linkedEventId)?.let { timelineEvent ->
-                                SendMode.Reply(timelineEvent, currentDraft.content)
-                            }
-                        }
-                        is UserDraft.Edit -> {
-                            room.getTimelineEvent(currentDraft.linkedEventId)?.let { timelineEvent ->
-                                SendMode.Edit(timelineEvent, currentDraft.content)
-                            }
-                        }
-                        is UserDraft.Voice -> SendMode.Voice(currentDraft.content)
-                        else -> null
-                    } ?: SendMode.Regular("", fromSharing = false)
+                    sendMode = sendMode
             )
         }
     }
 
-    private fun handleUserIsTyping(action: MessageComposerAction.UserIsTyping) {
+    private suspend fun handleUserIsTyping(action: MessageComposerAction.UserIsTyping) {
         if (vectorPreferences.sendTypingNotifs()) {
             if (action.isTyping) {
-                room.typingService().userIsTyping()
+                room.await().typingService().userIsTyping()
             } else {
-                room.typingService().userStopsTyping()
+                room.await().typingService().userStopsTyping()
             }
         }
     }
 
-    private fun sendChatEffect(sendChatEffect: ParsedCommand.SendChatEffect) {
+    private suspend fun sendChatEffect(sendChatEffect: ParsedCommand.SendChatEffect) {
         // If message is blank, convert to an emote, with default message
         if (sendChatEffect.message.isBlank()) {
             val defaultMessage = stringProvider.getString(
@@ -621,27 +628,25 @@ class MessageComposerViewModel @AssistedInject constructor(
                         ChatEffect.SNOWFALL -> R.string.default_message_emote_snow
                     }
             )
-            room.sendService().sendTextMessage(defaultMessage, MessageType.MSGTYPE_EMOTE)
+            room.await().sendService().sendTextMessage(defaultMessage, MessageType.MSGTYPE_EMOTE)
         } else {
-            room.sendService().sendTextMessage(sendChatEffect.message, sendChatEffect.chatEffect.toMessageType())
+            room.await().sendService().sendTextMessage(sendChatEffect.message, sendChatEffect.chatEffect.toMessageType())
         }
     }
 
-    private fun handleJoinToAnotherRoomSlashCommand(command: ParsedCommand.JoinRoom) {
-        viewModelScope.launch {
-            try {
-                session.roomService().joinRoom(command.roomAlias, command.reason, emptyList())
-            } catch (failure: Throwable) {
-                _viewEvents.post(MessageComposerViewEvents.SlashCommandResultError(failure))
-                return@launch
-            }
-            session.getRoomSummary(command.roomAlias)
-                    ?.also { analyticsTracker.capture(it.toAnalyticsJoinedRoom(JoinedRoom.Trigger.SlashCommand)) }
-                    ?.roomId
-                    ?.let {
-                        _viewEvents.post(MessageComposerViewEvents.JoinRoomCommandSuccess(it))
-                    }
+    private suspend fun handleJoinToAnotherRoomSlashCommand(command: ParsedCommand.JoinRoom) {
+        try {
+            session.roomService().joinRoom(command.roomAlias, command.reason, emptyList())
+        } catch (failure: Throwable) {
+            _viewEvents.post(MessageComposerViewEvents.SlashCommandResultError(failure))
+            return
         }
+        session.getRoomSummary(command.roomAlias)
+                ?.also { analyticsTracker.capture(it.toAnalyticsJoinedRoom(JoinedRoom.Trigger.SlashCommand)) }
+                ?.roomId
+                ?.let {
+                    _viewEvents.post(MessageComposerViewEvents.JoinRoomCommandSuccess(it))
+                }
     }
 
     private fun legacyRiotQuoteText(quotedText: String?, myText: String): String {
@@ -664,26 +669,26 @@ class MessageComposerViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleChangeTopicSlashCommand(changeTopic: ParsedCommand.ChangeTopic) {
+    private suspend fun handleChangeTopicSlashCommand(changeTopic: ParsedCommand.ChangeTopic) {
         launchSlashCommandFlowSuspendable(changeTopic) {
-            room.stateService().updateTopic(changeTopic.topic)
+            room.await().stateService().updateTopic(changeTopic.topic)
         }
     }
 
-    private fun handleInviteSlashCommand(invite: ParsedCommand.Invite) {
+    private suspend fun handleInviteSlashCommand(invite: ParsedCommand.Invite) {
         launchSlashCommandFlowSuspendable(invite) {
-            room.membershipService().invite(invite.userId, invite.reason)
+            room.await().membershipService().invite(invite.userId, invite.reason)
         }
     }
 
-    private fun handleInvite3pidSlashCommand(invite: ParsedCommand.Invite3Pid) {
+    private suspend fun handleInvite3pidSlashCommand(invite: ParsedCommand.Invite3Pid) {
         launchSlashCommandFlowSuspendable(invite) {
-            room.membershipService().invite3pid(invite.threePid)
+            room.await().membershipService().invite3pid(invite.threePid)
         }
     }
 
-    private fun handleSetUserPowerLevel(setUserPowerLevel: ParsedCommand.SetUserPowerLevel) {
-        val newPowerLevelsContent = room.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
+    private suspend fun handleSetUserPowerLevel(setUserPowerLevel: ParsedCommand.SetUserPowerLevel) {
+        val newPowerLevelsContent = room.await().getStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
                 ?.content
                 ?.toModel<PowerLevelsContent>()
                 ?.setUserPowerLevel(setUserPowerLevel.userId, setUserPowerLevel.powerLevel)
@@ -691,21 +696,21 @@ class MessageComposerViewModel @AssistedInject constructor(
                 ?: return
 
         launchSlashCommandFlowSuspendable(setUserPowerLevel) {
-            room.stateService().sendStateEvent(EventType.STATE_ROOM_POWER_LEVELS, stateKey = "", newPowerLevelsContent)
+            room.await().stateService().sendStateEvent(EventType.STATE_ROOM_POWER_LEVELS, stateKey = "", newPowerLevelsContent)
         }
     }
 
-    private fun handleChangeDisplayNameSlashCommand(changeDisplayName: ParsedCommand.ChangeDisplayName) {
+    private suspend fun handleChangeDisplayNameSlashCommand(changeDisplayName: ParsedCommand.ChangeDisplayName) {
         launchSlashCommandFlowSuspendable(changeDisplayName) {
             session.profileService().setDisplayName(session.myUserId, changeDisplayName.displayName)
         }
     }
 
-    private fun handlePartSlashCommand(command: ParsedCommand.PartRoom) {
+    private suspend fun handlePartSlashCommand(command: ParsedCommand.PartRoom) {
         launchSlashCommandFlowSuspendable(command) {
             if (command.roomAlias == null) {
                 // Leave the current room
-                room
+                room.await()
             } else {
                 session.getRoomSummary(roomIdOrAlias = command.roomAlias)
                         ?.roomId
@@ -717,65 +722,65 @@ class MessageComposerViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleRemoveSlashCommand(removeUser: ParsedCommand.RemoveUser) {
+    private suspend fun handleRemoveSlashCommand(removeUser: ParsedCommand.RemoveUser) {
         launchSlashCommandFlowSuspendable(removeUser) {
-            room.membershipService().remove(removeUser.userId, removeUser.reason)
+            room.await().membershipService().remove(removeUser.userId, removeUser.reason)
         }
     }
 
-    private fun handleBanSlashCommand(ban: ParsedCommand.BanUser) {
+    private suspend fun handleBanSlashCommand(ban: ParsedCommand.BanUser) {
         launchSlashCommandFlowSuspendable(ban) {
-            room.membershipService().ban(ban.userId, ban.reason)
+            room.await().membershipService().ban(ban.userId, ban.reason)
         }
     }
 
-    private fun handleUnbanSlashCommand(unban: ParsedCommand.UnbanUser) {
+    private suspend fun handleUnbanSlashCommand(unban: ParsedCommand.UnbanUser) {
         launchSlashCommandFlowSuspendable(unban) {
-            room.membershipService().unban(unban.userId, unban.reason)
+            room.await().membershipService().unban(unban.userId, unban.reason)
         }
     }
 
-    private fun handleChangeRoomNameSlashCommand(changeRoomName: ParsedCommand.ChangeRoomName) {
+    private suspend fun handleChangeRoomNameSlashCommand(changeRoomName: ParsedCommand.ChangeRoomName) {
         launchSlashCommandFlowSuspendable(changeRoomName) {
-            room.stateService().updateName(changeRoomName.name)
+            room.await().stateService().updateName(changeRoomName.name)
         }
     }
 
-    private fun getMyRoomMemberContent(): RoomMemberContent? {
-        return room.getStateEvent(EventType.STATE_ROOM_MEMBER, QueryStringValue.Equals(session.myUserId))
+    private suspend fun getMyRoomMemberContent(): RoomMemberContent? {
+        return room.await().getStateEvent(EventType.STATE_ROOM_MEMBER, QueryStringValue.Equals(session.myUserId))
                 ?.content
                 ?.toModel<RoomMemberContent>()
     }
 
-    private fun handleChangeDisplayNameForRoomSlashCommand(changeDisplayName: ParsedCommand.ChangeDisplayNameForRoom) {
+    private suspend fun handleChangeDisplayNameForRoomSlashCommand(changeDisplayName: ParsedCommand.ChangeDisplayNameForRoom) {
         launchSlashCommandFlowSuspendable(changeDisplayName) {
             getMyRoomMemberContent()
                     ?.copy(displayName = changeDisplayName.displayName)
                     ?.toContent()
                     ?.let {
-                        room.stateService().sendStateEvent(EventType.STATE_ROOM_MEMBER, session.myUserId, it)
+                        room.await().stateService().sendStateEvent(EventType.STATE_ROOM_MEMBER, session.myUserId, it)
                     }
         }
     }
 
-    private fun handleChangeRoomAvatarSlashCommand(changeAvatar: ParsedCommand.ChangeRoomAvatar) {
+    private suspend fun handleChangeRoomAvatarSlashCommand(changeAvatar: ParsedCommand.ChangeRoomAvatar) {
         launchSlashCommandFlowSuspendable(changeAvatar) {
-            room.stateService().sendStateEvent(EventType.STATE_ROOM_AVATAR, stateKey = "", RoomAvatarContent(changeAvatar.url).toContent())
+            room.await().stateService().sendStateEvent(EventType.STATE_ROOM_AVATAR, stateKey = "", RoomAvatarContent(changeAvatar.url).toContent())
         }
     }
 
-    private fun handleChangeAvatarForRoomSlashCommand(changeAvatar: ParsedCommand.ChangeAvatarForRoom) {
+    private suspend fun handleChangeAvatarForRoomSlashCommand(changeAvatar: ParsedCommand.ChangeAvatarForRoom) {
         launchSlashCommandFlowSuspendable(changeAvatar) {
             getMyRoomMemberContent()
                     ?.copy(avatarUrl = changeAvatar.url)
                     ?.toContent()
                     ?.let {
-                        room.stateService().sendStateEvent(EventType.STATE_ROOM_MEMBER, session.myUserId, it)
+                        room.await().stateService().sendStateEvent(EventType.STATE_ROOM_MEMBER, session.myUserId, it)
                     }
         }
     }
 
-    private fun handleIgnoreSlashCommand(ignore: ParsedCommand.IgnoreUser) {
+    private suspend fun handleIgnoreSlashCommand(ignore: ParsedCommand.IgnoreUser) {
         launchSlashCommandFlowSuspendable(ignore) {
             session.userService().ignoreUserIds(listOf(ignore.userId))
         }
@@ -785,14 +790,14 @@ class MessageComposerViewModel @AssistedInject constructor(
         _viewEvents.post(MessageComposerViewEvents.SlashCommandConfirmationRequest(unignore))
     }
 
-    private fun handleSlashCommandConfirmed(action: MessageComposerAction.SlashCommandConfirmed) {
+    private suspend fun handleSlashCommandConfirmed(action: MessageComposerAction.SlashCommandConfirmed) {
         when (action.parsedCommand) {
             is ParsedCommand.UnignoreUser -> handleUnignoreSlashCommandConfirmed(action.parsedCommand)
             else -> TODO("Not handled yet")
         }
     }
 
-    private fun handleUnignoreSlashCommandConfirmed(unignore: ParsedCommand.UnignoreUser) {
+    private suspend fun handleUnignoreSlashCommandConfirmed(unignore: ParsedCommand.UnignoreUser) {
         launchSlashCommandFlowSuspendable(unignore) {
             session.userService().unIgnoreUserIds(listOf(unignore.userId))
         }
@@ -802,7 +807,7 @@ class MessageComposerViewModel @AssistedInject constructor(
         _viewEvents.post(MessageComposerViewEvents.OpenRoomMemberProfile(whois.userId))
     }
 
-    private fun sendPrefixedMessage(prefix: String, message: CharSequence, rootThreadEventId: String?) {
+    private suspend fun sendPrefixedMessage(prefix: String, message: CharSequence, rootThreadEventId: String?) {
         val sequence = buildString {
             append(prefix)
             if (message.isNotEmpty()) {
@@ -811,52 +816,52 @@ class MessageComposerViewModel @AssistedInject constructor(
             }
         }
         rootThreadEventId?.let {
-            room.relationService().replyInThread(it, sequence)
-        } ?: room.sendService().sendTextMessage(sequence)
+            room.await().relationService().replyInThread(it, sequence)
+        } ?: room.await().sendService().sendTextMessage(sequence)
     }
 
     /**
      * Convert a send mode to a draft and save the draft.
      */
-    private fun handleSaveTextDraft(draft: String) = withState {
+    private suspend fun handleSaveTextDraft(draft: String) = withState {
         session.coroutineScope.launch {
             when {
                 it.sendMode is SendMode.Regular && !it.sendMode.fromSharing -> {
                     setState { copy(sendMode = it.sendMode.copy(text = draft)) }
-                    room.draftService().saveDraft(UserDraft.Regular(draft))
+                    room.await().draftService().saveDraft(UserDraft.Regular(draft))
                 }
                 it.sendMode is SendMode.Reply -> {
                     setState { copy(sendMode = it.sendMode.copy(text = draft)) }
-                    room.draftService().saveDraft(UserDraft.Reply(it.sendMode.timelineEvent.root.eventId!!, draft))
+                    room.await().draftService().saveDraft(UserDraft.Reply(it.sendMode.timelineEvent.root.eventId!!, draft))
                 }
                 it.sendMode is SendMode.Quote -> {
                     setState { copy(sendMode = it.sendMode.copy(text = draft)) }
-                    room.draftService().saveDraft(UserDraft.Quote(it.sendMode.timelineEvent.root.eventId!!, draft))
+                    room.await().draftService().saveDraft(UserDraft.Quote(it.sendMode.timelineEvent.root.eventId!!, draft))
                 }
                 it.sendMode is SendMode.Edit -> {
                     setState { copy(sendMode = it.sendMode.copy(text = draft)) }
-                    room.draftService().saveDraft(UserDraft.Edit(it.sendMode.timelineEvent.root.eventId!!, draft))
+                    room.await().draftService().saveDraft(UserDraft.Edit(it.sendMode.timelineEvent.root.eventId!!, draft))
                 }
             }
         }
     }
 
-    private fun handleStartRecordingVoiceMessage() {
+    private suspend fun handleStartRecordingVoiceMessage() {
         try {
-            audioMessageHelper.startRecording(room.roomId)
+            audioMessageHelper.startRecording(room.await().roomId)
         } catch (failure: Throwable) {
             _viewEvents.post(MessageComposerViewEvents.VoicePlaybackOrRecordingFailure(failure))
         }
     }
 
-    private fun handleEndRecordingVoiceMessage(isCancelled: Boolean, rootThreadEventId: String? = null) {
+    private suspend fun handleEndRecordingVoiceMessage(isCancelled: Boolean, rootThreadEventId: String? = null) {
         audioMessageHelper.stopPlayback()
         if (isCancelled) {
             audioMessageHelper.deleteRecording()
         } else {
             audioMessageHelper.stopRecording()?.let { audioType ->
                 if (audioType.duration > 1000) {
-                    room.sendService().sendMedia(
+                    room.await().sendService().sendMedia(
                             attachment = audioType.toContentAttachmentData(isVoiceMessage = true),
                             compressBeforeSending = false,
                             roomIds = emptySet(),
@@ -870,8 +875,8 @@ class MessageComposerViewModel @AssistedInject constructor(
         handleEnterRegularMode(MessageComposerAction.EnterRegularMode(text = "", fromSharing = false))
     }
 
-    private fun handlePlayOrPauseVoicePlayback(action: MessageComposerAction.PlayOrPauseVoicePlayback) {
-        viewModelScope.launch(Dispatchers.IO) {
+    private suspend fun handlePlayOrPauseVoicePlayback(action: MessageComposerAction.PlayOrPauseVoicePlayback) {
+        withContext(coroutineDispatchers.io) {
             try {
                 // Download can fail
                 val audioFile = session.fileService().downloadFile(action.messageAudioContent)
@@ -913,16 +918,15 @@ class MessageComposerViewModel @AssistedInject constructor(
         audioMessageHelper.movePlaybackTo(action.eventId, action.percentage, action.duration)
     }
 
-    private fun handleEntersBackground(composerText: String) {
+    private suspend fun handleEntersBackground(composerText: String) {
         // Always stop all voice actions. It may be playing in timeline or active recording
         val playingAudioContent = audioMessageHelper.stopAllVoiceActions(deleteRecord = false)
-
-        val isVoiceRecording = com.airbnb.mvrx.withState(this) { it.isVoiceRecording }
+        val isVoiceRecording = awaitState().isVoiceRecording
         if (isVoiceRecording) {
-            viewModelScope.launch {
+            withContext(coroutineDispatchers.io) {
                 playingAudioContent?.toContentAttachmentData()?.let { voiceDraft ->
                     val content = voiceDraft.toJsonString()
-                    room.draftService().saveDraft(UserDraft.Voice(content))
+                    room.await().draftService().saveDraft(UserDraft.Voice(content))
                     setState { copy(sendMode = SendMode.Voice(content)) }
                 }
             }
@@ -931,18 +935,16 @@ class MessageComposerViewModel @AssistedInject constructor(
         }
     }
 
-    private fun launchSlashCommandFlowSuspendable(parsedCommand: ParsedCommand, block: suspend () -> Unit) {
+    private suspend fun launchSlashCommandFlowSuspendable(parsedCommand: ParsedCommand, block: suspend () -> Unit) {
         _viewEvents.post(MessageComposerViewEvents.SlashCommandLoading)
-        viewModelScope.launch {
-            val event = try {
-                block()
-                popDraft()
-                MessageComposerViewEvents.SlashCommandResultOk(parsedCommand)
-            } catch (failure: Throwable) {
-                MessageComposerViewEvents.SlashCommandResultError(failure)
-            }
-            _viewEvents.post(event)
+        val event = try {
+            block()
+            popDraft()
+            MessageComposerViewEvents.SlashCommandResultOk(parsedCommand)
+        } catch (failure: Throwable) {
+            MessageComposerViewEvents.SlashCommandResultError(failure)
         }
+        _viewEvents.post(event)
     }
 
     @AssistedFactory

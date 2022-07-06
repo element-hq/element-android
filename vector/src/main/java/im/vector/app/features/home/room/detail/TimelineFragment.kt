@@ -213,6 +213,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.billcarsonfr.jsonviewer.JSonViewerDialog
 import org.commonmark.parser.Parser
@@ -381,18 +382,20 @@ class TimelineFragment @Inject constructor(
         )
         keyboardStateUtils = KeyboardStateUtils(requireActivity())
         lazyLoadedViews.bind(views)
-        setupToolbar(views.roomToolbar)
-                .allowBack()
-        setupRecyclerView()
-        setupComposer()
-        setupNotificationView()
-        setupJumpToReadMarkerView()
-        setupActiveCallView()
-        setupJumpToBottomView()
-        setupEmojiButton()
-        setupRemoveJitsiWidgetView()
-        setupVoiceMessageView()
-        setupLiveLocationIndicator()
+        viewLifecycleOwner.lifecycleScope.launch {
+            setupToolbar(views.roomToolbar)
+                    .allowBack()
+            setupRecyclerView()
+            setupComposer()
+            setupNotificationView()
+            setupJumpToReadMarkerView()
+            setupActiveCallView()
+            setupJumpToBottomView()
+            setupEmojiButton()
+            setupRemoveJitsiWidgetView()
+            setupVoiceMessageView()
+            setupLiveLocationIndicator()
+        }
 
         views.includeRoomToolbar.roomToolbarContentView.debouncedClicks {
             navigator.openRoomProfile(requireActivity(), timelineArgs.roomId)
@@ -979,16 +982,17 @@ class TimelineFragment @Inject constructor(
     private fun setupJumpToBottomView() {
         views.jumpToBottomView.visibility = View.INVISIBLE
         views.jumpToBottomView.debouncedClicks {
-            timelineViewModel.handle(RoomDetailAction.ExitTrackingUnreadMessagesState)
-            views.jumpToBottomView.visibility = View.INVISIBLE
-            if (!timelineViewModel.timeline.isLive) {
-                scrollOnNewMessageCallback.forceScrollOnNextUpdate()
-                timelineViewModel.timeline.restartWithEventId(null)
-            } else {
-                layoutManager.scrollToPosition(0)
+            viewLifecycleOwner.lifecycleScope.launch {
+                timelineViewModel.handle(RoomDetailAction.ExitTrackingUnreadMessagesState)
+                views.jumpToBottomView.visibility = View.INVISIBLE
+                if (!timelineViewModel.timeline.await().isLive) {
+                    scrollOnNewMessageCallback.forceScrollOnNextUpdate()
+                    timelineViewModel.timeline.await().restartWithEventId(null)
+                } else {
+                    layoutManager.scrollToPosition(0)
+                }
             }
         }
-
         jumpToBottomViewVisibilityManager = JumpToBottomViewVisibilityManager(
                 views.jumpToBottomView,
                 debouncer,
@@ -1216,12 +1220,14 @@ class TimelineFragment @Inject constructor(
     }
 
     private fun handleSearchAction() {
-        navigator.openSearch(
-                context = requireContext(),
-                roomId = timelineArgs.roomId,
-                roomDisplayName = timelineViewModel.getRoomSummary()?.displayName,
-                roomAvatarUrl = timelineViewModel.getRoomSummary()?.avatarUrl
-        )
+        viewLifecycleOwner.lifecycleScope.launch {
+            navigator.openSearch(
+                    context = requireContext(),
+                    roomId = timelineArgs.roomId,
+                    roomDisplayName = timelineViewModel.getRoomSummary()?.displayName,
+                    roomAvatarUrl = timelineViewModel.getRoomSummary()?.avatarUrl
+            )
+        }
     }
 
     private fun displayDisabledIntegrationDialog() {
@@ -1416,9 +1422,9 @@ class TimelineFragment @Inject constructor(
 
 // PRIVATE METHODS *****************************************************************************
 
-    private fun setupRecyclerView() {
+    private suspend fun setupRecyclerView() {
         timelineEventController.callback = this
-        timelineEventController.timeline = timelineViewModel.timeline
+        timelineEventController.timeline = timelineViewModel.timeline.await()
 
         views.timelineRecyclerView.trackItemsVisibilityChange()
         layoutManager = object : LinearLayoutManager(context, RecyclerView.VERTICAL, true) {
@@ -2421,7 +2427,9 @@ class TimelineFragment @Inject constructor(
             views.composerLayout.views.composerEditText.setText(Command.EMOTE.command + " ")
             views.composerLayout.views.composerEditText.setSelection(Command.EMOTE.command.length + 1)
         } else {
-            val roomMember = timelineViewModel.getMember(userId)
+            val roomMember = runBlocking {
+                timelineViewModel.getMember(userId)
+            }
             // TODO move logic outside of fragment
             (roomMember?.displayName ?: userId)
                     .let { sanitizeDisplayName(it) }
@@ -2491,18 +2499,21 @@ class TimelineFragment @Inject constructor(
      * using the ThreadsActivity.
      */
     private fun navigateToThreadTimeline(rootThreadEventId: String, startsThread: Boolean = false, showKeyboard: Boolean = false) {
-        analyticsTracker.capture(Interaction.Name.MobileRoomThreadSummaryItem.toAnalyticsInteraction())
-        context?.let {
-            val roomThreadDetailArgs = ThreadTimelineArgs(
-                    startsThread = startsThread,
-                    roomId = timelineArgs.roomId,
-                    displayName = timelineViewModel.getRoomSummary()?.displayName,
-                    avatarUrl = timelineViewModel.getRoomSummary()?.avatarUrl,
-                    roomEncryptionTrustLevel = timelineViewModel.getRoomSummary()?.roomEncryptionTrustLevel,
-                    rootThreadEventId = rootThreadEventId,
-                    showKeyboard = showKeyboard
-            )
-            navigator.openThread(it, roomThreadDetailArgs)
+        viewLifecycleOwner.lifecycleScope.launch {
+            analyticsTracker.capture(Interaction.Name.MobileRoomThreadSummaryItem.toAnalyticsInteraction())
+            context?.let {
+                val roomSummary = timelineViewModel.awaitState().asyncRoomSummary()
+                val roomThreadDetailArgs = ThreadTimelineArgs(
+                        startsThread = startsThread,
+                        roomId = timelineArgs.roomId,
+                        displayName = roomSummary?.displayName,
+                        avatarUrl = roomSummary?.avatarUrl,
+                        roomEncryptionTrustLevel = roomSummary?.roomEncryptionTrustLevel,
+                        rootThreadEventId = rootThreadEventId,
+                        showKeyboard = showKeyboard
+                )
+                navigator.openThread(it, roomThreadDetailArgs)
+            }
         }
     }
 
@@ -2530,15 +2541,18 @@ class TimelineFragment @Inject constructor(
      * using the ThreadsActivity.
      */
     private fun navigateToThreadList() {
-        analyticsTracker.capture(Interaction.Name.MobileRoomThreadListButton.toAnalyticsInteraction())
-        context?.let {
-            val roomThreadDetailArgs = ThreadTimelineArgs(
-                    roomId = timelineArgs.roomId,
-                    displayName = timelineViewModel.getRoomSummary()?.displayName,
-                    roomEncryptionTrustLevel = timelineViewModel.getRoomSummary()?.roomEncryptionTrustLevel,
-                    avatarUrl = timelineViewModel.getRoomSummary()?.avatarUrl
-            )
-            navigator.openThreadList(it, roomThreadDetailArgs)
+        viewLifecycleOwner.lifecycleScope.launch {
+            analyticsTracker.capture(Interaction.Name.MobileRoomThreadListButton.toAnalyticsInteraction())
+            context?.let {
+                val roomSummary = timelineViewModel.awaitState().asyncRoomSummary()
+                val roomThreadDetailArgs = ThreadTimelineArgs(
+                        roomId = timelineArgs.roomId,
+                        displayName = roomSummary?.displayName,
+                        roomEncryptionTrustLevel = roomSummary?.roomEncryptionTrustLevel,
+                        avatarUrl = roomSummary?.avatarUrl
+                )
+                navigator.openThreadList(it, roomThreadDetailArgs)
+            }
         }
     }
 

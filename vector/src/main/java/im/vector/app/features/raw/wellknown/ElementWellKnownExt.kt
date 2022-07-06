@@ -47,7 +47,7 @@ fun ElementWellKnown?.getOutboundSessionKeySharingStrategyOrDefault(): OutboundS
 fun RawService.withElementWellKnown(
         coroutineScope: CoroutineScope,
         sessionParams: SessionParams,
-        block: ((ElementWellKnown?) -> Unit)
+        block: suspend ((ElementWellKnown?) -> Unit)
 ) = with(coroutineScope) {
     launch(Dispatchers.IO) {
         block(getElementWellknown(sessionParams))
