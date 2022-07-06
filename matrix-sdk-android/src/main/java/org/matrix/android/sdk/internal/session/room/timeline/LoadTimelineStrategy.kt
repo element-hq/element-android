@@ -36,7 +36,6 @@ import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
-import org.matrix.android.sdk.api.session.room.timeline.isReply
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.database.helper.addIfNecessary
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
@@ -249,21 +248,10 @@ internal class LoadTimelineStrategy constructor(
 
     fun buildSnapshot(): List<TimelineEvent> {
         val events = buildSendingEvents() + timelineChunk?.builtItems(includesNext = true, includesPrev = true).orEmpty()
-        val eventsUpdated = updateRepliedEventIfNeeded(events)
         return if (dependencies.timelineSettings.useLiveSenderInfo) {
-            eventsUpdated.map(this::applyLiveRoomState)
+            events.map(this::applyLiveRoomState)
         } else {
-            eventsUpdated
-        }
-    }
-
-    private fun updateRepliedEventIfNeeded(events: List<TimelineEvent>): List<TimelineEvent> {
-        return events.map {
-            if (it.isReply()) {
-                    createNewEncryptedRepliedEvent(it)?.let { newEvent ->
-                        it.copy(root = newEvent)
-                    } ?: it
-            } else it
+            events
         }
     }
 
@@ -285,13 +273,13 @@ internal class LoadTimelineStrategy constructor(
                     .bodyForReply(currentTimelineEvent.getLastMessageContent(), true).formattedText ?: ""
 
             timeLineEventEntity?.let { timelineEventEntity ->
-                    dependencies.localEchoEventFactory.createReplyTextEvent(
-                            roomId,
-                            dependencies.timelineEventMapper.map(timelineEventEntity),
-                            replyText,
-                            false,
-                            showInThread = false
-                    )
+                dependencies.localEchoEventFactory.createReplyTextEvent(
+                        roomId,
+                        dependencies.timelineEventMapper.map(timelineEventEntity),
+                        replyText,
+                        false,
+                        showInThread = false
+                )
             }
         }
     }
@@ -389,6 +377,8 @@ internal class LoadTimelineStrategy constructor(
                     initialEventId = mode.originEventId(),
                     onBuiltEvents = dependencies.onEventsUpdated,
                     onEventsDeleted = dependencies.onEventsDeleted,
+                    realm = dependencies.realm,
+                    localEchoEventFactory = dependencies.localEchoEventFactory
             )
         }
     }

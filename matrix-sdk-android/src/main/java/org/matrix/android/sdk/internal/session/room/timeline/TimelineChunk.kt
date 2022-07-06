@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.room.timeline
 
 import io.realm.OrderedCollectionChangeSet
 import io.realm.OrderedRealmCollectionChangeListener
+import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.RealmObjectChangeListener
 import io.realm.RealmQuery
@@ -26,10 +27,16 @@ import io.realm.Sort
 import kotlinx.coroutines.CompletableDeferred
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
+import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
+import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
+import org.matrix.android.sdk.api.session.room.timeline.isReply
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.database.mapper.EventMapper
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
@@ -37,12 +44,15 @@ import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
+import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.session.room.relation.threads.DefaultFetchThreadTimelineTask
 import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadTimelineTask
+import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
 import org.matrix.android.sdk.internal.session.sync.handler.room.ThreadsAwarenessHandler
 import timber.log.Timber
 import java.util.Collections
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicReference
 
 /**
  * This is a wrapper around a ChunkEntity in the database.
@@ -66,6 +76,8 @@ internal class TimelineChunk(
         private val initialEventId: String?,
         private val onBuiltEvents: (Boolean) -> Unit,
         private val onEventsDeleted: () -> Unit,
+        private val realm: AtomicReference<Realm>,
+        val localEchoEventFactory: LocalEchoEventFactory,
 ) {
 
     private val isLastForward = AtomicBoolean(chunkEntity.isLastForward)
@@ -413,7 +425,41 @@ internal class TimelineChunk(
             buildReadReceipts = timelineSettings.buildReadReceipts
     ).let {
         // eventually enhance with ui echo?
-        (uiEchoManager?.decorateEventWithReactionUiEcho(it) ?: it)
+        uiEchoManager?.decorateEventWithReactionUiEcho(it)
+
+        if (it.isReply()) {
+            createNewEncryptedRepliedEvent(it)?.let { newEvent ->
+                it.copy(root = newEvent)
+            } ?: it
+        } else  it
+    }
+
+    private fun createNewEncryptedRepliedEvent(currentTimelineEvent: TimelineEvent): Event? {
+        val relatesEventId = if (currentTimelineEvent.isEncrypted()) {
+            currentTimelineEvent.root.content.toModel<EncryptedEventContent>()?.relatesTo?.inReplyTo?.eventId
+        } else {
+            currentTimelineEvent.root.content.toModel<MessageContent>()?.relatesTo?.inReplyTo?.eventId
+        }
+        return relatesEventId?.let { eventId ->
+            val timeLineEventEntity = TimelineEventEntity.where(
+                    realm.get(),
+                    roomId,
+                    eventId
+            ).findFirst()
+
+            val replyText = localEchoEventFactory
+                    .bodyForReply(currentTimelineEvent.getLastMessageContent(), true).formattedText ?: ""
+
+            timeLineEventEntity?.let { timelineEventEntity ->
+                localEchoEventFactory.createReplyTextEvent(
+                        roomId,
+                        timelineEventMapper.map(timelineEventEntity),
+                        replyText,
+                        false,
+                        showInThread = false
+                )
+            }
+        }
     }
 
     /**
@@ -595,7 +641,9 @@ internal class TimelineChunk(
                 lightweightSettingsStorage = lightweightSettingsStorage,
                 initialEventId = null,
                 onBuiltEvents = this.onBuiltEvents,
-                onEventsDeleted = this.onEventsDeleted
+                onEventsDeleted = this.onEventsDeleted,
+                realm = realm,
+                localEchoEventFactory = localEchoEventFactory
         )
     }
 
