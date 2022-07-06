@@ -2125,7 +2125,7 @@
     <string name="search_hint_room_name">Поиск по имени</string>
     <string name="send_file_step_compressing_video">Сжатие видео %d%%</string>
     <string name="send_file_step_compressing_image">Сжатие изображения…</string>
-    <string name="give_feedback">Дать отзыв</string>
+    <string name="give_feedback">Оставить отзыв</string>
     <string name="feedback_failed">Не удалось отправить отзыв (%s)</string>
     <string name="feedback_sent">Спасибо, ваш отзыв успешно отправлен</string>
     <string name="you_may_contact_me">Вы можете связаться со мной, если у вас есть дополнительные вопросы</string>
@@ -2495,8 +2495,8 @@
     <string name="ftue_account_created_take_me_home">Домой</string>
     <string name="ftue_account_created_personalize">Персонализировать</string>
     <string name="beta">БЕТА</string>
-    <string name="send_feedback_threads_title">Обратная связь на бета-версию Обсуждений</string>
-    <string name="give_feedback_threads">Обратная связь</string>
+    <string name="send_feedback_threads_title">Отзыв на бета-версию Обсуждений</string>
+    <string name="give_feedback_threads">Оставить отзыв</string>
     <string name="beta_title_bottom_sheet_action">БЕТА</string>
     <string name="settings_presence_user_always_appears_offline_summary">Если включено, для других вы всегда будете выглядеть, как в офлайне, даже при использовании приложения.</string>
     <string name="settings_presence_user_always_appears_offline">Офлайн-режим</string>
@@ -2515,7 +2515,7 @@
     <string name="location_share_live_remaining_time">Осталось %1$s</string>
     <string name="live_location_bottom_sheet_last_updated_at">Обновлено %1$s назад</string>
     <string name="live_location_bottom_sheet_stop_sharing">Остановить трансляцию</string>
-    <string name="labs_enable_live_location">Включить отправку трансляции местоположения</string>
+    <string name="labs_enable_live_location">Включить функцию \"Поделиться трансляцией местоположения\"</string>
     <string name="live_location_sharing_notification_title">${app_name} Трансляция местоположения</string>
     <string name="location_share_live_until">Транслировать до %1$s</string>
     <string name="location_share_live_ended">Трансляция завершена</string>
