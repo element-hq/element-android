@@ -372,14 +372,18 @@ class WidgetFragment @Inject constructor(
         val deviceListDialogBuilder = MaterialAlertDialogBuilder(requireContext())
         val bluetoothDevices = mutableListOf<BluetoothDevice>()
 
-        bluetoothLowEnergyDeviceScanner.callback = object : ScanCallback() {
-            override fun onScanResult(callbackType: Int, result: ScanResult) {
-                super.onScanResult(callbackType, result)
-                Timber.d("### WidgetFragment. New BLE device found: " + result.device.name + " - " + result.device.address)
-                if (result.device.name == null) {
+        bluetoothLowEnergyDeviceScanner.callback = object : BluetoothLowEnergyDeviceScanner.Callback {
+            override fun onPairedDeviceFound(device: BluetoothDevice) {
+                onBluetoothDeviceSelected(device)
+            }
+
+            override fun onScanResult(device: BluetoothDevice) {
+                Timber.d("### WidgetFragment. New BLE device found: " + device.name + " - " + device.address)
+                if (device.name == null || bluetoothDevices.map { it.address }.contains(device.address)) {
                     return
                 }
-                bluetoothDevices.add(result.device)
+
+                bluetoothDevices.add(device)
 
                 deviceListDialogBuilder.setItems(
                         bluetoothDevices.map { it.name + " " + it.address }.toTypedArray()
