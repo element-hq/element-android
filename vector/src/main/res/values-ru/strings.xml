@@ -2602,4 +2602,12 @@
     <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">Сбросить способ оповещения</string>
     <string name="unifiedpush_distributor_background_sync">Фоновая синхронизация</string>
     <string name="action_next">Далее</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">Не удалось зарегистрировать токен конечной точки на домашнем сервере:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">Конечная точка успешно зарегистрирована на домашнем сервере.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_title">Регистрация конечной точки</string>
+    <string name="settings_troubleshoot_test_current_endpoint_failed">Не удалось найти конечную точку.</string>
+    <string name="settings_troubleshoot_test_current_endpoint_success">Текущая конечная точка: %s</string>
+    <string name="settings_troubleshoot_test_current_endpoint_title">Конечная точка</string>
+    <string name="space_leave_radio_buttons_title">Вещи в этом пространстве</string>
 </resources>
