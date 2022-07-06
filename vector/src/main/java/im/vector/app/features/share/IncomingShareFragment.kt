@@ -116,7 +116,6 @@ class IncomingShareFragment @Inject constructor(
     }
 
     private fun handleIncomingShareIntent(intent: Intent) = shareIntentHandler.handleIncomingShareIntent(
-            requireContext(),
             intent,
             onFile = {
                 val sharedData = SharedData.Attachments(it)

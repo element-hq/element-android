@@ -23,6 +23,7 @@ import javax.inject.Inject
 
 class ShareIntentHandler @Inject constructor(
         private val multiPickerIncomingFiles: MultiPickerIncomingFiles,
+        private val context: Context,
 ) {
 
     /**
@@ -30,7 +31,7 @@ class ShareIntentHandler @Inject constructor(
      *
      * @return true if it can handle the intent data, false otherwise
      */
-    fun handleIncomingShareIntent(context: Context, intent: Intent, onFile: (List<ContentAttachmentData>) -> Unit, onPlainText: (String) -> Unit): Boolean {
+    fun handleIncomingShareIntent(intent: Intent, onFile: (List<ContentAttachmentData>) -> Unit, onPlainText: (String) -> Unit): Boolean {
         val type = intent.resolveType(context) ?: return false
         return when {
             type == "text/plain" -> handlePlainText(intent, onPlainText)

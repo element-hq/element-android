@@ -36,7 +36,7 @@ class ShareIntentHandlerTest {
     private val onFile = FakeFunction1<List<ContentAttachmentData>>()
     private val onPlainText = FakeFunction1<String>()
 
-    private val shareIntentHandler = ShareIntentHandler(fakeMultiPickerIncomingFiles.instance)
+    private val shareIntentHandler = ShareIntentHandler(fakeMultiPickerIncomingFiles.instance, A_CONTEXT)
 
     @Test
     fun `given an unhandled sharing intent type, when handling intent, then is not handled`() {
@@ -161,6 +161,6 @@ class ShareIntentHandlerTest {
     }
 
     private fun handleIncomingShareIntent(intent: FakeIntent): Boolean {
-        return shareIntentHandler.handleIncomingShareIntent(A_CONTEXT, intent.instance, onFile.capture, onPlainText.capture)
+        return shareIntentHandler.handleIncomingShareIntent(intent.instance, onFile.capture, onPlainText.capture)
     }
 }

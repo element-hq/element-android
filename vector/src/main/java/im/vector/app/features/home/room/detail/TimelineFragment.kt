@@ -1619,7 +1619,7 @@ class TimelineFragment @Inject constructor(
 
     private fun sendUri(uri: Uri): Boolean {
         val shareIntent = Intent(Intent.ACTION_SEND, uri)
-        val isHandled = shareIntentHandler.handleIncomingShareIntent(requireContext(), shareIntent, ::onContentAttachmentsReady, onPlainText = {
+        val isHandled = shareIntentHandler.handleIncomingShareIntent(shareIntent, ::onContentAttachmentsReady, onPlainText = {
             fatalError("Should not happen as we're generating a File based share Intent", vectorPreferences.failFast())
         })
         if (!isHandled) {
