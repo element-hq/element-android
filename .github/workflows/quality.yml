@@ -203,3 +203,26 @@ jobs:
           name: detekt-report
           path: |
             */build/reports/detekt/detekt.html
+
+  towncrier:
+    name: Check that there is at least one file for the changelog
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
+      - name: Install towncrier
+        run: |
+          python3 -m pip install towncrier
+      - name: Run towncrier
+        run: |
+        # Fetch the pull request' base branch so towncrier will be able to
+        # compare the current branch with the base branch.
+        # Source: https://github.com/actions/checkout/#fetch-all-branches.
+        git fetch --no-tags origin +refs/heads/${BASE_BRANCH}:refs/remotes/origin/${BASE_BRANCH}
+        towncrier check --compare-with origin/${BASE_BRANCH}
+      env:
+        BASE_BRANCH: ${{ github.base_ref }}
+        if: github.event_name == 'pull_request'
