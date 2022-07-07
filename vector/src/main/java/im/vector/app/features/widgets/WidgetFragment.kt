@@ -131,9 +131,11 @@ class WidgetFragment @Inject constructor(
 
     override fun onPause() {
         super.onPause()
-        views.widgetWebView.let {
-            it.pauseTimers()
-            it.onPause()
+        if (fragmentArgs.kind != WidgetKind.ELEMENT_CALL) {
+            views.widgetWebView.let {
+                it.pauseTimers()
+                it.onPause()
+            }
         }
     }
 
