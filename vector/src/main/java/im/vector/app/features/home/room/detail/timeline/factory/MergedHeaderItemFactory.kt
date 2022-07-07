@@ -24,7 +24,6 @@ import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.app.features.home.room.detail.timeline.helper.MergedTimelineEventVisibilityStateChangedListener
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventVisibilityHelper
-import im.vector.app.features.home.room.detail.timeline.helper.canBeMerged
 import im.vector.app.features.home.room.detail.timeline.helper.isRoomConfiguration
 import im.vector.app.features.home.room.detail.timeline.item.BasedMergedItem
 import im.vector.app.features.home.room.detail.timeline.item.MergedRoomCreationItem
@@ -35,6 +34,7 @@ import im.vector.app.features.home.room.detail.timeline.tools.createLinkMovement
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.query.QueryStringValue
+import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.content.EncryptionEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -53,6 +53,7 @@ class MergedHeaderItemFactory @Inject constructor(
         private val timelineEventVisibilityHelper: TimelineEventVisibilityHelper
 ) {
 
+    private val mergeableEventTypes = listOf(EventType.STATE_ROOM_MEMBER, EventType.STATE_ROOM_SERVER_ACL)
     private val collapsedEventIds = linkedSetOf<Long>()
     private val mergeItemCollapseStates = HashMap<Long, Boolean>()
 
@@ -78,19 +79,44 @@ class MergedHeaderItemFactory @Inject constructor(
             callback: TimelineEventController.Callback?,
             requestModelBuild: () -> Unit
     ): BasedMergedItem<*>? {
-        return if (nextEvent?.root?.getClearType() == EventType.STATE_ROOM_CREATE &&
-                event.isRoomConfiguration(nextEvent.root.getClearContent()?.toModel<RoomCreateContent>()?.creator)) {
-            // It's the first item before room.create
-            // Collapse all room configuration events
-            buildRoomCreationMergedSummary(currentPosition, items, partialState, event, eventIdToHighlight, requestModelBuild, callback)
-        } else if (!event.canBeMerged() || (nextEvent?.root?.getClearType() == event.root.getClearType() && !addDaySeparator)) {
-            null
-        } else {
-            buildMembershipEventsMergedSummary(currentPosition, items, partialState, event, eventIdToHighlight, requestModelBuild, callback)
+        return when {
+            isRoomCreationSummary(event, nextEvent) ->
+                buildRoomCreationMergedSummary(currentPosition, items, partialState, event, eventIdToHighlight, requestModelBuild, callback)
+            isSimilarEventSummary(event, nextEvent, addDaySeparator) ->
+                buildSimilarEventsMergedSummary(currentPosition, items, partialState, event, eventIdToHighlight, requestModelBuild, callback)
+            else -> null
         }
     }
 
-    private fun buildMembershipEventsMergedSummary(
+    /**
+     * @param event the main timeline event
+     * @param nextEvent is an older event than event
+     */
+    private fun isRoomCreationSummary(
+            event: TimelineEvent,
+            nextEvent: TimelineEvent?,
+    ): Boolean {
+        // It's the first item before room.create
+        // Collapse all room configuration events
+        return nextEvent?.root?.getClearType() == EventType.STATE_ROOM_CREATE &&
+                event.isRoomConfiguration(nextEvent.root.getClearContent()?.toModel<RoomCreateContent>()?.creator)
+    }
+
+    /**
+     * @param event the main timeline event
+     * @param nextEvent is an older event than event
+     * @param addDaySeparator true to add a day separator
+     */
+    private fun isSimilarEventSummary(
+            event: TimelineEvent,
+            nextEvent: TimelineEvent?,
+            addDaySeparator: Boolean,
+    ): Boolean {
+        return event.root.getClearType() in mergeableEventTypes &&
+                (nextEvent?.root?.getClearType() != event.root.getClearType() || addDaySeparator)
+    }
+
+    private fun buildSimilarEventsMergedSummary(
             currentPosition: Int,
             items: List<TimelineEvent>,
             partialState: TimelineEventController.PartialState,
@@ -140,11 +166,7 @@ class MergedHeaderItemFactory @Inject constructor(
                 collapsedEventIds.removeAll(mergedEventIds)
             }
             val mergeId = mergedEventIds.joinToString(separator = "_") { it.toString() }
-            val summaryTitleResId = when (event.root.getClearType()) {
-                EventType.STATE_ROOM_MEMBER -> R.plurals.membership_changes
-                EventType.STATE_ROOM_SERVER_ACL -> R.plurals.notice_room_server_acl_changes
-                else -> null
-            }
+            val summaryTitleResId = getSummaryTitleResId(event.root)
             summaryTitleResId?.let { summaryTitle ->
                 val attributes = MergedSimilarEventsItem.Attributes(
                         summaryTitleResId = summaryTitle,
@@ -165,6 +187,16 @@ class MergedHeaderItemFactory @Inject constructor(
                             it.setOnVisibilityStateChanged(MergedTimelineEventVisibilityStateChangedListener(callback, mergedEvents))
                         }
             }
+        }
+    }
+
+    private fun getSummaryTitleResId(event: Event): Int? {
+        val type = event.getClearType()
+        return when {
+            type == EventType.STATE_ROOM_MEMBER -> R.plurals.membership_changes
+            type == EventType.STATE_ROOM_SERVER_ACL -> R.plurals.notice_room_server_acl_changes
+            event.isRedacted() -> R.plurals.room_removed_messages
+            else -> null
         }
     }
 
