@@ -71,5 +71,12 @@ class EventHtmlRendererTest {
         result shouldBeEqualTo "[code][italic]italic[/italic] [bold]bold[/bold][/code]"
     }
 
+    @Test
+    fun processesHtmlEntities() {
+        val result = """&amp; &lt; &gt; &apos; &quot;""".renderAsTestSpan()
+
+        result shouldBeEqualTo """& < > ' """"
+    }
+
     private fun String.renderAsTestSpan() = renderer.render(this).toSpannable().toTestSpan()
 }
