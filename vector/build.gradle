@@ -267,6 +267,7 @@ android {
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
             buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
 
+            // When updating this block, please also update the same block in the `nightly` buildType below
             postprocessing {
                 removeUnusedCode true
                 removeUnusedResources true
@@ -281,12 +282,12 @@ android {
         nightly {
             applicationIdSuffix ".nightly"
             versionNameSuffix "-nightly"
-            resValue "string", "app_name", "Element nightly"
+
+            initWith release
+            // Just override the background color of the launcher icon for the nightly build.
             resValue "color", "launcher_background", "#07007E"
 
-            buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
-            buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
-
+            // We need to copy paste this block, this is not done automatically by `initWith release`
             postprocessing {
                 removeUnusedCode true
                 removeUnusedResources true
