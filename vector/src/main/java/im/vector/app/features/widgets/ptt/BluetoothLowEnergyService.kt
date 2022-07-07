@@ -28,9 +28,9 @@ import android.content.Intent
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
-import im.vector.app.core.services.VectorService
 import androidx.core.content.getSystemService
 import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.core.services.VectorService
 import im.vector.app.features.notifications.NotificationUtils
 import timber.log.Timber
 import java.util.UUID

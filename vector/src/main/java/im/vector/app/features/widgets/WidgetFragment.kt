@@ -18,8 +18,6 @@ package im.vector.app.features.widgets
 
 import android.app.Activity
 import android.bluetooth.BluetoothDevice
-import android.bluetooth.le.ScanCallback
-import android.bluetooth.le.ScanResult
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -89,7 +87,6 @@ class WidgetFragment @Inject constructor(
     private val fragmentArgs: WidgetArgs by args()
     private val viewModel: WidgetViewModel by activityViewModel()
 
-
     private val scanBluetoothResultLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
         if (allGranted) {
             startBluetoothScanning()
@@ -158,6 +155,16 @@ class WidgetFragment @Inject constructor(
         views.widgetWebView.let {
             it.resumeTimers()
             it.onResume()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (fragmentArgs.kind != WidgetKind.ELEMENT_CALL) {
+            views.widgetWebView.let {
+                it.pauseTimers()
+                it.onPause()
+            }
         }
     }
 
