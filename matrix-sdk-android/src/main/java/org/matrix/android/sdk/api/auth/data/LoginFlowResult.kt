@@ -21,5 +21,6 @@ data class LoginFlowResult(
         val ssoIdentityProviders: List<SsoIdentityProvider>?,
         val isLoginAndRegistrationSupported: Boolean,
         val homeServerUrl: String,
-        val isOutdatedHomeserver: Boolean
+        val isOutdatedHomeserver: Boolean,
+        val isLogoutDevicesSupported: Boolean
 )

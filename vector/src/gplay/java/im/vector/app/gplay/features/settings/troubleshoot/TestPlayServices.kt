@@ -46,7 +46,7 @@ class TestPlayServices @Inject constructor(
             if (apiAvailability.isUserResolvableError(resultCode)) {
                 quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_play_services_quickfix) {
                     override fun doFix() {
-                        apiAvailability.getErrorDialog(context, resultCode, 9000 /*hey does the magic number*/).show()
+                        apiAvailability.getErrorDialog(context, resultCode, 9000 /*hey does the magic number*/)?.show()
                     }
                 }
                 Timber.e("Play Services apk error $resultCode -> ${apiAvailability.getErrorString(resultCode)}.")

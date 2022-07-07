@@ -1118,9 +1118,7 @@
     <string name="login_signin_username_hint">Benutzername oder E-Mail-Adresse</string>
     <string name="login_signup_password_hint">Passwort</string>
     <string name="login_signup_error_user_in_use">Dieser Benutzername ist bereits belegt</string>
-    <string name="login_signup_cancel_confirmation_content">Dein Benutzerkonto ist noch nicht erstellt.
-\n
-\nMöchtest du die Registrierung stoppen\?</string>
+    <string name="login_signup_cancel_confirmation_content">Dein Benutzerkonto ist noch nicht erstellt. Möchtest du die Registrierung stoppen\?</string>
     <string name="login_a11y_choose_matrix_org">matrix.org auswählen</string>
     <string name="login_a11y_choose_modular">modular auswählen</string>
     <string name="login_a11y_choose_other">Benutzerdefinierten Server auswählen</string>
@@ -2336,7 +2334,6 @@
     <string name="room_profile_section_restore_security">Verschlüsselung wiederherstellen</string>
     <string name="tooltip_attachment_location">Standort freigeben</string>
     <string name="location_activity_title_static_sharing">Standort freigeben</string>
-    <string name="settings_enable_location_sharing">Standortfreigabe aktivieren</string>
     <string name="location_share_external">Öffnen mit</string>
     <string name="location_not_available_dialog_content">${app_name} konnte nicht auf deinen Standort zugreifen. Bitte versuche es später noch einmal.</string>
     <string name="location_not_available_dialog_title">${app_name} konnte nicht auf deinen Standort zugreifen</string>
@@ -2359,8 +2356,6 @@
     <string name="encryption_has_been_misconfigured">Die Verschlüsselung wurde fehlerhaft konfiguriert.</string>
     <string name="room_unsupported_e2e_algorithm_as_admin">Die Verschlüsselung wurde fehlerhaft konfiguriert und du kannst keine Nachrichten senden. Klicke, um die Einstellungen zu öffnen.</string>
     <string name="room_unsupported_e2e_algorithm">Die Verschlüsselung wurde fehlerhaft konfiguriert und du kannst keine Nachrichten senden. Bitte kontaktiere einen Admin, um die Verschlüsselung wiederherzustellen.</string>
-    <string name="labs_render_locations_in_timeline">Geteilte Standorte anzeigen</string>
-    <string name="settings_enable_location_sharing_summary">Sobald aktiviert, kannst du deinen Standort in jeden Raum senden</string>
     <string name="sent_location">Hat den Standort geteilt</string>
     <string name="labs_enable_thread_messages">Threads aktivieren</string>
     <string name="ftue_auth_use_case_connect_to_server">Mit Server verbinden</string>
@@ -2411,7 +2406,6 @@
     </plurals>
     <string name="location_share_live_stop">Beenden</string>
     <string name="location_share_live_enabled">Live-Standort aktiviert</string>
-    <string name="location_in_background_missing_permission_dialog_title">Zugriff erlauben</string>
     <string name="a11y_location_share_option_pinned_icon">Standort teilen</string>
     <string name="location_share_option_pinned">Standort teilen</string>
     <string name="location_share_option_user_current">Meinen Standort teilen</string>

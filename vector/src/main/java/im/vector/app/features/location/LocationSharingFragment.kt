@@ -24,6 +24,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -39,6 +40,7 @@ import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.databinding.FragmentLocationSharingBinding
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
+import im.vector.app.features.location.live.LiveLocationLabsFlagPromotionBottomSheet
 import im.vector.app.features.location.live.duration.ChooseLiveDurationBottomSheet
 import im.vector.app.features.location.option.LocationSharingOption
 import im.vector.app.features.settings.VectorPreferences
@@ -69,6 +71,15 @@ class LocationSharingFragment @Inject constructor(
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLocationSharingBinding {
         return FragmentLocationSharingBinding.inflate(inflater, container, false)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setFragmentResultListener(LiveLocationLabsFlagPromotionBottomSheet.REQUEST_KEY) { _, bundle ->
+            val isApproved = bundle.getBoolean(LiveLocationLabsFlagPromotionBottomSheet.BUNDLE_KEY_LABS_APPROVAL)
+            handleLiveLocationLabsFlagPromotionResult(isApproved)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -168,10 +179,10 @@ class LocationSharingFragment @Inject constructor(
     }
 
     private fun handleStartLiveLocationService(event: LocationSharingViewEvents.StartLiveLocationService) {
-        val args = LocationSharingService.RoomArgs(event.sessionId, event.roomId, event.durationMillis)
+        val args = LocationSharingAndroidService.RoomArgs(event.sessionId, event.roomId, event.durationMillis)
 
-        Intent(requireContext(), LocationSharingService::class.java)
-                .putExtra(LocationSharingService.EXTRA_ROOM_ARGS, args)
+        Intent(requireContext(), LocationSharingAndroidService::class.java)
+                .putExtra(LocationSharingAndroidService.EXTRA_ROOM_ARGS, args)
                 .also {
                     ContextCompat.startForegroundService(requireContext(), it)
                 }
@@ -194,6 +205,22 @@ class LocationSharingFragment @Inject constructor(
         }
     }
 
+    private fun handleLiveLocationLabsFlagPromotionResult(isApproved: Boolean) {
+        if (isApproved) {
+            vectorPreferences.setLiveLocationLabsEnabled(isEnabled = true)
+            startLiveLocationSharing()
+        }
+    }
+
+    private fun tryStartLiveLocationSharing() {
+        if (vectorPreferences.labsEnableLiveLocation()) {
+            startLiveLocationSharing()
+        } else {
+            LiveLocationLabsFlagPromotionBottomSheet.newInstance()
+                    .show(requireActivity().supportFragmentManager, "DISPLAY_LIVE_LOCATION_LABS_FLAG_PROMOTION")
+        }
+    }
+
     private val foregroundLocationResultLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
         if (allGranted) {
             startLiveLocationSharing()
@@ -202,16 +229,12 @@ class LocationSharingFragment @Inject constructor(
         }
     }
 
-    private fun tryStartLiveLocationSharing() {
+    private fun startLiveLocationSharing() {
         // we need to re-check foreground location to be sure it has not changed after landing on this screen
         if (checkPermissions(PERMISSIONS_FOR_FOREGROUND_LOCATION_SHARING, requireActivity(), foregroundLocationResultLauncher)) {
-            startLiveLocationSharing()
+            ChooseLiveDurationBottomSheet.newInstance(this)
+                    .show(requireActivity().supportFragmentManager, "DISPLAY_CHOOSE_DURATION_OPTIONS")
         }
-    }
-
-    private fun startLiveLocationSharing() {
-        ChooseLiveDurationBottomSheet.newInstance(this)
-                .show(requireActivity().supportFragmentManager, "DISPLAY_CHOOSE_DURATION_OPTIONS")
     }
 
     override fun onBottomSheetResult(resultCode: Int, data: Any?) {
@@ -223,13 +246,7 @@ class LocationSharingFragment @Inject constructor(
     private fun updateMap(state: LocationSharingViewState) {
         // first, update the options view
         val options: Set<LocationSharingOption> = when (state.areTargetAndUserLocationEqual) {
-            true -> {
-                if (vectorPreferences.labsEnableLiveLocation()) {
-                    setOf(LocationSharingOption.USER_CURRENT, LocationSharingOption.USER_LIVE)
-                } else {
-                    setOf(LocationSharingOption.USER_CURRENT)
-                }
-            }
+            true -> setOf(LocationSharingOption.USER_CURRENT, LocationSharingOption.USER_LIVE)
             false -> setOf(LocationSharingOption.PINNED)
             else -> emptySet()
         }

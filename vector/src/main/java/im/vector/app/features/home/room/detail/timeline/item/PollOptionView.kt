@@ -82,6 +82,7 @@ class PollOptionView @JvmOverloads constructor(
     private fun renderPollUndisclosed(state: PollOptionViewState.PollUndisclosed) {
         views.optionCheckImageView.isVisible = true
         views.optionWinnerImageView.isVisible = false
+        hideVotes()
         renderVoteSelection(state.isSelected)
     }
 

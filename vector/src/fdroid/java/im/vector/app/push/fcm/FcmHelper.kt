@@ -21,34 +21,35 @@ import android.app.Activity
 import android.content.Context
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.pushers.PushersManager
-import im.vector.app.core.time.Clock
 import im.vector.app.fdroid.BackgroundSyncStarter
 import im.vector.app.fdroid.receiver.AlarmSyncBroadcastReceiver
-import im.vector.app.features.settings.VectorPreferences
+import javax.inject.Inject
 
 /**
  * This class has an alter ego in the gplay variant.
  */
-object FcmHelper {
+class FcmHelper @Inject constructor(
+        private val context: Context,
+        private val backgroundSyncStarter: BackgroundSyncStarter,
+) {
 
-    fun isPushSupported(): Boolean = false
+    fun isFirebaseAvailable(): Boolean = false
 
     /**
      * Retrieves the FCM registration token.
      *
      * @return the FCM token or null if not received from FCM
      */
-    fun getFcmToken(context: Context): String? {
+    fun getFcmToken(): String? {
         return null
     }
 
     /**
      * Store FCM token to the SharedPrefs
      *
-     * @param context android context
      * @param token the token to store
      */
-    fun storeFcmToken(context: Context, token: String?) {
+    fun storeFcmToken(token: String?) {
         // No op
     }
 
@@ -61,18 +62,13 @@ object FcmHelper {
         // No op
     }
 
-    fun onEnterForeground(context: Context, activeSessionHolder: ActiveSessionHolder) {
+    fun onEnterForeground(activeSessionHolder: ActiveSessionHolder) {
         // try to stop all regardless of background mode
         activeSessionHolder.getSafeActiveSession()?.syncService()?.stopAnyBackgroundSync()
         AlarmSyncBroadcastReceiver.cancelAlarm(context)
     }
 
-    fun onEnterBackground(
-            context: Context,
-            vectorPreferences: VectorPreferences,
-            activeSessionHolder: ActiveSessionHolder,
-            clock: Clock
-    ) {
-        BackgroundSyncStarter.start(context, vectorPreferences, activeSessionHolder, clock)
+    fun onEnterBackground(activeSessionHolder: ActiveSessionHolder) {
+        backgroundSyncStarter.start(activeSessionHolder)
     }
 }

@@ -45,6 +45,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
+import org.matrix.android.sdk.api.session.events.model.isContentReportable
 import org.matrix.android.sdk.api.session.events.model.isTextMessage
 import org.matrix.android.sdk.api.session.events.model.isThread
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -79,7 +80,8 @@ class MessageActionsViewModel @AssistedInject constructor(
         private val errorFormatter: ErrorFormatter,
         private val stringProvider: StringProvider,
         private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
-        private val vectorPreferences: VectorPreferences
+        private val vectorPreferences: VectorPreferences,
+        private val checkIfCanReplyEventUseCase: CheckIfCanReplyEventUseCase,
 ) : VectorViewModel<MessageActionState, MessageActionsAction, EmptyViewEvents>(initialState) {
 
     private val informationData = initialState.informationData
@@ -421,7 +423,7 @@ class MessageActionsViewModel @AssistedInject constructor(
         add(EventSharedAction.CopyPermalink(eventId))
         if (session.myUserId != timelineEvent.root.senderId) {
             // not sent by me
-            if (timelineEvent.root.getClearType() == EventType.MESSAGE) {
+            if (timelineEvent.root.isContentReportable()) {
                 add(EventSharedAction.ReportContent(eventId, timelineEvent.root.senderId))
             }
 
@@ -435,21 +437,7 @@ class MessageActionsViewModel @AssistedInject constructor(
     }
 
     private fun canReply(event: TimelineEvent, messageContent: MessageContent?, actionPermissions: ActionPermissions): Boolean {
-        // Only EventType.MESSAGE and EventType.POLL_START event types are supported for the moment
-        if (event.root.getClearType() !in EventType.POLL_START + EventType.MESSAGE) return false
-        if (!actionPermissions.canSendMessage) return false
-        return when (messageContent?.msgType) {
-            MessageType.MSGTYPE_TEXT,
-            MessageType.MSGTYPE_NOTICE,
-            MessageType.MSGTYPE_EMOTE,
-            MessageType.MSGTYPE_IMAGE,
-            MessageType.MSGTYPE_VIDEO,
-            MessageType.MSGTYPE_AUDIO,
-            MessageType.MSGTYPE_FILE,
-            MessageType.MSGTYPE_POLL_START,
-            MessageType.MSGTYPE_LOCATION -> true
-            else -> false
-        }
+        return checkIfCanReplyEventUseCase.execute(event, messageContent, actionPermissions)
     }
 
     /**

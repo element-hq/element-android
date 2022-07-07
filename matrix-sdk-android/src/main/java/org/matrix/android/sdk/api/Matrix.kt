@@ -17,6 +17,8 @@
 package org.matrix.android.sdk.api
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.work.Configuration
 import androidx.work.WorkManager
@@ -25,10 +27,12 @@ import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
+import org.matrix.android.sdk.api.debug.DebugService
 import org.matrix.android.sdk.api.legacy.LegacySessionImporter
 import org.matrix.android.sdk.api.network.ApiInterceptorListener
 import org.matrix.android.sdk.api.network.ApiPath
 import org.matrix.android.sdk.api.raw.RawService
+import org.matrix.android.sdk.api.securestorage.SecureStorageService
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.di.DaggerMatrixComponent
@@ -54,6 +58,7 @@ class Matrix(context: Context, matrixConfiguration: MatrixConfiguration) {
     @Inject internal lateinit var legacySessionImporter: LegacySessionImporter
     @Inject internal lateinit var authenticationService: AuthenticationService
     @Inject internal lateinit var rawService: RawService
+    @Inject internal lateinit var debugService: DebugService
     @Inject internal lateinit var userAgentHolder: UserAgentHolder
     @Inject internal lateinit var backgroundDetectionObserver: BackgroundDetectionObserver
     @Inject internal lateinit var olmManager: OlmManager
@@ -62,6 +67,9 @@ class Matrix(context: Context, matrixConfiguration: MatrixConfiguration) {
     @Inject internal lateinit var apiInterceptor: ApiInterceptor
     @Inject internal lateinit var matrixWorkerFactory: MatrixWorkerFactory
     @Inject internal lateinit var lightweightSettingsStorage: LightweightSettingsStorage
+    @Inject internal lateinit var secureStorageService: SecureStorageService
+
+    private val uiHandler = Handler(Looper.getMainLooper())
 
     init {
         val appContext = context.applicationContext
@@ -74,7 +82,9 @@ class Matrix(context: Context, matrixConfiguration: MatrixConfiguration) {
                     .build()
             WorkManager.initialize(appContext, configuration)
         }
-        ProcessLifecycleOwner.get().lifecycle.addObserver(backgroundDetectionObserver)
+        uiHandler.post {
+            ProcessLifecycleOwner.get().lifecycle.addObserver(backgroundDetectionObserver)
+        }
     }
 
     /**
@@ -94,6 +104,11 @@ class Matrix(context: Context, matrixConfiguration: MatrixConfiguration) {
     fun rawService() = rawService
 
     /**
+     * Return the DebugService.
+     */
+    fun debugService() = debugService
+
+    /**
      * Return the LightweightSettingsStorage.
      */
     fun lightweightSettingsStorage() = lightweightSettingsStorage
@@ -107,6 +122,11 @@ class Matrix(context: Context, matrixConfiguration: MatrixConfiguration) {
      * Return the legacy session importer, useful if you want to migrate an app, which was using the legacy Matrix Android Sdk.
      */
     fun legacySessionImporter() = legacySessionImporter
+
+    /**
+     * Returns the SecureStorageService used to encrypt and decrypt sensitive data.
+     */
+    fun secureStorageService(): SecureStorageService = secureStorageService
 
     /**
      * Get the worker factory. The returned value has to be provided to `WorkConfiguration.Builder()`.

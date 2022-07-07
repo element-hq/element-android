@@ -33,6 +33,7 @@ import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
 import com.mapbox.mapboxsdk.style.layers.Property
 import im.vector.app.R
+import im.vector.app.core.utils.DimensionConverter
 import timber.log.Timber
 
 class MapTilerMapView @JvmOverloads constructor(
@@ -56,6 +57,7 @@ class MapTilerMapView @JvmOverloads constructor(
     private var mapRefs: MapRefs? = null
     private var initZoomDone = false
     private var showLocationButton = false
+    private var dimensionConverter: DimensionConverter? = null
 
     init {
         context.theme.obtainStyledAttributes(
@@ -70,6 +72,7 @@ class MapTilerMapView @JvmOverloads constructor(
                 recycle()
             }
         }
+        dimensionConverter = DimensionConverter(resources)
     }
 
     private fun setLocateButtonVisibility(typedArray: TypedArray) {
@@ -151,7 +154,12 @@ class MapTilerMapView @JvmOverloads constructor(
             pendingState = state
         }
 
-        safeMapRefs.map.uiSettings.setLogoMargins(0, 0, 0, state.logoMarginBottom)
+        safeMapRefs.map.uiSettings.apply {
+            setLogoMargins(0, 0, 0, state.logoMarginBottom)
+            dimensionConverter?.let {
+                setAttributionMargins(it.dpToPx(88), 0, 0, state.logoMarginBottom)
+            }
+        }
 
         val pinDrawable = state.pinDrawable ?: userLocationDrawable
         pinDrawable?.let { drawable ->

@@ -534,7 +534,7 @@
     <string name="merged_events_expand">розгорнути</string>
     <string name="merged_events_collapse">згорнути</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="room_participants_action_remove">Вилучити</string>
     <string name="settings_inline_url_preview_summary">Попередній перегляд посилань у бесіді, якщо ваш сервер підтримує цю можливість.</string>
     <string name="settings_send_typing_notifs">Надсилати сповіщення про набір повідомлення</string>
@@ -895,7 +895,7 @@
     <string name="room_alias_published_alias_main">Це основна адреса</string>
     <string name="room_alias_published_alias_subtitle">Загальнодоступні адреси може використовувати будь-хто на будь-якому сервері для приєднання до вашої кімнати. Щоб опублікувати адресу спочатку вкажіть її локальною адресою.</string>
     <string name="room_alias_published_alias_title">Загальнодоступні адреси</string>
-    <string name="room_settings_alias_subtitle">Перегляньте та керуйте адресами цієї кімнати та їхньою видимістю у каталозі кімнат.</string>
+    <string name="room_settings_alias_subtitle">Переглядайте й керуйте адресами цієї кімнати та їхньою видимістю в каталозі кімнат.</string>
     <string name="room_settings_alias_title">Адреси кімнат</string>
     <string name="room_settings_room_access_title">Доступ до кімнати</string>
     <string name="room_settings_room_read_history_dialog_subtitle">Зміни щодо тих, хто може читати історію, стосуватимуться лише майбутніх повідомлень у цій кімнаті. Видимість наявної історії залишиться незмінною.</string>
@@ -2007,9 +2007,7 @@
     <string name="login_error_outdated_homeserver_warning_content">Цей домашній сервер працює давній версії. Попросіть адміністратора домашнього сервера оновити його. Ви можете продовжити, але деякі функції не працюватимуть.</string>
     <string name="login_wait_for_email_notice">Ми щойно надіслали листа на %1$s
 \nНатисніть на посилання, яке він містить, щоб продовжити створення облікового запису.</string>
-    <string name="login_signup_cancel_confirmation_content">Ваш обліковий запис ще не створено.
-\n
-\nЗупинити процес реєстрації\?</string>
+    <string name="login_signup_cancel_confirmation_content">Ваш обліковий запис ще не створено. Зупинити процес реєстрації\?</string>
     <string name="delete_event_dialog_title">Підтвердити вилучення</string>
     <string name="settings_key_requests">Запити ключів</string>
     <string name="login_default_session_public_name">${app_name} Android</string>
@@ -2423,9 +2421,6 @@
     <string name="ftue_auth_carousel_control_title">Ви контролюєте все.</string>
     <string name="ftue_auth_carousel_secure_title">Володійте своїми розмовами.</string>
     <string name="tooltip_attachment_location">Поділитися місцеперебуванням</string>
-    <string name="labs_render_locations_in_timeline">Зображувати місцеперебування користувача у стрічці</string>
-    <string name="settings_enable_location_sharing_summary">Після увімкнення ви зможете надіслати своє місцеперебування до будь-якої кімнати</string>
-    <string name="settings_enable_location_sharing">Увімкнути надсилання місцеперебування</string>
     <string name="location_share_external">Відкрити за допомогою</string>
     <string name="location_not_available_dialog_content">${app_name} не може отримати доступ до вашого місцеперебування. Спробуйте пізніше.</string>
     <string name="location_not_available_dialog_title">${app_name} не може отримати доступ до вашого місцеперебування</string>
@@ -2455,7 +2450,7 @@
     <string name="location_timeline_failed_to_load_map">Не вдалося завантажити карту</string>
     <string name="a11y_static_map_image">Карта</string>
     <string name="labs_enable_thread_messages_desc">Примітка: застосунок перезапуститься</string>
-    <string name="labs_enable_thread_messages">Увімкнути тред повідомлень</string>
+    <string name="labs_enable_thread_messages">Увімкнути гілки повідомлень</string>
     <string name="ftue_auth_use_case_connect_to_server">Під\'єднатися до сервера</string>
     <string name="ftue_auth_use_case_join_existing_server">Бажаєте приєднання до наявного сервера\?</string>
     <string name="ftue_auth_use_case_skip_partial">пропустити це питання</string>
@@ -2465,25 +2460,25 @@
     <string name="ftue_auth_use_case_option_one">Друзі й сім\'я</string>
     <string name="ftue_auth_use_case_subtitle">Ми допоможемо вам з\'єднатися.</string>
     <string name="ftue_auth_use_case_title">З ким ви спілкуватиметеся найчастіше\?</string>
-    <string name="navigate_to_thread_when_already_in_the_thread">Ви вже переглядаєте цей тред!</string>
+    <string name="navigate_to_thread_when_already_in_the_thread">Ви вже переглядаєте цю гілку!</string>
     <string name="view_in_room">Переглянути у кімнаті</string>
-    <string name="reply_in_thread">Відповісти у тред</string>
-    <string name="command_not_supported_in_threads">Команду «%s» розпізнано, але її не підтримують треди.</string>
-    <string name="search_thread_from_a_thread">З треду</string>
+    <string name="reply_in_thread">Відповісти у гілку</string>
+    <string name="command_not_supported_in_threads">Команду «%s» розпізнано, але вона не підтримується в гілках.</string>
+    <string name="search_thread_from_a_thread">З гілки</string>
     <string name="thread_list_empty_notice">Порада: Торкніться й утримуйте повідомлення і виберіть «%s».</string>
-    <string name="thread_list_empty_title">Спілкуйтеся за темою в тредах</string>
-    <string name="thread_list_empty_subtitle">Треди допомагають підтримувати розмови за темою та за ними легко стежити.</string>
-    <string name="thread_list_modal_my_threads_subtitle">Показує всі треди, де ви брали участь</string>
-    <string name="thread_list_modal_my_threads_title">Мої треди</string>
-    <string name="thread_list_modal_all_threads_subtitle">Показує всі треди цієї кімнати</string>
-    <string name="thread_list_modal_all_threads_title">Усі треди</string>
+    <string name="thread_list_empty_title">Упорядкуйте обговорення за допомогою гілок</string>
+    <string name="thread_list_empty_subtitle">Гілки допомагають підтримувати розмови за темою та за ними легко стежити.</string>
+    <string name="thread_list_modal_my_threads_subtitle">Показує всі гілки, де ви брали участь</string>
+    <string name="thread_list_modal_my_threads_title">Мої гілки</string>
+    <string name="thread_list_modal_all_threads_subtitle">Показує всі гілки цієї кімнати</string>
+    <string name="thread_list_modal_all_threads_title">Усі гілки</string>
     <string name="thread_list_modal_title">Фільтрувати</string>
-    <string name="thread_list_title">Треди</string>
-    <string name="thread_timeline_title">Тред</string>
-    <string name="room_threads_filter">Фільтрувати треди кімнати</string>
-    <string name="action_thread_copy_link_to_thread">Копіювати лінк треду</string>
+    <string name="thread_list_title">Гілки</string>
+    <string name="thread_timeline_title">Гілка</string>
+    <string name="room_threads_filter">Фільтрувати гілки кімнати</string>
+    <string name="action_thread_copy_link_to_thread">Копіювати посилання на гілку</string>
     <string name="action_thread_view_in_room">Переглянути у кімнаті</string>
-    <string name="action_view_threads">Переглянути треди</string>
+    <string name="action_view_threads">Переглянути гілки</string>
     <plurals name="notice_room_server_acl_changes">
         <item quantity="one">%d зміна ACL сервера</item>
         <item quantity="few">%d зміни ACL сервера</item>
@@ -2504,9 +2499,6 @@
     <string name="room_notification_two_users_are_typing">%1$s і %2$s</string>
     <string name="location_share_live_stop">Зупинити</string>
     <string name="location_share_live_enabled">Місцеперебування поширюється наживо</string>
-    <string name="location_in_background_missing_permission_dialog_content">Якщо бажаєте поширювати місцеперебування наживо, ${app_name} потребує доступу до місцеперебування протягом усієї фонової роботи застосунку.
-\nМи отримуватимемо ваше місцеперебування лише протягом обраного вами терміну.</string>
-    <string name="location_in_background_missing_permission_dialog_title">Дозвольте доступ</string>
     <string name="a11y_location_share_option_pinned_icon">Поширити ці координати</string>
     <string name="location_share_option_pinned">Поширити ці координати</string>
     <string name="a11y_location_share_pin_on_map">Маркер обраних координат на карті</string>
@@ -2515,12 +2507,12 @@
     <string name="a11y_location_share_option_user_current_icon">Поширити моє поточне місцеперебування</string>
     <string name="location_share_option_user_current">Поширити моє поточне місцеперебування</string>
     <string name="a11y_location_share_locate_button">Перейти до поточного місцеперебування</string>
-    <string name="threads_notice_migration_message">Наближаємось до випуску тредів у загальнодоступну бета-версію.
+    <string name="threads_notice_migration_message">Наближаємось до випуску гілок у загальнодоступну бета-версію.
 \n
-\nГотуючись, маємо дещо змінити: раніше створені треди буде показано як звичайні відповіді.
+\nГотуючись, маємо дещо змінити: раніше створені гілки буде показано звичайними відповідями.
 \n
-\nЦе буде одноразовий перехід, оскільки треди — тепер частина специфікації Matrix.</string>
-    <string name="threads_notice_migration_title">Незабаром бета-версія тредів 🎉</string>
+\nЦе буде одноразовий перехід, оскільки відтепер гілки — це частина специфікації Matrix.</string>
+    <string name="threads_notice_migration_title">Незабаром бета-версія гілок 🎉</string>
     <string name="live_location_sharing_notification_description">Триває передавання місцеперебування</string>
     <string name="live_location_sharing_notification_title">${app_name} Місцеперебування наживо</string>
     <string name="error_forbidden_digits_only_username">Домашній сервер не приймає ім\'я користувача лише з цифр.</string>
@@ -2555,17 +2547,17 @@
     <string name="sent_live_location">Ділиться своїм місцеперебуванням наживо</string>
     <string name="ftue_auth_carousel_workplace_body">${app_name} також чудово підходить для роботи. Йому довіряють найтаємніші організації світу.</string>
     <string name="beta">БЕТА</string>
-    <string name="send_feedback_threads_info">Треди — це поточна розробка з новими, захопливими майбутніми функціями, такими як вдосконалені сповіщення. Ми хотіли б почути ваш відгук!</string>
-    <string name="send_feedback_threads_title">Відгук про Треди бета</string>
+    <string name="send_feedback_threads_info">Гілки — це поточна розробка з новими, захопливими майбутніми функціями, як-от удосконалені сповіщення. Ми хотіли б почути ваш відгук!</string>
+    <string name="send_feedback_threads_title">Відгук про Гілки бета</string>
     <string name="give_feedback_threads">Надіслати відгук</string>
     <string name="beta_title_bottom_sheet_action">БЕТА</string>
     <string name="settings_presence_user_always_appears_offline_summary">Якщо ввімкнено, ви завжди будете видимі в режимі офлайн для інших користувачів, навіть коли користуєтеся застосунком.</string>
     <string name="settings_presence_user_always_appears_offline">Офлайн режим</string>
     <string name="settings_presence">Присутність</string>
-    <string name="threads_labs_enable_notice_message">Ваш домашній сервер не підтримує тредів, тому ця функція може бути ненадійною. Деякі треди повідомлень можуть бути недоступними. %sУсе одно хочете ввімкнути треди\?</string>
-    <string name="threads_labs_enable_notice_title">Треди бета</string>
-    <string name="threads_beta_enable_notice_message">Треди допомагають упорядкувати свої розмови за темами та легко стежити за ними. %sУвімкнення тредів перезавантажить застосунок. Це може тривати більше часу для деяких облікових записів.</string>
-    <string name="threads_beta_enable_notice_title">Треди бета</string>
+    <string name="threads_labs_enable_notice_message">Ваш домашній сервер не підтримує гілок, тому ця функція може працювати нестабільно. Деякі гілки повідомлень можуть бути недоступними. %sУсе одно хочете ввімкнути гілки\?</string>
+    <string name="threads_labs_enable_notice_title">Гілки бета</string>
+    <string name="threads_beta_enable_notice_message">Гілки допомагають упорядкувати свої розмови за темами та легко стежити за ними. %sУвімкнення гілок перезапустить застосунок. Це може тривати більше часу для деяких облікових записів.</string>
+    <string name="threads_beta_enable_notice_title">Гілки бета</string>
     <string name="action_learn_more">Докладніше</string>
     <string name="action_try_it_out">Спробувати</string>
     <string name="screen_sharing_notification_description">Триває трансляція з екрана</string>
@@ -2582,4 +2574,22 @@
     <string name="settings_show_latest_profile">Показати найновіші відомості про користувача</string>
     <string name="a11y_presence_busy">Зайнятий</string>
     <string name="keys_backup_settings_signature_from_this_user">Резервна копія має дійсний підпис від цього користувача.</string>
+    <string name="live_location_bottom_sheet_last_updated_at">Оновлено %1$s тому</string>
+    <string name="live_location_bottom_sheet_stop_sharing">Припинити поширення</string>
+    <string name="labs_enable_live_location_summary">Тимчасова реалізація: місця зберігаються в історії кімнат</string>
+    <string name="labs_enable_live_location">Увімкнути поширення місцеперебування наживо</string>
+    <string name="location_share_live_remaining_time">Залишилося %1$s</string>
+    <string name="location_share_live_until">Наживо до %1$s</string>
+    <string name="location_share_live_view">Переглянути місцеперебування наживо</string>
+    <string name="location_share_live_ended">Надсилання місцеперебування наживо завершено</string>
+    <string name="space_explore_filter_no_result_description">Деякі результати можуть бути прихованими, оскільки вони приватні, і вам потрібне запрошення до них.</string>
+    <string name="space_explore_filter_no_result_title">Нічого не знайдено</string>
+    <string name="space_leave_radio_button_none">Не виходити</string>
+    <string name="space_leave_radio_button_all">Вийти з усіх</string>
+    <string name="space_leave_radio_buttons_title">Речі в цьому просторі</string>
+    <string name="settings_autoplay_animated_images_summary">Відтворювати анімовані зображення, як тільки вони стають видимі у стрічці</string>
+    <string name="settings_autoplay_animated_images_title">Автовідтворення анімованих зображень</string>
+    <string name="time_unit_second_short">с</string>
+    <string name="time_unit_minute_short">хв</string>
+    <string name="time_unit_hour_short">г</string>
 </resources>

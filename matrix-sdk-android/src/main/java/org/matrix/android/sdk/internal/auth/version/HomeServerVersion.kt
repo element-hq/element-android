@@ -58,6 +58,7 @@ internal data class HomeServerVersion(
         val r0_4_0 = HomeServerVersion(major = 0, minor = 4, patch = 0)
         val r0_5_0 = HomeServerVersion(major = 0, minor = 5, patch = 0)
         val r0_6_0 = HomeServerVersion(major = 0, minor = 6, patch = 0)
+        val r0_6_1 = HomeServerVersion(major = 0, minor = 6, patch = 1)
         val v1_3_0 = HomeServerVersion(major = 1, minor = 3, patch = 0)
     }
 }

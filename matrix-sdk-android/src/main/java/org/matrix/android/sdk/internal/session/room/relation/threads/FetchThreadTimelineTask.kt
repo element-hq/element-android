@@ -209,7 +209,8 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
      * Create an EventEntity to be added in the TimelineEventEntity.
      */
     private fun createEventEntity(roomId: String, event: Event, realm: Realm): EventEntity {
-        val ageLocalTs = event.unsignedData?.age?.let { clock.epochMillis() - it }
+        val now = clock.epochMillis()
+        val ageLocalTs = now - (event.unsignedData?.age ?: 0)
         return event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
     }
 

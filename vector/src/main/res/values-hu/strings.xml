@@ -542,7 +542,7 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
     <string name="merged_events_expand">kinyit</string>
     <string name="merged_events_collapse">bezár</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="room_participants_action_remove">Elküld</string>
     <string name="settings_inline_url_preview_summary">URL előnézet a csevegő ablakban, ha a Matrix szervered támogatja ezt a lehetőséget.</string>
     <string name="settings_send_typing_notifs">Gépelés visszajelzés küldése</string>
@@ -1078,9 +1078,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="login_signup_submit">Következő</string>
     <string name="login_signup_error_user_in_use">A felhasználónév már használatban van</string>
     <string name="login_signup_cancel_confirmation_title">Figyelmeztetés</string>
-    <string name="login_signup_cancel_confirmation_content">A felhasználói fiókod még nincs kész.
-\n
-\nMegállítód a regisztrációt\?</string>
+    <string name="login_signup_cancel_confirmation_content">A felhasználói fiókod még nincs kész. Megállítód a regisztrációt\?</string>
     <string name="login_a11y_choose_matrix_org">matrix.org kiválasztása</string>
     <string name="login_a11y_choose_modular">Element Matrix Services kiválasztása</string>
     <string name="login_a11y_choose_other">Egyedi matrix szerver kiválasztása</string>
@@ -2335,9 +2333,6 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="ftue_auth_carousel_encrypted_title">Biztonságos üzenetküldés.</string>
     <string name="ftue_auth_carousel_control_title">Te irányítasz.</string>
     <string name="tooltip_attachment_location">Tartózkodási hely megosztása</string>
-    <string name="labs_render_locations_in_timeline">A felhasználó földrajzi helyzetének megjelenítése az idővonalon</string>
-    <string name="settings_enable_location_sharing_summary">A beállítás után bármelyik szobában megoszthatod a földrajzi helyzetedet</string>
-    <string name="settings_enable_location_sharing">Földrajzi hely megosztás engedélyezése</string>
     <string name="location_share_external">Megnyitás ezzel</string>
     <string name="location_not_available_dialog_content">Az ${app_name} nem fér hozzá a tartózkodási helyedhez. Próbáld újra később.</string>
     <string name="location_not_available_dialog_title">Az ${app_name} nem tudott hozzáférni a tartózkodási helyedhez</string>
@@ -2410,8 +2405,6 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     </plurals>
     <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s és mások</string>
     <string name="room_notification_two_users_are_typing">%1$s és %2$s</string>
-    <string name="location_in_background_missing_permission_dialog_content">Ha folyamatosan meg akarod osztani a földrajzi pozíciódat ahhoz a(z) ${app_name} alkalmazásnak hozzá kell férnie a helyadatokhoz akkor is ha a háttérben fut.
-\nCsak az általad megadott idő intervallumban férünk hozzá a helyadatokhoz.</string>
     <string name="threads_notice_migration_message">Egyre közelebb kerülünk ahhoz, hogy publikus béta állapotba kerüljenek az üzenetszálak.
 \n
 \nAz előkészületekkel be kell vezetnünk pár változtatást: az eddig a pontig készített üzenetszálak hagyományos válaszokként fognak megjelenni.
@@ -2419,7 +2412,6 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 \nEz egy egyszeri változtatás ahogy az üzenetszálak ezentúl a Matrix specifikáció részét képezik.</string>
     <string name="location_share_live_stop">Állj</string>
     <string name="location_share_live_enabled">Folyamatos pozíció megosztás engedélyezve</string>
-    <string name="location_in_background_missing_permission_dialog_title">Hozzáférés engedélyezése</string>
     <string name="a11y_location_share_option_pinned_icon">Ennek a földrajzi helynek a megosztása</string>
     <string name="location_share_option_pinned">Ennek a földrajzi helynek a megosztása</string>
     <string name="a11y_location_share_option_user_live_icon">Pozícióm folyamatos megosztása</string>
@@ -2490,4 +2482,22 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="settings_show_latest_profile">Legfrissebb felhasználói információ megjelenítése</string>
     <string name="a11y_presence_busy">Foglalt</string>
     <string name="keys_backup_settings_signature_from_this_user">A mentésnek érvényes aláírása van ettől a felhasználótól.</string>
+    <string name="live_location_bottom_sheet_last_updated_at">Frissítve ekkor: %1$s</string>
+    <string name="live_location_bottom_sheet_stop_sharing">Megosztás megállítása</string>
+    <string name="labs_enable_live_location_summary">Átmeneti megvalósítás: a helyadatok megmaradnak a szoba naplójában</string>
+    <string name="labs_enable_live_location">Élő helymegosztás engedélyezése</string>
+    <string name="location_share_live_remaining_time">%1$s kilépett</string>
+    <string name="location_share_live_until">Élő eddig: %1$s</string>
+    <string name="location_share_live_view">Élő földrajzi helyzet megtekintése</string>
+    <string name="location_share_live_ended">Élő pozíció megosztás befejeződött</string>
+    <string name="space_explore_filter_no_result_description">Néhány találat lehet rejtett, mert privát és meghívóra van szükséged hozzájuk.</string>
+    <string name="space_explore_filter_no_result_title">Nincs találat</string>
+    <string name="space_leave_radio_button_none">Egyet sem hagy el</string>
+    <string name="space_leave_radio_button_all">Mindet elhagy</string>
+    <string name="space_leave_radio_buttons_title">Dolgok ezen a téren</string>
+    <string name="settings_autoplay_animated_images_summary">Animált képek lejátszása ahogy megjelennek az idővonalon</string>
+    <string name="settings_autoplay_animated_images_title">Animált képek automatikus lejátszása</string>
+    <string name="time_unit_second_short">mperc</string>
+    <string name="time_unit_minute_short">perc</string>
+    <string name="time_unit_hour_short">ó</string>
 </resources>

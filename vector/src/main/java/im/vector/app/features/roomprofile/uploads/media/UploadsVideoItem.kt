@@ -28,8 +28,8 @@ import im.vector.app.core.epoxy.onClick
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
 
-@EpoxyModelClass(layout = R.layout.item_uploads_video)
-abstract class UploadsVideoItem : VectorEpoxyModel<UploadsVideoItem.Holder>() {
+@EpoxyModelClass
+abstract class UploadsVideoItem : VectorEpoxyModel<UploadsVideoItem.Holder>(R.layout.item_uploads_video) {
 
     @EpoxyAttribute lateinit var imageContentRenderer: ImageContentRenderer
     @EpoxyAttribute lateinit var data: VideoContentRenderer.Data

@@ -180,3 +180,8 @@ System\.currentTimeMillis\(\)===2
 
 ### Remove extra space between the name and the description
 \* @\w+ \w+  +
+
+### Please use the MenuProvider interface now
+onCreateOptionsMenu
+onOptionsItemSelected
+onPrepareOptionsMenu

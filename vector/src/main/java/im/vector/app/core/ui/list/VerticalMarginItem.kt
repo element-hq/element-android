@@ -26,8 +26,8 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 /**
  * A generic item with empty space.
  */
-@EpoxyModelClass(layout = R.layout.item_vertical_margin)
-abstract class VerticalMarginItem : VectorEpoxyModel<VerticalMarginItem.Holder>() {
+@EpoxyModelClass
+abstract class VerticalMarginItem : VectorEpoxyModel<VerticalMarginItem.Holder>(R.layout.item_vertical_margin) {
 
     @EpoxyAttribute
     var heightInPx: Int = 0

@@ -28,6 +28,7 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -66,6 +67,7 @@ class RoomMemberListViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<RoomMemberListViewModel, RoomMemberListViewState> by hiltMavericksViewModelFactory()
 
     private val room = session.getRoom(initialState.roomId)!!
+    private val roomFlow = room.flow()
 
     init {
         observeRoomMemberSummaries()
@@ -82,9 +84,9 @@ class RoomMemberListViewModel @AssistedInject constructor(
         }
 
         combine(
-                room.flow().liveRoomMembers(roomMemberQueryParams),
-                room.flow()
-                        .liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
+                roomFlow.liveRoomMembers(roomMemberQueryParams),
+                roomFlow
+                        .liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
                         .mapOptional { it.content.toModel<PowerLevelsContent>() }
                         .unwrap()
         ) { roomMembers, powerLevelsContent ->
@@ -94,8 +96,19 @@ class RoomMemberListViewModel @AssistedInject constructor(
                     copy(roomMemberSummaries = async)
                 }
 
+        roomFlow.liveAreAllMembersLoaded()
+                .distinctUntilChanged()
+                .onEach {
+                    setState {
+                        copy(
+                                areAllMembersLoaded = it
+                        )
+                    }
+                }
+                .launchIn(viewModelScope)
+
         if (room.roomCryptoService().isEncrypted()) {
-            room.flow().liveRoomMembers(roomMemberQueryParams)
+            roomFlow.liveRoomMembers(roomMemberQueryParams)
                     .flatMapLatest { membersSummary ->
                         session.cryptoService().getLiveCryptoDeviceInfo(membersSummary.map { it.userId })
                                 .asFlow()
@@ -138,7 +151,7 @@ class RoomMemberListViewModel @AssistedInject constructor(
     }
 
     private fun observeRoomSummary() {
-        room.flow().liveRoomSummary()
+        roomFlow.liveRoomSummary()
                 .unwrap()
                 .execute { async ->
                     copy(roomSummary = async)
@@ -146,7 +159,8 @@ class RoomMemberListViewModel @AssistedInject constructor(
     }
 
     private fun observeThirdPartyInvites() {
-        room.flow().liveStateEvents(setOf(EventType.STATE_ROOM_THIRD_PARTY_INVITE))
+        roomFlow
+                .liveStateEvents(setOf(EventType.STATE_ROOM_THIRD_PARTY_INVITE), QueryStringValue.IsNotNull)
                 .execute { async ->
                     copy(threePidInvites = async)
                 }

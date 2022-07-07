@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -60,6 +61,7 @@ class SpacePeopleFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(membersViewModel) { memberListState ->
+        views.progressBar.isGone = memberListState.areAllMembersLoaded
         val memberCount = (memberListState.roomSummary.invoke()?.otherMemberIds?.size ?: 0) + 1
 
         toolbar?.subtitle = resources.getQuantityString(R.plurals.room_title_members, memberCount, memberCount)

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="lockscreen_button_size">60dp</dimen>
+    <dimen name="lockscreen_button_margin_vertical">15dp</dimen>
+</resources>

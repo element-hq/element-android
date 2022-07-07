@@ -31,8 +31,8 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.themes.ThemeUtils
 import org.matrix.android.sdk.api.util.MatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_known_user)
-abstract class UserDirectoryUserItem : VectorEpoxyModel<UserDirectoryUserItem.Holder>() {
+@EpoxyModelClass
+abstract class UserDirectoryUserItem : VectorEpoxyModel<UserDirectoryUserItem.Holder>(R.layout.item_known_user) {
 
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem

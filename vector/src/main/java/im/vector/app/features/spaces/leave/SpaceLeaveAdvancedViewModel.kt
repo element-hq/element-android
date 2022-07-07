@@ -33,6 +33,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import okhttp3.internal.toImmutableList
+import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.query.SpaceFilter
 import org.matrix.android.sdk.api.session.Session
@@ -59,7 +60,7 @@ class SpaceLeaveAdvancedViewModel @AssistedInject constructor(
         val space = session.getRoom(initialState.spaceId)
         val spaceSummary = space?.roomSummary()
 
-        val powerLevelsEvent = space?.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS)
+        val powerLevelsEvent = space?.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
         powerLevelsEvent?.content?.toModel<PowerLevelsContent>()?.let { powerLevelsContent ->
             val powerLevelsHelper = PowerLevelsHelper(powerLevelsContent)
             val isAdmin = powerLevelsHelper.getUserRole(session.myUserId) is Role.Admin

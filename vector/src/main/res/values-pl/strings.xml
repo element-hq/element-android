@@ -832,7 +832,7 @@
     <string name="settings_troubleshoot_test_play_services_success">Usługi Google Play są aktualne.</string>
     <string name="sas_got_it">Rozumiem</string>
     <string name="room_list_people_empty_body">Twoje rozmowy bezpośrednie będą wyświetlane tutaj. Naciśnij przycisk + żeby rozpocząć nową.</string>
-    <string name="room_list_rooms_empty_body">Twoje pokoje będą wyświetlane tutaj. Naciśnij przycisk +żeby znaleźć istniejące bądź utworzyć nowy.</string>
+    <string name="room_list_rooms_empty_body">Twoje pokoje będą wyświetlane tutaj. Naciśnij przycisk + znajdujący się na dole po prawej, aby znaleźć istniejące pokoje bądź utworzyć nowe.</string>
     <string name="malformed_message">Nieprawidłowe zdarzenie, nie można wyświetlić</string>
     <string name="keys_backup_unable_to_get_trust_info">Wystąpił błąd podczas otrzymywania zaufanych informacji</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Wystąpił błąd podczas uzyskiwania danych kluczy kopii zapasowej</string>
@@ -984,9 +984,7 @@
     <string name="login_signup_submit">Dalej</string>
     <string name="login_signup_error_user_in_use">Nazwa użytkownika zajęta</string>
     <string name="login_signup_cancel_confirmation_title">Ostrzeżenie</string>
-    <string name="login_signup_cancel_confirmation_content">Twoje konto wciąż nie zostalo utworzone.
-\n
-\nZatrzymać proces rejestracji\?</string>
+    <string name="login_signup_cancel_confirmation_content">Twoje konto wciąż nie zostalo utworzone. Zatrzymać proces rejestracji\?</string>
     <string name="login_a11y_choose_matrix_org">Wybierz matrix.org</string>
     <string name="login_a11y_choose_modular">Wybierz Element Matrix Services</string>
     <string name="login_a11y_choose_other">Wybierz niestandardowy serwer domowy</string>
@@ -1739,7 +1737,7 @@
     <string name="room_settings_space_access_title">Dostęp do Przestrzeni</string>
     <string name="room_settings_access_rules_pref_dialog_title">Kto powinien mieć dostęp \?</string>
     <string name="room_settings_room_notifications_account_settings">Ustawienia konta</string>
-    <string name="room_settings_room_notifications_manage_notifications">Możesz zarządzać notyfikacjami w %1$s.</string>
+    <string name="room_settings_room_notifications_manage_notifications">Możesz zarządzać powiadomieniami w %1$s.</string>
     <string name="room_settings_room_notifications_encryption_notice">Proszę zwrócić uwagę, że powiadomienia o wzmiankach i słowach kluczowych nie są dostępne w zaszyfrowanych pokojach na urządzeniach mobilnych.</string>
     <string name="room_settings_room_notifications_notify_me">Powiadamiaj mnie o</string>
     <string name="settings_secure_backup_reset">Zresetuj bezpieczną kopię zapasową</string>
@@ -1931,7 +1929,7 @@
     <string name="settings_notification_other">Inne</string>
     <string name="settings_notification_mentions_and_keywords">Wzmianki i słowa kluczowe</string>
     <string name="settings_notification_default">Domyślne powiadomienia</string>
-    <string name="settings_notification_emails_no_emails">Aby otrzymywać emaile z notyfikacjami, proszę przypisać email do swojego konta Matrix</string>
+    <string name="settings_notification_emails_no_emails">Aby otrzymywać e-maile z powiadomieniami, proszę przypisać adres e-mail do swojego konta Matrix</string>
     <string name="voice_message_reply_content">Wiadomość głosowa (%1$s)</string>
     <string name="error_voice_message_cannot_reply_or_edit">Nie można odpowiadać lub edytować kiedy wiadomość głosowa jest aktywna</string>
     <string name="error_voice_message_unable_to_record">Nie udało się nagrać wiadomości głosowej</string>
@@ -2503,15 +2501,9 @@
     <string name="location_share_live_stop">Zatrzymaj</string>
     <string name="location_share_live_enabled">Włączona lokalizacja na żywo</string>
     <string name="location_timeline_failed_to_load_map">Nie udało się wczytać mapy</string>
-    <string name="labs_render_locations_in_timeline">Renderuj lokalizacje użytkowników na osi czasu</string>
-    <string name="settings_enable_location_sharing_summary">Po włączeniu będziesz mógł wysłać swoją lokalizację do dowolnego pokoju</string>
-    <string name="settings_enable_location_sharing">Włącz udostępnianie lokalizacji</string>
     <string name="location_share_external">Otwórz za pomocą</string>
     <string name="location_not_available_dialog_content">${app_name} nie może uzyskać dostępu do Twojej lokalizacji. Spróbuj ponownie później.</string>
     <string name="location_not_available_dialog_title">${app_name} nie może uzyskać dostępu do Twojej lokalizacji</string>
-    <string name="location_in_background_missing_permission_dialog_content">Jeśli chcesz udostępniać swoją lokalizację na żywo, ${app_name} potrzebuje dostępu do lokalizacji przez cały czas, gdy aplikacja działa w tle.
-\n Będziemy mieć dostęp do Twojej lokalizacji tylko przez wybrany przez Ciebie okres.</string>
-    <string name="location_in_background_missing_permission_dialog_title">Zgoda na dostęp</string>
     <string name="a11y_location_share_option_pinned_icon">Udostępnij tę lokalizację</string>
     <string name="location_share_option_pinned">Udostępnij tę lokalizację</string>
     <string name="a11y_location_share_option_user_live_icon">Udostępnij lokalizację na żywo</string>
@@ -2583,4 +2575,22 @@
     <string name="settings_show_latest_profile_description">Pokazuj aktualny stan profilu (obraz i nazwa) w całej historii konwersacji.</string>
     <string name="settings_show_latest_profile">Pokazuj najnowsze informacje o użytkowniku</string>
     <string name="a11y_presence_busy">Zajęty</string>
+    <string name="live_location_bottom_sheet_last_updated_at">Zaktualizowano %1$s temu</string>
+    <string name="location_share_live_remaining_time">%1$s pozostało</string>
+    <string name="location_share_live_until">Na żywo do %1$s</string>
+    <string name="live_location_bottom_sheet_stop_sharing">Przestań udostępniać</string>
+    <string name="labs_enable_live_location_summary">Tymczasowa implementacja: lokalizacje pozostaną w historii pokoju</string>
+    <string name="labs_enable_live_location">Włącz udostępnianie lokalizacji na żywo</string>
+    <string name="location_share_live_view">Pokaż lokalizację na żywo</string>
+    <string name="location_share_live_ended">Lokalizacja na żywo zakończona</string>
+    <string name="space_explore_filter_no_result_description">Niektóre przestrzenie mogą być ukryte ponieważ są prywatne nie jesteś do nich zaproszony.</string>
+    <string name="space_explore_filter_no_result_title">Brak wyników</string>
+    <string name="space_leave_radio_button_none">Nie opuszczaj żadnych</string>
+    <string name="space_leave_radio_button_all">Opuść wszystkie</string>
+    <string name="settings_autoplay_animated_images_summary">Odtwarzaj animowane obrazki na osi czasu od razu gdy są widoczne na ekranie</string>
+    <string name="settings_autoplay_animated_images_title">Autoodtwarzanie animowanych obrazków</string>
+    <string name="time_unit_second_short">sek</string>
+    <string name="time_unit_hour_short">godz</string>
+    <string name="time_unit_minute_short">min</string>
+    <string name="space_leave_radio_buttons_title">Pokoje w przestrzeni</string>
 </resources>

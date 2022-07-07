@@ -60,6 +60,9 @@ class DebugVectorFeatures(
     override fun isOnboardingCombinedLoginEnabled(): Boolean = read(DebugFeatureKeys.onboardingCombinedLogin)
             ?: vectorFeatures.isOnboardingCombinedLoginEnabled()
 
+    override fun allowExternalUnifiedPushDistributors(): Boolean = read(DebugFeatureKeys.allowExternalUnifiedPushDistributors)
+            ?: vectorFeatures.allowExternalUnifiedPushDistributors()
+
     override fun isScreenSharingEnabled(): Boolean = read(DebugFeatureKeys.screenSharing)
             ?: vectorFeatures.isScreenSharingEnabled()
 
@@ -113,10 +116,11 @@ private fun <T : Enum<T>> enumPreferencesKey(type: KClass<T>) = stringPreference
 object DebugFeatureKeys {
     val onboardingAlreadyHaveAnAccount = booleanPreferencesKey("onboarding-already-have-an-account")
     val onboardingSplashCarousel = booleanPreferencesKey("onboarding-splash-carousel")
-    val onboardingUseCase = booleanPreferencesKey("onboarding-splash-carousel")
+    val onboardingUseCase = booleanPreferencesKey("onboarding-use-case")
     val onboardingPersonalize = booleanPreferencesKey("onboarding-personalize")
     val onboardingCombinedRegister = booleanPreferencesKey("onboarding-combined-register")
     val onboardingCombinedLogin = booleanPreferencesKey("onboarding-combined-login")
+    val allowExternalUnifiedPushDistributors = booleanPreferencesKey("allow-external-unified-push-distributors")
     val liveLocationSharing = booleanPreferencesKey("live-location-sharing")
     val screenSharing = booleanPreferencesKey("screen-sharing")
 }

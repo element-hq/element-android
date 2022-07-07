@@ -612,7 +612,7 @@
         <item quantity="other">%d suhtluskeelu saanud kasutajat</item>
     </plurals>
     <string name="room_settings_category_advanced_title">Lisaseadistused</string>
-    <string name="room_settings_room_internal_id">Selle jututoa sisemine tunnus</string>
+    <string name="room_settings_room_internal_id">Selle jututoa tehniline tunnus</string>
     <string name="room_settings_labs_pref_title">Katsed</string>
     <string name="room_settings_labs_warning_message">Need on alles katsejärgus olevad funktsionaalsused. Ole kasutamisel ettevaatlik.</string>
     <string name="encryption_information_decryption_error">Dekrüptimise viga</string>
@@ -1062,7 +1062,7 @@
     <string name="merged_events_expand">laienda</string>
     <string name="merged_events_collapse">ahenda</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="no_valid_google_play_services_apk">Ühtegi Google Play teenuste rakendusefaili ei leidunud. Teavitused ei pruugi korralikult toimida.</string>
     <string name="passphrase_create_passphrase">Loo paroolifraas</string>
     <string name="passphrase_confirm_passphrase">Sisesta paroolifraas veel üks kord</string>
@@ -1242,9 +1242,7 @@
     <string name="login_signup_submit">Järgmine</string>
     <string name="login_signup_error_user_in_use">Selline kasutajanimi on juba olemas</string>
     <string name="login_signup_cancel_confirmation_title">Hoiatus</string>
-    <string name="login_signup_cancel_confirmation_content">Sinu kasutajakonto pole veel loodud.
-\n
-\nKas katkestame konto registreerimise\?</string>
+    <string name="login_signup_cancel_confirmation_content">Sinu kasutajakonto pole veel loodud. Kas katkestame konto registreerimise\?</string>
     <string name="login_a11y_choose_matrix_org">Vali matrix.org</string>
     <string name="login_a11y_choose_modular">Vali teenusepakkujaks Element Matrix Services</string>
     <string name="login_a11y_choose_other">Vali mõni muu koduserver</string>
@@ -1545,8 +1543,8 @@
     <string name="room_profile_section_more_settings">Jututubade seadistused</string>
     <string name="room_profile_section_more_notifications">Teavitused</string>
     <plurals name="room_profile_section_more_member_list">
-        <item quantity="one">Üks inimene</item>
-        <item quantity="other">%1$d inimest</item>
+        <item quantity="one">Üks osaleja</item>
+        <item quantity="other">%1$d osalejat</item>
     </plurals>
     <string name="room_profile_section_more_uploads">Üleslaaditud failid</string>
     <string name="room_profile_section_more_leave">Lahku jututoast</string>
@@ -2335,9 +2333,6 @@
     <string name="ftue_auth_carousel_control_title">Sul on kontroll oma andmete üle.</string>
     <string name="ftue_auth_carousel_secure_title">Vestlused, mida sa tegelikult ka omad.</string>
     <string name="tooltip_attachment_location">Jaga asukohta</string>
-    <string name="labs_render_locations_in_timeline">Kuva ajajoonel kasutaja asukohti</string>
-    <string name="settings_enable_location_sharing_summary">Kui see seadistus on kasutusel, siis sa saad oma asukohta jagada igas jututoas</string>
-    <string name="settings_enable_location_sharing">Luba asukohta jagada</string>
     <string name="location_share_external">Ava muu rakendusega</string>
     <string name="location_not_available_dialog_content">${app_name} ei saanud asukohta tuvastada. Palun proovi hiljem uuesti.</string>
     <string name="location_not_available_dialog_title">${app_name} ei saanud asukohta tuvastada</string>
@@ -2412,9 +2407,6 @@
     <string name="room_notification_two_users_are_typing">%1$s ja %2$s</string>
     <string name="location_share_live_stop">Lõpeta asukoha jagamine</string>
     <string name="location_share_live_enabled">Reaalajas asukoha jagamine on kasutusel</string>
-    <string name="location_in_background_missing_permission_dialog_content">Kui sa soovid reaalajas oma asukohta jagada, siis ${app_name} vajab alati õigus asukohta tuvastada. Seda ka siis kui rakendus töötab taustal.
-\nLigipääs asukohale on saadaval vaid sinu valitud ajavahemiku vältel.</string>
-    <string name="location_in_background_missing_permission_dialog_title">Luba ligipääs asukohale</string>
     <string name="a11y_location_share_option_pinned_icon">Jaga seda asukohta</string>
     <string name="location_share_option_pinned">Jaga seda asukohta</string>
     <string name="a11y_location_share_option_user_live_icon">Jaga asukohta reaalajas</string>
@@ -2490,4 +2482,22 @@
     <string name="settings_show_latest_profile">Näita viimast kasutajateavet</string>
     <string name="a11y_presence_busy">Hõivatud</string>
     <string name="keys_backup_settings_signature_from_this_user">Varukoopial on kehtiv allkiri sellelt kasutajalt.</string>
+    <string name="live_location_bottom_sheet_last_updated_at">Uuendamise välp: %1$s</string>
+    <string name="live_location_bottom_sheet_stop_sharing">Lõpeta asukoha jagamine</string>
+    <string name="labs_enable_live_location_summary">Tegemist on ajutise ja esialgse lahendusega: asukohad on jututoa ajaloos näha</string>
+    <string name="labs_enable_live_location">Luba asukohta jagada reaalajas</string>
+    <string name="location_share_live_remaining_time">Jäänud on %1$s</string>
+    <string name="location_share_live_until">Asukoha jagamine toimib kuni %1$s</string>
+    <string name="location_share_live_view">Vaata asukohta reaalajas</string>
+    <string name="location_share_live_ended">Reaalajas asukoha jagamine on lõppenud</string>
+    <string name="space_explore_filter_no_result_description">Kuna mõned otsingutulemused on privaatsed ja nad seega võivad olla varjatud ning sa vajad nende nägemiseks kutset.</string>
+    <string name="space_explore_filter_no_result_title">Tulemusi pole</string>
+    <string name="space_leave_radio_button_none">Ära lahku ainsamastki</string>
+    <string name="space_leave_radio_button_all">Lahku kõigist</string>
+    <string name="space_leave_radio_buttons_title">Siin kogukonnad leiduvad objektid</string>
+    <string name="settings_autoplay_animated_images_summary">Esita liikuvaid pilte ajajoonel niipea, kui nad nähtavale ilmuvad</string>
+    <string name="settings_autoplay_animated_images_title">Esita liikuvaid pilte automaatselt</string>
+    <string name="time_unit_second_short">sek</string>
+    <string name="time_unit_minute_short">min</string>
+    <string name="time_unit_hour_short">t</string>
 </resources>

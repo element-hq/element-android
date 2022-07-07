@@ -47,18 +47,17 @@ import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
 import im.vector.app.features.onboarding.OnboardingAction.AuthenticateAction
 import im.vector.app.features.onboarding.StartAuthenticationFlowUseCase.StartAuthenticationResult
-import im.vector.app.features.onboarding.ftueauth.MatrixOrgRegistrationStagesComparator
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.MatrixPatterns
+import org.matrix.android.sdk.api.MatrixPatterns.getServerName
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import org.matrix.android.sdk.api.auth.login.LoginWizard
-import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
-import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.failure.isHomeserverUnavailable
 import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
@@ -80,11 +79,11 @@ class OnboardingViewModel @AssistedInject constructor(
         private val vectorFeatures: VectorFeatures,
         private val analyticsTracker: AnalyticsTracker,
         private val uriFilenameResolver: UriFilenameResolver,
-        private val registrationActionHandler: RegistrationActionHandler,
         private val directLoginUseCase: DirectLoginUseCase,
         private val startAuthenticationFlowUseCase: StartAuthenticationFlowUseCase,
         private val vectorOverrides: VectorOverrides,
-        private val buildMeta: BuildMeta
+        private val registrationActionHandler: RegistrationActionHandler,
+        private val buildMeta: BuildMeta,
 ) : VectorViewModel<OnboardingViewState, OnboardingAction, OnboardingViewEvents>(initialState) {
 
     @AssistedFactory
@@ -145,12 +144,15 @@ class OnboardingViewModel @AssistedInject constructor(
             is OnboardingAction.UpdateSignMode -> handleUpdateSignMode(action)
             is OnboardingAction.InitWith -> handleInitWith(action)
             is OnboardingAction.HomeServerChange -> withAction(action) { handleHomeserverChange(action) }
+            is OnboardingAction.MaybeUpdateHomeserverFromMatrixId -> handleMaybeUpdateHomeserver(action)
             is AuthenticateAction -> withAction(action) { handleAuthenticateAction(action) }
             is OnboardingAction.LoginWithToken -> handleLoginWithToken(action)
             is OnboardingAction.WebLoginSuccess -> handleWebLoginSuccess(action)
             is OnboardingAction.ResetPassword -> handleResetPassword(action)
+            OnboardingAction.ResendResetPassword -> handleResendResetPassword()
+            is OnboardingAction.ConfirmNewPassword -> handleResetPasswordConfirmed(action)
             is OnboardingAction.ResetPasswordMailConfirmed -> handleResetPasswordMailConfirmed()
-            is OnboardingAction.PostRegisterAction -> handleRegisterAction(action.registerAction, ::emitFlowResultViewEvent)
+            is OnboardingAction.PostRegisterAction -> handleRegisterAction(action.registerAction)
             is OnboardingAction.ResetAction -> handleResetAction(action)
             is OnboardingAction.UserAcceptCertificate -> handleUserAcceptCertificate(action)
             OnboardingAction.ClearHomeServerHistory -> handleClearHomeServerHistory()
@@ -162,6 +164,16 @@ class OnboardingViewModel @AssistedInject constructor(
             OnboardingAction.SaveSelectedProfilePicture -> updateProfilePicture()
             is OnboardingAction.PostViewEvent -> _viewEvents.post(action.viewEvent)
             OnboardingAction.StopEmailValidationCheck -> cancelWaitForEmailValidation()
+        }
+    }
+
+    private fun handleMaybeUpdateHomeserver(action: OnboardingAction.MaybeUpdateHomeserverFromMatrixId) {
+        val isFullMatrixId = MatrixPatterns.isUserId(action.userId)
+        if (isFullMatrixId) {
+            val domain = action.userId.getServerName().substringBeforeLast(":").ensureProtocol()
+            handleHomeserverChange(OnboardingAction.HomeServerChange.EditHomeServer(domain))
+        } else {
+            // ignore the action
         }
     }
 
@@ -259,12 +271,12 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleRegisterAction(action: RegisterAction, onNextRegistrationStepAction: (FlowResult) -> Unit) {
+    private fun handleRegisterAction(action: RegisterAction) {
         val job = viewModelScope.launch {
             if (action.hasLoadingState()) {
                 setState { copy(isLoading = true) }
             }
-            internalRegisterAction(action, onNextRegistrationStepAction)
+            internalRegisterAction(action)
             setState { copy(isLoading = false) }
         }
 
@@ -275,47 +287,38 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private suspend fun internalRegisterAction(action: RegisterAction, onNextRegistrationStepAction: (FlowResult) -> Unit) {
-        runCatching { registrationActionHandler.handleRegisterAction(registrationWizard, action) }
-                .fold(
-                        onSuccess = {
-                            when {
-                                action.ignoresResult() -> {
-                                    // do nothing
-                                }
-                                else -> when (it) {
-                                    is RegistrationResult.Complete -> onSessionCreated(
-                                            it.session,
-                                            authenticationDescription = awaitState().selectedAuthenticationState.description
-                                                    ?: AuthenticationDescription.Register(AuthenticationDescription.AuthenticationType.Other)
-                                    )
-                                    is RegistrationResult.NextStep -> onFlowResponse(it.flowResult, onNextRegistrationStepAction)
-                                    is RegistrationResult.SendEmailSuccess -> _viewEvents.post(OnboardingViewEvents.OnSendEmailSuccess(it.email))
-                                    is RegistrationResult.Error -> _viewEvents.post(OnboardingViewEvents.Failure(it.cause))
-                                }
-                            }
-                        },
-                        onFailure = {
-                            if (it !is CancellationException) {
-                                _viewEvents.post(OnboardingViewEvents.Failure(it))
-                            }
+    private suspend fun internalRegisterAction(action: RegisterAction, overrideNextStage: (() -> Unit)? = null) {
+        runCatching { registrationActionHandler.processAction(awaitState().selectedHomeserver, action) }.fold(
+                onSuccess = {
+                    when (it) {
+                        RegistrationActionHandler.Result.Ignored -> {
+                            // do nothing
                         }
-                )
+                        is RegistrationActionHandler.Result.NextStage -> {
+                            overrideNextStage?.invoke() ?: _viewEvents.post(OnboardingViewEvents.DisplayRegistrationStage(it.stage))
+                        }
+                        is RegistrationActionHandler.Result.RegistrationComplete -> onSessionCreated(
+                                it.session,
+                                authenticationDescription = awaitState().selectedAuthenticationState.description
+                                        ?: AuthenticationDescription.Register(AuthenticationDescription.AuthenticationType.Other)
+                        )
+                        RegistrationActionHandler.Result.StartRegistration -> _viewEvents.post(OnboardingViewEvents.DisplayStartRegistration)
+                        RegistrationActionHandler.Result.UnsupportedStage -> _viewEvents.post(OnboardingViewEvents.DisplayRegistrationFallback)
+                        is RegistrationActionHandler.Result.SendEmailSuccess -> _viewEvents.post(OnboardingViewEvents.OnSendEmailSuccess(it.email))
+                        is RegistrationActionHandler.Result.SendMsisdnSuccess -> _viewEvents.post(OnboardingViewEvents.OnSendMsisdnSuccess(it.msisdn.msisdn))
+                        is RegistrationActionHandler.Result.Error -> _viewEvents.post(OnboardingViewEvents.Failure(it.cause))
+                        RegistrationActionHandler.Result.MissingNextStage -> {
+                            _viewEvents.post(OnboardingViewEvents.Failure(IllegalStateException("No next registration stage found")))
+                        }
+                    }
+                },
+                onFailure = {
+                    if (it !is CancellationException) {
+                        _viewEvents.post(OnboardingViewEvents.Failure(it))
+                    }
+                }
+        )
     }
-
-    private fun emitFlowResultViewEvent(flowResult: FlowResult) {
-        withState { state ->
-            val orderedResult = when {
-                state.hasSelectedMatrixOrg() && vectorFeatures.isOnboardingCombinedRegisterEnabled() -> flowResult.copy(
-                        missingStages = flowResult.missingStages.sortedWith(MatrixOrgRegistrationStagesComparator())
-                )
-                else -> flowResult
-            }
-            _viewEvents.post(OnboardingViewEvents.RegistrationFlowResult(orderedResult, isRegistrationStarted))
-        }
-    }
-
-    private fun OnboardingViewState.hasSelectedMatrixOrg() = selectedHomeserver.userFacingUrl == matrixOrgUrl
 
     private fun handleRegisterWith(action: AuthenticateAction.Register) {
         setState {
@@ -328,8 +331,7 @@ class OnboardingViewModel @AssistedInject constructor(
                         action.username,
                         action.password,
                         action.initialDeviceName
-                ),
-                ::emitFlowResultViewEvent
+                )
         )
     }
 
@@ -382,7 +384,7 @@ class OnboardingViewModel @AssistedInject constructor(
     private fun handleUpdateSignMode(action: OnboardingAction.UpdateSignMode) {
         updateSignMode(action.signMode)
         when (action.signMode) {
-            SignMode.SignUp -> handleRegisterAction(RegisterAction.StartRegistration, ::emitFlowResultViewEvent)
+            SignMode.SignUp -> handleRegisterAction(RegisterAction.StartRegistration)
             SignMode.SignIn -> startAuthenticationFlow()
             SignMode.SignInWithMatrixId -> _viewEvents.post(OnboardingViewEvents.OnSignModeSelected(SignMode.SignInWithMatrixId))
             SignMode.Unknown -> Unit
@@ -440,24 +442,50 @@ class OnboardingViewModel @AssistedInject constructor(
     }
 
     private fun handleResetPassword(action: OnboardingAction.ResetPassword) {
+        startResetPasswordFlow(action.email) {
+            setState { copy(isLoading = false, resetState = createResetState(action, selectedHomeserver)) }
+            _viewEvents.post(OnboardingViewEvents.OnResetPasswordEmailConfirmationSent(action.email))
+        }
+    }
+
+    private fun createResetState(action: OnboardingAction.ResetPassword, selectedHomeserverState: SelectedHomeserverState) = ResetState(
+            email = action.email,
+            newPassword = action.newPassword,
+            supportsLogoutAllDevices = selectedHomeserverState.isLogoutDevicesSupported
+    )
+
+    private fun handleResendResetPassword() {
+        withState { state ->
+            val resetState = state.resetState
+            when (resetState.email) {
+                null -> _viewEvents.post(OnboardingViewEvents.Failure(IllegalStateException("Developer error - No reset email has been set")))
+                else -> {
+                    startResetPasswordFlow(resetState.email) {
+                        setState { copy(isLoading = false) }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun startResetPasswordFlow(email: String, onSuccess: suspend () -> Unit) {
         val safeLoginWizard = loginWizard
         setState { copy(isLoading = true) }
         currentJob = viewModelScope.launch {
-            runCatching { safeLoginWizard.resetPassword(action.email) }.fold(
-                    onSuccess = {
-                        setState {
-                            copy(
-                                    isLoading = false,
-                                    resetState = ResetState(email = action.email, newPassword = action.newPassword)
-                            )
-                        }
-                        _viewEvents.post(OnboardingViewEvents.OnResetPasswordSendThreePidDone)
-                    },
+            runCatching { safeLoginWizard.resetPassword(email) }.fold(
+                    onSuccess = { onSuccess.invoke() },
                     onFailure = {
                         setState { copy(isLoading = false) }
                         _viewEvents.post(OnboardingViewEvents.Failure(it))
                     }
             )
+        }
+    }
+
+    private fun handleResetPasswordConfirmed(action: OnboardingAction.ConfirmNewPassword) {
+        setState { copy(isLoading = true) }
+        currentJob = viewModelScope.launch {
+            confirmPasswordReset(action.newPassword, action.signOutAllDevices)
         }
     }
 
@@ -470,25 +498,26 @@ class OnboardingViewModel @AssistedInject constructor(
                     setState { copy(isLoading = false) }
                     _viewEvents.post(OnboardingViewEvents.Failure(IllegalStateException("Developer error - No new password has been set")))
                 }
-                else -> {
-                    runCatching { loginWizard.resetPasswordMailConfirmed(newPassword) }.fold(
-                            onSuccess = {
-                                setState {
-                                    copy(
-                                            isLoading = false,
-                                            resetState = ResetState()
-                                    )
-                                }
-                                _viewEvents.post(OnboardingViewEvents.OnResetPasswordMailConfirmationSuccess)
-                            },
-                            onFailure = {
-                                setState { copy(isLoading = false) }
-                                _viewEvents.post(OnboardingViewEvents.Failure(it))
-                            }
-                    )
-                }
+                else -> confirmPasswordReset(newPassword, logoutAllDevices = true)
             }
         }
+    }
+
+    private suspend fun confirmPasswordReset(newPassword: String, logoutAllDevices: Boolean) {
+        runCatching { loginWizard.resetPasswordMailConfirmed(newPassword, logoutAllDevices = logoutAllDevices) }.fold(
+                onSuccess = {
+                    setState { copy(isLoading = false, resetState = ResetState()) }
+                    val nextEvent = when {
+                        vectorFeatures.isOnboardingCombinedLoginEnabled() -> OnboardingViewEvents.OnResetPasswordComplete
+                        else                                              -> OnboardingViewEvents.OpenResetPasswordComplete
+                    }
+                    _viewEvents.post(nextEvent)
+                },
+                onFailure = {
+                    setState { copy(isLoading = false) }
+                    _viewEvents.post(OnboardingViewEvents.Failure(it))
+                }
+        )
     }
 
     private fun handleDirectLogin(action: AuthenticateAction.LoginDirect, homeServerConnectionConfig: HomeServerConnectionConfig?) {
@@ -528,19 +557,6 @@ class OnboardingViewModel @AssistedInject constructor(
         loginWizard
 
         _viewEvents.post(OnboardingViewEvents.OnSignModeSelected(SignMode.SignIn))
-    }
-
-    private suspend fun onFlowResponse(flowResult: FlowResult, onNextRegistrationStepAction: (FlowResult) -> Unit) {
-        // If dummy stage is mandatory, and password is already sent, do the dummy stage now
-        if (isRegistrationStarted && flowResult.missingStages.any { it is Stage.Dummy && it.mandatory }) {
-            handleRegisterDummy(onNextRegistrationStepAction)
-        } else {
-            onNextRegistrationStepAction(flowResult)
-        }
-    }
-
-    private suspend fun handleRegisterDummy(onNextRegistrationStepAction: (FlowResult) -> Unit) {
-        internalRegisterAction(RegisterAction.RegisterDummy, onNextRegistrationStepAction)
     }
 
     private suspend fun onSessionCreated(session: Session, authenticationDescription: AuthenticationDescription) {
@@ -684,7 +700,7 @@ class OnboardingViewModel @AssistedInject constructor(
                 }
                 OnboardingFlow.SignUp -> {
                     updateSignMode(SignMode.SignUp)
-                    internalRegisterAction(RegisterAction.StartRegistration, ::emitFlowResultViewEvent)
+                    internalRegisterAction(RegisterAction.StartRegistration)
                 }
                 OnboardingFlow.SignInSignUp,
                 null -> {

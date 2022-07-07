@@ -43,7 +43,9 @@ import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.extensions.validateBackPressed
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.pushers.PushersManager
+import im.vector.app.core.pushers.UnifiedPushHelper
 import im.vector.app.databinding.ActivityHomeBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
@@ -102,7 +104,8 @@ class HomeActivity :
         VectorBaseActivity<ActivityHomeBinding>(),
         NavigationInterceptor,
         SpaceInviteBottomSheet.InteractionListener,
-        MatrixToBottomSheet.InteractionListener {
+        MatrixToBottomSheet.InteractionListener,
+        VectorMenuProvider {
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
 
@@ -127,6 +130,8 @@ class HomeActivity :
     @Inject lateinit var avatarRenderer: AvatarRenderer
     @Inject lateinit var initSyncStepFormatter: InitSyncStepFormatter
     @Inject lateinit var appStateHandler: AppStateHandler
+    @Inject lateinit var unifiedPushHelper: UnifiedPushHelper
+    @Inject lateinit var fcmHelper: FcmHelper
 
     private val createSpaceResultLauncher = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
@@ -187,7 +192,15 @@ class HomeActivity :
         super.onCreate(savedInstanceState)
         analyticsScreenName = MobileScreen.ScreenName.Home
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, false)
-        FcmHelper.ensureFcmTokenIsRetrieved(this, pushManager, vectorPreferences.areNotificationEnabledForDevice())
+        unifiedPushHelper.register(this) {
+            if (unifiedPushHelper.isEmbeddedDistributor()) {
+                fcmHelper.ensureFcmTokenIsRetrieved(
+                        this,
+                        pushManager,
+                        vectorPreferences.areNotificationEnabledForDevice()
+                )
+            }
+        }
         sharedActionViewModel = viewModelProvider.get(HomeSharedActionViewModel::class.java)
         views.drawerLayout.addDrawerListener(drawerListener)
         if (isFirstCreation()) {
@@ -524,47 +537,45 @@ class HomeActivity :
 
     override fun getMenuRes() = R.menu.home
 
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+    override fun handlePrepareMenu(menu: Menu) {
         menu.findItem(R.id.menu_home_init_sync_legacy).isVisible = vectorPreferences.developerMode()
         menu.findItem(R.id.menu_home_init_sync_optimized).isVisible = vectorPreferences.developerMode()
-        return super.onPrepareOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             R.id.menu_home_suggestion -> {
                 bugReporter.openBugReportScreen(this, ReportType.SUGGESTION)
-                return true
+                true
             }
             R.id.menu_home_report_bug -> {
                 bugReporter.openBugReportScreen(this, ReportType.BUG_REPORT)
-                return true
+                true
             }
             R.id.menu_home_init_sync_legacy -> {
                 // Configure the SDK
                 initialSyncStrategy = InitialSyncStrategy.Legacy
                 // And clear cache
                 MainActivity.restartApp(this, MainActivityArgs(clearCache = true))
-                return true
+                true
             }
             R.id.menu_home_init_sync_optimized -> {
                 // Configure the SDK
                 initialSyncStrategy = InitialSyncStrategy.Optimized()
                 // And clear cache
                 MainActivity.restartApp(this, MainActivityArgs(clearCache = true))
-                return true
+                true
             }
             R.id.menu_home_filter -> {
                 navigator.openRoomsFiltering(this)
-                return true
+                true
             }
             R.id.menu_home_setting -> {
                 navigator.openSettings(this)
-                return true
+                true
             }
+            else -> false
         }
-
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onBackPressed() {

@@ -1,0 +1,2 @@
+Hlavní změny v této verzi: Vylepšena správa šifrovaných zpráv. Opravy různých chyb a vylepšení stability.
+Úplný seznam změn: https://github.com/vector-im/element-android/releases

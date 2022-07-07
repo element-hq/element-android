@@ -26,8 +26,8 @@ import im.vector.app.core.ui.views.QrCodeImageView
 /**
  * An Epoxy item displaying a QR code.
  */
-@EpoxyModelClass(layout = R.layout.item_verification_qr_code)
-abstract class BottomSheetVerificationQrCodeItem : VectorEpoxyModel<BottomSheetVerificationQrCodeItem.Holder>() {
+@EpoxyModelClass
+abstract class BottomSheetVerificationQrCodeItem : VectorEpoxyModel<BottomSheetVerificationQrCodeItem.Holder>(R.layout.item_verification_qr_code) {
 
     @EpoxyAttribute
     lateinit var data: String

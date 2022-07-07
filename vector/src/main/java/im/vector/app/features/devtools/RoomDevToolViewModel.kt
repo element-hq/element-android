@@ -32,6 +32,7 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -59,7 +60,7 @@ class RoomDevToolViewModel @AssistedInject constructor(
     init {
         session.getRoom(initialState.roomId)
                 ?.flow()
-                ?.liveStateEvents(emptySet())
+                ?.liveStateEvents(emptySet(), QueryStringValue.IsNotNull)
                 ?.execute { async ->
                     copy(stateEvents = async)
                 }

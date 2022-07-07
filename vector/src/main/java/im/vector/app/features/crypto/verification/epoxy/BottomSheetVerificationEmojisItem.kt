@@ -34,8 +34,8 @@ import org.matrix.android.sdk.api.session.crypto.verification.EmojiRepresentatio
 /**
  * A emoji list for bottom sheet.
  */
-@EpoxyModelClass(layout = R.layout.item_verification_emojis)
-abstract class BottomSheetVerificationEmojisItem : VectorEpoxyModel<BottomSheetVerificationEmojisItem.Holder>() {
+@EpoxyModelClass
+abstract class BottomSheetVerificationEmojisItem : VectorEpoxyModel<BottomSheetVerificationEmojisItem.Holder>(R.layout.item_verification_emojis) {
 
     @EpoxyAttribute lateinit var emojiRepresentation0: EmojiRepresentation
     @EpoxyAttribute lateinit var emojiRepresentation1: EmojiRepresentation

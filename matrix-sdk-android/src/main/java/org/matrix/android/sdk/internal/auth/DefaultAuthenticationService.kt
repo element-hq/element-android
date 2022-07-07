@@ -22,6 +22,7 @@ import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.MatrixPatterns.getServerName
 import org.matrix.android.sdk.api.auth.AuthenticationService
+import org.matrix.android.sdk.api.auth.LoginType
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.LoginFlowResult
@@ -40,6 +41,7 @@ import org.matrix.android.sdk.internal.auth.login.DefaultLoginWizard
 import org.matrix.android.sdk.internal.auth.login.DirectLoginTask
 import org.matrix.android.sdk.internal.auth.registration.DefaultRegistrationWizard
 import org.matrix.android.sdk.internal.auth.version.Versions
+import org.matrix.android.sdk.internal.auth.version.doesServerSupportLogoutDevices
 import org.matrix.android.sdk.internal.auth.version.isLoginAndRegistrationSupportedBySdk
 import org.matrix.android.sdk.internal.auth.version.isSupportedBySdk
 import org.matrix.android.sdk.internal.di.Unauthenticated
@@ -73,10 +75,7 @@ internal class DefaultAuthenticationService @Inject constructor(
     }
 
     override fun getLastAuthenticatedSession(): Session? {
-        val sessionParams = sessionParamsStore.getLast()
-        return sessionParams?.let {
-            sessionManager.getOrCreateSession(it)
-        }
+        return sessionManager.getLastSession()
     }
 
     override suspend fun getLoginFlowOfSession(sessionId: String): LoginFlowResult {
@@ -295,7 +294,8 @@ internal class DefaultAuthenticationService @Inject constructor(
                 ssoIdentityProviders = loginFlowResponse.flows.orEmpty().firstOrNull { it.type == LoginFlowTypes.SSO }?.ssoIdentityProvider,
                 isLoginAndRegistrationSupported = versions.isLoginAndRegistrationSupportedBySdk(),
                 homeServerUrl = homeServerUrl,
-                isOutdatedHomeserver = !versions.isSupportedBySdk()
+                isOutdatedHomeserver = !versions.isSupportedBySdk(),
+                isLogoutDevicesSupported = versions.doesServerSupportLogoutDevices()
         )
     }
 
@@ -362,7 +362,7 @@ internal class DefaultAuthenticationService @Inject constructor(
             homeServerConnectionConfig: HomeServerConnectionConfig,
             credentials: Credentials
     ): Session {
-        return sessionCreator.createSession(credentials, homeServerConnectionConfig)
+        return sessionCreator.createSession(credentials, homeServerConnectionConfig, LoginType.SSO)
     }
 
     override suspend fun getWellKnownData(

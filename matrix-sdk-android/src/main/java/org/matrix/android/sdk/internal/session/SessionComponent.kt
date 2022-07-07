@@ -20,6 +20,7 @@ import dagger.BindsInstance
 import dagger.Component
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.data.SessionParams
+import org.matrix.android.sdk.api.securestorage.SecureStorageModule
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.internal.crypto.CryptoModule
 import org.matrix.android.sdk.internal.crypto.crosssigning.UpdateTrustWorker
@@ -94,7 +95,8 @@ import org.matrix.android.sdk.internal.util.system.SystemModule
             ThirdPartyModule::class,
             SpaceModule::class,
             PresenceModule::class,
-            RequestModule::class
+            RequestModule::class,
+            SecureStorageModule::class,
         ]
 )
 @SessionScope

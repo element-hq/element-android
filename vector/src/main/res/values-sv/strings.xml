@@ -1238,7 +1238,7 @@
     <string name="merged_events_expand">expandera</string>
     <string name="merged_events_collapse">kollapsa</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="passphrase_create_passphrase">Skapa lösenfras</string>
     <string name="passphrase_confirm_passphrase">Bekräfta lösenfras</string>
     <string name="passphrase_enter_passphrase">Skriv lösenfras</string>
@@ -1430,9 +1430,7 @@
     <string name="login_signup_submit">Nästa</string>
     <string name="login_signup_error_user_in_use">Det användarnamnet är upptaget</string>
     <string name="login_signup_cancel_confirmation_title">Varning</string>
-    <string name="login_signup_cancel_confirmation_content">Ditt konto är inte skapat än.
-\n
-\nVill du avbryta registreringsprocessen\?</string>
+    <string name="login_signup_cancel_confirmation_content">Ditt konto är inte skapat än. Vill du avbryta registreringsprocessen\?</string>
     <string name="login_a11y_choose_matrix_org">Välj matrix.org</string>
     <string name="login_a11y_choose_modular">Välj Element Matrix Services</string>
     <string name="login_a11y_choose_other">Välj en annan hemserver</string>
@@ -2335,9 +2333,6 @@
     <string name="ftue_auth_carousel_secure_title">Äg dina konversationer.</string>
     <string name="room_error_access_unauthorized">Du får inte gå med i det här rummet</string>
     <string name="tooltip_attachment_location">Dela plats</string>
-    <string name="labs_render_locations_in_timeline">Visa användarplatser i tidslinjen</string>
-    <string name="settings_enable_location_sharing_summary">När det har aktiverats så kan du skicka din plats till vilket rum som helst</string>
-    <string name="settings_enable_location_sharing">Aktivera platsdelning</string>
     <string name="location_share_external">Öppna med</string>
     <string name="location_not_available_dialog_content">${app_name} kunde inte komma åt din plats. Försök igen senare.</string>
     <string name="location_not_available_dialog_title">${app_name} kunde inte komma åt din plats</string>
@@ -2413,9 +2408,6 @@
     <string name="threads_notice_migration_title">Trådar närmar sig beta 🎉</string>
     <string name="location_share_live_stop">Stoppa</string>
     <string name="location_share_live_enabled">Plats i realtid aktiverad</string>
-    <string name="location_in_background_missing_permission_dialog_content">Om du vill dela din plats i realtid så behöver ${app_name} åtkomst till din plats hela tiden när appen är i bakgrunden.
-\nVi kommer bara använda din plats under tiden du väljer.</string>
-    <string name="location_in_background_missing_permission_dialog_title">Tillåt åtkomst</string>
     <string name="a11y_location_share_option_pinned_icon">Dela den här platsen</string>
     <string name="location_share_option_pinned">Dela den här platsen</string>
     <string name="a11y_location_share_option_user_live_icon">Dela plats i realtid</string>
@@ -2490,4 +2482,22 @@
     <string name="settings_show_latest_profile">Visa senaste användarinfon</string>
     <string name="a11y_presence_busy">Upptagen</string>
     <string name="keys_backup_settings_signature_from_this_user">Säkerhetskopian har en giltig signatur från den här användaren.</string>
+    <string name="live_location_bottom_sheet_last_updated_at">Uppdaterades för %1$s sen</string>
+    <string name="live_location_bottom_sheet_stop_sharing">Sluta dela</string>
+    <string name="labs_enable_live_location_summary">Temporär implementation: platser ligger kvar i rumshistoriken</string>
+    <string name="labs_enable_live_location">Aktivera platsdelning i realtid</string>
+    <string name="location_share_live_remaining_time">%1$s kvar</string>
+    <string name="location_share_live_until">Realtid tills %1$s</string>
+    <string name="location_share_live_view">Se realtidsplats</string>
+    <string name="location_share_live_ended">Realtidsplats avslutad</string>
+    <string name="space_explore_filter_no_result_description">Vissa resultat kan vara dolda för att de är privata och du behöver en inbjudan till dem.</string>
+    <string name="space_explore_filter_no_result_title">Inga resultat funna</string>
+    <string name="space_leave_radio_button_none">Lämna inga</string>
+    <string name="space_leave_radio_button_all">Lämna alla</string>
+    <string name="space_leave_radio_buttons_title">Saker i det här utrymmet</string>
+    <string name="settings_autoplay_animated_images_summary">Spela animerad bilder i tidslinjen så fort de syns</string>
+    <string name="settings_autoplay_animated_images_title">Autospela animerade bilder</string>
+    <string name="time_unit_second_short">sek</string>
+    <string name="time_unit_minute_short">min</string>
+    <string name="time_unit_hour_short">t</string>
 </resources>

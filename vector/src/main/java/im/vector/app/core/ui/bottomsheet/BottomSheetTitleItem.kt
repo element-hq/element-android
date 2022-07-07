@@ -27,8 +27,8 @@ import im.vector.app.core.extensions.setTextOrHide
 /**
  * A title for bottom sheet, with an optional subtitle. It does not include the bottom separator.
  */
-@EpoxyModelClass(layout = R.layout.item_bottom_sheet_title)
-abstract class BottomSheetTitleItem : VectorEpoxyModel<BottomSheetTitleItem.Holder>() {
+@EpoxyModelClass
+abstract class BottomSheetTitleItem : VectorEpoxyModel<BottomSheetTitleItem.Holder>(R.layout.item_bottom_sheet_title) {
 
     @EpoxyAttribute
     lateinit var title: String

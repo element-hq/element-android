@@ -25,6 +25,7 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.geometry.LatLngBounds
 import com.mapbox.mapboxsdk.maps.MapView
@@ -40,6 +41,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.addChildFragment
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.databinding.FragmentLocationLiveMapViewBinding
 import im.vector.app.features.location.UrlMapProvider
 import im.vector.app.features.location.zoomToBounds
@@ -58,6 +60,7 @@ class LocationLiveMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
 
     @Inject lateinit var urlMapProvider: UrlMapProvider
     @Inject lateinit var bottomSheetController: LiveLocationBottomSheetController
+    @Inject lateinit var dimensionConverter: DimensionConverter
 
     private val viewModel: LocationLiveMapViewModel by fragmentViewModel()
 
@@ -73,6 +76,8 @@ class LocationLiveMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        observeViewEvents()
+
         views.liveLocationBottomSheetRecyclerView.configureWith(bottomSheetController, hasFixedSize = false, disableItemAnimation = true)
 
         bottomSheetController.callback = object : LiveLocationBottomSheetController.Callback {
@@ -86,6 +91,14 @@ class LocationLiveMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
         }
     }
 
+    private fun observeViewEvents() {
+        viewModel.observeViewEvents { viewEvent ->
+            when (viewEvent) {
+                is LocationLiveMapViewEvents.Error -> displayErrorDialog(viewEvent.error)
+            }
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         setupMap()
@@ -94,6 +107,13 @@ class LocationLiveMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
     private fun setupMap() {
         val mapFragment = getOrCreateSupportMapFragment()
         mapFragment.getMapAsync { mapboxMap ->
+            val bottomSheetHeight = BottomSheetBehavior.from(views.bottomSheet).peekHeight
+            mapboxMap.uiSettings.apply {
+                // Place copyright above the user list bottom sheet
+                setLogoMargins(dimensionConverter.dpToPx(8), 0, 0, bottomSheetHeight + dimensionConverter.dpToPx(8))
+                setAttributionMargins(dimensionConverter.dpToPx(96), 0, 0, bottomSheetHeight + dimensionConverter.dpToPx(8))
+            }
+
             lifecycleScope.launch {
                 mapboxMap.setStyle(urlMapProvider.getMapUrl()) { style ->
                     mapStyle = style

@@ -23,8 +23,8 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 
-@EpoxyModelClass(layout = R.layout.item_autocomplete_header_item)
-abstract class AutocompleteHeaderItem : VectorEpoxyModel<AutocompleteHeaderItem.Holder>() {
+@EpoxyModelClass
+abstract class AutocompleteHeaderItem : VectorEpoxyModel<AutocompleteHeaderItem.Holder>(R.layout.item_autocomplete_header_item) {
 
     @EpoxyAttribute var title: String? = null
 

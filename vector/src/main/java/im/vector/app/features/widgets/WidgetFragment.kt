@@ -42,6 +42,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.utils.openUrlInExternalBrowser
 import im.vector.app.databinding.FragmentRoomWidgetBinding
 import im.vector.app.features.webview.WebEventListener
@@ -68,7 +69,8 @@ class WidgetFragment @Inject constructor(
 ) :
         VectorBaseFragment<FragmentRoomWidgetBinding>(),
         WebEventListener,
-        OnBackPressed {
+        OnBackPressed,
+        VectorMenuProvider {
 
     private val fragmentArgs: WidgetArgs by args()
     private val viewModel: WidgetViewModel by activityViewModel()
@@ -79,7 +81,6 @@ class WidgetFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setHasOptionsMenu(true)
         views.widgetWebView.setupForWidget(this)
         if (fragmentArgs.kind.isAdmin()) {
             viewModel.getPostAPIMediator().setWebView(views.widgetWebView)
@@ -136,53 +137,64 @@ class WidgetFragment @Inject constructor(
         }
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) = withState(viewModel) { state ->
-        val widget = state.asyncWidget()
-        menu.findItem(R.id.action_edit)?.isVisible = state.widgetKind != WidgetKind.INTEGRATION_MANAGER
-        if (widget == null) {
-            menu.findItem(R.id.action_refresh)?.isVisible = false
-            menu.findItem(R.id.action_widget_open_ext)?.isVisible = false
-            menu.findItem(R.id.action_delete)?.isVisible = false
-            menu.findItem(R.id.action_revoke)?.isVisible = false
-        } else {
-            menu.findItem(R.id.action_refresh)?.isVisible = true
-            menu.findItem(R.id.action_widget_open_ext)?.isVisible = true
-            menu.findItem(R.id.action_delete)?.isVisible = state.canManageWidgets && widget.isAddedByMe
-            menu.findItem(R.id.action_revoke)?.isVisible = state.status == WidgetStatus.WIDGET_ALLOWED && !widget.isAddedByMe
+    override fun getMenuRes() = R.menu.menu_widget
+
+    override fun handlePrepareMenu(menu: Menu) {
+        withState(viewModel) { state ->
+            val widget = state.asyncWidget()
+            menu.findItem(R.id.action_edit)?.isVisible = state.widgetKind != WidgetKind.INTEGRATION_MANAGER
+            if (widget == null) {
+                menu.findItem(R.id.action_refresh)?.isVisible = false
+                menu.findItem(R.id.action_widget_open_ext)?.isVisible = false
+                menu.findItem(R.id.action_delete)?.isVisible = false
+                menu.findItem(R.id.action_revoke)?.isVisible = false
+            } else {
+                menu.findItem(R.id.action_refresh)?.isVisible = true
+                menu.findItem(R.id.action_widget_open_ext)?.isVisible = true
+                menu.findItem(R.id.action_delete)?.isVisible = state.canManageWidgets && widget.isAddedByMe
+                menu.findItem(R.id.action_revoke)?.isVisible = state.status == WidgetStatus.WIDGET_ALLOWED && !widget.isAddedByMe
+            }
         }
-        super.onPrepareOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean = withState(viewModel) { state ->
-        when (item.itemId) {
-            R.id.action_edit -> {
-                navigator.openIntegrationManager(
-                        requireContext(),
-                        integrationManagerActivityResultLauncher,
-                        state.roomId,
-                        state.widgetId,
-                        state.widgetKind.screenId
-                )
-                return@withState true
-            }
-            R.id.action_delete -> {
-                deleteWidget()
-                return@withState true
-            }
-            R.id.action_refresh -> if (state.formattedURL.complete) {
-                views.widgetWebView.reload()
-                return@withState true
-            }
-            R.id.action_widget_open_ext -> if (state.formattedURL.complete) {
-                openUrlInExternalBrowser(requireContext(), state.formattedURL.invoke())
-                return@withState true
-            }
-            R.id.action_revoke -> if (state.status == WidgetStatus.WIDGET_ALLOWED) {
-                revokeWidget()
-                return@withState true
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
+        return withState(viewModel) { state ->
+            return@withState when (item.itemId) {
+                R.id.action_edit -> {
+                    navigator.openIntegrationManager(
+                            requireContext(),
+                            integrationManagerActivityResultLauncher,
+                            state.roomId,
+                            state.widgetId,
+                            state.widgetKind.screenId
+                    )
+                    true
+                }
+                R.id.action_delete -> {
+                    deleteWidget()
+                    true
+                }
+                R.id.action_refresh -> {
+                    if (state.formattedURL.complete) {
+                        views.widgetWebView.reload()
+                    }
+                    true
+                }
+                R.id.action_widget_open_ext -> {
+                    if (state.formattedURL.complete) {
+                        openUrlInExternalBrowser(requireContext(), state.formattedURL.invoke())
+                    }
+                    true
+                }
+                R.id.action_revoke -> {
+                    if (state.status == WidgetStatus.WIDGET_ALLOWED) {
+                        revokeWidget()
+                    }
+                    true
+                }
+                else -> false
             }
         }
-        return@withState super.onOptionsItemSelected(item)
     }
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean = withState(viewModel) { state ->

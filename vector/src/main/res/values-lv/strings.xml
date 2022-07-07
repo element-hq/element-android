@@ -1083,9 +1083,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="login_a11y_choose_other">Izvēlēties pielāgotu bāzes serveri</string>
     <string name="login_a11y_choose_modular">Izvēlēties Element Matrix Services</string>
     <string name="login_a11y_choose_matrix_org">Izvēlēties matrix.org</string>
-    <string name="login_signup_cancel_confirmation_content">Jūsu konts vēl nav izveidots..
-\n
-\nVai pārtraukt reģistrēšanos\?</string>
+    <string name="login_signup_cancel_confirmation_content">Jūsu konts vēl nav izveidots.. Vai pārtraukt reģistrēšanos\?</string>
     <string name="login_set_msisdn_notice2">Lūdzu, izmantojiet starptautisko formātu.</string>
     <string name="login_set_msisdn_notice">Iestatiet tālruņa numuru,lai pēc izvēles ļaut jums zināmiem cilvēkiem atrast.</string>
     <string name="login_set_msisdn_title">Iestatiet tālruņa numuru</string>

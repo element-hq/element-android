@@ -563,7 +563,7 @@
     <string name="merged_events_expand">Rozbaliť</string>
     <string name="merged_events_collapse">Zbaliť</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="action_accept">Prijať</string>
     <string name="auth_accept_policies">Prosím prečítajte si a odsúhlaste zmluvné podmienky tohoto domovského servera:</string>
     <string name="settings_call_category">Hovory</string>
@@ -1569,9 +1569,6 @@
     <string name="location_not_available_dialog_title">${app_name} nemohol získať prístup k vašej polohe</string>
     <string name="location_not_available_dialog_content">${app_name} nemohol získať prístup k vašej polohe. Skúste to prosím neskôr.</string>
     <string name="location_share_external">Otvoriť s</string>
-    <string name="settings_enable_location_sharing">Povoliť zdieľanie polohy</string>
-    <string name="settings_enable_location_sharing_summary">Po zapnutí tejto funkcie budete môcť odoslať svoju polohu do ľubovoľnej miestnosti</string>
-    <string name="labs_render_locations_in_timeline">Vykresliť umiestnenie používateľa na časovej osi</string>
     <string name="tooltip_attachment_location">Zdieľať polohu</string>
     <string name="login_server_url_form_modular_text">Prémiový hosting pre organizácie</string>
     <string name="login_signin_to">Prihlásiť sa do %1$s</string>
@@ -1913,9 +1910,7 @@
     <string name="verify_cancel_other">Ak to teraz zrušíte, neoveríte %1$s (%2$s). Začnite znova v ich používateľskom profile.</string>
     <string name="verify_cancel_self_verification_from_trusted">Ak to zrušíte, nebudete môcť čítať zašifrované správy v novom zariadení a ostatní používatelia mu nebudú dôverovať</string>
     <string name="verify_cancel_self_verification_from_untrusted">Ak to zrušíte, nebudete môcť čítať zašifrované správy v tomto zariadení a ostatní používatelia mu nebudú dôverovať</string>
-    <string name="login_signup_cancel_confirmation_content">Váš účet ešte nie je vytvorený.
-\n
-\nZastaviť proces registrácie\?</string>
+    <string name="login_signup_cancel_confirmation_content">Váš účet ešte nie je vytvorený. Zastaviť proces registrácie\?</string>
     <string name="login_reset_password_cancel_confirmation_content">Vaše heslo ešte nebolo zmenené.
 \n
 \nZastaviť proces zmeny hesla\?</string>
@@ -2459,9 +2454,6 @@
     <string name="call_transfer_connect_action">Pripojiť</string>
     <string name="location_share_live_stop">Zastaviť</string>
     <string name="location_share_live_enabled">Poloha v reálnom čase zapnutá</string>
-    <string name="location_in_background_missing_permission_dialog_content">Ak chcete zdieľať svoju polohu v reálnom čase, ${app_name} potrebuje prístup k polohe po celý čas, kým je aplikácia na pozadí.
-\nPrístup k vašej polohe bude len počas obdobia, ktoré si zvolíte.</string>
-    <string name="location_in_background_missing_permission_dialog_title">Povoliť prístup</string>
     <string name="a11y_location_share_option_pinned_icon">Zdieľať túto polohu</string>
     <string name="location_share_option_pinned">Zdieľať túto polohu</string>
     <string name="a11y_location_share_option_user_live_icon">Zdieľať polohu v reálnom čase</string>
@@ -2537,4 +2529,22 @@
     <string name="settings_show_latest_profile">Zobraziť najnovšie informácie o používateľovi</string>
     <string name="a11y_presence_busy">Obsadený/zaneprázdnený</string>
     <string name="keys_backup_settings_signature_from_this_user">Zálohovanie má platný podpis od tohto používateľa.</string>
+    <string name="live_location_bottom_sheet_last_updated_at">Aktualizované pred %1$s</string>
+    <string name="live_location_bottom_sheet_stop_sharing">Zastaviť zdieľanie</string>
+    <string name="labs_enable_live_location_summary">Dočasná implementácia: polohy pretrvávajú v histórii miestnosti</string>
+    <string name="labs_enable_live_location">Povoliť zdieľanie polohy v reálnom čase</string>
+    <string name="location_share_live_remaining_time">ostáva %1$s</string>
+    <string name="location_share_live_until">Zdieľať polohu do %1$s</string>
+    <string name="location_share_live_view">Zobraziť polohu v reálnom čase</string>
+    <string name="location_share_live_ended">Ukončenie polohy v reálnom čase</string>
+    <string name="space_explore_filter_no_result_description">Niektoré výsledky môžu byť skryté, pretože sú súkromné a na ich zobrazenie potrebujete pozvánku.</string>
+    <string name="space_explore_filter_no_result_title">Nenašli sa žiadne výsledky</string>
+    <string name="space_leave_radio_button_none">Neopustiť žiadne</string>
+    <string name="space_leave_radio_button_all">Opustiť všetko</string>
+    <string name="space_leave_radio_buttons_title">Veci v tomto priestore</string>
+    <string name="settings_autoplay_animated_images_summary">Prehrať animované obrázky na časovej osi hneď, ako sú viditeľné</string>
+    <string name="settings_autoplay_animated_images_title">Automaticky prehrať animované obrázky</string>
+    <string name="time_unit_second_short">sek</string>
+    <string name="time_unit_minute_short">min</string>
+    <string name="time_unit_hour_short">h</string>
 </resources>

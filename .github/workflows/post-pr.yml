@@ -13,6 +13,7 @@ env:
   CI_GRADLE_ARG_PROPERTIES: >
     -Porg.gradle.jvmargs=-Xmx4g
     -Porg.gradle.parallel=false
+    --no-daemon
 
 jobs:
 
@@ -41,7 +42,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python 3.8
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: 3.8
       - uses: actions/cache@v3

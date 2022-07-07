@@ -20,6 +20,7 @@ import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.IdRes
+import androidx.annotation.LayoutRes
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
@@ -36,7 +37,9 @@ import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvid
 import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
 import im.vector.app.features.home.room.detail.timeline.style.granularRoundedCorners
 
-abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder> : AbsMessageItem<H>() {
+abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder>(
+        @LayoutRes layoutId: Int = R.layout.item_timeline_event_base
+) : AbsMessageItem<H>(layoutId) {
 
     @EpoxyAttribute
     var locationUrl: String? = null
@@ -85,6 +88,7 @@ abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder> : AbsMe
                     ): Boolean {
                         holder.staticMapPinImageView.setImageResource(R.drawable.ic_location_pin_failed)
                         holder.staticMapErrorTextView.isVisible = true
+                        holder.staticMapCopyrightTextView.isVisible = false
                         return false
                     }
 
@@ -100,6 +104,7 @@ abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder> : AbsMe
                             holder.staticMapPinImageView.setImageDrawable(pinDrawable)
                         }
                         holder.staticMapErrorTextView.isVisible = false
+                        holder.staticMapCopyrightTextView.isVisible = true
                         return false
                     }
                 })
@@ -111,5 +116,6 @@ abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder> : AbsMe
         val staticMapImageView by bind<ImageView>(R.id.staticMapImageView)
         val staticMapPinImageView by bind<ImageView>(R.id.staticMapPinImageView)
         val staticMapErrorTextView by bind<TextView>(R.id.staticMapErrorTextView)
+        val staticMapCopyrightTextView by bind<TextView>(R.id.staticMapCopyrightTextView)
     }
 }

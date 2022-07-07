@@ -16,8 +16,8 @@
     <string name="notice_display_name_removed">%1$s a supprimé son nom d’affichage (précédemment %2$s)</string>
     <string name="notice_room_topic_changed">%1$s a changé le sujet en : %2$s</string>
     <string name="notice_room_name_changed">%1$s a changé le nom du salon en : %2$s</string>
-    <string name="notice_placed_video_call">%s a passé un appel vidéo.</string>
-    <string name="notice_placed_voice_call">%s a passé un appel audio.</string>
+    <string name="notice_placed_video_call">%s a lancé un appel vidéo.</string>
+    <string name="notice_placed_voice_call">%s a lancé un appel audio.</string>
     <string name="notice_answered_call">%s a répondu à l’appel.</string>
     <string name="notice_ended_call">%s a raccroché.</string>
     <string name="notice_made_future_room_visibility">%1$s a rendu l’historique futur du salon visible pour %2$s</string>
@@ -159,8 +159,8 @@
     <string name="notice_answered_call_by_you">Vous avez répondu à l’appel.</string>
     <string name="notice_call_candidates_by_you">Vous avez envoyé les données pour configurer l’appel.</string>
     <string name="notice_call_candidates">%s a envoyé les données pour configurer l’appel.</string>
-    <string name="notice_placed_voice_call_by_you">Vous avez passé un appel audio.</string>
-    <string name="notice_placed_video_call_by_you">Vous avez passé un appel vidéo.</string>
+    <string name="notice_placed_voice_call_by_you">Vous avez lancé un appel audio.</string>
+    <string name="notice_placed_video_call_by_you">Vous avez lancé un appel vidéo.</string>
     <string name="notice_room_name_changed_by_you">Vous avez changé le nom du salon en : %1$s</string>
     <string name="notice_room_avatar_changed_by_you">Vous avez modifié l’avatar du salon</string>
     <string name="notice_room_avatar_changed">%1$s a modifié l’avatar du salon</string>
@@ -582,7 +582,7 @@
     <string name="merged_events_expand">développer</string>
     <string name="merged_events_collapse">réduire</string>
     <string name="generic_label_and_value">%1$s : %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="room_participants_action_remove">Expulser</string>
     <string name="settings_inline_url_preview_summary">Afficher un aperçu des liens dans la discussion quand votre serveur d’accueil le permet.</string>
     <string name="settings_send_typing_notifs">Envoyer des notifications de saisie</string>
@@ -1118,9 +1118,7 @@
     <string name="login_signup_submit">Suivant</string>
     <string name="login_signup_error_user_in_use">Ce nom d’utilisateur est déjà pris</string>
     <string name="login_signup_cancel_confirmation_title">Attention</string>
-    <string name="login_signup_cancel_confirmation_content">Votre compte n’est pas encore crée.
-\n
-\nArrêter le processus de création \?</string>
+    <string name="login_signup_cancel_confirmation_content">Votre compte n’est pas encore crée. Arrêter le processus de création \?</string>
     <string name="login_a11y_choose_matrix_org">Sélectionner matrix.org</string>
     <string name="login_a11y_choose_modular">Sélectionner Element Matrix Services</string>
     <string name="login_a11y_choose_other">Sélectionner un serveur d’accueil personnalisé</string>
@@ -2337,9 +2335,6 @@
     <string name="ftue_auth_carousel_control_body">Choisissez où vos conversations sont stockées, vous avez le contrôle et êtes indépendant. Connecté via Matrix.</string>
     <string name="room_unsupported_e2e_algorithm">Le chiffrement a été mal configuré ce qui vous empêche d’envoyer des messages. Veuillez contacter un administrateur pour remettre le chiffrement en état de marche.</string>
     <string name="tooltip_attachment_location">Partager la localisation</string>
-    <string name="labs_render_locations_in_timeline">Afficher les localisations de l\'utilisateur dans le temps</string>
-    <string name="settings_enable_location_sharing_summary">Une fois activé il vous sera possible d\'envoyer votre localisation dans n\'importe quel salon</string>
-    <string name="settings_enable_location_sharing">Activer le partage de localisation</string>
     <string name="location_share_external">Ouvrir avec</string>
     <string name="location_not_available_dialog_content">${app_name} n\'a pas pu accéder à votre localisation. Veuillez réessayer plus tard.</string>
     <string name="location_not_available_dialog_title">${app_name} n\'a pas pu accéder à votre localisation</string>
@@ -2414,9 +2409,6 @@
     <string name="live_location_sharing_notification_title">Position en temps réel de ${app_name}</string>
     <string name="location_share_live_stop">Arrêter</string>
     <string name="location_share_live_enabled">Position en temps réel activée</string>
-    <string name="location_in_background_missing_permission_dialog_content">Si vous souhaitez partager votre position en temps réel, ${app_name} a besoin de l’autorisation d’accès permanent à la position quand l’application est en arrière-plan.
-\nNous accèderons à votre position seulement pendant la durée que vous définissez.</string>
-    <string name="location_in_background_missing_permission_dialog_title">Autoriser l’accès</string>
     <string name="a11y_location_share_option_pinned_icon">Partager cet emplacement</string>
     <string name="location_share_option_pinned">Partager cet emplacement</string>
     <string name="a11y_location_share_option_user_live_icon">Partager la position en temps réel</string>
@@ -2490,4 +2482,22 @@
 \n
 \nCette action va redémarrer l’application et pourra prendre du temps.</string>
     <string name="initial_sync_request_title">Requête de synchronisation initiale</string>
+    <string name="live_location_bottom_sheet_last_updated_at">Mis-à-jour il y a %1$s</string>
+    <string name="live_location_bottom_sheet_stop_sharing">Arrêter le partage</string>
+    <string name="labs_enable_live_location_summary">Implémentation temporaire : les positions sont persistantes dans l’historique du salon</string>
+    <string name="labs_enable_live_location">Activer le partage de position en continu</string>
+    <string name="location_share_live_remaining_time">%1$s restant</string>
+    <string name="location_share_live_until">En direct jusqu’à %1$s</string>
+    <string name="location_share_live_view">Voir la position en direct</string>
+    <string name="location_share_live_ended">Position en temps réel terminée</string>
+    <string name="space_explore_filter_no_result_description">Certains résultats peuvent être cachés car ils sont privés et requièrent une invitation.</string>
+    <string name="space_explore_filter_no_result_title">Aucun résultat</string>
+    <string name="space_leave_radio_button_none">Ne rien quitter</string>
+    <string name="space_leave_radio_button_all">Tout quitter</string>
+    <string name="space_leave_radio_buttons_title">Choses dans cet espace</string>
+    <string name="settings_autoplay_animated_images_summary">Joue les images animées de l’historique dès qu’elles sont visibles</string>
+    <string name="settings_autoplay_animated_images_title">Jouer automatiquement les images animées</string>
+    <string name="time_unit_second_short">s</string>
+    <string name="time_unit_minute_short">min</string>
+    <string name="time_unit_hour_short">h</string>
 </resources>

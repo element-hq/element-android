@@ -21,6 +21,7 @@ import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.content.res.Resources
+import com.google.i18n.phonenumbers.PhoneNumberUtil
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -50,6 +51,7 @@ import im.vector.app.features.room.VectorRoomDisplayNameFallbackProvider
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.ui.SharedPreferencesUiStateRepository
 import im.vector.app.features.ui.UiStateRepository
+import im.vector.app.flipper.FlipperProxy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -119,12 +121,16 @@ object VectorStaticModule {
     @Provides
     fun providesMatrixConfiguration(
             vectorPreferences: VectorPreferences,
-            vectorRoomDisplayNameFallbackProvider: VectorRoomDisplayNameFallbackProvider
+            vectorRoomDisplayNameFallbackProvider: VectorRoomDisplayNameFallbackProvider,
+            flipperProxy: FlipperProxy,
     ): MatrixConfiguration {
         return MatrixConfiguration(
                 applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
                 roomDisplayNameFallbackProvider = vectorRoomDisplayNameFallbackProvider,
                 threadMessagesEnabledDefault = vectorPreferences.areThreadMessagesEnabled(),
+                networkInterceptors = listOfNotNull(
+                        flipperProxy.getNetworkInterceptor(),
+                )
         )
     }
 
@@ -187,6 +193,9 @@ object VectorStaticModule {
     fun providesAnalyticsConfig(): AnalyticsConfig {
         return analyticsConfig
     }
+
+    @Provides
+    fun providesPhoneNumberUtil(): PhoneNumberUtil = PhoneNumberUtil.getInstance()
 
     @Provides
     @Singleton

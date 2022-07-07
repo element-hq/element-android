@@ -28,6 +28,7 @@ import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.databinding.ActivityBugReportBinding
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import timber.log.Timber
@@ -36,7 +37,9 @@ import timber.log.Timber
  * Form to send a bug report.
  */
 @AndroidEntryPoint
-class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
+class BugReportActivity :
+        VectorBaseActivity<ActivityBugReportBinding>(),
+        VectorMenuProvider {
 
     override fun getBinding() = ActivityBugReportBinding.inflate(layoutInflater)
 
@@ -120,29 +123,27 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
 
     override fun getMenuRes() = R.menu.bug_report
 
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+    override fun handlePrepareMenu(menu: Menu) {
         menu.findItem(R.id.ic_action_send_bug_report)?.let {
             val isValid = !views.bugReportMaskView.isVisible
 
             it.isEnabled = isValid
             it.icon.alpha = if (isValid) 255 else 100
         }
-
-        return super.onPrepareOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             R.id.ic_action_send_bug_report -> {
                 if (views.bugReportEditText.text.toString().trim().length >= 10) {
                     sendBugReport()
                 } else {
                     views.bugReportTextInputLayout.error = getString(R.string.bug_report_error_too_short)
                 }
-                return true
+                true
             }
+            else -> false
         }
-        return super.onOptionsItemSelected(item)
     }
 
     /**
@@ -259,7 +260,7 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
     }
 
     private fun onSendScreenshotChanged() {
-        views.bugReportScreenshotPreview.isVisible = views.bugReportButtonIncludeScreenshot.isChecked && bugReporter.screenshot != null
+        views.bugReportScreenshotPreview.isVisible = bugReporter.screenshot != null
     }
 
     override fun onBackPressed() {

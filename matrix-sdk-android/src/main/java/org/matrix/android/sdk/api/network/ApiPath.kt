@@ -162,7 +162,7 @@ enum class ApiPath(val path: String, val method: String) {
     KICK_USER(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/kick", "POST"),
     REDACT_EVENT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/redact/{eventId}/{txnId}", "PUT"),
     REPORT_CONTENT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/report/{eventId}", "POST"),
-    GET_ALIASES(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "org.matrix.msc2432/rooms/{roomId}/aliases", "GET"),
+    GET_ALIASES(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/aliases", "GET"),
     SEND_TYPING_STATE(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/typing/{userId}", "PUT"),
     PUT_TAG(NetworkConstants.URI_API_PREFIX_PATH_R0 + "user/{userId}/rooms/{roomId}/tags/{tag}", "PUT"),
     DELETE_TAG(NetworkConstants.URI_API_PREFIX_PATH_R0 + "user/{userId}/rooms/{roomId}/tags/{tag}", "DELETE"),

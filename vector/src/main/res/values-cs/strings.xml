@@ -4,7 +4,7 @@
     <string name="notice_room_invite">%1$s pozval(a) %2$s</string>
     <string name="notice_room_invite_you">%1$s vás pozval(a)</string>
     <string name="notice_room_join">%1$s vstoupil(a) do místnosti</string>
-    <string name="notice_room_leave">Uživatel %1$s odešel z místnosti</string>
+    <string name="notice_room_leave">Uživatel %1$s opustil místnost</string>
     <string name="notice_room_reject">%1$s odmítl(a) pozvání</string>
     <string name="notice_room_remove">%1$s odebral(a) %2$s</string>
     <string name="notice_room_unban">%1$s zrušil(a) vykázání %2$s</string>
@@ -836,7 +836,7 @@
     <string name="merged_events_expand">rozbalit</string>
     <string name="merged_events_collapse">sbalit</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="no_valid_google_play_services_apk">Žádný platný APK Google Plaz Services nenalezen. Oznámení možná nebudou pracovat spolehlivě.</string>
     <string name="passphrase_create_passphrase">Vytvořit přístupovou frázi</string>
     <string name="passphrase_confirm_passphrase">Potvrdit přístupovou frázi</string>
@@ -1164,9 +1164,7 @@
     <string name="login_signup_username_hint">Uživatelské jméno</string>
     <string name="login_signup_error_user_in_use">Toto uživatelské jméno je již obsazeno</string>
     <string name="login_signup_cancel_confirmation_title">Varování</string>
-    <string name="login_signup_cancel_confirmation_content">Váš účet nebyl ještě založen.
-\n
-\nZastavit registrační proces\?</string>
+    <string name="login_signup_cancel_confirmation_content">Váš účet nebyl ještě založen. Zastavit registrační proces\?</string>
     <string name="login_a11y_choose_matrix_org">Vybrat matrix.org</string>
     <string name="login_a11y_choose_modular">Vybrat Element Matrix Services</string>
     <string name="login_a11y_choose_other">Vybrat vlastní domovský server</string>
@@ -2380,9 +2378,6 @@
     <string name="ftue_auth_carousel_control_title">Máte vše pod kontrolou.</string>
     <string name="ftue_auth_carousel_secure_title">Vlastněte své konverzace.</string>
     <string name="tooltip_attachment_location">Sdílet polohu</string>
-    <string name="labs_render_locations_in_timeline">Zobrazit polohy uživatele na časové ose</string>
-    <string name="settings_enable_location_sharing_summary">Po zapnutí budete moci odeslat svou polohu do libovolné místnosti</string>
-    <string name="settings_enable_location_sharing">Povolit sdílení polohy</string>
     <string name="location_share_external">Otevřít v</string>
     <string name="location_not_available_dialog_content">${app_name} nemohl získat přístup k vaší poloze. Zkuste to prosím později.</string>
     <string name="location_not_available_dialog_title">${app_name} nemohl získat přístup k vaší poloze</string>
@@ -2459,9 +2454,6 @@
     <string name="room_notification_two_users_are_typing">%1$s a %2$s</string>
     <string name="location_share_live_stop">Zastavit</string>
     <string name="location_share_live_enabled">Poloha živě povolena</string>
-    <string name="location_in_background_missing_permission_dialog_content">Pokud chcete sdílet svou polohu živě, ${název_aplikace} potřebuje přístup k poloze po celou dobu, kdy je aplikace na pozadí.
-\nK vaší poloze budeme mít přístup pouze po dobu, kterou si zvolíte.</string>
-    <string name="location_in_background_missing_permission_dialog_title">Povolit přístup</string>
     <string name="a11y_location_share_option_pinned_icon">Sdílet tuto polohu</string>
     <string name="location_share_option_pinned">Sdílet tuto polohu</string>
     <string name="a11y_location_share_option_user_live_icon">Sdílet polohu živě</string>
@@ -2537,4 +2529,22 @@
     <string name="settings_show_latest_profile_description">Zobrazit nejnovější informace o profilu (avatar a zobrazované jméno) u všech zpráv.</string>
     <string name="a11y_presence_busy">Zaneprázdněn</string>
     <string name="keys_backup_settings_signature_from_this_user">Záloha má platný podpis tohoto uživatele.</string>
+    <string name="live_location_bottom_sheet_last_updated_at">Aktualizována před %1$s</string>
+    <string name="live_location_bottom_sheet_stop_sharing">Ukončit sdílení</string>
+    <string name="labs_enable_live_location_summary">Dočasná implementace: polohy přetrvávají v historii místností</string>
+    <string name="labs_enable_live_location">Povolit sdílení polohy živě</string>
+    <string name="location_share_live_remaining_time">zbývá %1$s</string>
+    <string name="location_share_live_until">Živě do %1$s</string>
+    <string name="location_share_live_view">Zobrazit polohu živě</string>
+    <string name="location_share_live_ended">Poloha živě ukončena</string>
+    <string name="space_explore_filter_no_result_description">Některé výsledky mohou být skryté, protože jsou soukromé a potřebujete k nim pozvánku.</string>
+    <string name="space_explore_filter_no_result_title">Nebyly nalezeny žádné výsledky</string>
+    <string name="space_leave_radio_button_none">Nic neopouštět</string>
+    <string name="space_leave_radio_button_all">Opustit všechny</string>
+    <string name="space_leave_radio_buttons_title">Věci v tomto prostoru</string>
+    <string name="settings_autoplay_animated_images_summary">Přehrávat animované obrázky na časové ose, jakmile jsou viditelné</string>
+    <string name="settings_autoplay_animated_images_title">Automaticky přehrávat animované obrázky</string>
+    <string name="time_unit_second_short">sek</string>
+    <string name="time_unit_minute_short">min</string>
+    <string name="time_unit_hour_short">h</string>
 </resources>

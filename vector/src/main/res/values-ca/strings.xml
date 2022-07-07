@@ -243,7 +243,7 @@
     <string name="later">Més tard</string>
     <string name="permalink">Enllaç permanent</string>
     <string name="view_source">Visualitza el codi font</string>
-    <string name="view_decrypted_source">Visualitza el codi font desencriptat</string>
+    <string name="view_decrypted_source">Visualitza el codi font desxifrat</string>
     <string name="action_delete">Elimina</string>
     <string name="action_rename">Canvia el nom</string>
     <string name="report_content">Informa del contingut</string>
@@ -544,7 +544,7 @@
     <string name="option_send_voice">Envia veu</string>
     <string name="error_no_external_application_found">Ho sento, no s\'ha trobat cap aplicació externa per completar l\'acció.</string>
     <string name="e2e_re_request_encryption_key">Tornar a demanar les claus de xifrat de les teves altres sessions.</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Si us plau, obre ${app_name} a un altre dispositiu que pugui desxifrar el missatge de manera que pugui enviar les claus a aquesta sessió.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Obre ${app_name} a un altre dispositiu que pugui desxifrar el missatge de manera que pugui enviar les claus a aquesta sessió.</string>
     <string name="dialog_title_error">Error</string>
     <string name="system_alerts_header">Alertes de sistema</string>
     <string name="send_bug_report_description_in_english">Si és possible, escriu la descripció en anglès.</string>
@@ -646,7 +646,7 @@
     <string name="markdown_has_been_enabled">S\'ha habilitat el Markdown.</string>
     <string name="markdown_has_been_disabled">S\'ha inhabilitat el Markdown.</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="no_valid_google_play_services_apk">No s\'ha trobat cap APK de Google Play Services vàlid. Les notificacions poden no funcionar correctament.</string>
     <string name="title_activity_keys_backup_setup">Còpia de seguretat de les claus</string>
     <string name="title_activity_keys_backup_restore">Utilitza la còpia de seguretat de les claus</string>
@@ -861,7 +861,7 @@
     <string name="room_list_catchup_empty_title">Estàs al dia!</string>
     <string name="room_list_catchup_empty_body">No tens més missatges sense llegir</string>
     <string name="room_list_people_empty_title">Xats</string>
-    <string name="room_list_people_empty_body">Els teus xats personals es mostraran aquí. Clica el + de la part inferior dreta per iniciar-ne algun.</string>
+    <string name="room_list_people_empty_body">Els teus xats directes es mostraran aquí. Clica el + de la part inferior dreta per crear-ne algun.</string>
     <string name="room_list_rooms_empty_title">Sales</string>
     <string name="room_list_rooms_empty_body">Les teves sales es mostraran aquí. Clica el + de la part inferior dreta per buscar-ne d\'existents o per crear-ne una.</string>
     <string name="title_activity_emoji_reaction_picker">Reaccions</string>
@@ -913,7 +913,7 @@
     <string name="room_settings_enable_encryption_dialog_content">Una vegada activat, el xifrat d\'una sala no es pot desactivar. El servidor no pot llegir els missatges enviats en una sala xifrada, només els poden llegir els participants. L\'activació del xifrat pot fer que molts bots i enllaços no funcionin correctament.</string>
     <string name="room_profile_section_more_notifications">Notificacions</string>
     <string name="direct_room_profile_not_encrypted_subtitle">Els missatges d\'aquí NO estan xifrats d\'extrem a extrem.</string>
-    <string name="room_profile_not_encrypted_subtitle">Els missatges d\'aquesta sala NO estan encriptats d\'extrem a extrem.</string>
+    <string name="room_profile_not_encrypted_subtitle">Els missatges d\'aquesta sala NO estan xifrats d\'extrem a extrem.</string>
     <string name="create_room_encryption_description">Una vegada activat, el xifrat no es pot desactivar.</string>
     <string name="login_reset_password_warning_content">Si canvies la contrasenya es restabliran les claus de xifrat d\'extrem a extrem de totes les teves sessions de manera que l\'històric del xat no es podrà llegir. Fes una còpia de seguretat de les claus o exporta les teves claus de sala d\'una altra sessió abans de fer el canvi de contrasenya.</string>
     <string name="room_join_rules_public_by_you">Has fet la sala accessible per a qualsevol que tingui l\'enllaç.</string>
@@ -1036,7 +1036,7 @@
     <string name="no_message_edits_found">No s\'han trobat edicions</string>
     <string name="message_edits">Edicions de missatges</string>
     <string name="edited_suffix">(editat)</string>
-    <string name="room_profile_encrypted_subtitle">Els missatges d\'aquesta sala estan encriptats d\'extrem a extrem.
+    <string name="room_profile_encrypted_subtitle">Els missatges d\'aquesta sala estan xifrats d\'extrem a extrem.
 \n
 \nEls missatges estan protegits i només tu i el destinatari teniu les úniques claus per poder desxifrar-los.</string>
     <string name="sent_a_file">Fitxer</string>
@@ -1602,9 +1602,7 @@
     <string name="login_a11y_choose_other">Selecciona un servidor local personalitzat</string>
     <string name="login_a11y_choose_modular">Selecciona Serveis Matrix d\'Element</string>
     <string name="login_a11y_choose_matrix_org">Selecciona matrix.org</string>
-    <string name="login_signup_cancel_confirmation_content">El teu compte encara s\'ha creat.
-\n
-\nVols aturar el procés de registre\?</string>
+    <string name="login_signup_cancel_confirmation_content">El teu compte encara s\'ha creat. Vols aturar el procés de registre\?</string>
     <string name="login_signup_cancel_confirmation_title">Atenció</string>
     <string name="login_signup_error_user_in_use">Aquest nom d\'usuari ja està agafat</string>
     <string name="login_set_msisdn_notice">Estableix un número de telèfon per, opcionalment, permetre que la gent que coneixes et pugui trobar.</string>
@@ -2091,13 +2089,9 @@
     <string name="location_share_live_started">Carregant ubicació en directe…</string>
     <string name="location_share_live_enabled">Compartició d\'ubicació en directe activada</string>
     <string name="location_timeline_failed_to_load_map">No s\'ha pogut carregar el mapa</string>
-    <string name="labs_render_locations_in_timeline">Mostra les ubicacions dels usuaris a la cronologia</string>
-    <string name="settings_enable_location_sharing_summary">Si està activat, podràs enviar la teva ubicació a qualsevol sala</string>
-    <string name="settings_enable_location_sharing">Activa la compartició d\'ubicació</string>
     <string name="location_share_external">Obre amb</string>
     <string name="location_not_available_dialog_content">${app_name} no ha pogut accedir a la teva ubicació. Torna-ho a provar més tard.</string>
     <string name="location_not_available_dialog_title">${app_name} no ha pogut accedir a la teva ubicació</string>
-    <string name="location_in_background_missing_permission_dialog_title">Permet l\'accés</string>
     <string name="location_share_live_select_duration_option_3">8 hores</string>
     <string name="location_share_live_select_duration_option_2">1 hora</string>
     <string name="location_share_live_select_duration_option_1">15 minuts</string>
@@ -2139,8 +2133,6 @@
     <string name="room_settings_room_access_restricted_description">Qualsevol a un espai amb aquesta sala podrà trobar-la i unir-s\'hi. Només els administradors d\'aquesta sala poden afegir-la a un espai.</string>
     <string name="upgrade_room_for_restricted">Qualsevol a·%s podrà trobar i unir-se a aquesta sala; no caldrà convidar tothom manualment. Podràs canviar-ho a la configuració de sala en qualsevol moment.</string>
     <string name="upgrade_room_for_restricted_no_param">Qualsevol persona d\'un espai principal podrà trobar i unir-se a aquesta sala; no caldrà convidar tothom manualment. Podràs canviar-ho a la configuració de sala en qualsevol moment.</string>
-    <string name="location_in_background_missing_permission_dialog_content">Per compartir la teva ubicació en directe, ${app_name} necessita accedir a la teva ubicació mentre l\'aplicació està en segon pla.
-\nNomés s\'accedirà a la teva ubicació durant el temps que escullis.</string>
     <string name="command_description_ignore_user">Ignora un usuari i amaga els seus missatges</string>
     <string name="space_you_know_that_contains_this_room">Espai que saps que conté aquesta sala</string>
     <string name="decide_which_spaces_can_access">Tria quins espais poden accedir a aquesta sala. Si se selecciona un espai, els seus membres podran trobar i unir-se a la sala.</string>
@@ -2490,4 +2482,22 @@
     <string name="tooltip_attachment_gallery">Envia imatges i vídeos</string>
     <string name="tooltip_attachment_photo">Obre càmera</string>
     <string name="message_bubbles">Mostra els contorns dels missatges</string>
+    <string name="live_location_bottom_sheet_last_updated_at">Actualitzada fa %1$s</string>
+    <string name="labs_enable_live_location_summary">Implementació temporal: les ubicacions persisteixen a l\'historial de la sala</string>
+    <string name="space_leave_radio_buttons_title">Coses en aquest espai</string>
+    <string name="settings_autoplay_animated_images_summary">Reprodueix immediatament les imatges animades a la cronologia</string>
+    <string name="live_location_bottom_sheet_stop_sharing">Deixa de compartir</string>
+    <string name="labs_enable_live_location">Activa la compartició d\'ubicació en directe</string>
+    <string name="location_share_live_remaining_time">%1$s restants</string>
+    <string name="location_share_live_until">En directe fins %1$s</string>
+    <string name="location_share_live_view">Mostra la ubicació en directe</string>
+    <string name="location_share_live_ended">Compartició d\'ubicació en directe finalitzada</string>
+    <string name="settings_autoplay_animated_images_title">Reprodueix automàticament imatges animades</string>
+    <string name="space_explore_filter_no_result_description">Alguns resultats poden estar amagats perquè són privats i necessites invitació prèvia.</string>
+    <string name="space_explore_filter_no_result_title">Sense resultats</string>
+    <string name="space_leave_radio_button_all">Marxa de tot arreu</string>
+    <string name="space_leave_radio_button_none">No marxis d\'enlloc</string>
+    <string name="time_unit_second_short">s</string>
+    <string name="time_unit_minute_short">min</string>
+    <string name="time_unit_hour_short">h</string>
 </resources>

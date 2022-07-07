@@ -386,7 +386,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
     }
 
     private fun getPowerLevelsHelper(roomId: String): PowerLevelsHelper? {
-        return stateEventDataSource.getStateEvent(roomId, EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
+        return stateEventDataSource.getStateEvent(roomId, EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
                 ?.content?.toModel<PowerLevelsContent>()
                 ?.let { PowerLevelsHelper(it) }
     }

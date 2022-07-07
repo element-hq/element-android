@@ -598,9 +598,7 @@
     <string name="settings_select_country">בחר\\י מדינה</string>
     <string name="settings_emails_and_phone_numbers_summary">נהל מיילים ומספרי טלפון המקושרים לחשבון מטריקס שלך</string>
     <string name="settings_emails_and_phone_numbers_title">דוא\"ל ומספר טלפון</string>
-    <string name="settings_unignore_user">הצג את כל ההודעות מ- %s\?
-\n
-\nשים לב שפעולה זו תפעיל מחדש את האפליקציה והיא עשויה להימשך זמן מה.</string>
+    <string name="settings_unignore_user">להציג את כל ההודעות מאת %s\?</string>
     <string name="settings_password_updated">הסיסמה שלכם עודכנה</string>
     <string name="settings_fail_to_update_password_invalid_current_password">הסיסמה אינה תקינה</string>
     <string name="settings_fail_to_update_password">עדכון הסיסמה נכשל</string>
@@ -1175,9 +1173,9 @@
     <string name="message_add_reaction">הוסף תגובה</string>
     <string name="action_agree">מסכים</string>
     <string name="title_activity_emoji_reaction_picker">תגובות</string>
-    <string name="room_list_rooms_empty_body">החדרים שלך יוצגו כאן. הקש על + שמאל למטה כדי למצוא את הקיים או התחל כמה משלך.</string>
+    <string name="room_list_rooms_empty_body">החדרים שלך יוצגו כאן. יש ללחוץ על + שמאל מלמטה כדי למצוא את הקיים או לפתוח כאלו משלך.</string>
     <string name="room_list_rooms_empty_title">חדרים</string>
-    <string name="room_list_people_empty_body">שיחות ההודעה הישירה שלך יוצגו כאן. הקש על + שמאל למטה כדי להתחיל כמה.</string>
+    <string name="room_list_people_empty_body">שיחות ההודעה הישירה שלך יוצגו כאן. יש ללחוץ על + משמאל למטה כדי לפתוח כאלה.</string>
     <string name="room_list_people_empty_title">שיחות</string>
     <string name="room_list_catchup_empty_body">אין לך יותר הודעות שלא נקראו</string>
     <string name="room_list_catchup_empty_title">כולכם נתפסתם!</string>
@@ -1556,7 +1554,7 @@
     <string name="message_key">מפתח הודעה</string>
     <string name="recovery_passphrase">ביטוי סיסמה לשחזור</string>
     <string name="verification_cancelled">האימות בוטל</string>
-    <string name="verify_cancelled_notice">אמת את המכשירים שלך מההגדרות.</string>
+    <string name="verify_cancelled_notice">האימות בוטל. אפשר להתחיל את האימות שוב.</string>
     <string name="verify_not_me_self_verification">אחד מהדברים הבאים עלול להתפשר:
 \n
 \n- הסיסמה שלך
@@ -1630,7 +1628,7 @@
     <string name="identity_server_set_default_submit">השתמש ב-%1$s</string>
     <string name="identity_server_set_default_notice">שרת הבית שלך (%1$s) מציע להשתמש ב-%2$s עבור שרת הזהות שלך</string>
     <string name="identity_server_user_consent_not_provided">הסכמת המשתמש לא סופקה.</string>
-    <string name="identity_server_error_no_current_binding_error">אין קשר נוכחי למזהה זה.</string>
+    <string name="identity_server_error_no_current_binding_error">אין קישור נוכחי למזהה זה.</string>
     <string name="identity_server_error_binding_error">העמותה נכשלה.</string>
     <string name="identity_server_error_bulk_sha256_not_supported">למען הפרטיות שלך, אלמנט תומך רק בשליחת הודעות דוא\"ל של משתמשים, בליל ומספר טלפון.</string>
     <string name="identity_server_error_terms_not_signed">אנא קבל תחילה את התנאים של שרת הזהות בהגדרות.</string>
@@ -1882,9 +1880,6 @@
     <string name="tooltip_attachment_photo">פתח מצלמה</string>
     <string name="message_bubbles">הצג בועות הודעה</string>
     <string name="location_timeline_failed_to_load_map">טעינת המפה נכשלה</string>
-    <string name="labs_render_locations_in_timeline">מיפוי מיקומי משתמשים בציר הזמן</string>
-    <string name="settings_enable_location_sharing_summary">לאחר ההפעלה, תוכל לשלוח את המיקום שלך לכל חדר</string>
-    <string name="settings_enable_location_sharing">אפשר שיתוף מיקום</string>
     <string name="location_share_external">פתח באמצעות</string>
     <string name="location_not_available_dialog_content">${app_name} לא הצליח לגשת למיקום שלך. אנא נסה שוב מאוחר יותר.</string>
     <string name="location_not_available_dialog_title">${app_name} לא הצליח לגשת למיקום שלך</string>
@@ -1945,13 +1940,13 @@
         <item quantity="one">שיחת וידאו שלא נענתה</item>
         <item quantity="two">%d שיחות וידאו שלא נענו</item>
         <item quantity="many">%d שיחות וידאו שלא נענו</item>
-        <item quantity="other">שיחת וידאו שלא נענתה</item>
+        <item quantity="other">%d שיחות וידאו שלא נענו</item>
     </plurals>
     <plurals name="missed_audio_call">
         <item quantity="one">שיחה שלא נענתה</item>
         <item quantity="two">%d שיחות שלא נענו</item>
         <item quantity="many">%d שיחות שלא נענו</item>
-        <item quantity="other">שיחה שלא נענתה</item>
+        <item quantity="other">%d שיחות שלא נענו</item>
     </plurals>
     <string name="call_ringing">צלצול שיחה…</string>
     <string name="error_unauthorized">לא מורשה, חסרים אישורי אימות חוקיים</string>
@@ -2162,7 +2157,7 @@
     <string name="restart_the_application_to_apply_changes">אתחל את הישומון כדי שהשינויים יכנסו לתוקף.</string>
     <string name="join_anyway">הצטרף בכל מקרה</string>
     <string name="join_space">הצטרף למרחב</string>
-    <string name="create_space">צור מרחב</string>
+    <string name="create_space">יצירת מרחב</string>
     <string name="skip_for_now">דלג כרגע</string>
     <string name="share_space_link_message">הצטרף למרחב שלי %1$s%2$s</string>
     <string name="settings_encrypted_group_messages">הודעות קבוצה מוצפנות</string>
@@ -2204,7 +2199,7 @@
     <string name="create_spaces_choose_type_label">איזה סוג מרחב אתה רוצה ליצור\?</string>
     <string name="your_private_space">המרחב הפרטי שלך</string>
     <string name="your_public_space">המרחב הציבורי שלך</string>
-    <string name="add_space">הוסף מרחב</string>
+    <string name="add_space">הוספת מרחב</string>
     <string name="private_space">מרחב אישי</string>
     <string name="public_space">מרחב ציבורי</string>
     <string name="event_status_delete_all_failed_dialog_message">האם אתה בטוח שברצונך למחוק את כל ההודעות שלא נשלחו בחדר הזה\?</string>
@@ -2236,7 +2231,7 @@
     <string name="dev_tools_send_custom_event">שלח אירוע מותאם אישית</string>
     <string name="dev_tools_explore_room_state">חקור מצב חדר</string>
     <string name="dev_tools_menu_name">כלי מפתח</string>
-    <string name="a11y_presence_unavailable">לא זמין</string>
+    <string name="a11y_presence_unavailable">אין זמינות</string>
     <string name="a11y_presence_offline">לא על הקו</string>
     <string name="a11y_presence_online">על הקו</string>
     <string name="a11y_public_room">חדר ציבורי</string>
@@ -2276,7 +2271,7 @@
     <string name="space_leave_prompt_msg_private">לא תוכל להצטרף מחדש אלא אם כן תוזמן מחדש.</string>
     <string name="space_leave_prompt_msg_only_you">אתה האדם היחיד כאן. אם תעזוב, אף אחד לא יוכל להצטרף בעתיד, כולל אותך.</string>
     <string name="space_leave_prompt_msg_with_name">האם אתה בטוח שברצונך לעזוב את %s\?</string>
-    <string name="leave_space">עזוב את המרחב</string>
+    <string name="leave_space">עזיבה</string>
     <string name="space_add_child_title">הוסיפו חדרים</string>
     <string name="space_explore_activity_title">גלה חדרים</string>
     <plurals name="space_people_you_know">
@@ -2299,14 +2294,14 @@
     <string name="invite_by_link">שתף קישור</string>
     <string name="invite_by_username_or_mail">הזמן לפי שם משתמש או דואר אלקטרוני</string>
     <string name="encryption_has_been_misconfigured">ההצפנה הוגדרה בצורה שגויה.</string>
-    <string name="verification_scan_self_emoji_subtitle">אמת על ידי השוואת אימוג\'י</string>
+    <string name="verification_scan_self_emoji_subtitle">אימות על ידי השוואת אימוג׳י</string>
     <string name="verification_scan_with_this_device">סרוק עם המכשיר הקיים</string>
     <string name="verification_scan_self_notice">סרוק את הקוד עם המכשיר האחר או החלף וסרוק את הקוד מהמכשיר הקיים</string>
     <string name="sent_a_voice_message">קול</string>
     <string name="create_space_in_progress">יצירת מרחב…</string>
     <string name="create_space_alias_hint">כתובת מרחב</string>
     <string name="command_description_lenny">קידומת ( ͡° ͜ʖ ͡°) להודעת טקסט רגילה</string>
-    <string name="settings_developer_mode_show_info_on_screen_summary">הראה קצת מידע שימושי לעזור לטיפול בבאגים ביישום</string>
+    <string name="settings_developer_mode_show_info_on_screen_summary">הצגת מידע שימושי לטיפול בתקלות ביישומון</string>
     <string name="settings_developer_mode_show_info_on_screen_title">הראה מידע על באגים במסך</string>
     <string name="does_not_look_like_valid_email">נראה שכתובת הדואר האלקטרוני אינה תקפה</string>
     <string name="ftue_auth_use_case_connect_to_server">התחבר לשרת</string>
@@ -2343,7 +2338,7 @@
     <string name="navigate_to_thread_when_already_in_the_thread">אתה צופה בת\'רד זה!</string>
     <string name="create_new_space">יצירת מרחב חדש</string>
     <string name="view_in_room">צפייה בחדר</string>
-    <string name="reply_in_thread">השב בשרשור</string>
+    <string name="reply_in_thread">תגובה בשרשור</string>
     <string name="command_description_whois">הצגת מידע על המשתמש</string>
     <string name="command_description_avatar_for_room">משנה את האווטר שלך בחדר הנוכחי בלבד</string>
     <string name="command_description_room_avatar">משנה את האווטר בחדר הנוכחי</string>
@@ -2428,17 +2423,17 @@
     <string name="a11y_start_voice_message">הקלט שיחה קולית</string>
     <string name="error_failed_to_join_room">סליחה , אירעה שגיאה בזמן נסיון ההצטרפות לחדר:%s</string>
     <string name="room_upgrade_to_recommended_version">שדרג לגרסת החדר המומלצת</string>
-    <string name="room_using_unstable_room_version">חדר זה נמצא בשדרוג גרסה %s , לכן הוא לא יציב .</string>
+    <string name="room_using_unstable_room_version">גרסת החדר היא %s , לכן סומן כלא יציב על ידי שרת הבית.</string>
     <string name="upgrade_room_no_power_to_manage">נדרשת הרשאה לשדרוג החדר</string>
-    <string name="upgrade_room_update_parent_space">אחראי המרחב מעודכן אוטומטית</string>
+    <string name="upgrade_room_update_parent_space">לעדכן את אחראי המרחב אוטומטית</string>
     <string name="upgrade_room_auto_invite">הזמן משתמשים אוטומטית</string>
     <string name="upgrade_public_room_from_to">תשדרג את החדר מ%1$s ל%2$s.</string>
     <string name="upgrade_private_room">שדרג חדר פרטי</string>
-    <string name="upgrade_public_room">שדרג חדר ציבורי</string>
+    <string name="upgrade_public_room">שדרוג חדר ציבורי</string>
     <string name="upgrade_required">נדרש שדרוג</string>
     <string name="upgrade">שדרוג</string>
-    <string name="it_may_take_some_time">אנא המתן, זה יכול לקחת קצת זמן.</string>
-    <string name="joining_replacement_room">הצטרפו לחדר שהוחלף</string>
+    <string name="it_may_take_some_time">נא להמתין, זה יכול לקחת קצת זמן.</string>
+    <string name="joining_replacement_room">הצטרפות לחדר החלופי</string>
     <plurals name="entries">
         <item quantity="one">כניסה %d</item>
         <item quantity="two">שתי כניסות %d</item>
@@ -2459,11 +2454,11 @@
     <string name="settings_server_default_room_version">גרסת ברירת מחדל</string>
     <string name="settings_server_room_versions">גרסאות חדר 👓</string>
     <string name="settings_server_upload_size_unknown">המגבלה אינה ידועה.</string>
-    <string name="settings_server_upload_size_content">שרת הבית שלך מקבל קבצים מצורפים (קבצים, מדיה וכו\') בגודל של עד %s.</string>
+    <string name="settings_server_upload_size_content">שרת הבית שלך מקבל קבצים מצורפים (קבצים, מדיה וכו׳) בגודל של עד %s.</string>
     <string name="settings_server_upload_size_title">מגבלת העלאת קובץ לשרת</string>
     <string name="settings_server_version">גרסת שרת</string>
     <string name="settings_server_name">שם שרת</string>
-    <string name="room_member_override_nick_color">ביטול צבע</string>
+    <string name="room_member_override_nick_color">דריסת צבע שם תצוגה</string>
     <string name="room_profile_section_restore_security">שחזור הצפנה</string>
     <string name="contact_admin_to_restore_encryption">אנא צור קשר עם מנהל המערכת לשחזור ההצפנה למצב תקין .</string>
     <string name="unnamed_room">חדר ללא שם</string>
@@ -2496,9 +2491,6 @@
         <item quantity="other">נדרשות %1$s אפשרויות לפחות</item>
     </plurals>
     <string name="link_this_email_with_your_account">%s בהגדרות כדי לקבל הזמנות ישירות ב-${app_name}.</string>
-    <string name="location_in_background_missing_permission_dialog_content">אם תרצה לשתף את המיקום החי שלך, ${app_name} זקוק לגישה למיקום כל הזמן כשהאפליקציה נמצאת ברקע.
-\nאנו ניגשים למיקום שלך רק למשך הזמן שתבחר.</string>
-    <string name="location_in_background_missing_permission_dialog_title">אפשר גישה</string>
     <string name="a11y_location_share_option_pinned_icon">שתף מיקום זה</string>
     <string name="location_share_option_pinned">שתף מיקום זה</string>
     <string name="a11y_location_share_option_user_live_icon">שתף מיקום בזמן אמת</string>
@@ -2511,8 +2503,8 @@
     <string name="location_share_live_enabled">מיקום בזמן אמת מופעל</string>
     <string name="upgrade_room_warning">שדרוג חדר הוא פעולה מתקדמת ומומלץ לרוב כאשר החדר אינו יציב עקב באגים, תכונות חסרות או פרצות אבטחה.
 \nזה בדרך כלל משפיע רק על אופן עיבוד החדר בשרת.</string>
-    <string name="upgrade_room_for_restricted">כל מי שנמצא ב%s יוכל למצוא או להצטרף לחדר- אין צורך להזמין משתתפים. ניתן לשנות את הגדרת החדר בכל זמן.</string>
-    <string name="labs_enable_latex_maths">אפשר LaTeX mathematics</string>
+    <string name="upgrade_room_for_restricted">כל מי שנמצא ב%s יוכל למצוא או להצטרף לחדר- אין צורך להזמין משתתפים. ניתן לשנות את הגדרות החדר בכל זמן.</string>
+    <string name="labs_enable_latex_maths">להפעיל LaTeX מתמטי</string>
     <string name="link_this_email_settings_link">שייך את הדואר האלקטרוני לחשבונך</string>
     <string name="identity_server_consent_dialog_content_3">כדי לגלות אנשי קשר קיימים, עליך לשלוח פרטי איש קשר (אימייל ומספרי טלפון) לשרת הזהות שלך. אנו משייכים את הנתונים שלך לפני השליחה לצורך פרטיות.</string>
     <string name="threads_notice_migration_message">אנחנו מתקרבים לשחרור גרסת ביטא ציבורית לשרשורים.
@@ -2520,4 +2512,6 @@
 \nבזמן שאנו מתכוננים לכך, עלינו לבצע מספר שינויים: שרשורים שנוצרו לפני נקודה זו יוצגו כתשובות רגילות.
 \n
 \nזה יהיה מעבר חד פעמי שכן שרשורים הם כעת חלק ממפרט Matrix.</string>
+    <string name="screen_sharing_notification_title">שיתוף מסך של ${app_name}</string>
+    <string name="screen_sharing_notification_description">המסך משותף כרגע</string>
 </resources>

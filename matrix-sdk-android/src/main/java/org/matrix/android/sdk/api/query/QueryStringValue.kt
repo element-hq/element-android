@@ -17,6 +17,11 @@
 package org.matrix.android.sdk.api.query
 
 /**
+ * Only a subset of [QueryStringValue] are applicable to query the `stateKey` of a state event.
+ */
+sealed interface QueryStateEventValue
+
+/**
  * Basic query language. All these cases are mutually exclusive.
  */
 sealed interface QueryStringValue {
@@ -33,22 +38,22 @@ sealed interface QueryStringValue {
     /**
      * The tested field has to be not null.
      */
-    object IsNotNull : QueryStringValue
+    object IsNotNull : QueryStringValue, QueryStateEventValue
 
     /**
      * The tested field has to be empty.
      */
-    object IsEmpty : QueryStringValue
+    object IsEmpty : QueryStringValue, QueryStateEventValue
 
     /**
-     * The tested field has to not empty.
+     * The tested field has to be not empty.
      */
-    object IsNotEmpty : QueryStringValue
+    object IsNotEmpty : QueryStringValue, QueryStateEventValue
 
     /**
      * Interface to check String content.
      */
-    sealed interface ContentQueryStringValue : QueryStringValue {
+    sealed interface ContentQueryStringValue : QueryStringValue, QueryStateEventValue {
         val string: String
         val case: Case
     }
