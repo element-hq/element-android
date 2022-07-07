@@ -16,11 +16,11 @@
 
 package im.vector.app.features.settings
 
-import android.content.Context
+import android.content.SharedPreferences
 import androidx.annotation.StringRes
 import androidx.core.content.edit
 import im.vector.app.R
-import im.vector.app.core.di.DefaultSharedPreferences
+import im.vector.app.core.di.DefaultPreferences
 import im.vector.app.core.utils.SystemSettingsProvider
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -65,7 +65,7 @@ interface FontScalePreferences {
  */
 @Singleton
 class FontScalePreferencesImpl @Inject constructor(
-        private val context: Context,
+        @DefaultPreferences private val preferences: SharedPreferences,
         private val systemSettingsProvider: SystemSettingsProvider,
 ) : FontScalePreferences {
 
@@ -87,8 +87,6 @@ class FontScalePreferencesImpl @Inject constructor(
     private val normalFontScaleValue = fontScaleValues[2]
 
     override fun getAppFontScaleValue(): FontScaleValue {
-        val preferences = DefaultSharedPreferences.getInstance(context)
-
         return if (APPLICATION_FONT_SCALE_KEY !in preferences) {
             normalFontScaleValue
         } else {
@@ -109,7 +107,7 @@ class FontScalePreferencesImpl @Inject constructor(
     }
 
     override fun setFontScaleValue(fontScaleValue: FontScaleValue) {
-        DefaultSharedPreferences.getInstance(context)
+        preferences
                 .edit()
                 .putString(APPLICATION_FONT_SCALE_KEY, fontScaleValue.preferenceValue)
                 .apply()
@@ -118,12 +116,11 @@ class FontScalePreferencesImpl @Inject constructor(
     override fun getAvailableScales(): List<FontScaleValue> = fontScaleValues
 
     override fun getUseSystemScale(): Boolean {
-        val preferences = DefaultSharedPreferences.getInstance(context)
         return preferences.getBoolean(APPLICATION_USE_SYSTEM_FONT_SCALE_KEY, true)
     }
 
     override fun setUseSystemScale(useSystem: Boolean) {
-        DefaultSharedPreferences.getInstance(context)
+        preferences
                 .edit { putBoolean(APPLICATION_USE_SYSTEM_FONT_SCALE_KEY, useSystem) }
     }
 }
@@ -136,4 +133,3 @@ data class FontScaleValue(
         @StringRes
         val nameResId: Int
 )
-

@@ -21,8 +21,8 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 
-@EpoxyModelClass(layout = R.layout.item_font_scale_section)
-abstract class FontScaleSectionItem : VectorEpoxyModel<FontScaleSectionItem.Holder>() {
+@EpoxyModelClass
+abstract class FontScaleSectionItem : VectorEpoxyModel<FontScaleSectionItem.Holder>(R.layout.item_font_scale_section) {
 
     @EpoxyAttribute var sectionName: String = ""
 

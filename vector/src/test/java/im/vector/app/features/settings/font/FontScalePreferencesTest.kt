@@ -17,8 +17,6 @@
 package im.vector.app.features.settings.font
 
 import im.vector.app.features.settings.FontScalePreferencesImpl
-import im.vector.app.test.fakes.FakeContentResolver
-import im.vector.app.test.fakes.FakeContext
 import im.vector.app.test.fakes.FakeSharedPreferences
 import im.vector.app.test.fakes.FakeSystemSettingsProvider
 import org.amshove.kluent.shouldBeEqualTo
@@ -26,11 +24,10 @@ import org.junit.Test
 
 class FontScalePreferencesTest {
 
-    private val fakeContentResolver = FakeContentResolver()
     private val fakeSharedPreferences = FakeSharedPreferences()
     private val fakeSystemSettingsProvider = FakeSystemSettingsProvider()
     private val fontScalePreferences = FontScalePreferencesImpl(
-            context = FakeContext(fakeContentResolver.instance, fakeSharedPreferences).instance,
+            preferences = fakeSharedPreferences,
             systemSettingsProvider = fakeSystemSettingsProvider
     )
 

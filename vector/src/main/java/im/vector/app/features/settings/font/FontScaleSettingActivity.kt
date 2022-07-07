@@ -22,7 +22,7 @@ import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
 
 @AndroidEntryPoint
-class FontScaleSettingActivity: VectorBaseActivity<ActivitySimpleBinding>() {
+class FontScaleSettingActivity : VectorBaseActivity<ActivitySimpleBinding>() {
 
     override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
 

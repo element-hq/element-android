@@ -25,8 +25,8 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.features.settings.FontScaleValue
 
-@EpoxyModelClass(layout = R.layout.item_font_scale)
-abstract class FontScaleItem : VectorEpoxyModel<FontScaleItem.Holder>() {
+@EpoxyModelClass
+abstract class FontScaleItem : VectorEpoxyModel<FontScaleItem.Holder>(R.layout.item_font_scale) {
 
     companion object {
         const val MINIMAL_TEXT_SIZE_DP = 10f

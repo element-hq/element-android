@@ -22,8 +22,8 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 
-@EpoxyModelClass(layout = R.layout.item_font_scale_system)
-abstract class FontScaleUseSystemSettingsItem : VectorEpoxyModel<FontScaleUseSystemSettingsItem.Holder>() {
+@EpoxyModelClass
+abstract class FontScaleUseSystemSettingsItem : VectorEpoxyModel<FontScaleUseSystemSettingsItem.Holder>(R.layout.item_font_scale_system) {
 
     @EpoxyAttribute var useSystemSettings: Boolean = true
 

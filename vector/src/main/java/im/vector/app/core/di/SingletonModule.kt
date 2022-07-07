@@ -21,6 +21,7 @@ import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.content.res.Resources
+import androidx.preference.PreferenceManager
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import dagger.Binds
 import dagger.Module
@@ -210,4 +211,11 @@ object VectorStaticModule {
     @Provides
     @Singleton
     fun providesBuildMeta() = BuildMeta()
+
+    @Provides
+    @Singleton
+    @DefaultPreferences
+    fun providesDefaultSharedPreferences(context: Context): SharedPreferences {
+        return PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
+    }
 }

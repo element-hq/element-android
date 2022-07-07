@@ -42,6 +42,7 @@ import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.preference.PreferenceManager
 import androidx.viewbinding.ViewBinding
 import com.airbnb.mvrx.MavericksView
 import com.bumptech.glide.util.Util
@@ -174,7 +175,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     private val restorables = ArrayList<Restorable>()
 
     override fun attachBaseContext(base: Context) {
-        val fontScalePreferences = FontScalePreferencesImpl(this, SystemSettingsProviderImpl(this))
+        val fontScalePreferences = FontScalePreferencesImpl(PreferenceManager.getDefaultSharedPreferences(base), SystemSettingsProviderImpl(base))
         val vectorConfiguration = VectorConfiguration(this, fontScalePreferences)
         super.attachBaseContext(vectorConfiguration.getLocalisedContext(base))
     }

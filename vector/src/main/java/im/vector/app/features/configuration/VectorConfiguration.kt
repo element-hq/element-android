@@ -27,7 +27,6 @@ import im.vector.app.features.themes.ThemeUtils
 import timber.log.Timber
 import java.util.Locale
 import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * Handle locale configuration change, such as theme, font size and locale chosen by the user.

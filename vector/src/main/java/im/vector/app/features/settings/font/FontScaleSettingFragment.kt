@@ -42,6 +42,9 @@ class FontScaleSettingFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupToolbar(views.fontScaleToolbar)
+                .allowBack()
+
         fontListController.callback = this
         setupRecyclerView()
 

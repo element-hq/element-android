@@ -18,7 +18,6 @@ package im.vector.app.test.fakes
 
 import android.content.ContentResolver
 import android.content.Context
-import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.ParcelFileDescriptor
@@ -27,8 +26,7 @@ import io.mockk.mockk
 import java.io.OutputStream
 
 class FakeContext(
-        private val contentResolver: ContentResolver = mockk(),
-        private val sharedPreferences: SharedPreferences = mockk()
+        private val contentResolver: ContentResolver = mockk()
 ) {
 
     val instance = mockk<Context>()
@@ -36,8 +34,6 @@ class FakeContext(
     init {
         every { instance.contentResolver } returns contentResolver
         every { instance.applicationContext } returns instance
-        every { instance.packageName } returns "im.vector.app"
-        every { instance.getSharedPreferences(any(), any()) } returns sharedPreferences
     }
 
     fun givenFileDescriptor(uri: Uri, mode: String, factory: () -> ParcelFileDescriptor?) {
