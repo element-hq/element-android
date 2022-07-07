@@ -423,15 +423,15 @@ internal class TimelineChunk(
     private fun buildTimelineEvent(eventEntity: TimelineEventEntity) = timelineEventMapper.map(
             timelineEventEntity = eventEntity,
             buildReadReceipts = timelineSettings.buildReadReceipts
-    ).let {
+    ).let { timelineEvent ->
         // eventually enhance with ui echo?
-        uiEchoManager?.decorateEventWithReactionUiEcho(it)
+        uiEchoManager?.decorateEventWithReactionUiEcho(timelineEvent)
 
-        if (it.isReply()) {
-            createNewEncryptedRepliedEvent(it)?.let { newEvent ->
-                it.copy(root = newEvent)
-            } ?: it
-        } else it
+        if (timelineEvent.isReply()) {
+            createNewEncryptedRepliedEvent(timelineEvent)?.let { newEvent ->
+                timelineEvent.copy(root = newEvent)
+            } ?: timelineEvent
+        } else timelineEvent
     }
 
     private fun createNewEncryptedRepliedEvent(currentTimelineEvent: TimelineEvent): Event? {
