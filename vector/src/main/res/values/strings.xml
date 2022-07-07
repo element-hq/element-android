@@ -3103,4 +3103,8 @@
     <string name="live_location_labs_promotion_description">Please note: this is a labs feature using a temporary implementation. This means you will not be able to delete your location history, and advanced users will be able to see your location history even after you stop sharing your live location with this room.</string>
     <string name="live_location_labs_promotion_switch_title">Enable location sharing</string>
 
+    <plurals name="room_removed_messages">
+        <item quantity="one">%d message removed</item>
+        <item quantity="other">%d messages removed</item>
+    </plurals>
 </resources>

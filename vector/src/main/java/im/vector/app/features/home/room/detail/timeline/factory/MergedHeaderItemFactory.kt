@@ -46,6 +46,8 @@ import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import javax.inject.Inject
 
+private const val MIN_NUMBER_OF_MERGED_EVENTS = 2
+
 class MergedHeaderItemFactory @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
         private val avatarRenderer: AvatarRenderer,
@@ -80,10 +82,12 @@ class MergedHeaderItemFactory @Inject constructor(
             requestModelBuild: () -> Unit
     ): BasedMergedItem<*>? {
         return when {
-            isRoomCreationSummary(event, nextEvent) ->
+            isStartOfRoomCreationSummary(event, nextEvent) ->
                 buildRoomCreationMergedSummary(currentPosition, items, partialState, event, eventIdToHighlight, requestModelBuild, callback)
-            isSimilarEventSummary(event, nextEvent, addDaySeparator) ->
-                buildSimilarEventsMergedSummary(currentPosition, items, partialState, event, eventIdToHighlight, requestModelBuild, callback)
+            isStartOfSameTypeEventsSummary(event, nextEvent, addDaySeparator) ->
+                buildSameTypeEventsMergedSummary(currentPosition, items, partialState, event, eventIdToHighlight, requestModelBuild, callback)
+            isStartOfRedactedEventsSummary(event, nextEvent, addDaySeparator) ->
+                buildRedactedEventsMergedSummary(currentPosition, items, partialState, event, eventIdToHighlight, requestModelBuild, callback)
             else -> null
         }
     }
@@ -92,7 +96,7 @@ class MergedHeaderItemFactory @Inject constructor(
      * @param event the main timeline event
      * @param nextEvent is an older event than event
      */
-    private fun isRoomCreationSummary(
+    private fun isStartOfRoomCreationSummary(
             event: TimelineEvent,
             nextEvent: TimelineEvent?,
     ): Boolean {
@@ -107,7 +111,7 @@ class MergedHeaderItemFactory @Inject constructor(
      * @param nextEvent is an older event than event
      * @param addDaySeparator true to add a day separator
      */
-    private fun isSimilarEventSummary(
+    private fun isStartOfSameTypeEventsSummary(
             event: TimelineEvent,
             nextEvent: TimelineEvent?,
             addDaySeparator: Boolean,
@@ -116,7 +120,21 @@ class MergedHeaderItemFactory @Inject constructor(
                 (nextEvent?.root?.getClearType() != event.root.getClearType() || addDaySeparator)
     }
 
-    private fun buildSimilarEventsMergedSummary(
+    /**
+     * @param event the main timeline event
+     * @param nextEvent is an older event than event
+     * @param addDaySeparator true to add a day separator
+     */
+    private fun isStartOfRedactedEventsSummary(
+            event: TimelineEvent,
+            nextEvent: TimelineEvent?,
+            addDaySeparator: Boolean,
+    ): Boolean {
+        return event.root.isRedacted() &&
+                ((nextEvent?.root?.getClearType() != EventType.REDACTION && !nextEvent?.root?.isRedacted().orFalse()) || addDaySeparator)
+    }
+
+    private fun buildSameTypeEventsMergedSummary(
             currentPosition: Int,
             items: List<TimelineEvent>,
             partialState: TimelineEventController.PartialState,
@@ -128,11 +146,42 @@ class MergedHeaderItemFactory @Inject constructor(
         val mergedEvents = timelineEventVisibilityHelper.prevSameTypeEvents(
                 items,
                 currentPosition,
-                2,
+                MIN_NUMBER_OF_MERGED_EVENTS,
                 eventIdToHighlight,
                 partialState.rootThreadEventId,
                 partialState.isFromThreadTimeline()
         )
+        return buildSimilarEventsMergedSummary(mergedEvents, partialState, event, eventIdToHighlight, requestModelBuild, callback)
+    }
+
+    private fun buildRedactedEventsMergedSummary(
+            currentPosition: Int,
+            items: List<TimelineEvent>,
+            partialState: TimelineEventController.PartialState,
+            event: TimelineEvent,
+            eventIdToHighlight: String?,
+            requestModelBuild: () -> Unit,
+            callback: TimelineEventController.Callback?
+    ): MergedSimilarEventsItem_? {
+        val mergedEvents = timelineEventVisibilityHelper.prevRedactedEvents(
+                items,
+                currentPosition,
+                MIN_NUMBER_OF_MERGED_EVENTS,
+                eventIdToHighlight,
+                partialState.rootThreadEventId,
+                partialState.isFromThreadTimeline()
+        )
+        return buildSimilarEventsMergedSummary(mergedEvents, partialState, event, eventIdToHighlight, requestModelBuild, callback)
+    }
+
+    private fun buildSimilarEventsMergedSummary(
+            mergedEvents: List<TimelineEvent>,
+            partialState: TimelineEventController.PartialState,
+            event: TimelineEvent,
+            eventIdToHighlight: String?,
+            requestModelBuild: () -> Unit,
+            callback: TimelineEventController.Callback?
+    ): MergedSimilarEventsItem_? {
         return if (mergedEvents.isEmpty()) {
             null
         } else {
@@ -153,7 +202,7 @@ class MergedHeaderItemFactory @Inject constructor(
                 )
                 mergedData.add(data)
             }
-            val mergedEventIds = mergedEvents.map { it.localId }
+            val mergedEventIds = mergedEvents.map { it.localId }.toSet()
             // We try to find if one of the item id were used as mergeItemCollapseStates key
             // => handle case where paginating from mergeable events and we get more
             val previousCollapseStateKey = mergedEventIds.intersect(mergeItemCollapseStates.keys).firstOrNull()
@@ -223,7 +272,7 @@ class MergedHeaderItemFactory @Inject constructor(
             tmpPos--
             prevEvent = items.getOrNull(tmpPos)
         }
-        return if (mergedEvents.size > 2) {
+        return if (mergedEvents.size > MIN_NUMBER_OF_MERGED_EVENTS) {
             var highlighted = false
             val mergedData = ArrayList<BasedMergedItem.Data>(mergedEvents.size)
             mergedEvents.reversed()
