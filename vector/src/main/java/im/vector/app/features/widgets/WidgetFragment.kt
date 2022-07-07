@@ -311,7 +311,8 @@ class WidgetFragment @Inject constructor(
                 request = request,
                 context = requireContext(),
                 activity = requireActivity(),
-                activityResultLauncher = permissionResultLauncher
+                activityResultLauncher = permissionResultLauncher,
+                autoApprove = fragmentArgs.kind == WidgetKind.ELEMENT_CALL
         )
     }
 
