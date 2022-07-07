@@ -47,9 +47,8 @@ import javax.inject.Singleton
 
 /**
  * This class handles the global app state.
- * It requires to be added to ProcessLifecycleOwner.get().lifecycle
+ * It is required that this class is added as an observer to ProcessLifecycleOwner.get().lifecycle in [VectorApplication]
  */
-// TODO Keep this class for now, will maybe be used fro Space
 @Singleton
 class AppStateHandler @Inject constructor(
         private val sessionDataSource: ActiveSessionDataSource,
@@ -71,30 +70,39 @@ class AppStateHandler @Inject constructor(
         }
     }
 
-    fun setCurrentSpace(spaceId: String?, session: Session? = null, persistNow: Boolean = false, isForwardNavigation: Boolean = true) {
+    fun setCurrentSpace(
+            spaceId: String?,
+            session: Session? = null,
+            persistNow: Boolean = false,
+            isForwardNavigation: Boolean = true,
+    ) {
+        val activeSession = session ?: activeSessionHolder.getSafeActiveSession() ?: return
         val currentSpace = selectedSpaceDataSource.currentValue?.orNull()
-        val uSession = session ?: activeSessionHolder.getSafeActiveSession() ?: return
-        if (currentSpace != null && spaceId == currentSpace.roomId) return
-        val spaceSum = spaceId?.let { uSession.getRoomSummary(spaceId) }
+        val spaceSummary = spaceId?.let { activeSession.getRoomSummary(spaceId) }
+        val sameSpaceSelected = currentSpace != null && spaceId == currentSpace.roomId
+
+        if (sameSpaceSelected) {
+            return
+        }
 
         if (isForwardNavigation) {
             spaceBackstack.addLast(currentSpace?.roomId)
         }
 
         if (persistNow) {
-            uiStateRepository.storeSelectedSpace(spaceSum?.roomId, uSession.sessionId)
+            uiStateRepository.storeSelectedSpace(spaceSummary?.roomId, activeSession.sessionId)
         }
 
-        if (spaceSum == null) {
+        if (spaceSummary == null) {
             selectedSpaceDataSource.post(Option.empty())
         } else {
-            selectedSpaceDataSource.post(Option.just(spaceSum))
+            selectedSpaceDataSource.post(Option.just(spaceSummary))
         }
 
         if (spaceId != null) {
-            uSession.coroutineScope.launch(Dispatchers.IO) {
+            activeSession.coroutineScope.launch(Dispatchers.IO) {
                 tryOrNull {
-                    uSession.getRoom(spaceId)?.membershipService()?.loadRoomMembersIfNeeded()
+                    activeSession.getRoom(spaceId)?.membershipService()?.loadRoomMembersIfNeeded()
                 }
             }
         }
