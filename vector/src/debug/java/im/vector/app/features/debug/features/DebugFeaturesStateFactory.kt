@@ -70,6 +70,11 @@ class DebugFeaturesStateFactory @Inject constructor(
                                 key = DebugFeatureKeys.allowExternalUnifiedPushDistributors,
                                 factory = VectorFeatures::allowExternalUnifiedPushDistributors
                         ),
+                        createBooleanFeature(
+                                label = "Force usage of OpusEncoder library",
+                                key = DebugFeatureKeys.forceUsageOfOpusEncoder,
+                                factory = VectorFeatures::forceUsageOfOpusEncoder
+                        ),
                 )
         )
     }
