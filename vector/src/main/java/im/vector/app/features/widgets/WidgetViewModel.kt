@@ -275,6 +275,7 @@ class WidgetViewModel @AssistedInject constructor(
         integrationManagerService.removeListener(this)
         widgetPostAPIHandler?.navigationCallback = null
         postAPIMediator.setHandler(null)
+        bluetoothLowEnergyServiceConnection.stopService()
         super.onCleared()
     }
 

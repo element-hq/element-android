@@ -68,4 +68,8 @@ class BluetoothLowEnergyServiceConnection @Inject constructor(
     override fun onCharacteristicRead(data: ByteArray) {
         callback?.onCharacteristicRead(data)
     }
+
+    fun stopService() {
+        bluetoothLowEnergyService?.stopService()
+    }
 }

@@ -101,6 +101,23 @@ class BluetoothLowEnergyService : VectorService() {
         return START_STICKY
     }
 
+    fun stopService() {
+        stopForeground(true)
+        stopSelf()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        destroyMe()
+    }
+
+    private fun destroyMe() {
+        callback = null
+        bluetoothGatt?.disconnect()
+        bluetoothAdapter = null
+        bluetoothGatt = null
+    }
+
     private fun initializeBluetoothAdapter() {
         val bluetoothManager = getSystemService<BluetoothManager>()
         bluetoothAdapter = bluetoothManager?.adapter
