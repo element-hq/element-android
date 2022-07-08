@@ -507,13 +507,13 @@ internal class LocalEchoEventFactory @Inject constructor(
         return createMessageEvent(roomId, content)
     }
 
-    private fun createMessageEvent(roomId: String, content: MessageContent? = null, currentEventId: String? = null): Event {
-        return createEvent(roomId, EventType.MESSAGE, content.toContent(), currentEventId)
+    private fun createMessageEvent(roomId: String, content: MessageContent? = null): Event {
+        return createEvent(roomId, EventType.MESSAGE, content.toContent())
     }
 
-    fun createEvent(roomId: String, type: String, content: Content?, currentEventId: String? = null): Event {
+    fun createEvent(roomId: String, type: String, content: Content?): Event {
         val newContent = enhanceStickerIfNeeded(type, content) ?: content
-        val localId = currentEventId ?: LocalEcho.createLocalEchoId()
+        val localId = LocalEcho.createLocalEchoId()
         return Event(
                 roomId = roomId,
                 originServerTs = dummyOriginServerTs(),
@@ -573,6 +573,51 @@ internal class LocalEchoEventFactory @Inject constructor(
         return clock.epochMillis()
     }
 
+    fun createReplyTextContent(
+            eventReplied: TimelineEvent,
+            replyText: CharSequence,
+            autoMarkdown: Boolean,
+            rootThreadEventId: String? = null,
+            showInThread: Boolean
+    ): Content? {
+        // Fallbacks and event representation
+        // TODO Add error/warning logs when any of this is null
+        val permalink = permalinkFactory.createPermalink(eventReplied.root, false) ?: return null
+        val userId = eventReplied.root.senderId ?: return null
+        val userLink = permalinkFactory.createPermalink(userId, false) ?: return null
+
+        val body = bodyForReply(eventReplied.getLastMessageContent(), eventReplied.isReply())
+
+        // As we always supply formatted body for replies we should force the MarkdownParser to produce html.
+        val replyTextFormatted = markdownParser.parse(replyText, force = true, advanced = autoMarkdown).takeFormatted()
+        // Body of the original message may not have formatted version, so may also have to convert to html.
+        val bodyFormatted = body.formattedText ?: markdownParser.parse(body.text, force = true, advanced = autoMarkdown).takeFormatted()
+        val replyFormatted = buildFormattedReply(
+                permalink,
+                userLink,
+                userId,
+                bodyFormatted,
+                replyTextFormatted
+        )
+        //
+        // > <@alice:example.org> This is the original body
+        //
+        val replyFallback = buildReplyFallback(body, userId, replyText.toString())
+
+        val eventId = eventReplied.root.eventId ?: return null
+        return MessageTextContent(
+                msgType = MessageType.MSGTYPE_TEXT,
+                format = MessageFormat.FORMAT_MATRIX_HTML,
+                body = replyFallback,
+                formattedBody = replyFormatted,
+                relatesTo = generateReplyRelationContent(
+                        eventId = eventId,
+                        rootThreadEventId = rootThreadEventId,
+                        showInThread = showInThread
+                )
+        ).toContent()
+    }
+
     /**
      * Creates a reply to a regular timeline Event or a thread Event if needed.
      */
@@ -583,7 +628,6 @@ internal class LocalEchoEventFactory @Inject constructor(
             autoMarkdown: Boolean,
             rootThreadEventId: String? = null,
             showInThread: Boolean,
-            currentEventId: String? = null
     ): Event? {
         // Fallbacks and event representation
         // TODO Add error/warning logs when any of this is null
@@ -621,7 +665,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                         showInThread = showInThread
                 )
         )
-        return createMessageEvent(roomId, content, currentEventId)
+        return createMessageEvent(roomId, content)
     }
 
     /**

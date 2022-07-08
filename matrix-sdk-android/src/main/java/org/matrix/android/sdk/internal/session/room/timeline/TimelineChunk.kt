@@ -29,6 +29,7 @@ import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.UnsignedData
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
@@ -451,14 +452,21 @@ internal class TimelineChunk(
                     .bodyForReply(currentTimelineEvent.getLastMessageContent(), true).formattedText ?: ""
 
             timeLineEventEntity?.let { timelineEventEntity ->
-                localEchoEventFactory.createReplyTextEvent(
-                        roomId,
+                val newContent = localEchoEventFactory.createReplyTextContent(
                         timelineEventMapper.map(timelineEventEntity),
                         replyText,
                         false,
-                        showInThread = false,
-                        currentEventId = currentTimelineEvent.eventId
-
+                        showInThread = false
+                )
+                val event = currentTimelineEvent.root
+                Event(
+                        roomId = event.roomId,
+                        originServerTs = event.originServerTs,
+                        senderId = event.senderId,
+                        eventId = currentTimelineEvent.eventId,
+                        type = EventType.MESSAGE,
+                        content = newContent,
+                        unsignedData = UnsignedData(age = null, transactionId = currentTimelineEvent.eventId)
                 )
             }
         }
