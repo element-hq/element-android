@@ -25,7 +25,6 @@ import android.view.View
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import com.squareup.moshi.Types
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.getAllChildFragments
@@ -342,7 +341,7 @@ class BugReporter @Inject constructor(
 
                     // add some github labels
                     builder.addFormDataPart("label", buildMeta.versionName)
-                    builder.addFormDataPart("label", BuildConfig.FLAVOR_DESCRIPTION)
+                    builder.addFormDataPart("label", buildMeta.flavorDescription)
                     builder.addFormDataPart("label", buildMeta.gitBranchName)
 
                     // Special for Element

@@ -221,6 +221,8 @@ object VectorStaticModule {
             gitRevisionDate = BuildConfig.GIT_REVISION_DATE,
             gitBranchName = BuildConfig.GIT_BRANCH_NAME,
             buildNumber = BuildConfig.BUILD_NUMBER,
+            flavorDescription = BuildConfig.FLAVOR_DESCRIPTION,
+            flavorShortDescription = BuildConfig.SHORT_FLAVOR_DESCRIPTION,
     )
 
     @Provides

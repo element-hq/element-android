@@ -16,7 +16,6 @@
 
 package im.vector.app.features.version
 
-import im.vector.app.BuildConfig
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.resources.VersionCodeProvider
 import javax.inject.Inject
@@ -27,9 +26,9 @@ class VersionProvider @Inject constructor(
 ) {
 
     fun getVersion(longFormat: Boolean, useBuildNumber: Boolean): String {
-        var result = "${BuildConfig.VERSION_NAME} [${versionCodeProvider.getVersionCode()}]"
+        var result = "${buildMeta.versionName} [${versionCodeProvider.getVersionCode()}]"
 
-        var flavor = BuildConfig.SHORT_FLAVOR_DESCRIPTION
+        var flavor = buildMeta.flavorShortDescription
 
         if (flavor.isNotBlank()) {
             flavor += "-"

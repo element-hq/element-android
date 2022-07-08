@@ -27,4 +27,6 @@ data class BuildMeta(
         val gitRevisionDate: String,
         val gitBranchName: String,
         val buildNumber: String,
+        val flavorDescription: String,
+        val flavorShortDescription: String,
 )
