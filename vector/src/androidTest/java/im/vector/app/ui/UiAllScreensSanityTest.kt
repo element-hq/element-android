@@ -99,29 +99,32 @@ class UiAllScreensSanityTest {
 
         testThreadScreens()
 
+        val spaceName = UUID.randomUUID().toString()
         elementRobot.space {
             createSpace {
-                crawl()
+                createAndCrawl(spaceName)
             }
-            val spaceName = UUID.randomUUID().toString()
+            val publicSpace = UUID.randomUUID().toString()
             createSpace {
-                createPublicSpace(spaceName)
+                createPublicSpace(publicSpace)
             }
 
-            spaceMenu(spaceName) {
+            spaceMenu(publicSpace) {
                 spaceMembers()
                 spaceSettings {
                     crawl()
                 }
                 exploreRooms()
 
-                invitePeople().also { openMenu(spaceName) }
-                addRoom().also { openMenu(spaceName) }
-                addSpace().also { openMenu(spaceName) }
+                invitePeople().also { openMenu(publicSpace) }
+                addRoom().also { openMenu(publicSpace) }
+                addSpace().also { openMenu(publicSpace) }
 
                 leaveSpace()
             }
         }
+
+        elementRobot.space { selectSpace(spaceName) }
 
         elementRobot.withDeveloperMode {
             settings {

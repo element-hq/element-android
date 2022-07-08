@@ -36,11 +36,11 @@ import java.util.UUID
 
 class SpaceCreateRobot {
 
-    fun crawl() {
+    fun createAndCrawl(name: String) {
         // public
         clickOn(R.id.publicButton)
         waitUntilViewVisible(withId(R.id.recyclerView))
-        onView(ViewMatchers.withHint(R.string.create_room_name_hint)).perform(ViewActions.replaceText(UUID.randomUUID().toString()))
+        onView(ViewMatchers.withHint(R.string.create_room_name_hint)).perform(ViewActions.replaceText(name))
         clickOn(R.id.nextButton)
         waitUntilViewVisible(withId(R.id.recyclerView))
         pressBack()
