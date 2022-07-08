@@ -20,6 +20,8 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.ui.UiStateRepository
 import io.mockk.mockk
+import org.amshove.kluent.shouldBe
+import org.junit.Test
 
 internal class AppStateHandlerTest {
 
@@ -35,6 +37,11 @@ internal class AppStateHandlerTest {
             analyticsTracker,
     )
 
+    @Test
+    fun `given selected space is null, when getCurrentSpace, then return null`() {
+        val currentSpace = appStateHandlerImpl.getCurrentSpace()
 
+        currentSpace shouldBe null
+    }
 
 }

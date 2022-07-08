@@ -27,6 +27,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import im.vector.app.AppStateHandler
+import im.vector.app.AppStateHandlerImpl
 import im.vector.app.BuildConfig
 import im.vector.app.EmojiCompatWrapper
 import im.vector.app.EmojiSpanify
@@ -97,6 +99,9 @@ abstract class VectorBindModule {
 
     @Binds
     abstract fun bindEmojiSpanify(emojiCompatWrapper: EmojiCompatWrapper): EmojiSpanify
+
+    @Binds
+    abstract fun bindAppStateHandler(appStateHandlerImpl: AppStateHandlerImpl): AppStateHandler
 }
 
 @InstallIn(SingletonComponent::class)
