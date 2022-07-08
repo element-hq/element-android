@@ -109,8 +109,8 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(
                 }
 
         combine(
-                appStateHandler.selectedSpaceFlow.distinctUntilChanged(),
-                appStateHandler.selectedSpaceFlow.flatMapLatest {
+                appStateHandler.getSelectedSpaceFlow().distinctUntilChanged(),
+                appStateHandler.getSelectedSpaceFlow().flatMapLatest {
                     roomService.getPagedRoomSummariesLive(
                             roomSummaryQueryParams {
                                 this.memberships = Membership.activeMemberships()
@@ -161,10 +161,10 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(
             CountInfo(
                     homeCount = counts,
                     otherCount = RoomAggregateNotificationCount(
-                            notificationCount = rootCounts.fold(0, { acc, rs -> acc + rs.notificationCount }) +
+                            notificationCount = rootCounts.fold(0) { acc, rs -> acc + rs.notificationCount } +
                                     (counts.notificationCount.takeIf { selectedSpace != null } ?: 0) +
                                     spaceInviteCount,
-                            highlightCount = rootCounts.fold(0, { acc, rs -> acc + rs.highlightCount }) +
+                            highlightCount = rootCounts.fold(0) { acc, rs -> acc + rs.highlightCount } +
                                     (counts.highlightCount.takeIf { selectedSpace != null } ?: 0) +
                                     spaceInviteCount
                     )

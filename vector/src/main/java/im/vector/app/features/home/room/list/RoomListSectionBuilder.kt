@@ -94,7 +94,7 @@ class RoomListSectionBuilder(
             }
         }
 
-        appStateHandler.selectedSpaceFlow
+        appStateHandler.getSelectedSpaceFlow()
                 .distinctUntilChanged()
                 .onEach { selectedSpaceOption ->
                     val selectedSpace = selectedSpaceOption.orNull()
@@ -149,7 +149,7 @@ class RoomListSectionBuilder(
         ) {
             it.memberships = listOf(Membership.JOIN)
             it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-            it.roomTagQueryFilter = RoomTagQueryFilter(false, false, false)
+            it.roomTagQueryFilter = RoomTagQueryFilter(isFavorite = false, isLowPriority = false, isServerNotice = false)
         }
 
         addSection(
@@ -186,7 +186,7 @@ class RoomListSectionBuilder(
 
         // add suggested rooms
         val suggestedRoomsFlow = // MutableLiveData<List<SpaceChildInfo>>()
-                appStateHandler.selectedSpaceFlow
+                appStateHandler.getSelectedSpaceFlow()
                         .distinctUntilChanged()
                         .flatMapLatest { selectedSpaceOption ->
                             val selectedSpace = selectedSpaceOption.orNull()
@@ -270,7 +270,7 @@ class RoomListSectionBuilder(
         ) {
             it.memberships = listOf(Membership.JOIN)
             it.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
-            it.roomTagQueryFilter = RoomTagQueryFilter(false, false, null)
+            it.roomTagQueryFilter = RoomTagQueryFilter(isFavorite = false, isLowPriority = false, isServerNotice = null)
         }
 
         addSection(
@@ -282,7 +282,7 @@ class RoomListSectionBuilder(
         ) {
             it.memberships = listOf(Membership.JOIN)
             it.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
-            it.roomTagQueryFilter = RoomTagQueryFilter(false, true, null)
+            it.roomTagQueryFilter = RoomTagQueryFilter(isFavorite = false, isLowPriority = true, isServerNotice = null)
         }
     }
 

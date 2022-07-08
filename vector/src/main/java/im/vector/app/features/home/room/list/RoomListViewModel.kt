@@ -100,7 +100,7 @@ class RoomListViewModel @AssistedInject constructor(
         observeMembershipChanges()
         observeLocalRooms()
 
-        appStateHandler.selectedSpaceFlow
+        appStateHandler.getSelectedSpaceFlow()
                 .distinctUntilChanged()
                 .execute {
                     copy(
@@ -148,7 +148,7 @@ class RoomListViewModel @AssistedInject constructor(
     private val roomListSectionBuilder = RoomListSectionBuilder(
                 session,
                 stringProvider,
-                appStateHandlerImpl,
+                appStateHandler,
                 viewModelScope,
                 autoAcceptInvites,
                 {
