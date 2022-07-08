@@ -85,8 +85,7 @@ class SpaceListViewModel @AssistedInject constructor(
                 }
 
         observeSpaceSummaries()
-//        observeSelectionState()
-        appStateHandler.selectedSpaceFlow
+        appStateHandler.getSelectedSpaceFlow()
                 .distinctUntilChanged()
                 .setOnEach { selectedSpaceOption ->
                     copy(

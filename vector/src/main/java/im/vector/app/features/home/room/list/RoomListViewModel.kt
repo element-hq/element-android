@@ -148,7 +148,7 @@ class RoomListViewModel @AssistedInject constructor(
     private val roomListSectionBuilder = RoomListSectionBuilder(
                 session,
                 stringProvider,
-                appStateHandler,
+                appStateHandlerImpl,
                 viewModelScope,
                 autoAcceptInvites,
                 {
