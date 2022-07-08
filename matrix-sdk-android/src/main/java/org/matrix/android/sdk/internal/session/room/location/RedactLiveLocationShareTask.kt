@@ -45,6 +45,11 @@ internal class DefaultRedactLiveLocationShareTask @Inject constructor(
         val relatedEventIds = getRelatedEventIdsOfLive(params.beaconInfoEventId)
         Timber.d("beacon with id ${params.beaconInfoEventId} has related event ids: ${relatedEventIds.joinToString(", ")}")
 
+        redactEvent(
+                eventId = params.beaconInfoEventId,
+                roomId = params.roomId,
+                reason = params.reason
+        )
         relatedEventIds.forEach { eventId ->
             redactEvent(
                     eventId = eventId,
@@ -52,12 +57,6 @@ internal class DefaultRedactLiveLocationShareTask @Inject constructor(
                     reason = params.reason
             )
         }
-
-        redactEvent(
-                eventId = params.beaconInfoEventId,
-                roomId = params.roomId,
-                reason = params.reason
-        )
     }
 
     private suspend fun getRelatedEventIdsOfLive(beaconInfoEventId: String): List<String> {
