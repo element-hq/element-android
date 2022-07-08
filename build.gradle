@@ -126,6 +126,7 @@ allprojects {
         // display the corresponding rule
         verbose = true
         disabledRules = [
+                "indent", // TODO Re-enable this rule after changing indent length
                 "spacing-between-declarations-with-comments",
                 "no-multi-spaces",
                 "experimental:spacing-between-declarations-with-annotations",
