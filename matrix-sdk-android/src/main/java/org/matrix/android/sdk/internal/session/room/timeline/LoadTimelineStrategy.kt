@@ -90,6 +90,7 @@ internal class LoadTimelineStrategy constructor(
     data class Dependencies(
             val timelineSettings: TimelineSettings,
             val realm: AtomicReference<Realm>,
+            val cryptoRealmConfiguration: RealmConfiguration,
             val eventDecryptor: TimelineEventDecryptor,
             val paginationTask: PaginationTask,
             val realmConfiguration: RealmConfiguration,
@@ -176,11 +177,19 @@ internal class LoadTimelineStrategy constructor(
             dependencies.matrixCoroutineDispatchers.main
     )
 
+    private val cryptoInfoEventDecorator = CryptoInfoEventDecorator(
+            realmConfiguration = dependencies.cryptoRealmConfiguration,
+            roomId = roomId,
+            clock = clock,
+            onEventsUpdated = dependencies.onEventsUpdated
+    )
+
     suspend fun onStart() {
         dependencies.eventDecryptor.start()
         dependencies.timelineInput.listeners.add(timelineInputListener)
         val realm = dependencies.realm.get()
         sendingEventsDataSource.start()
+        cryptoInfoEventDecorator.start()
         chunkEntity = getChunkEntity(realm).also {
             it.addChangeListener(chunkEntityListener)
             timelineChunk = it.createTimelineChunk()
@@ -196,6 +205,7 @@ internal class LoadTimelineStrategy constructor(
         dependencies.timelineInput.listeners.remove(timelineInputListener)
         chunkEntity?.removeChangeListener(chunkEntityListener)
         sendingEventsDataSource.stop()
+        cryptoInfoEventDecorator.stop()
         timelineChunk?.close(closeNext = true, closePrev = true)
         getContextLatch?.cancel()
         chunkEntity = null
@@ -245,6 +255,8 @@ internal class LoadTimelineStrategy constructor(
             events.map(this::applyLiveRoomState)
         } else {
             events
+        }.let {
+            cryptoInfoEventDecorator.decorateTimelineEvents(events)
         }
     }
 

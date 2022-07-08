@@ -61,7 +61,12 @@ data class TimelineEvent(
         val ownedByThreadChunk: Boolean = false,
         val senderInfo: SenderInfo,
         val annotations: EventAnnotationsSummary? = null,
-        val readReceipts: List<ReadReceipt> = emptyList()
+        val readReceipts: List<ReadReceipt> = emptyList(),
+        /**
+         * If true the SDK is currently trying to get the keys from other sessions.
+         * will only be set when used with Timeline, if not will be null
+         */
+        val hasActiveRequestForKeys: Boolean? = null,
 ) {
 
     init {

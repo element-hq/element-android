@@ -420,6 +420,11 @@ class MessageActionsViewModel @AssistedInject constructor(
                 }
             }
             addViewSourceItems(timelineEvent)
+        } else {
+            if (session.cryptoService().getCryptoDeviceInfo(session.myUserId).size > 1 ||
+                    timelineEvent.senderInfo.userId != session.myUserId) {
+                add(EventSharedAction.ReRequestKey(timelineEvent.eventId))
+            }
         }
         add(EventSharedAction.CopyPermalink(eventId))
         if (session.myUserId != timelineEvent.root.senderId) {

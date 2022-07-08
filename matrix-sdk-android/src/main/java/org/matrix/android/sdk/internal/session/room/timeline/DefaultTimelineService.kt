@@ -21,6 +21,7 @@ import com.zhuinden.monarchy.Monarchy
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import io.realm.RealmConfiguration
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
@@ -29,6 +30,7 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
+import org.matrix.android.sdk.internal.di.CryptoDatabase
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
 import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadTimelineTask
@@ -40,6 +42,7 @@ import org.matrix.android.sdk.internal.util.time.Clock
 internal class DefaultTimelineService @AssistedInject constructor(
         @Assisted private val roomId: String,
         @SessionDatabase private val monarchy: Monarchy,
+        @CryptoDatabase private val cryptoRealmConfiguration: RealmConfiguration,
         private val timelineInput: TimelineInput,
         private val contextOfEventTask: GetContextOfEventTask,
         private val eventDecryptor: TimelineEventDecryptor,
@@ -68,6 +71,7 @@ internal class DefaultTimelineService @AssistedInject constructor(
                 initialEventId = eventId,
                 settings = settings,
                 realmConfiguration = monarchy.realmConfiguration,
+                cryptoRealmConfiguration = cryptoRealmConfiguration,
                 coroutineDispatchers = coroutineDispatchers,
                 paginationTask = paginationTask,
                 fetchTokenAndPaginateTask = fetchTokenAndPaginateTask,

@@ -16,18 +16,16 @@
 
 package org.matrix.android.sdk.internal.crypto
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_OLM
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.model.MXEventDecryptionResult
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
+import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.content.OlmEventContent
@@ -35,9 +33,9 @@ import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.internal.crypto.actions.EnsureOlmSessionsForDevicesAction
 import org.matrix.android.sdk.internal.crypto.actions.MessageEncrypter
+import org.matrix.android.sdk.internal.crypto.algorithms.DecryptionResult
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
-import org.matrix.android.sdk.internal.extensions.foldToCallback
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
@@ -49,7 +47,6 @@ private val loggerTag = LoggerTag("EventDecryptor", LoggerTag.CRYPTO)
 
 @SessionScope
 internal class EventDecryptor @Inject constructor(
-        private val cryptoCoroutineScope: CoroutineScope,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val clock: Clock,
         private val roomDecryptorProvider: RoomDecryptorProvider,
@@ -80,24 +77,26 @@ internal class EventDecryptor @Inject constructor(
      * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
      * @return the MXEventDecryptionResult data, or throw in case of error
      */
-    @Throws(MXCryptoError::class)
-    suspend fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
+    suspend fun decryptEvent(event: Event, timeline: String): DecryptionResult {
         return internalDecryptEvent(event, timeline)
     }
 
-    /**
-     * Decrypt an event asynchronously.
-     *
-     * @param event the raw event.
-     * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
-     * @param callback the callback to return data or null
-     */
-    fun decryptEventAsync(event: Event, timeline: String, callback: MatrixCallback<MXEventDecryptionResult>) {
-        // is it needed to do that on the crypto scope??
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-            runCatching {
-                internalDecryptEvent(event, timeline)
-            }.foldToCallback(callback)
+    suspend fun decryptAndUpdate(event: Event, timeline: String) {
+        val result = internalDecryptEvent(event, timeline)
+        when (result) {
+            is DecryptionResult.Success -> {
+                val decryptionResult = result.decryptedResult
+                event.mxDecryptionResult = OlmDecryptionResult(
+                        payload = decryptionResult.clearEvent,
+                        senderKey = decryptionResult.senderCurve25519Key,
+                        keysClaimed = decryptionResult.claimedEd25519Key?.let { mapOf("ed25519" to it) },
+                        forwardingCurve25519KeyChain = decryptionResult.forwardingCurve25519KeyChain
+                )
+            }
+            is DecryptionResult.Failure -> {
+                event.mCryptoError = (result.error as? MXCryptoError.Base)?.errorType ?: MXCryptoError.ErrorType.UNABLE_TO_DECRYPT
+                event.mCryptoErrorReason = (result.error as? MXCryptoError.Base)?.technicalMessage ?: result.error.message
+            }
         }
     }
 
@@ -108,20 +107,23 @@ internal class EventDecryptor @Inject constructor(
      * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
      * @return the MXEventDecryptionResult data, or null in case of error
      */
-    @Throws(MXCryptoError::class)
-    private suspend fun internalDecryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
+    private suspend fun internalDecryptEvent(event: Event, timeline: String): DecryptionResult {
         val eventContent = event.content
         if (eventContent == null) {
             Timber.tag(loggerTag.value).e("decryptEvent : empty event content")
-            throw MXCryptoError.Base(MXCryptoError.ErrorType.BAD_ENCRYPTED_MESSAGE, MXCryptoError.BAD_ENCRYPTED_MESSAGE_REASON)
+            return DecryptionResult.Failure(
+                    MXCryptoError.Base(MXCryptoError.ErrorType.BAD_ENCRYPTED_MESSAGE, MXCryptoError.BAD_ENCRYPTED_MESSAGE_REASON)
+            )
         } else if (event.isRedacted()) {
             // we shouldn't attempt to decrypt a redacted event because the content is cleared and decryption will fail because of null algorithm
-            return MXEventDecryptionResult(
-                    clearEvent = mapOf(
-                            "room_id" to event.roomId.orEmpty(),
-                            "type" to EventType.MESSAGE,
-                            "content" to emptyMap<String, Any>(),
-                            "unsigned" to event.unsignedData.toContent()
+            return DecryptionResult.Success(
+                    MXEventDecryptionResult(
+                            clearEvent = mapOf(
+                                    "room_id" to event.roomId.orEmpty(),
+                                    "type" to EventType.MESSAGE,
+                                    "content" to emptyMap<String, Any>(),
+                                    "unsigned" to event.unsignedData.toContent()
+                            )
                     )
             )
         } else {
@@ -130,25 +132,27 @@ internal class EventDecryptor @Inject constructor(
             if (alg == null) {
                 val reason = String.format(MXCryptoError.UNABLE_TO_DECRYPT_REASON, event.eventId, algorithm)
                 Timber.tag(loggerTag.value).e("decryptEvent() : $reason")
-                throw MXCryptoError.Base(MXCryptoError.ErrorType.UNABLE_TO_DECRYPT, reason)
+                return DecryptionResult.Failure(
+                        MXCryptoError.Base(MXCryptoError.ErrorType.UNABLE_TO_DECRYPT, reason)
+                )
             } else {
-                try {
-                    return alg.decryptEvent(event, timeline)
-                } catch (mxCryptoError: MXCryptoError) {
-                    Timber.tag(loggerTag.value).d("internalDecryptEvent : Failed to decrypt ${event.eventId} reason: $mxCryptoError")
-                    if (algorithm == MXCRYPTO_ALGORITHM_OLM) {
-                        if (mxCryptoError is MXCryptoError.Base &&
-                                mxCryptoError.errorType == MXCryptoError.ErrorType.BAD_ENCRYPTED_MESSAGE) {
-                            // need to find sending device
-                            val olmContent = event.content.toModel<OlmEventContent>()
-                            if (event.senderId != null && olmContent?.senderKey != null) {
-                                markOlmSessionForUnwedging(event.senderId, olmContent.senderKey)
-                            } else {
-                                Timber.tag(loggerTag.value).d("Can't mark as wedge malformed")
+                return alg.decryptEvent(event, timeline).also {
+                    if (it is DecryptionResult.Failure) {
+                        val mxCryptoError = it.error
+                        Timber.tag(loggerTag.value).d("internalDecryptEvent : Failed to decrypt ${event.eventId} reason: $mxCryptoError")
+                        if (algorithm == MXCRYPTO_ALGORITHM_OLM) {
+                            if (mxCryptoError is MXCryptoError.Base &&
+                                    mxCryptoError.errorType == MXCryptoError.ErrorType.BAD_ENCRYPTED_MESSAGE) {
+                                // need to find sending device
+                                val olmContent = event.content.toModel<OlmEventContent>()
+                                if (event.senderId != null && olmContent?.senderKey != null) {
+                                    markOlmSessionForUnwedging(event.senderId, olmContent.senderKey)
+                                } else {
+                                    Timber.tag(loggerTag.value).d("Can't mark as wedge malformed")
+                                }
                             }
                         }
                     }
-                    throw mxCryptoError
                 }
             }
         }

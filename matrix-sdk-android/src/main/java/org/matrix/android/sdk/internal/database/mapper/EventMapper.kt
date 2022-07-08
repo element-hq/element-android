@@ -22,6 +22,7 @@ import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.UnsignedData
+import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
 import org.matrix.android.sdk.api.session.events.model.getRootThreadEventId
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.sender.SenderInfo
@@ -56,6 +57,7 @@ internal object EventMapper {
         }
         eventEntity.decryptionErrorReason = event.mCryptoErrorReason
         eventEntity.decryptionErrorCode = event.mCryptoError?.name
+        eventEntity.decryptionWithheldCode = event.mCryptoWithHeldCode?.value
         eventEntity.isRootThread = event.threadDetails?.isRootThread ?: false
         eventEntity.rootThreadEventId = event.getRootThreadEventId()
         eventEntity.numberOfThreads = event.threadDetails?.numberOfThreads ?: 0
@@ -90,18 +92,23 @@ internal object EventMapper {
             it.ageLocalTs = eventEntity.ageLocalTs
             it.sendState = eventEntity.sendState
             it.sendStateDetails = eventEntity.sendStateDetails
-            eventEntity.decryptionResultJson?.let { json ->
+
+            val decryptionJson = eventEntity.decryptionResultJson
+            if (decryptionJson != null) {
                 try {
-                    it.mxDecryptionResult = MoshiProvider.providesMoshi().adapter(OlmDecryptionResult::class.java).fromJson(json)
+                    it.mxDecryptionResult = MoshiProvider.providesMoshi().adapter(OlmDecryptionResult::class.java).fromJson(decryptionJson)
                 } catch (t: JsonDataException) {
                     Timber.e(t, "Failed to parse decryption result")
                 }
+            } else {
+                // TODO get the full crypto error object
+                eventEntity.decryptionErrorCode?.let { errorCode ->
+                    it.mCryptoError = MXCryptoError.ErrorType.valueOf(errorCode)
+                    it.mCryptoWithHeldCode = WithHeldCode.fromCode(eventEntity.decryptionWithheldCode)
+                    it.mCryptoErrorReason = eventEntity.decryptionErrorReason
+                }
             }
-            // TODO get the full crypto error object
-            it.mCryptoError = eventEntity.decryptionErrorCode?.let { errorCode ->
-                MXCryptoError.ErrorType.valueOf(errorCode)
-            }
-            it.mCryptoErrorReason = eventEntity.decryptionErrorReason
+
             it.threadDetails = ThreadDetails(
                     isRootThread = eventEntity.isRootThread,
                     isThread = if (it.threadDetails?.isThread == true) true else eventEntity.isThread(),

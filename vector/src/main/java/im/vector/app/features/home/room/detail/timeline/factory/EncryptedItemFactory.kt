@@ -30,9 +30,9 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.image
 import me.gujun.android.span.span
-import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
+import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
 import org.matrix.android.sdk.api.session.events.model.toModel
 import javax.inject.Inject
 
@@ -56,16 +56,18 @@ class EncryptedItemFactory @Inject constructor(
                 val cryptoError = event.root.mCryptoError
 
                 val spannableStr = if (vectorPreferences.developerMode()) {
-                    val errorDescription =
-                            if (cryptoError == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID) {
-                                stringProvider.getString(R.string.notice_crypto_error_unknown_inbound_session_id)
-                            } else {
-                                // TODO i18n
-                                cryptoError?.name
-                            }
+                    // In developer mode we want to show the raw error
+                    val errorDescription = if (event.root.mCryptoWithHeldCode != null) {
+                        "${cryptoError?.name ?: "NULL"} | ${event.root.mCryptoWithHeldCode?.value}"
+                    } else {
+                        cryptoError?.name ?: "NULL"
+                    }
 
-                    val message = stringProvider.getString(R.string.encrypted_message).takeIf { cryptoError == null }
-                            ?: stringProvider.getString(R.string.notice_crypto_unable_to_decrypt, errorDescription)
+                    val message = stringProvider.getString(R.string.notice_crypto_unable_to_decrypt, errorDescription).let {
+                        if (event.hasActiveRequestForKeys == true) {
+                            "$it - key request in progress"
+                        } else it
+                    }
                     span(message) {
                         textStyle = "italic"
                         textColor = colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
@@ -78,29 +80,38 @@ class EncryptedItemFactory @Inject constructor(
                             textColor = colorFromAttribute
                         }
                     } else {
-                        when (cryptoError) {
-                            MXCryptoError.ErrorType.KEYS_WITHHELD -> {
-                                span {
-                                    drawableProvider.getDrawable(R.drawable.ic_forbidden, colorFromAttribute)?.let {
-                                        image(it, "baseline")
-                                        +" "
-                                    }
-                                    span(stringProvider.getString(R.string.notice_crypto_unable_to_decrypt_final)) {
-                                        textStyle = "italic"
-                                        textColor = colorFromAttribute
-                                    }
+                        if (event.hasActiveRequestForKeys == true) {
+                            span {
+                                drawableProvider.getDrawable(R.drawable.ic_clock, colorFromAttribute)?.let {
+                                    image(it, "baseline")
+                                    +" "
+                                }
+                                span(stringProvider.getString(R.string.notice_crypto_unable_to_decrypt_requesting_keys)) {
+                                    textStyle = "italic"
+                                    textColor = colorFromAttribute
                                 }
                             }
-                            else -> {
-                                span {
-                                    drawableProvider.getDrawable(R.drawable.ic_clock, colorFromAttribute)?.let {
-                                        image(it, "baseline")
-                                        +" "
-                                    }
-                                    span(stringProvider.getString(R.string.notice_crypto_unable_to_decrypt_friendly)) {
-                                        textStyle = "italic"
-                                        textColor = colorFromAttribute
-                                    }
+                        } else if (event.root.mCryptoWithHeldCode != null) {
+                            val messageId = when (event.root.mCryptoWithHeldCode) {
+                                WithHeldCode.BLACKLISTED -> R.string.crypto_error_withheld_blacklisted
+                                WithHeldCode.UNVERIFIED -> R.string.crypto_error_withheld_unverified
+                                else -> R.string.crypto_error_withheld_generic
+                            }
+                            span {
+                                drawableProvider.getDrawable(R.drawable.ic_forbidden, colorFromAttribute)?.let {
+                                    image(it, "baseline")
+                                    +" "
+                                }
+                                span(stringProvider.getString(messageId)) {
+                                    textStyle = "italic"
+                                    textColor = colorFromAttribute
+                                }
+                            }
+                        } else {
+                            span {
+                                span(stringProvider.getString(R.string.notice_crypto_unable_to_decrypt_no_keys)) {
+                                    textStyle = "italic"
+                                    textColor = colorFromAttribute
                                 }
                             }
                         }

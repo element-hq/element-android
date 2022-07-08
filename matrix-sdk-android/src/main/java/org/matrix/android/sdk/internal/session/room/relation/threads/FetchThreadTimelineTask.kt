@@ -17,8 +17,6 @@ package org.matrix.android.sdk.internal.session.room.relation.threads
 
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
-import org.matrix.android.sdk.api.session.crypto.MXCryptoError
-import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
@@ -212,27 +210,6 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
         val now = clock.epochMillis()
         val ageLocalTs = now - (event.unsignedData?.age ?: 0)
         return event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
-    }
-
-    /**
-     * Invoke the event decryption mechanism for a specific event.
-     */
-    private suspend fun decryptIfNeeded(event: Event, roomId: String) {
-        try {
-            // Event from sync does not have roomId, so add it to the event first
-            val result = cryptoService.decryptEvent(event.copy(roomId = roomId), "")
-            event.mxDecryptionResult = OlmDecryptionResult(
-                    payload = result.clearEvent,
-                    senderKey = result.senderCurve25519Key,
-                    keysClaimed = result.claimedEd25519Key?.let { k -> mapOf("ed25519" to k) },
-                    forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
-            )
-        } catch (e: MXCryptoError) {
-            if (e is MXCryptoError.Base) {
-                event.mCryptoError = e.errorType
-                event.mCryptoErrorReason = e.technicalMessage.takeIf { it.isNotEmpty() } ?: e.detailedErrorDescription
-            }
-        }
     }
 
     private fun handleReaction(

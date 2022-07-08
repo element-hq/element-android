@@ -34,12 +34,12 @@ import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.api.session.crypto.model.IncomingRoomKeyRequest
 import org.matrix.android.sdk.api.session.crypto.model.MXDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.MXEncryptEventContentResult
-import org.matrix.android.sdk.api.session.crypto.model.MXEventDecryptionResult
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.content.RoomKeyWithHeldContent
+import org.matrix.android.sdk.internal.crypto.algorithms.DecryptionResult
 import org.matrix.android.sdk.internal.crypto.model.SessionInfo
 
 interface CryptoService {
@@ -145,10 +145,9 @@ interface CryptoService {
 
     fun discardOutboundSession(roomId: String)
 
-    @Throws(MXCryptoError::class)
-    suspend fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult
+    suspend fun decryptEvent(event: Event, timeline: String): DecryptionResult
 
-    fun decryptEventAsync(event: Event, timeline: String, callback: MatrixCallback<MXEventDecryptionResult>)
+    suspend fun decryptAndUpdateEvent(event: Event, timeline: String)
 
     fun getEncryptionAlgorithm(roomId: String): String?
 

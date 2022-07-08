@@ -79,6 +79,11 @@ internal open class EventEntity(
             if (value != field) field = value
         }
 
+    var decryptionWithheldCode: String? = null
+        set(value) {
+            if (value != field) field = value
+        }
+
     companion object
 
     fun setDecryptionResult(result: MXEventDecryptionResult) {
@@ -93,6 +98,7 @@ internal open class EventEntity(
         decryptionResultJson = adapter.toJson(decryptionResult)
         decryptionErrorCode = null
         decryptionErrorReason = null
+        decryptionWithheldCode = null
 
         // If we have an EventInsertEntity for the eventId we make sures it can be processed now.
         realm.where(EventInsertEntity::class.java)

@@ -30,6 +30,7 @@ import org.matrix.android.sdk.api.session.events.model.content.RoomKeyContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.internal.crypto.MXOlmDevice
 import org.matrix.android.sdk.internal.crypto.OutgoingKeyRequestManager
+import org.matrix.android.sdk.internal.crypto.algorithms.DecryptionResult
 import org.matrix.android.sdk.internal.crypto.algorithms.IMXDecrypting
 import org.matrix.android.sdk.internal.crypto.keysbackup.DefaultKeysBackupService
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
@@ -54,29 +55,33 @@ internal class MXMegolmDecryption(
      */
 //    private var pendingEvents: MutableMap<String /* senderKey|sessionId */, MutableMap<String /* timelineId */, MutableList<Event>>> = HashMap()
 
-    @Throws(MXCryptoError::class)
-    override suspend fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
+    override suspend fun decryptEvent(event: Event, timeline: String): DecryptionResult {
         return decryptEvent(event, timeline, true)
     }
 
-    @Throws(MXCryptoError::class)
-    private suspend fun decryptEvent(event: Event, timeline: String, requestKeysOnFail: Boolean): MXEventDecryptionResult {
+    private suspend fun decryptEvent(event: Event, timeline: String, requestKeysOnFail: Boolean): DecryptionResult {
         Timber.tag(loggerTag.value).v("decryptEvent ${event.eventId}, requestKeysOnFail:$requestKeysOnFail")
         if (event.roomId.isNullOrBlank()) {
-            throw MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON)
+            return DecryptionResult.Failure(
+                    MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON)
+            )
         }
 
         val encryptedEventContent = event.content.toModel<EncryptedEventContent>()
-                ?: throw MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON)
+                ?: return DecryptionResult.Failure(
+                        MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON)
+                )
 
         if (encryptedEventContent.senderKey.isNullOrBlank() ||
                 encryptedEventContent.sessionId.isNullOrBlank() ||
                 encryptedEventContent.ciphertext.isNullOrBlank()) {
-            throw MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON)
+            return DecryptionResult.Failure(
+                    MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON)
+            )
         }
 
-        return runCatching {
-            olmDevice.decryptGroupMessage(
+        try {
+            val olmDecryptionResult = olmDevice.decryptGroupMessage(
                     encryptedEventContent.ciphertext,
                     event.roomId,
                     timeline,
@@ -84,85 +89,73 @@ internal class MXMegolmDecryption(
                     encryptedEventContent.sessionId,
                     encryptedEventContent.senderKey
             )
-        }
-                .fold(
-                        { olmDecryptionResult ->
-                            // the decryption succeeds
-                            if (olmDecryptionResult.payload != null) {
-                                MXEventDecryptionResult(
-                                        clearEvent = olmDecryptionResult.payload,
-                                        senderCurve25519Key = olmDecryptionResult.senderKey,
-                                        claimedEd25519Key = olmDecryptionResult.keysClaimed?.get("ed25519"),
-                                        forwardingCurve25519KeyChain = olmDecryptionResult.forwardingCurve25519KeyChain
-                                                .orEmpty()
-                                ).also {
-                                    liveEventManager.get().dispatchLiveEventDecrypted(event, it)
-                                }
-                            } else {
-                                throw MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON)
-                            }
-                        },
-                        { throwable ->
-                            liveEventManager.get().dispatchLiveEventDecryptionFailed(event, throwable)
-                            if (throwable is MXCryptoError.OlmError) {
-                                // TODO Check the value of .message
-                                if (throwable.olmException.message == "UNKNOWN_MESSAGE_INDEX") {
-                                    // So we know that session, but it's ratcheted and we can't decrypt at that index
-
-                                    if (requestKeysOnFail) {
-                                        requestKeysForEvent(event)
-                                    }
-                                    // Check if partially withheld
-                                    val withHeldInfo = cryptoStore.getWithHeldMegolmSession(event.roomId, encryptedEventContent.sessionId)
-                                    if (withHeldInfo != null) {
-                                        // Encapsulate as withHeld exception
-                                        throw MXCryptoError.Base(
-                                                MXCryptoError.ErrorType.KEYS_WITHHELD,
-                                                withHeldInfo.code?.value ?: "",
-                                                withHeldInfo.reason
-                                        )
-                                    }
-
-                                    throw MXCryptoError.Base(
-                                            MXCryptoError.ErrorType.UNKNOWN_MESSAGE_INDEX,
-                                            "UNKNOWN_MESSAGE_INDEX",
-                                            null
-                                    )
-                                }
-
-                                val reason = String.format(MXCryptoError.OLM_REASON, throwable.olmException.message)
-                                val detailedReason = String.format(MXCryptoError.DETAILED_OLM_REASON, encryptedEventContent.ciphertext, reason)
-
-                                throw MXCryptoError.Base(
-                                        MXCryptoError.ErrorType.OLM,
-                                        reason,
-                                        detailedReason
-                                )
-                            }
-                            if (throwable is MXCryptoError.Base) {
-                                if (throwable.errorType == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID) {
-                                    // Check if it was withheld by sender to enrich error code
-                                    val withHeldInfo = cryptoStore.getWithHeldMegolmSession(event.roomId, encryptedEventContent.sessionId)
-                                    if (withHeldInfo != null) {
-                                        if (requestKeysOnFail) {
-                                            requestKeysForEvent(event)
-                                        }
-                                        // Encapsulate as withHeld exception
-                                        throw MXCryptoError.Base(
-                                                MXCryptoError.ErrorType.KEYS_WITHHELD,
-                                                withHeldInfo.code?.value ?: "",
-                                                withHeldInfo.reason
-                                        )
-                                    }
-
-                                    if (requestKeysOnFail) {
-                                        requestKeysForEvent(event)
-                                    }
-                                }
-                            }
-                            throw throwable
-                        }
+            return if (olmDecryptionResult.payload != null) {
+                MXEventDecryptionResult(
+                        clearEvent = olmDecryptionResult.payload,
+                        senderCurve25519Key = olmDecryptionResult.senderKey,
+                        claimedEd25519Key = olmDecryptionResult.keysClaimed?.get("ed25519"),
+                        forwardingCurve25519KeyChain = olmDecryptionResult.forwardingCurve25519KeyChain
+                                .orEmpty()
+                ).also {
+                    liveEventManager.get().dispatchLiveEventDecrypted(event, it)
+                }.let {
+                    DecryptionResult.Success(it)
+                }
+            } else {
+                return DecryptionResult.Failure(
+                        MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON)
                 )
+            }
+        } catch (olmError: MXCryptoError.OlmError) {
+            liveEventManager.get().dispatchLiveEventDecryptionFailed(event, olmError)
+            return if (olmError.olmException.message == "UNKNOWN_MESSAGE_INDEX") {
+                // So we know that session, but it's ratcheted and we can't decrypt at that index
+                DecryptionResult.Failure(
+                        MXCryptoError.Base(
+                                MXCryptoError.ErrorType.UNKNOWN_MESSAGE_INDEX,
+                                "UNKNOWN_MESSAGE_INDEX",
+                                null
+                        ),
+                        // Check if partially withheld
+                        cryptoStore.getWithHeldMegolmSession(event.roomId, encryptedEventContent.sessionId)?.code
+                ).also {
+                    if (requestKeysOnFail) {
+                        requestKeysForEvent(event)
+                    }
+                }
+            } else {
+                DecryptionResult.Failure(
+                        MXCryptoError.Base(
+                                MXCryptoError.ErrorType.OLM,
+                                String.format(MXCryptoError.OLM_REASON, olmError.olmException.message),
+                                String.format(MXCryptoError.DETAILED_OLM_REASON, event.eventId, olmError.olmException.message)
+                        )
+                ).also {
+                    if (requestKeysOnFail) {
+                        requestKeysForEvent(event)
+                    }
+                }
+            }
+        } catch (cryptoError: MXCryptoError) {
+            liveEventManager.get().dispatchLiveEventDecryptionFailed(event, cryptoError)
+            return DecryptionResult.Failure(
+                    cryptoError,
+                    cryptoStore.getWithHeldMegolmSession(event.roomId, encryptedEventContent.sessionId)?.code
+            ).also {
+                if (requestKeysOnFail) {
+                    requestKeysForEvent(event)
+                }
+            }
+        } catch (other: Throwable) {
+            Timber.e("Unexpected decryption error, should not happen", other)
+            return DecryptionResult.Failure(
+                    MXCryptoError.Base(
+                            MXCryptoError.ErrorType.UNABLE_TO_DECRYPT,
+                            other.localizedMessage ?: "Unexpected error"
+                    ),
+                    cryptoStore.getWithHeldMegolmSession(event.roomId, encryptedEventContent.sessionId)?.code
+            )
+        }
     }
 
     /**

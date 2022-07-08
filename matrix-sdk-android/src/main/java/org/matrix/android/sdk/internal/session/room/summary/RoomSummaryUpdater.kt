@@ -20,7 +20,7 @@ import io.realm.Realm
 import io.realm.kotlin.createObject
 import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.extensions.orFalse
-import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.content.EncryptionEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -40,6 +40,7 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.sync.model.RoomSyncSummary
 import org.matrix.android.sdk.api.session.sync.model.RoomSyncUnreadNotifications
 import org.matrix.android.sdk.internal.crypto.EventDecryptor
+import org.matrix.android.sdk.internal.crypto.algorithms.DecryptionResult
 import org.matrix.android.sdk.internal.crypto.crosssigning.DefaultCrossSigningService
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.database.mapper.asDomain
@@ -80,7 +81,7 @@ internal class RoomSummaryUpdater @Inject constructor(
         val roomSummaryEntity = RoomSummaryEntity.getOrNull(realm, roomId)
         if (roomSummaryEntity != null) {
             val latestPreviewableEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
-            latestPreviewableEvent?.attemptToDecrypt()
+            latestPreviewableEvent?.attemptToDecrypt(true)
         }
     }
 
@@ -129,14 +130,14 @@ internal class RoomSummaryUpdater @Inject constructor(
         Timber.v("## Space: Updating summary room [$roomId] roomType: [$roomType]")
 
         val encryptionEvent = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_ENCRYPTION, stateKey = "")?.root
-        Timber.d("## CRYPTO: currentEncryptionEvent is $encryptionEvent")
+        Timber.v("## CRYPTO: currentEncryptionEvent is $encryptionEvent")
 
         val latestPreviewableEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
 
         val lastActivityFromEvent = latestPreviewableEvent?.root?.originServerTs
         if (lastActivityFromEvent != null) {
             roomSummaryEntity.lastActivityTime = lastActivityFromEvent
-            latestPreviewableEvent.attemptToDecrypt()
+            latestPreviewableEvent.attemptToDecrypt(false)
         }
 
         roomSummaryEntity.hasUnreadMessages = roomSummaryEntity.notificationCount > 0 ||
@@ -186,17 +187,27 @@ internal class RoomSummaryUpdater @Inject constructor(
         }
     }
 
-    private fun TimelineEventEntity.attemptToDecrypt() {
+    private fun TimelineEventEntity.attemptToDecrypt(force: Boolean) {
         when (val root = this.root) {
             null -> {
                 Timber.v("Decryption skipped due to missing root event $eventId")
             }
             else -> {
-                if (root.type == EventType.ENCRYPTED && root.decryptionResultJson == null) {
-                    Timber.v("Should decrypt $eventId")
-                    tryOrNull {
-                        runBlocking { eventDecryptor.decryptEvent(root.asDomain(), "") }
-                    }?.let { root.setDecryptionResult(it) }
+                if (root.type == EventType.ENCRYPTED) {
+                    if (force || (root.decryptionResultJson == null && root.decryptionErrorCode == null)) {
+                        Timber.v("Should decrypt $eventId")
+                        when (val res = runBlocking { eventDecryptor.decryptEvent(root.asDomain(), "") }) {
+                            is DecryptionResult.Success -> {
+                                root.setDecryptionResult(res.decryptedResult)
+                            }
+                            is DecryptionResult.Failure -> {
+                                val error = res.error
+                                root.decryptionErrorCode = (error as? MXCryptoError.Base)?.errorType?.name ?: MXCryptoError.ErrorType.UNABLE_TO_DECRYPT.name
+                                root.decryptionErrorReason = (error as? MXCryptoError.Base)?.technicalMessage ?: error.message
+                                root.decryptionWithheldCode = res.withheldInfo?.value
+                            }
+                        }
+                    }
                 }
             }
         }

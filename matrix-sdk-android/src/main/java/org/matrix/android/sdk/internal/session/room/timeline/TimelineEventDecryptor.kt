@@ -24,6 +24,7 @@ import org.matrix.android.sdk.api.session.crypto.NewSessionListener
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.internal.crypto.algorithms.DecryptionResult
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.query.where
@@ -129,29 +130,30 @@ internal class TimelineEventDecryptor @Inject constructor(
             threadAwareNonEncryptedEvents(request, realm)
             return
         }
-        try {
-            // note: runBlocking should be used here while we are in realm single thread executor, to avoid thread switching
-            val result = runBlocking { cryptoService.decryptEvent(request.event, timelineId) }
-            Timber.v("Successfully decrypted event ${event.eventId}")
-            realm.executeTransaction {
-                val eventId = event.eventId ?: return@executeTransaction
-                val eventEntity = EventEntity
-                        .where(it, eventId = eventId)
-                        .findFirst()
-                eventEntity?.setDecryptionResult(result)
-                val decryptedEvent = eventEntity?.asDomain()
-                threadsAwarenessHandler.makeEventThreadAware(realm, event.roomId, decryptedEvent, eventEntity)
+        // note: runBlocking should be used here while we are in realm single thread executor, to avoid thread switching
+        when (val result = runBlocking { cryptoService.decryptEvent(request.event, timelineId) }) {
+            is DecryptionResult.Success -> {
+                Timber.v("Successfully decrypted event ${event.eventId}")
+                realm.executeTransaction {
+                    val eventId = event.eventId ?: return@executeTransaction
+                    val eventEntity = EventEntity
+                            .where(it, eventId = eventId)
+                            .findFirst()
+                    eventEntity?.setDecryptionResult(result.decryptedResult)
+                    val decryptedEvent = eventEntity?.asDomain()
+                    threadsAwarenessHandler.makeEventThreadAware(realm, event.roomId, decryptedEvent, eventEntity)
+                }
             }
-        } catch (e: MXCryptoError) {
-            Timber.v("Failed to decrypt event ${event.eventId} : ${e.localizedMessage}")
-            if (e is MXCryptoError.Base /*&& e.errorType == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID*/) {
-                // Keep track of unknown sessions to automatically try to decrypt on new session
+            is DecryptionResult.Failure -> {
+                val error = result.error
+                Timber.v("Failed to decrypt event ${event.eventId} : ${error.localizedMessage}")
                 realm.executeTransaction {
                     EventEntity.where(it, eventId = event.eventId ?: "")
                             .findFirst()
                             ?.let {
-                                it.decryptionErrorCode = e.errorType.name
-                                it.decryptionErrorReason = e.technicalMessage.takeIf { it.isNotEmpty() } ?: e.detailedErrorDescription
+                                it.decryptionErrorCode = (error as? MXCryptoError.Base)?.errorType?.name ?: MXCryptoError.ErrorType.UNABLE_TO_DECRYPT.name
+                                it.decryptionErrorReason = (error as? MXCryptoError.Base)?.technicalMessage ?: error.message
+                                it.decryptionWithheldCode  = result.withheldInfo?.value
                             }
                 }
                 event.content?.toModel<EncryptedEventContent>()?.let { content ->
@@ -163,12 +165,9 @@ internal class TimelineEventDecryptor @Inject constructor(
                     }
                 }
             }
-        } catch (t: Throwable) {
-            Timber.e("Failed to decrypt event ${event.eventId}, ${t.localizedMessage}")
-        } finally {
-            synchronized(existingRequests) {
-                existingRequests.remove(request)
-            }
+        }
+        synchronized(existingRequests) {
+            existingRequests.remove(request)
         }
     }
 

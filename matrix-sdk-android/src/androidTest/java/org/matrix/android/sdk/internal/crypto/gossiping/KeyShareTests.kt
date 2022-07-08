@@ -46,7 +46,7 @@ import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import org.matrix.android.sdk.common.RetryTestRule
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
-import org.matrix.android.sdk.mustFail
+import org.matrix.android.sdk.internal.crypto.algorithms.DecryptionResult
 
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
@@ -95,9 +95,10 @@ class KeyShareTests : InstrumentedTest {
         assert(receivedEvent!!.isEncrypted())
 
         commonTestHelper.runBlockingTest {
-            mustFail {
-                aliceSession2.cryptoService().decryptEvent(receivedEvent.root, "foo")
-            }
+            assertTrue(
+                    "Should not be able to decrypt",
+                    aliceSession2.cryptoService().decryptEvent(receivedEvent.root, "foo") is DecryptionResult.Failure
+            )
         }
 
         val outgoingRequestsBefore = aliceSession2.cryptoService().getOutgoingRoomKeyRequests()
@@ -166,9 +167,10 @@ class KeyShareTests : InstrumentedTest {
         }
 
         commonTestHelper.runBlockingTest {
-            mustFail {
-                aliceSession2.cryptoService().decryptEvent(receivedEvent.root, "foo")
-            }
+            assertTrue(
+                    "Should not be able to decrypt",
+                    aliceSession2.cryptoService().decryptEvent(receivedEvent.root, "foo") is DecryptionResult.Failure
+            )
         }
 
         // Mark the device as trusted

@@ -19,7 +19,6 @@ package org.matrix.android.sdk.internal.crypto
 import android.util.Log
 import androidx.test.filters.LargeTest
 import kotlinx.coroutines.delay
-import org.amshove.kluent.fail
 import org.amshove.kluent.internal.assertEquals
 import org.junit.Assert
 import org.junit.FixMethodOrder
@@ -61,7 +60,7 @@ import org.matrix.android.sdk.common.RetryTestRule
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
 import org.matrix.android.sdk.common.TestMatrixCallback
-import org.matrix.android.sdk.mustFail
+import org.matrix.android.sdk.internal.crypto.algorithms.DecryptionResult
 import java.util.concurrent.CountDownLatch
 
 // @Ignore("This test fails with an unhandled exception thrown from a coroutine which terminates the entire test run.")
@@ -504,17 +503,17 @@ class E2eeSanityTests : InstrumentedTest {
 
         // Confirm we can decrypt one but not the other
         testHelper.runBlockingTest {
-            mustFail(message = "Should not be able to decrypt event") {
-                newBobSession.cryptoService().decryptEvent(firstEventNewBobPov.root, "")
-            }
+            Assert.assertTrue(
+                    "Should not be able to decrypt event",
+                    newBobSession.cryptoService().decryptEvent(firstEventNewBobPov.root, "") is DecryptionResult.Failure
+            )
         }
 
         testHelper.runBlockingTest {
-            try {
-                newBobSession.cryptoService().decryptEvent(secondEventNewBobPov.root, "")
-            } catch (error: MXCryptoError) {
-                fail("Should be able to decrypt event")
-            }
+            Assert.assertTrue(
+                    "Should be able to decrypt event",
+                    newBobSession.cryptoService().decryptEvent(secondEventNewBobPov.root, "") is DecryptionResult.Success
+            )
         }
 
         // Now let's verify bobs session, and re-request keys
@@ -535,22 +534,15 @@ class E2eeSanityTests : InstrumentedTest {
         // we should be able to decrypt both
         testHelper.waitWithLatch {
             testHelper.retryPeriodicallyWithLatch(it) {
-                val canDecryptFirst = try {
-                    testHelper.runBlockingTest {
-                        newBobSession.cryptoService().decryptEvent(firstEventNewBobPov.root, "")
-                    }
-                    true
-                } catch (error: MXCryptoError) {
-                    false
-                }
-                val canDecryptSecond = try {
-                    testHelper.runBlockingTest {
-                        newBobSession.cryptoService().decryptEvent(secondEventNewBobPov.root, "")
-                    }
-                    true
-                } catch (error: MXCryptoError) {
-                    false
-                }
+                val canDecryptFirst =
+                        testHelper.runBlockingTest {
+                            newBobSession.cryptoService().decryptEvent(firstEventNewBobPov.root, "")
+                        } is DecryptionResult.Success
+
+                val canDecryptSecond =
+                        testHelper.runBlockingTest {
+                            newBobSession.cryptoService().decryptEvent(secondEventNewBobPov.root, "")
+                        } is DecryptionResult.Success
                 canDecryptFirst && canDecryptSecond
             }
         }

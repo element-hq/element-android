@@ -19,7 +19,26 @@ package org.matrix.android.sdk.internal.crypto.algorithms
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.model.MXEventDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
 import org.matrix.android.sdk.internal.crypto.keysbackup.DefaultKeysBackupService
+
+fun MXEventDecryptionResult.toResult() = DecryptionResult.Success(this)
+
+sealed class DecryptionResult {
+    data class Success(val decryptedResult: MXEventDecryptionResult) : DecryptionResult()
+    data class Failure(val error: MXCryptoError, val withheldInfo: WithHeldCode? = null) : DecryptionResult()
+
+    fun fold(success: (MXEventDecryptionResult) -> Unit, error: (MXCryptoError, WithHeldCode?) -> Unit) {
+        when (this) {
+            is Success -> {
+                success(this.decryptedResult)
+            }
+            is Failure -> {
+                error(this.error, this.withheldInfo)
+            }
+        }
+    }
+}
 
 /**
  * An interface for decrypting data.
@@ -33,8 +52,7 @@ internal interface IMXDecrypting {
      * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
      * @return the decryption information, or an error
      */
-    @Throws(MXCryptoError::class)
-    suspend fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult
+    suspend fun decryptEvent(event: Event, timeline: String): DecryptionResult
 
     /**
      * Handle a key event.

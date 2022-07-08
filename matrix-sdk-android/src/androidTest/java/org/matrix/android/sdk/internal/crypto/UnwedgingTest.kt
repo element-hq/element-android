@@ -29,7 +29,6 @@ import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
-import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
@@ -40,6 +39,7 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import org.matrix.android.sdk.common.TestConstants
+import org.matrix.android.sdk.internal.crypto.algorithms.DecryptionResult
 import org.matrix.android.sdk.internal.crypto.model.OlmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.store.db.deserializeFromRealm
 import org.matrix.android.sdk.internal.crypto.store.db.serializeForRealm
@@ -226,13 +226,10 @@ class UnwedgingTest : InstrumentedTest {
         testHelper.waitWithLatch {
             testHelper.retryPeriodicallyWithLatch(it) {
                 // we should get back the key and be able to decrypt
-                val result = testHelper.runBlockingTest {
-                    tryOrNull {
-                        bobSession.cryptoService().decryptEvent(messagesReceivedByBob[0].root, "")
-                    }
-                }
-                Timber.i("## CRYPTO | testUnwedging: decrypt result  ${result?.clearEvent}")
-                result != null
+                val canDecrypt = testHelper.runBlockingTest {
+                    bobSession.cryptoService().decryptEvent(messagesReceivedByBob[0].root, "")
+                } is DecryptionResult.Success
+                canDecrypt
             }
         }
 

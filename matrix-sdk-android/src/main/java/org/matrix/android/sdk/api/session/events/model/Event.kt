@@ -24,6 +24,7 @@ import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
+import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
@@ -99,6 +100,13 @@ data class Event(
     @Transient
     var mCryptoErrorReason: String? = null
 
+    /**
+     * If the session is unknown (UISI) or paritially known (unknown message index)
+     * we can have more info from the session owner on why it was not sent.
+     */
+    @Transient
+    var mCryptoWithHeldCode: WithHeldCode? = null
+
     @Transient
     var sendState: SendState = SendState.UNKNOWN
 
@@ -131,6 +139,7 @@ data class Event(
             it.mxDecryptionResult = mxDecryptionResult
             it.mCryptoError = mCryptoError
             it.mCryptoErrorReason = mCryptoErrorReason
+            it.mCryptoWithHeldCode = mCryptoWithHeldCode
             it.sendState = sendState
             it.ageLocalTs = ageLocalTs
             it.threadDetails = threadDetails
@@ -278,6 +287,7 @@ data class Event(
         if (mxDecryptionResult != other.mxDecryptionResult) return false
         if (mCryptoError != other.mCryptoError) return false
         if (mCryptoErrorReason != other.mCryptoErrorReason) return false
+        if (mCryptoWithHeldCode != other.mCryptoWithHeldCode) return false
         if (sendState != other.sendState) return false
         if (threadDetails != other.threadDetails) return false
         return true
@@ -297,6 +307,7 @@ data class Event(
         result = 31 * result + (mxDecryptionResult?.hashCode() ?: 0)
         result = 31 * result + (mCryptoError?.hashCode() ?: 0)
         result = 31 * result + (mCryptoErrorReason?.hashCode() ?: 0)
+        result = 31 * result + (mCryptoWithHeldCode?.hashCode() ?: 0)
         result = 31 * result + sendState.hashCode()
         result = 31 * result + threadDetails.hashCode()
 

@@ -30,6 +30,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.threads.model.ThreadSummary
 import org.matrix.android.sdk.api.session.room.threads.model.ThreadSummaryUpdateType
+import org.matrix.android.sdk.internal.crypto.algorithms.DecryptionResult
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
@@ -219,23 +220,26 @@ private fun decryptIfNeeded(cryptoService: CryptoService?, eventEntity: EventEnt
     cryptoService ?: return
     val event = eventEntity.asDomain()
     if (event.isEncrypted() && event.mxDecryptionResult == null && event.eventId != null) {
-        try {
-            Timber.i("###THREADS ThreadSummaryHelper request decryption for eventId:${event.eventId}")
-            // Event from sync does not have roomId, so add it to the event first
-            // note: runBlocking should be used here while we are in realm single thread executor, to avoid thread switching
-            val result = runBlocking { cryptoService.decryptEvent(event.copy(roomId = roomId), "") }
-            event.mxDecryptionResult = OlmDecryptionResult(
-                    payload = result.clearEvent,
-                    senderKey = result.senderCurve25519Key,
-                    keysClaimed = result.claimedEd25519Key?.let { k -> mapOf("ed25519" to k) },
-                    forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
-            )
-            // Save decryption result, to not decrypt every time we enter the thread list
-            eventEntity.setDecryptionResult(result)
-        } catch (e: MXCryptoError) {
-            if (e is MXCryptoError.Base) {
-                event.mCryptoError = e.errorType
-                event.mCryptoErrorReason = e.technicalMessage.takeIf { it.isNotEmpty() } ?: e.detailedErrorDescription
+        Timber.i("###THREADS ThreadSummaryHelper request decryption for eventId:${event.eventId}")
+        // Event from sync does not have roomId, so add it to the event first
+        // note: runBlocking should be used here while we are in realm single thread executor, to avoid thread switching
+        val result = runBlocking { cryptoService.decryptEvent(event.copy(roomId = roomId), "") }
+        when (result) {
+            is DecryptionResult.Success -> {
+                val decryptedResult = result.decryptedResult
+                event.mxDecryptionResult = OlmDecryptionResult(
+                        payload = decryptedResult.clearEvent,
+                        senderKey = decryptedResult.senderCurve25519Key,
+                        keysClaimed = decryptedResult.claimedEd25519Key?.let { k -> mapOf("ed25519" to k) },
+                        forwardingCurve25519KeyChain = decryptedResult.forwardingCurve25519KeyChain
+                )
+                // Save decryption result, to not decrypt every time we enter the thread list
+                eventEntity.setDecryptionResult(decryptedResult)
+            }
+            is DecryptionResult.Failure -> {
+                event.mCryptoError = (result.error as? MXCryptoError.Base)?.errorType ?: MXCryptoError.ErrorType.UNABLE_TO_DECRYPT
+                event.mCryptoErrorReason = (result.error as? MXCryptoError.Base)?.technicalMessage ?: result.error.message
+                event.mCryptoWithHeldCode = result.withheldInfo
             }
         }
     }

@@ -18,6 +18,7 @@ package org.matrix.android.sdk.api.session.crypto
 
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
+import org.matrix.android.sdk.internal.crypto.algorithms.DecryptionResult
 import org.matrix.olm.OlmException
 
 /**
@@ -60,7 +61,7 @@ sealed class MXCryptoError : Throwable() {
         OLM,
         UNKNOWN_DEVICES,
         UNKNOWN_MESSAGE_INDEX,
-        KEYS_WITHHELD
+//        KEYS_WITHHELD
     }
 
     companion object {
@@ -91,4 +92,6 @@ sealed class MXCryptoError : Throwable() {
         const val NO_MORE_ALGORITHM_REASON = "Room was previously configured to use encryption, but is no longer." +
                 " Perhaps the homeserver is hiding the configuration event."
     }
+
+    fun toResult() = DecryptionResult.Failure(this)
 }

@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.crypto.replayattack
 
 import androidx.test.filters.LargeTest
-import org.amshove.kluent.internal.assertFailsWith
 import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.fail
@@ -64,11 +63,15 @@ class ReplayAttackTest : InstrumentedTest {
             // Lets decrypt the original event
             aliceSession.cryptoService().decryptEvent(sentEvents[0].root, timelineId)
             // Lets decrypt the fake event that will have the same message index
-            val exception = assertFailsWith<MXCryptoError.Base> {
-                // An exception should be thrown while the same index would have been used for the previous decryption
-                aliceSession.cryptoService().decryptEvent(fakeEventWithTheSameIndex.root, timelineId)
-            }
-            assertEquals(MXCryptoError.ErrorType.DUPLICATED_MESSAGE_INDEX, exception.errorType)
+
+            aliceSession.cryptoService().decryptEvent(fakeEventWithTheSameIndex.root, timelineId).fold(
+                    {
+                        fail("Decryption should have fail because of duplicate index")
+                    },
+                    { err, code ->
+                        assertEquals(MXCryptoError.ErrorType.DUPLICATED_MESSAGE_INDEX, (err as MXCryptoError.Base).errorType)
+                    }
+            )
         }
         cryptoTestData.cleanUp(testHelper)
     }

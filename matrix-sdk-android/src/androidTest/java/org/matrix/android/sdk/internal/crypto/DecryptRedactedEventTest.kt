@@ -55,21 +55,23 @@ class DecryptRedactedEventTest : InstrumentedTest {
         val eventBobPov = bobSession.getRoom(e2eRoomID)?.getTimelineEvent(timelineEvent.eventId)!!
 
         testHelper.runBlockingTest {
-            try {
-                val result = bobSession.cryptoService().decryptEvent(eventBobPov.root, "")
-                Assert.assertEquals(
-                        "Unexpected redacted reason",
-                        redactionReason,
-                        result.clearEvent.toModel<Event>()?.unsignedData?.redactedEvent?.content?.get("reason")
-                )
-                Assert.assertEquals(
-                        "Unexpected Redacted event id",
-                        timelineEvent.eventId,
-                        result.clearEvent.toModel<Event>()?.unsignedData?.redactedEvent?.redacts
-                )
-            } catch (failure: Throwable) {
-                Assert.fail("Should not throw when decrypting a redacted event")
-            }
+            bobSession.cryptoService().decryptEvent(eventBobPov.root, "").fold(
+                    { result ->
+                        Assert.assertEquals(
+                                "Unexpected redacted reason",
+                                redactionReason,
+                                result.clearEvent.toModel<Event>()?.unsignedData?.redactedEvent?.content?.get("reason")
+                        )
+                        Assert.assertEquals(
+                                "Unexpected Redacted event id",
+                                timelineEvent.eventId,
+                                result.clearEvent.toModel<Event>()?.unsignedData?.redactedEvent?.redacts
+                        )
+                    },
+                    { err, _ ->
+                        Assert.fail("Should not throw when decrypting a redacted event actual ${err.message}")
+                    }
+            )
         }
     }
 }

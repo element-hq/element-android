@@ -57,8 +57,8 @@ import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.api.session.crypto.model.IncomingRoomKeyRequest
 import org.matrix.android.sdk.api.session.crypto.model.MXDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.MXEncryptEventContentResult
-import org.matrix.android.sdk.api.session.crypto.model.MXEventDecryptionResult
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
+import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.crypto.model.RoomKeyShareRequest
 import org.matrix.android.sdk.api.session.crypto.model.TrailType
 import org.matrix.android.sdk.api.session.events.model.Content
@@ -75,6 +75,7 @@ import org.matrix.android.sdk.api.session.room.model.shouldShareHistory
 import org.matrix.android.sdk.api.session.sync.model.SyncResponse
 import org.matrix.android.sdk.internal.crypto.actions.MegolmSessionDataImporter
 import org.matrix.android.sdk.internal.crypto.actions.SetDeviceVerificationAction
+import org.matrix.android.sdk.internal.crypto.algorithms.DecryptionResult
 import org.matrix.android.sdk.internal.crypto.algorithms.IMXEncrypting
 import org.matrix.android.sdk.internal.crypto.algorithms.IMXGroupEncryption
 import org.matrix.android.sdk.internal.crypto.algorithms.megolm.MXMegolmEncryptionFactory
@@ -752,32 +753,33 @@ internal class DefaultCryptoService @Inject constructor(
      * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
      * @return the MXEventDecryptionResult data, or throw in case of error
      */
-    @Throws(MXCryptoError::class)
-    override suspend fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
-        return internalDecryptEvent(event, timeline)
-    }
-
-    /**
-     * Decrypt an event asynchronously.
-     *
-     * @param event the raw event.
-     * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
-     * @param callback the callback to return data or null
-     */
-    override fun decryptEventAsync(event: Event, timeline: String, callback: MatrixCallback<MXEventDecryptionResult>) {
-        eventDecryptor.decryptEventAsync(event, timeline, callback)
-    }
-
-    /**
-     * Decrypt an event.
-     *
-     * @param event the raw event.
-     * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
-     * @return the MXEventDecryptionResult data, or null in case of error
-     */
-    @Throws(MXCryptoError::class)
-    private suspend fun internalDecryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
+    override suspend fun decryptEvent(event: Event, timeline: String): DecryptionResult {
         return eventDecryptor.decryptEvent(event, timeline)
+    }
+
+    /**
+     * Decrypts the event and udpdates the event fields with the results
+     */
+    override suspend fun decryptAndUpdateEvent(event: Event, timeline: String) {
+        eventDecryptor.decryptEvent(event, timeline).fold(
+                { decryptionResult ->
+                    event.mxDecryptionResult = OlmDecryptionResult(
+                            payload = decryptionResult.clearEvent,
+                            senderKey = decryptionResult.senderCurve25519Key,
+                            keysClaimed = decryptionResult.claimedEd25519Key?.let { k -> mapOf("ed25519" to k) },
+                            forwardingCurve25519KeyChain = decryptionResult.forwardingCurve25519KeyChain
+                    )
+                    // clear errors
+                    event.mCryptoError = null
+                    event.mCryptoErrorReason = null
+                    event.mCryptoWithHeldCode = null
+                },
+                { error, code ->
+                    event.mCryptoError = (error as? MXCryptoError.Base)?.errorType ?: MXCryptoError.ErrorType.UNABLE_TO_DECRYPT
+                    event.mCryptoErrorReason = (error as? MXCryptoError.Base)?.technicalMessage ?: error.message
+                    event.mCryptoWithHeldCode = code
+                }
+        )
     }
 
     /**

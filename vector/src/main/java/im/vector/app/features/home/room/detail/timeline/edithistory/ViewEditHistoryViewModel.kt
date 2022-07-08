@@ -29,11 +29,8 @@ import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.crypto.MXCryptoError
-import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.isReply
 import org.matrix.android.sdk.api.session.getRoom
-import timber.log.Timber
 import java.util.UUID
 
 class ViewEditHistoryViewModel @AssistedInject constructor(
@@ -76,18 +73,7 @@ class ViewEditHistoryViewModel @AssistedInject constructor(
                 val timelineID = event.roomId + UUID.randomUUID().toString()
                 // We need to check encryption
                 if (event.isEncrypted() && event.mxDecryptionResult == null) {
-                    // for now decrypt sync
-                    try {
-                        val result = session.cryptoService().decryptEvent(event, timelineID)
-                        event.mxDecryptionResult = OlmDecryptionResult(
-                                payload = result.clearEvent,
-                                senderKey = result.senderCurve25519Key,
-                                keysClaimed = result.claimedEd25519Key?.let { k -> mapOf("ed25519" to k) },
-                                forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
-                        )
-                    } catch (e: MXCryptoError) {
-                        Timber.w("Failed to decrypt event in history")
-                    }
+                   session.cryptoService().decryptAndUpdateEvent(event, timelineID)
                 }
 
                 if (event.eventId == eventId) {

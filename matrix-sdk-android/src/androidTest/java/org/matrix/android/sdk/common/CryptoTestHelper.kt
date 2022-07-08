@@ -41,7 +41,6 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersion
 import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupAuthData
 import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
 import org.matrix.android.sdk.api.session.crypto.keysbackup.extractCurveKeyFromRecoveryKey
-import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.OutgoingSasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
@@ -63,6 +62,7 @@ import org.matrix.android.sdk.api.session.securestorage.KeyRef
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.awaitCallback
 import org.matrix.android.sdk.api.util.toBase64NoPadding
+import org.matrix.android.sdk.internal.crypto.algorithms.DecryptionResult
 import java.util.UUID
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
@@ -523,18 +523,7 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
                 testHelper.retryPeriodicallyWithLatch(latch) {
                     val event = session.getRoom(e2eRoomID)!!.timelineService().getTimelineEvent(sentEventId)!!.root
                     testHelper.runBlockingTest {
-                        try {
-                            session.cryptoService().decryptEvent(event, "").let { result ->
-                                event.mxDecryptionResult = OlmDecryptionResult(
-                                        payload = result.clearEvent,
-                                        senderKey = result.senderCurve25519Key,
-                                        keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
-                                        forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
-                                )
-                            }
-                        } catch (error: MXCryptoError) {
-                            // nop
-                        }
+                        session.cryptoService().decryptAndUpdateEvent(event, "")
                     }
                     Log.v("TEST", "ensureCanDecrypt ${event.getClearType()} is ${event.getClearContent()}")
                     event.getClearType() == EventType.MESSAGE &&
@@ -548,15 +537,15 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
         sentEventIds.forEach { sentEventId ->
             val event = session.getRoom(e2eRoomID)!!.timelineService().getTimelineEvent(sentEventId)!!.root
             testHelper.runBlockingTest {
-                try {
-                    session.cryptoService().decryptEvent(event, "")
-                    fail("Should not be able to decrypt event")
-                } catch (error: MXCryptoError) {
-                    val errorType = (error as? MXCryptoError.Base)?.errorType
-                    if (expectedError == null) {
-                        assertNotNull(errorType)
-                    } else {
-                        assertEquals("Unexpected reason", expectedError, errorType)
+                when (val result = session.cryptoService().decryptEvent(event, "")) {
+                    is DecryptionResult.Failure -> {
+                        val errorType = (result.error as? MXCryptoError.Base)?.errorType ?: MXCryptoError.ErrorType.UNABLE_TO_DECRYPT
+                        if (expectedError != null) {
+                            assertEquals("Unexpected reason", expectedError, errorType)
+                        }
+                    }
+                    is DecryptionResult.Success -> {
+                        fail("Should not be able to decrypt event")
                     }
                 }
             }

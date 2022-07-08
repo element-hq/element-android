@@ -80,11 +80,9 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
 import org.matrix.android.sdk.api.session.events.model.RelationType
-import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
 import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
 import org.matrix.android.sdk.api.session.events.model.isTextMessage
 import org.matrix.android.sdk.api.session.events.model.toContent
@@ -1111,13 +1109,7 @@ class TimelineViewModel @AssistedInject constructor(
 
     private fun handleTapOnFailedToDecrypt(action: RoomDetailAction.TapOnFailedToDecrypt) {
         room.getTimelineEvent(action.eventId)?.let {
-            val code = when (it.root.mCryptoError) {
-                MXCryptoError.ErrorType.KEYS_WITHHELD -> {
-                    WithHeldCode.fromCode(it.root.mCryptoErrorReason)
-                }
-                else -> null
-            }
-
+            val code = it.root.mCryptoWithHeldCode
             _viewEvents.post(RoomDetailViewEvents.ShowE2EErrorMessage(code))
         }
     }
