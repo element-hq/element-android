@@ -207,7 +207,7 @@ class HomeDetailViewModel @AssistedInject constructor(
     }
 
     private fun observeRoomGroupingMethod() {
-        appStateHandler.selectedSpaceFlow
+        appStateHandler.getSelectedSpaceFlow()
                 .setOnEach {
                     copy(
                             selectedSpace = it.orNull()
@@ -216,7 +216,7 @@ class HomeDetailViewModel @AssistedInject constructor(
     }
 
     private fun observeRoomSummaries() {
-        appStateHandler.selectedSpaceFlow.distinctUntilChanged().flatMapLatest {
+        appStateHandler.getSelectedSpaceFlow().distinctUntilChanged().flatMapLatest {
             // we use it as a trigger to all changes in room, but do not really load
             // the actual models
             session.roomService().getPagedRoomSummariesLive(

@@ -359,7 +359,7 @@ class RoomListSectionBuilder(
             query: (RoomSummaryQueryParams.Builder) -> Unit
     ) {
         withQueryParams(query) { roomQueryParams ->
-            val updatedQueryParams = roomQueryParams.process(spaceFilterStrategy, appStateHandler.safeActiveSpaceId())
+            val updatedQueryParams = roomQueryParams.process(spaceFilterStrategy, appStateHandler.getSafeActiveSpaceId())
             val liveQueryParams = MutableStateFlow(updatedQueryParams)
             val itemCountFlow = liveQueryParams
                     .flatMapLatest {
@@ -370,7 +370,7 @@ class RoomListSectionBuilder(
 
             val name = stringProvider.getString(nameRes)
             val filteredPagedRoomSummariesLive = session.roomService().getFilteredPagedRoomSummariesLive(
-                    roomQueryParams.process(spaceFilterStrategy, appStateHandler.safeActiveSpaceId()),
+                    roomQueryParams.process(spaceFilterStrategy, appStateHandler.getSafeActiveSpaceId()),
                     pagedListConfig
             )
             when (spaceFilterStrategy) {
@@ -417,7 +417,7 @@ class RoomListSectionBuilder(
                                             RoomAggregateNotificationCount(it.size, it.size)
                                         } else {
                                             session.roomService().getNotificationCountForRooms(
-                                                    roomQueryParams.process(spaceFilterStrategy, appStateHandler.safeActiveSpaceId())
+                                                    roomQueryParams.process(spaceFilterStrategy, appStateHandler.getSafeActiveSpaceId())
                                             )
                                         }
                                 )

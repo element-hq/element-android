@@ -75,19 +75,19 @@ class SpaceLeaveAdvancedViewModel @AssistedInject constructor(
         }
 
         setState { copy(spaceSummary = spaceSummary) }
-        session.getRoom(initialState.spaceId)?.let { room ->
-            room.flow().liveRoomSummary()
-                    .unwrap()
-                    .onEach {
-                        if (it.membership == Membership.LEAVE) {
-                            setState { copy(leaveState = Success(Unit)) }
-                            if (appStateHandler.safeActiveSpaceId() == initialState.spaceId) {
-                                // switch to home?
-                                appStateHandler.setCurrentSpace(null, session)
-                            }
+        session.getRoom(initialState.spaceId)
+                ?.flow()
+                ?.liveRoomSummary()
+                ?.unwrap()
+                ?.onEach {
+                    if (it.membership == Membership.LEAVE) {
+                        setState { copy(leaveState = Success(Unit)) }
+                        if (appStateHandler.getSafeActiveSpaceId() == initialState.spaceId) {
+                            // switch to home?
+                            appStateHandler.setCurrentSpace(null, session)
                         }
-                    }.launchIn(viewModelScope)
-        }
+                    }
+                }?.launchIn(viewModelScope)
 
         viewModelScope.launch {
             val children = session.roomService().getRoomSummaries(

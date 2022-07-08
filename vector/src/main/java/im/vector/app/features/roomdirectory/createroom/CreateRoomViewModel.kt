@@ -73,7 +73,7 @@ class CreateRoomViewModel @AssistedInject constructor(
         initHomeServerName()
         initAdminE2eByDefault()
 
-        val parentSpaceId = initialState.parentSpaceId ?: appStateHandler.safeActiveSpaceId()
+        val parentSpaceId = initialState.parentSpaceId ?: appStateHandler.getSafeActiveSpaceId()
 
         val restrictedSupport = session.homeServerCapabilitiesService().getHomeServerCapabilities()
                 .isFeatureSupported(HomeServerCapabilities.ROOM_CAP_RESTRICTED)
