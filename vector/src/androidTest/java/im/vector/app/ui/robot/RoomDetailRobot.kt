@@ -154,7 +154,9 @@ class RoomDetailRobot {
 
     fun openThreadSummaries() {
         clickMenu(R.id.menu_timeline_thread_list)
-        waitUntilViewVisible(withId(R.id.threadListRecyclerView))
+        withRetry {
+            waitUntilViewVisible(withId(R.id.threadListRecyclerView))
+        }
     }
 
     fun selectThreadSummariesFilter() {
