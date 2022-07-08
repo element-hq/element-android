@@ -37,7 +37,7 @@ class TimelineEventVisibilityHelper @Inject constructor(
 
     private interface PredicateToStopSearch {
         /**
-         * Indicate whether a search on events should stop by comparing to given successive events.
+         * Indicate whether a search on events should stop by comparing 2 given successive events.
          * @param oldEvent the oldest event between the 2 events to compare
          * @param newEvent the more recent event between the 2 events to compare
          */
@@ -148,7 +148,7 @@ class TimelineEventVisibilityHelper @Inject constructor(
     ): List<TimelineEvent> {
         val prevSub = timelineEvents
                 .subList(0, index + 1)
-                // Ensure to not take the REDACTION event into account
+                // Ensure to not take the REDACTION events into account
                 .filter { it.root.getClearType() != EventType.REDACTION }
         return prevSub
                 .reversed()
