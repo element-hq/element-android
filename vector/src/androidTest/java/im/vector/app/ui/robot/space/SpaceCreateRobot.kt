@@ -32,7 +32,6 @@ import im.vector.app.espresso.tools.waitUntilDialogVisible
 import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.spaces.manage.SpaceManageActivity
-import java.util.UUID
 
 class SpaceCreateRobot {
 
