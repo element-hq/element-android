@@ -1020,20 +1020,32 @@ class VectorPreferences @Inject constructor(
         }
     }
 
-    private fun labsSpacesOnlyOrphansInHome(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_LABS_SPACES_HOME_AS_ORPHAN, false)
-    }
-
     fun labsAutoReportUISI(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_LABS_AUTO_REPORT_UISI, false)
     }
 
     fun prefSpacesShowAllRoomInHome(): Boolean {
-        return defaultPrefs.getBoolean(
-                SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME,
-                // migration of old property
-                !labsSpacesOnlyOrphansInHome()
-        )
+        val defaultValue = false
+        return when {
+            defaultPrefs.contains(SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME) -> {
+                defaultPrefs.getBoolean(SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME, defaultValue)
+            }
+            defaultPrefs.contains(SETTINGS_LABS_SPACES_HOME_AS_ORPHAN) -> migrateOrphansInSpacesToShowAllInHome()
+            else -> defaultValue
+        }
+    }
+
+    private fun migrateOrphansInSpacesToShowAllInHome(): Boolean {
+        val showAllRoomsInHome = !labsSpacesOnlyOrphansInHome()
+        defaultPrefs.edit {
+            putBoolean(SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME, showAllRoomsInHome)
+            remove(SETTINGS_LABS_SPACES_HOME_AS_ORPHAN)
+        }
+        return showAllRoomsInHome
+    }
+
+    private fun labsSpacesOnlyOrphansInHome(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_LABS_SPACES_HOME_AS_ORPHAN, false)
     }
 
     /*
