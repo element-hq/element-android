@@ -66,6 +66,38 @@ class ElementRobot {
         waitForHome()
     }
 
+    // Used for michaelk testing
+    fun login(userId: String, password: String) {
+        val onboardingRobot = OnboardingRobot()
+        onboardingRobot.login(userId = userId, password = password)
+        val analyticsRobot = AnalyticsRobot()
+        analyticsRobot.optOut()
+        waitForHome()
+    }
+
+    // Used for michaelk testing
+    fun register(userId: String, password: String) {
+        onboarding { createAccount(userId, password) }
+        val analyticsRobot = AnalyticsRobot()
+        analyticsRobot.optOut()
+        waitForHome()
+
+    }
+    fun startVerification() {
+        val cryptoRobot = CryptoRobot()
+        cryptoRobot.startVerification()
+    }
+
+    fun acceptVerification() {
+        val cryptoRobot = CryptoRobot()
+        cryptoRobot.acceptVerification()
+    }
+
+    fun completeVerification() {
+        val cryptoRobot = CryptoRobot()
+        cryptoRobot.completeVerification()
+    }
+
     private fun waitForHome() {
         waitUntilActivityVisible<HomeActivity> {
             waitUntilViewVisible(withId(R.id.roomListContainer))
