@@ -159,7 +159,7 @@ class UiAllScreensSanityTest {
         elementRobot.newRoom {
             createNewRoom {
                 crawl()
-                createRoom {
+                createRoom(roomName = "thread room") {
                     val message = "Hello This message will be a thread!"
                     postMessage(message)
                     replyToThread(message)
