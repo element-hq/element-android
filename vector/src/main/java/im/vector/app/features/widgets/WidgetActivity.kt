@@ -17,11 +17,18 @@
 package im.vector.app.features.widgets
 
 import android.app.Activity
+import android.app.PendingIntent
 import android.app.PictureInPictureParams
+import android.app.RemoteAction
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
+import android.content.res.Configuration
+import android.graphics.drawable.Icon
 import android.os.Build
 import android.util.Rational
+import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
@@ -43,6 +50,10 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
         private const val WIDGET_FRAGMENT_TAG = "WIDGET_FRAGMENT_TAG"
         private const val WIDGET_PERMISSION_FRAGMENT_TAG = "WIDGET_PERMISSION_FRAGMENT_TAG"
         private const val EXTRA_RESULT = "EXTRA_RESULT"
+        private const val REQUEST_CODE_HANGUP = 1
+        private const val ACTION_MEDIA_CONTROL = "MEDIA_CONTROL"
+        private const val EXTRA_CONTROL_TYPE = "EXTRA_CONTROL_TYPE"
+        private const val CONTROL_TYPE_HANGUP = 2
 
         fun newIntent(context: Context, args: WidgetArgs): Intent {
             return Intent(context, WidgetActivity::class.java).apply {
@@ -141,11 +152,44 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
 
     private fun enterPictureInPicture() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val aspectRatio = Rational(resources.getDimensionPixelSize(R.dimen.call_pip_width), resources.getDimensionPixelSize(R.dimen.call_pip_height))
-            val params = PictureInPictureParams.Builder()
-                    .setAspectRatio(aspectRatio)
-                    .build()
-            enterPictureInPictureMode(params)
+            createElementCallPipParams()?.let {
+                enterPictureInPictureMode(it)
+            }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createElementCallPipParams(): PictureInPictureParams? {
+        val actions = mutableListOf<RemoteAction>()
+        val intent = Intent(ACTION_MEDIA_CONTROL).putExtra(EXTRA_CONTROL_TYPE, CONTROL_TYPE_HANGUP)
+        val pendingIntent = PendingIntent.getBroadcast(this, REQUEST_CODE_HANGUP, intent, 0)
+        val icon = Icon.createWithResource(this, R.drawable.ic_call_hangup)
+        actions.add(RemoteAction(icon, getString(R.string.call_notification_hangup), getString(R.string.call_notification_hangup), pendingIntent))
+
+        val aspectRatio = Rational(resources.getDimensionPixelSize(R.dimen.call_pip_width), resources.getDimensionPixelSize(R.dimen.call_pip_height))
+        return PictureInPictureParams.Builder()
+                .setAspectRatio(aspectRatio)
+                .setActions(actions)
+                .build()
+    }
+
+    private var hangupBroadcastReceiver: BroadcastReceiver? = null
+    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration?) {
+        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
+        if (isInPictureInPictureMode) {
+            hangupBroadcastReceiver = object : BroadcastReceiver() {
+                override fun onReceive(context: Context?, intent: Intent?) {
+                    if (intent?.action == ACTION_MEDIA_CONTROL) {
+                        val controlType = intent.getIntExtra(EXTRA_CONTROL_TYPE, 0)
+                        if (controlType == CONTROL_TYPE_HANGUP) {
+                            viewModel.handle(WidgetAction.HangupElementCall)
+                        }
+                    }
+                }
+            }
+            registerReceiver(hangupBroadcastReceiver, IntentFilter(ACTION_MEDIA_CONTROL))
+        } else {
+            unregisterReceiver(hangupBroadcastReceiver)
         }
     }
 
