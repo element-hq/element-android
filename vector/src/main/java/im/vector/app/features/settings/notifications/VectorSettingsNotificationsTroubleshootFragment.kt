@@ -35,7 +35,6 @@ import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSettingsNotificationsTroubleshootBinding
 import im.vector.app.features.notifications.NotificationActionIds
-import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.rageshake.BugReporter
 import im.vector.app.features.settings.VectorSettingsFragmentInteractionListener
 import im.vector.app.features.settings.troubleshoot.NotificationTroubleshootTestManager

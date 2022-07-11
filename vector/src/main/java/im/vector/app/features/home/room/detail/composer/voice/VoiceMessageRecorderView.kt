@@ -21,7 +21,6 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.hardware.vibrate
 import im.vector.app.core.time.Clock

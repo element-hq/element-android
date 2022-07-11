@@ -20,7 +20,6 @@ import android.content.Context
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import im.vector.app.ActiveSessionDataSource
-import im.vector.app.BuildConfig
 import im.vector.app.core.pushers.UnifiedPushHelper
 import im.vector.app.core.services.CallAndroidService
 import im.vector.app.features.analytics.AnalyticsTracker

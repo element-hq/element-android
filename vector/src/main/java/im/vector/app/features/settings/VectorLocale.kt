@@ -19,7 +19,6 @@ package im.vector.app.features.settings
 import android.content.Context
 import android.content.res.Configuration
 import androidx.core.content.edit
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
 import im.vector.app.core.resources.BuildMeta

@@ -24,7 +24,6 @@ import androidx.annotation.WorkerThread
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
-import im.vector.app.BuildConfig
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.utils.DimensionConverter

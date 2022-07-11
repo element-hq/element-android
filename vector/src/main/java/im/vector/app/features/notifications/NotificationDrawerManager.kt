@@ -20,7 +20,6 @@ import android.os.Handler
 import android.os.HandlerThread
 import androidx.annotation.WorkerThread
 import im.vector.app.ActiveSessionDataSource
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.utils.FirstThrottler

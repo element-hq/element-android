@@ -18,7 +18,6 @@ package im.vector.app.features.settings
 
 import android.os.Bundle
 import androidx.preference.Preference
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.extensions.orEmpty
 import im.vector.app.core.preference.VectorPreference

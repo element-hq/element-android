@@ -16,7 +16,6 @@
 package im.vector.app.features.notifications
 
 import android.net.Uri
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.extensions.takeAs
 import im.vector.app.core.resources.BuildMeta

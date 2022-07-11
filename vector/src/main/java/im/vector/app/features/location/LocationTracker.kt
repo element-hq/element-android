@@ -24,7 +24,6 @@ import androidx.annotation.RequiresPermission
 import androidx.annotation.VisibleForTesting
 import androidx.core.content.getSystemService
 import androidx.core.location.LocationListenerCompat
-import im.vector.app.BuildConfig
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.features.session.coroutineScope

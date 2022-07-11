@@ -22,7 +22,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.databinding.FragmentFtueAuthSplashBinding

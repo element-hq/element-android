@@ -18,7 +18,6 @@ package im.vector.app.features.analytics.impl
 
 import android.content.Context
 import com.posthog.android.PostHog
-import im.vector.app.BuildConfig
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.features.analytics.AnalyticsConfig
 import javax.inject.Inject

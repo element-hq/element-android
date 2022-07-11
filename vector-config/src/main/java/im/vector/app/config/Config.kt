@@ -46,12 +46,12 @@ object Config {
     const val VOICE_MESSAGE_LIMIT_MS = 120_000L
 
     /**
-     * The strategy for sharing device keys
+     * The strategy for sharing device keys.
      */
     val KEY_SHARING_STRATEGY = KeySharingStrategy.WhenTyping
 
     /**
-     * The onboarding flow
+     * The onboarding flow.
      */
     val ONBOARDING_VARIANT = OnboardingVariant.FTUE_AUTH
 

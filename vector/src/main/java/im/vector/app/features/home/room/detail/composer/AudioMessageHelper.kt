@@ -20,7 +20,6 @@ import android.content.Context
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import androidx.core.content.FileProvider
-import im.vector.app.BuildConfig
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.app.features.voice.VoiceFailure
