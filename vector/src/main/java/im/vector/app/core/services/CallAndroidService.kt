@@ -51,7 +51,7 @@ private val loggerTag = LoggerTag("CallService", LoggerTag.VOIP)
  * Foreground service to manage calls.
  */
 @AndroidEntryPoint
-class CallService : VectorService() {
+class CallAndroidService : VectorAndroidService() {
 
     private val connections = mutableMapOf<String, CallConnection>()
     private val knownCalls = mutableMapOf<String, CallInformation>()
@@ -98,7 +98,7 @@ class CallService : VectorService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Timber.tag(loggerTag.value).v("onStartCommand $intent")
         if (mediaSession == null) {
-            mediaSession = MediaSessionCompat(applicationContext, CallService::class.java.name).apply {
+            mediaSession = MediaSessionCompat(applicationContext, CallAndroidService::class.java.name).apply {
                 setCallback(mediaSessionButtonCallback)
             }
         }
@@ -326,7 +326,7 @@ class CallService : VectorService() {
                 callId: String,
                 isInBackground: Boolean
         ) {
-            val intent = Intent(context, CallService::class.java)
+            val intent = Intent(context, CallAndroidService::class.java)
                     .apply {
                         action = ACTION_INCOMING_RINGING_CALL
                         putExtra(EXTRA_CALL_ID, callId)
@@ -339,7 +339,7 @@ class CallService : VectorService() {
                 context: Context,
                 callId: String
         ) {
-            val intent = Intent(context, CallService::class.java)
+            val intent = Intent(context, CallAndroidService::class.java)
                     .apply {
                         action = ACTION_OUTGOING_RINGING_CALL
                         putExtra(EXTRA_CALL_ID, callId)
@@ -351,7 +351,7 @@ class CallService : VectorService() {
                 context: Context,
                 callId: String
         ) {
-            val intent = Intent(context, CallService::class.java)
+            val intent = Intent(context, CallAndroidService::class.java)
                     .apply {
                         action = ACTION_ONGOING_CALL
                         putExtra(EXTRA_CALL_ID, callId)
@@ -365,7 +365,7 @@ class CallService : VectorService() {
                 endCallReason: EndCallReason,
                 rejected: Boolean
         ) {
-            val intent = Intent(context, CallService::class.java)
+            val intent = Intent(context, CallAndroidService::class.java)
                     .apply {
                         action = ACTION_CALL_TERMINATED
                         putExtra(EXTRA_CALL_ID, callId)
@@ -377,8 +377,8 @@ class CallService : VectorService() {
     }
 
     inner class CallServiceBinder : Binder() {
-        fun getCallService(): CallService {
-            return this@CallService
+        fun getCallService(): CallAndroidService {
+            return this@CallAndroidService
         }
     }
 }

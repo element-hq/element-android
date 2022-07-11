@@ -20,6 +20,7 @@ import android.content.Context
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import kotlinx.coroutines.runBlocking
+import org.matrix.android.sdk.api.auth.LoginType
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.DiscoveryInformation
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
@@ -145,7 +146,8 @@ internal class DefaultLegacySessionImporter @Inject constructor(
                         forceUsageTlsVersions = legacyConfig.forceUsageOfTlsVersions()
                 ),
                 // If token is not valid, this boolean will be updated later
-                isTokenValid = true
+                isTokenValid = true,
+                loginType = LoginType.UNKNOWN,
         )
 
         Timber.d("Migration: save session")

@@ -19,8 +19,8 @@ package im.vector.app.features.poll
 import im.vector.app.features.home.room.detail.timeline.item.PollOptionViewState
 
 data class PollViewState(
-    val question: String,
-    val totalVotes: String,
-    val canVote: Boolean,
-    val optionViewStates: List<PollOptionViewState>?,
+        val question: String,
+        val votesStatus: String,
+        val canVote: Boolean,
+        val optionViewStates: List<PollOptionViewState>?,
 )

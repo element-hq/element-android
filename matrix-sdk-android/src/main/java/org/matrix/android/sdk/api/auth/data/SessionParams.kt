@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.api.auth.data
 
+import org.matrix.android.sdk.api.auth.LoginType
+
 /**
  * This data class holds necessary data to open a session.
  * You don't have to manually instantiate it.
@@ -34,7 +36,12 @@ data class SessionParams(
         /**
          * Set to false if the current token is not valid anymore. Application should not have to use this info.
          */
-        val isTokenValid: Boolean
+        val isTokenValid: Boolean,
+
+        /**
+         * The authentication method that was used to create the session.
+         */
+        val loginType: LoginType,
 ) {
     /*
      * Shortcuts. Usually the application should only need to use these shortcuts

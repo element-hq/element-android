@@ -37,6 +37,7 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.intent.getFilenameFromUri
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.toast
@@ -66,7 +67,8 @@ class SpaceSettingsFragment @Inject constructor(
 ) : VectorBaseFragment<FragmentRoomSettingGenericBinding>(),
         SpaceSettingsController.Callback,
         GalleryOrCameraDialogHelper.Listener,
-        OnBackPressed {
+        OnBackPressed,
+        VectorMenuProvider {
 
     private val viewModel: RoomSettingsViewModel by fragmentViewModel()
     private val sharedViewModel: SpaceManageSharedViewModel by activityViewModel()
@@ -111,18 +113,20 @@ class SpaceSettingsFragment @Inject constructor(
         super.onDestroyView()
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
+    override fun handlePrepareMenu(menu: Menu) {
         withState(viewModel) { state ->
             menu.findItem(R.id.roomSettingsSaveAction).isVisible = state.showSaveAction
         }
-        super.onPrepareOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.roomSettingsSaveAction) {
-            viewModel.handle(RoomSettingsAction.Save)
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.roomSettingsSaveAction -> {
+                viewModel.handle(RoomSettingsAction.Save)
+                true
+            }
+            else -> false
         }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun renderRoomSummary(state: RoomSettingsViewState) {

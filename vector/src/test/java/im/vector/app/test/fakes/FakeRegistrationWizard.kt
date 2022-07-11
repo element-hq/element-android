@@ -30,8 +30,8 @@ class FakeRegistrationWizard : RegistrationWizard by mockk(relaxed = false) {
         coEvery { expect(this@FakeRegistrationWizard) } returns RegistrationResult.Success(result)
     }
 
-    fun givenAddEmailThreePidErrors(cause: Throwable, email: String) {
-        coEvery { addThreePid(RegisterThreePid.Email(email)) } throws cause
+    fun givenAddThreePidErrors(cause: Throwable, threePid: RegisterThreePid) {
+        coEvery { addThreePid(threePid) } throws cause
     }
 
     fun givenCheckIfEmailHasBeenValidatedErrors(errors: List<Throwable>, finally: RegistrationResult? = null) {

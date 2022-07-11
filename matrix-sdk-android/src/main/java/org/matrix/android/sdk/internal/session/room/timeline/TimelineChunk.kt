@@ -490,38 +490,11 @@ internal class TimelineChunk(
     private fun handleDatabaseChangeSet(results: RealmResults<TimelineEventEntity>, changeSet: OrderedCollectionChangeSet) {
         val insertions = changeSet.insertionRanges
         for (range in insertions) {
-            // Check if the insertion's displayIndices match our expectations - or skip this insertion.
-            // Inconsistencies (missing messages) can happen otherwise if we get insertions before having loaded all timeline events of the chunk.
-            if (builtEvents.isNotEmpty()) {
-                // Check consistency to item before insertions
-                if (range.startIndex > 0) {
-                    val firstInsertion = results[range.startIndex]!!
-                    val lastBeforeInsertion = builtEvents[range.startIndex - 1]
-                    if (firstInsertion.displayIndex + 1 != lastBeforeInsertion.displayIndex) {
-                        Timber.i(
-                                "handleDatabaseChangeSet: skip insertion at ${range.startIndex}/${builtEvents.size}, " +
-                                        "displayIndex mismatch at ${range.startIndex}: ${firstInsertion.displayIndex} -> ${lastBeforeInsertion.displayIndex}"
-                        )
-                        continue
-                    }
-                }
-                // Check consistency to item after insertions
-                if (range.startIndex < builtEvents.size) {
-                    val lastInsertion = results[range.startIndex + range.length - 1]!!
-                    val firstAfterInsertion = builtEvents[range.startIndex]
-                    if (firstAfterInsertion.displayIndex + 1 != lastInsertion.displayIndex) {
-                        Timber.i(
-                                "handleDatabaseChangeSet: skip insertion at ${range.startIndex}/${builtEvents.size}, " +
-                                        "displayIndex mismatch at ${range.startIndex + range.length}: " +
-                                        "${firstAfterInsertion.displayIndex} -> ${lastInsertion.displayIndex}"
-                        )
-                        continue
-                    }
-                }
-            }
+            if (!validateInsertion(range, results)) continue
             val newItems = results
                     .subList(range.startIndex, range.startIndex + range.length)
                     .map { it.buildAndDecryptIfNeeded() }
+
             builtEventsIndexes.entries.filter { it.value >= range.startIndex }.forEach { it.setValue(it.value + range.length) }
             newItems.mapIndexed { index, timelineEvent ->
                 if (timelineEvent.root.type == EventType.STATE_ROOM_CREATE) {
@@ -536,12 +509,9 @@ internal class TimelineChunk(
         for (range in modifications) {
             for (modificationIndex in (range.startIndex until range.startIndex + range.length)) {
                 val updatedEntity = results[modificationIndex] ?: continue
-                val displayIndex = builtEventsIndexes[updatedEntity.eventId]
-                if (displayIndex == null) {
-                    continue
-                }
+                val builtEventIndex = builtEventsIndexes[updatedEntity.eventId] ?: continue
                 try {
-                    builtEvents[displayIndex] = updatedEntity.buildAndDecryptIfNeeded()
+                    builtEvents[builtEventIndex] = updatedEntity.buildAndDecryptIfNeeded()
                 } catch (failure: Throwable) {
                     Timber.v("Fail to update items at index: $modificationIndex")
                 }
@@ -556,6 +526,21 @@ internal class TimelineChunk(
         if (deletions.isNotEmpty()) {
             onEventsDeleted()
         }
+    }
+
+    private fun validateInsertion(range: OrderedCollectionChangeSet.Range, results: RealmResults<TimelineEventEntity>): Boolean {
+        // Insertion can only happen from LastForward chunk after a sync.
+        if (isLastForward.get()) {
+            val firstBuiltEvent = builtEvents.firstOrNull()
+            if (firstBuiltEvent != null) {
+                val lastInsertion = results[range.startIndex + range.length - 1] ?: return false
+                if (firstBuiltEvent.displayIndex + 1 != lastInsertion.displayIndex) {
+                    Timber.v("There is no continuation in the chunk, chunk is not fully loaded yet, skip insert.")
+                    return false
+                }
+            }
+        }
+        return true
     }
 
     private fun getNextDisplayIndex(direction: Timeline.Direction): Int? {

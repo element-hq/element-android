@@ -301,7 +301,7 @@ class KeysBackupTest : InstrumentedTest {
         val keyBackupCreationInfo = keysBackupTestHelper.prepareAndCreateKeysBackupData(keysBackup).megolmBackupCreationInfo
 
         // - Check encryptGroupSession() returns stg
-        val keyBackupData = keysBackup.encryptGroupSession(session)
+        val keyBackupData = testHelper.runBlockingTest { keysBackup.encryptGroupSession(session) }
         assertNotNull(keyBackupData)
         assertNotNull(keyBackupData!!.sessionData)
 
@@ -312,7 +312,7 @@ class KeysBackupTest : InstrumentedTest {
         val sessionData = keysBackup
                 .decryptKeyBackupData(
                         keyBackupData,
-                        session.olmInboundGroupSession!!.sessionIdentifier(),
+                        session.safeSessionId!!,
                         cryptoTestData.roomId,
                         decryption!!
                 )

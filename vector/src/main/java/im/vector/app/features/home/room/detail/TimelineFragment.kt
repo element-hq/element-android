@@ -30,7 +30,6 @@ import android.view.HapticFeedbackConstants
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -74,6 +73,7 @@ import im.vector.app.core.animations.play
 import im.vector.app.core.dialogs.ConfirmationDialogBuilder
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.epoxy.LayoutManagerStateRestorer
+import im.vector.app.core.error.fatalError
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.containsRtLOverride
 import im.vector.app.core.extensions.ensureEndsLeftToRight
@@ -89,6 +89,7 @@ import im.vector.app.core.hardware.vibrate
 import im.vector.app.core.intent.getFilenameFromUri
 import im.vector.app.core.intent.getMimeTypeFromUri
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.platform.lifecycleAwareLazy
 import im.vector.app.core.platform.showOptimizedSnackbar
 import im.vector.app.core.resources.ColorProvider
@@ -130,6 +131,7 @@ import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.attachments.AttachmentTypeSelectorView
 import im.vector.app.features.attachments.AttachmentsHelper
 import im.vector.app.features.attachments.ContactAttachment
+import im.vector.app.features.attachments.ShareIntentHandler
 import im.vector.app.features.attachments.preview.AttachmentsPreviewActivity
 import im.vector.app.features.attachments.preview.AttachmentsPreviewArgs
 import im.vector.app.features.attachments.toGroupedContentAttachmentData
@@ -272,6 +274,7 @@ class TimelineFragment @Inject constructor(
         private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
         private val callManager: WebRtcCallManager,
         private val audioMessagePlaybackTracker: AudioMessagePlaybackTracker,
+        private val shareIntentHandler: ShareIntentHandler,
         private val clock: Clock
 ) :
         VectorBaseFragment<FragmentTimelineBinding>(),
@@ -280,7 +283,8 @@ class TimelineFragment @Inject constructor(
         AttachmentTypeSelectorView.Callback,
         AttachmentsHelper.Callback,
         GalleryOrCameraDialogHelper.Listener,
-        CurrentCallsView.Callback {
+        CurrentCallsView.Callback,
+        VectorMenuProvider {
 
     companion object {
 
@@ -1055,15 +1059,14 @@ class TimelineFragment @Inject constructor(
     }
 
     @SuppressLint("RestrictedApi")
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    override fun handlePostCreateMenu(menu: Menu) {
         if (isThreadTimeLine()) {
             if (menu is MenuBuilder) menu.setOptionalIconsVisible(true)
         }
-        super.onCreateOptionsMenu(menu, inflater)
         // We use a custom layout for this menu item, so we need to set a ClickListener
         menu.findItem(R.id.open_matrix_apps)?.let { menuItem ->
             menuItem.actionView.debouncedClicks {
-                onOptionsItemSelected(menuItem)
+                handleMenuItemSelected(menuItem)
             }
         }
         val joinConfItem = menu.findItem(R.id.join_conference)
@@ -1073,13 +1076,13 @@ class TimelineFragment @Inject constructor(
 
         // Custom thread notification menu item
         menu.findItem(R.id.menu_timeline_thread_list)?.let { menuItem ->
-            menuItem.actionView.setOnClickListener {
-                onOptionsItemSelected(menuItem)
+            menuItem.actionView.debouncedClicks {
+                handleMenuItemSelected(menuItem)
             }
         }
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
+    override fun handlePrepareMenu(menu: Menu) {
         menu.forEach {
             it.isVisible = timelineViewModel.isMenuItemVisible(it.itemId)
         }
@@ -1121,7 +1124,7 @@ class TimelineFragment @Inject constructor(
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.invite -> {
                 navigator.openInviteUsersToRoom(requireActivity(), timelineArgs.roomId)
@@ -1174,7 +1177,7 @@ class TimelineFragment @Inject constructor(
                 }
                 true
             }
-            else -> super.onOptionsItemSelected(item)
+            else -> false
         }
     }
 
@@ -1259,6 +1262,7 @@ class TimelineFragment @Inject constructor(
         val nonFormattedBody = when (messageContent) {
             is MessageAudioContent -> getAudioContentBodyText(messageContent)
             is MessagePollContent -> messageContent.getBestPollCreationInfo()?.question?.getBestQuestion()
+            is MessageBeaconInfoContent -> getString(R.string.sent_live_location)
             else -> messageContent?.body.orEmpty()
         }
         var formattedBody: CharSequence? = null
@@ -1618,7 +1622,9 @@ class TimelineFragment @Inject constructor(
 
     private fun sendUri(uri: Uri): Boolean {
         val shareIntent = Intent(Intent.ACTION_SEND, uri)
-        val isHandled = attachmentsHelper.handleShareIntent(requireContext(), shareIntent)
+        val isHandled = shareIntentHandler.handleIncomingShareIntent(requireContext(), shareIntent, ::onContentAttachmentsReady, onPlainText = {
+            fatalError("Should not happen as we're generating a File based share Intent", vectorPreferences.failFast())
+        })
         if (!isHandled) {
             Toast.makeText(requireContext(), R.string.error_handling_incoming_share, Toast.LENGTH_SHORT).show()
         }
@@ -2633,10 +2639,6 @@ class TimelineFragment @Inject constructor(
             val intent = AttachmentsPreviewActivity.newIntent(requireContext(), AttachmentsPreviewArgs(grouped.previewables))
             contentAttachmentActivityResultLauncher.launch(intent)
         }
-    }
-
-    override fun onAttachmentsProcessFailed() {
-        Toast.makeText(requireContext(), R.string.error_attachment, Toast.LENGTH_SHORT).show()
     }
 
     override fun onContactAttachmentReady(contactAttachment: ContactAttachment) {

@@ -30,6 +30,7 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.trackItemsVisibilityChange
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.platform.showOptimizedSnackbar
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.FragmentPublicRoomsBinding
@@ -55,7 +56,8 @@ class PublicRoomsFragment @Inject constructor(
         private val permalinkHandler: PermalinkHandler,
         private val session: Session
 ) : VectorBaseFragment<FragmentPublicRoomsBinding>(),
-        PublicRoomsController.Callback {
+        PublicRoomsController.Callback,
+        VectorMenuProvider {
 
     private val viewModel: RoomDirectoryViewModel by activityViewModel()
     private lateinit var sharedActionViewModel: RoomDirectorySharedActionViewModel
@@ -105,14 +107,13 @@ class PublicRoomsFragment @Inject constructor(
         super.onDestroyView()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_room_directory_change_protocol -> {
                 sharedActionViewModel.post(RoomDirectorySharedAction.ChangeProtocol)
                 true
             }
-            else ->
-                super.onOptionsItemSelected(item)
+            else -> false
         }
     }
 

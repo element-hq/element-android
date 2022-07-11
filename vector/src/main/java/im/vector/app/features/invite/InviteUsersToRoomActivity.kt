@@ -71,7 +71,7 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity() {
                     when (sharedAction) {
                         UserListSharedAction.Close -> finish()
                         UserListSharedAction.GoBack -> onBackPressed()
-                        is UserListSharedAction.OnMenuItemSelected -> onMenuItemSelected(sharedAction)
+                        is UserListSharedAction.OnMenuItemSubmitClick -> handleOnMenuItemSubmitClick(sharedAction)
                         UserListSharedAction.OpenPhoneBook -> openPhoneBook()
                         // not exhaustive because it's a sharedAction
                         else -> Unit
@@ -85,6 +85,7 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity() {
                     UserListFragmentArgs(
                             title = getString(R.string.invite_users_to_room_title),
                             menuResId = R.menu.vector_invite_users_to_room,
+                            submitMenuItemId = R.id.action_invite_users_to_room_invite,
                             excludedUserIds = viewModel.getUserIdsOfRoomMembers(),
                             showInviteActions = false
                     )
@@ -94,10 +95,8 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity() {
         viewModel.observeViewEvents { renderInviteEvents(it) }
     }
 
-    private fun onMenuItemSelected(action: UserListSharedAction.OnMenuItemSelected) {
-        if (action.itemId == R.id.action_invite_users_to_room_invite) {
-            viewModel.handle(InviteUsersToRoomAction.InviteSelectedUsers(action.selections))
-        }
+    private fun handleOnMenuItemSubmitClick(action: UserListSharedAction.OnMenuItemSubmitClick) {
+        viewModel.handle(InviteUsersToRoomAction.InviteSelectedUsers(action.selections))
     }
 
     private fun openPhoneBook() {

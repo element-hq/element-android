@@ -21,6 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import im.vector.app.core.extensions.associateContentStateWith
+import im.vector.app.core.extensions.autofillEmail
 import im.vector.app.core.extensions.clearErrorOnChange
 import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.isEmail
@@ -47,6 +48,7 @@ class FtueAuthEmailEntryFragment @Inject constructor() : AbstractFtueAuthFragmen
         views.emailEntryInput.setOnImeDoneListener { updateEmail() }
         views.emailEntryInput.clearErrorOnChange(viewLifecycleOwner)
         views.emailEntrySubmit.debouncedClicks { updateEmail() }
+        views.emailEntryInput.autofillEmail()
     }
 
     private fun updateEmail() {

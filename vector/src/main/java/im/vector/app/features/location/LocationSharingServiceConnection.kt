@@ -27,7 +27,8 @@ import javax.inject.Singleton
 @Singleton
 class LocationSharingServiceConnection @Inject constructor(
         private val context: Context
-) : ServiceConnection, LocationSharingService.Callback {
+) : ServiceConnection,
+        LocationSharingAndroidService.Callback {
 
     interface Callback {
         fun onLocationServiceRunning()
@@ -37,7 +38,7 @@ class LocationSharingServiceConnection @Inject constructor(
 
     private val callbacks = mutableSetOf<Callback>()
     private var isBound = false
-    private var locationSharingService: LocationSharingService? = null
+    private var locationSharingAndroidService: LocationSharingAndroidService? = null
 
     fun bind(callback: Callback) {
         addCallback(callback)
@@ -45,7 +46,7 @@ class LocationSharingServiceConnection @Inject constructor(
         if (isBound) {
             callback.onLocationServiceRunning()
         } else {
-            Intent(context, LocationSharingService::class.java).also { intent ->
+            Intent(context, LocationSharingAndroidService::class.java).also { intent ->
                 context.bindService(intent, this, 0)
             }
         }
@@ -56,7 +57,7 @@ class LocationSharingServiceConnection @Inject constructor(
     }
 
     override fun onServiceConnected(className: ComponentName, binder: IBinder) {
-        locationSharingService = (binder as LocationSharingService.LocalBinder).getService().also {
+        locationSharingAndroidService = (binder as LocationSharingAndroidService.LocalBinder).getService().also {
             it.callback = this
         }
         isBound = true
@@ -65,8 +66,8 @@ class LocationSharingServiceConnection @Inject constructor(
 
     override fun onServiceDisconnected(className: ComponentName) {
         isBound = false
-        locationSharingService?.callback = null
-        locationSharingService = null
+        locationSharingAndroidService?.callback = null
+        locationSharingAndroidService = null
         onCallbackActionNoArg(Callback::onLocationServiceStopped)
     }
 

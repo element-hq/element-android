@@ -84,6 +84,9 @@ internal abstract class AuthModule {
     abstract fun bindSessionCreator(creator: DefaultSessionCreator): SessionCreator
 
     @Binds
+    abstract fun bindSessionParamsCreator(creator: DefaultSessionParamsCreator): SessionParamsCreator
+
+    @Binds
     abstract fun bindDirectLoginTask(task: DefaultDirectLoginTask): DirectLoginTask
 
     @Binds

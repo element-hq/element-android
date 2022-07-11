@@ -199,12 +199,7 @@ class FtueAuthVariant(
                 openWaitForEmailVerification(viewEvents.email)
             }
             is OnboardingViewEvents.OnSendMsisdnSuccess -> {
-                // Pop the enter Msisdn Fragment
-                supportFragmentManager.popBackStack(FRAGMENT_REGISTRATION_STAGE_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                addRegistrationStageFragmentToBackstack(
-                        FtueAuthGenericTextInputFormFragment::class.java,
-                        FtueAuthGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.ConfirmMsisdn, true, viewEvents.msisdn),
-                )
+                openMsisdnConfirmation(viewEvents.msisdn)
             }
             is OnboardingViewEvents.Failure,
             is OnboardingViewEvents.Loading ->
@@ -388,12 +383,21 @@ class FtueAuthVariant(
         when (stage) {
             is Stage.ReCaptcha -> onCaptcha(stage)
             is Stage.Email -> onEmail(stage)
-            is Stage.Msisdn -> addRegistrationStageFragmentToBackstack(
+            is Stage.Msisdn -> onMsisdn(stage)
+            is Stage.Terms -> onTerms(stage)
+            else -> Unit // Should not happen
+        }
+    }
+
+    private fun onMsisdn(stage: Stage) {
+        when {
+            vectorFeatures.isOnboardingCombinedRegisterEnabled() -> addRegistrationStageFragmentToBackstack(
+                    FtueAuthPhoneEntryFragment::class.java
+            )
+            else -> addRegistrationStageFragmentToBackstack(
                     FtueAuthGenericTextInputFormFragment::class.java,
                     FtueAuthGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.SetMsisdn, stage.mandatory),
             )
-            is Stage.Terms -> onTerms(stage)
-            else -> Unit // Should not happen
         }
     }
 
@@ -419,6 +423,20 @@ class FtueAuthVariant(
             else -> addRegistrationStageFragmentToBackstack(
                     FtueAuthLegacyWaitForEmailFragment::class.java,
                     FtueAuthWaitForEmailFragmentArgument(email),
+            )
+        }
+    }
+
+    private fun openMsisdnConfirmation(msisdn: String) {
+        supportFragmentManager.popBackStack(FRAGMENT_REGISTRATION_STAGE_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        when {
+            vectorFeatures.isOnboardingCombinedRegisterEnabled() -> addRegistrationStageFragmentToBackstack(
+                    FtueAuthPhoneConfirmationFragment::class.java,
+                    FtueAuthPhoneConfirmationFragmentArgument(msisdn),
+            )
+            else -> addRegistrationStageFragmentToBackstack(
+                    FtueAuthGenericTextInputFormFragment::class.java,
+                    FtueAuthGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.ConfirmMsisdn, true, msisdn),
             )
         }
     }

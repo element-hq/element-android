@@ -19,11 +19,11 @@ package im.vector.app.core.platform
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
-import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowInsetsController
@@ -31,15 +31,18 @@ import android.view.WindowManager
 import android.widget.TextView
 import androidx.annotation.CallSuper
 import androidx.annotation.MainThread
-import androidx.annotation.MenuRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.app.MultiWindowModeChangedInfo
 import androidx.core.content.ContextCompat
+import androidx.core.util.Consumer
+import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
@@ -86,6 +89,7 @@ import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.receivers.DebugReceiver
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.failure.InitialSyncRequestReason
@@ -199,6 +203,8 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
         supportFragmentManager.fragmentFactory = fragmentFactory
         viewModelFactory = activityEntryPoint.viewModelFactory()
         super.onCreate(savedInstanceState)
+        addOnMultiWindowModeChangedListener(onMultiWindowModeChangedListener)
+        setupMenu()
         configurationViewModel = viewModelProvider.get(ConfigurationViewModel::class.java)
         bugReporter = singletonEntryPoint.bugReporter()
         pinLocker = singletonEntryPoint.pinLocker()
@@ -247,6 +253,32 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
                 setTitle(titleRes)
             }
         }
+    }
+
+    private fun setupMenu() {
+        // Always add a MenuProvider to handle the back action from the Toolbar
+        val vectorMenuProvider = this as? VectorMenuProvider
+        addMenuProvider(
+                object : MenuProvider {
+                    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                        vectorMenuProvider?.let {
+                            menuInflater.inflate(it.getMenuRes(), menu)
+                            it.handlePostCreateMenu(menu)
+                        }
+                    }
+
+                    override fun onPrepareMenu(menu: Menu) {
+                        vectorMenuProvider?.handlePrepareMenu(menu)
+                    }
+
+                    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                        return vectorMenuProvider?.handleMenuItemSelected(menuItem).orFalse() ||
+                                handleMenuItemHome(menuItem)
+                    }
+                },
+                this,
+                Lifecycle.State.RESUMED
+        )
     }
 
     /**
@@ -332,6 +364,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     }
 
     override fun onDestroy() {
+        removeOnMultiWindowModeChangedListener(onMultiWindowModeChangedListener)
         super.onDestroy()
         Timber.i("onDestroy Activity ${javaClass.simpleName}")
     }
@@ -417,11 +450,9 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
         }
     }
 
-    override fun onMultiWindowModeChanged(isInMultiWindowMode: Boolean, newConfig: Configuration?) {
-        super.onMultiWindowModeChanged(isInMultiWindowMode, newConfig)
-
-        Timber.w("onMultiWindowModeChanged. isInMultiWindowMode: $isInMultiWindowMode")
-        bugReporter.inMultiWindowMode = isInMultiWindowMode
+    private val onMultiWindowModeChangedListener = Consumer<MultiWindowModeChangedInfo> {
+        Timber.w("onMultiWindowModeChanged. isInMultiWindowMode: ${it.isInMultiWindowMode}")
+        bugReporter.inMultiWindowMode = it.isInMultiWindowMode
     }
 
     protected fun createFragment(fragmentClass: Class<out Fragment>, argsParcelable: Parcelable? = null): Fragment {
@@ -463,28 +494,14 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
         }
     }
 
-    /* ==========================================================================================
-     * MENU MANAGEMENT
-     * ========================================================================================== */
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val menuRes = getMenuRes()
-
-        if (menuRes != -1) {
-            menuInflater.inflate(menuRes, menu)
-            return true
+    private fun handleMenuItemHome(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed(true)
+                true
+            }
+            else -> false
         }
-
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            onBackPressed(true)
-            return true
-        }
-
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onBackPressed() {
@@ -586,9 +603,6 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
     @StringRes
     open fun getTitleRes() = -1
-
-    @MenuRes
-    open fun getMenuRes() = -1
 
     /**
      * Return a object containing other themes for this activity.

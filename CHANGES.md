@@ -1,3 +1,14 @@
+Changes in Element v1.4.27 (2022-07-06)
+=======================================
+
+Bugfixes 🐛
+----------
+ - Fixes crash when sharing plain text, such as a url ([#6451](https://github.com/vector-im/element-android/issues/6451))
+ - Fix crashes on Timeline [Thread] due to range validation ([#6461](https://github.com/vector-im/element-android/issues/6461))
+ - Fix crashes when opening Thread ([#6463](https://github.com/vector-im/element-android/issues/6463))
+ - Fix ConcurrentModificationException on BackgroundDetectionObserver ([#6469](https://github.com/vector-im/element-android/issues/6469))
+
+
 Changes in Element v1.4.26 (2022-06-30)
 =======================================
 

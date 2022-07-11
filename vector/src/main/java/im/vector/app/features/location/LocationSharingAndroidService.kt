@@ -21,8 +21,9 @@ import android.os.Binder
 import android.os.IBinder
 import android.os.Parcelable
 import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.services.VectorService
+import im.vector.app.core.services.VectorAndroidService
 import im.vector.app.features.location.live.GetLiveLocationShareSummaryUseCase
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.session.coroutineScope
@@ -41,7 +42,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class LocationSharingService : VectorService(), LocationTracker.Callback {
+class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Callback {
 
     @Parcelize
     data class RoomArgs(
@@ -79,7 +80,7 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
 
         launchWithActiveSession { session ->
             val job = locationTracker.locations
-                    .onEach(this@LocationSharingService::onLocationUpdate)
+                    .onEach(this@LocationSharingAndroidService::onLocationUpdate)
                     .launchIn(session.coroutineScope)
             jobs.add(job)
         }
@@ -112,7 +113,10 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
         val updateLiveResult = session
                 .getRoom(roomArgs.roomId)
                 ?.locationSharingService()
-                ?.startLiveLocationShare(timeoutMillis = roomArgs.durationMillis)
+                ?.startLiveLocationShare(
+                        timeoutMillis = roomArgs.durationMillis,
+                        description = getString(R.string.sent_live_location)
+                )
 
         updateLiveResult
                 ?.let { result ->
@@ -221,7 +225,7 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
     }
 
     inner class LocalBinder : Binder() {
-        fun getService(): LocationSharingService = this@LocationSharingService
+        fun getService(): LocationSharingAndroidService = this@LocationSharingAndroidService
     }
 
     interface Callback {
