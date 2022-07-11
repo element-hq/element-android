@@ -207,7 +207,7 @@ jobs:
   towncrier:
     name: Towncrier check
     runs-on: ubuntu-latest
-    if: github.head_ref == 'develop'
+    if: github.event_name == 'pull_request' && github.head_ref == 'develop'
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python 3.8
@@ -226,4 +226,3 @@ jobs:
           towncrier check --compare-with origin/${BASE_BRANCH}
       env:
         BASE_BRANCH: ${{ github.base_ref }}
-        if: github.event_name == 'pull_request'
