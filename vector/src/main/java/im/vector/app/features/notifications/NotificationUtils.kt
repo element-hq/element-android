@@ -48,7 +48,6 @@ import androidx.fragment.app.Fragment
 import im.vector.app.R
 import im.vector.app.core.extensions.createIgnoredUri
 import im.vector.app.core.platform.PendingIntentCompat
-import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.services.CallAndroidService
 import im.vector.app.core.time.Clock
@@ -68,27 +67,6 @@ import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.random.Random
-
-/**
- * Util class for creating notifications.
- * Note: Cannot inject ColorProvider in the constructor, because it requires an Activity
- */
-
-data class NotificationActionIds @Inject constructor(
-        private val buildMeta: BuildMeta,
-) {
-
-    val JOIN_ACTION = "${buildMeta.applicationId}.NotificationActions.JOIN_ACTION"
-    val REJECT_ACTION = "${buildMeta.applicationId}.NotificationActions.REJECT_ACTION"
-    val QUICK_LAUNCH_ACTION = "${buildMeta.applicationId}.NotificationActions.QUICK_LAUNCH_ACTION"
-    val MARK_ROOM_READ_ACTION = "${buildMeta.applicationId}.NotificationActions.MARK_ROOM_READ_ACTION"
-    val SMART_REPLY_ACTION = "${buildMeta.applicationId}.NotificationActions.SMART_REPLY_ACTION"
-    val DISMISS_SUMMARY_ACTION = "${buildMeta.applicationId}.NotificationActions.DISMISS_SUMMARY_ACTION"
-    val DISMISS_ROOM_NOTIF_ACTION = "${buildMeta.applicationId}.NotificationActions.DISMISS_ROOM_NOTIF_ACTION"
-    val TAP_TO_VIEW_ACTION = "${buildMeta.applicationId}.NotificationActions.TAP_TO_VIEW_ACTION"
-    val DIAGNOSTIC_ACTION = "${buildMeta.applicationId}.NotificationActions.DIAGNOSTIC"
-    val PUSH_ACTION = "${buildMeta.applicationId}.PUSH"
-}
 
 @Singleton
 class NotificationUtils @Inject constructor(
