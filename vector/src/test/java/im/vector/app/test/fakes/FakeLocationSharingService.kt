@@ -41,7 +41,7 @@ class FakeLocationSharingService : LocationSharingService by mockk() {
 
     fun givenLiveLocationShareSummaryReturns(
             eventId: String,
-            summary: LiveLocationShareAggregatedSummary
+            summary: LiveLocationShareAggregatedSummary?
     ): LiveData<Optional<LiveLocationShareAggregatedSummary>> {
         return MutableLiveData(Optional(summary)).also {
             every { getLiveLocationShareSummary(eventId) } returns it
