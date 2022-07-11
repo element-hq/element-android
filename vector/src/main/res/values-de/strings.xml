@@ -2421,4 +2421,5 @@
     <string name="threads_beta_enable_notice_title">Threads Beta</string>
     <string name="call_start_screen_sharing">Bildschirm teilen</string>
     <string name="action_try_it_out">Ausprobieren</string>
+    <string name="location_share_live_until">Live bis %1$s</string>
 </resources>
