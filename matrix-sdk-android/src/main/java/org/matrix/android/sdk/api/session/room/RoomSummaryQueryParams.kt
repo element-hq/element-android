@@ -87,10 +87,6 @@ data class RoomSummaryQueryParams(
          * Used to filter room using the current space.
          */
         val spaceFilter: SpaceFilter?,
-        /**
-         * Used to filter room using the current group.
-         */
-        val activeGroupId: String? = null
 ) {
 
     /**
@@ -106,7 +102,6 @@ data class RoomSummaryQueryParams(
         var excludeType: List<String?>? = listOf(RoomType.SPACE)
         var includeType: List<String?>? = null
         var spaceFilter: SpaceFilter? = null
-        var activeGroupId: String? = null
 
         fun build() = RoomSummaryQueryParams(
                 displayName = displayName,
@@ -117,7 +112,6 @@ data class RoomSummaryQueryParams(
                 excludeType = excludeType,
                 includeType = includeType,
                 spaceFilter = spaceFilter,
-                activeGroupId = activeGroupId
         )
     }
 }
