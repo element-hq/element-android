@@ -1709,7 +1709,7 @@ class TimelineFragment @Inject constructor(
                 views.includeRoomToolbar.roomToolbarContentView.isVisible = false
                 views.includeThreadToolbar.roomToolbarThreadConstraintLayout.isVisible = false
                 setupToolbar(views.roomToolbar)
-                        .setTitle(R.string.fab_menu_create_chat)
+                        .setTitle(R.string.room_member_open_or_create_dm)
                         .allowBack(useCross = true)
             }
             isThreadTimeLine() -> {
