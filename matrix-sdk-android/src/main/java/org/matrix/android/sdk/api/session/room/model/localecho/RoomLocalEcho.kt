@@ -22,7 +22,10 @@ object RoomLocalEcho {
 
     private const val PREFIX = "!local."
 
+    /**
+     * Tell whether the provider room id is a local id.
+     */
     fun isLocalEchoId(roomId: String) = roomId.startsWith(PREFIX)
 
-    fun createLocalEchoId() = "${PREFIX}${UUID.randomUUID()}"
+    internal fun createLocalEchoId() = "${PREFIX}${UUID.randomUUID()}"
 }
