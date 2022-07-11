@@ -18,7 +18,9 @@ package org.matrix.android.sdk.internal.session.room.create
 
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
+import io.realm.RealmConfiguration
 import io.realm.kotlin.createObject
+import kotlinx.coroutines.TimeoutCancellationException
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.events.model.Content
@@ -26,6 +28,7 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
 import org.matrix.android.sdk.api.session.events.model.toContent
+import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
@@ -38,6 +41,7 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.sync.model.RoomSyncSummary
 import org.matrix.android.sdk.api.session.user.UserService
 import org.matrix.android.sdk.api.session.user.model.User
+import org.matrix.android.sdk.internal.database.awaitNotEmptyResult
 import org.matrix.android.sdk.internal.database.helper.addTimelineEvent
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.mapper.toEntity
@@ -47,6 +51,7 @@ import org.matrix.android.sdk.internal.database.model.EventInsertType
 import org.matrix.android.sdk.internal.database.model.RoomEntity
 import org.matrix.android.sdk.internal.database.model.RoomMembersLoadStatusType
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
+import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.database.query.copyToRealmOrIgnore
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.getOrNull
@@ -59,6 +64,7 @@ import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.awaitTransaction
 import org.matrix.android.sdk.internal.util.time.Clock
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 internal interface CreateLocalRoomTask : Task<CreateRoomParams, String>
@@ -68,6 +74,7 @@ internal class DefaultCreateLocalRoomTask @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
         private val roomMemberEventHandler: RoomMemberEventHandler,
         private val roomSummaryUpdater: RoomSummaryUpdater,
+        @SessionDatabase private val realmConfiguration: RealmConfiguration,
         private val createRoomBodyBuilder: CreateRoomBodyBuilder,
         private val userService: UserService,
         private val clock: Clock,
@@ -81,8 +88,16 @@ internal class DefaultCreateLocalRoomTask @Inject constructor(
             createLocalRoomSummaryEntity(realm, roomId, createRoomBody)
         }
 
-        // Ensure that Realm is up to date before returning the roomId.
-        monarchy.doWithRealm { it.refresh() }
+        // Wait for room to be created in DB
+        try {
+            awaitNotEmptyResult(realmConfiguration, TimeUnit.MINUTES.toMillis(1L)) { realm ->
+                realm.where(RoomSummaryEntity::class.java)
+                        .equalTo(RoomSummaryEntityFields.ROOM_ID, roomId)
+                        .equalTo(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.JOIN.name)
+            }
+        } catch (exception: TimeoutCancellationException) {
+            throw CreateRoomFailure.CreatedWithTimeout(roomId)
+        }
 
         return roomId
     }
