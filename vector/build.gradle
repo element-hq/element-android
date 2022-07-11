@@ -342,8 +342,6 @@ android {
 }
 
 dependencies {
-    implementation project(':library:opusencoder')
-
     implementation project(":vector-config")
     implementation project(":matrix-sdk-android")
     implementation project(":matrix-sdk-android-flow")
@@ -381,6 +379,8 @@ dependencies {
 
     implementation libs.androidx.datastorepreferences
 
+    // Opus Encoder
+    implementation libs.element.opusencoder
 
     // Log
     implementation libs.jakewharton.timber
