@@ -17,10 +17,13 @@
 package org.matrix.android.sdk.session.room.timeline
 
 import androidx.test.filters.LargeTest
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.amshove.kluent.internal.assertEquals
+import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldBeFalse
 import org.amshove.kluent.shouldBeTrue
+import org.amshove.kluent.shouldNotBe
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -31,6 +34,7 @@ import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
@@ -61,28 +65,38 @@ class TimelineForwardPaginationTest : InstrumentedTest {
 
         aliceSession.cryptoService().setWarnOnUnknownDevices(false)
 
-        val roomFromAlicePOV = aliceSession.getRoom(aliceRoomId)!!
-
         // Alice sends X messages
         val message = "Message from Alice"
         val sentMessages = commonTestHelper.sendTextMessage(
-                roomFromAlicePOV,
+                aliceSession.getRoom(aliceRoomId)!!,
                 message,
                 numberOfMessagesToSend
         )
-
+        Timber.tag("TimelineTest").v("Sent ${sentMessages.size} messages")
         // Alice clear the cache and restart the sync
-        commonTestHelper.clearCacheAndSync(aliceSession)
-        val aliceTimeline = roomFromAlicePOV.timelineService().createTimeline(null, TimelineSettings(30))
+        commonTestHelper.runBlockingTest {
+            aliceSession.getRoom(aliceRoomId) shouldNotBe null
+            Timber.tag("TimelineTest").v("Clear cache")
+            aliceSession.clearCache()
+            aliceSession.getRoom(aliceRoomId) shouldBe null
+            Timber.tag("TimelineTest").v("Launch initial sync")
+            aliceSession.syncService().syncOnce(0L)
+            aliceSession.getRoom(aliceRoomId) shouldNotBe null
+        }
+
+        val aliceRoom = aliceSession.getRoom(aliceRoomId)!!
+        Timber.tag("TimelineTest").v("Got roomSummary : ${aliceRoom.roomSummary()}")
+        val aliceTimeline = aliceRoom.timelineService().createTimeline(null, TimelineSettings(30))
         aliceTimeline.start()
+        Timber.tag("TimelineTest").v("Start timeline with initialSize of 30.")
 
         // Alice sees the 10 last message of the room, and can only navigate BACKWARD
         run {
             val lock = CountDownLatch(1)
             val eventsListener = commonTestHelper.createEventListener(lock) { snapshot ->
-                Timber.e("Alice timeline updated: with ${snapshot.size} events:")
+                Timber.tag("TimelineTest").v("Alice timeline updated: with ${snapshot.size} events:")
                 snapshot.forEach {
-                    Timber.w(" event ${it.root.content}")
+                    Timber.tag("TimelineTest").v(" event ${it.root.content}")
                 }
 
                 // Ok, we have the 10 last messages of the initial sync
@@ -104,11 +118,10 @@ class TimelineForwardPaginationTest : InstrumentedTest {
         run {
             val lock = CountDownLatch(1)
             val aliceEventsListener = commonTestHelper.createEventListener(lock) { snapshot ->
-                Timber.e("Alice timeline updated: with ${snapshot.size} events:")
+                Timber.tag("TimelineTest").v("#restartWithEventId Alice timeline updated: with ${snapshot.size} events:")
                 snapshot.forEach {
-                    Timber.w(" event ${it.root.content}")
+                    Timber.tag("TimelineTest").v(" event ${it.root.content}")
                 }
-
                 // The event is not in db, so it is fetch alone
                 snapshot.size == 1 &&
                         snapshot.all { it.root.content.toModel<MessageContent>()?.body?.startsWith("Message from Alice").orFalse() }

@@ -51,7 +51,6 @@ import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.api.session.sync.SyncState
-import timber.log.Timber
 import java.util.UUID
 import java.util.concurrent.CancellationException
 import java.util.concurrent.CountDownLatch
@@ -142,42 +141,8 @@ class CommonTestHelper internal constructor(context: Context) {
      * @param session the session to sync
      */
     fun syncSession(session: Session, timeout: Long = TestConstants.timeOutMillis * 10) {
-        val lock = CountDownLatch(1)
-        coroutineScope.launch {
-            session.syncService().startSync(true)
-            val syncLiveData = session.syncService().getSyncStateLive()
-            val syncObserver = object : Observer<SyncState> {
-                override fun onChanged(t: SyncState?) {
-                    if (session.syncService().hasAlreadySynced()) {
-                        lock.countDown()
-                        syncLiveData.removeObserver(this)
-                    }
-                }
-            }
-            syncLiveData.observeForever(syncObserver)
-        }
-        await(lock, timeout)
-    }
-
-    /**
-     * This methods clear the cache and waits for initialSync
-     *
-     * @param session the session to sync
-     */
-    fun clearCacheAndSync(session: Session, timeout: Long = TestConstants.timeOutMillis) {
-        waitWithLatch(timeout) { latch ->
-            session.clearCache()
-            val syncLiveData = session.syncService().getSyncStateLive()
-            val syncObserver = object : Observer<SyncState> {
-                override fun onChanged(t: SyncState?) {
-                    if (session.syncService().hasAlreadySynced()) {
-                        Timber.v("Clear cache and synced")
-                        syncLiveData.removeObserver(this)
-                        latch.countDown()
-                    }
-                }
-            }
-            syncLiveData.observeForever(syncObserver)
+        runBlockingTest(timeout) {
+            session.syncService().syncOnce(0L)
             session.syncService().startSync(true)
         }
     }
