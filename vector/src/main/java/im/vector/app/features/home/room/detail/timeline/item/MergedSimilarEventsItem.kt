@@ -63,7 +63,7 @@ abstract class MergedSimilarEventsItem : BasedMergedItem<MergedSimilarEventsItem
     }
 
     companion object {
-        private const val STUB_ID = R.id.messageContentMergedHeaderStub
+        private val STUB_ID = R.id.messageContentMergedHeaderStub
     }
 
     data class Attributes(
