@@ -31,6 +31,7 @@ import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.arguments.TimelineArgs
 import im.vector.app.features.location.live.map.LiveLocationMapViewActivity
 import im.vector.app.features.location.live.map.LiveLocationMapViewArgs
+import im.vector.app.features.notifications.NotificationActionIds
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.themes.ThemeUtils
 import javax.inject.Inject
@@ -41,6 +42,7 @@ class LiveLocationNotificationBuilder @Inject constructor(
         private val context: Context,
         private val stringProvider: StringProvider,
         private val clock: Clock,
+        private val actionIds: NotificationActionIds,
 ) {
 
     /**
@@ -66,7 +68,7 @@ class LiveLocationNotificationBuilder @Inject constructor(
                 liveLocationMapViewArgs = LiveLocationMapViewArgs(roomId = roomId),
                 firstStartMainActivity = true
         )
-        mapIntent.action = NotificationUtils.TAP_TO_VIEW_ACTION
+        mapIntent.action = actionIds.TAP_TO_VIEW_ACTION
         // pending intent get reused by system, this will mess up the extra params, so put unique info to avoid that
         mapIntent.data = createIgnoredUri("openLiveLocationMap?$roomId")
 

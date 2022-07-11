@@ -20,6 +20,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import im.vector.app.BuildConfig
 import im.vector.app.config.Analytics
 import im.vector.app.config.Config
 import im.vector.app.config.KeySharingStrategy
