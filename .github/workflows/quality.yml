@@ -207,6 +207,7 @@ jobs:
   towncrier:
     name: Towncrier check
     runs-on: ubuntu-latest
+    if: github.head_ref == 'develop'
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python 3.8
