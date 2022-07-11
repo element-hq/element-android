@@ -21,7 +21,6 @@ data class BuildMeta(
         val sdkInt: Int,
         val applicationId: String,
         val lowPrivacyLoggingEnabled: Boolean,
-        val enableStrictModeLogs: Boolean,
         val versionName: String,
         val gitRevision: String,
         val gitRevisionDate: String,

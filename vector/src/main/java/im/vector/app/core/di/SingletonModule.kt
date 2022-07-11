@@ -215,7 +215,6 @@ object VectorStaticModule {
             sdkInt = Build.VERSION.SDK_INT,
             applicationId = BuildConfig.APPLICATION_ID,
             lowPrivacyLoggingEnabled = Config.LOW_PRIVACY_LOG_ENABLE,
-            enableStrictModeLogs = Config.ENABLE_STRICT_MODE_LOGS,
             versionName = BuildConfig.VERSION_NAME,
             gitRevision = BuildConfig.GIT_REVISION,
             gitRevisionDate = BuildConfig.GIT_REVISION_DATE,
