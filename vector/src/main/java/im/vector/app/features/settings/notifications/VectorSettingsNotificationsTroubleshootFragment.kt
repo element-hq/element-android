@@ -152,11 +152,11 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
 
         tryOrNull("Unable to register the receiver") {
             LocalBroadcastManager.getInstance(requireContext())
-                    .registerReceiver(broadcastReceiverPush, IntentFilter(actionIds.PUSH_ACTION))
+                    .registerReceiver(broadcastReceiverPush, IntentFilter(actionIds.push))
         }
         tryOrNull("Unable to register the receiver") {
             LocalBroadcastManager.getInstance(requireContext())
-                    .registerReceiver(broadcastReceiverNotification, IntentFilter(actionIds.DIAGNOSTIC_ACTION))
+                    .registerReceiver(broadcastReceiverNotification, IntentFilter(actionIds.diagnostic))
         }
     }
 

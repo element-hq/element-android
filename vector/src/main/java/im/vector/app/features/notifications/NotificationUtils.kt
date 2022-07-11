@@ -632,7 +632,7 @@ class NotificationUtils @Inject constructor(
                     // Add actions and notification intents
                     // Mark room as read
                     val markRoomReadIntent = Intent(context, NotificationBroadcastReceiver::class.java)
-                    markRoomReadIntent.action = actionIds.MARK_ROOM_READ_ACTION
+                    markRoomReadIntent.action = actionIds.markRoomRead
                     markRoomReadIntent.data = createIgnoredUri(roomInfo.roomId)
                     markRoomReadIntent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomInfo.roomId)
                     val markRoomReadPendingIntent = PendingIntent.getBroadcast(
@@ -679,7 +679,7 @@ class NotificationUtils @Inject constructor(
 
                     val intent = Intent(context, NotificationBroadcastReceiver::class.java)
                     intent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomInfo.roomId)
-                    intent.action = actionIds.DISMISS_ROOM_NOTIF_ACTION
+                    intent.action = actionIds.dismissRoom
                     val pendingIntent = PendingIntent.getBroadcast(
                             context.applicationContext,
                             clock.epochMillis().toInt(),
@@ -714,7 +714,7 @@ class NotificationUtils @Inject constructor(
                     val roomId = inviteNotifiableEvent.roomId
                     // offer to type a quick reject button
                     val rejectIntent = Intent(context, NotificationBroadcastReceiver::class.java)
-                    rejectIntent.action = actionIds.REJECT_ACTION
+                    rejectIntent.action = actionIds.reject
                     rejectIntent.data = createIgnoredUri("$roomId&$matrixId")
                     rejectIntent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId)
                     val rejectIntentPendingIntent = PendingIntent.getBroadcast(
@@ -732,7 +732,7 @@ class NotificationUtils @Inject constructor(
 
                     // offer to type a quick accept button
                     val joinIntent = Intent(context, NotificationBroadcastReceiver::class.java)
-                    joinIntent.action = actionIds.JOIN_ACTION
+                    joinIntent.action = actionIds.join
                     joinIntent.data = createIgnoredUri("$roomId&$matrixId")
                     joinIntent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId)
                     val joinIntentPendingIntent = PendingIntent.getBroadcast(
@@ -815,7 +815,7 @@ class NotificationUtils @Inject constructor(
 
     private fun buildOpenRoomIntent(roomId: String): PendingIntent? {
         val roomIntentTap = RoomDetailActivity.newIntent(context, TimelineArgs(roomId = roomId, switchToParentSpace = true), true)
-        roomIntentTap.action = actionIds.TAP_TO_VIEW_ACTION
+        roomIntentTap.action = actionIds.tapToView
         // pending intent get reused by system, this will mess up the extra params, so put unique info to avoid that
         roomIntentTap.data = createIgnoredUri("openRoom?$roomId")
 
@@ -853,7 +853,7 @@ class NotificationUtils @Inject constructor(
         val intent: Intent
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent = Intent(context, NotificationBroadcastReceiver::class.java)
-            intent.action = actionIds.SMART_REPLY_ACTION
+            intent.action = actionIds.smartReply
             intent.data = createIgnoredUri(roomId)
             intent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId)
             return PendingIntent.getBroadcast(
@@ -929,7 +929,7 @@ class NotificationUtils @Inject constructor(
 
     private fun getDismissSummaryPendingIntent(): PendingIntent {
         val intent = Intent(context, NotificationBroadcastReceiver::class.java)
-        intent.action = actionIds.DISMISS_SUMMARY_ACTION
+        intent.action = actionIds.dismissSummary
         intent.data = createIgnoredUri("deleteSummary")
         return PendingIntent.getBroadcast(
                 context.applicationContext,
@@ -968,7 +968,7 @@ class NotificationUtils @Inject constructor(
 
     fun displayDiagnosticNotification() {
         val testActionIntent = Intent(context, TestNotificationReceiver::class.java)
-        testActionIntent.action = actionIds.DIAGNOSTIC_ACTION
+        testActionIntent.action = actionIds.diagnostic
         val testPendingIntent = PendingIntent.getBroadcast(
                 context,
                 0,

@@ -68,7 +68,7 @@ class LiveLocationNotificationBuilder @Inject constructor(
                 liveLocationMapViewArgs = LiveLocationMapViewArgs(roomId = roomId),
                 firstStartMainActivity = true
         )
-        mapIntent.action = actionIds.TAP_TO_VIEW_ACTION
+        mapIntent.action = actionIds.tapToView
         // pending intent get reused by system, this will mess up the extra params, so put unique info to avoid that
         mapIntent.data = createIgnoredUri("openLiveLocationMap?$roomId")
 

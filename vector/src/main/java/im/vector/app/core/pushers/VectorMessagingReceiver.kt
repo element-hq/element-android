@@ -102,7 +102,7 @@ class VectorMessagingReceiver : MessagingReceiver() {
 
         // Diagnostic Push
         if (pushData.eventId == PushersManager.TEST_EVENT_ID) {
-            val intent = Intent(actionIds.PUSH_ACTION)
+            val intent = Intent(actionIds.push)
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
             return
         }

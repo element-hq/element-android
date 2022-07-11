@@ -28,14 +28,14 @@ data class NotificationActionIds @Inject constructor(
         private val buildMeta: BuildMeta,
 ) {
 
-    val JOIN_ACTION = "${buildMeta.applicationId}.NotificationActions.JOIN_ACTION"
-    val REJECT_ACTION = "${buildMeta.applicationId}.NotificationActions.REJECT_ACTION"
-    val QUICK_LAUNCH_ACTION = "${buildMeta.applicationId}.NotificationActions.QUICK_LAUNCH_ACTION"
-    val MARK_ROOM_READ_ACTION = "${buildMeta.applicationId}.NotificationActions.MARK_ROOM_READ_ACTION"
-    val SMART_REPLY_ACTION = "${buildMeta.applicationId}.NotificationActions.SMART_REPLY_ACTION"
-    val DISMISS_SUMMARY_ACTION = "${buildMeta.applicationId}.NotificationActions.DISMISS_SUMMARY_ACTION"
-    val DISMISS_ROOM_NOTIF_ACTION = "${buildMeta.applicationId}.NotificationActions.DISMISS_ROOM_NOTIF_ACTION"
-    val TAP_TO_VIEW_ACTION = "${buildMeta.applicationId}.NotificationActions.TAP_TO_VIEW_ACTION"
-    val DIAGNOSTIC_ACTION = "${buildMeta.applicationId}.NotificationActions.DIAGNOSTIC"
-    val PUSH_ACTION = "${buildMeta.applicationId}.PUSH"
+    val join = "${buildMeta.applicationId}.NotificationActions.JOIN_ACTION"
+    val reject = "${buildMeta.applicationId}.NotificationActions.REJECT_ACTION"
+    val quickLaunch = "${buildMeta.applicationId}.NotificationActions.QUICK_LAUNCH_ACTION"
+    val markRoomRead = "${buildMeta.applicationId}.NotificationActions.MARK_ROOM_READ_ACTION"
+    val smartReply = "${buildMeta.applicationId}.NotificationActions.SMART_REPLY_ACTION"
+    val dismissSummary = "${buildMeta.applicationId}.NotificationActions.DISMISS_SUMMARY_ACTION"
+    val dismissRoom = "${buildMeta.applicationId}.NotificationActions.DISMISS_ROOM_NOTIF_ACTION"
+    val tapToView = "${buildMeta.applicationId}.NotificationActions.TAP_TO_VIEW_ACTION"
+    val diagnostic = "${buildMeta.applicationId}.NotificationActions.DIAGNOSTIC"
+    val push = "${buildMeta.applicationId}.PUSH"
 }
