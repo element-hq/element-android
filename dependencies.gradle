@@ -97,7 +97,7 @@ ext.libs = [
                 'flipperNetworkPlugin'    : "com.facebook.flipper:flipper-network-plugin:$flipper",
         ],
         element     : [
-                'opusencoder'             : "io.element.android:opusencoder:1.0.1",
+                'opusencoder'             : "io.element.android:opusencoder:1.0.3",
         ],
         squareup    : [
                 'moshi'                  : "com.squareup.moshi:moshi:$moshi",
