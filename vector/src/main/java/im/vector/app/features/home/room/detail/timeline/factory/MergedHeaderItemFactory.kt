@@ -46,8 +46,6 @@ import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import javax.inject.Inject
 
-private const val MIN_NUMBER_OF_MERGED_EVENTS = 2
-
 class MergedHeaderItemFactory @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
         private val avatarRenderer: AvatarRenderer,
@@ -215,8 +213,7 @@ class MergedHeaderItemFactory @Inject constructor(
                 collapsedEventIds.removeAll(mergedEventIds)
             }
             val mergeId = mergedEventIds.joinToString(separator = "_") { it.toString() }
-            val summaryTitleResId = getSummaryTitleResId(event.root)
-            summaryTitleResId?.let { summaryTitle ->
+            getSummaryTitleResId(event.root)?.let { summaryTitle ->
                 val attributes = MergedSimilarEventsItem.Attributes(
                         summaryTitleResId = summaryTitle,
                         isCollapsed = isCollapsed,
@@ -344,5 +341,9 @@ class MergedHeaderItemFactory @Inject constructor(
 
     fun isCollapsed(localId: Long): Boolean {
         return collapsedEventIds.contains(localId)
+    }
+
+    companion object {
+        private const val MIN_NUMBER_OF_MERGED_EVENTS = 2
     }
 }
