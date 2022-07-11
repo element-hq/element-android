@@ -21,6 +21,9 @@ import kotlinx.coroutines.flow.SharedFlow
 import org.matrix.android.sdk.api.session.sync.model.SyncResponse
 
 interface SyncService {
+
+    suspend fun syncOnce(timeout: Long): SyncResponse
+
     /**
      * This method start the sync thread.
      */

@@ -17,8 +17,15 @@
 package org.matrix.android.sdk.internal.session.sync
 
 import androidx.lifecycle.LiveData
+import io.realm.RealmConfiguration
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.session.sync.SyncRequestState
 import org.matrix.android.sdk.api.session.sync.SyncService
+import org.matrix.android.sdk.api.session.sync.model.SyncResponse
+import org.matrix.android.sdk.internal.database.awaitNotEmptyResult
+import org.matrix.android.sdk.internal.database.model.SyncEntity
+import org.matrix.android.sdk.internal.database.model.SyncEntityFields
+import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.session.SessionState
@@ -35,7 +42,9 @@ internal class DefaultSyncService @Inject constructor(
         private val syncTokenStore: SyncTokenStore,
         private val syncRequestStateTracker: SyncRequestStateTracker,
         private val sessionState: SessionState,
+        private val syncTask: SyncTask,
 ) : SyncService {
+
     private var syncThread: SyncThread? = null
 
     override fun requireBackgroundSync() {
@@ -48,6 +57,11 @@ internal class DefaultSyncService @Inject constructor(
 
     override fun stopAnyBackgroundSync() {
         SyncWorker.stopAnyBackgroundSync(workManagerProvider)
+    }
+
+    override suspend fun syncOnce(timeout: Long): SyncResponse {
+        val syncParams = SyncTask.Params(timeout = timeout, presence = null, afterPause = false)
+        return syncTask.execute(syncParams)
     }
 
     override fun startSync(fromForeground: Boolean) {
