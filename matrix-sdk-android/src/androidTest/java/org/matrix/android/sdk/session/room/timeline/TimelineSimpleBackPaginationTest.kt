@@ -20,7 +20,6 @@ import androidx.test.filters.LargeTest
 import kotlinx.coroutines.runBlocking
 import org.amshove.kluent.internal.assertEquals
 import org.junit.FixMethodOrder
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
@@ -35,11 +34,11 @@ import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import org.matrix.android.sdk.common.TestConstants
+import timber.log.Timber
 
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
 @LargeTest
-@Ignore
 class TimelineSimpleBackPaginationTest : InstrumentedTest {
 
     @Test
@@ -68,28 +67,14 @@ class TimelineSimpleBackPaginationTest : InstrumentedTest {
 
         val bobTimeline = roomFromBobPOV.timelineService().createTimeline(null, TimelineSettings(30))
         bobTimeline.start()
-
-        commonTestHelper.waitWithLatch(timeout = TestConstants.timeOutMillis * 10) {
-            val listener = object : Timeline.Listener {
-
-                override fun onStateUpdated(direction: Timeline.Direction, state: Timeline.PaginationState) {
-                    if (direction == Timeline.Direction.FORWARDS) {
-                        return
-                    }
-                    if (state.hasMoreToLoad && !state.loading) {
-                        bobTimeline.paginate(Timeline.Direction.BACKWARDS, 30)
-                    } else if (!state.hasMoreToLoad) {
-                        bobTimeline.removeListener(this)
-                        it.countDown()
-                    }
-                }
+        commonTestHelper.runBlockingTest {
+            while (bobTimeline.hasMoreToLoad(Timeline.Direction.BACKWARDS)) {
+                val timelineEvents = bobTimeline.awaitPaginate(direction = Timeline.Direction.BACKWARDS, 30)
+                Timber.v("Number of TimelineEvents= ${timelineEvents.size}")
             }
-            bobTimeline.addListener(listener)
-            bobTimeline.paginate(Timeline.Direction.BACKWARDS, 30)
         }
         assertEquals(false, bobTimeline.hasMoreToLoad(Timeline.Direction.FORWARDS))
         assertEquals(false, bobTimeline.hasMoreToLoad(Timeline.Direction.BACKWARDS))
-
         val onlySentEvents = runBlocking {
             bobTimeline.getSnapshot()
         }
@@ -99,7 +84,6 @@ class TimelineSimpleBackPaginationTest : InstrumentedTest {
                     (it.root.content.toModel<MessageTextContent>())?.body?.startsWith(message).orFalse()
                 }
         assertEquals(numberOfMessagesToSent, onlySentEvents.size)
-
         bobTimeline.dispose()
     }
 }

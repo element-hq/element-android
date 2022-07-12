@@ -17,10 +17,10 @@
 package org.matrix.android.sdk.session.room.timeline
 
 import androidx.test.filters.LargeTest
+import kotlinx.coroutines.runBlocking
 import org.amshove.kluent.shouldBeFalse
 import org.amshove.kluent.shouldBeTrue
 import org.junit.FixMethodOrder
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
@@ -40,7 +40,6 @@ import java.util.concurrent.CountDownLatch
 
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
-@Ignore("This test will be ignored until it is fixed")
 @LargeTest
 class TimelinePreviousLastForwardTest : InstrumentedTest {
 
@@ -232,11 +231,12 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
             bobTimeline.addListener(eventsListener)
 
             bobTimeline.paginate(Timeline.Direction.FORWARDS, 50)
-            bobTimeline.paginate(Timeline.Direction.FORWARDS, 50)
-
             commonTestHelper.await(lock)
             bobTimeline.removeAllListeners()
-
+            commonTestHelper.runBlockingTest {
+                val timelineEvents = bobTimeline.awaitPaginate(Timeline.Direction.FORWARDS, 50)
+                Timber.v("Number of timelineEvents=${timelineEvents.size}")
+            }
             bobTimeline.hasMoreToLoad(Timeline.Direction.FORWARDS).shouldBeFalse()
             bobTimeline.hasMoreToLoad(Timeline.Direction.BACKWARDS).shouldBeFalse()
         }
