@@ -47,7 +47,6 @@ import org.matrix.android.sdk.mustFail
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
 @LargeTest
-@Ignore
 class WithHeldTests : InstrumentedTest {
 
     @get:Rule val rule = RetryTestRule(3)
