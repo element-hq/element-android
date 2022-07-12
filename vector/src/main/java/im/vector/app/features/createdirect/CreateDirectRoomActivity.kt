@@ -161,7 +161,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
     }
 
     private fun handleOnMenuItemSubmitClick(action: UserListSharedAction.OnMenuItemSubmitClick) {
-        viewModel.handle(CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers(action.selections))
+        viewModel.handle(CreateDirectRoomAction.PrepareRoomWithSelectedUsers(action.selections))
     }
 
     private fun renderCreateAndInviteState(state: Async<String>) {

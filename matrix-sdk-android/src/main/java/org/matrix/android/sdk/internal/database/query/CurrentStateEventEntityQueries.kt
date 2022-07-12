@@ -23,13 +23,20 @@ import io.realm.kotlin.createObject
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntityFields
 
+internal fun CurrentStateEventEntity.Companion.whereRoomId(
+        realm: Realm,
+        roomId: String
+): RealmQuery<CurrentStateEventEntity> {
+    return realm.where(CurrentStateEventEntity::class.java)
+            .equalTo(CurrentStateEventEntityFields.ROOM_ID, roomId)
+}
+
 internal fun CurrentStateEventEntity.Companion.whereType(
         realm: Realm,
         roomId: String,
         type: String
 ): RealmQuery<CurrentStateEventEntity> {
-    return realm.where(CurrentStateEventEntity::class.java)
-            .equalTo(CurrentStateEventEntityFields.ROOM_ID, roomId)
+    return whereRoomId(realm = realm, roomId = roomId)
             .equalTo(CurrentStateEventEntityFields.TYPE, type)
 }
 

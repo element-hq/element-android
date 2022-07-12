@@ -75,6 +75,11 @@ class DebugFeaturesStateFactory @Inject constructor(
                                 key = DebugFeatureKeys.forceUsageOfOpusEncoder,
                                 factory = VectorFeatures::forceUsageOfOpusEncoder
                         ),
+                        createBooleanFeature(
+                                label = "Start DM on first message",
+                                key = DebugFeatureKeys.startDmOnFirstMsg,
+                                factory = VectorFeatures::shouldStartDmOnFirstMessage
+                        ),
                 )
         )
     }
