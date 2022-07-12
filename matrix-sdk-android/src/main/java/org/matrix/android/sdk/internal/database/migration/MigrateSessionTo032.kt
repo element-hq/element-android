@@ -19,10 +19,9 @@ package org.matrix.android.sdk.internal.database.migration
 import io.realm.DynamicRealm
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
-internal class MigrateSessionTo032(realm: DynamicRealm) : RealmMigrator(realm, 31) {
+internal class MigrateSessionTo032(realm: DynamicRealm) : RealmMigrator(realm, 32) {
 
     override fun doMigrate(realm: DynamicRealm) {
-        // Add hasFailedSending in RoomSummary and a small warning icon on room list
         realm.schema.get("RoomSummaryEntity")
                 ?.removeField("groupIds")
     }
