@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.pin.lockscreen.crypto
+package im.vector.app.features.pin.lockscreen.crypto.migrations
 
 import android.os.Build
 import android.util.Base64
 import androidx.annotation.VisibleForTesting
 import im.vector.app.features.pin.PinCodeStore
 import im.vector.app.features.pin.lockscreen.crypto.LockScreenCryptoConstants.LEGACY_PIN_CODE_KEY_ALIAS
+import im.vector.app.features.pin.lockscreen.di.PinCodeKeyAlias
 import org.matrix.android.sdk.api.securestorage.SecretStoringUtils
 import org.matrix.android.sdk.api.util.BuildVersionSdkIntProvider
 import java.security.Key
@@ -31,7 +32,8 @@ import javax.inject.Inject
 /**
  * Used to migrate from the old PIN code key ciphers to a more secure ones.
  */
-class PinCodeMigrator @Inject constructor(
+class LegacyPinCodeMigrator @Inject constructor(
+        @PinCodeKeyAlias private val pinCodeKeyAlias: String,
         private val pinCodeStore: PinCodeStore,
         private val keyStore: KeyStore,
         private val secretStoringUtils: SecretStoringUtils,
@@ -41,13 +43,13 @@ class PinCodeMigrator @Inject constructor(
     private val legacyKey: Key get() = keyStore.getKey(LEGACY_PIN_CODE_KEY_ALIAS, null)
 
     /**
-     * Migrates from the old ciphers and [LEGACY_PIN_CODE_KEY_ALIAS] to the [newAlias].
+     * Migrates from the old ciphers and renames [LEGACY_PIN_CODE_KEY_ALIAS] to [pinCodeKeyAlias].
      */
-    suspend fun migrate(newAlias: String) {
+    suspend fun migrate() {
         if (!keyStore.containsAlias(LEGACY_PIN_CODE_KEY_ALIAS)) return
 
         val pinCode = getDecryptedPinCode() ?: return
-        val encryptedBytes = secretStoringUtils.securelyStoreBytes(pinCode.toByteArray(), newAlias)
+        val encryptedBytes = secretStoringUtils.securelyStoreBytes(pinCode.toByteArray(), pinCodeKeyAlias)
         val encryptedPinCode = Base64.encodeToString(encryptedBytes, Base64.NO_WRAP)
         pinCodeStore.savePinCode(encryptedPinCode)
         keyStore.deleteEntry(LEGACY_PIN_CODE_KEY_ALIAS)
