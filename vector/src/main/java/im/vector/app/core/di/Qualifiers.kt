@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+@file:Suppress("MatchingDeclarationName") //remove suppression when more qualifiers will be added
 package im.vector.app.core.di
 
 import javax.inject.Qualifier

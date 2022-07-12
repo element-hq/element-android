@@ -21,7 +21,7 @@ import android.provider.Settings
 import javax.inject.Inject
 
 /**
- * A helper to get system settings
+ * A helper to get system settings.
  */
 interface SystemSettingsProvider {
 

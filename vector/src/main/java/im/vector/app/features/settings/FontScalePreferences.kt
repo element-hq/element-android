@@ -26,35 +26,35 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Stores and returns font scale settings using shared preferences
+ * Stores and returns font scale settings using shared preferences.
  */
 interface FontScalePreferences {
-    /** Defines whether to use system settings for font scale or not
+    /** Defines whether to use system settings for font scale or not.
      * @param useSystem true to use system settings, false to use app settings
      */
     fun setUseSystemScale(useSystem: Boolean)
 
-    /** Returns whether to use system settings for font scale or not
+    /** Returns whether to use system settings for font scale or not.
      * @return useSystem true to use system settings, false to use app settings
      */
     fun getUseSystemScale(): Boolean
 
-    /** Returns font scale taking in account [useSystemScale] setting
+    /** Returns font scale taking in account [useSystemScale] setting.
      * @return App setting for font scale if [getUseSystemScale] returns false, system setting otherwise
      */
     fun getResolvedFontScaleValue(): FontScaleValue
 
-    /** Returns persisted app font scale
+    /** Returns persisted app font scale.
      * @return app setting for font scale
      */
     fun getAppFontScaleValue(): FontScaleValue
 
-    /** Sets and stores app font scale setting value
+    /** Sets and stores app font scale setting value.
      * @param fontScaleValue value to be set and saved
      */
     fun setFontScaleValue(fontScaleValue: FontScaleValue)
 
-    /** Returns list of all available font scale values
+    /** Returns list of all available font scale values.
      * @return list of values
      */
     fun getAvailableScales(): List<FontScaleValue>
