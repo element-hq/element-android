@@ -84,7 +84,7 @@ class MergedHeaderItemFactory @Inject constructor(
                 buildRoomCreationMergedSummary(currentPosition, items, partialState, event, eventIdToHighlight, requestModelBuild, callback)
             isStartOfSameTypeEventsSummary(event, nextEvent, addDaySeparator) ->
                 buildSameTypeEventsMergedSummary(currentPosition, items, partialState, event, eventIdToHighlight, requestModelBuild, callback)
-            isStartOfRedactedEventsSummary(event, nextEvent, addDaySeparator) ->
+            isStartOfRedactedEventsSummary(event, items, currentPosition, addDaySeparator) ->
                 buildRedactedEventsMergedSummary(currentPosition, items, partialState, event, eventIdToHighlight, requestModelBuild, callback)
             else -> null
         }
@@ -120,16 +120,21 @@ class MergedHeaderItemFactory @Inject constructor(
 
     /**
      * @param event the main timeline event
-     * @param nextEvent is an older event than event
+     * @param items all known items, sorted from newer event to oldest event
+     * @param currentPosition the current position
      * @param addDaySeparator true to add a day separator
      */
     private fun isStartOfRedactedEventsSummary(
             event: TimelineEvent,
-            nextEvent: TimelineEvent?,
+            items: List<TimelineEvent>,
+            currentPosition: Int,
             addDaySeparator: Boolean,
     ): Boolean {
+        val nextNonRedactionEvent = items
+                .subList(fromIndex = currentPosition + 1, toIndex = items.size)
+                .find { it.root.getClearType() != EventType.REDACTION }
         return event.root.isRedacted() &&
-                ((nextEvent?.root?.getClearType() != EventType.REDACTION && !nextEvent?.root?.isRedacted().orFalse()) || addDaySeparator)
+                (!nextNonRedactionEvent?.root?.isRedacted().orFalse() || addDaySeparator)
     }
 
     private fun buildSameTypeEventsMergedSummary(
