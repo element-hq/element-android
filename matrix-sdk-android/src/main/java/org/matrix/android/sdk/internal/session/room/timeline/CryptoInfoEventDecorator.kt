@@ -57,7 +57,7 @@ internal class CryptoInfoEventDecorator(
 
     companion object {
         val BACKGROUND_HANDLER = createBackgroundHandler("DefaultTimeline_Thread")
-        val MAX_AGE_FOR_REQUEST_TO_BE_IDLE = 60_000L
+        const val MAX_AGE_FOR_REQUEST_TO_BE_IDLE = 60_000L
     }
 
     private val dispatcher = BACKGROUND_HANDLER.asCoroutineDispatcher()

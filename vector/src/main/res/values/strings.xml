@@ -2675,7 +2675,8 @@
     <string name="room_settings_set_avatar">Set avatar</string>
 
     <string name="notice_crypto_unable_to_decrypt_no_keys">"Unable to decrypt message, the sender's device has not sent us the keys."</string>
-    <string name="notice_crypto_unable_to_decrypt_final">You cannot access this message</string>
+    <!-- TODO TO BE REMOVED -->
+    <string name="notice_crypto_unable_to_decrypt_final" tools:ignore="UnusedResources">You cannot access this message</string>
     <string name="notice_crypto_unable_to_decrypt_friendly">Waiting for this message, this may take a while</string>
     <string name="notice_crypto_unable_to_decrypt_requesting_keys">"Requesting keys to decrypt this message, this may take a while"</string>
     <string name="notice_crypto_unable_to_decrypt_friendly_desc">Due to end-to-end encryption, you might need to wait for someone\'s message to arrive because the encryption keys were not properly sent to you.</string>
