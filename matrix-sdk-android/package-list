@@ -2625,6 +2625,9 @@ $dokka.location:org.matrix.android.sdk.api.session.room.model.livelocation/LiveL
 $dokka.location:org.matrix.android.sdk.api.session.room.model.livelocation/LiveLocationShareAggregatedSummary/isActive/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.model.livelocation/-live-location-share-aggregated-summary/is-active.html
 $dokka.location:org.matrix.android.sdk.api.session.room.model.livelocation/LiveLocationShareAggregatedSummary/lastLocationDataContent/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.model.livelocation/-live-location-share-aggregated-summary/last-location-data-content.html
 $dokka.location:org.matrix.android.sdk.api.session.room.model.livelocation/LiveLocationShareAggregatedSummary/userId/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.model.livelocation/-live-location-share-aggregated-summary/user-id.html
+$dokka.location:org.matrix.android.sdk.api.session.room.model.localecho////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.model.localecho/index.html
+$dokka.location:org.matrix.android.sdk.api.session.room.model.localecho/RoomLocalEcho///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.model.localecho/-room-local-echo/index.html
+$dokka.location:org.matrix.android.sdk.api.session.room.model.localecho/RoomLocalEcho/isLocalEchoId/#kotlin.String/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.model.localecho/-room-local-echo/is-local-echo-id.html
 $dokka.location:org.matrix.android.sdk.api.session.room.model.message////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.model.message/index.html
 $dokka.location:org.matrix.android.sdk.api.session.room.model.message//getFileName/org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.model.message/get-file-name.html
 $dokka.location:org.matrix.android.sdk.api.session.room.model.message//getFileUrl/org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.model.message/get-file-url.html
@@ -3686,7 +3689,9 @@ $dokka.location:org.matrix.android.sdk.api.session.room/RoomDirectoryService/get
 $dokka.location:org.matrix.android.sdk.api.session.room/RoomDirectoryService/setRoomDirectoryVisibility/#kotlin.String#org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room/-room-directory-service/set-room-directory-visibility.html
 $dokka.location:org.matrix.android.sdk.api.session.room/RoomService///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room/-room-service/index.html
 $dokka.location:org.matrix.android.sdk.api.session.room/RoomService/createDirectRoom/#kotlin.String/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room/-room-service/create-direct-room.html
+$dokka.location:org.matrix.android.sdk.api.session.room/RoomService/createLocalRoom/#org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room/-room-service/create-local-room.html
 $dokka.location:org.matrix.android.sdk.api.session.room/RoomService/createRoom/#org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room/-room-service/create-room.html
+$dokka.location:org.matrix.android.sdk.api.session.room/RoomService/deleteLocalRoom/#kotlin.String/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room/-room-service/delete-local-room.html
 $dokka.location:org.matrix.android.sdk.api.session.room/RoomService/deleteRoomAlias/#kotlin.String/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room/-room-service/delete-room-alias.html
 $dokka.location:org.matrix.android.sdk.api.session.room/RoomService/getBreadcrumbs/#org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room/-room-service/get-breadcrumbs.html
 $dokka.location:org.matrix.android.sdk.api.session.room/RoomService/getBreadcrumbsLive/#org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room/-room-service/get-breadcrumbs-live.html
@@ -4707,6 +4712,7 @@ org.matrix.android.sdk.api.session.room.model
 org.matrix.android.sdk.api.session.room.model.call
 org.matrix.android.sdk.api.session.room.model.create
 org.matrix.android.sdk.api.session.room.model.livelocation
+org.matrix.android.sdk.api.session.room.model.localecho
 org.matrix.android.sdk.api.session.room.model.message
 org.matrix.android.sdk.api.session.room.model.relation
 org.matrix.android.sdk.api.session.room.model.roomdirectory
