@@ -16,7 +16,7 @@
 
 @file:Suppress("DEPRECATION")
 
-package im.vector.app.features.pin.lockscreen.crypto
+package im.vector.app.features.pin.lockscreen.crypto.migrations
 
 import android.os.Build
 import android.security.KeyPairGeneratorSpec
@@ -57,7 +57,7 @@ import javax.crypto.spec.PSource
 import javax.security.auth.x500.X500Principal
 import kotlin.math.abs
 
-class PinCodeMigratorTests {
+class LegacyPinCodeMigratorTests {
 
     private val alias = UUID.randomUUID().toString()
 
@@ -72,7 +72,9 @@ class PinCodeMigratorTests {
     private val secretStoringUtils: SecretStoringUtils = spyk(
             SecretStoringUtils(context, keyStore, buildVersionSdkIntProvider)
     )
-    private val pinCodeMigrator = spyk(PinCodeMigrator(pinCodeStore, keyStore, secretStoringUtils, buildVersionSdkIntProvider))
+    private val legacyPinCodeMigrator = spyk(
+            LegacyPinCodeMigrator(alias, pinCodeStore, keyStore, secretStoringUtils, buildVersionSdkIntProvider)
+    )
 
     @After
     fun tearDown() {
@@ -87,21 +89,21 @@ class PinCodeMigratorTests {
 
     @Test
     fun isMigrationNeededReturnsTrueIfLegacyKeyExists() {
-        pinCodeMigrator.isMigrationNeeded() shouldBe false
+        legacyPinCodeMigrator.isMigrationNeeded() shouldBe false
 
         generateLegacyKey()
 
-        pinCodeMigrator.isMigrationNeeded() shouldBe true
+        legacyPinCodeMigrator.isMigrationNeeded() shouldBe true
     }
 
     @Test
     fun migrateWillReturnEarlyIfPinCodeDoesNotExist() = runTest {
-        every { pinCodeMigrator.isMigrationNeeded() } returns false
+        every { legacyPinCodeMigrator.isMigrationNeeded() } returns false
         coEvery { pinCodeStore.getPinCode() } returns null
 
-        pinCodeMigrator.migrate(alias)
+        legacyPinCodeMigrator.migrate()
 
-        coVerify(exactly = 0) { pinCodeMigrator.getDecryptedPinCode() }
+        coVerify(exactly = 0) { legacyPinCodeMigrator.getDecryptedPinCode() }
         verify(exactly = 0) { secretStoringUtils.securelyStoreBytes(any(), any()) }
         coVerify(exactly = 0) { pinCodeStore.savePinCode(any()) }
         verify(exactly = 0) { keyStore.deleteEntry(LEGACY_PIN_CODE_KEY_ALIAS) }
@@ -109,13 +111,13 @@ class PinCodeMigratorTests {
 
     @Test
     fun migrateWillReturnEarlyIfIsNotNeeded() = runTest {
-        every { pinCodeMigrator.isMigrationNeeded() } returns false
-        coEvery { pinCodeMigrator.getDecryptedPinCode() } returns "1234"
+        every { legacyPinCodeMigrator.isMigrationNeeded() } returns false
+        coEvery { legacyPinCodeMigrator.getDecryptedPinCode() } returns "1234"
         every { secretStoringUtils.securelyStoreBytes(any(), any()) } returns ByteArray(0)
 
-        pinCodeMigrator.migrate(alias)
+        legacyPinCodeMigrator.migrate()
 
-        coVerify(exactly = 0) { pinCodeMigrator.getDecryptedPinCode() }
+        coVerify(exactly = 0) { legacyPinCodeMigrator.getDecryptedPinCode() }
         verify(exactly = 0) { secretStoringUtils.securelyStoreBytes(any(), any()) }
         coVerify(exactly = 0) { pinCodeStore.savePinCode(any()) }
         verify(exactly = 0) { keyStore.deleteEntry(LEGACY_PIN_CODE_KEY_ALIAS) }
@@ -126,9 +128,9 @@ class PinCodeMigratorTests {
         val pinCode = "1234"
         saveLegacyPinCode(pinCode)
 
-        pinCodeMigrator.migrate(alias)
+        legacyPinCodeMigrator.migrate()
 
-        coVerify { pinCodeMigrator.getDecryptedPinCode() }
+        coVerify { legacyPinCodeMigrator.getDecryptedPinCode() }
         verify { secretStoringUtils.securelyStoreBytes(any(), any()) }
         coVerify { pinCodeStore.savePinCode(any()) }
         verify { keyStore.deleteEntry(LEGACY_PIN_CODE_KEY_ALIAS) }
@@ -145,9 +147,9 @@ class PinCodeMigratorTests {
         every { buildVersionSdkIntProvider.get() } returns Build.VERSION_CODES.LOLLIPOP
         saveLegacyPinCode(pinCode)
 
-        pinCodeMigrator.migrate(alias)
+        legacyPinCodeMigrator.migrate()
 
-        coVerify { pinCodeMigrator.getDecryptedPinCode() }
+        coVerify { legacyPinCodeMigrator.getDecryptedPinCode() }
         verify { secretStoringUtils.securelyStoreBytes(any(), any()) }
         coVerify { pinCodeStore.savePinCode(any()) }
         verify { keyStore.deleteEntry(LEGACY_PIN_CODE_KEY_ALIAS) }

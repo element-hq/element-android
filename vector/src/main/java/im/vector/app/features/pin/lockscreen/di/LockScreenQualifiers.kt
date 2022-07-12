@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,14 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.util
+package im.vector.app.features.pin.lockscreen.di
 
-interface BuildVersionSdkIntProvider {
-    /**
-     * Return the current version of the Android SDK.
-     */
-    fun get(): Int
+import javax.inject.Qualifier
 
-    /**
-     * Checks the if the current OS version is equal or greater than [version].
-     * @return A `non-null` result if true, `null` otherwise.
-     */
-    fun <T> whenAtLeast(version: Int, result: () -> T): T? {
-        return if (get() >= version) {
-            result()
-        } else null
-    }
-}
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class PinCodeKeyAlias
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class BiometricKeyAlias
