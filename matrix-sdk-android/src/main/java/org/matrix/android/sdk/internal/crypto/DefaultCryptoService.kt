@@ -820,7 +820,7 @@ internal class DefaultCryptoService @Inject constructor(
                 EventType.SEND_SECRET -> {
                     onSecretSendReceived(event)
                 }
-                EventType.ROOM_KEY_WITHHELD -> {
+                in EventType.ROOM_KEY_WITHHELD -> {
                     onKeyWithHeldReceived(event)
                 }
                 else -> {
@@ -869,7 +869,7 @@ internal class DefaultCryptoService @Inject constructor(
                 senderKey = withHeldContent.senderKey,
                 fromDevice = withHeldContent.fromDevice,
                 event = Event(
-                        type = EventType.ROOM_KEY_WITHHELD,
+                        type = EventType.ROOM_KEY_WITHHELD.first(),
                         senderId = senderId,
                         content = event.getClearContent()
                 )

@@ -315,7 +315,7 @@ internal class IncomingKeyRequestManager @Inject constructor(
         )
 
         val params = SendToDeviceTask.Params(
-                EventType.ROOM_KEY_WITHHELD,
+                EventType.ROOM_KEY_WITHHELD.first(),
                 MXUsersDevicesMap<Any>().apply {
                     setObject(request.requestingUserId, request.requestingDeviceId, withHeldContent)
                 }
