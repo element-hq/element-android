@@ -71,6 +71,11 @@ class DebugFeaturesStateFactory @Inject constructor(
                                 factory = VectorFeatures::allowExternalUnifiedPushDistributors
                         ),
                         createBooleanFeature(
+                                label = "Force usage of OpusEncoder library",
+                                key = DebugFeatureKeys.forceUsageOfOpusEncoder,
+                                factory = VectorFeatures::forceUsageOfOpusEncoder
+                        ),
+                        createBooleanFeature(
                                 label = "Start DM on first message",
                                 key = DebugFeatureKeys.startDmOnFirstMsg,
                                 factory = VectorFeatures::shouldStartDmOnFirstMessage
