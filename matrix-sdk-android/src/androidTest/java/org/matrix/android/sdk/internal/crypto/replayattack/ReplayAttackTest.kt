@@ -68,7 +68,7 @@ class ReplayAttackTest : InstrumentedTest {
                     {
                         fail("Decryption should have fail because of duplicate index")
                     },
-                    { err, code ->
+                    { err, _ ->
                         assertEquals(MXCryptoError.ErrorType.DUPLICATED_MESSAGE_INDEX, (err as MXCryptoError.Base).errorType)
                     }
             )
