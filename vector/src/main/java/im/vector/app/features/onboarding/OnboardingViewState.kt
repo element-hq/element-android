@@ -49,6 +49,9 @@ data class OnboardingViewState(
         val isForceLoginFallbackEnabled: Boolean = false,
 
         @PersistState
+        val registrationState: RegistrationState = RegistrationState(),
+
+        @PersistState
         val selectedHomeserver: SelectedHomeserverState = SelectedHomeserverState(),
 
         @PersistState
@@ -94,4 +97,10 @@ data class ResetState(
 @Parcelize
 data class SelectedAuthenticationState(
         val description: AuthenticationDescription? = null,
+) : Parcelable
+
+@Parcelize
+data class RegistrationState(
+        val isUserNameAvailable: Boolean = false,
+        val selectedMatrixId: String? = null,
 ) : Parcelable

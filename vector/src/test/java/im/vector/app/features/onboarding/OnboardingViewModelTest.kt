@@ -290,13 +290,13 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `given a full matrix id, when maybe updating homeserver, then updates selected homeserver state and emits edited event`() = runTest {
-        viewModelWith(initialState.copy(onboardingFlow = OnboardingFlow.SignUp))
+    fun `given a full matrix id, when a login username is entered, then updates selected homeserver state and emits edited event`() = runTest {
+        viewModelWith(initialState.copy(onboardingFlow = OnboardingFlow.SignIn))
         givenCanSuccessfullyUpdateHomeserver(A_HOMESERVER_URL, SELECTED_HOMESERVER_STATE)
         val test = viewModel.test()
         val fullMatrixId = "@a-user:${A_HOMESERVER_URL.removePrefix("https://")}"
 
-        viewModel.handle(OnboardingAction.UserNameEnteredAction.Registration(fullMatrixId))
+        viewModel.handle(OnboardingAction.UserNameEnteredAction.Login(fullMatrixId))
 
         test
                 .assertStatesChanges(
@@ -311,12 +311,11 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `given a username, when maybe updating homeserver, then does nothing`() = runTest {
-        viewModelWith(initialState.copy(onboardingFlow = OnboardingFlow.SignUp))
+    fun `given a username, when a login username is entered, then does nothing`() = runTest {
         val test = viewModel.test()
         val onlyUsername = "a-username"
 
-        viewModel.handle(OnboardingAction.UserNameEnteredAction.Registration(onlyUsername))
+        viewModel.handle(OnboardingAction.UserNameEnteredAction.Login(onlyUsername))
 
         test
                 .assertStates(initialState)

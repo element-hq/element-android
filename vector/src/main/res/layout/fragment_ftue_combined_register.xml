@@ -34,8 +34,8 @@
             android:layout_height="52dp"
             app:layout_constraintBottom_toTopOf="@id/createAccountHeaderIcon"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0"
-            app:layout_constraintVertical_chainStyle="packed" />
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintVertical_bias="0" />
 
         <ImageView
             android:id="@+id/createAccountHeaderIcon"
@@ -62,7 +62,7 @@
             android:gravity="center"
             android:text="@string/ftue_auth_create_account_title"
             android:textColor="?vctr_content_primary"
-            app:layout_constraintBottom_toTopOf="@id/createAccountHeaderTitle"
+            app:layout_constraintBottom_toTopOf="@id/titleContentSpacing"
             app:layout_constraintEnd_toEndOf="@id/createAccountGutterEnd"
             app:layout_constraintStart_toStartOf="@id/createAccountGutterStart"
             app:layout_constraintTop_toBottomOf="@id/createAccountHeaderIcon" />
@@ -160,18 +160,18 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="@string/ftue_auth_create_account_username_entry_footer"
             app:layout_constraintBottom_toTopOf="@id/entrySpacing"
             app:layout_constraintEnd_toEndOf="@id/createAccountGutterEnd"
             app:layout_constraintStart_toStartOf="@id/createAccountGutterStart"
-            app:layout_constraintTop_toBottomOf="@id/createAccountInput" />
+            app:layout_constraintTop_toBottomOf="@id/createAccountInput"
+            tools:text="Others can discover you %s" />
 
         <Space
             android:id="@+id/entrySpacing"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@id/createAccountPasswordInput"
-            app:layout_constraintHeight_percent="0.03"
+            app:layout_constraintHeight_percent="0.02"
             app:layout_constraintTop_toBottomOf="@id/createAccountEntryFooter" />
 
         <com.google.android.material.textfield.TextInputLayout
