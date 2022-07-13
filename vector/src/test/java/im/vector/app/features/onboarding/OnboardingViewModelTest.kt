@@ -296,7 +296,7 @@ class OnboardingViewModelTest {
         val test = viewModel.test()
         val fullMatrixId = "@a-user:${A_HOMESERVER_URL.removePrefix("https://")}"
 
-        viewModel.handle(OnboardingAction.MaybeUpdateHomeserverFromMatrixId(fullMatrixId))
+        viewModel.handle(OnboardingAction.UserNameEnteredAction.Registration(fullMatrixId))
 
         test
                 .assertStatesChanges(
@@ -316,7 +316,7 @@ class OnboardingViewModelTest {
         val test = viewModel.test()
         val onlyUsername = "a-username"
 
-        viewModel.handle(OnboardingAction.MaybeUpdateHomeserverFromMatrixId(onlyUsername))
+        viewModel.handle(OnboardingAction.UserNameEnteredAction.Registration(onlyUsername))
 
         test
                 .assertStates(initialState)

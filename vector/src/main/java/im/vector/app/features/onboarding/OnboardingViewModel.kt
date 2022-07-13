@@ -144,7 +144,7 @@ class OnboardingViewModel @AssistedInject constructor(
             is OnboardingAction.UpdateSignMode -> handleUpdateSignMode(action)
             is OnboardingAction.InitWith -> handleInitWith(action)
             is OnboardingAction.HomeServerChange -> withAction(action) { handleHomeserverChange(action) }
-            is OnboardingAction.MaybeUpdateHomeserverFromMatrixId -> handleMaybeUpdateHomeserver(action)
+            is OnboardingAction.UserNameEnteredAction -> handleUserNameEntered(action)
             is AuthenticateAction -> withAction(action) { handleAuthenticateAction(action) }
             is OnboardingAction.LoginWithToken -> handleLoginWithToken(action)
             is OnboardingAction.WebLoginSuccess -> handleWebLoginSuccess(action)
@@ -167,10 +167,17 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleMaybeUpdateHomeserver(action: OnboardingAction.MaybeUpdateHomeserverFromMatrixId) {
-        val isFullMatrixId = MatrixPatterns.isUserId(action.userId)
+    private fun handleUserNameEntered(action: OnboardingAction.UserNameEnteredAction) {
+        when(action) {
+            is OnboardingAction.UserNameEnteredAction.Login -> maybeUpdateHomeserver(action.userId)
+            is OnboardingAction.UserNameEnteredAction.Registration -> maybeUpdateHomeserver(action.userId)
+        }
+    }
+
+    private fun maybeUpdateHomeserver(userNameOrMatrixId: String) {
+        val isFullMatrixId = MatrixPatterns.isUserId(userNameOrMatrixId)
         if (isFullMatrixId) {
-            val domain = action.userId.getServerName().substringBeforeLast(":").ensureProtocol()
+            val domain = userNameOrMatrixId.getServerName().substringBeforeLast(":").ensureProtocol()
             handleHomeserverChange(OnboardingAction.HomeServerChange.EditHomeServer(domain))
         } else {
             // ignore the action

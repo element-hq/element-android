@@ -70,7 +70,7 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
         views.editServerButton.debouncedClicks { viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.EditServerSelection)) }
         views.createAccountPasswordInput.setOnImeDoneListener { submit() }
         views.createAccountInput.setOnFocusLostListener {
-            viewModel.handle(OnboardingAction.MaybeUpdateHomeserverFromMatrixId(views.createAccountInput.content()))
+            viewModel.handle(OnboardingAction.UserNameEnteredAction.Registration(views.createAccountInput.content()))
         }
     }
 

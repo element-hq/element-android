@@ -60,7 +60,7 @@ class FtueAuthCombinedLoginFragment @Inject constructor(
         views.loginRoot.realignPercentagesToParent()
         views.editServerButton.debouncedClicks { viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.EditServerSelection)) }
         views.loginPasswordInput.setOnImeDoneListener { submit() }
-        views.loginInput.setOnFocusLostListener { viewModel.handle(OnboardingAction.MaybeUpdateHomeserverFromMatrixId(views.loginInput.content())) }
+        views.loginInput.setOnFocusLostListener { viewModel.handle(OnboardingAction.UserNameEnteredAction.Login(views.loginInput.content())) }
         views.loginForgotPassword.debouncedClicks { viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnForgetPasswordClicked)) }
     }
 
