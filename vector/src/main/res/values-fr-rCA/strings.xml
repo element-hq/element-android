@@ -2071,4 +2071,9 @@
     <string name="missing_permissions_title">Permissions manquantes</string>
     <string name="denied_permission_voice_message">Pour envoyer des messages vocaux, veuillez accorder la permission Microphone.</string>
     <string name="denied_permission_camera">Pour effectuer cette action, veuillez autoriser la permission Caméra depuis les réglages système.</string>
+    <string name="initial_sync_request_content">${app_name} a besoin d’effacer le cache pour la mise-à-jour, pour la raison suivante :
+\n%s
+\n
+\nCette action va redémarrer l’application et pourra prendre du temps.</string>
+    <string name="initial_sync_request_title">Requête de synchronisation initiale</string>
 </resources>
