@@ -1,0 +1,1 @@
+Upgrade dependency `io.element.android.opusencoder` to `v1.0.4`. This should fix some flaky instrumented tests.
