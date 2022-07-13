@@ -22,6 +22,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import com.airbnb.mvrx.viewModel
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -47,6 +48,8 @@ import im.vector.app.features.signout.hard.SignedOutActivity
 import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.ui.UiStateRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
@@ -84,6 +87,8 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
         }
     }
 
+    private val mainViewModel: MainViewModel by viewModel()
+
     override fun getBinding() = ActivityMainBinding.inflate(layoutInflater)
 
     override fun getOtherThemes() = ActivityOtherThemes.Launcher
@@ -103,6 +108,21 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        mainViewModel.viewEvents.stream()
+                .onEach(::handleViewEvents)
+                .launchIn(lifecycleScope)
+
+        mainViewModel.handle(MainViewAction.StartApp)
+    }
+
+    private fun handleViewEvents(event: MainViewEvent) {
+        when (event) {
+            MainViewEvent.AppStarted -> handleAppStarted()
+        }
+    }
+
+    private fun handleAppStarted() {
         args = parseArgs()
         if (args.clearCredentials || args.isUserLoggedOut || args.clearCache) {
             clearNotifications()
