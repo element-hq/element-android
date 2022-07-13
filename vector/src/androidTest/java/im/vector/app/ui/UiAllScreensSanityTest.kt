@@ -104,21 +104,21 @@ class UiAllScreensSanityTest {
             createSpace {
                 createAndCrawl(spaceName)
             }
-            val publicSpace = UUID.randomUUID().toString()
+            val publicSpaceName = UUID.randomUUID().toString()
             createSpace {
-                createPublicSpace(publicSpace)
+                createPublicSpace(publicSpaceName)
             }
 
-            spaceMenu(publicSpace) {
+            spaceMenu(publicSpaceName) {
                 spaceMembers()
                 spaceSettings {
                     crawl()
                 }
                 exploreRooms()
 
-                invitePeople().also { openMenu(publicSpace) }
-                addRoom().also { openMenu(publicSpace) }
-                addSpace().also { openMenu(publicSpace) }
+                invitePeople().also { openMenu(publicSpaceName) }
+                addRoom().also { openMenu(publicSpaceName) }
+                addSpace().also { openMenu(publicSpaceName) }
 
                 leaveSpace()
             }
