@@ -22,6 +22,7 @@ import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.MatrixPatterns.getServerName
 import org.matrix.android.sdk.api.auth.AuthenticationService
+import org.matrix.android.sdk.api.auth.LoginType
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.LoginFlowResult
@@ -361,7 +362,7 @@ internal class DefaultAuthenticationService @Inject constructor(
             homeServerConnectionConfig: HomeServerConnectionConfig,
             credentials: Credentials
     ): Session {
-        return sessionCreator.createSession(credentials, homeServerConnectionConfig)
+        return sessionCreator.createSession(credentials, homeServerConnectionConfig, LoginType.SSO)
     }
 
     override suspend fun getWellKnownData(

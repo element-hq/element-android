@@ -971,7 +971,6 @@
         <item quantity="one">%d utilisateur a lu</item>
         <item quantity="other">%d utilisateurs ont lu</item>
     </plurals>
-    <string name="error_attachment">Une erreur est survenue pendant la récupération de la pièce jointe.</string>
     <string name="attachment_type_file">Fichier</string>
     <string name="attachment_type_contact">Contact</string>
     <string name="attachment_type_camera">Appareil photo</string>
@@ -2500,4 +2499,34 @@
     <string name="time_unit_second_short">s</string>
     <string name="time_unit_minute_short">min</string>
     <string name="time_unit_hour_short">h</string>
+    <string name="live_location_labs_promotion_switch_title">Activer le partage de localisation</string>
+    <string name="live_location_labs_promotion_description">Attention : c\'est une fonctionnalité expérimentale qui utilise une implémentation temporaire. Cela implique que vous ne pourrez pas supprimer votre historique de positions, et les utilisateurs avancés pourront voir votre historique de positions même après avoir arrêter le partage de votre position en continu dans ce salon.</string>
+    <string name="live_location_labs_promotion_title">Partage de position en continu</string>
+    <string name="settings_troubleshoot_test_current_gateway">Passerelle actuelle : %s</string>
+    <string name="settings_troubleshoot_test_current_gateway_title">Passerelle</string>
+    <string name="settings_troubleshoot_test_current_endpoint_failed">Impossible de trouver le point de connexion.</string>
+    <string name="settings_troubleshoot_test_current_endpoint_success">Point de connexion actuel : %s</string>
+    <string name="settings_troubleshoot_test_current_endpoint_title">Point de connexion</string>
+    <string name="settings_troubleshoot_test_current_distributor">Utilise %s actuellement.</string>
+    <string name="settings_troubleshoot_test_current_distributor_title">Méthode</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="one">%d méthode trouvée.</item>
+        <item quantity="other">%d méthodes trouvées.</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_distributors_fdroid">Aucune autre méthode que la synchronisation en arrière-plan n’a été trouvée.</string>
+    <string name="settings_troubleshoot_test_distributors_gplay">Aucune autre méthode que Google Play Service n’a été trouvée.</string>
+    <string name="settings_troubleshoot_test_distributors_title">Méthodes disponibles</string>
+    <string name="settings_notification_method">Méthode de notification</string>
+    <string name="unifiedpush_distributor_background_sync">Synchronisation en arrière-plan</string>
+    <string name="unifiedpush_distributor_fcm_fallback">Google Services</string>
+    <string name="unifiedpush_getdistributors_dialog_title">Choisissez comment recevoir les notifications</string>
+    <string name="settings_security_pin_code_use_biometrics_error">Impossible d’activer l’authentification biométrique.</string>
+    <string name="auth_biometric_key_invalidated_message">L’authentification biométrique a été désactivée car une nouvelle méthode d’authentification biométrique a été ajoutée récemment. Vous pouvez la réactiver dans les Paramètres.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">Réinitialiser la méthode de notification</string>
+    <string name="push_gateway_item_profile_tag">Étiquette de profil :</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">Le jeton du point de connexion n’a pas pu être enregistré sur le serveur d’accueil :
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">Le point de connexion a été correctement enregistré sur le serveur d’accueil.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_title">Enregistrement du point de connexion</string>
+    <string name="action_next">Suivant</string>
 </resources>

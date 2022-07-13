@@ -29,7 +29,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
 
-@EpoxyModelClass(layout = R2.layout.item_jv_base_value)
+@EpoxyModelClass
 internal abstract class ValueItem : EpoxyModelWithHolder<ValueItem.Holder>() {
 
     @EpoxyAttribute
@@ -43,6 +43,8 @@ internal abstract class ValueItem : EpoxyModelWithHolder<ValueItem.Holder>() {
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var itemClickListener: View.OnClickListener? = null
+
+    override fun getDefaultLayout() = R.layout.item_jv_base_value
 
     override fun bind(holder: Holder) {
         super.bind(holder)

@@ -21,7 +21,6 @@ import android.content.Intent
 import android.graphics.Typeface
 import android.util.TypedValue
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.SearchView
 import androidx.core.view.isVisible
@@ -33,6 +32,7 @@ import im.vector.app.EmojiCompatFontProvider
 import im.vector.app.R
 import im.vector.app.core.extensions.observeEvent
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.databinding.ActivityEmojiReactionPickerBinding
 import im.vector.app.features.reactions.data.EmojiDataSource
 import im.vector.lib.core.utils.flow.throttleFirst
@@ -48,12 +48,16 @@ import javax.inject.Inject
  * TODO Finish Refactor to vector base activity
  */
 @AndroidEntryPoint
-class EmojiReactionPickerActivity : VectorBaseActivity<ActivityEmojiReactionPickerBinding>(),
-        EmojiCompatFontProvider.FontProviderListener {
+class EmojiReactionPickerActivity :
+        VectorBaseActivity<ActivityEmojiReactionPickerBinding>(),
+        EmojiCompatFontProvider.FontProviderListener,
+        VectorMenuProvider {
 
     lateinit var viewModel: EmojiChooserViewModel
 
     override fun getMenuRes() = R.menu.menu_emoji_reaction_picker
+
+    override fun handleMenuItemSelected(item: MenuItem) = false
 
     override fun getBinding() = ActivityEmojiReactionPickerBinding.inflate(layoutInflater)
 
@@ -138,10 +142,7 @@ class EmojiReactionPickerActivity : VectorBaseActivity<ActivityEmojiReactionPick
         super.onDestroy()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater: MenuInflater = menuInflater
-        inflater.inflate(getMenuRes(), menu)
-
+    override fun handlePostCreateMenu(menu: Menu) {
         val searchItem = menu.findItem(R.id.search)
         (searchItem.actionView as? SearchView)?.let { searchView ->
             searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
@@ -175,7 +176,6 @@ class EmojiReactionPickerActivity : VectorBaseActivity<ActivityEmojiReactionPick
                     .launchIn(lifecycleScope)
         }
         searchItem.expandActionView()
-        return true
     }
 
     // TODO move to ThemeUtils when core module is created

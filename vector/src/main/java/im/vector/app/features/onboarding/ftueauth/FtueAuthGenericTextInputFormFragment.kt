@@ -36,7 +36,6 @@ import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.databinding.FragmentLoginGenericTextInputFormBinding
 import im.vector.app.features.login.TextInputFormFragmentMode
 import im.vector.app.features.onboarding.OnboardingAction
-import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.RegisterAction
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -226,12 +225,7 @@ class FtueAuthGenericTextInputFormFragment @Inject constructor() : AbstractFtueA
                 views.loginGenericTextInputFormTil.error = errorFormatter.toHumanReadable(throwable)
             }
             TextInputFormFragmentMode.SetMsisdn -> {
-                if (throwable.is401()) {
-                    // This is normal use case, we go to the enter code screen
-                    viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnSendMsisdnSuccess(viewModel.currentThreePid ?: "")))
-                } else {
-                    views.loginGenericTextInputFormTil.error = errorFormatter.toHumanReadable(throwable)
-                }
+                views.loginGenericTextInputFormTil.error = errorFormatter.toHumanReadable(throwable)
             }
             TextInputFormFragmentMode.ConfirmMsisdn -> {
                 when {

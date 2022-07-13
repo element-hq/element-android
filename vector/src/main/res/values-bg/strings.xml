@@ -38,7 +38,6 @@
     <string name="notice_crypto_error_unknown_inbound_session_id">Устройството на подателя не изпрати ключовете за това съобщение.</string>
     <string name="room_displayname_room_invite">Покана за стая</string>
     <string name="room_displayname_two_members">%1$s и %2$s</string>
-
     <string name="room_displayname_empty_room">Празна стая</string>
     <string name="initial_sync_start_importing_account">Начална синхронизация:
 \nИмпортиране на профил…</string>
@@ -46,15 +45,16 @@
 \nИмпортиране на данни за шифроване</string>
     <string name="initial_sync_start_importing_account_rooms">Начална синхронизация:
 \nИмпортиране на стаи</string>
-    <string name="initial_sync_start_importing_account_joined_rooms">Начална синхронизация:
+    <string name="initial_sync_start_importing_account_joined_rooms">Начална синхронизация.
+\nЗареждане на моите разговори
 \nИмпортиране на стаи, от които съм част</string>
-    <string name="initial_sync_start_importing_account_invited_rooms">Начална синхронизация:
+    <string name="initial_sync_start_importing_account_invited_rooms">Начална синхронизация.
 \nИмпортиране на стаи, към които съм поканен</string>
-    <string name="initial_sync_start_importing_account_left_rooms">Начална синхронизация:
+    <string name="initial_sync_start_importing_account_left_rooms">Начална синхронизация.
 \nИмпортиране на стаи, които съм напуснал</string>
-    <string name="initial_sync_start_importing_account_groups">Начална синхронизация:
+    <string name="initial_sync_start_importing_account_groups">Начална синхронизация.
 \nИмпортиране на общности</string>
-    <string name="initial_sync_start_importing_account_data">Начална синхронизация:
+    <string name="initial_sync_start_importing_account_data">Начална синхронизация.
 \nИмпортиране на данни за профила</string>
     <string name="notice_room_update">%s обнови тази стая.</string>
     <string name="event_status_sending_message">Изпращане на съобщение…</string>
@@ -194,7 +194,6 @@
     <string name="call_in_progress">В момента тече разговор…</string>
     <string name="call_connecting">Свързване…</string>
     <string name="call_ended">Разговорът приключи</string>
-
     <plurals name="room_title_members">
         <item quantity="one">%d член</item>
         <item quantity="other">%d членове</item>
@@ -226,7 +225,6 @@
     <string name="notification_noisy_notifications">Шумни известия</string>
     <string name="notification_silent_notifications">Уведомления без звук</string>
     <string name="view_decrypted_source">Прегледай разшифрования източник</string>
-
     <string name="or">или</string>
     <string name="action_invite">Покани</string>
     <string name="action_sign_out">Отписване</string>
@@ -248,7 +246,6 @@
     <string name="matrix_only_filter">Само потребители на Matrix</string>
     <string name="no_result_placeholder">Няма резултати</string>
     <string name="rooms_header">Стаи</string>
-
     <string name="groups_header">Общности</string>
     <string name="send_bug_report_include_logs">Изпращане на логове</string>
     <string name="send_bug_report_include_crash_logs">Изпращане на логове за забивания</string>
@@ -284,9 +281,7 @@
     <string name="auth_recaptcha_message">Този Home сървър би искал да се увери, че не сте робот</string>
     <string name="auth_reset_password_missing_email">Имейл адресът, свързан с профила Ви, трябва да бъде въведен.</string>
     <string name="auth_reset_password_error_unauthorized">Неуспешно потвърждаване на имейл адреса: уверете се, че сте кликнали върху връзката в имейла</string>
-
     <string name="send_bug_report_progress">Напредък (%s%%)</string>
-
     <string name="login_error_invalid_home_server">Въведете валиден URL адрес</string>
     <string name="login_error_bad_json">Грешно формиран JSON</string>
     <string name="login_error_not_json">Не съдържаше валиден JSON</string>
@@ -322,12 +317,9 @@
     <string name="ssl_only_accept">Приемайте сертификата само ако администратора на сървъра е публикувал отпечатък, който съвпада с този по-горе.</string>
     <string name="ssl_trust">Довери се</string>
     <string name="ssl_do_not_trust">Не се доверявай</string>
-
     <string name="search_hint">Търси</string>
     <string name="search_members_hint">Филтриране на членовете</string>
     <string name="search_no_results">Няма резултати</string>
-
-
     <string name="room_settings_all_messages">Всички съобщения</string>
     <string name="room_settings_add_homescreen_shortcut">Добави на главния екран</string>
     <string name="settings_profile_picture">Профилна снимка</string>
@@ -370,7 +362,6 @@
     <string name="devices_details_device_name">Обнови публичното име</string>
     <string name="devices_details_last_seen_title">Последно видян</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-
     <string name="devices_delete_dialog_title">Автентикация</string>
     <string name="settings_logged_in">Влезли сте като</string>
     <string name="settings_home_server">Home сървър</string>
@@ -406,7 +397,6 @@
     <string name="room_settings_labs_warning_message">Това са експериментални функции, които могат да се счупят по неочаквани начини. Внимавайте при използване.</string>
     <string name="room_settings_set_main_address">Задай като основен адрес</string>
     <string name="room_settings_unset_main_address">Премахни задаването като основен адрес</string>
-
     <string name="settings_theme">Тема</string>
     <string name="encryption_information_decryption_error">Грешка при разшифроване</string>
     <string name="encryption_information_device_name">Публично име</string>
@@ -418,7 +408,6 @@
     <string name="encryption_export_export">Експортирай</string>
     <string name="passphrase_enter_passphrase">Въведи парола</string>
     <string name="passphrase_confirm_passphrase">Потвърди парола</string>
-
     <string name="encryption_import_e2e_room_keys">Импортирай E2E ключове за стая</string>
     <string name="encryption_import_room_keys">Импортиране на ключове за стая</string>
     <string name="encryption_import_room_keys_summary">Импортирай ключовете в локален файл</string>
@@ -430,7 +419,6 @@
     <string name="encryption_information_verify">Потвърди</string>
     <string name="encryption_information_verify_device_warning">За да потвърдите, че на това устройство може да се вярва, моля свържете се със собственика му по друг начин (напр. на живо или чрез телефонен разговор) и го попитайте дали ключът, който вижда в настройките на потребителя за това устройство, съвпада с ключа по-долу:</string>
     <string name="encryption_information_verify_device_warning2">Ако съвпада, моля натиснете бутона за потвърждение по-долу. Ако не съвпада, то тогава някой друг имитира това устройство и вероятно бихте искали да го вкарате в черния списък. В бъдеще този процес на потвърждение ще бъде по-лесен.</string>
-
     <string name="directory_server_placeholder">Адрес на Home сървър</string>
     <string name="directory_server_all_rooms_on_server">Всички стаи на сървър %s</string>
     <string name="directory_server_native_rooms">Всички изцяло %s стаи</string>
@@ -453,14 +441,10 @@
     <string name="widget_integration_missing_user_id">Липсва user_id в заявката.</string>
     <string name="widget_integration_room_not_visible">Стая %s не е видима.</string>
     <string name="room_add_matrix_apps">Добави Matrix приложения</string>
-
-
     <string name="permissions_rationale_msg_record_audio">${app_name} иска разшерение за достъп до Вашия микрофон, за да се извърши звуков разговор.</string>
-
     <string name="permissions_rationale_msg_camera_and_audio">${app_name} иска разширение за достъп до микрофона и камерата Ви, за да извърши видео разговор.
 \n
 \nМоля, разрешете достъпа от следващия прозорец, който ще се покаже, за да можете да се обадите.</string>
-
     <string name="yes">ДА</string>
     <string name="no">НЕ</string>
     <string name="_continue">Продължи</string>
@@ -470,7 +454,6 @@
     <string name="avatar">Профилна снимка</string>
     <string name="list_members">Списък с членове</string>
     <string name="room_jump_to_first_unread">Отиди до първото непрочетено съобщение.</string>
-
     <string name="room_participants_leave_prompt_title">Напускане на стая</string>
     <string name="room_participants_action_invite">Покани</string>
     <string name="settings_app_info_link_summary">Покажи системния екран с информация за приложението.</string>
@@ -490,7 +473,6 @@
         <item quantity="one">%d непрочетено съобщение</item>
         <item quantity="other">%d непрочетени съобщения</item>
     </plurals>
-
     <string name="font_size">Размер на шрифта</string>
     <string name="tiny">Ситен</string>
     <string name="small">Малък</string>
@@ -559,16 +541,10 @@
     <string name="room_tombstone_continuation_link">Кореспонденцията продължава тук</string>
     <string name="room_tombstone_continuation_description">Тази стая е продължение от предишна кореспонденция</string>
     <string name="room_tombstone_predecessor_link">Натиснете тук за да видите по-стари съобщения</string>
-
-
-
-
     <plurals name="room_details_selected">
         <item quantity="one">%d избран</item>
         <item quantity="other">%d избрани</item>
     </plurals>
-
-
     <string name="system_alerts_header">Системни уведомления</string>
     <string name="resource_limit_contact_admin">свържете се със администратора на услугата</string>
     <string name="resource_limit_soft_default">Сървърът е надвишил някой от лимитите си, така че <b>някои потребители няма да успеят да влязат в профила си</b>.</string>
@@ -660,7 +636,6 @@
     <string name="settings_troubleshoot_test_battery_success">${app_name} не се влияе от Оптимизация на батерията.</string>
     <string name="settings_troubleshoot_test_battery_failed">Ако потребител остави устройството неподвижно с изключен екран за известно време, то влиза в режим на заспиване. Това предотвратява приложенията да достъпват мрежата и отлага техните задачи, синхронизации и стандартни аларми.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Игнорирай оптимизацията</string>
-
     <string name="no_valid_google_play_services_apk">Не беше открит валиден APK пакет за Google Play услугите. Уведомленията може да не работят правилно.</string>
     <string name="video_call_in_progress">В момента тече видео разговор…</string>
     <string name="title_activity_keys_backup_setup">Резервно копие на ключовете</string>
@@ -697,7 +672,6 @@
     <string name="keys_backup_setup_step3_button_title">Готово</string>
     <string name="keys_backup_setup_step3_copy_button_title">Запази ключа за възстановяване</string>
     <string name="keys_backup_setup_step3_save_button_title">Запази като файл</string>
-
     <string name="keys_backup_setup_step3_please_make_copy">Моля, направете копие</string>
     <string name="keys_backup_setup_step3_share_intent_chooser_title">Сподели ключа за възстановяване с…</string>
     <string name="keys_backup_setup_step3_generating_key_status">Генериране на ключ за възстановяване използвайки парола. Процесът може да отнеме няколко секунди.</string>
@@ -783,7 +757,6 @@
     <string name="keys_backup_info_title_algorithm">Алгоритъм</string>
     <string name="keys_backup_info_title_signature">Подпис</string>
     <string name="keys_backup_settings_untrusted_backup">За да използвате резервно копие на ключовете, възстановете с паролата или ключа за възстановяване.</string>
-
     <string name="keys_backup_restoring_computing_key_waiting_message">Изчисляване на ключ за възстановяване…</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">Изтегляне на ключове…</string>
     <string name="keys_backup_restoring_importing_keys_waiting_message">Импортиране на ключове…</string>
@@ -791,7 +764,6 @@
     <string name="settings_send_message_with_enter">Изпращай съобщения с Enter</string>
     <string name="settings_send_message_with_enter_summary">Enter бутонът на клавиатурата ще изпраща съобщение вместо да добавя нов ред</string>
     <string name="settings_fail_to_update_password_invalid_current_password">Паролата не е валидна</string>
-
     <string name="settings_media">Медия</string>
     <string name="settings_default_compression">Компресия по подразбиране</string>
     <string name="compression_opt_list_choose">Избери</string>
@@ -829,8 +801,6 @@
     <string name="ignore_request_short_label">Отхвърли</string>
     <string name="sas_verified">Потвърдено!</string>
     <string name="sas_got_it">Разбрах</string>
-
-
     <string name="sas_incoming_request_notif_title">Заявка за потвърждение</string>
     <string name="sas_incoming_request_notif_content">%s иска да потвърди устройството Ви</string>
     <string name="sas_error_unknown">Неизвестна грешка</string>
@@ -927,7 +897,6 @@
     <string name="none">Нищо</string>
     <string name="action_revoke">Оттегли</string>
     <string name="action_disconnect">Прекъсни</string>
-
     <string name="login_error_homeserver_not_found">Неуспешна връзка със сървъра на този адрес, моля проверете</string>
     <string name="settings_background_fdroid_sync_mode">Режим на фонова синхронизация</string>
     <string name="settings_background_fdroid_sync_mode_battery">Пестящ батерия</string>
@@ -938,7 +907,6 @@
 \nТова ще повлияе на използването на антената и батерията. Ще се показва перманентна нотификация, че ${app_name} слуша за събития.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Без фонова синхронизация</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">Няма да бъдете уведомени за входящи съобщения, когато приложението е във фонов режим.</string>
-
     <string name="settings_discovery_category">Откриване</string>
     <string name="settings_discovery_manage">Управлявайте настройките на откриваемостта.</string>
     <string name="identity_server_not_defined">Не използвате сървър за самоличност</string>
@@ -982,7 +950,6 @@
         <item quantity="one">%d потребител прочете</item>
         <item quantity="other">%d потребителя прочетоха</item>
     </plurals>
-    <string name="error_attachment">Възникна грешка при извличане на прикачения файл.</string>
     <string name="attachment_type_file">Файл</string>
     <string name="attachment_type_contact">Контакт</string>
     <string name="attachment_type_camera">Камера</string>
@@ -1008,7 +975,6 @@
     <string name="content_reported_as_inappropriate_content">Съдържанието беше докладвано като неподходящо. 
 \n 
 \nАко не искате да виждате повече съдържание от този потребител, може да ги игнорирате за да скриете съобщенията им.</string>
-
     <string name="login_error_no_homeserver_found">Това не е валиден адрес на Matrix сървър</string>
     <string name="settings_integrations">Интеграции</string>
     <string name="settings_integrations_summary">Използвайте мениджър на интеграции за да управлявате ботове, връзки с други мрежи, приспособления и стикери.
@@ -1298,7 +1264,6 @@
 \nСъобщенията ви са защитени чрез заключване, и само вие и получателят имате уникалните ключове да го отключите.</string>
     <string name="direct_room_profile_not_encrypted_subtitle">Съобщенията тук не са шифровани от-край-до-край.</string>
     <string name="room_profile_not_encrypted_subtitle">Съобщенията в тази стая не са шифровани от-край-до-край.</string>
-
     <string name="verification_request_waiting_for">Изчакване на %s…</string>
     <string name="verification_verified_user">Потвърден %s</string>
     <string name="verification_verify_user">Потвърди %s</string>
@@ -1596,7 +1561,6 @@
     <string name="bootstrap_cancel_text">Ако се откажете сега, може да загубите шифрованите съобщения и данни, в случай че загубите достъп до сесиите си.
 \n
 \nМоже също така да настроите защитено резервно копие и да управлявате ключовете си от Настройки.</string>
-
     <string name="bootstrap_crosssigning_save_cloud">Копирайте го в личното си облачно пространство</string>
     <string name="bootstrap_crosssigning_save_usb">Запазете го на USB флашка или резервен диск</string>
     <string name="bootstrap_crosssigning_print_it">Принтирайте го и го съхранете на безопасно място</string>
@@ -1759,9 +1723,9 @@
     <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Сървърите съдържащи IP адреси ще бъдат блокирани.</string>
     <string name="notice_room_server_acl_updated_ip_literals_allowed">• Сървърите съдържащи IP адреси ще бъдат разрешени.</string>
     <string name="notice_room_server_acl_updated_was_allowed">• Сървърите съдържащи %s бяха премахнати от списъка с разрешени.</string>
-    <string name="notice_room_server_acl_updated_allowed">• Сървърите съдържащи %s ще бъдат разрешени.</string>
-    <string name="notice_room_server_acl_updated_was_banned">"• Сървърите съдържащи  %s бяха премахнати от списъка с блокирани."</string>
-    <string name="notice_room_server_acl_updated_banned">"• Сървърите съдържащи  %s ще бъдат блокирани."</string>
+    <string name="notice_room_server_acl_updated_allowed">• Сървърите съдържащи %s сега ще бъдат разрешени.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• Сървърите съдържащи %s бяха премахнати от списъка с блокирани.</string>
+    <string name="notice_room_server_acl_updated_banned">• Сървърите съдържащи %s сега ще бъдат блокирани.</string>
     <string name="notice_room_server_acl_updated_title_by_you">Променихте сървърните разрешения (ACL) за тази стая.</string>
     <string name="notice_room_server_acl_updated_title">%s промени разрешенията (ACL) за тази стая.</string>
     <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Сървърите съдържащи IP адрес са блокирани.</string>
@@ -1770,4 +1734,6 @@
     <string name="notice_room_server_acl_set_banned">• Сървърите съдържащи %s са блокирани.</string>
     <string name="notice_room_server_acl_set_title_by_you">Настроихте сървърните разрешения (ACL) за тази стая.</string>
     <string name="notice_room_server_acl_set_title">%s настрой разрешенията (ACL) за тази стая.</string>
+    <string name="initial_sync_request_title">Първоначална заявка за синхронизация</string>
+    <string name="room_error_access_unauthorized">Нямате права да се присъедините към тази стая</string>
 </resources>

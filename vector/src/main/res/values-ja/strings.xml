@@ -1595,7 +1595,6 @@
     <string name="room_error_access_unauthorized">このルームへの参加は許可されていません</string>
     <string name="topic_prefix">"トピック: "</string>
     <string name="settings_troubleshoot_title">トラブルシューティング</string>
-    <string name="error_attachment">添付ファイルの取得中にエラーが発生しました。</string>
     <string name="a11y_close_keys_backup_banner">鍵のバックアップのバナーを閉じる</string>
     <string name="settings_notification_keyword_contains_invalid_character">キーワードに「%s」を含めることはできません</string>
     <string name="settings_notification_emails_enable_for_email">%sへのメール通知を有効にする</string>

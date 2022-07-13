@@ -30,8 +30,8 @@ import im.vector.app.core.epoxy.addTextChangedListenerOnce
 import im.vector.app.core.epoxy.setValueOnce
 import im.vector.app.core.platform.SimpleTextWatcher
 
-@EpoxyModelClass(layout = R.layout.item_form_multiline_text_input)
-abstract class FormMultiLineEditTextItem : VectorEpoxyModel<FormMultiLineEditTextItem.Holder>() {
+@EpoxyModelClass
+abstract class FormMultiLineEditTextItem : VectorEpoxyModel<FormMultiLineEditTextItem.Holder>(R.layout.item_form_multiline_text_input) {
 
     @EpoxyAttribute
     var hint: String? = null

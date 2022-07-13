@@ -21,8 +21,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import androidx.lifecycle.lifecycleScope
 import im.vector.app.R
+import im.vector.app.core.extensions.clearErrorOnChange
 import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.editText
 import im.vector.app.core.extensions.realignPercentagesToParent
@@ -34,10 +34,7 @@ import im.vector.app.databinding.FragmentFtueServerSelectionCombinedBinding
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewState
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.failure.isHomeserverUnavailable
-import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
 class FtueAuthCombinedServerSelectionFragment @Inject constructor() : AbstractFtueAuthFragment<FragmentFtueServerSelectionCombinedBinding>() {
@@ -66,9 +63,7 @@ class FtueAuthCombinedServerSelectionFragment @Inject constructor() : AbstractFt
         }
         views.chooseServerGetInTouch.debouncedClicks { openUrlInExternalBrowser(requireContext(), getString(R.string.ftue_ems_url)) }
         views.chooseServerSubmit.debouncedClicks { updateServerUrl() }
-        views.chooseServerInput.editText().textChanges()
-                .onEach { views.chooseServerInput.error = null }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+        views.chooseServerInput.clearErrorOnChange(viewLifecycleOwner)
     }
 
     private fun updateServerUrl() {

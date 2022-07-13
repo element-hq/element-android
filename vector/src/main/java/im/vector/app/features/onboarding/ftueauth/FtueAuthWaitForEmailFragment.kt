@@ -58,12 +58,7 @@ class FtueAuthWaitForEmailFragment @Inject constructor(
     }
 
     private fun setupUi() {
-        views.emailVerificationGradientContainer.setBackgroundResource(
-                when (themeProvider.isLightTheme()) {
-                    true -> R.drawable.bg_waiting_for_email_verification
-                    false -> R.drawable.bg_color_background
-                }
-        )
+        views.emailVerificationGradientContainer.setBackgroundResource(themeProvider.ftueBreakerBackground())
         views.emailVerificationTitle.text = getString(R.string.ftue_auth_email_verification_title)
                 .colorTerminatingFullStop(ThemeUtils.getColor(requireContext(), R.attr.colorSecondary))
         views.emailVerificationSubtitle.text = getString(R.string.ftue_auth_email_verification_subtitle, params.email)

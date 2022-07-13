@@ -38,8 +38,8 @@ import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
  * Can display an accessory on the right, that can be an image or an indeterminate progress.
  * If provided with an action, will display a button at the bottom of the list item.
  */
-@EpoxyModelClass(layout = R.layout.item_generic_with_value)
-abstract class GenericWithValueItem : VectorEpoxyModel<GenericWithValueItem.Holder>() {
+@EpoxyModelClass
+abstract class GenericWithValueItem : VectorEpoxyModel<GenericWithValueItem.Holder>(R.layout.item_generic_with_value) {
 
     @EpoxyAttribute
     var title: EpoxyCharSequence? = null

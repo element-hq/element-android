@@ -24,7 +24,8 @@ import timber.log.Timber
 
 internal open class OutboundGroupSessionInfoEntity(
         var serializedOutboundSessionData: String? = null,
-        var creationTime: Long? = null
+        var creationTime: Long? = null,
+        var shouldShareHistory: Boolean = false
 ) : RealmObject() {
 
     fun getOutboundGroupSession(): OlmOutboundGroupSession? {

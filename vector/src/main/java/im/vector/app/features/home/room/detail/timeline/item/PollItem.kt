@@ -26,7 +26,7 @@ import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_base)
+@EpoxyModelClass
 abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
 
     @EpoxyAttribute
@@ -42,7 +42,7 @@ abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
     var canVote: Boolean = false
 
     @EpoxyAttribute
-    var totalVotesText: String? = null
+    var votesStatus: String? = null
 
     @EpoxyAttribute
     var edited: Boolean = false
@@ -58,7 +58,7 @@ abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
         renderSendState(holder.view, holder.questionTextView)
 
         holder.questionTextView.text = pollQuestion?.charSequence
-        holder.totalVotesTextView.text = totalVotesText
+        holder.votesStatusTextView.text = votesStatus
 
         while (holder.optionsContainer.childCount < optionViewStates.size) {
             holder.optionsContainer.addView(PollOptionView(holder.view.context))
@@ -88,7 +88,7 @@ abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
     class Holder : AbsMessageItem.Holder(STUB_ID) {
         val questionTextView by bind<TextView>(R.id.questionTextView)
         val optionsContainer by bind<LinearLayout>(R.id.optionsContainer)
-        val totalVotesTextView by bind<TextView>(R.id.optionsTotalVotesTextView)
+        val votesStatusTextView by bind<TextView>(R.id.optionsVotesStatusTextView)
     }
 
     companion object {

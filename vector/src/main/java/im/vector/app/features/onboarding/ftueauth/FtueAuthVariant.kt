@@ -20,6 +20,7 @@ import android.content.Intent
 import android.os.Parcelable
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.core.view.children
 import androidx.core.view.isVisible
@@ -29,7 +30,6 @@ import androidx.fragment.app.FragmentTransaction
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
-import im.vector.app.core.extensions.POP_BACK_STACK_EXCLUSIVE
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.popBackstack
@@ -162,41 +162,44 @@ class FtueAuthVariant(
                 )
             is OnboardingViewEvents.OnWebLoginError -> onWebLoginError(viewEvents)
             is OnboardingViewEvents.OnForgetPasswordClicked ->
+                when {
+                    vectorFeatures.isOnboardingCombinedLoginEnabled() -> addLoginStageFragmentToBackstack(FtueAuthResetPasswordEmailEntryFragment::class.java)
+                    else -> addLoginStageFragmentToBackstack(FtueAuthResetPasswordFragment::class.java)
+                }
+            is OnboardingViewEvents.OnResetPasswordEmailConfirmationSent -> {
+                supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                when {
+                    vectorFeatures.isOnboardingCombinedLoginEnabled() -> addLoginStageFragmentToBackstack(
+                            FtueAuthResetPasswordBreakerFragment::class.java,
+                            FtueAuthResetPasswordBreakerArgument(viewEvents.email),
+                    )
+                    else -> activity.addFragmentToBackstack(
+                            views.loginFragmentContainer,
+                            FtueAuthResetPasswordMailConfirmationFragment::class.java,
+                    )
+                }
+            }
+            OnboardingViewEvents.OnResetPasswordBreakerConfirmed -> {
+                supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 activity.addFragmentToBackstack(
                         views.loginFragmentContainer,
-                        FtueAuthResetPasswordFragment::class.java,
-                        option = commonOption
-                )
-            is OnboardingViewEvents.OnResetPasswordSendThreePidDone -> {
-                supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
-                activity.addFragmentToBackstack(
-                        views.loginFragmentContainer,
-                        FtueAuthResetPasswordMailConfirmationFragment::class.java,
+                        FtueAuthResetPasswordEntryFragment::class.java,
                         option = commonOption
                 )
             }
-            is OnboardingViewEvents.OnResetPasswordMailConfirmationSuccess -> {
-                supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
-                activity.addFragmentToBackstack(
-                        views.loginFragmentContainer,
-                        FtueAuthResetPasswordSuccessFragment::class.java,
-                        option = commonOption
-                )
+            is OnboardingViewEvents.OpenResetPasswordComplete -> {
+                supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                addLoginStageFragmentToBackstack(FtueAuthResetPasswordSuccessFragment::class.java)
             }
-            is OnboardingViewEvents.OnResetPasswordMailConfirmationSuccessDone -> {
-                // Go back to the login fragment
-                supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
+            OnboardingViewEvents.OnResetPasswordComplete -> {
+                Toast.makeText(activity, R.string.ftue_auth_password_reset_confirmation, Toast.LENGTH_SHORT).show()
+                activity.popBackstack()
             }
             is OnboardingViewEvents.OnSendEmailSuccess -> {
                 openWaitForEmailVerification(viewEvents.email)
             }
             is OnboardingViewEvents.OnSendMsisdnSuccess -> {
-                // Pop the enter Msisdn Fragment
-                supportFragmentManager.popBackStack(FRAGMENT_REGISTRATION_STAGE_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                addRegistrationStageFragmentToBackstack(
-                        FtueAuthGenericTextInputFormFragment::class.java,
-                        FtueAuthGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.ConfirmMsisdn, true, viewEvents.msisdn),
-                )
+                openMsisdnConfirmation(viewEvents.msisdn)
             }
             is OnboardingViewEvents.Failure,
             is OnboardingViewEvents.Loading ->
@@ -380,12 +383,21 @@ class FtueAuthVariant(
         when (stage) {
             is Stage.ReCaptcha -> onCaptcha(stage)
             is Stage.Email -> onEmail(stage)
-            is Stage.Msisdn -> addRegistrationStageFragmentToBackstack(
+            is Stage.Msisdn -> onMsisdn(stage)
+            is Stage.Terms -> onTerms(stage)
+            else -> Unit // Should not happen
+        }
+    }
+
+    private fun onMsisdn(stage: Stage) {
+        when {
+            vectorFeatures.isOnboardingCombinedRegisterEnabled() -> addRegistrationStageFragmentToBackstack(
+                    FtueAuthPhoneEntryFragment::class.java
+            )
+            else -> addRegistrationStageFragmentToBackstack(
                     FtueAuthGenericTextInputFormFragment::class.java,
                     FtueAuthGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.SetMsisdn, stage.mandatory),
             )
-            is Stage.Terms -> onTerms(stage)
-            else -> Unit // Should not happen
         }
     }
 
@@ -411,6 +423,20 @@ class FtueAuthVariant(
             else -> addRegistrationStageFragmentToBackstack(
                     FtueAuthLegacyWaitForEmailFragment::class.java,
                     FtueAuthWaitForEmailFragmentArgument(email),
+            )
+        }
+    }
+
+    private fun openMsisdnConfirmation(msisdn: String) {
+        supportFragmentManager.popBackStack(FRAGMENT_REGISTRATION_STAGE_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        when {
+            vectorFeatures.isOnboardingCombinedRegisterEnabled() -> addRegistrationStageFragmentToBackstack(
+                    FtueAuthPhoneConfirmationFragment::class.java,
+                    FtueAuthPhoneConfirmationFragmentArgument(msisdn),
+            )
+            else -> addRegistrationStageFragmentToBackstack(
+                    FtueAuthGenericTextInputFormFragment::class.java,
+                    FtueAuthGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.ConfirmMsisdn, true, msisdn),
             )
         }
     }
@@ -493,6 +519,16 @@ class FtueAuthVariant(
                 fragmentClass,
                 params,
                 tag = FRAGMENT_REGISTRATION_STAGE_TAG,
+                option = commonOption
+        )
+    }
+
+    private fun addLoginStageFragmentToBackstack(fragmentClass: Class<out Fragment>, params: Parcelable? = null) {
+        activity.addFragmentToBackstack(
+                views.loginFragmentContainer,
+                fragmentClass,
+                params,
+                tag = FRAGMENT_LOGIN_TAG,
                 option = commonOption
         )
     }

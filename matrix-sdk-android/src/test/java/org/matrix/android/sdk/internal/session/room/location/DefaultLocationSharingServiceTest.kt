@@ -51,6 +51,7 @@ private const val A_LATITUDE = 1.4
 private const val A_LONGITUDE = 40.0
 private const val AN_UNCERTAINTY = 5.0
 private const val A_TIMEOUT = 15_000L
+private const val A_DESCRIPTION = "description"
 
 @ExperimentalCoroutinesApi
 internal class DefaultLocationSharingServiceTest {
@@ -137,7 +138,7 @@ internal class DefaultLocationSharingServiceTest {
         coEvery { stopLiveLocationShareTask.execute(any()) } returns UpdateLiveLocationShareResult.Success("stopped-event-id")
         coEvery { startLiveLocationShareTask.execute(any()) } returns UpdateLiveLocationShareResult.Success(AN_EVENT_ID)
 
-        val result = defaultLocationSharingService.startLiveLocationShare(A_TIMEOUT)
+        val result = defaultLocationSharingService.startLiveLocationShare(A_TIMEOUT, A_DESCRIPTION)
 
         result shouldBeEqualTo UpdateLiveLocationShareResult.Success(AN_EVENT_ID)
         val expectedCheckExistingParams = CheckIfExistingActiveLiveTask.Params(
@@ -150,7 +151,8 @@ internal class DefaultLocationSharingServiceTest {
         coVerify { stopLiveLocationShareTask.execute(expectedStopParams) }
         val expectedStartParams = StartLiveLocationShareTask.Params(
                 roomId = A_ROOM_ID,
-                timeoutMillis = A_TIMEOUT
+                timeoutMillis = A_TIMEOUT,
+                description = A_DESCRIPTION
         )
         coVerify { startLiveLocationShareTask.execute(expectedStartParams) }
     }
@@ -161,7 +163,7 @@ internal class DefaultLocationSharingServiceTest {
         val error = Throwable()
         coEvery { stopLiveLocationShareTask.execute(any()) } returns UpdateLiveLocationShareResult.Failure(error)
 
-        val result = defaultLocationSharingService.startLiveLocationShare(A_TIMEOUT)
+        val result = defaultLocationSharingService.startLiveLocationShare(A_TIMEOUT, A_DESCRIPTION)
 
         result shouldBeEqualTo UpdateLiveLocationShareResult.Failure(error)
         val expectedCheckExistingParams = CheckIfExistingActiveLiveTask.Params(
@@ -179,7 +181,7 @@ internal class DefaultLocationSharingServiceTest {
         coEvery { checkIfExistingActiveLiveTask.execute(any()) } returns false
         coEvery { startLiveLocationShareTask.execute(any()) } returns UpdateLiveLocationShareResult.Success(AN_EVENT_ID)
 
-        val result = defaultLocationSharingService.startLiveLocationShare(A_TIMEOUT)
+        val result = defaultLocationSharingService.startLiveLocationShare(A_TIMEOUT, A_DESCRIPTION)
 
         result shouldBeEqualTo UpdateLiveLocationShareResult.Success(AN_EVENT_ID)
         val expectedCheckExistingParams = CheckIfExistingActiveLiveTask.Params(
@@ -188,7 +190,8 @@ internal class DefaultLocationSharingServiceTest {
         coVerify { checkIfExistingActiveLiveTask.execute(expectedCheckExistingParams) }
         val expectedStartParams = StartLiveLocationShareTask.Params(
                 roomId = A_ROOM_ID,
-                timeoutMillis = A_TIMEOUT
+                timeoutMillis = A_TIMEOUT,
+                description = A_DESCRIPTION
         )
         coVerify { startLiveLocationShareTask.execute(expectedStartParams) }
     }

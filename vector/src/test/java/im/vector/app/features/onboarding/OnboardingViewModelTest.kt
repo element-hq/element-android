@@ -478,7 +478,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `given can successfully reset password, when resetting password, then emits reset done event`() = runTest {
+    fun `given can successfully start password reset, when resetting password, then emits confirmation email sent`() = runTest {
         viewModelWith(initialState.copy(selectedHomeserver = SELECTED_HOMESERVER_STATE_SUPPORTED_LOGOUT_DEVICES))
         val test = viewModel.test()
         fakeLoginWizard.givenResetPasswordSuccess(AN_EMAIL)
@@ -495,14 +495,35 @@ class OnboardingViewModelTest {
                             copy(isLoading = false, resetState = resetState)
                         }
                 )
-                .assertEvents(OnboardingViewEvents.OnResetPasswordSendThreePidDone)
+                .assertEvents(OnboardingViewEvents.OnResetPasswordEmailConfirmationSent(AN_EMAIL))
                 .finish()
     }
 
     @Test
-    fun `given can successfully confirm reset password, when confirm reset password, then emits reset success`() = runTest {
+    fun `given existing reset state, when resending reset password email, then triggers reset password and emits nothing`() = runTest {
         viewModelWith(initialState.copy(resetState = ResetState(AN_EMAIL, A_PASSWORD)))
         val test = viewModel.test()
+        fakeLoginWizard.givenResetPasswordSuccess(AN_EMAIL)
+        fakeAuthenticationService.givenLoginWizard(fakeLoginWizard)
+
+        viewModel.handle(OnboardingAction.ResendResetPassword)
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false) }
+                )
+                .assertNoEvents()
+                .finish()
+        fakeLoginWizard.verifyResetPassword(AN_EMAIL)
+    }
+
+    @Test
+    fun `given combined login disabled, when confirming password reset, then opens reset password complete`() = runTest {
+        viewModelWith(initialState.copy(resetState = ResetState(AN_EMAIL, A_PASSWORD)))
+        val test = viewModel.test()
+        fakeVectorFeatures.givenCombinedLoginDisabled()
         fakeLoginWizard.givenConfirmResetPasswordSuccess(A_PASSWORD)
         fakeAuthenticationService.givenLoginWizard(fakeLoginWizard)
 
@@ -514,7 +535,27 @@ class OnboardingViewModelTest {
                         { copy(isLoading = true) },
                         { copy(isLoading = false, resetState = ResetState()) }
                 )
-                .assertEvents(OnboardingViewEvents.OnResetPasswordMailConfirmationSuccess)
+                .assertEvents(OnboardingViewEvents.OpenResetPasswordComplete)
+                .finish()
+    }
+
+    @Test
+    fun `given combined login enabled, when confirming password reset, then emits reset password complete`() = runTest {
+        viewModelWith(initialState.copy(resetState = ResetState(AN_EMAIL, A_PASSWORD)))
+        val test = viewModel.test()
+        fakeVectorFeatures.givenCombinedLoginEnabled()
+        fakeLoginWizard.givenConfirmResetPasswordSuccess(A_PASSWORD)
+        fakeAuthenticationService.givenLoginWizard(fakeLoginWizard)
+
+        viewModel.handle(OnboardingAction.ResetPasswordMailConfirmed)
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false, resetState = ResetState()) }
+                )
+                .assertEvents(OnboardingViewEvents.OnResetPasswordComplete)
                 .finish()
     }
 
@@ -589,7 +630,7 @@ class OnboardingViewModelTest {
     private fun givenCanSuccessfullyUpdateHomeserver(homeserverUrl: String, resultingState: SelectedHomeserverState) {
         fakeHomeServerConnectionConfigFactory.givenConfigFor(homeserverUrl, A_HOMESERVER_CONFIG)
         fakeStartAuthenticationFlowUseCase.givenResult(A_HOMESERVER_CONFIG, StartAuthenticationResult(isHomeserverOutdated = false, resultingState))
-        givenRegistrationResultFor(RegisterAction.StartRegistration, ANY_CONTINUING_REGISTRATION_RESULT)
+        givenRegistrationResultFor(RegisterAction.StartRegistration, RegistrationActionHandler.Result.StartRegistration)
         fakeHomeServerHistoryService.expectUrlToBeAdded(A_HOMESERVER_CONFIG.homeServerUri.toString())
     }
 

@@ -437,7 +437,10 @@ internal class OutgoingKeyRequestManager @Inject constructor(
         if (perSessionBackupQueryRateLimiter.tryFromBackupIfPossible(sessionId, roomId)) {
             // let's see what's the index
             val knownIndex = tryOrNull {
-                inboundGroupSessionStore.getInboundGroupSession(sessionId, request.requestBody?.senderKey ?: "")?.wrapper?.firstKnownIndex
+                inboundGroupSessionStore.getInboundGroupSession(sessionId, request.requestBody?.senderKey ?: "")
+                        ?.wrapper
+                        ?.session
+                        ?.firstKnownIndex
             }
             if (knownIndex != null && knownIndex <= request.fromIndex) {
                 // we found the key in backup with good enough index, so we can just mark as cancelled, no need to send request

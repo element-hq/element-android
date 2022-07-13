@@ -735,26 +735,30 @@ class TimelineViewModel @AssistedInject constructor(
             return@withState false
         }
 
-        if (initialState.isThreadTimeline()) {
-            when (itemId) {
-                R.id.menu_thread_timeline_view_in_room,
-                R.id.menu_thread_timeline_copy_link,
-                R.id.menu_thread_timeline_share -> true
-                else -> false
+        when {
+            initialState.isLocalRoom() -> false
+            initialState.isThreadTimeline() -> {
+                when (itemId) {
+                    R.id.menu_thread_timeline_view_in_room,
+                    R.id.menu_thread_timeline_copy_link,
+                    R.id.menu_thread_timeline_share -> true
+                    else -> false
+                }
             }
-        } else {
-            when (itemId) {
-                R.id.timeline_setting -> true
-                R.id.invite -> state.canInvite
-                R.id.open_matrix_apps -> true
-                R.id.voice_call -> state.isCallOptionAvailable()
-                R.id.video_call -> state.isCallOptionAvailable() || state.jitsiState.confId == null || state.jitsiState.hasJoined
-                // Show Join conference button only if there is an active conf id not joined. Otherwise fallback to default video disabled. ^
-                R.id.join_conference -> !state.isCallOptionAvailable() && state.jitsiState.confId != null && !state.jitsiState.hasJoined
-                R.id.search -> state.isSearchAvailable()
-                R.id.menu_timeline_thread_list -> vectorPreferences.areThreadMessagesEnabled()
-                R.id.dev_tools -> vectorPreferences.developerMode()
-                else -> false
+            else -> {
+                when (itemId) {
+                    R.id.timeline_setting -> true
+                    R.id.invite -> state.canInvite
+                    R.id.open_matrix_apps -> true
+                    R.id.voice_call -> state.isCallOptionAvailable()
+                    R.id.video_call -> state.isCallOptionAvailable() || state.jitsiState.confId == null || state.jitsiState.hasJoined
+                    // Show Join conference button only if there is an active conf id not joined. Otherwise fallback to default video disabled. ^
+                    R.id.join_conference -> !state.isCallOptionAvailable() && state.jitsiState.confId != null && !state.jitsiState.hasJoined
+                    R.id.search -> state.isSearchAvailable()
+                    R.id.menu_timeline_thread_list -> vectorPreferences.areThreadMessagesEnabled()
+                    R.id.dev_tools -> vectorPreferences.developerMode()
+                    else -> false
+                }
             }
         }
     }

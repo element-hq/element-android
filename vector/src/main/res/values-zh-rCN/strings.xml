@@ -1033,7 +1033,6 @@
     <plurals name="fallback_users_read">
         <item quantity="other">%d 个用户已读</item>
     </plurals>
-    <string name="error_attachment">获取附件时出错。</string>
     <string name="attachment_type_file">文件</string>
     <string name="attachment_type_contact">联系人</string>
     <string name="attachment_type_camera">相机</string>

@@ -1004,7 +1004,6 @@
     <string name="attachment_type_contact">איש קשר</string>
     <string name="attachment_type_file">קובץ</string>
     <string name="attachment_type_dialog_title">הוסף תמונה מ</string>
-    <string name="error_attachment">אירעה שגיאה בעת אחזור הקובץ המצורף.</string>
     <string name="one_user_read">%s נקרא</string>
     <string name="two_users_read">%1$s ו- %2$s נקראו</string>
     <string name="three_users_read">%1$s, %2$s ו- %3$s נקראו</string>

@@ -1145,7 +1145,6 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="attachment_type_gallery">Galeri</string>
     <string name="attachment_type_camera">Kamera</string>
     <string name="attachment_type_contact">Kontak</string>
-    <string name="error_attachment">Ada kesalahan terjadi saat menerima lampiran.</string>
     <string name="attachment_type_dialog_title">Tambahkan gambar dari</string>
     <string name="attachment_type_file">File</string>
     <string name="x_plus">+%d</string>
@@ -2455,4 +2454,33 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="time_unit_second_short">dtk</string>
     <string name="time_unit_minute_short">mnt</string>
     <string name="time_unit_hour_short">j</string>
+    <string name="live_location_labs_promotion_switch_title">Aktifkan pembagian lokasi</string>
+    <string name="live_location_labs_promotion_description">Mohon dicatat: ini adalah fitur uji coba menggunakan implementasi sementara. Ini berarti Anda tidak dapat menghapus riwayat lokasi Anda, dan pengguna bertingkat lanjut dapat melihat riwayat lokasi Anda bahkan setelah Anda membagikan lokasi langsung Anda di ruangan ini.</string>
+    <string name="live_location_labs_promotion_title">Pembagian lokasi langsung</string>
+    <string name="settings_troubleshoot_test_current_gateway">Gateway saat ini: %s</string>
+    <string name="settings_troubleshoot_test_current_gateway_title">Gateway</string>
+    <string name="settings_troubleshoot_test_current_endpoint_failed">Tidak dapat menemukan endpoint.</string>
+    <string name="settings_troubleshoot_test_current_endpoint_success">Endpoint saat ini: %s</string>
+    <string name="settings_troubleshoot_test_current_endpoint_title">Endpoint</string>
+    <string name="settings_troubleshoot_test_current_distributor">Saat ini menggunakan %s.</string>
+    <string name="settings_troubleshoot_test_current_distributor_title">Metode</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="other">Ditemukan %d metode.</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_distributors_fdroid">Tidak ada metode lain selain sinkronisasi latar belakang yang ditemukan.</string>
+    <string name="settings_troubleshoot_test_distributors_gplay">Tidak ada metode lain selain Layanan Google Play yang ditemukan.</string>
+    <string name="settings_troubleshoot_test_distributors_title">Metode yang tersedia</string>
+    <string name="settings_notification_method">Metode notifikasi</string>
+    <string name="unifiedpush_distributor_background_sync">Sinkronisasi latar belakang</string>
+    <string name="unifiedpush_distributor_fcm_fallback">Layanan Google</string>
+    <string name="unifiedpush_getdistributors_dialog_title">Pilih cara untuk menerima notifikasi</string>
+    <string name="settings_security_pin_code_use_biometrics_error">Tidak dapat mengaktifkan otentikasi biometrik.</string>
+    <string name="auth_biometric_key_invalidated_message">Otentikasi biometrik dinonaktifkan karena sebuah otentikasi biometrik telah ditambahkan baru-baru ini. Anda dapat mengaktifkan ulang di Pengaturan.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">Atur ulang metode notifikasi</string>
+    <string name="push_gateway_item_profile_tag">Tag profil:</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">Gagal mendaftarkan token endpoint ke homeserver:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">Endpoint berhasil terdaftar ke homeserver.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_title">Pendaftaran Endpoint</string>
+    <string name="action_next">Lanjut</string>
 </resources>

@@ -1045,7 +1045,6 @@
         <item quantity="few">%d uživatelé přečetli</item>
         <item quantity="other">%d uživatelů přečetlo</item>
     </plurals>
-    <string name="error_attachment">Během načítání přílohy došlo k chybě.</string>
     <string name="attachment_type_file">Soubor</string>
     <string name="attachment_type_contact">Kontakt</string>
     <string name="attachment_type_camera">Fotoaparát</string>
@@ -2547,4 +2546,35 @@
     <string name="time_unit_second_short">sek</string>
     <string name="time_unit_minute_short">min</string>
     <string name="time_unit_hour_short">h</string>
+    <string name="live_location_labs_promotion_switch_title">Povolit sdílení polohy živě</string>
+    <string name="live_location_labs_promotion_description">Upozornění: jedná se o experimetnální funkci s dočasnou implementací. To znamená, že nebudete moci odstranit historii své polohy a pokročilí uživatelé budou moci vidět historii vaší polohy i poté, co přestanete sdílet svou polohu živě v této místnosti.</string>
+    <string name="live_location_labs_promotion_title">Sdílení polohy živě</string>
+    <string name="settings_troubleshoot_test_current_gateway">Aktuální brána: %s</string>
+    <string name="settings_troubleshoot_test_current_gateway_title">Brána</string>
+    <string name="settings_troubleshoot_test_current_endpoint_failed">Nelze najít koncový bod.</string>
+    <string name="settings_troubleshoot_test_current_endpoint_success">Aktuální koncový bod: %s</string>
+    <string name="settings_troubleshoot_test_current_endpoint_title">Koncový bod</string>
+    <string name="settings_troubleshoot_test_current_distributor">Aktuálně se používá %s.</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="one">Nalezen %d způsob.</item>
+        <item quantity="few">Nalezeny %d způsoby.</item>
+        <item quantity="other">Nalezeno %d způsobů.</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_current_distributor_title">Způsob</string>
+    <string name="settings_troubleshoot_test_distributors_fdroid">Nebyl nalezen jiný způsob než synchronizace na pozadí.</string>
+    <string name="settings_troubleshoot_test_distributors_gplay">Žádný jiný způsob než služba Google Play nebyl nalezen.</string>
+    <string name="settings_troubleshoot_test_distributors_title">Dostupné způsoby</string>
+    <string name="settings_notification_method">Způsob oznamování</string>
+    <string name="unifiedpush_distributor_background_sync">Synchronizace na pozadí</string>
+    <string name="unifiedpush_distributor_fcm_fallback">Služby Google</string>
+    <string name="unifiedpush_getdistributors_dialog_title">Výběr způsobu přijímání oznámení</string>
+    <string name="settings_security_pin_code_use_biometrics_error">Nepodařilo se zapnout biometrické ověřování.</string>
+    <string name="auth_biometric_key_invalidated_message">Biometrické ověřování bylo vypnuto, protože nedávno byla přidána nová metoda biometrického ověřování. Můžete ho znovu povolit v Nastavení.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">Obnovit metodu oznamování</string>
+    <string name="push_gateway_item_profile_tag">Značka profilu:</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">Nepodařilo se zaregistrovat token koncového bodu na domovském serveru:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">Koncový bod byl úspěšně zaregistrován na domovském serveru.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_title">Registrace koncového bodu</string>
+    <string name="action_next">Další</string>
 </resources>

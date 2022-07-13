@@ -91,7 +91,7 @@ class PollItemViewStateFactoryTest {
 
         pollViewState shouldBeEqualTo PollViewState(
                 question = A_POLL_CONTENT.getBestPollCreationInfo()?.question?.getBestQuestion() ?: "",
-                totalVotes = stringProvider.instance.getString(R.string.poll_no_votes_cast),
+                votesStatus = stringProvider.instance.getString(R.string.poll_no_votes_cast),
                 canVote = false,
                 optionViewStates = A_POLL_CONTENT.getBestPollCreationInfo()?.answers?.map { answer ->
                     PollOptionViewState.PollSending(
@@ -117,7 +117,7 @@ class PollItemViewStateFactoryTest {
 
         pollViewState shouldBeEqualTo PollViewState(
                 question = A_POLL_CONTENT.getBestPollCreationInfo()?.question?.getBestQuestion() ?: "",
-                totalVotes = stringProvider.instance.getQuantityString(R.plurals.poll_total_vote_count_after_ended, 0, 0),
+                votesStatus = stringProvider.instance.getQuantityString(R.plurals.poll_total_vote_count_after_ended, 0, 0),
                 canVote = false,
                 optionViewStates = A_POLL_CONTENT.getBestPollCreationInfo()?.answers?.map { answer ->
                     PollOptionViewState.PollEnded(
@@ -143,7 +143,7 @@ class PollItemViewStateFactoryTest {
 
         pollViewState shouldBeEqualTo PollViewState(
                 question = A_POLL_CONTENT.getBestPollCreationInfo()?.question?.getBestQuestion() ?: "",
-                totalVotes = "",
+                votesStatus = stringProvider.instance.getString(R.string.poll_undisclosed_not_ended),
                 canVote = true,
                 optionViewStates = A_POLL_CONTENT.getBestPollCreationInfo()?.answers?.map { answer ->
                     PollOptionViewState.PollUndisclosed(
@@ -179,7 +179,7 @@ class PollItemViewStateFactoryTest {
 
         pollViewState shouldBeEqualTo PollViewState(
                 question = A_POLL_CONTENT.getBestPollCreationInfo()?.question?.getBestQuestion() ?: "",
-                totalVotes = stringProvider.instance.getQuantityString(R.plurals.poll_total_vote_count_before_ended_and_voted, 1, 1),
+                votesStatus = stringProvider.instance.getQuantityString(R.plurals.poll_total_vote_count_before_ended_and_voted, 1, 1),
                 canVote = true,
                 optionViewStates = A_POLL_CONTENT.getBestPollCreationInfo()?.answers?.mapIndexed { index, answer ->
                     PollOptionViewState.PollVoted(
@@ -210,7 +210,7 @@ class PollItemViewStateFactoryTest {
 
         pollViewState shouldBeEqualTo PollViewState(
                 question = A_POLL_CONTENT.getBestPollCreationInfo()?.question?.getBestQuestion() ?: "",
-                totalVotes = stringProvider.instance.getString(R.string.poll_no_votes_cast),
+                votesStatus = stringProvider.instance.getString(R.string.poll_no_votes_cast),
                 canVote = true,
                 optionViewStates = A_POLL_CONTENT.getBestPollCreationInfo()?.answers?.map { answer ->
                     PollOptionViewState.PollReady(

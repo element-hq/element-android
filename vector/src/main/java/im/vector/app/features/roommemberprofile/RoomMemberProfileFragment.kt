@@ -42,6 +42,7 @@ import im.vector.app.core.extensions.copyOnLongClick
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.DialogBaseEditTextBinding
 import im.vector.app.databinding.DialogShareQrCodeBinding
@@ -74,7 +75,8 @@ class RoomMemberProfileFragment @Inject constructor(
         private val roomDetailPendingActionStore: RoomDetailPendingActionStore,
         private val matrixItemColorProvider: MatrixItemColorProvider
 ) : VectorBaseFragment<FragmentMatrixProfileBinding>(),
-        RoomMemberProfileController.Callback {
+        RoomMemberProfileController.Callback,
+        VectorMenuProvider {
 
     private lateinit var headerViews: ViewStubRoomMemberProfileHeaderBinding
 
@@ -160,14 +162,14 @@ class RoomMemberProfileFragment @Inject constructor(
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             R.id.roomMemberProfileShareAction -> {
                 viewModel.handle(RoomMemberProfileAction.ShareRoomMemberProfile)
-                return true
+                true
             }
+            else -> false
         }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun handleStartVerification(startVerification: RoomMemberProfileViewEvents.StartVerification) {

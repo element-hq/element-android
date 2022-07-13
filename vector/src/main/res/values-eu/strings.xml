@@ -1215,7 +1215,6 @@ Errore hau ${app_name}-en kontroletik kanpo dago. Ez dago Google konturik gailua
     </plurals>
 
 
-    <string name="error_attachment">Errore bat gertatu da eranskina eskuratzean.</string>
     <string name="attachment_type_file">Fitxategia</string>
     <string name="attachment_type_contact">Kontaktua</string>
     <string name="attachment_type_camera">Kamera</string>

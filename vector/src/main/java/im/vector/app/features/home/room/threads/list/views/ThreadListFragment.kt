@@ -19,7 +19,6 @@ package im.vector.app.features.home.room.threads.list.views
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -31,6 +30,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.databinding.FragmentThreadListBinding
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.AvatarRenderer
@@ -54,7 +54,8 @@ class ThreadListFragment @Inject constructor(
         private val threadListController: ThreadListController,
         val threadListViewModelFactory: ThreadListViewModel.Factory
 ) : VectorBaseFragment<FragmentThreadListBinding>(),
-        ThreadListController.Listener {
+        ThreadListController.Listener,
+        VectorMenuProvider {
 
     private val threadListViewModel: ThreadListViewModel by fragmentViewModel()
 
@@ -71,27 +72,26 @@ class ThreadListFragment @Inject constructor(
         analyticsScreenName = MobileScreen.ScreenName.ThreadList
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-
+    override fun handlePostCreateMenu(menu: Menu) {
+        // We use a custom layout for this menu item, so we need to set a ClickListener
         menu.findItem(R.id.menu_thread_list_filter)?.let { menuItem ->
-            menuItem.actionView.setOnClickListener {
-                onOptionsItemSelected(menuItem)
+            menuItem.actionView.debouncedClicks {
+                handleMenuItemSelected(menuItem)
             }
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_thread_list_filter -> {
                 ThreadListBottomSheet().show(childFragmentManager, "Filtering")
                 true
             }
-            else -> super.onOptionsItemSelected(item)
+            else -> false
         }
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
+    override fun handlePrepareMenu(menu: Menu) {
         withState(threadListViewModel) { state ->
             val filterIcon = menu.findItem(R.id.menu_thread_list_filter).actionView
             val filterBadge = filterIcon.findViewById<View>(R.id.threadListFilterBadge)

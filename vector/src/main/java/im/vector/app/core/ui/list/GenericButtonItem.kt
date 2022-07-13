@@ -33,8 +33,8 @@ import im.vector.app.features.themes.ThemeUtils
 /**
  * A generic button list item.
  */
-@EpoxyModelClass(layout = R.layout.item_generic_button)
-abstract class GenericButtonItem : VectorEpoxyModel<GenericButtonItem.Holder>() {
+@EpoxyModelClass
+abstract class GenericButtonItem : VectorEpoxyModel<GenericButtonItem.Holder>(R.layout.item_generic_button) {
 
     @EpoxyAttribute
     var text: String? = null

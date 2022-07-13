@@ -16,7 +16,9 @@
 
 package org.matrix.android.sdk.internal.crypto.algorithms
 
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.events.model.Content
+import org.matrix.android.sdk.internal.crypto.InboundGroupSessionHolder
 
 /**
  * An interface for encrypting data.
@@ -32,4 +34,6 @@ internal interface IMXEncrypting {
      * @return the encrypted content
      */
     suspend fun encryptEventContent(eventContent: Content, eventType: String, userIds: List<String>): Content
+
+    suspend fun shareHistoryKeysWithDevice(inboundSessionWrapper: InboundGroupSessionHolder, deviceInfo: CryptoDeviceInfo) {}
 }

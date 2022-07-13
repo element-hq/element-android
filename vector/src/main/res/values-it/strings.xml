@@ -992,7 +992,6 @@
         <item quantity="one">%d utente ha letto</item>
         <item quantity="other">%d utenti hanno letto</item>
     </plurals>
-    <string name="error_attachment">Si è verificato un errore nella ricezione dell\'allegato.</string>
     <string name="attachment_type_file">File</string>
     <string name="attachment_type_contact">Contatto</string>
     <string name="attachment_type_camera">Fotocamera</string>
@@ -2491,4 +2490,34 @@
     <string name="time_unit_hour_short">o</string>
     <string name="time_unit_second_short">sec</string>
     <string name="time_unit_minute_short">min</string>
+    <string name="live_location_labs_promotion_switch_title">Attiva condivisione posizione</string>
+    <string name="live_location_labs_promotion_description">Nota: si tratta di una funzionalità sperimentale che usa un\'implementazione temporanea. Ciò significa che non potrai eliminare la cronologia delle posizioni e gli utenti avanzati potranno vederla anche dopo l\'interruzione della tua condivisione con questa stanza.</string>
+    <string name="live_location_labs_promotion_title">Condivisione posizione in tempo reale</string>
+    <string name="settings_troubleshoot_test_current_gateway">Gateway attuale: %s</string>
+    <string name="settings_troubleshoot_test_current_gateway_title">Gateway</string>
+    <string name="settings_troubleshoot_test_current_endpoint_failed">Impossibile trovare l\'endpoint.</string>
+    <string name="settings_troubleshoot_test_current_endpoint_success">Endpoint attuale: %s</string>
+    <string name="settings_troubleshoot_test_current_endpoint_title">Endpoint</string>
+    <string name="settings_troubleshoot_test_current_distributor">Ora si sta usando %s.</string>
+    <string name="settings_troubleshoot_test_current_distributor_title">Metodo</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="one">Trovato %d metodo.</item>
+        <item quantity="other">Trovati %d metodi.</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_distributors_fdroid">Nessun altro metodo trovato oltre alla sincronizzazione in secondo piano.</string>
+    <string name="unifiedpush_distributor_fcm_fallback">Servizi Google</string>
+    <string name="settings_troubleshoot_test_distributors_gplay">Nessun altro metodo trovato oltre a Google Play Service.</string>
+    <string name="settings_troubleshoot_test_distributors_title">Metodi disponibili</string>
+    <string name="settings_notification_method">Metodo di notifica</string>
+    <string name="unifiedpush_distributor_background_sync">Sincronizzazione in secondo piano</string>
+    <string name="unifiedpush_getdistributors_dialog_title">Scegli come ricevere le notifiche</string>
+    <string name="settings_security_pin_code_use_biometrics_error">Impossibile attivare l\'autenticazione biometrica.</string>
+    <string name="auth_biometric_key_invalidated_message">L\'autenticazione biometrica è stata disattivata perché è stato aggiunto di recente un nuovo metodo di autenticazione biometrica. Puoi riattivarla nelle impostazioni.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">Reimposta metodo di notifica</string>
+    <string name="push_gateway_item_profile_tag">Etichetta profilo:</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">È fallita la registrazione del token dell\'endpoint sull\'homeserver:
+\n %1$s</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">Endpoint registrato con successo sull\'homeserver.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_title">Registrazione endpoint</string>
+    <string name="action_next">Avanti</string>
 </resources>

@@ -19,9 +19,9 @@ def retrofit = "2.9.0"
 def arrow = "0.8.2"
 def markwon = "4.6.2"
 def moshi = "1.13.0"
-def lifecycle = "2.4.1"
+def lifecycle = "2.5.0"
 def flowBinding = "1.2.0"
-def flipper = "0.151.1"
+def flipper = "0.153.0"
 def epoxy = "4.6.2"
 def mavericks = "2.7.0"
 def glide = "4.13.2"
@@ -29,7 +29,7 @@ def bigImageViewer = "1.8.1"
 def jjwt = "0.11.5"
 def vanniktechEmoji = "0.15.0"
 
-def fragment = "1.4.1"
+def fragment = "1.5.0"
 
 // Testing
 def mockk = "1.12.3" // We need to use 1.12.3 to have mocking in androidTest until a new version is released: https://github.com/mockk/mockk/issues/819
@@ -50,7 +50,7 @@ ext.libs = [
         ],
         androidx    : [
                 'annotation'              : "androidx.annotation:annotation:1.4.0",
-                'activity'                : "androidx.activity:activity:1.4.0",
+                'activity'                : "androidx.activity:activity:1.5.0",
                 'annotations'             : "androidx.annotation:annotation:1.3.0",
                 'appCompat'               : "androidx.appcompat:appcompat:1.4.2",
                 'biometric'               : "androidx.biometric:biometric:1.1.0",
@@ -95,6 +95,9 @@ ext.libs = [
         flipper     : [
                 'flipper'                 : "com.facebook.flipper:flipper:$flipper",
                 'flipperNetworkPlugin'    : "com.facebook.flipper:flipper-network-plugin:$flipper",
+        ],
+        element     : [
+                'opusencoder'             : "io.element.android:opusencoder:1.0.3",
         ],
         squareup    : [
                 'moshi'                  : "com.squareup.moshi:moshi:$moshi",

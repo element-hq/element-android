@@ -30,7 +30,8 @@ data class RoomListViewState(
         val roomMembershipChanges: Map<String, ChangeMembershipState> = emptyMap(),
         val asyncSuggestedRooms: Async<List<SpaceChildInfo>> = Uninitialized,
         val currentUserName: String? = null,
-        val currentRoomGrouping: Async<RoomGroupingMethod> = Uninitialized
+        val currentRoomGrouping: Async<RoomGroupingMethod> = Uninitialized,
+        val localRoomIds: Set<String> = emptySet()
 ) : MavericksState {
 
     constructor(args: RoomListParams) : this(displayMode = args.displayMode)

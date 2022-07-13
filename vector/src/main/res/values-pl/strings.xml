@@ -890,7 +890,6 @@
         <item quantity="many">%d użytkowników odczytało</item>
         <item quantity="other">%d użytkowników odczytało</item>
     </plurals>
-    <string name="error_attachment">Wystąpił błąd poczas otrzymywania załącznika.</string>
     <string name="error_handling_incoming_share">Nie można obsłużyć otrzymanych danych</string>
     <string name="content_reported_as_inappropriate_title">Zgłoszono jako nieodpowiedni</string>
     <string name="content_reported_as_inappropriate_content">Zawartość została zgłoszona jako niewłaściwa.
@@ -1178,7 +1177,7 @@
     <string name="room_list_catchup_empty_body">Nie masz więcej nieprzeczytanych wiadomości</string>
     <string name="title_activity_emoji_reaction_picker">Reakcje</string>
     <string name="action_agree">Zgoda</string>
-    <string name="message_view_reaction">Zobacz Reakcje</string>
+    <string name="message_view_reaction">Zobacz reakcje</string>
     <string name="event_redacted_by_user_reason">Zdarzenie usunięte przez użytkownika</string>
     <string name="event_redacted_by_admin_reason">Zdarzenie moderowane przez administratora pokoju</string>
     <string name="settings_general_title">Ogólne</string>
@@ -2593,4 +2592,17 @@
     <string name="time_unit_hour_short">godz</string>
     <string name="time_unit_minute_short">min</string>
     <string name="space_leave_radio_buttons_title">Pokoje w przestrzeni</string>
+    <string name="action_next">Dalej</string>
+    <string name="settings_troubleshoot_test_current_distributor_title">Dostawca</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="one">Znaleziono %d dostawcę.</item>
+        <item quantity="few">Znaleziono %d dostawców.</item>
+        <item quantity="many">Znaleziono %d dostawdów.</item>
+        <item quantity="other">Znaleziono %d dostawdów.</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_distributors_fdroid">Nie znaleziono innej metody poza ciągłą synchronizacją w tle.</string>
+    <string name="settings_troubleshoot_test_distributors_gplay">Nie znaleziono innych dostawców poza usługami Google Play.</string>
+    <string name="settings_troubleshoot_test_distributors_title">Dostępni dostawcy</string>
+    <string name="settings_notification_method">Dostawca powiadomień</string>
+    <string name="unifiedpush_getdistributors_dialog_title">Wybierz, którego dostawcy powiadomień push chcesz używać</string>
 </resources>

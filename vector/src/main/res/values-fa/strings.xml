@@ -1460,7 +1460,6 @@
     <string name="error_handling_incoming_share">نتوانست هم‌رسانی داده را مدیریت کند</string>
     <string name="rotate_and_crop_screen_title">چرخش و برش</string>
     <string name="attachment_type_dialog_title">افزودن تصویر از</string>
-    <string name="error_attachment">هنگام دریافت پیوست خطایی رخ داد.</string>
     <plurals name="fallback_users_read">
         <item quantity="one">%d کاربر خواند</item>
         <item quantity="other">%d کاربر خواندند</item>
@@ -2500,4 +2499,26 @@
     <string name="time_unit_second_short">ث</string>
     <string name="time_unit_minute_short">د</string>
     <string name="time_unit_hour_short">س</string>
+    <string name="live_location_labs_promotion_switch_title">به کار انداختن مکان زنده</string>
+    <string name="live_location_labs_promotion_title">هم‌رسانی مکان زنده</string>
+    <string name="settings_troubleshoot_test_current_gateway">دروازهٔ کنونی: %s</string>
+    <string name="settings_troubleshoot_test_current_gateway_title">دروازه</string>
+    <string name="settings_troubleshoot_test_current_distributor">در حال استفاده از %s.</string>
+    <string name="settings_troubleshoot_test_current_distributor_title">روش</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="one">۱ روش پیدا شد.</item>
+        <item quantity="other">%d روش پیدا شد.</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_distributors_fdroid">روشی جز همگام سازی پس‌زمینه پیدا نشد.</string>
+    <string name="settings_troubleshoot_test_distributors_gplay">روشی جز خدمت پلی گوگل پیدا نشد.</string>
+    <string name="settings_troubleshoot_test_distributors_title">روش‌های موجود</string>
+    <string name="settings_notification_method">روش آگاهی</string>
+    <string name="unifiedpush_distributor_background_sync">همگام سازی پس‌زمینه</string>
+    <string name="unifiedpush_distributor_fcm_fallback">خدمات گوگل</string>
+    <string name="unifiedpush_getdistributors_dialog_title">گزینش چگونگی دریافت آگاهی</string>
+    <string name="settings_security_pin_code_use_biometrics_error">نتوانست تأیید هویت زیست‌سنجی را به کار بیندازد.</string>
+    <string name="auth_biometric_key_invalidated_message">تأیی هویت زیست‌سنجی به دلیل اضافه شدن روش تأیسد هویت زیست‌سنجی جدیدی به تازگی از کار افتاده. می‌توانید دوباره در تنظیمات به کارش بیندازید.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">بازنشانی روش آگاهی</string>
+    <string name="push_gateway_item_profile_tag">برچسب نمایه:</string>
+    <string name="action_next">بعدی</string>
 </resources>

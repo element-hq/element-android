@@ -19,17 +19,17 @@ import android.widget.Button
 import androidx.annotation.StringRes
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
-import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
+import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.attributes.ButtonStyle
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.resources.ColorProvider
 
-@EpoxyModelClass(layout = R.layout.item_settings_button)
-abstract class SettingsButtonItem : EpoxyModelWithHolder<SettingsButtonItem.Holder>() {
+@EpoxyModelClass
+abstract class SettingsButtonItem : VectorEpoxyModel<SettingsButtonItem.Holder>(R.layout.item_settings_button) {
 
     @EpoxyAttribute
     lateinit var colorProvider: ColorProvider

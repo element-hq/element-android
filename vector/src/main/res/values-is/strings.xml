@@ -1637,7 +1637,6 @@
     <string name="room_list_quick_actions_low_priority_add">Bæta í lítinn forgang</string>
     <string name="block_user">HUNSA NOTANDA</string>
     <string name="error_handling_incoming_share">Tókst ekki að meðhöndla deiligögn</string>
-    <string name="error_attachment">Villa kom upp þegar reynt var að sækja viðhengið.</string>
     <string name="error_file_too_big_simple">Skráin er of stór til að senda hana inn.</string>
     <plurals name="fallback_users_read">
         <item quantity="one">%d notandi las</item>

@@ -17,24 +17,31 @@
 package org.matrix.android.sdk.internal.session.room.membership
 
 import androidx.lifecycle.LiveData
+import com.otaliastudios.opengl.core.use
 import com.zhuinden.monarchy.Monarchy
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.realm.Realm
 import io.realm.RealmQuery
+import org.matrix.android.sdk.api.MatrixConfiguration
+import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.room.members.MembershipService
 import org.matrix.android.sdk.api.session.room.members.RoomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
+import org.matrix.android.sdk.internal.database.helper.findLatestSessionInfo
 import org.matrix.android.sdk.internal.database.mapper.asDomain
+import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFields
+import org.matrix.android.sdk.internal.database.model.RoomMembersLoadStatusType
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.query.QueryStringValueProcessor
 import org.matrix.android.sdk.internal.query.process
+import org.matrix.android.sdk.internal.session.room.RoomDataSource
 import org.matrix.android.sdk.internal.session.room.membership.admin.MembershipAdminTask
 import org.matrix.android.sdk.internal.session.room.membership.joining.InviteTask
 import org.matrix.android.sdk.internal.session.room.membership.threepid.InviteThreePidTask
@@ -47,8 +54,11 @@ internal class DefaultMembershipService @AssistedInject constructor(
         private val inviteTask: InviteTask,
         private val inviteThreePidTask: InviteThreePidTask,
         private val membershipAdminTask: MembershipAdminTask,
+        private val roomDataSource: RoomDataSource,
+        private val cryptoService: CryptoService,
         @UserId
         private val userId: String,
+        private val matrixConfiguration: MatrixConfiguration,
         private val queryStringValueProcessor: QueryStringValueProcessor
 ) : MembershipService {
 
@@ -60,6 +70,15 @@ internal class DefaultMembershipService @AssistedInject constructor(
     override suspend fun loadRoomMembersIfNeeded() {
         val params = LoadRoomMembersTask.Params(roomId, excludeMembership = Membership.LEAVE)
         loadRoomMembersTask.execute(params)
+    }
+
+    override suspend fun areAllMembersLoaded(): Boolean {
+        val status = roomDataSource.getRoomMembersLoadStatus(roomId)
+        return status == RoomMembersLoadStatusType.LOADED
+    }
+
+    override fun areAllMembersLoadedLive(): LiveData<Boolean> {
+        return roomDataSource.getRoomMembersLoadStatusLive(roomId)
     }
 
     override fun getRoomMember(userId: String): RoomMemberSummary? {
@@ -127,8 +146,18 @@ internal class DefaultMembershipService @AssistedInject constructor(
     }
 
     override suspend fun invite(userId: String, reason: String?) {
+        sendShareHistoryKeysIfNeeded(userId)
         val params = InviteTask.Params(roomId, userId, reason)
         inviteTask.execute(params)
+    }
+
+    private suspend fun sendShareHistoryKeysIfNeeded(userId: String) {
+        if (!cryptoService.isShareKeysOnInviteEnabled()) return
+        // TODO not sure it's the right way to get the latest messages in a room
+        val sessionInfo = Realm.getInstance(monarchy.realmConfiguration).use {
+            ChunkEntity.findLatestSessionInfo(it, roomId)
+        }
+        cryptoService.sendSharedHistoryKeys(roomId, userId, sessionInfo)
     }
 
     override suspend fun invite3pid(threePid: ThreePid) {
