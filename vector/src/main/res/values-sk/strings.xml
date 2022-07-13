@@ -2547,4 +2547,35 @@
     <string name="time_unit_second_short">sek</string>
     <string name="time_unit_minute_short">min</string>
     <string name="time_unit_hour_short">h</string>
+    <string name="live_location_labs_promotion_switch_title">Povoliť zdieľanie polohy</string>
+    <string name="live_location_labs_promotion_description">Upozornenie: ide o laboratórnu funkciu, ktorá je dočasne implementovaná. To znamená, že nebudete môcť vymazať históriu svojej polohy a pokročilí používatelia budú môcť vidieť históriu vašej polohy aj po tom, ako prestanete zdieľať svoju reálnu polohu s touto miestnosťou.</string>
+    <string name="live_location_labs_promotion_title">Zdieľanie polohy v reálnom čase</string>
+    <string name="settings_troubleshoot_test_current_gateway">Aktuálna brána: %s</string>
+    <string name="settings_troubleshoot_test_current_gateway_title">Brána</string>
+    <string name="settings_troubleshoot_test_current_endpoint_failed">Nie je možné nájsť koncový bod.</string>
+    <string name="settings_troubleshoot_test_current_endpoint_success">Aktuálny koncový bod: %s</string>
+    <string name="settings_troubleshoot_test_current_endpoint_title">Koncový bod</string>
+    <string name="settings_troubleshoot_test_current_distributor">V súčasnosti používa %s.</string>
+    <string name="settings_troubleshoot_test_current_distributor_title">Spôsob</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="one">Nájdený %d spôsob.</item>
+        <item quantity="few">Nájdené %d spôsoby.</item>
+        <item quantity="other">Nájdených %d spôsobov.</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_distributors_fdroid">Nenašiel sa iný spôsob ako synchronizácia na pozadí.</string>
+    <string name="settings_troubleshoot_test_distributors_gplay">Žiadny iný spôsob ako služba Google Play nebol nájdený.</string>
+    <string name="settings_troubleshoot_test_distributors_title">Dostupné spôsoby</string>
+    <string name="settings_notification_method">Spôsob oznamovania</string>
+    <string name="unifiedpush_distributor_background_sync">Synchronizácia na pozadí</string>
+    <string name="unifiedpush_distributor_fcm_fallback">Služby Google</string>
+    <string name="unifiedpush_getdistributors_dialog_title">Vyberte si spôsob prijímania oznámení</string>
+    <string name="settings_security_pin_code_use_biometrics_error">Nepodarilo sa zapnúť biometrické overovanie.</string>
+    <string name="auth_biometric_key_invalidated_message">Biometrické overovanie bolo vypnuté, pretože nedávno bola pridaná nová metóda biometrického overovania. Môžete ho opäť povoliť v Nastaveniach.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">Obnoviť spôsob oznamovania</string>
+    <string name="push_gateway_item_profile_tag">Značka profilu:</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">Nepodarilo sa zaregistrovať token koncového bodu na domovskom serveri:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">Koncové zariadenie sa úspešne zaregistrovalo na domovský server.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_title">Registrácia koncového bodu</string>
+    <string name="action_next">Ďalej</string>
 </resources>
