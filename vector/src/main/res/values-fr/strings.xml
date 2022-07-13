@@ -971,7 +971,6 @@
         <item quantity="one">%d utilisateur a lu</item>
         <item quantity="other">%d utilisateurs ont lu</item>
     </plurals>
-    <string name="error_attachment">Une erreur est survenue pendant la récupération de la pièce jointe.</string>
     <string name="attachment_type_file">Fichier</string>
     <string name="attachment_type_contact">Contact</string>
     <string name="attachment_type_camera">Appareil photo</string>

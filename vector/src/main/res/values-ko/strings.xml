@@ -815,7 +815,6 @@
     <plurals name="fallback_users_read">
         <item quantity="other">%d명이 읽음</item>
     </plurals>
-    <string name="error_attachment">첨부 파일을 검색하는 중 오류가 발생했습니다.</string>
     <string name="attachment_type_file">파일</string>
     <string name="attachment_type_contact">연락처</string>
     <string name="attachment_type_camera">카메라</string>

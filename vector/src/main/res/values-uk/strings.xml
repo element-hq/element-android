@@ -1930,7 +1930,6 @@
     <string name="room_list_quick_actions_favorite_remove">Вилучити з обраних</string>
     <string name="room_list_quick_actions_favorite_add">Додати до обраних</string>
     <string name="error_handling_incoming_share">Не вдалося обробити спільні дані</string>
-    <string name="error_attachment">Сталася помилка завантаження вкладення.</string>
     <plurals name="fallback_users_read">
         <item quantity="one">Прочитано %d користувачем</item>
         <item quantity="few">Прочитали %d користувачі</item>

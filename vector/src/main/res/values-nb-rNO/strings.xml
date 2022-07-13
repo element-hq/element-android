@@ -836,7 +836,6 @@
     <string name="a11y_create_menu_close">Lukk menyen for opprett rom…</string>
     <string name="a11y_create_direct_message">Lag en ny direkte samtale</string>
     <string name="a11y_jump_to_bottom">Gå til bunnen</string>
-    <string name="error_attachment">Det oppstod en feil under henting av vedlegget.</string>
     <string name="attachment_type_dialog_title">Legg til bilde fra</string>
     <string name="rotate_and_crop_screen_title">Roter og beskjær</string>
     <string name="error_handling_incoming_share">Kunne ikke håndtere delingsdata</string>

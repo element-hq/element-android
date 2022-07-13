@@ -989,7 +989,6 @@
     <string name="login_server_url_form_common_notice">Introdueix l\'adreça del servidor que vulguis utilitzar</string>
     <string name="attachment_type_gallery">Galeria</string>
     <string name="attachment_type_sticker">Adhesiu</string>
-    <string name="error_attachment">S\'ha produït un error mentre es rebia el fitxer adjunt.</string>
     <string name="a11y_jump_to_bottom">Salta al final</string>
     <string name="a11y_create_room">Crea una nova sala</string>
     <string name="a11y_create_menu_close">Tanca el menú de creació de sala…</string>

@@ -950,7 +950,6 @@
         <item quantity="one">%d потребител прочете</item>
         <item quantity="other">%d потребителя прочетоха</item>
     </plurals>
-    <string name="error_attachment">Възникна грешка при извличане на прикачения файл.</string>
     <string name="attachment_type_file">Файл</string>
     <string name="attachment_type_contact">Контакт</string>
     <string name="attachment_type_camera">Камера</string>

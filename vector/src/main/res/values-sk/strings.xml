@@ -1602,7 +1602,6 @@
     <string name="uploads_files_no_result">V tejto miestnosti nie sú žiadne súbory</string>
     <string name="uploads_media_title">MÉDIÁ</string>
     <string name="uploads_media_no_result">V tejto miestnosti nie sú žiadne médiá</string>
-    <string name="error_attachment">Pri načítavaní prílohy došlo k chybe.</string>
     <string name="a11y_jump_to_bottom">Prejsť na spodok</string>
     <string name="a11y_create_room">Vytvoriť novú miestnosť</string>
     <string name="a11y_create_direct_message">Vytvoriť novú priamu konverzáciu</string>

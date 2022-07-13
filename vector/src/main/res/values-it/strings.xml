@@ -992,7 +992,6 @@
         <item quantity="one">%d utente ha letto</item>
         <item quantity="other">%d utenti hanno letto</item>
     </plurals>
-    <string name="error_attachment">Si è verificato un errore nella ricezione dell\'allegato.</string>
     <string name="attachment_type_file">File</string>
     <string name="attachment_type_contact">Contatto</string>
     <string name="attachment_type_camera">Fotocamera</string>

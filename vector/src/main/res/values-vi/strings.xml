@@ -736,7 +736,6 @@
     <string name="attachment_type_contact">Liên hệ</string>
     <string name="attachment_type_file">Tệp</string>
     <string name="attachment_type_dialog_title">Thêm hình từ</string>
-    <string name="error_attachment">Lỗi xảy ra khi hiển thị tệp đính kèm.</string>
     <string name="error_file_too_big_simple">Tệp quá lớn để tải lên.</string>
     <plurals name="fallback_users_read">
         <item quantity="other">%d người dùng đã đọc</item>

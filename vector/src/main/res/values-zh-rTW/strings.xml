@@ -974,7 +974,6 @@
     <plurals name="fallback_users_read">
         <item quantity="other">%d 個使用者已閱讀</item>
     </plurals>
-    <string name="error_attachment">在擷取附件時遇到錯誤。</string>
     <string name="attachment_type_file">檔案</string>
     <string name="attachment_type_contact">聯絡人</string>
     <string name="attachment_type_camera">相機</string>

@@ -1460,7 +1460,6 @@
     <string name="error_handling_incoming_share">نتوانست هم‌رسانی داده را مدیریت کند</string>
     <string name="rotate_and_crop_screen_title">چرخش و برش</string>
     <string name="attachment_type_dialog_title">افزودن تصویر از</string>
-    <string name="error_attachment">هنگام دریافت پیوست خطایی رخ داد.</string>
     <plurals name="fallback_users_read">
         <item quantity="one">%d کاربر خواند</item>
         <item quantity="other">%d کاربر خواندند</item>

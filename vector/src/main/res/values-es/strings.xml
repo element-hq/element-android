@@ -1015,7 +1015,6 @@
         <item quantity="one">Leído por %d usuario</item>
         <item quantity="other">Leído por %d usuarios</item>
     </plurals>
-    <string name="error_attachment">Ha ocurrido un error recuperando el archivo adjunto.</string>
     <string name="attachment_type_file">Archivo</string>
     <string name="attachment_type_contact">Contacto</string>
     <string name="attachment_type_camera">Cámara</string>

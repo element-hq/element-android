@@ -1145,7 +1145,6 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="attachment_type_gallery">Galeri</string>
     <string name="attachment_type_camera">Kamera</string>
     <string name="attachment_type_contact">Kontak</string>
-    <string name="error_attachment">Ada kesalahan terjadi saat menerima lampiran.</string>
     <string name="attachment_type_dialog_title">Tambahkan gambar dari</string>
     <string name="attachment_type_file">File</string>
     <string name="x_plus">+%d</string>
