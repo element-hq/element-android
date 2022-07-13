@@ -31,7 +31,7 @@ class LocationSharingServiceConnection @Inject constructor(
         LocationSharingAndroidService.Callback {
 
     interface Callback {
-        fun onLocationServiceRunning()
+        fun onLocationServiceRunning(roomIds: Set<String>)
         fun onLocationServiceStopped()
         fun onLocationServiceError(error: Throwable)
     }
@@ -44,7 +44,7 @@ class LocationSharingServiceConnection @Inject constructor(
         addCallback(callback)
 
         if (isBound) {
-            callback.onLocationServiceRunning()
+            callback.onLocationServiceRunning(getRoomIdsOfActiveLives())
         } else {
             Intent(context, LocationSharingAndroidService::class.java).also { intent ->
                 context.bindService(intent, this, 0)
@@ -56,12 +56,15 @@ class LocationSharingServiceConnection @Inject constructor(
         removeCallback(callback)
     }
 
+    private fun getRoomIdsOfActiveLives(): Set<String> {
+        return locationSharingAndroidService?.getRoomIdsOfActiveLives() ?: emptySet()
+    }
+
     override fun onServiceConnected(className: ComponentName, binder: IBinder) {
         locationSharingAndroidService = (binder as LocationSharingAndroidService.LocalBinder).getService().also {
             it.callback = this
         }
         isBound = true
-        onCallbackActionNoArg(Callback::onLocationServiceRunning)
     }
 
     override fun onServiceDisconnected(className: ComponentName) {
@@ -69,6 +72,10 @@ class LocationSharingServiceConnection @Inject constructor(
         locationSharingAndroidService?.callback = null
         locationSharingAndroidService = null
         onCallbackActionNoArg(Callback::onLocationServiceStopped)
+    }
+
+    override fun onRoomIdsUpdate(roomIds: Set<String>) {
+        forwardRoomIdsToCallbacks(roomIds)
     }
 
     override fun onServiceError(error: Throwable) {
@@ -85,6 +92,10 @@ class LocationSharingServiceConnection @Inject constructor(
 
     private fun onCallbackActionNoArg(action: Callback.() -> Unit) {
         callbacks.toList().forEach(action)
+    }
+
+    private fun forwardRoomIdsToCallbacks(roomIds: Set<String>) {
+        callbacks.toList().forEach { it.onLocationServiceRunning(roomIds) }
     }
 
     private fun forwardErrorToCallbacks(error: Throwable) {

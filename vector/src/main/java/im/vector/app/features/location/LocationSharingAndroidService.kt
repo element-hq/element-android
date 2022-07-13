@@ -193,11 +193,13 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
     private fun addRoomArgs(beaconEventId: String, roomArgs: RoomArgs) {
         Timber.i("adding roomArgs for beaconEventId: $beaconEventId")
         roomArgsMap[beaconEventId] = roomArgs
+        callback?.onRoomIdsUpdate(getRoomIdsOfActiveLives())
     }
 
     private fun removeRoomArgs(beaconEventId: String) {
         Timber.i("removing roomArgs for beaconEventId: $beaconEventId")
         roomArgsMap.remove(beaconEventId)
+        callback?.onRoomIdsUpdate(getRoomIdsOfActiveLives())
     }
 
     private fun listenForLiveSummaryChanges(roomId: String, beaconEventId: String) {
@@ -220,6 +222,10 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
                         )
                     }
 
+    fun getRoomIdsOfActiveLives(): Set<String> {
+        return roomArgsMap.map { it.value.roomId }.toSet()
+    }
+
     override fun onBind(intent: Intent?): IBinder {
         return binder
     }
@@ -229,6 +235,7 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
     }
 
     interface Callback {
+        fun onRoomIdsUpdate(roomIds: Set<String>)
         fun onServiceError(error: Throwable)
     }
 

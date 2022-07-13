@@ -1294,8 +1294,8 @@ class TimelineViewModel @AssistedInject constructor(
         _viewEvents.post(RoomDetailViewEvents.OnNewTimelineEvents(eventIds))
     }
 
-    override fun onLocationServiceRunning() {
-        setState { copy(isSharingLiveLocation = true) }
+    override fun onLocationServiceRunning(roomIds: Set<String>) {
+        setState { copy(isSharingLiveLocation = roomId in roomIds) }
     }
 
     override fun onLocationServiceStopped() {
