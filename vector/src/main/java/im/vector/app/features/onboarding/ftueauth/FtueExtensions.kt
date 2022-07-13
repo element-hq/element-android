@@ -47,7 +47,9 @@ fun observeContentChangesAndResetErrors(username: TextInputLayout, password: Tex
             transform = { usernameHasContent, passwordHasContent -> usernameHasContent && passwordHasContent }
     ).onEach {
         username.error = null
+        username.isErrorEnabled = false
         password.error = null
+        username.isErrorEnabled = false
         submit.isEnabled = it
     }
 }
