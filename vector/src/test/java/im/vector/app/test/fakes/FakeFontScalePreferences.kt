@@ -51,4 +51,8 @@ class FakeFontScalePreferences : FontScalePreferences by mockk(relaxUnitFun = tr
             setFontScaleValue(value)
         }
     }
+
+    fun givenAvailableScaleOptions(availableFontScales: List<FontScaleValue>) {
+        every { getAvailableScales() } returns availableFontScales
+    }
 }

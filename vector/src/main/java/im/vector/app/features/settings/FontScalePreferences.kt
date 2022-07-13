@@ -23,7 +23,6 @@ import im.vector.app.R
 import im.vector.app.core.di.DefaultPreferences
 import im.vector.app.core.utils.SystemSettingsProvider
 import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * Stores and returns font scale settings using shared preferences.
@@ -63,7 +62,6 @@ interface FontScalePreferences {
 /**
  * Object to manage the Font Scale choice of the user.
  */
-@Singleton
 class FontScalePreferencesImpl @Inject constructor(
         @DefaultPreferences private val preferences: SharedPreferences,
         private val systemSettingsProvider: SystemSettingsProvider,

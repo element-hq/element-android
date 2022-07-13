@@ -31,7 +31,7 @@ interface SystemSettingsProvider {
     fun getSystemFontScale(): Float
 }
 
-class SystemSettingsProviderImpl @Inject constructor(
+class AndroidSystemSettingsProvider @Inject constructor(
         private val context: Context,
 ) : SystemSettingsProvider {
 

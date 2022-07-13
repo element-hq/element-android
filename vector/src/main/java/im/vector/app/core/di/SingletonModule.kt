@@ -38,8 +38,8 @@ import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.time.Clock
 import im.vector.app.core.time.DefaultClock
+import im.vector.app.core.utils.AndroidSystemSettingsProvider
 import im.vector.app.core.utils.SystemSettingsProvider
-import im.vector.app.core.utils.SystemSettingsProviderImpl
 import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.VectorAnalytics
@@ -107,7 +107,7 @@ abstract class VectorBindModule {
     abstract fun bindFontScale(fontScale: FontScalePreferencesImpl): FontScalePreferences
 
     @Binds
-    abstract fun bindSystemSettingsProvide(provider: SystemSettingsProviderImpl): SystemSettingsProvider
+    abstract fun bindSystemSettingsProvide(provider: AndroidSystemSettingsProvider): SystemSettingsProvider
 }
 
 @InstallIn(SingletonComponent::class)

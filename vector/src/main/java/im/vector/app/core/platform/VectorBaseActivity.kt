@@ -64,7 +64,7 @@ import im.vector.app.core.extensions.restart
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.extensions.toMvRxBundle
-import im.vector.app.core.utils.SystemSettingsProviderImpl
+import im.vector.app.core.utils.AndroidSystemSettingsProvider
 import im.vector.app.core.utils.ToolbarConfig
 import im.vector.app.core.utils.toast
 import im.vector.app.features.MainActivity
@@ -175,7 +175,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     private val restorables = ArrayList<Restorable>()
 
     override fun attachBaseContext(base: Context) {
-        val fontScalePreferences = FontScalePreferencesImpl(PreferenceManager.getDefaultSharedPreferences(base), SystemSettingsProviderImpl(base))
+        val fontScalePreferences = FontScalePreferencesImpl(PreferenceManager.getDefaultSharedPreferences(base), AndroidSystemSettingsProvider(base))
         val vectorConfiguration = VectorConfiguration(this, fontScalePreferences)
         super.attachBaseContext(vectorConfiguration.getLocalisedContext(base))
     }

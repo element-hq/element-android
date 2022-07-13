@@ -17,6 +17,7 @@
 package im.vector.app.features.settings.font
 
 import com.airbnb.mvrx.test.MvRxTestRule
+import im.vector.app.features.settings.FontScaleValue
 import im.vector.app.test.fakes.FakeConfiguration
 import im.vector.app.test.fakes.FakeFontScalePreferences
 import im.vector.app.test.test
@@ -24,6 +25,15 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+
+private val A_SELECTION = aFontScaleValue(index = 1)
+private val A_SCALE_OPTIONS_WITH_SELECTION = listOf(
+        aFontScaleValue(index = 0),
+        A_SELECTION,
+)
+
+// our tests only make use of the index
+private fun aFontScaleValue(index: Int) = FontScaleValue(index, "foo", -1f, 0)
 
 class FontScaleSettingViewModelTest {
 
@@ -53,51 +63,43 @@ class FontScaleSettingViewModelTest {
     }
 
     @Test
-    fun `when handling FontScaleChangedAction, then changes state and emits RestartActivity event`() = runTest {
-        val scaleOptions = fakeFontScalePreferences.getAvailableScales()
-        viewModelWith(
-                initialState.copy(
-                        availableScaleOptions = scaleOptions,
-                        persistedSettingIndex = 0,
-                )
-        )
+    fun `given useSystemSetting is false when handling FontScaleChangedAction, then changes state and emits RestartActivity event`() =
+            runTest {
+                fakeFontScalePreferences.givenAvailableScaleOptions(A_SCALE_OPTIONS_WITH_SELECTION)
+                viewModelWith(initialState)
+                val test = viewModel.test()
 
-        val test = viewModel.test()
+                viewModel.handle(FontScaleSettingAction.FontScaleChangedAction(A_SELECTION))
 
-        val newIndex = 2
+                test
+                        .assertStatesChanges(
+                                initialState.copy(availableScaleOptions = A_SCALE_OPTIONS_WITH_SELECTION),
+                                { copy(persistedSettingIndex = A_SELECTION.index) }
+                        )
+                        .assertEvents(FontScaleSettingViewEvents.RestartActivity)
+                        .finish()
 
-        viewModel.handle(FontScaleSettingAction.FontScaleChangedAction(scaleOptions[newIndex]))
-
-        test
-                .assertStatesChanges(
-                        initialState,
-                        { copy(persistedSettingIndex = newIndex) }
-                )
-                .assertEvents(FontScaleSettingViewEvents.RestartActivity)
-                .finish()
-
-        fakeFontScalePreferences.verifyAppScaleFontValue(scaleOptions[newIndex])
-    }
+                fakeFontScalePreferences.verifyAppScaleFontValue(A_SELECTION)
+            }
 
     @Test
-    fun `when handling UseSystemSettingChangedAction, then changes state and emits RestartActivity event`() = runTest {
-        val scaleOptions = fakeFontScalePreferences.getAvailableScales()
-        viewModelWith(
-                initialState.copy(availableScaleOptions = scaleOptions)
-        )
+    fun `given app and system font scale are different when handling UseSystemSettingChangedAction, then changes state and emits RestartActivity event`() =
+            runTest {
+                fakeFontScalePreferences.givenAvailableScaleOptions(A_SCALE_OPTIONS_WITH_SELECTION)
+                viewModelWith(initialState)
+                val test = viewModel.test()
 
-        val test = viewModel.test()
-        fakeFontScalePreferences.givenAppSettingIsDifferentFromSystemSetting()
-        val newValue = false
+                fakeFontScalePreferences.givenAppSettingIsDifferentFromSystemSetting()
+                val newValue = false
 
-        viewModel.handle(FontScaleSettingAction.UseSystemSettingChangedAction(newValue))
+                viewModel.handle(FontScaleSettingAction.UseSystemSettingChangedAction(newValue))
 
-        test
-                .assertStatesChanges(
-                        initialState,
-                        { copy(useSystemSettings = newValue) }
-                )
-                .assertEvents(FontScaleSettingViewEvents.RestartActivity)
-                .finish()
-    }
+                test
+                        .assertStatesChanges(
+                                initialState.copy(availableScaleOptions = A_SCALE_OPTIONS_WITH_SELECTION),
+                                { copy(useSystemSettings = newValue) }
+                        )
+                        .assertEvents(FontScaleSettingViewEvents.RestartActivity)
+                        .finish()
+            }
 }
