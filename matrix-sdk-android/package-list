@@ -4503,9 +4503,14 @@ $dokka.location:org.matrix.android.sdk.api.util/MimeTypes/Images/#/PointingToDec
 $dokka.location:org.matrix.android.sdk.api.util/MimeTypes/Jpeg/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/-mime-types/-jpeg.html
 $dokka.location:org.matrix.android.sdk.api.util/MimeTypes/OctetStream/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/-mime-types/-octet-stream.html
 $dokka.location:org.matrix.android.sdk.api.util/MimeTypes/Ogg/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/-mime-types/-ogg.html
+$dokka.location:org.matrix.android.sdk.api.util/MimeTypes/PlainText/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/-mime-types/-plain-text.html
 $dokka.location:org.matrix.android.sdk.api.util/MimeTypes/Png/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/-mime-types/-png.html
+$dokka.location:org.matrix.android.sdk.api.util/MimeTypes/isMimeTypeAny/kotlin.String?#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/-mime-types/is-mime-type-any.html
+$dokka.location:org.matrix.android.sdk.api.util/MimeTypes/isMimeTypeApplication/kotlin.String?#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/-mime-types/is-mime-type-application.html
 $dokka.location:org.matrix.android.sdk.api.util/MimeTypes/isMimeTypeAudio/kotlin.String?#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/-mime-types/is-mime-type-audio.html
+$dokka.location:org.matrix.android.sdk.api.util/MimeTypes/isMimeTypeFile/kotlin.String?#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/-mime-types/is-mime-type-file.html
 $dokka.location:org.matrix.android.sdk.api.util/MimeTypes/isMimeTypeImage/kotlin.String?#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/-mime-types/is-mime-type-image.html
+$dokka.location:org.matrix.android.sdk.api.util/MimeTypes/isMimeTypeText/kotlin.String?#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/-mime-types/is-mime-type-text.html
 $dokka.location:org.matrix.android.sdk.api.util/MimeTypes/isMimeTypeVideo/kotlin.String?#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/-mime-types/is-mime-type-video.html
 $dokka.location:org.matrix.android.sdk.api.util/MimeTypes/normalizeMimeType/kotlin.String?#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/-mime-types/normalize-mime-type.html
 $dokka.location:org.matrix.android.sdk.api.util/NoOpCancellable///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/-no-op-cancellable/index.html
