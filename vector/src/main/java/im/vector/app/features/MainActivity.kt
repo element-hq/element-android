@@ -17,6 +17,7 @@
 package im.vector.app.features
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
@@ -76,6 +77,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
 
     companion object {
         private const val EXTRA_ARGS = "EXTRA_ARGS"
+        private const val EXTRA_NEXT_INTENT = "EXTRA_NEXT_INTENT"
 
         // Special action to clear cache and/or clear credentials
         fun restartApp(activity: Activity, args: MainActivityArgs) {
@@ -84,6 +86,12 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
 
             intent.putExtra(EXTRA_ARGS, args)
             activity.startActivity(intent)
+        }
+
+        fun getIntentWithNextIntent(context: Context, nextIntent: Intent): Intent {
+            val intent = Intent(context, MainActivity::class.java)
+            intent.putExtra(EXTRA_NEXT_INTENT, nextIntent)
+            return intent
         }
     }
 
@@ -123,15 +131,21 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
     }
 
     private fun handleAppStarted() {
-        args = parseArgs()
-        if (args.clearCredentials || args.isUserLoggedOut || args.clearCache) {
-            clearNotifications()
-        }
-        // Handle some wanted cleanup
-        if (args.clearCache || args.clearCredentials) {
-            doCleanUp()
+        if (intent.hasExtra(EXTRA_NEXT_INTENT)) {
+            // Start the next Activity
+            val nextIntent = intent.getParcelableExtra<Intent>(EXTRA_NEXT_INTENT)
+            startIntentAndFinish(nextIntent)
         } else {
-            startNextActivityAndFinish()
+            args = parseArgs()
+            if (args.clearCredentials || args.isUserLoggedOut || args.clearCache) {
+                clearNotifications()
+            }
+            // Handle some wanted cleanup
+            if (args.clearCache || args.clearCredentials) {
+                doCleanUp()
+            } else {
+                startNextActivityAndFinish()
+            }
         }
     }
 
@@ -273,6 +287,10 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                 null
             }
         }
+        startIntentAndFinish(intent)
+    }
+
+    private fun startIntentAndFinish(intent: Intent?) {
         intent?.let { startActivity(it) }
         finish()
     }

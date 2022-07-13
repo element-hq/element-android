@@ -623,10 +623,12 @@ class HomeActivity :
                     inviteNotificationRoomId = inviteNotificationRoomId
             )
 
-            return Intent(context, HomeActivity::class.java)
+            val intent = Intent(context, HomeActivity::class.java)
                     .apply {
                         putExtra(Mavericks.KEY_ARG, args)
                     }
+
+            return MainActivity.getIntentWithNextIntent(context, intent)
         }
     }
 
