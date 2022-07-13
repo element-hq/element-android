@@ -44,10 +44,9 @@ fun TextInputLayout.content() = editText().text.toString()
 fun TextInputLayout.hasContent() = !editText().text.isNullOrEmpty()
 
 fun TextInputLayout.clearErrorOnChange(lifecycleOwner: LifecycleOwner) {
-    editText()
-            .textChanges()
-            .onEach { error = null }
-            .launchIn(lifecycleOwner.lifecycleScope)
+    onTextChange(lifecycleOwner) {
+        error = null
+    }
 }
 
 fun TextInputLayout.onTextChange(lifecycleOwner: LifecycleOwner, action: (CharSequence) -> Unit) {
