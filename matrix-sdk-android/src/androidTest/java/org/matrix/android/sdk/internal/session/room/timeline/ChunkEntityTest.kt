@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.session.room.timeline
+package org.matrix.android.sdk.internal.session.room.timeline
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.zhuinden.monarchy.Monarchy
@@ -32,9 +32,8 @@ import org.matrix.android.sdk.internal.database.helper.addTimelineEvent
 import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.SessionRealmModule
-import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
 import org.matrix.android.sdk.internal.util.time.DefaultClock
-import org.matrix.android.sdk.session.room.timeline.RoomDataHelper.createFakeMessageEvent
+import org.matrix.android.sdk.internal.session.room.timeline.RoomDataHelper.createFakeMessageEvent
 
 @RunWith(AndroidJUnit4::class)
 internal class ChunkEntityTest : InstrumentedTest {

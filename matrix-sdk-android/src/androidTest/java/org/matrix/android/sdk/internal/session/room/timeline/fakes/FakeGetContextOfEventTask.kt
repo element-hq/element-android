@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.session.room.timeline
+package org.matrix.android.sdk.internal.session.room.timeline.fakes
 
 import org.matrix.android.sdk.internal.session.room.timeline.GetContextOfEventTask
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
+import org.matrix.android.sdk.internal.session.room.timeline.RoomDataHelper
 import org.matrix.android.sdk.internal.session.room.timeline.TokenChunkEventPersistor
 import kotlin.random.Random
 
@@ -30,6 +31,10 @@ internal class FakeGetContextOfEventTask constructor(private val tokenChunkEvent
                 Random.nextLong().toString(),
                 fakeEvents
         )
-        return tokenChunkEventPersistor.insertInDb(tokenChunkEvent, params.roomId, PaginationDirection.BACKWARDS)
+        return tokenChunkEventPersistor.insertInDb(
+                receivedChunk = tokenChunkEvent,
+                roomId = params.roomId,
+                direction = PaginationDirection.BACKWARDS
+        )
     }
 }
