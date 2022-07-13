@@ -1467,7 +1467,6 @@
         <item quantity="one">%d kasutaja luges</item>
         <item quantity="other">%d kasutajat lugesid</item>
     </plurals>
-    <string name="error_attachment">Manuse laadimisel tekkis viga.</string>
     <string name="attachment_type_file">Fail</string>
     <string name="attachment_type_contact">Kontakt</string>
     <string name="attachment_type_camera">Kaamera</string>

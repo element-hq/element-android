@@ -1045,7 +1045,6 @@
         <item quantity="few">%d uživatelé přečetli</item>
         <item quantity="other">%d uživatelů přečetlo</item>
     </plurals>
-    <string name="error_attachment">Během načítání přílohy došlo k chybě.</string>
     <string name="attachment_type_file">Soubor</string>
     <string name="attachment_type_contact">Kontakt</string>
     <string name="attachment_type_camera">Fotoaparát</string>

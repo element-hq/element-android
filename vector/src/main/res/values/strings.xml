@@ -1815,9 +1815,6 @@
 
     <string name="error_file_too_big_simple">"The file is too large to upload."</string>
 
-    <!-- TODO Remove key -->
-    <!--suppress UnusedResources -->
-    <string name="error_attachment">"An error occurred while retrieving the attachment."</string>
     <string name="attachment_type_dialog_title">"Add image from"</string>
     <string name="attachment_type_file">"File"</string>
     <string name="attachment_type_contact">"Contact"</string>

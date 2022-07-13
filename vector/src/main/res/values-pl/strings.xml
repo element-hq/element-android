@@ -890,7 +890,6 @@
         <item quantity="many">%d użytkowników odczytało</item>
         <item quantity="other">%d użytkowników odczytało</item>
     </plurals>
-    <string name="error_attachment">Wystąpił błąd poczas otrzymywania załącznika.</string>
     <string name="error_handling_incoming_share">Nie można obsłużyć otrzymanych danych</string>
     <string name="content_reported_as_inappropriate_title">Zgłoszono jako nieodpowiedni</string>
     <string name="content_reported_as_inappropriate_content">Zawartość została zgłoszona jako niewłaściwa.

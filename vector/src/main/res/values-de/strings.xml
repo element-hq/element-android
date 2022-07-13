@@ -1020,7 +1020,6 @@
         <item quantity="one">gelesen von einem Nutzer</item>
         <item quantity="other">gelesen von %d Nutzern</item>
     </plurals>
-    <string name="error_attachment">Beim Abrufen des Anhangs ist ein Fehler aufgetreten.</string>
     <string name="attachment_type_file">Datei</string>
     <string name="attachment_type_contact">Kontakt</string>
     <string name="attachment_type_camera">Kamera</string>

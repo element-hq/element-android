@@ -1380,7 +1380,6 @@
     <string name="rotate_and_crop_screen_title">Roteren en bijsnijden</string>
     <string name="attachment_type_poll">Opiniepeiling</string>
     <string name="attachment_type_dialog_title">Afbeelding toevoegen van</string>
-    <string name="error_attachment">Er is een fout opgetreden bij het ophalen van de bijlage.</string>
     <string name="error_file_too_big_simple">Het bestand is te groot om te uploaden.</string>
     <plurals name="fallback_users_read">
         <item quantity="one">%d persoon gelezen</item>

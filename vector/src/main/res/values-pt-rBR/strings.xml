@@ -1092,7 +1092,6 @@
         <item quantity="one">%d usuária(o) leu</item>
         <item quantity="other">%d usuárias(os) leram</item>
     </plurals>
-    <string name="error_attachment">Um erro ocorreu enquando recuperando o anexo.</string>
     <string name="attachment_type_file">Arquivo</string>
     <string name="attachment_type_contact">Contato</string>
     <string name="attachment_type_camera">Câmera</string>

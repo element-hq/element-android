@@ -1348,7 +1348,6 @@
         <item quantity="one">%d användare läste</item>
         <item quantity="other">%d användare läste</item>
     </plurals>
-    <string name="error_attachment">Ett fel inträffade vid hämtning av bilagan.</string>
     <string name="error_handling_incoming_share">Kunde inte hantera delningsdata</string>
     <string name="uploads_files_subtitle">%1$s vid %2$s</string>
     <string name="report_content_spam">Det är skräppost</string>
