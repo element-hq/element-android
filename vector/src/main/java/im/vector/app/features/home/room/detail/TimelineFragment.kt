@@ -1323,6 +1323,7 @@ class TimelineFragment @Inject constructor(
 
     private fun handlePendingAction(roomDetailPendingAction: RoomDetailPendingAction) {
         when (roomDetailPendingAction) {
+            RoomDetailPendingAction.DoNothing -> Unit
             is RoomDetailPendingAction.JumpToReadReceipt ->
                 timelineViewModel.handle(RoomDetailAction.JumpToReadReceipt(roomDetailPendingAction.userId))
             is RoomDetailPendingAction.MentionUser ->
