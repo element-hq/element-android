@@ -155,7 +155,6 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
         setupAutoFill()
 
         views.selectedServerName.text = state.selectedHomeserver.userFacingUrl.toReducedUrl()
-        views.selectedServerDescription.text = state.selectedHomeserver.description
 
         if (state.isLoading) {
             // Ensure password is hidden

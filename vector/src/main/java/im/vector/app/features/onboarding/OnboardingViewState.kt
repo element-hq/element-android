@@ -66,7 +66,6 @@ enum class OnboardingFlow {
 
 @Parcelize
 data class SelectedHomeserverState(
-        val description: String? = null,
         val userFacingUrl: String? = null,
         val upstreamUrl: String? = null,
         val preferredLoginMode: LoginMode = LoginMode.Unknown,
