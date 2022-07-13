@@ -60,7 +60,6 @@ import kotlin.coroutines.resume
  */
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
-@Ignore
 class UnwedgingTest : InstrumentedTest {
 
     private lateinit var messagesReceivedByBob: List<TimelineEvent>
