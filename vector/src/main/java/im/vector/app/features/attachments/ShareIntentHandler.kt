@@ -18,53 +18,36 @@ package im.vector.app.features.attachments
 
 import android.content.Context
 import android.content.Intent
-import im.vector.lib.multipicker.MultiPicker
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
+import org.matrix.android.sdk.api.util.MimeTypes
+import org.matrix.android.sdk.api.util.MimeTypes.isMimeTypeAny
+import org.matrix.android.sdk.api.util.MimeTypes.isMimeTypeApplication
+import org.matrix.android.sdk.api.util.MimeTypes.isMimeTypeAudio
+import org.matrix.android.sdk.api.util.MimeTypes.isMimeTypeFile
+import org.matrix.android.sdk.api.util.MimeTypes.isMimeTypeImage
+import org.matrix.android.sdk.api.util.MimeTypes.isMimeTypeText
+import org.matrix.android.sdk.api.util.MimeTypes.isMimeTypeVideo
 import javax.inject.Inject
 
-class ShareIntentHandler @Inject constructor() {
+class ShareIntentHandler @Inject constructor(
+        private val multiPickerIncomingFiles: MultiPickerIncomingFiles,
+        private val context: Context,
+) {
 
     /**
      * This methods aims to handle incoming share intents.
      *
      * @return true if it can handle the intent data, false otherwise
      */
-    fun handleIncomingShareIntent(context: Context, intent: Intent, onFile: (List<ContentAttachmentData>) -> Unit, onPlainText: (String) -> Unit): Boolean {
+    fun handleIncomingShareIntent(intent: Intent, onFile: (List<ContentAttachmentData>) -> Unit, onPlainText: (String) -> Unit): Boolean {
         val type = intent.resolveType(context) ?: return false
         return when {
-            type == "text/plain" -> handlePlainText(intent, onPlainText)
-            type.startsWith("image") -> {
-                onFile(
-                        MultiPicker.get(MultiPicker.IMAGE).getIncomingFiles(context, intent).map {
-                            it.toContentAttachmentData()
-                        }
-                )
-                true
-            }
-            type.startsWith("video") -> {
-                onFile(
-                        MultiPicker.get(MultiPicker.VIDEO).getIncomingFiles(context, intent).map {
-                            it.toContentAttachmentData()
-                        }
-                )
-                true
-            }
-            type.startsWith("audio") -> {
-                onFile(
-                        MultiPicker.get(MultiPicker.AUDIO).getIncomingFiles(context, intent).map {
-                            it.toContentAttachmentData()
-                        }
-                )
-                true
-            }
-
-            type.startsWith("application") || type.startsWith("file") || type.startsWith("text") || type.startsWith("*") -> {
-                onFile(
-                        MultiPicker.get(MultiPicker.FILE).getIncomingFiles(context, intent).map {
-                            it.toContentAttachmentData()
-                        }
-                )
-                true
+            type == MimeTypes.PlainText -> handlePlainText(intent, onPlainText)
+            type.isMimeTypeImage() -> onFile(multiPickerIncomingFiles.image(intent)).let { true }
+            type.isMimeTypeVideo() -> onFile(multiPickerIncomingFiles.video(intent)).let { true }
+            type.isMimeTypeAudio() -> onFile(multiPickerIncomingFiles.audio(intent)).let { true }
+            type.isMimeTypeApplication() || type.isMimeTypeFile() || type.isMimeTypeText() || type.isMimeTypeAny() -> {
+                onFile(multiPickerIncomingFiles.file(intent)).let { true }
             }
             else -> false
         }
