@@ -25,6 +25,7 @@ import androidx.autofill.HintConstants
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import im.vector.app.R
+import im.vector.app.core.extensions.clearErrorOnChange
 import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.editText
 import im.vector.app.core.extensions.hideKeyboard
@@ -41,8 +42,10 @@ import im.vector.app.features.login.render
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewState
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
+import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
 class FtueAuthCombinedLoginFragment @Inject constructor(
@@ -66,8 +69,12 @@ class FtueAuthCombinedLoginFragment @Inject constructor(
 
     private fun setupSubmitButton() {
         views.loginSubmit.setOnClickListener { submit() }
-        observeContentChangesAndResetErrors(views.loginInput, views.loginPasswordInput, views.loginSubmit)
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+        views.loginInput.clearErrorOnChange(viewLifecycleOwner)
+        views.loginPasswordInput.clearErrorOnChange(viewLifecycleOwner)
+
+        combine(views.loginInput.editText().textChanges(), views.loginPasswordInput.editText().textChanges()) { account, password ->
+            views.loginSubmit.isEnabled = account.isNotEmpty() && password.isNotEmpty()
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun submit() {

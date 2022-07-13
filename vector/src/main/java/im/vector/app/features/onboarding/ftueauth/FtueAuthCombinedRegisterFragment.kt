@@ -28,6 +28,7 @@ import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
+import im.vector.app.core.extensions.clearErrorOnChange
 import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.editText
 import im.vector.app.core.extensions.hasSurroundingSpaces
@@ -48,8 +49,8 @@ import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingAction.AuthenticateAction
 import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewState
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import org.matrix.android.sdk.api.failure.isHomeserverUnavailable
 import org.matrix.android.sdk.api.failure.isInvalidPassword
@@ -60,6 +61,8 @@ import org.matrix.android.sdk.api.failure.isUsernameInUse
 import org.matrix.android.sdk.api.failure.isWeakPassword
 import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
+
+private const val MINIMUM_PASSWORD_LENGTH = 8
 
 class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAuthFragment<FragmentFtueCombinedRegisterBinding>() {
 
@@ -86,8 +89,14 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
 
     private fun setupSubmitButton() {
         views.createAccountSubmit.setOnClickListener { submit() }
-        observeContentChangesAndResetErrors(views.createAccountInput, views.createAccountPasswordInput, views.createAccountSubmit)
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+        views.createAccountInput.clearErrorOnChange(viewLifecycleOwner)
+        views.createAccountPasswordInput.clearErrorOnChange(viewLifecycleOwner)
+
+        combine(views.createAccountInput.editText().textChanges(), views.createAccountPasswordInput.editText().textChanges()) { account, password ->
+            val accountIsValid = account.isNotEmpty()
+            val passwordIsValid = password.length >= MINIMUM_PASSWORD_LENGTH
+            views.createAccountSubmit.isEnabled = accountIsValid && passwordIsValid
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun submit() {

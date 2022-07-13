@@ -46,6 +46,7 @@ fun TextInputLayout.hasContent() = !editText().text.isNullOrEmpty()
 fun TextInputLayout.clearErrorOnChange(lifecycleOwner: LifecycleOwner) {
     onTextChange(lifecycleOwner) {
         error = null
+        isErrorEnabled = false
     }
 }
 
