@@ -449,6 +449,9 @@ dependencies {
     implementation libs.airbnb.epoxyPaging
     implementation libs.airbnb.mavericks
 
+    // Snap Helper https://github.com/rubensousa/GravitySnapHelper
+    implementation 'com.github.rubensousa:gravitysnaphelper:2.2.2'
+
     // Work
     implementation libs.androidx.work
 

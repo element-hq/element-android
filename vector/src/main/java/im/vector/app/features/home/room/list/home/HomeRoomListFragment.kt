@@ -35,6 +35,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.databinding.FragmentRoomListBinding
 import im.vector.app.features.analytics.plan.ViewRoom
+import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.list.RoomListAnimator
 import im.vector.app.features.home.room.list.RoomListListener
@@ -43,6 +44,7 @@ import im.vector.app.features.home.room.list.RoomSummaryPagedController
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
+import im.vector.app.features.home.room.list.home.recent.RecentRoomCarouselController
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -53,7 +55,8 @@ import javax.inject.Inject
 
 class HomeRoomListFragment @Inject constructor(
         private val roomSummaryItemFactory: RoomSummaryItemFactory,
-        private val userPreferencesProvider: UserPreferencesProvider
+        private val userPreferencesProvider: UserPreferencesProvider,
+        private val avatarRenderer: AvatarRenderer
 ) : VectorBaseFragment<FragmentRoomListBinding>(),
         RoomListListener {
 
@@ -180,6 +183,14 @@ class HomeRoomListFragment @Inject constructor(
                     }
                 }.adapter
             }
+            is HomeRoomSection.RecentRoomsData -> RecentRoomCarouselController(
+                    avatarRenderer = avatarRenderer
+            ).also { controller ->
+                controller.listener = this
+                data.list.observe(viewLifecycleOwner) { list ->
+                    controller.submitList(list)
+                }
+            }.adapter
         }
     }
 

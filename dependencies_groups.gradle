@@ -74,6 +74,7 @@ ext.groups = [
                         'com.github.javaparser',
                         'com.github.piasy',
                         'com.github.shyiko.klob',
+                        'com.github.rubensousa',
                         'com.google',
                         'com.google.android',
                         'com.google.api.grpc',
