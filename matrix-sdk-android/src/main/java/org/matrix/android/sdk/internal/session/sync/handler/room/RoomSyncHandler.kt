@@ -122,6 +122,7 @@ internal class RoomSyncHandler @Inject constructor(
 //        roomSummaryUpdater.validateSpaceRelationship(realm)
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun postSyncSpaceHierarchyHandle(realm: Realm) {
 //        roomSummaryUpdater.validateSpaceRelationship(realm)
     }
