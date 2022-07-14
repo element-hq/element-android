@@ -1912,7 +1912,7 @@
     <string name="ftue_account_created_personalize">Personalize profile</string>
     <string name="ftue_account_created_take_me_home">Take me home</string>
     <string name="ftue_account_created_congratulations_title">Congratulations!</string>
-    <string name="ftue_account_created_subtitle">Your account %s has been created.</string>
+    <string name="ftue_account_created_subtitle">Your account %s has been created</string>
 
     <string name="ftue_display_name_title">Choose a display name</string>
     <string name="ftue_display_name_subtitle">This will be shown when you send messages.</string>
