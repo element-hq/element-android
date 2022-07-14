@@ -25,7 +25,9 @@ import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.session.SessionScope
+import timber.log.Timber
 import javax.inject.Inject
+import kotlin.system.measureTimeMillis
 
 internal interface RoomGetter {
     fun getRoom(roomId: String): Room?
@@ -40,9 +42,14 @@ internal class DefaultRoomGetter @Inject constructor(
 ) : RoomGetter {
 
     override fun getRoom(roomId: String): Room? {
-        return realmSessionProvider.withRealm { realm ->
-            createRoom(realm, roomId)
+        var result: Room? = null
+        val timing = measureTimeMillis {
+            result = realmSessionProvider.withRealm { realm ->
+                createRoom(realm, roomId)
+            }
         }
+        Timber.v("## ROOM: getRoom completed in $timing ms")
+        return result
     }
 
     override fun getDirectRoomWith(otherUserId: String): String? {
