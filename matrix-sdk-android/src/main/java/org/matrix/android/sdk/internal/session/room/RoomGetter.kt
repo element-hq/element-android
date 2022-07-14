@@ -48,7 +48,7 @@ internal class DefaultRoomGetter @Inject constructor(
                 createRoom(realm, roomId)
             }
         }
-        Timber.v("## ROOM: getRoom completed in $timing ms")
+        Timber.v("## ROOM: getRoom completed in $timing ms on ${Thread.currentThread().name}")
         return result
     }
 
