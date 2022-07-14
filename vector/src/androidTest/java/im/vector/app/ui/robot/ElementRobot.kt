@@ -17,6 +17,7 @@
 package im.vector.app.ui.robot
 
 import android.view.View
+import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions
@@ -91,8 +92,7 @@ class ElementRobot {
         waitUntilActivityVisible<CreateDirectRoomActivity> {
             waitUntilViewVisible(withId(R.id.userListSearch))
         }
-        // close keyboard
-        pressBack()
+        closeSoftKeyboard()
         block(NewDirectMessageRobot())
         pressBack()
         waitUntilViewVisible(withId(R.id.bottomNavigationView))
