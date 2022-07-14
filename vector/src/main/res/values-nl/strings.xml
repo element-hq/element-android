@@ -1380,7 +1380,6 @@
     <string name="rotate_and_crop_screen_title">Roteren en bijsnijden</string>
     <string name="attachment_type_poll">Opiniepeiling</string>
     <string name="attachment_type_dialog_title">Afbeelding toevoegen van</string>
-    <string name="error_attachment">Er is een fout opgetreden bij het ophalen van de bijlage.</string>
     <string name="error_file_too_big_simple">Het bestand is te groot om te uploaden.</string>
     <plurals name="fallback_users_read">
         <item quantity="one">%d persoon gelezen</item>
@@ -2500,4 +2499,34 @@
     <string name="time_unit_second_short">sec</string>
     <string name="time_unit_minute_short">min</string>
     <string name="time_unit_hour_short">u</string>
+    <string name="live_location_labs_promotion_switch_title">Locatie delen inschakelen</string>
+    <string name="live_location_labs_promotion_description">Let op: dit is een labfunctie met een tijdelijke implementatie. Dit betekent dat u uw locatiegeschiedenis niet kunt verwijderen en dat geavanceerde gebruikers uw locatiegeschiedenis kunnen zien, zelfs nadat u stopt met het delen van uw live locatie met deze ruimte.</string>
+    <string name="live_location_labs_promotion_title">Live locatie delen</string>
+    <string name="settings_troubleshoot_test_current_gateway">Huidige gateway: %s</string>
+    <string name="settings_troubleshoot_test_current_gateway_title">Gateway</string>
+    <string name="settings_troubleshoot_test_current_endpoint_failed">Kan het eindpunt niet vinden.</string>
+    <string name="settings_troubleshoot_test_current_endpoint_success">Huidig eindpunt: %s</string>
+    <string name="settings_troubleshoot_test_current_endpoint_title">Eindpunt</string>
+    <string name="settings_troubleshoot_test_current_distributor">Gebruikt momenteel %s.</string>
+    <string name="settings_troubleshoot_test_current_distributor_title">Methode</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="one">%d methode gevonden.</item>
+        <item quantity="other">%d methoden gevonden.</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_distributors_fdroid">Geen andere methode dan achtergrondsynchronisatie gevonden.</string>
+    <string name="settings_troubleshoot_test_distributors_gplay">Geen andere methode dan Google Play Service gevonden.</string>
+    <string name="settings_troubleshoot_test_distributors_title">Beschikbare methoden</string>
+    <string name="settings_notification_method">Meldingsmethode</string>
+    <string name="unifiedpush_distributor_background_sync">Achtergrondsynchronisatie</string>
+    <string name="unifiedpush_distributor_fcm_fallback">Google Services</string>
+    <string name="unifiedpush_getdistributors_dialog_title">Kies hoe u meldingen wilt ontvangen</string>
+    <string name="settings_security_pin_code_use_biometrics_error">Kan biometrische authenticatie niet inschakelen.</string>
+    <string name="auth_biometric_key_invalidated_message">Biometrische authenticatie is uitgeschakeld omdat er onlangs een nieuwe biometrische authenticatiemethode is toegevoegd. U kunt het weer inschakelen in Instellingen.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">Meldingsmethode resetten</string>
+    <string name="push_gateway_item_profile_tag">Profieltag:</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">Kan eindpunt token niet registreren op server:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">Eindpunt succesvol geregistreerd bij server.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_title">Registratie van eindpunt</string>
+    <string name="action_next">Volgende</string>
 </resources>

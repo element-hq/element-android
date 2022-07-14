@@ -1467,7 +1467,6 @@
         <item quantity="one">%d kasutaja luges</item>
         <item quantity="other">%d kasutajat lugesid</item>
     </plurals>
-    <string name="error_attachment">Manuse laadimisel tekkis viga.</string>
     <string name="attachment_type_file">Fail</string>
     <string name="attachment_type_contact">Kontakt</string>
     <string name="attachment_type_camera">Kaamera</string>
@@ -2500,4 +2499,25 @@
     <string name="time_unit_second_short">sek</string>
     <string name="time_unit_minute_short">min</string>
     <string name="time_unit_hour_short">t</string>
+    <string name="live_location_labs_promotion_switch_title">Luba asukohta jagada</string>
+    <string name="live_location_labs_promotion_description">Palun arvesta järgnevaga: see katseline funktsionaalsus kasutab ajutist lahendust. See tähendab, et sa ei saa oma asukoha jagamise ajalugu kustutada ning heade arvutioskustega kasutajad saavad näha sinu asukohta ka siis, kui sa oled oma asukoha jagamise selles jututoas lõpetanud.</string>
+    <string name="live_location_labs_promotion_title">Asukoha jagamine reaalajas</string>
+    <string name="settings_security_pin_code_use_biometrics_error">Biomeetrilise autentimise kasutuselevõtmine ei õnnestunud.</string>
+    <string name="auth_biometric_key_invalidated_message">Kuna hiljuti lisandus uus biomeetrilise autentimise meetod, siis lülitati biomeetriline autentimine välja. Sa saad ta uuesti kasutusele võtta seadistustest.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">Lähtesta teavituse meetod</string>
+    <string name="push_gateway_item_profile_tag">Profiili silt:</string>
+    <string name="action_next">Järgmine</string>
+    <string name="settings_troubleshoot_test_current_distributor">Hetkel on kasutusel %s.</string>
+    <string name="settings_troubleshoot_test_current_distributor_title">Meetod</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="one">Leidsin %d meetodi.</item>
+        <item quantity="other">Leidsin %d meetodit.</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_distributors_fdroid">Ühtegi teist meetodit peale taustal sünkroniseerimise ei leidunud.</string>
+    <string name="settings_troubleshoot_test_distributors_gplay">Ühtegi teist meetodit peale Google Play Service ei leidunud.</string>
+    <string name="settings_troubleshoot_test_distributors_title">Saadaval olevad meetodid</string>
+    <string name="settings_notification_method">Teavituse meetod</string>
+    <string name="unifiedpush_distributor_background_sync">Sünkroniseerimine taustal</string>
+    <string name="unifiedpush_distributor_fcm_fallback">Google\'i teenused</string>
+    <string name="unifiedpush_getdistributors_dialog_title">Vali teavituste laadimise viis</string>
 </resources>

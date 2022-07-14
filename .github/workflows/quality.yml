@@ -21,7 +21,7 @@ jobs:
       - name: Run code quality check suite
         run: ./tools/check/check_code_quality.sh
 
-# Knit for all the modules (https://github.com/Kotlin/kotlinx-knit)
+  # Knit for all the modules (https://github.com/Kotlin/kotlinx-knit)
   knit:
     name: Knit
     runs-on: ubuntu-latest
@@ -31,7 +31,7 @@ jobs:
         run: |
           ./gradlew knit
 
-# ktlint for all the modules
+  # ktlint for all the modules
   ktlint:
     name: Kotlin Linter
     runs-on: ubuntu-latest
@@ -104,7 +104,7 @@ jobs:
               comment_id: ${{ steps.fc.outputs.comment-id }}
             })
 
-# Gradle dependency analysis using https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin
+  # Gradle dependency analysis using https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin
   dependency-analysis:
     name: Dependency analysis
     runs-on: ubuntu-latest
@@ -123,7 +123,7 @@ jobs:
           name: dependency-analysis
           path: build/reports/dependency-check-report.html
 
-# Lint for main module
+  # Lint for main module
   android-lint:
     name: Android Linter
     runs-on: ubuntu-latest
@@ -151,7 +151,7 @@ jobs:
           path: |
             vector/build/reports/*.*
 
-# Lint for Gplay and Fdroid release APK
+  # Lint for Gplay and Fdroid release APK
   apk-lint:
     name: Lint APK (${{ matrix.target }})
     runs-on: ubuntu-latest
@@ -203,3 +203,26 @@ jobs:
           name: detekt-report
           path: |
             */build/reports/detekt/detekt.html
+
+#  towncrier:
+#    name: Towncrier check
+#    runs-on: ubuntu-latest
+#    if: github.event_name == 'pull_request' && github.head_ref == 'develop'
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Set up Python 3.8
+#        uses: actions/setup-python@v4
+#        with:
+#          python-version: 3.8
+#      - name: Install towncrier
+#        run: |
+#          python3 -m pip install towncrier
+#      - name: Run towncrier
+#        # Fetch the pull request' base branch so towncrier will be able to
+#        # compare the current branch with the base branch.
+#        # Source: https://github.com/actions/checkout/#fetch-all-branches.
+#        run: |
+#          git fetch --no-tags origin +refs/heads/${BASE_BRANCH}:refs/remotes/origin/${BASE_BRANCH}
+#          towncrier check --compare-with origin/${BASE_BRANCH}
+#      env:
+#        BASE_BRANCH: ${{ github.base_ref }}

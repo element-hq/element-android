@@ -47,7 +47,10 @@ import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
+import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.model.localecho.RoomLocalEcho
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
+import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.state.isPublic
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.flow.flow
@@ -95,6 +98,7 @@ class RoomListViewModel @AssistedInject constructor(
 
     init {
         observeMembershipChanges()
+        observeLocalRooms()
 
         appStateHandler.selectedSpaceFlow
                 .distinctUntilChanged()
@@ -119,6 +123,23 @@ class RoomListViewModel @AssistedInject constructor(
                 .liveRoomChangeMembershipState()
                 .setOnEach {
                     copy(roomMembershipChanges = it)
+                }
+    }
+
+    private fun observeLocalRooms() {
+        val queryParams = roomSummaryQueryParams {
+            memberships = listOf(Membership.JOIN)
+        }
+        session
+                .flow()
+                .liveRoomSummaries(queryParams)
+                .map { roomSummaries ->
+                    roomSummaries.mapNotNull { summary ->
+                        summary.roomId.takeIf { RoomLocalEcho.isLocalEchoId(it) }
+                    }.toSet()
+                }
+                .setOnEach { roomIds ->
+                    copy(localRoomIds = roomIds)
                 }
     }
 
@@ -158,6 +179,14 @@ class RoomListViewModel @AssistedInject constructor(
 
     fun isPublicRoom(roomId: String): Boolean {
         return session.getRoom(roomId)?.stateService()?.isPublic().orFalse()
+    }
+
+    fun deleteLocalRooms(roomsIds: Set<String>) {
+        viewModelScope.launch {
+            roomsIds.forEach {
+                session.roomService().deleteLocalRoom(it)
+            }
+        }
     }
 
     // PRIVATE METHODS *****************************************************************************

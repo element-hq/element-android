@@ -906,7 +906,6 @@
         <item quantity="one">1 käyttäjä on lukenut</item>
         <item quantity="other">%d käyttäjää on lukenut</item>
     </plurals>
-    <string name="error_attachment">Liitettä noudettaessa tapahtui virhe.</string>
     <string name="attachment_type_file">Tiedosto</string>
     <string name="attachment_type_camera">Kamera</string>
     <string name="attachment_type_gallery">Galleria</string>

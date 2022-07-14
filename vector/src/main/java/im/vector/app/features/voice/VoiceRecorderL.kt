@@ -23,8 +23,8 @@ import android.media.MediaRecorder
 import android.media.audiofx.AutomaticGainControl
 import android.media.audiofx.NoiseSuppressor
 import android.os.Build
-import im.vector.opusencoder.OggOpusEncoder
-import im.vector.opusencoder.configuration.SampleRate
+import io.element.android.opusencoder.OggOpusEncoder
+import io.element.android.opusencoder.configuration.SampleRate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.isActive

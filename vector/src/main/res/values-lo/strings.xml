@@ -1106,7 +1106,6 @@
     <string name="attachment_type_contact">ຕິດຕໍ່</string>
     <string name="attachment_type_file">ໄຟລ໌</string>
     <string name="attachment_type_dialog_title">ເພີ່ມຮູບພາບຈາກ</string>
-    <string name="error_attachment">ເກີດຄວາມຜິດພາດຂຶ້ນໃນຂະນະທີ່ກຳລັງດຶງໄຟລ໌ແນບມາ.</string>
     <string name="error_file_too_big_simple">ໄຟລ໌ໃຫຍ່ເກີນທີ່ຈະອັບໂຫລດ.</string>
     <plurals name="fallback_users_read">
         <item quantity="other">%d ຜູ້ໃຊ້ອ່ານແລ້ວ</item>

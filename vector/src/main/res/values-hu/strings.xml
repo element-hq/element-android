@@ -930,7 +930,6 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
         <item quantity="one">%d felhasználó olvasta</item>
         <item quantity="other">%d felhasználó olvasta</item>
     </plurals>
-    <string name="error_attachment">A csatolmány letöltésénél hiba történt.</string>
     <string name="attachment_type_file">Fájl</string>
     <string name="attachment_type_contact">Névjegy</string>
     <string name="attachment_type_camera">Kamera</string>

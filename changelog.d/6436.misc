@@ -1,1 +1,0 @@
-Let your Activity or Fragment implement `VectorMenuProvider` if they provide a menu.

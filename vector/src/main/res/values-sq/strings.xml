@@ -986,7 +986,6 @@
         <item quantity="one">%d përdorues lexoi</item>
         <item quantity="other">%d përdorues lexuan</item>
     </plurals>
-    <string name="error_attachment">Ndodhi një gabim gjatë marrjes së bashkëngjitjes.</string>
     <string name="attachment_type_file">Kartelë</string>
     <string name="attachment_type_contact">Kontakt</string>
     <string name="attachment_type_camera">Kamerë</string>

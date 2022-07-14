@@ -1957,7 +1957,6 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="uploads_media_no_result">Šajā istabā nav multivides</string>
     <string name="uploads_media_title">Multivide</string>
     <string name="error_handling_incoming_share">Nevarēja apstrādāt kopīgošanas datus</string>
-    <string name="error_attachment">Iegūstot pielikumu, radās kļūda.</string>
     <string name="error_file_too_big_simple">Fails ir pārāk liels, lai tos augšupielādētu.</string>
     <plurals name="two_and_some_others_read">
         <item quantity="zero">%1$s, %2$s un %3$d citi lasīja</item>
