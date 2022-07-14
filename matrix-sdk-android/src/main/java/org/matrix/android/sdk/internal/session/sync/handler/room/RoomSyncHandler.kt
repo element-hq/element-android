@@ -123,7 +123,7 @@ internal class RoomSyncHandler @Inject constructor(
     }
 
     fun postSyncSpaceHierarchyHandle(realm: Realm) {
-        roomSummaryUpdater.validateSpaceRelationship(realm)
+//        roomSummaryUpdater.validateSpaceRelationship(realm)
     }
     // PRIVATE METHODS *****************************************************************************
 
