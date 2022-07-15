@@ -46,6 +46,9 @@ import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.session.VectorSessionStore
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.signout.hard.SignedOutActivity
+import im.vector.app.features.start.StartAppAction
+import im.vector.app.features.start.StartAppViewEvent
+import im.vector.app.features.start.StartAppViewModel
 import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.ui.UiStateRepository
 import kotlinx.coroutines.Dispatchers
@@ -78,6 +81,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
     companion object {
         private const val EXTRA_ARGS = "EXTRA_ARGS"
         private const val EXTRA_NEXT_INTENT = "EXTRA_NEXT_INTENT"
+        private const val EXTRA_INIT_SESSION = "EXTRA_INIT_SESSION"
 
         // Special action to clear cache and/or clear credentials
         fun restartApp(activity: Activity, args: MainActivityArgs) {
@@ -88,6 +92,12 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
             activity.startActivity(intent)
         }
 
+        fun getIntentToInitSession(activity: Activity): Intent {
+            val intent = Intent(activity, MainActivity::class.java)
+            intent.putExtra(EXTRA_INIT_SESSION, true)
+            return intent
+        }
+
         fun getIntentWithNextIntent(context: Context, nextIntent: Intent): Intent {
             val intent = Intent(context, MainActivity::class.java)
             intent.putExtra(EXTRA_NEXT_INTENT, nextIntent)
@@ -95,7 +105,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
         }
     }
 
-    private val mainViewModel: MainViewModel by viewModel()
+    private val startAppViewModel: StartAppViewModel by viewModel()
 
     override fun getBinding() = ActivityMainBinding.inflate(layoutInflater)
 
@@ -117,16 +127,16 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mainViewModel.viewEvents.stream()
+        startAppViewModel.viewEvents.stream()
                 .onEach(::handleViewEvents)
                 .launchIn(lifecycleScope)
 
-        mainViewModel.handle(MainViewAction.StartApp)
+        startAppViewModel.handle(StartAppAction.StartApp)
     }
 
-    private fun handleViewEvents(event: MainViewEvent) {
+    private fun handleViewEvents(event: StartAppViewEvent) {
         when (event) {
-            MainViewEvent.AppStarted -> handleAppStarted()
+            StartAppViewEvent.AppStarted -> handleAppStarted()
         }
     }
 
@@ -135,6 +145,9 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
             // Start the next Activity
             val nextIntent = intent.getParcelableExtra<Intent>(EXTRA_NEXT_INTENT)
             startIntentAndFinish(nextIntent)
+        } else if (intent.hasExtra(EXTRA_INIT_SESSION)) {
+            setResult(RESULT_OK)
+            finish()
         } else {
             args = parseArgs()
             if (args.clearCredentials || args.isUserLoggedOut || args.clearCache) {

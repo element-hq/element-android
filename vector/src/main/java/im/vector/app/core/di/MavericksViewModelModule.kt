@@ -20,7 +20,6 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.multibindings.IntoMap
-import im.vector.app.features.MainViewModel
 import im.vector.app.features.analytics.accountdata.AnalyticsAccountDataViewModel
 import im.vector.app.features.analytics.ui.consent.AnalyticsConsentViewModel
 import im.vector.app.features.auth.ReAuthViewModel
@@ -112,6 +111,7 @@ import im.vector.app.features.spaces.manage.SpaceManageSharedViewModel
 import im.vector.app.features.spaces.people.SpacePeopleViewModel
 import im.vector.app.features.spaces.preview.SpacePreviewViewModel
 import im.vector.app.features.spaces.share.ShareSpaceViewModel
+import im.vector.app.features.start.StartAppViewModel
 import im.vector.app.features.terms.ReviewTermsViewModel
 import im.vector.app.features.usercode.UserCodeSharedViewModel
 import im.vector.app.features.userdirectory.UserListViewModel
@@ -486,8 +486,8 @@ interface MavericksViewModelModule {
 
     @Binds
     @IntoMap
-    @MavericksViewModelKey(MainViewModel::class)
-    fun mainViewModelFactory(factory: MainViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+    @MavericksViewModelKey(StartAppViewModel::class)
+    fun startAppViewModelFactory(factory: StartAppViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
     @Binds
     @IntoMap

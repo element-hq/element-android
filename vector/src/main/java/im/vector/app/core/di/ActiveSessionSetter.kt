@@ -26,12 +26,15 @@ class ActiveSessionSetter @Inject constructor(
         private val authenticationService: AuthenticationService,
         private val applicationContext: Context,
 ) {
+    fun shouldSetActionSession(): Boolean {
+        return authenticationService.hasAuthenticatedSessions() && !activeSessionHolder.hasActiveSession()
+    }
+
     fun tryToSetActiveSession(startSync: Boolean) {
-        if (authenticationService.hasAuthenticatedSessions() && !activeSessionHolder.hasActiveSession()) {
+        if (shouldSetActionSession()) {
             val lastAuthenticatedSession = authenticationService.getLastAuthenticatedSession()!!
             activeSessionHolder.setActiveSession(lastAuthenticatedSession)
             lastAuthenticatedSession.configureAndStart(applicationContext, startSyncing = startSync)
-            activeSessionHolder.setActiveSession(lastAuthenticatedSession)
         }
     }
 }

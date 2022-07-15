@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features
+package im.vector.app.features.start
 
 import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
@@ -23,36 +23,29 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.di.ActiveSessionSetter
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.platform.VectorDummyViewState
-import im.vector.app.core.platform.VectorViewEvents
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.core.platform.VectorViewModelAction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-sealed interface MainViewAction : VectorViewModelAction {
-    object StartApp : MainViewAction
-}
-
-sealed interface MainViewEvent : VectorViewEvents {
-    object AppStarted : MainViewEvent
-}
-
-class MainViewModel @AssistedInject constructor(
-        @Assisted val initialState: VectorDummyViewState,
+class StartAppViewModel @AssistedInject constructor(
+        @Assisted val initialState: StartAppViewState,
         private val activeSessionSetter: ActiveSessionSetter,
-) : VectorViewModel<VectorDummyViewState, MainViewAction, MainViewEvent>(initialState) {
+) : VectorViewModel<StartAppViewState, StartAppAction, StartAppViewEvent>(initialState) {
 
     @AssistedFactory
-    interface Factory : MavericksAssistedViewModelFactory<MainViewModel, VectorDummyViewState> {
-        override fun create(initialState: VectorDummyViewState): MainViewModel
+    interface Factory : MavericksAssistedViewModelFactory<StartAppViewModel, StartAppViewState> {
+        override fun create(initialState: StartAppViewState): StartAppViewModel
     }
 
-    companion object : MavericksViewModelFactory<MainViewModel, VectorDummyViewState> by hiltMavericksViewModelFactory()
+    companion object : MavericksViewModelFactory<StartAppViewModel, StartAppViewState> by hiltMavericksViewModelFactory()
 
-    override fun handle(action: MainViewAction) {
+    fun shouldStartApp(): Boolean {
+        return activeSessionSetter.shouldSetActionSession()
+    }
+
+    override fun handle(action: StartAppAction) {
         when (action) {
-            MainViewAction.StartApp -> handleStartApp()
+            StartAppAction.StartApp -> handleStartApp()
         }
     }
 
@@ -60,7 +53,7 @@ class MainViewModel @AssistedInject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             // This can take time because of DB migration(s), so do it in a background task.
             activeSessionSetter.tryToSetActiveSession(startSync = true)
-            _viewEvents.post(MainViewEvent.AppStarted)
+            _viewEvents.post(StartAppViewEvent.AppStarted)
         }
     }
 }
