@@ -63,20 +63,6 @@
             app:layout_constraintStart_toStartOf="@id/displayNameGutterStart"
             app:layout_constraintTop_toBottomOf="@id/displayNameHeaderIcon" />
 
-        <TextView
-            android:id="@+id/displayNameHeaderSubtitle"
-            style="@style/Widget.Vector.TextView.Subtitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="center"
-            android:text="@string/ftue_display_name_subtitle"
-            android:textColor="?vctr_content_secondary"
-            app:layout_constraintBottom_toTopOf="@id/titleContentSpacing"
-            app:layout_constraintEnd_toEndOf="@id/displayNameGutterEnd"
-            app:layout_constraintStart_toStartOf="@id/displayNameGutterStart"
-            app:layout_constraintTop_toBottomOf="@id/displayNameHeaderTitle" />
-
         <Space
             android:id="@+id/titleContentSpacing"
             android:layout_width="match_parent"
