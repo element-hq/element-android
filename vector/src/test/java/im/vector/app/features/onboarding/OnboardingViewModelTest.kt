@@ -72,6 +72,8 @@ private val SELECTED_HOMESERVER_STATE = SelectedHomeserverState(preferredLoginMo
 private val SELECTED_HOMESERVER_STATE_SUPPORTED_LOGOUT_DEVICES = SelectedHomeserverState(isLogoutDevicesSupported = true)
 private const val AN_EMAIL = "hello@example.com"
 private const val A_PASSWORD = "a-password"
+private const val A_USERNAME = "hello-world"
+private const val A_MATRIX_ID = "@$A_USERNAME:matrix.org"
 
 class OnboardingViewModelTest {
 
@@ -405,15 +407,6 @@ class OnboardingViewModelTest {
                 .finish()
     }
 
-    private fun availableRegistrationState(userName: String, homeServerUrl: String) = RegistrationState(
-            isUserNameAvailable = true,
-            selectedMatrixId = "@$userName:${homeServerUrl.removePrefix("https://")}"
-    )
-
-    private fun initialRegistrationState(homeServerUrl: String) = initialState.copy(
-            onboardingFlow = OnboardingFlow.SignUp, selectedHomeserver = SelectedHomeserverState(userFacingUrl = homeServerUrl)
-    )
-
     @Test
     fun `given in the sign up flow, when editing homeserver errors, then does not update the selected homeserver state and emits error`() = runTest {
         viewModelWith(initialState.copy(onboardingFlow = OnboardingFlow.SignUp))
@@ -433,7 +426,8 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `given personalisation enabled, when registering account, then updates state and emits account created event`() = runTest {
+    fun `given matrix id and personalisation enabled, when registering account, then updates state and emits account created event`() = runTest {
+        viewModelWith(initialState.copy(registrationState = RegistrationState(selectedMatrixId = A_MATRIX_ID)))
         fakeVectorFeatures.givenPersonalisationEnabled()
         givenSuccessfullyCreatesAccount(A_HOMESERVER_CAPABILITIES)
         givenRegistrationResultFor(RegisterAction.StartRegistration, RegistrationActionHandler.Result.RegistrationComplete(fakeSession))
@@ -445,7 +439,7 @@ class OnboardingViewModelTest {
                 .assertStatesChanges(
                         initialState,
                         { copy(isLoading = true) },
-                        { copy(isLoading = false, personalizationState = A_HOMESERVER_CAPABILITIES.toPersonalisationState()) }
+                        { copy(isLoading = false, personalizationState = A_HOMESERVER_CAPABILITIES.toPersonalisationState(A_USERNAME)) }
                 )
                 .assertEvents(OnboardingViewEvents.OnAccountCreated)
                 .finish()
@@ -738,9 +732,20 @@ class OnboardingViewModelTest {
     private fun givenUserNameIsUnavailable(userName: String, failure: Failure.ServerError) {
         fakeAuthenticationService.givenRegistrationWizard(FakeRegistrationWizard().also { it.givenUserNameIsUnavailable(userName, failure) })
     }
+
+    private fun availableRegistrationState(userName: String, homeServerUrl: String) = RegistrationState(
+            isUserNameAvailable = true,
+            selectedMatrixId = "@$userName:${homeServerUrl.removePrefix("https://")}"
+    )
+
+    private fun initialRegistrationState(homeServerUrl: String) = initialState.copy(
+            onboardingFlow = OnboardingFlow.SignUp, selectedHomeserver = SelectedHomeserverState(userFacingUrl = homeServerUrl)
+    )
+
 }
 
-private fun HomeServerCapabilities.toPersonalisationState() = PersonalizationState(
+private fun HomeServerCapabilities.toPersonalisationState(displayName: String? = null) = PersonalizationState(
         supportsChangingDisplayName = canChangeDisplayName,
-        supportsChangingProfilePicture = canChangeAvatar
+        supportsChangingProfilePicture = canChangeAvatar,
+        displayName = displayName,
 )
