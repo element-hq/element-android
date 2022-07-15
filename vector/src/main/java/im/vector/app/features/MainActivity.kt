@@ -21,6 +21,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
+import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.viewModel
@@ -49,6 +50,7 @@ import im.vector.app.features.signout.hard.SignedOutActivity
 import im.vector.app.features.start.StartAppAction
 import im.vector.app.features.start.StartAppViewEvent
 import im.vector.app.features.start.StartAppViewModel
+import im.vector.app.features.start.StartAppViewState
 import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.ui.UiStateRepository
 import kotlinx.coroutines.Dispatchers
@@ -127,11 +129,21 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        startAppViewModel.onEach {
+            renderState(it)
+        }
         startAppViewModel.viewEvents.stream()
                 .onEach(::handleViewEvents)
                 .launchIn(lifecycleScope)
 
         startAppViewModel.handle(StartAppAction.StartApp)
+    }
+
+    private fun renderState(state: StartAppViewState) {
+        if (state.duration > 0) {
+            views.status.setText(R.string.updating_your_data)
+        }
+        views.status.isVisible = state.duration > 0
     }
 
     private fun handleViewEvents(event: StartAppViewEvent) {
