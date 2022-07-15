@@ -63,5 +63,7 @@
     <string name="ftue_auth_forgot_password">Forgot password</string>
     <string name="ftue_auth_password_reset_confirmation">Password reset</string>
 
+    <string name="ftue_auth_captcha_title">Are you a human?</string>
+
     <string name="location_map_view_copyright" translatable="false">© MapTiler © OpenStreetMap contributors</string>
 </resources>
