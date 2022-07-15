@@ -741,7 +741,6 @@ class OnboardingViewModelTest {
     private fun initialRegistrationState(homeServerUrl: String) = initialState.copy(
             onboardingFlow = OnboardingFlow.SignUp, selectedHomeserver = SelectedHomeserverState(userFacingUrl = homeServerUrl)
     )
-
 }
 
 private fun HomeServerCapabilities.toPersonalisationState(displayName: String? = null) = PersonalizationState(

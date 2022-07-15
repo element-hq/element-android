@@ -81,7 +81,6 @@ class FtueAuthPhoneEntryFragment @Inject constructor(
 
     override fun updateWithState(state: OnboardingViewState) {
         views.phoneEntryHeaderSubtitle.text = getString(R.string.ftue_auth_phone_subtitle, state.selectedHomeserver.userFacingUrl.toReducedUrl())
-
     }
 
     override fun onError(throwable: Throwable) {
