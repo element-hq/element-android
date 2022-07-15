@@ -54,7 +54,5 @@ sealed class PermalinkData {
 
     data class UserLink(val userId: String) : PermalinkData()
 
-    data class GroupLink(val groupId: String) : PermalinkData()
-
-    data class FallbackLink(val uri: Uri) : PermalinkData()
+    data class FallbackLink(val uri: Uri, val isLegacyGroupLink: Boolean = false) : PermalinkData()
 }

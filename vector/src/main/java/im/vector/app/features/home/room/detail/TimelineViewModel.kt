@@ -61,7 +61,6 @@ import im.vector.app.features.raw.wellknown.withElementWellKnown
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorDataStore
 import im.vector.app.features.settings.VectorPreferences
-import im.vector.app.space
 import im.vector.lib.core.utils.flow.chunk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -219,7 +218,7 @@ class TimelineViewModel @AssistedInject constructor(
         if (initialState.switchToParentSpace) {
             // We are coming from a notification, try to switch to the most relevant space
             // so that when hitting back the room will appear in the list
-            appStateHandler.getCurrentRoomGroupingMethod()?.space().let { currentSpace ->
+            appStateHandler.getCurrentSpace().let { currentSpace ->
                 val currentRoomSummary = room.roomSummary() ?: return@let
                 // nothing we are good
                 if ((currentSpace == null && !vectorPreferences.prefSpacesShowAllRoomInHome()) ||

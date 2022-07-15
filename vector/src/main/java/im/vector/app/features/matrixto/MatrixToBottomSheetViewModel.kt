@@ -76,13 +76,8 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                     copy(matrixItem = Loading())
                 }
             }
-            is PermalinkData.GroupLink -> {
-                // Not yet supported
-            }
-            is PermalinkData.FallbackLink -> {
-                // Not yet supported
-            }
-            is PermalinkData.RoomEmailInviteLink -> Unit
+            is PermalinkData.RoomEmailInviteLink,
+            is PermalinkData.FallbackLink -> Unit
         }
         viewModelScope.launch(Dispatchers.IO) {
             resolveLink(initialState)
@@ -185,10 +180,6 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                         )
                     }
                 }
-            }
-            is PermalinkData.GroupLink -> {
-                // not yet supported
-                _viewEvents.post(MatrixToViewEvents.Dismiss)
             }
             is PermalinkData.RoomEmailInviteLink,
             is PermalinkData.FallbackLink -> {

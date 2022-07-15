@@ -49,6 +49,7 @@ import org.matrix.android.sdk.internal.database.migration.MigrateSessionTo028
 import org.matrix.android.sdk.internal.database.migration.MigrateSessionTo029
 import org.matrix.android.sdk.internal.database.migration.MigrateSessionTo030
 import org.matrix.android.sdk.internal.database.migration.MigrateSessionTo031
+import org.matrix.android.sdk.internal.database.migration.MigrateSessionTo032
 import org.matrix.android.sdk.internal.util.Normalizer
 import timber.log.Timber
 import javax.inject.Inject
@@ -63,7 +64,7 @@ internal class RealmSessionStoreMigration @Inject constructor(
     override fun equals(other: Any?) = other is RealmSessionStoreMigration
     override fun hashCode() = 1000
 
-    val schemaVersion = 31L
+    val schemaVersion = 32L
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
         Timber.d("Migrating Realm Session from $oldVersion to $newVersion")
@@ -99,5 +100,6 @@ internal class RealmSessionStoreMigration @Inject constructor(
         if (oldVersion < 29) MigrateSessionTo029(realm).perform()
         if (oldVersion < 30) MigrateSessionTo030(realm).perform()
         if (oldVersion < 31) MigrateSessionTo031(realm).perform()
+        if (oldVersion < 32) MigrateSessionTo032(realm).perform()
     }
 }

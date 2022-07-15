@@ -26,7 +26,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.AppStateHandler
-import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
@@ -101,11 +100,11 @@ class RoomListViewModel @AssistedInject constructor(
         observeMembershipChanges()
         observeLocalRooms()
 
-        appStateHandler.selectedRoomGroupingFlow
+        appStateHandler.selectedSpaceFlow
                 .distinctUntilChanged()
                 .execute {
                     copy(
-                            currentRoomGrouping = it.invoke()?.orNull()?.let { Success(it) } ?: Loading()
+                            asyncSelectedSpace = it.invoke()?.orNull()?.let { Success(it) } ?: Loading()
                     )
                 }
 
@@ -146,8 +145,7 @@ class RoomListViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<RoomListViewModel, RoomListViewState> by hiltMavericksViewModelFactory()
 
-    private val roomListSectionBuilder = if (appStateHandler.getCurrentRoomGroupingMethod() is RoomGroupingMethod.BySpace) {
-        RoomListSectionBuilderSpace(
+    private val roomListSectionBuilder = RoomListSectionBuilder(
                 session,
                 stringProvider,
                 appStateHandler,
@@ -159,17 +157,6 @@ class RoomListViewModel @AssistedInject constructor(
                 suggestedRoomJoiningState,
                 !vectorPreferences.prefSpacesShowAllRoomInHome()
         )
-    } else {
-        RoomListSectionBuilderGroup(
-                viewModelScope,
-                session,
-                stringProvider,
-                appStateHandler,
-                autoAcceptInvites
-        ) {
-            updatableQuery = it
-        }
-    }
 
     val sections: List<RoomsSection> by lazy {
         roomListSectionBuilder.buildSections(initialState.displayMode)
