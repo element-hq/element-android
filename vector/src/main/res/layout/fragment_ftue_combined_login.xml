@@ -140,7 +140,7 @@
             style="@style/Widget.Vector.TextInputLayout.Username"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="@string/username"
+            android:hint="@string/ftue_auth_login_username_entry"
             app:layout_constraintBottom_toTopOf="@id/entrySpacing"
             app:layout_constraintEnd_toEndOf="@id/loginGutterEnd"
             app:layout_constraintStart_toStartOf="@id/loginGutterStart"
