@@ -21,7 +21,6 @@ import org.amshove.kluent.shouldBe
 import org.junit.Assert
 import org.junit.Before
 import org.junit.FixMethodOrder
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
@@ -60,7 +59,6 @@ import kotlin.coroutines.resume
  */
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
-@Ignore
 class UnwedgingTest : InstrumentedTest {
 
     private lateinit var messagesReceivedByBob: List<TimelineEvent>
