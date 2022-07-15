@@ -1915,6 +1915,9 @@
     <string name="ftue_account_created_subtitle">Your account %s has been created</string>
 
     <string name="ftue_display_name_title">Choose a display name</string>
+
+    <!--  TODO remove  -->
+    <!--suppress UnusedResources -->
     <string name="ftue_display_name_subtitle">This will be shown when you send messages.</string>
     <string name="ftue_display_name_entry_title">Display Name</string>
     <string name="ftue_display_name_entry_footer">You can change this later</string>
