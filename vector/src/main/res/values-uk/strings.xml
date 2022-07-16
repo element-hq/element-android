@@ -22,7 +22,7 @@
     <string name="notice_placed_video_call">%s починає відеовиклик.</string>
     <string name="notice_placed_voice_call">%s розпочинає голосовий виклик.</string>
     <string name="notice_answered_call">%s відповідає на виклик.</string>
-    <string name="notice_ended_call">%s завершує дзвінок.</string>
+    <string name="notice_ended_call">%s завершує виклик.</string>
     <string name="notice_made_future_room_visibility">%1$s робить майбутню історію кімнати видимою для %2$s</string>
     <string name="notice_room_visibility_invited">всіх учасників кімнати, з моменту їх запрошення.</string>
     <string name="notice_room_visibility_joined">всіх учасників кімнати, з моменту їх приєднання.</string>
@@ -135,7 +135,7 @@
     <string name="notice_made_future_room_visibility_by_you">Ви зробили майбутню історію кімнати видимою для %1$s</string>
     <string name="notice_made_future_direct_room_visibility_by_you">Ви зробили майбутні повідомлення видимими для %1$s</string>
     <string name="notice_made_future_direct_room_visibility">%1$s робить майбутні повідомлення видимими для %2$s</string>
-    <string name="notice_ended_call_by_you">Ви завершили дзвінок.</string>
+    <string name="notice_ended_call_by_you">Ви завершили виклик.</string>
     <string name="notice_answered_call_by_you">Ви відповіли на виклик.</string>
     <string name="notice_call_candidates_by_you">Ви надіслали дані для налаштування виклику.</string>
     <string name="notice_call_candidates">%s надсилає дані для налаштування виклику.</string>
@@ -230,8 +230,10 @@
     <string name="call_in_progress">Виконується виклик…</string>
     <string name="call_error_user_not_responding">Абонент не відповідає.</string>
     <string name="permissions_rationale_popup_title">Інформація</string>
-    <string name="permissions_rationale_msg_record_audio">Для здійснення аудіодзвінків потрібен доступ до мікрофону.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Для здійснення відеодзвінків потрібен доступ до камери та мікрофону.\n\nБудь ласка, надайте його у наступних виринаючих вікнах, щоб мати змогу їх здійснити.</string>
+    <string name="permissions_rationale_msg_record_audio">Для здійснення аудіовикликів потрібен доступ до мікрофона.</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Для здійснення відеовикликів потрібен доступ до камери та мікрофону.
+\n
+\nНадайте його у наступних спливних вікнах, щоб мати змогу їх здійснити.</string>
     <string name="yes">ТАК</string>
     <string name="no">НІ</string>
     <string name="_continue">Продовжити</string>
@@ -406,7 +408,7 @@
     <string name="notification_noisy">Гучно</string>
     <string name="encrypted_message">Зашифроване повідомлення</string>
     <string name="settings_labs_native_camera">Використовувати рідну камеру</string>
-    <string name="you_added_a_new_device">Щойно доданий вами пристрій \'%s\' править ключі шифрування.</string>
+    <string name="you_added_a_new_device">Щойно доданий вами сеанс «%s», який запитує ключі шифрування.</string>
     <string name="your_unverified_device_requesting">Ваш незвірений пристрій «%s» вимагає ключі шифрування.</string>
     <string name="start_verification">Почати перевірку</string>
     <string name="command_error">Помилка виконання команди</string>
@@ -600,13 +602,13 @@
     <string name="action_skip">Пропустити</string>
     <string name="failed_to_remove_widget">Не вдалося видалити віджет</string>
     <string name="failed_to_add_widget">Не вдалося додати віджет</string>
-    <string name="cannot_call_yourself">Ви не можете здійснити дзвінок із самим собою</string>
+    <string name="cannot_call_yourself">Ви не можете викликати самих себе</string>
     <string name="audio_meeting">Почати аудіо-зустріч</string>
     <string name="video_meeting">Почати відеозустріч</string>
-    <string name="no_permissions_to_start_webrtc_call_in_direct_room">У вас немає повноважень розпочати дзвінок</string>
-    <string name="no_permissions_to_start_webrtc_call">У вас немає повноважень на дзвінок у цій кімнаті</string>
-    <string name="no_permissions_to_start_conf_call_in_direct_room">У вас немає повноважень розпочати груповий виклик</string>
-    <string name="no_permissions_to_start_conf_call">У вас немає повноважень розпочати груповий виклик у цій кімнаті</string>
+    <string name="no_permissions_to_start_webrtc_call_in_direct_room">У вас немає дозволу розпочати виклик</string>
+    <string name="no_permissions_to_start_webrtc_call">У вас немає дозволу розпочати виклик у цій кімнаті</string>
+    <string name="no_permissions_to_start_conf_call_in_direct_room">У вас немає дозволу розпочати груповий виклик</string>
+    <string name="no_permissions_to_start_conf_call">У вас немає дозволу розпочати груповий виклик у цій кімнаті</string>
     <string name="action_reset">Скинути</string>
     <string name="action_dismiss">Відхилити</string>
     <string name="action_play">Грати</string>
@@ -628,7 +630,7 @@
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">Мені не потрібні мої зашифровані повідомлення</string>
     <string name="warning_unsaved_change_discard">Скасувати зміни</string>
     <string name="login_error_ssl_other">Помилка SSL.</string>
-    <string name="cannot_call_yourself_with_invite">Ви не можете здійснити дзвінок із самим собою, дочекайтесь, доки інші учасники приймуть ваше запрошення</string>
+    <string name="cannot_call_yourself_with_invite">Ви не можете викликати себе самих, дочекайтесь, доки інші учасники погодяться на ваше запрошення</string>
     <string name="uploads_files_title">ФАЙЛИ</string>
     <string name="uploads_media_no_result">У цій кімнаті немає медіа</string>
     <string name="uploads_media_title">МЕДІА</string>
@@ -1005,9 +1007,9 @@
 \n
 \nВи можете будь-коли змінити цю дію в загальних налаштуваннях.</string>
     <string name="room_participants_action_ignore_title">Нехтувати користувача</string>
-    <string name="room_participants_power_level_demote">Понизити</string>
-    <string name="room_participants_power_level_demote_warning_prompt">Ви не зможете скасувати цю зміну, оскільки понижуєте свої права, якщо ви останній привілейований користувач у кімнаті, неможливо буде повернути собі привілеї.</string>
-    <string name="room_participants_power_level_demote_warning_title">Понизитися\?</string>
+    <string name="room_participants_power_level_demote">Зменшити</string>
+    <string name="room_participants_power_level_demote_warning_prompt">Ви не зможете скасувати цю зміну, оскільки зменшуєте свої повноваження, якщо ви останній привілейований користувач у кімнаті, неможливо буде повернути собі повноваження.</string>
+    <string name="room_participants_power_level_demote_warning_title">Зменшити свої повноваження\?</string>
     <string name="permissions_denied_add_contact">Дозволити доступ до ваших контактів.</string>
     <string name="permissions_denied_qr_code">Щоб сканувати QR-код необхідно дозволити доступ до камери.</string>
     <string name="video_call_in_progress">Триває відеовиклик…</string>
@@ -1074,7 +1076,7 @@
     <string name="room_profile_not_encrypted_subtitle">Повідомлення в цій кімнаті не захищено наскрізним шифруванням.</string>
     <string name="direct_room_profile_not_encrypted_subtitle">Повідомлення тут не захищено наскрізним шифруванням.</string>
     <string name="room_settings_enable_encryption">Увімкнути наскрізне шифрування…</string>
-    <string name="direct_room_encryption_enabled_tile_description">Повідомлення в цій кімнаті захищені наскрізним шифруванням.</string>
+    <string name="direct_room_encryption_enabled_tile_description">Повідомлення в цій бесіді захищені наскрізним шифруванням.</string>
     <string name="verification_verify_device">Звірити цей сеанс</string>
     <string name="settings_active_sessions_unverified_device_desc">Звірте цей сеанс, щоб позначити його надійним та надати йому доступ до зашифрованих повідомлень. Якщо ви не входили в цей сеанс, ваш обліковий запис може бути зламано:</string>
     <string name="room_directory_search_hint">Назва або ID (#example:matrix.org)</string>
@@ -1152,8 +1154,8 @@
     <string name="send_a_sticker">Наліпка</string>
     <string name="terms_description_for_integration_manager">Використовувати ботів, мости, віджети та пакунки наліпок</string>
     <string name="no_connectivity_to_the_server_indicator">Зв\'язок із сервером втрачено</string>
-    <string name="no_message_edits_found">Не знайдено жодної правки</string>
-    <string name="message_edits">Історія правок</string>
+    <string name="no_message_edits_found">Виправлень не знайдено</string>
+    <string name="message_edits">Історія виправлень</string>
     <string name="a11y_trust_level_trusted">Рівень довіри</string>
     <string name="not_trusted">Не довірений</string>
     <string name="trusted">Довірений</string>
@@ -2461,7 +2463,7 @@
     <string name="ftue_auth_use_case_title">З ким ви спілкуватиметеся найчастіше\?</string>
     <string name="navigate_to_thread_when_already_in_the_thread">Ви вже переглядаєте цю гілку!</string>
     <string name="view_in_room">Переглянути у кімнаті</string>
-    <string name="reply_in_thread">Відповісти у гілку</string>
+    <string name="reply_in_thread">Відповісти в гілці</string>
     <string name="command_not_supported_in_threads">Команду «%s» розпізнано, але вона не підтримується в гілках.</string>
     <string name="search_thread_from_a_thread">З гілки</string>
     <string name="thread_list_empty_notice">Порада: Торкніться й утримуйте повідомлення і виберіть «%s».</string>
@@ -2623,4 +2625,10 @@
     <string name="settings_troubleshoot_test_endpoint_registration_success">Кінцеву точку успішно зареєстровано на домашньому сервері.</string>
     <string name="settings_troubleshoot_test_endpoint_registration_title">Реєстрація кінцевої точки</string>
     <string name="action_next">Далі</string>
+    <string name="poll_undisclosed_not_ended">Результати будуть видимі після завершення опитування</string>
+    <string name="labs_enable_msc3061_share_history_desc">Коли запросити когось у зашифровану кімнату, яка поширює історію, зашифрована історія буде видимою.</string>
+    <string name="labs_enable_msc3061_share_history">MSC3061: Поширення ключів кімнати для минулих повідомлень</string>
+    <string name="send_your_first_msg_to_invite">Надішліть своє перше повідомлення, щоб запросити %s до бесіди</string>
+    <string name="direct_room_encryption_enabled_tile_description_future">Повідомлення в цій бесіді будуть захищені наскрізним шифруванням.</string>
+    <string name="create_room_action_go">Уперед</string>
 </resources>
