@@ -135,7 +135,7 @@ class LiveLocationShareMessageItemFactory @Inject constructor(
                         liveLocationShareSummaryData.lastGeoUri.orEmpty(),
                         getEndOfLiveDateTime(liveLocationShareSummaryData)
                 )
-        }.also { viewState -> Timber.d("computed viewState: $viewState") }
+        }
     }
 
     private fun getEndOfLiveDateTime(liveLocationShareSummaryData: LiveLocationShareSummaryData): LocalDateTime? {
