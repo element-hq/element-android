@@ -1706,7 +1706,7 @@
     <string name="direct_room_profile_section_more_leave">Lämna</string>
     <string name="secure_backup_reset_all">Återställ allt</string>
     <string name="direct_room_created_summary_item_by_you">Du gick med.</string>
-    <string name="direct_room_encryption_enabled_tile_description">Meddelanden i det här rummet är totalsträckskrypterade.</string>
+    <string name="direct_room_encryption_enabled_tile_description">Meddelanden i den här chatten är totalsträckskrypterade.</string>
     <string name="direct_room_profile_section_more_settings">Inställningar</string>
     <string name="direct_room_profile_encrypted_subtitle">Meddelanden här är totalsträckskrypterade.
 \n
@@ -2529,4 +2529,10 @@
 \n%1$s</string>
     <string name="settings_troubleshoot_test_endpoint_registration_success">Lyckades registrera ändpunkten hos hemservern.</string>
     <string name="settings_troubleshoot_test_endpoint_registration_title">Ändpunktsregistrering</string>
+    <string name="poll_undisclosed_not_ended">Resultat kommer att synas när omröstningen avslutas</string>
+    <string name="labs_enable_msc3061_share_history_desc">När du bjuder in i ett krypterat rum som delar historik, så kommer krypterad historik att vara synlig.</string>
+    <string name="labs_enable_msc3061_share_history">MSC3061: Delar rumsnycklar för tidigare meddelanden</string>
+    <string name="send_your_first_msg_to_invite">Skicka ditt första meddelande för att bjuda in %s att chatta</string>
+    <string name="direct_room_encryption_enabled_tile_description_future">Meddelanden i den här chatten kommer att vara totalsträckskrypterade.</string>
+    <string name="create_room_action_go">Gå</string>
 </resources>
