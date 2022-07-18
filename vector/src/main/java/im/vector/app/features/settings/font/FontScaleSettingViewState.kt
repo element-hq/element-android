@@ -14,10 +14,13 @@
  * limitations under the License.
  */
 
-package im.vector.app.core.di
+package im.vector.app.features.settings.font
 
-import javax.inject.Qualifier
+import com.airbnb.mvrx.MavericksState
+import im.vector.app.features.settings.FontScaleValue
 
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-annotation class NamedGlobalScope
+data class FontScaleSettingViewState(
+        val availableScaleOptions: List<FontScaleValue> = emptyList(),
+        val persistedSettingIndex: Int = 0,
+        val useSystemSettings: Boolean = true,
+) : MavericksState

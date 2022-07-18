@@ -162,6 +162,7 @@ import im.vector.app.features.settings.devtools.GossipingEventsPaperTrailFragmen
 import im.vector.app.features.settings.devtools.IncomingKeyRequestListFragment
 import im.vector.app.features.settings.devtools.KeyRequestsFragment
 import im.vector.app.features.settings.devtools.OutgoingKeyRequestListFragment
+import im.vector.app.features.settings.font.FontScaleSettingFragment
 import im.vector.app.features.settings.homeserver.HomeserverSettingsFragment
 import im.vector.app.features.settings.ignored.VectorSettingsIgnoredUsersFragment
 import im.vector.app.features.settings.legals.LegalsFragment
@@ -585,6 +586,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(HomeserverSettingsFragment::class)
     fun bindHomeserverSettingsFragment(fragment: HomeserverSettingsFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(FontScaleSettingFragment::class)
+    fun bindFontScaleSettingFragment(fragment: FontScaleSettingFragment): Fragment
 
     @Binds
     @IntoMap

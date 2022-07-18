@@ -90,6 +90,7 @@ import im.vector.app.features.settings.devtools.AccountDataViewModel
 import im.vector.app.features.settings.devtools.GossipingEventsPaperTrailViewModel
 import im.vector.app.features.settings.devtools.KeyRequestListViewModel
 import im.vector.app.features.settings.devtools.KeyRequestViewModel
+import im.vector.app.features.settings.font.FontScaleSettingViewModel
 import im.vector.app.features.settings.homeserver.HomeserverSettingsViewModel
 import im.vector.app.features.settings.ignored.IgnoredUsersViewModel
 import im.vector.app.features.settings.legals.LegalsViewModel
@@ -606,4 +607,9 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(LocationLiveMapViewModel::class)
     fun locationLiveMapViewModelFactory(factory: LocationLiveMapViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(FontScaleSettingViewModel::class)
+    fun fontScaleSettingViewModelFactory(factory: FontScaleSettingViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 }
