@@ -22,6 +22,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Test
+import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntity
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntityFields
 import org.matrix.android.sdk.test.fakes.FakeEventSenderProcessor
@@ -58,59 +59,68 @@ class DefaultRedactLiveLocationShareTaskTest {
     }
 
     @Test
-    fun `given parameters when calling the task then it is correctly executed`() = runTest {
-        val params = RedactLiveLocationShareTask.Params(
-                roomId = A_ROOM_ID,
-                beaconInfoEventId = AN_EVENT_ID,
-                reason = A_REASON
-        )
-        fakeRealmConfiguration.givenAwaitTransaction<List<String>>(fakeRealm.instance)
+    fun `given parameters when redacting then post redact events and related and creates redact local echos`() = runTest {
+        val params = createParams()
         val relatedEventIds = listOf(AN_EVENT_ID_1, AN_EVENT_ID_2, AN_EVENT_ID_3)
-        val aggregatedSummaryEntity = LiveLocationShareAggregatedSummaryEntity(
-                eventId = AN_EVENT_ID,
-                relatedEventIds = RealmList(*relatedEventIds.toTypedArray()),
-        )
-        fakeRealm.givenWhere<LiveLocationShareAggregatedSummaryEntity>()
-                .givenEqualTo(LiveLocationShareAggregatedSummaryEntityFields.EVENT_ID, AN_EVENT_ID)
-                .givenFindFirst(aggregatedSummaryEntity)
-        val redactedEvent = fakeLocalEchoEventFactory.givenCreateRedactEvent(
-                eventId = AN_EVENT_ID,
-                withLocalEcho = true
-        )
-        fakeEventSenderProcessor.givenPostRedaction(event = redactedEvent, reason = A_REASON)
-        val redactedEvent1 = fakeLocalEchoEventFactory.givenCreateRedactEvent(
-                eventId = AN_EVENT_ID_1,
-                withLocalEcho = true
-        )
-        fakeEventSenderProcessor.givenPostRedaction(event = redactedEvent1, reason = A_REASON)
-        val redactedEvent2 = fakeLocalEchoEventFactory.givenCreateRedactEvent(
-                eventId = AN_EVENT_ID_2,
-                withLocalEcho = true
-        )
-        fakeEventSenderProcessor.givenPostRedaction(event = redactedEvent2, reason = A_REASON)
-        val redactedEvent3 = fakeLocalEchoEventFactory.givenCreateRedactEvent(
-                eventId = AN_EVENT_ID_3,
-                withLocalEcho = true
-        )
-        fakeEventSenderProcessor.givenPostRedaction(event = redactedEvent3, reason = A_REASON)
+        val aggregatedSummaryEntity = createSummary(relatedEventIds)
+        givenSummaryForId(AN_EVENT_ID, aggregatedSummaryEntity)
+        fakeRealmConfiguration.givenAwaitTransaction<List<String>>(fakeRealm.instance)
+        val redactEvents = givenCreateRedactEventWithLocalEcho(relatedEventIds + AN_EVENT_ID)
+        givenPostRedaction(redactEvents)
 
         defaultRedactLiveLocationShareTask.execute(params)
 
-        fakeLocalEchoEventFactory.verifyCreateRedactEvent(
-                roomId = A_ROOM_ID,
+        verifyCreateRedactEventForEventIds(relatedEventIds + AN_EVENT_ID)
+        verifyCreateLocalEchoForEvents(redactEvents)
+    }
+
+    private fun createParams() = RedactLiveLocationShareTask.Params(
+            roomId = A_ROOM_ID,
+            beaconInfoEventId = AN_EVENT_ID,
+            reason = A_REASON
+    )
+
+    private fun createSummary(relatedEventIds: List<String>): LiveLocationShareAggregatedSummaryEntity {
+        return LiveLocationShareAggregatedSummaryEntity(
                 eventId = AN_EVENT_ID,
-                reason = A_REASON
+                relatedEventIds = RealmList(*relatedEventIds.toTypedArray()),
         )
-        fakeLocalEchoEventFactory.verifyCreateLocalEcho(redactedEvent)
-        relatedEventIds.forEach { eventId ->
+    }
+
+    private fun givenSummaryForId(eventId: String, aggregatedSummaryEntity: LiveLocationShareAggregatedSummaryEntity) {
+        fakeRealm.givenWhere<LiveLocationShareAggregatedSummaryEntity>()
+                .givenEqualTo(LiveLocationShareAggregatedSummaryEntityFields.EVENT_ID, eventId)
+                .givenFindFirst(aggregatedSummaryEntity)
+    }
+
+    private fun givenCreateRedactEventWithLocalEcho(eventIds: List<String>): List<Event> {
+        return eventIds.map { eventId ->
+            fakeLocalEchoEventFactory.givenCreateRedactEvent(
+                    eventId = eventId,
+                    withLocalEcho = true
+            )
+        }
+    }
+
+    private fun givenPostRedaction(redactEvents: List<Event>) {
+        redactEvents.forEach {
+            fakeEventSenderProcessor.givenPostRedaction(event = it, reason = A_REASON)
+        }
+    }
+
+    private fun verifyCreateRedactEventForEventIds(eventIds: List<String>) {
+        eventIds.forEach { eventId ->
             fakeLocalEchoEventFactory.verifyCreateRedactEvent(
                     roomId = A_ROOM_ID,
                     eventId = eventId,
                     reason = A_REASON
             )
         }
-        fakeLocalEchoEventFactory.verifyCreateLocalEcho(redactedEvent1)
-        fakeLocalEchoEventFactory.verifyCreateLocalEcho(redactedEvent2)
-        fakeLocalEchoEventFactory.verifyCreateLocalEcho(redactedEvent3)
+    }
+
+    private fun verifyCreateLocalEchoForEvents(events: List<Event>) {
+        events.forEach { redactionEvent ->
+            fakeLocalEchoEventFactory.verifyCreateLocalEcho(redactionEvent)
+        }
     }
 }
