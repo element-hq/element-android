@@ -24,7 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.services.VectorAndroidService
-import im.vector.app.features.location.live.CheckIfLiveLocationShareIsRedactedUseCase
+import im.vector.app.features.redaction.CheckIfEventIsRedactedUseCase
 import im.vector.app.features.location.live.GetLiveLocationShareSummaryUseCase
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.session.coroutineScope
@@ -56,7 +56,7 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
     @Inject lateinit var locationTracker: LocationTracker
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var getLiveLocationShareSummaryUseCase: GetLiveLocationShareSummaryUseCase
-    @Inject lateinit var checkIfLiveLocationShareIsRedactedUseCase: CheckIfLiveLocationShareIsRedactedUseCase
+    @Inject lateinit var checkIfEventIsRedactedUseCase: CheckIfEventIsRedactedUseCase
 
     private val binder = LocalBinder()
 
@@ -214,7 +214,7 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
     }
 
     private suspend fun isLiveRedacted(roomId: String, beaconEventId: String): Boolean {
-        return checkIfLiveLocationShareIsRedactedUseCase.execute(roomId = roomId, eventId = beaconEventId)
+        return checkIfEventIsRedactedUseCase.execute(roomId = roomId, eventId = beaconEventId)
     }
 
     private fun launchWithActiveSession(block: suspend CoroutineScope.(Session) -> Unit) =

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.location.live
+package im.vector.app.features.redaction
 
 import im.vector.app.test.fakes.FakeSession
 import kotlinx.coroutines.test.runTest
@@ -26,11 +26,11 @@ import org.matrix.android.sdk.api.session.events.model.UnsignedData
 private const val A_ROOM_ID = "room_id"
 private const val AN_EVENT_ID = "event_id"
 
-class CheckIfLiveLocationShareIsRedactedUseCaseTest {
+class CheckIfEventIsRedactedUseCaseTest {
 
     private val fakeSession = FakeSession()
 
-    private val checkIfLiveLocationShareIsRedactedUseCase = CheckIfLiveLocationShareIsRedactedUseCase(
+    private val checkIfEventIsRedactedUseCase = CheckIfEventIsRedactedUseCase(
             session = fakeSession
     )
 
@@ -42,7 +42,7 @@ class CheckIfLiveLocationShareIsRedactedUseCaseTest {
         fakeSession.eventService()
                 .givenGetEventReturns(event)
 
-        val result = checkIfLiveLocationShareIsRedactedUseCase.execute(A_ROOM_ID, AN_EVENT_ID)
+        val result = checkIfEventIsRedactedUseCase.execute(A_ROOM_ID, AN_EVENT_ID)
 
         result shouldBeEqualTo true
     }
@@ -53,7 +53,7 @@ class CheckIfLiveLocationShareIsRedactedUseCaseTest {
         fakeSession.eventService()
                 .givenGetEventReturns(event)
 
-        val result = checkIfLiveLocationShareIsRedactedUseCase.execute(A_ROOM_ID, AN_EVENT_ID)
+        val result = checkIfEventIsRedactedUseCase.execute(A_ROOM_ID, AN_EVENT_ID)
 
         result shouldBeEqualTo false
     }

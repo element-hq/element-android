@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.location.live
+package im.vector.app.features.redaction
 
 import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
 import javax.inject.Inject
 
-class CheckIfLiveLocationShareIsRedactedUseCase @Inject constructor(
+class CheckIfEventIsRedactedUseCase @Inject constructor(
         private val session: Session,
 ) {
 
