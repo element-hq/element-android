@@ -42,8 +42,8 @@ jobs:
           column-name: "Need info"
           label-name: "X-Needs-Info"
 
-  add_priority_design_issues_to_project:
-    name: P1 X-Needs-Design to Design project board
+  add_design_issues_to_project:
+    name: X-Needs-Design to Design project board
     runs-on: ubuntu-latest
     # Skip in forks
     if: >
