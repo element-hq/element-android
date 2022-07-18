@@ -41,7 +41,8 @@ import org.matrix.android.sdk.flow.unwrap
 data class DisplayReactionsViewState(
         val eventId: String,
         val roomId: String,
-        val mapReactionKeyToMemberList: Async<List<ReactionInfo>> = Uninitialized) :
+        val mapReactionKeyToMemberList: Async<List<ReactionInfo>> = Uninitialized
+) :
         MavericksState {
 
     constructor(args: TimelineEventFragmentArgs) : this(roomId = args.roomId, eventId = args.eventId)

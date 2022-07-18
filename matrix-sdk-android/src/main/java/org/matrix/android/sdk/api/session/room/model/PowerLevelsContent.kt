@@ -95,8 +95,8 @@ data class PowerLevelsContent(
             // the first implementation was a string value
             is String -> value.toInt()
             is Double -> value.toInt()
-            is Int    -> value
-            else      -> Role.Moderator.value
+            is Int -> value
+            else -> Role.Moderator.value
         }
     }
 

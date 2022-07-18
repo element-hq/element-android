@@ -111,14 +111,14 @@
 
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
 
-        <item name="pf_lock_screen">@style/PinCodeScreenStyle</item>
-        <item name="pf_key_button">@style/PinCodeKeyButtonStyle</item>
-        <item name="pf_title">@style/PinCodeTitleStyle</item>
-        <item name="pf_hint">@style/PinCodeHintStyle</item>
-        <item name="pf_code_view">@style/PinCodeDotsViewStyle</item>
-        <item name="pf_delete_button">@style/PinCodeDeleteButtonStyle</item>
-        <item name="pf_fingerprint_button">@style/PinCodeFingerprintButtonStyle</item>
-        <item name="pf_next">@style/PinCodeNextButtonStyle</item>
+        <item name="lockscreen_theme">@style/PinCodeScreenStyle</item>
+        <item name="lockscreen_key_button_theme">@style/PinCodeKeyButtonStyle</item>
+        <item name="lockscreen_title_theme">@style/PinCodeTitleStyle</item>
+        <item name="lockscreen_hint_theme">@style/PinCodeHintStyle</item>
+        <item name="lockscreen_code_view_theme">@style/PinCodeDotsViewStyle</item>
+        <item name="lockscreen_delete_button_theme">@style/PinCodeDeleteButtonStyle</item>
+        <item name="lockscreen_fingerprint_button_theme">@style/PinCodeFingerprintButtonStyle</item>
+        <item name="lockscreen_next_theme">@style/PinCodeNextButtonStyle</item>
 
         <!-- Use dark color, to have enough contrast with icons color. windowLightStatusBar is only available in API 23+ -->
         <item name="android:statusBarColor">@color/android_status_bar_background_dark</item>

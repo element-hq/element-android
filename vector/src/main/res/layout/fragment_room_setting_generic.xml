@@ -113,6 +113,25 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
+        <!-- Trick to remove surrounding padding (clip from wrapping frame) -->
+        <FrameLayout
+            android:id="@+id/progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:elevation="8dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+            tools:visibility="visible">
+
+            <ProgressBar
+                style="@style/Widget.Vector.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="14dp"
+                android:layout_gravity="center"
+                android:indeterminate="true" />
+
+        </FrameLayout>
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <include

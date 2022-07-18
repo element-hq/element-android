@@ -40,19 +40,10 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.getRoomSummary
-import org.matrix.android.sdk.api.session.group.model.GroupSummary
-import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.sync.SyncRequestState
 import javax.inject.Inject
 import javax.inject.Singleton
-
-sealed class RoomGroupingMethod {
-    data class ByLegacyGroup(val groupSummary: GroupSummary?) : RoomGroupingMethod()
-    data class BySpace(val spaceSummary: RoomSummary?) : RoomGroupingMethod()
-}
-
-fun RoomGroupingMethod.space() = (this as? RoomGroupingMethod.BySpace)?.spaceSummary
-fun RoomGroupingMethod.group() = (this as? RoomGroupingMethod.ByLegacyGroup)?.groupSummary
 
 /**
  * This class handles the global app state.
@@ -68,56 +59,42 @@ class AppStateHandler @Inject constructor(
 ) : DefaultLifecycleObserver {
 
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
-    private val selectedSpaceDataSource = BehaviorDataSource<Option<RoomGroupingMethod>>(Option.empty())
+    private val selectedSpaceDataSource = BehaviorDataSource<Option<RoomSummary>>(Option.empty())
 
-    val selectedRoomGroupingFlow = selectedSpaceDataSource.stream()
+    val selectedSpaceFlow = selectedSpaceDataSource.stream()
 
-    fun getCurrentRoomGroupingMethod(): RoomGroupingMethod? {
-        // XXX we should somehow make it live :/ just a work around
-        // For example just after creating a space and switching to it the
-        // name in the app Bar could show Empty Room, and it will not update unless you
-        // switch space
-        return selectedSpaceDataSource.currentValue?.orNull()?.let {
-            if (it is RoomGroupingMethod.BySpace) {
-                // try to refresh sum?
-                it.spaceSummary?.roomId?.let { activeSessionHolder.getSafeActiveSession()?.roomService()?.getRoomSummary(it) }?.let {
-                    RoomGroupingMethod.BySpace(it)
-                } ?: it
-            } else it
+    private val spaceBackstack = ArrayDeque<String?>()
+
+    fun getCurrentSpace(): RoomSummary? {
+        return selectedSpaceDataSource.currentValue?.orNull()?.let { spaceSummary ->
+            activeSessionHolder.getSafeActiveSession()?.roomService()?.getRoomSummary(spaceSummary.roomId)
         }
     }
 
-    fun setCurrentSpace(spaceId: String?, session: Session? = null, persistNow: Boolean = false) {
+    fun setCurrentSpace(spaceId: String?, session: Session? = null, persistNow: Boolean = false, isForwardNavigation: Boolean = true) {
+        val currentSpace = selectedSpaceDataSource.currentValue?.orNull()
         val uSession = session ?: activeSessionHolder.getSafeActiveSession() ?: return
-        if (selectedSpaceDataSource.currentValue?.orNull() is RoomGroupingMethod.BySpace &&
-                spaceId == selectedSpaceDataSource.currentValue?.orNull()?.space()?.roomId) return
+        if (currentSpace != null && spaceId == currentSpace.roomId) return
         val spaceSum = spaceId?.let { uSession.getRoomSummary(spaceId) }
 
+        if (isForwardNavigation) {
+            spaceBackstack.addLast(currentSpace?.roomId)
+        }
+
         if (persistNow) {
-            uiStateRepository.storeGroupingMethod(true, uSession.sessionId)
             uiStateRepository.storeSelectedSpace(spaceSum?.roomId, uSession.sessionId)
         }
 
-        selectedSpaceDataSource.post(Option.just(RoomGroupingMethod.BySpace(spaceSum)))
+        if (spaceSum == null) {
+            selectedSpaceDataSource.post(Option.empty())
+        } else {
+            selectedSpaceDataSource.post(Option.just(spaceSum))
+        }
+
         if (spaceId != null) {
             uSession.coroutineScope.launch(Dispatchers.IO) {
                 tryOrNull {
                     uSession.getRoom(spaceId)?.membershipService()?.loadRoomMembersIfNeeded()
-                }
-            }
-        }
-    }
-
-    fun setCurrentGroup(groupId: String?, session: Session? = null) {
-        val uSession = session ?: activeSessionHolder.getSafeActiveSession() ?: return
-        if (selectedSpaceDataSource.currentValue?.orNull() is RoomGroupingMethod.ByLegacyGroup &&
-                groupId == selectedSpaceDataSource.currentValue?.orNull()?.group()?.groupId) return
-        val activeGroup = groupId?.let { uSession.groupService().getGroupSummary(groupId) }
-        selectedSpaceDataSource.post(Option.just(RoomGroupingMethod.ByLegacyGroup(activeGroup)))
-        if (groupId != null) {
-            uSession.coroutineScope.launch {
-                tryOrNull {
-                    uSession.groupService().getGroup(groupId)?.fetchGroupData()
                 }
             }
         }
@@ -129,11 +106,7 @@ class AppStateHandler @Inject constructor(
                 .onEach {
                     // sessionDataSource could already return a session while activeSession holder still returns null
                     it.orNull()?.let { session ->
-                        if (uiStateRepository.isGroupingMethodSpace(session.sessionId)) {
-                            setCurrentSpace(uiStateRepository.getSelectedSpace(session.sessionId), session)
-                        } else {
-                            setCurrentGroup(uiStateRepository.getSelectedGroup(session.sessionId), session)
-                        }
+                        setCurrentSpace(uiStateRepository.getSelectedSpace(session.sessionId), session)
                         observeSyncStatus(session)
                     }
                 }
@@ -141,9 +114,9 @@ class AppStateHandler @Inject constructor(
     }
 
     private fun observeSyncStatus(session: Session) {
-        session.syncStatusService().getSyncStatusLive()
+        session.syncService().getSyncRequestStateLive()
                 .asFlow()
-                .filterIsInstance<SyncStatusService.Status.IncrementalSyncDone>()
+                .filterIsInstance<SyncRequestState.IncrementalSyncDone>()
                 .map { session.spaceService().getRootSpaceSummaries().size }
                 .distinctUntilChanged()
                 .onEach { spacesNumber ->
@@ -151,12 +124,10 @@ class AppStateHandler @Inject constructor(
                 }.launchIn(session.coroutineScope)
     }
 
-    fun safeActiveSpaceId(): String? {
-        return (selectedSpaceDataSource.currentValue?.orNull() as? RoomGroupingMethod.BySpace)?.spaceSummary?.roomId
-    }
+    fun getSpaceBackstack() = spaceBackstack
 
-    fun safeActiveGroupId(): String? {
-        return (selectedSpaceDataSource.currentValue?.orNull() as? RoomGroupingMethod.ByLegacyGroup)?.groupSummary?.groupId
+    fun safeActiveSpaceId(): String? {
+        return selectedSpaceDataSource.currentValue?.orNull()?.roomId
     }
 
     override fun onResume(owner: LifecycleOwner) {
@@ -166,15 +137,6 @@ class AppStateHandler @Inject constructor(
     override fun onPause(owner: LifecycleOwner) {
         coroutineScope.coroutineContext.cancelChildren()
         val session = activeSessionHolder.getSafeActiveSession() ?: return
-        when (val currentMethod = selectedSpaceDataSource.currentValue?.orNull() ?: RoomGroupingMethod.BySpace(null)) {
-            is RoomGroupingMethod.BySpace       -> {
-                uiStateRepository.storeGroupingMethod(true, session.sessionId)
-                uiStateRepository.storeSelectedSpace(currentMethod.spaceSummary?.roomId, session.sessionId)
-            }
-            is RoomGroupingMethod.ByLegacyGroup -> {
-                uiStateRepository.storeGroupingMethod(false, session.sessionId)
-                uiStateRepository.storeSelectedGroup(currentMethod.groupSummary?.groupId, session.sessionId)
-            }
-        }
+        uiStateRepository.storeSelectedSpace(selectedSpaceDataSource.currentValue?.orNull()?.roomId, session.sessionId)
     }
 }

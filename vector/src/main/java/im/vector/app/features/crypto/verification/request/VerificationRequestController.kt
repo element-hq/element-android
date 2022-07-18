@@ -88,17 +88,19 @@ class VerificationRequestController @Inject constructor(
                 }
             }
 
-            bottomSheetDividerItem {
-                id("sep1")
-            }
+            if (!state.isVerificationRequired) {
+                bottomSheetDividerItem {
+                    id("sep1")
+                }
 
-            bottomSheetVerificationActionItem {
-                id("skip")
-                title(host.stringProvider.getString(R.string.action_skip))
-                titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
-                iconRes(R.drawable.ic_arrow_right)
-                iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
-                listener { host.listener?.onClickSkip() }
+                bottomSheetVerificationActionItem {
+                    id("skip")
+                    title(host.stringProvider.getString(R.string.action_skip))
+                    titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
+                    iconRes(R.drawable.ic_arrow_right)
+                    iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
+                    listener { host.listener?.onClickSkip() }
+                }
             }
         } else {
             val styledText =
@@ -133,13 +135,13 @@ class VerificationRequestController @Inject constructor(
                         listener { host.listener?.onClickOnVerificationStart() }
                     }
                 }
-                is Loading       -> {
+                is Loading -> {
                     bottomSheetVerificationWaitingItem {
                         id("waiting")
                         title(host.stringProvider.getString(R.string.verification_request_waiting_for, matrixItem.getBestName()))
                     }
                 }
-                is Success       -> {
+                is Success -> {
                     if (!pr.invoke().isReady) {
                         if (state.isMe) {
                             bottomSheetVerificationWaitingItem {
@@ -154,7 +156,7 @@ class VerificationRequestController @Inject constructor(
                         }
                     }
                 }
-                is Fail          -> Unit
+                is Fail -> Unit
             }
         }
 

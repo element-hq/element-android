@@ -31,8 +31,8 @@ import im.vector.app.core.platform.ButtonStateView
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.util.MatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_public_room)
-abstract class PublicRoomItem : VectorEpoxyModel<PublicRoomItem.Holder>() {
+@EpoxyModelClass
+abstract class PublicRoomItem : VectorEpoxyModel<PublicRoomItem.Holder>(R.layout.item_public_room) {
 
     @EpoxyAttribute
     lateinit var avatarRenderer: AvatarRenderer
@@ -71,9 +71,9 @@ abstract class PublicRoomItem : VectorEpoxyModel<PublicRoomItem.Holder>() {
 
         holder.buttonState.render(
                 when (joinState) {
-                    JoinState.NOT_JOINED    -> ButtonStateView.State.Button
-                    JoinState.JOINING       -> ButtonStateView.State.Loading
-                    JoinState.JOINED        -> ButtonStateView.State.Loaded
+                    JoinState.NOT_JOINED -> ButtonStateView.State.Button
+                    JoinState.JOINING -> ButtonStateView.State.Loading
+                    JoinState.JOINED -> ButtonStateView.State.Loaded
                     JoinState.JOINING_ERROR -> ButtonStateView.State.Error
                 }
         )

@@ -18,7 +18,9 @@ package org.matrix.android.sdk.internal.session.room.timeline
 
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.android.asCoroutineDispatcher
 import kotlinx.coroutines.cancelChildren
@@ -32,6 +34,7 @@ import kotlinx.coroutines.withContext
 import okhttp3.internal.closeQuietly
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
@@ -114,6 +117,7 @@ internal class DefaultTimeline(
     )
 
     private var strategy: LoadTimelineStrategy = buildStrategy(LoadTimelineStrategy.Mode.Live)
+    private var startTimelineJob: Job? = null
 
     override val isLive: Boolean
         get() = !getPaginationState(Timeline.Direction.FORWARDS).hasMoreToLoad
@@ -141,7 +145,7 @@ internal class DefaultTimeline(
         timelineScope.launch {
             loadRoomMembersIfNeeded()
         }
-        timelineScope.launch {
+        startTimelineJob = timelineScope.launch {
             sequencer.post {
                 if (isStarted.compareAndSet(false, true)) {
                     isFromThreadTimeline = rootThreadEventId != null
@@ -172,8 +176,10 @@ internal class DefaultTimeline(
 
     override fun restartWithEventId(eventId: String?) {
         timelineScope.launch {
-            openAround(eventId, rootThreadEventId)
-            postSnapshot()
+            sequencer.post {
+                openAround(eventId, rootThreadEventId)
+                postSnapshot()
+            }
         }
     }
 
@@ -183,6 +189,7 @@ internal class DefaultTimeline(
 
     override fun paginate(direction: Timeline.Direction, count: Int) {
         timelineScope.launch {
+            startTimelineJob?.join()
             val postSnapshot = loadMore(count, direction, fetchOnServerIfNeeded = true)
             if (postSnapshot) {
                 postSnapshot()
@@ -191,6 +198,7 @@ internal class DefaultTimeline(
     }
 
     override suspend fun awaitPaginate(direction: Timeline.Direction, count: Int): List<TimelineEvent> {
+        startTimelineJob?.join()
         withContext(timelineDispatcher) {
             loadMore(count, direction, fetchOnServerIfNeeded = true)
         }
@@ -235,11 +243,15 @@ internal class DefaultTimeline(
         val loadMoreResult = try {
             strategy.loadMore(count, direction, fetchOnServerIfNeeded)
         } catch (throwable: Throwable) {
-            // Timeline could not be loaded with a (likely) permanent issue, such as the
-            // server now knowing the initialEventId, so we want to show an error message
-            // and possibly restart without initialEventId.
-            onTimelineFailure(throwable)
-            return false
+            if (throwable is CancellationException) {
+                LoadMoreResult.FAILURE
+            } else {
+                // Timeline could not be loaded with a (likely) permanent issue, such as the
+                // server now knowing the initialEventId, so we want to show an error message
+                // and possibly restart without initialEventId.
+                onTimelineFailure(throwable)
+                return false
+            }
         }
         Timber.v("$baseLogMessage: result $loadMoreResult")
         val hasMoreToLoad = loadMoreResult != LoadMoreResult.REACHED_END
@@ -259,8 +271,8 @@ internal class DefaultTimeline(
 
         strategy = when {
             rootThreadEventId != null -> buildStrategy(LoadTimelineStrategy.Mode.Thread(rootThreadEventId))
-            eventId == null           -> buildStrategy(LoadTimelineStrategy.Mode.Live)
-            else                      -> buildStrategy(LoadTimelineStrategy.Mode.Permalink(eventId))
+            eventId == null -> buildStrategy(LoadTimelineStrategy.Mode.Live)
+            else -> buildStrategy(LoadTimelineStrategy.Mode.Permalink(eventId))
         }
 
         rootThreadEventId?.let {
@@ -273,6 +285,7 @@ internal class DefaultTimeline(
                 direction = Timeline.Direction.BACKWARDS,
                 fetchOnServerIfNeeded = false
         )
+
         Timber.v("$baseLogMessage finished")
     }
 
@@ -306,9 +319,11 @@ internal class DefaultTimeline(
 
     private fun onLimitedTimeline() {
         timelineScope.launch {
-            initPaginationStates(null)
-            loadMore(settings.initialSize, Timeline.Direction.BACKWARDS, false)
-            postSnapshot()
+            sequencer.post {
+                initPaginationStates(null)
+                loadMore(settings.initialSize, Timeline.Direction.BACKWARDS, false)
+                postSnapshot()
+            }
         }
     }
 
@@ -344,7 +359,7 @@ internal class DefaultTimeline(
 
     private fun updateState(direction: Timeline.Direction, update: (Timeline.PaginationState) -> Timeline.PaginationState) {
         val stateReference = when (direction) {
-            Timeline.Direction.FORWARDS  -> forwardState
+            Timeline.Direction.FORWARDS -> forwardState
             Timeline.Direction.BACKWARDS -> backwardState
         }
         val currentValue = stateReference.get()
@@ -383,7 +398,7 @@ internal class DefaultTimeline(
     }
 
     private suspend fun loadRoomMembersIfNeeded() {
-        val loadRoomMembersParam = LoadRoomMembersTask.Params(roomId)
+        val loadRoomMembersParam = LoadRoomMembersTask.Params(roomId, excludeMembership = Membership.LEAVE)
         try {
             loadRoomMembersTask.execute(loadRoomMembersParam)
         } catch (failure: Throwable) {

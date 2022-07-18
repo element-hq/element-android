@@ -35,11 +35,13 @@ import javax.inject.Inject
 
 private const val PERSISTENCE_KEY = "ManagedBySender"
 
-internal class QueueMemento @Inject constructor(context: Context,
-                                                @SessionId sessionId: String,
-                                                private val queuedTaskFactory: QueuedTaskFactory,
-                                                private val localEchoRepository: LocalEchoRepository,
-                                                private val cryptoService: CryptoService) {
+internal class QueueMemento @Inject constructor(
+        context: Context,
+        @SessionId sessionId: String,
+        private val queuedTaskFactory: QueuedTaskFactory,
+        private val localEchoRepository: LocalEchoRepository,
+        private val cryptoService: CryptoService
+) {
 
     private val storage = context.getSharedPreferences("QueueMemento_$sessionId", Context.MODE_PRIVATE)
     private val trackedTasks = mutableListOf<QueuedTask>()
@@ -74,11 +76,11 @@ internal class QueueMemento @Inject constructor(context: Context,
                     encrypt = task.encrypt,
                     order = order
             )
-            is RedactQueuedTask    -> RedactEventTaskInfo(
+            is RedactQueuedTask -> RedactEventTaskInfo(
                     redactionLocalEcho = task.redactionLocalEchoId,
                     order = order
             )
-            else                   -> null
+            else -> null
         }
     }
 
@@ -92,7 +94,7 @@ internal class QueueMemento @Inject constructor(context: Context,
                 ?.forEach { info ->
                     try {
                         when (info) {
-                            is SendEventTaskInfo   -> {
+                            is SendEventTaskInfo -> {
                                 localEchoRepository.getUpToDateEcho(info.localEchoId)?.let {
                                     if (it.sendState.isSending() && it.eventId != null && it.roomId != null) {
                                         localEchoRepository.updateSendState(it.eventId, it.roomId, SendState.UNSENT)

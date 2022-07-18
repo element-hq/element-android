@@ -17,6 +17,7 @@
 package im.vector.app.ui.robot
 
 import android.view.View
+import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions
@@ -91,8 +92,7 @@ class ElementRobot {
         waitUntilActivityVisible<CreateDirectRoomActivity> {
             waitUntilViewVisible(withId(R.id.userListSearch))
         }
-        // close keyboard
-        pressBack()
+        closeSoftKeyboard()
         block(NewDirectMessageRobot())
         pressBack()
         waitUntilViewVisible(withId(R.id.bottomNavigationView))
@@ -129,7 +129,7 @@ class ElementRobot {
                 // We need to wait for the initial sync to complete; but we can't
                 // use waitForHome() like login does.
 
-		// waitForHome() -- does not work because we have already fufilled the initialSync
+                // waitForHome() -- does not work because we have already fufilled the initialSync
                 // so we can racily have an IllegalStateException that we have transitioned from busy -> idle
                 // but never having sent the signal.
 
@@ -141,7 +141,7 @@ class ElementRobot {
                 // I hereby cheat and write:
                 Thread.sleep(30_000)
             }
-            else                       -> {
+            else -> {
             }
         }
     }

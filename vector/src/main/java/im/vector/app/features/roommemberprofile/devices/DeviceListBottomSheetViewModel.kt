@@ -48,8 +48,10 @@ data class DeviceListViewState(
         val selectedDevice: CryptoDeviceInfo? = null
 ) : MavericksState
 
-class DeviceListBottomSheetViewModel @AssistedInject constructor(@Assisted private val initialState: DeviceListViewState,
-                                                                 private val session: Session) :
+class DeviceListBottomSheetViewModel @AssistedInject constructor(
+        @Assisted private val initialState: DeviceListViewState,
+        private val session: Session
+) :
         VectorViewModel<DeviceListViewState, DeviceListAction, DeviceListBottomSheetViewEvents>(initialState) {
 
     @AssistedFactory
@@ -91,7 +93,7 @@ class DeviceListBottomSheetViewModel @AssistedInject constructor(@Assisted priva
 
     override fun handle(action: DeviceListAction) {
         when (action) {
-            is DeviceListAction.SelectDevice   -> selectDevice(action)
+            is DeviceListAction.SelectDevice -> selectDevice(action)
             is DeviceListAction.DeselectDevice -> deselectDevice()
             is DeviceListAction.ManuallyVerify -> manuallyVerify(action)
         }

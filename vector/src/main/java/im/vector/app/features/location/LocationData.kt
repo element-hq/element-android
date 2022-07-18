@@ -30,7 +30,7 @@ data class LocationData(
 
 /**
  * Creates location data from a MessageLocationContent.
- * "geo:40.05,29.24;30" -> LocationData(40.05, 29.24, 30)
+ * "geo:40.05,29.24;u=30" -> LocationData(40.05, 29.24, 30)
  * @return location data or null if geo uri is not valid
  */
 fun MessageLocationContent.toLocationData(): LocationData? {
@@ -39,7 +39,7 @@ fun MessageLocationContent.toLocationData(): LocationData? {
 
 /**
  * Creates location data from a geoUri String.
- * "geo:40.05,29.24;30" -> LocationData(40.05, 29.24, 30)
+ * "geo:40.05,29.24;u=30" -> LocationData(40.05, 29.24, 30)
  * @return location data or null if geo uri is null or not valid
  */
 fun String?.toLocationData(): LocationData? {

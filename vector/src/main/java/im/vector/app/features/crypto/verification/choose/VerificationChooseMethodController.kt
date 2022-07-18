@@ -21,6 +21,7 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.bottomSheetDividerItem
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.ui.list.buttonPositiveDestructiveButtonBarItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationNoticeItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationQrCodeItem
@@ -108,6 +109,15 @@ class VerificationChooseMethodController @Inject constructor(
                 iconColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
                 listener { host.listener?.doVerifyBySas() }
             }
+        } else if (!state.isReadySent) {
+            // a bit of a special case, if you tapped on the timeline cell but not on a button
+            buttonPositiveDestructiveButtonBarItem {
+                id("accept_decline")
+                positiveText(host.stringProvider.getString(R.string.action_accept).toEpoxyCharSequence())
+                destructiveText(host.stringProvider.getString(R.string.action_decline).toEpoxyCharSequence())
+                positiveButtonClickAction { host.listener?.acceptRequest() }
+                destructiveButtonClickAction { host.listener?.declineRequest() }
+            }
         }
 
         if (state.isMe && state.canCrossSign) {
@@ -131,5 +141,7 @@ class VerificationChooseMethodController @Inject constructor(
         fun openCamera()
         fun doVerifyBySas()
         fun onClickOnWasNotMe()
+        fun acceptRequest()
+        fun declineRequest()
     }
 }

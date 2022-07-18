@@ -563,7 +563,7 @@
     <string name="merged_events_expand">Rozbaliť</string>
     <string name="merged_events_collapse">Zbaliť</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="action_accept">Prijať</string>
     <string name="auth_accept_policies">Prosím prečítajte si a odsúhlaste zmluvné podmienky tohoto domovského servera:</string>
     <string name="settings_call_category">Hovory</string>
@@ -1569,9 +1569,6 @@
     <string name="location_not_available_dialog_title">${app_name} nemohol získať prístup k vašej polohe</string>
     <string name="location_not_available_dialog_content">${app_name} nemohol získať prístup k vašej polohe. Skúste to prosím neskôr.</string>
     <string name="location_share_external">Otvoriť s</string>
-    <string name="settings_enable_location_sharing">Povoliť zdieľanie polohy</string>
-    <string name="settings_enable_location_sharing_summary">Po zapnutí tejto funkcie budete môcť odoslať svoju polohu do ľubovoľnej miestnosti</string>
-    <string name="labs_render_locations_in_timeline">Vykresliť umiestnenie používateľa na časovej osi</string>
     <string name="tooltip_attachment_location">Zdieľať polohu</string>
     <string name="login_server_url_form_modular_text">Prémiový hosting pre organizácie</string>
     <string name="login_signin_to">Prihlásiť sa do %1$s</string>
@@ -1605,7 +1602,6 @@
     <string name="uploads_files_no_result">V tejto miestnosti nie sú žiadne súbory</string>
     <string name="uploads_media_title">MÉDIÁ</string>
     <string name="uploads_media_no_result">V tejto miestnosti nie sú žiadne médiá</string>
-    <string name="error_attachment">Pri načítavaní prílohy došlo k chybe.</string>
     <string name="a11y_jump_to_bottom">Prejsť na spodok</string>
     <string name="a11y_create_room">Vytvoriť novú miestnosť</string>
     <string name="a11y_create_direct_message">Vytvoriť novú priamu konverzáciu</string>
@@ -1752,7 +1748,6 @@
     <string name="space_add_space_to_any_space_you_manage">Pridať priestor do priestoru, ktorý spravujete.</string>
     <string name="space_add_existing_rooms_only">Pridať existujúce miestnosti</string>
     <string name="space_add_existing_rooms">Pridať existujúce miestnosti a priestor</string>
-    <string name="dont_leave_any">Neopustiť žiadne miestnosti ani priestory</string>
     <string name="space_leave_prompt_msg_as_admin">Ste jediným správcom tohto priestoru. Jeho opustenie bude znamenať, že nad ním nikto nebude mať kontrolu.</string>
     <string name="space_leave_prompt_msg_only_you">Ste tu jediný človek. Ak odídete, nikto sa už v budúcnosti nebude môcť pripojiť do tejto miestnosti, vrátane vás.</string>
     <string name="space_leave_prompt_msg_with_name">Ste si istí, že chcete opustiť %s\?</string>
@@ -1882,8 +1877,6 @@
     <string name="space_manage_rooms_and_spaces">Spravovať miestnosti a priestory</string>
     <string name="spaces_beta_welcome_to_spaces_desc">Priestory sú novým spôsobom spájania miestností a ľudí.</string>
     <string name="space_add_existing_spaces">Pridať existujúce priestory</string>
-    <string name="leave_specific_ones">Opustiť konkrétne miestnosti a priestory…</string>
-    <string name="leave_all_rooms_and_spaces">Opustiť všetky miestnosti a priestory</string>
     <string name="create_spaces_room_private_header_desc">Vytvorme pre každého z nich miestnosť. Neskôr môžete pridať aj ďalšie, vrátane už existujúcich.</string>
     <string name="create_spaces_room_private_header">Na akých veciach pracujete\?</string>
     <string name="create_spaces_invite_public_header_desc">Zabezpečte, aby mali k spoločnosti %s prístup správni ľudia. Neskôr môžete pozvať ďalších.</string>
@@ -1916,9 +1909,7 @@
     <string name="verify_cancel_other">Ak to teraz zrušíte, neoveríte %1$s (%2$s). Začnite znova v ich používateľskom profile.</string>
     <string name="verify_cancel_self_verification_from_trusted">Ak to zrušíte, nebudete môcť čítať zašifrované správy v novom zariadení a ostatní používatelia mu nebudú dôverovať</string>
     <string name="verify_cancel_self_verification_from_untrusted">Ak to zrušíte, nebudete môcť čítať zašifrované správy v tomto zariadení a ostatní používatelia mu nebudú dôverovať</string>
-    <string name="login_signup_cancel_confirmation_content">Váš účet ešte nie je vytvorený.
-\n
-\nZastaviť proces registrácie\?</string>
+    <string name="login_signup_cancel_confirmation_content">Váš účet ešte nie je vytvorený. Zastaviť proces registrácie\?</string>
     <string name="login_reset_password_cancel_confirmation_content">Vaše heslo ešte nebolo zmenené.
 \n
 \nZastaviť proces zmeny hesla\?</string>
@@ -2385,7 +2376,7 @@
     <string name="search_hint_room_name">Hľadať názov</string>
     <string name="feedback_failed">Spätnú väzbu sa nepodarilo odoslať (%s)</string>
     <string name="settings_developer_mode_show_info_on_screen_title">Zobraziť informácie o ladení chýb na obrazovke</string>
-    <string name="room_member_override_nick_color">Nahradiť farbu prezývky</string>
+    <string name="room_member_override_nick_color">Nahradiť farbu zobrazovaného mena</string>
     <string name="ftue_auth_use_case_join_existing_server">Chcete sa pripojiť k existujúcemu serveru\?</string>
     <string name="event_redacted_by_admin_reason_with_reason">Udalosť bola upravená administrátorom miestnosti, dôvod: %1$s</string>
     <string name="room_preview_not_found">Táto miestnosť je momentálne neprístupná.
@@ -2457,15 +2448,11 @@
     <string name="bootstrap_crosssigning_progress_default_key">Definovanie predvoleného kľúča SSSS</string>
     <string name="settings_developer_mode_fail_fast_title">Rýchle-zlyhanie</string>
     <string name="call_transfer_consult_first">Najprv konzultovať</string>
-    <string name="pick_tings_to_leave">Vyberte si, čo opustíte</string>
     <string name="command_description_leave_room">Opustiť miestnosť s daným id (alebo aktuálnu miestnosť, ak je prázdna)</string>
     <string name="a11y_trust_level_warning">Varovná úroveň dôveryhodnosti</string>
     <string name="call_transfer_connect_action">Pripojiť</string>
     <string name="location_share_live_stop">Zastaviť</string>
     <string name="location_share_live_enabled">Poloha v reálnom čase zapnutá</string>
-    <string name="location_in_background_missing_permission_dialog_content">Ak chcete zdieľať svoju polohu v reálnom čase, ${app_name} potrebuje prístup k polohe po celý čas, kým je aplikácia na pozadí.
-\nPrístup k vašej polohe bude len počas obdobia, ktoré si zvolíte.</string>
-    <string name="location_in_background_missing_permission_dialog_title">Povoliť prístup</string>
     <string name="a11y_location_share_option_pinned_icon">Zdieľať túto polohu</string>
     <string name="location_share_option_pinned">Zdieľať túto polohu</string>
     <string name="a11y_location_share_option_user_live_icon">Zdieľať polohu v reálnom čase</string>
@@ -2537,4 +2524,57 @@
 \n
 \nUpozorňujeme, že táto akcia spôsobí reštart aplikácie a môže chvíľu trvať.</string>
     <string name="initial_sync_request_title">Úvodná žiadosť o synchronizáciu</string>
+    <string name="settings_show_latest_profile_description">Zobraziť najnovšie informácie o profile (obrázok a zobrazované meno) pre všetky správy.</string>
+    <string name="settings_show_latest_profile">Zobraziť najnovšie informácie o používateľovi</string>
+    <string name="a11y_presence_busy">Obsadený/zaneprázdnený</string>
+    <string name="keys_backup_settings_signature_from_this_user">Zálohovanie má platný podpis od tohto používateľa.</string>
+    <string name="live_location_bottom_sheet_last_updated_at">Aktualizované pred %1$s</string>
+    <string name="live_location_bottom_sheet_stop_sharing">Zastaviť zdieľanie</string>
+    <string name="labs_enable_live_location_summary">Dočasná implementácia: polohy pretrvávajú v histórii miestnosti</string>
+    <string name="labs_enable_live_location">Povoliť zdieľanie polohy v reálnom čase</string>
+    <string name="location_share_live_remaining_time">ostáva %1$s</string>
+    <string name="location_share_live_until">Zdieľať polohu do %1$s</string>
+    <string name="location_share_live_view">Zobraziť polohu v reálnom čase</string>
+    <string name="location_share_live_ended">Ukončenie polohy v reálnom čase</string>
+    <string name="space_explore_filter_no_result_description">Niektoré výsledky môžu byť skryté, pretože sú súkromné a na ich zobrazenie potrebujete pozvánku.</string>
+    <string name="space_explore_filter_no_result_title">Nenašli sa žiadne výsledky</string>
+    <string name="space_leave_radio_button_none">Neopustiť žiadne</string>
+    <string name="space_leave_radio_button_all">Opustiť všetko</string>
+    <string name="space_leave_radio_buttons_title">Veci v tomto priestore</string>
+    <string name="settings_autoplay_animated_images_summary">Prehrať animované obrázky na časovej osi hneď, ako sú viditeľné</string>
+    <string name="settings_autoplay_animated_images_title">Automaticky prehrať animované obrázky</string>
+    <string name="time_unit_second_short">sek</string>
+    <string name="time_unit_minute_short">min</string>
+    <string name="time_unit_hour_short">h</string>
+    <string name="live_location_labs_promotion_switch_title">Povoliť zdieľanie polohy</string>
+    <string name="live_location_labs_promotion_description">Upozornenie: ide o laboratórnu funkciu, ktorá je dočasne implementovaná. To znamená, že nebudete môcť vymazať históriu svojej polohy a pokročilí používatelia budú môcť vidieť históriu vašej polohy aj po tom, ako prestanete zdieľať svoju reálnu polohu s touto miestnosťou.</string>
+    <string name="live_location_labs_promotion_title">Zdieľanie polohy v reálnom čase</string>
+    <string name="settings_troubleshoot_test_current_gateway">Aktuálna brána: %s</string>
+    <string name="settings_troubleshoot_test_current_gateway_title">Brána</string>
+    <string name="settings_troubleshoot_test_current_endpoint_failed">Nie je možné nájsť koncový bod.</string>
+    <string name="settings_troubleshoot_test_current_endpoint_success">Aktuálny koncový bod: %s</string>
+    <string name="settings_troubleshoot_test_current_endpoint_title">Koncový bod</string>
+    <string name="settings_troubleshoot_test_current_distributor">V súčasnosti používa %s.</string>
+    <string name="settings_troubleshoot_test_current_distributor_title">Spôsob</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="one">Nájdený %d spôsob.</item>
+        <item quantity="few">Nájdené %d spôsoby.</item>
+        <item quantity="other">Nájdených %d spôsobov.</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_distributors_fdroid">Nenašiel sa iný spôsob ako synchronizácia na pozadí.</string>
+    <string name="settings_troubleshoot_test_distributors_gplay">Žiadny iný spôsob ako služba Google Play nebol nájdený.</string>
+    <string name="settings_troubleshoot_test_distributors_title">Dostupné spôsoby</string>
+    <string name="settings_notification_method">Spôsob oznamovania</string>
+    <string name="unifiedpush_distributor_background_sync">Synchronizácia na pozadí</string>
+    <string name="unifiedpush_distributor_fcm_fallback">Služby Google</string>
+    <string name="unifiedpush_getdistributors_dialog_title">Vyberte si spôsob prijímania oznámení</string>
+    <string name="settings_security_pin_code_use_biometrics_error">Nepodarilo sa zapnúť biometrické overovanie.</string>
+    <string name="auth_biometric_key_invalidated_message">Biometrické overovanie bolo vypnuté, pretože nedávno bola pridaná nová metóda biometrického overovania. Môžete ho opäť povoliť v Nastaveniach.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">Obnoviť spôsob oznamovania</string>
+    <string name="push_gateway_item_profile_tag">Značka profilu:</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">Nepodarilo sa zaregistrovať token koncového bodu na domovskom serveri:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">Koncové zariadenie sa úspešne zaregistrovalo na domovský server.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_title">Registrácia koncového bodu</string>
+    <string name="action_next">Ďalej</string>
 </resources>

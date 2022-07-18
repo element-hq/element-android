@@ -37,7 +37,8 @@ class WidgetItemFactory @Inject constructor(
         private val avatarSizeProvider: AvatarSizeProvider,
         private val messageColorProvider: MessageColorProvider,
         private val avatarRenderer: AvatarRenderer,
-        private val userPreferencesProvider: UserPreferencesProvider) {
+        private val userPreferencesProvider: UserPreferencesProvider
+) {
 
     fun create(params: TimelineItemFactoryParams): VectorEpoxyModel<*>? {
         val event = params.event
@@ -47,7 +48,7 @@ class WidgetItemFactory @Inject constructor(
         return when (WidgetType.fromString(widgetContent.type ?: previousWidgetContent?.type ?: "")) {
             WidgetType.Jitsi -> createJitsiItem(params, widgetContent)
             // There is lot of other widget types we could improve here
-            else             -> noticeItemFactory.create(params)
+            else -> noticeItemFactory.create(params)
         }
     }
 

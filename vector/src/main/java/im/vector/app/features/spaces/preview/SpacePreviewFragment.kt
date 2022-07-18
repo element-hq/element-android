@@ -105,7 +105,7 @@ class SpacePreviewFragment @Inject constructor(
                 views.spacePreviewAcceptInviteButton.isEnabled = false
                 views.spacePreviewDeclineInviteButton.isEnabled = false
             }
-            is Fail    -> {
+            is Fail -> {
                 views.spacePreviewPeekingProgress.isVisible = false
                 views.spacePreviewButtonBar.isVisible = false
             }
@@ -121,16 +121,16 @@ class SpacePreviewFragment @Inject constructor(
 
         when (it.inviteTermination) {
             is Loading -> sharedActionViewModel.post(SpacePreviewSharedAction.ShowModalLoading)
-            else       -> sharedActionViewModel.post(SpacePreviewSharedAction.HideModalLoading)
+            else -> sharedActionViewModel.post(SpacePreviewSharedAction.HideModalLoading)
         }
     }
 
     private fun handleViewEvents(viewEvents: SpacePreviewViewEvents) {
         when (viewEvents) {
-            SpacePreviewViewEvents.Dismiss        -> {
+            SpacePreviewViewEvents.Dismiss -> {
                 sharedActionViewModel.post(SpacePreviewSharedAction.DismissAction)
             }
-            SpacePreviewViewEvents.JoinSuccess    -> {
+            SpacePreviewViewEvents.JoinSuccess -> {
                 sharedActionViewModel.post(SpacePreviewSharedAction.HideModalLoading)
                 sharedActionViewModel.post(SpacePreviewSharedAction.DismissAction)
             }

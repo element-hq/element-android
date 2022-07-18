@@ -26,8 +26,8 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 
-@EpoxyModelClass(layout = R.layout.item_login_centered_button)
-abstract class LoginCenterButtonItem : VectorEpoxyModel<LoginCenterButtonItem.Holder>() {
+@EpoxyModelClass
+abstract class LoginCenterButtonItem : VectorEpoxyModel<LoginCenterButtonItem.Holder>(R.layout.item_login_centered_button) {
 
     @EpoxyAttribute var text: String? = null
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var listener: ClickListener? = null

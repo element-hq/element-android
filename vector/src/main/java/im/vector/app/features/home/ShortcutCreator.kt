@@ -63,7 +63,7 @@ class ShortcutCreator @Inject constructor(
             val glideRequests = GlideApp.with(context)
             val matrixItem = roomSummary.toMatrixItem()
             when (useAdaptiveIcon) {
-                true  -> avatarRenderer.adaptiveShortcutDrawable(glideRequests, matrixItem, iconSize, adaptiveIconSize, adaptiveIconOuterSides.toFloat())
+                true -> avatarRenderer.adaptiveShortcutDrawable(glideRequests, matrixItem, iconSize, adaptiveIconSize, adaptiveIconOuterSides.toFloat())
                 false -> avatarRenderer.shortcutDrawable(glideRequests, matrixItem, iconSize)
             }
         } catch (failure: Throwable) {

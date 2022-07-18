@@ -101,12 +101,17 @@ import im.vector.app.features.onboarding.ftueauth.FtueAuthAccountCreatedFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthCaptchaFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthChooseDisplayNameFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthChooseProfilePictureFragment
+import im.vector.app.features.onboarding.ftueauth.FtueAuthCombinedLoginFragment
+import im.vector.app.features.onboarding.ftueauth.FtueAuthCombinedRegisterFragment
+import im.vector.app.features.onboarding.ftueauth.FtueAuthCombinedServerSelectionFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthEmailEntryFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthGenericTextInputFormFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthLegacyStyleCaptchaFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthLegacyWaitForEmailFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthLoginFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthPersonalizationCompleteFragment
+import im.vector.app.features.onboarding.ftueauth.FtueAuthPhoneConfirmationFragment
+import im.vector.app.features.onboarding.ftueauth.FtueAuthPhoneEntryFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthResetPasswordFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthResetPasswordMailConfirmationFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthResetPasswordSuccessFragment
@@ -157,6 +162,7 @@ import im.vector.app.features.settings.devtools.GossipingEventsPaperTrailFragmen
 import im.vector.app.features.settings.devtools.IncomingKeyRequestListFragment
 import im.vector.app.features.settings.devtools.KeyRequestsFragment
 import im.vector.app.features.settings.devtools.OutgoingKeyRequestListFragment
+import im.vector.app.features.settings.font.FontScaleSettingFragment
 import im.vector.app.features.settings.homeserver.HomeserverSettingsFragment
 import im.vector.app.features.settings.ignored.VectorSettingsIgnoredUsersFragment
 import im.vector.app.features.settings.legals.LegalsFragment
@@ -508,6 +514,16 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
+    @FragmentKey(FtueAuthPhoneEntryFragment::class)
+    fun bindFtueAuthPhoneEntryFragment(fragment: FtueAuthPhoneEntryFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(FtueAuthPhoneConfirmationFragment::class)
+    fun bindFtueAuthPhoneConfirmationFragment(fragment: FtueAuthPhoneConfirmationFragment): Fragment
+
+    @Binds
+    @IntoMap
     @FragmentKey(FtueAuthChooseDisplayNameFragment::class)
     fun bindFtueAuthChooseDisplayNameFragment(fragment: FtueAuthChooseDisplayNameFragment): Fragment
 
@@ -520,6 +536,21 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(FtueAuthPersonalizationCompleteFragment::class)
     fun bindFtueAuthPersonalizationCompleteFragment(fragment: FtueAuthPersonalizationCompleteFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(FtueAuthCombinedLoginFragment::class)
+    fun bindFtueAuthCombinedLoginFragment(fragment: FtueAuthCombinedLoginFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(FtueAuthCombinedRegisterFragment::class)
+    fun bindFtueAuthCombinedRegisterFragment(fragment: FtueAuthCombinedRegisterFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(FtueAuthCombinedServerSelectionFragment::class)
+    fun bindFtueAuthCombinedServerSelectionFragment(fragment: FtueAuthCombinedServerSelectionFragment): Fragment
 
     @Binds
     @IntoMap
@@ -555,6 +586,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(HomeserverSettingsFragment::class)
     fun bindHomeserverSettingsFragment(fragment: HomeserverSettingsFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(FontScaleSettingFragment::class)
+    fun bindFontScaleSettingFragment(fragment: FontScaleSettingFragment): Fragment
 
     @Binds
     @IntoMap

@@ -17,8 +17,6 @@
 package im.vector.app.features.location
 
 import im.vector.app.BuildConfig
-import im.vector.app.core.resources.LocaleProvider
-import im.vector.app.core.resources.isRTL
 import im.vector.app.features.raw.wellknown.getElementWellknown
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
@@ -26,7 +24,6 @@ import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
 
 class UrlMapProvider @Inject constructor(
-        private val localeProvider: LocaleProvider,
         private val session: Session,
         private val rawService: RawService
 ) {
@@ -44,10 +41,12 @@ class UrlMapProvider @Inject constructor(
         return upstreamMapUrl ?: fallbackMapUrl
     }
 
-    fun buildStaticMapUrl(locationData: LocationData,
-                          zoom: Double,
-                          width: Int,
-                          height: Int): String {
+    fun buildStaticMapUrl(
+            locationData: LocationData,
+            zoom: Double,
+            width: Int,
+            height: Int
+    ): String {
         return buildString {
             append(STATIC_MAP_BASE_URL)
             append(locationData.longitude)
@@ -61,10 +60,8 @@ class UrlMapProvider @Inject constructor(
             append(height)
             append(".png")
             append(keyParam)
-            if (!localeProvider.isRTL()) {
-                // On LTR languages we want the legal mentions to be displayed on the bottom left of the image
-                append("&attribution=bottomleft")
-            }
+            // Since the default copyright font is too small we put a custom one on map
+            append("&attribution=false")
         }
     }
 }

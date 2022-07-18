@@ -40,8 +40,8 @@ import me.gujun.android.span.image
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.util.MatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_explore_space_child)
-abstract class SpaceChildInfoItem : VectorEpoxyModel<SpaceChildInfoItem.Holder>() {
+@EpoxyModelClass
+abstract class SpaceChildInfoItem : VectorEpoxyModel<SpaceChildInfoItem.Holder>(R.layout.item_explore_space_child) {
 
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem

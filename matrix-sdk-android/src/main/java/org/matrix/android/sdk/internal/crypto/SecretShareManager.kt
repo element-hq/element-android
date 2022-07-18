@@ -150,14 +150,14 @@ internal class SecretShareManager @Inject constructor(
             // we can share the secret
 
             val secretValue = when (secretName) {
-                MASTER_KEY_SSSS_NAME       -> cryptoStore.getCrossSigningPrivateKeys()?.master
+                MASTER_KEY_SSSS_NAME -> cryptoStore.getCrossSigningPrivateKeys()?.master
                 SELF_SIGNING_KEY_SSSS_NAME -> cryptoStore.getCrossSigningPrivateKeys()?.selfSigned
                 USER_SIGNING_KEY_SSSS_NAME -> cryptoStore.getCrossSigningPrivateKeys()?.user
                 KEYBACKUP_SECRET_SSSS_NAME -> cryptoStore.getKeyBackupRecoveryKeyInfo()?.recoveryKey
                         ?.let {
                             extractCurveKeyFromRecoveryKey(it)?.toBase64NoPadding()
                         }
-                else                       -> null
+                else -> null
             }
             if (secretValue == null) {
                 Timber.tag(loggerTag.value)

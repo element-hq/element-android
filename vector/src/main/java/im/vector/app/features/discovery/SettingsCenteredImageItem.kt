@@ -19,12 +19,12 @@ import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
-import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
+import im.vector.app.core.epoxy.VectorEpoxyModel
 
-@EpoxyModelClass(layout = R.layout.item_settings_centered_image)
-abstract class SettingsCenteredImageItem : EpoxyModelWithHolder<SettingsCenteredImageItem.Holder>() {
+@EpoxyModelClass
+abstract class SettingsCenteredImageItem : VectorEpoxyModel<SettingsCenteredImageItem.Holder>(R.layout.item_settings_centered_image) {
 
     @EpoxyAttribute
     @DrawableRes

@@ -19,12 +19,13 @@ package im.vector.app.features.call.conference
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.widget.FrameLayout
 import android.widget.Toast
+import androidx.core.app.PictureInPictureModeChangedInfo
+import androidx.core.util.Consumer
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import com.airbnb.mvrx.Fail
@@ -66,6 +67,7 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        addOnPictureInPictureModeChangedListener(pictureInPictureModeChangedInfoConsumer)
 
         jitsiViewModel.onEach {
             renderState(it)
@@ -73,11 +75,11 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
 
         jitsiViewModel.observeViewEvents {
             when (it) {
-                is JitsiCallViewEvents.JoinConference             -> configureJitsiView(it)
+                is JitsiCallViewEvents.JoinConference -> configureJitsiView(it)
                 is JitsiCallViewEvents.ConfirmSwitchingConference -> handleConfirmSwitching(it)
-                JitsiCallViewEvents.FailJoiningConference         -> handleFailJoining()
-                JitsiCallViewEvents.Finish                        -> finish()
-                JitsiCallViewEvents.LeaveConference               -> handleLeaveConference()
+                JitsiCallViewEvents.FailJoiningConference -> handleFailJoining()
+                JitsiCallViewEvents.Finish -> finish()
+                JitsiCallViewEvents.LeaveConference -> handleLeaveConference()
             }
         }
         lifecycle.addObserver(ConferenceEventObserver(this, this::onBroadcastEvent))
@@ -109,6 +111,7 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
             ConferenceEventEmitter(this).emitConferenceEnded()
         }
         JitsiMeetActivityDelegate.onHostDestroy(this)
+        removeOnPictureInPictureModeChangedListener(pictureInPictureModeChangedInfoConsumer)
         super.onDestroy()
     }
 
@@ -138,11 +141,9 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
                 .show()
     }
 
-    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean,
-                                               newConfig: Configuration) {
-        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
+    private val pictureInPictureModeChangedInfoConsumer = Consumer<PictureInPictureModeChangedInfo> {
         checkIfActivityShouldBeFinished()
-        Timber.w("onPictureInPictureModeChanged($isInPictureInPictureMode)")
+        Timber.w("onPictureInPictureModeChanged(${it.isInPictureInPictureMode})")
     }
 
     private fun checkIfActivityShouldBeFinished() {
@@ -155,12 +156,12 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
 
     private fun renderState(viewState: JitsiCallViewState) {
         when (viewState.widget) {
-            is Fail    -> finish()
+            is Fail -> finish()
             is Success -> {
                 views.jitsiProgressLayout.isVisible = false
                 jitsiMeetView?.isVisible = true
             }
-            else       -> {
+            else -> {
                 jitsiMeetView?.isVisible = false
                 views.jitsiProgressLayout.isVisible = true
             }
@@ -220,7 +221,7 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
         Timber.v("Broadcast received: $event")
         when (event) {
             is ConferenceEvent.Terminated -> onConferenceTerminated(event.data)
-            else                          -> Unit
+            else -> Unit
         }
     }
 

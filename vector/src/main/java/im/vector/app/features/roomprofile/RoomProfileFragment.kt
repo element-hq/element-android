@@ -39,6 +39,7 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.copyOnLongClick
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.FragmentMatrixProfileBinding
@@ -70,7 +71,8 @@ class RoomProfileFragment @Inject constructor(
         private val roomDetailPendingActionStore: RoomDetailPendingActionStore,
 ) :
         VectorBaseFragment<FragmentMatrixProfileBinding>(),
-        RoomProfileController.Callback {
+        RoomProfileController.Callback,
+        VectorMenuProvider {
 
     private lateinit var headerViews: ViewStubRoomProfileHeaderBinding
 
@@ -122,11 +124,11 @@ class RoomProfileFragment @Inject constructor(
         views.matrixProfileAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener)
         roomProfileViewModel.observeViewEvents {
             when (it) {
-                is RoomProfileViewEvents.Loading          -> showLoading(it.message)
-                is RoomProfileViewEvents.Failure          -> showFailure(it.throwable)
+                is RoomProfileViewEvents.Loading -> showLoading(it.message)
+                is RoomProfileViewEvents.Failure -> showFailure(it.throwable)
                 is RoomProfileViewEvents.ShareRoomProfile -> onShareRoomProfile(it.permalink)
-                is RoomProfileViewEvents.OnShortcutReady  -> addShortcut(it)
-                RoomProfileViewEvents.DismissLoading      -> dismissLoadingDialog()
+                is RoomProfileViewEvents.OnShortcutReady -> addShortcut(it)
+                RoomProfileViewEvents.DismissLoading -> dismissLoadingDialog()
             }
         }
         roomListQuickActionsSharedActionViewModel
@@ -170,30 +172,30 @@ class RoomProfileFragment @Inject constructor(
         headerViews.roomProfileAliasView.copyOnLongClick()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             R.id.roomProfileShareAction -> {
                 roomProfileViewModel.handle(RoomProfileAction.ShareRoomProfile)
-                return true
+                true
             }
+            else -> false
         }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun handleQuickActions(action: RoomListQuickActionsSharedAction) = when (action) {
-        is RoomListQuickActionsSharedAction.NotificationsAllNoisy     -> {
+        is RoomListQuickActionsSharedAction.NotificationsAllNoisy -> {
             roomProfileViewModel.handle(RoomProfileAction.ChangeRoomNotificationState(RoomNotificationState.ALL_MESSAGES_NOISY))
         }
-        is RoomListQuickActionsSharedAction.NotificationsAll          -> {
+        is RoomListQuickActionsSharedAction.NotificationsAll -> {
             roomProfileViewModel.handle(RoomProfileAction.ChangeRoomNotificationState(RoomNotificationState.ALL_MESSAGES))
         }
         is RoomListQuickActionsSharedAction.NotificationsMentionsOnly -> {
             roomProfileViewModel.handle(RoomProfileAction.ChangeRoomNotificationState(RoomNotificationState.MENTIONS_ONLY))
         }
-        is RoomListQuickActionsSharedAction.NotificationsMute         -> {
+        is RoomListQuickActionsSharedAction.NotificationsMute -> {
             roomProfileViewModel.handle(RoomProfileAction.ChangeRoomNotificationState(RoomNotificationState.MUTE))
         }
-        else                                                          -> Timber.v("$action not handled")
+        else -> Timber.v("$action not handled")
     }
 
     private fun setupRecyclerView() {

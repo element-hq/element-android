@@ -17,7 +17,6 @@
 package im.vector.app.features.share
 
 import android.app.Activity
-import android.content.ClipDescription
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -38,10 +37,9 @@ import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentIncomingShareBinding
 import im.vector.app.features.analytics.plan.ViewRoom
-import im.vector.app.features.attachments.AttachmentsHelper
+import im.vector.app.features.attachments.ShareIntentHandler
 import im.vector.app.features.attachments.preview.AttachmentsPreviewActivity
 import im.vector.app.features.attachments.preview.AttachmentsPreviewArgs
-import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
@@ -52,13 +50,12 @@ import javax.inject.Inject
  */
 class IncomingShareFragment @Inject constructor(
         private val incomingShareController: IncomingShareController,
-        private val sessionHolder: ActiveSessionHolder
+        private val sessionHolder: ActiveSessionHolder,
+        private val shareIntentHandler: ShareIntentHandler,
 ) :
         VectorBaseFragment<FragmentIncomingShareBinding>(),
-        AttachmentsHelper.Callback,
         IncomingShareController.Callback {
 
-    private lateinit var attachmentsHelper: AttachmentsHelper
     private val viewModel: IncomingShareViewModel by fragmentViewModel()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentIncomingShareBinding {
@@ -75,11 +72,10 @@ class IncomingShareFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         setupToolbar(views.incomingShareToolbar)
-        attachmentsHelper = AttachmentsHelper(requireContext(), this).register()
 
         viewModel.observeViewEvents {
             when (it) {
-                is IncomingShareViewEvents.ShareToRoom            -> handleShareToRoom(it)
+                is IncomingShareViewEvents.ShareToRoom -> handleShareToRoom(it)
                 is IncomingShareViewEvents.EditMediaBeforeSending -> handleEditMediaBeforeSending(it)
                 is IncomingShareViewEvents.MultipleRoomsShareDone -> handleMultipleRoomsShareDone(it)
             }
@@ -87,22 +83,17 @@ class IncomingShareFragment @Inject constructor(
 
         val intent = vectorBaseActivity.intent
         val isShareManaged = when (intent?.action) {
-            Intent.ACTION_SEND          -> {
-                var isShareManaged = attachmentsHelper.handleShareIntent(requireContext(), intent)
-                if (!isShareManaged) {
-                    isShareManaged = handleTextShare(intent)
-                }
-
+            Intent.ACTION_SEND -> {
+                val isShareManaged = handleIncomingShareIntent(intent)
                 // Direct share
                 if (intent.hasExtra(Intent.EXTRA_SHORTCUT_ID)) {
                     val roomId = intent.getStringExtra(Intent.EXTRA_SHORTCUT_ID)!!
                     sessionHolder.getSafeActiveSession()?.getRoomSummary(roomId)?.let { viewModel.handle(IncomingShareAction.ShareToRoom(it)) }
                 }
-
                 isShareManaged
             }
-            Intent.ACTION_SEND_MULTIPLE -> attachmentsHelper.handleShareIntent(requireContext(), intent)
-            else                        -> false
+            Intent.ACTION_SEND_MULTIPLE -> handleIncomingShareIntent(intent)
+            else -> false
         }
 
         if (!isShareManaged) {
@@ -123,6 +114,18 @@ class IncomingShareFragment @Inject constructor(
             handleSendShare()
         }
     }
+
+    private fun handleIncomingShareIntent(intent: Intent) = shareIntentHandler.handleIncomingShareIntent(
+            intent,
+            onFile = {
+                val sharedData = SharedData.Attachments(it)
+                viewModel.handle(IncomingShareAction.UpdateSharedData(sharedData))
+            },
+            onPlainText = {
+                val sharedData = SharedData.Text(it)
+                viewModel.handle(IncomingShareAction.UpdateSharedData(sharedData))
+            }
+    )
 
     private fun handleMultipleRoomsShareDone(viewEvent: IncomingShareViewEvents.MultipleRoomsShareDone) {
         requireActivity().let {
@@ -173,32 +176,9 @@ class IncomingShareFragment @Inject constructor(
         incomingShareController.callback = this
     }
 
-    override fun onContentAttachmentsReady(attachments: List<ContentAttachmentData>) {
-        val sharedData = SharedData.Attachments(attachments)
-        viewModel.handle(IncomingShareAction.UpdateSharedData(sharedData))
-    }
-
-    override fun onAttachmentsProcessFailed() {
-        cannotManageShare(R.string.error_handling_incoming_share)
-    }
-
     private fun cannotManageShare(@StringRes messageResId: Int) {
         Toast.makeText(requireContext(), messageResId, Toast.LENGTH_LONG).show()
         requireActivity().finish()
-    }
-
-    private fun handleTextShare(intent: Intent): Boolean {
-        if (intent.type == ClipDescription.MIMETYPE_TEXT_PLAIN) {
-            val sharedText = intent.getCharSequenceExtra(Intent.EXTRA_TEXT)?.toString()
-            return if (sharedText.isNullOrEmpty()) {
-                false
-            } else {
-                val sharedData = SharedData.Text(sharedText)
-                viewModel.handle(IncomingShareAction.UpdateSharedData(sharedData))
-                true
-            }
-        }
-        return false
     }
 
     private fun showConfirmationDialog(roomSummary: RoomSummary, sharedData: SharedData) {

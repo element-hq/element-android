@@ -60,26 +60,26 @@ internal class DefaultIncomingSASDefaultVerificationTransaction(
     override val uxState: IncomingSasVerificationTransaction.UxState
         get() {
             return when (val immutableState = state) {
-                is VerificationTxState.OnStarted      -> IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT
+                is VerificationTxState.OnStarted -> IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT
                 is VerificationTxState.SendingAccept,
                 is VerificationTxState.Accepted,
                 is VerificationTxState.OnKeyReceived,
                 is VerificationTxState.SendingKey,
-                is VerificationTxState.KeySent        -> IncomingSasVerificationTransaction.UxState.WAIT_FOR_KEY_AGREEMENT
+                is VerificationTxState.KeySent -> IncomingSasVerificationTransaction.UxState.WAIT_FOR_KEY_AGREEMENT
                 is VerificationTxState.ShortCodeReady -> IncomingSasVerificationTransaction.UxState.SHOW_SAS
                 is VerificationTxState.ShortCodeAccepted,
                 is VerificationTxState.SendingMac,
                 is VerificationTxState.MacSent,
-                is VerificationTxState.Verifying      -> IncomingSasVerificationTransaction.UxState.WAIT_FOR_VERIFICATION
-                is VerificationTxState.Verified       -> IncomingSasVerificationTransaction.UxState.VERIFIED
-                is VerificationTxState.Cancelled      -> {
+                is VerificationTxState.Verifying -> IncomingSasVerificationTransaction.UxState.WAIT_FOR_VERIFICATION
+                is VerificationTxState.Verified -> IncomingSasVerificationTransaction.UxState.VERIFIED
+                is VerificationTxState.Cancelled -> {
                     if (immutableState.byMe) {
                         IncomingSasVerificationTransaction.UxState.CANCELLED_BY_ME
                     } else {
                         IncomingSasVerificationTransaction.UxState.CANCELLED_BY_OTHER
                     }
                 }
-                else                                  -> IncomingSasVerificationTransaction.UxState.UNKNOWN
+                else -> IncomingSasVerificationTransaction.UxState.UNKNOWN
             }
         }
 
@@ -232,7 +232,7 @@ internal class DefaultIncomingSASDefaultVerificationTransaction(
                 val sasInfo = "MATRIX_KEY_VERIFICATION_SAS|$otherUserId|$otherDeviceId|$otherKey|$userId|$deviceId|${getSAS().publicKey}|$transactionId"
                 return getSAS().generateShortCode(sasInfo, 6)
             }
-            else             -> {
+            else -> {
                 // Protocol has been checked earlier
                 throw IllegalArgumentException()
             }

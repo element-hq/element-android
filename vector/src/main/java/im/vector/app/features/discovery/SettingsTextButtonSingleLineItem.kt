@@ -25,11 +25,11 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
-import com.airbnb.epoxy.EpoxyModelWithHolder
 import com.google.android.material.switchmaterial.SwitchMaterial
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
+import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.attributes.ButtonStyle
 import im.vector.app.core.epoxy.attributes.ButtonType
 import im.vector.app.core.epoxy.attributes.IconMode
@@ -39,8 +39,8 @@ import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.themes.ThemeUtils
 
-@EpoxyModelClass(layout = R.layout.item_settings_button_single_line)
-abstract class SettingsTextButtonSingleLineItem : EpoxyModelWithHolder<SettingsTextButtonSingleLineItem.Holder>() {
+@EpoxyModelClass
+abstract class SettingsTextButtonSingleLineItem : VectorEpoxyModel<SettingsTextButtonSingleLineItem.Holder>(R.layout.item_settings_button_single_line) {
 
     @EpoxyAttribute
     lateinit var colorProvider: ColorProvider
@@ -111,11 +111,11 @@ abstract class SettingsTextButtonSingleLineItem : EpoxyModelWithHolder<SettingsT
                     holder.mainButton.isVisible = false
                     holder.switchButton.isVisible = false
                 }
-                ButtonType.NORMAL    -> {
+                ButtonType.NORMAL -> {
                     holder.mainButton.isVisible = true
                     holder.switchButton.isVisible = false
                     when (buttonStyle) {
-                        ButtonStyle.POSITIVE    -> {
+                        ButtonStyle.POSITIVE -> {
                             holder.mainButton.setTextColor(colorProvider.getColorFromAttribute(R.attr.colorPrimary))
                         }
                         ButtonStyle.DESTRUCTIVE -> {
@@ -124,7 +124,7 @@ abstract class SettingsTextButtonSingleLineItem : EpoxyModelWithHolder<SettingsT
                     }
                     holder.mainButton.onClick(buttonClickListener)
                 }
-                ButtonType.SWITCH    -> {
+                ButtonType.SWITCH -> {
                     holder.mainButton.isVisible = false
                     holder.switchButton.isVisible = true
                     // set to null before changing the state
@@ -136,10 +136,10 @@ abstract class SettingsTextButtonSingleLineItem : EpoxyModelWithHolder<SettingsT
         }
 
         when (iconMode) {
-            IconMode.NONE  -> {
+            IconMode.NONE -> {
                 holder.textView.setCompoundDrawables(null, null, null, null)
             }
-            IconMode.INFO  -> {
+            IconMode.INFO -> {
                 val errorColor = colorProvider.getColor(R.color.notification_accent_color)
                 ContextCompat.getDrawable(holder.view.context, R.drawable.ic_notification_privacy_warning)?.apply {
                     ThemeUtils.tintDrawableWithColor(this, errorColor)

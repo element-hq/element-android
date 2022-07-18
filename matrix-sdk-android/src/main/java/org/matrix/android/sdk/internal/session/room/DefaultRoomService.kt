@@ -20,7 +20,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.paging.PagedList
 import com.zhuinden.monarchy.Monarchy
-import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.identity.model.SignInvitationResult
 import org.matrix.android.sdk.api.session.room.Room
@@ -44,7 +43,9 @@ import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFie
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.room.alias.DeleteRoomAliasTask
 import org.matrix.android.sdk.internal.session.room.alias.GetRoomIdByAliasTask
+import org.matrix.android.sdk.internal.session.room.create.CreateLocalRoomTask
 import org.matrix.android.sdk.internal.session.room.create.CreateRoomTask
+import org.matrix.android.sdk.internal.session.room.delete.DeleteLocalRoomTask
 import org.matrix.android.sdk.internal.session.room.membership.RoomChangeMembershipStateDataSource
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberHelper
 import org.matrix.android.sdk.internal.session.room.membership.joining.JoinRoomTask
@@ -61,6 +62,8 @@ import javax.inject.Inject
 internal class DefaultRoomService @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
         private val createRoomTask: CreateRoomTask,
+        private val createLocalRoomTask: CreateLocalRoomTask,
+        private val deleteLocalRoomTask: DeleteLocalRoomTask,
         private val joinRoomTask: JoinRoomTask,
         private val markAllRoomsReadTask: MarkAllRoomsReadTask,
         private val updateBreadcrumbsTask: UpdateBreadcrumbsTask,
@@ -79,6 +82,14 @@ internal class DefaultRoomService @Inject constructor(
         return createRoomTask.executeRetry(createRoomParams, 3)
     }
 
+    override suspend fun createLocalRoom(createRoomParams: CreateRoomParams): String {
+        return createLocalRoomTask.execute(createRoomParams)
+    }
+
+    override suspend fun deleteLocalRoom(roomId: String) {
+        deleteLocalRoomTask.execute(DeleteLocalRoomTask.Params(roomId))
+    }
+
     override fun getRoom(roomId: String): Room? {
         return roomGetter.getRoom(roomId)
     }
@@ -91,18 +102,27 @@ internal class DefaultRoomService @Inject constructor(
         return roomSummaryDataSource.getRoomSummary(roomIdOrAlias)
     }
 
-    override fun getRoomSummaries(queryParams: RoomSummaryQueryParams,
-                                  sortOrder: RoomSortOrder): List<RoomSummary> {
+    override fun getRoomSummaryLive(roomId: String): LiveData<Optional<RoomSummary>> {
+        return roomSummaryDataSource.getRoomSummaryLive(roomId)
+    }
+
+    override fun getRoomSummaries(
+            queryParams: RoomSummaryQueryParams,
+            sortOrder: RoomSortOrder
+    ): List<RoomSummary> {
         return roomSummaryDataSource.getRoomSummaries(queryParams, sortOrder)
     }
 
     override fun refreshJoinedRoomSummaryPreviews(roomId: String?) {
-        val roomSummaries = getRoomSummaries(roomSummaryQueryParams {
-            if (roomId != null) {
-                this.roomId = QueryStringValue.Equals(roomId)
-            }
-            memberships = listOf(Membership.JOIN)
-        })
+        val roomSummaries = if (roomId == null) {
+            getRoomSummaries(roomSummaryQueryParams {
+                memberships = listOf(Membership.JOIN)
+            })
+        } else {
+            listOfNotNull(
+                    getRoomSummary(roomId)?.takeIf { it.membership == Membership.JOIN }
+            )
+        }
 
         if (roomSummaries.isNotEmpty()) {
             monarchy.runTransactionSync { realm ->
@@ -113,21 +133,28 @@ internal class DefaultRoomService @Inject constructor(
         }
     }
 
-    override fun getRoomSummariesLive(queryParams: RoomSummaryQueryParams,
-                                      sortOrder: RoomSortOrder): LiveData<List<RoomSummary>> {
+    override fun getRoomSummariesLive(
+            queryParams: RoomSummaryQueryParams,
+            sortOrder: RoomSortOrder
+    ): LiveData<List<RoomSummary>> {
         return roomSummaryDataSource.getRoomSummariesLive(queryParams, sortOrder)
     }
 
-    override fun getPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams,
-                                           pagedListConfig: PagedList.Config,
-                                           sortOrder: RoomSortOrder): LiveData<PagedList<RoomSummary>> {
+    override fun getPagedRoomSummariesLive(
+            queryParams: RoomSummaryQueryParams,
+            pagedListConfig: PagedList.Config,
+            sortOrder: RoomSortOrder
+    ): LiveData<PagedList<RoomSummary>> {
         return roomSummaryDataSource.getSortedPagedRoomSummariesLive(queryParams, pagedListConfig, sortOrder)
     }
 
-    override fun getFilteredPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams,
-                                                   pagedListConfig: PagedList.Config,
-                                                   sortOrder: RoomSortOrder): UpdatableLivePageResult {
-        return roomSummaryDataSource.getUpdatablePagedRoomSummariesLive(queryParams, pagedListConfig, sortOrder)
+    override fun getFilteredPagedRoomSummariesLive(
+            queryParams: RoomSummaryQueryParams,
+            pagedListConfig: PagedList.Config,
+            sortOrder: RoomSortOrder,
+            getFlattenParents: Boolean
+    ): UpdatableLivePageResult {
+        return roomSummaryDataSource.getUpdatablePagedRoomSummariesLive(queryParams, pagedListConfig, sortOrder, getFlattenParents)
     }
 
     override fun getRoomCountLive(queryParams: RoomSummaryQueryParams): LiveData<Int> {
@@ -154,9 +181,11 @@ internal class DefaultRoomService @Inject constructor(
         joinRoomTask.execute(JoinRoomTask.Params(roomIdOrAlias, reason, viaServers))
     }
 
-    override suspend fun joinRoom(roomId: String,
-                                  reason: String?,
-                                  thirdPartySigned: SignInvitationResult) {
+    override suspend fun joinRoom(
+            roomId: String,
+            reason: String?,
+            thirdPartySigned: SignInvitationResult
+    ) {
         joinRoomTask.execute(JoinRoomTask.Params(roomId, reason, thirdPartySigned = thirdPartySigned))
     }
 

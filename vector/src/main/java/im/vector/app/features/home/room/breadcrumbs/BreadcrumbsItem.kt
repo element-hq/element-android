@@ -32,8 +32,8 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.list.UnreadCounterBadgeView
 import org.matrix.android.sdk.api.util.MatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_breadcrumbs)
-abstract class BreadcrumbsItem : VectorEpoxyModel<BreadcrumbsItem.Holder>() {
+@EpoxyModelClass
+abstract class BreadcrumbsItem : VectorEpoxyModel<BreadcrumbsItem.Holder>(R.layout.item_breadcrumbs) {
 
     @EpoxyAttribute var hasTypingUsers: Boolean = false
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer

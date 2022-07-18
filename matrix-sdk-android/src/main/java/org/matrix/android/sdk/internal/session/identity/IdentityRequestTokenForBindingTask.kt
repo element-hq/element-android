@@ -57,7 +57,7 @@ internal class DefaultIdentityRequestTokenForBindingTask @Inject constructor(
 
         val tokenResponse = executeRequest(null) {
             when (params.threePid) {
-                is ThreePid.Email  -> identityAPI.requestTokenToBindEmail(
+                is ThreePid.Email -> identityAPI.requestTokenToBindEmail(
                         IdentityRequestTokenForEmailBody(
                                 clientSecret = clientSecret,
                                 sendAttempt = sendAttempt,

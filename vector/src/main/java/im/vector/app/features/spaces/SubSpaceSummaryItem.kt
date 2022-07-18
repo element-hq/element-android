@@ -34,8 +34,8 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.list.UnreadCounterBadgeView
 import org.matrix.android.sdk.api.util.MatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_sub_space)
-abstract class SubSpaceSummaryItem : VectorEpoxyModel<SubSpaceSummaryItem.Holder>() {
+@EpoxyModelClass
+abstract class SubSpaceSummaryItem : VectorEpoxyModel<SubSpaceSummaryItem.Holder>(R.layout.item_sub_space) {
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem

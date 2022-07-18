@@ -307,12 +307,14 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
         private const val EXTRA_IMAGE_DATA = "EXTRA_IMAGE_DATA"
         private const val EXTRA_IN_MEMORY_DATA = "EXTRA_IN_MEMORY_DATA"
 
-        fun newIntent(context: Context,
-                      mediaData: AttachmentData,
-                      roomId: String?,
-                      eventId: String,
-                      inMemoryData: List<AttachmentData>,
-                      sharedTransitionName: String?) = Intent(context, VectorAttachmentViewerActivity::class.java).also {
+        fun newIntent(
+                context: Context,
+                mediaData: AttachmentData,
+                roomId: String?,
+                eventId: String,
+                inMemoryData: List<AttachmentData>,
+                sharedTransitionName: String?
+        ) = Intent(context, VectorAttachmentViewerActivity::class.java).also {
             it.putExtra(EXTRA_ARGS, Args(roomId, eventId, sharedTransitionName))
             it.putExtra(EXTRA_IMAGE_DATA, mediaData)
             if (inMemoryData.isNotEmpty()) {

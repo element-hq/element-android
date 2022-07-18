@@ -50,7 +50,7 @@ import org.matrix.android.sdk.api.session.events.model.content.RoomKeyWithHeldCo
 import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
-import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper2
+import org.matrix.android.sdk.internal.crypto.model.MXInboundMegolmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.model.OlmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.model.OutboundGroupSessionWrapper
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
@@ -88,7 +88,6 @@ import org.matrix.android.sdk.internal.crypto.store.db.query.get
 import org.matrix.android.sdk.internal.crypto.store.db.query.getById
 import org.matrix.android.sdk.internal.crypto.store.db.query.getOrCreate
 import org.matrix.android.sdk.internal.crypto.util.RequestIdHelper
-import org.matrix.android.sdk.internal.database.tools.RealmDebugTools
 import org.matrix.android.sdk.internal.di.CryptoDatabase
 import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.MoshiProvider
@@ -322,10 +321,12 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun storeUserCrossSigningKeys(userId: String,
-                                           masterKey: CryptoCrossSigningKey?,
-                                           selfSigningKey: CryptoCrossSigningKey?,
-                                           userSigningKey: CryptoCrossSigningKey?) {
+    override fun storeUserCrossSigningKeys(
+            userId: String,
+            masterKey: CryptoCrossSigningKey?,
+            selfSigningKey: CryptoCrossSigningKey?,
+            userSigningKey: CryptoCrossSigningKey?
+    ) {
         doRealmTransaction(realmConfiguration) { realm ->
             UserEntity.getOrCreate(realm, userId)
                     .let { userEntity ->
@@ -656,9 +657,25 @@ internal class RealmCryptoStore @Inject constructor(
                 ?: false
     }
 
+    override fun shouldShareHistory(roomId: String): Boolean {
+        if (!isShareKeysOnInviteEnabled()) return false
+        return doWithRealm(realmConfiguration) {
+            CryptoRoomEntity.getById(it, roomId)?.shouldShareHistory
+        }
+                ?: false
+    }
+
     override fun setShouldEncryptForInvitedMembers(roomId: String, shouldEncryptForInvitedMembers: Boolean) {
         doRealmTransaction(realmConfiguration) {
             CryptoRoomEntity.getOrCreate(it, roomId).shouldEncryptForInvitedMembers = shouldEncryptForInvitedMembers
+        }
+    }
+
+    override fun setShouldShareHistory(roomId: String, shouldShareHistory: Boolean) {
+        Timber.tag(loggerTag.value)
+                .v("setShouldShareHistory for room $roomId is $shouldShareHistory")
+        doRealmTransaction(realmConfiguration) {
+            CryptoRoomEntity.getOrCreate(it, roomId).shouldShareHistory = shouldShareHistory
         }
     }
 
@@ -726,54 +743,55 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun storeInboundGroupSessions(sessions: List<OlmInboundGroupSessionWrapper2>) {
+    override fun storeInboundGroupSessions(sessions: List<MXInboundMegolmSessionWrapper>) {
         if (sessions.isEmpty()) {
             return
         }
 
         doRealmTransaction(realmConfiguration) { realm ->
-            sessions.forEach { session ->
-                var sessionIdentifier: String? = null
+            sessions.forEach { wrapper ->
 
-                try {
-                    sessionIdentifier = session.olmInboundGroupSession?.sessionIdentifier()
+                val sessionIdentifier = try {
+                    wrapper.session.sessionIdentifier()
                 } catch (e: OlmException) {
                     Timber.e(e, "## storeInboundGroupSession() : sessionIdentifier failed")
+                    return@forEach
                 }
 
-                if (sessionIdentifier != null) {
-                    val key = OlmInboundGroupSessionEntity.createPrimaryKey(sessionIdentifier, session.senderKey)
+//                    val shouldShareHistory = session.roomId?.let { roomId ->
+//                        CryptoRoomEntity.getById(realm, roomId)?.shouldShareHistory
+//                    } ?: false
+                val key = OlmInboundGroupSessionEntity.createPrimaryKey(sessionIdentifier, wrapper.sessionData.senderKey)
 
-                    val existing = realm.where<OlmInboundGroupSessionEntity>()
-                            .equalTo(OlmInboundGroupSessionEntityFields.PRIMARY_KEY, key)
-                            .findFirst()
-
-                    if (existing != null) {
-                        // we want to keep the existing backup status
-                        existing.putInboundGroupSession(session)
-                    } else {
-                        val realmOlmInboundGroupSession = OlmInboundGroupSessionEntity().apply {
-                            primaryKey = key
-                            sessionId = sessionIdentifier
-                            senderKey = session.senderKey
-                            putInboundGroupSession(session)
-                        }
-
-                        realm.insertOrUpdate(realmOlmInboundGroupSession)
-                    }
+                val realmOlmInboundGroupSession = OlmInboundGroupSessionEntity().apply {
+                    primaryKey = key
+                    store(wrapper)
                 }
+                Timber.i("## CRYPTO | shouldShareHistory: ${wrapper.sessionData.sharedHistory} for $key")
+                realm.insertOrUpdate(realmOlmInboundGroupSession)
             }
         }
     }
 
-    override fun getInboundGroupSession(sessionId: String, senderKey: String): OlmInboundGroupSessionWrapper2? {
+    override fun getInboundGroupSession(sessionId: String, senderKey: String): MXInboundMegolmSessionWrapper? {
         val key = OlmInboundGroupSessionEntity.createPrimaryKey(sessionId, senderKey)
 
-        return doWithRealm(realmConfiguration) {
-            it.where<OlmInboundGroupSessionEntity>()
+        return doWithRealm(realmConfiguration) { realm ->
+            realm.where<OlmInboundGroupSessionEntity>()
                     .equalTo(OlmInboundGroupSessionEntityFields.PRIMARY_KEY, key)
                     .findFirst()
-                    ?.getInboundGroupSession()
+                    ?.toModel()
+        }
+    }
+
+    override fun getInboundGroupSession(sessionId: String, senderKey: String, sharedHistory: Boolean): MXInboundMegolmSessionWrapper? {
+        val key = OlmInboundGroupSessionEntity.createPrimaryKey(sessionId, senderKey)
+        return doWithRealm(realmConfiguration) {
+            it.where<OlmInboundGroupSessionEntity>()
+                    .equalTo(OlmInboundGroupSessionEntityFields.SHARED_HISTORY, sharedHistory)
+                    .equalTo(OlmInboundGroupSessionEntityFields.PRIMARY_KEY, key)
+                    .findFirst()
+                    ?.toModel()
         }
     }
 
@@ -785,7 +803,8 @@ internal class RealmCryptoStore @Inject constructor(
                         entity.getOutboundGroupSession()?.let {
                             OutboundGroupSessionWrapper(
                                     it,
-                                    entity.creationTime ?: 0
+                                    entity.creationTime ?: 0,
+                                    entity.shouldShareHistory
                             )
                         }
                     }
@@ -805,6 +824,8 @@ internal class RealmCryptoStore @Inject constructor(
                 if (outboundGroupSession != null) {
                     val info = realm.createObject(OutboundGroupSessionInfoEntity::class.java).apply {
                         creationTime = clock.epochMillis()
+                        // Store the room history visibility on the outbound session creation
+                        shouldShareHistory = entity.shouldShareHistory
                         putOutboundGroupSession(outboundGroupSession)
                     }
                     entity.outboundSessionInfo = info
@@ -813,17 +834,32 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
+//    override fun needsRotationDueToVisibilityChange(roomId: String): Boolean {
+//        return doWithRealm(realmConfiguration) { realm ->
+//            CryptoRoomEntity.getById(realm, roomId)?.let { entity ->
+//                entity.shouldShareHistory != entity.outboundSessionInfo?.shouldShareHistory
+//            }
+//        } ?: false
+//    }
+
     /**
      * Note: the result will be only use to export all the keys and not to use the OlmInboundGroupSessionWrapper2,
      * so there is no need to use or update `inboundGroupSessionToRelease` for native memory management.
      */
-    override fun getInboundGroupSessions(): List<OlmInboundGroupSessionWrapper2> {
-        return doWithRealm(realmConfiguration) {
-            it.where<OlmInboundGroupSessionEntity>()
+    override fun getInboundGroupSessions(): List<MXInboundMegolmSessionWrapper> {
+        return doWithRealm(realmConfiguration) { realm ->
+            realm.where<OlmInboundGroupSessionEntity>()
                     .findAll()
-                    .mapNotNull { inboundGroupSessionEntity ->
-                        inboundGroupSessionEntity.getInboundGroupSession()
-                    }
+                    .mapNotNull { it.toModel() }
+        }
+    }
+
+    override fun getInboundGroupSessions(roomId: String): List<MXInboundMegolmSessionWrapper> {
+        return doWithRealm(realmConfiguration) { realm ->
+            realm.where<OlmInboundGroupSessionEntity>()
+                    .equalTo(OlmInboundGroupSessionEntityFields.ROOM_ID, roomId)
+                    .findAll()
+                    .mapNotNull { it.toModel() }
         }
     }
 
@@ -884,7 +920,7 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun markBackupDoneForInboundGroupSessions(olmInboundGroupSessionWrappers: List<OlmInboundGroupSessionWrapper2>) {
+    override fun markBackupDoneForInboundGroupSessions(olmInboundGroupSessionWrappers: List<MXInboundMegolmSessionWrapper>) {
         if (olmInboundGroupSessionWrappers.isEmpty()) {
             return
         }
@@ -892,10 +928,13 @@ internal class RealmCryptoStore @Inject constructor(
         doRealmTransaction(realmConfiguration) { realm ->
             olmInboundGroupSessionWrappers.forEach { olmInboundGroupSessionWrapper ->
                 try {
-                    val sessionIdentifier = olmInboundGroupSessionWrapper.olmInboundGroupSession?.sessionIdentifier()
+                    val sessionIdentifier =
+                            tryOrNull("Failed to get session identifier") {
+                                olmInboundGroupSessionWrapper.session.sessionIdentifier()
+                            } ?: return@forEach
                     val key = OlmInboundGroupSessionEntity.createPrimaryKey(
                             sessionIdentifier,
-                            olmInboundGroupSessionWrapper.senderKey
+                            olmInboundGroupSessionWrapper.sessionData.senderKey
                     )
 
                     val existing = realm.where<OlmInboundGroupSessionEntity>()
@@ -908,9 +947,7 @@ internal class RealmCryptoStore @Inject constructor(
                         // ... might be in cache but not yet persisted, create a record to persist backedup state
                         val realmOlmInboundGroupSession = OlmInboundGroupSessionEntity().apply {
                             primaryKey = key
-                            sessionId = sessionIdentifier
-                            senderKey = olmInboundGroupSessionWrapper.senderKey
-                            putInboundGroupSession(olmInboundGroupSessionWrapper)
+                            store(olmInboundGroupSessionWrapper)
                             backedUp = true
                         }
 
@@ -923,15 +960,13 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun inboundGroupSessionsToBackup(limit: Int): List<OlmInboundGroupSessionWrapper2> {
+    override fun inboundGroupSessionsToBackup(limit: Int): List<MXInboundMegolmSessionWrapper> {
         return doWithRealm(realmConfiguration) {
             it.where<OlmInboundGroupSessionEntity>()
                     .equalTo(OlmInboundGroupSessionEntityFields.BACKED_UP, false)
                     .limit(limit.toLong())
                     .findAll()
-                    .mapNotNull { inboundGroupSession ->
-                        inboundGroupSession.getInboundGroupSession()
-                    }
+                    .mapNotNull { it.toModel() }
         }
     }
 
@@ -970,6 +1005,18 @@ internal class RealmCryptoStore @Inject constructor(
         return doWithRealm(realmConfiguration) {
             it.where<CryptoMetadataEntity>().findFirst()?.globalBlacklistUnverifiedDevices
         } ?: false
+    }
+
+    override fun isShareKeysOnInviteEnabled(): Boolean {
+        return doWithRealm(realmConfiguration) {
+            it.where<CryptoMetadataEntity>().findFirst()?.enableKeyForwardingOnInvite
+        } ?: false
+    }
+
+    override fun enableShareKeyOnInvite(enable: Boolean) {
+        doRealmTransaction(realmConfiguration) {
+            it.where<CryptoMetadataEntity>().findFirst()?.enableKeyForwardingOnInvite = enable
+        }
     }
 
     override fun setDeviceKeysUploaded(uploaded: Boolean) {
@@ -1154,9 +1201,11 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun getOrAddOutgoingRoomKeyRequest(requestBody: RoomKeyRequestBody,
-                                                recipients: Map<String, List<String>>,
-                                                fromIndex: Int): OutgoingKeyRequest {
+    override fun getOrAddOutgoingRoomKeyRequest(
+            requestBody: RoomKeyRequestBody,
+            recipients: Map<String, List<String>>,
+            fromIndex: Int
+    ): OutgoingKeyRequest {
         // Insert the request and return the one passed in parameter
         lateinit var request: OutgoingKeyRequest
         doRealmTransaction(realmConfiguration) { realm ->
@@ -1220,12 +1269,14 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun updateOutgoingRoomKeyReply(roomId: String,
-                                            sessionId: String,
-                                            algorithm: String,
-                                            senderKey: String,
-                                            fromDevice: String?,
-                                            event: Event) {
+    override fun updateOutgoingRoomKeyReply(
+            roomId: String,
+            sessionId: String,
+            algorithm: String,
+            senderKey: String,
+            fromDevice: String?,
+            event: Event
+    ) {
         doRealmTransaction(realmConfiguration) { realm ->
             realm.where<OutgoingKeyRequestEntity>()
                     .equalTo(OutgoingKeyRequestEntityFields.ROOM_ID, roomId)
@@ -1266,7 +1317,8 @@ internal class RealmCryptoStore @Inject constructor(
             senderKey: String,
             algorithm: String,
             fromUser: String,
-            fromDevice: String) {
+            fromDevice: String
+    ) {
         monarchy.writeAsync { realm ->
             val now = clock.epochMillis()
             realm.createObject<AuditTrailEntity>().apply {
@@ -1288,13 +1340,15 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun saveWithheldAuditTrail(roomId: String,
-                                        sessionId: String,
-                                        senderKey: String,
-                                        algorithm: String,
-                                        code: WithHeldCode,
-                                        userId: String,
-                                        deviceId: String) {
+    override fun saveWithheldAuditTrail(
+            roomId: String,
+            sessionId: String,
+            senderKey: String,
+            algorithm: String,
+            code: WithHeldCode,
+            userId: String,
+            deviceId: String
+    ) {
         monarchy.writeAsync { realm ->
             val now = clock.epochMillis()
             realm.createObject<AuditTrailEntity>().apply {
@@ -1316,34 +1370,39 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun saveForwardKeyAuditTrail(roomId: String,
-                                          sessionId: String,
-                                          senderKey: String,
-                                          algorithm: String,
-                                          userId: String,
-                                          deviceId: String,
-                                          chainIndex: Long?) {
+    override fun saveForwardKeyAuditTrail(
+            roomId: String,
+            sessionId: String,
+            senderKey: String,
+            algorithm: String,
+            userId: String,
+            deviceId: String,
+            chainIndex: Long?
+    ) {
         saveForwardKeyTrail(roomId, sessionId, senderKey, algorithm, userId, deviceId, chainIndex, false)
     }
 
-    override fun saveIncomingForwardKeyAuditTrail(roomId: String,
-                                                  sessionId: String,
-                                                  senderKey: String,
-                                                  algorithm: String,
-                                                  userId: String,
-                                                  deviceId: String,
-                                                  chainIndex: Long?) {
+    override fun saveIncomingForwardKeyAuditTrail(
+            roomId: String,
+            sessionId: String,
+            senderKey: String,
+            algorithm: String,
+            userId: String,
+            deviceId: String,
+            chainIndex: Long?
+    ) {
         saveForwardKeyTrail(roomId, sessionId, senderKey, algorithm, userId, deviceId, chainIndex, true)
     }
 
-    private fun saveForwardKeyTrail(roomId: String,
-                                    sessionId: String,
-                                    senderKey: String,
-                                    algorithm: String,
-                                    userId: String,
-                                    deviceId: String,
-                                    chainIndex: Long?,
-                                    incoming: Boolean
+    private fun saveForwardKeyTrail(
+            roomId: String,
+            sessionId: String,
+            senderKey: String,
+            algorithm: String,
+            userId: String,
+            deviceId: String,
+            chainIndex: Long?,
+            incoming: Boolean
     ) {
         monarchy.writeAsync { realm ->
             val now = clock.epochMillis()
@@ -1617,12 +1676,14 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun markedSessionAsShared(roomId: String?,
-                                       sessionId: String,
-                                       userId: String,
-                                       deviceId: String,
-                                       deviceIdentityKey: String,
-                                       chainIndex: Int) {
+    override fun markedSessionAsShared(
+            roomId: String?,
+            sessionId: String,
+            userId: String,
+            deviceId: String,
+            deviceIdentityKey: String,
+            chainIndex: Int
+    ) {
         doRealmTransaction(realmConfiguration) { realm ->
             SharedSessionEntity.create(
                     realm = realm,
@@ -1692,12 +1753,5 @@ internal class RealmCryptoStore @Inject constructor(
 
             // Can we do something for WithHeldSessionEntity?
         }
-    }
-
-    /**
-     * Prints out database info.
-     */
-    override fun logDbUsageInfo() {
-        RealmDebugTools(realmConfiguration).logInfo("Crypto")
     }
 }

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fingerprint_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="8dp"
+    android:paddingStart="24dp"
+    android:paddingEnd="24dp"
+    android:paddingTop="16dp">
+
+    <TextView
+        android:id="@+id/fingerprint_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/lockscreen_fingerprint_description"
+        android:textAppearance="@android:style/TextAppearance.Material.Subhead"
+        android:textColor="?android:attr/textColorSecondary"/>
+
+
+    <ImageView
+        android:id="@+id/fingerprint_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/fingerprint_description"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/lockscreen_fingerprint_40"
+        android:contentDescription="@string/lockscreen_description_fingerprint_icon"/>
+
+    <TextView
+        android:id="@+id/fingerprint_status"
+        style="@android:style/TextAppearance.Material.Body1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/fingerprint_icon"
+        android:layout_alignTop="@id/fingerprint_icon"
+        android:layout_marginStart="16dp"
+        android:layout_toEndOf="@id/fingerprint_icon"
+        android:gravity="center_vertical"
+        android:text="@string/lockscreen_fingerprint_hint"
+        android:textColor="@color/lockscreen_hint_color" />
+</RelativeLayout>

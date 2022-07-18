@@ -19,8 +19,6 @@ package org.matrix.android.sdk.internal.session.room.aggregation.poll
 import io.mockk.every
 import io.mockk.mockk
 import io.realm.RealmList
-import io.realm.RealmModel
-import io.realm.RealmQuery
 import org.amshove.kluent.shouldBeFalse
 import org.amshove.kluent.shouldBeTrue
 import org.junit.Before
@@ -46,6 +44,8 @@ import org.matrix.android.sdk.internal.session.room.aggregation.poll.PollEventsT
 import org.matrix.android.sdk.internal.session.room.aggregation.poll.PollEventsTestData.A_TIMELINE_EVENT
 import org.matrix.android.sdk.internal.session.room.aggregation.poll.PollEventsTestData.A_USER_ID_1
 import org.matrix.android.sdk.test.fakes.FakeRealm
+import org.matrix.android.sdk.test.fakes.givenEqualTo
+import org.matrix.android.sdk.test.fakes.givenFindFirst
 
 class PollAggregationProcessorTest {
 
@@ -135,14 +135,11 @@ class PollAggregationProcessorTest {
         pollAggregationProcessor.handlePollEndEvent(session, powerLevelsHelper, realm.instance, event).shouldBeFalse()
     }
 
-    private inline fun <reified T : RealmModel> RealmQuery<T>.givenEqualTo(fieldName: String, value: String, result: RealmQuery<T>) {
-        every { equalTo(fieldName, value) } returns result
-    }
-
     private fun mockEventAnnotationsSummaryEntity() {
-        val queryResult = realm.givenWhereReturns(result = EventAnnotationsSummaryEntity())
-        queryResult.givenEqualTo(EventAnnotationsSummaryEntityFields.ROOM_ID, A_POLL_REPLACE_EVENT.roomId!!, queryResult)
-        queryResult.givenEqualTo(EventAnnotationsSummaryEntityFields.EVENT_ID, A_POLL_REPLACE_EVENT.eventId!!, queryResult)
+        realm.givenWhere<EventAnnotationsSummaryEntity>()
+                .givenFindFirst(EventAnnotationsSummaryEntity())
+                .givenEqualTo(EventAnnotationsSummaryEntityFields.ROOM_ID, A_POLL_REPLACE_EVENT.roomId!!)
+                .givenEqualTo(EventAnnotationsSummaryEntityFields.EVENT_ID, A_POLL_REPLACE_EVENT.eventId!!)
     }
 
     private fun mockRoom(

@@ -25,8 +25,12 @@ import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.network.ssl.Fingerprint
 
 sealed interface OnboardingAction : VectorViewModelAction {
-    data class OnGetStarted(val resetLoginConfig: Boolean, val onboardingFlow: OnboardingFlow) : OnboardingAction
-    data class OnIAlreadyHaveAnAccount(val resetLoginConfig: Boolean, val onboardingFlow: OnboardingFlow) : OnboardingAction
+    sealed interface SplashAction : OnboardingAction {
+        val onboardingFlow: OnboardingFlow
+
+        data class OnGetStarted(override val onboardingFlow: OnboardingFlow) : SplashAction
+        data class OnIAlreadyHaveAnAccount(override val onboardingFlow: OnboardingFlow) : SplashAction
+    }
 
     data class UpdateServerType(val serverType: ServerType) : OnboardingAction
 
@@ -43,19 +47,25 @@ sealed interface OnboardingAction : VectorViewModelAction {
     data class LoginWithToken(val loginToken: String) : OnboardingAction
     data class WebLoginSuccess(val credentials: Credentials) : OnboardingAction
     data class InitWith(val loginConfig: LoginConfig?) : OnboardingAction
-    data class ResetPassword(val email: String, val newPassword: String) : OnboardingAction
+    data class ResetPassword(val email: String, val newPassword: String?) : OnboardingAction
+    data class ConfirmNewPassword(val newPassword: String, val signOutAllDevices: Boolean) : OnboardingAction
+    object ResendResetPassword : OnboardingAction
     object ResetPasswordMailConfirmed : OnboardingAction
 
-    // Login or Register, depending on the signMode
-    data class LoginOrRegister(val username: String, val password: String, val initialDeviceName: String) : OnboardingAction
-    data class Register(val username: String, val password: String, val initialDeviceName: String) : OnboardingAction
+    data class MaybeUpdateHomeserverFromMatrixId(val userId: String) : OnboardingAction
+    sealed interface AuthenticateAction : OnboardingAction {
+        data class Register(val username: String, val password: String, val initialDeviceName: String) : AuthenticateAction
+        data class Login(val username: String, val password: String, val initialDeviceName: String) : AuthenticateAction
+        data class LoginDirect(val matrixId: String, val password: String, val initialDeviceName: String) : AuthenticateAction
+    }
+
     object StopEmailValidationCheck : OnboardingAction
 
     data class PostRegisterAction(val registerAction: RegisterAction) : OnboardingAction
 
     // Reset actions
     sealed interface ResetAction : OnboardingAction
-
+    object ResetDeeplinkConfig : ResetAction
     object ResetHomeServerType : ResetAction
     object ResetHomeServerUrl : ResetAction
     object ResetSignMode : ResetAction

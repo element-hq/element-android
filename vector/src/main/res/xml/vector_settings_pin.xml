@@ -15,7 +15,6 @@
 
     <im.vector.app.core.preference.VectorSwitchPreference
         android:defaultValue="true"
-        android:dependency="SETTINGS_SECURITY_USE_PIN_CODE_FLAG"
         android:key="SETTINGS_SECURITY_USE_BIOMETRICS_FLAG"
         android:summaryOff="@string/settings_security_pin_code_use_biometrics_summary_off"
         android:summaryOn="@string/settings_security_pin_code_use_biometrics_summary_on"

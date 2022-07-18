@@ -19,12 +19,12 @@ import android.widget.TextView
 import androidx.annotation.ColorInt
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
-import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
+import im.vector.app.core.epoxy.VectorEpoxyModel
 
-@EpoxyModelClass(layout = R.layout.item_settings_information)
-abstract class SettingsInformationItem : EpoxyModelWithHolder<SettingsInformationItem.Holder>() {
+@EpoxyModelClass
+abstract class SettingsInformationItem : VectorEpoxyModel<SettingsInformationItem.Holder>(R.layout.item_settings_information) {
 
     @EpoxyAttribute
     lateinit var message: String

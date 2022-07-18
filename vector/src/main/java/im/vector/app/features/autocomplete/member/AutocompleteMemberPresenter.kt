@@ -36,10 +36,11 @@ import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.util.MatrixItem
 
-class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
-                                                              @Assisted val roomId: String,
-                                                              private val session: Session,
-                                                              private val controller: AutocompleteMemberController
+class AutocompleteMemberPresenter @AssistedInject constructor(
+        context: Context,
+        @Assisted val roomId: String,
+        private val session: Session,
+        private val controller: AutocompleteMemberController
 ) : RecyclerViewPresenter<AutocompleteMemberItem>(context), AutocompleteClickListener<AutocompleteMemberItem> {
 
     /* ==========================================================================================

@@ -39,6 +39,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.getUser
 import org.matrix.android.sdk.api.util.toMatrixItem
+import timber.log.Timber
 
 /**
  * Sampling period to compare target location and user location.
@@ -65,11 +66,18 @@ class LocationSharingViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<LocationSharingViewModel, LocationSharingViewState> by hiltMavericksViewModelFactory()
 
     init {
-        locationTracker.addCallback(this)
-        locationTracker.start()
+        initLocationTracking()
         setUserItem()
         updatePin()
         compareTargetAndUserLocation()
+    }
+
+    private fun initLocationTracking() {
+        locationTracker.addCallback(this)
+        locationTracker.locations
+                .onEach(::onLocationUpdate)
+                .launchIn(viewModelScope)
+        locationTracker.start()
     }
 
     private fun setUserItem() {
@@ -118,10 +126,10 @@ class LocationSharingViewModel @AssistedInject constructor(
 
     override fun handle(action: LocationSharingAction) {
         when (action) {
-            LocationSharingAction.CurrentUserLocationSharing  -> handleCurrentUserLocationSharingAction()
-            is LocationSharingAction.PinnedLocationSharing    -> handlePinnedLocationSharingAction(action)
-            is LocationSharingAction.LocationTargetChange     -> handleLocationTargetChangeAction(action)
-            LocationSharingAction.ZoomToUserLocation          -> handleZoomToUserLocationAction()
+            LocationSharingAction.CurrentUserLocationSharing -> handleCurrentUserLocationSharingAction()
+            is LocationSharingAction.PinnedLocationSharing -> handlePinnedLocationSharingAction(action)
+            is LocationSharingAction.LocationTargetChange -> handleLocationTargetChangeAction(action)
+            LocationSharingAction.ZoomToUserLocation -> handleZoomToUserLocationAction()
             is LocationSharingAction.StartLiveLocationSharing -> handleStartLiveLocationSharingAction(action.durationMillis)
         }
     }
@@ -136,13 +144,15 @@ class LocationSharingViewModel @AssistedInject constructor(
 
     private fun shareLocation(locationData: LocationData?, isUserLocation: Boolean) {
         locationData?.let { location ->
-            room.sendService().sendLocation(
-                    latitude = location.latitude,
-                    longitude = location.longitude,
-                    uncertainty = location.uncertainty,
-                    isUserLocation = isUserLocation
-            )
-            _viewEvents.post(LocationSharingViewEvents.Close)
+            viewModelScope.launch {
+                room.locationSharingService().sendStaticLocation(
+                        latitude = location.latitude,
+                        longitude = location.longitude,
+                        uncertainty = location.uncertainty,
+                        isUserLocation = isUserLocation
+                )
+                _viewEvents.post(LocationSharingViewEvents.Close)
+            }
         } ?: run {
             _viewEvents.post(LocationSharingViewEvents.LocationNotAvailableError)
         }
@@ -170,7 +180,8 @@ class LocationSharingViewModel @AssistedInject constructor(
         )
     }
 
-    override fun onLocationUpdate(locationData: LocationData) {
+    private fun onLocationUpdate(locationData: LocationData) {
+        Timber.d("onLocationUpdate()")
         setState {
             copy(lastKnownUserLocation = locationData)
         }
@@ -182,7 +193,7 @@ class LocationSharingViewModel @AssistedInject constructor(
         }
     }
 
-    override fun onLocationProviderIsNotAvailable() {
+    override fun onNoLocationProviderAvailable() {
         _viewEvents.post(LocationSharingViewEvents.LocationNotAvailableError)
     }
 }

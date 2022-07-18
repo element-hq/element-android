@@ -15,7 +15,6 @@
  */
 package org.matrix.android.sdk.internal.crypto.tasks
 
-import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
@@ -39,7 +38,8 @@ internal class DefaultSendEventTask @Inject constructor(
         private val encryptEventTask: EncryptEventTask,
         private val loadRoomMembersTask: LoadRoomMembersTask,
         private val roomAPI: RoomAPI,
-        private val globalErrorReceiver: GlobalErrorReceiver) : SendEventTask {
+        private val globalErrorReceiver: GlobalErrorReceiver
+) : SendEventTask {
 
     override suspend fun execute(params: SendEventTask.Params): String {
         try {
@@ -47,8 +47,12 @@ internal class DefaultSendEventTask @Inject constructor(
             params.event.roomId
                     ?.takeIf { params.encrypt }
                     ?.let { roomId ->
-                        tryOrNull {
+                        try {
                             loadRoomMembersTask.execute(LoadRoomMembersTask.Params(roomId))
+                        } catch (failure: Throwable) {
+                            // send any way?
+                            // the result is that some users won't probably be able to decrypt :/
+                            Timber.w(failure, "SendEvent: failed to load members in room ${params.event.roomId}")
                         }
                     }
 

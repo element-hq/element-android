@@ -25,8 +25,10 @@ import javax.inject.Inject
 import kotlin.math.roundToInt
 
 @ActivityScoped
-class TimelineMediaSizeProvider @Inject constructor(private val resources: Resources,
-                                                    private val vectorPreferences: VectorPreferences) {
+class TimelineMediaSizeProvider @Inject constructor(
+        private val resources: Resources,
+        private val vectorPreferences: VectorPreferences
+) {
 
     var recyclerView: RecyclerView? = null
     private var cachedSize: Pair<Int, Int>? = null

@@ -31,8 +31,8 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_base_state)
-abstract class StatusTileTimelineItem : AbsBaseMessageItem<StatusTileTimelineItem.Holder>() {
+@EpoxyModelClass
+abstract class StatusTileTimelineItem : AbsBaseMessageItem<StatusTileTimelineItem.Holder>(R.layout.item_timeline_event_base_state) {
 
     override val baseAttributes: AbsBaseMessageItem.Attributes
         get() = attributes
@@ -56,7 +56,7 @@ abstract class StatusTileTimelineItem : AbsBaseMessageItem<StatusTileTimelineIte
         val startDrawable = when (attributes.shieldUIState) {
             ShieldUIState.GREEN -> R.drawable.ic_shield_trusted
             ShieldUIState.BLACK -> R.drawable.ic_shield_black
-            ShieldUIState.RED   -> R.drawable.ic_shield_warning
+            ShieldUIState.RED -> R.drawable.ic_shield_warning
             ShieldUIState.ERROR -> R.drawable.ic_warning_badge
         }
 

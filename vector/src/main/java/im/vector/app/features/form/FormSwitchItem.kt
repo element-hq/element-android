@@ -26,8 +26,8 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.setValueOnce
 import im.vector.app.core.extensions.setTextOrHide
 
-@EpoxyModelClass(layout = R.layout.item_form_switch)
-abstract class FormSwitchItem : VectorEpoxyModel<FormSwitchItem.Holder>() {
+@EpoxyModelClass
+abstract class FormSwitchItem : VectorEpoxyModel<FormSwitchItem.Holder>(R.layout.item_form_switch) {
 
     @EpoxyAttribute
     var listener: ((Boolean) -> Unit)? = null

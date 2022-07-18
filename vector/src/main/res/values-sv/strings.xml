@@ -1238,7 +1238,7 @@
     <string name="merged_events_expand">expandera</string>
     <string name="merged_events_collapse">kollapsa</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="passphrase_create_passphrase">Skapa lösenfras</string>
     <string name="passphrase_confirm_passphrase">Bekräfta lösenfras</string>
     <string name="passphrase_enter_passphrase">Skriv lösenfras</string>
@@ -1348,7 +1348,6 @@
         <item quantity="one">%d användare läste</item>
         <item quantity="other">%d användare läste</item>
     </plurals>
-    <string name="error_attachment">Ett fel inträffade vid hämtning av bilagan.</string>
     <string name="error_handling_incoming_share">Kunde inte hantera delningsdata</string>
     <string name="uploads_files_subtitle">%1$s vid %2$s</string>
     <string name="report_content_spam">Det är skräppost</string>
@@ -1430,9 +1429,7 @@
     <string name="login_signup_submit">Nästa</string>
     <string name="login_signup_error_user_in_use">Det användarnamnet är upptaget</string>
     <string name="login_signup_cancel_confirmation_title">Varning</string>
-    <string name="login_signup_cancel_confirmation_content">Ditt konto är inte skapat än.
-\n
-\nVill du avbryta registreringsprocessen\?</string>
+    <string name="login_signup_cancel_confirmation_content">Ditt konto är inte skapat än. Vill du avbryta registreringsprocessen\?</string>
     <string name="login_a11y_choose_matrix_org">Välj matrix.org</string>
     <string name="login_a11y_choose_modular">Välj Element Matrix Services</string>
     <string name="login_a11y_choose_other">Välj en annan hemserver</string>
@@ -2239,10 +2236,6 @@
     <string name="space_add_space_to_any_space_you_manage">Lägg till ett utrymme till alla utrymmen du hanterar.</string>
     <string name="space_add_existing_spaces">Lägg till befintliga utrymmen</string>
     <string name="space_add_existing_rooms_only">Lägg till befintliga rum</string>
-    <string name="pick_tings_to_leave">Välj saker att lämna</string>
-    <string name="leave_specific_ones">Lämna specifika rum och utrymmen…</string>
-    <string name="dont_leave_any">Lämna inga rum och utrymmen</string>
-    <string name="leave_all_rooms_and_spaces">Lämna alla rum och utrymmen</string>
     <string name="space_leave_prompt_msg_with_name">Är du säker på att du vill lämna %s\?</string>
     <string name="discovery_section">Upptäckt (%s)</string>
     <string name="finish_setup">Slutför konfigurationen</string>
@@ -2251,7 +2244,7 @@
     <string name="finish_setting_up_discovery">Slutför inställning av upptäckbarhet.</string>
     <string name="create_space_identity_server_info_none">Du använder för närvarande ingen identitetsserver. För att bjuda in teammedlemmar och kunna upptäckas av dem, konfigurera en nedan.</string>
     <string name="invite_by_username_or_mail">Bjud in med användarnamn eller e-postadress</string>
-    <string name="a11y_presence_unavailable">Otillgänglig</string>
+    <string name="a11y_presence_unavailable">Borta</string>
     <string name="a11y_presence_offline">Offline</string>
     <string name="a11y_presence_online">Online</string>
     <string name="login_error_homeserver_from_url_not_found_enter_manual">Välj hemserver</string>
@@ -2339,9 +2332,6 @@
     <string name="ftue_auth_carousel_secure_title">Äg dina konversationer.</string>
     <string name="room_error_access_unauthorized">Du får inte gå med i det här rummet</string>
     <string name="tooltip_attachment_location">Dela plats</string>
-    <string name="labs_render_locations_in_timeline">Visa användarplatser i tidslinjen</string>
-    <string name="settings_enable_location_sharing_summary">När det har aktiverats så kan du skicka din plats till vilket rum som helst</string>
-    <string name="settings_enable_location_sharing">Aktivera platsdelning</string>
     <string name="location_share_external">Öppna med</string>
     <string name="location_not_available_dialog_content">${app_name} kunde inte komma åt din plats. Försök igen senare.</string>
     <string name="location_not_available_dialog_title">${app_name} kunde inte komma åt din plats</string>
@@ -2417,9 +2407,6 @@
     <string name="threads_notice_migration_title">Trådar närmar sig beta 🎉</string>
     <string name="location_share_live_stop">Stoppa</string>
     <string name="location_share_live_enabled">Plats i realtid aktiverad</string>
-    <string name="location_in_background_missing_permission_dialog_content">Om du vill dela din plats i realtid så behöver ${app_name} åtkomst till din plats hela tiden när appen är i bakgrunden.
-\nVi kommer bara använda din plats under tiden du väljer.</string>
-    <string name="location_in_background_missing_permission_dialog_title">Tillåt åtkomst</string>
     <string name="a11y_location_share_option_pinned_icon">Dela den här platsen</string>
     <string name="location_share_option_pinned">Dela den här platsen</string>
     <string name="a11y_location_share_option_user_live_icon">Dela plats i realtid</string>
@@ -2490,4 +2477,56 @@
 \n
 \nObservera att detta startar om appen, och kan ta ett tag.</string>
     <string name="initial_sync_request_title">Förfrågan om inledande synk</string>
+    <string name="settings_show_latest_profile_description">Visa den senaste profilinfon (avatar och visningsnamn) för alla meddelandena.</string>
+    <string name="settings_show_latest_profile">Visa senaste användarinfon</string>
+    <string name="a11y_presence_busy">Upptagen</string>
+    <string name="keys_backup_settings_signature_from_this_user">Säkerhetskopian har en giltig signatur från den här användaren.</string>
+    <string name="live_location_bottom_sheet_last_updated_at">Uppdaterades för %1$s sen</string>
+    <string name="live_location_bottom_sheet_stop_sharing">Sluta dela</string>
+    <string name="labs_enable_live_location_summary">Temporär implementation: platser ligger kvar i rumshistoriken</string>
+    <string name="labs_enable_live_location">Aktivera platsdelning i realtid</string>
+    <string name="location_share_live_remaining_time">%1$s kvar</string>
+    <string name="location_share_live_until">Realtid tills %1$s</string>
+    <string name="location_share_live_view">Se realtidsplats</string>
+    <string name="location_share_live_ended">Realtidsplats avslutad</string>
+    <string name="space_explore_filter_no_result_description">Vissa resultat kan vara dolda för att de är privata och du behöver en inbjudan till dem.</string>
+    <string name="space_explore_filter_no_result_title">Inga resultat funna</string>
+    <string name="space_leave_radio_button_none">Lämna inga</string>
+    <string name="space_leave_radio_button_all">Lämna alla</string>
+    <string name="space_leave_radio_buttons_title">Saker i det här utrymmet</string>
+    <string name="settings_autoplay_animated_images_summary">Spela animerad bilder i tidslinjen så fort de syns</string>
+    <string name="settings_autoplay_animated_images_title">Autospela animerade bilder</string>
+    <string name="time_unit_second_short">sek</string>
+    <string name="time_unit_minute_short">min</string>
+    <string name="time_unit_hour_short">t</string>
+    <string name="action_next">Nästa</string>
+    <string name="live_location_labs_promotion_switch_title">Aktivera platsdelning</string>
+    <string name="live_location_labs_promotion_description">OBS: det här är en experimentell funktion som använder en temporär implementation. Det betyder att du inte kommer kunna radera din platshistorik, och avancerade användare kommer kunna se din platshistorik även efter att du slutar dela din realtidsplats med det här rummet.</string>
+    <string name="live_location_labs_promotion_title">Positionsdelning i realtid</string>
+    <string name="settings_troubleshoot_test_current_gateway">Nuvarande gateway: %s</string>
+    <string name="settings_troubleshoot_test_current_gateway_title">Gateway</string>
+    <string name="settings_troubleshoot_test_current_endpoint_failed">Kan inte hitta ändpunkten.</string>
+    <string name="settings_troubleshoot_test_current_endpoint_success">Nuvarande ändpunkt: %s</string>
+    <string name="settings_troubleshoot_test_current_endpoint_title">Ändpunkt</string>
+    <string name="settings_troubleshoot_test_current_distributor">Använder för närvarande %s.</string>
+    <string name="settings_troubleshoot_test_current_distributor_title">Metod</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="one">Hittade %d metod.</item>
+        <item quantity="other">Hittade %d metoder.</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_distributors_fdroid">Ingen annan metod än bakgrundssynkronisering hittad.</string>
+    <string name="settings_troubleshoot_test_distributors_gplay">Ingen annan metod än Google Play-tjänster hittad.</string>
+    <string name="settings_troubleshoot_test_distributors_title">Tillgängliga metoder</string>
+    <string name="settings_notification_method">Aviseringsmetod</string>
+    <string name="unifiedpush_distributor_background_sync">Bakgrundssynkronisering</string>
+    <string name="unifiedpush_distributor_fcm_fallback">Googletjänster</string>
+    <string name="unifiedpush_getdistributors_dialog_title">Välj hur du vill ta emot aviseringar</string>
+    <string name="settings_security_pin_code_use_biometrics_error">Kunde inte aktivera biometrisk autentisering.</string>
+    <string name="auth_biometric_key_invalidated_message">Biometrisk autentisering inaktiverades eftersom att en ny biometrisk autentiseringsmetod nyligen lades till. Du kan aktivera den igen i inställningarna.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">Återställ aviseringsmetod</string>
+    <string name="push_gateway_item_profile_tag">Profiltagg:</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">Misslyckades att registrera ändpunktstoken med hemservern:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">Lyckades registrera ändpunkten hos hemservern.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_title">Ändpunktsregistrering</string>
 </resources>

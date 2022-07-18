@@ -27,11 +27,11 @@ enum class Kind(val value: String) {
 
         fun fromString(value: String): Kind {
             return when (value) {
-                "event_match"                    -> EventMatch
-                "contains_display_name"          -> ContainsDisplayName
-                "room_member_count"              -> RoomMemberCount
+                "event_match" -> EventMatch
+                "contains_display_name" -> ContainsDisplayName
+                "room_member_count" -> RoomMemberCount
                 "sender_notification_permission" -> SenderNotificationPermission
-                else                             -> Unrecognised
+                else -> Unrecognised
             }
         }
     }

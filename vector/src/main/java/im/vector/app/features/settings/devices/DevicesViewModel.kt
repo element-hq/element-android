@@ -43,6 +43,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.auth.UIABaseAuth
@@ -90,7 +91,8 @@ class DevicesViewModel @AssistedInject constructor(
         @Assisted initialState: DevicesViewState,
         private val session: Session,
         private val reAuthHelper: ReAuthHelper,
-        private val stringProvider: StringProvider
+        private val stringProvider: StringProvider,
+        private val matrix: Matrix,
 ) : VectorViewModel<DevicesViewState, DevicesAction, DevicesViewEvents>(initialState), VerificationService.Listener {
 
     var uiaContinuation: Continuation<UIABaseAuth>? = null
@@ -198,15 +200,15 @@ class DevicesViewModel @AssistedInject constructor(
 
     override fun handle(action: DevicesAction) {
         return when (action) {
-            is DevicesAction.Refresh                -> queryRefreshDevicesList()
-            is DevicesAction.Delete                 -> handleDelete(action)
-            is DevicesAction.Rename                 -> handleRename(action)
-            is DevicesAction.PromptRename           -> handlePromptRename(action)
-            is DevicesAction.VerifyMyDevice         -> handleInteractiveVerification(action)
-            is DevicesAction.CompleteSecurity       -> handleCompleteSecurity()
+            is DevicesAction.Refresh -> queryRefreshDevicesList()
+            is DevicesAction.Delete -> handleDelete(action)
+            is DevicesAction.Rename -> handleRename(action)
+            is DevicesAction.PromptRename -> handlePromptRename(action)
+            is DevicesAction.VerifyMyDevice -> handleInteractiveVerification(action)
+            is DevicesAction.CompleteSecurity -> handleCompleteSecurity()
             is DevicesAction.MarkAsManuallyVerified -> handleVerifyManually(action)
             is DevicesAction.VerifyMyDeviceManually -> handleShowDeviceCryptoInfo(action)
-            is DevicesAction.SsoAuthDone            -> {
+            is DevicesAction.SsoAuthDone -> {
                 // we should use token based auth
                 // _viewEvents.post(CrossSigningSettingsViewEvents.ShowModalWaitingView(null))
                 // will release the interactive auth interceptor
@@ -218,8 +220,8 @@ class DevicesViewModel @AssistedInject constructor(
                 }
                 Unit
             }
-            is DevicesAction.PasswordAuthDone       -> {
-                val decryptedPass = session.secureStorageService()
+            is DevicesAction.PasswordAuthDone -> {
+                val decryptedPass = matrix.secureStorageService()
                         .loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
                 uiaContinuation?.resume(
                         UserPasswordAuth(
@@ -230,7 +232,7 @@ class DevicesViewModel @AssistedInject constructor(
                 )
                 Unit
             }
-            DevicesAction.ReAuthCancelled           -> {
+            DevicesAction.ReAuthCancelled -> {
                 Timber.d("## UIA - Reauth cancelled")
 //                _viewEvents.post(DevicesViewEvents.Loading)
                 uiaContinuation?.resumeWithException(Exception())

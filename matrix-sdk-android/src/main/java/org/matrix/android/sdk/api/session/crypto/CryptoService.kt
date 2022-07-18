@@ -40,6 +40,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationServic
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.content.RoomKeyWithHeldContent
+import org.matrix.android.sdk.internal.crypto.model.SessionInfo
 
 interface CryptoService {
 
@@ -84,13 +85,29 @@ interface CryptoService {
 
     fun isKeyGossipingEnabled(): Boolean
 
+    /**
+     * As per MSC3061.
+     * If true will make it possible to share part of e2ee room history
+     * on invite depending on the room visibility setting.
+     */
+    fun enableShareKeyOnInvite(enable: Boolean)
+
+    /**
+     * As per MSC3061.
+     * If true will make it possible to share part of e2ee room history
+     * on invite depending on the room visibility setting.
+     */
+    fun isShareKeysOnInviteEnabled(): Boolean
+
     fun setRoomUnBlacklistUnverifiedDevices(roomId: String)
 
     fun getDeviceTrackingStatus(userId: String): Int
 
-    suspend fun importRoomKeys(roomKeysAsArray: ByteArray,
-                               password: String,
-                               progressListener: ProgressListener?): ImportRoomKeysResult
+    suspend fun importRoomKeys(
+            roomKeysAsArray: ByteArray,
+            password: String,
+            progressListener: ProgressListener?
+    ): ImportRoomKeysResult
 
     suspend fun exportRoomKeys(password: String): ByteArray
 
@@ -119,10 +136,12 @@ interface CryptoService {
     fun isRoomEncrypted(roomId: String): Boolean
 
     // TODO This could be removed from this interface
-    fun encryptEventContent(eventContent: Content,
-                            eventType: String,
-                            roomId: String,
-                            callback: MatrixCallback<MXEncryptEventContentResult>)
+    fun encryptEventContent(
+            eventContent: Content,
+            eventType: String,
+            roomId: String,
+            callback: MatrixCallback<MXEncryptEventContentResult>
+    )
 
     fun discardOutboundSession(roomId: String)
 
@@ -167,11 +186,14 @@ interface CryptoService {
     fun getSharedWithInfo(roomId: String?, sessionId: String): MXUsersDevicesMap<Int>
     fun getWithHeldMegolmSession(roomId: String, sessionId: String): RoomKeyWithHeldContent?
 
-    fun logDbUsageInfo()
-
     /**
      * Perform any background tasks that can be done before a message is ready to
      * send, in order to speed up sending of the message.
      */
     fun prepareToEncrypt(roomId: String, callback: MatrixCallback<Unit>)
+
+    /**
+     * Share all inbound sessions of the last chunk messages to the provided userId devices.
+     */
+    suspend fun sendSharedHistoryKeys(roomId: String, userId: String, sessionInfoSet: Set<SessionInfo>?)
 }

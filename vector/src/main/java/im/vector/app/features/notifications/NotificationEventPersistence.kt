@@ -17,7 +17,7 @@
 package im.vector.app.features.notifications
 
 import android.content.Context
-import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.Matrix
 import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
@@ -27,14 +27,17 @@ import javax.inject.Inject
 private const val ROOMS_NOTIFICATIONS_FILE_NAME = "im.vector.notifications.cache"
 private const val KEY_ALIAS_SECRET_STORAGE = "notificationMgr"
 
-class NotificationEventPersistence @Inject constructor(private val context: Context) {
+class NotificationEventPersistence @Inject constructor(
+        private val context: Context,
+        private val matrix: Matrix,
+) {
 
-    fun loadEvents(currentSession: Session?, factory: (List<NotifiableEvent>) -> NotificationEventQueue): NotificationEventQueue {
+    fun loadEvents(factory: (List<NotifiableEvent>) -> NotificationEventQueue): NotificationEventQueue {
         try {
             val file = File(context.applicationContext.cacheDir, ROOMS_NOTIFICATIONS_FILE_NAME)
             if (file.exists()) {
                 file.inputStream().use {
-                    val events: ArrayList<NotifiableEvent>? = currentSession?.secureStorageService()?.loadSecureSecret(it, KEY_ALIAS_SECRET_STORAGE)
+                    val events: ArrayList<NotifiableEvent>? = matrix.secureStorageService().loadSecureSecret(it, KEY_ALIAS_SECRET_STORAGE)
                     if (events != null) {
                         return factory(events)
                     }
@@ -46,7 +49,7 @@ class NotificationEventPersistence @Inject constructor(private val context: Cont
         return factory(emptyList())
     }
 
-    fun persistEvents(queuedEvents: NotificationEventQueue, currentSession: Session) {
+    fun persistEvents(queuedEvents: NotificationEventQueue) {
         if (queuedEvents.isEmpty()) {
             deleteCachedRoomNotifications(context)
             return
@@ -55,7 +58,7 @@ class NotificationEventPersistence @Inject constructor(private val context: Cont
             val file = File(context.applicationContext.cacheDir, ROOMS_NOTIFICATIONS_FILE_NAME)
             if (!file.exists()) file.createNewFile()
             FileOutputStream(file).use {
-                currentSession.secureStorageService().securelyStoreObject(queuedEvents.rawEvents(), KEY_ALIAS_SECRET_STORAGE, it)
+                matrix.secureStorageService().securelyStoreObject(queuedEvents.rawEvents(), KEY_ALIAS_SECRET_STORAGE, it)
             }
         } catch (e: Throwable) {
             Timber.e(e, "## Failed to save cached notification info")

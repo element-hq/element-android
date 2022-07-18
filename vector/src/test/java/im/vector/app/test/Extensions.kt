@@ -86,6 +86,11 @@ class ViewModelTest<S, VE>(
         return this
     }
 
+    fun assertLatestState(expected: S): ViewModelTest<S, VE> {
+        states.assertLatestValue(expected)
+        return this
+    }
+
     fun finish() {
         states.finish()
         viewEvents.finish()

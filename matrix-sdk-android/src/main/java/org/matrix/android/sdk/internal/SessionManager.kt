@@ -27,8 +27,10 @@ import org.matrix.android.sdk.internal.session.SessionComponent
 import javax.inject.Inject
 
 @MatrixScope
-internal class SessionManager @Inject constructor(private val matrixComponent: MatrixComponent,
-                                                  private val sessionParamsStore: SessionParamsStore) {
+internal class SessionManager @Inject constructor(
+        private val matrixComponent: MatrixComponent,
+        private val sessionParamsStore: SessionParamsStore
+) {
 
     // SessionId -> SessionComponent
     private val sessionComponents = HashMap<String, SessionComponent>()
@@ -36,6 +38,13 @@ internal class SessionManager @Inject constructor(private val matrixComponent: M
     fun getSessionComponent(sessionId: String): SessionComponent? {
         val sessionParams = sessionParamsStore.get(sessionId) ?: return null
         return getOrCreateSessionComponent(sessionParams)
+    }
+
+    fun getLastSession(): Session? {
+        val sessionParams = sessionParamsStore.getLast()
+        return sessionParams?.let {
+            getOrCreateSession(it)
+        }
     }
 
     fun getOrCreateSession(sessionParams: SessionParams): Session {
@@ -53,7 +62,7 @@ internal class SessionManager @Inject constructor(private val matrixComponent: M
 
     fun stopSession(sessionId: String) {
         val sessionComponent = sessionComponents[sessionId] ?: throw RuntimeException("You don't have a session for id $sessionId")
-        sessionComponent.session().stopSync()
+        sessionComponent.session().syncService().stopSync()
     }
 
     fun getOrCreateSessionComponent(sessionParams: SessionParams): SessionComponent {

@@ -2,7 +2,6 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'com.jakewharton.butterknife'
 
 buildscript {
     repositories {
@@ -14,9 +13,6 @@ buildscript {
         maven {
             url 'https://repo1.maven.org/maven2'
         }
-    }
-    dependencies {
-        classpath 'com.jakewharton:butterknife-gradle-plugin:10.2.3'
     }
 }
 
@@ -52,6 +48,7 @@ dependencies {
 
     implementation libs.androidx.appCompat
     implementation libs.androidx.core
+    implementation libs.androidx.recyclerview
 
     implementation libs.airbnb.epoxy
     kapt libs.airbnb.epoxyProcessor
@@ -60,7 +57,6 @@ dependencies {
     // Span utils
     implementation 'me.gujun.android:span:1.7'
 
-    implementation libs.google.material
 
     implementation libs.jetbrains.coroutinesCore
     implementation libs.jetbrains.coroutinesAndroid

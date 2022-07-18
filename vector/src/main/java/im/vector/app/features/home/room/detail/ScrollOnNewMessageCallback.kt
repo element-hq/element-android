@@ -23,8 +23,10 @@ import im.vector.app.features.home.room.detail.timeline.item.ItemWithEvents
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import java.util.concurrent.CopyOnWriteArrayList
 
-class ScrollOnNewMessageCallback(private val layoutManager: LinearLayoutManager,
-                                 private val timelineEventController: TimelineEventController) : DefaultListUpdateCallback {
+class ScrollOnNewMessageCallback(
+        private val layoutManager: LinearLayoutManager,
+        private val timelineEventController: TimelineEventController
+) : DefaultListUpdateCallback {
 
     private val newTimelineEventIds = CopyOnWriteArrayList<String>()
     private var forceScroll = false

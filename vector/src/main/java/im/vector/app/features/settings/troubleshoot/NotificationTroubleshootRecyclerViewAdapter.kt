@@ -51,7 +51,7 @@ class NotificationTroubleshootRecyclerViewAdapter(val tests: ArrayList<Troublesh
             views.troubleshootTestDescription.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_content_secondary))
 
             when (test.status) {
-                TroubleshootTest.TestStatus.NOT_STARTED      -> {
+                TroubleshootTest.TestStatus.NOT_STARTED -> {
                     views.troubleshootTestTitle.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_content_secondary))
 
                     views.troubleshootProgressBar.visibility = View.INVISIBLE
@@ -68,18 +68,18 @@ class NotificationTroubleshootRecyclerViewAdapter(val tests: ArrayList<Troublesh
                     views.troubleshootStatusIcon.setImageDrawable(drawable)
                     views.troubleshootTestDescription.setTextColor(infoColor)
                 }
-                TroubleshootTest.TestStatus.RUNNING          -> {
+                TroubleshootTest.TestStatus.RUNNING -> {
                     views.troubleshootProgressBar.visibility = View.VISIBLE
                     views.troubleshootStatusIcon.visibility = View.INVISIBLE
                 }
-                TroubleshootTest.TestStatus.FAILED           -> {
+                TroubleshootTest.TestStatus.FAILED -> {
                     views.troubleshootProgressBar.visibility = View.INVISIBLE
                     views.troubleshootStatusIcon.visibility = View.VISIBLE
                     views.troubleshootStatusIcon.setImageResource(R.drawable.unit_test_ko)
                     views.troubleshootStatusIcon.imageTintList = null
                     views.troubleshootTestDescription.setTextColor(ThemeUtils.getColor(context, R.attr.colorError))
                 }
-                TroubleshootTest.TestStatus.SUCCESS          -> {
+                TroubleshootTest.TestStatus.SUCCESS -> {
                     views.troubleshootProgressBar.visibility = View.INVISIBLE
                     views.troubleshootStatusIcon.visibility = View.VISIBLE
                     views.troubleshootStatusIcon.setImageResource(R.drawable.unit_test_ok)

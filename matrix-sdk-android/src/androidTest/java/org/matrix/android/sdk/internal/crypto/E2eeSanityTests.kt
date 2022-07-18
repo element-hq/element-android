@@ -48,16 +48,15 @@ import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventCon
 import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
-import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.room.Room
-import org.matrix.android.sdk.api.session.room.failure.JoinRoomFailure
 import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.common.CommonTestHelper
-import org.matrix.android.sdk.common.CryptoTestHelper
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSessionTest
 import org.matrix.android.sdk.common.RetryTestRule
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
@@ -65,6 +64,7 @@ import org.matrix.android.sdk.common.TestMatrixCallback
 import org.matrix.android.sdk.mustFail
 import java.util.concurrent.CountDownLatch
 
+// @Ignore("This test fails with an unhandled exception thrown from a coroutine which terminates the entire test run.")
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
 @LargeTest
@@ -82,9 +82,7 @@ class E2eeSanityTests : InstrumentedTest {
      * Alice sends a new message, then check that the new one can be decrypted
      */
     @Test
-    fun testSendingE2EEMessages() {
-        val testHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(testHelper)
+    fun testSendingE2EEMessages() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
 
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true)
         val aliceSession = cryptoTestData.firstSession
@@ -114,7 +112,7 @@ class E2eeSanityTests : InstrumentedTest {
 
         // All user should accept invite
         otherAccounts.forEach { otherSession ->
-            waitForAndAcceptInviteInRoom(testHelper, otherSession, e2eRoomID)
+            testHelper.waitForAndAcceptInviteInRoom(otherSession, e2eRoomID)
             Log.v("#E2E TEST", "${otherSession.myUserId} joined room $e2eRoomID")
         }
 
@@ -155,7 +153,7 @@ class E2eeSanityTests : InstrumentedTest {
         }
 
         newAccount.forEach {
-            waitForAndAcceptInviteInRoom(testHelper, it, e2eRoomID)
+            testHelper.waitForAndAcceptInviteInRoom(it, e2eRoomID)
         }
 
         ensureMembersHaveJoined(testHelper, aliceSession, newAccount, e2eRoomID)
@@ -198,21 +196,12 @@ class E2eeSanityTests : InstrumentedTest {
                 }
             }
         }
-
-        otherAccounts.forEach {
-            testHelper.signOutAndClose(it)
-        }
-        newAccount.forEach { testHelper.signOutAndClose(it) }
-
-        cryptoTestData.cleanUp(testHelper)
     }
 
     @Test
-    fun testKeyGossipingIsEnabledByDefault() {
-        val testHelper = CommonTestHelper(context())
+    fun testKeyGossipingIsEnabledByDefault() = runSessionTest(context()) { testHelper ->
         val session = testHelper.createAccount("alice", SessionTestParams(true))
         Assert.assertTrue("Key gossiping should be enabled by default", session.cryptoService().isKeyGossipingEnabled())
-        testHelper.signOutAndClose(session)
     }
 
     /**
@@ -230,9 +219,7 @@ class E2eeSanityTests : InstrumentedTest {
      * 9. Check that new session can decrypt
      */
     @Test
-    fun testBasicBackupImport() {
-        val testHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(testHelper)
+    fun testBasicBackupImport() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
 
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true)
         val aliceSession = cryptoTestData.firstSession
@@ -344,8 +331,6 @@ class E2eeSanityTests : InstrumentedTest {
 
         // ensure bob can now decrypt
         cryptoTestHelper.ensureCanDecrypt(sentEventIds, newBobSession, e2eRoomID, messagesText)
-
-        testHelper.signOutAndClose(newBobSession)
     }
 
     /**
@@ -353,9 +338,7 @@ class E2eeSanityTests : InstrumentedTest {
      * get them from an older one.
      */
     @Test
-    fun testSimpleGossip() {
-        val testHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(testHelper)
+    fun testSimpleGossip() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
 
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true)
         val aliceSession = cryptoTestData.firstSession
@@ -449,18 +432,13 @@ class E2eeSanityTests : InstrumentedTest {
         }
 
         cryptoTestHelper.ensureCanDecrypt(sentEventIds, newBobSession, e2eRoomID, messagesText)
-
-        cryptoTestData.cleanUp(testHelper)
-        testHelper.signOutAndClose(newBobSession)
     }
 
     /**
      * Test that if a better key is forwarded (lower index, it is then used)
      */
     @Test
-    fun testForwardBetterKey() {
-        val testHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(testHelper)
+    fun testForwardBetterKey() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
 
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true)
         val aliceSession = cryptoTestData.firstSession
@@ -576,10 +554,6 @@ class E2eeSanityTests : InstrumentedTest {
                 canDecryptFirst && canDecryptSecond
             }
         }
-
-        testHelper.signOutAndClose(aliceSession)
-        testHelper.signOutAndClose(bobSessionWithBetterKey)
-        testHelper.signOutAndClose(newBobSession)
     }
 
     private fun sendMessageInRoom(testHelper: CommonTestHelper, aliceRoomPOV: Room, text: String): String? {
@@ -610,9 +584,7 @@ class E2eeSanityTests : InstrumentedTest {
      * Test that if a better key is forwared (lower index, it is then used)
      */
     @Test
-    fun testSelfInteractiveVerificationAndGossip() {
-        val testHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(testHelper)
+    fun testASelfInteractiveVerificationAndGossip() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
 
         val aliceSession = testHelper.createAccount("alice", SessionTestParams(true))
         cryptoTestHelper.bootstrapSecurity(aliceSession)
@@ -651,7 +623,7 @@ class E2eeSanityTests : InstrumentedTest {
                         // we can release this latch?
                         oldCompleteLatch.countDown()
                     }
-                    else                                                -> Unit
+                    else -> Unit
                 }
             }
         })
@@ -678,17 +650,17 @@ class E2eeSanityTests : InstrumentedTest {
                     IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT -> {
                         // no need to accept as there was a request first it will auto accept
                     }
-                    IncomingSasVerificationTransaction.UxState.SHOW_SAS    -> {
+                    IncomingSasVerificationTransaction.UxState.SHOW_SAS -> {
                         if (matchOnce) {
                             sasTx.userHasVerifiedShortCode()
                             newCode = sasTx.getDecimalCodeRepresentation()
                             matchOnce = false
                         }
                     }
-                    IncomingSasVerificationTransaction.UxState.VERIFIED    -> {
+                    IncomingSasVerificationTransaction.UxState.VERIFIED -> {
                         newCompleteLatch.countDown()
                     }
-                    else                                                   -> Unit
+                    else -> Unit
                 }
             }
         })
@@ -751,9 +723,6 @@ class E2eeSanityTests : InstrumentedTest {
                 aliceSession.cryptoService().keysBackupService().getKeyBackupRecoveryKeyInfo()!!.version,
                 aliceNewSession.cryptoService().keysBackupService().getKeyBackupRecoveryKeyInfo()!!.version
         )
-
-        testHelper.signOutAndClose(aliceSession)
-        testHelper.signOutAndClose(aliceNewSession)
     }
 
     private fun ensureMembersHaveJoined(testHelper: CommonTestHelper, aliceSession: Session, otherAccounts: List<Session>, e2eRoomID: String) {
@@ -764,37 +733,6 @@ class E2eeSanityTests : InstrumentedTest {
                 }.all {
                     it == Membership.JOIN
                 }
-            }
-        }
-    }
-
-    private fun waitForAndAcceptInviteInRoom(testHelper: CommonTestHelper, otherSession: Session, e2eRoomID: String) {
-        testHelper.waitWithLatch { latch ->
-            testHelper.retryPeriodicallyWithLatch(latch) {
-                val roomSummary = otherSession.getRoomSummary(e2eRoomID)
-                (roomSummary != null && roomSummary.membership == Membership.INVITE).also {
-                    if (it) {
-                        Log.v("#E2E TEST", "${otherSession.myUserId} can see the invite from alice")
-                    }
-                }
-            }
-        }
-
-        // not sure why it's taking so long :/
-        testHelper.runBlockingTest(90_000) {
-            Log.v("#E2E TEST", "${otherSession.myUserId} tries to join room $e2eRoomID")
-            try {
-                otherSession.roomService().joinRoom(e2eRoomID)
-            } catch (ex: JoinRoomFailure.JoinedWithTimeout) {
-                // it's ok we will wait after
-            }
-        }
-
-        Log.v("#E2E TEST", "${otherSession.myUserId} waiting for join echo ...")
-        testHelper.waitWithLatch {
-            testHelper.retryPeriodicallyWithLatch(it) {
-                val roomSummary = otherSession.getRoomSummary(e2eRoomID)
-                roomSummary != null && roomSummary.membership == Membership.JOIN
             }
         }
     }

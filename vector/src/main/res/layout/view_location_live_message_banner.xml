@@ -37,12 +37,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="8dp"
-        tools:text="@string/location_share_live_enabled"
         android:textColor="?colorOnSurface"
         app:layout_constraintBottom_toTopOf="@id/locationLiveMessageBannerSubTitle"
         app:layout_constraintStart_toEndOf="@id/locationLiveMessageBannerIcon"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="@string/location_share_live_enabled" />
 
     <TextView
         android:id="@+id/locationLiveMessageBannerSubTitle"
@@ -58,10 +58,10 @@
     <Button
         android:id="@+id/locationLiveMessageBannerStop"
         style="@style/Widget.Vector.Button.Text.LocationLive"
-        android:layout_width="45dp"
-        android:layout_height="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/location_share_live_stop"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/locationLiveMessageBannerBackground"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/locationLiveMessageBannerBackground" />
 </merge>

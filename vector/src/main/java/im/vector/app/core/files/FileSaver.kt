@@ -55,11 +55,13 @@ fun writeToFile(data: ByteArray, file: File): Try<Unit> {
     }
 }
 
-fun addEntryToDownloadManager(context: Context,
-                              file: File,
-                              mimeType: String,
-                              title: String = file.name,
-                              description: String = file.name): Uri? {
+fun addEntryToDownloadManager(
+        context: Context,
+        file: File,
+        mimeType: String,
+        title: String = file.name,
+        description: String = file.name
+): Uri? {
     try {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             val contentValues = ContentValues().apply {

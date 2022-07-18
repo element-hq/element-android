@@ -21,6 +21,8 @@ import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.content.res.Resources
+import androidx.preference.PreferenceManager
+import com.google.i18n.phonenumbers.PhoneNumberUtil
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -33,8 +35,11 @@ import im.vector.app.config.analyticsConfig
 import im.vector.app.core.dispatchers.CoroutineDispatchers
 import im.vector.app.core.error.DefaultErrorFormatter
 import im.vector.app.core.error.ErrorFormatter
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.time.Clock
 import im.vector.app.core.time.DefaultClock
+import im.vector.app.core.utils.AndroidSystemSettingsProvider
+import im.vector.app.core.utils.SystemSettingsProvider
 import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.VectorAnalytics
@@ -46,9 +51,12 @@ import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.pin.PinCodeStore
 import im.vector.app.features.pin.SharedPrefPinCodeStore
 import im.vector.app.features.room.VectorRoomDisplayNameFallbackProvider
+import im.vector.app.features.settings.FontScalePreferences
+import im.vector.app.features.settings.FontScalePreferencesImpl
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.ui.SharedPreferencesUiStateRepository
 import im.vector.app.features.ui.UiStateRepository
+import im.vector.app.flipper.FlipperProxy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -94,6 +102,12 @@ abstract class VectorBindModule {
 
     @Binds
     abstract fun bindEmojiSpanify(emojiCompatWrapper: EmojiCompatWrapper): EmojiSpanify
+
+    @Binds
+    abstract fun bindFontScale(fontScale: FontScalePreferencesImpl): FontScalePreferences
+
+    @Binds
+    abstract fun bindSystemSettingsProvide(provider: AndroidSystemSettingsProvider): SystemSettingsProvider
 }
 
 @InstallIn(SingletonComponent::class)
@@ -118,11 +132,16 @@ object VectorStaticModule {
     @Provides
     fun providesMatrixConfiguration(
             vectorPreferences: VectorPreferences,
-            vectorRoomDisplayNameFallbackProvider: VectorRoomDisplayNameFallbackProvider): MatrixConfiguration {
+            vectorRoomDisplayNameFallbackProvider: VectorRoomDisplayNameFallbackProvider,
+            flipperProxy: FlipperProxy,
+    ): MatrixConfiguration {
         return MatrixConfiguration(
                 applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
                 roomDisplayNameFallbackProvider = vectorRoomDisplayNameFallbackProvider,
                 threadMessagesEnabledDefault = vectorPreferences.areThreadMessagesEnabled(),
+                networkInterceptors = listOfNotNull(
+                        flipperProxy.getNetworkInterceptor(),
+                )
         )
     }
 
@@ -184,5 +203,19 @@ object VectorStaticModule {
     @Provides
     fun providesAnalyticsConfig(): AnalyticsConfig {
         return analyticsConfig
+    }
+
+    @Provides
+    fun providesPhoneNumberUtil(): PhoneNumberUtil = PhoneNumberUtil.getInstance()
+
+    @Provides
+    @Singleton
+    fun providesBuildMeta() = BuildMeta()
+
+    @Provides
+    @Singleton
+    @DefaultPreferences
+    fun providesDefaultSharedPreferences(context: Context): SharedPreferences {
+        return PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
     }
 }

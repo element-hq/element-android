@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.crypto.algorithms.megolm
 
 import dagger.Lazy
+import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.NewSessionListener
@@ -41,6 +42,7 @@ internal class MXMegolmDecryption(
         private val olmDevice: MXOlmDevice,
         private val outgoingKeyRequestManager: OutgoingKeyRequestManager,
         private val cryptoStore: IMXCryptoStore,
+        private val matrixConfiguration: MatrixConfiguration,
         private val liveEventManager: Lazy<StreamEventsManager>
 ) : IMXDecrypting {
 
@@ -78,6 +80,7 @@ internal class MXMegolmDecryption(
                     encryptedEventContent.ciphertext,
                     event.roomId,
                     timeline,
+                    eventId = event.eventId.orEmpty(),
                     encryptedEventContent.sessionId,
                     encryptedEventContent.senderKey
             )
@@ -148,7 +151,8 @@ internal class MXMegolmDecryption(
                                         throw MXCryptoError.Base(
                                                 MXCryptoError.ErrorType.KEYS_WITHHELD,
                                                 withHeldInfo.code?.value ?: "",
-                                                withHeldInfo.reason)
+                                                withHeldInfo.reason
+                                        )
                                     }
 
                                     if (requestKeysOnFail) {
@@ -238,19 +242,20 @@ internal class MXMegolmDecryption(
 
         Timber.tag(loggerTag.value).i("onRoomKeyEvent addInboundGroupSession ${roomKeyContent.sessionId}")
         val addSessionResult = olmDevice.addInboundGroupSession(
-                roomKeyContent.sessionId,
-                roomKeyContent.sessionKey,
-                roomKeyContent.roomId,
-                senderKey,
-                forwardingCurve25519KeyChain,
-                keysClaimed,
-                exportFormat
+                sessionId = roomKeyContent.sessionId,
+                sessionKey = roomKeyContent.sessionKey,
+                roomId = roomKeyContent.roomId,
+                senderKey = senderKey,
+                forwardingCurve25519KeyChain = forwardingCurve25519KeyChain,
+                keysClaimed = keysClaimed,
+                exportFormat = exportFormat,
+                sharedHistory = roomKeyContent.getSharedKey()
         )
 
         when (addSessionResult) {
-            is MXOlmDevice.AddSessionResult.Imported               -> addSessionResult.ratchetIndex
+            is MXOlmDevice.AddSessionResult.Imported -> addSessionResult.ratchetIndex
             is MXOlmDevice.AddSessionResult.NotImportedHigherIndex -> addSessionResult.newIndex
-            else                                                   -> null
+            else -> null
         }?.let { index ->
             if (event.getClearType() == EventType.FORWARDED_ROOM_KEY) {
                 val fromDevice = (event.content?.get("sender_key") as? String)?.let { senderDeviceIdentityKey ->
@@ -267,7 +272,8 @@ internal class MXMegolmDecryption(
                         senderKey = senderKey,
                         fromIndex = index,
                         fromDevice = fromDevice,
-                        event = event)
+                        event = event
+                )
 
                 cryptoStore.saveIncomingForwardKeyAuditTrail(
                         roomId = roomKeyContent.roomId,
@@ -276,7 +282,8 @@ internal class MXMegolmDecryption(
                         algorithm = roomKeyContent.algorithm ?: "",
                         userId = event.senderId ?: "",
                         deviceId = fromDevice ?: "",
-                        chainIndex = index.toLong())
+                        chainIndex = index.toLong()
+                )
 
                 // The index is used to decide if we cancel sent request or if we wait for a better key
                 outgoingKeyRequestManager.postCancelRequestForSessionIfNeeded(roomKeyContent.sessionId, roomKeyContent.roomId, senderKey, index)
@@ -290,6 +297,14 @@ internal class MXMegolmDecryption(
 
             onNewSession(roomKeyContent.roomId, senderKey, roomKeyContent.sessionId)
         }
+    }
+
+    /**
+     * Returns boolean shared key flag, if enabled with respect to matrix configuration.
+     */
+    private fun RoomKeyContent.getSharedKey(): Boolean {
+        if (!cryptoStore.isShareKeysOnInviteEnabled()) return false
+        return sharedHistory ?: false
     }
 
     /**

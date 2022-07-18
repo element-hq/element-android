@@ -24,11 +24,13 @@ import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 interface AccountService {
     /**
      * Ask the homeserver to change the password.
+     *
      * @param password Current password.
      * @param newPassword New password
+     * @param logoutAllDevices defaults to true, all devices will be logged out. False values will only be taken into account
+     * if [org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities.canControlLogoutDevices] is true.
      */
-    suspend fun changePassword(password: String,
-                               newPassword: String)
+    suspend fun changePassword(password: String, newPassword: String, logoutAllDevices: Boolean = true)
 
     /**
      * Deactivate the account.
@@ -46,6 +48,8 @@ interface AccountService {
      * an incomplete view of conversations
      * @param userInteractiveAuthInterceptor see [UserInteractiveAuthInterceptor]
      */
-    suspend fun deactivateAccount(eraseAllData: Boolean,
-                                  userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor)
+    suspend fun deactivateAccount(
+            eraseAllData: Boolean,
+            userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor
+    )
 }

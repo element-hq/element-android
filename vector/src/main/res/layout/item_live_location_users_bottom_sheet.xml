@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:background="?selectableItemBackground">
+
+    <ImageView
+        android:id="@+id/itemUserAvatarImageView"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:importantForAccessibility="no"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@sample/user_round_avatars" />
+
+    <TextView
+        android:id="@+id/itemUserDisplayNameTextView"
+        style="@style/TextAppearance.Vector.Body.BottomSheetDisplayName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@id/itemUserAvatarImageView"
+        app:layout_constraintTop_toTopOf="@id/itemUserAvatarImageView"
+        tools:text="@sample/live_location_users.json/data/displayName" />
+
+    <TextView
+        android:id="@+id/itemRemainingTimeTextView"
+        style="@style/TextAppearance.Vector.Body.BottomSheetRemainingTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        app:layout_constraintStart_toStartOf="@id/itemUserDisplayNameTextView"
+        app:layout_constraintTop_toBottomOf="@id/itemUserDisplayNameTextView"
+        tools:text="@sample/live_location_users.json/data/remainingTime" />
+
+    <TextView
+        android:id="@+id/itemLastUpdatedAtTextView"
+        style="@style/TextAppearance.Vector.Body.BottomSheetLastUpdatedAt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        app:layout_constraintStart_toStartOf="@id/itemRemainingTimeTextView"
+        app:layout_constraintTop_toBottomOf="@id/itemRemainingTimeTextView"
+        tools:text="@sample/live_location_users.json/data/lastUpdatedAt" />
+
+    <Button
+        android:id="@+id/itemStopSharingButton"
+        style="@style/Widget.Vector.Button.Text.BottomSheetStopSharing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/location_share_live_stop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

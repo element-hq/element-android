@@ -135,7 +135,7 @@ internal class IncomingKeyRequestManager @Inject constructor(
                             // just add to the buffer
                             incomingRequestBuffer.add(validMegolmRequest)
                         }
-                        MegolmRequestAction.Cancel  -> {
+                        MegolmRequestAction.Cancel -> {
                             // ignore, we can't cancel as it's not known (probably already processed)
                             // still notify app layer if it was passed up previously
                             IncomingRoomKeyRequest.fromRestRequest(senderId, request, clock)?.let { iReq ->
@@ -159,7 +159,7 @@ internal class IncomingKeyRequestManager @Inject constructor(
                         MegolmRequestAction.Request -> {
                             // it's already in buffer, nop keep existing
                         }
-                        MegolmRequestAction.Cancel  -> {
+                        MegolmRequestAction.Cancel -> {
                             // discard the request in buffer
                             incomingRequestBuffer.remove(existing)
                             outgoingRequestScope.launch(coroutineDispatchers.computation) {
@@ -369,9 +369,11 @@ internal class IncomingKeyRequestManager @Inject constructor(
         shareMegolmKey(validReq, requestingDevice, null)
     }
 
-    private suspend fun shareMegolmKey(validRequest: ValidMegolmRequestBody,
-                                       requestingDevice: CryptoDeviceInfo,
-                                       chainIndex: Long?): Boolean {
+    private suspend fun shareMegolmKey(
+            validRequest: ValidMegolmRequestBody,
+            requestingDevice: CryptoDeviceInfo,
+            chainIndex: Long?
+    ): Boolean {
         Timber.tag(loggerTag.value)
                 .d("try to re-share Megolm Key at index $chainIndex for ${validRequest.shortDbgString()}")
 

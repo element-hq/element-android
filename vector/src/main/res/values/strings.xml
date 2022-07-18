@@ -174,7 +174,8 @@
     <string name="initial_sync_start_importing_account_joined_rooms">Initial sync:\nLoading your conversations\nIf you\'ve joined lots of rooms, this might take a while</string>
     <string name="initial_sync_start_importing_account_invited_rooms">Initial sync:\nImporting invited rooms</string>
     <string name="initial_sync_start_importing_account_left_rooms">Initial sync:\nImporting left rooms</string>
-    <string name="initial_sync_start_importing_account_groups">Initial sync:\nImporting communities</string>
+    <!--TODO:delete-->
+    <string name="initial_sync_start_importing_account_groups" tools:ignore="UnusedResources">Initial sync:\nImporting communities</string>
     <string name="initial_sync_start_importing_account_data">Initial sync:\nImporting account data</string>
 
     <string name="initial_sync_request_title">Initial sync request</string>
@@ -397,6 +398,7 @@
     <string name="action_dismiss">Dismiss</string>
     <string name="action_reset">Reset</string>
     <string name="action_learn_more">Learn more</string>
+    <string name="action_next">Next</string>
 
     <string name="copied_to_clipboard">Copied to clipboard</string>
 
@@ -441,7 +443,8 @@
     <string name="settings_room_directory_show_all_rooms_summary">Show all rooms in the room directory, including rooms with explicit content.</string>
 
     <!-- Groups fragment -->
-    <string name="groups_header">Communities</string>
+    <!--TODO: delete-->
+    <string name="groups_header" tools:ignore="UnusedResources">Communities</string>
 
     <string name="spaces_header">Spaces</string>
 
@@ -855,6 +858,10 @@
     <string name="settings_troubleshoot_test_token_registration_success">FCM token successfully registered to homeserver.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">Failed to register FCM token to homeserver:\n%1$s</string>
 
+    <string name="settings_troubleshoot_test_endpoint_registration_title">Endpoint Registration</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">Endpoint successfully registered to homeserver.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">Failed to register endpoint token to homeserver:\n%1$s</string>
+
     <string name="settings_troubleshoot_test_push_loop_title">Test Push</string>
     <string name="settings_troubleshoot_test_push_loop_waiting_for_push">The application is waiting for the PUSH</string>
     <string name="settings_troubleshoot_test_push_loop_success">The application is receiving PUSH</string>
@@ -973,6 +980,8 @@
     <string name="settings_show_read_receipts_summary">Click on the read receipts for a detailed list.</string>
     <string name="settings_chat_effects_title">Show chat effects</string>
     <string name="settings_chat_effects_description">Use /confetti command or send a message containing ❄️ or 🎉</string>
+    <string name="settings_autoplay_animated_images_title">Autoplay animated images</string>
+    <string name="settings_autoplay_animated_images_summary">Play animated images in the timeline as soon as they are visible</string>
     <string name="settings_show_join_leave_messages">Show join and leave events</string>
     <string name="settings_show_join_leave_messages_summary">Invites, removes, and bans are unaffected.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Show account events</string>
@@ -1254,6 +1263,10 @@
     <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
 
     <!-- text size selection -->
+    <string name="font_size_title">Choose font size</string>
+    <string name="font_size_section_auto">Set automatically</string>
+    <string name="font_size_section_manually">Choose manually</string>
+    <string name="font_size_use_system">Use system default</string>
     <string name="font_size">Font size</string>
     <string name="tiny">Tiny</string>
     <string name="small">Small</string>
@@ -1422,7 +1435,7 @@
     <string name="merged_events_collapse">collapse</string>
 
     <string name="generic_label_and_value">%1$s: %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="no_valid_google_play_services_apk">No valid Google Play Services APK found. Notifications may not work properly.</string>
 
     <!-- Passphrase -->
@@ -1584,9 +1597,11 @@
     <string name="room_list_catchup_empty_title">You’re all caught up!</string>
     <string name="room_list_catchup_empty_body">You have no more unread messages</string>
     <string name="room_list_people_empty_title">Conversations</string>
-    <string name="room_list_people_empty_body">Your direct message conversations will be displayed here. Tap the + bottom right to start some.</string>
+    <!-- Note to translators: for RTL languages, the + will be at the bottom left. Please translate "bottom left" instead of "bottom right". Thanks! -->
+    <string name="room_list_people_empty_body">Your direct message conversations will be displayed here. Tap the + at the bottom right to start some.</string>
     <string name="room_list_rooms_empty_title">Rooms</string>
-    <string name="room_list_rooms_empty_body">Your rooms will be displayed here. Tap the + bottom right to find existing ones or start some of your own.</string>
+    <!-- Note to translators: for RTL languages, the + will be at the bottom left. Please translate "bottom left" instead of "bottom right". Thanks! -->
+    <string name="room_list_rooms_empty_body">Your rooms will be displayed here. Tap the + at the bottom right to find existing ones or start some of your own.</string>
 
     <string name="title_activity_emoji_reaction_picker">Reactions</string>
     <string name="message_add_reaction">Add Reaction</string>
@@ -1605,7 +1620,8 @@
     <string name="error_no_network">No network. Please check your Internet connection.</string>
     <string name="change_room_directory_network">"Change network"</string>
     <string name="please_wait">"Please wait…"</string>
-    <string name="group_all_communities">"All Communities"</string>
+    <!--TODO: delete-->
+    <string name="group_all_communities" tools:ignore="UnusedResources">"All Communities"</string>
 
     <string name="room_preview_no_preview">"This room can't be previewed"</string>
     <string name="room_preview_not_found">This room is not accessible at this time.\nTry again later, or ask a room admin to check if you have access.</string>
@@ -1615,6 +1631,7 @@
 
     <!-- Create room screen -->
     <string name="create_room_action_create">"CREATE"</string>
+    <string name="create_room_action_go">Go</string>
     <string name="create_room_name_section">"Room name"</string>
     <string name="create_room_name_hint">"Name"</string>
     <string name="create_room_topic_section">"Room topic (optional)"</string>
@@ -1648,6 +1665,7 @@
     <string name="push_gateway_item_device_name">session_name:</string>
     <string name="push_gateway_item_url">Url:</string>
     <string name="push_gateway_item_format">Format:</string>
+    <string name="push_gateway_item_profile_tag">Profile tag:</string>
 
     <string name="preference_voice_and_video">Voice &amp; Video</string>
     <string name="preference_root_help_about">Help &amp; About</string>
@@ -1660,6 +1678,8 @@
     <string name="preference_system_settings">System settings</string>
 
     <string name="settings_troubleshoot_test_token_registration_quick_fix">Register token</string>
+
+    <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">Reset notification method</string>
 
     <string name="send_suggestion">Make a suggestion</string>
     <string name="send_suggestion_content">Please write your suggestion below.</string>
@@ -1802,7 +1822,6 @@
 
     <string name="error_file_too_big_simple">"The file is too large to upload."</string>
 
-    <string name="error_attachment">"An error occurred while retrieving the attachment."</string>
     <string name="attachment_type_dialog_title">"Add image from"</string>
     <string name="attachment_type_file">"File"</string>
     <string name="attachment_type_contact">"Contact"</string>
@@ -2021,7 +2040,7 @@
     <string name="login_signup_submit">Next</string>
     <string name="login_signup_error_user_in_use">That username is taken</string>
     <string name="login_signup_cancel_confirmation_title">Warning</string>
-    <string name="login_signup_cancel_confirmation_content">Your account is not created yet.\n\nStop the registration process?</string>
+    <string name="login_signup_cancel_confirmation_content">Your account is not created yet. Stop the registration process?</string>
 
     <string name="login_a11y_choose_matrix_org">Select matrix.org</string>
     <string name="login_a11y_choose_modular">Select Element Matrix Services</string>
@@ -2072,6 +2091,7 @@
     <string name="soft_logout_sso_not_same_user_error">The current session is for user %1$s and you provide credentials for user %2$s. This is not supported by ${app_name}.\nPlease first clear data, then sign in again on another account.</string>
 
     <string name="permalink_malformed">Your matrix.to link was malformed</string>
+    <string name="permalink_unsupported_groups">Cannot open this link: communities have been replaced by spaces</string>
     <string name="bug_report_error_too_short">The description is too short</string>
 
     <string name="notification_initial_sync">Initial Sync…</string>
@@ -2388,7 +2408,8 @@
 
     <string name="encryption_enabled">Encryption enabled</string>
     <string name="encryption_enabled_tile_description">Messages in this room are end-to-end encrypted. Learn more &amp; verify users in their profile.</string>
-    <string name="direct_room_encryption_enabled_tile_description">Messages in this room are end-to-end encrypted.</string>
+    <string name="direct_room_encryption_enabled_tile_description">Messages in this chat are end-to-end encrypted.</string>
+    <string name="direct_room_encryption_enabled_tile_description_future">Messages in this chat will be end-to-end encrypted.</string>
     <string name="encryption_not_enabled">Encryption not enabled</string>
     <string name="encryption_misconfigured">Encryption is misconfigured</string>
     <string name="encryption_unknown_algorithm_tile_description">The encryption used by this room is not supported</string>
@@ -2400,6 +2421,7 @@
     <string name="this_is_the_beginning_of_room">This is the beginning of %s.</string>
     <string name="this_is_the_beginning_of_room_no_name">This is the beginning of this conversation.</string>
     <string name="this_is_the_beginning_of_dm">This is the beginning of your direct message history with %s.</string>
+    <string name="send_your_first_msg_to_invite">Send your first message to invite %s to chat</string>
     <!-- First param will be replaced by the value of add_a_topic_link_text, that will be clickable-->
     <string name="room_created_summary_no_topic_creation_text">%s to let people know what this room is about.</string>
     <string name="add_a_topic_link_text">Add a topic</string>
@@ -2629,6 +2651,7 @@
     <string name="auth_pin_reset_title">Reset PIN</string>
     <string name="auth_pin_new_pin_action">New PIN</string>
     <string name="auth_pin_reset_content">To reset your PIN, you\'ll need to re-login and create a new one.</string>
+    <string name="auth_biometric_key_invalidated_message">Biometric authentication was disabled because a new biometric authentication method was recently added. You can enable it again in Settings.</string>
     <string name="settings_security_application_protection_title">Protect access</string>
     <string name="settings_security_application_protection_summary">Protect access using PIN and biometrics.</string>
     <string name="settings_security_application_protection_screen_title">Configure protection</string>
@@ -2638,6 +2661,7 @@
     <string name="settings_security_pin_code_use_biometrics_summary_on">Enable device specific biometrics, like fingerprints and face recognition.</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
     <string name="settings_security_pin_code_use_biometrics_summary_off">PIN code is the only way to unlock ${app_name}.</string>
+    <string name="settings_security_pin_code_use_biometrics_error">Could not enable biometric authentication.</string>
     <string name="settings_security_pin_code_notifications_title">Show content in notifications</string>
     <string name="settings_security_pin_code_notifications_summary_on">Show details like room names and message content.</string>
     <string name="settings_security_pin_code_notifications_summary_off">Only display number of unread messages in a simple notification.</string>
@@ -2847,15 +2871,6 @@
     <string name="space_leave_prompt_msg_private">You won\'t be able to rejoin unless you are re-invited.</string>
     <string name="space_leave_prompt_msg_as_admin">You\'re the only admin of this space. Leaving it will mean no one has control over it.</string>
 
-    <!-- TODO delete -->
-    <string name="leave_all_rooms_and_spaces" tools:ignore="UnusedResources">Leave all rooms and spaces</string>
-    <!-- TODO delete -->
-    <string name="dont_leave_any" tools:ignore="UnusedResources">Don’t leave any rooms and spaces</string>
-    <!-- TODO delete -->
-    <string name="leave_specific_ones" tools:ignore="UnusedResources">Leave specific rooms and spaces…</string>
-    <!-- TODO delete -->
-    <string name="pick_tings_to_leave" tools:ignore="UnusedResources">Pick things to leave</string>
-
     <string name="space_explore_filter_no_result_title">No results found</string>
     <string name="space_explore_filter_no_result_description">Some results may be hidden because they’re private and you need an invite to them.</string>
 
@@ -2953,6 +2968,9 @@
     <string name="labs_enable_latex_maths">Enable LaTeX mathematics</string>
     <string name="restart_the_application_to_apply_changes">Restart the application for the change to take effect.</string>
 
+    <string name="labs_enable_msc3061_share_history">MSC3061: Sharing room keys for past messages</string>
+    <string name="labs_enable_msc3061_share_history_desc">When inviting in an encrypted room that is sharing history, encrypted history will be visible.</string>
+
     <!-- Poll -->
     <string name="create_poll_title">Create Poll</string>
     <string name="create_poll_question_title">Poll question or topic</string>
@@ -2975,6 +2993,7 @@
         <item quantity="other">Based on %1$d votes</item>
     </plurals>
     <string name="poll_no_votes_cast">No votes cast</string>
+    <string name="poll_undisclosed_not_ended">Results will be visible when the poll is ended</string>
     <plurals name="poll_total_vote_count_before_ended_and_not_voted">
         <item quantity="one">%1$d vote cast. Vote to the see the results</item>
         <item quantity="other">%1$d votes cast. Vote to the see the results</item>
@@ -3015,14 +3034,9 @@
     <string name="location_share_live_select_duration_option_1">15 minutes</string>
     <string name="location_share_live_select_duration_option_2">1 hour</string>
     <string name="location_share_live_select_duration_option_3">8 hours</string>
-    <string name="location_in_background_missing_permission_dialog_title">Allow access</string>
-    <string name="location_in_background_missing_permission_dialog_content">If you’d like to share your Live location, ${app_name} needs location access all the time when the app is in the background.\nWe will only access your location for the duration that you choose.</string>
     <string name="location_not_available_dialog_title">${app_name} could not access your location</string>
     <string name="location_not_available_dialog_content">${app_name} could not access your location. Please try again later.</string>
     <string name="location_share_external">Open with</string>
-    <string name="settings_enable_location_sharing">Enable location sharing</string>
-    <string name="settings_enable_location_sharing_summary">Once enabled you will be able to send your location to any room</string>
-    <string name="labs_render_locations_in_timeline">Render user locations in the timeline</string>
     <string name="location_timeline_failed_to_load_map">Failed to load map</string>
     <string name="location_share_live_enabled">Live location enabled</string>
     <string name="location_share_live_started">Loading live location…</string>
@@ -3037,6 +3051,9 @@
     <string name="live_location_sharing_notification_description">Location sharing is in progress</string>
     <string name="labs_enable_live_location">Enable Live Location Sharing</string>
     <string name="labs_enable_live_location_summary">Temporary implementation: locations persist in room history</string>
+    <!-- TODO remove key -->
+    <string name="live_location_bottom_sheet_stop_sharing" tools:ignore="UnusedResources">Stop sharing</string>
+    <string name="live_location_bottom_sheet_last_updated_at">Updated %1$s ago</string>
 
     <string name="message_bubbles">Show Message bubbles</string>
 
@@ -3061,4 +3078,29 @@
     <!-- Screen sharing -->
     <string name="screen_sharing_notification_title">${app_name} Screen Sharing</string>
     <string name="screen_sharing_notification_description">Screen sharing is in progress</string>
+
+    <string name="unifiedpush_getdistributors_dialog_title">Choose how to receive notifications</string>
+    <string name="unifiedpush_distributor_fcm_fallback">Google Services</string>
+    <string name="unifiedpush_distributor_background_sync">Background synchronization</string>
+    <string name="settings_notification_method">Notification method</string>
+    <string name="settings_troubleshoot_test_distributors_title">Available methods</string>
+    <string name="settings_troubleshoot_test_distributors_gplay">No other method than Google Play Service found.</string>
+    <string name="settings_troubleshoot_test_distributors_fdroid">No other method than background synchronization found.</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="one">Found %d method.</item>
+        <item quantity="other">Found %d methods.</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_current_distributor_title">Method</string>
+    <string name="settings_troubleshoot_test_current_distributor">Currently using %s.</string>
+    <string name="settings_troubleshoot_test_current_endpoint_title">Endpoint</string>
+    <string name="settings_troubleshoot_test_current_endpoint_success">Current endpoint: %s</string>
+    <string name="settings_troubleshoot_test_current_endpoint_failed">Cannot find the endpoint.</string>
+    <string name="settings_troubleshoot_test_current_gateway_title">Gateway</string>
+    <string name="settings_troubleshoot_test_current_gateway">Current gateway: %s</string>
+
+    <!-- Live Location Sharing Labs Flag Promotional BottomSheet -->
+    <string name="live_location_labs_promotion_title">Live location sharing</string>
+    <string name="live_location_labs_promotion_description">Please note: this is a labs feature using a temporary implementation. This means you will not be able to delete your location history, and advanced users will be able to see your location history even after you stop sharing your live location with this room.</string>
+    <string name="live_location_labs_promotion_switch_title">Enable location sharing</string>
+
 </resources>

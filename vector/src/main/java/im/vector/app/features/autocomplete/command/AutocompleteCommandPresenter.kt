@@ -30,7 +30,8 @@ class AutocompleteCommandPresenter @AssistedInject constructor(
         @Assisted val isInThreadTimeline: Boolean,
         context: Context,
         private val controller: AutocompleteCommandController,
-        private val vectorPreferences: VectorPreferences) :
+        private val vectorPreferences: VectorPreferences
+) :
         RecyclerViewPresenter<Command>(context), AutocompleteClickListener<Command> {
 
     @AssistedFactory

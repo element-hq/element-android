@@ -60,6 +60,26 @@ class DebugFeaturesStateFactory @Inject constructor(
                                 key = DebugFeatureKeys.onboardingCombinedRegister,
                                 factory = VectorFeatures::isOnboardingCombinedRegisterEnabled
                         ),
+                        createBooleanFeature(
+                                label = "FTUE Combined login",
+                                key = DebugFeatureKeys.onboardingCombinedLogin,
+                                factory = VectorFeatures::isOnboardingCombinedLoginEnabled
+                        ),
+                        createBooleanFeature(
+                                label = "Allow external UnifiedPush distributors",
+                                key = DebugFeatureKeys.allowExternalUnifiedPushDistributors,
+                                factory = VectorFeatures::allowExternalUnifiedPushDistributors
+                        ),
+                        createBooleanFeature(
+                                label = "Force usage of OpusEncoder library",
+                                key = DebugFeatureKeys.forceUsageOfOpusEncoder,
+                                factory = VectorFeatures::forceUsageOfOpusEncoder
+                        ),
+                        createBooleanFeature(
+                                label = "Start DM on first message",
+                                key = DebugFeatureKeys.startDmOnFirstMsg,
+                                factory = VectorFeatures::shouldStartDmOnFirstMessage
+                        ),
                 )
         )
     }

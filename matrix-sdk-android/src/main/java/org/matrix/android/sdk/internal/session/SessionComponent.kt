@@ -20,6 +20,7 @@ import dagger.BindsInstance
 import dagger.Component
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.data.SessionParams
+import org.matrix.android.sdk.api.securestorage.SecureStorageModule
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.internal.crypto.CryptoModule
 import org.matrix.android.sdk.internal.crypto.crosssigning.UpdateTrustWorker
@@ -34,8 +35,6 @@ import org.matrix.android.sdk.internal.session.content.ContentModule
 import org.matrix.android.sdk.internal.session.content.UploadContentWorker
 import org.matrix.android.sdk.internal.session.contentscanner.ContentScannerModule
 import org.matrix.android.sdk.internal.session.filter.FilterModule
-import org.matrix.android.sdk.internal.session.group.GetGroupDataWorker
-import org.matrix.android.sdk.internal.session.group.GroupModule
 import org.matrix.android.sdk.internal.session.homeserver.HomeServerCapabilitiesModule
 import org.matrix.android.sdk.internal.session.identity.IdentityModule
 import org.matrix.android.sdk.internal.session.integrationmanager.IntegrationManagerModule
@@ -46,6 +45,7 @@ import org.matrix.android.sdk.internal.session.profile.ProfileModule
 import org.matrix.android.sdk.internal.session.pushers.AddPusherWorker
 import org.matrix.android.sdk.internal.session.pushers.PushersModule
 import org.matrix.android.sdk.internal.session.room.RoomModule
+import org.matrix.android.sdk.internal.session.room.aggregation.livelocation.DeactivateLiveLocationShareWorker
 import org.matrix.android.sdk.internal.session.room.send.MultipleEventSendingDispatcherWorker
 import org.matrix.android.sdk.internal.session.room.send.RedactEventWorker
 import org.matrix.android.sdk.internal.session.room.send.SendEventWorker
@@ -72,10 +72,8 @@ import org.matrix.android.sdk.internal.util.system.SystemModule
             SyncModule::class,
             HomeServerCapabilitiesModule::class,
             SignOutModule::class,
-            GroupModule::class,
             UserModule::class,
             FilterModule::class,
-            GroupModule::class,
             ContentModule::class,
             CacheModule::class,
             MediaModule::class,
@@ -97,7 +95,8 @@ import org.matrix.android.sdk.internal.util.system.SystemModule
             ThirdPartyModule::class,
             SpaceModule::class,
             PresenceModule::class,
-            RequestModule::class
+            RequestModule::class,
+            SecureStorageModule::class,
         ]
 )
 @SessionScope
@@ -121,8 +120,6 @@ internal interface SessionComponent {
 
     fun inject(worker: RedactEventWorker)
 
-    fun inject(worker: GetGroupDataWorker)
-
     fun inject(worker: UploadContentWorker)
 
     fun inject(worker: SyncWorker)
@@ -131,10 +128,13 @@ internal interface SessionComponent {
 
     fun inject(worker: UpdateTrustWorker)
 
+    fun inject(worker: DeactivateLiveLocationShareWorker)
+
     @Component.Factory
     interface Factory {
         fun create(
                 matrixComponent: MatrixComponent,
-                @BindsInstance sessionParams: SessionParams): SessionComponent
+                @BindsInstance sessionParams: SessionParams
+        ): SessionComponent
     }
 }

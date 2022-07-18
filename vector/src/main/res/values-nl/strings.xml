@@ -597,7 +597,7 @@
     <string name="merged_events_expand">uitvouwen</string>
     <string name="merged_events_collapse">invouwen</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="no_valid_google_play_services_apk">Er is geen geldige APK van Google Play Services gevonden. Meldingen zullen mogelijk niet correct functioneren.</string>
     <string name="passphrase_create_passphrase">Wachtwoord aanmaken</string>
     <string name="passphrase_passphrase_does_not_match">Wachtwoorden komen niet overeen</string>
@@ -767,7 +767,7 @@
     <string name="room_list_catchup_empty_title">U bent helemaal bij!</string>
     <string name="room_list_catchup_empty_body">U hebt geen ongelezen berichten meer</string>
     <string name="room_list_people_empty_title">Gesprekken</string>
-    <string name="room_list_people_empty_body">Uw directe gesprekken zullen hier worden weergegeven. Gebruik de + knop om een gesprek te starten.</string>
+    <string name="room_list_people_empty_body">Uw directe gesprekken zullen hier worden weergegeven. Gebruik de + knop rechts onder om een gesprek te starten.</string>
     <string name="room_list_rooms_empty_title">Kamers</string>
     <string name="room_list_rooms_empty_body">Uw kamers zullen hier worden weergegeven. Gebruik de + knop rechtsonder om een bestaande kamer te openen of een nieuwe aan te maken.</string>
     <string name="title_activity_emoji_reaction_picker">Reacties</string>
@@ -1380,7 +1380,6 @@
     <string name="rotate_and_crop_screen_title">Roteren en bijsnijden</string>
     <string name="attachment_type_poll">Opiniepeiling</string>
     <string name="attachment_type_dialog_title">Afbeelding toevoegen van</string>
-    <string name="error_attachment">Er is een fout opgetreden bij het ophalen van de bijlage.</string>
     <string name="error_file_too_big_simple">Het bestand is te groot om te uploaden.</string>
     <plurals name="fallback_users_read">
         <item quantity="one">%d persoon gelezen</item>
@@ -1691,7 +1690,7 @@
     <string name="dev_tools_send_custom_event">Aangepaste gebeurtenis versturen</string>
     <string name="dev_tools_explore_room_state">Kamer status ontdekken</string>
     <string name="dev_tools_menu_name">Ontwikkel tools</string>
-    <string name="a11y_presence_unavailable">Niet beschikbaar</string>
+    <string name="a11y_presence_unavailable">Afwezig</string>
     <string name="a11y_presence_offline">Offline</string>
     <string name="a11y_presence_online">Online</string>
     <string name="a11y_public_room">Openbare kamer</string>
@@ -2138,9 +2137,7 @@
     <string name="login_a11y_captcha_container">Voer de captcha uitdaging uit</string>
     <string name="login_a11y_choose_other">Selecteer een aangepaste server</string>
     <string name="login_a11y_choose_modular">Selecteer Element Matrix Services</string>
-    <string name="login_signup_cancel_confirmation_content">Uw account is nog niet aangemaakt.
-\n
-\nHet registratieproces stoppen\?</string>
+    <string name="login_signup_cancel_confirmation_content">Uw account is nog niet aangemaakt. Het registratieproces stoppen\?</string>
     <string name="login_signup_error_user_in_use">Deze inlognaam is in gebruik</string>
     <string name="login_signin_username_hint">Inlognaam of e-mailadres</string>
     <string name="login_signup_to">Meld u aan bij %1$s</string>
@@ -2268,10 +2265,6 @@
     <string name="space_add_existing_spaces">Bestaande spaces toevoegen</string>
     <string name="space_add_existing_rooms_only">Bestaande kamers toevoegen</string>
     <string name="space_add_existing_rooms">Bestaande kamers en space toevoegen</string>
-    <string name="pick_tings_to_leave">Kies dingen om te verlaten</string>
-    <string name="leave_specific_ones">Specifieke kamers en spaces verlaten…</string>
-    <string name="dont_leave_any">Verlaat geen kamers en spaces</string>
-    <string name="leave_all_rooms_and_spaces">Verlaat alle kamers en spaces</string>
     <string name="space_leave_prompt_msg_private">U kunt pas weer deelnemen als u opnieuw wordt uitgenodigd.</string>
     <string name="space_leave_prompt_msg_only_you">U bent de enige persoon hier. Als u weggaat, kan niemand meer meedoen, ook u niet.</string>
     <string name="space_leave_prompt_msg_with_name">Weet u zeker dat u %s wilt verlaten\?</string>
@@ -2334,14 +2327,11 @@
     <string name="command_description_join_space">Word lid van de Space met het opgegeven id</string>
     <string name="command_description_add_to_space">Toevoegen aan een Space</string>
     <string name="command_description_create_space">Maak een Space</string>
-    <string name="room_member_override_nick_color">Bijnaam kleur overschrijven</string>
+    <string name="room_member_override_nick_color">Kleur weergavenaam overschrijven</string>
     <string name="login_splash_already_have_account">Ik heb al een account</string>
     <string name="ftue_auth_carousel_encrypted_title">Veilig berichtenverkeer.</string>
     <string name="ftue_auth_carousel_control_title">U heeft de controle.</string>
     <string name="tooltip_attachment_location">Deel locatie</string>
-    <string name="labs_render_locations_in_timeline">Persoonslocaties in de tijdlijn weergeven</string>
-    <string name="settings_enable_location_sharing_summary">Eenmaal ingeschakeld, kun je je locatie naar elke kamer sturen</string>
-    <string name="settings_enable_location_sharing">Locatie delen inschakelen</string>
     <string name="location_share_external">Open met</string>
     <string name="location_not_available_dialog_content">${app_name} kan geen toegang krijgen tot uw locatie. Probeer het later opnieuw.</string>
     <string name="location_not_available_dialog_title">${app_name} heeft geen toegang tot uw locatie</string>
@@ -2413,9 +2403,6 @@
     <string name="live_location_sharing_notification_title">${app_name} Live locatie</string>
     <string name="location_share_live_stop">Stop</string>
     <string name="location_share_live_enabled">Live locatie ingeschakeld</string>
-    <string name="location_in_background_missing_permission_dialog_content">Als u de Live-locatie wilt delen, heeft ${app_name} altijd locatietoegang nodig als de app op de achtergrond actief is.
-\nWe hebben alleen toegang tot uw locatie voor de duur die u kiest.</string>
-    <string name="location_in_background_missing_permission_dialog_title">Toegang te verlenen</string>
     <string name="a11y_location_share_option_pinned_icon">Deel deze locatie</string>
     <string name="location_share_option_pinned">Deel deze locatie</string>
     <string name="a11y_location_share_option_user_live_icon">Live locatie delen</string>
@@ -2490,4 +2477,56 @@
 \n
 \nHoud er rekening mee dat deze actie de app opnieuw zal starten en dat dit enige tijd kan duren.</string>
     <string name="initial_sync_request_title">Initieel synchronisatieverzoek</string>
+    <string name="settings_show_latest_profile_description">Toon de laatste profielinformatie (avatar en weergavenaam) voor alle berichten.</string>
+    <string name="settings_show_latest_profile">Toon laatste persoonsinformatie</string>
+    <string name="a11y_presence_busy">Bezet</string>
+    <string name="keys_backup_settings_signature_from_this_user">Back-up heeft een geldige handtekening van deze persoon.</string>
+    <string name="live_location_bottom_sheet_last_updated_at">%1$s geleden bijgewerkt</string>
+    <string name="live_location_bottom_sheet_stop_sharing">Stop met delen</string>
+    <string name="labs_enable_live_location_summary">Tijdelijke implementatie: locaties blijven bestaan in kamergeschiedenis</string>
+    <string name="labs_enable_live_location">Live locatie delen inschakelen</string>
+    <string name="location_share_live_remaining_time">%1$s te gaan</string>
+    <string name="location_share_live_until">Live tot %1$s</string>
+    <string name="location_share_live_view">Bekijk live locatie</string>
+    <string name="location_share_live_ended">Live locatie beëindigd</string>
+    <string name="space_explore_filter_no_result_description">Sommige resultaten zijn mogelijk verborgen omdat ze privé zijn en u hiervoor een uitnodiging nodig heeft.</string>
+    <string name="space_explore_filter_no_result_title">Geen resultaten gevonden</string>
+    <string name="space_leave_radio_button_none">Verlaat geen</string>
+    <string name="space_leave_radio_button_all">Verlaat alles</string>
+    <string name="space_leave_radio_buttons_title">Dingen in deze space</string>
+    <string name="settings_autoplay_animated_images_summary">Speel geanimeerde afbeeldingen af in de tijdlijn zodra ze zichtbaar zijn</string>
+    <string name="settings_autoplay_animated_images_title">Geanimeerde afbeeldingen automatisch afspelen</string>
+    <string name="time_unit_second_short">sec</string>
+    <string name="time_unit_minute_short">min</string>
+    <string name="time_unit_hour_short">u</string>
+    <string name="live_location_labs_promotion_switch_title">Locatie delen inschakelen</string>
+    <string name="live_location_labs_promotion_description">Let op: dit is een labfunctie met een tijdelijke implementatie. Dit betekent dat u uw locatiegeschiedenis niet kunt verwijderen en dat geavanceerde gebruikers uw locatiegeschiedenis kunnen zien, zelfs nadat u stopt met het delen van uw live locatie met deze ruimte.</string>
+    <string name="live_location_labs_promotion_title">Live locatie delen</string>
+    <string name="settings_troubleshoot_test_current_gateway">Huidige gateway: %s</string>
+    <string name="settings_troubleshoot_test_current_gateway_title">Gateway</string>
+    <string name="settings_troubleshoot_test_current_endpoint_failed">Kan het eindpunt niet vinden.</string>
+    <string name="settings_troubleshoot_test_current_endpoint_success">Huidig eindpunt: %s</string>
+    <string name="settings_troubleshoot_test_current_endpoint_title">Eindpunt</string>
+    <string name="settings_troubleshoot_test_current_distributor">Gebruikt momenteel %s.</string>
+    <string name="settings_troubleshoot_test_current_distributor_title">Methode</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="one">%d methode gevonden.</item>
+        <item quantity="other">%d methoden gevonden.</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_distributors_fdroid">Geen andere methode dan achtergrondsynchronisatie gevonden.</string>
+    <string name="settings_troubleshoot_test_distributors_gplay">Geen andere methode dan Google Play Service gevonden.</string>
+    <string name="settings_troubleshoot_test_distributors_title">Beschikbare methoden</string>
+    <string name="settings_notification_method">Meldingsmethode</string>
+    <string name="unifiedpush_distributor_background_sync">Achtergrondsynchronisatie</string>
+    <string name="unifiedpush_distributor_fcm_fallback">Google Services</string>
+    <string name="unifiedpush_getdistributors_dialog_title">Kies hoe u meldingen wilt ontvangen</string>
+    <string name="settings_security_pin_code_use_biometrics_error">Kan biometrische authenticatie niet inschakelen.</string>
+    <string name="auth_biometric_key_invalidated_message">Biometrische authenticatie is uitgeschakeld omdat er onlangs een nieuwe biometrische authenticatiemethode is toegevoegd. U kunt het weer inschakelen in Instellingen.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">Meldingsmethode resetten</string>
+    <string name="push_gateway_item_profile_tag">Profieltag:</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">Kan eindpunt token niet registreren op server:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">Eindpunt succesvol geregistreerd bij server.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_title">Registratie van eindpunt</string>
+    <string name="action_next">Volgende</string>
 </resources>

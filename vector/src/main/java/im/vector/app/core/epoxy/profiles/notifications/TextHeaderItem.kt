@@ -24,8 +24,8 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 
-@EpoxyModelClass(layout = R.layout.item_text_header)
-abstract class TextHeaderItem : VectorEpoxyModel<TextHeaderItem.Holder>() {
+@EpoxyModelClass
+abstract class TextHeaderItem : VectorEpoxyModel<TextHeaderItem.Holder>(R.layout.item_text_header) {
 
     @EpoxyAttribute
     var text: String? = null

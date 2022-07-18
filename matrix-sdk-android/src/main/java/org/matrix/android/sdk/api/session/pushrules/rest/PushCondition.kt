@@ -61,7 +61,7 @@ data class PushCondition(
 
     fun asExecutableCondition(rule: PushRule): Condition? {
         return when (Kind.fromString(kind)) {
-            Kind.EventMatch                   -> {
+            Kind.EventMatch -> {
                 if (key != null && pattern != null) {
                     EventMatchCondition(key, pattern, rule.ruleId == RuleIds.RULE_ID_CONTAIN_USER_NAME)
                 } else {
@@ -69,10 +69,10 @@ data class PushCondition(
                     null
                 }
             }
-            Kind.ContainsDisplayName          -> {
+            Kind.ContainsDisplayName -> {
                 ContainsDisplayNameCondition()
             }
-            Kind.RoomMemberCount              -> {
+            Kind.RoomMemberCount -> {
                 if (iz.isNullOrEmpty()) {
                     Timber.e("Malformed ROOM_MEMBER_COUNT condition")
                     null
@@ -88,7 +88,7 @@ data class PushCondition(
                     SenderNotificationPermissionCondition(key)
                 }
             }
-            Kind.Unrecognised                 -> {
+            Kind.Unrecognised -> {
                 Timber.e("Unknown kind $kind")
                 null
             }

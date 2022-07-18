@@ -1,9 +1,37 @@
-def excludes = [ ]
+def excludes = [
+// dependency injection graph
+'**/*Module.*',
+'**/*Module*.*',
+
+// Framework entry points
+'**/*Activity*',
+'**/*Fragment*',
+'**/*Application*',
+'**/*AndroidService*',
+
+// We would like to exclude android widgets as well but our naming is inconsistent
+
+// Proof of concept
+'**/*Login2*',
+
+// Generated
+'**/*JsonAdapter*',
+'**/*Item.*',
+'**/*$Holder.*',
+'**/*ViewHolder.*',
+'**/*View.*',
+'**/*BottomSheet.*'
+]
 
 def initializeReport(report, projects, classExcludes) {
     projects.each { project -> project.apply plugin: 'jacoco' }
-    report.executionData { fileTree(rootProject.rootDir.absolutePath).include("**/build/jacoco/*.exec") }
 
+    report.executionData {
+        fileTree(rootProject.rootDir.absolutePath).include(
+            "**/build/**/*.exec",
+            "**/build/outputs/code_coverage/**/coverage.ec",
+        )
+    }
     report.reports {
         xml.enabled true
         html.enabled true
@@ -43,13 +71,21 @@ def collectProjects(predicate) {
     return subprojects.findAll { it.buildFile.isFile() && predicate(it) }
 }
 
-task allCodeCoverageReport(type: JacocoReport) {
+task generateCoverageReport(type: JacocoReport) {
     outputs.upToDateWhen { false }
     rootProject.apply plugin: 'jacoco'
-    // to limit projects in a specific report, add
-    // def excludedProjects = [ ... ]
-    // def projects = collectProjects { !excludedProjects.contains(it.name) }
-    def projects = collectProjects { true }
-    dependsOn { projects*.test }
+    def projects = collectProjects { ['vector', 'matrix-sdk-android'].contains(it.name) }
     initializeReport(it, projects, excludes)
+}
+
+task unitTestsWithCoverage(type: GradleBuild) {
+    // the 7.1.3 android gradle plugin has a bug where enableTestCoverage generates invalid coverage
+    startParameter.projectProperties.coverage = [enableTestCoverage:  false]
+    tasks = [':vector:testGplayDebugUnitTest', ':matrix-sdk-android:testDebugUnitTest']
+}
+
+task instrumentationTestsWithCoverage(type: GradleBuild) {
+    startParameter.projectProperties.coverage = [enableTestCoverage:  true]
+    startParameter.projectProperties['android.testInstrumentationRunnerArguments.notPackage'] = 'im.vector.app.ui'
+    tasks = [':vector:connectedGplayDebugAndroidTest', 'matrix-sdk-android:connectedDebugAndroidTest']
 }

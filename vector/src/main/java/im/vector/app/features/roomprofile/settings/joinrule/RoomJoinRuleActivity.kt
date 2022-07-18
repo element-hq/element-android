@@ -75,10 +75,10 @@ class RoomJoinRuleActivity : VectorBaseActivity<ActivitySimpleBinding>() {
                 Uninitialized -> {
                     // nop
                 }
-                is Loading    -> {
+                is Loading -> {
                     views.simpleActivityWaitingView.isVisible = true
                 }
-                is Success    -> {
+                is Success -> {
                     withState(viewModel) { state ->
                         if (state.didSwitchToReplacementRoom) {
                             // we should navigate to new room
@@ -87,7 +87,7 @@ class RoomJoinRuleActivity : VectorBaseActivity<ActivitySimpleBinding>() {
                         finish()
                     }
                 }
-                is Fail       -> {
+                is Fail -> {
                     views.simpleActivityWaitingView.isVisible = false
                     toast(errorFormatter.toHumanReadable(it.error))
                 }
@@ -97,7 +97,7 @@ class RoomJoinRuleActivity : VectorBaseActivity<ActivitySimpleBinding>() {
         viewModel.observeViewEvents {
             when (it) {
                 RoomJoinRuleChooseRestrictedEvents.NavigateToChooseRestricted -> navigateToChooseRestricted()
-                is RoomJoinRuleChooseRestrictedEvents.NavigateToUpgradeRoom   -> navigateToUpgradeRoom(it)
+                is RoomJoinRuleChooseRestrictedEvents.NavigateToUpgradeRoom -> navigateToUpgradeRoom(it)
             }
         }
 

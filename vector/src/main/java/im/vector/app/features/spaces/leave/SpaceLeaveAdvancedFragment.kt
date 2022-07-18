@@ -32,6 +32,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.utils.ToggleableAppBarLayoutBehavior
 import im.vector.app.databinding.FragmentSpaceLeaveAdvancedBinding
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -40,7 +41,8 @@ import javax.inject.Inject
 class SpaceLeaveAdvancedFragment @Inject constructor(
         val controller: SelectChildrenController
 ) : VectorBaseFragment<FragmentSpaceLeaveAdvancedBinding>(),
-        SelectChildrenController.Listener {
+        SelectChildrenController.Listener,
+        VectorMenuProvider {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) =
             FragmentSpaceLeaveAdvancedBinding.inflate(layoutInflater, container, false)
@@ -48,6 +50,8 @@ class SpaceLeaveAdvancedFragment @Inject constructor(
     val viewModel: SpaceLeaveAdvancedViewModel by activityViewModel()
 
     override fun getMenuRes() = R.menu.menu_space_leave
+
+    override fun handleMenuItemSelected(item: MenuItem) = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -62,9 +66,9 @@ class SpaceLeaveAdvancedFragment @Inject constructor(
             state.spaceSummary?.let { summary ->
                 val warningMessage: CharSequence? = when {
                     summary.otherMemberIds.isEmpty() -> getString(R.string.space_leave_prompt_msg_only_you)
-                    state.isLastAdmin                -> getString(R.string.space_leave_prompt_msg_as_admin)
-                    !summary.isPublic                -> getString(R.string.space_leave_prompt_msg_private)
-                    else                             -> null
+                    state.isLastAdmin -> getString(R.string.space_leave_prompt_msg_as_admin)
+                    !summary.isPublic -> getString(R.string.space_leave_prompt_msg_private)
+                    else -> null
                 }
 
                 views.spaceLeavePromptDescription.isVisible = warningMessage != null
@@ -83,13 +87,13 @@ class SpaceLeaveAdvancedFragment @Inject constructor(
 
         views.spaceLeaveSelectGroup.setOnCheckedChangeListener { _, optionId ->
             when (optionId) {
-                R.id.spaceLeaveSelectAll  -> viewModel.handle(SpaceLeaveAdvanceViewAction.SelectAll)
+                R.id.spaceLeaveSelectAll -> viewModel.handle(SpaceLeaveAdvanceViewAction.SelectAll)
                 R.id.spaceLeaveSelectNone -> viewModel.handle(SpaceLeaveAdvanceViewAction.SelectNone)
             }
         }
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
+    override fun handlePrepareMenu(menu: Menu) {
         menu.findItem(R.id.menu_space_leave_search)?.let { searchItem ->
             searchItem.bind(
                     onExpanded = { viewModel.handle(SpaceLeaveAdvanceViewAction.SetFilteringEnabled(isEnabled = true)) },
@@ -97,7 +101,6 @@ class SpaceLeaveAdvancedFragment @Inject constructor(
                     onTextChanged = { viewModel.handle(SpaceLeaveAdvanceViewAction.UpdateFilter(it)) }
             )
         }
-        super.onPrepareOptionsMenu(menu)
     }
 
     override fun onDestroyView() {
@@ -131,9 +134,9 @@ class SpaceLeaveAdvancedFragment @Inject constructor(
     private fun updateRadioButtonsState(state: SpaceLeaveAdvanceViewState) {
         (state.allChildren as? Success)?.invoke()?.size?.let { allChildrenCount ->
             when (state.selectedRooms.size) {
-                0                -> views.spaceLeaveSelectNone.isChecked = true
+                0 -> views.spaceLeaveSelectNone.isChecked = true
                 allChildrenCount -> views.spaceLeaveSelectAll.isChecked = true
-                else             -> views.spaceLeaveSelectSemi.isChecked = true
+                else -> views.spaceLeaveSelectSemi.isChecked = true
             }
         }
     }
@@ -141,7 +144,8 @@ class SpaceLeaveAdvancedFragment @Inject constructor(
     private fun MenuItem.bind(
             onExpanded: () -> Unit,
             onCollapsed: () -> Unit,
-            onTextChanged: (String) -> Unit) {
+            onTextChanged: (String) -> Unit
+    ) {
         setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
                 onExpanded()

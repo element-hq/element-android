@@ -44,7 +44,6 @@ import dagger.hilt.android.HiltAndroidApp
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.extensions.startSyncing
-import im.vector.app.core.time.Clock
 import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.configuration.VectorConfiguration
@@ -61,6 +60,7 @@ import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.version.VersionProvider
+import im.vector.app.flipper.FlipperProxy
 import im.vector.app.push.fcm.FcmHelper
 import org.jitsi.meet.sdk.log.JitsiMeetDefaultLogHandler
 import org.matrix.android.sdk.api.Matrix
@@ -87,7 +87,6 @@ class VectorApplication :
     @Inject lateinit var emojiCompatWrapper: EmojiCompatWrapper
     @Inject lateinit var vectorUncaughtExceptionHandler: VectorUncaughtExceptionHandler
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
-    @Inject lateinit var clock: Clock
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var versionProvider: VersionProvider
@@ -100,7 +99,9 @@ class VectorApplication :
     @Inject lateinit var autoRageShaker: AutoRageShaker
     @Inject lateinit var vectorFileLogger: VectorFileLogger
     @Inject lateinit var vectorAnalytics: VectorAnalytics
+    @Inject lateinit var flipperProxy: FlipperProxy
     @Inject lateinit var matrix: Matrix
+    @Inject lateinit var fcmHelper: FcmHelper
 
     // font thread handler
     private var fontThreadHandler: Handler? = null
@@ -118,6 +119,7 @@ class VectorApplication :
         enableStrictModeIfNeeded()
         super.onCreate()
         appContext = this
+        flipperProxy.init(matrix)
         vectorAnalytics.init()
         invitesAcceptor.initialize()
         autoRageShaker.initialize()
@@ -175,15 +177,15 @@ class VectorApplication :
         ProcessLifecycleOwner.get().lifecycle.addObserver(object : DefaultLifecycleObserver {
             override fun onResume(owner: LifecycleOwner) {
                 Timber.i("App entered foreground")
-                FcmHelper.onEnterForeground(appContext, activeSessionHolder)
+                fcmHelper.onEnterForeground(activeSessionHolder)
                 activeSessionHolder.getSafeActiveSession()?.also {
-                    it.stopAnyBackgroundSync()
+                    it.syncService().stopAnyBackgroundSync()
                 }
             }
 
             override fun onPause(owner: LifecycleOwner) {
                 Timber.i("App entered background")
-                FcmHelper.onEnterBackground(appContext, vectorPreferences, activeSessionHolder, clock)
+                fcmHelper.onEnterBackground(activeSessionHolder)
             }
         })
         ProcessLifecycleOwner.get().lifecycle.addObserver(appStateHandler)

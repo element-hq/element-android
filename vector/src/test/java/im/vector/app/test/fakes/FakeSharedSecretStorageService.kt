@@ -19,6 +19,7 @@ package im.vector.app.test.fakes
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.securestorage.IntegrityResult
 import org.matrix.android.sdk.api.session.securestorage.KeyInfoResult
+import org.matrix.android.sdk.api.session.securestorage.KeyRef
 import org.matrix.android.sdk.api.session.securestorage.KeySigner
 import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageError
 import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
@@ -34,11 +35,13 @@ class FakeSharedSecretStorageService : SharedSecretStorageService {
         TODO("Not yet implemented")
     }
 
-    override suspend fun generateKeyWithPassphrase(keyId: String,
-                                                   keyName: String,
-                                                   passphrase: String,
-                                                   keySigner: KeySigner,
-                                                   progressListener: ProgressListener?): SsssKeyCreationInfo {
+    override suspend fun generateKeyWithPassphrase(
+            keyId: String,
+            keyName: String,
+            passphrase: String,
+            keySigner: KeySigner,
+            progressListener: ProgressListener?
+    ): SsssKeyCreationInfo {
         TODO("Not yet implemented")
     }
 
@@ -56,7 +59,7 @@ class FakeSharedSecretStorageService : SharedSecretStorageService {
         TODO("Not yet implemented")
     }
 
-    override suspend fun storeSecret(name: String, secretBase64: String, keys: List<SharedSecretStorageService.KeyRef>) {
+    override suspend fun storeSecret(name: String, secretBase64: String, keys: List<KeyRef>) {
         TODO("Not yet implemented")
     }
 

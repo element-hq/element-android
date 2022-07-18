@@ -18,6 +18,7 @@ package im.vector.app.test.fakes
 
 import android.content.ContentResolver
 import android.content.Context
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.ParcelFileDescriptor
 import io.mockk.every
@@ -32,6 +33,7 @@ class FakeContext(
 
     init {
         every { instance.contentResolver } returns contentResolver
+        every { instance.applicationContext } returns instance
     }
 
     fun givenFileDescriptor(uri: Uri, mode: String, factory: () -> ParcelFileDescriptor?) {
@@ -47,5 +49,22 @@ class FakeContext(
 
     fun givenMissingSafeOutputStreamFor(uri: Uri) {
         every { contentResolver.openOutputStream(uri, "wt") } returns null
+    }
+
+    fun givenNoConnection() {
+        val connectivityManager = FakeConnectivityManager()
+        connectivityManager.givenNoActiveConnection()
+        givenService(Context.CONNECTIVITY_SERVICE, ConnectivityManager::class.java, connectivityManager.instance)
+    }
+
+    fun <T> givenService(name: String, klass: Class<T>, service: T) {
+        every { instance.getSystemService(name) } returns service
+        every { instance.getSystemService(klass) } returns service
+    }
+
+    fun givenHasConnection() {
+        val connectivityManager = FakeConnectivityManager()
+        connectivityManager.givenHasActiveConnection()
+        givenService(Context.CONNECTIVITY_SERVICE, ConnectivityManager::class.java, connectivityManager.instance)
     }
 }

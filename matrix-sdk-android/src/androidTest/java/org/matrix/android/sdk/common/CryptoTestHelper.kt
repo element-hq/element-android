@@ -53,12 +53,13 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.securestorage.EmptyKeySigner
-import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
+import org.matrix.android.sdk.api.session.securestorage.KeyRef
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.awaitCallback
 import org.matrix.android.sdk.api.util.toBase64NoPadding
@@ -66,7 +67,7 @@ import java.util.UUID
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 
-class CryptoTestHelper(private val testHelper: CommonTestHelper) {
+class CryptoTestHelper(val testHelper: CommonTestHelper) {
 
     private val messagesFromAlice: List<String> = listOf("0 - Hello I'm Alice!", "4 - Go!")
     private val messagesFromBob: List<String> = listOf("1 - Hello I'm Bob!", "2 - Isn't life grand?", "3 - Let's go to the opera.")
@@ -76,11 +77,14 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
     /**
      * @return alice session
      */
-    fun doE2ETestWithAliceInARoom(encryptedRoom: Boolean = true): CryptoTestData {
+    fun doE2ETestWithAliceInARoom(encryptedRoom: Boolean = true, roomHistoryVisibility: RoomHistoryVisibility? = null): CryptoTestData {
         val aliceSession = testHelper.createAccount(TestConstants.USER_ALICE, defaultSessionParams)
 
         val roomId = testHelper.runBlockingTest {
-            aliceSession.roomService().createRoom(CreateRoomParams().apply { name = "MyRoom" })
+            aliceSession.roomService().createRoom(CreateRoomParams().apply {
+                historyVisibility = roomHistoryVisibility
+                name = "MyRoom"
+            })
         }
         if (encryptedRoom) {
             testHelper.waitWithLatch { latch ->
@@ -104,8 +108,8 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
     /**
      * @return alice and bob sessions
      */
-    fun doE2ETestWithAliceAndBobInARoom(encryptedRoom: Boolean = true): CryptoTestData {
-        val cryptoTestData = doE2ETestWithAliceInARoom(encryptedRoom)
+    fun doE2ETestWithAliceAndBobInARoom(encryptedRoom: Boolean = true, roomHistoryVisibility: RoomHistoryVisibility? = null): CryptoTestData {
+        val cryptoTestData = doE2ETestWithAliceInARoom(encryptedRoom, roomHistoryVisibility)
         val aliceSession = cryptoTestData.firstSession
         val aliceRoomId = cryptoTestData.roomId
 
@@ -361,19 +365,19 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
             ssssService.storeSecret(
                     MASTER_KEY_SSSS_NAME,
                     session.cryptoService().crossSigningService().getCrossSigningPrivateKeys()!!.master!!,
-                    listOf(SharedSecretStorageService.KeyRef(keyInfo.keyId, keyInfo.keySpec))
+                    listOf(KeyRef(keyInfo.keyId, keyInfo.keySpec))
             )
 
             ssssService.storeSecret(
                     SELF_SIGNING_KEY_SSSS_NAME,
                     session.cryptoService().crossSigningService().getCrossSigningPrivateKeys()!!.selfSigned!!,
-                    listOf(SharedSecretStorageService.KeyRef(keyInfo.keyId, keyInfo.keySpec))
+                    listOf(KeyRef(keyInfo.keyId, keyInfo.keySpec))
             )
 
             ssssService.storeSecret(
                     USER_SIGNING_KEY_SSSS_NAME,
                     session.cryptoService().crossSigningService().getCrossSigningPrivateKeys()!!.user!!,
-                    listOf(SharedSecretStorageService.KeyRef(keyInfo.keyId, keyInfo.keySpec))
+                    listOf(KeyRef(keyInfo.keyId, keyInfo.keySpec))
             )
 
             // set up megolm backup
@@ -390,7 +394,7 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
                 ssssService.storeSecret(
                         KEYBACKUP_SECRET_SSSS_NAME,
                         secret,
-                        listOf(SharedSecretStorageService.KeyRef(keyInfo.keyId, keyInfo.keySpec))
+                        listOf(KeyRef(keyInfo.keyId, keyInfo.keySpec))
                 )
             }
         }

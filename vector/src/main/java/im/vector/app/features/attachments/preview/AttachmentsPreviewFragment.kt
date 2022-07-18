@@ -44,6 +44,7 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.insertBeforeLast
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.OnSnapPositionChangeListener
@@ -67,7 +68,9 @@ class AttachmentsPreviewFragment @Inject constructor(
         private val attachmentBigPreviewController: AttachmentBigPreviewController,
         private val colorProvider: ColorProvider,
         private val clock: Clock,
-) : VectorBaseFragment<FragmentAttachmentsPreviewBinding>(), AttachmentMiniaturePreviewController.Callback {
+) : VectorBaseFragment<FragmentAttachmentsPreviewBinding>(),
+        AttachmentMiniaturePreviewController.Callback,
+        VectorMenuProvider {
 
     private val fragmentArgs: AttachmentsPreviewArgs by args()
     private val viewModel: AttachmentsPreviewViewModel by fragmentViewModel()
@@ -97,30 +100,26 @@ class AttachmentsPreviewFragment @Inject constructor(
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.attachmentsPreviewRemoveAction -> {
                 handleRemoveAction()
                 true
             }
-            R.id.attachmentsPreviewEditAction   -> {
+            R.id.attachmentsPreviewEditAction -> {
                 handleEditAction()
                 true
             }
-            else                                -> {
-                super.onOptionsItemSelected(item)
-            }
+            else -> false
         }
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
+    override fun handlePrepareMenu(menu: Menu) {
         withState(viewModel) { state ->
             val editMenuItem = menu.findItem(R.id.attachmentsPreviewEditAction)
             val showEditMenuItem = state.attachments.getOrNull(state.currentAttachmentIndex)?.isEditable().orFalse()
             editMenuItem.setVisible(showEditMenuItem)
         }
-
-        super.onPrepareOptionsMenu(menu)
     }
 
     override fun getMenuRes() = R.menu.vector_attachments_preview
@@ -152,7 +151,7 @@ class AttachmentsPreviewFragment @Inject constructor(
         return when {
             nbVideos == 0 -> resources.getQuantityString(R.plurals.send_images_with_original_size, nbImages)
             nbImages == 0 -> resources.getQuantityString(R.plurals.send_videos_with_original_size, nbVideos)
-            else          -> getString(R.string.send_images_and_video_with_original_size)
+            else -> getString(R.string.send_images_and_video_with_original_size)
         }
     }
 

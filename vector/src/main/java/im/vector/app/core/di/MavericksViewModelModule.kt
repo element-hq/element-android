@@ -54,6 +54,7 @@ import im.vector.app.features.home.room.list.RoomListViewModel
 import im.vector.app.features.homeserver.HomeServerCapabilitiesViewModel
 import im.vector.app.features.invite.InviteUsersToRoomViewModel
 import im.vector.app.features.location.LocationSharingViewModel
+import im.vector.app.features.location.live.map.LocationLiveMapViewModel
 import im.vector.app.features.login.LoginViewModel
 import im.vector.app.features.login2.LoginViewModel2
 import im.vector.app.features.login2.created.AccountCreatedViewModel
@@ -89,6 +90,7 @@ import im.vector.app.features.settings.devtools.AccountDataViewModel
 import im.vector.app.features.settings.devtools.GossipingEventsPaperTrailViewModel
 import im.vector.app.features.settings.devtools.KeyRequestListViewModel
 import im.vector.app.features.settings.devtools.KeyRequestViewModel
+import im.vector.app.features.settings.font.FontScaleSettingViewModel
 import im.vector.app.features.settings.homeserver.HomeserverSettingsViewModel
 import im.vector.app.features.settings.ignored.IgnoredUsersViewModel
 import im.vector.app.features.settings.legals.LegalsViewModel
@@ -600,4 +602,14 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(VectorAttachmentViewerViewModel::class)
     fun vectorAttachmentViewerViewModelFactory(factory: VectorAttachmentViewerViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(LocationLiveMapViewModel::class)
+    fun locationLiveMapViewModelFactory(factory: LocationLiveMapViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(FontScaleSettingViewModel::class)
+    fun fontScaleSettingViewModelFactory(factory: FontScaleSettingViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 }

@@ -1537,7 +1537,6 @@
     <string name="create_poll_options_hint">選択肢%1$d</string>
     <string name="create_poll_options_title">選択肢を作成</string>
     <string name="location_activity_title_preview">位置情報</string>
-    <string name="settings_enable_location_sharing">位置情報の共有を有効にする</string>
     <string name="location_timeline_failed_to_load_map">地図を読み込めませんでした</string>
     <string name="reply_in_thread">スレッドで返信</string>
     <string name="location_activity_title_static_sharing">位置情報を共有</string>
@@ -1596,7 +1595,6 @@
     <string name="room_error_access_unauthorized">このルームへの参加は許可されていません</string>
     <string name="topic_prefix">"トピック: "</string>
     <string name="settings_troubleshoot_title">トラブルシューティング</string>
-    <string name="error_attachment">添付ファイルの取得中にエラーが発生しました。</string>
     <string name="a11y_close_keys_backup_banner">鍵のバックアップのバナーを閉じる</string>
     <string name="settings_notification_keyword_contains_invalid_character">キーワードに「%s」を含めることはできません</string>
     <string name="settings_notification_emails_enable_for_email">%sへのメール通知を有効にする</string>
@@ -1653,7 +1651,6 @@
     <string name="login_a11y_choose_matrix_org">matrix.orgを選択</string>
     <string name="space_add_existing_spaces">既存のスペースを追加</string>
     <string name="space_add_existing_rooms_only">既存のルームを追加</string>
-    <string name="leave_all_rooms_and_spaces">全てのルームとスペースから退出</string>
     <string name="finish_setup">セットアップを終了</string>
     <string name="create_spaces_default_public_random_room_name">ランダム</string>
     <string name="create_spaces_loading_message">スペースを作成しています…</string>
@@ -1679,8 +1676,6 @@
     <string name="auth_pin_forgot">PINコードを忘れましたか？</string>
     <string name="auth_pin_title">PINコードを入力</string>
     <string name="create_pin_confirm_title">PINコードを確認</string>
-    <string name="labs_render_locations_in_timeline">ユーザーの位置情報をタイムラインに表示</string>
-    <string name="settings_enable_location_sharing_summary">一度有効にすると、位置情報はどのルームにも送れるようになります</string>
     <string name="legals_third_party_notices">サードパーティー製ライブラリー</string>
     <string name="analytics_opt_in_list_item_3">これはいつでも設定から無効にできます</string>
     <string name="analytics_opt_in_list_item_2">私たちは、情報を第三者と共有することは<b>ありません</b></string>
@@ -1879,8 +1874,6 @@
     </plurals>
     <string name="invite_to_space">%sに招待</string>
     <string name="invite_by_username_or_mail">ユーザー名かメールアドレスで招待</string>
-    <string name="dont_leave_any">どのルームやスペースからも退出しない</string>
-    <string name="pick_tings_to_leave">退出するルームとスペースを選択</string>
     <string name="space_leave_prompt_msg_with_name">%sを退出してよろしいですか？</string>
     <string name="spaces_beta_welcome_to_spaces_desc">スペースは、ルームや連絡先をグループ化する新しい方法です。</string>
     <string name="you_are_invited">招待されています</string>
@@ -1939,7 +1932,6 @@
     <string name="login_server_url_form_modular_hint">Element Matrix Servicesのアドレス</string>
     <string name="login_signin_to">%1$sにサインイン</string>
     <string name="ftue_auth_use_case_title">誰と最もよく会話しますか？</string>
-    <string name="leave_specific_ones">特定のルームとスペースから退出…</string>
     <string name="this_space_has_no_rooms_not_admin">非公開で招待が必要なルームは表示されていません。
 \nルームを追加する権限はありません。</string>
     <string name="this_space_has_no_rooms_admin">非公開で招待が必要なルームは表示されていません。</string>
@@ -2340,7 +2332,6 @@
     <string name="message_reaction_show_less">詳細を非表示</string>
     <string name="invite_people_to_your_space_desc">他の参加者はいません。%sに招待しましょう。</string>
     <string name="location_share_live_enabled">位置情報（ライブ）が有効です</string>
-    <string name="location_in_background_missing_permission_dialog_title">アクセスを許可</string>
     <string name="a11y_location_share_option_user_current_icon">現在の位置情報を共有</string>
     <string name="location_share_option_user_current">現在の位置情報を共有</string>
     <string name="create_spaces_room_public_header_desc">ルームを作成します。後から追加できます。</string>

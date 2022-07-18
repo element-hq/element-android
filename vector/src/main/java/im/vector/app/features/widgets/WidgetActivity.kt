@@ -64,8 +64,6 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
 
     override fun getBinding() = ActivityWidgetBinding.inflate(layoutInflater)
 
-    override fun getMenuRes() = R.menu.menu_widget
-
     override fun getTitleRes() = R.string.room_widget_activity_title
 
     override fun initUiAndData() {
@@ -80,7 +78,7 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
         viewModel.observeViewEvents {
             when (it) {
                 is WidgetViewEvents.Close -> handleClose(it)
-                else                      -> Unit
+                else -> Unit
             }
         }
 
@@ -92,7 +90,7 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
 
         viewModel.onEach(WidgetViewState::status) { ws ->
             when (ws) {
-                WidgetStatus.UNKNOWN            -> {
+                WidgetStatus.UNKNOWN -> {
                 }
                 WidgetStatus.WIDGET_NOT_ALLOWED -> {
                     val dFrag = supportFragmentManager.findFragmentByTag(WIDGET_PERMISSION_FRAGMENT_TAG) as? RoomWidgetPermissionBottomSheet
@@ -104,7 +102,7 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
                                 .show(supportFragmentManager, WIDGET_PERMISSION_FRAGMENT_TAG)
                     }
                 }
-                WidgetStatus.WIDGET_ALLOWED     -> {
+                WidgetStatus.WIDGET_ALLOWED -> {
                     if (supportFragmentManager.findFragmentByTag(WIDGET_FRAGMENT_TAG) == null) {
                         addFragment(views.fragmentContainer, WidgetFragment::class.java, widgetArgs, WIDGET_FRAGMENT_TAG)
                     }

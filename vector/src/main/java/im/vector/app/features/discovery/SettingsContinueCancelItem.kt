@@ -18,14 +18,14 @@ package im.vector.app.features.discovery
 import android.widget.Button
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
-import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
+import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
 
-@EpoxyModelClass(layout = R.layout.item_settings_continue_cancel)
-abstract class SettingsContinueCancelItem : EpoxyModelWithHolder<SettingsContinueCancelItem.Holder>() {
+@EpoxyModelClass
+abstract class SettingsContinueCancelItem : VectorEpoxyModel<SettingsContinueCancelItem.Holder>(R.layout.item_settings_continue_cancel) {
 
     @EpoxyAttribute
     var continueText: String? = null

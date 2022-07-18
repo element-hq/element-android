@@ -21,8 +21,8 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 
-@EpoxyModelClass(layout = R.layout.item_timeline_read_marker)
-abstract class TimelineReadMarkerItem : VectorEpoxyModel<TimelineReadMarkerItem.Holder>() {
+@EpoxyModelClass
+abstract class TimelineReadMarkerItem : VectorEpoxyModel<TimelineReadMarkerItem.Holder>(R.layout.item_timeline_read_marker) {
 
     class Holder : VectorEpoxyHolder()
 }
