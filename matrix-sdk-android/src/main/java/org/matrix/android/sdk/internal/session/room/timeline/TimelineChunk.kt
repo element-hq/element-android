@@ -468,14 +468,7 @@ internal class TimelineChunk(
                         type = EventType.MESSAGE,
                         content = newContent,
                         unsignedData = UnsignedData(age = null, transactionId = currentTimelineEvent.eventId),
-                ).apply {
-                    mxDecryptionResult = event.mxDecryptionResult
-                    mCryptoError = event.mCryptoError
-                    mCryptoErrorReason = event.mCryptoErrorReason
-                    sendState = event.sendState
-                    ageLocalTs = event.ageLocalTs
-                    threadDetails = event.threadDetails
-                }
+                )
             }
         }
     }

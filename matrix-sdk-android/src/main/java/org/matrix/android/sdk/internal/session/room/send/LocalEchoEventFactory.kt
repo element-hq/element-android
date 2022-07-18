@@ -628,9 +628,11 @@ internal class LocalEchoEventFactory @Inject constructor(
             autoMarkdown: Boolean,
             rootThreadEventId: String? = null,
             showInThread: Boolean,
-    ): Event {
+    ): Event? {
         val content = createReplyTextContent(eventReplied, replyText, autoMarkdown, rootThreadEventId, showInThread)
-        return createMessageEvent(roomId, content)
+        return content?.let {
+            createMessageEvent(roomId, it)
+        }
     }
 
     /**
