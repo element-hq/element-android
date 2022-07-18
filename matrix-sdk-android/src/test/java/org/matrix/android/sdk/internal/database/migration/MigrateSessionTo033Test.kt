@@ -20,10 +20,10 @@ import org.junit.Test
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.test.fakes.FakeDynamicRealm
 
-internal class MigrateSessionTo032Test {
+internal class MigrateSessionTo033Test {
 
     private val fakeDynamicRealm = FakeDynamicRealm()
-    private val migrator = MigrateSessionTo032(fakeDynamicRealm.instance)
+    private val migrator = MigrateSessionTo033(fakeDynamicRealm.instance)
 
     @Test
     fun `when doMigrate, then directParentNames added`() {
