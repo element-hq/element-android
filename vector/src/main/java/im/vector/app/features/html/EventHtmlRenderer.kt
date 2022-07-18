@@ -153,6 +153,7 @@ class MatrixHtmlPluginConfigure @Inject constructor(private val colorProvider: C
 
     override fun configureHtml(plugin: HtmlPlugin) {
         plugin
+                .addHandler(ListHandlerWithInitialStart())
                 .addHandler(FontTagHandler())
                 .addHandler(ParagraphHandler(DimensionConverter(resources)))
                 .addHandler(MxReplyTagHandler())

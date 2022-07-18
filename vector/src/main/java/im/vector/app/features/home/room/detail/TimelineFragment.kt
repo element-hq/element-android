@@ -1323,6 +1323,7 @@ class TimelineFragment @Inject constructor(
 
     private fun handlePendingAction(roomDetailPendingAction: RoomDetailPendingAction) {
         when (roomDetailPendingAction) {
+            RoomDetailPendingAction.DoNothing -> Unit
             is RoomDetailPendingAction.JumpToReadReceipt ->
                 timelineViewModel.handle(RoomDetailAction.JumpToReadReceipt(roomDetailPendingAction.userId))
             is RoomDetailPendingAction.MentionUser ->
@@ -1430,6 +1431,9 @@ class TimelineFragment @Inject constructor(
                 updateJumpToReadMarkerViewVisibility()
                 jumpToBottomViewVisibilityManager.maybeShowJumpToBottomViewVisibilityWithDelay()
             }
+        }.apply {
+            // For local rooms, pin the view's content to the top edge (the layout is reversed)
+            stackFromEnd = isLocalRoom()
         }
         val stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
         scrollOnNewMessageCallback = ScrollOnNewMessageCallback(layoutManager, timelineEventController)
@@ -1619,7 +1623,7 @@ class TimelineFragment @Inject constructor(
 
     private fun sendUri(uri: Uri): Boolean {
         val shareIntent = Intent(Intent.ACTION_SEND, uri)
-        val isHandled = shareIntentHandler.handleIncomingShareIntent(requireContext(), shareIntent, ::onContentAttachmentsReady, onPlainText = {
+        val isHandled = shareIntentHandler.handleIncomingShareIntent(shareIntent, ::onContentAttachmentsReady, onPlainText = {
             fatalError("Should not happen as we're generating a File based share Intent", vectorPreferences.failFast())
         })
         if (!isHandled) {
@@ -1701,31 +1705,41 @@ class TimelineFragment @Inject constructor(
     }
 
     private fun renderToolbar(roomSummary: RoomSummary?) {
-        if (!isThreadTimeLine()) {
-            views.includeRoomToolbar.roomToolbarContentView.isVisible = true
-            views.includeThreadToolbar.roomToolbarThreadConstraintLayout.isVisible = false
-            if (roomSummary == null) {
-                views.includeRoomToolbar.roomToolbarContentView.isClickable = false
-            } else {
-                views.includeRoomToolbar.roomToolbarContentView.isClickable = roomSummary.membership == Membership.JOIN
-                views.includeRoomToolbar.roomToolbarTitleView.text = roomSummary.displayName
-                avatarRenderer.render(roomSummary.toMatrixItem(), views.includeRoomToolbar.roomToolbarAvatarImageView)
-                val showPresence = roomSummary.isDirect
-                views.includeRoomToolbar.roomToolbarPresenceImageView.render(showPresence, roomSummary.directUserPresence)
-                val shieldView = if (showPresence) views.includeRoomToolbar.roomToolbarTitleShield else views.includeRoomToolbar.roomToolbarAvatarShield
-                shieldView.render(roomSummary.roomEncryptionTrustLevel)
-                views.includeRoomToolbar.roomToolbarPublicImageView.isVisible = roomSummary.isPublic && !roomSummary.isDirect
+        when {
+            isLocalRoom()      -> {
+                views.includeRoomToolbar.roomToolbarContentView.isVisible = false
+                views.includeThreadToolbar.roomToolbarThreadConstraintLayout.isVisible = false
+                setupToolbar(views.roomToolbar)
+                        .setTitle(R.string.room_member_open_or_create_dm)
+                        .allowBack(useCross = true)
             }
-        } else {
-            views.includeRoomToolbar.roomToolbarContentView.isVisible = false
-            views.includeThreadToolbar.roomToolbarThreadConstraintLayout.isVisible = true
-            timelineArgs.threadTimelineArgs?.let {
-                val matrixItem = MatrixItem.RoomItem(it.roomId, it.displayName, it.avatarUrl)
-                avatarRenderer.render(matrixItem, views.includeThreadToolbar.roomToolbarThreadImageView)
-                views.includeThreadToolbar.roomToolbarThreadShieldImageView.render(it.roomEncryptionTrustLevel)
-                views.includeThreadToolbar.roomToolbarThreadSubtitleTextView.text = it.displayName
+            isThreadTimeLine() -> {
+                views.includeRoomToolbar.roomToolbarContentView.isVisible = false
+                views.includeThreadToolbar.roomToolbarThreadConstraintLayout.isVisible = true
+                timelineArgs.threadTimelineArgs?.let {
+                    val matrixItem = MatrixItem.RoomItem(it.roomId, it.displayName, it.avatarUrl)
+                    avatarRenderer.render(matrixItem, views.includeThreadToolbar.roomToolbarThreadImageView)
+                    views.includeThreadToolbar.roomToolbarThreadShieldImageView.render(it.roomEncryptionTrustLevel)
+                    views.includeThreadToolbar.roomToolbarThreadSubtitleTextView.text = it.displayName
+                }
+                views.includeThreadToolbar.roomToolbarThreadTitleTextView.text = resources.getText(R.string.thread_timeline_title)
             }
-            views.includeThreadToolbar.roomToolbarThreadTitleTextView.text = resources.getText(R.string.thread_timeline_title)
+            else               -> {
+                views.includeRoomToolbar.roomToolbarContentView.isVisible = true
+                views.includeThreadToolbar.roomToolbarThreadConstraintLayout.isVisible = false
+                if (roomSummary == null) {
+                    views.includeRoomToolbar.roomToolbarContentView.isClickable = false
+                } else {
+                    views.includeRoomToolbar.roomToolbarContentView.isClickable = roomSummary.membership == Membership.JOIN
+                    views.includeRoomToolbar.roomToolbarTitleView.text = roomSummary.displayName
+                    avatarRenderer.render(roomSummary.toMatrixItem(), views.includeRoomToolbar.roomToolbarAvatarImageView)
+                    val showPresence = roomSummary.isDirect
+                    views.includeRoomToolbar.roomToolbarPresenceImageView.render(showPresence, roomSummary.directUserPresence)
+                    val shieldView = if (showPresence) views.includeRoomToolbar.roomToolbarTitleShield else views.includeRoomToolbar.roomToolbarAvatarShield
+                    shieldView.render(roomSummary.roomEncryptionTrustLevel)
+                    views.includeRoomToolbar.roomToolbarPublicImageView.isVisible = roomSummary.isPublic && !roomSummary.isDirect
+                }
+            }
         }
     }
 
@@ -2659,6 +2673,11 @@ class TimelineFragment @Inject constructor(
      * Returns true if the current room is a Thread room, false otherwise.
      */
     private fun isThreadTimeLine(): Boolean = timelineArgs.threadTimelineArgs?.rootThreadEventId != null
+
+    /**
+     * Returns true if the current room is a local room, false otherwise.
+     */
+    private fun isLocalRoom(): Boolean = withState(timelineViewModel) { it.isLocalRoom() }
 
     /**
      * Returns the root thread event if we are in a thread room, otherwise returns null.

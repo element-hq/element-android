@@ -16,13 +16,9 @@
 
 package im.vector.app.ui.robot.space
 
-import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
-import com.adevinta.android.barista.internal.viewaction.ClickChildAction
 import im.vector.app.R
 import im.vector.app.clickOnSheet
 import im.vector.app.espresso.tools.waitUntilActivityVisible
@@ -33,21 +29,8 @@ import im.vector.app.features.roomprofile.RoomProfileActivity
 import im.vector.app.features.spaces.SpaceExploreActivity
 import im.vector.app.features.spaces.leave.SpaceLeaveAdvancedActivity
 import im.vector.app.features.spaces.manage.SpaceManageActivity
-import org.hamcrest.Matchers
 
 class SpaceMenuRobot {
-
-    fun openMenu(spaceName: String) {
-        waitUntilViewVisible(ViewMatchers.withId(R.id.groupListView))
-        onView(ViewMatchers.withId(R.id.groupListView))
-                .perform(
-                        RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
-                                ViewMatchers.hasDescendant(Matchers.allOf(ViewMatchers.withId(R.id.groupNameView), ViewMatchers.withText(spaceName))),
-                                ClickChildAction.clickChildWithId(R.id.groupTmpLeave)
-                        ).atPosition(0)
-                )
-        waitUntilDialogVisible(ViewMatchers.withId(R.id.spaceNameView))
-    }
 
     fun invitePeople() = apply {
         clickOnSheet(R.id.invitePeople)

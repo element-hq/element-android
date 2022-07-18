@@ -989,7 +989,6 @@
     <string name="login_server_url_form_common_notice">Introdueix l\'adreça del servidor que vulguis utilitzar</string>
     <string name="attachment_type_gallery">Galeria</string>
     <string name="attachment_type_sticker">Adhesiu</string>
-    <string name="error_attachment">S\'ha produït un error mentre es rebia el fitxer adjunt.</string>
     <string name="a11y_jump_to_bottom">Salta al final</string>
     <string name="a11y_create_room">Crea una nova sala</string>
     <string name="a11y_create_menu_close">Tanca el menú de creació de sala…</string>
@@ -2500,4 +2499,34 @@
     <string name="time_unit_second_short">s</string>
     <string name="time_unit_minute_short">min</string>
     <string name="time_unit_hour_short">h</string>
+    <string name="live_location_labs_promotion_description">Nota: aquesta és una funció en proves que utilitza una implementació temporal. Això vol dir que no podràs suprimir el teu historial d\'ubicacions i que els usuaris avançats el podran veure fins i tot després de deixar de compartir la teva ubicació en directe en aquesta sala.</string>
+    <string name="auth_biometric_key_invalidated_message">L\'autenticació biomètrica s\'ha desactivat perquè s\'ha afegit un nou mètode d\'autenticació biomètrica. Pots tornar-la a activar a Configuració.</string>
+    <string name="live_location_labs_promotion_switch_title">Activa la compartició d\'ubicació</string>
+    <string name="live_location_labs_promotion_title">Compartició d\'ubicació en directe</string>
+    <string name="settings_troubleshoot_test_current_gateway">\'Gateway\' actual: %s</string>
+    <string name="settings_troubleshoot_test_current_gateway_title">Passarel·la (\'gateway\')</string>
+    <string name="settings_troubleshoot_test_current_endpoint_failed">No s\'ha trobat l\'endpoint.</string>
+    <string name="settings_troubleshoot_test_current_endpoint_success">\'Endpoint\' actual: %s</string>
+    <string name="settings_troubleshoot_test_current_endpoint_title">Punt final (\'endpoint\')</string>
+    <string name="settings_troubleshoot_test_current_distributor">Actualment utilitzant %s.</string>
+    <string name="settings_troubleshoot_test_current_distributor_title">Mètode</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="one">S\'ha trobat %d mètode.</item>
+        <item quantity="other">S\'han trobat %d mètodes.</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_distributors_fdroid">No s\'ha trobat cap altre mètode a part de la sincronització en segon pla.</string>
+    <string name="settings_troubleshoot_test_distributors_gplay">No s\'ha trobat cap altre mètode a part de Serveis de Google.</string>
+    <string name="settings_troubleshoot_test_distributors_title">Mètodes disponibles</string>
+    <string name="settings_notification_method">Mètode de notificacions</string>
+    <string name="unifiedpush_distributor_background_sync">Sincronització en segon pla</string>
+    <string name="unifiedpush_distributor_fcm_fallback">Serveis de Google</string>
+    <string name="unifiedpush_getdistributors_dialog_title">Tria com rebre les notificacions</string>
+    <string name="settings_security_pin_code_use_biometrics_error">No s\'ha pogut activar l\'autenticació biomètrica.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">Restableix el mètode de notificacions</string>
+    <string name="push_gateway_item_profile_tag">Etiqueta de perfil:</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">No s\'ha pogut registrar l\'endpoint al servidor:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">\'Endpoint\' registrat correctament al servidor.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_title">Registre d\'endpoint</string>
+    <string name="action_next">Següent</string>
 </resources>

@@ -254,7 +254,6 @@
     <string name="attachment_type_contact">Contact</string>
     <string name="attachment_type_file">Fichier</string>
     <string name="attachment_type_dialog_title">Ajouter une image à partir de</string>
-    <string name="error_attachment">Une erreur est survenue pendant la récupération de la pièce jointe.</string>
     <string name="one_user_read">%s a lu</string>
     <string name="two_users_read">%1$s et %2$s ont lu</string>
     <string name="three_users_read">%1$s, %2$s et %3$s ont lu</string>
@@ -2071,4 +2070,9 @@
     <string name="missing_permissions_title">Permissions manquantes</string>
     <string name="denied_permission_voice_message">Pour envoyer des messages vocaux, veuillez accorder la permission Microphone.</string>
     <string name="denied_permission_camera">Pour effectuer cette action, veuillez autoriser la permission Caméra depuis les réglages système.</string>
+    <string name="initial_sync_request_content">${app_name} a besoin d’effacer le cache pour la mise-à-jour, pour la raison suivante :
+\n%s
+\n
+\nCette action va redémarrer l’application et pourra prendre du temps.</string>
+    <string name="initial_sync_request_title">Requête de synchronisation initiale</string>
 </resources>

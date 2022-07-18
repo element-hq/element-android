@@ -886,7 +886,7 @@
     <string name="push_gateway_item_format">格式：</string>
     <string name="preference_voice_and_video">音訊與視訊</string>
     <string name="preference_root_help_about">說明與關於</string>
-    <string name="settings_troubleshoot_test_token_registration_quick_fix">註冊代符</string>
+    <string name="settings_troubleshoot_test_token_registration_quick_fix">註冊權杖</string>
     <string name="send_suggestion">建議</string>
     <string name="send_suggestion_content">請在下面編寫您的建議。</string>
     <string name="send_suggestion_report_placeholder">在此描述您的建議</string>
@@ -974,7 +974,6 @@
     <plurals name="fallback_users_read">
         <item quantity="other">%d 個使用者已閱讀</item>
     </plurals>
-    <string name="error_attachment">在擷取附件時遇到錯誤。</string>
     <string name="attachment_type_file">檔案</string>
     <string name="attachment_type_contact">聯絡人</string>
     <string name="attachment_type_camera">相機</string>
@@ -2453,4 +2452,33 @@
     <string name="time_unit_second_short">秒</string>
     <string name="time_unit_minute_short">分鐘</string>
     <string name="time_unit_hour_short">小時</string>
+    <string name="live_location_labs_promotion_switch_title">啟用位置分享</string>
+    <string name="live_location_labs_promotion_description">請注意：這是使用暫時實作的實驗室功能。這代表了您將無法刪除您的位置歷史紀錄，即使您停止與此聊天室分享您的即時位置，進階使用者也還是能看到您的位置歷史紀錄。</string>
+    <string name="live_location_labs_promotion_title">即時位置分享</string>
+    <string name="settings_troubleshoot_test_current_gateway">目前閘道：%s</string>
+    <string name="settings_troubleshoot_test_current_gateway_title">閘道</string>
+    <string name="settings_troubleshoot_test_current_endpoint_failed">找不到端點。</string>
+    <string name="settings_troubleshoot_test_current_endpoint_success">目前端點：%s</string>
+    <string name="settings_troubleshoot_test_current_endpoint_title">端點</string>
+    <string name="settings_troubleshoot_test_current_distributor">目前正在使用 %s。</string>
+    <string name="settings_troubleshoot_test_current_distributor_title">方式</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="other">找到 %d 種方式。</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_distributors_fdroid">找不到除了背景同步以外的方式。</string>
+    <string name="settings_troubleshoot_test_distributors_gplay">找不到除了 Google Play 服務以外的方式。</string>
+    <string name="settings_troubleshoot_test_distributors_title">可用方式</string>
+    <string name="settings_notification_method">通知方式</string>
+    <string name="unifiedpush_distributor_background_sync">背景同步</string>
+    <string name="unifiedpush_distributor_fcm_fallback">Google 服務</string>
+    <string name="unifiedpush_getdistributors_dialog_title">選擇如何接收通知</string>
+    <string name="settings_security_pin_code_use_biometrics_error">無法啟用生物特徵驗證。</string>
+    <string name="auth_biometric_key_invalidated_message">生物特徵驗證方式被停用，因為最新新增了新的生物特徵驗證方式。您可以在「設定」中再次啟用它。</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">重設通知方式</string>
+    <string name="push_gateway_item_profile_tag">個人檔案標籤：</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">註冊端點權杖至家伺服器失敗：
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">端點成功註冊至家伺服器。</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_title">端點註冊</string>
+    <string name="action_next">下一步</string>
 </resources>

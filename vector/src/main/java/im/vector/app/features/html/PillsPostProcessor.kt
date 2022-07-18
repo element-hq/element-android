@@ -94,7 +94,6 @@ class PillsPostProcessor @AssistedInject constructor(
         val matrixItem = when (val permalinkData = PermalinkParser.parse(url)) {
             is PermalinkData.UserLink -> permalinkData.toMatrixItem(roomId)
             is PermalinkData.RoomLink -> permalinkData.toMatrixItem()
-            is PermalinkData.GroupLink -> permalinkData.toMatrixItem()
             else -> null
         } ?: return null
         return createPillImageSpan(matrixItem)
@@ -118,9 +117,4 @@ class PillsPostProcessor @AssistedInject constructor(
                 // Exclude event link (used in reply events, we do not want to pill the "in reply to")
                 null
             }
-
-    private fun PermalinkData.GroupLink.toMatrixItem(): MatrixItem? {
-        val group = sessionHolder.getSafeActiveSession()?.groupService()?.getGroupSummary(groupId)
-        return MatrixItem.GroupItem(groupId, group?.displayName, group?.avatarUrl)
-    }
 }

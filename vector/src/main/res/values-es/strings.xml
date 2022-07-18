@@ -742,7 +742,7 @@
     <string name="notification_silent">Silencioso</string>
     <string name="error_empty_field_enter_user_name">Por favor introduzca un nombre de usuario.</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="no_valid_google_play_services_apk">No se ha encontrado ningún APK válido de Servicios de Google Play. Las notificaciones podrían no funcionar correctamente.</string>
     <string name="passphrase_empty_error_message">Por favor introduzca una contraseña</string>
     <string name="passphrase_passphrase_too_weak">La contraseña que has introducido es muy débil</string>
@@ -855,9 +855,9 @@
     <string name="invited_by">Invitado por %s</string>
     <string name="room_list_catchup_empty_body">No tienes más mensajes sin leer</string>
     <string name="room_list_people_empty_title">Conversaciones</string>
-    <string name="room_list_people_empty_body">Tus conversaciones se mostrarán aquí. Toque + en la derecha para comenzar.</string>
+    <string name="room_list_people_empty_body">Tus conversaciones se mostrarán aquí. Toque el + en la esquina inferior derecha para comenzar.</string>
     <string name="room_list_rooms_empty_title">Salas</string>
-    <string name="room_list_rooms_empty_body">Tus salas se mostrarán aquí. Pulsa el botón + abajo a la derecha para buscar o crear salas propias.</string>
+    <string name="room_list_rooms_empty_body">Tus salas se mostrarán aquí. Pulsa el botón + abajo en la esquina inferior derecha para buscar o crear salas propias.</string>
     <string name="title_activity_emoji_reaction_picker">Reacciones</string>
     <string name="action_agree">De acuerdo</string>
     <string name="message_add_reaction">Añadir reacción</string>
@@ -1015,7 +1015,6 @@
         <item quantity="one">Leído por %d usuario</item>
         <item quantity="other">Leído por %d usuarios</item>
     </plurals>
-    <string name="error_attachment">Ha ocurrido un error recuperando el archivo adjunto.</string>
     <string name="attachment_type_file">Archivo</string>
     <string name="attachment_type_contact">Contacto</string>
     <string name="attachment_type_camera">Cámara</string>
@@ -2496,4 +2495,34 @@
     <string name="time_unit_second_short">sec</string>
     <string name="time_unit_minute_short">min</string>
     <string name="time_unit_hour_short">h</string>
+    <string name="live_location_labs_promotion_switch_title">Activar compartir ubicación</string>
+    <string name="live_location_labs_promotion_description">Nota: esta funcionalidad es experimental, y su funcionamiento es todavía provisional. Esto significa que no podrás eliminar el historial de tu ubicación, y usuarios con conocimientos avanzados podrán verlo en esta sala incluso cuando dejes de compartir en tiempo real.</string>
+    <string name="live_location_labs_promotion_title">Compartir ubicación en tiempo real</string>
+    <string name="settings_troubleshoot_test_current_gateway">Puerta de enlace actual: %s</string>
+    <string name="settings_troubleshoot_test_current_gateway_title">Puerta de enlace</string>
+    <string name="settings_troubleshoot_test_current_endpoint_failed">No se pudo encontrar el punto final.</string>
+    <string name="settings_troubleshoot_test_current_endpoint_success">Punto final actual: %s</string>
+    <string name="settings_troubleshoot_test_current_endpoint_title">Punto final</string>
+    <string name="settings_troubleshoot_test_current_distributor">Actualmente usando %s.</string>
+    <string name="settings_troubleshoot_test_current_distributor_title">Método</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="one">Se encontró %d método.</item>
+        <item quantity="other">Se encontraron %d métodos.</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_distributors_fdroid">No se ha encontrado otro método aparte de la sincronización en segundo plano.</string>
+    <string name="settings_troubleshoot_test_distributors_gplay">No se ha encontrado otro método aparte de los servicios de Google Play.</string>
+    <string name="settings_troubleshoot_test_distributors_title">Métodos disponibles</string>
+    <string name="settings_notification_method">Método de notificación</string>
+    <string name="unifiedpush_distributor_background_sync">Sincronización en segundo plano</string>
+    <string name="unifiedpush_distributor_fcm_fallback">Servicios de Google</string>
+    <string name="unifiedpush_getdistributors_dialog_title">Elija como recibir notificaciones</string>
+    <string name="settings_security_pin_code_use_biometrics_error">No se pudo habilitar la identificación biométrica.</string>
+    <string name="auth_biometric_key_invalidated_message">La identificación biométrica fue desactivada debido a que un método de identificación biométrica fue añadido recientemente. Puede activarlo de nuevo en Preferencias.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">Reestablecer método de notificación</string>
+    <string name="push_gateway_item_profile_tag">Etiqueta de perfil:</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">Ha ocurrido un error al registrar el token del punto final al servidor doméstico:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">El destino se ha registrado de forma satisfactoria al servidor doméstico.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_title">Registración de punto final</string>
+    <string name="action_next">Siguiente</string>
 </resources>

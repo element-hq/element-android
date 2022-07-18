@@ -320,9 +320,6 @@ internal class RoomSummaryDataSource @Inject constructor(
             null -> Unit // nop
         }
 
-        queryParams.activeGroupId?.let { activeGroupId ->
-            query.contains(RoomSummaryEntityFields.GROUP_IDS, activeGroupId)
-        }
         return query
     }
 

@@ -1348,7 +1348,6 @@
         <item quantity="one">%d användare läste</item>
         <item quantity="other">%d användare läste</item>
     </plurals>
-    <string name="error_attachment">Ett fel inträffade vid hämtning av bilagan.</string>
     <string name="error_handling_incoming_share">Kunde inte hantera delningsdata</string>
     <string name="uploads_files_subtitle">%1$s vid %2$s</string>
     <string name="report_content_spam">Det är skräppost</string>
@@ -2500,4 +2499,34 @@
     <string name="time_unit_second_short">sek</string>
     <string name="time_unit_minute_short">min</string>
     <string name="time_unit_hour_short">t</string>
+    <string name="action_next">Nästa</string>
+    <string name="live_location_labs_promotion_switch_title">Aktivera platsdelning</string>
+    <string name="live_location_labs_promotion_description">OBS: det här är en experimentell funktion som använder en temporär implementation. Det betyder att du inte kommer kunna radera din platshistorik, och avancerade användare kommer kunna se din platshistorik även efter att du slutar dela din realtidsplats med det här rummet.</string>
+    <string name="live_location_labs_promotion_title">Positionsdelning i realtid</string>
+    <string name="settings_troubleshoot_test_current_gateway">Nuvarande gateway: %s</string>
+    <string name="settings_troubleshoot_test_current_gateway_title">Gateway</string>
+    <string name="settings_troubleshoot_test_current_endpoint_failed">Kan inte hitta ändpunkten.</string>
+    <string name="settings_troubleshoot_test_current_endpoint_success">Nuvarande ändpunkt: %s</string>
+    <string name="settings_troubleshoot_test_current_endpoint_title">Ändpunkt</string>
+    <string name="settings_troubleshoot_test_current_distributor">Använder för närvarande %s.</string>
+    <string name="settings_troubleshoot_test_current_distributor_title">Metod</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="one">Hittade %d metod.</item>
+        <item quantity="other">Hittade %d metoder.</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_distributors_fdroid">Ingen annan metod än bakgrundssynkronisering hittad.</string>
+    <string name="settings_troubleshoot_test_distributors_gplay">Ingen annan metod än Google Play-tjänster hittad.</string>
+    <string name="settings_troubleshoot_test_distributors_title">Tillgängliga metoder</string>
+    <string name="settings_notification_method">Aviseringsmetod</string>
+    <string name="unifiedpush_distributor_background_sync">Bakgrundssynkronisering</string>
+    <string name="unifiedpush_distributor_fcm_fallback">Googletjänster</string>
+    <string name="unifiedpush_getdistributors_dialog_title">Välj hur du vill ta emot aviseringar</string>
+    <string name="settings_security_pin_code_use_biometrics_error">Kunde inte aktivera biometrisk autentisering.</string>
+    <string name="auth_biometric_key_invalidated_message">Biometrisk autentisering inaktiverades eftersom att en ny biometrisk autentiseringsmetod nyligen lades till. Du kan aktivera den igen i inställningarna.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">Återställ aviseringsmetod</string>
+    <string name="push_gateway_item_profile_tag">Profiltagg:</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">Misslyckades att registrera ändpunktstoken med hemservern:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">Lyckades registrera ändpunkten hos hemservern.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_title">Ändpunktsregistrering</string>
 </resources>

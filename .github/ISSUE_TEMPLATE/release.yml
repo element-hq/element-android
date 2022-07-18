@@ -29,7 +29,7 @@ body:
         - [ ] Check the rageshake with the current dev version: https://github.com/matrix-org/element-android-rageshakes/labels/1.2.3-dev
         - [ ] Run the integration test, and especially `UiAllScreensSanityTest.allScreensTest()`
         - [ ] Create an account on matrix.org and do some smoke tests that the sanity test does not cover like: 1-1 call, 1-1 video call, Jitsi call for instance
-        - [ ] Run towncrier: `towncrier --version v1.2.3 --draft` (remove `--draft` do write the file CHANGES.md)
+        - [ ] Run towncrier: `towncrier build --version v1.2.3 --draft` (remove `--draft` do write the file CHANGES.md)
         - [ ] Check that the folder `changelog.d` is empty. It can happen that some remaining files stay here
         - [ ] Check the file CHANGES.md consistency. It's possible to reorder items (most important changes first) or change their section if relevant. Also an opportunity to fix some typo, or rewrite things
         - [ ] Add file for fastlane under ./fastlane/metadata/android/en-US/changelogs

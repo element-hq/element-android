@@ -136,6 +136,7 @@ class RoomMemberProfileFragment @Inject constructor(
                 is RoomMemberProfileViewEvents.OnBanActionSuccess -> Unit
                 is RoomMemberProfileViewEvents.OnIgnoreActionSuccess -> Unit
                 is RoomMemberProfileViewEvents.OnInviteActionSuccess -> Unit
+                RoomMemberProfileViewEvents.GoBack -> handleGoBack()
             }
         }
         setupLongClicks()
@@ -307,6 +308,11 @@ class RoomMemberProfileFragment @Inject constructor(
 
     override fun onOpenDmClicked() {
         viewModel.handle(RoomMemberProfileAction.OpenOrCreateDm(fragmentArgs.userId))
+    }
+
+    private fun handleGoBack() {
+        roomDetailPendingActionStore.data = RoomDetailPendingAction.DoNothing
+        vectorBaseActivity.finish()
     }
 
     override fun onJumpToReadReceiptClicked() {

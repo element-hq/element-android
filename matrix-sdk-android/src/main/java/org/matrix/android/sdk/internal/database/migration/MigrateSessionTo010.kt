@@ -49,7 +49,7 @@ internal class MigrateSessionTo010(realm: DynamicRealm) : RealmMigrator(realm, 1
         realm.schema.get("RoomSummaryEntity")
                 ?.addField(RoomSummaryEntityFields.ROOM_TYPE, String::class.java)
                 ?.addField(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, String::class.java)
-                ?.addField(RoomSummaryEntityFields.GROUP_IDS, String::class.java)
+                ?.addField("groupIds", String::class.java)
                 ?.transform { obj ->
 
                     val creationEvent = realm.where("CurrentStateEventEntity")

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +17,12 @@
 package org.matrix.android.sdk.internal.database.migration
 
 import io.realm.DynamicRealm
-import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
 internal class MigrateSessionTo032(realm: DynamicRealm) : RealmMigrator(realm, 32) {
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.get("RoomSummaryEntity")
-                ?.addRealmListField(RoomSummaryEntityFields.DIRECT_PARENT_NAMES.`$`, String::class.java)
-                ?.transform { it.setString(RoomSummaryEntityFields.DIRECT_PARENT_NAMES.`$`, "") }
+                ?.removeField("groupIds")
     }
 }
