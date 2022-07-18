@@ -611,6 +611,7 @@ class HomeActivity :
     companion object {
         fun newIntent(
                 context: Context,
+                firstStartMainActivity: Boolean,
                 clearNotification: Boolean = false,
                 authenticationDescription: AuthenticationDescription? = null,
                 existingSession: Boolean = false,
@@ -628,7 +629,11 @@ class HomeActivity :
                         putExtra(Mavericks.KEY_ARG, args)
                     }
 
-            return MainActivity.getIntentWithNextIntent(context, intent)
+            return if (firstStartMainActivity) {
+                MainActivity.getIntentWithNextIntent(context, intent)
+            } else {
+                intent
+            }
         }
     }
 

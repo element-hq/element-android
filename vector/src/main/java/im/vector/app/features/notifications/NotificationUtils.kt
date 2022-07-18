@@ -240,7 +240,7 @@ class NotificationUtils @Inject constructor(
     @SuppressLint("NewApi")
     fun buildForegroundServiceNotification(@StringRes subTitleResId: Int, withProgress: Boolean = true): Notification {
         // build the pending intent go to the home screen if this is clicked.
-        val i = HomeActivity.newIntent(context)
+        val i = HomeActivity.newIntent(context, firstStartMainActivity = false)
         i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         val mainIntent = MainActivity.getIntentWithNextIntent(context, i)
         val pi = PendingIntent.getActivity(context, 0, mainIntent, PendingIntentCompat.FLAG_IMMUTABLE)
@@ -346,7 +346,7 @@ class NotificationUtils @Inject constructor(
         )
 
         val answerCallPendingIntent = TaskStackBuilder.create(context)
-                .addNextIntentWithParentStack(HomeActivity.newIntent(context))
+                .addNextIntentWithParentStack(HomeActivity.newIntent(context, firstStartMainActivity = false))
                 .addNextIntent(
                         VectorCallActivity.newIntent(
                                 context = context,
@@ -470,7 +470,7 @@ class NotificationUtils @Inject constructor(
         )
 
         val contentPendingIntent = TaskStackBuilder.create(context)
-                .addNextIntentWithParentStack(HomeActivity.newIntent(context))
+                .addNextIntentWithParentStack(HomeActivity.newIntent(context, firstStartMainActivity = false))
                 .addNextIntent(VectorCallActivity.newIntent(context, call, null))
                 .getPendingIntent(clock.epochMillis().toInt(), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE)
 
@@ -532,7 +532,7 @@ class NotificationUtils @Inject constructor(
                 .setCategory(NotificationCompat.CATEGORY_CALL)
 
         val contentPendingIntent = TaskStackBuilder.create(context)
-                .addNextIntentWithParentStack(HomeActivity.newIntent(context))
+                .addNextIntentWithParentStack(HomeActivity.newIntent(context, firstStartMainActivity = false))
                 .addNextIntent(RoomDetailActivity.newIntent(context, TimelineArgs(callInformation.nativeRoomId), true))
                 .getPendingIntent(clock.epochMillis().toInt(), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE)
 
@@ -767,7 +767,11 @@ class NotificationUtils @Inject constructor(
                             joinIntentPendingIntent
                     )
 
-                    val contentIntent = HomeActivity.newIntent(context, inviteNotificationRoomId = inviteNotifiableEvent.roomId)
+                    val contentIntent = HomeActivity.newIntent(
+                            context,
+                            firstStartMainActivity = true,
+                            inviteNotificationRoomId = inviteNotifiableEvent.roomId
+                    )
                     contentIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                     // pending intent get reused by system, this will mess up the extra params, so put unique info to avoid that
                     contentIntent.data = createIgnoredUri(inviteNotifiableEvent.eventId)
@@ -808,7 +812,7 @@ class NotificationUtils @Inject constructor(
                 .setColor(accentColor)
                 .setAutoCancel(true)
                 .apply {
-                    val contentIntent = HomeActivity.newIntent(context)
+                    val contentIntent = HomeActivity.newIntent(context, firstStartMainActivity = true)
                     contentIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                     // pending intent get reused by system, this will mess up the extra params, so put unique info to avoid that
                     contentIntent.data = createIgnoredUri(simpleNotifiableEvent.eventId)
@@ -837,7 +841,7 @@ class NotificationUtils @Inject constructor(
 
         // Recreate the back stack
         return TaskStackBuilder.create(context)
-                .addNextIntentWithParentStack(HomeActivity.newIntent(context))
+                .addNextIntentWithParentStack(HomeActivity.newIntent(context, firstStartMainActivity = false))
                 .addNextIntent(roomIntentTap)
                 .getPendingIntent(
                         clock.epochMillis().toInt(),
@@ -846,7 +850,7 @@ class NotificationUtils @Inject constructor(
     }
 
     private fun buildOpenHomePendingIntentForSummary(): PendingIntent {
-        val intent = HomeActivity.newIntent(context, clearNotification = true)
+        val intent = HomeActivity.newIntent(context, firstStartMainActivity = false, clearNotification = true)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         intent.data = createIgnoredUri("tapSummary")
         val mainIntent = MainActivity.getIntentWithNextIntent(context, intent)
