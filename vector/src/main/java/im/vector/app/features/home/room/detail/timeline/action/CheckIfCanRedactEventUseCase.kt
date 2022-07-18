@@ -29,10 +29,9 @@ class CheckIfCanRedactEventUseCase @Inject constructor(
         // Only some event types are supported for the moment
         val canRedactEventTypes = listOf(EventType.MESSAGE, EventType.STICKER) +
                 EventType.POLL_START + EventType.STATE_ROOM_BEACON_INFO
-        if (event.root.getClearType() !in canRedactEventTypes) return false
-        // Message sent by the current user can always be redacted
-        if (event.root.senderId == activeSessionHolder.getActiveSession().myUserId) return true
-        // Check permission for messages sent by other users
-        return actionPermissions.canRedact
+
+        return event.root.getClearType() in canRedactEventTypes &&
+                // Message sent by the current user can always be redacted, else check permission for messages sent by other users
+                (event.root.senderId == activeSessionHolder.getActiveSession().myUserId || actionPermissions.canRedact)
     }
 }
