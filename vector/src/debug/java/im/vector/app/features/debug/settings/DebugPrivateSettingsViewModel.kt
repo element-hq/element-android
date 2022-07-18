@@ -47,22 +47,21 @@ class DebugPrivateSettingsViewModel @AssistedInject constructor(
 
     private fun observeVectorOverrides() {
         debugVectorOverrides.forceDialPad.setOnEach {
-            copy(
-                    dialPadVisible = it
-            )
+            copy(dialPadVisible = it)
         }
         debugVectorOverrides.forceLoginFallback.setOnEach {
             copy(forceLoginFallback = it)
         }
+        debugVectorOverrides.newAppLayoutEnabled.setOnEach {
+            copy(newAppLayoutEnabled = it)
+        }
         debugVectorOverrides.forceHomeserverCapabilities.setOnEach {
             val activeDisplayNameOption = BooleanHomeserverCapabilitiesOverride.from(it.canChangeDisplayName)
             val activeAvatarOption = BooleanHomeserverCapabilitiesOverride.from(it.canChangeAvatar)
-            copy(
-                    homeserverCapabilityOverrides = homeserverCapabilityOverrides.copy(
+            copy(homeserverCapabilityOverrides = homeserverCapabilityOverrides.copy(
                             displayName = homeserverCapabilityOverrides.displayName.copy(activeOption = activeDisplayNameOption),
                             avatar = homeserverCapabilityOverrides.avatar.copy(activeOption = activeAvatarOption),
-                    )
-            )
+                    ))
         }
     }
 
@@ -70,6 +69,7 @@ class DebugPrivateSettingsViewModel @AssistedInject constructor(
         when (action) {
             is DebugPrivateSettingsViewActions.SetDialPadVisibility -> handleSetDialPadVisibility(action)
             is DebugPrivateSettingsViewActions.SetForceLoginFallbackEnabled -> handleSetForceLoginFallbackEnabled(action)
+            is DebugPrivateSettingsViewActions.SetNewAppLayoutEnabled -> handleSetNewAppLayoutEnabled(action)
             is SetDisplayNameCapabilityOverride -> handleSetDisplayNameCapabilityOverride(action)
             is SetAvatarCapabilityOverride -> handleSetAvatarCapabilityOverride(action)
         }
@@ -84,6 +84,12 @@ class DebugPrivateSettingsViewModel @AssistedInject constructor(
     private fun handleSetForceLoginFallbackEnabled(action: DebugPrivateSettingsViewActions.SetForceLoginFallbackEnabled) {
         viewModelScope.launch {
             debugVectorOverrides.setForceLoginFallback(action.force)
+        }
+    }
+
+    private fun handleSetNewAppLayoutEnabled(action: DebugPrivateSettingsViewActions.SetNewAppLayoutEnabled) {
+        viewModelScope.launch {
+            debugVectorOverrides.setNewAppLayoutEnabled(action.enabled)
         }
     }
 
