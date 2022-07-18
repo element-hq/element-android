@@ -45,5 +45,7 @@ class RedactLiveLocationShareEventUseCaseTest {
         val event = Event(eventId = "")
 
         redactLiveLocationShareEventUseCase.execute(event = event, room = fakeRoom, reason = A_REASON)
+
+        fakeRoom.locationSharingService().verifyRedactLiveLocationShare(inverse = true, beaconInfoEventId = "", reason = A_REASON)
     }
 }

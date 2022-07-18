@@ -56,7 +56,12 @@ class FakeLocationSharingService : LocationSharingService by mockk() {
         coEvery { redactLiveLocationShare(beaconInfoEventId, reason) } just runs
     }
 
-    fun verifyRedactLiveLocationShare(beaconInfoEventId: String, reason: String?) {
-        coVerify { redactLiveLocationShare(beaconInfoEventId, reason) }
+    /**
+     * @param inverse when true it will check redaction of the live did not happen
+     * @param beaconInfoEventId event id of the beacon related to the live
+     * @param reason reason explaining the redaction
+     */
+    fun verifyRedactLiveLocationShare(inverse: Boolean = false, beaconInfoEventId: String, reason: String?) {
+        coVerify(inverse = inverse) { redactLiveLocationShare(beaconInfoEventId, reason) }
     }
 }
