@@ -45,13 +45,13 @@ internal class DefaultRedactLiveLocationShareTask @Inject constructor(
         val relatedEventIds = getRelatedEventIdsOfLive(params.beaconInfoEventId)
         Timber.d("beacon with id ${params.beaconInfoEventId} has related event ids: ${relatedEventIds.joinToString(", ")}")
 
-        redactEvent(
+        postRedactionWithLocalEcho(
                 eventId = params.beaconInfoEventId,
                 roomId = params.roomId,
                 reason = params.reason
         )
         relatedEventIds.forEach { eventId ->
-            redactEvent(
+            postRedactionWithLocalEcho(
                     eventId = eventId,
                     roomId = params.roomId,
                     reason = params.reason
@@ -69,8 +69,8 @@ internal class DefaultRedactLiveLocationShareTask @Inject constructor(
         }
     }
 
-    private fun redactEvent(eventId: String, roomId: String, reason: String?) {
-        Timber.d("redacting event of id $eventId")
+    private fun postRedactionWithLocalEcho(eventId: String, roomId: String, reason: String?) {
+        Timber.d("posting redaction for event of id $eventId")
         val redactionEcho = localEchoEventFactory.createRedactEvent(roomId, eventId, reason)
         localEchoEventFactory.createLocalEcho(redactionEcho)
         eventSenderProcessor.postRedaction(redactionEcho, reason)
