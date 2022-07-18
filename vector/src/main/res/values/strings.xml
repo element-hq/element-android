@@ -3051,7 +3051,8 @@
     <string name="live_location_sharing_notification_description">Location sharing is in progress</string>
     <string name="labs_enable_live_location">Enable Live Location Sharing</string>
     <string name="labs_enable_live_location_summary">Temporary implementation: locations persist in room history</string>
-    <string name="live_location_bottom_sheet_stop_sharing">Stop sharing</string>
+    <!-- TODO remove key -->
+    <string name="live_location_bottom_sheet_stop_sharing" tools:ignore="UnusedResources">Stop sharing</string>
     <string name="live_location_bottom_sheet_last_updated_at">Updated %1$s ago</string>
 
     <string name="message_bubbles">Show Message bubbles</string>
