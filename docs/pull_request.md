@@ -191,7 +191,7 @@ Examples of prefixes:
 - `[Bugfix]`
 - etc.
 
-Also, it's still possible to add labels to the PRs, such as `A-` or `T-` labels, even if this is not a string requirement. We prefer to spend time to add labels on issues.
+Also, it's still possible to add labels to the PRs, such as `A-` or `T-` labels, even if this is not a strong requirement. We prefer to spend time to add labels on issues.
 
 ##### PR description
 

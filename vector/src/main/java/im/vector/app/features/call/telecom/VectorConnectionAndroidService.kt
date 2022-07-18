@@ -29,7 +29,7 @@ import android.telecom.PhoneAccountHandle
 import android.telecom.StatusHints
 import android.telecom.TelecomManager
 import androidx.annotation.RequiresApi
-import im.vector.app.core.services.CallService
+import im.vector.app.core.services.CallAndroidService
 
 /**
  * No active calls in other apps
@@ -47,7 +47,7 @@ import im.vector.app.core.services.CallService
  *            the parameter followed by a call to the destroy() method if the user rejects the incoming call.
  *</pre>
  */
-@RequiresApi(Build.VERSION_CODES.M) class VectorConnectionService : ConnectionService() {
+@RequiresApi(Build.VERSION_CODES.M) class VectorConnectionAndroidService : ConnectionService() {
 
     /**
      * The telecom subsystem calls this method in response to your app calling placeCall(Uri, Bundle) to create a new outgoing call.
@@ -69,14 +69,14 @@ import im.vector.app.core.services.CallService
         connection.setCallerDisplayName("Element Caller", TelecomManager.PRESENTATION_ALLOWED)
         connection.statusHints = StatusHints("Testing Hint...", null, null)
 
-        bindService(Intent(applicationContext, CallService::class.java), CallServiceConnection(connection), 0)
+        bindService(Intent(applicationContext, CallAndroidService::class.java), CallServiceConnection(connection), 0)
         connection.setInitializing()
         return connection
     }
 
     inner class CallServiceConnection(private val callConnection: CallConnection) : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, binder: IBinder?) {
-            val callSrvBinder = binder as CallService.CallServiceBinder
+            val callSrvBinder = binder as CallAndroidService.CallServiceBinder
             callSrvBinder.getCallService().addConnection(callConnection)
             unbindService(this)
         }

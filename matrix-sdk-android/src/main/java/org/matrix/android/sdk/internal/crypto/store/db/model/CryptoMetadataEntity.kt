@@ -35,6 +35,11 @@ internal open class CryptoMetadataEntity(
         var globalBlacklistUnverifiedDevices: Boolean = false,
         // setting to enable or disable key gossiping
         var globalEnableKeyGossiping: Boolean = true,
+
+        // MSC3061: Sharing room keys for past messages
+        // If set to true key history will be shared to invited users with respect to room setting
+        var enableKeyForwardingOnInvite: Boolean = false,
+
         // The keys backup version currently used. Null means no backup.
         var backupVersion: String? = null,
 

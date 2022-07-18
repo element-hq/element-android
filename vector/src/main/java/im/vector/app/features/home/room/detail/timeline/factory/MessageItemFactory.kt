@@ -244,7 +244,7 @@ class MessageItemFactory @Inject constructor(
                 .eventId(informationData.eventId)
                 .pollQuestion(createPollQuestion(informationData, pollViewState.question, callback))
                 .canVote(pollViewState.canVote)
-                .totalVotesText(pollViewState.totalVotes)
+                .votesStatus(pollViewState.votesStatus)
                 .optionViewStates(pollViewState.optionViewStates)
                 .edited(informationData.hasBeenEdited)
                 .highlighted(highlight)

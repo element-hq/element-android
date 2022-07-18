@@ -33,7 +33,7 @@
         app:layout_constraintTop_toBottomOf="@id/questionTextView" />
 
     <TextView
-        android:id="@+id/optionsTotalVotesTextView"
+        android:id="@+id/optionsVotesStatusTextView"
         style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
