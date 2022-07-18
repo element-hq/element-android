@@ -24,9 +24,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.services.VectorAndroidService
-import im.vector.app.features.redaction.CheckIfEventIsRedactedUseCase
 import im.vector.app.features.location.live.GetLiveLocationShareSummaryUseCase
 import im.vector.app.features.notifications.NotificationUtils
+import im.vector.app.features.redaction.CheckIfEventIsRedactedUseCase
 import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
