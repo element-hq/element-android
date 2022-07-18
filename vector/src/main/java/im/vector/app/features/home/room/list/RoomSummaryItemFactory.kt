@@ -214,11 +214,11 @@ class RoomSummaryItemFactory @Inject constructor(
     }
 
     private fun joinParentNames(roomSummary: RoomSummary) = with(roomSummary) {
-        when (directParentNames.size) {
+        when (val size = directParentNames.size) {
             0 -> null
             1 -> directParentNames.first()
-            2 -> stringProvider.getString(R.string.search_space_two_parents, directParentNames[0], directParentNames[1])
-            else -> stringProvider.getString(R.string.search_space_multiple_parents, directParentNames.first(), directParentNames.size - 1)
+            2 -> stringProvider.getQuantityString(R.plurals.search_space_parents, 1, directParentNames[0], directParentNames[1])
+            else -> stringProvider.getQuantityString(R.plurals.search_space_parents, size - 1, directParentNames[0], directParentNames.size - 1)
         }
     }
 }
