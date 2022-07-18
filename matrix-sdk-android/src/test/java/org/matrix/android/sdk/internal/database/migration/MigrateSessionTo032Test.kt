@@ -17,8 +17,8 @@
 package org.matrix.android.sdk.internal.database.migration
 
 import org.junit.Test
-import org.matrix.android.sdk.test.fakes.FakeDynamicRealm
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
+import org.matrix.android.sdk.test.fakes.FakeDynamicRealm
 
 internal class MigrateSessionTo032Test {
 
