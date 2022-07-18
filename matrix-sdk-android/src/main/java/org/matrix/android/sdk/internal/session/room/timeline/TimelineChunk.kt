@@ -31,6 +31,7 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.UnsignedData
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
+import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
@@ -457,7 +458,7 @@ internal class TimelineChunk(
                         replyText,
                         false,
                         showInThread = false
-                )
+                ).toContent()
                 val event = currentTimelineEvent.root
                 Event(
                         roomId = event.roomId,
@@ -466,8 +467,15 @@ internal class TimelineChunk(
                         eventId = currentTimelineEvent.eventId,
                         type = EventType.MESSAGE,
                         content = newContent,
-                        unsignedData = UnsignedData(age = null, transactionId = currentTimelineEvent.eventId)
-                )
+                        unsignedData = UnsignedData(age = null, transactionId = currentTimelineEvent.eventId),
+                ).apply {
+                    mxDecryptionResult = event.mxDecryptionResult
+                    mCryptoError = event.mCryptoError
+                    mCryptoErrorReason = event.mCryptoErrorReason
+                    sendState = event.sendState
+                    ageLocalTs = event.ageLocalTs
+                    threadDetails = event.threadDetails
+                }
             }
         }
     }

@@ -579,7 +579,7 @@ internal class LocalEchoEventFactory @Inject constructor(
             autoMarkdown: Boolean,
             rootThreadEventId: String? = null,
             showInThread: Boolean
-    ): Content? {
+    ): MessageContent? {
         // Fallbacks and event representation
         // TODO Add error/warning logs when any of this is null
         val permalink = permalinkFactory.createPermalink(eventReplied.root, false) ?: return null
@@ -615,7 +615,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                         rootThreadEventId = rootThreadEventId,
                         showInThread = showInThread
                 )
-        ).toContent()
+        )
     }
 
     /**
@@ -628,43 +628,8 @@ internal class LocalEchoEventFactory @Inject constructor(
             autoMarkdown: Boolean,
             rootThreadEventId: String? = null,
             showInThread: Boolean,
-    ): Event? {
-        // Fallbacks and event representation
-        // TODO Add error/warning logs when any of this is null
-        val permalink = permalinkFactory.createPermalink(eventReplied.root, false) ?: return null
-        val userId = eventReplied.root.senderId ?: return null
-        val userLink = permalinkFactory.createPermalink(userId, false) ?: return null
-
-        val body = bodyForReply(eventReplied.getLastMessageContent(), eventReplied.isReply())
-
-        // As we always supply formatted body for replies we should force the MarkdownParser to produce html.
-        val replyTextFormatted = markdownParser.parse(replyText, force = true, advanced = autoMarkdown).takeFormatted()
-        // Body of the original message may not have formatted version, so may also have to convert to html.
-        val bodyFormatted = body.formattedText ?: markdownParser.parse(body.text, force = true, advanced = autoMarkdown).takeFormatted()
-        val replyFormatted = buildFormattedReply(
-                permalink,
-                userLink,
-                userId,
-                bodyFormatted,
-                replyTextFormatted
-        )
-        //
-        // > <@alice:example.org> This is the original body
-        //
-        val replyFallback = buildReplyFallback(body, userId, replyText.toString())
-
-        val eventId = eventReplied.root.eventId ?: return null
-        val content =  MessageTextContent(
-                msgType = MessageType.MSGTYPE_TEXT,
-                format = MessageFormat.FORMAT_MATRIX_HTML,
-                body = replyFallback,
-                formattedBody = replyFormatted,
-                relatesTo = generateReplyRelationContent(
-                        eventId = eventId,
-                        rootThreadEventId = rootThreadEventId,
-                        showInThread = showInThread
-                )
-        )
+    ): Event {
+        val content = createReplyTextContent(eventReplied, replyText, autoMarkdown, rootThreadEventId, showInThread)
         return createMessageEvent(roomId, content)
     }
 
