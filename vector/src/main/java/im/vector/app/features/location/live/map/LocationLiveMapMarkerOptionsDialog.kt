@@ -17,17 +17,14 @@
 package im.vector.app.features.location.live.map
 
 import android.content.Context
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
-import androidx.core.content.ContextCompat
 import im.vector.app.R
 import im.vector.app.databinding.ViewLiveLocationMarkerPopupBinding
 
 class LocationLiveMapMarkerOptionsDialog(
         context: Context,
-        inflater: LayoutInflater,
 ) : PopupWindow() {
 
     interface Callback {
@@ -39,7 +36,7 @@ class LocationLiveMapMarkerOptionsDialog(
     var callback: Callback? = null
 
     init {
-        contentView = inflater.inflate(R.layout.view_live_location_marker_popup, null, false)
+        contentView = View.inflate(context, R.layout.view_live_location_marker_popup, null)
 
         views = ViewLiveLocationMarkerPopupBinding.bind(contentView)
 
@@ -48,8 +45,6 @@ class LocationLiveMapMarkerOptionsDialog(
         inputMethodMode = INPUT_METHOD_NOT_NEEDED
         isFocusable = true
         isTouchable = true
-        elevation = 8f
-        setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.bg_live_location_marker_popup))
 
         contentView.setOnClickListener {
             callback?.onShareLocationClicked()
@@ -58,6 +53,7 @@ class LocationLiveMapMarkerOptionsDialog(
 
     fun show(anchorView: View) {
         contentView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
+        // By default the left side of the dialog is aligned with the pin. We need shift it to the left to make it's center aligned with the pin.
         showAsDropDown(anchorView, -contentView.measuredWidth / 2, 0)
     }
 }

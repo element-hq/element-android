@@ -143,7 +143,7 @@ class LocationLiveMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
                 y = (screenLocation?.y ?: 0f) - views.liveLocationPopupAnchor.height
             }
 
-            LocationLiveMapMarkerOptionsDialog(requireContext(), layoutInflater)
+            LocationLiveMapMarkerOptionsDialog(requireContext())
                     .apply {
                         callback = object : LocationLiveMapMarkerOptionsDialog.Callback {
                             override fun onShareLocationClicked() {
