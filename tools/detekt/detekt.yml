@@ -23,6 +23,8 @@ style:
     active: false
   ProtectedMemberInFinalClass:
     active: false
+  UseCheckOrError:
+    active: false
 
 empty-blocks:
   EmptyFunctionBlock:
