@@ -29,6 +29,8 @@ import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
@@ -65,6 +67,9 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
     var callback: Callback? = null
     private val jobs = mutableListOf<Job>()
     private var startInProgress = false
+
+    private val _roomIdsOfActiveLives = MutableSharedFlow<Set<String>>(replay = 1)
+    val roomIdsOfActiveLives = _roomIdsOfActiveLives.asSharedFlow()
 
     override fun onCreate() {
         super.onCreate()
@@ -193,13 +198,13 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
     private fun addRoomArgs(beaconEventId: String, roomArgs: RoomArgs) {
         Timber.i("adding roomArgs for beaconEventId: $beaconEventId")
         roomArgsMap[beaconEventId] = roomArgs
-        callback?.onRoomIdsUpdate(getRoomIdsOfActiveLives())
+        launchWithActiveSession { _roomIdsOfActiveLives.emit(getRoomIdsOfActiveLives()) }
     }
 
     private fun removeRoomArgs(beaconEventId: String) {
         Timber.i("removing roomArgs for beaconEventId: $beaconEventId")
         roomArgsMap.remove(beaconEventId)
-        callback?.onRoomIdsUpdate(getRoomIdsOfActiveLives())
+        launchWithActiveSession { _roomIdsOfActiveLives.emit(getRoomIdsOfActiveLives()) }
     }
 
     private fun listenForLiveSummaryChanges(roomId: String, beaconEventId: String) {
@@ -235,7 +240,6 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
     }
 
     interface Callback {
-        fun onRoomIdsUpdate(roomIds: Set<String>)
         fun onServiceError(error: Throwable)
     }
 
