@@ -280,10 +280,10 @@ android {
         }
 
         nightly {
+            initWith release
             applicationIdSuffix ".nightly"
             versionNameSuffix "-nightly"
 
-            initWith release
             // Just override the background color of the launcher icon for the nightly build.
             resValue "color", "launcher_background", "#07007E"
 
