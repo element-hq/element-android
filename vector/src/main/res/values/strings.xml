@@ -1608,7 +1608,7 @@
     <string name="message_view_reaction">View Reactions</string>
     <string name="reactions">Reactions</string>
 
-    <string name="event_redacted">Message deleted</string>
+    <string name="event_redacted">Message removed</string>
     <string name="settings_show_redacted">Show removed messages</string>
     <string name="settings_show_redacted_summary">Show a placeholder for removed messages</string>
     <string name="event_redacted_by_user_reason">Event deleted by user</string>
@@ -3166,4 +3166,8 @@
     <string name="live_location_labs_promotion_description">Please note: this is a labs feature using a temporary implementation. This means you will not be able to delete your location history, and advanced users will be able to see your location history even after you stop sharing your live location with this room.</string>
     <string name="live_location_labs_promotion_switch_title">Enable location sharing</string>
 
+    <plurals name="room_removed_messages">
+        <item quantity="one">%d message removed</item>
+        <item quantity="other">%d messages removed</item>
+    </plurals>
 </resources>

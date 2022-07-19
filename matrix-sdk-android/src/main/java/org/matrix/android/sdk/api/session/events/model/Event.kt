@@ -202,7 +202,7 @@ data class Event(
      * It will return a decrypted text message or an empty string otherwise.
      */
     fun getDecryptedTextSummary(): String? {
-        if (isRedacted()) return "Message Deleted"
+        if (isRedacted()) return "Message removed"
         val text = getDecryptedValue() ?: run {
             if (isPoll()) {
                 return getPollQuestion() ?: "created a poll."

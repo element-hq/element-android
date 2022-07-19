@@ -54,11 +54,6 @@ object TimelineDisplayableEvents {
     ) + EventType.POLL_START + EventType.STATE_ROOM_BEACON_INFO
 }
 
-fun TimelineEvent.canBeMerged(): Boolean {
-    return root.getClearType() == EventType.STATE_ROOM_MEMBER ||
-            root.getClearType() == EventType.STATE_ROOM_SERVER_ACL
-}
-
 fun TimelineEvent.isRoomConfiguration(roomCreatorUserId: String?): Boolean {
     return root.isStateEvent() && when (root.getClearType()) {
         EventType.STATE_ROOM_GUEST_ACCESS,
