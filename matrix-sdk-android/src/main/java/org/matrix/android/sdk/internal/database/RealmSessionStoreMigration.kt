@@ -67,7 +67,7 @@ internal class RealmSessionStoreMigration @Inject constructor(
     override fun equals(other: Any?) = other is RealmSessionStoreMigration
     override fun hashCode() = 1000
 
-    override fun doMigrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
+    override fun doMigrate(realm: DynamicRealm, oldVersion: Long) {
         if (oldVersion < 1) MigrateSessionTo001(realm).perform()
         if (oldVersion < 2) MigrateSessionTo002(realm).perform()
         if (oldVersion < 3) MigrateSessionTo003(realm).perform()
