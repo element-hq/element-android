@@ -175,9 +175,7 @@ class LocationSharingFragment @Inject constructor(
         MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(R.string.live_location_not_enough_permission_dialog_title)
                 .setMessage(R.string.live_location_not_enough_permission_dialog_description)
-                .setPositiveButton(R.string.ok) { dialogInterface, _ ->
-                    dialogInterface.dismiss()
-                }
+                .setPositiveButton(R.string.ok, null)
                 .show()
     }
 

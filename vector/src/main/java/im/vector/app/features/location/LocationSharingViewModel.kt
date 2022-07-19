@@ -75,22 +75,21 @@ class LocationSharingViewModel @AssistedInject constructor(
         setUserItem()
         updatePin()
         compareTargetAndUserLocation()
-        checkPowerLevelsForLiveLocationSharing()
+        observePowerLevelsForLiveLocationSharing()
     }
 
-    private fun checkPowerLevelsForLiveLocationSharing() {
+    private fun observePowerLevelsForLiveLocationSharing() {
         PowerLevelsFlowFactory(room).createFlow()
                 .distinctUntilChanged()
-                .onEach {
+                .setOnEach {
                     val powerLevelsHelper = PowerLevelsHelper(it)
                     val canShareLiveLocation = EventType.STATE_ROOM_BEACON_INFO
-                            .map { beaconInfoType ->
+                            .all { beaconInfoType ->
                                 powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, beaconInfoType)
                             }
-                            .all { isUserAllowed -> isUserAllowed }
 
-                    setState { copy(canShareLiveLocation = canShareLiveLocation) }
-                }.launchIn(viewModelScope)
+                    copy(canShareLiveLocation = canShareLiveLocation)
+                }
     }
 
     private fun initLocationTracking() {
