@@ -806,7 +806,6 @@ internal class MXOlmDevice @Inject constructor(
             }
             replayAttackMap[messageIndexKey] = eventId
         }
-        inboundGroupSessionStore.storeInBoundGroupSession(sessionHolder, sessionId, senderKey)
         val payload = try {
             val adapter = MoshiProvider.providesMoshi().adapter<JsonDict>(JSON_DICT_PARAMETERIZED_TYPE)
             val payloadString = convertFromUTF8(decryptResult.mDecryptedMessage)
