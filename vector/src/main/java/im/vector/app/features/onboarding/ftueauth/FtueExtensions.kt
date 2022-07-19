@@ -53,6 +53,6 @@ fun observeContentChangesAndResetErrors(username: TextInputLayout, password: Tex
 }
 
 fun ThemeProvider.ftueBreakerBackground() = when (isLightTheme()) {
-    true  -> R.drawable.bg_gradient_ftue_breaker
+    true -> R.drawable.bg_gradient_ftue_breaker
     false -> R.drawable.bg_color_background
 }
