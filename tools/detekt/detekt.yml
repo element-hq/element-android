@@ -43,6 +43,8 @@ exceptions:
     active: false
   TooGenericExceptionThrown:
     active: false
+  InstanceOfCheckForException:
+    active: false
 
 complexity:
   TooManyFunctions:
