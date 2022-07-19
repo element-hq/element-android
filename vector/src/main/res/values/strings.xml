@@ -1608,7 +1608,7 @@
     <string name="message_view_reaction">View Reactions</string>
     <string name="reactions">Reactions</string>
 
-    <string name="event_redacted">Message deleted</string>
+    <string name="event_redacted">Message removed</string>
     <string name="settings_show_redacted">Show removed messages</string>
     <string name="settings_show_redacted_summary">Show a placeholder for removed messages</string>
     <string name="event_redacted_by_user_reason">Event deleted by user</string>
