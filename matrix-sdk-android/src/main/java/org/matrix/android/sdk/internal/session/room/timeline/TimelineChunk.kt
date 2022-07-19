@@ -468,7 +468,11 @@ internal class TimelineChunk(
                         type = EventType.MESSAGE,
                         content = newContent,
                         unsignedData = UnsignedData(age = null, transactionId = currentTimelineEvent.eventId),
-                )
+                ).apply {
+                    this.sendState = event.sendState
+                    this.ageLocalTs = event.ageLocalTs
+                    this.threadDetails = event.threadDetails
+                }
             }
         }
     }
