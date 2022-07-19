@@ -16,10 +16,7 @@
 
 package im.vector.app.features.onboarding
 
-import im.vector.app.R
 import im.vector.app.core.extensions.containsAllItems
-import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.utils.ensureTrailingSlash
 import im.vector.app.features.login.LoginMode
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
@@ -29,7 +26,6 @@ import javax.inject.Inject
 
 class StartAuthenticationFlowUseCase @Inject constructor(
         private val authenticationService: AuthenticationService,
-        private val stringProvider: StringProvider
 ) {
 
     suspend fun execute(config: HomeServerConnectionConfig): StartAuthenticationResult {
@@ -46,18 +42,12 @@ class StartAuthenticationFlowUseCase @Inject constructor(
             config: HomeServerConnectionConfig,
             preferredLoginMode: LoginMode
     ) = SelectedHomeserverState(
-            description = when (config.homeServerUri.toString()) {
-                matrixOrgUrl() -> stringProvider.getString(R.string.ftue_auth_create_account_matrix_dot_org_server_description)
-                else -> null
-            },
             userFacingUrl = config.homeServerUri.toString(),
             upstreamUrl = authFlow.homeServerUrl,
             preferredLoginMode = preferredLoginMode,
             supportedLoginTypes = authFlow.supportedLoginTypes,
             isLogoutDevicesSupported = authFlow.isLogoutDevicesSupported
     )
-
-    private fun matrixOrgUrl() = stringProvider.getString(R.string.matrix_org_server_url).ensureTrailingSlash()
 
     private fun LoginFlowResult.findPreferredLoginMode() = when {
         supportedLoginTypes.containsAllItems(LoginFlowTypes.SSO, LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(ssoIdentityProviders)

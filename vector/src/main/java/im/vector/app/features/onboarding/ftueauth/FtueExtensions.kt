@@ -16,16 +16,10 @@
 
 package im.vector.app.features.onboarding.ftueauth
 
-import android.widget.Button
-import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
-import im.vector.app.core.extensions.hasContentFlow
 import im.vector.app.features.login.SignMode
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.themes.ThemeProvider
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.onEach
 
 fun SignMode.toAuthenticateAction(login: String, password: String, initialDeviceName: String): OnboardingAction.AuthenticateAction {
     return when (this) {
@@ -33,22 +27,6 @@ fun SignMode.toAuthenticateAction(login: String, password: String, initialDevice
         SignMode.SignUp -> OnboardingAction.AuthenticateAction.Register(username = login, password, initialDeviceName)
         SignMode.SignIn -> OnboardingAction.AuthenticateAction.Login(username = login, password, initialDeviceName)
         SignMode.SignInWithMatrixId -> OnboardingAction.AuthenticateAction.LoginDirect(matrixId = login, password, initialDeviceName)
-    }
-}
-
-/**
- * A flow to monitor content changes from both username/id and password fields,
- * clearing errors and enabling/disabling the submission button on non empty content changes.
- */
-fun observeContentChangesAndResetErrors(username: TextInputLayout, password: TextInputLayout, submit: Button): Flow<*> {
-    return combine(
-            username.hasContentFlow { it.trim() },
-            password.hasContentFlow(),
-            transform = { usernameHasContent, passwordHasContent -> usernameHasContent && passwordHasContent }
-    ).onEach {
-        username.error = null
-        password.error = null
-        submit.isEnabled = it
     }
 }
 
