@@ -21,6 +21,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -48,6 +49,7 @@ import im.vector.app.features.session.VectorSessionStore
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.signout.hard.SignedOutActivity
 import im.vector.app.features.start.StartAppAction
+import im.vector.app.features.start.StartAppAndroidService
 import im.vector.app.features.start.StartAppViewEvent
 import im.vector.app.features.start.StartAppViewModel
 import im.vector.app.features.start.StartAppViewState
@@ -144,6 +146,11 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
             views.status.setText(R.string.updating_your_data)
         }
         views.status.isVisible = state.duration > 0
+        if (state.duration == 1L && startAppViewModel.shouldStartApp()) {
+            // Start foreground service, because the operation may take a while
+            val intent = Intent(this, StartAppAndroidService::class.java)
+            ContextCompat.startForegroundService(this, intent)
+        }
     }
 
     private fun handleViewEvents(event: StartAppViewEvent) {

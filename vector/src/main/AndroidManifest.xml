@@ -381,6 +381,11 @@
             android:foregroundServiceType="location" />
 
         <service
+            android:name=".features.start.StartAppAndroidService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+
+        <service
             android:name=".features.call.webrtc.ScreenCaptureAndroidService"
             android:exported="false"
             android:foregroundServiceType="mediaProjection"

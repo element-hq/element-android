@@ -568,6 +568,19 @@ class NotificationUtils @Inject constructor(
                 .build()
     }
 
+    /**
+     * Creates a notification that indicates the application is initializing.
+     */
+    fun buildStartAppNotification(): Notification {
+        return NotificationCompat.Builder(context, LISTENING_FOR_EVENTS_NOTIFICATION_CHANNEL_ID)
+                .setContentTitle(stringProvider.getString(R.string.updating_your_data))
+                .setSmallIcon(R.drawable.sync)
+                .setColor(ThemeUtils.getColor(context, android.R.attr.colorPrimary))
+                .setCategory(NotificationCompat.CATEGORY_SERVICE)
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .build()
+    }
+
     fun buildDownloadFileNotification(uri: Uri, fileName: String, mimeType: String): Notification {
         return NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
                 .setGroup(stringProvider.getString(R.string.app_name))
