@@ -27,8 +27,10 @@ import im.vector.app.core.extensions.autofillPhoneNumber
 import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.editText
 import im.vector.app.core.extensions.setOnImeDoneListener
+import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentFtuePhoneInputBinding
 import im.vector.app.features.onboarding.OnboardingAction
+import im.vector.app.features.onboarding.OnboardingViewState
 import im.vector.app.features.onboarding.RegisterAction
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -75,6 +77,10 @@ class FtueAuthPhoneEntryFragment @Inject constructor(
                 viewModel.handle(OnboardingAction.PostRegisterAction(RegisterAction.AddThreePid(RegisterThreePid.Msisdn(phoneNumber, countryCode))))
             }
         }
+    }
+
+    override fun updateWithState(state: OnboardingViewState) {
+        views.phoneEntryHeaderSubtitle.text = getString(R.string.ftue_auth_phone_subtitle, state.selectedHomeserver.userFacingUrl.toReducedUrl())
     }
 
     override fun onError(throwable: Throwable) {
