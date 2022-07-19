@@ -117,7 +117,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
                             it.fold(true) { prev, dev -> prev && (dev.trustLevel?.crossSigningVerified == true) }
                     )
                 }
-                .execute { it ->
+                .execute {
                     copy(
                             allDevicesAreTrusted = it()?.first == true,
                             allDevicesAreCrossSignedTrusted = it()?.second == true
