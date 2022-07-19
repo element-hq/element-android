@@ -16,19 +16,26 @@
 
 package org.matrix.android.sdk.test.fakes
 
-import io.mockk.every
+import io.mockk.coEvery
 import io.mockk.mockk
-import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.util.Cancelable
-import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
+import io.mockk.mockkStatic
+import io.mockk.slot
+import io.realm.Realm
+import io.realm.RealmConfiguration
+import org.matrix.android.sdk.internal.database.awaitTransaction
 
-internal class FakeEventSenderProcessor : EventSenderProcessor by mockk() {
+internal class FakeRealmConfiguration {
 
-    fun givenPostEventReturns(event: Event, cancelable: Cancelable) {
-        every { postEvent(event) } returns cancelable
+    init {
+        mockkStatic("org.matrix.android.sdk.internal.database.AsyncTransactionKt")
     }
 
-    fun givenPostRedaction(event: Event, reason: String?) {
-        every { postRedaction(event, reason) } returns mockk()
+    val instance = mockk<RealmConfiguration>()
+
+    fun <T> givenAwaitTransaction(realm: Realm) {
+        val transaction = slot<suspend (Realm) -> T>()
+        coEvery { awaitTransaction(instance, capture(transaction)) } coAnswers {
+            secondArg<suspend (Realm) -> T>().invoke(realm)
+        }
     }
 }

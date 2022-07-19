@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,16 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.test.fakes
+package im.vector.app.test.fakes
 
-import io.mockk.every
+import io.mockk.coEvery
 import io.mockk.mockk
+import org.matrix.android.sdk.api.session.events.EventService
 import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.util.Cancelable
-import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
 
-internal class FakeEventSenderProcessor : EventSenderProcessor by mockk() {
+class FakeEventService : EventService by mockk() {
 
-    fun givenPostEventReturns(event: Event, cancelable: Cancelable) {
-        every { postEvent(event) } returns cancelable
-    }
-
-    fun givenPostRedaction(event: Event, reason: String?) {
-        every { postRedaction(event, reason) } returns mockk()
+    fun givenGetEventReturns(event: Event) {
+        coEvery { getEvent(any(), any()) } returns event
     }
 }

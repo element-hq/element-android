@@ -371,6 +371,8 @@ fun Event.isPoll(): Boolean = getClearType() in EventType.POLL_START || getClear
 
 fun Event.isSticker(): Boolean = getClearType() == EventType.STICKER
 
+fun Event.isLiveLocation(): Boolean = getClearType() in EventType.STATE_ROOM_BEACON_INFO
+
 fun Event.getRelationContent(): RelationDefaultContent? {
     return if (isEncrypted()) {
         content.toModel<EncryptedEventContent>()?.relatesTo
