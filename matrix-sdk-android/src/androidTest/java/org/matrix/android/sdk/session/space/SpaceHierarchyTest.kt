@@ -610,4 +610,82 @@ class SpaceHierarchyTest : InstrumentedTest {
             }
         }
     }
+
+    @Test
+    fun testDirectParentNames() = runSessionTest(context()) { commonTestHelper ->
+        val aliceSession = commonTestHelper.createAccount("Alice", SessionTestParams(true))
+
+        val spaceAInfo = createPublicSpace(
+                commonTestHelper,
+                aliceSession, "SpaceA",
+                listOf(
+                        Triple("A1", true /*auto-join*/, true/*canonical*/),
+                        Triple("A2", true, true)
+                )
+        )
+
+        val spaceBInfo = createPublicSpace(
+                commonTestHelper,
+                aliceSession, "SpaceB",
+                listOf(
+                        Triple("B1", true /*auto-join*/, true/*canonical*/),
+                        Triple("B2", true, true),
+                        Triple("B3", true, true)
+                )
+        )
+
+        // also add B1 in space A
+
+        val B1roomId = spaceBInfo.roomIds.first()
+        val viaServers = listOf(aliceSession.sessionParams.homeServerHost ?: "")
+
+        val spaceA = aliceSession.spaceService().getSpace(spaceAInfo.spaceId)
+        val spaceB = aliceSession.spaceService().getSpace(spaceBInfo.spaceId)
+        commonTestHelper.runBlockingTest {
+            spaceA!!.addChildren(B1roomId, viaServers, null, true)
+        }
+
+        commonTestHelper.waitWithLatch { latch ->
+            commonTestHelper.retryPeriodicallyWithLatch(latch) {
+                val roomSummary = aliceSession.getRoomSummary(B1roomId)
+                roomSummary != null &&
+                        roomSummary.directParentNames.size == 2 &&
+                        roomSummary.directParentNames.contains(spaceA!!.spaceSummary()!!.name) &&
+                        roomSummary.directParentNames.contains(spaceB!!.spaceSummary()!!.name)
+            }
+        }
+
+        commonTestHelper.waitWithLatch { latch ->
+            commonTestHelper.retryPeriodicallyWithLatch(latch) {
+                val roomSummary = aliceSession.getRoomSummary(spaceAInfo.roomIds.first())
+                roomSummary != null &&
+                        roomSummary.directParentNames.size == 1 &&
+                        roomSummary.directParentNames.contains(spaceA!!.spaceSummary()!!.name)
+            }
+        }
+
+        val newAName = "FooBar"
+        commonTestHelper.runBlockingTest {
+            spaceA!!.asRoom().stateService().updateName(newAName)
+        }
+
+        commonTestHelper.waitWithLatch { latch ->
+            commonTestHelper.retryPeriodicallyWithLatch(latch) {
+                val roomSummary = aliceSession.getRoomSummary(B1roomId)
+                roomSummary != null &&
+                        roomSummary.directParentNames.size == 2 &&
+                        roomSummary.directParentNames.contains(newAName) &&
+                        roomSummary.directParentNames.contains(spaceB!!.spaceSummary()!!.name)
+            }
+        }
+
+        commonTestHelper.waitWithLatch { latch ->
+            commonTestHelper.retryPeriodicallyWithLatch(latch) {
+                val roomSummary = aliceSession.getRoomSummary(spaceAInfo.roomIds.first())
+                roomSummary != null &&
+                        roomSummary.directParentNames.size == 1 &&
+                        roomSummary.directParentNames.contains(newAName)
+            }
+        }
+    }
 }

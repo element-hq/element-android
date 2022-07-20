@@ -223,6 +223,7 @@ internal class RoomSummaryUpdater @Inject constructor(
                     .sort(RoomSummaryEntityFields.ROOM_ID)
                     .findAll().map {
                         it.flattenParentIds = null
+                        it.directParentNames.clear()
                         it to emptyList<RoomSummaryEntity>().toMutableSet()
                     }
                     .toMap()
@@ -350,39 +351,29 @@ internal class RoomSummaryUpdater @Inject constructor(
             }
 
             val acyclicGraph = graph.withoutEdges(backEdges)
-//            Timber.v("## SPACES: acyclicGraph $acyclicGraph")
             val flattenSpaceParents = acyclicGraph.flattenDestination().map {
                 it.key.name to it.value.map { it.name }
             }.toMap()
-//            Timber.v("## SPACES: flattenSpaceParents ${flattenSpaceParents.map { it.key.name to it.value.map { it.name } }.joinToString("\n") {
-//                it.first + ": [" + it.second.joinToString(",") + "]"
-//            }}")
-
-//            Timber.v("## SPACES: lookup map ${lookupMap.map { it.key.name to it.value.map { it.name } }.toMap()}")
 
             lookupMap.entries
                     .filter { it.key.roomType == RoomType.SPACE && it.key.membership == Membership.JOIN }
                     .forEach { entry ->
                         val parent = RoomSummaryEntity.where(realm, entry.key.roomId).findFirst()
                         if (parent != null) {
-//                            Timber.v("## SPACES: check hierarchy of ${parent.name} id ${parent.roomId}")
-//                            Timber.v("## SPACES: flat known parents of ${parent.name} are ${flattenSpaceParents[parent.roomId]}")
                             val flattenParentsIds = (flattenSpaceParents[parent.roomId] ?: emptyList()) + listOf(parent.roomId)
-//                            Timber.v("## SPACES: flatten known parents of children of ${parent.name} are ${flattenParentsIds}")
+
                             entry.value.forEach { child ->
                                 RoomSummaryEntity.where(realm, child.roomId).findFirst()?.let { childSum ->
+                                    childSum.directParentNames.add(parent.displayName())
 
-//                                    Timber.w("## SPACES: ${childSum.name} is ${childSum.roomId} fc: ${childSum.flattenParentIds}")
-//                                    var allParents = childSum.flattenParentIds ?: ""
-                                    if (childSum.flattenParentIds == null) childSum.flattenParentIds = ""
+                                    if (childSum.flattenParentIds == null) {
+                                        childSum.flattenParentIds = ""
+                                    }
                                     flattenParentsIds.forEach {
                                         if (childSum.flattenParentIds?.contains(it) != true) {
                                             childSum.flattenParentIds += "|$it"
                                         }
                                     }
-//                                    childSum.flattenParentIds = "$allParents|"
-
-//                                    Timber.v("## SPACES: flatten of ${childSum.name} is ${childSum.flattenParentIds}")
                                 }
                             }
                         }

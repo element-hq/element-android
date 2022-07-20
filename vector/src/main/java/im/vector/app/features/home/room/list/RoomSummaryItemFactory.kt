@@ -207,9 +207,18 @@ class RoomSummaryItemFactory @Inject constructor(
 
     private fun getSearchResultSubtitle(roomSummary: RoomSummary): String {
         val userId = roomSummary.directUserId
-        val spaceName = roomSummary.flattenParents.lastOrNull()?.name
+        val directParent = joinParentNames(roomSummary)
         val canonicalAlias = roomSummary.canonicalAlias
 
-        return (userId ?: spaceName ?: canonicalAlias).orEmpty()
+        return (userId ?: directParent ?: canonicalAlias).orEmpty()
+    }
+
+    private fun joinParentNames(roomSummary: RoomSummary) = with(roomSummary) {
+        when (val size = directParentNames.size) {
+            0 -> null
+            1 -> directParentNames.first()
+            2 -> stringProvider.getString(R.string.search_space_two_parents, directParentNames[0], directParentNames[1])
+            else -> stringProvider.getQuantityString(R.plurals.search_space_multiple_parents, size - 1, directParentNames[0], size - 1)
+        }
     }
 }
