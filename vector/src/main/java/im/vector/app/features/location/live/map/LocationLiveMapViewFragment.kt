@@ -45,6 +45,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.openLocation
 import im.vector.app.databinding.FragmentLocationLiveMapViewBinding
+import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.UrlMapProvider
 import im.vector.app.features.location.zoomToBounds
 import im.vector.app.features.location.zoomToLocation
@@ -137,11 +138,9 @@ class LocationLiveMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
 
     private fun onSymbolClicked(symbol: Symbol?) {
         symbol?.let {
-            val screenLocation = mapboxMap?.get()?.projection?.toScreenLocation(it.latLng)
-            views.liveLocationPopupAnchor.apply {
-                x = screenLocation?.x ?: 0f
-                y = (screenLocation?.y ?: 0f) - views.liveLocationPopupAnchor.height
-            }
+            mapboxMap
+                    ?.get()
+                    ?.zoomToLocation(LocationData(it.latLng.latitude, it.latLng.longitude, null), preserveCurrentZoomLevel = false)
 
             LocationLiveMapMarkerOptionsDialog(requireContext())
                     .apply {
