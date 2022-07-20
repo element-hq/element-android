@@ -31,7 +31,7 @@ import javax.inject.Inject
 
 class FontScaleSettingFragment @Inject constructor(
         private val fontListController: FontScaleSettingController
-)  : VectorBaseFragment<FragmentSettingsFontScalingBinding>(), FontScaleSettingController.Callback {
+) : VectorBaseFragment<FragmentSettingsFontScalingBinding>(), FontScaleSettingController.Callback {
 
     private val viewModel: FontScaleSettingViewModel by fragmentViewModel()
 
