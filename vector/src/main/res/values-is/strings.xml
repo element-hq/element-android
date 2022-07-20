@@ -764,7 +764,7 @@
     <string name="upgrade_security">Uppfærsla dulritunar tiltæk</string>
     <string name="command_description_plain">Sendir skilaboð sem óbreyttur texti án þess að túlka það sem markdown</string>
     <string name="encryption_not_enabled">Dulritun ekki virk</string>
-    <string name="direct_room_encryption_enabled_tile_description">Skilaboð í þessari spjallrás eru enda-í-enda dulrituð.</string>
+    <string name="direct_room_encryption_enabled_tile_description">Skilaboð í þessu spjalli eru enda-í-enda dulrituð.</string>
     <string name="settings_hs_admin_e2e_disabled">Kerfisstjóri netþjónsins þíns hefur lokað á sjálfvirka dulritun í einkaspjallrásum og beinum skilaboðum.</string>
     <string name="room_profile_section_more_settings">Stillingar spjallrásar</string>
     <string name="room_profile_not_encrypted_subtitle">Skilaboð í þessari spjallrás eru ekki enda-í-enda dulrituð.</string>
@@ -1292,7 +1292,7 @@
     <string name="keys_backup_setup_step3_button_title">Lokið</string>
     <string name="keys_backup_setup_step3_success_title">Tókst !</string>
     <string name="keys_backup_setup_step1_advanced">(Ítarlegt)</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
     <string name="merged_events_collapse">fella saman</string>
     <string name="merged_events_expand">fletta út</string>

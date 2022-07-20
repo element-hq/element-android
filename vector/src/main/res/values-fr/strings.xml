@@ -2529,4 +2529,10 @@
     <string name="settings_troubleshoot_test_endpoint_registration_success">Le point de connexion a été correctement enregistré sur le serveur d’accueil.</string>
     <string name="settings_troubleshoot_test_endpoint_registration_title">Enregistrement du point de connexion</string>
     <string name="action_next">Suivant</string>
+    <string name="poll_undisclosed_not_ended">Les résultats seront visibles lorsque le sondage sera terminé</string>
+    <string name="labs_enable_msc3061_share_history_desc">Lors de l’invitation dans un salon chiffré qui partage son historique, son historique chiffré sera visible.</string>
+    <string name="labs_enable_msc3061_share_history">MSC3061 : Partage des clés du salon pour les messages passés</string>
+    <string name="send_your_first_msg_to_invite">Envoyez votre premier message pour inviter %s à discuter</string>
+    <string name="direct_room_encryption_enabled_tile_description_future">Les messages de ce salon seront chiffrés de bout en bout.</string>
+    <string name="create_room_action_go">C’est parti</string>
 </resources>
