@@ -1,0 +1,2 @@
+Hlavní změny v této verzi: Podpora UnifiedPush a možnost používat push bez FCM.
+Úplný seznam změn: https://github.com/vector-im/element-android/releases

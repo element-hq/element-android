@@ -1927,7 +1927,7 @@
     <string name="room_created_summary_item">%s heeft de kamer gemaakt en geconfigureerd.</string>
     <string name="encryption_unknown_algorithm_tile_description">De versleuteling die door deze kamer wordt gebruikt, wordt niet ondersteund</string>
     <string name="encryption_not_enabled">Versleuteling niet ingeschakeld</string>
-    <string name="direct_room_encryption_enabled_tile_description">Berichten in deze kamer zijn end-to-end-versleuteld.</string>
+    <string name="direct_room_encryption_enabled_tile_description">Berichten in deze chat zijn end-to-end-versleuteld.</string>
     <string name="encryption_enabled_tile_description">Berichten in deze kamer zijn eind-tot-eind-versleuteld. Lees meer en verifieer persoon in hun profiel.</string>
     <string name="bootstrap_cancel_text">Als u nu annuleert, kunt u versleutelde berichten en gegevens kwijtraken als u de toegang tot uw aanmeldingen verliest.
 \n
@@ -2529,4 +2529,10 @@
     <string name="settings_troubleshoot_test_endpoint_registration_success">Eindpunt succesvol geregistreerd bij server.</string>
     <string name="settings_troubleshoot_test_endpoint_registration_title">Registratie van eindpunt</string>
     <string name="action_next">Volgende</string>
+    <string name="poll_undisclosed_not_ended">Resultaten zijn zichtbaar wanneer de poll is afgelopen</string>
+    <string name="labs_enable_msc3061_share_history_desc">Bij het uitnodigen in een versleutelde ruimte die geschiedenis deelt, is de versleutelde geschiedenis zichtbaar.</string>
+    <string name="labs_enable_msc3061_share_history">MSC3061: Kamersleutels delen voor eerdere berichten</string>
+    <string name="send_your_first_msg_to_invite">Stuur uw eerste bericht om %s uit te nodigen om te chatten</string>
+    <string name="direct_room_encryption_enabled_tile_description_future">Berichten in deze chat worden eind-tot-eind versleuteld.</string>
+    <string name="create_room_action_go">Ga</string>
 </resources>
