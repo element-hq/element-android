@@ -32,6 +32,7 @@ interface VectorFeatures {
     fun isScreenSharingEnabled(): Boolean
     fun forceUsageOfOpusEncoder(): Boolean
     fun shouldStartDmOnFirstMessage(): Boolean
+    fun isNewAppLayoutEnabled(): Boolean
 
     enum class OnboardingVariant {
         LEGACY,
@@ -52,4 +53,5 @@ class DefaultVectorFeatures : VectorFeatures {
     override fun isScreenSharingEnabled(): Boolean = true
     override fun forceUsageOfOpusEncoder(): Boolean = false
     override fun shouldStartDmOnFirstMessage(): Boolean = false
+    override fun isNewAppLayoutEnabled(): Boolean = false
 }

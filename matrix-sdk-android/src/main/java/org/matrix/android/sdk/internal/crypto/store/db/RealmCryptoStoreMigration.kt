@@ -40,9 +40,9 @@ import javax.inject.Inject
 
 /**
  * Schema version history:
- *  0, 1, 2: legacy Riot-Android
- *  3: migrate to RiotX schema
- *  4, 5, 6, 7, 8, 9: migrations from RiotX (which was previously 1, 2, 3, 4, 5, 6)
+ *  0, 1, 2: legacy Riot-Android;
+ *  3: migrate to RiotX schema;
+ *  4, 5, 6, 7, 8, 9: migrations from RiotX (which was previously 1, 2, 3, 4, 5, 6).
  */
 internal class RealmCryptoStoreMigration @Inject constructor(
         private val clock: Clock,

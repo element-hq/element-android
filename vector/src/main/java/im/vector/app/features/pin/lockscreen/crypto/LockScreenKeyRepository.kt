@@ -36,7 +36,7 @@ class LockScreenKeyRepository(
     private val systemKeyAlias = "$baseName.system"
 
     private val pinCodeCrypto: KeyStoreCrypto by lazy {
-        keyStoreCryptoFactory.provide(pinCodeKeyAlias,  keyNeedsUserAuthentication = false)
+        keyStoreCryptoFactory.provide(pinCodeKeyAlias, keyNeedsUserAuthentication = false)
     }
     private val systemKeyCrypto: KeyStoreCrypto by lazy {
         keyStoreCryptoFactory.provide(systemKeyAlias, keyNeedsUserAuthentication = true)

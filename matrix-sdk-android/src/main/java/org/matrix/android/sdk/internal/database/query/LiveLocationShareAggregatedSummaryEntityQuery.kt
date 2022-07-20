@@ -25,6 +25,14 @@ import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationS
 
 internal fun LiveLocationShareAggregatedSummaryEntity.Companion.where(
         realm: Realm,
+        eventId: String,
+): RealmQuery<LiveLocationShareAggregatedSummaryEntity> {
+    return realm.where<LiveLocationShareAggregatedSummaryEntity>()
+            .equalTo(LiveLocationShareAggregatedSummaryEntityFields.EVENT_ID, eventId)
+}
+
+internal fun LiveLocationShareAggregatedSummaryEntity.Companion.where(
+        realm: Realm,
         roomId: String,
         eventId: String,
 ): RealmQuery<LiveLocationShareAggregatedSummaryEntity> {
@@ -70,6 +78,13 @@ internal fun LiveLocationShareAggregatedSummaryEntity.Companion.get(
         eventId: String,
 ): LiveLocationShareAggregatedSummaryEntity? {
     return LiveLocationShareAggregatedSummaryEntity.where(realm, roomId, eventId).findFirst()
+}
+
+internal fun LiveLocationShareAggregatedSummaryEntity.Companion.get(
+        realm: Realm,
+        eventId: String,
+): LiveLocationShareAggregatedSummaryEntity? {
+    return LiveLocationShareAggregatedSummaryEntity.where(realm, eventId).findFirst()
 }
 
 internal fun LiveLocationShareAggregatedSummaryEntity.Companion.findActiveLiveInRoomForUser(

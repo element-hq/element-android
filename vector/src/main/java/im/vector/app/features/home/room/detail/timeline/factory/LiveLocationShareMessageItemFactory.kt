@@ -36,7 +36,6 @@ import im.vector.app.features.location.toLocationData
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.threeten.bp.LocalDateTime
-import timber.log.Timber
 import javax.inject.Inject
 
 class LiveLocationShareMessageItemFactory @Inject constructor(
@@ -135,7 +134,7 @@ class LiveLocationShareMessageItemFactory @Inject constructor(
                         liveLocationShareSummaryData.lastGeoUri.orEmpty(),
                         getEndOfLiveDateTime(liveLocationShareSummaryData)
                 )
-        }.also { viewState -> Timber.d("computed viewState: $viewState") }
+        }
     }
 
     private fun getEndOfLiveDateTime(liveLocationShareSummaryData: LiveLocationShareSummaryData): LocalDateTime? {

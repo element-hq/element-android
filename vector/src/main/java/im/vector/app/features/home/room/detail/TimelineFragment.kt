@@ -498,7 +498,6 @@ class TimelineFragment @Inject constructor(
                 RoomDetailViewEvents.StopChatEffects -> handleStopChatEffects()
                 is RoomDetailViewEvents.DisplayAndAcceptCall -> acceptIncomingCall(it)
                 RoomDetailViewEvents.RoomReplacementStarted -> handleRoomReplacement()
-                is RoomDetailViewEvents.ChangeLocationIndicator -> handleChangeLocationIndicator(it)
             }
         }
 
@@ -661,10 +660,6 @@ class TimelineFragment @Inject constructor(
                 context = requireContext(),
                 roomId = timelineArgs.roomId
         )
-    }
-
-    private fun handleChangeLocationIndicator(event: RoomDetailViewEvents.ChangeLocationIndicator) {
-        views.locationLiveStatusIndicator.isVisible = event.isVisible
     }
 
     private fun displayErrorMessage(error: RoomDetailViewEvents.Failure) {
@@ -1686,6 +1681,11 @@ class TimelineFragment @Inject constructor(
         } else if (mainState.asyncInviter.complete) {
             vectorBaseActivity.finish()
         }
+        updateLiveLocationIndicator(mainState.isSharingLiveLocation)
+    }
+
+    private fun updateLiveLocationIndicator(isSharingLiveLocation: Boolean) {
+        views.locationLiveStatusIndicator.isVisible = isSharingLiveLocation
     }
 
     private fun FragmentTimelineBinding.hideComposerViews() {
@@ -1706,7 +1706,7 @@ class TimelineFragment @Inject constructor(
 
     private fun renderToolbar(roomSummary: RoomSummary?) {
         when {
-            isLocalRoom()      -> {
+            isLocalRoom() -> {
                 views.includeRoomToolbar.roomToolbarContentView.isVisible = false
                 views.includeThreadToolbar.roomToolbarThreadConstraintLayout.isVisible = false
                 setupToolbar(views.roomToolbar)
@@ -1724,7 +1724,7 @@ class TimelineFragment @Inject constructor(
                 }
                 views.includeThreadToolbar.roomToolbarThreadTitleTextView.text = resources.getText(R.string.thread_timeline_title)
             }
-            else               -> {
+            else -> {
                 views.includeRoomToolbar.roomToolbarContentView.isVisible = true
                 views.includeThreadToolbar.roomToolbarThreadConstraintLayout.isVisible = false
                 if (roomSummary == null) {

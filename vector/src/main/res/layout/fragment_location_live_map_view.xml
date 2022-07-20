@@ -6,6 +6,11 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_live_location_users_bottom_sheet">
 
+    <View
+        android:id="@+id/liveLocationPopupAnchor"
+        android:layout_width="40dp"
+        android:layout_height="40dp" />
+
     <FrameLayout
         android:id="@+id/liveLocationMapFragmentContainer"
         android:layout_width="match_parent"

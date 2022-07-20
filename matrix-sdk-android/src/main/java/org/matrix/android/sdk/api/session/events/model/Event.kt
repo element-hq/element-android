@@ -202,7 +202,7 @@ data class Event(
      * It will return a decrypted text message or an empty string otherwise.
      */
     fun getDecryptedTextSummary(): String? {
-        if (isRedacted()) return "Message Deleted"
+        if (isRedacted()) return "Message removed"
         val text = getDecryptedValue() ?: run {
             if (isPoll()) {
                 return getPollQuestion() ?: "created a poll."
@@ -370,6 +370,8 @@ fun Event.isLocationMessage(): Boolean {
 fun Event.isPoll(): Boolean = getClearType() in EventType.POLL_START || getClearType() in EventType.POLL_END
 
 fun Event.isSticker(): Boolean = getClearType() == EventType.STICKER
+
+fun Event.isLiveLocation(): Boolean = getClearType() in EventType.STATE_ROOM_BEACON_INFO
 
 fun Event.getRelationContent(): RelationDefaultContent? {
     return if (isEncrypted()) {
