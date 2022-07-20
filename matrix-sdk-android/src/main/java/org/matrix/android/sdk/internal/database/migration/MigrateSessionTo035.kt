@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.database.migration
 
 import io.realm.DynamicRealm
+import io.realm.RealmList
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
@@ -25,6 +26,6 @@ internal class MigrateSessionTo035(realm: DynamicRealm) : RealmMigrator(realm, 3
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.get("RoomSummaryEntity")
                 ?.addRealmListField(RoomSummaryEntityFields.DIRECT_PARENT_NAMES.`$`, String::class.java)
-                ?.transform { it.setString(RoomSummaryEntityFields.DIRECT_PARENT_NAMES.`$`, "") }
+                ?.transform { it.setList(RoomSummaryEntityFields.DIRECT_PARENT_NAMES.`$`, RealmList("")) }
     }
 }
