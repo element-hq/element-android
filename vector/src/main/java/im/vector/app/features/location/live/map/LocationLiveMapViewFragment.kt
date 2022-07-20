@@ -273,7 +273,7 @@ class LocationLiveMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
                 .find { it.matrixItem.id == userId }
                 ?.locationData
                 ?.let { locationData ->
-                    mapboxMap?.get()?.zoomToLocation(locationData, preserveCurrentZoomLevel = true)
+                    mapboxMap?.get()?.zoomToLocation(locationData, preserveCurrentZoomLevel = false)
                 }
     }
 
