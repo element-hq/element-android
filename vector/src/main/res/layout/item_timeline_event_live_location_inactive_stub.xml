@@ -56,13 +56,16 @@
     <TextView
         android:id="@+id/locationLiveInactiveTitle"
         style="@style/Widget.Vector.TextView.Caption"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="8dp"
+        android:layout_margin="8dp"
+        android:lines="1"
         android:text="@string/location_share_live_ended"
+        android:ellipsize="end"
         android:textColor="?vctr_content_tertiary"
         app:layout_constraintBottom_toBottomOf="@id/locationLiveInactiveBanner"
         app:layout_constraintStart_toEndOf="@id/locationLiveInactiveBannerIcon"
+        app:layout_constraintEnd_toEndOf="@id/locationLiveInactiveBanner"
         app:layout_constraintTop_toTopOf="@id/locationLiveInactiveBanner" />
 
     <androidx.constraintlayout.widget.Guideline
