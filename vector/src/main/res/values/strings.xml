@@ -3126,6 +3126,8 @@
     <string name="live_location_not_enough_permission_dialog_title">You don’t have permission to share live location</string>
     <string name="live_location_not_enough_permission_dialog_description">You need to have the right permissions in order to share live location in this room.</string>
     <string name="live_location_share_location_item_share">Share location</string>
+    <!-- mostly used as a description when replying to a live location message -->
+    <string name="live_location_description">Live location</string>
 
     <string name="message_bubbles">Show Message bubbles</string>
 
