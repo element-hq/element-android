@@ -20,6 +20,8 @@ import android.content.res.Resources
 import android.graphics.drawable.ColorDrawable
 import android.widget.ImageView
 import androidx.core.view.updateLayoutParams
+import com.bumptech.glide.load.MultiTransformation
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.GranularRoundedCorners
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import im.vector.app.R
@@ -51,7 +53,7 @@ class DefaultLiveLocationShareStatusItem : LiveLocationShareStatusItem {
         }
         GlideApp.with(mapImageView)
                 .load(R.drawable.bg_no_location_map)
-                .transform(mapCornerTransformation)
+                .transform(MultiTransformation(CenterCrop(), mapCornerTransformation))
                 .into(mapImageView)
     }
 
