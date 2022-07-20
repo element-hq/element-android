@@ -24,10 +24,8 @@ import im.vector.app.core.di.ActiveSessionSetter
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.lib.core.utils.flow.tickerFlow
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
 
@@ -54,7 +52,7 @@ class StartAppViewModel @AssistedInject constructor(
     }
 
     private fun handleStartApp() {
-        startTimer()
+        handleLongProcessing()
         viewModelScope.launch(Dispatchers.IO) {
             // This can take time because of DB migration(s), so do it in a background task.
             activeSessionSetter.tryToSetActiveSession(startSync = true)
@@ -62,12 +60,11 @@ class StartAppViewModel @AssistedInject constructor(
         }
     }
 
-    private fun startTimer() {
-        setState { copy(duration = 0) }
-        tickerFlow(viewModelScope, 1.seconds.inWholeMilliseconds)
-                .onEach {
-                    setState { copy(duration = duration + 1) }
-                }
-                .launchIn(viewModelScope)
+    private fun handleLongProcessing() {
+        viewModelScope.launch(Dispatchers.Default) {
+            delay(1.seconds.inWholeMilliseconds)
+            setState { copy(mayBeLongToProcess = true) }
+            _viewEvents.post(StartAppViewEvent.StartForegroundService)
+        }
     }
 }

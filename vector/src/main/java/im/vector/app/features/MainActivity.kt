@@ -142,20 +142,24 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
     }
 
     private fun renderState(state: StartAppViewState) {
-        if (state.duration > 0) {
+        if (state.mayBeLongToProcess) {
             views.status.setText(R.string.updating_your_data)
         }
-        views.status.isVisible = state.duration > 0
-        if (state.duration == 1L && startAppViewModel.shouldStartApp()) {
-            // Start foreground service, because the operation may take a while
-            val intent = Intent(this, StartAppAndroidService::class.java)
-            ContextCompat.startForegroundService(this, intent)
-        }
+        views.status.isVisible = state.mayBeLongToProcess
     }
 
     private fun handleViewEvents(event: StartAppViewEvent) {
         when (event) {
+            StartAppViewEvent.StartForegroundService -> handleStartForegroundService()
             StartAppViewEvent.AppStarted -> handleAppStarted()
+        }
+    }
+
+    private fun handleStartForegroundService() {
+        if (startAppViewModel.shouldStartApp()) {
+            // Start foreground service, because the operation may take a while
+            val intent = Intent(this, StartAppAndroidService::class.java)
+            ContextCompat.startForegroundService(this, intent)
         }
     }
 
