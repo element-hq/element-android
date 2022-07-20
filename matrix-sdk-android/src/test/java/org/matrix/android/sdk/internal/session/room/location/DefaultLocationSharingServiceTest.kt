@@ -22,8 +22,10 @@ import androidx.lifecycle.Transformations
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.runs
 import io.mockk.slot
 import io.mockk.unmockkAll
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -52,6 +54,7 @@ private const val A_LONGITUDE = 40.0
 private const val AN_UNCERTAINTY = 5.0
 private const val A_TIMEOUT = 15_000L
 private const val A_DESCRIPTION = "description"
+private const val A_REASON = "reason"
 
 @ExperimentalCoroutinesApi
 internal class DefaultLocationSharingServiceTest {
@@ -62,6 +65,7 @@ internal class DefaultLocationSharingServiceTest {
     private val startLiveLocationShareTask = mockk<StartLiveLocationShareTask>()
     private val stopLiveLocationShareTask = mockk<StopLiveLocationShareTask>()
     private val checkIfExistingActiveLiveTask = mockk<CheckIfExistingActiveLiveTask>()
+    private val redactLiveLocationShareTask = mockk<RedactLiveLocationShareTask>()
     private val fakeLiveLocationShareAggregatedSummaryMapper = mockk<LiveLocationShareAggregatedSummaryMapper>()
 
     private val defaultLocationSharingService = DefaultLocationSharingService(
@@ -72,6 +76,7 @@ internal class DefaultLocationSharingServiceTest {
             startLiveLocationShareTask = startLiveLocationShareTask,
             stopLiveLocationShareTask = stopLiveLocationShareTask,
             checkIfExistingActiveLiveTask = checkIfExistingActiveLiveTask,
+            redactLiveLocationShareTask = redactLiveLocationShareTask,
             liveLocationShareAggregatedSummaryMapper = fakeLiveLocationShareAggregatedSummaryMapper
     )
 
@@ -207,6 +212,20 @@ internal class DefaultLocationSharingServiceTest {
                 roomId = A_ROOM_ID
         )
         coVerify { stopLiveLocationShareTask.execute(expectedParams) }
+    }
+
+    @Test
+    fun `live location share can be redacted`() = runTest {
+        coEvery { redactLiveLocationShareTask.execute(any()) } just runs
+
+        defaultLocationSharingService.redactLiveLocationShare(beaconInfoEventId = AN_EVENT_ID, reason = A_REASON)
+
+        val expectedParams = RedactLiveLocationShareTask.Params(
+                roomId = A_ROOM_ID,
+                beaconInfoEventId = AN_EVENT_ID,
+                reason = A_REASON
+        )
+        coVerify { redactLiveLocationShareTask.execute(expectedParams) }
     }
 
     @Test

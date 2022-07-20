@@ -97,7 +97,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="@string/ftue_auth_choose_server_entry_hint"
-            app:layout_constraintBottom_toTopOf="@id/chooseServerEntryFooter"
+            app:layout_constraintBottom_toTopOf="@id/actionSpacing"
             app:layout_constraintEnd_toEndOf="@id/chooseServerGutterEnd"
             app:layout_constraintStart_toStartOf="@id/chooseServerGutterStart"
             app:layout_constraintTop_toBottomOf="@id/titleContentSpacing">
@@ -111,25 +111,13 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:id="@+id/chooseServerEntryFooter"
-            style="@style/Widget.Vector.TextView.Micro"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="@string/ftue_auth_choose_server_entry_footer"
-            app:layout_constraintBottom_toTopOf="@id/actionSpacing"
-            app:layout_constraintEnd_toEndOf="@id/chooseServerGutterEnd"
-            app:layout_constraintStart_toStartOf="@id/chooseServerGutterStart"
-            app:layout_constraintTop_toBottomOf="@id/chooseServerInput" />
-
         <Space
             android:id="@+id/actionSpacing"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@id/chooseServerSubmit"
-            app:layout_constraintHeight_percent="0.02"
-            app:layout_constraintTop_toBottomOf="@id/chooseServerEntryFooter" />
+            app:layout_constraintHeight_percent="0.03"
+            app:layout_constraintTop_toBottomOf="@id/chooseServerInput" />
 
         <Button
             android:id="@+id/chooseServerSubmit"

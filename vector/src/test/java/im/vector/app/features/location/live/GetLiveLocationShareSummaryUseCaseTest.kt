@@ -53,7 +53,7 @@ class GetLiveLocationShareSummaryUseCaseTest {
     }
 
     @Test
-    fun `given a room id and event id when calling use case then live data on summary is returned`() = runTest {
+    fun `given a room id and event id when calling use case then flow on summary is returned`() = runTest {
         val summary = LiveLocationShareAggregatedSummary(
                 userId = "userId",
                 isActive = true,
@@ -69,5 +69,18 @@ class GetLiveLocationShareSummaryUseCaseTest {
         val result = getLiveLocationShareSummaryUseCase.execute(A_ROOM_ID, AN_EVENT_ID).first()
 
         result shouldBeEqualTo summary
+    }
+
+    @Test
+    fun `given a room id, event id and a null summary when calling use case then null is emitted in the flow`() = runTest {
+        fakeSession.roomService()
+                .getRoom(A_ROOM_ID)
+                .locationSharingService()
+                .givenLiveLocationShareSummaryReturns(AN_EVENT_ID, null)
+                .givenAsFlowReturns(Optional(null))
+
+        val result = getLiveLocationShareSummaryUseCase.execute(A_ROOM_ID, AN_EVENT_ID).first()
+
+        result shouldBeEqualTo null
     }
 }
