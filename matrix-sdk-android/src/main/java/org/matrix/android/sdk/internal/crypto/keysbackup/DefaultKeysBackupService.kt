@@ -1349,6 +1349,8 @@ internal class DefaultKeysBackupService @Inject constructor(
 
                                         // Mark keys as backed up
                                         cryptoStore.markBackupDoneForInboundGroupSessions(olmInboundGroupSessionWrappers)
+                                        // we can release the sessions now
+                                        olmInboundGroupSessionWrappers.onEach { it.session.releaseSession() }
 
                                         if (olmInboundGroupSessionWrappers.size < KEY_BACKUP_SEND_KEYS_MAX_COUNT) {
                                             Timber.v("backupKeys: All keys have been backed up")

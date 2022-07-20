@@ -38,6 +38,7 @@ internal class MXMegolmDecryptionFactory @Inject constructor(
                 outgoingKeyRequestManager,
                 cryptoStore,
                 matrixConfiguration,
-                eventsManager)
+                eventsManager
+        )
     }
 }

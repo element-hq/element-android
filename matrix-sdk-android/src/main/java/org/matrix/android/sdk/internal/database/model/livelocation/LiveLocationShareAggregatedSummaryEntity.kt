@@ -44,6 +44,8 @@ internal open class LiveLocationShareAggregatedSummaryEntity(
          */
         var isActive: Boolean? = null,
 
+        var startOfLiveTimestampMillis: Long? = null,
+
         var endOfLiveTimestampMillis: Long? = null,
 
         /**

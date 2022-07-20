@@ -23,4 +23,7 @@ sealed class LocationSharingViewEvents : VectorViewEvents {
     object LocationNotAvailableError : LocationSharingViewEvents()
     data class ZoomToUserLocation(val userLocation: LocationData) : LocationSharingViewEvents()
     data class StartLiveLocationService(val sessionId: String, val roomId: String, val durationMillis: Long) : LocationSharingViewEvents()
+    object ChooseLiveLocationDuration : LocationSharingViewEvents()
+    object ShowLabsFlagPromotion : LocationSharingViewEvents()
+    object LiveLocationSharingNotEnoughPermission : LocationSharingViewEvents()
 }

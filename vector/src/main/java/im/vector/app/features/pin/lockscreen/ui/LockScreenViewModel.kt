@@ -94,7 +94,7 @@ class LockScreenViewModel @AssistedInject constructor(
 
     override fun handle(action: LockScreenAction) {
         when (action) {
-            is LockScreenAction.PinCodeEntered      -> onPinCodeEntered(action.value)
+            is LockScreenAction.PinCodeEntered -> onPinCodeEntered(action.value)
             is LockScreenAction.ShowBiometricPrompt -> showBiometricPrompt(action.callingActivity)
         }
     }

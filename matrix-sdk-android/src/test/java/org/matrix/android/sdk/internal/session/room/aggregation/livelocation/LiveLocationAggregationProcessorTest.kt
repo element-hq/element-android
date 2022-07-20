@@ -36,6 +36,7 @@ import org.matrix.android.sdk.test.fakes.FakeWorkManagerProvider
 import org.matrix.android.sdk.test.fakes.givenEqualTo
 import org.matrix.android.sdk.test.fakes.givenFindAll
 import org.matrix.android.sdk.test.fakes.givenFindFirst
+import org.matrix.android.sdk.test.fakes.givenLessThan
 import org.matrix.android.sdk.test.fakes.givenNotEqualTo
 
 private const val A_SESSION_ID = "session_id"
@@ -183,6 +184,7 @@ internal class LiveLocationAggregationProcessorTest {
         aggregatedEntity.roomId shouldBeEqualTo A_ROOM_ID
         aggregatedEntity.userId shouldBeEqualTo A_SENDER_ID
         aggregatedEntity.isActive shouldBeEqualTo true
+        aggregatedEntity.startOfLiveTimestampMillis shouldBeEqualTo A_TIMESTAMP
         aggregatedEntity.endOfLiveTimestampMillis shouldBeEqualTo A_TIMESTAMP + A_TIMEOUT_MILLIS
         aggregatedEntity.lastLocationContent shouldBeEqualTo null
         previousEntities.forEach { entity ->
@@ -404,6 +406,7 @@ internal class LiveLocationAggregationProcessorTest {
                 .givenNotEqualTo(LiveLocationShareAggregatedSummaryEntityFields.EVENT_ID, AN_EVENT_ID)
                 .givenEqualTo(LiveLocationShareAggregatedSummaryEntityFields.USER_ID, A_SENDER_ID)
                 .givenEqualTo(LiveLocationShareAggregatedSummaryEntityFields.IS_ACTIVE, true)
+                .givenLessThan(LiveLocationShareAggregatedSummaryEntityFields.START_OF_LIVE_TIMESTAMP_MILLIS, A_TIMESTAMP)
                 .givenFindAll(summaryList)
         return summaryList
     }

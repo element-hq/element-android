@@ -92,12 +92,14 @@ internal fun LiveLocationShareAggregatedSummaryEntity.Companion.findActiveLiveIn
         roomId: String,
         userId: String,
         ignoredEventId: String,
+        startOfLiveTimestampThreshold: Long,
 ): List<LiveLocationShareAggregatedSummaryEntity> {
     return LiveLocationShareAggregatedSummaryEntity
             .whereRoomId(realm, roomId = roomId)
             .equalTo(LiveLocationShareAggregatedSummaryEntityFields.USER_ID, userId)
             .equalTo(LiveLocationShareAggregatedSummaryEntityFields.IS_ACTIVE, true)
             .notEqualTo(LiveLocationShareAggregatedSummaryEntityFields.EVENT_ID, ignoredEventId)
+            .lessThan(LiveLocationShareAggregatedSummaryEntityFields.START_OF_LIVE_TIMESTAMP_MILLIS, startOfLiveTimestampThreshold)
             .findAll()
             .toList()
 }

@@ -101,6 +101,14 @@ inline fun <reified T : RealmModel> RealmQuery<T>.givenIsNotNull(
     return this
 }
 
+inline fun <reified T : RealmModel> RealmQuery<T>.givenLessThan(
+        fieldName: String,
+        value: Long
+): RealmQuery<T> {
+    every { lessThan(fieldName, value) } returns this
+    return this
+}
+
 /**
  * Should be called on a mocked RealmObject and not on a real RealmObject so that the underlying final method is mocked.
  */

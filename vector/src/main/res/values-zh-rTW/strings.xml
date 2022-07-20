@@ -1671,7 +1671,7 @@
     <string name="bad_passphrase_key_reset_all_action">忘記或遺失所有復原選項？重設所有東西</string>
     <string name="direct_room_created_summary_item_by_you">您已加入。</string>
     <string name="direct_room_created_summary_item">%s 已加入。</string>
-    <string name="direct_room_encryption_enabled_tile_description">此聊天室中的訊息有端到端加密。</string>
+    <string name="direct_room_encryption_enabled_tile_description">此聊天中的訊息有端到端加密。</string>
     <string name="direct_room_profile_section_more_leave">離開</string>
     <string name="direct_room_profile_section_more_settings">設定</string>
     <string name="direct_room_profile_encrypted_subtitle">這裡的訊息有端到端加密。
@@ -2481,4 +2481,10 @@
     <string name="settings_troubleshoot_test_endpoint_registration_success">端點成功註冊至家伺服器。</string>
     <string name="settings_troubleshoot_test_endpoint_registration_title">端點註冊</string>
     <string name="action_next">下一步</string>
+    <string name="poll_undisclosed_not_ended">結果將在投票結束時可見</string>
+    <string name="labs_enable_msc3061_share_history_desc">在分享歷史的加密聊天室中邀請時，加密歷史會是可見的。</string>
+    <string name="labs_enable_msc3061_share_history">MSC3061：為過去的訊息分享聊天室金鑰</string>
+    <string name="send_your_first_msg_to_invite">傳送您的第一則訊息以邀請 %s 來聊天</string>
+    <string name="direct_room_encryption_enabled_tile_description_future">此聊天中的訊息將會是端到端加密。</string>
+    <string name="create_room_action_go">到</string>
 </resources>

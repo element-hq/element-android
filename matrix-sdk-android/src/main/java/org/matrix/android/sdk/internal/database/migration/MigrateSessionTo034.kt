@@ -17,14 +17,18 @@
 package org.matrix.android.sdk.internal.database.migration
 
 import io.realm.DynamicRealm
-import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
+import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntityFields
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
+/**
+ * Migrating to:
+ * Live location sharing aggregated summary: adding new field startOfLiveTimestampMillis.
+ */
 internal class MigrateSessionTo034(realm: DynamicRealm) : RealmMigrator(realm, 34) {
 
     override fun doMigrate(realm: DynamicRealm) {
-        realm.schema.get("RoomSummaryEntity")
-                ?.addRealmListField(RoomSummaryEntityFields.DIRECT_PARENT_NAMES.`$`, String::class.java)
-                ?.transform { it.setString(RoomSummaryEntityFields.DIRECT_PARENT_NAMES.`$`, "") }
+        realm.schema.get("LiveLocationShareAggregatedSummaryEntity")
+                ?.addField(LiveLocationShareAggregatedSummaryEntityFields.START_OF_LIVE_TIMESTAMP_MILLIS, Long::class.java)
+                ?.setNullable(LiveLocationShareAggregatedSummaryEntityFields.START_OF_LIVE_TIMESTAMP_MILLIS, true)
     }
 }

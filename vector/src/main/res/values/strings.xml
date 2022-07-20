@@ -3121,6 +3121,8 @@
     <!-- TODO remove key -->
     <string name="live_location_bottom_sheet_stop_sharing" tools:ignore="UnusedResources">Stop sharing</string>
     <string name="live_location_bottom_sheet_last_updated_at">Updated %1$s ago</string>
+    <string name="live_location_not_enough_permission_dialog_title">You don’t have permission to share live location</string>
+    <string name="live_location_not_enough_permission_dialog_description">You need to have the right permissions in order to share live location in this room.</string>
     <string name="live_location_share_location_item_share">Share location</string>
 
     <string name="message_bubbles">Show Message bubbles</string>
