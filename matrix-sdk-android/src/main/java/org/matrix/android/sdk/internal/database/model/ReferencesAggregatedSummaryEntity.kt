@@ -16,8 +16,10 @@
 package org.matrix.android.sdk.internal.database.model
 
 import io.realm.RealmList
-import io.realm.RealmObject
+import io.realm.RealmModel
+import io.realm.annotations.RealmClass
 
+@RealmClass
 internal open class ReferencesAggregatedSummaryEntity(
         var eventId: String = "",
         var content: String? = null,
@@ -25,7 +27,7 @@ internal open class ReferencesAggregatedSummaryEntity(
         var sourceEvents: RealmList<String> = RealmList(),
         // List of transaction ids for local echos
         var sourceLocalEcho: RealmList<String> = RealmList()
-) : RealmObject() {
+) : RealmModel {
 
     companion object
 }

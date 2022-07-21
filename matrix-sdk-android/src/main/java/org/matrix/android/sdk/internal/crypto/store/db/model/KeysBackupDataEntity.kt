@@ -16,9 +16,11 @@
 
 package org.matrix.android.sdk.internal.crypto.store.db.model
 
-import io.realm.RealmObject
+import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
+import io.realm.annotations.RealmClass
 
+@RealmClass
 internal open class KeysBackupDataEntity(
         // Primary key to update this object. There is only one object, so it's a constant, please do not set it
         @PrimaryKey
@@ -27,4 +29,4 @@ internal open class KeysBackupDataEntity(
         var backupLastServerHash: String? = null,
         // The last known number of backed up keys on the server
         var backupLastServerNumberOfKeys: Int? = null
-) : RealmObject()
+) : RealmModel

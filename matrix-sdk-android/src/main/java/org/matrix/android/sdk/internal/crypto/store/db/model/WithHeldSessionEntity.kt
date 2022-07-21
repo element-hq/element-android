@@ -16,8 +16,9 @@
 
 package org.matrix.android.sdk.internal.crypto.store.db.model
 
-import io.realm.RealmObject
+import io.realm.RealmModel
 import io.realm.annotations.Index
+import io.realm.annotations.RealmClass
 import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
 
 /**
@@ -27,6 +28,7 @@ import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
  * For example, the sender may have blacklisted certain devices or users,
  * or may be choosing to not send the megolm key to devices that they have not verified yet.
  */
+@RealmClass
 internal open class WithHeldSessionEntity(
         var roomId: String? = null,
         var algorithm: String? = null,
@@ -34,7 +36,7 @@ internal open class WithHeldSessionEntity(
         @Index var senderKey: String? = null,
         var codeString: String? = null,
         var reason: String? = null
-) : RealmObject() {
+) : RealmModel {
 
     var code: WithHeldCode?
         get() {

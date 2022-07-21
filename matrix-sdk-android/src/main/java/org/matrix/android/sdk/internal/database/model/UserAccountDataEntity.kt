@@ -16,8 +16,9 @@
 
 package org.matrix.android.sdk.internal.database.model
 
-import io.realm.RealmObject
+import io.realm.RealmModel
 import io.realm.annotations.Index
+import io.realm.annotations.RealmClass
 
 /**
  * Clients can store custom config data for their account on their homeserver.
@@ -25,10 +26,11 @@ import io.realm.annotations.Index
  * Users may only view the account data for their own account.
  * The account_data may be either global or scoped to a particular rooms.
  */
+@RealmClass
 internal open class UserAccountDataEntity(
         @Index var type: String? = null,
         var contentStr: String? = null
-) : RealmObject() {
+) : RealmModel {
 
     companion object
 }

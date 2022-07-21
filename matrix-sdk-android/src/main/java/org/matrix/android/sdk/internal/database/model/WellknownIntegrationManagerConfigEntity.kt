@@ -16,14 +16,16 @@
 
 package org.matrix.android.sdk.internal.database.model
 
-import io.realm.RealmObject
+import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
+import io.realm.annotations.RealmClass
 
+@RealmClass
 internal open class WellknownIntegrationManagerConfigEntity(
         @PrimaryKey var id: Long = 0,
         var apiUrl: String = "",
         var uiUrl: String = ""
-) : RealmObject() {
+) : RealmModel {
 
     companion object
 }

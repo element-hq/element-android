@@ -17,11 +17,13 @@
 package org.matrix.android.sdk.internal.database.model
 
 import io.realm.RealmList
-import io.realm.RealmObject
+import io.realm.RealmModel
+import io.realm.annotations.RealmClass
 
 /**
  * Decorates room summary with space related information.
  */
+@RealmClass
 internal open class SpaceChildSummaryEntity(
 //        var isSpace: Boolean = false,
 
@@ -40,7 +42,7 @@ internal open class SpaceChildSummaryEntity(
 
 //        var level: Int = 0
 
-) : RealmObject() {
+) : RealmModel {
 
     companion object
 }

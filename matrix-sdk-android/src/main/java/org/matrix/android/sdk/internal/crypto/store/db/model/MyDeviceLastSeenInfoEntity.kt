@@ -16,9 +16,11 @@
 
 package org.matrix.android.sdk.internal.crypto.store.db.model
 
-import io.realm.RealmObject
+import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
+import io.realm.annotations.RealmClass
 
+@RealmClass
 internal open class MyDeviceLastSeenInfoEntity(
         /** The device id. */
         @PrimaryKey var deviceId: String? = null,
@@ -28,7 +30,7 @@ internal open class MyDeviceLastSeenInfoEntity(
         var lastSeenTs: Long? = null,
         /** The last ip address. */
         var lastSeenIp: String? = null
-) : RealmObject() {
+) : RealmModel {
 
     companion object
 }

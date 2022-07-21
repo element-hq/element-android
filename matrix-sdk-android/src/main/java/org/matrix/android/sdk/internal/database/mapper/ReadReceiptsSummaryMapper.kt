@@ -18,12 +18,14 @@ package org.matrix.android.sdk.internal.database.mapper
 
 import io.realm.Realm
 import io.realm.RealmList
+import io.realm.kotlin.isManaged
 import org.matrix.android.sdk.api.session.room.model.ReadReceipt
 import org.matrix.android.sdk.internal.database.RealmSessionProvider
 import org.matrix.android.sdk.internal.database.model.ReadReceiptEntity
 import org.matrix.android.sdk.internal.database.model.ReadReceiptsSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntity
 import org.matrix.android.sdk.internal.database.query.where
+import org.matrix.android.sdk.internal.extensions.realm
 import javax.inject.Inject
 
 internal class ReadReceiptsSummaryMapper @Inject constructor(
@@ -36,7 +38,7 @@ internal class ReadReceiptsSummaryMapper @Inject constructor(
         }
         val readReceipts = readReceiptsSummaryEntity.readReceipts
         // Avoid opening a new realm if we already have one opened
-        return if (readReceiptsSummaryEntity.isManaged) {
+        return if (readReceiptsSummaryEntity.isManaged()) {
             map(readReceipts, readReceiptsSummaryEntity.realm)
         } else {
             realmSessionProvider.withRealm { realm ->

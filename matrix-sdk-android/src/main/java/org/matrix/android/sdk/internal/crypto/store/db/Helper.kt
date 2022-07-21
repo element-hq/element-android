@@ -19,7 +19,7 @@ package org.matrix.android.sdk.internal.crypto.store.db
 import android.util.Base64
 import io.realm.Realm
 import io.realm.RealmConfiguration
-import io.realm.RealmObject
+import io.realm.RealmModel
 import java.io.ByteArrayOutputStream
 import java.io.ObjectOutputStream
 import java.util.zip.GZIPInputStream
@@ -37,7 +37,7 @@ internal fun <T> doWithRealm(realmConfiguration: RealmConfiguration, action: (Re
 /**
  * Get realm, do the query, copy from realm, close realm, and return the copied result.
  */
-internal fun <T : RealmObject> doRealmQueryAndCopy(realmConfiguration: RealmConfiguration, action: (Realm) -> T?): T? {
+internal fun <T : RealmModel> doRealmQueryAndCopy(realmConfiguration: RealmConfiguration, action: (Realm) -> T?): T? {
     return Realm.getInstance(realmConfiguration).use { realm ->
         action.invoke(realm)?.let { realm.copyFromRealm(it) }
     }
@@ -46,7 +46,7 @@ internal fun <T : RealmObject> doRealmQueryAndCopy(realmConfiguration: RealmConf
 /**
  * Get realm, do the list query, copy from realm, close realm, and return the copied result.
  */
-internal fun <T : RealmObject> doRealmQueryAndCopyList(realmConfiguration: RealmConfiguration, action: (Realm) -> Iterable<T>): Iterable<T> {
+internal fun <T : RealmModel> doRealmQueryAndCopyList(realmConfiguration: RealmConfiguration, action: (Realm) -> Iterable<T>): Iterable<T> {
     return Realm.getInstance(realmConfiguration).use { realm ->
         action.invoke(realm).let { realm.copyFromRealm(it) }
     }

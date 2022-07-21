@@ -19,8 +19,10 @@ package org.matrix.android.sdk.internal.crypto.store.db.model
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Types
 import io.realm.RealmList
-import io.realm.RealmObject
+import io.realm.RealmModel
 import io.realm.annotations.Index
+import io.realm.annotations.RealmClass
+import io.realm.kotlin.deleteFromRealm
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.crypto.OutgoingKeyRequest
 import org.matrix.android.sdk.api.session.crypto.OutgoingRoomKeyRequestState
@@ -33,6 +35,7 @@ import org.matrix.android.sdk.api.session.events.model.content.RoomKeyWithHeldCo
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.internal.di.MoshiProvider
 
+@RealmClass
 internal open class OutgoingKeyRequestEntity(
         @Index var requestId: String? = null,
         var requestedIndex: Int? = null,
@@ -44,7 +47,7 @@ internal open class OutgoingKeyRequestEntity(
         @Index var megolmSessionId: String? = null,
 
         var replies: RealmList<KeyRequestReplyEntity> = RealmList()
-) : RealmObject() {
+) : RealmModel {
 
     @Index private var requestStateStr: String = OutgoingRoomKeyRequestState.UNSENT.name
 

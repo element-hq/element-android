@@ -16,18 +16,20 @@
 
 package org.matrix.android.sdk.internal.database.model
 
-import io.realm.RealmObject
+import io.realm.RealmModel
 import io.realm.RealmResults
 import io.realm.annotations.LinkingObjects
 import io.realm.annotations.PrimaryKey
+import io.realm.annotations.RealmClass
 
+@RealmClass
 internal open class ReadReceiptEntity(
         @PrimaryKey var primaryKey: String = "",
         var eventId: String = "",
         var roomId: String = "",
         var userId: String = "",
         var originServerTs: Double = 0.0
-) : RealmObject() {
+) : RealmModel {
     companion object
 
     @LinkingObjects("readReceipts")

@@ -16,8 +16,9 @@
 
 package org.matrix.android.sdk.internal.crypto.store.db.model
 
-import io.realm.RealmObject
+import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
+import io.realm.annotations.RealmClass
 import org.matrix.android.sdk.internal.crypto.model.InboundGroupSessionData
 import org.matrix.android.sdk.internal.crypto.model.MXInboundMegolmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.store.db.deserializeFromRealm
@@ -28,6 +29,7 @@ import timber.log.Timber
 
 internal fun OlmInboundGroupSessionEntity.Companion.createPrimaryKey(sessionId: String?, senderKey: String?) = "$sessionId|$senderKey"
 
+@RealmClass
 internal open class OlmInboundGroupSessionEntity(
         // Combined value to build a primary key
         @PrimaryKey var primaryKey: String? = null,
@@ -54,7 +56,7 @@ internal open class OlmInboundGroupSessionEntity(
         // Indicate if the key has been backed up to the homeserver
         var backedUp: Boolean = false
 ) :
-        RealmObject() {
+        RealmModel {
 
     fun store(wrapper: MXInboundMegolmSessionWrapper) {
         this.serializedOlmInboundGroupSession = serializeForRealm(wrapper.session)

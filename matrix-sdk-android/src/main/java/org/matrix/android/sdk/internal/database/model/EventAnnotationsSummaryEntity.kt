@@ -16,11 +16,14 @@
 package org.matrix.android.sdk.internal.database.model
 
 import io.realm.RealmList
-import io.realm.RealmObject
+import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
+import io.realm.annotations.RealmClass
+import io.realm.kotlin.deleteFromRealm
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntity
 import timber.log.Timber
 
+@RealmClass
 internal open class EventAnnotationsSummaryEntity(
         @PrimaryKey
         var eventId: String = "",
@@ -30,7 +33,7 @@ internal open class EventAnnotationsSummaryEntity(
         var referencesSummaryEntity: ReferencesAggregatedSummaryEntity? = null,
         var pollResponseSummary: PollResponseAggregatedSummaryEntity? = null,
         var liveLocationShareAggregatedSummary: LiveLocationShareAggregatedSummaryEntity? = null,
-) : RealmObject() {
+) : RealmModel {
 
     /**
      * Cleanup undesired editions, done by users different from the originalEventSender.

@@ -16,16 +16,17 @@
 package org.matrix.android.sdk.internal.database.model
 
 import io.realm.RealmList
-import io.realm.RealmObject
+import io.realm.RealmModel
 import io.realm.annotations.RealmClass
 
 /**
  * Keep all the editions of a message.
  */
+@RealmClass
 internal open class EditAggregatedSummaryEntity(
         // The list of the editions used to build the summary (might be out of sync if chunked received from message chunk)
         var editions: RealmList<EditionOfEvent> = RealmList()
-) : RealmObject() {
+) : RealmModel {
 
     companion object
 }
@@ -37,4 +38,4 @@ internal open class EditionOfEvent(
         var content: String? = null,
         var timestamp: Long = 0,
         var isLocalEcho: Boolean = false
-) : RealmObject()
+) : RealmModel

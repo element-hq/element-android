@@ -16,15 +16,22 @@
 
 package org.matrix.android.sdk.internal.extensions
 
+import io.realm.Realm
 import io.realm.RealmList
+import io.realm.RealmModel
 import io.realm.RealmObject
 import io.realm.RealmObjectSchema
 import org.matrix.android.sdk.internal.database.model.HomeServerCapabilitiesEntityFields
 import org.matrix.android.sdk.internal.util.fatalError
 
-internal fun RealmObject.assertIsManaged() {
-    check(isManaged) { "${javaClass.simpleName} entity should be managed to use this function" }
+internal fun RealmModel.assertIsManaged() {
+    check(RealmObject.isManaged(this)) { "${javaClass.simpleName} entity should be managed to use this function" }
 }
+
+internal val RealmModel.realm: Realm
+    get() {
+        return RealmObject.getRealm(this)
+    }
 
 /**
  * Clear a RealmList by deleting all its items calling the provided lambda.

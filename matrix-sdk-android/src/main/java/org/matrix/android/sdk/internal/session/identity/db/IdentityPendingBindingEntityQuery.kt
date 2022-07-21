@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.identity.db
 
 import io.realm.Realm
 import io.realm.kotlin.createObject
+import io.realm.kotlin.deleteFromRealm
 import io.realm.kotlin.where
 import org.matrix.android.sdk.api.session.identity.ThreePid
 

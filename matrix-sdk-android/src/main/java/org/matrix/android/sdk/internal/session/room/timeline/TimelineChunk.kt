@@ -23,6 +23,8 @@ import io.realm.RealmObjectChangeListener
 import io.realm.RealmQuery
 import io.realm.RealmResults
 import io.realm.Sort
+import io.realm.kotlin.addChangeListener
+import io.realm.kotlin.removeChangeListener
 import kotlinx.coroutines.CompletableDeferred
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull

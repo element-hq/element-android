@@ -16,9 +16,11 @@
 
 package org.matrix.android.sdk.internal.database.model
 
-import io.realm.RealmObject
+import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
+import io.realm.annotations.RealmClass
 
+@RealmClass
 internal open class PreviewUrlCacheEntity(
         @PrimaryKey
         var url: String = "",
@@ -31,7 +33,7 @@ internal open class PreviewUrlCacheEntity(
         var imageWidth: Int? = null,
         var imageHeight: Int? = null,
         var lastUpdatedTimestamp: Long = 0L
-) : RealmObject() {
+) : RealmModel {
 
     companion object
 }

@@ -20,6 +20,7 @@ import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
 import io.realm.RealmChangeListener
 import io.realm.RealmConfiguration
+import io.realm.RealmModel
 import io.realm.RealmObject
 import io.realm.RealmResults
 import kotlinx.coroutines.CoroutineScope
@@ -34,7 +35,7 @@ import java.util.concurrent.atomic.AtomicReference
 
 internal interface LiveEntityObserver : SessionLifecycleObserver
 
-internal abstract class RealmLiveEntityObserver<T : RealmObject>(protected val realmConfiguration: RealmConfiguration) :
+internal abstract class RealmLiveEntityObserver<T : RealmModel>(protected val realmConfiguration: RealmConfiguration) :
         LiveEntityObserver, RealmChangeListener<RealmResults<T>> {
 
     private companion object {

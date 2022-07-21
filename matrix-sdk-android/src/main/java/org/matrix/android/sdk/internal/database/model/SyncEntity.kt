@@ -16,10 +16,12 @@
 
 package org.matrix.android.sdk.internal.database.model
 
-import io.realm.RealmObject
+import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
+import io.realm.annotations.RealmClass
 
+@RealmClass
 internal open class SyncEntity(
         var nextBatch: String? = null,
         @PrimaryKey var id: Long = 0
-) : RealmObject()
+) : RealmModel

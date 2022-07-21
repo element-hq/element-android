@@ -16,8 +16,10 @@
 
 package org.matrix.android.sdk.internal.auth.db
 
-import io.realm.RealmObject
+import io.realm.RealmModel
+import io.realm.annotations.RealmClass
 
+@RealmClass
 internal open class PendingSessionEntity(
         var homeServerConnectionConfigJson: String = "",
         var clientSecret: String = "",
@@ -26,4 +28,4 @@ internal open class PendingSessionEntity(
         var currentSession: String? = null,
         var isRegistrationStarted: Boolean = false,
         var currentThreePidDataJson: String? = null
-) : RealmObject()
+) : RealmModel

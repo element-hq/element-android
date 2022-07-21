@@ -16,14 +16,16 @@
 
 package org.matrix.android.sdk.internal.database.model
 
-import io.realm.RealmObject
+import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
+import io.realm.annotations.RealmClass
 
+@RealmClass
 internal open class UserEntity(
         @PrimaryKey var userId: String = "",
         var displayName: String = "",
         var avatarUrl: String = ""
-) : RealmObject() {
+) : RealmModel {
 
     companion object
 }

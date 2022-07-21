@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.internal.query
 
 import io.realm.Case
-import io.realm.RealmObject
+import io.realm.RealmModel
 import io.realm.RealmQuery
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.query.QueryStringValue.ContentQueryStringValue
@@ -28,7 +28,7 @@ internal class QueryStringValueProcessor @Inject constructor(
         private val normalizer: Normalizer
 ) {
 
-    fun <T : RealmObject> RealmQuery<T>.process(field: String, queryStringValue: QueryStringValue): RealmQuery<T> {
+    fun <T : RealmModel> RealmQuery<T>.process(field: String, queryStringValue: QueryStringValue): RealmQuery<T> {
         return when (queryStringValue) {
             is QueryStringValue.NoCondition -> this
             is QueryStringValue.IsNotNull -> isNotNull(field)

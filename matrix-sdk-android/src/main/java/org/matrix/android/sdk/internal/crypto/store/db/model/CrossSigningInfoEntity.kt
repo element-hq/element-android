@@ -17,16 +17,19 @@
 package org.matrix.android.sdk.internal.crypto.store.db.model
 
 import io.realm.RealmList
-import io.realm.RealmObject
+import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
+import io.realm.annotations.RealmClass
+import io.realm.kotlin.deleteFromRealm
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KeyUsage
 import org.matrix.android.sdk.internal.extensions.clearWith
 
+@RealmClass
 internal open class CrossSigningInfoEntity(
         @PrimaryKey
         var userId: String? = null,
         var crossSigningKeys: RealmList<KeyInfoEntity> = RealmList()
-) : RealmObject() {
+) : RealmModel {
 
     companion object
 

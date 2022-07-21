@@ -16,13 +16,15 @@
 
 package org.matrix.android.sdk.internal.database.model
 
-import io.realm.RealmObject
+import io.realm.RealmModel
 import io.realm.annotations.Index
 import io.realm.annotations.PrimaryKey
+import io.realm.annotations.RealmClass
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.internal.database.model.presence.UserPresenceEntity
 
+@RealmClass
 internal open class RoomMemberSummaryEntity(
         @PrimaryKey var primaryKey: String = "",
         @Index var userId: String = "",
@@ -31,7 +33,7 @@ internal open class RoomMemberSummaryEntity(
         var avatarUrl: String? = null,
         var reason: String? = null,
         var isDirect: Boolean = false
-) : RealmObject() {
+) : RealmModel {
 
     private var membershipStr: String = Membership.NONE.name
     var membership: Membership

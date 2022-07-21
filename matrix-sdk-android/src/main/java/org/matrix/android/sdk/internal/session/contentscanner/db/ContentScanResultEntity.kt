@@ -16,12 +16,14 @@
 
 package org.matrix.android.sdk.internal.session.contentscanner.db
 
-import io.realm.RealmObject
+import io.realm.RealmModel
 import io.realm.annotations.Index
+import io.realm.annotations.RealmClass
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.contentscanner.ScanState
 import org.matrix.android.sdk.api.session.contentscanner.ScanStatusInfo
 
+@RealmClass
 internal open class ContentScanResultEntity(
         @Index
         var mediaUrl: String? = null,
@@ -29,7 +31,7 @@ internal open class ContentScanResultEntity(
         var humanReadableMessage: String? = null,
         var scanDateTimestamp: Long? = null,
         var scannerUrl: String? = null
-) : RealmObject() {
+) : RealmModel {
 
     var scanResult: ScanState
         get() {

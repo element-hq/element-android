@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.pushers
 
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
+import io.realm.kotlin.deleteFromRealm
 import org.matrix.android.sdk.api.session.pushers.PusherState
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.PusherEntity

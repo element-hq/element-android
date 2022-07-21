@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.room.send
 
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
+import io.realm.kotlin.deleteFromRealm
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel

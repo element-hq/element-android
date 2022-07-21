@@ -17,10 +17,12 @@
 package org.matrix.android.sdk.internal.database.model
 
 import io.realm.RealmList
-import io.realm.RealmObject
+import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
+import io.realm.annotations.RealmClass
 import org.matrix.android.sdk.api.session.room.model.Membership
 
+@RealmClass
 internal open class GroupSummaryEntity(
         @PrimaryKey var groupId: String = "",
         var displayName: String = "",
@@ -28,7 +30,7 @@ internal open class GroupSummaryEntity(
         var avatarUrl: String = "",
         var roomIds: RealmList<String> = RealmList(),
         var userIds: RealmList<String> = RealmList()
-) : RealmObject() {
+) : RealmModel {
 
     private var membershipStr: String = Membership.NONE.name
     var membership: Membership

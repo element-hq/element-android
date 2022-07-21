@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.room.summary
 
 import io.realm.Realm
 import io.realm.kotlin.createObject
+import io.realm.kotlin.deleteFromRealm
 import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -58,6 +59,7 @@ import org.matrix.android.sdk.internal.database.query.isEventRead
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.extensions.clearWith
+import org.matrix.android.sdk.internal.extensions.realm
 import org.matrix.android.sdk.internal.query.process
 import org.matrix.android.sdk.internal.session.room.RoomAvatarResolver
 import org.matrix.android.sdk.internal.session.room.accountdata.RoomAccountDataDataSource

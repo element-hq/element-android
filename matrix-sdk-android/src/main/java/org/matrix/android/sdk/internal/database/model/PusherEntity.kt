@@ -15,7 +15,9 @@
  */
 package org.matrix.android.sdk.internal.database.model
 
-import io.realm.RealmObject
+import io.realm.RealmModel
+import io.realm.annotations.RealmClass
+import io.realm.kotlin.deleteFromRealm
 import org.matrix.android.sdk.api.session.pushers.PusherState
 
 // TODO
@@ -27,6 +29,7 @@ import org.matrix.android.sdk.api.session.pushers.PusherState
 //        at org.matrix.android.sdk.internal.database.model.PusherEntity.setData(PusherEntity.kt:16)
 //        at org.matrix.android.sdk.internal.session.pushers.AddHttpPusherWorker$doWork$$inlined$fold$lambda$2.execute(AddHttpPusherWorker.kt:70)
 //        at io.realm.Realm.executeTransaction(Realm.java:1493)
+@RealmClass
 internal open class PusherEntity(
         var pushKey: String = "",
         var kind: String? = null,
@@ -36,7 +39,7 @@ internal open class PusherEntity(
         var profileTag: String? = null,
         var lang: String? = null,
         var data: PusherDataEntity? = null
-) : RealmObject() {
+) : RealmModel {
     private var stateStr: String = PusherState.UNREGISTERED.name
 
     var state: PusherState

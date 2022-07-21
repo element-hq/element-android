@@ -15,14 +15,16 @@
  */
 package org.matrix.android.sdk.internal.database.model
 
-import io.realm.RealmObject
+import io.realm.RealmModel
+import io.realm.annotations.RealmClass
 
+@RealmClass
 internal open class PushConditionEntity(
         var kind: String = "",
         var key: String? = null,
         var pattern: String? = null,
         var iz: String? = null
-) : RealmObject() {
+) : RealmModel {
 
     companion object
 }

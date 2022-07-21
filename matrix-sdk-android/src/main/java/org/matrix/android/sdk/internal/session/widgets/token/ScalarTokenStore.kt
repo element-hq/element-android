@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.session.widgets.token
 
 import com.zhuinden.monarchy.Monarchy
+import io.realm.kotlin.deleteFromRealm
 import org.matrix.android.sdk.internal.database.model.ScalarTokenEntity
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase

@@ -16,12 +16,14 @@
 
 package org.matrix.android.sdk.internal.database.model
 
-import io.realm.RealmObject
+import io.realm.RealmModel
+import io.realm.annotations.RealmClass
 
+@RealmClass
 internal open class RoomTagEntity(
         var tagName: String = "",
         var tagOrder: Double? = null
-) : RealmObject() {
+) : RealmModel {
 
     companion object
 }

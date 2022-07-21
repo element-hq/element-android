@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.database.helper
 
 import io.realm.Realm
+import io.realm.RealmObject
 import io.realm.kotlin.createObject
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -38,6 +39,7 @@ import org.matrix.android.sdk.internal.database.query.find
 import org.matrix.android.sdk.internal.database.query.findLastForwardChunkOfRoom
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.where
+import org.matrix.android.sdk.internal.extensions.realm
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
 import timber.log.Timber
 

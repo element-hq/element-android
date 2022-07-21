@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.session.room.timeline
 import com.zhuinden.monarchy.Monarchy
 import dagger.Lazy
 import io.realm.Realm
+import io.realm.kotlin.isValid
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
@@ -40,6 +41,7 @@ import org.matrix.android.sdk.internal.database.query.findLastForwardChunkOfRoom
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.extensions.realm
 import org.matrix.android.sdk.internal.session.StreamEventsManager
 import org.matrix.android.sdk.internal.util.awaitTransaction
 import org.matrix.android.sdk.internal.util.time.Clock
@@ -183,7 +185,7 @@ internal class TokenChunkEventPersistor @Inject constructor(
                 }
             }
         }
-        if (currentChunk.isValid) {
+        if (currentChunk.isValid()) {
             RoomEntity.where(realm, roomId).findFirst()?.addIfNecessary(currentChunk)
         }
 

@@ -16,12 +16,15 @@
 
 package org.matrix.android.sdk.internal.database.model
 
-import io.realm.RealmObject
+import io.realm.RealmModel
 import io.realm.RealmResults
 import io.realm.annotations.Index
 import io.realm.annotations.LinkingObjects
+import io.realm.annotations.RealmClass
+import io.realm.kotlin.deleteFromRealm
 import org.matrix.android.sdk.internal.extensions.assertIsManaged
 
+@RealmClass
 internal open class TimelineEventEntity(
         var localId: Long = 0,
         @Index var eventId: String = "",
@@ -37,7 +40,7 @@ internal open class TimelineEventEntity(
         // to a thread chunk and is a temporarily event.
         var ownedByThreadChunk: Boolean = false,
         var readReceipts: ReadReceiptsSummaryEntity? = null
-) : RealmObject() {
+) : RealmModel {
 
     @LinkingObjects("timelineEvents")
     val chunk: RealmResults<ChunkEntity>? = null

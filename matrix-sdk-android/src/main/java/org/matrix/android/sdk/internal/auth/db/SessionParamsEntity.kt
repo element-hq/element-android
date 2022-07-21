@@ -16,9 +16,11 @@
 
 package org.matrix.android.sdk.internal.auth.db
 
-import io.realm.RealmObject
+import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
+import io.realm.annotations.RealmClass
 
+@RealmClass
 internal open class SessionParamsEntity(
         @PrimaryKey var sessionId: String = "",
         var userId: String = "",
@@ -28,4 +30,4 @@ internal open class SessionParamsEntity(
         // In case of hard logout, this object is deleted from DB
         var isTokenValid: Boolean = true,
         var loginType: String = "",
-) : RealmObject()
+) : RealmModel

@@ -17,8 +17,11 @@
 package org.matrix.android.sdk.internal.crypto.store.db.model
 
 import io.realm.RealmList
-import io.realm.RealmObject
+import io.realm.RealmModel
+import io.realm.annotations.RealmClass
+import io.realm.kotlin.deleteFromRealm
 
+@RealmClass
 internal open class KeyInfoEntity(
         var publicKeyBase64: String? = null,
 //        var isTrusted: Boolean = false,
@@ -29,7 +32,7 @@ internal open class KeyInfoEntity(
          */
         var signatures: String? = null,
         var trustLevelEntity: TrustLevelEntity? = null
-) : RealmObject()
+) : RealmModel
 
 internal fun KeyInfoEntity.deleteOnCascade() {
     trustLevelEntity?.deleteFromRealm()

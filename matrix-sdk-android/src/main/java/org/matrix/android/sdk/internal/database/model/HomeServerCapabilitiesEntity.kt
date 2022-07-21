@@ -16,9 +16,11 @@
 
 package org.matrix.android.sdk.internal.database.model
 
-import io.realm.RealmObject
+import io.realm.RealmModel
+import io.realm.annotations.RealmClass
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 
+@RealmClass
 internal open class HomeServerCapabilitiesEntity(
         var canChangePassword: Boolean = true,
         var canChangeDisplayName: Boolean = true,
@@ -31,7 +33,7 @@ internal open class HomeServerCapabilitiesEntity(
         var lastUpdatedTimestamp: Long = 0L,
         var canUseThreading: Boolean = false,
         var canControlLogoutDevices: Boolean = false
-) : RealmObject() {
+) : RealmModel {
 
     companion object
 }

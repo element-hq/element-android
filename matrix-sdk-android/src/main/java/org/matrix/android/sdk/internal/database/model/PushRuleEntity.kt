@@ -16,10 +16,13 @@
 package org.matrix.android.sdk.internal.database.model
 
 import io.realm.RealmList
-import io.realm.RealmObject
+import io.realm.RealmModel
 import io.realm.RealmResults
 import io.realm.annotations.LinkingObjects
+import io.realm.annotations.RealmClass
+import io.realm.kotlin.deleteFromRealm
 
+@RealmClass
 internal open class PushRuleEntity(
         // Required. The actions to perform when this rule is matched.
         var actionsStr: String? = null,
@@ -33,7 +36,7 @@ internal open class PushRuleEntity(
         var conditions: RealmList<PushConditionEntity>? = RealmList(),
         // The glob-style pattern to match against. Only applicable to content rules.
         var pattern: String? = null
-) : RealmObject() {
+) : RealmModel {
 
     @LinkingObjects("pushRules")
     val parent: RealmResults<PushRulesEntity>? = null

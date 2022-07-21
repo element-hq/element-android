@@ -17,9 +17,11 @@
 package org.matrix.android.sdk.internal.database.model
 
 import io.realm.RealmList
-import io.realm.RealmObject
+import io.realm.RealmModel
 import io.realm.annotations.Index
 import io.realm.annotations.PrimaryKey
+import io.realm.annotations.RealmClass
+import io.realm.kotlin.deleteFromRealm
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -30,12 +32,13 @@ import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.internal.database.model.presence.UserPresenceEntity
 import org.matrix.android.sdk.internal.session.room.membership.RoomName
 
+@RealmClass
 internal open class RoomSummaryEntity(
         @PrimaryKey var roomId: String = "",
         var roomType: String? = null,
         var parents: RealmList<SpaceParentSummaryEntity> = RealmList(),
         var children: RealmList<SpaceChildSummaryEntity> = RealmList()
-) : RealmObject() {
+) : RealmModel {
 
     private var displayName: String? = ""
 

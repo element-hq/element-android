@@ -16,12 +16,14 @@
 
 package org.matrix.android.sdk.internal.session.contentscanner.db
 
-import io.realm.RealmObject
+import io.realm.RealmModel
+import io.realm.annotations.RealmClass
 
+@RealmClass
 internal open class ContentScannerInfoEntity(
         var serverUrl: String? = null,
         var enabled: Boolean? = null
-) : RealmObject() {
+) : RealmModel {
 
     companion object
 }

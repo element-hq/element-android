@@ -23,6 +23,7 @@ import io.realm.RealmConfiguration
 import io.realm.RealmResults
 import io.realm.kotlin.createObject
 import io.realm.kotlin.executeTransactionAwait
+import io.realm.kotlin.isValid
 import kotlinx.coroutines.CompletableDeferred
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -301,7 +302,7 @@ internal class LoadTimelineStrategy constructor(
                 this.rootThreadEventId = rootThreadEventId
                 this.isLastForwardThread = true
             }
-            if (threadChunk.isValid) {
+            if (threadChunk.isValid()) {
                 RoomEntity.where(it, roomId).findFirst()?.addIfNecessary(threadChunk)
             }
         }

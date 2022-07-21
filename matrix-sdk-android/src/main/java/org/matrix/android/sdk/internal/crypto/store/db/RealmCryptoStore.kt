@@ -25,6 +25,7 @@ import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.Sort
 import io.realm.kotlin.createObject
+import io.realm.kotlin.deleteFromRealm
 import io.realm.kotlin.where
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.api.extensions.tryOrNull

@@ -16,6 +16,7 @@
 package org.matrix.android.sdk.internal.session.room
 
 import io.realm.Realm
+import io.realm.kotlin.deleteFromRealm
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationState
 import org.matrix.android.sdk.api.session.events.model.AggregatedAnnotation

@@ -16,9 +16,11 @@
 
 package org.matrix.android.sdk.internal.database.model
 
-import io.realm.RealmObject
+import io.realm.RealmModel
+import io.realm.annotations.RealmClass
 
-internal open class IgnoredUserEntity(var userId: String = "") : RealmObject() {
+@RealmClass
+internal open class IgnoredUserEntity(var userId: String = "") : RealmModel {
 
     companion object
 }

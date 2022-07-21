@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.database.helper
 
 import com.squareup.moshi.JsonDataException
 import io.realm.Realm
+import io.realm.RealmModel
 import io.realm.RealmQuery
 import io.realm.Sort
 import org.matrix.android.sdk.api.session.events.model.UnsignedData
@@ -37,6 +38,7 @@ import org.matrix.android.sdk.internal.database.query.findLastForwardChunkOfRoom
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.database.query.whereRoomId
 import org.matrix.android.sdk.internal.di.MoshiProvider
+import org.matrix.android.sdk.internal.extensions.realm
 import timber.log.Timber
 
 private typealias Summary = Pair<Int, TimelineEventEntity>?

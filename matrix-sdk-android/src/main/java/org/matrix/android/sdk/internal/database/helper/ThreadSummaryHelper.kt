@@ -44,6 +44,7 @@ import org.matrix.android.sdk.internal.database.query.copyToRealmOrIgnore
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.getOrNull
 import org.matrix.android.sdk.internal.database.query.where
+import org.matrix.android.sdk.internal.extensions.realm
 import org.matrix.android.sdk.internal.session.events.getFixedRoomMemberContent
 import org.matrix.android.sdk.internal.session.room.timeline.TimelineEventDecryptor
 import timber.log.Timber

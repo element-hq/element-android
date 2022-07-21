@@ -16,14 +16,17 @@
 package org.matrix.android.sdk.internal.database.model
 
 import io.realm.RealmList
-import io.realm.RealmObject
+import io.realm.RealmModel
+import io.realm.annotations.RealmClass
+import io.realm.kotlin.deleteFromRealm
 import org.matrix.android.sdk.api.session.pushrules.RuleKind
 import org.matrix.android.sdk.internal.extensions.clearWith
 
+@RealmClass
 internal open class PushRulesEntity(
         var scope: String = "",
         var pushRules: RealmList<PushRuleEntity> = RealmList()
-) : RealmObject() {
+) : RealmModel {
 
     private var kindStr: String = RuleKind.CONTENT.name
     var kind: RuleKind

@@ -17,20 +17,23 @@
 package org.matrix.android.sdk.internal.database.model
 
 import io.realm.RealmList
-import io.realm.RealmObject
+import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
+import io.realm.annotations.RealmClass
+import io.realm.kotlin.deleteFromRealm
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.internal.database.model.threads.ThreadSummaryEntity
 import org.matrix.android.sdk.internal.database.query.findRootOrLatest
 import org.matrix.android.sdk.internal.extensions.assertIsManaged
 
+@RealmClass
 internal open class RoomEntity(
         @PrimaryKey var roomId: String = "",
         var chunks: RealmList<ChunkEntity> = RealmList(),
         var sendingTimelineEvents: RealmList<TimelineEventEntity> = RealmList(),
         var threadSummaries: RealmList<ThreadSummaryEntity> = RealmList(),
         var accountData: RealmList<RoomAccountDataEntity> = RealmList()
-) : RealmObject() {
+) : RealmModel {
 
     private var membershipStr: String = Membership.NONE.name
     var membership: Membership

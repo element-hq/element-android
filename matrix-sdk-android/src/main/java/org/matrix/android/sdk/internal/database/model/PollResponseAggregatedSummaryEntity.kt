@@ -16,11 +16,13 @@
 package org.matrix.android.sdk.internal.database.model
 
 import io.realm.RealmList
-import io.realm.RealmObject
+import io.realm.RealmModel
+import io.realm.annotations.RealmClass
 
 /**
  * Keep the latest state of a poll.
  */
+@RealmClass
 internal open class PollResponseAggregatedSummaryEntity(
         // For now we persist this a JSON for greater flexibility
         // #see PollSummaryContent
@@ -34,7 +36,7 @@ internal open class PollResponseAggregatedSummaryEntity(
         // The list of the eventIDs used to build the summary (might be out of sync if chunked received from message chunk)
         var sourceEvents: RealmList<String> = RealmList(),
         var sourceLocalEchoEvents: RealmList<String> = RealmList()
-) : RealmObject() {
+) : RealmModel {
 
     companion object
 }

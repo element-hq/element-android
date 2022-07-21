@@ -16,12 +16,14 @@
 
 package org.matrix.android.sdk.internal.database.model
 
-import io.realm.RealmObject
+import io.realm.RealmModel
+import io.realm.annotations.RealmClass
 
 /**
  * Contain a map between Json filter string and filterId (from Homeserver).
  * Currently there is only one object in this table.
  */
+@RealmClass
 internal open class FilterEntity(
         // The serialized FilterBody
         var filterBodyJson: String = "",
@@ -30,7 +32,7 @@ internal open class FilterEntity(
         // the id server side of the filterBodyJson, can be used instead of filterBodyJson if not blank
         var filterId: String = ""
 
-) : RealmObject() {
+) : RealmModel {
 
     companion object
 }
