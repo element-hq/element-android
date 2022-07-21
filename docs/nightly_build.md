@@ -48,7 +48,7 @@ mv towncrier.toml towncrier.toml.bak
 sed 's/CHANGES\.md/CHANGES_NIGHTLY\.md/' towncrier.toml.bak > towncrier.toml
 rm towncrier.toml.bak
 yes n | towncrier --version nightly
-./gradlew assembleGplayNightly appDistributionUploadGplayNightly $CI_GRADLE_ARG_PROPERTIES --stacktrace
+./gradlew assembleGplayNightly appDistributionUploadGplayNightly "-Porg.gradle.jvmargs=-XX:MaxRAM=7g -Xmx3g -XX:MaxMetaspaceSize=1g" -Porg.gradle.parallel=false --stacktrace
 ```
 
 Then you can reset the change on the codebase.

@@ -5,12 +5,6 @@ on:
     # Every nights at 4
     - cron: "0 4 * * *"
 
-env:
-  CI_GRADLE_ARG_PROPERTIES: >
-    -Porg.gradle.jvmargs=-Xmx4g
-    -Porg.gradle.parallel=false
-    --no-daemon
-
 jobs:
   nightly:
     name: Build and publish nightly Gplay APK to Firebase
@@ -40,7 +34,7 @@ jobs:
           yes n | towncrier build --version nightly
       - name: Build and upload Gplay Nightly APK
         run: |
-          ./gradlew assembleGplayNightly appDistributionUploadGplayNightly $CI_GRADLE_ARG_PROPERTIES --stacktrace
+          ./gradlew assembleGplayNightly appDistributionUploadGplayNightly "-Porg.gradle.jvmargs=-XX:MaxRAM=7g -Xmx3g -XX:MaxMetaspaceSize=1g" -Porg.gradle.parallel=false --stacktrace
         env:
           ELEMENT_ANDROID_NIGHTLY_KEYID: ${{ secrets.ELEMENT_ANDROID_NIGHTLY_KEYID }}
           ELEMENT_ANDROID_NIGHTLY_KEYPASSWORD: ${{ secrets.ELEMENT_ANDROID_NIGHTLY_KEYPASSWORD }}

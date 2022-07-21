@@ -5,13 +5,6 @@ on:
   push:
     branches: [main, develop]
 
-# Enrich gradle.properties for CI/CD
-env:
-  CI_GRADLE_ARG_PROPERTIES: >
-    -Porg.gradle.jvmargs=-Xmx4g
-    -Porg.gradle.parallel=false
-    --no-daemon
-
 jobs:
   tests:
     name: Runs all tests
@@ -51,9 +44,9 @@ jobs:
           disable-animations: true
           emulator-build: 7425822
           script: | 
-            ./gradlew unitTestsWithCoverage --stacktrace $CI_GRADLE_ARG_PROPERTIES
-            ./gradlew instrumentationTestsWithCoverage --stacktrace $CI_GRADLE_ARG_PROPERTIES
-            ./gradlew generateCoverageReport --stacktrace $CI_GRADLE_ARG_PROPERTIES
+            ./gradlew unitTestsWithCoverage --stacktrace "-Porg.gradle.jvmargs=-XX:MaxRAM=7g -Xmx3g -XX:MaxMetaspaceSize=1g" -Porg.gradle.parallel=false
+            ./gradlew instrumentationTestsWithCoverage --stacktrace "-Porg.gradle.jvmargs=-XX:MaxRAM=7g -Xmx3g -XX:MaxMetaspaceSize=1g" -Porg.gradle.parallel=false
+            ./gradlew generateCoverageReport --stacktrace "-Porg.gradle.jvmargs=-XX:MaxRAM=7g -Xmx3g -XX:MaxMetaspaceSize=1g" -Porg.gradle.parallel=false
 # NB: continue-on-error marks steps.tests.conclusion = 'success' but leaves stes.tests.outcome = 'failure'
       - name: Run all the codecoverage tests at once (retry if emulator failed)
         uses: reactivecircus/android-emulator-runner@v2
@@ -67,10 +60,10 @@ jobs:
           disable-animations: true
           emulator-build: 7425822
           script: |
-            ./gradlew unitTestsWithCoverage --stacktrace $CI_GRADLE_ARG_PROPERTIES
-            ./gradlew instrumentationTestsWithCoverage --stacktrace $CI_GRADLE_ARG_PROPERTIES
-            ./gradlew generateCoverageReport --stacktrace $CI_GRADLE_ARG_PROPERTIES
-      - run: ./gradlew sonarqube $CI_GRADLE_ARG_PROPERTIES
+            ./gradlew unitTestsWithCoverage --stacktrace "-Porg.gradle.jvmargs=-XX:MaxRAM=7g -Xmx3g -XX:MaxMetaspaceSize=1g" -Porg.gradle.parallel=false
+            ./gradlew instrumentationTestsWithCoverage --stacktrace "-Porg.gradle.jvmargs=-XX:MaxRAM=7g -Xmx3g -XX:MaxMetaspaceSize=1g" -Porg.gradle.parallel=false
+            ./gradlew generateCoverageReport --stacktrace "-Porg.gradle.jvmargs=-XX:MaxRAM=7g -Xmx3g -XX:MaxMetaspaceSize=1g" -Porg.gradle.parallel=false
+      - run: ./gradlew sonarqube "-Porg.gradle.jvmargs=-XX:MaxRAM=7g -Xmx3g -XX:MaxMetaspaceSize=1g" -Porg.gradle.parallel=false
         if: always() # we may have failed a previous step and retried, that's OK
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
@@ -114,5 +107,5 @@ jobs:
 #          restore-keys: | 
 #            ${{ runner.os }}-gradle- 
 #      - name: Build Android Tests  
-#        run: ./gradlew clean assembleAndroidTest $CI_GRADLE_ARG_PROPERTIES --stacktrace 
+#        run: ./gradlew clean assembleAndroidTest "-Porg.gradle.jvmargs=-XX:MaxRAM=7g -Xmx3g -XX:MaxMetaspaceSize=1g" -Porg.gradle.parallel=false --stacktrace
 
