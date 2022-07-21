@@ -365,7 +365,7 @@ internal class MXMegolmEncryption(
                 fromDevice = myDeviceId
         )
         val params = SendToDeviceTask.Params(
-                EventType.ROOM_KEY_WITHHELD.first(),
+                EventType.ROOM_KEY_WITHHELD.stable,
                 MXUsersDevicesMap<Any>().apply {
                     targets.forEach {
                         setObject(it.userId, it.deviceId, withHeldContent)
