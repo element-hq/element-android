@@ -29,9 +29,12 @@ import android.graphics.drawable.Icon
 import android.os.Build
 import android.util.Rational
 import androidx.annotation.RequiresApi
+import androidx.core.app.PictureInPictureModeChangedInfo
+import androidx.core.util.Consumer
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
+import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
@@ -99,6 +102,7 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
         // Trust element call widget by default
         if (widgetArgs.kind == WidgetKind.ELEMENT_CALL) {
             if (supportFragmentManager.findFragmentByTag(WIDGET_FRAGMENT_TAG) == null) {
+                addOnPictureInPictureModeChangedListener(pictureInPictureModeChangedInfoConsumer)
                 addFragment(views.fragmentContainer, WidgetFragment::class.java, widgetArgs, WIDGET_FRAGMENT_TAG)
             }
         } else {
@@ -148,6 +152,11 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
         }
     }
 
+    override fun onDestroy() {
+        removeOnPictureInPictureModeChangedListener(pictureInPictureModeChangedInfoConsumer)
+        super.onDestroy()
+    }
+
     private fun enterPictureInPicture() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createElementCallPipParams()?.let {
@@ -172,8 +181,10 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
     }
 
     private var hangupBroadcastReceiver: BroadcastReceiver? = null
-    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration?) {
-        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
+
+    private val pictureInPictureModeChangedInfoConsumer = Consumer<PictureInPictureModeChangedInfo> {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return@Consumer
+        
         if (isInPictureInPictureMode) {
             hangupBroadcastReceiver = object : BroadcastReceiver() {
                 override fun onReceive(context: Context?, intent: Intent?) {
