@@ -28,7 +28,6 @@ def glide = "4.13.2"
 def bigImageViewer = "1.8.1"
 def jjwt = "0.11.5"
 def vanniktechEmoji = "0.15.0"
-
 def fragment = "1.5.0"
 
 // Testing
@@ -160,6 +159,9 @@ ext.libs = [
         ],
         apache      : [
                 'commonsImaging'         : "org.apache.sanselan:sanselan:0.97-incubator"
+        ],
+        realm      : [
+                'base'                   : "io.realm.kotlin:library-base:${realmKotlinVersion}"
         ],
         tests       : [
                 'kluent'                 : "org.amshove.kluent:kluent-android:1.68",

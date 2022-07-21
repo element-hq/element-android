@@ -1,14 +1,3 @@
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'kotlin-parcelize'
-apply plugin: 'realm-android'
-apply plugin: "org.jetbrains.dokka"
-
-if (project.hasProperty("coverage")) {
-    apply plugin: 'jacoco'
-}
-
 buildscript {
     repositories {
         // Do not use `mavenCentral()`, it prevents Dependabot from working properly
@@ -19,6 +8,21 @@ buildscript {
     dependencies {
         classpath "io.realm:realm-gradle-plugin:10.11.0"
     }
+}
+
+plugins {
+    id("io.realm.kotlin") version "${realmKotlinVersion}"
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-parcelize'
+apply plugin: 'realm-android'
+apply plugin: "org.jetbrains.dokka"
+
+if (project.hasProperty("coverage")) {
+    apply plugin: 'jacoco'
 }
 
 dokkaHtml {
@@ -172,6 +176,7 @@ dependencies {
 
     // Database
     implementation 'com.github.Zhuinden:realm-monarchy:0.7.1'
+    implementation libs.realm.base
 
     kapt 'dk.ilios:realmfieldnameshelper:2.0.0'
 
