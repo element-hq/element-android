@@ -1625,6 +1625,7 @@
     <string name="error_no_network">No network. Please check your Internet connection.</string>
     <string name="change_room_directory_network">"Change network"</string>
     <string name="please_wait">"Please wait…"</string>
+    <string name="updating_your_data">Updating your data…</string>
     <!--TODO: delete-->
     <string name="group_all_communities" tools:ignore="UnusedResources">"All Communities"</string>
 

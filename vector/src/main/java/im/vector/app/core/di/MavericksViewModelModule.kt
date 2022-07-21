@@ -111,6 +111,7 @@ import im.vector.app.features.spaces.manage.SpaceManageSharedViewModel
 import im.vector.app.features.spaces.people.SpacePeopleViewModel
 import im.vector.app.features.spaces.preview.SpacePreviewViewModel
 import im.vector.app.features.spaces.share.ShareSpaceViewModel
+import im.vector.app.features.start.StartAppViewModel
 import im.vector.app.features.terms.ReviewTermsViewModel
 import im.vector.app.features.usercode.UserCodeSharedViewModel
 import im.vector.app.features.userdirectory.UserListViewModel
@@ -482,6 +483,11 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(AnalyticsAccountDataViewModel::class)
     fun analyticsAccountDataViewModelFactory(factory: AnalyticsAccountDataViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(StartAppViewModel::class)
+    fun startAppViewModelFactory(factory: StartAppViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
     @Binds
     @IntoMap

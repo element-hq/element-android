@@ -173,7 +173,7 @@ class DefaultNavigator @Inject constructor(
         }
 
         val args = TimelineArgs(roomId = roomId, eventId = eventId, isInviteAlreadyAccepted = isInviteAlreadyAccepted)
-        val intent = RoomDetailActivity.newIntent(context, args)
+        val intent = RoomDetailActivity.newIntent(context, args, false)
         startActivity(context, intent, buildTask)
     }
 
@@ -203,7 +203,7 @@ class DefaultNavigator @Inject constructor(
                         eventId = null,
                         openShareSpaceForId = spaceId.takeIf { postSwitchSpaceAction.showShareSheet }
                 )
-                val intent = RoomDetailActivity.newIntent(context, args)
+                val intent = RoomDetailActivity.newIntent(context, args, false)
                 startActivity(context, intent, false)
             }
         }
@@ -290,7 +290,7 @@ class DefaultNavigator @Inject constructor(
 
     override fun openRoomForSharingAndFinish(activity: Activity, roomId: String, sharedData: SharedData) {
         val args = TimelineArgs(roomId, null, sharedData)
-        val intent = RoomDetailActivity.newIntent(activity, args)
+        val intent = RoomDetailActivity.newIntent(activity, args, false)
         activity.startActivity(intent)
         activity.finish()
     }
