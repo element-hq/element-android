@@ -54,7 +54,14 @@ class EventMatchCondition(
         // word boundary.
         return try {
             if (key == "content.body") {
-                val regex = Regex("(\\W|^)" + pattern.simpleGlobToRegExp() + "(\\W|$)", setOf(RegexOption.DOT_MATCHES_ALL, RegexOption.IGNORE_CASE))
+                val modPattern = if (pattern.startsWith("*") && pattern.endsWith("*")) {
+                    // Regex.containsMatchIn() is way faster without leading and trailing
+                    // stars, that don't make any difference for the evaluation result
+                    pattern.removePrefix("*").removeSuffix("*").simpleGlobToRegExp()
+                } else {
+                    "(\\W|^)" + pattern.simpleGlobToRegExp() + "(\\W|$)"
+                }
+                val regex = Regex(modPattern, setOf(RegexOption.DOT_MATCHES_ALL, RegexOption.IGNORE_CASE))
                 regex.containsMatchIn(value)
             } else {
                 val regex = Regex(pattern.simpleGlobToRegExp(), setOf(RegexOption.DOT_MATCHES_ALL, RegexOption.IGNORE_CASE))
