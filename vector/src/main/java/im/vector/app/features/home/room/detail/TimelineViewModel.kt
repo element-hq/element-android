@@ -467,6 +467,13 @@ class TimelineViewModel @AssistedInject constructor(
             }
             is RoomDetailAction.EndPoll -> handleEndPoll(action.eventId)
             RoomDetailAction.StopLiveLocationSharing -> handleStopLiveLocationSharing()
+            RoomDetailAction.OpenElementCallWidget -> handleOpenElementCallWidget()
+        }
+    }
+
+    private fun handleOpenElementCallWidget() = withState { state ->
+        if (state.hasActiveElementCallWidget()) {
+            _viewEvents.post(RoomDetailViewEvents.OpenElementCallWidget)
         }
     }
 
