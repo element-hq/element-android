@@ -24,6 +24,8 @@ import im.vector.app.test.fakes.FakeUiStateRepository
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Before
@@ -112,5 +114,30 @@ internal class AppStateHandlerImplTest {
         val backstack = appStateHandler.getSpaceBackstack()
 
         backstack.size shouldBe 0
+    }
+
+    @Test
+    fun `when setCurrentSpace, then space is emitted to selectedSpaceFlow`() = runTest {
+        appStateHandler.setCurrentSpace(spaceId, session)
+
+        val currentSpace = appStateHandler.getSelectedSpaceFlow().first().orNull()
+
+        currentSpace shouldBeEqualTo spaceSummary
+    }
+
+    @Test
+    fun `given current space exists, when getSafeActiveSpaceId, then return current space id`() {
+        appStateHandler.setCurrentSpace(spaceId, session)
+
+        val activeSpaceId = appStateHandler.getSafeActiveSpaceId()
+
+        activeSpaceId shouldBeEqualTo spaceId
+    }
+
+    @Test
+    fun `given current space doesn't exist, when getSafeActiveSpaceId, then return current null`() {
+        val activeSpaceId = appStateHandler.getSafeActiveSpaceId()
+
+        activeSpaceId shouldBe null
     }
 }
