@@ -93,7 +93,8 @@ data class RoomDetailViewState(
         return asyncRoomSummary.invoke()?.isDirect ?: true ||
                 // When there is only one member, a warning will be displayed when the user
                 // clicks on the menu item to start a call
-                asyncRoomSummary.invoke()?.joinedMembersCount == 1
+                asyncRoomSummary.invoke()?.joinedMembersCount == 1 ||
+                hasActiveElementCallWidget()
     }
 
     fun isSearchAvailable() = asyncRoomSummary()?.isEncrypted == false
