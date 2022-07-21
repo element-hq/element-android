@@ -28,11 +28,11 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import im.vector.app.SpaceStateHandler
-import im.vector.app.SpaceStateHandlerImpl
 import im.vector.app.BuildConfig
 import im.vector.app.EmojiCompatWrapper
 import im.vector.app.EmojiSpanify
+import im.vector.app.SpaceStateHandler
+import im.vector.app.SpaceStateHandlerImpl
 import im.vector.app.config.analyticsConfig
 import im.vector.app.core.dispatchers.CoroutineDispatchers
 import im.vector.app.core.error.DefaultErrorFormatter
