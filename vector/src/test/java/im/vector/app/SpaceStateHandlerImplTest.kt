@@ -21,21 +21,19 @@ import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakeAnalyticsTracker
 import im.vector.app.test.fakes.FakeSession
 import im.vector.app.test.fakes.FakeUiStateRepository
-import io.mockk.every
+import im.vector.app.test.fixtures.RoomSummaryFixture.aRoomSummary
 import io.mockk.justRun
-import io.mockk.mockk
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Before
 import org.junit.Test
-import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 internal class SpaceStateHandlerImplTest {
 
     private val spaceId = "spaceId"
-    private val spaceSummary: RoomSummary = mockk()
+    private val spaceSummary = aRoomSummary(spaceId)
     private val session = FakeSession.withRoomSummary(spaceSummary)
 
     private val sessionDataSource = FakeActiveSessionDataSource()
@@ -53,7 +51,6 @@ internal class SpaceStateHandlerImplTest {
     @Before
     fun setup() {
         justRun { uiStateRepository.storeSelectedSpace(any(), any()) }
-        every { spaceSummary.roomId } returns spaceId
     }
 
     @Test
