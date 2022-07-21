@@ -102,6 +102,8 @@ data class RoomDetailViewState(
     // It can differs for a short period of time on the JitsiState as its computed async.
     fun hasActiveJitsiWidget() = activeRoomWidgets()?.any { it.type == WidgetType.Jitsi && it.isActive }.orFalse()
 
+    fun hasActiveElementCallWidget() = activeRoomWidgets()?.any { it.type == WidgetType.ElementCall && it.isActive }.orFalse()
+
     fun isDm() = asyncRoomSummary()?.isDirect == true
 
     fun isThreadTimeline() = rootThreadEventId != null
