@@ -1943,7 +1943,7 @@
 
     <string name="ftue_auth_terms_title">Server policies</string>
     <!-- Note for translators, %s is the homeserver name, eg matrix.org -->
-    <string name="ftue_auth_terms_subtitle">Please read through %s\'s terns and policies</string>
+    <string name="ftue_auth_terms_subtitle">Please read through %s\'s terms and policies</string>
 
     <string name="ftue_auth_email_title">Enter your email</string>
     <!-- Note for translators, %s is the homeserver name, eg matrix.org -->
