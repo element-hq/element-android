@@ -16,32 +16,56 @@
 
 package im.vector.app
 
-import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.ui.UiStateRepository
+import im.vector.app.test.fakes.FakeActiveSessionHolder
+import im.vector.app.test.fakes.FakeSession
+import io.mockk.every
+import io.mockk.justRun
 import io.mockk.mockk
 import org.amshove.kluent.shouldBe
+import org.junit.Before
 import org.junit.Test
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 internal class AppStateHandlerTest {
 
+    private val spaceId = "spaceId"
+    private val spaceSummary: RoomSummary = mockk {
+        every { roomId } returns spaceId
+    }
+    private val session = FakeSession.withRoomSummary(spaceSummary)
+
     private val sessionDataSource: ActiveSessionDataSource = mockk()
     private val uiStateRepository: UiStateRepository = mockk()
-    private val activeSessionHolder: ActiveSessionHolder = mockk()
+    private val activeSessionHolder = FakeActiveSessionHolder(session).instance
     private val analyticsTracker: AnalyticsTracker = mockk()
 
-    private val appStateHandlerImpl = AppStateHandlerImpl(
+    private val appStateHandler = AppStateHandlerImpl(
             sessionDataSource,
             uiStateRepository,
             activeSessionHolder,
             analyticsTracker,
     )
 
+    @Before
+    fun setup() {
+        justRun { uiStateRepository.storeSelectedSpace(any(), any()) }
+    }
+
     @Test
-    fun `given selected space is null, when getCurrentSpace, then return null`() {
-        val currentSpace = appStateHandlerImpl.getCurrentSpace()
+    fun `given selected space doesn't exist, when getCurrentSpace, then return null`() {
+        val currentSpace = appStateHandler.getCurrentSpace()
 
         currentSpace shouldBe null
     }
 
+    @Test
+    fun `given selected space exists, when getCurrentSpace, then return selected space`() {
+        appStateHandler.setCurrentSpace(spaceId, session)
+
+        val currentSpace = appStateHandler.getCurrentSpace()
+
+        currentSpace shouldBe spaceSummary
+    }
 }
