@@ -22,12 +22,10 @@ import im.vector.app.test.fakes.FakeAnalyticsTracker
 import im.vector.app.test.fakes.FakeSession
 import im.vector.app.test.fakes.FakeUiStateRepository
 import im.vector.app.test.fixtures.RoomSummaryFixture.aRoomSummary
-import io.mockk.justRun
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldBeEqualTo
-import org.junit.Before
 import org.junit.Test
 
 internal class SpaceStateHandlerImplTest {
@@ -47,11 +45,6 @@ internal class SpaceStateHandlerImplTest {
             activeSessionHolder.instance,
             analyticsTracker,
     )
-
-    @Before
-    fun setup() {
-        justRun { uiStateRepository.storeSelectedSpace(any(), any()) }
-    }
 
     @Test
     fun `given selected space doesn't exist, when getCurrentSpace, then return null`() {

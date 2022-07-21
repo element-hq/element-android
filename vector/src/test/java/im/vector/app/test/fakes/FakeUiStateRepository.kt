@@ -17,11 +17,16 @@
 package im.vector.app.test.fakes
 
 import im.vector.app.features.ui.UiStateRepository
+import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
 import org.matrix.android.sdk.api.session.Session
 
 class FakeUiStateRepository : UiStateRepository by mockk() {
+
+    init {
+        justRun { storeSelectedSpace(any(), any()) }
+    }
 
     fun verifyStoreSelectedSpace(roomId: String, session: Session, inverse: Boolean = false) {
         verify(inverse = inverse) { storeSelectedSpace(roomId, session.sessionId) }
