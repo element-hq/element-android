@@ -32,7 +32,7 @@ import org.junit.Before
 import org.junit.Test
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
-internal class AppStateHandlerImplTest {
+internal class SpaceStateHandlerImplTest {
 
     private val spaceId = "spaceId"
     private val spaceSummary: RoomSummary = mockk()
@@ -43,7 +43,7 @@ internal class AppStateHandlerImplTest {
     private val activeSessionHolder = FakeActiveSessionHolder(session)
     private val analyticsTracker = FakeAnalyticsTracker()
 
-    private val appStateHandler = AppStateHandlerImpl(
+    private val spaceStateHandler = SpaceStateHandlerImpl(
             sessionDataSource.instance,
             uiStateRepository,
             activeSessionHolder.instance,
@@ -58,39 +58,39 @@ internal class AppStateHandlerImplTest {
 
     @Test
     fun `given selected space doesn't exist, when getCurrentSpace, then return null`() {
-        val currentSpace = appStateHandler.getCurrentSpace()
+        val currentSpace = spaceStateHandler.getCurrentSpace()
 
         currentSpace shouldBe null
     }
 
     @Test
     fun `given selected space exists, when getCurrentSpace, then return selected space`() {
-        appStateHandler.setCurrentSpace(spaceId, session)
+        spaceStateHandler.setCurrentSpace(spaceId, session)
 
-        val currentSpace = appStateHandler.getCurrentSpace()
+        val currentSpace = spaceStateHandler.getCurrentSpace()
 
         currentSpace shouldBe spaceSummary
     }
 
     @Test
     fun `given persistNow is true, when setCurrentSpace, then immediately persist to ui state`() {
-        appStateHandler.setCurrentSpace(spaceId, session, persistNow = true)
+        spaceStateHandler.setCurrentSpace(spaceId, session, persistNow = true)
 
         uiStateRepository.verifyStoreSelectedSpace(spaceId, session)
     }
 
     @Test
     fun `given persistNow is false, when setCurrentSpace, then don't immediately persist to ui state`() {
-        appStateHandler.setCurrentSpace(spaceId, session, persistNow = false)
+        spaceStateHandler.setCurrentSpace(spaceId, session, persistNow = false)
 
         uiStateRepository.verifyStoreSelectedSpace(spaceId, session, inverse = true)
     }
 
     @Test
     fun `given is forward navigation and no current space, when setCurrentSpace, then null added to backstack`() {
-        appStateHandler.setCurrentSpace(spaceId, session, isForwardNavigation = true)
+        spaceStateHandler.setCurrentSpace(spaceId, session, isForwardNavigation = true)
 
-        val backstack = appStateHandler.getSpaceBackstack()
+        val backstack = spaceStateHandler.getSpaceBackstack()
 
         backstack.size shouldBe 1
         backstack.first() shouldBe null
@@ -98,10 +98,10 @@ internal class AppStateHandlerImplTest {
 
     @Test
     fun `given is forward navigation and is in space, when setCurrentSpace, then previous space added to backstack`() {
-        appStateHandler.setCurrentSpace(spaceId, session, isForwardNavigation = true)
-        appStateHandler.setCurrentSpace("secondSpaceId", session, isForwardNavigation = true)
+        spaceStateHandler.setCurrentSpace(spaceId, session, isForwardNavigation = true)
+        spaceStateHandler.setCurrentSpace("secondSpaceId", session, isForwardNavigation = true)
 
-        val backstack = appStateHandler.getSpaceBackstack()
+        val backstack = spaceStateHandler.getSpaceBackstack()
 
         backstack.size shouldBe 2
         backstack shouldBeEqualTo listOf(null, spaceId)
@@ -109,34 +109,34 @@ internal class AppStateHandlerImplTest {
 
     @Test
     fun `given is not forward navigation, when setCurrentSpace, then previous space not added to backstack`() {
-        appStateHandler.setCurrentSpace(spaceId, session, isForwardNavigation = false)
+        spaceStateHandler.setCurrentSpace(spaceId, session, isForwardNavigation = false)
 
-        val backstack = appStateHandler.getSpaceBackstack()
+        val backstack = spaceStateHandler.getSpaceBackstack()
 
         backstack.size shouldBe 0
     }
 
     @Test
     fun `when setCurrentSpace, then space is emitted to selectedSpaceFlow`() = runTest {
-        appStateHandler.setCurrentSpace(spaceId, session)
+        spaceStateHandler.setCurrentSpace(spaceId, session)
 
-        val currentSpace = appStateHandler.getSelectedSpaceFlow().first().orNull()
+        val currentSpace = spaceStateHandler.getSelectedSpaceFlow().first().orNull()
 
         currentSpace shouldBeEqualTo spaceSummary
     }
 
     @Test
     fun `given current space exists, when getSafeActiveSpaceId, then return current space id`() {
-        appStateHandler.setCurrentSpace(spaceId, session)
+        spaceStateHandler.setCurrentSpace(spaceId, session)
 
-        val activeSpaceId = appStateHandler.getSafeActiveSpaceId()
+        val activeSpaceId = spaceStateHandler.getSafeActiveSpaceId()
 
         activeSpaceId shouldBeEqualTo spaceId
     }
 
     @Test
     fun `given current space doesn't exist, when getSafeActiveSpaceId, then return current null`() {
-        val activeSpaceId = appStateHandler.getSafeActiveSpaceId()
+        val activeSpaceId = spaceStateHandler.getSafeActiveSpaceId()
 
         activeSpaceId shouldBe null
     }

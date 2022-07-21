@@ -23,7 +23,7 @@ import androidx.lifecycle.asFlow
 import androidx.lifecycle.liveData
 import androidx.paging.PagedList
 import com.airbnb.mvrx.Async
-import im.vector.app.AppStateHandler
+import im.vector.app.SpaceStateHandler
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.RoomListDisplayMode
@@ -58,7 +58,7 @@ import timber.log.Timber
 class RoomListSectionBuilder(
         private val session: Session,
         private val stringProvider: StringProvider,
-        private val appStateHandler: AppStateHandler,
+        private val spaceStateHandler: SpaceStateHandler,
         private val viewModelScope: CoroutineScope,
         private val autoAcceptInvites: AutoAcceptInvites,
         private val onUpdatable: (UpdatableLivePageResult) -> Unit,
@@ -94,7 +94,7 @@ class RoomListSectionBuilder(
             }
         }
 
-        appStateHandler.getSelectedSpaceFlow()
+        spaceStateHandler.getSelectedSpaceFlow()
                 .distinctUntilChanged()
                 .onEach { selectedSpaceOption ->
                     val selectedSpace = selectedSpaceOption.orNull()
@@ -186,7 +186,7 @@ class RoomListSectionBuilder(
 
         // add suggested rooms
         val suggestedRoomsFlow = // MutableLiveData<List<SpaceChildInfo>>()
-                appStateHandler.getSelectedSpaceFlow()
+                spaceStateHandler.getSelectedSpaceFlow()
                         .distinctUntilChanged()
                         .flatMapLatest { selectedSpaceOption ->
                             val selectedSpace = selectedSpaceOption.orNull()
@@ -359,7 +359,7 @@ class RoomListSectionBuilder(
             query: (RoomSummaryQueryParams.Builder) -> Unit
     ) {
         withQueryParams(query) { roomQueryParams ->
-            val updatedQueryParams = roomQueryParams.process(spaceFilterStrategy, appStateHandler.getSafeActiveSpaceId())
+            val updatedQueryParams = roomQueryParams.process(spaceFilterStrategy, spaceStateHandler.getSafeActiveSpaceId())
             val liveQueryParams = MutableStateFlow(updatedQueryParams)
             val itemCountFlow = liveQueryParams
                     .flatMapLatest {
@@ -370,7 +370,7 @@ class RoomListSectionBuilder(
 
             val name = stringProvider.getString(nameRes)
             val filteredPagedRoomSummariesLive = session.roomService().getFilteredPagedRoomSummariesLive(
-                    roomQueryParams.process(spaceFilterStrategy, appStateHandler.getSafeActiveSpaceId()),
+                    roomQueryParams.process(spaceFilterStrategy, spaceStateHandler.getSafeActiveSpaceId()),
                     pagedListConfig
             )
             when (spaceFilterStrategy) {
@@ -417,7 +417,7 @@ class RoomListSectionBuilder(
                                             RoomAggregateNotificationCount(it.size, it.size)
                                         } else {
                                             session.roomService().getNotificationCountForRooms(
-                                                    roomQueryParams.process(spaceFilterStrategy, appStateHandler.getSafeActiveSpaceId())
+                                                    roomQueryParams.process(spaceFilterStrategy, spaceStateHandler.getSafeActiveSpaceId())
                                             )
                                         }
                                 )

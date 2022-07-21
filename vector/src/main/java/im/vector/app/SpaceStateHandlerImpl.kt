@@ -49,12 +49,12 @@ import javax.inject.Singleton
  * It is required that this class is added as an observer to ProcessLifecycleOwner.get().lifecycle in [VectorApplication]
  */
 @Singleton
-class AppStateHandlerImpl @Inject constructor(
+class SpaceStateHandlerImpl @Inject constructor(
         private val sessionDataSource: ActiveSessionDataSource,
         private val uiStateRepository: UiStateRepository,
         private val activeSessionHolder: ActiveSessionHolder,
         private val analyticsTracker: AnalyticsTracker
-) : AppStateHandler {
+) : SpaceStateHandler {
 
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     private val selectedSpaceDataSource = BehaviorDataSource<Option<RoomSummary>>(Option.empty())

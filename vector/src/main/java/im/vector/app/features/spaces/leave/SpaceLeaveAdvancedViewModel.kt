@@ -24,7 +24,7 @@ import com.airbnb.mvrx.Uninitialized
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.AppStateHandler
+import im.vector.app.SpaceStateHandler
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyViewEvents
@@ -53,7 +53,7 @@ import timber.log.Timber
 class SpaceLeaveAdvancedViewModel @AssistedInject constructor(
         @Assisted val initialState: SpaceLeaveAdvanceViewState,
         private val session: Session,
-        private val appStateHandler: AppStateHandler
+        private val spaceStateHandler: SpaceStateHandler
 ) : VectorViewModel<SpaceLeaveAdvanceViewState, SpaceLeaveAdvanceViewAction, EmptyViewEvents>(initialState) {
 
     init {
@@ -82,9 +82,9 @@ class SpaceLeaveAdvancedViewModel @AssistedInject constructor(
                 ?.onEach {
                     if (it.membership == Membership.LEAVE) {
                         setState { copy(leaveState = Success(Unit)) }
-                        if (appStateHandler.getSafeActiveSpaceId() == initialState.spaceId) {
+                        if (spaceStateHandler.getSafeActiveSpaceId() == initialState.spaceId) {
                             // switch to home?
-                            appStateHandler.setCurrentSpace(null, session)
+                            spaceStateHandler.setCurrentSpace(null, session)
                         }
                     }
                 }?.launchIn(viewModelScope)

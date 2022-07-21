@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.Flow
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
-interface AppStateHandler : DefaultLifecycleObserver {
+interface SpaceStateHandler : DefaultLifecycleObserver {
 
     fun getCurrentSpace(): RoomSummary?
 

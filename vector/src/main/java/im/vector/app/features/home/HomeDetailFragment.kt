@@ -28,7 +28,7 @@ import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.badge.BadgeDrawable
-import im.vector.app.AppStateHandler
+import im.vector.app.SpaceStateHandler
 import im.vector.app.R
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.toMvRxBundle
@@ -66,7 +66,7 @@ class HomeDetailFragment @Inject constructor(
         private val alertManager: PopupAlertManager,
         private val callManager: WebRtcCallManager,
         private val vectorPreferences: VectorPreferences,
-        private val appStateHandler: AppStateHandler
+        private val spaceStateHandler: SpaceStateHandler
 ) : VectorBaseFragment<FragmentHomeDetailBinding>(),
         KeysBackupBanner.Delegate,
         CurrentCallsView.Callback,
@@ -183,13 +183,13 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun navigateBack() {
-        val previousSpaceId = appStateHandler.getSpaceBackstack().removeLastOrNull()
-        val parentSpaceId = appStateHandler.getCurrentSpace()?.flattenParentIds?.lastOrNull()
+        val previousSpaceId = spaceStateHandler.getSpaceBackstack().removeLastOrNull()
+        val parentSpaceId = spaceStateHandler.getCurrentSpace()?.flattenParentIds?.lastOrNull()
         setCurrentSpace(previousSpaceId ?: parentSpaceId)
     }
 
     private fun setCurrentSpace(spaceId: String?) {
-        appStateHandler.setCurrentSpace(spaceId, isForwardNavigation = false)
+        spaceStateHandler.setCurrentSpace(spaceId, isForwardNavigation = false)
         sharedActionViewModel.post(HomeActivitySharedAction.OnCloseSpace)
     }
 
@@ -212,7 +212,7 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun refreshSpaceState() {
-        appStateHandler.getCurrentSpace()?.let {
+        spaceStateHandler.getCurrentSpace()?.let {
             onSpaceChange(it)
         }
     }
@@ -466,7 +466,7 @@ class HomeDetailFragment @Inject constructor(
         return this
     }
 
-    override fun onBackPressed(toolbarButton: Boolean) = if (appStateHandler.getCurrentSpace() != null) {
+    override fun onBackPressed(toolbarButton: Boolean) = if (spaceStateHandler.getCurrentSpace() != null) {
         navigateBack()
         true
     } else {

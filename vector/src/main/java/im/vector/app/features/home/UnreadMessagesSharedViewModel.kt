@@ -22,7 +22,7 @@ import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.AppStateHandler
+import im.vector.app.SpaceStateHandler
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyAction
@@ -58,7 +58,7 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(
         @Assisted initialState: UnreadMessagesState,
         session: Session,
         private val vectorPreferences: VectorPreferences,
-        appStateHandler: AppStateHandler,
+        spaceStateHandler: SpaceStateHandler,
         private val autoAcceptInvites: AutoAcceptInvites
 ) :
         VectorViewModel<UnreadMessagesState, EmptyAction, EmptyViewEvents>(initialState) {
@@ -109,8 +109,8 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(
                 }
 
         combine(
-                appStateHandler.getSelectedSpaceFlow().distinctUntilChanged(),
-                appStateHandler.getSelectedSpaceFlow().flatMapLatest {
+                spaceStateHandler.getSelectedSpaceFlow().distinctUntilChanged(),
+                spaceStateHandler.getSelectedSpaceFlow().flatMapLatest {
                     roomService.getPagedRoomSummariesLive(
                             roomSummaryQueryParams {
                                 this.memberships = Membership.activeMemberships()
