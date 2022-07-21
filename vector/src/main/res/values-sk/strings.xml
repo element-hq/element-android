@@ -1810,7 +1810,7 @@
     <string name="invite_friends_text">Ahoj, ozvi sa mi na ${app_name}: %s</string>
     <string name="create_room_dm_failure">Nemohli sme vytvoriť vašu priamu správu. Skontrolujte používateľov, ktorých chcete pozvať, a skúste to znova.</string>
     <string name="notice_crypto_unable_to_decrypt_friendly_desc">Kvôli end-to-end šifrovaniu sa môže stať, že budete musieť chvíľu počkať, kým vám od niekoho príde správa, pretože vám neboli správne odoslané šifrovacie kľúče.</string>
-    <string name="direct_room_encryption_enabled_tile_description">Správy v tejto miestnosti sú šifrované od vás až k príjemcovi.</string>
+    <string name="direct_room_encryption_enabled_tile_description">Správy v tejto konverzácii sú šifrované od vás až k príjemcovi.</string>
     <string name="encryption_enabled_tile_description">Správy v tejto miestnosti sú end-to-end šifrované. Zistite viac a overte používateľov v ich profile.</string>
     <string name="settings_hs_admin_e2e_disabled">Správca vášho servera predvolene vypol end-to-end šifrovanie v súkromných miestnostiach a v priamych správach.</string>
     <string name="verification_conclusion_ok_notice">Správy s týmto používateľom sú end-to-end šifrované a tretie strany ich nemôžu čítať.</string>
@@ -2577,4 +2577,10 @@
     <string name="settings_troubleshoot_test_endpoint_registration_success">Koncové zariadenie sa úspešne zaregistrovalo na domovský server.</string>
     <string name="settings_troubleshoot_test_endpoint_registration_title">Registrácia koncového bodu</string>
     <string name="action_next">Ďalej</string>
+    <string name="poll_undisclosed_not_ended">Výsledky budú viditeľné po ukončení ankety</string>
+    <string name="labs_enable_msc3061_share_history_desc">Pri pozvaní do zašifrovanej miestnosti, ktorá zdieľa históriu, bude zašifrovaná história viditeľná.</string>
+    <string name="labs_enable_msc3061_share_history">MSC3061: Zdieľanie kľúčov od miestnosti pre staršie správy</string>
+    <string name="send_your_first_msg_to_invite">Odošlite svoju prvú správu a pozvite %s do konverzácie</string>
+    <string name="direct_room_encryption_enabled_tile_description_future">Správy v tejto miestnosti sú šifrované od vás až k príjemcovi.</string>
+    <string name="create_room_action_go">Spustiť</string>
 </resources>

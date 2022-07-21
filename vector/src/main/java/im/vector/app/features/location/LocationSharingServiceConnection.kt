@@ -21,17 +21,22 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
+import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.features.session.coroutineScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class LocationSharingServiceConnection @Inject constructor(
-        private val context: Context
-) : ServiceConnection,
-        LocationSharingAndroidService.Callback {
+        private val context: Context,
+        private val activeSessionHolder: ActiveSessionHolder
+) : ServiceConnection, LocationSharingAndroidService.Callback {
 
     interface Callback {
-        fun onLocationServiceRunning()
+        fun onLocationServiceRunning(roomIds: Set<String>)
         fun onLocationServiceStopped()
         fun onLocationServiceError(error: Throwable)
     }
@@ -44,7 +49,7 @@ class LocationSharingServiceConnection @Inject constructor(
         addCallback(callback)
 
         if (isBound) {
-            callback.onLocationServiceRunning()
+            callback.onLocationServiceRunning(getRoomIdsOfActiveLives())
         } else {
             Intent(context, LocationSharingAndroidService::class.java).also { intent ->
                 context.bindService(intent, this, 0)
@@ -56,12 +61,24 @@ class LocationSharingServiceConnection @Inject constructor(
         removeCallback(callback)
     }
 
+    private fun getRoomIdsOfActiveLives(): Set<String> {
+        return locationSharingAndroidService?.getRoomIdsOfActiveLives() ?: emptySet()
+    }
+
     override fun onServiceConnected(className: ComponentName, binder: IBinder) {
-        locationSharingAndroidService = (binder as LocationSharingAndroidService.LocalBinder).getService().also {
-            it.callback = this
+        locationSharingAndroidService = (binder as LocationSharingAndroidService.LocalBinder).getService().also { service ->
+            service.callback = this
+            getActiveSessionCoroutineScope()?.let { scope ->
+                service.roomIdsOfActiveLives
+                        .onEach(::onRoomIdsUpdate)
+                        .launchIn(scope)
+            }
         }
         isBound = true
-        onCallbackActionNoArg(Callback::onLocationServiceRunning)
+    }
+
+    private fun getActiveSessionCoroutineScope(): CoroutineScope? {
+        return activeSessionHolder.getSafeActiveSession()?.coroutineScope
     }
 
     override fun onServiceDisconnected(className: ComponentName) {
@@ -69,6 +86,10 @@ class LocationSharingServiceConnection @Inject constructor(
         locationSharingAndroidService?.callback = null
         locationSharingAndroidService = null
         onCallbackActionNoArg(Callback::onLocationServiceStopped)
+    }
+
+    private fun onRoomIdsUpdate(roomIds: Set<String>) {
+        forwardRoomIdsToCallbacks(roomIds)
     }
 
     override fun onServiceError(error: Throwable) {
@@ -85,6 +106,10 @@ class LocationSharingServiceConnection @Inject constructor(
 
     private fun onCallbackActionNoArg(action: Callback.() -> Unit) {
         callbacks.toList().forEach(action)
+    }
+
+    private fun forwardRoomIdsToCallbacks(roomIds: Set<String>) {
+        callbacks.toList().forEach { it.onLocationServiceRunning(roomIds) }
     }
 
     private fun forwardErrorToCallbacks(error: Throwable) {

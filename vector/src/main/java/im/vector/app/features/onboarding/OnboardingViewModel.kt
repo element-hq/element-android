@@ -563,7 +563,7 @@ class OnboardingViewModel @AssistedInject constructor(
                     setState { copy(isLoading = false, resetState = ResetState()) }
                     val nextEvent = when {
                         vectorFeatures.isOnboardingCombinedLoginEnabled() -> OnboardingViewEvents.OnResetPasswordComplete
-                        else                                              -> OnboardingViewEvents.OpenResetPasswordComplete
+                        else -> OnboardingViewEvents.OpenResetPasswordComplete
                     }
                     _viewEvents.post(nextEvent)
                 },

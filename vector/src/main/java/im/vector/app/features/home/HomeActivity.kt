@@ -219,7 +219,7 @@ class HomeActivity :
                         is HomeActivitySharedAction.ShowSpaceSettings -> showSpaceSettings(sharedAction.spaceId)
                         is HomeActivitySharedAction.OpenSpaceInvite -> openSpaceInvite(sharedAction.spaceId)
                         HomeActivitySharedAction.SendSpaceFeedBack -> bugReporter.openBugReportScreen(this, ReportType.SPACE_BETA_FEEDBACK)
-                        HomeActivitySharedAction.OnCloseSpace      -> onCloseSpace()
+                        HomeActivitySharedAction.OnCloseSpace -> onCloseSpace()
                     }
                 }
                 .launchIn(lifecycleScope)

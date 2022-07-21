@@ -31,6 +31,6 @@ fun SignMode.toAuthenticateAction(login: String, password: String, initialDevice
 }
 
 fun ThemeProvider.ftueBreakerBackground() = when (isLightTheme()) {
-    true  -> R.drawable.bg_gradient_ftue_breaker
+    true -> R.drawable.bg_gradient_ftue_breaker
     false -> R.drawable.bg_color_background
 }

@@ -1692,7 +1692,7 @@
     <string name="secure_backup_reset_all">Reimposta tutto</string>
     <string name="bad_passphrase_key_reset_all_action">Hai dimenticato o perso tutte le opzioni di ripristino\? Reimposta tutto</string>
     <string name="direct_room_created_summary_item_by_you">Sei entrato.</string>
-    <string name="direct_room_encryption_enabled_tile_description">I messaggi in questa stanza sono crittografati E2E.</string>
+    <string name="direct_room_encryption_enabled_tile_description">I messaggi in questa conversazione sono cifrati end-to-end.</string>
     <string name="direct_room_profile_section_more_leave">Esci</string>
     <string name="direct_room_profile_section_more_settings">Impostazioni</string>
     <string name="direct_room_profile_encrypted_subtitle">I messaggi qui sono cifrati E2E.
@@ -2520,4 +2520,10 @@
     <string name="settings_troubleshoot_test_endpoint_registration_success">Endpoint registrato con successo sull\'homeserver.</string>
     <string name="settings_troubleshoot_test_endpoint_registration_title">Registrazione endpoint</string>
     <string name="action_next">Avanti</string>
+    <string name="poll_undisclosed_not_ended">I risultati saranno visibili quando il sondaggio sarà terminato</string>
+    <string name="labs_enable_msc3061_share_history_desc">Quando si invita in una stanza crittografata che condivide la cronologia, la cronologia cifrata sarà visibile.</string>
+    <string name="labs_enable_msc3061_share_history">MSC3061: Condivisione chiavi stanza per messaggi passati</string>
+    <string name="send_your_first_msg_to_invite">Invia il primo messaggio per invitare %s a parlare</string>
+    <string name="direct_room_encryption_enabled_tile_description_future">I messaggi in questa conversazione saranno cifrati end-to-end.</string>
+    <string name="create_room_action_go">Vai</string>
 </resources>

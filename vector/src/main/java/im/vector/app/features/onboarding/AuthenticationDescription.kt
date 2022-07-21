@@ -41,12 +41,12 @@ sealed interface AuthenticationDescription : Parcelable {
 }
 
 fun SsoIdentityProvider?.toAuthenticationType() = when (this?.brand) {
-    SsoIdentityProvider.BRAND_GOOGLE   -> AuthenticationType.Google
-    SsoIdentityProvider.BRAND_GITHUB   -> AuthenticationType.GitHub
-    SsoIdentityProvider.BRAND_APPLE    -> AuthenticationType.Apple
+    SsoIdentityProvider.BRAND_GOOGLE -> AuthenticationType.Google
+    SsoIdentityProvider.BRAND_GITHUB -> AuthenticationType.GitHub
+    SsoIdentityProvider.BRAND_APPLE -> AuthenticationType.Apple
     SsoIdentityProvider.BRAND_FACEBOOK -> AuthenticationType.Facebook
-    SsoIdentityProvider.BRAND_GITLAB   -> AuthenticationType.GitLab
-    SsoIdentityProvider.BRAND_TWITTER  -> AuthenticationType.SSO
-    null                               -> AuthenticationType.SSO
-    else                               -> AuthenticationType.SSO
+    SsoIdentityProvider.BRAND_GITLAB -> AuthenticationType.GitLab
+    SsoIdentityProvider.BRAND_TWITTER -> AuthenticationType.SSO
+    null -> AuthenticationType.SSO
+    else -> AuthenticationType.SSO
 }

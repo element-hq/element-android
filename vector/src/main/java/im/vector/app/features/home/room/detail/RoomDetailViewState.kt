@@ -75,7 +75,8 @@ data class RoomDetailViewState(
         val switchToParentSpace: Boolean = false,
         val rootThreadEventId: String? = null,
         val threadNotificationBadgeState: ThreadNotificationBadgeState = ThreadNotificationBadgeState(),
-        val typingUsers: List<SenderInfo>? = null
+        val typingUsers: List<SenderInfo>? = null,
+        val isSharingLiveLocation: Boolean = false,
 ) : MavericksState {
 
     constructor(args: TimelineArgs) : this(

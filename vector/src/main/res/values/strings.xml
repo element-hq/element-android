@@ -1608,7 +1608,7 @@
     <string name="message_view_reaction">View Reactions</string>
     <string name="reactions">Reactions</string>
 
-    <string name="event_redacted">Message deleted</string>
+    <string name="event_redacted">Message removed</string>
     <string name="settings_show_redacted">Show removed messages</string>
     <string name="settings_show_redacted_summary">Show a placeholder for removed messages</string>
     <string name="event_redacted_by_user_reason">Event deleted by user</string>
@@ -3116,6 +3116,8 @@
     <!-- TODO remove key -->
     <string name="live_location_bottom_sheet_stop_sharing" tools:ignore="UnusedResources">Stop sharing</string>
     <string name="live_location_bottom_sheet_last_updated_at">Updated %1$s ago</string>
+    <string name="live_location_not_enough_permission_dialog_title">You don’t have permission to share live location</string>
+    <string name="live_location_not_enough_permission_dialog_description">You need to have the right permissions in order to share live location in this room.</string>
     <string name="live_location_share_location_item_share">Share location</string>
 
     <string name="message_bubbles">Show Message bubbles</string>
@@ -3166,4 +3168,8 @@
     <string name="live_location_labs_promotion_description">Please note: this is a labs feature using a temporary implementation. This means you will not be able to delete your location history, and advanced users will be able to see your location history even after you stop sharing your live location with this room.</string>
     <string name="live_location_labs_promotion_switch_title">Enable location sharing</string>
 
+    <plurals name="room_removed_messages">
+        <item quantity="one">%d message removed</item>
+        <item quantity="other">%d messages removed</item>
+    </plurals>
 </resources>
