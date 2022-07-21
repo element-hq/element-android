@@ -24,7 +24,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.res.Configuration
 import android.graphics.drawable.Icon
 import android.os.Build
 import android.util.Rational
@@ -34,7 +33,6 @@ import androidx.core.util.Consumer
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
-import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
@@ -184,7 +182,7 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
 
     private val pictureInPictureModeChangedInfoConsumer = Consumer<PictureInPictureModeChangedInfo> {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return@Consumer
-        
+
         if (isInPictureInPictureMode) {
             hangupBroadcastReceiver = object : BroadcastReceiver() {
                 override fun onReceive(context: Context?, intent: Intent?) {
