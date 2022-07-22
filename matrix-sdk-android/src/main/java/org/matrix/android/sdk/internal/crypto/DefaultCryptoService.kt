@@ -758,7 +758,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     /**
-     * Decrypts the event and udpdates the event fields with the results
+     * Decrypts the event and udpdates the event fields with the results.
      */
     override suspend fun decryptAndUpdateEvent(event: Event, timeline: String) {
         eventDecryptor.decryptEvent(event, timeline).fold(
