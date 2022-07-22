@@ -78,6 +78,7 @@ import im.vector.app.features.spaces.invite.SpaceInviteBottomSheet
 import im.vector.app.features.spaces.share.ShareSpaceBottomSheet
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
+import im.vector.app.nightly.NightlyProxy
 import im.vector.app.push.fcm.FcmHelper
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -132,6 +133,7 @@ class HomeActivity :
     @Inject lateinit var appStateHandler: AppStateHandler
     @Inject lateinit var unifiedPushHelper: UnifiedPushHelper
     @Inject lateinit var fcmHelper: FcmHelper
+    @Inject lateinit var nightlyProxy: NightlyProxy
 
     private val createSpaceResultLauncher = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
@@ -533,6 +535,9 @@ class HomeActivity :
 
         // Force remote backup state update to update the banner if needed
         serverBackupStatusViewModel.refreshRemoteStateIfNeeded()
+
+        // Check nightly
+        nightlyProxy.updateIfNewReleaseAvailable()
     }
 
     override fun getMenuRes() = R.menu.home
