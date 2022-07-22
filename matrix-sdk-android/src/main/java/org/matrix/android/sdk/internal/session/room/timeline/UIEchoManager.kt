@@ -29,13 +29,9 @@ import timber.log.Timber
 import java.util.Collections
 
 internal class UIEchoManager(
-        private val listener: Listener,
+        private val listener: RebuildListener,
         private val clock: Clock,
 ) {
-
-    interface Listener {
-        fun rebuildEvent(eventId: String, builder: (TimelineEvent) -> TimelineEvent?): Boolean
-    }
 
     private val inMemorySendingEvents = Collections.synchronizedList<TimelineEvent>(ArrayList())
 

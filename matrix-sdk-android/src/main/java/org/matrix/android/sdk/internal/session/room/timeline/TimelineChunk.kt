@@ -61,6 +61,7 @@ internal class TimelineChunk(
         private val fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
         private val timelineEventMapper: TimelineEventMapper,
         private val uiEchoManager: UIEchoManager?,
+        private val cryptoInfoEventDecorator: CryptoInfoEventDecorator?,
         private val threadsAwarenessHandler: ThreadsAwarenessHandler,
         private val lightweightSettingsStorage: LightweightSettingsStorage,
         private val initialEventId: String?,
@@ -414,6 +415,8 @@ internal class TimelineChunk(
     ).let {
         // eventually enhance with ui echo?
         (uiEchoManager?.decorateEventWithReactionUiEcho(it) ?: it)
+    }.let {
+        (cryptoInfoEventDecorator?.decorateTimelineEvent(it) ?: it)
     }
 
     /**
@@ -576,6 +579,7 @@ internal class TimelineChunk(
                 fetchTokenAndPaginateTask = fetchTokenAndPaginateTask,
                 timelineEventMapper = timelineEventMapper,
                 uiEchoManager = uiEchoManager,
+                cryptoInfoEventDecorator = cryptoInfoEventDecorator,
                 threadsAwarenessHandler = threadsAwarenessHandler,
                 lightweightSettingsStorage = lightweightSettingsStorage,
                 initialEventId = null,

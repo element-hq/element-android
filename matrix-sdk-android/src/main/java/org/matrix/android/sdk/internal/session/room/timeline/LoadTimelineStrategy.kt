@@ -128,7 +128,7 @@ internal class LoadTimelineStrategy constructor(
         }
     }
 
-    private val uiEchoManagerListener = object : UIEchoManager.Listener {
+    private val rebuildEventListener = object : RebuildListener {
         override fun rebuildEvent(eventId: String, builder: (TimelineEvent) -> TimelineEvent?): Boolean {
             return timelineChunk?.rebuildEvent(eventId, builder, searchInNext = true, searchInPrev = true).orFalse()
         }
@@ -162,7 +162,7 @@ internal class LoadTimelineStrategy constructor(
         }
     }
 
-    private val uiEchoManager = UIEchoManager(uiEchoManagerListener, clock)
+    private val uiEchoManager = UIEchoManager(rebuildEventListener, clock)
     private val sendingEventsDataSource: SendingEventsDataSource = RealmSendingEventsDataSource(
             roomId = roomId,
             realm = dependencies.realm,
@@ -181,6 +181,7 @@ internal class LoadTimelineStrategy constructor(
             realmConfiguration = dependencies.cryptoRealmConfiguration,
             roomId = roomId,
             clock = clock,
+            rebuildListener = rebuildEventListener,
             onEventsUpdated = dependencies.onEventsUpdated
     )
 
@@ -255,8 +256,6 @@ internal class LoadTimelineStrategy constructor(
             events.map(this::applyLiveRoomState)
         } else {
             events
-        }.let {
-            cryptoInfoEventDecorator.decorateTimelineEvents(events)
         }
     }
 
@@ -348,6 +347,7 @@ internal class LoadTimelineStrategy constructor(
                     fetchTokenAndPaginateTask = dependencies.fetchTokenAndPaginateTask,
                     timelineEventMapper = dependencies.timelineEventMapper,
                     uiEchoManager = uiEchoManager,
+                    cryptoInfoEventDecorator = cryptoInfoEventDecorator,
                     threadsAwarenessHandler = dependencies.threadsAwarenessHandler,
                     lightweightSettingsStorage = dependencies.lightweightSettingsStorage,
                     initialEventId = mode.originEventId(),

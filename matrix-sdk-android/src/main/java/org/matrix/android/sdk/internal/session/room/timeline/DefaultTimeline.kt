@@ -58,7 +58,7 @@ internal class DefaultTimeline(
         private val roomId: String,
         private val initialEventId: String?,
         private val realmConfiguration: RealmConfiguration,
-        private val cryptoRealmConfiguration: RealmConfiguration,
+        cryptoRealmConfiguration: RealmConfiguration,
         private val loadRoomMembersTask: LoadRoomMembersTask,
         private val readReceiptHandler: ReadReceiptHandler,
         private val settings: TimelineSettings,

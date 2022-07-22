@@ -31,6 +31,8 @@ import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.crypto.OutgoingRoomKeyRequestState
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoRoomEntity
+import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoRoomEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.OutgoingKeyRequestEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.OutgoingKeyRequestEntityFields
 import org.matrix.android.sdk.internal.task.SemaphoreCoroutineSequencer
@@ -52,6 +54,7 @@ internal class CryptoInfoEventDecorator(
         private val realmConfiguration: RealmConfiguration,
         private val roomId: String,
         private val clock: Clock,
+        private val rebuildListener: RebuildListener,
         private val onEventsUpdated: (Boolean) -> Unit,
 ) : RealmChangeListener<RealmResults<OutgoingKeyRequestEntity>> {
 
@@ -66,11 +69,15 @@ internal class CryptoInfoEventDecorator(
 
     private var outgoingRequestList: RealmResults<OutgoingKeyRequestEntity>? = null
 
+    private var decoratedEvents = mutableMapOf<String, MutableList<String>>()
+
     private var activeOutgoingRequestsForSession = emptyList<String>()
     private var realmInstance = AtomicReference<Realm>()
     private val isStarted = AtomicBoolean(false)
 
     private var tickerTimer: Timer? = null
+
+    private var isE2EE = false
 
     fun getActiveRequestForSession(): List<String> {
         return synchronized(this) {
@@ -83,6 +90,13 @@ internal class CryptoInfoEventDecorator(
             sequencer.post {
                 if (isStarted.compareAndSet(false, true)) {
                     realmInstance.set(Realm.getInstance(realmConfiguration))
+
+                    realmInstance.get().where<CryptoRoomEntity>()
+                            .equalTo(CryptoRoomEntityFields.ROOM_ID, roomId)
+                            .findFirst()?.let {
+                                isE2EE = it.wasEncryptedOnce ?: false
+                            }
+
                     val now = clock.epochMillis()
                     // we can limit the query to the most recent request at the time of creation of the CryptoInfoEventDecorator
                     val createdAfter = now - MAX_AGE_FOR_REQUEST_TO_BE_IDLE
@@ -92,7 +106,8 @@ internal class CryptoInfoEventDecorator(
                                     listOf(
                                             OutgoingRoomKeyRequestState.UNSENT,
                                             OutgoingRoomKeyRequestState.SENT,
-                                            OutgoingRoomKeyRequestState.CANCELLATION_PENDING_AND_WILL_RESEND
+                                            OutgoingRoomKeyRequestState.CANCELLATION_PENDING_AND_WILL_RESEND,
+                                            OutgoingRoomKeyRequestState.SENT_THEN_CANCELED,
                                     )
                                             .map { it.name }
                                             .toTypedArray()
@@ -106,20 +121,20 @@ internal class CryptoInfoEventDecorator(
         }
     }
 
-    fun decorateTimelineEvents(events: List<TimelineEvent>): List<TimelineEvent> {
-        val activeKeyReq = getActiveRequestForSession()
-        return if (activeKeyReq.isNotEmpty()) {
-            events.map {
-                if (it.root.getClearType() == EventType.ENCRYPTED) {
-                    val megolmSessionId = it.root.content?.get("session_id") as? String ?: return@map it
-                    it.copy(
-                            hasActiveRequestForKeys = activeKeyReq.contains(megolmSessionId)
-                    )
-                } else it
-            }
-        } else {
-            events
+    fun decorateTimelineEvent(event: TimelineEvent): TimelineEvent {
+        if (!isE2EE) return event
+        if (event.root.getClearType() != EventType.ENCRYPTED) return event
+        val megolmSessionId = event.root.content?.get("session_id") as? String ?: return event
+        // we might want to remember the built events per megolm session
+        synchronized(this) {
+            decoratedEvents.getOrPut(megolmSessionId) { mutableListOf() }.add(event.eventId)
         }
+        val hasActiveRequests = getActiveRequestForSession().contains(megolmSessionId)
+        return if (hasActiveRequests) {
+            event.copy(
+                    hasActiveRequestForKeys = hasActiveRequests
+            )
+        } else event
     }
 
     fun stop() {
@@ -128,6 +143,7 @@ internal class CryptoInfoEventDecorator(
             sequencer.post {
                 if (isStarted.compareAndSet(true, false)) {
                     outgoingRequestList?.removeAllChangeListeners()
+                    decoratedEvents.clear()
                     outgoingRequestList = null
                     realmInstance.get().closeQuietly()
                     tickerTimer?.cancel()
@@ -167,9 +183,23 @@ internal class CryptoInfoEventDecorator(
             }
         }
 
+        val sessionsToRebuild = mutableSetOf<String>()
+        val builtMap = mutableMapOf<String, List<String>>()
+        val oldActive = getActiveRequestForSession()
         synchronized(this) {
+            sessionsToRebuild.addAll(oldActive)
+            sessionsToRebuild.addAll(newList)
             activeOutgoingRequestsForSession = newList
+            builtMap.putAll(decoratedEvents)
         }
+        sessionsToRebuild
+                .flatMap { builtMap[it] ?: emptyList() }
+                .forEach { eventId ->
+                    rebuildListener.rebuildEvent(eventId) {
+                        decorateTimelineEvent(it)
+                    }
+                }
+
         onEventsUpdated(true)
         // do we need to schedule a ticker update next?
         if (newList.isNotEmpty()) {
