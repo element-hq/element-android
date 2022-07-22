@@ -859,6 +859,9 @@ class TimelineFragment @Inject constructor(
         views.locationLiveStatusIndicator.stopButton.debouncedClicks {
             timelineViewModel.handle(RoomDetailAction.StopLiveLocationSharing)
         }
+        views.locationLiveStatusIndicator.root.debouncedClicks {
+            navigateToLocationLiveMap()
+        }
     }
 
     private fun joinJitsiRoom(jitsiWidget: Widget, enableVideo: Boolean) {

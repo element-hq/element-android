@@ -19,6 +19,7 @@ package im.vector.app.features.location.live
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.Button
 import androidx.constraintlayout.widget.ConstraintLayout
 import im.vector.app.databinding.ViewLocationLiveStatusBinding
@@ -33,6 +34,9 @@ class LocationLiveStatusView @JvmOverloads constructor(
             LayoutInflater.from(context),
             this
     )
+
+    val root: View
+        get() = binding.root
 
     val stopButton: Button
         get() = binding.locationLiveStatusStop
