@@ -50,13 +50,13 @@ internal class SessionParamsMapper @Inject constructor(moshi: Moshi) {
         if (credentialsJson == null || homeServerConnectionConfigJson == null) {
             return null
         }
-        return SessionParamsEntity(
-                sessionParams.credentials.sessionId(),
-                sessionParams.userId,
-                credentialsJson,
-                homeServerConnectionConfigJson,
-                sessionParams.isTokenValid,
-                sessionParams.loginType.name,
-        )
+        return SessionParamsEntity().apply {
+            this.sessionId = sessionParams.credentials.sessionId()
+            this.userId = sessionParams.userId
+            this.credentialsJson = credentialsJson
+            this.homeServerConnectionConfigJson = homeServerConnectionConfigJson
+            this.isTokenValid = sessionParams.isTokenValid
+            this.loginType = sessionParams.loginType.name
+        }
     }
 }

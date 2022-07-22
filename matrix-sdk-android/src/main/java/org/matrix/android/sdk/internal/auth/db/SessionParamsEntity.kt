@@ -16,18 +16,17 @@
 
 package org.matrix.android.sdk.internal.auth.db
 
-import io.realm.RealmModel
-import io.realm.annotations.PrimaryKey
-import io.realm.annotations.RealmClass
+import io.realm.kotlin.types.RealmObject
+import io.realm.kotlin.types.annotations.PrimaryKey
 
-@RealmClass
-internal open class SessionParamsEntity(
-        @PrimaryKey var sessionId: String = "",
-        var userId: String = "",
-        var credentialsJson: String = "",
-        var homeServerConnectionConfigJson: String = "",
-        // Set to false when the token is invalid and the user has been soft logged out
-        // In case of hard logout, this object is deleted from DB
-        var isTokenValid: Boolean = true,
-        var loginType: String = "",
-) : RealmModel
+internal class SessionParamsEntity : RealmObject {
+    @PrimaryKey var sessionId: String = ""
+    var userId: String = ""
+    var credentialsJson: String = ""
+    var homeServerConnectionConfigJson: String = ""
+
+    // Set to false when the token is invalid and the user has been soft logged out
+    // In case of hard logout, this object is deleted from DB
+    var isTokenValid: Boolean = true
+    var loginType: String = ""
+}

@@ -16,14 +16,12 @@
 
 package org.matrix.android.sdk.internal.auth.db
 
-import io.realm.Realm
-import io.realm.RealmConfiguration
-import io.realm.exceptions.RealmPrimaryKeyConstraintException
+import io.realm.kotlin.UpdatePolicy
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.auth.data.sessionId
 import org.matrix.android.sdk.internal.auth.SessionParamsStore
-import org.matrix.android.sdk.internal.database.awaitTransaction
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.di.AuthDatabase
 import timber.log.Timber
 import javax.inject.Inject
@@ -31,60 +29,49 @@ import javax.inject.Inject
 internal class RealmSessionParamsStore @Inject constructor(
         private val mapper: SessionParamsMapper,
         @AuthDatabase
-        private val realmConfiguration: RealmConfiguration
+        private val realmInstance: RealmInstance
 ) : SessionParamsStore {
 
     override fun getLast(): SessionParams? {
-        return Realm.getInstance(realmConfiguration).use { realm ->
-            realm
-                    .where(SessionParamsEntity::class.java)
-                    .findAll()
-                    .map { mapper.map(it) }
-                    .lastOrNull()
-        }
+        return realmInstance.blockingRealm()
+                .query(SessionParamsEntity::class)
+                .find()
+                .map { mapper.map(it) }
+                .lastOrNull()
     }
 
     override fun get(sessionId: String): SessionParams? {
-        return Realm.getInstance(realmConfiguration).use { realm ->
-            realm
-                    .where(SessionParamsEntity::class.java)
-                    .equalTo(SessionParamsEntityFields.SESSION_ID, sessionId)
-                    .findAll()
-                    .map { mapper.map(it) }
-                    .firstOrNull()
-        }
+        return realmInstance.blockingRealm()
+                .query(SessionParamsEntity::class)
+                .query("sessionId == $0", sessionId)
+                .first()
+                .find()
+                ?.let { mapper.map(it) }
     }
 
     override fun getAll(): List<SessionParams> {
-        return Realm.getInstance(realmConfiguration).use { realm ->
-            realm
-                    .where(SessionParamsEntity::class.java)
-                    .findAll()
-                    .mapNotNull { mapper.map(it) }
-        }
+        return realmInstance.blockingRealm()
+                .query(SessionParamsEntity::class)
+                .find()
+                .mapNotNull { mapper.map(it) }
     }
 
     override suspend fun save(sessionParams: SessionParams) {
-        awaitTransaction(realmConfiguration) {
+        realmInstance.write {
             val entity = mapper.map(sessionParams)
             if (entity != null) {
-                try {
-                    it.insert(entity)
-                } catch (e: RealmPrimaryKeyConstraintException) {
-                    Timber.e(e, "Something wrong happened during previous session creation. Override with new credentials")
-                    it.insertOrUpdate(entity)
-                }
+                copyToRealm(entity, updatePolicy = UpdatePolicy.ALL)
             }
         }
     }
 
     override suspend fun setTokenInvalid(sessionId: String) {
-        awaitTransaction(realmConfiguration) { realm ->
-            val currentSessionParams = realm
-                    .where(SessionParamsEntity::class.java)
-                    .equalTo(SessionParamsEntityFields.SESSION_ID, sessionId)
-                    .findAll()
-                    .firstOrNull()
+        realmInstance.write {
+            val currentSessionParams =
+                    query(SessionParamsEntity::class)
+                            .query("sessionId == $0", sessionId)
+                            .first()
+                            .find()
 
             if (currentSessionParams == null) {
                 // Should not happen
@@ -98,13 +85,12 @@ internal class RealmSessionParamsStore @Inject constructor(
     }
 
     override suspend fun updateCredentials(newCredentials: Credentials) {
-        awaitTransaction(realmConfiguration) { realm ->
-            val currentSessionParams = realm
-                    .where(SessionParamsEntity::class.java)
-                    .equalTo(SessionParamsEntityFields.SESSION_ID, newCredentials.sessionId())
-                    .findAll()
-                    .map { mapper.map(it) }
-                    .firstOrNull()
+        realmInstance.write {
+            val currentSessionParams = query(SessionParamsEntity::class)
+                    .query("sessionId == $0", newCredentials.sessionId())
+                    .first()
+                    .find()
+                    ?.let { mapper.map(it) }
 
             if (currentSessionParams == null) {
                 // Should not happen
@@ -119,26 +105,25 @@ internal class RealmSessionParamsStore @Inject constructor(
 
                 val entity = mapper.map(newSessionParams)
                 if (entity != null) {
-                    realm.insertOrUpdate(entity)
+                    copyToRealm(entity, updatePolicy = UpdatePolicy.ALL)
                 }
             }
         }
     }
 
     override suspend fun delete(sessionId: String) {
-        awaitTransaction(realmConfiguration) {
-            it.where(SessionParamsEntity::class.java)
-                    .equalTo(SessionParamsEntityFields.SESSION_ID, sessionId)
-                    .findAll()
-                    .deleteAllFromRealm()
+        realmInstance.write {
+            val sessionParam = query(SessionParamsEntity::class)
+                    .query("sessionId == $0", sessionId)
+                    .find()
+            delete(sessionParam)
         }
     }
 
     override suspend fun deleteAll() {
-        awaitTransaction(realmConfiguration) {
-            it.where(SessionParamsEntity::class.java)
-                    .findAll()
-                    .deleteAllFromRealm()
+        realmInstance.write {
+            val sessionParam = query(SessionParamsEntity::class).find()
+            delete(sessionParam)
         }
     }
 }

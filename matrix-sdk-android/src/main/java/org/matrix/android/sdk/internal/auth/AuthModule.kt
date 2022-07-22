@@ -20,18 +20,23 @@ import android.content.Context
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
-import io.realm.RealmConfiguration
+import io.realm.kotlin.RealmConfiguration
+import kotlinx.coroutines.CoroutineScope
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.legacy.LegacySessionImporter
+import org.matrix.android.sdk.internal.auth.db.AUTH_REALM_SCHEMA
 import org.matrix.android.sdk.internal.auth.db.AuthRealmMigration
-import org.matrix.android.sdk.internal.auth.db.AuthRealmModule
 import org.matrix.android.sdk.internal.auth.db.RealmPendingSessionStore
 import org.matrix.android.sdk.internal.auth.db.RealmSessionParamsStore
 import org.matrix.android.sdk.internal.auth.login.DefaultDirectLoginTask
 import org.matrix.android.sdk.internal.auth.login.DirectLoginTask
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.RealmKeysUtils
 import org.matrix.android.sdk.internal.di.AuthDatabase
+import org.matrix.android.sdk.internal.di.MatrixCoroutineScope
+import org.matrix.android.sdk.internal.di.MatrixScope
 import org.matrix.android.sdk.internal.legacy.DefaultLegacySessionImporter
 import org.matrix.android.sdk.internal.wellknown.WellknownModule
 import java.io.File
@@ -56,15 +61,30 @@ internal abstract class AuthModule {
                 old.renameTo(File(context.filesDir, "matrix-sdk-auth.realm"))
             }
 
-            return RealmConfiguration.Builder()
+            return RealmConfiguration.Builder(AUTH_REALM_SCHEMA)
                     .apply {
                         realmKeysUtils.configureEncryption(this, DB_ALIAS)
                     }
                     .name("matrix-sdk-auth.realm")
-                    .modules(AuthRealmModule())
                     .schemaVersion(authRealmMigration.schemaVersion)
                     .migration(authRealmMigration)
                     .build()
+        }
+
+        @JvmStatic
+        @Provides
+        @AuthDatabase
+        @MatrixScope
+        fun providesRealmInstance(
+                @AuthDatabase realmConfiguration: RealmConfiguration,
+                @MatrixCoroutineScope matrixCoroutineScope: CoroutineScope,
+                matrixCoroutineDispatchers: MatrixCoroutineDispatchers
+        ): RealmInstance {
+            return RealmInstance(
+                    coroutineScope = matrixCoroutineScope,
+                    realmConfiguration = realmConfiguration,
+                    coroutineDispatcher = matrixCoroutineDispatchers.io
+            )
         }
     }
 

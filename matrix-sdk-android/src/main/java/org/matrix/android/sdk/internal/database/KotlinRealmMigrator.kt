@@ -14,20 +14,30 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.auth.db.migration
+package org.matrix.android.sdk.internal.database
 
 import io.realm.kotlin.migration.AutomaticSchemaMigration
-import org.matrix.android.sdk.api.auth.LoginType
-import org.matrix.android.sdk.internal.database.KotlinRealmMigrator
 import timber.log.Timber
 
-internal class MigrateAuthTo005(migrationContext: AutomaticSchemaMigration.MigrationContext) : KotlinRealmMigrator(migrationContext, targetSchemaVersion = 5) {
-
-    override fun doMigrate(migrationContext: AutomaticSchemaMigration.MigrationContext) {
-        Timber.d("Update SessionParamsEntity to add LoginType")
-        migrationContext.enumerate("SessionParamsEntity") { _, newObj ->
-            newObj?.set("loginType", LoginType.UNKNOWN.name)
-        }
+internal abstract class KotlinRealmMigrator(
+        private val migrationContext: AutomaticSchemaMigration.MigrationContext,
+        private val targetSchemaVersion: Int
+) {
+    fun perform() {
+        Timber.d("Migrate ${migrationContext.oldRealm.configuration.name} to $targetSchemaVersion")
+        doMigrate(migrationContext)
     }
 
+    abstract fun doMigrate(migrationContext: AutomaticSchemaMigration.MigrationContext)
 }
+
+val AutomaticSchemaMigration.MigrationContext.oldVersion: Long
+    get() {
+        return oldRealm.schemaVersion()
+    }
+
+val AutomaticSchemaMigration.MigrationContext.newVersion: Long
+    get() {
+        return newRealm.schemaVersion()
+    }
+

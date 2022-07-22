@@ -16,32 +16,24 @@
 
 package org.matrix.android.sdk.internal.auth.db.migration
 
-import io.realm.DynamicRealm
+import io.realm.kotlin.migration.AutomaticSchemaMigration
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.sessionId
-import org.matrix.android.sdk.internal.auth.db.SessionParamsEntityFields
+import org.matrix.android.sdk.internal.database.KotlinRealmMigrator
 import org.matrix.android.sdk.internal.di.MoshiProvider
-import org.matrix.android.sdk.internal.util.database.RealmMigrator
 import timber.log.Timber
 
-internal class MigrateAuthTo003(realm: DynamicRealm) : RealmMigrator(realm, 3) {
+internal class MigrateAuthTo003(migrationContext: AutomaticSchemaMigration.MigrationContext) : KotlinRealmMigrator(migrationContext, targetSchemaVersion = 3) {
 
-    override fun doMigrate(realm: DynamicRealm) {
+    override fun doMigrate(migrationContext: AutomaticSchemaMigration.MigrationContext) {
         Timber.d("Update SessionParamsEntity primary key, to allow several sessions with the same userId")
 
-        realm.schema.get("SessionParamsEntity")
-                ?.removePrimaryKey()
-                ?.addField(SessionParamsEntityFields.SESSION_ID, String::class.java)
-                ?.setRequired(SessionParamsEntityFields.SESSION_ID, true)
-                ?.transform {
-                    val credentialsJson = it.getString(SessionParamsEntityFields.CREDENTIALS_JSON)
-
-                    val credentials = MoshiProvider.providesMoshi()
-                            .adapter(Credentials::class.java)
-                            .fromJson(credentialsJson)
-
-                    it.set(SessionParamsEntityFields.SESSION_ID, credentials!!.sessionId())
-                }
-                ?.addPrimaryKey(SessionParamsEntityFields.SESSION_ID)
+        val credentialsAdapter = MoshiProvider.providesMoshi()
+                .adapter(Credentials::class.java)
+        migrationContext.enumerate("SessionParamsEntity") { oldObject, newObject ->
+            val credentialsJson = oldObject.getValue("credentialsJson", String::class)
+            val credentials = credentialsAdapter.fromJson(credentialsJson)
+            newObject?.set("sessionId", credentials!!.sessionId())
+        }
     }
 }

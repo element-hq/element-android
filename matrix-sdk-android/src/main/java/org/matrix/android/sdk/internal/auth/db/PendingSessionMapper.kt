@@ -57,14 +57,14 @@ internal class PendingSessionMapper @Inject constructor(moshi: Moshi) {
         val resetPasswordDataJson = resetPasswordDataAdapter.toJson(sessionData.resetPasswordData)
         val currentThreePidDataJson = threePidDataAdapter.toJson(sessionData.currentThreePidData)
 
-        return PendingSessionEntity(
-                homeServerConnectionConfigJson = homeServerConnectionConfigJson,
-                clientSecret = sessionData.clientSecret,
-                sendAttempt = sessionData.sendAttempt,
-                resetPasswordDataJson = resetPasswordDataJson,
-                currentSession = sessionData.currentSession,
-                isRegistrationStarted = sessionData.isRegistrationStarted,
-                currentThreePidDataJson = currentThreePidDataJson
-        )
+        return PendingSessionEntity().apply {
+            this.homeServerConnectionConfigJson = homeServerConnectionConfigJson
+            this.clientSecret = sessionData.clientSecret
+            this.sendAttempt = sessionData.sendAttempt
+            this.resetPasswordDataJson = resetPasswordDataJson
+            this.currentSession = sessionData.currentSession
+            this.isRegistrationStarted = sessionData.isRegistrationStarted
+            this.currentThreePidDataJson = currentThreePidDataJson
+        }
     }
 }

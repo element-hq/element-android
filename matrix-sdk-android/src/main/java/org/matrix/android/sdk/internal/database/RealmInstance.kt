@@ -19,6 +19,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -26,6 +27,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.util.Optional
+import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.database.pagedlist.RealmTiledDataSource
 
 internal typealias RealmQueryBuilder<T> = (Realm) -> RealmQuery<T>
@@ -74,6 +77,16 @@ internal class RealmInstance(
         }
     }
 
+    fun <T : RealmObject> queryFirst(
+            realmQueryBuilder: RealmQueryBuilder<T>
+    ): Flow<Optional<T>> {
+        return getRealm().flatMapConcat {
+            realmQueryBuilder(it).first().asFlow()
+        }.map {
+            Optional.from(it.obj)
+        }
+    }
+
     fun <T : RealmObject> queryPagedList(
             config: PagedList.Config,
             queryBuilder: RealmQueryBuilder<T>
@@ -107,6 +120,12 @@ internal class RealmInstance(
     fun <R> blockingWrite(block: MutableRealm.() -> R): R {
         return runBlocking {
             write(block)
+        }
+    }
+
+    fun blockingRealm(): Realm {
+        return runBlocking {
+            getRealm().first()
         }
     }
 

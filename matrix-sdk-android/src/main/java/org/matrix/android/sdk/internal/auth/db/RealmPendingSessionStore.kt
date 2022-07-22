@@ -16,47 +16,44 @@
 
 package org.matrix.android.sdk.internal.auth.db
 
-import io.realm.Realm
-import io.realm.RealmConfiguration
+import io.realm.kotlin.MutableRealm
 import org.matrix.android.sdk.internal.auth.PendingSessionStore
-import org.matrix.android.sdk.internal.database.awaitTransaction
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.di.AuthDatabase
 import javax.inject.Inject
 
 internal class RealmPendingSessionStore @Inject constructor(
         private val mapper: PendingSessionMapper,
         @AuthDatabase
-        private val realmConfiguration: RealmConfiguration
+        private val realmInstance: RealmInstance,
 ) : PendingSessionStore {
 
     override suspend fun savePendingSessionData(pendingSessionData: PendingSessionData) {
-        awaitTransaction(realmConfiguration) { realm ->
+        realmInstance.write {
             val entity = mapper.map(pendingSessionData)
             if (entity != null) {
-                realm.where(PendingSessionEntity::class.java)
-                        .findAll()
-                        .deleteAllFromRealm()
-
-                realm.insert(entity)
+                deleteAllPendingSessions()
+                copyToRealm(entity)
             }
         }
     }
 
     override fun getPendingSessionData(): PendingSessionData? {
-        return Realm.getInstance(realmConfiguration).use { realm ->
-            realm
-                    .where(PendingSessionEntity::class.java)
-                    .findAll()
-                    .map { mapper.map(it) }
-                    .firstOrNull()
-        }
+        return realmInstance.blockingRealm()
+                .query(PendingSessionEntity::class)
+                .find()
+                .map { mapper.map(it) }
+                .firstOrNull()
     }
 
     override suspend fun delete() {
-        awaitTransaction(realmConfiguration) {
-            it.where(PendingSessionEntity::class.java)
-                    .findAll()
-                    .deleteAllFromRealm()
+        realmInstance.write {
+            deleteAllPendingSessions()
         }
+    }
+
+    private fun MutableRealm.deleteAllPendingSessions() {
+        val pendingSessionEntities = query(PendingSessionEntity::class).find()
+        delete(pendingSessionEntities)
     }
 }
