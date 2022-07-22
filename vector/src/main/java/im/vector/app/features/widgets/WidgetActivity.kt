@@ -189,7 +189,7 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
                     if (intent?.action == ACTION_MEDIA_CONTROL) {
                         val controlType = intent.getIntExtra(EXTRA_CONTROL_TYPE, 0)
                         if (controlType == CONTROL_TYPE_HANGUP) {
-                            viewModel.handle(WidgetAction.HangupElementCall)
+                            viewModel.handle(WidgetAction.CloseWidget)
                         }
                     }
                 }

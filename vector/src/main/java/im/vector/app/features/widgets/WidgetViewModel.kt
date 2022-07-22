@@ -147,11 +147,11 @@ class WidgetViewModel @AssistedInject constructor(
             WidgetAction.DeleteWidget -> handleDeleteWidget()
             WidgetAction.RevokeWidget -> handleRevokeWidget()
             WidgetAction.OnTermsReviewed -> loadFormattedUrl(forceFetchToken = false)
-            WidgetAction.HangupElementCall -> handleHangupElementCall()
+            WidgetAction.CloseWidget -> handleCloseWidget()
         }
     }
 
-    private fun handleHangupElementCall() {
+    private fun handleCloseWidget() {
         _viewEvents.post(WidgetViewEvents.Close())
     }
 

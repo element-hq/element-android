@@ -26,5 +26,5 @@ sealed class WidgetAction : VectorViewModelAction {
     object DeleteWidget : WidgetAction()
     object RevokeWidget : WidgetAction()
     object OnTermsReviewed : WidgetAction()
-    object HangupElementCall : WidgetAction()
+    object CloseWidget : WidgetAction()
 }
