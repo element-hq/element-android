@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.auth.db
+package org.matrix.android.sdk.internal.di
 
-import io.realm.annotations.RealmModule
+import javax.inject.Qualifier
 
-/**
- * Realm module for authentication classes.
- */
-@RealmModule(
-        library = true,
-        classes = [
-            SessionParamsEntity::class,
-            PendingSessionEntity::class
-        ]
-)
-internal class AuthRealmModule
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+internal annotation class MatrixCoroutineScope
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+internal annotation class SessionCoroutineScope

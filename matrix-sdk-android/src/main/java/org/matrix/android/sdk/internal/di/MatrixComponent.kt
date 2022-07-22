@@ -21,6 +21,7 @@ import android.content.res.Resources
 import com.squareup.moshi.Moshi
 import dagger.BindsInstance
 import dagger.Component
+import kotlinx.coroutines.CoroutineScope
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.MatrixConfiguration
@@ -63,6 +64,9 @@ import java.io.File
 internal interface MatrixComponent {
 
     fun matrixCoroutineDispatchers(): MatrixCoroutineDispatchers
+
+    @MatrixCoroutineScope
+    fun matrixCoroutineScope(): CoroutineScope
 
     fun moshi(): Moshi
 

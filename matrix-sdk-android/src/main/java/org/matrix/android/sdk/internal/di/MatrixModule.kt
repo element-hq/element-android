@@ -20,9 +20,11 @@ import android.content.Context
 import android.content.res.Resources
 import dagger.Module
 import dagger.Provides
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.android.asCoroutineDispatcher
 import kotlinx.coroutines.asCoroutineDispatcher
+import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.util.createBackgroundHandler
 import org.matrix.olm.OlmManager
@@ -43,6 +45,13 @@ internal object MatrixModule {
                 crypto = createBackgroundHandler("Crypto_Thread").asCoroutineDispatcher(),
                 dmVerif = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
         )
+    }
+
+    @JvmStatic
+    @Provides
+    @MatrixCoroutineScope
+    fun providesMatrixCoroutineScope(matrixConfiguration: MatrixConfiguration): CoroutineScope {
+        return matrixConfiguration.coroutineScope
     }
 
     @JvmStatic

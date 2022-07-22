@@ -16,12 +16,15 @@
 
 package org.matrix.android.sdk.api
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
 import okhttp3.ConnectionSpec
 import okhttp3.Interceptor
 import org.matrix.android.sdk.api.crypto.MXCryptoConfig
 import java.net.Proxy
 
 data class MatrixConfiguration(
+        val coroutineScope: CoroutineScope = MainScope(),
         val applicationFlavor: String = "Default-application-flavor",
         val cryptoConfig: MXCryptoConfig = MXCryptoConfig(),
         val integrationUIUrl: String = "https://scalar.vector.im/",
