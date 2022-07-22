@@ -43,6 +43,7 @@ import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.extensions.validateBackPressed
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.pushers.UnifiedPushHelper
 import im.vector.app.databinding.ActivityHomeBinding
@@ -103,7 +104,8 @@ class HomeActivity :
         VectorBaseActivity<ActivityHomeBinding>(),
         NavigationInterceptor,
         SpaceInviteBottomSheet.InteractionListener,
-        MatrixToBottomSheet.InteractionListener {
+        MatrixToBottomSheet.InteractionListener,
+        VectorMenuProvider {
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
 
@@ -212,13 +214,12 @@ class HomeActivity :
                     when (sharedAction) {
                         is HomeActivitySharedAction.OpenDrawer -> views.drawerLayout.openDrawer(GravityCompat.START)
                         is HomeActivitySharedAction.CloseDrawer -> views.drawerLayout.closeDrawer(GravityCompat.START)
-                        is HomeActivitySharedAction.OpenGroup -> openGroup(sharedAction.shouldClearFragment)
                         is HomeActivitySharedAction.OpenSpacePreview -> startActivity(SpacePreviewActivity.newIntent(this, sharedAction.spaceId))
                         is HomeActivitySharedAction.AddSpace -> createSpaceResultLauncher.launch(SpaceCreationActivity.newIntent(this))
                         is HomeActivitySharedAction.ShowSpaceSettings -> showSpaceSettings(sharedAction.spaceId)
                         is HomeActivitySharedAction.OpenSpaceInvite -> openSpaceInvite(sharedAction.spaceId)
                         HomeActivitySharedAction.SendSpaceFeedBack -> bugReporter.openBugReportScreen(this, ReportType.SPACE_BETA_FEEDBACK)
-                        HomeActivitySharedAction.CloseGroup -> closeGroup()
+                        HomeActivitySharedAction.OnCloseSpace -> onCloseSpace()
                     }
                 }
                 .launchIn(lifecycleScope)
@@ -263,17 +264,6 @@ class HomeActivity :
         homeActivityViewModel.handle(HomeActivityViewActions.ViewStarted)
     }
 
-    private fun openGroup(shouldClearFragment: Boolean) {
-        views.drawerLayout.closeDrawer(GravityCompat.START)
-
-        // When switching from space to group or group to space, we need to reload the fragment
-        if (shouldClearFragment) {
-            replaceFragment(views.homeDetailFragmentContainer, HomeDetailFragment::class.java, allowStateLoss = true)
-        } else {
-            // do nothing
-        }
-    }
-
     private fun showSpaceSettings(spaceId: String) {
         // open bottom sheet
         SpaceSettingsMenuBottomSheet
@@ -290,7 +280,7 @@ class HomeActivity :
                 .show(supportFragmentManager, "SPACE_INVITE")
     }
 
-    private fun closeGroup() {
+    private fun onCloseSpace() {
         views.drawerLayout.openDrawer(GravityCompat.START)
     }
 
@@ -547,47 +537,45 @@ class HomeActivity :
 
     override fun getMenuRes() = R.menu.home
 
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+    override fun handlePrepareMenu(menu: Menu) {
         menu.findItem(R.id.menu_home_init_sync_legacy).isVisible = vectorPreferences.developerMode()
         menu.findItem(R.id.menu_home_init_sync_optimized).isVisible = vectorPreferences.developerMode()
-        return super.onPrepareOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             R.id.menu_home_suggestion -> {
                 bugReporter.openBugReportScreen(this, ReportType.SUGGESTION)
-                return true
+                true
             }
             R.id.menu_home_report_bug -> {
                 bugReporter.openBugReportScreen(this, ReportType.BUG_REPORT)
-                return true
+                true
             }
             R.id.menu_home_init_sync_legacy -> {
                 // Configure the SDK
                 initialSyncStrategy = InitialSyncStrategy.Legacy
                 // And clear cache
                 MainActivity.restartApp(this, MainActivityArgs(clearCache = true))
-                return true
+                true
             }
             R.id.menu_home_init_sync_optimized -> {
                 // Configure the SDK
                 initialSyncStrategy = InitialSyncStrategy.Optimized()
                 // And clear cache
                 MainActivity.restartApp(this, MainActivityArgs(clearCache = true))
-                return true
+                true
             }
             R.id.menu_home_filter -> {
                 navigator.openRoomsFiltering(this)
-                return true
+                true
             }
             R.id.menu_home_setting -> {
                 navigator.openSettings(this)
-                return true
+                true
             }
+            else -> false
         }
-
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onBackPressed() {
@@ -623,6 +611,7 @@ class HomeActivity :
     companion object {
         fun newIntent(
                 context: Context,
+                firstStartMainActivity: Boolean,
                 clearNotification: Boolean = false,
                 authenticationDescription: AuthenticationDescription? = null,
                 existingSession: Boolean = false,
@@ -635,10 +624,16 @@ class HomeActivity :
                     inviteNotificationRoomId = inviteNotificationRoomId
             )
 
-            return Intent(context, HomeActivity::class.java)
+            val intent = Intent(context, HomeActivity::class.java)
                     .apply {
                         putExtra(Mavericks.KEY_ARG, args)
                     }
+
+            return if (firstStartMainActivity) {
+                MainActivity.getIntentWithNextIntent(context, intent)
+            } else {
+                intent
+            }
         }
     }
 

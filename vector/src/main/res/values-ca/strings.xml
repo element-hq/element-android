@@ -21,7 +21,7 @@
     <string name="notice_room_ban">%1$s ha vetat %2$s</string>
     <string name="notice_room_withdraw">%1$s ha retirat la invitació de %2$s</string>
     <string name="notice_avatar_url_changed">%1$s ha canviat la seva foto</string>
-    <string name="notice_made_future_room_visibility">%1$s ha establert la visibilitat de l\'històric futur de la sala a %2$s</string>
+    <string name="notice_made_future_room_visibility">%1$s ha activat la visualització de l\'històric de la sala (a partir d\'ara) a %2$s</string>
     <string name="notice_room_visibility_joined">tots els participants de la sala, des de que s\'hi uneixen.</string>
     <string name="notice_room_visibility_world_readable">qualsevol.</string>
     <string name="notice_avatar_changed_too">(també ha canviat la foto)</string>
@@ -153,7 +153,7 @@
     <string name="notice_room_update">%s ha actualitzat aquesta sala.</string>
     <string name="notice_made_future_direct_room_visibility_by_you">Has establert la visibilitat dels missatges futurs a %1$s</string>
     <string name="notice_made_future_direct_room_visibility">%1$s ha establert la visibilitat dels missatges futurs a %2$s</string>
-    <string name="notice_made_future_room_visibility_by_you">Has establert la visibilitat de l\'històric futur de la sala a %1$s</string>
+    <string name="notice_made_future_room_visibility_by_you">Has establert la visibilitat de l\'històric de la sala (a partir d\'ara) a %1$s</string>
     <string name="notice_ended_call_by_you">Has finalitzat la trucada.</string>
     <string name="notice_answered_call_by_you">Has respost a la trucada.</string>
     <string name="notice_call_candidates_by_you">Has enviat dades per configurar la trucada.</string>
@@ -243,7 +243,7 @@
     <string name="later">Més tard</string>
     <string name="permalink">Enllaç permanent</string>
     <string name="view_source">Visualitza el codi font</string>
-    <string name="view_decrypted_source">Visualitza el codi font desencriptat</string>
+    <string name="view_decrypted_source">Visualitza el codi font desxifrat</string>
     <string name="action_delete">Elimina</string>
     <string name="action_rename">Canvia el nom</string>
     <string name="report_content">Informa del contingut</string>
@@ -646,7 +646,7 @@
     <string name="markdown_has_been_enabled">S\'ha habilitat el Markdown.</string>
     <string name="markdown_has_been_disabled">S\'ha inhabilitat el Markdown.</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="no_valid_google_play_services_apk">No s\'ha trobat cap APK de Google Play Services vàlid. Les notificacions poden no funcionar correctament.</string>
     <string name="title_activity_keys_backup_setup">Còpia de seguretat de les claus</string>
     <string name="title_activity_keys_backup_restore">Utilitza la còpia de seguretat de les claus</string>
@@ -913,7 +913,7 @@
     <string name="room_settings_enable_encryption_dialog_content">Una vegada activat, el xifrat d\'una sala no es pot desactivar. El servidor no pot llegir els missatges enviats en una sala xifrada, només els poden llegir els participants. L\'activació del xifrat pot fer que molts bots i enllaços no funcionin correctament.</string>
     <string name="room_profile_section_more_notifications">Notificacions</string>
     <string name="direct_room_profile_not_encrypted_subtitle">Els missatges d\'aquí NO estan xifrats d\'extrem a extrem.</string>
-    <string name="room_profile_not_encrypted_subtitle">Els missatges d\'aquesta sala NO estan encriptats d\'extrem a extrem.</string>
+    <string name="room_profile_not_encrypted_subtitle">Els missatges d\'aquesta sala NO estan xifrats d\'extrem a extrem.</string>
     <string name="create_room_encryption_description">Una vegada activat, el xifrat no es pot desactivar.</string>
     <string name="login_reset_password_warning_content">Si canvies la contrasenya es restabliran les claus de xifrat d\'extrem a extrem de totes les teves sessions de manera que l\'històric del xat no es podrà llegir. Fes una còpia de seguretat de les claus o exporta les teves claus de sala d\'una altra sessió abans de fer el canvi de contrasenya.</string>
     <string name="room_join_rules_public_by_you">Has fet la sala accessible per a qualsevol que tingui l\'enllaç.</string>
@@ -989,7 +989,6 @@
     <string name="login_server_url_form_common_notice">Introdueix l\'adreça del servidor que vulguis utilitzar</string>
     <string name="attachment_type_gallery">Galeria</string>
     <string name="attachment_type_sticker">Adhesiu</string>
-    <string name="error_attachment">S\'ha produït un error mentre es rebia el fitxer adjunt.</string>
     <string name="a11y_jump_to_bottom">Salta al final</string>
     <string name="a11y_create_room">Crea una nova sala</string>
     <string name="a11y_create_menu_close">Tanca el menú de creació de sala…</string>
@@ -1036,7 +1035,7 @@
     <string name="no_message_edits_found">No s\'han trobat edicions</string>
     <string name="message_edits">Edicions de missatges</string>
     <string name="edited_suffix">(editat)</string>
-    <string name="room_profile_encrypted_subtitle">Els missatges d\'aquesta sala estan encriptats d\'extrem a extrem.
+    <string name="room_profile_encrypted_subtitle">Els missatges d\'aquesta sala estan xifrats d\'extrem a extrem.
 \n
 \nEls missatges estan protegits i només tu i el destinatari teniu les úniques claus per poder desxifrar-los.</string>
     <string name="sent_a_file">Fitxer</string>
@@ -1056,7 +1055,7 @@
     <string name="login_splash_text2">Utilitza el xifrat per mantenir els teus xats privats</string>
     <string name="login_splash_title">Aquest xat és teu. Apropia-te\'n.</string>
     <string name="room_filtering_filter_hint">Filtra xats…</string>
-    <string name="this_is_the_beginning_of_dm">Inici de l\'històric del xat personal amb %s.</string>
+    <string name="this_is_the_beginning_of_dm">Inici de l\'històric del xat directe amb %s.</string>
     <string name="settings_hs_admin_e2e_disabled">L\'administrador del servidor ha desactivat el xifrat d\'extrem a extrem per defecte en sales privades i en xats directes.</string>
     <string name="room_member_open_or_create_dm">Xat personal</string>
     <string name="direct_room_profile_encrypted_subtitle">Els missatges d\'aquí estan xifrats d\'extrem a extrem.
@@ -1065,7 +1064,7 @@
     <string name="a11y_create_direct_message">Crea un nou xat personal</string>
     <string name="room_filtering_footer_create_new_direct_message">Envia un nou missatge</string>
     <string name="bottom_action_people_x">Xats directes</string>
-    <string name="direct_room_encryption_enabled_tile_description">Els missatges d\'aquesta sala estan xifrats d\'extrem a extrem.</string>
+    <string name="direct_room_encryption_enabled_tile_description">Els missatges d\'aquest xat estan xifrats d\'extrem a extrem.</string>
     <string name="settings_labs_show_hidden_events_in_timeline">Mostra els esdeveniments amagats a la cronologia</string>
     <string name="send_suggestion_failed">No s\'ha pogut enviat el suggeriment (%s)</string>
     <string name="send_suggestion_sent">Gràcies, el suggeriment s\'ha enviat correctament</string>
@@ -2089,13 +2088,9 @@
     <string name="location_share_live_started">Carregant ubicació en directe…</string>
     <string name="location_share_live_enabled">Compartició d\'ubicació en directe activada</string>
     <string name="location_timeline_failed_to_load_map">No s\'ha pogut carregar el mapa</string>
-    <string name="labs_render_locations_in_timeline">Mostra les ubicacions dels usuaris a la cronologia</string>
-    <string name="settings_enable_location_sharing_summary">Si està activat, podràs enviar la teva ubicació a qualsevol sala</string>
-    <string name="settings_enable_location_sharing">Activa la compartició d\'ubicació</string>
     <string name="location_share_external">Obre amb</string>
     <string name="location_not_available_dialog_content">${app_name} no ha pogut accedir a la teva ubicació. Torna-ho a provar més tard.</string>
     <string name="location_not_available_dialog_title">${app_name} no ha pogut accedir a la teva ubicació</string>
-    <string name="location_in_background_missing_permission_dialog_title">Permet l\'accés</string>
     <string name="location_share_live_select_duration_option_3">8 hores</string>
     <string name="location_share_live_select_duration_option_2">1 hora</string>
     <string name="location_share_live_select_duration_option_1">15 minuts</string>
@@ -2137,8 +2132,6 @@
     <string name="room_settings_room_access_restricted_description">Qualsevol a un espai amb aquesta sala podrà trobar-la i unir-s\'hi. Només els administradors d\'aquesta sala poden afegir-la a un espai.</string>
     <string name="upgrade_room_for_restricted">Qualsevol a·%s podrà trobar i unir-se a aquesta sala; no caldrà convidar tothom manualment. Podràs canviar-ho a la configuració de sala en qualsevol moment.</string>
     <string name="upgrade_room_for_restricted_no_param">Qualsevol persona d\'un espai principal podrà trobar i unir-se a aquesta sala; no caldrà convidar tothom manualment. Podràs canviar-ho a la configuració de sala en qualsevol moment.</string>
-    <string name="location_in_background_missing_permission_dialog_content">Per compartir la teva ubicació en directe, ${app_name} necessita accedir a la teva ubicació mentre l\'aplicació està en segon pla.
-\nNomés s\'accedirà a la teva ubicació durant el temps que escullis.</string>
     <string name="command_description_ignore_user">Ignora un usuari i amaga els seus missatges</string>
     <string name="space_you_know_that_contains_this_room">Espai que saps que conté aquesta sala</string>
     <string name="decide_which_spaces_can_access">Tria quins espais poden accedir a aquesta sala. Si se selecciona un espai, els seus membres podran trobar i unir-se a la sala.</string>
@@ -2489,7 +2482,7 @@
     <string name="tooltip_attachment_photo">Obre càmera</string>
     <string name="message_bubbles">Mostra els contorns dels missatges</string>
     <string name="live_location_bottom_sheet_last_updated_at">Actualitzada fa %1$s</string>
-    <string name="labs_enable_live_location_summary">Implementació temporal: les ubicacions persisteixen a l\'historial de la sala</string>
+    <string name="labs_enable_live_location_summary">Implementació temporal: les ubicacions persisteixen a l\'històric de la sala</string>
     <string name="space_leave_radio_buttons_title">Coses en aquest espai</string>
     <string name="settings_autoplay_animated_images_summary">Reprodueix immediatament les imatges animades a la cronologia</string>
     <string name="live_location_bottom_sheet_stop_sharing">Deixa de compartir</string>
@@ -2506,4 +2499,40 @@
     <string name="time_unit_second_short">s</string>
     <string name="time_unit_minute_short">min</string>
     <string name="time_unit_hour_short">h</string>
+    <string name="live_location_labs_promotion_description">Nota: aquesta és una funció en proves que utilitza una implementació temporal. Això vol dir que no podràs suprimir el teu historial d\'ubicacions i que els usuaris avançats el podran veure fins i tot després de deixar de compartir la teva ubicació en directe en aquesta sala.</string>
+    <string name="auth_biometric_key_invalidated_message">L\'autenticació biomètrica s\'ha desactivat perquè s\'ha afegit un nou mètode d\'autenticació biomètrica. Pots tornar-la a activar a Configuració.</string>
+    <string name="live_location_labs_promotion_switch_title">Activa la compartició d\'ubicació</string>
+    <string name="live_location_labs_promotion_title">Compartició d\'ubicació en directe</string>
+    <string name="settings_troubleshoot_test_current_gateway">\'Gateway\' actual: %s</string>
+    <string name="settings_troubleshoot_test_current_gateway_title">Passarel·la (\'gateway\')</string>
+    <string name="settings_troubleshoot_test_current_endpoint_failed">No s\'ha trobat l\'endpoint.</string>
+    <string name="settings_troubleshoot_test_current_endpoint_success">\'Endpoint\' actual: %s</string>
+    <string name="settings_troubleshoot_test_current_endpoint_title">Punt final (\'endpoint\')</string>
+    <string name="settings_troubleshoot_test_current_distributor">Actualment utilitzant %s.</string>
+    <string name="settings_troubleshoot_test_current_distributor_title">Mètode</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="one">S\'ha trobat %d mètode.</item>
+        <item quantity="other">S\'han trobat %d mètodes.</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_distributors_fdroid">No s\'ha trobat cap altre mètode a part de la sincronització en segon pla.</string>
+    <string name="settings_troubleshoot_test_distributors_gplay">No s\'ha trobat cap altre mètode a part de Serveis de Google.</string>
+    <string name="settings_troubleshoot_test_distributors_title">Mètodes disponibles</string>
+    <string name="settings_notification_method">Mètode de notificacions</string>
+    <string name="unifiedpush_distributor_background_sync">Sincronització en segon pla</string>
+    <string name="unifiedpush_distributor_fcm_fallback">Serveis de Google</string>
+    <string name="unifiedpush_getdistributors_dialog_title">Tria com rebre les notificacions</string>
+    <string name="settings_security_pin_code_use_biometrics_error">No s\'ha pogut activar l\'autenticació biomètrica.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">Restableix el mètode de notificacions</string>
+    <string name="push_gateway_item_profile_tag">Etiqueta de perfil:</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">No s\'ha pogut registrar l\'endpoint al servidor:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">\'Endpoint\' registrat correctament al servidor.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_title">Registre d\'endpoint</string>
+    <string name="action_next">Següent</string>
+    <string name="labs_enable_msc3061_share_history_desc">Quan convidis algú a una sala xifrada que comparteix l\'històric de missatges, aquest serà visible.</string>
+    <string name="poll_undisclosed_not_ended">Els resultats es mostraran quan acabi l\'enquesta</string>
+    <string name="labs_enable_msc3061_share_history">MSC3061: Compartició de claus de sala per missatges antics</string>
+    <string name="send_your_first_msg_to_invite">Envia un primer missatge per convidar %s a parlar</string>
+    <string name="direct_room_encryption_enabled_tile_description_future">Els missatges d\'aquest xat seran xifrats d\'extrem a extrem.</string>
+    <string name="create_room_action_go">Crea</string>
 </resources>

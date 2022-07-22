@@ -18,6 +18,7 @@ package im.vector.app.features.signout.soft
 
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
@@ -35,6 +36,7 @@ import im.vector.app.features.signout.soft.epoxy.loginRedButtonItem
 import im.vector.app.features.signout.soft.epoxy.loginTextItem
 import im.vector.app.features.signout.soft.epoxy.loginTitleItem
 import im.vector.app.features.signout.soft.epoxy.loginTitleSmallItem
+import org.matrix.android.sdk.api.auth.LoginType
 import javax.inject.Inject
 
 class SoftLogoutController @Inject constructor(
@@ -91,55 +93,76 @@ class SoftLogoutController @Inject constructor(
         }
     }
 
-    private fun buildForm(state: SoftLogoutViewState) {
+    private fun buildForm(state: SoftLogoutViewState) = when (state.asyncHomeServerLoginFlowRequest) {
+        is Fail -> buildLoginErrorWithRetryItem(state.asyncHomeServerLoginFlowRequest.error)
+        is Success -> buildLoginSuccessItem(state)
+        is Loading, Uninitialized -> buildLoadingItem()
+        is Incomplete -> Unit
+    }
+
+    private fun buildLoadingItem() {
+        loadingItem {
+            id("loading")
+        }
+    }
+
+    private fun buildLoginErrorWithRetryItem(error: Throwable) {
         val host = this
-        when (state.asyncHomeServerLoginFlowRequest) {
-            Uninitialized,
-            is Loading -> {
-                loadingItem {
-                    id("loading")
-                }
-            }
-            is Fail -> {
-                loginErrorWithRetryItem {
-                    id("errorRetry")
-                    text(host.errorFormatter.toHumanReadable(state.asyncHomeServerLoginFlowRequest.error))
-                    listener { host.listener?.retry() }
-                }
-            }
-            is Success -> {
-                when (state.asyncHomeServerLoginFlowRequest.invoke()) {
-                    LoginMode.Password -> {
-                        loginPasswordFormItem {
-                            id("passwordForm")
-                            stringProvider(host.stringProvider)
-                            passwordValue(state.enteredPassword)
-                            submitEnabled(state.enteredPassword.isNotEmpty())
-                            onPasswordEdited { host.listener?.passwordEdited(it) }
-                            errorText((state.asyncLoginAction as? Fail)?.error?.let { host.errorFormatter.toHumanReadable(it) })
-                            forgetPasswordClickListener { host.listener?.forgetPasswordClicked() }
-                            submitClickListener { host.listener?.submit() }
-                        }
-                    }
-                    is LoginMode.Sso -> {
-                        loginCenterButtonItem {
-                            id("sso")
-                            text(host.stringProvider.getString(R.string.login_signin_sso))
-                            listener { host.listener?.signinFallbackSubmit() }
-                        }
-                    }
-                    is LoginMode.SsoAndPassword -> {
-                    }
-                    LoginMode.Unsupported -> {
-                        loginCenterButtonItem {
-                            id("fallback")
-                            text(host.stringProvider.getString(R.string.login_signin))
-                            listener { host.listener?.signinFallbackSubmit() }
-                        }
-                    }
-                    LoginMode.Unknown -> Unit // Should not happen
-                }
-            }
+        loginErrorWithRetryItem {
+            id("errorRetry")
+            text(host.errorFormatter.toHumanReadable(error))
+            listener { host.listener?.retry() }
+        }
+    }
+
+    private fun buildLoginSuccessItem(state: SoftLogoutViewState) = when (state.asyncHomeServerLoginFlowRequest.invoke()) {
+        LoginMode.Password -> buildLoginPasswordForm(state)
+        is LoginMode.Sso -> buildLoginSSOForm()
+        is LoginMode.SsoAndPassword -> disambiguateLoginSSOAndPasswordForm(state)
+        LoginMode.Unsupported -> buildLoginUnsupportedForm()
+        LoginMode.Unknown, null -> Unit // Should not happen
+    }
+
+    private fun buildLoginPasswordForm(state: SoftLogoutViewState) {
+        val host = this
+        loginPasswordFormItem {
+            id("passwordForm")
+            stringProvider(host.stringProvider)
+            passwordValue(state.enteredPassword)
+            submitEnabled(state.enteredPassword.isNotEmpty())
+            onPasswordEdited { host.listener?.passwordEdited(it) }
+            errorText((state.asyncLoginAction as? Fail)?.error?.let { host.errorFormatter.toHumanReadable(it) })
+            forgetPasswordClickListener { host.listener?.forgetPasswordClicked() }
+            submitClickListener { host.listener?.submit() }
+        }
+    }
+
+    private fun buildLoginSSOForm() {
+        val host = this
+        loginCenterButtonItem {
+            id("sso")
+            text(host.stringProvider.getString(R.string.login_signin_sso))
+            listener { host.listener?.signinFallbackSubmit() }
+        }
+    }
+
+    private fun disambiguateLoginSSOAndPasswordForm(state: SoftLogoutViewState) {
+        when (state.loginType) {
+            LoginType.PASSWORD -> buildLoginPasswordForm(state)
+            LoginType.SSO -> buildLoginSSOForm()
+            LoginType.DIRECT,
+            LoginType.CUSTOM,
+            LoginType.UNSUPPORTED -> buildLoginUnsupportedForm()
+            LoginType.UNKNOWN -> Unit
+        }
+    }
+
+    private fun buildLoginUnsupportedForm() {
+        val host = this
+        loginCenterButtonItem {
+            id("fallback")
+            text(host.stringProvider.getString(R.string.login_signin))
+            listener { host.listener?.signinFallbackSubmit() }
         }
     }
 

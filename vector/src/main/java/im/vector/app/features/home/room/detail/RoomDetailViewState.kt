@@ -25,6 +25,7 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.model.localecho.RoomLocalEcho
 import org.matrix.android.sdk.api.session.room.sender.SenderInfo
 import org.matrix.android.sdk.api.session.sync.SyncRequestState
 import org.matrix.android.sdk.api.session.sync.SyncState
@@ -74,7 +75,8 @@ data class RoomDetailViewState(
         val switchToParentSpace: Boolean = false,
         val rootThreadEventId: String? = null,
         val threadNotificationBadgeState: ThreadNotificationBadgeState = ThreadNotificationBadgeState(),
-        val typingUsers: List<SenderInfo>? = null
+        val typingUsers: List<SenderInfo>? = null,
+        val isSharingLiveLocation: Boolean = false,
 ) : MavericksState {
 
     constructor(args: TimelineArgs) : this(
@@ -103,4 +105,6 @@ data class RoomDetailViewState(
     fun isDm() = asyncRoomSummary()?.isDirect == true
 
     fun isThreadTimeline() = rootThreadEventId != null
+
+    fun isLocalRoom() = RoomLocalEcho.isLocalEchoId(roomId)
 }

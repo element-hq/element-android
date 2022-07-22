@@ -43,7 +43,7 @@
         </receiver>
 
         <service
-            android:name=".fdroid.service.GuardService"
+            android:name=".fdroid.service.GuardAndroidService"
             android:exported="false"
             tools:ignore="Instantiatable" />
 

@@ -62,11 +62,6 @@ internal class DefaultCreateRoomTask @Inject constructor(
 ) : CreateRoomTask {
 
     override suspend fun execute(params: CreateRoomParams): String {
-        val otherUserId = if (params.isDirect()) {
-            params.getFirstInvitedUserId()
-                    ?: throw IllegalStateException("You can't create a direct room without an invitedUser")
-        } else null
-
         if (params.preset == CreateRoomPreset.PRESET_PUBLIC_CHAT) {
             try {
                 aliasAvailabilityChecker.check(params.roomAliasName)
@@ -111,14 +106,13 @@ internal class DefaultCreateRoomTask @Inject constructor(
             RoomSummaryEntity.where(it, roomId).findFirst()?.lastActivityTime = clock.epochMillis()
         }
 
-        if (otherUserId != null) {
-            handleDirectChatCreation(roomId, otherUserId)
-        }
+        handleDirectChatCreation(roomId, createRoomBody.getDirectUserId())
         setReadMarkers(roomId)
         return roomId
     }
 
-    private suspend fun handleDirectChatCreation(roomId: String, otherUserId: String) {
+    private suspend fun handleDirectChatCreation(roomId: String, otherUserId: String?) {
+        otherUserId ?: return // This is not a direct room
         monarchy.awaitTransaction { realm ->
             RoomSummaryEntity.where(realm, roomId).findFirst()?.apply {
                 this.directUserId = otherUserId
@@ -132,22 +126,5 @@ internal class DefaultCreateRoomTask @Inject constructor(
     private suspend fun setReadMarkers(roomId: String) {
         val setReadMarkerParams = SetReadMarkersTask.Params(roomId, forceReadReceipt = true, forceReadMarker = true)
         return readMarkersTask.execute(setReadMarkerParams)
-    }
-
-    /**
-     * Tells if the created room can be a direct chat one.
-     *
-     * @return true if it is a direct chat
-     */
-    private fun CreateRoomParams.isDirect(): Boolean {
-        return preset == CreateRoomPreset.PRESET_TRUSTED_PRIVATE_CHAT &&
-                isDirect == true
-    }
-
-    /**
-     * @return the first invited user id
-     */
-    private fun CreateRoomParams.getFirstInvitedUserId(): String? {
-        return invitedUserIds.firstOrNull() ?: invite3pids.firstOrNull()?.value
     }
 }

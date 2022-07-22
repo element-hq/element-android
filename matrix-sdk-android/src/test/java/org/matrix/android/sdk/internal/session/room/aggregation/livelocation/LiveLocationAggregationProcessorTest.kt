@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.room.aggregation.livelocation
 
 import androidx.work.ExistingWorkPolicy
 import org.amshove.kluent.shouldBeEqualTo
+import org.amshove.kluent.shouldContain
 import org.junit.Test
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.UnsignedData
@@ -35,6 +36,7 @@ import org.matrix.android.sdk.test.fakes.FakeWorkManagerProvider
 import org.matrix.android.sdk.test.fakes.givenEqualTo
 import org.matrix.android.sdk.test.fakes.givenFindAll
 import org.matrix.android.sdk.test.fakes.givenFindFirst
+import org.matrix.android.sdk.test.fakes.givenLessThan
 import org.matrix.android.sdk.test.fakes.givenNotEqualTo
 
 private const val A_SESSION_ID = "session_id"
@@ -182,6 +184,7 @@ internal class LiveLocationAggregationProcessorTest {
         aggregatedEntity.roomId shouldBeEqualTo A_ROOM_ID
         aggregatedEntity.userId shouldBeEqualTo A_SENDER_ID
         aggregatedEntity.isActive shouldBeEqualTo true
+        aggregatedEntity.startOfLiveTimestampMillis shouldBeEqualTo A_TIMESTAMP
         aggregatedEntity.endOfLiveTimestampMillis shouldBeEqualTo A_TIMESTAMP + A_TIMEOUT_MILLIS
         aggregatedEntity.lastLocationContent shouldBeEqualTo null
         previousEntities.forEach { entity ->
@@ -199,9 +202,10 @@ internal class LiveLocationAggregationProcessorTest {
                 age = 123,
                 replacesState = AN_EVENT_ID
         )
+        val stateEventId = "state-event-id"
         val event = Event(
                 senderId = A_SENDER_ID,
-                eventId = "",
+                eventId = stateEventId,
                 unsignedData = unsignedData
         )
         val beaconInfo = MessageBeaconInfoContent(
@@ -237,6 +241,7 @@ internal class LiveLocationAggregationProcessorTest {
         aggregatedEntity.roomId shouldBeEqualTo A_ROOM_ID
         aggregatedEntity.userId shouldBeEqualTo A_SENDER_ID
         aggregatedEntity.isActive shouldBeEqualTo false
+        aggregatedEntity.relatedEventIds shouldContain stateEventId
         aggregatedEntity.endOfLiveTimestampMillis shouldBeEqualTo A_TIMESTAMP + A_TIMEOUT_MILLIS
         aggregatedEntity.lastLocationContent shouldBeEqualTo null
         previousEntities.forEach { entity ->
@@ -324,7 +329,7 @@ internal class LiveLocationAggregationProcessorTest {
         val lastBeaconLocationContent = MessageBeaconLocationDataContent(
                 unstableTimestampMillis = A_TIMESTAMP
         )
-        givenLastSummaryQueryReturns(
+        val aggregatedEntity = givenLastSummaryQueryReturns(
                 eventId = AN_EVENT_ID,
                 roomId = A_ROOM_ID,
                 beaconLocationContent = lastBeaconLocationContent
@@ -340,6 +345,7 @@ internal class LiveLocationAggregationProcessorTest {
         )
 
         result shouldBeEqualTo false
+        aggregatedEntity.relatedEventIds shouldContain AN_EVENT_ID
     }
 
     @Test
@@ -353,7 +359,7 @@ internal class LiveLocationAggregationProcessorTest {
         val lastBeaconLocationContent = MessageBeaconLocationDataContent(
                 unstableTimestampMillis = A_TIMESTAMP - 60_000
         )
-        val entity = givenLastSummaryQueryReturns(
+        val aggregatedEntity = givenLastSummaryQueryReturns(
                 eventId = AN_EVENT_ID,
                 roomId = A_ROOM_ID,
                 beaconLocationContent = lastBeaconLocationContent
@@ -369,7 +375,8 @@ internal class LiveLocationAggregationProcessorTest {
         )
 
         result shouldBeEqualTo true
-        val savedLocationData = ContentMapper.map(entity.lastLocationContent).toModel<MessageBeaconLocationDataContent>()
+        aggregatedEntity.relatedEventIds shouldContain AN_EVENT_ID
+        val savedLocationData = ContentMapper.map(aggregatedEntity.lastLocationContent).toModel<MessageBeaconLocationDataContent>()
         savedLocationData?.getBestTimestampMillis() shouldBeEqualTo A_TIMESTAMP
         savedLocationData?.getBestLocationInfo()?.geoUri shouldBeEqualTo A_GEO_URI
     }
@@ -399,6 +406,7 @@ internal class LiveLocationAggregationProcessorTest {
                 .givenNotEqualTo(LiveLocationShareAggregatedSummaryEntityFields.EVENT_ID, AN_EVENT_ID)
                 .givenEqualTo(LiveLocationShareAggregatedSummaryEntityFields.USER_ID, A_SENDER_ID)
                 .givenEqualTo(LiveLocationShareAggregatedSummaryEntityFields.IS_ACTIVE, true)
+                .givenLessThan(LiveLocationShareAggregatedSummaryEntityFields.START_OF_LIVE_TIMESTAMP_MILLIS, A_TIMESTAMP)
                 .givenFindAll(summaryList)
         return summaryList
     }

@@ -542,7 +542,7 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
     <string name="merged_events_expand">kinyit</string>
     <string name="merged_events_collapse">bezár</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="room_participants_action_remove">Elküld</string>
     <string name="settings_inline_url_preview_summary">URL előnézet a csevegő ablakban, ha a Matrix szervered támogatja ezt a lehetőséget.</string>
     <string name="settings_send_typing_notifs">Gépelés visszajelzés küldése</string>
@@ -930,7 +930,6 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
         <item quantity="one">%d felhasználó olvasta</item>
         <item quantity="other">%d felhasználó olvasta</item>
     </plurals>
-    <string name="error_attachment">A csatolmány letöltésénél hiba történt.</string>
     <string name="attachment_type_file">Fájl</string>
     <string name="attachment_type_contact">Névjegy</string>
     <string name="attachment_type_camera">Kamera</string>
@@ -1608,7 +1607,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="settings_emails_empty">Még nem adtál hozzá a fiókodhoz email címet</string>
     <string name="settings_emails">Email címek</string>
     <string name="settings_phone_number_empty">Még nem adtál hozzá telefonszámot a fiókodhoz</string>
-    <string name="direct_room_encryption_enabled_tile_description">Az üzenetek ebben a szobában végpontok közötti titkosítással védettek.</string>
+    <string name="direct_room_encryption_enabled_tile_description">Az üzenetek ebben a beszélgetésben végpontok közötti titkosítással védettek.</string>
     <string name="attachment_type_dialog_title">Kép hozzáadása</string>
     <string name="add_a_topic_link_text">Adj meg egy témát</string>
     <string name="room_created_summary_no_topic_creation_text">%s, hogy a többiek tudják, miről van szó ebben a szobában!</string>
@@ -2319,7 +2318,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="restart_the_application_to_apply_changes">A változások életbelépéséhez indítsd újra az alkalmazást.</string>
     <string name="labs_enable_latex_maths">LaTeX matematikai szintaxis engedélyezése</string>
     <string name="room_error_access_unauthorized">Nem léphetsz be ebbe a szobába</string>
-    <string name="ftue_auth_carousel_secure_title">Az ön beszélgetései csak az öné.</string>
+    <string name="ftue_auth_carousel_secure_title">Birtokold a beszélgetéseid.</string>
     <string name="labs_auto_report_uisi_desc">Titkosítás visszafejtési hiba esemény alkalmával a rendszer automatikusan elküldi a logokat</string>
     <string name="labs_auto_report_uisi">Titkosítás visszafejtési hibák automatikus jelentése.</string>
     <string name="tooltip_attachment_poll">Szavazás létrehozása</string>
@@ -2333,9 +2332,6 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="ftue_auth_carousel_encrypted_title">Biztonságos üzenetküldés.</string>
     <string name="ftue_auth_carousel_control_title">Te irányítasz.</string>
     <string name="tooltip_attachment_location">Tartózkodási hely megosztása</string>
-    <string name="labs_render_locations_in_timeline">A felhasználó földrajzi helyzetének megjelenítése az idővonalon</string>
-    <string name="settings_enable_location_sharing_summary">A beállítás után bármelyik szobában megoszthatod a földrajzi helyzetedet</string>
-    <string name="settings_enable_location_sharing">Földrajzi hely megosztás engedélyezése</string>
     <string name="location_share_external">Megnyitás ezzel</string>
     <string name="location_not_available_dialog_content">Az ${app_name} nem fér hozzá a tartózkodási helyedhez. Próbáld újra később.</string>
     <string name="location_not_available_dialog_title">Az ${app_name} nem tudott hozzáférni a tartózkodási helyedhez</string>
@@ -2408,8 +2404,6 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     </plurals>
     <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s és mások</string>
     <string name="room_notification_two_users_are_typing">%1$s és %2$s</string>
-    <string name="location_in_background_missing_permission_dialog_content">Ha folyamatosan meg akarod osztani a földrajzi pozíciódat ahhoz a(z) ${app_name} alkalmazásnak hozzá kell férnie a helyadatokhoz akkor is ha a háttérben fut.
-\nCsak az általad megadott idő intervallumban férünk hozzá a helyadatokhoz.</string>
     <string name="threads_notice_migration_message">Egyre közelebb kerülünk ahhoz, hogy publikus béta állapotba kerüljenek az üzenetszálak.
 \n
 \nAz előkészületekkel be kell vezetnünk pár változtatást: az eddig a pontig készített üzenetszálak hagyományos válaszokként fognak megjelenni.
@@ -2417,7 +2411,6 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 \nEz egy egyszeri változtatás ahogy az üzenetszálak ezentúl a Matrix specifikáció részét képezik.</string>
     <string name="location_share_live_stop">Állj</string>
     <string name="location_share_live_enabled">Folyamatos pozíció megosztás engedélyezve</string>
-    <string name="location_in_background_missing_permission_dialog_title">Hozzáférés engedélyezése</string>
     <string name="a11y_location_share_option_pinned_icon">Ennek a földrajzi helynek a megosztása</string>
     <string name="location_share_option_pinned">Ennek a földrajzi helynek a megosztása</string>
     <string name="a11y_location_share_option_user_live_icon">Pozícióm folyamatos megosztása</string>
@@ -2443,7 +2436,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="ftue_display_name_title">Válassz egy megjelenítési nevet</string>
     <string name="ftue_account_created_subtitle">A fiókod elkészült: %s.</string>
     <string name="ftue_account_created_congratulations_title">Gratulálunk!</string>
-    <string name="ftue_account_created_take_me_home">Vigyél haza</string>
+    <string name="ftue_account_created_take_me_home">A kezdőlapra</string>
     <string name="ftue_account_created_personalize">Profil személyre szabása</string>
     <string name="action_disable">Tiltás</string>
     <string name="location_share_live_started">Élő földrajzi helyzet meghatározás betöltése…</string>
@@ -2506,4 +2499,40 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="time_unit_second_short">mperc</string>
     <string name="time_unit_minute_short">perc</string>
     <string name="time_unit_hour_short">ó</string>
+    <string name="live_location_labs_promotion_switch_title">Földrajzi hely megosztás engedélyezése</string>
+    <string name="live_location_labs_promotion_description">Figyelem: ez a labor lehetőség egy átmeneti megvalósítás. Ez azt jelenti, hogy a szobába már elküldött helyadatok az élő hely megosztás leállítása után is hozzáférhetők maradnak a szobában.</string>
+    <string name="live_location_labs_promotion_title">Élő földrajzi hely megosztása</string>
+    <string name="settings_troubleshoot_test_current_gateway">Jelenlegi átjáró: %s</string>
+    <string name="settings_troubleshoot_test_current_gateway_title">Átjáró (gateway)</string>
+    <string name="settings_troubleshoot_test_current_endpoint_failed">Nem található végpont.</string>
+    <string name="settings_troubleshoot_test_current_endpoint_success">Jelenlegi végpont: %s</string>
+    <string name="settings_troubleshoot_test_current_endpoint_title">Végpont</string>
+    <string name="settings_troubleshoot_test_current_distributor">Jelenleg használatban: %s.</string>
+    <string name="settings_troubleshoot_test_current_distributor_title">Metódus</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="one">%d beállítás található.</item>
+        <item quantity="other">%d beállítás található.</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_distributors_fdroid">A háttér szinkronizációs szolgáltatástól eltérő beállítási lehetőség nem érhető el.</string>
+    <string name="settings_troubleshoot_test_distributors_gplay">A Google Play szolgáltatástól eltérő beállítási lehetőség nem érhető el.</string>
+    <string name="settings_troubleshoot_test_distributors_title">Elérhető beállítások</string>
+    <string name="settings_notification_method">Értesítési beállítások</string>
+    <string name="unifiedpush_distributor_background_sync">Szinkronizálás a háttérben</string>
+    <string name="unifiedpush_distributor_fcm_fallback">Google szolgáltatások</string>
+    <string name="unifiedpush_getdistributors_dialog_title">Válaszd ki, hogyan szeretnél értesítéseket kapni</string>
+    <string name="poll_undisclosed_not_ended">Az eredmény a szavazás végeztével válik láthatóvá</string>
+    <string name="labs_enable_msc3061_share_history_desc">Ha olyan titkosított szobába hívsz meg valakit ahol a régi üzenetek megosztása engedélyezett a régi titkosított üzenetek is láthatóak lesznek a meghívott számára.</string>
+    <string name="labs_enable_msc3061_share_history">MSC3061: Szoba kulcsok megosztása a régi üzenetekhez</string>
+    <string name="settings_security_pin_code_use_biometrics_error">A biometrikus azonosítást nem lehet engedélyezni.</string>
+    <string name="auth_biometric_key_invalidated_message">A biometrikus azonosítás kikapcsolásra került mivel egy új biometrikus azonosítási metódus került hozzáadásra. Újra engedélyezheted a Beállításokban.</string>
+    <string name="send_your_first_msg_to_invite">Az első üzeneteddel hívd meg ide őt: %s</string>
+    <string name="direct_room_encryption_enabled_tile_description_future">Az üzenetek ebben a beszélgetésben végpontok közötti titkosítással lesznek védve.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">Értesítési metódus visszaállítása</string>
+    <string name="push_gateway_item_profile_tag">Profil címke:</string>
+    <string name="create_room_action_go">Menj</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">Végpont token regisztrációja sikertelen a Matrix-kiszolgálón:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">Végpont sikeresen regisztrálva lett a matrix szerveren.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_title">Végpont regisztráció</string>
+    <string name="action_next">Következő</string>
 </resources>

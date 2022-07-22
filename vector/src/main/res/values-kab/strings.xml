@@ -744,7 +744,6 @@
         <item quantity="one">1 useqdac yeɣra</item>
         <item quantity="other">%d yiseqdacen ɣran</item>
     </plurals>
-    <string name="error_attachment">Tuccḍa deg tuqqna lawan n uneɛruḍ n uceqquf yeddan.</string>
     <string name="attachment_type_sticker">Astiker</string>
     <string name="error_handling_incoming_share">Ur yezmir ara ad ttusqedcen deg yisefka n beṭṭu</string>
     <string name="uploads_media_title">AMIDYA</string>

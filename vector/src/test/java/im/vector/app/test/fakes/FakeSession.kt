@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ class FakeSession(
         val fakeHomeServerCapabilitiesService: FakeHomeServerCapabilitiesService = FakeHomeServerCapabilitiesService(),
         val fakeSharedSecretStorageService: FakeSharedSecretStorageService = FakeSharedSecretStorageService(),
         private val fakeRoomService: FakeRoomService = FakeRoomService(),
+        private val fakeEventService: FakeEventService = FakeEventService(),
 ) : Session by mockk(relaxed = true) {
 
     init {
@@ -50,6 +51,7 @@ class FakeSession(
     override fun homeServerCapabilitiesService(): HomeServerCapabilitiesService = fakeHomeServerCapabilitiesService
     override fun sharedSecretStorageService() = fakeSharedSecretStorageService
     override fun roomService() = fakeRoomService
+    override fun eventService() = fakeEventService
 
     fun givenVectorStore(vectorSessionStore: VectorSessionStore) {
         coEvery {

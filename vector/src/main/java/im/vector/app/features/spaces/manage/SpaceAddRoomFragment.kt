@@ -36,6 +36,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.databinding.FragmentSpaceAddRoomsBinding
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.debounce
@@ -51,7 +52,9 @@ class SpaceAddRoomFragment @Inject constructor(
         private val roomEpoxyController: AddRoomListController,
         private val dmEpoxyController: AddRoomListController,
 ) : VectorBaseFragment<FragmentSpaceAddRoomsBinding>(),
-        OnBackPressed, AddRoomListController.Listener {
+        OnBackPressed,
+        AddRoomListController.Listener,
+        VectorMenuProvider {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) =
             FragmentSpaceAddRoomsBinding.inflate(layoutInflater, container, false)
@@ -151,17 +154,18 @@ class SpaceAddRoomFragment @Inject constructor(
         }
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        super.onPrepareOptionsMenu(menu)
+    override fun handlePrepareMenu(menu: Menu) {
         menu.findItem(R.id.spaceAddRoomSaveItem).isVisible = saveNeeded
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.spaceAddRoomSaveItem) {
-            viewModel.handle(SpaceAddRoomActions.Save)
-            return true
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.spaceAddRoomSaveItem -> {
+                viewModel.handle(SpaceAddRoomActions.Save)
+                true
+            }
+            else -> false
         }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onDestroyView() {

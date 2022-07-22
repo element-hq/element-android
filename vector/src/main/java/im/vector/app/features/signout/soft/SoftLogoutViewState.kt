@@ -22,6 +22,7 @@ import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.login.LoginMode
+import org.matrix.android.sdk.api.auth.LoginType
 
 data class SoftLogoutViewState(
         val asyncHomeServerLoginFlowRequest: Async<LoginMode> = Uninitialized,
@@ -31,7 +32,8 @@ data class SoftLogoutViewState(
         val deviceId: String,
         val userDisplayName: String,
         val hasUnsavedKeys: Boolean,
-        val enteredPassword: String = ""
+        val loginType: LoginType,
+        val enteredPassword: String = "",
 ) : MavericksState {
 
     fun isLoading(): Boolean {

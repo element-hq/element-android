@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.room.aggregation.livelocation
 
 import androidx.work.ExistingWorkPolicy
 import io.realm.Realm
+import io.realm.RealmList
 import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toContent
@@ -73,16 +74,22 @@ internal class LiveLocationAggregationProcessor @Inject constructor(
                 eventId = targetEventId
         )
 
+        if (!isLive && !event.eventId.isNullOrEmpty()) {
+            // in this case, the received event is a new state event related to the previous one
+            addRelatedEventId(event.eventId, aggregatedSummary)
+        }
+
         // remote event can stay with isLive == true while the local summary is no more active
         val isActive = aggregatedSummary.isActive.orTrue() && isLive
         val endOfLiveTimestampMillis = content.getBestTimestampMillis()?.let { it + (content.timeout ?: 0) }
         Timber.d("updating summary of id=$targetEventId with isActive=$isActive and endTimestamp=$endOfLiveTimestampMillis")
 
+        aggregatedSummary.startOfLiveTimestampMillis = content.getBestTimestampMillis()
         aggregatedSummary.endOfLiveTimestampMillis = endOfLiveTimestampMillis
         aggregatedSummary.isActive = isActive
         aggregatedSummary.userId = event.senderId
 
-        deactivateAllPreviousBeacons(realm, roomId, event.senderId, targetEventId)
+        deactivateAllPreviousBeacons(realm, roomId, event.senderId, targetEventId, content.getBestTimestampMillis() ?: 0)
 
         if (isActive) {
             scheduleDeactivationAfterTimeout(targetEventId, roomId, endOfLiveTimestampMillis)
@@ -144,6 +151,11 @@ internal class LiveLocationAggregationProcessor @Inject constructor(
                 roomId = roomId,
                 eventId = relatedEventId
         )
+
+        if (!event.eventId.isNullOrEmpty()) {
+            addRelatedEventId(event.eventId, aggregatedSummary)
+        }
+
         val updatedLocationTimestamp = content.getBestTimestampMillis() ?: 0
         val currentLocationTimestamp = ContentMapper
                 .map(aggregatedSummary.lastLocationContent)
@@ -160,13 +172,31 @@ internal class LiveLocationAggregationProcessor @Inject constructor(
         }
     }
 
-    private fun deactivateAllPreviousBeacons(realm: Realm, roomId: String, userId: String, currentEventId: String) {
+    private fun addRelatedEventId(
+            eventId: String,
+            aggregatedSummary: LiveLocationShareAggregatedSummaryEntity
+    ) {
+        Timber.d("adding related event id $eventId to summary of id ${aggregatedSummary.eventId}")
+        val updatedEventIds = aggregatedSummary.relatedEventIds.toMutableList().also {
+            it.add(eventId)
+        }
+        aggregatedSummary.relatedEventIds = RealmList(*updatedEventIds.toTypedArray())
+    }
+
+    private fun deactivateAllPreviousBeacons(
+            realm: Realm,
+            roomId: String,
+            userId: String,
+            currentEventId: String,
+            currentEventTimestamp: Long
+    ) {
         LiveLocationShareAggregatedSummaryEntity
                 .findActiveLiveInRoomForUser(
                         realm = realm,
                         roomId = roomId,
                         userId = userId,
-                        ignoredEventId = currentEventId
+                        ignoredEventId = currentEventId,
+                        startOfLiveTimestampThreshold = currentEventTimestamp
                 )
                 .forEach { it.isActive = false }
     }

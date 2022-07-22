@@ -22,8 +22,8 @@ import com.airbnb.epoxy.EpoxyModelClass
 import com.google.android.material.checkbox.MaterialCheckBox
 import im.vector.app.R
 
-@EpoxyModelClass(layout = R.layout.item_checkbox)
-abstract class CheckBoxItem : VectorEpoxyModel<CheckBoxItem.Holder>() {
+@EpoxyModelClass
+abstract class CheckBoxItem : VectorEpoxyModel<CheckBoxItem.Holder>(R.layout.item_checkbox) {
 
     @EpoxyAttribute
     var checked: Boolean = false

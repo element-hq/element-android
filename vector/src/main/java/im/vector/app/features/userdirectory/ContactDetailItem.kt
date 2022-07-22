@@ -26,8 +26,8 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 
-@EpoxyModelClass(layout = R.layout.item_contact_detail)
-abstract class ContactDetailItem : VectorEpoxyModel<ContactDetailItem.Holder>() {
+@EpoxyModelClass
+abstract class ContactDetailItem : VectorEpoxyModel<ContactDetailItem.Holder>(R.layout.item_contact_detail) {
 
     @EpoxyAttribute lateinit var threePid: String
     @EpoxyAttribute var matrixId: String? = null

@@ -607,7 +607,7 @@
     <string name="merged_events_expand">aufklappen</string>
     <string name="merged_events_collapse">zusammenklappen</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="room_participants_action_remove">Entfernen</string>
     <string name="settings_inline_url_preview_summary">Linkvorschau im Chat aktivieren, falls dein Homeserver diese Funktion unterstützt.</string>
     <string name="settings_send_typing_notifs">Schreibbenachrichtigungen senden</string>
@@ -1020,7 +1020,6 @@
         <item quantity="one">gelesen von einem Nutzer</item>
         <item quantity="other">gelesen von %d Nutzern</item>
     </plurals>
-    <string name="error_attachment">Beim Abrufen des Anhangs ist ein Fehler aufgetreten.</string>
     <string name="attachment_type_file">Datei</string>
     <string name="attachment_type_contact">Kontakt</string>
     <string name="attachment_type_camera">Kamera</string>
@@ -2215,7 +2214,7 @@
 \nUm sie für immer zu entfernen, solltest du sie bannen.</string>
     <string name="a11y_stop_voice_message">Aufnahme beenden</string>
     <string name="finish_setup">Einrichtung beenden</string>
-    <string name="a11y_presence_unavailable">Nicht stören</string>
+    <string name="a11y_presence_unavailable">Nicht da</string>
     <string name="a11y_presence_offline">Offline</string>
     <string name="a11y_presence_online">Online</string>
     <string name="call_tap_to_return">%1$s Klicke zum Zurückkehren</string>
@@ -2278,7 +2277,7 @@
     <string name="analytics_opt_in_content_link">hier</string>
     <string name="analytics_opt_in_title">Hilf mit, ${app_name} zu verbessern</string>
     <string name="action_enable">Aktivieren</string>
-    <string name="room_member_override_nick_color">Farbe des Nicknamens ändern</string>
+    <string name="room_member_override_nick_color">Farbe des Anzeigenamens ändern</string>
     <string name="ftue_auth_carousel_control_title">Du hast die volle Kontrolle.</string>
     <string name="room_error_access_unauthorized">Du hast nicht die Berechtigung um diesen Raum zu betreten</string>
     <plurals name="poll_total_vote_count_before_ended_and_not_voted">
@@ -2334,7 +2333,6 @@
     <string name="room_profile_section_restore_security">Verschlüsselung wiederherstellen</string>
     <string name="tooltip_attachment_location">Standort freigeben</string>
     <string name="location_activity_title_static_sharing">Standort freigeben</string>
-    <string name="settings_enable_location_sharing">Standortfreigabe aktivieren</string>
     <string name="location_share_external">Öffnen mit</string>
     <string name="location_not_available_dialog_content">${app_name} konnte nicht auf deinen Standort zugreifen. Bitte versuche es später noch einmal.</string>
     <string name="location_not_available_dialog_title">${app_name} konnte nicht auf deinen Standort zugreifen</string>
@@ -2357,8 +2355,6 @@
     <string name="encryption_has_been_misconfigured">Die Verschlüsselung wurde fehlerhaft konfiguriert.</string>
     <string name="room_unsupported_e2e_algorithm_as_admin">Die Verschlüsselung wurde fehlerhaft konfiguriert und du kannst keine Nachrichten senden. Klicke, um die Einstellungen zu öffnen.</string>
     <string name="room_unsupported_e2e_algorithm">Die Verschlüsselung wurde fehlerhaft konfiguriert und du kannst keine Nachrichten senden. Bitte kontaktiere einen Admin, um die Verschlüsselung wiederherzustellen.</string>
-    <string name="labs_render_locations_in_timeline">Geteilte Standorte anzeigen</string>
-    <string name="settings_enable_location_sharing_summary">Sobald aktiviert, kannst du deinen Standort in jeden Raum senden</string>
     <string name="sent_location">Hat den Standort geteilt</string>
     <string name="labs_enable_thread_messages">Threads aktivieren</string>
     <string name="ftue_auth_use_case_connect_to_server">Mit Server verbinden</string>
@@ -2409,7 +2405,6 @@
     </plurals>
     <string name="location_share_live_stop">Beenden</string>
     <string name="location_share_live_enabled">Live-Standort aktiviert</string>
-    <string name="location_in_background_missing_permission_dialog_title">Zugriff erlauben</string>
     <string name="a11y_location_share_option_pinned_icon">Standort teilen</string>
     <string name="location_share_option_pinned">Standort teilen</string>
     <string name="location_share_option_user_current">Meinen Standort teilen</string>
@@ -2425,4 +2420,113 @@
     <string name="threads_beta_enable_notice_title">Threads Beta</string>
     <string name="call_start_screen_sharing">Bildschirm teilen</string>
     <string name="action_try_it_out">Ausprobieren</string>
+    <string name="location_share_live_until">Live bis %1$s</string>
+    <string name="unifiedpush_getdistributors_dialog_title">Wähle Deine Benachrichtigungsmethode</string>
+    <string name="labs_enable_live_location_summary">Vorläufige Implementierung: Standorte bleiben im Nachrichtenverlauf von Räumen erhalten</string>
+    <string name="push_gateway_item_profile_tag">Profil-Tag:</string>
+    <string name="time_unit_hour_short">h</string>
+    <string name="live_location_labs_promotion_switch_title">Standortfreigabe aktivieren</string>
+    <string name="live_location_labs_promotion_description">Bitte beachten: Dies ist eine Testfunktion mit einer vorübergehenden Implementierung. Das bedeutet, dass Du Deinen Standortverlauf nicht löschen kannst und dass fortgeschrittene Nutzer Deinen Standortverlauf auch dann noch sehen können, wenn Du Deinen Live-Standort nicht mehr mit diesem Raum teilst.</string>
+    <string name="live_location_labs_promotion_title">Live-Standortfreigabe</string>
+    <string name="settings_troubleshoot_test_current_gateway">Aktuelles Gateway: %s</string>
+    <string name="settings_troubleshoot_test_current_gateway_title">Gateway</string>
+    <string name="settings_troubleshoot_test_current_endpoint_failed">Kann den Endpunkt nicht finden.</string>
+    <string name="settings_troubleshoot_test_current_endpoint_success">Aktueller Endpunkt: %s</string>
+    <string name="settings_troubleshoot_test_current_endpoint_title">Endpunkt</string>
+    <string name="settings_troubleshoot_test_current_distributor">Derzeit wird %s verwendet.</string>
+    <string name="settings_troubleshoot_test_current_distributor_title">Methode</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="one">%d Methode gefunden.</item>
+        <item quantity="other">%d Methoden gefunden.</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_distributors_fdroid">Keine andere Methode als die Hintergrund-Synchronisation gefunden.</string>
+    <string name="settings_troubleshoot_test_distributors_gplay">Keine andere Methode als Google Play Service gefunden.</string>
+    <string name="settings_troubleshoot_test_distributors_title">Verfügbare Methoden</string>
+    <string name="settings_notification_method">Benachrichtigungsmethode</string>
+    <string name="unifiedpush_distributor_background_sync">Hintergrund-Synchronisation</string>
+    <string name="unifiedpush_distributor_fcm_fallback">Google Services</string>
+    <string name="screen_sharing_notification_description">Bildschirmfreigabe ist in Arbeit</string>
+    <string name="screen_sharing_notification_title">${app_name} Bildschirmfreigabe</string>
+    <string name="live_location_bottom_sheet_last_updated_at">Aktualisiert vor %1$s</string>
+    <string name="live_location_bottom_sheet_stop_sharing">Teilen beenden</string>
+    <string name="labs_enable_live_location">Aktiviere Live-Standortfreigabe</string>
+    <string name="live_location_sharing_notification_description">Standortfreigabe ist in Arbeit</string>
+    <string name="live_location_sharing_notification_title">${app_name} Live-Standort</string>
+    <string name="location_share_live_remaining_time">%1$s übrig</string>
+    <string name="location_share_live_view">Live-Standort anzeigen</string>
+    <string name="location_share_live_ended">Live-Standort beendet</string>
+    <string name="location_share_live_started">Live-Standort laden…</string>
+    <string name="location_share_live_select_duration_option_3">8 Stunden</string>
+    <string name="location_share_live_select_duration_option_2">1 Stunde</string>
+    <string name="location_share_live_select_duration_option_1">15 Minuten</string>
+    <string name="location_share_live_select_duration_title">Teile Deinen Live-Standort für</string>
+    <string name="a11y_location_share_locate_button">Auf aktuellen Standort zoomen</string>
+    <string name="a11y_location_share_pin_on_map">Pin des ausgewählten Ortes auf der Karte</string>
+    <string name="audio_message_file_size">(%1$s)</string>
+    <string name="audio_message_reply_content">%1$s (%2$s)</string>
+    <string name="error_audio_message_unable_to_play">Kann %1$s nicht abspielen</string>
+    <string name="a11y_pause_audio_message">Pausieren %1$s</string>
+    <string name="a11y_play_audio_message">Abspielen %1$s</string>
+    <string name="a11y_audio_playback_duration">%1$d Minuten %2$d Sekunden</string>
+    <string name="a11y_audio_message_item">%1$s, %2$s, %3$s</string>
+    <string name="settings_show_latest_profile_description">Die neuesten Profilinformationen (Avatar und Anzeigename) für alle Nachrichten anzeigen.</string>
+    <string name="settings_show_latest_profile">Aktuelle Benutzerinformationen anzeigen</string>
+    <string name="ftue_personalize_complete_title">Du kannst loslegen!</string>
+    <string name="ftue_display_name_title">einen Anzeigenamen wählen</string>
+    <string name="ftue_account_created_take_me_home">Zurück zum Home-Screen</string>
+    <string name="send_feedback_threads_title">Threads Beta-Feedback</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">Benachrichtigungsmethode zurücksetzen</string>
+    <string name="initial_sync_request_content">${app_name} muss aus folgendem Grund eine Cache-Löschung durchführen, um auf dem neuesten Stand zu bleiben:
+\n%s
+\n
+\nDiese Aktion wird die Anwendung neu starten und einige Zeit dauern.</string>
+    <string name="keys_backup_settings_signature_from_this_user">Die Sicherung hat eine gültige Signatur von diesem Benutzer.</string>
+    <string name="settings_presence_user_always_appears_offline_summary">Wenn diese Option aktiviert ist, wirst Du anderen Nutzer:innen immer als offline angezeigt, auch wenn Du die Anwendung verwendest.</string>
+    <string name="settings_presence_user_always_appears_offline">Offline Modus</string>
+    <string name="settings_presence">Präsenz</string>
+    <string name="settings_autoplay_animated_images_summary">Animierte Bilder in der Zeitleiste abspielen, sobald sie sichtbar sind</string>
+    <string name="settings_autoplay_animated_images_title">Animierte Bilder automatisch abspielen</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">Das Endpunkt-Token konnte nicht auf dem Heimserver registriert werden:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">Endpunkt erfolgreich beim Heimserver registriert.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_title">Endpunkt-Registrierung</string>
+    <string name="threads_labs_enable_notice_message">Dein Heimserver unterstützt derzeit keine Threads, daher kann diese Funktion evtl. nicht richtig funktionieren. Einige Nachrichten mit Threads sind möglicherweise nicht zuverlässig verfügbar. %sMöchtest Du Threads trotzdem aktivieren\?</string>
+    <string name="threads_beta_enable_notice_message">Threads helfen dabei, Unterhaltungen beim Thema zu halten und leichter zu verfolgen. %sDie Aktivierung von Threads aktualisiert die App. Dies kann bei einigen Konten länger dauern.</string>
+    <string name="threads_notice_migration_message">Wir nähern uns der Veröffentlichung einer öffentlichen Beta für Threads.
+\n
+\nIn Vorbereitung darauf müssen wir einige Änderungen vornehmen: Threads, die vor diesem Zeitpunkt erstellt wurden, werden als normale Antworten angezeigt.
+\n
+\nDies wird ein einmaliger Übergang sein, da Threads nun Teil der Matrix-Spezifikation sind.</string>
+    <string name="call_stop_screen_sharing">Bildschirmfreigabe beenden</string>
+    <string name="action_next">Weiter</string>
+    <string name="action_learn_more">Mehr erfahren</string>
+    <string name="time_unit_second_short">sek</string>
+    <string name="time_unit_minute_short">min</string>
+    <string name="initial_sync_request_reason_unignored_users">- das Ignorieren einiger Benutzer:innen wurde rückgängig gemacht</string>
+    <string name="initial_sync_request_title">Initiale Synchronisierungsanfrage</string>
+    <string name="space_explore_filter_no_result_description">Einige Ergebnisse werden möglicherweise ausgeblendet, weil sie privat sind und Du eine Einladung benötigst, um sie zu sehen.</string>
+    <string name="space_explore_filter_no_result_title">Keine Ergebnisse gefunden</string>
+    <string name="space_leave_radio_button_none">Nichts verlassen</string>
+    <string name="space_leave_radio_button_all">Alles verlassen</string>
+    <string name="space_leave_radio_buttons_title">Dinge in diesem Space</string>
+    <string name="a11y_presence_busy">Beschäftigt</string>
+    <string name="settings_security_pin_code_use_biometrics_error">Die biometrische Authentifizierung konnte nicht aktiviert werden.</string>
+    <string name="auth_biometric_key_invalidated_message">Die biometrische Authentifizierung wurde deaktiviert, weil kürzlich eine neue biometrische Authentifizierungsmethode hinzugefügt wurde. Du kannst sie in den Einstellungen wieder aktivieren.</string>
+    <string name="error_forbidden_digits_only_username">Der Heimserver akzeptiert keine Benutzernamen, die nur aus Ziffern bestehen.</string>
+    <string name="sent_live_location">teilten ihren Live-Standort</string>
+    <string name="ftue_personalize_skip_this_step">Schritt überspringen</string>
+    <string name="ftue_personalize_submit">Speichern und fortfahren</string>
+    <string name="ftue_personalize_complete_subtitle">Deine Einstellungen wurden gespeichert.</string>
+    <string name="ftue_personalize_lets_go">Los geht\'s</string>
+    <string name="ftue_profile_picture_subtitle">Du kannst das jederzeit ändern.</string>
+    <string name="ftue_profile_picture_title">Profilbild hinzufügen</string>
+    <string name="ftue_display_name_entry_footer">Du kannst dies später ändern</string>
+    <string name="ftue_display_name_entry_title">Anzeigename</string>
+    <string name="ftue_display_name_subtitle">Dies wird angezeigt, wenn Du Nachrichten sendest.</string>
+    <string name="ftue_account_created_subtitle">Dein Konto %s wurde erstellt.</string>
+    <string name="ftue_account_created_congratulations_title">Herzlichen Glückwunsch!</string>
+    <string name="ftue_account_created_personalize">Profil personalisieren</string>
+    <string name="ftue_auth_carousel_workplace_body">${app_name} ist auch für den Arbeitsplatz geeignet. Die sichersten Organisationen der Welt vertrauen darauf.</string>
+    <string name="send_feedback_threads_info">Threads sind noch in Arbeit, und es stehen neue, aufregende Funktionen an, wie z. B. verbesserte Benachrichtigungen. Wir würden uns sehr über Dein Feedback freuen!</string>
+    <string name="direct_room_encryption_enabled_tile_description_future">Nachrichten in diesem Chat werden End-zu-End-Verschlüsselt</string>
 </resources>

@@ -29,8 +29,8 @@ import im.vector.app.core.epoxy.onClick
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.util.MatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_unknown_room)
-abstract class UnknownRoomItem : VectorEpoxyModel<UnknownRoomItem.Holder>() {
+@EpoxyModelClass
+abstract class UnknownRoomItem : VectorEpoxyModel<UnknownRoomItem.Holder>(R.layout.item_unknown_room) {
 
     @EpoxyAttribute
     lateinit var avatarRenderer: AvatarRenderer

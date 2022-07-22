@@ -890,7 +890,6 @@
         <item quantity="many">%d użytkowników odczytało</item>
         <item quantity="other">%d użytkowników odczytało</item>
     </plurals>
-    <string name="error_attachment">Wystąpił błąd poczas otrzymywania załącznika.</string>
     <string name="error_handling_incoming_share">Nie można obsłużyć otrzymanych danych</string>
     <string name="content_reported_as_inappropriate_title">Zgłoszono jako nieodpowiedni</string>
     <string name="content_reported_as_inappropriate_content">Zawartość została zgłoszona jako niewłaściwa.
@@ -1164,9 +1163,9 @@
         <item quantity="other">Wyślij obrazów w oryginalnym rozmiarze</item>
     </plurals>
     <string name="delete_event_dialog_title">Potwierdź Usunięcie</string>
-    <string name="delete_event_dialog_content">Jesteś pewny(-na), że chcesz usunąć to wydarzenie\? Jeżeli usuniesz nazwę pokoju lub zmienisz temat, wciąż będzie możliwe cofnięcie zmiany.</string>
+    <string name="delete_event_dialog_content">Czy na pewno chcesz usunąć to wydarzenie\? Pamiętaj, że skasowanie nazwy pokoju lub zmiana jego tematu może czasem je przywrócić.</string>
     <string name="delete_event_dialog_reason_checkbox">Podaj przyczynę</string>
-    <string name="delete_event_dialog_reason_hint">Przyczyna reakcji</string>
+    <string name="delete_event_dialog_reason_hint">Powód usunięcia</string>
     <string name="event_redacted_by_user_reason_with_reason">Wydarzenie usunięte przez użytkownika, przyczyna: %1$s</string>
     <string name="event_redacted_by_admin_reason_with_reason">Wydarzenie moderowane przez administratora pokoju, przyczyna: %1$s</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">Klucze są już aktualne!</string>
@@ -1178,7 +1177,7 @@
     <string name="room_list_catchup_empty_body">Nie masz więcej nieprzeczytanych wiadomości</string>
     <string name="title_activity_emoji_reaction_picker">Reakcje</string>
     <string name="action_agree">Zgoda</string>
-    <string name="message_view_reaction">Zobacz Reakcje</string>
+    <string name="message_view_reaction">Zobacz reakcje</string>
     <string name="event_redacted_by_user_reason">Zdarzenie usunięte przez użytkownika</string>
     <string name="event_redacted_by_admin_reason">Zdarzenie moderowane przez administratora pokoju</string>
     <string name="settings_general_title">Ogólne</string>
@@ -1737,7 +1736,7 @@
     <string name="room_settings_space_access_title">Dostęp do Przestrzeni</string>
     <string name="room_settings_access_rules_pref_dialog_title">Kto powinien mieć dostęp \?</string>
     <string name="room_settings_room_notifications_account_settings">Ustawienia konta</string>
-    <string name="room_settings_room_notifications_manage_notifications">Możesz zarządzać notyfikacjami w %1$s.</string>
+    <string name="room_settings_room_notifications_manage_notifications">Możesz zarządzać powiadomieniami w %1$s.</string>
     <string name="room_settings_room_notifications_encryption_notice">Proszę zwrócić uwagę, że powiadomienia o wzmiankach i słowach kluczowych nie są dostępne w zaszyfrowanych pokojach na urządzeniach mobilnych.</string>
     <string name="room_settings_room_notifications_notify_me">Powiadamiaj mnie o</string>
     <string name="settings_secure_backup_reset">Zresetuj bezpieczną kopię zapasową</string>
@@ -1929,7 +1928,7 @@
     <string name="settings_notification_other">Inne</string>
     <string name="settings_notification_mentions_and_keywords">Wzmianki i słowa kluczowe</string>
     <string name="settings_notification_default">Domyślne powiadomienia</string>
-    <string name="settings_notification_emails_no_emails">Aby otrzymywać emaile z notyfikacjami, proszę przypisać email do swojego konta Matrix</string>
+    <string name="settings_notification_emails_no_emails">Aby otrzymywać e-maile z powiadomieniami, proszę przypisać adres e-mail do swojego konta Matrix</string>
     <string name="voice_message_reply_content">Wiadomość głosowa (%1$s)</string>
     <string name="error_voice_message_cannot_reply_or_edit">Nie można odpowiadać lub edytować kiedy wiadomość głosowa jest aktywna</string>
     <string name="error_voice_message_unable_to_record">Nie udało się nagrać wiadomości głosowej</string>
@@ -2501,15 +2500,9 @@
     <string name="location_share_live_stop">Zatrzymaj</string>
     <string name="location_share_live_enabled">Włączona lokalizacja na żywo</string>
     <string name="location_timeline_failed_to_load_map">Nie udało się wczytać mapy</string>
-    <string name="labs_render_locations_in_timeline">Renderuj lokalizacje użytkowników na osi czasu</string>
-    <string name="settings_enable_location_sharing_summary">Po włączeniu będziesz mógł wysłać swoją lokalizację do dowolnego pokoju</string>
-    <string name="settings_enable_location_sharing">Włącz udostępnianie lokalizacji</string>
     <string name="location_share_external">Otwórz za pomocą</string>
     <string name="location_not_available_dialog_content">${app_name} nie może uzyskać dostępu do Twojej lokalizacji. Spróbuj ponownie później.</string>
     <string name="location_not_available_dialog_title">${app_name} nie może uzyskać dostępu do Twojej lokalizacji</string>
-    <string name="location_in_background_missing_permission_dialog_content">Jeśli chcesz udostępniać swoją lokalizację na żywo, ${app_name} potrzebuje dostępu do lokalizacji przez cały czas, gdy aplikacja działa w tle.
-\n Będziemy mieć dostęp do Twojej lokalizacji tylko przez wybrany przez Ciebie okres.</string>
-    <string name="location_in_background_missing_permission_dialog_title">Zgoda na dostęp</string>
     <string name="a11y_location_share_option_pinned_icon">Udostępnij tę lokalizację</string>
     <string name="location_share_option_pinned">Udostępnij tę lokalizację</string>
     <string name="a11y_location_share_option_user_live_icon">Udostępnij lokalizację na żywo</string>
@@ -2599,4 +2592,17 @@
     <string name="time_unit_hour_short">godz</string>
     <string name="time_unit_minute_short">min</string>
     <string name="space_leave_radio_buttons_title">Pokoje w przestrzeni</string>
+    <string name="action_next">Dalej</string>
+    <string name="settings_troubleshoot_test_current_distributor_title">Dostawca</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="one">Znaleziono %d dostawcę.</item>
+        <item quantity="few">Znaleziono %d dostawców.</item>
+        <item quantity="many">Znaleziono %d dostawdów.</item>
+        <item quantity="other">Znaleziono %d dostawdów.</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_distributors_fdroid">Nie znaleziono innej metody poza ciągłą synchronizacją w tle.</string>
+    <string name="settings_troubleshoot_test_distributors_gplay">Nie znaleziono innych dostawców poza usługami Google Play.</string>
+    <string name="settings_troubleshoot_test_distributors_title">Dostępni dostawcy</string>
+    <string name="settings_notification_method">Dostawca powiadomień</string>
+    <string name="unifiedpush_getdistributors_dialog_title">Wybierz, którego dostawcy powiadomień push chcesz używać</string>
 </resources>

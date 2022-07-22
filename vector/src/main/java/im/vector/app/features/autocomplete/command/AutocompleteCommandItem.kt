@@ -25,8 +25,8 @@ import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
 
-@EpoxyModelClass(layout = R.layout.item_autocomplete_command)
-abstract class AutocompleteCommandItem : VectorEpoxyModel<AutocompleteCommandItem.Holder>() {
+@EpoxyModelClass
+abstract class AutocompleteCommandItem : VectorEpoxyModel<AutocompleteCommandItem.Holder>(R.layout.item_autocomplete_command) {
 
     @EpoxyAttribute
     var name: String? = null

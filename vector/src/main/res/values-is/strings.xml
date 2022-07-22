@@ -764,7 +764,7 @@
     <string name="upgrade_security">Uppfærsla dulritunar tiltæk</string>
     <string name="command_description_plain">Sendir skilaboð sem óbreyttur texti án þess að túlka það sem markdown</string>
     <string name="encryption_not_enabled">Dulritun ekki virk</string>
-    <string name="direct_room_encryption_enabled_tile_description">Skilaboð í þessari spjallrás eru enda-í-enda dulrituð.</string>
+    <string name="direct_room_encryption_enabled_tile_description">Skilaboð í þessu spjalli eru enda-í-enda dulrituð.</string>
     <string name="settings_hs_admin_e2e_disabled">Kerfisstjóri netþjónsins þíns hefur lokað á sjálfvirka dulritun í einkaspjallrásum og beinum skilaboðum.</string>
     <string name="room_profile_section_more_settings">Stillingar spjallrásar</string>
     <string name="room_profile_not_encrypted_subtitle">Skilaboð í þessari spjallrás eru ekki enda-í-enda dulrituð.</string>
@@ -845,7 +845,6 @@
     <string name="disconnect_identity_server">Aftengja auðkennisþjón</string>
     <string name="send_feedback_space_title">Umsagnir um svæði</string>
     <string name="settings_show_redacted_summary">Birta frátökutákn fyrir fjarlægð skilaboð</string>
-    <string name="settings_enable_location_sharing_summary">Eftir að þetta hefur verið virkjað, muntu geta sent staðsetninguna þína á hvaða spjallrás sem er</string>
     <string name="closed_poll_option_description">Niðurstöður birtast einungis eftir að þú hefur lokað könnuninni</string>
     <string name="open_poll_option_description">Kjósendur sjá niðurstöðurnar þegar þeir hafa kosið</string>
     <plurals name="poll_total_vote_count_after_ended">
@@ -868,8 +867,6 @@
     </plurals>
     <string name="message_bubbles">Birta skilaboðablöðrur</string>
     <string name="location_timeline_failed_to_load_map">Mistókst að hlaða inn landakorti</string>
-    <string name="labs_render_locations_in_timeline">Myndgera staðsetningu notenda á tímalínunni</string>
-    <string name="settings_enable_location_sharing">Virkja deilingu staðsetninga</string>
     <string name="location_not_available_dialog_content">${app_name} gat ekki fengið staðsetninguna þína. Reyndu aftur síðar.</string>
     <string name="location_not_available_dialog_title">${app_name} gat ekki fengið staðsetninguna þína</string>
     <string name="closed_poll_option_title">Lokuð könnun</string>
@@ -1295,7 +1292,7 @@
     <string name="keys_backup_setup_step3_button_title">Lokið</string>
     <string name="keys_backup_setup_step3_success_title">Tókst !</string>
     <string name="keys_backup_setup_step1_advanced">(Ítarlegt)</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
     <string name="merged_events_collapse">fella saman</string>
     <string name="merged_events_expand">fletta út</string>
@@ -1567,7 +1564,6 @@
     <string name="a11y_create_menu_close">Loka valmyndinni til að útbúa spjallrás…</string>
     <string name="location_share_live_stop">Stöðva</string>
     <string name="location_share_live_enabled">Staðsetning í rauntíma virkjuð</string>
-    <string name="location_in_background_missing_permission_dialog_title">Leyfa aðgang</string>
     <string name="a11y_location_share_option_pinned_icon">Deila þessari staðsetningu</string>
     <string name="location_share_option_pinned">Deila þessari staðsetningu</string>
     <string name="a11y_location_share_option_user_live_icon">Deila staðsetningu í rauntíma</string>
@@ -1641,7 +1637,6 @@
     <string name="room_list_quick_actions_low_priority_add">Bæta í lítinn forgang</string>
     <string name="block_user">HUNSA NOTANDA</string>
     <string name="error_handling_incoming_share">Tókst ekki að meðhöndla deiligögn</string>
-    <string name="error_attachment">Villa kom upp þegar reynt var að sækja viðhengið.</string>
     <string name="error_file_too_big_simple">Skráin er of stór til að senda hana inn.</string>
     <plurals name="fallback_users_read">
         <item quantity="one">%d notandi las</item>

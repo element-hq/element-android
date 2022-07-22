@@ -8,8 +8,9 @@ on:
 # Enrich gradle.properties for CI/CD
 env:
   CI_GRADLE_ARG_PROPERTIES: >
-    -Porg.gradle.jvmargs=-Xmx2g
+    -Porg.gradle.jvmargs=-Xmx4g
     -Porg.gradle.parallel=false
+    --no-daemon
 
 jobs:
   tests:

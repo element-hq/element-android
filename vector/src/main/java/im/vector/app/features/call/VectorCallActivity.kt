@@ -22,7 +22,6 @@ import android.app.PictureInPictureParams
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
-import android.content.res.Configuration
 import android.graphics.Color
 import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
@@ -35,8 +34,10 @@ import android.view.View
 import android.view.WindowManager
 import androidx.activity.result.ActivityResult
 import androidx.annotation.StringRes
+import androidx.core.app.PictureInPictureModeChangedInfo
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
+import androidx.core.util.Consumer
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
@@ -50,6 +51,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.utils.PERMISSIONS_FOR_AUDIO_IP_CALL
 import im.vector.app.core.utils.PERMISSIONS_FOR_VIDEO_IP_CALL
 import im.vector.app.core.utils.checkPermissions
@@ -59,7 +61,7 @@ import im.vector.app.features.call.dialpad.CallDialPadBottomSheet
 import im.vector.app.features.call.dialpad.DialPadFragment
 import im.vector.app.features.call.transfer.CallTransferActivity
 import im.vector.app.features.call.utils.EglUtils
-import im.vector.app.features.call.webrtc.ScreenCaptureService
+import im.vector.app.features.call.webrtc.ScreenCaptureAndroidService
 import im.vector.app.features.call.webrtc.ScreenCaptureServiceConnection
 import im.vector.app.features.call.webrtc.WebRtcCall
 import im.vector.app.features.call.webrtc.WebRtcCallManager
@@ -94,7 +96,10 @@ data class CallArgs(
 private val loggerTag = LoggerTag("VectorCallActivity", LoggerTag.VOIP)
 
 @AndroidEntryPoint
-class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallControlsView.InteractionListener {
+class VectorCallActivity :
+        VectorBaseActivity<ActivityCallBinding>(),
+        CallControlsView.InteractionListener,
+        VectorMenuProvider {
 
     override fun getBinding() = ActivityCallBinding.inflate(layoutInflater)
 
@@ -128,6 +133,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         window.statusBarColor = Color.TRANSPARENT
         window.navigationBarColor = Color.BLACK
         super.onCreate(savedInstanceState)
+        addOnPictureInPictureModeChangedListener(pictureInPictureModeChangedInfoConsumer)
 
         Timber.tag(loggerTag.value).v("EXTRA_MODE is ${intent.getStringExtra(EXTRA_MODE)}")
         if (intent.getStringExtra(EXTRA_MODE) == INCOMING_RINGING) {
@@ -210,25 +216,31 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && isInPictureInPictureMode
     }
 
-    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration) = withState(callViewModel) {
-        renderState(it)
+    private val pictureInPictureModeChangedInfoConsumer = Consumer<PictureInPictureModeChangedInfo> {
+        withState(callViewModel) {
+            renderState(it)
+        }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menu_call_open_chat) {
-            returnToChat()
-            return true
-        } else if (item.itemId == android.R.id.home) {
-            // We check here as we want PiP in some cases
-            onBackPressed()
-            return true
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_call_open_chat -> {
+                returnToChat()
+                true
+            }
+            android.R.id.home -> {
+                // We check here as we want PiP in some cases
+                onBackPressed()
+                true
+            }
+            else -> false
         }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onDestroy() {
         detachRenderersIfNeeded()
         turnScreenOffAndKeyguardOn()
+        removeOnPictureInPictureModeChangedListener(pictureInPictureModeChangedInfoConsumer)
         super.onDestroy()
     }
 
@@ -592,7 +604,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     private fun returnToChat() {
         val roomId = withState(callViewModel) { it.roomId }
         val args = TimelineArgs(roomId)
-        val intent = RoomDetailActivity.newIntent(this, args).apply {
+        val intent = RoomDetailActivity.newIntent(this, args, false).apply {
             flags = FLAG_ACTIVITY_CLEAR_TOP
         }
         startActivity(intent)
@@ -663,7 +675,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     private fun startScreenSharingService(activityResult: ActivityResult) {
         ContextCompat.startForegroundService(
                 this,
-                Intent(this, ScreenCaptureService::class.java)
+                Intent(this, ScreenCaptureAndroidService::class.java)
         )
         bindToScreenCaptureService(activityResult)
     }

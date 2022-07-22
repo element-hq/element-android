@@ -30,7 +30,6 @@ import android.view.HapticFeedbackConstants
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -74,6 +73,7 @@ import im.vector.app.core.animations.play
 import im.vector.app.core.dialogs.ConfirmationDialogBuilder
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.epoxy.LayoutManagerStateRestorer
+import im.vector.app.core.error.fatalError
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.containsRtLOverride
 import im.vector.app.core.extensions.ensureEndsLeftToRight
@@ -89,6 +89,7 @@ import im.vector.app.core.hardware.vibrate
 import im.vector.app.core.intent.getFilenameFromUri
 import im.vector.app.core.intent.getMimeTypeFromUri
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.platform.lifecycleAwareLazy
 import im.vector.app.core.platform.showOptimizedSnackbar
 import im.vector.app.core.resources.ColorProvider
@@ -130,6 +131,7 @@ import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.attachments.AttachmentTypeSelectorView
 import im.vector.app.features.attachments.AttachmentsHelper
 import im.vector.app.features.attachments.ContactAttachment
+import im.vector.app.features.attachments.ShareIntentHandler
 import im.vector.app.features.attachments.preview.AttachmentsPreviewActivity
 import im.vector.app.features.attachments.preview.AttachmentsPreviewArgs
 import im.vector.app.features.attachments.toGroupedContentAttachmentData
@@ -272,6 +274,7 @@ class TimelineFragment @Inject constructor(
         private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
         private val callManager: WebRtcCallManager,
         private val audioMessagePlaybackTracker: AudioMessagePlaybackTracker,
+        private val shareIntentHandler: ShareIntentHandler,
         private val clock: Clock
 ) :
         VectorBaseFragment<FragmentTimelineBinding>(),
@@ -280,7 +283,8 @@ class TimelineFragment @Inject constructor(
         AttachmentTypeSelectorView.Callback,
         AttachmentsHelper.Callback,
         GalleryOrCameraDialogHelper.Listener,
-        CurrentCallsView.Callback {
+        CurrentCallsView.Callback,
+        VectorMenuProvider {
 
     companion object {
 
@@ -494,7 +498,6 @@ class TimelineFragment @Inject constructor(
                 RoomDetailViewEvents.StopChatEffects -> handleStopChatEffects()
                 is RoomDetailViewEvents.DisplayAndAcceptCall -> acceptIncomingCall(it)
                 RoomDetailViewEvents.RoomReplacementStarted -> handleRoomReplacement()
-                is RoomDetailViewEvents.ChangeLocationIndicator -> handleChangeLocationIndicator(it)
             }
         }
 
@@ -657,10 +660,6 @@ class TimelineFragment @Inject constructor(
                 context = requireContext(),
                 roomId = timelineArgs.roomId
         )
-    }
-
-    private fun handleChangeLocationIndicator(event: RoomDetailViewEvents.ChangeLocationIndicator) {
-        views.locationLiveStatusIndicator.isVisible = event.isVisible
     }
 
     private fun displayErrorMessage(error: RoomDetailViewEvents.Failure) {
@@ -1055,15 +1054,14 @@ class TimelineFragment @Inject constructor(
     }
 
     @SuppressLint("RestrictedApi")
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    override fun handlePostCreateMenu(menu: Menu) {
         if (isThreadTimeLine()) {
             if (menu is MenuBuilder) menu.setOptionalIconsVisible(true)
         }
-        super.onCreateOptionsMenu(menu, inflater)
         // We use a custom layout for this menu item, so we need to set a ClickListener
         menu.findItem(R.id.open_matrix_apps)?.let { menuItem ->
             menuItem.actionView.debouncedClicks {
-                onOptionsItemSelected(menuItem)
+                handleMenuItemSelected(menuItem)
             }
         }
         val joinConfItem = menu.findItem(R.id.join_conference)
@@ -1073,13 +1071,13 @@ class TimelineFragment @Inject constructor(
 
         // Custom thread notification menu item
         menu.findItem(R.id.menu_timeline_thread_list)?.let { menuItem ->
-            menuItem.actionView.setOnClickListener {
-                onOptionsItemSelected(menuItem)
+            menuItem.actionView.debouncedClicks {
+                handleMenuItemSelected(menuItem)
             }
         }
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
+    override fun handlePrepareMenu(menu: Menu) {
         menu.forEach {
             it.isVisible = timelineViewModel.isMenuItemVisible(it.itemId)
         }
@@ -1121,7 +1119,7 @@ class TimelineFragment @Inject constructor(
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.invite -> {
                 navigator.openInviteUsersToRoom(requireActivity(), timelineArgs.roomId)
@@ -1174,7 +1172,7 @@ class TimelineFragment @Inject constructor(
                 }
                 true
             }
-            else -> super.onOptionsItemSelected(item)
+            else -> false
         }
     }
 
@@ -1208,9 +1206,9 @@ class TimelineFragment @Inject constructor(
         getRootThreadEventId()?.let {
             val newRoom = timelineArgs.copy(threadTimelineArgs = null, eventId = it)
             context?.let { con ->
-                val int = RoomDetailActivity.newIntent(con, newRoom)
-                int.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-                con.startActivity(int)
+                val intent = RoomDetailActivity.newIntent(con, newRoom, false)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                con.startActivity(intent)
             }
         }
     }
@@ -1259,6 +1257,7 @@ class TimelineFragment @Inject constructor(
         val nonFormattedBody = when (messageContent) {
             is MessageAudioContent -> getAudioContentBodyText(messageContent)
             is MessagePollContent -> messageContent.getBestPollCreationInfo()?.question?.getBestQuestion()
+            is MessageBeaconInfoContent -> getString(R.string.sent_live_location)
             else -> messageContent?.body.orEmpty()
         }
         var formattedBody: CharSequence? = null
@@ -1319,6 +1318,7 @@ class TimelineFragment @Inject constructor(
 
     private fun handlePendingAction(roomDetailPendingAction: RoomDetailPendingAction) {
         when (roomDetailPendingAction) {
+            RoomDetailPendingAction.DoNothing -> Unit
             is RoomDetailPendingAction.JumpToReadReceipt ->
                 timelineViewModel.handle(RoomDetailAction.JumpToReadReceipt(roomDetailPendingAction.userId))
             is RoomDetailPendingAction.MentionUser ->
@@ -1426,6 +1426,9 @@ class TimelineFragment @Inject constructor(
                 updateJumpToReadMarkerViewVisibility()
                 jumpToBottomViewVisibilityManager.maybeShowJumpToBottomViewVisibilityWithDelay()
             }
+        }.apply {
+            // For local rooms, pin the view's content to the top edge (the layout is reversed)
+            stackFromEnd = isLocalRoom()
         }
         val stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
         scrollOnNewMessageCallback = ScrollOnNewMessageCallback(layoutManager, timelineEventController)
@@ -1615,7 +1618,9 @@ class TimelineFragment @Inject constructor(
 
     private fun sendUri(uri: Uri): Boolean {
         val shareIntent = Intent(Intent.ACTION_SEND, uri)
-        val isHandled = attachmentsHelper.handleShareIntent(requireContext(), shareIntent)
+        val isHandled = shareIntentHandler.handleIncomingShareIntent(shareIntent, ::onContentAttachmentsReady, onPlainText = {
+            fatalError("Should not happen as we're generating a File based share Intent", vectorPreferences.failFast())
+        })
         if (!isHandled) {
             Toast.makeText(requireContext(), R.string.error_handling_incoming_share, Toast.LENGTH_SHORT).show()
         }
@@ -1676,6 +1681,11 @@ class TimelineFragment @Inject constructor(
         } else if (mainState.asyncInviter.complete) {
             vectorBaseActivity.finish()
         }
+        updateLiveLocationIndicator(mainState.isSharingLiveLocation)
+    }
+
+    private fun updateLiveLocationIndicator(isSharingLiveLocation: Boolean) {
+        views.locationLiveStatusIndicator.isVisible = isSharingLiveLocation
     }
 
     private fun FragmentTimelineBinding.hideComposerViews() {
@@ -1695,31 +1705,41 @@ class TimelineFragment @Inject constructor(
     }
 
     private fun renderToolbar(roomSummary: RoomSummary?) {
-        if (!isThreadTimeLine()) {
-            views.includeRoomToolbar.roomToolbarContentView.isVisible = true
-            views.includeThreadToolbar.roomToolbarThreadConstraintLayout.isVisible = false
-            if (roomSummary == null) {
-                views.includeRoomToolbar.roomToolbarContentView.isClickable = false
-            } else {
-                views.includeRoomToolbar.roomToolbarContentView.isClickable = roomSummary.membership == Membership.JOIN
-                views.includeRoomToolbar.roomToolbarTitleView.text = roomSummary.displayName
-                avatarRenderer.render(roomSummary.toMatrixItem(), views.includeRoomToolbar.roomToolbarAvatarImageView)
-                val showPresence = roomSummary.isDirect
-                views.includeRoomToolbar.roomToolbarPresenceImageView.render(showPresence, roomSummary.directUserPresence)
-                val shieldView = if (showPresence) views.includeRoomToolbar.roomToolbarTitleShield else views.includeRoomToolbar.roomToolbarAvatarShield
-                shieldView.render(roomSummary.roomEncryptionTrustLevel)
-                views.includeRoomToolbar.roomToolbarPublicImageView.isVisible = roomSummary.isPublic && !roomSummary.isDirect
+        when {
+            isLocalRoom() -> {
+                views.includeRoomToolbar.roomToolbarContentView.isVisible = false
+                views.includeThreadToolbar.roomToolbarThreadConstraintLayout.isVisible = false
+                setupToolbar(views.roomToolbar)
+                        .setTitle(R.string.room_member_open_or_create_dm)
+                        .allowBack(useCross = true)
             }
-        } else {
-            views.includeRoomToolbar.roomToolbarContentView.isVisible = false
-            views.includeThreadToolbar.roomToolbarThreadConstraintLayout.isVisible = true
-            timelineArgs.threadTimelineArgs?.let {
-                val matrixItem = MatrixItem.RoomItem(it.roomId, it.displayName, it.avatarUrl)
-                avatarRenderer.render(matrixItem, views.includeThreadToolbar.roomToolbarThreadImageView)
-                views.includeThreadToolbar.roomToolbarThreadShieldImageView.render(it.roomEncryptionTrustLevel)
-                views.includeThreadToolbar.roomToolbarThreadSubtitleTextView.text = it.displayName
+            isThreadTimeLine() -> {
+                views.includeRoomToolbar.roomToolbarContentView.isVisible = false
+                views.includeThreadToolbar.roomToolbarThreadConstraintLayout.isVisible = true
+                timelineArgs.threadTimelineArgs?.let {
+                    val matrixItem = MatrixItem.RoomItem(it.roomId, it.displayName, it.avatarUrl)
+                    avatarRenderer.render(matrixItem, views.includeThreadToolbar.roomToolbarThreadImageView)
+                    views.includeThreadToolbar.roomToolbarThreadShieldImageView.render(it.roomEncryptionTrustLevel)
+                    views.includeThreadToolbar.roomToolbarThreadSubtitleTextView.text = it.displayName
+                }
+                views.includeThreadToolbar.roomToolbarThreadTitleTextView.text = resources.getText(R.string.thread_timeline_title)
             }
-            views.includeThreadToolbar.roomToolbarThreadTitleTextView.text = resources.getText(R.string.thread_timeline_title)
+            else -> {
+                views.includeRoomToolbar.roomToolbarContentView.isVisible = true
+                views.includeThreadToolbar.roomToolbarThreadConstraintLayout.isVisible = false
+                if (roomSummary == null) {
+                    views.includeRoomToolbar.roomToolbarContentView.isClickable = false
+                } else {
+                    views.includeRoomToolbar.roomToolbarContentView.isClickable = roomSummary.membership == Membership.JOIN
+                    views.includeRoomToolbar.roomToolbarTitleView.text = roomSummary.displayName
+                    avatarRenderer.render(roomSummary.toMatrixItem(), views.includeRoomToolbar.roomToolbarAvatarImageView)
+                    val showPresence = roomSummary.isDirect
+                    views.includeRoomToolbar.roomToolbarPresenceImageView.render(showPresence, roomSummary.directUserPresence)
+                    val shieldView = if (showPresence) views.includeRoomToolbar.roomToolbarTitleShield else views.includeRoomToolbar.roomToolbarAvatarShield
+                    shieldView.render(roomSummary.roomEncryptionTrustLevel)
+                    views.includeRoomToolbar.roomToolbarPublicImageView.isVisible = roomSummary.isPublic && !roomSummary.isDirect
+                }
+            }
         }
     }
 
@@ -2622,10 +2642,6 @@ class TimelineFragment @Inject constructor(
         }
     }
 
-    override fun onAttachmentsProcessFailed() {
-        Toast.makeText(requireContext(), R.string.error_attachment, Toast.LENGTH_SHORT).show()
-    }
-
     override fun onContactAttachmentReady(contactAttachment: ContactAttachment) {
         super.onContactAttachmentReady(contactAttachment)
         val formattedContact = contactAttachment.toHumanReadable()
@@ -2657,6 +2673,11 @@ class TimelineFragment @Inject constructor(
      * Returns true if the current room is a Thread room, false otherwise.
      */
     private fun isThreadTimeLine(): Boolean = timelineArgs.threadTimelineArgs?.rootThreadEventId != null
+
+    /**
+     * Returns true if the current room is a local room, false otherwise.
+     */
+    private fun isLocalRoom(): Boolean = withState(timelineViewModel) { it.isLocalRoom() }
 
     /**
      * Returns the root thread event if we are in a thread room, otherwise returns null.

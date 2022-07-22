@@ -23,6 +23,7 @@ import kotlinx.parcelize.Parcelize
 data class UserListFragmentArgs(
         val title: String,
         val menuResId: Int,
+        val submitMenuItemId: Int,
         val excludedUserIds: Set<String>? = null,
         val singleSelection: Boolean = false,
         val showInviteActions: Boolean = true,

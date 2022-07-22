@@ -21,7 +21,7 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 
-@EpoxyModelClass(layout = R.layout.item_room_placeholder)
-abstract class RoomSummaryItemPlaceHolder : VectorEpoxyModel<RoomSummaryItemPlaceHolder.Holder>() {
+@EpoxyModelClass
+abstract class RoomSummaryItemPlaceHolder : VectorEpoxyModel<RoomSummaryItemPlaceHolder.Holder>(R.layout.item_room_placeholder) {
     class Holder : VectorEpoxyHolder()
 }

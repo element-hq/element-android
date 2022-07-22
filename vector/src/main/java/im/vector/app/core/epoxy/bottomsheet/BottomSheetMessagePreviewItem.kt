@@ -43,8 +43,8 @@ import org.matrix.android.sdk.api.util.MatrixItem
 /**
  * A message preview for bottom sheet.
  */
-@EpoxyModelClass(layout = R.layout.item_bottom_sheet_message_preview)
-abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessagePreviewItem.Holder>() {
+@EpoxyModelClass
+abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessagePreviewItem.Holder>(R.layout.item_bottom_sheet_message_preview) {
 
     @EpoxyAttribute
     lateinit var avatarRenderer: AvatarRenderer

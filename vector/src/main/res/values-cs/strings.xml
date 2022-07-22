@@ -836,7 +836,7 @@
     <string name="merged_events_expand">rozbalit</string>
     <string name="merged_events_collapse">sbalit</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="no_valid_google_play_services_apk">Žádný platný APK Google Plaz Services nenalezen. Oznámení možná nebudou pracovat spolehlivě.</string>
     <string name="passphrase_create_passphrase">Vytvořit přístupovou frázi</string>
     <string name="passphrase_confirm_passphrase">Potvrdit přístupovou frázi</string>
@@ -1045,7 +1045,6 @@
         <item quantity="few">%d uživatelé přečetli</item>
         <item quantity="other">%d uživatelů přečetlo</item>
     </plurals>
-    <string name="error_attachment">Během načítání přílohy došlo k chybě.</string>
     <string name="attachment_type_file">Soubor</string>
     <string name="attachment_type_contact">Kontakt</string>
     <string name="attachment_type_camera">Fotoaparát</string>
@@ -2378,9 +2377,6 @@
     <string name="ftue_auth_carousel_control_title">Máte vše pod kontrolou.</string>
     <string name="ftue_auth_carousel_secure_title">Vlastněte své konverzace.</string>
     <string name="tooltip_attachment_location">Sdílet polohu</string>
-    <string name="labs_render_locations_in_timeline">Zobrazit polohy uživatele na časové ose</string>
-    <string name="settings_enable_location_sharing_summary">Po zapnutí budete moci odeslat svou polohu do libovolné místnosti</string>
-    <string name="settings_enable_location_sharing">Povolit sdílení polohy</string>
     <string name="location_share_external">Otevřít v</string>
     <string name="location_not_available_dialog_content">${app_name} nemohl získat přístup k vaší poloze. Zkuste to prosím později.</string>
     <string name="location_not_available_dialog_title">${app_name} nemohl získat přístup k vaší poloze</string>
@@ -2457,9 +2453,6 @@
     <string name="room_notification_two_users_are_typing">%1$s a %2$s</string>
     <string name="location_share_live_stop">Zastavit</string>
     <string name="location_share_live_enabled">Poloha živě povolena</string>
-    <string name="location_in_background_missing_permission_dialog_content">Pokud chcete sdílet svou polohu živě, ${název_aplikace} potřebuje přístup k poloze po celou dobu, kdy je aplikace na pozadí.
-\nK vaší poloze budeme mít přístup pouze po dobu, kterou si zvolíte.</string>
-    <string name="location_in_background_missing_permission_dialog_title">Povolit přístup</string>
     <string name="a11y_location_share_option_pinned_icon">Sdílet tuto polohu</string>
     <string name="location_share_option_pinned">Sdílet tuto polohu</string>
     <string name="a11y_location_share_option_user_live_icon">Sdílet polohu živě</string>
@@ -2553,4 +2546,41 @@
     <string name="time_unit_second_short">sek</string>
     <string name="time_unit_minute_short">min</string>
     <string name="time_unit_hour_short">h</string>
+    <string name="live_location_labs_promotion_switch_title">Povolit sdílení polohy živě</string>
+    <string name="live_location_labs_promotion_description">Upozornění: jedná se o experimetnální funkci s dočasnou implementací. To znamená, že nebudete moci odstranit historii své polohy a pokročilí uživatelé budou moci vidět historii vaší polohy i poté, co přestanete sdílet svou polohu živě v této místnosti.</string>
+    <string name="live_location_labs_promotion_title">Sdílení polohy živě</string>
+    <string name="settings_troubleshoot_test_current_gateway">Aktuální brána: %s</string>
+    <string name="settings_troubleshoot_test_current_gateway_title">Brána</string>
+    <string name="settings_troubleshoot_test_current_endpoint_failed">Nelze najít koncový bod.</string>
+    <string name="settings_troubleshoot_test_current_endpoint_success">Aktuální koncový bod: %s</string>
+    <string name="settings_troubleshoot_test_current_endpoint_title">Koncový bod</string>
+    <string name="settings_troubleshoot_test_current_distributor">Aktuálně se používá %s.</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="one">Nalezen %d způsob.</item>
+        <item quantity="few">Nalezeny %d způsoby.</item>
+        <item quantity="other">Nalezeno %d způsobů.</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_current_distributor_title">Způsob</string>
+    <string name="settings_troubleshoot_test_distributors_fdroid">Nebyl nalezen jiný způsob než synchronizace na pozadí.</string>
+    <string name="settings_troubleshoot_test_distributors_gplay">Žádný jiný způsob než služba Google Play nebyl nalezen.</string>
+    <string name="settings_troubleshoot_test_distributors_title">Dostupné způsoby</string>
+    <string name="settings_notification_method">Způsob oznamování</string>
+    <string name="unifiedpush_distributor_background_sync">Synchronizace na pozadí</string>
+    <string name="unifiedpush_distributor_fcm_fallback">Služby Google</string>
+    <string name="unifiedpush_getdistributors_dialog_title">Výběr způsobu přijímání oznámení</string>
+    <string name="settings_security_pin_code_use_biometrics_error">Nepodařilo se zapnout biometrické ověřování.</string>
+    <string name="auth_biometric_key_invalidated_message">Biometrické ověřování bylo vypnuto, protože nedávno byla přidána nová metoda biometrického ověřování. Můžete ho znovu povolit v Nastavení.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">Obnovit metodu oznamování</string>
+    <string name="push_gateway_item_profile_tag">Značka profilu:</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">Nepodařilo se zaregistrovat token koncového bodu na domovském serveru:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">Koncový bod byl úspěšně zaregistrován na domovském serveru.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_title">Registrace koncového bodu</string>
+    <string name="action_next">Další</string>
+    <string name="poll_undisclosed_not_ended">Výsledky se zobrazí po ukončení hlasování</string>
+    <string name="labs_enable_msc3061_share_history_desc">Při pozvání do šifrované místnosti, která sdílí historii, bude zašifrovaná historie viditelná.</string>
+    <string name="labs_enable_msc3061_share_history">MSC3061: Sdílení klíčů místnosti pro minulé zprávy</string>
+    <string name="send_your_first_msg_to_invite">Odesláním první zprávy pozvete %s do místnosti</string>
+    <string name="direct_room_encryption_enabled_tile_description_future">Zprávy v této místnosti budou koncově šifrovány.</string>
+    <string name="create_room_action_go">Přejít</string>
 </resources>

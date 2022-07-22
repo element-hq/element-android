@@ -1238,7 +1238,7 @@
     <string name="merged_events_expand">expandera</string>
     <string name="merged_events_collapse">kollapsa</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="passphrase_create_passphrase">Skapa lösenfras</string>
     <string name="passphrase_confirm_passphrase">Bekräfta lösenfras</string>
     <string name="passphrase_enter_passphrase">Skriv lösenfras</string>
@@ -1348,7 +1348,6 @@
         <item quantity="one">%d användare läste</item>
         <item quantity="other">%d användare läste</item>
     </plurals>
-    <string name="error_attachment">Ett fel inträffade vid hämtning av bilagan.</string>
     <string name="error_handling_incoming_share">Kunde inte hantera delningsdata</string>
     <string name="uploads_files_subtitle">%1$s vid %2$s</string>
     <string name="report_content_spam">Det är skräppost</string>
@@ -1707,7 +1706,7 @@
     <string name="direct_room_profile_section_more_leave">Lämna</string>
     <string name="secure_backup_reset_all">Återställ allt</string>
     <string name="direct_room_created_summary_item_by_you">Du gick med.</string>
-    <string name="direct_room_encryption_enabled_tile_description">Meddelanden i det här rummet är totalsträckskrypterade.</string>
+    <string name="direct_room_encryption_enabled_tile_description">Meddelanden i den här chatten är totalsträckskrypterade.</string>
     <string name="direct_room_profile_section_more_settings">Inställningar</string>
     <string name="direct_room_profile_encrypted_subtitle">Meddelanden här är totalsträckskrypterade.
 \n
@@ -2333,9 +2332,6 @@
     <string name="ftue_auth_carousel_secure_title">Äg dina konversationer.</string>
     <string name="room_error_access_unauthorized">Du får inte gå med i det här rummet</string>
     <string name="tooltip_attachment_location">Dela plats</string>
-    <string name="labs_render_locations_in_timeline">Visa användarplatser i tidslinjen</string>
-    <string name="settings_enable_location_sharing_summary">När det har aktiverats så kan du skicka din plats till vilket rum som helst</string>
-    <string name="settings_enable_location_sharing">Aktivera platsdelning</string>
     <string name="location_share_external">Öppna med</string>
     <string name="location_not_available_dialog_content">${app_name} kunde inte komma åt din plats. Försök igen senare.</string>
     <string name="location_not_available_dialog_title">${app_name} kunde inte komma åt din plats</string>
@@ -2411,9 +2407,6 @@
     <string name="threads_notice_migration_title">Trådar närmar sig beta 🎉</string>
     <string name="location_share_live_stop">Stoppa</string>
     <string name="location_share_live_enabled">Plats i realtid aktiverad</string>
-    <string name="location_in_background_missing_permission_dialog_content">Om du vill dela din plats i realtid så behöver ${app_name} åtkomst till din plats hela tiden när appen är i bakgrunden.
-\nVi kommer bara använda din plats under tiden du väljer.</string>
-    <string name="location_in_background_missing_permission_dialog_title">Tillåt åtkomst</string>
     <string name="a11y_location_share_option_pinned_icon">Dela den här platsen</string>
     <string name="location_share_option_pinned">Dela den här platsen</string>
     <string name="a11y_location_share_option_user_live_icon">Dela plats i realtid</string>
@@ -2506,4 +2499,40 @@
     <string name="time_unit_second_short">sek</string>
     <string name="time_unit_minute_short">min</string>
     <string name="time_unit_hour_short">t</string>
+    <string name="action_next">Nästa</string>
+    <string name="live_location_labs_promotion_switch_title">Aktivera platsdelning</string>
+    <string name="live_location_labs_promotion_description">OBS: det här är en experimentell funktion som använder en temporär implementation. Det betyder att du inte kommer kunna radera din platshistorik, och avancerade användare kommer kunna se din platshistorik även efter att du slutar dela din realtidsplats med det här rummet.</string>
+    <string name="live_location_labs_promotion_title">Positionsdelning i realtid</string>
+    <string name="settings_troubleshoot_test_current_gateway">Nuvarande gateway: %s</string>
+    <string name="settings_troubleshoot_test_current_gateway_title">Gateway</string>
+    <string name="settings_troubleshoot_test_current_endpoint_failed">Kan inte hitta ändpunkten.</string>
+    <string name="settings_troubleshoot_test_current_endpoint_success">Nuvarande ändpunkt: %s</string>
+    <string name="settings_troubleshoot_test_current_endpoint_title">Ändpunkt</string>
+    <string name="settings_troubleshoot_test_current_distributor">Använder för närvarande %s.</string>
+    <string name="settings_troubleshoot_test_current_distributor_title">Metod</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="one">Hittade %d metod.</item>
+        <item quantity="other">Hittade %d metoder.</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_distributors_fdroid">Ingen annan metod än bakgrundssynkronisering hittad.</string>
+    <string name="settings_troubleshoot_test_distributors_gplay">Ingen annan metod än Google Play-tjänster hittad.</string>
+    <string name="settings_troubleshoot_test_distributors_title">Tillgängliga metoder</string>
+    <string name="settings_notification_method">Aviseringsmetod</string>
+    <string name="unifiedpush_distributor_background_sync">Bakgrundssynkronisering</string>
+    <string name="unifiedpush_distributor_fcm_fallback">Googletjänster</string>
+    <string name="unifiedpush_getdistributors_dialog_title">Välj hur du vill ta emot aviseringar</string>
+    <string name="settings_security_pin_code_use_biometrics_error">Kunde inte aktivera biometrisk autentisering.</string>
+    <string name="auth_biometric_key_invalidated_message">Biometrisk autentisering inaktiverades eftersom att en ny biometrisk autentiseringsmetod nyligen lades till. Du kan aktivera den igen i inställningarna.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">Återställ aviseringsmetod</string>
+    <string name="push_gateway_item_profile_tag">Profiltagg:</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">Misslyckades att registrera ändpunktstoken med hemservern:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">Lyckades registrera ändpunkten hos hemservern.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_title">Ändpunktsregistrering</string>
+    <string name="poll_undisclosed_not_ended">Resultat kommer att synas när omröstningen avslutas</string>
+    <string name="labs_enable_msc3061_share_history_desc">När du bjuder in i ett krypterat rum som delar historik, så kommer krypterad historik att vara synlig.</string>
+    <string name="labs_enable_msc3061_share_history">MSC3061: Delar rumsnycklar för tidigare meddelanden</string>
+    <string name="send_your_first_msg_to_invite">Skicka ditt första meddelande för att bjuda in %s att chatta</string>
+    <string name="direct_room_encryption_enabled_tile_description_future">Meddelanden i den här chatten kommer att vara totalsträckskrypterade.</string>
+    <string name="create_room_action_go">Gå</string>
 </resources>

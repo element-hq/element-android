@@ -21,58 +21,98 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
+import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.features.session.coroutineScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class LocationSharingServiceConnection @Inject constructor(
-        private val context: Context
-) : ServiceConnection, LocationSharingService.Callback {
+        private val context: Context,
+        private val activeSessionHolder: ActiveSessionHolder
+) : ServiceConnection, LocationSharingAndroidService.Callback {
 
     interface Callback {
-        fun onLocationServiceRunning()
+        fun onLocationServiceRunning(roomIds: Set<String>)
         fun onLocationServiceStopped()
         fun onLocationServiceError(error: Throwable)
     }
 
-    private var callback: Callback? = null
+    private val callbacks = mutableSetOf<Callback>()
     private var isBound = false
-    private var locationSharingService: LocationSharingService? = null
+    private var locationSharingAndroidService: LocationSharingAndroidService? = null
 
     fun bind(callback: Callback) {
-        this.callback = callback
+        addCallback(callback)
 
         if (isBound) {
-            callback.onLocationServiceRunning()
+            callback.onLocationServiceRunning(getRoomIdsOfActiveLives())
         } else {
-            Intent(context, LocationSharingService::class.java).also { intent ->
+            Intent(context, LocationSharingAndroidService::class.java).also { intent ->
                 context.bindService(intent, this, 0)
             }
         }
     }
 
-    fun unbind() {
-        callback = null
+    fun unbind(callback: Callback) {
+        removeCallback(callback)
     }
 
-    fun stopLiveLocationSharing(roomId: String) {
-        locationSharingService?.stopSharingLocation(roomId)
+    private fun getRoomIdsOfActiveLives(): Set<String> {
+        return locationSharingAndroidService?.getRoomIdsOfActiveLives() ?: emptySet()
     }
 
     override fun onServiceConnected(className: ComponentName, binder: IBinder) {
-        locationSharingService = (binder as LocationSharingService.LocalBinder).getService().also {
-            it.callback = this
+        locationSharingAndroidService = (binder as LocationSharingAndroidService.LocalBinder).getService().also { service ->
+            service.callback = this
+            getActiveSessionCoroutineScope()?.let { scope ->
+                service.roomIdsOfActiveLives
+                        .onEach(::onRoomIdsUpdate)
+                        .launchIn(scope)
+            }
         }
         isBound = true
-        callback?.onLocationServiceRunning()
+    }
+
+    private fun getActiveSessionCoroutineScope(): CoroutineScope? {
+        return activeSessionHolder.getSafeActiveSession()?.coroutineScope
     }
 
     override fun onServiceDisconnected(className: ComponentName) {
         isBound = false
-        locationSharingService?.callback = null
-        locationSharingService = null
-        callback?.onLocationServiceStopped()
+        locationSharingAndroidService?.callback = null
+        locationSharingAndroidService = null
+        onCallbackActionNoArg(Callback::onLocationServiceStopped)
+    }
+
+    private fun onRoomIdsUpdate(roomIds: Set<String>) {
+        forwardRoomIdsToCallbacks(roomIds)
     }
 
     override fun onServiceError(error: Throwable) {
-        callback?.onLocationServiceError(error)
+        forwardErrorToCallbacks(error)
+    }
+
+    private fun addCallback(callback: Callback) {
+        callbacks.add(callback)
+    }
+
+    private fun removeCallback(callback: Callback) {
+        callbacks.remove(callback)
+    }
+
+    private fun onCallbackActionNoArg(action: Callback.() -> Unit) {
+        callbacks.toList().forEach(action)
+    }
+
+    private fun forwardRoomIdsToCallbacks(roomIds: Set<String>) {
+        callbacks.toList().forEach { it.onLocationServiceRunning(roomIds) }
+    }
+
+    private fun forwardErrorToCallbacks(error: Throwable) {
+        callbacks.toList().forEach { it.onLocationServiceError(error) }
     }
 }

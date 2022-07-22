@@ -25,7 +25,6 @@ import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.crypto.crosssigning.UpdateTrustWorker
 import org.matrix.android.sdk.internal.di.MatrixScope
 import org.matrix.android.sdk.internal.session.content.UploadContentWorker
-import org.matrix.android.sdk.internal.session.group.GetGroupDataWorker
 import org.matrix.android.sdk.internal.session.pushers.AddPusherWorker
 import org.matrix.android.sdk.internal.session.room.aggregation.livelocation.DeactivateLiveLocationShareWorker
 import org.matrix.android.sdk.internal.session.room.send.MultipleEventSendingDispatcherWorker
@@ -53,8 +52,6 @@ internal class MatrixWorkerFactory @Inject constructor(private val sessionManage
                 CheckFactoryWorker(appContext, workerParameters, true)
             AddPusherWorker::class.java.name ->
                 AddPusherWorker(appContext, workerParameters, sessionManager)
-            GetGroupDataWorker::class.java.name ->
-                GetGroupDataWorker(appContext, workerParameters, sessionManager)
             MultipleEventSendingDispatcherWorker::class.java.name ->
                 MultipleEventSendingDispatcherWorker(appContext, workerParameters, sessionManager)
             RedactEventWorker::class.java.name ->

@@ -41,7 +41,6 @@ import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.events.EventService
 import org.matrix.android.sdk.api.session.file.ContentDownloadStateTracker
 import org.matrix.android.sdk.api.session.file.FileService
-import org.matrix.android.sdk.api.session.group.GroupService
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 import org.matrix.android.sdk.api.session.identity.IdentityService
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
@@ -97,7 +96,6 @@ internal class DefaultSession @Inject constructor(
         private val sessionListeners: SessionListeners,
         private val roomService: Lazy<RoomService>,
         private val roomDirectoryService: Lazy<RoomDirectoryService>,
-        private val groupService: Lazy<GroupService>,
         private val userService: Lazy<UserService>,
         private val filterService: Lazy<FilterService>,
         private val federationService: Lazy<FederationService>,
@@ -209,7 +207,6 @@ internal class DefaultSession @Inject constructor(
     override fun homeServerCapabilitiesService(): HomeServerCapabilitiesService = homeServerCapabilitiesService.get()
     override fun roomService(): RoomService = roomService.get()
     override fun roomDirectoryService(): RoomDirectoryService = roomDirectoryService.get()
-    override fun groupService(): GroupService = groupService.get()
     override fun userService(): UserService = userService.get()
     override fun signOutService(): SignOutService = signOutService.get()
     override fun filterService(): FilterService = filterService.get()

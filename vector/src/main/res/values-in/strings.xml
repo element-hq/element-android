@@ -1145,10 +1145,9 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="attachment_type_gallery">Galeri</string>
     <string name="attachment_type_camera">Kamera</string>
     <string name="attachment_type_contact">Kontak</string>
-    <string name="error_attachment">Ada kesalahan terjadi saat menerima lampiran.</string>
     <string name="attachment_type_dialog_title">Tambahkan gambar dari</string>
     <string name="attachment_type_file">File</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
     <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
     <string name="labs_show_unread_notifications_as_tab">Tambahkan tab terdedikasi untuk notifikasi yang belum dibaca di layar utama.</string>
@@ -2033,7 +2032,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="room_created_summary_item_by_you">Anda membuat dan mengatur ruangan ini.</string>
     <string name="room_created_summary_item">%s membuat dan mengatur ruangan ini.</string>
     <string name="encryption_not_enabled">Enkripsi tidak diaktifkan</string>
-    <string name="direct_room_encryption_enabled_tile_description">Pesan di ruangan ini dienkripsi secara ujung-ke-ujung.</string>
+    <string name="direct_room_encryption_enabled_tile_description">Pesan di obrolan ini dienkripsi secara ujung-ke-ujung.</string>
     <string name="encryption_enabled_tile_description">Pesan di ruangan ini dienkripsi secara ujung-ke-ujung. Pelajari lebih lanjut &amp; verifikasi pengguna di profil mereka.</string>
     <string name="encryption_enabled">Enkripsi diaktifkan</string>
     <string name="bootstrap_cancel_text">Jika Anda batalkan, Anda mungkin kehilangan pesan terenkripsi dan data Anda jika Anda kehilangan akses ke login Anda.
@@ -2290,9 +2289,6 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="ftue_auth_carousel_control_title">Anda dalam kendali.</string>
     <string name="ftue_auth_carousel_secure_title">Miliki percakapan Anda.</string>
     <string name="tooltip_attachment_location">Bagikan lokasi</string>
-    <string name="labs_render_locations_in_timeline">Tampilkan lokasi pengguna di linimasa</string>
-    <string name="settings_enable_location_sharing_summary">Setelah diaktifkan Anda akan dapat mengirim lokasi Anda ke ruangan apa saja</string>
-    <string name="settings_enable_location_sharing">Aktifkan pembagian lokasi</string>
     <string name="location_share_external">Buka dengan</string>
     <string name="location_not_available_dialog_content">${app_name} tidak dapat mengakses lokasi Anda. Silakan coba lagi nanti.</string>
     <string name="location_not_available_dialog_title">${app_name} tidak dapat mengakses lokasi Anda</string>
@@ -2365,9 +2361,6 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="room_notification_two_users_are_typing">%1$s dan %2$s</string>
     <string name="location_share_live_stop">Berhenti</string>
     <string name="location_share_live_enabled">Lokasi langsung diaktifkan</string>
-    <string name="location_in_background_missing_permission_dialog_content">Jika Anda ingin membagikan lokasi langsung Anda, ${app_name} membutuhkan akses ke lokasi selama aplikasinya di latar belakang.
-\nKami hanya akan mengakses lokasi Anda untuk durasi yang Anda pilih.</string>
-    <string name="location_in_background_missing_permission_dialog_title">Perbolehkan akses</string>
     <string name="a11y_location_share_option_pinned_icon">Bagikan lokasi ini</string>
     <string name="location_share_option_pinned">Bagikan lokasi ini</string>
     <string name="a11y_location_share_option_user_live_icon">Bagikan lokasi langsung</string>
@@ -2461,4 +2454,39 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="time_unit_second_short">dtk</string>
     <string name="time_unit_minute_short">mnt</string>
     <string name="time_unit_hour_short">j</string>
+    <string name="live_location_labs_promotion_switch_title">Aktifkan pembagian lokasi</string>
+    <string name="live_location_labs_promotion_description">Mohon dicatat: ini adalah fitur uji coba menggunakan implementasi sementara. Ini berarti Anda tidak dapat menghapus riwayat lokasi Anda, dan pengguna bertingkat lanjut dapat melihat riwayat lokasi Anda bahkan setelah Anda membagikan lokasi langsung Anda di ruangan ini.</string>
+    <string name="live_location_labs_promotion_title">Pembagian lokasi langsung</string>
+    <string name="settings_troubleshoot_test_current_gateway">Gateway saat ini: %s</string>
+    <string name="settings_troubleshoot_test_current_gateway_title">Gateway</string>
+    <string name="settings_troubleshoot_test_current_endpoint_failed">Tidak dapat menemukan endpoint.</string>
+    <string name="settings_troubleshoot_test_current_endpoint_success">Endpoint saat ini: %s</string>
+    <string name="settings_troubleshoot_test_current_endpoint_title">Endpoint</string>
+    <string name="settings_troubleshoot_test_current_distributor">Saat ini menggunakan %s.</string>
+    <string name="settings_troubleshoot_test_current_distributor_title">Metode</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="other">Ditemukan %d metode.</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_distributors_fdroid">Tidak ada metode lain selain sinkronisasi latar belakang yang ditemukan.</string>
+    <string name="settings_troubleshoot_test_distributors_gplay">Tidak ada metode lain selain Layanan Google Play yang ditemukan.</string>
+    <string name="settings_troubleshoot_test_distributors_title">Metode yang tersedia</string>
+    <string name="settings_notification_method">Metode notifikasi</string>
+    <string name="unifiedpush_distributor_background_sync">Sinkronisasi latar belakang</string>
+    <string name="unifiedpush_distributor_fcm_fallback">Layanan Google</string>
+    <string name="unifiedpush_getdistributors_dialog_title">Pilih cara untuk menerima notifikasi</string>
+    <string name="settings_security_pin_code_use_biometrics_error">Tidak dapat mengaktifkan otentikasi biometrik.</string>
+    <string name="auth_biometric_key_invalidated_message">Otentikasi biometrik dinonaktifkan karena sebuah otentikasi biometrik telah ditambahkan baru-baru ini. Anda dapat mengaktifkan ulang di Pengaturan.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">Atur ulang metode notifikasi</string>
+    <string name="push_gateway_item_profile_tag">Tag profil:</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">Gagal mendaftarkan token endpoint ke homeserver:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">Endpoint berhasil terdaftar ke homeserver.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_title">Pendaftaran Endpoint</string>
+    <string name="action_next">Lanjut</string>
+    <string name="poll_undisclosed_not_ended">Hasil akan ditampilkan ketika pemungutan suara berakhir</string>
+    <string name="labs_enable_msc3061_share_history_desc">Ketika mengundang ke ruangan terenkripsi yang juga membagikan riwayat, riwayat terenkripsi akan dapat dilihat.</string>
+    <string name="labs_enable_msc3061_share_history">MSC3061: Pembagian kunci ruangan untuk pesan lama</string>
+    <string name="send_your_first_msg_to_invite">Kirim pesan pertama Anda untuk mengundang %s ke obrolan</string>
+    <string name="direct_room_encryption_enabled_tile_description_future">Pesan di obrolan ini akan dienkripsi secara ujung-ke-ujung.</string>
+    <string name="create_room_action_go">Mulai</string>
 </resources>

@@ -45,7 +45,6 @@ class AttachmentsHelper(val context: Context, val callback: Callback) : Restorab
         }
 
         fun onContentAttachmentsReady(attachments: List<ContentAttachmentData>)
-        fun onAttachmentsProcessFailed()
     }
 
     // Capture path allows to handle camera image picking. It must be restored if the activity gets killed.
@@ -187,42 +186,5 @@ class AttachmentsHelper(val context: Context, val callback: Callback) : Restorab
                         .getSelectedFiles(context, data)
                         .map { it.toContentAttachmentData() }
         )
-    }
-
-    /**
-     * This methods aims to handle share intent.
-     *
-     * @return true if it can handle the intent data, false otherwise
-     */
-    fun handleShareIntent(context: Context, intent: Intent): Boolean {
-        val type = intent.resolveType(context) ?: return false
-        if (type.startsWith("image")) {
-            callback.onContentAttachmentsReady(
-                    MultiPicker.get(MultiPicker.IMAGE).getIncomingFiles(context, intent).map {
-                        it.toContentAttachmentData()
-                    }
-            )
-        } else if (type.startsWith("video")) {
-            callback.onContentAttachmentsReady(
-                    MultiPicker.get(MultiPicker.VIDEO).getIncomingFiles(context, intent).map {
-                        it.toContentAttachmentData()
-                    }
-            )
-        } else if (type.startsWith("audio")) {
-            callback.onContentAttachmentsReady(
-                    MultiPicker.get(MultiPicker.AUDIO).getIncomingFiles(context, intent).map {
-                        it.toContentAttachmentData()
-                    }
-            )
-        } else if (type.startsWith("application") || type.startsWith("file") || type.startsWith("text") || type.startsWith("*")) {
-            callback.onContentAttachmentsReady(
-                    MultiPicker.get(MultiPicker.FILE).getIncomingFiles(context, intent).map {
-                        it.toContentAttachmentData()
-                    }
-            )
-        } else {
-            return false
-        }
-        return true
     }
 }

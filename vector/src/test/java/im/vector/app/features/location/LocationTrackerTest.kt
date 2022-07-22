@@ -19,21 +19,21 @@ package im.vector.app.features.location
 import android.content.Context
 import android.location.Location
 import android.location.LocationManager
-import im.vector.app.core.utils.Debouncer
-import im.vector.app.core.utils.createBackgroundHandler
+import im.vector.app.features.session.coroutineScope
+import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakeContext
-import im.vector.app.test.fakes.FakeHandler
 import im.vector.app.test.fakes.FakeLocationManager
+import im.vector.app.test.test
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.runs
-import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
 import io.mockk.verifyOrder
+import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.After
 import org.junit.Before
@@ -45,26 +45,18 @@ private const val AN_ACCURACY = 5.0f
 
 class LocationTrackerTest {
 
-    private val fakeHandler = FakeHandler()
     private val fakeLocationManager = FakeLocationManager()
     private val fakeContext = FakeContext().also {
         it.givenService(Context.LOCATION_SERVICE, android.location.LocationManager::class.java, fakeLocationManager.instance)
     }
+    private val fakeActiveSessionHolder = FakeActiveSessionHolder()
 
     private lateinit var locationTracker: LocationTracker
 
     @Before
     fun setUp() {
-        mockkConstructor(Debouncer::class)
-        every { anyConstructed<Debouncer>().cancelAll() } just runs
-        val runnable = slot<Runnable>()
-        every { anyConstructed<Debouncer>().debounce(any(), MIN_TIME_TO_UPDATE_LOCATION_MILLIS, capture(runnable)) } answers {
-            runnable.captured.run()
-            true
-        }
-        mockkStatic("im.vector.app.core.utils.HandlerKt")
-        every { createBackgroundHandler(any()) } returns fakeHandler.instance
-        locationTracker = LocationTracker(fakeContext.instance)
+        mockkStatic("im.vector.app.features.session.SessionCoroutineScopesKt")
+        locationTracker = LocationTracker(fakeContext.instance, fakeActiveSessionHolder.instance)
         fakeLocationManager.givenRemoveUpdates(locationTracker)
     }
 
@@ -139,13 +131,11 @@ class LocationTrackerTest {
     }
 
     @Test
-    fun `when location updates are received from fused provider then fused locations are taken in priority`() {
+    fun `when location updates are received from fused provider then fused locations are taken in priority`() = runTest {
+        every { fakeActiveSessionHolder.fakeSession.coroutineScope } returns this
         val providers = listOf(LocationManager.GPS_PROVIDER, LocationManager.FUSED_PROVIDER, LocationManager.NETWORK_PROVIDER)
         mockAvailableProviders(providers)
-        val callback = mockCallback()
-        locationTracker.addCallback(callback)
         locationTracker.start()
-
         val fusedLocation = mockLocation(
                 provider = LocationManager.FUSED_PROVIDER,
                 latitude = 1.0,
@@ -159,29 +149,31 @@ class LocationTrackerTest {
         val networkLocation = mockLocation(
                 provider = LocationManager.NETWORK_PROVIDER
         )
+        val resultUpdates = locationTracker.locations.test(this)
+
         locationTracker.onLocationChanged(fusedLocation)
         locationTracker.onLocationChanged(gpsLocation)
         locationTracker.onLocationChanged(networkLocation)
+        advanceTimeBy(MIN_TIME_TO_UPDATE_LOCATION_MILLIS + 1)
 
         val expectedLocationData = LocationData(
                 latitude = 1.0,
                 longitude = 3.0,
                 uncertainty = 4.0
         )
-        verify { callback.onLocationUpdate(expectedLocationData) }
-        verify { anyConstructed<Debouncer>().debounce(any(), MIN_TIME_TO_UPDATE_LOCATION_MILLIS, any()) }
+        resultUpdates
+                .assertValues(listOf(expectedLocationData))
+                .finish()
         locationTracker.hasLocationFromFusedProvider shouldBeEqualTo true
         locationTracker.hasLocationFromGPSProvider shouldBeEqualTo false
     }
 
     @Test
-    fun `when location updates are received from gps provider then gps locations are taken if none are received from fused provider`() {
+    fun `when location updates are received from gps provider then gps locations are taken if none are received from fused provider`() = runTest {
+        every { fakeActiveSessionHolder.fakeSession.coroutineScope } returns this
         val providers = listOf(LocationManager.GPS_PROVIDER, LocationManager.FUSED_PROVIDER, LocationManager.NETWORK_PROVIDER)
         mockAvailableProviders(providers)
-        val callback = mockCallback()
-        locationTracker.addCallback(callback)
         locationTracker.start()
-
         val gpsLocation = mockLocation(
                 provider = LocationManager.GPS_PROVIDER,
                 latitude = 1.0,
@@ -192,66 +184,75 @@ class LocationTrackerTest {
         val networkLocation = mockLocation(
                 provider = LocationManager.NETWORK_PROVIDER
         )
+        val resultUpdates = locationTracker.locations.test(this)
+
         locationTracker.onLocationChanged(gpsLocation)
         locationTracker.onLocationChanged(networkLocation)
+        advanceTimeBy(MIN_TIME_TO_UPDATE_LOCATION_MILLIS + 1)
 
         val expectedLocationData = LocationData(
                 latitude = 1.0,
                 longitude = 3.0,
                 uncertainty = 4.0
         )
-        verify { callback.onLocationUpdate(expectedLocationData) }
-        verify { anyConstructed<Debouncer>().debounce(any(), MIN_TIME_TO_UPDATE_LOCATION_MILLIS, any()) }
+        resultUpdates
+                .assertValues(listOf(expectedLocationData))
+                .finish()
         locationTracker.hasLocationFromFusedProvider shouldBeEqualTo false
         locationTracker.hasLocationFromGPSProvider shouldBeEqualTo true
     }
 
     @Test
-    fun `when location updates are received from network provider then network locations are taken if none are received from fused or gps provider`() {
+    fun `when location updates are received from network provider then network locations are taken if none are received from fused, gps provider`() = runTest {
+        every { fakeActiveSessionHolder.fakeSession.coroutineScope } returns this
         val providers = listOf(LocationManager.GPS_PROVIDER, LocationManager.FUSED_PROVIDER, LocationManager.NETWORK_PROVIDER)
         mockAvailableProviders(providers)
-        val callback = mockCallback()
-        locationTracker.addCallback(callback)
         locationTracker.start()
-
         val networkLocation = mockLocation(
                 provider = LocationManager.NETWORK_PROVIDER,
                 latitude = 1.0,
                 longitude = 3.0,
                 accuracy = 4f
         )
+        val resultUpdates = locationTracker.locations.test(this)
+
         locationTracker.onLocationChanged(networkLocation)
+        advanceTimeBy(MIN_TIME_TO_UPDATE_LOCATION_MILLIS + 1)
 
         val expectedLocationData = LocationData(
                 latitude = 1.0,
                 longitude = 3.0,
                 uncertainty = 4.0
         )
-        verify { callback.onLocationUpdate(expectedLocationData) }
-        verify { anyConstructed<Debouncer>().debounce(any(), MIN_TIME_TO_UPDATE_LOCATION_MILLIS, any()) }
+        resultUpdates
+                .assertValues(listOf(expectedLocationData))
+                .finish()
         locationTracker.hasLocationFromFusedProvider shouldBeEqualTo false
         locationTracker.hasLocationFromGPSProvider shouldBeEqualTo false
     }
 
     @Test
-    fun `when requesting the last location then last location is notified via callback`() {
+    fun `when requesting the last location then last location is notified via location updates flow`() = runTest {
+        every { fakeActiveSessionHolder.fakeSession.coroutineScope } returns this
         val providers = listOf(LocationManager.GPS_PROVIDER)
         fakeLocationManager.givenActiveProviders(providers)
         val lastLocation = mockLocation(provider = LocationManager.GPS_PROVIDER)
         fakeLocationManager.givenLastLocationForProvider(provider = LocationManager.GPS_PROVIDER, location = lastLocation)
         fakeLocationManager.givenRequestUpdatesForProvider(provider = LocationManager.GPS_PROVIDER, listener = locationTracker)
-        val callback = mockCallback()
-        locationTracker.addCallback(callback)
         locationTracker.start()
+        val resultUpdates = locationTracker.locations.test(this)
 
         locationTracker.requestLastKnownLocation()
+        advanceTimeBy(MIN_TIME_TO_UPDATE_LOCATION_MILLIS + 1)
 
         val expectedLocationData = LocationData(
                 latitude = A_LATITUDE,
                 longitude = A_LONGITUDE,
                 uncertainty = AN_ACCURACY.toDouble()
         )
-        verify { callback.onLocationUpdate(expectedLocationData) }
+        resultUpdates
+                .assertValues(listOf(expectedLocationData))
+                .finish()
     }
 
     @Test
@@ -259,7 +260,6 @@ class LocationTrackerTest {
         locationTracker.stop()
 
         verify { fakeLocationManager.instance.removeUpdates(locationTracker) }
-        verify { anyConstructed<Debouncer>().cancelAll() }
         locationTracker.callbacks.isEmpty() shouldBeEqualTo true
         locationTracker.hasLocationFromGPSProvider shouldBeEqualTo false
         locationTracker.hasLocationFromFusedProvider shouldBeEqualTo false
@@ -276,7 +276,6 @@ class LocationTrackerTest {
     private fun mockCallback(): LocationTracker.Callback {
         return mockk<LocationTracker.Callback>().also {
             every { it.onNoLocationProviderAvailable() } just runs
-            every { it.onLocationUpdate(any()) } just runs
         }
     }
 

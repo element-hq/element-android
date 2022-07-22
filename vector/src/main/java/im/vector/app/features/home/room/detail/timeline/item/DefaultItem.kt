@@ -24,8 +24,8 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.features.home.AvatarRenderer
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_base_noinfo)
-abstract class DefaultItem : BaseEventItem<DefaultItem.Holder>() {
+@EpoxyModelClass
+abstract class DefaultItem : BaseEventItem<DefaultItem.Holder>(R.layout.item_timeline_event_base_noinfo) {
 
     @EpoxyAttribute
     lateinit var attributes: Attributes

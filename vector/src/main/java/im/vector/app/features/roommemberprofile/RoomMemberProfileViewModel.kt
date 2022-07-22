@@ -183,6 +183,9 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
             }
             if (roomId != initialState.roomId) {
                 _viewEvents.post(RoomMemberProfileViewEvents.OpenRoom(roomId = roomId))
+            } else {
+                // Just go back to the previous screen (timeline)
+                _viewEvents.post(RoomMemberProfileViewEvents.GoBack)
             }
         }
     }

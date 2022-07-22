@@ -114,7 +114,9 @@ class FtueAuthTermsFragment @Inject constructor(
     }
 
     override fun updateWithState(state: OnboardingViewState) {
-        policyController.homeServer = state.selectedHomeserver.userFacingUrl.toReducedUrl()
+        val homeserverName = state.selectedHomeserver.userFacingUrl.toReducedUrl()
+        views.termsHeaderSubtitle.text = getString(R.string.ftue_auth_terms_subtitle, homeserverName)
+        policyController.homeServer = homeserverName
         renderState()
     }
 

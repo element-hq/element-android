@@ -1537,7 +1537,6 @@
     <string name="create_poll_options_hint">選択肢%1$d</string>
     <string name="create_poll_options_title">選択肢を作成</string>
     <string name="location_activity_title_preview">位置情報</string>
-    <string name="settings_enable_location_sharing">位置情報の共有を有効にする</string>
     <string name="location_timeline_failed_to_load_map">地図を読み込めませんでした</string>
     <string name="reply_in_thread">スレッドで返信</string>
     <string name="location_activity_title_static_sharing">位置情報を共有</string>
@@ -1596,7 +1595,6 @@
     <string name="room_error_access_unauthorized">このルームへの参加は許可されていません</string>
     <string name="topic_prefix">"トピック: "</string>
     <string name="settings_troubleshoot_title">トラブルシューティング</string>
-    <string name="error_attachment">添付ファイルの取得中にエラーが発生しました。</string>
     <string name="a11y_close_keys_backup_banner">鍵のバックアップのバナーを閉じる</string>
     <string name="settings_notification_keyword_contains_invalid_character">キーワードに「%s」を含めることはできません</string>
     <string name="settings_notification_emails_enable_for_email">%sへのメール通知を有効にする</string>
@@ -1678,8 +1676,6 @@
     <string name="auth_pin_forgot">PINコードを忘れましたか？</string>
     <string name="auth_pin_title">PINコードを入力</string>
     <string name="create_pin_confirm_title">PINコードを確認</string>
-    <string name="labs_render_locations_in_timeline">ユーザーの位置情報をタイムラインに表示</string>
-    <string name="settings_enable_location_sharing_summary">一度有効にすると、位置情報はどのルームにも送れるようになります</string>
     <string name="legals_third_party_notices">サードパーティー製ライブラリー</string>
     <string name="analytics_opt_in_list_item_3">これはいつでも設定から無効にできます</string>
     <string name="analytics_opt_in_list_item_2">私たちは、情報を第三者と共有することは<b>ありません</b></string>
@@ -2336,7 +2332,6 @@
     <string name="message_reaction_show_less">詳細を非表示</string>
     <string name="invite_people_to_your_space_desc">他の参加者はいません。%sに招待しましょう。</string>
     <string name="location_share_live_enabled">位置情報（ライブ）が有効です</string>
-    <string name="location_in_background_missing_permission_dialog_title">アクセスを許可</string>
     <string name="a11y_location_share_option_user_current_icon">現在の位置情報を共有</string>
     <string name="location_share_option_user_current">現在の位置情報を共有</string>
     <string name="create_spaces_room_public_header_desc">ルームを作成します。後から追加できます。</string>

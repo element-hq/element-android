@@ -51,12 +51,7 @@ object TimelineDisplayableEvents {
             EventType.STATE_ROOM_JOIN_RULES,
             EventType.KEY_VERIFICATION_DONE,
             EventType.KEY_VERIFICATION_CANCEL,
-    ) + EventType.POLL_START + EventType.STATE_ROOM_BEACON_INFO
-}
-
-fun TimelineEvent.canBeMerged(): Boolean {
-    return root.getClearType() == EventType.STATE_ROOM_MEMBER ||
-            root.getClearType() == EventType.STATE_ROOM_SERVER_ACL
+    ) + EventType.POLL_START + EventType.STATE_ROOM_BEACON_INFO + EventType.BEACON_LOCATION_DATA
 }
 
 fun TimelineEvent.isRoomConfiguration(roomCreatorUserId: String?): Boolean {

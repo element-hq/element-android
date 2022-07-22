@@ -32,7 +32,8 @@ data class VerificationConclusionViewState(
 enum class ConclusionState {
     SUCCESS,
     WARNING,
-    CANCELLED
+    CANCELLED,
+    INVALID_QR_CODE
 }
 
 class VerificationConclusionViewModel(initialState: VerificationConclusionViewState) :
@@ -44,7 +45,9 @@ class VerificationConclusionViewModel(initialState: VerificationConclusionViewSt
             val args = viewModelContext.args<VerificationConclusionFragment.Args>()
 
             return when (safeValueOf(args.cancelReason)) {
-                CancelCode.QrCodeInvalid,
+                CancelCode.QrCodeInvalid -> {
+                    VerificationConclusionViewState(ConclusionState.INVALID_QR_CODE, args.isMe)
+                }
                 CancelCode.MismatchedUser,
                 CancelCode.MismatchedSas,
                 CancelCode.MismatchedCommitment,

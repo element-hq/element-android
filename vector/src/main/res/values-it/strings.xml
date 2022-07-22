@@ -607,7 +607,7 @@
     <string name="merged_events_expand">espandi</string>
     <string name="merged_events_collapse">riduci</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="room_participants_action_remove">Butta fuori</string>
     <string name="settings_inline_url_preview_summary">Se il tuo Home Server supporta questa funzione, all\'interno delle chat verrà visualizzata un\'anteprima dei link postati.</string>
     <string name="settings_send_typing_notifs">Invia notifiche di digitazione</string>
@@ -992,7 +992,6 @@
         <item quantity="one">%d utente ha letto</item>
         <item quantity="other">%d utenti hanno letto</item>
     </plurals>
-    <string name="error_attachment">Si è verificato un errore nella ricezione dell\'allegato.</string>
     <string name="attachment_type_file">File</string>
     <string name="attachment_type_contact">Contatto</string>
     <string name="attachment_type_camera">Fotocamera</string>
@@ -1693,7 +1692,7 @@
     <string name="secure_backup_reset_all">Reimposta tutto</string>
     <string name="bad_passphrase_key_reset_all_action">Hai dimenticato o perso tutte le opzioni di ripristino\? Reimposta tutto</string>
     <string name="direct_room_created_summary_item_by_you">Sei entrato.</string>
-    <string name="direct_room_encryption_enabled_tile_description">I messaggi in questa stanza sono crittografati E2E.</string>
+    <string name="direct_room_encryption_enabled_tile_description">I messaggi in questa conversazione sono cifrati end-to-end.</string>
     <string name="direct_room_profile_section_more_leave">Esci</string>
     <string name="direct_room_profile_section_more_settings">Impostazioni</string>
     <string name="direct_room_profile_encrypted_subtitle">I messaggi qui sono cifrati E2E.
@@ -2324,9 +2323,6 @@
     <string name="ftue_auth_carousel_control_title">Tu hai il controllo.</string>
     <string name="ftue_auth_carousel_secure_title">Prendi il controllo delle tue conversazioni.</string>
     <string name="tooltip_attachment_location">Condividi posizione</string>
-    <string name="labs_render_locations_in_timeline">Mostra le posizioni dell\'utente nella linea temporale</string>
-    <string name="settings_enable_location_sharing_summary">Una volta attivata, potrai inviare la tua posizione in qualsiasi stanza</string>
-    <string name="settings_enable_location_sharing">Attiva condivisione posizione</string>
     <string name="location_share_external">Apri con</string>
     <string name="location_not_available_dialog_content">${app_name} non ha potuto rilevare la tua posizione. Riprova più tardi.</string>
     <string name="location_not_available_dialog_title">${app_name} non ha potuto rilevare la tua posizione</string>
@@ -2401,9 +2397,6 @@
     <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s e altri</string>
     <string name="location_share_live_stop">Ferma</string>
     <string name="location_share_live_enabled">Posizione in tempo reale attivata</string>
-    <string name="location_in_background_missing_permission_dialog_content">Se vuoi condividere la tua posizione in tempo reale, ${app_name} richiede l\'accesso alla posizione costantemente quando l\'app è in secondo piano.
-\nAccederemo alla tua posizione solo per la durata che scegli.</string>
-    <string name="location_in_background_missing_permission_dialog_title">Permetti accesso</string>
     <string name="a11y_location_share_option_pinned_icon">Condividi questa posizione</string>
     <string name="location_share_option_pinned">Condividi questa posizione</string>
     <string name="a11y_location_share_option_user_live_icon">Condividi posizione in tempo reale</string>
@@ -2497,4 +2490,40 @@
     <string name="time_unit_hour_short">o</string>
     <string name="time_unit_second_short">sec</string>
     <string name="time_unit_minute_short">min</string>
+    <string name="live_location_labs_promotion_switch_title">Attiva condivisione posizione</string>
+    <string name="live_location_labs_promotion_description">Nota: si tratta di una funzionalità sperimentale che usa un\'implementazione temporanea. Ciò significa che non potrai eliminare la cronologia delle posizioni e gli utenti avanzati potranno vederla anche dopo l\'interruzione della tua condivisione con questa stanza.</string>
+    <string name="live_location_labs_promotion_title">Condivisione posizione in tempo reale</string>
+    <string name="settings_troubleshoot_test_current_gateway">Gateway attuale: %s</string>
+    <string name="settings_troubleshoot_test_current_gateway_title">Gateway</string>
+    <string name="settings_troubleshoot_test_current_endpoint_failed">Impossibile trovare l\'endpoint.</string>
+    <string name="settings_troubleshoot_test_current_endpoint_success">Endpoint attuale: %s</string>
+    <string name="settings_troubleshoot_test_current_endpoint_title">Endpoint</string>
+    <string name="settings_troubleshoot_test_current_distributor">Ora si sta usando %s.</string>
+    <string name="settings_troubleshoot_test_current_distributor_title">Metodo</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="one">Trovato %d metodo.</item>
+        <item quantity="other">Trovati %d metodi.</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_distributors_fdroid">Nessun altro metodo trovato oltre alla sincronizzazione in secondo piano.</string>
+    <string name="unifiedpush_distributor_fcm_fallback">Servizi Google</string>
+    <string name="settings_troubleshoot_test_distributors_gplay">Nessun altro metodo trovato oltre a Google Play Service.</string>
+    <string name="settings_troubleshoot_test_distributors_title">Metodi disponibili</string>
+    <string name="settings_notification_method">Metodo di notifica</string>
+    <string name="unifiedpush_distributor_background_sync">Sincronizzazione in secondo piano</string>
+    <string name="unifiedpush_getdistributors_dialog_title">Scegli come ricevere le notifiche</string>
+    <string name="settings_security_pin_code_use_biometrics_error">Impossibile attivare l\'autenticazione biometrica.</string>
+    <string name="auth_biometric_key_invalidated_message">L\'autenticazione biometrica è stata disattivata perché è stato aggiunto di recente un nuovo metodo di autenticazione biometrica. Puoi riattivarla nelle impostazioni.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">Reimposta metodo di notifica</string>
+    <string name="push_gateway_item_profile_tag">Etichetta profilo:</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">È fallita la registrazione del token dell\'endpoint sull\'homeserver:
+\n %1$s</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">Endpoint registrato con successo sull\'homeserver.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_title">Registrazione endpoint</string>
+    <string name="action_next">Avanti</string>
+    <string name="poll_undisclosed_not_ended">I risultati saranno visibili quando il sondaggio sarà terminato</string>
+    <string name="labs_enable_msc3061_share_history_desc">Quando si invita in una stanza crittografata che condivide la cronologia, la cronologia cifrata sarà visibile.</string>
+    <string name="labs_enable_msc3061_share_history">MSC3061: Condivisione chiavi stanza per messaggi passati</string>
+    <string name="send_your_first_msg_to_invite">Invia il primo messaggio per invitare %s a parlare</string>
+    <string name="direct_room_encryption_enabled_tile_description_future">I messaggi in questa conversazione saranno cifrati end-to-end.</string>
+    <string name="create_room_action_go">Vai</string>
 </resources>

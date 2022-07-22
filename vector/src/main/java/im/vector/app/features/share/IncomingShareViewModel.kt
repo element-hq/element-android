@@ -35,6 +35,7 @@ import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.flow.flow
@@ -134,7 +135,8 @@ class IncomingShareViewModel @AssistedInject constructor(
 
     private fun handleShareToRoom(action: IncomingShareAction.ShareToRoom) = withState { state ->
         val sharedData = state.sharedData ?: return@withState
-        _viewEvents.post(IncomingShareViewEvents.ShareToRoom(action.roomSummary, sharedData, showAlert = false))
+        val roomSummary = session.getRoomSummary(action.roomId) ?: return@withState
+        _viewEvents.post(IncomingShareViewEvents.ShareToRoom(roomSummary, sharedData, showAlert = false))
     }
 
     private fun handleShareMediaToSelectedRooms(action: IncomingShareAction.ShareMedia) = withState { state ->

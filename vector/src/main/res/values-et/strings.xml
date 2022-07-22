@@ -612,7 +612,7 @@
         <item quantity="other">%d suhtluskeelu saanud kasutajat</item>
     </plurals>
     <string name="room_settings_category_advanced_title">Lisaseadistused</string>
-    <string name="room_settings_room_internal_id">Selle jututoa sisemine tunnus</string>
+    <string name="room_settings_room_internal_id">Selle jututoa tehniline tunnus</string>
     <string name="room_settings_labs_pref_title">Katsed</string>
     <string name="room_settings_labs_warning_message">Need on alles katsejärgus olevad funktsionaalsused. Ole kasutamisel ettevaatlik.</string>
     <string name="encryption_information_decryption_error">Dekrüptimise viga</string>
@@ -1062,7 +1062,7 @@
     <string name="merged_events_expand">laienda</string>
     <string name="merged_events_collapse">ahenda</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="no_valid_google_play_services_apk">Ühtegi Google Play teenuste rakendusefaili ei leidunud. Teavitused ei pruugi korralikult toimida.</string>
     <string name="passphrase_create_passphrase">Loo paroolifraas</string>
     <string name="passphrase_confirm_passphrase">Sisesta paroolifraas veel üks kord</string>
@@ -1467,7 +1467,6 @@
         <item quantity="one">%d kasutaja luges</item>
         <item quantity="other">%d kasutajat lugesid</item>
     </plurals>
-    <string name="error_attachment">Manuse laadimisel tekkis viga.</string>
     <string name="attachment_type_file">Fail</string>
     <string name="attachment_type_contact">Kontakt</string>
     <string name="attachment_type_camera">Kaamera</string>
@@ -1543,8 +1542,8 @@
     <string name="room_profile_section_more_settings">Jututubade seadistused</string>
     <string name="room_profile_section_more_notifications">Teavitused</string>
     <plurals name="room_profile_section_more_member_list">
-        <item quantity="one">Üks inimene</item>
-        <item quantity="other">%1$d inimest</item>
+        <item quantity="one">Üks osaleja</item>
+        <item quantity="other">%1$d osalejat</item>
     </plurals>
     <string name="room_profile_section_more_uploads">Üleslaaditud failid</string>
     <string name="room_profile_section_more_leave">Lahku jututoast</string>
@@ -1706,7 +1705,7 @@
     <string name="bad_passphrase_key_reset_all_action">Kas sa unustasid või kaotasid kõik võimalused taastada ligipääsu oma kontole\? Lähtesta kõik seadistused</string>
     <string name="direct_room_created_summary_item_by_you">Sina liitusid.</string>
     <string name="direct_room_created_summary_item">%s liitus.</string>
-    <string name="direct_room_encryption_enabled_tile_description">See jututuba on läbivalt krüptitud.</string>
+    <string name="direct_room_encryption_enabled_tile_description">See vestlus on läbivalt krüptitud.</string>
     <string name="direct_room_profile_section_more_leave">Lahku</string>
     <string name="direct_room_profile_section_more_settings">Seadistused</string>
     <string name="direct_room_profile_encrypted_subtitle">Sõnumid siin jututoas kasutavad läbivat krüptimist. 
@@ -2333,9 +2332,6 @@
     <string name="ftue_auth_carousel_control_title">Sul on kontroll oma andmete üle.</string>
     <string name="ftue_auth_carousel_secure_title">Vestlused, mida sa tegelikult ka omad.</string>
     <string name="tooltip_attachment_location">Jaga asukohta</string>
-    <string name="labs_render_locations_in_timeline">Kuva ajajoonel kasutaja asukohti</string>
-    <string name="settings_enable_location_sharing_summary">Kui see seadistus on kasutusel, siis sa saad oma asukohta jagada igas jututoas</string>
-    <string name="settings_enable_location_sharing">Luba asukohta jagada</string>
     <string name="location_share_external">Ava muu rakendusega</string>
     <string name="location_not_available_dialog_content">${app_name} ei saanud asukohta tuvastada. Palun proovi hiljem uuesti.</string>
     <string name="location_not_available_dialog_title">${app_name} ei saanud asukohta tuvastada</string>
@@ -2410,9 +2406,6 @@
     <string name="room_notification_two_users_are_typing">%1$s ja %2$s</string>
     <string name="location_share_live_stop">Lõpeta asukoha jagamine</string>
     <string name="location_share_live_enabled">Reaalajas asukoha jagamine on kasutusel</string>
-    <string name="location_in_background_missing_permission_dialog_content">Kui sa soovid reaalajas oma asukohta jagada, siis ${app_name} vajab alati õigus asukohta tuvastada. Seda ka siis kui rakendus töötab taustal.
-\nLigipääs asukohale on saadaval vaid sinu valitud ajavahemiku vältel.</string>
-    <string name="location_in_background_missing_permission_dialog_title">Luba ligipääs asukohale</string>
     <string name="a11y_location_share_option_pinned_icon">Jaga seda asukohta</string>
     <string name="location_share_option_pinned">Jaga seda asukohta</string>
     <string name="a11y_location_share_option_user_live_icon">Jaga asukohta reaalajas</string>
@@ -2506,4 +2499,31 @@
     <string name="time_unit_second_short">sek</string>
     <string name="time_unit_minute_short">min</string>
     <string name="time_unit_hour_short">t</string>
+    <string name="live_location_labs_promotion_switch_title">Luba asukohta jagada</string>
+    <string name="live_location_labs_promotion_description">Palun arvesta järgnevaga: see katseline funktsionaalsus kasutab ajutist lahendust. See tähendab, et sa ei saa oma asukoha jagamise ajalugu kustutada ning heade arvutioskustega kasutajad saavad näha sinu asukohta ka siis, kui sa oled oma asukoha jagamise selles jututoas lõpetanud.</string>
+    <string name="live_location_labs_promotion_title">Asukoha jagamine reaalajas</string>
+    <string name="settings_security_pin_code_use_biometrics_error">Biomeetrilise autentimise kasutuselevõtmine ei õnnestunud.</string>
+    <string name="auth_biometric_key_invalidated_message">Kuna hiljuti lisandus uus biomeetrilise autentimise meetod, siis lülitati biomeetriline autentimine välja. Sa saad ta uuesti kasutusele võtta seadistustest.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">Lähtesta teavituse meetod</string>
+    <string name="push_gateway_item_profile_tag">Profiili silt:</string>
+    <string name="action_next">Järgmine</string>
+    <string name="settings_troubleshoot_test_current_distributor">Hetkel on kasutusel %s.</string>
+    <string name="settings_troubleshoot_test_current_distributor_title">Meetod</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="one">Leidsin %d meetodi.</item>
+        <item quantity="other">Leidsin %d meetodit.</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_distributors_fdroid">Ühtegi teist meetodit peale taustal sünkroniseerimise ei leidunud.</string>
+    <string name="settings_troubleshoot_test_distributors_gplay">Ühtegi teist meetodit peale Google Play Service ei leidunud.</string>
+    <string name="settings_troubleshoot_test_distributors_title">Saadaval olevad meetodid</string>
+    <string name="settings_notification_method">Teavituse meetod</string>
+    <string name="unifiedpush_distributor_background_sync">Sünkroniseerimine taustal</string>
+    <string name="unifiedpush_distributor_fcm_fallback">Google\'i teenused</string>
+    <string name="unifiedpush_getdistributors_dialog_title">Vali teavituste laadimise viis</string>
+    <string name="poll_undisclosed_not_ended">Tulemused on näha siis, kui küsitlus on lõppenud</string>
+    <string name="labs_enable_msc3061_share_history_desc">Kutsudes osalejaid krüptitud jututuppa, kus ajaloo jagamine on lubatud, on vanad sõnumid loetavad.</string>
+    <string name="labs_enable_msc3061_share_history">MSC3061: Minevikus saadetud sõnumite lugemiseks vajalike krüptovõtmete jagamine jututoas</string>
+    <string name="send_your_first_msg_to_invite">Saada oma esimene sõnum kutsudes %s vestlusesse</string>
+    <string name="direct_room_encryption_enabled_tile_description_future">See vestlus saab olema läbivalt krüptitud.</string>
+    <string name="create_room_action_go">Mine</string>
 </resources>

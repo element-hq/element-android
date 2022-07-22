@@ -21,7 +21,6 @@ import android.content.Intent
 import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuItem
-import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.airbnb.mvrx.Fail
@@ -36,6 +35,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.SimpleFragmentActivity
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.createJSonViewerStyleProvider
 import kotlinx.parcelize.Parcelize
@@ -43,7 +43,10 @@ import org.billcarsonfr.jsonviewer.JSonViewerFragment
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class RoomDevToolActivity : SimpleFragmentActivity(), FragmentManager.OnBackStackChangedListener {
+class RoomDevToolActivity :
+        SimpleFragmentActivity(),
+        FragmentManager.OnBackStackChangedListener,
+        VectorMenuProvider {
 
     @Inject lateinit var colorProvider: ColorProvider
 
@@ -133,16 +136,18 @@ class RoomDevToolActivity : SimpleFragmentActivity(), FragmentManager.OnBackStac
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menuItemEdit) {
-            viewModel.handle(RoomDevToolAction.MenuEdit)
-            return true
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menuItemEdit -> {
+                viewModel.handle(RoomDevToolAction.MenuEdit)
+                true
+            }
+            R.id.menuItemSend -> {
+                viewModel.handle(RoomDevToolAction.MenuItemSend)
+                true
+            }
+            else -> false
         }
-        if (item.itemId == R.id.menuItemSend) {
-            viewModel.handle(RoomDevToolAction.MenuItemSend)
-            return true
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onBackPressed() {
@@ -174,21 +179,12 @@ class RoomDevToolActivity : SimpleFragmentActivity(), FragmentManager.OnBackStac
         super.onDestroy()
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu?): Boolean = withState(viewModel) { state ->
-        menu?.forEach {
-            val isVisible = when (it.itemId) {
-                R.id.menuItemEdit -> {
-                    state.displayMode is RoomDevToolViewState.Mode.StateEventDetail
-                }
-                R.id.menuItemSend -> {
-                    state.displayMode is RoomDevToolViewState.Mode.EditEventContent ||
-                            state.displayMode is RoomDevToolViewState.Mode.SendEventForm
-                }
-                else -> true
-            }
-            it.isVisible = isVisible
+    override fun handlePrepareMenu(menu: Menu) {
+        withState(viewModel) { state ->
+            menu.findItem(R.id.menuItemEdit).isVisible = state.displayMode == RoomDevToolViewState.Mode.StateEventDetail
+            menu.findItem(R.id.menuItemSend).isVisible = state.displayMode == RoomDevToolViewState.Mode.EditEventContent ||
+                    state.displayMode is RoomDevToolViewState.Mode.SendEventForm
         }
-        return@withState true
     }
 
     companion object {

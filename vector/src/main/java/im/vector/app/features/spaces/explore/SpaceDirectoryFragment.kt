@@ -38,6 +38,7 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.colorizeMatchingText
 import im.vector.app.core.utils.isValidUrl
@@ -67,7 +68,8 @@ class SpaceDirectoryFragment @Inject constructor(
 ) : VectorBaseFragment<FragmentSpaceDirectoryBinding>(),
         SpaceDirectoryController.InteractionListener,
         TimelineEventController.UrlClickCallback,
-        OnBackPressed {
+        OnBackPressed,
+        VectorMenuProvider {
 
     override fun getMenuRes() = R.menu.menu_space_directory
 
@@ -177,40 +179,41 @@ class SpaceDirectoryFragment @Inject constructor(
         views.addOrCreateChatRoomButton.isVisible = state.canAddRooms
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) = withState(viewModel) { state ->
-        menu.findItem(R.id.spaceAddRoom)?.isVisible = state.canAddRooms
-        menu.findItem(R.id.spaceCreateRoom)?.isVisible = false // Not yet implemented
+    override fun handlePrepareMenu(menu: Menu) {
+        withState(viewModel) { state ->
+            menu.findItem(R.id.spaceAddRoom)?.isVisible = state.canAddRooms
+            menu.findItem(R.id.spaceCreateRoom)?.isVisible = false // Not yet implemented
 
-        menu.findItem(R.id.spaceSearch)?.let { searchItem ->
-            val searchView = searchItem.actionView as SearchView
-            searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    return true
-                }
+            menu.findItem(R.id.spaceSearch)?.let { searchItem ->
+                val searchView = searchItem.actionView as SearchView
+                searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                    override fun onQueryTextSubmit(query: String?): Boolean {
+                        return true
+                    }
 
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    onFilterQueryChanged(newText)
-                    return true
-                }
-            })
+                    override fun onQueryTextChange(newText: String?): Boolean {
+                        onFilterQueryChanged(newText)
+                        return true
+                    }
+                })
+            }
         }
-        super.onPrepareOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             R.id.spaceAddRoom -> {
                 withState(viewModel) { state ->
                     addExistingRooms(state.spaceId)
                 }
-                return true
+                true
             }
             R.id.spaceCreateRoom -> {
                 // not implemented yet
-                return true
+                true
             }
+            else -> false
         }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onFilterQueryChanged(query: String?) {
