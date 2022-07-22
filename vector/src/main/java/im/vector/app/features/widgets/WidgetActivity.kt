@@ -41,6 +41,7 @@ import im.vector.app.databinding.ActivityWidgetBinding
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionBottomSheet
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewEvents
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewModel
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.Content
 import java.io.Serializable
 
@@ -145,7 +146,7 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
     override fun onUserLeaveHint() {
         super.onUserLeaveHint()
         val widgetArgs: WidgetArgs? = intent?.extras?.getParcelable(Mavericks.KEY_ARG)
-        if (widgetArgs?.kind == WidgetKind.ELEMENT_CALL) {
+        if (widgetArgs?.kind?.supportsPictureInPictureMode().orFalse()) {
             enterPictureInPicture()
         }
     }
