@@ -498,6 +498,7 @@ class TimelineFragment @Inject constructor(
                 RoomDetailViewEvents.StopChatEffects -> handleStopChatEffects()
                 is RoomDetailViewEvents.DisplayAndAcceptCall -> acceptIncomingCall(it)
                 RoomDetailViewEvents.RoomReplacementStarted -> handleRoomReplacement()
+                RoomDetailViewEvents.OpenElementCallWidget -> handleOpenElementCallWidget()
             }
         }
 
@@ -1090,9 +1091,8 @@ class TimelineFragment @Inject constructor(
                 2 -> state.isAllowedToStartWebRTCCall
                 else -> state.isAllowedToManageWidgets
             }
-            setOf(R.id.voice_call, R.id.video_call).forEach {
-                menu.findItem(it).icon?.alpha = if (callButtonsEnabled) 0xFF else 0x40
-            }
+            menu.findItem(R.id.video_call).icon?.alpha = if (callButtonsEnabled) 0xFF else 0x40
+            menu.findItem(R.id.voice_call).icon?.alpha = if (callButtonsEnabled  || state.hasActiveElementCallWidget()) 0xFF else 0x40
 
             val matrixAppsMenuItem = menu.findItem(R.id.open_matrix_apps)
             val widgetsCount = state.activeRoomWidgets.invoke()?.size ?: 0
@@ -2651,6 +2651,15 @@ class TimelineFragment @Inject constructor(
     private fun onViewWidgetsClicked() {
         RoomWidgetsBottomSheet.newInstance()
                 .show(childFragmentManager, "ROOM_WIDGETS_BOTTOM_SHEET")
+    }
+
+    private fun handleOpenElementCallWidget() = withState(timelineViewModel) { state ->
+        state
+                .activeRoomWidgets()
+                ?.find { it.type == WidgetType.ElementCall }
+                ?.also { widget ->
+                    navigator.openRoomWidget(requireContext(), state.roomId, widget)
+                }
     }
 
     override fun onTapToReturnToCall() {
