@@ -34,7 +34,7 @@ jobs:
           yes n | towncrier build --version nightly
       - name: Build and upload Gplay Nightly APK
         run: |
-          ./gradlew assembleGplayNightly appDistributionUploadGplayNightly "-Porg.gradle.jvmargs=-XX:MaxRAM=7g -Xmx3g -XX:MaxMetaspaceSize=1g" -Porg.gradle.parallel=false --stacktrace
+          ./gradlew assembleGplayNightly appDistributionUploadGplayNightly "-Porg.gradle.jvmargs=-XX:MaxRAM=7g -Xmx3g -XX:MaxMetaspaceSize=1g" -Porg.gradle.parallel=false -Dfile.encoding=UTF-8 --stacktrace
         env:
           ELEMENT_ANDROID_NIGHTLY_KEYID: ${{ secrets.ELEMENT_ANDROID_NIGHTLY_KEYID }}
           ELEMENT_ANDROID_NIGHTLY_KEYPASSWORD: ${{ secrets.ELEMENT_ANDROID_NIGHTLY_KEYPASSWORD }}
