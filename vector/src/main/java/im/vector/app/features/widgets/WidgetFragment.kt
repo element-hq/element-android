@@ -43,6 +43,7 @@ import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.VectorMenuProvider
+import im.vector.app.core.utils.CheckWebViewPermissionsUseCase
 import im.vector.app.core.utils.openUrlInExternalBrowser
 import im.vector.app.databinding.FragmentRoomWidgetBinding
 import im.vector.app.features.webview.WebEventListener
@@ -65,7 +66,8 @@ data class WidgetArgs(
 ) : Parcelable
 
 class WidgetFragment @Inject constructor(
-        private val permissionUtils: WebviewPermissionUtils
+        private val permissionUtils: WebviewPermissionUtils,
+        private val checkWebViewPermissionsUseCase: CheckWebViewPermissionsUseCase,
 ) :
         VectorBaseFragment<FragmentRoomWidgetBinding>(),
         WebEventListener,
@@ -81,7 +83,7 @@ class WidgetFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        views.widgetWebView.setupForWidget(requireActivity(), this)
+        views.widgetWebView.setupForWidget(requireActivity(), checkWebViewPermissionsUseCase, this)
         if (fragmentArgs.kind.isAdmin()) {
             viewModel.getPostAPIMediator().setWebView(views.widgetWebView)
         }
