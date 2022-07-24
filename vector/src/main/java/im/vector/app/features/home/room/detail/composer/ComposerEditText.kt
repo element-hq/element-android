@@ -79,6 +79,11 @@ class ComposerEditText @JvmOverloads constructor(
         return ic
     }
 
+    /** Set whether the keyboard should disable personalized learning. */
+    fun setUseIncognitoKeyboard(useIncognitoKeyboard: Boolean) {
+        imeOptions = if (useIncognitoKeyboard) imeOptions or INCOGNITO_KEYBOARD_IME else imeOptions and INCOGNITO_KEYBOARD_IME.inv()
+    }
+
     init {
         addTextChangedListener(
                 object : SimpleTextWatcher() {
@@ -115,5 +120,9 @@ class ComposerEditText @JvmOverloads constructor(
                     }
                 }
         )
+    }
+
+    companion object {
+        const val INCOGNITO_KEYBOARD_IME = EditorInfo.IME_FLAG_NO_PERSONALIZED_LEARNING
     }
 }
