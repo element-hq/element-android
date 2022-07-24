@@ -2579,4 +2579,13 @@
     <string name="font_size_section_manually">Tria manualment</string>
     <string name="font_size_section_auto">Automàtica</string>
     <string name="font_size_title">Tria la mida de la lletra</string>
+    <plurals name="room_removed_messages">
+        <item quantity="one">%d missatge eliminat</item>
+        <item quantity="other">%d missatges eliminats</item>
+    </plurals>
+    <string name="live_location_share_location_item_share">Comparteix ubicació</string>
+    <string name="live_location_not_enough_permission_dialog_description">No tens els permisos adequats per poder compartir la ubicació en directe en aquesta sala.</string>
+    <string name="ftue_auth_password_reset_confirmation">Restabliment de contrasenya</string>
+    <string name="ftue_auth_forgot_password">Contrasenya oblidada</string>
+    <string name="ftue_auth_choose_server_ems_subtitle">Element Matrix Services (EMS) és un servei robust i fiable d\'allotjament (servidors) per comunicacions ràpides, segures i en temps real. Descobreix-ho a &lt;a href=\"${ftue_ems_url}\"&gt;element.io/ems&lt;/a&gt;</string>
 </resources>
