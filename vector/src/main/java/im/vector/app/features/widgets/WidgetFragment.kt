@@ -46,6 +46,7 @@ import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.utils.CheckWebViewPermissionsUseCase
 import im.vector.app.core.utils.openUrlInExternalBrowser
 import im.vector.app.databinding.FragmentRoomWidgetBinding
+import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.webview.WebEventListener
 import im.vector.app.features.widgets.webview.WebviewPermissionUtils
 import im.vector.app.features.widgets.webview.clearAfterWidget
@@ -68,6 +69,7 @@ data class WidgetArgs(
 class WidgetFragment @Inject constructor(
         private val permissionUtils: WebviewPermissionUtils,
         private val checkWebViewPermissionsUseCase: CheckWebViewPermissionsUseCase,
+        private val vectorPreferences: VectorPreferences,
 ) :
         VectorBaseFragment<FragmentRoomWidgetBinding>(),
         WebEventListener,
@@ -303,7 +305,7 @@ class WidgetFragment @Inject constructor(
                 context = requireContext(),
                 activity = requireActivity(),
                 activityResultLauncher = permissionResultLauncher,
-                autoApprove = fragmentArgs.kind == WidgetKind.ELEMENT_CALL
+                autoApprove = fragmentArgs.kind == WidgetKind.ELEMENT_CALL && vectorPreferences.labsEnableElementCallPermissionShortcuts()
         )
     }
 

@@ -3181,4 +3181,8 @@
         <item quantity="one">%d message removed</item>
         <item quantity="other">%d messages removed</item>
     </plurals>
+
+    <!-- Element Call Widget -->
+    <string name="labs_enable_element_call_permission_shortcuts">Enable Element Call permission shortcuts</string>
+    <string name="labs_enable_element_call_permission_shortcuts_summary">Auto-approve Element Call widgets and grant camera / mic access</string>
 </resources>
