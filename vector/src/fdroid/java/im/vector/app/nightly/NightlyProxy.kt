@@ -19,7 +19,5 @@ package im.vector.app.nightly
 import javax.inject.Inject
 
 class NightlyProxy @Inject constructor() {
-    fun updateIfNewReleaseAvailable() {
-        // No op
-    }
+    fun updateIfNewReleaseAvailable() = Unit
 }
