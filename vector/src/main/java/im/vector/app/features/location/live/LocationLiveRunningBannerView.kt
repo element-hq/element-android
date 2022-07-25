@@ -49,16 +49,16 @@ class LocationLiveRunningBannerView @JvmOverloads constructor(
     )
 
     val stopButton: Button
-        get() = binding.locationLiveMessageBannerStop
+        get() = binding.locationLiveRunningBannerStop
 
     private val background: ImageView
-        get() = binding.locationLiveMessageBannerBackground
+        get() = binding.locationLiveRunningBannerBackground
 
     private val title: TextView
-        get() = binding.locationLiveMessageBannerTitle
+        get() = binding.locationLiveRunningBannerTitle
 
     private val subTitle: TextView
-        get() = binding.locationLiveMessageBannerSubTitle
+        get() = binding.locationLiveRunningBannerSubTitle
 
     private var countDownTimer: CountDownTimer? = null
 
@@ -70,7 +70,7 @@ class LocationLiveRunningBannerView @JvmOverloads constructor(
 
         GlideApp.with(context)
                 .load(ColorDrawable(ThemeUtils.getColor(context, android.R.attr.colorBackground)))
-                .placeholder(binding.locationLiveMessageBannerBackground.drawable)
+                .placeholder(binding.locationLiveRunningBannerBackground.drawable)
                 .transform(GranularRoundedCorners(0f, 0f, viewState.bottomEndCornerRadiusInDp, viewState.bottomStartCornerRadiusInDp))
                 .into(background)
     }
@@ -109,14 +109,14 @@ class LocationLiveRunningBannerView @JvmOverloads constructor(
 
             if (viewState.isStopButtonCenteredVertically) {
                 constraintSet.connect(
-                        R.id.locationLiveMessageBannerStop,
+                        R.id.locationLiveRunningBannerStop,
                         ConstraintSet.BOTTOM,
-                        R.id.locationLiveMessageBannerBackground,
+                        R.id.locationLiveRunningBannerBackground,
                         ConstraintSet.BOTTOM,
                         0
                 )
             } else {
-                constraintSet.clear(R.id.locationLiveMessageBannerStop, ConstraintSet.BOTTOM)
+                constraintSet.clear(R.id.locationLiveRunningBannerStop, ConstraintSet.BOTTOM)
             }
 
             constraintSet.applyTo(parentLayout)

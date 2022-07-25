@@ -26,8 +26,8 @@ import im.vector.app.core.resources.toTimestamp
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
-import im.vector.app.features.location.live.LocationLiveRunningBannerView
 import im.vector.app.features.location.live.LocationLiveMessageBannerViewState
+import im.vector.app.features.location.live.LocationLiveRunningBannerView
 import org.threeten.bp.LocalDateTime
 
 @EpoxyModelClass
@@ -112,7 +112,7 @@ abstract class MessageLiveLocationItem : AbsMessageLocationItem<MessageLiveLocat
     override fun getViewStubId() = STUB_ID
 
     class Holder : AbsMessageLocationItem.Holder(STUB_ID) {
-        val locationLiveRunningBanner by bind<LocationLiveRunningBannerView>(R.id.locationLiveMessageBanner)
+        val locationLiveRunningBanner by bind<LocationLiveRunningBannerView>(R.id.locationLiveRunningBanner)
     }
 
     companion object {
