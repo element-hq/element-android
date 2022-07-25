@@ -49,6 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:lines="1"
+        android:ellipsize="end"
         android:text="@string/location_share_live_started"
         android:textColor="?vctr_content_tertiary"
         app:layout_constraintBottom_toBottomOf="@id/locationLiveStartBanner"
