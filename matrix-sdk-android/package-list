@@ -4103,7 +4103,7 @@ $dokka.location:org.matrix.android.sdk.api.session.sync/SyncRequestState.Initial
 $dokka.location:org.matrix.android.sdk.api.session.sync/SyncRequestState.InitialSyncRequestState///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.sync/-sync-request-state/-initial-sync-request-state/index.html
 $dokka.location:org.matrix.android.sdk.api.session.sync/SyncRequestState///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.sync/-sync-request-state/index.html
 $dokka.location:org.matrix.android.sdk.api.session.sync/SyncService///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.sync/-sync-service/index.html
-$dokka.location:org.matrix.android.sdk.api.session.sync/SyncService/getSyncRequestStateLive/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.sync/-sync-service/get-sync-request-state-live.html
+$dokka.location:org.matrix.android.sdk.api.session.sync/SyncService/getSyncRequestStateFlow/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.sync/-sync-service/get-sync-request-state-flow.html
 $dokka.location:org.matrix.android.sdk.api.session.sync/SyncService/getSyncState/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.sync/-sync-service/get-sync-state.html
 $dokka.location:org.matrix.android.sdk.api.session.sync/SyncService/getSyncStateLive/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.sync/-sync-service/get-sync-state-live.html
 $dokka.location:org.matrix.android.sdk.api.session.sync/SyncService/hasAlreadySynced/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.sync/-sync-service/has-already-synced.html
