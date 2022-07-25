@@ -22,6 +22,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -57,7 +59,6 @@ import javax.inject.Inject
 /**
  * Screen showing a map with all the current users sharing their live location in a room.
  */
-
 @AndroidEntryPoint
 class LocationLiveMapViewFragment @Inject constructor() : VectorBaseFragment<FragmentLocationLiveMapViewBinding>() {
 
@@ -173,7 +174,13 @@ class LocationLiveMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
     }
 
     private fun updateUserListBottomSheet(userLocations: List<UserLiveLocationViewState>) {
-        bottomSheetController.setData(userLocations)
+        if (userLocations.isEmpty()) {
+            views.bottomSheet.isGone = true
+            // TODO show Live location ended view
+        } else {
+            views.bottomSheet.isVisible = true
+            bottomSheetController.setData(userLocations)
+        }
     }
 
     private fun updateMap(userLiveLocations: List<UserLiveLocationViewState>) {
