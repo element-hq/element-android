@@ -18,6 +18,7 @@ package im.vector.app.features.widgets
 
 import android.app.Activity
 import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.app.PictureInPictureParams
 import android.app.RemoteAction
 import android.content.BroadcastReceiver
@@ -172,7 +173,7 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
     private fun createElementCallPipParams(): PictureInPictureParams? {
         val actions = mutableListOf<RemoteAction>()
         val intent = Intent(ACTION_MEDIA_CONTROL).putExtra(EXTRA_CONTROL_TYPE, CONTROL_TYPE_HANGUP)
-        val pendingIntent = PendingIntent.getBroadcast(this, REQUEST_CODE_HANGUP, intent, 0)
+        val pendingIntent = PendingIntent.getBroadcast(this, REQUEST_CODE_HANGUP, intent, FLAG_IMMUTABLE)
         val icon = Icon.createWithResource(this, R.drawable.ic_call_hangup)
         actions.add(RemoteAction(icon, getString(R.string.call_notification_hangup), getString(R.string.call_notification_hangup), pendingIntent))
 
