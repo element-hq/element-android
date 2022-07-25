@@ -17,9 +17,11 @@
 package im.vector.app.features.location.live
 
 import android.content.Context
+import android.content.res.TypedArray
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
+import im.vector.app.R
 import im.vector.app.databinding.ViewLocationLiveEndedBannerBinding
 
 class LocationLiveEndedBannerView @JvmOverloads constructor(
@@ -28,10 +30,28 @@ class LocationLiveEndedBannerView @JvmOverloads constructor(
         defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
+    private val binding = ViewLocationLiveEndedBannerBinding.inflate(
+            LayoutInflater.from(context),
+            this
+    )
+
     init {
-        ViewLocationLiveEndedBannerBinding.inflate(
-                LayoutInflater.from(context),
-                this
-        )
+        context.theme.obtainStyledAttributes(
+                attrs,
+                R.styleable.LocationLiveEndedBannerView,
+                0,
+                0
+        ).run {
+            try {
+                setBackgroundAlpha(this)
+            } finally {
+                recycle()
+            }
+        }
+    }
+
+    private fun setBackgroundAlpha(typedArray: TypedArray) {
+        val withAlpha = typedArray.getBoolean(R.styleable.LocationLiveEndedBannerView_locLiveEndedBkgWithAlpha, false)
+        binding.locationLiveEndedBannerBackground.alpha = if (withAlpha) 0.75f else 1f
     }
 }
