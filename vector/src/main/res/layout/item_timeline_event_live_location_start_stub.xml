@@ -28,8 +28,8 @@
 
     <ImageView
         android:id="@+id/locationLiveStartIcon"
-        android:layout_width="26dp"
-        android:layout_height="26dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_marginVertical="8dp"
         android:layout_marginStart="8dp"
         android:background="@drawable/circle"

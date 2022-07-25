@@ -10,7 +10,7 @@
         android:id="@+id/liveLocationPopupAnchor"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center" />
 
     <FrameLayout
         android:id="@+id/liveLocationMapFragmentContainer"
@@ -48,5 +48,14 @@
             tools:listitem="@layout/item_live_location_users_bottom_sheet" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <im.vector.app.features.location.live.LocationLiveEndedBannerView
+        android:id="@+id/liveLocationMapFragmentEndedBanner"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_gravity="bottom"
+        android:visibility="gone"
+        app:locLiveEndedBkgWithAlpha="false"
+        tools:visibility="visible" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

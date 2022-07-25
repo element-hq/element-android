@@ -111,13 +111,6 @@ class LocationLiveMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
     private fun setupMap() {
         val mapFragment = getOrCreateSupportMapFragment()
         mapFragment.getMapAsync { mapboxMap ->
-            val bottomSheetHeight = BottomSheetBehavior.from(views.bottomSheet).peekHeight
-            mapboxMap.uiSettings.apply {
-                // Place copyright above the user list bottom sheet
-                setLogoMargins(dimensionConverter.dpToPx(8), 0, 0, bottomSheetHeight + dimensionConverter.dpToPx(8))
-                setAttributionMargins(dimensionConverter.dpToPx(96), 0, 0, bottomSheetHeight + dimensionConverter.dpToPx(8))
-            }
-
             lifecycleScope.launch {
                 mapboxMap.setStyle(urlMapProvider.getMapUrl()) { style ->
                     mapStyle = style
@@ -175,11 +168,43 @@ class LocationLiveMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
 
     private fun updateUserListBottomSheet(userLocations: List<UserLiveLocationViewState>) {
         if (userLocations.isEmpty()) {
-            views.bottomSheet.isGone = true
-            // TODO show Live location ended view
+            showEndedLiveBanner()
         } else {
-            views.bottomSheet.isVisible = true
-            bottomSheetController.setData(userLocations)
+            showUserList(userLocations)
+        }
+    }
+
+    private fun showEndedLiveBanner() {
+        views.bottomSheet.isGone = true
+        views.liveLocationMapFragmentEndedBanner.isVisible = true
+        updateCopyrightMargin(bottomOffset = views.liveLocationMapFragmentEndedBanner.height)
+    }
+
+    private fun showUserList(userLocations: List<UserLiveLocationViewState>) {
+        val bottomSheetHeight = BottomSheetBehavior.from(views.bottomSheet).peekHeight
+        updateCopyrightMargin(bottomOffset = bottomSheetHeight)
+        views.bottomSheet.isVisible = true
+        views.liveLocationMapFragmentEndedBanner.isGone = true
+        bottomSheetController.setData(userLocations)
+    }
+
+    private fun updateCopyrightMargin(bottomOffset: Int) {
+        getOrCreateSupportMapFragment().getMapAsync { mapboxMap ->
+            mapboxMap.uiSettings.apply {
+                // Place copyright above the user list bottom sheet
+                setLogoMargins(
+                        dimensionConverter.dpToPx(COPYRIGHT_MARGIN_DP),
+                        0,
+                        0,
+                        bottomOffset + dimensionConverter.dpToPx(COPYRIGHT_MARGIN_DP)
+                )
+                setAttributionMargins(
+                        dimensionConverter.dpToPx(COPYRIGHT_ATTRIBUTION_MARGIN_DP),
+                        0,
+                        0,
+                        bottomOffset + dimensionConverter.dpToPx(COPYRIGHT_MARGIN_DP)
+                )
+            }
         }
     }
 
@@ -285,5 +310,7 @@ class LocationLiveMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
 
     companion object {
         private const val MAP_FRAGMENT_TAG = "im.vector.app.features.location.live.map"
+        private const val COPYRIGHT_MARGIN_DP = 8
+        private const val COPYRIGHT_ATTRIBUTION_MARGIN_DP = 96
     }
 }
