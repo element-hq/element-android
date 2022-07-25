@@ -16,8 +16,6 @@
 
 package org.matrix.android.sdk.internal.session.sync
 
-import androidx.lifecycle.LiveData
-import org.matrix.android.sdk.api.session.sync.SyncRequestState
 import org.matrix.android.sdk.api.session.sync.SyncService
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
@@ -75,9 +73,7 @@ internal class DefaultSyncService @Inject constructor(
 
     override fun getSyncState() = getSyncThread().currentState()
 
-    override fun getSyncRequestStateLive(): LiveData<SyncRequestState> {
-        return syncRequestStateTracker.syncRequestState
-    }
+    override fun getSyncRequestStateFlow() = syncRequestStateTracker.syncRequestState
 
     override fun hasAlreadySynced(): Boolean {
         return syncTokenStore.getLastToken() != null
