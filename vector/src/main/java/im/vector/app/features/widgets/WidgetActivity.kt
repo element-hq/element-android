@@ -38,12 +38,14 @@ import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityWidgetBinding
+import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionBottomSheet
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewEvents
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewModel
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.Content
 import java.io.Serializable
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
@@ -78,6 +80,8 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
     private val viewModel: WidgetViewModel by viewModel()
     private val permissionViewModel: RoomWidgetPermissionViewModel by viewModel()
 
+    @Inject lateinit var vectorPreferences: VectorPreferences
+
     override fun getBinding() = ActivityWidgetBinding.inflate(layoutInflater)
 
     override fun getTitleRes() = R.string.room_widget_activity_title
@@ -99,7 +103,7 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
         }
 
         // Trust element call widget by default
-        if (widgetArgs.kind == WidgetKind.ELEMENT_CALL) {
+        if (widgetArgs.kind == WidgetKind.ELEMENT_CALL && vectorPreferences.labsEnableElementCallPermissionShortcuts()) {
             if (supportFragmentManager.findFragmentByTag(WIDGET_FRAGMENT_TAG) == null) {
                 addOnPictureInPictureModeChangedListener(pictureInPictureModeChangedInfoConsumer)
                 addFragment(views.fragmentContainer, WidgetFragment::class.java, widgetArgs, WIDGET_FRAGMENT_TAG)
