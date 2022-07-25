@@ -56,6 +56,7 @@
         android:layout_gravity="bottom"
         android:visibility="gone"
         app:locLiveEndedBkgWithAlpha="false"
+        app:locLiveEndedIconMarginStart="16dp"
         tools:visibility="visible" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

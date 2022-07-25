@@ -3,6 +3,7 @@
 
     <declare-styleable name="LocationLiveEndedBannerView">
         <attr name="locLiveEndedBkgWithAlpha" format="boolean" />
+        <attr name="locLiveEndedIconMarginStart" format="dimension" />
     </declare-styleable>
 
 </resources>

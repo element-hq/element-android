@@ -22,7 +22,8 @@
         app:layout_constraintBottom_toBottomOf="@id/locationLiveInactiveMap"
         app:layout_constraintEnd_toEndOf="@id/locationLiveInactiveMap"
         app:layout_constraintStart_toStartOf="@id/locationLiveInactiveMap"
-        app:locLiveEndedBkgWithAlpha="true" />
+        app:locLiveEndedBkgWithAlpha="true"
+        app:locLiveEndedIconMarginStart="8dp" />
 
     <ImageView
         android:id="@+id/locationLiveInactiveIcon"

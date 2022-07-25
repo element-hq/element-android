@@ -21,6 +21,7 @@ import android.content.res.TypedArray
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.updateLayoutParams
 import im.vector.app.R
 import im.vector.app.databinding.ViewLocationLiveEndedBannerBinding
 
@@ -44,6 +45,7 @@ class LocationLiveEndedBannerView @JvmOverloads constructor(
         ).run {
             try {
                 setBackgroundAlpha(this)
+                setIconMarginStart(this)
             } finally {
                 recycle()
             }
@@ -53,5 +55,12 @@ class LocationLiveEndedBannerView @JvmOverloads constructor(
     private fun setBackgroundAlpha(typedArray: TypedArray) {
         val withAlpha = typedArray.getBoolean(R.styleable.LocationLiveEndedBannerView_locLiveEndedBkgWithAlpha, false)
         binding.locationLiveEndedBannerBackground.alpha = if (withAlpha) 0.75f else 1f
+    }
+
+    private fun setIconMarginStart(typedArray: TypedArray) {
+        val margin = typedArray.getDimensionPixelOffset(R.styleable.LocationLiveEndedBannerView_locLiveEndedIconMarginStart, 0)
+        binding.locationLiveEndedBannerIcon.updateLayoutParams<MarginLayoutParams> {
+            marginStart = margin
+        }
     }
 }
