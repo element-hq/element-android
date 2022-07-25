@@ -449,6 +449,12 @@ dependencies {
     implementation libs.airbnb.epoxyPaging
     implementation libs.airbnb.mavericks
 
+    // Nightly
+    // API-only library
+    gplayImplementation libs.google.appdistributionApi
+    // Full SDK implementation
+    gplayImplementation libs.google.appdistribution
+
     // Work
     implementation libs.androidx.work
 
