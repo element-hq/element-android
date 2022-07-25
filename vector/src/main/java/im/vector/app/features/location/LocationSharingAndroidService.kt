@@ -122,7 +122,7 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
                 ?.locationSharingService()
                 ?.startLiveLocationShare(
                         timeoutMillis = roomArgs.durationMillis,
-                        description = getString(R.string.sent_live_location)
+                        description = getString(R.string.live_location_description)
                 )
 
         updateLiveResult
