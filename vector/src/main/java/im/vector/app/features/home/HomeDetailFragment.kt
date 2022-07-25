@@ -358,7 +358,7 @@ class HomeDetailFragment @Inject constructor(
                 when (tab) {
                     is HomeTab.RoomList -> {
                         if (vectorFeatures.isNewAppLayoutEnabled()) {
-                            add(R.id.roomListContainer, createHomeRoomListFragment(), fragmentTag)
+                            add(R.id.roomListContainer, HomeRoomListFragment::class.java, null, fragmentTag)
                         } else {
                             val params = RoomListParams(tab.displayMode)
                             add(R.id.roomListContainer, RoomListFragment::class.java, params.toMvRxBundle(), fragmentTag)
@@ -375,10 +375,6 @@ class HomeDetailFragment @Inject constructor(
                 attach(fragmentToShow)
             }
         }
-    }
-
-    private fun createHomeRoomListFragment(): Fragment {
-        return childFragmentManager.fragmentFactory.instantiate(vectorBaseActivity.classLoader, HomeRoomListFragment::class.java.name)
     }
 
     private fun createDialPadFragment(): Fragment {
