@@ -31,19 +31,19 @@ import com.bumptech.glide.load.resource.bitmap.GranularRoundedCorners
 import im.vector.app.R
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.utils.TextUtils
-import im.vector.app.databinding.ViewLocationLiveMessageBannerBinding
+import im.vector.app.databinding.ViewLocationLiveRunningBannerBinding
 import im.vector.app.features.themes.ThemeUtils
 import org.threeten.bp.Duration
 
 private const val REMAINING_TIME_COUNTER_INTERVAL_IN_MS = 1000L
 
-class LocationLiveMessageBannerView @JvmOverloads constructor(
+class LocationLiveRunningBannerView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
-    private val binding = ViewLocationLiveMessageBannerBinding.inflate(
+    private val binding = ViewLocationLiveRunningBannerBinding.inflate(
             LayoutInflater.from(context),
             this
     )
