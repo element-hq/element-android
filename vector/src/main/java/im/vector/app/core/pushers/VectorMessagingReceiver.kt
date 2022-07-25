@@ -27,6 +27,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.BuildConfig
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.di.ActiveSessionSetter
 import im.vector.app.core.network.WifiDetector
 import im.vector.app.core.pushers.model.PushData
 import im.vector.app.core.services.GuardServiceStarter
@@ -59,6 +60,7 @@ class VectorMessagingReceiver : MessagingReceiver() {
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
     @Inject lateinit var notifiableEventResolver: NotifiableEventResolver
     @Inject lateinit var pushersManager: PushersManager
+    @Inject lateinit var activeSessionSetter: ActiveSessionSetter
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var vectorDataStore: VectorDataStore
@@ -177,6 +179,11 @@ class VectorMessagingReceiver : MessagingReceiver() {
             }
 
             val session = activeSessionHolder.getSafeActiveSession()
+                    ?: run {
+                        // Active session may not exist yet, if MainActivity has not been launched
+                        activeSessionSetter.tryToSetActiveSession(startSync = false)
+                        activeSessionHolder.getSafeActiveSession()
+                    }
 
             if (session == null) {
                 Timber.tag(loggerTag.value).w("## Can't sync from push, no current session")

@@ -34,23 +34,31 @@
     <TextView
         android:id="@+id/locationLiveMessageBannerTitle"
         style="@style/Widget.Vector.TextView.Caption"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="8dp"
-        tools:text="@string/location_share_live_enabled"
+        android:ellipsize="end"
+        android:lines="1"
         android:textColor="?colorOnSurface"
         app:layout_constraintBottom_toTopOf="@id/locationLiveMessageBannerSubTitle"
+        app:layout_constraintEnd_toStartOf="@id/locationLiveMessageBannerStop"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toEndOf="@id/locationLiveMessageBannerIcon"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="@string/location_share_live_enabled" />
 
     <TextView
         android:id="@+id/locationLiveMessageBannerSubTitle"
         style="@style/Widget.Vector.TextView.Caption"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:lines="1"
         android:textColor="?vctr_content_secondary"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/locationLiveMessageBannerTitle"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="@id/locationLiveMessageBannerTitle"
         app:layout_constraintTop_toBottomOf="@id/locationLiveMessageBannerTitle"
         tools:text="9min left" />
@@ -58,10 +66,10 @@
     <Button
         android:id="@+id/locationLiveMessageBannerStop"
         style="@style/Widget.Vector.Button.Text.LocationLive"
-        android:layout_width="45dp"
-        android:layout_height="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/location_share_live_stop"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/locationLiveMessageBannerBackground"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/locationLiveMessageBannerBackground" />
 </merge>

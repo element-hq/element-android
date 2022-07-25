@@ -45,12 +45,14 @@
     <TextView
         android:id="@+id/locationLiveStartTitle"
         style="@style/Widget.Vector.TextView.Caption"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="8dp"
+        android:layout_margin="8dp"
+        android:lines="1"
         android:text="@string/location_share_live_started"
         android:textColor="?vctr_content_tertiary"
         app:layout_constraintBottom_toBottomOf="@id/locationLiveStartBanner"
+        app:layout_constraintEnd_toEndOf="@id/locationLiveStartBanner"
         app:layout_constraintStart_toEndOf="@id/locationLiveStartIcon"
         app:layout_constraintTop_toTopOf="@id/locationLiveStartBanner" />
 

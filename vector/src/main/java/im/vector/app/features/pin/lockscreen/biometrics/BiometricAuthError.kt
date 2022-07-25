@@ -33,6 +33,6 @@ class BiometricAuthError(val code: Int, message: String) : Throwable(message) {
     val isAuthPermanentlyDisabledError: Boolean get() = code == BiometricPrompt.ERROR_LOCKOUT_PERMANENT
 
     companion object {
-       private val LOCKOUT_ERROR_CODES = arrayOf(BiometricPrompt.ERROR_LOCKOUT, BiometricPrompt.ERROR_LOCKOUT_PERMANENT)
+        private val LOCKOUT_ERROR_CODES = arrayOf(BiometricPrompt.ERROR_LOCKOUT, BiometricPrompt.ERROR_LOCKOUT_PERMANENT)
     }
 }

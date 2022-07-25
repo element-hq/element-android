@@ -78,6 +78,7 @@ import im.vector.app.features.spaces.invite.SpaceInviteBottomSheet
 import im.vector.app.features.spaces.share.ShareSpaceBottomSheet
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
+import im.vector.app.nightly.NightlyProxy
 import im.vector.app.push.fcm.FcmHelper
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -132,6 +133,7 @@ class HomeActivity :
     @Inject lateinit var appStateHandler: AppStateHandler
     @Inject lateinit var unifiedPushHelper: UnifiedPushHelper
     @Inject lateinit var fcmHelper: FcmHelper
+    @Inject lateinit var nightlyProxy: NightlyProxy
 
     private val createSpaceResultLauncher = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
@@ -214,13 +216,12 @@ class HomeActivity :
                     when (sharedAction) {
                         is HomeActivitySharedAction.OpenDrawer -> views.drawerLayout.openDrawer(GravityCompat.START)
                         is HomeActivitySharedAction.CloseDrawer -> views.drawerLayout.closeDrawer(GravityCompat.START)
-                        is HomeActivitySharedAction.OpenGroup -> openGroup(sharedAction.shouldClearFragment)
                         is HomeActivitySharedAction.OpenSpacePreview -> startActivity(SpacePreviewActivity.newIntent(this, sharedAction.spaceId))
                         is HomeActivitySharedAction.AddSpace -> createSpaceResultLauncher.launch(SpaceCreationActivity.newIntent(this))
                         is HomeActivitySharedAction.ShowSpaceSettings -> showSpaceSettings(sharedAction.spaceId)
                         is HomeActivitySharedAction.OpenSpaceInvite -> openSpaceInvite(sharedAction.spaceId)
                         HomeActivitySharedAction.SendSpaceFeedBack -> bugReporter.openBugReportScreen(this, ReportType.SPACE_BETA_FEEDBACK)
-                        HomeActivitySharedAction.CloseGroup -> closeGroup()
+                        HomeActivitySharedAction.OnCloseSpace -> onCloseSpace()
                     }
                 }
                 .launchIn(lifecycleScope)
@@ -265,17 +266,6 @@ class HomeActivity :
         homeActivityViewModel.handle(HomeActivityViewActions.ViewStarted)
     }
 
-    private fun openGroup(shouldClearFragment: Boolean) {
-        views.drawerLayout.closeDrawer(GravityCompat.START)
-
-        // When switching from space to group or group to space, we need to reload the fragment
-        if (shouldClearFragment) {
-            replaceFragment(views.homeDetailFragmentContainer, HomeDetailFragment::class.java, allowStateLoss = true)
-        } else {
-            // do nothing
-        }
-    }
-
     private fun showSpaceSettings(spaceId: String) {
         // open bottom sheet
         SpaceSettingsMenuBottomSheet
@@ -292,7 +282,7 @@ class HomeActivity :
                 .show(supportFragmentManager, "SPACE_INVITE")
     }
 
-    private fun closeGroup() {
+    private fun onCloseSpace() {
         views.drawerLayout.openDrawer(GravityCompat.START)
     }
 
@@ -545,6 +535,11 @@ class HomeActivity :
 
         // Force remote backup state update to update the banner if needed
         serverBackupStatusViewModel.refreshRemoteStateIfNeeded()
+
+        // Check nightly
+        if (isFirstCreation()) {
+            nightlyProxy.updateIfNewReleaseAvailable()
+        }
     }
 
     override fun getMenuRes() = R.menu.home
@@ -623,6 +618,7 @@ class HomeActivity :
     companion object {
         fun newIntent(
                 context: Context,
+                firstStartMainActivity: Boolean,
                 clearNotification: Boolean = false,
                 authenticationDescription: AuthenticationDescription? = null,
                 existingSession: Boolean = false,
@@ -635,10 +631,16 @@ class HomeActivity :
                     inviteNotificationRoomId = inviteNotificationRoomId
             )
 
-            return Intent(context, HomeActivity::class.java)
+            val intent = Intent(context, HomeActivity::class.java)
                     .apply {
                         putExtra(Mavericks.KEY_ARG, args)
                     }
+
+            return if (firstStartMainActivity) {
+                MainActivity.getIntentWithNextIntent(context, intent)
+            } else {
+                intent
+            }
         }
     }
 

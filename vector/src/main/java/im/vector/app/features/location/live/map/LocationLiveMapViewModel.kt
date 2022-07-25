@@ -87,7 +87,7 @@ class LocationLiveMapViewModel @AssistedInject constructor(
         }
     }
 
-    override fun onLocationServiceRunning() {
+    override fun onLocationServiceRunning(roomIds: Set<String>) {
         // NOOP
     }
 

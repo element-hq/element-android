@@ -110,6 +110,7 @@ class SpaceDirectoryController @Inject constructor(
                     ?.filter {
                         it.parentRoomId == (data.hierarchyStack.lastOrNull() ?: data.spaceId)
                     }
+                    ?.filterNot { it.isUpgradedRoom(data) }
                     ?: emptyList()
 
             if (flattenChildInfo.isEmpty()) {
@@ -209,4 +210,7 @@ class SpaceDirectoryController @Inject constructor(
             }
         }
     }
+
+    private fun SpaceChildInfo.isUpgradedRoom(data: SpaceDirectoryState) =
+            data.knownRoomSummaries.any { it.roomId == childRoomId && it.versioningState.isUpgraded() }
 }

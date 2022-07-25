@@ -104,6 +104,9 @@ class LocationSharingFragment @Inject constructor(
                 LocationSharingViewEvents.LocationNotAvailableError -> handleLocationNotAvailableError()
                 is LocationSharingViewEvents.ZoomToUserLocation -> handleZoomToUserLocationEvent(it)
                 is LocationSharingViewEvents.StartLiveLocationService -> handleStartLiveLocationService(it)
+                LocationSharingViewEvents.ChooseLiveLocationDuration -> handleChooseLiveLocationDuration()
+                LocationSharingViewEvents.ShowLabsFlagPromotion -> handleShowLabsFlagPromotion()
+                LocationSharingViewEvents.LiveLocationSharingNotEnoughPermission -> handleLiveLocationSharingNotEnoughPermission()
             }
         }
     }
@@ -168,6 +171,14 @@ class LocationSharingFragment @Inject constructor(
                 .show()
     }
 
+    private fun handleLiveLocationSharingNotEnoughPermission() {
+        MaterialAlertDialogBuilder(requireActivity())
+                .setTitle(R.string.live_location_not_enough_permission_dialog_title)
+                .setMessage(R.string.live_location_not_enough_permission_dialog_description)
+                .setPositiveButton(R.string.ok, null)
+                .show()
+    }
+
     private fun initLocateButton() {
         views.mapView.locateButton.setOnClickListener {
             viewModel.handle(LocationSharingAction.ZoomToUserLocation)
@@ -201,7 +212,7 @@ class LocationSharingFragment @Inject constructor(
             viewModel.handle(LocationSharingAction.CurrentUserLocationSharing)
         }
         views.shareLocationOptionsPicker.optionUserLive.debouncedClicks {
-            tryStartLiveLocationSharing()
+            viewModel.handle(LocationSharingAction.LiveLocationSharingRequested)
         }
     }
 
@@ -212,13 +223,13 @@ class LocationSharingFragment @Inject constructor(
         }
     }
 
-    private fun tryStartLiveLocationSharing() {
-        if (vectorPreferences.labsEnableLiveLocation()) {
-            startLiveLocationSharing()
-        } else {
-            LiveLocationLabsFlagPromotionBottomSheet.newInstance()
-                    .show(requireActivity().supportFragmentManager, "DISPLAY_LIVE_LOCATION_LABS_FLAG_PROMOTION")
-        }
+    private fun handleChooseLiveLocationDuration() {
+        startLiveLocationSharing()
+    }
+
+    private fun handleShowLabsFlagPromotion() {
+        LiveLocationLabsFlagPromotionBottomSheet.newInstance()
+                .show(requireActivity().supportFragmentManager, "DISPLAY_LIVE_LOCATION_LABS_FLAG_PROMOTION")
     }
 
     private val foregroundLocationResultLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->

@@ -482,7 +482,11 @@ class FtueAuthVariant(
 
     private fun navigateToHome() {
         withState(onboardingViewModel) {
-            val intent = HomeActivity.newIntent(activity, authenticationDescription = it.selectedAuthenticationState.description)
+            val intent = HomeActivity.newIntent(
+                    activity,
+                    firstStartMainActivity = false,
+                    authenticationDescription = it.selectedAuthenticationState.description
+            )
             activity.startActivity(intent)
             activity.finish()
         }

@@ -2577,4 +2577,10 @@
     <string name="settings_troubleshoot_test_endpoint_registration_success">Koncový bod byl úspěšně zaregistrován na domovském serveru.</string>
     <string name="settings_troubleshoot_test_endpoint_registration_title">Registrace koncového bodu</string>
     <string name="action_next">Další</string>
+    <string name="poll_undisclosed_not_ended">Výsledky se zobrazí po ukončení hlasování</string>
+    <string name="labs_enable_msc3061_share_history_desc">Při pozvání do šifrované místnosti, která sdílí historii, bude zašifrovaná historie viditelná.</string>
+    <string name="labs_enable_msc3061_share_history">MSC3061: Sdílení klíčů místnosti pro minulé zprávy</string>
+    <string name="send_your_first_msg_to_invite">Odesláním první zprávy pozvete %s do místnosti</string>
+    <string name="direct_room_encryption_enabled_tile_description_future">Zprávy v této místnosti budou koncově šifrovány.</string>
+    <string name="create_room_action_go">Přejít</string>
 </resources>

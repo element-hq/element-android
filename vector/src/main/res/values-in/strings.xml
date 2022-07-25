@@ -2032,7 +2032,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="room_created_summary_item_by_you">Anda membuat dan mengatur ruangan ini.</string>
     <string name="room_created_summary_item">%s membuat dan mengatur ruangan ini.</string>
     <string name="encryption_not_enabled">Enkripsi tidak diaktifkan</string>
-    <string name="direct_room_encryption_enabled_tile_description">Pesan di ruangan ini dienkripsi secara ujung-ke-ujung.</string>
+    <string name="direct_room_encryption_enabled_tile_description">Pesan di obrolan ini dienkripsi secara ujung-ke-ujung.</string>
     <string name="encryption_enabled_tile_description">Pesan di ruangan ini dienkripsi secara ujung-ke-ujung. Pelajari lebih lanjut &amp; verifikasi pengguna di profil mereka.</string>
     <string name="encryption_enabled">Enkripsi diaktifkan</string>
     <string name="bootstrap_cancel_text">Jika Anda batalkan, Anda mungkin kehilangan pesan terenkripsi dan data Anda jika Anda kehilangan akses ke login Anda.
@@ -2483,4 +2483,10 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="settings_troubleshoot_test_endpoint_registration_success">Endpoint berhasil terdaftar ke homeserver.</string>
     <string name="settings_troubleshoot_test_endpoint_registration_title">Pendaftaran Endpoint</string>
     <string name="action_next">Lanjut</string>
+    <string name="poll_undisclosed_not_ended">Hasil akan ditampilkan ketika pemungutan suara berakhir</string>
+    <string name="labs_enable_msc3061_share_history_desc">Ketika mengundang ke ruangan terenkripsi yang juga membagikan riwayat, riwayat terenkripsi akan dapat dilihat.</string>
+    <string name="labs_enable_msc3061_share_history">MSC3061: Pembagian kunci ruangan untuk pesan lama</string>
+    <string name="send_your_first_msg_to_invite">Kirim pesan pertama Anda untuk mengundang %s ke obrolan</string>
+    <string name="direct_room_encryption_enabled_tile_description_future">Pesan di obrolan ini akan dienkripsi secara ujung-ke-ujung.</string>
+    <string name="create_room_action_go">Mulai</string>
 </resources>

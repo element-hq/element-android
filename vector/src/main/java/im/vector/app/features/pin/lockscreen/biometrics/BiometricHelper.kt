@@ -73,26 +73,30 @@ class BiometricHelper @Inject constructor(
     /**
      * Returns true if a weak biometric method (i.e.: some face or iris unlock implementations) can be used.
      */
-    val canUseWeakBiometricAuth: Boolean get() =
-        configuration.isWeakBiometricsEnabled && biometricManager.canAuthenticate(BIOMETRIC_WEAK) == BIOMETRIC_SUCCESS
+    val canUseWeakBiometricAuth: Boolean
+        get() =
+            configuration.isWeakBiometricsEnabled && biometricManager.canAuthenticate(BIOMETRIC_WEAK) == BIOMETRIC_SUCCESS
 
     /**
      * Returns true if a strong biometric method (i.e.: fingerprint, some face or iris unlock implementations) can be used.
      */
-    val canUseStrongBiometricAuth: Boolean get() =
-        configuration.isStrongBiometricsEnabled && biometricManager.canAuthenticate(BIOMETRIC_STRONG) == BIOMETRIC_SUCCESS
+    val canUseStrongBiometricAuth: Boolean
+        get() =
+            configuration.isStrongBiometricsEnabled && biometricManager.canAuthenticate(BIOMETRIC_STRONG) == BIOMETRIC_SUCCESS
 
     /**
      * Returns true if the device credentials can be used to unlock (system pin code, password, pattern, etc.).
      */
-    val canUseDeviceCredentialsAuth: Boolean get() =
-        configuration.isDeviceCredentialUnlockEnabled && biometricManager.canAuthenticate(DEVICE_CREDENTIAL) == BIOMETRIC_SUCCESS
+    val canUseDeviceCredentialsAuth: Boolean
+        get() =
+            configuration.isDeviceCredentialUnlockEnabled && biometricManager.canAuthenticate(DEVICE_CREDENTIAL) == BIOMETRIC_SUCCESS
 
     /**
      * Returns true if any system authentication method (biometric weak/strong or device credentials) can be used.
      */
     @VisibleForTesting(otherwise = PRIVATE)
-    internal val canUseAnySystemAuth: Boolean get() = canUseWeakBiometricAuth || canUseStrongBiometricAuth || canUseDeviceCredentialsAuth
+    internal val canUseAnySystemAuth: Boolean
+        get() = canUseWeakBiometricAuth || canUseStrongBiometricAuth || canUseDeviceCredentialsAuth
 
     /**
      * Returns true if any system authentication method and there is a valid associated key.
@@ -153,9 +157,9 @@ class BiometricHelper @Inject constructor(
     @SuppressLint("NewApi")
     @OptIn(ExperimentalCoroutinesApi::class)
     private fun authenticateInternal(
-        activity: FragmentActivity,
-        checkSystemKeyExists: Boolean,
-        cryptoObject: BiometricPrompt.CryptoObject? = null,
+            activity: FragmentActivity,
+            checkSystemKeyExists: Boolean,
+            cryptoObject: BiometricPrompt.CryptoObject? = null,
     ): Flow<Boolean> {
         if (checkSystemKeyExists && !isSystemAuthEnabledAndValid) return flowOf(false)
 
@@ -189,9 +193,9 @@ class BiometricHelper @Inject constructor(
 
     @VisibleForTesting(otherwise = PRIVATE)
     internal fun authenticateWithPromptInternal(
-        activity: FragmentActivity,
-        cryptoObject: BiometricPrompt.CryptoObject? = null,
-        channel: Channel<Boolean>,
+            activity: FragmentActivity,
+            cryptoObject: BiometricPrompt.CryptoObject? = null,
+            channel: Channel<Boolean>,
     ): BiometricPrompt {
         val executor = ContextCompat.getMainExecutor(context)
         val callback = createSuspendingAuthCallback(channel, executor.asCoroutineDispatcher())

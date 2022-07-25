@@ -1705,7 +1705,7 @@
     <string name="bad_passphrase_key_reset_all_action">Kas sa unustasid või kaotasid kõik võimalused taastada ligipääsu oma kontole\? Lähtesta kõik seadistused</string>
     <string name="direct_room_created_summary_item_by_you">Sina liitusid.</string>
     <string name="direct_room_created_summary_item">%s liitus.</string>
-    <string name="direct_room_encryption_enabled_tile_description">See jututuba on läbivalt krüptitud.</string>
+    <string name="direct_room_encryption_enabled_tile_description">See vestlus on läbivalt krüptitud.</string>
     <string name="direct_room_profile_section_more_leave">Lahku</string>
     <string name="direct_room_profile_section_more_settings">Seadistused</string>
     <string name="direct_room_profile_encrypted_subtitle">Sõnumid siin jututoas kasutavad läbivat krüptimist. 
@@ -2520,4 +2520,10 @@
     <string name="unifiedpush_distributor_background_sync">Sünkroniseerimine taustal</string>
     <string name="unifiedpush_distributor_fcm_fallback">Google\'i teenused</string>
     <string name="unifiedpush_getdistributors_dialog_title">Vali teavituste laadimise viis</string>
+    <string name="poll_undisclosed_not_ended">Tulemused on näha siis, kui küsitlus on lõppenud</string>
+    <string name="labs_enable_msc3061_share_history_desc">Kutsudes osalejaid krüptitud jututuppa, kus ajaloo jagamine on lubatud, on vanad sõnumid loetavad.</string>
+    <string name="labs_enable_msc3061_share_history">MSC3061: Minevikus saadetud sõnumite lugemiseks vajalike krüptovõtmete jagamine jututoas</string>
+    <string name="send_your_first_msg_to_invite">Saada oma esimene sõnum kutsudes %s vestlusesse</string>
+    <string name="direct_room_encryption_enabled_tile_description_future">See vestlus saab olema läbivalt krüptitud.</string>
+    <string name="create_room_action_go">Mine</string>
 </resources>

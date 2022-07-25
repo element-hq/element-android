@@ -99,29 +99,32 @@ class UiAllScreensSanityTest {
 
         testThreadScreens()
 
+        val spaceName = UUID.randomUUID().toString()
         elementRobot.space {
             createSpace {
-                crawl()
+                createAndCrawl(spaceName)
             }
-            val spaceName = UUID.randomUUID().toString()
+            val publicSpaceName = UUID.randomUUID().toString()
             createSpace {
-                createPublicSpace(spaceName)
+                createPublicSpace(publicSpaceName)
             }
 
-            spaceMenu(spaceName) {
+            spaceMenu(publicSpaceName) {
                 spaceMembers()
                 spaceSettings {
                     crawl()
                 }
                 exploreRooms()
 
-                invitePeople().also { openMenu(spaceName) }
-                addRoom().also { openMenu(spaceName) }
-                addSpace().also { openMenu(spaceName) }
+                invitePeople().also { openMenu(publicSpaceName) }
+                addRoom().also { openMenu(publicSpaceName) }
+                addSpace().also { openMenu(publicSpaceName) }
 
                 leaveSpace()
             }
         }
+
+        elementRobot.space { selectSpace(spaceName) }
 
         elementRobot.withDeveloperMode {
             settings {
@@ -159,7 +162,7 @@ class UiAllScreensSanityTest {
         elementRobot.newRoom {
             createNewRoom {
                 crawl()
-                createRoom {
+                createRoom(roomName = "thread room") {
                     val message = "Hello This message will be a thread!"
                     postMessage(message)
                     replyToThread(message)

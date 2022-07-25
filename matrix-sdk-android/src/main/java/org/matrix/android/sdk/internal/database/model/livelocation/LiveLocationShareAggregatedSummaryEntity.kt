@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.database.model.livelocation
 
+import io.realm.RealmList
 import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
@@ -31,6 +32,11 @@ internal open class LiveLocationShareAggregatedSummaryEntity(
         @PrimaryKey
         var eventId: String = "",
 
+        /**
+         * List of event ids used to compute the aggregated summary data.
+         */
+        var relatedEventIds: RealmList<String> = RealmList(),
+
         var roomId: String = "",
 
         var userId: String = "",
@@ -39,6 +45,8 @@ internal open class LiveLocationShareAggregatedSummaryEntity(
          * Indicate whether the live is currently running.
          */
         var isActive: Boolean? = null,
+
+        var startOfLiveTimestampMillis: Long? = null,
 
         var endOfLiveTimestampMillis: Long? = null,
 

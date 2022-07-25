@@ -308,7 +308,8 @@
         <activity android:name=".features.terms.ReviewTermsActivity" />
         <activity
             android:name=".features.widgets.WidgetActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation" />
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:supportsPictureInPicture="true" />
 
         <activity android:name=".features.pin.PinActivity" />
         <activity android:name=".features.analytics.ui.consent.AnalyticsOptInActivity" />
@@ -347,6 +348,7 @@
         <activity android:name=".features.poll.create.CreatePollActivity" />
         <activity android:name=".features.location.LocationSharingActivity" />
         <activity android:name=".features.location.live.map.LocationLiveMapViewActivity" />
+        <activity android:name=".features.settings.font.FontScaleSettingActivity"/>
 
         <!-- Services -->
 
@@ -378,6 +380,11 @@
             android:name=".features.location.LocationSharingAndroidService"
             android:exported="false"
             android:foregroundServiceType="location" />
+
+        <service
+            android:name=".features.start.StartAppAndroidService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
 
         <service
             android:name=".features.call.webrtc.ScreenCaptureAndroidService"

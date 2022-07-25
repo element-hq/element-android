@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home
 
-import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
@@ -218,8 +217,7 @@ class HomeActivityViewModel @AssistedInject constructor(
     private fun observeInitialSync() {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
 
-        session.syncService().getSyncRequestStateLive()
-                .asFlow()
+        session.syncService().getSyncRequestStateFlow()
                 .onEach { status ->
                     when (status) {
                         is SyncRequestState.Idle -> {
