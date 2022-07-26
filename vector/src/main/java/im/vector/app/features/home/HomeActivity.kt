@@ -537,7 +537,7 @@ class HomeActivity :
         serverBackupStatusViewModel.refreshRemoteStateIfNeeded()
 
         // Check nightly
-        nightlyProxy.updateIfNewReleaseAvailable()
+        nightlyProxy.mayDisplayFirebasePopup()
     }
 
     override fun getMenuRes() = R.menu.home

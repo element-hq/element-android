@@ -29,7 +29,7 @@ class NightlyProxy @Inject constructor(
         private val clock: Clock,
         private val context: Context,
 ) {
-    fun updateIfNewReleaseAvailable() {
+    fun mayDisplayFirebasePopup() {
         if (!canDisplayPopup()) return
         val firebaseAppDistribution = FirebaseAppDistribution.getInstance()
         firebaseAppDistribution.updateIfNewReleaseAvailable()
