@@ -18,6 +18,7 @@ package im.vector.app.features.widgets
 
 import android.app.Activity
 import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.app.PictureInPictureParams
 import android.app.RemoteAction
 import android.content.BroadcastReceiver
@@ -38,12 +39,14 @@ import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityWidgetBinding
+import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionBottomSheet
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewEvents
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewModel
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.Content
 import java.io.Serializable
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
@@ -78,6 +81,8 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
     private val viewModel: WidgetViewModel by viewModel()
     private val permissionViewModel: RoomWidgetPermissionViewModel by viewModel()
 
+    @Inject lateinit var vectorPreferences: VectorPreferences
+
     override fun getBinding() = ActivityWidgetBinding.inflate(layoutInflater)
 
     override fun getTitleRes() = R.string.room_widget_activity_title
@@ -99,7 +104,7 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
         }
 
         // Trust element call widget by default
-        if (widgetArgs.kind == WidgetKind.ELEMENT_CALL) {
+        if (widgetArgs.kind == WidgetKind.ELEMENT_CALL && vectorPreferences.labsEnableElementCallPermissionShortcuts()) {
             if (supportFragmentManager.findFragmentByTag(WIDGET_FRAGMENT_TAG) == null) {
                 addOnPictureInPictureModeChangedListener(pictureInPictureModeChangedInfoConsumer)
                 addFragment(views.fragmentContainer, WidgetFragment::class.java, widgetArgs, WIDGET_FRAGMENT_TAG)
@@ -168,7 +173,7 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
     private fun createElementCallPipParams(): PictureInPictureParams? {
         val actions = mutableListOf<RemoteAction>()
         val intent = Intent(ACTION_MEDIA_CONTROL).putExtra(EXTRA_CONTROL_TYPE, CONTROL_TYPE_HANGUP)
-        val pendingIntent = PendingIntent.getBroadcast(this, REQUEST_CODE_HANGUP, intent, 0)
+        val pendingIntent = PendingIntent.getBroadcast(this, REQUEST_CODE_HANGUP, intent, FLAG_IMMUTABLE)
         val icon = Icon.createWithResource(this, R.drawable.ic_call_hangup)
         actions.add(RemoteAction(icon, getString(R.string.call_notification_hangup), getString(R.string.call_notification_hangup), pendingIntent))
 

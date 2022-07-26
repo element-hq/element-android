@@ -2352,7 +2352,9 @@
         <item quantity="other">%d active sessions</item>
     </plurals>
 
-    <string name="crosssigning_verify_this_session">Verify this login</string>
+    <string name="crosssigning_verify_this_session">Verify this device</string>
+    <string name="crosssigning_cannot_verify_this_session">Unable to verify this device</string>
+    <string name="crosssigning_cannot_verify_this_session_desc">You won’t be able to access encrypted message history. Reset your Secure Message Backup and verification keys to start fresh.</string>
 
     <string name="verification_open_other_to_verify">Use an existing session to verify this one, granting it access to encrypted messages.</string>
 
@@ -3181,4 +3183,8 @@
         <item quantity="one">%d message removed</item>
         <item quantity="other">%d messages removed</item>
     </plurals>
+
+    <!-- Element Call Widget -->
+    <string name="labs_enable_element_call_permission_shortcuts">Enable Element Call permission shortcuts</string>
+    <string name="labs_enable_element_call_permission_shortcuts_summary">Auto-approve Element Call widgets and grant camera / mic access</string>
 </resources>
