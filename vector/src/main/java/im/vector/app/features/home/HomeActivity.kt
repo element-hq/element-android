@@ -49,6 +49,7 @@ import im.vector.app.core.pushers.UnifiedPushHelper
 import im.vector.app.databinding.ActivityHomeBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.accountdata.AnalyticsAccountDataViewModel
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.analytics.plan.ViewRoom
@@ -125,6 +126,7 @@ class HomeActivity :
     @Inject lateinit var pushManager: PushersManager
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
     @Inject lateinit var vectorPreferences: VectorPreferences
+    @Inject lateinit var vectorFeatures: VectorFeatures
     @Inject lateinit var popupAlertManager: PopupAlertManager
     @Inject lateinit var shortcutsHandler: ShortcutsHandler
     @Inject lateinit var permalinkHandler: PermalinkHandler
@@ -203,11 +205,16 @@ class HomeActivity :
                 )
             }
         }
-        sharedActionViewModel = viewModelProvider.get(HomeSharedActionViewModel::class.java)
+        sharedActionViewModel = viewModelProvider[HomeSharedActionViewModel::class.java]
         views.drawerLayout.addDrawerListener(drawerListener)
         if (isFirstCreation()) {
-            replaceFragment(views.homeDetailFragmentContainer, HomeDetailFragment::class.java)
-            replaceFragment(views.homeDrawerFragmentContainer, HomeDrawerFragment::class.java)
+            if (vectorFeatures.isNewAppLayoutEnabled()) {
+                views.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+                replaceFragment(views.homeDetailFragmentContainer, NewHomeDetailFragment::class.java)
+            } else {
+                replaceFragment(views.homeDetailFragmentContainer, HomeDetailFragment::class.java)
+                replaceFragment(views.homeDrawerFragmentContainer, HomeDrawerFragment::class.java)
+            }
         }
 
         sharedActionViewModel

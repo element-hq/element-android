@@ -57,6 +57,7 @@ import im.vector.app.features.discovery.change.SetIdentityServerFragment
 import im.vector.app.features.home.HomeDetailFragment
 import im.vector.app.features.home.HomeDrawerFragment
 import im.vector.app.features.home.LoadingFragment
+import im.vector.app.features.home.NewHomeDetailFragment
 import im.vector.app.features.home.room.breadcrumbs.BreadcrumbsFragment
 import im.vector.app.features.home.room.detail.TimelineFragment
 import im.vector.app.features.home.room.detail.search.SearchFragment
@@ -256,6 +257,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(HomeDetailFragment::class)
     fun bindHomeDetailFragment(fragment: HomeDetailFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(NewHomeDetailFragment::class)
+    fun bindNewHomeDetailFragment(fragment: NewHomeDetailFragment): Fragment
 
     @Binds
     @IntoMap
