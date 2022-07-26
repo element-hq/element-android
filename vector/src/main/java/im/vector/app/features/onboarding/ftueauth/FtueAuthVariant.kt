@@ -414,16 +414,18 @@ class FtueAuthVariant(
     }
 
     private fun openWaitForEmailVerification(email: String, isRestoredSession: Boolean) {
-        supportFragmentManager.popBackStack(FRAGMENT_REGISTRATION_STAGE_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         when {
             vectorFeatures.isOnboardingCombinedRegisterEnabled() -> addRegistrationStageFragmentToBackstack(
                     FtueAuthWaitForEmailFragment::class.java,
                     FtueAuthWaitForEmailFragmentArgument(email, isRestoredSession),
             )
-            else -> addRegistrationStageFragmentToBackstack(
-                    FtueAuthLegacyWaitForEmailFragment::class.java,
-                    FtueAuthWaitForEmailFragmentArgument(email, isRestoredSession),
-            )
+            else -> {
+                supportFragmentManager.popBackStack(FRAGMENT_REGISTRATION_STAGE_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                addRegistrationStageFragmentToBackstack(
+                        FtueAuthLegacyWaitForEmailFragment::class.java,
+                        FtueAuthWaitForEmailFragmentArgument(email, isRestoredSession),
+                )
+            }
         }
     }
 
