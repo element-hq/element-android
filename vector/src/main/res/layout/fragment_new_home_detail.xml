@@ -56,6 +56,7 @@
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                 <com.google.android.material.appbar.MaterialToolbar
+                    style="@style/Widget.Vector.Material3.Toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:elevation="0dp"
