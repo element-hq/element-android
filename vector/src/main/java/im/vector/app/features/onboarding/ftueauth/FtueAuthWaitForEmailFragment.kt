@@ -35,7 +35,8 @@ import javax.inject.Inject
 
 @Parcelize
 data class FtueAuthWaitForEmailFragmentArgument(
-        val email: String
+        val email: String,
+        val isRestoredSession: Boolean,
 ) : Parcelable
 
 /**

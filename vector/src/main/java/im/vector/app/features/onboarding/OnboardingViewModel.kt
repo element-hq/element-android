@@ -348,7 +348,9 @@ class OnboardingViewModel @AssistedInject constructor(
                             overrideNextStage?.invoke() ?: _viewEvents.post(OnboardingViewEvents.DisplayStartRegistration)
                         }
                         RegistrationActionHandler.Result.UnsupportedStage -> _viewEvents.post(OnboardingViewEvents.DisplayRegistrationFallback)
-                        is RegistrationActionHandler.Result.SendEmailSuccess -> _viewEvents.post(OnboardingViewEvents.OnSendEmailSuccess(it.email))
+                        is RegistrationActionHandler.Result.SendEmailSuccess -> _viewEvents.post(
+                                OnboardingViewEvents.OnSendEmailSuccess(it.email, isRestoredSession = false)
+                        )
                         is RegistrationActionHandler.Result.SendMsisdnSuccess -> _viewEvents.post(OnboardingViewEvents.OnSendMsisdnSuccess(it.msisdn.msisdn))
                         is RegistrationActionHandler.Result.Error -> _viewEvents.post(OnboardingViewEvents.Failure(it.cause))
                         RegistrationActionHandler.Result.MissingNextStage -> {
@@ -412,8 +414,8 @@ class OnboardingViewModel @AssistedInject constructor(
                     authenticationService.cancelPendingLoginOrRegistration()
                     setState {
                         copy(
-                            isLoading = false,
-                            registrationState = RegistrationState(),
+                                isLoading = false,
+                                registrationState = RegistrationState(),
                         )
                     }
                 }
@@ -486,7 +488,7 @@ class OnboardingViewModel @AssistedInject constructor(
         try {
             if (registrationWizard.isRegistrationStarted()) {
                 currentThreePid?.let {
-                    handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnSendEmailSuccess(it)))
+                    handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnSendEmailSuccess(it, isRestoredSession = true)))
                 }
             }
         } catch (e: Throwable) {
