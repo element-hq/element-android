@@ -75,7 +75,11 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
         setupSubmitButton()
         views.createAccountRoot.realignPercentagesToParent()
         views.editServerButton.debouncedClicks { viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.EditServerSelection)) }
-        views.createAccountPasswordInput.setOnImeDoneListener { submit() }
+        views.createAccountPasswordInput.setOnImeDoneListener {
+            if (canSubmit(views.createAccountInput.content(), views.createAccountPasswordInput.content())) {
+                submit()
+            }
+        }
 
         views.createAccountInput.onTextChange(viewLifecycleOwner) {
             viewModel.handle(OnboardingAction.ResetSelectedRegistrationUserName)
@@ -87,15 +91,19 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
         }
     }
 
+    private fun canSubmit(account: CharSequence, password: CharSequence): Boolean {
+        val accountIsValid = account.isNotEmpty()
+        val passwordIsValid = password.length >= MINIMUM_PASSWORD_LENGTH
+        return accountIsValid && passwordIsValid
+    }
+
     private fun setupSubmitButton() {
         views.createAccountSubmit.setOnClickListener { submit() }
         views.createAccountInput.clearErrorOnChange(viewLifecycleOwner)
         views.createAccountPasswordInput.clearErrorOnChange(viewLifecycleOwner)
 
         combine(views.createAccountInput.editText().textChanges(), views.createAccountPasswordInput.editText().textChanges()) { account, password ->
-            val accountIsValid = account.isNotEmpty()
-            val passwordIsValid = password.length >= MINIMUM_PASSWORD_LENGTH
-            views.createAccountSubmit.isEnabled = accountIsValid && passwordIsValid
+            views.createAccountSubmit.isEnabled = canSubmit(account, password)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
