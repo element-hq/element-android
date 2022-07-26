@@ -19,5 +19,5 @@ package im.vector.app.nightly
 import javax.inject.Inject
 
 class NightlyProxy @Inject constructor() {
-    fun mayDisplayFirebasePopup() = Unit
+    fun onHomeResumed() = Unit
 }

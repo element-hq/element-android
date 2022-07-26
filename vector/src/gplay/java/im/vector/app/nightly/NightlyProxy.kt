@@ -31,7 +31,7 @@ class NightlyProxy @Inject constructor(
         @DefaultPreferences
         private val sharedPreferences: SharedPreferences,
 ) {
-    fun mayDisplayFirebasePopup() {
+    fun onHomeResumed() {
         if (!canDisplayPopup()) return
         val firebaseAppDistribution = FirebaseAppDistribution.getInstance()
         firebaseAppDistribution.updateIfNewReleaseAvailable()
