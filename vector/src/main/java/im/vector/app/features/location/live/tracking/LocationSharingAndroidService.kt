@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.location
+package im.vector.app.features.location.live.tracking
 
 import android.content.Intent
 import android.os.Binder
@@ -24,8 +24,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.services.VectorAndroidService
+import im.vector.app.features.location.LocationData
+import im.vector.app.features.location.LocationTracker
 import im.vector.app.features.location.live.GetLiveLocationShareSummaryUseCase
-import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.redaction.CheckIfEventIsRedactedUseCase
 import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.CoroutineScope
@@ -54,7 +55,7 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
             val durationMillis: Long
     ) : Parcelable
 
-    @Inject lateinit var notificationUtils: NotificationUtils
+    @Inject lateinit var liveLocationNotificationBuilder: LiveLocationNotificationBuilder
     @Inject lateinit var locationTracker: LocationTracker
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var getLiveLocationShareSummaryUseCase: GetLiveLocationShareSummaryUseCase
@@ -102,7 +103,7 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
 
         if (roomArgs != null) {
             // Show a sticky notification
-            val notification = notificationUtils.buildLiveLocationSharingNotification()
+            val notification = liveLocationNotificationBuilder.buildLiveLocationSharingNotification(roomArgs.roomId)
             startForeground(roomArgs.roomId.hashCode(), notification)
 
             // Send beacon info state event

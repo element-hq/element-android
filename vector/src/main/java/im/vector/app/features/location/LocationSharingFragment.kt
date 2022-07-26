@@ -42,6 +42,7 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import im.vector.app.features.location.live.LiveLocationLabsFlagPromotionBottomSheet
 import im.vector.app.features.location.live.duration.ChooseLiveDurationBottomSheet
+import im.vector.app.features.location.live.tracking.LocationSharingAndroidService
 import im.vector.app.features.location.option.LocationSharingOption
 import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.util.MatrixItem

@@ -24,6 +24,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityLocationSharingBinding
+import im.vector.app.features.MainActivity
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -59,9 +60,14 @@ class LocationLiveMapViewActivity : VectorBaseActivity<ActivityLocationSharingBi
 
         private const val EXTRA_LOCATION_LIVE_MAP_VIEW_ARGS = "EXTRA_LOCATION_LIVE_MAP_VIEW_ARGS"
 
-        fun getIntent(context: Context, locationLiveMapViewArgs: LocationLiveMapViewArgs): Intent {
-            return Intent(context, LocationLiveMapViewActivity::class.java).apply {
+        fun getIntent(context: Context, locationLiveMapViewArgs: LocationLiveMapViewArgs, firstStartMainActivity: Boolean = false): Intent {
+            val intent = Intent(context, LocationLiveMapViewActivity::class.java).apply {
                 putExtra(EXTRA_LOCATION_LIVE_MAP_VIEW_ARGS, locationLiveMapViewArgs)
+            }
+            return if (firstStartMainActivity) {
+                MainActivity.getIntentWithNextIntent(context, intent)
+            } else {
+                intent
             }
         }
     }
