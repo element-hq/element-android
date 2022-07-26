@@ -286,8 +286,10 @@ class NewHomeDetailFragment @Inject constructor(
     }
 
     private fun setupToolbar() {
-        // TODO: Reimplement
+        setupToolbar(views.toolbar)
     }
+
+
 
     private fun setupBottomNavigationView() {
         views.bottomNavigationView.menu.findItem(R.id.bottom_action_notification).isVisible = vectorPreferences.labAddNotificationTab()

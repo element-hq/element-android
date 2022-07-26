@@ -41,9 +41,7 @@
 
     <!-- Material 3 -->
 
-    <style name="Widget.Vector.Material3.Toolbar" parent="Widget.Material3.Toolbar">
-
-    </style>
+    <style name="Widget.Vector.Material3.Toolbar" parent="Widget.Material3.Toolbar" />
 
     <style name="Widget.Vector.Material3.CollapsingToolbar.Medium" parent="Widget.Material3.CollapsingToolbar.Medium">
         <item name="expandedTitleTextAppearance">@style/TextAppearance.Vector.Title.Medium</item>
