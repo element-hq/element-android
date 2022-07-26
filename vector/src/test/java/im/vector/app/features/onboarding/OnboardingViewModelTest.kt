@@ -103,6 +103,48 @@ class OnboardingViewModelTest {
     }
 
     @Test
+    fun `given registration started with currentThreePid, when handling InitWith, then emits restored session OnSendEmailSuccess`() = runTest {
+        val test = viewModel.test()
+        fakeAuthenticationService.givenRegistrationWizard(FakeRegistrationWizard().also {
+            it.givenRegistrationStarted(hasStarted = true)
+            it.givenCurrentThreePid(AN_EMAIL)
+        })
+
+        viewModel.handle(OnboardingAction.InitWith(LoginConfig(A_HOMESERVER_URL, identityServerUrl = null)))
+
+        test
+                .assertEvents(OnboardingViewEvents.OnSendEmailSuccess(AN_EMAIL, isRestoredSession = true))
+                .finish()
+    }
+
+    @Test
+    fun `given registration not started, when handling InitWith, then does nothing`() = runTest {
+        val test = viewModel.test()
+        fakeAuthenticationService.givenRegistrationWizard(FakeRegistrationWizard().also { it.givenRegistrationStarted(hasStarted = false) })
+
+        viewModel.handle(OnboardingAction.InitWith(LoginConfig(A_HOMESERVER_URL, identityServerUrl = null)))
+
+        test
+                .assertNoEvents()
+                .finish()
+    }
+
+    @Test
+    fun `given registration started without currentThreePid, when handling InitWith, then does nothing`() = runTest {
+        val test = viewModel.test()
+        fakeAuthenticationService.givenRegistrationWizard(FakeRegistrationWizard().also {
+            it.givenRegistrationStarted(hasStarted = true)
+            it.givenCurrentThreePid(threePid = null)
+        })
+
+        viewModel.handle(OnboardingAction.InitWith(LoginConfig(A_HOMESERVER_URL, identityServerUrl = null)))
+
+        test
+                .assertNoEvents()
+                .finish()
+    }
+
+    @Test
     fun `when handling PostViewEvent, then emits contents as view event`() = runTest {
         val test = viewModel.test()
 
@@ -251,6 +293,24 @@ class OnboardingViewModelTest {
                         { copy(isLoading = false) }
                 )
                 .assertNoEvents()
+                .finish()
+    }
+
+    @Test
+    fun `given register action returns email success, when handling action, then updates registration state and emits email success`() = runTest {
+        val test = viewModel.test()
+        givenRegistrationResultFor(A_LOADABLE_REGISTER_ACTION, RegistrationActionHandler.Result.SendEmailSuccess(AN_EMAIL))
+
+        viewModel.handle(OnboardingAction.PostRegisterAction(A_LOADABLE_REGISTER_ACTION))
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = true) },
+                        { copy(registrationState = RegistrationState(email = AN_EMAIL)) },
+                        { copy(isLoading = false) }
+                )
+                .assertEvents(OnboardingViewEvents.OnSendEmailSuccess(AN_EMAIL, isRestoredSession = false))
                 .finish()
     }
 
