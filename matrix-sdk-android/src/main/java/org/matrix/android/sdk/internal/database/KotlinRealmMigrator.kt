@@ -28,7 +28,7 @@ internal abstract class KotlinRealmMigrator(
         doMigrate(migrationContext)
     }
 
-    abstract fun doMigrate(migrationContext: AutomaticSchemaMigration.MigrationContext)
+    protected abstract fun doMigrate(migrationContext: AutomaticSchemaMigration.MigrationContext)
 }
 
 val AutomaticSchemaMigration.MigrationContext.oldVersion: Long

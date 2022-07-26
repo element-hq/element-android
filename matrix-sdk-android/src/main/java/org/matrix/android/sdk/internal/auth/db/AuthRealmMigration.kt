@@ -22,12 +22,13 @@ import org.matrix.android.sdk.internal.auth.db.migration.MigrateAuthTo002
 import org.matrix.android.sdk.internal.auth.db.migration.MigrateAuthTo003
 import org.matrix.android.sdk.internal.auth.db.migration.MigrateAuthTo004
 import org.matrix.android.sdk.internal.auth.db.migration.MigrateAuthTo005
-import org.matrix.android.sdk.internal.database.newVersion
-import org.matrix.android.sdk.internal.database.oldVersion
-import timber.log.Timber
+import org.matrix.android.sdk.internal.database.MatrixAutomaticSchemaMigration
 import javax.inject.Inject
 
-internal class AuthRealmMigration @Inject constructor() : AutomaticSchemaMigration {
+internal class AuthRealmMigration @Inject constructor() : MatrixAutomaticSchemaMigration(
+        dbName = "Auth",
+        schemaVersion = 5L
+) {
     /**
      * Forces all AuthRealmMigration instances to be equal.
      * Avoids Realm throwing when multiple instances of the migration are set.
@@ -35,17 +36,11 @@ internal class AuthRealmMigration @Inject constructor() : AutomaticSchemaMigrati
     override fun equals(other: Any?) = other is AuthRealmMigration
     override fun hashCode() = 4000
 
-    override fun migrate(migrationContext: AutomaticSchemaMigration.MigrationContext) {
-        val oldVersion = migrationContext.oldVersion
-        val newVersion = migrationContext.newVersion
-        Timber.d("Migrating Auth Realm from $oldVersion to $newVersion")
-
+    override fun doMigrate(oldVersion: Long, migrationContext: AutomaticSchemaMigration.MigrationContext) {
         if (oldVersion < 1) MigrateAuthTo001(migrationContext).perform()
         if (oldVersion < 2) MigrateAuthTo002(migrationContext).perform()
         if (oldVersion < 3) MigrateAuthTo003(migrationContext).perform()
         if (oldVersion < 4) MigrateAuthTo004(migrationContext).perform()
         if (oldVersion < 5) MigrateAuthTo005(migrationContext).perform()
     }
-
-    val schemaVersion = 5L
 }
