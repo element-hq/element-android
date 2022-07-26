@@ -537,9 +537,7 @@ class HomeActivity :
         serverBackupStatusViewModel.refreshRemoteStateIfNeeded()
 
         // Check nightly
-        if (isFirstCreation()) {
-            nightlyProxy.updateIfNewReleaseAvailable()
-        }
+        nightlyProxy.updateIfNewReleaseAvailable()
     }
 
     override fun getMenuRes() = R.menu.home

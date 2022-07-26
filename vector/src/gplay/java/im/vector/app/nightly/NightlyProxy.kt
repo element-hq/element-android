@@ -16,13 +16,21 @@
 
 package im.vector.app.nightly
 
+import android.content.Context
+import androidx.core.content.edit
 import com.google.firebase.appdistribution.FirebaseAppDistribution
 import com.google.firebase.appdistribution.FirebaseAppDistributionException
+import im.vector.app.core.di.DefaultSharedPreferences
+import im.vector.app.core.time.Clock
 import timber.log.Timber
 import javax.inject.Inject
 
-class NightlyProxy @Inject constructor() {
+class NightlyProxy @Inject constructor(
+        private val clock: Clock,
+        private val context: Context,
+) {
     fun updateIfNewReleaseAvailable() {
+        if (!canDisplayPopup()) return
         val firebaseAppDistribution = FirebaseAppDistribution.getInstance()
         firebaseAppDistribution.updateIfNewReleaseAvailable()
                 .addOnProgressListener { up ->
@@ -43,5 +51,24 @@ class NightlyProxy @Inject constructor() {
                         Timber.e(e, "FirebaseAppDistribution - other error")
                     }
                 }
+    }
+
+    private fun canDisplayPopup(): Boolean {
+        val sharedPreferences = DefaultSharedPreferences.getInstance(context)
+        val today = clock.epochMillis() / A_DAY_IN_MILLIS
+        val lastDisplayPopupDay = sharedPreferences.getLong(SHARED_PREF_KEY, 0)
+        return (today > lastDisplayPopupDay)
+                .also { canDisplayPopup ->
+                    if (canDisplayPopup) {
+                        sharedPreferences.edit {
+                            putLong(SHARED_PREF_KEY, today)
+                        }
+                    }
+                }
+    }
+
+    companion object {
+        private const val A_DAY_IN_MILLIS = 8_600_000L
+        private const val SHARED_PREF_KEY = "LAST_NIGHTLY_POPUP_DAY"
     }
 }
