@@ -26,19 +26,19 @@ import javax.inject.Inject
 
 internal class DefaultDebugService @Inject constructor(
         //@AuthDatabase private val realmConfigurationAuth: RealmConfiguration,
-        @GlobalDatabase private val realmConfigurationGlobal: RealmConfiguration,
+        //@GlobalDatabase private val realmConfigurationGlobal: RealmConfiguration,
         private val sessionManager: SessionManager,
 ) : DebugService {
 
     override fun getAllRealmConfigurations(): List<RealmConfiguration> {
-        return sessionManager.getLastSession()?.getRealmConfigurations().orEmpty() +
+        return sessionManager.getLastSession()?.getRealmConfigurations().orEmpty()
                 //realmConfigurationAuth +
-                realmConfigurationGlobal
+                //realmConfigurationGlobal
     }
 
     override fun logDbUsageInfo() {
         //RealmDebugTools(realmConfigurationAuth).logInfo("Auth")
-        RealmDebugTools(realmConfigurationGlobal).logInfo("Global")
+        //RealmDebugTools(realmConfigurationGlobal).logInfo("Global")
         sessionManager.getLastSession()?.logDbUsageInfo()
     }
 }

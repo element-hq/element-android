@@ -39,7 +39,7 @@ internal class RealmPendingSessionStore @Inject constructor(
     }
 
     override fun getPendingSessionData(): PendingSessionData? {
-        return realmInstance.blockingRealm()
+        return realmInstance.getBlockingRealm()
                 .query(PendingSessionEntity::class)
                 .find()
                 .map { mapper.map(it) }

@@ -14,25 +14,19 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.raw
+package org.matrix.android.sdk.internal.raw.db.migration
 
-import io.realm.DynamicRealm
-import org.matrix.android.sdk.internal.raw.migration.MigrateGlobalTo001
-import org.matrix.android.sdk.internal.util.database.MatrixRealmMigration
+import io.realm.kotlin.migration.AutomaticSchemaMigration
+import org.matrix.android.sdk.internal.database.MatrixAutomaticSchemaMigration
+import org.matrix.android.sdk.internal.raw.db.migration.MigrateGlobalTo001
 import javax.inject.Inject
 
-internal class GlobalRealmMigration @Inject constructor() : MatrixRealmMigration(
+internal class GlobalRealmMigration @Inject constructor() : MatrixAutomaticSchemaMigration(
         dbName = "Global",
         schemaVersion = 1L,
 ) {
-    /**
-     * Forces all GlobalRealmMigration instances to be equal.
-     * Avoids Realm throwing when multiple instances of the migration are set.
-     */
-    override fun equals(other: Any?) = other is GlobalRealmMigration
-    override fun hashCode() = 2000
 
-    override fun doMigrate(realm: DynamicRealm, oldVersion: Long) {
-        if (oldVersion < 1) MigrateGlobalTo001(realm).perform()
+    override fun doMigrate(oldVersion: Long, migrationContext: AutomaticSchemaMigration.MigrationContext) {
+        if (oldVersion < 1L) MigrateGlobalTo001(migrationContext).perform()
     }
 }

@@ -1,11 +1,11 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,19 +14,16 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.database.model
+package org.matrix.android.sdk.internal.raw.db.model
 
-import io.realm.RealmModel
-import io.realm.annotations.PrimaryKey
-import io.realm.annotations.RealmClass
+import io.realm.kotlin.types.RealmObject
+import io.realm.kotlin.types.annotations.PrimaryKey
 
-@RealmClass
-internal open class RawCacheEntity(
-        @PrimaryKey
-        var url: String = "",
-        var data: String = "",
-        var lastUpdatedTimestamp: Long = 0L
-) : RealmModel {
+internal class KnownServerUrlEntity(
+) : RealmObject {
+
+    @PrimaryKey
+    var url: String = ""
 
     companion object
 }

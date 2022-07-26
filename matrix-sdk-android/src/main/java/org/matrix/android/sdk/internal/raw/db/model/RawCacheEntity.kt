@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.raw
+package org.matrix.android.sdk.internal.raw.db.model
 
-import org.matrix.android.sdk.internal.raw.db.model.KnownServerUrlEntity
-import org.matrix.android.sdk.internal.raw.db.model.RawCacheEntity
+import io.realm.kotlin.types.RealmObject
+import io.realm.kotlin.types.annotations.PrimaryKey
 
-/**
- * Realm module for global classes.
- */
-internal val GLOBAL_REALM_SCHEMA = setOf(
-        RawCacheEntity::class,
-        KnownServerUrlEntity::class
-)
+internal class RawCacheEntity : RealmObject {
+
+    @PrimaryKey
+    var url: String = ""
+    var data: String = ""
+    var lastUpdatedTimestamp: Long = 0L
+
+    companion object
+}

@@ -17,19 +17,23 @@
 
 package org.matrix.android.sdk.internal.raw
 
-import com.zhuinden.monarchy.Monarchy
 import dagger.Binds
 import dagger.Lazy
 import dagger.Module
 import dagger.Provides
-import io.realm.RealmConfiguration
+import io.realm.kotlin.RealmConfiguration
+import kotlinx.coroutines.CoroutineScope
 import okhttp3.OkHttpClient
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.raw.RawService
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.RealmKeysUtils
 import org.matrix.android.sdk.internal.di.GlobalDatabase
+import org.matrix.android.sdk.internal.di.MatrixCoroutineScope
 import org.matrix.android.sdk.internal.di.MatrixScope
 import org.matrix.android.sdk.internal.di.Unauthenticated
 import org.matrix.android.sdk.internal.network.RetrofitFactory
+import org.matrix.android.sdk.internal.raw.db.migration.GlobalRealmMigration
 
 @Module
 internal abstract class RawModule {
@@ -41,9 +45,17 @@ internal abstract class RawModule {
         @JvmStatic
         @Provides
         @GlobalDatabase
-        fun providesMonarchy(@GlobalDatabase realmConfiguration: RealmConfiguration): Monarchy {
-            return Monarchy.Builder()
-                    .setRealmConfiguration(realmConfiguration)
+        fun providesRealmConfiguration(
+                realmKeysUtils: RealmKeysUtils,
+                globalRealmMigration: GlobalRealmMigration
+        ): RealmConfiguration {
+            return RealmConfiguration.Builder(GLOBAL_REALM_SCHEMA)
+                    .apply {
+                        realmKeysUtils.configureEncryption(this, DB_ALIAS)
+                    }
+                    .name("matrix-sdk-global.realm")
+                    .schemaVersion(globalRealmMigration.schemaVersion)
+                    .migration(globalRealmMigration)
                     .build()
         }
 
@@ -51,20 +63,16 @@ internal abstract class RawModule {
         @Provides
         @GlobalDatabase
         @MatrixScope
-        fun providesRealmConfiguration(
-                realmKeysUtils: RealmKeysUtils,
-                globalRealmMigration: GlobalRealmMigration
-        ): RealmConfiguration {
-            return RealmConfiguration.Builder()
-                    .apply {
-                        realmKeysUtils.configureEncryption(this, DB_ALIAS)
-                    }
-                    .name("matrix-sdk-global.realm")
-                    .schemaVersion(globalRealmMigration.schemaVersion)
-                    .migration(globalRealmMigration)
-                    .allowWritesOnUiThread(true)
-                    .modules(GlobalRealmModule())
-                    .build()
+        fun providesRealmInstance(
+                @GlobalDatabase realmConfiguration: RealmConfiguration,
+                @MatrixCoroutineScope matrixCoroutineScope: CoroutineScope,
+                matrixCoroutineDispatchers: MatrixCoroutineDispatchers
+        ): RealmInstance {
+            return RealmInstance(
+                    coroutineScope = matrixCoroutineScope,
+                    realmConfiguration = realmConfiguration,
+                    coroutineDispatcher = matrixCoroutineDispatchers.io
+            )
         }
 
         @Provides

@@ -19,7 +19,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -28,7 +27,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.util.Optional
-import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.database.pagedlist.RealmTiledDataSource
 
 internal typealias RealmQueryBuilder<T> = (Realm) -> RealmQuery<T>
@@ -64,7 +62,7 @@ internal class RealmInstance(
     fun <T : RealmObject> queryResults(
             realmQueryBuilder: RealmQueryBuilder<T>
     ): Flow<ResultsChange<T>> {
-        return getRealm().flatMapConcat {
+        return getRealmFlow().flatMapConcat {
             realmQueryBuilder(it).asFlow()
         }
     }
@@ -80,7 +78,7 @@ internal class RealmInstance(
     fun <T : RealmObject> queryFirst(
             realmQueryBuilder: RealmQueryBuilder<T>
     ): Flow<Optional<T>> {
-        return getRealm().flatMapConcat {
+        return getRealmFlow().flatMapConcat {
             realmQueryBuilder(it).first().asFlow()
         }.map {
             Optional.from(it.obj)
@@ -100,7 +98,7 @@ internal class RealmInstance(
             }
         }.flowOn(Dispatchers.Main.immediate)
 
-        return getRealm().flatMapConcat { realm ->
+        return getRealmFlow().flatMapConcat { realm ->
             val livePagedList = LivePagedListBuilder(
                     RealmTiledDataSource.Factory(
                             realm = realm,
@@ -114,7 +112,7 @@ internal class RealmInstance(
     }
 
     suspend fun <R> write(block: MutableRealm.() -> R): R {
-        return realm.await().write(block)
+        return getRealm().write(block)
     }
 
     fun <R> blockingWrite(block: MutableRealm.() -> R): R {
@@ -123,13 +121,18 @@ internal class RealmInstance(
         }
     }
 
-    fun blockingRealm(): Realm {
-        return runBlocking {
-            getRealm().first()
-        }
+    suspend fun getRealm(): Realm = realm.await()
+
+    fun getRealmFlow(): Flow<Realm> = flow {
+        emit(getRealm())
     }
 
-    fun getRealm(): Flow<Realm> = flow {
-        emit(realm.await())
+    fun getBlockingRealm(): Realm {
+        return runBlocking {
+            getRealm()
+        }
     }
 }
+
+
+

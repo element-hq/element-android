@@ -14,18 +14,15 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.raw.migration
+package org.matrix.android.sdk.internal.raw.db.migration
 
-import io.realm.DynamicRealm
-import org.matrix.android.sdk.internal.database.model.KnownServerUrlEntityFields
-import org.matrix.android.sdk.internal.util.database.RealmMigrator
+import io.realm.kotlin.migration.AutomaticSchemaMigration
+import org.matrix.android.sdk.internal.database.KotlinRealmMigrator
+import timber.log.Timber
 
-internal class MigrateGlobalTo001(realm: DynamicRealm) : RealmMigrator(realm, 1) {
+internal class MigrateGlobalTo001(migrationContext: AutomaticSchemaMigration.MigrationContext) : KotlinRealmMigrator(migrationContext, 1) {
 
-    override fun doMigrate(realm: DynamicRealm) {
-        realm.schema.create("KnownServerUrlEntity")
-                .addField(KnownServerUrlEntityFields.URL, String::class.java)
-                .addPrimaryKey(KnownServerUrlEntityFields.URL)
-                .setRequired(KnownServerUrlEntityFields.URL, true)
+    override fun doMigrate(migrationContext: AutomaticSchemaMigration.MigrationContext) {
+        Timber.v("Add field to KnownServerUrlEntity")
     }
 }

@@ -33,7 +33,7 @@ internal class RealmSessionParamsStore @Inject constructor(
 ) : SessionParamsStore {
 
     override fun getLast(): SessionParams? {
-        return realmInstance.blockingRealm()
+        return realmInstance.getBlockingRealm()
                 .query(SessionParamsEntity::class)
                 .find()
                 .map { mapper.map(it) }
@@ -41,7 +41,7 @@ internal class RealmSessionParamsStore @Inject constructor(
     }
 
     override fun get(sessionId: String): SessionParams? {
-        return realmInstance.blockingRealm()
+        return realmInstance.getBlockingRealm()
                 .query(SessionParamsEntity::class)
                 .query("sessionId == $0", sessionId)
                 .first()
@@ -50,7 +50,7 @@ internal class RealmSessionParamsStore @Inject constructor(
     }
 
     override fun getAll(): List<SessionParams> {
-        return realmInstance.blockingRealm()
+        return realmInstance.getBlockingRealm()
                 .query(SessionParamsEntity::class)
                 .find()
                 .mapNotNull { mapper.map(it) }
