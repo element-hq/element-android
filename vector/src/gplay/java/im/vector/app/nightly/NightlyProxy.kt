@@ -20,6 +20,7 @@ import android.content.Context
 import androidx.core.content.edit
 import com.google.firebase.appdistribution.FirebaseAppDistribution
 import com.google.firebase.appdistribution.FirebaseAppDistributionException
+import im.vector.app.BuildConfig
 import im.vector.app.core.di.DefaultSharedPreferences
 import im.vector.app.core.time.Clock
 import timber.log.Timber
@@ -54,6 +55,7 @@ class NightlyProxy @Inject constructor(
     }
 
     private fun canDisplayPopup(): Boolean {
+        if (BuildConfig.APPLICATION_ID != "im.vector.app.nightly") return false
         val sharedPreferences = DefaultSharedPreferences.getInstance(context)
         val today = clock.epochMillis() / A_DAY_IN_MILLIS
         val lastDisplayPopupDay = sharedPreferences.getLong(SHARED_PREF_KEY, 0)
