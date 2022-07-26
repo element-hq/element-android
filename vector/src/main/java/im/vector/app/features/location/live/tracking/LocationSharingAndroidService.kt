@@ -20,6 +20,7 @@ import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
 import android.os.Parcelable
+import androidx.core.app.NotificationManagerCompat
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
@@ -63,13 +64,11 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
 
     private val binder = LocalBinder()
 
-    /**
-     * Keep track of a map between beacon event Id starting the live and RoomArgs.
-     */
-    private val roomArgsMap = mutableMapOf<String, RoomArgs>()
+    private val liveInfoSet = linkedSetOf<LiveInfo>()
     var callback: Callback? = null
     private val jobs = mutableListOf<Job>()
     private var startInProgress = false
+    private var foregroundModeStarted = false
 
     private val _roomIdsOfActiveLives = MutableSharedFlow<Set<String>>(replay = 1)
     val roomIdsOfActiveLives = _roomIdsOfActiveLives.asSharedFlow()
@@ -77,7 +76,6 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
     override fun onCreate() {
         super.onCreate()
         Timber.i("onCreate")
-
         initLocationTracking()
     }
 
@@ -104,7 +102,12 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
         if (roomArgs != null) {
             // Show a sticky notification
             val notification = liveLocationNotificationBuilder.buildLiveLocationSharingNotification(roomArgs.roomId)
-            startForeground(roomArgs.roomId.hashCode(), notification)
+            if (foregroundModeStarted) {
+                NotificationManagerCompat.from(this).notify(FOREGROUND_SERVICE_NOTIFICATION_ID, notification)
+            } else {
+                startForeground(FOREGROUND_SERVICE_NOTIFICATION_ID, notification)
+                foregroundModeStarted = true
+            }
 
             // Send beacon info state event
             launchWithActiveSession { session ->
@@ -149,15 +152,24 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
     private fun stopSharingLocation(beaconEventId: String) {
         Timber.i("stopSharingLocation for beacon $beaconEventId")
         removeRoomArgs(beaconEventId)
+        updateNotification()
         tryToDestroyMe()
+    }
+
+    private fun updateNotification() {
+        if (liveInfoSet.isNotEmpty()) {
+            val roomId = liveInfoSet.last().roomArgs.roomId
+            val notification = liveLocationNotificationBuilder.buildLiveLocationSharingNotification(roomId)
+            NotificationManagerCompat.from(this).notify(FOREGROUND_SERVICE_NOTIFICATION_ID, notification)
+        }
     }
 
     private fun onLocationUpdate(locationData: LocationData) {
         Timber.i("onLocationUpdate. Uncertainty: ${locationData.uncertainty}")
 
         // Emit location update to all rooms in which live location sharing is active
-        roomArgsMap.toMap().forEach { item ->
-            sendLiveLocation(item.value.roomId, item.key, locationData)
+        liveInfoSet.toSet().forEach { liveInfo ->
+            sendLiveLocation(liveInfo.roomArgs.roomId, liveInfo.beaconEventId, locationData)
         }
     }
 
@@ -184,7 +196,7 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
     }
 
     private fun tryToDestroyMe() {
-        if (startInProgress.not() && roomArgsMap.isEmpty()) {
+        if (startInProgress.not() && liveInfoSet.isEmpty()) {
             Timber.i("Destroying self, time is up for all rooms")
             stopSelf()
         }
@@ -200,13 +212,14 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
 
     private fun addRoomArgs(beaconEventId: String, roomArgs: RoomArgs) {
         Timber.i("adding roomArgs for beaconEventId: $beaconEventId")
-        roomArgsMap[beaconEventId] = roomArgs
+        liveInfoSet.removeAll { it.beaconEventId == beaconEventId }
+        liveInfoSet.add(LiveInfo(beaconEventId, roomArgs))
         launchWithActiveSession { _roomIdsOfActiveLives.emit(getRoomIdsOfActiveLives()) }
     }
 
     private fun removeRoomArgs(beaconEventId: String) {
         Timber.i("removing roomArgs for beaconEventId: $beaconEventId")
-        roomArgsMap.remove(beaconEventId)
+        liveInfoSet.removeAll { it.beaconEventId == beaconEventId }
         launchWithActiveSession { _roomIdsOfActiveLives.emit(getRoomIdsOfActiveLives()) }
     }
 
@@ -235,7 +248,7 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
                     }
 
     fun getRoomIdsOfActiveLives(): Set<String> {
-        return roomArgsMap.map { it.value.roomId }.toSet()
+        return liveInfoSet.map { it.roomArgs.roomId }.toSet()
     }
 
     override fun onBind(intent: Intent?): IBinder {
@@ -252,5 +265,11 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
 
     companion object {
         const val EXTRA_ROOM_ARGS = "EXTRA_ROOM_ARGS"
+        private const val FOREGROUND_SERVICE_NOTIFICATION_ID = 300
     }
+
+    private data class LiveInfo(
+            val beaconEventId: String,
+            val roomArgs: RoomArgs
+    )
 }
