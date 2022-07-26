@@ -524,6 +524,7 @@
     <string name="auth_recaptcha_message">This homeserver would like to make sure you are not a robot</string>
     <string name="auth_reset_password_missing_email">The email address linked to your account must be entered.</string>
     <string name="auth_reset_password_error_unauthorized">Failed to verify email address: make sure you clicked the link in the email</string>
+    <string name="auth_reset_password_error_unverified">Email not verified, check your inbox</string>
     <string name="auth_accept_policies">"Please review and accept the policies of this homeserver:"</string>
 
     <!-- Login Screen -->
