@@ -55,7 +55,7 @@ internal class RawCacheStore @Inject constructor(
 
     private fun queryForUrl(realm: TypedRealm, url: String): RealmSingleQuery<RawCacheEntity> {
         return realm
-                .query(RawCacheEntity::class, "url=$0", url)
+                .query(RawCacheEntity::class, "url == $0", url)
                 .first()
     }
 }
