@@ -20,12 +20,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
 import im.vector.app.R
+import im.vector.app.core.extensions.associateContentStateWith
 import im.vector.app.core.extensions.clearErrorOnChange
 import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.editText
 import im.vector.app.core.extensions.realignPercentagesToParent
+import im.vector.app.core.extensions.setOnImeDoneListener
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.core.utils.ensureProtocol
 import im.vector.app.core.utils.ensureTrailingSlash
@@ -53,18 +54,18 @@ class FtueAuthCombinedServerSelectionFragment @Inject constructor() : AbstractFt
         views.chooseServerToolbar.setNavigationOnClickListener {
             viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnBack))
         }
-        views.chooseServerInput.editText?.setOnEditorActionListener { _, actionId, _ ->
-            when (actionId) {
-                EditorInfo.IME_ACTION_DONE -> {
-                    updateServerUrl()
-                }
+        views.chooseServerInput.associateContentStateWith(button = views.chooseServerSubmit, enabledPredicate = { canSubmit(it) })
+        views.chooseServerInput.setOnImeDoneListener {
+            if (canSubmit(views.chooseServerInput.content())) {
+                updateServerUrl()
             }
-            false
         }
         views.chooseServerGetInTouch.debouncedClicks { openUrlInExternalBrowser(requireContext(), getString(R.string.ftue_ems_url)) }
         views.chooseServerSubmit.debouncedClicks { updateServerUrl() }
         views.chooseServerInput.clearErrorOnChange(viewLifecycleOwner)
     }
+
+    private fun canSubmit(url: String) = url.isNotEmpty()
 
     private fun updateServerUrl() {
         viewModel.handle(OnboardingAction.HomeServerChange.EditHomeServer(views.chooseServerInput.content().ensureProtocol().ensureTrailingSlash()))
