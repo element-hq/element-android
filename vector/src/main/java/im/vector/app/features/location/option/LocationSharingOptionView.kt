@@ -46,7 +46,7 @@ class LocationSharingOptionView @JvmOverloads constructor(
     )
 
     init {
-        context.theme.obtainStyledAttributes(
+        context.obtainStyledAttributes(
                 attrs,
                 R.styleable.LocationSharingOptionView,
                 0,

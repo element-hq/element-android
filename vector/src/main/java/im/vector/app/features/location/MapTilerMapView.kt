@@ -61,7 +61,7 @@ class MapTilerMapView @JvmOverloads constructor(
     private var dimensionConverter: DimensionConverter? = null
 
     init {
-        context.theme.obtainStyledAttributes(
+        context.obtainStyledAttributes(
                 attrs,
                 R.styleable.MapTilerMapView,
                 0,

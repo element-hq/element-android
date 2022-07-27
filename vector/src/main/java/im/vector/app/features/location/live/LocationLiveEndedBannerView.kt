@@ -40,7 +40,7 @@ class LocationLiveEndedBannerView @JvmOverloads constructor(
     )
 
     init {
-        context.theme.obtainStyledAttributes(
+        context.obtainStyledAttributes(
                 attrs,
                 R.styleable.LocationLiveEndedBannerView,
                 0,
