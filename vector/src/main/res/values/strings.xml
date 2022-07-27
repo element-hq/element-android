@@ -1973,9 +1973,9 @@
     <string name="ftue_auth_phone_confirmation_subtitle">A code was sent to %s</string>
     <string name="ftue_auth_phone_confirmation_resend_code">Resend code</string>
 
-    <string name="ftue_auth_email_verification_title">Check your email to verify.</string>
+    <string name="ftue_auth_email_verification_title">Verify your email</string>
     <!-- Note for translators, %s is the users email address -->
-    <string name="ftue_auth_email_verification_subtitle">To confirm your email, tap the button in the email we just sent to %s</string>
+    <string name="ftue_auth_email_verification_subtitle">Follow the instructions sent to %s</string>
     <string name="ftue_auth_email_verification_footer">Did not receive an email?</string>
     <string name="ftue_auth_email_resend_email">Resend email</string>
     <string name="ftue_auth_forgot_password">Forgot password</string>
