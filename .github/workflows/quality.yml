@@ -51,58 +51,6 @@ jobs:
           name: ktlinting-report
           path: |
             */build/reports/ktlint/ktlint*/ktlint*.txt
-      - name: Handle Results
-        if: always()
-        id: ktlint-results
-        run: |
-          results="$(cat */*/build/reports/ktlint/ktlint*/ktlint*.txt */build/reports/ktlint/ktlint*/ktlint*.txt | sed -r "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g")"
-          if [ -z  "$results" ]; then
-            echo "::set-output name=add_comment::false"
-          else
-            body="👎\`Failed${results}\`"
-            body="${body//'%'/'%25'}"
-            body="${body//$'\n'/'%0A'}"
-            body="${body//$'\r'/'%0D'}"
-            body="$( echo $body | sed 's/\/home\/runner\/work\/element-android\/element-android\//\`<br\/>\`/g')"
-            body="$( echo $body | sed 's/\/src\/main\/java\// 🔸 /g')"
-            body="$( echo $body | sed 's/im\/vector\/app\///g')"
-            body="$( echo $body | sed 's/im\/vector\/lib\/attachmentviewer\///g')"
-            body="$( echo $body | sed 's/im\/vector\/lib\/multipicker\///g')"
-            body="$( echo $body | sed 's/im\/vector\/lib\///g')"
-            body="$( echo $body | sed 's/org\/matrix\/android\/sdk\///g')"
-            body="$( echo $body | sed 's/\/src\/androidTest\/java\// 🔸 /g')"
-            echo "::set-output name=add_comment::true"
-            echo "::set-output name=body::$body"
-          fi
-      - name: Find Comment
-        if: always() && github.event_name == 'pull_request'
-        uses: peter-evans/find-comment@v2
-        id: fc
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          comment-author: 'github-actions[bot]'
-          body-includes: Ktlint Results
-      - name: Add comment if needed
-        if: always() && github.event_name == 'pull_request' && steps.ktlint-results.outputs.add_comment == 'true'
-        uses: peter-evans/create-or-update-comment@v2
-        with:
-          comment-id: ${{ steps.fc.outputs.comment-id }}
-          issue-number: ${{ github.event.pull_request.number }}
-          body: |
-            ### Ktlint Results
-
-            ${{ steps.ktlint-results.outputs.body }}
-          edit-mode: replace
-      - name: Delete comment if needed
-        if: always() && github.event_name == 'pull_request' && steps.fc.outputs.comment-id != '' && steps.ktlint-results.outputs.add_comment == 'false'
-        uses: actions/github-script@v3
-        with:
-          script: |
-            github.issues.deleteComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              comment_id: ${{ steps.fc.outputs.comment-id }}
-            })
       - name: Prepare Danger
         if: always()
         run: |
