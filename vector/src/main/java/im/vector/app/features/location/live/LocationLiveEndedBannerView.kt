@@ -21,6 +21,7 @@ import android.content.res.TypedArray
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.res.use
 import androidx.core.view.updateLayoutParams
 import im.vector.app.R
 import im.vector.app.databinding.ViewLocationLiveEndedBannerBinding
@@ -42,13 +43,9 @@ class LocationLiveEndedBannerView @JvmOverloads constructor(
                 R.styleable.LocationLiveEndedBannerView,
                 0,
                 0
-        ).run {
-            try {
-                setBackgroundAlpha(this)
-                setIconMarginStart(this)
-            } finally {
-                recycle()
-            }
+        ).use {
+            setBackgroundAlpha(it)
+            setIconMarginStart(it)
         }
     }
 
