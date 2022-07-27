@@ -28,17 +28,17 @@ import im.vector.app.features.MainActivity
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class LocationLiveMapViewArgs(
+data class LiveLocationMapViewArgs(
         val roomId: String
 ) : Parcelable
 
 @AndroidEntryPoint
-class LocationLiveMapViewActivity : VectorBaseActivity<ActivityLocationSharingBinding>() {
+class LiveLocationMapViewActivity : VectorBaseActivity<ActivityLocationSharingBinding>() {
 
     override fun getBinding() = ActivityLocationSharingBinding.inflate(layoutInflater)
 
     override fun initUiAndData() {
-        val mapViewArgs: LocationLiveMapViewArgs? = intent?.extras?.getParcelable(EXTRA_LOCATION_LIVE_MAP_VIEW_ARGS)
+        val mapViewArgs: LiveLocationMapViewArgs? = intent?.extras?.getParcelable(EXTRA_LIVE_LOCATION_MAP_VIEW_ARGS)
         if (mapViewArgs == null) {
             finish()
             return
@@ -50,7 +50,7 @@ class LocationLiveMapViewActivity : VectorBaseActivity<ActivityLocationSharingBi
         if (isFirstCreation()) {
             addFragment(
                     views.fragmentContainer,
-                    LocationLiveMapViewFragment::class.java,
+                    LiveLocationMapViewFragment::class.java,
                     mapViewArgs
             )
         }
@@ -58,11 +58,11 @@ class LocationLiveMapViewActivity : VectorBaseActivity<ActivityLocationSharingBi
 
     companion object {
 
-        private const val EXTRA_LOCATION_LIVE_MAP_VIEW_ARGS = "EXTRA_LOCATION_LIVE_MAP_VIEW_ARGS"
+        private const val EXTRA_LIVE_LOCATION_MAP_VIEW_ARGS = "EXTRA_LIVE_LOCATION_MAP_VIEW_ARGS"
 
-        fun getIntent(context: Context, locationLiveMapViewArgs: LocationLiveMapViewArgs, firstStartMainActivity: Boolean = false): Intent {
-            val intent = Intent(context, LocationLiveMapViewActivity::class.java).apply {
-                putExtra(EXTRA_LOCATION_LIVE_MAP_VIEW_ARGS, locationLiveMapViewArgs)
+        fun getIntent(context: Context, liveLocationMapViewArgs: LiveLocationMapViewArgs, firstStartMainActivity: Boolean = false): Intent {
+            val intent = Intent(context, LiveLocationMapViewActivity::class.java).apply {
+                putExtra(EXTRA_LIVE_LOCATION_MAP_VIEW_ARGS, liveLocationMapViewArgs)
             }
             return if (firstStartMainActivity) {
                 MainActivity.getIntentWithNextIntent(context, intent)

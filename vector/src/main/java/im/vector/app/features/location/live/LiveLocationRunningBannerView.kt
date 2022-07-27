@@ -31,51 +31,51 @@ import com.bumptech.glide.load.resource.bitmap.GranularRoundedCorners
 import im.vector.app.R
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.utils.TextUtils
-import im.vector.app.databinding.ViewLocationLiveRunningBannerBinding
+import im.vector.app.databinding.ViewLiveLocationRunningBannerBinding
 import im.vector.app.features.themes.ThemeUtils
 import org.threeten.bp.Duration
 
 private const val REMAINING_TIME_COUNTER_INTERVAL_IN_MS = 1000L
 
-class LocationLiveRunningBannerView @JvmOverloads constructor(
+class LiveLocationRunningBannerView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
-    private val binding = ViewLocationLiveRunningBannerBinding.inflate(
+    private val binding = ViewLiveLocationRunningBannerBinding.inflate(
             LayoutInflater.from(context),
             this
     )
 
     val stopButton: Button
-        get() = binding.locationLiveRunningBannerStop
+        get() = binding.liveLocationRunningBannerStop
 
     private val background: ImageView
-        get() = binding.locationLiveRunningBannerBackground
+        get() = binding.liveLocationRunningBannerBackground
 
     private val title: TextView
-        get() = binding.locationLiveRunningBannerTitle
+        get() = binding.liveLocationRunningBannerTitle
 
     private val subTitle: TextView
-        get() = binding.locationLiveRunningBannerSubTitle
+        get() = binding.liveLocationRunningBannerSubTitle
 
     private var countDownTimer: CountDownTimer? = null
 
-    fun render(viewState: LocationLiveMessageBannerViewState) {
+    fun render(viewState: LiveLocationMessageBannerViewState) {
         when (viewState) {
-            is LocationLiveMessageBannerViewState.Emitter -> renderEmitter(viewState)
-            is LocationLiveMessageBannerViewState.Watcher -> renderWatcher(viewState)
+            is LiveLocationMessageBannerViewState.Emitter -> renderEmitter(viewState)
+            is LiveLocationMessageBannerViewState.Watcher -> renderWatcher(viewState)
         }
 
         GlideApp.with(context)
                 .load(ColorDrawable(ThemeUtils.getColor(context, android.R.attr.colorBackground)))
-                .placeholder(binding.locationLiveRunningBannerBackground.drawable)
+                .placeholder(binding.liveLocationRunningBannerBackground.drawable)
                 .transform(GranularRoundedCorners(0f, 0f, viewState.bottomEndCornerRadiusInDp, viewState.bottomStartCornerRadiusInDp))
                 .into(background)
     }
 
-    private fun renderEmitter(viewState: LocationLiveMessageBannerViewState.Emitter) {
+    private fun renderEmitter(viewState: LiveLocationMessageBannerViewState.Emitter) {
         stopButton.isVisible = true
         title.text = context.getString(R.string.location_share_live_enabled)
 
@@ -109,21 +109,21 @@ class LocationLiveRunningBannerView @JvmOverloads constructor(
 
             if (viewState.isStopButtonCenteredVertically) {
                 constraintSet.connect(
-                        R.id.locationLiveRunningBannerStop,
+                        R.id.liveLocationRunningBannerStop,
                         ConstraintSet.BOTTOM,
-                        R.id.locationLiveRunningBannerBackground,
+                        R.id.liveLocationRunningBannerBackground,
                         ConstraintSet.BOTTOM,
                         0
                 )
             } else {
-                constraintSet.clear(R.id.locationLiveRunningBannerStop, ConstraintSet.BOTTOM)
+                constraintSet.clear(R.id.liveLocationRunningBannerStop, ConstraintSet.BOTTOM)
             }
 
             constraintSet.applyTo(parentLayout)
         }
     }
 
-    private fun renderWatcher(viewState: LocationLiveMessageBannerViewState.Watcher) {
+    private fun renderWatcher(viewState: LiveLocationMessageBannerViewState.Watcher) {
         stopButton.isVisible = false
         title.text = context.getString(R.string.location_share_live_view)
         subTitle.text = context.getString(R.string.location_share_live_until, viewState.formattedLocalTimeOfEndOfLive)

@@ -7,7 +7,7 @@
     tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
 
     <ImageView
-        android:id="@+id/locationLiveEndedBannerBackground"
+        android:id="@+id/liveLocationEndedBannerBackground"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:src="?android:colorBackground"
@@ -18,7 +18,7 @@
         tools:ignore="ContentDescription" />
 
     <ImageView
-        android:id="@+id/locationLiveEndedBannerIcon"
+        android:id="@+id/liveLocationEndedBannerIcon"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginVertical="8dp"
@@ -26,15 +26,15 @@
         android:background="@drawable/circle"
         android:backgroundTint="?vctr_content_quaternary"
         android:padding="3dp"
-        app:layout_constraintBottom_toBottomOf="@id/locationLiveEndedBannerBackground"
-        app:layout_constraintStart_toStartOf="@id/locationLiveEndedBannerBackground"
-        app:layout_constraintTop_toTopOf="@id/locationLiveEndedBannerBackground"
-        app:srcCompat="@drawable/ic_attachment_location_live_white"
+        app:layout_constraintBottom_toBottomOf="@id/liveLocationEndedBannerBackground"
+        app:layout_constraintStart_toStartOf="@id/liveLocationEndedBannerBackground"
+        app:layout_constraintTop_toTopOf="@id/liveLocationEndedBannerBackground"
+        app:srcCompat="@drawable/ic_attachment_live_location_white"
         app:tint="?android:colorBackground"
         tools:ignore="ContentDescription" />
 
     <TextView
-        android:id="@+id/locationLiveEndedTitle"
+        android:id="@+id/liveLocationEndedTitle"
         style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -43,8 +43,8 @@
         android:lines="1"
         android:text="@string/location_share_live_ended"
         android:textColor="?vctr_content_tertiary"
-        app:layout_constraintBottom_toBottomOf="@id/locationLiveEndedBannerBackground"
-        app:layout_constraintEnd_toEndOf="@id/locationLiveEndedBannerBackground"
-        app:layout_constraintStart_toEndOf="@id/locationLiveEndedBannerIcon"
-        app:layout_constraintTop_toTopOf="@id/locationLiveEndedBannerBackground" />
+        app:layout_constraintBottom_toBottomOf="@id/liveLocationEndedBannerBackground"
+        app:layout_constraintEnd_toEndOf="@id/liveLocationEndedBannerBackground"
+        app:layout_constraintStart_toEndOf="@id/liveLocationEndedBannerIcon"
+        app:layout_constraintTop_toTopOf="@id/liveLocationEndedBannerBackground" />
 </merge>
