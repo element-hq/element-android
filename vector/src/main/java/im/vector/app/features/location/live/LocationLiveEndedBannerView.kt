@@ -26,6 +26,8 @@ import androidx.core.view.updateLayoutParams
 import im.vector.app.R
 import im.vector.app.databinding.ViewLocationLiveEndedBannerBinding
 
+private const val BACKGROUND_ALPHA = 0.75f
+
 class LocationLiveEndedBannerView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
@@ -51,7 +53,7 @@ class LocationLiveEndedBannerView @JvmOverloads constructor(
 
     private fun setBackgroundAlpha(typedArray: TypedArray) {
         val withAlpha = typedArray.getBoolean(R.styleable.LocationLiveEndedBannerView_locLiveEndedBkgWithAlpha, false)
-        binding.locationLiveEndedBannerBackground.alpha = if (withAlpha) 0.75f else 1f
+        binding.locationLiveEndedBannerBackground.alpha = if (withAlpha) BACKGROUND_ALPHA else 1f
     }
 
     private fun setIconMarginStart(typedArray: TypedArray) {
