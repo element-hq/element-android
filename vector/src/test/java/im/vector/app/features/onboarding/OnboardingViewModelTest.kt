@@ -75,6 +75,7 @@ private val DEFAULT_SELECTED_HOMESERVER_STATE = SELECTED_HOMESERVER_STATE.copy(u
 private const val AN_EMAIL = "hello@example.com"
 private const val A_PASSWORD = "a-password"
 private const val A_USERNAME = "hello-world"
+private const val A_DEVICE_NAME = "a-device-name"
 private const val A_MATRIX_ID = "@$A_USERNAME:matrix.org"
 private const val A_LOGIN_TOKEN = "a-login-token"
 
@@ -150,6 +151,25 @@ class OnboardingViewModelTest {
         givenInitialisesSession(fakeSession)
 
         viewModel.handle(OnboardingAction.LoginWithToken(A_LOGIN_TOKEN))
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false) }
+                )
+                .assertEvents(OnboardingViewEvents.OnAccountSignedIn)
+                .finish()
+    }
+
+    @Test
+    fun `given can login with username and password, when logging in, then emits AccountSignedIn`() = runTest {
+        val test = viewModel.test()
+        fakeAuthenticationService.givenLoginWizard(fakeLoginWizard)
+        fakeLoginWizard.givenLoginSuccess(A_USERNAME, A_PASSWORD, A_DEVICE_NAME, fakeSession)
+        givenInitialisesSession(fakeSession)
+
+        viewModel.handle(OnboardingAction.AuthenticateAction.Login(A_USERNAME, A_PASSWORD, A_DEVICE_NAME))
 
         test
                 .assertStatesChanges(

@@ -33,6 +33,10 @@ class FakeLoginWizard : LoginWizard by mockk() {
         coEvery { loginWithToken(token) } returns result
     }
 
+    fun givenLoginSuccess(username: String, password: String, deviceName: String, result: Session) {
+        coEvery { login(username, password, deviceName) } returns result
+    }
+
     fun givenConfirmResetPasswordSuccess(password: String) {
         coJustRun { resetPasswordMailConfirmed(password) }
     }
