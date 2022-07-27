@@ -308,6 +308,7 @@ $dokka.location:org.matrix.android.sdk.api.failure//isInvalidUIAAuth/kotlin.Thro
 $dokka.location:org.matrix.android.sdk.api.failure//isInvalidUsername/kotlin.Throwable#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/is-invalid-username.html
 $dokka.location:org.matrix.android.sdk.api.failure//isLimitExceededError/kotlin.Throwable#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/is-limit-exceeded-error.html
 $dokka.location:org.matrix.android.sdk.api.failure//isLoginEmailUnknown/kotlin.Throwable#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/is-login-email-unknown.html
+$dokka.location:org.matrix.android.sdk.api.failure//isMissingEmailVerification/kotlin.Throwable#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/is-missing-email-verification.html
 $dokka.location:org.matrix.android.sdk.api.failure//isRegistrationAvailabilityError/kotlin.Throwable#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/is-registration-availability-error.html
 $dokka.location:org.matrix.android.sdk.api.failure//isRegistrationDisabled/kotlin.Throwable#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/is-registration-disabled.html
 $dokka.location:org.matrix.android.sdk.api.failure//isTokenError/kotlin.Throwable#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/is-token-error.html
