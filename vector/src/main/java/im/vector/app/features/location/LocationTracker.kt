@@ -61,6 +61,7 @@ class LocationTracker @Inject constructor(
     @VisibleForTesting
     var hasLocationFromGPSProvider = false
 
+    private var firstLocationHandled = false
     private val _locations = MutableSharedFlow<Location>(replay = 1)
 
     /**
@@ -68,7 +69,14 @@ class LocationTracker @Inject constructor(
      */
     val locations = _locations.asSharedFlow()
             .onEach { Timber.d("new location emitted") }
-            .debounce(MIN_TIME_TO_UPDATE_LOCATION_MILLIS)
+            .debounce {
+                if (firstLocationHandled) {
+                    MIN_TIME_TO_UPDATE_LOCATION_MILLIS
+                } else {
+                    firstLocationHandled = true
+                    0
+                }
+            }
             .onEach { Timber.d("new location emitted after debounce") }
             .map { it.toLocationData() }
 
