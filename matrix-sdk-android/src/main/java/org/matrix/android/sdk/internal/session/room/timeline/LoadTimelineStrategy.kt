@@ -43,7 +43,6 @@ import org.matrix.android.sdk.internal.database.query.findAllIncludingEvents
 import org.matrix.android.sdk.internal.database.query.findLastForwardChunkOfThread
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadTimelineTask
-import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
 import org.matrix.android.sdk.internal.session.room.state.StateEventDataSource
 import org.matrix.android.sdk.internal.session.sync.handler.room.ThreadsAwarenessHandler
 import org.matrix.android.sdk.internal.util.time.Clock
@@ -107,7 +106,6 @@ internal class LoadTimelineStrategy constructor(
             val onNewTimelineEvents: (List<String>) -> Unit,
             val stateEventDataSource: StateEventDataSource,
             val matrixCoroutineDispatchers: MatrixCoroutineDispatchers,
-            val localEchoEventFactory: LocalEchoEventFactory
     )
 
     private var getContextLatch: CompletableDeferred<Unit>? = null
@@ -343,8 +341,6 @@ internal class LoadTimelineStrategy constructor(
                     initialEventId = mode.originEventId(),
                     onBuiltEvents = dependencies.onEventsUpdated,
                     onEventsDeleted = dependencies.onEventsDeleted,
-                    realm = dependencies.realm,
-                    localEchoEventFactory = dependencies.localEchoEventFactory
             )
         }
     }

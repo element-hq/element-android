@@ -32,7 +32,6 @@ import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
 import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadTimelineTask
-import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
 import org.matrix.android.sdk.internal.session.room.state.StateEventDataSource
 import org.matrix.android.sdk.internal.session.sync.handler.room.ReadReceiptHandler
 import org.matrix.android.sdk.internal.session.sync.handler.room.ThreadsAwarenessHandler
@@ -56,7 +55,6 @@ internal class DefaultTimelineService @AssistedInject constructor(
         private val timelineEventDataSource: TimelineEventDataSource,
         private val clock: Clock,
         private val stateEventDataSource: StateEventDataSource,
-        private val localEchoEventFactory: LocalEchoEventFactory
 ) : TimelineService {
 
     @AssistedFactory
@@ -84,7 +82,6 @@ internal class DefaultTimelineService @AssistedInject constructor(
                 lightweightSettingsStorage = lightweightSettingsStorage,
                 clock = clock,
                 stateEventDataSource = stateEventDataSource,
-                localEchoEventFactory = localEchoEventFactory
         )
     }
 
