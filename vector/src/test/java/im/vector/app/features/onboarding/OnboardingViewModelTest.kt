@@ -67,9 +67,11 @@ private val A_HOMESERVER_CAPABILITIES = aHomeServerCapabilities(canChangeDisplay
 private val ANY_CONTINUING_REGISTRATION_RESULT = RegistrationActionHandler.Result.NextStage(Stage.Dummy(mandatory = true))
 private val A_DIRECT_LOGIN = OnboardingAction.AuthenticateAction.LoginDirect("@a-user:id.org", "a-password", "a-device-name")
 private const val A_HOMESERVER_URL = "https://edited-homeserver.org"
+private val A_DEFAULT_HOMESERVER_URL = "${R.string.matrix_org_server_url.toTestString()}/"
 private val A_HOMESERVER_CONFIG = HomeServerConnectionConfig(FakeUri().instance)
 private val SELECTED_HOMESERVER_STATE = SelectedHomeserverState(preferredLoginMode = LoginMode.Password, userFacingUrl = A_HOMESERVER_URL)
 private val SELECTED_HOMESERVER_STATE_SUPPORTED_LOGOUT_DEVICES = SelectedHomeserverState(isLogoutDevicesSupported = true)
+private val DEFAULT_SELECTED_HOMESERVER_STATE = SELECTED_HOMESERVER_STATE.copy(userFacingUrl = A_DEFAULT_HOMESERVER_URL)
 private const val AN_EMAIL = "hello@example.com"
 private const val A_PASSWORD = "a-password"
 private const val A_USERNAME = "hello-world"
@@ -100,6 +102,43 @@ class OnboardingViewModelTest {
     @Before
     fun setUp() {
         viewModelWith(initialState)
+    }
+
+    @Test
+    fun `given usecase screen enabled, when handling sign up splash action, then emits OpenUseCaseSelection`() = runTest {
+        val test = viewModel.test()
+        fakeVectorFeatures.givenOnboardingUseCaseEnabled()
+
+        viewModel.handle(OnboardingAction.SplashAction.OnGetStarted(OnboardingFlow.SignUp))
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(onboardingFlow = OnboardingFlow.SignUp) }
+                )
+                .assertEvents(OnboardingViewEvents.OpenUseCaseSelection)
+                .finish()
+    }
+
+    @Test
+    fun `given combined login enabled, when handling sign in splash action, then emits OpenCombinedLogin with default homeserver`() = runTest {
+        val test = viewModel.test()
+        fakeVectorFeatures.givenCombinedLoginEnabled()
+        givenCanSuccessfullyUpdateHomeserver(A_DEFAULT_HOMESERVER_URL, DEFAULT_SELECTED_HOMESERVER_STATE)
+
+        viewModel.handle(OnboardingAction.SplashAction.OnIAlreadyHaveAnAccount(OnboardingFlow.SignIn))
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(onboardingFlow = OnboardingFlow.SignIn) },
+                        { copy(isLoading = true) },
+                        { copy(selectedHomeserver = DEFAULT_SELECTED_HOMESERVER_STATE) },
+                        { copy(signMode = SignMode.SignIn) },
+                        { copy(isLoading = false) }
+                )
+                .assertEvents(OnboardingViewEvents.OpenCombinedLogin)
+                .finish()
     }
 
     @Test
