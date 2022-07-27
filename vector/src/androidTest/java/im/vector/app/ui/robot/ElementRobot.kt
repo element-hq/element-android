@@ -182,13 +182,8 @@ class ElementRobot {
             val activity = EspressoHelper.getCurrentActivity()!!
             val popup = activity.findViewById<View>(com.tapadoo.alerter.R.id.llAlertBackground)!!
             activity.runOnUiThread { popup.performClick() }
-
             waitUntilViewVisible(withId(R.id.bottomSheetFragmentContainer))
-            waitUntilViewVisible(ViewMatchers.withText(R.string.action_skip))
-            clickOn(R.string.action_skip)
-            assertDisplayed(R.string.are_you_sure)
-            clickOn(R.string.action_skip)
-            waitUntilViewVisible(withId(R.id.bottomSheetFragmentContainer))
+            pressBack()
         }.onFailure { Timber.w(it, "Verification popup missing") }
     }
 
