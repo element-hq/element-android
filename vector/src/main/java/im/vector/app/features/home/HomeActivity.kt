@@ -126,7 +126,6 @@ class HomeActivity :
     @Inject lateinit var pushManager: PushersManager
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
     @Inject lateinit var vectorPreferences: VectorPreferences
-    @Inject lateinit var vectorFeatures: VectorFeatures
     @Inject lateinit var popupAlertManager: PopupAlertManager
     @Inject lateinit var shortcutsHandler: ShortcutsHandler
     @Inject lateinit var permalinkHandler: PermalinkHandler
