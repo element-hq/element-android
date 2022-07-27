@@ -35,7 +35,8 @@ import javax.inject.Inject
 
 @Parcelize
 data class FtueAuthWaitForEmailFragmentArgument(
-        val email: String
+        val email: String,
+        val isRestoredSession: Boolean,
 ) : Parcelable
 
 /**
@@ -47,6 +48,8 @@ class FtueAuthWaitForEmailFragment @Inject constructor(
 
     private val params: FtueAuthWaitForEmailFragmentArgument by args()
     private var inferHasLeftAndReturnedToScreen = false
+
+    override fun backIsHardExit() = params.isRestoredSession
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueWaitForEmailVerificationBinding {
         return FragmentFtueWaitForEmailVerificationBinding.inflate(inflater, container, false)
@@ -97,6 +100,11 @@ class FtueAuthWaitForEmailFragment @Inject constructor(
     }
 
     override fun resetViewModel() {
-        viewModel.handle(OnboardingAction.ResetAuthenticationAttempt)
+        when {
+            backIsHardExit() -> viewModel.handle(OnboardingAction.ResetAuthenticationAttempt)
+            else -> {
+                // delegate to the previous step
+            }
+        }
     }
 }
