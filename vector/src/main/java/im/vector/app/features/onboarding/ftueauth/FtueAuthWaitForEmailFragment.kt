@@ -21,6 +21,7 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import im.vector.app.R
@@ -63,6 +64,7 @@ class FtueAuthWaitForEmailFragment @Inject constructor(
                 .colorTerminatingFullStop(ThemeUtils.getColor(requireContext(), R.attr.colorSecondary))
         views.emailVerificationSubtitle.text = getString(R.string.ftue_auth_email_verification_subtitle, params.email)
         views.emailVerificationResendEmail.debouncedClicks {
+            hideWaitingForVerificationLoading()
             viewModel.handle(OnboardingAction.PostRegisterAction(RegisterAction.SendAgainThreePid))
         }
     }
@@ -75,11 +77,19 @@ class FtueAuthWaitForEmailFragment @Inject constructor(
 
     private fun showLoadingIfReturningToScreen() {
         when (inferHasLeftAndReturnedToScreen) {
-            true -> views.emailVerificationWaiting.isVisible = true
+            true -> showWaitingForVerificationLoading()
             false -> {
                 inferHasLeftAndReturnedToScreen = true
             }
         }
+    }
+
+    private fun hideWaitingForVerificationLoading() {
+        views.emailVerificationWaiting.isInvisible = true
+    }
+
+    private fun showWaitingForVerificationLoading() {
+        views.emailVerificationWaiting.isInvisible = false
     }
 
     override fun onPause() {
