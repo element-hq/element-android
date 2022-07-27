@@ -27,6 +27,7 @@ import androidx.biometric.BiometricManager.BIOMETRIC_SUCCESS
 import androidx.biometric.BiometricPrompt
 import androidx.lifecycle.lifecycleScope
 import androidx.test.core.app.ActivityScenario
+import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
 import im.vector.app.TestBuildVersionSdkIntProvider
 import im.vector.app.features.pin.lockscreen.configuration.LockScreenConfiguration
@@ -200,6 +201,7 @@ class BiometricHelperTests {
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
+    @SdkSuppress(minSdkVersion = Build.VERSION_CODES.R) // Due to some issues with mockk and CryptoObject initialization
     @Test
     fun authenticateInDeviceWithIssuesShowsFallbackPromptDialog() = runTest {
         buildVersionSdkIntProvider.value = Build.VERSION_CODES.M
@@ -236,6 +238,7 @@ class BiometricHelperTests {
     }
 
     @Test
+    @SdkSuppress(minSdkVersion = Build.VERSION_CODES.R) // Due to some issues with mockk and CryptoObject initialization
     fun authenticateCreatesSystemKeyIfNeededOnSuccessOnAndroidM() = runTest {
         buildVersionSdkIntProvider.value = Build.VERSION_CODES.M
         every { lockScreenKeyRepository.isSystemKeyValid() } returns true
