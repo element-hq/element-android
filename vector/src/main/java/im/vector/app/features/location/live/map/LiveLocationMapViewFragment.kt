@@ -112,6 +112,7 @@ class LiveLocationMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
 
     override fun onDestroy() {
         onSymbolClickListener?.let { symbolManager?.removeClickListener(it) }
+        bottomSheetController.callback = null
         super.onDestroy()
     }
 

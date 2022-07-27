@@ -33,7 +33,6 @@ class LiveLocationBottomSheetController @Inject constructor(
         private val vectorDateFormatter: VectorDateFormatter,
         private val stringProvider: StringProvider,
         private val clock: Clock,
-        private val context: Context,
 ) : EpoxyController() {
 
     interface Callback {
