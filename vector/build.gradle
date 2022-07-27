@@ -573,7 +573,7 @@ dependencies {
     debugImplementation "com.kgurgul.flipper:flipper-realm-android:2.2.0"
 
     // Activate when you want to check for leaks, from time to time.
-    //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.3'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
 
     androidTestImplementation libs.androidx.testCore
     androidTestImplementation libs.androidx.testRunner
