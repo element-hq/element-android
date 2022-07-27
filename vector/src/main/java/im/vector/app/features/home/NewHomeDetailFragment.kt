@@ -23,6 +23,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -54,8 +55,12 @@ import im.vector.app.features.settings.VectorSettingsActivity.Companion.EXTRA_DI
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.BannerState
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class NewHomeDetailFragment @Inject constructor(
@@ -64,7 +69,8 @@ class NewHomeDetailFragment @Inject constructor(
         private val alertManager: PopupAlertManager,
         private val callManager: WebRtcCallManager,
         private val vectorPreferences: VectorPreferences,
-        private val appStateHandler: AppStateHandler
+        private val appStateHandler: AppStateHandler,
+        private val session: Session,
 ) : VectorBaseFragment<FragmentNewHomeDetailBinding>(),
         KeysBackupBanner.Delegate,
         CurrentCallsView.Callback,
@@ -287,9 +293,17 @@ class NewHomeDetailFragment @Inject constructor(
 
     private fun setupToolbar() {
         setupToolbar(views.toolbar)
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            session.userService().getUser(session.myUserId)?.let { user ->
+                avatarRenderer.render(user.toMatrixItem(), views.avatar)
+            }
+        }
+
+        views.avatar.setOnClickListener {
+            navigator.openSettings(requireContext())
+        }
     }
-
-
 
     private fun setupBottomNavigationView() {
         views.bottomNavigationView.menu.findItem(R.id.bottom_action_notification).isVisible = vectorPreferences.labAddNotificationTab()

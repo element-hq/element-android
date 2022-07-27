@@ -61,7 +61,17 @@
                     android:layout_height="?attr/actionBarSize"
                     android:elevation="0dp"
                     app:layout_collapseMode="pin"
-                    app:title="@string/all_chats" />
+                    app:title="@string/all_chats">
+
+                    <ImageView
+                        android:id="@+id/avatar"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:padding="6dp"
+                        android:contentDescription="@string/a11y_open_settings"
+                        tools:src="@sample/user_round_avatars" />
+
+                </com.google.android.material.appbar.MaterialToolbar>
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
