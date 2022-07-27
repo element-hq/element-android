@@ -40,12 +40,12 @@ jobs:
       - name: Run detekt
         if: always()
         run: |
-          ./gradlew detekt "-Porg.gradle.jvmargs=-XX:MaxRAM=7g -Xmx3g -XX:MaxMetaspaceSize=1g" -Porg.gradle.parallel=false -Dfile.encoding=UTF-8
+          ./gradlew detekt "-Porg.gradle.jvmargs=-XX:MaxRAM=7g -Xmx2g -XX:MaxMetaspaceSize=1g" -Porg.gradle.parallel=false -Dfile.encoding=UTF-8
       - name: Run lint
         # Not always, if ktlint or detekt fail, avoid running the long lint check.
         run: |
-          ./gradlew lintGplayRelease --stacktrace "-Porg.gradle.jvmargs=-XX:MaxRAM=7g -Xmx3g -XX:MaxMetaspaceSize=1g" -Porg.gradle.parallel=false -Dfile.encoding=UTF-8
-          ./gradlew lintFdroidRelease --stacktrace "-Porg.gradle.jvmargs=-XX:MaxRAM=7g -Xmx3g -XX:MaxMetaspaceSize=1g" -Porg.gradle.parallel=false -Dfile.encoding=UTF-8
+          ./gradlew lintGplayRelease --stacktrace "-Porg.gradle.jvmargs=-XX:MaxRAM=7g -Xmx2g -XX:MaxMetaspaceSize=1g" -Porg.gradle.parallel=false -Dfile.encoding=UTF-8
+          ./gradlew lintFdroidRelease --stacktrace "-Porg.gradle.jvmargs=-XX:MaxRAM=7g -Xmx2g -XX:MaxMetaspaceSize=1g" -Porg.gradle.parallel=false -Dfile.encoding=UTF-8
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@v3
@@ -78,7 +78,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Dependency analysis
-        run: ./gradlew dependencyCheckAnalyze "-Porg.gradle.jvmargs=-XX:MaxRAM=7g -Xmx3g -XX:MaxMetaspaceSize=1g" -Porg.gradle.parallel=false -Dfile.encoding=UTF-8
+        run: ./gradlew dependencyCheckAnalyze "-Porg.gradle.jvmargs=-XX:MaxRAM=7g -Xmx2g -XX:MaxMetaspaceSize=1g" -Porg.gradle.parallel=false -Dfile.encoding=UTF-8
       - name: Upload dependency analysis
         if: always()
         uses: actions/upload-artifact@v3
