@@ -251,7 +251,7 @@
     <string name="action_quick_reply">快速回覆</string>
     <string name="action_open">開啟</string>
     <string name="action_close">關閉</string>
-    <string name="copied_to_clipboard">複製到剪貼簿</string>
+    <string name="copied_to_clipboard">已複製到剪貼簿</string>
     <string name="dialog_title_confirmation">確認</string>
     <string name="dialog_title_warning">警告</string>
     <string name="bottom_action_favourites">最愛</string>
@@ -337,8 +337,8 @@
     <string name="room_participants_action_invite">邀請</string>
     <string name="room_participants_action_ban">封鎖</string>
     <string name="room_participants_action_unban">封禁</string>
-    <string name="room_participants_action_ignore">隱藏所有來自此使用者的訊息</string>
-    <string name="room_participants_action_unignore">顯示所有來自此使用者的訊息</string>
+    <string name="room_participants_action_ignore">忽略</string>
+    <string name="room_participants_action_unignore">取消忽略</string>
     <string name="room_participants_action_mention">提及</string>
     <string name="room_participants_ban_prompt_msg">封鎖使用者將會把他們從此聊天室中移除，並避免他們再次加入。</string>
     <string name="room_one_user_is_typing">%s 正在打字…</string>
@@ -370,7 +370,7 @@
 \n
 \n要現在新增一些貼圖嗎？</string>
     <string name="error_no_external_application_found">對不起，沒有應用程式可以完成此操作。</string>
-    <string name="e2e_re_request_encryption_key">從其他工作階段重新請求金鑰。<u>重新請求金鑰</u>。</string>
+    <string name="e2e_re_request_encryption_key">從其他工作階段重新請求加密金鑰。</string>
     <string name="e2e_re_request_encryption_key_dialog_content">請在另一個可以解密訊息的裝置上啟動 ${app_name}，以便它將金鑰發送到此工作階段。</string>
     <string name="ssl_expected_existing_expl">憑證已從以前受信任的更改為不受信任的憑證。伺服器可能已續訂其憑證。請與伺服器管理員聯繫以尋找所需的指紋。</string>
     <string name="ssl_only_accept">僅當伺服器管理員發佈的指紋與上面的指紋匹配時才接受此憑證。</string>
@@ -590,7 +590,7 @@
     <string name="passphrase_passphrase_does_not_match">密語必須符合</string>
     <string name="merged_events_expand">展開</string>
     <string name="merged_events_collapse">摺疊</string>
-    <string name="room_participants_action_remove">踢出</string>
+    <string name="room_participants_action_remove">從聊天移除</string>
     <string name="settings_inline_url_preview_summary">當您的家伺服器支援此功能時在聊天中預覽連結。</string>
     <string name="settings_send_typing_notifs">傳送輸入通知</string>
     <string name="settings_send_typing_notifs_summary">讓其他使用者知道您正在輸入。</string>
@@ -1034,8 +1034,8 @@
     <string name="room_list_quick_actions_settings">設定</string>
     <string name="room_list_quick_actions_leave">離開聊天室</string>
     <string name="notice_member_no_changes">%1$s 未做出任何變更</string>
-    <string name="command_description_spoiler">傳送為擾亂者指定的訊息</string>
-    <string name="spoiler">擾亂者</string>
+    <string name="command_description_spoiler">將指定的訊息作為劇透傳送</string>
+    <string name="spoiler">劇透</string>
     <string name="reaction_search_type_hint">輸入關鍵字以尋找反應。</string>
     <string name="no_ignored_users">您未忽略任何使用者</string>
     <string name="help_long_click_on_room_for_more_options">長按聊天室以檢視更多選項</string>
@@ -2349,7 +2349,7 @@
     <string name="room_message_autocomplete_users">使用者</string>
     <string name="room_message_notify_everyone">通知整個聊天室</string>
     <plurals name="message_reaction_show_more">
-        <item quantity="other">%1$d 更多</item>
+        <item quantity="other">還有%1$d個</item>
     </plurals>
     <string name="message_reaction_show_less">顯示較少</string>
     <plurals name="notice_room_server_acl_changes">
