@@ -300,7 +300,7 @@ class NewHomeDetailFragment @Inject constructor(
             }
         }
 
-        views.avatar.setOnClickListener {
+        views.avatar.debouncedClicks {
             navigator.openSettings(requireContext())
         }
     }

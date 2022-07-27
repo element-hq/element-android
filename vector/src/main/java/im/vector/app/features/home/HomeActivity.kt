@@ -46,10 +46,10 @@ import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.pushers.UnifiedPushHelper
+import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.ActivityHomeBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
-import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.accountdata.AnalyticsAccountDataViewModel
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.analytics.plan.ViewRoom
@@ -587,7 +587,26 @@ class HomeActivity :
                 navigator.openSettings(this)
                 true
             }
+            R.id.menu_home_invite_friends -> {
+                launchInviteFriends()
+                true
+            }
             else -> false
+        }
+    }
+
+    private fun launchInviteFriends() {
+        activeSessionHolder.getSafeActiveSession()?.permalinkService()?.createPermalink(sharedActionViewModel.session.myUserId)?.let { permalink ->
+            analyticsTracker.screen(MobileScreen(screenName = MobileScreen.ScreenName.InviteFriends))
+            val text = getString(R.string.invite_friends_text, permalink)
+
+            startSharePlainTextIntent(
+                    context = this,
+                    activityResultLauncher = null,
+                    chooserTitle = getString(R.string.invite_friends),
+                    text = text,
+                    extraTitle = getString(R.string.invite_friends_rich_title)
+            )
         }
     }
 
