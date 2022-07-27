@@ -35,6 +35,7 @@ import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.MapboxMapOptions
 import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.mapboxsdk.maps.SupportMapFragment
+import com.mapbox.mapboxsdk.plugins.annotation.OnSymbolClickListener
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
@@ -73,6 +74,7 @@ class LiveLocationMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
     private var mapStyle: Style? = null
     private val pendingLiveLocations = mutableListOf<UserLiveLocationViewState>()
     private var isMapFirstUpdate = true
+    private var onSymbolClickListener: OnSymbolClickListener? = null
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLiveLocationMapViewBinding {
         return FragmentLiveLocationMapViewBinding.inflate(layoutInflater, container, false)
@@ -108,6 +110,11 @@ class LiveLocationMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
         setupMap()
     }
 
+    override fun onDestroy() {
+        onSymbolClickListener?.let { symbolManager?.removeClickListener(it) }
+        super.onDestroy()
+    }
+
     private fun setupMap() {
         val mapFragment = getOrCreateSupportMapFragment()
         mapFragment.getMapAsync { mapboxMap ->
@@ -117,10 +124,10 @@ class LiveLocationMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
                     this@LiveLocationMapViewFragment.mapboxMap = WeakReference(mapboxMap)
                     symbolManager = SymbolManager(mapFragment.view as MapView, mapboxMap, style).apply {
                         iconAllowOverlap = true
-                        addClickListener {
+                        onSymbolClickListener = OnSymbolClickListener {
                             onSymbolClicked(it)
                             true
-                        }
+                        }.also { addClickListener(it) }
                     }
                     pendingLiveLocations
                             .takeUnless { it.isEmpty() }
