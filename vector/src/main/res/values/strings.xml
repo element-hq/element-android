@@ -1937,6 +1937,7 @@
 
     <string name="ftue_auth_choose_server_title">Select your server</string>
     <string name="ftue_auth_choose_server_subtitle">What is the address of your server? This is like a home for all your data</string>
+    <string name="ftue_auth_choose_server_sign_in_subtitle">What is the address of your server?</string>
     <string name="ftue_auth_choose_server_entry_hint">Server URL</string>
     <string name="ftue_auth_choose_server_ems_title">Want to host your own server?</string>
 

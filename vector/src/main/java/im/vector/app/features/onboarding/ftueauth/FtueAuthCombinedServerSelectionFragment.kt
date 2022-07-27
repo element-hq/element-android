@@ -33,6 +33,7 @@ import im.vector.app.core.utils.ensureTrailingSlash
 import im.vector.app.core.utils.openUrlInExternalBrowser
 import im.vector.app.databinding.FragmentFtueServerSelectionCombinedBinding
 import im.vector.app.features.onboarding.OnboardingAction
+import im.vector.app.features.onboarding.OnboardingFlow
 import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewState
 import org.matrix.android.sdk.api.failure.isHomeserverUnavailable
@@ -76,6 +77,14 @@ class FtueAuthCombinedServerSelectionFragment @Inject constructor() : AbstractFt
     }
 
     override fun updateWithState(state: OnboardingViewState) {
+        views.chooseServerHeaderSubtitle.setText(
+                when (state.onboardingFlow) {
+                    OnboardingFlow.SignIn -> R.string.ftue_auth_choose_server_sign_in_subtitle
+                    OnboardingFlow.SignUp -> R.string.ftue_auth_choose_server_subtitle
+                    else -> throw IllegalStateException("Invalid flow state")
+                }
+        )
+
         if (views.chooseServerInput.content().isEmpty()) {
             val userUrlInput = state.selectedHomeserver.userFacingUrl?.toReducedUrlKeepingSchemaIfInsecure()
             views.chooseServerInput.editText().setText(userUrlInput)
