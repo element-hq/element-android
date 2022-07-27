@@ -22,9 +22,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogNegativeButton
 import im.vector.app.R
-import im.vector.app.espresso.tools.waitUntilActivityVisible
 import im.vector.app.espresso.tools.waitUntilViewVisible
-import im.vector.app.features.settings.font.FontScaleSettingActivity
 
 class SettingsPreferencesRobot {
 
