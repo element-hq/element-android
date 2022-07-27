@@ -31,26 +31,36 @@ jobs:
         run: |
           ./gradlew knit
 
-  # ktlint for all the modules
-  ktlint:
-    name: Kotlin Linter
+  # Check the project: ktlint, detekt, lint
+  lint:
+    name: Android Linter
     runs-on: ubuntu-latest
     # Allow all jobs on main and develop. Just one per PR.
     concurrency:
-      group: ${{ github.ref == 'refs/heads/main' && format('ktlint-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('ktlint-develop-{0}', github.sha) || format('ktlint-{0}', github.ref) }}
+      group: ${{ github.ref == 'refs/heads/main' && format('lint-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('lint-develop-{0}', github.sha) || format('lint-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v3
       - name: Run ktlint
         run: |
           ./gradlew ktlintCheck --continue
+      - name: Run detekt
+        if: always()
+        run: |
+          ./gradlew detekt $CI_GRADLE_ARG_PROPERTIES
+      - name: Run lint
+        # Not always, if ktlint or detekt fail, avoid running the long lint check.
+        run: |
+          ./gradlew lintGplayRelease lintFdroidRelease --stacktrace $CI_GRADLE_ARG_PROPERTIES
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: ktlinting-report
+          name: linting-report
           path: |
             */build/reports/ktlint/ktlint*/ktlint*.txt
+            */build/reports/detekt/detekt.html
+            */build/reports/*.*
       - name: Prepare Danger
         if: always()
         run: |
@@ -83,82 +93,3 @@ jobs:
         with:
           name: dependency-analysis
           path: build/reports/dependency-check-report.html
-
-  # Lint for Gplay and Fdroid release APK
-  apk-lint:
-    name: Lint APK (${{ matrix.target }})
-    runs-on: ubuntu-latest
-    if: github.ref != 'refs/heads/main'
-    strategy:
-      fail-fast: false
-      matrix:
-        target: [ Gplay, Fdroid ]
-    # Allow all jobs on develop. Just one per PR.
-    concurrency:
-      group: ${{ github.ref == 'refs/heads/develop' && format('apk-lint-develop-{0}-{1}', matrix.target, github.sha) || format('apk-lint-{0}-{1}', matrix.target, github.ref) }}
-      cancel-in-progress: true
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-      - name: Lint ${{ matrix.target }} release
-        run: ./gradlew clean lint${{ matrix.target }}Release --stacktrace $CI_GRADLE_ARG_PROPERTIES
-      - name: Upload ${{ matrix.target }} linting report
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: release-lint-report-${{ matrix.target }}
-          path: |
-            vector/build/reports/*.*
-      - name: Prepare Danger
-        if: always()
-        run: |
-          npm install --save-dev @babel/core
-          npm install --save-dev @babel/plugin-transform-flow-strip-types
-          yarn add danger-plugin-lint-report --dev
-      - name: Danger lint
-        if: always()
-        uses: danger/danger-js@11.1.1
-        with:
-          args: "--dangerfile tools/danger/dangerfile-lint.js"
-        env:
-          DANGER_GITHUB_API_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
-
-  detekt:
-    name: Detekt Analysis
-    runs-on: ubuntu-latest
-    # Allow all jobs on main and develop. Just one per PR.
-    concurrency:
-      group: ${{ github.ref == 'refs/heads/main' && format('detekt-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('detekt-develop-{0}', github.sha) || format('detekt-{0}', github.ref) }}
-      cancel-in-progress: true
-    steps:
-      - uses: actions/checkout@v3
-      - name: Run detekt
-        run: |
-          ./gradlew detekt $CI_GRADLE_ARG_PROPERTIES
-      - name: Upload reports
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: detekt-report
-          path: |
-            */build/reports/detekt/detekt.html
-      - name: Prepare Danger
-        if: always()
-        run: |
-          npm install --save-dev @babel/core
-          npm install --save-dev @babel/plugin-transform-flow-strip-types
-          yarn add danger-plugin-lint-report --dev
-      - name: Danger lint
-        if: always()
-        uses: danger/danger-js@11.1.1
-        with:
-          args: "--dangerfile tools/danger/dangerfile-lint.js"
-        env:
-          DANGER_GITHUB_API_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
