@@ -22,7 +22,9 @@ import im.vector.app.R
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.ReAuthHelper
+import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
+import im.vector.app.features.onboarding.RegistrationStateFixture.aRegistrationState
 import im.vector.app.features.onboarding.StartAuthenticationFlowUseCase.StartAuthenticationResult
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakeAnalyticsTracker
@@ -78,6 +80,7 @@ private const val A_USERNAME = "hello-world"
 private const val A_DEVICE_NAME = "a-device-name"
 private const val A_MATRIX_ID = "@$A_USERNAME:matrix.org"
 private const val A_LOGIN_TOKEN = "a-login-token"
+private val A_REGISTRATION_STATE = aRegistrationState(email = AN_EMAIL)
 
 class OnboardingViewModelTest {
 
@@ -779,6 +782,107 @@ class OnboardingViewModelTest {
                         { copy(isLoading = false, resetState = ResetState()) }
                 )
                 .assertEvents(OnboardingViewEvents.OnResetPasswordComplete)
+                .finish()
+    }
+
+    @Test
+    fun `given homeserver state, when resetting homeserver url, then resets auth service and state`() = runTest {
+        viewModelWith(initialState.copy(isLoading = true, selectedHomeserver = SELECTED_HOMESERVER_STATE))
+        val test = viewModel.test()
+        fakeAuthenticationService.expectReset()
+
+        viewModel.handle(OnboardingAction.ResetHomeServerUrl)
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = false, selectedHomeserver = SelectedHomeserverState()) },
+                )
+                .assertNoEvents()
+                .finish()
+        fakeAuthenticationService.verifyReset()
+    }
+
+    @Test
+    fun `given server type, when resetting homeserver type, then resets state`() = runTest {
+        viewModelWith(initialState.copy(serverType = ServerType.EMS))
+        val test = viewModel.test()
+
+        viewModel.handle(OnboardingAction.ResetHomeServerType)
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(serverType = ServerType.Unknown) },
+                )
+                .assertNoEvents()
+                .finish()
+    }
+
+    @Test
+    fun `given sign mode, when resetting sign mode, then resets state`() = runTest {
+        viewModelWith(initialState.copy(isLoading = true, signMode = SignMode.SignIn))
+        val test = viewModel.test()
+
+        viewModel.handle(OnboardingAction.ResetSignMode)
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = false, signMode = SignMode.Unknown) },
+                )
+                .assertNoEvents()
+                .finish()
+    }
+
+    @Test
+    fun `given registration state, when resetting authentication attempt, then cancels pending logic or registration and resets state`() = runTest {
+        viewModelWith(initialState.copy(isLoading = true, registrationState = A_REGISTRATION_STATE))
+        val test = viewModel.test()
+        fakeAuthenticationService.expectedCancelsPendingLogin()
+
+        viewModel.handle(OnboardingAction.ResetAuthenticationAttempt)
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = false, registrationState = RegistrationState()) },
+                )
+                .assertNoEvents()
+                .finish()
+        fakeAuthenticationService.verifyCancelsPendingLogin()
+    }
+
+
+    @Test
+    fun `given reset state, when resetting reset state, then resets state`() = runTest {
+        viewModelWith(initialState.copy(isLoading = true, resetState = ResetState(AN_EMAIL)))
+        val test = viewModel.test()
+
+        viewModel.handle(OnboardingAction.ResetResetPassword)
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = false, resetState = ResetState()) },
+                )
+                .assertNoEvents()
+                .finish()
+    }
+
+    @Test
+    fun `given registration state, when resetting user name, then resets state`() = runTest {
+        viewModelWith(initialState.copy(registrationState = A_REGISTRATION_STATE))
+        val test = viewModel.test()
+
+        viewModel.handle(OnboardingAction.ResetSelectedRegistrationUserName)
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(registrationState = RegistrationState()) },
+                )
+                .assertNoEvents()
                 .finish()
     }
 
