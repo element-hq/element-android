@@ -17,6 +17,7 @@
 package im.vector.app.ui.robot.settings
 
 import androidx.test.espresso.Espresso.pressBack
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogNegativeButton
@@ -34,8 +35,7 @@ class SettingsPreferencesRobot {
         clickOn(R.string.settings_theme)
         clickDialogNegativeButton()
         clickOn(R.string.font_size)
-        waitUntilActivityVisible<FontScaleSettingActivity> {
-            pressBack()
-        }
+        waitUntilViewVisible(withId(R.id.fons_scale_recycler))
+        pressBack()
     }
 }
