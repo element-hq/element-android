@@ -16,15 +16,21 @@
 
 package im.vector.app.test.fakes
 
+import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.mockk
 import org.matrix.android.sdk.api.auth.login.LoginWizard
+import org.matrix.android.sdk.api.session.Session
 
 class FakeLoginWizard : LoginWizard by mockk() {
 
     fun givenResetPasswordSuccess(email: String) {
         coJustRun { resetPassword(email) }
+    }
+
+    fun givenLoginWithTokenResult(token: String, result: Session) {
+        coEvery { loginWithToken(token) } returns result
     }
 
     fun givenConfirmResetPasswordSuccess(password: String) {

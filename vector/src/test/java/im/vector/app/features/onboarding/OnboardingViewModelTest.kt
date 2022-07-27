@@ -76,6 +76,7 @@ private const val AN_EMAIL = "hello@example.com"
 private const val A_PASSWORD = "a-password"
 private const val A_USERNAME = "hello-world"
 private const val A_MATRIX_ID = "@$A_USERNAME:matrix.org"
+private const val A_LOGIN_TOKEN = "a-login-token"
 
 class OnboardingViewModelTest {
 
@@ -138,6 +139,25 @@ class OnboardingViewModelTest {
                         { copy(isLoading = false) }
                 )
                 .assertEvents(OnboardingViewEvents.OpenCombinedLogin)
+                .finish()
+    }
+
+    @Test
+    fun `given can successfully login in with token, when logging in with token, then emits AccountSignedIn`() = runTest {
+        val test = viewModel.test()
+        fakeAuthenticationService.givenLoginWizard(fakeLoginWizard)
+        fakeLoginWizard.givenLoginWithTokenResult(A_LOGIN_TOKEN, fakeSession)
+        givenInitialisesSession(fakeSession)
+
+        viewModel.handle(OnboardingAction.LoginWithToken(A_LOGIN_TOKEN))
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false) }
+                )
+                .assertEvents(OnboardingViewEvents.OnAccountSignedIn)
                 .finish()
     }
 
