@@ -45,7 +45,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
-import org.matrix.android.sdk.api.query.SpaceFilter
+import org.matrix.android.sdk.api.query.toActiveSpaceOrNoFilter
 import org.matrix.android.sdk.api.query.toActiveSpaceOrOrphanRooms
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.NewSessionListener
@@ -235,7 +235,7 @@ class HomeDetailViewModel @AssistedInject constructor(
                                 roomSummaryQueryParams {
                                     memberships = listOf(Membership.INVITE)
                                     roomCategoryFilter = RoomCategoryFilter.ONLY_DM
-                                    spaceFilter = activeSpaceRoomId?.let { SpaceFilter.ActiveSpace(it) }
+                                    spaceFilter = activeSpaceRoomId.toActiveSpaceOrNoFilter()
                                 }
                         ).size
 
@@ -252,7 +252,7 @@ class HomeDetailViewModel @AssistedInject constructor(
                             roomSummaryQueryParams {
                                 memberships = listOf(Membership.JOIN)
                                 roomCategoryFilter = RoomCategoryFilter.ONLY_DM
-                                spaceFilter = activeSpaceRoomId?.let { SpaceFilter.ActiveSpace(it) }
+                                spaceFilter = activeSpaceRoomId.toActiveSpaceOrNoFilter()
                             }
                     )
 

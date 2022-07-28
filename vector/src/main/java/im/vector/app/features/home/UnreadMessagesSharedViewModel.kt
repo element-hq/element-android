@@ -142,8 +142,9 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(
             val totalCount = roomService.getNotificationCountForRooms(
                     roomSummaryQueryParams {
                         this.memberships = listOf(Membership.JOIN)
-                        this.spaceFilter = SpaceFilter.OrphanRooms.takeIf {
-                            !vectorPreferences.prefSpacesShowAllRoomInHome()
+                        this.spaceFilter = when {
+                            vectorPreferences.prefSpacesShowAllRoomInHome() -> SpaceFilter.NoFilter
+                            else -> SpaceFilter.OrphanRooms
                         }
                     }
             )
