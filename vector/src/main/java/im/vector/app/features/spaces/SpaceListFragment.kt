@@ -37,6 +37,10 @@ import im.vector.app.features.home.HomeSharedActionViewModel
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 
+/**
+ * This Fragment is displayed in the navigation drawer [im.vector.app.features.home.HomeDrawerFragment] and
+ * is displaying the space hierarchy, with some actions on Spaces.
+ */
 class SpaceListFragment @Inject constructor(
         private val spaceController: SpaceSummaryController
 ) : VectorBaseFragment<FragmentSpaceListBinding>(), SpaceSummaryController.Callback {
