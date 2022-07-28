@@ -76,6 +76,12 @@ class MapTilerMapView @JvmOverloads constructor(
         showLocationButton = typedArray.getBoolean(R.styleable.MapTilerMapView_showLocateButton, false)
     }
 
+    override fun onDestroy() {
+        mapRefs?.symbolManager?.onDestroy()
+        mapRefs = null
+        super.onDestroy()
+    }
+
     /**
      * For location fragments.
      */
