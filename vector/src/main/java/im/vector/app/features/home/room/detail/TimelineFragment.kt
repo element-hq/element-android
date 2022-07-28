@@ -2616,12 +2616,8 @@ class TimelineFragment :
 
     private fun launchAttachmentProcess(type: AttachmentTypeSelectorView.Type) {
         when (type) {
-            AttachmentTypeSelectorView.Type.CAMERA -> attachmentsHelper.openCamera(
-                    activity = requireActivity(),
-                    vectorPreferences = vectorPreferences,
-                    cameraActivityResultLauncher = attachmentCameraActivityResultLauncher,
-                    cameraVideoActivityResultLauncher = attachmentCameraVideoActivityResultLauncher
-            )
+            AttachmentTypeSelectorView.Type.PHOTO_CAMERA -> attachmentsHelper.openPhotoCamera(attachmentCameraActivityResultLauncher)
+            AttachmentTypeSelectorView.Type.VIDEO_CAMERA -> attachmentsHelper.openVideoCamera(attachmentCameraVideoActivityResultLauncher)
             AttachmentTypeSelectorView.Type.FILE -> attachmentsHelper.selectFile(attachmentFileActivityResultLauncher)
             AttachmentTypeSelectorView.Type.GALLERY -> attachmentsHelper.selectGallery(attachmentMediaActivityResultLauncher)
             AttachmentTypeSelectorView.Type.CONTACT -> attachmentsHelper.selectContact(attachmentContactActivityResultLauncher)

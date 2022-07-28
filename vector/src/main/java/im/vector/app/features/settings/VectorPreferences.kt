@@ -207,8 +207,6 @@ class VectorPreferences @Inject constructor(
 
         private const val SETTINGS_UNKNOWN_DEVICE_DISMISSED_LIST = "SETTINGS_UNKNWON_DEVICE_DISMISSED_LIST"
 
-        private const val TAKE_PHOTO_VIDEO_MODE = "TAKE_PHOTO_VIDEO_MODE"
-
         private const val SETTINGS_LABS_ENABLE_LIVE_LOCATION = "SETTINGS_LABS_ENABLE_LIVE_LOCATION"
 
         private const val SETTINGS_LABS_ENABLE_ELEMENT_CALL_PERMISSION_SHORTCUTS = "SETTINGS_LABS_ENABLE_ELEMENT_CALL_PERMISSION_SHORTCUTS"
@@ -222,11 +220,6 @@ class VectorPreferences @Inject constructor(
 
         // This key will be used to enable user for displaying live user info or not.
         const val SETTINGS_TIMELINE_SHOW_LIVE_SENDER_INFO = "SETTINGS_TIMELINE_SHOW_LIVE_SENDER_INFO"
-
-        // Possible values for TAKE_PHOTO_VIDEO_MODE
-        const val TAKE_PHOTO_VIDEO_MODE_ALWAYS_ASK = 0
-        const val TAKE_PHOTO_VIDEO_MODE_PHOTO = 1
-        const val TAKE_PHOTO_VIDEO_MODE_VIDEO = 2
 
         // Background sync modes
 
@@ -445,15 +438,6 @@ class VectorPreferences @Inject constructor(
      */
     fun showAvatarDisplayNameChangeMessages(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY, true)
-    }
-
-    /**
-     * Tells the native camera to take a photo or record a video.
-     *
-     * @return true to use the native camera app to record video or take photo.
-     */
-    fun useNativeCamera(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_USE_NATIVE_CAMERA_PREFERENCE_KEY, false)
     }
 
     /**
@@ -1045,19 +1029,6 @@ class VectorPreferences @Inject constructor(
 
     fun prefSpacesShowAllRoomInHome(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME, false)
-    }
-
-    /*
-     * Photo / video picker
-     */
-    fun getTakePhotoVideoMode(): Int {
-        return defaultPrefs.getInt(TAKE_PHOTO_VIDEO_MODE, TAKE_PHOTO_VIDEO_MODE_ALWAYS_ASK)
-    }
-
-    fun setTakePhotoVideoMode(mode: Int) {
-        return defaultPrefs.edit {
-            putInt(TAKE_PHOTO_VIDEO_MODE, mode)
-        }
     }
 
     fun labsEnableLiveLocation(): Boolean {
