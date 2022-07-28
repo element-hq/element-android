@@ -100,7 +100,7 @@ class SpaceListViewModel @AssistedInject constructor(
                     this.memberships = listOf(Membership.JOIN)
                     this.spaceFilter = SpaceFilter.OrphanRooms.takeIf {
                         !vectorPreferences.prefSpacesShowAllRoomInHome()
-                    }
+                    } ?: SpaceFilter.NoFilter
                 }, sortOrder = RoomSortOrder.NONE
         ).asFlow()
                 .sample(300)
@@ -117,7 +117,7 @@ class SpaceListViewModel @AssistedInject constructor(
                                 this.memberships = listOf(Membership.JOIN)
                                 this.spaceFilter = SpaceFilter.OrphanRooms.takeIf {
                                     !vectorPreferences.prefSpacesShowAllRoomInHome()
-                                }
+                                } ?: SpaceFilter.NoFilter
                             }
                     )
                     val counts = RoomAggregateNotificationCount(

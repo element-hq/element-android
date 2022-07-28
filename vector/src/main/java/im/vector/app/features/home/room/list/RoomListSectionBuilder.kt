@@ -45,6 +45,7 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.query.RoomTagQueryFilter
 import org.matrix.android.sdk.api.query.SpaceFilter
+import org.matrix.android.sdk.api.query.toActiveSpaceOrNoFilter
 import org.matrix.android.sdk.api.query.toActiveSpaceOrOrphanRooms
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoomSummary
@@ -393,7 +394,7 @@ class RoomListSectionBuilder(
                                 )
                             } else {
                                 filteredPagedRoomSummariesLive.queryParams = roomQueryParams.copy(
-                                        spaceFilter = null
+                                        spaceFilter = SpaceFilter.NoFilter
                                 )
                             }
                             liveQueryParams.update { filteredPagedRoomSummariesLive.queryParams }
@@ -449,7 +450,7 @@ class RoomListSectionBuilder(
             }
             RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL -> {
                 copy(
-                        spaceFilter = currentSpace?.let { SpaceFilter.ActiveSpace(it) }
+                        spaceFilter = currentSpace.toActiveSpaceOrNoFilter()
                 )
             }
             RoomListViewModel.SpaceFilterStrategy.NONE -> this

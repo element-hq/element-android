@@ -39,6 +39,7 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.query.SpaceFilter
+import org.matrix.android.sdk.api.query.toActiveSpaceOrNoFilter
 import org.matrix.android.sdk.api.query.toActiveSpaceOrOrphanRooms
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoom
@@ -121,15 +122,15 @@ class HomeRoomListViewModel @AssistedInject constructor(
         )
     }
 
-    private fun getSpaceFilter(selectedSpaceId: String?, strategy: RoomListViewModel.SpaceFilterStrategy): SpaceFilter? {
+    private fun getSpaceFilter(selectedSpaceId: String?, strategy: RoomListViewModel.SpaceFilterStrategy): SpaceFilter {
         return when (strategy) {
             RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL -> {
                 selectedSpaceId.toActiveSpaceOrOrphanRooms()
             }
             RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL -> {
-                selectedSpaceId?.let { SpaceFilter.ActiveSpace(it) }
+                selectedSpaceId.toActiveSpaceOrNoFilter()
             }
-            RoomListViewModel.SpaceFilterStrategy.NONE -> null
+            RoomListViewModel.SpaceFilterStrategy.NONE -> SpaceFilter.NoFilter
         }
     }
 
