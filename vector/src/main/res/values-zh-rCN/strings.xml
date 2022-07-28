@@ -2126,7 +2126,7 @@
     <string name="call_tile_voice_missed">未接语音通话</string>
     <string name="call_tile_video_declined">视频通话被拒绝</string>
     <string name="call_tile_voice_declined">语音通话被拒绝</string>
-    <string name="call_tile_video_call_has_ended">视频通话结束了 • %1$s</string>
+    <string name="call_tile_video_call_has_ended">视频通话已结束 • %1$s</string>
     <string name="call_tile_voice_call_has_ended">语音通话结束了 • %1$s</string>
     <string name="call_tile_video_incoming">视频来电</string>
     <string name="call_tile_voice_incoming">语音来电</string>
