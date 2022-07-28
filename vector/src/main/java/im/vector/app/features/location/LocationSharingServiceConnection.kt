@@ -67,7 +67,7 @@ class LocationSharingServiceConnection @Inject constructor(
     }
 
     override fun onServiceConnected(className: ComponentName, binder: IBinder) {
-        locationSharingAndroidService = (binder as LocationSharingAndroidService.LocalBinder).getService().also { service ->
+        locationSharingAndroidService = (binder as LocationSharingAndroidServiceBinder).getService()?.also { service ->
             service.callback = this
             getActiveSessionCoroutineScope()?.let { scope ->
                 service.roomIdsOfActiveLives
