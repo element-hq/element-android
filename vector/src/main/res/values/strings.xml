@@ -1608,6 +1608,11 @@
     <!-- Note to translators: for RTL languages, the + will be at the bottom left. Please translate "bottom left" instead of "bottom right". Thanks! -->
     <string name="room_list_rooms_empty_body">Your rooms will be displayed here. Tap the + at the bottom right to find existing ones or start some of your own.</string>
 
+    <string name="room_list_filter_all">All</string>
+    <string name="room_list_filter_unreads">Unreads</string>
+    <string name="room_list_filter_favourites">Favourites</string>
+    <string name="room_list_filter_people">People</string>
+
     <string name="title_activity_emoji_reaction_picker">Reactions</string>
     <string name="message_add_reaction">Add Reaction</string>
     <string name="message_view_reaction">View Reactions</string>

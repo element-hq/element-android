@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.home.room.list.home
+package im.vector.app.features.home.room.list.home.filter
 
-import androidx.lifecycle.LiveData
-import androidx.paging.PagedList
-import im.vector.app.features.home.room.list.home.filter.HomeRoomFilter
-import kotlinx.coroutines.flow.SharedFlow
-import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import androidx.annotation.StringRes
+import im.vector.app.R
 
-sealed class HomeRoomSection {
-    data class RoomSummaryData(
-            val list: LiveData<PagedList<RoomSummary>>,
-            val showFilters: Boolean,
-            val filtersData: SharedFlow<List<HomeRoomFilter>>
-    ) : HomeRoomSection()
+enum class HomeRoomFilter(@StringRes val titleRes: Int) {
+    ALL(R.string.room_list_filter_all),
+    UNREADS(R.string.room_list_filter_unreads),
+    FAVOURITES(R.string.room_list_filter_favourites),
+    PEOPlE(R.string.room_list_filter_people),
 }
