@@ -27,7 +27,6 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.home.room.list.RoomListViewModel
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -107,13 +106,8 @@ class HomeRoomListViewModel @AssistedInject constructor(
                 }
                 .onEach { selectedSpaceOption ->
                     val selectedSpace = selectedSpaceOption.orNull()
-                    val strategy = if (!vectorPreferences.prefSpacesShowAllRoomInHome()) {
-                        RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL
-                    } else {
-                        RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL
-                    }
                     filteredPagedRoomSummariesLive.queryParams = filteredPagedRoomSummariesLive.queryParams.copy(
-                            spaceFilter = getSpaceFilter(selectedSpaceId = selectedSpace?.roomId, strategy)
+                            spaceFilter = getSpaceFilter(selectedSpaceId = selectedSpace?.roomId)
                     )
                 }.launchIn(viewModelScope)
 
@@ -122,15 +116,10 @@ class HomeRoomListViewModel @AssistedInject constructor(
         )
     }
 
-    private fun getSpaceFilter(selectedSpaceId: String?, strategy: RoomListViewModel.SpaceFilterStrategy): SpaceFilter {
-        return when (strategy) {
-            RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL -> {
-                selectedSpaceId.toActiveSpaceOrOrphanRooms()
-            }
-            RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL -> {
-                selectedSpaceId.toActiveSpaceOrNoFilter()
-            }
-            RoomListViewModel.SpaceFilterStrategy.NONE -> SpaceFilter.NoFilter
+    private fun getSpaceFilter(selectedSpaceId: String?): SpaceFilter {
+        return when {
+            vectorPreferences.prefSpacesShowAllRoomInHome() -> selectedSpaceId.toActiveSpaceOrNoFilter()
+            else -> selectedSpaceId.toActiveSpaceOrOrphanRooms()
         }
     }
 

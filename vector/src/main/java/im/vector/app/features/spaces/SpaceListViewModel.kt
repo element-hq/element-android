@@ -98,9 +98,7 @@ class SpaceListViewModel @AssistedInject constructor(
         session.roomService().getPagedRoomSummariesLive(
                 roomSummaryQueryParams {
                     this.memberships = listOf(Membership.JOIN)
-                    this.spaceFilter = SpaceFilter.OrphanRooms.takeIf {
-                        !vectorPreferences.prefSpacesShowAllRoomInHome()
-                    } ?: SpaceFilter.NoFilter
+                    this.spaceFilter = roomsInSpaceFilter()
                 }, sortOrder = RoomSortOrder.NONE
         ).asFlow()
                 .sample(300)
@@ -115,9 +113,7 @@ class SpaceListViewModel @AssistedInject constructor(
                     val totalCount = session.roomService().getNotificationCountForRooms(
                             roomSummaryQueryParams {
                                 this.memberships = listOf(Membership.JOIN)
-                                this.spaceFilter = SpaceFilter.OrphanRooms.takeIf {
-                                    !vectorPreferences.prefSpacesShowAllRoomInHome()
-                                } ?: SpaceFilter.NoFilter
+                                this.spaceFilter = roomsInSpaceFilter()
                             }
                     )
                     val counts = RoomAggregateNotificationCount(
@@ -132,6 +128,11 @@ class SpaceListViewModel @AssistedInject constructor(
                 }
                 .flowOn(Dispatchers.Default)
                 .launchIn(viewModelScope)
+    }
+
+    private fun roomsInSpaceFilter() = when {
+        vectorPreferences.prefSpacesShowAllRoomInHome() -> SpaceFilter.NoFilter
+        else -> SpaceFilter.OrphanRooms
     }
 
     override fun handle(action: SpaceListAction) {
