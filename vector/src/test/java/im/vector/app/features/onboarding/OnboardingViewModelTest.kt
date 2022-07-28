@@ -867,7 +867,6 @@ class OnboardingViewModelTest {
         viewModel.handle(OnboardingAction.ResetResetPassword)
 
         test
-
                 .assertStatesChanges(
                         initialState,
                         { copy(isLoading = false, resetState = ResetState()) },
@@ -907,7 +906,6 @@ class OnboardingViewModelTest {
                         { copy(selectedAuthenticationState = SelectedAuthenticationState(SSO_REGISTRATION_DESCRIPTION)) }
                 )
                 .finish()
-
     }
 
     private fun viewModelWith(state: OnboardingViewState) {
