@@ -17,17 +17,23 @@
 package org.matrix.android.sdk.internal.session
 
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.newCoroutineContext
+import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.SessionLifecycleObserver
+import org.matrix.android.sdk.internal.di.MatrixCoroutineScope
 import javax.inject.Inject
 
 @SessionScope
-internal class SessionCoroutineScopeHolder @Inject constructor() : SessionLifecycleObserver {
+internal class SessionCoroutineScopeHolder @Inject constructor(
+        @MatrixCoroutineScope private val parentScope: CoroutineScope,
+) : SessionLifecycleObserver {
 
-    val scope: CoroutineScope = CoroutineScope(SupervisorJob())
+    val scope: CoroutineScope = CoroutineScope(parentScope.coroutineContext + SupervisorJob() + CoroutineName("Session"))
 
     override fun onSessionStopped(session: Session) {
         scope.cancelChildren()

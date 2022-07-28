@@ -25,6 +25,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoSet
 import io.realm.RealmConfiguration
+import kotlinx.coroutines.CoroutineScope
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.auth.data.Credentials
@@ -53,6 +54,7 @@ import org.matrix.android.sdk.internal.database.SessionRealmConfigurationFactory
 import org.matrix.android.sdk.internal.di.Authenticated
 import org.matrix.android.sdk.internal.di.CacheDirectory
 import org.matrix.android.sdk.internal.di.DeviceId
+import org.matrix.android.sdk.internal.di.SessionCoroutineScope
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.SessionDownloadsDirectory
 import org.matrix.android.sdk.internal.di.SessionFilesDirectory
@@ -303,6 +305,14 @@ internal abstract class SessionModule {
         fun providesMxCryptoConfig(matrixConfiguration: MatrixConfiguration): MXCryptoConfig {
             return matrixConfiguration.cryptoConfig
         }
+
+        @JvmStatic
+        @Provides
+        @SessionCoroutineScope
+        fun providesSessionCoroutineScope(coroutineScopeHolder: SessionCoroutineScopeHolder): CoroutineScope {
+            return coroutineScopeHolder.scope
+        }
+
     }
 
     @Binds
