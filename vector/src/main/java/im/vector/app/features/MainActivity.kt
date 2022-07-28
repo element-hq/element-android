@@ -141,6 +141,8 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        shortcutsHandler.updateShortcutsWithPreviousIntent()
+
         startAppViewModel.onEach {
             renderState(it)
         }
