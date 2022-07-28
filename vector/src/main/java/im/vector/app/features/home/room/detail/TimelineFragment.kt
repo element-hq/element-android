@@ -966,6 +966,7 @@ class TimelineFragment @Inject constructor(
 
     override fun onDestroyView() {
         audioMessagePlaybackTracker.makeAllPlaybacksIdle()
+        audioMessagePlaybackTracker.clear()
         lazyLoadedViews.unBind()
         timelineEventController.callback = null
         timelineEventController.removeModelBuildListener(modelBuildListener)
