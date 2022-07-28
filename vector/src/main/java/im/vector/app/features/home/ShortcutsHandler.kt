@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.ShortcutManager
@@ -96,7 +97,9 @@ class ShortcutsHandler @Inject constructor(
                 .launchIn(coroutineScope)
     }
 
+    @SuppressLint("RestrictedApi")
     fun updateShortcutsWithPreviousIntent() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) return
         // Check if it's been already done
         if (sharedPreferences.getBoolean(SHARED_PREF_KEY, false)) return
         ShortcutManagerCompat.getShortcuts(context, ShortcutManagerCompat.FLAG_MATCH_PINNED)
