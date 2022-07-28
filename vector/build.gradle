@@ -27,6 +27,7 @@ knit {
         exclude '**/.gradle/**'
         exclude '**/towncrier/template.md'
         exclude '**/CHANGES.md'
+        exclude '/node_modules'
     }
 }
 
