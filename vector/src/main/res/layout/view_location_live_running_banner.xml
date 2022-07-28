@@ -7,7 +7,7 @@
     tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
 
     <ImageView
-        android:id="@+id/locationLiveMessageBannerBackground"
+        android:id="@+id/locationLiveRunningBannerBackground"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:alpha="0.75"
@@ -18,7 +18,7 @@
         tools:ignore="ContentDescription" />
 
     <ImageView
-        android:id="@+id/locationLiveMessageBannerIcon"
+        android:id="@+id/locationLiveRunningBannerIcon"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginHorizontal="8dp"
@@ -26,42 +26,50 @@
         android:backgroundTint="?vctr_live_location"
         android:padding="3dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@id/locationLiveMessageBannerBackground"
+        app:layout_constraintStart_toStartOf="@id/locationLiveRunningBannerBackground"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_attachment_location_live_white"
         tools:ignore="ContentDescription" />
 
     <TextView
-        android:id="@+id/locationLiveMessageBannerTitle"
+        android:id="@+id/locationLiveRunningBannerTitle"
         style="@style/Widget.Vector.TextView.Caption"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="8dp"
+        android:ellipsize="end"
+        android:lines="1"
         android:textColor="?colorOnSurface"
-        app:layout_constraintBottom_toTopOf="@id/locationLiveMessageBannerSubTitle"
-        app:layout_constraintStart_toEndOf="@id/locationLiveMessageBannerIcon"
+        app:layout_constraintBottom_toTopOf="@id/locationLiveRunningBannerSubTitle"
+        app:layout_constraintEnd_toStartOf="@id/locationLiveRunningBannerStop"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/locationLiveRunningBannerIcon"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
         tools:text="@string/location_share_live_enabled" />
 
     <TextView
-        android:id="@+id/locationLiveMessageBannerSubTitle"
+        android:id="@+id/locationLiveRunningBannerSubTitle"
         style="@style/Widget.Vector.TextView.Caption"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:lines="1"
         android:textColor="?vctr_content_secondary"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@id/locationLiveMessageBannerTitle"
-        app:layout_constraintTop_toBottomOf="@id/locationLiveMessageBannerTitle"
+        app:layout_constraintEnd_toEndOf="@id/locationLiveRunningBannerTitle"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="@id/locationLiveRunningBannerTitle"
+        app:layout_constraintTop_toBottomOf="@id/locationLiveRunningBannerTitle"
         tools:text="9min left" />
 
     <Button
-        android:id="@+id/locationLiveMessageBannerStop"
+        android:id="@+id/locationLiveRunningBannerStop"
         style="@style/Widget.Vector.Button.Text.LocationLive"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/location_share_live_stop"
-        app:layout_constraintBottom_toBottomOf="@id/locationLiveMessageBannerBackground"
+        app:layout_constraintBottom_toBottomOf="@id/locationLiveRunningBannerBackground"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/locationLiveMessageBannerBackground" />
+        app:layout_constraintTop_toTopOf="@id/locationLiveRunningBannerBackground" />
 </merge>

@@ -248,9 +248,12 @@ jobs:
     # Skip in forks
     if: >
       github.repository == 'vector-im/element-android' &&
-      (contains(github.event.issue.labels.*.name, 'Z-ElementX-Alpha') ||
-        contains(github.event.issue.labels.*.name, 'Z-ElementX-Beta') ||
-        contains(github.event.issue.labels.*.name, 'Z-ElementX'))
+      (contains(github.event.issue.labels.*.name, 'Z-BBQ-Alpha') ||
+        contains(github.event.issue.labels.*.name, 'Z-BBQ-Beta') ||
+        contains(github.event.issue.labels.*.name, 'Z-BBQ-Release') ||
+        contains(github.event.issue.labels.*.name, 'Z-Banquet-Alpha') ||
+        contains(github.event.issue.labels.*.name, 'Z-Banquet-Beta') ||
+        contains(github.event.issue.labels.*.name, 'Z-Banquet-Release'))
     steps:
       - uses: octokit/graphql-action@v2.x
         with:

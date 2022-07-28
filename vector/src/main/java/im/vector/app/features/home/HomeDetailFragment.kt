@@ -41,6 +41,7 @@ import im.vector.app.core.ui.views.CurrentCallsView
 import im.vector.app.core.ui.views.CurrentCallsViewPresenter
 import im.vector.app.core.ui.views.KeysBackupBanner
 import im.vector.app.databinding.FragmentHomeDetailBinding
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.call.SharedKnownCallsViewModel
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.dialpad.DialPadFragment
@@ -48,6 +49,7 @@ import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.home.room.list.RoomListFragment
 import im.vector.app.features.home.room.list.RoomListParams
 import im.vector.app.features.home.room.list.UnreadCounterBadgeView
+import im.vector.app.features.home.room.list.home.HomeRoomListFragment
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
 import im.vector.app.features.settings.VectorLocale
@@ -66,7 +68,8 @@ class HomeDetailFragment @Inject constructor(
         private val alertManager: PopupAlertManager,
         private val callManager: WebRtcCallManager,
         private val vectorPreferences: VectorPreferences,
-        private val spaceStateHandler: SpaceStateHandler
+        private val spaceStateHandler: SpaceStateHandler,
+        private val vectorFeatures: VectorFeatures,
 ) : VectorBaseFragment<FragmentHomeDetailBinding>(),
         KeysBackupBanner.Delegate,
         CurrentCallsView.Callback,
@@ -352,8 +355,12 @@ class HomeDetailFragment @Inject constructor(
             if (fragmentToShow == null) {
                 when (tab) {
                     is HomeTab.RoomList -> {
-                        val params = RoomListParams(tab.displayMode)
-                        add(R.id.roomListContainer, RoomListFragment::class.java, params.toMvRxBundle(), fragmentTag)
+                        if (vectorFeatures.isNewAppLayoutEnabled()) {
+                            add(R.id.roomListContainer, HomeRoomListFragment::class.java, null, fragmentTag)
+                        } else {
+                            val params = RoomListParams(tab.displayMode)
+                            add(R.id.roomListContainer, RoomListFragment::class.java, params.toMvRxBundle(), fragmentTag)
+                        }
                     }
                     is HomeTab.DialPad -> {
                         add(R.id.roomListContainer, createDialPadFragment(), fragmentTag)

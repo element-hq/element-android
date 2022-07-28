@@ -206,6 +206,8 @@ class VectorPreferences @Inject constructor(
 
         private const val SETTINGS_LABS_ENABLE_LIVE_LOCATION = "SETTINGS_LABS_ENABLE_LIVE_LOCATION"
 
+        private const val SETTINGS_LABS_ENABLE_ELEMENT_CALL_PERMISSION_SHORTCUTS = "SETTINGS_LABS_ENABLE_ELEMENT_CALL_PERMISSION_SHORTCUTS"
+
         // This key will be used to identify clients with the old thread support enabled io.element.thread
         const val SETTINGS_LABS_ENABLE_THREAD_MESSAGES_OLD_CLIENTS = "SETTINGS_LABS_ENABLE_THREAD_MESSAGES"
 
@@ -1048,6 +1050,10 @@ class VectorPreferences @Inject constructor(
         defaultPrefs.edit {
             putBoolean(SETTINGS_LABS_ENABLE_LIVE_LOCATION, isEnabled)
         }
+    }
+
+    fun labsEnableElementCallPermissionShortcuts(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_LABS_ENABLE_ELEMENT_CALL_PERMISSION_SHORTCUTS, false)
     }
 
     /**

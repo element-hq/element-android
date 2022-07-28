@@ -302,7 +302,8 @@ class Login2Variant(
 
     private fun terminate() {
         val intent = HomeActivity.newIntent(
-                activity
+                activity,
+                firstStartMainActivity = false,
         )
         activity.startActivity(intent)
         activity.finish()

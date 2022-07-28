@@ -18,7 +18,6 @@ package im.vector.app.features.home.room.detail
 
 import android.net.Uri
 import androidx.annotation.IdRes
-import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -467,6 +466,13 @@ class TimelineViewModel @AssistedInject constructor(
             }
             is RoomDetailAction.EndPoll -> handleEndPoll(action.eventId)
             RoomDetailAction.StopLiveLocationSharing -> handleStopLiveLocationSharing()
+            RoomDetailAction.OpenElementCallWidget -> handleOpenElementCallWidget()
+        }
+    }
+
+    private fun handleOpenElementCallWidget() = withState { state ->
+        if (state.hasActiveElementCallWidget()) {
+            _viewEvents.post(RoomDetailViewEvents.OpenElementCallWidget)
         }
     }
 
@@ -752,7 +758,7 @@ class TimelineViewModel @AssistedInject constructor(
                     R.id.timeline_setting -> true
                     R.id.invite -> state.canInvite
                     R.id.open_matrix_apps -> true
-                    R.id.voice_call -> state.isCallOptionAvailable()
+                    R.id.voice_call -> state.isCallOptionAvailable() || state.hasActiveElementCallWidget()
                     R.id.video_call -> state.isCallOptionAvailable() || state.jitsiState.confId == null || state.jitsiState.hasJoined
                     // Show Join conference button only if there is an active conf id not joined. Otherwise fallback to default video disabled. ^
                     R.id.join_conference -> !state.isCallOptionAvailable() && state.jitsiState.confId != null && !state.jitsiState.hasJoined
@@ -1145,8 +1151,7 @@ class TimelineViewModel @AssistedInject constructor(
                     copy(syncState = syncState)
                 }
 
-        session.syncService().getSyncRequestStateLive()
-                .asFlow()
+        session.syncService().getSyncRequestStateFlow()
                 .filterIsInstance<SyncRequestState.IncrementalSyncRequestState>()
                 .setOnEach {
                     copy(incrementalSyncRequestState = it)

@@ -45,8 +45,8 @@
         app:layout_constraintTop_toBottomOf="@id/staticMapPinImageView"
         tools:visibility="visible" />
 
-    <im.vector.app.features.location.live.LocationLiveMessageBannerView
-        android:id="@+id/locationLiveMessageBanner"
+    <im.vector.app.features.location.live.LocationLiveRunningBannerView
+        android:id="@+id/locationLiveRunningBanner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:visibility="gone"

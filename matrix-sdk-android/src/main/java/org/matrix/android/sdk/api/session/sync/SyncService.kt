@@ -60,9 +60,9 @@ interface SyncService {
     fun getSyncStateLive(): LiveData<SyncState>
 
     /**
-     * Get the [SyncRequestState] as a LiveData.
+     * Get the [SyncRequestState] as a SharedFlow.
      */
-    fun getSyncRequestStateLive(): LiveData<SyncRequestState>
+    fun getSyncRequestStateFlow(): SharedFlow<SyncRequestState>
 
     /**
      * This method returns a flow of SyncResponse. New value will be pushed through the sync thread.

@@ -46,9 +46,9 @@ class DefaultVectorFeatures : VectorFeatures {
     override fun isOnboardingAlreadyHaveAccountSplashEnabled() = true
     override fun isOnboardingSplashCarouselEnabled() = true
     override fun isOnboardingUseCaseEnabled() = true
-    override fun isOnboardingPersonalizeEnabled() = false
-    override fun isOnboardingCombinedRegisterEnabled() = false
-    override fun isOnboardingCombinedLoginEnabled() = false
+    override fun isOnboardingPersonalizeEnabled() = true
+    override fun isOnboardingCombinedRegisterEnabled() = true
+    override fun isOnboardingCombinedLoginEnabled() = true
     override fun allowExternalUnifiedPushDistributors(): Boolean = Config.ALLOW_EXTERNAL_UNIFIED_PUSH_DISTRIBUTORS
     override fun isScreenSharingEnabled(): Boolean = true
     override fun forceUsageOfOpusEncoder(): Boolean = false

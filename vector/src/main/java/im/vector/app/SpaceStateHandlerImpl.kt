@@ -17,7 +17,6 @@
 package im.vector.app
 
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.asFlow
 import arrow.core.Option
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.utils.BehaviorDataSource
@@ -119,8 +118,7 @@ class SpaceStateHandlerImpl @Inject constructor(
     }
 
     private fun observeSyncStatus(session: Session) {
-        session.syncService().getSyncRequestStateLive()
-                .asFlow()
+        session.syncService().getSyncRequestStateFlow()
                 .filterIsInstance<SyncRequestState.IncrementalSyncDone>()
                 .map { session.spaceService().getRootSpaceSummaries().size }
                 .distinctUntilChanged()

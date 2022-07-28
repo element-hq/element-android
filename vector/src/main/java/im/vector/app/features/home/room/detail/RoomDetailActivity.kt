@@ -35,6 +35,7 @@ import im.vector.app.core.extensions.keepScreenOn
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityRoomDetailBinding
+import im.vector.app.features.MainActivity
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.home.room.breadcrumbs.BreadcrumbsFragment
@@ -191,9 +192,14 @@ class RoomDetailActivity :
         const val EXTRA_ROOM_ID = "EXTRA_ROOM_ID"
         const val ACTION_ROOM_DETAILS_FROM_SHORTCUT = "ROOM_DETAILS_FROM_SHORTCUT"
 
-        fun newIntent(context: Context, timelineArgs: TimelineArgs): Intent {
-            return Intent(context, RoomDetailActivity::class.java).apply {
+        fun newIntent(context: Context, timelineArgs: TimelineArgs, firstStartMainActivity: Boolean): Intent {
+            val intent = Intent(context, RoomDetailActivity::class.java).apply {
                 putExtra(EXTRA_ROOM_DETAIL_ARGS, timelineArgs)
+            }
+            return if (firstStartMainActivity) {
+                MainActivity.getIntentWithNextIntent(context, intent)
+            } else {
+                intent
             }
         }
 

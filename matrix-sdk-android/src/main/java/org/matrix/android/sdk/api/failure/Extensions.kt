@@ -86,6 +86,10 @@ fun Throwable.isInvalidUIAAuth() = this is Failure.ServerError &&
 fun Throwable.isHomeserverUnavailable() = this is Failure.NetworkConnection &&
         this.ioException is UnknownHostException
 
+fun Throwable.isMissingEmailVerification() = this is Failure.ServerError &&
+        error.code == MatrixError.M_UNAUTHORIZED &&
+        error.message == "Unable to get validated threepid"
+
 /**
  * Try to convert to a RegistrationFlowResponse. Return null in the cases it's not possible
  */
