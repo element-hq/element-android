@@ -86,6 +86,8 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
         private const val EXTRA_ARGS = "EXTRA_ARGS"
         private const val EXTRA_NEXT_INTENT = "EXTRA_NEXT_INTENT"
         private const val EXTRA_INIT_SESSION = "EXTRA_INIT_SESSION"
+        private const val EXTRA_ROOM_ID = "EXTRA_ROOM_ID"
+        private const val ACTION_ROOM_DETAILS_FROM_SHORTCUT = "ROOM_DETAILS_FROM_SHORTCUT"
 
         // Special action to clear cache and/or clear credentials
         fun restartApp(activity: Activity, args: MainActivityArgs) {
@@ -106,6 +108,14 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
             val intent = Intent(context, MainActivity::class.java)
             intent.putExtra(EXTRA_NEXT_INTENT, nextIntent)
             return intent
+        }
+
+        // Shortcuts can't have intents with parcelables
+        fun shortcutIntent(context: Context, roomId: String): Intent {
+            return Intent(context, MainActivity::class.java).apply {
+                action = ACTION_ROOM_DETAILS_FROM_SHORTCUT
+                putExtra(EXTRA_ROOM_ID, roomId)
+            }
         }
     }
 
@@ -170,6 +180,13 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
             startIntentAndFinish(nextIntent)
         } else if (intent.hasExtra(EXTRA_INIT_SESSION)) {
             setResult(RESULT_OK)
+            finish()
+        } else if (intent.action == ACTION_ROOM_DETAILS_FROM_SHORTCUT) {
+            val roomId = intent.getStringExtra(EXTRA_ROOM_ID)
+            if (roomId?.isNotEmpty() == true) {
+                // TODO Add a trigger Shortcut to the analytics.
+                navigator.openRoom(this, roomId)
+            }
             finish()
         } else {
             args = parseArgs()
