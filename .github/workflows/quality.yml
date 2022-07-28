@@ -59,9 +59,7 @@ jobs:
         with:
           name: linting-report
           path: |
-            */build/reports/ktlint/ktlint*/ktlint*.txt
-            */build/reports/detekt/detekt.html
-            */build/reports/*.*
+            */build/reports/**/*.*
       - name: Prepare Danger
         if: always()
         run: |
