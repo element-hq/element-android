@@ -124,7 +124,7 @@ class HomeRoomListViewModel @AssistedInject constructor(
     private fun getSpaceFilter(selectedSpaceId: String?, strategy: RoomListViewModel.SpaceFilterStrategy): SpaceFilter? {
         return when (strategy) {
             RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL -> {
-                selectedSpaceId?.toActiveSpaceOrOrphanRooms()
+                selectedSpaceId.toActiveSpaceOrOrphanRooms()
             }
             RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL -> {
                 selectedSpaceId?.let { SpaceFilter.ActiveSpace(it) }

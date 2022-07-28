@@ -378,7 +378,7 @@ class RoomListSectionBuilder(
                     activeSpaceUpdaters.add(object : RoomListViewModel.ActiveSpaceQueryUpdater {
                         override fun updateForSpaceId(roomId: String?) {
                             filteredPagedRoomSummariesLive.queryParams = roomQueryParams.copy(
-                                    spaceFilter = roomId?.toActiveSpaceOrOrphanRooms()
+                                    spaceFilter = roomId.toActiveSpaceOrOrphanRooms()
                             )
                             liveQueryParams.update { filteredPagedRoomSummariesLive.queryParams }
                         }
@@ -444,7 +444,7 @@ class RoomListSectionBuilder(
         return when (spaceFilter) {
             RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL -> {
                 copy(
-                        spaceFilter = currentSpace?.toActiveSpaceOrOrphanRooms()
+                        spaceFilter = currentSpace.toActiveSpaceOrOrphanRooms()
                 )
             }
             RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL -> {
