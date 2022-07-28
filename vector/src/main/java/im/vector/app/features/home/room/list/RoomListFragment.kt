@@ -211,12 +211,14 @@ class RoomListFragment @Inject constructor(
     }
 
     private fun setupCreateRoomButton() {
-        when (roomListParams.displayMode) {
-            RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.isVisible = true
-            RoomListDisplayMode.PEOPLE -> views.createChatRoomButton.isVisible = true
-            RoomListDisplayMode.ROOMS -> views.createGroupRoomButton.isVisible = true
-            RoomListDisplayMode.FILTERED -> Unit // No button in this mode
-        }
+        // TODO: Uncomment
+//        when (roomListParams.displayMode) {
+//            RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.isVisible = true
+//            RoomListDisplayMode.PEOPLE -> views.createChatRoomButton.isVisible = false
+//            RoomListDisplayMode.PEOPLE -> views.createChatRoomButton.isVisible = true
+//            RoomListDisplayMode.ROOMS -> views.createGroupRoomButton.isVisible = true
+//            RoomListDisplayMode.FILTERED -> Unit // No button in this mode
+//        }
 
         views.createChatRoomButton.debouncedClicks {
             fabCreateDirectChat()
