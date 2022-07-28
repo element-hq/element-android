@@ -51,6 +51,8 @@ class FtueAuthSplashCarouselFragment @Inject constructor(
         private val carouselStateFactory: SplashCarouselStateFactory
 ) : AbstractFtueAuthFragment<FragmentFtueSplashCarouselBinding>() {
 
+    private var tabLayoutMediator: TabLayoutMediator? = null
+
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueSplashCarouselBinding {
         return FragmentFtueSplashCarouselBinding.inflate(inflater, container, false)
     }
@@ -60,10 +62,19 @@ class FtueAuthSplashCarouselFragment @Inject constructor(
         setupViews()
     }
 
+    override fun onDestroyView() {
+        tabLayoutMediator?.detach()
+        tabLayoutMediator = null
+        views.splashCarousel.adapter = null
+        super.onDestroyView()
+    }
+
     private fun setupViews() {
         val carouselAdapter = carouselController.adapter
         views.splashCarousel.adapter = carouselAdapter
-        TabLayoutMediator(views.carouselIndicator, views.splashCarousel) { _, _ -> }.attach()
+        tabLayoutMediator = TabLayoutMediator(views.carouselIndicator, views.splashCarousel) { _, _ -> }
+                .also { it.attach() }
+
         carouselController.setData(carouselStateFactory.create())
 
         val isAlreadyHaveAccountEnabled = vectorFeatures.isOnboardingAlreadyHaveAccountSplashEnabled()
