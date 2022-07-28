@@ -22,6 +22,7 @@ import android.util.AttributeSet
 import android.view.Gravity
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.use
 import androidx.core.view.marginBottom
 import androidx.core.view.marginTop
 import androidx.core.view.updateLayoutParams
@@ -60,17 +61,13 @@ class MapTilerMapView @JvmOverloads constructor(
     private var dimensionConverter: DimensionConverter? = null
 
     init {
-        context.theme.obtainStyledAttributes(
+        context.obtainStyledAttributes(
                 attrs,
                 R.styleable.MapTilerMapView,
                 0,
                 0
-        ).run {
-            try {
-                setLocateButtonVisibility(this)
-            } finally {
-                recycle()
-            }
+        ).use {
+            setLocateButtonVisibility(it)
         }
         dimensionConverter = DimensionConverter(resources)
     }
