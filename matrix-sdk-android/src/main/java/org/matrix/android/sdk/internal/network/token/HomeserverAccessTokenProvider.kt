@@ -24,5 +24,5 @@ internal class HomeserverAccessTokenProvider @Inject constructor(
         @SessionId private val sessionId: String,
         private val sessionParamsStore: SessionParamsStore
 ) : AccessTokenProvider {
-    override fun getToken() = sessionParamsStore.get(sessionId)?.credentials?.accessToken
+    override suspend fun getToken() = sessionParamsStore.get(sessionId)?.credentials?.accessToken
 }

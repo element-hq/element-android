@@ -32,7 +32,7 @@ interface IdentityService {
     /**
      * Return the current identity server URL used by this account. Returns null if no identity server is configured.
      */
-    fun getCurrentIdentityServerUrl(): String?
+    suspend fun getCurrentIdentityServerUrl(): String?
 
     /**
      * Check if the identity server is valid.
@@ -105,7 +105,7 @@ interface IdentityService {
      * @return the value stored using [setUserConsent] or false if [setUserConsent] has never been called, or if the identity server
      *         has been changed
      */
-    fun getUserConsent(): Boolean
+    suspend fun getUserConsent(): Boolean
 
     /**
      * Set the user consent to the provided value. Application MUST explicitly ask for the user consent to send their private data
@@ -113,7 +113,7 @@ interface IdentityService {
      * Please see https://support.google.com/googleplay/android-developer/answer/9888076?hl=en for more details.
      * @param newValue true if the user explicitly give their consent, false if the user wants to revoke their consent.
      */
-    fun setUserConsent(newValue: Boolean)
+    suspend fun setUserConsent(newValue: Boolean)
 
     /**
      * Get the status of the current user's threePid.

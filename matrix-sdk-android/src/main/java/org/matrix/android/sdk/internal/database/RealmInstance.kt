@@ -51,7 +51,7 @@ internal class RealmInstance(
 
     suspend fun open() {
         coroutineScope.launch {
-            realm.join()
+            realm.await()
         }.join()
     }
 

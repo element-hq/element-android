@@ -16,16 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.identity.db
 
-import io.realm.annotations.RealmModule
-
-/**
- * Realm module for identity server classes.
- */
-@RealmModule(
-        library = true,
-        classes = [
-            IdentityDataEntity::class,
-            IdentityPendingBindingEntity::class
-        ]
+internal val IDENTITY_REALM_SCHEMA = setOf(
+        IdentityDataEntity::class,
+        IdentityPendingBindingEntity::class,
 )
-internal class IdentityRealmModule

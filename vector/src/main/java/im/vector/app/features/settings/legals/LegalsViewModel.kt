@@ -52,14 +52,17 @@ class LegalsViewModel @AssistedInject constructor(
         }
     }
 
-    private fun loadData() = withState { state ->
-        loadHomeserver(state)
-        val url = session.identityService().getCurrentIdentityServerUrl()
-        if (url.isNullOrEmpty()) {
-            setState { copy(hasIdentityServer = false) }
-        } else {
-            setState { copy(hasIdentityServer = true) }
-            loadIdentityServer(state)
+    private fun loadData() {
+        viewModelScope.launch {
+            val state = awaitState()
+            loadHomeserver(state)
+            val url = session.identityService().getCurrentIdentityServerUrl()
+            if (url.isNullOrEmpty()) {
+                setState { copy(hasIdentityServer = false) }
+            } else {
+                setState { copy(hasIdentityServer = true) }
+                loadIdentityServer(state)
+            }
         }
     }
 

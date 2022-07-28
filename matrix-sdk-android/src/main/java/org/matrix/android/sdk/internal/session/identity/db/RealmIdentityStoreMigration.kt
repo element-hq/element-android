@@ -16,15 +16,16 @@
 
 package org.matrix.android.sdk.internal.session.identity.db
 
-import io.realm.DynamicRealm
+import io.realm.kotlin.migration.AutomaticSchemaMigration
+import org.matrix.android.sdk.internal.database.MatrixAutomaticSchemaMigration
 import org.matrix.android.sdk.internal.session.identity.db.migration.MigrateIdentityTo001
-import org.matrix.android.sdk.internal.util.database.MatrixRealmMigration
 import javax.inject.Inject
 
-internal class RealmIdentityStoreMigration @Inject constructor() : MatrixRealmMigration(
+internal class RealmIdentityStoreMigration @Inject constructor() : MatrixAutomaticSchemaMigration(
         dbName = "Identity",
         schemaVersion = 1L,
 ) {
+
     /**
      * Forces all RealmIdentityStoreMigration instances to be equal.
      * Avoids Realm throwing when multiple instances of the migration are set.
@@ -32,7 +33,7 @@ internal class RealmIdentityStoreMigration @Inject constructor() : MatrixRealmMi
     override fun equals(other: Any?) = other is RealmIdentityStoreMigration
     override fun hashCode() = 3000
 
-    override fun doMigrate(realm: DynamicRealm, oldVersion: Long) {
-        if (oldVersion < 1) MigrateIdentityTo001(realm).perform()
+    override fun doMigrate(oldVersion: Long, migrationContext: AutomaticSchemaMigration.MigrationContext) {
+        if (oldVersion < 1) MigrateIdentityTo001(migrationContext).perform()
     }
 }

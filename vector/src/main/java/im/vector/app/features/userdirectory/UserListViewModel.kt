@@ -31,6 +31,7 @@ import im.vector.app.core.extensions.toggle
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.discovery.fetchIdentityServerWithTerms
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
@@ -73,24 +74,30 @@ class UserListViewModel @AssistedInject constructor(
 
     private val identityServerListener = object : IdentityServiceListener {
         override fun onIdentityServerChange() {
-            withState {
-                identityServerUsersSearch.tryEmit(UserSearch(it.searchTerm))
-                val identityServerURL = cleanISURL(session.identityService().getCurrentIdentityServerUrl())
-                setState {
-                    copy(configuredIdentityServer = identityServerURL)
-                }
+            viewModelScope.launch {
+                identityServerUsersSearch.tryEmit(UserSearch(awaitState().searchTerm))
+                updateConfiguredIdentityServer()
             }
         }
     }
 
     init {
+        loadInitialState()
         observeUsers()
-        setState {
-            copy(
-                    configuredIdentityServer = cleanISURL(session.identityService().getCurrentIdentityServerUrl())
-            )
-        }
         session.identityService().addListener(identityServerListener)
+    }
+
+    private fun loadInitialState() {
+        viewModelScope.launch {
+            updateConfiguredIdentityServer()
+        }
+    }
+
+    private suspend fun updateConfiguredIdentityServer() = coroutineScope {
+        val identityServerURL = cleanISURL(session.identityService().getCurrentIdentityServerUrl())
+        setState {
+            copy(configuredIdentityServer = identityServerURL)
+        }
     }
 
     private fun cleanISURL(url: String?): String? {
@@ -128,9 +135,11 @@ class UserListViewModel @AssistedInject constructor(
     }
 
     private fun handleISUpdateConsent(action: UserListAction.UpdateUserConsent) {
-        session.identityService().setUserConsent(action.consent)
-        withState {
-            retryUserSearch(it)
+        viewModelScope.launch {
+            session.identityService().setUserConsent(action.consent)
+            withState {
+                retryUserSearch(it)
+            }
         }
     }
 

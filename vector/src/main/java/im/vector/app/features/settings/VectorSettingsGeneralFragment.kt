@@ -293,10 +293,12 @@ class VectorSettingsGeneralFragment @Inject constructor(
 
     override fun onResume() {
         super.onResume()
-        // Refresh identity server summary
-        mIdentityServerPreference.summary = session.identityService().getCurrentIdentityServerUrl() ?: getString(R.string.identity_server_not_defined)
-        refreshIntegrationManagerSettings()
-        session.integrationManagerService().addListener(integrationServiceListener)
+        viewLifecycleOwner.lifecycleScope.launchWhenResumed {
+            // Refresh identity server summary
+            mIdentityServerPreference.summary = session.identityService().getCurrentIdentityServerUrl() ?: getString(R.string.identity_server_not_defined)
+            refreshIntegrationManagerSettings()
+            session.integrationManagerService().addListener(integrationServiceListener)
+        }
     }
 
     override fun onPause() {

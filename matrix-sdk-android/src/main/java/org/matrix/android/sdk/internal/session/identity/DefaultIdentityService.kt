@@ -20,6 +20,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import dagger.Lazy
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
@@ -41,6 +43,7 @@ import org.matrix.android.sdk.api.session.identity.SharedState
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.identity.model.SignInvitationResult
 import org.matrix.android.sdk.internal.di.AuthenticatedIdentity
+import org.matrix.android.sdk.internal.di.SessionCoroutineScope
 import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificate
 import org.matrix.android.sdk.internal.extensions.observeNotNull
 import org.matrix.android.sdk.internal.network.RetrofitFactory
@@ -81,7 +84,8 @@ internal class DefaultIdentityService @Inject constructor(
         private val accountDataDataSource: UserAccountDataDataSource,
         private val homeServerCapabilitiesService: HomeServerCapabilitiesService,
         private val sign3pidInvitationTask: Sign3pidInvitationTask,
-        private val sessionParams: SessionParams
+        private val sessionParams: SessionParams,
+        @SessionCoroutineScope private val coroutineScope: CoroutineScope,
 ) : IdentityService, SessionLifecycleObserver {
 
     private val lifecycleOwner: LifecycleOwner = LifecycleOwner { lifecycleRegistry }
@@ -95,14 +99,17 @@ internal class DefaultIdentityService @Inject constructor(
         accountDataDataSource
                 .getLiveAccountDataEvent(UserAccountDataTypes.TYPE_IDENTITY_SERVER)
                 .observeNotNull(lifecycleOwner) {
-                    notifyIdentityServerUrlChange(it.getOrNull()?.content?.toModel<IdentityServerContent>()?.baseUrl)
+                    coroutineScope.notifyIdentityServerUrlChange(it.getOrNull()?.content?.toModel<IdentityServerContent>()?.baseUrl)
                 }
 
         // Init identityApi
-        updateIdentityAPI(identityStore.getIdentityData()?.identityServerUrl)
+        coroutineScope.launch {
+            val url = identityStore.getIdentityData()?.identityServerUrl
+            updateIdentityAPI(url)
+        }
     }
 
-    private fun notifyIdentityServerUrlChange(baseUrl: String?) {
+    private fun CoroutineScope.notifyIdentityServerUrlChange(baseUrl: String?) = launch {
         // This is maybe not a real change (echo of account data we are just setting)
         if (identityStore.getIdentityData()?.identityServerUrl == baseUrl) {
             Timber.d("Echo of local identity server url change, or no change")
@@ -129,7 +136,7 @@ internal class DefaultIdentityService @Inject constructor(
                 ?: homeServerCapabilitiesService.getHomeServerCapabilities().defaultIdentityServerUrl
     }
 
-    override fun getCurrentIdentityServerUrl(): String? {
+    override suspend fun getCurrentIdentityServerUrl(): String? {
         return identityStore.getIdentityData()?.identityServerUrl
     }
 
@@ -225,11 +232,11 @@ internal class DefaultIdentityService @Inject constructor(
         )
     }
 
-    override fun getUserConsent(): Boolean {
+    override suspend fun getUserConsent(): Boolean {
         return identityStore.getIdentityData()?.userConsent.orFalse()
     }
 
-    override fun setUserConsent(newValue: Boolean) {
+    override suspend fun setUserConsent(newValue: Boolean) {
         identityStore.setUserConsent(newValue)
     }
 

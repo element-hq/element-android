@@ -16,18 +16,14 @@
 
 package org.matrix.android.sdk.internal.session.identity.db
 
-import io.realm.RealmList
-import io.realm.RealmModel
-import io.realm.annotations.RealmClass
+import io.realm.kotlin.ext.realmListOf
+import io.realm.kotlin.types.RealmList
+import io.realm.kotlin.types.RealmObject
 
-@RealmClass
-internal open class IdentityDataEntity(
-        var identityServerUrl: String? = null,
-        var token: String? = null,
-        var hashLookupPepper: String? = null,
-        var hashLookupAlgorithm: RealmList<String> = RealmList(),
-        var userConsent: Boolean = false
-) : RealmModel {
-
-    companion object
+internal class IdentityDataEntity : RealmObject {
+    var identityServerUrl: String? = null
+    var token: String? = null
+    var hashLookupPepper: String? = null
+    var hashLookupAlgorithm: RealmList<String> = realmListOf()
+    var userConsent: Boolean = false
 }

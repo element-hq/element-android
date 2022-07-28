@@ -31,6 +31,7 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.discovery.fetchIdentityServerWithTerms
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
@@ -63,15 +64,19 @@ class ContactsBookViewModel @AssistedInject constructor(
     }
 
     private fun loadContacts() {
-        setState {
-            copy(
-                    mappedContacts = Loading(),
-                    identityServerUrl = session.identityService().getCurrentIdentityServerUrl(),
-                    userConsent = session.identityService().getUserConsent()
-            )
-        }
-
         viewModelScope.launch(Dispatchers.IO) {
+
+            val identityServerUrl = session.identityService().getCurrentIdentityServerUrl()
+            val userConsent = session.identityService().getUserConsent()
+
+            setState {
+                copy(
+                        mappedContacts = Loading(),
+                        identityServerUrl = identityServerUrl,
+                        userConsent = userConsent
+                )
+            }
+
             allContacts = contactsDataSource.getContacts(
                     withEmails = true,
                     // Do not handle phone numbers for the moment
@@ -90,57 +95,55 @@ class ContactsBookViewModel @AssistedInject constructor(
         }
     }
 
-    private fun performLookup(contacts: List<MappedContact>) {
+    private suspend fun performLookup(contacts: List<MappedContact>) = coroutineScope {
         if (!session.identityService().getUserConsent()) {
-            return
+            return@coroutineScope
         }
-        viewModelScope.launch {
-            val threePids = contacts.flatMap { contact ->
-                contact.emails.map { ThreePid.Email(it.email) } +
-                        contact.msisdns.map { ThreePid.Msisdn(it.phoneNumber) }
-            }
+        val threePids = contacts.flatMap { contact ->
+            contact.emails.map { ThreePid.Email(it.email) } +
+                    contact.msisdns.map { ThreePid.Msisdn(it.phoneNumber) }
+        }
 
-            val data = try {
-                session.identityService().lookUp(threePids)
-            } catch (failure: Throwable) {
-                Timber.w(failure, "Unable to perform the lookup")
+        val data = try {
+            session.identityService().lookUp(threePids)
+        } catch (failure: Throwable) {
+            Timber.w(failure, "Unable to perform the lookup")
 
-                // Should not happen, but just to be sure
-                if (failure is IdentityServiceError.UserConsentNotProvided) {
-                    setState {
-                        copy(userConsent = false)
-                    }
+            // Should not happen, but just to be sure
+            if (failure is IdentityServiceError.UserConsentNotProvided) {
+                setState {
+                    copy(userConsent = false)
                 }
-                return@launch
             }
-
-            mappedContacts = allContacts.map { contactModel ->
-                contactModel.copy(
-                        emails = contactModel.emails.map { email ->
-                            email.copy(
-                                    matrixId = data
-                                            .firstOrNull { foundThreePid -> foundThreePid.threePid.value == email.email }
-                                            ?.matrixId
-                            )
-                        },
-                        msisdns = contactModel.msisdns.map { msisdn ->
-                            msisdn.copy(
-                                    matrixId = data
-                                            .firstOrNull { foundThreePid -> foundThreePid.threePid.value == msisdn.phoneNumber }
-                                            ?.matrixId
-                            )
-                        }
-                )
-            }
-
-            setState {
-                copy(
-                        isBoundRetrieved = true
-                )
-            }
-
-            updateFilteredMappedContacts()
+            return@coroutineScope
         }
+
+        mappedContacts = allContacts.map { contactModel ->
+            contactModel.copy(
+                    emails = contactModel.emails.map { email ->
+                        email.copy(
+                                matrixId = data
+                                        .firstOrNull { foundThreePid -> foundThreePid.threePid.value == email.email }
+                                        ?.matrixId
+                        )
+                    },
+                    msisdns = contactModel.msisdns.map { msisdn ->
+                        msisdn.copy(
+                                matrixId = data
+                                        .firstOrNull { foundThreePid -> foundThreePid.threePid.value == msisdn.phoneNumber }
+                                        ?.matrixId
+                        )
+                    }
+            )
+        }
+
+        setState {
+            copy(
+                    isBoundRetrieved = true
+            )
+        }
+
+        updateFilteredMappedContacts()
     }
 
     private fun updateFilteredMappedContacts() = withState { state ->
@@ -159,6 +162,7 @@ class ContactsBookViewModel @AssistedInject constructor(
     }
 
     override fun handle(action: ContactsBookAction) {
+
         when (action) {
             is ContactsBookAction.FilterWith -> handleFilterWith(action)
             is ContactsBookAction.OnlyBoundContacts -> handleOnlyBoundContacts(action)
@@ -180,14 +184,14 @@ class ContactsBookViewModel @AssistedInject constructor(
     }
 
     private fun handleUserConsentGranted() {
-        session.identityService().setUserConsent(true)
-
-        setState {
-            copy(userConsent = true)
+        viewModelScope.launch {
+            session.identityService().setUserConsent(true)
+            setState {
+                copy(userConsent = true)
+            }
+            // Perform the lookup
+            performLookup(allContacts)
         }
-
-        // Perform the lookup
-        performLookup(allContacts)
     }
 
     private fun handleOnlyBoundContacts(action: ContactsBookAction.OnlyBoundContacts) {

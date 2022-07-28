@@ -53,29 +53,37 @@ class CreateSpaceViewModel @AssistedInject constructor(
 
     private val identityServerManagerListener = object : IdentityServiceListener {
         override fun onIdentityServerChange() {
-            val identityServerUrl = identityService.getCurrentIdentityServerUrl()
-            setState {
-                copy(
-                        canInviteByMail = identityServerUrl != null
-                )
+            viewModelScope.launch {
+                val identityServerUrl = identityService.getCurrentIdentityServerUrl()
+                setState {
+                    copy(
+                            canInviteByMail = identityServerUrl != null
+                    )
+                }
             }
         }
     }
 
     init {
-        val identityServerUrl = identityService.getCurrentIdentityServerUrl()
-        setState {
-            copy(
-                    homeServerName = session.myUserId.getServerName(),
-                    canInviteByMail = identityServerUrl != null
-            )
-        }
+        loadInitialState()
         startListenToIdentityManager()
     }
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<CreateSpaceViewModel, CreateSpaceState> {
         override fun create(initialState: CreateSpaceState): CreateSpaceViewModel
+    }
+
+    private fun loadInitialState() {
+        viewModelScope.launch {
+            val identityServerUrl = identityService.getCurrentIdentityServerUrl()
+            setState {
+                copy(
+                        homeServerName = session.myUserId.getServerName(),
+                        canInviteByMail = identityServerUrl != null
+                )
+            }
+        }
     }
 
     private fun startListenToIdentityManager() {

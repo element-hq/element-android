@@ -23,5 +23,5 @@ import javax.inject.Inject
 internal class IdentityAccessTokenProvider @Inject constructor(
         private val identityStore: IdentityStore
 ) : AccessTokenProvider {
-    override fun getToken() = identityStore.getIdentityData()?.token
+    override suspend fun getToken() = identityStore.getIdentityData()?.token
 }

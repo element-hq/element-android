@@ -21,26 +21,26 @@ import org.matrix.android.sdk.internal.session.identity.model.IdentityHashDetail
 
 internal interface IdentityStore {
 
-    fun getIdentityData(): IdentityData?
+    suspend fun getIdentityData(): IdentityData?
 
-    fun setUrl(url: String?)
+    suspend fun setUrl(url: String?)
 
-    fun setToken(token: String?)
+    suspend fun setToken(token: String?)
 
-    fun setUserConsent(consent: Boolean)
+    suspend fun setUserConsent(consent: Boolean)
 
-    fun setHashDetails(hashDetailResponse: IdentityHashDetailResponse)
+    suspend fun setHashDetails(hashDetailResponse: IdentityHashDetailResponse)
 
     /**
      * Store details about a current binding.
      */
-    fun storePendingBinding(threePid: ThreePid, data: IdentityPendingBinding)
+    suspend fun storePendingBinding(threePid: ThreePid, data: IdentityPendingBinding)
 
-    fun getPendingBinding(threePid: ThreePid): IdentityPendingBinding?
+    suspend fun getPendingBinding(threePid: ThreePid): IdentityPendingBinding?
 
-    fun deletePendingBinding(threePid: ThreePid)
+    suspend fun deletePendingBinding(threePid: ThreePid)
 }
 
-internal fun IdentityStore.getIdentityServerUrlWithoutProtocol(): String? {
+internal suspend fun IdentityStore.getIdentityServerUrlWithoutProtocol(): String? {
     return getIdentityData()?.identityServerUrl?.substringAfter("://")
 }

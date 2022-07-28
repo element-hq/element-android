@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.network
 
+import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
 import org.matrix.android.sdk.internal.network.token.AccessTokenProvider
@@ -26,12 +27,13 @@ internal class AccessTokenInterceptor(private val accessTokenProvider: AccessTok
         var request = chain.request()
 
         // Add the access token to all requests if it is set
-        accessTokenProvider.getToken()?.let { token ->
+        runBlocking {
+            accessTokenProvider.getToken()
+        }?.let { token ->
             val newRequestBuilder = request.newBuilder()
             newRequestBuilder.header(HttpHeaders.Authorization, "Bearer $token")
             request = newRequestBuilder.build()
         }
-
         return chain.proceed(request)
     }
 }

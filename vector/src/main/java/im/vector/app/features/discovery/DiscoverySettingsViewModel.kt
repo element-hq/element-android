@@ -60,10 +60,11 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
                 runCatching { fetchIdentityServerWithTerms() }.fold(
                         onSuccess = {
                             val currentIS = state.identityServer()
+                            val userConsent = identityService.getUserConsent()
                             setState {
                                 copy(
                                         identityServer = Success(it),
-                                        userConsent = identityService.getUserConsent()
+                                        userConsent = userConsent
                                 )
                             }
                             if (currentIS != it) retrieveBinding()
@@ -75,14 +76,22 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
     }
 
     init {
-        setState {
-            copy(
-                    identityServer = Success(identityService.getCurrentIdentityServerUrl()?.let { ServerAndPolicies(it, emptyList()) }),
-                    userConsent = identityService.getUserConsent()
-            )
-        }
+        loadInitialState()
         startListenToIdentityManager()
         observeThreePids()
+    }
+
+    private fun loadInitialState() {
+        viewModelScope.launch {
+            val identityServer = identityService.getCurrentIdentityServerUrl()?.let { ServerAndPolicies(it, emptyList()) }
+            val userConsent = identityService.getUserConsent()
+            setState {
+                copy(
+                        identityServer = Success(identityServer),
+                        userConsent = userConsent
+                )
+            }
+        }
     }
 
     private fun observeThreePids() {
@@ -116,13 +125,14 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
     }
 
     private fun handleUpdateUserConsent(action: DiscoverySettingsAction.UpdateUserConsent) {
-        identityService.setUserConsent(action.newConsent)
-        setState { copy(userConsent = action.newConsent) }
+        viewModelScope.launch {
+            identityService.setUserConsent(action.newConsent)
+            setState { copy(userConsent = action.newConsent) }
+        }
     }
 
     private fun disconnectIdentityServer() {
         setState { copy(identityServer = Loading()) }
-
         viewModelScope.launch {
             try {
                 session.identityService().disconnect()

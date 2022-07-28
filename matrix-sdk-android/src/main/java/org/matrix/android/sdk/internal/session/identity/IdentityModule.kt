@@ -19,13 +19,17 @@ package org.matrix.android.sdk.internal.session.identity
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
-import io.realm.RealmConfiguration
+import io.realm.kotlin.RealmConfiguration
+import kotlinx.coroutines.CoroutineScope
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.MatrixConfiguration
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.session.identity.IdentityService
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.RealmKeysUtils
 import org.matrix.android.sdk.internal.di.AuthenticatedIdentity
 import org.matrix.android.sdk.internal.di.IdentityDatabase
+import org.matrix.android.sdk.internal.di.MatrixCoroutineScope
 import org.matrix.android.sdk.internal.di.SessionFilesDirectory
 import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificate
 import org.matrix.android.sdk.internal.di.UserMd5
@@ -35,7 +39,7 @@ import org.matrix.android.sdk.internal.network.token.AccessTokenProvider
 import org.matrix.android.sdk.internal.session.SessionModule
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.identity.data.IdentityStore
-import org.matrix.android.sdk.internal.session.identity.db.IdentityRealmModule
+import org.matrix.android.sdk.internal.session.identity.db.IDENTITY_REALM_SCHEMA
 import org.matrix.android.sdk.internal.session.identity.db.RealmIdentityStore
 import org.matrix.android.sdk.internal.session.identity.db.RealmIdentityStoreMigration
 import java.io.File
@@ -64,24 +68,37 @@ internal abstract class IdentityModule {
         @JvmStatic
         @Provides
         @IdentityDatabase
-        @SessionScope
-        fun providesIdentityRealmConfiguration(
+        fun providesRealmConfiguration(
                 realmKeysUtils: RealmKeysUtils,
-                realmIdentityStoreMigration: RealmIdentityStoreMigration,
+                identityStoreMigration: RealmIdentityStoreMigration,
                 @SessionFilesDirectory directory: File,
                 @UserMd5 userMd5: String
         ): RealmConfiguration {
-            return RealmConfiguration.Builder()
-                    .directory(directory)
-                    .name("matrix-sdk-identity.realm")
+            return RealmConfiguration.Builder(IDENTITY_REALM_SCHEMA)
+                    .directory(directory.path)
                     .apply {
                         realmKeysUtils.configureEncryption(this, SessionModule.getKeyAlias(userMd5))
                     }
-                    .schemaVersion(realmIdentityStoreMigration.schemaVersion)
-                    .migration(realmIdentityStoreMigration)
-                    .allowWritesOnUiThread(true)
-                    .modules(IdentityRealmModule())
+                    .name("matrix-sdk-global.realm")
+                    .schemaVersion(identityStoreMigration.schemaVersion)
+                    .migration(identityStoreMigration)
                     .build()
+        }
+
+        @JvmStatic
+        @Provides
+        @IdentityDatabase
+        @SessionScope
+        fun providesRealmInstance(
+                @IdentityDatabase realmConfiguration: RealmConfiguration,
+                @MatrixCoroutineScope matrixCoroutineScope: CoroutineScope,
+                matrixCoroutineDispatchers: MatrixCoroutineDispatchers
+        ): RealmInstance {
+            return RealmInstance(
+                    coroutineScope = matrixCoroutineScope,
+                    realmConfiguration = realmConfiguration,
+                    coroutineDispatcher = matrixCoroutineDispatchers.io
+            )
         }
     }
 
