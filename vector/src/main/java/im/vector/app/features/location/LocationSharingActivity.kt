@@ -35,7 +35,7 @@ data class LocationSharingArgs(
 
 @AndroidEntryPoint
 class LocationSharingActivity : VectorBaseActivity<ActivityLocationSharingBinding>() {
-
+// TODO fix leak of mapTilerView
     override fun getBinding() = ActivityLocationSharingBinding.inflate(layoutInflater)
 
     override fun initUiAndData() {

@@ -43,6 +43,7 @@ import com.mapbox.mapboxsdk.style.layers.Property
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.addChildFragment
+import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.DimensionConverter
@@ -110,10 +111,11 @@ class LiveLocationMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
         setupMap()
     }
 
-    override fun onDestroy() {
+    override fun onDestroyView() {
         onSymbolClickListener?.let { symbolManager?.removeClickListener(it) }
         bottomSheetController.callback = null
-        super.onDestroy()
+        views.liveLocationBottomSheetRecyclerView.cleanup()
+        super.onDestroyView()
     }
 
     private fun setupMap() {

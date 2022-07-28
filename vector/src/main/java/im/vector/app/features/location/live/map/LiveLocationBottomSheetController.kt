@@ -16,7 +16,6 @@
 
 package im.vector.app.features.location.live.map
 
-import android.content.Context
 import com.airbnb.epoxy.EpoxyController
 import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
