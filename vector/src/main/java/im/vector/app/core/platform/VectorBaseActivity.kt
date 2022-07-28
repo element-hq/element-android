@@ -259,7 +259,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
         initUiAndData()
 
         if (vectorFeatures.isNewAppLayoutEnabled()) {
-            tryOrNull { // TODO: Add to XML theme when feature flag is removed
+            tryOrNull { // Add to XML theme when feature flag is removed
                 val toolbarBackground = MaterialColors.getColor(views.root, R.attr.vctr_toolbar_background)
                 window.statusBarColor = toolbarBackground
                 window.navigationBarColor = toolbarBackground

@@ -270,7 +270,7 @@ class NewHomeDetailFragment @Inject constructor(
     }
 
     private fun onSpaceChange(spaceSummary: RoomSummary?) {
-        // TODO: Reimplement
+        // Reimplement in next PR
         println(spaceSummary)
     }
 
