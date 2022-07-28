@@ -29,7 +29,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Run knit
         run: |
-          ./gradlew knit
+          ./gradlew knitCheck
 
   # Check the project: ktlint, detekt, lint
   lint:
