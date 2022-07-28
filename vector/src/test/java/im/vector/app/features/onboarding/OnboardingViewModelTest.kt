@@ -49,10 +49,12 @@ import im.vector.app.test.fixtures.aBuildMeta
 import im.vector.app.test.fixtures.aHomeServerCapabilities
 import im.vector.app.test.test
 import kotlinx.coroutines.test.runTest
+import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
+import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
@@ -81,6 +83,10 @@ private const val A_DEVICE_NAME = "a-device-name"
 private const val A_MATRIX_ID = "@$A_USERNAME:matrix.org"
 private const val A_LOGIN_TOKEN = "a-login-token"
 private val A_REGISTRATION_STATE = aRegistrationState(email = AN_EMAIL)
+private const val A_SSO_URL = "https://a-sso.url"
+private const val A_REDIRECT_URI = "https://a-redirect.uri"
+private const val A_DEVICE_ID = "a-device-id"
+private val SSO_REGISTRATION_DESCRIPTION = AuthenticationDescription.Register(AuthenticationDescription.AuthenticationType.SSO)
 
 class OnboardingViewModelTest {
 
@@ -853,7 +859,6 @@ class OnboardingViewModelTest {
         fakeAuthenticationService.verifyCancelsPendingLogin()
     }
 
-
     @Test
     fun `given reset state, when resetting reset state, then resets state`() = runTest {
         viewModelWith(initialState.copy(isLoading = true, resetState = ResetState(AN_EMAIL)))
@@ -862,6 +867,7 @@ class OnboardingViewModelTest {
         viewModel.handle(OnboardingAction.ResetResetPassword)
 
         test
+
                 .assertStatesChanges(
                         initialState,
                         { copy(isLoading = false, resetState = ResetState()) },
@@ -884,6 +890,24 @@ class OnboardingViewModelTest {
                 )
                 .assertNoEvents()
                 .finish()
+    }
+
+    @Test
+    fun `given returns Sso url, when fetching Sso url, then updates authentication state and returns supplied Sso url`() = runTest {
+        val test = viewModel.test()
+        val provider = SsoIdentityProvider(id = "provider_id", null, null, null)
+        fakeAuthenticationService.givenSsoUrl(A_REDIRECT_URI, A_DEVICE_ID, provider.id, result = A_SSO_URL)
+
+        val result = viewModel.fetchSsoUrl(A_REDIRECT_URI, A_DEVICE_ID, provider)
+
+        result shouldBeEqualTo A_SSO_URL
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(selectedAuthenticationState = SelectedAuthenticationState(SSO_REGISTRATION_DESCRIPTION)) }
+                )
+                .finish()
+
     }
 
     private fun viewModelWith(state: OnboardingViewState) {

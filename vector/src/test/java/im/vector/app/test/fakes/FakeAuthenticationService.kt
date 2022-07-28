@@ -77,4 +77,8 @@ class FakeAuthenticationService : AuthenticationService by mockk() {
     fun verifyCancelsPendingLogin() {
         coVerify { cancelPendingLoginOrRegistration() }
     }
+
+    fun givenSsoUrl(redirectUri: String, deviceId: String, providerId: String, result: String) {
+        coEvery { getSsoUrl(redirectUri, deviceId, providerId) } returns result
+    }
 }
