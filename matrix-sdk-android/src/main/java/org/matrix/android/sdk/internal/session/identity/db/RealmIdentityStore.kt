@@ -43,9 +43,19 @@ internal class RealmIdentityStore @Inject constructor(
     }
 
     override suspend fun setUrl(url: String?) {
-        val identityData = getIdentityDataEntity() ?: return
         realmInstance.write {
-            findLatest(identityData)?.identityServerUrl = url
+            delete(
+                    query(IdentityDataEntity::class).find()
+            )
+            // Delete all pending binding if any
+            delete(
+                    query(IdentityPendingBindingEntity::class).find()
+            )
+            if (url == null) return@write
+            val newIdentityData = IdentityDataEntity().apply {
+                identityServerUrl = url
+            }
+            copyToRealm(newIdentityData)
         }
     }
 
