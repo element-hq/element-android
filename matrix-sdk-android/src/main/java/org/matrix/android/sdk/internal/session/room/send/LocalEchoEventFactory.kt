@@ -574,13 +574,17 @@ internal class LocalEchoEventFactory @Inject constructor(
         return clock.epochMillis()
     }
 
-    fun createReplyTextContent(
+    /**
+     * Creates a reply to a regular timeline Event or a thread Event if needed.
+     */
+    fun createReplyTextEvent(
+            roomId: String,
             eventReplied: TimelineEvent,
             replyText: CharSequence,
             autoMarkdown: Boolean,
             rootThreadEventId: String? = null,
             showInThread: Boolean
-    ): MessageContent? {
+    ): Event? {
         // Fallbacks and event representation
         // TODO Add error/warning logs when any of this is null
         val permalink = permalinkFactory.createPermalink(eventReplied.root, false) ?: return null
@@ -606,7 +610,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         val replyFallback = buildReplyFallback(body, userId, replyText.toString())
 
         val eventId = eventReplied.root.eventId ?: return null
-        return MessageTextContent(
+        val content = MessageTextContent(
                 msgType = MessageType.MSGTYPE_TEXT,
                 format = MessageFormat.FORMAT_MATRIX_HTML,
                 body = replyFallback,
@@ -617,23 +621,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                         showInThread = showInThread
                 )
         )
-    }
-
-    /**
-     * Creates a reply to a regular timeline Event or a thread Event if needed.
-     */
-    fun createReplyTextEvent(
-            roomId: String,
-            eventReplied: TimelineEvent,
-            replyText: CharSequence,
-            autoMarkdown: Boolean,
-            rootThreadEventId: String? = null,
-            showInThread: Boolean,
-    ): Event? {
-        val content = createReplyTextContent(eventReplied, replyText, autoMarkdown, rootThreadEventId, showInThread)
-        return content?.let {
-            createMessageEvent(roomId, it)
-        }
+        return createMessageEvent(roomId, content)
     }
 
     /**
@@ -694,7 +682,7 @@ internal class LocalEchoEventFactory @Inject constructor(
      * In case of an edit of a reply the last content is not
      * himself a reply, but it will contain the fallbacks, so we have to trim them.
      */
-    fun bodyForReply(content: MessageContent?, isReply: Boolean): TextContent {
+    private fun bodyForReply(content: MessageContent?, isReply: Boolean): TextContent {
         when (content?.msgType) {
             MessageType.MSGTYPE_EMOTE,
             MessageType.MSGTYPE_TEXT,

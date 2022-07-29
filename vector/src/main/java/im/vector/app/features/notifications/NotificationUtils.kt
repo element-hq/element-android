@@ -105,7 +105,7 @@ class NotificationUtils @Inject constructor(
         const val SMART_REPLY_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.SMART_REPLY_ACTION"
         const val DISMISS_SUMMARY_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.DISMISS_SUMMARY_ACTION"
         const val DISMISS_ROOM_NOTIF_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.DISMISS_ROOM_NOTIF_ACTION"
-        private const val TAP_TO_VIEW_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.TAP_TO_VIEW_ACTION"
+        const val TAP_TO_VIEW_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.TAP_TO_VIEW_ACTION"
         const val DIAGNOSTIC_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.DIAGNOSTIC"
         const val PUSH_ACTION = "${BuildConfig.APPLICATION_ID}.PUSH"
 
@@ -118,7 +118,7 @@ class NotificationUtils @Inject constructor(
 
         private const val NOISY_NOTIFICATION_CHANNEL_ID = "DEFAULT_NOISY_NOTIFICATION_CHANNEL_ID"
 
-        private const val SILENT_NOTIFICATION_CHANNEL_ID = "DEFAULT_SILENT_NOTIFICATION_CHANNEL_ID_V2"
+        const val SILENT_NOTIFICATION_CHANNEL_ID = "DEFAULT_SILENT_NOTIFICATION_CHANNEL_ID_V2"
         private const val CALL_NOTIFICATION_CHANNEL_ID = "CALL_NOTIFICATION_CHANNEL_ID_V2"
 
         fun supportNotificationChannels() = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
@@ -538,20 +538,6 @@ class NotificationUtils @Inject constructor(
 
         builder.setContentIntent(contentPendingIntent)
         return builder.build()
-    }
-
-    /**
-     * Creates a notification that indicates the application is retrieving location even if it is in background or killed.
-     */
-    fun buildLiveLocationSharingNotification(): Notification {
-        return NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
-                .setContentTitle(stringProvider.getString(R.string.live_location_sharing_notification_title))
-                .setContentText(stringProvider.getString(R.string.live_location_sharing_notification_description))
-                .setSmallIcon(R.drawable.ic_attachment_location_live_white)
-                .setColor(ThemeUtils.getColor(context, android.R.attr.colorPrimary))
-                .setCategory(NotificationCompat.CATEGORY_LOCATION_SHARING)
-                .setContentIntent(buildOpenHomePendingIntentForSummary())
-                .build()
     }
 
     /**

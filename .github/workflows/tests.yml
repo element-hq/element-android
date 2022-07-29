@@ -73,7 +73,7 @@ jobs:
       - run: ./gradlew sonarqube $CI_GRADLE_ARG_PROPERTIES
         if: always() # we may have failed a previous step and retried, that's OK
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          GITHUB_TOKEN: ${{ secrets.SONARQUBE_GITHUB_API_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           ORG_GRADLE_PROJECT_SONAR_LOGIN: ${{ secrets.SONAR_TOKEN }}
 

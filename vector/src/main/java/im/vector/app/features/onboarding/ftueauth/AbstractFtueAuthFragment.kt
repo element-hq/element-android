@@ -46,6 +46,7 @@ abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<V
 
     // Due to async, we keep a boolean to avoid displaying twice the cancellation dialog
     private var displayCancelDialog = true
+    protected open fun backIsHardExit() = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,7 +116,7 @@ abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<V
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
         return when {
-            displayCancelDialog && viewModel.isRegistrationStarted -> {
+            displayCancelDialog && viewModel.isRegistrationStarted && backIsHardExit() -> {
                 // Ask for confirmation before cancelling the registration
                 MaterialAlertDialogBuilder(requireActivity())
                         .setTitle(R.string.login_signup_cancel_confirmation_title)

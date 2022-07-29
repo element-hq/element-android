@@ -377,7 +377,7 @@
         </service>
 
         <service
-            android:name=".features.location.LocationSharingAndroidService"
+            android:name=".features.location.live.tracking.LocationSharingAndroidService"
             android:exported="false"
             android:foregroundServiceType="location" />
 

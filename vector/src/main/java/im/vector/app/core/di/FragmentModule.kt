@@ -61,6 +61,7 @@ import im.vector.app.features.home.room.breadcrumbs.BreadcrumbsFragment
 import im.vector.app.features.home.room.detail.TimelineFragment
 import im.vector.app.features.home.room.detail.search.SearchFragment
 import im.vector.app.features.home.room.list.RoomListFragment
+import im.vector.app.features.home.room.list.home.HomeRoomListFragment
 import im.vector.app.features.home.room.threads.list.views.ThreadListFragment
 import im.vector.app.features.location.LocationPreviewFragment
 import im.vector.app.features.location.LocationSharingFragment
@@ -1041,4 +1042,9 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(LocationPreviewFragment::class)
     fun bindLocationPreviewFragment(fragment: LocationPreviewFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(HomeRoomListFragment::class)
+    fun binHomeRoomListFragment(fragment: HomeRoomListFragment): Fragment
 }

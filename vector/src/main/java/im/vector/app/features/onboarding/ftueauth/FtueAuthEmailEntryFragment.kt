@@ -25,6 +25,8 @@ import im.vector.app.core.extensions.associateContentStateWith
 import im.vector.app.core.extensions.autofillEmail
 import im.vector.app.core.extensions.clearErrorOnChange
 import im.vector.app.core.extensions.content
+import im.vector.app.core.extensions.editText
+import im.vector.app.core.extensions.hasContent
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.setOnImeDoneListener
 import im.vector.app.core.extensions.toReducedUrl
@@ -61,6 +63,10 @@ class FtueAuthEmailEntryFragment @Inject constructor() : AbstractFtueAuthFragmen
 
     override fun updateWithState(state: OnboardingViewState) {
         views.emailEntryHeaderSubtitle.text = getString(R.string.ftue_auth_email_subtitle, state.selectedHomeserver.userFacingUrl.toReducedUrl())
+
+        if (!views.emailEntryInput.hasContent()) {
+            views.emailEntryInput.editText().setText(state.registrationState.email)
+        }
     }
 
     override fun onError(throwable: Throwable) {

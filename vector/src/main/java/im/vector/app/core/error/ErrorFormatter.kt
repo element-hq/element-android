@@ -25,6 +25,7 @@ import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.failure.MatrixIdFailure
 import org.matrix.android.sdk.api.failure.isInvalidPassword
 import org.matrix.android.sdk.api.failure.isLimitExceededError
+import org.matrix.android.sdk.api.failure.isMissingEmailVerification
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import java.net.HttpURLConnection
 import java.net.SocketTimeoutException
@@ -104,6 +105,9 @@ class DefaultErrorFormatter @Inject constructor(
                     throwable.error.code == MatrixError.M_UNKNOWN &&
                             throwable.error.message == "Not allowed to join this room" -> {
                         stringProvider.getString(R.string.room_error_access_unauthorized)
+                    }
+                    throwable.isMissingEmailVerification() -> {
+                        stringProvider.getString(R.string.auth_reset_password_error_unverified)
                     }
                     else -> {
                         throwable.error.message.takeIf { it.isNotEmpty() }
