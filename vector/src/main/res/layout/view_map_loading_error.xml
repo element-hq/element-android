@@ -25,7 +25,7 @@
         android:layout_width="28dp"
         android:layout_height="28dp"
         android:contentDescription="@string/a11y_location_share_option_pinned_icon"
-        tools:src="@drawable/ic_warning_badge" />
+        android:src="@drawable/ic_warning_badge" />
 
     <TextView
         android:id="@+id/mapLoadingErrorDescription"
