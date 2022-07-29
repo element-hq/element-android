@@ -21,7 +21,7 @@ if (pr.body.length == 0) {
 
 // Warn when there is a big PR
 if (editedFiles.length > 50) {
-    warn("This pull request seems relatively large. Please consider splitting it into multiple smaller ones.")
+    message("This pull request seems relatively large. Please consider splitting it into multiple smaller ones.")
 }
 
 // Request a changelog for each PR
@@ -102,5 +102,5 @@ if (hasPngs) {
 
 // Check for reviewers
 if (pr.requested_reviewers.length == 0 && !pr.draft) {
-    fail("Please add a reviewer to your PR.")
+    warn("Please add a reviewer to your PR.")
 }
