@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.api.session.contentscanner
 
-import androidx.lifecycle.LiveData
+import kotlinx.coroutines.flow.Flow
 import org.matrix.android.sdk.api.session.crypto.attachments.ElementToDecrypt
 import org.matrix.android.sdk.api.util.Optional
 
@@ -24,12 +24,14 @@ interface ContentScannerService {
 
     val serverPublicKey: String?
 
+    //TODO: suspend
     fun getContentScannerServer(): String?
-    fun setScannerUrl(url: String?)
-    fun enableScanner(enabled: Boolean)
+    suspend fun setScannerUrl(url: String?)
+    suspend fun enableScanner(enabled: Boolean)
+    //TODO: suspend
     fun isScannerEnabled(): Boolean
-    fun getLiveStatusForFile(mxcUrl: String, fetchIfNeeded: Boolean = true, fileInfo: ElementToDecrypt? = null): LiveData<Optional<ScanStatusInfo>>
-    fun getCachedScanResultForFile(mxcUrl: String): ScanStatusInfo?
+    fun getLiveStatusForFile(mxcUrl: String, fetchIfNeeded: Boolean = true, fileInfo: ElementToDecrypt? = null): Flow<Optional<ScanStatusInfo>>
+    suspend fun getCachedScanResultForFile(mxcUrl: String): ScanStatusInfo?
 
     /**
      * Get the current public curve25519 key that the AV server is advertising.
