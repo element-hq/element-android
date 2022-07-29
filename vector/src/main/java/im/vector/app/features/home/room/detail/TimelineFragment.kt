@@ -965,8 +965,7 @@ class TimelineFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        audioMessagePlaybackTracker.makeAllPlaybacksIdle()
-        audioMessagePlaybackTracker.clear()
+        messageComposerViewModel.handle(MessageComposerAction.EndAllVoiceActions())
         lazyLoadedViews.unBind()
         timelineEventController.callback = null
         timelineEventController.removeModelBuildListener(modelBuildListener)
@@ -1099,7 +1098,7 @@ class TimelineFragment @Inject constructor(
                 else -> state.isAllowedToManageWidgets
             }
             menu.findItem(R.id.video_call).icon?.alpha = if (callButtonsEnabled) 0xFF else 0x40
-            menu.findItem(R.id.voice_call).icon?.alpha = if (callButtonsEnabled  || state.hasActiveElementCallWidget()) 0xFF else 0x40
+            menu.findItem(R.id.voice_call).icon?.alpha = if (callButtonsEnabled || state.hasActiveElementCallWidget()) 0xFF else 0x40
 
             val matrixAppsMenuItem = menu.findItem(R.id.open_matrix_apps)
             val widgetsCount = state.activeRoomWidgets.invoke()?.size ?: 0
