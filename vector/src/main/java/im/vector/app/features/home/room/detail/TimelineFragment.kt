@@ -91,6 +91,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.platform.lifecycleAwareLazy
 import im.vector.app.core.platform.showOptimizedSnackbar
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.core.time.Clock
@@ -277,6 +278,7 @@ class TimelineFragment @Inject constructor(
         private val shareIntentHandler: ShareIntentHandler,
         private val clock: Clock,
         private val vectorFeatures: VectorFeatures,
+        private val buildMeta: BuildMeta,
 ) :
         VectorBaseFragment<FragmentTimelineBinding>(),
         TimelineEventController.Callback,
@@ -373,7 +375,7 @@ class TimelineFragment @Inject constructor(
         sharedActionViewModel = activityViewModelProvider.get(MessageSharedActionViewModel::class.java)
         sharedActivityActionViewModel = activityViewModelProvider.get(RoomDetailSharedActionViewModel::class.java)
         knownCallsViewModel = activityViewModelProvider.get(SharedKnownCallsViewModel::class.java)
-        attachmentsHelper = AttachmentsHelper(requireContext(), this).register()
+        attachmentsHelper = AttachmentsHelper(requireContext(), this, buildMeta).register()
         callActionsHandler = StartCallActionsHandler(
                 roomId = timelineArgs.roomId,
                 fragment = this,
@@ -2647,7 +2649,6 @@ class TimelineFragment @Inject constructor(
     }
 
     override fun onContactAttachmentReady(contactAttachment: ContactAttachment) {
-        super.onContactAttachmentReady(contactAttachment)
         val formattedContact = contactAttachment.toHumanReadable()
         messageComposerViewModel.handle(MessageComposerAction.SendMessage(formattedContact, false))
     }
