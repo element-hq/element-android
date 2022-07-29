@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -90,6 +91,7 @@ class HomeRoomListFragment @Inject constructor(
         }
 
         setupRecyclerView()
+        setupFabs()
     }
 
     private fun setupRecyclerView() {
@@ -106,6 +108,19 @@ class HomeRoomListFragment @Inject constructor(
         }.launchIn(lifecycleScope)
 
         views.roomListView.adapter = concatAdapter
+    }
+
+    private fun setupFabs() {
+        views.newLayoutCreateChatButton.isVisible = true
+        views.newLayoutOpenSpacesButton.isVisible = true
+
+        views.newLayoutCreateChatButton.setOnClickListener {
+            // Click action for create chat modal goes here
+        }
+
+        views.newLayoutOpenSpacesButton.setOnClickListener {
+            // Click action for open spaces modal goes here
+        }
     }
 
     override fun invalidate() = withState(roomListViewModel) { state ->
