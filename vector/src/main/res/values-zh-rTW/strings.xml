@@ -1273,7 +1273,7 @@
     <plurals name="settings_active_sessions_count">
         <item quantity="other">%d 活躍的工作階段</item>
     </plurals>
-    <string name="crosssigning_verify_this_session">驗證此登入</string>
+    <string name="crosssigning_verify_this_session">驗證此裝置</string>
     <string name="verification_open_other_to_verify">使用既有的工作階段來驗證這個，讓它可以存取已加密的訊息。</string>
     <string name="verification_profile_verify">驗證</string>
     <string name="verification_profile_verified">已驗證</string>
@@ -2501,8 +2501,8 @@
     <string name="ftue_auth_forgot_password">忘記密碼</string>
     <string name="ftue_auth_email_resend_email">重新傳送電子郵件</string>
     <string name="ftue_auth_email_verification_footer">沒有收到電子郵件？</string>
-    <string name="ftue_auth_email_verification_subtitle">要確認您的電子郵件，請點擊我們剛剛寄給 %s 的電子郵件中的按鈕</string>
-    <string name="ftue_auth_email_verification_title">檢查您的電子郵件以驗證。</string>
+    <string name="ftue_auth_email_verification_subtitle">請遵循傳送至 %s 中的步驟</string>
+    <string name="ftue_auth_email_verification_title">驗證您的電子郵件</string>
     <string name="ftue_auth_phone_confirmation_resend_code">重新傳送驗證碼</string>
     <string name="ftue_auth_phone_confirmation_subtitle">驗證碼已傳送至 %s</string>
     <string name="ftue_auth_phone_confirmation_title">確認您的電話號碼</string>
@@ -2539,4 +2539,18 @@
     <string name="font_size_section_manually">手動選擇</string>
     <string name="font_size_section_auto">自動設定</string>
     <string name="font_size_title">選擇字型大小</string>
+    <string name="labs_enable_element_call_permission_shortcuts_summary">自動批准 Element Call 小工具並授予相機/麥克風存取權限</string>
+    <string name="labs_enable_element_call_permission_shortcuts">啟用 Element Call 權限捷徑</string>
+    <string name="live_location_description">即時位置</string>
+    <string name="verify_invalid_qr_notice">這個 QR code 的格式似乎不正確。請嘗試使用其他方法進行驗證。</string>
+    <string name="crosssigning_cannot_verify_this_session_desc">您將無法存取已加密的訊息歷史紀錄。重設您的安全訊息備份與驗證金鑰以重新開始。</string>
+    <string name="crosssigning_cannot_verify_this_session">無法驗證此裝置</string>
+    <string name="ftue_auth_choose_server_sign_in_subtitle">您的伺服器地址是？</string>
+    <string name="ftue_auth_sign_in_choose_server_header">您的對話所在位置</string>
+    <string name="updating_your_data">正在更新您的資料……</string>
+    <plurals name="search_space_multiple_parents">
+        <item quantity="other">%1$s 與 %2$d 個其他人</item>
+    </plurals>
+    <string name="search_space_two_parents">%1$s 與 %2$s</string>
+    <string name="auth_reset_password_error_unverified">電子郵件未驗證，請檢查您的收件匣</string>
 </resources>
