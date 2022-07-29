@@ -8,6 +8,8 @@ const {danger, warn} = require('danger')
 // warn(JSON.stringify(danger))
 
 const pr = danger.github.pr
+// User who has created the PR.
+const user = pr.user.login
 const modified = danger.git.modified_files
 const created = danger.git.created_files
 let editedFiles = [...modified, ...created]
@@ -23,21 +25,29 @@ if (editedFiles.length > 50) {
 }
 
 // Request a changelog for each PR
-let changelogFiles = editedFiles.filter(file => file.startsWith("changelog.d/"))
+const changelogAllowList = [
+    "dependabot[bot]",
+]
 
-if (changelogFiles.length == 0) {
-    warn("Please add a changelog. See instructions [here](https://github.com/vector-im/element-android/blob/develop/CONTRIBUTING.md#changelog)")
-} else {
-    const validTowncrierExtensions = [
-        "bugfix",
-        "doc",
-        "feature",
-        "misc",
-        "sdk",
-        "wip",
-    ]
-    if (!changelogFiles.every(file => validTowncrierExtensions.includes(file.split(".").pop()))) {
-        fail("Invalid extension for changelog. See instructions [here](https://github.com/vector-im/element-android/blob/develop/CONTRIBUTING.md#changelog)")
+let requiresChangelog = !changelogAllowList.includes(user)
+
+if (requiresChangelog) {
+    let changelogFiles = editedFiles.filter(file => file.startsWith("changelog.d/"))
+
+    if (changelogFiles.length == 0) {
+        warn("Please add a changelog. See instructions [here](https://github.com/vector-im/element-android/blob/develop/CONTRIBUTING.md#changelog)")
+    } else {
+        const validTowncrierExtensions = [
+            "bugfix",
+            "doc",
+            "feature",
+            "misc",
+            "sdk",
+            "wip",
+        ]
+        if (!changelogFiles.every(file => validTowncrierExtensions.includes(file.split(".").pop()))) {
+            fail("Invalid extension for changelog. See instructions [here](https://github.com/vector-im/element-android/blob/develop/CONTRIBUTING.md#changelog)")
+        }
     }
 }
 
@@ -66,7 +76,7 @@ const allowList = [
     "yostyle",
 ]
 
-let requiresSignOff = !allowList.includes(pr.user.login)
+let requiresSignOff = !allowList.includes(user)
 
 if (requiresSignOff) {
     let hasPRBodySignOff = pr.body.includes(signOff)
