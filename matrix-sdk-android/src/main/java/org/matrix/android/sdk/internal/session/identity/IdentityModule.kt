@@ -79,7 +79,7 @@ internal abstract class IdentityModule {
                     .apply {
                         realmKeysUtils.configureEncryption(this, SessionModule.getKeyAlias(userMd5))
                     }
-                    .name("matrix-sdk-global.realm")
+                    .name("matrix-sdk-identity.realm")
                     .schemaVersion(identityStoreMigration.schemaVersion)
                     .migration(identityStoreMigration)
                     .build()

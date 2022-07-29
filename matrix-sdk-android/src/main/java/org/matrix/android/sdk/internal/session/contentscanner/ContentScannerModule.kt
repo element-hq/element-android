@@ -19,16 +19,20 @@ package org.matrix.android.sdk.internal.session.contentscanner
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
-import io.realm.RealmConfiguration
+import io.realm.kotlin.RealmConfiguration
+import kotlinx.coroutines.CoroutineScope
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.session.contentscanner.ContentScannerService
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.RealmKeysUtils
 import org.matrix.android.sdk.internal.di.ContentScannerDatabase
+import org.matrix.android.sdk.internal.di.MatrixCoroutineScope
 import org.matrix.android.sdk.internal.di.SessionFilesDirectory
 import org.matrix.android.sdk.internal.di.UserMd5
 import org.matrix.android.sdk.internal.session.SessionModule
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.contentscanner.data.ContentScannerStore
-import org.matrix.android.sdk.internal.session.contentscanner.db.ContentScannerRealmModule
+import org.matrix.android.sdk.internal.session.contentscanner.db.CONTENT_SCANNER_REALM_SCHEMA
 import org.matrix.android.sdk.internal.session.contentscanner.db.RealmContentScannerStore
 import org.matrix.android.sdk.internal.session.contentscanner.tasks.DefaultDownloadEncryptedTask
 import org.matrix.android.sdk.internal.session.contentscanner.tasks.DefaultGetServerPublicKeyTask
@@ -48,21 +52,34 @@ internal abstract class ContentScannerModule {
         @JvmStatic
         @Provides
         @ContentScannerDatabase
-        @SessionScope
-        fun providesContentScannerRealmConfiguration(
+        fun providesRealmConfiguration(
                 realmKeysUtils: RealmKeysUtils,
                 @SessionFilesDirectory directory: File,
                 @UserMd5 userMd5: String
         ): RealmConfiguration {
-            return RealmConfiguration.Builder()
-                    .directory(directory)
-                    .name("matrix-sdk-content-scanning.realm")
+            return RealmConfiguration.Builder(CONTENT_SCANNER_REALM_SCHEMA)
+                    .directory(directory.path)
                     .apply {
                         realmKeysUtils.configureEncryption(this, SessionModule.getKeyAlias(userMd5))
                     }
-                    .allowWritesOnUiThread(true)
-                    .modules(ContentScannerRealmModule())
+                    .name("matrix-sdk-content-scanning.realm")
                     .build()
+        }
+
+        @JvmStatic
+        @Provides
+        @ContentScannerDatabase
+        @SessionScope
+        fun providesRealmInstance(
+                @ContentScannerDatabase realmConfiguration: RealmConfiguration,
+                @MatrixCoroutineScope matrixCoroutineScope: CoroutineScope,
+                matrixCoroutineDispatchers: MatrixCoroutineDispatchers
+        ): RealmInstance {
+            return RealmInstance(
+                    coroutineScope = matrixCoroutineScope,
+                    realmConfiguration = realmConfiguration,
+                    coroutineDispatcher = matrixCoroutineDispatchers.io
+            )
         }
     }
 

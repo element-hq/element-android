@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 internal class RealmIdentityStoreMigration @Inject constructor() : MatrixAutomaticSchemaMigration(
         dbName = "Identity",
-        schemaVersion = 1L,
+        schemaVersion = 2L,
 ) {
 
     /**

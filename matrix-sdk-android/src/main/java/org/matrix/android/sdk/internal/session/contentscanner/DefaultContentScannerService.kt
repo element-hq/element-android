@@ -16,8 +16,8 @@
 
 package org.matrix.android.sdk.internal.session.contentscanner
 
-import androidx.lifecycle.LiveData
 import dagger.Lazy
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.session.contentscanner.ContentScannerService
@@ -91,7 +91,7 @@ internal class DefaultContentScannerService @Inject constructor(
         )
     }
 
-    override fun setScannerUrl(url: String?) = contentScannerStore.setScannerUrl(url).also {
+    override suspend fun setScannerUrl(url: String?) = contentScannerStore.setScannerUrl(url).also {
         if (url == null) {
             contentScannerApiProvider.contentScannerApi = null
             serverPublicKey = null
@@ -111,18 +111,17 @@ internal class DefaultContentScannerService @Inject constructor(
         }
     }
 
-    override fun enableScanner(enabled: Boolean) = contentScannerStore.enableScanner(enabled)
+    override suspend fun enableScanner(enabled: Boolean) = contentScannerStore.enableScanner(enabled)
 
     override fun isScannerEnabled(): Boolean = contentScannerStore.isScanEnabled()
 
-    override fun getCachedScanResultForFile(mxcUrl: String): ScanStatusInfo? {
+    override suspend fun getCachedScanResultForFile(mxcUrl: String): ScanStatusInfo? {
         return contentScannerStore.getScanResult(mxcUrl)
     }
 
-    override fun getLiveStatusForFile(mxcUrl: String, fetchIfNeeded: Boolean, fileInfo: ElementToDecrypt?): LiveData<Optional<ScanStatusInfo>> {
-        val data = contentScannerStore.getLiveScanResult(mxcUrl)
-        if (fetchIfNeeded && !contentScannerStore.isScanResultKnownOrInProgress(mxcUrl, getContentScannerServer())) {
-            taskExecutor.executorScope.launch {
+    override fun getLiveStatusForFile(mxcUrl: String, fetchIfNeeded: Boolean, fileInfo: ElementToDecrypt?): Flow<Optional<ScanStatusInfo>> {
+        taskExecutor.executorScope.launch {
+            if (fetchIfNeeded && !contentScannerStore.isScanResultKnownOrInProgress(mxcUrl, getContentScannerServer())) {
                 try {
                     getScanResultForAttachment(mxcUrl, fileInfo)
                 } catch (failure: Throwable) {
@@ -130,6 +129,6 @@ internal class DefaultContentScannerService @Inject constructor(
                 }
             }
         }
-        return data
+        return contentScannerStore.getLiveScanResult(mxcUrl)
     }
 }

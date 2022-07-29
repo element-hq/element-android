@@ -16,18 +16,18 @@
 
 package org.matrix.android.sdk.internal.session.contentscanner.db
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
-import com.zhuinden.monarchy.Monarchy
-import io.realm.Realm
-import io.realm.RealmConfiguration
-import io.realm.kotlin.createObject
-import io.realm.kotlin.where
+import io.realm.kotlin.TypedRealm
+import io.realm.kotlin.query.RealmQuery
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.map
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.contentscanner.ScanState
 import org.matrix.android.sdk.api.session.contentscanner.ScanStatusInfo
 import org.matrix.android.sdk.api.util.Optional
-import org.matrix.android.sdk.api.util.toOptional
+import org.matrix.android.sdk.internal.database.RealmInstance
+import org.matrix.android.sdk.internal.database.await
 import org.matrix.android.sdk.internal.di.ContentScannerDatabase
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.contentscanner.data.ContentScannerStore
@@ -38,108 +38,124 @@ import javax.inject.Inject
 @SessionScope
 internal class RealmContentScannerStore @Inject constructor(
         @ContentScannerDatabase
-        private val realmConfiguration: RealmConfiguration,
+        private val realmInstance: RealmInstance,
         private val clock: Clock,
 ) : ContentScannerStore {
 
-    private val monarchy = Monarchy.Builder()
-            .setRealmConfiguration(realmConfiguration)
-            .build()
-
     override fun getScannerUrl(): String? {
-        return monarchy.fetchAllMappedSync(
-                { realm ->
-                    realm.where<ContentScannerInfoEntity>()
-                }, {
-            it.serverUrl
-        }
-        ).firstOrNull()
+        return realmInstance.getBlockingRealm()
+                .queryContentScannerInfoEntity()
+                .first()
+                .find()
+                ?.serverUrl
     }
 
-    override fun setScannerUrl(url: String?) {
-        monarchy.runTransactionSync { realm ->
-            val info = realm.where<ContentScannerInfoEntity>().findFirst()
-                    ?: realm.createObject()
-            info.serverUrl = url
-        }
+    override suspend fun setScannerUrl(url: String?) = upsertContentScannerInfoEntity {
+        it.serverUrl = url
     }
 
-    override fun enableScanner(enabled: Boolean) {
-        monarchy.runTransactionSync { realm ->
-            val info = realm.where<ContentScannerInfoEntity>().findFirst()
-                    ?: realm.createObject()
-            info.enabled = enabled
+    override suspend fun enableScanner(enabled: Boolean) = upsertContentScannerInfoEntity {
+        it.enabled = enabled
+    }
+
+    private suspend fun upsertContentScannerInfoEntity(operation: (ContentScannerInfoEntity) -> Unit) {
+        realmInstance.write {
+            val contentScannerInfoEntity = queryContentScannerInfoEntity().first().find()
+            if (contentScannerInfoEntity != null) {
+                operation(contentScannerInfoEntity)
+            } else {
+                val newContentScannerInfoEntity = ContentScannerInfoEntity().apply {
+                    operation(this)
+                }
+                copyToRealm(newContentScannerInfoEntity)
+            }
         }
     }
 
     override fun isScanEnabled(): Boolean {
-        return monarchy.fetchAllMappedSync(
-                { realm ->
-                    realm.where<ContentScannerInfoEntity>()
-                }, {
-            it.enabled.orFalse() && it.serverUrl?.isValidUrl().orFalse()
-        }
-        ).firstOrNull().orFalse()
+        val contentScannerInfoEntity = realmInstance.getBlockingRealm()
+                .queryContentScannerInfoEntity()
+                .first()
+                .find() ?: return false
+
+        return contentScannerInfoEntity.enabled.orFalse() && contentScannerInfoEntity.serverUrl?.isValidUrl().orFalse()
     }
 
-    override fun updateStateForContent(mxcUrl: String, state: ScanState, scannerUrl: String?) {
-        monarchy.runTransactionSync {
-            ContentScanResultEntity.getOrCreate(it, mxcUrl, scannerUrl, clock.epochMillis()).scanResult = state
-        }
+    override suspend fun updateStateForContent(mxcUrl: String, state: ScanState, scannerUrl: String?) = upsertContentScanResultEntity(mxcUrl, scannerUrl) {
+        it.scanResult = state
     }
 
-    override fun updateScanResultForContent(mxcUrl: String, scannerUrl: String?, state: ScanState, humanReadable: String) {
-        monarchy.runTransactionSync {
-            ContentScanResultEntity.getOrCreate(it, mxcUrl, scannerUrl, clock.epochMillis()).apply {
-                scanResult = state
-                scanDateTimestamp = clock.epochMillis()
-                humanReadableMessage = humanReadable
-            }
-        }
+    override suspend fun updateScanResultForContent(mxcUrl: String, scannerUrl: String?, state: ScanState, humanReadable: String) = upsertContentScanResultEntity(
+            mxcUrl,
+            scannerUrl
+    ) {
+        it.scanResult = state
+        it.scanDateTimestamp = clock.epochMillis()
+        it.humanReadableMessage = humanReadable
     }
 
-    override fun isScanResultKnownOrInProgress(mxcUrl: String, scannerUrl: String?): Boolean {
-        var isKnown = false
-        monarchy.runTransactionSync {
-            val info = ContentScanResultEntity.get(it, mxcUrl, scannerUrl)?.scanResult
-            isKnown = when (info) {
-                ScanState.IN_PROGRESS,
-                ScanState.TRUSTED,
-                ScanState.INFECTED -> true
-                else -> false
-            }
-        }
-        return isKnown
-    }
-
-    override fun getScanResult(mxcUrl: String): ScanStatusInfo? {
-        return monarchy.fetchAllMappedSync({ realm ->
-            realm.where<ContentScanResultEntity>()
-                    .equalTo(ContentScanResultEntityFields.MEDIA_URL, mxcUrl)
-                    .apply {
-                        getScannerUrl()?.let {
-                            equalTo(ContentScanResultEntityFields.SCANNER_URL, it)
-                        }
-                    }
-        }, {
-            it.toModel()
-        })
-                .firstOrNull()
-    }
-
-    override fun getLiveScanResult(mxcUrl: String): LiveData<Optional<ScanStatusInfo>> {
-        val liveData = monarchy.findAllMappedWithChanges(
-                { realm: Realm ->
-                    realm.where<ContentScanResultEntity>()
-                            .equalTo(ContentScanResultEntityFields.MEDIA_URL, mxcUrl)
-                            .equalTo(ContentScanResultEntityFields.SCANNER_URL, getScannerUrl())
-                },
-                { entity ->
-                    entity.toModel()
+    private suspend fun upsertContentScanResultEntity(mxcUrl: String, scannerUrl: String?, operation: (ContentScanResultEntity) -> Unit) {
+        realmInstance.write {
+            val contentScanResultEntity = queryContentScanResultEntity(mxcUrl, scannerUrl).first().find()
+            if (contentScanResultEntity != null) {
+                operation(contentScanResultEntity)
+            } else {
+                val newContentScanResultEntity = ContentScanResultEntity().apply {
+                    operation(this)
                 }
-        )
-        return Transformations.map(liveData) {
-            it.firstOrNull().toOptional()
+                copyToRealm(newContentScanResultEntity)
+            }
         }
+    }
+
+    override suspend fun isScanResultKnownOrInProgress(mxcUrl: String, scannerUrl: String?): Boolean {
+        val info = realmInstance.getRealm()
+                .queryContentScanResultEntity(mxcUrl, scannerUrl)
+                .first()
+                .await()
+                ?.scanResult
+
+        return when (info) {
+            ScanState.IN_PROGRESS,
+            ScanState.TRUSTED,
+            ScanState.INFECTED -> true
+            else -> false
+        }
+    }
+
+    override suspend fun getScanResult(mxcUrl: String): ScanStatusInfo? {
+        val scannerUrl = getScannerUrl()
+        return realmInstance.getRealm()
+                .queryContentScanResultEntity(mxcUrl, scannerUrl)
+                .first()
+                .await()
+                ?.toModel()
+    }
+
+    override fun getLiveScanResult(mxcUrl: String): Flow<Optional<ScanStatusInfo>> {
+        return realmInstance.getRealmFlow()
+                .flatMapConcat { realm ->
+                    val scannerUrl = getScannerUrl()
+                    realm
+                            .queryContentScanResultEntity(mxcUrl, scannerUrl)
+                            .first()
+                            .asFlow()
+                }.map {
+                    val scanStatusInfo = it.obj?.toModel()
+                    Optional.from(scanStatusInfo)
+                }
+    }
+
+    private fun TypedRealm.queryContentScanResultEntity(mxcUrl: String, scannerUrl: String?): RealmQuery<ContentScanResultEntity> {
+        return query(ContentScanResultEntity::class, "mediaUrl == $0", mxcUrl)
+                .apply {
+                    if (scannerUrl != null) {
+                        query("scannerUrl == $0", scannerUrl)
+                    }
+                }
+    }
+
+    private fun TypedRealm.queryContentScannerInfoEntity(): RealmQuery<ContentScannerInfoEntity> {
+        return query(ContentScannerInfoEntity::class)
     }
 }
