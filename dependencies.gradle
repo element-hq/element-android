@@ -14,7 +14,7 @@ def gradle = "7.1.3"
 // Ref: https://kotlinlang.org/releases.html
 def kotlin = "1.6.21"
 def kotlinCoroutines = "1.6.4"
-def dagger = "2.42"
+def dagger = "2.43"
 def appDistribution = "16.0.0-beta03"
 def retrofit = "2.9.0"
 def arrow = "0.8.2"
