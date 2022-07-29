@@ -7,6 +7,7 @@ import androidx.paging.PagedList
 import io.realm.kotlin.MutableRealm
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
+import io.realm.kotlin.TypedRealm
 import io.realm.kotlin.notifications.ResultsChange
 import io.realm.kotlin.query.RealmQuery
 import io.realm.kotlin.types.RealmObject
@@ -29,7 +30,7 @@ import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.database.pagedlist.RealmTiledDataSource
 
-internal typealias RealmQueryBuilder<T> = (Realm) -> RealmQuery<T>
+internal typealias RealmQueryBuilder<T> = (TypedRealm) -> RealmQuery<T>
 
 /**
  * This class is responsible for managing an instance of realm.
