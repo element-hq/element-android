@@ -103,6 +103,19 @@ jobs:
               repo: context.repo.repo,
               comment_id: ${{ steps.fc.outputs.comment-id }}
             })
+      - name: Prepare Danger
+        if: always()
+        run: |
+          npm install --save-dev @babel/core
+          npm install --save-dev @babel/plugin-transform-flow-strip-types
+          yarn add danger-plugin-lint-report --dev
+      - name: Danger lint
+        if: always()
+        uses: danger/danger-js@11.1.1
+        with:
+          args: "--dangerfile tools/danger/dangerfile-lint.js"
+        env:
+          DANGER_GITHUB_API_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
 
   # Gradle dependency analysis using https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin
   dependency-analysis:
@@ -122,34 +135,6 @@ jobs:
         with:
           name: dependency-analysis
           path: build/reports/dependency-check-report.html
-
-  # Lint for main module
-  android-lint:
-    name: Android Linter
-    runs-on: ubuntu-latest
-    # Allow all jobs on main and develop. Just one per PR.
-    concurrency:
-      group: ${{ github.ref == 'refs/heads/main' && format('android-lint-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('android-lint-develop-{0}', github.sha) || format('android-lint-{0}', github.ref) }}
-      cancel-in-progress: true
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-      - name: Lint analysis
-        run: ./gradlew clean :vector:lint --stacktrace $CI_GRADLE_ARG_PROPERTIES
-      - name: Upload reports
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: lint-report
-          path: |
-            vector/build/reports/*.*
 
   # Lint for Gplay and Fdroid release APK
   apk-lint:
@@ -183,6 +168,19 @@ jobs:
           name: release-lint-report-${{ matrix.target }}
           path: |
             vector/build/reports/*.*
+      - name: Prepare Danger
+        if: always()
+        run: |
+          npm install --save-dev @babel/core
+          npm install --save-dev @babel/plugin-transform-flow-strip-types
+          yarn add danger-plugin-lint-report --dev
+      - name: Danger lint
+        if: always()
+        uses: danger/danger-js@11.1.1
+        with:
+          args: "--dangerfile tools/danger/dangerfile-lint.js"
+        env:
+          DANGER_GITHUB_API_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
 
   detekt:
     name: Detekt Analysis
@@ -203,26 +201,16 @@ jobs:
           name: detekt-report
           path: |
             */build/reports/detekt/detekt.html
-
-#  towncrier:
-#    name: Towncrier check
-#    runs-on: ubuntu-latest
-#    if: github.event_name == 'pull_request' && github.head_ref == 'develop'
-#    steps:
-#      - uses: actions/checkout@v3
-#      - name: Set up Python 3.8
-#        uses: actions/setup-python@v4
-#        with:
-#          python-version: 3.8
-#      - name: Install towncrier
-#        run: |
-#          python3 -m pip install towncrier
-#      - name: Run towncrier
-#        # Fetch the pull request' base branch so towncrier will be able to
-#        # compare the current branch with the base branch.
-#        # Source: https://github.com/actions/checkout/#fetch-all-branches.
-#        run: |
-#          git fetch --no-tags origin +refs/heads/${BASE_BRANCH}:refs/remotes/origin/${BASE_BRANCH}
-#          towncrier check --compare-with origin/${BASE_BRANCH}
-#      env:
-#        BASE_BRANCH: ${{ github.base_ref }}
+      - name: Prepare Danger
+        if: always()
+        run: |
+          npm install --save-dev @babel/core
+          npm install --save-dev @babel/plugin-transform-flow-strip-types
+          yarn add danger-plugin-lint-report --dev
+      - name: Danger lint
+        if: always()
+        uses: danger/danger-js@11.1.1
+        with:
+          args: "--dangerfile tools/danger/dangerfile-lint.js"
+        env:
+          DANGER_GITHUB_API_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
