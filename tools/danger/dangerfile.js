@@ -50,6 +50,7 @@ const allowList = [
     "BillCarsonFr",
     "bmarty",
     "Claire1817",
+    "dependabot[bot]",
     "ericdecanini",
     "fedrunov",
     "Florian14",
