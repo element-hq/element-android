@@ -23,6 +23,7 @@ import android.view.Gravity
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.use
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.marginBottom
 import androidx.core.view.marginTop
 import androidx.core.view.updateLayoutParams
@@ -162,7 +163,7 @@ class MapTilerMapView @JvmOverloads constructor(
         pinDrawable?.let { drawable ->
             if (!safeMapRefs.style.isFullyLoaded ||
                     safeMapRefs.style.getImage(state.pinId) == null) {
-                safeMapRefs.style.addImage(state.pinId, drawable)
+                safeMapRefs.style.addImage(state.pinId, drawable.toBitmap())
             }
         }
 
