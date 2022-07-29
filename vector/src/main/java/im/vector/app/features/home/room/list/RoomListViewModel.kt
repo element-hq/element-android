@@ -25,7 +25,7 @@ import com.airbnb.mvrx.Success
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.AppStateHandler
+import im.vector.app.SpaceStateHandler
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
@@ -60,7 +60,7 @@ class RoomListViewModel @AssistedInject constructor(
         @Assisted initialState: RoomListViewState,
         private val session: Session,
         stringProvider: StringProvider,
-        appStateHandler: AppStateHandler,
+        spaceStateHandler: SpaceStateHandler,
         vectorPreferences: VectorPreferences,
         autoAcceptInvites: AutoAcceptInvites,
         private val analyticsTracker: AnalyticsTracker
@@ -100,7 +100,7 @@ class RoomListViewModel @AssistedInject constructor(
         observeMembershipChanges()
         observeLocalRooms()
 
-        appStateHandler.selectedSpaceFlow
+        spaceStateHandler.getSelectedSpaceFlow()
                 .distinctUntilChanged()
                 .execute {
                     copy(
@@ -146,17 +146,17 @@ class RoomListViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<RoomListViewModel, RoomListViewState> by hiltMavericksViewModelFactory()
 
     private val roomListSectionBuilder = RoomListSectionBuilder(
-            session,
-            stringProvider,
-            appStateHandler,
-            viewModelScope,
-            autoAcceptInvites,
-            {
-                updatableQuery = it
-            },
-            suggestedRoomJoiningState,
-            !vectorPreferences.prefSpacesShowAllRoomInHome()
-    )
+                session,
+                stringProvider,
+                spaceStateHandler,
+                viewModelScope,
+                autoAcceptInvites,
+                {
+                    updatableQuery = it
+                },
+                suggestedRoomJoiningState,
+                !vectorPreferences.prefSpacesShowAllRoomInHome()
+        )
 
     val sections: List<RoomsSection> by lazy {
         roomListSectionBuilder.buildSections(initialState.displayMode)

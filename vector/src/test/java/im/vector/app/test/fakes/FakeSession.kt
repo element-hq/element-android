@@ -23,11 +23,14 @@ import im.vector.app.features.session.VectorSessionStore
 import im.vector.app.test.testCoroutineDispatchers
 import io.mockk.coEvery
 import io.mockk.coJustRun
+import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 import org.matrix.android.sdk.api.session.profile.ProfileService
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 class FakeSession(
         val fakeCryptoService: FakeCryptoService = FakeCryptoService(),
@@ -65,6 +68,13 @@ class FakeSession(
         coJustRun {
             this@FakeSession.configureAndStart(any(), startSyncing = true)
             this@FakeSession.startSyncing(any())
+        }
+    }
+
+    companion object {
+
+        fun withRoomSummary(roomSummary: RoomSummary) = FakeSession().apply {
+            every { getRoomSummary(any()) } returns roomSummary
         }
     }
 }
