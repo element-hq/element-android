@@ -24,7 +24,6 @@ import im.vector.app.BuildConfig
 import im.vector.app.config.Analytics
 import im.vector.app.config.Config
 import im.vector.app.config.KeySharingStrategy
-import im.vector.app.core.resources.BuildMeta
 import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.call.webrtc.VoipConfig
 import im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy
