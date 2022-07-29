@@ -126,6 +126,11 @@ allprojects {
         enableExperimentalRules = true
         // display the corresponding rule
         verbose = true
+        reporters {
+            reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.PLAIN)
+            // To have XML report for Danger
+            reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.CHECKSTYLE)
+        }
         disabledRules = [
                 // TODO Re-enable these 4 rules after reformatting project
                 "indent",
