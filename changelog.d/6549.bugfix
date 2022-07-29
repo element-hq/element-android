@@ -1,1 +1,0 @@
-Fix infinite loading when opening a DM when the current room is the same DM.

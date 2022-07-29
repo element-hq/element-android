@@ -1,1 +1,0 @@
-Improves performance on search screen by replacing flattenParents with directParentName in RoomSummary

@@ -1,1 +1,0 @@
-SDK - The SpaceFilter is query parameter is no longer nullable, use SpaceFilter.NoFilter instead
