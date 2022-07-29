@@ -22,6 +22,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -33,6 +35,7 @@ import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.MapboxMapOptions
 import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.mapboxsdk.maps.SupportMapFragment
+import com.mapbox.mapboxsdk.plugins.annotation.Symbol
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
 import com.mapbox.mapboxsdk.style.layers.Property
@@ -42,7 +45,9 @@ import im.vector.app.core.extensions.addChildFragment
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.DimensionConverter
+import im.vector.app.core.utils.openLocation
 import im.vector.app.databinding.FragmentLocationLiveMapViewBinding
+import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.UrlMapProvider
 import im.vector.app.features.location.zoomToBounds
 import im.vector.app.features.location.zoomToLocation
@@ -54,7 +59,6 @@ import javax.inject.Inject
 /**
  * Screen showing a map with all the current users sharing their live location in a room.
  */
-
 @AndroidEntryPoint
 class LocationLiveMapViewFragment @Inject constructor() : VectorBaseFragment<FragmentLocationLiveMapViewBinding>() {
 
@@ -107,19 +111,16 @@ class LocationLiveMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
     private fun setupMap() {
         val mapFragment = getOrCreateSupportMapFragment()
         mapFragment.getMapAsync { mapboxMap ->
-            val bottomSheetHeight = BottomSheetBehavior.from(views.bottomSheet).peekHeight
-            mapboxMap.uiSettings.apply {
-                // Place copyright above the user list bottom sheet
-                setLogoMargins(dimensionConverter.dpToPx(8), 0, 0, bottomSheetHeight + dimensionConverter.dpToPx(8))
-                setAttributionMargins(dimensionConverter.dpToPx(96), 0, 0, bottomSheetHeight + dimensionConverter.dpToPx(8))
-            }
-
             lifecycleScope.launch {
                 mapboxMap.setStyle(urlMapProvider.getMapUrl()) { style ->
                     mapStyle = style
                     this@LocationLiveMapViewFragment.mapboxMap = WeakReference(mapboxMap)
                     symbolManager = SymbolManager(mapFragment.view as MapView, mapboxMap, style).apply {
                         iconAllowOverlap = true
+                        addClickListener {
+                            onSymbolClicked(it)
+                            true
+                        }
                     }
                     pendingLiveLocations
                             .takeUnless { it.isEmpty() }
@@ -127,6 +128,29 @@ class LocationLiveMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
                 }
             }
         }
+    }
+
+    private fun onSymbolClicked(symbol: Symbol?) {
+        symbol?.let {
+            mapboxMap
+                    ?.get()
+                    ?.zoomToLocation(LocationData(it.latLng.latitude, it.latLng.longitude, null), preserveCurrentZoomLevel = false)
+
+            LocationLiveMapMarkerOptionsDialog(requireContext())
+                    .apply {
+                        callback = object : LocationLiveMapMarkerOptionsDialog.Callback {
+                            override fun onShareLocationClicked() {
+                                shareLocation(symbol)
+                                dismiss()
+                            }
+                        }
+                    }
+                    .show(views.liveLocationPopupAnchor)
+        }
+    }
+
+    private fun shareLocation(symbol: Symbol) {
+        openLocation(requireActivity(), symbol.latLng.latitude, symbol.latLng.longitude)
     }
 
     private fun getOrCreateSupportMapFragment() =
@@ -143,7 +167,45 @@ class LocationLiveMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
     }
 
     private fun updateUserListBottomSheet(userLocations: List<UserLiveLocationViewState>) {
+        if (userLocations.isEmpty()) {
+            showEndedLiveBanner()
+        } else {
+            showUserList(userLocations)
+        }
+    }
+
+    private fun showEndedLiveBanner() {
+        views.bottomSheet.isGone = true
+        views.liveLocationMapFragmentEndedBanner.isVisible = true
+        updateCopyrightMargin(bottomOffset = views.liveLocationMapFragmentEndedBanner.height)
+    }
+
+    private fun showUserList(userLocations: List<UserLiveLocationViewState>) {
+        val bottomSheetHeight = BottomSheetBehavior.from(views.bottomSheet).peekHeight
+        updateCopyrightMargin(bottomOffset = bottomSheetHeight)
+        views.bottomSheet.isVisible = true
+        views.liveLocationMapFragmentEndedBanner.isGone = true
         bottomSheetController.setData(userLocations)
+    }
+
+    private fun updateCopyrightMargin(bottomOffset: Int) {
+        getOrCreateSupportMapFragment().getMapAsync { mapboxMap ->
+            mapboxMap.uiSettings.apply {
+                // Place copyright above the user list bottom sheet
+                setLogoMargins(
+                        dimensionConverter.dpToPx(COPYRIGHT_MARGIN_DP),
+                        0,
+                        0,
+                        bottomOffset + dimensionConverter.dpToPx(COPYRIGHT_MARGIN_DP)
+                )
+                setAttributionMargins(
+                        dimensionConverter.dpToPx(COPYRIGHT_ATTRIBUTION_MARGIN_DP),
+                        0,
+                        0,
+                        bottomOffset + dimensionConverter.dpToPx(COPYRIGHT_MARGIN_DP)
+                )
+            }
+        }
     }
 
     private fun updateMap(userLiveLocations: List<UserLiveLocationViewState>) {
@@ -242,11 +304,13 @@ class LocationLiveMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
                 .find { it.matrixItem.id == userId }
                 ?.locationData
                 ?.let { locationData ->
-                    mapboxMap?.get()?.zoomToLocation(locationData, preserveCurrentZoomLevel = true)
+                    mapboxMap?.get()?.zoomToLocation(locationData, preserveCurrentZoomLevel = false)
                 }
     }
 
     companion object {
         private const val MAP_FRAGMENT_TAG = "im.vector.app.features.location.live.map"
+        private const val COPYRIGHT_MARGIN_DP = 8
+        private const val COPYRIGHT_ATTRIBUTION_MARGIN_DP = 96
     }
 }

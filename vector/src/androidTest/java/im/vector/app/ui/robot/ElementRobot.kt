@@ -17,12 +17,12 @@
 package im.vector.app.ui.robot
 
 import android.view.View
+import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -91,8 +91,7 @@ class ElementRobot {
         waitUntilActivityVisible<CreateDirectRoomActivity> {
             waitUntilViewVisible(withId(R.id.userListSearch))
         }
-        // close keyboard
-        pressBack()
+        closeSoftKeyboard()
         block(NewDirectMessageRobot())
         pressBack()
         waitUntilViewVisible(withId(R.id.bottomNavigationView))
@@ -182,13 +181,8 @@ class ElementRobot {
             val activity = EspressoHelper.getCurrentActivity()!!
             val popup = activity.findViewById<View>(com.tapadoo.alerter.R.id.llAlertBackground)!!
             activity.runOnUiThread { popup.performClick() }
-
             waitUntilViewVisible(withId(R.id.bottomSheetFragmentContainer))
-            waitUntilViewVisible(ViewMatchers.withText(R.string.action_skip))
-            clickOn(R.string.action_skip)
-            assertDisplayed(R.string.are_you_sure)
-            clickOn(R.string.action_skip)
-            waitUntilViewVisible(withId(R.id.bottomSheetFragmentContainer))
+            pressBack()
         }.onFailure { Timber.w(it, "Verification popup missing") }
     }
 

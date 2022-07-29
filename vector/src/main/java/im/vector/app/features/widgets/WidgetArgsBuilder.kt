@@ -78,6 +78,13 @@ class WidgetArgsBuilder @Inject constructor(
         )
     }
 
+    fun buildElementCallWidgetArgs(roomId: String, widget: Widget): WidgetArgs {
+        return buildRoomWidgetArgs(roomId, widget)
+                .copy(
+                        kind = WidgetKind.ELEMENT_CALL
+                )
+    }
+
     @Suppress("UNCHECKED_CAST")
     private fun Map<String, String?>.filterNotNull(): Map<String, String> {
         return filterValues { it != null } as Map<String, String>

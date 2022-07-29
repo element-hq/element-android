@@ -763,11 +763,17 @@ internal class RealmCryptoStore @Inject constructor(
 //                    } ?: false
                 val key = OlmInboundGroupSessionEntity.createPrimaryKey(sessionIdentifier, wrapper.sessionData.senderKey)
 
+                val existing = realm.where<OlmInboundGroupSessionEntity>()
+                        .equalTo(OlmInboundGroupSessionEntityFields.PRIMARY_KEY, key)
+                        .findFirst()
+
                 val realmOlmInboundGroupSession = OlmInboundGroupSessionEntity().apply {
                     primaryKey = key
                     store(wrapper)
+                    backedUp = existing?.backedUp ?: false
                 }
-                Timber.i("## CRYPTO | shouldShareHistory: ${wrapper.sessionData.sharedHistory} for $key")
+
+                Timber.v("## CRYPTO | shouldShareHistory: ${wrapper.sessionData.sharedHistory} for $key")
                 realm.insertOrUpdate(realmOlmInboundGroupSession)
             }
         }

@@ -61,6 +61,7 @@ import im.vector.app.features.home.room.breadcrumbs.BreadcrumbsFragment
 import im.vector.app.features.home.room.detail.TimelineFragment
 import im.vector.app.features.home.room.detail.search.SearchFragment
 import im.vector.app.features.home.room.list.RoomListFragment
+import im.vector.app.features.home.room.list.home.HomeRoomListFragment
 import im.vector.app.features.home.room.threads.list.views.ThreadListFragment
 import im.vector.app.features.location.LocationPreviewFragment
 import im.vector.app.features.location.LocationSharingFragment
@@ -162,6 +163,7 @@ import im.vector.app.features.settings.devtools.GossipingEventsPaperTrailFragmen
 import im.vector.app.features.settings.devtools.IncomingKeyRequestListFragment
 import im.vector.app.features.settings.devtools.KeyRequestsFragment
 import im.vector.app.features.settings.devtools.OutgoingKeyRequestListFragment
+import im.vector.app.features.settings.font.FontScaleSettingFragment
 import im.vector.app.features.settings.homeserver.HomeserverSettingsFragment
 import im.vector.app.features.settings.ignored.VectorSettingsIgnoredUsersFragment
 import im.vector.app.features.settings.legals.LegalsFragment
@@ -585,6 +587,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(HomeserverSettingsFragment::class)
     fun bindHomeserverSettingsFragment(fragment: HomeserverSettingsFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(FontScaleSettingFragment::class)
+    fun bindFontScaleSettingFragment(fragment: FontScaleSettingFragment): Fragment
 
     @Binds
     @IntoMap
@@ -1035,4 +1042,9 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(LocationPreviewFragment::class)
     fun bindLocationPreviewFragment(fragment: LocationPreviewFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(HomeRoomListFragment::class)
+    fun binHomeRoomListFragment(fragment: HomeRoomListFragment): Fragment
 }

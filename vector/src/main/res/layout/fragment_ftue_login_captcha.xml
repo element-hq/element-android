@@ -38,7 +38,7 @@
         android:background="@drawable/circle"
         android:backgroundTint="?colorSecondary"
         android:contentDescription="@null"
-        android:src="@drawable/ic_user_fg"
+        android:src="@drawable/ic_robot"
         app:layout_constraintBottom_toTopOf="@id/captchaHeaderTitle"
         app:layout_constraintEnd_toEndOf="@id/captchaGutterEnd"
         app:layout_constraintHeight_percent="0.10"
@@ -53,26 +53,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:gravity="center"
-        android:text="@string/ftue_auth_create_account_title"
+        android:text="@string/ftue_auth_captcha_title"
         android:textColor="?vctr_content_primary"
-        app:layout_constraintBottom_toTopOf="@id/captchaHeaderSubtitle"
-        app:layout_constraintEnd_toEndOf="@id/captchaGutterEnd"
-        app:layout_constraintStart_toStartOf="@id/captchaGutterStart"
-        app:layout_constraintTop_toBottomOf="@id/captchaHeaderIcon" />
-
-    <TextView
-        android:id="@+id/captchaHeaderSubtitle"
-        style="@style/Widget.Vector.TextView.Subtitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:gravity="center"
-        android:text="@string/auth_recaptcha_message"
-        android:textColor="?vctr_content_secondary"
         app:layout_constraintBottom_toTopOf="@id/titleContentSpacing"
         app:layout_constraintEnd_toEndOf="@id/captchaGutterEnd"
         app:layout_constraintStart_toStartOf="@id/captchaGutterStart"
-        app:layout_constraintTop_toBottomOf="@id/captchaHeaderTitle" />
+        app:layout_constraintTop_toBottomOf="@id/captchaHeaderIcon" />
 
     <Space
         android:id="@+id/titleContentSpacing"
@@ -80,7 +66,7 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/loginCaptchaWevView"
         app:layout_constraintHeight_percent="0.03"
-        app:layout_constraintTop_toBottomOf="@id/captchaHeaderSubtitle" />
+        app:layout_constraintTop_toBottomOf="@id/captchaHeaderTitle" />
 
     <WebView
         android:id="@+id/loginCaptchaWevView"

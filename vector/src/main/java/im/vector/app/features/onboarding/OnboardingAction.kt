@@ -52,9 +52,13 @@ sealed interface OnboardingAction : VectorViewModelAction {
     object ResendResetPassword : OnboardingAction
     object ResetPasswordMailConfirmed : OnboardingAction
 
-    data class MaybeUpdateHomeserverFromMatrixId(val userId: String) : OnboardingAction
+    sealed interface UserNameEnteredAction : OnboardingAction {
+        data class Registration(val userId: String) : UserNameEnteredAction
+        data class Login(val userId: String) : UserNameEnteredAction
+    }
     sealed interface AuthenticateAction : OnboardingAction {
         data class Register(val username: String, val password: String, val initialDeviceName: String) : AuthenticateAction
+        data class RegisterWithMatrixId(val matrixId: String, val password: String, val initialDeviceName: String) : AuthenticateAction
         data class Login(val username: String, val password: String, val initialDeviceName: String) : AuthenticateAction
         data class LoginDirect(val matrixId: String, val password: String, val initialDeviceName: String) : AuthenticateAction
     }
@@ -71,6 +75,7 @@ sealed interface OnboardingAction : VectorViewModelAction {
     object ResetSignMode : ResetAction
     object ResetAuthenticationAttempt : ResetAction
     object ResetResetPassword : ResetAction
+    object ResetSelectedRegistrationUserName : ResetAction
 
     // Homeserver history
     object ClearHomeServerHistory : OnboardingAction

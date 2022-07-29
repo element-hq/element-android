@@ -33,6 +33,7 @@ import im.vector.app.test.fakes.FakeHomeServerConnectionConfigFactory
 import im.vector.app.test.fakes.FakeHomeServerHistoryService
 import im.vector.app.test.fakes.FakeLoginWizard
 import im.vector.app.test.fakes.FakeRegistrationActionHandler
+import im.vector.app.test.fakes.FakeRegistrationWizard
 import im.vector.app.test.fakes.FakeSession
 import im.vector.app.test.fakes.FakeStartAuthenticationFlowUseCase
 import im.vector.app.test.fakes.FakeStringProvider
@@ -41,6 +42,7 @@ import im.vector.app.test.fakes.FakeUriFilenameResolver
 import im.vector.app.test.fakes.FakeVectorFeatures
 import im.vector.app.test.fakes.FakeVectorOverrides
 import im.vector.app.test.fakes.toTestString
+import im.vector.app.test.fixtures.a401ServerError
 import im.vector.app.test.fixtures.aBuildMeta
 import im.vector.app.test.fixtures.aHomeServerCapabilities
 import im.vector.app.test.test
@@ -50,11 +52,13 @@ import org.junit.Rule
 import org.junit.Test
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.registration.Stage
+import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 
 private const val A_DISPLAY_NAME = "a display name"
 private const val A_PICTURE_FILENAME = "a-picture.png"
+private val A_SERVER_ERROR = a401ServerError()
 private val AN_ERROR = RuntimeException("an error!")
 private val A_LOADABLE_REGISTER_ACTION = RegisterAction.StartRegistration
 private val A_NON_LOADABLE_REGISTER_ACTION = RegisterAction.CheckIfEmailHasBeenValidated(delayMillis = -1L)
@@ -64,10 +68,12 @@ private val ANY_CONTINUING_REGISTRATION_RESULT = RegistrationActionHandler.Resul
 private val A_DIRECT_LOGIN = OnboardingAction.AuthenticateAction.LoginDirect("@a-user:id.org", "a-password", "a-device-name")
 private const val A_HOMESERVER_URL = "https://edited-homeserver.org"
 private val A_HOMESERVER_CONFIG = HomeServerConnectionConfig(FakeUri().instance)
-private val SELECTED_HOMESERVER_STATE = SelectedHomeserverState(preferredLoginMode = LoginMode.Password)
+private val SELECTED_HOMESERVER_STATE = SelectedHomeserverState(preferredLoginMode = LoginMode.Password, userFacingUrl = A_HOMESERVER_URL)
 private val SELECTED_HOMESERVER_STATE_SUPPORTED_LOGOUT_DEVICES = SelectedHomeserverState(isLogoutDevicesSupported = true)
 private const val AN_EMAIL = "hello@example.com"
 private const val A_PASSWORD = "a-password"
+private const val A_USERNAME = "hello-world"
+private const val A_MATRIX_ID = "@$A_USERNAME:matrix.org"
 
 class OnboardingViewModelTest {
 
@@ -94,6 +100,48 @@ class OnboardingViewModelTest {
     @Before
     fun setUp() {
         viewModelWith(initialState)
+    }
+
+    @Test
+    fun `given registration started with currentThreePid, when handling InitWith, then emits restored session OnSendEmailSuccess`() = runTest {
+        val test = viewModel.test()
+        fakeAuthenticationService.givenRegistrationWizard(FakeRegistrationWizard().also {
+            it.givenRegistrationStarted(hasStarted = true)
+            it.givenCurrentThreePid(AN_EMAIL)
+        })
+
+        viewModel.handle(OnboardingAction.InitWith(LoginConfig(A_HOMESERVER_URL, identityServerUrl = null)))
+
+        test
+                .assertEvents(OnboardingViewEvents.OnSendEmailSuccess(AN_EMAIL, isRestoredSession = true))
+                .finish()
+    }
+
+    @Test
+    fun `given registration not started, when handling InitWith, then does nothing`() = runTest {
+        val test = viewModel.test()
+        fakeAuthenticationService.givenRegistrationWizard(FakeRegistrationWizard().also { it.givenRegistrationStarted(hasStarted = false) })
+
+        viewModel.handle(OnboardingAction.InitWith(LoginConfig(A_HOMESERVER_URL, identityServerUrl = null)))
+
+        test
+                .assertNoEvents()
+                .finish()
+    }
+
+    @Test
+    fun `given registration started without currentThreePid, when handling InitWith, then does nothing`() = runTest {
+        val test = viewModel.test()
+        fakeAuthenticationService.givenRegistrationWizard(FakeRegistrationWizard().also {
+            it.givenRegistrationStarted(hasStarted = true)
+            it.givenCurrentThreePid(threePid = null)
+        })
+
+        viewModel.handle(OnboardingAction.InitWith(LoginConfig(A_HOMESERVER_URL, identityServerUrl = null)))
+
+        test
+                .assertNoEvents()
+                .finish()
     }
 
     @Test
@@ -249,6 +297,24 @@ class OnboardingViewModelTest {
     }
 
     @Test
+    fun `given register action returns email success, when handling action, then updates registration state and emits email success`() = runTest {
+        val test = viewModel.test()
+        givenRegistrationResultFor(A_LOADABLE_REGISTER_ACTION, RegistrationActionHandler.Result.SendEmailSuccess(AN_EMAIL))
+
+        viewModel.handle(OnboardingAction.PostRegisterAction(A_LOADABLE_REGISTER_ACTION))
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = true) },
+                        { copy(registrationState = RegistrationState(email = AN_EMAIL)) },
+                        { copy(isLoading = false) }
+                )
+                .assertEvents(OnboardingViewEvents.OnSendEmailSuccess(AN_EMAIL, isRestoredSession = false))
+                .finish()
+    }
+
+    @Test
     fun `given unavailable deeplink, when selecting homeserver, then emits failure with default homeserver as retry action`() = runTest {
         fakeContext.givenHasConnection()
         fakeHomeServerConnectionConfigFactory.givenConfigFor(A_HOMESERVER_URL, A_HOMESERVER_CONFIG)
@@ -290,13 +356,13 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `given a full matrix id, when maybe updating homeserver, then updates selected homeserver state and emits edited event`() = runTest {
-        viewModelWith(initialState.copy(onboardingFlow = OnboardingFlow.SignUp))
+    fun `given a full matrix id, when a login username is entered, then updates selected homeserver state and emits edited event`() = runTest {
+        viewModelWith(initialState.copy(onboardingFlow = OnboardingFlow.SignIn))
         givenCanSuccessfullyUpdateHomeserver(A_HOMESERVER_URL, SELECTED_HOMESERVER_STATE)
         val test = viewModel.test()
         val fullMatrixId = "@a-user:${A_HOMESERVER_URL.removePrefix("https://")}"
 
-        viewModel.handle(OnboardingAction.MaybeUpdateHomeserverFromMatrixId(fullMatrixId))
+        viewModel.handle(OnboardingAction.UserNameEnteredAction.Login(fullMatrixId))
 
         test
                 .assertStatesChanges(
@@ -311,16 +377,93 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `given a username, when maybe updating homeserver, then does nothing`() = runTest {
-        viewModelWith(initialState.copy(onboardingFlow = OnboardingFlow.SignUp))
+    fun `given a username, when a login username is entered, then does nothing`() = runTest {
         val test = viewModel.test()
         val onlyUsername = "a-username"
 
-        viewModel.handle(OnboardingAction.MaybeUpdateHomeserverFromMatrixId(onlyUsername))
+        viewModel.handle(OnboardingAction.UserNameEnteredAction.Login(onlyUsername))
 
         test
                 .assertStates(initialState)
                 .assertNoEvents()
+                .finish()
+    }
+
+    @Test
+    fun `given available username, when a register username is entered, then emits available registration state`() = runTest {
+        viewModelWith(initialRegistrationState(A_HOMESERVER_URL))
+        val onlyUsername = "a-username"
+        givenUserNameIsAvailable(onlyUsername)
+        val test = viewModel.test()
+
+        viewModel.handle(OnboardingAction.UserNameEnteredAction.Registration(onlyUsername))
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(registrationState = availableRegistrationState(onlyUsername, A_HOMESERVER_URL)) }
+                )
+                .assertNoEvents()
+                .finish()
+    }
+
+    @Test
+    fun `given unavailable username, when a register username is entered, then emits availability error`() = runTest {
+        viewModelWith(initialRegistrationState(A_HOMESERVER_URL))
+        val onlyUsername = "a-username"
+        givenUserNameIsUnavailable(onlyUsername, A_SERVER_ERROR)
+        val test = viewModel.test()
+
+        viewModel.handle(OnboardingAction.UserNameEnteredAction.Registration(onlyUsername))
+
+        test
+                .assertState(initialState)
+                .assertEvents(OnboardingViewEvents.Failure(A_SERVER_ERROR))
+                .finish()
+    }
+
+    @Test
+    fun `given available full matrix id, when a register username is entered, then changes homeserver and emits available registration state`() = runTest {
+        viewModelWith(initialRegistrationState("ignored-url"))
+        givenCanSuccessfullyUpdateHomeserver(A_HOMESERVER_URL, SELECTED_HOMESERVER_STATE)
+        val userName = "a-user"
+        val fullMatrixId = "@$userName:${A_HOMESERVER_URL.removePrefix("https://")}"
+        givenUserNameIsAvailable(userName)
+        val test = viewModel.test()
+
+        viewModel.handle(OnboardingAction.UserNameEnteredAction.Registration(fullMatrixId))
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = true) },
+                        { copy(selectedHomeserver = SELECTED_HOMESERVER_STATE) },
+                        { copy(registrationState = availableRegistrationState(userName, A_HOMESERVER_URL)) },
+                        { copy(isLoading = false) },
+                )
+                .assertEvents(OnboardingViewEvents.OnHomeserverEdited)
+                .finish()
+    }
+
+    @Test
+    fun `given unavailable full matrix id, when a register username is entered, then emits availability error`() = runTest {
+        viewModelWith(initialRegistrationState("ignored-url"))
+        givenCanSuccessfullyUpdateHomeserver(A_HOMESERVER_URL, SELECTED_HOMESERVER_STATE)
+        val userName = "a-user"
+        val fullMatrixId = "@$userName:${A_HOMESERVER_URL.removePrefix("https://")}"
+        givenUserNameIsUnavailable(userName, A_SERVER_ERROR)
+        val test = viewModel.test()
+
+        viewModel.handle(OnboardingAction.UserNameEnteredAction.Registration(fullMatrixId))
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = true) },
+                        { copy(selectedHomeserver = SELECTED_HOMESERVER_STATE) },
+                        { copy(isLoading = false) },
+                )
+                .assertEvents(OnboardingViewEvents.OnHomeserverEdited, OnboardingViewEvents.Failure(A_SERVER_ERROR))
                 .finish()
     }
 
@@ -343,7 +486,8 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `given personalisation enabled, when registering account, then updates state and emits account created event`() = runTest {
+    fun `given matrix id and personalisation enabled, when registering account, then updates state and emits account created event`() = runTest {
+        viewModelWith(initialState.copy(registrationState = RegistrationState(selectedMatrixId = A_MATRIX_ID)))
         fakeVectorFeatures.givenPersonalisationEnabled()
         givenSuccessfullyCreatesAccount(A_HOMESERVER_CAPABILITIES)
         givenRegistrationResultFor(RegisterAction.StartRegistration, RegistrationActionHandler.Result.RegistrationComplete(fakeSession))
@@ -355,7 +499,7 @@ class OnboardingViewModelTest {
                 .assertStatesChanges(
                         initialState,
                         { copy(isLoading = true) },
-                        { copy(isLoading = false, personalizationState = A_HOMESERVER_CAPABILITIES.toPersonalisationState()) }
+                        { copy(isLoading = false, personalizationState = A_HOMESERVER_CAPABILITIES.toPersonalisationState(A_USERNAME)) }
                 )
                 .assertEvents(OnboardingViewEvents.OnAccountCreated)
                 .finish()
@@ -640,9 +784,27 @@ class OnboardingViewModelTest {
         givenRegistrationResultFor(RegisterAction.StartRegistration, RegistrationActionHandler.Result.Error(error))
         fakeHomeServerHistoryService.expectUrlToBeAdded(A_HOMESERVER_CONFIG.homeServerUri.toString())
     }
+
+    private fun givenUserNameIsAvailable(userName: String) {
+        fakeAuthenticationService.givenRegistrationWizard(FakeRegistrationWizard().also { it.givenUserNameIsAvailable(userName) })
+    }
+
+    private fun givenUserNameIsUnavailable(userName: String, failure: Failure.ServerError) {
+        fakeAuthenticationService.givenRegistrationWizard(FakeRegistrationWizard().also { it.givenUserNameIsUnavailable(userName, failure) })
+    }
+
+    private fun availableRegistrationState(userName: String, homeServerUrl: String) = RegistrationState(
+            isUserNameAvailable = true,
+            selectedMatrixId = "@$userName:${homeServerUrl.removePrefix("https://")}"
+    )
+
+    private fun initialRegistrationState(homeServerUrl: String) = initialState.copy(
+            onboardingFlow = OnboardingFlow.SignUp, selectedHomeserver = SelectedHomeserverState(userFacingUrl = homeServerUrl)
+    )
 }
 
-private fun HomeServerCapabilities.toPersonalisationState() = PersonalizationState(
+private fun HomeServerCapabilities.toPersonalisationState(displayName: String? = null) = PersonalizationState(
         supportsChangingDisplayName = canChangeDisplayName,
-        supportsChangingProfilePicture = canChangeAvatar
+        supportsChangingProfilePicture = canChangeAvatar,
+        displayName = displayName,
 )

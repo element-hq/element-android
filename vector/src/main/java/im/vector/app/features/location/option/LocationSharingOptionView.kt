@@ -24,6 +24,7 @@ import android.widget.ImageView
 import androidx.annotation.ColorInt
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.use
 import androidx.core.view.setPadding
 import im.vector.app.R
 import im.vector.app.core.extensions.tintBackground
@@ -45,18 +46,14 @@ class LocationSharingOptionView @JvmOverloads constructor(
     )
 
     init {
-        context.theme.obtainStyledAttributes(
+        context.obtainStyledAttributes(
                 attrs,
                 R.styleable.LocationSharingOptionView,
                 0,
                 0
-        ).run {
-            try {
-                setIcon(this)
-                setTitle(this)
-            } finally {
-                recycle()
-            }
+        ).use {
+            setIcon(it)
+            setTitle(it)
         }
     }
 

@@ -30,7 +30,6 @@ import com.airbnb.mvrx.withState
 import com.google.android.material.badge.BadgeDrawable
 import im.vector.app.AppStateHandler
 import im.vector.app.R
-import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.platform.OnBackPressed
@@ -42,6 +41,7 @@ import im.vector.app.core.ui.views.CurrentCallsView
 import im.vector.app.core.ui.views.CurrentCallsViewPresenter
 import im.vector.app.core.ui.views.KeysBackupBanner
 import im.vector.app.databinding.FragmentHomeDetailBinding
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.call.SharedKnownCallsViewModel
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.dialpad.DialPadFragment
@@ -49,6 +49,7 @@ import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.home.room.list.RoomListFragment
 import im.vector.app.features.home.room.list.RoomListParams
 import im.vector.app.features.home.room.list.UnreadCounterBadgeView
+import im.vector.app.features.home.room.list.home.HomeRoomListFragment
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
 import im.vector.app.features.settings.VectorLocale
@@ -58,7 +59,6 @@ import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.BannerState
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
-import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 
@@ -68,7 +68,8 @@ class HomeDetailFragment @Inject constructor(
         private val alertManager: PopupAlertManager,
         private val callManager: WebRtcCallManager,
         private val vectorPreferences: VectorPreferences,
-        private val appStateHandler: AppStateHandler
+        private val appStateHandler: AppStateHandler,
+        private val vectorFeatures: VectorFeatures,
 ) : VectorBaseFragment<FragmentHomeDetailBinding>(),
         KeysBackupBanner.Delegate,
         CurrentCallsView.Callback,
@@ -130,11 +131,8 @@ class HomeDetailFragment @Inject constructor(
             views.bottomNavigationView.selectedItemId = it.currentTab.toMenuId()
         }
 
-        viewModel.onEach(HomeDetailViewState::roomGroupingMethod) { roomGroupingMethod ->
-            when (roomGroupingMethod) {
-                is RoomGroupingMethod.ByLegacyGroup -> onGroupChange(roomGroupingMethod.groupSummary)
-                is RoomGroupingMethod.BySpace -> onSpaceChange(roomGroupingMethod.spaceSummary)
-            }
+        viewModel.onEach(HomeDetailViewState::selectedSpace) { selectedSpace ->
+            onSpaceChange(selectedSpace)
         }
 
         viewModel.onEach(HomeDetailViewState::currentTab) { currentTab ->
@@ -188,25 +186,15 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun navigateBack() {
-        try {
-            val lastSpace = appStateHandler.getSpaceBackstack().removeLast()
-            setCurrentSpace(lastSpace)
-        } catch (e: NoSuchElementException) {
-            navigateUpOneSpace()
-        }
+        val previousSpaceId = appStateHandler.getSpaceBackstack().removeLastOrNull()
+        val parentSpaceId = appStateHandler.getCurrentSpace()?.flattenParentIds?.lastOrNull()
+        setCurrentSpace(previousSpaceId ?: parentSpaceId)
     }
 
     private fun setCurrentSpace(spaceId: String?) {
         appStateHandler.setCurrentSpace(spaceId, isForwardNavigation = false)
-        sharedActionViewModel.post(HomeActivitySharedAction.CloseGroup)
+        sharedActionViewModel.post(HomeActivitySharedAction.OnCloseSpace)
     }
-
-    private fun navigateUpOneSpace() {
-        val parentId = getCurrentSpace()?.flattenParentIds?.lastOrNull()
-        setCurrentSpace(parentId)
-    }
-
-    private fun getCurrentSpace() = (appStateHandler.getCurrentRoomGroupingMethod() as? RoomGroupingMethod.BySpace)?.spaceSummary
 
     private fun handleCallStarted() {
         dismissLoadingDialog()
@@ -227,10 +215,8 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun refreshSpaceState() {
-        when (val roomGroupingMethod = appStateHandler.getCurrentRoomGroupingMethod()) {
-            is RoomGroupingMethod.ByLegacyGroup -> onGroupChange(roomGroupingMethod.groupSummary)
-            is RoomGroupingMethod.BySpace -> onSpaceChange(roomGroupingMethod.spaceSummary)
-            else -> Unit
+        appStateHandler.getCurrentSpace()?.let {
+            onSpaceChange(it)
         }
     }
 
@@ -291,15 +277,6 @@ class HomeDetailFragment @Inject constructor(
         )
     }
 
-    private fun onGroupChange(groupSummary: GroupSummary?) {
-        if (groupSummary == null) {
-            views.groupToolbarSpaceTitleView.isVisible = false
-        } else {
-            views.groupToolbarSpaceTitleView.isVisible = true
-            views.groupToolbarSpaceTitleView.text = groupSummary.displayName
-        }
-    }
-
     private fun onSpaceChange(spaceSummary: RoomSummary?) {
         if (spaceSummary == null) {
             views.groupToolbarSpaceTitleView.isVisible = false
@@ -335,16 +312,9 @@ class HomeDetailFragment @Inject constructor(
         }
 
         views.homeToolbarContent.debouncedClicks {
-            withState(viewModel) {
-                when (it.roomGroupingMethod) {
-                    is RoomGroupingMethod.ByLegacyGroup -> {
-                        // do nothing
-                    }
-                    is RoomGroupingMethod.BySpace -> {
-                        it.roomGroupingMethod.spaceSummary?.let { spaceSummary ->
-                            sharedActionViewModel.post(HomeActivitySharedAction.ShowSpaceSettings(spaceSummary.roomId))
-                        }
-                    }
+            withState(viewModel) { viewState ->
+                viewState.selectedSpace?.let {
+                    sharedActionViewModel.post(HomeActivitySharedAction.ShowSpaceSettings(it.roomId))
                 }
             }
         }
@@ -385,8 +355,12 @@ class HomeDetailFragment @Inject constructor(
             if (fragmentToShow == null) {
                 when (tab) {
                     is HomeTab.RoomList -> {
-                        val params = RoomListParams(tab.displayMode)
-                        add(R.id.roomListContainer, RoomListFragment::class.java, params.toMvRxBundle(), fragmentTag)
+                        if (vectorFeatures.isNewAppLayoutEnabled()) {
+                            add(R.id.roomListContainer, HomeRoomListFragment::class.java, null, fragmentTag)
+                        } else {
+                            val params = RoomListParams(tab.displayMode)
+                            add(R.id.roomListContainer, RoomListFragment::class.java, params.toMvRxBundle(), fragmentTag)
+                        }
                     }
                     is HomeTab.DialPad -> {
                         add(R.id.roomListContainer, createDialPadFragment(), fragmentTag)
@@ -499,7 +473,7 @@ class HomeDetailFragment @Inject constructor(
         return this
     }
 
-    override fun onBackPressed(toolbarButton: Boolean) = if (getCurrentSpace() != null) {
+    override fun onBackPressed(toolbarButton: Boolean) = if (appStateHandler.getCurrentSpace() != null) {
         navigateBack()
         true
     } else {

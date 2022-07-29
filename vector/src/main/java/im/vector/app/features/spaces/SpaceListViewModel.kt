@@ -24,7 +24,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.AppStateHandler
-import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
@@ -33,8 +32,6 @@ import im.vector.app.features.analytics.plan.Interaction
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
-import im.vector.app.group
-import im.vector.app.space
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -50,7 +47,6 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
-import org.matrix.android.sdk.api.session.group.groupSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.accountdata.RoomAccountDataTypes
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -79,10 +75,7 @@ class SpaceListViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<SpaceListViewModel, SpaceListViewState> by hiltMavericksViewModelFactory()
 
-//    private var currentGroupingMethod : RoomGroupingMethod? = null
-
     init {
-
         session.userService().getUserLive(session.myUserId)
                 .asFlow()
                 .setOnEach {
@@ -93,27 +86,19 @@ class SpaceListViewModel @AssistedInject constructor(
 
         observeSpaceSummaries()
 //        observeSelectionState()
-        appStateHandler.selectedRoomGroupingFlow
+        appStateHandler.selectedSpaceFlow
                 .distinctUntilChanged()
-                .setOnEach {
+                .setOnEach { selectedSpaceOption ->
                     copy(
-                            selectedGroupingMethod = it.orNull() ?: RoomGroupingMethod.BySpace(null)
+                            selectedSpace = selectedSpaceOption.orNull()
                     )
-                }
-
-        session.groupService().getGroupSummariesLive(groupSummaryQueryParams {})
-                .asFlow()
-                .setOnEach {
-                    copy(legacyGroups = it)
                 }
 
         // XXX there should be a way to refactor this and share it
         session.roomService().getPagedRoomSummariesLive(
                 roomSummaryQueryParams {
                     this.memberships = listOf(Membership.JOIN)
-                    this.spaceFilter = SpaceFilter.OrphanRooms.takeIf {
-                        !vectorPreferences.prefSpacesShowAllRoomInHome()
-                    }
+                    this.spaceFilter = roomsInSpaceFilter()
                 }, sortOrder = RoomSortOrder.NONE
         ).asFlow()
                 .sample(300)
@@ -128,9 +113,7 @@ class SpaceListViewModel @AssistedInject constructor(
                     val totalCount = session.roomService().getNotificationCountForRooms(
                             roomSummaryQueryParams {
                                 this.memberships = listOf(Membership.JOIN)
-                                this.spaceFilter = SpaceFilter.OrphanRooms.takeIf {
-                                    !vectorPreferences.prefSpacesShowAllRoomInHome()
-                                }
+                                this.spaceFilter = roomsInSpaceFilter()
                             }
                     )
                     val counts = RoomAggregateNotificationCount(
@@ -147,6 +130,11 @@ class SpaceListViewModel @AssistedInject constructor(
                 .launchIn(viewModelScope)
     }
 
+    private fun roomsInSpaceFilter() = when {
+        vectorPreferences.prefSpacesShowAllRoomInHome() -> SpaceFilter.NoFilter
+        else -> SpaceFilter.OrphanRooms
+    }
+
     override fun handle(action: SpaceListAction) {
         when (action) {
             is SpaceListAction.SelectSpace -> handleSelectSpace(action)
@@ -154,7 +142,6 @@ class SpaceListViewModel @AssistedInject constructor(
             SpaceListAction.AddSpace -> handleAddSpace()
             is SpaceListAction.ToggleExpand -> handleToggleExpand(action)
             is SpaceListAction.OpenSpaceInvite -> handleSelectSpaceInvite(action)
-            is SpaceListAction.SelectLegacyGroup -> handleSelectGroup(action)
             is SpaceListAction.MoveSpace -> handleMoveSpace(action)
             is SpaceListAction.OnEndDragging -> handleEndDragging()
             is SpaceListAction.OnStartDragging -> handleStartDragging()
@@ -229,23 +216,13 @@ class SpaceListViewModel @AssistedInject constructor(
     }
 
     private fun handleSelectSpace(action: SpaceListAction.SelectSpace) = withState { state ->
-        val groupingMethod = state.selectedGroupingMethod
-        if (groupingMethod is RoomGroupingMethod.ByLegacyGroup || groupingMethod.space()?.roomId != action.spaceSummary?.roomId) {
+        if (state.selectedSpace?.roomId != action.spaceSummary?.roomId) {
             analyticsTracker.capture(Interaction(null, null, Interaction.Name.SpacePanelSwitchSpace))
-            setState { copy(selectedGroupingMethod = RoomGroupingMethod.BySpace(action.spaceSummary)) }
+            setState { copy(selectedSpace = action.spaceSummary) }
             appStateHandler.setCurrentSpace(action.spaceSummary?.roomId)
-            _viewEvents.post(SpaceListViewEvents.OpenSpace(groupingMethod is RoomGroupingMethod.ByLegacyGroup))
+            _viewEvents.post(SpaceListViewEvents.CloseDrawer)
         } else {
             analyticsTracker.capture(Interaction(null, null, Interaction.Name.SpacePanelSelectedSpace))
-        }
-    }
-
-    private fun handleSelectGroup(action: SpaceListAction.SelectLegacyGroup) = withState { state ->
-        val groupingMethod = state.selectedGroupingMethod
-        if (groupingMethod is RoomGroupingMethod.BySpace || groupingMethod.group()?.groupId != action.groupSummary?.groupId) {
-            setState { copy(selectedGroupingMethod = RoomGroupingMethod.ByLegacyGroup(action.groupSummary)) }
-            appStateHandler.setCurrentGroup(action.groupSummary?.groupId)
-            _viewEvents.post(SpaceListViewEvents.OpenGroup(groupingMethod is RoomGroupingMethod.BySpace))
         }
     }
 

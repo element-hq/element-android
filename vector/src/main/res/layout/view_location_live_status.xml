@@ -40,7 +40,7 @@
     <Button
         android:id="@+id/locationLiveStatusStop"
         style="@style/Widget.Vector.Button.Text.OnPrimary.LocationLive"
-        android:layout_width="60dp"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:text="@string/location_share_live_stop"
         app:layout_constraintBottom_toBottomOf="@id/locationLiveStatusContainer"

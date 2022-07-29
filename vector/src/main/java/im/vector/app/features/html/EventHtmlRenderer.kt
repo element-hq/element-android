@@ -85,27 +85,27 @@ class EventHtmlRenderer @Inject constructor(
     } else {
         builder
     }
-        .usePlugin(
-            MarkwonInlineParserPlugin.create(
-                /* Configuring the Markwon inline formatting processor.
-                 * Default settings are all Markdown features. Turn those off, only using the
-                 * inline HTML processor and HTML entities processor.
-                 */
-                MarkwonInlineParser.factoryBuilderNoDefaults()
-                    .addInlineProcessor(HtmlInlineProcessor()) // use inline HTML processor
-                    .addInlineProcessor(EntityInlineProcessor()) // use HTML entities processor
+            .usePlugin(
+                    MarkwonInlineParserPlugin.create(
+                            /* Configuring the Markwon inline formatting processor.
+                             * Default settings are all Markdown features. Turn those off, only using the
+                             * inline HTML processor and HTML entities processor.
+                             */
+                            MarkwonInlineParser.factoryBuilderNoDefaults()
+                                    .addInlineProcessor(HtmlInlineProcessor()) // use inline HTML processor
+                                    .addInlineProcessor(EntityInlineProcessor()) // use HTML entities processor
+                    )
             )
-        )
-        .usePlugin(object : AbstractMarkwonPlugin() {
-            override fun configureParser(builder: Parser.Builder) {
-                /* Configuring the Markwon block formatting processor.
-                 * Default settings are all Markdown blocks. Turn those off.
-                 */
-                builder.enabledBlockTypes(kotlin.collections.emptySet())
-            }
-        })
-        .textSetter(PrecomputedFutureTextSetterCompat.create())
-        .build()
+            .usePlugin(object : AbstractMarkwonPlugin() {
+                override fun configureParser(builder: Parser.Builder) {
+                    /* Configuring the Markwon block formatting processor.
+                     * Default settings are all Markdown blocks. Turn those off.
+                     */
+                    builder.enabledBlockTypes(kotlin.collections.emptySet())
+                }
+            })
+            .textSetter(PrecomputedFutureTextSetterCompat.create())
+            .build()
 
     val plugins: List<MarkwonPlugin> = markwon.plugins
 

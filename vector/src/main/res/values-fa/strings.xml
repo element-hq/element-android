@@ -1095,7 +1095,7 @@
     <string name="direct_room_created_summary_item">%s پیوست.</string>
     <string name="room_created_summary_item_by_you">اتاق را ساخته و پیکربندی کردید.</string>
     <string name="encryption_not_enabled">رمزنگاری به کار نیفتاده</string>
-    <string name="direct_room_encryption_enabled_tile_description">پیام‌های این اتاق، رمزنگاری سرتاسری دارند.</string>
+    <string name="direct_room_encryption_enabled_tile_description">پیام‌های این گپ، رمزنگاری سرتاسری دارند.</string>
     <string name="encryption_enabled_tile_description">پیام‌های این اتاق رمزنگاری سرتاسری دارند. در نمایهٔ کاربران تأییدشان کرده و بیش‌تر بیاموزید.</string>
     <string name="encryption_enabled">رمزنگاری به کار افتاد</string>
     <string name="settings_when_rooms_are_upgraded">هنگام ارتقای اتاق‌ها</string>
@@ -1213,7 +1213,7 @@
     <string name="settings_troubleshoot_test_token_registration_failed">شکست در ثبت ژتون FCM در کارساز خانگی:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_token_registration_success">ژتون FCM با موفقیت در کارساز خانگی ثبت شد.</string>
-    <string name="settings_troubleshoot_test_token_registration_title">ثبت توکن</string>
+    <string name="settings_troubleshoot_test_token_registration_title">ثبت ژتون</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">افزودن حساب کاربری</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 \nاین خطا خارج از مهار ${app_name} است. هیچ حساب گوگلی روی تلفن نیست. لطفاً مدیر حساب را گشوده و حساب گوگلی بیفزایید.</string>
@@ -1221,11 +1221,11 @@
 \nاین خطا خارج از مهار ${app_name} است و ممکن است به دلایل مختلفی رخ داده باشد. ممکن است اگر بعداً دوباره تلاش کنید، کار کند. می‌توانید بررسی کنید که مصرف دادهٔ خدمات پلی گوگل در تنظیمات سامانه محدود نشده باشد یا ساعت افزاره‌تان درست باشد. همچنین ممکن است روی رام‌های سفارشی اتفاق بیفتد.</string>
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
 \nاین خطا، خارج از مهار ${app_name} است و طبق گفتهٔ گوگل، نشانگر ثبت بیش‌از حد کاره‌ها در FCM است. خطا فقط در مواردی که تعداد خیلی زیادی کاره وجود داشته باشد رخ می‌دهد، پس کاربران معمولی نباید تحت تأثیر قرار گیرند.</string>
-    <string name="settings_troubleshoot_test_fcm_failed">بازیابی توکن FCM با مشکل مواجه شد:
+    <string name="settings_troubleshoot_test_fcm_failed">شکست در بازیابی ژتون FCM:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_fcm_success">توکن FCM با موفقیت بازیابی شد:
+    <string name="settings_troubleshoot_test_fcm_success">ژتون FCM با موفقیت بازیابی شد:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_fcm_title">توکن Firebase</string>
+    <string name="settings_troubleshoot_test_fcm_title">ژتون فایربیس</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">مشکل Google Play Services را برطرف کنید</string>
     <string name="settings_troubleshoot_test_play_services_failed">المنت برای ارسال آگاهی‌ها از خدمات پلی گوگل استفاده می‌کند اما به نظر می‌رسد به درستی پیکربندی نشده است:
 \n%1$s</string>
@@ -1494,7 +1494,7 @@
     <string name="settings_discovery_disconnect_identity_server_info">قطع ارتباط با سرور هویت‌سنجی به این معنی است که توسط کاربران دیگر قابل شناسایی نخواهید بود و نمی توانید دیگران را از طریق ایمیل یا تلفن دعوت کنید.</string>
     <string name="settings_discovery_identity_server_info_none">در حال استفاده از کارساز هویتی نیستید. برای کشق و قابل کشف بودن به دست آشنایان موجودی که می‌شناسید، یک کارساز هویت در زیر پیکربندی کنید.</string>
     <string name="settings_discovery_identity_server_info">دارید برای کشف و قابل کشف بودن به دست آشنایان موجودی که می‌شناسید از %1$s استفاده می‌کنید.</string>
-    <string name="settings_troubleshoot_test_token_registration_quick_fix">ثبت توکن</string>
+    <string name="settings_troubleshoot_test_token_registration_quick_fix">ثبت ژتون</string>
     <string name="push_gateway_item_format">فرمت:</string>
     <string name="push_gateway_item_url">آدرس:</string>
     <string name="push_gateway_item_device_name">نام نشست:</string>
@@ -1515,7 +1515,7 @@
     <string name="create_room_topic_hint">توضیحات</string>
     <string name="create_room_topic_section">توضیح در مورد اتاق (اختیاری)</string>
     <string name="create_room_name_section">نام اتاق</string>
-    <string name="event_redacted">پیام پاک شد</string>
+    <string name="event_redacted">پیام برداشته شد</string>
     <string name="error_user_already_logged_in">به نظر در تلاش برای وصل شدن به کارساز خانگی دیگری هستید. می‌خواهید خارج شوید؟</string>
     <string name="identity_server_not_defined">از هیچ کارساز هویتی استفاده نمی‌کنید</string>
     <string name="sas_error_unknown">خطای نامشخص</string>
@@ -2364,12 +2364,12 @@
     <string name="labs_enable_thread_messages">به کار انداختن پیام‌های رشته‌ای</string>
     <string name="ftue_auth_use_case_connect_to_server">وصل شدن به کارساز</string>
     <string name="ftue_auth_use_case_join_existing_server">دنبال پیوستن به کارسازهای موجودید؟</string>
-    <string name="ftue_auth_use_case_skip_partial">از این پرسش بگذرید</string>
-    <string name="ftue_auth_use_case_skip">هنوز اطمینان ندارید؟ می‌توانید %s</string>
+    <string name="ftue_auth_use_case_skip_partial">پرش از این پرسش</string>
+    <string name="ftue_auth_use_case_skip">هنوز اطمینان ندارید؟ %s</string>
     <string name="ftue_auth_use_case_option_three">اجتماع‌ها</string>
     <string name="ftue_auth_use_case_option_two">گروه‌ها</string>
     <string name="ftue_auth_use_case_option_one">دوستان و خانواده</string>
-    <string name="ftue_auth_use_case_subtitle">کمکتان می‌کنیم وصل بمانید.</string>
+    <string name="ftue_auth_use_case_subtitle">کمکتان می‌کنیم وصل بمانید</string>
     <string name="ftue_auth_use_case_title">بیش‌تر با چه‌کسی گپ می‌زنید؟</string>
     <string name="navigate_to_thread_when_already_in_the_thread">هم‌اکنون دارید این رشته را می‌بینید!</string>
     <string name="view_in_room">دیدن در اتاق</string>
@@ -2425,16 +2425,16 @@
     <string name="error_forbidden_digits_only_username">کارساز خانگی، نام‌های کاربری فقط رقمی را نمی‌پذیرد.</string>
     <string name="ftue_personalize_skip_this_step">پرش از این گام</string>
     <string name="ftue_personalize_submit">ذخیره و ادامه</string>
-    <string name="ftue_personalize_complete_subtitle">ترجیحاتتان ذخیره شد.</string>
-    <string name="ftue_personalize_complete_title">همه‌چیز تنظیم شده!</string>
+    <string name="ftue_personalize_complete_subtitle">برای به‌روز رسانی نمایه‌تان، هر زمانی به تنظیمات سر بزنید</string>
+    <string name="ftue_personalize_complete_title">خوب به نظر می‌رسد!</string>
     <string name="ftue_personalize_lets_go">بزن بریم</string>
-    <string name="ftue_profile_picture_subtitle">می‌توانید هرزمانی تغییرش دهید.</string>
+    <string name="ftue_profile_picture_subtitle">زمان گذاشتن صورتی روی نام است</string>
     <string name="ftue_display_name_title">گزینش نامی نمایشی</string>
     <string name="ftue_profile_picture_title">افزودن یک تصویر نمایه</string>
     <string name="ftue_display_name_entry_footer">می‌توانید بعدها تغییرش دهید</string>
     <string name="ftue_display_name_entry_title">نام نمایشی</string>
     <string name="ftue_display_name_subtitle">هنگامی که پیام می‌فرستید نشان داده خواهد شد.</string>
-    <string name="ftue_account_created_subtitle">حسابتان %s ایجاد شد.</string>
+    <string name="ftue_account_created_subtitle">حسابتان %s ایجاد شد</string>
     <string name="ftue_account_created_congratulations_title">تبریک!</string>
     <string name="ftue_account_created_take_me_home">مرا به خانه ببر</string>
     <string name="ftue_account_created_personalize">شخصی سازی نمایه</string>
@@ -2521,4 +2521,71 @@
     <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">بازنشانی روش آگاهی</string>
     <string name="push_gateway_item_profile_tag">برچسب نمایه:</string>
     <string name="action_next">بعدی</string>
+    <string name="live_location_labs_promotion_description">لطفاً به خاطر داشته باشید: این یک ویژگی آزمایشگاهی با پیاده‌سازی موقّتی است. یعنی نخواهید توانست تاریخجهٔ مکانتان را حذف کرده و کاربران پیش‌رفته خواهند توانست حتا پس از پایان هم‌رسانی مکان زنده‌تان با این اتاق، تاریخچهٔ مکانتان را ببینند.</string>
+    <string name="settings_troubleshoot_test_current_endpoint_failed">نتوانست نقطهٔ پایانی را بیابد.</string>
+    <string name="settings_troubleshoot_test_current_endpoint_success">نقطهٔ پایانی کنونی: %s</string>
+    <string name="settings_troubleshoot_test_current_endpoint_title">نقطهٔ پایانی</string>
+    <string name="poll_undisclosed_not_ended">هنگام پایان نظرسنجی، نتایج نمایان خواهند شد</string>
+    <string name="labs_enable_msc3061_share_history_desc">هنگام دعوت به اتاقی رمزشده که تاریخچه‌ای هم‌رسانده دارد، تاریخچهٔ رمز شده نمایان خواهد بود.</string>
+    <string name="labs_enable_msc3061_share_history">MSC3061: هم‌رسانی کلیدهای اتاق برای پیام‌های گذشته</string>
+    <string name="send_your_first_msg_to_invite">نخستین پیامتان را برای دعوت %s به گپ بفرستید</string>
+    <string name="direct_room_encryption_enabled_tile_description_future">پیام‌های این گپ رمزنگاری سرتاسری خواهند شد.</string>
+    <string name="create_room_action_go">رفتن</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">شکست در ثبت ژتون نقطهٔ پایانی روی کارساز خانگی:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">نقطهٔ پایانی با موفّقیت روی کارساز خانگی ثبت شد.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_title">ثبت نقطهٔ پایانی</string>
+    <plurals name="room_removed_messages">
+        <item quantity="one">۱ پیام برداشته شد</item>
+        <item quantity="other">%d پیام برداشته شد</item>
+    </plurals>
+    <string name="live_location_share_location_item_share">هم‌رسانی مکان</string>
+    <string name="live_location_not_enough_permission_dialog_description">برای هم‌رسانی مکان زنده در این اتاق باید اجازه‌های درست را داشته باشید.</string>
+    <string name="live_location_not_enough_permission_dialog_title">اجازهٔ هم‌رسانی مکان زنده را ندارید</string>
+    <string name="permalink_unsupported_groups">نتوانست این پیوند را بگشاید: فضاها جایگزین اجتماع‌ها شده‌اند</string>
+    <string name="ftue_auth_login_username_entry">نام کاربری، رایانامه یا تلفن</string>
+    <string name="ftue_auth_captcha_title">انسانید؟</string>
+    <string name="ftue_auth_password_reset_email_confirmation_subtitle">دستورالعمل‌های فرستاده به %s را دنبال‌کنید</string>
+    <string name="ftue_auth_password_reset_confirmation">بازنشانی گذرواژه</string>
+    <string name="ftue_auth_forgot_password">فراموشی گذرواژه</string>
+    <string name="ftue_auth_email_resend_email">فرستادن دوبارهٔ رایانامه</string>
+    <string name="ftue_auth_email_verification_footer">رایانامه‌ای نگرفتید؟</string>
+    <string name="ftue_auth_email_verification_subtitle">برای تأیید رایانامه‌تان، روی دکمه در رایانامه‌ای‌که اکنون برایتان به %s فرستادیم بزنید</string>
+    <string name="ftue_auth_email_verification_title">برای تأیید، رایانامه‌تان را بررسی کنید.</string>
+    <string name="ftue_auth_phone_confirmation_resend_code">فرستادن دوبارهٔ رمز</string>
+    <string name="ftue_auth_phone_confirmation_subtitle">رمزی به %s فرستاده خواهد شد</string>
+    <string name="ftue_auth_phone_confirmation_title">شمارهٔ تلفنتان را تأیید کنید</string>
+    <string name="ftue_auth_sign_out_all_devices">خروج از تمامی افزاره‌ها</string>
+    <string name="ftue_auth_reset_password">تکرار گذرواژه</string>
+    <string name="ftue_auth_new_password_subtitle">مطمئن شوید ۸ نویسه یا بیش‌تر است.</string>
+    <string name="ftue_auth_new_password_title">گذرواژه‌ای جدید برگزینید</string>
+    <string name="ftue_auth_new_password_entry_title">گذرواژهٔ جدید</string>
+    <string name="ftue_auth_reset_password_breaker_title">رایانامه‌تان را بررسی کنید.</string>
+    <string name="ftue_auth_reset_password_email_subtitle">%s برایتان پیوند تأییدی خواهد فرستاد</string>
+    <string name="ftue_auth_phone_confirmation_entry_title">رمز تأیید</string>
+    <string name="ftue_auth_phone_entry_title">شمارهٔ تلفن</string>
+    <string name="ftue_auth_phone_subtitle">%s می‌خواهد حسابتان را تأیید کند</string>
+    <string name="ftue_auth_phone_title">شمارهٔ تلفنتان را وارد کنید</string>
+    <string name="ftue_auth_email_entry_title">رایانامه</string>
+    <string name="ftue_auth_email_subtitle">%s می‌خواهد حسابتان را تأیید کند</string>
+    <string name="ftue_auth_email_title">رایانامه‌تان را وارد کنید</string>
+    <string name="ftue_auth_terms_subtitle">لطفاً شرایط و سیاست‌های %s را بخوانید</string>
+    <string name="ftue_auth_terms_title">سیاست‌های کارساز</string>
+    <string name="ftue_auth_choose_server_ems_cta">در ارتباط بمانید</string>
+    <string name="ftue_auth_choose_server_ems_subtitle">خدمات ماتریکسی المنت (EMS) خدمتی مطمئن برای ارتباطات سریع، امن و زنده است. چگونگیش را در <a href="${ftue_ems_url}">element.io/ems</a> ببینید</string>
+    <string name="ftue_auth_choose_server_ems_title">می‌خواهید کارساز خود را میزبانی کنید؟</string>
+    <string name="ftue_auth_choose_server_entry_hint">نشانی کارساز</string>
+    <string name="ftue_auth_choose_server_subtitle">نشانی کارسازتان چیست؟ چونان خانه‌ای برای تمامی داده‌هایتان است</string>
+    <string name="ftue_auth_choose_server_title">کارسازتان را برگزینید</string>
+    <string name="ftue_auth_welcome_back_title">خوش برگشتید!</string>
+    <string name="ftue_auth_create_account_edit_server_selection">ویرایش</string>
+    <string name="ftue_auth_create_account_sso_section_header">یا</string>
+    <string name="ftue_auth_create_account_choose_server_header">جایی که گفت‌وگوهایتان خواهند زیست</string>
+    <string name="ftue_auth_create_account_password_entry_footer">باید ۸ نویسه یا بیش‌تر باشد</string>
+    <string name="ftue_auth_create_account_username_entry_footer">دیگران می‌توانند بیابندتان %s</string>
+    <string name="ftue_auth_create_account_title">ایجاد حسابتان</string>
+    <string name="font_size_use_system">استفاده از پیش‌گزیدهٔ سامانه</string>
+    <string name="font_size_section_manually">گزینش دستی</string>
+    <string name="font_size_section_auto">تنظیم خودکار</string>
+    <string name="font_size_title">گزینش اندازهٔ قلم</string>
 </resources>

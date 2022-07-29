@@ -63,10 +63,10 @@ class EncryptionItemFactory @Inject constructor(
                         isDirect && RoomLocalEcho.isLocalEchoId(event.root.roomId.orEmpty()) -> {
                             R.string.direct_room_encryption_enabled_tile_description_future
                         }
-                        isDirect                                                             -> {
+                        isDirect -> {
                             R.string.direct_room_encryption_enabled_tile_description
                         }
-                        else                                                                 -> {
+                        else -> {
                             R.string.encryption_enabled_tile_description
                         }
                     }

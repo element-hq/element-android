@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.util.database
 import io.realm.DynamicRealm
 import io.realm.RealmObjectSchema
 import timber.log.Timber
+import kotlin.system.measureTimeMillis
 
 internal abstract class RealmMigrator(
         private val realm: DynamicRealm,
@@ -26,7 +27,10 @@ internal abstract class RealmMigrator(
 ) {
     fun perform() {
         Timber.d("Migrate ${realm.configuration.realmFileName} to $targetSchemaVersion")
-        doMigrate(realm)
+        val duration = measureTimeMillis {
+            doMigrate(realm)
+        }
+        Timber.d("Migrate ${realm.configuration.realmFileName} to $targetSchemaVersion took $duration ms.")
     }
 
     abstract fun doMigrate(realm: DynamicRealm)

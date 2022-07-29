@@ -26,8 +26,6 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.session.crypto.crosssigning.PrivateKeysInfo
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
-import org.matrix.android.sdk.api.session.group.GroupSummaryQueryParams
-import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.pushers.Pusher
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
@@ -56,13 +54,6 @@ class FlowSession(private val session: Session) {
         return session.roomService().getRoomSummariesLive(queryParams, sortOrder).asFlow()
                 .startWith(session.coroutineDispatchers.io) {
                     session.roomService().getRoomSummaries(queryParams, sortOrder)
-                }
-    }
-
-    fun liveGroupSummaries(queryParams: GroupSummaryQueryParams): Flow<List<GroupSummary>> {
-        return session.groupService().getGroupSummariesLive(queryParams).asFlow()
-                .startWith(session.coroutineDispatchers.io) {
-                    session.groupService().getGroupSummaries(queryParams)
                 }
     }
 

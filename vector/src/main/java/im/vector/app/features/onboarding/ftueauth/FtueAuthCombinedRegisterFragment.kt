@@ -28,11 +28,14 @@ import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
+import im.vector.app.core.extensions.clearErrorOnChange
 import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.editText
 import im.vector.app.core.extensions.hasSurroundingSpaces
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
+import im.vector.app.core.extensions.isMatrixId
+import im.vector.app.core.extensions.onTextChange
 import im.vector.app.core.extensions.realignPercentagesToParent
 import im.vector.app.core.extensions.setOnFocusLostListener
 import im.vector.app.core.extensions.setOnImeDoneListener
@@ -46,6 +49,7 @@ import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingAction.AuthenticateAction
 import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewState
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import org.matrix.android.sdk.api.failure.isHomeserverUnavailable
@@ -55,7 +59,10 @@ import org.matrix.android.sdk.api.failure.isLoginEmailUnknown
 import org.matrix.android.sdk.api.failure.isRegistrationDisabled
 import org.matrix.android.sdk.api.failure.isUsernameInUse
 import org.matrix.android.sdk.api.failure.isWeakPassword
+import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
+
+private const val MINIMUM_PASSWORD_LENGTH = 8
 
 class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAuthFragment<FragmentFtueCombinedRegisterBinding>() {
 
@@ -68,16 +75,36 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
         setupSubmitButton()
         views.createAccountRoot.realignPercentagesToParent()
         views.editServerButton.debouncedClicks { viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.EditServerSelection)) }
-        views.createAccountPasswordInput.setOnImeDoneListener { submit() }
-        views.createAccountInput.setOnFocusLostListener {
-            viewModel.handle(OnboardingAction.MaybeUpdateHomeserverFromMatrixId(views.createAccountInput.content()))
+        views.createAccountPasswordInput.setOnImeDoneListener {
+            if (canSubmit(views.createAccountInput.content(), views.createAccountPasswordInput.content())) {
+                submit()
+            }
         }
+
+        views.createAccountInput.onTextChange(viewLifecycleOwner) {
+            viewModel.handle(OnboardingAction.ResetSelectedRegistrationUserName)
+            views.createAccountEntryFooter.text = ""
+        }
+
+        views.createAccountInput.setOnFocusLostListener {
+            viewModel.handle(OnboardingAction.UserNameEnteredAction.Registration(views.createAccountInput.content()))
+        }
+    }
+
+    private fun canSubmit(account: CharSequence, password: CharSequence): Boolean {
+        val accountIsValid = account.isNotEmpty()
+        val passwordIsValid = password.length >= MINIMUM_PASSWORD_LENGTH
+        return accountIsValid && passwordIsValid
     }
 
     private fun setupSubmitButton() {
         views.createAccountSubmit.setOnClickListener { submit() }
-        observeContentChangesAndResetErrors(views.createAccountInput, views.createAccountPasswordInput, views.createAccountSubmit)
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+        views.createAccountInput.clearErrorOnChange(viewLifecycleOwner)
+        views.createAccountPasswordInput.clearErrorOnChange(viewLifecycleOwner)
+
+        combine(views.createAccountInput.editText().textChanges(), views.createAccountPasswordInput.editText().textChanges()) { account, password ->
+            views.createAccountSubmit.isEnabled = canSubmit(account, password)
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun submit() {
@@ -103,7 +130,12 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
             }
 
             if (error == 0) {
-                viewModel.handle(AuthenticateAction.Register(login, password, getString(R.string.login_default_session_public_name)))
+                val initialDeviceName = getString(R.string.login_default_session_public_name)
+                val registerAction = when {
+                    login.isMatrixId() -> AuthenticateAction.RegisterWithMatrixId(login, password, initialDeviceName)
+                    else -> AuthenticateAction.Register(login, password, initialDeviceName)
+                }
+                viewModel.handle(registerAction)
             }
         }
     }
@@ -153,17 +185,25 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
     override fun updateWithState(state: OnboardingViewState) {
         setupUi(state)
         setupAutoFill()
+    }
 
+    private fun setupUi(state: OnboardingViewState) {
         views.selectedServerName.text = state.selectedHomeserver.userFacingUrl.toReducedUrl()
-        views.selectedServerDescription.text = state.selectedHomeserver.description
 
         if (state.isLoading) {
             // Ensure password is hidden
             views.createAccountPasswordInput.editText().hidePassword()
         }
-    }
 
-    private fun setupUi(state: OnboardingViewState) {
+        views.createAccountEntryFooter.text = when {
+            state.registrationState.isUserNameAvailable -> getString(
+                    R.string.ftue_auth_create_account_username_entry_footer,
+                    state.registrationState.selectedMatrixId
+            )
+
+            else -> ""
+        }
+
         when (state.selectedHomeserver.preferredLoginMode) {
             is LoginMode.SsoAndPassword -> renderSsoProviders(state.deviceId, state.selectedHomeserver.preferredLoginMode.ssoIdentityProviders)
             else -> hideSsoProviders()

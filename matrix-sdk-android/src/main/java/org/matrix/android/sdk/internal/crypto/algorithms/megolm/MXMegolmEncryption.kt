@@ -250,8 +250,10 @@ internal class MXMegolmEncryption(
      * @param sessionInfo the session info
      * @param devicesByUser the devices map
      */
-    private suspend fun shareUserDevicesKey(sessionInfo: MXOutboundSessionInfo,
-                                            devicesByUser: Map<String, List<CryptoDeviceInfo>>) {
+    private suspend fun shareUserDevicesKey(
+            sessionInfo: MXOutboundSessionInfo,
+            devicesByUser: Map<String, List<CryptoDeviceInfo>>
+    ) {
         val sessionKey = olmDevice.getSessionKey(sessionInfo.sessionId) ?: return Unit.also {
             Timber.tag(loggerTag.value).v("shareUserDevicesKey() Failed to share session, failed to export")
         }
@@ -363,7 +365,7 @@ internal class MXMegolmEncryption(
                 fromDevice = myDeviceId
         )
         val params = SendToDeviceTask.Params(
-                EventType.ROOM_KEY_WITHHELD,
+                EventType.ROOM_KEY_WITHHELD.stable,
                 MXUsersDevicesMap<Any>().apply {
                     targets.forEach {
                         setObject(it.userId, it.deviceId, withHeldContent)

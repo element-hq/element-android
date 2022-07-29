@@ -86,6 +86,14 @@ class VerificationConclusionController @Inject constructor(
 
                 bottomGotIt()
             }
+            ConclusionState.INVALID_QR_CODE -> {
+                bottomSheetVerificationNoticeItem {
+                    id("invalid_qr")
+                    notice(host.stringProvider.getString(R.string.verify_invalid_qr_notice).toEpoxyCharSequence())
+                }
+
+                bottomGotIt()
+            }
             ConclusionState.CANCELLED -> {
                 bottomSheetVerificationNoticeItem {
                     id("notice_cancelled")

@@ -53,7 +53,7 @@ sealed class OnboardingViewEvents : VectorViewEvents {
     object OnResetPasswordBreakerConfirmed : OnboardingViewEvents()
     object OnResetPasswordComplete : OnboardingViewEvents()
 
-    data class OnSendEmailSuccess(val email: String) : OnboardingViewEvents()
+    data class OnSendEmailSuccess(val email: String, val isRestoredSession: Boolean) : OnboardingViewEvents()
     data class OnSendMsisdnSuccess(val msisdn: String) : OnboardingViewEvents()
 
     data class OnWebLoginError(val errorCode: Int, val description: String, val failingUrl: String) : OnboardingViewEvents()

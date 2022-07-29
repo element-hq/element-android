@@ -42,20 +42,13 @@ jobs:
           column-name: "Need info"
           label-name: "X-Needs-Info"
 
-  add_priority_design_issues_to_project:
-    name: P1 X-Needs-Design to Design project board
+  add_design_issues_to_project:
+    name: X-Needs-Design to Design project board
     runs-on: ubuntu-latest
     # Skip in forks
     if: >
       github.repository == 'vector-im/element-android' &&
-      contains(github.event.issue.labels.*.name, 'X-Needs-Design') &&
-      (contains(github.event.issue.labels.*.name, 'S-Critical') &&
-        (contains(github.event.issue.labels.*.name, 'O-Frequent') ||
-          contains(github.event.issue.labels.*.name, 'O-Occasional')) ||
-        contains(github.event.issue.labels.*.name, 'S-Major') &&
-        contains(github.event.issue.labels.*.name, 'O-Frequent') ||
-        contains(github.event.issue.labels.*.name, 'A11y') &&
-        contains(github.event.issue.labels.*.name, 'O-Frequent'))
+      contains(github.event.issue.labels.*.name, 'X-Needs-Design')
     steps:
       - uses: octokit/graphql-action@v2.x
         id: add_to_project
@@ -255,9 +248,12 @@ jobs:
     # Skip in forks
     if: >
       github.repository == 'vector-im/element-android' &&
-      (contains(github.event.issue.labels.*.name, 'Z-ElementX-Alpha') ||
-        contains(github.event.issue.labels.*.name, 'Z-ElementX-Beta') ||
-        contains(github.event.issue.labels.*.name, 'Z-ElementX'))
+      (contains(github.event.issue.labels.*.name, 'Z-BBQ-Alpha') ||
+        contains(github.event.issue.labels.*.name, 'Z-BBQ-Beta') ||
+        contains(github.event.issue.labels.*.name, 'Z-BBQ-Release') ||
+        contains(github.event.issue.labels.*.name, 'Z-Banquet-Alpha') ||
+        contains(github.event.issue.labels.*.name, 'Z-Banquet-Beta') ||
+        contains(github.event.issue.labels.*.name, 'Z-Banquet-Release'))
     steps:
       - uses: octokit/graphql-action@v2.x
         with:

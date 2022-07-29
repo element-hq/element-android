@@ -17,11 +17,15 @@
 package im.vector.app.features
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import com.airbnb.mvrx.viewModel
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,9 +48,16 @@ import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.session.VectorSessionStore
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.signout.hard.SignedOutActivity
+import im.vector.app.features.start.StartAppAction
+import im.vector.app.features.start.StartAppAndroidService
+import im.vector.app.features.start.StartAppViewEvent
+import im.vector.app.features.start.StartAppViewModel
+import im.vector.app.features.start.StartAppViewState
 import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.ui.UiStateRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
@@ -73,6 +84,10 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
 
     companion object {
         private const val EXTRA_ARGS = "EXTRA_ARGS"
+        private const val EXTRA_NEXT_INTENT = "EXTRA_NEXT_INTENT"
+        private const val EXTRA_INIT_SESSION = "EXTRA_INIT_SESSION"
+        private const val EXTRA_ROOM_ID = "EXTRA_ROOM_ID"
+        private const val ACTION_ROOM_DETAILS_FROM_SHORTCUT = "ROOM_DETAILS_FROM_SHORTCUT"
 
         // Special action to clear cache and/or clear credentials
         fun restartApp(activity: Activity, args: MainActivityArgs) {
@@ -82,7 +97,29 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
             intent.putExtra(EXTRA_ARGS, args)
             activity.startActivity(intent)
         }
+
+        fun getIntentToInitSession(activity: Activity): Intent {
+            val intent = Intent(activity, MainActivity::class.java)
+            intent.putExtra(EXTRA_INIT_SESSION, true)
+            return intent
+        }
+
+        fun getIntentWithNextIntent(context: Context, nextIntent: Intent): Intent {
+            val intent = Intent(context, MainActivity::class.java)
+            intent.putExtra(EXTRA_NEXT_INTENT, nextIntent)
+            return intent
+        }
+
+        // Shortcuts can't have intents with parcelables
+        fun shortcutIntent(context: Context, roomId: String): Intent {
+            return Intent(context, MainActivity::class.java).apply {
+                action = ACTION_ROOM_DETAILS_FROM_SHORTCUT
+                putExtra(EXTRA_ROOM_ID, roomId)
+            }
+        }
     }
+
+    private val startAppViewModel: StartAppViewModel by viewModel()
 
     override fun getBinding() = ActivityMainBinding.inflate(layoutInflater)
 
@@ -103,15 +140,67 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        args = parseArgs()
-        if (args.clearCredentials || args.isUserLoggedOut || args.clearCache) {
-            clearNotifications()
+
+        shortcutsHandler.updateShortcutsWithPreviousIntent()
+
+        startAppViewModel.onEach {
+            renderState(it)
         }
-        // Handle some wanted cleanup
-        if (args.clearCache || args.clearCredentials) {
-            doCleanUp()
+        startAppViewModel.viewEvents.stream()
+                .onEach(::handleViewEvents)
+                .launchIn(lifecycleScope)
+
+        startAppViewModel.handle(StartAppAction.StartApp)
+    }
+
+    private fun renderState(state: StartAppViewState) {
+        if (state.mayBeLongToProcess) {
+            views.status.setText(R.string.updating_your_data)
+        }
+        views.status.isVisible = state.mayBeLongToProcess
+    }
+
+    private fun handleViewEvents(event: StartAppViewEvent) {
+        when (event) {
+            StartAppViewEvent.StartForegroundService -> handleStartForegroundService()
+            StartAppViewEvent.AppStarted -> handleAppStarted()
+        }
+    }
+
+    private fun handleStartForegroundService() {
+        if (startAppViewModel.shouldStartApp()) {
+            // Start foreground service, because the operation may take a while
+            val intent = Intent(this, StartAppAndroidService::class.java)
+            ContextCompat.startForegroundService(this, intent)
+        }
+    }
+
+    private fun handleAppStarted() {
+        if (intent.hasExtra(EXTRA_NEXT_INTENT)) {
+            // Start the next Activity
+            val nextIntent = intent.getParcelableExtra<Intent>(EXTRA_NEXT_INTENT)
+            startIntentAndFinish(nextIntent)
+        } else if (intent.hasExtra(EXTRA_INIT_SESSION)) {
+            setResult(RESULT_OK)
+            finish()
+        } else if (intent.action == ACTION_ROOM_DETAILS_FROM_SHORTCUT) {
+            val roomId = intent.getStringExtra(EXTRA_ROOM_ID)
+            if (roomId?.isNotEmpty() == true) {
+                // TODO Add a trigger Shortcut to the analytics.
+                navigator.openRoom(this, roomId)
+            }
+            finish()
         } else {
-            startNextActivityAndFinish()
+            args = parseArgs()
+            if (args.clearCredentials || args.isUserLoggedOut || args.clearCache) {
+                clearNotifications()
+            }
+            // Handle some wanted cleanup
+            if (args.clearCache || args.clearCredentials) {
+                doCleanUp()
+            } else {
+                startNextActivityAndFinish()
+            }
         }
     }
 
@@ -241,7 +330,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                 // We have a session.
                 // Check it can be opened
                 if (sessionHolder.getActiveSession().isOpenable) {
-                    HomeActivity.newIntent(this, existingSession = true)
+                    HomeActivity.newIntent(this, firstStartMainActivity = false, existingSession = true)
                 } else {
                     // The token is still invalid
                     navigator.softLogout(this)
@@ -253,6 +342,10 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                 null
             }
         }
+        startIntentAndFinish(intent)
+    }
+
+    private fun startIntentAndFinish(intent: Intent?) {
         intent?.let { startActivity(it) }
         finish()
     }

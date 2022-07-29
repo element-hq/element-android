@@ -18,7 +18,6 @@ package org.matrix.android.sdk.api.util
 
 import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.extensions.tryOrNull
-import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomType
@@ -113,19 +112,6 @@ sealed class MatrixItem(
         override fun updateAvatar(newAvatar: String?) = copy(avatarUrl = newAvatar)
     }
 
-    data class GroupItem(
-            override val id: String,
-            override val displayName: String? = null,
-            override val avatarUrl: String? = null
-    ) :
-            MatrixItem(id, displayName, avatarUrl) {
-        init {
-            if (BuildConfig.DEBUG) checkId()
-        }
-
-        override fun updateAvatar(newAvatar: String?) = copy(avatarUrl = newAvatar)
-    }
-
     protected fun checkId() {
         if (!id.startsWith(getIdPrefix())) {
             error("Wrong usage of MatrixItem: check the id $id should start with ${getIdPrefix()}")
@@ -144,7 +130,6 @@ sealed class MatrixItem(
         is RoomItem,
         is EveryoneInRoomItem -> '!'
         is RoomAliasItem -> '#'
-        is GroupItem -> '+'
     }
 
     fun firstLetterOfDisplayName(): String {
@@ -195,8 +180,6 @@ sealed class MatrixItem(
  * ========================================================================================== */
 
 fun User.toMatrixItem() = MatrixItem.UserItem(userId, displayName, avatarUrl)
-
-fun GroupSummary.toMatrixItem() = MatrixItem.GroupItem(groupId, displayName, avatarUrl)
 
 fun RoomSummary.toMatrixItem() = if (roomType == RoomType.SPACE) {
     MatrixItem.SpaceItem(roomId, displayName, avatarUrl)

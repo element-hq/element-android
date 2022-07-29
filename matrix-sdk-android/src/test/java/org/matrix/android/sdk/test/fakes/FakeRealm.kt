@@ -18,10 +18,13 @@ package org.matrix.android.sdk.test.fakes
 
 import io.mockk.MockKVerificationScope
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import io.mockk.verify
 import io.realm.Realm
 import io.realm.RealmModel
+import io.realm.RealmObject
 import io.realm.RealmQuery
 import io.realm.RealmResults
 import io.realm.kotlin.where
@@ -96,4 +99,19 @@ inline fun <reified T : RealmModel> RealmQuery<T>.givenIsNotNull(
 ): RealmQuery<T> {
     every { isNotNull(fieldName) } returns this
     return this
+}
+
+inline fun <reified T : RealmModel> RealmQuery<T>.givenLessThan(
+        fieldName: String,
+        value: Long
+): RealmQuery<T> {
+    every { lessThan(fieldName, value) } returns this
+    return this
+}
+
+/**
+ * Should be called on a mocked RealmObject and not on a real RealmObject so that the underlying final method is mocked.
+ */
+fun RealmObject.givenDelete() {
+    every { deleteFromRealm() } just runs
 }

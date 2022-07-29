@@ -106,6 +106,7 @@ internal class RoomSummaryMapper @Inject constructor(
                             worldReadable = it.childSummaryEntity?.joinRules == RoomJoinRules.PUBLIC
                     )
                 },
+                directParentNames = roomSummaryEntity.directParentNames.toList(),
                 flattenParentIds = roomSummaryEntity.flattenParentIds?.split("|") ?: emptyList(),
                 roomEncryptionAlgorithm = when (val alg = roomSummaryEntity.e2eAlgorithm) {
                     // I should probably use #hasEncryptorClassForAlgorithm but it says it supports

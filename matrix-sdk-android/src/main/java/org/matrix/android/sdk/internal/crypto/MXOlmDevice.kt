@@ -604,14 +604,16 @@ internal class MXOlmDevice @Inject constructor(
      * @param sharedHistory MSC3061, this key is sharable on invite
      * @return true if the operation succeeds.
      */
-    fun addInboundGroupSession(sessionId: String,
-                               sessionKey: String,
-                               roomId: String,
-                               senderKey: String,
-                               forwardingCurve25519KeyChain: List<String>,
-                               keysClaimed: Map<String, String>,
-                               exportFormat: Boolean,
-                               sharedHistory: Boolean): AddSessionResult {
+    fun addInboundGroupSession(
+            sessionId: String,
+            sessionKey: String,
+            roomId: String,
+            senderKey: String,
+            forwardingCurve25519KeyChain: List<String>,
+            keysClaimed: Map<String, String>,
+            exportFormat: Boolean,
+            sharedHistory: Boolean
+    ): AddSessionResult {
         val candidateSession = tryOrNull("Failed to create inbound session in room $roomId") {
             if (exportFormat) {
                 OlmInboundGroupSession.importSession(sessionKey)
@@ -701,8 +703,8 @@ internal class MXOlmDevice @Inject constructor(
             val senderKey = megolmSessionData.senderKey ?: continue
             val roomId = megolmSessionData.roomId
 
-            val candidateSessionToImport =  try {
-                 MXInboundMegolmSessionWrapper.newFromMegolmData(megolmSessionData, true)
+            val candidateSessionToImport = try {
+                MXInboundMegolmSessionWrapper.newFromMegolmData(megolmSessionData, true)
             } catch (e: Throwable) {
                 Timber.tag(loggerTag.value).e(e, "## importInboundGroupSession() : Failed to import session $senderKey/$sessionId")
                 continue
@@ -806,7 +808,6 @@ internal class MXOlmDevice @Inject constructor(
             }
             replayAttackMap[messageIndexKey] = eventId
         }
-        inboundGroupSessionStore.storeInBoundGroupSession(sessionHolder, sessionId, senderKey)
         val payload = try {
             val adapter = MoshiProvider.providesMoshi().adapter<JsonDict>(JSON_DICT_PARAMETERIZED_TYPE)
             val payloadString = convertFromUTF8(decryptResult.mDecryptedMessage)

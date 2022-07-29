@@ -51,6 +51,7 @@ import im.vector.app.features.home.room.detail.timeline.edithistory.ViewEditHist
 import im.vector.app.features.home.room.detail.timeline.reactions.ViewReactionsViewModel
 import im.vector.app.features.home.room.detail.upgrade.MigrateRoomViewModel
 import im.vector.app.features.home.room.list.RoomListViewModel
+import im.vector.app.features.home.room.list.home.HomeRoomListViewModel
 import im.vector.app.features.homeserver.HomeServerCapabilitiesViewModel
 import im.vector.app.features.invite.InviteUsersToRoomViewModel
 import im.vector.app.features.location.LocationSharingViewModel
@@ -90,6 +91,7 @@ import im.vector.app.features.settings.devtools.AccountDataViewModel
 import im.vector.app.features.settings.devtools.GossipingEventsPaperTrailViewModel
 import im.vector.app.features.settings.devtools.KeyRequestListViewModel
 import im.vector.app.features.settings.devtools.KeyRequestViewModel
+import im.vector.app.features.settings.font.FontScaleSettingViewModel
 import im.vector.app.features.settings.homeserver.HomeserverSettingsViewModel
 import im.vector.app.features.settings.ignored.IgnoredUsersViewModel
 import im.vector.app.features.settings.legals.LegalsViewModel
@@ -110,6 +112,7 @@ import im.vector.app.features.spaces.manage.SpaceManageSharedViewModel
 import im.vector.app.features.spaces.people.SpacePeopleViewModel
 import im.vector.app.features.spaces.preview.SpacePreviewViewModel
 import im.vector.app.features.spaces.share.ShareSpaceViewModel
+import im.vector.app.features.start.StartAppViewModel
 import im.vector.app.features.terms.ReviewTermsViewModel
 import im.vector.app.features.usercode.UserCodeSharedViewModel
 import im.vector.app.features.userdirectory.UserListViewModel
@@ -484,6 +487,11 @@ interface MavericksViewModelModule {
 
     @Binds
     @IntoMap
+    @MavericksViewModelKey(StartAppViewModel::class)
+    fun startAppViewModelFactory(factory: StartAppViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
     @MavericksViewModelKey(HomeServerCapabilitiesViewModel::class)
     fun homeServerCapabilitiesViewModelFactory(factory: HomeServerCapabilitiesViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
@@ -606,4 +614,14 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(LocationLiveMapViewModel::class)
     fun locationLiveMapViewModelFactory(factory: LocationLiveMapViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(FontScaleSettingViewModel::class)
+    fun fontScaleSettingViewModelFactory(factory: FontScaleSettingViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(HomeRoomListViewModel::class)
+    fun homeRoomListViewModel(factory: HomeRoomListViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 }

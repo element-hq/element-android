@@ -174,7 +174,8 @@
     <string name="initial_sync_start_importing_account_joined_rooms">Initial sync:\nLoading your conversations\nIf you\'ve joined lots of rooms, this might take a while</string>
     <string name="initial_sync_start_importing_account_invited_rooms">Initial sync:\nImporting invited rooms</string>
     <string name="initial_sync_start_importing_account_left_rooms">Initial sync:\nImporting left rooms</string>
-    <string name="initial_sync_start_importing_account_groups">Initial sync:\nImporting communities</string>
+    <!--TODO:delete-->
+    <string name="initial_sync_start_importing_account_groups" tools:ignore="UnusedResources">Initial sync:\nImporting communities</string>
     <string name="initial_sync_start_importing_account_data">Initial sync:\nImporting account data</string>
 
     <string name="initial_sync_request_title">Initial sync request</string>
@@ -442,7 +443,8 @@
     <string name="settings_room_directory_show_all_rooms_summary">Show all rooms in the room directory, including rooms with explicit content.</string>
 
     <!-- Groups fragment -->
-    <string name="groups_header">Communities</string>
+    <!--TODO: delete-->
+    <string name="groups_header" tools:ignore="UnusedResources">Communities</string>
 
     <string name="spaces_header">Spaces</string>
 
@@ -522,6 +524,7 @@
     <string name="auth_recaptcha_message">This homeserver would like to make sure you are not a robot</string>
     <string name="auth_reset_password_missing_email">The email address linked to your account must be entered.</string>
     <string name="auth_reset_password_error_unauthorized">Failed to verify email address: make sure you clicked the link in the email</string>
+    <string name="auth_reset_password_error_unverified">Email not verified, check your inbox</string>
     <string name="auth_accept_policies">"Please review and accept the policies of this homeserver:"</string>
 
     <!-- Login Screen -->
@@ -762,6 +765,11 @@
     <string name="search_members_hint">Filter room members</string>
     <string name="search_banned_user_hint">Filter banned users</string>
     <string name="search_no_results">No results</string>
+    <string name="search_space_two_parents">%1$s and %2$s</string>
+    <plurals name="search_space_multiple_parents">
+        <item quantity="one">%1$s and %2$d other</item>
+        <item quantity="other">%1$s and %2$d others</item>
+    </plurals>
 
     <!-- home room settings -->
     <string name="room_settings_all_messages">All messages</string>
@@ -1261,6 +1269,10 @@
     <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
 
     <!-- text size selection -->
+    <string name="font_size_title">Choose font size</string>
+    <string name="font_size_section_auto">Set automatically</string>
+    <string name="font_size_section_manually">Choose manually</string>
+    <string name="font_size_use_system">Use system default</string>
     <string name="font_size">Font size</string>
     <string name="tiny">Tiny</string>
     <string name="small">Small</string>
@@ -1602,7 +1614,7 @@
     <string name="message_view_reaction">View Reactions</string>
     <string name="reactions">Reactions</string>
 
-    <string name="event_redacted">Message deleted</string>
+    <string name="event_redacted">Message removed</string>
     <string name="settings_show_redacted">Show removed messages</string>
     <string name="settings_show_redacted_summary">Show a placeholder for removed messages</string>
     <string name="event_redacted_by_user_reason">Event deleted by user</string>
@@ -1614,7 +1626,9 @@
     <string name="error_no_network">No network. Please check your Internet connection.</string>
     <string name="change_room_directory_network">"Change network"</string>
     <string name="please_wait">"Please wait…"</string>
-    <string name="group_all_communities">"All Communities"</string>
+    <string name="updating_your_data">Updating your data…</string>
+    <!--TODO: delete-->
+    <string name="group_all_communities" tools:ignore="UnusedResources">"All Communities"</string>
 
     <string name="room_preview_no_preview">"This room can't be previewed"</string>
     <string name="room_preview_not_found">This room is not accessible at this time.\nTry again later, or ask a room admin to check if you have access.</string>
@@ -1896,31 +1910,95 @@
     <string name="ftue_auth_carousel_workplace_body">${app_name} is also great for the workplace. It’s trusted by the world’s most secure organisations.</string>
 
     <string name="ftue_auth_use_case_title">Who will you chat to the most?</string>
-    <string name="ftue_auth_use_case_subtitle">We\'ll help you get connected.</string>
+    <string name="ftue_auth_use_case_subtitle">We\'ll help you get connected</string>
     <string name="ftue_auth_use_case_option_one">Friends and family</string>
     <string name="ftue_auth_use_case_option_two">Teams</string>
     <string name="ftue_auth_use_case_option_three">Communities</string>
     <!-- Note to translators: the %s is replaced by the content of ftue_auth_use_case_skip_partial -->
-    <string name="ftue_auth_use_case_skip">Not sure yet? You can %s</string>
-    <string name="ftue_auth_use_case_skip_partial">skip this question</string>
+    <string name="ftue_auth_use_case_skip">Not sure yet? %s</string>
+    <string name="ftue_auth_use_case_skip_partial">Skip this question</string>
     <string name="ftue_auth_use_case_join_existing_server">Looking to join an existing server?</string>
     <string name="ftue_auth_use_case_connect_to_server">Connect to server</string>
 
     <string name="ftue_account_created_personalize">Personalize profile</string>
     <string name="ftue_account_created_take_me_home">Take me home</string>
     <string name="ftue_account_created_congratulations_title">Congratulations!</string>
-    <string name="ftue_account_created_subtitle">Your account %s has been created.</string>
+    <string name="ftue_account_created_subtitle">Your account %s has been created</string>
+
+    <string name="ftue_auth_create_account_title">Create your account</string>
+    <!-- Note for translators, %s is the full matrix of the account being created, eg @hello:matrix.org -->
+    <string name="ftue_auth_create_account_username_entry_footer">Others can discover you %s</string>
+    <string name="ftue_auth_create_account_password_entry_footer">Must be 8 characters or more</string>
+    <string name="ftue_auth_create_account_choose_server_header">Where your conversations will live</string>
+    <string name="ftue_auth_sign_in_choose_server_header">Where your conversations live</string>
+    <string name="ftue_auth_create_account_sso_section_header">Or</string>
+    <string name="ftue_auth_create_account_edit_server_selection">Edit</string>
+
+    <string name="ftue_auth_welcome_back_title">Welcome back!</string>
+
+    <string name="ftue_auth_choose_server_title">Select your server</string>
+    <string name="ftue_auth_choose_server_subtitle">What is the address of your server? This is like a home for all your data</string>
+    <string name="ftue_auth_choose_server_sign_in_subtitle">What is the address of your server?</string>
+    <string name="ftue_auth_choose_server_entry_hint">Server URL</string>
+    <string name="ftue_auth_choose_server_ems_title">Want to host your own server?</string>
+
+    <string name="ftue_auth_choose_server_ems_subtitle">Element Matrix Services (EMS) is a robust and reliable hosting service for fast, secure and real time communication. Find out how on <a href="${ftue_ems_url}">element.io/ems</a></string>
+    <string name="ftue_auth_choose_server_ems_cta">Get in touch</string>
+
+    <string name="ftue_auth_terms_title">Server policies</string>
+    <!-- Note for translators, %s is the homeserver name, eg matrix.org -->
+    <string name="ftue_auth_terms_subtitle">Please read through %s\'s terms and policies</string>
+
+    <string name="ftue_auth_email_title">Enter your email</string>
+    <!-- Note for translators, %s is the homeserver name, eg matrix.org -->
+    <string name="ftue_auth_email_subtitle">%s needs to verify your account</string>
+    <string name="ftue_auth_email_entry_title">Email</string>
+    <string name="ftue_auth_phone_title">Enter your phone number</string>
+    <!-- Note for translators, %s is the homeserver name, eg matrix.org -->
+    <string name="ftue_auth_phone_subtitle">%s needs to verify your account</string>
+    <string name="ftue_auth_phone_entry_title">Phone Number</string>
+    <string name="ftue_auth_phone_confirmation_entry_title">Confirmation code</string>
+
+    <!-- Note for translators, %s is the homeserver name, eg matrix.org -->
+    <string name="ftue_auth_reset_password_email_subtitle">%s will send you a verification link</string>
+    <string name="ftue_auth_reset_password_breaker_title">Check your email.</string>
+    <string name="ftue_auth_new_password_entry_title">New Password</string>
+    <string name="ftue_auth_new_password_title">Choose a new password</string>
+    <string name="ftue_auth_new_password_subtitle">Make sure it\'s 8 characters or more.</string>
+    <string name="ftue_auth_reset_password">Reset password</string>
+    <string name="ftue_auth_sign_out_all_devices">Sign out all devices</string>
+
+    <string name="ftue_auth_phone_confirmation_title">Confirm your phone number</string>
+    <!-- Note for translators, %s is the users international phone number -->
+    <string name="ftue_auth_phone_confirmation_subtitle">A code was sent to %s</string>
+    <string name="ftue_auth_phone_confirmation_resend_code">Resend code</string>
+
+    <string name="ftue_auth_email_verification_title">Verify your email</string>
+    <!-- Note for translators, %s is the users email address -->
+    <string name="ftue_auth_email_verification_subtitle">Follow the instructions sent to %s</string>
+    <string name="ftue_auth_email_verification_footer">Did not receive an email?</string>
+    <string name="ftue_auth_email_resend_email">Resend email</string>
+    <string name="ftue_auth_forgot_password">Forgot password</string>
+    <string name="ftue_auth_password_reset_confirmation">Password reset</string>
+    <!-- Note for translators, %s is the users email address -->
+    <string name="ftue_auth_password_reset_email_confirmation_subtitle">Follow the instructions send to %s</string>
+
+    <string name="ftue_auth_captcha_title">Are you a human?</string>
+    <string name="ftue_auth_login_username_entry">Username / Email / Phone</string>
 
     <string name="ftue_display_name_title">Choose a display name</string>
+
+    <!--  TODO remove  -->
+    <!--suppress UnusedResources -->
     <string name="ftue_display_name_subtitle">This will be shown when you send messages.</string>
     <string name="ftue_display_name_entry_title">Display Name</string>
     <string name="ftue_display_name_entry_footer">You can change this later</string>
 
     <string name="ftue_profile_picture_title">Add a profile picture</string>
-    <string name="ftue_profile_picture_subtitle">You can change this anytime.</string>
+    <string name="ftue_profile_picture_subtitle">Time to put a face to the name</string>
     <string name="ftue_personalize_lets_go">Let\'s go</string>
-    <string name="ftue_personalize_complete_title">You\'re all set!</string>
-    <string name="ftue_personalize_complete_subtitle">Your preferences have been saved.</string>
+    <string name="ftue_personalize_complete_title">Looking good!</string>
+    <string name="ftue_personalize_complete_subtitle">Head to settings anytime to update your profile</string>
 
     <string name="ftue_personalize_submit">Save and continue</string>
     <string name="ftue_personalize_skip_this_step">Skip this step</string>
@@ -2084,6 +2162,7 @@
     <string name="soft_logout_sso_not_same_user_error">The current session is for user %1$s and you provide credentials for user %2$s. This is not supported by ${app_name}.\nPlease first clear data, then sign in again on another account.</string>
 
     <string name="permalink_malformed">Your matrix.to link was malformed</string>
+    <string name="permalink_unsupported_groups">Cannot open this link: communities have been replaced by spaces</string>
     <string name="bug_report_error_too_short">The description is too short</string>
 
     <string name="notification_initial_sync">Initial Sync…</string>
@@ -2276,7 +2355,9 @@
         <item quantity="other">%d active sessions</item>
     </plurals>
 
-    <string name="crosssigning_verify_this_session">Verify this login</string>
+    <string name="crosssigning_verify_this_session">Verify this device</string>
+    <string name="crosssigning_cannot_verify_this_session">Unable to verify this device</string>
+    <string name="crosssigning_cannot_verify_this_session_desc">You won’t be able to access encrypted message history. Reset your Secure Message Backup and verification keys to start fresh.</string>
 
     <string name="verification_open_other_to_verify">Use an existing session to verify this one, granting it access to encrypted messages.</string>
 
@@ -2361,6 +2442,7 @@
     </string>
 
     <string name="verify_cancelled_notice">Verification has been cancelled. You can start verification again.</string>
+    <string name="verify_invalid_qr_notice">This QR code looks malformed. Please try to verify with another method.</string>
     <string name="verification_cancelled">Verification Cancelled</string>
 
     <string name="recovery_passphrase">Recovery Passphrase</string>
@@ -3043,8 +3125,14 @@
     <string name="live_location_sharing_notification_description">Location sharing is in progress</string>
     <string name="labs_enable_live_location">Enable Live Location Sharing</string>
     <string name="labs_enable_live_location_summary">Temporary implementation: locations persist in room history</string>
-    <string name="live_location_bottom_sheet_stop_sharing">Stop sharing</string>
+    <!-- TODO remove key -->
+    <string name="live_location_bottom_sheet_stop_sharing" tools:ignore="UnusedResources">Stop sharing</string>
     <string name="live_location_bottom_sheet_last_updated_at">Updated %1$s ago</string>
+    <string name="live_location_not_enough_permission_dialog_title">You don’t have permission to share live location</string>
+    <string name="live_location_not_enough_permission_dialog_description">You need to have the right permissions in order to share live location in this room.</string>
+    <string name="live_location_share_location_item_share">Share location</string>
+    <!-- mostly used as a description when replying to a live location message -->
+    <string name="live_location_description">Live location</string>
 
     <string name="message_bubbles">Show Message bubbles</string>
 
@@ -3094,4 +3182,12 @@
     <string name="live_location_labs_promotion_description">Please note: this is a labs feature using a temporary implementation. This means you will not be able to delete your location history, and advanced users will be able to see your location history even after you stop sharing your live location with this room.</string>
     <string name="live_location_labs_promotion_switch_title">Enable location sharing</string>
 
+    <plurals name="room_removed_messages">
+        <item quantity="one">%d message removed</item>
+        <item quantity="other">%d messages removed</item>
+    </plurals>
+
+    <!-- Element Call Widget -->
+    <string name="labs_enable_element_call_permission_shortcuts">Enable Element Call permission shortcuts</string>
+    <string name="labs_enable_element_call_permission_shortcuts_summary">Auto-approve Element Call widgets and grant camera / mic access</string>
 </resources>

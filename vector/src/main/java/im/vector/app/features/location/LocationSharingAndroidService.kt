@@ -26,9 +26,12 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.services.VectorAndroidService
 import im.vector.app.features.location.live.GetLiveLocationShareSummaryUseCase
 import im.vector.app.features.notifications.NotificationUtils
+import im.vector.app.features.redaction.CheckIfEventIsRedactedUseCase
 import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
@@ -55,6 +58,7 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
     @Inject lateinit var locationTracker: LocationTracker
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var getLiveLocationShareSummaryUseCase: GetLiveLocationShareSummaryUseCase
+    @Inject lateinit var checkIfEventIsRedactedUseCase: CheckIfEventIsRedactedUseCase
 
     private val binder = LocalBinder()
 
@@ -65,6 +69,9 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
     var callback: Callback? = null
     private val jobs = mutableListOf<Job>()
     private var startInProgress = false
+
+    private val _roomIdsOfActiveLives = MutableSharedFlow<Set<String>>(replay = 1)
+    val roomIdsOfActiveLives = _roomIdsOfActiveLives.asSharedFlow()
 
     override fun onCreate() {
         super.onCreate()
@@ -115,7 +122,7 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
                 ?.locationSharingService()
                 ?.startLiveLocationShare(
                         timeoutMillis = roomArgs.durationMillis,
-                        description = getString(R.string.sent_live_location)
+                        description = getString(R.string.live_location_description)
                 )
 
         updateLiveResult
@@ -193,22 +200,28 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
     private fun addRoomArgs(beaconEventId: String, roomArgs: RoomArgs) {
         Timber.i("adding roomArgs for beaconEventId: $beaconEventId")
         roomArgsMap[beaconEventId] = roomArgs
+        launchWithActiveSession { _roomIdsOfActiveLives.emit(getRoomIdsOfActiveLives()) }
     }
 
     private fun removeRoomArgs(beaconEventId: String) {
         Timber.i("removing roomArgs for beaconEventId: $beaconEventId")
         roomArgsMap.remove(beaconEventId)
+        launchWithActiveSession { _roomIdsOfActiveLives.emit(getRoomIdsOfActiveLives()) }
     }
 
     private fun listenForLiveSummaryChanges(roomId: String, beaconEventId: String) {
         launchWithActiveSession { session ->
             val job = getLiveLocationShareSummaryUseCase.execute(roomId, beaconEventId)
-                    .distinctUntilChangedBy { it.isActive }
-                    .filter { it.isActive == false }
+                    .distinctUntilChangedBy { it?.isActive }
+                    .filter { it?.isActive == false || (it == null && isLiveRedacted(roomId, beaconEventId)) }
                     .onEach { stopSharingLocation(beaconEventId) }
                     .launchIn(session.coroutineScope)
             jobs.add(job)
         }
+    }
+
+    private suspend fun isLiveRedacted(roomId: String, beaconEventId: String): Boolean {
+        return checkIfEventIsRedactedUseCase.execute(roomId = roomId, eventId = beaconEventId)
     }
 
     private fun launchWithActiveSession(block: suspend CoroutineScope.(Session) -> Unit) =
@@ -219,6 +232,10 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
                                 block = { block(session) }
                         )
                     }
+
+    fun getRoomIdsOfActiveLives(): Set<String> {
+        return roomArgsMap.map { it.value.roomId }.toSet()
+    }
 
     override fun onBind(intent: Intent?): IBinder {
         return binder

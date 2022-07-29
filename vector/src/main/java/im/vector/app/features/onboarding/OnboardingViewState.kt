@@ -49,6 +49,9 @@ data class OnboardingViewState(
         val isForceLoginFallbackEnabled: Boolean = false,
 
         @PersistState
+        val registrationState: RegistrationState = RegistrationState(),
+
+        @PersistState
         val selectedHomeserver: SelectedHomeserverState = SelectedHomeserverState(),
 
         @PersistState
@@ -66,7 +69,6 @@ enum class OnboardingFlow {
 
 @Parcelize
 data class SelectedHomeserverState(
-        val description: String? = null,
         val userFacingUrl: String? = null,
         val upstreamUrl: String? = null,
         val preferredLoginMode: LoginMode = LoginMode.Unknown,
@@ -95,4 +97,11 @@ data class ResetState(
 @Parcelize
 data class SelectedAuthenticationState(
         val description: AuthenticationDescription? = null,
+) : Parcelable
+
+@Parcelize
+data class RegistrationState(
+        val email: String? = null,
+        val isUserNameAvailable: Boolean = false,
+        val selectedMatrixId: String? = null,
 ) : Parcelable

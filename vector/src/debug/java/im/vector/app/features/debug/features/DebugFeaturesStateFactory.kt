@@ -80,6 +80,11 @@ class DebugFeaturesStateFactory @Inject constructor(
                                 key = DebugFeatureKeys.startDmOnFirstMsg,
                                 factory = VectorFeatures::shouldStartDmOnFirstMessage
                         ),
+                        createBooleanFeature(
+                                label = "Enable New App Layout",
+                                key = DebugFeatureKeys.newAppLayoutEnabled,
+                                factory = VectorFeatures::isNewAppLayoutEnabled
+                        ),
                 )
         )
     }

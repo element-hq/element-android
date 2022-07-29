@@ -42,6 +42,7 @@ internal class DefaultLocationSharingService @AssistedInject constructor(
         private val startLiveLocationShareTask: StartLiveLocationShareTask,
         private val stopLiveLocationShareTask: StopLiveLocationShareTask,
         private val checkIfExistingActiveLiveTask: CheckIfExistingActiveLiveTask,
+        private val redactLiveLocationShareTask: RedactLiveLocationShareTask,
         private val liveLocationShareAggregatedSummaryMapper: LiveLocationShareAggregatedSummaryMapper,
 ) : LocationSharingService {
 
@@ -100,6 +101,15 @@ internal class DefaultLocationSharingService @AssistedInject constructor(
                 roomId = roomId,
         )
         return stopLiveLocationShareTask.execute(params)
+    }
+
+    override suspend fun redactLiveLocationShare(beaconInfoEventId: String, reason: String?) {
+        val params = RedactLiveLocationShareTask.Params(
+                roomId = roomId,
+                beaconInfoEventId = beaconInfoEventId,
+                reason = reason
+        )
+        return redactLiveLocationShareTask.execute(params)
     }
 
     override fun getRunningLiveLocationShareSummaries(): LiveData<List<LiveLocationShareAggregatedSummary>> {

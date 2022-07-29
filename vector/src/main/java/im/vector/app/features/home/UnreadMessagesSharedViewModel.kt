@@ -23,7 +23,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.AppStateHandler
-import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyAction
@@ -110,8 +109,8 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(
                 }
 
         combine(
-                appStateHandler.selectedRoomGroupingFlow.distinctUntilChanged(),
-                appStateHandler.selectedRoomGroupingFlow.flatMapLatest {
+                appStateHandler.selectedSpaceFlow.distinctUntilChanged(),
+                appStateHandler.selectedSpaceFlow.flatMapLatest {
                     roomService.getPagedRoomSummariesLive(
                             roomSummaryQueryParams {
                                 this.memberships = Membership.activeMemberships()
@@ -119,74 +118,58 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(
                     ).asFlow()
                             .throttleFirst(300)
                 }
-        ) { groupingMethod, _ ->
-            when (groupingMethod.orNull()) {
-                is RoomGroupingMethod.ByLegacyGroup -> {
-                    // currently not supported
-                    CountInfo(
-                            RoomAggregateNotificationCount(0, 0),
-                            RoomAggregateNotificationCount(0, 0)
-                    )
-                }
-                is RoomGroupingMethod.BySpace -> {
-                    val selectedSpace = appStateHandler.safeActiveSpaceId()
+        ) { selectedSpaceOption, _ ->
+            val selectedSpace = selectedSpaceOption.orNull()?.roomId
 
-                    val inviteCount = if (autoAcceptInvites.hideInvites) {
-                        0
-                    } else {
-                        roomService.getRoomSummaries(
-                                roomSummaryQueryParams { this.memberships = listOf(Membership.INVITE) }
-                        ).size
-                    }
-
-                    val spaceInviteCount = if (autoAcceptInvites.hideInvites) {
-                        0
-                    } else {
-                        roomService.getRoomSummaries(
-                                spaceSummaryQueryParams {
-                                    this.memberships = listOf(Membership.INVITE)
-                                }
-                        ).size
-                    }
-
-                    val totalCount = roomService.getNotificationCountForRooms(
-                            roomSummaryQueryParams {
-                                this.memberships = listOf(Membership.JOIN)
-                                this.spaceFilter = SpaceFilter.OrphanRooms.takeIf {
-                                    !vectorPreferences.prefSpacesShowAllRoomInHome()
-                                }
-                            }
-                    )
-
-                    val counts = RoomAggregateNotificationCount(
-                            totalCount.notificationCount + inviteCount,
-                            totalCount.highlightCount + inviteCount
-                    )
-                    val rootCounts = session.spaceService().getRootSpaceSummaries()
-                            .filter {
-                                // filter out current selection
-                                it.roomId != selectedSpace
-                            }
-
-                    CountInfo(
-                            homeCount = counts,
-                            otherCount = RoomAggregateNotificationCount(
-                                    notificationCount = rootCounts.fold(0, { acc, rs -> acc + rs.notificationCount }) +
-                                            (counts.notificationCount.takeIf { selectedSpace != null } ?: 0) +
-                                            spaceInviteCount,
-                                    highlightCount = rootCounts.fold(0, { acc, rs -> acc + rs.highlightCount }) +
-                                            (counts.highlightCount.takeIf { selectedSpace != null } ?: 0) +
-                                            spaceInviteCount
-                            )
-                    )
-                }
-                null -> {
-                    CountInfo(
-                            RoomAggregateNotificationCount(0, 0),
-                            RoomAggregateNotificationCount(0, 0)
-                    )
-                }
+            val inviteCount = if (autoAcceptInvites.hideInvites) {
+                0
+            } else {
+                roomService.getRoomSummaries(
+                        roomSummaryQueryParams { this.memberships = listOf(Membership.INVITE) }
+                ).size
             }
+
+            val spaceInviteCount = if (autoAcceptInvites.hideInvites) {
+                0
+            } else {
+                roomService.getRoomSummaries(
+                        spaceSummaryQueryParams {
+                            this.memberships = listOf(Membership.INVITE)
+                        }
+                ).size
+            }
+
+            val totalCount = roomService.getNotificationCountForRooms(
+                    roomSummaryQueryParams {
+                        this.memberships = listOf(Membership.JOIN)
+                        this.spaceFilter = when {
+                            vectorPreferences.prefSpacesShowAllRoomInHome() -> SpaceFilter.NoFilter
+                            else -> SpaceFilter.OrphanRooms
+                        }
+                    }
+            )
+
+            val counts = RoomAggregateNotificationCount(
+                    totalCount.notificationCount + inviteCount,
+                    totalCount.highlightCount + inviteCount
+            )
+            val rootCounts = session.spaceService().getRootSpaceSummaries()
+                    .filter {
+                        // filter out current selection
+                        it.roomId != selectedSpace
+                    }
+
+            CountInfo(
+                    homeCount = counts,
+                    otherCount = RoomAggregateNotificationCount(
+                            notificationCount = rootCounts.fold(0, { acc, rs -> acc + rs.notificationCount }) +
+                                    (counts.notificationCount.takeIf { selectedSpace != null } ?: 0) +
+                                    spaceInviteCount,
+                            highlightCount = rootCounts.fold(0, { acc, rs -> acc + rs.highlightCount }) +
+                                    (counts.highlightCount.takeIf { selectedSpace != null } ?: 0) +
+                                    spaceInviteCount
+                    )
+            )
         }
                 .flowOn(Dispatchers.Default)
                 .execute {
