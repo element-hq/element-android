@@ -1381,6 +1381,12 @@ class TimelineFragment :
         }
     }
 
+    private val attachmentVectorCameraActivityResultLauncher = registerStartForActivityResult {
+        if (it.resultCode == Activity.RESULT_OK) {
+            attachmentsHelper.onVectorCameraResult()
+        }
+    }
+
     private val contentAttachmentActivityResultLauncher = registerStartForActivityResult { activityResult ->
         val data = activityResult.data ?: return@registerStartForActivityResult
         if (activityResult.resultCode == Activity.RESULT_OK) {
@@ -2616,7 +2622,7 @@ class TimelineFragment :
 
     private fun launchAttachmentProcess(type: AttachmentTypeSelectorView.Type) {
         when (type) {
-            AttachmentTypeSelectorView.Type.PHOTO_CAMERA -> attachmentsHelper.openPhotoCamera(attachmentCameraActivityResultLauncher)
+            AttachmentTypeSelectorView.Type.PHOTO_CAMERA -> attachmentsHelper.openVectorCamera(attachmentVectorCameraActivityResultLauncher)
             AttachmentTypeSelectorView.Type.VIDEO_CAMERA -> attachmentsHelper.openVideoCamera(attachmentCameraVideoActivityResultLauncher)
             AttachmentTypeSelectorView.Type.FILE -> attachmentsHelper.selectFile(attachmentFileActivityResultLauncher)
             AttachmentTypeSelectorView.Type.GALLERY -> attachmentsHelper.selectGallery(attachmentMediaActivityResultLauncher)
