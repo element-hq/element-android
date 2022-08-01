@@ -27,7 +27,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.BuildConfig
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.di.ActiveSessionSetter
 import im.vector.app.core.network.WifiDetector
 import im.vector.app.core.pushers.model.PushData
 import im.vector.app.core.services.GuardServiceStarter
@@ -38,6 +37,7 @@ import im.vector.app.features.settings.BackgroundSyncMode
 import im.vector.app.features.settings.VectorDataStore
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -60,7 +60,6 @@ class VectorMessagingReceiver : MessagingReceiver() {
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
     @Inject lateinit var notifiableEventResolver: NotifiableEventResolver
     @Inject lateinit var pushersManager: PushersManager
-    @Inject lateinit var activeSessionSetter: ActiveSessionSetter
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var vectorDataStore: VectorDataStore
@@ -116,7 +115,7 @@ class VectorMessagingReceiver : MessagingReceiver() {
                 // we are in foreground, let the sync do the things?
                 Timber.tag(loggerTag.value).d("PUSH received in a foreground state, ignore")
             } else {
-                onMessageReceivedInternal(pushData)
+                coroutineScope.launch(Dispatchers.IO) { onMessageReceivedInternal(pushData) }
             }
         }
     }
@@ -170,7 +169,7 @@ class VectorMessagingReceiver : MessagingReceiver() {
      *
      * @param pushData Object containing message data.
      */
-    private fun onMessageReceivedInternal(pushData: PushData) {
+    private suspend fun onMessageReceivedInternal(pushData: PushData) {
         try {
             if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
                 Timber.tag(loggerTag.value).d("## onMessageReceivedInternal() : $pushData")
@@ -178,12 +177,7 @@ class VectorMessagingReceiver : MessagingReceiver() {
                 Timber.tag(loggerTag.value).d("## onMessageReceivedInternal()")
             }
 
-            val session = activeSessionHolder.getSafeActiveSession()
-                    ?: run {
-                        // Active session may not exist yet, if MainActivity has not been launched
-                        activeSessionSetter.tryToSetActiveSession(startSync = false)
-                        activeSessionHolder.getSafeActiveSession()
-                    }
+            val session = activeSessionHolder.getOrInitializeSession(startSync = false)
 
             if (session == null) {
                 Timber.tag(loggerTag.value).w("## Can't sync from push, no current session")
@@ -204,7 +198,7 @@ class VectorMessagingReceiver : MessagingReceiver() {
         }
     }
 
-    private fun getEventFastLane(session: Session, pushData: PushData) {
+    private suspend fun getEventFastLane(session: Session, pushData: PushData) {
         pushData.roomId ?: return
         pushData.eventId ?: return
 
@@ -218,18 +212,16 @@ class VectorMessagingReceiver : MessagingReceiver() {
             return
         }
 
-        coroutineScope.launch {
-            Timber.tag(loggerTag.value).d("Fast lane: start request")
-            val event = tryOrNull { session.eventService().getEvent(pushData.roomId, pushData.eventId) } ?: return@launch
+        Timber.tag(loggerTag.value).d("Fast lane: start request")
+        val event = tryOrNull { session.eventService().getEvent(pushData.roomId, pushData.eventId) } ?: return
 
-            val resolvedEvent = notifiableEventResolver.resolveInMemoryEvent(session, event, canBeReplaced = true)
+        val resolvedEvent = notifiableEventResolver.resolveInMemoryEvent(session, event, canBeReplaced = true)
 
-            resolvedEvent
-                    ?.also { Timber.tag(loggerTag.value).d("Fast lane: notify drawer") }
-                    ?.let {
-                        notificationDrawerManager.updateEvents { it.onNotifiableEventReceived(resolvedEvent) }
-                    }
-        }
+        resolvedEvent
+                ?.also { Timber.tag(loggerTag.value).d("Fast lane: notify drawer") }
+                ?.let {
+                    notificationDrawerManager.updateEvents { it.onNotifiableEventReceived(resolvedEvent) }
+                }
     }
 
     // check if the event was not yet received

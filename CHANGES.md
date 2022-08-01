@@ -1,3 +1,12 @@
+Changes in Element v1.4.31 (2022-08-01)
+=======================================
+
+Bugfixes 🐛
+----------
+ - Fixes crash when returning to the app after backgrounding ([#6709](https://github.com/vector-im/element-android/issues/6709))
+ - Fix message content sometimes appearing in the log ([#6706](https://github.com/vector-im/element-android/issues/6706))
+
+
 Changes in Element v1.4.30 (2022-07-29)
 =======================================
 
