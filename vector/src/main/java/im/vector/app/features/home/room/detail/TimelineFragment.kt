@@ -860,8 +860,8 @@ class TimelineFragment @Inject constructor(
         views.liveLocationStatusIndicator.stopButton.debouncedClicks {
             timelineViewModel.handle(RoomDetailAction.StopLiveLocationSharing)
         }
-        views.locationLiveStatusIndicator.debouncedClicks {
-            navigateToLocationLiveMap()
+        views.liveLocationStatusIndicator.debouncedClicks {
+            navigateToLiveLocationMap()
         }
     }
 
