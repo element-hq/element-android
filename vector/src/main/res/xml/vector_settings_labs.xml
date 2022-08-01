@@ -77,4 +77,10 @@
         android:summary="@string/labs_enable_live_location_summary"
         android:title="@string/labs_enable_live_location" />
 
+    <im.vector.app.core.preference.VectorSwitchPreference
+        android:defaultValue="false"
+        android:key="SETTINGS_LABS_ENABLE_ELEMENT_CALL_PERMISSION_SHORTCUTS"
+        android:summary="@string/labs_enable_element_call_permission_shortcuts_summary"
+        android:title="@string/labs_enable_element_call_permission_shortcuts" />
+
 </androidx.preference.PreferenceScreen>

@@ -34,6 +34,7 @@ import im.vector.app.features.pin.lockscreen.biometrics.BiometricHelper
 import im.vector.app.features.pin.lockscreen.configuration.LockScreenConfiguration
 import im.vector.app.features.pin.lockscreen.configuration.LockScreenConfiguratorProvider
 import im.vector.app.features.pin.lockscreen.configuration.LockScreenMode
+import im.vector.app.features.pin.lockscreen.crypto.LockScreenKeysMigrator
 import im.vector.app.features.pin.lockscreen.pincode.PinCodeHelper
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emitAll
@@ -47,6 +48,7 @@ class LockScreenViewModel @AssistedInject constructor(
         @Assisted val initialState: LockScreenViewState,
         private val pinCodeHelper: PinCodeHelper,
         private val biometricHelper: BiometricHelper,
+        private val lockScreenKeysMigrator: LockScreenKeysMigrator,
         private val configuratorProvider: LockScreenConfiguratorProvider,
         private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
 ) : VectorViewModel<LockScreenViewState, LockScreenAction, LockScreenViewEvent>(initialState) {
@@ -85,7 +87,7 @@ class LockScreenViewModel @AssistedInject constructor(
 
     init {
         // We need this to run synchronously before we start reading the configurations
-        runBlocking { pinCodeHelper.migratePinCodeIfNeeded() }
+        runBlocking { lockScreenKeysMigrator.migrateIfNeeded() }
 
         configuratorProvider.configurationFlow
                 .onEach { updateConfiguration(it) }

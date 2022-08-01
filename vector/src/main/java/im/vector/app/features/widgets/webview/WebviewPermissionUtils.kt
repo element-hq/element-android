@@ -41,11 +41,22 @@ class WebviewPermissionUtils @Inject constructor(
             request: PermissionRequest,
             context: Context,
             activity: FragmentActivity,
-            activityResultLauncher: ActivityResultLauncher<Array<String>>
+            activityResultLauncher: ActivityResultLauncher<Array<String>>,
+            autoApprove: Boolean = false
     ) {
+        if (autoApprove) {
+            onPermissionsSelected(
+                permissions = request.resources.toList(),
+                request = request,
+                activity = activity,
+                activityResultLauncher = activityResultLauncher)
+            return
+        }
+
         val allowedPermissions = request.resources.map {
             it to false
         }.toMutableList()
+
         MaterialAlertDialogBuilder(context)
                 .setTitle(title)
                 .setMultiChoiceItems(
@@ -54,26 +65,36 @@ class WebviewPermissionUtils @Inject constructor(
                     allowedPermissions[which] = allowedPermissions[which].first to isChecked
                 }
                 .setPositiveButton(R.string.room_widget_resource_grant_permission) { _, _ ->
-                    permissionRequest = request
-                    selectedPermissions = allowedPermissions.mapNotNull { perm ->
+                    val permissions = allowedPermissions.mapNotNull { perm ->
                         perm.first.takeIf { perm.second }
                     }
-
-                    val requiredAndroidPermissions = selectedPermissions.mapNotNull { permission ->
-                        webPermissionToAndroidPermission(permission)
-                    }
-
-                    // When checkPermissions returns false, some of the required Android permissions will
-                    // have to be requested and the flow completes asynchronously via onPermissionResult
-                    if (checkPermissions(requiredAndroidPermissions, activity, activityResultLauncher)) {
-                        request.grant(selectedPermissions.toTypedArray())
-                        reset()
-                    }
+                    onPermissionsSelected(permissions, request, activity, activityResultLauncher)
                 }
                 .setNegativeButton(R.string.room_widget_resource_decline_permission) { _, _ ->
                     request.deny()
                 }
                 .show()
+    }
+
+    private fun onPermissionsSelected(
+            permissions: List<String>,
+            request: PermissionRequest,
+            activity: FragmentActivity,
+            activityResultLauncher: ActivityResultLauncher<Array<String>>,
+    ) {
+        permissionRequest = request
+        selectedPermissions = permissions
+
+        val requiredAndroidPermissions = selectedPermissions.mapNotNull { permission ->
+            webPermissionToAndroidPermission(permission)
+        }
+
+        // When checkPermissions returns false, some of the required Android permissions will
+        // have to be requested and the flow completes asynchronously via onPermissionResult
+        if (checkPermissions(requiredAndroidPermissions, activity, activityResultLauncher)) {
+            request.grant(selectedPermissions.toTypedArray())
+            reset()
+        }
     }
 
     fun onPermissionResult(result: Map<String, Boolean>) {

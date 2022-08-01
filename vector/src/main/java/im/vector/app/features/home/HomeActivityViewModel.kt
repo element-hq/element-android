@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home
 
-import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
@@ -218,8 +217,7 @@ class HomeActivityViewModel @AssistedInject constructor(
     private fun observeInitialSync() {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
 
-        session.syncService().getSyncRequestStateLive()
-                .asFlow()
+        session.syncService().getSyncRequestStateFlow()
                 .onEach { status ->
                     when (status) {
                         is SyncRequestState.Idle -> {
@@ -364,14 +362,30 @@ class HomeActivityViewModel @AssistedInject constructor(
                             // If 4S is forced, force verification
                             _viewEvents.post(HomeActivityViewEvents.ForceVerification(true))
                         } else {
-                            // New session
-                            _viewEvents.post(
-                                    HomeActivityViewEvents.OnNewSession(
-                                            session.getUser(session.myUserId)?.toMatrixItem(),
-                                            // Always send request instead of waiting for an incoming as per recent EW changes
-                                            false
-                                    )
-                            )
+                            // we wan't to check if there is a way to actually verify this session,
+                            // that means that there is another session to verify against, or
+                            // secure backup is setup
+                            val hasTargetDeviceToVerifyAgainst = session
+                                    .cryptoService()
+                                    .getUserDevices(session.myUserId)
+                                    .size >= 2 // this one + another
+                            val is4Ssetup = session.sharedSecretStorageService().isRecoverySetup()
+                            if (hasTargetDeviceToVerifyAgainst || is4Ssetup) {
+                                // New session
+                                _viewEvents.post(
+                                        HomeActivityViewEvents.CurrentSessionNotVerified(
+                                                session.getUser(session.myUserId)?.toMatrixItem(),
+                                                // Always send request instead of waiting for an incoming as per recent EW changes
+                                                false
+                                        )
+                                )
+                            } else {
+                                _viewEvents.post(
+                                        HomeActivityViewEvents.CurrentSessionCannotBeVerified(
+                                                session.getUser(session.myUserId)?.toMatrixItem(),
+                                        )
+                                )
+                            }
                         }
                     }
                 }

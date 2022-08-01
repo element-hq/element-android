@@ -76,4 +76,3 @@ abstract class RecentRoomItem : VectorEpoxyModel<RecentRoomItem.Holder>(R.layout
         val rootView by bind<ViewGroup>(R.id.recentRoot)
     }
 }
-

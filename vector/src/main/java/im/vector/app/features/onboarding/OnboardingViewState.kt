@@ -101,6 +101,7 @@ data class SelectedAuthenticationState(
 
 @Parcelize
 data class RegistrationState(
+        val email: String? = null,
         val isUserNameAvailable: Boolean = false,
         val selectedMatrixId: String? = null,
 ) : Parcelable

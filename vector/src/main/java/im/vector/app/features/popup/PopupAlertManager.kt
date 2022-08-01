@@ -26,6 +26,7 @@ import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.isAnimationEnabled
+import im.vector.app.features.MainActivity
 import im.vector.app.features.analytics.ui.consent.AnalyticsOptInActivity
 import im.vector.app.features.pin.PinActivity
 import im.vector.app.features.signout.hard.SignedOutActivity
@@ -302,6 +303,7 @@ class PopupAlertManager @Inject constructor(
 
     private fun shouldBeDisplayedIn(alert: VectorAlert?, activity: Activity): Boolean {
         return alert != null &&
+                activity !is MainActivity &&
                 activity !is PinActivity &&
                 activity !is SignedOutActivity &&
                 activity !is AnalyticsOptInActivity &&

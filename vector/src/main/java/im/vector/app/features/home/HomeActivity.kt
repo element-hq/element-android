@@ -35,8 +35,8 @@ import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.AppStateHandler
 import im.vector.app.R
+import im.vector.app.SpaceStateHandler
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.registerStartForActivityResult
@@ -78,6 +78,7 @@ import im.vector.app.features.spaces.invite.SpaceInviteBottomSheet
 import im.vector.app.features.spaces.share.ShareSpaceBottomSheet
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
+import im.vector.app.nightly.NightlyProxy
 import im.vector.app.push.fcm.FcmHelper
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -129,9 +130,10 @@ class HomeActivity :
     @Inject lateinit var permalinkHandler: PermalinkHandler
     @Inject lateinit var avatarRenderer: AvatarRenderer
     @Inject lateinit var initSyncStepFormatter: InitSyncStepFormatter
-    @Inject lateinit var appStateHandler: AppStateHandler
+    @Inject lateinit var spaceStateHandler: SpaceStateHandler
     @Inject lateinit var unifiedPushHelper: UnifiedPushHelper
     @Inject lateinit var fcmHelper: FcmHelper
+    @Inject lateinit var nightlyProxy: NightlyProxy
 
     private val createSpaceResultLauncher = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
@@ -238,7 +240,8 @@ class HomeActivity :
         homeActivityViewModel.observeViewEvents {
             when (it) {
                 is HomeActivityViewEvents.AskPasswordToInitCrossSigning -> handleAskPasswordToInitCrossSigning(it)
-                is HomeActivityViewEvents.OnNewSession -> handleOnNewSession(it)
+                is HomeActivityViewEvents.CurrentSessionNotVerified -> handleOnNewSession(it)
+                is HomeActivityViewEvents.CurrentSessionCannotBeVerified -> handleCantVerify(it)
                 HomeActivityViewEvents.PromptToEnableSessionPush -> handlePromptToEnablePush()
                 HomeActivityViewEvents.StartRecoverySetupFlow -> handleStartRecoverySetup()
                 is HomeActivityViewEvents.ForceVerification -> {
@@ -422,7 +425,7 @@ class HomeActivity :
         }
     }
 
-    private fun handleOnNewSession(event: HomeActivityViewEvents.OnNewSession) {
+    private fun handleOnNewSession(event: HomeActivityViewEvents.CurrentSessionNotVerified) {
         // We need to ask
         promptSecurityEvent(
                 event.userItem,
@@ -434,6 +437,17 @@ class HomeActivity :
             } else {
                 it.navigator.requestSelfSessionVerification(it)
             }
+        }
+    }
+
+    private fun handleCantVerify(event: HomeActivityViewEvents.CurrentSessionCannotBeVerified) {
+        // We need to ask
+        promptSecurityEvent(
+                event.userItem,
+                R.string.crosssigning_cannot_verify_this_session,
+                R.string.crosssigning_cannot_verify_this_session_desc
+        ) {
+            it.navigator.open4SSetup(it, SetupMode.PASSPHRASE_AND_NEEDED_SECRETS_RESET)
         }
     }
 
@@ -533,6 +547,9 @@ class HomeActivity :
 
         // Force remote backup state update to update the banner if needed
         serverBackupStatusViewModel.refreshRemoteStateIfNeeded()
+
+        // Check nightly
+        nightlyProxy.onHomeResumed()
     }
 
     override fun getMenuRes() = R.menu.home

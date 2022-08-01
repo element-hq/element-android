@@ -28,8 +28,8 @@
 
     <ImageView
         android:id="@+id/locationLiveStartIcon"
-        android:layout_width="26dp"
-        android:layout_height="26dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_marginVertical="8dp"
         android:layout_marginStart="8dp"
         android:background="@drawable/circle"
@@ -45,12 +45,15 @@
     <TextView
         android:id="@+id/locationLiveStartTitle"
         style="@style/Widget.Vector.TextView.Caption"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="8dp"
+        android:layout_margin="8dp"
+        android:lines="1"
+        android:ellipsize="end"
         android:text="@string/location_share_live_started"
         android:textColor="?vctr_content_tertiary"
         app:layout_constraintBottom_toBottomOf="@id/locationLiveStartBanner"
+        app:layout_constraintEnd_toEndOf="@id/locationLiveStartBanner"
         app:layout_constraintStart_toEndOf="@id/locationLiveStartIcon"
         app:layout_constraintTop_toTopOf="@id/locationLiveStartBanner" />
 

@@ -92,7 +92,7 @@ class VectorApplication :
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var versionProvider: VersionProvider
     @Inject lateinit var notificationUtils: NotificationUtils
-    @Inject lateinit var appStateHandler: AppStateHandler
+    @Inject lateinit var spaceStateHandler: SpaceStateHandler
     @Inject lateinit var popupAlertManager: PopupAlertManager
     @Inject lateinit var pinLocker: PinLocker
     @Inject lateinit var callManager: WebRtcCallManager
@@ -186,7 +186,7 @@ class VectorApplication :
                 fcmHelper.onEnterBackground(activeSessionHolder)
             }
         })
-        ProcessLifecycleOwner.get().lifecycle.addObserver(appStateHandler)
+        ProcessLifecycleOwner.get().lifecycle.addObserver(spaceStateHandler)
         ProcessLifecycleOwner.get().lifecycle.addObserver(pinLocker)
         ProcessLifecycleOwner.get().lifecycle.addObserver(callManager)
         // This should be done as early as possible

@@ -34,31 +34,46 @@ import im.vector.app.waitForView
 
 class OnboardingRobot {
 
+    private val defaultVectorFeatures = DefaultVectorFeatures()
+
     fun crawl() {
         waitUntilViewVisible(withId(R.id.loginSplashSubmit))
-        crawlGetStarted()
+        crawlCreateAccount()
         crawlAlreadyHaveAccount()
     }
 
-    private fun crawlGetStarted() {
-        clickOn(R.id.loginSplashSubmit)
-        assertDisplayed(R.id.useCaseHeaderTitle, R.string.ftue_auth_use_case_title)
-        clickOn(R.id.useCaseOptionOne)
-        OnboardingServersRobot().crawlSignUp()
-        pressBack()
-        pressBack()
+    private fun crawlCreateAccount() {
+        if (defaultVectorFeatures.isOnboardingCombinedRegisterEnabled()) {
+            // TODO https://github.com/vector-im/element-android/issues/6652
+        } else {
+            clickOn(R.id.loginSplashSubmit)
+            assertDisplayed(R.id.useCaseHeaderTitle, R.string.ftue_auth_use_case_title)
+            clickOn(R.id.useCaseOptionOne)
+            OnboardingServersRobot().crawlSignUp()
+            pressBack()
+            pressBack()
+        }
     }
 
     private fun crawlAlreadyHaveAccount() {
-        clickOn(R.id.loginSplashAlreadyHaveAccount)
-        OnboardingServersRobot().crawlSignIn()
-        pressBack()
+        if (defaultVectorFeatures.isOnboardingCombinedLoginEnabled()) {
+            // TODO https://github.com/vector-im/element-android/issues/6652
+        } else {
+            clickOn(R.id.loginSplashAlreadyHaveAccount)
+            OnboardingServersRobot().crawlSignIn()
+            pressBack()
+        }
     }
 
     fun createAccount(userId: String, password: String = "password", homeServerUrl: String = "http://10.0.2.2:8080") {
-        initSession(true, userId, password, homeServerUrl)
+        if (defaultVectorFeatures.isOnboardingCombinedRegisterEnabled()) {
+            createAccountViaCombinedRegister(homeServerUrl, userId, password)
+        } else {
+            initSession(true, userId, password, homeServerUrl)
+        }
+
         waitUntilViewVisible(withText(R.string.ftue_account_created_congratulations_title))
-        if (DefaultVectorFeatures().isOnboardingPersonalizeEnabled()) {
+        if (defaultVectorFeatures.isOnboardingPersonalizeEnabled()) {
             clickOn(R.string.ftue_account_created_personalize)
 
             waitUntilViewVisible(withText(R.string.ftue_display_name_title))
@@ -75,8 +90,47 @@ class OnboardingRobot {
         }
     }
 
+    private fun createAccountViaCombinedRegister(homeServerUrl: String, userId: String, password: String) {
+        waitUntilViewVisible(withId(R.id.loginSplashSubmit))
+        assertDisplayed(R.id.loginSplashSubmit, R.string.login_splash_create_account)
+        clickOn(R.id.loginSplashSubmit)
+        clickOn(R.id.useCaseOptionOne)
+
+        waitUntilViewVisible(withId(R.id.createAccountRoot))
+        clickOn(R.id.editServerButton)
+        writeTo(R.id.chooseServerInput, homeServerUrl)
+        closeSoftKeyboard()
+        clickOn(R.id.chooseServerSubmit)
+        waitUntilViewVisible(withId(R.id.createAccountRoot))
+
+        writeTo(R.id.createAccountInput, userId)
+        writeTo(R.id.createAccountPasswordInput, password)
+        clickOn(R.id.createAccountSubmit)
+    }
+
     fun login(userId: String, password: String = "password", homeServerUrl: String = "http://10.0.2.2:8080") {
-        initSession(false, userId, password, homeServerUrl)
+        if (defaultVectorFeatures.isOnboardingCombinedLoginEnabled()) {
+            loginViaCombinedLogin(homeServerUrl, userId, password)
+        } else {
+            initSession(false, userId, password, homeServerUrl)
+        }
+    }
+
+    private fun loginViaCombinedLogin(homeServerUrl: String, userId: String, password: String) {
+        waitUntilViewVisible(withId(R.id.loginSplashSubmit))
+        assertDisplayed(R.id.loginSplashSubmit, R.string.login_splash_create_account)
+        clickOn(R.id.loginSplashAlreadyHaveAccount)
+
+        waitUntilViewVisible(withId(R.id.loginRoot))
+        clickOn(R.id.editServerButton)
+        writeTo(R.id.chooseServerInput, homeServerUrl)
+        closeSoftKeyboard()
+        clickOn(R.id.chooseServerSubmit)
+        waitUntilViewVisible(withId(R.id.loginRoot))
+
+        writeTo(R.id.loginInput, userId)
+        writeTo(R.id.loginPasswordInput, password)
+        clickOn(R.id.loginSubmit)
     }
 
     private fun initSession(

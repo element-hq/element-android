@@ -250,7 +250,7 @@ jobs:
       github.repository == 'vector-im/element-android' &&
       (contains(github.event.issue.labels.*.name, 'Z-BBQ-Alpha') ||
         contains(github.event.issue.labels.*.name, 'Z-BBQ-Beta') ||
-        contains(github.event.issue.labels.*.name, 'Z-BBQ-Release' ||
+        contains(github.event.issue.labels.*.name, 'Z-BBQ-Release') ||
         contains(github.event.issue.labels.*.name, 'Z-Banquet-Alpha') ||
         contains(github.event.issue.labels.*.name, 'Z-Banquet-Beta') ||
         contains(github.event.issue.labels.*.name, 'Z-Banquet-Release'))
