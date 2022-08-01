@@ -198,7 +198,7 @@ class VectorMessagingReceiver : MessagingReceiver() {
         }
     }
 
-    private fun getEventFastLane(session: Session, pushData: PushData) {
+    private suspend fun getEventFastLane(session: Session, pushData: PushData) {
         pushData.roomId ?: return
         pushData.eventId ?: return
 
@@ -212,18 +212,16 @@ class VectorMessagingReceiver : MessagingReceiver() {
             return
         }
 
-        coroutineScope.launch {
-            Timber.tag(loggerTag.value).d("Fast lane: start request")
-            val event = tryOrNull { session.eventService().getEvent(pushData.roomId, pushData.eventId) } ?: return@launch
+        Timber.tag(loggerTag.value).d("Fast lane: start request")
+        val event = tryOrNull { session.eventService().getEvent(pushData.roomId, pushData.eventId) } ?: return
 
-            val resolvedEvent = notifiableEventResolver.resolveInMemoryEvent(session, event, canBeReplaced = true)
+        val resolvedEvent = notifiableEventResolver.resolveInMemoryEvent(session, event, canBeReplaced = true)
 
-            resolvedEvent
-                    ?.also { Timber.tag(loggerTag.value).d("Fast lane: notify drawer") }
-                    ?.let {
-                        notificationDrawerManager.updateEvents { it.onNotifiableEventReceived(resolvedEvent) }
-                    }
-        }
+        resolvedEvent
+                ?.also { Timber.tag(loggerTag.value).d("Fast lane: notify drawer") }
+                ?.let {
+                    notificationDrawerManager.updateEvents { it.onNotifiableEventReceived(resolvedEvent) }
+                }
     }
 
     // check if the event was not yet received
