@@ -20,7 +20,7 @@ import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.core.di.ActiveSessionSetter
+import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
@@ -31,7 +31,7 @@ import kotlin.time.Duration.Companion.seconds
 
 class StartAppViewModel @AssistedInject constructor(
         @Assisted val initialState: StartAppViewState,
-        private val activeSessionSetter: ActiveSessionSetter,
+        private val sessionHolder: ActiveSessionHolder,
 ) : VectorViewModel<StartAppViewState, StartAppAction, StartAppViewEvent>(initialState) {
 
     @AssistedFactory
@@ -42,7 +42,7 @@ class StartAppViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<StartAppViewModel, StartAppViewState> by hiltMavericksViewModelFactory()
 
     fun shouldStartApp(): Boolean {
-        return activeSessionSetter.shouldSetActionSession()
+        return sessionHolder.isWaitingForSessionInitialization()
     }
 
     override fun handle(action: StartAppAction) {
@@ -55,9 +55,13 @@ class StartAppViewModel @AssistedInject constructor(
         handleLongProcessing()
         viewModelScope.launch(Dispatchers.IO) {
             // This can take time because of DB migration(s), so do it in a background task.
-            activeSessionSetter.tryToSetActiveSession(startSync = true)
+            eagerlyInitializeSession()
             _viewEvents.post(StartAppViewEvent.AppStarted)
         }
+    }
+
+    private suspend fun eagerlyInitializeSession() {
+        sessionHolder.getOrInitializeSession(startSync = true)
     }
 
     private fun handleLongProcessing() {
