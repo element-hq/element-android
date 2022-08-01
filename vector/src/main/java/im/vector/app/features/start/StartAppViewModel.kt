@@ -23,6 +23,7 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
+import im.vector.app.core.dispatchers.CoroutineDispatchers
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -32,6 +33,7 @@ import kotlin.time.Duration.Companion.seconds
 class StartAppViewModel @AssistedInject constructor(
         @Assisted val initialState: StartAppViewState,
         private val sessionHolder: ActiveSessionHolder,
+        private val dispatchers: CoroutineDispatchers,
 ) : VectorViewModel<StartAppViewState, StartAppAction, StartAppViewEvent>(initialState) {
 
     @AssistedFactory
@@ -53,7 +55,7 @@ class StartAppViewModel @AssistedInject constructor(
 
     private fun handleStartApp() {
         handleLongProcessing()
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatchers.io) {
             // This can take time because of DB migration(s), so do it in a background task.
             eagerlyInitializeSession()
             _viewEvents.post(StartAppViewEvent.AppStarted)
