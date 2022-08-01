@@ -368,6 +368,10 @@ android {
 }
 
 dependencies {
+    // WYSIWIG dependencies
+    implementation files("libs/wysiwyg-release.aar")
+    implementation "net.java.dev.jna:jna:5.7.0@aar"
+
     implementation project(":vector-config")
     implementation project(":matrix-sdk-android")
     implementation project(":matrix-sdk-android-flow")

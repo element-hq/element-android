@@ -17,13 +17,13 @@
 package im.vector.app.features.home.room.detail.composer
 
 import android.content.Context
-import android.net.Uri
 import android.text.Editable
 import android.util.AttributeSet
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.text.toSpannable
+import androidx.core.widget.addTextChangedListener
 import androidx.transition.ChangeBounds
 import androidx.transition.Fade
 import androidx.transition.Transition
@@ -65,15 +65,21 @@ class MessageComposerView @JvmOverloads constructor(
 
         collapse(false)
 
-        views.composerEditText.callback = object : ComposerEditText.Callback {
-            override fun onRichContentSelected(contentUri: Uri): Boolean {
-                return callback?.onRichContentSelected(contentUri) ?: false
-            }
+//        views.composerEditText.callback = object : ComposerEditText.Callback {
+//            override fun onRichContentSelected(contentUri: Uri): Boolean {
+//                return callback?.onRichContentSelected(contentUri) ?: false
+//            }
+//
+//            override fun onTextChanged(text: CharSequence) {
+//                callback?.onTextChanged(text)
+//            }
+//        }
 
-            override fun onTextChanged(text: CharSequence) {
-                callback?.onTextChanged(text)
-            }
-        }
+        // Equivalent of ComposerEditText.Callback.onTextChanged
+        views.composerEditText.addTextChangedListener(onTextChanged = { text, _, _, _ ->
+            text?.let { callback?.onTextChanged(it) }
+        })
+
         views.composerRelatedMessageCloseButton.setOnClickListener {
             collapse()
             callback?.onCloseRelatedMessage()

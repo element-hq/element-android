@@ -102,7 +102,7 @@
         android:layout_height="0dp"
         android:background="@drawable/bg_composer_edit_text" />
 
-    <im.vector.app.features.home.room.detail.composer.ComposerEditText
+    <io.element.android.wysiwyg.EditorEditText
         android:id="@+id/composerEditText"
         style="@style/Widget.Vector.EditText.Composer"
         android:layout_width="0dp"

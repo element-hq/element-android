@@ -133,7 +133,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_goneMarginEnd="12dp" />
 
-    <im.vector.app.features.home.room.detail.composer.ComposerEditText
+    <io.element.android.wysiwyg.EditorEditText
         android:id="@+id/composerEditText"
         style="@style/Widget.Vector.EditText.Composer"
         android:layout_width="0dp"
