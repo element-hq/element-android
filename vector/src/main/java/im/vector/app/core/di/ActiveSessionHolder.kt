@@ -27,11 +27,7 @@ import im.vector.app.features.crypto.keysrequest.KeyRequestHandler
 import im.vector.app.features.crypto.verification.IncomingVerificationRequestHandler
 import im.vector.app.features.notifications.PushRuleTriggerListener
 import im.vector.app.features.session.SessionListener
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
@@ -106,9 +102,7 @@ class ActiveSessionHolder @Inject constructor(
     suspend fun getOrInitializeSession(startSync: Boolean): Session? {
         return activeSessionReference.get() ?: sessionInitializer.tryInitialize(readCurrentSession = { activeSessionReference.get() }) { session ->
             setActiveSession(session)
-            withContext(Dispatchers.Main) {
-                session.configureAndStart(applicationContext, startSyncing = startSync)
-            }
+            session.configureAndStart(applicationContext, startSyncing = startSync)
         }
     }
 

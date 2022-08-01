@@ -37,7 +37,7 @@ class SessionInitializer @Inject constructor(
      * @param initializer callback to allow additional initialization on the Session, such as setting the in-memory Session instance.
      * @return the initialized Session or null when no authenticated sessions are available.
      */
-    suspend fun tryInitialize(readCurrentSession: () -> Session?, initializer: suspend (Session) -> Unit): Session? {
+    suspend fun tryInitialize(readCurrentSession: () -> Session?, initializer: (Session) -> Unit): Session? {
         return withContext(INITIALIZER_CONTEXT) {
             val currentInMemorySession = readCurrentSession()
             when {
