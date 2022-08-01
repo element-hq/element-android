@@ -6,11 +6,21 @@
     android:layout_height="match_parent"
     tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
 
+    <ImageView
+        android:id="@+id/mapLoadingErrorBackground"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="?vctr_system"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
+
     <androidx.constraintlayout.helper.widget.Flow
         android:id="@+id/mapLoadingErrorContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="?vctr_system"
         android:orientation="vertical"
         app:constraint_referenced_ids="mapLoadingErrorIcon,mapLoadingErrorDescription"
         app:flow_verticalGap="12dp"
@@ -24,8 +34,8 @@
         android:id="@+id/mapLoadingErrorIcon"
         android:layout_width="28dp"
         android:layout_height="28dp"
-        android:contentDescription="@string/a11y_location_share_option_pinned_icon"
-        android:src="@drawable/ic_warning_badge" />
+        android:src="@drawable/ic_warning_badge"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/mapLoadingErrorDescription"
