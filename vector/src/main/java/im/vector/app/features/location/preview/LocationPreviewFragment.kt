@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.location
+package im.vector.app.features.location.preview
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -33,6 +33,10 @@ import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.utils.openLocation
 import im.vector.app.databinding.FragmentLocationPreviewBinding
 import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
+import im.vector.app.features.location.DEFAULT_PIN_ID
+import im.vector.app.features.location.LocationSharingArgs
+import im.vector.app.features.location.MapState
+import im.vector.app.features.location.UrlMapProvider
 import java.lang.ref.WeakReference
 import javax.inject.Inject
 

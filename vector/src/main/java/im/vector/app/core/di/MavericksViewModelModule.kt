@@ -54,7 +54,7 @@ import im.vector.app.features.home.room.list.RoomListViewModel
 import im.vector.app.features.home.room.list.home.HomeRoomListViewModel
 import im.vector.app.features.homeserver.HomeServerCapabilitiesViewModel
 import im.vector.app.features.invite.InviteUsersToRoomViewModel
-import im.vector.app.features.location.LocationPreviewViewModel
+import im.vector.app.features.location.preview.LocationPreviewViewModel
 import im.vector.app.features.location.LocationSharingViewModel
 import im.vector.app.features.location.live.map.LiveLocationMapViewModel
 import im.vector.app.features.login.LoginViewModel

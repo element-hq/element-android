@@ -64,7 +64,7 @@ import im.vector.app.features.home.room.detail.search.SearchFragment
 import im.vector.app.features.home.room.list.RoomListFragment
 import im.vector.app.features.home.room.list.home.HomeRoomListFragment
 import im.vector.app.features.home.room.threads.list.views.ThreadListFragment
-import im.vector.app.features.location.LocationPreviewFragment
+import im.vector.app.features.location.preview.LocationPreviewFragment
 import im.vector.app.features.location.LocationSharingFragment
 import im.vector.app.features.login.LoginCaptchaFragment
 import im.vector.app.features.login.LoginFragment
