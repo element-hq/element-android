@@ -59,7 +59,7 @@ import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorPr
 import im.vector.app.features.roommemberprofile.devices.DeviceListBottomSheet
 import im.vector.app.features.roommemberprofile.powerlevel.EditPowerLevelDialogs
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.session.crypto.model.UserVerificationLevel
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
@@ -235,23 +235,27 @@ class RoomMemberProfileFragment :
                         if (state.userMXCrossSigningInfo.isTrusted()) {
                             // User is trusted
                             if (state.allDevicesAreCrossSignedTrusted) {
-                                RoomEncryptionTrustLevel.Trusted
+                                UserVerificationLevel.VERIFIED_ALL_DEVICES_TRUSTED
                             } else {
-                                RoomEncryptionTrustLevel.Warning
+                                UserVerificationLevel.VERIFIED_WITH_DEVICES_UNTRUSTED
                             }
                         } else {
-                            RoomEncryptionTrustLevel.Default
+                            if (state.userMXCrossSigningInfo.wasTrustedOnce) {
+                                UserVerificationLevel.UNVERIFIED_BUT_WAS_PREVIOUSLY
+                            } else {
+                                UserVerificationLevel.WAS_NEVER_VERIFIED
+                            }
                         }
                     } else {
                         // Legacy
                         if (state.allDevicesAreTrusted) {
-                            RoomEncryptionTrustLevel.Trusted
+                            UserVerificationLevel.VERIFIED_ALL_DEVICES_TRUSTED
                         } else {
-                            RoomEncryptionTrustLevel.Warning
+                            UserVerificationLevel.VERIFIED_WITH_DEVICES_UNTRUSTED
                         }
                     }
-                    headerViews.memberProfileDecorationImageView.render(trustLevel)
-                    views.matrixProfileDecorationToolbarAvatarImageView.render(trustLevel)
+                    headerViews.memberProfileDecorationImageView.renderUser(trustLevel)
+                    views.matrixProfileDecorationToolbarAvatarImageView.renderUser(trustLevel)
                 } else {
                     headerViews.memberProfileDecorationImageView.isVisible = false
                 }

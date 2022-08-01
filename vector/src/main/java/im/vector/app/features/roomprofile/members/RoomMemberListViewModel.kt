@@ -37,7 +37,7 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.session.crypto.model.UserVerificationLevel
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
@@ -119,10 +119,22 @@ class RoomMemberListViewModel @AssistedInject constructor(
                                         val allDeviceTrusted = it.value.fold(it.value.isNotEmpty()) { prev, next ->
                                             prev && next.trustLevel?.isCrossSigningVerified().orFalse()
                                         }
-                                        if (session.cryptoService().crossSigningService().getUserCrossSigningKeys(it.key)?.isTrusted().orFalse()) {
-                                            if (allDeviceTrusted) RoomEncryptionTrustLevel.Trusted else RoomEncryptionTrustLevel.Warning
-                                        } else {
-                                            RoomEncryptionTrustLevel.Default
+                                        val mxCrossSigningInfo = session.cryptoService().crossSigningService().getUserCrossSigningKeys(it.key)
+                                        when {
+                                            mxCrossSigningInfo == null -> {
+                                                UserVerificationLevel.WAS_NEVER_VERIFIED
+                                            }
+                                            mxCrossSigningInfo.isTrusted() -> {
+                                                if (allDeviceTrusted) UserVerificationLevel.VERIFIED_ALL_DEVICES_TRUSTED
+                                                else UserVerificationLevel.VERIFIED_WITH_DEVICES_UNTRUSTED
+                                            }
+                                            else -> {
+                                                if (mxCrossSigningInfo.wasTrustedOnce) {
+                                                    UserVerificationLevel.UNVERIFIED_BUT_WAS_PREVIOUSLY
+                                                } else {
+                                                    UserVerificationLevel.WAS_NEVER_VERIFIED
+                                                }
+                                            }
                                         }
                                     }
                                 }

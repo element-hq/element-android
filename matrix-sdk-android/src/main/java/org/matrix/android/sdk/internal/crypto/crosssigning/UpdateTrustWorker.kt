@@ -259,21 +259,27 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
         cryptoRealm.where(CrossSigningInfoEntity::class.java)
                 .equalTo(CrossSigningInfoEntityFields.USER_ID, userId)
                 .findFirst()
-                ?.crossSigningKeys
-                ?.forEach { info ->
-                    // optimization to avoid trigger updates when there is no change..
-                    if (info.trustLevelEntity?.isVerified() != verified) {
-                        Timber.d("## CrossSigning - Trust change for $userId : $verified")
-                        val level = info.trustLevelEntity
-                        if (level == null) {
-                            info.trustLevelEntity = cryptoRealm.createObject(TrustLevelEntity::class.java).also {
-                                it.locallyVerified = verified
-                                it.crossSignedVerified = verified
+                ?.let { userKeyInfo ->
+                    userKeyInfo
+                            .crossSigningKeys
+                            .forEach { key ->
+                                // optimization to avoid trigger updates when there is no change..
+                                if (key.trustLevelEntity?.isVerified() != verified) {
+                                    Timber.d("## CrossSigning - Trust change for $userId : $verified")
+                                    val level = key.trustLevelEntity
+                                    if (level == null) {
+                                        key.trustLevelEntity = cryptoRealm.createObject(TrustLevelEntity::class.java).also {
+                                            it.locallyVerified = verified
+                                            it.crossSignedVerified = verified
+                                        }
+                                    } else {
+                                        level.locallyVerified = verified
+                                        level.crossSignedVerified = verified
+                                    }
+                                }
                             }
-                        } else {
-                            level.locallyVerified = verified
-                            level.crossSignedVerified = verified
-                        }
+                    if (verified) {
+                        userKeyInfo.wasUserVerifiedOnce = true
                     }
                 }
     }
@@ -299,8 +305,18 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
                     getCrossSigningInfo(cryptoRealm, userId)?.isTrusted() == true
                 }
 
+        val resetTrust = listToCheck
+                .filter { userId ->
+                    val crossSigningInfo = getCrossSigningInfo(cryptoRealm, userId)
+                    crossSigningInfo?.isTrusted() != true && crossSigningInfo?.wasTrustedOnce == true
+                }
+
         return if (allTrustedUserIds.isEmpty()) {
-            RoomEncryptionTrustLevel.Default
+            if (resetTrust.isEmpty()) {
+                RoomEncryptionTrustLevel.Default
+            } else {
+                RoomEncryptionTrustLevel.Warning
+            }
         } else {
             // If one of the verified user as an untrusted device -> warning
             // If all devices of all verified users are trusted -> green
@@ -327,11 +343,15 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
                         if (hasWarning) {
                             RoomEncryptionTrustLevel.Warning
                         } else {
-                            if (listToCheck.size == allTrustedUserIds.size) {
-                                // all users are trusted and all devices are verified
-                                RoomEncryptionTrustLevel.Trusted
+                            if (resetTrust.isEmpty()) {
+                                if (listToCheck.size == allTrustedUserIds.size) {
+                                    // all users are trusted and all devices are verified
+                                    RoomEncryptionTrustLevel.Trusted
+                                } else {
+                                    RoomEncryptionTrustLevel.Default
+                                }
                             } else {
-                                RoomEncryptionTrustLevel.Default
+                                RoomEncryptionTrustLevel.Warning
                             }
                         }
                     }
@@ -344,7 +364,8 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
                 userId = userId,
                 crossSigningKeys = xsignInfo.crossSigningKeys.mapNotNull {
                     crossSigningKeysMapper.map(userId, it)
-                }
+                },
+                wasTrustedOnce = xsignInfo.wasUserVerifiedOnce
         )
     }
 

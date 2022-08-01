@@ -26,7 +26,7 @@ import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
-import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.session.crypto.model.UserVerificationLevel
 import org.matrix.android.sdk.api.util.MatrixItem
 
 abstract class BaseProfileMatrixItem<T : ProfileMatrixItem.Holder>(@LayoutRes layoutId: Int) : VectorEpoxyModel<T>(layoutId) {
@@ -35,7 +35,7 @@ abstract class BaseProfileMatrixItem<T : ProfileMatrixItem.Holder>(@LayoutRes la
     @EpoxyAttribute var editable: Boolean = true
 
     @EpoxyAttribute
-    var userEncryptionTrustLevel: RoomEncryptionTrustLevel? = null
+    var userVerificationLevel: UserVerificationLevel? = null
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var clickListener: ClickListener? = null
@@ -53,6 +53,6 @@ abstract class BaseProfileMatrixItem<T : ProfileMatrixItem.Holder>(@LayoutRes la
         holder.subtitleView.setTextOrHide(matrixId)
         holder.editableView.isVisible = editable
         avatarRenderer.render(matrixItem, holder.avatarImageView)
-        holder.avatarDecorationImageView.render(userEncryptionTrustLevel)
+        holder.avatarDecorationImageView.renderUser(userVerificationLevel)
     }
 }

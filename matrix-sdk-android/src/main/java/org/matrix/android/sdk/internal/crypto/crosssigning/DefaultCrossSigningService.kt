@@ -167,7 +167,11 @@ internal class DefaultCrossSigningService @Inject constructor(
                 }
 
                 override fun onSuccess(data: InitializeCrossSigningTask.Result) {
-                    val crossSigningInfo = MXCrossSigningInfo(userId, listOf(data.masterKeyInfo, data.userKeyInfo, data.selfSignedKeyInfo))
+                    val crossSigningInfo = MXCrossSigningInfo(
+                            userId,
+                            listOf(data.masterKeyInfo, data.userKeyInfo, data.selfSignedKeyInfo),
+                            true
+                    )
                     cryptoStore.setMyCrossSigningInfo(crossSigningInfo)
                     setUserKeysAsTrusted(userId, true)
                     cryptoStore.storePrivateKeysInfo(data.masterKeyPK, data.userKeyPK, data.selfSigningKeyPK)
