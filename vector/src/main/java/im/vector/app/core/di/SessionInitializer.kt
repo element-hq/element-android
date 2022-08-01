@@ -16,15 +16,13 @@
 
 package im.vector.app.core.di
 
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.newSingleThreadContext
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
 
-@OptIn(DelicateCoroutinesApi::class)
-private val INITIALIZER_CONTEXT = newSingleThreadContext("session-initializer")
+private val initializerSemaphore = Semaphore(permits = 1)
 
 class SessionInitializer @Inject constructor(
         private val authenticationService: AuthenticationService,
@@ -38,7 +36,7 @@ class SessionInitializer @Inject constructor(
      * @return the initialized Session or null when no authenticated sessions are available.
      */
     suspend fun tryInitialize(readCurrentSession: () -> Session?, initializer: (Session) -> Unit): Session? {
-        return withContext(INITIALIZER_CONTEXT) {
+        return initializerSemaphore.withPermit {
             val currentInMemorySession = readCurrentSession()
             when {
                 currentInMemorySession != null -> currentInMemorySession
