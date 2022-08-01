@@ -17,6 +17,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <im.vector.app.features.location.MapLoadingErrorView
+        android:id="@+id/mapPreviewLoadingError"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="180dp"
+        android:visibility="gone" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bottomSheet"
         android:layout_width="match_parent"

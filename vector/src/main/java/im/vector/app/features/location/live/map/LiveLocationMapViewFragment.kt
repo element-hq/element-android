@@ -71,11 +71,13 @@ class LiveLocationMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
     private val viewModel: LiveLocationMapViewModel by fragmentViewModel()
 
     private var mapboxMap: WeakReference<MapboxMap>? = null
+    private var mapView: MapView? = null
     private var symbolManager: SymbolManager? = null
     private var mapStyle: Style? = null
     private val pendingLiveLocations = mutableListOf<UserLiveLocationViewState>()
     private var isMapFirstUpdate = true
     private var onSymbolClickListener: OnSymbolClickListener? = null
+    private var mapLoadingErrorListener: MapView.OnDidFailLoadingMapListener? = null
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLiveLocationMapViewBinding {
         return FragmentLiveLocationMapViewBinding.inflate(layoutInflater, container, false)
@@ -106,6 +108,13 @@ class LiveLocationMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
         }
     }
 
+    override fun onDestroyView() {
+        mapLoadingErrorListener?.let { mapView?.removeOnDidFailLoadingMapListener(it) }
+        mapLoadingErrorListener = null
+        mapView = null
+        super.onDestroyView()
+    }
+
     override fun onResume() {
         super.onResume()
         setupMap()
@@ -122,6 +131,7 @@ class LiveLocationMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
     private fun setupMap() {
         val mapFragment = getOrCreateSupportMapFragment()
         mapFragment.getMapAsync { mapboxMap ->
+            (mapFragment.view as? MapView)?.let(::listenMapLoadingError)
             lifecycleScope.launch {
                 mapboxMap.setStyle(urlMapProvider.getMapUrl()) { style ->
                     mapStyle = style
@@ -139,6 +149,13 @@ class LiveLocationMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
                 }
             }
         }
+    }
+
+    private fun listenMapLoadingError(mapView: MapView) {
+        this.mapView = mapView
+        mapLoadingErrorListener = MapView.OnDidFailLoadingMapListener {
+            viewModel.handle(LocationLiveMapAction.ShowMapLoadingError)
+        }.also { mapView.addOnDidFailLoadingMapListener(it) }
     }
 
     private fun onSymbolClicked(symbol: Symbol?) {
@@ -173,7 +190,12 @@ class LiveLocationMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
                     }
 
     override fun invalidate() = withState(viewModel) { viewState ->
-        updateMap(viewState.userLocations)
+        if(viewState.loadingMapHasFailed) {
+            views.mapPreviewLoadingError.isVisible = true
+        } else {
+            views.mapPreviewLoadingError.isGone = true
+            updateMap(viewState.userLocations)
+        }
         updateUserListBottomSheet(viewState.userLocations)
     }
 
