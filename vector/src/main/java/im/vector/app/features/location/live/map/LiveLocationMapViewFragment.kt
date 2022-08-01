@@ -190,7 +190,7 @@ class LiveLocationMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
                     }
 
     override fun invalidate() = withState(viewModel) { viewState ->
-        if(viewState.loadingMapHasFailed) {
+        if (viewState.loadingMapHasFailed) {
             views.mapPreviewLoadingError.isVisible = true
         } else {
             views.mapPreviewLoadingError.isGone = true

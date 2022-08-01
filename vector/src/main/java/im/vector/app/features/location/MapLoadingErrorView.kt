@@ -53,7 +53,7 @@ class MapLoadingErrorView @JvmOverloads constructor(
 
     private fun setErrorDescription(typedArray: TypedArray) {
         val description = typedArray.getString(R.styleable.MapLoadingErrorView_mapErrorDescription)
-        if(description.isNullOrEmpty()) {
+        if (description.isNullOrEmpty()) {
             binding.mapLoadingErrorDescription.setText(R.string.location_share_loading_map_error)
         } else {
             binding.mapLoadingErrorDescription.text = description
