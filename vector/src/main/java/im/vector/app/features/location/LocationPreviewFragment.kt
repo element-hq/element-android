@@ -21,8 +21,11 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.args
+import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.withState
 import com.mapbox.mapboxsdk.maps.MapView
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
@@ -44,8 +47,12 @@ class LocationPreviewFragment @Inject constructor(
 
     private val args: LocationSharingArgs by args()
 
+    private val viewModel: LocationPreviewViewModel by fragmentViewModel()
+
     // Keep a ref to handle properly the onDestroy callback
     private var mapView: WeakReference<MapView>? = null
+
+    private var mapLoadingErrorListener: MapView.OnDidFailLoadingMapListener? = null
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLocationPreviewBinding {
         return FragmentLocationPreviewBinding.inflate(layoutInflater, container, false)
@@ -55,12 +62,21 @@ class LocationPreviewFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
 
         mapView = WeakReference(views.mapView)
+        mapLoadingErrorListener = MapView.OnDidFailLoadingMapListener {
+            viewModel.handle(LocationPreviewAction.ShowMapLoadingError)
+        }.also { views.mapView.addOnDidFailLoadingMapListener(it) }
         views.mapView.onCreate(savedInstanceState)
 
         lifecycleScope.launchWhenCreated {
             views.mapView.initialize(urlMapProvider.getMapUrl())
             loadPinDrawable()
         }
+    }
+
+    override fun onDestroyView() {
+        mapLoadingErrorListener?.let { mapView?.get()?.removeOnDidFailLoadingMapListener(it) }
+        mapLoadingErrorListener = null
+        super.onDestroyView()
     }
 
     override fun onResume() {
@@ -97,6 +113,10 @@ class LocationPreviewFragment @Inject constructor(
         mapView?.get()?.onDestroy()
         mapView?.clear()
         super.onDestroy()
+    }
+
+    override fun invalidate() = withState(viewModel) { state ->
+        views.mapPreviewLoadingError.isVisible = state.loadingMapHasFailed
     }
 
     override fun getMenuRes() = R.menu.menu_location_preview
