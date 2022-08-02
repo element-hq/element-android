@@ -37,6 +37,7 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.UserVerificationLevel
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -116,32 +117,36 @@ class RoomMemberListViewModel @AssistedInject constructor(
                                 .map { deviceList ->
                                     // If any key change, emit the userIds list
                                     deviceList.groupBy { it.userId }.mapValues {
-                                        val allDeviceTrusted = it.value.fold(it.value.isNotEmpty()) { prev, next ->
-                                            prev && next.trustLevel?.isCrossSigningVerified().orFalse()
-                                        }
-                                        val mxCrossSigningInfo = session.cryptoService().crossSigningService().getUserCrossSigningKeys(it.key)
-                                        when {
-                                            mxCrossSigningInfo == null -> {
-                                                UserVerificationLevel.WAS_NEVER_VERIFIED
-                                            }
-                                            mxCrossSigningInfo.isTrusted() -> {
-                                                if (allDeviceTrusted) UserVerificationLevel.VERIFIED_ALL_DEVICES_TRUSTED
-                                                else UserVerificationLevel.VERIFIED_WITH_DEVICES_UNTRUSTED
-                                            }
-                                            else -> {
-                                                if (mxCrossSigningInfo.wasTrustedOnce) {
-                                                    UserVerificationLevel.UNVERIFIED_BUT_WAS_PREVIOUSLY
-                                                } else {
-                                                    UserVerificationLevel.WAS_NEVER_VERIFIED
-                                                }
-                                            }
-                                        }
+                                        getUserTrustLevel(it.key, it.value)
                                     }
                                 }
                     }
                     .execute { async ->
                         copy(trustLevelMap = async)
                     }
+        }
+    }
+
+    private fun getUserTrustLevel(userId: String, devices: List<CryptoDeviceInfo>): UserVerificationLevel {
+        val allDeviceTrusted = devices.fold(devices.isNotEmpty()) { prev, next ->
+            prev && next.trustLevel?.isCrossSigningVerified().orFalse()
+        }
+        val mxCrossSigningInfo = session.cryptoService().crossSigningService().getUserCrossSigningKeys(userId)
+        return when {
+            mxCrossSigningInfo == null -> {
+                UserVerificationLevel.WAS_NEVER_VERIFIED
+            }
+            mxCrossSigningInfo.isTrusted() -> {
+                if (allDeviceTrusted) UserVerificationLevel.VERIFIED_ALL_DEVICES_TRUSTED
+                else UserVerificationLevel.VERIFIED_WITH_DEVICES_UNTRUSTED
+            }
+            else -> {
+                if (mxCrossSigningInfo.wasTrustedOnce) {
+                    UserVerificationLevel.UNVERIFIED_BUT_WAS_PREVIOUSLY
+                } else {
+                    UserVerificationLevel.WAS_NEVER_VERIFIED
+                }
+            }
         }
     }
 

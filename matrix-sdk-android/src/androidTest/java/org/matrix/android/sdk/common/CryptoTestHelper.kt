@@ -365,7 +365,7 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
         }
 
         testHelper.retryPeriodically {
-            alice.cryptoService().crossSigningService().isUserTrusted(bob.myUserId)
+            bob.cryptoService().crossSigningService().isUserTrusted(alice.myUserId)
         }
     }
 

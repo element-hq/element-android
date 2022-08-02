@@ -161,6 +161,7 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
             // i have all the new trusts, update DB
             trusts.forEach {
                 val verified = it.value?.isVerified() == true
+                Timber.v("[$myUserId] ## CrossSigning - Updating user trust: ${it.key} to $verified")
                 updateCrossSigningKeysTrust(cryptoRealm, it.key, verified)
             }
 
