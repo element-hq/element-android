@@ -44,6 +44,7 @@ import im.vector.app.features.home.room.list.RoomSummaryPagedController
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
+import im.vector.app.features.spaces.SpacesBottomSheet
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -119,6 +120,7 @@ class HomeRoomListFragment @Inject constructor(
 
         views.newLayoutOpenSpacesButton.setOnClickListener {
             // Click action for open spaces modal goes here
+            SpacesBottomSheet().show(requireActivity().supportFragmentManager, SpacesBottomSheet.TAG)
         }
 
         // Hide FABs when list is scrolling
