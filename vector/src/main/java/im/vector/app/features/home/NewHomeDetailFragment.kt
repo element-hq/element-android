@@ -28,8 +28,8 @@ import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.badge.BadgeDrawable
-import im.vector.app.AppStateHandler
 import im.vector.app.R
+import im.vector.app.SpaceStateHandler
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.platform.OnBackPressed
@@ -47,6 +47,7 @@ import im.vector.app.features.call.dialpad.DialPadFragment
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.home.room.list.RoomListFragment
 import im.vector.app.features.home.room.list.RoomListParams
+import im.vector.app.features.home.room.list.home.HomeRoomListFragment
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
 import im.vector.app.features.settings.VectorLocale
@@ -69,7 +70,7 @@ class NewHomeDetailFragment @Inject constructor(
         private val alertManager: PopupAlertManager,
         private val callManager: WebRtcCallManager,
         private val vectorPreferences: VectorPreferences,
-        private val appStateHandler: AppStateHandler,
+        private val spaceStateHandler: SpaceStateHandler,
         private val session: Session,
 ) : VectorBaseFragment<FragmentNewHomeDetailBinding>(),
         KeysBackupBanner.Delegate,
@@ -178,13 +179,13 @@ class NewHomeDetailFragment @Inject constructor(
     }
 
     private fun navigateBack() {
-        val previousSpaceId = appStateHandler.getSpaceBackstack().removeLastOrNull()
-        val parentSpaceId = appStateHandler.getCurrentSpace()?.flattenParentIds?.lastOrNull()
+        val previousSpaceId = spaceStateHandler.getSpaceBackstack().removeLastOrNull()
+        val parentSpaceId = spaceStateHandler.getCurrentSpace()?.flattenParentIds?.lastOrNull()
         setCurrentSpace(previousSpaceId ?: parentSpaceId)
     }
 
     private fun setCurrentSpace(spaceId: String?) {
-        appStateHandler.setCurrentSpace(spaceId, isForwardNavigation = false)
+        spaceStateHandler.setCurrentSpace(spaceId, isForwardNavigation = false)
         sharedActionViewModel.post(HomeActivitySharedAction.OnCloseSpace)
     }
 
@@ -207,7 +208,7 @@ class NewHomeDetailFragment @Inject constructor(
     }
 
     private fun refreshSpaceState() {
-        appStateHandler.getCurrentSpace()?.let {
+        spaceStateHandler.getCurrentSpace()?.let {
             onSpaceChange(it)
         }
     }
@@ -340,7 +341,7 @@ class NewHomeDetailFragment @Inject constructor(
                 when (tab) {
                     is HomeTab.RoomList -> {
                         val params = RoomListParams(tab.displayMode)
-                        add(R.id.roomListContainer, RoomListFragment::class.java, params.toMvRxBundle(), fragmentTag)
+                        add(R.id.roomListContainer, HomeRoomListFragment::class.java, params.toMvRxBundle(), fragmentTag)
                     }
                     is HomeTab.DialPad -> {
                         add(R.id.roomListContainer, createDialPadFragment(), fragmentTag)
@@ -453,7 +454,7 @@ class NewHomeDetailFragment @Inject constructor(
         return this
     }
 
-    override fun onBackPressed(toolbarButton: Boolean) = if (appStateHandler.getCurrentSpace() != null) {
+    override fun onBackPressed(toolbarButton: Boolean) = if (spaceStateHandler.getCurrentSpace() != null) {
         navigateBack()
         true
     } else {
