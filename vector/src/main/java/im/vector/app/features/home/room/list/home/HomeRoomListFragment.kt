@@ -114,11 +114,11 @@ class HomeRoomListFragment @Inject constructor(
         showFABs()
 
         views.newLayoutCreateChatButton.setOnClickListener {
-            // Click action for create chat modal goes here
+            // Click action for create chat modal goes here (Issue #6717)
         }
 
         views.newLayoutOpenSpacesButton.setOnClickListener {
-            // Click action for open spaces modal goes here
+            // Click action for open spaces modal goes here (Issue #6499)
         }
 
         // Hide FABs when list is scrolling
