@@ -19,23 +19,11 @@ package im.vector.lib.multipicker
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Parcelable
-import android.provider.MediaStore
 import androidx.activity.result.ActivityResultLauncher
-import androidx.core.content.FileProvider
 import im.vector.lib.multipicker.entity.MultiPickerImageType
 import im.vector.lib.multipicker.entity.MultiPickerVideoType
-import im.vector.lib.multipicker.utils.MediaType
-import im.vector.lib.multipicker.utils.createTemporaryMediaFile
 import im.vector.lib.multipicker.utils.toMultiPickerImageType
 import im.vector.lib.multipicker.utils.toMultiPickerVideoType
-import kotlinx.parcelize.Parcelize
-
-@Parcelize
-data class CameraUris(
-        var photoUri: Uri?,
-        var videoUri: Uri?,
-) : Parcelable
 
 class VectorCameraPicker {
 
@@ -43,16 +31,8 @@ class VectorCameraPicker {
      * Start camera by using a ActivityResultLauncher.
      * @return Uri of taken photo or null if the operation is cancelled.
      */
-    fun startWithExpectingFile(context: Context, activityResultLauncher: ActivityResultLauncher<Intent>): CameraUris {
-        val uris = CameraUris(
-                photoUri = createMediaUri(context, MediaType.IMAGE),
-                videoUri = createMediaUri(context, MediaType.VIDEO),
-        )
-        val intent = createIntent().apply {
-            putExtra(MediaStore.EXTRA_OUTPUT, uris)
-        }
-        activityResultLauncher.launch(intent)
-        return uris
+    fun start(activityResultLauncher: ActivityResultLauncher<Intent>) {
+        activityResultLauncher.launch(createIntent())
     }
 
     /**
@@ -80,12 +60,6 @@ class VectorCameraPicker {
         return Intent(ACTION_VECTOR_CAMERA).apply {
             action = ACTION_VECTOR_CAMERA
         }
-    }
-
-    private fun createMediaUri(context: Context, mediaType: MediaType): Uri {
-        val file = createTemporaryMediaFile(context, mediaType)
-        val authority = context.packageName + ".multipicker.fileprovider"
-        return FileProvider.getUriForFile(context, authority, file)
     }
 
     companion object {

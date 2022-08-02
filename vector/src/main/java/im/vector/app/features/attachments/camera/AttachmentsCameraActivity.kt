@@ -23,7 +23,6 @@ import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.features.themes.ActivityOtherThemes
-import im.vector.lib.multipicker.CameraUris
 
 @AndroidEntryPoint
 class AttachmentsCameraActivity : VectorBaseActivity<ActivitySimpleBinding>() {
@@ -35,12 +34,11 @@ class AttachmentsCameraActivity : VectorBaseActivity<ActivitySimpleBinding>() {
 
     override fun initUiAndData() {
         if (isFirstCreation()) {
-            val fragmentArgs: CameraUris = intent?.extras?.getParcelable(MediaStore.EXTRA_OUTPUT) ?: return
-            addFragment(views.simpleFragmentContainer, AttachmentsCameraFragment::class.java, fragmentArgs)
+            addFragment(views.simpleFragmentContainer, AttachmentsCameraFragment::class.java)
         }
     }
 
-    fun setResultAndFinish(data: CameraUris) {
+    fun setResultAndFinish(data: VectorCameraOutput) {
         val resultIntent = Intent().apply {
             putExtra(MediaStore.EXTRA_OUTPUT, data)
         }

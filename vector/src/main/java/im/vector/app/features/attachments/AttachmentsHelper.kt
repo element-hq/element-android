@@ -22,7 +22,8 @@ import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import im.vector.app.core.platform.Restorable
 import im.vector.app.core.resources.BuildMeta
-import im.vector.lib.multipicker.CameraUris
+import im.vector.app.features.attachments.camera.MediaType
+import im.vector.app.features.attachments.camera.VectorCameraOutput
 import im.vector.lib.multipicker.MultiPicker
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import timber.log.Timber
@@ -101,7 +102,7 @@ class AttachmentsHelper(
     }
 
     fun openVectorCamera(vectorCameraActivityResultLauncher: ActivityResultLauncher<Intent>) {
-        MultiPicker.get(MultiPicker.VECTOR_CAMERA).startWithExpectingFile(context, vectorCameraActivityResultLauncher)
+        MultiPicker.get(MultiPicker.VECTOR_CAMERA).start(vectorCameraActivityResultLauncher)
     }
 
     /**
@@ -163,14 +164,12 @@ class AttachmentsHelper(
         }
     }
 
-    fun onVectorCameraResult(cameraUris: CameraUris) {
+    fun onVectorCameraResult(cameraOutput: VectorCameraOutput) {
         val multiPicker = MultiPicker.get(MultiPicker.VECTOR_CAMERA)
-        val media = cameraUris.photoUri?.let { photoUri ->
-            multiPicker.getTakenPhoto(context, photoUri)
-        } ?: run {
-            cameraUris.videoUri?.let { videoUri ->
-                multiPicker.getTakenVideo(context, videoUri)
-            }
+        val media = if (cameraOutput.type == MediaType.IMAGE) {
+            multiPicker.getTakenPhoto(context, cameraOutput.uri)
+        } else {
+            multiPicker.getTakenVideo(context, cameraOutput.uri)
         } ?: return
         callback.onContentAttachmentsReady(
                 listOf(media).map { it.toContentAttachmentData() }

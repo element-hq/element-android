@@ -136,6 +136,7 @@ import im.vector.app.features.attachments.AttachmentTypeSelectorView
 import im.vector.app.features.attachments.AttachmentsHelper
 import im.vector.app.features.attachments.ContactAttachment
 import im.vector.app.features.attachments.ShareIntentHandler
+import im.vector.app.features.attachments.camera.VectorCameraOutput
 import im.vector.app.features.attachments.preview.AttachmentsPreviewActivity
 import im.vector.app.features.attachments.preview.AttachmentsPreviewArgs
 import im.vector.app.features.attachments.toGroupedContentAttachmentData
@@ -213,7 +214,6 @@ import im.vector.app.features.widgets.WidgetActivity
 import im.vector.app.features.widgets.WidgetArgs
 import im.vector.app.features.widgets.WidgetKind
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionBottomSheet
-import im.vector.lib.multipicker.CameraUris
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
@@ -1385,8 +1385,8 @@ class TimelineFragment :
 
     private val attachmentVectorCameraActivityResultLauncher = registerStartForActivityResult {
         if (it.resultCode == Activity.RESULT_OK) {
-            it.data?.getParcelableExtra<CameraUris>(MediaStore.EXTRA_OUTPUT)?.let { cameraUris ->
-                attachmentsHelper.onVectorCameraResult(cameraUris)
+            it.data?.getParcelableExtra<VectorCameraOutput>(MediaStore.EXTRA_OUTPUT)?.let { cameraOutput ->
+                attachmentsHelper.onVectorCameraResult(cameraOutput)
             }
         }
     }

@@ -18,7 +18,9 @@ package im.vector.app.features.attachments.camera
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -42,14 +44,12 @@ import androidx.camera.video.VideoRecordEvent
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.PermissionChecker
-import com.airbnb.mvrx.args
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.time.Clock
 import im.vector.app.databinding.FragmentAttachmentsCameraBinding
-import im.vector.lib.multipicker.CameraUris
 import timber.log.Timber
 import java.io.File
 import java.util.concurrent.ExecutorService
@@ -62,8 +62,6 @@ class AttachmentsCameraFragment :
         VectorMenuProvider {
 
     @Inject lateinit var clock: Clock
-
-    private val cameraUris: CameraUris by args()
 
     private lateinit var authority : String
     private lateinit var storageDir : File
@@ -123,8 +121,9 @@ class AttachmentsCameraFragment :
         context?.let { context ->
         // Get a stable reference of the modifiable image capture use case
         val imageCapture = imageCapture ?: return
-        val uri = cameraUris.photoUri ?: return
-        val file = context.contentResolver.openOutputStream(uri) ?: return
+
+        val file = createTempFile(MediaType.IMAGE)
+        val outputUri = getUri(context, file)
 
         // Create output options object which contains file + metadata
         val outputOptions = ImageCapture.OutputFileOptions
@@ -144,7 +143,12 @@ class AttachmentsCameraFragment :
                     }
 
                     override fun onImageSaved(output: ImageCapture.OutputFileResults){
-                        (activity as? AttachmentsCameraActivity)?.setResultAndFinish(cameraUris.apply { videoUri = null })
+                        (activity as? AttachmentsCameraActivity)?.setResultAndFinish(
+                                VectorCameraOutput(
+                                        type = MediaType.IMAGE,
+                                        uri = outputUri
+                                )
+                        )
                     }
                 }
         )
@@ -167,17 +171,8 @@ class AttachmentsCameraFragment :
                 return
             }
 
-            val file = File.createTempFile(
-                    "VID_${clock.epochMillis()}",
-                    ".mp4",
-                    storageDir
-            )
-
-            val outputUri = FileProvider.getUriForFile(
-                    context,
-                    authority,
-                    file
-            )
+            val file = createTempFile(MediaType.VIDEO)
+            val outputUri = getUri(context, file)
 
             val options = FileOutputOptions
                     .Builder(file)
@@ -204,10 +199,10 @@ class AttachmentsCameraFragment :
                                     Timber.d("Video capture succeeded: " +
                                             "${recordEvent.outputResults.outputUri}")
                                     (activity as? AttachmentsCameraActivity)?.setResultAndFinish(
-                                            cameraUris.apply {
-                                                videoUri = outputUri
-                                                photoUri = null
-                                            }
+                                            VectorCameraOutput(
+                                                    type = MediaType.VIDEO,
+                                                    uri = outputUri
+                                            )
                                     )
                                 } else {
                                     recording?.close()
@@ -277,6 +272,34 @@ class AttachmentsCameraFragment :
 
     override fun handleMenuItemSelected(item: MenuItem): Boolean {
         return true
+    }
+
+    private fun createTempFile(type: MediaType): File {
+        var prefix = ""
+        var suffix = ""
+        when (type) {
+            MediaType.IMAGE -> {
+                prefix = "IMG_"
+                suffix = ".jpg"
+            }
+            MediaType.VIDEO -> {
+                prefix = "VID_"
+                suffix = ".mp4"
+            }
+        }
+        return File.createTempFile(
+                "$prefix${clock.epochMillis()}",
+                suffix,
+                storageDir
+        )
+    }
+
+    private fun getUri(context: Context, file: File): Uri {
+        return FileProvider.getUriForFile(
+                context,
+                authority,
+                file
+        )
     }
 
     companion object {
