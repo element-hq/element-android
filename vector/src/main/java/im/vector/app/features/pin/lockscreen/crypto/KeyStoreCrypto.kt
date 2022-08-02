@@ -20,6 +20,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.security.keystore.KeyPermanentlyInvalidatedException
+import android.security.keystore.UserNotAuthenticatedException
 import android.util.Base64
 import androidx.annotation.VisibleForTesting
 import androidx.biometric.BiometricPrompt
@@ -116,6 +117,8 @@ class KeyStoreCrypto @AssistedInject constructor(
                 ensureKey()
                 true
             } catch (e: KeyPermanentlyInvalidatedException) {
+                false
+            } catch (e: UserNotAuthenticatedException) {
                 false
             }
         } else {
