@@ -28,7 +28,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import im.vector.application.BuildConfig
 import im.vector.app.EmojiCompatWrapper
 import im.vector.app.EmojiSpanify
 import im.vector.app.SpaceStateHandler
@@ -58,6 +57,7 @@ import im.vector.app.features.settings.FontScalePreferencesImpl
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.ui.SharedPreferencesUiStateRepository
 import im.vector.app.features.ui.UiStateRepository
+import im.vector.application.BuildConfig
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
