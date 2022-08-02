@@ -1,3 +1,4 @@
+include ':vector-app'
 include ':vector'
 include ':vector-config'
 include ':matrix-sdk-android'
