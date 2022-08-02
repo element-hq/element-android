@@ -8,6 +8,7 @@ const {danger, warn} = require('danger')
 // warn(JSON.stringify(danger))
 
 const pr = danger.github.pr
+const github = danger.github
 // User who has created the PR.
 const user = pr.user.login
 const modified = danger.git.modified_files
@@ -101,6 +102,6 @@ if (hasPngs) {
 }
 
 // Check for reviewers
-if (pr.requested_reviewers.length == 0 && !pr.draft) {
+if (github.requested_reviewers.length == 0 && !pr.draft) {
     warn("Please add a reviewer to your PR.")
 }
