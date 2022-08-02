@@ -46,7 +46,6 @@ class AttachmentsHelper(
 
     // Capture path allows to handle camera image picking. It must be restored if the activity gets killed.
     private var captureUri: Uri? = null
-    private var captureCameraUris: CameraUris? = null
 
     // The pending type is set if we have to handle permission request. It must be restored if the activity gets killed.
     var pendingType: AttachmentTypeSelectorView.Type? = null
@@ -102,7 +101,7 @@ class AttachmentsHelper(
     }
 
     fun openVectorCamera(vectorCameraActivityResultLauncher: ActivityResultLauncher<Intent>) {
-        captureCameraUris = MultiPicker.get(MultiPicker.VECTOR_CAMERA).startWithExpectingFile(context, vectorCameraActivityResultLauncher)
+        MultiPicker.get(MultiPicker.VECTOR_CAMERA).startWithExpectingFile(context, vectorCameraActivityResultLauncher)
     }
 
     /**
@@ -164,20 +163,18 @@ class AttachmentsHelper(
         }
     }
 
-    fun onVectorCameraResult() {
-        captureCameraUris?.let { cameraUris ->
-            val multiPicker = MultiPicker.get(MultiPicker.VECTOR_CAMERA)
-            val media = cameraUris.photoUri?.let { photoUri ->
-                multiPicker.getTakenPhoto(context, photoUri)
-            } ?: run {
-                cameraUris.videoUri?.let { videoUri ->
-                    multiPicker.getTakenVideo(context, videoUri)
-                }
-            } ?: return
-            callback.onContentAttachmentsReady(
-                    listOf(media).map { it.toContentAttachmentData() }
-            )
-        }
+    fun onVectorCameraResult(cameraUris: CameraUris) {
+        val multiPicker = MultiPicker.get(MultiPicker.VECTOR_CAMERA)
+        val media = cameraUris.photoUri?.let { photoUri ->
+            multiPicker.getTakenPhoto(context, photoUri)
+        } ?: run {
+            cameraUris.videoUri?.let { videoUri ->
+                multiPicker.getTakenVideo(context, videoUri)
+            }
+        } ?: return
+        callback.onContentAttachmentsReady(
+                listOf(media).map { it.toContentAttachmentData() }
+        )
     }
 
     fun onCameraVideoResult() {

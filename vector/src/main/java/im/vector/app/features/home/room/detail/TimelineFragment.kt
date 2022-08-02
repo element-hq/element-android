@@ -23,6 +23,7 @@ import android.content.res.Configuration
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.Spannable
 import android.text.format.DateUtils
 import android.text.method.LinkMovementMethod
@@ -212,6 +213,7 @@ import im.vector.app.features.widgets.WidgetActivity
 import im.vector.app.features.widgets.WidgetArgs
 import im.vector.app.features.widgets.WidgetKind
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionBottomSheet
+import im.vector.lib.multipicker.CameraUris
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
@@ -1383,7 +1385,9 @@ class TimelineFragment :
 
     private val attachmentVectorCameraActivityResultLauncher = registerStartForActivityResult {
         if (it.resultCode == Activity.RESULT_OK) {
-            attachmentsHelper.onVectorCameraResult()
+            it.data?.getParcelableExtra<CameraUris>(MediaStore.EXTRA_OUTPUT)?.let { cameraUris ->
+                attachmentsHelper.onVectorCameraResult(cameraUris)
+            }
         }
     }
 

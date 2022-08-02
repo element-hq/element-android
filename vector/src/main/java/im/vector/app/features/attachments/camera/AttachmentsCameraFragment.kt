@@ -17,6 +17,7 @@
 package im.vector.app.features.attachments.camera
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -31,32 +32,47 @@ import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.video.FileOutputOptions
+import androidx.camera.video.Quality
+import androidx.camera.video.QualitySelector
 import androidx.camera.video.Recorder
 import androidx.camera.video.Recording
 import androidx.camera.video.VideoCapture
+import androidx.camera.video.VideoRecordEvent
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
+import androidx.core.content.PermissionChecker
 import com.airbnb.mvrx.args
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.VectorMenuProvider
+import im.vector.app.core.time.Clock
 import im.vector.app.databinding.FragmentAttachmentsCameraBinding
 import im.vector.lib.multipicker.CameraUris
 import timber.log.Timber
+import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class AttachmentsCameraFragment :
         VectorBaseFragment<FragmentAttachmentsCameraBinding>(),
         VectorMenuProvider {
 
+    @Inject lateinit var clock: Clock
+
     private val cameraUris: CameraUris by args()
+
+    private lateinit var authority : String
+    private lateinit var storageDir : File
 
     private var imageCapture: ImageCapture? = null
 
     private var videoCapture: VideoCapture<Recorder>? = null
     private var recording: Recording? = null
+
 
     private lateinit var cameraExecutor: ExecutorService
 
@@ -75,6 +91,8 @@ class AttachmentsCameraFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        authority = context?.packageName + ".fileProvider"
+        storageDir = context?.cacheDir.also { it?.mkdirs() }!!
 
         // Request camera permissions
         if (allPermissionsGranted()) {
@@ -99,7 +117,6 @@ class AttachmentsCameraFragment :
             ContextCompat.checkSelfPermission(context, permission)
         } == PackageManager.PERMISSION_GRANTED
     }
-
 
     private fun takePhoto() {
         Timber.d("Taking a photo")
@@ -134,10 +151,78 @@ class AttachmentsCameraFragment :
         }
     }
 
-
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun captureVideo() {
-        Timber.d("Capturing Video")}
+        Timber.d("Capturing Video")
+        context?.let { context ->
+            val videoCapture = this.videoCapture ?: return
 
+            views.attachmentsCameraImageAction.isEnabled = false
+
+            val curRecording = recording
+            if (curRecording != null) {
+                // Stop the current recording session.
+                curRecording.stop()
+                recording = null
+                return
+            }
+
+            val file = File.createTempFile(
+                    "VID_${clock.epochMillis()}",
+                    ".mp4",
+                    storageDir
+            )
+
+            val outputUri = FileProvider.getUriForFile(
+                    context,
+                    authority,
+                    file
+            )
+
+            val options = FileOutputOptions
+                    .Builder(file)
+                    .build()
+            recording = videoCapture.output
+                    .prepareRecording(context, options)
+                    .apply {
+                        if (PermissionChecker.checkSelfPermission(context,
+                                        Manifest.permission.RECORD_AUDIO) ==
+                                PermissionChecker.PERMISSION_GRANTED)
+                        {
+                            withAudioEnabled()
+                        }
+                    }
+                    .start(ContextCompat.getMainExecutor(context)) { recordEvent ->
+                        when(recordEvent) {
+                            is VideoRecordEvent.Start -> {
+                                views.attachmentsCameraVideoAction.setImageDrawable(
+                                        context.getDrawable(R.drawable.ic_video_off)
+                                )
+                            }
+                            is VideoRecordEvent.Finalize -> {
+                                if (!recordEvent.hasError()) {
+                                    Timber.d("Video capture succeeded: " +
+                                            "${recordEvent.outputResults.outputUri}")
+                                    (activity as? AttachmentsCameraActivity)?.setResultAndFinish(
+                                            cameraUris.apply {
+                                                videoUri = outputUri
+                                                photoUri = null
+                                            }
+                                    )
+                                } else {
+                                    recording?.close()
+                                    recording = null
+                                    Timber.e("Video capture ends with error: " +
+                                            "${recordEvent.error}")
+                                    (activity as? AttachmentsCameraActivity)?.setErrorAndFinish()
+                                }
+                            }
+                        }
+                    }
+        }
+    }
+
+    @SuppressLint("RestrictedApi")
     private fun startCamera() {
         Timber.d("Starting Camera")
         context?.let { context ->
@@ -156,6 +241,11 @@ class AttachmentsCameraFragment :
 
                 imageCapture = ImageCapture.Builder().build()
 
+                val recorder = Recorder.Builder()
+                        .setQualitySelector(QualitySelector.from(Quality.HIGHEST))
+                        .build()
+                videoCapture = VideoCapture.withOutput(recorder)
+
                 // Select back camera as a default
                 val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
@@ -165,7 +255,7 @@ class AttachmentsCameraFragment :
 
                     // Bind use cases to camera
                     cameraProvider.bindToLifecycle(
-                            this, cameraSelector, preview, imageCapture
+                            this, cameraSelector, preview, imageCapture, videoCapture
                     )
                 } catch (exc: Exception) {
                     Timber.e("Use case binding failed", exc)
