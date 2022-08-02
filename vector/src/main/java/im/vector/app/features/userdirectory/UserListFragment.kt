@@ -96,7 +96,7 @@ class UserListFragment @Inject constructor(
                 is UserListViewEvents.OpenShareMatrixToLink -> {
                     val text = getString(R.string.invite_friends_text, it.link)
                     startSharePlainTextIntent(
-                            fragment = this,
+                            context = requireContext(),
                             activityResultLauncher = null,
                             chooserTitle = getString(R.string.invite_friends),
                             text = text,

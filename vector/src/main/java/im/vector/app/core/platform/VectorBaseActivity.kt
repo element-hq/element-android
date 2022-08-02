@@ -50,6 +50,7 @@ import androidx.viewbinding.ViewBinding
 import com.airbnb.mvrx.MavericksView
 import com.bumptech.glide.util.Util
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.color.MaterialColors
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.EntryPointAccessors
@@ -72,6 +73,7 @@ import im.vector.app.core.utils.ToolbarConfig
 import im.vector.app.core.utils.toast
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.configuration.VectorConfiguration
@@ -160,6 +162,9 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
     @Inject
     lateinit var fontScalePreferences: FontScalePreferences
+
+    @Inject
+    lateinit var vectorFeatures: VectorFeatures
 
     lateinit var navigator: Navigator
         private set
@@ -252,6 +257,14 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
         this.savedInstanceState = savedInstanceState
 
         initUiAndData()
+
+        if (vectorFeatures.isNewAppLayoutEnabled()) {
+            tryOrNull { // Add to XML theme when feature flag is removed
+                val toolbarBackground = MaterialColors.getColor(views.root, R.attr.vctr_toolbar_background)
+                window.statusBarColor = toolbarBackground
+                window.navigationBarColor = toolbarBackground
+            }
+        }
 
         val titleRes = getTitleRes()
         if (titleRes != -1) {
