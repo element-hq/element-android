@@ -14,19 +14,8 @@
  * limitations under the License.
  */
 
-package im.vector.app.test.fixtures
+package im.vector.app.features.home.room.detail.composer.voice
 
-import im.vector.app.core.resources.BuildMeta
-
-fun aBuildMeta() = BuildMeta(
-        isDebug = false,
-        applicationId = "im.vector",
-        lowPrivacyLoggingEnabled = false,
-        versionName = "app-version-name",
-        gitRevision = "abcdef",
-        gitRevisionDate = "01-01-01",
-        gitBranchName = "a-branch-name",
-        buildNumber = "100",
-        flavorDescription = "Gplay",
-        flavorShortDescription = "",
+data class VoiceMessageConfig(
+        val lengthLimitMs: Long
 )
