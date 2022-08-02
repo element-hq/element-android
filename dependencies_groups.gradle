@@ -125,6 +125,7 @@ ext.groups = [
                         'info.picocli',
                         'io.arrow-kt',
                         'io.element.android',
+                        'io.github.davidburstrom.contester',
                         'io.github.detekt.sarif4k',
                         'io.github.microutils',
                         'io.github.reactivecircus.flowbinding',

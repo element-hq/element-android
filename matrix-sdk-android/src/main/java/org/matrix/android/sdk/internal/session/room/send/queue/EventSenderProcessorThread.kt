@@ -119,7 +119,7 @@ internal class EventSenderProcessorThread @Inject constructor(
 
     override fun cancel(eventId: String, roomId: String) {
         (currentTask as? SendEventQueuedTask)
-                ?.takeIf { it -> it.event.eventId == eventId && it.event.roomId == roomId }
+                ?.takeIf { it.event.eventId == eventId && it.event.roomId == roomId }
                 ?.cancel()
     }
 
