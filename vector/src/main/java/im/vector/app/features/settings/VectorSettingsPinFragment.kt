@@ -60,17 +60,16 @@ class VectorSettingsPinFragment @Inject constructor(
         findPreference<SwitchPreference>(VectorPreferences.SETTINGS_SECURITY_USE_BIOMETRICS_FLAG)!!
     }
 
-    private fun shouldCheckBiometricPref(isPinCodeChecked: Boolean): Boolean {
-        return isPinCodeChecked && // Biometric auth depends on PIN auth
-                biometricHelper.isSystemAuthEnabledAndValid &&
-                biometricHelper.isSystemKeyValid
+    private fun updateBiometricPrefState(isPinCodeChecked: Boolean) {
+        // Biometric auth depends on PIN auth
+        useBiometricPref.isEnabled = isPinCodeChecked && biometricHelper.canUseAnySystemAuth
+        useBiometricPref.isChecked = isPinCodeChecked && biometricHelper.isSystemAuthEnabledAndValid
     }
 
     override fun onResume() {
         super.onResume()
 
-        useBiometricPref.isEnabled = usePinCodePref.isChecked
-        useBiometricPref.isChecked = shouldCheckBiometricPref(usePinCodePref.isChecked)
+        updateBiometricPrefState(isPinCodeChecked = usePinCodePref.isChecked)
     }
 
     override fun bindPref() {
@@ -78,8 +77,7 @@ class VectorSettingsPinFragment @Inject constructor(
 
         usePinCodePref.setOnPreferenceChangeListener { _, value ->
             val isChecked = (value as? Boolean).orFalse()
-            useBiometricPref.isEnabled = isChecked
-            useBiometricPref.isChecked = shouldCheckBiometricPref(isChecked)
+            updateBiometricPrefState(isPinCodeChecked = isChecked)
             if (!isChecked) {
                 disableBiometricAuthentication()
             }
@@ -104,7 +102,7 @@ class VectorSettingsPinFragment @Inject constructor(
                     }.onFailure {
                         showEnableBiometricErrorMessage()
                     }
-                    useBiometricPref.isChecked = shouldCheckBiometricPref(usePinCodePref.isChecked)
+                    updateBiometricPrefState(isPinCodeChecked = usePinCodePref.isChecked)
                 }
                 false
             } else {

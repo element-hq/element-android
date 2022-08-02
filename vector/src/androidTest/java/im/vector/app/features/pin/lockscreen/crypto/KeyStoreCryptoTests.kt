@@ -18,6 +18,7 @@ package im.vector.app.features.pin.lockscreen.crypto
 
 import android.os.Build
 import android.security.keystore.KeyPermanentlyInvalidatedException
+import android.security.keystore.UserNotAuthenticatedException
 import androidx.test.platform.app.InstrumentationRegistry
 import im.vector.app.TestBuildVersionSdkIntProvider
 import io.mockk.every
@@ -69,10 +70,12 @@ class KeyStoreCryptoTests {
         runCatching { keyStoreCrypto.ensureKey() }
         keyStoreCrypto.hasValidKey() shouldBe true
 
-        val exception = KeyPermanentlyInvalidatedException()
-        every { secretStoringUtils.getEncryptCipher(any()) } throws exception
+        val keyInvalidatedException = KeyPermanentlyInvalidatedException()
+        every { secretStoringUtils.getEncryptCipher(any()) } throws keyInvalidatedException
+        keyStoreCrypto.hasValidKey() shouldBe false
 
-        runCatching { keyStoreCrypto.ensureKey() }
+        val userNotAuthenticatedException = UserNotAuthenticatedException()
+        every { secretStoringUtils.getEncryptCipher(any()) } throws userNotAuthenticatedException
         keyStoreCrypto.hasValidKey() shouldBe false
     }
 

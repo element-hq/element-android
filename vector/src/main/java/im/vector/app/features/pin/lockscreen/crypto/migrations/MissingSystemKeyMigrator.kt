@@ -19,6 +19,7 @@ package im.vector.app.features.pin.lockscreen.crypto.migrations
 import android.annotation.SuppressLint
 import android.os.Build
 import android.security.keystore.KeyPermanentlyInvalidatedException
+import android.security.keystore.UserNotAuthenticatedException
 import im.vector.app.features.pin.lockscreen.crypto.KeyStoreCrypto
 import im.vector.app.features.pin.lockscreen.di.BiometricKeyAlias
 import im.vector.app.features.settings.VectorPreferences
@@ -45,7 +46,9 @@ class MissingSystemKeyMigrator @Inject constructor(
             try {
                 keystoreCryptoFactory.provide(systemKeyAlias, true).ensureKey()
             } catch (e: KeyPermanentlyInvalidatedException) {
-                Timber.e("Could not automatically create biometric key.", e)
+                Timber.e("Could not automatically create biometric key because it was invalidated.", e)
+            } catch (e: UserNotAuthenticatedException) {
+                Timber.e("Could not automatically create biometric key because there are no enrolled biometric authenticators.", e)
             }
         }
     }
