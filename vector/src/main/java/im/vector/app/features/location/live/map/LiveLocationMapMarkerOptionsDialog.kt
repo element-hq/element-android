@@ -23,7 +23,7 @@ import android.widget.PopupWindow
 import im.vector.app.R
 import im.vector.app.databinding.ViewLiveLocationMarkerPopupBinding
 
-class LocationLiveMapMarkerOptionsDialog(
+class LiveLocationMapMarkerOptionsDialog(
         context: Context,
 ) : PopupWindow() {
 

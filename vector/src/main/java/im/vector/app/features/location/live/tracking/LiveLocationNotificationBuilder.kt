@@ -29,8 +29,8 @@ import im.vector.app.core.time.Clock
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.arguments.TimelineArgs
-import im.vector.app.features.location.live.map.LocationLiveMapViewActivity
-import im.vector.app.features.location.live.map.LocationLiveMapViewArgs
+import im.vector.app.features.location.live.map.LiveLocationMapViewActivity
+import im.vector.app.features.location.live.map.LiveLocationMapViewArgs
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.themes.ThemeUtils
 import javax.inject.Inject
@@ -51,7 +51,7 @@ class LiveLocationNotificationBuilder @Inject constructor(
         return NotificationCompat.Builder(context, NotificationUtils.SILENT_NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(stringProvider.getString(R.string.live_location_sharing_notification_title))
                 .setContentText(stringProvider.getString(R.string.live_location_sharing_notification_description))
-                .setSmallIcon(R.drawable.ic_attachment_location_live_white)
+                .setSmallIcon(R.drawable.ic_attachment_live_location_white)
                 .setColor(ThemeUtils.getColor(context, android.R.attr.colorPrimary))
                 .setCategory(NotificationCompat.CATEGORY_LOCATION_SHARING)
                 .setContentIntent(buildOpenLiveLocationMapIntent(roomId))
@@ -61,9 +61,9 @@ class LiveLocationNotificationBuilder @Inject constructor(
     private fun buildOpenLiveLocationMapIntent(roomId: String): PendingIntent? {
         val homeIntent = HomeActivity.newIntent(context, firstStartMainActivity = false)
         val roomIntent = RoomDetailActivity.newIntent(context, TimelineArgs(roomId = roomId, switchToParentSpace = true), firstStartMainActivity = false)
-        val mapIntent = LocationLiveMapViewActivity.getIntent(
+        val mapIntent = LiveLocationMapViewActivity.getIntent(
                 context = context,
-                locationLiveMapViewArgs = LocationLiveMapViewArgs(roomId = roomId),
+                liveLocationMapViewArgs = LiveLocationMapViewArgs(roomId = roomId),
                 firstStartMainActivity = true
         )
         mapIntent.action = NotificationUtils.TAP_TO_VIEW_ACTION

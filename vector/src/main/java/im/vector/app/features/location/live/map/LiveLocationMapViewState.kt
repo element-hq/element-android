@@ -21,7 +21,7 @@ import com.airbnb.mvrx.MavericksState
 import im.vector.app.features.location.LocationData
 import org.matrix.android.sdk.api.util.MatrixItem
 
-data class LocationLiveMapViewState(
+data class LiveLocationMapViewState(
         val roomId: String,
         val userLocations: List<UserLiveLocationViewState> = emptyList(),
         /**
@@ -29,8 +29,8 @@ data class LocationLiveMapViewState(
          */
         val mapSymbolIds: Map<String, Long> = emptyMap()
 ) : MavericksState {
-    constructor(locationLiveMapViewArgs: LocationLiveMapViewArgs) : this(
-            roomId = locationLiveMapViewArgs.roomId
+    constructor(liveLocationMapViewArgs: LiveLocationMapViewArgs) : this(
+            roomId = liveLocationMapViewArgs.roomId
     )
 }
 

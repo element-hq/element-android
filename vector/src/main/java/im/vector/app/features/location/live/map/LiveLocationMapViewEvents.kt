@@ -16,10 +16,8 @@
 
 package im.vector.app.features.location.live.map
 
-import im.vector.app.core.platform.VectorViewModelAction
+import im.vector.app.core.platform.VectorViewEvents
 
-sealed class LocationLiveMapAction : VectorViewModelAction {
-    data class AddMapSymbol(val key: String, val value: Long) : LocationLiveMapAction()
-    data class RemoveMapSymbol(val key: String) : LocationLiveMapAction()
-    object StopSharing : LocationLiveMapAction()
+sealed interface LiveLocationMapViewEvents : VectorViewEvents {
+    data class Error(val error: Throwable) : LiveLocationMapViewEvents
 }
