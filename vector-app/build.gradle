@@ -8,6 +8,7 @@ apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: 'kotlinx-knit'
+apply plugin: 'com.likethesalad.stem'
 
 if (project.hasProperty("coverage")) {
     apply plugin: 'jacoco'

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- The https://github.com/LikeTheSalad/android-stem requires a non empty strings.xml -->
+    <string name="ignored_placeholder" tools:ignore="UnusedResources">ignored</string>
+</resources>
