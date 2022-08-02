@@ -102,6 +102,6 @@ if (hasPngs) {
 }
 
 // Check for reviewers
-if (github.requested_reviewers.length == 0 && !pr.draft) {
+if (github.requested_reviewers.users.length == 0 && !pr.draft) {
     warn("Please add a reviewer to your PR.")
 }
