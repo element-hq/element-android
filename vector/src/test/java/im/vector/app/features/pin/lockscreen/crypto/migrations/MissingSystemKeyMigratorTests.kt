@@ -18,6 +18,7 @@ package im.vector.app.features.pin.lockscreen.crypto.migrations
 
 import android.os.Build
 import android.security.keystore.KeyPermanentlyInvalidatedException
+import android.security.keystore.UserNotAuthenticatedException
 import im.vector.app.features.pin.lockscreen.crypto.KeyStoreCrypto
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.test.TestBuildVersionSdkIntProvider
@@ -57,6 +58,17 @@ class MissingSystemKeyMigratorTests {
         every { vectorPreferences.useBiometricsToUnlock() } returns true
 
         invoking { missingSystemKeyMigrator.migrate() } shouldNotThrow KeyPermanentlyInvalidatedException::class
+    }
+
+    @Test
+    fun migrateHandlesUserNotAuthenticatedExceptions() {
+        val keyStoreCryptoMock = mockk<KeyStoreCrypto> {
+            every { ensureKey() } throws UserNotAuthenticatedException()
+        }
+        every { keyStoreCryptoFactory.provide(any(), any()) } returns keyStoreCryptoMock
+        every { vectorPreferences.useBiometricsToUnlock() } returns true
+
+        invoking { missingSystemKeyMigrator.migrate() } shouldNotThrow UserNotAuthenticatedException::class
     }
 
     @Test

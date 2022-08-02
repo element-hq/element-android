@@ -27,8 +27,8 @@ import com.airbnb.mvrx.Uninitialized
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.AppStateHandler
 import im.vector.app.R
+import im.vector.app.SpaceStateHandler
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.mvrx.runCatchingToAsync
@@ -52,8 +52,8 @@ import im.vector.app.features.home.room.detail.sticker.StickerPickerActionHandle
 import im.vector.app.features.home.room.detail.timeline.factory.TimelineFactory
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.typing.TypingHelper
-import im.vector.app.features.location.LocationSharingServiceConnection
 import im.vector.app.features.location.live.StopLiveLocationShareUseCase
+import im.vector.app.features.location.live.tracking.LocationSharingServiceConnection
 import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.raw.wellknown.getOutboundSessionKeySharingStrategyOrDefault
@@ -138,7 +138,7 @@ class TimelineViewModel @AssistedInject constructor(
         private val stopLiveLocationShareUseCase: StopLiveLocationShareUseCase,
         private val redactLiveLocationShareEventUseCase: RedactLiveLocationShareEventUseCase,
         timelineFactory: TimelineFactory,
-        appStateHandler: AppStateHandler,
+        spaceStateHandler: SpaceStateHandler,
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState),
         Timeline.Listener, ChatEffectManager.Delegate, CallProtocolsChecker.Listener, LocationSharingServiceConnection.Callback {
 
@@ -220,16 +220,16 @@ class TimelineViewModel @AssistedInject constructor(
         if (initialState.switchToParentSpace) {
             // We are coming from a notification, try to switch to the most relevant space
             // so that when hitting back the room will appear in the list
-            appStateHandler.getCurrentSpace().let { currentSpace ->
+            spaceStateHandler.getCurrentSpace().let { currentSpace ->
                 val currentRoomSummary = room.roomSummary() ?: return@let
                 // nothing we are good
                 if ((currentSpace == null && !vectorPreferences.prefSpacesShowAllRoomInHome()) ||
                         (currentSpace != null && !currentRoomSummary.flattenParentIds.contains(currentSpace.roomId))) {
                     // take first one or switch to home
-                    appStateHandler.setCurrentSpace(
+                    spaceStateHandler.setCurrentSpace(
                             currentRoomSummary
                                     .flattenParentIds.firstOrNull { it.isNotBlank() },
-                            // force persist, because if not on resume the AppStateHandler will resume
+                            // force persist, because if not on resume the SpaceStateHandler will resume
                             // the current space from what was persisted on enter background
                             persistNow = true
                     )

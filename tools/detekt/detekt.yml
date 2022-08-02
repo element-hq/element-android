@@ -23,6 +23,8 @@ style:
     active: false
   ProtectedMemberInFinalClass:
     active: false
+  UseCheckOrError:
+    active: false
 
 empty-blocks:
   EmptyFunctionBlock:
@@ -42,6 +44,8 @@ exceptions:
   ThrowingExceptionsWithoutMessageOrCause:
     active: false
   TooGenericExceptionThrown:
+    active: false
+  InstanceOfCheckForException:
     active: false
 
 complexity:

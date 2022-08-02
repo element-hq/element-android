@@ -317,7 +317,7 @@ internal class RoomSummaryDataSource @Inject constructor(
             is SpaceFilter.ExcludeSpace -> {
                 query.not().contains(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, queryParams.spaceFilter.spaceId)
             }
-            null -> Unit // nop
+            SpaceFilter.NoFilter -> Unit // nop
         }
 
         return query

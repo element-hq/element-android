@@ -656,8 +656,8 @@ class TimelineFragment @Inject constructor(
                 )
     }
 
-    private fun navigateToLocationLiveMap() {
-        navigator.openLocationLiveMap(
+    private fun navigateToLiveLocationMap() {
+        navigator.openLiveLocationMap(
                 context = requireContext(),
                 roomId = timelineArgs.roomId
         )
@@ -857,11 +857,11 @@ class TimelineFragment @Inject constructor(
     }
 
     private fun setupLiveLocationIndicator() {
-        views.locationLiveStatusIndicator.stopButton.debouncedClicks {
+        views.liveLocationStatusIndicator.stopButton.debouncedClicks {
             timelineViewModel.handle(RoomDetailAction.StopLiveLocationSharing)
         }
-        views.locationLiveStatusIndicator.debouncedClicks {
-            navigateToLocationLiveMap()
+        views.liveLocationStatusIndicator.debouncedClicks {
+            navigateToLiveLocationMap()
         }
     }
 
@@ -1688,7 +1688,7 @@ class TimelineFragment @Inject constructor(
     }
 
     private fun updateLiveLocationIndicator(isSharingLiveLocation: Boolean) {
-        views.locationLiveStatusIndicator.isVisible = isSharingLiveLocation
+        views.liveLocationStatusIndicator.isVisible = isSharingLiveLocation
     }
 
     private fun FragmentTimelineBinding.hideComposerViews() {
@@ -2068,7 +2068,7 @@ class TimelineFragment @Inject constructor(
                 handleShowLocationPreview(messageContent, informationData.senderId)
             }
             is MessageBeaconInfoContent -> {
-                navigateToLocationLiveMap()
+                navigateToLiveLocationMap()
             }
             else -> {
                 val handled = onThreadSummaryClicked(informationData.eventId, isRootThreadEvent)

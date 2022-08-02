@@ -102,6 +102,7 @@
     <!-- Wording -->
     <issue id="Typos" severity="error" />
     <issue id="TypographyDashes" severity="error" />
+    <issue id="PluralsCandidate" severity="error" />
 
     <!-- DI -->
     <issue id="JvmStaticProvidesInObjectDetector" severity="error" />

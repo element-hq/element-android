@@ -23,8 +23,8 @@ import androidx.lifecycle.asFlow
 import androidx.lifecycle.liveData
 import androidx.paging.PagedList
 import com.airbnb.mvrx.Async
-import im.vector.app.AppStateHandler
 import im.vector.app.R
+import im.vector.app.SpaceStateHandler
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.invite.AutoAcceptInvites
@@ -45,6 +45,7 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.query.RoomTagQueryFilter
 import org.matrix.android.sdk.api.query.SpaceFilter
+import org.matrix.android.sdk.api.query.toActiveSpaceOrNoFilter
 import org.matrix.android.sdk.api.query.toActiveSpaceOrOrphanRooms
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoomSummary
@@ -58,7 +59,7 @@ import timber.log.Timber
 class RoomListSectionBuilder(
         private val session: Session,
         private val stringProvider: StringProvider,
-        private val appStateHandler: AppStateHandler,
+        private val spaceStateHandler: SpaceStateHandler,
         private val viewModelScope: CoroutineScope,
         private val autoAcceptInvites: AutoAcceptInvites,
         private val onUpdatable: (UpdatableLivePageResult) -> Unit,
@@ -94,7 +95,7 @@ class RoomListSectionBuilder(
             }
         }
 
-        appStateHandler.selectedSpaceFlow
+        spaceStateHandler.getSelectedSpaceFlow()
                 .distinctUntilChanged()
                 .onEach { selectedSpaceOption ->
                     val selectedSpace = selectedSpaceOption.orNull()
@@ -149,7 +150,7 @@ class RoomListSectionBuilder(
         ) {
             it.memberships = listOf(Membership.JOIN)
             it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-            it.roomTagQueryFilter = RoomTagQueryFilter(false, false, false)
+            it.roomTagQueryFilter = RoomTagQueryFilter(isFavorite = false, isLowPriority = false, isServerNotice = false)
         }
 
         addSection(
@@ -186,7 +187,7 @@ class RoomListSectionBuilder(
 
         // add suggested rooms
         val suggestedRoomsFlow = // MutableLiveData<List<SpaceChildInfo>>()
-                appStateHandler.selectedSpaceFlow
+                spaceStateHandler.getSelectedSpaceFlow()
                         .distinctUntilChanged()
                         .flatMapLatest { selectedSpaceOption ->
                             val selectedSpace = selectedSpaceOption.orNull()
@@ -270,7 +271,7 @@ class RoomListSectionBuilder(
         ) {
             it.memberships = listOf(Membership.JOIN)
             it.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
-            it.roomTagQueryFilter = RoomTagQueryFilter(false, false, null)
+            it.roomTagQueryFilter = RoomTagQueryFilter(isFavorite = false, isLowPriority = false, isServerNotice = null)
         }
 
         addSection(
@@ -282,7 +283,7 @@ class RoomListSectionBuilder(
         ) {
             it.memberships = listOf(Membership.JOIN)
             it.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
-            it.roomTagQueryFilter = RoomTagQueryFilter(false, true, null)
+            it.roomTagQueryFilter = RoomTagQueryFilter(isFavorite = false, isLowPriority = true, isServerNotice = null)
         }
     }
 
@@ -359,7 +360,7 @@ class RoomListSectionBuilder(
             query: (RoomSummaryQueryParams.Builder) -> Unit
     ) {
         withQueryParams(query) { roomQueryParams ->
-            val updatedQueryParams = roomQueryParams.process(spaceFilterStrategy, appStateHandler.safeActiveSpaceId())
+            val updatedQueryParams = roomQueryParams.process(spaceFilterStrategy, spaceStateHandler.getSafeActiveSpaceId())
             val liveQueryParams = MutableStateFlow(updatedQueryParams)
             val itemCountFlow = liveQueryParams
                     .flatMapLatest {
@@ -370,7 +371,7 @@ class RoomListSectionBuilder(
 
             val name = stringProvider.getString(nameRes)
             val filteredPagedRoomSummariesLive = session.roomService().getFilteredPagedRoomSummariesLive(
-                    roomQueryParams.process(spaceFilterStrategy, appStateHandler.safeActiveSpaceId()),
+                    roomQueryParams.process(spaceFilterStrategy, spaceStateHandler.getSafeActiveSpaceId()),
                     pagedListConfig
             )
             when (spaceFilterStrategy) {
@@ -378,7 +379,7 @@ class RoomListSectionBuilder(
                     activeSpaceUpdaters.add(object : RoomListViewModel.ActiveSpaceQueryUpdater {
                         override fun updateForSpaceId(roomId: String?) {
                             filteredPagedRoomSummariesLive.queryParams = roomQueryParams.copy(
-                                    spaceFilter = roomId?.toActiveSpaceOrOrphanRooms()
+                                    spaceFilter = roomId.toActiveSpaceOrOrphanRooms()
                             )
                             liveQueryParams.update { filteredPagedRoomSummariesLive.queryParams }
                         }
@@ -393,7 +394,7 @@ class RoomListSectionBuilder(
                                 )
                             } else {
                                 filteredPagedRoomSummariesLive.queryParams = roomQueryParams.copy(
-                                        spaceFilter = null
+                                        spaceFilter = SpaceFilter.NoFilter
                                 )
                             }
                             liveQueryParams.update { filteredPagedRoomSummariesLive.queryParams }
@@ -417,7 +418,7 @@ class RoomListSectionBuilder(
                                             RoomAggregateNotificationCount(it.size, it.size)
                                         } else {
                                             session.roomService().getNotificationCountForRooms(
-                                                    roomQueryParams.process(spaceFilterStrategy, appStateHandler.safeActiveSpaceId())
+                                                    roomQueryParams.process(spaceFilterStrategy, spaceStateHandler.getSafeActiveSpaceId())
                                             )
                                         }
                                 )
@@ -444,12 +445,12 @@ class RoomListSectionBuilder(
         return when (spaceFilter) {
             RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL -> {
                 copy(
-                        spaceFilter = currentSpace?.toActiveSpaceOrOrphanRooms()
+                        spaceFilter = currentSpace.toActiveSpaceOrOrphanRooms()
                 )
             }
             RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL -> {
                 copy(
-                        spaceFilter = currentSpace?.let { SpaceFilter.ActiveSpace(it) }
+                        spaceFilter = currentSpace.toActiveSpaceOrNoFilter()
                 )
             }
             RoomListViewModel.SpaceFilterStrategy.NONE -> this

@@ -337,7 +337,7 @@ class RoomProfileFragment @Inject constructor(
 
     private fun onShareRoomProfile(permalink: String) {
         startSharePlainTextIntent(
-                fragment = this,
+                context = requireContext(),
                 activityResultLauncher = null,
                 chooserTitle = null,
                 text = permalink

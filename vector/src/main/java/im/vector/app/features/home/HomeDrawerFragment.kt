@@ -102,7 +102,7 @@ class HomeDrawerFragment @Inject constructor(
                 val text = getString(R.string.invite_friends_text, permalink)
 
                 startSharePlainTextIntent(
-                        fragment = this,
+                        context = requireContext(),
                         activityResultLauncher = null,
                         chooserTitle = getString(R.string.invite_friends),
                         text = text,

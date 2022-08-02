@@ -35,8 +35,8 @@ import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.AppStateHandler
 import im.vector.app.R
+import im.vector.app.SpaceStateHandler
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.registerStartForActivityResult
@@ -46,6 +46,7 @@ import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.pushers.UnifiedPushHelper
+import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.ActivityHomeBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
@@ -130,7 +131,7 @@ class HomeActivity :
     @Inject lateinit var permalinkHandler: PermalinkHandler
     @Inject lateinit var avatarRenderer: AvatarRenderer
     @Inject lateinit var initSyncStepFormatter: InitSyncStepFormatter
-    @Inject lateinit var appStateHandler: AppStateHandler
+    @Inject lateinit var spaceStateHandler: SpaceStateHandler
     @Inject lateinit var unifiedPushHelper: UnifiedPushHelper
     @Inject lateinit var fcmHelper: FcmHelper
     @Inject lateinit var nightlyProxy: NightlyProxy
@@ -203,11 +204,16 @@ class HomeActivity :
                 )
             }
         }
-        sharedActionViewModel = viewModelProvider.get(HomeSharedActionViewModel::class.java)
+        sharedActionViewModel = viewModelProvider[HomeSharedActionViewModel::class.java]
         views.drawerLayout.addDrawerListener(drawerListener)
         if (isFirstCreation()) {
-            replaceFragment(views.homeDetailFragmentContainer, HomeDetailFragment::class.java)
-            replaceFragment(views.homeDrawerFragmentContainer, HomeDrawerFragment::class.java)
+            if (vectorFeatures.isNewAppLayoutEnabled()) {
+                views.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+                replaceFragment(views.homeDetailFragmentContainer, NewHomeDetailFragment::class.java)
+            } else {
+                replaceFragment(views.homeDetailFragmentContainer, HomeDetailFragment::class.java)
+                replaceFragment(views.homeDrawerFragmentContainer, HomeDrawerFragment::class.java)
+            }
         }
 
         sharedActionViewModel
@@ -552,7 +558,7 @@ class HomeActivity :
         nightlyProxy.onHomeResumed()
     }
 
-    override fun getMenuRes() = R.menu.home
+    override fun getMenuRes() = if (vectorFeatures.isNewAppLayoutEnabled()) R.menu.menu_new_home else R.menu.menu_home
 
     override fun handlePrepareMenu(menu: Menu) {
         menu.findItem(R.id.menu_home_init_sync_legacy).isVisible = vectorPreferences.developerMode()
@@ -591,7 +597,26 @@ class HomeActivity :
                 navigator.openSettings(this)
                 true
             }
+            R.id.menu_home_invite_friends -> {
+                launchInviteFriends()
+                true
+            }
             else -> false
+        }
+    }
+
+    private fun launchInviteFriends() {
+        activeSessionHolder.getSafeActiveSession()?.permalinkService()?.createPermalink(sharedActionViewModel.session.myUserId)?.let { permalink ->
+            analyticsTracker.screen(MobileScreen(screenName = MobileScreen.ScreenName.InviteFriends))
+            val text = getString(R.string.invite_friends_text, permalink)
+
+            startSharePlainTextIntent(
+                    context = this,
+                    activityResultLauncher = null,
+                    chooserTitle = getString(R.string.invite_friends),
+                    text = text,
+                    extraTitle = getString(R.string.invite_friends_rich_title)
+            )
         }
     }
 
