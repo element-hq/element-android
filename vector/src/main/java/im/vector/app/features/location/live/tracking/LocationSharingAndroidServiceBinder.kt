@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.location
+package im.vector.app.features.location.live.tracking
 
 import android.os.Binder
 

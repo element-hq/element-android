@@ -23,8 +23,8 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.location.LocationSharingServiceConnection
 import im.vector.app.features.location.live.StopLiveLocationShareUseCase
+import im.vector.app.features.location.live.tracking.LocationSharingServiceConnection
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch

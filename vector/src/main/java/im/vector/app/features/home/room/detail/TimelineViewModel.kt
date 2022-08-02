@@ -52,8 +52,8 @@ import im.vector.app.features.home.room.detail.sticker.StickerPickerActionHandle
 import im.vector.app.features.home.room.detail.timeline.factory.TimelineFactory
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.typing.TypingHelper
-import im.vector.app.features.location.LocationSharingServiceConnection
 import im.vector.app.features.location.live.StopLiveLocationShareUseCase
+import im.vector.app.features.location.live.tracking.LocationSharingServiceConnection
 import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.raw.wellknown.getOutboundSessionKeySharingStrategyOrDefault
