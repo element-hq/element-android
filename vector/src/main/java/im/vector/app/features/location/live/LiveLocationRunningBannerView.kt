@@ -128,4 +128,9 @@ class LiveLocationRunningBannerView @JvmOverloads constructor(
         title.text = context.getString(R.string.location_share_live_view)
         subTitle.text = context.getString(R.string.location_share_live_until, viewState.formattedLocalTimeOfEndOfLive)
     }
+
+    override fun onDetachedFromWindow() {
+        countDownTimer?.cancel()
+        super.onDetachedFromWindow()
+    }
 }

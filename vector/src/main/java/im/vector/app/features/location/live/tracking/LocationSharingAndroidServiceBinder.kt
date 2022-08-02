@@ -14,24 +14,21 @@
  * limitations under the License.
  */
 
-package im.vector.app.test.fakes
+package im.vector.app.features.location.live.tracking
 
-import im.vector.app.features.location.live.tracking.LocationSharingServiceConnection
-import io.mockk.every
-import io.mockk.just
-import io.mockk.mockk
-import io.mockk.runs
-import io.mockk.verify
+import android.os.Binder
 
-class FakeLocationSharingServiceConnection {
+class LocationSharingAndroidServiceBinder : Binder() {
 
-    val instance = mockk<LocationSharingServiceConnection>()
+    private var locationSharingAndroidService: LocationSharingAndroidService? = null
 
-    fun givenBind() {
-        every { instance.bind(any()) } just runs
+    fun setup(service: LocationSharingAndroidService) {
+        locationSharingAndroidService = service
     }
 
-    fun verifyBind(callback: LocationSharingServiceConnection.Callback) {
-        verify { instance.bind(callback) }
+    fun cleanUp() {
+        locationSharingAndroidService = null
     }
+
+    fun getService() = locationSharingAndroidService
 }

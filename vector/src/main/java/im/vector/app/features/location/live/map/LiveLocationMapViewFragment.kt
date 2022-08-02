@@ -35,6 +35,7 @@ import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.MapboxMapOptions
 import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.mapboxsdk.maps.SupportMapFragment
+import com.mapbox.mapboxsdk.plugins.annotation.OnSymbolClickListener
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
@@ -42,6 +43,7 @@ import com.mapbox.mapboxsdk.style.layers.Property
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.addChildFragment
+import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.DimensionConverter
@@ -73,6 +75,7 @@ class LiveLocationMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
     private var mapStyle: Style? = null
     private val pendingLiveLocations = mutableListOf<UserLiveLocationViewState>()
     private var isMapFirstUpdate = true
+    private var onSymbolClickListener: OnSymbolClickListener? = null
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLiveLocationMapViewBinding {
         return FragmentLiveLocationMapViewBinding.inflate(layoutInflater, container, false)
@@ -108,6 +111,14 @@ class LiveLocationMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
         setupMap()
     }
 
+    override fun onDestroyView() {
+        onSymbolClickListener?.let { symbolManager?.removeClickListener(it) }
+        symbolManager?.onDestroy()
+        bottomSheetController.callback = null
+        views.liveLocationBottomSheetRecyclerView.cleanup()
+        super.onDestroyView()
+    }
+
     private fun setupMap() {
         val mapFragment = getOrCreateSupportMapFragment()
         mapFragment.getMapAsync { mapboxMap ->
@@ -117,10 +128,10 @@ class LiveLocationMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
                     this@LiveLocationMapViewFragment.mapboxMap = WeakReference(mapboxMap)
                     symbolManager = SymbolManager(mapFragment.view as MapView, mapboxMap, style).apply {
                         iconAllowOverlap = true
-                        addClickListener {
+                        onSymbolClickListener = OnSymbolClickListener {
                             onSymbolClicked(it)
                             true
-                        }
+                        }.also { addClickListener(it) }
                     }
                     pendingLiveLocations
                             .takeUnless { it.isEmpty() }
