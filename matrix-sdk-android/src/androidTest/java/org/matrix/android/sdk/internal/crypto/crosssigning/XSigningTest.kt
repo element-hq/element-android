@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.crypto.crosssigning
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
@@ -257,6 +258,11 @@ class XSigningTest : InstrumentedTest {
             assertTrue(it is UserTrustResult.Success)
         }
 
+        // Ensure also that bob device is trusted
+        aliceSession.cryptoService().getUserDevices(bobSession.myUserId).first().let { bobDeviceAlicePoc ->
+            bobDeviceAlicePoc.trustLevel!!.crossSigningVerified shouldBeEqualTo true
+        }
+
         val currentBobMSK = aliceSession.cryptoService().crossSigningService()
                 .getUserCrossSigningKeys(bobSession.myUserId)!!
                 .masterKey()!!.unpaddedBase64PublicKey!!
@@ -308,6 +314,11 @@ class XSigningTest : InstrumentedTest {
             testHelper.retryPeriodicallyWithLatch(it) {
                 !aliceSession.cryptoService().crossSigningService().isUserTrusted(bobSession.myUserId)
             }
+        }
+
+        // Ensure also that bob device are not trusted
+        aliceSession.cryptoService().getUserDevices(bobSession.myUserId).first().let { bobDeviceAlicePoc ->
+            bobDeviceAlicePoc.trustLevel!!.crossSigningVerified shouldBeEqualTo false
         }
     }
 }

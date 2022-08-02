@@ -263,8 +263,8 @@ class MemberListViewModelTest {
         val viewModel = createViewModel()
         viewModel
                 .test()
-                .assertPredicateLatestState {
-                    val trustMap = it.trustLevelMap.invoke() ?: return@assertPredicateLatestState false
+                .assertLatestState {
+                    val trustMap = it.trustLevelMap.invoke() ?: return@assertLatestState false
                     trustMap[aliceMxid] == UserVerificationLevel.VERIFIED_WITH_DEVICES_UNTRUSTED &&
                             trustMap[bobMxid] == UserVerificationLevel.VERIFIED_ALL_DEVICES_TRUSTED &&
                             trustMap[marcMxid] == UserVerificationLevel.UNVERIFIED_BUT_WAS_PREVIOUSLY
