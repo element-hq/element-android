@@ -8,11 +8,12 @@ const {danger, warn} = require('danger')
 // warn(JSON.stringify(danger))
 
 const pr = danger.github.pr
+const github = danger.github
 // User who has created the PR.
 const user = pr.user.login
 const modified = danger.git.modified_files
 const created = danger.git.created_files
-let editedFiles = [...modified, ...created]
+const editedFiles = [...modified, ...created]
 
 // Check that the PR has a description
 if (pr.body.length == 0) {
@@ -29,10 +30,10 @@ const changelogAllowList = [
     "dependabot[bot]",
 ]
 
-let requiresChangelog = !changelogAllowList.includes(user)
+const requiresChangelog = !changelogAllowList.includes(user)
 
 if (requiresChangelog) {
-    let changelogFiles = editedFiles.filter(file => file.startsWith("changelog.d/"))
+    const changelogFiles = editedFiles.filter(file => file.startsWith("changelog.d/"))
 
     if (changelogFiles.length == 0) {
         warn("Please add a changelog. See instructions [here](https://github.com/vector-im/element-android/blob/develop/CONTRIBUTING.md#changelog)")
@@ -76,18 +77,18 @@ const allowList = [
     "yostyle",
 ]
 
-let requiresSignOff = !allowList.includes(user)
+const requiresSignOff = !allowList.includes(user)
 
 if (requiresSignOff) {
-    let hasPRBodySignOff = pr.body.includes(signOff)
-    let hasCommitSignOff = danger.git.commits.every(commit => commit.message.includes(signOff))
+    const hasPRBodySignOff = pr.body.includes(signOff)
+    const hasCommitSignOff = danger.git.commits.every(commit => commit.message.includes(signOff))
     if (!hasPRBodySignOff && !hasCommitSignOff) {
         fail("Please add a sign-off to either the PR description or to the commits themselves.")
     }
 }
 
 // Check for screenshots on view changes
-let hasChangedViews = editedFiles.filter(file => file.includes("/layout")).length > 0
+const hasChangedViews = editedFiles.filter(file => file.includes("/layout")).length > 0
 if (hasChangedViews) {
     if (!pr.body.includes("user-images")) {
         warn("You seem to have made changes to views. Please consider adding screenshots.")
@@ -95,12 +96,12 @@ if (hasChangedViews) {
 }
 
 // Check for pngs on resources
-let hasPngs = editedFiles.filter(file => file.toLowerCase().endsWith(".png")).length > 0
+const hasPngs = editedFiles.filter(file => file.toLowerCase().endsWith(".png")).length > 0
 if (hasPngs) {
     warn("You seem to have made changes to some images. Please consider using an vector drawable.")
 }
 
 // Check for reviewers
-if (pr.requested_reviewers.length == 0 && !pr.draft) {
+if (github.requested_reviewers.users.length == 0 && !pr.draft) {
     warn("Please add a reviewer to your PR.")
 }
