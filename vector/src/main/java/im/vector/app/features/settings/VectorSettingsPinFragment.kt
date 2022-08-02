@@ -66,10 +66,14 @@ class VectorSettingsPinFragment @Inject constructor(
                 biometricHelper.isSystemKeyValid
     }
 
+    private fun shouldEnableBiometricPref(isPinCodeChecked: Boolean): Boolean {
+        return isPinCodeChecked && biometricHelper.canUseAnySystemAuth
+    }
+
     override fun onResume() {
         super.onResume()
 
-        useBiometricPref.isEnabled = usePinCodePref.isChecked && biometricHelper.canUseAnySystemAuth
+        useBiometricPref.isEnabled = shouldEnableBiometricPref(isPinCodeChecked = usePinCodePref.isChecked)
         useBiometricPref.isChecked = shouldCheckBiometricPref(isPinCodeChecked = usePinCodePref.isChecked)
     }
 
@@ -78,7 +82,7 @@ class VectorSettingsPinFragment @Inject constructor(
 
         usePinCodePref.setOnPreferenceChangeListener { _, value ->
             val isChecked = (value as? Boolean).orFalse()
-            useBiometricPref.isEnabled = isChecked
+            useBiometricPref.isEnabled = shouldEnableBiometricPref(isPinCodeChecked = isChecked)
             useBiometricPref.isChecked = shouldCheckBiometricPref(isPinCodeChecked = isChecked)
             if (!isChecked) {
                 disableBiometricAuthentication()
