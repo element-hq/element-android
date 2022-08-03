@@ -86,6 +86,7 @@ class LiveLocationMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeViewEvents()
+        setupMap()
 
         views.liveLocationBottomSheetRecyclerView.configureWith(bottomSheetController, hasFixedSize = false, disableItemAnimation = true)
 
@@ -119,15 +120,13 @@ class LiveLocationMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
         super.onDestroyView()
     }
 
-    override fun onResume() {
-        super.onResume()
-        setupMap()
-    }
-
     private fun setupMap() {
         val mapFragment = getOrCreateSupportMapFragment()
         mapFragment.getMapAsync { mapboxMap ->
-            (mapFragment.view as? MapView)?.let(::listenMapLoadingError)
+            (mapFragment.view as? MapView)?.let {
+                mapView = it
+                listenMapLoadingError(it)
+            }
             lifecycleScope.launch {
                 mapboxMap.setStyle(urlMapProvider.getMapUrl()) { style ->
                     mapStyle = style
@@ -148,7 +147,6 @@ class LiveLocationMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
     }
 
     private fun listenMapLoadingError(mapView: MapView) {
-        this.mapView = mapView
         mapLoadingErrorListener = MapView.OnDidFailLoadingMapListener {
             viewModel.handle(LiveLocationMapAction.ShowMapLoadingError)
         }.also { mapView.addOnDidFailLoadingMapListener(it) }
