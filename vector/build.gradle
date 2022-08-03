@@ -102,13 +102,6 @@ android {
         }
     }
 
-    lintOptions {
-        lintConfig file("../tools/lint/lint.xml")
-
-        checkDependencies true
-        abortOnError true
-    }
-
     compileOptions {
         sourceCompatibility versions.sourceCompat
         targetCompatibility versions.targetCompat
