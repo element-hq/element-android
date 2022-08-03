@@ -28,7 +28,7 @@ data class LiveLocationMapViewState(
          * Map to keep track of symbol ids associated to each user Id.
          */
         val mapSymbolIds: Map<String, Long> = emptyMap(),
-        val loadingMapHasFailed: Boolean = false
+        val loadingMapHasFailed: Boolean = false,
 ) : MavericksState {
     constructor(liveLocationMapViewArgs: LiveLocationMapViewArgs) : this(
             roomId = liveLocationMapViewArgs.roomId
