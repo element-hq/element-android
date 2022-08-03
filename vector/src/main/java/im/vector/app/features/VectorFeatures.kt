@@ -53,5 +53,5 @@ class DefaultVectorFeatures : VectorFeatures {
     override fun isScreenSharingEnabled(): Boolean = true
     override fun forceUsageOfOpusEncoder(): Boolean = false
     override fun shouldStartDmOnFirstMessage(): Boolean = false
-    override fun isNewAppLayoutEnabled(): Boolean = true
+    override fun isNewAppLayoutEnabled(): Boolean = false
 }

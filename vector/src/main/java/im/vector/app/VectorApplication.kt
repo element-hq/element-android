@@ -142,13 +142,9 @@ class VectorApplication :
         logInfo()
         LazyThreeTen.init(this)
         Mavericks.initialize(debugMode = false)
-        EpoxyController.defaultDiffingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
-        EpoxyController.defaultModelBuildingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
-        Carousel.setDefaultGlobalSnapHelperFactory(object : Carousel.SnapHelperFactory() {
-            override fun buildSnapHelper(context: Context?): SnapHelper {
-                return GravitySnapHelper(Gravity.START)
-            }
-        })
+
+        configureEpoxy()
+
         registerActivityLifecycleCallbacks(VectorActivityLifecycleCallbacks(popupAlertManager))
         val fontRequest = FontRequest(
                 "com.google.android.gms.fonts",
@@ -202,6 +198,16 @@ class VectorApplication :
 
         // Initialize Mapbox before inflating mapViews
         Mapbox.getInstance(this)
+    }
+
+    private fun configureEpoxy() {
+        EpoxyController.defaultDiffingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
+        EpoxyController.defaultModelBuildingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
+        Carousel.setDefaultGlobalSnapHelperFactory(object : Carousel.SnapHelperFactory() {
+            override fun buildSnapHelper(context: Context?): SnapHelper {
+                return GravitySnapHelper(Gravity.START)
+            }
+        })
     }
 
     private fun enableStrictModeIfNeeded() {

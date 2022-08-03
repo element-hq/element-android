@@ -43,10 +43,7 @@ class RecentRoomCarouselController @Inject constructor(
         data?.let { data ->
             carousel {
                 id("recents_carousel")
-                withModelsFrom(data) { originalRoomSummary ->
-
-                    var roomSummary = originalRoomSummary
-
+                withModelsFrom(data) { roomSummary ->
                     val onClick = host.listener?.let { it::onRoomClicked }
                     val onLongClick = host.listener?.let { it::onRoomLongClicked }
 
@@ -64,7 +61,7 @@ class RecentRoomCarouselController @Inject constructor(
     }
 }
 
-inline fun <T> CarouselModelBuilder.withModelsFrom(
+private inline fun <T> CarouselModelBuilder.withModelsFrom(
         items: List<T>,
         modelBuilder: (T) -> EpoxyModel<*>
 ) {
