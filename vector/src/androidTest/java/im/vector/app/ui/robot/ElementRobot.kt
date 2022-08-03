@@ -67,17 +67,17 @@ class ElementRobot {
     }
 
     // Used for michaelk testing
-    fun login(userId: String, password: String) {
+    fun login(homeserverURL: String, userId: String, password: String) {
         val onboardingRobot = OnboardingRobot()
-        onboardingRobot.login(userId = userId, password = password)
-        val analyticsRobot = AnalyticsRobot()
+        onboardingRobot.login(userId = userId, password = password, homeServerUrl = homeserverURL)
+        val analyticsRobot = AnalyticsRobot() // The application stores the analytics state on first open
         analyticsRobot.optOut()
         waitForHome()
     }
 
     // Used for michaelk testing
-    fun register(userId: String, password: String) {
-        onboarding { createAccount(userId, password) }
+    fun register(homeserverURL: String, userId: String, password: String) {
+        onboarding { createAccount(userId, password, homeServerUrl = homeserverURL) }
         val analyticsRobot = AnalyticsRobot()
         analyticsRobot.optOut()
         waitForHome()
