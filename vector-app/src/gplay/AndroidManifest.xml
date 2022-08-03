@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <application>
+    <application android:name="im.vector.app.VectorApplication">
 
         <!-- Firebase components -->
         <meta-data
@@ -9,8 +9,8 @@
             android:value="true" />
 
         <receiver
+            android:name="im.vector.app.push.fcm.EmbeddedFCMDistributor"
             android:enabled="true"
-            android:name=".push.fcm.EmbeddedFCMDistributor"
             android:exported="false">
 
             <intent-filter>
