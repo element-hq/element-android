@@ -7,7 +7,7 @@ on:
 
 env:
   GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx2560m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.daemon.jvm.options="-Xmx2560m" -Dkotlin.incremental=false
-  CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 4 --no-daemon
+  CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 2 --no-daemon
 
 jobs:
   nightly:
