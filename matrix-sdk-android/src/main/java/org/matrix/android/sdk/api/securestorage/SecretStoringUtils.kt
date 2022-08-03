@@ -180,11 +180,11 @@ class SecretStoringUtils @Inject constructor(
             is KeyStore.PrivateKeyEntry -> keyEntry.certificate.publicKey
             else -> throw IllegalStateException("Unknown KeyEntry type.")
         }
-        val cipherMode = when {
+        val cipherAlgorithm = when {
             buildVersionSdkIntProvider.get() >= Build.VERSION_CODES.M -> AES_MODE
             else -> RSA_MODE
         }
-        val cipher = Cipher.getInstance(cipherMode)
+        val cipher = Cipher.getInstance(cipherAlgorithm)
         cipher.init(Cipher.ENCRYPT_MODE, key)
         return cipher
     }
@@ -204,13 +204,17 @@ class SecretStoringUtils @Inject constructor(
                     .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
                     .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
                     .setKeySize(128)
+                    .setUserAuthenticationRequired(keyNeedsUserAuthentication)
                     .apply {
-                        setUserAuthenticationRequired(keyNeedsUserAuthentication)
-                        if (buildVersionSdkIntProvider.get() >= Build.VERSION_CODES.N) {
-                            setInvalidatedByBiometricEnrollment(true)
+                        if (keyNeedsUserAuthentication) {
+                            buildVersionSdkIntProvider.whenAtLeast(Build.VERSION_CODES.N) {
+                                setInvalidatedByBiometricEnrollment(true)
+                            }
+                            buildVersionSdkIntProvider.whenAtLeast(Build.VERSION_CODES.P) {
+                                setUnlockedDeviceRequired(true)
+                            }
                         }
                     }
-                    .setUserAuthenticationRequired(keyNeedsUserAuthentication)
                     .build()
             generator.init(keyGenSpec)
             return generator.generateKey()

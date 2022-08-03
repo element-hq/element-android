@@ -22,7 +22,7 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.AppStateHandler
+import im.vector.app.SpaceStateHandler
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.singletonEntryPoint
@@ -45,7 +45,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
-import org.matrix.android.sdk.api.query.SpaceFilter
+import org.matrix.android.sdk.api.query.toActiveSpaceOrNoFilter
 import org.matrix.android.sdk.api.query.toActiveSpaceOrOrphanRooms
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.NewSessionListener
@@ -68,7 +68,7 @@ class HomeDetailViewModel @AssistedInject constructor(
         private val vectorDataStore: VectorDataStore,
         private val callManager: WebRtcCallManager,
         private val directRoomHelper: DirectRoomHelper,
-        private val appStateHandler: AppStateHandler,
+        private val spaceStateHandler: SpaceStateHandler,
         private val autoAcceptInvites: AutoAcceptInvites,
         private val vectorOverrides: VectorOverrides
 ) : VectorViewModel<HomeDetailViewState, HomeDetailAction, HomeDetailViewEvents>(initialState),
@@ -198,8 +198,7 @@ class HomeDetailViewModel @AssistedInject constructor(
                     copy(syncState = syncState)
                 }
 
-        session.syncService().getSyncRequestStateLive()
-                .asFlow()
+        session.syncService().getSyncRequestStateFlow()
                 .filterIsInstance<SyncRequestState.IncrementalSyncRequestState>()
                 .setOnEach {
                     copy(incrementalSyncRequestState = it)
@@ -207,7 +206,7 @@ class HomeDetailViewModel @AssistedInject constructor(
     }
 
     private fun observeRoomGroupingMethod() {
-        appStateHandler.selectedSpaceFlow
+        spaceStateHandler.getSelectedSpaceFlow()
                 .setOnEach {
                     copy(
                             selectedSpace = it.orNull()
@@ -216,7 +215,7 @@ class HomeDetailViewModel @AssistedInject constructor(
     }
 
     private fun observeRoomSummaries() {
-        appStateHandler.selectedSpaceFlow.distinctUntilChanged().flatMapLatest {
+        spaceStateHandler.getSelectedSpaceFlow().distinctUntilChanged().flatMapLatest {
             // we use it as a trigger to all changes in room, but do not really load
             // the actual models
             session.roomService().getPagedRoomSummariesLive(
@@ -228,7 +227,7 @@ class HomeDetailViewModel @AssistedInject constructor(
         }
                 .throttleFirst(300)
                 .onEach {
-                    val activeSpaceRoomId = appStateHandler.getCurrentSpace()?.roomId
+                    val activeSpaceRoomId = spaceStateHandler.getCurrentSpace()?.roomId
                     var dmInvites = 0
                     var roomsInvite = 0
                     if (autoAcceptInvites.showInvites()) {
@@ -236,7 +235,7 @@ class HomeDetailViewModel @AssistedInject constructor(
                                 roomSummaryQueryParams {
                                     memberships = listOf(Membership.INVITE)
                                     roomCategoryFilter = RoomCategoryFilter.ONLY_DM
-                                    spaceFilter = activeSpaceRoomId?.let { SpaceFilter.ActiveSpace(it) }
+                                    spaceFilter = activeSpaceRoomId.toActiveSpaceOrNoFilter()
                                 }
                         ).size
 
@@ -253,7 +252,7 @@ class HomeDetailViewModel @AssistedInject constructor(
                             roomSummaryQueryParams {
                                 memberships = listOf(Membership.JOIN)
                                 roomCategoryFilter = RoomCategoryFilter.ONLY_DM
-                                spaceFilter = activeSpaceRoomId?.let { SpaceFilter.ActiveSpace(it) }
+                                spaceFilter = activeSpaceRoomId.toActiveSpaceOrNoFilter()
                             }
                     )
 

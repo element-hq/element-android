@@ -38,7 +38,7 @@
         android:background="@drawable/circle"
         android:backgroundTint="?colorSecondary"
         android:contentDescription="@null"
-        android:src="@drawable/ic_user_fg"
+        android:src="@drawable/ic_robot"
         app:layout_constraintBottom_toTopOf="@id/captchaHeaderTitle"
         app:layout_constraintEnd_toEndOf="@id/captchaGutterEnd"
         app:layout_constraintHeight_percent="0.10"

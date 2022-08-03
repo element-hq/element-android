@@ -22,12 +22,11 @@ import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.AppStateHandler
+import im.vector.app.SpaceStateHandler
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.home.room.list.RoomListViewModel
 import im.vector.app.features.home.room.list.home.filter.HomeRoomFilter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -43,8 +42,7 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.query.RoomTagQueryFilter
-import org.matrix.android.sdk.api.query.SpaceFilter
-import org.matrix.android.sdk.api.query.toActiveSpaceOrOrphanRooms
+import org.matrix.android.sdk.api.query.toActiveSpaceOrNoFilter
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
@@ -58,7 +56,7 @@ import org.matrix.android.sdk.flow.flow
 class HomeRoomListViewModel @AssistedInject constructor(
         @Assisted initialState: HomeRoomListViewState,
         private val session: Session,
-        private val appStateHandler: AppStateHandler
+        private val spaceStateHandler: SpaceStateHandler
 ) : VectorViewModel<HomeRoomListViewState, HomeRoomListAction, HomeRoomListViewEvents>(initialState) {
 
     @AssistedFactory
@@ -114,16 +112,15 @@ class HomeRoomListViewModel @AssistedInject constructor(
             this.filteredPagedRoomSummariesLive = it
         }
 
-        appStateHandler.selectedSpaceFlow
+        spaceStateHandler.getSelectedSpaceFlow()
                 .distinctUntilChanged()
                 .onStart {
-                    emit(appStateHandler.getCurrentSpace().toOption())
+                    emit(spaceStateHandler.getCurrentSpace().toOption())
                 }
                 .onEach { selectedSpaceOption ->
                     val selectedSpace = selectedSpaceOption.orNull()
-                    val strategy = RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL
                     liveResults.queryParams = liveResults.queryParams.copy(
-                            spaceFilter = getSpaceFilter(selectedSpaceId = selectedSpace?.roomId, strategy)
+                            spaceFilter =  selectedSpace?.roomId.toActiveSpaceOrNoFilter()
                     )
                 }.launchIn(viewModelScope)
 
@@ -199,18 +196,6 @@ class HomeRoomListViewModel @AssistedInject constructor(
                     roomCategoryFilter = RoomCategoryFilter.ONLY_DM,
                     roomTagQueryFilter = null
             )
-        }
-    }
-
-    private fun getSpaceFilter(selectedSpaceId: String?, strategy: RoomListViewModel.SpaceFilterStrategy): SpaceFilter? {
-        return when (strategy) {
-            RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL -> {
-                selectedSpaceId?.toActiveSpaceOrOrphanRooms()
-            }
-            RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL -> {
-                selectedSpaceId?.let { SpaceFilter.ActiveSpace(it) }
-            }
-            RoomListViewModel.SpaceFilterStrategy.NONE -> null
         }
     }
 

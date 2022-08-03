@@ -117,4 +117,6 @@ sealed class RoomDetailAction : VectorViewModelAction {
 
     // Live Location
     object StopLiveLocationSharing : RoomDetailAction()
+
+    object OpenElementCallWidget : RoomDetailAction()
 }

@@ -524,6 +524,7 @@
     <string name="auth_recaptcha_message">This homeserver would like to make sure you are not a robot</string>
     <string name="auth_reset_password_missing_email">The email address linked to your account must be entered.</string>
     <string name="auth_reset_password_error_unauthorized">Failed to verify email address: make sure you clicked the link in the email</string>
+    <string name="auth_reset_password_error_unverified">Email not verified, check your inbox</string>
     <string name="auth_accept_policies">"Please review and accept the policies of this homeserver:"</string>
 
     <!-- Login Screen -->
@@ -1934,6 +1935,7 @@
     <string name="ftue_auth_create_account_username_entry_footer">Others can discover you %s</string>
     <string name="ftue_auth_create_account_password_entry_footer">Must be 8 characters or more</string>
     <string name="ftue_auth_create_account_choose_server_header">Where your conversations will live</string>
+    <string name="ftue_auth_sign_in_choose_server_header">Where your conversations live</string>
     <string name="ftue_auth_create_account_sso_section_header">Or</string>
     <string name="ftue_auth_create_account_edit_server_selection">Edit</string>
 
@@ -1941,6 +1943,7 @@
 
     <string name="ftue_auth_choose_server_title">Select your server</string>
     <string name="ftue_auth_choose_server_subtitle">What is the address of your server? This is like a home for all your data</string>
+    <string name="ftue_auth_choose_server_sign_in_subtitle">What is the address of your server?</string>
     <string name="ftue_auth_choose_server_entry_hint">Server URL</string>
     <string name="ftue_auth_choose_server_ems_title">Want to host your own server?</string>
 
@@ -1975,9 +1978,9 @@
     <string name="ftue_auth_phone_confirmation_subtitle">A code was sent to %s</string>
     <string name="ftue_auth_phone_confirmation_resend_code">Resend code</string>
 
-    <string name="ftue_auth_email_verification_title">Check your email to verify.</string>
+    <string name="ftue_auth_email_verification_title">Verify your email</string>
     <!-- Note for translators, %s is the users email address -->
-    <string name="ftue_auth_email_verification_subtitle">To confirm your email, tap the button in the email we just sent to %s</string>
+    <string name="ftue_auth_email_verification_subtitle">Follow the instructions sent to %s</string>
     <string name="ftue_auth_email_verification_footer">Did not receive an email?</string>
     <string name="ftue_auth_email_resend_email">Resend email</string>
     <string name="ftue_auth_forgot_password">Forgot password</string>
@@ -2357,7 +2360,9 @@
         <item quantity="other">%d active sessions</item>
     </plurals>
 
-    <string name="crosssigning_verify_this_session">Verify this login</string>
+    <string name="crosssigning_verify_this_session">Verify this device</string>
+    <string name="crosssigning_cannot_verify_this_session">Unable to verify this device</string>
+    <string name="crosssigning_cannot_verify_this_session_desc">You won’t be able to access encrypted message history. Reset your Secure Message Backup and verification keys to start fresh.</string>
 
     <string name="verification_open_other_to_verify">Use an existing session to verify this one, granting it access to encrypted messages.</string>
 
@@ -3018,7 +3023,7 @@
     <string name="voice_message_reply_content">Voice Message (%1$s)</string>
 
     <string name="a11y_audio_message_item">%1$s, %2$s, %3$s</string> <!-- filename, duration, file size -->
-    <string name="a11y_audio_playback_duration">%1$d minutes %2$d seconds</string>
+    <string name="a11y_audio_playback_duration" tools:ignore="PluralsCandidate">%1$d minutes %2$d seconds</string>
     <string name="a11y_play_audio_message">Play %1$s</string>
     <string name="a11y_pause_audio_message">Pause %1$s</string>
     <string name="error_audio_message_unable_to_play">Unable to play %1$s</string>
@@ -3131,6 +3136,8 @@
     <string name="live_location_not_enough_permission_dialog_title">You don’t have permission to share live location</string>
     <string name="live_location_not_enough_permission_dialog_description">You need to have the right permissions in order to share live location in this room.</string>
     <string name="live_location_share_location_item_share">Share location</string>
+    <!-- mostly used as a description when replying to a live location message -->
+    <string name="live_location_description">Live location</string>
 
     <string name="message_bubbles">Show Message bubbles</string>
 
@@ -3184,4 +3191,8 @@
         <item quantity="one">%d message removed</item>
         <item quantity="other">%d messages removed</item>
     </plurals>
+
+    <!-- Element Call Widget -->
+    <string name="labs_enable_element_call_permission_shortcuts">Enable Element Call permission shortcuts</string>
+    <string name="labs_enable_element_call_permission_shortcuts_summary">Auto-approve Element Call widgets and grant camera / mic access</string>
 </resources>

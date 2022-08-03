@@ -31,6 +31,7 @@ import im.vector.app.core.extensions.setOnImeDoneListener
 import im.vector.app.databinding.FragmentFtueResetPasswordInputBinding
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewState
+import org.matrix.android.sdk.api.failure.isMissingEmailVerification
 
 @AndroidEntryPoint
 class FtueAuthResetPasswordEntryFragment : AbstractFtueAuthFragment<FragmentFtueResetPasswordInputBinding>() {
@@ -61,7 +62,12 @@ class FtueAuthResetPasswordEntryFragment : AbstractFtueAuthFragment<FragmentFtue
     }
 
     override fun onError(throwable: Throwable) {
-        views.newPasswordInput.error = errorFormatter.toHumanReadable(throwable)
+        when {
+            throwable.isMissingEmailVerification() -> super.onError(throwable)
+            else -> {
+                views.newPasswordInput.error = errorFormatter.toHumanReadable(throwable)
+            }
+        }
     }
 
     override fun updateWithState(state: OnboardingViewState) {

@@ -17,3 +17,8 @@
 /fastlane/report.xml
 
 /**/build
+
+# Added by yarn
+/package.json
+/yarn.lock
+/node_modules

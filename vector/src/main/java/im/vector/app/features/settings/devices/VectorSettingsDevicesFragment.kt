@@ -37,6 +37,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.DialogBaseEditTextBinding
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.features.auth.ReAuthActivity
+import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
@@ -88,6 +89,9 @@ class VectorSettingsDevicesFragment @Inject constructor(
                     ManuallyVerifyDialog.show(requireActivity(), it.cryptoDeviceInfo) {
                         viewModel.handle(DevicesAction.MarkAsManuallyVerified(it.cryptoDeviceInfo))
                     }
+                }
+                is DevicesViewEvents.PromptResetSecrets -> {
+                    navigator.open4SSetup(requireContext(), SetupMode.PASSPHRASE_AND_NEEDED_SECRETS_RESET)
                 }
             }
         }

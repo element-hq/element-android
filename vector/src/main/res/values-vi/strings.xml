@@ -1494,14 +1494,14 @@
     <string name="use_recovery_key">Sử dụng Khóa Khôi phục</string>
     <string name="enter_secret_storage_passphrase_or_key">Dùng %1$s của bạn hoặc dùng %2$s của bạn để tiếp tục.</string>
     <string name="command_description_discard_session_not_handled">Chỉ được hỗ trợ trong các phòng được mã hóa</string>
-    <string name="command_description_discard_session">Buộc nhóm phiên hướng ra hiện tại trong một căn phòng được mã hóa phải bị loại bỏ</string>
+    <string name="command_description_discard_session">Buộc nhóm phiên hướng ra hiện tại trong một phòng được mã hóa phải bị loại bỏ</string>
     <string name="use_latest_app">Sử dụng ${app_name mới nhất} trên các thiết bị khác của bạn:</string>
-    <string name="or_other_mx_capable_client">hoặc một máy khách Matrix có khả năng xác thực chéo khác</string>
+    <string name="or_other_mx_capable_client">hoặc một máy khách Matrix khác có khả năng xác thực chéo</string>
     <string name="app_ios_android">${app_name} iOS
 \n${app_name} Android</string>
     <string name="app_desktop_web">${app_name} Web
 \n${app_name} Desktop</string>
-    <string name="use_other_session_content_description">Sử dụng ${app_name} mới nhất trên các thiết bị khác của bạn, Web ${app_name}, Máy tính để bàn ${app_name}, iOS ${app_name}, ${app_name} cho Android hoặc một máy khách Matrix có khả năng xác thực chéo khác</string>
+    <string name="use_other_session_content_description">Sử dụng ${app_name} mới nhất trên các thiết bị khác của bạn, Web ${app_name}, Máy tính để bàn ${app_name}, iOS ${app_name}, Android ${app_name} hoặc một máy khách Matrix khác có khả năng xác thực chéo</string>
     <string name="change_password_summary">Đặt mật khẩu tài khoản mới…</string>
     <string name="error_saving_media_file">Không thể lưu tệp Media</string>
     <string name="settings_security_prevent_screenshots_summary">Bật thiết đặt này thêm FLAG_SECURE cho tất cả các Hoạt động. Khởi động lại ứng dụng để thay đổi có hiệu lực.</string>
@@ -1590,11 +1590,11 @@
     <string name="settings_active_sessions_show_all">Hiện Tất cả Phiên</string>
     <string name="settings_active_sessions_list">Phiên Hoạt động</string>
     <string name="settings_hs_admin_e2e_disabled">Người quản trị máy chủ của bạn đã vô hiệu hóa mã hóa đầu cuối theo mặc định trong phòng riêng và Tin nhắn trực tiếp.</string>
-    <string name="encryption_information_dg_xsigning_disabled">Xác thực chéo không được bật</string>
+    <string name="encryption_information_dg_xsigning_disabled">Xác thực chéo không được kích hoạt</string>
     <string name="encryption_information_dg_xsigning_not_trusted">Xác thực chéo được kích hoạt.
 \nCác khóa không đáng tin cậy</string>
     <string name="encryption_information_dg_xsigning_trusted">Xác thực chéo được kích hoạt
-\nCác mã khóa là đáng tin cậy.
+\nCác khóa là đáng tin cậy.
 \nCác khóa riêng tư không xác định</string>
     <string name="encryption_information_dg_xsigning_complete">Xác thực chéo được kích hoạt
 \nKhóa riêng trên thiết bị.</string>
@@ -2258,7 +2258,7 @@
     <string name="preference_help">Trợ giúp</string>
     <string name="preference_root_legals">Pháp lý</string>
     <string name="preference_root_help_about">Trợ giúp &amp; Giới thiệu</string>
-    <string name="preference_voice_and_video">Voice &amp; Video</string>
+    <string name="preference_voice_and_video">Âm thanh &amp; Hình ảnh</string>
     <string name="push_gateway_item_format">Format:</string>
     <string name="push_gateway_item_url">Url:</string>
     <string name="push_gateway_item_device_name">session_name:</string>
@@ -2270,4 +2270,8 @@
     <plurals name="send_images_with_original_size">
         <item quantity="other">Gửi ảnh với kích thước gốc</item>
     </plurals>
+    <string name="settings_presence_user_always_appears_offline_summary">Nếu được bật, bạn sẽ luôn hiển thị ngoại tuyến với các người dùng khác, ngay cả thi sử dụng ứng dụng.</string>
+    <string name="settings_presence_user_always_appears_offline">Chế độ ngoại tuyến</string>
+    <string name="settings_presence">Sự hiện diện</string>
+    <string name="message_bubbles">Hiển thị bong bóng tin nhắn</string>
 </resources>

@@ -35,9 +35,11 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.databinding.FragmentRoomListBinding
 import im.vector.app.features.analytics.plan.ViewRoom
+import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.list.RoomListAnimator
 import im.vector.app.features.home.room.list.RoomListListener
 import im.vector.app.features.home.room.list.RoomSummaryItemFactory
+import im.vector.app.features.home.room.list.RoomSummaryPagedController
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel

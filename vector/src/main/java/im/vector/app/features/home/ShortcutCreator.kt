@@ -27,7 +27,7 @@ import androidx.core.graphics.drawable.IconCompat
 import im.vector.app.BuildConfig
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.utils.DimensionConverter
-import im.vector.app.features.home.room.detail.RoomDetailActivity
+import im.vector.app.features.MainActivity
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
@@ -58,7 +58,7 @@ class ShortcutCreator @Inject constructor(
 
     @WorkerThread
     fun create(roomSummary: RoomSummary, rank: Int = 1): ShortcutInfoCompat {
-        val intent = RoomDetailActivity.shortcutIntent(context, roomSummary.roomId)
+        val intent = MainActivity.shortcutIntent(context, roomSummary.roomId)
         val bitmap = try {
             val glideRequests = GlideApp.with(context)
             val matrixItem = roomSummary.toMatrixItem()
