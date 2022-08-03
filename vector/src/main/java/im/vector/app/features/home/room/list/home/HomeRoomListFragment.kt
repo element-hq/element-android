@@ -64,6 +64,8 @@ class HomeRoomListFragment @Inject constructor(
     private var concatAdapter = ConcatAdapter()
     private var modelBuildListener: OnModelBuildFinishedListener? = null
 
+    private val spacesBottomSheet = SpacesBottomSheet()
+
     private lateinit var stateRestorer: LayoutManagerStateRestorer
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomListBinding {
@@ -120,7 +122,7 @@ class HomeRoomListFragment @Inject constructor(
 
         views.newLayoutOpenSpacesButton.setOnClickListener {
             // Click action for open spaces modal goes here
-            SpacesBottomSheet().show(requireActivity().supportFragmentManager, SpacesBottomSheet.TAG)
+            spacesBottomSheet.show(requireActivity().supportFragmentManager, SpacesBottomSheet.TAG)
         }
 
         // Hide FABs when list is scrolling

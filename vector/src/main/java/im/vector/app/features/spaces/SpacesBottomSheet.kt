@@ -31,13 +31,10 @@ class SpacesBottomSheet : BottomSheetDialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentSpacesBottomSheetBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
             replaceChildFragment(R.id.space_list, SpaceListFragment::class.java)
         }
+        return binding.root
     }
 
     companion object {
