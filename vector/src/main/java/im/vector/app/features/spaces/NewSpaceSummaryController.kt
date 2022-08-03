@@ -20,6 +20,7 @@ import com.airbnb.epoxy.EpoxyController
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.grouplist.homeSpaceSummaryItem
+import im.vector.app.features.grouplist.newHomeSpaceSummaryItem
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.list.UnreadCounterBadgeView
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -65,7 +66,7 @@ class NewSpaceSummaryController @Inject constructor(
             id("space_list_header")
         }
 
-        homeSpaceSummaryItem {
+        newHomeSpaceSummaryItem {
             id("space_home")
             text(this@NewSpaceSummaryController.stringProvider.getString(R.string.all_chats))
             selected(selectedSpace == null)

@@ -143,7 +143,7 @@ class SpaceListFragment @Inject constructor(
         }
 
         if (vectorFeatures.isNewAppLayoutEnabled()) {
-            newSpaceController.update(state).also { onUpdate?.invoke() }
+            newSpaceController.update(state)
         } else {
             spaceController.update(state)
         }

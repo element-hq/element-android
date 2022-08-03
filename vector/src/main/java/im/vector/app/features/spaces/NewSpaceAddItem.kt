@@ -16,6 +16,8 @@
 
 package im.vector.app.features.spaces
 
+import android.content.res.ColorStateList
+import android.widget.ImageView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
@@ -23,6 +25,7 @@ import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
+import im.vector.app.features.themes.ThemeUtils
 
 @EpoxyModelClass
 abstract class NewSpaceAddItem : VectorEpoxyModel<NewSpaceAddItem.Holder>(R.layout.item_new_space_add) {
@@ -32,7 +35,11 @@ abstract class NewSpaceAddItem : VectorEpoxyModel<NewSpaceAddItem.Holder>(R.layo
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.view.onClick(listener)
+
+        holder.plus.imageTintList = ColorStateList.valueOf(ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_primary))
     }
 
-    class Holder : VectorEpoxyHolder()
+    class Holder : VectorEpoxyHolder() {
+        val plus by bind<ImageView>(R.id.plus)
+    }
 }

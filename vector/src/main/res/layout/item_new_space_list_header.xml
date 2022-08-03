@@ -4,6 +4,7 @@
     style="@style/TextAppearance.Vector.Body.Medium"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/bg_space_item"
     android:orientation="vertical"
     android:padding="16dp"
     android:text="@string/all_chats"
