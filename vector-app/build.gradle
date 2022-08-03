@@ -345,5 +345,7 @@ dependencies {
     implementation project(':vector-config')
     implementation libs.dagger.hilt
     implementation 'androidx.multidex:multidex:2.0.1'
+    implementation "androidx.sharetarget:sharetarget:1.1.0"
+
     kapt libs.dagger.hiltCompiler
 }
