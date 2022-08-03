@@ -164,7 +164,7 @@ dependencies {
     implementation libs.androidx.appCompat
     implementation libs.androidx.fragmentKtx
     implementation libs.androidx.constraintLayout
-    implementation "androidx.sharetarget:sharetarget:1.1.0"
+    api "androidx.sharetarget:sharetarget:1.1.0"
     implementation libs.androidx.core
     implementation "androidx.media:media:1.6.0"
     implementation "androidx.transition:transition:1.4.1"
