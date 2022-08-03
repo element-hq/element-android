@@ -49,8 +49,8 @@ jobs:
       - name: Run lint
         # Not always, if ktlint or detekt fail, avoid running the long lint check.
         run: |
-          ./gradlew lintGplayRelease $CI_GRADLE_ARG_PROPERTIES
-          ./gradlew lintFdroidRelease $CI_GRADLE_ARG_PROPERTIES
+          ./gradlew vector-app:lintGplayRelease $CI_GRADLE_ARG_PROPERTIES
+          ./gradlew vector-app:lintFdroidRelease $CI_GRADLE_ARG_PROPERTIES
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@v3
