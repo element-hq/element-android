@@ -1304,7 +1304,7 @@
         <item quantity="other">使用原始大小傳送圖片</item>
     </plurals>
     <string name="delete_event_dialog_title">確認移除</string>
-    <string name="delete_event_dialog_content">您確定您想要移除（刪除）此活動嗎？注意，如果您刪除聊天室名稱或變更主題，則可能會撤銷變更。</string>
+    <string name="delete_event_dialog_content">您確定您想要移除（刪除）此活動嗎？注意，如果您刪除聊天室名稱或主題的變更，變更會被撤銷。</string>
     <string name="delete_event_dialog_reason_checkbox">包含理由</string>
     <string name="delete_event_dialog_reason_hint">修改原因</string>
     <string name="event_redacted_by_user_reason_with_reason">被使用者刪除的活動，理由：%1$s</string>
@@ -2293,9 +2293,9 @@
     <string name="location_activity_title_preview">位置</string>
     <string name="location_activity_title_static_sharing">分享位置</string>
     <string name="closed_poll_option_description">結果僅在您結束投票後顯示</string>
-    <string name="closed_poll_option_title">已關閉投票</string>
+    <string name="closed_poll_option_title">封闭式投票</string>
     <string name="open_poll_option_description">投票者在投票後可以立刻看到投票結果</string>
-    <string name="open_poll_option_title">開啟投票</string>
+    <string name="open_poll_option_title">開放式投票</string>
     <string name="poll_type_title">投票類型</string>
     <string name="edit_poll_title">編輯投票</string>
     <string name="poll_no_votes_cast">沒有投票</string>
@@ -2486,7 +2486,7 @@
     <string name="labs_enable_msc3061_share_history">MSC3061：為過去的訊息分享聊天室金鑰</string>
     <string name="send_your_first_msg_to_invite">傳送您的第一則訊息以邀請 %s 來聊天</string>
     <string name="direct_room_encryption_enabled_tile_description_future">此聊天中的訊息將會是端到端加密。</string>
-    <string name="create_room_action_go">到</string>
+    <string name="create_room_action_go">出發</string>
     <plurals name="room_removed_messages">
         <item quantity="other">已移除 %d 則訊息</item>
     </plurals>
