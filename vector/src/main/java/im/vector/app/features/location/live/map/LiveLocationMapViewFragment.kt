@@ -109,6 +109,10 @@ class LiveLocationMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
     }
 
     override fun onDestroyView() {
+        onSymbolClickListener?.let { symbolManager?.removeClickListener(it) }
+        symbolManager?.onDestroy()
+        bottomSheetController.callback = null
+        views.liveLocationBottomSheetRecyclerView.cleanup()
         mapLoadingErrorListener?.let { mapView?.removeOnDidFailLoadingMapListener(it) }
         mapLoadingErrorListener = null
         mapView = null
@@ -118,14 +122,6 @@ class LiveLocationMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
     override fun onResume() {
         super.onResume()
         setupMap()
-    }
-
-    override fun onDestroyView() {
-        onSymbolClickListener?.let { symbolManager?.removeClickListener(it) }
-        symbolManager?.onDestroy()
-        bottomSheetController.callback = null
-        views.liveLocationBottomSheetRecyclerView.cleanup()
-        super.onDestroyView()
     }
 
     private fun setupMap() {
@@ -154,7 +150,7 @@ class LiveLocationMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
     private fun listenMapLoadingError(mapView: MapView) {
         this.mapView = mapView
         mapLoadingErrorListener = MapView.OnDidFailLoadingMapListener {
-            viewModel.handle(LocationLiveMapAction.ShowMapLoadingError)
+            viewModel.handle(LiveLocationMapAction.ShowMapLoadingError)
         }.also { mapView.addOnDidFailLoadingMapListener(it) }
     }
 

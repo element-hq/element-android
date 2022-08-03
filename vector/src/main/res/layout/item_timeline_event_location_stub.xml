@@ -34,7 +34,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/locationLiveRunningBanner"
+        app:layout_constraintBottom_toTopOf="@id/liveLocationRunningBanner"
         app:layout_constraintEnd_toEndOf="@id/staticMapImageView"
         app:layout_constraintStart_toStartOf="@id/staticMapImageView"
         app:layout_constraintTop_toTopOf="@id/staticMapImageView"
