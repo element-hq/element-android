@@ -192,6 +192,7 @@ android {
                 // See https://issuetracker.google.com/issues/171133218
                 output.versionCodeOverride = baseVariantVersion + baseAbiVersionCode
                 print "ABI " + output.getFilter(OutputFile.ABI) + " \t-> VersionCode = " + output.versionCodeOverride + "\n"
+                output.outputFileName = output.outputFileName.replace("vector-app", "vector")
             }
         }
 
