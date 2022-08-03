@@ -103,7 +103,7 @@ android {
     }
 
     lintOptions {
-        lintConfig file("lint.xml")
+        lintConfig file("../tools/lint/lint.xml")
 
         checkDependencies true
         abortOnError true
