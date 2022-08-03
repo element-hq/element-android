@@ -29,6 +29,7 @@ import io.realm.kotlin.where
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.logger.LoggerTag
+import org.matrix.android.sdk.api.session.crypto.GlobalCryptoConfig
 import org.matrix.android.sdk.api.session.crypto.NewSessionListener
 import org.matrix.android.sdk.api.session.crypto.OutgoingKeyRequest
 import org.matrix.android.sdk.api.session.crypto.OutgoingRoomKeyRequestState
@@ -53,7 +54,6 @@ import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.crypto.model.MXInboundMegolmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.model.OlmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.model.OutboundGroupSessionWrapper
-import org.matrix.android.sdk.api.session.crypto.GlobalCryptoConfig
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.store.db.mapper.CrossSigningKeysMapper
 import org.matrix.android.sdk.internal.crypto.store.db.mapper.MyDeviceLastSeenInfoEntityMapper

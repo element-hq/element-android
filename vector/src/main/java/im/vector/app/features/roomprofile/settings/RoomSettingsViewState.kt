@@ -23,11 +23,11 @@ import com.airbnb.mvrx.Uninitialized
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.roomprofile.RoomProfileArgs
+import org.matrix.android.sdk.api.session.crypto.GlobalCryptoConfig
 import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import org.matrix.android.sdk.api.session.crypto.GlobalCryptoConfig
 
 data class RoomSettingsViewState(
         val roomId: String,

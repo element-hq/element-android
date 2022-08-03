@@ -40,6 +40,7 @@ import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.crypto.CryptoService
+import org.matrix.android.sdk.api.session.crypto.GlobalCryptoConfig
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.NewSessionListener
 import org.matrix.android.sdk.api.session.crypto.OutgoingKeyRequest
@@ -87,7 +88,6 @@ import org.matrix.android.sdk.internal.crypto.model.MXKey.Companion.KEY_SIGNED_C
 import org.matrix.android.sdk.internal.crypto.model.SessionInfo
 import org.matrix.android.sdk.internal.crypto.model.toRest
 import org.matrix.android.sdk.internal.crypto.repository.WarnOnUnknownDeviceRepository
-import org.matrix.android.sdk.api.session.crypto.GlobalCryptoConfig
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.DeleteDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.GetDeviceInfoTask
@@ -1194,6 +1194,7 @@ internal class DefaultCryptoService @Inject constructor(
      * Add this room to the ones which don't encrypt messages to unverified devices.
      *
      * @param roomId the room id
+     * @param if true will block sending keys to unverified devices
      */
     override fun setRoomBlacklistUnverifiedDevices(roomId: String, enable: Boolean) {
         cryptoStore.blackListUnverifiedDevicesInRoom(roomId, enable)

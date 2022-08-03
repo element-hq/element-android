@@ -42,7 +42,6 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.content.RoomKeyWithHeldContent
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.crypto.model.SessionInfo
-import org.matrix.android.sdk.api.session.crypto.GlobalCryptoConfig
 
 interface CryptoService {
 
