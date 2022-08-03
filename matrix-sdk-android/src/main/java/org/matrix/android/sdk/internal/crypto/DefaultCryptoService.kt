@@ -87,6 +87,7 @@ import org.matrix.android.sdk.internal.crypto.model.MXKey.Companion.KEY_SIGNED_C
 import org.matrix.android.sdk.internal.crypto.model.SessionInfo
 import org.matrix.android.sdk.internal.crypto.model.toRest
 import org.matrix.android.sdk.internal.crypto.repository.WarnOnUnknownDeviceRepository
+import org.matrix.android.sdk.api.session.crypto.GlobalCryptoConfig
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.DeleteDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.GetDeviceInfoTask
@@ -1163,6 +1164,10 @@ internal class DefaultCryptoService @Inject constructor(
         return cryptoStore.getGlobalBlacklistUnverifiedDevices()
     }
 
+    override fun getLiveGlobalCryptoConfig(): LiveData<GlobalCryptoConfig> {
+        return cryptoStore.getLiveGlobalCryptoConfig()
+    }
+
     /**
      * Tells whether the client should encrypt messages only for the verified devices
      * in this room.
@@ -1171,30 +1176,18 @@ internal class DefaultCryptoService @Inject constructor(
      * @param roomId the room id
      * @return true if the client should encrypt messages only for the verified devices.
      */
-// TODO add this info in CryptoRoomEntity?
     override fun isRoomBlacklistUnverifiedDevices(roomId: String?): Boolean {
-        return roomId?.let { cryptoStore.getRoomsListBlacklistUnverifiedDevices().contains(it) }
+        return roomId?.let { cryptoStore.getBlacklistUnverifiedDevices(roomId) }
                 ?: false
     }
 
     /**
-     * Manages the room black-listing for unverified devices.
+     * A live status regarding sharing keys for unverified devices in this room.
      *
-     * @param roomId the room id
-     * @param add true to add the room id to the list, false to remove it.
+     * @return Live status
      */
-    private fun setRoomBlacklistUnverifiedDevices(roomId: String, add: Boolean) {
-        val roomIds = cryptoStore.getRoomsListBlacklistUnverifiedDevices().toMutableList()
-
-        if (add) {
-            if (roomId !in roomIds) {
-                roomIds.add(roomId)
-            }
-        } else {
-            roomIds.remove(roomId)
-        }
-
-        cryptoStore.setRoomsListBlacklistUnverifiedDevices(roomIds)
+    override fun getLiveBlacklistUnverifiedDevices(roomId: String): LiveData<Boolean> {
+        return cryptoStore.getLiveBlacklistUnverifiedDevices(roomId)
     }
 
     /**
@@ -1202,8 +1195,8 @@ internal class DefaultCryptoService @Inject constructor(
      *
      * @param roomId the room id
      */
-    override fun setRoomBlacklistUnverifiedDevices(roomId: String) {
-        setRoomBlacklistUnverifiedDevices(roomId, true)
+    override fun setRoomBlacklistUnverifiedDevices(roomId: String, enable: Boolean) {
+        cryptoStore.blackListUnverifiedDevicesInRoom(roomId, enable)
     }
 
     /**

@@ -27,6 +27,7 @@ import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.crypto.GlobalCryptoConfig
 
 data class RoomSettingsViewState(
         val roomId: String,
@@ -45,7 +46,10 @@ data class RoomSettingsViewState(
         val showSaveAction: Boolean = false,
         val actionPermissions: ActionPermissions = ActionPermissions(),
         val supportsRestricted: Boolean = false,
-        val canUpgradeToRestricted: Boolean = false
+        val canUpgradeToRestricted: Boolean = false,
+        val encryptToVerifiedDeviceOnly: Async<Boolean> = Uninitialized,
+        val globalCryptoConfig: Async<GlobalCryptoConfig> = Uninitialized,
+        val unverifiedDevicesInTheRoom: Async<Boolean> = Uninitialized,
 ) : MavericksState {
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)

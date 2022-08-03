@@ -17,6 +17,7 @@
 package im.vector.app.features.roomprofile.settings
 
 import androidx.core.net.toFile
+import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -25,8 +26,12 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
+import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -37,6 +42,8 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
+import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
+import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomAvatarContent
 import org.matrix.android.sdk.api.session.room.model.RoomGuestAccessContent
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibilityContent
@@ -83,6 +90,39 @@ class RoomSettingsViewModel @AssistedInject constructor(
                     canUpgradeToRestricted = couldUpgradeToRestricted
             )
         }
+
+        session.cryptoService().getLiveBlacklistUnverifiedDevices(initialState.roomId)
+                .asFlow()
+                .execute {
+                    copy(encryptToVerifiedDeviceOnly = it)
+                }
+
+        session.cryptoService().getLiveGlobalCryptoConfig()
+                .asFlow()
+                .execute {
+                    copy(globalCryptoConfig = it)
+                }
+
+        val flowRoom = room.flow()
+        session.cryptoService().getLiveBlacklistUnverifiedDevices(initialState.roomId)
+                .asFlow()
+                .flatMapLatest {
+                    if (it) {
+                        flowRoom.liveRoomMembers(roomMemberQueryParams { memberships = Membership.activeMemberships() })
+                                .map { it.map { it.userId } }
+                                .flatMapLatest {
+                                    session.cryptoService().getLiveCryptoDeviceInfo(it).asFlow()
+                                }
+                    } else {
+                        flowOf(emptyList())
+                    }
+                }.map {
+                    it.isNotEmpty()
+                }.execute {
+                    copy(
+                            unverifiedDevicesInTheRoom = it
+                    )
+                }
     }
 
     private fun observeState() {
@@ -212,6 +252,7 @@ class RoomSettingsViewModel @AssistedInject constructor(
             is RoomSettingsAction.SetRoomGuestAccess -> handleSetGuestAccess(action)
             is RoomSettingsAction.Save -> saveSettings()
             is RoomSettingsAction.Cancel -> cancel()
+            is RoomSettingsAction.SetEncryptToVerifiedDeviceOnly -> setEncryptToVerifiedDeviceOnly(action.enable)
         }
     }
 
@@ -230,6 +271,12 @@ class RoomSettingsViewModel @AssistedInject constructor(
                     newJoinRules = state.newRoomJoinRules.newJoinRules.takeIf { it != state.currentRoomJoinRules },
                     newGuestAccess = action.guestAccess.takeIf { it != state.currentGuestAccess }
             ))
+        }
+    }
+
+    private fun setEncryptToVerifiedDeviceOnly(enabled: Boolean) {
+        session.coroutineScope.launch {
+            session.cryptoService().setRoomBlacklistUnverifiedDevices(room.roomId, enabled)
         }
     }
 
