@@ -35,6 +35,7 @@ import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.MapboxMapOptions
 import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.mapboxsdk.maps.SupportMapFragment
+import com.mapbox.mapboxsdk.plugins.annotation.OnSymbolClickListener
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
@@ -42,11 +43,12 @@ import com.mapbox.mapboxsdk.style.layers.Property
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.addChildFragment
+import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.openLocation
-import im.vector.app.databinding.FragmentLocationLiveMapViewBinding
+import im.vector.app.databinding.FragmentLiveLocationMapViewBinding
 import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.UrlMapProvider
 import im.vector.app.features.location.zoomToBounds
@@ -60,22 +62,23 @@ import javax.inject.Inject
  * Screen showing a map with all the current users sharing their live location in a room.
  */
 @AndroidEntryPoint
-class LocationLiveMapViewFragment @Inject constructor() : VectorBaseFragment<FragmentLocationLiveMapViewBinding>() {
+class LiveLocationMapViewFragment @Inject constructor() : VectorBaseFragment<FragmentLiveLocationMapViewBinding>() {
 
     @Inject lateinit var urlMapProvider: UrlMapProvider
     @Inject lateinit var bottomSheetController: LiveLocationBottomSheetController
     @Inject lateinit var dimensionConverter: DimensionConverter
 
-    private val viewModel: LocationLiveMapViewModel by fragmentViewModel()
+    private val viewModel: LiveLocationMapViewModel by fragmentViewModel()
 
     private var mapboxMap: WeakReference<MapboxMap>? = null
     private var symbolManager: SymbolManager? = null
     private var mapStyle: Style? = null
     private val pendingLiveLocations = mutableListOf<UserLiveLocationViewState>()
     private var isMapFirstUpdate = true
+    private var onSymbolClickListener: OnSymbolClickListener? = null
 
-    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLocationLiveMapViewBinding {
-        return FragmentLocationLiveMapViewBinding.inflate(layoutInflater, container, false)
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLiveLocationMapViewBinding {
+        return FragmentLiveLocationMapViewBinding.inflate(layoutInflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -90,7 +93,7 @@ class LocationLiveMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
             }
 
             override fun onStopLocationClicked() {
-                viewModel.handle(LocationLiveMapAction.StopSharing)
+                viewModel.handle(LiveLocationMapAction.StopSharing)
             }
         }
     }
@@ -98,7 +101,7 @@ class LocationLiveMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
     private fun observeViewEvents() {
         viewModel.observeViewEvents { viewEvent ->
             when (viewEvent) {
-                is LocationLiveMapViewEvents.Error -> displayErrorDialog(viewEvent.error)
+                is LiveLocationMapViewEvents.Error -> displayErrorDialog(viewEvent.error)
             }
         }
     }
@@ -108,19 +111,27 @@ class LocationLiveMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
         setupMap()
     }
 
+    override fun onDestroyView() {
+        onSymbolClickListener?.let { symbolManager?.removeClickListener(it) }
+        symbolManager?.onDestroy()
+        bottomSheetController.callback = null
+        views.liveLocationBottomSheetRecyclerView.cleanup()
+        super.onDestroyView()
+    }
+
     private fun setupMap() {
         val mapFragment = getOrCreateSupportMapFragment()
         mapFragment.getMapAsync { mapboxMap ->
             lifecycleScope.launch {
                 mapboxMap.setStyle(urlMapProvider.getMapUrl()) { style ->
                     mapStyle = style
-                    this@LocationLiveMapViewFragment.mapboxMap = WeakReference(mapboxMap)
+                    this@LiveLocationMapViewFragment.mapboxMap = WeakReference(mapboxMap)
                     symbolManager = SymbolManager(mapFragment.view as MapView, mapboxMap, style).apply {
                         iconAllowOverlap = true
-                        addClickListener {
+                        onSymbolClickListener = OnSymbolClickListener {
                             onSymbolClicked(it)
                             true
-                        }
+                        }.also { addClickListener(it) }
                     }
                     pendingLiveLocations
                             .takeUnless { it.isEmpty() }
@@ -136,9 +147,9 @@ class LocationLiveMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
                     ?.get()
                     ?.zoomToLocation(LocationData(it.latLng.latitude, it.latLng.longitude, null), preserveCurrentZoomLevel = false)
 
-            LocationLiveMapMarkerOptionsDialog(requireContext())
+            LiveLocationMapMarkerOptionsDialog(requireContext())
                     .apply {
-                        callback = object : LocationLiveMapMarkerOptionsDialog.Callback {
+                        callback = object : LiveLocationMapMarkerOptionsDialog.Callback {
                             override fun onShareLocationClicked() {
                                 shareLocation(symbol)
                                 dismiss()
@@ -238,7 +249,7 @@ class LocationLiveMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
         addUserPinToMapStyle(userLocation.matrixItem.id, userLocation.pinDrawable)
         val symbolOptions = buildSymbolOptions(userLocation)
         val symbol = symbolManager.create(symbolOptions)
-        viewModel.handle(LocationLiveMapAction.AddMapSymbol(userLocation.matrixItem.id, symbol.id))
+        viewModel.handle(LiveLocationMapAction.AddMapSymbol(userLocation.matrixItem.id, symbol.id))
     }
 
     private fun updateSymbol(symbolId: Long, userLocation: UserLiveLocationViewState, symbolManager: SymbolManager) {
@@ -254,7 +265,7 @@ class LocationLiveMapViewFragment @Inject constructor() : VectorBaseFragment<Fra
         val userIdsToRemove = state.mapSymbolIds.keys.subtract(userLiveLocations.map { it.matrixItem.id }.toSet())
         userIdsToRemove.forEach { userId ->
             removeUserPinFromMapStyle(userId)
-            viewModel.handle(LocationLiveMapAction.RemoveMapSymbol(userId))
+            viewModel.handle(LiveLocationMapAction.RemoveMapSymbol(userId))
 
             state.mapSymbolIds[userId]?.let { symbolId ->
                 Timber.d("trying to delete symbol with id: $symbolId")

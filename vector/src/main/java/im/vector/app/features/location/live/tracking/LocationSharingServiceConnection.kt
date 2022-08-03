@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.location
+package im.vector.app.features.location.live.tracking
 
 import android.content.ComponentName
 import android.content.Context
@@ -22,7 +22,6 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.features.location.live.tracking.LocationSharingAndroidService
 import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
@@ -67,7 +66,7 @@ class LocationSharingServiceConnection @Inject constructor(
     }
 
     override fun onServiceConnected(className: ComponentName, binder: IBinder) {
-        locationSharingAndroidService = (binder as LocationSharingAndroidService.LocalBinder).getService().also { service ->
+        locationSharingAndroidService = (binder as LocationSharingAndroidServiceBinder).getService()?.also { service ->
             service.callback = this
             getActiveSessionCoroutineScope()?.let { scope ->
                 service.roomIdsOfActiveLives

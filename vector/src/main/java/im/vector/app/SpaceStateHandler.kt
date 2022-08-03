@@ -24,19 +24,19 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 /**
  * Gets info about the current space the user has navigated to, any space backstack they may have
- * and handles switching to different spaces
+ * and handles switching to different spaces.
  */
 interface SpaceStateHandler : DefaultLifecycleObserver {
 
     /**
-     * Gets the current space the current user has navigated to
+     * Gets the current space the current user has navigated to.
      *
      * @return null if the user is not in
      */
     fun getCurrentSpace(): RoomSummary?
 
     /**
-     * Sets the new space the current user is navigating to
+     * Sets the new space the current user is navigating to.
      *
      * @param spaceId the id of the space being navigated to
      * @param session the current active session
@@ -51,19 +51,19 @@ interface SpaceStateHandler : DefaultLifecycleObserver {
     )
 
     /**
-     * Gets the current backstack of spaces (via their id)
+     * Gets the current backstack of spaces (via their id).
      *
      * null may be an entry in the ArrayDeque to indicate the root space (All Chats)
      */
     fun getSpaceBackstack(): ArrayDeque<String?>
 
     /**
-     * Gets a flow of the selected space for clients to react immediately to space changes
+     * Gets a flow of the selected space for clients to react immediately to space changes.
      */
     fun getSelectedSpaceFlow(): Flow<Option<RoomSummary>>
 
     /**
-     * Gets the id of the active space, or null if there is none
+     * Gets the id of the active space, or null if there is none.
      */
     fun getSafeActiveSpaceId(): String?
 }

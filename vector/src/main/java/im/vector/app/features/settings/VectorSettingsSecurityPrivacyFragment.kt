@@ -35,7 +35,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.fragmentViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
-import im.vector.app.config.analyticsConfig
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.dialogs.ExportKeysDialog
 import im.vector.app.core.extensions.queryExportKeys
@@ -51,6 +50,7 @@ import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.openFileSelection
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.DialogImportE2eKeysBinding
+import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.analytics.ui.consent.AnalyticsConsentViewActions
 import im.vector.app.features.analytics.ui.consent.AnalyticsConsentViewModel
@@ -84,7 +84,8 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         private val keysExporter: KeysExporter,
         private val keysImporter: KeysImporter,
         private val rawService: RawService,
-        private val navigator: Navigator
+        private val navigator: Navigator,
+        private val analyticsConfig: AnalyticsConfig,
 ) : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.settings_security_and_privacy

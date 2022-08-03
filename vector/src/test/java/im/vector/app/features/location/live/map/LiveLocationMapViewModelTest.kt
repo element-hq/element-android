@@ -34,20 +34,20 @@ import org.matrix.android.sdk.api.util.MatrixItem
 
 private const val A_ROOM_ID = "room_id"
 
-class LocationLiveMapViewModelTest {
+class LiveLocationMapViewModelTest {
 
     @get:Rule
     val mvRxTestRule = MvRxTestRule(testDispatcher = UnconfinedTestDispatcher())
 
-    private val args = LocationLiveMapViewArgs(roomId = A_ROOM_ID)
+    private val args = LiveLocationMapViewArgs(roomId = A_ROOM_ID)
 
     private val getListOfUserLiveLocationUseCase = mockk<GetListOfUserLiveLocationUseCase>()
     private val locationServiceConnection = FakeLocationSharingServiceConnection()
     private val stopLiveLocationShareUseCase = mockk<StopLiveLocationShareUseCase>()
 
-    private fun createViewModel(): LocationLiveMapViewModel {
-        return LocationLiveMapViewModel(
-                LocationLiveMapViewState(args),
+    private fun createViewModel(): LiveLocationMapViewModel {
+        return LiveLocationMapViewModel(
+                LiveLocationMapViewState(args),
                 getListOfUserLiveLocationUseCase,
                 locationServiceConnection.instance,
                 stopLiveLocationShareUseCase
@@ -78,7 +78,7 @@ class LocationLiveMapViewModelTest {
         viewModel
                 .test()
                 .assertState(
-                        LocationLiveMapViewState(args).copy(
+                        LiveLocationMapViewState(args).copy(
                                 userLocations = userLocations
                         )
                 )

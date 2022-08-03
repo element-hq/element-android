@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,20 @@
 
 package im.vector.app.config
 
-import im.vector.app.BuildConfig
-import im.vector.app.features.analytics.AnalyticsConfig
+enum class KeySharingStrategy {
+    /**
+     * Keys will be sent for the first time when the first message is sent.
+     * This is handled by the Matrix SDK so there's no need to do it in Vector.
+     */
+    WhenSendingEvent,
 
-private val allowedPackageList = listOf(
-        "im.vector.app",
-        "im.vector.app.nightly",
-)
+    /**
+     * Keys will be sent for the first time when the timeline displayed.
+     */
+    WhenEnteringRoom,
 
-val analyticsConfig: AnalyticsConfig = object : AnalyticsConfig {
-    override val isEnabled = BuildConfig.APPLICATION_ID in allowedPackageList
-    override val postHogHost = "https://posthog.hss.element.io"
-    override val postHogApiKey = "phc_Jzsm6DTm6V2705zeU5dcNvQDlonOR68XvX2sh1sEOHO"
-    override val policyLink = "https://element.io/cookie-policy"
+    /**
+     * Keys will be sent for the first time when a typing started.
+     */
+    WhenTyping
 }

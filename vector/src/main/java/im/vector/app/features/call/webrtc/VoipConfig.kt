@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.location.live.map
+package im.vector.app.features.call.webrtc
 
-import im.vector.app.core.platform.VectorViewEvents
-
-sealed interface LocationLiveMapViewEvents : VectorViewEvents {
-    data class Error(val error: Throwable) : LocationLiveMapViewEvents
-}
+data class VoipConfig(
+      val handleCallAssertedIdentityEvents: Boolean
+)

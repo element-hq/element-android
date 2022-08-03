@@ -24,17 +24,17 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.use
 import androidx.core.view.updateLayoutParams
 import im.vector.app.R
-import im.vector.app.databinding.ViewLocationLiveEndedBannerBinding
+import im.vector.app.databinding.ViewLiveLocationEndedBannerBinding
 
 private const val BACKGROUND_ALPHA = 0.75f
 
-class LocationLiveEndedBannerView @JvmOverloads constructor(
+class LiveLocationEndedBannerView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
-    private val binding = ViewLocationLiveEndedBannerBinding.inflate(
+    private val binding = ViewLiveLocationEndedBannerBinding.inflate(
             LayoutInflater.from(context),
             this
     )
@@ -42,7 +42,7 @@ class LocationLiveEndedBannerView @JvmOverloads constructor(
     init {
         context.obtainStyledAttributes(
                 attrs,
-                R.styleable.LocationLiveEndedBannerView,
+                R.styleable.LiveLocationEndedBannerView,
                 0,
                 0
         ).use {
@@ -52,13 +52,13 @@ class LocationLiveEndedBannerView @JvmOverloads constructor(
     }
 
     private fun setBackgroundAlpha(typedArray: TypedArray) {
-        val withAlpha = typedArray.getBoolean(R.styleable.LocationLiveEndedBannerView_locLiveEndedBkgWithAlpha, false)
-        binding.locationLiveEndedBannerBackground.alpha = if (withAlpha) BACKGROUND_ALPHA else 1f
+        val withAlpha = typedArray.getBoolean(R.styleable.LiveLocationEndedBannerView_locLiveEndedBkgWithAlpha, false)
+        binding.liveLocationEndedBannerBackground.alpha = if (withAlpha) BACKGROUND_ALPHA else 1f
     }
 
     private fun setIconMarginStart(typedArray: TypedArray) {
-        val margin = typedArray.getDimensionPixelOffset(R.styleable.LocationLiveEndedBannerView_locLiveEndedIconMarginStart, 0)
-        binding.locationLiveEndedBannerIcon.updateLayoutParams<MarginLayoutParams> {
+        val margin = typedArray.getDimensionPixelOffset(R.styleable.LiveLocationEndedBannerView_locLiveEndedIconMarginStart, 0)
+        binding.liveLocationEndedBannerIcon.updateLayoutParams<MarginLayoutParams> {
             marginStart = margin
         }
     }

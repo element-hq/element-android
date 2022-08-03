@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,10 @@
  * limitations under the License.
  */
 
-package im.vector.app.config
+package im.vector.app.features.raw.wellknown
 
-import im.vector.app.BuildConfig
-import im.vector.app.features.analytics.AnalyticsConfig
+import im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy
 
-val analyticsConfig: AnalyticsConfig = object : AnalyticsConfig {
-    override val isEnabled = BuildConfig.APPLICATION_ID == "im.vector.app.debug"
-    override val postHogHost = "https://posthog.element.dev"
-    override val postHogApiKey = "phc_VtA1L35nw3aeAtHIx1ayrGdzGkss7k1xINeXcoIQzXN"
-    override val policyLink = "https://element.io/cookie-policy"
-}
+data class CryptoConfig(
+        val fallbackKeySharingStrategy: OutboundSessionKeySharingStrategy
+)

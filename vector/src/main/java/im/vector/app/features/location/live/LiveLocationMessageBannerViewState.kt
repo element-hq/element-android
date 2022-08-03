@@ -16,7 +16,7 @@
 
 package im.vector.app.features.location.live
 
-sealed class LocationLiveMessageBannerViewState(
+sealed class LiveLocationMessageBannerViewState(
         open val bottomStartCornerRadiusInDp: Float,
         open val bottomEndCornerRadiusInDp: Float,
 ) {
@@ -26,11 +26,11 @@ sealed class LocationLiveMessageBannerViewState(
             override val bottomEndCornerRadiusInDp: Float,
             val remainingTimeInMillis: Long,
             val isStopButtonCenteredVertically: Boolean
-    ) : LocationLiveMessageBannerViewState(bottomStartCornerRadiusInDp, bottomEndCornerRadiusInDp)
+    ) : LiveLocationMessageBannerViewState(bottomStartCornerRadiusInDp, bottomEndCornerRadiusInDp)
 
     data class Watcher(
             override val bottomStartCornerRadiusInDp: Float,
             override val bottomEndCornerRadiusInDp: Float,
             val formattedLocalTimeOfEndOfLive: String,
-    ) : LocationLiveMessageBannerViewState(bottomStartCornerRadiusInDp, bottomEndCornerRadiusInDp)
+    ) : LiveLocationMessageBannerViewState(bottomStartCornerRadiusInDp, bottomEndCornerRadiusInDp)
 }

@@ -136,6 +136,7 @@
     <string name="matrix_error">Matrix error</string>
 
     <!-- Home Screen -->
+    <string name="all_chats">All Chats</string>
 
     <!-- Last seen time -->
 
@@ -2808,6 +2809,7 @@
 
     <string name="a11y_screenshot">Screenshot</string>
     <string name="a11y_open_widget">Open widgets</string>
+    <string name="a11y_open_settings">Open settings</string>
     <string name="a11y_import_key_from_file">Import key from file</string>
     <string name="a11y_image">Image</string>
     <string name="a11y_change_avatar">Change avatar</string>

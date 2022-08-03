@@ -17,7 +17,6 @@
 package im.vector.app.features.location.live.tracking
 
 import android.content.Intent
-import android.os.Binder
 import android.os.IBinder
 import android.os.Parcelable
 import androidx.core.app.NotificationManagerCompat
@@ -62,7 +61,7 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
     @Inject lateinit var getLiveLocationShareSummaryUseCase: GetLiveLocationShareSummaryUseCase
     @Inject lateinit var checkIfEventIsRedactedUseCase: CheckIfEventIsRedactedUseCase
 
-    private val binder = LocalBinder()
+    private var binder: LocationSharingAndroidServiceBinder? = null
 
     private val liveInfoSet = linkedSetOf<LiveInfo>()
     var callback: Callback? = null
@@ -76,6 +75,7 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
     override fun onCreate() {
         super.onCreate()
         Timber.i("onCreate")
+        binder = LocationSharingAndroidServiceBinder().also { it.setup(this) }
         initLocationTracking()
     }
 
@@ -205,6 +205,8 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
     override fun onDestroy() {
         super.onDestroy()
         Timber.i("onDestroy")
+        binder?.cleanUp()
+        binder = null
         jobs.forEach { it.cancel() }
         jobs.clear()
         locationTracker.removeCallback(this)
@@ -251,12 +253,8 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
         return liveInfoSet.map { it.roomArgs.roomId }.toSet()
     }
 
-    override fun onBind(intent: Intent?): IBinder {
+    override fun onBind(intent: Intent?): IBinder? {
         return binder
-    }
-
-    inner class LocalBinder : Binder() {
-        fun getService(): LocationSharingAndroidService = this@LocationSharingAndroidService
     }
 
     interface Callback {
