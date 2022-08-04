@@ -145,13 +145,13 @@
         app:layout_constraintTop_toBottomOf="@id/composer_preview_barrier"
         app:layout_goneMarginEnd="12dp" />
 
-    <io.element.android.wysiwyg.EditorEditText
-        android:id="@+id/composerEditText"
+    <io.element.android.wysiwyg.RichTextEditor
+        android:id="@+id/composerEditor"
         style="@style/Widget.Vector.EditText.Composer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:nextFocusLeft="@id/composerEditText"
-        android:nextFocusUp="@id/composerEditText"
+        android:nextFocusLeft="@id/composerEditor"
+        android:nextFocusUp="@id/composerEditor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/composerEmojiButton"
         app:layout_constraintStart_toStartOf="@id/composerEditTextOuterBorder"
@@ -168,7 +168,7 @@
         android:src="@drawable/ic_insert_emoji"
         app:layout_constraintBottom_toBottomOf="@id/sendButton"
         app:layout_constraintEnd_toEndOf="@id/composerEditTextOuterBorder"
-        app:layout_constraintStart_toEndOf="@id/composerEditText"
+        app:layout_constraintStart_toEndOf="@id/composerEditor"
         app:layout_constraintTop_toTopOf="@id/sendButton"
         app:layout_goneMarginBottom="52dp"
         app:layout_goneMarginEnd="8dp"

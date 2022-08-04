@@ -736,7 +736,7 @@ class TimelineFragment @Inject constructor(
                         setImageResource(R.drawable.ic_insert_emoji)
                     }
                 },
-                editText = views.composerLayout.views.composerEditText
+                editText = views.composerLayout.views.composerEditor.editText
         )
     }
 
@@ -1523,7 +1523,7 @@ class TimelineFragment @Inject constructor(
     }
 
     private fun setupComposer() {
-        val composerEditText = views.composerLayout.views.composerEditText
+        val composerEditText = views.composerLayout.views.composerEditor.editText
         autoCompleter.setup(composerEditText)
 
         observerUserTyping()
@@ -1554,7 +1554,7 @@ class TimelineFragment @Inject constructor(
 
         if (isThreadTimeLine() && timelineArgs.threadTimelineArgs?.showKeyboard == true) {
             // Show keyboard when the user started a thread
-            views.composerLayout.views.composerEditText.showKeyboard(andRequestFocus = true)
+            views.composerLayout.views.composerEditor.editText.showKeyboard(andRequestFocus = true)
         }
         views.composerLayout.callback = object : MessageComposerView.Callback {
             override fun onAddAttachment() {
@@ -1605,7 +1605,7 @@ class TimelineFragment @Inject constructor(
 
     private fun observerUserTyping() {
         if (isThreadTimeLine()) return
-        views.composerLayout.views.composerEditText.textChanges()
+        views.composerLayout.views.composerEditor.editText.textChanges()
                 .skipInitialValue()
                 .debounce(300)
                 .map { it.isNotEmpty() }
@@ -1615,7 +1615,7 @@ class TimelineFragment @Inject constructor(
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 
-        views.composerLayout.views.composerEditText.focusChanges()
+        views.composerLayout.views.composerEditor.editText.focusChanges()
                 .onEach {
                     timelineViewModel.handle(RoomDetailAction.ComposerFocusChange(it))
                 }
@@ -2443,8 +2443,8 @@ class TimelineFragment @Inject constructor(
         if (startToCompose &&
                 userId == session.myUserId) {
             // Empty composer, current user: start an emote
-            views.composerLayout.views.composerEditText.setText(Command.EMOTE.command + " ")
-            views.composerLayout.views.composerEditText.setSelection(Command.EMOTE.command.length + 1)
+            views.composerLayout.views.composerEditor.editText.setText(Command.EMOTE.command + " ")
+            views.composerLayout.views.composerEditor.editText.setSelection(Command.EMOTE.command.length + 1)
         } else {
             val roomMember = timelineViewModel.getMember(userId)
             // TODO move logic outside of fragment
@@ -2460,7 +2460,7 @@ class TimelineFragment @Inject constructor(
                                             requireContext(),
                                             MatrixItem.UserItem(userId, displayName, roomMember?.avatarUrl)
                                     )
-                                            .also { it.bind(views.composerLayout.views.composerEditText) },
+                                            .also { it.bind(views.composerLayout.views.composerEditor.editText) },
                                     0,
                                     displayName.length,
                                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -2470,11 +2470,11 @@ class TimelineFragment @Inject constructor(
                             if (startToCompose) {
                                 if (displayName.startsWith("/")) {
                                     // Ensure displayName will not be interpreted as a Slash command
-                                    views.composerLayout.views.composerEditText.append("\\")
+                                    views.composerLayout.views.composerEditor.editText.append("\\")
                                 }
-                                views.composerLayout.views.composerEditText.append(pill)
+                                views.composerLayout.views.composerEditor.editText.append(pill)
                             } else {
-                                views.composerLayout.views.composerEditText.text?.insert(views.composerLayout.views.composerEditText.selectionStart, pill)
+                                views.composerLayout.views.composerEditor.editText.text?.insert(views.composerLayout.views.composerEditor.editText.selectionStart, pill)
                             }
                         }
                     }
@@ -2484,7 +2484,7 @@ class TimelineFragment @Inject constructor(
 
     private fun focusComposerAndShowKeyboard() {
         if (views.composerLayout.isVisible) {
-            views.composerLayout.views.composerEditText.showKeyboard(andRequestFocus = true)
+            views.composerLayout.views.composerEditor.editText.showKeyboard(andRequestFocus = true)
         }
     }
 

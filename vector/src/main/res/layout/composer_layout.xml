@@ -102,13 +102,13 @@
         android:layout_height="0dp"
         android:background="@drawable/bg_composer_edit_text" />
 
-    <io.element.android.wysiwyg.EditorEditText
-        android:id="@+id/composerEditText"
+    <io.element.android.wysiwyg.RichTextEditor
+        android:id="@+id/composerEditor"
         style="@style/Widget.Vector.EditText.Composer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:nextFocusLeft="@id/composerEditText"
-        android:nextFocusUp="@id/composerEditText"
+        android:nextFocusLeft="@id/composerEditor"
+        android:nextFocusUp="@id/composerEditor"
         tools:hint="@string/room_message_placeholder"
         tools:ignore="MissingConstraints" />
 

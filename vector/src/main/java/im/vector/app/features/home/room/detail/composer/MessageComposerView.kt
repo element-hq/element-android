@@ -57,7 +57,7 @@ class MessageComposerView @JvmOverloads constructor(
     private val animationDuration = 100L
 
     val text: Editable?
-        get() = views.composerEditText.text
+        get() = views.composerEditor.editText.text
 
     init {
         inflate(context, R.layout.composer_layout, this)
@@ -76,7 +76,7 @@ class MessageComposerView @JvmOverloads constructor(
 //        }
 
         // Equivalent of ComposerEditText.Callback.onTextChanged
-        views.composerEditText.addTextChangedListener(onTextChanged = { text, _, _, _ ->
+        views.composerEditor.editText.addTextChangedListener(onTextChanged = { text, _, _, _ ->
             text?.let { callback?.onTextChanged(it) }
         })
 
@@ -114,7 +114,7 @@ class MessageComposerView @JvmOverloads constructor(
     }
 
     fun setTextIfDifferent(text: CharSequence?): Boolean {
-        return views.composerEditText.setTextIfDifferent(text)
+        return views.composerEditor.editText.setTextIfDifferent(text)
     }
 
     private fun applyNewConstraintSet(animate: Boolean, transitionComplete: (() -> Unit)?) {
@@ -155,9 +155,9 @@ class MessageComposerView @JvmOverloads constructor(
 
     fun setRoomEncrypted(isEncrypted: Boolean) {
         if (isEncrypted) {
-            views.composerEditText.setHint(R.string.room_message_placeholder)
+            views.composerEditor.editText.setHint(R.string.room_message_placeholder)
         } else {
-            views.composerEditText.setHint(R.string.room_message_placeholder)
+            views.composerEditor.editText.setHint(R.string.room_message_placeholder)
         }
     }
 }
