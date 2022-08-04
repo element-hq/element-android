@@ -35,6 +35,8 @@ import im.vector.app.databinding.FragmentSpaceListBinding
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.home.HomeActivitySharedAction
 import im.vector.app.features.home.HomeSharedActionViewModel
+import im.vector.app.features.home.room.list.actions.RoomListSharedAction
+import im.vector.app.features.home.room.list.actions.RoomListSharedActionViewModel
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 
@@ -48,7 +50,8 @@ class SpaceListFragment @Inject constructor(
         private val vectorFeatures: VectorFeatures,
 ) : VectorBaseFragment<FragmentSpaceListBinding>(), SpaceSummaryController.Callback, NewSpaceSummaryController.Callback {
 
-    private lateinit var sharedActionViewModel: HomeSharedActionViewModel
+    private lateinit var homeActivitySharedActionViewModel: HomeSharedActionViewModel
+    private lateinit var roomListSharedActionViewModel: RoomListSharedActionViewModel
     private val viewModel: SpaceListViewModel by fragmentViewModel()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSpaceListBinding {
@@ -57,7 +60,8 @@ class SpaceListFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        sharedActionViewModel = activityViewModelProvider[HomeSharedActionViewModel::class.java]
+        homeActivitySharedActionViewModel = activityViewModelProvider[HomeSharedActionViewModel::class.java]
+        roomListSharedActionViewModel = activityViewModelProvider[RoomListSharedActionViewModel::class.java]
         views.stateView.contentView = views.groupListView
         setupSpaceController()
         enableDragAndDrop()
@@ -121,10 +125,10 @@ class SpaceListFragment @Inject constructor(
 
     private fun observeViewEvents() = viewModel.observeViewEvents {
         when (it) {
-            is SpaceListViewEvents.OpenSpaceSummary -> sharedActionViewModel.post(HomeActivitySharedAction.OpenSpacePreview(it.id))
-            is SpaceListViewEvents.AddSpace -> sharedActionViewModel.post(HomeActivitySharedAction.AddSpace)
-            is SpaceListViewEvents.OpenSpaceInvite -> sharedActionViewModel.post(HomeActivitySharedAction.OpenSpaceInvite(it.id))
-            SpaceListViewEvents.CloseDrawer -> sharedActionViewModel.post(HomeActivitySharedAction.CloseDrawer)
+            is SpaceListViewEvents.OpenSpaceSummary -> homeActivitySharedActionViewModel.post(HomeActivitySharedAction.OpenSpacePreview(it.id))
+            is SpaceListViewEvents.AddSpace -> homeActivitySharedActionViewModel.post(HomeActivitySharedAction.AddSpace)
+            is SpaceListViewEvents.OpenSpaceInvite -> homeActivitySharedActionViewModel.post(HomeActivitySharedAction.OpenSpaceInvite(it.id))
+            SpaceListViewEvents.CloseDrawer -> homeActivitySharedActionViewModel.post(HomeActivitySharedAction.CloseDrawer)
         }
     }
 
@@ -151,6 +155,7 @@ class SpaceListFragment @Inject constructor(
 
     override fun onSpaceSelected(spaceSummary: RoomSummary?) {
         viewModel.handle(SpaceListAction.SelectSpace(spaceSummary))
+        roomListSharedActionViewModel.post(RoomListSharedAction.CloseBottomSheet)
     }
 
     override fun onSpaceInviteSelected(spaceSummary: RoomSummary) {
@@ -158,7 +163,7 @@ class SpaceListFragment @Inject constructor(
     }
 
     override fun onSpaceSettings(spaceSummary: RoomSummary) {
-        sharedActionViewModel.post(HomeActivitySharedAction.ShowSpaceSettings(spaceSummary.roomId))
+        homeActivitySharedActionViewModel.post(HomeActivitySharedAction.ShowSpaceSettings(spaceSummary.roomId))
     }
 
     override fun onToggleExpand(spaceSummary: RoomSummary) {
@@ -170,6 +175,6 @@ class SpaceListFragment @Inject constructor(
     }
 
     override fun sendFeedBack() {
-        sharedActionViewModel.post(HomeActivitySharedAction.SendSpaceFeedBack)
+        homeActivitySharedActionViewModel.post(HomeActivitySharedAction.SendSpaceFeedBack)
     }
 }
