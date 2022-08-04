@@ -40,7 +40,6 @@ import im.vector.app.core.ui.views.CurrentCallsView
 import im.vector.app.core.ui.views.CurrentCallsViewPresenter
 import im.vector.app.core.ui.views.KeysBackupBanner
 import im.vector.app.databinding.FragmentNewHomeDetailBinding
-import im.vector.app.features.VectorFeatures
 import im.vector.app.features.call.SharedKnownCallsViewModel
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.dialpad.DialPadFragment
@@ -70,7 +69,6 @@ class NewHomeDetailFragment @Inject constructor(
         private val vectorPreferences: VectorPreferences,
         private val appStateHandler: SpaceStateHandler,
         private val session: Session,
-        private val vectorFeatures: VectorFeatures,
 ) : VectorBaseFragment<FragmentNewHomeDetailBinding>(),
         KeysBackupBanner.Delegate,
         CurrentCallsView.Callback,
