@@ -76,19 +76,19 @@ class LocationTrackerTest {
         verifyOrder {
             fakeLocationManager.instance.requestLocationUpdates(
                     LocationManager.FUSED_PROVIDER,
-                    MIN_TIME_TO_UPDATE_LOCATION_MILLIS,
+                    locationTracker.minDurationToUpdateLocationMillis,
                     MIN_DISTANCE_TO_UPDATE_LOCATION_METERS,
                     locationTracker
             )
             fakeLocationManager.instance.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER,
-                    MIN_TIME_TO_UPDATE_LOCATION_MILLIS,
+                    locationTracker.minDurationToUpdateLocationMillis,
                     MIN_DISTANCE_TO_UPDATE_LOCATION_METERS,
                     locationTracker
             )
             fakeLocationManager.instance.requestLocationUpdates(
                     LocationManager.NETWORK_PROVIDER,
-                    MIN_TIME_TO_UPDATE_LOCATION_MILLIS,
+                    locationTracker.minDurationToUpdateLocationMillis,
                     MIN_DISTANCE_TO_UPDATE_LOCATION_METERS,
                     locationTracker
             )
@@ -155,7 +155,7 @@ class LocationTrackerTest {
         locationTracker.onLocationChanged(fusedLocation)
         locationTracker.onLocationChanged(gpsLocation)
         locationTracker.onLocationChanged(networkLocation)
-        advanceTimeBy(MIN_TIME_TO_UPDATE_LOCATION_MILLIS + 1)
+        advanceTimeBy(locationTracker.minDurationToUpdateLocationMillis + 1)
 
         val expectedLocationData = LocationData(
                 latitude = 1.0,
@@ -189,7 +189,7 @@ class LocationTrackerTest {
 
         locationTracker.onLocationChanged(gpsLocation)
         locationTracker.onLocationChanged(networkLocation)
-        advanceTimeBy(MIN_TIME_TO_UPDATE_LOCATION_MILLIS + 1)
+        advanceTimeBy(locationTracker.minDurationToUpdateLocationMillis + 1)
 
         val expectedLocationData = LocationData(
                 latitude = 1.0,
@@ -218,7 +218,7 @@ class LocationTrackerTest {
         val resultUpdates = locationTracker.locations.test(this)
 
         locationTracker.onLocationChanged(networkLocation)
-        advanceTimeBy(MIN_TIME_TO_UPDATE_LOCATION_MILLIS + 1)
+        advanceTimeBy(locationTracker.minDurationToUpdateLocationMillis + 1)
 
         val expectedLocationData = LocationData(
                 latitude = 1.0,
@@ -244,7 +244,7 @@ class LocationTrackerTest {
         val resultUpdates = locationTracker.locations.test(this)
 
         locationTracker.requestLastKnownLocation()
-        advanceTimeBy(MIN_TIME_TO_UPDATE_LOCATION_MILLIS + 1)
+        advanceTimeBy(locationTracker.minDurationToUpdateLocationMillis + 1)
 
         val expectedLocationData = LocationData(
                 latitude = A_LATITUDE,
