@@ -35,7 +35,6 @@ import org.hamcrest.core.AllOf
 
 class CryptoRobot {
 
-
     // Do this if we don't get the popup in time; but actually; just wait for the pop-up
     fun manualVerification() {
         // Settings
@@ -43,9 +42,9 @@ class CryptoRobot {
         clickOn(R.id.homeDrawerHeaderSettingsView)
         BaristaClickInteractions.clickOn(R.string.settings_security_and_privacy)
         clickOnPreference(R.string.settings_active_sessions_show_all)
-        clickListItem(R.id.genericRecyclerView, 3); // the first remote client.
+        clickListItem(R.id.genericRecyclerView, 3) // the first remote client.
         AllOf.allOf(withId(R.id.itemVerificationClickableZone), withChild(withText(R.string.verification_verify_device))).performAction(click())
-            }
+    }
 
     fun startVerification() {
         // These are kinda async popups, be somewhat lenient with them.
