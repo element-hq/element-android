@@ -16,6 +16,8 @@
 
 package im.vector.app.config
 
+import kotlin.time.Duration.Companion.minutes
+
 /**
  * Set of flags to configure the application.
  */
@@ -43,7 +45,7 @@ object Config {
     /**
      * The maximum length of voice messages in milliseconds.
      */
-    const val VOICE_MESSAGE_LIMIT_MS = 900_000L
+    val VOICE_MESSAGE_LIMIT_MS = 15.minutes.inWholeMilliseconds
 
     /**
      * The strategy for sharing device keys.
