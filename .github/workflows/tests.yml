@@ -49,9 +49,9 @@ jobs:
           disable-animations: true
           emulator-build: 7425822
           script: | 
-            ./gradlew unitTestsWithCoverage --stacktrace $CI_GRADLE_ARG_PROPERTIES
-            ./gradlew instrumentationTestsWithCoverage --stacktrace $CI_GRADLE_ARG_PROPERTIES
-            ./gradlew generateCoverageReport --stacktrace $CI_GRADLE_ARG_PROPERTIES
+            ./gradlew unitTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
+            ./gradlew instrumentationTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
+            ./gradlew generateCoverageReport $CI_GRADLE_ARG_PROPERTIES
 # NB: continue-on-error marks steps.tests.conclusion = 'success' but leaves stes.tests.outcome = 'failure'
       - name: Run all the codecoverage tests at once (retry if emulator failed)
         uses: reactivecircus/android-emulator-runner@v2
@@ -112,5 +112,5 @@ jobs:
 #          restore-keys: | 
 #            ${{ runner.os }}-gradle- 
 #      - name: Build Android Tests  
-#        run: ./gradlew clean assembleAndroidTest $CI_GRADLE_ARG_PROPERTIES --stacktrace 
+#        run: ./gradlew clean assembleAndroidTest $CI_GRADLE_ARG_PROPERTIES
 
