@@ -80,11 +80,11 @@ class TrafficLightClientTest {
 
                 // TODO: Determine how to avoid these 60s delays before prompt arrives.
                 // TODO (alt): Determine how to wait for the prompt to be visible before continuing instead of explicit wait.
-                Thread.sleep(20000); // try to wait for cross signing to have kicked in...
+                sleep(20000) // try to wait for cross signing to have kicked in...
                 println("Waited 20s")
-                Thread.sleep(20000);
+                sleep(20000)
                 println("Waited 40s")
-                Thread.sleep(20000);
+                sleep(20000)
                 println("Waited 60s")
                 post(postURL, "{\"response\": \"loggedin\"}")
             }
@@ -95,11 +95,11 @@ class TrafficLightClientTest {
                 val homeserverURL = data.getJSONObject("homeserver_url").getString("local_docker")
                 elementRobot.register(homeserverURL, user, pass)
 
-                sleep(20000); // try to wait for cross signing to have kicked in...
+                sleep(20000) // try to wait for cross signing to have kicked in...
                 println("Waited 20s")
-                sleep(20000);
+                sleep(20000)
                 println("Waited 40s")
-                sleep(20000);
+                sleep(20000)
                 println("Waited 60s")
 
                 post(postURL, "{\"response\": \"registered\"}")
@@ -162,5 +162,3 @@ class TrafficLightClientTest {
         client.newCall(request).execute().use { response -> return JSONObject(response.body!!.string()) }
     }
 }
-
-
