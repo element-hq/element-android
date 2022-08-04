@@ -81,8 +81,8 @@ class ElementRobot {
         val analyticsRobot = AnalyticsRobot()
         analyticsRobot.optOut()
         waitForHome()
-
     }
+
     fun startVerification() {
         val cryptoRobot = CryptoRobot()
         cryptoRobot.startVerification()
