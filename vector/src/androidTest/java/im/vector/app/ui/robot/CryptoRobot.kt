@@ -62,7 +62,6 @@ class CryptoRobot {
         }
         try {
             withRetry {
-
                 waitUntilViewVisible(withText(R.string.verification_scan_emoji_title))
                 clickOn(R.string.verification_scan_emoji_title)
             }
