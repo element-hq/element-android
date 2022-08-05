@@ -42,6 +42,7 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.util.fromBase64
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
+import org.matrix.android.sdk.internal.di.SessionCoroutineScope
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.SessionScope
@@ -71,11 +72,12 @@ internal class OutgoingKeyRequestManager @Inject constructor(
         private val inboundGroupSessionStore: InboundGroupSessionStore,
         private val sendToDeviceTask: SendToDeviceTask,
         private val deviceListManager: DeviceListManager,
-        private val perSessionBackupQueryRateLimiter: PerSessionBackupQueryRateLimiter
+        private val perSessionBackupQueryRateLimiter: PerSessionBackupQueryRateLimiter,
+        @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
 ) {
 
     private val dispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
-    private val outgoingRequestScope = CoroutineScope(SupervisorJob() + dispatcher)
+    private val outgoingRequestScope = CoroutineScope(sessionCoroutineScope.coroutineContext + dispatcher)
     private val sequencer = SemaphoreCoroutineSequencer()
 
     // We only have one active key request per session, so we don't request if it's already requested
@@ -330,7 +332,6 @@ internal class OutgoingKeyRequestManager @Inject constructor(
 
     fun close() {
         try {
-            outgoingRequestScope.cancel("User Terminate")
             requestDiscardedBecauseAlreadySentThatCouldBeTriedWithBackup.clear()
         } catch (failure: Throwable) {
             Timber.tag(loggerTag.value).w("Failed to shutDown request manager")

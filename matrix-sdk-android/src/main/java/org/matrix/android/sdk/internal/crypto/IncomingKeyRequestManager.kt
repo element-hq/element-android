@@ -42,6 +42,7 @@ import org.matrix.android.sdk.internal.crypto.actions.EnsureOlmSessionsForDevice
 import org.matrix.android.sdk.internal.crypto.actions.MessageEncrypter
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
+import org.matrix.android.sdk.internal.di.SessionCoroutineScope
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.task.SemaphoreCoroutineSequencer
 import org.matrix.android.sdk.internal.util.time.Clock
@@ -63,10 +64,11 @@ internal class IncomingKeyRequestManager @Inject constructor(
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val sendToDeviceTask: SendToDeviceTask,
         private val clock: Clock,
+        @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
 ) {
 
     private val dispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
-    private val outgoingRequestScope = CoroutineScope(SupervisorJob() + dispatcher)
+    private val outgoingRequestScope = CoroutineScope(sessionCoroutineScope.coroutineContext + dispatcher)
     val sequencer = SemaphoreCoroutineSequencer()
 
     private val incomingRequestBuffer = mutableListOf<ValidMegolmRequestBody>()
@@ -456,7 +458,6 @@ internal class IncomingKeyRequestManager @Inject constructor(
 
     fun close() {
         try {
-            outgoingRequestScope.cancel("User Terminate")
             incomingRequestBuffer.clear()
         } catch (failure: Throwable) {
             Timber.tag(loggerTag.value).w("Failed to shutDown request manager")

@@ -401,7 +401,6 @@ internal class DefaultCryptoService @Inject constructor(
      * Close the crypto.
      */
     fun close() = runBlocking(coroutineDispatchers.crypto) {
-        sessionCoroutineScope.coroutineContext.cancelChildren(CancellationException("Closing crypto module"))
         incomingKeyRequestManager.close()
         outgoingKeyRequestManager.close()
         olmDevice.release()
