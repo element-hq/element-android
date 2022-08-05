@@ -45,8 +45,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
 
-    <im.vector.app.features.location.live.LocationLiveStatusView
-        android:id="@+id/locationLiveStatusIndicator"
+    <im.vector.app.features.location.live.LiveLocationStatusView
+        android:id="@+id/liveLocationStatusIndicator"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:visibility="gone"
@@ -63,7 +63,7 @@
         android:minHeight="54dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/locationLiveStatusIndicator" />
+        app:layout_constraintTop_toBottomOf="@id/liveLocationStatusIndicator" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/timelineRecyclerView"

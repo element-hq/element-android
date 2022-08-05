@@ -31,7 +31,9 @@ import dagger.hilt.components.SingletonComponent
 import im.vector.app.BuildConfig
 import im.vector.app.EmojiCompatWrapper
 import im.vector.app.EmojiSpanify
-import im.vector.app.config.analyticsConfig
+import im.vector.app.SpaceStateHandler
+import im.vector.app.SpaceStateHandlerImpl
+import im.vector.app.config.Config
 import im.vector.app.core.dispatchers.CoroutineDispatchers
 import im.vector.app.core.error.DefaultErrorFormatter
 import im.vector.app.core.error.ErrorFormatter
@@ -40,7 +42,6 @@ import im.vector.app.core.time.Clock
 import im.vector.app.core.time.DefaultClock
 import im.vector.app.core.utils.AndroidSystemSettingsProvider
 import im.vector.app.core.utils.SystemSettingsProvider
-import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.analytics.impl.DefaultVectorAnalytics
@@ -108,6 +109,9 @@ abstract class VectorBindModule {
 
     @Binds
     abstract fun bindSystemSettingsProvide(provider: AndroidSystemSettingsProvider): SystemSettingsProvider
+
+    @Binds
+    abstract fun bindSpaceStateHandler(spaceStateHandlerImpl: SpaceStateHandlerImpl): SpaceStateHandler
 }
 
 @InstallIn(SingletonComponent::class)
@@ -201,16 +205,22 @@ object VectorStaticModule {
     }
 
     @Provides
-    fun providesAnalyticsConfig(): AnalyticsConfig {
-        return analyticsConfig
-    }
-
-    @Provides
     fun providesPhoneNumberUtil(): PhoneNumberUtil = PhoneNumberUtil.getInstance()
 
     @Provides
     @Singleton
-    fun providesBuildMeta() = BuildMeta()
+    fun providesBuildMeta() = BuildMeta(
+            isDebug = BuildConfig.DEBUG,
+            applicationId = BuildConfig.APPLICATION_ID,
+            lowPrivacyLoggingEnabled = Config.LOW_PRIVACY_LOG_ENABLE,
+            versionName = BuildConfig.VERSION_NAME,
+            gitRevision = BuildConfig.GIT_REVISION,
+            gitRevisionDate = BuildConfig.GIT_REVISION_DATE,
+            gitBranchName = BuildConfig.GIT_BRANCH_NAME,
+            buildNumber = BuildConfig.BUILD_NUMBER,
+            flavorDescription = BuildConfig.FLAVOR_DESCRIPTION,
+            flavorShortDescription = BuildConfig.SHORT_FLAVOR_DESCRIPTION,
+    )
 
     @Provides
     @Singleton

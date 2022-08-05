@@ -31,12 +31,12 @@ import androidx.core.app.TaskStackBuilder
 import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import im.vector.app.AppStateHandler
 import im.vector.app.R
+import im.vector.app.SpaceStateHandler
+import im.vector.app.config.OnboardingVariant
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.error.fatalError
 import im.vector.app.features.VectorFeatures
-import im.vector.app.features.VectorFeatures.OnboardingVariant
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.extensions.toAnalyticsViewRoom
 import im.vector.app.features.analytics.plan.ViewRoom
@@ -66,8 +66,8 @@ import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.LocationSharingActivity
 import im.vector.app.features.location.LocationSharingArgs
 import im.vector.app.features.location.LocationSharingMode
-import im.vector.app.features.location.live.map.LocationLiveMapViewActivity
-import im.vector.app.features.location.live.map.LocationLiveMapViewArgs
+import im.vector.app.features.location.live.map.LiveLocationMapViewActivity
+import im.vector.app.features.location.live.map.LiveLocationMapViewArgs
 import im.vector.app.features.login.LoginActivity
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.matrixto.MatrixToBottomSheet
@@ -120,7 +120,7 @@ class DefaultNavigator @Inject constructor(
         private val sessionHolder: ActiveSessionHolder,
         private val vectorPreferences: VectorPreferences,
         private val widgetArgsBuilder: WidgetArgsBuilder,
-        private val appStateHandler: AppStateHandler,
+        private val spaceStateHandler: SpaceStateHandler,
         private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
         private val features: VectorFeatures,
         private val analyticsTracker: AnalyticsTracker
@@ -167,7 +167,7 @@ class DefaultNavigator @Inject constructor(
             analyticsTracker.capture(
                     sessionHolder.getActiveSession().getRoomSummary(roomId).toAnalyticsViewRoom(
                             trigger = trigger,
-                            selectedSpace = appStateHandler.getCurrentSpace()
+                            selectedSpace = spaceStateHandler.getCurrentSpace()
                     )
             )
         }
@@ -182,7 +182,7 @@ class DefaultNavigator @Inject constructor(
             fatalError("Trying to open an unknown space $spaceId", vectorPreferences.failFast())
             return
         }
-        appStateHandler.setCurrentSpace(spaceId)
+        spaceStateHandler.setCurrentSpace(spaceId)
         when (postSwitchSpaceAction) {
             Navigator.PostSwitchSpaceAction.None -> {
                 // go back to home if we are showing room details?
@@ -318,7 +318,7 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun openRoomDirectory(context: Context, initialFilter: String) {
-        when (val currentSpace = appStateHandler.getCurrentSpace()) {
+        when (val currentSpace = spaceStateHandler.getCurrentSpace()) {
             null -> RoomDirectoryActivity.getIntent(context, initialFilter)
             else -> SpaceExploreActivity.newIntent(context, currentSpace.roomId)
         }.start(context)
@@ -330,14 +330,14 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun openCreateDirectRoom(context: Context) {
-        when (val currentSpace = appStateHandler.getCurrentSpace()) {
+        when (val currentSpace = spaceStateHandler.getCurrentSpace()) {
             null -> CreateDirectRoomActivity.getIntent(context)
             else -> SpacePeopleActivity.newIntent(context, currentSpace.roomId)
         }.start(context)
     }
 
     override fun openInviteUsersToRoom(context: Context, roomId: String) {
-        when (val currentSpace = appStateHandler.getCurrentSpace()) {
+        when (val currentSpace = spaceStateHandler.getCurrentSpace()) {
             null -> InviteUsersToRoomActivity.getIntent(context, roomId).start(context)
             else -> showInviteToDialog(context, currentSpace, roomId)
         }
@@ -560,10 +560,10 @@ class DefaultNavigator @Inject constructor(
         context.startActivity(intent)
     }
 
-    override fun openLocationLiveMap(context: Context, roomId: String) {
-        val intent = LocationLiveMapViewActivity.getIntent(
+    override fun openLiveLocationMap(context: Context, roomId: String) {
+        val intent = LiveLocationMapViewActivity.getIntent(
                 context = context,
-                locationLiveMapViewArgs = LocationLiveMapViewArgs(roomId = roomId)
+                liveLocationMapViewArgs = LiveLocationMapViewArgs(roomId = roomId)
         )
         context.startActivity(intent)
     }

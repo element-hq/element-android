@@ -86,7 +86,7 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
             views.createAccountEntryFooter.text = ""
         }
 
-        views.createAccountInput.setOnFocusLostListener {
+        views.createAccountInput.setOnFocusLostListener(viewLifecycleOwner) {
             viewModel.handle(OnboardingAction.UserNameEnteredAction.Registration(views.createAccountInput.content()))
         }
     }

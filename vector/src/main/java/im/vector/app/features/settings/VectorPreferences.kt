@@ -23,11 +23,12 @@ import android.provider.MediaStore
 import androidx.annotation.BoolRes
 import androidx.core.content.edit
 import com.squareup.seismic.ShakeDetector
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.time.Clock
 import im.vector.app.features.disclaimer.SHARED_PREF_KEY
+import im.vector.app.features.home.ShortcutsHandler
 import im.vector.app.features.homeserver.ServerUrlsRepository
 import im.vector.app.features.themes.ThemeUtils
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -37,6 +38,7 @@ import javax.inject.Inject
 class VectorPreferences @Inject constructor(
         private val context: Context,
         private val clock: Clock,
+        private val buildMeta: BuildMeta,
 ) {
 
     companion object {
@@ -268,7 +270,9 @@ class VectorPreferences @Inject constructor(
                 SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY,
 
                 SETTINGS_USE_RAGE_SHAKE_KEY,
-                SETTINGS_SECURITY_USE_FLAG_SECURE
+                SETTINGS_SECURITY_USE_FLAG_SECURE,
+
+                ShortcutsHandler.SHARED_PREF_KEY,
         )
     }
 
@@ -361,7 +365,7 @@ class VectorPreferences @Inject constructor(
     }
 
     fun failFast(): Boolean {
-        return BuildConfig.DEBUG || (developerMode() && defaultPrefs.getBoolean(SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY, false))
+        return buildMeta.isDebug || (developerMode() && defaultPrefs.getBoolean(SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY, false))
     }
 
     fun didAskUserToEnableSessionPush(): Boolean {

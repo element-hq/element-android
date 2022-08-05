@@ -30,7 +30,7 @@ buildscript {
         classpath 'com.google.android.gms:oss-licenses-plugin:0.10.5'
         classpath "com.likethesalad.android:stem-plugin:2.1.1"
         classpath 'org.owasp:dependency-check-gradle:7.1.1'
-        classpath "org.jetbrains.dokka:dokka-gradle-plugin:1.7.0"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:1.7.10"
         classpath "org.jetbrains.kotlinx:kotlinx-knit:0.4.0"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -41,10 +41,10 @@ plugins {
     // ktlint Plugin
     id "org.jlleitschuh.gradle.ktlint" version "10.3.0"
     // Detekt
-    id "io.gitlab.arturbosch.detekt" version "1.20.0"
+    id "io.gitlab.arturbosch.detekt" version "1.21.0"
 
     // Dependency Analysis
-    id 'com.autonomousapps.dependency-analysis' version "1.9.0"
+    id 'com.autonomousapps.dependency-analysis' version "1.11.2"
 }
 
 // https://github.com/jeremylong/DependencyCheck
@@ -126,6 +126,11 @@ allprojects {
         enableExperimentalRules = true
         // display the corresponding rule
         verbose = true
+        reporters {
+            reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.PLAIN)
+            // To have XML report for Danger
+            reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.CHECKSTYLE)
+        }
         disabledRules = [
                 // TODO Re-enable these 4 rules after reformatting project
                 "indent",

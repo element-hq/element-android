@@ -334,7 +334,7 @@ class RoomMemberProfileFragment @Inject constructor(
                 .setNeutralButton(R.string.ok, null)
                 .setPositiveButton(R.string.share_by_text) { _, _ ->
                     startSharePlainTextIntent(
-                            fragment = this,
+                            context = requireContext(),
                             activityResultLauncher = null,
                             chooserTitle = null,
                             text = permalink

@@ -23,7 +23,7 @@ import com.airbnb.mvrx.Success
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.AppStateHandler
+import im.vector.app.SpaceStateHandler
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
@@ -61,7 +61,7 @@ import org.matrix.android.sdk.flow.flow
 
 class SpaceListViewModel @AssistedInject constructor(
         @Assisted initialState: SpaceListViewState,
-        private val appStateHandler: AppStateHandler,
+        private val spaceStateHandler: SpaceStateHandler,
         private val session: Session,
         private val vectorPreferences: VectorPreferences,
         private val autoAcceptInvites: AutoAcceptInvites,
@@ -85,8 +85,7 @@ class SpaceListViewModel @AssistedInject constructor(
                 }
 
         observeSpaceSummaries()
-//        observeSelectionState()
-        appStateHandler.selectedSpaceFlow
+        spaceStateHandler.getSelectedSpaceFlow()
                 .distinctUntilChanged()
                 .setOnEach { selectedSpaceOption ->
                     copy(
@@ -98,9 +97,7 @@ class SpaceListViewModel @AssistedInject constructor(
         session.roomService().getPagedRoomSummariesLive(
                 roomSummaryQueryParams {
                     this.memberships = listOf(Membership.JOIN)
-                    this.spaceFilter = SpaceFilter.OrphanRooms.takeIf {
-                        !vectorPreferences.prefSpacesShowAllRoomInHome()
-                    }
+                    this.spaceFilter = roomsInSpaceFilter()
                 }, sortOrder = RoomSortOrder.NONE
         ).asFlow()
                 .sample(300)
@@ -115,9 +112,7 @@ class SpaceListViewModel @AssistedInject constructor(
                     val totalCount = session.roomService().getNotificationCountForRooms(
                             roomSummaryQueryParams {
                                 this.memberships = listOf(Membership.JOIN)
-                                this.spaceFilter = SpaceFilter.OrphanRooms.takeIf {
-                                    !vectorPreferences.prefSpacesShowAllRoomInHome()
-                                }
+                                this.spaceFilter = roomsInSpaceFilter()
                             }
                     )
                     val counts = RoomAggregateNotificationCount(
@@ -132,6 +127,11 @@ class SpaceListViewModel @AssistedInject constructor(
                 }
                 .flowOn(Dispatchers.Default)
                 .launchIn(viewModelScope)
+    }
+
+    private fun roomsInSpaceFilter() = when {
+        vectorPreferences.prefSpacesShowAllRoomInHome() -> SpaceFilter.NoFilter
+        else -> SpaceFilter.OrphanRooms
     }
 
     override fun handle(action: SpaceListAction) {
@@ -218,7 +218,7 @@ class SpaceListViewModel @AssistedInject constructor(
         if (state.selectedSpace?.roomId != action.spaceSummary?.roomId) {
             analyticsTracker.capture(Interaction(null, null, Interaction.Name.SpacePanelSwitchSpace))
             setState { copy(selectedSpace = action.spaceSummary) }
-            appStateHandler.setCurrentSpace(action.spaceSummary?.roomId)
+            spaceStateHandler.setCurrentSpace(action.spaceSummary?.roomId)
             _viewEvents.post(SpaceListViewEvents.CloseDrawer)
         } else {
             analyticsTracker.capture(Interaction(null, null, Interaction.Name.SpacePanelSelectedSpace))

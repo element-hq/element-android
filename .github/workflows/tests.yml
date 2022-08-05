@@ -7,10 +7,8 @@ on:
 
 # Enrich gradle.properties for CI/CD
 env:
-  CI_GRADLE_ARG_PROPERTIES: >
-    -Porg.gradle.jvmargs=-Xmx4g
-    -Porg.gradle.parallel=false
-    --no-daemon
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3072m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.daemon.jvm.options="-Xmx2560m" -Dkotlin.incremental=false
+  CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 2 --no-daemon
 
 jobs:
   tests:
@@ -51,9 +49,9 @@ jobs:
           disable-animations: true
           emulator-build: 7425822
           script: | 
-            ./gradlew unitTestsWithCoverage --stacktrace $CI_GRADLE_ARG_PROPERTIES
-            ./gradlew instrumentationTestsWithCoverage --stacktrace $CI_GRADLE_ARG_PROPERTIES
-            ./gradlew generateCoverageReport --stacktrace $CI_GRADLE_ARG_PROPERTIES
+            ./gradlew unitTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
+            ./gradlew instrumentationTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
+            ./gradlew generateCoverageReport $CI_GRADLE_ARG_PROPERTIES
 # NB: continue-on-error marks steps.tests.conclusion = 'success' but leaves stes.tests.outcome = 'failure'
       - name: Run all the codecoverage tests at once (retry if emulator failed)
         uses: reactivecircus/android-emulator-runner@v2
@@ -67,13 +65,13 @@ jobs:
           disable-animations: true
           emulator-build: 7425822
           script: |
-            ./gradlew unitTestsWithCoverage --stacktrace $CI_GRADLE_ARG_PROPERTIES
-            ./gradlew instrumentationTestsWithCoverage --stacktrace $CI_GRADLE_ARG_PROPERTIES
-            ./gradlew generateCoverageReport --stacktrace $CI_GRADLE_ARG_PROPERTIES
+            ./gradlew unitTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
+            ./gradlew instrumentationTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
+            ./gradlew generateCoverageReport $CI_GRADLE_ARG_PROPERTIES
       - run: ./gradlew sonarqube $CI_GRADLE_ARG_PROPERTIES
         if: always() # we may have failed a previous step and retried, that's OK
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          GITHUB_TOKEN: ${{ secrets.SONARQUBE_GITHUB_API_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           ORG_GRADLE_PROJECT_SONAR_LOGIN: ${{ secrets.SONAR_TOKEN }}
 
@@ -114,5 +112,5 @@ jobs:
 #          restore-keys: | 
 #            ${{ runner.os }}-gradle- 
 #      - name: Build Android Tests  
-#        run: ./gradlew clean assembleAndroidTest $CI_GRADLE_ARG_PROPERTIES --stacktrace 
+#        run: ./gradlew clean assembleAndroidTest $CI_GRADLE_ARG_PROPERTIES
 

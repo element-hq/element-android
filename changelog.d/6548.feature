@@ -1,1 +1,0 @@
-Move initialization of the Session to a background thread. MainActivity is restoring the session now, instead of VectorApplication. Useful when for instance a long migration of a database is required.
