@@ -23,6 +23,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyControllerAdapter
 import com.airbnb.epoxy.OnModelBuildFinishedListener
 import com.airbnb.mvrx.fragmentViewModel
@@ -71,7 +72,7 @@ class HomeRoomListFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        sharedActionViewModel = activityViewModelProvider.get(RoomListQuickActionsSharedActionViewModel::class.java)
+        sharedActionViewModel = activityViewModelProvider[RoomListQuickActionsSharedActionViewModel::class.java]
         sharedActionViewModel
                 .stream()
                 .onEach { handleQuickActions(it) }
@@ -90,6 +91,7 @@ class HomeRoomListFragment @Inject constructor(
         }
 
         setupRecyclerView()
+        setupFabs()
     }
 
     private fun setupRecyclerView() {
@@ -106,6 +108,41 @@ class HomeRoomListFragment @Inject constructor(
         }.launchIn(lifecycleScope)
 
         views.roomListView.adapter = concatAdapter
+    }
+
+    private fun setupFabs() {
+        showFABs()
+
+        views.newLayoutCreateChatButton.setOnClickListener {
+            // Click action for create chat modal goes here (Issue #6717)
+        }
+
+        views.newLayoutOpenSpacesButton.setOnClickListener {
+            // Click action for open spaces modal goes here (Issue #6499)
+        }
+
+        // Hide FABs when list is scrolling
+        views.roomListView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                views.createChatFabMenu.handler.removeCallbacksAndMessages(null)
+
+                when (newState) {
+                    RecyclerView.SCROLL_STATE_IDLE -> views.createChatFabMenu.postDelayed(::showFABs, 250)
+                    RecyclerView.SCROLL_STATE_DRAGGING,
+                    RecyclerView.SCROLL_STATE_SETTLING -> hideFABs()
+                }
+            }
+        })
+    }
+
+    private fun showFABs() {
+        views.newLayoutCreateChatButton.show()
+        views.newLayoutOpenSpacesButton.show()
+    }
+
+    private fun hideFABs() {
+        views.newLayoutCreateChatButton.hide()
+        views.newLayoutOpenSpacesButton.hide()
     }
 
     override fun invalidate() = withState(roomListViewModel) { state ->
