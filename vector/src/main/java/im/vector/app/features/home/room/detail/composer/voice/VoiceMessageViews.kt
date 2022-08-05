@@ -348,8 +348,10 @@ class VoiceMessageViews(
     fun renderRecordingWaveform(amplitudeList: List<Int>) {
         views.voicePlaybackWaveform.doOnLayout { waveFormView ->
             val waveformColor = ThemeUtils.getColor(waveFormView.context, R.attr.vctr_content_quaternary)
+            val view = waveFormView as AudioWaveformView
+            view.clear()
             amplitudeList.forEach {
-                (waveFormView as AudioWaveformView).add(AudioWaveformView.FFT(it.toFloat(), waveformColor))
+                view.add(AudioWaveformView.FFT(it.toFloat(), waveformColor))
             }
         }
     }
