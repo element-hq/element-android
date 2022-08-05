@@ -3,7 +3,6 @@ package org.matrix.android.sdk.internal.database.pagedlist
 import androidx.paging.DataSource
 import io.realm.kotlin.Realm
 import io.realm.kotlin.notifications.UpdatedResults
-import io.realm.kotlin.query.RealmQuery
 import io.realm.kotlin.query.RealmResults
 import io.realm.kotlin.types.RealmObject
 import kotlinx.coroutines.CoroutineScope
@@ -11,23 +10,27 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.matrix.android.sdk.internal.database.RealmObjectMapper
+import org.matrix.android.sdk.internal.database.RealmQueryBuilder
 
-internal class RealmTiledDataSource<T : RealmObject> internal constructor(
+internal class RealmTiledDataSource<T : RealmObject, R> internal constructor(
         realm: Realm,
-        queryBuilder: (Realm) -> RealmQuery<T>,
+        queryBuilder: RealmQueryBuilder<T>,
+        private val mapper: RealmObjectMapper<T, R>,
         coroutineScope: CoroutineScope
 ) :
-        TiledDataSource<T>() {
+        TiledDataSource<R>() {
 
-    class Factory<T : RealmObject>(
+    class Factory<T : RealmObject, R>(
             private val realm: Realm,
-            private val queryBuilder: (Realm) -> RealmQuery<T>,
+            private val queryBuilder: RealmQueryBuilder<T>,
+            private val mapper: RealmObjectMapper<T, R>,
             private val coroutineScope: CoroutineScope,
-    ) : DataSource.Factory<Int, T>() {
+    ) : DataSource.Factory<Int, R>() {
 
-        override fun create(): DataSource<Int, T> {
+        override fun create(): DataSource<Int, R> {
             val childScope = CoroutineScope(SupervisorJob() + coroutineScope.coroutineContext)
-            return RealmTiledDataSource(realm, queryBuilder, childScope)
+            return RealmTiledDataSource(realm, queryBuilder, mapper, childScope)
         }
     }
 
@@ -37,7 +40,7 @@ internal class RealmTiledDataSource<T : RealmObject> internal constructor(
         addInvalidatedCallback {
             coroutineScope.coroutineContext.cancelChildren()
         }
-        results = queryBuilder(realm).find()
+        results = queryBuilder.build(realm).find()
         results.asFlow()
                 .onEach { resultsChange ->
                     when (resultsChange) {
@@ -52,14 +55,15 @@ internal class RealmTiledDataSource<T : RealmObject> internal constructor(
         return results.size
     }
 
-    override fun loadRange(startPosition: Int, count: Int): List<T> {
+    override fun loadRange(startPosition: Int, count: Int): List<R> {
         val size = countItems()
         if (size == 0) return emptyList()
         return buildList {
             val endPosition = minOf(startPosition + count, size)
             for (position in startPosition until endPosition) {
                 results.getOrNull(position)?.also { item ->
-                    add(item)
+                    val mapped = mapper.map(item)
+                    add(mapped)
                 }
             }
         }
