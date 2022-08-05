@@ -108,8 +108,6 @@ class NewSpaceSummaryController @Inject constructor(
                     id(subSpaceSummary.roomId)
                     matrixItem(subSpaceSummary.toMatrixItem())
                     selected(false)
-                    canDrag(true)
-                    onMore { host.callback?.onSpaceSettings(subSpaceSummary) }
                     listener { host.callback?.onSpaceSelected(subSpaceSummary) }
                     countState(
                             UnreadCounterBadgeView.State(
@@ -135,8 +133,6 @@ class NewSpaceSummaryController @Inject constructor(
                         avatarRenderer(host.avatarRenderer)
                         id(roomSummary.roomId)
                         matrixItem(roomSummary.toMatrixItem())
-                        canDrag(true)
-                        onMore { host.callback?.onSpaceSettings(roomSummary) }
                         listener { host.callback?.onSpaceSelected(roomSummary) }
                         countState(UnreadCounterBadgeView.State(roomSummary.notificationCount, roomSummary.highlightCount > 0))
                     }

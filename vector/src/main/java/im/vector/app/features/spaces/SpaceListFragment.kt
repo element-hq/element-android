@@ -96,7 +96,7 @@ class SpaceListFragment @Inject constructor(
                         toPositionM = null
                         fromPositionM = null
                         model?.matrixItem?.id?.let {
-                            viewModel.handle(SpaceListAction.OnStartDragging(it, model.expanded))
+                            viewModel.handle(SpaceListAction.OnStartDragging(it, false))
                         }
                         itemView?.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
                         initialElevation = itemView?.elevation
@@ -121,10 +121,6 @@ class SpaceListFragment @Inject constructor(
                             toPositionM = toPosition
                             itemView?.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
                         }
-                    }
-
-                    override fun isDragEnabledForModel(model: NewSpaceSummaryItem?): Boolean {
-                        return model?.canDrag == true
                     }
                 })
     }

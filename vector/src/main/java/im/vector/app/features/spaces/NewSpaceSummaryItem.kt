@@ -37,35 +37,27 @@ abstract class NewSpaceSummaryItem : VectorEpoxyModel<NewSpaceSummaryItem.Holder
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
     @EpoxyAttribute var selected: Boolean = false
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var listener: ClickListener? = null
-    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var onMore: ClickListener? = null
-    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var toggleExpand: ClickListener? = null
-    @EpoxyAttribute var expanded: Boolean = false
-    @EpoxyAttribute var hasChildren: Boolean = false
-    @EpoxyAttribute var indent: Int = 0
     @EpoxyAttribute var countState: UnreadCounterBadgeView.State = UnreadCounterBadgeView.State(0, false)
-    @EpoxyAttribute var description: String? = null
-    @EpoxyAttribute var showSeparator: Boolean = false
-    @EpoxyAttribute var canDrag: Boolean = true
 
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.rootView.onClick(listener)
-        holder.groupNameView.text = matrixItem.displayName
+        holder.name.text = matrixItem.displayName
         holder.rootView.isChecked = selected
 
-        avatarRenderer.render(matrixItem, holder.avatarImageView)
-        holder.counterBadgeView.render(countState)
+        avatarRenderer.render(matrixItem, holder.avatar)
+        holder.unreadCounter.render(countState)
     }
 
     override fun unbind(holder: Holder) {
-        avatarRenderer.clear(holder.avatarImageView)
+        avatarRenderer.clear(holder.avatar)
         super.unbind(holder)
     }
 
     class Holder : VectorEpoxyHolder() {
         val rootView by bind<CheckableConstraintLayout>(R.id.root)
-        val avatarImageView by bind<ImageView>(R.id.avatar)
-        val groupNameView by bind<TextView>(R.id.name)
-        val counterBadgeView by bind<UnreadCounterBadgeView>(R.id.unread_counter)
+        val avatar by bind<ImageView>(R.id.avatar)
+        val name by bind<TextView>(R.id.name)
+        val unreadCounter by bind<UnreadCounterBadgeView>(R.id.unread_counter)
     }
 }
