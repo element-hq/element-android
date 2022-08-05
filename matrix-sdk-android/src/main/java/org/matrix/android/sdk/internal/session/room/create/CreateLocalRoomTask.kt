@@ -38,7 +38,6 @@ import org.matrix.android.sdk.api.session.room.model.RoomThirdPartyInviteContent
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
 import org.matrix.android.sdk.api.session.room.model.localecho.LocalRoomThirdPartyInviteContent
-import org.matrix.android.sdk.api.session.room.model.localecho.LocalThreePid
 import org.matrix.android.sdk.api.session.room.model.localecho.RoomLocalEcho
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.sync.model.RoomSyncSummary
@@ -52,6 +51,7 @@ import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
 import org.matrix.android.sdk.internal.database.model.EventInsertType
+import org.matrix.android.sdk.internal.database.model.LocalRoomSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomEntity
 import org.matrix.android.sdk.internal.database.model.RoomMembersLoadStatusType
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
@@ -63,6 +63,7 @@ import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.events.getFixedRoomMemberContent
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberEventHandler
+import org.matrix.android.sdk.internal.session.room.membership.threepid.toThreePid
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryUpdater
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
 import org.matrix.android.sdk.internal.task.Task
@@ -90,7 +91,7 @@ internal class DefaultCreateLocalRoomTask @Inject constructor(
         val roomId = RoomLocalEcho.createLocalEchoId()
         monarchy.awaitTransaction { realm ->
             createLocalRoomEntity(realm, roomId, createRoomBody)
-            createLocalRoomSummaryEntity(realm, roomId, createRoomBody)
+            createLocalRoomSummaryEntity(realm, roomId, createRoomBody, params)
         }
 
         // Wait for room to be created in DB
@@ -119,13 +120,17 @@ internal class DefaultCreateLocalRoomTask @Inject constructor(
         }
     }
 
-    private fun createLocalRoomSummaryEntity(realm: Realm, roomId: String, createRoomBody: CreateRoomBody) {
-        val otherUserId = createRoomBody.getDirectUserId()
-        if (otherUserId != null) {
-            RoomSummaryEntity.getOrCreate(realm, roomId).apply {
+    private fun createLocalRoomSummaryEntity(realm: Realm, roomId: String, createRoomBody: CreateRoomBody, createRoomParams: CreateRoomParams) {
+        val roomSummaryEntity = realm.createObject<RoomSummaryEntity>(roomId).apply {
+            val otherUserId = createRoomBody.getDirectUserId()
+            if (otherUserId != null) {
                 isDirect = true
                 directUserId = otherUserId
             }
+        }
+        realm.createObject<LocalRoomSummaryEntity>(roomId).also {
+            it.roomSummaryEntity = roomSummaryEntity
+            it.createRoomParams = createRoomParams
         }
         roomSummaryUpdater.update(
                 realm = realm,
@@ -244,10 +249,7 @@ internal class DefaultCreateLocalRoomTask @Inject constructor(
                             isDirect = createRoomBody.isDirect.orFalse(),
                             membership = Membership.INVITE,
                             displayName = body.address,
-                            thirdPartyInvite = LocalThreePid(
-                                    msisdn = body.address.takeIf { body.medium == "msisdn" },
-                                    email = body.address.takeIf { body.medium == "email" }
-                            )
+                            thirdPartyInvite = body.toThreePid()
                     ).toContent()
             )
         }

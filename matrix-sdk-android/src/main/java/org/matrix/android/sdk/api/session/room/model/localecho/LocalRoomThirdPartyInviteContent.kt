@@ -18,6 +18,7 @@ package org.matrix.android.sdk.api.session.room.model.localecho
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.room.model.Membership
 
 /**
@@ -29,11 +30,5 @@ data class LocalRoomThirdPartyInviteContent(
         @Json(name = "membership") val membership: Membership,
         @Json(name = "displayname") val displayName: String? = null,
         @Json(name = "is_direct") val isDirect: Boolean = false,
-        @Json(name = "third_party_invite") val thirdPartyInvite: LocalThreePid? = null,
-)
-
-@JsonClass(generateAdapter = true)
-data class LocalThreePid(
-        val email: String? = null,
-        val msisdn: String? = null,
+        @Json(name = "third_party_invite") val thirdPartyInvite: ThreePid? = null,
 )

@@ -163,6 +163,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor'
 
     implementation libs.squareup.moshi
+    implementation libs.squareup.moshiAdapters
     kapt libs.squareup.moshiKotlin
 
     api "com.atlassian.commonmark:commonmark:0.13.0"

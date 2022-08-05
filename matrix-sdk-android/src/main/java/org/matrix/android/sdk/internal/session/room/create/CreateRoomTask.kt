@@ -70,7 +70,6 @@ internal class DefaultCreateRoomTask @Inject constructor(
         }
 
         val createRoomBody = createRoomBodyBuilder.build(params)
-
         val createRoomResponse = try {
             executeRequest(globalErrorReceiver) {
                 roomAPI.createRoom(createRoomBody)
@@ -89,6 +88,7 @@ internal class DefaultCreateRoomTask @Inject constructor(
             }
             throw throwable
         }
+
         val roomId = createRoomResponse.roomId
         // Wait for room to come back from the sync (but it can maybe be in the DB if the sync response is received before)
         try {
