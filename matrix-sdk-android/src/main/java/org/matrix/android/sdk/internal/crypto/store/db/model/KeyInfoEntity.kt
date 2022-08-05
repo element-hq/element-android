@@ -16,25 +16,28 @@
 
 package org.matrix.android.sdk.internal.crypto.store.db.model
 
-import io.realm.RealmList
-import io.realm.RealmModel
-import io.realm.annotations.RealmClass
-import io.realm.kotlin.deleteFromRealm
+import io.realm.kotlin.ext.realmListOf
+import io.realm.kotlin.types.RealmList
+import io.realm.kotlin.types.RealmObject
 
-@RealmClass
-internal open class KeyInfoEntity(
-        var publicKeyBase64: String? = null,
-//        var isTrusted: Boolean = false,
-        var usages: RealmList<String> = RealmList(),
-        /**
-         * The signature of this MXDeviceInfo.
-         * A map from "<userId>" to a map from "<key type>:<Publickey>" to "<signature>"
-         */
-        var signatures: String? = null,
-        var trustLevelEntity: TrustLevelEntity? = null
-) : RealmModel
+internal class KeyInfoEntity : RealmObject {
+    var publicKeyBase64: String? = null
 
+    //        var isTrusted: Boolean = false,
+    var usages: RealmList<String> = realmListOf()
+
+    /**
+     * The signature of this MXDeviceInfo.
+     * A map from "<userId>" to a map from "<key type>:<Publickey>" to "<signature>"
+     */
+    var signatures: String? = null
+    var trustLevelEntity: TrustLevelEntity? = null
+}
+
+/*
 internal fun KeyInfoEntity.deleteOnCascade() {
     trustLevelEntity?.deleteFromRealm()
     deleteFromRealm()
 }
+
+ */

@@ -16,9 +16,8 @@
 
 package org.matrix.android.sdk.internal.crypto.store.db.model
 
-import io.realm.RealmModel
-import io.realm.annotations.PrimaryKey
-import io.realm.annotations.RealmClass
+import io.realm.kotlin.types.RealmObject
+import io.realm.kotlin.types.annotations.PrimaryKey
 import org.matrix.android.sdk.internal.crypto.model.InboundGroupSessionData
 import org.matrix.android.sdk.internal.crypto.model.MXInboundMegolmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.store.db.deserializeFromRealm
@@ -29,34 +28,32 @@ import timber.log.Timber
 
 internal fun OlmInboundGroupSessionEntity.Companion.createPrimaryKey(sessionId: String?, senderKey: String?) = "$sessionId|$senderKey"
 
-@RealmClass
-internal open class OlmInboundGroupSessionEntity(
-        // Combined value to build a primary key
-        @PrimaryKey var primaryKey: String? = null,
+internal class OlmInboundGroupSessionEntity : RealmObject {
+    // Combined value to build a primary key
+    @PrimaryKey var primaryKey: String? = null
 
-        // denormalization for faster querying (these fields are in the inboundGroupSessionDataJson)
-        var sessionId: String? = null,
-        var senderKey: String? = null,
-        var roomId: String? = null,
+    // denormalization for faster querying (these fields are in the inboundGroupSessionDataJson)
+    var sessionId: String? = null
+    var senderKey: String? = null
+    var roomId: String? = null
 
-        // Deprecated, used for migration / olmInboundGroupSessionData contains Json
-        // keep it in case of problem to have a chance to recover
-        var olmInboundGroupSessionData: String? = null,
+    // Deprecated, used for migration / olmInboundGroupSessionData contains Json
+    // keep it in case of problem to have a chance to recover
+    var olmInboundGroupSessionData: String? = null
 
-        // Stores the session data in an extensible format
-        // to allow to store data not yet supported for later use
-        var inboundGroupSessionDataJson: String? = null,
+    // Stores the session data in an extensible format
+    // to allow to store data not yet supported for later use
+    var inboundGroupSessionDataJson: String? = null
 
-        // The pickled session
-        var serializedOlmInboundGroupSession: String? = null,
+    // The pickled session
+    var serializedOlmInboundGroupSession: String? = null
 
-        // Flag that indicates whether or not the current inboundSession will be shared to
-        // invited users to decrypt past messages
-        var sharedHistory: Boolean = false,
-        // Indicate if the key has been backed up to the homeserver
-        var backedUp: Boolean = false
-) :
-        RealmModel {
+    // Flag that indicates whether or not the current inboundSession will be shared to
+    // invited users to decrypt past messages
+    var sharedHistory: Boolean = false
+
+    // Indicate if the key has been backed up to the homeserver
+    var backedUp: Boolean = false
 
     fun store(wrapper: MXInboundMegolmSessionWrapper) {
         this.serializedOlmInboundGroupSession = serializeForRealm(wrapper.session)

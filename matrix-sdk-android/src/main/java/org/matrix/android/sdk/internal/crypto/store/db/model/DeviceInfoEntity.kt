@@ -16,42 +16,38 @@
 
 package org.matrix.android.sdk.internal.crypto.store.db.model
 
-import io.realm.RealmModel
-import io.realm.RealmResults
-import io.realm.annotations.LinkingObjects
-import io.realm.annotations.PrimaryKey
-import io.realm.annotations.RealmClass
-import io.realm.kotlin.deleteFromRealm
+import io.realm.kotlin.types.RealmObject
+import io.realm.kotlin.types.annotations.PrimaryKey
 
 internal fun DeviceInfoEntity.Companion.createPrimaryKey(userId: String, deviceId: String) = "$userId|$deviceId"
 
-@RealmClass
-internal open class DeviceInfoEntity(
-        @PrimaryKey var primaryKey: String = "",
-        var deviceId: String? = null,
-        var identityKey: String? = null,
-        var userId: String? = null,
-        var isBlocked: Boolean? = null,
-        var algorithmListJson: String? = null,
-        var keysMapJson: String? = null,
-        var signatureMapJson: String? = null,
-        // Will contain the device name from unsigned data if present
-        var unsignedMapJson: String? = null,
-        var trustLevelEntity: TrustLevelEntity? = null,
-        /**
-         * We use that to make distinction between old devices (there before mine)
-         * and new ones. Used for example to detect new unverified login
-         */
-        var firstTimeSeenLocalTs: Long? = null
-) : RealmModel {
+internal class DeviceInfoEntity : RealmObject {
+    @PrimaryKey var primaryKey: String = ""
+    var deviceId: String? = null
+    var identityKey: String? = null
+    var userId: String? = null
+    var isBlocked: Boolean? = null
+    var algorithmListJson: String? = null
+    var keysMapJson: String? = null
+    var signatureMapJson: String? = null
 
-    @LinkingObjects("devices")
-    val users: RealmResults<UserEntity>? = null
+    // Will contain the device name from unsigned data if present
+    var unsignedMapJson: String? = null
+    var trustLevelEntity: TrustLevelEntity? = null
+
+    /**
+     * We use that to make distinction between old devices (there before mine)
+     * and new ones. Used for example to detect new unverified login
+     */
+    var firstTimeSeenLocalTs: Long? = null
 
     companion object
 }
 
+/*
 internal fun DeviceInfoEntity.deleteOnCascade() {
     trustLevelEntity?.deleteFromRealm()
     deleteFromRealm()
 }
+
+ */

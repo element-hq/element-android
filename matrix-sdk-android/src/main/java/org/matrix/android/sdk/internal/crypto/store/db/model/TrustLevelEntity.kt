@@ -16,14 +16,11 @@
 
 package org.matrix.android.sdk.internal.crypto.store.db.model
 
-import io.realm.RealmModel
-import io.realm.annotations.RealmClass
+import io.realm.kotlin.types.RealmObject
 
-@RealmClass
-internal open class TrustLevelEntity(
-        var crossSignedVerified: Boolean? = null,
-        var locallyVerified: Boolean? = null
-) : RealmModel {
+internal class TrustLevelEntity : RealmObject {
+    var crossSignedVerified: Boolean? = null
+    var locallyVerified: Boolean? = null
 
     companion object
 

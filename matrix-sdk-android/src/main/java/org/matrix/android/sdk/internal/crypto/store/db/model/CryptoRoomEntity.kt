@@ -16,27 +16,26 @@
 
 package org.matrix.android.sdk.internal.crypto.store.db.model
 
-import io.realm.RealmModel
-import io.realm.annotations.PrimaryKey
-import io.realm.annotations.RealmClass
+import io.realm.kotlin.types.RealmObject
+import io.realm.kotlin.types.annotations.PrimaryKey
 
-@RealmClass
-internal open class CryptoRoomEntity(
-        @PrimaryKey var roomId: String? = null,
-        var algorithm: String? = null,
-        var shouldEncryptForInvitedMembers: Boolean? = null,
-        var blacklistUnverifiedDevices: Boolean = false,
-        // Determines whether or not room history should be shared on new member invites
-        var shouldShareHistory: Boolean = false,
-        // Store the current outbound session for this room,
-        // to avoid re-create and re-share at each startup (if rotation not needed..)
-        // This is specific to megolm but not sure how to model it better
-        var outboundSessionInfo: OutboundGroupSessionInfoEntity? = null,
-        // a security to ensure that a room will never revert to not encrypted
-        // even if a new state event with empty encryption, or state is reset somehow
-        var wasEncryptedOnce: Boolean? = false
-) :
-        RealmModel {
+internal class CryptoRoomEntity : RealmObject {
+    @PrimaryKey var roomId: String? = null
+    var algorithm: String? = null
+    var shouldEncryptForInvitedMembers: Boolean? = null
+    var blacklistUnverifiedDevices: Boolean = false
+
+    // Determines whether or not room history should be shared on new member invites
+    var shouldShareHistory: Boolean = false
+
+    // Store the current outbound session for this room,
+    // to avoid re-create and re-share at each startup (if rotation not needed..)
+    // This is specific to megolm but not sure how to model it better
+    var outboundSessionInfo: OutboundGroupSessionInfoEntity? = null
+
+    // a security to ensure that a room will never revert to not encrypted
+    // even if a new state event with empty encryption, or state is reset somehow
+    var wasEncryptedOnce: Boolean? = false
 
     companion object
 }

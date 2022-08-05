@@ -16,25 +16,22 @@
 
 package org.matrix.android.sdk.internal.crypto.store.db.model
 
-import io.realm.RealmModel
-import io.realm.annotations.Index
-import io.realm.annotations.RealmClass
+import io.realm.kotlin.types.RealmObject
+import io.realm.kotlin.types.annotations.Index
 
 /**
  * Keep a record of to whom (user/device) a given session should have been shared.
  * It will be used to reply to keyshare requests from other users, in order to see if
  * this session was originaly shared with a given user
  */
-@RealmClass
-internal open class SharedSessionEntity(
-        var roomId: String? = null,
-        var algorithm: String? = null,
-        @Index var sessionId: String? = null,
-        @Index var userId: String? = null,
-        @Index var deviceId: String? = null,
-        @Index var deviceIdentityKey: String? = null,
-        var chainIndex: Int? = null
-) : RealmModel {
+internal class SharedSessionEntity : RealmObject {
+    var roomId: String? = null
+    var algorithm: String? = null
+    @Index var sessionId: String? = null
+    @Index var userId: String? = null
+    @Index var deviceId: String? = null
+    @Index var deviceIdentityKey: String? = null
+    var chainIndex: Int? = null
 
     companion object
 }
