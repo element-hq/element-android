@@ -20,9 +20,9 @@ import io.realm.kotlin.migration.AutomaticSchemaMigration
 import org.matrix.android.sdk.internal.database.KotlinRealmMigrator
 import timber.log.Timber
 
-internal class MigrateCryptoTo001Legacy(context: AutomaticSchemaMigration.MigrationContext) : KotlinRealmMigrator(context, 1) {
+internal class MigrateCryptoTo018(context: AutomaticSchemaMigration.MigrationContext) : KotlinRealmMigrator(context, 18) {
 
     override fun doMigrate(migrationContext: AutomaticSchemaMigration.MigrationContext) {
-        Timber.d("Add field lastReceivedMessageTs (Long) and set the value to 0")
+        Timber.d("Migrate to realm-kotlin")
     }
 }

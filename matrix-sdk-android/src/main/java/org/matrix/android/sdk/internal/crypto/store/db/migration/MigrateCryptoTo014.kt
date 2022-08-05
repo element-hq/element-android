@@ -16,26 +16,28 @@
 
 package org.matrix.android.sdk.internal.crypto.store.db.migration
 
-import io.realm.DynamicRealm
-import org.matrix.android.sdk.internal.crypto.store.db.model.DeviceInfoEntityFields
-import org.matrix.android.sdk.internal.crypto.store.db.model.SharedSessionEntityFields
-import org.matrix.android.sdk.internal.util.database.RealmMigrator
+import io.realm.kotlin.migration.AutomaticSchemaMigration
+import org.matrix.android.sdk.internal.database.KotlinRealmMigrator
+import org.matrix.android.sdk.internal.database.safeEnumerate
+import timber.log.Timber
 
 // Version 14L Update the way we remember key sharing
-internal class MigrateCryptoTo014(realm: DynamicRealm) : RealmMigrator(realm, 14) {
+internal class MigrateCryptoTo014(context: AutomaticSchemaMigration.MigrationContext) : KotlinRealmMigrator(context, 14) {
 
-    override fun doMigrate(realm: DynamicRealm) {
-        realm.schema.get("SharedSessionEntity")
-                ?.addField(SharedSessionEntityFields.DEVICE_IDENTITY_KEY, String::class.java)
-                ?.addIndex(SharedSessionEntityFields.DEVICE_IDENTITY_KEY)
-                ?.transform {
-                    val sharedUserId = it.getString(SharedSessionEntityFields.USER_ID)
-                    val sharedDeviceId = it.getString(SharedSessionEntityFields.DEVICE_ID)
-                    val knownDevice = realm.where("DeviceInfoEntity")
-                            .equalTo(DeviceInfoEntityFields.USER_ID, sharedUserId)
-                            .equalTo(DeviceInfoEntityFields.DEVICE_ID, sharedDeviceId)
-                            .findFirst()
-                    it.setString(SharedSessionEntityFields.DEVICE_IDENTITY_KEY, knownDevice?.getString(DeviceInfoEntityFields.IDENTITY_KEY))
-                }
+    override fun doMigrate(migrationContext: AutomaticSchemaMigration.MigrationContext) {
+        Timber.d("Update SharedSessionEntity")
+        migrationContext.safeEnumerate("SharedSessionEntity") { oldObject, newObject ->
+            if(newObject == null) return@safeEnumerate
+            val sharedUserId = oldObject.getNullableValue("userId", String::class)
+            val sharedDeviceId = oldObject.getNullableValue("deviceId", String::class)
+            val knownDevice = migrationContext.newRealm.query("DeviceInfoEntity")
+                    .query("userId == $0", sharedUserId)
+                    .query("deviceId == $0", sharedDeviceId)
+                    .first()
+                    .find()
+
+            val deviceIdentityKey = knownDevice?.getNullableValue("identityKey", String::class)
+            newObject.set("deviceIdentityKey", deviceIdentityKey)
+        }
     }
 }

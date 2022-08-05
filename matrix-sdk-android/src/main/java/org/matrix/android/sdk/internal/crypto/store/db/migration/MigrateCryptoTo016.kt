@@ -16,55 +16,21 @@
 
 package org.matrix.android.sdk.internal.crypto.store.db.migration
 
-import io.realm.DynamicRealm
-import org.matrix.android.sdk.internal.crypto.store.db.model.AuditTrailEntityFields
-import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoMetadataEntityFields
-import org.matrix.android.sdk.internal.crypto.store.db.model.KeyRequestReplyEntityFields
-import org.matrix.android.sdk.internal.crypto.store.db.model.OutgoingKeyRequestEntityFields
-import org.matrix.android.sdk.internal.util.database.RealmMigrator
+import io.realm.kotlin.migration.AutomaticSchemaMigration
+import org.matrix.android.sdk.internal.database.KotlinRealmMigrator
+import timber.log.Timber
 
-internal class MigrateCryptoTo016(realm: DynamicRealm) : RealmMigrator(realm, 16) {
+internal class MigrateCryptoTo016(context: AutomaticSchemaMigration.MigrationContext) : KotlinRealmMigrator(context, 16) {
 
-    override fun doMigrate(realm: DynamicRealm) {
-        realm.schema.remove("OutgoingGossipingRequestEntity")
-        realm.schema.remove("IncomingGossipingRequestEntity")
-        realm.schema.remove("GossipingEventEntity")
-
+    override fun doMigrate(migrationContext: AutomaticSchemaMigration.MigrationContext) {
+        Timber.d("Remove OutgoingGossipingRequestEntity")
+        Timber.d("Remove IncomingGossipingRequestEntity")
+        Timber.d("Remove GossipingEventEntity")
         // No need to migrate existing request, just start fresh
+        Timber.d("Create GossipingEventEntity")
+        Timber.d("Create GossipingEventEntity")
+        Timber.d("Create GossipingEventEntity")
 
-        val replySchema = realm.schema.create("KeyRequestReplyEntity")
-                .addField(KeyRequestReplyEntityFields.SENDER_ID, String::class.java)
-                .addField(KeyRequestReplyEntityFields.FROM_DEVICE, String::class.java)
-                .addField(KeyRequestReplyEntityFields.EVENT_JSON, String::class.java)
-
-        realm.schema.create("OutgoingKeyRequestEntity")
-                .addField(OutgoingKeyRequestEntityFields.REQUEST_ID, String::class.java)
-                .addIndex(OutgoingKeyRequestEntityFields.REQUEST_ID)
-                .addField(OutgoingKeyRequestEntityFields.MEGOLM_SESSION_ID, String::class.java)
-                .addIndex(OutgoingKeyRequestEntityFields.MEGOLM_SESSION_ID)
-                .addRealmListField(OutgoingKeyRequestEntityFields.REPLIES.`$`, replySchema)
-                .addField(OutgoingKeyRequestEntityFields.RECIPIENTS_DATA, String::class.java)
-                .addField(OutgoingKeyRequestEntityFields.REQUEST_STATE_STR, String::class.java)
-                .addIndex(OutgoingKeyRequestEntityFields.REQUEST_STATE_STR)
-                .addField(OutgoingKeyRequestEntityFields.REQUESTED_INFO_STR, String::class.java)
-                .addField(OutgoingKeyRequestEntityFields.ROOM_ID, String::class.java)
-                .addIndex(OutgoingKeyRequestEntityFields.ROOM_ID)
-                .addField(OutgoingKeyRequestEntityFields.REQUESTED_INDEX, Integer::class.java)
-                .addField(OutgoingKeyRequestEntityFields.CREATION_TIME_STAMP, Long::class.java)
-                .setNullable(OutgoingKeyRequestEntityFields.CREATION_TIME_STAMP, true)
-
-        realm.schema.create("AuditTrailEntity")
-                .addField(AuditTrailEntityFields.AGE_LOCAL_TS, Long::class.java)
-                .setNullable(AuditTrailEntityFields.AGE_LOCAL_TS, true)
-                .addField(AuditTrailEntityFields.CONTENT_JSON, String::class.java)
-                .addField(AuditTrailEntityFields.TYPE, String::class.java)
-                .addIndex(AuditTrailEntityFields.TYPE)
-
-        realm.schema.get("CryptoMetadataEntity")
-                ?.addField(CryptoMetadataEntityFields.GLOBAL_ENABLE_KEY_GOSSIPING, Boolean::class.java)
-                ?.transform {
-                    // set the default value to true
-                    it.setBoolean(CryptoMetadataEntityFields.GLOBAL_ENABLE_KEY_GOSSIPING, true)
-                }
+        Timber.d("Update CryptoMetadataEntity")
     }
 }

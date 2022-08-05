@@ -16,21 +16,21 @@
 
 package org.matrix.android.sdk.internal.crypto.store.db.migration
 
-import io.realm.DynamicRealm
+import io.realm.kotlin.migration.AutomaticSchemaMigration
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
-import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoRoomEntityFields
-import org.matrix.android.sdk.internal.util.database.RealmMigrator
+import org.matrix.android.sdk.internal.database.KotlinRealmMigrator
+import org.matrix.android.sdk.internal.database.safeEnumerate
+import timber.log.Timber
 
 // Version 15L adds wasEncryptedOnce field to CryptoRoomEntity
-internal class MigrateCryptoTo015(realm: DynamicRealm) : RealmMigrator(realm, 15) {
+internal class MigrateCryptoTo015(context: AutomaticSchemaMigration.MigrationContext) : KotlinRealmMigrator(context, 15) {
 
-    override fun doMigrate(realm: DynamicRealm) {
-        realm.schema.get("CryptoRoomEntity")
-                ?.addField(CryptoRoomEntityFields.WAS_ENCRYPTED_ONCE, Boolean::class.java)
-                ?.setNullable(CryptoRoomEntityFields.WAS_ENCRYPTED_ONCE, true)
-                ?.transform {
-                    val currentAlgorithm = it.getString(CryptoRoomEntityFields.ALGORITHM)
-                    it.set(CryptoRoomEntityFields.WAS_ENCRYPTED_ONCE, currentAlgorithm == MXCRYPTO_ALGORITHM_MEGOLM)
-                }
+    override fun doMigrate(migrationContext: AutomaticSchemaMigration.MigrationContext) {
+        Timber.d("Update CryptoRoomEntity")
+        migrationContext.safeEnumerate("CryptoRoomEntity") { oldObject, newObject ->
+            if(newObject == null) return@safeEnumerate
+            val currentAlgorithm = oldObject.getNullableValue("algorithm", String::class)
+            newObject.set("wasEncryptedOnce", currentAlgorithm == MXCRYPTO_ALGORITHM_MEGOLM)
+        }
     }
 }

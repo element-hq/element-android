@@ -16,17 +16,13 @@
 
 package org.matrix.android.sdk.internal.crypto.store.db.migration
 
-import io.realm.DynamicRealm
-import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoMetadataEntityFields
-import org.matrix.android.sdk.internal.util.database.RealmMigrator
+import io.realm.kotlin.migration.AutomaticSchemaMigration
+import org.matrix.android.sdk.internal.database.KotlinRealmMigrator
 import timber.log.Timber
 
-internal class MigrateCryptoTo006(realm: DynamicRealm) : RealmMigrator(realm, 6) {
+internal class MigrateCryptoTo006(context: AutomaticSchemaMigration.MigrationContext) : KotlinRealmMigrator(context, 6) {
 
-    override fun doMigrate(realm: DynamicRealm) {
+    override fun doMigrate(migrationContext: AutomaticSchemaMigration.MigrationContext) {
         Timber.d("Updating CryptoMetadataEntity table")
-        realm.schema.get("CryptoMetadataEntity")
-                ?.addField(CryptoMetadataEntityFields.KEY_BACKUP_RECOVERY_KEY, String::class.java)
-                ?.addField(CryptoMetadataEntityFields.KEY_BACKUP_RECOVERY_KEY_VERSION, String::class.java)
     }
 }

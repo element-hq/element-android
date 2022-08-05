@@ -16,15 +16,15 @@
 
 package org.matrix.android.sdk.internal.crypto.store.db.migration
 
-import io.realm.DynamicRealm
-import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoMetadataEntityFields
-import org.matrix.android.sdk.internal.util.database.RealmMigrator
+import io.realm.kotlin.migration.AutomaticSchemaMigration
+import org.matrix.android.sdk.internal.database.KotlinRealmMigrator
+import timber.log.Timber
 
 // Version 11L added deviceKeysSentToServer boolean to CryptoMetadataEntity
-internal class MigrateCryptoTo011(realm: DynamicRealm) : RealmMigrator(realm, 11) {
+internal class MigrateCryptoTo011(context: AutomaticSchemaMigration.MigrationContext) : KotlinRealmMigrator(context, 11) {
 
-    override fun doMigrate(realm: DynamicRealm) {
-        realm.schema.get("CryptoMetadataEntity")
-                ?.addField(CryptoMetadataEntityFields.DEVICE_KEYS_SENT_TO_SERVER, Boolean::class.java)
+    override fun doMigrate(migrationContext: AutomaticSchemaMigration.MigrationContext) {
+        Timber.d("Update CryptoMetadataEntity")
     }
+
 }
