@@ -17,12 +17,11 @@
 package org.matrix.android.sdk.internal.crypto
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import io.realm.Realm
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNull
-import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -37,19 +36,14 @@ import org.matrix.olm.OlmSession
 
 private const val DUMMY_DEVICE_KEY = "DeviceKey"
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4::class)
-@Ignore
 class CryptoStoreTest : InstrumentedTest {
 
     @get:Rule val rule = RetryTestRule(3)
 
     private val cryptoStoreHelper = CryptoStoreHelper()
     private val clock = DefaultClock()
-
-    @Before
-    fun setup() {
-        Realm.init(context())
-    }
 
 //    @Test
 //    fun test_metadata_realm_ok() {
@@ -69,11 +63,11 @@ class CryptoStoreTest : InstrumentedTest {
 //    }
 
     @Test
-    fun test_lastSessionUsed() {
+    fun test_lastSessionUsed() = runTest {
         // Ensure Olm is initialized
         OlmManager()
 
-        val cryptoStore: IMXCryptoStore = cryptoStoreHelper.createStore()
+        val cryptoStore: IMXCryptoStore = cryptoStoreHelper.createStore(this)
 
         assertNull(cryptoStore.getLastUsedSessionId(DUMMY_DEVICE_KEY))
 

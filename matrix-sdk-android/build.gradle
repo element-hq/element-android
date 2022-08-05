@@ -152,6 +152,7 @@ dependencies {
     // Lifecycle
     implementation libs.androidx.lifecycleCommon
     implementation libs.androidx.lifecycleProcess
+    implementation libs.androidx.lifecycleLivedata
 
     // Network
     implementation libs.squareup.retrofit
@@ -226,6 +227,7 @@ dependencies {
     androidTestImplementation libs.mockk.mockkAndroid
     androidTestImplementation libs.androidx.coreTesting
     androidTestImplementation libs.jetbrains.coroutinesAndroid
+    androidTestImplementation libs.jetbrains.coroutinesTest
     // Plant Timber tree for test
     androidTestImplementation libs.tests.timberJunitRule
 
