@@ -7,7 +7,7 @@
     android:background="@drawable/bg_space_item"
     android:orientation="vertical"
     android:padding="16dp"
-    android:text="@string/all_chats"
+    android:text="@string/change_space"
     android:textAllCaps="true"
     android:textColor="?vctr_content_tertiary"
     android:textSize="14sp"

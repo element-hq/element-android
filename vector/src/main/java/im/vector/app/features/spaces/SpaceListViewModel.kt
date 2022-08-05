@@ -194,7 +194,7 @@ class SpaceListViewModel @AssistedInject constructor(
                         val moved = removeAt(index)
                         add(index + action.delta, moved)
                     },
-                    spaceOrderLocalEchos = updatedLocalEchos
+                    spaceOrderLocalEchos = updatedLocalEchos,
             )
         }
         session.coroutineScope.launch {
