@@ -32,7 +32,6 @@ import im.vector.app.core.extensions.isMatrixId
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.core.extensions.vectorStore
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.ensureProtocol
 import im.vector.app.core.utils.ensureTrailingSlash
@@ -63,6 +62,7 @@ import org.matrix.android.sdk.api.auth.registration.RegistrationAvailability
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.failure.isHomeserverUnavailable
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.util.BuildVersionSdkIntProvider
 import timber.log.Timber
 import java.util.UUID
 import java.util.concurrent.CancellationException
@@ -86,7 +86,7 @@ class OnboardingViewModel @AssistedInject constructor(
         private val startAuthenticationFlowUseCase: StartAuthenticationFlowUseCase,
         private val vectorOverrides: VectorOverrides,
         private val registrationActionHandler: RegistrationActionHandler,
-        private val buildMeta: BuildMeta,
+        private val sdkIntProvider: BuildVersionSdkIntProvider,
 ) : VectorViewModel<OnboardingViewState, OnboardingAction, OnboardingViewEvents>(initialState) {
 
     @AssistedFactory
@@ -708,7 +708,7 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private fun onAuthenticationStartError(error: Throwable, trigger: OnboardingAction.HomeServerChange) {
         when {
-            error.isHomeserverUnavailable() && applicationContext.inferNoConnectivity(buildMeta) -> _viewEvents.post(
+            error.isHomeserverUnavailable() && applicationContext.inferNoConnectivity(sdkIntProvider) -> _viewEvents.post(
                     OnboardingViewEvents.Failure(error)
             )
             deeplinkUrlIsUnavailable(error, trigger) -> _viewEvents.post(

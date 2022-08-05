@@ -17,9 +17,11 @@
 package im.vector.app.features.pin.lockscreen.crypto.migrations
 
 import android.os.Build
+import android.security.keystore.UserNotAuthenticatedException
 import androidx.annotation.RequiresApi
 import im.vector.app.features.pin.lockscreen.crypto.KeyStoreCrypto
 import im.vector.app.features.pin.lockscreen.di.BiometricKeyAlias
+import timber.log.Timber
 import java.security.KeyStore
 import javax.inject.Inject
 
@@ -39,7 +41,11 @@ class SystemKeyV1Migrator @Inject constructor(
     fun migrate() {
         keyStore.deleteEntry(SYSTEM_KEY_ALIAS_V1)
         val systemKeyStoreCrypto = keystoreCryptoFactory.provide(systemKeyAlias, keyNeedsUserAuthentication = true)
-        systemKeyStoreCrypto.ensureKey()
+        try {
+            systemKeyStoreCrypto.ensureKey()
+        } catch (e: UserNotAuthenticatedException) {
+            Timber.e("Could not migrate v1 biometric key because there are no enrolled biometric authenticators.", e)
+        }
     }
 
     /**

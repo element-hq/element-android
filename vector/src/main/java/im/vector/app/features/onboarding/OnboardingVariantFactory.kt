@@ -16,6 +16,7 @@
 
 package im.vector.app.features.onboarding
 
+import im.vector.app.config.OnboardingVariant
 import im.vector.app.core.platform.ScreenOrientationLocker
 import im.vector.app.databinding.ActivityLoginBinding
 import im.vector.app.features.VectorFeatures
@@ -34,8 +35,8 @@ class OnboardingVariantFactory @Inject constructor(
             onboardingViewModel: Lazy<OnboardingViewModel>,
             loginViewModel2: Lazy<LoginViewModel2>
     ) = when (vectorFeatures.onboardingVariant()) {
-        VectorFeatures.OnboardingVariant.LEGACY -> error("Legacy is not supported by the FTUE")
-        VectorFeatures.OnboardingVariant.FTUE_AUTH -> FtueAuthVariant(
+        OnboardingVariant.LEGACY -> error("Legacy is not supported by the FTUE")
+        OnboardingVariant.FTUE_AUTH -> FtueAuthVariant(
                 views = views,
                 onboardingViewModel = onboardingViewModel.value,
                 activity = activity,
@@ -43,7 +44,7 @@ class OnboardingVariantFactory @Inject constructor(
                 vectorFeatures = vectorFeatures,
                 orientationLocker = orientationLocker
         )
-        VectorFeatures.OnboardingVariant.LOGIN_2 -> Login2Variant(
+        OnboardingVariant.LOGIN_2 -> Login2Variant(
                 views = views,
                 loginViewModel = loginViewModel2.value,
                 activity = activity,

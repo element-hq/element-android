@@ -33,10 +33,10 @@ import androidx.core.view.ViewCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.SpaceStateHandler
+import im.vector.app.config.OnboardingVariant
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.error.fatalError
 import im.vector.app.features.VectorFeatures
-import im.vector.app.features.VectorFeatures.OnboardingVariant
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.extensions.toAnalyticsViewRoom
 import im.vector.app.features.analytics.plan.ViewRoom
@@ -66,8 +66,8 @@ import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.LocationSharingActivity
 import im.vector.app.features.location.LocationSharingArgs
 import im.vector.app.features.location.LocationSharingMode
-import im.vector.app.features.location.live.map.LocationLiveMapViewActivity
-import im.vector.app.features.location.live.map.LocationLiveMapViewArgs
+import im.vector.app.features.location.live.map.LiveLocationMapViewActivity
+import im.vector.app.features.location.live.map.LiveLocationMapViewArgs
 import im.vector.app.features.login.LoginActivity
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.matrixto.MatrixToBottomSheet
@@ -560,10 +560,10 @@ class DefaultNavigator @Inject constructor(
         context.startActivity(intent)
     }
 
-    override fun openLocationLiveMap(context: Context, roomId: String) {
-        val intent = LocationLiveMapViewActivity.getIntent(
+    override fun openLiveLocationMap(context: Context, roomId: String) {
+        val intent = LiveLocationMapViewActivity.getIntent(
                 context = context,
-                locationLiveMapViewArgs = LocationLiveMapViewArgs(roomId = roomId)
+                liveLocationMapViewArgs = LiveLocationMapViewArgs(roomId = roomId)
         )
         context.startActivity(intent)
     }

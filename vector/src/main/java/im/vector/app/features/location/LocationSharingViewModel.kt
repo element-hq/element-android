@@ -152,6 +152,7 @@ class LocationSharingViewModel @AssistedInject constructor(
             LocationSharingAction.ZoomToUserLocation -> handleZoomToUserLocationAction()
             LocationSharingAction.LiveLocationSharingRequested -> handleLiveLocationSharingRequestedAction()
             is LocationSharingAction.StartLiveLocationSharing -> handleStartLiveLocationSharingAction(action.durationMillis)
+            LocationSharingAction.ShowMapLoadingError -> handleShowMapLoadingError()
         }
     }
 
@@ -209,6 +210,10 @@ class LocationSharingViewModel @AssistedInject constructor(
                         durationMillis = durationMillis
                 )
         )
+    }
+
+    private fun handleShowMapLoadingError() {
+        setState { copy(loadingMapHasFailed = true) }
     }
 
     private fun onLocationUpdate(locationData: LocationData) {

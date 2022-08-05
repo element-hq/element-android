@@ -26,8 +26,8 @@ import im.vector.app.core.resources.toTimestamp
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
-import im.vector.app.features.location.live.LocationLiveMessageBannerViewState
-import im.vector.app.features.location.live.LocationLiveRunningBannerView
+import im.vector.app.features.location.live.LiveLocationMessageBannerViewState
+import im.vector.app.features.location.live.LiveLocationRunningBannerView
 import org.threeten.bp.LocalDateTime
 
 @EpoxyModelClass
@@ -44,17 +44,17 @@ abstract class MessageLiveLocationItem : AbsMessageLocationItem<MessageLiveLocat
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        bindLocationLiveBanner(holder)
+        bindLiveLocationBanner(holder)
     }
 
-    private fun bindLocationLiveBanner(holder: Holder) {
+    private fun bindLiveLocationBanner(holder: Holder) {
         // TODO in a future PR add check on device id to confirm that is the one that sent the beacon
         val isEmitter = currentUserId != null && currentUserId == locationUserId
         val messageLayout = attributes.informationData.messageLayout
         val viewState = buildViewState(holder, messageLayout, isEmitter)
-        holder.locationLiveRunningBanner.isVisible = true
-        holder.locationLiveRunningBanner.render(viewState)
-        holder.locationLiveRunningBanner.stopButton.setOnClickListener {
+        holder.liveLocationRunningBanner.isVisible = true
+        holder.liveLocationRunningBanner.render(viewState)
+        holder.liveLocationRunningBanner.stopButton.setOnClickListener {
             attributes.callback?.onTimelineItemAction(RoomDetailAction.StopLiveLocationSharing)
         }
     }
@@ -63,24 +63,24 @@ abstract class MessageLiveLocationItem : AbsMessageLocationItem<MessageLiveLocat
             holder: Holder,
             messageLayout: TimelineMessageLayout,
             isEmitter: Boolean
-    ): LocationLiveMessageBannerViewState {
+    ): LiveLocationMessageBannerViewState {
         return when {
             messageLayout is TimelineMessageLayout.Bubble && isEmitter ->
-                LocationLiveMessageBannerViewState.Emitter(
+                LiveLocationMessageBannerViewState.Emitter(
                         remainingTimeInMillis = getRemainingTimeOfLiveInMillis(),
                         bottomStartCornerRadiusInDp = messageLayout.cornersRadius.bottomStartRadius,
                         bottomEndCornerRadiusInDp = messageLayout.cornersRadius.bottomEndRadius,
                         isStopButtonCenteredVertically = false
                 )
             messageLayout is TimelineMessageLayout.Bubble ->
-                LocationLiveMessageBannerViewState.Watcher(
+                LiveLocationMessageBannerViewState.Watcher(
                         bottomStartCornerRadiusInDp = messageLayout.cornersRadius.bottomStartRadius,
                         bottomEndCornerRadiusInDp = messageLayout.cornersRadius.bottomEndRadius,
                         formattedLocalTimeOfEndOfLive = getFormattedLocalTimeEndOfLive(),
                 )
             isEmitter -> {
                 val cornerRadius = getBannerCornerRadiusForDefaultLayout(holder)
-                LocationLiveMessageBannerViewState.Emitter(
+                LiveLocationMessageBannerViewState.Emitter(
                         remainingTimeInMillis = getRemainingTimeOfLiveInMillis(),
                         bottomStartCornerRadiusInDp = cornerRadius,
                         bottomEndCornerRadiusInDp = cornerRadius,
@@ -89,7 +89,7 @@ abstract class MessageLiveLocationItem : AbsMessageLocationItem<MessageLiveLocat
             }
             else -> {
                 val cornerRadius = getBannerCornerRadiusForDefaultLayout(holder)
-                LocationLiveMessageBannerViewState.Watcher(
+                LiveLocationMessageBannerViewState.Watcher(
                         bottomStartCornerRadiusInDp = cornerRadius,
                         bottomEndCornerRadiusInDp = cornerRadius,
                         formattedLocalTimeOfEndOfLive = getFormattedLocalTimeEndOfLive(),
@@ -112,7 +112,7 @@ abstract class MessageLiveLocationItem : AbsMessageLocationItem<MessageLiveLocat
     override fun getViewStubId() = STUB_ID
 
     class Holder : AbsMessageLocationItem.Holder(STUB_ID) {
-        val locationLiveRunningBanner by bind<LocationLiveRunningBannerView>(R.id.locationLiveRunningBanner)
+        val liveLocationRunningBanner by bind<LiveLocationRunningBannerView>(R.id.liveLocationRunningBanner)
     }
 
     companion object {

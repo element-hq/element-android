@@ -16,8 +16,10 @@
 
 package im.vector.app.core.di
 
+import android.content.Context
 import arrow.core.Option
 import im.vector.app.ActiveSessionDataSource
+import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.pushers.UnifiedPushHelper
 import im.vector.app.core.services.GuardServiceStarter
 import im.vector.app.features.call.webrtc.WebRtcCallManager
@@ -25,6 +27,8 @@ import im.vector.app.features.crypto.keysrequest.KeyRequestHandler
 import im.vector.app.features.crypto.verification.IncomingVerificationRequestHandler
 import im.vector.app.features.notifications.PushRuleTriggerListener
 import im.vector.app.features.session.SessionListener
+import kotlinx.coroutines.runBlocking
+import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicReference
@@ -41,7 +45,10 @@ class ActiveSessionHolder @Inject constructor(
         private val sessionListener: SessionListener,
         private val imageManager: ImageManager,
         private val unifiedPushHelper: UnifiedPushHelper,
-        private val guardServiceStarter: GuardServiceStarter
+        private val guardServiceStarter: GuardServiceStarter,
+        private val sessionInitializer: SessionInitializer,
+        private val applicationContext: Context,
+        private val authenticationService: AuthenticationService,
 ) {
 
     private var activeSessionReference: AtomicReference<Session?> = AtomicReference()
@@ -80,17 +87,26 @@ class ActiveSessionHolder @Inject constructor(
     }
 
     fun hasActiveSession(): Boolean {
-        return activeSessionReference.get() != null
+        return activeSessionReference.get() != null || authenticationService.hasAuthenticatedSessions()
     }
 
     fun getSafeActiveSession(): Session? {
-        return activeSessionReference.get()
+        return runBlocking { getOrInitializeSession(startSync = true) }
     }
 
     fun getActiveSession(): Session {
-        return activeSessionReference.get()
+        return getSafeActiveSession()
                 ?: throw IllegalStateException("You should authenticate before using this")
     }
+
+    suspend fun getOrInitializeSession(startSync: Boolean): Session? {
+        return activeSessionReference.get() ?: sessionInitializer.tryInitialize(readCurrentSession = { activeSessionReference.get() }) { session ->
+            setActiveSession(session)
+            session.configureAndStart(applicationContext, startSyncing = startSync)
+        }
+    }
+
+    fun isWaitingForSessionInitialization() = activeSessionReference.get() == null && authenticationService.hasAuthenticatedSessions()
 
     // TODO Stop sync ?
 //    fun switchToSession(sessionParams: SessionParams) {

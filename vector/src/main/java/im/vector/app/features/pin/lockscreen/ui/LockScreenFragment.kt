@@ -59,7 +59,7 @@ class LockScreenFragment : VectorBaseFragment<FragmentLockScreenBinding>() {
             if (state.lockScreenConfiguration.mode == LockScreenMode.CREATE) return@withState
 
             viewLifecycleOwner.lifecycleScope.launchWhenResumed {
-                if (state.isBiometricKeyInvalidated) {
+                if (state.canUseBiometricAuth && state.isBiometricKeyInvalidated) {
                     lockScreenListener?.onBiometricKeyInvalidated()
                 } else if (state.showBiometricPromptAutomatically) {
                     showBiometricPrompt()
