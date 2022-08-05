@@ -161,10 +161,11 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
     private fun formatPlaybackTime(time: Int) = DateUtils.formatElapsedTime((time / 1000).toLong())
 
     override fun unbind(holder: Holder) {
-        super.unbind(holder)
+        holder.voicePlaybackWaveform.clear()
         contentUploadStateTrackerBinder.unbind(attributes.informationData.eventId)
         contentDownloadStateTrackerBinder.unbind(mxcUrl)
         audioMessagePlaybackTracker.untrack(attributes.informationData.eventId)
+        super.unbind(holder)
     }
 
     override fun getViewStubId() = STUB_ID
