@@ -106,6 +106,10 @@ class AttachmentsCameraFragment :
             changeCaptureMode()
         }
 
+        views.attachmentsCameraFlip.debouncedClicks {
+            changeLensFacing()
+        }
+
         cameraExecutor = Executors.newSingleThreadExecutor()
     }
 
@@ -115,6 +119,7 @@ class AttachmentsCameraFragment :
         } == PackageManager.PERMISSION_GRANTED
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun changeCaptureMode() {
         when (captureMode) {
             MediaType.IMAGE -> {
@@ -142,6 +147,15 @@ class AttachmentsCameraFragment :
                 }
             }
         }
+    }
+
+    private fun changeLensFacing() {
+        cameraSelector = if (cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA) {
+            CameraSelector.DEFAULT_FRONT_CAMERA
+        } else {
+            CameraSelector.DEFAULT_BACK_CAMERA
+        }
+        startCamera()
     }
 
     private fun capture() {
@@ -254,7 +268,6 @@ class AttachmentsCameraFragment :
         }
     }
 
-    @SuppressLint("RestrictedApi")
     private fun startCamera() {
         Timber.d("Starting Camera")
         context?.let { context ->
@@ -277,9 +290,6 @@ class AttachmentsCameraFragment :
                         .setQualitySelector(QualitySelector.from(Quality.HIGHEST))
                         .build()
                 videoCapture = VideoCapture.withOutput(recorder)
-
-                // Select back camera as a default
-                val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
                 try {
                     // Unbind use cases before rebinding
@@ -341,6 +351,7 @@ class AttachmentsCameraFragment :
 
     companion object {
         private var captureMode = MediaType.IMAGE
+        private var cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
         private val REQUIRED_PERMISSIONS =
                 mutableListOf (
                         Manifest.permission.CAMERA,
