@@ -83,7 +83,6 @@ fun TextInputLayout.setOnImeDoneListener(action: () -> Unit) {
  * The listener is only called when the view is in a resumed state to avoid triggers when exiting a screen.
  */
 fun TextInputLayout.setOnFocusLostListener(lifecycleOwner: LifecycleOwner, action: () -> Unit) {
-    lifecycleOwner.lifecycle
     editText().setOnFocusChangeListener { _, hasFocus ->
         when (hasFocus) {
             false -> lifecycleOwner.lifecycleScope.launchWhenResumed { action() }
