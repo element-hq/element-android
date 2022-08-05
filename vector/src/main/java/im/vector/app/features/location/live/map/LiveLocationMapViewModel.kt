@@ -61,6 +61,7 @@ class LiveLocationMapViewModel @AssistedInject constructor(
             is LiveLocationMapAction.AddMapSymbol -> handleAddMapSymbol(action)
             is LiveLocationMapAction.RemoveMapSymbol -> handleRemoveMapSymbol(action)
             LiveLocationMapAction.StopSharing -> handleStopSharing()
+            LiveLocationMapAction.ShowMapLoadingError -> handleShowMapLoadingError()
         }
     }
 
@@ -85,6 +86,10 @@ class LiveLocationMapViewModel @AssistedInject constructor(
                 _viewEvents.post(LiveLocationMapViewEvents.Error(result.error))
             }
         }
+    }
+
+    private fun handleShowMapLoadingError() {
+        setState { copy(loadingMapHasFailed = true) }
     }
 
     override fun onLocationServiceRunning(roomIds: Set<String>) {

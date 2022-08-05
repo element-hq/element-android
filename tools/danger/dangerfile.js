@@ -83,7 +83,7 @@ if (requiresSignOff) {
     const hasPRBodySignOff = pr.body.includes(signOff)
     const hasCommitSignOff = danger.git.commits.every(commit => commit.message.includes(signOff))
     if (!hasPRBodySignOff && !hasCommitSignOff) {
-        fail("Please add a sign-off to either the PR description or to the commits themselves.")
+        fail("Please add a sign-off to either the PR description or to the commits themselves. See instructions [here](https://matrix-org.github.io/synapse/latest/development/contributing_guide.html#sign-off).")
     }
 }
 

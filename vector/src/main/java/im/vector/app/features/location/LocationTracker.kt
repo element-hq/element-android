@@ -24,8 +24,8 @@ import androidx.annotation.RequiresPermission
 import androidx.annotation.VisibleForTesting
 import androidx.core.content.getSystemService
 import androidx.core.location.LocationListenerCompat
-import im.vector.app.BuildConfig
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -36,11 +36,16 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.time.Duration.Companion.seconds
+
+@VisibleForTesting
+const val MIN_DISTANCE_TO_UPDATE_LOCATION_METERS = 10f
 
 @Singleton
 class LocationTracker @Inject constructor(
         context: Context,
-        private val activeSessionHolder: ActiveSessionHolder
+        private val activeSessionHolder: ActiveSessionHolder,
+        private val buildMeta: BuildMeta,
 ) : LocationListenerCompat {
 
     private val locationManager = context.getSystemService<LocationManager>()
@@ -61,14 +66,25 @@ class LocationTracker @Inject constructor(
     @VisibleForTesting
     var hasLocationFromGPSProvider = false
 
+    private var firstLocationHandled = false
     private val _locations = MutableSharedFlow<Location>(replay = 1)
+
+    @VisibleForTesting
+    val minDurationToUpdateLocationMillis = 5.seconds.inWholeMilliseconds
 
     /**
      * SharedFlow to collect location updates.
      */
     val locations = _locations.asSharedFlow()
             .onEach { Timber.d("new location emitted") }
-            .debounce(MIN_TIME_TO_UPDATE_LOCATION_MILLIS)
+            .debounce {
+                if (firstLocationHandled) {
+                    minDurationToUpdateLocationMillis
+                } else {
+                    firstLocationHandled = true
+                    0
+                }
+            }
             .onEach { Timber.d("new location emitted after debounce") }
             .map { it.toLocationData() }
 
@@ -95,7 +111,7 @@ class LocationTracker @Inject constructor(
 
                         locationManager.requestLocationUpdates(
                                 provider,
-                                MIN_TIME_TO_UPDATE_LOCATION_MILLIS,
+                                minDurationToUpdateLocationMillis,
                                 MIN_DISTANCE_TO_UPDATE_LOCATION_METERS,
                                 this
                         )
@@ -104,7 +120,7 @@ class LocationTracker @Inject constructor(
                     }
                     .maxByOrNull { location -> location.time }
                     ?.let { latestKnownLocation ->
-                        if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
+                        if (buildMeta.lowPrivacyLoggingEnabled) {
                             Timber.d("lastKnownLocation: $latestKnownLocation")
                         } else {
                             Timber.d("lastKnownLocation: ${latestKnownLocation.provider}")
@@ -162,7 +178,7 @@ class LocationTracker @Inject constructor(
     }
 
     override fun onLocationChanged(location: Location) {
-        if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
+        if (buildMeta.lowPrivacyLoggingEnabled) {
             Timber.d("onLocationChanged: $location")
         } else {
             Timber.d("onLocationChanged: ${location.provider}")
@@ -196,7 +212,7 @@ class LocationTracker @Inject constructor(
 
     private fun notifyLocation(location: Location) {
         activeSessionHolder.getSafeActiveSession()?.coroutineScope?.launch {
-            if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
+            if (buildMeta.lowPrivacyLoggingEnabled) {
                 Timber.d("notify location: $location")
             } else {
                 Timber.d("notify location: ${location.provider}")

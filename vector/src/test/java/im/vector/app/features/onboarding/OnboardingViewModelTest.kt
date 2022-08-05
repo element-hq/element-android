@@ -17,6 +17,7 @@
 package im.vector.app.features.onboarding
 
 import android.net.Uri
+import android.os.Build
 import com.airbnb.mvrx.test.MvRxTestRule
 import im.vector.app.R
 import im.vector.app.features.login.LoginConfig
@@ -24,6 +25,7 @@ import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.ReAuthHelper
 import im.vector.app.features.login.SignMode
 import im.vector.app.features.onboarding.StartAuthenticationFlowUseCase.StartAuthenticationResult
+import im.vector.app.test.TestBuildVersionSdkIntProvider
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakeAnalyticsTracker
 import im.vector.app.test.fakes.FakeAuthenticationService
@@ -43,7 +45,6 @@ import im.vector.app.test.fakes.FakeVectorFeatures
 import im.vector.app.test.fakes.FakeVectorOverrides
 import im.vector.app.test.fakes.toTestString
 import im.vector.app.test.fixtures.a401ServerError
-import im.vector.app.test.fixtures.aBuildMeta
 import im.vector.app.test.fixtures.aHomeServerCapabilities
 import im.vector.app.test.test
 import kotlinx.coroutines.test.runTest
@@ -720,7 +721,7 @@ class OnboardingViewModelTest {
                 fakeStartAuthenticationFlowUseCase.instance,
                 FakeVectorOverrides(),
                 fakeRegistrationActionHandler.instance,
-                aBuildMeta(),
+                TestBuildVersionSdkIntProvider().also { it.value = Build.VERSION_CODES.O },
         ).also {
             viewModel = it
             initialState = state

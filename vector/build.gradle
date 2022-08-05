@@ -156,19 +156,6 @@ android {
         buildConfigField "String", "GIT_BRANCH_NAME", "\"${gitBranchName()}\""
         buildConfigField "String", "BUILD_NUMBER", "\"${buildNumber}\""
 
-        buildConfigField "im.vector.app.features.VectorFeatures.OnboardingVariant", "ONBOARDING_VARIANT", "im.vector.app.features.VectorFeatures.OnboardingVariant.FTUE_AUTH"
-
-        buildConfigField "im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy", "outboundSessionKeySharingStrategy", "im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy.WhenTyping"
-
-        buildConfigField "Long", "VOICE_MESSAGE_DURATION_LIMIT_MS", "120_000L"
-
-        //  If set, MSC3086 asserted identity messages sent on VoIP calls will cause the call to appear in the room corresponding to the asserted identity.
-        //  This *must* only be set in trusted environments.
-        buildConfigField "Boolean", "handleCallAssertedIdentityEvents", "false"
-
-        buildConfigField "Boolean", "enableLocationSharing", "true"
-        buildConfigField "String", "mapTilerKey", "\"fU3vlMsMn4Jb6dnEIFsx\""
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         // Keep abiFilter for the universalApk
@@ -250,10 +237,6 @@ android {
             resValue "string", "app_name", "Element dbg"
             resValue "color", "launcher_background", "#0DBD8B"
 
-            buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
-            // Set to true if you want to enable strict mode in debug
-            buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
-
             signingConfig signingConfigs.debug
 
             if (project.hasProperty("coverage")) {
@@ -265,10 +248,6 @@ android {
             resValue "string", "app_name", "Element"
             resValue "color", "launcher_background", "#0DBD8B"
 
-            buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
-            buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
-
-            // When updating this block, please also update the same block in the `nightly` buildType below
             postprocessing {
                 removeUnusedCode true
                 removeUnusedResources true
@@ -329,7 +308,6 @@ android {
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getGplayVersionSuffix()}"
 
             resValue "bool", "isGplay", "true"
-            buildConfigField "boolean", "ALLOW_FCM_USE", "true"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"G\""
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"GooglePlay\""
         }
@@ -340,7 +318,6 @@ android {
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getFdroidVersionSuffix()}"
 
             resValue "bool", "isGplay", "false"
-            buildConfigField "boolean", "ALLOW_FCM_USE", "false"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"F\""
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"FDroid\""
         }
@@ -438,7 +415,7 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.6.0'
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.52'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.53'
 
     // FlowBinding
     implementation libs.github.flowBinding

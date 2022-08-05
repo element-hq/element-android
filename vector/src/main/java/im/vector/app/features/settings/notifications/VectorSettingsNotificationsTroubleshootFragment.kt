@@ -34,7 +34,7 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSettingsNotificationsTroubleshootBinding
-import im.vector.app.features.notifications.NotificationUtils
+import im.vector.app.features.notifications.NotificationActionIds
 import im.vector.app.features.rageshake.BugReporter
 import im.vector.app.features.settings.VectorSettingsFragmentInteractionListener
 import im.vector.app.features.settings.troubleshoot.NotificationTroubleshootTestManager
@@ -46,7 +46,8 @@ import javax.inject.Inject
 
 class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
         private val bugReporter: BugReporter,
-        private val testManagerFactory: NotificationTroubleshootTestManagerFactory
+        private val testManagerFactory: NotificationTroubleshootTestManagerFactory,
+        private val actionIds: NotificationActionIds,
 ) : VectorBaseFragment<FragmentSettingsNotificationsTroubleshootBinding>() {
 
     private var testManager: NotificationTroubleshootTestManager? = null
@@ -151,11 +152,11 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
 
         tryOrNull("Unable to register the receiver") {
             LocalBroadcastManager.getInstance(requireContext())
-                    .registerReceiver(broadcastReceiverPush, IntentFilter(NotificationUtils.PUSH_ACTION))
+                    .registerReceiver(broadcastReceiverPush, IntentFilter(actionIds.push))
         }
         tryOrNull("Unable to register the receiver") {
             LocalBroadcastManager.getInstance(requireContext())
-                    .registerReceiver(broadcastReceiverNotification, IntentFilter(NotificationUtils.DIAGNOSTIC_ACTION))
+                    .registerReceiver(broadcastReceiverNotification, IntentFilter(actionIds.diagnostic))
         }
     }
 

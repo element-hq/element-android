@@ -23,11 +23,11 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.extensions.observeK
 import im.vector.app.core.extensions.replaceChildFragment
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.FragmentHomeDrawerBinding
 import im.vector.app.features.analytics.plan.MobileScreen
@@ -43,7 +43,8 @@ import javax.inject.Inject
 class HomeDrawerFragment @Inject constructor(
         private val session: Session,
         private val vectorPreferences: VectorPreferences,
-        private val avatarRenderer: AvatarRenderer
+        private val avatarRenderer: AvatarRenderer,
+        private val buildMeta: BuildMeta,
 ) : VectorBaseFragment<FragmentHomeDrawerBinding>() {
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
@@ -112,7 +113,7 @@ class HomeDrawerFragment @Inject constructor(
         }
 
         // Debug menu
-        views.homeDrawerHeaderDebugView.isVisible = BuildConfig.DEBUG && vectorPreferences.developerMode()
+        views.homeDrawerHeaderDebugView.isVisible = buildMeta.isDebug && vectorPreferences.developerMode()
         views.homeDrawerHeaderDebugView.debouncedClicks {
             sharedActionViewModel.post(HomeActivitySharedAction.CloseDrawer)
             navigator.openDebug(requireActivity())
