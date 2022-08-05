@@ -98,6 +98,8 @@ class AttachmentsCameraFragment :
             requestPermissionLauncher.launch(REQUIRED_PERMISSIONS)
         }
 
+        setButtons()
+
         views.attachmentsCameraCaptureAction.debouncedClicks {
             capture()
         }
@@ -119,11 +121,18 @@ class AttachmentsCameraFragment :
         } == PackageManager.PERMISSION_GRANTED
     }
 
-    @SuppressLint("UseCompatLoadingForDrawables")
     private fun changeCaptureMode() {
+        captureMode = when (captureMode) {
+            MediaType.IMAGE -> MediaType.VIDEO
+            MediaType.VIDEO -> MediaType.IMAGE
+        }
+        setButtons()
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun setButtons() {
         when (captureMode) {
-            MediaType.IMAGE -> {
-                captureMode = MediaType.VIDEO
+            MediaType.VIDEO -> {
                 views.attachmentsCameraCaptureAction.setImageDrawable(
                         context?.getDrawable(R.drawable.ic_video)
                 )
@@ -134,8 +143,7 @@ class AttachmentsCameraFragment :
                     contentDescription = getString(R.string.attachment_camera_photo)
                 }
             }
-            MediaType.VIDEO -> {
-                captureMode = MediaType.IMAGE
+            MediaType.IMAGE -> {
                 views.attachmentsCameraCaptureAction.setImageDrawable(
                         context?.getDrawable(R.drawable.ic_camera_plain)
                 )
