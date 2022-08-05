@@ -163,7 +163,7 @@ class HomeRoomListFragment @Inject constructor(
         showFABs()
 
         views.newLayoutCreateChatButton.setOnClickListener {
-            // Click action for create chat modal goes here
+            // Click action for create chat modal goes here (Issue #6717)
         }
 
         views.newLayoutOpenSpacesButton.setOnClickListener {
