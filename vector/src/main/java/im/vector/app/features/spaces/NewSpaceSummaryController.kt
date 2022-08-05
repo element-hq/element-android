@@ -47,7 +47,7 @@ class NewSpaceSummaryController @Inject constructor(
     override fun buildModels() {
         val nonNullViewState = viewState ?: return
         buildGroupModels(
-                nonNullViewState.asyncSpaces(),
+                nonNullViewState.spaces,
                 nonNullViewState.selectedSpace,
                 nonNullViewState.rootSpacesOrdered,
                 nonNullViewState.homeAggregateCount
