@@ -31,6 +31,7 @@ import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.epoxy.LayoutManagerStateRestorer
+import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.UserPreferencesProvider
@@ -47,6 +48,7 @@ import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedA
 import im.vector.app.features.home.room.list.actions.RoomListSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListSharedActionViewModel
 import im.vector.app.features.spaces.SpaceListBottomSheet
+import im.vector.app.features.home.room.list.home.recent.RecentRoomCarouselController
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -57,7 +59,8 @@ import javax.inject.Inject
 
 class HomeRoomListFragment @Inject constructor(
         private val roomSummaryItemFactory: RoomSummaryItemFactory,
-        private val userPreferencesProvider: UserPreferencesProvider
+        private val userPreferencesProvider: UserPreferencesProvider,
+        private val recentRoomCarouselController: RecentRoomCarouselController
 ) : VectorBaseFragment<FragmentRoomListBinding>(),
         RoomListListener {
 
@@ -238,6 +241,12 @@ class HomeRoomListFragment @Inject constructor(
                     }
                 }.adapter
             }
+            is HomeRoomSection.RecentRoomsData -> recentRoomCarouselController.also { controller ->
+                controller.listener = this
+                data.list.observe(viewLifecycleOwner) { list ->
+                    controller.submitList(list)
+                }
+            }.adapter
         }
     }
 
@@ -248,6 +257,12 @@ class HomeRoomListFragment @Inject constructor(
                 isInviteAlreadyAccepted = isInviteAlreadyAccepted,
                 trigger = ViewRoom.Trigger.RoomList
         )
+    }
+
+    override fun onDestroyView() {
+        views.roomListView.cleanup()
+        recentRoomCarouselController.listener = null
+        super.onDestroyView()
     }
 
     // region RoomListListener
