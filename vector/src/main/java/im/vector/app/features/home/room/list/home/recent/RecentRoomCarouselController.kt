@@ -16,6 +16,9 @@
 
 package im.vector.app.features.home.room.list.home.recent
 
+import android.content.res.Resources
+import android.util.TypedValue
+import com.airbnb.epoxy.Carousel
 import com.airbnb.epoxy.CarouselModelBuilder
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyModel
@@ -27,11 +30,24 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class RecentRoomCarouselController @Inject constructor(
-        private val avatarRenderer: AvatarRenderer
+        private val avatarRenderer: AvatarRenderer,
+        private val resources: Resources,
 ) : EpoxyController() {
 
     private var data: List<RoomSummary>? = null
     var listener: RoomListListener? = null
+
+    private val hPadding = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            16f,
+            resources.displayMetrics
+    ).toInt()
+
+    private val itemSpacing = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            24f,
+            resources.displayMetrics
+    ).toInt()
 
     fun submitList(recentList: List<RoomSummary>) {
         this.data = recentList
@@ -43,6 +59,7 @@ class RecentRoomCarouselController @Inject constructor(
         data?.let { data ->
             carousel {
                 id("recents_carousel")
+                padding(Carousel.Padding(host.hPadding, host.itemSpacing))
                 withModelsFrom(data) { roomSummary ->
                     val onClick = host.listener?.let { it::onRoomClicked }
                     val onLongClick = host.listener?.let { it::onRoomLongClicked }
