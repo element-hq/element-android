@@ -25,10 +25,12 @@ import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
+import android.view.ScaleGestureDetector
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -70,8 +72,16 @@ class AttachmentsCameraFragment :
     private var videoCapture: VideoCapture<Recorder>? = null
     private var recording: Recording? = null
 
-
+    private lateinit var camera: Camera
     private lateinit var cameraExecutor: ExecutorService
+
+    private val gestureListener = object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
+        override fun onScale(detector: ScaleGestureDetector): Boolean {
+            val scale = camera.cameraInfo.zoomState.value!!.zoomRatio * detector.scaleFactor
+            camera.cameraControl.setZoomRatio(scale)
+            return true
+        }
+    }
 
     private val requestPermissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
@@ -86,6 +96,7 @@ class AttachmentsCameraFragment :
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         authority = context?.packageName + ".fileProvider"
@@ -111,7 +122,12 @@ class AttachmentsCameraFragment :
         views.attachmentsCameraFlip.debouncedClicks {
             changeLensFacing()
         }
+        val scaleGestureDetector = ScaleGestureDetector(context, gestureListener)
 
+        views.root.setOnTouchListener { _, event ->
+            scaleGestureDetector.onTouchEvent(event)
+            return@setOnTouchListener true
+        }
         cameraExecutor = Executors.newSingleThreadExecutor()
     }
 
@@ -292,7 +308,9 @@ class AttachmentsCameraFragment :
                             it.setSurfaceProvider(views.viewFinder.surfaceProvider)
                         }
 
-                imageCapture = ImageCapture.Builder().build()
+                imageCapture = ImageCapture.Builder()
+                        .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
+                        .build()
 
                 val recorder = Recorder.Builder()
                         .setQualitySelector(QualitySelector.from(Quality.HIGHEST))
@@ -304,7 +322,7 @@ class AttachmentsCameraFragment :
                     cameraProvider.unbindAll()
 
                     // Bind use cases to camera
-                    cameraProvider.bindToLifecycle(
+                    camera = cameraProvider.bindToLifecycle(
                             this, cameraSelector, preview, imageCapture, videoCapture
                     )
                 } catch (exc: Exception) {
