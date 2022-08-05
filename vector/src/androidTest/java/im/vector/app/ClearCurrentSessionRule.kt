@@ -28,6 +28,11 @@ import org.junit.runner.Description
 import org.junit.runners.model.Statement
 import kotlin.reflect.KClass
 
+/**
+ * A TestRule to reset and clear the current Session.
+ * If a Session is active it will be signed out and cleared from the ActiveSessionHolder.
+ * The VectorPreferences and AnalyticsDatastore are also cleared in an attempt to recreate a fresh base.
+ */
 class ClearCurrentSessionRule : TestWatcher() {
     override fun apply(base: Statement, description: Description): Statement {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
@@ -46,6 +51,10 @@ class ClearCurrentSessionRule : TestWatcher() {
 
 private fun KClass<*>.asTopLevel() = Class.forName("${qualifiedName}Kt")
 
+/**
+ * Fetches the top level, private [Context.dataStore] extension property from [im.vector.app.features.analytics.store.AnalyticsStore]
+ * via reflection to avoid exposing property to all callers.
+ */
 @Suppress("UNCHECKED_CAST")
 private fun reflectAnalyticDatastore(context: Context): DataStore<Preferences> {
     val klass = AnalyticsStore::class.asTopLevel()
