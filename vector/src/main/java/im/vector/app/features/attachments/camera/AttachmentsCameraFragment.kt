@@ -67,7 +67,6 @@ class AttachmentsCameraFragment :
     private lateinit var storageDir : File
 
     private var imageCapture: ImageCapture? = null
-
     private var videoCapture: VideoCapture<Recorder>? = null
     private var recording: Recording? = null
 
@@ -99,12 +98,12 @@ class AttachmentsCameraFragment :
             requestPermissionLauncher.launch(REQUIRED_PERMISSIONS)
         }
 
-        views.attachmentsCameraImageAction.debouncedClicks {
-            takePhoto()
+        views.attachmentsCameraCaptureAction.debouncedClicks {
+            capture()
         }
 
-        views.attachmentsCameraVideoAction.debouncedClicks {
-            captureVideo()
+        views.attachmentsCameraChangeAction.debouncedClicks {
+            changeCaptureMode()
         }
 
         cameraExecutor = Executors.newSingleThreadExecutor()
@@ -114,6 +113,43 @@ class AttachmentsCameraFragment :
         context?.let { context ->
             ContextCompat.checkSelfPermission(context, permission)
         } == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun changeCaptureMode() {
+        when (captureMode) {
+            MediaType.IMAGE -> {
+                captureMode = MediaType.VIDEO
+                views.attachmentsCameraCaptureAction.setImageDrawable(
+                        context?.getDrawable(R.drawable.ic_video)
+                )
+                views.attachmentsCameraChangeAction.apply {
+                    setImageDrawable(
+                            context?.getDrawable(R.drawable.ic_camera_plain)
+                    )
+                    contentDescription = getString(R.string.attachment_camera_photo)
+                }
+            }
+            MediaType.VIDEO -> {
+                captureMode = MediaType.IMAGE
+                views.attachmentsCameraCaptureAction.setImageDrawable(
+                        context?.getDrawable(R.drawable.ic_camera_plain)
+                )
+                views.attachmentsCameraChangeAction.apply {
+                    setImageDrawable(
+                            context?.getDrawable(R.drawable.ic_video)
+                    )
+                    contentDescription = getString(R.string.attachment_camera_video)
+                }
+            }
+        }
+    }
+
+    private fun capture() {
+        when (captureMode) {
+            MediaType.IMAGE -> takePhoto()
+            MediaType.VIDEO -> captureVideo()
+        }
+
     }
 
     private fun takePhoto() {
@@ -161,7 +197,8 @@ class AttachmentsCameraFragment :
         context?.let { context ->
             val videoCapture = this.videoCapture ?: return
 
-            views.attachmentsCameraImageAction.isEnabled = false
+            views.attachmentsCameraChangeAction.isEnabled = false
+            views.attachmentsCameraFlip.isEnabled = false
 
             val curRecording = recording
             if (curRecording != null) {
@@ -190,7 +227,7 @@ class AttachmentsCameraFragment :
                     .start(ContextCompat.getMainExecutor(context)) { recordEvent ->
                         when(recordEvent) {
                             is VideoRecordEvent.Start -> {
-                                views.attachmentsCameraVideoAction.setImageDrawable(
+                                views.attachmentsCameraCaptureAction.setImageDrawable(
                                         context.getDrawable(R.drawable.ic_video_off)
                                 )
                             }
@@ -303,6 +340,7 @@ class AttachmentsCameraFragment :
     }
 
     companion object {
+        private var captureMode = MediaType.IMAGE
         private val REQUIRED_PERMISSIONS =
                 mutableListOf (
                         Manifest.permission.CAMERA,

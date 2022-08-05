@@ -11,35 +11,53 @@
         android:layout_height="match_parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/attachmentsCameraImageAction"
+        android:id="@+id/attachmentsCameraChangeAction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="50dp"
-        android:contentDescription="@string/attachment_camera_photo"
+        android:contentDescription="@string/attachment_camera_video"
         android:elevation="2dp"
-        android:src="@drawable/ic_camera_plain"
+        android:scaleX="0.7"
+        android:scaleY="0.7"
+        android:src="@drawable/ic_video"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/vertical_leftline"
         app:layout_constraintStart_toStartOf="@+id/vertical_leftline" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/attachmentsCameraVideoAction"
+        android:id="@+id/attachmentsCameraCaptureAction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="50dp"
         android:elevation="2dp"
-        android:src="@drawable/ic_video"
+        android:scaleX="1.3"
+        android:scaleY="1.3"
+        android:src="@drawable/ic_camera_plain"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/vertical_centerline"
+        app:layout_constraintEnd_toStartOf="@id/vertical_centerline"
+        android:contentDescription="@string/attachment_camera_capture" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/attachmentsCameraFlip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:elevation="2dp"
+        android:scaleX="0.7"
+        android:scaleY="0.7"
+        android:src="@drawable/ic_video_flip"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@id/vertical_rightline"
         app:layout_constraintEnd_toStartOf="@id/vertical_rightline"
-        android:contentDescription="@string/attachment_camera_video" />
+        android:contentDescription="@string/attachment_camera_flip" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/vertical_leftline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent=".25" />
+        app:layout_constraintGuide_percent=".2" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/vertical_centerline"
@@ -53,6 +71,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent=".75" />
+        app:layout_constraintGuide_percent=".8" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

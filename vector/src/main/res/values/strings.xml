@@ -3199,6 +3199,8 @@
     <string name="tooltip_attachment_video">Open camera for a video</string>
     <string name="attachment_camera_photo">Take a photo</string>
     <string name="attachment_camera_video">Take a video</string>
+    <string name="attachment_camera_capture">Capture</string>
+    <string name="attachment_camera_flip">Change camera</string>
 
     <plurals name="room_removed_messages">
         <item quantity="one">%d message removed</item>
