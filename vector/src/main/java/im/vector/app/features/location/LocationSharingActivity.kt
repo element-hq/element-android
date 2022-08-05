@@ -23,6 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityLocationSharingBinding
+import im.vector.app.features.location.preview.LocationPreviewFragment
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
