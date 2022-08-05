@@ -353,6 +353,8 @@ class TimelineFragment @Inject constructor(
 
     private var lockSendButton = false
     private val currentCallsViewPresenter = CurrentCallsViewPresenter()
+    private val isEmojiKeyboardVisible: Boolean
+        get() = vectorPreferences.showEmojiKeyboard()
 
     private val lazyLoadedViews = RoomDetailLazyLoadedViews()
     private val emojiPopup: EmojiPopup by lifecycleAwareLazy {
@@ -1569,6 +1571,10 @@ class TimelineFragment @Inject constructor(
                     )
                 }
                 attachmentTypeSelector.show(views.composerLayout.views.attachmentButton)
+            }
+
+            override fun onExpandOrCompactChange() {
+                views.composerLayout.views.composerEmojiButton.isVisible = isEmojiKeyboardVisible
             }
 
             override fun onSendMessage(text: CharSequence) {
