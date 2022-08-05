@@ -25,7 +25,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.replaceChildFragment
 import im.vector.app.databinding.FragmentSpacesBottomSheetBinding
 
-class SpacesBottomSheet : BottomSheetDialogFragment() {
+class SpaceListBottomSheet : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentSpacesBottomSheetBinding
 
