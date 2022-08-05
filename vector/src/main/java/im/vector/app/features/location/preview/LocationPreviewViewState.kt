@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.location.live.map
+package im.vector.app.features.location.preview
 
-import im.vector.app.core.platform.VectorViewModelAction
+import com.airbnb.mvrx.MavericksState
 
-sealed class LiveLocationMapAction : VectorViewModelAction {
-    data class AddMapSymbol(val key: String, val value: Long) : LiveLocationMapAction()
-    data class RemoveMapSymbol(val key: String) : LiveLocationMapAction()
-    object StopSharing : LiveLocationMapAction()
-    object ShowMapLoadingError : LiveLocationMapAction()
-}
+data class LocationPreviewViewState(
+        val loadingMapHasFailed: Boolean = false
+) : MavericksState
