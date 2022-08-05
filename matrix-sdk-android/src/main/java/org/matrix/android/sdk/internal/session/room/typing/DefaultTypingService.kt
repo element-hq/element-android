@@ -25,6 +25,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.room.typing.TypingService
+import org.matrix.android.sdk.internal.di.SessionCoroutineScope
 import timber.log.Timber
 
 /**
@@ -35,6 +36,7 @@ import timber.log.Timber
  */
 internal class DefaultTypingService @AssistedInject constructor(
         @Assisted private val roomId: String,
+        @SessionCoroutineScope private val coroutineScope: CoroutineScope,
         private val sendTypingTask: SendTypingTask
 ) : TypingService {
 
@@ -43,7 +45,6 @@ internal class DefaultTypingService @AssistedInject constructor(
         fun create(roomId: String): DefaultTypingService
     }
 
-    private val coroutineScope = CoroutineScope(Job())
     private var currentTask: Job? = null
 
     // What the homeserver knows

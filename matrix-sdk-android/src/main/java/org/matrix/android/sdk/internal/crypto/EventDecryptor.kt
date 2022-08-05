@@ -37,6 +37,7 @@ import org.matrix.android.sdk.internal.crypto.actions.EnsureOlmSessionsForDevice
 import org.matrix.android.sdk.internal.crypto.actions.MessageEncrypter
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
+import org.matrix.android.sdk.internal.di.SessionCoroutineScope
 import org.matrix.android.sdk.internal.extensions.foldToCallback
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.util.time.Clock
@@ -49,7 +50,7 @@ private val loggerTag = LoggerTag("EventDecryptor", LoggerTag.CRYPTO)
 
 @SessionScope
 internal class EventDecryptor @Inject constructor(
-        private val cryptoCoroutineScope: CoroutineScope,
+        @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val clock: Clock,
         private val roomDecryptorProvider: RoomDecryptorProvider,
@@ -94,7 +95,7 @@ internal class EventDecryptor @Inject constructor(
      */
     fun decryptEventAsync(event: Event, timeline: String, callback: MatrixCallback<MXEventDecryptionResult>) {
         // is it needed to do that on the crypto scope??
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+        sessionCoroutineScope.launch(coroutineDispatchers.crypto) {
             runCatching {
                 internalDecryptEvent(event, timeline)
             }.foldToCallback(callback)

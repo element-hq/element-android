@@ -20,6 +20,7 @@ import android.content.Context
 import android.content.res.Resources
 import dagger.Module
 import dagger.Provides
+import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.android.asCoroutineDispatcher
@@ -49,9 +50,10 @@ internal object MatrixModule {
 
     @JvmStatic
     @Provides
+    @MatrixScope
     @MatrixCoroutineScope
     fun providesMatrixCoroutineScope(matrixConfiguration: MatrixConfiguration): CoroutineScope {
-        return matrixConfiguration.coroutineScope
+        return CoroutineScope(matrixConfiguration.coroutineScope.coroutineContext + CoroutineName("Matrix"))
     }
 
     @JvmStatic

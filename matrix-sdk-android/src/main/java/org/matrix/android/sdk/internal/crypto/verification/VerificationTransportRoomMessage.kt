@@ -53,12 +53,12 @@ internal class VerificationTransportRoomMessage(
         private val roomId: String,
         private val localEchoEventFactory: LocalEchoEventFactory,
         private val tx: DefaultVerificationTransaction?,
-        cryptoCoroutineScope: CoroutineScope,
+        sessionCoroutineScope: CoroutineScope,
         private val clock: Clock,
 ) : VerificationTransport {
 
     private val dispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
-    private val verificationSenderScope = CoroutineScope(cryptoCoroutineScope.coroutineContext + dispatcher)
+    private val verificationSenderScope = CoroutineScope(sessionCoroutineScope.coroutineContext + dispatcher)
     private val sequencer = SemaphoreCoroutineSequencer()
 
     override fun <T> sendToOther(

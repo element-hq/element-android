@@ -20,9 +20,8 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.cancelChildren
-import kotlinx.coroutines.newCoroutineContext
-import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.SessionLifecycleObserver
 import org.matrix.android.sdk.internal.di.MatrixCoroutineScope
@@ -36,14 +35,14 @@ internal class SessionCoroutineScopeHolder @Inject constructor(
     val scope: CoroutineScope = CoroutineScope(parentScope.coroutineContext + SupervisorJob() + CoroutineName("Session"))
 
     override fun onSessionStopped(session: Session) {
-        scope.cancelChildren()
+        scope.cancel(CancellationException("Closing session"))
     }
 
     override fun onClearCache(session: Session) {
-        scope.cancelChildren()
+        scope.cancelChildren(CancellationException("Clear cache"))
     }
 
-    private fun CoroutineScope.cancelChildren() {
-        coroutineContext.cancelChildren(CancellationException("Closing session"))
+    private fun CoroutineScope.cancelChildren(exception: CancellationException) {
+        coroutineContext.cancelChildren(exception)
     }
 }
