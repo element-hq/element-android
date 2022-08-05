@@ -51,8 +51,10 @@ internal object CryptoMapper {
     )
 
     internal fun mapToEntity(deviceInfo: CryptoDeviceInfo): DeviceInfoEntity {
-        return DeviceInfoEntity(primaryKey = DeviceInfoEntity.createPrimaryKey(deviceInfo.userId, deviceInfo.deviceId))
-                .also { updateDeviceInfoEntity(it, deviceInfo) }
+        return DeviceInfoEntity().apply {
+            primaryKey = DeviceInfoEntity.createPrimaryKey(deviceInfo.userId, deviceInfo.deviceId)
+            updateDeviceInfoEntity(this, deviceInfo)
+        }
     }
 
     internal fun updateDeviceInfoEntity(entity: DeviceInfoEntity, deviceInfo: CryptoDeviceInfo) {
@@ -63,17 +65,14 @@ internal object CryptoMapper {
         entity.signatureMapJson = mapMigrationAdapter.toJson(deviceInfo.signatures)
         entity.isBlocked = deviceInfo.isBlocked
         val deviceInfoTrustLevel = deviceInfo.trustLevel
+        // deletion of the trustLevelEntity has to be handled before
         if (deviceInfoTrustLevel == null) {
-            entity.trustLevelEntity?.deleteFromRealm()
             entity.trustLevelEntity = null
         } else {
-            if (entity.trustLevelEntity == null) {
-                // Create a new TrustLevelEntity object
-                entity.trustLevelEntity = TrustLevelEntity()
+            entity.trustLevelEntity = TrustLevelEntity().apply {
+                this.crossSignedVerified = deviceInfoTrustLevel.crossSigningVerified
+                this.locallyVerified = deviceInfoTrustLevel.locallyVerified
             }
-            // Update the existing TrustLevelEntity object
-            entity.trustLevelEntity?.crossSignedVerified = deviceInfoTrustLevel.crossSigningVerified
-            entity.trustLevelEntity?.locallyVerified = deviceInfoTrustLevel.locallyVerified
         }
         // We store the device name if present now
         entity.unsignedMapJson = deviceInfo.unsigned?.deviceDisplayName

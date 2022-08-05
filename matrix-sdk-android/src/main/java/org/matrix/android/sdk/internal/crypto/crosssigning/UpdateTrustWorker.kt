@@ -19,9 +19,9 @@ package org.matrix.android.sdk.internal.crypto.crosssigning
 import android.content.Context
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
-import io.realm.Realm
 import io.realm.RealmConfiguration
-import io.realm.kotlin.where
+import io.realm.kotlin.MutableRealm
+import io.realm.kotlin.TypedRealm
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.session.crypto.crosssigning.UserTrustResult
@@ -32,11 +32,12 @@ import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.store.db.mapper.CrossSigningKeysMapper
 import org.matrix.android.sdk.internal.crypto.store.db.model.CrossSigningInfoEntity
-import org.matrix.android.sdk.internal.crypto.store.db.model.CrossSigningInfoEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoMapper
 import org.matrix.android.sdk.internal.crypto.store.db.model.TrustLevelEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.UserEntity
-import org.matrix.android.sdk.internal.crypto.store.db.model.UserEntityFields
+import org.matrix.android.sdk.internal.crypto.store.db.query.crossSigningInfoEntityQueries
+import org.matrix.android.sdk.internal.crypto.store.db.query.userEntityQueries
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.awaitTransaction
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFields
@@ -72,7 +73,7 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
 
     // It breaks the crypto store contract, but we need to batch things :/
     @CryptoDatabase
-    @Inject lateinit var cryptoRealmConfiguration: RealmConfiguration
+    @Inject lateinit var cryptoRealmInstance: RealmInstance
 
     @SessionDatabase
     @Inject lateinit var sessionRealmConfiguration: RealmConfiguration
@@ -113,11 +114,10 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
 
         // First we check that the users MSK are trusted by mine
         // After that we check the trust chain for each devices of each users
-        awaitTransaction(cryptoRealmConfiguration) { cryptoRealm ->
+        cryptoRealmInstance.write {
             // By mapping here to model, this object is not live
             // I should update it if needed
-            myCrossSigningInfo = getCrossSigningInfo(cryptoRealm, myUserId)
-
+            myCrossSigningInfo = getCrossSigningInfo(myUserId)
             var myTrustResult: UserTrustResult? = null
 
             if (userList.contains(myUserId)) {
@@ -125,25 +125,25 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
                 // i am in the list.. but i don't know exactly the delta of change :/
                 // If it's my cross signing keys we should refresh all trust
                 // do it anyway ?
-                userList = cryptoRealm.where(CrossSigningInfoEntity::class.java)
-                        .findAll()
+                userList = query(CrossSigningInfoEntity::class)
+                        .find()
                         .mapNotNull { it.userId }
 
                 // check right now my keys and mark it as trusted as other trust depends on it
-                val myDevices = cryptoRealm.where<UserEntity>()
-                        .equalTo(UserEntityFields.USER_ID, myUserId)
-                        .findFirst()
+                val myDevices = query(UserEntity::class, "userId == $0", myUserId)
+                        .first()
+                        .find()
                         ?.devices
                         ?.map { CryptoMapper.mapToModel(it) }
 
                 myTrustResult = crossSigningService.checkSelfTrust(myCrossSigningInfo, myDevices)
-                updateCrossSigningKeysTrust(cryptoRealm, myUserId, myTrustResult.isVerified())
+                updateCrossSigningKeysTrust(myUserId, myTrustResult.isVerified())
                 // update model reference
-                myCrossSigningInfo = getCrossSigningInfo(cryptoRealm, myUserId)
+                myCrossSigningInfo = getCrossSigningInfo(myUserId)
             }
 
             val otherInfos = userList.associateWith { userId ->
-                getCrossSigningInfo(cryptoRealm, userId)
+                getCrossSigningInfo(userId)
             }
 
             val trusts = otherInfos.mapValues { entry ->
@@ -161,20 +161,20 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
             // i have all the new trusts, update DB
             trusts.forEach {
                 val verified = it.value?.isVerified() == true
-                updateCrossSigningKeysTrust(cryptoRealm, it.key, verified)
+                updateCrossSigningKeysTrust(it.key, verified)
             }
 
             // Ok so now we have to check device trust for all these users..
             Timber.v("## CrossSigning - Updating devices cross trust users: ${trusts.keys.logLimit()}")
             trusts.keys.forEach { userId ->
-                val devicesEntities = cryptoRealm.where<UserEntity>()
-                        .equalTo(UserEntityFields.USER_ID, userId)
-                        .findFirst()
+                val devicesEntities = query(UserEntity::class, "userId == $0", userId)
+                        .first()
+                        .find()
                         ?.devices
 
                 val trustMap = devicesEntities?.associateWith { device ->
                     // get up to date from DB has could have been updated
-                    val otherInfo = getCrossSigningInfo(cryptoRealm, userId)
+                    val otherInfo = getCrossSigningInfo(userId)
                     crossSigningService.checkDeviceTrust(myCrossSigningInfo, otherInfo, CryptoMapper.mapToModel(device))
                 }
 
@@ -187,7 +187,7 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
                         // need to save
                         val trustEntity = device.trustLevelEntity
                         if (trustEntity == null) {
-                            device.trustLevelEntity = cryptoRealm.createObject(TrustLevelEntity::class.java).also {
+                            device.trustLevelEntity = TrustLevelEntity().also {
                                 it.locallyVerified = false
                                 it.crossSignedVerified = crossSignedVerified
                             }
@@ -197,8 +197,8 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
                     }
                 }
             }
-        }
 
+        }
         // So Cross Signing keys trust is updated, device trust is updated
         // We can now update room shields? in the session DB?
         updateTrustStep2(userList, myCrossSigningInfo)
@@ -207,45 +207,46 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
     private suspend fun updateTrustStep2(userList: List<String>, myCrossSigningInfo: MXCrossSigningInfo?) {
         Timber.d("## CrossSigning - Updating shields for impacted rooms...")
         awaitTransaction(sessionRealmConfiguration) { sessionRealm ->
-            Realm.getInstance(cryptoRealmConfiguration).use { cryptoRealm ->
-                sessionRealm.where(RoomMemberSummaryEntity::class.java)
-                        .`in`(RoomMemberSummaryEntityFields.USER_ID, userList.toTypedArray())
-                        .distinct(RoomMemberSummaryEntityFields.ROOM_ID)
-                        .findAll()
-                        .map { it.roomId }
-                        .also { Timber.d("## CrossSigning -  ... impacted rooms ${it.logLimit()}") }
-                        .forEach { roomId ->
-                            RoomSummaryEntity.where(sessionRealm, roomId)
-                                    .equalTo(RoomSummaryEntityFields.IS_ENCRYPTED, true)
-                                    .findFirst()
-                                    ?.let { roomSummary ->
-                                        Timber.v("## CrossSigning - Check shield state for room $roomId")
-                                        val allActiveRoomMembers = RoomMemberHelper(sessionRealm, roomId).getActiveRoomMemberIds()
-                                        try {
-                                            val updatedTrust = computeRoomShield(
-                                                    myCrossSigningInfo,
-                                                    cryptoRealm,
-                                                    allActiveRoomMembers,
-                                                    roomSummary
-                                            )
-                                            if (roomSummary.roomEncryptionTrustLevel != updatedTrust) {
-                                                Timber.d("## CrossSigning - Shield change detected for $roomId -> $updatedTrust")
-                                                roomSummary.roomEncryptionTrustLevel = updatedTrust
-                                            }
-                                        } catch (failure: Throwable) {
-                                            Timber.e(failure)
+            val cryptoRealm = cryptoRealmInstance.getBlockingRealm()
+            sessionRealm.where(RoomMemberSummaryEntity::class.java)
+                    .`in`(RoomMemberSummaryEntityFields.USER_ID, userList.toTypedArray())
+                    .distinct(RoomMemberSummaryEntityFields.ROOM_ID)
+                    .findAll()
+                    .map { it.roomId }
+                    .also { Timber.d("## CrossSigning -  ... impacted rooms ${it.logLimit()}") }
+                    .forEach { roomId ->
+                        RoomSummaryEntity.where(sessionRealm, roomId)
+                                .equalTo(RoomSummaryEntityFields.IS_ENCRYPTED, true)
+                                .findFirst()
+                                ?.let { roomSummary ->
+                                    Timber.v("## CrossSigning - Check shield state for room $roomId")
+                                    val allActiveRoomMembers = RoomMemberHelper(sessionRealm, roomId).getActiveRoomMemberIds()
+                                    try {
+                                        val updatedTrust = computeRoomShield(
+                                                myCrossSigningInfo,
+                                                cryptoRealm,
+                                                allActiveRoomMembers,
+                                                roomSummary
+                                        )
+                                        if (roomSummary.roomEncryptionTrustLevel != updatedTrust) {
+                                            Timber.d("## CrossSigning - Shield change detected for $roomId -> $updatedTrust")
+                                            roomSummary.roomEncryptionTrustLevel = updatedTrust
                                         }
+                                    } catch (failure: Throwable) {
+                                        Timber.e(failure)
                                     }
-                        }
-            }
+                                }
+                    }
         }
     }
 
-    private fun getCrossSigningInfo(cryptoRealm: Realm, userId: String): MXCrossSigningInfo? {
-        return cryptoRealm.where(CrossSigningInfoEntity::class.java)
-                .equalTo(CrossSigningInfoEntityFields.USER_ID, userId)
-                .findFirst()
-                ?.let { mapCrossSigningInfoEntity(it) }
+    private fun TypedRealm.getCrossSigningInfo(userId: String): MXCrossSigningInfo? {
+        return crossSigningInfoEntityQueries()
+                .firstUserId(userId)
+                .find()
+                ?.let {
+                    mapCrossSigningInfoEntity(it)
+                }
     }
 
     private fun cleanup(params: Params) {
@@ -253,10 +254,10 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
                 ?.let { updateTrustWorkerDataRepository.delete(it) }
     }
 
-    private fun updateCrossSigningKeysTrust(cryptoRealm: Realm, userId: String, verified: Boolean) {
-        cryptoRealm.where(CrossSigningInfoEntity::class.java)
-                .equalTo(CrossSigningInfoEntityFields.USER_ID, userId)
-                .findFirst()
+    private fun MutableRealm.updateCrossSigningKeysTrust(userId: String, verified: Boolean) {
+        crossSigningInfoEntityQueries()
+                .firstUserId(userId)
+                .find()
                 ?.crossSigningKeys
                 ?.forEach { info ->
                     // optimization to avoid trigger updates when there is no change..
@@ -264,7 +265,7 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
                         Timber.d("## CrossSigning - Trust change for $userId : $verified")
                         val level = info.trustLevelEntity
                         if (level == null) {
-                            info.trustLevelEntity = cryptoRealm.createObject(TrustLevelEntity::class.java).also {
+                            info.trustLevelEntity = TrustLevelEntity().also {
                                 it.locallyVerified = verified
                                 it.crossSignedVerified = verified
                             }
@@ -278,7 +279,7 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
 
     private fun computeRoomShield(
             myCrossSigningInfo: MXCrossSigningInfo?,
-            cryptoRealm: Realm,
+            cryptoRealm: TypedRealm,
             activeMemberUserIds: List<String>,
             roomSummaryEntity: RoomSummaryEntity
     ): RoomEncryptionTrustLevel {
@@ -294,7 +295,7 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
 
         val allTrustedUserIds = listToCheck
                 .filter { userId ->
-                    getCrossSigningInfo(cryptoRealm, userId)?.isTrusted() == true
+                    cryptoRealm.getCrossSigningInfo(userId)?.isTrusted() == true
                 }
 
         return if (allTrustedUserIds.isEmpty()) {
@@ -305,9 +306,9 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
             // else -> black
             allTrustedUserIds
                     .mapNotNull { userId ->
-                        cryptoRealm.where<UserEntity>()
-                                .equalTo(UserEntityFields.USER_ID, userId)
-                                .findFirst()
+                        cryptoRealm.userEntityQueries()
+                                .firstUserId(userId)
+                                .find()
                                 ?.devices
                                 ?.map { CryptoMapper.mapToModel(it) }
                     }

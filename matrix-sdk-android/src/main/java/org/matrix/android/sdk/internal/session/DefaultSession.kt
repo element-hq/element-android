@@ -89,7 +89,6 @@ internal class DefaultSession @Inject constructor(
         override val sessionId: String,
         override val coroutineDispatchers: MatrixCoroutineDispatchers,
         @SessionDatabase private val realmConfiguration: RealmConfiguration,
-        @CryptoDatabase private val realmConfigurationCrypto: RealmConfiguration,
         private val lifecycleObservers: Set<@JvmSuppressWildcards SessionLifecycleObserver>,
         private val sessionListeners: SessionListeners,
         private val roomService: Lazy<RoomService>,
@@ -263,7 +262,7 @@ internal class DefaultSession @Inject constructor(
 
     override fun logDbUsageInfo() {
         RealmDebugTools(realmConfiguration).logInfo("Session")
-        RealmDebugTools(realmConfigurationCrypto).logInfo("Crypto")
+        //RealmDebugTools(realmConfigurationCrypto).logInfo("Crypto")
         //RealmDebugTools(realmConfigurationIdentity).logInfo("Identity")
         //RealmDebugTools(realmConfigurationContentScanner).logInfo("ContentScanner")
     }
@@ -271,7 +270,7 @@ internal class DefaultSession @Inject constructor(
     override fun getRealmConfigurations(): List<RealmConfiguration> {
         return listOf(
                 realmConfiguration,
-                realmConfigurationCrypto,
+                //realmConfigurationCrypto,
                 //realmConfigurationIdentity,
                 //realmConfigurationContentScanner,
         )

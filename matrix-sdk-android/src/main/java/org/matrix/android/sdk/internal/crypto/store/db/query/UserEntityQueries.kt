@@ -17,14 +17,28 @@
 package org.matrix.android.sdk.internal.crypto.store.db.query
 
 import io.realm.kotlin.TypedRealm
+import io.realm.kotlin.query.RealmQuery
 import io.realm.kotlin.query.RealmSingleQuery
-import org.matrix.android.sdk.internal.crypto.store.db.model.CrossSigningInfoEntity
+import org.matrix.android.sdk.internal.crypto.store.db.model.UserEntity
+import org.matrix.android.sdk.internal.database.queryIn
 
-internal class CrossSigningInfoEntityQueries(realm: TypedRealm) : TypedRealm by realm {
+internal class UserEntityQueries(realm: TypedRealm) : TypedRealm by realm {
 
-    fun firstUserId(userId: String): RealmSingleQuery<CrossSigningInfoEntity> {
-        return query(CrossSigningInfoEntity::class, "userId == $0", userId).first()
+    fun all(): RealmQuery<UserEntity> {
+        return query(UserEntity::class)
+    }
+
+    fun byUserId(userId: String): RealmQuery<UserEntity> {
+        return all().query("userId == $0", userId)
+    }
+
+    fun firstUserId(userId: String): RealmSingleQuery<UserEntity> {
+        return byUserId(userId).first()
+    }
+
+    fun byUserIds(userIds: List<String>): RealmQuery<UserEntity> {
+        return all().queryIn("userId", userIds)
     }
 }
 
-internal fun TypedRealm.crossSigningInfoEntityQueries() = CrossSigningInfoEntityQueries(this)
+internal fun TypedRealm.userEntityQueries() = UserEntityQueries(this)

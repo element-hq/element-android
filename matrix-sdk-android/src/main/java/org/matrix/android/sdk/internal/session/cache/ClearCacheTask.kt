@@ -17,7 +17,9 @@
 package org.matrix.android.sdk.internal.session.cache
 
 import io.realm.RealmConfiguration
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.awaitTransaction
+import org.matrix.android.sdk.internal.database.deleteAll
 import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
 
@@ -28,6 +30,15 @@ internal class RealmClearCacheTask @Inject constructor(private val realmConfigur
     override suspend fun execute(params: Unit) {
         awaitTransaction(realmConfiguration) {
             it.deleteAll()
+        }
+    }
+}
+
+internal class RealmKotlinClearCacheTask @Inject constructor(private val realmInstance: RealmInstance) : ClearCacheTask {
+
+    override suspend fun execute(params: Unit) {
+        realmInstance.write {
+            deleteAll()
         }
     }
 }
