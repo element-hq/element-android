@@ -26,7 +26,6 @@ import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.R
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.database.pagedlist.RealmTiledDataSource
-import timber.log.Timber
 
 internal fun interface RealmQueryBuilder<T : RealmObject> {
     fun build(realm: TypedRealm): RealmQuery<T>
@@ -60,16 +59,12 @@ internal class RealmInstance(
 
     suspend fun open() {
         coroutineScope.launch {
-            realm.await()
+            getRealm()
         }.join()
     }
 
     suspend fun close() = withContext(NonCancellable) {
-        try {
-            realm.await().close()
-        } catch (failure: Throwable) {
-            Timber.e("Error whole closing realm. Instance was probably already closed.")
-        }
+        getRealm().close()
     }
 
     fun <T : RealmObject> queryResults(

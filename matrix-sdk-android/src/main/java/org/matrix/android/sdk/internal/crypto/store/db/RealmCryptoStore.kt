@@ -172,9 +172,6 @@ internal class RealmCryptoStore @Inject constructor(
     override fun close() {
         // Ensure no async request will be run later
         olmAccount?.releaseAccount()
-        runBlocking {
-            realmInstance.close()
-        }
     }
 
     private fun updateCryptoMetadata(operation: (CryptoMetadataEntity) -> Unit) {
