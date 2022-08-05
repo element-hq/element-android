@@ -26,6 +26,7 @@ import org.matrix.android.sdk.api.util.MatrixItem
 data class SpaceListViewState(
         val myMxItem: Async<MatrixItem.UserItem> = Uninitialized,
         val asyncSpaces: Async<List<RoomSummary>> = Uninitialized,
+        val spaces: List<RoomSummary> = emptyList(),
         val selectedSpace: RoomSummary? = null,
         val rootSpacesOrdered: List<RoomSummary>? = null,
         val spaceOrderInfo: Map<String, String?>? = null,
