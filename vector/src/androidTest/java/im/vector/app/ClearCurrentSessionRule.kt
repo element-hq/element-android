@@ -16,25 +16,39 @@
 
 package im.vector.app
 
-import androidx.datastore.preferences.preferencesDataStoreFile
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
 import androidx.test.platform.app.InstrumentationRegistry
+import im.vector.app.features.analytics.store.AnalyticsStore
 import kotlinx.coroutines.runBlocking
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
+import kotlin.reflect.KClass
 
 class ClearCurrentSessionRule : TestWatcher() {
     override fun apply(base: Statement, description: Description): Statement {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         runBlocking {
+            reflectAnalyticDatastore(context).edit { it.clear() }
             runCatching {
                 val holder = (context.applicationContext as VectorApplication).activeSessionHolder
                 holder.getSafeActiveSession()?.signOutService()?.signOut(true)
-                context.preferencesDataStoreFile(name = "vector_analytics").delete()
                 (context.applicationContext as VectorApplication).vectorPreferences.clearPreferences()
                 holder.clearActiveSession()
             }
         }
         return super.apply(base, description)
     }
+}
+
+private fun KClass<*>.asTopLevel() = Class.forName("${qualifiedName}Kt")
+
+@Suppress("UNCHECKED_CAST")
+private fun reflectAnalyticDatastore(context: Context): DataStore<Preferences> {
+    val klass = AnalyticsStore::class.asTopLevel()
+    val method = klass.getMethod("access\$getDataStore", Context::class.java)
+    return method.invoke(klass, context) as DataStore<Preferences>
 }
