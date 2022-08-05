@@ -14,13 +14,8 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.location.live.map
+package im.vector.app.features.location
 
-import im.vector.app.core.platform.VectorViewModelAction
+import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 
-sealed class LiveLocationMapAction : VectorViewModelAction {
-    data class AddMapSymbol(val key: String, val value: Long) : LiveLocationMapAction()
-    data class RemoveMapSymbol(val key: String) : LiveLocationMapAction()
-    object StopSharing : LiveLocationMapAction()
-    object ShowMapLoadingError : LiveLocationMapAction()
-}
+data class MapLoadingErrorViewState(val backgroundTransformation: BitmapTransformation)

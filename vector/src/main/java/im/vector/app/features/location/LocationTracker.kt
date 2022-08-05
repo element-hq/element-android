@@ -36,6 +36,10 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.time.Duration.Companion.seconds
+
+@VisibleForTesting
+const val MIN_DISTANCE_TO_UPDATE_LOCATION_METERS = 10f
 
 @Singleton
 class LocationTracker @Inject constructor(
@@ -62,14 +66,25 @@ class LocationTracker @Inject constructor(
     @VisibleForTesting
     var hasLocationFromGPSProvider = false
 
+    private var firstLocationHandled = false
     private val _locations = MutableSharedFlow<Location>(replay = 1)
+
+    @VisibleForTesting
+    val minDurationToUpdateLocationMillis = 5.seconds.inWholeMilliseconds
 
     /**
      * SharedFlow to collect location updates.
      */
     val locations = _locations.asSharedFlow()
             .onEach { Timber.d("new location emitted") }
-            .debounce(MIN_TIME_TO_UPDATE_LOCATION_MILLIS)
+            .debounce {
+                if (firstLocationHandled) {
+                    minDurationToUpdateLocationMillis
+                } else {
+                    firstLocationHandled = true
+                    0
+                }
+            }
             .onEach { Timber.d("new location emitted after debounce") }
             .map { it.toLocationData() }
 
@@ -96,7 +111,7 @@ class LocationTracker @Inject constructor(
 
                         locationManager.requestLocationUpdates(
                                 provider,
-                                MIN_TIME_TO_UPDATE_LOCATION_MILLIS,
+                                minDurationToUpdateLocationMillis,
                                 MIN_DISTANCE_TO_UPDATE_LOCATION_METERS,
                                 this
                         )
