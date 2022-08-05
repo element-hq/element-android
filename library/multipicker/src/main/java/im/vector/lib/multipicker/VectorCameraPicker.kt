@@ -31,8 +31,9 @@ class VectorCameraPicker {
      * Start camera by using a ActivityResultLauncher.
      * @return Uri of taken photo or null if the operation is cancelled.
      */
-    fun start(activityResultLauncher: ActivityResultLauncher<Intent>) {
-        activityResultLauncher.launch(createIntent())
+    fun start(context: Context, activityResultLauncher: ActivityResultLauncher<Intent>, targetClass: Class<*>) {
+        val intent = Intent(context, targetClass)
+        activityResultLauncher.launch(intent)
     }
 
     /**
@@ -53,16 +54,5 @@ class VectorCameraPicker {
      */
     fun getTakenVideo(context: Context, videoUri: Uri): MultiPickerVideoType? {
         return videoUri.toMultiPickerVideoType(context)
-    }
-
-
-    private fun createIntent(): Intent {
-        return Intent(ACTION_VECTOR_CAMERA).apply {
-            action = ACTION_VECTOR_CAMERA
-        }
-    }
-
-    companion object {
-        const val ACTION_VECTOR_CAMERA = "im.vector.app.action.VECTOR_CAMERA"
     }
 }

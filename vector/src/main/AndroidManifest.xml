@@ -291,13 +291,7 @@
             android:name=".features.attachments.preview.AttachmentsPreviewActivity"
             android:theme="@style/Theme.Vector.Black.AttachmentsPreview" />
         <activity android:name=".features.attachments.camera.AttachmentsCameraActivity"
-            android:theme="@style/Theme.Vector.Black.AttachmentsPreview"
-            android:exported="false" >
-            <intent-filter>
-                <action android:name="im.vector.app.action.VECTOR_CAMERA" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
+            android:theme="@style/Theme.Vector.Black.AttachmentsPreview" />
         <activity
             android:name=".features.call.VectorCallActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"

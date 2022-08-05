@@ -22,6 +22,7 @@ import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import im.vector.app.core.platform.Restorable
 import im.vector.app.core.resources.BuildMeta
+import im.vector.app.features.attachments.camera.AttachmentsCameraActivity
 import im.vector.app.features.attachments.camera.MediaType
 import im.vector.app.features.attachments.camera.VectorCameraOutput
 import im.vector.lib.multipicker.MultiPicker
@@ -102,7 +103,11 @@ class AttachmentsHelper(
     }
 
     fun openVectorCamera(vectorCameraActivityResultLauncher: ActivityResultLauncher<Intent>) {
-        MultiPicker.get(MultiPicker.VECTOR_CAMERA).start(vectorCameraActivityResultLauncher)
+        MultiPicker.get(MultiPicker.VECTOR_CAMERA).start(
+                context,
+                vectorCameraActivityResultLauncher,
+                AttachmentsCameraActivity::class.java
+        )
     }
 
     /**
