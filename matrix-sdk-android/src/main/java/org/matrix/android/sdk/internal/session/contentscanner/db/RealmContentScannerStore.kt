@@ -19,7 +19,6 @@ package org.matrix.android.sdk.internal.session.contentscanner.db
 import io.realm.kotlin.TypedRealm
 import io.realm.kotlin.query.RealmQuery
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.map
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -27,6 +26,7 @@ import org.matrix.android.sdk.api.session.contentscanner.ScanState
 import org.matrix.android.sdk.api.session.contentscanner.ScanStatusInfo
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.database.RealmInstance
+import org.matrix.android.sdk.internal.database.andIf
 import org.matrix.android.sdk.internal.database.await
 import org.matrix.android.sdk.internal.di.ContentScannerDatabase
 import org.matrix.android.sdk.internal.session.SessionScope
@@ -101,6 +101,8 @@ internal class RealmContentScannerStore @Inject constructor(
                 operation(contentScanResultEntity)
             } else {
                 val newContentScanResultEntity = ContentScanResultEntity().apply {
+                    this.mediaUrl = mxcUrl
+                    this.scannerUrl = scannerUrl
                     operation(this)
                 }
                 copyToRealm(newContentScanResultEntity)
@@ -148,10 +150,8 @@ internal class RealmContentScannerStore @Inject constructor(
 
     private fun TypedRealm.queryContentScanResultEntity(mxcUrl: String, scannerUrl: String?): RealmQuery<ContentScanResultEntity> {
         return query(ContentScanResultEntity::class, "mediaUrl == $0", mxcUrl)
-                .apply {
-                    if (scannerUrl != null) {
-                        query("scannerUrl == $0", scannerUrl)
-                    }
+                .andIf(scannerUrl != null) {
+                    query("scannerUrl == $0", scannerUrl)
                 }
     }
 

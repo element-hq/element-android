@@ -45,6 +45,7 @@ internal class RawCacheStore @Inject constructor(
             } else {
                 val newCacheEntity = RawCacheEntity()
                         .apply {
+                            this.url = url
                             this.data = data
                             this.lastUpdatedTimestamp = timestamp
                         }
