@@ -45,18 +45,19 @@ import org.matrix.android.sdk.api.query.RoomTagQueryFilter
 import org.matrix.android.sdk.api.query.toActiveSpaceOrNoFilter
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoom
-import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.room.state.isPublic
+import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.flow.flow
 
 class HomeRoomListViewModel @AssistedInject constructor(
         @Assisted initialState: HomeRoomListViewState,
         private val session: Session,
-        private val spaceStateHandler: SpaceStateHandler
+        private val spaceStateHandler: SpaceStateHandler,
+        private val preferences: HomeLayoutPreferences,
 ) : VectorViewModel<HomeRoomListViewState, HomeRoomListAction, HomeRoomListViewEvents>(initialState) {
 
     @AssistedFactory
@@ -76,10 +77,44 @@ class HomeRoomListViewModel @AssistedInject constructor(
     private val _sections = MutableSharedFlow<Set<HomeRoomSection>>(replay = 1)
     val sections = _sections.asSharedFlow()
 
+    val filtersPreferencesFlow = MutableSharedFlow<Boolean>(replay = 1)
+    val recentsPreferencesFlow = MutableSharedFlow<Boolean>(replay = 1)
+
     private var filteredPagedRoomSummariesLive: UpdatableLivePageResult? = null
 
     init {
         configureSections()
+        observePreferences()
+    }
+
+    private fun observePreferences() {
+        preferences.registerFiltersListener { areFiltersEnabled ->
+            viewModelScope.launch {
+                filtersPreferencesFlow.emit(areFiltersEnabled)
+            }
+        }
+
+        filtersPreferencesFlow.onStart {
+            emit(preferences.areFiltersEnabled())
+        }
+
+        preferences.registerRecentsListener { areRecentsEnabled ->
+            viewModelScope.launch {
+                recentsPreferencesFlow.emit(areRecentsEnabled)
+            }
+        }
+
+        viewModelScope.launch {
+            filtersPreferencesFlow.emit(preferences.areFiltersEnabled())
+        }
+        recentsPreferencesFlow.onStart {
+            emit(preferences.areRecentsEnabled())
+        }
+    }
+
+    override fun onCleared() {
+        preferences.unregisterListeners()
+        super.onCleared()
     }
 
     private fun configureSections() {
@@ -102,12 +137,10 @@ class HomeRoomListViewModel @AssistedInject constructor(
         }
 
         val params = getFilteredQueryParams(HomeRoomFilter.ALL, builder.build())
-        val sortOrder = RoomSortOrder.ACTIVITY // TODO: https://github.com/vector-im/element-android/issues/6506
 
         val liveResults = session.roomService().getFilteredPagedRoomSummariesLive(
                 params,
-                pagedListConfig,
-                sortOrder
+                pagedListConfig
         ).also {
             this.filteredPagedRoomSummariesLive = it
         }
@@ -120,19 +153,19 @@ class HomeRoomListViewModel @AssistedInject constructor(
                 .onEach { selectedSpaceOption ->
                     val selectedSpace = selectedSpaceOption.orNull()
                     liveResults.queryParams = liveResults.queryParams.copy(
-                            spaceFilter =  selectedSpace?.roomId.toActiveSpaceOrNoFilter()
+                            spaceFilter = selectedSpace?.roomId.toActiveSpaceOrNoFilter()
                     )
                 }.launchIn(viewModelScope)
 
+
         return HomeRoomSection.RoomSummaryData(
                 list = liveResults.livePagedList,
-                showFilters = true, // TODO: https://github.com/vector-im/element-android/issues/6506
                 filtersData = getFiltersDataFlow()
         )
     }
 
-    private fun getFiltersDataFlow(): SharedFlow<List<HomeRoomFilter>> {
-        val flow = MutableSharedFlow<List<HomeRoomFilter>>(replay = 1)
+    private fun getFiltersDataFlow(): SharedFlow<Optional<List<HomeRoomFilter>>> {
+        val flow = MutableSharedFlow<Optional<List<HomeRoomFilter>>>(replay = 1)
 
         val favouritesFlow = session.flow()
                 .liveRoomSummaries(
@@ -153,26 +186,33 @@ class HomeRoomListViewModel @AssistedInject constructor(
                 .map { it.isNotEmpty() }
                 .distinctUntilChanged()
 
-        favouritesFlow.combine(dmsFLow) { hasFavourite, hasDm ->
-            hasFavourite to hasDm
-        }.onEach { (hasFavourite, hasDm) ->
-            val filtersData = mutableListOf(
-                    HomeRoomFilter.ALL,
-                    HomeRoomFilter.UNREADS
-            )
-            if (hasFavourite) {
-                filtersData.add(
-                        HomeRoomFilter.FAVOURITES
-                )
-            }
-            if (hasDm) {
-                filtersData.add(
-                        HomeRoomFilter.PEOPlE
-                )
-            }
+        favouritesFlow
+                .combine(dmsFLow) { hasFavourite, hasDm ->
+                    hasFavourite to hasDm
+                }.combine(filtersPreferencesFlow) { (hasFavourite, hasDm), areFiltersEnabled ->
+                    Triple(hasFavourite, hasDm, areFiltersEnabled)
+                }.onEach { (hasFavourite, hasDm, areFiltersEnabled) ->
+                    if (areFiltersEnabled) {
+                        val filtersData = mutableListOf(
+                                HomeRoomFilter.ALL,
+                                HomeRoomFilter.UNREADS
+                        )
+                        if (hasFavourite) {
+                            filtersData.add(
+                                    HomeRoomFilter.FAVOURITES
+                            )
+                        }
+                        if (hasDm) {
+                            filtersData.add(
+                                    HomeRoomFilter.PEOPlE
+                            )
+                        }
+                        flow.emit(Optional.from(filtersData))
+                    } else {
+                        flow.emit(Optional.empty())
+                    }
 
-            flow.emit(filtersData)
-        }.launchIn(viewModelScope)
+                }.launchIn(viewModelScope)
 
         return flow
     }

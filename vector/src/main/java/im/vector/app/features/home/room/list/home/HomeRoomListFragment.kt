@@ -23,6 +23,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyControllerAdapter
 import com.airbnb.epoxy.OnModelBuildFinishedListener
 import com.airbnb.mvrx.fragmentViewModel
@@ -106,6 +107,15 @@ class HomeRoomListFragment @Inject constructor(
         }.launchIn(lifecycleScope)
 
         views.roomListView.adapter = concatAdapter
+
+        //we need to force scroll when recents/filter tabs are added to make them visible
+        concatAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                if (positionStart == 0) {
+                    layoutManager.scrollToPosition(0)
+                }
+            }
+        })
     }
 
     override fun invalidate() = withState(roomListViewModel) { state ->
@@ -172,12 +182,11 @@ class HomeRoomListFragment @Inject constructor(
             is HomeRoomSection.RoomSummaryData -> {
                 HomeFilteredRoomsController(
                         roomSummaryItemFactory,
-                        showFilters = section.showFilters,
                 ).also { controller ->
                     controller.listener = this
                     controller.onFilterChanged = ::onRoomFilterChanged
                     section.filtersData.onEach {
-                        controller.submitFiltersData(it)
+                        controller.submitFiltersData(it.getOrNull())
                     }.launchIn(lifecycleScope)
                     section.list.observe(viewLifecycleOwner) { list ->
                         controller.submitList(list)
