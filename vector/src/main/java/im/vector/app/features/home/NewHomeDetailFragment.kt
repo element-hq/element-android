@@ -22,6 +22,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
@@ -315,6 +316,7 @@ class NewHomeDetailFragment @Inject constructor(
             viewModel.handle(HomeDetailAction.SwitchTab(tab))
             true
         }
+        views.bottomNavigationView.isGone = true
     }
 
     private fun updateUIForTab(tab: HomeTab) {
