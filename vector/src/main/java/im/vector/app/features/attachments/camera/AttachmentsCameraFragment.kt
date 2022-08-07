@@ -240,6 +240,7 @@ class AttachmentsCameraFragment :
     private fun takePhoto() {
         Timber.d("Taking a photo")
         context?.let { context ->
+            views.attachmentsCameraLoading.isVisible = true
             // Get a stable reference of the modifiable image capture use case
             val imageCapture = imageCapture ?: return
 
