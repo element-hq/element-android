@@ -3201,6 +3201,7 @@
     <string name="attachment_camera_video">Take a video</string>
     <string name="attachment_camera_capture">Capture</string>
     <string name="attachment_camera_flip">Change camera</string>
+    <string name="labs_enable_builtin_camera">Enable Built-in Camera</string>
 
     <plurals name="room_removed_messages">
         <item quantity="one">%d message removed</item>

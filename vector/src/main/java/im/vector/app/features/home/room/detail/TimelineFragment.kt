@@ -1582,6 +1582,9 @@ class TimelineFragment :
                     attachmentTypeSelector.setAttachmentVisibility(
                             AttachmentTypeSelectorView.Type.POLL, !isThreadTimeLine()
                     )
+                    attachmentTypeSelector.setAttachmentVisibility(
+                            AttachmentTypeSelectorView.Type.VIDEO_CAMERA, !vectorPreferences.builtinCameraIsEnabled()
+                    )
                 }
                 attachmentTypeSelector.show(views.composerLayout.views.attachmentButton)
             }
@@ -2626,7 +2629,13 @@ class TimelineFragment :
 
     private fun launchAttachmentProcess(type: AttachmentTypeSelectorView.Type) {
         when (type) {
-            AttachmentTypeSelectorView.Type.PHOTO_CAMERA -> attachmentsHelper.openVectorCamera(attachmentVectorCameraActivityResultLauncher)
+            AttachmentTypeSelectorView.Type.PHOTO_CAMERA -> {
+                if (vectorPreferences.builtinCameraIsEnabled()) {
+                    attachmentsHelper.openVectorCamera(attachmentVectorCameraActivityResultLauncher)
+                } else {
+                    attachmentsHelper.openPhotoCamera(attachmentCameraActivityResultLauncher)
+                }
+            }
             AttachmentTypeSelectorView.Type.VIDEO_CAMERA -> attachmentsHelper.openVideoCamera(attachmentCameraVideoActivityResultLauncher)
             AttachmentTypeSelectorView.Type.FILE -> attachmentsHelper.selectFile(attachmentFileActivityResultLauncher)
             AttachmentTypeSelectorView.Type.GALLERY -> attachmentsHelper.selectGallery(attachmentMediaActivityResultLauncher)
