@@ -66,8 +66,8 @@ class AttachmentsCameraFragment :
 
     @Inject lateinit var clock: Clock
 
-    private lateinit var authority : String
-    private lateinit var storageDir : File
+    private lateinit var authority: String
+    private lateinit var storageDir: File
 
     private var imageCapture: ImageCapture? = null
     private var videoCapture: VideoCapture<Recorder>? = null
@@ -240,41 +240,41 @@ class AttachmentsCameraFragment :
     private fun takePhoto() {
         Timber.d("Taking a photo")
         context?.let { context ->
-        // Get a stable reference of the modifiable image capture use case
-        val imageCapture = imageCapture ?: return
+            // Get a stable reference of the modifiable image capture use case
+            val imageCapture = imageCapture ?: return
 
-        imageCapture.flashMode = flashMode
+            imageCapture.flashMode = flashMode
 
-        val file = createTempFile(MediaType.IMAGE)
-        val outputUri = getUri(context, file)
+            val file = createTempFile(MediaType.IMAGE)
+            val outputUri = getUri(context, file)
 
-        // Create output options object which contains file + metadata
-        val outputOptions = ImageCapture.OutputFileOptions
-                .Builder(file)
-                .build()
+            // Create output options object which contains file + metadata
+            val outputOptions = ImageCapture.OutputFileOptions
+                    .Builder(file)
+                    .build()
 
-        // Set up image capture listener, which is triggered after photo has
-        // been taken
-        imageCapture.takePicture(
-                outputOptions,
-                ContextCompat.getMainExecutor(context),
-                object : ImageCapture.OnImageSavedCallback {
-                    override fun onError(exc: ImageCaptureException) {
-                        Timber.e("Photo capture failed: ${exc.message}", exc)
-                        Toast.makeText(context, "An error occurred", Toast.LENGTH_SHORT).show()
-                        (activity as? AttachmentsCameraActivity)?.setErrorAndFinish()
+            // Set up image capture listener, which is triggered after photo has
+            // been taken
+            imageCapture.takePicture(
+                    outputOptions,
+                    ContextCompat.getMainExecutor(context),
+                    object : ImageCapture.OnImageSavedCallback {
+                        override fun onError(exc: ImageCaptureException) {
+                            Timber.e("Photo capture failed: ${exc.message}", exc)
+                            Toast.makeText(context, "An error occurred", Toast.LENGTH_SHORT).show()
+                            (activity as? AttachmentsCameraActivity)?.setErrorAndFinish()
+                        }
+
+                        override fun onImageSaved(output: ImageCapture.OutputFileResults) {
+                            (activity as? AttachmentsCameraActivity)?.setResultAndFinish(
+                                    VectorCameraOutput(
+                                            type = MediaType.IMAGE,
+                                            uri = outputUri
+                                    )
+                            )
+                        }
                     }
-
-                    override fun onImageSaved(output: ImageCapture.OutputFileResults){
-                        (activity as? AttachmentsCameraActivity)?.setResultAndFinish(
-                                VectorCameraOutput(
-                                        type = MediaType.IMAGE,
-                                        uri = outputUri
-                                )
-                        )
-                    }
-                }
-        )
+            )
         }
     }
 
@@ -304,15 +304,15 @@ class AttachmentsCameraFragment :
             recording = videoCapture.output
                     .prepareRecording(context, options)
                     .apply {
-                        if (PermissionChecker.checkSelfPermission(context,
-                                        Manifest.permission.RECORD_AUDIO) ==
-                                PermissionChecker.PERMISSION_GRANTED)
-                        {
+                        if (PermissionChecker.checkSelfPermission(
+                                        context,
+                                        Manifest.permission.RECORD_AUDIO
+                                ) == PermissionChecker.PERMISSION_GRANTED) {
                             withAudioEnabled()
                         }
                     }
                     .start(ContextCompat.getMainExecutor(context)) { recordEvent ->
-                        when(recordEvent) {
+                        when (recordEvent) {
                             is VideoRecordEvent.Start -> {
                                 views.attachmentsCameraCaptureAction.setImageDrawable(
                                         context.getDrawable(R.drawable.ic_video_off)
@@ -429,7 +429,7 @@ class AttachmentsCameraFragment :
         private var cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
         private var flashMode = ImageCapture.FLASH_MODE_AUTO
         private val REQUIRED_PERMISSIONS =
-                mutableListOf (
+                mutableListOf(
                         Manifest.permission.CAMERA,
                         Manifest.permission.RECORD_AUDIO
                 ).apply {
@@ -437,6 +437,5 @@ class AttachmentsCameraFragment :
                         add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     }
                 }.toTypedArray()
-
     }
 }

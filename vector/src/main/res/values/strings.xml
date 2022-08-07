@@ -511,12 +511,15 @@
 
     <string name="option_send_files">Send files</string>
     <string name="option_send_sticker">Send sticker</string>
-    <string name="option_take_photo_video">Take photo or video</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="option_take_photo_video">Take photo or video</string>
     <string name="option_take_photo">Take photo</string>
     <string name="option_take_video">Take video</string>
-    <string name="option_always_ask">Always ask</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="option_always_ask">Always ask</string>
 
-    <string name="use_as_default_and_do_not_ask_again">Use as default and do not ask again</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="use_as_default_and_do_not_ask_again">Use as default and do not ask again</string>
 
     <!-- No sticker application dialog -->
     <string name="no_sticker_application_dialog_content">You don’t currently have any stickerpacks enabled.\n\nAdd some now?</string>

@@ -20,13 +20,13 @@ import android.net.Uri
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
-enum class MediaType{
+enum class MediaType {
     IMAGE,
     VIDEO
 }
 
 @Parcelize
-data class VectorCameraOutput (
+data class VectorCameraOutput(
         val type: MediaType,
         val uri: Uri,
 ) : Parcelable

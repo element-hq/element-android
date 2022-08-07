@@ -52,7 +52,7 @@
     <!-- Adding CAMERA permission prevents Chromebooks to see the application on the PlayStore -->
     <!-- Tell that the Camera is not mandatory to install the application -->
     <uses-feature
-        android:name="android.hardware.camera.any"
+        android:name="android.hardware.camera"
         android:required="false" />
     <uses-feature
         android:name="android.hardware.camera.autofocus"

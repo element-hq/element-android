@@ -27,7 +27,7 @@ class MultiPicker<T> private constructor() {
         val CONTACT by lazy { MultiPicker<ContactPicker>() }
         val CAMERA by lazy { MultiPicker<CameraPicker>() }
         val CAMERA_VIDEO by lazy { MultiPicker<CameraVideoPicker>() }
-        val VECTOR_CAMERA by lazy { MultiPicker<VectorCameraPicker>()}
+        val VECTOR_CAMERA by lazy { MultiPicker<VectorCameraPicker>() }
 
         @Suppress("UNCHECKED_CAST")
         fun <T> get(type: MultiPicker<T>): T {

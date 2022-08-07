@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -21,8 +20,8 @@
         android:scaleY="0.7"
         android:src="@drawable/ic_video"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/vertical_leftline"
-        app:layout_constraintStart_toStartOf="@+id/vertical_leftline" />
+        app:layout_constraintEnd_toStartOf="@id/attachmentsCameraCaptureAction"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/attachmentsCameraCaptureAction"
@@ -34,8 +33,8 @@
         android:scaleY="1.3"
         android:src="@drawable/ic_camera_plain"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@id/vertical_centerline"
-        app:layout_constraintEnd_toStartOf="@id/vertical_centerline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:contentDescription="@string/attachment_camera_capture" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -48,8 +47,8 @@
         android:scaleY="0.7"
         android:src="@drawable/ic_video_flip"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@id/vertical_rightline"
-        app:layout_constraintEnd_toStartOf="@id/vertical_rightline"
+        app:layout_constraintStart_toEndOf="@id/attachmentsCameraCaptureAction"
+        app:layout_constraintEnd_toEndOf="parent"
         android:contentDescription="@string/attachment_camera_flip" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -65,26 +64,5 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:contentDescription="@string/attachment_camera_disable_flash" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/vertical_leftline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent=".2" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/vertical_centerline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent=".50" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/vertical_rightline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent=".8" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
