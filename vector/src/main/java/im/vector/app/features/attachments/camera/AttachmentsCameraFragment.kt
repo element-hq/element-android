@@ -47,6 +47,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.PermissionChecker
 import dagger.hilt.android.AndroidEntryPoint
+import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.VectorMenuProvider
@@ -109,7 +110,8 @@ class AttachmentsCameraFragment :
             requestPermissionLauncher.launch(REQUIRED_PERMISSIONS)
         }
 
-        setButtons()
+        setCaptureModeButtons()
+        setFlashButton()
 
         views.attachmentsCameraCaptureAction.debouncedClicks {
             capture()
@@ -122,6 +124,11 @@ class AttachmentsCameraFragment :
         views.attachmentsCameraFlip.debouncedClicks {
             changeLensFacing()
         }
+
+        views.attachmentsCameraFlash.debouncedClicks {
+            rotateFlashMode()
+        }
+
         val scaleGestureDetector = ScaleGestureDetector(context, gestureListener)
 
         views.root.setOnTouchListener { _, event ->
@@ -142,11 +149,11 @@ class AttachmentsCameraFragment :
             MediaType.IMAGE -> MediaType.VIDEO
             MediaType.VIDEO -> MediaType.IMAGE
         }
-        setButtons()
+        setCaptureModeButtons()
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    private fun setButtons() {
+    private fun setCaptureModeButtons() {
         when (captureMode) {
             MediaType.VIDEO -> {
                 views.attachmentsCameraCaptureAction.setImageDrawable(
@@ -171,6 +178,36 @@ class AttachmentsCameraFragment :
                 }
             }
         }
+        setFlashButton()
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun setFlashButton() {
+        if (captureMode == MediaType.VIDEO || cameraSelector != CameraSelector.DEFAULT_BACK_CAMERA) {
+            views.attachmentsCameraFlash.isVisible = false
+        } else {
+            views.attachmentsCameraFlash.apply {
+                isVisible = true
+                setImageDrawable(
+                        context?.getDrawable(
+                                when (flashMode) {
+                                    ImageCapture.FLASH_MODE_AUTO -> R.drawable.ic_flash_auto
+                                    ImageCapture.FLASH_MODE_OFF -> R.drawable.ic_flash_off
+                                    ImageCapture.FLASH_MODE_ON -> R.drawable.ic_flash_on
+                                    else -> R.drawable.ic_flash_auto
+                                }
+                        )
+                )
+                contentDescription = context?.getString(
+                        when (flashMode) {
+                            ImageCapture.FLASH_MODE_AUTO -> R.string.attachment_camera_disable_flash
+                            ImageCapture.FLASH_MODE_OFF -> R.string.attachment_camera_enable_flash
+                            ImageCapture.FLASH_MODE_ON -> R.string.attachment_camera_auto_flash
+                            else -> R.string.attachment_camera_disable_flash
+                        }
+                )
+            }
+        }
     }
 
     private fun changeLensFacing() {
@@ -179,6 +216,7 @@ class AttachmentsCameraFragment :
         } else {
             CameraSelector.DEFAULT_BACK_CAMERA
         }
+        setFlashButton()
         startCamera()
     }
 
@@ -187,7 +225,16 @@ class AttachmentsCameraFragment :
             MediaType.IMAGE -> takePhoto()
             MediaType.VIDEO -> captureVideo()
         }
+    }
 
+    private fun rotateFlashMode() {
+        flashMode = when (flashMode) {
+            ImageCapture.FLASH_MODE_AUTO -> ImageCapture.FLASH_MODE_OFF
+            ImageCapture.FLASH_MODE_OFF -> ImageCapture.FLASH_MODE_ON
+            ImageCapture.FLASH_MODE_ON -> ImageCapture.FLASH_MODE_AUTO
+            else -> ImageCapture.FLASH_MODE_OFF
+        }
+        setFlashButton()
     }
 
     private fun takePhoto() {
@@ -195,6 +242,8 @@ class AttachmentsCameraFragment :
         context?.let { context ->
         // Get a stable reference of the modifiable image capture use case
         val imageCapture = imageCapture ?: return
+
+        imageCapture.flashMode = flashMode
 
         val file = createTempFile(MediaType.IMAGE)
         val outputUri = getUri(context, file)
@@ -378,6 +427,7 @@ class AttachmentsCameraFragment :
     companion object {
         private var captureMode = MediaType.IMAGE
         private var cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+        private var flashMode = ImageCapture.FLASH_MODE_AUTO
         private val REQUIRED_PERMISSIONS =
                 mutableListOf (
                         Manifest.permission.CAMERA,

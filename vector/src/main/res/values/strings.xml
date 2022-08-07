@@ -3202,6 +3202,9 @@
     <string name="attachment_camera_capture">Capture</string>
     <string name="attachment_camera_flip">Change camera</string>
     <string name="labs_enable_builtin_camera">Enable Built-in Camera</string>
+    <string name="attachment_camera_disable_flash">Disable flash</string>
+    <string name="attachment_camera_enable_flash">Enable flash</string>
+    <string name="attachment_camera_auto_flash">Set flash automatically</string>
 
     <plurals name="room_removed_messages">
         <item quantity="one">%d message removed</item>

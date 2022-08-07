@@ -52,6 +52,20 @@
         app:layout_constraintEnd_toStartOf="@id/vertical_rightline"
         android:contentDescription="@string/attachment_camera_flip" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/attachmentsCameraFlash"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="25dp"
+        android:elevation="2dp"
+        android:scaleX="0.7"
+        android:scaleY="0.7"
+        android:src="@drawable/ic_flash_auto"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/attachment_camera_disable_flash" />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/vertical_leftline"
         android:layout_width="wrap_content"
