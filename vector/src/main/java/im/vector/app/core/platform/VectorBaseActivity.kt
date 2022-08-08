@@ -91,7 +91,7 @@ import im.vector.app.features.settings.FontScalePreferencesImpl
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.themes.ThemeUtils
-import im.vector.app.receivers.DebugReceiver
+import im.vector.app.receivers.VectorDebugReceiver
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -160,6 +160,8 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     @Inject lateinit var rageShake: RageShake
     @Inject lateinit var buildMeta: BuildMeta
     @Inject lateinit var fontScalePreferences: FontScalePreferences
+    // For debug only
+    @Inject lateinit var debugReceiver: VectorDebugReceiver
 
     @Inject
     lateinit var vectorFeatures: VectorFeatures
@@ -175,9 +177,6 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     private var mainActivityStarted = false
 
     private var savedInstanceState: Bundle? = null
-
-    // For debug only
-    private var debugReceiver: DebugReceiver? = null
 
     private val restorables = ArrayList<Restorable>()
 
@@ -418,13 +417,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
         if (this !is BugReportActivity && vectorPreferences.useRageshake()) {
             rageShake.start()
         }
-        DebugReceiver
-                .getIntentFilter(this)
-                .takeIf { buildMeta.isDebug }
-                ?.let {
-                    debugReceiver = DebugReceiver()
-                    registerReceiver(debugReceiver, it)
-                }
+        debugReceiver.register(this)
     }
 
     private val postResumeScheduledActions = mutableListOf<() -> Unit>()
@@ -454,11 +447,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
         Timber.i("onPause Activity ${javaClass.simpleName}")
 
         rageShake.stop()
-
-        debugReceiver?.let {
-            unregisterReceiver(debugReceiver)
-            debugReceiver = null
-        }
+        debugReceiver.unregister(this)
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
