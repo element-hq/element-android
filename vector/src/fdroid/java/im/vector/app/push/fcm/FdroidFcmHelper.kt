@@ -20,6 +20,7 @@ package im.vector.app.push.fcm
 import android.app.Activity
 import android.content.Context
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.pushers.FcmHelper
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.fdroid.BackgroundSyncStarter
 import im.vector.app.fdroid.receiver.AlarmSyncBroadcastReceiver
@@ -28,19 +29,19 @@ import javax.inject.Inject
 /**
  * This class has an alter ego in the gplay variant.
  */
-class FcmHelper @Inject constructor(
+class FdroidFcmHelper @Inject constructor(
         private val context: Context,
         private val backgroundSyncStarter: BackgroundSyncStarter,
-) {
+) : FcmHelper {
 
-    fun isFirebaseAvailable(): Boolean = false
+    override fun isFirebaseAvailable(): Boolean = false
 
     /**
      * Retrieves the FCM registration token.
      *
      * @return the FCM token or null if not received from FCM
      */
-    fun getFcmToken(): String? {
+    override fun getFcmToken(): String? {
         return null
     }
 
@@ -49,7 +50,7 @@ class FcmHelper @Inject constructor(
      *
      * @param token the token to store
      */
-    fun storeFcmToken(token: String?) {
+    override fun storeFcmToken(token: String?) {
         // No op
     }
 
@@ -58,17 +59,17 @@ class FcmHelper @Inject constructor(
      *
      * @param activity the first launch Activity
      */
-    fun ensureFcmTokenIsRetrieved(activity: Activity, pushersManager: PushersManager, registerPusher: Boolean) {
+    override fun ensureFcmTokenIsRetrieved(activity: Activity, pushersManager: PushersManager, registerPusher: Boolean) {
         // No op
     }
 
-    fun onEnterForeground(activeSessionHolder: ActiveSessionHolder) {
+    override fun onEnterForeground(activeSessionHolder: ActiveSessionHolder) {
         // try to stop all regardless of background mode
         activeSessionHolder.getSafeActiveSession()?.syncService()?.stopAnyBackgroundSync()
         AlarmSyncBroadcastReceiver.cancelAlarm(context)
     }
 
-    fun onEnterBackground(activeSessionHolder: ActiveSessionHolder) {
+    override fun onEnterBackground(activeSessionHolder: ActiveSessionHolder) {
         backgroundSyncStarter.start(activeSessionHolder)
     }
 }
