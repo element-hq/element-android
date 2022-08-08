@@ -116,6 +116,10 @@ class AudioMessagePlaybackTracker @Inject constructor() {
         setState(id, Listener.State.Recording(amplitudeList))
     }
 
+    fun stopRecording(id: String) {
+        setState(id, Listener.State.Idle)
+    }
+
     fun getPlaybackState(id: String) = states[id]
 
     fun getPlaybackTime(id: String): Int {

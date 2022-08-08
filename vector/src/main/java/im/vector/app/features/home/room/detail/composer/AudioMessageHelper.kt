@@ -79,6 +79,7 @@ class AudioMessageHelper @Inject constructor(
     }
 
     fun stopRecording(): MultiPickerAudioType? {
+        playbackTracker.stopRecording(AudioMessagePlaybackTracker.RECORDING_ID)
         tryOrNull("Cannot stop media recording amplitude") {
             stopRecordingAmplitudes()
         }
@@ -110,11 +111,13 @@ class AudioMessageHelper @Inject constructor(
      * When entering in playback mode actually.
      */
     fun pauseRecording() {
+        playbackTracker.stopRecording(AudioMessagePlaybackTracker.RECORDING_ID)
         voiceRecorder.stopRecord()
         stopRecordingAmplitudes()
     }
 
     fun deleteRecording() {
+        playbackTracker.stopRecording(AudioMessagePlaybackTracker.RECORDING_ID)
         tryOrNull("Cannot stop media recording amplitude") {
             stopRecordingAmplitudes()
         }
