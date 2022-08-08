@@ -869,11 +869,11 @@ class TimelineFragment @Inject constructor(
     }
 
     private fun joinJitsiRoom(jitsiWidget: Widget, enableVideo: Boolean) {
-        navigator.openRoomWidget(requireContext(), timelineArgs.roomId, jitsiWidget, mapOf(JitsiCallViewModel.ENABLE_VIDEO_OPTION to enableVideo))
+        navigator.openRoomWidget(requireContext(), null, timelineArgs.roomId, jitsiWidget, mapOf(JitsiCallViewModel.ENABLE_VIDEO_OPTION to enableVideo))
     }
 
     private fun openStickerPicker(event: RoomDetailViewEvents.OpenStickerPicker) {
-        navigator.openStickerPicker(requireContext(), stickerActivityResultLauncher, timelineArgs.roomId, event.widget)
+        navigator.openStickerPicker(requireContext(), widgetActivityResultLauncher, timelineArgs.roomId, event.widget)
     }
 
     private fun startOpenFileIntent(action: RoomDetailViewEvents.OpenFile) {
@@ -1395,9 +1395,10 @@ class TimelineFragment @Inject constructor(
         }
     }
 
-    private val stickerActivityResultLauncher = registerStartForActivityResult { activityResult ->
+    private val widgetActivityResultLauncher = registerStartForActivityResult { activityResult ->
         val data = activityResult.data ?: return@registerStartForActivityResult
         if (activityResult.resultCode == Activity.RESULT_OK) {
+            // The msgType can be check to handle other widget actions
             WidgetActivity.getOutput(data).toModel<MessageStickerContent>()
                     ?.let { content ->
                         timelineViewModel.handle(RoomDetailAction.SendSticker(content))
@@ -2654,7 +2655,7 @@ class TimelineFragment @Inject constructor(
     }
 
     private fun onViewWidgetsClicked() {
-        RoomWidgetsBottomSheet.newInstance()
+        RoomWidgetsBottomSheet.newInstance(widgetActivityResultLauncher)
                 .show(childFragmentManager, "ROOM_WIDGETS_BOTTOM_SHEET")
     }
 
@@ -2663,7 +2664,7 @@ class TimelineFragment @Inject constructor(
                 .activeRoomWidgets()
                 ?.find { it.type == WidgetType.ElementCall }
                 ?.also { widget ->
-                    navigator.openRoomWidget(requireContext(), state.roomId, widget)
+                    navigator.openRoomWidget(requireContext(), null, state.roomId, widget)
                 }
     }
 
