@@ -150,6 +150,7 @@ import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRul
 import im.vector.app.features.roomprofile.uploads.RoomUploadsFragment
 import im.vector.app.features.roomprofile.uploads.files.RoomUploadsFilesFragment
 import im.vector.app.features.roomprofile.uploads.media.RoomUploadsMediaFragment
+import im.vector.app.features.settings.VectorSettingsAdvancedSettingsFragment
 import im.vector.app.features.settings.VectorSettingsGeneralFragment
 import im.vector.app.features.settings.VectorSettingsHelpAboutFragment
 import im.vector.app.features.settings.VectorSettingsLabsFragment
@@ -623,6 +624,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(VectorSettingsSecurityPrivacyFragment::class)
     fun bindVectorSettingsSecurityPrivacyFragment(fragment: VectorSettingsSecurityPrivacyFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(VectorSettingsAdvancedSettingsFragment::class)
+    fun bindVectorSettingsAdvancedSettingsFragment(fragment: VectorSettingsAdvancedSettingsFragment): Fragment
 
     @Binds
     @IntoMap
