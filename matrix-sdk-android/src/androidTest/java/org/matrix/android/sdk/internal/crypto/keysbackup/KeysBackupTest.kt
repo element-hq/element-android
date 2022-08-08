@@ -29,7 +29,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
-import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_CURVE_25519_BACKUP
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.listeners.StepProgressListener
 import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
@@ -122,7 +122,7 @@ class KeysBackupTest : InstrumentedTest {
             keysBackup.prepareKeysBackupVersion(null, null, it)
         }
 
-        assertEquals(MXCRYPTO_ALGORITHM_MEGOLM_BACKUP, megolmBackupCreationInfo.algorithm)
+        assertEquals(MXCRYPTO_ALGORITHM_CURVE_25519_BACKUP, megolmBackupCreationInfo.algorithm)
         assertNotNull(megolmBackupCreationInfo.authData.publicKey)
         assertNotNull(megolmBackupCreationInfo.authData.signatures)
         assertNotNull(megolmBackupCreationInfo.recoveryKey)

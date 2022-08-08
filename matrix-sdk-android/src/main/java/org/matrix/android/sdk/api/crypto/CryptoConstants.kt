@@ -27,9 +27,14 @@ const val MXCRYPTO_ALGORITHM_OLM = "m.olm.v1.curve25519-aes-sha2"
 const val MXCRYPTO_ALGORITHM_MEGOLM = "m.megolm.v1.aes-sha2"
 
 /**
- * Matrix algorithm value for megolm keys backup.
+ * Matrix algorithm value for CURVE_25519 megolm keys backup.
  */
-const val MXCRYPTO_ALGORITHM_MEGOLM_BACKUP = "m.megolm_backup.v1.curve25519-aes-sha2"
+const val MXCRYPTO_ALGORITHM_CURVE_25519_BACKUP = "m.megolm_backup.v1.curve25519-aes-sha2"
+
+/**
+ * Matrix algorithm value for AES-256 megolm keys backup.
+ */
+const val MXCRYPTO_ALGORITHM_AES_256_BACKUP = "org.matrix.msc3270.v1.aes-hmac-sha2"
 
 /**
  * Secured Shared Storage algorithm constant.

@@ -30,7 +30,7 @@ import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.data.Credentials
-import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_CURVE_25519_BACKUP
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.listeners.ProgressListener
@@ -219,7 +219,7 @@ internal class DefaultKeysBackupService @Inject constructor(
                         signatures = signatures
                 )
                 val creationInfo = MegolmBackupCreationInfo(
-                        algorithm = MXCRYPTO_ALGORITHM_MEGOLM_BACKUP,
+                        algorithm = MXCRYPTO_ALGORITHM_CURVE_25519_BACKUP,
                         authData = signedMegolmBackupAuthData,
                         recoveryKey = computeRecoveryKey(olmPkDecryption.privateKey())
                 )
@@ -1109,7 +1109,7 @@ internal class DefaultKeysBackupService @Inject constructor(
      */
     private fun getMegolmBackupAuthData(keysBackupData: KeysVersionResult): MegolmBackupAuthData? {
         return keysBackupData
-                .takeIf { it.version.isNotEmpty() && it.algorithm == MXCRYPTO_ALGORITHM_MEGOLM_BACKUP }
+                .takeIf { it.version.isNotEmpty() && it.algorithm == MXCRYPTO_ALGORITHM_CURVE_25519_BACKUP }
                 ?.getAuthDataAsMegolmBackupAuthData()
                 ?.takeIf { it.publicKey.isNotEmpty() }
     }
