@@ -91,7 +91,7 @@ internal class DefaultCreateLocalRoomTask @Inject constructor(
         val roomId = RoomLocalEcho.createLocalEchoId()
         monarchy.awaitTransaction { realm ->
             createLocalRoomEntity(realm, roomId, createRoomBody)
-            createLocalRoomSummaryEntity(realm, roomId, createRoomBody, params)
+            createLocalRoomSummaryEntity(realm, roomId, params, createRoomBody)
         }
 
         // Wait for room to be created in DB
@@ -120,7 +120,8 @@ internal class DefaultCreateLocalRoomTask @Inject constructor(
         }
     }
 
-    private fun createLocalRoomSummaryEntity(realm: Realm, roomId: String, createRoomBody: CreateRoomBody, createRoomParams: CreateRoomParams) {
+    private fun createLocalRoomSummaryEntity(realm: Realm, roomId: String, createRoomParams: CreateRoomParams, createRoomBody: CreateRoomBody) {
+        // Create the room summary entity
         val roomSummaryEntity = realm.createObject<RoomSummaryEntity>(roomId).apply {
             val otherUserId = createRoomBody.getDirectUserId()
             if (otherUserId != null) {
@@ -128,10 +129,20 @@ internal class DefaultCreateLocalRoomTask @Inject constructor(
                 directUserId = otherUserId
             }
         }
+
+        // Update the createRoomParams from the potential feature preset before saving
+        createRoomParams.featurePreset?.let { featurePreset ->
+            featurePreset.updateRoomParams(createRoomParams)
+            createRoomParams.initialStates.addAll(featurePreset.setupInitialStates().orEmpty())
+        }
+
+        // Create a LocalRoomSummaryEntity decorated by the related RoomSummaryEntity and the updated CreateRoomParams
         realm.createObject<LocalRoomSummaryEntity>(roomId).also {
             it.roomSummaryEntity = roomSummaryEntity
             it.createRoomParams = createRoomParams
         }
+
+        // Update the RoomSummaryEntity by simulating a fake sync response
         roomSummaryUpdater.update(
                 realm = realm,
                 roomId = roomId,
