@@ -58,7 +58,6 @@ import org.matrix.olm.OlmPkSigning
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import kotlin.time.Duration.Companion.seconds
 
 @SessionScope
 internal class DefaultCrossSigningService @Inject constructor(

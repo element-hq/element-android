@@ -22,9 +22,7 @@ import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
 import com.squareup.moshi.Types
 import dagger.Lazy
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext

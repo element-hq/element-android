@@ -27,7 +27,7 @@ internal class MigrateCryptoTo014(context: AutomaticSchemaMigration.MigrationCon
     override fun doMigrate(migrationContext: AutomaticSchemaMigration.MigrationContext) {
         Timber.d("Update SharedSessionEntity")
         migrationContext.safeEnumerate("SharedSessionEntity") { oldObject, newObject ->
-            if(newObject == null) return@safeEnumerate
+            if (newObject == null) return@safeEnumerate
             val sharedUserId = oldObject.getNullableValue("userId", String::class)
             val sharedDeviceId = oldObject.getNullableValue("deviceId", String::class)
             val knownDevice = migrationContext.newRealm.query("DeviceInfoEntity")

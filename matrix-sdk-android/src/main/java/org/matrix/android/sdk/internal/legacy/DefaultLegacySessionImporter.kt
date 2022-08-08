@@ -17,8 +17,6 @@
 package org.matrix.android.sdk.internal.legacy
 
 import android.content.Context
-import io.realm.Realm
-import io.realm.RealmConfiguration
 import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.auth.LoginType
 import org.matrix.android.sdk.api.auth.data.Credentials
@@ -164,7 +162,7 @@ internal class DefaultLegacySessionImporter @Inject constructor(
         newLocation.mkdirs()
 
         Timber.d("Migration: create legacy realm configuration")
-        //TODO: RE-ENABLE before merging...
+        // TODO: RE-ENABLE before merging...
         /*
         val userMd5 = legacyConfig.credentials.userId.md5()
         val keyAlias = "crypto_module_$userMd5"

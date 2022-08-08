@@ -96,7 +96,6 @@ internal class MigrateCryptoTo004(context: AutomaticSchemaMigration.MigrationCon
                 // an unfortunate refactor did modify that class, making deserialization failing
                 // so we just skip and ignore..
             }
-
         }
     }
 }

@@ -28,7 +28,7 @@ internal class MigrateCryptoTo015(context: AutomaticSchemaMigration.MigrationCon
     override fun doMigrate(migrationContext: AutomaticSchemaMigration.MigrationContext) {
         Timber.d("Update CryptoRoomEntity")
         migrationContext.safeEnumerate("CryptoRoomEntity") { oldObject, newObject ->
-            if(newObject == null) return@safeEnumerate
+            if (newObject == null) return@safeEnumerate
             val currentAlgorithm = oldObject.getNullableValue("algorithm", String::class)
             newObject.set("wasEncryptedOnce", currentAlgorithm == MXCRYPTO_ALGORITHM_MEGOLM)
         }

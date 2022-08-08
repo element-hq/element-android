@@ -24,4 +24,3 @@ internal open class ContentScannerInfoEntity : RealmObject {
 
     companion object
 }
-

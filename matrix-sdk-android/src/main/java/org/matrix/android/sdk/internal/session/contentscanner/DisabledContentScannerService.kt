@@ -16,8 +16,6 @@
 
 package org.matrix.android.sdk.internal.session.contentscanner
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import org.matrix.android.sdk.api.session.contentscanner.ContentScannerService

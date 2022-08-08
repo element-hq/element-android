@@ -22,7 +22,6 @@ import timber.log.Timber
 
 internal class MigrateCryptoTo002Legacy(context: AutomaticSchemaMigration.MigrationContext) : KotlinRealmMigrator(context, 2) {
 
-
     override fun doMigrate(migrationContext: AutomaticSchemaMigration.MigrationContext) {
         Timber.d("Update IncomingRoomKeyRequestEntity format: requestBodyString field is exploded into several fields")
         Timber.d("Update OutgoingRoomKeyRequestEntity format: requestBodyString field is exploded into several fields")

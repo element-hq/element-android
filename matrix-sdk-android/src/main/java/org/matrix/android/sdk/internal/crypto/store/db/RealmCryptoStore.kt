@@ -25,7 +25,6 @@ import io.realm.kotlin.UpdatePolicy
 import io.realm.kotlin.query.RealmQuery
 import io.realm.kotlin.query.RealmSingleQuery
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.logger.LoggerTag
@@ -418,7 +417,6 @@ internal class RealmCryptoStore @Inject constructor(
                 }
                 userEntity.crossSigningInfoEntity = signingInfo
             }
-
         }
     }
 
@@ -873,7 +871,6 @@ internal class RealmCryptoStore @Inject constructor(
                 // Only one object
                 copyToRealm(keysBackupData, updatePolicy = UpdatePolicy.ALL)
             }
-
         }
     }
 
@@ -884,7 +881,6 @@ internal class RealmCryptoStore @Inject constructor(
                     .forEach { inboundGroupSession ->
                         inboundGroupSession.backedUp = false
                     }
-
         }
     }
 
@@ -1272,7 +1268,6 @@ internal class RealmCryptoStore @Inject constructor(
                         // I delete like this because I want to cascade delete replies?
                         deleteOnCascade(it)
                     }
-
         }
     }
 
@@ -1621,7 +1616,6 @@ internal class RealmCryptoStore @Inject constructor(
                 operation(newWithHeldSessionEntity)
                 copyToRealm(newWithHeldSessionEntity)
             }
-
         }
     }
 

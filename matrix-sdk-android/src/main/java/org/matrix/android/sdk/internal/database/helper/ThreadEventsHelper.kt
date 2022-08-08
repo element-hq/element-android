@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.database.helper
 
 import com.squareup.moshi.JsonDataException
 import io.realm.Realm
-import io.realm.RealmModel
 import io.realm.RealmQuery
 import io.realm.Sort
 import org.matrix.android.sdk.api.session.events.model.UnsignedData

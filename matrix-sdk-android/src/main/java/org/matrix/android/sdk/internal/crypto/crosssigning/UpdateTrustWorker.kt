@@ -197,7 +197,6 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
                     }
                 }
             }
-
         }
         // So Cross Signing keys trust is updated, device trust is updated
         // We can now update room shields? in the session DB?

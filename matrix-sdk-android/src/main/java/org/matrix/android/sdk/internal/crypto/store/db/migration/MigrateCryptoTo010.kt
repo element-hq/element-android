@@ -27,5 +27,4 @@ internal class MigrateCryptoTo010(context: AutomaticSchemaMigration.MigrationCon
         Timber.d("Create WithHeldSessionEntity")
         Timber.d("Create SharedSessionEntity")
     }
-
 }

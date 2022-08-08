@@ -65,7 +65,6 @@ class ContactsBookViewModel @AssistedInject constructor(
 
     private fun loadContacts() {
         viewModelScope.launch(Dispatchers.IO) {
-
             val identityServerUrl = session.identityService().getCurrentIdentityServerUrl()
             val userConsent = session.identityService().getUserConsent()
 
@@ -162,7 +161,6 @@ class ContactsBookViewModel @AssistedInject constructor(
     }
 
     override fun handle(action: ContactsBookAction) {
-
         when (action) {
             is ContactsBookAction.FilterWith -> handleFilterWith(action)
             is ContactsBookAction.OnlyBoundContacts -> handleOnlyBoundContacts(action)

@@ -102,4 +102,3 @@ internal fun AutomaticSchemaMigration.MigrationContext.safeEnumerate(
         block(it, latest)
     }
 }
-

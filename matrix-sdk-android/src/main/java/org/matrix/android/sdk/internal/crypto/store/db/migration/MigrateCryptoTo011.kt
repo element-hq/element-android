@@ -26,5 +26,4 @@ internal class MigrateCryptoTo011(context: AutomaticSchemaMigration.MigrationCon
     override fun doMigrate(migrationContext: AutomaticSchemaMigration.MigrationContext) {
         Timber.d("Update CryptoMetadataEntity")
     }
-
 }

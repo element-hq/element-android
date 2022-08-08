@@ -312,7 +312,6 @@ internal abstract class SessionModule {
         fun providesSessionCoroutineScope(coroutineScopeHolder: SessionCoroutineScopeHolder): CoroutineScope {
             return coroutineScopeHolder.scope
         }
-
     }
 
     @Binds

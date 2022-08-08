@@ -40,4 +40,3 @@ val AutomaticSchemaMigration.MigrationContext.newVersion: Long
     get() {
         return newRealm.schemaVersion()
     }
-

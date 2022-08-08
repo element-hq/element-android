@@ -100,7 +100,6 @@ internal class RealmKeysUtils @Inject constructor(
         realmConfigurationBuilder.encryptionKey(key)
     }
 
-
     // Expose to handle Realm migration to riotX
     fun getRealmEncryptionKey(alias: String): ByteArray {
         val key = if (hasKeyForDatabase(alias)) {
