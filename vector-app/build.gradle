@@ -236,6 +236,7 @@ android {
         debug {
             applicationIdSuffix ".debug"
             signingConfig signingConfigs.debug
+            resValue "color", "launcher_background", "#0DBD8B"
 
             if (project.hasProperty("coverage")) {
                 testCoverageEnabled = coverage.enableTestCoverage
@@ -243,6 +244,7 @@ android {
         }
 
         release {
+            resValue "color", "launcher_background", "#0DBD8B"
             postprocessing {
                 removeUnusedCode true
                 removeUnusedResources true
@@ -258,6 +260,7 @@ android {
             initWith release
             applicationIdSuffix ".nightly"
             versionNameSuffix "-nightly"
+            resValue "color", "launcher_background", "#07007E"
 
             // We need to copy paste this block, this is not done automatically by `initWith release`
             postprocessing {
