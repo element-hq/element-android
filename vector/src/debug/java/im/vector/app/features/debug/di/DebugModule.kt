@@ -26,6 +26,8 @@ import dagger.hilt.components.SingletonComponent
 import im.vector.app.core.debug.DebugReceiver
 import im.vector.app.features.debug.DebugMenuActivity
 import im.vector.app.core.debug.DebugNavigator
+import im.vector.app.core.debug.FlipperProxy
+import im.vector.app.flipper.VectorFlipperProxy
 import im.vector.app.receivers.VectorDebugReceiver
 
 @InstallIn(SingletonComponent::class)
@@ -44,4 +46,8 @@ abstract class DebugModule {
 
     @Binds
     abstract fun bindsDebugReceiver(receiver: VectorDebugReceiver): DebugReceiver
+
+    @Binds
+    abstract fun bindsFlipperProxy(flipperProxy: VectorFlipperProxy): FlipperProxy
+
 }

@@ -16,18 +16,26 @@
 
 package im.vector.app.di
 
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import im.vector.app.core.services.GuardServiceStarter
+import im.vector.app.features.home.NightlyProxy
+import im.vector.app.nightly.FirebaseNightlyProxy
 
 @InstallIn(SingletonComponent::class)
 @Module
-object FlavorModule {
+abstract class FlavorModule {
 
-    @Provides
-    fun provideGuardServiceStarter(): GuardServiceStarter {
-        return object : GuardServiceStarter {}
+    companion object {
+        @Provides
+        fun provideGuardServiceStarter(): GuardServiceStarter {
+            return object : GuardServiceStarter {}
+        }
     }
+
+    @Binds
+    abstract fun bindsNightlyProxy(nightlyProxy: FirebaseNightlyProxy): NightlyProxy
 }

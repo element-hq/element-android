@@ -29,19 +29,19 @@ import com.facebook.flipper.plugins.sharedpreferences.SharedPreferencesFlipperPl
 import com.facebook.soloader.SoLoader
 import com.kgurgul.flipper.RealmDatabaseDriver
 import com.kgurgul.flipper.RealmDatabaseProvider
+import im.vector.app.core.debug.FlipperProxy
 import io.realm.RealmConfiguration
-import okhttp3.Interceptor
 import org.matrix.android.sdk.api.Matrix
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class FlipperProxy @Inject constructor(
+class VectorFlipperProxy @Inject constructor(
         private val context: Context,
-) {
+) : FlipperProxy {
     private val networkFlipperPlugin = NetworkFlipperPlugin()
 
-    fun init(matrix: Matrix) {
+    override fun init(matrix: Matrix) {
         SoLoader.init(context, false)
 
         if (FlipperUtils.shouldEnableFlipper(context)) {
@@ -65,8 +65,5 @@ class FlipperProxy @Inject constructor(
         }
     }
 
-    @Suppress("RedundantNullableReturnType")
-    fun getNetworkInterceptor(): Interceptor? {
-        return FlipperOkhttpInterceptor(networkFlipperPlugin)
-    }
+    override fun networkInterceptor() = FlipperOkhttpInterceptor(networkFlipperPlugin)
 }
