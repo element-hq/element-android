@@ -21,6 +21,7 @@ import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.kotlin.createObject
 import kotlinx.coroutines.TimeoutCancellationException
+import org.matrix.android.sdk.api.MatrixPatterns.getServerName
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.events.model.Content
@@ -31,18 +32,32 @@ import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.Membership
-import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
+import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
+import org.matrix.android.sdk.api.session.room.model.RoomCanonicalAliasContent
+import org.matrix.android.sdk.api.session.room.model.RoomGuestAccessContent
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
+import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibilityContent
+import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
+import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
+import org.matrix.android.sdk.api.session.room.model.RoomNameContent
 import org.matrix.android.sdk.api.session.room.model.RoomThirdPartyInviteContent
+import org.matrix.android.sdk.api.session.room.model.RoomTopicContent
+import org.matrix.android.sdk.api.session.room.model.banOrDefault
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
+import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
+import org.matrix.android.sdk.api.session.room.model.eventsDefaultOrDefault
+import org.matrix.android.sdk.api.session.room.model.inviteOrDefault
+import org.matrix.android.sdk.api.session.room.model.kickOrDefault
 import org.matrix.android.sdk.api.session.room.model.localecho.LocalRoomThirdPartyInviteContent
 import org.matrix.android.sdk.api.session.room.model.localecho.RoomLocalEcho
+import org.matrix.android.sdk.api.session.room.model.redactOrDefault
+import org.matrix.android.sdk.api.session.room.model.stateDefaultOrDefault
+import org.matrix.android.sdk.api.session.room.model.usersDefaultOrDefault
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.sync.model.RoomSyncSummary
 import org.matrix.android.sdk.api.session.user.UserService
-import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
 import org.matrix.android.sdk.internal.database.awaitNotEmptyResult
 import org.matrix.android.sdk.internal.database.helper.addTimelineEvent
@@ -75,7 +90,7 @@ import javax.inject.Inject
 internal interface CreateLocalRoomTask : Task<CreateRoomParams, String>
 
 internal class DefaultCreateLocalRoomTask @Inject constructor(
-        @UserId private val userId: String,
+        @UserId private val myUserId: String,
         @SessionDatabase private val monarchy: Monarchy,
         private val roomMemberEventHandler: RoomMemberEventHandler,
         private val roomSummaryUpdater: RoomSummaryUpdater,
@@ -87,7 +102,7 @@ internal class DefaultCreateLocalRoomTask @Inject constructor(
 ) : CreateLocalRoomTask {
 
     override suspend fun execute(params: CreateRoomParams): String {
-        val createRoomBody = createRoomBodyBuilder.build(params.withDefault())
+        val createRoomBody = createRoomBodyBuilder.build(params)
         val roomId = RoomLocalEcho.createLocalEchoId()
         monarchy.awaitTransaction { realm ->
             createLocalRoomEntity(realm, roomId, createRoomBody)
@@ -213,77 +228,210 @@ internal class DefaultCreateLocalRoomTask @Inject constructor(
     }
 
     /**
-     * Build the list of the events related to the room creation params.
+     * Build the list of state events related to the room creation body.
+     * The events list is ordered following the specification: https://spec.matrix.org/latest/client-server-api/#post_matrixclientv3createroom
      *
-     * @param createRoomBody the room creation params
+     * @param createRoomBody the room creation body
      *
      * @return the list of events
      */
     private suspend fun createLocalRoomEvents(createRoomBody: CreateRoomBody): List<Event> {
-        val myUser = userService.getUser(userId) ?: User(userId)
-        val invitedUsers = createRoomBody.invitedUserIds.orEmpty()
-                .mapNotNull { tryOrNull { userService.resolveUser(it) } }
-        val invited3Pids = createRoomBody.invite3pids.orEmpty()
+        return buildList {
+            createRoomCreateEvent(createRoomBody)
+            createRoomMemberEvents(listOf(myUserId))
+            createRoomPowerLevelsEvent(createRoomBody)
+            createRoomAliasEvent(createRoomBody)
+            createRoomPresetEvents(createRoomBody)
+            createRoomInitialStateEvents(createRoomBody)
+            createRoomNameAndTopicStateEvents(createRoomBody)
+            createRoomMemberEvents(createRoomBody.invitedUserIds.orEmpty())
+            createRoomThreePidEvents(createRoomBody)
+            createRoomDefaultEvents()
+        }
+    }
 
-        val createRoomEvent = createLocalEvent(
+    /**
+     * Generate the create state event related to this room.
+     */
+    private fun MutableList<Event>.createRoomCreateEvent(createRoomBody: CreateRoomBody) = apply {
+        val roomCreateEvent = createLocalEvent(
                 type = EventType.STATE_ROOM_CREATE,
                 content = RoomCreateContent(
-                        creator = userId
-                ).toContent()
-        )
-        val myRoomMemberEvent = createLocalEvent(
-                type = EventType.STATE_ROOM_MEMBER,
-                content = RoomMemberContent(
-                        membership = Membership.JOIN,
-                        displayName = myUser.displayName,
-                        avatarUrl = myUser.avatarUrl
-                ).toContent(),
-                stateKey = userId
-        )
-        val roomMemberEvents = invitedUsers.map {
-            createLocalEvent(
-                    type = EventType.STATE_ROOM_MEMBER,
-                    content = RoomMemberContent(
-                            isDirect = createRoomBody.isDirect.orFalse(),
-                            membership = Membership.INVITE,
-                            displayName = it.displayName,
-                            avatarUrl = it.avatarUrl
-                    ).toContent(),
-                    stateKey = it.userId
-            )
-        }
+                        creator = myUserId,
+                        roomVersion = createRoomBody.roomVersion,
+                        type = (createRoomBody.creationContent as? Map<*, *>)?.get(CreateRoomParams.CREATION_CONTENT_KEY_ROOM_TYPE) as? String
 
-        val localRoomThreePidEvents = invited3Pids.map { body ->
-            createLocalEvent(
+                ).toContent(),
+                stateKey = ""
+        )
+        add(roomCreateEvent)
+    }
+
+    /**
+     * Generate the create state event related to the power levels using the given overridden values or the default values according to the specification.
+     * Ref: https://spec.matrix.org/latest/client-server-api/#mroompower_levels
+     */
+    private fun MutableList<Event>.createRoomPowerLevelsEvent(createRoomBody: CreateRoomBody) = apply {
+        val powerLevelsContent = createLocalEvent(
+                type = EventType.STATE_ROOM_POWER_LEVELS,
+                content = (createRoomBody.powerLevelContentOverride ?: PowerLevelsContent()).let {
+                    it.copy(
+                            ban = it.banOrDefault(),
+                            eventsDefault = it.eventsDefaultOrDefault(),
+                            invite = it.inviteOrDefault(),
+                            kick = it.kickOrDefault(),
+                            redact = it.redactOrDefault(),
+                            stateDefault = it.stateDefaultOrDefault(),
+                            usersDefault = it.usersDefaultOrDefault(),
+                    )
+                }.toContent(),
+                stateKey = ""
+        )
+        add(powerLevelsContent)
+    }
+
+    /**
+     * Generate the local room member state events related to the given user ids, if any.
+     */
+    private suspend fun MutableList<Event>.createRoomMemberEvents(userIds: List<String>, isDirect: Boolean? = null) = apply {
+        val memberEvents = userIds
+                .mapNotNull { tryOrNull { userService.resolveUser(it) } }
+                .map { user ->
+                    createLocalEvent(
+                            type = EventType.STATE_ROOM_MEMBER,
+                            content = RoomMemberContent(
+                                    isDirect = isDirect.orFalse(),
+                                    membership = if (user.userId == myUserId) Membership.JOIN else Membership.INVITE,
+                                    displayName = user.displayName,
+                                    avatarUrl = user.avatarUrl
+                            ).toContent(),
+                            stateKey = user.userId
+                    )
+                }
+        addAll(memberEvents)
+    }
+
+    /**
+     * Generate the local state events related to the given third party invites, if any.
+     */
+    private fun MutableList<Event>.createRoomThreePidEvents(createRoomBody: CreateRoomBody) = apply {
+        val threePidEvents = createRoomBody.invite3pids.orEmpty().map { body ->
+            val localThirdPartyInviteEvent = createLocalEvent(
                     type = EventType.LOCAL_STATE_ROOM_THIRD_PARTY_INVITE,
                     content = LocalRoomThirdPartyInviteContent(
                             isDirect = createRoomBody.isDirect.orFalse(),
                             membership = Membership.INVITE,
                             displayName = body.address,
                             thirdPartyInvite = body.toThreePid()
-                    ).toContent()
+                    ).toContent(),
+                    stateKey = ""
             )
-        }
-
-        val roomThreePidEvents = invited3Pids.map { body ->
-            createLocalEvent(
+            val thirdPartyInviteEvent = createLocalEvent(
                     type = EventType.STATE_ROOM_THIRD_PARTY_INVITE,
-                    content = RoomThirdPartyInviteContent(
-                            displayName = body.address,
-                            keyValidityUrl = null,
-                            publicKey = null,
-                            publicKeys = null
-                    ).toContent()
+                    content = RoomThirdPartyInviteContent(body.address, null, null, null).toContent(),
+                    stateKey = ""
             )
+            listOf(localThirdPartyInviteEvent, thirdPartyInviteEvent)
+        }.flatten()
+        addAll(threePidEvents)
+    }
+
+    /**
+     * Generate the local state event related to the given alias, if any.
+     */
+    fun MutableList<Event>.createRoomAliasEvent(createRoomBody: CreateRoomBody) = apply {
+        if (createRoomBody.roomAliasName != null) {
+            val canonicalAliasContent = createLocalEvent(
+                    type = EventType.STATE_ROOM_CANONICAL_ALIAS,
+                    content = RoomCanonicalAliasContent(
+                            canonicalAlias = "${createRoomBody.roomAliasName}:${myUserId.getServerName()}"
+                    ).toContent(),
+                    stateKey = ""
+            )
+            add(canonicalAliasContent)
+        }
+    }
+
+    /**
+     * Generate the local state events related to the given [CreateRoomPreset].
+     * Ref: https://spec.matrix.org/latest/client-server-api/#post_matrixclientv3createroom
+     */
+    private fun MutableList<Event>.createRoomPresetEvents(createRoomBody: CreateRoomBody) = apply {
+        createRoomBody.preset ?: return@apply
+
+        var joinRules: RoomJoinRules? = null
+        var historyVisibility: RoomHistoryVisibility? = null
+        var guestAccess: GuestAccess? = null
+        when (createRoomBody.preset) {
+            CreateRoomPreset.PRESET_PRIVATE_CHAT,
+            CreateRoomPreset.PRESET_TRUSTED_PRIVATE_CHAT -> {
+                joinRules = RoomJoinRules.INVITE
+                historyVisibility = RoomHistoryVisibility.SHARED
+                guestAccess = GuestAccess.CanJoin
+            }
+            CreateRoomPreset.PRESET_PUBLIC_CHAT -> {
+                joinRules = RoomJoinRules.PUBLIC
+                historyVisibility = RoomHistoryVisibility.SHARED
+                guestAccess = GuestAccess.Forbidden
+            }
         }
 
-        return buildList {
-            add(createRoomEvent)
-            add(myRoomMemberEvent)
-            addAll(createRoomBody.initialStates.orEmpty().map { createLocalEvent(it.type, it.content, it.stateKey) })
-            addAll(roomMemberEvents)
-            addAll(roomThreePidEvents)
-            addAll(localRoomThreePidEvents)
+        add(createLocalEvent(EventType.STATE_ROOM_JOIN_RULES, RoomJoinRulesContent(joinRules.value).toContent(), ""))
+        add(createLocalEvent(EventType.STATE_ROOM_HISTORY_VISIBILITY, RoomHistoryVisibilityContent(historyVisibility.value).toContent(), ""))
+        add(createLocalEvent(EventType.STATE_ROOM_GUEST_ACCESS, RoomGuestAccessContent(guestAccess.value).toContent(), ""))
+    }
+
+    /**
+     * Generate the local state events related to the given initial states, if any.
+     * The given initial state events override the potential existing ones of the same type.
+     */
+    private fun MutableList<Event>.createRoomInitialStateEvents(createRoomBody: CreateRoomBody) = apply {
+        createRoomBody.initialStates ?: return@apply
+
+        val initialStateEvents = createRoomBody.initialStates.map { createLocalEvent(it.type, it.content, it.stateKey) }
+        // Erase existing events of the same type
+        removeAll { event -> event.type in initialStateEvents.map { it.type } }
+        // Add the initial state events to the list
+        addAll(initialStateEvents)
+    }
+
+    /**
+     * Generate the local events related to the given room name and topic, if any.
+     */
+    private fun MutableList<Event>.createRoomNameAndTopicStateEvents(createRoomBody: CreateRoomBody) = apply {
+        if (createRoomBody.name != null) {
+            add(createLocalEvent(EventType.STATE_ROOM_NAME, RoomNameContent(createRoomBody.name).toContent(), ""))
+        }
+        if (createRoomBody.topic != null) {
+            add(createLocalEvent(EventType.STATE_ROOM_TOPIC, RoomTopicContent(createRoomBody.topic).toContent(), ""))
+        }
+    }
+
+    /**
+     * Generate the local events which have not been set and are in that case provided by the server with default values:
+     * - m.room.history_visibility (https://spec.matrix.org/latest/client-server-api/#server-behaviour-5)
+     * - m.room.guest_access (https://spec.matrix.org/latest/client-server-api/#mroomguest_access)
+     */
+    private fun MutableList<Event>.createRoomDefaultEvents() = apply {
+        // HistoryVisibility
+        if (none { it.type == EventType.STATE_ROOM_HISTORY_VISIBILITY }) {
+            add(
+                    createLocalEvent(
+                            type = EventType.STATE_ROOM_HISTORY_VISIBILITY,
+                            content = RoomHistoryVisibilityContent(RoomHistoryVisibility.SHARED.value).toContent(),
+                            stateKey = ""
+                    )
+            )
+        }
+        // GuestAccess
+        if (none { it.type == EventType.STATE_ROOM_GUEST_ACCESS }) {
+            add(
+                    createLocalEvent(
+                            type = EventType.STATE_ROOM_GUEST_ACCESS,
+                            content = RoomGuestAccessContent(GuestAccess.Forbidden.value).toContent(),
+                            stateKey = ""
+                    )
+            )
         }
     }
 
@@ -294,25 +442,16 @@ internal class DefaultCreateLocalRoomTask @Inject constructor(
      * @param content the content of the Event
      * @param stateKey the stateKey, if any
      *
-     * @return a fake event
+     * @return a local event
      */
-    private fun createLocalEvent(type: String?, content: Content?, stateKey: String? = ""): Event {
+    private fun createLocalEvent(type: String?, content: Content?, stateKey: String?): Event {
         return Event(
                 type = type,
-                senderId = userId,
+                senderId = myUserId,
                 stateKey = stateKey,
                 content = content,
                 originServerTs = clock.epochMillis(),
                 eventId = LocalEcho.createLocalEchoId()
         )
-    }
-
-    /**
-     * Setup default values to the CreateRoomParams as the room is created locally (the default values will not be defined by the server).
-     */
-    private fun CreateRoomParams.withDefault() = this.apply {
-        if (visibility == null) visibility = RoomDirectoryVisibility.PRIVATE
-        if (historyVisibility == null) historyVisibility = RoomHistoryVisibility.SHARED
-        if (guestAccess == null) guestAccess = GuestAccess.Forbidden
     }
 }

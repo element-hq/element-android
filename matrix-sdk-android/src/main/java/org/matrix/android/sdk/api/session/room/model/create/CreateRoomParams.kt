@@ -167,8 +167,8 @@ open class CreateRoomParams {
     @Transient var featurePreset: RoomFeaturePreset? = null
 
     companion object {
-        private const val CREATION_CONTENT_KEY_M_FEDERATE = "m.federate"
-        private const val CREATION_CONTENT_KEY_ROOM_TYPE = "type"
+        internal const val CREATION_CONTENT_KEY_M_FEDERATE = "m.federate"
+        internal const val CREATION_CONTENT_KEY_ROOM_TYPE = "type"
 
         fun fromJson(json: String?): CreateRoomParams? {
             return json?.let { MoshiProvider.providesMoshi().adapter(CreateRoomParams::class.java).fromJson(it) }
