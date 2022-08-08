@@ -85,6 +85,8 @@ ext.libs = [
                 'material'                : "com.google.android.material:material:1.6.1",
                 'appdistributionApi'      : "com.google.firebase:firebase-appdistribution-api-ktx:$appDistribution",
                 'appdistribution'         : "com.google.firebase:firebase-appdistribution:$appDistribution",
+                // Phone number https://github.com/google/libphonenumber
+                'phonenumber'             : "com.googlecode.libphonenumber:libphonenumber:8.12.53"
         ],
         dagger      : [
                 'dagger'                  : "com.google.dagger:dagger:$dagger",

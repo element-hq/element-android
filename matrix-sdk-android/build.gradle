@@ -198,8 +198,7 @@ dependencies {
     // Exif data handling
     implementation libs.apache.commonsImaging
 
-    // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.53'
+    implementation libs.google.phonenumber
 
     testImplementation libs.tests.junit
     // Note: version sticks to 1.9.2 due to https://github.com/mockk/mockk/issues/281

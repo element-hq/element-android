@@ -184,8 +184,7 @@ dependencies {
     // Debug
     api 'com.facebook.stetho:stetho:1.6.0'
 
-    // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.53'
+    api libs.google.phonenumber
 
     // FlowBinding
     implementation libs.github.flowBinding
