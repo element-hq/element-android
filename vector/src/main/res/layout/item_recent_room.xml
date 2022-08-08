@@ -44,7 +44,7 @@
 
     <TextView
         android:id="@+id/recentTitle"
-        style="@style/Widget.Vector.TextView.Subtitle"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
