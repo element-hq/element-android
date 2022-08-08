@@ -75,19 +75,7 @@
         </intent>
     </queries>
 
-    <application
-        android:allowBackup="false"
-        android:hasFragileUserData="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:networkSecurityConfig="@xml/network_security_config"
-        android:resizeableActivity="true"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:taskAffinity="${applicationId}.${appTaskAffinitySuffix}"
-        android:theme="@style/Theme.Vector.Light"
-        tools:ignore="UnusedAttribute"
-        tools:replace="android:allowBackup">
+    <application android:supportsRtl="true">
 
         <!-- No limit for screen ratio: avoid black strips -->
         <meta-data
@@ -347,7 +335,7 @@
         <activity android:name=".features.poll.create.CreatePollActivity" />
         <activity android:name=".features.location.LocationSharingActivity" />
         <activity android:name=".features.location.live.map.LiveLocationMapViewActivity" />
-        <activity android:name=".features.settings.font.FontScaleSettingActivity"/>
+        <activity android:name=".features.settings.font.FontScaleSettingActivity" />
 
         <!-- Services -->
 
