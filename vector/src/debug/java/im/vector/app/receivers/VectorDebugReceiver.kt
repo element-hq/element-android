@@ -23,7 +23,7 @@ import android.content.IntentFilter
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import im.vector.app.core.di.DefaultSharedPreferences
-import im.vector.app.core.platform.DebugReceiver
+import im.vector.app.core.debug.DebugReceiver
 import im.vector.app.core.utils.lsFiles
 import timber.log.Timber
 import javax.inject.Inject

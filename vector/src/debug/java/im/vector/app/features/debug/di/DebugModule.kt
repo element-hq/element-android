@@ -23,9 +23,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import im.vector.app.core.platform.DebugReceiver
+import im.vector.app.core.debug.DebugReceiver
 import im.vector.app.features.debug.DebugMenuActivity
-import im.vector.app.features.navigation.DebugNavigator
+import im.vector.app.core.debug.DebugNavigator
 import im.vector.app.receivers.VectorDebugReceiver
 
 @InstallIn(SingletonComponent::class)

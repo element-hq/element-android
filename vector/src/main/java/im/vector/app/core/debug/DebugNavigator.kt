@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.navigation
+package im.vector.app.core.debug
 
 import android.content.Context
 

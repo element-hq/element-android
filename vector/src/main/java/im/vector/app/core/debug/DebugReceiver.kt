@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.core.platform
+package im.vector.app.core.debug
 
 import android.content.Context
 

@@ -20,8 +20,8 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import im.vector.app.core.platform.DebugReceiver
-import im.vector.app.features.navigation.DebugNavigator
+import im.vector.app.core.debug.DebugNavigator
+import im.vector.app.core.debug.DebugReceiver
 
 @InstallIn(SingletonComponent::class)
 @Module
