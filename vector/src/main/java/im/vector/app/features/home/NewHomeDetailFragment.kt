@@ -22,7 +22,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
@@ -42,12 +41,10 @@ import im.vector.app.core.ui.views.KeysBackupBanner
 import im.vector.app.databinding.FragmentNewHomeDetailBinding
 import im.vector.app.features.call.SharedKnownCallsViewModel
 import im.vector.app.features.call.VectorCallActivity
-import im.vector.app.features.call.dialpad.DialPadFragment
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.home.room.list.home.HomeRoomListFragment
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
-import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity.Companion.EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY_MANAGE_SESSIONS
 import im.vector.app.features.themes.ThemeUtils
@@ -138,14 +135,10 @@ class NewHomeDetailFragment @Inject constructor(
             updateUIForTab(currentTab)
         }
 
-        viewModel.onEach(HomeDetailViewState::showDialPadTab) { showDialPadTab ->
-            updateTabVisibilitySafely(R.id.bottom_action_dial_pad, showDialPadTab)
-        }
-
         viewModel.observeViewEvents { viewEvent ->
             when (viewEvent) {
-                HomeDetailViewEvents.CallStarted -> handleCallStarted()
-                is HomeDetailViewEvents.FailToCall -> showFailure(viewEvent.failure)
+                HomeDetailViewEvents.CallStarted -> Unit
+                is HomeDetailViewEvents.FailToCall -> Unit
                 HomeDetailViewEvents.Loading -> showLoadingDialog()
             }
         }
@@ -184,12 +177,6 @@ class NewHomeDetailFragment @Inject constructor(
     private fun setCurrentSpace(spaceId: String?) {
         spaceStateHandler.setCurrentSpace(spaceId, isForwardNavigation = false)
         sharedActionViewModel.post(HomeActivitySharedAction.OnCloseSpace)
-    }
-
-    private fun handleCallStarted() {
-        dismissLoadingDialog()
-        val fragmentTag = HomeTab.DialPad.toFragmentTag()
-        (childFragmentManager.findFragmentByTag(fragmentTag) as? DialPadFragment)?.clear()
     }
 
     override fun onDestroyView() {
@@ -339,27 +326,12 @@ class NewHomeDetailFragment @Inject constructor(
                         add(R.id.roomListContainer, HomeRoomListFragment::class.java, null, fragmentTag)
                     }
                     is HomeTab.DialPad -> {
-                        add(R.id.roomListContainer, createDialPadFragment(), fragmentTag)
+                        throw NotImplementedError("this tab shouldn't exists when app layout is enabled")
                     }
                 }
             } else {
-                if (tab is HomeTab.DialPad) {
-                    (fragmentToShow as? DialPadFragment)?.applyCallback()
-                }
                 attach(fragmentToShow)
             }
-        }
-    }
-
-    private fun createDialPadFragment(): Fragment {
-        val fragment = childFragmentManager.fragmentFactory.instantiate(vectorBaseActivity.classLoader, DialPadFragment::class.java.name)
-        return (fragment as DialPadFragment).apply {
-            arguments = Bundle().apply {
-                putBoolean(DialPadFragment.EXTRA_ENABLE_DELETE, true)
-                putBoolean(DialPadFragment.EXTRA_ENABLE_OK, true)
-                putString(DialPadFragment.EXTRA_REGION_CODE, VectorLocale.applicationLocale.country)
-            }
-            applyCallback()
         }
     }
 
@@ -437,16 +409,6 @@ class NewHomeDetailFragment @Inject constructor(
                 startActivity(it)
             }
         }
-    }
-
-    private fun DialPadFragment.applyCallback(): DialPadFragment {
-        callback = object : DialPadFragment.Callback {
-            override fun onOkClicked(formatted: String?, raw: String?) {
-                if (raw.isNullOrEmpty()) return
-                viewModel.handle(HomeDetailAction.StartCallWithPhoneNumber(raw))
-            }
-        }
-        return this
     }
 
     override fun onBackPressed(toolbarButton: Boolean) = if (spaceStateHandler.getCurrentSpace() != null) {

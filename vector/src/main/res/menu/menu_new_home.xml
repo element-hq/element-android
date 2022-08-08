@@ -9,6 +9,11 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/menu_home_diapad"
+        android:title="@string/call_dial_pad_title"
+        app:showAsAction="never"/>
+
+    <item
         android:id="@+id/menu_home_suggestion"
         android:icon="@drawable/ic_material_bug_report"
         android:title="@string/send_suggestion"
