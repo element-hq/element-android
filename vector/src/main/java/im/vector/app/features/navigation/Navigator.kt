@@ -112,7 +112,7 @@ interface Navigator {
 
     fun openKeysBackupManager(context: Context)
 
-    fun openGroupDetail(groupId: String, context: Context, buildTask: Boolean = false)
+    fun showGroupsUnsupportedWarning(context: Context)
 
     fun openRoomMemberProfile(userId: String, roomId: String?, context: Context, buildTask: Boolean = false)
 
@@ -186,7 +186,7 @@ interface Navigator {
             locationOwnerId: String?
     )
 
-    fun openLocationLiveMap(context: Context, roomId: String)
+    fun openLiveLocationMap(context: Context, roomId: String)
 
     fun openThread(context: Context, threadTimelineArgs: ThreadTimelineArgs, eventIdToNavigate: String? = null)
 

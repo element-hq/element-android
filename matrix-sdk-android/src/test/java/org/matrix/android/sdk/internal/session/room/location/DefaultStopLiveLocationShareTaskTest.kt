@@ -27,11 +27,10 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.room.location.UpdateLiveLocationShareResult
-import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
 import org.matrix.android.sdk.internal.session.room.state.SendStateTask
+import org.matrix.android.sdk.test.fakes.FakeGetActiveBeaconInfoForUserTask
 import org.matrix.android.sdk.test.fakes.FakeSendStateTask
-import org.matrix.android.sdk.test.fakes.FakeStateEventDataSource
 
 private const val A_USER_ID = "user-id"
 private const val A_ROOM_ID = "room-id"
@@ -43,12 +42,11 @@ private const val AN_EPOCH = 1655210176L
 class DefaultStopLiveLocationShareTaskTest {
 
     private val fakeSendStateTask = FakeSendStateTask()
-    private val fakeStateEventDataSource = FakeStateEventDataSource()
+    private val fakeGetActiveBeaconInfoForUserTask = FakeGetActiveBeaconInfoForUserTask()
 
     private val defaultStopLiveLocationShareTask = DefaultStopLiveLocationShareTask(
-            userId = A_USER_ID,
             sendStateTask = fakeSendStateTask,
-            stateEventDataSource = fakeStateEventDataSource.instance
+            getActiveBeaconInfoForUserTask = fakeGetActiveBeaconInfoForUserTask
     )
 
     @After
@@ -67,7 +65,7 @@ class DefaultStopLiveLocationShareTaskTest {
                         unstableTimestampMillis = AN_EPOCH
                 ).toContent()
         )
-        fakeStateEventDataSource.givenGetStateEventReturns(currentStateEvent)
+        fakeGetActiveBeaconInfoForUserTask.givenExecuteReturns(currentStateEvent)
         fakeSendStateTask.givenExecuteRetryReturns(AN_EVENT_ID)
 
         val result = defaultStopLiveLocationShareTask.execute(params)
@@ -78,20 +76,21 @@ class DefaultStopLiveLocationShareTaskTest {
                 isLive = false,
                 unstableTimestampMillis = AN_EPOCH
         ).toContent()
-        val expectedParams = SendStateTask.Params(
+        val expectedSendParams = SendStateTask.Params(
                 roomId = params.roomId,
                 stateKey = A_USER_ID,
                 eventType = EventType.STATE_ROOM_BEACON_INFO.first(),
                 body = expectedBeaconContent
         )
         fakeSendStateTask.verifyExecuteRetry(
-                params = expectedParams,
+                params = expectedSendParams,
                 remainingRetry = 3
         )
-        fakeStateEventDataSource.verifyGetStateEvent(
-                roomId = params.roomId,
-                eventType = EventType.STATE_ROOM_BEACON_INFO.first(),
-                stateKey = A_USER_ID
+        val expectedGetBeaconParams = GetActiveBeaconInfoForUserTask.Params(
+                roomId = params.roomId
+        )
+        fakeGetActiveBeaconInfoForUserTask.verifyExecute(
+                expectedGetBeaconParams
         )
     }
 
@@ -109,18 +108,15 @@ class DefaultStopLiveLocationShareTaskTest {
                                 unstableTimestampMillis = AN_EPOCH
                         ).toContent()
                 ),
-                // incorrect content
+                // null content
                 Event(
                         stateKey = A_USER_ID,
-                        content = MessageAudioContent(
-                                msgType = "",
-                                body = ""
-                        ).toContent()
+                        content = null
                 )
         )
 
         incorrectCurrentStateEvents.forEach { currentStateEvent ->
-            fakeStateEventDataSource.givenGetStateEventReturns(currentStateEvent)
+            fakeGetActiveBeaconInfoForUserTask.givenExecuteReturns(currentStateEvent)
             fakeSendStateTask.givenExecuteRetryReturns(AN_EVENT_ID)
             val params = StopLiveLocationShareTask.Params(roomId = A_ROOM_ID)
 
@@ -141,7 +137,7 @@ class DefaultStopLiveLocationShareTaskTest {
                         unstableTimestampMillis = AN_EPOCH
                 ).toContent()
         )
-        fakeStateEventDataSource.givenGetStateEventReturns(currentStateEvent)
+        fakeGetActiveBeaconInfoForUserTask.givenExecuteReturns(currentStateEvent)
         fakeSendStateTask.givenExecuteRetryReturns("")
 
         val result = defaultStopLiveLocationShareTask.execute(params)
@@ -160,7 +156,7 @@ class DefaultStopLiveLocationShareTaskTest {
                         unstableTimestampMillis = AN_EPOCH
                 ).toContent()
         )
-        fakeStateEventDataSource.givenGetStateEventReturns(currentStateEvent)
+        fakeGetActiveBeaconInfoForUserTask.givenExecuteReturns(currentStateEvent)
         val error = Throwable()
         fakeSendStateTask.givenExecuteRetryThrows(error)
 

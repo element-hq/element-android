@@ -23,7 +23,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ScrollView
-import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
@@ -37,6 +36,7 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.setupAsSearch
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.showIdentityServerConsentDialog
 import im.vector.app.core.utils.startSharePlainTextIntent
@@ -55,7 +55,8 @@ class UserListFragment @Inject constructor(
         private val userListController: UserListController,
         private val dimensionConverter: DimensionConverter,
 ) : VectorBaseFragment<FragmentUserListBinding>(),
-        UserListController.Callback {
+        UserListController.Callback,
+        VectorMenuProvider {
 
     private val args: UserListFragmentArgs by args()
     private val viewModel: UserListViewModel by activityViewModel()
@@ -95,7 +96,7 @@ class UserListFragment @Inject constructor(
                 is UserListViewEvents.OpenShareMatrixToLink -> {
                     val text = getString(R.string.invite_friends_text, it.link)
                     startSharePlainTextIntent(
-                            fragment = this,
+                            context = requireContext(),
                             activityResultLauncher = null,
                             chooserTitle = getString(R.string.invite_friends),
                             text = text,
@@ -113,19 +114,24 @@ class UserListFragment @Inject constructor(
         super.onDestroyView()
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
+    override fun handlePrepareMenu(menu: Menu) {
+        if (args.submitMenuItemId == -1) return
         withState(viewModel) {
             val showMenuItem = it.pendingSelections.isNotEmpty()
-            menu.forEach { menuItem ->
-                menuItem.isVisible = showMenuItem
-            }
+            menu.findItem(args.submitMenuItemId).isVisible = showMenuItem
         }
-        super.onPrepareOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean = withState(viewModel) {
-        sharedActionViewModel.post(UserListSharedAction.OnMenuItemSelected(item.itemId, it.pendingSelections))
-        return@withState true
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            args.submitMenuItemId -> {
+                withState(viewModel) {
+                    sharedActionViewModel.post(UserListSharedAction.OnMenuItemSubmitClick(it.pendingSelections))
+                }
+                true
+            }
+            else -> false
+        }
     }
 
     private fun setupRecyclerView() {

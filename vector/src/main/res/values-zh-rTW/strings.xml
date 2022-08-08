@@ -251,7 +251,7 @@
     <string name="action_quick_reply">快速回覆</string>
     <string name="action_open">開啟</string>
     <string name="action_close">關閉</string>
-    <string name="copied_to_clipboard">複製到剪貼簿</string>
+    <string name="copied_to_clipboard">已複製到剪貼簿</string>
     <string name="dialog_title_confirmation">確認</string>
     <string name="dialog_title_warning">警告</string>
     <string name="bottom_action_favourites">最愛</string>
@@ -337,8 +337,8 @@
     <string name="room_participants_action_invite">邀請</string>
     <string name="room_participants_action_ban">封鎖</string>
     <string name="room_participants_action_unban">封禁</string>
-    <string name="room_participants_action_ignore">隱藏所有來自此使用者的訊息</string>
-    <string name="room_participants_action_unignore">顯示所有來自此使用者的訊息</string>
+    <string name="room_participants_action_ignore">忽略</string>
+    <string name="room_participants_action_unignore">取消忽略</string>
     <string name="room_participants_action_mention">提及</string>
     <string name="room_participants_ban_prompt_msg">封鎖使用者將會把他們從此聊天室中移除，並避免他們再次加入。</string>
     <string name="room_one_user_is_typing">%s 正在打字…</string>
@@ -370,7 +370,7 @@
 \n
 \n要現在新增一些貼圖嗎？</string>
     <string name="error_no_external_application_found">對不起，沒有應用程式可以完成此操作。</string>
-    <string name="e2e_re_request_encryption_key">從其他工作階段重新請求金鑰。<u>重新請求金鑰</u>。</string>
+    <string name="e2e_re_request_encryption_key">從其他工作階段重新請求加密金鑰。</string>
     <string name="e2e_re_request_encryption_key_dialog_content">請在另一個可以解密訊息的裝置上啟動 ${app_name}，以便它將金鑰發送到此工作階段。</string>
     <string name="ssl_expected_existing_expl">憑證已從以前受信任的更改為不受信任的憑證。伺服器可能已續訂其憑證。請與伺服器管理員聯繫以尋找所需的指紋。</string>
     <string name="ssl_only_accept">僅當伺服器管理員發佈的指紋與上面的指紋匹配時才接受此憑證。</string>
@@ -590,7 +590,7 @@
     <string name="passphrase_passphrase_does_not_match">密語必須符合</string>
     <string name="merged_events_expand">展開</string>
     <string name="merged_events_collapse">摺疊</string>
-    <string name="room_participants_action_remove">踢出</string>
+    <string name="room_participants_action_remove">從聊天移除</string>
     <string name="settings_inline_url_preview_summary">當您的家伺服器支援此功能時在聊天中預覽連結。</string>
     <string name="settings_send_typing_notifs">傳送輸入通知</string>
     <string name="settings_send_typing_notifs_summary">讓其他使用者知道您正在輸入。</string>
@@ -608,7 +608,7 @@
     <string name="markdown_has_been_enabled">Markdown 已啟用。</string>
     <string name="markdown_has_been_disabled">Markdown 已停用。</string>
     <string name="generic_label_and_value">%1$s：%2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="settings_call_category">通話</string>
     <string name="settings_call_ringtone_use_app_ringtone">為來電使用預設的 ${app_name} 鈴聲</string>
     <string name="settings_call_ringtone_title">來電鈴聲</string>
@@ -886,7 +886,7 @@
     <string name="push_gateway_item_format">格式：</string>
     <string name="preference_voice_and_video">音訊與視訊</string>
     <string name="preference_root_help_about">說明與關於</string>
-    <string name="settings_troubleshoot_test_token_registration_quick_fix">註冊代符</string>
+    <string name="settings_troubleshoot_test_token_registration_quick_fix">註冊權杖</string>
     <string name="send_suggestion">建議</string>
     <string name="send_suggestion_content">請在下面編寫您的建議。</string>
     <string name="send_suggestion_report_placeholder">在此描述您的建議</string>
@@ -974,7 +974,6 @@
     <plurals name="fallback_users_read">
         <item quantity="other">%d 個使用者已閱讀</item>
     </plurals>
-    <string name="error_attachment">在擷取附件時遇到錯誤。</string>
     <string name="attachment_type_file">檔案</string>
     <string name="attachment_type_contact">聯絡人</string>
     <string name="attachment_type_camera">相機</string>
@@ -1035,8 +1034,8 @@
     <string name="room_list_quick_actions_settings">設定</string>
     <string name="room_list_quick_actions_leave">離開聊天室</string>
     <string name="notice_member_no_changes">%1$s 未做出任何變更</string>
-    <string name="command_description_spoiler">傳送為擾亂者指定的訊息</string>
-    <string name="spoiler">擾亂者</string>
+    <string name="command_description_spoiler">將指定的訊息作為劇透傳送</string>
+    <string name="spoiler">劇透</string>
     <string name="reaction_search_type_hint">輸入關鍵字以尋找反應。</string>
     <string name="no_ignored_users">您未忽略任何使用者</string>
     <string name="help_long_click_on_room_for_more_options">長按聊天室以檢視更多選項</string>
@@ -1121,9 +1120,7 @@
     <string name="login_signup_submit">下一個</string>
     <string name="login_signup_error_user_in_use">使用者名稱已被使用</string>
     <string name="login_signup_cancel_confirmation_title">警告</string>
-    <string name="login_signup_cancel_confirmation_content">尚未建立您的帳號。
-\n
-\n停止註冊程序？</string>
+    <string name="login_signup_cancel_confirmation_content">尚未建立您的帳號。停止註冊流程？</string>
     <string name="login_a11y_choose_matrix_org">選取 matrix.org</string>
     <string name="login_a11y_choose_modular">選取 Element Matrix Services</string>
     <string name="login_a11y_choose_other">選取自訂的家伺服器</string>
@@ -1435,7 +1432,7 @@
         <item quantity="other">邀請已傳送給 %1$s 與其他 %2$d 個人</item>
     </plurals>
     <string name="invite_users_to_room_failure">我們無法邀請使用者。請檢查您想要邀請的使用者並再試一次。</string>
-    <string name="event_redacted">訊息已刪除</string>
+    <string name="event_redacted">訊息已移除</string>
     <string name="settings_show_redacted">顯示已移除的訊息</string>
     <string name="settings_show_redacted_summary">為已移除的訊息顯示佔位符</string>
     <string name="settings_discovery_confirm_mail_not_clicked">我們已傳送確認電子郵件給 %s，請先檢查您的電子郵件並點擊確認連結</string>
@@ -1674,7 +1671,7 @@
     <string name="bad_passphrase_key_reset_all_action">忘記或遺失所有復原選項？重設所有東西</string>
     <string name="direct_room_created_summary_item_by_you">您已加入。</string>
     <string name="direct_room_created_summary_item">%s 已加入。</string>
-    <string name="direct_room_encryption_enabled_tile_description">此聊天室中的訊息有端到端加密。</string>
+    <string name="direct_room_encryption_enabled_tile_description">此聊天中的訊息有端到端加密。</string>
     <string name="direct_room_profile_section_more_leave">離開</string>
     <string name="direct_room_profile_section_more_settings">設定</string>
     <string name="direct_room_profile_encrypted_subtitle">這裡的訊息有端到端加密。
@@ -2290,9 +2287,6 @@
     <string name="ftue_auth_carousel_control_title">您已掌控了您的資料。</string>
     <string name="ftue_auth_carousel_secure_title">擁有您的對話。</string>
     <string name="tooltip_attachment_location">分享位置</string>
-    <string name="labs_render_locations_in_timeline">在時間軸中繪製使用者位置</string>
-    <string name="settings_enable_location_sharing_summary">啟用後，您就能將您的位置傳送至任何聊天室</string>
-    <string name="settings_enable_location_sharing">啟用位置分享</string>
     <string name="location_share_external">開啟以</string>
     <string name="location_not_available_dialog_content">${app_name} 無法存取您的位置。請稍後再試。</string>
     <string name="location_not_available_dialog_title">${app_name} 無法存取您的位置</string>
@@ -2326,11 +2320,11 @@
     <string name="ftue_auth_use_case_connect_to_server">連線至伺服器</string>
     <string name="ftue_auth_use_case_join_existing_server">想要加入現有的伺服器？</string>
     <string name="ftue_auth_use_case_skip_partial">略過此問題</string>
-    <string name="ftue_auth_use_case_skip">還不確定？您可以 %s</string>
+    <string name="ftue_auth_use_case_skip">還不確定？%s</string>
     <string name="ftue_auth_use_case_option_three">社群</string>
     <string name="ftue_auth_use_case_option_two">團隊</string>
     <string name="ftue_auth_use_case_option_one">朋友與家人</string>
-    <string name="ftue_auth_use_case_subtitle">我們將會協助您建立聯繫。</string>
+    <string name="ftue_auth_use_case_subtitle">我們將會協助您建立聯繫</string>
     <string name="ftue_auth_use_case_title">您與誰聊最多？</string>
     <string name="navigate_to_thread_when_already_in_the_thread">您已經在檢視此討論串了！</string>
     <string name="view_in_room">在聊天室中檢視</string>
@@ -2355,7 +2349,7 @@
     <string name="room_message_autocomplete_users">使用者</string>
     <string name="room_message_notify_everyone">通知整個聊天室</string>
     <plurals name="message_reaction_show_more">
-        <item quantity="other">%1$d 更多</item>
+        <item quantity="other">還有%1$d個</item>
     </plurals>
     <string name="message_reaction_show_less">顯示較少</string>
     <plurals name="notice_room_server_acl_changes">
@@ -2365,9 +2359,6 @@
     <string name="room_notification_more_than_two_users_are_typing">%1$s、%2$s 與其他人</string>
     <string name="location_share_live_stop">停止</string>
     <string name="location_share_live_enabled">即時位置已啟用</string>
-    <string name="location_in_background_missing_permission_dialog_content">若您想要分享您的即時位置，${app_name} 需要當應用程式在背景時隨時存取位置的權限。
-\n我們將只會在您選擇的期間內存取您的位置。</string>
-    <string name="location_in_background_missing_permission_dialog_title">允許存取</string>
     <string name="a11y_location_share_option_pinned_icon">分享此位置</string>
     <string name="location_share_option_pinned">分享此位置</string>
     <string name="a11y_location_share_option_user_live_icon">分享即時位置</string>
@@ -2387,16 +2378,16 @@
     <string name="error_forbidden_digits_only_username">家伺服器不接受僅有數字的使用者名稱。</string>
     <string name="ftue_personalize_skip_this_step">略過此步驟</string>
     <string name="ftue_personalize_submit">儲存並繼續</string>
-    <string name="ftue_personalize_complete_subtitle">您的偏好設定已儲存。</string>
-    <string name="ftue_personalize_complete_title">準備好了！</string>
+    <string name="ftue_personalize_complete_subtitle">隨時前往設定以更新您的個人資料</string>
+    <string name="ftue_personalize_complete_title">看起來不錯！</string>
     <string name="ftue_personalize_lets_go">走吧</string>
-    <string name="ftue_profile_picture_subtitle">您可以在任何時候變更這個。</string>
+    <string name="ftue_profile_picture_subtitle">是時候為名字加上臉了</string>
     <string name="ftue_profile_picture_title">新增個人資訊照片</string>
     <string name="ftue_display_name_entry_footer">您可以在稍後變更這個</string>
     <string name="ftue_display_name_entry_title">顯示名稱</string>
     <string name="ftue_display_name_subtitle">這將會在您傳送訊息時顯示。</string>
     <string name="ftue_display_name_title">選擇顯示名稱</string>
-    <string name="ftue_account_created_subtitle">您的帳號 %s 已建立。</string>
+    <string name="ftue_account_created_subtitle">您的帳號 %s 已建立</string>
     <string name="ftue_account_created_congratulations_title">恭喜！</string>
     <string name="ftue_account_created_take_me_home">帶我回家</string>
     <string name="ftue_account_created_personalize">個人化檔案</string>
@@ -2461,4 +2452,91 @@
     <string name="time_unit_second_short">秒</string>
     <string name="time_unit_minute_short">分鐘</string>
     <string name="time_unit_hour_short">小時</string>
+    <string name="live_location_labs_promotion_switch_title">啟用位置分享</string>
+    <string name="live_location_labs_promotion_description">請注意：這是使用暫時實作的實驗室功能。這代表了您將無法刪除您的位置歷史紀錄，即使您停止與此聊天室分享您的即時位置，進階使用者也還是能看到您的位置歷史紀錄。</string>
+    <string name="live_location_labs_promotion_title">即時位置分享</string>
+    <string name="settings_troubleshoot_test_current_gateway">目前閘道：%s</string>
+    <string name="settings_troubleshoot_test_current_gateway_title">閘道</string>
+    <string name="settings_troubleshoot_test_current_endpoint_failed">找不到端點。</string>
+    <string name="settings_troubleshoot_test_current_endpoint_success">目前端點：%s</string>
+    <string name="settings_troubleshoot_test_current_endpoint_title">端點</string>
+    <string name="settings_troubleshoot_test_current_distributor">目前正在使用 %s。</string>
+    <string name="settings_troubleshoot_test_current_distributor_title">方式</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="other">找到 %d 種方式。</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_distributors_fdroid">找不到除了背景同步以外的方式。</string>
+    <string name="settings_troubleshoot_test_distributors_gplay">找不到除了 Google Play 服務以外的方式。</string>
+    <string name="settings_troubleshoot_test_distributors_title">可用方式</string>
+    <string name="settings_notification_method">通知方式</string>
+    <string name="unifiedpush_distributor_background_sync">背景同步</string>
+    <string name="unifiedpush_distributor_fcm_fallback">Google 服務</string>
+    <string name="unifiedpush_getdistributors_dialog_title">選擇如何接收通知</string>
+    <string name="settings_security_pin_code_use_biometrics_error">無法啟用生物特徵驗證。</string>
+    <string name="auth_biometric_key_invalidated_message">生物特徵驗證方式被停用，因為最新新增了新的生物特徵驗證方式。您可以在「設定」中再次啟用它。</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">重設通知方式</string>
+    <string name="push_gateway_item_profile_tag">個人檔案標籤：</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">註冊端點權杖至家伺服器失敗：
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">端點成功註冊至家伺服器。</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_title">端點註冊</string>
+    <string name="action_next">下一步</string>
+    <string name="poll_undisclosed_not_ended">結果將在投票結束時可見</string>
+    <string name="labs_enable_msc3061_share_history_desc">在分享歷史的加密聊天室中邀請時，加密歷史會是可見的。</string>
+    <string name="labs_enable_msc3061_share_history">MSC3061：為過去的訊息分享聊天室金鑰</string>
+    <string name="send_your_first_msg_to_invite">傳送您的第一則訊息以邀請 %s 來聊天</string>
+    <string name="direct_room_encryption_enabled_tile_description_future">此聊天中的訊息將會是端到端加密。</string>
+    <string name="create_room_action_go">到</string>
+    <plurals name="room_removed_messages">
+        <item quantity="other">已移除 %d 則訊息</item>
+    </plurals>
+    <string name="live_location_share_location_item_share">分享位置</string>
+    <string name="live_location_not_enough_permission_dialog_description">您必須擁有正確的權限才能在此聊天室中分享即時位置。</string>
+    <string name="live_location_not_enough_permission_dialog_title">您無權分享即時位置</string>
+    <string name="permalink_unsupported_groups">無法開啟此連結：社群已被空間取代</string>
+    <string name="ftue_auth_login_username_entry">使用者名稱 / 電子郵件 / 電話</string>
+    <string name="ftue_auth_captcha_title">您是人類嗎？</string>
+    <string name="ftue_auth_password_reset_email_confirmation_subtitle">按照寄送到 %s 的說明操作</string>
+    <string name="ftue_auth_password_reset_confirmation">密碼重設</string>
+    <string name="ftue_auth_forgot_password">忘記密碼</string>
+    <string name="ftue_auth_email_resend_email">重新傳送電子郵件</string>
+    <string name="ftue_auth_email_verification_footer">沒有收到電子郵件？</string>
+    <string name="ftue_auth_email_verification_subtitle">要確認您的電子郵件，請點擊我們剛剛寄給 %s 的電子郵件中的按鈕</string>
+    <string name="ftue_auth_email_verification_title">檢查您的電子郵件以驗證。</string>
+    <string name="ftue_auth_phone_confirmation_resend_code">重新傳送驗證碼</string>
+    <string name="ftue_auth_phone_confirmation_subtitle">驗證碼已傳送至 %s</string>
+    <string name="ftue_auth_phone_confirmation_title">確認您的電話號碼</string>
+    <string name="ftue_auth_sign_out_all_devices">登出所有裝置</string>
+    <string name="ftue_auth_reset_password">重設密碼</string>
+    <string name="ftue_auth_new_password_subtitle">確認其為 8 個字元或更多。</string>
+    <string name="ftue_auth_new_password_title">選擇新密碼</string>
+    <string name="ftue_auth_new_password_entry_title">新密碼</string>
+    <string name="ftue_auth_reset_password_breaker_title">檢查您的電子郵件。</string>
+    <string name="ftue_auth_reset_password_email_subtitle">%s 將會傳送給您驗證連結</string>
+    <string name="ftue_auth_phone_confirmation_entry_title">確認代碼</string>
+    <string name="ftue_auth_phone_entry_title">電話號碼</string>
+    <string name="ftue_auth_phone_subtitle">%s 必須驗證您的帳號</string>
+    <string name="ftue_auth_phone_title">輸入您的電話號碼</string>
+    <string name="ftue_auth_email_entry_title">電子郵件</string>
+    <string name="ftue_auth_email_subtitle">%s 必須驗證您的帳號</string>
+    <string name="ftue_auth_email_title">輸入您的電子郵件</string>
+    <string name="ftue_auth_terms_subtitle">請仔細閱讀 %s 的條款與政策</string>
+    <string name="ftue_auth_terms_title">伺服器政策</string>
+    <string name="ftue_auth_choose_server_ems_cta">保持聯絡</string>
+    <string name="ftue_auth_choose_server_ems_subtitle">Element Matrix Services (EMS) 是一個強大且可靠的主機託管服務，可實現快速、安全且即時的通訊。可在 <a href="${ftue_ems_url}">element.io/ems</a> 上了解如何使用</string>
+    <string name="ftue_auth_choose_server_ems_title">想要架設自己的伺服器？</string>
+    <string name="ftue_auth_choose_server_entry_hint">伺服器 URL</string>
+    <string name="ftue_auth_choose_server_subtitle">您的伺服器位置是什麼？這就像您所有資料的家</string>
+    <string name="ftue_auth_choose_server_title">選取您的伺服器</string>
+    <string name="ftue_auth_welcome_back_title">歡迎回來！</string>
+    <string name="ftue_auth_create_account_edit_server_selection">編輯</string>
+    <string name="ftue_auth_create_account_sso_section_header">或</string>
+    <string name="ftue_auth_create_account_choose_server_header">您的對話將在哪裡進行</string>
+    <string name="ftue_auth_create_account_password_entry_footer">必須是 8 個字元或更多</string>
+    <string name="ftue_auth_create_account_username_entry_footer">其他人可以探索您 %s</string>
+    <string name="ftue_auth_create_account_title">建立您的帳號</string>
+    <string name="font_size_use_system">使用系統預設值</string>
+    <string name="font_size_section_manually">手動選擇</string>
+    <string name="font_size_section_auto">自動設定</string>
+    <string name="font_size_title">選擇字型大小</string>
 </resources>

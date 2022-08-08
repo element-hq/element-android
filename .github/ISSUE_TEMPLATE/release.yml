@@ -29,7 +29,7 @@ body:
         - [ ] Check the rageshake with the current dev version: https://github.com/matrix-org/element-android-rageshakes/labels/1.2.3-dev
         - [ ] Run the integration test, and especially `UiAllScreensSanityTest.allScreensTest()`
         - [ ] Create an account on matrix.org and do some smoke tests that the sanity test does not cover like: 1-1 call, 1-1 video call, Jitsi call for instance
-        - [ ] Run towncrier: `towncrier --version v1.2.3 --draft` (remove `--draft` do write the file CHANGES.md)
+        - [ ] Run towncrier: `towncrier build --version v1.2.3 --draft` (remove `--draft` do write the file CHANGES.md)
         - [ ] Check that the folder `changelog.d` is empty. It can happen that some remaining files stay here
         - [ ] Check the file CHANGES.md consistency. It's possible to reorder items (most important changes first) or change their section if relevant. Also an opportunity to fix some typo, or rewrite things
         - [ ] Add file for fastlane under ./fastlane/metadata/android/en-US/changelogs
@@ -100,12 +100,20 @@ body:
 
         ##### Release on MavenCentral
 
+        - [ ] Checkout the branch `main`
         - [ ] Run the command `./gradlew publish --no-daemon --no-parallel`. You'll need some non-public element to do so
+        - [ ] Run the command `./gradlew closeAndReleaseRepository`. If it is working well, you can jump directly to the final step of this section.
+
+        If `./gradlew closeAndReleaseRepository` fails (for instance, several repositories are waiting to be handled), you have to close and release the repository manually. Do the following steps:
+
         - [ ] Connect to https://s01.oss.sonatype.org
         - [ ] Click on Staging Repositories and check the the files have been uploaded
         - [ ] Click on close
         - [ ] Wait (check Activity tab until step "Repository closed" is displayed)
         - [ ] Click on release. The staging repository will disappear
+
+        Final step
+
         - [ ] Check that the release is available in https://repo1.maven.org/maven2/org/matrix/android/matrix-android-sdk2/ (it can take a few minutes)
 
         ##### Release on GitHub

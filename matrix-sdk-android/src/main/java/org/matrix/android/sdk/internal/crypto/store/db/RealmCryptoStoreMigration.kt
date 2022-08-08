@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.crypto.store.db
 
 import io.realm.DynamicRealm
-import io.realm.RealmMigration
 import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo001Legacy
 import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo002Legacy
 import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo003RiotX
@@ -34,13 +33,23 @@ import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo
 import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo014
 import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo015
 import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo016
+import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo017
+import org.matrix.android.sdk.internal.util.database.MatrixRealmMigration
 import org.matrix.android.sdk.internal.util.time.Clock
-import timber.log.Timber
 import javax.inject.Inject
 
+/**
+ * Schema version history:
+ *  0, 1, 2: legacy Riot-Android;
+ *  3: migrate to RiotX schema;
+ *  4, 5, 6, 7, 8, 9: migrations from RiotX (which was previously 1, 2, 3, 4, 5, 6).
+ */
 internal class RealmCryptoStoreMigration @Inject constructor(
         private val clock: Clock,
-) : RealmMigration {
+) : MatrixRealmMigration(
+        dbName = "Crypto",
+        schemaVersion = 17L,
+) {
     /**
      * Forces all RealmCryptoStoreMigration instances to be equal.
      * Avoids Realm throwing when multiple instances of the migration are set.
@@ -48,14 +57,7 @@ internal class RealmCryptoStoreMigration @Inject constructor(
     override fun equals(other: Any?) = other is RealmCryptoStoreMigration
     override fun hashCode() = 5000
 
-    // 0, 1, 2: legacy Riot-Android
-    // 3: migrate to RiotX schema
-    // 4, 5, 6, 7, 8, 9: migrations from RiotX (which was previously 1, 2, 3, 4, 5, 6)
-    val schemaVersion = 16L
-
-    override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
-        Timber.d("Migrating Realm Crypto from $oldVersion to $newVersion")
-
+    override fun doMigrate(realm: DynamicRealm, oldVersion: Long) {
         if (oldVersion < 1) MigrateCryptoTo001Legacy(realm).perform()
         if (oldVersion < 2) MigrateCryptoTo002Legacy(realm).perform()
         if (oldVersion < 3) MigrateCryptoTo003RiotX(realm).perform()
@@ -72,5 +74,6 @@ internal class RealmCryptoStoreMigration @Inject constructor(
         if (oldVersion < 14) MigrateCryptoTo014(realm).perform()
         if (oldVersion < 15) MigrateCryptoTo015(realm).perform()
         if (oldVersion < 16) MigrateCryptoTo016(realm).perform()
+        if (oldVersion < 17) MigrateCryptoTo017(realm).perform()
     }
 }

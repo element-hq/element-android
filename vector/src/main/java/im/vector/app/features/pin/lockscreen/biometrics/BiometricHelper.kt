@@ -53,6 +53,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.util.BuildVersionSdkIntProvider
 import java.security.KeyStore
+import javax.crypto.Cipher
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
@@ -73,26 +74,27 @@ class BiometricHelper @Inject constructor(
     /**
      * Returns true if a weak biometric method (i.e.: some face or iris unlock implementations) can be used.
      */
-    val canUseWeakBiometricAuth: Boolean get() =
-        configuration.isWeakBiometricsEnabled && biometricManager.canAuthenticate(BIOMETRIC_WEAK) == BIOMETRIC_SUCCESS
+    val canUseWeakBiometricAuth: Boolean
+        get() = configuration.isWeakBiometricsEnabled && biometricManager.canAuthenticate(BIOMETRIC_WEAK) == BIOMETRIC_SUCCESS
 
     /**
      * Returns true if a strong biometric method (i.e.: fingerprint, some face or iris unlock implementations) can be used.
      */
-    val canUseStrongBiometricAuth: Boolean get() =
-        configuration.isStrongBiometricsEnabled && biometricManager.canAuthenticate(BIOMETRIC_STRONG) == BIOMETRIC_SUCCESS
+    val canUseStrongBiometricAuth: Boolean
+        get() = configuration.isStrongBiometricsEnabled && biometricManager.canAuthenticate(BIOMETRIC_STRONG) == BIOMETRIC_SUCCESS
 
     /**
      * Returns true if the device credentials can be used to unlock (system pin code, password, pattern, etc.).
      */
-    val canUseDeviceCredentialsAuth: Boolean get() =
-        configuration.isDeviceCredentialUnlockEnabled && biometricManager.canAuthenticate(DEVICE_CREDENTIAL) == BIOMETRIC_SUCCESS
+    val canUseDeviceCredentialsAuth: Boolean
+        get() = configuration.isDeviceCredentialUnlockEnabled && biometricManager.canAuthenticate(DEVICE_CREDENTIAL) == BIOMETRIC_SUCCESS
 
     /**
      * Returns true if any system authentication method (biometric weak/strong or device credentials) can be used.
      */
     @VisibleForTesting(otherwise = PRIVATE)
-    internal val canUseAnySystemAuth: Boolean get() = canUseWeakBiometricAuth || canUseStrongBiometricAuth || canUseDeviceCredentialsAuth
+    internal val canUseAnySystemAuth: Boolean
+        get() = canUseWeakBiometricAuth || canUseStrongBiometricAuth || canUseDeviceCredentialsAuth
 
     /**
      * Returns true if any system authentication method and there is a valid associated key.
@@ -116,7 +118,7 @@ class BiometricHelper @Inject constructor(
      */
     @MainThread
     fun enableAuthentication(activity: FragmentActivity): Flow<Boolean> {
-        return authenticateInternal(activity, checkSystemKeyExists = false, cryptoObject = null)
+        return authenticateInternal(activity, checkSystemKeyExists = false, cryptoObject = getAuthCryptoObject())
     }
 
     /**
@@ -136,7 +138,7 @@ class BiometricHelper @Inject constructor(
      */
     @MainThread
     fun authenticate(activity: FragmentActivity): Flow<Boolean> {
-        return authenticateInternal(activity, checkSystemKeyExists = true, cryptoObject = null)
+        return authenticateInternal(activity, checkSystemKeyExists = true, cryptoObject = getAuthCryptoObject())
     }
 
     /**
@@ -155,7 +157,7 @@ class BiometricHelper @Inject constructor(
     private fun authenticateInternal(
         activity: FragmentActivity,
         checkSystemKeyExists: Boolean,
-        cryptoObject: BiometricPrompt.CryptoObject? = null,
+        cryptoObject: BiometricPrompt.CryptoObject,
     ): Flow<Boolean> {
         if (checkSystemKeyExists && !isSystemAuthEnabledAndValid) return flowOf(false)
 
@@ -190,7 +192,7 @@ class BiometricHelper @Inject constructor(
     @VisibleForTesting(otherwise = PRIVATE)
     internal fun authenticateWithPromptInternal(
         activity: FragmentActivity,
-        cryptoObject: BiometricPrompt.CryptoObject? = null,
+        cryptoObject: BiometricPrompt.CryptoObject,
         channel: Channel<Boolean>,
     ): BiometricPrompt {
         val executor = ContextCompat.getMainExecutor(context)
@@ -210,15 +212,12 @@ class BiometricHelper @Inject constructor(
                 }
                 .setAllowedAuthenticators(authenticators)
                 .build()
+
         return BiometricPrompt(activity, executor, callback).also {
             showFallbackFragmentIfNeeded(activity, channel.receiveAsFlow(), executor.asCoroutineDispatcher()) {
                 // For some reason this seems to be needed unless we want to receive a fragment transaction exception
                 delay(1L)
-                if (cryptoObject != null) {
-                    it.authenticate(promptInfo, cryptoObject)
-                } else {
-                    it.authenticate(promptInfo)
-                }
+                it.authenticate(promptInfo, cryptoObject)
             }
         }
     }
@@ -266,12 +265,27 @@ class BiometricHelper @Inject constructor(
         }
 
         override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-            scope.launch {
-                channel.send(true)
-                // Success is a terminal event, should close both the Channel and the CoroutineScope to free resources.
-                channel.close()
-                scope.cancel()
+            val cipher = result.cryptoObject?.cipher
+            if (isCipherValid(cipher)) {
+                scope.launch {
+                    channel.send(true)
+                    // Success is a terminal event, should close both the Channel and the CoroutineScope to free resources.
+                    channel.close()
+                    scope.cancel()
+                }
+            } else {
+                scope.launch {
+                    channel.close(IllegalStateException("System key was not valid after authentication."))
+                    scope.cancel()
+                }
             }
+        }
+
+        private fun isCipherValid(cipher: Cipher?): Boolean {
+            if (cipher == null) return false
+            return runCatching {
+                cipher.doFinal("biometric_challenge".toByteArray())
+            }.isSuccess
         }
     }
 
@@ -316,6 +330,9 @@ class BiometricHelper @Inject constructor(
 
     @VisibleForTesting(otherwise = PRIVATE)
     internal fun createAuthChannel(): Channel<Boolean> = Channel(capacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+
+    @VisibleForTesting(otherwise = PRIVATE)
+    internal fun getAuthCryptoObject(): BiometricPrompt.CryptoObject = lockScreenKeyRepository.getSystemKeyAuthCryptoObject()
 
     companion object {
         private const val FALLBACK_BIOMETRIC_FRAGMENT_TAG = "fragment.biometric_fallback"

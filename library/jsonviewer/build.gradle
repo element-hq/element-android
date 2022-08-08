@@ -2,7 +2,6 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'com.jakewharton.butterknife'
 
 buildscript {
     repositories {
@@ -14,9 +13,6 @@ buildscript {
         maven {
             url 'https://repo1.maven.org/maven2'
         }
-    }
-    dependencies {
-        classpath 'com.jakewharton:butterknife-gradle-plugin:10.2.3'
     }
 }
 

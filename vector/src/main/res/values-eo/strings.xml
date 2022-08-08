@@ -692,7 +692,6 @@
     <string name="attachment_type_camera">Filmilo</string>
     <string name="attachment_type_contact">Kontakto</string>
     <string name="attachment_type_file">Dosiero</string>
-    <string name="error_attachment">Eraris akirado de la kunsendaĵo.</string>
     <plurals name="fallback_users_read">
         <item quantity="one">%d uzanto legis</item>
         <item quantity="other">%d uzantoj legis</item>

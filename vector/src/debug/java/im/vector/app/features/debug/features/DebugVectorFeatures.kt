@@ -24,6 +24,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import im.vector.app.config.OnboardingVariant
 import im.vector.app.features.DefaultVectorFeatures
 import im.vector.app.features.VectorFeatures
 import kotlinx.coroutines.flow.first
@@ -39,8 +40,8 @@ class DebugVectorFeatures(
 
     private val dataStore = context.dataStore
 
-    override fun onboardingVariant(): VectorFeatures.OnboardingVariant {
-        return readPreferences().getEnum<VectorFeatures.OnboardingVariant>() ?: vectorFeatures.onboardingVariant()
+    override fun onboardingVariant(): OnboardingVariant {
+        return readPreferences().getEnum<OnboardingVariant>() ?: vectorFeatures.onboardingVariant()
     }
 
     override fun isOnboardingAlreadyHaveAccountSplashEnabled(): Boolean = read(DebugFeatureKeys.onboardingAlreadyHaveAnAccount)
@@ -65,6 +66,18 @@ class DebugVectorFeatures(
 
     override fun isScreenSharingEnabled(): Boolean = read(DebugFeatureKeys.screenSharing)
             ?: vectorFeatures.isScreenSharingEnabled()
+
+    override fun isLocationSharingEnabled(): Boolean = read(DebugFeatureKeys.liveLocationSharing)
+            ?: vectorFeatures.isLocationSharingEnabled()
+
+    override fun forceUsageOfOpusEncoder(): Boolean = read(DebugFeatureKeys.forceUsageOfOpusEncoder)
+            ?: vectorFeatures.forceUsageOfOpusEncoder()
+
+    override fun shouldStartDmOnFirstMessage(): Boolean = read(DebugFeatureKeys.startDmOnFirstMsg)
+            ?: vectorFeatures.shouldStartDmOnFirstMessage()
+
+    override fun isNewAppLayoutEnabled(): Boolean = read(DebugFeatureKeys.newAppLayoutEnabled)
+            ?: vectorFeatures.isNewAppLayoutEnabled()
 
     fun <T> override(value: T?, key: Preferences.Key<T>) = updatePreferences {
         if (value == null) {
@@ -116,11 +129,14 @@ private fun <T : Enum<T>> enumPreferencesKey(type: KClass<T>) = stringPreference
 object DebugFeatureKeys {
     val onboardingAlreadyHaveAnAccount = booleanPreferencesKey("onboarding-already-have-an-account")
     val onboardingSplashCarousel = booleanPreferencesKey("onboarding-splash-carousel")
-    val onboardingUseCase = booleanPreferencesKey("onboarding-splash-carousel")
+    val onboardingUseCase = booleanPreferencesKey("onboarding-use-case")
     val onboardingPersonalize = booleanPreferencesKey("onboarding-personalize")
     val onboardingCombinedRegister = booleanPreferencesKey("onboarding-combined-register")
     val onboardingCombinedLogin = booleanPreferencesKey("onboarding-combined-login")
     val allowExternalUnifiedPushDistributors = booleanPreferencesKey("allow-external-unified-push-distributors")
     val liveLocationSharing = booleanPreferencesKey("live-location-sharing")
     val screenSharing = booleanPreferencesKey("screen-sharing")
+    val forceUsageOfOpusEncoder = booleanPreferencesKey("force-usage-of-opus-encoder")
+    val startDmOnFirstMsg = booleanPreferencesKey("start-dm-on-first-msg")
+    val newAppLayoutEnabled = booleanPreferencesKey("new-app-layout-enabled")
 }

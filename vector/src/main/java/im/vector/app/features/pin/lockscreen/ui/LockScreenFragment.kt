@@ -59,7 +59,7 @@ class LockScreenFragment : VectorBaseFragment<FragmentLockScreenBinding>() {
             if (state.lockScreenConfiguration.mode == LockScreenMode.CREATE) return@withState
 
             viewLifecycleOwner.lifecycleScope.launchWhenResumed {
-                if (state.isBiometricKeyInvalidated) {
+                if (state.canUseBiometricAuth && state.isBiometricKeyInvalidated) {
                     lockScreenListener?.onBiometricKeyInvalidated()
                 } else if (state.showBiometricPromptAutomatically) {
                     showBiometricPrompt()
@@ -114,15 +114,15 @@ class LockScreenFragment : VectorBaseFragment<FragmentLockScreenBinding>() {
     private fun handleEvent(viewEvent: LockScreenViewEvent) {
         when (viewEvent) {
             is LockScreenViewEvent.CodeCreationComplete -> lockScreenListener?.onPinCodeCreated()
-            is LockScreenViewEvent.ClearPinCode         -> {
+            is LockScreenViewEvent.ClearPinCode -> {
                 if (viewEvent.confirmationFailed) {
                     lockScreenListener?.onNewCodeValidationFailed()
                 }
                 views.codeView.clearCode()
             }
-            is LockScreenViewEvent.AuthSuccessful       -> lockScreenListener?.onAuthenticationSuccess(viewEvent.method)
-            is LockScreenViewEvent.AuthFailure          -> onAuthFailure(viewEvent.method)
-            is LockScreenViewEvent.AuthError            -> onAuthError(viewEvent.method, viewEvent.throwable)
+            is LockScreenViewEvent.AuthSuccessful -> lockScreenListener?.onAuthenticationSuccess(viewEvent.method)
+            is LockScreenViewEvent.AuthFailure -> onAuthFailure(viewEvent.method)
+            is LockScreenViewEvent.AuthError -> onAuthError(viewEvent.method, viewEvent.throwable)
         }
     }
 

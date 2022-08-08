@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.location.live.map.bottomsheet
+package im.vector.app.features.location.live.map
 
 import android.widget.Button
 import android.widget.ImageView
@@ -34,8 +34,8 @@ import im.vector.lib.core.utils.timer.CountUpTimer
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.threeten.bp.Duration
 
-@EpoxyModelClass(layout = R.layout.item_live_location_users_bottom_sheet)
-abstract class LiveLocationUserItem : VectorEpoxyModel<LiveLocationUserItem.Holder>() {
+@EpoxyModelClass
+abstract class LiveLocationUserItem : VectorEpoxyModel<LiveLocationUserItem.Holder>(R.layout.item_live_location_users_bottom_sheet) {
 
     interface Callback {
         fun onUserSelected(userId: String)
@@ -79,15 +79,12 @@ abstract class LiveLocationUserItem : VectorEpoxyModel<LiveLocationUserItem.Hold
             }
         }
 
-        stopTimer(holder)
-        holder.timer = CountUpTimer(1000).apply {
-            tickListener = object : CountUpTimer.TickListener {
-                override fun onTick(milliseconds: Long) {
-                    holder.itemLastUpdatedAtTextView.text = getFormattedLastUpdatedAt(locationUpdateTimeMillis)
-                }
+        holder.timer.tickListener = object : CountUpTimer.TickListener {
+            override fun onTick(milliseconds: Long) {
+                holder.itemLastUpdatedAtTextView.text = getFormattedLastUpdatedAt(locationUpdateTimeMillis)
             }
-            resume()
         }
+        holder.timer.resume()
 
         holder.view.setOnClickListener { callback?.onUserSelected(matrixItem.id) }
     }
@@ -98,8 +95,7 @@ abstract class LiveLocationUserItem : VectorEpoxyModel<LiveLocationUserItem.Hold
     }
 
     private fun stopTimer(holder: Holder) {
-        holder.timer?.stop()
-        holder.timer = null
+        holder.timer.stop()
     }
 
     private fun getFormattedLastUpdatedAt(locationUpdateTimeMillis: Long?): String {
@@ -111,7 +107,7 @@ abstract class LiveLocationUserItem : VectorEpoxyModel<LiveLocationUserItem.Hold
     }
 
     class Holder : VectorEpoxyHolder() {
-        var timer: CountUpTimer? = null
+        val timer: CountUpTimer = CountUpTimer(1000)
         val itemUserAvatarImageView by bind<ImageView>(R.id.itemUserAvatarImageView)
         val itemUserDisplayNameTextView by bind<TextView>(R.id.itemUserDisplayNameTextView)
         val itemRemainingTimeTextView by bind<TextView>(R.id.itemRemainingTimeTextView)

@@ -28,8 +28,8 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 
-@EpoxyModelClass(layout = R.layout.item_room_directory_server)
-abstract class RoomDirectoryServerItem : VectorEpoxyModel<RoomDirectoryServerItem.Holder>() {
+@EpoxyModelClass
+abstract class RoomDirectoryServerItem : VectorEpoxyModel<RoomDirectoryServerItem.Holder>(R.layout.item_room_directory_server) {
 
     @EpoxyAttribute
     var serverName: String? = null

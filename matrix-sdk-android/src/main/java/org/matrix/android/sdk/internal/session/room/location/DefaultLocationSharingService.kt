@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.session.room.location
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import com.zhuinden.monarchy.Monarchy
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -25,9 +26,12 @@ import org.matrix.android.sdk.api.session.room.location.LocationSharingService
 import org.matrix.android.sdk.api.session.room.location.UpdateLiveLocationShareResult
 import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationShareAggregatedSummary
 import org.matrix.android.sdk.api.util.Cancelable
+import org.matrix.android.sdk.api.util.Optional
+import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.database.mapper.LiveLocationShareAggregatedSummaryMapper
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntity
 import org.matrix.android.sdk.internal.database.query.findRunningLiveInRoom
+import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 
 internal class DefaultLocationSharingService @AssistedInject constructor(
@@ -37,6 +41,8 @@ internal class DefaultLocationSharingService @AssistedInject constructor(
         private val sendLiveLocationTask: SendLiveLocationTask,
         private val startLiveLocationShareTask: StartLiveLocationShareTask,
         private val stopLiveLocationShareTask: StopLiveLocationShareTask,
+        private val checkIfExistingActiveLiveTask: CheckIfExistingActiveLiveTask,
+        private val redactLiveLocationShareTask: RedactLiveLocationShareTask,
         private val liveLocationShareAggregatedSummaryMapper: LiveLocationShareAggregatedSummaryMapper,
 ) : LocationSharingService {
 
@@ -67,12 +73,27 @@ internal class DefaultLocationSharingService @AssistedInject constructor(
         return sendLiveLocationTask.execute(params)
     }
 
-    override suspend fun startLiveLocationShare(timeoutMillis: Long): UpdateLiveLocationShareResult {
+    override suspend fun startLiveLocationShare(timeoutMillis: Long, description: String): UpdateLiveLocationShareResult {
+        // Ensure to stop any active live before starting a new one
+        if (checkIfExistingActiveLive()) {
+            val result = stopLiveLocationShare()
+            if (result is UpdateLiveLocationShareResult.Failure) {
+                return result
+            }
+        }
         val params = StartLiveLocationShareTask.Params(
                 roomId = roomId,
-                timeoutMillis = timeoutMillis
+                timeoutMillis = timeoutMillis,
+                description = description
         )
         return startLiveLocationShareTask.execute(params)
+    }
+
+    private suspend fun checkIfExistingActiveLive(): Boolean {
+        val params = CheckIfExistingActiveLiveTask.Params(
+                roomId = roomId
+        )
+        return checkIfExistingActiveLiveTask.execute(params)
     }
 
     override suspend fun stopLiveLocationShare(): UpdateLiveLocationShareResult {
@@ -82,10 +103,30 @@ internal class DefaultLocationSharingService @AssistedInject constructor(
         return stopLiveLocationShareTask.execute(params)
     }
 
+    override suspend fun redactLiveLocationShare(beaconInfoEventId: String, reason: String?) {
+        val params = RedactLiveLocationShareTask.Params(
+                roomId = roomId,
+                beaconInfoEventId = beaconInfoEventId,
+                reason = reason
+        )
+        return redactLiveLocationShareTask.execute(params)
+    }
+
     override fun getRunningLiveLocationShareSummaries(): LiveData<List<LiveLocationShareAggregatedSummary>> {
         return monarchy.findAllMappedWithChanges(
                 { LiveLocationShareAggregatedSummaryEntity.findRunningLiveInRoom(it, roomId = roomId) },
                 liveLocationShareAggregatedSummaryMapper
         )
+    }
+
+    override fun getLiveLocationShareSummary(beaconInfoEventId: String): LiveData<Optional<LiveLocationShareAggregatedSummary>> {
+        return Transformations.map(
+                monarchy.findAllMappedWithChanges(
+                        { LiveLocationShareAggregatedSummaryEntity.where(it, roomId = roomId, eventId = beaconInfoEventId) },
+                        liveLocationShareAggregatedSummaryMapper
+                )
+        ) {
+            it.firstOrNull().toOptional()
+        }
     }
 }

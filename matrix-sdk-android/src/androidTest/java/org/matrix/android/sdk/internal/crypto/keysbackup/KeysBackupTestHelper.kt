@@ -187,7 +187,7 @@ internal class KeysBackupTestHelper(
         // - Alice must have the same keys on both devices
         for (aliceKey1 in testData.aliceKeys) {
             val aliceKey2 = (testData.aliceSession2.cryptoService().keysBackupService() as DefaultKeysBackupService).store
-                    .getInboundGroupSession(aliceKey1.olmInboundGroupSession!!.sessionIdentifier(), aliceKey1.senderKey!!)
+                    .getInboundGroupSession(aliceKey1.safeSessionId!!, aliceKey1.senderKey!!)
             Assert.assertNotNull(aliceKey2)
             assertKeysEquals(aliceKey1.exportKeys(), aliceKey2!!.exportKeys())
         }

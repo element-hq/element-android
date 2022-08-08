@@ -37,7 +37,7 @@ import androidx.datastore.preferences.core.Preferences
 import dagger.hilt.EntryPoints
 import im.vector.app.core.datastore.dataStoreProvider
 import im.vector.app.core.di.SingletonEntryPoint
-import im.vector.app.core.resources.BuildMeta
+import org.matrix.android.sdk.api.util.BuildVersionSdkIntProvider
 import java.io.OutputStream
 import kotlin.math.roundToInt
 
@@ -93,9 +93,9 @@ fun Context.safeOpenOutputStream(uri: Uri): OutputStream? {
  */
 @Suppress("deprecation")
 @SuppressLint("NewApi") // false positive
-fun Context.inferNoConnectivity(buildMeta: BuildMeta): Boolean {
+fun Context.inferNoConnectivity(sdkIntProvider: BuildVersionSdkIntProvider): Boolean {
     val connectivityManager = getSystemService<ConnectivityManager>()!!
-    return if (buildMeta.sdkInt > Build.VERSION_CODES.M) {
+    return if (sdkIntProvider.get() > Build.VERSION_CODES.M) {
         val networkCapabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
         when {
             networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) == true -> false

@@ -81,7 +81,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                     when (action) {
                         UserListSharedAction.Close -> finish()
                         UserListSharedAction.GoBack -> onBackPressed()
-                        is UserListSharedAction.OnMenuItemSelected -> onMenuItemSelected(action)
+                        is UserListSharedAction.OnMenuItemSubmitClick -> handleOnMenuItemSubmitClick(action)
                         UserListSharedAction.OpenPhoneBook -> openPhoneBook()
                         UserListSharedAction.AddByQrCode -> openAddByQrCode()
                     }
@@ -93,7 +93,8 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                     UserListFragment::class.java,
                     UserListFragmentArgs(
                             title = getString(R.string.fab_menu_create_chat),
-                            menuResId = R.menu.vector_create_direct_room
+                            menuResId = R.menu.vector_create_direct_room,
+                            submitMenuItemId = R.id.action_create_direct_room,
                     )
             )
         }
@@ -159,10 +160,8 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
         }
     }
 
-    private fun onMenuItemSelected(action: UserListSharedAction.OnMenuItemSelected) {
-        if (action.itemId == R.id.action_create_direct_room) {
-            viewModel.handle(CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers(action.selections))
-        }
+    private fun handleOnMenuItemSubmitClick(action: UserListSharedAction.OnMenuItemSubmitClick) {
+        viewModel.handle(CreateDirectRoomAction.PrepareRoomWithSelectedUsers(action.selections))
     }
 
     private fun renderCreateAndInviteState(state: Async<String>) {

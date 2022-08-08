@@ -42,6 +42,7 @@ class TypingMessageDotsView(context: Context, attrs: AttributeSet) :
     }
 
     private val circles = mutableListOf<View>()
+    private val objectAnimators = mutableListOf<ObjectAnimator>()
 
     init {
         orientation = HORIZONTAL
@@ -76,15 +77,17 @@ class TypingMessageDotsView(context: Context, attrs: AttributeSet) :
     }
 
     private fun animateCircle(index: Int, circle: View) {
-        ObjectAnimator.ofFloat(circle, "alpha", DEFAULT_MAX_ALPHA, DEFAULT_MIN_ALPHA).apply {
+        val objectAnimator = ObjectAnimator.ofFloat(circle, "alpha", DEFAULT_MAX_ALPHA, DEFAULT_MIN_ALPHA).apply {
             duration = DEFAULT_CIRCLE_DURATION
             startDelay = DEFAULT_START_ANIM_CIRCLE_DURATION * index
             repeatCount = ValueAnimator.INFINITE
-        }.start()
+        }
+        objectAnimators.add(objectAnimator)
+        objectAnimator.start()
     }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        circles.forEach { it.clearAnimation() }
+        objectAnimators.forEach { it.cancel() }
     }
 }

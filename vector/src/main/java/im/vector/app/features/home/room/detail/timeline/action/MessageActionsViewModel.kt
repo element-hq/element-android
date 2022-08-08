@@ -80,7 +80,9 @@ class MessageActionsViewModel @AssistedInject constructor(
         private val errorFormatter: ErrorFormatter,
         private val stringProvider: StringProvider,
         private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
-        private val vectorPreferences: VectorPreferences
+        private val vectorPreferences: VectorPreferences,
+        private val checkIfCanReplyEventUseCase: CheckIfCanReplyEventUseCase,
+        private val checkIfCanRedactEventUseCase: CheckIfCanRedactEventUseCase,
 ) : VectorViewModel<MessageActionState, MessageActionsAction, EmptyViewEvents>(initialState) {
 
     private val informationData = initialState.informationData
@@ -436,21 +438,7 @@ class MessageActionsViewModel @AssistedInject constructor(
     }
 
     private fun canReply(event: TimelineEvent, messageContent: MessageContent?, actionPermissions: ActionPermissions): Boolean {
-        // Only EventType.MESSAGE and EventType.POLL_START event types are supported for the moment
-        if (event.root.getClearType() !in EventType.POLL_START + EventType.MESSAGE) return false
-        if (!actionPermissions.canSendMessage) return false
-        return when (messageContent?.msgType) {
-            MessageType.MSGTYPE_TEXT,
-            MessageType.MSGTYPE_NOTICE,
-            MessageType.MSGTYPE_EMOTE,
-            MessageType.MSGTYPE_IMAGE,
-            MessageType.MSGTYPE_VIDEO,
-            MessageType.MSGTYPE_AUDIO,
-            MessageType.MSGTYPE_FILE,
-            MessageType.MSGTYPE_POLL_START,
-            MessageType.MSGTYPE_LOCATION -> true
-            else -> false
-        }
+        return checkIfCanReplyEventUseCase.execute(event, messageContent, actionPermissions)
     }
 
     /**
@@ -531,12 +519,7 @@ class MessageActionsViewModel @AssistedInject constructor(
     }
 
     private fun canRedact(event: TimelineEvent, actionPermissions: ActionPermissions): Boolean {
-        // Only event of type EventType.MESSAGE, EventType.STICKER and EventType.POLL_START are supported for the moment
-        if (event.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER) + EventType.POLL_START) return false
-        // Message sent by the current user can always be redacted
-        if (event.root.senderId == session.myUserId) return true
-        // Check permission for messages sent by other users
-        return actionPermissions.canRedact
+        return checkIfCanRedactEventUseCase.execute(event, actionPermissions)
     }
 
     private fun canRetry(event: TimelineEvent, actionPermissions: ActionPermissions): Boolean {

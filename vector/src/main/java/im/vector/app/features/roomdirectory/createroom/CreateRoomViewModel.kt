@@ -25,7 +25,7 @@ import com.airbnb.mvrx.Uninitialized
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.AppStateHandler
+import im.vector.app.SpaceStateHandler
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
@@ -58,7 +58,7 @@ class CreateRoomViewModel @AssistedInject constructor(
         @Assisted private val initialState: CreateRoomViewState,
         private val session: Session,
         private val rawService: RawService,
-        appStateHandler: AppStateHandler,
+        spaceStateHandler: SpaceStateHandler,
         private val analyticsTracker: AnalyticsTracker
 ) : VectorViewModel<CreateRoomViewState, CreateRoomAction, CreateRoomViewEvents>(initialState) {
 
@@ -73,7 +73,7 @@ class CreateRoomViewModel @AssistedInject constructor(
         initHomeServerName()
         initAdminE2eByDefault()
 
-        val parentSpaceId = initialState.parentSpaceId ?: appStateHandler.safeActiveSpaceId()
+        val parentSpaceId = initialState.parentSpaceId ?: spaceStateHandler.getSafeActiveSpaceId()
 
         val restrictedSupport = session.homeServerCapabilitiesService().getHomeServerCapabilities()
                 .isFeatureSupported(HomeServerCapabilities.ROOM_CAP_RESTRICTED)

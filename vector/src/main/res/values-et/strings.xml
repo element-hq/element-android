@@ -612,7 +612,7 @@
         <item quantity="other">%d suhtluskeelu saanud kasutajat</item>
     </plurals>
     <string name="room_settings_category_advanced_title">Lisaseadistused</string>
-    <string name="room_settings_room_internal_id">Selle jututoa sisemine tunnus</string>
+    <string name="room_settings_room_internal_id">Selle jututoa tehniline tunnus</string>
     <string name="room_settings_labs_pref_title">Katsed</string>
     <string name="room_settings_labs_warning_message">Need on alles katsejärgus olevad funktsionaalsused. Ole kasutamisel ettevaatlik.</string>
     <string name="encryption_information_decryption_error">Dekrüptimise viga</string>
@@ -1062,7 +1062,7 @@
     <string name="merged_events_expand">laienda</string>
     <string name="merged_events_collapse">ahenda</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="no_valid_google_play_services_apk">Ühtegi Google Play teenuste rakendusefaili ei leidunud. Teavitused ei pruugi korralikult toimida.</string>
     <string name="passphrase_create_passphrase">Loo paroolifraas</string>
     <string name="passphrase_confirm_passphrase">Sisesta paroolifraas veel üks kord</string>
@@ -1467,7 +1467,6 @@
         <item quantity="one">%d kasutaja luges</item>
         <item quantity="other">%d kasutajat lugesid</item>
     </plurals>
-    <string name="error_attachment">Manuse laadimisel tekkis viga.</string>
     <string name="attachment_type_file">Fail</string>
     <string name="attachment_type_contact">Kontakt</string>
     <string name="attachment_type_camera">Kaamera</string>
@@ -1543,8 +1542,8 @@
     <string name="room_profile_section_more_settings">Jututubade seadistused</string>
     <string name="room_profile_section_more_notifications">Teavitused</string>
     <plurals name="room_profile_section_more_member_list">
-        <item quantity="one">Üks inimene</item>
-        <item quantity="other">%1$d inimest</item>
+        <item quantity="one">Üks osaleja</item>
+        <item quantity="other">%1$d osalejat</item>
     </plurals>
     <string name="room_profile_section_more_uploads">Üleslaaditud failid</string>
     <string name="room_profile_section_more_leave">Lahku jututoast</string>
@@ -1706,7 +1705,7 @@
     <string name="bad_passphrase_key_reset_all_action">Kas sa unustasid või kaotasid kõik võimalused taastada ligipääsu oma kontole\? Lähtesta kõik seadistused</string>
     <string name="direct_room_created_summary_item_by_you">Sina liitusid.</string>
     <string name="direct_room_created_summary_item">%s liitus.</string>
-    <string name="direct_room_encryption_enabled_tile_description">See jututuba on läbivalt krüptitud.</string>
+    <string name="direct_room_encryption_enabled_tile_description">See vestlus on läbivalt krüptitud.</string>
     <string name="direct_room_profile_section_more_leave">Lahku</string>
     <string name="direct_room_profile_section_more_settings">Seadistused</string>
     <string name="direct_room_profile_encrypted_subtitle">Sõnumid siin jututoas kasutavad läbivat krüptimist. 
@@ -2333,9 +2332,6 @@
     <string name="ftue_auth_carousel_control_title">Sul on kontroll oma andmete üle.</string>
     <string name="ftue_auth_carousel_secure_title">Vestlused, mida sa tegelikult ka omad.</string>
     <string name="tooltip_attachment_location">Jaga asukohta</string>
-    <string name="labs_render_locations_in_timeline">Kuva ajajoonel kasutaja asukohti</string>
-    <string name="settings_enable_location_sharing_summary">Kui see seadistus on kasutusel, siis sa saad oma asukohta jagada igas jututoas</string>
-    <string name="settings_enable_location_sharing">Luba asukohta jagada</string>
     <string name="location_share_external">Ava muu rakendusega</string>
     <string name="location_not_available_dialog_content">${app_name} ei saanud asukohta tuvastada. Palun proovi hiljem uuesti.</string>
     <string name="location_not_available_dialog_title">${app_name} ei saanud asukohta tuvastada</string>
@@ -2361,7 +2357,7 @@
     <string name="attachment_type_location">Asukoht</string>
     <string name="room_unsupported_e2e_algorithm_as_admin">Krüptimise seadistustes on viga ja sa ei saa sõnumeid saata. Seadistuste avamiseks klõpsi siin.</string>
     <string name="room_unsupported_e2e_algorithm">Krüptimise seadistustes on viga ja sa ei saa sõnumeid saata. Kui soovid krüptimist töökorda saada, siis võta ühendust serveri haldajaga.</string>
-    <string name="ftue_auth_use_case_subtitle">Me aitame sind Matrix\'i võrgu kasutamisel.</string>
+    <string name="ftue_auth_use_case_subtitle">Me aitame sind Matrix\'i võrgu kasutamisel</string>
     <string name="ftue_auth_use_case_connect_to_server">Alusta koduserveri kasutamist</string>
     <string name="labs_enable_thread_messages">Võta jutulõngad kasutusele</string>
     <string name="labs_enable_thread_messages_desc">Märkus: palun käivita rakendus uuesti</string>
@@ -2369,8 +2365,8 @@
     <string name="a11y_static_map_image">Kaart</string>
     <string name="message_bubbles">Näita jutumulle</string>
     <string name="ftue_auth_use_case_join_existing_server">Tahad kasutada mõnda olemasolevat koduserverit\?</string>
-    <string name="ftue_auth_use_case_skip_partial">jätta selle küsimuse vahele</string>
-    <string name="ftue_auth_use_case_skip">Sa pole veel otsustanud\? Sa võid %s</string>
+    <string name="ftue_auth_use_case_skip_partial">Jäta see küsimus vahele</string>
+    <string name="ftue_auth_use_case_skip">Sa pole veel otsustanud\? %s</string>
     <string name="ftue_auth_use_case_option_two">Töökaaslased</string>
     <string name="ftue_auth_use_case_option_three">Kogukonnad</string>
     <string name="ftue_auth_use_case_option_one">Perekond ja sõbrad</string>
@@ -2410,9 +2406,6 @@
     <string name="room_notification_two_users_are_typing">%1$s ja %2$s</string>
     <string name="location_share_live_stop">Lõpeta asukoha jagamine</string>
     <string name="location_share_live_enabled">Reaalajas asukoha jagamine on kasutusel</string>
-    <string name="location_in_background_missing_permission_dialog_content">Kui sa soovid reaalajas oma asukohta jagada, siis ${app_name} vajab alati õigus asukohta tuvastada. Seda ka siis kui rakendus töötab taustal.
-\nLigipääs asukohale on saadaval vaid sinu valitud ajavahemiku vältel.</string>
-    <string name="location_in_background_missing_permission_dialog_title">Luba ligipääs asukohale</string>
     <string name="a11y_location_share_option_pinned_icon">Jaga seda asukohta</string>
     <string name="location_share_option_pinned">Jaga seda asukohta</string>
     <string name="a11y_location_share_option_user_live_icon">Jaga asukohta reaalajas</string>
@@ -2432,16 +2425,16 @@
     <string name="error_forbidden_digits_only_username">Koduserver ei võimalda ainult numbritest koosneva kasutajanime loomist.</string>
     <string name="ftue_personalize_skip_this_step">Jäta see samm vahele</string>
     <string name="ftue_personalize_submit">Salvesta ja jätka</string>
-    <string name="ftue_personalize_complete_subtitle">Sinu eelistused on salvestatud.</string>
-    <string name="ftue_personalize_complete_title">Kõik on valmis!</string>
+    <string name="ftue_personalize_complete_subtitle">Seadistusest saad alati oma profiili muuta</string>
+    <string name="ftue_personalize_complete_title">Tundub õige!</string>
     <string name="ftue_personalize_lets_go">Alustame nüüd</string>
-    <string name="ftue_profile_picture_subtitle">Sa võid seda hiljem alati muuta.</string>
+    <string name="ftue_profile_picture_subtitle">On aeg lisada oma nime juurde sobilik pilt</string>
     <string name="ftue_profile_picture_title">Lisa profiilipilt</string>
     <string name="ftue_display_name_entry_footer">Sa võid seda hiljem muuta</string>
     <string name="ftue_display_name_entry_title">Kuvatav nimi</string>
     <string name="ftue_display_name_subtitle">Seda näidatakse sõnumite saatmisel.</string>
     <string name="ftue_display_name_title">Vali kuvatav nimi</string>
-    <string name="ftue_account_created_subtitle">Sinu kasutajakonto %s on nüüd olemas.</string>
+    <string name="ftue_account_created_subtitle">Sinu kasutajakonto %s on nüüd olemas</string>
     <string name="ftue_account_created_congratulations_title">Õnnitlused!</string>
     <string name="ftue_account_created_take_me_home">Mine avalehele</string>
     <string name="ftue_account_created_personalize">Isikupärasta oma profiili</string>
@@ -2506,4 +2499,84 @@
     <string name="time_unit_second_short">sek</string>
     <string name="time_unit_minute_short">min</string>
     <string name="time_unit_hour_short">t</string>
+    <string name="live_location_labs_promotion_switch_title">Luba asukohta jagada</string>
+    <string name="live_location_labs_promotion_description">Palun arvesta järgnevaga: see katseline funktsionaalsus kasutab ajutist lahendust. See tähendab, et sa ei saa oma asukoha jagamise ajalugu kustutada ning heade arvutioskustega kasutajad saavad näha sinu asukohta ka siis, kui sa oled oma asukoha jagamise selles jututoas lõpetanud.</string>
+    <string name="live_location_labs_promotion_title">Asukoha jagamine reaalajas</string>
+    <string name="settings_security_pin_code_use_biometrics_error">Biomeetrilise autentimise kasutuselevõtmine ei õnnestunud.</string>
+    <string name="auth_biometric_key_invalidated_message">Kuna hiljuti lisandus uus biomeetrilise autentimise meetod, siis lülitati biomeetriline autentimine välja. Sa saad ta uuesti kasutusele võtta seadistustest.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">Lähtesta teavituse meetod</string>
+    <string name="push_gateway_item_profile_tag">Profiili silt:</string>
+    <string name="action_next">Järgmine</string>
+    <string name="settings_troubleshoot_test_current_distributor">Hetkel on kasutusel %s.</string>
+    <string name="settings_troubleshoot_test_current_distributor_title">Meetod</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="one">Leidsin %d meetodi.</item>
+        <item quantity="other">Leidsin %d meetodit.</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_distributors_fdroid">Ühtegi teist meetodit peale taustal sünkroniseerimise ei leidunud.</string>
+    <string name="settings_troubleshoot_test_distributors_gplay">Ühtegi teist meetodit peale Google Play Service ei leidunud.</string>
+    <string name="settings_troubleshoot_test_distributors_title">Saadaval olevad meetodid</string>
+    <string name="settings_notification_method">Teavituse meetod</string>
+    <string name="unifiedpush_distributor_background_sync">Sünkroniseerimine taustal</string>
+    <string name="unifiedpush_distributor_fcm_fallback">Google\'i teenused</string>
+    <string name="unifiedpush_getdistributors_dialog_title">Vali teavituste laadimise viis</string>
+    <string name="poll_undisclosed_not_ended">Tulemused on näha siis, kui küsitlus on lõppenud</string>
+    <string name="labs_enable_msc3061_share_history_desc">Kutsudes osalejaid krüptitud jututuppa, kus ajaloo jagamine on lubatud, on vanad sõnumid loetavad.</string>
+    <string name="labs_enable_msc3061_share_history">MSC3061: Minevikus saadetud sõnumite lugemiseks vajalike krüptovõtmete jagamine jututoas</string>
+    <string name="send_your_first_msg_to_invite">Saada oma esimene sõnum kutsudes %s vestlusesse</string>
+    <string name="direct_room_encryption_enabled_tile_description_future">See vestlus saab olema läbivalt krüptitud.</string>
+    <string name="create_room_action_go">Mine</string>
+    <plurals name="room_removed_messages">
+        <item quantity="one">%d sõnum on eemaldatud</item>
+        <item quantity="other">%d sõnumit on eemaldatud</item>
+    </plurals>
+    <string name="live_location_share_location_item_share">Jaga asukohta</string>
+    <string name="live_location_not_enough_permission_dialog_description">Selles jututoas asukoha jagamiseks peavad sul olema vastavad õigused.</string>
+    <string name="live_location_not_enough_permission_dialog_title">Sul pole vajalikke õigusi asukoha jagamiseks reaalajas</string>
+    <string name="permalink_unsupported_groups">Seda linki ei saa avada: seniste vanatüübiliste kogukondade asemel on nüüd uued kogukonnad ehk kogukonnakeskused</string>
+    <string name="ftue_auth_login_username_entry">Kasutajanimi / E-post / Telefon</string>
+    <string name="ftue_auth_captcha_title">Kas sa ikka oled inimene\?</string>
+    <string name="ftue_auth_password_reset_email_confirmation_subtitle">Palun järgi juhtnööre, mille saatsime %s aadressile</string>
+    <string name="ftue_auth_password_reset_confirmation">Salasõna lähtestamine</string>
+    <string name="ftue_auth_forgot_password">Kas unustasid oma salasõna</string>
+    <string name="ftue_auth_email_resend_email">Saada e-kiri uuesti</string>
+    <string name="ftue_auth_email_verification_footer">Sa ei saanud e-kirja kätte\?</string>
+    <string name="ftue_auth_email_verification_subtitle">Oma e-posti aadressi kinnitamiseks klõpsi selles kirjas leiduvat nuppu, mille just saatsime %s aadressile</string>
+    <string name="ftue_auth_email_verification_title">Kinnitamiseks vaata oma e-kirju.</string>
+    <string name="ftue_auth_phone_confirmation_resend_code">Saada kinnituskood uuesti</string>
+    <string name="ftue_auth_phone_confirmation_subtitle">Kinnituskoodi saatsime telefoninumbrile %s</string>
+    <string name="ftue_auth_phone_confirmation_title">Kinnita oma telefoninumber</string>
+    <string name="ftue_auth_sign_out_all_devices">Logi kõik oma seadmed võrgust välja</string>
+    <string name="ftue_auth_reset_password">Lähtesta salasõna</string>
+    <string name="ftue_auth_new_password_subtitle">Palun kasuta vähemalt 8-tähelist salasõna.</string>
+    <string name="ftue_auth_new_password_title">Vali uus salasõna</string>
+    <string name="ftue_auth_new_password_entry_title">Uus salasõna</string>
+    <string name="ftue_auth_reset_password_breaker_title">Vaata oma e-kirju.</string>
+    <string name="ftue_auth_reset_password_email_subtitle">%s saadab sulle verifitseerimiseks lingi</string>
+    <string name="ftue_auth_phone_confirmation_entry_title">Kinnituskood</string>
+    <string name="ftue_auth_phone_entry_title">Telefoninumber</string>
+    <string name="ftue_auth_phone_subtitle">%s soovib sinu kasutajakonto verifitseerimist</string>
+    <string name="ftue_auth_phone_title">Sisesta oma telefoninumber</string>
+    <string name="ftue_auth_email_entry_title">E-posti aadress</string>
+    <string name="ftue_auth_email_subtitle">%s soovib sinu kasutajakonto verifitseerimist</string>
+    <string name="ftue_auth_email_title">Sisesta oma e-posti aadress</string>
+    <string name="ftue_auth_terms_subtitle">Palun loe läbi %s serveri kasutustingimused ja reeglid</string>
+    <string name="ftue_auth_terms_title">Serveri reeglid</string>
+    <string name="ftue_auth_choose_server_ems_cta">Võta meiega ühedust</string>
+    <string name="ftue_auth_choose_server_ems_subtitle">Element Matrix Services (EMS) on toimiv ja usaldusväärne serveriteenus kiireks ja turvaliseks suhtluseks. Lisateave <a href="${ftue_ems_url}">element.io/ems</a></string>
+    <string name="ftue_auth_choose_server_ems_title">Kas soovid et sul oleks oma serveriteenus\?</string>
+    <string name="ftue_auth_choose_server_entry_hint">Serveri url</string>
+    <string name="ftue_auth_choose_server_subtitle">Mis on sinu serveri aadress\? Mingis mõttes on see sinu andmete kodu</string>
+    <string name="ftue_auth_choose_server_title">Vali oma koduserver</string>
+    <string name="ftue_auth_welcome_back_title">Tere tulemast tagasi!</string>
+    <string name="ftue_auth_create_account_edit_server_selection">Muuda</string>
+    <string name="ftue_auth_create_account_sso_section_header">Või</string>
+    <string name="ftue_auth_create_account_choose_server_header">Kuidas sinu vestlusi hallatakse</string>
+    <string name="ftue_auth_create_account_password_entry_footer">Peab olema 8 või enam tähemärki</string>
+    <string name="ftue_auth_create_account_username_entry_footer">Teised saavad sind otsida sellisena: %s</string>
+    <string name="ftue_auth_create_account_title">Loo endale konto</string>
+    <string name="font_size_use_system">Kasuta süsteemi seadistust</string>
+    <string name="font_size_section_manually">Vali ise</string>
+    <string name="font_size_section_auto">Määra automaatselt</string>
+    <string name="font_size_title">Vali kirjatüübi suurus</string>
 </resources>

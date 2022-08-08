@@ -18,6 +18,7 @@ package im.vector.app.features.home.room.detail.timeline.helper
 
 import im.vector.app.core.extensions.localDateTime
 import im.vector.app.core.resources.UserPreferencesProvider
+import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.getRelationContent
@@ -26,28 +27,42 @@ import org.matrix.android.sdk.api.session.events.model.isThread
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
+import org.matrix.android.sdk.api.session.room.model.localecho.RoomLocalEcho
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import javax.inject.Inject
 
-class TimelineEventVisibilityHelper @Inject constructor(private val userPreferencesProvider: UserPreferencesProvider) {
+class TimelineEventVisibilityHelper @Inject constructor(
+        private val userPreferencesProvider: UserPreferencesProvider,
+) {
+
+    private interface PredicateToStopSearch {
+        /**
+         * Indicate whether a search on events should stop by comparing 2 given successive events.
+         * @param oldEvent the oldest event between the 2 events to compare
+         * @param newEvent the more recent event between the 2 events to compare
+         */
+        fun shouldStopSearch(oldEvent: Event, newEvent: Event): Boolean
+    }
 
     /**
-     * @param timelineEvents the events to search in
+     * @param timelineEvents the events to search in, sorted from oldest event to newer event
      * @param index the index to start computing (inclusive)
      * @param minSize the minimum number of same type events to have sequentially, otherwise will return an empty list
      * @param eventIdToHighlight used to compute visibility
      * @param rootThreadEventId the root thread event id if in a thread timeline
      * @param isFromThreadTimeline true if the timeline is a thread
+     * @param predicateToStop events are taken until this condition is met
      *
-     * @return a list of timeline events which have sequentially the same type following the next direction.
+     * @return a list of timeline events which meet sequentially the same criteria following the next direction.
      */
-    private fun nextSameTypeEvents(
+    private fun nextEventsUntil(
             timelineEvents: List<TimelineEvent>,
             index: Int,
             minSize: Int,
             eventIdToHighlight: String?,
             rootThreadEventId: String?,
-            isFromThreadTimeline: Boolean
+            isFromThreadTimeline: Boolean,
+            predicateToStop: PredicateToStopSearch
     ): List<TimelineEvent> {
         if (index >= timelineEvents.size - 1) {
             return emptyList()
@@ -64,13 +79,15 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
         } else {
             nextSubList.subList(0, indexOfNextDay)
         }
-        val indexOfFirstDifferentEventType = nextSameDayEvents.indexOfFirst { it.root.getClearType() != timelineEvent.root.getClearType() }
-        val sameTypeEvents = if (indexOfFirstDifferentEventType == -1) {
+        val indexOfFirstDifferentEvent = nextSameDayEvents.indexOfFirst {
+            predicateToStop.shouldStopSearch(oldEvent = timelineEvent.root, newEvent = it.root)
+        }
+        val similarEvents = if (indexOfFirstDifferentEvent == -1) {
             nextSameDayEvents
         } else {
-            nextSameDayEvents.subList(0, indexOfFirstDifferentEventType)
+            nextSameDayEvents.subList(0, indexOfFirstDifferentEvent)
         }
-        val filteredSameTypeEvents = sameTypeEvents.filter {
+        val filteredSimilarEvents = similarEvents.filter {
             shouldShowEvent(
                     timelineEvent = it,
                     highlightedEventId = eventIdToHighlight,
@@ -78,14 +95,11 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
                     rootThreadEventId = rootThreadEventId
             )
         }
-        if (filteredSameTypeEvents.size < minSize) {
-            return emptyList()
-        }
-        return filteredSameTypeEvents
+        return if (filteredSimilarEvents.size < minSize) emptyList() else filteredSimilarEvents
     }
 
     /**
-     * @param timelineEvents the events to search in
+     * @param timelineEvents the events to search in, sorted from newer event to oldest event
      * @param index the index to start computing (inclusive)
      * @param minSize the minimum number of same type events to have sequentially, otherwise will return an empty list
      * @param eventIdToHighlight used to compute visibility
@@ -106,7 +120,44 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
         return prevSub
                 .reversed()
                 .let {
-                    nextSameTypeEvents(it, 0, minSize, eventIdToHighlight, rootThreadEventId, isFromThreadTimeline)
+                    nextEventsUntil(it, 0, minSize, eventIdToHighlight, rootThreadEventId, isFromThreadTimeline, object : PredicateToStopSearch {
+                        override fun shouldStopSearch(oldEvent: Event, newEvent: Event): Boolean {
+                            return oldEvent.getClearType() != newEvent.getClearType()
+                        }
+                    })
+                }
+    }
+
+    /**
+     * @param timelineEvents the events to search in, sorted from newer event to oldest event
+     * @param index the index to start computing (inclusive)
+     * @param minSize the minimum number of same type events to have sequentially, otherwise will return an empty list
+     * @param eventIdToHighlight used to compute visibility
+     * @param rootThreadEventId the root thread eventId
+     * @param isFromThreadTimeline true if the timeline is a thread
+     *
+     * @return a list of timeline events which are all redacted following the prev direction.
+     */
+    fun prevRedactedEvents(
+            timelineEvents: List<TimelineEvent>,
+            index: Int,
+            minSize: Int,
+            eventIdToHighlight: String?,
+            rootThreadEventId: String?,
+            isFromThreadTimeline: Boolean
+    ): List<TimelineEvent> {
+        val prevSub = timelineEvents
+                .subList(0, index + 1)
+                // Ensure to not take the REDACTION events into account
+                .filter { it.root.getClearType() != EventType.REDACTION }
+        return prevSub
+                .reversed()
+                .let {
+                    nextEventsUntil(it, 0, minSize, eventIdToHighlight, rootThreadEventId, isFromThreadTimeline, object : PredicateToStopSearch {
+                        override fun shouldStopSearch(oldEvent: Event, newEvent: Event): Boolean {
+                            return oldEvent.isRedacted() && !newEvent.isRedacted()
+                        }
+                    })
                 }
     }
 
@@ -176,11 +227,22 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
             return true
         }
 
+        // Hide fake events for local rooms
+        if (RoomLocalEcho.isLocalEchoId(roomId) &&
+                root.getClearType() == EventType.STATE_ROOM_MEMBER ||
+                root.getClearType() == EventType.STATE_ROOM_HISTORY_VISIBILITY) {
+            return true
+        }
+
         // Allow only the the threads within the rootThreadEventId along with the root event
         if (userPreferencesProvider.areThreadMessagesEnabled() && isFromThreadTimeline) {
             return if (root.getRootThreadEventId() == rootThreadEventId) {
                 false
             } else root.eventId != rootThreadEventId
+        }
+
+        if (root.getClearType() in EventType.BEACON_LOCATION_DATA) {
+            return !root.isRedacted()
         }
 
         return false

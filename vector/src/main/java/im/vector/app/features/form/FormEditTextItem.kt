@@ -34,8 +34,8 @@ import im.vector.app.core.epoxy.addTextChangedListenerOnce
 import im.vector.app.core.epoxy.setValueOnce
 import im.vector.app.core.platform.SimpleTextWatcher
 
-@EpoxyModelClass(layout = R.layout.item_form_text_input)
-abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
+@EpoxyModelClass
+abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>(R.layout.item_form_text_input) {
 
     @EpoxyAttribute
     var hint: String? = null

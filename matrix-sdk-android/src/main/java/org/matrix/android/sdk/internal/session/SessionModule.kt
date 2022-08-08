@@ -88,6 +88,7 @@ import org.matrix.android.sdk.internal.session.room.EventRelationsAggregationPro
 import org.matrix.android.sdk.internal.session.room.aggregation.poll.DefaultPollAggregationProcessor
 import org.matrix.android.sdk.internal.session.room.aggregation.poll.PollAggregationProcessor
 import org.matrix.android.sdk.internal.session.room.create.RoomCreateEventProcessor
+import org.matrix.android.sdk.internal.session.room.location.LiveLocationShareRedactionEventProcessor
 import org.matrix.android.sdk.internal.session.room.prune.RedactionEventProcessor
 import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
 import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessorCoroutine
@@ -320,6 +321,10 @@ internal abstract class SessionModule {
     @Binds
     @IntoSet
     abstract fun bindEventRedactionProcessor(processor: RedactionEventProcessor): EventInsertLiveProcessor
+
+    @Binds
+    @IntoSet
+    abstract fun bindLiveLocationShareRedactionEventProcessor(processor: LiveLocationShareRedactionEventProcessor): EventInsertLiveProcessor
 
     @Binds
     @IntoSet

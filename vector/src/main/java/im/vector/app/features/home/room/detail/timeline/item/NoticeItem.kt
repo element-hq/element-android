@@ -30,8 +30,8 @@ import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_base_noinfo)
-abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
+@EpoxyModelClass
+abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>(R.layout.item_timeline_event_base_noinfo) {
 
     @EpoxyAttribute
     lateinit var attributes: Attributes

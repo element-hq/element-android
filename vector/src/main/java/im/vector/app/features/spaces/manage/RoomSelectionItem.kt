@@ -30,8 +30,8 @@ import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.util.MatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_room_to_add_in_space)
-abstract class RoomSelectionItem : VectorEpoxyModel<RoomSelectionItem.Holder>() {
+@EpoxyModelClass
+abstract class RoomSelectionItem : VectorEpoxyModel<RoomSelectionItem.Holder>(R.layout.item_room_to_add_in_space) {
 
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem

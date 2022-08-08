@@ -90,55 +90,84 @@ class PermalinkHandler @Inject constructor(
             buildTask: Boolean
     ): Boolean {
         return when (permalinkData) {
-            is PermalinkData.RoomLink -> {
-                val roomId = permalinkData.getRoomId()
-                val session = activeSessionHolder.getSafeActiveSession()
+            is PermalinkData.RoomLink -> handleRoomLink(permalinkData, rawLink, context, navigationInterceptor, buildTask)
+            is PermalinkData.UserLink -> handleUserLink(permalinkData, rawLink, context, navigationInterceptor, buildTask)
+            is PermalinkData.FallbackLink -> handleFallbackLink(permalinkData, context)
+            is PermalinkData.RoomEmailInviteLink -> handleRoomInviteLink(permalinkData, context)
+        }
+    }
 
-                val rootThreadEventId = permalinkData.eventId?.let { eventId ->
-                    val room = roomId?.let { session?.getRoom(it) }
+    private suspend fun handleRoomLink(
+            permalinkData: PermalinkData.RoomLink,
+            rawLink: Uri,
+            context: Context,
+            navigationInterceptor: NavigationInterceptor?,
+            buildTask: Boolean
+    ): Boolean {
+        val roomId = permalinkData.getRoomId()
+        val session = activeSessionHolder.getSafeActiveSession()
 
-                    val rootThreadEventId = room?.getTimelineEvent(eventId)?.root?.getRootThreadEventId()
-                    rootThreadEventId ?: if (room?.getTimelineEvent(eventId)?.isRootThread() == true) {
-                        eventId
-                    } else {
-                        null
-                    }
-                }
-                openRoom(
-                        navigationInterceptor,
-                        context = context,
-                        roomId = roomId,
-                        permalinkData = permalinkData,
-                        rawLink = rawLink,
-                        buildTask = buildTask,
-                        rootThreadEventId = rootThreadEventId
-                )
-                true
+        val rootThreadEventId = permalinkData.eventId?.let { eventId ->
+            val room = roomId?.let { session?.getRoom(it) }
+
+            val rootThreadEventId = room?.getTimelineEvent(eventId)?.root?.getRootThreadEventId()
+            rootThreadEventId ?: if (room?.getTimelineEvent(eventId)?.isRootThread() == true) {
+                eventId
+            } else {
+                null
             }
-            is PermalinkData.GroupLink -> {
-                navigator.openGroupDetail(permalinkData.groupId, context, buildTask)
-                true
+        }
+        openRoom(
+                navigationInterceptor,
+                context = context,
+                roomId = roomId,
+                permalinkData = permalinkData,
+                rawLink = rawLink,
+                buildTask = buildTask,
+                rootThreadEventId = rootThreadEventId
+        )
+        return true
+    }
+
+    private fun handleUserLink(
+            permalinkData: PermalinkData.UserLink,
+            rawLink: Uri,
+            context: Context,
+            navigationInterceptor: NavigationInterceptor?,
+            buildTask: Boolean
+    ): Boolean {
+        if (navigationInterceptor?.navToMemberProfile(permalinkData.userId, rawLink) != true) {
+            navigator.openRoomMemberProfile(userId = permalinkData.userId, roomId = null, context = context, buildTask = buildTask)
+        }
+        return true
+    }
+
+    private fun handleRoomInviteLink(
+            permalinkData: PermalinkData.RoomEmailInviteLink,
+            context: Context
+    ): Boolean {
+        val data = RoomPreviewData(
+                roomId = permalinkData.roomId,
+                roomName = permalinkData.roomName,
+                avatarUrl = permalinkData.roomAvatarUrl,
+                fromEmailInvite = permalinkData,
+                roomType = permalinkData.roomType
+        )
+        navigator.openRoomPreview(context, data)
+        return true
+    }
+
+    private suspend fun handleFallbackLink(
+            permalinkData: PermalinkData.FallbackLink,
+            context: Context
+    ): Boolean {
+        return if (permalinkData.isLegacyGroupLink) {
+            withContext(Dispatchers.Main) {
+                navigator.showGroupsUnsupportedWarning(context)
             }
-            is PermalinkData.UserLink -> {
-                if (navigationInterceptor?.navToMemberProfile(permalinkData.userId, rawLink) != true) {
-                    navigator.openRoomMemberProfile(userId = permalinkData.userId, roomId = null, context = context, buildTask = buildTask)
-                }
-                true
-            }
-            is PermalinkData.FallbackLink -> {
-                false
-            }
-            is PermalinkData.RoomEmailInviteLink -> {
-                val data = RoomPreviewData(
-                        roomId = permalinkData.roomId,
-                        roomName = permalinkData.roomName,
-                        avatarUrl = permalinkData.roomAvatarUrl,
-                        fromEmailInvite = permalinkData,
-                        roomType = permalinkData.roomType
-                )
-                navigator.openRoomPreview(context, data)
-                true
-            }
+            true
+        } else {
+            false
         }
     }
 

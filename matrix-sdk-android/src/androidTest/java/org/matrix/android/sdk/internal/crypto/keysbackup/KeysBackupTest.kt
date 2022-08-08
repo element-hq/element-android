@@ -24,7 +24,6 @@ import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.FixMethodOrder
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -56,7 +55,6 @@ import java.util.concurrent.CountDownLatch
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
 @LargeTest
-@Ignore
 class KeysBackupTest : InstrumentedTest {
 
     @get:Rule val rule = RetryTestRule(3)
@@ -301,7 +299,7 @@ class KeysBackupTest : InstrumentedTest {
         val keyBackupCreationInfo = keysBackupTestHelper.prepareAndCreateKeysBackupData(keysBackup).megolmBackupCreationInfo
 
         // - Check encryptGroupSession() returns stg
-        val keyBackupData = keysBackup.encryptGroupSession(session)
+        val keyBackupData = testHelper.runBlockingTest { keysBackup.encryptGroupSession(session) }
         assertNotNull(keyBackupData)
         assertNotNull(keyBackupData!!.sessionData)
 
@@ -312,7 +310,7 @@ class KeysBackupTest : InstrumentedTest {
         val sessionData = keysBackup
                 .decryptKeyBackupData(
                         keyBackupData,
-                        session.olmInboundGroupSession!!.sessionIdentifier(),
+                        session.safeSessionId!!,
                         cryptoTestData.roomId,
                         decryption!!
                 )

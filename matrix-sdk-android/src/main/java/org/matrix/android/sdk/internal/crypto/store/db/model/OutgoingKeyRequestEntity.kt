@@ -117,7 +117,7 @@ internal open class OutgoingKeyRequestEntity(
 
     private fun eventToResult(event: Event): RequestResult? {
         return when (event.getClearType()) {
-            EventType.ROOM_KEY_WITHHELD -> {
+            in EventType.ROOM_KEY_WITHHELD.values -> {
                 event.content.toModel<RoomKeyWithHeldContent>()?.code?.let {
                     RequestResult.Failure(it)
                 }

@@ -34,8 +34,8 @@ import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
 import org.matrix.android.sdk.api.session.threads.ThreadDetails
 import org.matrix.android.sdk.api.util.MatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_search_result)
-abstract class SearchResultItem : VectorEpoxyModel<SearchResultItem.Holder>() {
+@EpoxyModelClass
+abstract class SearchResultItem : VectorEpoxyModel<SearchResultItem.Holder>(R.layout.item_search_result) {
 
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute var formattedDate: String? = null

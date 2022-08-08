@@ -890,7 +890,6 @@
         <item quantity="many">%d użytkowników odczytało</item>
         <item quantity="other">%d użytkowników odczytało</item>
     </plurals>
-    <string name="error_attachment">Wystąpił błąd poczas otrzymywania załącznika.</string>
     <string name="error_handling_incoming_share">Nie można obsłużyć otrzymanych danych</string>
     <string name="content_reported_as_inappropriate_title">Zgłoszono jako nieodpowiedni</string>
     <string name="content_reported_as_inappropriate_content">Zawartość została zgłoszona jako niewłaściwa.
@@ -1164,9 +1163,9 @@
         <item quantity="other">Wyślij obrazów w oryginalnym rozmiarze</item>
     </plurals>
     <string name="delete_event_dialog_title">Potwierdź Usunięcie</string>
-    <string name="delete_event_dialog_content">Jesteś pewny(-na), że chcesz usunąć to wydarzenie\? Jeżeli usuniesz nazwę pokoju lub zmienisz temat, wciąż będzie możliwe cofnięcie zmiany.</string>
+    <string name="delete_event_dialog_content">Czy na pewno chcesz usunąć to wydarzenie\? Pamiętaj, że skasowanie nazwy pokoju lub zmiana jego tematu może czasem je przywrócić.</string>
     <string name="delete_event_dialog_reason_checkbox">Podaj przyczynę</string>
-    <string name="delete_event_dialog_reason_hint">Przyczyna reakcji</string>
+    <string name="delete_event_dialog_reason_hint">Powód usunięcia</string>
     <string name="event_redacted_by_user_reason_with_reason">Wydarzenie usunięte przez użytkownika, przyczyna: %1$s</string>
     <string name="event_redacted_by_admin_reason_with_reason">Wydarzenie moderowane przez administratora pokoju, przyczyna: %1$s</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">Klucze są już aktualne!</string>
@@ -1178,7 +1177,7 @@
     <string name="room_list_catchup_empty_body">Nie masz więcej nieprzeczytanych wiadomości</string>
     <string name="title_activity_emoji_reaction_picker">Reakcje</string>
     <string name="action_agree">Zgoda</string>
-    <string name="message_view_reaction">Zobacz Reakcje</string>
+    <string name="message_view_reaction">Zobacz reakcje</string>
     <string name="event_redacted_by_user_reason">Zdarzenie usunięte przez użytkownika</string>
     <string name="event_redacted_by_admin_reason">Zdarzenie moderowane przez administratora pokoju</string>
     <string name="settings_general_title">Ogólne</string>
@@ -1737,7 +1736,7 @@
     <string name="room_settings_space_access_title">Dostęp do Przestrzeni</string>
     <string name="room_settings_access_rules_pref_dialog_title">Kto powinien mieć dostęp \?</string>
     <string name="room_settings_room_notifications_account_settings">Ustawienia konta</string>
-    <string name="room_settings_room_notifications_manage_notifications">Możesz zarządzać notyfikacjami w %1$s.</string>
+    <string name="room_settings_room_notifications_manage_notifications">Możesz zarządzać powiadomieniami w %1$s.</string>
     <string name="room_settings_room_notifications_encryption_notice">Proszę zwrócić uwagę, że powiadomienia o wzmiankach i słowach kluczowych nie są dostępne w zaszyfrowanych pokojach na urządzeniach mobilnych.</string>
     <string name="room_settings_room_notifications_notify_me">Powiadamiaj mnie o</string>
     <string name="settings_secure_backup_reset">Zresetuj bezpieczną kopię zapasową</string>
@@ -1929,7 +1928,7 @@
     <string name="settings_notification_other">Inne</string>
     <string name="settings_notification_mentions_and_keywords">Wzmianki i słowa kluczowe</string>
     <string name="settings_notification_default">Domyślne powiadomienia</string>
-    <string name="settings_notification_emails_no_emails">Aby otrzymywać emaile z notyfikacjami, proszę przypisać email do swojego konta Matrix</string>
+    <string name="settings_notification_emails_no_emails">Aby otrzymywać e-maile z powiadomieniami, proszę przypisać adres e-mail do swojego konta Matrix</string>
     <string name="voice_message_reply_content">Wiadomość głosowa (%1$s)</string>
     <string name="error_voice_message_cannot_reply_or_edit">Nie można odpowiadać lub edytować kiedy wiadomość głosowa jest aktywna</string>
     <string name="error_voice_message_unable_to_record">Nie udało się nagrać wiadomości głosowej</string>
@@ -2501,15 +2500,9 @@
     <string name="location_share_live_stop">Zatrzymaj</string>
     <string name="location_share_live_enabled">Włączona lokalizacja na żywo</string>
     <string name="location_timeline_failed_to_load_map">Nie udało się wczytać mapy</string>
-    <string name="labs_render_locations_in_timeline">Renderuj lokalizacje użytkowników na osi czasu</string>
-    <string name="settings_enable_location_sharing_summary">Po włączeniu będziesz mógł wysłać swoją lokalizację do dowolnego pokoju</string>
-    <string name="settings_enable_location_sharing">Włącz udostępnianie lokalizacji</string>
     <string name="location_share_external">Otwórz za pomocą</string>
     <string name="location_not_available_dialog_content">${app_name} nie może uzyskać dostępu do Twojej lokalizacji. Spróbuj ponownie później.</string>
     <string name="location_not_available_dialog_title">${app_name} nie może uzyskać dostępu do Twojej lokalizacji</string>
-    <string name="location_in_background_missing_permission_dialog_content">Jeśli chcesz udostępniać swoją lokalizację na żywo, ${app_name} potrzebuje dostępu do lokalizacji przez cały czas, gdy aplikacja działa w tle.
-\n Będziemy mieć dostęp do Twojej lokalizacji tylko przez wybrany przez Ciebie okres.</string>
-    <string name="location_in_background_missing_permission_dialog_title">Zgoda na dostęp</string>
     <string name="a11y_location_share_option_pinned_icon">Udostępnij tę lokalizację</string>
     <string name="location_share_option_pinned">Udostępnij tę lokalizację</string>
     <string name="a11y_location_share_option_user_live_icon">Udostępnij lokalizację na żywo</string>
@@ -2599,4 +2592,84 @@
     <string name="time_unit_hour_short">godz</string>
     <string name="time_unit_minute_short">min</string>
     <string name="space_leave_radio_buttons_title">Pokoje w przestrzeni</string>
+    <string name="action_next">Dalej</string>
+    <string name="settings_troubleshoot_test_current_distributor_title">Dostawca</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="one">Znaleziono %d dostawcę.</item>
+        <item quantity="few">Znaleziono %d dostawców.</item>
+        <item quantity="many">Znaleziono %d dostawdów.</item>
+        <item quantity="other">Znaleziono %d dostawdów.</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_distributors_fdroid">Nie znaleziono innej metody poza ciągłą synchronizacją w tle.</string>
+    <string name="settings_troubleshoot_test_distributors_gplay">Nie znaleziono innych dostawców poza usługami Google Play.</string>
+    <string name="settings_troubleshoot_test_distributors_title">Dostępni dostawcy</string>
+    <string name="settings_notification_method">Dostawca powiadomień</string>
+    <string name="unifiedpush_getdistributors_dialog_title">Wybierz, którego dostawcy powiadomień push chcesz używać</string>
+    <plurals name="room_removed_messages">
+        <item quantity="one">%d wiadomość usunięta</item>
+        <item quantity="few">%d wiadomości usunięte</item>
+        <item quantity="many">%d wiadomości usuniętych</item>
+        <item quantity="other">%d wiadomości usuniętych</item>
+    </plurals>
+    <string name="live_location_labs_promotion_switch_title">Włącz udostępnianie lokalizacji</string>
+    <string name="ftue_auth_choose_server_ems_cta">Skontaktuj się z nami</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">Zresetuj metodę powiadomień</string>
+    <string name="push_gateway_item_profile_tag">Tag profilu:</string>
+    <string name="create_room_action_go">Kontynuuj</string>
+    <string name="live_location_labs_promotion_title">Udostępnianie lokalizacji na żywo</string>
+    <string name="settings_troubleshoot_test_current_distributor">Obecnie używane: %s.</string>
+    <string name="unifiedpush_distributor_background_sync">Synchronizacja w tle</string>
+    <string name="unifiedpush_distributor_fcm_fallback">Usługi Google</string>
+    <string name="live_location_share_location_item_share">Udostępnij lokalizację</string>
+    <string name="live_location_not_enough_permission_dialog_description">Musisz mieć poprawne uprawnienia, aby udostępniać lokalizację na żywo w tym pokoju.</string>
+    <string name="live_location_not_enough_permission_dialog_title">Nie masz uprawnień by udostępniać lokalizację na żywo</string>
+    <string name="poll_undisclosed_not_ended">Wyniki będą widoczne po zakończeniu ankiety</string>
+    <string name="settings_security_pin_code_use_biometrics_error">Nie udało się włączyć uwierzytelniania biometrycznego.</string>
+    <string name="auth_biometric_key_invalidated_message">Uwierzytelnianie biometryczne zostało wyłączone, gdyż niedawno została dodana nowa metoda uwierzytelniania biometrycznego. Możesz włączyć je ponownie w ustawieniach.</string>
+    <string name="send_your_first_msg_to_invite">Wyślij pierwszą wiadomość aby zaprosić %s do czatu</string>
+    <string name="direct_room_encryption_enabled_tile_description_future">Wiadomości w tym czacie będą szyfrowane end-to-end.</string>
+    <string name="permalink_unsupported_groups">Otworzenie tego linku nie jest możliwe: społeczności zostały zastąpione przestrzeniami</string>
+    <string name="ftue_auth_login_username_entry">Nazwa użytkownika / Email / Telefon</string>
+    <string name="ftue_auth_captcha_title">Czy jesteś człowiekiem\?</string>
+    <string name="ftue_auth_password_reset_email_confirmation_subtitle">Podążaj za instrukcjami wysłanymi na %s</string>
+    <string name="ftue_auth_password_reset_confirmation">Reset hasła</string>
+    <string name="ftue_auth_forgot_password">Zapomniane hasło</string>
+    <string name="ftue_auth_email_resend_email">Wyślij wiadomość ponownie</string>
+    <string name="ftue_auth_email_verification_footer">Email nie dotarł\?</string>
+    <string name="ftue_auth_email_verification_subtitle">Aby potwierdzić swój email, dotknij przycisk we wiadomości wysłanej na %s</string>
+    <string name="ftue_auth_email_verification_title">Sprawdź swoją skrzynkę email aby dokończyć weryfikację.</string>
+    <string name="ftue_auth_phone_confirmation_resend_code">Wyślij kod ponownie</string>
+    <string name="ftue_auth_phone_confirmation_subtitle">Kod został wysłany do %s</string>
+    <string name="ftue_auth_phone_confirmation_title">Potwierdź swój numer telefonu</string>
+    <string name="ftue_auth_sign_out_all_devices">Wyloguj wszystkie urządzenia</string>
+    <string name="ftue_auth_reset_password">Zresetuj hasło</string>
+    <string name="ftue_auth_new_password_subtitle">Upewnij się, że ma 8 lub więcej znaków.</string>
+    <string name="ftue_auth_new_password_title">Wybierz nowe hasło</string>
+    <string name="ftue_auth_new_password_entry_title">Nowe hasło</string>
+    <string name="ftue_auth_reset_password_breaker_title">Sprawdź swoją skrzynkę email.</string>
+    <string name="ftue_auth_reset_password_email_subtitle">%s wyśle ci link weryfikujący</string>
+    <string name="ftue_auth_phone_confirmation_entry_title">Kod potwierdzenia</string>
+    <string name="ftue_auth_phone_entry_title">Numer telefonu</string>
+    <string name="ftue_auth_phone_subtitle">%s potrzebuje zweryfikować twoje konto</string>
+    <string name="ftue_auth_phone_title">Podaj swój numer telefonu</string>
+    <string name="ftue_auth_email_entry_title">Email</string>
+    <string name="ftue_auth_email_subtitle">%s potrzebuje zweryfikować twoje konto</string>
+    <string name="ftue_auth_email_title">Podaj swój email</string>
+    <string name="ftue_auth_terms_title">Reguły serwera</string>
+    <string name="ftue_auth_choose_server_ems_subtitle">Element Matrix Services (EMS) to solidny i niezawodny hosting zapewniający szybką, bezpieczną i natychmiastową komunikację. Dowiedz się więcej na &lt;a href=\"${ftue_ems_url}\"&gt;element.io/ems&lt;/a&gt;</string>
+    <string name="ftue_auth_choose_server_ems_title">Chcesz hostować swój własny serwer\?</string>
+    <string name="ftue_auth_choose_server_entry_hint">URL serwera</string>
+    <string name="ftue_auth_choose_server_subtitle">Jaki jest adres twojego serwera\? To miejsce, gdzie przechowywane będą twoje dane</string>
+    <string name="ftue_auth_choose_server_title">Wybierz swój serwer</string>
+    <string name="ftue_auth_welcome_back_title">Witamy ponownie!</string>
+    <string name="ftue_auth_create_account_edit_server_selection">Edytuj</string>
+    <string name="ftue_auth_create_account_sso_section_header">Albo</string>
+    <string name="ftue_auth_create_account_choose_server_header">Miejsce, w którym przechowywane będą twoje rozmowy</string>
+    <string name="ftue_auth_create_account_password_entry_footer">Musi mieć przynajmniej 8 znaków</string>
+    <string name="ftue_auth_create_account_username_entry_footer">Inni będą mogli znaleźć twoje konto jako %s</string>
+    <string name="ftue_auth_create_account_title">Utwórz konto</string>
+    <string name="font_size_use_system">Używaj domyślnego z systemu</string>
+    <string name="font_size_section_manually">Ustaw ręcznie</string>
+    <string name="font_size_section_auto">Ustaw automatycznie</string>
+    <string name="font_size_title">Wybierz rozmiar czcionki</string>
 </resources>

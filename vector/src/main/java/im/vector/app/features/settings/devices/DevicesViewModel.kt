@@ -239,6 +239,7 @@ class DevicesViewModel @AssistedInject constructor(
                 uiaContinuation = null
                 pendingAuth = null
             }
+            DevicesAction.ResetSecurity -> _viewEvents.post(DevicesViewEvents.PromptResetSecrets)
         }
     }
 

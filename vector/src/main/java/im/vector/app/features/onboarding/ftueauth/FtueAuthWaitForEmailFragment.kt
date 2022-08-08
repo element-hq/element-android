@@ -21,7 +21,7 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
+import androidx.core.view.isInvisible
 import com.airbnb.mvrx.args
 import im.vector.app.R
 import im.vector.app.core.utils.colorTerminatingFullStop
@@ -35,7 +35,8 @@ import javax.inject.Inject
 
 @Parcelize
 data class FtueAuthWaitForEmailFragmentArgument(
-        val email: String
+        val email: String,
+        val isRestoredSession: Boolean,
 ) : Parcelable
 
 /**
@@ -48,6 +49,8 @@ class FtueAuthWaitForEmailFragment @Inject constructor(
     private val params: FtueAuthWaitForEmailFragmentArgument by args()
     private var inferHasLeftAndReturnedToScreen = false
 
+    override fun backIsHardExit() = params.isRestoredSession
+
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueWaitForEmailVerificationBinding {
         return FragmentFtueWaitForEmailVerificationBinding.inflate(inflater, container, false)
     }
@@ -58,16 +61,12 @@ class FtueAuthWaitForEmailFragment @Inject constructor(
     }
 
     private fun setupUi() {
-        views.emailVerificationGradientContainer.setBackgroundResource(
-                when (themeProvider.isLightTheme()) {
-                    true -> R.drawable.bg_waiting_for_email_verification
-                    false -> R.drawable.bg_color_background
-                }
-        )
+        views.emailVerificationGradientContainer.setBackgroundResource(themeProvider.ftueBreakerBackground())
         views.emailVerificationTitle.text = getString(R.string.ftue_auth_email_verification_title)
                 .colorTerminatingFullStop(ThemeUtils.getColor(requireContext(), R.attr.colorSecondary))
         views.emailVerificationSubtitle.text = getString(R.string.ftue_auth_email_verification_subtitle, params.email)
         views.emailVerificationResendEmail.debouncedClicks {
+            hideWaitingForVerificationLoading()
             viewModel.handle(OnboardingAction.PostRegisterAction(RegisterAction.SendAgainThreePid))
         }
     }
@@ -80,11 +79,19 @@ class FtueAuthWaitForEmailFragment @Inject constructor(
 
     private fun showLoadingIfReturningToScreen() {
         when (inferHasLeftAndReturnedToScreen) {
-            true -> views.emailVerificationWaiting.isVisible = true
+            true -> showWaitingForVerificationLoading()
             false -> {
                 inferHasLeftAndReturnedToScreen = true
             }
         }
+    }
+
+    private fun hideWaitingForVerificationLoading() {
+        views.emailVerificationWaiting.isInvisible = true
+    }
+
+    private fun showWaitingForVerificationLoading() {
+        views.emailVerificationWaiting.isInvisible = false
     }
 
     override fun onPause() {
@@ -93,6 +100,11 @@ class FtueAuthWaitForEmailFragment @Inject constructor(
     }
 
     override fun resetViewModel() {
-        viewModel.handle(OnboardingAction.ResetAuthenticationAttempt)
+        when {
+            backIsHardExit() -> viewModel.handle(OnboardingAction.ResetAuthenticationAttempt)
+            else -> {
+                // delegate to the previous step
+            }
+        }
     }
 }

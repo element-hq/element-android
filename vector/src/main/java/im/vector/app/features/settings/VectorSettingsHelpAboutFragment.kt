@@ -18,10 +18,10 @@ package im.vector.app.features.settings
 
 import android.os.Bundle
 import androidx.preference.Preference
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.extensions.orEmpty
 import im.vector.app.core.preference.VectorPreference
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.utils.FirstThrottler
 import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.openAppSettingsPage
@@ -32,7 +32,8 @@ import org.matrix.android.sdk.api.Matrix
 import javax.inject.Inject
 
 class VectorSettingsHelpAboutFragment @Inject constructor(
-        private val versionProvider: VersionProvider
+        private val versionProvider: VersionProvider,
+        private val buildMeta: BuildMeta,
 ) : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.preference_root_help_about
@@ -66,9 +67,9 @@ class VectorSettingsHelpAboutFragment @Inject constructor(
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_VERSION_PREFERENCE_KEY)!!.let {
             it.summary = buildString {
                 append(versionProvider.getVersion(longFormat = false, useBuildNumber = true))
-                if (BuildConfig.DEBUG) {
+                if (buildMeta.isDebug) {
                     append(" ")
-                    append(BuildConfig.GIT_BRANCH_NAME)
+                    append(buildMeta.gitBranchName)
                 }
             }
 

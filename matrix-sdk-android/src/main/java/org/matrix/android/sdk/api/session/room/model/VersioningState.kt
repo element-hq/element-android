@@ -33,5 +33,7 @@ enum class VersioningState {
     /**
      * The room has been upgraded, and the new room has been joined.
      */
-    UPGRADED_ROOM_JOINED,
+    UPGRADED_ROOM_JOINED;
+
+    fun isUpgraded() = this != NONE
 }

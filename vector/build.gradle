@@ -1,6 +1,7 @@
 import com.android.build.OutputFile
 
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.firebase.appdistribution'
 apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
@@ -26,6 +27,7 @@ knit {
         exclude '**/.gradle/**'
         exclude '**/towncrier/template.md'
         exclude '**/CHANGES.md'
+        exclude '/node_modules'
     }
 }
 
@@ -35,7 +37,7 @@ ext.versionMinor = 4
 // Note: even values are reserved for regular release, odd values for hotfix release.
 // When creating a hotfix, you should decrease the value, since the current value
 // is the value for the next regular release.
-ext.versionPatch = 26
+ext.versionPatch = 32
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -154,19 +156,6 @@ android {
         buildConfigField "String", "GIT_BRANCH_NAME", "\"${gitBranchName()}\""
         buildConfigField "String", "BUILD_NUMBER", "\"${buildNumber}\""
 
-        buildConfigField "im.vector.app.features.VectorFeatures.OnboardingVariant", "ONBOARDING_VARIANT", "im.vector.app.features.VectorFeatures.OnboardingVariant.FTUE_AUTH"
-
-        buildConfigField "im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy", "outboundSessionKeySharingStrategy", "im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy.WhenTyping"
-
-        buildConfigField "Long", "VOICE_MESSAGE_DURATION_LIMIT_MS", "120_000L"
-
-        //  If set, MSC3086 asserted identity messages sent on VoIP calls will cause the call to appear in the room corresponding to the asserted identity.
-        //  This *must* only be set in trusted environments.
-        buildConfigField "Boolean", "handleCallAssertedIdentityEvents", "false"
-
-        buildConfigField "Boolean", "enableLocationSharing", "true"
-        buildConfigField "String", "mapTilerKey", "\"fU3vlMsMn4Jb6dnEIFsx\""
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         // Keep abiFilter for the universalApk
@@ -228,6 +217,12 @@ android {
             storeFile file('./signature/debug.keystore')
             storePassword 'android'
         }
+        nightly {
+            keyAlias System.env.ELEMENT_ANDROID_NIGHTLY_KEYID ?: project.property("signing.element.nightly.keyId")
+            keyPassword System.env.ELEMENT_ANDROID_NIGHTLY_KEYPASSWORD ?: project.property("signing.element.nightly.keyPassword")
+            storeFile file('./signature/nightly.keystore')
+            storePassword System.env.ELEMENT_ANDROID_NIGHTLY_STOREPASSWORD ?: project.property("signing.element.nightly.storePassword")
+        }
         release {
             keyAlias project.property("signing.element.keyId")
             keyPassword project.property("signing.element.keyPassword")
@@ -240,10 +235,7 @@ android {
         debug {
             applicationIdSuffix ".debug"
             resValue "string", "app_name", "Element dbg"
-
-            buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
-            // Set to true if you want to enable strict mode in debug
-            buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
+            resValue "color", "launcher_background", "#0DBD8B"
 
             signingConfig signingConfigs.debug
 
@@ -254,9 +246,7 @@ android {
 
         release {
             resValue "string", "app_name", "Element"
-
-            buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
-            buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
+            resValue "color", "launcher_background", "#0DBD8B"
 
             postprocessing {
                 removeUnusedCode true
@@ -267,6 +257,40 @@ android {
                 proguardFiles 'proguard-rules.pro'
             }
             // signingConfig signingConfigs.release
+        }
+
+        nightly {
+            initWith release
+            applicationIdSuffix ".nightly"
+            versionNameSuffix "-nightly"
+
+            // Just override the background color of the launcher icon for the nightly build.
+            resValue "color", "launcher_background", "#07007E"
+
+            // We need to copy paste this block, this is not done automatically by `initWith release`
+            postprocessing {
+                removeUnusedCode true
+                removeUnusedResources true
+                // We do not activate obfuscation as it makes it hard then to read crash reports, and it's a bit useless on an open source project :)
+                obfuscate false
+                optimizeCode true
+                proguardFiles 'proguard-rules.pro'
+            }
+            matchingFallbacks = ['release']
+            signingConfig signingConfigs.nightly
+            firebaseAppDistribution {
+                artifactType = "APK"
+                // We upload the universal APK to fix this error:
+                // "App Distribution found more than 1 output file for this variant.
+                // Please contact firebase-support@google.com for help using APK splits with App Distribution."
+                artifactPath = "$rootDir/vector/build/outputs/apk/gplay/nightly/vector-gplay-universal-nightly.apk"
+                // This file will be generated by the GitHub action
+                releaseNotesFile = "CHANGES_NIGHTLY.md"
+                groups = "external-testers"
+                // This should not be required, but if I do not add the appId, I get this error:
+                // "App Distribution halted because it had a problem uploading the APK: [404] Requested entity was not found."
+                appId = "1:912726360885:android:efd8545af52a9f9300427c"
+            }
         }
     }
 
@@ -284,7 +308,6 @@ android {
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getGplayVersionSuffix()}"
 
             resValue "bool", "isGplay", "true"
-            buildConfigField "boolean", "ALLOW_FCM_USE", "true"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"G\""
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"GooglePlay\""
         }
@@ -295,7 +318,6 @@ android {
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getFdroidVersionSuffix()}"
 
             resValue "bool", "isGplay", "false"
-            buildConfigField "boolean", "ALLOW_FCM_USE", "false"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"F\""
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"FDroid\""
         }
@@ -334,6 +356,10 @@ android {
         test {
             java.srcDirs += "src/sharedTest/java"
         }
+        // Add sourceSets for `release` version when building `nightly`
+        nightly {
+            java.srcDirs += "src/release/java"
+        }
     }
 
     buildFeatures {
@@ -342,8 +368,6 @@ android {
 }
 
 dependencies {
-    implementation project(':library:opusencoder')
-
     implementation project(":vector-config")
     implementation project(":matrix-sdk-android")
     implementation project(":matrix-sdk-android-flow")
@@ -372,7 +396,6 @@ dependencies {
     implementation "com.gabrielittner.threetenbp:lazythreetenbp:0.10.0"
 
     implementation libs.squareup.moshi
-    implementation libs.squareup.moshiKt
     kapt libs.squareup.moshiKotlin
 
     // Lifecycle
@@ -382,6 +405,8 @@ dependencies {
 
     implementation libs.androidx.datastorepreferences
 
+    // Opus Encoder
+    implementation libs.element.opusencoder
 
     // Log
     implementation libs.jakewharton.timber
@@ -390,7 +415,7 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.6.0'
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.50'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.53'
 
     // FlowBinding
     implementation libs.github.flowBinding
@@ -401,6 +426,12 @@ dependencies {
     kapt libs.airbnb.epoxyProcessor
     implementation libs.airbnb.epoxyPaging
     implementation libs.airbnb.mavericks
+
+    // Nightly
+    // API-only library
+    gplayImplementation libs.google.appdistributionApi
+    // Full SDK implementation
+    gplayImplementation libs.google.appdistribution
 
     // Work
     implementation libs.androidx.work
@@ -470,7 +501,7 @@ dependencies {
     // UnifiedPush
     implementation 'com.github.UnifiedPush:android-connector:2.0.0'
     // UnifiedPush gplay flavor only
-    gplayImplementation('com.github.UnifiedPush:android-embedded_fcm_distributor:2.0.0') {
+    gplayImplementation('com.github.UnifiedPush:android-embedded_fcm_distributor:2.1.1') {
         exclude group: 'com.google.firebase', module: 'firebase-core'
         exclude group: 'com.google.firebase', module: 'firebase-analytics'
         exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'
@@ -534,13 +565,13 @@ dependencies {
     }
 
     // Flipper, debug builds only
-    debugImplementation('com.facebook.flipper:flipper:0.150.0') {
+    debugImplementation(libs.flipper.flipper) {
         exclude group: 'com.facebook.fbjni', module: 'fbjni'
     }
-    debugImplementation('com.facebook.flipper:flipper-network-plugin:0.150.0') {
+    debugImplementation(libs.flipper.flipperNetworkPlugin) {
         exclude group: 'com.facebook.fbjni', module: 'fbjni'
     }
-    debugImplementation 'com.facebook.soloader:soloader:0.10.3'
+    debugImplementation 'com.facebook.soloader:soloader:0.10.4'
     debugImplementation "com.kgurgul.flipper:flipper-realm-android:2.2.0"
 
     // Activate when you want to check for leaks, from time to time.
@@ -567,4 +598,5 @@ dependencies {
     androidTestImplementation libs.mockk.mockkAndroid
     androidTestUtil libs.androidx.orchestrator
     debugImplementation libs.androidx.fragmentTesting
+    androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:1.7.10"
 }

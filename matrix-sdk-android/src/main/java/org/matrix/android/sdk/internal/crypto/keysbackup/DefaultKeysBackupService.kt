@@ -24,8 +24,10 @@ import androidx.annotation.WorkerThread
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
@@ -50,6 +52,7 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.toKeysVersionResult
 import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.api.util.awaitCallback
 import org.matrix.android.sdk.api.util.fromBase64
+import org.matrix.android.sdk.internal.crypto.InboundGroupSessionStore
 import org.matrix.android.sdk.internal.crypto.MXOlmDevice
 import org.matrix.android.sdk.internal.crypto.MegolmSessionData
 import org.matrix.android.sdk.internal.crypto.ObjectSigner
@@ -71,7 +74,7 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.GetRoomSessionsDa
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.GetSessionsDataTask
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.StoreSessionsDataTask
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.UpdateKeysBackupVersionTask
-import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper2
+import org.matrix.android.sdk.internal.crypto.model.MXInboundMegolmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.store.db.model.KeysBackupDataEntity
 import org.matrix.android.sdk.internal.di.MoshiProvider
@@ -118,6 +121,8 @@ internal class DefaultKeysBackupService @Inject constructor(
         private val updateKeysBackupVersionTask: UpdateKeysBackupVersionTask,
         // Task executor
         private val taskExecutor: TaskExecutor,
+        private val matrixConfiguration: MatrixConfiguration,
+        private val inboundGroupSessionStore: InboundGroupSessionStore,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val cryptoCoroutineScope: CoroutineScope
 ) : KeysBackupService {
@@ -1316,7 +1321,7 @@ internal class DefaultKeysBackupService @Inject constructor(
 
                 olmInboundGroupSessionWrappers.forEach { olmInboundGroupSessionWrapper ->
                     val roomId = olmInboundGroupSessionWrapper.roomId ?: return@forEach
-                    val olmInboundGroupSession = olmInboundGroupSessionWrapper.olmInboundGroupSession ?: return@forEach
+                    val olmInboundGroupSession = olmInboundGroupSessionWrapper.session
 
                     try {
                         encryptGroupSession(olmInboundGroupSessionWrapper)
@@ -1344,6 +1349,8 @@ internal class DefaultKeysBackupService @Inject constructor(
 
                                         // Mark keys as backed up
                                         cryptoStore.markBackupDoneForInboundGroupSessions(olmInboundGroupSessionWrappers)
+                                        // we can release the sessions now
+                                        olmInboundGroupSessionWrappers.onEach { it.session.releaseSession() }
 
                                         if (olmInboundGroupSessionWrappers.size < KEY_BACKUP_SEND_KEYS_MAX_COUNT) {
                                             Timber.v("backupKeys: All keys have been backed up")
@@ -1405,19 +1412,29 @@ internal class DefaultKeysBackupService @Inject constructor(
 
     @VisibleForTesting
     @WorkerThread
-    fun encryptGroupSession(olmInboundGroupSessionWrapper: OlmInboundGroupSessionWrapper2): KeyBackupData? {
+    suspend fun encryptGroupSession(olmInboundGroupSessionWrapper: MXInboundMegolmSessionWrapper): KeyBackupData? {
+        olmInboundGroupSessionWrapper.safeSessionId ?: return null
+        olmInboundGroupSessionWrapper.senderKey ?: return null
         // Gather information for each key
-        val device = olmInboundGroupSessionWrapper.senderKey?.let { cryptoStore.deviceWithIdentityKey(it) }
+        val device = cryptoStore.deviceWithIdentityKey(olmInboundGroupSessionWrapper.senderKey)
 
         // Build the m.megolm_backup.v1.curve25519-aes-sha2 data as defined at
         // https://github.com/uhoreg/matrix-doc/blob/e2e_backup/proposals/1219-storing-megolm-keys-serverside.md#mmegolm_backupv1curve25519-aes-sha2-key-format
-        val sessionData = olmInboundGroupSessionWrapper.exportKeys() ?: return null
+        val sessionData = inboundGroupSessionStore
+                .getInboundGroupSession(olmInboundGroupSessionWrapper.safeSessionId, olmInboundGroupSessionWrapper.senderKey)
+                ?.let {
+                    withContext(coroutineDispatchers.computation) {
+                        it.mutex.withLock { it.wrapper.exportKeys() }
+                    }
+                }
+                ?: return null
         val sessionBackupData = mapOf(
                 "algorithm" to sessionData.algorithm,
                 "sender_key" to sessionData.senderKey,
                 "sender_claimed_keys" to sessionData.senderClaimedKeys,
                 "forwarding_curve25519_key_chain" to (sessionData.forwardingCurve25519KeyChain.orEmpty()),
-                "session_key" to sessionData.sessionKey
+                "session_key" to sessionData.sessionKey,
+                "org.matrix.msc3061.shared_history" to sessionData.sharedHistory
         )
 
         val json = MoshiProvider.providesMoshi()
@@ -1425,7 +1442,9 @@ internal class DefaultKeysBackupService @Inject constructor(
                 .toJson(sessionBackupData)
 
         val encryptedSessionBackupData = try {
-            backupOlmPkEncryption?.encrypt(json)
+            withContext(coroutineDispatchers.computation) {
+                backupOlmPkEncryption?.encrypt(json)
+            }
         } catch (e: OlmException) {
             Timber.e(e, "OlmException")
             null
@@ -1435,20 +1454,28 @@ internal class DefaultKeysBackupService @Inject constructor(
         // Build backup data for that key
         return KeyBackupData(
                 firstMessageIndex = try {
-                    olmInboundGroupSessionWrapper.olmInboundGroupSession?.firstKnownIndex ?: 0
+                    olmInboundGroupSessionWrapper.session.firstKnownIndex
                 } catch (e: OlmException) {
                     Timber.e(e, "OlmException")
                     0L
                 },
-                forwardedCount = olmInboundGroupSessionWrapper.forwardingCurve25519KeyChain.orEmpty().size,
+                forwardedCount = olmInboundGroupSessionWrapper.sessionData.forwardingCurve25519KeyChain.orEmpty().size,
                 isVerified = device?.isVerified == true,
-
+                sharedHistory = olmInboundGroupSessionWrapper.getSharedKey(),
                 sessionData = mapOf(
                         "ciphertext" to encryptedSessionBackupData.mCipherText,
                         "mac" to encryptedSessionBackupData.mMac,
                         "ephemeral" to encryptedSessionBackupData.mEphemeralKey
                 )
         )
+    }
+
+    /**
+     * Returns boolean shared key flag, if enabled with respect to matrix configuration.
+     */
+    private fun MXInboundMegolmSessionWrapper.getSharedKey(): Boolean {
+        if (!cryptoStore.isShareKeysOnInviteEnabled()) return false
+        return sessionData.sharedHistory
     }
 
     @VisibleForTesting

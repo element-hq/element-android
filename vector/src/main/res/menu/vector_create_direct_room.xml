@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/action_create_direct_room"
-        android:title="@string/create_room_action_create"
+        android:title="@string/create_room_action_go"
         app:showAsAction="always" />
 
 </menu>

@@ -10,38 +10,5 @@
     <string name="cut_the_slack_from_teams" translatable="false">Cut the slack from teams.</string>
 
     <!--  WIP -->
-    <string name="ftue_auth_create_account_title">Create your account</string>
-    <string name="ftue_auth_create_account_subtitle">We\'ll need some info to get you set up.</string>
-    <string name="ftue_auth_create_account_username_entry_footer">You can\'t change this later</string>
-    <string name="ftue_auth_create_account_password_entry_footer">Must be 8 characters or more</string>
-    <string name="ftue_auth_create_account_choose_server_header">Choose your server to store your data</string>
-    <string name="ftue_auth_create_account_sso_section_header">Or</string>
-    <string name="ftue_auth_create_account_matrix_dot_org_server_description">Join millions for free on the largest public server</string>
-    <string name="ftue_auth_create_account_edit_server_selection">Edit</string>
-
-    <string name="ftue_auth_welcome_back_title">Welcome back!</string>
-
-    <string name="ftue_auth_choose_server_title">Choose your server</string>
-    <string name="ftue_auth_choose_server_subtitle">What is the address of your server? Server is like a home for all your data.</string>
-    <string name="ftue_auth_choose_server_entry_hint">Server URL</string>
-    <string name="ftue_auth_choose_server_entry_footer">You can only connect to a server that has already been set up</string>
-    <string name="ftue_auth_choose_server_ems_title">Want to host your own server?</string>
-
-    <string name="ftue_auth_choose_server_ems_subtitle">Element Matrix Services (EMS) is a robust and reliable hosting service for fast, secure and real time communication. Find out how on <a href="${ftue_ems_url}">element.io/ems</a></string>
-    <string name="ftue_auth_choose_server_ems_cta">Get in touch</string>
-
-    <string name="ftue_auth_terms_title">Privacy policy</string>
-    <string name="ftue_auth_terms_subtitle">Please read through T&amp;C. You must accept in order to continue.</string>
-
-    <string name="ftue_auth_email_title">Enter your email address</string>
-    <string name="ftue_auth_email_subtitle">This will help verify your account and enables password recovery.</string>
-    <string name="ftue_auth_email_entry_title">Email Address</string>
-
-    <string name="ftue_auth_email_verification_title">Check your email to verify.</string>
-    <!-- Note for translators, %s is the users email address -->
-    <string name="ftue_auth_email_verification_subtitle">To confirm your email address, tap the button in the email we just sent to %s</string>
-    <string name="ftue_auth_email_verification_footer">Did not receive an email?</string>
-    <string name="ftue_auth_email_resend_email">Resend email</string>
-
     <string name="location_map_view_copyright" translatable="false">© MapTiler © OpenStreetMap contributors</string>
 </resources>

@@ -16,47 +16,36 @@
 
 package org.matrix.android.sdk.internal.session.sync
 
-import androidx.work.ExistingPeriodicWorkPolicy
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.session.pushrules.PushRuleService
 import org.matrix.android.sdk.api.session.pushrules.RuleScope
 import org.matrix.android.sdk.api.session.sync.InitialSyncStep
-import org.matrix.android.sdk.api.session.sync.model.GroupsSyncResponse
 import org.matrix.android.sdk.api.session.sync.model.RoomsSyncResponse
 import org.matrix.android.sdk.api.session.sync.model.SyncResponse
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.SessionId
-import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.session.SessionListeners
 import org.matrix.android.sdk.internal.session.dispatchTo
-import org.matrix.android.sdk.internal.session.group.GetGroupDataWorker
 import org.matrix.android.sdk.internal.session.pushrules.ProcessEventForPushTask
 import org.matrix.android.sdk.internal.session.sync.handler.CryptoSyncHandler
-import org.matrix.android.sdk.internal.session.sync.handler.GroupSyncHandler
 import org.matrix.android.sdk.internal.session.sync.handler.PresenceSyncHandler
 import org.matrix.android.sdk.internal.session.sync.handler.SyncResponsePostTreatmentAggregatorHandler
 import org.matrix.android.sdk.internal.session.sync.handler.UserAccountDataSyncHandler
 import org.matrix.android.sdk.internal.session.sync.handler.room.RoomSyncHandler
 import org.matrix.android.sdk.internal.util.awaitTransaction
-import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlin.system.measureTimeMillis
-
-private const val GET_GROUP_DATA_WORKER = "GET_GROUP_DATA_WORKER"
 
 internal class SyncResponseHandler @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
         @SessionId private val sessionId: String,
         private val sessionManager: SessionManager,
         private val sessionListeners: SessionListeners,
-        private val workManagerProvider: WorkManagerProvider,
         private val roomSyncHandler: RoomSyncHandler,
         private val userAccountDataSyncHandler: UserAccountDataSyncHandler,
-        private val groupSyncHandler: GroupSyncHandler,
         private val cryptoSyncHandler: CryptoSyncHandler,
         private val aggregatorHandler: SyncResponsePostTreatmentAggregatorHandler,
         private val cryptoService: DefaultCryptoService,
@@ -109,24 +98,13 @@ internal class SyncResponseHandler @Inject constructor(
             // IMPORTANT nothing should be suspend here as we are accessing the realm instance (thread local)
             measureTimeMillis {
                 Timber.v("Handle rooms")
-                reportSubtask(reporter, InitialSyncStep.ImportingAccountRoom, 1, 0.7f) {
+                reportSubtask(reporter, InitialSyncStep.ImportingAccountRoom, 1, 0.8f) {
                     if (syncResponse.rooms != null) {
                         roomSyncHandler.handle(realm, syncResponse.rooms, isInitialSync, aggregator, reporter)
                     }
                 }
             }.also {
                 Timber.v("Finish handling rooms in $it ms")
-            }
-
-            measureTimeMillis {
-                reportSubtask(reporter, InitialSyncStep.ImportingAccountGroups, 1, 0.1f) {
-                    Timber.v("Handle groups")
-                    if (syncResponse.groups != null) {
-                        groupSyncHandler.handle(realm, syncResponse.groups, reporter)
-                    }
-                }
-            }.also {
-                Timber.v("Finish handling groups in $it ms")
             }
 
             measureTimeMillis {
@@ -155,9 +133,6 @@ internal class SyncResponseHandler @Inject constructor(
             userAccountDataSyncHandler.synchronizeWithServerIfNeeded(it.invite)
             dispatchInvitedRoom(it)
         }
-        syncResponse.groups?.let {
-            scheduleGroupDataFetchingIfNeeded(it)
-        }
 
         Timber.v("On sync completed")
         cryptoSyncHandler.onSyncCompleted(syncResponse)
@@ -175,31 +150,6 @@ internal class SyncResponseHandler @Inject constructor(
                 listener.onNewInvitedRoom(session, roomId)
             }
         }
-    }
-
-    /**
-     * At the moment we don't get any group data through the sync, so we poll where every hour.
-     * You can also force to refetch group data using [Group] API.
-     */
-    private fun scheduleGroupDataFetchingIfNeeded(groupsSyncResponse: GroupsSyncResponse) {
-        val groupIds = ArrayList<String>()
-        groupIds.addAll(groupsSyncResponse.join.keys)
-        groupIds.addAll(groupsSyncResponse.invite.keys)
-        if (groupIds.isEmpty()) {
-            Timber.v("No new groups to fetch data for.")
-            return
-        }
-        Timber.v("There are ${groupIds.size} new groups to fetch data for.")
-        val getGroupDataWorkerParams = GetGroupDataWorker.Params(sessionId)
-        val workData = WorkerParamsFactory.toData(getGroupDataWorkerParams)
-
-        val getGroupWork = workManagerProvider.matrixPeriodicWorkRequestBuilder<GetGroupDataWorker>(1, TimeUnit.HOURS)
-                .setInputData(workData)
-                .setConstraints(WorkManagerProvider.workConstraints)
-                .build()
-
-        workManagerProvider.workManager
-                .enqueueUniquePeriodicWork(GET_GROUP_DATA_WORKER, ExistingPeriodicWorkPolicy.REPLACE, getGroupWork)
     }
 
     private suspend fun checkPushRules(roomsSyncResponse: RoomsSyncResponse, isInitialSync: Boolean) {

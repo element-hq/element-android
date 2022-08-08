@@ -97,14 +97,14 @@
     <string name="notice_room_server_acl_updated_was_banned">• الخوادِم المُطابقة لـ %s أُزيلت مِن قائمة الحظر.</string>
     <string name="notice_room_server_acl_updated_banned">• الخوادِم المُطابقة لـ %s محظورة الآن.</string>
     <string name="notice_room_server_acl_updated_ip_literals_allowed">• خوادِم مُطابقة IP الحرفية مسموحة الآن.</string>
-    <string name="notice_room_server_acl_updated_title_by_you">يَّرتَ خادِم الـACLs لهذه الغُرفة.</string>
-    <string name="notice_room_server_acl_updated_title">غيَّرَ %s خادِم الـACLs لهذه الغُرفة.</string>
-    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• الخوادِم المطابقة للقيم الحرفية للـIP محظورة.</string>
-    <string name="notice_room_server_acl_set_allowed">• الخوادِم المُطابقة لـ %s مسموحة.</string>
+    <string name="notice_room_server_acl_updated_title_by_you">لقد قمت بتغيير قائمة الوصول لهذه الغُرفة.</string>
+    <string name="notice_room_server_acl_updated_title">قام %s بتغيير قائمة الوصول (ACL) لهذه الغُرفة.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• الخوادِم المتطابقة من حيث بروتوكول الإنترنت (IP) المستخدم محظورة.</string>
+    <string name="notice_room_server_acl_set_allowed">• الخوادِم المُطابقة لـِ %s مسموحة.</string>
     <string name="notice_room_server_acl_set_banned">• الخوادِم المُطابقة لـ %s محظورة.</string>
-    <string name="notice_room_server_acl_set_ip_literals_allowed">• الخوادِم المطابقة للقيم الحرفية للـIP مسموحة.</string>
-    <string name="notice_room_server_acl_set_title_by_you">عيَّنتَ خادِم الـACLs لهذه الغُرفة.</string>
-    <string name="notice_room_server_acl_set_title">عيَّنَ %s خادِم الـACLs لهذه الغُرفة.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">الخوادِم المتطابقة من حيث بروتوكول الإنترنت (IP) المستخدم مسموحة.</string>
+    <string name="notice_room_server_acl_set_title_by_you">لقد قمت بتعيين قائمة التحكم بالوصول لهذه الغُرفة.</string>
+    <string name="notice_room_server_acl_set_title">%s قام بتعيين قائمة التحكم بالوصول لهذه الغرفة.</string>
     <string name="notice_direct_room_update_by_you">رقيتَ هُنا.</string>
     <string name="notice_direct_room_update">رقّى %s هُنا.</string>
     <string name="notice_made_future_direct_room_visibility_by_you">جعلتَ الرسائل المُستقبلية مرئية لـ %1$s</string>
@@ -245,7 +245,7 @@
     <string name="action_remove">أزِل</string>
     <string name="action_join">انضم</string>
     <string name="action_reject">ارفض</string>
-    <string name="room_jump_to_first_unread">انتقل إلى غير المقروءة.</string>
+    <string name="room_jump_to_first_unread">انتقل إلى الرسائل الغير مقروءة</string>
     <string name="room_participants_leave_prompt_title">ترك الغرفة</string>
     <string name="room_participants_leave_prompt_msg">أمتأكّد من ترك الغرفة؟</string>
     <string name="room_participants_action_ban">امنع</string>
@@ -362,7 +362,7 @@
         <item quantity="one">عضو واحد</item>
         <item quantity="two">عضوان</item>
         <item quantity="few">%d أعضاء</item>
-        <item quantity="many">%d عضوا</item>
+        <item quantity="many">%d عضو</item>
         <item quantity="other">%d عضو</item>
     </plurals>
     <string name="room_two_users_are_typing">‏⁨%1$s⁩ و ⁨%2$s⁩ يكتبون…</string>
@@ -397,17 +397,17 @@
         <item quantity="other">%d تغيير على العضوية</item>
     </plurals>
     <string name="permissions_rationale_msg_record_audio">يحتاج Element تصريحا منك للوصول إلى المِكرفون لإجراء المكالمات الصوتية.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">يحتاج Element تصريحا منك للوصول إلى الكمرة والمِكرفون لإجراء المكالمات الصورية.
-
-رجاءً اسمح بالوصول في المنبثقة التالية لتقدر على إرسال إجراء المكالمات الصورية.</string>
+    <string name="permissions_rationale_msg_camera_and_audio">يحتاج ${app_name} تصريحا منك للوصول إلى الكاميرا والمايكروفون لإجراء المكالمات المرئية.
+\n
+\nرجاءً اسمح بالوصول في النافذة التالية لتتمكن من إجراء المكالمة.</string>
     <string name="action_invite">ادعُ</string>
     <string name="join_room">انضم إلى الغرفة</string>
     <string name="compression_opt_list_original">الأصلي</string>
     <string name="call_error_user_not_responding">لم يُجب الطرف البعيد.</string>
     <string name="room_participants_header_direct_chats">الدردشات المباشرة</string>
     <string name="room_participants_action_mention">أشِر إليه</string>
-    <string name="room_participants_power_level_prompt">لن تستطيع العودة عن هذا التغيير إذ أنك تمنح المستخدم نفس مستوى السلطة الذي لك.
-أمتأكد؟</string>
+    <string name="room_participants_power_level_prompt">لا يمكن التراجع عن هذا التغيير إذ أنك تمنح المستخدم نفس مستوى الصلاحيات الخاص بك.
+\nهل تريد تأكيد التغيير؟</string>
     <string name="room_participants_ban_prompt_msg">حظر مستخدم عن هذه الغرفة سيمنعه من الانضمام إليها ثانية.</string>
     <string name="ssl_trust">ثِق</string>
     <string name="ssl_do_not_trust">لا تثق</string>
@@ -507,8 +507,8 @@
     <string name="option_send_voice">أرسِل صوتًا</string>
     <string name="option_send_sticker">أرسِل ملصقًا</string>
     <string name="no_sticker_application_dialog_content">ليس ثمة أية حزمة ملصقات مفعّلة حاليًا.
-
-أتريد إضافة حزمة الآن؟</string>
+\n|
+\nأتريد إضافة حزمة الآن؟</string>
     <string name="error_no_external_application_found">نأسف، لم نجد أي تطبيق خارجي لإكمال هذا الإجراء.</string>
     <string name="e2e_re_request_encryption_key"><u>أعِد طلب مفاتيح التعمية</u>من أجهزتك الأخرى.</string>
     <string name="e2e_re_request_encryption_key_dialog_content">رجاءً أطلِق Element في جهاز آخر يقدر على فك تعمية الرسالة ليُرسل المفاتيح إلى هذا الجهاز.</string>
@@ -548,7 +548,7 @@
     <string name="command_description_invite_user">يدعو المستخدم حسب المعرّف المعطى إلى الغرفة الحالية</string>
     <string name="command_description_markdown">شغّل/عطّل مارك‌داون</string>
     <string name="deactivate_account_submit">ألغِ تفعيل الحساب</string>
-    <string name="room_tombstone_versioned_description">استُبدلت هذه الغرفة ولم تعد نشطة بعد الآن</string>
+    <string name="room_tombstone_versioned_description">استُبدلت هذه الغرفة ولم تعد نشطة بعد الآن.</string>
     <string name="room_tombstone_continuation_description">هذه الغرفة هي استمرار لمحادثة أخرى</string>
     <string name="room_tombstone_predecessor_link">انقر هنا لرؤية الرسائل الأقدم</string>
     <string name="resource_limit_contact_admin">راسِل مدير الخدمة</string>
@@ -567,7 +567,7 @@
     <string name="room_tombstone_continuation_link">استمرت المحادثة هنا</string>
     <string name="resource_limit_soft_default">تخطّ خادوم المنزل هذا حدود الموارد لديه بذلك <b>لن يستطيع بعض المستخدمين الولوج</b>.</string>
     <string name="resource_limit_hard_default">تخطّ خادوم المنزل هذا أحد حدود الموارد لديه.</string>
-    <string name="resource_limit_soft_mau"> وصل خادوم المنزل هذا حدّ المستخدمين النشطين شهريًا بذلك <b>لن يستطيع بعض المستخدمين الولوج</b>.</string>
+    <string name="resource_limit_soft_mau"> وصل هذا الخادم الحدّ الأقصى للمستخدمين النشطين شهريًا بذلك <b>لن يستطيع بعض المستخدمين الولوج لحساباتهم</b>.</string>
     <string name="resource_limit_hard_mau">وصل خادوم المنزل هذا حدّ المستخدمين النشطين شهريًا.</string>
     <string name="call_connecting">يجري وصل الاتصال…</string>
     <string name="deactivate_account_content">سيجعل هذا حسابك محال الاستخدام للأبد. لن تقدر على الولوج ولن يقدر أحد على إعادة التسجيل بنفس معرّف المستخدم. سيتسبب هذا بأن يترك حسابك كل الغرف التي تشارك فيها، وستُزال تفاصيل الحساب من خادوم التعريف. <b>هذا إجراء لا عودة فيه</b>.

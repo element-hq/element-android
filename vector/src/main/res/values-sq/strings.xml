@@ -986,7 +986,6 @@
         <item quantity="one">%d përdorues lexoi</item>
         <item quantity="other">%d përdorues lexuan</item>
     </plurals>
-    <string name="error_attachment">Ndodhi një gabim gjatë marrjes së bashkëngjitjes.</string>
     <string name="attachment_type_file">Kartelë</string>
     <string name="attachment_type_contact">Kontakt</string>
     <string name="attachment_type_camera">Kamerë</string>
@@ -2324,7 +2323,6 @@
     <string name="ftue_auth_carousel_control_title">Kontrollin e keni ju.</string>
     <string name="ftue_auth_carousel_secure_title">Jini zot i bisedave tuaja.</string>
     <string name="tooltip_attachment_location">Jepe vendndodhjen</string>
-    <string name="settings_enable_location_sharing">Aktivizoni dhënie vendndodhjeje</string>
     <string name="location_activity_title_preview">Vendndodhje</string>
     <string name="location_activity_title_static_sharing">Jepe vendndodhjen</string>
     <string name="closed_poll_option_description">Përfundimet shfaqen vetëm kur përfundoni anketimin</string>
@@ -2337,8 +2335,6 @@
     <string name="ftue_auth_carousel_encrypted_body">I fshehtëzuar skaj më skaj dhe pa u dashur numër telefoni. Pa reklama, apo shfrytëzim të dhënash.</string>
     <string name="ftue_auth_carousel_control_body">Zgjidhni ku mbahen bisedat tuaja, duke ju dhënë kontroll dhe pavarësi. Të lidhur përmes Matrix-i.</string>
     <string name="ftue_auth_carousel_secure_body">Komunikim i sigurt dhe i pavarur, që ju jep të njëjtën shkallë privatësie si biseda kokë më kokë, në shtëpinë tuaj.</string>
-    <string name="labs_render_locations_in_timeline">Trego vendndodhje përdoruesi në rrjedhën kohore</string>
-    <string name="settings_enable_location_sharing_summary">Pasi të aktivizohet, do të jeni në gjendje të dërgoni vendndodhjen tuaj në çfarëdo dhome</string>
     <string name="location_share_external">Hape me</string>
     <string name="location_not_available_dialog_content">${app_name} s’njohu dot vendndodhjen tuaj. Ju lutemi, riprovoni më vonë.</string>
     <string name="location_not_available_dialog_title">${app_name} s’mësoi dot vendndodhjen tuaj</string>
@@ -2402,9 +2398,6 @@
     <string name="message_reaction_show_less">Shfaq më pak</string>
     <string name="location_share_live_stop">Ndale</string>
     <string name="location_share_live_enabled">Vendndodhje Drejtpërsëdrejti e aktivizuar</string>
-    <string name="location_in_background_missing_permission_dialog_content">Nëse do të donit të tregonit Vendndodhjen tuaj Drejtpërsëdrejti, ${app_name} lyp njohje të vendndodhjes gjithë kohën, kur aplikacioni gjenden në prapaskenë.
-\nDo ta njohim vendndodhjen tuaj vetëm për kohëzgjatjen që zgjidhni ju.</string>
-    <string name="location_in_background_missing_permission_dialog_title">Lejoni hyrje</string>
     <string name="a11y_location_share_option_pinned_icon">Tregoje këtë vendndodhje</string>
     <string name="location_share_option_pinned">Tregoje këtë vendndodhje</string>
     <string name="a11y_location_share_option_user_current_icon">Tregoje vendndodhjen time të tanishme</string>

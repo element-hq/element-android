@@ -84,8 +84,9 @@ internal class MegolmSessionDataImporter @Inject constructor(
                             megolmSessionData.senderKey ?: "",
                             tryOrNull {
                                 olmInboundGroupSessionWrappers
-                                        .firstOrNull { it.olmInboundGroupSession?.sessionIdentifier() == megolmSessionData.sessionId }
-                                        ?.firstKnownIndex?.toInt()
+                                        .firstOrNull { it.session.sessionIdentifier() == megolmSessionData.sessionId }
+                                        ?.session?.firstKnownIndex
+                                        ?.toInt()
                             } ?: 0
                     )
 

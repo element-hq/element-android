@@ -27,4 +27,8 @@ internal class FakeEventSenderProcessor : EventSenderProcessor by mockk() {
     fun givenPostEventReturns(event: Event, cancelable: Cancelable) {
         every { postEvent(event) } returns cancelable
     }
+
+    fun givenPostRedaction(event: Event, reason: String?) {
+        every { postRedaction(event, reason) } returns mockk()
+    }
 }

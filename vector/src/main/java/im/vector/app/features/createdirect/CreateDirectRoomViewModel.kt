@@ -26,6 +26,7 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.plan.CreatedRoom
 import im.vector.app.features.raw.wellknown.getElementWellknown
@@ -46,7 +47,8 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
         @Assisted initialState: CreateDirectRoomViewState,
         private val rawService: RawService,
         val session: Session,
-        val analyticsTracker: AnalyticsTracker
+        val analyticsTracker: AnalyticsTracker,
+        val vectorFeatures: VectorFeatures
 ) :
         VectorViewModel<CreateDirectRoomViewState, CreateDirectRoomAction, CreateDirectRoomViewEvents>(initialState) {
 
@@ -59,7 +61,8 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
 
     override fun handle(action: CreateDirectRoomAction) {
         when (action) {
-            is CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers -> onSubmitInvitees(action.selections)
+            is CreateDirectRoomAction.PrepareRoomWithSelectedUsers -> onSubmitInvitees(action.selections)
+            is CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers -> onCreateRoomWithInvitees()
             is CreateDirectRoomAction.QrScannedAction -> onCodeParsed(action)
         }
     }
@@ -94,16 +97,18 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
         }
         if (existingRoomId != null) {
             // Do not create a new DM, just tell that the creation is successful by passing the existing roomId
-            setState {
-                copy(createAndInviteState = Success(existingRoomId))
-            }
+            setState { copy(createAndInviteState = Success(existingRoomId)) }
         } else {
-            // Create the DM
-            createRoomAndInviteSelectedUsers(selections)
+            createLocalRoomWithSelectedUsers(selections)
         }
     }
 
-    private fun createRoomAndInviteSelectedUsers(selections: Set<PendingSelection>) {
+    private fun onCreateRoomWithInvitees() {
+        // Create the DM
+        withState { createLocalRoomWithSelectedUsers(it.pendingSelections) }
+    }
+
+    private fun createLocalRoomWithSelectedUsers(selections: Set<PendingSelection>) {
         setState { copy(createAndInviteState = Loading()) }
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -124,7 +129,11 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
                     }
 
             val result = runCatchingToAsync {
-                session.roomService().createRoom(roomParams)
+                if (vectorFeatures.shouldStartDmOnFirstMessage()) {
+                    session.roomService().createLocalRoom(roomParams)
+                } else {
+                    session.roomService().createRoom(roomParams)
+                }
             }
             analyticsTracker.capture(CreatedRoom(isDM = roomParams.isDirect.orFalse()))
 

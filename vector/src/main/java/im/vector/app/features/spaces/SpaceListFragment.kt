@@ -31,22 +31,25 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.databinding.FragmentGroupListBinding
+import im.vector.app.databinding.FragmentSpaceListBinding
 import im.vector.app.features.home.HomeActivitySharedAction
 import im.vector.app.features.home.HomeSharedActionViewModel
-import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 
+/**
+ * This Fragment is displayed in the navigation drawer [im.vector.app.features.home.HomeDrawerFragment] and
+ * is displaying the space hierarchy, with some actions on Spaces.
+ */
 class SpaceListFragment @Inject constructor(
         private val spaceController: SpaceSummaryController
-) : VectorBaseFragment<FragmentGroupListBinding>(), SpaceSummaryController.Callback {
+) : VectorBaseFragment<FragmentSpaceListBinding>(), SpaceSummaryController.Callback {
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
     private val viewModel: SpaceListViewModel by fragmentViewModel()
 
-    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGroupListBinding {
-        return FragmentGroupListBinding.inflate(inflater, container, false)
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSpaceListBinding {
+        return FragmentSpaceListBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -76,19 +79,16 @@ class SpaceListFragment @Inject constructor(
                     }
 
                     override fun onDragReleased(model: SpaceSummaryItem?, itemView: View?) {
-//                        Timber.v("VAL: onModelMoved from $fromPositionM to $toPositionM ${model?.matrixItem?.getBestName()}")
                         if (toPositionM == null || fromPositionM == null) return
                         val movingSpace = model?.matrixItem?.id ?: return
                         viewModel.handle(SpaceListAction.MoveSpace(movingSpace, toPositionM!! - fromPositionM!!))
                     }
 
                     override fun clearView(model: SpaceSummaryItem?, itemView: View?) {
-//                        Timber.v("VAL: clearView ${model?.matrixItem?.getBestName()}")
                         itemView?.elevation = initialElevation ?: 0f
                     }
 
                     override fun onModelMoved(fromPosition: Int, toPosition: Int, modelBeingMoved: SpaceSummaryItem?, itemView: View?) {
-//                        Timber.v("VAL: onModelMoved incremental from $fromPosition to $toPosition ${modelBeingMoved?.matrixItem?.getBestName()}")
                         if (fromPositionM == null) {
                             fromPositionM = fromPosition
                         }
@@ -97,7 +97,6 @@ class SpaceListFragment @Inject constructor(
                     }
 
                     override fun isDragEnabledForModel(model: SpaceSummaryItem?): Boolean {
-//                        Timber.v("VAL: isDragEnabledForModel ${model?.matrixItem?.getBestName()}")
                         return model?.canDrag == true
                     }
                 })
@@ -105,10 +104,9 @@ class SpaceListFragment @Inject constructor(
         viewModel.observeViewEvents {
             when (it) {
                 is SpaceListViewEvents.OpenSpaceSummary -> sharedActionViewModel.post(HomeActivitySharedAction.OpenSpacePreview(it.id))
-                is SpaceListViewEvents.OpenSpace -> sharedActionViewModel.post(HomeActivitySharedAction.OpenGroup(it.groupingMethodHasChanged))
                 is SpaceListViewEvents.AddSpace -> sharedActionViewModel.post(HomeActivitySharedAction.AddSpace)
-                is SpaceListViewEvents.OpenGroup -> sharedActionViewModel.post(HomeActivitySharedAction.OpenGroup(it.groupingMethodHasChanged))
                 is SpaceListViewEvents.OpenSpaceInvite -> sharedActionViewModel.post(HomeActivitySharedAction.OpenSpaceInvite(it.id))
+                SpaceListViewEvents.CloseDrawer -> sharedActionViewModel.post(HomeActivitySharedAction.CloseDrawer)
             }
         }
     }
@@ -147,10 +145,6 @@ class SpaceListFragment @Inject constructor(
 
     override fun onAddSpaceSelected() {
         viewModel.handle(SpaceListAction.AddSpace)
-    }
-
-    override fun onGroupSelected(groupSummary: GroupSummary?) {
-        viewModel.handle(SpaceListAction.SelectLegacyGroup(groupSummary))
     }
 
     override fun sendFeedBack() {

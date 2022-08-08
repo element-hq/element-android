@@ -20,6 +20,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
 import androidx.exifinterface.media.ExifInterface
+import org.matrix.android.sdk.api.extensions.ensureNotEmpty
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -700,6 +701,7 @@ internal class LocalEchoEventFactory @Inject constructor(
             MessageType.MSGTYPE_AUDIO -> return TextContent("sent an audio file.")
             MessageType.MSGTYPE_IMAGE -> return TextContent("sent an image.")
             MessageType.MSGTYPE_VIDEO -> return TextContent("sent a video.")
+            MessageType.MSGTYPE_BEACON_INFO -> return TextContent(content.body.ensureNotEmpty() ?: "Live location")
             MessageType.MSGTYPE_POLL_START -> {
                 return TextContent((content as? MessagePollContent)?.getBestPollCreationInfo()?.question?.getBestQuestion() ?: "")
             }
@@ -708,7 +710,7 @@ internal class LocalEchoEventFactory @Inject constructor(
     }
 
     /**
-     * Returns RFC5870 formatted geo uri 'geo:latitude,longitude;uncertainty' like 'geo:40.05,29.24;30'
+     * Returns RFC5870 formatted geo uri 'geo:latitude,longitude;u=uncertainty' like 'geo:40.05,29.24;u=30'
      * Uncertainty of the location is in meters and not required.
      */
     private fun buildGeoUri(latitude: Double, longitude: Double, uncertainty: Double?): String {
@@ -718,7 +720,7 @@ internal class LocalEchoEventFactory @Inject constructor(
             append(",")
             append(longitude)
             uncertainty?.let {
-                append(";")
+                append(";u=")
                 append(it)
             }
         }

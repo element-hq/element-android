@@ -70,6 +70,26 @@ class DebugFeaturesStateFactory @Inject constructor(
                                 key = DebugFeatureKeys.allowExternalUnifiedPushDistributors,
                                 factory = VectorFeatures::allowExternalUnifiedPushDistributors
                         ),
+                        createBooleanFeature(
+                                label = "Enable Live Location Sharing",
+                                key = DebugFeatureKeys.liveLocationSharing,
+                                factory = VectorFeatures::isLocationSharingEnabled
+                        ),
+                        createBooleanFeature(
+                                label = "Force usage of OpusEncoder library",
+                                key = DebugFeatureKeys.forceUsageOfOpusEncoder,
+                                factory = VectorFeatures::forceUsageOfOpusEncoder
+                        ),
+                        createBooleanFeature(
+                                label = "Start DM on first message",
+                                key = DebugFeatureKeys.startDmOnFirstMsg,
+                                factory = VectorFeatures::shouldStartDmOnFirstMessage
+                        ),
+                        createBooleanFeature(
+                                label = "Enable New App Layout",
+                                key = DebugFeatureKeys.newAppLayoutEnabled,
+                                factory = VectorFeatures::isNewAppLayoutEnabled
+                        ),
                 )
         )
     }

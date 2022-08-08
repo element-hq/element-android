@@ -6,7 +6,7 @@
     <string name="notice_room_join">%1$s juntou-se à sala</string>
     <string name="notice_room_leave">%1$s saiu da sala</string>
     <string name="notice_room_reject">%1$s rejeitou o convite</string>
-    <string name="notice_room_remove">%1$s expulsou %2$s</string>
+    <string name="notice_room_remove">%1$s removeu %2$s</string>
     <string name="notice_room_unban">%1$s desbaniu %2$s</string>
     <string name="notice_room_ban">%1$s baniu %2$s</string>
     <string name="notice_room_withdraw">%1$s retirou o convite de %2$s</string>
@@ -20,9 +20,9 @@
     <string name="notice_placed_voice_call">%s começou uma chamada de voz.</string>
     <string name="notice_answered_call">%s atendeu a chamada.</string>
     <string name="notice_ended_call">%s terminou a chamada.</string>
-    <string name="notice_made_future_room_visibility">%1$s fez histórico da sala futuro visível para %2$s</string>
+    <string name="notice_made_future_room_visibility">%1$s fez histórico futuro da sala visível para %2$s</string>
     <string name="notice_room_visibility_invited">todos os membros da sala, do ponto que foram convidados.</string>
-    <string name="notice_room_visibility_joined">todos os mebros da sala, do ponto que se juntaram.</string>
+    <string name="notice_room_visibility_joined">todos os membros da sala, do ponto que se juntaram.</string>
     <string name="notice_room_visibility_shared">todos os membros da sala.</string>
     <string name="notice_room_visibility_world_readable">qualquer pessoa.</string>
     <string name="notice_avatar_changed_too">(avatar mudou também)</string>
@@ -46,7 +46,7 @@
     <string name="notice_room_join_by_you">Você juntou-se à sala</string>
     <string name="notice_room_leave_by_you">Você saiu da sala</string>
     <string name="notice_room_reject_by_you">Você rejeitou o convite</string>
-    <string name="notice_room_remove_by_you">Você expulsou %1$s</string>
+    <string name="notice_room_remove_by_you">Você removeu %1$s</string>
     <string name="notice_room_unban_by_you">Você desbaniu %1$s</string>
     <string name="notice_room_ban_by_you">Você baniu %1$s</string>
     <string name="notice_room_withdraw_by_you">Você retirou o convite de %1$s</string>
@@ -64,7 +64,7 @@
     <string name="notice_call_candidates_by_you">Você enviou dados para configurar a chamada.</string>
     <string name="notice_answered_call_by_you">Você atendeu a chamada.</string>
     <string name="notice_ended_call_by_you">Você terminou a chamada.</string>
-    <string name="notice_made_future_room_visibility_by_you">Você fez histórico da sala futuro visível para %1$s</string>
+    <string name="notice_made_future_room_visibility_by_you">Você fez histórico futuro da sala visível para %1$s</string>
     <string name="notice_room_update">%s fez o upgrade desta sala.</string>
     <string name="notice_room_update_by_you">Você fez o upgrade desta sala.</string>
     <string name="notice_room_name_removed_by_you">Você removeu o nome da sala</string>
@@ -72,8 +72,8 @@
     <string name="notice_room_avatar_removed">%1$s removeu o avatar da sala</string>
     <string name="notice_room_avatar_removed_by_you">Você removeu o avatar da sala</string>
     <string name="notice_room_third_party_invite_by_you">Você enviou um convite para %1$s para se juntar à sala</string>
-    <string name="notice_room_third_party_revoked_invite">%1$s revogou o convite para %2$s para entrar na sala</string>
-    <string name="notice_room_third_party_revoked_invite_by_you">Você revogou o convite para %1$s para entrar na sala</string>
+    <string name="notice_room_third_party_revoked_invite">%1$s revogou o convite para %2$s para se juntar à sala</string>
+    <string name="notice_room_third_party_revoked_invite_by_you">Você revogou o convite para %1$s para se juntar à sala</string>
     <string name="notice_room_third_party_registered_invite_by_you">Você aceitou o convite para %1$s</string>
     <string name="notice_widget_added">%1$s adicionou widget %2$s</string>
     <string name="notice_widget_added_by_you">Você adicionou widget %1$s</string>
@@ -94,10 +94,10 @@
     <string name="initial_sync_start_importing_account_crypto">Sinc inicial:
 \nImportando crypto</string>
     <string name="initial_sync_start_importing_account_rooms">Sinc inicial:
-\nImportando Salas</string>
+\nImportando salas</string>
     <string name="initial_sync_start_importing_account_joined_rooms">Sinc inicial:
 \nCarregando suas conversas
-\nSe você tem se juntado a um monte de salas, isto poderia levar um momento</string>
+\nSe você tem se juntado a muitas salas, isto podia levar um tempo</string>
     <string name="initial_sync_start_importing_account_invited_rooms">Sinc inicial:
 \nImportando salas convidadas</string>
     <string name="initial_sync_start_importing_account_left_rooms">Sinc inicial:
@@ -172,7 +172,7 @@
     <string name="notice_direct_room_third_party_invite">%1$s convidou %2$s</string>
     <string name="notice_direct_room_update_by_you">Você fez o upgrade aqui.</string>
     <string name="notice_direct_room_update">%s fez o upgrade aqui.</string>
-    <string name="notice_made_future_direct_room_visibility_by_you">Você deixou mensagens futuras vísiveis para %1$s</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">Você fez mensagens futuras visíveis para %1$s</string>
     <string name="notice_made_future_direct_room_visibility">%1$s fez mensagens futuras visíveis para %2$s</string>
     <string name="notice_direct_room_leave_by_you">Você saiu da sala</string>
     <string name="notice_direct_room_leave">%1$s saiu da sala</string>
@@ -678,7 +678,7 @@
     <string name="merged_events_expand">expandir</string>
     <string name="merged_events_collapse">colapsar</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="no_valid_google_play_services_apk">Nenhum APK de Google Play Services válido encontrado. Notificações podem não funcionar apropriadamente.</string>
     <string name="settings_troubleshoot_test_battery_failed">Se um/uma usuário(a) deixa um dispositivo despluggado e parado por um período de tempo, com a tela desligada, o dispositivo entra em modo Doze. Isto previne apps de acessar a rede e adia seus trabalhos, sincs e alarmes padrões.</string>
     <string name="passphrase_create_passphrase">Criar frasepasse</string>
@@ -981,7 +981,7 @@
     <string name="message_add_reaction">Adicionar Reação</string>
     <string name="message_view_reaction">Visualizar Reações</string>
     <string name="reactions">Reações</string>
-    <string name="event_redacted">Mensagem deletada</string>
+    <string name="event_redacted">Mensagem removida</string>
     <string name="settings_show_redacted">Mostrar mensagens removidas</string>
     <string name="settings_show_redacted_summary">Mostrar um placeholder para mensagens removidas</string>
     <string name="event_redacted_by_user_reason">Evento deletado por usuária(o)</string>
@@ -999,7 +999,7 @@
     <string name="create_room_action_create">CRIAR</string>
     <string name="create_room_name_hint">Nome</string>
     <string name="create_room_public_title">Pública</string>
-    <string name="create_room_public_description">Qualquer pessoa vai ser capaz de se juntar a esta sala</string>
+    <string name="create_room_public_description">Qualquer pessoa poderá se juntar a esta sala</string>
     <string name="keys_backup_unable_to_get_trust_info">Um erro ocorreu ao obter info de confiança</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Um erro ocorreu ao obter dados de backup de chaves</string>
     <string name="import_e2e_keys_from_file">Importar as chaves e2e de arquivo \"%1$s\".</string>
@@ -1092,7 +1092,6 @@
         <item quantity="one">%d usuária(o) leu</item>
         <item quantity="other">%d usuárias(os) leram</item>
     </plurals>
-    <string name="error_attachment">Um erro ocorreu enquando recuperando o anexo.</string>
     <string name="attachment_type_file">Arquivo</string>
     <string name="attachment_type_contact">Contato</string>
     <string name="attachment_type_camera">Câmera</string>
@@ -1644,7 +1643,7 @@
     </plurals>
     <string name="room_manage_integrations">Gerenciar Integrações</string>
     <string name="room_no_active_widgets">Nenhum widget ativo</string>
-    <string name="create_room_federation_error">A sala tem sido criada, mas alguns convites não têm sido enviados pela seguinte razão:
+    <string name="create_room_federation_error">A sala foi criada, mas alguns convites não foram enviados pelo seguinte motivo:
 \n
 \n%s</string>
     <plurals name="two_and_some_others_read">
@@ -1705,7 +1704,7 @@
     <string name="secure_backup_reset_all">Resettar tudo</string>
     <string name="bad_passphrase_key_reset_all_action">Esqueceu ou perdeu todas as opções de recuperação\? Resette tudo</string>
     <string name="direct_room_created_summary_item_by_you">Você juntou-se.</string>
-    <string name="direct_room_encryption_enabled_tile_description">Mensagens nesta sala são encriptadas ponta-a-ponta.</string>
+    <string name="direct_room_encryption_enabled_tile_description">Mensagens neste chat são encriptadas ponta-a-ponta.</string>
     <string name="direct_room_profile_section_more_leave">Sair</string>
     <string name="direct_room_profile_section_more_settings">Configurações</string>
     <string name="direct_room_profile_encrypted_subtitle">Mensagens aqui são encriptadas ponta-a-ponta.
@@ -1955,7 +1954,7 @@
     <string name="room_settings_room_access_private_description">Somente pessoas convidadas podem achar e se juntar</string>
     <string name="room_settings_room_access_private_title">Privada</string>
     <string name="room_settings_room_access_entry_unknown">Configuração de acesso desconhecida (%s)</string>
-    <string name="room_settings_room_access_entry_knock">Qualquer pessoa pode tocar na sala, membros podem então aceitar ou rejeitar</string>
+    <string name="room_settings_room_access_entry_knock">Qualquer pessoa pode bater na porta na sala, membros podem então aceitar ou rejeitar</string>
     <string name="room_settings_guest_access_title">Permitir visitantes se juntarem</string>
     <string name="use_as_default_and_do_not_ask_again">Usar como default e não perguntar de novo</string>
     <string name="option_always_ask">Sempre perguntar</string>
@@ -2304,7 +2303,7 @@
     <string name="legals_identity_server_title">A política de seu servidor de identidade</string>
     <string name="legals_home_server_title">A política de seu servidorcasa</string>
     <string name="legals_application_title">Política de ${app_name}</string>
-    <string name="analytics_opt_in_list_item_1">Nós <b>não</b> gravamos ou perfilamos quaisquer dados de conta</string>
+    <string name="analytics_opt_in_list_item_1">Nós <b>não</b> gravaremos nem criaremos um perfil dos dados de sua conta</string>
     <string name="analytics_opt_in_content">Ajude-nos a identificar problemas e melhorar ${app_name} ao compartilhar dados de uso anônimos. Para entender como pessoas usam seus múltiplos dispositivos, nós vamos gerar um identificador aleatório, compartilhado por seus dispositivos.
 \n
 \nVocê pode ler todos os nossos termos %s.</string>
@@ -2318,7 +2317,7 @@
     <string name="action_enable">Habilitar</string>
     <string name="restart_the_application_to_apply_changes">Recomece o aplicativo para a mudançar tomar efeito.</string>
     <string name="labs_enable_latex_maths">Habilitar matemática LaTeX</string>
-    <string name="room_error_access_unauthorized">Você não é permitida(o) a juntar-se a esta sala</string>
+    <string name="room_error_access_unauthorized">Você não é permitida(o) se juntar a esta sala</string>
     <string name="tooltip_attachment_poll">Criar sondagem</string>
     <string name="tooltip_attachment_contact">Abrir contatos</string>
     <string name="tooltip_attachment_sticker">Enviar sticker</string>
@@ -2333,9 +2332,6 @@
     <string name="ftue_auth_carousel_control_title">Você está em controle.</string>
     <string name="ftue_auth_carousel_secure_title">Tenha posse de suas conversas.</string>
     <string name="tooltip_attachment_location">Compartilhar localização</string>
-    <string name="labs_render_locations_in_timeline">Render localizações de usuária(o) na timeline</string>
-    <string name="settings_enable_location_sharing_summary">Uma vez habilitado você vai ser capaz de enviar sua localização a qualquer sala</string>
-    <string name="settings_enable_location_sharing">Habilitar compartilhamento de localização</string>
     <string name="location_share_external">Abrir com</string>
     <string name="location_not_available_dialog_content">${app_name} não pôde acessar sua localização. Por favor tente de novo mais tarde.</string>
     <string name="location_not_available_dialog_title">${app_name} não pôde acessar sua localização</string>
@@ -2368,12 +2364,12 @@
     <string name="labs_enable_thread_messages">Habilitar Mensagens de Thread</string>
     <string name="ftue_auth_use_case_connect_to_server">Conectar a servidor</string>
     <string name="ftue_auth_use_case_join_existing_server">Procurando se juntar a um servidor existente\?</string>
-    <string name="ftue_auth_use_case_skip_partial">pular esta pergunta</string>
-    <string name="ftue_auth_use_case_skip">Não tem certeza ainda\? Você pode %s</string>
+    <string name="ftue_auth_use_case_skip_partial">Pular esta pergunta</string>
+    <string name="ftue_auth_use_case_skip">Não tem certeza ainda\? %s</string>
     <string name="ftue_auth_use_case_option_three">Comunidades</string>
     <string name="ftue_auth_use_case_option_two">Times</string>
     <string name="ftue_auth_use_case_option_one">Amigas(os) e família</string>
-    <string name="ftue_auth_use_case_subtitle">Nós vamos ajudá-la(o) a ficar conectada(o).</string>
+    <string name="ftue_auth_use_case_subtitle">Nós vamos ajudá-la(o) a ficar conectada(o)</string>
     <string name="ftue_auth_use_case_title">Com quem você vai fazer chat mais\?</string>
     <string name="navigate_to_thread_when_already_in_the_thread">Você já está visualizando esta thread!</string>
     <string name="view_in_room">Visualizar Em Sala</string>
@@ -2409,8 +2405,6 @@
     <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s e outras(os)</string>
     <string name="room_notification_two_users_are_typing">%1$s e %2$s</string>
     <string name="location_share_live_enabled">Localização ao vivo habilitada</string>
-    <string name="location_in_background_missing_permission_dialog_content">Se você gostaria de compartilhar sua localização Ao Vivo, ${app_name} precisa de acesso de localização todo o tempo quando o app está no background.
-\nNós vamos somente acessar sua localização pela duração que você escolher.</string>
     <string name="a11y_location_share_option_pinned_icon">Compartilhar esta localização</string>
     <string name="location_share_option_pinned">Compartilhar esta localização</string>
     <string name="a11y_location_share_option_user_live_icon">Compartilhar localização ao vivo</string>
@@ -2420,7 +2414,6 @@
     <string name="a11y_location_share_locate_button">Zoom para localização atual</string>
     <string name="a11y_location_share_pin_on_map">Pin de localização selecionada em mapa</string>
     <string name="location_share_live_stop">Parar</string>
-    <string name="location_in_background_missing_permission_dialog_title">Permitir acesso</string>
     <string name="threads_notice_migration_message">Nós estamos ficando mais perto de lançar uma Beta pública para Threads.
 \n
 \nEnquanto nos preparamos para isso, nós precisamos fazer algumas mudanças: threads criadas antes deste ponto vão ser exibidas como respostas regulares.
@@ -2432,16 +2425,16 @@
     <string name="error_forbidden_digits_only_username">O servidorcasa não aceita nome de usuária(o) com somente dígitos.</string>
     <string name="ftue_personalize_skip_this_step">Pular este passo</string>
     <string name="ftue_personalize_submit">Salvar e continuar</string>
-    <string name="ftue_personalize_complete_subtitle">Suas preferências têm sido salvas.</string>
-    <string name="ftue_personalize_complete_title">Você está pronta(o)!</string>
+    <string name="ftue_personalize_complete_subtitle">Passe em configurações a qualquer momento para atualizar seu perfil</string>
+    <string name="ftue_personalize_complete_title">Tá com uma cara boa!</string>
     <string name="ftue_personalize_lets_go">Vamo lá</string>
-    <string name="ftue_profile_picture_subtitle">Você pode mudar isto a qualquer hora.</string>
+    <string name="ftue_profile_picture_subtitle">Hora de colocar um rosto ao nome</string>
     <string name="ftue_profile_picture_title">Adicione uma imagem de perfil</string>
     <string name="ftue_display_name_entry_footer">Você pode mudar isto mais tarde</string>
     <string name="ftue_display_name_entry_title">Nome de Exibição</string>
     <string name="ftue_display_name_subtitle">Isto vai ser mostrado quando você enviar mensagens.</string>
     <string name="ftue_display_name_title">Escolha um nome de exibição</string>
-    <string name="ftue_account_created_subtitle">Sua conta %s tem sido criada.</string>
+    <string name="ftue_account_created_subtitle">Sua conta %s tem sido criada</string>
     <string name="ftue_account_created_congratulations_title">Parabéns!</string>
     <string name="ftue_account_created_take_me_home">Me leve para casa</string>
     <string name="ftue_account_created_personalize">Personalizar perfil</string>
@@ -2479,7 +2472,7 @@
     <string name="call_stop_screen_sharing">Parar compartilhamento de tela</string>
     <string name="call_start_screen_sharing">Compartilhar tela</string>
     <string name="initial_sync_request_reason_unignored_users">- Algumas(ns) usuárias(os) têm sido designoradas(os)</string>
-    <string name="initial_sync_request_content">${app_name} precisa performar um cache limpo para estar atualizado, pela seguinte razão:
+    <string name="initial_sync_request_content">${app_name} precisa performar uma limpa de cache para estar atualizado, pela seguinte razão:
 \n%s
 \n
 \nNote que esta ação vai recomeçar o app e pode levar algum tempo.</string>
@@ -2492,7 +2485,7 @@
     <string name="live_location_bottom_sheet_stop_sharing">Parar de compartilhar</string>
     <string name="labs_enable_live_location_summary">Implementação tempoária: locais persistem em histórico de sala</string>
     <string name="labs_enable_live_location">Habilitar Compartilhament de Localização Ao Vivo</string>
-    <string name="location_share_live_remaining_time">%1$s saiu</string>
+    <string name="location_share_live_remaining_time">%1$s restando</string>
     <string name="location_share_live_until">Ao vivo até %1$s</string>
     <string name="location_share_live_view">Ver localização ao vivo</string>
     <string name="location_share_live_ended">Localização ao vivo terminou</string>
@@ -2506,4 +2499,93 @@
     <string name="time_unit_second_short">seg</string>
     <string name="time_unit_minute_short">min</string>
     <string name="time_unit_hour_short">h</string>
+    <string name="live_location_labs_promotion_description">Observação: esta é uma funcionalidade experimental usando uma implementação temporária. Isso significa que você não poderá deletar seu histórico de localização, e usuários avançados poderão ver seu histórico de localização mesmo depois que você parar de compartilhar sua localização em tempo real com esta sala.</string>
+    <string name="push_gateway_item_profile_tag">Tag do perfil:</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">Falhou ao registrar o token do endpoint ao servidorcasa:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_current_endpoint_title">Endpoint</string>
+    <string name="settings_troubleshoot_test_current_gateway_title">Gateway</string>
+    <string name="live_location_labs_promotion_switch_title">Ativar compartilhamento de localização</string>
+    <string name="live_location_labs_promotion_title">Compartilhamento de localização em tempo real</string>
+    <string name="settings_troubleshoot_test_current_gateway">Gateway atual: %s</string>
+    <string name="settings_troubleshoot_test_current_endpoint_failed">Não foi possível encontrar o endpoint.</string>
+    <string name="settings_troubleshoot_test_current_endpoint_success">Endpoint atual: %s</string>
+    <string name="settings_troubleshoot_test_current_distributor">Usando %s atualmente.</string>
+    <string name="settings_troubleshoot_test_current_distributor_title">Método</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="one">%d método encontrado.</item>
+        <item quantity="other">%d métodos encontrados.</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_distributors_fdroid">Nenhum outro método além da sincronização em plano de fundo encontrado.</string>
+    <string name="settings_troubleshoot_test_distributors_gplay">Nenhum outro método além do Google Play Services encontrado.</string>
+    <string name="settings_troubleshoot_test_distributors_title">Métodos disponíveis</string>
+    <string name="settings_notification_method">Método de notificação</string>
+    <string name="unifiedpush_distributor_background_sync">Sincronização em plano de fundo</string>
+    <string name="unifiedpush_distributor_fcm_fallback">Serviços do Google</string>
+    <string name="unifiedpush_getdistributors_dialog_title">Escolha como receber notificações</string>
+    <string name="auth_biometric_key_invalidated_message">A verificação biométrica foi desativada porque um novo método de verificação biométrica foi adicionado recentemente. Você pode reativá-la nas Configurações.</string>
+    <string name="settings_security_pin_code_use_biometrics_error">Não foi possível ativar a verificação biométrica.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">Redefinir método de notificação</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">Endpoint registrado com sucesso ao servidor casa.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_title">Registro de Endpoint</string>
+    <string name="action_next">Próximo</string>
+    <plurals name="room_removed_messages">
+        <item quantity="one">%d mensagem removida</item>
+        <item quantity="other">%d mensagens removidas</item>
+    </plurals>
+    <string name="live_location_share_location_item_share">Compartilhar localização</string>
+    <string name="live_location_not_enough_permission_dialog_description">Você precisa ter as permissões certas a fim de compartilhar localização ao vivo nesta sala.</string>
+    <string name="live_location_not_enough_permission_dialog_title">Você não tem permissão para compartilhar localização ao vivo</string>
+    <string name="poll_undisclosed_not_ended">Resultados vão ser visíveis quando a sondagem estiver terminada</string>
+    <string name="labs_enable_msc3061_share_history_desc">Quando convidando numa sala encriptada que está compartilhando histórico, histórico encriptada vai estar visível.</string>
+    <string name="labs_enable_msc3061_share_history">MSC3061: Compartilhando chaves de sala para mensagens passadas</string>
+    <string name="send_your_first_msg_to_invite">Envie sua primeira mensagem para convidar %s a fazer chat</string>
+    <string name="direct_room_encryption_enabled_tile_description_future">Mensagens neste chat vão ser encriptadas ponta-a-ponta.</string>
+    <string name="permalink_unsupported_groups">Não dá para abrir este link: comunidades têm sido substituídas por espaços</string>
+    <string name="ftue_auth_login_username_entry">Nome de Usuária(o) / Email / Telefone</string>
+    <string name="ftue_auth_captcha_title">Você é um/uma humano(a)\?</string>
+    <string name="ftue_auth_password_reset_email_confirmation_subtitle">Siga as instruções enviadas para %s</string>
+    <string name="ftue_auth_password_reset_confirmation">Reset de senha</string>
+    <string name="ftue_auth_forgot_password">Esqueceu senha</string>
+    <string name="ftue_auth_email_resend_email">Reenviar email</string>
+    <string name="ftue_auth_email_verification_footer">Não recebeu um email\?</string>
+    <string name="ftue_auth_email_verification_subtitle">Para confirmar seu email, toque no botão no email que nós acabamos de enviar para %s</string>
+    <string name="ftue_auth_email_verification_title">Checar seu email para verificar.</string>
+    <string name="ftue_auth_phone_confirmation_resend_code">Reenviar código</string>
+    <string name="ftue_auth_phone_confirmation_subtitle">Um código foi enviado para %s</string>
+    <string name="ftue_auth_phone_confirmation_title">Confirmar seu número de telefone</string>
+    <string name="ftue_auth_sign_out_all_devices">Fazer signout de todos os dispositivos</string>
+    <string name="ftue_auth_reset_password">Resettar senha</string>
+    <string name="ftue_auth_new_password_subtitle">Garanta que seja 8 caracteres ou mais.</string>
+    <string name="ftue_auth_new_password_title">Escolher uma senha nova</string>
+    <string name="ftue_auth_new_password_entry_title">Senha Nova</string>
+    <string name="ftue_auth_reset_password_breaker_title">Checar seu email.</string>
+    <string name="ftue_auth_reset_password_email_subtitle">%s vai enviar para você um link de verificação</string>
+    <string name="ftue_auth_phone_confirmation_entry_title">Código de confirmação</string>
+    <string name="ftue_auth_phone_entry_title">Número de Telefone</string>
+    <string name="ftue_auth_phone_subtitle">%s precisa verificar sua conta</string>
+    <string name="ftue_auth_phone_title">Entrar seu número de telefone</string>
+    <string name="ftue_auth_email_entry_title">Email</string>
+    <string name="ftue_auth_email_subtitle">%s precisa verificar sua conta</string>
+    <string name="ftue_auth_email_title">Entrar seu email</string>
+    <string name="ftue_auth_terms_subtitle">Por favor leia todos os termos e políticas de %s</string>
+    <string name="ftue_auth_terms_title">Políticas de servidor</string>
+    <string name="ftue_auth_choose_server_ems_cta">Entrar em contato</string>
+    <string name="ftue_auth_choose_server_ems_subtitle">Element Matrix Services (EMS) é um serviço de hospedagem robusto e confiável para comunicação rápida, segura e em tempo real. Descubra como em <a href="${ftue_ems_url}">element.io/ems</a></string>
+    <string name="ftue_auth_choose_server_ems_title">Quer hospedar seu próprio servidor\?</string>
+    <string name="ftue_auth_choose_server_entry_hint">URL de servidor</string>
+    <string name="ftue_auth_choose_server_subtitle">Qual é o endereço de seu servidor\? Isto é como uma casa para todos os seus dados</string>
+    <string name="ftue_auth_choose_server_title">Selecionar seu servidor</string>
+    <string name="ftue_auth_welcome_back_title">Boas-vindas de volta!</string>
+    <string name="ftue_auth_create_account_edit_server_selection">Editar</string>
+    <string name="ftue_auth_create_account_sso_section_header">Ou</string>
+    <string name="ftue_auth_create_account_choose_server_header">Onde suas conversas vão viver</string>
+    <string name="ftue_auth_create_account_password_entry_footer">Deve ser 8 caracteres ou mais</string>
+    <string name="ftue_auth_create_account_username_entry_footer">Outras(os) podem descobrir você %s</string>
+    <string name="ftue_auth_create_account_title">Criar sua conta</string>
+    <string name="create_room_action_go">Ir</string>
+    <string name="font_size_use_system">Usar default de sistema</string>
+    <string name="font_size_section_manually">Escolher manualmente</string>
+    <string name="font_size_section_auto">Definir automaticamente</string>
+    <string name="font_size_title">Encolher tamanho de fonte</string>
 </resources>

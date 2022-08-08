@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.session.room.membership
 
 import com.zhuinden.monarchy.Monarchy
-import io.realm.Realm
 import io.realm.kotlin.createObject
 import kotlinx.coroutines.TimeoutCancellationException
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -38,11 +37,13 @@ import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
+import org.matrix.android.sdk.internal.session.room.RoomDataSource
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryUpdater
 import org.matrix.android.sdk.internal.session.sync.SyncTokenStore
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.awaitTransaction
 import org.matrix.android.sdk.internal.util.time.Clock
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -57,6 +58,7 @@ internal interface LoadRoomMembersTask : Task<LoadRoomMembersTask.Params, Unit> 
 internal class DefaultLoadRoomMembersTask @Inject constructor(
         private val roomAPI: RoomAPI,
         @SessionDatabase private val monarchy: Monarchy,
+        private val roomDataSource: RoomDataSource,
         private val syncTokenStore: SyncTokenStore,
         private val roomSummaryUpdater: RoomSummaryUpdater,
         private val roomMemberEventHandler: RoomMemberEventHandler,
@@ -67,7 +69,7 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
 ) : LoadRoomMembersTask {
 
     override suspend fun execute(params: LoadRoomMembersTask.Params) {
-        when (getRoomMembersLoadStatus(params.roomId)) {
+        when (roomDataSource.getRoomMembersLoadStatus(params.roomId)) {
             RoomMembersLoadStatusType.NONE -> doRequest(params)
             RoomMembersLoadStatusType.LOADING -> waitPreviousRequestToFinish(params)
             RoomMembersLoadStatusType.LOADED -> Unit
@@ -105,43 +107,40 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
     }
 
     private suspend fun insertInDb(response: RoomMembersResponse, roomId: String) {
+        val chunks = response.roomMemberEvents.chunked(500)
+        chunks.forEach { roomMemberEvents ->
+            monarchy.awaitTransaction { realm ->
+                Timber.v("Insert ${roomMemberEvents.size} member events in room $roomId")
+                // We ignore all the already known members
+                val now = clock.epochMillis()
+                for (roomMemberEvent in roomMemberEvents) {
+                    if (roomMemberEvent.eventId == null || roomMemberEvent.stateKey == null || roomMemberEvent.type == null) {
+                        continue
+                    }
+                    val ageLocalTs = now - (roomMemberEvent.unsignedData?.age ?: 0)
+                    val eventEntity = roomMemberEvent.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
+                    CurrentStateEventEntity.getOrCreate(
+                            realm,
+                            roomId,
+                            roomMemberEvent.stateKey,
+                            roomMemberEvent.type
+                    ).apply {
+                        eventId = roomMemberEvent.eventId
+                        root = eventEntity
+                    }
+                    roomMemberEventHandler.handle(realm, roomId, roomMemberEvent, false)
+                }
+            }
+        }
         monarchy.awaitTransaction { realm ->
-            // We ignore all the already known members
             val roomEntity = RoomEntity.where(realm, roomId).findFirst()
                     ?: realm.createObject(roomId)
-            val now = clock.epochMillis()
-            for (roomMemberEvent in response.roomMemberEvents) {
-                if (roomMemberEvent.eventId == null || roomMemberEvent.stateKey == null || roomMemberEvent.type == null) {
-                    continue
-                }
-                val ageLocalTs = roomMemberEvent.unsignedData?.age?.let { now - it }
-                val eventEntity = roomMemberEvent.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
-                CurrentStateEventEntity.getOrCreate(
-                        realm,
-                        roomId,
-                        roomMemberEvent.stateKey,
-                        roomMemberEvent.type
-                ).apply {
-                    eventId = roomMemberEvent.eventId
-                    root = eventEntity
-                }
-                roomMemberEventHandler.handle(realm, roomId, roomMemberEvent, false)
-            }
             roomEntity.membersLoadStatus = RoomMembersLoadStatusType.LOADED
             roomSummaryUpdater.update(realm, roomId, updateMembers = true)
         }
-
         if (cryptoSessionInfoProvider.isRoomEncrypted(roomId)) {
             deviceListManager.onRoomMembersLoadedFor(roomId)
         }
-    }
-
-    private fun getRoomMembersLoadStatus(roomId: String): RoomMembersLoadStatusType {
-        var result: RoomMembersLoadStatusType?
-        Realm.getInstance(monarchy.realmConfiguration).use {
-            result = RoomEntity.where(it, roomId).findFirst()?.membersLoadStatus
-        }
-        return result ?: RoomMembersLoadStatusType.NONE
     }
 
     private suspend fun setRoomMembersLoadStatus(roomId: String, status: RoomMembersLoadStatusType) {

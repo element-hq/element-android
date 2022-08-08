@@ -1,4 +1,191 @@
-Changes in Element v1.4.24 (2022-06-21)
+Changes in Element v1.4.31 (2022-08-01)
+=======================================
+
+Bugfixes 🐛
+----------
+ - Fixes crash when returning to the app after backgrounding ([#6709](https://github.com/vector-im/element-android/issues/6709))
+ - Fix message content sometimes appearing in the log ([#6706](https://github.com/vector-im/element-android/issues/6706))
+
+
+Changes in Element v1.4.30 (2022-07-29)
+=======================================
+
+Features ✨
+----------
+ - [FTUE] - Enable improved login and register onboarding flows ([#2585](https://github.com/vector-im/element-android/issues/2585))
+ - Adds settings screen to change app font scale or enable using system setting ([#5687](https://github.com/vector-im/element-android/issues/5687))
+ - [Location sharing] - Delete action on a live message ([#6437](https://github.com/vector-im/element-android/issues/6437))
+ - [Timeline] - Collapse redacted events ([#6487](https://github.com/vector-im/element-android/issues/6487))
+ - Improve lock screen implementation with extra security measures ([#6522](https://github.com/vector-im/element-android/issues/6522))
+ - Move initialization of the Session to a background thread. MainActivity is restoring the session now, instead of VectorApplication. Useful when for instance a long migration of a database is required. ([#6548](https://github.com/vector-im/element-android/issues/6548))
+ - Share location with other apps ([#6567](https://github.com/vector-im/element-android/issues/6567))
+ - Support element call widget ([#6616](https://github.com/vector-im/element-android/issues/6616))
+ - [FTUE] Updates FTUE registration to include username availability check and update copy ([#6546](https://github.com/vector-im/element-android/issues/6546))
+ - [FTUE] - Allows the email address to be changed during the verification process ([#6622](https://github.com/vector-im/element-android/issues/6622))
+ - [FTUE] Updates the copy within the FTUE onboarding ([#6547](https://github.com/vector-im/element-android/issues/6547))
+ - [FTUE] Test session feedback ([#6620](https://github.com/vector-im/element-android/issues/6620))
+ - [FTUE] - Improved reset password error message ([#6621](https://github.com/vector-im/element-android/issues/6621))
+
+Bugfixes 🐛
+----------
+ - Fixes wrong voice message being displayed and played on the timeline. ([#6213](https://github.com/vector-im/element-android/issues/6213))
+ - Fixes the room list not taking into account the Show all rooms in Home preference ([#6665](https://github.com/vector-im/element-android/issues/6665))
+ - Stop using unstable names for withheld codes ([#5115](https://github.com/vector-im/element-android/issues/5115))
+ - Fixes room not being in space after upgrade ([#6200](https://github.com/vector-im/element-android/issues/6200))
+ - Fixed issues with reporting sync state events from different threads ([#6341](https://github.com/vector-im/element-android/issues/6341))
+ - Display specific message when verification QR code is malformed ([#6395](https://github.com/vector-im/element-android/issues/6395))
+ - When there is no way to verify a device (no 4S nor other device) propose to reset verification keys ([#6466](https://github.com/vector-im/element-android/issues/6466))
+ - Unwedging could cause the SDK to force creating a new olm session every hour ([#6534](https://github.com/vector-im/element-android/issues/6534))
+ - [Location Share] - Wrong room live location status bar visibility in timeline ([#6537](https://github.com/vector-im/element-android/issues/6537))
+ - Fix infinite loading when opening a DM when the current room is the same DM. ([#6549](https://github.com/vector-im/element-android/issues/6549))
+ - Do not log the live location of the user ([#6579](https://github.com/vector-im/element-android/issues/6579))
+ - Fix backup saving several times the same keys ([#6585](https://github.com/vector-im/element-android/issues/6585))
+ - Check user power level before sharing live location ([#6587](https://github.com/vector-im/element-android/issues/6587))
+ - [Location Share] - Live is considered as ended while still active ([#6596](https://github.com/vector-im/element-android/issues/6596))
+ - Put EC permission shortcuts behind labs flag (PSG-630) ([#6634](https://github.com/vector-im/element-android/issues/6634))
+ - ObjectAnimators are not canceled in TypingMessageDotsView ([#6663](https://github.com/vector-im/element-android/issues/6663))
+
+SDK API changes ⚠️
+------------------
+ - Communities/Groups are removed completely ([#5733](https://github.com/vector-im/element-android/issues/5733))
+ - SDK - The SpaceFilter is query parameter is no longer nullable, use SpaceFilter.NoFilter instead ([#6666](https://github.com/vector-im/element-android/issues/6666))
+
+Other changes
+-------------
+ - Nightly build publication on Firebase ([#6478](https://github.com/vector-im/element-android/issues/6478))
+ - Communities/Groups are removed completely ([#5733](https://github.com/vector-im/element-android/issues/5733))
+ - Improves performance on search screen by replacing flattenParents with directParentName in RoomSummary ([#6314](https://github.com/vector-im/element-android/issues/6314))
+ - Log durations of DB migration and migration steps. ([#6538](https://github.com/vector-im/element-android/issues/6538))
+ - [Location Share] - Standardise "Stop" texts for live ([#6541](https://github.com/vector-im/element-android/issues/6541))
+ - Adds NewAppLayoutEnabled feature flag ([#6584](https://github.com/vector-im/element-android/issues/6584))
+ - [Location sharing] - Small improvements of UI for live ([#6607](https://github.com/vector-im/element-android/issues/6607))
+ - Live Location Sharing - Reset zoom level while focusing a user ([#6609](https://github.com/vector-im/element-android/issues/6609))
+ - Fix a typo in the terms and conditions step during registration. ([#6612](https://github.com/vector-im/element-android/issues/6612))
+ - [Location sharing] - OnTap on the top live status bar, display the expanded map view ([#6625](https://github.com/vector-im/element-android/issues/6625))
+ - [Location Share] - Expanded map state when no more live location shares ([#6635](https://github.com/vector-im/element-android/issues/6635))
+
+
+Changes in Element v1.4.28 (2022-07-13)
+=======================================
+
+Features ✨
+----------
+ - Improve user experience when he is first invited to a room. Users will be able to decrypt and view previous messages ([#5853](https://github.com/vector-im/element-android/issues/5853))
+ - [Location sharing] - Reply action on a live message ([#6401](https://github.com/vector-im/element-android/issues/6401))
+ - Show a loader if all the Room Members are not yet loaded. ([#6413](https://github.com/vector-im/element-android/issues/6413))
+
+Bugfixes 🐛
+----------
+ - Fixes numbered lists always starting from 1 ([#4777](https://github.com/vector-im/element-android/issues/4777))
+ - Adds LoginType to SessionParams to fix soft logout form not showing for SSO and Password type ([#5398](https://github.com/vector-im/element-android/issues/5398))
+ - Use stable endpoint for alias management instead of MSC2432. Contributed by Nico. ([#6288](https://github.com/vector-im/element-android/issues/6288))
+ - [Poll] Fixes visible and wrong votes in closed poll after removing 2 previous polls ([#6430](https://github.com/vector-im/element-android/issues/6430))
+ - Fix HTML entities being displayed in messages ([#6442](https://github.com/vector-im/element-android/issues/6442))
+ - Gallery picker can pick external images ([#6450](https://github.com/vector-im/element-android/issues/6450))
+ - Fixes crash when sharing plain text, such as a url ([#6451](https://github.com/vector-im/element-android/issues/6451))
+ - Fix crashes on Timeline [Thread] due to range validation ([#6461](https://github.com/vector-im/element-android/issues/6461))
+ - Fix crashes when opening Thread ([#6463](https://github.com/vector-im/element-android/issues/6463))
+ - Fix ConcurrentModificationException on BackgroundDetectionObserver ([#6469](https://github.com/vector-im/element-android/issues/6469))
+ - Fixes inconsistency with rooms within spaces showing or disappearing from home ([#6510](https://github.com/vector-im/element-android/issues/6510))
+
+In development 🚧
+----------------
+ - FTUE - Adds support for resetting the password during the FTUE onboarding journey ([#5284](https://github.com/vector-im/element-android/issues/5284))
+ - Create DM room only on first message - Design implementation & debug feature flag ([#5525](https://github.com/vector-im/element-android/issues/5525))
+
+Other changes
+-------------
+ - Replacing Epoxy annotation layout id references with getDefaultLayoutId ([#6389](https://github.com/vector-im/element-android/issues/6389))
+ - Ensure `RealmList<T>.clearWith()` extension is correctly used. ([#6392](https://github.com/vector-im/element-android/issues/6392))
+ - [Poll] - Add a description under undisclosed poll when not ended ([#6423](https://github.com/vector-im/element-android/issues/6423))
+ - Add `android:hasFragileUserData="true"` in the manifest ([#6429](https://github.com/vector-im/element-android/issues/6429))
+ - Add code check to prevent modification of frozen class ([#6434](https://github.com/vector-im/element-android/issues/6434))
+ - Let your Activity or Fragment implement `VectorMenuProvider` if they provide a menu. ([#6436](https://github.com/vector-im/element-android/issues/6436))
+ - Rename Android Service to use `AndroidService` suffix ([#6458](https://github.com/vector-im/element-android/issues/6458))
+
+
+Changes in Element v1.4.27 (2022-07-06)
+=======================================
+
+Bugfixes 🐛
+----------
+ - Fixes crash when sharing plain text, such as a url ([#6451](https://github.com/vector-im/element-android/issues/6451))
+ - Fix crashes on Timeline [Thread] due to range validation ([#6461](https://github.com/vector-im/element-android/issues/6461))
+ - Fix crashes when opening Thread ([#6463](https://github.com/vector-im/element-android/issues/6463))
+ - Fix ConcurrentModificationException on BackgroundDetectionObserver ([#6469](https://github.com/vector-im/element-android/issues/6469))
+
+
+Changes in Element v1.4.26 (2022-06-30)
+=======================================
+
+Features ✨
+----------
+ - Use UnifiedPush and allows user to have push without FCM. ([#3448](https://github.com/vector-im/element-android/issues/3448))
+ - Replace ffmpeg-kit with libopus and libopusenc. ([#6203](https://github.com/vector-im/element-android/issues/6203))
+ - Improve lock screen implementation. ([#6217](https://github.com/vector-im/element-android/issues/6217))
+ - Allow sharing text based content via android's share menu (eg .ics files) ([#6285](https://github.com/vector-im/element-android/issues/6285))
+ - Promote live location labs flag ([#6350](https://github.com/vector-im/element-android/issues/6350))
+ - [Location sharing] - Stop any active live before starting a new one ([#6364](https://github.com/vector-im/element-android/issues/6364))
+ - Expose pusher profile tag in advanced settings ([#6369](https://github.com/vector-im/element-android/issues/6369))
+
+Bugfixes 🐛
+----------
+ - Fixes concurrent modification crash when signing out or launching the app ([#5821](https://github.com/vector-im/element-android/issues/5821))
+ - Refactor - better naming, return native user id and not sip user id and create a dm with the native user instead of with the sip user. ([#6101](https://github.com/vector-im/element-android/issues/6101))
+ - Fixed /upgraderoom command not doing anything ([#6154](https://github.com/vector-im/element-android/issues/6154))
+ - Fixed crash when opening large images in the timeline ([#6290](https://github.com/vector-im/element-android/issues/6290))
+ - [Location sharing] Fix crash when starting/stopping a live when offline ([#6315](https://github.com/vector-im/element-android/issues/6315))
+ - Fix loop in timeline and simplify management of chunks and timeline events. ([#6318](https://github.com/vector-im/element-android/issues/6318))
+ - Update design and behaviour on widget permission bottom sheet ([#6326](https://github.com/vector-im/element-android/issues/6326))
+ - Fix | Some user verification requests couldn't be accepted/declined ([#6328](https://github.com/vector-im/element-android/issues/6328))
+ - [Location sharing] Fix stop of a live not possible from another device ([#6349](https://github.com/vector-im/element-android/issues/6349))
+ - Fix backslash escapes in formatted messages ([#6357](https://github.com/vector-im/element-android/issues/6357))
+ - Fixes wrong error message when signing in with wrong credentials ([#6371](https://github.com/vector-im/element-android/issues/6371))
+ - [Location Share] - Adding missing prefix "u=" for uncertainty in geo URI ([#6375](https://github.com/vector-im/element-android/issues/6375))
+
+In development 🚧
+----------------
+ - FTUE - Adds automatic homeserver selection when typing a full matrix id during registration or login ([#6162](https://github.com/vector-im/element-android/issues/6162))
+
+Improved Documentation 📚
+------------------------
+ - Update the PR process doc to come back to one reviewer with optional additional reviewers. ([#6396](https://github.com/vector-im/element-android/issues/6396))
+
+SDK API changes ⚠️
+------------------
+ - Group all location sharing related API into LocationSharingService ([#5864](https://github.com/vector-im/element-android/issues/5864))
+ - Add support for MSC2457 - opting in or out of logging out all devices when changing password ([#6191](https://github.com/vector-im/element-android/issues/6191))
+ - Create `QueryStateEventValue` to do query on `stateKey` for State Event. Also remove the default parameter values for those type. ([#6319](https://github.com/vector-im/element-android/issues/6319))
+
+Other changes
+-------------
+ - - Notify of the latest known location in LocationTracker to avoid multiple locations at start
+  - Debounce location updates
+  - Improve location providers access ([#5913](https://github.com/vector-im/element-android/issues/5913))
+ - Add unit tests for LiveLocationAggregationProcessor code ([#6155](https://github.com/vector-im/element-android/issues/6155))
+ - Making screenshots in bug reports opt in instead of opt out ([#6261](https://github.com/vector-im/element-android/issues/6261))
+ - Setup [Flipper](https://fbflipper.com/) ([#6300](https://github.com/vector-im/element-android/issues/6300))
+ - CreatePollViewModel unit tests ([#6320](https://github.com/vector-im/element-android/issues/6320))
+ - Fix flaky test in voice recording feature. ([#6329](https://github.com/vector-im/element-android/issues/6329))
+ - Poll view state unit tests ([#6366](https://github.com/vector-im/element-android/issues/6366))
+ - Let LoadRoomMembersTask insert by chunk to release db. ([#6394](https://github.com/vector-im/element-android/issues/6394))
+
+
+Changes in Element v1.4.25 (2022-06-27)
+=======================================
+
+Bugfixes 🐛
+----------
+- Second attempt to fix session database migration to version 30.
+
+Changes in Element v1.4.24 (2022-06-22)
+=======================================
+
+Bugfixes 🐛
+----------
+- First attempt to fix session database migration to version 30.
+
+Changes in Element v1.4.23 (2022-06-21)
 =======================================
 
 Bugfixes 🐛

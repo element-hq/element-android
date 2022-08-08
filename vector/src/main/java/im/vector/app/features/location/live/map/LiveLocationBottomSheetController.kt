@@ -16,7 +16,6 @@
 
 package im.vector.app.features.location.live.map
 
-import android.content.Context
 import com.airbnb.epoxy.EpoxyController
 import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
@@ -26,8 +25,6 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.resources.toTimestamp
 import im.vector.app.core.time.Clock
 import im.vector.app.features.home.AvatarRenderer
-import im.vector.app.features.location.live.map.bottomsheet.LiveLocationUserItem
-import im.vector.app.features.location.live.map.bottomsheet.liveLocationUserItem
 import javax.inject.Inject
 
 class LiveLocationBottomSheetController @Inject constructor(
@@ -35,7 +32,6 @@ class LiveLocationBottomSheetController @Inject constructor(
         private val vectorDateFormatter: VectorDateFormatter,
         private val stringProvider: StringProvider,
         private val clock: Clock,
-        private val context: Context,
 ) : EpoxyController() {
 
     interface Callback {

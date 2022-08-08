@@ -21,7 +21,7 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 
-@EpoxyModelClass(layout = R.layout.item_login_header)
-abstract class LoginHeaderItem : VectorEpoxyModel<LoginHeaderItem.Holder>() {
+@EpoxyModelClass
+abstract class LoginHeaderItem : VectorEpoxyModel<LoginHeaderItem.Holder>(R.layout.item_login_header) {
     class Holder : VectorEpoxyHolder()
 }

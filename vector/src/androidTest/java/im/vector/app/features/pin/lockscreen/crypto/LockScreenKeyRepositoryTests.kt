@@ -16,21 +16,16 @@
 
 package im.vector.app.features.pin.lockscreen.crypto
 
-import android.security.keystore.KeyPermanentlyInvalidatedException
 import androidx.test.platform.app.InstrumentationRegistry
+import im.vector.app.features.pin.lockscreen.crypto.migrations.LegacyPinCodeMigrator
 import im.vector.app.features.settings.VectorPreferences
 import io.mockk.clearAllMocks
-import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
-import io.mockk.verify
-import kotlinx.coroutines.test.runTest
-import org.amshove.kluent.coInvoking
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeFalse
 import org.amshove.kluent.shouldBeTrue
-import org.amshove.kluent.shouldNotThrow
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -49,7 +44,7 @@ class LockScreenKeyRepositoryTests {
     }
 
     private lateinit var lockScreenKeyRepository: LockScreenKeyRepository
-    private val pinCodeMigrator: PinCodeMigrator = mockk(relaxed = true)
+    private val legacyPinCodeMigrator: LegacyPinCodeMigrator = mockk(relaxed = true)
     private val vectorPreferences: VectorPreferences = mockk(relaxed = true)
 
     private val keyStore: KeyStore by lazy {
@@ -58,7 +53,7 @@ class LockScreenKeyRepositoryTests {
 
     @Before
     fun setup() {
-        lockScreenKeyRepository = spyk(LockScreenKeyRepository("base", pinCodeMigrator, vectorPreferences, keyStoreCryptoFactory))
+        lockScreenKeyRepository = spyk(LockScreenKeyRepository("base.pin_code", "base.system", keyStoreCryptoFactory))
     }
 
     @After
@@ -140,45 +135,5 @@ class LockScreenKeyRepositoryTests {
         lockScreenKeyRepository.deletePinCodeKey()
 
         lockScreenKeyRepository.hasPinCodeKey().shouldBeFalse()
-    }
-
-    @Test
-    fun migrateKeysIfNeededReturnsEarlyIfNotNeeded() = runTest {
-        every { pinCodeMigrator.isMigrationNeeded() } returns false
-
-        lockScreenKeyRepository.migrateKeysIfNeeded()
-
-        coVerify(exactly = 0) { pinCodeMigrator.migrate(any()) }
-    }
-
-    @Test
-    fun migrateKeysIfNeededWillMigratePinCodeAndKeys() = runTest {
-        every { pinCodeMigrator.isMigrationNeeded() } returns true
-
-        lockScreenKeyRepository.migrateKeysIfNeeded()
-
-        coVerify { pinCodeMigrator.migrate(any()) }
-    }
-
-    @Test
-    fun migrateKeysIfNeededWillCreateSystemKeyIfNeeded() = runTest {
-        every { pinCodeMigrator.isMigrationNeeded() } returns true
-        every { vectorPreferences.useBiometricsToUnlock() } returns true
-        every { lockScreenKeyRepository.ensureSystemKey() } returns mockk()
-
-        lockScreenKeyRepository.migrateKeysIfNeeded()
-
-        verify { lockScreenKeyRepository.ensureSystemKey() }
-    }
-
-    @Test
-    fun migrateKeysIfNeededWillHandleKeyPermanentlyInvalidatedException() = runTest {
-        every { pinCodeMigrator.isMigrationNeeded() } returns true
-        every { vectorPreferences.useBiometricsToUnlock() } returns true
-        every { lockScreenKeyRepository.ensureSystemKey() } throws KeyPermanentlyInvalidatedException()
-
-        coInvoking { lockScreenKeyRepository.migrateKeysIfNeeded() } shouldNotThrow KeyPermanentlyInvalidatedException::class
-
-        verify { lockScreenKeyRepository.ensureSystemKey() }
     }
 }

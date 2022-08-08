@@ -22,7 +22,7 @@
     <string name="notice_placed_video_call">%s починає відеовиклик.</string>
     <string name="notice_placed_voice_call">%s розпочинає голосовий виклик.</string>
     <string name="notice_answered_call">%s відповідає на виклик.</string>
-    <string name="notice_ended_call">%s завершує дзвінок.</string>
+    <string name="notice_ended_call">%s завершує виклик.</string>
     <string name="notice_made_future_room_visibility">%1$s робить майбутню історію кімнати видимою для %2$s</string>
     <string name="notice_room_visibility_invited">всіх учасників кімнати, з моменту їх запрошення.</string>
     <string name="notice_room_visibility_joined">всіх учасників кімнати, з моменту їх приєднання.</string>
@@ -135,7 +135,7 @@
     <string name="notice_made_future_room_visibility_by_you">Ви зробили майбутню історію кімнати видимою для %1$s</string>
     <string name="notice_made_future_direct_room_visibility_by_you">Ви зробили майбутні повідомлення видимими для %1$s</string>
     <string name="notice_made_future_direct_room_visibility">%1$s робить майбутні повідомлення видимими для %2$s</string>
-    <string name="notice_ended_call_by_you">Ви завершили дзвінок.</string>
+    <string name="notice_ended_call_by_you">Ви завершили виклик.</string>
     <string name="notice_answered_call_by_you">Ви відповіли на виклик.</string>
     <string name="notice_call_candidates_by_you">Ви надіслали дані для налаштування виклику.</string>
     <string name="notice_call_candidates">%s надсилає дані для налаштування виклику.</string>
@@ -230,8 +230,10 @@
     <string name="call_in_progress">Виконується виклик…</string>
     <string name="call_error_user_not_responding">Абонент не відповідає.</string>
     <string name="permissions_rationale_popup_title">Інформація</string>
-    <string name="permissions_rationale_msg_record_audio">Для здійснення аудіодзвінків потрібен доступ до мікрофону.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Для здійснення відеодзвінків потрібен доступ до камери та мікрофону.\n\nБудь ласка, надайте його у наступних виринаючих вікнах, щоб мати змогу їх здійснити.</string>
+    <string name="permissions_rationale_msg_record_audio">Для здійснення аудіовикликів потрібен доступ до мікрофона.</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Для здійснення відеовикликів потрібен доступ до камери та мікрофону.
+\n
+\nНадайте його у наступних спливних вікнах, щоб мати змогу їх здійснити.</string>
     <string name="yes">ТАК</string>
     <string name="no">НІ</string>
     <string name="_continue">Продовжити</string>
@@ -295,7 +297,7 @@
     <string name="settings_copyright">Copyright</string>
     <string name="settings_privacy_policy">Політика приватності</string>
     <string name="settings_clear_cache">Очистити кеш</string>
-    <string name="settings_clear_media_cache">Очистити медіа кеш</string>
+    <string name="settings_clear_media_cache">Очистити медіакеш</string>
     <string name="settings_keep_media">Зберігати медіа</string>
     <string name="settings_user_settings">Налаштування користувача</string>
     <string name="settings_notifications">Сповіщення</string>
@@ -406,7 +408,7 @@
     <string name="notification_noisy">Гучно</string>
     <string name="encrypted_message">Зашифроване повідомлення</string>
     <string name="settings_labs_native_camera">Використовувати рідну камеру</string>
-    <string name="you_added_a_new_device">Щойно доданий вами пристрій \'%s\' править ключі шифрування.</string>
+    <string name="you_added_a_new_device">Щойно доданий вами сеанс «%s», який запитує ключі шифрування.</string>
     <string name="your_unverified_device_requesting">Ваш незвірений пристрій «%s» вимагає ключі шифрування.</string>
     <string name="start_verification">Почати перевірку</string>
     <string name="command_error">Помилка виконання команди</string>
@@ -463,7 +465,7 @@
     </plurals>
     <string name="settings_inline_url_preview">Попередній перегляд посилань</string>
     <string name="settings_preview_media_before_sending">Попередній перегляд медіа перед надсиланням</string>
-    <string name="settings_opt_in_of_analytics_summary">${app_name} збирає анонімну аналітику, щоб ми могли вдосконалювати цей додаток.</string>
+    <string name="settings_opt_in_of_analytics_summary">${app_name} збирає анонімну аналітику, щоб ми могли вдосконалювати цей застосунок.</string>
     <string name="encryption_export_notice">Будь ласка, створіть пароль для шифрування ключів що експортуються. Вам знадобиться ввести такий самий пароль для імпорту цих ключів.</string>
     <string name="passphrase_create_passphrase">Створіть пароль</string>
     <string name="passphrase_passphrase_does_not_match">Паролі мають збігатися</string>
@@ -499,7 +501,7 @@
     <string name="command_description_remove_user">Вилучити користувача із вказаним ID</string>
     <string name="command_description_nick">Змінити Ваш псевдонім</string>
     <string name="command_description_markdown">Увімкнути/Вимкнути розмітку Markdown</string>
-    <string name="command_description_clear_scalar_token">Для виправлення керування додатками Matrix</string>
+    <string name="command_description_clear_scalar_token">Для виправлення керування застосунками Matrix</string>
     <string name="create">Створити</string>
     <string name="group_details_home">Домівка</string>
     <string name="rooms">Кімнати</string>
@@ -534,7 +536,7 @@
     <string name="merged_events_expand">розгорнути</string>
     <string name="merged_events_collapse">згорнути</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="room_participants_action_remove">Вилучити</string>
     <string name="settings_inline_url_preview_summary">Попередній перегляд посилань у бесіді, якщо ваш сервер підтримує цю можливість.</string>
     <string name="settings_send_typing_notifs">Надсилати сповіщення про набір повідомлення</string>
@@ -562,7 +564,7 @@
     <string name="title_activity_keys_backup_setup">Резервна копія ключа</string>
     <string name="title_activity_keys_backup_restore">Використати резервну копію ключа</string>
     <string name="room_list_people_empty_body">Тут з\'явиться список бесід з вашими особистими повідомленнями. Торкніться + внизу праворуч щоб розпочати бесіду.</string>
-    <string name="event_redacted">Повідомлення видалено</string>
+    <string name="event_redacted">Повідомлення вилучено</string>
     <string name="fab_menu_create_chat">Особисті повідомлення</string>
     <string name="bottom_action_people_x">Особисті повідомлення</string>
     <string name="room_filtering_footer_create_new_direct_message">Надіслати нове особисте повідомлення</string>
@@ -600,13 +602,13 @@
     <string name="action_skip">Пропустити</string>
     <string name="failed_to_remove_widget">Не вдалося видалити віджет</string>
     <string name="failed_to_add_widget">Не вдалося додати віджет</string>
-    <string name="cannot_call_yourself">Ви не можете здійснити дзвінок із самим собою</string>
+    <string name="cannot_call_yourself">Ви не можете викликати самих себе</string>
     <string name="audio_meeting">Почати аудіо-зустріч</string>
     <string name="video_meeting">Почати відеозустріч</string>
-    <string name="no_permissions_to_start_webrtc_call_in_direct_room">У вас немає повноважень розпочати дзвінок</string>
-    <string name="no_permissions_to_start_webrtc_call">У вас немає повноважень на дзвінок у цій кімнаті</string>
-    <string name="no_permissions_to_start_conf_call_in_direct_room">У вас немає повноважень розпочати груповий виклик</string>
-    <string name="no_permissions_to_start_conf_call">У вас немає повноважень розпочати груповий виклик у цій кімнаті</string>
+    <string name="no_permissions_to_start_webrtc_call_in_direct_room">У вас немає дозволу розпочати виклик</string>
+    <string name="no_permissions_to_start_webrtc_call">У вас немає дозволу розпочати виклик у цій кімнаті</string>
+    <string name="no_permissions_to_start_conf_call_in_direct_room">У вас немає дозволу розпочати груповий виклик</string>
+    <string name="no_permissions_to_start_conf_call">У вас немає дозволу розпочати груповий виклик у цій кімнаті</string>
     <string name="action_reset">Скинути</string>
     <string name="action_dismiss">Відхилити</string>
     <string name="action_play">Грати</string>
@@ -628,7 +630,7 @@
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">Мені не потрібні мої зашифровані повідомлення</string>
     <string name="warning_unsaved_change_discard">Скасувати зміни</string>
     <string name="login_error_ssl_other">Помилка SSL.</string>
-    <string name="cannot_call_yourself_with_invite">Ви не можете здійснити дзвінок із самим собою, дочекайтесь, доки інші учасники приймуть ваше запрошення</string>
+    <string name="cannot_call_yourself_with_invite">Ви не можете викликати себе самих, дочекайтесь, доки інші учасники погодяться на ваше запрошення</string>
     <string name="uploads_files_title">ФАЙЛИ</string>
     <string name="uploads_media_no_result">У цій кімнаті немає медіа</string>
     <string name="uploads_media_title">МЕДІА</string>
@@ -1005,9 +1007,9 @@
 \n
 \nВи можете будь-коли змінити цю дію в загальних налаштуваннях.</string>
     <string name="room_participants_action_ignore_title">Нехтувати користувача</string>
-    <string name="room_participants_power_level_demote">Понизити</string>
-    <string name="room_participants_power_level_demote_warning_prompt">Ви не зможете скасувати цю зміну, оскільки понижуєте свої права, якщо ви останній привілейований користувач у кімнаті, неможливо буде повернути собі привілеї.</string>
-    <string name="room_participants_power_level_demote_warning_title">Понизитися\?</string>
+    <string name="room_participants_power_level_demote">Зменшити</string>
+    <string name="room_participants_power_level_demote_warning_prompt">Ви не зможете скасувати цю зміну, оскільки зменшуєте свої повноваження, якщо ви останній привілейований користувач у кімнаті, неможливо буде повернути собі повноваження.</string>
+    <string name="room_participants_power_level_demote_warning_title">Зменшити свої повноваження\?</string>
     <string name="permissions_denied_add_contact">Дозволити доступ до ваших контактів.</string>
     <string name="permissions_denied_qr_code">Щоб сканувати QR-код необхідно дозволити доступ до камери.</string>
     <string name="video_call_in_progress">Триває відеовиклик…</string>
@@ -1074,7 +1076,7 @@
     <string name="room_profile_not_encrypted_subtitle">Повідомлення в цій кімнаті не захищено наскрізним шифруванням.</string>
     <string name="direct_room_profile_not_encrypted_subtitle">Повідомлення тут не захищено наскрізним шифруванням.</string>
     <string name="room_settings_enable_encryption">Увімкнути наскрізне шифрування…</string>
-    <string name="direct_room_encryption_enabled_tile_description">Повідомлення в цій кімнаті захищені наскрізним шифруванням.</string>
+    <string name="direct_room_encryption_enabled_tile_description">Повідомлення в цій бесіді захищені наскрізним шифруванням.</string>
     <string name="verification_verify_device">Звірити цей сеанс</string>
     <string name="settings_active_sessions_unverified_device_desc">Звірте цей сеанс, щоб позначити його надійним та надати йому доступ до зашифрованих повідомлень. Якщо ви не входили в цей сеанс, ваш обліковий запис може бути зламано:</string>
     <string name="room_directory_search_hint">Назва або ID (#example:matrix.org)</string>
@@ -1152,8 +1154,8 @@
     <string name="send_a_sticker">Наліпка</string>
     <string name="terms_description_for_integration_manager">Використовувати ботів, мости, віджети та пакунки наліпок</string>
     <string name="no_connectivity_to_the_server_indicator">Зв\'язок із сервером втрачено</string>
-    <string name="no_message_edits_found">Не знайдено жодної правки</string>
-    <string name="message_edits">Історія правок</string>
+    <string name="no_message_edits_found">Виправлень не знайдено</string>
+    <string name="message_edits">Історія виправлень</string>
     <string name="a11y_trust_level_trusted">Рівень довіри</string>
     <string name="not_trusted">Не довірений</string>
     <string name="trusted">Довірений</string>
@@ -1294,8 +1296,8 @@
     <string name="qr_code">QR-код</string>
     <string name="add_by_qr_code">Додати за QR-кодом</string>
     <string name="identity_server_set_alternative_notice_no_default">Зазначте адресу сервера ідентифікації</string>
-    <string name="identity_server_set_alternative_notice">В іншому разі, ви можете зазначити адресу будь-якого іншого сервера ідентифікації</string>
-    <string name="identity_server_set_default_notice">Ваш домашній сервер (%1$s) пропонує використовувати %2$s як ваш сервер ідентифікації</string>
+    <string name="identity_server_set_alternative_notice">Крім того, ви можете вказати URL-адресу будь-якого іншого сервера ідентифікації</string>
+    <string name="identity_server_set_default_notice">Ваш домашній сервер (%1$s) пропонує використовувати %2$s вашим сервером ідентифікації</string>
     <string name="identity_server_error_terms_not_signed">Спочатку погодьтесь з умовами користування сервером ідентифікації в налаштуваннях.</string>
     <string name="identity_server_error_no_identity_server_configured">Спочатку налаштуйте сервер ідентифікації.</string>
     <string name="identity_server_error_outdated_identity_server">Цей сервер ідентифікації є застарілим. ${app_name} підтримує лише API V2.</string>
@@ -1335,7 +1337,7 @@
     <string name="send_file_step_sending_file">Надсилання файлу (%1$s / %2$s)</string>
     <string name="send_file_step_encrypting_file">Шифрування файлу…</string>
     <string name="rageshake_detected">Струс виявлено!</string>
-    <string name="settings_rageshake_detection_threshold_summary">Потрясіть вашим пристроєм, щоб перевірити поріг чутливості</string>
+    <string name="settings_rageshake_detection_threshold_summary">Струсніть пристроєм, щоб перевірити поріг чутливості</string>
     <string name="settings_rageshake_detection_threshold">Поріг чутливості</string>
     <string name="settings_rageshake">Лютоcтрус</string>
     <string name="settings_developer_mode_summary">Режим розробника вмикає приховані функції та може зробити застосунок менш стабільним. Лише для розробників!</string>
@@ -1347,9 +1349,9 @@
     <string name="settings_discovery_bad_identity_server">Неможливо під\'єднатись до сервера ідентифікації</string>
     <string name="settings_discovery_enter_identity_server">Зазначте адресу сервера ідентифікації</string>
     <string name="global_retry">Повторити</string>
-    <string name="settings_discovery_disconnect_identity_server_info">Від\'єднання від вашого сервера ідентифікації означатиме, що ви не будете виявними для інших користувачів та не зможете запрошувати інших через електронну пошту або номер телефону.</string>
-    <string name="settings_discovery_identity_server_info_none">Ви наразі не використовуєте жодного сервера ідентифікації. Для того, щоб виявляти інших та бути виявним для знайомих вам наявних контактів, налаштуйте такий сервер нижче.</string>
-    <string name="settings_discovery_identity_server_info">Ви зараз використовуєте %1$s для того, щоб виявляти інших та бути виявним для знайомих вам наявних контактів.</string>
+    <string name="settings_discovery_disconnect_identity_server_info">Від\'єднання від вашого сервера ідентифікації означатиме, що ви не будете виявними для інших користувачів і не зможете запрошувати інших електронною поштою або телефоном.</string>
+    <string name="settings_discovery_identity_server_info_none">Наразі ви не використовуєте жодного сервера ідентифікації. Щоб виявляти інших і бути виявним для знайомих вам наявних контактів, налаштуйте сервер внизу.</string>
+    <string name="settings_discovery_identity_server_info">Зараз ви використовуєте %1$s, щоб виявляти інших та бути виявним для знайомих вам наявних контактів.</string>
     <string name="change_identity_server">Змінити сервер ідентифікації</string>
     <string name="add_identity_server">Налаштувати сервер ідентифікації</string>
     <string name="disconnect_identity_server">Від\'єднати сервер ідентифікації</string>
@@ -1617,8 +1619,8 @@
     <string name="use_as_default_and_do_not_ask_again">Застосувати типовим і більше не запитувати</string>
     <string name="option_always_ask">Завжди запитувати</string>
     <string name="hs_client_url">URL-адреса API домашнього сервера</string>
-    <string name="settings_room_directory_show_all_rooms_summary">Показати всі кімнати в каталозі кімнат, включно з кімнатами з делікатним вмістом.</string>
-    <string name="settings_room_directory_show_all_rooms">Показати кімнати з делікатним вмістом</string>
+    <string name="settings_room_directory_show_all_rooms_summary">Показувати всі кімнати в каталозі кімнат, включно з кімнатами з делікатним вмістом.</string>
+    <string name="settings_room_directory_show_all_rooms">Показувати кімнати з делікатним вмістом</string>
     <string name="settings_category_room_directory">Каталог кімнат</string>
     <string name="suggested_header">Пропоновані кімнати</string>
     <string name="dialog_edit_hint">Нове значення</string>
@@ -1930,7 +1932,6 @@
     <string name="room_list_quick_actions_favorite_remove">Вилучити з обраних</string>
     <string name="room_list_quick_actions_favorite_add">Додати до обраних</string>
     <string name="error_handling_incoming_share">Не вдалося обробити спільні дані</string>
-    <string name="error_attachment">Сталася помилка завантаження вкладення.</string>
     <plurals name="fallback_users_read">
         <item quantity="one">Прочитано %d користувачем</item>
         <item quantity="few">Прочитали %d користувачі</item>
@@ -1994,8 +1995,8 @@
     <string name="verification_scan_emoji_subtitle">Якщо ви не бачите особу, порівняйте натомість емоджі</string>
     <string name="login_error_threepid_denied">Ваш домен е-пошти не авторизовано для реєстрації на цьому сервері</string>
     <string name="create_room_disable_federation_title">Заборонити будь-кому, хто не є учасником %s, будь-коли приєднуватися до цієї кімнати</string>
-    <string name="settings_developer_mode_show_info_on_screen_summary">Показати корисні дані для зневадження застосунку</string>
-    <string name="settings_developer_mode_show_info_on_screen_title">Показати дані зневадження на екрані</string>
+    <string name="settings_developer_mode_show_info_on_screen_summary">Показувати корисні для зневадження застосунку дані</string>
+    <string name="settings_developer_mode_show_info_on_screen_title">Показувати дані зневадження на екрані</string>
     <string name="settings_developer_mode_fail_fast_summary">${app_name} може частіше виходити з ладу, коли виникає несподівана помилка</string>
     <string name="settings_developer_mode_fail_fast_title">Швидкий збій</string>
     <string name="autocomplete_limited_results">Показано лише перші результати, введіть більше букв…</string>
@@ -2310,7 +2311,7 @@
         <item quantity="many">%d ваших знайомих уже приєдналися</item>
         <item quantity="other">%d ваших знайомих уже приєдналися</item>
     </plurals>
-    <string name="create_space_identity_server_info_none">Зараз ви не використовуєте сервер ідентифікації. Налаштуйте його нижче, щоб запрошувати інших і щоб інші могли вас знаходити.</string>
+    <string name="create_space_identity_server_info_none">Зараз ви не використовуєте сервер ідентифікації. Налаштуйте його нижче, щоб запрошувати інших і щоб інші могли знаходити вас.</string>
     <string name="invite_people_to_your_space_desc">Наразі тут лише ви. %s стане ще краще з іншими.</string>
     <string name="create_spaces_default_public_random_room_name">Різне</string>
     <string name="create_spaces_room_private_header_desc">Створімо по кімнаті для кожної теми. Згодом ви зможете додати ще, зокрема створені раніше.</string>
@@ -2420,15 +2421,12 @@
     <string name="ftue_auth_carousel_encrypted_title">Захищене спілкування.</string>
     <string name="ftue_auth_carousel_control_title">Ви контролюєте все.</string>
     <string name="ftue_auth_carousel_secure_title">Володійте своїми розмовами.</string>
-    <string name="tooltip_attachment_location">Поділитися місцеперебуванням</string>
-    <string name="labs_render_locations_in_timeline">Зображувати місцеперебування користувача у стрічці</string>
-    <string name="settings_enable_location_sharing_summary">Після увімкнення ви зможете надіслати своє місцеперебування до будь-якої кімнати</string>
-    <string name="settings_enable_location_sharing">Увімкнути надсилання місцеперебування</string>
+    <string name="tooltip_attachment_location">Поділитися місцем перебування</string>
     <string name="location_share_external">Відкрити за допомогою</string>
     <string name="location_not_available_dialog_content">${app_name} не може отримати доступ до вашого місцеперебування. Спробуйте пізніше.</string>
     <string name="location_not_available_dialog_title">${app_name} не може отримати доступ до вашого місцеперебування</string>
-    <string name="location_activity_title_preview">Місцеперебування</string>
-    <string name="location_activity_title_static_sharing">Поділитися місцеперебуванням</string>
+    <string name="location_activity_title_preview">Місце перебування</string>
+    <string name="location_activity_title_static_sharing">Поділитися місцем перебування</string>
     <string name="closed_poll_option_description">Результати можна переглянути лише після завершення опитування</string>
     <string name="closed_poll_option_title">Закрите опитування</string>
     <string name="open_poll_option_description">Усі, хто проголосує, побачать результати одразу після голосування</string>
@@ -2453,35 +2451,35 @@
     <string name="location_timeline_failed_to_load_map">Не вдалося завантажити карту</string>
     <string name="a11y_static_map_image">Карта</string>
     <string name="labs_enable_thread_messages_desc">Примітка: застосунок перезапуститься</string>
-    <string name="labs_enable_thread_messages">Увімкнути тред повідомлень</string>
+    <string name="labs_enable_thread_messages">Увімкнути гілки повідомлень</string>
     <string name="ftue_auth_use_case_connect_to_server">Під\'єднатися до сервера</string>
     <string name="ftue_auth_use_case_join_existing_server">Бажаєте приєднання до наявного сервера\?</string>
-    <string name="ftue_auth_use_case_skip_partial">пропустити це питання</string>
-    <string name="ftue_auth_use_case_skip">Досі не впевнені\? Ви можете %s</string>
+    <string name="ftue_auth_use_case_skip_partial">Пропустити це запитання</string>
+    <string name="ftue_auth_use_case_skip">Досі не впевнені\? %s</string>
     <string name="ftue_auth_use_case_option_three">Спільноти</string>
     <string name="ftue_auth_use_case_option_two">Команди</string>
     <string name="ftue_auth_use_case_option_one">Друзі й сім\'я</string>
-    <string name="ftue_auth_use_case_subtitle">Ми допоможемо вам з\'єднатися.</string>
+    <string name="ftue_auth_use_case_subtitle">Ми допоможемо вам з\'єднатися</string>
     <string name="ftue_auth_use_case_title">З ким ви спілкуватиметеся найчастіше\?</string>
-    <string name="navigate_to_thread_when_already_in_the_thread">Ви вже переглядаєте цей тред!</string>
+    <string name="navigate_to_thread_when_already_in_the_thread">Ви вже переглядаєте цю гілку!</string>
     <string name="view_in_room">Переглянути у кімнаті</string>
-    <string name="reply_in_thread">Відповісти у тред</string>
-    <string name="command_not_supported_in_threads">Команду «%s» розпізнано, але її не підтримують треди.</string>
-    <string name="search_thread_from_a_thread">З треду</string>
+    <string name="reply_in_thread">Відповісти в гілці</string>
+    <string name="command_not_supported_in_threads">Команду «%s» розпізнано, але вона не підтримується в гілках.</string>
+    <string name="search_thread_from_a_thread">З гілки</string>
     <string name="thread_list_empty_notice">Порада: Торкніться й утримуйте повідомлення і виберіть «%s».</string>
-    <string name="thread_list_empty_title">Спілкуйтеся за темою в тредах</string>
-    <string name="thread_list_empty_subtitle">Треди допомагають підтримувати розмови за темою та за ними легко стежити.</string>
-    <string name="thread_list_modal_my_threads_subtitle">Показує всі треди, де ви брали участь</string>
-    <string name="thread_list_modal_my_threads_title">Мої треди</string>
-    <string name="thread_list_modal_all_threads_subtitle">Показує всі треди цієї кімнати</string>
-    <string name="thread_list_modal_all_threads_title">Усі треди</string>
+    <string name="thread_list_empty_title">Упорядкуйте обговорення за допомогою гілок</string>
+    <string name="thread_list_empty_subtitle">Гілки допомагають підтримувати розмови за темою та за ними легко стежити.</string>
+    <string name="thread_list_modal_my_threads_subtitle">Показує всі гілки, де ви брали участь</string>
+    <string name="thread_list_modal_my_threads_title">Мої гілки</string>
+    <string name="thread_list_modal_all_threads_subtitle">Показує всі гілки цієї кімнати</string>
+    <string name="thread_list_modal_all_threads_title">Усі гілки</string>
     <string name="thread_list_modal_title">Фільтрувати</string>
-    <string name="thread_list_title">Треди</string>
-    <string name="thread_timeline_title">Тред</string>
-    <string name="room_threads_filter">Фільтрувати треди кімнати</string>
-    <string name="action_thread_copy_link_to_thread">Копіювати лінк треду</string>
+    <string name="thread_list_title">Гілки</string>
+    <string name="thread_timeline_title">Гілка</string>
+    <string name="room_threads_filter">Фільтрувати гілки кімнати</string>
+    <string name="action_thread_copy_link_to_thread">Копіювати посилання на гілку</string>
     <string name="action_thread_view_in_room">Переглянути у кімнаті</string>
-    <string name="action_view_threads">Переглянути треди</string>
+    <string name="action_view_threads">Переглянути гілки</string>
     <plurals name="notice_room_server_acl_changes">
         <item quantity="one">%d зміна ACL сервера</item>
         <item quantity="few">%d зміни ACL сервера</item>
@@ -2502,9 +2500,6 @@
     <string name="room_notification_two_users_are_typing">%1$s і %2$s</string>
     <string name="location_share_live_stop">Зупинити</string>
     <string name="location_share_live_enabled">Місцеперебування поширюється наживо</string>
-    <string name="location_in_background_missing_permission_dialog_content">Якщо бажаєте поширювати місцеперебування наживо, ${app_name} потребує доступу до місцеперебування протягом усієї фонової роботи застосунку.
-\nМи отримуватимемо ваше місцеперебування лише протягом обраного вами терміну.</string>
-    <string name="location_in_background_missing_permission_dialog_title">Дозвольте доступ</string>
     <string name="a11y_location_share_option_pinned_icon">Поширити ці координати</string>
     <string name="location_share_option_pinned">Поширити ці координати</string>
     <string name="a11y_location_share_pin_on_map">Маркер обраних координат на карті</string>
@@ -2513,27 +2508,27 @@
     <string name="a11y_location_share_option_user_current_icon">Поширити моє поточне місцеперебування</string>
     <string name="location_share_option_user_current">Поширити моє поточне місцеперебування</string>
     <string name="a11y_location_share_locate_button">Перейти до поточного місцеперебування</string>
-    <string name="threads_notice_migration_message">Наближаємось до випуску тредів у загальнодоступну бета-версію.
+    <string name="threads_notice_migration_message">Наближаємось до випуску гілок у загальнодоступну бета-версію.
 \n
-\nГотуючись, маємо дещо змінити: раніше створені треди буде показано як звичайні відповіді.
+\nГотуючись, маємо дещо змінити: раніше створені гілки буде показано звичайними відповідями.
 \n
-\nЦе буде одноразовий перехід, оскільки треди — тепер частина специфікації Matrix.</string>
-    <string name="threads_notice_migration_title">Незабаром бета-версія тредів 🎉</string>
+\nЦе буде одноразовий перехід, оскільки відтепер гілки — це частина специфікації Matrix.</string>
+    <string name="threads_notice_migration_title">Незабаром бета-версія гілок 🎉</string>
     <string name="live_location_sharing_notification_description">Триває передавання місцеперебування</string>
     <string name="live_location_sharing_notification_title">${app_name} Місцеперебування наживо</string>
     <string name="error_forbidden_digits_only_username">Домашній сервер не приймає ім\'я користувача лише з цифр.</string>
     <string name="ftue_personalize_skip_this_step">Пропустити цей крок</string>
     <string name="ftue_personalize_submit">Зберегти й продовжити</string>
-    <string name="ftue_personalize_complete_subtitle">Ваші налаштування збережено.</string>
-    <string name="ftue_personalize_complete_title">Усе налаштовано!</string>
+    <string name="ftue_personalize_complete_subtitle">Будь-коли оновіть свій профіль у налаштуваннях</string>
+    <string name="ftue_personalize_complete_title">Все чудово!</string>
     <string name="ftue_personalize_lets_go">Поїхали</string>
-    <string name="ftue_profile_picture_subtitle">Ви можете змінити його будь-коли.</string>
+    <string name="ftue_profile_picture_subtitle">Час вказати ім’я</string>
     <string name="ftue_profile_picture_title">Додати зображення профілю</string>
     <string name="ftue_display_name_entry_footer">Ви можете змінити його пізніше</string>
     <string name="ftue_display_name_entry_title">Показуване ім\'я</string>
     <string name="ftue_display_name_subtitle">Його буде показано у надісланих повідомленнях.</string>
     <string name="ftue_display_name_title">Виберіть показуване ім\'я</string>
-    <string name="ftue_account_created_subtitle">Ваш обліковий запис %s створено.</string>
+    <string name="ftue_account_created_subtitle">Ваш обліковий запис %s створений</string>
     <string name="ftue_account_created_congratulations_title">Вітаємо!</string>
     <string name="ftue_account_created_take_me_home">На головну</string>
     <string name="ftue_account_created_personalize">Персоналізувати профіль</string>
@@ -2553,17 +2548,17 @@
     <string name="sent_live_location">Ділиться своїм місцеперебуванням наживо</string>
     <string name="ftue_auth_carousel_workplace_body">${app_name} також чудово підходить для роботи. Йому довіряють найтаємніші організації світу.</string>
     <string name="beta">БЕТА</string>
-    <string name="send_feedback_threads_info">Треди — це поточна розробка з новими, захопливими майбутніми функціями, такими як вдосконалені сповіщення. Ми хотіли б почути ваш відгук!</string>
-    <string name="send_feedback_threads_title">Відгук про Треди бета</string>
+    <string name="send_feedback_threads_info">Гілки — це поточна розробка з новими, захопливими майбутніми функціями, як-от удосконалені сповіщення. Ми хотіли б почути ваш відгук!</string>
+    <string name="send_feedback_threads_title">Відгук про Гілки бета</string>
     <string name="give_feedback_threads">Надіслати відгук</string>
     <string name="beta_title_bottom_sheet_action">БЕТА</string>
     <string name="settings_presence_user_always_appears_offline_summary">Якщо ввімкнено, ви завжди будете видимі в режимі офлайн для інших користувачів, навіть коли користуєтеся застосунком.</string>
     <string name="settings_presence_user_always_appears_offline">Офлайн режим</string>
     <string name="settings_presence">Присутність</string>
-    <string name="threads_labs_enable_notice_message">Ваш домашній сервер не підтримує тредів, тому ця функція може бути ненадійною. Деякі треди повідомлень можуть бути недоступними. %sУсе одно хочете ввімкнути треди\?</string>
-    <string name="threads_labs_enable_notice_title">Треди бета</string>
-    <string name="threads_beta_enable_notice_message">Треди допомагають упорядкувати свої розмови за темами та легко стежити за ними. %sУвімкнення тредів перезавантажить застосунок. Це може тривати більше часу для деяких облікових записів.</string>
-    <string name="threads_beta_enable_notice_title">Треди бета</string>
+    <string name="threads_labs_enable_notice_message">Ваш домашній сервер не підтримує гілок, тому ця функція може працювати нестабільно. Деякі гілки повідомлень можуть бути недоступними. %sУсе одно хочете ввімкнути гілки\?</string>
+    <string name="threads_labs_enable_notice_title">Гілки бета</string>
+    <string name="threads_beta_enable_notice_message">Гілки допомагають упорядкувати свої розмови за темами та легко стежити за ними. %sУвімкнення гілок перезапустить застосунок. Це може тривати більше часу для деяких облікових записів.</string>
+    <string name="threads_beta_enable_notice_title">Гілки бета</string>
     <string name="action_learn_more">Докладніше</string>
     <string name="action_try_it_out">Спробувати</string>
     <string name="screen_sharing_notification_description">Триває трансляція з екрана</string>
@@ -2576,8 +2571,8 @@
 \n
 \nЗауважте, що ця дія перезапустить застосунок, і це може тривати деякий час.</string>
     <string name="initial_sync_request_title">Початковий запит синхронізації</string>
-    <string name="settings_show_latest_profile_description">Показати найновіші відомості про профіль (аватар і показуване ім\'я) для всіх повідомлень.</string>
-    <string name="settings_show_latest_profile">Показати найновіші відомості про користувача</string>
+    <string name="settings_show_latest_profile_description">Показувати найновіші дані профілю (аватар і показуване ім\'я) для всіх повідомлень.</string>
+    <string name="settings_show_latest_profile">Показувати найновіші дані користувача</string>
     <string name="a11y_presence_busy">Зайнятий</string>
     <string name="keys_backup_settings_signature_from_this_user">Резервна копія має дійсний підпис від цього користувача.</string>
     <string name="live_location_bottom_sheet_last_updated_at">Оновлено %1$s тому</string>
@@ -2598,4 +2593,97 @@
     <string name="time_unit_second_short">с</string>
     <string name="time_unit_minute_short">хв</string>
     <string name="time_unit_hour_short">г</string>
+    <string name="live_location_labs_promotion_switch_title">Увімкнути надсилання місцеперебування</string>
+    <string name="live_location_labs_promotion_description">Зверніть увагу: це експериментальна функція, яка використовує тимчасову імплементацію. Це означає, що ви не зможете видалити свою історію місцеперебування, а досвідчені користувачі зможуть переглядати вашу історію місцеперебування, навіть якщо ви припините ділитися ним із цією кімнатою.</string>
+    <string name="live_location_labs_promotion_title">Надсилання місцеперебування наживо</string>
+    <string name="settings_troubleshoot_test_current_gateway">Поточний шлюз: %s</string>
+    <string name="settings_troubleshoot_test_current_gateway_title">Шлюз</string>
+    <string name="settings_troubleshoot_test_current_endpoint_failed">Не вдалося знайти кінцеву точку.</string>
+    <string name="settings_troubleshoot_test_current_endpoint_success">Поточна кінцева точка: %s</string>
+    <string name="settings_troubleshoot_test_current_endpoint_title">Кінцева точка</string>
+    <string name="settings_troubleshoot_test_current_distributor">Зараз використовується %s.</string>
+    <string name="settings_troubleshoot_test_current_distributor_title">Метод</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="one">Знайдений %d метод.</item>
+        <item quantity="few">Знайдені %d методи.</item>
+        <item quantity="many">Знайдені %d методів.</item>
+        <item quantity="other">Знайдені %d методів.</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_distributors_fdroid">Не знайдено іншого методу, крім фонової синхронізації.</string>
+    <string name="settings_troubleshoot_test_distributors_gplay">Іншого методу, крім служби Google Play, не знайдено.</string>
+    <string name="settings_troubleshoot_test_distributors_title">Доступні методи</string>
+    <string name="settings_notification_method">Метод сповіщення</string>
+    <string name="unifiedpush_distributor_background_sync">Фонова синхронізація</string>
+    <string name="unifiedpush_distributor_fcm_fallback">Служби Google</string>
+    <string name="unifiedpush_getdistributors_dialog_title">Виберіть, як отримувати сповіщення</string>
+    <string name="settings_security_pin_code_use_biometrics_error">Не вдалось увімкнути біометричне розпізнавання.</string>
+    <string name="auth_biometric_key_invalidated_message">Біометричне розпізнавання було вимкнено, оскільки нещодавно було додано новий метод біометричного розпізнавання. Ви можете знову ввімкнути його в налаштуваннях.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">Скинути метод сповіщень</string>
+    <string name="push_gateway_item_profile_tag">Мітка профілю:</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">Не вдалося зареєструвати токен кінцевої точки на домашньому сервері:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">Кінцеву точку успішно зареєстровано на домашньому сервері.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_title">Реєстрація кінцевої точки</string>
+    <string name="action_next">Далі</string>
+    <string name="poll_undisclosed_not_ended">Результати будуть видимі після завершення опитування</string>
+    <string name="labs_enable_msc3061_share_history_desc">Коли запросити когось у зашифровану кімнату, яка поширює історію, зашифрована історія буде видимою.</string>
+    <string name="labs_enable_msc3061_share_history">MSC3061: Поширення ключів кімнати для минулих повідомлень</string>
+    <string name="send_your_first_msg_to_invite">Надішліть своє перше повідомлення, щоб запросити %s до бесіди</string>
+    <string name="direct_room_encryption_enabled_tile_description_future">Повідомлення в цій бесіді будуть захищені наскрізним шифруванням.</string>
+    <string name="create_room_action_go">Уперед</string>
+    <plurals name="room_removed_messages">
+        <item quantity="one">%d повідомлення вилучене</item>
+        <item quantity="few">%d повідомлення вилучені</item>
+        <item quantity="many">%d повідомлень вилучені</item>
+        <item quantity="other">%d повідомлень вилучені</item>
+    </plurals>
+    <string name="live_location_share_location_item_share">Поділитися місцем перебування</string>
+    <string name="live_location_not_enough_permission_dialog_description">Ви повинні мати відповідні дозволи, щоб ділитися місцем перебування наживо в цій кімнаті.</string>
+    <string name="live_location_not_enough_permission_dialog_title">Ви не маєте дозволу ділитися поточним місцем перебування</string>
+    <string name="permalink_unsupported_groups">Неможливо відкрити це посилання: спільноти замінено просторами</string>
+    <string name="ftue_auth_login_username_entry">Ім\'я користувача / Е-пошта / Телефон</string>
+    <string name="ftue_auth_captcha_title">Ви людина\?</string>
+    <string name="ftue_auth_password_reset_email_confirmation_subtitle">Виконайте вказівки, надіслані на %s</string>
+    <string name="ftue_auth_password_reset_confirmation">Скидання пароля</string>
+    <string name="ftue_auth_forgot_password">Забули пароль</string>
+    <string name="ftue_auth_email_verification_footer">Не отримали лист\?</string>
+    <string name="ftue_auth_email_resend_email">Повторно надіслати електронний лист</string>
+    <string name="ftue_auth_email_verification_subtitle">Щоб підтвердити свою електронну адресу, торкніться кнопки в електронному листі, який ми щойно надіслали на адресу %s</string>
+    <string name="ftue_auth_email_verification_title">Перейдіть до своєї електронної пошти для підтвердження.</string>
+    <string name="ftue_auth_phone_confirmation_resend_code">Повторно надіслати код</string>
+    <string name="ftue_auth_phone_confirmation_subtitle">Код було надіслано на %s</string>
+    <string name="ftue_auth_phone_confirmation_title">Підтвердьте свій номер телефону</string>
+    <string name="ftue_auth_sign_out_all_devices">Вийти на всіх пристроях</string>
+    <string name="ftue_auth_reset_password">Скинути пароль</string>
+    <string name="ftue_auth_new_password_subtitle">Переконайтеся, що він складається з 8 або більше символів.</string>
+    <string name="ftue_auth_new_password_title">Виберіть новий пароль</string>
+    <string name="ftue_auth_new_password_entry_title">Новий пароль</string>
+    <string name="ftue_auth_reset_password_breaker_title">Перегляньте свою електронну пошту.</string>
+    <string name="ftue_auth_reset_password_email_subtitle">%s надішле вам посилання для підтвердження</string>
+    <string name="ftue_auth_phone_confirmation_entry_title">Код підтвердження</string>
+    <string name="ftue_auth_phone_title">Введіть свій номер телефону</string>
+    <string name="ftue_auth_email_entry_title">Е-пошта</string>
+    <string name="ftue_auth_email_subtitle">%s потребує підтвердження вашого облікового запису</string>
+    <string name="ftue_auth_phone_subtitle">%s потребує підтвердження вашого облікового запису</string>
+    <string name="ftue_auth_phone_entry_title">Номер телефону</string>
+    <string name="ftue_auth_email_title">Введіть адресу електронної пошти</string>
+    <string name="ftue_auth_terms_subtitle">Ознайомтеся з умовами та правилами %s</string>
+    <string name="ftue_auth_terms_title">Правила сервера</string>
+    <string name="ftue_auth_choose_server_ems_cta">Будьте в курсі</string>
+    <string name="ftue_auth_choose_server_ems_subtitle">Element Matrix Services (EMS) — це надійна служба розміщення для швидкого, безпечного зв’язку в реальному часі. Дізнайтеся, як на <a href="${ftue_ems_url}">element.io/ems</a></string>
+    <string name="ftue_auth_choose_server_ems_title">Хочете розмістити власний сервер\?</string>
+    <string name="ftue_auth_choose_server_entry_hint">URL-адреса сервера</string>
+    <string name="ftue_auth_choose_server_subtitle">Яка адреса вашого сервера\? Це як домівка всіх ваших даних</string>
+    <string name="ftue_auth_choose_server_title">Виберіть свій сервер</string>
+    <string name="ftue_auth_welcome_back_title">З поверненням!</string>
+    <string name="ftue_auth_create_account_edit_server_selection">Редагувати</string>
+    <string name="ftue_auth_create_account_sso_section_header">Або</string>
+    <string name="ftue_auth_create_account_choose_server_header">Де відбуватимуться ваші розмови</string>
+    <string name="ftue_auth_create_account_password_entry_footer">Має бути 8 або більше символів</string>
+    <string name="ftue_auth_create_account_username_entry_footer">Інші бачитимуть вашим іменем %s</string>
+    <string name="ftue_auth_create_account_title">Створіть свій обліковий запис</string>
+    <string name="font_size_use_system">Використовувати типовий для системи</string>
+    <string name="font_size_section_manually">Вибрати вручну</string>
+    <string name="font_size_section_auto">Установити автоматично</string>
+    <string name="font_size_title">Виберіть розмір шрифту</string>
 </resources>

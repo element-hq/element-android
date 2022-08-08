@@ -47,6 +47,11 @@ class StartCallActionsHandler(
     }
 
     private fun handleCallRequest(isVideoCall: Boolean) = withState(timelineViewModel) { state ->
+        if (state.hasActiveElementCallWidget() && !isVideoCall) {
+            timelineViewModel.handle(RoomDetailAction.OpenElementCallWidget)
+            return@withState
+        }
+
         val roomSummary = state.asyncRoomSummary.invoke() ?: return@withState
         when (roomSummary.joinedMembersCount) {
             1 -> {

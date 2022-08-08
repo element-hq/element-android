@@ -16,12 +16,12 @@
 package im.vector.app.features.discovery
 
 import com.airbnb.epoxy.EpoxyModelClass
-import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
+import im.vector.app.core.epoxy.VectorEpoxyModel
 
-@EpoxyModelClass(layout = R.layout.item_settings_progress)
-abstract class SettingsProgressItem : EpoxyModelWithHolder<SettingsProgressItem.Holder>() {
+@EpoxyModelClass
+abstract class SettingsProgressItem : VectorEpoxyModel<SettingsProgressItem.Holder>(R.layout.item_settings_progress) {
 
     class Holder : VectorEpoxyHolder()
 }
