@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.debug
+package im.vector.app.features.navigation
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Context
 
-// This activity is not accessible
-class DebugMenuActivity : AppCompatActivity()
+interface DebugNavigator {
+    fun openDebugMenu(context: Context)
+}

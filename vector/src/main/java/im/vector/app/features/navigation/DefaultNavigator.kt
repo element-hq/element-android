@@ -51,7 +51,6 @@ import im.vector.app.features.crypto.recover.BootstrapBottomSheet
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.crypto.verification.SupportedVerificationMethodsProvider
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
-import im.vector.app.features.debug.DebugMenuActivity
 import im.vector.app.features.devtools.RoomDevToolActivity
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.arguments.TimelineArgs
@@ -123,7 +122,8 @@ class DefaultNavigator @Inject constructor(
         private val spaceStateHandler: SpaceStateHandler,
         private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
         private val features: VectorFeatures,
-        private val analyticsTracker: AnalyticsTracker
+        private val analyticsTracker: AnalyticsTracker,
+        private val debugNavigator: DebugNavigator,
 ) : Navigator {
 
     override fun openLogin(context: Context, loginConfig: LoginConfig?, flags: Int) {
@@ -367,7 +367,7 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun openDebug(context: Context) {
-        context.startActivity(Intent(context, DebugMenuActivity::class.java))
+        debugNavigator.openDebugMenu(context)
     }
 
     override fun openKeysBackupSetup(context: Context, showManualExport: Boolean) {
@@ -615,3 +615,4 @@ class DefaultNavigator @Inject constructor(
         context.startActivity(this)
     }
 }
+

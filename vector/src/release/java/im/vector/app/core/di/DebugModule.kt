@@ -21,12 +21,21 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import im.vector.app.core.platform.DebugReceiver
+import im.vector.app.features.navigation.DebugNavigator
 
 @InstallIn(SingletonComponent::class)
 @Module
 object DebugModule {
+
     @Provides
-    fun providesDebugReceiver() = object: DebugReceiver {
+    fun providesDebugNavigator() = object : DebugNavigator {
+        override fun openDebugMenu(context: Context) {
+            // no op
+        }
+    }
+
+    @Provides
+    fun providesDebugReceiver() = object : DebugReceiver {
         override fun register(context: Context) {
             // no op
         }
