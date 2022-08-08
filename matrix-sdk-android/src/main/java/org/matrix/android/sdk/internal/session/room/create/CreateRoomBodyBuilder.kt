@@ -78,7 +78,7 @@ internal class CreateRoomBodyBuilder @Inject constructor(
                         buildAvatarEvent(params),
                         buildGuestAccess(params)
                 ) +
-                        params.featurePreset?.setupInitialStates().orEmpty() +
+                        buildFeaturePresetInitialStates(params) +
                         buildCustomInitialStates(params)
                 )
                 .takeIf { it.isNotEmpty() }
@@ -97,6 +97,16 @@ internal class CreateRoomBodyBuilder @Inject constructor(
                 powerLevelContentOverride = params.powerLevelContentOverride,
                 roomVersion = params.roomVersion
         )
+    }
+
+    private fun buildFeaturePresetInitialStates(params: CreateRoomParams): List<Event> {
+        return params.featurePreset?.setupInitialStates().orEmpty().map {
+            Event(
+                    type = it.type,
+                    stateKey = it.stateKey,
+                    content = it.content
+            )
+        }
     }
 
     private fun buildCustomInitialStates(params: CreateRoomParams): List<Event> {
