@@ -36,29 +36,14 @@ class FdroidFcmHelper @Inject constructor(
 
     override fun isFirebaseAvailable(): Boolean = false
 
-    /**
-     * Retrieves the FCM registration token.
-     *
-     * @return the FCM token or null if not received from FCM
-     */
     override fun getFcmToken(): String? {
         return null
     }
 
-    /**
-     * Store FCM token to the SharedPrefs
-     *
-     * @param token the token to store
-     */
     override fun storeFcmToken(token: String?) {
         // No op
     }
 
-    /**
-     * onNewToken may not be called on application upgrade, so ensure my shared pref is set
-     *
-     * @param activity the first launch Activity
-     */
     override fun ensureFcmTokenIsRetrieved(activity: Activity, pushersManager: PushersManager, registerPusher: Boolean) {
         // No op
     }

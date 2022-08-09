@@ -45,32 +45,17 @@ class GoogleFcmHelper @Inject constructor(
 
     override fun isFirebaseAvailable(): Boolean = true
 
-    /**
-     * Retrieves the FCM registration token.
-     *
-     * @return the FCM token or null if not received from FCM
-     */
     override fun getFcmToken(): String? {
         return sharedPrefs.getString(PREFS_KEY_FCM_TOKEN, null)
     }
 
-    /**
-     * Store FCM token to the SharedPrefs
-     * TODO Store in realm
-     *
-     * @param token the token to store
-     */
     override fun storeFcmToken(token: String?) {
+        // TODO Store in realm
         sharedPrefs.edit {
             putString(PREFS_KEY_FCM_TOKEN, token)
         }
     }
 
-    /**
-     * onNewToken may not be called on application upgrade, so ensure my shared pref is set
-     *
-     * @param activity the first launch Activity
-     */
     override fun ensureFcmTokenIsRetrieved(activity: Activity, pushersManager: PushersManager, registerPusher: Boolean) {
         //        if (TextUtils.isEmpty(getFcmToken(activity))) {
         // 'app should always check the device for a compatible Google Play services APK before accessing Google Play services features'
@@ -106,12 +91,10 @@ class GoogleFcmHelper @Inject constructor(
         return resultCode == ConnectionResult.SUCCESS
     }
 
-    @Suppress("UNUSED_PARAMETER")
     override fun onEnterForeground(activeSessionHolder: ActiveSessionHolder) {
         // No op
     }
 
-    @Suppress("UNUSED_PARAMETER")
     override fun onEnterBackground(activeSessionHolder: ActiveSessionHolder) {
         // No op
     }

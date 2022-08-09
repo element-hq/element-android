@@ -53,7 +53,7 @@ class FdroidNotificationTroubleshootTestManagerFactory @Inject constructor(
         private val testBatteryOptimization: TestBatteryOptimization,
         private val testNotification: TestNotification,
         private val vectorFeatures: VectorFeatures,
-): NotificationTroubleshootTestManagerFactory {
+) : NotificationTroubleshootTestManagerFactory {
 
     override fun create(fragment: Fragment): NotificationTroubleshootTestManager {
         val mgr = NotificationTroubleshootTestManager(fragment)

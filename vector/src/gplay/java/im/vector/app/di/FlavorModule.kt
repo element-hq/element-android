@@ -49,4 +49,3 @@ abstract class FlavorModule {
     @Binds
     abstract fun bindsFlavorLegals(legals: GoogleFlavorLegals): FlavourLegals
 }
-

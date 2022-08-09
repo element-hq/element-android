@@ -34,6 +34,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.SpaceStateHandler
 import im.vector.app.config.OnboardingVariant
+import im.vector.app.core.debug.DebugNavigator
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.error.fatalError
 import im.vector.app.features.VectorFeatures
@@ -51,7 +52,6 @@ import im.vector.app.features.crypto.recover.BootstrapBottomSheet
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.crypto.verification.SupportedVerificationMethodsProvider
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
-import im.vector.app.core.debug.DebugNavigator
 import im.vector.app.features.devtools.RoomDevToolActivity
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.arguments.TimelineArgs
@@ -616,4 +616,3 @@ class DefaultNavigator @Inject constructor(
         context.startActivity(this)
     }
 }
-

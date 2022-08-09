@@ -25,22 +25,23 @@ interface FcmHelper {
     /**
      * Retrieves the FCM registration token.
      *
-     * @return the FCM token or null if not received from FCM
+     * @return the FCM token or null if not received from FCM.
      */
     fun getFcmToken(): String?
 
     /**
-     * Store FCM token to the SharedPrefs
-     * TODO Store in realm
+     * Store FCM token to the SharedPrefs.
      *
-     * @param token the token to store
+     * @param token the token to store.
      */
     fun storeFcmToken(token: String?)
 
     /**
-     * onNewToken may not be called on application upgrade, so ensure my shared pref is set
+     * onNewToken may not be called on application upgrade, so ensure my shared pref is set.
      *
-     * @param activity the first launch Activity
+     * @param activity the first launch Activity.
+     * @param pushersManager the instance to register the pusher on.
+     * @param registerPusher whether the pusher should be registered.
      */
     fun ensureFcmTokenIsRetrieved(activity: Activity, pushersManager: PushersManager, registerPusher: Boolean)
 
