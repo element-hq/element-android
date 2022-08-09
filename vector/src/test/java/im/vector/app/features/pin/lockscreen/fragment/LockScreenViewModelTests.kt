@@ -19,9 +19,11 @@ package im.vector.app.features.pin.lockscreen.fragment
 import android.app.KeyguardManager
 import android.os.Build
 import android.security.keystore.KeyPermanentlyInvalidatedException
+import androidx.biometric.BiometricPrompt
 import androidx.fragment.app.FragmentActivity
 import com.airbnb.mvrx.test.MvRxTestRule
 import com.airbnb.mvrx.withState
+import im.vector.app.features.pin.lockscreen.biometrics.BiometricAuthError
 import im.vector.app.features.pin.lockscreen.biometrics.BiometricHelper
 import im.vector.app.features.pin.lockscreen.configuration.LockScreenConfiguration
 import im.vector.app.features.pin.lockscreen.configuration.LockScreenMode
@@ -46,6 +48,7 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeFalse
+import org.amshove.kluent.shouldBeTrue
 import org.amshove.kluent.shouldNotBeEqualTo
 import org.junit.Before
 import org.junit.Rule
@@ -260,7 +263,44 @@ class LockScreenViewModelTests {
         events.assertValues(LockScreenViewEvent.AuthError(AuthMethod.BIOMETRICS, exception))
     }
 
-    private fun createViewState(
+    @Test
+    fun `when showBiometricPrompt handles isAuthDisabledError, canUseBiometricAuth becomes false`() = runTest {
+        val viewModel = LockScreenViewModel(createViewState(), pinCodeHelper, biometricHelperFactory, keysMigrator, versionProvider, keyguardManager)
+        val exception = BiometricAuthError(BiometricPrompt.ERROR_LOCKOUT_PERMANENT, "Permanent lockout")
+        coEvery { biometricHelper.authenticate(any<FragmentActivity>()) } throws exception
+
+        val events = viewModel.test().viewEvents
+        events.assertNoValues()
+
+        viewModel.handle(LockScreenAction.ShowBiometricPrompt(mockk()))
+
+        exception.isAuthDisabledError.shouldBeTrue()
+        events.assertValues(LockScreenViewEvent.AuthError(AuthMethod.BIOMETRICS, exception))
+        viewModel.test().states.assertLatestValue { !it.canUseBiometricAuth }
+    }
+
+    @Test
+    fun `when OnUIReady action is received and showBiometricPromptAutomatically is true it shows prompt`() = runTest {
+        // To force showBiometricPromptAutomatically to be true
+        every { biometricHelper.isSystemAuthEnabledAndValid } returns true
+        val viewModel = LockScreenViewModel(createViewState(), pinCodeHelper, biometricHelperFactory, keysMigrator, versionProvider, keyguardManager)
+        val events = viewModel.test().viewEvents
+        viewModel.handle(LockScreenAction.OnUIReady)
+        events.assertLatestValue(LockScreenViewEvent.ShowBiometricPromptAutomatically)
+    }
+
+    @Test
+    fun `when OnUIReady action is received and isBiometricKeyInvalidated is true it shows prompt`() = runTest {
+        // To force isBiometricKeyInvalidated to be true
+        every { biometricHelper.hasSystemKey } returns true
+        every { biometricHelper.isSystemKeyValid } returns false
+        val viewModel = LockScreenViewModel(createViewState(), pinCodeHelper, biometricHelperFactory, keysMigrator, versionProvider, keyguardManager)
+        val events = viewModel.test().viewEvents
+        viewModel.handle(LockScreenAction.OnUIReady)
+        events.assertLatestValue(LockScreenViewEvent.ShowBiometricKeyInvalidatedMessage)
+    }
+
+        private fun createViewState(
             lockScreenConfiguration: LockScreenConfiguration = createDefaultConfiguration(),
             canUseBiometricAuth: Boolean = false,
             showBiometricPromptAutomatically: Boolean = false,
