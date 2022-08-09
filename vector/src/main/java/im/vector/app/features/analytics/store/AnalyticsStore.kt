@@ -29,6 +29,9 @@ import kotlinx.coroutines.flow.map
 import org.matrix.android.sdk.api.extensions.orFalse
 import javax.inject.Inject
 
+/**
+ * Also accessed via reflection by the instrumentation tests @see [im.vector.app.ClearCurrentSessionRule].
+ */
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "vector_analytics")
 
 /**

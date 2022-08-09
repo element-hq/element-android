@@ -27,6 +27,7 @@ import im.vector.app.features.MainActivity
 import im.vector.app.ui.robot.ElementRobot
 import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import java.util.UUID
 
@@ -35,7 +36,9 @@ import java.util.UUID
 class CantVerifyTest : VerificationTestBase() {
 
     @get:Rule
-    val activityRule = ActivityScenarioRule(MainActivity::class.java)
+    val testRule = RuleChain
+            .outerRule(ActivityScenarioRule(MainActivity::class.java))
+            .around(ClearCurrentSessionRule())
 
     private val elementRobot = ElementRobot()
     var userName: String = "loginTest_${UUID.randomUUID()}"
