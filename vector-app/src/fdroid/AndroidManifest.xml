@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="im.vector.app">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -15,7 +14,7 @@
     <application>
 
         <receiver
-            android:name=".fdroid.receiver.OnApplicationUpgradeOrRebootReceiver"
+            android:name="im.vector.app.fdroid.receiver.OnApplicationUpgradeOrRebootReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
@@ -24,12 +23,12 @@
         </receiver>
 
         <receiver
-            android:name=".fdroid.receiver.AlarmSyncBroadcastReceiver"
+            android:name="im.vector.app.fdroid.receiver.AlarmSyncBroadcastReceiver"
             android:enabled="true"
             android:exported="false" />
 
         <receiver
-            android:name=".fdroid.receiver.KeepInternalDistributor"
+            android:name="im.vector.app.fdroid.receiver.KeepInternalDistributor"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
@@ -43,7 +42,7 @@
         </receiver>
 
         <service
-            android:name=".fdroid.service.GuardAndroidService"
+            android:name="im.vector.app.fdroid.service.GuardAndroidService"
             android:exported="false"
             tools:ignore="Instantiatable" />
 
