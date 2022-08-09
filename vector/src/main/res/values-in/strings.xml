@@ -1420,7 +1420,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="verification_profile_verified">Terverifikasi</string>
     <string name="verification_profile_verify">Verifikasi</string>
     <string name="verification_open_other_to_verify">Gunakan sesi yang ada untuk memverifikasi yang satu ini, memberikan aksesnya ke pesan terenkripsi.</string>
-    <string name="crosssigning_verify_this_session">Verifikasi login ini</string>
+    <string name="crosssigning_verify_this_session">Verifikasi perangkat ini</string>
     <plurals name="settings_active_sessions_count">
         <item quantity="other">%d sesi aktif</item>
     </plurals>
@@ -2490,7 +2490,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="direct_room_encryption_enabled_tile_description_future">Pesan di obrolan ini akan dienkripsi secara ujung-ke-ujung.</string>
     <string name="create_room_action_go">Mulai</string>
     <string name="ftue_auth_password_reset_email_confirmation_subtitle">Ikuti petunjuk yang terkirim ke %s</string>
-    <string name="ftue_auth_email_verification_subtitle">Untuk mengonfirmasi email Anda, ketuk tombol dalam email yang kami kirim ke %s</string>
+    <string name="ftue_auth_email_verification_subtitle">Ikuti petunjuk yang terkirim ke %s</string>
     <plurals name="room_removed_messages">
         <item quantity="other">%d pesan dihapus</item>
     </plurals>
@@ -2504,7 +2504,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="ftue_auth_forgot_password">Lupa kata sandi</string>
     <string name="ftue_auth_email_resend_email">Kirim ulang email</string>
     <string name="ftue_auth_email_verification_footer">Belum menerima email\?</string>
-    <string name="ftue_auth_email_verification_title">Periksa email Anda untuk memverifikasi.</string>
+    <string name="ftue_auth_email_verification_title">Verifikasi email Anda</string>
     <string name="ftue_auth_phone_confirmation_resend_code">Kirim ulang kode</string>
     <string name="ftue_auth_phone_confirmation_subtitle">Sebuah kode terkirim ke %s</string>
     <string name="ftue_auth_phone_confirmation_title">Konfirmasi nomor telepon Anda</string>
@@ -2541,4 +2541,22 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="font_size_section_manually">Pilih secara manual</string>
     <string name="font_size_section_auto">Atur secara otomatis</string>
     <string name="font_size_title">Pilih ukuran font</string>
+    <string name="labs_enable_element_call_permission_shortcuts_summary">Terima akses kamera / mikrofon widget Element Call secara otomatis</string>
+    <string name="labs_enable_element_call_permission_shortcuts">Aktifkan pintasan izin Element Call</string>
+    <string name="live_location_description">Lokasi langsung</string>
+    <string name="location_share_loading_map_error">Tidak dapat memuat peta
+\nHomeserver ini mungkin tidak diatur untuk menampilkan peta.</string>
+    <string name="a11y_open_settings">Buka pengaturan</string>
+    <string name="verify_invalid_qr_notice">Kode QR ini tampaknya tidak benar. Mohon coba verifikasi dengan metode lain.</string>
+    <string name="crosssigning_cannot_verify_this_session_desc">Anda tidak akan dapat mengakses riwayat pesan terenkripsi. Atur ulang Cadangan Pesan Aman dan kunci-kunci verifikasi Anda untuk memulai secara segar.</string>
+    <string name="crosssigning_cannot_verify_this_session">Tidak dapat memverifikasi perangkat ini</string>
+    <string name="ftue_auth_choose_server_sign_in_subtitle">Apa alamat server Anda\?</string>
+    <string name="ftue_auth_sign_in_choose_server_header">Di mana percakapan Anda tinggal</string>
+    <string name="updating_your_data">Memperbarui data Anda…</string>
+    <plurals name="search_space_multiple_parents">
+        <item quantity="other">%1$s dan %2$d lainnya</item>
+    </plurals>
+    <string name="search_space_two_parents">%1$s dan %2$s</string>
+    <string name="auth_reset_password_error_unverified">Email belum diverifikasi, periksa kotak masuk Anda</string>
+    <string name="all_chats">Semua Obrolan</string>
 </resources>
