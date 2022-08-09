@@ -66,13 +66,13 @@ class DebugVectorOverrides(private val context: Context) : VectorOverrides {
     suspend fun setHomeserverCapabilities(block: HomeserverCapabilitiesOverride.() -> HomeserverCapabilitiesOverride) {
         val capabilitiesOverride = block(forceHomeserverCapabilities.firstOrNull() ?: HomeserverCapabilitiesOverride(null, null))
         context.dataStore.edit { settings ->
-            when (capabilitiesOverride.canChangeDisplayName) {
+            when (val canChangeDisplayName = capabilitiesOverride.canChangeDisplayName) {
                 null -> settings.remove(forceCanChangeDisplayName)
-                else -> settings[forceCanChangeDisplayName] = capabilitiesOverride.canChangeDisplayName
+                else -> settings[forceCanChangeDisplayName] = canChangeDisplayName
             }
-            when (capabilitiesOverride.canChangeAvatar) {
+            when (val canChangeAvatar = capabilitiesOverride.canChangeAvatar) {
                 null -> settings.remove(forceCanChangeAvatar)
-                else -> settings[forceCanChangeAvatar] = capabilitiesOverride.canChangeAvatar
+                else -> settings[forceCanChangeAvatar] = canChangeAvatar
             }
         }
     }

@@ -25,8 +25,8 @@ import android.view.ViewGroup
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.databinding.FragmentDebugPrivateSettingsBinding
 import im.vector.app.features.home.room.list.home.release.ReleaseNotesActivity
+import im.vector.application.databinding.FragmentDebugPrivateSettingsBinding
 
 class DebugPrivateSettingsFragment : VectorBaseFragment<FragmentDebugPrivateSettingsBinding>() {
 

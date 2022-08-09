@@ -349,6 +349,7 @@ android {
 dependencies {
     implementation project(':vector')
     implementation project(':vector-config')
+    debugImplementation project(':library:ui-styles')
     implementation libs.dagger.hilt
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation "androidx.sharetarget:sharetarget:1.1.0"
@@ -364,6 +365,7 @@ dependencies {
     debugImplementation "com.kgurgul.flipper:flipper-realm-android:2.2.0"
 
     kapt libs.dagger.hiltCompiler
+    kapt libs.airbnb.epoxyProcessor
 
     androidTestImplementation libs.androidx.testCore
     androidTestImplementation libs.androidx.testRunner
