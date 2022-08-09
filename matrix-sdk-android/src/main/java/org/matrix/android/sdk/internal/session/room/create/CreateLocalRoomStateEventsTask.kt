@@ -92,7 +92,7 @@ internal class DefaultCreateLocalRoomStateEventsTask @Inject constructor(
      * Generate the create state event related to this room.
      */
     private fun MutableList<Event>.createRoomCreateEvent() = apply {
-        val roomCreateEvent = createLocalEvent(
+        val roomCreateEvent = createLocalStateEvent(
                 type = EventType.STATE_ROOM_CREATE,
                 content = RoomCreateContent(
                         creator = roomCreatorUserId,
@@ -100,7 +100,6 @@ internal class DefaultCreateLocalRoomStateEventsTask @Inject constructor(
                         type = (createRoomBody.creationContent as? Map<*, *>)?.get(CreateRoomParams.CREATION_CONTENT_KEY_ROOM_TYPE) as? String
 
                 ).toContent(),
-                stateKey = ""
         )
         add(roomCreateEvent)
     }
@@ -110,7 +109,7 @@ internal class DefaultCreateLocalRoomStateEventsTask @Inject constructor(
      * Ref: https://spec.matrix.org/latest/client-server-api/#mroompower_levels
      */
     private fun MutableList<Event>.createRoomPowerLevelsEvent() = apply {
-        val powerLevelsContent = createLocalEvent(
+        val powerLevelsContent = createLocalStateEvent(
                 type = EventType.STATE_ROOM_POWER_LEVELS,
                 content = (createRoomBody.powerLevelContentOverride ?: PowerLevelsContent()).let {
                     it.copy(
@@ -123,7 +122,6 @@ internal class DefaultCreateLocalRoomStateEventsTask @Inject constructor(
                             usersDefault = it.usersDefaultOrDefault(),
                     )
                 }.toContent(),
-                stateKey = ""
         )
         add(powerLevelsContent)
     }
@@ -135,7 +133,7 @@ internal class DefaultCreateLocalRoomStateEventsTask @Inject constructor(
         val memberEvents = userIds
                 .mapNotNull { tryOrNull { userService.resolveUser(it) } }
                 .map { user ->
-                    createLocalEvent(
+                    createLocalStateEvent(
                             type = EventType.STATE_ROOM_MEMBER,
                             content = RoomMemberContent(
                                     isDirect = createRoomBody.isDirect.takeUnless { user.userId == roomCreatorUserId }.orFalse(),
@@ -154,7 +152,7 @@ internal class DefaultCreateLocalRoomStateEventsTask @Inject constructor(
      */
     private fun MutableList<Event>.createRoomThreePidEvents() = apply {
         val threePidEvents = createRoomBody.invite3pids.orEmpty().map { body ->
-            val localThirdPartyInviteEvent = createLocalEvent(
+            val localThirdPartyInviteEvent = createLocalStateEvent(
                     type = EventType.LOCAL_STATE_ROOM_THIRD_PARTY_INVITE,
                     content = LocalRoomThirdPartyInviteContent(
                             isDirect = createRoomBody.isDirect.orFalse(),
@@ -162,12 +160,10 @@ internal class DefaultCreateLocalRoomStateEventsTask @Inject constructor(
                             displayName = body.address,
                             thirdPartyInvite = body.toThreePid()
                     ).toContent(),
-                    stateKey = ""
             )
-            val thirdPartyInviteEvent = createLocalEvent(
+            val thirdPartyInviteEvent = createLocalStateEvent(
                     type = EventType.STATE_ROOM_THIRD_PARTY_INVITE,
                     content = RoomThirdPartyInviteContent(body.address, null, null, null).toContent(),
-                    stateKey = ""
             )
             listOf(localThirdPartyInviteEvent, thirdPartyInviteEvent)
         }.flatten()
@@ -179,12 +175,11 @@ internal class DefaultCreateLocalRoomStateEventsTask @Inject constructor(
      */
     fun MutableList<Event>.createRoomAliasEvent() = apply {
         if (createRoomBody.roomAliasName != null) {
-            val canonicalAliasContent = createLocalEvent(
+            val canonicalAliasContent = createLocalStateEvent(
                     type = EventType.STATE_ROOM_CANONICAL_ALIAS,
                     content = RoomCanonicalAliasContent(
                             canonicalAlias = "${createRoomBody.roomAliasName}:${roomCreatorUserId.getServerName()}"
                     ).toContent(),
-                    stateKey = ""
             )
             add(canonicalAliasContent)
         }
@@ -214,9 +209,9 @@ internal class DefaultCreateLocalRoomStateEventsTask @Inject constructor(
             }
         }
 
-        add(createLocalEvent(EventType.STATE_ROOM_JOIN_RULES, RoomJoinRulesContent(joinRules.value).toContent(), ""))
-        add(createLocalEvent(EventType.STATE_ROOM_HISTORY_VISIBILITY, RoomHistoryVisibilityContent(historyVisibility.value).toContent(), ""))
-        add(createLocalEvent(EventType.STATE_ROOM_GUEST_ACCESS, RoomGuestAccessContent(guestAccess.value).toContent(), ""))
+        add(createLocalStateEvent(EventType.STATE_ROOM_JOIN_RULES, RoomJoinRulesContent(joinRules.value).toContent()))
+        add(createLocalStateEvent(EventType.STATE_ROOM_HISTORY_VISIBILITY, RoomHistoryVisibilityContent(historyVisibility.value).toContent()))
+        add(createLocalStateEvent(EventType.STATE_ROOM_GUEST_ACCESS, RoomGuestAccessContent(guestAccess.value).toContent()))
     }
 
     /**
@@ -226,7 +221,7 @@ internal class DefaultCreateLocalRoomStateEventsTask @Inject constructor(
     private fun MutableList<Event>.createRoomInitialStateEvents() = apply {
         val initialStates = createRoomBody.initialStates ?: return@apply
 
-        val initialStateEvents = initialStates.map { createLocalEvent(it.type, it.content, it.stateKey) }
+        val initialStateEvents = initialStates.map { createLocalStateEvent(it.type, it.content, it.stateKey) }
         // Erase existing events of the same type
         removeAll { event -> event.type in initialStateEvents.map { it.type } }
         // Add the initial state events to the list
@@ -238,10 +233,10 @@ internal class DefaultCreateLocalRoomStateEventsTask @Inject constructor(
      */
     private fun MutableList<Event>.createRoomNameAndTopicStateEvents() = apply {
         if (createRoomBody.name != null) {
-            add(createLocalEvent(EventType.STATE_ROOM_NAME, RoomNameContent(createRoomBody.name).toContent(), ""))
+            add(createLocalStateEvent(EventType.STATE_ROOM_NAME, RoomNameContent(createRoomBody.name).toContent()))
         }
         if (createRoomBody.topic != null) {
-            add(createLocalEvent(EventType.STATE_ROOM_TOPIC, RoomTopicContent(createRoomBody.topic).toContent(), ""))
+            add(createLocalStateEvent(EventType.STATE_ROOM_TOPIC, RoomTopicContent(createRoomBody.topic).toContent()))
         }
     }
 
@@ -255,35 +250,33 @@ internal class DefaultCreateLocalRoomStateEventsTask @Inject constructor(
         // HistoryVisibility
         if (none { it.type == EventType.STATE_ROOM_HISTORY_VISIBILITY }) {
             add(
-                    createLocalEvent(
+                    createLocalStateEvent(
                             type = EventType.STATE_ROOM_HISTORY_VISIBILITY,
                             content = RoomHistoryVisibilityContent(RoomHistoryVisibility.SHARED.value).toContent(),
-                            stateKey = ""
                     )
             )
         }
         // GuestAccess
         if (none { it.type == EventType.STATE_ROOM_GUEST_ACCESS }) {
             add(
-                    createLocalEvent(
+                    createLocalStateEvent(
                             type = EventType.STATE_ROOM_GUEST_ACCESS,
                             content = RoomGuestAccessContent(GuestAccess.Forbidden.value).toContent(),
-                            stateKey = ""
                     )
             )
         }
     }
 
     /**
-     * Generate a local event from the given parameters.
+     * Generate a local state event from the given parameters.
      *
      * @param type the event type, see [EventType]
-     * @param content the content of the Event
+     * @param content the content of the event
      * @param stateKey the stateKey, if any
      *
-     * @return a local event
+     * @return a local state event
      */
-    private fun createLocalEvent(type: String?, content: Content?, stateKey: String?): Event {
+    private fun createLocalStateEvent(type: String?, content: Content?, stateKey: String? = ""): Event {
         return Event(
                 type = type,
                 senderId = roomCreatorUserId,
