@@ -47,6 +47,11 @@ class FlowTestObserver<T>(
         return this
     }
 
+    fun assertLatestValue(predicate: (T) -> Boolean): FlowTestObserver<T> {
+        assertTrue(predicate(values.last()))
+        return this
+    }
+
     fun assertLatestValue(value: T) {
         assertTrue(values.last() == value)
     }
