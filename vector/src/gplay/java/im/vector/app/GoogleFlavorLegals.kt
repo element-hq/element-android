@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,5 +19,15 @@ package im.vector.app
 import android.content.Context
 import android.content.Intent
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import im.vector.app.features.settings.legals.FlavourLegals
+import javax.inject.Inject
 
-fun openOssLicensesMenuActivity(context: Context) = context.startActivity(Intent(context, OssLicensesMenuActivity::class.java))
+class GoogleFlavorLegals @Inject constructor() : FlavourLegals {
+
+    override fun hasThirdPartyNotices() = true
+
+    override fun navigateToThirdPartyNotices(context: Context) {
+        // See https://developers.google.com/android/guides/opensource
+        context.startActivity(Intent(context, OssLicensesMenuActivity::class.java))
+    }
+}

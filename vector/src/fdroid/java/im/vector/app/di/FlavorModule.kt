@@ -27,6 +27,7 @@ import im.vector.app.core.services.GuardServiceStarter
 import im.vector.app.fdroid.service.FDroidGuardServiceStarter
 import im.vector.app.features.home.NightlyProxy
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.settings.legals.FlavourLegals
 import im.vector.app.push.fcm.FdroidFcmHelper
 
 @InstallIn(SingletonComponent::class)
@@ -42,6 +43,15 @@ abstract class FlavorModule {
         @Provides
         fun provideNightlyProxy() = object : NightlyProxy {
             override fun onHomeResumed() {
+                // no op
+            }
+        }
+
+        @Provides
+        fun providesFlavorLegals() = object : FlavourLegals {
+            override fun hasThirdPartyNotices() = false
+
+            override fun navigateToThirdPartyNotices(context: Context) {
                 // no op
             }
         }
