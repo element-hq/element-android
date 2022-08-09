@@ -34,6 +34,10 @@ import im.vector.app.databinding.FragmentLockScreenBinding
 import im.vector.app.features.pin.lockscreen.configuration.LockScreenConfiguration
 import im.vector.app.features.pin.lockscreen.configuration.LockScreenMode
 import im.vector.app.features.pin.lockscreen.views.LockScreenCodeView
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 @AndroidEntryPoint
 class LockScreenFragment : VectorBaseFragment<FragmentLockScreenBinding>() {
@@ -55,22 +59,12 @@ class LockScreenFragment : VectorBaseFragment<FragmentLockScreenBinding>() {
             handleEvent(it)
         }
 
-        withState(viewModel) { state ->
-            if (state.lockScreenConfiguration.mode == LockScreenMode.CREATE) return@withState
-
-            viewLifecycleOwner.lifecycleScope.launchWhenResumed {
-                if (state.canUseBiometricAuth && state.isBiometricKeyInvalidated) {
-                    lockScreenListener?.onBiometricKeyInvalidated()
-                } else if (state.showBiometricPromptAutomatically) {
+        viewModel.stateFlow.distinctUntilChangedBy { it.showBiometricPromptAutomatically }
+                .filter { it.showBiometricPromptAutomatically }
+                .onEach {
                     showBiometricPrompt()
                 }
-            }
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        viewModel.reset()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     override fun invalidate() = withState(viewModel) { state ->
@@ -83,6 +77,7 @@ class LockScreenFragment : VectorBaseFragment<FragmentLockScreenBinding>() {
                 setupTitleView(views.titleTextView, false, state.lockScreenConfiguration)
             }
         }
+
         renderDeleteOrFingerprintButtons(views, views.codeView.enteredDigits)
     }
 
@@ -123,6 +118,7 @@ class LockScreenFragment : VectorBaseFragment<FragmentLockScreenBinding>() {
             is LockScreenViewEvent.AuthSuccessful -> lockScreenListener?.onAuthenticationSuccess(viewEvent.method)
             is LockScreenViewEvent.AuthFailure -> onAuthFailure(viewEvent.method)
             is LockScreenViewEvent.AuthError -> onAuthError(viewEvent.method, viewEvent.throwable)
+            is LockScreenViewEvent.ShowBiometricKeyInvalidatedMessage -> lockScreenListener?.onBiometricKeyInvalidated()
         }
     }
 

@@ -16,8 +16,10 @@
 
 package im.vector.app.features.pin.lockscreen.di
 
+import android.app.KeyguardManager
 import android.content.Context
 import androidx.biometric.BiometricManager
+import androidx.core.content.getSystemService
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -83,6 +85,9 @@ object LockScreenModule {
             SecretStoringUtils(context, keyStore, buildVersionSdkIntProvider),
             buildVersionSdkIntProvider,
     )
+
+    @Provides
+    fun provideKeyguardManager(context: Context): KeyguardManager = context.getSystemService()!!
 }
 
 @Module
