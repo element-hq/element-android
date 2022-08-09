@@ -44,7 +44,7 @@ class MissingSystemKeyMigratorTests {
         every { keyStoreCryptoFactory.provide(any(), any()) } returns keyStoreCryptoMock
         every { vectorPreferences.useBiometricsToUnlock() } returns true
 
-        missingSystemKeyMigrator.migrate()
+        missingSystemKeyMigrator.migrateIfNeeded()
 
         verify { keyStoreCryptoMock.ensureKey() }
     }
@@ -57,7 +57,7 @@ class MissingSystemKeyMigratorTests {
         every { keyStoreCryptoFactory.provide(any(), any()) } returns keyStoreCryptoMock
         every { vectorPreferences.useBiometricsToUnlock() } returns true
 
-        invoking { missingSystemKeyMigrator.migrate() } shouldNotThrow KeyPermanentlyInvalidatedException::class
+        invoking { missingSystemKeyMigrator.migrateIfNeeded() } shouldNotThrow KeyPermanentlyInvalidatedException::class
     }
 
     @Test
@@ -68,7 +68,7 @@ class MissingSystemKeyMigratorTests {
         every { keyStoreCryptoFactory.provide(any(), any()) } returns keyStoreCryptoMock
         every { vectorPreferences.useBiometricsToUnlock() } returns true
 
-        invoking { missingSystemKeyMigrator.migrate() } shouldNotThrow UserNotAuthenticatedException::class
+        invoking { missingSystemKeyMigrator.migrateIfNeeded() } shouldNotThrow UserNotAuthenticatedException::class
     }
 
     @Test
@@ -79,7 +79,7 @@ class MissingSystemKeyMigratorTests {
         every { keyStoreCryptoFactory.provide(any(), any()) } returns keyStoreCryptoMock
         every { vectorPreferences.useBiometricsToUnlock() } returns false
 
-        missingSystemKeyMigrator.migrate()
+        missingSystemKeyMigrator.migrateIfNeeded()
 
         verify(exactly = 0) { keyStoreCryptoMock.ensureKey() }
     }
@@ -93,7 +93,7 @@ class MissingSystemKeyMigratorTests {
         every { keyStoreCryptoFactory.provide(any(), any()) } returns keyStoreCryptoMock
         every { vectorPreferences.useBiometricsToUnlock() } returns false
 
-        missingSystemKeyMigrator.migrate()
+        missingSystemKeyMigrator.migrateIfNeeded()
 
         verify(exactly = 0) { keyStoreCryptoMock.ensureKey() }
     }

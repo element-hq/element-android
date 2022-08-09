@@ -18,6 +18,7 @@ package im.vector.app.features.pin.lockscreen.crypto.migrations
 
 import android.security.keystore.UserNotAuthenticatedException
 import im.vector.app.features.pin.lockscreen.crypto.KeyStoreCrypto
+import im.vector.app.features.settings.VectorPreferences
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -31,7 +32,8 @@ class SystemKeyV1MigratorTests {
 
     private val keyStoreCryptoFactory = mockk<KeyStoreCrypto.Factory>()
     private val keyStore = mockk<KeyStore>(relaxed = true)
-    private val systemKeyV1Migrator = SystemKeyV1Migrator("vector.system_new", keyStore, keyStoreCryptoFactory)
+    private val vectorPreferences = mockk<VectorPreferences>(relaxed = true)
+    private val systemKeyV1Migrator = SystemKeyV1Migrator("vector.system_new", keyStore, keyStoreCryptoFactory, vectorPreferences)
 
     @Test
     fun isMigrationNeededReturnsTrueIfV1KeyExists() {
