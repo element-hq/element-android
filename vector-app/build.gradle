@@ -341,6 +341,13 @@ android {
         ]
     }
 
+    sourceSets {
+        // Add sourceSets for `release` version when building `nightly`
+        nightly {
+            java.srcDirs += "src/release/java"
+        }
+    }
+
     buildFeatures {
         viewBinding true
     }
