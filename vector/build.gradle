@@ -192,7 +192,7 @@ dependencies {
     api libs.airbnb.mavericks
 
     // Snap Helper https://github.com/rubensousa/GravitySnapHelper
-    implementation 'com.github.rubensousa:gravitysnaphelper:2.2.2'
+    api 'com.github.rubensousa:gravitysnaphelper:2.2.2'
 
     // Nightly
     // API-only library
