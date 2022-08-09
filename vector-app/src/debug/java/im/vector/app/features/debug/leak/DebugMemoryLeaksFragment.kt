@@ -26,6 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentDebugMemoryLeaksBinding
+import im.vector.application.databinding.FragmentDebugMemoryLeaksBinding
 
 @AndroidEntryPoint
 class DebugMemoryLeaksFragment : VectorBaseFragment<FragmentDebugMemoryLeaksBinding>() {
