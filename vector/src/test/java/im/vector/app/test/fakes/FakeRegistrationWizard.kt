@@ -57,6 +57,10 @@ class FakeRegistrationWizard : RegistrationWizard by mockk(relaxed = false) {
         coEvery { registrationAvailable(userName) } returns RegistrationAvailability.Available
     }
 
+    fun givenUserNameIsAvailableThrows(userName: String, cause: Throwable) {
+        coEvery { registrationAvailable(userName) } throws cause
+    }
+
     fun givenUserNameIsUnavailable(userName: String, failure: Failure.ServerError) {
         coEvery { registrationAvailable(userName) } returns RegistrationAvailability.NotAvailable(failure)
     }
