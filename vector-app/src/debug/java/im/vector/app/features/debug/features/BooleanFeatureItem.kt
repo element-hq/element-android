@@ -23,9 +23,9 @@ import android.widget.Spinner
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
-import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.application.R
 
 @EpoxyModelClass
 abstract class BooleanFeatureItem : VectorEpoxyModel<BooleanFeatureItem.Holder>(R.layout.item_feature) {
@@ -70,8 +70,8 @@ abstract class BooleanFeatureItem : VectorEpoxyModel<BooleanFeatureItem.Holder>(
     }
 
     class Holder : VectorEpoxyHolder() {
-        val label by bind<TextView>(im.vector.app.R.id.feature_label)
-        val optionsSpinner by bind<Spinner>(im.vector.app.R.id.feature_options)
+        val label by bind<TextView>(R.id.feature_label)
+        val optionsSpinner by bind<Spinner>(R.id.feature_options)
     }
 
     interface Listener {
