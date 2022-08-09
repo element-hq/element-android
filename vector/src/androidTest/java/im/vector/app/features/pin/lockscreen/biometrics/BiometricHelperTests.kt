@@ -39,6 +39,7 @@ import im.vector.app.features.pin.lockscreen.ui.fallbackprompt.FallbackBiometric
 import im.vector.app.features.pin.lockscreen.utils.DevicePromptCheck
 import io.mockk.clearAllMocks
 import io.mockk.every
+import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.mockkStatic
@@ -247,7 +248,7 @@ class BiometricHelperTests {
             every { createAuthChannel() } returns mockAuthChannel
             every { authenticateWithPromptInternal(any(), any(), any()) } returns mockk()
         }
-        every { lockScreenKeyRepository.deleteSystemKey() } returns Unit
+        justRun { lockScreenKeyRepository.deleteSystemKey() }
 
         val latch = CountDownLatch(1)
         val intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, LockScreenTestActivity::class.java)

@@ -182,8 +182,7 @@ class LockScreenViewModel @AssistedInject constructor(
      * See issue [#6768](https://github.com/vector-im/element-android/issues/6768).
      */
     @SuppressLint("NewApi")
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    internal suspend fun waitUntilKeyguardIsUnlocked() {
+    private suspend fun waitUntilKeyguardIsUnlocked() {
         if (versionProvider.get() < Build.VERSION_CODES.S) return
         withTimeoutOrNull(5.seconds) {
             while (keyguardManager.isDeviceLocked) {
