@@ -25,4 +25,5 @@ sealed class LockScreenViewEvent : VectorViewEvents {
     data class AuthFailure(val method: AuthMethod) : LockScreenViewEvent()
     data class AuthError(val method: AuthMethod, val throwable: Throwable) : LockScreenViewEvent()
     object ShowBiometricKeyInvalidatedMessage : LockScreenViewEvent()
+    object ShowBiometricPromptAutomatically : LockScreenViewEvent()
 }

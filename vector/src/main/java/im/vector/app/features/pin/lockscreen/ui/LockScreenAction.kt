@@ -22,4 +22,5 @@ import im.vector.app.core.platform.VectorViewModelAction
 sealed class LockScreenAction : VectorViewModelAction {
     data class PinCodeEntered(val value: String) : LockScreenAction()
     data class ShowBiometricPrompt(val callingActivity: FragmentActivity) : LockScreenAction()
+    object OnUIReady : LockScreenAction()
 }

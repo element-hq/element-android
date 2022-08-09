@@ -23,7 +23,6 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,10 +33,6 @@ import im.vector.app.databinding.FragmentLockScreenBinding
 import im.vector.app.features.pin.lockscreen.configuration.LockScreenConfiguration
 import im.vector.app.features.pin.lockscreen.configuration.LockScreenMode
 import im.vector.app.features.pin.lockscreen.views.LockScreenCodeView
-import kotlinx.coroutines.flow.distinctUntilChangedBy
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 
 @AndroidEntryPoint
 class LockScreenFragment : VectorBaseFragment<FragmentLockScreenBinding>() {
@@ -59,12 +54,7 @@ class LockScreenFragment : VectorBaseFragment<FragmentLockScreenBinding>() {
             handleEvent(it)
         }
 
-        viewModel.stateFlow.distinctUntilChangedBy { it.showBiometricPromptAutomatically }
-                .filter { it.showBiometricPromptAutomatically }
-                .onEach {
-                    showBiometricPrompt()
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+        viewModel.handle(LockScreenAction.OnUIReady)
     }
 
     override fun invalidate() = withState(viewModel) { state ->
@@ -119,6 +109,7 @@ class LockScreenFragment : VectorBaseFragment<FragmentLockScreenBinding>() {
             is LockScreenViewEvent.AuthFailure -> onAuthFailure(viewEvent.method)
             is LockScreenViewEvent.AuthError -> onAuthError(viewEvent.method, viewEvent.throwable)
             is LockScreenViewEvent.ShowBiometricKeyInvalidatedMessage -> lockScreenListener?.onBiometricKeyInvalidated()
+            is LockScreenViewEvent.ShowBiometricPromptAutomatically -> showBiometricPrompt()
         }
     }
 

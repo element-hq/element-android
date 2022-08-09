@@ -20,7 +20,6 @@ import android.annotation.SuppressLint
 import android.app.KeyguardManager
 import android.os.Build
 import android.security.keystore.KeyPermanentlyInvalidatedException
-import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.FragmentActivity
 import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
@@ -37,6 +36,7 @@ import im.vector.app.features.pin.lockscreen.pincode.PinCodeHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -77,10 +77,20 @@ class LockScreenViewModel @AssistedInject constructor(
             lockScreenKeysMigrator.migrateIfNeeded()
             // Update initial state with biometric info
             updateStateWithBiometricInfo()
+        }
+    }
 
-            val state = awaitState()
-            // If when initialized we detect a key invalidation, we should show an error message.
-            if (state.isBiometricKeyInvalidated) {
+    private fun observeStateChanges() {
+        // The first time the state allows it, show the biometric prompt
+        viewModelScope.launch {
+            if (stateFlow.firstOrNull { it.showBiometricPromptAutomatically } != null) {
+                _viewEvents.post(LockScreenViewEvent.ShowBiometricPromptAutomatically)
+            }
+        }
+
+        // The first time the state allows it, react to biometric key being invalidated
+        viewModelScope.launch {
+            if (stateFlow.firstOrNull { it.isBiometricKeyInvalidated } != null) {
                 onBiometricKeyInvalidated()
             }
         }
@@ -90,6 +100,7 @@ class LockScreenViewModel @AssistedInject constructor(
         when (action) {
             is LockScreenAction.PinCodeEntered -> onPinCodeEntered(action.value)
             is LockScreenAction.ShowBiometricPrompt -> showBiometricPrompt(action.callingActivity)
+            is LockScreenAction.OnUIReady -> observeStateChanges()
         }
     }
 
