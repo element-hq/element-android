@@ -23,13 +23,13 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.onPermissionDeniedDialog
 import im.vector.app.core.utils.onPermissionDeniedSnackbar
 import im.vector.app.core.utils.registerForPermissionsResult
-import im.vector.app.databinding.ActivityDebugPermissionBinding
+import im.vector.application.R
+import im.vector.application.databinding.ActivityDebugPermissionBinding
 import timber.log.Timber
 
 @AndroidEntryPoint

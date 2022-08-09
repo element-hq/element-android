@@ -20,9 +20,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import im.vector.app.R
-import im.vector.app.databinding.ActivityTestLinkifyBinding
-import im.vector.app.databinding.ItemTestLinkifyBinding
+import im.vector.application.R
+import im.vector.application.databinding.ActivityTestLinkifyBinding
+import im.vector.application.databinding.ItemTestLinkifyBinding
 
 class TestLinkifyActivity : AppCompatActivity() {
 
