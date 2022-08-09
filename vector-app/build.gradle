@@ -360,6 +360,16 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation "androidx.sharetarget:sharetarget:1.1.0"
 
+    // Flipper, debug builds only
+    debugImplementation(libs.flipper.flipper) {
+        exclude group: 'com.facebook.fbjni', module: 'fbjni'
+    }
+    debugImplementation(libs.flipper.flipperNetworkPlugin) {
+        exclude group: 'com.facebook.fbjni', module: 'fbjni'
+    }
+    debugImplementation 'com.facebook.soloader:soloader:0.10.4'
+    debugImplementation "com.kgurgul.flipper:flipper-realm-android:2.2.0"
+
     kapt libs.dagger.hiltCompiler
 
     androidTestImplementation libs.androidx.testCore
@@ -385,5 +395,6 @@ dependencies {
     androidTestImplementation libs.androidx.fragmentTesting
     androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:1.7.10"
     debugImplementation libs.androidx.fragmentTesting
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
 }
 
