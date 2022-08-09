@@ -1289,7 +1289,7 @@
         <item quantity="one">%d sessione attiva</item>
         <item quantity="other">%d sessioni attive</item>
     </plurals>
-    <string name="crosssigning_verify_this_session">Verifica questo accesso</string>
+    <string name="crosssigning_verify_this_session">Verifica questo dispositivo</string>
     <string name="verification_open_other_to_verify">Usa una sessione esistente per verificare questa, dandole l\'accesso ai messaggi criptati.</string>
     <string name="verification_profile_verify">Verifica</string>
     <string name="verification_profile_verified">Verificato</string>
@@ -2541,8 +2541,8 @@
     <string name="ftue_auth_forgot_password">Password dimenticata</string>
     <string name="ftue_auth_email_resend_email">Reinvia email</string>
     <string name="ftue_auth_email_verification_footer">Non hai ricevuto un\'email\?</string>
-    <string name="ftue_auth_email_verification_subtitle">Per confermare l\'email, tocca il pulsante nell\'email che abbiamo appena inviato a %s</string>
-    <string name="ftue_auth_email_verification_title">Controlla l\'email per verificare.</string>
+    <string name="ftue_auth_email_verification_subtitle">Segui le istruzioni inviate a %s</string>
+    <string name="ftue_auth_email_verification_title">Verifica l\'email</string>
     <string name="ftue_auth_phone_confirmation_resend_code">Reinvia codice</string>
     <string name="ftue_auth_phone_confirmation_subtitle">È stato inviato un codice a %s</string>
     <string name="ftue_auth_phone_confirmation_title">Conferma il tuo numero di telefono</string>
@@ -2579,4 +2579,19 @@
     <string name="font_size_section_manually">Scegli manualmente</string>
     <string name="font_size_section_auto">Imposta automaticamente</string>
     <string name="font_size_title">Scegli dimensione caratteri</string>
+    <string name="labs_enable_element_call_permission_shortcuts_summary">Auto-approva i widget di Element Call e consenti accesso a fotocamera / microfono</string>
+    <string name="labs_enable_element_call_permission_shortcuts">Attiva scorciatoie di autorizzazione di Element Call</string>
+    <string name="live_location_description">Posizione in tempo reale</string>
+    <string name="verify_invalid_qr_notice">Questo codice QR sembra sbagliato. Prova la verifica con un altro metodo.</string>
+    <string name="crosssigning_cannot_verify_this_session_desc">Non potrai accedere alla cronologia dei messaggi cifrati. Reimposta il backup dei messaggi sicuri e le chiavi di verifica per ricominciare.</string>
+    <string name="crosssigning_cannot_verify_this_session">Impossibile verificare questo dispositivo</string>
+    <string name="ftue_auth_choose_server_sign_in_subtitle">Qual è l\'indirizzo del tuo server\?</string>
+    <string name="ftue_auth_sign_in_choose_server_header">Dove vivono le tue conversazioni</string>
+    <string name="updating_your_data">Aggiornamento dei tuoi dati…</string>
+    <plurals name="search_space_multiple_parents">
+        <item quantity="one">%1$s e %2$d altro</item>
+        <item quantity="other">%1$s e altri %2$d</item>
+    </plurals>
+    <string name="search_space_two_parents">%1$s e %2$s</string>
+    <string name="auth_reset_password_error_unverified">Email non verificata, controlla la posta in arrivo</string>
 </resources>
