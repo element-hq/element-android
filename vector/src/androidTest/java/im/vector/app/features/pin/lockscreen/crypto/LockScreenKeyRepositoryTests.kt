@@ -17,8 +17,6 @@
 package im.vector.app.features.pin.lockscreen.crypto
 
 import androidx.test.platform.app.InstrumentationRegistry
-import im.vector.app.features.pin.lockscreen.crypto.migrations.LegacyPinCodeMigrator
-import im.vector.app.features.settings.VectorPreferences
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
@@ -44,8 +42,6 @@ class LockScreenKeyRepositoryTests {
     }
 
     private lateinit var lockScreenKeyRepository: LockScreenKeyRepository
-    private val legacyPinCodeMigrator: LegacyPinCodeMigrator = mockk(relaxed = true)
-    private val vectorPreferences: VectorPreferences = mockk(relaxed = true)
 
     private val keyStore: KeyStore by lazy {
         KeyStore.getInstance(LockScreenCryptoConstants.ANDROID_KEY_STORE).also { it.load(null) }
