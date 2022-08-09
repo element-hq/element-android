@@ -1207,7 +1207,7 @@
     <string name="verification_open_other_to_verify">Використайте чинний сеанс, щоб звірити цей сеанс, таким чином надавши йому доступ до зашифрованих повідомлень.</string>
     <string name="confirm_your_identity_quad_s">Підтвердьте вашу тотожність, звіривши цей вхід та надавши йому доступ до зашифрованих повідомлень.</string>
     <string name="verify_this_session">Звірте новий вхід, що доступається до вашого облікового запису: %1$s</string>
-    <string name="crosssigning_verify_this_session">Звірте цей вхід</string>
+    <string name="crosssigning_verify_this_session">Звірте цей пристрій</string>
     <string name="verification_request_waiting">Очікування…</string>
     <string name="new_session">Новий вхід. Це були ви\?</string>
     <string name="refresh">Оновити</string>
@@ -1227,7 +1227,7 @@
     <string name="notice_room_third_party_registered_invite_with_reason_by_you">Ви прийняли запрошення для %1$s. Причина: %2$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason">%1$s приймає запрошення для %2$s. Причина: %3$s</string>
     <string name="notice_room_ban_with_reason_by_you">Ви заблокували %1$s. Причина: %2$s</string>
-    <string name="notice_room_ban_with_reason">%1$s заблоковано %2$s. Причина: %3$s</string>
+    <string name="notice_room_ban_with_reason">%1$s блокує %2$s. Причина: %3$s</string>
     <string name="notice_room_unban_with_reason_by_you">Ви розблокували %1$s. Причина: %2$s</string>
     <string name="notice_room_unban_with_reason">%1$s розблоковує %2$s. Причина: %3$s</string>
     <string name="notice_room_remove_with_reason_by_you">Ви вилучили %1$s. Причина: %2$s</string>
@@ -1436,11 +1436,11 @@
     </plurals>
     <string name="keys_backup_restore_success_title">Резервну копію відновлено %s!</string>
     <string name="keys_backup_recovery_code_error_decrypt">Не вдалося розшифрувати резервну копію за допомогою цього ключа відновлення: переконайтеся, що ви ввели правильний ключ відновлення.</string>
-    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Сервери з відповідними літералам IP тепер заблоковано.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Сервери з відповідними літералам IP тепер заблоковані.</string>
     <string name="notice_room_server_acl_updated_was_banned">• Відповідні сервери %s було вилучено зі списку блокування.</string>
-    <string name="notice_room_server_acl_updated_banned">• Відповідні сервери %s тепер заблоковано.</string>
-    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Сервери, що з відповідними літералам IP заблоковано.</string>
-    <string name="notice_room_server_acl_set_banned">• Відповідні сервери %s заблоковано.</string>
+    <string name="notice_room_server_acl_updated_banned">• Відповідні сервери %s відтепер заблоковані.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Сервери з відповідними літералам IP заблоковані.</string>
+    <string name="notice_room_server_acl_set_banned">• Відповідні сервери %s заблоковані.</string>
     <string name="error_opening_banned_room">Неможливо відкрити кімнату, у якій вас заблоковано.</string>
     <string name="room_filtering_footer_open_room_directory">Переглянути каталог кімнат</string>
     <string name="create_room_in_progress">Створення кімнати…</string>
@@ -2648,8 +2648,8 @@
     <string name="ftue_auth_forgot_password">Забули пароль</string>
     <string name="ftue_auth_email_verification_footer">Не отримали лист\?</string>
     <string name="ftue_auth_email_resend_email">Повторно надіслати електронний лист</string>
-    <string name="ftue_auth_email_verification_subtitle">Щоб підтвердити свою електронну адресу, торкніться кнопки в електронному листі, який ми щойно надіслали на адресу %s</string>
-    <string name="ftue_auth_email_verification_title">Перейдіть до своєї електронної пошти для підтвердження.</string>
+    <string name="ftue_auth_email_verification_subtitle">Виконайте вказівки надіслані на %s</string>
+    <string name="ftue_auth_email_verification_title">Підтвердьте свою електронну адресу</string>
     <string name="ftue_auth_phone_confirmation_resend_code">Повторно надіслати код</string>
     <string name="ftue_auth_phone_confirmation_subtitle">Код було надіслано на %s</string>
     <string name="ftue_auth_phone_confirmation_title">Підтвердьте свій номер телефону</string>
@@ -2686,4 +2686,21 @@
     <string name="font_size_section_manually">Вибрати вручну</string>
     <string name="font_size_section_auto">Установити автоматично</string>
     <string name="font_size_title">Виберіть розмір шрифту</string>
+    <string name="labs_enable_element_call_permission_shortcuts_summary">Віджети автосхвалення викликів Element і надання доступу до камери/мікрофона</string>
+    <string name="labs_enable_element_call_permission_shortcuts">Увімкнути ярлики дозволів на виклик елемента</string>
+    <string name="live_location_description">Місце перебування наживо</string>
+    <string name="verify_invalid_qr_notice">Цей QR-код має неправильний вигляд. Спробуйте звірити іншим методом.</string>
+    <string name="crosssigning_cannot_verify_this_session_desc">Ви не зможете отримати доступ до історії зашифрованих повідомлень. Скиньте захищену резервну копію повідомлень і ключі підтвердження, щоб почати заново.</string>
+    <string name="crosssigning_cannot_verify_this_session">Не вдалося звірити цей пристрій</string>
+    <string name="ftue_auth_choose_server_sign_in_subtitle">Яка адреса вашого сервера\?</string>
+    <string name="ftue_auth_sign_in_choose_server_header">Де відбуватимуться ваші розмови</string>
+    <string name="updating_your_data">Оновлення ваших даних…</string>
+    <plurals name="search_space_multiple_parents">
+        <item quantity="one">%1$s і %2$d інший</item>
+        <item quantity="few">%1$s і %2$d інші</item>
+        <item quantity="many">%1$s і %2$d інших</item>
+        <item quantity="other">%1$s і %2$d інших</item>
+    </plurals>
+    <string name="search_space_two_parents">%1$s і %2$s</string>
+    <string name="auth_reset_password_error_unverified">Електронна пошта не підтверджена, перевірте свою поштову скриньку</string>
 </resources>
