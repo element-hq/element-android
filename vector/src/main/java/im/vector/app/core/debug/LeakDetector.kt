@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.app.leakcanary
+package im.vector.app.core.debug
 
-import leakcanary.LeakCanary
-import javax.inject.Inject
-
-class LeakCanaryProxy @Inject constructor() {
-    fun enable(enable: Boolean) {
-        LeakCanary.config = LeakCanary.config.copy(dumpHeap = enable)
-    }
+/**
+ * Used for memory leak analysis control.
+ */
+interface LeakDetector {
+    fun enable(enable: Boolean)
 }

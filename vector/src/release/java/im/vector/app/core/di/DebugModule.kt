@@ -24,6 +24,7 @@ import dagger.hilt.components.SingletonComponent
 import im.vector.app.core.debug.DebugNavigator
 import im.vector.app.core.debug.DebugReceiver
 import im.vector.app.core.debug.FlipperProxy
+import im.vector.app.core.debug.LeakDetector
 import okhttp3.Interceptor
 import org.matrix.android.sdk.api.Matrix
 
@@ -56,5 +57,12 @@ object DebugModule {
         }
 
         override fun networkInterceptor(): Interceptor? = null
+    }
+
+    @Provides
+    fun providesLeakDetector() = object : LeakDetector {
+        override fun enable(enable: Boolean) {
+            // no op
+        }
     }
 }

@@ -20,18 +20,18 @@ import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.debug.LeakDetector
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.settings.VectorPreferences
-import im.vector.app.leakcanary.LeakCanaryProxy
 import kotlinx.coroutines.launch
 
 class DebugMemoryLeaksViewModel @AssistedInject constructor(
         @Assisted initialState: DebugMemoryLeaksViewState,
         private val vectorPreferences: VectorPreferences,
-        private val leakCanaryProxy: LeakCanaryProxy,
+        private val leakDetector: LeakDetector,
 ) : VectorViewModel<DebugMemoryLeaksViewState, DebugMemoryLeaksViewActions, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
@@ -56,7 +56,7 @@ class DebugMemoryLeaksViewModel @AssistedInject constructor(
     private fun handleEnableMemoryLeaksAnalysis(action: DebugMemoryLeaksViewActions.EnableMemoryLeaksAnalysis) {
         viewModelScope.launch {
             vectorPreferences.enableMemoryLeakAnalysis(action.isEnabled)
-            leakCanaryProxy.enable(action.isEnabled)
+            leakDetector.enable(action.isEnabled)
             refreshStateFromPreferences()
         }
     }

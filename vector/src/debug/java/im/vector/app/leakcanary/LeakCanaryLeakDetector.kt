@@ -16,12 +16,12 @@
 
 package im.vector.app.leakcanary
 
+import im.vector.app.core.debug.LeakDetector
+import leakcanary.LeakCanary
 import javax.inject.Inject
 
-/**
- * No op version.
- */
-@Suppress("UNUSED_PARAMETER")
-class LeakCanaryProxy @Inject constructor() {
-    fun enable(enable: Boolean) {}
+class LeakCanaryLeakDetector @Inject constructor() : LeakDetector {
+    override fun enable(enable: Boolean) {
+        LeakCanary.config = LeakCanary.config.copy(dumpHeap = enable)
+    }
 }
