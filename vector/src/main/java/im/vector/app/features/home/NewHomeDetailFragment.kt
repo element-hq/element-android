@@ -270,8 +270,7 @@ class NewHomeDetailFragment @Inject constructor(
     }
 
     private fun onSpaceChange(spaceSummary: RoomSummary?) {
-        // Reimplement in next PR
-        println(spaceSummary)
+        views.collapsingToolbar.title = (spaceSummary?.displayName ?: getString(R.string.all_chats))
     }
 
     private fun setupKeysBackupBanner() {
