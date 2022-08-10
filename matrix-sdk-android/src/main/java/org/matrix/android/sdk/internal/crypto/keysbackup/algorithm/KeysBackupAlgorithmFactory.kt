@@ -29,7 +29,7 @@ internal class KeysBackupAlgorithmFactory @Inject constructor() {
                 KeysBackupCurve25519Algorithm(keysVersion)
             }
             MXCRYPTO_ALGORITHM_AES_256_BACKUP -> {
-                throw IllegalStateException("AES_256 is not yet handled")
+                KeysBackupAes256Algorithm(keysVersion)
             }
             else -> {
                 throw IllegalStateException("Unknown algorithm")
