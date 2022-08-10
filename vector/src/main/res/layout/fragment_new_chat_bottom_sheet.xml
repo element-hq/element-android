@@ -14,8 +14,7 @@
         android:paddingVertical="16dp"
         android:text="@string/start_chat"
         android:textAppearance="@style/TextAppearance.Vector.Body"
-        android:textColor="?vctr_content_primary"
-        android:textStyle="bold" />
+        android:textColor="?vctr_content_primary" />
 
     <TextView
         android:id="@+id/create_room"
@@ -27,7 +26,6 @@
         android:paddingVertical="16dp"
         android:text="@string/create_room"
         android:textAppearance="@style/TextAppearance.Vector.Body"
-        android:textColor="?vctr_content_primary"
-        android:textStyle="bold" />
+        android:textColor="?vctr_content_primary" />
 
 </LinearLayout>
