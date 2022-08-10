@@ -168,6 +168,7 @@ class VectorPreferences @Inject constructor(
         private const val SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY = "SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY"
         private const val SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY = "SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY"
         private const val SETTINGS_DEVELOPER_MODE_SHOW_INFO_ON_SCREEN_KEY = "SETTINGS_DEVELOPER_MODE_SHOW_INFO_ON_SCREEN_KEY"
+        // TODO make it private
         const val SETTINGS_ENABLE_MEMORY_LEAK_ANALYSIS_KEY = "SETTINGS_ENABLE_MEMORY_LEAK_ANALYSIS_KEY"
 
         const val SETTINGS_LABS_MSC3061_SHARE_KEYS_HISTORY = "SETTINGS_LABS_MSC3061_SHARE_KEYS_HISTORY"
@@ -370,8 +371,14 @@ class VectorPreferences @Inject constructor(
         return buildMeta.isDebug || (developerMode() && defaultPrefs.getBoolean(SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY, false))
     }
 
+    fun enableMemoryLeakAnalysis(isEnabled: Boolean) {
+        defaultPrefs.edit(commit = true) {
+            putBoolean(SETTINGS_ENABLE_MEMORY_LEAK_ANALYSIS_KEY, isEnabled)
+        }
+    }
+
     fun isMemoryLeakAnalysisEnabled(): Boolean {
-        return buildMeta.isDebug && developerMode() && defaultPrefs.getBoolean(SETTINGS_ENABLE_MEMORY_LEAK_ANALYSIS_KEY, false)
+        return buildMeta.isDebug && defaultPrefs.getBoolean(SETTINGS_ENABLE_MEMORY_LEAK_ANALYSIS_KEY, false)
     }
 
     fun didAskUserToEnableSessionPush(): Boolean {

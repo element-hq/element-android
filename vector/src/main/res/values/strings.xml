@@ -2185,9 +2185,6 @@
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
     <string name="settings_developer_mode_fail_fast_summary">${app_name} may crash more often when an unexpected error occurs</string>
 
-    <string name="settings_enable_memory_leak_analysis_title">Enable memory leak analysis</string>
-    <string name="settings_enable_memory_leak_analysis_summary">App performances may be impacted when enabled.</string>
-
     <string name="settings_developer_mode_show_info_on_screen_title">Show debug info on screen</string>
     <string name="settings_developer_mode_show_info_on_screen_summary">Show some useful info to help debugging the application</string>
 

@@ -44,13 +44,6 @@
             android:summary="@string/settings_developer_mode_fail_fast_summary"
             android:title="@string/settings_developer_mode_fail_fast_title" />
 
-        <im.vector.app.core.preference.VectorSwitchPreference
-            android:defaultValue="false"
-            android:dependency="SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY"
-            android:key="SETTINGS_ENABLE_MEMORY_LEAK_ANALYSIS_KEY"
-            android:summary="@string/settings_enable_memory_leak_analysis_summary"
-            android:title="@string/settings_enable_memory_leak_analysis_title" />
-
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
     <im.vector.app.core.preference.VectorPreferenceCategory

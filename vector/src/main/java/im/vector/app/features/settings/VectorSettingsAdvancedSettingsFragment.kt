@@ -19,19 +19,15 @@ package im.vector.app.features.settings
 import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.SeekBarPreference
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.preference.VectorPreferenceCategory
 import im.vector.app.core.preference.VectorSwitchPreference
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.rageshake.RageShake
-import im.vector.app.leakcanary.LeakCanaryProxy
 import javax.inject.Inject
 
-class VectorSettingsAdvancedSettingsFragment @Inject constructor(
-        private val leakCanaryProxy: LeakCanaryProxy,
-) : VectorSettingsBaseFragment() {
+class VectorSettingsAdvancedSettingsFragment @Inject constructor() : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.settings_advanced_settings
     override val preferenceXmlRes = R.xml.vector_settings_advanced_settings
@@ -86,18 +82,6 @@ class VectorSettingsAdvancedSettingsFragment @Inject constructor(
             }
         } else {
             findPreference<VectorPreferenceCategory>("SETTINGS_RAGE_SHAKE_CATEGORY_KEY")!!.isVisible = false
-        }
-
-        bindMemoryLeakSetting()
-    }
-
-    private fun bindMemoryLeakSetting() {
-        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_ENABLE_MEMORY_LEAK_ANALYSIS_KEY)?.let { pref ->
-            pref.isVisible = BuildConfig.DEBUG
-            pref.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                leakCanaryProxy.enable(newValue as? Boolean ?: false)
-                true
-            }
         }
     }
 }

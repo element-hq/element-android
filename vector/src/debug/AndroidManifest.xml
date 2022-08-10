@@ -10,6 +10,7 @@
         <activity android:name=".features.debug.sas.DebugSasEmojiActivity" />
         <activity android:name=".features.debug.features.DebugFeaturesSettingsActivity" />
         <activity android:name=".features.debug.DebugMenuActivity" />
+        <activity android:name=".features.debug.leak.DebugMemoryLeaksActivity" />
 
         <activity
             android:name="com.facebook.flipper.android.diagnostics.FlipperDiagnosticActivity"
