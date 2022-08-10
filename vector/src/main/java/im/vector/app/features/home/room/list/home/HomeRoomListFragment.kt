@@ -47,8 +47,8 @@ import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedA
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
 import im.vector.app.features.home.room.list.actions.RoomListSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListSharedActionViewModel
-import im.vector.app.features.spaces.SpaceListBottomSheet
 import im.vector.app.features.home.room.list.home.recent.RecentRoomCarouselController
+import im.vector.app.features.spaces.SpaceListBottomSheet
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
