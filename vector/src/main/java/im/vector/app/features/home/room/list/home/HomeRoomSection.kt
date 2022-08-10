@@ -28,4 +28,8 @@ sealed class HomeRoomSection {
             val showFilters: Boolean,
             val filtersData: SharedFlow<List<HomeRoomFilter>>
     ) : HomeRoomSection()
+
+    data class RecentRoomsData(
+            val list: LiveData<List<RoomSummary>>
+    ) : HomeRoomSection()
 }

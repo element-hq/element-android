@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.pin.lockscreen.ui
+package im.vector.app.features.onboarding
 
-import androidx.fragment.app.FragmentActivity
-import im.vector.app.core.platform.VectorViewModelAction
+object RegistrationStateFixture {
 
-sealed class LockScreenAction : VectorViewModelAction {
-    data class PinCodeEntered(val value: String) : LockScreenAction()
-    data class ShowBiometricPrompt(val callingActivity: FragmentActivity) : LockScreenAction()
-    object OnUIReady : LockScreenAction()
+    fun aRegistrationState(
+            email: String? = null,
+            isUserNameAvailable: Boolean = false,
+            selectedMatrixId: String? = null,
+    ) = RegistrationState(email, isUserNameAvailable, selectedMatrixId)
 }

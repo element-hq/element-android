@@ -2000,7 +2000,7 @@
     <string name="verification_profile_device_verified_because">Deze sessie wordt vertrouwd voor veilig berichtenverkeer omdat %1$s (%2$s) deze heeft geverifieerd:</string>
     <string name="room_member_profile_failed_to_get_devices">Kan geen sessies ophalen</string>
     <string name="verification_open_other_to_verify">Gebruik een bestaande sessie om deze te verifiëren en deze toegang te verlenen tot versleutelde berichten.</string>
-    <string name="crosssigning_verify_this_session">Verifieer deze login</string>
+    <string name="crosssigning_verify_this_session">Verifieer dit apparaat</string>
     <plurals name="settings_active_sessions_count">
         <item quantity="one">%d actieve sessie</item>
         <item quantity="other">%d actieve sessies</item>
@@ -2550,8 +2550,8 @@
     <string name="ftue_auth_forgot_password">Wachtwoord vergeten</string>
     <string name="ftue_auth_email_resend_email">Email opnieuw verzenden</string>
     <string name="ftue_auth_email_verification_footer">Geen e-mail ontvangen\?</string>
-    <string name="ftue_auth_email_verification_subtitle">Om uw e-mailadres te bevestigen, tikt u op de knop in de e-mail die we zojuist naar %s hebben gestuurd</string>
-    <string name="ftue_auth_email_verification_title">Controleer uw e-mail om te verifiëren.</string>
+    <string name="ftue_auth_email_verification_subtitle">Volg de instructies die naar %s zijn gestuurd</string>
+    <string name="ftue_auth_email_verification_title">Verifieer uw e-mailadres</string>
     <string name="ftue_auth_phone_confirmation_resend_code">Code nogmaals versturen</string>
     <string name="ftue_auth_phone_confirmation_subtitle">Er is een code verzonden naar %s</string>
     <string name="ftue_auth_phone_confirmation_title">Bevestig uw telefoonnummer</string>
@@ -2588,4 +2588,19 @@
     <string name="font_size_section_manually">Handmatig kiezen</string>
     <string name="font_size_section_auto">Automatisch instellen</string>
     <string name="font_size_title">Kies lettergrootte</string>
+    <string name="labs_enable_element_call_permission_shortcuts_summary">Keur automatisch Element Oproep widgets goed en verleen camera-/microfoontoegang</string>
+    <string name="labs_enable_element_call_permission_shortcuts">Snelkoppelingen voor Element Oproep machtigingen inschakelen</string>
+    <string name="live_location_description">Live locatie</string>
+    <string name="verify_invalid_qr_notice">Deze QR-code lijkt misvormd. Probeer te verifiëren met een andere methode.</string>
+    <string name="crosssigning_cannot_verify_this_session_desc">U hebt geen toegang tot de gecodeerde berichtgeschiedenis. Reset uw Veilige Berichten Back-up en verificatiesleutels om opnieuw te beginnen.</string>
+    <string name="crosssigning_cannot_verify_this_session">Kan dit apparaat niet verifiëren</string>
+    <string name="ftue_auth_choose_server_sign_in_subtitle">Wat is het adres van uw server\?</string>
+    <string name="ftue_auth_sign_in_choose_server_header">Waar uw conversaties leven</string>
+    <string name="updating_your_data">Uw gegevens bijwerken…</string>
+    <plurals name="search_space_multiple_parents">
+        <item quantity="one">%1$s en %2$d andere</item>
+        <item quantity="other">%1$s en %2$d andere</item>
+    </plurals>
+    <string name="search_space_two_parents">%1$s en %2$s</string>
+    <string name="auth_reset_password_error_unverified">E-mailadres niet geverifieerd, controleer je inbox</string>
 </resources>

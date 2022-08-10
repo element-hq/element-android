@@ -26,7 +26,7 @@ import io.mockk.verify
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 
-class LockScreenTestMigratorTests {
+class LockScreenKeysMigratorTests {
 
     private val legacyPinCodeMigrator = mockk<LegacyPinCodeMigrator>(relaxed = true)
     private val missingSystemKeyMigrator = mockk<MissingSystemKeyMigrator>(relaxed = true)
@@ -42,7 +42,7 @@ class LockScreenTestMigratorTests {
         runBlocking { migrator.migrateIfNeeded() }
 
         coVerify(exactly = 0) { legacyPinCodeMigrator.migrate() }
-        verify(exactly = 0) { missingSystemKeyMigrator.migrate() }
+        verify(exactly = 0) { missingSystemKeyMigrator.migrateIfNeeded() }
 
         // When migration is needed
         every { legacyPinCodeMigrator.isMigrationNeeded() } returns true
@@ -50,7 +50,7 @@ class LockScreenTestMigratorTests {
         runBlocking { migrator.migrateIfNeeded() }
 
         coVerify { legacyPinCodeMigrator.migrate() }
-        verify { missingSystemKeyMigrator.migrate() }
+        verify { missingSystemKeyMigrator.migrateIfNeeded() }
     }
 
     @Test

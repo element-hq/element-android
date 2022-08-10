@@ -40,6 +40,8 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.query.QueryStringValue
+import org.matrix.android.sdk.api.query.SpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.query.RoomTagQueryFilter
 import org.matrix.android.sdk.api.query.toActiveSpaceOrNoFilter
@@ -50,6 +52,7 @@ import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
+import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.state.isPublic
 import org.matrix.android.sdk.flow.flow
 
@@ -85,6 +88,7 @@ class HomeRoomListViewModel @AssistedInject constructor(
     private fun configureSections() {
         val newSections = mutableSetOf<HomeRoomSection>()
 
+        newSections.add(getRecentRoomsSection())
         newSections.add(getFilteredRoomsSection())
 
         viewModelScope.launch {
@@ -94,6 +98,18 @@ class HomeRoomListViewModel @AssistedInject constructor(
         setState {
             copy(state = StateView.State.Content)
         }
+    }
+
+    private fun getRecentRoomsSection(): HomeRoomSection {
+        val liveList = session.roomService()
+                .getBreadcrumbsLive(roomSummaryQueryParams {
+                    displayName = QueryStringValue.NoCondition
+                    memberships = listOf(Membership.JOIN)
+                })
+
+        return HomeRoomSection.RecentRoomsData(
+                list = liveList
+        )
     }
 
     private fun getFilteredRoomsSection(): HomeRoomSection.RoomSummaryData {

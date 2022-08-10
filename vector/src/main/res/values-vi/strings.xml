@@ -975,7 +975,7 @@
 \nVui lòng kiểm tra thiết lập.</string>
     <string name="settings_troubleshoot_test_system_settings_success">Thông báo được bật trong thiết lập hệ thống.</string>
     <string name="settings_troubleshoot_test_system_settings_title">Thiết lập hệ thống.</string>
-    <string name="settings_notification_troubleshoot">Xử lý lỗi thông báo</string>
+    <string name="settings_notification_troubleshoot">Thông báo khắc phục lỗi</string>
     <string name="settings_notification_keyword_contains_invalid_character">Từ khóa không được chứa \'%s\'</string>
     <string name="settings_notification_keyword_contains_dot">Từ khóa không được bắt đầu với \'.\'</string>
     <string name="settings_notification_new_keyword">Thêm mới từ khóa</string>
@@ -2274,4 +2274,7 @@
     <string name="settings_presence_user_always_appears_offline">Chế độ ngoại tuyến</string>
     <string name="settings_presence">Sự hiện diện</string>
     <string name="message_bubbles">Hiển thị bong bóng tin nhắn</string>
+    <string name="unifiedpush_getdistributors_dialog_title">Chọn cách nhận thông báo</string>
+    <string name="settings_notification_method">Phương thức thông báo</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">Đặt lại phương thức thông báo</string>
 </resources>

@@ -16,14 +16,16 @@
 
 package im.vector.app.features.pin.lockscreen.fragment
 
+import android.app.KeyguardManager
 import android.os.Build
 import android.security.keystore.KeyPermanentlyInvalidatedException
+import androidx.biometric.BiometricPrompt
 import androidx.fragment.app.FragmentActivity
 import com.airbnb.mvrx.test.MvRxTestRule
 import com.airbnb.mvrx.withState
+import im.vector.app.features.pin.lockscreen.biometrics.BiometricAuthError
 import im.vector.app.features.pin.lockscreen.biometrics.BiometricHelper
 import im.vector.app.features.pin.lockscreen.configuration.LockScreenConfiguration
-import im.vector.app.features.pin.lockscreen.configuration.LockScreenConfiguratorProvider
 import im.vector.app.features.pin.lockscreen.configuration.LockScreenMode
 import im.vector.app.features.pin.lockscreen.crypto.LockScreenKeysMigrator
 import im.vector.app.features.pin.lockscreen.pincode.PinCodeHelper
@@ -43,8 +45,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.amshove.kluent.shouldBeEqualTo
-import org.amshove.kluent.shouldBeFalse
+import org.amshove.kluent.shouldBeTrue
 import org.amshove.kluent.shouldNotBeEqualTo
 import org.junit.Before
 import org.junit.Rule
@@ -57,7 +58,15 @@ class LockScreenViewModelTests {
 
     private val pinCodeHelper = mockk<PinCodeHelper>(relaxed = true)
     private val biometricHelper = mockk<BiometricHelper>(relaxed = true)
+    private val biometricHelperFactory = object : BiometricHelper.BiometricHelperFactory {
+        override fun create(configuration: LockScreenConfiguration): BiometricHelper {
+            return biometricHelper
+        }
+    }
     private val keysMigrator = mockk<LockScreenKeysMigrator>(relaxed = true)
+    private val keyguardManager = mockk<KeyguardManager>(relaxed = true) {
+        every { isDeviceLocked } returns false
+    }
     private val versionProvider = TestBuildVersionSdkIntProvider()
 
     @Before
@@ -67,185 +76,226 @@ class LockScreenViewModelTests {
 
     @Test
     fun `init migrates old keys to new ones if needed`() {
+        // given
         val initialState = createViewState()
-        val configProvider = LockScreenConfiguratorProvider(createDefaultConfiguration())
-        LockScreenViewModel(initialState, pinCodeHelper, biometricHelper, keysMigrator, configProvider, versionProvider)
-
+        // when
+        LockScreenViewModel(initialState, pinCodeHelper, biometricHelperFactory, keysMigrator, versionProvider, keyguardManager)
+        // then
         coVerify { keysMigrator.migrateIfNeeded() }
     }
 
     @Test
-    fun `when ViewModel is instantiated initialState is updated with biometric info`() {
-        val initialState = createViewState()
-        val configProvider = LockScreenConfiguratorProvider(createDefaultConfiguration())
-        // This should set canUseBiometricAuth to true
+    fun `init updates the initial state with biometric info`() = runTest {
+        // given
         every { biometricHelper.isSystemAuthEnabledAndValid } returns true
-        val viewModel = LockScreenViewModel(initialState, pinCodeHelper, biometricHelper, keysMigrator, configProvider, versionProvider)
-        val newState = withState(viewModel) { it }
-        initialState shouldNotBeEqualTo newState
+        val initialState = createViewState()
+        // when
+        val viewModel = LockScreenViewModel(initialState, pinCodeHelper, biometricHelperFactory, keysMigrator, versionProvider, keyguardManager)
+        // then
+        val newState = viewModel.awaitState() // Can't use viewModel.test() here since we want to record events emitted on init
+        newState shouldNotBeEqualTo initialState
     }
 
     @Test
-    fun `when onPinCodeEntered is called in VERIFY mode, the code is verified and the result is emitted as a ViewEvent`() = runTest {
+    fun `Updating the initial state with biometric info waits until device is unlocked on Android 12+`() = runTest {
+        // given
         val initialState = createViewState()
-        val configProvider = LockScreenConfiguratorProvider(createDefaultConfiguration())
-        val viewModel = LockScreenViewModel(initialState, pinCodeHelper, biometricHelper, keysMigrator, configProvider, versionProvider)
+        versionProvider.value = Build.VERSION_CODES.S
+        // when
+        LockScreenViewModel(initialState, pinCodeHelper, biometricHelperFactory, keysMigrator, versionProvider, keyguardManager)
+        // then
+        verify { keyguardManager.isDeviceLocked }
+    }
+
+    @Test
+    fun `when ViewModel is instantiated initialState is updated with biometric info`() {
+        // given
+        givenShowBiometricPromptAutomatically()
+        val initialState = createViewState()
+        // when
+        val viewModel = LockScreenViewModel(initialState, pinCodeHelper, biometricHelperFactory, keysMigrator, versionProvider, keyguardManager)
+        // then
+        withState(viewModel) { newState ->
+            initialState shouldNotBeEqualTo newState
+        }
+    }
+
+    @Test
+    fun `when onPinCodeEntered is called in VERIFY mode and verification is successful, code is verified and result is emitted as a ViewEvent`() = runTest {
+        // given
+        val initialState = createViewState()
+        val viewModel = LockScreenViewModel(initialState, pinCodeHelper, biometricHelperFactory, keysMigrator, versionProvider, keyguardManager)
         coEvery { pinCodeHelper.verifyPinCode(any()) } returns true
-
-        val events = viewModel.test().viewEvents
-        events.assertNoValues()
-
-        val stateBefore = viewModel.awaitState()
-
+        val test = viewModel.test()
+        // when
         viewModel.handle(LockScreenAction.PinCodeEntered("1234"))
+        // then
         coVerify { pinCodeHelper.verifyPinCode(any()) }
-        events.assertValues(LockScreenViewEvent.AuthSuccessful(AuthMethod.PIN_CODE))
+        test.assertEvents(LockScreenViewEvent.AuthSuccessful(AuthMethod.PIN_CODE))
+        test.assertStates(initialState)
+    }
 
+    @Test
+    fun `when onPinCodeEntered is called in VERIFY mode and verification fails, the error result is emitted as a ViewEvent`() = runTest {
+        // given
+        val initialState = createViewState()
+        val viewModel = LockScreenViewModel(initialState, pinCodeHelper, biometricHelperFactory, keysMigrator, versionProvider, keyguardManager)
         coEvery { pinCodeHelper.verifyPinCode(any()) } returns false
+        val test = viewModel.test()
+        // when
         viewModel.handle(LockScreenAction.PinCodeEntered("1234"))
-        events.assertValues(LockScreenViewEvent.AuthSuccessful(AuthMethod.PIN_CODE), LockScreenViewEvent.AuthFailure(AuthMethod.PIN_CODE))
-
-        val stateAfter = viewModel.awaitState()
-        stateBefore shouldBeEqualTo stateAfter
+        // then
+        coVerify { pinCodeHelper.verifyPinCode(any()) }
+        test.assertEvents(LockScreenViewEvent.AuthFailure(AuthMethod.PIN_CODE))
+        test.assertStates(initialState)
     }
 
     @Test
     fun `when onPinCodeEntered is called in CREATE mode with no confirmation needed it creates the pin code`() = runTest {
+        // given
         val configuration = createDefaultConfiguration(mode = LockScreenMode.CREATE, needsNewCodeValidation = false)
         val initialState = createViewState(lockScreenConfiguration = configuration)
-        val configProvider = LockScreenConfiguratorProvider(configuration)
-        val viewModel = LockScreenViewModel(initialState, pinCodeHelper, biometricHelper, keysMigrator, configProvider, versionProvider)
-
-        val events = viewModel.test().viewEvents
-        events.assertNoValues()
-
+        val viewModel = LockScreenViewModel(initialState, pinCodeHelper, biometricHelperFactory, keysMigrator, versionProvider, keyguardManager)
+        val test = viewModel.test()
+        // when
         viewModel.handle(LockScreenAction.PinCodeEntered("1234"))
+        // then
         coVerify { pinCodeHelper.createPinCode(any()) }
-
-        events.assertValues(LockScreenViewEvent.CodeCreationComplete)
+        test.assertEvents(LockScreenViewEvent.CodeCreationComplete)
     }
 
     @Test
     fun `when onPinCodeEntered is called twice in CREATE mode with confirmation needed it verifies and creates the pin code`() = runTest {
+        // given
+        val pinCode = "1234"
         val configuration = createDefaultConfiguration(mode = LockScreenMode.CREATE, needsNewCodeValidation = true)
-        val configProvider = LockScreenConfiguratorProvider(configuration)
-        val initialState = createViewState(lockScreenConfiguration = configuration)
-        val viewModel = LockScreenViewModel(initialState, pinCodeHelper, biometricHelper, keysMigrator, configProvider, versionProvider)
-
-        val events = viewModel.test().viewEvents
-        events.assertNoValues()
-
-        viewModel.handle(LockScreenAction.PinCodeEntered("1234"))
-
-        events.assertValues(LockScreenViewEvent.ClearPinCode(false))
-        val pinCodeState = viewModel.awaitState().pinCodeState
-        pinCodeState shouldBeEqualTo PinCodeState.FirstCodeEntered
-
-        viewModel.handle(LockScreenAction.PinCodeEntered("1234"))
-        events.assertValues(LockScreenViewEvent.ClearPinCode(false), LockScreenViewEvent.CodeCreationComplete)
+        val initialState = createViewState(lockScreenConfiguration = configuration, pinCodeState = PinCodeState.FirstCodeEntered(pinCode))
+        val viewModel = LockScreenViewModel(initialState, pinCodeHelper, biometricHelperFactory, keysMigrator, versionProvider, keyguardManager)
+        val test = viewModel.test()
+        // when
+        viewModel.handle(LockScreenAction.PinCodeEntered(pinCode))
+        // then
+        test.assertEvents(LockScreenViewEvent.CodeCreationComplete)
+                .assertLatestState { (it.pinCodeState as? PinCodeState.FirstCodeEntered)?.pinCode == pinCode }
     }
 
     @Test
     fun `when onPinCodeEntered is called in CREATE mode with incorrect confirmation it clears the pin code`() = runTest {
+        // given
         val configuration = createDefaultConfiguration(mode = LockScreenMode.CREATE, needsNewCodeValidation = true)
-        val initialState = createViewState(lockScreenConfiguration = configuration)
-        val configProvider = LockScreenConfiguratorProvider(configuration)
-        val viewModel = LockScreenViewModel(initialState, pinCodeHelper, biometricHelper, keysMigrator, configProvider, versionProvider)
-
-        val events = viewModel.test().viewEvents
-        events.assertNoValues()
-
-        viewModel.handle(LockScreenAction.PinCodeEntered("1234"))
-
-        events.assertValues(LockScreenViewEvent.ClearPinCode(false))
-        val pinCodeState = viewModel.awaitState().pinCodeState
-        pinCodeState shouldBeEqualTo PinCodeState.FirstCodeEntered
-
+        val initialState = createViewState(lockScreenConfiguration = configuration, pinCodeState = PinCodeState.FirstCodeEntered("1234"))
+        val viewModel = LockScreenViewModel(initialState, pinCodeHelper, biometricHelperFactory, keysMigrator, versionProvider, keyguardManager)
+        val test = viewModel.test()
+        // when
         viewModel.handle(LockScreenAction.PinCodeEntered("4321"))
-        events.assertValues(LockScreenViewEvent.ClearPinCode(false), LockScreenViewEvent.ClearPinCode(true))
-        val newPinCodeState = viewModel.awaitState().pinCodeState
-        newPinCodeState shouldBeEqualTo PinCodeState.Idle
+        // then
+        test.assertEvents(LockScreenViewEvent.ClearPinCode(true))
+                .assertLatestState(initialState.copy(pinCodeState = PinCodeState.Idle))
     }
 
     @Test
     fun `onPinCodeEntered handles exceptions`() = runTest {
+        // given
         val initialState = createViewState()
-        val configProvider = LockScreenConfiguratorProvider(createDefaultConfiguration())
-        val viewModel = LockScreenViewModel(initialState, pinCodeHelper, biometricHelper, keysMigrator, configProvider, versionProvider)
+        val viewModel = LockScreenViewModel(initialState, pinCodeHelper, biometricHelperFactory, keysMigrator, versionProvider, keyguardManager)
         val exception = IllegalStateException("Something went wrong")
         coEvery { pinCodeHelper.verifyPinCode(any()) } throws exception
-
-        val events = viewModel.test().viewEvents
-        events.assertNoValues()
-
+        val test = viewModel.test()
+        // when
         viewModel.handle(LockScreenAction.PinCodeEntered("1234"))
-
-        events.assertValues(LockScreenViewEvent.AuthError(AuthMethod.PIN_CODE, exception))
+        // then
+        test.assertEvents(LockScreenViewEvent.AuthError(AuthMethod.PIN_CODE, exception))
     }
 
     @Test
     fun `when showBiometricPrompt catches a KeyPermanentlyInvalidatedException it disables biometric authentication`() = runTest {
+        // given
         versionProvider.value = Build.VERSION_CODES.M
-
-        every { biometricHelper.isSystemAuthEnabledAndValid } returns true
-        every { biometricHelper.isSystemKeyValid } returns true
+        every { biometricHelper.isSystemKeyValid } returns false
         val exception = KeyPermanentlyInvalidatedException()
         coEvery { biometricHelper.authenticate(any<FragmentActivity>()) } throws exception
-        coEvery { biometricHelper.disableAuthentication() } coAnswers {
-            every { biometricHelper.isSystemAuthEnabledAndValid } returns false
-        }
         val configuration = createDefaultConfiguration(mode = LockScreenMode.VERIFY, needsNewCodeValidation = true, isBiometricsEnabled = true)
-        val configProvider = LockScreenConfiguratorProvider(configuration)
         val initialState = createViewState(
                 canUseBiometricAuth = true,
                 isBiometricKeyInvalidated = false,
                 lockScreenConfiguration = configuration
         )
-        val viewModel = LockScreenViewModel(initialState, pinCodeHelper, biometricHelper, keysMigrator, configProvider, versionProvider)
-
-        val events = viewModel.test().viewEvents
-        events.assertNoValues()
-
+        val viewModel = LockScreenViewModel(initialState, pinCodeHelper, biometricHelperFactory, keysMigrator, versionProvider, keyguardManager)
+        val test = viewModel.test()
+        // when
         viewModel.handle(LockScreenAction.ShowBiometricPrompt(mockk()))
-
-        events.assertValues(LockScreenViewEvent.AuthError(AuthMethod.BIOMETRICS, exception))
+        // then
+        test.assertEvents(LockScreenViewEvent.ShowBiometricKeyInvalidatedMessage)
+                // Biometric key is invalidated so biometric auth is disabled
+                .assertLatestState { !it.canUseBiometricAuth }
         verify { biometricHelper.disableAuthentication() }
-
-        // System key was deleted, biometric auth should be disabled
-        val newState = viewModel.awaitState()
-        newState.canUseBiometricAuth.shouldBeFalse()
     }
 
     @Test
     fun `when showBiometricPrompt receives an event it propagates it as a ViewEvent`() = runTest {
-        val configProvider = LockScreenConfiguratorProvider(createDefaultConfiguration())
-        val viewModel = LockScreenViewModel(createViewState(), pinCodeHelper, biometricHelper, keysMigrator, configProvider, versionProvider)
+        // given
+        val viewModel = LockScreenViewModel(createViewState(), pinCodeHelper, biometricHelperFactory, keysMigrator, versionProvider, keyguardManager)
         coEvery { biometricHelper.authenticate(any<FragmentActivity>()) } returns flowOf(false, true)
-
-        val events = viewModel.test().viewEvents
-        events.assertNoValues()
-
+        val test = viewModel.test()
+        // when
         viewModel.handle(LockScreenAction.ShowBiometricPrompt(mockk()))
-
-        events.assertValues(LockScreenViewEvent.AuthFailure(AuthMethod.BIOMETRICS), LockScreenViewEvent.AuthSuccessful(AuthMethod.BIOMETRICS))
+        // then
+        test.assertEvents(LockScreenViewEvent.AuthFailure(AuthMethod.BIOMETRICS), LockScreenViewEvent.AuthSuccessful(AuthMethod.BIOMETRICS))
     }
 
     @Test
     fun `showBiometricPrompt handles exceptions`() = runTest {
-        val configProvider = LockScreenConfiguratorProvider(createDefaultConfiguration())
-        val viewModel = LockScreenViewModel(createViewState(), pinCodeHelper, biometricHelper, keysMigrator, configProvider, versionProvider)
+        // given
+        val viewModel = LockScreenViewModel(createViewState(), pinCodeHelper, biometricHelperFactory, keysMigrator, versionProvider, keyguardManager)
         val exception = IllegalStateException("Something went wrong")
         coEvery { biometricHelper.authenticate(any<FragmentActivity>()) } throws exception
-
-        val events = viewModel.test().viewEvents
-        events.assertNoValues()
-
+        val test = viewModel.test()
+        // when
         viewModel.handle(LockScreenAction.ShowBiometricPrompt(mockk()))
-
-        events.assertValues(LockScreenViewEvent.AuthError(AuthMethod.BIOMETRICS, exception))
+        // then
+        test.assertEvents(LockScreenViewEvent.AuthError(AuthMethod.BIOMETRICS, exception))
     }
 
-    private fun createViewState(
+    @Test
+    fun `when showBiometricPrompt handles isAuthDisabledError, canUseBiometricAuth becomes false`() = runTest {
+        // given
+        val viewModel = LockScreenViewModel(createViewState(), pinCodeHelper, biometricHelperFactory, keysMigrator, versionProvider, keyguardManager)
+        val exception = BiometricAuthError(BiometricPrompt.ERROR_LOCKOUT_PERMANENT, "Permanent lockout")
+        coEvery { biometricHelper.authenticate(any<FragmentActivity>()) } throws exception
+        val test = viewModel.test()
+        // when
+        viewModel.handle(LockScreenAction.ShowBiometricPrompt(mockk()))
+        // then
+        exception.isAuthDisabledError.shouldBeTrue()
+        test.assertEvents(LockScreenViewEvent.AuthError(AuthMethod.BIOMETRICS, exception))
+                .assertLatestState { !it.canUseBiometricAuth }
+    }
+
+    @Test
+    fun `when OnUIReady action is received and showBiometricPromptAutomatically is true it shows prompt`() = runTest {
+        // given
+        givenShowBiometricPromptAutomatically()
+        val viewModel = LockScreenViewModel(createViewState(), pinCodeHelper, biometricHelperFactory, keysMigrator, versionProvider, keyguardManager)
+        val test = viewModel.test()
+        // when
+        viewModel.handle(LockScreenAction.OnUIReady)
+        // then
+        test.assertEvents(LockScreenViewEvent.ShowBiometricPromptAutomatically)
+    }
+
+    @Test
+    fun `when OnUIReady action is received and isBiometricKeyInvalidated is true it shows prompt`() = runTest {
+        // given
+        givenBiometricKeyIsInvalidated()
+        val viewModel = LockScreenViewModel(createViewState(), pinCodeHelper, biometricHelperFactory, keysMigrator, versionProvider, keyguardManager)
+        val test = viewModel.test()
+        // when
+        viewModel.handle(LockScreenAction.OnUIReady)
+        // then
+        test.assertEvents(LockScreenViewEvent.ShowBiometricKeyInvalidatedMessage)
+    }
+
+        private fun createViewState(
             lockScreenConfiguration: LockScreenConfiguration = createDefaultConfiguration(),
             canUseBiometricAuth: Boolean = false,
             showBiometricPromptAutomatically: Boolean = false,
@@ -271,4 +321,13 @@ class LockScreenViewModelTests {
             isDeviceCredentialUnlockEnabled,
             needsNewCodeValidation
     ).let(otherChanges)
+
+    private fun givenBiometricKeyIsInvalidated() {
+        every { biometricHelper.hasSystemKey } returns true
+        every { biometricHelper.isSystemKeyValid } returns false
+    }
+
+    private fun givenShowBiometricPromptAutomatically() {
+        every { biometricHelper.isSystemAuthEnabledAndValid } returns true
+    }
 }

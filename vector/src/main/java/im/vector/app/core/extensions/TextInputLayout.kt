@@ -78,10 +78,14 @@ fun TextInputLayout.setOnImeDoneListener(action: () -> Unit) {
     }
 }
 
-fun TextInputLayout.setOnFocusLostListener(action: () -> Unit) {
+/**
+ * Set a listener for when the input has lost focus, such as moving to the another input field.
+ * The listener is only called when the view is in a resumed state to avoid triggers when exiting a screen.
+ */
+fun TextInputLayout.setOnFocusLostListener(lifecycleOwner: LifecycleOwner, action: () -> Unit) {
     editText().setOnFocusChangeListener { _, hasFocus ->
         when (hasFocus) {
-            false -> action()
+            false -> lifecycleOwner.lifecycleScope.launchWhenResumed { action() }
             else -> {
                 // do nothing
             }

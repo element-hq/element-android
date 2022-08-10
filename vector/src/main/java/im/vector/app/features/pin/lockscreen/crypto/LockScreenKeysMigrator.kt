@@ -40,7 +40,7 @@ class LockScreenKeysMigrator @Inject constructor(
     suspend fun migrateIfNeeded() {
         if (legacyPinCodeMigrator.isMigrationNeeded()) {
             legacyPinCodeMigrator.migrate()
-            missingSystemKeyMigrator.migrate()
+            missingSystemKeyMigrator.migrateIfNeeded()
         }
 
         if (systemKeyV1Migrator.isMigrationNeeded() && versionProvider.get() >= Build.VERSION_CODES.M) {

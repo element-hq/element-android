@@ -62,7 +62,10 @@ fun Throwable.isUsernameInUse() = this is Failure.ServerError &&
         error.code == MatrixError.M_USER_IN_USE
 
 fun Throwable.isInvalidUsername() = this is Failure.ServerError &&
-        error.code == MatrixError.M_INVALID_USERNAME
+        (error.code == MatrixError.M_INVALID_USERNAME || usernameContainsNonAsciiCharacters())
+
+private fun Failure.ServerError.usernameContainsNonAsciiCharacters() = error.code == MatrixError.M_UNKNOWN &&
+        error.message == "Query parameter \'username\' must be ascii"
 
 fun Throwable.isInvalidPassword() = this is Failure.ServerError &&
         error.code == MatrixError.M_FORBIDDEN &&
