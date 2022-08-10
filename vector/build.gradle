@@ -170,7 +170,7 @@ dependencies {
     api libs.androidx.lifecycleProcess
     implementation libs.androidx.lifecycleRuntimeKtx
 
-    implementation libs.androidx.datastorepreferences
+    api libs.androidx.datastorepreferences
 
     // Opus Encoder
     implementation libs.element.opusencoder
