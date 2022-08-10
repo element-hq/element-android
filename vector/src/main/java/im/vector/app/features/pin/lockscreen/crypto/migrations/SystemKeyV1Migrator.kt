@@ -20,6 +20,8 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import im.vector.app.features.pin.lockscreen.crypto.KeyStoreCrypto
 import im.vector.app.features.pin.lockscreen.di.BiometricKeyAlias
+import im.vector.app.features.settings.VectorPreferences
+import timber.log.Timber
 import java.security.KeyStore
 import javax.inject.Inject
 
@@ -30,6 +32,7 @@ class SystemKeyV1Migrator @Inject constructor(
         @BiometricKeyAlias private val systemKeyAlias: String,
         private val keyStore: KeyStore,
         private val keystoreCryptoFactory: KeyStoreCrypto.Factory,
+        private val vectorPreferences: VectorPreferences,
 ) {
 
     /**
@@ -39,7 +42,13 @@ class SystemKeyV1Migrator @Inject constructor(
     fun migrate() {
         keyStore.deleteEntry(SYSTEM_KEY_ALIAS_V1)
         val systemKeyStoreCrypto = keystoreCryptoFactory.provide(systemKeyAlias, keyNeedsUserAuthentication = true)
-        systemKeyStoreCrypto.ensureKey()
+        runCatching {
+            systemKeyStoreCrypto.ensureKey()
+        }.onFailure { e ->
+            Timber.e(e, "Could not migrate v1 biometric key. Biometric authentication will be disabled.")
+            systemKeyStoreCrypto.deleteKey()
+            vectorPreferences.setUseBiometricToUnlock(false)
+        }
     }
 
     /**

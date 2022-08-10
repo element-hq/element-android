@@ -22,7 +22,7 @@ import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.AppStateHandler
+import im.vector.app.SpaceStateHandler
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyAction
@@ -58,7 +58,7 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(
         @Assisted initialState: UnreadMessagesState,
         session: Session,
         private val vectorPreferences: VectorPreferences,
-        appStateHandler: AppStateHandler,
+        spaceStateHandler: SpaceStateHandler,
         private val autoAcceptInvites: AutoAcceptInvites
 ) :
         VectorViewModel<UnreadMessagesState, EmptyAction, EmptyViewEvents>(initialState) {
@@ -109,8 +109,8 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(
                 }
 
         combine(
-                appStateHandler.selectedSpaceFlow.distinctUntilChanged(),
-                appStateHandler.selectedSpaceFlow.flatMapLatest {
+                spaceStateHandler.getSelectedSpaceFlow().distinctUntilChanged(),
+                spaceStateHandler.getSelectedSpaceFlow().flatMapLatest {
                     roomService.getPagedRoomSummariesLive(
                             roomSummaryQueryParams {
                                 this.memberships = Membership.activeMemberships()
@@ -162,10 +162,10 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(
             CountInfo(
                     homeCount = counts,
                     otherCount = RoomAggregateNotificationCount(
-                            notificationCount = rootCounts.fold(0, { acc, rs -> acc + rs.notificationCount }) +
+                            notificationCount = rootCounts.fold(0) { acc, rs -> acc + rs.notificationCount } +
                                     (counts.notificationCount.takeIf { selectedSpace != null } ?: 0) +
                                     spaceInviteCount,
-                            highlightCount = rootCounts.fold(0, { acc, rs -> acc + rs.highlightCount }) +
+                            highlightCount = rootCounts.fold(0) { acc, rs -> acc + rs.highlightCount } +
                                     (counts.highlightCount.takeIf { selectedSpace != null } ?: 0) +
                                     spaceInviteCount
                     )

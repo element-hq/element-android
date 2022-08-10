@@ -16,7 +16,6 @@
 
 package im.vector.app.features.raw.wellknown
 
-import im.vector.app.BuildConfig
 import im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -35,12 +34,12 @@ suspend fun RawService.getElementWellknown(sessionParams: SessionParams): Elemen
 
 fun ElementWellKnown.isE2EByDefault() = elementE2E?.e2eDefault ?: riotE2E?.e2eDefault ?: true
 
-fun ElementWellKnown?.getOutboundSessionKeySharingStrategyOrDefault(): OutboundSessionKeySharingStrategy {
+fun ElementWellKnown?.getOutboundSessionKeySharingStrategyOrDefault(fallback: OutboundSessionKeySharingStrategy): OutboundSessionKeySharingStrategy {
     return when (this?.elementE2E?.outboundsKeyPreSharingMode) {
         "on_room_opening" -> OutboundSessionKeySharingStrategy.WhenEnteringRoom
         "on_typing" -> OutboundSessionKeySharingStrategy.WhenTyping
         "disabled" -> OutboundSessionKeySharingStrategy.WhenSendingEvent
-        else -> BuildConfig.outboundSessionKeySharingStrategy
+        else -> fallback
     }
 }
 

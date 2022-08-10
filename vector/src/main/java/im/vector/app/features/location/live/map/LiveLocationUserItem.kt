@@ -79,15 +79,12 @@ abstract class LiveLocationUserItem : VectorEpoxyModel<LiveLocationUserItem.Hold
             }
         }
 
-        stopTimer(holder)
-        holder.timer = CountUpTimer(1000).apply {
-            tickListener = object : CountUpTimer.TickListener {
-                override fun onTick(milliseconds: Long) {
-                    holder.itemLastUpdatedAtTextView.text = getFormattedLastUpdatedAt(locationUpdateTimeMillis)
-                }
+        holder.timer.tickListener = object : CountUpTimer.TickListener {
+            override fun onTick(milliseconds: Long) {
+                holder.itemLastUpdatedAtTextView.text = getFormattedLastUpdatedAt(locationUpdateTimeMillis)
             }
-            resume()
         }
+        holder.timer.resume()
 
         holder.view.setOnClickListener { callback?.onUserSelected(matrixItem.id) }
     }
@@ -98,8 +95,7 @@ abstract class LiveLocationUserItem : VectorEpoxyModel<LiveLocationUserItem.Hold
     }
 
     private fun stopTimer(holder: Holder) {
-        holder.timer?.stop()
-        holder.timer = null
+        holder.timer.stop()
     }
 
     private fun getFormattedLastUpdatedAt(locationUpdateTimeMillis: Long?): String {
@@ -111,7 +107,7 @@ abstract class LiveLocationUserItem : VectorEpoxyModel<LiveLocationUserItem.Hold
     }
 
     class Holder : VectorEpoxyHolder() {
-        var timer: CountUpTimer? = null
+        val timer: CountUpTimer = CountUpTimer(1000)
         val itemUserAvatarImageView by bind<ImageView>(R.id.itemUserAvatarImageView)
         val itemUserDisplayNameTextView by bind<TextView>(R.id.itemUserDisplayNameTextView)
         val itemRemainingTimeTextView by bind<TextView>(R.id.itemRemainingTimeTextView)

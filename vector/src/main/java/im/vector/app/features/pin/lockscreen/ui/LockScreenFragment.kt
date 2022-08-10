@@ -23,7 +23,6 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
@@ -55,22 +54,7 @@ class LockScreenFragment : VectorBaseFragment<FragmentLockScreenBinding>() {
             handleEvent(it)
         }
 
-        withState(viewModel) { state ->
-            if (state.lockScreenConfiguration.mode == LockScreenMode.CREATE) return@withState
-
-            viewLifecycleOwner.lifecycleScope.launchWhenResumed {
-                if (state.isBiometricKeyInvalidated) {
-                    lockScreenListener?.onBiometricKeyInvalidated()
-                } else if (state.showBiometricPromptAutomatically) {
-                    showBiometricPrompt()
-                }
-            }
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        viewModel.reset()
+        viewModel.handle(LockScreenAction.OnUIReady)
     }
 
     override fun invalidate() = withState(viewModel) { state ->
@@ -83,6 +67,7 @@ class LockScreenFragment : VectorBaseFragment<FragmentLockScreenBinding>() {
                 setupTitleView(views.titleTextView, false, state.lockScreenConfiguration)
             }
         }
+
         renderDeleteOrFingerprintButtons(views, views.codeView.enteredDigits)
     }
 
@@ -123,6 +108,8 @@ class LockScreenFragment : VectorBaseFragment<FragmentLockScreenBinding>() {
             is LockScreenViewEvent.AuthSuccessful -> lockScreenListener?.onAuthenticationSuccess(viewEvent.method)
             is LockScreenViewEvent.AuthFailure -> onAuthFailure(viewEvent.method)
             is LockScreenViewEvent.AuthError -> onAuthError(viewEvent.method, viewEvent.throwable)
+            is LockScreenViewEvent.ShowBiometricKeyInvalidatedMessage -> lockScreenListener?.onBiometricKeyInvalidated()
+            is LockScreenViewEvent.ShowBiometricPromptAutomatically -> showBiometricPrompt()
         }
     }
 

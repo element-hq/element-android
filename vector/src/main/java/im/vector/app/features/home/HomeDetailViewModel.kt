@@ -22,7 +22,7 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.AppStateHandler
+import im.vector.app.SpaceStateHandler
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.singletonEntryPoint
@@ -68,7 +68,7 @@ class HomeDetailViewModel @AssistedInject constructor(
         private val vectorDataStore: VectorDataStore,
         private val callManager: WebRtcCallManager,
         private val directRoomHelper: DirectRoomHelper,
-        private val appStateHandler: AppStateHandler,
+        private val spaceStateHandler: SpaceStateHandler,
         private val autoAcceptInvites: AutoAcceptInvites,
         private val vectorOverrides: VectorOverrides
 ) : VectorViewModel<HomeDetailViewState, HomeDetailAction, HomeDetailViewEvents>(initialState),
@@ -206,7 +206,7 @@ class HomeDetailViewModel @AssistedInject constructor(
     }
 
     private fun observeRoomGroupingMethod() {
-        appStateHandler.selectedSpaceFlow
+        spaceStateHandler.getSelectedSpaceFlow()
                 .setOnEach {
                     copy(
                             selectedSpace = it.orNull()
@@ -215,7 +215,7 @@ class HomeDetailViewModel @AssistedInject constructor(
     }
 
     private fun observeRoomSummaries() {
-        appStateHandler.selectedSpaceFlow.distinctUntilChanged().flatMapLatest {
+        spaceStateHandler.getSelectedSpaceFlow().distinctUntilChanged().flatMapLatest {
             // we use it as a trigger to all changes in room, but do not really load
             // the actual models
             session.roomService().getPagedRoomSummariesLive(
@@ -227,7 +227,7 @@ class HomeDetailViewModel @AssistedInject constructor(
         }
                 .throttleFirst(300)
                 .onEach {
-                    val activeSpaceRoomId = appStateHandler.getCurrentSpace()?.roomId
+                    val activeSpaceRoomId = spaceStateHandler.getCurrentSpace()?.roomId
                     var dmInvites = 0
                     var roomsInvite = 0
                     if (autoAcceptInvites.showInvites()) {

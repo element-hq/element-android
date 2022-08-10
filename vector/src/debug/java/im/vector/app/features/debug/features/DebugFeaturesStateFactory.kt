@@ -71,6 +71,11 @@ class DebugFeaturesStateFactory @Inject constructor(
                                 factory = VectorFeatures::allowExternalUnifiedPushDistributors
                         ),
                         createBooleanFeature(
+                                label = "Enable Live Location Sharing",
+                                key = DebugFeatureKeys.liveLocationSharing,
+                                factory = VectorFeatures::isLocationSharingEnabled
+                        ),
+                        createBooleanFeature(
                                 label = "Force usage of OpusEncoder library",
                                 key = DebugFeatureKeys.forceUsageOfOpusEncoder,
                                 factory = VectorFeatures::forceUsageOfOpusEncoder

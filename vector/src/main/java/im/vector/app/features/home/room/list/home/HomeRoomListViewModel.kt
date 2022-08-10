@@ -22,7 +22,7 @@ import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.AppStateHandler
+import im.vector.app.SpaceStateHandler
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.StateView
@@ -37,6 +37,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.query.SpaceFilter
 import org.matrix.android.sdk.api.query.toActiveSpaceOrNoFilter
 import org.matrix.android.sdk.api.query.toActiveSpaceOrOrphanRooms
@@ -45,12 +46,13 @@ import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
+import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.state.isPublic
 
 class HomeRoomListViewModel @AssistedInject constructor(
         @Assisted initialState: HomeRoomListViewState,
         private val session: Session,
-        private val appStateHandler: AppStateHandler,
+        private val spaceStateHandler: SpaceStateHandler,
         private val vectorPreferences: VectorPreferences,
 ) : VectorViewModel<HomeRoomListViewState, HomeRoomListAction, HomeRoomListViewEvents>(initialState) {
 
@@ -78,6 +80,7 @@ class HomeRoomListViewModel @AssistedInject constructor(
     private fun configureSections() {
         val newSections = mutableSetOf<HomeRoomSection>()
 
+        newSections.add(getRecentRoomsSection())
         newSections.add(getAllRoomsSection())
 
         viewModelScope.launch {
@@ -87,6 +90,18 @@ class HomeRoomListViewModel @AssistedInject constructor(
         setState {
             copy(state = StateView.State.Content)
         }
+    }
+
+    private fun getRecentRoomsSection(): HomeRoomSection {
+        val liveList = session.roomService()
+                .getBreadcrumbsLive(roomSummaryQueryParams {
+                    displayName = QueryStringValue.NoCondition
+                    memberships = listOf(Membership.JOIN)
+                })
+
+        return HomeRoomSection.RecentRoomsData(
+                list = liveList
+        )
     }
 
     private fun getAllRoomsSection(): HomeRoomSection.RoomSummaryData {
@@ -99,10 +114,10 @@ class HomeRoomListViewModel @AssistedInject constructor(
                 pagedListConfig
         )
 
-        appStateHandler.selectedSpaceFlow
+        spaceStateHandler.getSelectedSpaceFlow()
                 .distinctUntilChanged()
                 .onStart {
-                    emit(appStateHandler.getCurrentSpace().toOption())
+                    emit(spaceStateHandler.getCurrentSpace().toOption())
                 }
                 .onEach { selectedSpaceOption ->
                     val selectedSpace = selectedSpaceOption.orNull()

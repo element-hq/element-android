@@ -31,21 +31,25 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.databinding.FragmentGroupListBinding
+import im.vector.app.databinding.FragmentSpaceListBinding
 import im.vector.app.features.home.HomeActivitySharedAction
 import im.vector.app.features.home.HomeSharedActionViewModel
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 
+/**
+ * This Fragment is displayed in the navigation drawer [im.vector.app.features.home.HomeDrawerFragment] and
+ * is displaying the space hierarchy, with some actions on Spaces.
+ */
 class SpaceListFragment @Inject constructor(
         private val spaceController: SpaceSummaryController
-) : VectorBaseFragment<FragmentGroupListBinding>(), SpaceSummaryController.Callback {
+) : VectorBaseFragment<FragmentSpaceListBinding>(), SpaceSummaryController.Callback {
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
     private val viewModel: SpaceListViewModel by fragmentViewModel()
 
-    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGroupListBinding {
-        return FragmentGroupListBinding.inflate(inflater, container, false)
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSpaceListBinding {
+        return FragmentSpaceListBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
