@@ -352,4 +352,27 @@ dependencies {
     implementation "androidx.sharetarget:sharetarget:1.1.0"
 
     kapt libs.dagger.hiltCompiler
+
+    androidTestImplementation libs.androidx.testCore
+    androidTestImplementation libs.androidx.testRunner
+    androidTestImplementation libs.androidx.testRules
+    androidTestImplementation libs.androidx.junit
+    androidTestImplementation libs.androidx.espressoCore
+    androidTestImplementation libs.androidx.espressoContrib
+    androidTestImplementation libs.androidx.espressoIntents
+    androidTestImplementation libs.tests.kluent
+    androidTestImplementation libs.androidx.coreTesting
+    androidTestImplementation(libs.jetbrains.coroutinesTest) {
+        exclude group: "org.jetbrains.kotlinx", module: "kotlinx-coroutines-debug"
+    }
+    // Plant Timber tree for test
+    androidTestImplementation libs.tests.timberJunitRule
+    // "The one who serves a great Espresso"
+    androidTestImplementation('com.adevinta.android:barista:4.2.0') {
+        exclude group: 'org.jetbrains.kotlin'
+    }
+    androidTestImplementation libs.mockk.mockkAndroid
+    androidTestUtil libs.androidx.orchestrator
+    androidTestImplementation libs.androidx.fragmentTesting
+    androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:1.7.10"
 }
