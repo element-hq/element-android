@@ -27,11 +27,11 @@ data class LockScreenViewState(
         val isBiometricKeyInvalidated: Boolean,
 ) : MavericksState {
     constructor(lockScreenConfiguration: LockScreenConfiguration) : this(
-            lockScreenConfiguration, false, false, PinCodeState.Idle, false
+            lockScreenConfiguration, false, false, PinCodeState.Idle, false,
     )
 }
 
 sealed class PinCodeState {
     object Idle : PinCodeState()
-    object FirstCodeEntered : PinCodeState()
+    data class FirstCodeEntered(val pinCode: String) : PinCodeState()
 }
