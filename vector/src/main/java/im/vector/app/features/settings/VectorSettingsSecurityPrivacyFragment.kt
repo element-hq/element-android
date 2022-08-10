@@ -137,8 +137,8 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_SHOW_DEVICES_LIST_PREFERENCE_KEY)!!
     }
 
-    private val showDevicesV2ListPref by lazy {
-        findPreference<VectorPreference>(VectorPreferences.SETTINGS_SHOW_DEVICES_V2_LIST_PREFERENCE_KEY)!!
+    private val showDevicesListV2Pref by lazy {
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_SHOW_DEVICES_LIST_V2_PREFERENCE_KEY)!!
     }
 
     // encrypt to unverified devices
@@ -552,9 +552,9 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         showDeviceListPref.isEnabled = devices.isNotEmpty()
         showDeviceListPref.summary = resources.getQuantityString(R.plurals.settings_active_sessions_count, devices.size, devices.size)
 
-        showDevicesV2ListPref.isVisible = vectorFeatures.isNewDeviceManagementEnabled()
-        showDevicesV2ListPref.title = showDeviceListPref.title.toString() + " (V2, WIP)"
-        showDevicesV2ListPref.summary = resources.getQuantityString(R.plurals.settings_active_sessions_count, devices.size, devices.size)
+        showDevicesListV2Pref.isVisible = vectorFeatures.isNewDeviceManagementEnabled()
+        showDevicesListV2Pref.title = showDeviceListPref.title.toString() + " (V2, WIP)"
+        showDevicesListV2Pref.summary = resources.getQuantityString(R.plurals.settings_active_sessions_count, devices.size, devices.size)
 
         val userId = session.myUserId
         val deviceId = session.sessionParams.deviceId
