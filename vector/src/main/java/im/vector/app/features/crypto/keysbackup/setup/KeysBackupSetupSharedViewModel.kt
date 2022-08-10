@@ -97,7 +97,7 @@ class KeysBackupSetupSharedViewModel @Inject constructor(
             val requestedId = currentRequestId.value!!
 
             mxSession.cryptoService().keysBackupService().prepareKeysBackupVersion(withPassphrase,
-                    object : ProgressListener {
+                    progressListener = object : ProgressListener {
                         override fun onProgress(progress: Int, total: Int) {
                             if (requestedId != currentRequestId.value) {
                                 // this is an old request, we can't cancel but we can ignore
@@ -111,7 +111,7 @@ class KeysBackupSetupSharedViewModel @Inject constructor(
                             )
                         }
                     },
-                    object : MatrixCallback<MegolmBackupCreationInfo> {
+                    callback = object : MatrixCallback<MegolmBackupCreationInfo> {
                         override fun onSuccess(data: MegolmBackupCreationInfo) {
                             if (requestedId != currentRequestId.value) {
                                 // this is an old request, we can't cancel but we can ignore

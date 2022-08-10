@@ -62,7 +62,7 @@ internal class DefaultSessionParamsCreator @Inject constructor(
                     ?.takeIf { it != homeServerConnectionConfig.homeServerUriBase.toString() }
                     ?.also { Timber.d("Overriding homeserver url to $it (will check if valid)") }
                     ?.let { Uri.parse(it) }
-                    ?.takeIf { validateUri(it, homeServerConnectionConfig) }
+                    // ?.takeIf { validateUri(it, homeServerConnectionConfig) }
 
     private suspend fun validateUri(uri: Uri, homeServerConnectionConfig: HomeServerConnectionConfig) =
             // Validate the URL, if the configuration is wrong server side, do not override

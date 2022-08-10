@@ -41,6 +41,7 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupVersionTru
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersion
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersionResult
 import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
+import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCurve25519AuthData
 import org.matrix.android.sdk.api.session.crypto.keysbackup.toKeysVersionResult
 import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.api.session.getRoom
@@ -49,6 +50,10 @@ import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSessionTest
 import org.matrix.android.sdk.common.RetryTestRule
 import org.matrix.android.sdk.common.TestConstants
 import org.matrix.android.sdk.common.waitFor
+import org.matrix.android.sdk.internal.crypto.keysbackup.algorithm.KeysBackupAlgorithmFactory
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeyBackupData
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysBackupData
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.RoomKeysBackupData
 import java.security.InvalidParameterException
 import java.util.Collections
 import java.util.concurrent.CountDownLatch
@@ -119,11 +124,12 @@ class KeysBackupTest : InstrumentedTest {
         assertFalse(keysBackup.isEnabled())
 
         val megolmBackupCreationInfo = testHelper.waitForCallback<MegolmBackupCreationInfo> {
-            keysBackup.prepareKeysBackupVersion(null, null, it)
+            keysBackup.prepareKeysBackupVersion(null, null, null, it)
         }
 
         assertEquals(MXCRYPTO_ALGORITHM_CURVE_25519_BACKUP, megolmBackupCreationInfo.algorithm)
-        assertNotNull(megolmBackupCreationInfo.authData.publicKey)
+        val authData = megolmBackupCreationInfo.authData as MegolmBackupCurve25519AuthData
+        assertNotNull(authData.publicKey)
         assertNotNull(megolmBackupCreationInfo.authData.signatures)
         assertNotNull(megolmBackupCreationInfo.recoveryKey)
 
@@ -145,7 +151,7 @@ class KeysBackupTest : InstrumentedTest {
         assertFalse(keysBackup.isEnabled())
 
         val megolmBackupCreationInfo = testHelper.waitForCallback<MegolmBackupCreationInfo> {
-            keysBackup.prepareKeysBackupVersion(null, null, it)
+            keysBackup.prepareKeysBackupVersion(null, null, null, it)
         }
 
         assertFalse(keysBackup.isEnabled())
@@ -298,23 +304,25 @@ class KeysBackupTest : InstrumentedTest {
         val session = keysBackup.store.inboundGroupSessionsToBackup(1)[0]
 
         val keyBackupCreationInfo = keysBackupTestHelper.prepareAndCreateKeysBackupData(keysBackup).megolmBackupCreationInfo
-
+        val keysBackupVersion = keysBackup.keysBackupVersion
+        assertNotNull(keysBackupVersion)
+        val algorithm = KeysBackupAlgorithmFactory().create(keysBackupVersion!!)
         // - Check encryptGroupSession() returns stg
         val keyBackupData = keysBackup.encryptGroupSession(session)
         assertNotNull(keyBackupData)
         assertNotNull(keyBackupData!!.sessionData)
-
-        // - Check pkDecryptionFromRecoveryKey() is able to create a OlmPkDecryption
-        val decryption = keysBackup.pkDecryptionFromRecoveryKey(keyBackupCreationInfo.recoveryKey)
-        assertNotNull(decryption)
-        // - Check decryptKeyBackupData() returns stg
-        val sessionData = keysBackup
-                .decryptKeyBackupData(
-                        keyBackupData,
-                        session.safeSessionId!!,
-                        cryptoTestData.roomId,
-                        decryption!!
-                )
+        val roomKeysBackupData = RoomKeysBackupData(
+                HashMap<String, KeyBackupData>().apply {
+                    put(session.safeSessionId!!, keyBackupData)
+                }
+        )
+        val keysBackupData = KeysBackupData(
+                HashMap<String, RoomKeysBackupData>().apply {
+                    put(cryptoTestData.roomId, roomKeysBackupData)
+                }
+        )
+        val sessionsData = algorithm.decryptSessions(keyBackupCreationInfo.recoveryKey, keysBackupData)
+        val sessionData = sessionsData.firstOrNull()
         assertNotNull(sessionData)
         // - Compare the decrypted megolm key with the original one
         keysBackupTestHelper.assertKeysEquals(session.exportKeys(), sessionData)

@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.di
 
 import android.content.Context
 import android.content.res.Resources
+import android.os.Handler
 import com.squareup.moshi.Moshi
 import dagger.BindsInstance
 import dagger.Component
@@ -65,6 +66,8 @@ internal interface MatrixComponent {
     fun matrixCoroutineDispatchers(): MatrixCoroutineDispatchers
 
     fun moshi(): Moshi
+
+    fun uiHandler(): Handler
 
     @Unauthenticated
     fun okHttpClient(): OkHttpClient

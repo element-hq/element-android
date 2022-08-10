@@ -144,7 +144,7 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(
         // for the backup and store it in the 4S
         if (session.sharedSecretStorageService().isRecoverySetup()) {
             val creationInfo = awaitCallback<MegolmBackupCreationInfo> {
-                session.cryptoService().keysBackupService().prepareKeysBackupVersion(null, null, it)
+                session.cryptoService().keysBackupService().prepareKeysBackupVersion(null, null, null, it)
             }
             pendingBackupCreationInfo = creationInfo
             val recoveryKey = extractCurveKeyFromRecoveryKey(creationInfo.recoveryKey)?.toBase64NoPadding()

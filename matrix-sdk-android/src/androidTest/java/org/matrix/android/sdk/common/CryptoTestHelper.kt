@@ -25,8 +25,8 @@ import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
-import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_CURVE_25519_BACKUP
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
@@ -35,8 +35,8 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NA
 import org.matrix.android.sdk.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersion
-import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupAuthData
 import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
+import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCurve25519AuthData
 import org.matrix.android.sdk.api.session.crypto.keysbackup.extractCurveKeyFromRecoveryKey
 import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerificationTransaction
@@ -179,8 +179,35 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
         }
     }
 
-    private fun createFakeMegolmBackupAuthData(): MegolmBackupAuthData {
-        return MegolmBackupAuthData(
+    fun checkEncryptedEvent(event: Event, roomId: String, clearMessage: String, senderSession: Session) {
+        assertEquals(EventType.ENCRYPTED, event.type)
+        assertNotNull(event.content)
+
+        val eventWireContent = event.content.toContent()
+        assertNotNull(eventWireContent)
+
+        assertNull(eventWireContent["body"])
+        assertEquals(MXCRYPTO_ALGORITHM_MEGOLM, eventWireContent["algorithm"])
+
+        assertNotNull(eventWireContent["ciphertext"])
+        assertNotNull(eventWireContent["session_id"])
+        assertNotNull(eventWireContent["sender_key"])
+
+        assertEquals(senderSession.sessionParams.deviceId, eventWireContent["device_id"])
+
+        assertNotNull(event.eventId)
+        assertEquals(roomId, event.roomId)
+        assertEquals(EventType.MESSAGE, event.getClearType())
+        // TODO assertTrue(event.getAge() < 10000)
+
+        val eventContent = event.toContent()
+        assertNotNull(eventContent)
+        assertEquals(clearMessage, eventContent["body"])
+        assertEquals(senderSession.myUserId, event.senderId)
+    }
+
+    fun createFakeMegolmBackupAuthData(): MegolmBackupCurve25519AuthData {
+        return MegolmBackupCurve25519AuthData(
                 publicKey = "abcdefg",
                 signatures = mapOf("something" to mapOf("ed25519:something" to "hijklmnop"))
         )
@@ -288,6 +315,24 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
                     secret,
                     listOf(KeyRef(keyInfo.keyId, keyInfo.keySpec))
             )
+
+            // set up megolm backup
+            val creationInfo = awaitCallback<MegolmBackupCreationInfo> {
+                session.cryptoService().keysBackupService().prepareKeysBackupVersion(null, null, null,  it)
+            }
+            val version = awaitCallback<KeysVersion> {
+                session.cryptoService().keysBackupService().createKeysBackupVersion(creationInfo, it)
+            }
+            // Save it for gossiping
+            session.cryptoService().keysBackupService().saveBackupRecoveryKey(creationInfo.recoveryKey, version = version.version)
+
+            extractCurveKeyFromRecoveryKey(creationInfo.recoveryKey)?.toBase64NoPadding()?.let { secret ->
+                ssssService.storeSecret(
+                        KEYBACKUP_SECRET_SSSS_NAME,
+                        secret,
+                        listOf(KeyRef(keyInfo.keyId, keyInfo.keySpec))
+                )
+            }
         }
     }
 

@@ -78,4 +78,10 @@ internal data class MegolmSessionData(
         // When this feature lands in spec name = shared_history should be used
         @Json(name = "org.matrix.msc3061.shared_history")
         val sharedHistory: Boolean = false,
+
+        /**
+         * Flag indicating that this session data is untrusted.
+         */
+        @Json(name = "untrusted")
+        val untrusted: Boolean = false,
 )

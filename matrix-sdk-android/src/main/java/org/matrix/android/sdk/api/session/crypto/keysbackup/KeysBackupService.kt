@@ -124,6 +124,7 @@ interface KeysBackupService {
      */
     fun prepareKeysBackupVersion(
             password: String?,
+            algorithm: String? = null,
             progressListener: ProgressListener?,
             callback: MatrixCallback<MegolmBackupCreationInfo>
     )

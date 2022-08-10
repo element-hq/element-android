@@ -20,8 +20,9 @@ import android.os.Handler
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupStateListener
 import timber.log.Timber
+import javax.inject.Inject
 
-internal class KeysBackupStateManager(private val uiHandler: Handler) {
+internal class KeysBackupStateManager @Inject constructor(private val uiHandler: Handler) {
 
     private val listeners = ArrayList<KeysBackupStateListener>()
 

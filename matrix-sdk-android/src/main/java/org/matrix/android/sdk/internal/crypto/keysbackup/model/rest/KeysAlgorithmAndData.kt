@@ -16,8 +16,11 @@
 
 package org.matrix.android.sdk.internal.crypto.keysbackup.model.rest
 
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_AES_256_BACKUP
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_CURVE_25519_BACKUP
+import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupAes256AuthData
 import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupAuthData
+import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCurve25519AuthData
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.di.MoshiProvider
 
@@ -41,12 +44,14 @@ import org.matrix.android.sdk.internal.di.MoshiProvider
 internal interface KeysAlgorithmAndData {
 
     /**
-     * The algorithm used for storing backups. Currently, only "m.megolm_backup.v1.curve25519-aes-sha2" is defined.
+     * The algorithm used for storing backups.
+     * Currently, "m.megolm_backup.v1.curve25519-aes-sha2" and
+     * org.matrix.msc3270.v1.aes-hmac-sha2 are defined.
      */
     val algorithm: String
 
     /**
-     * algorithm-dependent data, for "m.megolm_backup.v1.curve25519-aes-sha2" see [org.matrix.android.sdk.internal.crypto.keysbackup.MegolmBackupAuthData].
+     * algorithm-dependent data, for "m.megolm_backup.v1.curve25519-aes-sha2" * see [org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCurve25519AuthData].
      */
     val authData: JsonDict
 
@@ -54,9 +59,12 @@ internal interface KeysAlgorithmAndData {
      * Facility method to convert authData to a MegolmBackupAuthData object.
      */
     fun getAuthDataAsMegolmBackupAuthData(): MegolmBackupAuthData? {
-        return MoshiProvider.providesMoshi()
-                .takeIf { algorithm == MXCRYPTO_ALGORITHM_CURVE_25519_BACKUP }
-                ?.adapter(MegolmBackupAuthData::class.java)
-                ?.fromJsonValue(authData)
+        val moshi = MoshiProvider.providesMoshi()
+        val moshiAdapter = when (algorithm) {
+            MXCRYPTO_ALGORITHM_CURVE_25519_BACKUP -> moshi.adapter(MegolmBackupCurve25519AuthData::class.java)
+            MXCRYPTO_ALGORITHM_AES_256_BACKUP -> moshi.adapter(MegolmBackupAes256AuthData::class.java)
+            else -> null
+        }
+        return moshiAdapter?.fromJsonValue(authData)
     }
 }
