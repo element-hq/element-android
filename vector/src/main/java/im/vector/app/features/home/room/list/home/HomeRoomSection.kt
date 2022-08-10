@@ -24,4 +24,8 @@ sealed class HomeRoomSection {
     data class RoomSummaryData(
             val list: LiveData<PagedList<RoomSummary>>
     ) : HomeRoomSection()
+
+    data class RecentRoomsData(
+            val list: LiveData<List<RoomSummary>>
+    ) : HomeRoomSection()
 }

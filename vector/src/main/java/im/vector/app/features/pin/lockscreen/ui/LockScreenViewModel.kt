@@ -17,12 +17,11 @@
 package im.vector.app.features.pin.lockscreen.ui
 
 import android.annotation.SuppressLint
+import android.app.KeyguardManager
 import android.os.Build
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import androidx.fragment.app.FragmentActivity
 import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
-import com.airbnb.mvrx.withState
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -31,26 +30,29 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.pin.lockscreen.biometrics.BiometricAuthError
 import im.vector.app.features.pin.lockscreen.biometrics.BiometricHelper
-import im.vector.app.features.pin.lockscreen.configuration.LockScreenConfiguration
-import im.vector.app.features.pin.lockscreen.configuration.LockScreenConfiguratorProvider
 import im.vector.app.features.pin.lockscreen.configuration.LockScreenMode
 import im.vector.app.features.pin.lockscreen.crypto.LockScreenKeysMigrator
 import im.vector.app.features.pin.lockscreen.pincode.PinCodeHelper
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 import org.matrix.android.sdk.api.util.BuildVersionSdkIntProvider
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 class LockScreenViewModel @AssistedInject constructor(
         @Assisted val initialState: LockScreenViewState,
         private val pinCodeHelper: PinCodeHelper,
-        private val biometricHelper: BiometricHelper,
+        biometricHelperFactory: BiometricHelper.BiometricHelperFactory,
         private val lockScreenKeysMigrator: LockScreenKeysMigrator,
-        private val configuratorProvider: LockScreenConfiguratorProvider,
-        private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
+        private val versionProvider: BuildVersionSdkIntProvider,
+        private val keyguardManager: KeyguardManager,
 ) : VectorViewModel<LockScreenViewState, LockScreenAction, LockScreenViewEvent>(initialState) {
 
     @AssistedFactory
@@ -58,27 +60,9 @@ class LockScreenViewModel @AssistedInject constructor(
         override fun create(initialState: LockScreenViewState): LockScreenViewModel
     }
 
-    companion object : MavericksViewModelFactory<LockScreenViewModel, LockScreenViewState> by hiltMavericksViewModelFactory() {
+    companion object : MavericksViewModelFactory<LockScreenViewModel, LockScreenViewState> by hiltMavericksViewModelFactory()
 
-        override fun initialState(viewModelContext: ViewModelContext): LockScreenViewState {
-            return LockScreenViewState(
-                    lockScreenConfiguration = DUMMY_CONFIGURATION,
-                    canUseBiometricAuth = false,
-                    showBiometricPromptAutomatically = false,
-                    pinCodeState = PinCodeState.Idle,
-                    isBiometricKeyInvalidated = false,
-            )
-        }
-
-        private val DUMMY_CONFIGURATION = LockScreenConfiguration(
-                mode = LockScreenMode.VERIFY,
-                pinCodeLength = 4,
-                isStrongBiometricsEnabled = false,
-                isDeviceCredentialUnlockEnabled = false,
-                isWeakBiometricsEnabled = false,
-                needsNewCodeValidation = false,
-        )
-    }
+    private val biometricHelper = biometricHelperFactory.create(initialState.lockScreenConfiguration)
 
     private var firstEnteredCode: String? = null
 
@@ -86,18 +70,37 @@ class LockScreenViewModel @AssistedInject constructor(
     private var isSystemAuthTemporarilyDisabledByBiometricPrompt = false
 
     init {
-        // We need this to run synchronously before we start reading the configurations
-        runBlocking { lockScreenKeysMigrator.migrateIfNeeded() }
+        viewModelScope.launch {
+            // Wait until the keyguard is unlocked before performing migrations, it might cause crashes otherwise on Android 12 and 12L
+            waitUntilKeyguardIsUnlocked()
+            // Migrate pin code / system keys if needed
+            lockScreenKeysMigrator.migrateIfNeeded()
+            // Update initial state with biometric info
+            updateStateWithBiometricInfo()
+        }
+    }
 
-        configuratorProvider.configurationFlow
-                .onEach { updateConfiguration(it) }
-                .launchIn(viewModelScope)
+    private fun observeStateChanges() {
+        // The first time the state allows it, show the biometric prompt
+        viewModelScope.launch {
+            if (stateFlow.firstOrNull { it.showBiometricPromptAutomatically } != null) {
+                _viewEvents.post(LockScreenViewEvent.ShowBiometricPromptAutomatically)
+            }
+        }
+
+        // The first time the state allows it, react to biometric key being invalidated
+        viewModelScope.launch {
+            if (stateFlow.firstOrNull { it.isBiometricKeyInvalidated } != null) {
+                onBiometricKeyInvalidated()
+            }
+        }
     }
 
     override fun handle(action: LockScreenAction) {
         when (action) {
             is LockScreenAction.PinCodeEntered -> onPinCodeEntered(action.value)
             is LockScreenAction.ShowBiometricPrompt -> showBiometricPrompt(action.callingActivity)
+            is LockScreenAction.OnUIReady -> observeStateChanges()
         }
     }
 
@@ -141,13 +144,18 @@ class LockScreenViewModel @AssistedInject constructor(
     private fun showBiometricPrompt(activity: FragmentActivity) = flow {
         emitAll(biometricHelper.authenticate(activity))
     }.catch { error ->
-        if (buildVersionSdkIntProvider.get() >= Build.VERSION_CODES.M && error is KeyPermanentlyInvalidatedException) {
-            removeBiometricAuthentication()
-        } else if (error is BiometricAuthError && error.isAuthDisabledError) {
-            isSystemAuthTemporarilyDisabledByBiometricPrompt = true
-            updateStateWithBiometricInfo()
+        when {
+            versionProvider.get() >= Build.VERSION_CODES.M && error is KeyPermanentlyInvalidatedException -> {
+                onBiometricKeyInvalidated()
+            }
+            else -> {
+                if (error is BiometricAuthError && error.isAuthDisabledError) {
+                    isSystemAuthTemporarilyDisabledByBiometricPrompt = true
+                    updateStateWithBiometricInfo()
+                }
+                _viewEvents.post(LockScreenViewEvent.AuthError(AuthMethod.BIOMETRICS, error))
+            }
         }
-        _viewEvents.post(LockScreenViewEvent.AuthError(AuthMethod.BIOMETRICS, error))
     }.onEach { success ->
         _viewEvents.post(
                 if (success) LockScreenViewEvent.AuthSuccessful(AuthMethod.BIOMETRICS)
@@ -155,24 +163,22 @@ class LockScreenViewModel @AssistedInject constructor(
         )
     }.launchIn(viewModelScope)
 
-    fun reset() {
-        configuratorProvider.reset()
-    }
-
-    private fun removeBiometricAuthentication() {
+    private suspend fun onBiometricKeyInvalidated() {
         biometricHelper.disableAuthentication()
         updateStateWithBiometricInfo()
+        _viewEvents.post(LockScreenViewEvent.ShowBiometricKeyInvalidatedMessage)
     }
 
-    private fun updateStateWithBiometricInfo() {
-        val configuration = withState(this) { it.lockScreenConfiguration }
-        val canUseBiometricAuth = configuration.mode == LockScreenMode.VERIFY &&
+    @SuppressLint("NewApi")
+    private suspend fun updateStateWithBiometricInfo() {
+        // This is a terrible hack, but I found no other way to ensure this would be called only after the device is considered unlocked on Android 12+
+        waitUntilKeyguardIsUnlocked()
+        setState {
+            val isBiometricKeyInvalidated = biometricHelper.hasSystemKey && !biometricHelper.isSystemKeyValid
+            val canUseBiometricAuth = lockScreenConfiguration.mode == LockScreenMode.VERIFY &&
                 !isSystemAuthTemporarilyDisabledByBiometricPrompt &&
                 biometricHelper.isSystemAuthEnabledAndValid
-        val isBiometricKeyInvalidated = biometricHelper.hasSystemKey && !biometricHelper.isSystemKeyValid
-        val showBiometricPromptAutomatically = canUseBiometricAuth &&
-                configuration.autoStartBiometric
-        setState {
+            val showBiometricPromptAutomatically = canUseBiometricAuth && lockScreenConfiguration.autoStartBiometric
             copy(
                     canUseBiometricAuth = canUseBiometricAuth,
                     showBiometricPromptAutomatically = showBiometricPromptAutomatically,
@@ -181,8 +187,18 @@ class LockScreenViewModel @AssistedInject constructor(
         }
     }
 
-    private fun updateConfiguration(configuration: LockScreenConfiguration) {
-        setState { copy(lockScreenConfiguration = configuration) }
-        updateStateWithBiometricInfo()
+    /**
+     * Wait until the device is unlocked. There seems to be a behavior change on Android 12 that makes [KeyguardManager.isDeviceLocked] return `false` even
+     * after an Activity's `onResume` method. If we mix that with the system keys needing the device to be unlocked before they're used, we get crashes.
+     * See issue [#6768](https://github.com/vector-im/element-android/issues/6768).
+     */
+    @SuppressLint("NewApi")
+    private suspend fun waitUntilKeyguardIsUnlocked() {
+        if (versionProvider.get() < Build.VERSION_CODES.S) return
+        withTimeoutOrNull(5.seconds) {
+            while (keyguardManager.isDeviceLocked) {
+                delay(50.milliseconds)
+            }
+        }
     }
 }

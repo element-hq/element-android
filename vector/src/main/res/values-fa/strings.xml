@@ -982,7 +982,7 @@
     <string name="encryption_information_dg_xsigning_disabled">ورود چندگانه به کار نیفتاده</string>
     <string name="settings_hs_admin_e2e_disabled">مدیر کارسازتان رمزنگاری سرتاسری پیش‌گزیده را در اتاق‌های خصوصی و پیام‌های مستقیم از کار انداخته است.</string>
     <string name="settings_active_sessions_signout_device">خروج از این نشست</string>
-    <string name="crosssigning_verify_this_session">تأیید این ورود</string>
+    <string name="crosssigning_verify_this_session">تأیید این افزاره</string>
     <string name="verification_open_other_to_verify">استفاده از نشستی موجود برای تأییدش که به پیام‌های رمزشده دسترسی می‌دهد.</string>
     <string name="verification_profile_verify">تأیید</string>
     <string name="verification_profile_verified">تأیید‌شده</string>
@@ -2550,8 +2550,8 @@
     <string name="ftue_auth_forgot_password">فراموشی گذرواژه</string>
     <string name="ftue_auth_email_resend_email">فرستادن دوبارهٔ رایانامه</string>
     <string name="ftue_auth_email_verification_footer">رایانامه‌ای نگرفتید؟</string>
-    <string name="ftue_auth_email_verification_subtitle">برای تأیید رایانامه‌تان، روی دکمه در رایانامه‌ای‌که اکنون برایتان به %s فرستادیم بزنید</string>
-    <string name="ftue_auth_email_verification_title">برای تأیید، رایانامه‌تان را بررسی کنید.</string>
+    <string name="ftue_auth_email_verification_subtitle">دستورالعمل‌های فرستاده شده به %s را دنبال کنید</string>
+    <string name="ftue_auth_email_verification_title">رایانامه‌تان را تأیید کنید</string>
     <string name="ftue_auth_phone_confirmation_resend_code">فرستادن دوبارهٔ رمز</string>
     <string name="ftue_auth_phone_confirmation_subtitle">رمزی به %s فرستاده خواهد شد</string>
     <string name="ftue_auth_phone_confirmation_title">شمارهٔ تلفنتان را تأیید کنید</string>
@@ -2588,4 +2588,19 @@
     <string name="font_size_section_manually">گزینش دستی</string>
     <string name="font_size_section_auto">تنظیم خودکار</string>
     <string name="font_size_title">گزینش اندازهٔ قلم</string>
+    <string name="labs_enable_element_call_permission_shortcuts_summary">تأیید خودکار ابزارک‌های تماس و اعطای دسترسی دوربین و میکروفون</string>
+    <string name="labs_enable_element_call_permission_shortcuts">به کار انداخت میان‌برهای اجازهٔ تماس المنت</string>
+    <string name="live_location_description">مکان زنده</string>
+    <string name="verify_invalid_qr_notice">این رمز QR بدریخت به نظر می‌رسد. لطفاً تأیید با روشی دیگر را بیازمایید.</string>
+    <string name="crosssigning_cannot_verify_this_session_desc">نخواهید توانست به تاریخچهٔ پیام رمزشده دست یابید. برای آغاز تازه، کلیدهای تأیید و پشتیبان پیام امنتان را بازنشانی کنید.</string>
+    <string name="crosssigning_cannot_verify_this_session">ناتوان در تأیید این افزاره</string>
+    <string name="ftue_auth_choose_server_sign_in_subtitle">نشانی کارسازتان چیست؟</string>
+    <string name="ftue_auth_sign_in_choose_server_header">زیستگاه گفت‌وگوهایتان</string>
+    <string name="updating_your_data">به‌روز رساندن داده‌هایتان…</string>
+    <plurals name="search_space_multiple_parents">
+        <item quantity="one">%1$s و ۱ والد دیگر</item>
+        <item quantity="other">%1$s و %2$d والد دیگر</item>
+    </plurals>
+    <string name="search_space_two_parents">%1$s و %2$s</string>
+    <string name="auth_reset_password_error_unverified">رایانامه تأیید نشده. صندوق ورودیتان را بررسی کنید</string>
 </resources>

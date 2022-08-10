@@ -16,9 +16,13 @@
 
 package im.vector.app.features.pin.lockscreen.configuration
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
 /**
  * Configuration to be used by the lockscreen feature.
  */
+@Parcelize
 data class LockScreenConfiguration(
         /** Which mode should the UI display, [LockScreenMode.VERIFY] or [LockScreenMode.CREATE]. */
         val mode: LockScreenMode,
@@ -56,4 +60,4 @@ data class LockScreenConfiguration(
         val biometricSubtitle: String? = null,
         /** Text for the cancel button of the Biometric prompt dialog. Optional. */
         val biometricCancelButtonTitle: String? = null,
-)
+) : Parcelable
