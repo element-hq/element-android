@@ -22,7 +22,6 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.VectorViewModelAction
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import org.junit.Assert
 
 fun String.trimIndentOneLine() = trimIndent().replace("\n", "")
 

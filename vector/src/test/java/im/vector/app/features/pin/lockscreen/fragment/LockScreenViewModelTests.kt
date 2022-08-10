@@ -121,7 +121,7 @@ class LockScreenViewModelTests {
     }
 
     @Test
-    fun `when onPinCodeEntered is called in VERIFY mode and verification is successful, the code is verified and the result is emitted as a ViewEvent`() = runTest {
+    fun `when onPinCodeEntered is called in VERIFY mode and verification is successful, code is verified and result is emitted as a ViewEvent`() = runTest {
         // given
         val initialState = createViewState()
         val viewModel = LockScreenViewModel(initialState, pinCodeHelper, biometricHelperFactory, keysMigrator, versionProvider, keyguardManager)
