@@ -21,15 +21,32 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.databinding.FragmentNewChatBottomSheetBinding
+import im.vector.app.features.navigation.Navigator
+import javax.inject.Inject
 
-class NewChatBottomSheet : BottomSheetDialogFragment() {
+@AndroidEntryPoint
+class NewChatBottomSheet @Inject constructor() : BottomSheetDialogFragment() {
+
+    @Inject lateinit var navigator: Navigator
 
     private lateinit var binding: FragmentNewChatBottomSheetBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentNewChatBottomSheetBinding.inflate(inflater, container, false)
+        initFABs()
         return binding.root
+    }
+
+    private fun initFABs() {
+        binding.startChat.setOnClickListener {
+            navigator.openCreateDirectRoom(requireActivity())
+        }
+
+        binding.createRoom.setOnClickListener {
+            navigator.openCreateRoom(requireActivity(), "")
+        }
     }
 
     companion object {

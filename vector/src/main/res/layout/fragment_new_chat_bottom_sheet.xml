@@ -5,23 +5,29 @@
     android:orientation="vertical">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/start_chat"
+        style="@style/Widget.Vector.TextView.Subtitle"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.Vector.Subtitle"
-        android:textSize="18sp"
-        android:paddingVertical="8dp"
+        android:background="?selectableItemBackground"
         android:paddingHorizontal="16dp"
+        android:paddingVertical="16dp"
+        android:text="@string/start_chat"
+        android:textAppearance="@style/TextAppearance.Vector.Body"
         android:textColor="?vctr_content_primary"
-        android:text="@string/start_chat" />
+        android:textStyle="bold" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/create_room"
+        style="@style/Widget.Vector.TextView.Subtitle"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
         android:paddingHorizontal="16dp"
-        android:paddingVertical="8dp"
-        android:textAppearance="@style/TextAppearance.Vector.Subtitle"
-        android:textSize="18sp"
+        android:paddingVertical="16dp"
+        android:text="@string/create_room"
+        android:textAppearance="@style/TextAppearance.Vector.Body"
         android:textColor="?vctr_content_primary"
-        android:text="@string/create_room" />
+        android:textStyle="bold" />
 
 </LinearLayout>
