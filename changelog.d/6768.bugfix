@@ -1,1 +1,0 @@
-Fix crash when biometric key is used when coming back to foreground and KeyStore reports that the device is still locked.
