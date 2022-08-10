@@ -276,13 +276,12 @@ class LockScreenViewModelTests {
 
         exception.isAuthDisabledError.shouldBeTrue()
         events.assertValues(LockScreenViewEvent.AuthError(AuthMethod.BIOMETRICS, exception))
-        viewModel.test().states.assertLatestValue { !it.canUseBiometricAuth }
+        viewModel.test().assertLatestState { !it.canUseBiometricAuth }
     }
 
     @Test
     fun `when OnUIReady action is received and showBiometricPromptAutomatically is true it shows prompt`() = runTest {
-        // To force showBiometricPromptAutomatically to be true
-        every { biometricHelper.isSystemAuthEnabledAndValid } returns true
+        givenShowBiometricPromptAutomatically()
         val viewModel = LockScreenViewModel(createViewState(), pinCodeHelper, biometricHelperFactory, keysMigrator, versionProvider, keyguardManager)
         val events = viewModel.test().viewEvents
         viewModel.handle(LockScreenAction.OnUIReady)
@@ -291,9 +290,7 @@ class LockScreenViewModelTests {
 
     @Test
     fun `when OnUIReady action is received and isBiometricKeyInvalidated is true it shows prompt`() = runTest {
-        // To force isBiometricKeyInvalidated to be true
-        every { biometricHelper.hasSystemKey } returns true
-        every { biometricHelper.isSystemKeyValid } returns false
+        givenBiometricKeyIsInvalidated()
         val viewModel = LockScreenViewModel(createViewState(), pinCodeHelper, biometricHelperFactory, keysMigrator, versionProvider, keyguardManager)
         val events = viewModel.test().viewEvents
         viewModel.handle(LockScreenAction.OnUIReady)
@@ -326,4 +323,13 @@ class LockScreenViewModelTests {
             isDeviceCredentialUnlockEnabled,
             needsNewCodeValidation
     ).let(otherChanges)
+
+    private fun givenBiometricKeyIsInvalidated() {
+        every { biometricHelper.hasSystemKey } returns true
+        every { biometricHelper.isSystemKeyValid } returns false
+    }
+
+    private fun givenShowBiometricPromptAutomatically() {
+        every { biometricHelper.isSystemAuthEnabledAndValid } returns true
+    }
 }
