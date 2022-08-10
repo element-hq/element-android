@@ -205,7 +205,6 @@ class HomeRoomListFragment @Inject constructor(
         }
     }
 
-
     private fun promptLeaveRoom(roomId: String) {
         val isPublicRoom = roomListViewModel.isPublicRoom(roomId)
         val message = buildString {
