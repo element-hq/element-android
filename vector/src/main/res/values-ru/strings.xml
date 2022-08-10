@@ -960,7 +960,7 @@
     <string name="message_edits">Изменение сообщения</string>
     <string name="no_message_edits_found">Изменения не найдены</string>
     <string name="room_filtering_filter_hint">Отфильтровать беседы…</string>
-    <string name="room_filtering_footer_title">Не можете найти то, что ищете\?</string>
+    <string name="room_filtering_footer_title">Не можете найти нужное\?</string>
     <string name="room_filtering_footer_create_new_room">Создать новую комнату</string>
     <string name="room_filtering_footer_create_new_direct_message">Отправить новое личное сообщение</string>
     <string name="room_filtering_footer_open_room_directory">Просмотр каталога комнат</string>
@@ -1455,7 +1455,7 @@
         <item quantity="few">%d сессии активны</item>
         <item quantity="many">%d сессий активно</item>
     </plurals>
-    <string name="crosssigning_verify_this_session">Подтвердите это устройство</string>
+    <string name="crosssigning_verify_this_session">Подтверждение этого устройства</string>
     <string name="verification_open_other_to_verify">Используйте существующую сессию для подтверждения этой, предоставив ей доступ к зашифрованным сообщениям.</string>
     <string name="settings_dev_tools">Инструменты для разработчиков</string>
     <string name="settings_account_data">Данные учётной записи</string>
@@ -1743,10 +1743,10 @@
     <string name="settings_security_application_protection_summary">Защитите доступ с помощью PIN-кода и биометрии.</string>
     <string name="settings_security_application_protection_title">Защита доступа</string>
     <string name="secure_backup_reset_no_history">Вы перезапустите приложение без истории, сообщений, доверенных устройств или доверенных пользователей</string>
-    <string name="secure_backup_reset_if_you_reset_all">Если сбросить все</string>
+    <string name="secure_backup_reset_if_you_reset_all">Если сбросить всё</string>
     <string name="secure_backup_reset_all_no_other_devices">Делайте это только в том случае, если у вас нет другого устройства, с которого вы можете проверить это устройство.</string>
-    <string name="secure_backup_reset_all">Сбросить все</string>
-    <string name="bad_passphrase_key_reset_all_action">Забыли или потеряли все варианты восстановления\? Сбросить все</string>
+    <string name="secure_backup_reset_all">Сбросить всё</string>
+    <string name="bad_passphrase_key_reset_all_action">Забыли или потеряли все варианты восстановления\? Сбросить всё</string>
     <string name="direct_room_created_summary_item_by_you">Вы вошли.</string>
     <string name="direct_room_created_summary_item">%s вошёл(ла).</string>
     <string name="direct_room_encryption_enabled_tile_description">Сообщения в этой переписке защищены сквозным шифрованием.</string>
@@ -2663,4 +2663,8 @@
     <string name="ftue_auth_create_account_sso_section_header">Или</string>
     <string name="ftue_auth_create_account_title">Создать учётную запись</string>
     <string name="search_space_two_parents">%1$s и %2$s</string>
+    <string name="a11y_open_settings">Открыть настройки</string>
+    <string name="location_share_loading_map_error">Не удалось загрузить карту
+\nВозможно, этот домашний сервер не настроен для отображения карт.</string>
+    <string name="all_chats">Все Беседы</string>
 </resources>
