@@ -65,7 +65,7 @@
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_SHOW_DEVICES_V2_LIST_PREFERENCE_KEY"
             android:title="@string/settings_active_sessions_show_all"
-            app:fragment="im.vector.app.features.settings.devices.VectorSettingsDevicesFragment" />
+            app:fragment="im.vector.app.features.settings.devices.v2.VectorSettingsDevicesFragment" />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
