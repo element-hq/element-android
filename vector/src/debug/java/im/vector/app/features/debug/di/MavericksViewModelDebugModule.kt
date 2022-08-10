@@ -45,5 +45,4 @@ interface MavericksViewModelDebugModule {
     @IntoMap
     @MavericksViewModelKey(DebugMemoryLeaksViewModel::class)
     fun debugMemoryLeaksViewModelFactory(factory: DebugMemoryLeaksViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
-
 }
