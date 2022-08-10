@@ -27,7 +27,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Run knit
         run: |
-          ./gradlew knitCheck
+          ./gradlew knitCheck $CI_GRADLE_ARG_PROPERTIES
 
   # Check the project: ktlint, detekt, lint
   lint:
@@ -41,7 +41,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Run ktlint
         run: |
-          ./gradlew ktlintCheck --continue
+          ./gradlew ktlintCheck $CI_GRADLE_ARG_PROPERTIES --continue
       - name: Run detekt
         if: always()
         run: |
