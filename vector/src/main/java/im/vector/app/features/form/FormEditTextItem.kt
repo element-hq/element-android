@@ -59,6 +59,9 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>(R.la
     var singleLine: Boolean = true
 
     @EpoxyAttribute
+    var autoCapitalize: Boolean = false
+
+    @EpoxyAttribute
     var imeOptions: Int? = null
 
     @EpoxyAttribute
@@ -133,8 +136,14 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>(R.la
     private fun configureInputType(holder: Holder) {
         val newInputType =
                 inputType ?: when (singleLine) {
-                    true -> InputType.TYPE_CLASS_TEXT
-                    false -> InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
+                    true ->  {
+                        if (autoCapitalize) InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+                        else InputType.TYPE_CLASS_TEXT
+                    }
+                    false -> {
+                        if (autoCapitalize) InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+                        else InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
+                    }
                 }
 
         // This is a must in order to avoid extreme lag in some devices, on fast typing
