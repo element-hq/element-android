@@ -214,6 +214,9 @@ class HomeRoomListFragment @Inject constructor(
     }
 
     private fun setUpAdapters(sections: Set<HomeRoomSection>) {
+        concatAdapter.adapters.forEach {
+            concatAdapter.removeAdapter(it)
+        }
         sections.forEach {
             concatAdapter.addAdapter(getAdapterForData(it))
         }

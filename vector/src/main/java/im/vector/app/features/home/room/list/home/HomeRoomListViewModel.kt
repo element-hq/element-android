@@ -81,7 +81,6 @@ class HomeRoomListViewModel @AssistedInject constructor(
     val sections = _sections.asSharedFlow()
 
     val filtersPreferencesFlow = MutableSharedFlow<Boolean>(replay = 1)
-    val recentsPreferencesFlow = MutableSharedFlow<Boolean>(replay = 1)
 
     private var filteredPagedRoomSummariesLive: UpdatableLivePageResult? = null
 
@@ -97,21 +96,12 @@ class HomeRoomListViewModel @AssistedInject constructor(
             }
         }
 
-        filtersPreferencesFlow.onStart {
-            emit(preferences.areFiltersEnabled())
-        }
-
-        preferences.registerRecentsListener { areRecentsEnabled ->
-            viewModelScope.launch {
-                recentsPreferencesFlow.emit(areRecentsEnabled)
-            }
-        }
-
         viewModelScope.launch {
             filtersPreferencesFlow.emit(preferences.areFiltersEnabled())
         }
-        recentsPreferencesFlow.onStart {
-            emit(preferences.areRecentsEnabled())
+
+        preferences.registerRecentsListener { _ ->
+            configureSections()
         }
     }
 
@@ -123,7 +113,9 @@ class HomeRoomListViewModel @AssistedInject constructor(
     private fun configureSections() {
         val newSections = mutableSetOf<HomeRoomSection>()
 
-        newSections.add(getRecentRoomsSection())
+        if (preferences.areRecentsEnabled()) {
+            newSections.add(getRecentRoomsSection())
+        }
         newSections.add(getFilteredRoomsSection())
 
         viewModelScope.launch {
