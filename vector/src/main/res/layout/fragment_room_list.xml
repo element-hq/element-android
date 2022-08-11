@@ -59,49 +59,6 @@
             tools:layout_marginEnd="144dp"
             tools:visibility="visible" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="bottom|end">
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/newLayoutOpenSpacesButton"
-                style="@style/Widget.Vector.FloatingActionButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:accessibilityTraversalAfter="@id/newLayoutCreateChatButton"
-                android:contentDescription="@string/a11y_open_spaces"
-                android:src="@drawable/ic_open_spaces"
-                android:visibility="gone"
-                app:backgroundTint="?attr/vctr_toolbar_background"
-                app:fabSize="mini"
-                app:layout_constraintBottom_toTopOf="@id/newLayoutCreateChatButton"
-                app:layout_constraintEnd_toEndOf="@id/newLayoutCreateChatButton"
-                app:layout_constraintStart_toStartOf="@id/newLayoutCreateChatButton"
-                app:tint="?attr/colorPrimary"
-                tools:targetApi="lollipop_mr1"
-                tools:visibility="visible" />
-
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/newLayoutCreateChatButton"
-                style="@style/Widget.Vector.FloatingActionButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:accessibilityTraversalBefore="@id/roomListView"
-                android:contentDescription="@string/a11y_create_message"
-                android:src="@drawable/ic_new_chat"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                tools:targetApi="lollipop_mr1"
-                tools:visibility="visible" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
     </im.vector.app.core.platform.StateView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

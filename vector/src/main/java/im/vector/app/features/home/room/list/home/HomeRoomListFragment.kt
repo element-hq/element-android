@@ -66,15 +66,10 @@ class HomeRoomListFragment @Inject constructor(
 
     private val roomListViewModel: HomeRoomListViewModel by fragmentViewModel()
     private lateinit var sharedQuickActionsViewModel: RoomListQuickActionsSharedActionViewModel
-    private lateinit var sharedActionViewModel: RoomListSharedActionViewModel
     private var concatAdapter = ConcatAdapter()
     private var modelBuildListener: OnModelBuildFinishedListener? = null
 
-    private val spaceListBottomSheet = SpaceListBottomSheet()
-
     private lateinit var stateRestorer: LayoutManagerStateRestorer
-
-    private val newChatBottomSheet = NewChatBottomSheet()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomListBinding {
         return FragmentRoomListBinding.inflate(inflater, container, false)
@@ -86,17 +81,11 @@ class HomeRoomListFragment @Inject constructor(
         views.stateView.state = StateView.State.Loading
         setupObservers()
         setupRecyclerView()
-        setupFabs()
     }
 
     private fun setupObservers() {
         sharedQuickActionsViewModel = activityViewModelProvider[RoomListQuickActionsSharedActionViewModel::class.java]
-        sharedActionViewModel = activityViewModelProvider[RoomListSharedActionViewModel::class.java]
 
-        sharedActionViewModel
-                .stream()
-                .onEach(::handleSharedAction)
-                .launchIn(viewLifecycleOwner.lifecycleScope)
         sharedQuickActionsViewModel
                 .stream()
                 .onEach(::handleQuickActions)
@@ -109,12 +98,6 @@ class HomeRoomListFragment @Inject constructor(
                 is HomeRoomListViewEvents.SelectRoom -> handleSelectRoom(it, it.isInviteAlreadyAccepted)
                 is HomeRoomListViewEvents.Done -> Unit
             }
-        }
-    }
-
-    private fun handleSharedAction(action: RoomListSharedAction) {
-        when (action) {
-            RoomListSharedAction.CloseBottomSheet -> spaceListBottomSheet.dismiss()
         }
     }
 
@@ -171,42 +154,6 @@ class HomeRoomListFragment @Inject constructor(
                 }
             }
         })
-    }
-
-    private fun setupFabs() {
-        showFABs()
-
-        views.newLayoutCreateChatButton.setOnClickListener {
-            newChatBottomSheet.show(requireActivity().supportFragmentManager, NewChatBottomSheet.TAG)
-        }
-
-        views.newLayoutOpenSpacesButton.setOnClickListener {
-            // Click action for open spaces modal goes here
-            spaceListBottomSheet.show(requireActivity().supportFragmentManager, SpaceListBottomSheet.TAG)
-        }
-
-        // Hide FABs when list is scrolling
-        views.roomListView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                views.createChatFabMenu.handler.removeCallbacksAndMessages(null)
-
-                when (newState) {
-                    RecyclerView.SCROLL_STATE_IDLE -> views.createChatFabMenu.postDelayed(::showFABs, 250)
-                    RecyclerView.SCROLL_STATE_DRAGGING,
-                    RecyclerView.SCROLL_STATE_SETTLING -> hideFABs()
-                }
-            }
-        })
-    }
-
-    private fun showFABs() {
-        views.newLayoutCreateChatButton.show()
-        views.newLayoutOpenSpacesButton.show()
-    }
-
-    private fun hideFABs() {
-        views.newLayoutCreateChatButton.hide()
-        views.newLayoutOpenSpacesButton.hide()
     }
 
     override fun invalidate() = withState(roomListViewModel) { state ->

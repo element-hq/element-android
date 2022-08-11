@@ -22,7 +22,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
@@ -45,16 +44,22 @@ import im.vector.app.features.call.SharedKnownCallsViewModel
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.dialpad.DialPadFragment
 import im.vector.app.features.call.webrtc.WebRtcCallManager
+import im.vector.app.features.home.room.list.actions.RoomListSharedAction
+import im.vector.app.features.home.room.list.actions.RoomListSharedActionViewModel
 import im.vector.app.features.home.room.list.home.HomeRoomListFragment
+import im.vector.app.features.home.room.list.home.NewChatBottomSheet
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
 import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity.Companion.EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY_MANAGE_SESSIONS
+import im.vector.app.features.spaces.SpaceListBottomSheet
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.BannerState
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
@@ -78,11 +83,14 @@ class NewHomeDetailFragment @Inject constructor(
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
     private val unknownDeviceDetectorSharedViewModel: UnknownDeviceDetectorSharedViewModel by activityViewModel()
-    private val unreadMessagesSharedViewModel: UnreadMessagesSharedViewModel by activityViewModel()
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by activityViewModel()
 
-    private lateinit var sharedActionViewModel: HomeSharedActionViewModel
+    private lateinit var homeSharedActionViewModel: HomeSharedActionViewModel
+    private lateinit var sharedActionViewModel: RoomListSharedActionViewModel
     private lateinit var sharedCallActionViewModel: SharedKnownCallsViewModel
+
+    private val newChatBottomSheet = NewChatBottomSheet()
+    private val spaceListBottomSheet = SpaceListBottomSheet()
 
     private var hasUnreadRooms = false
         set(value) {
@@ -119,17 +127,18 @@ class NewHomeDetailFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        sharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
+        homeSharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
+        sharedActionViewModel = activityViewModelProvider[RoomListSharedActionViewModel::class.java]
         sharedCallActionViewModel = activityViewModelProvider.get(SharedKnownCallsViewModel::class.java)
-        setupBottomNavigationView()
         setupToolbar()
         setupKeysBackupBanner()
         setupActiveCallView()
+        setupFabs()
 
-        withState(viewModel) {
-            // Update the navigation view if needed (for when we restore the tabs)
-            views.bottomNavigationView.selectedItemId = it.currentTab.toMenuId()
-        }
+        sharedActionViewModel
+                .stream()
+                .onEach(::handleSharedAction)
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         viewModel.onEach(HomeDetailViewState::selectedSpace) { selectedSpace ->
             onSpaceChange(selectedSpace)
@@ -137,10 +146,6 @@ class NewHomeDetailFragment @Inject constructor(
 
         viewModel.onEach(HomeDetailViewState::currentTab) { currentTab ->
             updateUIForTab(currentTab)
-        }
-
-        viewModel.onEach(HomeDetailViewState::showDialPadTab) { showDialPadTab ->
-            updateTabVisibilitySafely(R.id.bottom_action_dial_pad, showDialPadTab)
         }
 
         viewModel.observeViewEvents { viewEvent ->
@@ -176,6 +181,23 @@ class NewHomeDetailFragment @Inject constructor(
                 }
     }
 
+    private fun setupFabs() {
+        views.newLayoutCreateChatButton.setOnClickListener {
+            newChatBottomSheet.show(requireActivity().supportFragmentManager, NewChatBottomSheet.TAG)
+        }
+
+        views.newLayoutOpenSpacesButton.setOnClickListener {
+            // Click action for open spaces modal goes here
+            spaceListBottomSheet.show(requireActivity().supportFragmentManager, SpaceListBottomSheet.TAG)
+        }
+    }
+
+    private fun handleSharedAction(action: RoomListSharedAction) {
+        when (action) {
+            RoomListSharedAction.CloseBottomSheet -> spaceListBottomSheet.dismiss()
+        }
+    }
+
     private fun navigateBack() {
         val previousSpaceId = spaceStateHandler.getSpaceBackstack().removeLastOrNull()
         val parentSpaceId = spaceStateHandler.getCurrentSpace()?.flattenParentIds?.lastOrNull()
@@ -184,7 +206,7 @@ class NewHomeDetailFragment @Inject constructor(
 
     private fun setCurrentSpace(spaceId: String?) {
         spaceStateHandler.setCurrentSpace(spaceId, isForwardNavigation = false)
-        sharedActionViewModel.post(HomeActivitySharedAction.OnCloseSpace)
+        homeSharedActionViewModel.post(HomeActivitySharedAction.OnCloseSpace)
     }
 
     private fun handleCallStarted() {
@@ -200,7 +222,6 @@ class NewHomeDetailFragment @Inject constructor(
 
     override fun onResume() {
         super.onResume()
-        updateTabVisibilitySafely(R.id.bottom_action_notification, vectorPreferences.labAddNotificationTab())
         callManager.checkForProtocolsSupportIfNeeded()
         refreshSpaceState()
     }
@@ -303,23 +324,7 @@ class NewHomeDetailFragment @Inject constructor(
         }
     }
 
-    private fun setupBottomNavigationView() {
-        views.bottomNavigationView.menu.findItem(R.id.bottom_action_notification).isVisible = vectorPreferences.labAddNotificationTab()
-        views.bottomNavigationView.setOnItemSelectedListener {
-            val tab = when (it.itemId) {
-                R.id.bottom_action_people -> HomeTab.RoomList(RoomListDisplayMode.PEOPLE)
-                R.id.bottom_action_rooms -> HomeTab.RoomList(RoomListDisplayMode.ROOMS)
-                R.id.bottom_action_notification -> HomeTab.RoomList(RoomListDisplayMode.NOTIFICATIONS)
-                else -> HomeTab.DialPad
-            }
-            viewModel.handle(HomeDetailAction.SwitchTab(tab))
-            true
-        }
-        views.bottomNavigationView.isGone = true
-    }
-
     private fun updateUIForTab(tab: HomeTab) {
-        views.bottomNavigationView.menu.findItem(tab.toMenuId()).isChecked = true
         updateSelectedFragment(tab)
         invalidateOptionsMenu()
     }
@@ -365,19 +370,6 @@ class NewHomeDetailFragment @Inject constructor(
         }
     }
 
-    private fun updateTabVisibilitySafely(tabId: Int, isVisible: Boolean) {
-        val wasVisible = views.bottomNavigationView.menu.findItem(tabId).isVisible
-        views.bottomNavigationView.menu.findItem(tabId).isVisible = isVisible
-        if (wasVisible && !isVisible) {
-            // As we hide it check if it's not the current item!
-            withState(viewModel) {
-                if (it.currentTab.toMenuId() == tabId) {
-                    viewModel.handle(HomeDetailAction.SwitchTab(HomeTab.RoomList(RoomListDisplayMode.PEOPLE)))
-                }
-            }
-        }
-    }
-
     /* ==========================================================================================
      * KeysBackupBanner Listener
      * ========================================================================================== */
@@ -391,9 +383,6 @@ class NewHomeDetailFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(viewModel) {
-        views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_people).render(it.notificationCountPeople, it.notificationHighlightPeople)
-        views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_rooms).render(it.notificationCountRooms, it.notificationHighlightRooms)
-        views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_notification).render(it.notificationCountCatchup, it.notificationHighlightCatchup)
         views.syncStateView.render(
                 it.syncState,
                 it.incrementalSyncRequestState,
