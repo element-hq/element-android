@@ -68,6 +68,8 @@ class HomeRoomListFragment @Inject constructor(
 
     private lateinit var stateRestorer: LayoutManagerStateRestorer
 
+    private val newChatBottomSheet = NewChatBottomSheet()
+
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomListBinding {
         return FragmentRoomListBinding.inflate(inflater, container, false)
     }
@@ -126,7 +128,7 @@ class HomeRoomListFragment @Inject constructor(
         showFABs()
 
         views.newLayoutCreateChatButton.setOnClickListener {
-            // Click action for create chat modal goes here (Issue #6717)
+            newChatBottomSheet.show(requireActivity().supportFragmentManager, NewChatBottomSheet.TAG)
         }
 
         views.newLayoutOpenSpacesButton.setOnClickListener {
