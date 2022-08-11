@@ -135,16 +135,9 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>(R.la
      */
     private fun configureInputType(holder: Holder) {
         val newInputType =
-                inputType ?: when (singleLine) {
-                    true ->  {
-                        if (autoCapitalize) InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
-                        else InputType.TYPE_CLASS_TEXT
-                    }
-                    false -> {
-                        if (autoCapitalize) InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
-                        else InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
-                    }
-                }
+                inputType ?: InputType.TYPE_CLASS_TEXT
+                        .let { if (autoCapitalize) it or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES else it }
+                        .let { if (!singleLine) it or InputType.TYPE_TEXT_FLAG_MULTI_LINE else it }
 
         // This is a must in order to avoid extreme lag in some devices, on fast typing
         if (holder.textInputEditText.inputType != newInputType) {
