@@ -111,6 +111,15 @@ class HomeRoomListFragment @Inject constructor(
         }.launchIn(lifecycleScope)
 
         views.roomListView.adapter = concatAdapter
+
+        //we need to force scroll when recents/filter tabs are added to make them visible
+        concatAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                if (positionStart == 0) {
+                    layoutManager.scrollToPosition(0)
+                }
+            }
+        })
     }
 
     private fun setupFabs() {
@@ -212,12 +221,11 @@ class HomeRoomListFragment @Inject constructor(
             is HomeRoomSection.RoomSummaryData -> {
                 HomeFilteredRoomsController(
                         roomSummaryItemFactory,
-                        showFilters = section.showFilters,
                 ).also { controller ->
                     controller.listener = this
                     controller.onFilterChanged = ::onRoomFilterChanged
                     section.filtersData.onEach {
-                        controller.submitFiltersData(it)
+                        controller.submitFiltersData(it.getOrNull())
                     }.launchIn(lifecycleScope)
                     section.list.observe(viewLifecycleOwner) { list ->
                         controller.submitList(list)
