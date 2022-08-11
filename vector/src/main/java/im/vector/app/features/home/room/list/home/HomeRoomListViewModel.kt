@@ -241,7 +241,7 @@ class HomeRoomListViewModel @AssistedInject constructor(
             )
             HomeRoomFilter.UNREADS -> currentParams.copy(
                     roomCategoryFilter = RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS,
-                    roomTagQueryFilter = null
+                    roomTagQueryFilter = RoomTagQueryFilter(null, false, null)
             )
             HomeRoomFilter.FAVOURITES ->
                 currentParams.copy(
