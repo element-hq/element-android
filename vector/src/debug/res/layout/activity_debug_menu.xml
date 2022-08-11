@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
@@ -8,8 +9,11 @@
     tools:ignore="HardcodedText">
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:layout_anchor="@+id/scrollView2"
+        app:layout_anchorGravity="center">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -37,6 +41,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Analytics" />
+
+            <Button
+                android:id="@+id/debug_memory_leaks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Memory leaks" />
 
             <Button
                 android:id="@+id/debug_test_text_view_link"

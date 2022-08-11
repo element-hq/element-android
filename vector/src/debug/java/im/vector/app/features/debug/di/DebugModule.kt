@@ -26,8 +26,10 @@ import dagger.hilt.components.SingletonComponent
 import im.vector.app.core.debug.DebugNavigator
 import im.vector.app.core.debug.DebugReceiver
 import im.vector.app.core.debug.FlipperProxy
+import im.vector.app.core.debug.LeakDetector
 import im.vector.app.features.debug.DebugMenuActivity
 import im.vector.app.flipper.VectorFlipperProxy
+import im.vector.app.leakcanary.LeakCanaryLeakDetector
 import im.vector.app.receivers.VectorDebugReceiver
 
 @InstallIn(SingletonComponent::class)
@@ -49,4 +51,7 @@ abstract class DebugModule {
 
     @Binds
     abstract fun bindsFlipperProxy(flipperProxy: VectorFlipperProxy): FlipperProxy
+
+    @Binds
+    abstract fun bindsLeakDetector(leakDetector: LeakCanaryLeakDetector): LeakDetector
 }
