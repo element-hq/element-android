@@ -41,7 +41,6 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.query.QueryStringValue
-import org.matrix.android.sdk.api.query.SpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.query.RoomTagQueryFilter
 import org.matrix.android.sdk.api.query.toActiveSpaceOrNoFilter
@@ -59,7 +58,7 @@ import org.matrix.android.sdk.flow.flow
 class HomeRoomListViewModel @AssistedInject constructor(
         @Assisted initialState: HomeRoomListViewState,
         private val session: Session,
-        private val spaceStateHandler: SpaceStateHandler
+        private val spaceStateHandler: SpaceStateHandler,
 ) : VectorViewModel<HomeRoomListViewState, HomeRoomListAction, HomeRoomListViewEvents>(initialState) {
 
     @AssistedFactory
@@ -118,7 +117,7 @@ class HomeRoomListViewModel @AssistedInject constructor(
         }
 
         val params = getFilteredQueryParams(HomeRoomFilter.ALL, builder.build())
-        val sortOrder = RoomSortOrder.ACTIVITY // TODO: https://github.com/vector-im/element-android/issues/6506
+        val sortOrder = RoomSortOrder.ACTIVITY // #6506
 
         val liveResults = session.roomService().getFilteredPagedRoomSummariesLive(
                 params,
@@ -142,7 +141,7 @@ class HomeRoomListViewModel @AssistedInject constructor(
 
         return HomeRoomSection.RoomSummaryData(
                 list = liveResults.livePagedList,
-                showFilters = true, // TODO: https://github.com/vector-im/element-android/issues/6506
+                showFilters = true, // #6506
                 filtersData = getFiltersDataFlow()
         )
     }
@@ -201,7 +200,7 @@ class HomeRoomListViewModel @AssistedInject constructor(
             )
             HomeRoomFilter.UNREADS -> currentParams.copy(
                     roomCategoryFilter = RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS,
-                    roomTagQueryFilter = null
+                    roomTagQueryFilter = RoomTagQueryFilter(null, false, null)
             )
             HomeRoomFilter.FAVOURITES ->
                 currentParams.copy(

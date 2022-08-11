@@ -8,7 +8,7 @@
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/home_filter_tabs_tabs"
-        style="@style/Widget.App.TabLayout"
+        style="@style/Widget.Vector.TabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"

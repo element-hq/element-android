@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Widget.App.TabLayout" parent="Widget.MaterialComponents.TabLayout">
+    <style name="Widget.Vector.TabLayout" parent="Widget.MaterialComponents.TabLayout">
         <item name="materialThemeOverlay">@style/ThemeOverlay.Vector.HomeFilterTabLayout</item>
         <item name="tabTextAppearance">@style/TextAppearance.Vector.FilterTabTextAppearance</item>
     </style>
