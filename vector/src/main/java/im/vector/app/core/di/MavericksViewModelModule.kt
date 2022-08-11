@@ -58,8 +58,6 @@ import im.vector.app.features.location.LocationSharingViewModel
 import im.vector.app.features.location.live.map.LiveLocationMapViewModel
 import im.vector.app.features.location.preview.LocationPreviewViewModel
 import im.vector.app.features.login.LoginViewModel
-import im.vector.app.features.login2.LoginViewModel2
-import im.vector.app.features.login2.created.AccountCreatedViewModel
 import im.vector.app.features.matrixto.MatrixToBottomSheetViewModel
 import im.vector.app.features.media.VectorAttachmentViewerViewModel
 import im.vector.app.features.onboarding.OnboardingViewModel
@@ -458,18 +456,8 @@ interface MavericksViewModelModule {
 
     @Binds
     @IntoMap
-    @MavericksViewModelKey(AccountCreatedViewModel::class)
-    fun accountCreatedViewModelFactory(factory: AccountCreatedViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
-
-    @Binds
-    @IntoMap
     @MavericksViewModelKey(OnboardingViewModel::class)
     fun onboardingViewModelFactory(factory: OnboardingViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
-
-    @Binds
-    @IntoMap
-    @MavericksViewModelKey(LoginViewModel2::class)
-    fun loginViewModel2Factory(factory: LoginViewModel2.Factory): MavericksAssistedViewModelFactory<*, *>
 
     @Binds
     @IntoMap
