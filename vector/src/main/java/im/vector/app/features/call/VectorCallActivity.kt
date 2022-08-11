@@ -241,6 +241,7 @@ class VectorCallActivity :
         detachRenderersIfNeeded()
         turnScreenOffAndKeyguardOn()
         removeOnPictureInPictureModeChangedListener(pictureInPictureModeChangedInfoConsumer)
+        screenCaptureServiceConnection.unbind()
         super.onDestroy()
     }
 
