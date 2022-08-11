@@ -553,7 +553,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         showDeviceListPref.summary = resources.getQuantityString(R.plurals.settings_active_sessions_count, devices.size, devices.size)
 
         showDevicesListV2Pref.isVisible = vectorFeatures.isNewDeviceManagementEnabled()
-        showDevicesListV2Pref.title = showDevicesListV2Pref.title.toString() + " (V2, WIP)"
+        showDevicesListV2Pref.title = getString(R.string.settings_active_sessions_show_all) + " (V2, WIP)"
         showDevicesListV2Pref.summary = resources.getQuantityString(R.plurals.settings_active_sessions_count, devices.size, devices.size)
 
         val userId = session.myUserId
