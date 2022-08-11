@@ -16,7 +16,6 @@
 
 package im.vector.app.features.roomdirectory.createroom
 
-import android.text.InputType
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
