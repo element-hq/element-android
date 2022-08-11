@@ -377,3 +377,4 @@ dependencies {
     androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:1.7.10"
     debugImplementation libs.androidx.fragmentTesting
 }
+
