@@ -37,7 +37,7 @@ import javax.inject.Inject
 
 class LegalsFragment @Inject constructor(
         private val controller: LegalsController,
-        private val flavourLegals: FlavourLegals,
+        private val flavorLegals: FlavorLegals,
 ) : VectorBaseFragment<FragmentGenericRecyclerBinding>(),
         LegalsController.Listener {
 
@@ -100,7 +100,7 @@ class LegalsFragment @Inject constructor(
 
     override fun openThirdPartyNoticeGplay() {
         if (firstThrottler.canHandle() is FirstThrottler.CanHandlerResult.Yes) {
-            flavourLegals.navigateToThirdPartyNotices(requireContext())
+            flavorLegals.navigateToThirdPartyNotices(requireContext())
         }
     }
 }

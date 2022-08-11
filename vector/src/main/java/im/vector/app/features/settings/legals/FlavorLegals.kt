@@ -18,7 +18,7 @@ package im.vector.app.features.settings.legals
 
 import android.content.Context
 
-interface FlavourLegals {
+interface FlavorLegals {
     fun hasThirdPartyNotices(): Boolean
     fun navigateToThirdPartyNotices(context: Context)
 }

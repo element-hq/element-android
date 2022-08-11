@@ -19,10 +19,10 @@ package im.vector.app
 import android.content.Context
 import android.content.Intent
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
-import im.vector.app.features.settings.legals.FlavourLegals
+import im.vector.app.features.settings.legals.FlavorLegals
 import javax.inject.Inject
 
-class GoogleFlavorLegals @Inject constructor() : FlavourLegals {
+class GoogleFlavorLegals @Inject constructor() : FlavorLegals {
 
     override fun hasThirdPartyNotices() = true
 

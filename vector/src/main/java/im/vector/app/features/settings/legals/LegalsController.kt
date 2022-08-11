@@ -39,7 +39,7 @@ class LegalsController @Inject constructor(
         private val resources: Resources,
         private val elementLegals: ElementLegals,
         private val errorFormatter: ErrorFormatter,
-        private val flavourLegals: FlavourLegals,
+        private val flavorLegals: FlavorLegals,
 ) : TypedEpoxyController<LegalsState>() {
 
     var listener: Listener? = null
@@ -135,7 +135,7 @@ class LegalsController @Inject constructor(
             clickListener { host.listener?.openThirdPartyNotice() }
         }
         // Only on Gplay
-        if (flavourLegals.hasThirdPartyNotices()) {
+        if (flavorLegals.hasThirdPartyNotices()) {
             discoveryPolicyItem {
                 id("eltpn2")
                 name(host.stringProvider.getString(R.string.settings_other_third_party_notices))
