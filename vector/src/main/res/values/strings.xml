@@ -2337,6 +2337,8 @@
     <string name="settings_active_sessions_manage">Manage Sessions</string>
     <string name="settings_active_sessions_signout_device">Sign out of this session</string>
     <string name="settings_sessions_list">Sessions</string>
+    <string name="settings_sessions_other_title">Other sessions</string>
+    <string name="settings_sessions_other_description">For best security, verify your sessions and sign out from any session that you don’t recognize or use anymore.</string>
 
     <string name="settings_server_name">Server name</string>
     <string name="settings_server_version">Server version</string>
