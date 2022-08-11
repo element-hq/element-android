@@ -6,6 +6,7 @@
     android:background="?android:colorBackground">
 
     <im.vector.app.features.settings.devices.v2.list.DevicesListHeaderView
+        android:id="@+id/devices_list_header_section_other"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:devicesListHeaderDescription="@string/settings_sessions_other_description"

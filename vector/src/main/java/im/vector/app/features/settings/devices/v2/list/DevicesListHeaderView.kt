@@ -23,6 +23,7 @@ import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.use
 import im.vector.app.R
+import im.vector.app.core.extensions.setTextWithColoredPart
 import im.vector.app.databinding.ViewDevicesListHeaderBinding
 
 class DevicesListHeaderView @JvmOverloads constructor(
@@ -35,6 +36,8 @@ class DevicesListHeaderView @JvmOverloads constructor(
             LayoutInflater.from(context),
             this
     )
+
+    var onLearnMoreClickListener: (() -> Unit)? = null
 
     init {
         context.obtainStyledAttributes(
@@ -55,6 +58,18 @@ class DevicesListHeaderView @JvmOverloads constructor(
 
     private fun setDescription(typedArray: TypedArray) {
         val description = typedArray.getString(R.styleable.DevicesListHeaderView_devicesListHeaderDescription)
-        binding.devicesListHeaderDescription.text = description
+        val learnMore = context.getString(R.string.action_learn_more)
+        val stringBuilder = StringBuilder()
+        stringBuilder.append(description)
+        stringBuilder.append(" ")
+        stringBuilder.append(learnMore)
+
+        binding.devicesListHeaderDescription.setTextWithColoredPart(
+                fullText = stringBuilder.toString(),
+                coloredPart = learnMore,
+                underline = false
+        ) {
+            onLearnMoreClickListener?.invoke()
+        }
     }
 }
