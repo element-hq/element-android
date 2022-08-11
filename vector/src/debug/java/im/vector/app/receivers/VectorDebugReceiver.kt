@@ -22,14 +22,24 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import im.vector.app.core.debug.DebugReceiver
 import im.vector.app.core.di.DefaultSharedPreferences
 import im.vector.app.core.utils.lsFiles
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * Receiver to handle some command from ADB
  */
-class DebugReceiver : BroadcastReceiver() {
+class VectorDebugReceiver @Inject constructor() : BroadcastReceiver(), DebugReceiver {
+
+    override fun register(context: Context) {
+        context.registerReceiver(this, getIntentFilter(context))
+    }
+
+    override fun unregister(context: Context) {
+        context.unregisterReceiver(this)
+    }
 
     override fun onReceive(context: Context, intent: Intent) {
         Timber.v("Received debug action: ${intent.action}")

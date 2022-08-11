@@ -23,15 +23,17 @@ import com.google.firebase.appdistribution.FirebaseAppDistributionException
 import im.vector.app.BuildConfig
 import im.vector.app.core.di.DefaultPreferences
 import im.vector.app.core.time.Clock
+import im.vector.app.features.home.NightlyProxy
 import timber.log.Timber
 import javax.inject.Inject
 
-class NightlyProxy @Inject constructor(
+class FirebaseNightlyProxy @Inject constructor(
         private val clock: Clock,
         @DefaultPreferences
         private val sharedPreferences: SharedPreferences,
-) {
-    fun onHomeResumed() {
+) : NightlyProxy {
+
+    override fun onHomeResumed() {
         if (!canDisplayPopup()) return
         val firebaseAppDistribution = FirebaseAppDistribution.getInstance()
         firebaseAppDistribution.updateIfNewReleaseAvailable()

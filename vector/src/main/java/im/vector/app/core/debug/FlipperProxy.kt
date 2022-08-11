@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.app.nightly
+package im.vector.app.core.debug
 
-import javax.inject.Inject
+import okhttp3.Interceptor
+import org.matrix.android.sdk.api.Matrix
 
-class NightlyProxy @Inject constructor() {
-    fun onHomeResumed() = Unit
+interface FlipperProxy {
+    fun init(matrix: Matrix)
+    fun networkInterceptor(): Interceptor?
 }

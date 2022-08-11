@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.app
+package im.vector.app.core.debug
 
 import android.content.Context
 
-// No op
-fun openOssLicensesMenuActivity(@Suppress("UNUSED_PARAMETER") context: Context) = Unit
+interface DebugReceiver {
+    fun register(context: Context)
+    fun unregister(context: Context)
+}

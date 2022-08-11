@@ -17,10 +17,8 @@ package im.vector.app.push.fcm
 
 import androidx.fragment.app.Fragment
 import im.vector.app.core.pushers.UnifiedPushHelper
-import im.vector.app.fdroid.features.settings.troubleshoot.TestAutoStartBoot
-import im.vector.app.fdroid.features.settings.troubleshoot.TestBackgroundRestrictions
-import im.vector.app.fdroid.features.settings.troubleshoot.TestBatteryOptimization
 import im.vector.app.features.VectorFeatures
+import im.vector.app.features.push.NotificationTroubleshootTestManagerFactory
 import im.vector.app.features.settings.troubleshoot.NotificationTroubleshootTestManager
 import im.vector.app.features.settings.troubleshoot.TestAccountSettings
 import im.vector.app.features.settings.troubleshoot.TestAvailableUnifiedPushDistributors
@@ -33,28 +31,31 @@ import im.vector.app.features.settings.troubleshoot.TestPushRulesSettings
 import im.vector.app.features.settings.troubleshoot.TestSystemSettings
 import im.vector.app.features.settings.troubleshoot.TestUnifiedPushEndpoint
 import im.vector.app.features.settings.troubleshoot.TestUnifiedPushGateway
+import im.vector.app.gplay.features.settings.troubleshoot.TestFirebaseToken
+import im.vector.app.gplay.features.settings.troubleshoot.TestPlayServices
+import im.vector.app.gplay.features.settings.troubleshoot.TestTokenRegistration
 import javax.inject.Inject
 
-class NotificationTroubleshootTestManagerFactory @Inject constructor(
+class GoogleNotificationTroubleshootTestManagerFactory @Inject constructor(
         private val unifiedPushHelper: UnifiedPushHelper,
         private val testSystemSettings: TestSystemSettings,
         private val testAccountSettings: TestAccountSettings,
         private val testDeviceSettings: TestDeviceSettings,
         private val testPushRulesSettings: TestPushRulesSettings,
+        private val testPlayServices: TestPlayServices,
+        private val testFirebaseToken: TestFirebaseToken,
+        private val testTokenRegistration: TestTokenRegistration,
         private val testCurrentUnifiedPushDistributor: TestCurrentUnifiedPushDistributor,
         private val testUnifiedPushGateway: TestUnifiedPushGateway,
         private val testUnifiedPushEndpoint: TestUnifiedPushEndpoint,
         private val testAvailableUnifiedPushDistributors: TestAvailableUnifiedPushDistributors,
         private val testEndpointAsTokenRegistration: TestEndpointAsTokenRegistration,
         private val testPushFromPushGateway: TestPushFromPushGateway,
-        private val testAutoStartBoot: TestAutoStartBoot,
-        private val testBackgroundRestrictions: TestBackgroundRestrictions,
-        private val testBatteryOptimization: TestBatteryOptimization,
         private val testNotification: TestNotification,
         private val vectorFeatures: VectorFeatures,
-) {
+) : NotificationTroubleshootTestManagerFactory {
 
-    fun create(fragment: Fragment): NotificationTroubleshootTestManager {
+    override fun create(fragment: Fragment): NotificationTroubleshootTestManager {
         val mgr = NotificationTroubleshootTestManager(fragment)
         mgr.addTest(testSystemSettings)
         mgr.addTest(testAccountSettings)
@@ -64,16 +65,16 @@ class NotificationTroubleshootTestManagerFactory @Inject constructor(
             mgr.addTest(testAvailableUnifiedPushDistributors)
             mgr.addTest(testCurrentUnifiedPushDistributor)
         }
-        if (unifiedPushHelper.isBackgroundSync()) {
-            mgr.addTest(testAutoStartBoot)
-            mgr.addTest(testBackgroundRestrictions)
-            mgr.addTest(testBatteryOptimization)
+        if (unifiedPushHelper.isEmbeddedDistributor()) {
+            mgr.addTest(testPlayServices)
+            mgr.addTest(testFirebaseToken)
+            mgr.addTest(testTokenRegistration)
         } else {
             mgr.addTest(testUnifiedPushGateway)
             mgr.addTest(testUnifiedPushEndpoint)
             mgr.addTest(testEndpointAsTokenRegistration)
-            mgr.addTest(testPushFromPushGateway)
         }
+        mgr.addTest(testPushFromPushGateway)
         mgr.addTest(testNotification)
         return mgr
     }

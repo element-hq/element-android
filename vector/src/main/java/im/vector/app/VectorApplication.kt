@@ -45,7 +45,9 @@ import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.google.GoogleEmojiProvider
 import dagger.hilt.android.HiltAndroidApp
 import im.vector.app.config.Config
+import im.vector.app.core.debug.FlipperProxy
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.pushers.FcmHelper
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.call.webrtc.WebRtcCallManager
@@ -63,8 +65,6 @@ import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.version.VersionProvider
-import im.vector.app.flipper.FlipperProxy
-import im.vector.app.push.fcm.FcmHelper
 import org.jitsi.meet.sdk.log.JitsiMeetDefaultLogHandler
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.auth.AuthenticationService
