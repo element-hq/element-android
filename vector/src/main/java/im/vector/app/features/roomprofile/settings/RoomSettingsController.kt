@@ -16,6 +16,7 @@
 
 package im.vector.app.features.roomprofile.settings
 
+import android.text.InputType
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.R
 import im.vector.app.core.epoxy.dividerItem
@@ -91,6 +92,7 @@ class RoomSettingsController @Inject constructor(
             enabled(data.actionPermissions.canChangeName)
             value(data.newName ?: roomSummary.displayName)
             hint(host.stringProvider.getString(R.string.room_settings_name_hint))
+            inputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES)
 
             onTextChange { text ->
                 host.callback?.onNameChanged(text)

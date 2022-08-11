@@ -16,6 +16,7 @@
 
 package im.vector.app.features.roomdirectory.createroom
 
+import android.text.InputType
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -67,6 +68,7 @@ class CreateRoomController @Inject constructor(
             enabled(enableFormElement)
             value(viewState.roomName)
             hint(host.stringProvider.getString(R.string.create_room_name_hint))
+            inputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES)
 
             onTextChange { text ->
                 host.listener?.onNameChange(text)
