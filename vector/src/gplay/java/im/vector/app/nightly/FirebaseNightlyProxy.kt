@@ -32,7 +32,7 @@ class FirebaseNightlyProxy @Inject constructor(
         @DefaultPreferences
         private val sharedPreferences: SharedPreferences,
         private val buildMeta: BuildMeta,
-): NightlyProxy {
+) : NightlyProxy {
 
     override fun onHomeResumed() {
         if (!canDisplayPopup()) return
