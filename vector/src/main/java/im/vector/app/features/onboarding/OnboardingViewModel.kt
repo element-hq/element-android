@@ -48,6 +48,8 @@ import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
 import im.vector.app.features.onboarding.OnboardingAction.AuthenticateAction
 import im.vector.app.features.onboarding.StartAuthenticationFlowUseCase.StartAuthenticationResult
+import java.util.UUID
+import java.util.concurrent.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
@@ -65,8 +67,6 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.internal.auth.SSOAction
 import org.matrix.android.sdk.api.util.BuildVersionSdkIntProvider
 import timber.log.Timber
-import java.util.UUID
-import java.util.concurrent.CancellationException
 
 /**
  *

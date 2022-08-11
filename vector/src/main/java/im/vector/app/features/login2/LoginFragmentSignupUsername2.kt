@@ -31,7 +31,6 @@ import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentLoginSignupUsername2Binding
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.SSORedirectRouterActivity
-import im.vector.app.features.login.SignMode
 import im.vector.app.features.login.SocialLoginButtonsView
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
