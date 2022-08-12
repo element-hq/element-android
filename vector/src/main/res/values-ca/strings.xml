@@ -2603,4 +2603,8 @@
     </plurals>
     <string name="search_space_two_parents">%1$s i %2$s</string>
     <string name="auth_reset_password_error_unverified">Correu no verificat, mira la teva safata d\'entrada</string>
+    <string name="location_share_loading_map_error">No s\'ha pogut carregar el mapa
+\nPotser el servidor utilitzat no està configurat per mostrar mapes.</string>
+    <string name="a11y_open_settings">Obre configuració</string>
+    <string name="all_chats">Tots els xats</string>
 </resources>
