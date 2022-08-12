@@ -25,7 +25,6 @@ import androidx.core.content.edit
 import com.squareup.seismic.ShakeDetector
 import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
-import im.vector.app.core.extensions.join
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.time.Clock
 import im.vector.app.features.disclaimer.SHARED_PREF_KEY
@@ -1121,7 +1120,7 @@ class VectorPreferences @Inject constructor(
      *
      * Only the IDs of the spaces are stored
      */
-    fun setPersistedSpaceBackstack(spaceBackstack: List<String>) {
+    fun setPersistedSpaceBackstack(spaceBackstack: List<String?>) {
         val spaceIdsJoined = spaceBackstack.joinToString(",")
         defaultPrefs.edit().putString(SETTINGS_PERSISTED_SPACE_BACKSTACK, spaceIdsJoined).apply()
     }
@@ -1129,7 +1128,7 @@ class VectorPreferences @Inject constructor(
     /**
      * Gets the space backstack used for up navigation
      */
-    fun getPersistedSpaceBackstack(): List<String> {
+    fun getPersistedSpaceBackstack(): List<String?> {
         val spaceIdsJoined = defaultPrefs.getString(SETTINGS_PERSISTED_SPACE_BACKSTACK, null)
         return spaceIdsJoined?.split(",").orEmpty()
     }

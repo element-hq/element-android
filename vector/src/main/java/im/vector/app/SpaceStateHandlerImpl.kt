@@ -77,14 +77,14 @@ class SpaceStateHandlerImpl @Inject constructor(
         val activeSession = session ?: activeSessionHolder.getSafeActiveSession() ?: return
         val currentSpace = selectedSpaceDataSource.currentValue?.orNull()
         val spaceSummary = spaceId?.let { activeSession.getRoomSummary(spaceId) }
-        val sameSpaceSelected = currentSpace != null && spaceId == currentSpace.roomId
+        val sameSpaceSelected = spaceId == currentSpace?.roomId
 
         if (sameSpaceSelected) {
             return
         }
 
         if (isForwardNavigation) {
-            addToBackstacks(spaceSummary)
+            addToBackstacks(currentSpace)
         }
 
         if (persistNow) {
@@ -107,7 +107,7 @@ class SpaceStateHandlerImpl @Inject constructor(
     }
 
     private fun addToBackstacks(space: RoomSummary?) {
-        val spaceId = space?.roomId ?: ROOT_SPACE_ID
+        val spaceId = space?.roomId
         spaceBackstack.addLast(spaceId)
 
         val currentPersistedBackstack = vectorPreferences.getPersistedSpaceBackstack().toMutableList()
@@ -154,9 +154,5 @@ class SpaceStateHandlerImpl @Inject constructor(
         coroutineScope.coroutineContext.cancelChildren()
         val session = activeSessionHolder.getSafeActiveSession() ?: return
         uiStateRepository.storeSelectedSpace(selectedSpaceDataSource.currentValue?.orNull()?.roomId, session.sessionId)
-    }
-
-    companion object {
-        private const val ROOT_SPACE_ID = "ROOT"
     }
 }
