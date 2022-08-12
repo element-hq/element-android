@@ -965,7 +965,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="room_settings_room_read_history_dialog_subtitle">Perubahan siapa yang dapat membaca riwayat hanya akan berlaku untuk pesan berikutnya di ruangan ini. Visibilitas riwayat yang ada tidak akan berubah.</string>
     <string name="room_settings_room_notifications_account_settings">Pengaturan akun</string>
     <string name="room_settings_room_notifications_manage_notifications">Anda dapat mengelola notifikasi di %1$s.</string>
-    <string name="room_settings_room_notifications_encryption_notice">Harap dicatat bahwa pemberitahuan sebutan &amp; kata kunci tidak tersedia di ruangan terenkripsi di ponsel.</string>
+    <string name="room_settings_room_notifications_encryption_notice">Harap dicatat bahwa pemberitahuan sebutan &amp; kata kunci tidak tersedia dalam ruangan terenkripsi di ponsel.</string>
     <string name="room_settings_room_notifications_notify_me">Beritahu saya untuk</string>
     <string name="settings_play_shutter_sound">Putar suara rana</string>
     <string name="media_source_choose">Pilih</string>
@@ -1005,11 +1005,11 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Tidak ada sinkronisasi latar belakang</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} akan disinkronkan di latar belakang secara berkala pada waktu yang tepat (dapat dikonfigurasi).
 \nIni akan memengaruhi penggunaan radio dan baterai, dan ada juga pemberitahuan yang ditampilkan permanen menyatakan bahwa ${app_name} sedang mendengarkan peristiwa.</string>
-    <string name="settings_mentions_and_keywords_encryption_notice">Anda tidak akan mendapatkan notifikasi untuk sebutan &amp; keyword di ruangan terenkripsi di ponsel.</string>
+    <string name="settings_mentions_and_keywords_encryption_notice">Anda tidak akan mendapatkan notifikasi untuk sebutan &amp; kata kunci dalam ruangan terenkripsi di ponsel.</string>
     <string name="settings_room_upgrades">Peningkatan ruangan</string>
     <string name="settings_messages_by_bot">Pesan dari bot</string>
     <string name="settings_room_invitations">Undangan ruangan</string>
-    <string name="settings_messages_containing_keywords">Keyword</string>
+    <string name="settings_messages_containing_keywords">Kata kunci</string>
     <string name="settings_mentions_at_room">\@room</string>
     <string name="settings_encrypted_group_messages">Pesan grup terenkripsi</string>
     <string name="settings_group_messages">Pesan grup</string>
@@ -1021,16 +1021,16 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="settings_when_rooms_are_upgraded">Saat ruangan ditingkatkan</string>
     <string name="settings_messages_in_e2e_group_chat">Pesan terenkripsi di obrolan grup</string>
     <string name="settings_messages_in_e2e_one_to_one">Pesan terenkripsi di chat satu-ke-satu</string>
-    <string name="settings_notification_keyword_contains_invalid_character">Keyword tidak boleh berisi \'%s\'</string>
-    <string name="settings_notification_keyword_contains_dot">Keyword tidak boleh diawali dengan \'.\'</string>
-    <string name="settings_notification_new_keyword">Tambahkan keyword baru</string>
-    <string name="settings_notification_your_keywords">Keyword Anda</string>
+    <string name="settings_notification_keyword_contains_invalid_character">Kata kunci tidak boleh berisi \'%s\'</string>
+    <string name="settings_notification_keyword_contains_dot">Kata kunci tidak boleh diawali dengan \'.\'</string>
+    <string name="settings_notification_new_keyword">Tambahkan kata kunci baru</string>
+    <string name="settings_notification_your_keywords">Kata kunci Anda</string>
     <string name="settings_notification_notify_me_for">Beritahu saya untuk</string>
     <string name="settings_notification_other">Lainnya</string>
-    <string name="settings_notification_mentions_and_keywords">Sebutan dan Keyword</string>
+    <string name="settings_notification_mentions_and_keywords">Sebutan dan Kata Kunci</string>
     <string name="settings_notification_default">Notifikasi Bawaan</string>
     <string name="room_settings_none">Tidak ada</string>
-    <string name="room_settings_mention_and_keyword_only">Hanya sebutan &amp; keyword</string>
+    <string name="room_settings_mention_and_keyword_only">Hanya sebutan &amp; kata kunci</string>
     <string name="call_remove_jitsi_widget_progress">Mengakhiri panggilan…</string>
     <string name="call_ended_invite_timeout_title">Tidak ada jawaban</string>
     <string name="call_ended_user_busy_description">Pengguna yang Anda panggil sedang sibuk.</string>
@@ -1097,7 +1097,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="room_join_rules_public">%1$s membuat ruangan publik untuk siapa pun yang mengetahui tautannya.</string>
     <string name="help_long_click_on_room_for_more_options">Tekan lama pada sebuah ruangan untuk melihat lebih banyak pilihan</string>
     <string name="no_ignored_users">Anda tidak mengabaikan pengguna apa pun</string>
-    <string name="reaction_search_type_hint">Ketik keyword untuk mencari reaksi.</string>
+    <string name="reaction_search_type_hint">Ketik kata kunci untuk mencari sebuah reaksi.</string>
     <string name="spoiler">Spoiler</string>
     <string name="command_description_spoiler">Mengirim pesan sebagai spoiler</string>
     <string name="notice_member_no_changes_by_you">Anda tidak membuat perubahan</string>
