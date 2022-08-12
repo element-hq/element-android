@@ -178,10 +178,8 @@ class NewHomeDetailFragment @Inject constructor(
     }
 
     private fun navigateBack() {
-        val spaceBackstack = spaceStateHandler.getSpaceBackstack()
-
         try {
-            val previousSpaceId = spaceBackstack.removeLast()
+            val previousSpaceId = spaceStateHandler.popSpaceBackstack()
             setCurrentSpace(previousSpaceId)
         } catch (e: NoSuchElementException) {
             requireActivity().finish()

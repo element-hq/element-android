@@ -138,7 +138,14 @@ class SpaceStateHandlerImpl @Inject constructor(
                 }.launchIn(session.coroutineScope)
     }
 
-    override fun getSpaceBackstack() = spaceBackstack
+    override fun popSpaceBackstack(): String? {
+        val poppedSpaceId = spaceBackstack.removeLast()
+        vectorPreferences.getPersistedSpaceBackstack().toMutableList().apply {
+            removeLast()
+            vectorPreferences.setPersistedSpaceBackstack(this)
+        }
+        return poppedSpaceId
+    }
 
     override fun getSelectedSpaceFlow() = selectedSpaceFlow
 
