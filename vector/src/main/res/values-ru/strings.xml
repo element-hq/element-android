@@ -55,7 +55,7 @@
     <string name="initial_sync_start_importing_account_groups">Начальная синхронизация:
 \nИмпорт сообществ</string>
     <string name="initial_sync_start_importing_account_data">Начальная синхронизация:
-\nИмпорт данных учетной записи</string>
+\nИмпорт данных учётной записи</string>
     <string name="notice_room_update">%s обновил эту комнату.</string>
     <string name="event_status_sending_message">Отправка сообщения…</string>
     <string name="notice_room_third_party_revoked_invite">%1$s отозвал приглашение %2$s присоединиться к комнате</string>
@@ -194,7 +194,7 @@
     <string name="room_displayname_3_members">%1$s, %2$s и %3$s</string>
     <string name="notice_room_server_acl_allow_is_empty">🎉 Всем серверам запрещено участвовать! Эта комната больше не может быть использована.</string>
     <string name="notice_room_server_acl_updated_no_change">Без изменений.</string>
-    <string name="room_displayname_empty_room_was">Пустая комната (был(а) %s)</string>
+    <string name="room_displayname_empty_room_was">Пустая комната (без %s)</string>
     <string name="notice_room_server_acl_set_banned">• Соответствующие серверы %s заблокированы.</string>
     <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Серверы, соответствующие буквальным IP-адресам, теперь запрещены.</string>
     <string name="notice_room_server_acl_updated_ip_literals_allowed">• Серверы, соответствующие буквальным IP-адресам, теперь разрешены.</string>
@@ -1455,7 +1455,7 @@
         <item quantity="few">%d сессии активны</item>
         <item quantity="many">%d сессий активно</item>
     </plurals>
-    <string name="crosssigning_verify_this_session">Подтверждение этого устройства</string>
+    <string name="crosssigning_verify_this_session">Подтвердите это устройство</string>
     <string name="verification_open_other_to_verify">Используйте существующую сессию для подтверждения этой, предоставив ей доступ к зашифрованным сообщениям.</string>
     <string name="settings_dev_tools">Инструменты для разработчиков</string>
     <string name="settings_account_data">Данные учётной записи</string>
@@ -2235,7 +2235,7 @@
     <string name="call_tile_video_incoming">Входящий видеовызов</string>
     <string name="call_tile_voice_incoming">Входящий голосовой вызов</string>
     <string name="call_tile_you_declined_this_call">Вы отклонили этот вызов</string>
-    <string name="room_settings_room_notifications_account_settings">Настройки учетной записи</string>
+    <string name="room_settings_room_notifications_account_settings">Настройки учётной записи</string>
     <string name="room_settings_room_notifications_manage_notifications">Вы можете управлять уведомлениями в %1$s.</string>
     <string name="room_settings_room_notifications_encryption_notice">Обратите внимание, что уведомления об упоминаниях и ключевых словах недоступны в зашифрованных комнатах на мобильных устройствах.</string>
     <string name="room_settings_room_notifications_notify_me">Уведомлять меня о</string>
@@ -2449,7 +2449,7 @@
     <string name="ftue_auth_use_case_option_two">Команды</string>
     <string name="ftue_auth_use_case_option_one">Друзья и семья</string>
     <string name="ftue_auth_use_case_subtitle">Мы поможем вам подключиться</string>
-    <string name="ftue_auth_use_case_title">С кем вы будете общаться больше всего\?</string>
+    <string name="ftue_auth_use_case_title">С кем вы будете общаться чаще всего\?</string>
     <string name="navigate_to_thread_when_already_in_the_thread">Вы уже просматриваете это обсуждение!</string>
     <string name="view_in_room">Просмотр в Комнате</string>
     <string name="reply_in_thread">Обсудить</string>
@@ -2661,7 +2661,7 @@
     <string name="ftue_auth_choose_server_entry_hint">URL-адрес сервера</string>
     <string name="ftue_auth_welcome_back_title">С возвращением!</string>
     <string name="ftue_auth_create_account_sso_section_header">Или</string>
-    <string name="ftue_auth_create_account_title">Создать учётную запись</string>
+    <string name="ftue_auth_create_account_title">Создайте учётную запись</string>
     <string name="search_space_two_parents">%1$s и %2$s</string>
     <string name="a11y_open_settings">Открыть настройки</string>
     <string name="location_share_loading_map_error">Не удалось загрузить карту
