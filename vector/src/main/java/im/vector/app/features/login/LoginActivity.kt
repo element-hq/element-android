@@ -49,6 +49,7 @@ import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.auth.toLocalizedLoginTerms
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.internal.auth.SSOAction
 
 /**
  * The LoginActivity manages the fragment navigation and also display the loading View.
@@ -299,6 +300,7 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
                 redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                 deviceId = state.deviceId,
                 providerId = null,
+                action = SSOAction.login
         )?.let { ssoUrl ->
             openUrlInChromeCustomTab(this, null, ssoUrl)
         }
