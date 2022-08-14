@@ -27,7 +27,7 @@ import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.features.login.SSORedirectRouterActivity
 import im.vector.app.features.login.hasSso
 import im.vector.app.features.login.ssoIdentityProviders
-import org.matrix.android.sdk.internal.auth.SSOAction
+import org.matrix.android.sdk.api.auth.SSOAction
 
 abstract class AbstractSSOLoginFragment2<VB : ViewBinding> : AbstractLoginFragment2<VB>() {
 

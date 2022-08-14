@@ -55,6 +55,7 @@ import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.MatrixPatterns.getServerName
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
+import org.matrix.android.sdk.api.auth.SSOAction
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import org.matrix.android.sdk.api.auth.login.LoginWizard
@@ -63,7 +64,6 @@ import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.failure.isHomeserverUnavailable
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.util.BuildVersionSdkIntProvider
-import org.matrix.android.sdk.internal.auth.SSOAction
 import timber.log.Timber
 import java.util.UUID
 import java.util.concurrent.CancellationException

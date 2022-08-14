@@ -25,8 +25,8 @@ import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentLoginSignupSigninSelectionBinding
+import org.matrix.android.sdk.api.auth.SSOAction
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
-import org.matrix.android.sdk.internal.auth.SSOAction
 import javax.inject.Inject
 
 /**

@@ -35,8 +35,8 @@ import im.vector.app.features.login.SocialLoginButtonsView
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import org.matrix.android.sdk.api.auth.SSOAction
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
-import org.matrix.android.sdk.internal.auth.SSOAction
 import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 

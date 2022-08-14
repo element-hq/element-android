@@ -38,11 +38,3 @@ internal const val SSO_REDIRECT_URL_PARAM = "redirectUrl"
 
 // Ref: https://matrix.org/docs/spec/client_server/r0.6.1#single-sign-on
 internal const val SSO_UIA_FALLBACK_PATH = "/_matrix/client/r0/auth/m.login.sso/fallback/web"
-
-/**
- * See https://github.com/matrix-org/matrix-spec-proposals/pull/3824
- */
-enum class SSOAction {
-    LOGIN,
-    REGISTER;
-}

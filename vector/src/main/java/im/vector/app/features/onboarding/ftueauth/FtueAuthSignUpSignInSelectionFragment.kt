@@ -35,8 +35,8 @@ import im.vector.app.features.login.ssoIdentityProviders
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingFlow
 import im.vector.app.features.onboarding.OnboardingViewState
+import org.matrix.android.sdk.api.auth.SSOAction
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
-import org.matrix.android.sdk.internal.auth.SSOAction
 import javax.inject.Inject
 
 /**

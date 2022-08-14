@@ -45,6 +45,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import org.matrix.android.sdk.api.auth.SSOAction
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import org.matrix.android.sdk.api.failure.isInvalidPassword
 import org.matrix.android.sdk.api.failure.isInvalidUsername
@@ -52,7 +53,6 @@ import org.matrix.android.sdk.api.failure.isLoginEmailUnknown
 import org.matrix.android.sdk.api.failure.isRegistrationDisabled
 import org.matrix.android.sdk.api.failure.isUsernameInUse
 import org.matrix.android.sdk.api.failure.isWeakPassword
-import org.matrix.android.sdk.internal.auth.SSOAction
 import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 

@@ -51,6 +51,7 @@ import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewState
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
+import org.matrix.android.sdk.api.auth.SSOAction
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import org.matrix.android.sdk.api.failure.isHomeserverUnavailable
 import org.matrix.android.sdk.api.failure.isInvalidPassword
@@ -59,7 +60,6 @@ import org.matrix.android.sdk.api.failure.isLoginEmailUnknown
 import org.matrix.android.sdk.api.failure.isRegistrationDisabled
 import org.matrix.android.sdk.api.failure.isUsernameInUse
 import org.matrix.android.sdk.api.failure.isWeakPassword
-import org.matrix.android.sdk.internal.auth.SSOAction
 import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 

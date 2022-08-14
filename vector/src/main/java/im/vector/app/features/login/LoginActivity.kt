@@ -45,11 +45,11 @@ import im.vector.app.features.login.terms.LoginTermsFragment
 import im.vector.app.features.login.terms.LoginTermsFragmentArgument
 import im.vector.app.features.onboarding.AuthenticationDescription
 import im.vector.app.features.pin.UnlockedActivity
+import org.matrix.android.sdk.api.auth.SSOAction
 import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.auth.toLocalizedLoginTerms
 import org.matrix.android.sdk.api.extensions.tryOrNull
-import org.matrix.android.sdk.internal.auth.SSOAction
 
 /**
  * The LoginActivity manages the fragment navigation and also display the loading View.

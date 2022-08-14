@@ -39,6 +39,7 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixPatterns.getServerName
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
+import org.matrix.android.sdk.api.auth.SSOAction
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.auth.login.LoginWizard
@@ -50,7 +51,6 @@ import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixIdFailure
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.internal.auth.SSOAction
 import timber.log.Timber
 import java.util.concurrent.CancellationException
 
