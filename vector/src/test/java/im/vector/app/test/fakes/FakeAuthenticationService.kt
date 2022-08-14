@@ -22,6 +22,7 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import org.matrix.android.sdk.api.auth.AuthenticationService
+import org.matrix.android.sdk.api.auth.SSOAction
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.LoginFlowResult
 import org.matrix.android.sdk.api.auth.login.LoginWizard
@@ -78,7 +79,7 @@ class FakeAuthenticationService : AuthenticationService by mockk() {
         coVerify { cancelPendingLoginOrRegistration() }
     }
 
-    fun givenSsoUrl(redirectUri: String, deviceId: String, providerId: String, result: String) {
-        coEvery { getSsoUrl(redirectUri, deviceId, providerId) } returns result
+    fun givenSsoUrl(redirectUri: String, deviceId: String, providerId: String, action: SSOAction, result: String) {
+        coEvery { getSsoUrl(redirectUri, deviceId, providerId, action) } returns result
     }
 }
