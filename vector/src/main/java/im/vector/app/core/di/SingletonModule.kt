@@ -34,6 +34,7 @@ import im.vector.app.EmojiSpanify
 import im.vector.app.SpaceStateHandler
 import im.vector.app.SpaceStateHandlerImpl
 import im.vector.app.config.Config
+import im.vector.app.core.debug.FlipperProxy
 import im.vector.app.core.dispatchers.CoroutineDispatchers
 import im.vector.app.core.error.DefaultErrorFormatter
 import im.vector.app.core.error.ErrorFormatter
@@ -57,7 +58,6 @@ import im.vector.app.features.settings.FontScalePreferencesImpl
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.ui.SharedPreferencesUiStateRepository
 import im.vector.app.features.ui.UiStateRepository
-import im.vector.app.flipper.FlipperProxy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -144,7 +144,7 @@ object VectorStaticModule {
                 roomDisplayNameFallbackProvider = vectorRoomDisplayNameFallbackProvider,
                 threadMessagesEnabledDefault = vectorPreferences.areThreadMessagesEnabled(),
                 networkInterceptors = listOfNotNull(
-                        flipperProxy.getNetworkInterceptor(),
+                        flipperProxy.networkInterceptor(),
                 )
         )
     }

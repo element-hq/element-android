@@ -20,10 +20,10 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.FragmentActivity
 import com.google.firebase.messaging.FirebaseMessaging
 import im.vector.app.R
+import im.vector.app.core.pushers.FcmHelper
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.startAddGoogleAccountIntent
 import im.vector.app.features.settings.troubleshoot.TroubleshootTest
-import im.vector.app.push.fcm.FcmHelper
 import timber.log.Timber
 import javax.inject.Inject
 
