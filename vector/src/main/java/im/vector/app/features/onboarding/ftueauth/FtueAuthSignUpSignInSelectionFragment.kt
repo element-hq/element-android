@@ -115,7 +115,8 @@ class FtueAuthSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOF
         when (state.selectedHomeserver.preferredLoginMode) {
             is LoginMode.Sso -> {
                 // change to only one button that is sign in with sso
-                views.loginSignupSigninSubmit.text = if (state.selectedHomeserver.hasOidcCompatibilityFlow) getString(R.string.login_continue) else getString(R.string.login_signin_sso)
+                views.loginSignupSigninSubmit.text =
+                        if (state.selectedHomeserver.hasOidcCompatibilityFlow) getString(R.string.login_continue) else getString(R.string.login_signin_sso)
                 views.loginSignupSigninSignIn.isVisible = false
             }
             else -> {
