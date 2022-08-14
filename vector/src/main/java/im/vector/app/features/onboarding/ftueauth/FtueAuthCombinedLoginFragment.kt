@@ -147,7 +147,7 @@ class FtueAuthCombinedLoginFragment @Inject constructor(
                     redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                     deviceId = deviceId,
                     provider = id,
-                    action = SSOAction.login
+                    action = SSOAction.LOGIN
             )?.let { openInCustomTab(it) }
         }
     }

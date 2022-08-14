@@ -81,7 +81,7 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOLogi
                                 redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                                 deviceId = state.deviceId,
                                 providerId = provider?.id,
-                                action = if (state.signMode == SignMode.SignUp) SSOAction.register else SSOAction.login
+                                action = if (state.signMode == SignMode.SignUp) SSOAction.REGISTER else SSOAction.LOGIN
                         )
                                 ?.let { openInCustomTab(it) }
                     }
@@ -115,7 +115,7 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOLogi
                     redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                     deviceId = state.deviceId,
                     providerId = null,
-                    action = if (state.signMode == SignMode.SignUp) SSOAction.register else SSOAction.login
+                    action = if (state.signMode == SignMode.SignUp) SSOAction.REGISTER else SSOAction.LOGIN
             )
                     ?.let { openInCustomTab(it) }
         } else {

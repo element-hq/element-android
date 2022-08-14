@@ -218,7 +218,7 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
                     redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                     deviceId = deviceId,
                     provider = provider,
-                    action = SSOAction.register
+                    action = SSOAction.REGISTER
             )?.let { openInCustomTab(it) }
         }
     }

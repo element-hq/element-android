@@ -103,7 +103,7 @@ class LoginFragmentSignupUsername2 @Inject constructor() : AbstractSSOLoginFragm
                             redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                             deviceId = state.deviceId,
                             providerId = provider?.id,
-                            action = if (state.signMode == SignMode2.SignUp) SSOAction.register else SSOAction.login
+                            action = if (state.signMode == SignMode2.SignUp) SSOAction.REGISTER else SSOAction.LOGIN
                     )
                             ?.let { openInCustomTab(it) }
                 }

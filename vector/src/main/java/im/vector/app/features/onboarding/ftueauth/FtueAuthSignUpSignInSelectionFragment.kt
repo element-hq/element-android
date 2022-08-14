@@ -89,7 +89,7 @@ class FtueAuthSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOF
                                 redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                                 deviceId = state.deviceId,
                                 provider = provider,
-                                action = if (state.signMode == SignMode.SignUp) SSOAction.register else SSOAction.login
+                                action = if (state.signMode == SignMode.SignUp) SSOAction.REGISTER else SSOAction.LOGIN
                         )
                                 ?.let { openInCustomTab(it) }
                     }
@@ -131,7 +131,7 @@ class FtueAuthSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOF
                     redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                     deviceId = state.deviceId,
                     provider = null,
-                    action = if (state.onboardingFlow == OnboardingFlow.SignUp) SSOAction.register else SSOAction.login
+                    action = if (state.onboardingFlow == OnboardingFlow.SignUp) SSOAction.REGISTER else SSOAction.LOGIN
             )
                     ?.let { openInCustomTab(it) }
         } else {

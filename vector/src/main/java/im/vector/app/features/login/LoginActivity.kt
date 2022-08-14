@@ -300,7 +300,7 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
                 redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                 deviceId = state.deviceId,
                 providerId = null,
-                action = SSOAction.login
+                action = SSOAction.LOGIN
         )?.let { ssoUrl ->
             openUrlInChromeCustomTab(this, null, ssoUrl)
         }

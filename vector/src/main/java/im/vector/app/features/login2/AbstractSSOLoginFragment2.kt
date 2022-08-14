@@ -95,7 +95,7 @@ abstract class AbstractSSOLoginFragment2<VB : ViewBinding> : AbstractLoginFragme
                         redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                         deviceId = state.deviceId,
                         providerId = null,
-                        action = if (state.signMode == SignMode2.SignUp) SSOAction.register else SSOAction.login
+                        action = if (state.signMode == SignMode2.SignUp) SSOAction.REGISTER else SSOAction.LOGIN
                 )
                         ?.let { prefetchUrl(it) }
             }

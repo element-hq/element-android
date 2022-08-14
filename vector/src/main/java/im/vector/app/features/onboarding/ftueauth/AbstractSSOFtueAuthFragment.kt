@@ -96,7 +96,7 @@ abstract class AbstractSSOFtueAuthFragment<VB : ViewBinding> : AbstractFtueAuthF
                         redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                         deviceId = state.deviceId,
                         provider = null,
-                        action = if (state.onboardingFlow == OnboardingFlow.SignUp) SSOAction.register else SSOAction.login
+                        action = if (state.onboardingFlow == OnboardingFlow.SignUp) SSOAction.REGISTER else SSOAction.LOGIN
                 )
                         ?.let { prefetchUrl(it) }
             }
