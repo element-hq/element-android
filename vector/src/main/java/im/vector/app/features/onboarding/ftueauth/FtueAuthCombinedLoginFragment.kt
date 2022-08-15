@@ -139,8 +139,8 @@ class FtueAuthCombinedLoginFragment @Inject constructor(
     }
 
     private fun renderSsoProviders(deviceId: String?, ssoProviders: List<SsoIdentityProvider>?) {
-        views.ssoGroup.isVisible = ssoProviders?.isNotEmpty() == true
-        views.ssoButtonsHeader.isVisible = views.ssoGroup.isVisible && views.loginEntryGroup.isVisible
+        views.ssoGroup.isVisible = true
+        views.ssoButtonsHeader.isVisible = isUsernameAndPasswordVisible()
         views.ssoButtons.render(ssoProviders, SocialLoginButtonsView.Mode.MODE_CONTINUE) { id ->
             viewModel.fetchSsoUrl(
                     redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
@@ -162,6 +162,8 @@ class FtueAuthCombinedLoginFragment @Inject constructor(
     private fun showUsernamePassword() {
         views.loginEntryGroup.isVisible = true
     }
+
+    private fun isUsernameAndPasswordVisible() = views.loginEntryGroup.isVisible
 
     private fun setupAutoFill() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
