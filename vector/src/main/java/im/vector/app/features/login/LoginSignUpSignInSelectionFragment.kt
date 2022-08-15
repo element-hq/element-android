@@ -26,7 +26,6 @@ import im.vector.app.R
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentLoginSignupSigninSelectionBinding
 import im.vector.app.features.login.SocialLoginButtonsView.Mode
-import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import javax.inject.Inject
 
 /**
