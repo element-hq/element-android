@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,27 +20,22 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 
-sealed class LoginMode : Parcelable { // Parcelable because persist state
+sealed interface SsoState : Parcelable {
+    @Parcelize
+    data class IdentityProviders(val providers: List<SsoIdentityProvider>) : SsoState
 
-    @Parcelize object Unknown : LoginMode()
-    @Parcelize object Password : LoginMode()
-    @Parcelize data class Sso(val ssoState: SsoState) : LoginMode()
-    @Parcelize data class SsoAndPassword(val ssoState: SsoState) : LoginMode()
-    @Parcelize object Unsupported : LoginMode()
-}
+    @Parcelize
+    object Fallback : SsoState
 
-fun LoginMode.ssoState(): SsoState {
-    return when (this) {
-        is LoginMode.Sso -> ssoState
-        is LoginMode.SsoAndPassword -> ssoState
-        else -> SsoState.Fallback
+    fun isFallback() = this == Fallback
+
+    fun providersOrNull() = when (this) {
+        Fallback -> null
+        is IdentityProviders -> providers.takeIf { it.isNotEmpty() }
     }
 }
 
-fun LoginMode.hasSso(): Boolean {
-    return when (this) {
-        is LoginMode.Sso -> true
-        is LoginMode.SsoAndPassword -> true
-        else -> false
-    }
-}
+fun List<SsoIdentityProvider>?.toSsoState() = this
+        ?.takeIf { it.isNotEmpty() }
+        ?.let { SsoState.IdentityProviders(it) }
+        ?: SsoState.Fallback

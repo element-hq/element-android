@@ -44,6 +44,7 @@ import im.vector.app.databinding.FragmentFtueCombinedRegisterBinding
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.SSORedirectRouterActivity
 import im.vector.app.features.login.SocialLoginButtonsView
+import im.vector.app.features.login.SsoState
 import im.vector.app.features.login.render
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingAction.AuthenticateAction
@@ -205,14 +206,14 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
         }
 
         when (state.selectedHomeserver.preferredLoginMode) {
-            is LoginMode.SsoAndPassword -> renderSsoProviders(state.deviceId, state.selectedHomeserver.preferredLoginMode.ssoIdentityProviders)
+            is LoginMode.SsoAndPassword -> renderSsoProviders(state.deviceId, state.selectedHomeserver.preferredLoginMode.ssoState)
             else -> hideSsoProviders()
         }
     }
 
-    private fun renderSsoProviders(deviceId: String?, ssoProviders: List<SsoIdentityProvider>?) {
+    private fun renderSsoProviders(deviceId: String?, ssoState: SsoState) {
         views.ssoGroup.isVisible = true
-        views.ssoButtons.render(ssoProviders, SocialLoginButtonsView.Mode.MODE_CONTINUE) { provider ->
+        views.ssoButtons.render(ssoState, SocialLoginButtonsView.Mode.MODE_CONTINUE) { provider ->
             viewModel.fetchSsoUrl(
                     redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                     deviceId = deviceId,
