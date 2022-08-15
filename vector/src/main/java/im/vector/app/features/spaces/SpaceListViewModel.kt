@@ -65,7 +65,7 @@ class SpaceListViewModel @AssistedInject constructor(
         private val session: Session,
         private val vectorPreferences: VectorPreferences,
         private val autoAcceptInvites: AutoAcceptInvites,
-        private val analyticsTracker: AnalyticsTracker
+        private val analyticsTracker: AnalyticsTracker,
 ) : VectorViewModel<SpaceListViewState, SpaceListAction, SpaceListViewEvents>(initialState) {
 
     @AssistedFactory
@@ -85,11 +85,14 @@ class SpaceListViewModel @AssistedInject constructor(
                 }
 
         observeSpaceSummaries()
+        val spaceHistory = spaceStateHandler.getPersistedSpaceBackstack()
+                .map { it to it?.let { session.roomService().getRoomSummary(it)?.displayName }.orEmpty()  }
         spaceStateHandler.getSelectedSpaceFlow()
                 .distinctUntilChanged()
                 .setOnEach { selectedSpaceOption ->
                     copy(
-                            selectedSpace = selectedSpaceOption.orNull()
+                            selectedSpace = selectedSpaceOption.orNull(),
+                            spaceHistory = spaceHistory,
                     )
                 }
 

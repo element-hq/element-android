@@ -75,26 +75,28 @@ class SpaceStateHandlerImpl @Inject constructor(
             isForwardNavigation: Boolean,
     ) {
         val activeSession = session ?: activeSessionHolder.getSafeActiveSession() ?: return
-        val currentSpace = selectedSpaceDataSource.currentValue?.orNull()
-        val spaceSummary = spaceId?.let { activeSession.getRoomSummary(spaceId) }
-        val sameSpaceSelected = spaceId == currentSpace?.roomId
+        val spaceToLeave = selectedSpaceDataSource.currentValue?.orNull()
+        val spaceToSet = spaceId?.let { activeSession.getRoomSummary(spaceId) }
+        val sameSpaceSelected = spaceId == spaceToLeave?.roomId
 
         if (sameSpaceSelected) {
             return
         }
 
         if (isForwardNavigation) {
-            addToBackstacks(currentSpace)
+            addToBackstacks(spaceToLeave, spaceToSet)
+        } else {
+            popBackstackUntil(spaceToSet)
         }
 
         if (persistNow) {
-            uiStateRepository.storeSelectedSpace(spaceSummary?.roomId, activeSession.sessionId)
+            uiStateRepository.storeSelectedSpace(spaceToSet?.roomId, activeSession.sessionId)
         }
 
-        if (spaceSummary == null) {
+        if (spaceToSet == null) {
             selectedSpaceDataSource.post(Option.empty())
         } else {
-            selectedSpaceDataSource.post(Option.just(spaceSummary))
+            selectedSpaceDataSource.post(Option.just(spaceToSet))
         }
 
         if (spaceId != null) {
@@ -106,12 +108,29 @@ class SpaceStateHandlerImpl @Inject constructor(
         }
     }
 
-    private fun addToBackstacks(space: RoomSummary?) {
+    private fun addToBackstacks(spaceToLeave: RoomSummary?, spaceToSet: RoomSummary?) {
+        spaceBackstack.addLast(spaceToLeave?.roomId)
+
+        // Only add to the persisted backstack if the space to set is not All Chats, else reset the persisted stack
+        if (spaceToSet != null && spaceToLeave != null) {
+            val currentPersistedBackstack = vectorPreferences.getPersistedSpaceBackstack().toMutableList()
+            currentPersistedBackstack.add(spaceToLeave.roomId)
+            vectorPreferences.setPersistedSpaceBackstack(currentPersistedBackstack)
+        } else if (spaceToSet == null) {
+            vectorPreferences.setPersistedSpaceBackstack(emptyList())
+        }
+    }
+
+    private fun popBackstackUntil(space: RoomSummary?) {
         val spaceId = space?.roomId
-        spaceBackstack.addLast(spaceId)
+        while (spaceBackstack.last() != spaceId) {
+            spaceBackstack.removeLast()
+        }
 
         val currentPersistedBackstack = vectorPreferences.getPersistedSpaceBackstack().toMutableList()
-        currentPersistedBackstack.add(spaceId)
+        while (currentPersistedBackstack.last() != spaceId) {
+            currentPersistedBackstack.removeLast()
+        }
         vectorPreferences.setPersistedSpaceBackstack(currentPersistedBackstack)
     }
 
@@ -146,6 +165,8 @@ class SpaceStateHandlerImpl @Inject constructor(
         }
         return poppedSpaceId
     }
+
+    override fun getPersistedSpaceBackstack() = vectorPreferences.getPersistedSpaceBackstack()
 
     override fun getSelectedSpaceFlow() = selectedSpaceFlow
 

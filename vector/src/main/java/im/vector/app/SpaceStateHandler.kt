@@ -57,6 +57,8 @@ interface SpaceStateHandler : DefaultLifecycleObserver {
      */
     fun popSpaceBackstack(): String?
 
+    fun getPersistedSpaceBackstack(): List<String?>
+
     /**
      * Gets a flow of the selected space for clients to react immediately to space changes.
      */

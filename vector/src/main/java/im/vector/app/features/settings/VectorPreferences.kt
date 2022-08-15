@@ -1121,7 +1121,7 @@ class VectorPreferences @Inject constructor(
      * Only the IDs of the spaces are stored
      */
     fun setPersistedSpaceBackstack(spaceBackstack: List<String?>) {
-        val spaceIdsJoined = spaceBackstack.joinToString(",")
+        val spaceIdsJoined = spaceBackstack.takeIf { it.isNotEmpty() }?.joinToString(",")
         defaultPrefs.edit().putString(SETTINGS_PERSISTED_SPACE_BACKSTACK, spaceIdsJoined).apply()
     }
 
@@ -1130,7 +1130,7 @@ class VectorPreferences @Inject constructor(
      */
     fun getPersistedSpaceBackstack(): List<String?> {
         val spaceIdsJoined = defaultPrefs.getString(SETTINGS_PERSISTED_SPACE_BACKSTACK, null)
-        return spaceIdsJoined?.split(",").orEmpty()
+        return spaceIdsJoined?.takeIf { it.isNotEmpty() }?.split(",").orEmpty()
     }
 
     fun showLiveSenderInfo(): Boolean {
