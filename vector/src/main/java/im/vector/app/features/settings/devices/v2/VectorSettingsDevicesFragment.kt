@@ -17,8 +17,11 @@
 package im.vector.app.features.settings.devices.v2
 
 import android.content.Context
+import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
@@ -45,5 +48,25 @@ class VectorSettingsDevicesFragment @Inject constructor() : VectorBaseFragment<F
         (activity as? AppCompatActivity)
                 ?.supportActionBar
                 ?.setTitle(R.string.settings_sessions_list)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initLearnMoreButtons()
+    }
+
+    override fun onDestroyView() {
+        cleanUpLearnMoreButtonsListeners()
+        super.onDestroyView()
+    }
+
+    private fun initLearnMoreButtons() {
+        views.devicesListHeaderSectionOther.onLearnMoreClickListener = {
+            Toast.makeText(context, "Learn more other", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun cleanUpLearnMoreButtonsListeners() {
+        views.devicesListHeaderSectionOther.onLearnMoreClickListener = null
     }
 }

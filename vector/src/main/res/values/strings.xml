@@ -2342,6 +2342,8 @@
     <string name="settings_active_sessions_manage">Manage Sessions</string>
     <string name="settings_active_sessions_signout_device">Sign out of this session</string>
     <string name="settings_sessions_list">Sessions</string>
+    <string name="settings_sessions_other_title">Other sessions</string>
+    <string name="settings_sessions_other_description">For best security, verify your sessions and sign out from any session that you don’t recognize or use anymore.</string>
 
     <string name="settings_server_name">Server name</string>
     <string name="settings_server_version">Server version</string>
@@ -3201,4 +3203,7 @@
     <!-- Element Call Widget -->
     <string name="labs_enable_element_call_permission_shortcuts">Enable Element Call permission shortcuts</string>
     <string name="labs_enable_element_call_permission_shortcuts_summary">Auto-approve Element Call widgets and grant camera / mic access</string>
+
+    <!-- Device Manager -->
+    <string name="device_manager_settings_active_sessions_show_all">Show All Sessions (V2, WIP)</string>
 </resources>
