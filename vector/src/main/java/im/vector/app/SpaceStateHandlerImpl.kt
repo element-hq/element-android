@@ -85,8 +85,6 @@ class SpaceStateHandlerImpl @Inject constructor(
 
         if (isForwardNavigation) {
             addToBackstacks(spaceToLeave, spaceToSet)
-        } else {
-            popBackstackUntil(spaceToSet)
         }
 
         if (persistNow) {
@@ -121,19 +119,6 @@ class SpaceStateHandlerImpl @Inject constructor(
         }
     }
 
-    private fun popBackstackUntil(space: RoomSummary?) {
-        val spaceId = space?.roomId
-        while (spaceBackstack.last() != spaceId) {
-            spaceBackstack.removeLast()
-        }
-
-        val currentPersistedBackstack = vectorPreferences.getPersistedSpaceBackstack().toMutableList()
-        while (currentPersistedBackstack.last() != spaceId) {
-            currentPersistedBackstack.removeLast()
-        }
-        vectorPreferences.setPersistedSpaceBackstack(currentPersistedBackstack)
-    }
-
     private fun observeActiveSession() {
         sessionDataSource.stream()
                 .distinctUntilChanged()
@@ -160,7 +145,7 @@ class SpaceStateHandlerImpl @Inject constructor(
     override fun popSpaceBackstack(): String? {
         val poppedSpaceId = spaceBackstack.removeLast()
         vectorPreferences.getPersistedSpaceBackstack().toMutableList().apply {
-            removeLast()
+            removeLastOrNull()
             vectorPreferences.setPersistedSpaceBackstack(this)
         }
         return poppedSpaceId

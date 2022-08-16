@@ -79,7 +79,6 @@ class NewHomeDetailFragment @Inject constructor(
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
     private val unknownDeviceDetectorSharedViewModel: UnknownDeviceDetectorSharedViewModel by activityViewModel()
-    private val unreadMessagesSharedViewModel: UnreadMessagesSharedViewModel by activityViewModel()
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by activityViewModel()
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
@@ -175,19 +174,6 @@ class NewHomeDetailFragment @Inject constructor(
                     currentCallsViewPresenter.updateCall(callManager.getCurrentCall(), callManager.getCalls())
                     invalidateOptionsMenu()
                 }
-    }
-
-    private fun navigateBack() {
-        try {
-            val previousSpaceId = spaceStateHandler.popSpaceBackstack()
-            setCurrentSpace(previousSpaceId)
-        } catch (e: NoSuchElementException) {
-            requireActivity().finish()
-        }
-    }
-
-    private fun setCurrentSpace(spaceId: String?) {
-        spaceStateHandler.setCurrentSpace(spaceId, isForwardNavigation = false)
     }
 
     private fun handleCallStarted() {
@@ -454,8 +440,11 @@ class NewHomeDetailFragment @Inject constructor(
         return this
     }
 
-    override fun onBackPressed(toolbarButton: Boolean): Boolean {
-        navigateBack()
-        return true
+    override fun onBackPressed(toolbarButton: Boolean) = try {
+        val lastSpace = spaceStateHandler.popSpaceBackstack()
+        spaceStateHandler.setCurrentSpace(lastSpace, isForwardNavigation = false)
+        true
+    } catch (e: NoSuchElementException) {
+        false
     }
 }
