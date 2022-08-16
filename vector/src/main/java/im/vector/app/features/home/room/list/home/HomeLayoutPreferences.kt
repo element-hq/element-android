@@ -25,39 +25,23 @@ class HomeLayoutPreferences @Inject constructor(
         @DefaultPreferences private val preferences: SharedPreferences
 ) {
 
-    companion object {
-        const val SETTINGS_PREFERENCES_HOME_RECENTS = "SETTINGS_PREFERENCES_HOME_RECENTS"
-        const val SETTINGS_PREFERENCES_HOME_FILTERS = "SETTINGS_PREFERENCES_HOME_FILTERS"
-        const val SETTINGS_PREFERENCES_USE_AZ_ORDER = "SETTINGS_PREFERENCES_USE_AZ_ORDER"
-    }
-
     // We need to keep references, because it's kept as a Weak reference and so will be gathered by GC
     private var filtersListener: SharedPreferences.OnSharedPreferenceChangeListener? = null
     private var recentsListener: SharedPreferences.OnSharedPreferenceChangeListener? = null
     private var orderListener: SharedPreferences.OnSharedPreferenceChangeListener? = null
 
-    fun areRecentsEnabled(): Boolean {
-        return preferences.getBoolean(SETTINGS_PREFERENCES_HOME_RECENTS, false)
-    }
+    fun areRecentsEnabled() = preferences.getBoolean(SETTINGS_PREFERENCES_HOME_RECENTS, false)
+    fun areFiltersEnabled() = preferences.getBoolean(SETTINGS_PREFERENCES_HOME_FILTERS, false)
+    fun isAZOrderingEnabled() = preferences.getBoolean(SETTINGS_PREFERENCES_USE_AZ_ORDER, false)
 
     fun setRecentsEnabled(isEnabled: Boolean) {
-        preferences.edit {
-            putBoolean(SETTINGS_PREFERENCES_HOME_RECENTS, isEnabled)
-        }
-    }
-
-    fun areFiltersEnabled(): Boolean {
-        return preferences.getBoolean(SETTINGS_PREFERENCES_HOME_FILTERS, false)
+        preferences.edit { putBoolean(SETTINGS_PREFERENCES_HOME_RECENTS, isEnabled) }
     }
 
     fun setFiltersEnabled(isEnabled: Boolean) {
         preferences.edit {
             putBoolean(SETTINGS_PREFERENCES_HOME_FILTERS, isEnabled)
         }
-    }
-
-    fun isAZOrderingEnabled(): Boolean {
-        return preferences.getBoolean(SETTINGS_PREFERENCES_USE_AZ_ORDER, false)
     }
 
     fun setAZOrderingEnabled(isEnabled: Boolean) {
@@ -103,5 +87,11 @@ class HomeLayoutPreferences @Inject constructor(
         preferences.unregisterOnSharedPreferenceChangeListener(filtersListener)
         preferences.unregisterOnSharedPreferenceChangeListener(recentsListener)
         preferences.unregisterOnSharedPreferenceChangeListener(orderListener)
+    }
+
+    companion object {
+        const val SETTINGS_PREFERENCES_HOME_RECENTS = "SETTINGS_PREFERENCES_HOME_RECENTS"
+        const val SETTINGS_PREFERENCES_HOME_FILTERS = "SETTINGS_PREFERENCES_HOME_FILTERS"
+        const val SETTINGS_PREFERENCES_USE_AZ_ORDER = "SETTINGS_PREFERENCES_USE_AZ_ORDER"
     }
 }

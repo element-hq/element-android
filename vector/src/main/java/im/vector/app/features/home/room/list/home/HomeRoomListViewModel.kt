@@ -170,7 +170,7 @@ class HomeRoomListViewModel @AssistedInject constructor(
                 .onEach { selectedSpaceOption ->
                     val selectedSpace = selectedSpaceOption.orNull()
                     liveResults.queryParams = liveResults.queryParams.copy(
-                            spaceFilter =  selectedSpace?.roomId.toActiveSpaceOrNoFilter()
+                            spaceFilter = selectedSpace?.roomId.toActiveSpaceOrNoFilter()
                     )
                 }.launchIn(viewModelScope)
 
@@ -202,32 +202,29 @@ class HomeRoomListViewModel @AssistedInject constructor(
                 .map { it.isNotEmpty() }
                 .distinctUntilChanged()
 
-        favouritesFlow
-                .combine(dmsFLow) { hasFavourite, hasDm ->
-                    hasFavourite to hasDm
-                }.combine(filtersPreferencesFlow) { (hasFavourite, hasDm), areFiltersEnabled ->
-                    Triple(hasFavourite, hasDm, areFiltersEnabled)
-                }.onEach { (hasFavourite, hasDm, areFiltersEnabled) ->
-                    if (areFiltersEnabled) {
-                        val filtersData = mutableListOf(
-                                HomeRoomFilter.ALL,
-                                HomeRoomFilter.UNREADS
-                        )
-                        if (hasFavourite) {
-                            filtersData.add(
-                                    HomeRoomFilter.FAVOURITES
-                            )
-                        }
-                        if (hasDm) {
-                            filtersData.add(
-                                    HomeRoomFilter.PEOPlE
-                            )
-                        }
-                        flow.emit(Optional.from(filtersData))
-                    } else {
-                        flow.emit(Optional.empty())
-                    }
-                }.launchIn(viewModelScope)
+        combine(favouritesFlow, dmsFLow, filtersPreferencesFlow) { hasFavourite, hasDm, areFiltersEnabled ->
+            Triple(hasFavourite, hasDm, areFiltersEnabled)
+        }.onEach { (hasFavourite, hasDm, areFiltersEnabled) ->
+            if (areFiltersEnabled) {
+                val filtersData = mutableListOf(
+                        HomeRoomFilter.ALL,
+                        HomeRoomFilter.UNREADS
+                )
+                if (hasFavourite) {
+                    filtersData.add(
+                            HomeRoomFilter.FAVOURITES
+                    )
+                }
+                if (hasDm) {
+                    filtersData.add(
+                            HomeRoomFilter.PEOPlE
+                    )
+                }
+                flow.emit(Optional.from(filtersData))
+            } else {
+                flow.emit(Optional.empty())
+            }
+        }.launchIn(viewModelScope)
 
         return flow
     }

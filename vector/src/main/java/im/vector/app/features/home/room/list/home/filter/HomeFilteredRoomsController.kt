@@ -27,7 +27,7 @@ import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 class HomeFilteredRoomsController(
-        private val roomSummaryItemFactory: RoomSummaryItemFactory
+        private val roomSummaryItemFactory: RoomSummaryItemFactory,
 ) : PagedListEpoxyController<RoomSummary>(
         // Important it must match the PageList builder notify Looper
         modelBuildingHandler = createUIHandler()

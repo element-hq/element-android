@@ -48,19 +48,10 @@ class HomeLayoutSettingBottomDialogFragment : VectorBaseBottomSheetDialogFragmen
             views.homeLayoutSettingsSortActivity.isChecked = true
         }
 
-        views.homeLayoutSettingsRecents.setOnCheckedChangeListener { _, isChecked ->
-            preferences.setRecentsEnabled(isChecked)
-        }
-
-        views.homeLayoutSettingsFilters.setOnCheckedChangeListener { _, isChecked ->
-            preferences.setFiltersEnabled(isChecked)
-        }
-
-        views.homeLayoutSettingsSortGroup.setOnCheckedChangeListener { _, checkedId ->
-            preferences.setAZOrderingEnabled(checkedId == R.id.home_layout_settings_sort_name)
-        }
-
         views.homeLayoutSettingsDone.setOnClickListener {
+            preferences.setRecentsEnabled(views.homeLayoutSettingsRecents.isChecked)
+            preferences.setFiltersEnabled(views.homeLayoutSettingsFilters.isChecked)
+            preferences.setAZOrderingEnabled(views.homeLayoutSettingsSortGroup.checkedRadioButtonId == R.id.home_layout_settings_sort_name)
             dismiss()
         }
     }
