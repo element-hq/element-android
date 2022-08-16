@@ -64,8 +64,6 @@ class LockScreenViewModel @AssistedInject constructor(
 
     private val biometricHelper = biometricHelperFactory.create(initialState.lockScreenConfiguration)
 
-    private var firstEnteredCode: String? = null
-
     // BiometricPrompt will automatically disable system auth after too many failed auth attempts
     private var isSystemAuthTemporarilyDisabledByBiometricPrompt = false
 
@@ -108,18 +106,17 @@ class LockScreenViewModel @AssistedInject constructor(
         val state = awaitState()
         when (state.lockScreenConfiguration.mode) {
             LockScreenMode.CREATE -> {
-                if (firstEnteredCode == null && state.lockScreenConfiguration.needsNewCodeValidation) {
-                    firstEnteredCode = code
-                    _viewEvents.post(LockScreenViewEvent.ClearPinCode(false))
-                    emit(PinCodeState.FirstCodeEntered)
+                val enteredPinCode = (state.pinCodeState as? PinCodeState.FirstCodeEntered)?.pinCode
+                if (enteredPinCode == null && state.lockScreenConfiguration.needsNewCodeValidation) {
+                    _viewEvents.post(LockScreenViewEvent.ClearPinCode(confirmationFailed = false))
+                    emit(PinCodeState.FirstCodeEntered(code))
                 } else {
-                    if (!state.lockScreenConfiguration.needsNewCodeValidation || code == firstEnteredCode) {
+                    if (!state.lockScreenConfiguration.needsNewCodeValidation || code == enteredPinCode) {
                         pinCodeHelper.createPinCode(code)
                         _viewEvents.post(LockScreenViewEvent.CodeCreationComplete)
                         emit(null)
                     } else {
-                        firstEnteredCode = null
-                        _viewEvents.post(LockScreenViewEvent.ClearPinCode(true))
+                        _viewEvents.post(LockScreenViewEvent.ClearPinCode(confirmationFailed = true))
                         emit(PinCodeState.Idle)
                     }
                 }
@@ -137,7 +134,9 @@ class LockScreenViewModel @AssistedInject constructor(
     }.catch { error ->
         _viewEvents.post(LockScreenViewEvent.AuthError(AuthMethod.PIN_CODE, error))
     }.onEach { newPinState ->
-        newPinState?.let { setState { copy(pinCodeState = it) } }
+        if (newPinState != null) {
+            setState { copy(pinCodeState = newPinState) }
+        }
     }.launchIn(viewModelScope)
 
     @SuppressLint("NewApi")

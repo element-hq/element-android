@@ -16,18 +16,36 @@
 
 package im.vector.app.di
 
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import im.vector.app.GoogleFlavorLegals
+import im.vector.app.core.pushers.FcmHelper
 import im.vector.app.core.services.GuardServiceStarter
+import im.vector.app.features.home.NightlyProxy
+import im.vector.app.features.settings.legals.FlavorLegals
+import im.vector.app.nightly.FirebaseNightlyProxy
+import im.vector.app.push.fcm.GoogleFcmHelper
 
 @InstallIn(SingletonComponent::class)
 @Module
-object FlavorModule {
+abstract class FlavorModule {
 
-    @Provides
-    fun provideGuardServiceStarter(): GuardServiceStarter {
-        return object : GuardServiceStarter {}
+    companion object {
+        @Provides
+        fun provideGuardServiceStarter(): GuardServiceStarter {
+            return object : GuardServiceStarter {}
+        }
     }
+
+    @Binds
+    abstract fun bindsNightlyProxy(nightlyProxy: FirebaseNightlyProxy): NightlyProxy
+
+    @Binds
+    abstract fun bindsFcmHelper(fcmHelper: GoogleFcmHelper): FcmHelper
+
+    @Binds
+    abstract fun bindsFlavorLegals(legals: GoogleFlavorLegals): FlavorLegals
 }

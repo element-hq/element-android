@@ -37,16 +37,16 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.databinding.FragmentRoomListBinding
 import im.vector.app.features.analytics.plan.ViewRoom
-import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.list.RoomListAnimator
 import im.vector.app.features.home.room.list.RoomListListener
 import im.vector.app.features.home.room.list.RoomSummaryItemFactory
-import im.vector.app.features.home.room.list.RoomSummaryPagedController
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
 import im.vector.app.features.home.room.list.actions.RoomListSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListSharedActionViewModel
+import im.vector.app.features.home.room.list.home.filter.HomeFilteredRoomsController
+import im.vector.app.features.home.room.list.home.filter.HomeRoomFilter
 import im.vector.app.features.home.room.list.home.recent.RecentRoomCarouselController
 import im.vector.app.features.spaces.SpaceListBottomSheet
 import kotlinx.coroutines.flow.launchIn
@@ -227,26 +227,34 @@ class HomeRoomListFragment @Inject constructor(
                 .show()
     }
 
-    private fun getAdapterForData(data: HomeRoomSection): EpoxyControllerAdapter {
-        return when (data) {
+    private fun getAdapterForData(section: HomeRoomSection): EpoxyControllerAdapter {
+        return when (section) {
             is HomeRoomSection.RoomSummaryData -> {
-                RoomSummaryPagedController(
+                HomeFilteredRoomsController(
                         roomSummaryItemFactory,
-                        RoomListDisplayMode.ROOMS
+                        showFilters = section.showFilters,
                 ).also { controller ->
                     controller.listener = this
-                    data.list.observe(viewLifecycleOwner) { list ->
+                    controller.onFilterChanged = ::onRoomFilterChanged
+                    section.filtersData.onEach {
+                        controller.submitFiltersData(it)
+                    }.launchIn(lifecycleScope)
+                    section.list.observe(viewLifecycleOwner) { list ->
                         controller.submitList(list)
                     }
                 }.adapter
             }
             is HomeRoomSection.RecentRoomsData -> recentRoomCarouselController.also { controller ->
                 controller.listener = this
-                data.list.observe(viewLifecycleOwner) { list ->
+                section.list.observe(viewLifecycleOwner) { list ->
                     controller.submitList(list)
                 }
             }.adapter
         }
+    }
+
+    private fun onRoomFilterChanged(filter: HomeRoomFilter) {
+        roomListViewModel.handle(HomeRoomListAction.ChangeRoomFilter(filter))
     }
 
     private fun handleSelectRoom(event: HomeRoomListViewEvents.SelectRoom, isInviteAlreadyAccepted: Boolean) {
