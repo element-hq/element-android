@@ -63,6 +63,7 @@ import im.vector.app.features.home.room.detail.TimelineFragment
 import im.vector.app.features.home.room.detail.search.SearchFragment
 import im.vector.app.features.home.room.list.RoomListFragment
 import im.vector.app.features.home.room.list.home.HomeRoomListFragment
+import im.vector.app.features.home.room.list.home.NewChatBottomSheet
 import im.vector.app.features.home.room.threads.list.views.ThreadListFragment
 import im.vector.app.features.location.LocationSharingFragment
 import im.vector.app.features.location.preview.LocationPreviewFragment
@@ -208,6 +209,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(RoomListFragment::class)
     fun bindRoomListFragment(fragment: RoomListFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(NewChatBottomSheet::class)
+    fun bindNewChatBottomSheetFragment(fragment: NewChatBottomSheet): Fragment
 
     @Binds
     @IntoMap
