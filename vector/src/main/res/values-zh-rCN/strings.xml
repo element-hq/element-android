@@ -81,8 +81,8 @@
     <string name="notice_room_canonical_alias_unset">%1$s 为此房间移除了主要地址。</string>
     <string name="notice_room_guest_access_can_join">%1$s 已允许访客加入房间。</string>
     <string name="notice_room_guest_access_forbidden">%1$s 已禁止访客加入房间。</string>
-    <string name="notice_end_to_end_ok">%1$s 已开启端对端加密。</string>
-    <string name="notice_end_to_end_unknown_algorithm">%1$s 已开启端对端加密（无法识别的演算法 %2$s）。</string>
+    <string name="notice_end_to_end_ok">%1$s已开启端到端加密。</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s已开启端到端加密（无法识别的算法%2$s）。</string>
     <string name="notice_room_created">%1$s 创建了这个房间</string>
     <string name="notice_room_invite_no_invitee_by_you">你的邀请</string>
     <string name="notice_room_created_by_you">你创建了这个房间</string>
@@ -152,8 +152,8 @@
     <string name="notice_room_canonical_alias_unset_by_you">你移除了此房间的主要地址。</string>
     <string name="notice_room_guest_access_can_join_by_you">你已允许访客加入房间。</string>
     <string name="notice_room_guest_access_forbidden_by_you">你已禁止访客加入房间。</string>
-    <string name="notice_end_to_end_ok_by_you">你已开启端对端加密。</string>
-    <string name="notice_end_to_end_unknown_algorithm_by_you">你已开启端对端加密（无法识别的算法 %1$s）。</string>
+    <string name="notice_end_to_end_ok_by_you">你已开启端到端加密。</string>
+    <string name="notice_end_to_end_unknown_algorithm_by_you">你已开启端到端加密（无法识别的算法%1$s）。</string>
     <string name="notice_direct_room_leave_with_reason_by_you">你已离开。理由：%1$s</string>
     <string name="notice_direct_room_leave_with_reason">%1$s 已离开。理由：%2$s</string>
     <string name="notice_direct_room_join_with_reason_by_you">你已加入。理由：%1$s</string>
@@ -312,13 +312,13 @@
     <string name="room_settings_category_advanced_title">高级</string>
     <string name="room_settings_room_internal_id">此房间的内部 ID</string>
     <string name="room_settings_labs_warning_message">这些是实验性功能，可能会出现不可预料的错误。请谨慎使用。</string>
-    <string name="encryption_export_e2e_room_keys">导出端对端房间密钥</string>
+    <string name="encryption_export_e2e_room_keys">导出端到端房间密钥</string>
     <string name="encryption_export_room_keys">导出房间密钥</string>
     <string name="encryption_export_room_keys_summary">导出密钥到本地文件</string>
     <string name="encryption_export_export">导出</string>
     <string name="passphrase_enter_passphrase">输入密语</string>
     <string name="passphrase_confirm_passphrase">确认密语</string>
-    <string name="encryption_import_e2e_room_keys">导入端对端房间密钥</string>
+    <string name="encryption_import_e2e_room_keys">导入端到端房间密钥</string>
     <string name="encryption_import_room_keys">导入房间密钥</string>
     <string name="encryption_import_room_keys_summary">从本地文件导入密钥</string>
     <string name="encryption_never_send_to_unverified_devices_title">仅向已验证的会话发送加密消息</string>
@@ -666,9 +666,9 @@
     <string name="passphrase_passphrase_too_weak">密语太弱了</string>
     <string name="keys_backup_passphrase_not_empty_error_message">如果你想要 ${app_name} 生成一个恢复密钥，请删除密语。</string>
     <string name="keys_backup_setup_step1_title">永不丢失已加密消息</string>
-    <string name="keys_backup_setup_step1_description">加密房间中的信息会被端对端加密以确保安全。只有你和拥有密钥的接收方可以读取这些信息。
+    <string name="keys_backup_setup_step1_description">加密房间中的消息是端到端加密的，以确保安全。只有你和接收者拥有密钥读取这些消息。
 \n
-\n安全地备份你的密钥以免丢失信息。</string>
+\n安全地备份你的密钥以免丢失消息。</string>
     <string name="keys_backup_setup">开始使用备份密钥</string>
     <string name="keys_backup_setup_step1_advanced">（高级）</string>
     <string name="keys_backup_setup_step1_manual_export">手动导出密钥</string>
@@ -967,7 +967,7 @@
     <string name="send_suggestion_failed">建议发送失败 (%s)</string>
     <string name="settings_labs_show_hidden_events_in_timeline">在时间线上显示隐藏事件</string>
     <string name="bottom_action_people_x">私聊消息</string>
-    <string name="send_file_step_idle">正在等待…</string>
+    <string name="send_file_step_idle">正在等待……</string>
     <string name="send_file_step_encrypting_thumbnail">正在加密缩略图…</string>
     <string name="send_file_step_sending_thumbnail">正在发送缩略图 (%1$s / %2$s)</string>
     <string name="send_file_step_encrypting_file">正在加密文件…</string>
@@ -1117,7 +1117,7 @@
     <string name="login_reset_password_email_hint">电子邮件</string>
     <string name="login_reset_password_password_hint">新密码</string>
     <string name="login_reset_password_warning_title">注意！</string>
-    <string name="login_reset_password_warning_content">更改你的密码将重置所有会话上的端对端加密密钥，从而使加密聊天记录无法读取。在重设密码之前，请设置“密钥备份”或从另一个会话中导出房间密钥。</string>
+    <string name="login_reset_password_warning_content">更改你的密码将重置所有会话上的端到端加密密钥，从而使加密聊天记录无法读取。在重设密码之前，请设置“密钥备份”或从另一个会话中导出房间密钥。</string>
     <string name="login_reset_password_warning_submit">继续</string>
     <string name="login_reset_password_error_not_found">电子邮件未链接到任何账户</string>
     <string name="login_reset_password_mail_confirmation_title">检查你的收件箱</string>
@@ -1239,7 +1239,7 @@
     <string name="sent_an_audio_file">音频</string>
     <string name="sent_a_file">文件</string>
     <string name="send_a_sticker">贴纸</string>
-    <string name="verification_request_waiting">正在等待…</string>
+    <string name="verification_request_waiting">正在等待……</string>
     <string name="verification_request_other_cancelled">%s 已取消</string>
     <string name="verification_request_you_cancelled">你已取消</string>
     <string name="verification_request_other_accepted">%s 已接受</string>
@@ -1254,9 +1254,9 @@
     <string name="verification_no_scan_emoji_title">通过比较表情符号验证</string>
     <string name="verification_verify_user">验证 %s</string>
     <string name="verification_verified_user">已验证 %s</string>
-    <string name="verification_request_waiting_for">正在等待 %s…</string>
-    <string name="room_profile_not_encrypted_subtitle">此房间的消息未经端对端加密。</string>
-    <string name="room_profile_encrypted_subtitle">该房间的消息已被端对端加密。
+    <string name="verification_request_waiting_for">正在等待%s……</string>
+    <string name="room_profile_not_encrypted_subtitle">此房间的消息未经端到端加密。</string>
+    <string name="room_profile_encrypted_subtitle">该房间的消息已端到端加密。
 \n
 \n你的消息受加密保护，并且只有你和消息接收者拥有唯一解密密钥。</string>
     <string name="room_profile_section_security">安全</string>
@@ -1289,7 +1289,7 @@
     <string name="command_description_rainbow_emote">和彩虹一样给给定的表情上色后发送</string>
     <string name="settings_category_timeline">时间线</string>
     <string name="settings_category_composer">消息编辑器</string>
-    <string name="room_settings_enable_encryption">启用端对端加密…</string>
+    <string name="room_settings_enable_encryption">启用端到端加密……</string>
     <string name="room_settings_enable_encryption_dialog_title">是否启用加密？</string>
     <string name="room_settings_enable_encryption_dialog_content">房间加密一经启用，便无法禁用。在加密房间中，发送的消息无法被服务器看到，只能被房间的参与者看到。启用加密可能会使许多机器人和桥接无法正常运作。</string>
     <string name="room_settings_enable_encryption_dialog_submit">启用加密</string>
@@ -1297,7 +1297,7 @@
     <string name="verification_request_start_notice">为保证安全，请当面验证，或者使用其他通讯方式验证。</string>
     <string name="verification_emoji_notice">比较独特表情，确保它们以相同顺序出现。</string>
     <string name="verification_code_notice">与其他用户设备上显示的代码比较。</string>
-    <string name="verification_conclusion_ok_notice">与此用户的消息端对端加密，无法被第三方读取。</string>
+    <string name="verification_conclusion_ok_notice">与此用户的消息是端到端加密的，无法被第三方读取。</string>
     <string name="verification_conclusion_ok_self_notice">你的新会话已验证。它可以访问你的加密消息，其他用户会将其视为可信任。</string>
     <string name="encryption_information_cross_signing_state">交叉签名</string>
     <string name="encryption_information_dg_xsigning_complete">交叉签名已启用
@@ -1308,7 +1308,7 @@
     <string name="encryption_information_dg_xsigning_not_trusted">交叉签名已启用。
 \n密钥未信任</string>
     <string name="encryption_information_dg_xsigning_disabled">交叉签名未启用</string>
-    <string name="settings_hs_admin_e2e_disabled">你的服务器管理员已默认禁用私有房间和私聊消息端对端加密。</string>
+    <string name="settings_hs_admin_e2e_disabled">你的服务器管理员已默认禁用私有房间和私聊消息端到端加密。</string>
     <string name="settings_active_sessions_list">活跃的会话</string>
     <string name="settings_active_sessions_show_all">显示全部会话</string>
     <string name="settings_active_sessions_manage">管理会话</string>
@@ -1344,7 +1344,7 @@
     <string name="verification_cannot_access_other_session">使用恢复密语或密钥</string>
     <string name="verification_use_passphrase">如果你无法访问已有会话</string>
     <string name="enter_secret_storage_invalid">无法在存储中找到秘密</string>
-    <string name="message_action_item_redact">移除…</string>
+    <string name="message_action_item_redact">移除……</string>
     <string name="share_confirm_room">你想要发送此附件到 %1$s 吗？</string>
     <plurals name="send_images_with_original_size">
         <item quantity="other">发送原始尺寸图片</item>
@@ -1409,7 +1409,7 @@
 \n
 \n你也可以通过设置菜单来建立保护备份以及管理你的密钥。</string>
     <string name="encryption_enabled">加密已开启</string>
-    <string name="encryption_enabled_tile_description">本房间信息已经端对端加密。验证成员时，请查看其个人档案以了解更多信息。</string>
+    <string name="encryption_enabled_tile_description">本房间信息已经端到端加密。验证成员时，请查看其个人档案以了解更多信息。</string>
     <string name="encryption_not_enabled">加密未开启</string>
     <string name="encryption_unknown_algorithm_tile_description">不支持本房间使用的加密方式</string>
     <string name="room_created_summary_item">%s 创建并配置了房间。</string>
@@ -1632,13 +1632,13 @@
     <string name="bad_passphrase_key_reset_all_action">忘记或丢失了所有的恢复选项？重置一切</string>
     <string name="direct_room_created_summary_item_by_you">你已加入。</string>
     <string name="direct_room_created_summary_item">%s 已加入。</string>
-    <string name="direct_room_encryption_enabled_tile_description">此聊天的消息是端对端加密的。</string>
+    <string name="direct_room_encryption_enabled_tile_description">此聊天的消息是端到端加密的。</string>
     <string name="direct_room_profile_section_more_leave">离开</string>
     <string name="direct_room_profile_section_more_settings">设置</string>
-    <string name="direct_room_profile_encrypted_subtitle">此处的消息已被端对端加密。
+    <string name="direct_room_profile_encrypted_subtitle">此处的消息已端到端加密。
 \n
 \n你的消息受加密保护，并且只有你和消息接收者拥有唯一解密密钥。</string>
-    <string name="direct_room_profile_not_encrypted_subtitle">此处的消息未经端对端加密。</string>
+    <string name="direct_room_profile_not_encrypted_subtitle">此处的消息未经端到端加密。</string>
     <string name="login_error_outdated_homeserver_warning_content">此主服务器正在运行较旧版本。要求你的主服务器管理员升级。你可以继续，但一些功能可能无法正确工作。</string>
     <string name="direct_room_join_rules_invite_by_you">你仅发出此邀请。</string>
     <string name="direct_room_join_rules_invite">%1$s 仅发出此邀请。</string>
@@ -1819,7 +1819,7 @@
     <string name="initial_sync_start_downloading">初始化同步：
 \n正在下载数据…</string>
     <string name="initial_sync_start_server_computing">初始化同步：
-\n正在等待服务器响应…</string>
+\n正在等待服务器响应……</string>
     <string name="room_displayname_empty_room_was">空房间（曾为 %s）</string>
     <plurals name="room_displayname_four_and_more_members">
         <item quantity="other">%1$s，%2$s，%3$s 和 %4$d 位其他成员</item>
@@ -1970,7 +1970,7 @@
     <string name="give_feedback">提供反馈</string>
     <string name="feedback_failed">反馈发送失败（%s）</string>
     <string name="feedback_sent">感谢，你的反馈已成功送达</string>
-    <string name="you_may_contact_me">如果你后续有任何问题，欢迎联系我</string>
+    <string name="you_may_contact_me">如果你有任何后续问题，可以联系我</string>
     <string name="send_feedback_space_info">你正在使用空间的测试版。你的反馈将有助于改善下一版本。我们将会记录你的平台和用户名以帮助我们尽我们所能多发挥你的反馈的作用。</string>
     <string name="feedback">反馈</string>
     <string name="send_feedback_space_title">空间反馈</string>
@@ -2456,7 +2456,7 @@
     <string name="error_forbidden_digits_only_username">主服务器不接收仅有数字的用户名。</string>
     <string name="send_your_first_msg_to_invite">发送你的第一条消息邀请%s聊天</string>
     <string name="encryption_misconfigured">加密配置错误</string>
-    <string name="direct_room_encryption_enabled_tile_description_future">此聊天中的消息会被端对端加密。</string>
+    <string name="direct_room_encryption_enabled_tile_description_future">此聊天中的消息会端到端加密。</string>
     <string name="room_profile_section_restore_security">还原加密</string>
     <string name="contact_admin_to_restore_encryption">请联系管理员将加密还原到有效状态。</string>
     <string name="encryption_has_been_misconfigured">加密被错误地配置了。</string>
