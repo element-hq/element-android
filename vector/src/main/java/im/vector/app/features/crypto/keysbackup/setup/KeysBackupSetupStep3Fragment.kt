@@ -134,7 +134,7 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment<Fr
             selectTxtFileToWrite(
                     activity = requireActivity(),
                     activityResultLauncher = saveRecoveryActivityResultLauncher,
-                    defaultFileName = "recovery-key-$userId-$timestamp.txt",
+                    defaultFileName = "recovery-key-$userId-${timestamp}.txt",
                     chooserHint = getString(R.string.save_recovery_key_chooser_hint)
             )
             dialog.dismiss()
