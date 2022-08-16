@@ -23,6 +23,7 @@ Here are the checks that Danger does so far:
 - PR description is not empty
 - Big PR got a warning to recommend to split
 - PR contains a file for towncrier and extension is checked
+- PR does not modify frozen classes
 - PR contains a Sign-Off, with exception for Element employee contributors
 - PR with change on layout should include screenshot in the description
 - PR which adds png file warn about the usage of vector drawables
