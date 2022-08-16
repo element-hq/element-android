@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.list.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -47,6 +48,8 @@ import im.vector.app.features.home.room.list.actions.RoomListSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListSharedActionViewModel
 import im.vector.app.features.home.room.list.home.filter.HomeFilteredRoomsController
 import im.vector.app.features.home.room.list.home.filter.HomeRoomFilter
+import im.vector.app.features.home.room.list.home.invites.InvitesActivity
+import im.vector.app.features.home.room.list.home.invites.InvitesCounterController
 import im.vector.app.features.home.room.list.home.recent.RecentRoomCarouselController
 import im.vector.app.features.spaces.SpaceListBottomSheet
 import kotlinx.coroutines.flow.launchIn
@@ -60,7 +63,8 @@ import javax.inject.Inject
 class HomeRoomListFragment @Inject constructor(
         private val roomSummaryItemFactory: RoomSummaryItemFactory,
         private val userPreferencesProvider: UserPreferencesProvider,
-        private val recentRoomCarouselController: RecentRoomCarouselController
+        private val recentRoomCarouselController: RecentRoomCarouselController,
+        private val invitesCounterController: InvitesCounterController,
 ) : VectorBaseFragment<FragmentRoomListBinding>(),
         RoomListListener {
 
@@ -263,7 +267,17 @@ class HomeRoomListFragment @Inject constructor(
                     controller.submitList(list)
                 }
             }.adapter
+            is HomeRoomSection.InvitesCountData -> invitesCounterController.also { controller ->
+                controller.clickListener = ::onInvitesCounterClicked
+                section.count.observe(viewLifecycleOwner) { count ->
+                    controller.submitData(count)
+                }
+            }.adapter
         }
+    }
+
+    private fun onInvitesCounterClicked() {
+        startActivity(Intent(activity, InvitesActivity::class.java))
     }
 
     private fun onRoomFilterChanged(filter: HomeRoomFilter) {
@@ -282,6 +296,7 @@ class HomeRoomListFragment @Inject constructor(
     override fun onDestroyView() {
         views.roomListView.cleanup()
         recentRoomCarouselController.listener = null
+        invitesCounterController.clickListener = null
         super.onDestroyView()
     }
 

@@ -52,6 +52,7 @@ import im.vector.app.features.home.room.detail.timeline.reactions.ViewReactionsV
 import im.vector.app.features.home.room.detail.upgrade.MigrateRoomViewModel
 import im.vector.app.features.home.room.list.RoomListViewModel
 import im.vector.app.features.home.room.list.home.HomeRoomListViewModel
+import im.vector.app.features.home.room.list.home.invites.InvitesViewModel
 import im.vector.app.features.homeserver.HomeServerCapabilitiesViewModel
 import im.vector.app.features.invite.InviteUsersToRoomViewModel
 import im.vector.app.features.location.LocationSharingViewModel
@@ -618,4 +619,9 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(HomeRoomListViewModel::class)
     fun homeRoomListViewModel(factory: HomeRoomListViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(InvitesViewModel::class)
+    fun invitesViewModel(factory: InvitesViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 }

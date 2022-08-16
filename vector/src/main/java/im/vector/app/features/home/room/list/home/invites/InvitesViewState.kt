@@ -14,26 +14,15 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.home.room.list.home
+package im.vector.app.features.home.room.list.home.invites
 
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
-import im.vector.app.features.home.room.list.home.filter.HomeRoomFilter
-import kotlinx.coroutines.flow.SharedFlow
+import com.airbnb.mvrx.MavericksState
+import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import org.matrix.android.sdk.api.util.Optional
 
-sealed class HomeRoomSection {
-    data class RoomSummaryData(
-            val list: LiveData<PagedList<RoomSummary>>,
-            val filtersData: SharedFlow<Optional<List<HomeRoomFilter>>>,
-    ) : HomeRoomSection()
-
-    data class RecentRoomsData(
-            val list: LiveData<List<RoomSummary>>
-    ) : HomeRoomSection()
-
-    data class InvitesCountData(
-            val count: LiveData<Int>
-    ) : HomeRoomSection()
-}
+data class InvitesViewState(
+        val pagedList: LiveData<PagedList<RoomSummary>>? = null,
+        val roomMembershipChanges: Map<String, ChangeMembershipState> = emptyMap(),
+) : MavericksState

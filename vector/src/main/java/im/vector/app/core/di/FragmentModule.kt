@@ -64,6 +64,7 @@ import im.vector.app.features.home.room.detail.search.SearchFragment
 import im.vector.app.features.home.room.list.RoomListFragment
 import im.vector.app.features.home.room.list.home.HomeRoomListFragment
 import im.vector.app.features.home.room.list.home.NewChatBottomSheet
+import im.vector.app.features.home.room.list.home.invites.InvitesFragment
 import im.vector.app.features.home.room.threads.list.views.ThreadListFragment
 import im.vector.app.features.location.LocationSharingFragment
 import im.vector.app.features.location.preview.LocationPreviewFragment
@@ -951,4 +952,9 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(HomeRoomListFragment::class)
     fun binHomeRoomListFragment(fragment: HomeRoomListFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(InvitesFragment::class)
+    fun binInvitesFragment(fragment: InvitesFragment): Fragment
 }
