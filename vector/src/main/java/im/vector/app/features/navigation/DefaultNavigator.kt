@@ -130,7 +130,6 @@ class DefaultNavigator @Inject constructor(
     override fun openLogin(context: Context, loginConfig: LoginConfig?, flags: Int) {
         val intent = when (features.onboardingVariant()) {
             OnboardingVariant.LEGACY -> LoginActivity.newIntent(context, loginConfig)
-            OnboardingVariant.LOGIN_2,
             OnboardingVariant.FTUE_AUTH -> OnboardingActivity.newIntent(context, loginConfig)
         }
         intent.addFlags(flags)
@@ -140,7 +139,6 @@ class DefaultNavigator @Inject constructor(
     override fun loginSSORedirect(context: Context, data: Uri?) {
         val intent = when (features.onboardingVariant()) {
             OnboardingVariant.LEGACY -> LoginActivity.redirectIntent(context, data)
-            OnboardingVariant.LOGIN_2,
             OnboardingVariant.FTUE_AUTH -> OnboardingActivity.redirectIntent(context, data)
         }
         context.startActivity(intent)
