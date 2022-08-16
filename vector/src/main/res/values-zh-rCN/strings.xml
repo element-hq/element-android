@@ -2553,4 +2553,8 @@
     <string name="ftue_auth_sign_in_choose_server_header">你的对话发生的地方</string>
     <string name="search_space_two_parents">%1$s和%2$s</string>
     <string name="auth_reset_password_error_unverified">电子邮件未确认，检查你的收件箱</string>
+    <string name="location_share_loading_map_error">无法加载地图
+\n此主服务器可能没有设置好显示地图。</string>
+    <string name="a11y_open_settings">打开设置</string>
+    <string name="all_chats">全部聊天</string>
 </resources>
