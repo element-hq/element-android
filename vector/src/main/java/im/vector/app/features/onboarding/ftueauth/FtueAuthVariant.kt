@@ -264,7 +264,7 @@ class FtueAuthVariant(
     }
 
     private fun openStartCombinedRegister() {
-        addRegistrationStageFragmentToBackstack(FtueAuthCombinedRegisterFragment::class.java)
+        addRegistrationStageFragmentToBackstack(FtueAuthCombinedRegisterFragment::class.java, allowStateLoss = true)
     }
 
     private fun displayFallbackWebDialog() {
