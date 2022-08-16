@@ -50,7 +50,8 @@ class NewSpaceSummaryController @Inject constructor(
                 nonNullViewState.spaces,
                 nonNullViewState.selectedSpace,
                 nonNullViewState.rootSpacesOrdered,
-                nonNullViewState.homeAggregateCount
+                nonNullViewState.homeAggregateCount,
+                nonNullViewState.spaceHistory,
         )
     }
 
@@ -58,11 +59,15 @@ class NewSpaceSummaryController @Inject constructor(
             spaceSummaries: List<RoomSummary>?,
             selectedSpace: RoomSummary?,
             rootSpaces: List<RoomSummary>?,
-            homeCount: RoomAggregateNotificationCount
+            homeCount: RoomAggregateNotificationCount,
+            spaceHistory: List<Pair<String?, String>>,
     ) {
         val host = this
+
         newSpaceListHeaderItem {
             id("space_list_header")
+            currentSpace(selectedSpace?.displayName)
+            spaceHistory(spaceHistory)
         }
 
         if (selectedSpace != null) {
