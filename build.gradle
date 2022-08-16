@@ -151,6 +151,8 @@ allprojects {
                 "experimental:comment-wrapping",
                 // - A KDoc comment after any other element on the same line must be separated by a new line
                 "experimental:kdoc-wrapping",
+                // Ignore error "Redundant curly braces", since we use it to fix false positives, for instance in "elementLogs.${i}.txt"
+                "string-template",
         ]
     }
 
