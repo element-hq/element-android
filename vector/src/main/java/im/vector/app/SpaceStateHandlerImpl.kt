@@ -60,7 +60,6 @@ class SpaceStateHandlerImpl @Inject constructor(
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     private val selectedSpaceDataSource = BehaviorDataSource<Option<RoomSummary>>(Option.empty())
     private val selectedSpaceFlow = selectedSpaceDataSource.stream()
-    private val spaceBackstack = ArrayDeque<String?>()
 
     override fun getCurrentSpace(): RoomSummary? {
         return selectedSpaceDataSource.currentValue?.orNull()?.let { spaceSummary ->
@@ -84,7 +83,7 @@ class SpaceStateHandlerImpl @Inject constructor(
         }
 
         if (isForwardNavigation) {
-            addToBackstacks(spaceToLeave, spaceToSet)
+            addToBackstack(spaceToLeave, spaceToSet)
         }
 
         if (persistNow) {
@@ -106,15 +105,13 @@ class SpaceStateHandlerImpl @Inject constructor(
         }
     }
 
-    private fun addToBackstacks(spaceToLeave: RoomSummary?, spaceToSet: RoomSummary?) {
-        spaceBackstack.addLast(spaceToLeave?.roomId)
-
+    private fun addToBackstack(spaceToLeave: RoomSummary?, spaceToSet: RoomSummary?) {
         // Only add to the persisted backstack if the space to set is not All Chats, else reset the persisted stack
-        if (spaceToSet != null && spaceToLeave != null) {
+        if (spaceToSet != null) {
             val currentPersistedBackstack = vectorPreferences.getPersistedSpaceBackstack().toMutableList()
-            currentPersistedBackstack.add(spaceToLeave.roomId)
+            currentPersistedBackstack.add(spaceToLeave?.roomId)
             vectorPreferences.setPersistedSpaceBackstack(currentPersistedBackstack)
-        } else if (spaceToSet == null) {
+        } else {
             vectorPreferences.setPersistedSpaceBackstack(emptyList())
         }
     }
@@ -143,12 +140,11 @@ class SpaceStateHandlerImpl @Inject constructor(
     }
 
     override fun popSpaceBackstack(): String? {
-        val poppedSpaceId = spaceBackstack.removeLast()
         vectorPreferences.getPersistedSpaceBackstack().toMutableList().apply {
-            removeLastOrNull()
+            val poppedSpaceId = removeLast()
             vectorPreferences.setPersistedSpaceBackstack(this)
+            return poppedSpaceId
         }
-        return poppedSpaceId
     }
 
     override fun getPersistedSpaceBackstack() = vectorPreferences.getPersistedSpaceBackstack()

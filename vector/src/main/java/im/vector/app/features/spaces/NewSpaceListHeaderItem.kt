@@ -38,8 +38,11 @@ abstract class NewSpaceListHeaderItem : VectorEpoxyModel<NewSpaceListHeaderItem.
     private fun buildSpaceHeaderText(context: Context): String {
         val allChats = context.getString(R.string.all_chats)
         var spaceHeaderText = allChats
-        if (spaceHistory.isNotEmpty()) {
-            spaceHeaderText += " > ${spaceHistory.joinToString(" > ") { it.second }}"
+
+        val nonRootSpaceHistory = spaceHistory.filter { it.second.isNotEmpty() }
+
+        if (nonRootSpaceHistory.isNotEmpty()) {
+            spaceHeaderText += " > ${nonRootSpaceHistory.joinToString(" > ") { it.second }}"
         }
         if (currentSpace != null) {
             spaceHeaderText += " > $currentSpace"
