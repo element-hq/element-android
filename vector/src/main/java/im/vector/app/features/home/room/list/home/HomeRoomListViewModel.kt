@@ -53,12 +53,14 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.state.isPublic
+import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.flow.flow
 
 class HomeRoomListViewModel @AssistedInject constructor(
         @Assisted initialState: HomeRoomListViewState,
         private val session: Session,
         private val spaceStateHandler: SpaceStateHandler,
+        private val preferences: HomeLayoutPreferences,
 ) : VectorViewModel<HomeRoomListViewState, HomeRoomListAction, HomeRoomListViewEvents>(initialState) {
 
     @AssistedFactory
@@ -78,16 +80,45 @@ class HomeRoomListViewModel @AssistedInject constructor(
     private val _sections = MutableSharedFlow<Set<HomeRoomSection>>(replay = 1)
     val sections = _sections.asSharedFlow()
 
+    private val filtersPreferencesFlow = MutableSharedFlow<Boolean>(replay = 1)
+
     private var filteredPagedRoomSummariesLive: UpdatableLivePageResult? = null
 
     init {
         configureSections()
+        observePreferences()
+    }
+
+    private fun observePreferences() {
+        preferences.registerFiltersListener { areFiltersEnabled ->
+            viewModelScope.launch {
+                filtersPreferencesFlow.emit(areFiltersEnabled)
+            }
+        }
+        viewModelScope.launch {
+            filtersPreferencesFlow.emit(preferences.areFiltersEnabled())
+        }
+
+        preferences.registerRecentsListener { _ ->
+            configureSections()
+        }
+
+        preferences.registerOrderingListener { _ ->
+            configureSections()
+        }
+    }
+
+    override fun onCleared() {
+        preferences.unregisterListeners()
+        super.onCleared()
     }
 
     private fun configureSections() {
         val newSections = mutableSetOf<HomeRoomSection>()
 
-        newSections.add(getRecentRoomsSection())
+        if (preferences.areRecentsEnabled()) {
+            newSections.add(getRecentRoomsSection())
+        }
         newSections.add(getFilteredRoomsSection())
 
         viewModelScope.launch {
@@ -117,7 +148,11 @@ class HomeRoomListViewModel @AssistedInject constructor(
         }
 
         val params = getFilteredQueryParams(HomeRoomFilter.ALL, builder.build())
-        val sortOrder = RoomSortOrder.ACTIVITY // #6506
+        val sortOrder = if (preferences.isAZOrderingEnabled()) {
+            RoomSortOrder.NAME
+        } else {
+            RoomSortOrder.ACTIVITY
+        }
 
         val liveResults = session.roomService().getFilteredPagedRoomSummariesLive(
                 params,
@@ -141,13 +176,12 @@ class HomeRoomListViewModel @AssistedInject constructor(
 
         return HomeRoomSection.RoomSummaryData(
                 list = liveResults.livePagedList,
-                showFilters = true, // #6506
                 filtersData = getFiltersDataFlow()
         )
     }
 
-    private fun getFiltersDataFlow(): SharedFlow<List<HomeRoomFilter>> {
-        val flow = MutableSharedFlow<List<HomeRoomFilter>>(replay = 1)
+    private fun getFiltersDataFlow(): SharedFlow<Optional<List<HomeRoomFilter>>> {
+        val flow = MutableSharedFlow<Optional<List<HomeRoomFilter>>>(replay = 1)
 
         val favouritesFlow = session.flow()
                 .liveRoomSummaries(
@@ -168,26 +202,32 @@ class HomeRoomListViewModel @AssistedInject constructor(
                 .map { it.isNotEmpty() }
                 .distinctUntilChanged()
 
-        favouritesFlow.combine(dmsFLow) { hasFavourite, hasDm ->
-            hasFavourite to hasDm
-        }.onEach { (hasFavourite, hasDm) ->
-            val filtersData = mutableListOf(
-                    HomeRoomFilter.ALL,
-                    HomeRoomFilter.UNREADS
-            )
-            if (hasFavourite) {
-                filtersData.add(
-                        HomeRoomFilter.FAVOURITES
-                )
-            }
-            if (hasDm) {
-                filtersData.add(
-                        HomeRoomFilter.PEOPlE
-                )
-            }
-
-            flow.emit(filtersData)
-        }.launchIn(viewModelScope)
+        favouritesFlow
+                .combine(dmsFLow) { hasFavourite, hasDm ->
+                    hasFavourite to hasDm
+                }.combine(filtersPreferencesFlow) { (hasFavourite, hasDm), areFiltersEnabled ->
+                    Triple(hasFavourite, hasDm, areFiltersEnabled)
+                }.onEach { (hasFavourite, hasDm, areFiltersEnabled) ->
+                    if (areFiltersEnabled) {
+                        val filtersData = mutableListOf(
+                                HomeRoomFilter.ALL,
+                                HomeRoomFilter.UNREADS
+                        )
+                        if (hasFavourite) {
+                            filtersData.add(
+                                    HomeRoomFilter.FAVOURITES
+                            )
+                        }
+                        if (hasDm) {
+                            filtersData.add(
+                                    HomeRoomFilter.PEOPlE
+                            )
+                        }
+                        flow.emit(Optional.from(filtersData))
+                    } else {
+                        flow.emit(Optional.empty())
+                    }
+                }.launchIn(viewModelScope)
 
         return flow
     }

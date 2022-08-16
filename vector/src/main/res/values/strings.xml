@@ -426,6 +426,15 @@
 
     <!-- Home screen -->
     <string name="home_filter_placeholder_home">Filter room names</string>
+    <string name="home_layout_preferences">Layout preferences</string>
+
+
+    <!-- Home screen layout settings -->
+    <string name="home_layout_preferences_filters">Show filters</string>
+    <string name="home_layout_preferences_recents">Show recents</string>
+    <string name="home_layout_preferences_sort_by">Sort by</string>
+    <string name="home_layout_preferences_sort_activity">Activity</string>
+    <string name="home_layout_preferences_sort_name">A - Z</string>
 
     <!-- Home fragment -->
     <string name="invitations_header">Invites</string>
