@@ -26,7 +26,7 @@ import org.matrix.android.sdk.api.util.Optional
 sealed class HomeRoomSection {
     data class RoomSummaryData(
             val list: LiveData<PagedList<RoomSummary>>,
-            val filtersData: SharedFlow<Optional<List<HomeRoomFilter>>>
+            val filtersData: SharedFlow<Optional<List<HomeRoomFilter>>>,
     ) : HomeRoomSection()
 
     data class RecentRoomsData(

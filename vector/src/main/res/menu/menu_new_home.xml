@@ -41,6 +41,6 @@
         android:icon="@drawable/ic_home_search"
         android:title="@string/home_filter_placeholder_home"
         app:iconTint="?vctr_content_secondary"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 
 </menu>
