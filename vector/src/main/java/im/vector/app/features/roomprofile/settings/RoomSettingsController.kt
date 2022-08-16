@@ -91,6 +91,7 @@ class RoomSettingsController @Inject constructor(
             enabled(data.actionPermissions.canChangeName)
             value(data.newName ?: roomSummary.displayName)
             hint(host.stringProvider.getString(R.string.room_settings_name_hint))
+            autoCapitalize(true)
 
             onTextChange { text ->
                 host.callback?.onNameChanged(text)
