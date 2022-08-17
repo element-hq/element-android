@@ -297,8 +297,17 @@ class NewHomeDetailFragment @Inject constructor(
             }
         }
 
+        views.collapsingToolbar.debouncedClicks(::openSpaceSettings)
+        views.toolbar.debouncedClicks(::openSpaceSettings)
+
         views.avatar.debouncedClicks {
             navigator.openSettings(requireContext())
+        }
+    }
+
+    private fun openSpaceSettings() = withState(viewModel) { viewState ->
+        viewState.selectedSpace?.let {
+            sharedActionViewModel.post(HomeActivitySharedAction.ShowSpaceSettings(it.roomId))
         }
     }
 
