@@ -30,9 +30,11 @@ import org.amshove.kluent.shouldBeEqualTo
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
+import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.tombstone.RoomTombstoneContent
 import org.matrix.android.sdk.internal.database.awaitNotEmptyResult
@@ -103,6 +105,7 @@ internal class DefaultCreateRoomFromLocalRoomTaskTest {
         val result = defaultCreateRoomFromLocalRoomTask.execute(params)
 
         // Then
+        verifyTombstoneEvent(AN_EXISTING_ROOM_ID)
         result shouldBeEqualTo AN_EXISTING_ROOM_ID
     }
 
@@ -124,6 +127,7 @@ internal class DefaultCreateRoomFromLocalRoomTaskTest {
         val result = defaultCreateRoomFromLocalRoomTask.execute(params)
 
         // Then
+        verifyTombstoneEvent(null)
         // CreateRoomTask has been called with the initial CreateRoomParams
         coVerify { createRoomTask.execute(aCreateRoomParams) }
         // The resulting roomId matches the roomId returned by the createRoomTask
@@ -143,5 +147,12 @@ internal class DefaultCreateRoomFromLocalRoomTaskTest {
                     .equalTo(LocalRoomSummaryEntityFields.ROOM_ID, A_LOCAL_ROOM_ID)
                     .findFirst()
         } returns localRoomSummaryEntity
+    }
+
+    private fun verifyTombstoneEvent(expectedRoomId: String?) {
+        fakeStateEventDataSource.verifyGetStateEvent(A_LOCAL_ROOM_ID, EventType.STATE_ROOM_TOMBSTONE, QueryStringValue.IsEmpty)
+        fakeStateEventDataSource.instance.getStateEvent(A_LOCAL_ROOM_ID, EventType.STATE_ROOM_TOMBSTONE, QueryStringValue.IsEmpty)
+                ?.content.toModel<RoomTombstoneContent>()
+                ?.replacementRoomId shouldBeEqualTo expectedRoomId
     }
 }
