@@ -24,7 +24,6 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.extractCurveKeyFromR
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.crypto.MegolmSessionData
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysBackupData
-import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.olm.OlmException
 import org.matrix.olm.OlmPkDecryption
 import org.matrix.olm.OlmPkEncryption
@@ -40,6 +39,7 @@ internal class KeysBackupCurve25519Algorithm(keysVersions: KeysVersionResult) : 
     private val publicKey: String
 
     private val encryptionKey: OlmPkEncryption
+    private var privateKey: ByteArray? = null
 
     init {
         if (keysVersions.algorithm != MXCRYPTO_ALGORITHM_CURVE_25519_BACKUP) {
@@ -52,26 +52,17 @@ internal class KeysBackupCurve25519Algorithm(keysVersions: KeysVersionResult) : 
         }
     }
 
+    override fun setRecoveryKey(recoveryKey: String?) {
+        privateKey = extractCurveKeyFromRecoveryKey(recoveryKey)
+    }
+
     override fun encryptSession(sessionData: MegolmSessionData): JsonDict? {
-        val sessionBackupData = mapOf(
-                "algorithm" to sessionData.algorithm,
-                "sender_key" to sessionData.senderKey,
-                "sender_claimed_keys" to sessionData.senderClaimedKeys,
-                "forwarding_curve25519_key_chain" to (sessionData.forwardingCurve25519KeyChain.orEmpty()),
-                "session_key" to sessionData.sessionKey,
-                "org.matrix.msc3061.shared_history" to sessionData.sharedHistory,
-                "untrusted" to sessionData.untrusted
-        )
-
-        val json = MoshiProvider.providesMoshi()
-                .adapter(Map::class.java)
-                .toJson(sessionBackupData)
-
         val encryptedSessionBackupData = try {
-            encryptionKey.encrypt(json)
+            val sessionDataJson = sessionData.asBackupJson()
+            encryptionKey.encrypt(sessionDataJson)
         } catch (e: OlmException) {
             Timber.e(e, "Error while encrypting backup data.")
-            null
+            throw e
         } ?: return null
 
         return mapOf(
@@ -81,29 +72,25 @@ internal class KeysBackupCurve25519Algorithm(keysVersions: KeysVersionResult) : 
         )
     }
 
-    override fun decryptSessions(recoveryKey: String, data: KeysBackupData): List<MegolmSessionData> {
-        fun pkDecryptionFromRecoveryKey(recoveryKey: String): OlmPkDecryption? {
-            // Extract the primary key
-            val privateKey = extractCurveKeyFromRecoveryKey(recoveryKey)
-            // Built the PK decryption with it
+    override fun decryptSessions(data: KeysBackupData): List<MegolmSessionData> {
+        fun pkDecryptionFromPrivateKey(privateKey: ByteArray): OlmPkDecryption? {
             var decryption: OlmPkDecryption? = null
-            if (privateKey != null) {
-                try {
-                    decryption = OlmPkDecryption()
-                    decryption.setPrivateKey(privateKey)
-                } catch (e: OlmException) {
-                    Timber.e(e, "OlmException")
-                }
+            try {
+                decryption = OlmPkDecryption()
+                decryption.setPrivateKey(privateKey)
+            } catch (e: OlmException) {
+                Timber.e(e, "OlmException")
             }
             return decryption
         }
 
-        if (!keyMatches(recoveryKey)) {
+        val privateKey = this.privateKey
+        if (privateKey == null || !keyMatches(privateKey)) {
             Timber.e("Invalid recovery key for this keys version")
             throw InvalidParameterException("Invalid recovery key")
         }
         // Get a PK decryption instance
-        val decryption = pkDecryptionFromRecoveryKey(recoveryKey)
+        val decryption = pkDecryptionFromPrivateKey(privateKey)
         if (decryption == null) {
             // This should not happen anymore
             Timber.e("Invalid recovery key. Error")
@@ -121,6 +108,7 @@ internal class KeysBackupCurve25519Algorithm(keysVersions: KeysVersionResult) : 
                 }
             }
         }
+        decryption.releaseDecryption()
         Timber.v(
                 "Decrypted ${sessionsData.size} keys out of $sessionsFromHsCount from the backup store on the homeserver"
         )
@@ -128,39 +116,26 @@ internal class KeysBackupCurve25519Algorithm(keysVersions: KeysVersionResult) : 
     }
 
     private fun decryptSession(sessionData: JsonDict, sessionId: String, roomId: String, decryption: OlmPkDecryption): MegolmSessionData? {
-        var sessionBackupData: MegolmSessionData? = null
 
         val ciphertext = sessionData["ciphertext"]?.toString()
         val mac = sessionData["mac"]?.toString()
         val ephemeralKey = sessionData["ephemeral"]?.toString()
 
-        if (ciphertext != null && mac != null && ephemeralKey != null) {
+        return if (ciphertext != null && mac != null && ephemeralKey != null) {
             val encrypted = OlmPkMessage()
             encrypted.mCipherText = ciphertext
             encrypted.mMac = mac
             encrypted.mEphemeralKey = ephemeralKey
-
             try {
                 val decrypted = decryption.decrypt(encrypted)
-
-                val moshi = MoshiProvider.providesMoshi()
-                val adapter = moshi.adapter(MegolmSessionData::class.java)
-
-                sessionBackupData = adapter.fromJson(decrypted)
+                createMegolmSessionData(decrypted, sessionId, roomId)
             } catch (e: OlmException) {
-                Timber.e(e, "OlmException")
+                Timber.e(e, "Exception while decrypting")
+                null
             }
-
-            if (sessionBackupData != null) {
-                sessionBackupData = sessionBackupData.copy(
-                        sessionId = sessionId,
-                        roomId = roomId,
-                        untrusted = untrusted
-                )
-            }
+        } else {
+            null
         }
-
-        return sessionBackupData
     }
 
     override fun release() {
@@ -169,14 +144,8 @@ internal class KeysBackupCurve25519Algorithm(keysVersions: KeysVersionResult) : 
 
     override val authData: MegolmBackupAuthData = curveAuthData
 
-    override fun keyMatches(key: String): Boolean {
-        fun pkPublicKeyFromRecoveryKey(recoveryKey: String): String? {
-            // Extract the primary key
-            val privateKey = extractCurveKeyFromRecoveryKey(recoveryKey)
-            if (privateKey == null) {
-                Timber.w("pkPublicKeyFromRecoveryKey: private key is null")
-                return null
-            }
+    override fun keyMatches(privateKey: ByteArray): Boolean {
+        fun pkPublicKeyFromPrivateKey(privateKey: ByteArray): String? {
             // Built the PK decryption with it
             val decryption = OlmPkDecryption()
             val pkPublicKey = try {
@@ -189,7 +158,7 @@ internal class KeysBackupCurve25519Algorithm(keysVersions: KeysVersionResult) : 
             return pkPublicKey
         }
 
-        val publicKey = pkPublicKeyFromRecoveryKey(key)
+        val publicKey = pkPublicKeyFromPrivateKey(privateKey)
         if (publicKey == null) {
             Timber.w("Public key is null")
             return false

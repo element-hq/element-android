@@ -221,12 +221,12 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
         val iv = cipherContent.initializationVector?.fromBase64() ?: ByteArray(16)
         val cipher = cipherContent.ciphertext?.fromBase64() ?: throw SharedSecretStorageError.BadCipherText
         val mac = cipherContent.mac?.fromBase64() ?: throw SharedSecretStorageError.BadMac
-        val encryptedResult = AesHmacSha2.Result(
+        val encryptionInfo = AesHmacSha2.EncryptionInfo(
                 cipherRawBytes = cipher,
                 initializationVector = iv,
                 mac = mac
         )
-        return AesHmacSha2.decrypt(secretKey.privateKey, secretName, encryptedResult)
+        return AesHmacSha2.decrypt(secretKey.privateKey, secretName, encryptionInfo)
     }
 
     override fun getAlgorithmsForSecret(name: String): List<KeyInfoResult> {

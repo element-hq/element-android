@@ -27,7 +27,7 @@ import kotlin.experimental.and
 
 internal object AesHmacSha2 {
 
-    class Result(
+    class EncryptionInfo(
             val cipherRawBytes: ByteArray,
             val mac: ByteArray,
             val initializationVector: ByteArray
@@ -55,7 +55,7 @@ internal object AesHmacSha2 {
      * (We use AES-CTR to match file encryption and key exports.)
      */
     @Throws
-    fun encrypt(privateKey: ByteArray, secretName: String, clearDataBase64: String, ivString: String? = null): Result {
+    fun encrypt(privateKey: ByteArray, secretName: String, clearDataBase64: String, ivString: String? = null): EncryptionInfo {
         val pseudoRandomKey = HkdfSha256.deriveSecret(
                 privateKey,
                 ByteArray(32) { 0.toByte() },
@@ -94,14 +94,14 @@ internal object AesHmacSha2 {
         mac.init(macKeySpec)
         val digest = mac.doFinal(cipherBytes)
 
-        return Result(
+        return EncryptionInfo(
                 cipherRawBytes = cipherBytes,
                 initializationVector = iv,
                 mac = digest
         )
     }
 
-    fun decrypt(privateKey: ByteArray, secretName: String, aesHmacSha2Result: Result): String {
+    fun decrypt(privateKey: ByteArray, secretName: String, aesHmacSha2Result: EncryptionInfo): String {
         val pseudoRandomKey = HkdfSha256.deriveSecret(
                 privateKey,
                 zeroByteArray(32),
@@ -140,9 +140,9 @@ internal object AesHmacSha2 {
      * @param {ByteArray} [key] the key to use
      * @param {string} [iv] The initialization vector as a base64-encoded string.
      *     If omitted, a random initialization vector will be created.
-     * @return [Result] An object that contains, `mac` and `iv` properties.
+     * @return [EncryptionInfo] An object that contains, `mac` and `iv` properties.
      */
-    fun calculateKeyCheck(key: ByteArray, iv: String?): Result {
+    fun calculateKeyCheck(key: ByteArray, iv: String?): EncryptionInfo {
         val zerosStr = String(zeroByteArray(32))
         return encrypt(key, "", zerosStr, iv)
     }

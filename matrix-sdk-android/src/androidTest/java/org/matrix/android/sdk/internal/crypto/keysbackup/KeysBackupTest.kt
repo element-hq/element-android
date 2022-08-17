@@ -42,6 +42,7 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersion
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersionResult
 import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
 import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCurve25519AuthData
+import org.matrix.android.sdk.api.session.crypto.keysbackup.extractCurveKeyFromRecoveryKey
 import org.matrix.android.sdk.api.session.crypto.keysbackup.toKeysVersionResult
 import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.api.session.getRoom
@@ -321,7 +322,8 @@ class KeysBackupTest : InstrumentedTest {
                     put(cryptoTestData.roomId, roomKeysBackupData)
                 }
         )
-        val sessionsData = algorithm.decryptSessions(keyBackupCreationInfo.recoveryKey, keysBackupData)
+        algorithm.setRecoveryKey(keyBackupCreationInfo.recoveryKey)
+        val sessionsData = algorithm.decryptSessions(keysBackupData)
         val sessionData = sessionsData.firstOrNull()
         assertNotNull(sessionData)
         // - Compare the decrypted megolm key with the original one

@@ -29,6 +29,7 @@ import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_CURVE_25519_BACKUP
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.listeners.ProgressListener
@@ -45,6 +46,7 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupAuthData
 import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
 import org.matrix.android.sdk.api.session.crypto.keysbackup.SavedKeyBackupKeyInfo
 import org.matrix.android.sdk.api.session.crypto.keysbackup.computeRecoveryKey
+import org.matrix.android.sdk.api.session.crypto.keysbackup.extractCurveKeyFromRecoveryKey
 import org.matrix.android.sdk.api.session.crypto.keysbackup.toKeysVersionResult
 import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.api.util.JsonDict
@@ -630,8 +632,9 @@ internal class DefaultKeysBackupService @Inject constructor(
 
                 // Get backed up keys from the homeserver
                 val data = getKeys(sessionId, roomId, keysVersionResult.version)
+                algorithm?.setRecoveryKey(recoveryKey)
                 val sessionsData = withContext(coroutineDispatchers.computation) {
-                    algorithm?.decryptSessions(recoveryKey, data)
+                    algorithm?.decryptSessions(data)
                 }.orEmpty()
                 // Do not trigger a backup for them if they come from the backup version we are using
                 val backUp = keysVersionResult.version != keysBackupVersion?.version
@@ -998,7 +1001,8 @@ internal class DefaultKeysBackupService @Inject constructor(
     private fun isValidRecoveryKeyForKeysBackupVersion(recoveryKey: String, keysBackupData: KeysVersionResult): Boolean {
         return try {
             val algorithm = algorithmFactory.create(keysBackupData)
-            val isValid = algorithm.keyMatches(recoveryKey)
+            val privateKey = extractCurveKeyFromRecoveryKey(recoveryKey) ?: return false
+            val isValid = algorithm.keyMatches(privateKey)
             algorithm.release()
             isValid
         } catch (failure: Throwable) {
@@ -1133,7 +1137,8 @@ internal class DefaultKeysBackupService @Inject constructor(
                 // Gather data to send to the homeserver
                 // roomId -> sessionId -> MXKeyBackupData
                 val keysBackupData = KeysBackupData()
-
+                val recoveryKey = cryptoStore.getKeyBackupRecoveryKeyInfo()?.recoveryKey
+                algorithm?.setRecoveryKey(recoveryKey)
                 olmInboundGroupSessionWrappers.forEach { olmInboundGroupSessionWrapper ->
                     val roomId = olmInboundGroupSessionWrapper.roomId ?: return@forEach
                     val olmInboundGroupSession = olmInboundGroupSessionWrapper.session
@@ -1242,7 +1247,9 @@ internal class DefaultKeysBackupService @Inject constructor(
                 }
                 ?: return null
 
-        val sessionBackupData = algorithm?.encryptSession(sessionData) ?: return null
+        val sessionBackupData = tryOrNull {
+            algorithm?.encryptSession(sessionData)
+        } ?: return null
         return KeyBackupData(
                 firstMessageIndex = try {
                     olmInboundGroupSessionWrapper.session.firstKnownIndex
@@ -1263,6 +1270,10 @@ internal class DefaultKeysBackupService @Inject constructor(
     private fun MXInboundMegolmSessionWrapper.getSharedKey(): Boolean {
         if (!cryptoStore.isShareKeysOnInviteEnabled()) return false
         return sessionData.sharedHistory
+    }
+
+    private fun getPrivateKey(): ByteArray {
+        return byteArrayOf()
     }
 
     /* ==========================================================================================
