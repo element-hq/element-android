@@ -87,9 +87,9 @@ class ShareSpaceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetSpa
                     startActivity(intent)
                     dismissAllowingStateLoss()
                 }
-                is ShareSpaceViewEvents.ShowInviteByLink     -> {
+                is ShareSpaceViewEvents.ShowInviteByLink -> {
                     startSharePlainTextIntent(
-                            fragment = this,
+                            context = requireContext(),
                             activityResultLauncher = null,
                             chooserTitle = getString(R.string.share_by_text),
                             text = getString(R.string.share_space_link_message, event.spaceName, event.permalink),

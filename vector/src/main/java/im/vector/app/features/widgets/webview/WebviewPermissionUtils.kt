@@ -41,11 +41,22 @@ class WebviewPermissionUtils @Inject constructor(
             request: PermissionRequest,
             context: Context,
             activity: FragmentActivity,
-            activityResultLauncher: ActivityResultLauncher<Array<String>>
+            activityResultLauncher: ActivityResultLauncher<Array<String>>,
+            autoApprove: Boolean = false
     ) {
+        if (autoApprove) {
+            onPermissionsSelected(
+                permissions = request.resources.toList(),
+                request = request,
+                activity = activity,
+                activityResultLauncher = activityResultLauncher)
+            return
+        }
+
         val allowedPermissions = request.resources.map {
             it to false
         }.toMutableList()
+
         MaterialAlertDialogBuilder(context)
                 .setTitle(title)
                 .setMultiChoiceItems(
@@ -54,21 +65,10 @@ class WebviewPermissionUtils @Inject constructor(
                     allowedPermissions[which] = allowedPermissions[which].first to isChecked
                 }
                 .setPositiveButton(R.string.room_widget_resource_grant_permission) { _, _ ->
-                    permissionRequest = request
-                    selectedPermissions = allowedPermissions.mapNotNull { perm ->
+                    val permissions = allowedPermissions.mapNotNull { perm ->
                         perm.first.takeIf { perm.second }
                     }
-
-                    val requiredAndroidPermissions = selectedPermissions.mapNotNull { permission ->
-                        webPermissionToAndroidPermission(permission)
-                    }
-
-                    // When checkPermissions returns false, some of the required Android permissions will
-                    // have to be requested and the flow completes asynchronously via onPermissionResult
-                    if (checkPermissions(requiredAndroidPermissions, activity, activityResultLauncher)) {
-                        request.grant(selectedPermissions.toTypedArray())
-                        reset()
-                    }
+                    onPermissionsSelected(permissions, request, activity, activityResultLauncher)
                 }
                 .setNegativeButton(R.string.room_widget_resource_decline_permission) { _, _ ->
                     request.deny()
@@ -76,11 +76,32 @@ class WebviewPermissionUtils @Inject constructor(
                 .show()
     }
 
+    private fun onPermissionsSelected(
+            permissions: List<String>,
+            request: PermissionRequest,
+            activity: FragmentActivity,
+            activityResultLauncher: ActivityResultLauncher<Array<String>>,
+    ) {
+        permissionRequest = request
+        selectedPermissions = permissions
+
+        val requiredAndroidPermissions = selectedPermissions.mapNotNull { permission ->
+            webPermissionToAndroidPermission(permission)
+        }
+
+        // When checkPermissions returns false, some of the required Android permissions will
+        // have to be requested and the flow completes asynchronously via onPermissionResult
+        if (checkPermissions(requiredAndroidPermissions, activity, activityResultLauncher)) {
+            request.grant(selectedPermissions.toTypedArray())
+            reset()
+        }
+    }
+
     fun onPermissionResult(result: Map<String, Boolean>) {
         if (permissionRequest == null) {
             fatalError(
-                message = "permissionRequest was null! Make sure to call promptForPermissions first.",
-                failFast = vectorPreferences.failFast()
+                    message = "permissionRequest was null! Make sure to call promptForPermissions first.",
+                    failFast = vectorPreferences.failFast()
             )
             return
         }
@@ -110,10 +131,10 @@ class WebviewPermissionUtils @Inject constructor(
 
     private fun webPermissionToHumanReadable(permission: String, context: Context): String {
         return when (permission) {
-            PermissionRequest.RESOURCE_AUDIO_CAPTURE      -> context.getString(R.string.room_widget_webview_access_microphone)
-            PermissionRequest.RESOURCE_VIDEO_CAPTURE      -> context.getString(R.string.room_widget_webview_access_camera)
+            PermissionRequest.RESOURCE_AUDIO_CAPTURE -> context.getString(R.string.room_widget_webview_access_microphone)
+            PermissionRequest.RESOURCE_VIDEO_CAPTURE -> context.getString(R.string.room_widget_webview_access_camera)
             PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID -> context.getString(R.string.room_widget_webview_read_protected_media)
-            else                                          -> permission
+            else -> permission
         }
     }
 
@@ -121,7 +142,7 @@ class WebviewPermissionUtils @Inject constructor(
         return when (permission) {
             PermissionRequest.RESOURCE_AUDIO_CAPTURE -> Manifest.permission.RECORD_AUDIO
             PermissionRequest.RESOURCE_VIDEO_CAPTURE -> Manifest.permission.CAMERA
-            else                                     -> null
+            else -> null
         }
     }
 }

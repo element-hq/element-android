@@ -21,8 +21,8 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 
-@EpoxyModelClass(layout = R.layout.item_help_footer)
-abstract class HelpFooterItem : VectorEpoxyModel<HelpFooterItem.Holder>() {
+@EpoxyModelClass
+abstract class HelpFooterItem : VectorEpoxyModel<HelpFooterItem.Holder>(R.layout.item_help_footer) {
 
     @EpoxyAttribute
     var text: String? = null

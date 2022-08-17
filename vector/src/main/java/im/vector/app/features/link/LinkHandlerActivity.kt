@@ -18,18 +18,23 @@ package im.vector.app.features.link
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
+import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.error.ErrorFormatter
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.ActivityProgressBinding
+import im.vector.app.features.MainActivity
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.permalink.PermalinkHandler
+import im.vector.app.features.start.StartAppViewModel
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import timber.log.Timber
@@ -45,10 +50,31 @@ class LinkHandlerActivity : VectorBaseActivity<ActivityProgressBinding>() {
     @Inject lateinit var errorFormatter: ErrorFormatter
     @Inject lateinit var permalinkHandler: PermalinkHandler
 
+    private val startAppViewModel: StartAppViewModel by viewModel()
+
     override fun getBinding() = ActivityProgressBinding.inflate(layoutInflater)
 
     override fun initUiAndData() {
         handleIntent()
+    }
+
+    private val launcher = registerStartForActivityResult {
+        if (it.resultCode == RESULT_OK) {
+            handleIntent()
+        } else {
+            // User has pressed back on the MainActivity, so finish also this one.
+            finish()
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        if (startAppViewModel.shouldStartApp()) {
+            launcher.launch(MainActivity.getIntentToInitSession(this))
+        } else {
+            handleIntent()
+        }
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -59,16 +85,16 @@ class LinkHandlerActivity : VectorBaseActivity<ActivityProgressBinding>() {
     private fun handleIntent() {
         val uri = intent.data
         when {
-            uri == null                                                                    -> {
+            uri == null -> {
                 // Should not happen
                 Timber.w("Uri is null")
                 finish()
             }
-            uri.getQueryParameter(LoginConfig.CONFIG_HS_PARAMETER) != null                 -> handleConfigUrl(uri)
-            uri.toString().startsWith(PermalinkService.MATRIX_TO_URL_BASE)                 -> handleSupportedHostUrl()
-            uri.toString().startsWith(PermalinkHandler.MATRIX_TO_CUSTOM_SCHEME_URL_BASE)   -> handleSupportedHostUrl()
+            uri.getQueryParameter(LoginConfig.CONFIG_HS_PARAMETER) != null -> handleConfigUrl(uri)
+            uri.toString().startsWith(PermalinkService.MATRIX_TO_URL_BASE) -> handleSupportedHostUrl()
+            uri.toString().startsWith(PermalinkHandler.MATRIX_TO_CUSTOM_SCHEME_URL_BASE) -> handleSupportedHostUrl()
             resources.getStringArray(R.array.permalink_supported_hosts).contains(uri.host) -> handleSupportedHostUrl()
-            else                                                                           -> {
+            else -> {
                 // Other links are not yet handled, but should not come here (manifest configuration error?)
                 toast(R.string.universal_link_malformed)
                 finish()

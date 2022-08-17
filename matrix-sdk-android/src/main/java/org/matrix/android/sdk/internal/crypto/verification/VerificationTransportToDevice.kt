@@ -76,12 +76,12 @@ internal class VerificationTransportToDevice(
                 .configureWith(SendToDeviceTask.Params(MessageType.MSGTYPE_VERIFICATION_REQUEST, contentMap)) {
                     this.callback = object : MatrixCallback<Unit> {
                         override fun onSuccess(data: Unit) {
-                            Timber.v("## verification [$tx.transactionId] send toDevice request success")
+                            Timber.v("## verification [${tx?.transactionId}] send toDevice request success")
                             callback.invoke(localId, validKeyReq)
                         }
 
                         override fun onFailure(failure: Throwable) {
-                            Timber.e("## verification [$tx.transactionId] failed to send toDevice request")
+                            Timber.e("## verification [${tx?.transactionId}] failed to send toDevice request")
                         }
                     }
                 }
@@ -103,12 +103,12 @@ internal class VerificationTransportToDevice(
                 .configureWith(SendToDeviceTask.Params(EventType.KEY_VERIFICATION_READY, contentMap)) {
                     this.callback = object : MatrixCallback<Unit> {
                         override fun onSuccess(data: Unit) {
-                            Timber.v("## verification [$tx.transactionId] send toDevice request success")
+                            Timber.v("## verification [${tx?.transactionId}] send toDevice request success")
                             callback?.invoke()
                         }
 
                         override fun onFailure(failure: Throwable) {
-                            Timber.e("## verification [$tx.transactionId] failed to send toDevice request")
+                            Timber.e("## verification [${tx?.transactionId}] failed to send toDevice request")
                         }
                     }
                 }
@@ -136,7 +136,7 @@ internal class VerificationTransportToDevice(
                 .configureWith(SendToDeviceTask.Params(type, contentMap)) {
                     this.callback = object : MatrixCallback<Unit> {
                         override fun onSuccess(data: Unit) {
-                            Timber.v("## SAS verification [$tx.transactionId] toDevice type '$type' success.")
+                            Timber.v("## SAS verification [${tx.transactionId}] toDevice type '$type' success.")
                             if (onDone != null) {
                                 onDone()
                             } else {
@@ -149,7 +149,7 @@ internal class VerificationTransportToDevice(
                         }
 
                         override fun onFailure(failure: Throwable) {
-                            Timber.e("## SAS verification [$tx.transactionId] failed to send toDevice in state : $tx.state")
+                            Timber.e("## SAS verification [${tx.transactionId}] failed to send toDevice in state : ${tx.state}")
                             tx.cancel(onErrorReason)
                         }
                     }

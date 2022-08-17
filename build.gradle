@@ -24,12 +24,13 @@ buildscript {
         classpath libs.gradle.gradlePlugin
         classpath libs.gradle.kotlinPlugin
         classpath libs.gradle.hiltPlugin
-        classpath 'com.google.gms:google-services:4.3.10'
-        classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.3'
+        classpath 'com.google.firebase:firebase-appdistribution-gradle:3.0.2'
+        classpath 'com.google.gms:google-services:4.3.13'
+        classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.4.0.2513'
         classpath 'com.google.android.gms:oss-licenses-plugin:0.10.5'
         classpath "com.likethesalad.android:stem-plugin:2.1.1"
-        classpath 'org.owasp:dependency-check-gradle:7.1.0.1'
-        classpath "org.jetbrains.dokka:dokka-gradle-plugin:1.6.21"
+        classpath 'org.owasp:dependency-check-gradle:7.1.1'
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:1.7.10"
         classpath "org.jetbrains.kotlinx:kotlinx-knit:0.4.0"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -40,10 +41,10 @@ plugins {
     // ktlint Plugin
     id "org.jlleitschuh.gradle.ktlint" version "10.3.0"
     // Detekt
-    id "io.gitlab.arturbosch.detekt" version "1.20.0"
+    id "io.gitlab.arturbosch.detekt" version "1.21.0"
 
     // Dependency Analysis
-    id 'com.autonomousapps.dependency-analysis' version "1.4.0"
+    id 'com.autonomousapps.dependency-analysis' version "1.11.2"
 }
 
 // https://github.com/jeremylong/DependencyCheck
@@ -125,6 +126,11 @@ allprojects {
         enableExperimentalRules = true
         // display the corresponding rule
         verbose = true
+        reporters {
+            reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.PLAIN)
+            // To have XML report for Danger
+            reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.CHECKSTYLE)
+        }
         disabledRules = [
                 // TODO Re-enable these 4 rules after reformatting project
                 "indent",
@@ -145,6 +151,8 @@ allprojects {
                 "experimental:comment-wrapping",
                 // - A KDoc comment after any other element on the same line must be separated by a new line
                 "experimental:kdoc-wrapping",
+                // Ignore error "Redundant curly braces", since we use it to fix false positives, for instance in "elementLogs.${i}.txt"
+                "string-template",
         ]
     }
 
@@ -168,7 +176,7 @@ def launchTask = getGradle()
         .toString()
         .toLowerCase()
 
-if (launchTask.contains("codeCoverageReport".toLowerCase())) {
+if (launchTask.contains("coverage".toLowerCase())) {
     apply from: 'coverage.gradle'
 }
 
@@ -191,7 +199,7 @@ sonarqube {
         property "sonar.links.issue", "https://github.com/vector-im/element-android/issues"
         property "sonar.organization", "new_vector_ltd_organization"
         property "sonar.java.coveragePlugin", "jacoco"
-        property "sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/reports/jacoco/theCodeCoverageReport/theCodeCoverageReport.xml"
+        property "sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/reports/jacoco/generateCoverageReport/generateCoverageReport.xml"
         property "sonar.login", project.hasProperty("SONAR_LOGIN") ? SONAR_LOGIN : "invalid"
     }
 }
@@ -252,11 +260,7 @@ dependencyAnalysis {
                 exclude("org.json:json") // Used in unit tests, overwrites the one bundled into Android
             }
         }
-        project(":library:ui-styles") {
-            onUnusedDependencies {
-                exclude("com.github.vector-im:PFLockScreen-Android") // False positive
-            }
-        }
+        project(":library:ui-styles")
         project(":matrix-sdk-android") {
             onUnusedDependencies {
                 exclude("io.reactivex.rxjava2:rxkotlin") // Transitively required for mocking realm as monarchy doesn't expose Rx
@@ -271,6 +275,8 @@ dependencyAnalysis {
             onUnusedDependencies {
                 // False positives
                 exclude(
+                        "androidx.fragment:fragment-testing",
+                        "com.facebook.soloader:soloader",
                         "com.vanniktech:emoji-google",
                         "com.vanniktech:emoji-material",
                         "org.maplibre.gl:android-plugin-annotation-v9",

@@ -65,7 +65,7 @@ class VoiceMessageViews(
                 MotionEvent.ACTION_DOWN -> {
                     actions.onWaveformClicked()
                 }
-                MotionEvent.ACTION_UP   -> {
+                MotionEvent.ACTION_UP -> {
                     val percentage = getTouchedPositionPercentage(motionEvent, view)
                     actions.onVoiceWaveformTouchedUp(percentage)
                 }
@@ -95,7 +95,7 @@ class VoiceMessageViews(
                     actions.onRequestRecording()
                     true
                 }
-                MotionEvent.ACTION_UP   -> {
+                MotionEvent.ACTION_UP -> {
                     actions.onMicButtonReleased()
                     true
                 }
@@ -103,7 +103,7 @@ class VoiceMessageViews(
                     actions.onMicButtonDrag { currentState -> draggableStateProcessor.process(event, currentState) }
                     true
                 }
-                else                    -> false
+                else -> false
             }
         }
     }

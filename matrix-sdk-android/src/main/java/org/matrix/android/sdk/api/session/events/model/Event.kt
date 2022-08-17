@@ -202,7 +202,7 @@ data class Event(
      * It will return a decrypted text message or an empty string otherwise.
      */
     fun getDecryptedTextSummary(): String? {
-        if (isRedacted()) return "Message Deleted"
+        if (isRedacted()) return "Message removed"
         val text = getDecryptedValue() ?: run {
             if (isPoll()) {
                 return getPollQuestion() ?: "created a poll."
@@ -212,13 +212,13 @@ data class Event(
 
         return when {
             isReplyRenderedInThread() || isQuote() -> ContentUtils.extractUsefulTextFromReply(text)
-            isFileMessage()                        -> "sent a file."
-            isAudioMessage()                       -> "sent an audio file."
-            isImageMessage()                       -> "sent an image."
-            isVideoMessage()                       -> "sent a video."
-            isSticker()                            -> "sent a sticker"
-            isPoll()                               -> getPollQuestion() ?: "created a poll."
-            else                                   -> text
+            isFileMessage() -> "sent a file."
+            isAudioMessage() -> "sent an audio file."
+            isImageMessage() -> "sent an image."
+            isVideoMessage() -> "sent a video."
+            isSticker() -> "sent a sticker"
+            isPoll() -> getPollQuestion() ?: "created a poll."
+            else -> text
         }
     }
 
@@ -318,35 +318,35 @@ fun Event.isTextMessage(): Boolean {
         MessageType.MSGTYPE_TEXT,
         MessageType.MSGTYPE_EMOTE,
         MessageType.MSGTYPE_NOTICE -> true
-        else                       -> false
+        else -> false
     }
 }
 
 fun Event.isImageMessage(): Boolean {
     return when (getMsgType()) {
         MessageType.MSGTYPE_IMAGE -> true
-        else                      -> false
+        else -> false
     }
 }
 
 fun Event.isVideoMessage(): Boolean {
     return when (getMsgType()) {
         MessageType.MSGTYPE_VIDEO -> true
-        else                      -> false
+        else -> false
     }
 }
 
 fun Event.isAudioMessage(): Boolean {
     return when (getMsgType()) {
         MessageType.MSGTYPE_AUDIO -> true
-        else                      -> false
+        else -> false
     }
 }
 
 fun Event.isFileMessage(): Boolean {
     return when (getMsgType()) {
         MessageType.MSGTYPE_FILE -> true
-        else                     -> false
+        else -> false
     }
 }
 
@@ -356,20 +356,22 @@ fun Event.isAttachmentMessage(): Boolean {
         MessageType.MSGTYPE_AUDIO,
         MessageType.MSGTYPE_VIDEO,
         MessageType.MSGTYPE_FILE -> true
-        else                     -> false
+        else -> false
     }
 }
 
 fun Event.isLocationMessage(): Boolean {
     return when (getMsgType()) {
         MessageType.MSGTYPE_LOCATION -> true
-        else                         -> false
+        else -> false
     }
 }
 
 fun Event.isPoll(): Boolean = getClearType() in EventType.POLL_START || getClearType() in EventType.POLL_END
 
 fun Event.isSticker(): Boolean = getClearType() == EventType.STICKER
+
+fun Event.isLiveLocation(): Boolean = getClearType() in EventType.STATE_ROOM_BEACON_INFO
 
 fun Event.getRelationContent(): RelationDefaultContent? {
     return if (isEncrypted()) {
@@ -378,9 +380,9 @@ fun Event.getRelationContent(): RelationDefaultContent? {
         content.toModel<MessageContent>()?.relatesTo ?: run {
             // Special cases when there is only a local msgtype for some event types
             when (getClearType()) {
-                EventType.STICKER                 -> getClearContent().toModel<MessageStickerContent>()?.relatesTo
+                EventType.STICKER -> getClearContent().toModel<MessageStickerContent>()?.relatesTo
                 in EventType.BEACON_LOCATION_DATA -> getClearContent().toModel<MessageBeaconLocationDataContent>()?.relatesTo
-                else                              -> null
+                else -> null
             }
         }
     }
@@ -427,3 +429,6 @@ fun Event.getPollContent(): MessagePollContent? {
 
 fun Event.supportsNotification() =
         this.getClearType() in EventType.MESSAGE + EventType.POLL_START + EventType.STATE_ROOM_BEACON_INFO
+
+fun Event.isContentReportable() =
+        this.getClearType() in EventType.MESSAGE + EventType.STATE_ROOM_BEACON_INFO

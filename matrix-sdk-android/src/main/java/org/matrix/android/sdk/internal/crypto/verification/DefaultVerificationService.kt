@@ -129,31 +129,31 @@ internal class DefaultVerificationService @Inject constructor(
         Timber.d("## SAS onToDeviceEvent ${event.getClearType()}")
         cryptoCoroutineScope.launch(coroutineDispatchers.dmVerif) {
             when (event.getClearType()) {
-                EventType.KEY_VERIFICATION_START         -> {
+                EventType.KEY_VERIFICATION_START -> {
                     onStartRequestReceived(event)
                 }
-                EventType.KEY_VERIFICATION_CANCEL        -> {
+                EventType.KEY_VERIFICATION_CANCEL -> {
                     onCancelReceived(event)
                 }
-                EventType.KEY_VERIFICATION_ACCEPT        -> {
+                EventType.KEY_VERIFICATION_ACCEPT -> {
                     onAcceptReceived(event)
                 }
-                EventType.KEY_VERIFICATION_KEY           -> {
+                EventType.KEY_VERIFICATION_KEY -> {
                     onKeyReceived(event)
                 }
-                EventType.KEY_VERIFICATION_MAC           -> {
+                EventType.KEY_VERIFICATION_MAC -> {
                     onMacReceived(event)
                 }
-                EventType.KEY_VERIFICATION_READY         -> {
+                EventType.KEY_VERIFICATION_READY -> {
                     onReadyReceived(event)
                 }
-                EventType.KEY_VERIFICATION_DONE          -> {
+                EventType.KEY_VERIFICATION_DONE -> {
                     onDoneReceived(event)
                 }
                 MessageType.MSGTYPE_VERIFICATION_REQUEST -> {
                     onRequestReceived(event)
                 }
-                else                                     -> {
+                else -> {
                     // ignore
                 }
             }
@@ -163,7 +163,7 @@ internal class DefaultVerificationService @Inject constructor(
     fun onRoomEvent(event: Event) {
         cryptoCoroutineScope.launch(coroutineDispatchers.dmVerif) {
             when (event.getClearType()) {
-                EventType.KEY_VERIFICATION_START  -> {
+                EventType.KEY_VERIFICATION_START -> {
                     onRoomStartRequestReceived(event)
                 }
                 EventType.KEY_VERIFICATION_CANCEL -> {
@@ -173,24 +173,24 @@ internal class DefaultVerificationService @Inject constructor(
                 EventType.KEY_VERIFICATION_ACCEPT -> {
                     onRoomAcceptReceived(event)
                 }
-                EventType.KEY_VERIFICATION_KEY    -> {
+                EventType.KEY_VERIFICATION_KEY -> {
                     onRoomKeyRequestReceived(event)
                 }
-                EventType.KEY_VERIFICATION_MAC    -> {
+                EventType.KEY_VERIFICATION_MAC -> {
                     onRoomMacReceived(event)
                 }
-                EventType.KEY_VERIFICATION_READY  -> {
+                EventType.KEY_VERIFICATION_READY -> {
                     onRoomReadyReceived(event)
                 }
-                EventType.KEY_VERIFICATION_DONE   -> {
+                EventType.KEY_VERIFICATION_DONE -> {
                     onRoomDoneReceived(event)
                 }
-                EventType.MESSAGE                 -> {
+                EventType.MESSAGE -> {
                     if (MessageType.MSGTYPE_VERIFICATION_REQUEST == event.getClearContent().toModel<MessageContent>()?.msgType) {
                         onRoomRequestReceived(event)
                     }
                 }
-                else                              -> {
+                else -> {
                     // ignore
                 }
             }
@@ -507,9 +507,9 @@ internal class DefaultVerificationService @Inject constructor(
             }
 
             when (startReq) {
-                is ValidVerificationInfoStart.SasVerificationInfoStart         -> {
+                is ValidVerificationInfoStart.SasVerificationInfoStart -> {
                     when (existing) {
-                        is SasVerificationTransaction    -> {
+                        is SasVerificationTransaction -> {
                             // should cancel both!
                             Timber.v("## SAS onStartRequestReceived - Request exist with same id ${startReq.transactionId}")
                             existing.cancel(CancelCode.UnexpectedMessage)
@@ -519,7 +519,7 @@ internal class DefaultVerificationService @Inject constructor(
                         is QrCodeVerificationTransaction -> {
                             // Nothing to do?
                         }
-                        null                             -> {
+                        null -> {
                             getExistingTransactionsForUser(otherUserId)
                                     ?.filterIsInstance(SasVerificationTransaction::class.java)
                                     ?.takeIf { it.isNotEmpty() }
@@ -973,12 +973,12 @@ internal class DefaultVerificationService @Inject constructor(
         }
 
         return when {
-            userId != otherUserId                        ->
+            userId != otherUserId ->
                 createQrCodeDataForDistinctUser(requestId, otherUserId)
             crossSigningService.isCrossSigningVerified() ->
                 // This is a self verification and I am the old device (Osborne2)
                 createQrCodeDataForVerifiedDevice(requestId, otherDeviceId)
-            else                                         ->
+            else ->
                 // This is a self verification and I am the new device (Dynabook)
                 createQrCodeDataForUnVerifiedDevice(requestId)
         }

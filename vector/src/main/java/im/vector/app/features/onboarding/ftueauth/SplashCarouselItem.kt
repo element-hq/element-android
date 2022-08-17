@@ -24,8 +24,8 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 
-@EpoxyModelClass(layout = R.layout.item_splash_carousel)
-abstract class SplashCarouselItem : VectorEpoxyModel<SplashCarouselItem.Holder>() {
+@EpoxyModelClass
+abstract class SplashCarouselItem : VectorEpoxyModel<SplashCarouselItem.Holder>(R.layout.item_splash_carousel) {
 
     @EpoxyAttribute
     lateinit var item: SplashCarouselState.Item

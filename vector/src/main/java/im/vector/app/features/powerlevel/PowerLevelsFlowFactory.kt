@@ -32,7 +32,7 @@ class PowerLevelsFlowFactory(private val room: Room) {
 
     fun createFlow(): Flow<PowerLevelsContent> {
         return room.flow()
-                .liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
+                .liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
                 .mapOptional { it.content.toModel<PowerLevelsContent>() }
                 .flowOn(Dispatchers.Default)
                 .unwrap()

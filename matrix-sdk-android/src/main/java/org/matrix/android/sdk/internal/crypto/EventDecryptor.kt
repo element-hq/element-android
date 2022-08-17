@@ -18,6 +18,8 @@ package org.matrix.android.sdk.internal.crypto
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
@@ -68,6 +70,7 @@ internal class EventDecryptor @Inject constructor(
             val senderKey: String?
     )
 
+    private val wedgedMutex = Mutex()
     private val wedgedDevices = mutableListOf<WedgedDeviceInfo>()
 
     /**
@@ -151,11 +154,13 @@ internal class EventDecryptor @Inject constructor(
         }
     }
 
-    private fun markOlmSessionForUnwedging(senderId: String, senderKey: String) {
-        val info = WedgedDeviceInfo(senderId, senderKey)
-        if (!wedgedDevices.contains(info)) {
-            Timber.tag(loggerTag.value).d("Marking device from $senderId key:$senderKey as wedged")
-            wedgedDevices.add(info)
+    private suspend fun markOlmSessionForUnwedging(senderId: String, senderKey: String) {
+        wedgedMutex.withLock {
+            val info = WedgedDeviceInfo(senderId, senderKey)
+            if (!wedgedDevices.contains(info)) {
+                Timber.tag(loggerTag.value).d("Marking device from $senderId key:$senderKey as wedged")
+                wedgedDevices.add(info)
+            }
         }
     }
 
@@ -167,15 +172,17 @@ internal class EventDecryptor @Inject constructor(
         Timber.tag(loggerTag.value).v("Unwedging:  ${wedgedDevices.size} are wedged")
         // get the one that should be retried according to rate limit
         val now = clock.epochMillis()
-        val toUnwedge = wedgedDevices.filter {
-            val lastForcedDate = lastNewSessionForcedDates[it] ?: 0
-            if (now - lastForcedDate < DefaultCryptoService.CRYPTO_MIN_FORCE_SESSION_PERIOD_MILLIS) {
-                Timber.tag(loggerTag.value).d("Unwedging, New session for $it already forced with device at $lastForcedDate")
-                return@filter false
+        val toUnwedge = wedgedMutex.withLock {
+            wedgedDevices.filter {
+                val lastForcedDate = lastNewSessionForcedDates[it] ?: 0
+                if (now - lastForcedDate < DefaultCryptoService.CRYPTO_MIN_FORCE_SESSION_PERIOD_MILLIS) {
+                    Timber.tag(loggerTag.value).d("Unwedging, New session for $it already forced with device at $lastForcedDate")
+                    return@filter false
+                }
+                // let's already mark that we tried now
+                lastNewSessionForcedDates[it] = now
+                true
             }
-            // let's already mark that we tried now
-            lastNewSessionForcedDates[it] = now
-            true
         }
 
         if (toUnwedge.isEmpty()) {
@@ -229,6 +236,15 @@ internal class EventDecryptor @Inject constructor(
                                     val sendToDeviceParams = SendToDeviceTask.Params(EventType.ENCRYPTED, sendToDeviceMap)
                                     withContext(coroutineDispatchers.io) {
                                         sendToDeviceTask.executeRetry(sendToDeviceParams, remainingRetry = SEND_TO_DEVICE_RETRY_COUNT)
+                                    }
+
+                                    deviceList.values.flatten().forEach { deviceInfo ->
+                                        wedgedMutex.withLock {
+                                            wedgedDevices.removeAll {
+                                                it.senderKey == deviceInfo.identityKey() &&
+                                                        it.userId == deviceInfo.userId
+                                            }
+                                        }
                                     }
                                 } catch (failure: Throwable) {
                                     deviceList.flatMap { it.value }.joinToString { it.shortDebugString() }.let {

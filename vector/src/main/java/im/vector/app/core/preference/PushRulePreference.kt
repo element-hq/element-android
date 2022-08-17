@@ -58,8 +58,8 @@ class PushRulePreference : VectorPreference {
     private fun refreshSummary() {
         summary = context.getString(
                 when (index) {
-                    NotificationIndex.OFF         -> R.string.notification_off
-                    NotificationIndex.SILENT      -> R.string.notification_silent
+                    NotificationIndex.OFF -> R.string.notification_off
+                    NotificationIndex.SILENT -> R.string.notification_silent
                     NotificationIndex.NOISY, null -> R.string.notification_noisy
                 }
         )
@@ -76,27 +76,27 @@ class PushRulePreference : VectorPreference {
         radioGroup?.setOnCheckedChangeListener(null)
 
         when (index) {
-            NotificationIndex.OFF    -> {
+            NotificationIndex.OFF -> {
                 radioGroup?.check(R.id.bingPreferenceRadioBingRuleOff)
             }
             NotificationIndex.SILENT -> {
                 radioGroup?.check(R.id.bingPreferenceRadioBingRuleSilent)
             }
-            NotificationIndex.NOISY  -> {
+            NotificationIndex.NOISY -> {
                 radioGroup?.check(R.id.bingPreferenceRadioBingRuleNoisy)
             }
-            null                     -> Unit
+            null -> Unit
         }
 
         radioGroup?.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
-                R.id.bingPreferenceRadioBingRuleOff    -> {
+                R.id.bingPreferenceRadioBingRuleOff -> {
                     onPreferenceChangeListener?.onPreferenceChange(this, NotificationIndex.OFF)
                 }
                 R.id.bingPreferenceRadioBingRuleSilent -> {
                     onPreferenceChangeListener?.onPreferenceChange(this, NotificationIndex.SILENT)
                 }
-                R.id.bingPreferenceRadioBingRuleNoisy  -> {
+                R.id.bingPreferenceRadioBingRuleNoisy -> {
                     onPreferenceChangeListener?.onPreferenceChange(this, NotificationIndex.NOISY)
                 }
             }

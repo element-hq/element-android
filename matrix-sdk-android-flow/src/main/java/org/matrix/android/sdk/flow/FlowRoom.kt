@@ -18,7 +18,7 @@ package org.matrix.android.sdk.flow
 
 import androidx.lifecycle.asFlow
 import kotlinx.coroutines.flow.Flow
-import org.matrix.android.sdk.api.query.QueryStringValue
+import org.matrix.android.sdk.api.query.QueryStateEventValue
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.getStateEvent
@@ -53,6 +53,13 @@ class FlowRoom(private val room: Room) {
                 }
     }
 
+    fun liveAreAllMembersLoaded(): Flow<Boolean> {
+        return room.membershipService().areAllMembersLoadedLive().asFlow()
+                .startWith(room.coroutineDispatchers.io) {
+                    room.membershipService().areAllMembersLoaded()
+                }
+    }
+
     fun liveAnnotationSummary(eventId: String): Flow<Optional<EventAnnotationsSummary>> {
         return room.relationService().getEventAnnotationsSummaryLive(eventId).asFlow()
                 .startWith(room.coroutineDispatchers.io) {
@@ -67,17 +74,17 @@ class FlowRoom(private val room: Room) {
                 }
     }
 
-    fun liveStateEvent(eventType: String, stateKey: QueryStringValue): Flow<Optional<Event>> {
+    fun liveStateEvent(eventType: String, stateKey: QueryStateEventValue): Flow<Optional<Event>> {
         return room.stateService().getStateEventLive(eventType, stateKey).asFlow()
                 .startWith(room.coroutineDispatchers.io) {
                     room.getStateEvent(eventType, stateKey).toOptional()
                 }
     }
 
-    fun liveStateEvents(eventTypes: Set<String>): Flow<List<Event>> {
-        return room.stateService().getStateEventsLive(eventTypes).asFlow()
+    fun liveStateEvents(eventTypes: Set<String>, stateKey: QueryStateEventValue): Flow<List<Event>> {
+        return room.stateService().getStateEventsLive(eventTypes, stateKey).asFlow()
                 .startWith(room.coroutineDispatchers.io) {
-                    room.stateService().getStateEvents(eventTypes)
+                    room.stateService().getStateEvents(eventTypes, stateKey)
                 }
     }
 

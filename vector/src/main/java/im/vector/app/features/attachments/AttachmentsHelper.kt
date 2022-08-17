@@ -23,9 +23,9 @@ import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import im.vector.app.core.dialogs.PhotoOrVideoDialog
 import im.vector.app.core.platform.Restorable
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.lib.multipicker.MultiPicker
-import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import timber.log.Timber
 
@@ -35,17 +35,15 @@ private const val PENDING_TYPE_KEY = "PENDING_TYPE_KEY"
 /**
  * This class helps to handle attachments by providing simple methods.
  */
-class AttachmentsHelper(val context: Context, val callback: Callback) : Restorable {
+class AttachmentsHelper(
+        val context: Context,
+        val callback: Callback,
+        private val buildMeta: BuildMeta,
+) : Restorable {
 
     interface Callback {
-        fun onContactAttachmentReady(contactAttachment: ContactAttachment) {
-            if (BuildConfig.LOG_PRIVATE_DATA) {
-                Timber.v("On contact attachment ready: $contactAttachment")
-            }
-        }
-
+        fun onContactAttachmentReady(contactAttachment: ContactAttachment)
         fun onContentAttachmentsReady(attachments: List<ContentAttachmentData>)
-        fun onAttachmentsProcessFailed()
     }
 
     // Capture path allows to handle camera image picking. It must be restored if the activity gets killed.
@@ -145,6 +143,9 @@ class AttachmentsHelper(val context: Context, val callback: Callback) : Restorab
                 .firstOrNull()
                 ?.toContactAttachment()
                 ?.let {
+                    if (buildMeta.lowPrivacyLoggingEnabled) {
+                        Timber.v("On contact attachment ready: $it")
+                    }
                     callback.onContactAttachmentReady(it)
                 }
     }
@@ -187,42 +188,5 @@ class AttachmentsHelper(val context: Context, val callback: Callback) : Restorab
                         .getSelectedFiles(context, data)
                         .map { it.toContentAttachmentData() }
         )
-    }
-
-    /**
-     * This methods aims to handle share intent.
-     *
-     * @return true if it can handle the intent data, false otherwise
-     */
-    fun handleShareIntent(context: Context, intent: Intent): Boolean {
-        val type = intent.resolveType(context) ?: return false
-        if (type.startsWith("image")) {
-            callback.onContentAttachmentsReady(
-                    MultiPicker.get(MultiPicker.IMAGE).getIncomingFiles(context, intent).map {
-                        it.toContentAttachmentData()
-                    }
-            )
-        } else if (type.startsWith("video")) {
-            callback.onContentAttachmentsReady(
-                    MultiPicker.get(MultiPicker.VIDEO).getIncomingFiles(context, intent).map {
-                        it.toContentAttachmentData()
-                    }
-            )
-        } else if (type.startsWith("audio")) {
-            callback.onContentAttachmentsReady(
-                    MultiPicker.get(MultiPicker.AUDIO).getIncomingFiles(context, intent).map {
-                        it.toContentAttachmentData()
-                    }
-            )
-        } else if (type.startsWith("application") || type.startsWith("file") || type.startsWith("*")) {
-            callback.onContentAttachmentsReady(
-                    MultiPicker.get(MultiPicker.FILE).getIncomingFiles(context, intent).map {
-                        it.toContentAttachmentData()
-                    }
-            )
-        } else {
-            return false
-        }
-        return true
     }
 }

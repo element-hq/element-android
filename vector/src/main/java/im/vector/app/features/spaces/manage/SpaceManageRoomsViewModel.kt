@@ -63,20 +63,20 @@ class SpaceManageRoomsViewModel @AssistedInject constructor(
 
     override fun handle(action: SpaceManageRoomViewAction) {
         when (action) {
-            is SpaceManageRoomViewAction.ToggleSelection          -> handleToggleSelection(action)
-            is SpaceManageRoomViewAction.UpdateFilter             -> {
+            is SpaceManageRoomViewAction.ToggleSelection -> handleToggleSelection(action)
+            is SpaceManageRoomViewAction.UpdateFilter -> {
                 setState { copy(currentFilter = action.filter) }
             }
-            SpaceManageRoomViewAction.ClearSelection              -> {
+            SpaceManageRoomViewAction.ClearSelection -> {
                 setState { copy(selectedRooms = emptyList()) }
             }
-            SpaceManageRoomViewAction.BulkRemove                  -> {
+            SpaceManageRoomViewAction.BulkRemove -> {
                 handleBulkRemove()
             }
-            is SpaceManageRoomViewAction.MarkAllAsSuggested       -> {
+            is SpaceManageRoomViewAction.MarkAllAsSuggested -> {
                 handleBulkMarkAsSuggested(action.suggested)
             }
-            SpaceManageRoomViewAction.RefreshFromServer           -> {
+            SpaceManageRoomViewAction.RefreshFromServer -> {
                 refreshSummaryAPI()
             }
             SpaceManageRoomViewAction.LoadAdditionalItemsIfNeeded -> {

@@ -97,7 +97,7 @@ class RoomGroupMessageCreator @Inject constructor(
             }
             when {
                 event.isSmartReplyError() -> addMessage(stringProvider.getString(R.string.notification_inline_reply_failed), event.timestamp, senderPerson)
-                else                      -> {
+                else -> {
                     val message = NotificationCompat.MessagingStyle.Message(event.body, event.timestamp, senderPerson).also { message ->
                         event.imageUri?.let {
                             message.setData("image/", it)

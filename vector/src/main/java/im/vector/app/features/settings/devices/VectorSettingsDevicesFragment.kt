@@ -37,6 +37,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.DialogBaseEditTextBinding
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.features.auth.ReAuthActivity
+import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
@@ -69,18 +70,18 @@ class VectorSettingsDevicesFragment @Inject constructor(
         views.genericRecyclerView.configureWith(devicesController, dividerDrawable = R.drawable.divider_horizontal)
         viewModel.observeViewEvents {
             when (it) {
-                is DevicesViewEvents.Loading            -> showLoading(it.message)
-                is DevicesViewEvents.Failure            -> showFailure(it.throwable)
-                is DevicesViewEvents.RequestReAuth      -> askForReAuthentication(it)
+                is DevicesViewEvents.Loading -> showLoading(it.message)
+                is DevicesViewEvents.Failure -> showFailure(it.throwable)
+                is DevicesViewEvents.RequestReAuth -> askForReAuthentication(it)
                 is DevicesViewEvents.PromptRenameDevice -> displayDeviceRenameDialog(it.deviceInfo)
-                is DevicesViewEvents.ShowVerifyDevice   -> {
+                is DevicesViewEvents.ShowVerifyDevice -> {
                     VerificationBottomSheet.withArgs(
                             roomId = null,
                             otherUserId = it.userId,
                             transactionId = it.transactionId
                     ).show(childFragmentManager, "REQPOP")
                 }
-                is DevicesViewEvents.SelfVerification   -> {
+                is DevicesViewEvents.SelfVerification -> {
                     VerificationBottomSheet.forSelfVerification(it.session)
                             .show(childFragmentManager, "REQPOP")
                 }
@@ -88,6 +89,9 @@ class VectorSettingsDevicesFragment @Inject constructor(
                     ManuallyVerifyDialog.show(requireActivity(), it.cryptoDeviceInfo) {
                         viewModel.handle(DevicesAction.MarkAsManuallyVerified(it.cryptoDeviceInfo))
                     }
+                }
+                is DevicesViewEvents.PromptResetSecrets -> {
+                    navigator.open4SSetup(requireContext(), SetupMode.PASSPHRASE_AND_NEEDED_SECRETS_RESET)
                 }
             }
         }
@@ -142,14 +146,14 @@ class VectorSettingsDevicesFragment @Inject constructor(
     private val reAuthActivityResultLauncher = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
             when (activityResult.data?.extras?.getString(ReAuthActivity.RESULT_FLOW_TYPE)) {
-                LoginFlowTypes.SSO      -> {
+                LoginFlowTypes.SSO -> {
                     viewModel.handle(DevicesAction.SsoAuthDone)
                 }
                 LoginFlowTypes.PASSWORD -> {
                     val password = activityResult.data?.extras?.getString(ReAuthActivity.RESULT_VALUE) ?: ""
                     viewModel.handle(DevicesAction.PasswordAuthDone(password))
                 }
-                else                    -> {
+                else -> {
                     viewModel.handle(DevicesAction.ReAuthCancelled)
                 }
             }
@@ -181,7 +185,7 @@ class VectorSettingsDevicesFragment @Inject constructor(
     private fun handleRequestStatus(unIgnoreRequest: Async<Unit>) {
         views.waitingView.root.isVisible = when (unIgnoreRequest) {
             is Loading -> true
-            else       -> false
+            else -> false
         }
     }
 }

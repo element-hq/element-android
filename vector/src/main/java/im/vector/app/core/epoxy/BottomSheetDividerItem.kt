@@ -18,7 +18,7 @@ package im.vector.app.core.epoxy
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 
-@EpoxyModelClass(layout = R.layout.item_divider_on_surface)
-abstract class BottomSheetDividerItem : VectorEpoxyModel<BottomSheetDividerItem.Holder>() {
+@EpoxyModelClass
+abstract class BottomSheetDividerItem : VectorEpoxyModel<BottomSheetDividerItem.Holder>(R.layout.item_divider_on_surface) {
     class Holder : VectorEpoxyHolder()
 }

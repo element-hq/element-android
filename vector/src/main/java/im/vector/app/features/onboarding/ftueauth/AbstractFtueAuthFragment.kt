@@ -46,6 +46,7 @@ abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<V
 
     // Due to async, we keep a boolean to avoid displaying twice the cancellation dialog
     private var displayCancelDialog = true
+    protected open fun backIsHardExit() = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,7 +68,7 @@ abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<V
     private fun handleOnboardingViewEvents(viewEvents: OnboardingViewEvents) {
         when (viewEvents) {
             is OnboardingViewEvents.Failure -> showFailure(viewEvents.throwable)
-            else                            ->
+            else ->
                 // This is handled by the Activity
                 Unit
         }
@@ -115,7 +116,7 @@ abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<V
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
         return when {
-            displayCancelDialog && viewModel.isRegistrationStarted -> {
+            displayCancelDialog && viewModel.isRegistrationStarted && backIsHardExit() -> {
                 // Ask for confirmation before cancelling the registration
                 MaterialAlertDialogBuilder(requireActivity())
                         .setTitle(R.string.login_signup_cancel_confirmation_title)
@@ -129,7 +130,7 @@ abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<V
 
                 true
             }
-            displayCancelDialog && isResetPasswordStarted          -> {
+            displayCancelDialog && isResetPasswordStarted -> {
                 // Ask for confirmation before cancelling the reset password
                 MaterialAlertDialogBuilder(requireActivity())
                         .setTitle(R.string.login_reset_password_cancel_confirmation_title)
@@ -143,7 +144,7 @@ abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<V
 
                 true
             }
-            else                                                   -> {
+            else -> {
                 resetViewModel()
                 // Do not consume the Back event
                 false

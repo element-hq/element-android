@@ -53,7 +53,7 @@ internal class AddPusherWorker(context: Context, params: WorkerParameters, sessi
         } catch (exception: Throwable) {
             when (exception) {
                 is Failure.NetworkConnection -> Result.retry()
-                else                         -> Result.failure()
+                else -> Result.failure()
             }
         }
     }

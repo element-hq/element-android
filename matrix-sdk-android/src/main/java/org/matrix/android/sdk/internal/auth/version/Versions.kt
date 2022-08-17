@@ -111,6 +111,15 @@ private fun Versions.doesServerSeparatesAddAndBind(): Boolean {
             unstableFeatures?.get(FEATURE_SEPARATE_ADD_AND_BIND) ?: false
 }
 
+/**
+ * Indicate if the server supports MSC2457 `logout_devices` parameter when setting a new password.
+ *
+ * @return true if logout_devices is supported
+ */
+internal fun Versions.doesServerSupportLogoutDevices(): Boolean {
+    return getMaxVersion() >= HomeServerVersion.r0_6_1
+}
+
 private fun Versions.getMaxVersion(): HomeServerVersion {
     return supportedVersions
             ?.mapNotNull { HomeServerVersion.parse(it) }

@@ -25,7 +25,7 @@ import org.matrix.android.sdk.internal.util.database.RealmMigrator
  * Migrating to:
  * Live location sharing aggregated summary: adding new field userId.
  */
-internal class MigrateSessionTo029(realm: DynamicRealm) : RealmMigrator(realm, 28) {
+internal class MigrateSessionTo029(realm: DynamicRealm) : RealmMigrator(realm, 29) {
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.get("LiveLocationShareAggregatedSummaryEntity")

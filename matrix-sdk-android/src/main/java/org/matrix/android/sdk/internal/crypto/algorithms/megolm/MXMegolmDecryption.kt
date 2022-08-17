@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.crypto.algorithms.megolm
 
 import dagger.Lazy
+import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.NewSessionListener
@@ -41,6 +42,7 @@ internal class MXMegolmDecryption(
         private val olmDevice: MXOlmDevice,
         private val outgoingKeyRequestManager: OutgoingKeyRequestManager,
         private val cryptoStore: IMXCryptoStore,
+        private val matrixConfiguration: MatrixConfiguration,
         private val liveEventManager: Lazy<StreamEventsManager>
 ) : IMXDecrypting {
 
@@ -240,13 +242,14 @@ internal class MXMegolmDecryption(
 
         Timber.tag(loggerTag.value).i("onRoomKeyEvent addInboundGroupSession ${roomKeyContent.sessionId}")
         val addSessionResult = olmDevice.addInboundGroupSession(
-                roomKeyContent.sessionId,
-                roomKeyContent.sessionKey,
-                roomKeyContent.roomId,
-                senderKey,
-                forwardingCurve25519KeyChain,
-                keysClaimed,
-                exportFormat
+                sessionId = roomKeyContent.sessionId,
+                sessionKey = roomKeyContent.sessionKey,
+                roomId = roomKeyContent.roomId,
+                senderKey = senderKey,
+                forwardingCurve25519KeyChain = forwardingCurve25519KeyChain,
+                keysClaimed = keysClaimed,
+                exportFormat = exportFormat,
+                sharedHistory = roomKeyContent.getSharedKey()
         )
 
         when (addSessionResult) {
@@ -294,6 +297,14 @@ internal class MXMegolmDecryption(
 
             onNewSession(roomKeyContent.roomId, senderKey, roomKeyContent.sessionId)
         }
+    }
+
+    /**
+     * Returns boolean shared key flag, if enabled with respect to matrix configuration.
+     */
+    private fun RoomKeyContent.getSharedKey(): Boolean {
+        if (!cryptoStore.isShareKeysOnInviteEnabled()) return false
+        return sharedHistory ?: false
     }
 
     /**

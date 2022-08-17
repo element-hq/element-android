@@ -31,7 +31,7 @@ class ScreenOrientationLocker @Inject constructor(
     @SuppressLint("SourceLockedOrientationActivity")
     fun lockPhonesToPortrait(activity: AppCompatActivity) {
         when (resources.getBoolean(R.bool.is_tablet)) {
-            true  -> {
+            true -> {
                 // do nothing
             }
             false -> {

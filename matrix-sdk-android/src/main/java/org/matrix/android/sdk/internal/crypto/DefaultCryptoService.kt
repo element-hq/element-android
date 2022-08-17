@@ -71,6 +71,7 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibilityContent
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
+import org.matrix.android.sdk.api.session.room.model.shouldShareHistory
 import org.matrix.android.sdk.api.session.sync.model.SyncResponse
 import org.matrix.android.sdk.internal.crypto.actions.MegolmSessionDataImporter
 import org.matrix.android.sdk.internal.crypto.actions.SetDeviceVerificationAction
@@ -81,6 +82,7 @@ import org.matrix.android.sdk.internal.crypto.algorithms.olm.MXOlmEncryptionFact
 import org.matrix.android.sdk.internal.crypto.crosssigning.DefaultCrossSigningService
 import org.matrix.android.sdk.internal.crypto.keysbackup.DefaultKeysBackupService
 import org.matrix.android.sdk.internal.crypto.model.MXKey.Companion.KEY_SIGNED_CURVE_25519_TYPE
+import org.matrix.android.sdk.internal.crypto.model.SessionInfo
 import org.matrix.android.sdk.internal.crypto.model.toRest
 import org.matrix.android.sdk.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
@@ -188,8 +190,8 @@ internal class DefaultCryptoService @Inject constructor(
 
     fun onStateEvent(roomId: String, event: Event) {
         when (event.type) {
-            EventType.STATE_ROOM_ENCRYPTION         -> onRoomEncryptionEvent(roomId, event)
-            EventType.STATE_ROOM_MEMBER             -> onRoomMembershipEvent(roomId, event)
+            EventType.STATE_ROOM_ENCRYPTION -> onRoomEncryptionEvent(roomId, event)
+            EventType.STATE_ROOM_MEMBER -> onRoomMembershipEvent(roomId, event)
             EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
         }
     }
@@ -198,8 +200,8 @@ internal class DefaultCryptoService @Inject constructor(
         // handle state events
         if (event.isStateEvent()) {
             when (event.type) {
-                EventType.STATE_ROOM_ENCRYPTION         -> onRoomEncryptionEvent(roomId, event)
-                EventType.STATE_ROOM_MEMBER             -> onRoomMembershipEvent(roomId, event)
+                EventType.STATE_ROOM_ENCRYPTION -> onRoomEncryptionEvent(roomId, event)
+                EventType.STATE_ROOM_MEMBER -> onRoomMembershipEvent(roomId, event)
                 EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
             }
         }
@@ -620,8 +622,8 @@ internal class DefaultCryptoService @Inject constructor(
 
         val alg: IMXEncrypting? = when (algorithm) {
             MXCRYPTO_ALGORITHM_MEGOLM -> megolmEncryptionFactory.create(roomId)
-            MXCRYPTO_ALGORITHM_OLM    -> olmEncryptionFactory.create(roomId)
-            else                      -> null
+            MXCRYPTO_ALGORITHM_OLM -> olmEncryptionFactory.create(roomId)
+            else -> null
         }
 
         if (alg != null) {
@@ -800,10 +802,10 @@ internal class DefaultCryptoService @Inject constructor(
                     // Keys are imported directly, not waiting for end of sync
                     onRoomKeyEvent(event)
                 }
-                EventType.REQUEST_SECRET                         -> {
+                EventType.REQUEST_SECRET -> {
                     secretShareManager.handleSecretRequest(event)
                 }
-                EventType.ROOM_KEY_REQUEST                       -> {
+                EventType.ROOM_KEY_REQUEST -> {
                     event.getClearContent().toModel<RoomKeyShareRequest>()?.let { req ->
                         // We'll always get these because we send room key requests to
                         // '*' (ie. 'all devices') which includes the sending device,
@@ -815,13 +817,13 @@ internal class DefaultCryptoService @Inject constructor(
                         }
                     }
                 }
-                EventType.SEND_SECRET                            -> {
+                EventType.SEND_SECRET -> {
                     onSecretSendReceived(event)
                 }
-                EventType.ROOM_KEY_WITHHELD                      -> {
+                in EventType.ROOM_KEY_WITHHELD.values -> {
                     onKeyWithHeldReceived(event)
                 }
-                else                                             -> {
+                else -> {
                     // ignore
                 }
             }
@@ -867,7 +869,7 @@ internal class DefaultCryptoService @Inject constructor(
                 senderKey = withHeldContent.senderKey,
                 fromDevice = withHeldContent.fromDevice,
                 event = Event(
-                        type = EventType.ROOM_KEY_WITHHELD,
+                        type = EventType.ROOM_KEY_WITHHELD.stable,
                         senderId = senderId,
                         content = event.getClearContent()
                 )
@@ -888,7 +890,7 @@ internal class DefaultCryptoService @Inject constructor(
             secretValue: String
     ): Boolean {
         return when (secretName) {
-            MASTER_KEY_SSSS_NAME       -> {
+            MASTER_KEY_SSSS_NAME -> {
                 crossSigningService.onSecretMSKGossip(secretValue)
                 true
             }
@@ -904,7 +906,7 @@ internal class DefaultCryptoService @Inject constructor(
                 keysBackupService.onSecretKeyGossip(secretValue)
                 true
             }
-            else                       -> false
+            else -> false
         }
     }
 
@@ -963,8 +965,12 @@ internal class DefaultCryptoService @Inject constructor(
     private fun onRoomHistoryVisibilityEvent(roomId: String, event: Event) {
         if (!event.isStateEvent()) return
         val eventContent = event.content.toModel<RoomHistoryVisibilityContent>()
-        eventContent?.historyVisibility?.let {
-            cryptoStore.setShouldEncryptForInvitedMembers(roomId, it != RoomHistoryVisibility.JOINED)
+        val historyVisibility = eventContent?.historyVisibility
+        if (historyVisibility == null) {
+            cryptoStore.setShouldShareHistory(roomId, false)
+        } else {
+            cryptoStore.setShouldEncryptForInvitedMembers(roomId, historyVisibility != RoomHistoryVisibility.JOINED)
+            cryptoStore.setShouldShareHistory(roomId, historyVisibility.shouldShareHistory())
         }
     }
 
@@ -1110,6 +1116,10 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     override fun isKeyGossipingEnabled() = cryptoStore.isKeyGossipingEnabled()
+
+    override fun isShareKeysOnInviteEnabled() = cryptoStore.isShareKeysOnInviteEnabled()
+
+    override fun enableShareKeyOnInvite(enable: Boolean) = cryptoStore.enableShareKeyOnInvite(enable)
 
     /**
      * Tells whether the client should ever send encrypted messages to unverified devices.
@@ -1298,10 +1308,6 @@ internal class DefaultCryptoService @Inject constructor(
         return cryptoStore.getWithHeldMegolmSession(roomId, sessionId)
     }
 
-    override fun logDbUsageInfo() {
-        cryptoStore.logDbUsageInfo()
-    }
-
     override fun prepareToEncrypt(roomId: String, callback: MatrixCallback<Unit>) {
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             Timber.tag(loggerTag.value).d("prepareToEncrypt() roomId:$roomId Check room members up to date")
@@ -1336,6 +1342,30 @@ internal class DefaultCryptoService @Inject constructor(
                         callback.onFailure(it)
                     }
             )
+        }
+    }
+
+    override suspend fun sendSharedHistoryKeys(roomId: String, userId: String, sessionInfoSet: Set<SessionInfo>?) {
+        deviceListManager.downloadKeys(listOf(userId), false)
+        val userDevices = cryptoStore.getUserDeviceList(userId)
+        val sessionToShare = sessionInfoSet.orEmpty().mapNotNull { sessionInfo ->
+            // Get inbound session from sessionId and sessionKey
+            withContext(coroutineDispatchers.crypto) {
+                olmDevice.getInboundGroupSession(
+                        sessionId = sessionInfo.sessionId,
+                        senderKey = sessionInfo.senderKey,
+                        roomId = roomId
+                ).takeIf { it.wrapper.sessionData.sharedHistory }
+            }
+        }
+
+        userDevices?.forEach { deviceInfo ->
+            // Lets share the provided inbound sessions for every user device
+            sessionToShare.forEach { inboundGroupSession ->
+                val encryptor = roomEncryptorsStore.get(roomId)
+                encryptor?.shareHistoryKeysWithDevice(inboundGroupSession, deviceInfo)
+                Timber.i("## CRYPTO | Sharing inbound session")
+            }
         }
     }
 

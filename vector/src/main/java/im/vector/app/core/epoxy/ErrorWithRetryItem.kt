@@ -23,8 +23,8 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 
-@EpoxyModelClass(layout = R.layout.item_error_retry)
-abstract class ErrorWithRetryItem : VectorEpoxyModel<ErrorWithRetryItem.Holder>() {
+@EpoxyModelClass
+abstract class ErrorWithRetryItem : VectorEpoxyModel<ErrorWithRetryItem.Holder>(R.layout.item_error_retry) {
 
     @EpoxyAttribute
     var text: String? = null

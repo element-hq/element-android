@@ -23,8 +23,8 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 
-@EpoxyModelClass(layout = R.layout.item_profile_section)
-abstract class ProfileSectionItem : VectorEpoxyModel<ProfileSectionItem.Holder>() {
+@EpoxyModelClass
+abstract class ProfileSectionItem : VectorEpoxyModel<ProfileSectionItem.Holder>(R.layout.item_profile_section) {
 
     @EpoxyAttribute
     lateinit var title: String

@@ -35,15 +35,19 @@ import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.AppStateHandler
 import im.vector.app.R
+import im.vector.app.SpaceStateHandler
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.extensions.validateBackPressed
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.core.platform.VectorMenuProvider
+import im.vector.app.core.pushers.FcmHelper
 import im.vector.app.core.pushers.PushersManager
+import im.vector.app.core.pushers.UnifiedPushHelper
+import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.ActivityHomeBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
@@ -76,14 +80,13 @@ import im.vector.app.features.spaces.invite.SpaceInviteBottomSheet
 import im.vector.app.features.spaces.share.ShareSpaceBottomSheet
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
-import im.vector.app.push.fcm.FcmHelper
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.sync.InitialSyncStrategy
+import org.matrix.android.sdk.api.session.sync.SyncRequestState
 import org.matrix.android.sdk.api.session.sync.initialSyncStrategy
 import org.matrix.android.sdk.api.util.MatrixItem
 import timber.log.Timber
@@ -102,7 +105,8 @@ class HomeActivity :
         VectorBaseActivity<ActivityHomeBinding>(),
         NavigationInterceptor,
         SpaceInviteBottomSheet.InteractionListener,
-        MatrixToBottomSheet.InteractionListener {
+        MatrixToBottomSheet.InteractionListener,
+        VectorMenuProvider {
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
 
@@ -126,7 +130,10 @@ class HomeActivity :
     @Inject lateinit var permalinkHandler: PermalinkHandler
     @Inject lateinit var avatarRenderer: AvatarRenderer
     @Inject lateinit var initSyncStepFormatter: InitSyncStepFormatter
-    @Inject lateinit var appStateHandler: AppStateHandler
+    @Inject lateinit var spaceStateHandler: SpaceStateHandler
+    @Inject lateinit var unifiedPushHelper: UnifiedPushHelper
+    @Inject lateinit var fcmHelper: FcmHelper
+    @Inject lateinit var nightlyProxy: NightlyProxy
 
     private val createSpaceResultLauncher = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
@@ -187,27 +194,39 @@ class HomeActivity :
         super.onCreate(savedInstanceState)
         analyticsScreenName = MobileScreen.ScreenName.Home
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, false)
-        FcmHelper.ensureFcmTokenIsRetrieved(this, pushManager, vectorPreferences.areNotificationEnabledForDevice())
-        sharedActionViewModel = viewModelProvider.get(HomeSharedActionViewModel::class.java)
+        unifiedPushHelper.register(this) {
+            if (unifiedPushHelper.isEmbeddedDistributor()) {
+                fcmHelper.ensureFcmTokenIsRetrieved(
+                        this,
+                        pushManager,
+                        vectorPreferences.areNotificationEnabledForDevice()
+                )
+            }
+        }
+        sharedActionViewModel = viewModelProvider[HomeSharedActionViewModel::class.java]
         views.drawerLayout.addDrawerListener(drawerListener)
         if (isFirstCreation()) {
-            replaceFragment(views.homeDetailFragmentContainer, HomeDetailFragment::class.java)
-            replaceFragment(views.homeDrawerFragmentContainer, HomeDrawerFragment::class.java)
+            if (vectorFeatures.isNewAppLayoutEnabled()) {
+                views.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+                replaceFragment(views.homeDetailFragmentContainer, NewHomeDetailFragment::class.java)
+            } else {
+                replaceFragment(views.homeDetailFragmentContainer, HomeDetailFragment::class.java)
+                replaceFragment(views.homeDrawerFragmentContainer, HomeDrawerFragment::class.java)
+            }
         }
 
         sharedActionViewModel
                 .stream()
                 .onEach { sharedAction ->
                     when (sharedAction) {
-                        is HomeActivitySharedAction.OpenDrawer        -> views.drawerLayout.openDrawer(GravityCompat.START)
-                        is HomeActivitySharedAction.CloseDrawer       -> views.drawerLayout.closeDrawer(GravityCompat.START)
-                        is HomeActivitySharedAction.OpenGroup         -> openGroup(sharedAction.shouldClearFragment)
-                        is HomeActivitySharedAction.OpenSpacePreview  -> startActivity(SpacePreviewActivity.newIntent(this, sharedAction.spaceId))
-                        is HomeActivitySharedAction.AddSpace          -> createSpaceResultLauncher.launch(SpaceCreationActivity.newIntent(this))
+                        is HomeActivitySharedAction.OpenDrawer -> views.drawerLayout.openDrawer(GravityCompat.START)
+                        is HomeActivitySharedAction.CloseDrawer -> views.drawerLayout.closeDrawer(GravityCompat.START)
+                        is HomeActivitySharedAction.OpenSpacePreview -> startActivity(SpacePreviewActivity.newIntent(this, sharedAction.spaceId))
+                        is HomeActivitySharedAction.AddSpace -> createSpaceResultLauncher.launch(SpaceCreationActivity.newIntent(this))
                         is HomeActivitySharedAction.ShowSpaceSettings -> showSpaceSettings(sharedAction.spaceId)
-                        is HomeActivitySharedAction.OpenSpaceInvite   -> openSpaceInvite(sharedAction.spaceId)
-                        HomeActivitySharedAction.SendSpaceFeedBack    -> bugReporter.openBugReportScreen(this, ReportType.SPACE_BETA_FEEDBACK)
-                        HomeActivitySharedAction.CloseGroup           -> closeGroup()
+                        is HomeActivitySharedAction.OpenSpaceInvite -> openSpaceInvite(sharedAction.spaceId)
+                        HomeActivitySharedAction.SendSpaceFeedBack -> bugReporter.openBugReportScreen(this, ReportType.SPACE_BETA_FEEDBACK)
+                        HomeActivitySharedAction.OnCloseSpace -> onCloseSpace()
                     }
                 }
                 .launchIn(lifecycleScope)
@@ -226,20 +245,21 @@ class HomeActivity :
         homeActivityViewModel.observeViewEvents {
             when (it) {
                 is HomeActivityViewEvents.AskPasswordToInitCrossSigning -> handleAskPasswordToInitCrossSigning(it)
-                is HomeActivityViewEvents.OnNewSession                  -> handleOnNewSession(it)
-                HomeActivityViewEvents.PromptToEnableSessionPush        -> handlePromptToEnablePush()
-                HomeActivityViewEvents.StartRecoverySetupFlow           -> handleStartRecoverySetup()
-                is HomeActivityViewEvents.ForceVerification             ->  {
+                is HomeActivityViewEvents.CurrentSessionNotVerified -> handleOnNewSession(it)
+                is HomeActivityViewEvents.CurrentSessionCannotBeVerified -> handleCantVerify(it)
+                HomeActivityViewEvents.PromptToEnableSessionPush -> handlePromptToEnablePush()
+                HomeActivityViewEvents.StartRecoverySetupFlow -> handleStartRecoverySetup()
+                is HomeActivityViewEvents.ForceVerification -> {
                     if (it.sendRequest) {
                         navigator.requestSelfSessionVerification(this)
                     } else {
                         navigator.waitSessionVerification(this)
                     }
                 }
-                is HomeActivityViewEvents.OnCrossSignedInvalidated      -> handleCrossSigningInvalidated(it)
-                HomeActivityViewEvents.ShowAnalyticsOptIn               -> handleShowAnalyticsOptIn()
-                HomeActivityViewEvents.NotifyUserForThreadsMigration    -> handleNotifyUserForThreadsMigration()
-                is HomeActivityViewEvents.MigrateThreads                -> migrateThreadsIfNeeded(it.checkSession)
+                is HomeActivityViewEvents.OnCrossSignedInvalidated -> handleCrossSigningInvalidated(it)
+                HomeActivityViewEvents.ShowAnalyticsOptIn -> handleShowAnalyticsOptIn()
+                HomeActivityViewEvents.NotifyUserForThreadsMigration -> handleNotifyUserForThreadsMigration()
+                is HomeActivityViewEvents.MigrateThreads -> migrateThreadsIfNeeded(it.checkSession)
             }
         }
         homeActivityViewModel.onEach { renderState(it) }
@@ -250,17 +270,6 @@ class HomeActivity :
             handleIntent(intent)
         }
         homeActivityViewModel.handle(HomeActivityViewActions.ViewStarted)
-    }
-
-    private fun openGroup(shouldClearFragment: Boolean) {
-        views.drawerLayout.closeDrawer(GravityCompat.START)
-
-        // When switching from space to group or group to space, we need to reload the fragment
-        if (shouldClearFragment) {
-            replaceFragment(views.homeDetailFragmentContainer, HomeDetailFragment::class.java, allowStateLoss = true)
-        } else {
-            // do nothing
-        }
     }
 
     private fun showSpaceSettings(spaceId: String) {
@@ -279,7 +288,7 @@ class HomeActivity :
                 .show(supportFragmentManager, "SPACE_INVITE")
     }
 
-    private fun closeGroup() {
+    private fun onCloseSpace() {
         views.drawerLayout.openDrawer(GravityCompat.START)
     }
 
@@ -337,12 +346,12 @@ class HomeActivity :
                     when {
                         deepLink.startsWith(USER_LINK_PREFIX) -> deepLink.substring(USER_LINK_PREFIX.length)
                         deepLink.startsWith(ROOM_LINK_PREFIX) -> deepLink.substring(ROOM_LINK_PREFIX.length)
-                        else                                  -> null
+                        else -> null
                     }?.let { permalinkId ->
                         activeSessionHolder.getSafeActiveSession()?.permalinkService()?.createPermalink(permalinkId)
                     }
                 }
-                else                                                  -> deepLink
+                else -> deepLink
             }
 
             lifecycleScope.launch {
@@ -373,9 +382,9 @@ class HomeActivity :
     }
 
     private fun renderState(state: HomeActivityViewState) {
-        when (val status = state.syncStatusServiceStatus) {
-            is SyncStatusService.Status.InitialSyncProgressing -> {
-                val initSyncStepStr = initSyncStepFormatter.format(status.initSyncStep)
+        when (val status = state.syncRequestState) {
+            is SyncRequestState.InitialSyncProgressing -> {
+                val initSyncStepStr = initSyncStepFormatter.format(status.initialSyncStep)
                 Timber.v("$initSyncStepStr ${status.percentProgress}")
                 views.waitingView.root.setOnClickListener {
                     // block interactions
@@ -392,7 +401,7 @@ class HomeActivity :
                 }
                 views.waitingView.root.isVisible = true
             }
-            else                                               -> {
+            else -> {
                 // Idle or Incremental sync status
                 views.waitingView.root.isVisible = false
             }
@@ -421,7 +430,7 @@ class HomeActivity :
         }
     }
 
-    private fun handleOnNewSession(event: HomeActivityViewEvents.OnNewSession) {
+    private fun handleOnNewSession(event: HomeActivityViewEvents.CurrentSessionNotVerified) {
         // We need to ask
         promptSecurityEvent(
                 event.userItem,
@@ -433,6 +442,17 @@ class HomeActivity :
             } else {
                 it.navigator.requestSelfSessionVerification(it)
             }
+        }
+    }
+
+    private fun handleCantVerify(event: HomeActivityViewEvents.CurrentSessionCannotBeVerified) {
+        // We need to ask
+        promptSecurityEvent(
+                event.userItem,
+                R.string.crosssigning_cannot_verify_this_session,
+                R.string.crosssigning_cannot_verify_this_session_desc
+        ) {
+            it.navigator.open4SSetup(it, SetupMode.PASSPHRASE_AND_NEEDED_SECRETS_RESET)
         }
     }
 
@@ -532,51 +552,71 @@ class HomeActivity :
 
         // Force remote backup state update to update the banner if needed
         serverBackupStatusViewModel.refreshRemoteStateIfNeeded()
+
+        // Check nightly
+        nightlyProxy.onHomeResumed()
     }
 
-    override fun getMenuRes() = R.menu.home
+    override fun getMenuRes() = if (vectorFeatures.isNewAppLayoutEnabled()) R.menu.menu_new_home else R.menu.menu_home
 
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+    override fun handlePrepareMenu(menu: Menu) {
         menu.findItem(R.id.menu_home_init_sync_legacy).isVisible = vectorPreferences.developerMode()
         menu.findItem(R.id.menu_home_init_sync_optimized).isVisible = vectorPreferences.developerMode()
-        return super.onPrepareOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menu_home_suggestion          -> {
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_home_suggestion -> {
                 bugReporter.openBugReportScreen(this, ReportType.SUGGESTION)
-                return true
+                true
             }
-            R.id.menu_home_report_bug          -> {
+            R.id.menu_home_report_bug -> {
                 bugReporter.openBugReportScreen(this, ReportType.BUG_REPORT)
-                return true
+                true
             }
-            R.id.menu_home_init_sync_legacy    -> {
+            R.id.menu_home_init_sync_legacy -> {
                 // Configure the SDK
                 initialSyncStrategy = InitialSyncStrategy.Legacy
                 // And clear cache
                 MainActivity.restartApp(this, MainActivityArgs(clearCache = true))
-                return true
+                true
             }
             R.id.menu_home_init_sync_optimized -> {
                 // Configure the SDK
                 initialSyncStrategy = InitialSyncStrategy.Optimized()
                 // And clear cache
                 MainActivity.restartApp(this, MainActivityArgs(clearCache = true))
-                return true
+                true
             }
-            R.id.menu_home_filter              -> {
+            R.id.menu_home_filter -> {
                 navigator.openRoomsFiltering(this)
-                return true
+                true
             }
-            R.id.menu_home_setting             -> {
+            R.id.menu_home_setting -> {
                 navigator.openSettings(this)
-                return true
+                true
             }
+            R.id.menu_home_invite_friends -> {
+                launchInviteFriends()
+                true
+            }
+            else -> false
         }
+    }
 
-        return super.onOptionsItemSelected(item)
+    private fun launchInviteFriends() {
+        activeSessionHolder.getSafeActiveSession()?.permalinkService()?.createPermalink(sharedActionViewModel.session.myUserId)?.let { permalink ->
+            analyticsTracker.screen(MobileScreen(screenName = MobileScreen.ScreenName.InviteFriends))
+            val text = getString(R.string.invite_friends_text, permalink)
+
+            startSharePlainTextIntent(
+                    context = this,
+                    activityResultLauncher = null,
+                    chooserTitle = getString(R.string.invite_friends),
+                    text = text,
+                    extraTitle = getString(R.string.invite_friends_rich_title)
+            )
+        }
     }
 
     override fun onBackPressed() {
@@ -612,6 +652,7 @@ class HomeActivity :
     companion object {
         fun newIntent(
                 context: Context,
+                firstStartMainActivity: Boolean,
                 clearNotification: Boolean = false,
                 authenticationDescription: AuthenticationDescription? = null,
                 existingSession: Boolean = false,
@@ -624,10 +665,16 @@ class HomeActivity :
                     inviteNotificationRoomId = inviteNotificationRoomId
             )
 
-            return Intent(context, HomeActivity::class.java)
+            val intent = Intent(context, HomeActivity::class.java)
                     .apply {
                         putExtra(Mavericks.KEY_ARG, args)
                     }
+
+            return if (firstStartMainActivity) {
+                MainActivity.getIntentWithNextIntent(context, intent)
+            } else {
+                intent
+            }
         }
     }
 

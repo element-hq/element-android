@@ -25,11 +25,13 @@ import androidx.autofill.HintConstants
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import im.vector.app.R
+import im.vector.app.core.extensions.clearErrorOnChange
 import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.editText
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.extensions.realignPercentagesToParent
+import im.vector.app.core.extensions.setOnFocusLostListener
 import im.vector.app.core.extensions.setOnImeDoneListener
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentFtueCombinedLoginBinding
@@ -40,8 +42,10 @@ import im.vector.app.features.login.render
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewState
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
+import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
 class FtueAuthCombinedLoginFragment @Inject constructor(
@@ -59,12 +63,20 @@ class FtueAuthCombinedLoginFragment @Inject constructor(
         views.loginRoot.realignPercentagesToParent()
         views.editServerButton.debouncedClicks { viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.EditServerSelection)) }
         views.loginPasswordInput.setOnImeDoneListener { submit() }
+        views.loginInput.setOnFocusLostListener(viewLifecycleOwner) {
+            viewModel.handle(OnboardingAction.UserNameEnteredAction.Login(views.loginInput.content()))
+        }
+        views.loginForgotPassword.debouncedClicks { viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnForgetPasswordClicked)) }
     }
 
     private fun setupSubmitButton() {
         views.loginSubmit.setOnClickListener { submit() }
-        observeContentChangesAndResetErrors(views.loginInput, views.loginPasswordInput, views.loginSubmit)
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+        views.loginInput.clearErrorOnChange(viewLifecycleOwner)
+        views.loginPasswordInput.clearErrorOnChange(viewLifecycleOwner)
+
+        combine(views.loginInput.editText().textChanges(), views.loginPasswordInput.editText().textChanges()) { account, password ->
+            views.loginSubmit.isEnabled = account.isNotEmpty() && password.isNotEmpty()
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun submit() {
@@ -102,7 +114,6 @@ class FtueAuthCombinedLoginFragment @Inject constructor(
         setupAutoFill()
 
         views.selectedServerName.text = state.selectedHomeserver.userFacingUrl.toReducedUrl()
-        views.selectedServerDescription.text = state.selectedHomeserver.description
 
         if (state.isLoading) {
             // Ensure password is hidden
@@ -116,11 +127,11 @@ class FtueAuthCombinedLoginFragment @Inject constructor(
                 showUsernamePassword()
                 renderSsoProviders(state.deviceId, state.selectedHomeserver.preferredLoginMode.ssoIdentityProviders)
             }
-            is LoginMode.Sso            -> {
+            is LoginMode.Sso -> {
                 hideUsernamePassword()
                 renderSsoProviders(state.deviceId, state.selectedHomeserver.preferredLoginMode.ssoIdentityProviders)
             }
-            else                        -> {
+            else -> {
                 showUsernamePassword()
                 hideSsoProviders()
             }

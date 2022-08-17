@@ -200,14 +200,13 @@ internal class RoomSummaryDataSource @Inject constructor(
             queryParams: RoomSummaryQueryParams,
             pagedListConfig: PagedList.Config,
             sortOrder: RoomSortOrder,
-            getFlattenedParents: Boolean = false
     ): UpdatableLivePageResult {
         val realmDataSourceFactory = monarchy.createDataSourceFactory { realm ->
             roomSummariesQuery(realm, queryParams).process(sortOrder)
         }
         val dataSourceFactory = realmDataSourceFactory.map {
             roomSummaryMapper.map(it)
-        }.map { if (getFlattenedParents) it.getWithParents() else it }
+        }
 
         val boundaries = MutableLiveData(ResultBoundaries())
 
@@ -244,13 +243,6 @@ internal class RoomSummaryDataSource @Inject constructor(
                     }
                 }
         }
-    }
-
-    private fun RoomSummary.getWithParents(): RoomSummary {
-        val parents = flattenParentIds.mapNotNull { parentId ->
-            getRoomSummary(parentId)
-        }
-        return copy(flattenParents = parents)
     }
 
     fun getCountLive(queryParams: RoomSummaryQueryParams): LiveData<Int> {
@@ -305,19 +297,19 @@ internal class RoomSummaryDataSource @Inject constructor(
             query.equalTo(RoomSummaryEntityFields.ROOM_TYPE, it)
         }
         when (queryParams.roomCategoryFilter) {
-            RoomCategoryFilter.ONLY_DM                 -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
-            RoomCategoryFilter.ONLY_ROOMS              -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
+            RoomCategoryFilter.ONLY_DM -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
+            RoomCategoryFilter.ONLY_ROOMS -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
             RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS -> query.greaterThan(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0)
-            null                                       -> Unit
+            null -> Unit
         }
 
         // Timber.w("VAL: activeSpaceId : ${queryParams.activeSpaceId}")
         when (queryParams.spaceFilter) {
-            SpaceFilter.OrphanRooms     -> {
+            SpaceFilter.OrphanRooms -> {
                 // orphan rooms
                 query.isNull(RoomSummaryEntityFields.FLATTEN_PARENT_IDS)
             }
-            is SpaceFilter.ActiveSpace  -> {
+            is SpaceFilter.ActiveSpace -> {
                 // It's annoying but for now realm java does not support querying in primitive list :/
                 // https://github.com/realm/realm-java/issues/5361
                 query.contains(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, queryParams.spaceFilter.spaceId)
@@ -325,12 +317,9 @@ internal class RoomSummaryDataSource @Inject constructor(
             is SpaceFilter.ExcludeSpace -> {
                 query.not().contains(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, queryParams.spaceFilter.spaceId)
             }
-            null                        -> Unit // nop
+            SpaceFilter.NoFilter -> Unit // nop
         }
 
-        queryParams.activeGroupId?.let { activeGroupId ->
-            query.contains(RoomSummaryEntityFields.GROUP_IDS, activeGroupId)
-        }
         return query
     }
 

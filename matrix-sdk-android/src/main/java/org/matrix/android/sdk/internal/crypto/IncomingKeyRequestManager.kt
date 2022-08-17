@@ -135,7 +135,7 @@ internal class IncomingKeyRequestManager @Inject constructor(
                             // just add to the buffer
                             incomingRequestBuffer.add(validMegolmRequest)
                         }
-                        MegolmRequestAction.Cancel  -> {
+                        MegolmRequestAction.Cancel -> {
                             // ignore, we can't cancel as it's not known (probably already processed)
                             // still notify app layer if it was passed up previously
                             IncomingRoomKeyRequest.fromRestRequest(senderId, request, clock)?.let { iReq ->
@@ -159,7 +159,7 @@ internal class IncomingKeyRequestManager @Inject constructor(
                         MegolmRequestAction.Request -> {
                             // it's already in buffer, nop keep existing
                         }
-                        MegolmRequestAction.Cancel  -> {
+                        MegolmRequestAction.Cancel -> {
                             // discard the request in buffer
                             incomingRequestBuffer.remove(existing)
                             outgoingRequestScope.launch(coroutineDispatchers.computation) {
@@ -315,7 +315,7 @@ internal class IncomingKeyRequestManager @Inject constructor(
         )
 
         val params = SendToDeviceTask.Params(
-                EventType.ROOM_KEY_WITHHELD,
+                EventType.ROOM_KEY_WITHHELD.stable,
                 MXUsersDevicesMap<Any>().apply {
                     setObject(request.requestingUserId, request.requestingDeviceId, withHeldContent)
                 }

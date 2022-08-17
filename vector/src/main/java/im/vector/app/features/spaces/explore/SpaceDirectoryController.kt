@@ -110,6 +110,7 @@ class SpaceDirectoryController @Inject constructor(
                     ?.filter {
                         it.parentRoomId == (data.hierarchyStack.lastOrNull() ?: data.spaceId)
                     }
+                    ?.filterNot { it.isUpgradedRoom(data) }
                     ?: emptyList()
 
             if (flattenChildInfo.isEmpty()) {
@@ -169,8 +170,8 @@ class SpaceDirectoryController @Inject constructor(
                             buttonLabel(
                                     when {
                                         error != null -> host.stringProvider.getString(R.string.global_retry)
-                                        isJoined      -> host.stringProvider.getString(R.string.action_open)
-                                        else          -> host.stringProvider.getString(R.string.action_join)
+                                        isJoined -> host.stringProvider.getString(R.string.action_open)
+                                        else -> host.stringProvider.getString(R.string.action_join)
                                     }
                             )
                             apply {
@@ -209,4 +210,7 @@ class SpaceDirectoryController @Inject constructor(
             }
         }
     }
+
+    private fun SpaceChildInfo.isUpgradedRoom(data: SpaceDirectoryState) =
+            data.knownRoomSummaries.any { it.roomId == childRoomId && it.versioningState.isUpgraded() }
 }

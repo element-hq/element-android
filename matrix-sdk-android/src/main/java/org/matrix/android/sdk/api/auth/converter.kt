@@ -69,8 +69,8 @@ fun TermPolicies.toLocalizedLoginTerms(
                 // Search for language
                 policy.keys.forEach { policyKey ->
                     when (policyKey) {
-                        "version"       -> Unit // Ignore
-                        userLanguage    -> {
+                        "version" -> Unit // Ignore
+                        userLanguage -> {
                             // We found the data for the user language
                             userLanguageUrlAndName = extractUrlAndName(policy[policyKey])
                         }
@@ -78,7 +78,7 @@ fun TermPolicies.toLocalizedLoginTerms(
                             // We found default language
                             defaultLanguageUrlAndName = extractUrlAndName(policy[policyKey])
                         }
-                        else            -> {
+                        else -> {
                             if (firstUrlAndName == null) {
                                 // Get at least some data
                                 firstUrlAndName = extractUrlAndName(policy[policyKey])
@@ -89,7 +89,7 @@ fun TermPolicies.toLocalizedLoginTerms(
 
                 // Copy found language data by priority
                 when {
-                    userLanguageUrlAndName != null    -> {
+                    userLanguageUrlAndName != null -> {
                         localizedFlowDataLoginTermsLocalizedUrl = userLanguageUrlAndName!!.url
                         localizedFlowDataLoginTermsLocalizedName = userLanguageUrlAndName!!.name
                     }
@@ -97,7 +97,7 @@ fun TermPolicies.toLocalizedLoginTerms(
                         localizedFlowDataLoginTermsLocalizedUrl = defaultLanguageUrlAndName!!.url
                         localizedFlowDataLoginTermsLocalizedName = defaultLanguageUrlAndName!!.name
                     }
-                    firstUrlAndName != null           -> {
+                    firstUrlAndName != null -> {
                         localizedFlowDataLoginTermsLocalizedUrl = firstUrlAndName!!.url
                         localizedFlowDataLoginTermsLocalizedName = firstUrlAndName!!.name
                     }

@@ -49,7 +49,7 @@ class VerificationConclusionController @Inject constructor(
         val host = this
 
         when (state.conclusionState) {
-            ConclusionState.SUCCESS   -> {
+            ConclusionState.SUCCESS -> {
                 bottomSheetVerificationNoticeItem {
                     id("notice")
                     notice(
@@ -68,7 +68,7 @@ class VerificationConclusionController @Inject constructor(
 
                 bottomDone()
             }
-            ConclusionState.WARNING   -> {
+            ConclusionState.WARNING -> {
                 bottomSheetVerificationNoticeItem {
                     id("notice")
                     notice(host.stringProvider.getString(R.string.verification_conclusion_not_secure).toEpoxyCharSequence())
@@ -82,6 +82,14 @@ class VerificationConclusionController @Inject constructor(
                 bottomSheetVerificationNoticeItem {
                     id("warning_notice")
                     notice(host.eventHtmlRenderer.render(host.stringProvider.getString(R.string.verification_conclusion_compromised)).toEpoxyCharSequence())
+                }
+
+                bottomGotIt()
+            }
+            ConclusionState.INVALID_QR_CODE -> {
+                bottomSheetVerificationNoticeItem {
+                    id("invalid_qr")
+                    notice(host.stringProvider.getString(R.string.verify_invalid_qr_notice).toEpoxyCharSequence())
                 }
 
                 bottomGotIt()

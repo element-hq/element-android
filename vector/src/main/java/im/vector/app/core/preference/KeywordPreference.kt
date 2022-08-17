@@ -133,13 +133,13 @@ class KeywordPreference : VectorPreference {
                 keyword.startsWith(".") -> {
                     context.getString(R.string.settings_notification_keyword_contains_dot)
                 }
-                keyword.contains("\\")  -> {
+                keyword.contains("\\") -> {
                     context.getString(R.string.settings_notification_keyword_contains_invalid_character, "\\")
                 }
-                keyword.contains("/")   -> {
+                keyword.contains("/") -> {
                     context.getString(R.string.settings_notification_keyword_contains_invalid_character, "/")
                 }
-                else                    -> null
+                else -> null
             }
 
             chipTextInputLayout.isErrorEnabled = errorMessage != null

@@ -21,6 +21,8 @@ import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.content.res.Resources
+import androidx.preference.PreferenceManager
+import com.google.i18n.phonenumbers.PhoneNumberUtil
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -29,14 +31,18 @@ import dagger.hilt.components.SingletonComponent
 import im.vector.app.BuildConfig
 import im.vector.app.EmojiCompatWrapper
 import im.vector.app.EmojiSpanify
-import im.vector.app.config.analyticsConfig
+import im.vector.app.SpaceStateHandler
+import im.vector.app.SpaceStateHandlerImpl
+import im.vector.app.config.Config
+import im.vector.app.core.debug.FlipperProxy
 import im.vector.app.core.dispatchers.CoroutineDispatchers
 import im.vector.app.core.error.DefaultErrorFormatter
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.time.Clock
 import im.vector.app.core.time.DefaultClock
-import im.vector.app.features.analytics.AnalyticsConfig
+import im.vector.app.core.utils.AndroidSystemSettingsProvider
+import im.vector.app.core.utils.SystemSettingsProvider
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.analytics.impl.DefaultVectorAnalytics
@@ -47,6 +53,8 @@ import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.pin.PinCodeStore
 import im.vector.app.features.pin.SharedPrefPinCodeStore
 import im.vector.app.features.room.VectorRoomDisplayNameFallbackProvider
+import im.vector.app.features.settings.FontScalePreferences
+import im.vector.app.features.settings.FontScalePreferencesImpl
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.ui.SharedPreferencesUiStateRepository
 import im.vector.app.features.ui.UiStateRepository
@@ -95,6 +103,15 @@ abstract class VectorBindModule {
 
     @Binds
     abstract fun bindEmojiSpanify(emojiCompatWrapper: EmojiCompatWrapper): EmojiSpanify
+
+    @Binds
+    abstract fun bindFontScale(fontScale: FontScalePreferencesImpl): FontScalePreferences
+
+    @Binds
+    abstract fun bindSystemSettingsProvide(provider: AndroidSystemSettingsProvider): SystemSettingsProvider
+
+    @Binds
+    abstract fun bindSpaceStateHandler(spaceStateHandlerImpl: SpaceStateHandlerImpl): SpaceStateHandler
 }
 
 @InstallIn(SingletonComponent::class)
@@ -119,12 +136,16 @@ object VectorStaticModule {
     @Provides
     fun providesMatrixConfiguration(
             vectorPreferences: VectorPreferences,
-            vectorRoomDisplayNameFallbackProvider: VectorRoomDisplayNameFallbackProvider
+            vectorRoomDisplayNameFallbackProvider: VectorRoomDisplayNameFallbackProvider,
+            flipperProxy: FlipperProxy,
     ): MatrixConfiguration {
         return MatrixConfiguration(
                 applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
                 roomDisplayNameFallbackProvider = vectorRoomDisplayNameFallbackProvider,
                 threadMessagesEnabledDefault = vectorPreferences.areThreadMessagesEnabled(),
+                networkInterceptors = listOfNotNull(
+                        flipperProxy.networkInterceptor(),
+                )
         )
     }
 
@@ -184,11 +205,27 @@ object VectorStaticModule {
     }
 
     @Provides
-    fun providesAnalyticsConfig(): AnalyticsConfig {
-        return analyticsConfig
-    }
+    fun providesPhoneNumberUtil(): PhoneNumberUtil = PhoneNumberUtil.getInstance()
 
     @Provides
     @Singleton
-    fun providesBuildMeta() = BuildMeta()
+    fun providesBuildMeta() = BuildMeta(
+            isDebug = BuildConfig.DEBUG,
+            applicationId = BuildConfig.APPLICATION_ID,
+            lowPrivacyLoggingEnabled = Config.LOW_PRIVACY_LOG_ENABLE,
+            versionName = BuildConfig.VERSION_NAME,
+            gitRevision = BuildConfig.GIT_REVISION,
+            gitRevisionDate = BuildConfig.GIT_REVISION_DATE,
+            gitBranchName = BuildConfig.GIT_BRANCH_NAME,
+            buildNumber = BuildConfig.BUILD_NUMBER,
+            flavorDescription = BuildConfig.FLAVOR_DESCRIPTION,
+            flavorShortDescription = BuildConfig.SHORT_FLAVOR_DESCRIPTION,
+    )
+
+    @Provides
+    @Singleton
+    @DefaultPreferences
+    fun providesDefaultSharedPreferences(context: Context): SharedPreferences {
+        return PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
+    }
 }

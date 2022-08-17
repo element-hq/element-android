@@ -101,7 +101,7 @@ class FtueAuthChooseProfilePictureFragment @Inject constructor(
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
         return when (withState(viewModel) { it.personalizationState.supportsChangingDisplayName }) {
-            true  -> super.onBackPressed(toolbarButton)
+            true -> super.onBackPressed(toolbarButton)
             false -> {
                 viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnTakeMeHome))
                 true

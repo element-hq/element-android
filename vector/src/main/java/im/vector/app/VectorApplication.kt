@@ -25,25 +25,31 @@ import android.content.res.Configuration
 import android.os.Handler
 import android.os.HandlerThread
 import android.os.StrictMode
+import android.view.Gravity
 import androidx.core.provider.FontRequest
 import androidx.core.provider.FontsContractCompat
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.multidex.MultiDex
+import androidx.recyclerview.widget.SnapHelper
+import com.airbnb.epoxy.Carousel
 import com.airbnb.epoxy.EpoxyAsyncUtil
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.mvrx.Mavericks
 import com.facebook.stetho.Stetho
 import com.gabrielittner.threetenbp.LazyThreeTen
+import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper
 import com.mapbox.mapboxsdk.Mapbox
 import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.google.GoogleEmojiProvider
 import dagger.hilt.android.HiltAndroidApp
+import im.vector.app.config.Config
+import im.vector.app.core.debug.FlipperProxy
+import im.vector.app.core.debug.LeakDetector
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.extensions.configureAndStart
-import im.vector.app.core.extensions.startSyncing
-import im.vector.app.core.time.Clock
+import im.vector.app.core.pushers.FcmHelper
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.configuration.VectorConfiguration
@@ -60,7 +66,6 @@ import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.version.VersionProvider
-import im.vector.app.push.fcm.FcmHelper
 import org.jitsi.meet.sdk.log.JitsiMeetDefaultLogHandler
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.auth.AuthenticationService
@@ -86,12 +91,11 @@ class VectorApplication :
     @Inject lateinit var emojiCompatWrapper: EmojiCompatWrapper
     @Inject lateinit var vectorUncaughtExceptionHandler: VectorUncaughtExceptionHandler
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
-    @Inject lateinit var clock: Clock
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var versionProvider: VersionProvider
     @Inject lateinit var notificationUtils: NotificationUtils
-    @Inject lateinit var appStateHandler: AppStateHandler
+    @Inject lateinit var spaceStateHandler: SpaceStateHandler
     @Inject lateinit var popupAlertManager: PopupAlertManager
     @Inject lateinit var pinLocker: PinLocker
     @Inject lateinit var callManager: WebRtcCallManager
@@ -99,7 +103,11 @@ class VectorApplication :
     @Inject lateinit var autoRageShaker: AutoRageShaker
     @Inject lateinit var vectorFileLogger: VectorFileLogger
     @Inject lateinit var vectorAnalytics: VectorAnalytics
+    @Inject lateinit var flipperProxy: FlipperProxy
     @Inject lateinit var matrix: Matrix
+    @Inject lateinit var fcmHelper: FcmHelper
+    @Inject lateinit var buildMeta: BuildMeta
+    @Inject lateinit var leakDetector: LeakDetector
 
     // font thread handler
     private var fontThreadHandler: Handler? = null
@@ -117,6 +125,7 @@ class VectorApplication :
         enableStrictModeIfNeeded()
         super.onCreate()
         appContext = this
+        flipperProxy.init(matrix)
         vectorAnalytics.init()
         invitesAcceptor.initialize()
         autoRageShaker.initialize()
@@ -127,19 +136,20 @@ class VectorApplication :
                 .filterIsInstance(JitsiMeetDefaultLogHandler::class.java)
                 .forEach { Timber.uproot(it) }
 
-        if (BuildConfig.DEBUG) {
+        if (buildMeta.isDebug) {
             Timber.plant(Timber.DebugTree())
         }
         Timber.plant(vectorFileLogger)
 
-        if (BuildConfig.DEBUG) {
+        if (buildMeta.isDebug) {
             Stetho.initializeWithDefaults(this)
         }
         logInfo()
         LazyThreeTen.init(this)
         Mavericks.initialize(debugMode = false)
-        EpoxyController.defaultDiffingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
-        EpoxyController.defaultModelBuildingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
+
+        configureEpoxy()
+
         registerActivityLifecycleCallbacks(VectorActivityLifecycleCallbacks(popupAlertManager))
         val fontRequest = FontRequest(
                 "com.google.android.gms.fonts",
@@ -148,7 +158,7 @@ class VectorApplication :
                 R.array.com_google_android_gms_fonts_certs
         )
         FontsContractCompat.requestFont(this, fontRequest, emojiCompatFontProvider, getFontThreadHandler())
-        VectorLocale.init(this)
+        VectorLocale.init(this, buildMeta)
         ThemeUtils.init(this)
         vectorConfiguration.applyToApplicationContext()
 
@@ -163,29 +173,21 @@ class VectorApplication :
             doNotShowDisclaimerDialog(this)
         }
 
-        if (authenticationService.hasAuthenticatedSessions() && !activeSessionHolder.hasActiveSession()) {
-            val lastAuthenticatedSession = authenticationService.getLastAuthenticatedSession()!!
-            activeSessionHolder.setActiveSession(lastAuthenticatedSession)
-            lastAuthenticatedSession.configureAndStart(applicationContext, startSyncing = false)
-        }
-
-        ProcessLifecycleOwner.get().lifecycle.addObserver(startSyncOnFirstStart)
-
         ProcessLifecycleOwner.get().lifecycle.addObserver(object : DefaultLifecycleObserver {
             override fun onResume(owner: LifecycleOwner) {
                 Timber.i("App entered foreground")
-                FcmHelper.onEnterForeground(appContext, activeSessionHolder)
+                fcmHelper.onEnterForeground(activeSessionHolder)
                 activeSessionHolder.getSafeActiveSession()?.also {
-                    it.stopAnyBackgroundSync()
+                    it.syncService().stopAnyBackgroundSync()
                 }
             }
 
             override fun onPause(owner: LifecycleOwner) {
                 Timber.i("App entered background")
-                FcmHelper.onEnterBackground(appContext, vectorPreferences, activeSessionHolder, clock)
+                fcmHelper.onEnterBackground(activeSessionHolder)
             }
         })
-        ProcessLifecycleOwner.get().lifecycle.addObserver(appStateHandler)
+        ProcessLifecycleOwner.get().lifecycle.addObserver(spaceStateHandler)
         ProcessLifecycleOwner.get().lifecycle.addObserver(pinLocker)
         ProcessLifecycleOwner.get().lifecycle.addObserver(callManager)
         // This should be done as early as possible
@@ -201,18 +203,22 @@ class VectorApplication :
 
         // Initialize Mapbox before inflating mapViews
         Mapbox.getInstance(this)
+
+        initMemoryLeakAnalysis()
     }
 
-    private val startSyncOnFirstStart = object : DefaultLifecycleObserver {
-        override fun onStart(owner: LifecycleOwner) {
-            Timber.i("App process started")
-            authenticationService.getLastAuthenticatedSession()?.startSyncing(appContext)
-            ProcessLifecycleOwner.get().lifecycle.removeObserver(this)
-        }
+    private fun configureEpoxy() {
+        EpoxyController.defaultDiffingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
+        EpoxyController.defaultModelBuildingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
+        Carousel.setDefaultGlobalSnapHelperFactory(object : Carousel.SnapHelperFactory() {
+            override fun buildSnapHelper(context: Context?): SnapHelper {
+                return GravitySnapHelper(Gravity.START)
+            }
+        })
     }
 
     private fun enableStrictModeIfNeeded() {
-        if (BuildConfig.ENABLE_STRICT_MODE_LOGS) {
+        if (Config.ENABLE_STRICT_MODE_LOGS) {
             StrictMode.setThreadPolicy(
                     StrictMode.ThreadPolicy.Builder()
                             .detectAll()
@@ -263,5 +269,9 @@ class VectorApplication :
         val handlerThread = HandlerThread("fonts")
         handlerThread.start()
         return Handler(handlerThread.looper)
+    }
+
+    private fun initMemoryLeakAnalysis() {
+        leakDetector.enable(vectorPreferences.isMemoryLeakAnalysisEnabled())
     }
 }

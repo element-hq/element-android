@@ -27,8 +27,8 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.features.media.ImageContentRenderer
 
-@EpoxyModelClass(layout = R.layout.item_uploads_image)
-abstract class UploadsImageItem : VectorEpoxyModel<UploadsImageItem.Holder>() {
+@EpoxyModelClass
+abstract class UploadsImageItem : VectorEpoxyModel<UploadsImageItem.Holder>(R.layout.item_uploads_image) {
 
     @EpoxyAttribute lateinit var imageContentRenderer: ImageContentRenderer
     @EpoxyAttribute lateinit var data: ImageContentRenderer.Data

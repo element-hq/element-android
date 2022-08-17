@@ -127,12 +127,12 @@ class AttachmentTypeSelectorView(
 
     fun setAttachmentVisibility(type: Type, isVisible: Boolean) {
         when (type) {
-            Type.CAMERA   -> views.attachmentCameraButton
-            Type.GALLERY  -> views.attachmentGalleryButton
-            Type.FILE     -> views.attachmentFileButton
-            Type.STICKER  -> views.attachmentStickersButton
-            Type.CONTACT  -> views.attachmentContactButton
-            Type.POLL     -> views.attachmentPollButton
+            Type.CAMERA -> views.attachmentCameraButton
+            Type.GALLERY -> views.attachmentGalleryButton
+            Type.FILE -> views.attachmentFileButton
+            Type.STICKER -> views.attachmentStickersButton
+            Type.CONTACT -> views.attachmentContactButton
+            Type.POLL -> views.attachmentPollButton
             Type.LOCATION -> views.attachmentLocationButton
         }.let {
             it.isVisible = isVisible

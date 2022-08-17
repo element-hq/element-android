@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,11 +23,14 @@ import im.vector.app.features.session.VectorSessionStore
 import im.vector.app.test.testCoroutineDispatchers
 import io.mockk.coEvery
 import io.mockk.coJustRun
+import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 import org.matrix.android.sdk.api.session.profile.ProfileService
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 class FakeSession(
         val fakeCryptoService: FakeCryptoService = FakeCryptoService(),
@@ -35,6 +38,7 @@ class FakeSession(
         val fakeHomeServerCapabilitiesService: FakeHomeServerCapabilitiesService = FakeHomeServerCapabilitiesService(),
         val fakeSharedSecretStorageService: FakeSharedSecretStorageService = FakeSharedSecretStorageService(),
         private val fakeRoomService: FakeRoomService = FakeRoomService(),
+        private val fakeEventService: FakeEventService = FakeEventService(),
 ) : Session by mockk(relaxed = true) {
 
     init {
@@ -50,6 +54,7 @@ class FakeSession(
     override fun homeServerCapabilitiesService(): HomeServerCapabilitiesService = fakeHomeServerCapabilitiesService
     override fun sharedSecretStorageService() = fakeSharedSecretStorageService
     override fun roomService() = fakeRoomService
+    override fun eventService() = fakeEventService
 
     fun givenVectorStore(vectorSessionStore: VectorSessionStore) {
         coEvery {
@@ -63,6 +68,13 @@ class FakeSession(
         coJustRun {
             this@FakeSession.configureAndStart(any(), startSyncing = true)
             this@FakeSession.startSyncing(any())
+        }
+    }
+
+    companion object {
+
+        fun withRoomSummary(roomSummary: RoomSummary) = FakeSession().apply {
+            every { getRoomSummary(any()) } returns roomSummary
         }
     }
 }

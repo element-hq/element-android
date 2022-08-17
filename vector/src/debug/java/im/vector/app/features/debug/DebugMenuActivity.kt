@@ -37,6 +37,7 @@ import im.vector.app.core.utils.toast
 import im.vector.app.databinding.ActivityDebugMenuBinding
 import im.vector.app.features.debug.analytics.DebugAnalyticsActivity
 import im.vector.app.features.debug.features.DebugFeaturesSettingsActivity
+import im.vector.app.features.debug.leak.DebugMemoryLeaksActivity
 import im.vector.app.features.debug.sas.DebugSasEmojiActivity
 import im.vector.app.features.debug.settings.DebugPrivateSettingsActivity
 import im.vector.app.features.qrcode.QrCodeScannerActivity
@@ -86,6 +87,7 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
         views.debugAnalytics.setOnClickListener {
             startActivity(Intent(this, DebugAnalyticsActivity::class.java))
         }
+        views.debugMemoryLeaks.setOnClickListener { openMemoryLeaksSettings() }
         views.debugTestTextViewLink.setOnClickListener { testTextViewLink() }
         views.debugOpenButtonStylesLight.setOnClickListener {
             startActivity(Intent(this, DebugVectorButtonStylesLightActivity::class.java))
@@ -128,6 +130,10 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
 
     private fun openPrivateSettings() {
         startActivity(Intent(this, DebugPrivateSettingsActivity::class.java))
+    }
+
+    private fun openMemoryLeaksSettings() {
+        startActivity(Intent(this, DebugMemoryLeaksActivity::class.java))
     }
 
     private fun renderQrCode(text: String) {

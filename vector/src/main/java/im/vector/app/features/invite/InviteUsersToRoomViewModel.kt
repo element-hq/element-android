@@ -60,18 +60,18 @@ class InviteUsersToRoomViewModel @AssistedInject constructor(
         selections.asFlow()
                 .map { user ->
                     when (user) {
-                        is PendingSelection.UserPendingSelection     -> room.membershipService().invite(user.user.userId, null)
+                        is PendingSelection.UserPendingSelection -> room.membershipService().invite(user.user.userId, null)
                         is PendingSelection.ThreePidPendingSelection -> room.membershipService().invite3pid(user.threePid)
                     }
                 }.onCompletion { error ->
                     if (error != null) return@onCompletion
 
                     val successMessage = when (selections.size) {
-                        1    -> stringProvider.getString(
+                        1 -> stringProvider.getString(
                                 R.string.invitation_sent_to_one_user,
                                 selections.first().getBestName()
                         )
-                        2    -> stringProvider.getString(
+                        2 -> stringProvider.getString(
                                 R.string.invitations_sent_to_two_users,
                                 selections.first().getBestName(),
                                 selections.last().getBestName()

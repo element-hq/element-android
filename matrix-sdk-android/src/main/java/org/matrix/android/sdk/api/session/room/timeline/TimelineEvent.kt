@@ -23,6 +23,7 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.getRelationContent
 import org.matrix.android.sdk.api.session.events.model.isEdition
+import org.matrix.android.sdk.api.session.events.model.isLiveLocation
 import org.matrix.android.sdk.api.session.events.model.isPoll
 import org.matrix.android.sdk.api.session.events.model.isReply
 import org.matrix.android.sdk.api.session.events.model.isSticker
@@ -139,11 +140,11 @@ fun TimelineEvent.getEditedEventId(): String? {
  */
 fun TimelineEvent.getLastMessageContent(): MessageContent? {
     return when (root.getClearType()) {
-        EventType.STICKER                   -> root.getClearContent().toModel<MessageStickerContent>()
-        in EventType.POLL_START             -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel<MessagePollContent>()
+        EventType.STICKER -> root.getClearContent().toModel<MessageStickerContent>()
+        in EventType.POLL_START -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel<MessagePollContent>()
         in EventType.STATE_ROOM_BEACON_INFO -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel<MessageBeaconInfoContent>()
-        in EventType.BEACON_LOCATION_DATA   -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel<MessageBeaconLocationDataContent>()
-        else                                -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel()
+        in EventType.BEACON_LOCATION_DATA -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel<MessageBeaconLocationDataContent>()
+        else -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel()
     }
 }
 
@@ -163,6 +164,10 @@ fun TimelineEvent.isPoll(): Boolean =
 
 fun TimelineEvent.isSticker(): Boolean {
     return root.isSticker()
+}
+
+fun TimelineEvent.isLiveLocation(): Boolean {
+    return root.isLiveLocation()
 }
 
 /**

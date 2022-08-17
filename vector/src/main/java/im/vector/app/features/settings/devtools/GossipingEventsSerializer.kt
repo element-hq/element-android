@@ -34,10 +34,10 @@ class GossipingEventsSerializer {
                 append("[${getFormattedDate(trail.ageLocalTs)}] ${type.name} ")
                 append("sessionId: ${info.sessionId} ")
                 when (type) {
-                    TrailType.IncomingKeyRequest  -> {
+                    TrailType.IncomingKeyRequest -> {
                         append("from:${info.userId}|${info.deviceId} - ")
                     }
-                    TrailType.OutgoingKeyForward  -> {
+                    TrailType.OutgoingKeyForward -> {
                         append("to:${info.userId}|${info.deviceId} - ")
                         (trail.info as? ForwardInfo)?.let {
                             append("chainIndex: ${it.chainIndex} ")
@@ -49,13 +49,13 @@ class GossipingEventsSerializer {
                             append("code: ${it.code} ")
                         }
                     }
-                    TrailType.IncomingKeyForward  -> {
+                    TrailType.IncomingKeyForward -> {
                         append("from:${info.userId}|${info.deviceId} - ")
                         (trail.info as? ForwardInfo)?.let {
                             append("chainIndex: ${it.chainIndex} ")
                         }
                     }
-                    else                          -> {
+                    else -> {
                         append("??")
                     }
                 }

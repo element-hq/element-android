@@ -20,6 +20,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
 import androidx.exifinterface.media.ExifInterface
+import org.matrix.android.sdk.api.extensions.ensureNotEmpty
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -244,7 +245,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         )
     }
 
-    fun createLocationEvent(
+    fun createStaticLocationEvent(
             roomId: String,
             latitude: Double,
             longitude: Double,
@@ -345,11 +346,11 @@ internal class LocalEchoEventFactory @Inject constructor(
             rootThreadEventId: String?
     ): Event {
         return when (attachment.type) {
-            ContentAttachmentData.Type.IMAGE         -> createImageEvent(roomId, attachment, rootThreadEventId)
-            ContentAttachmentData.Type.VIDEO         -> createVideoEvent(roomId, attachment, rootThreadEventId)
-            ContentAttachmentData.Type.AUDIO         -> createAudioEvent(roomId, attachment, isVoiceMessage = false, rootThreadEventId = rootThreadEventId)
+            ContentAttachmentData.Type.IMAGE -> createImageEvent(roomId, attachment, rootThreadEventId)
+            ContentAttachmentData.Type.VIDEO -> createVideoEvent(roomId, attachment, rootThreadEventId)
+            ContentAttachmentData.Type.AUDIO -> createAudioEvent(roomId, attachment, isVoiceMessage = false, rootThreadEventId = rootThreadEventId)
             ContentAttachmentData.Type.VOICE_MESSAGE -> createAudioEvent(roomId, attachment, isVoiceMessage = true, rootThreadEventId = rootThreadEventId)
-            ContentAttachmentData.Type.FILE          -> createFileEvent(roomId, attachment, rootThreadEventId)
+            ContentAttachmentData.Type.FILE -> createFileEvent(roomId, attachment, rootThreadEventId)
         }
     }
 
@@ -685,7 +686,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         when (content?.msgType) {
             MessageType.MSGTYPE_EMOTE,
             MessageType.MSGTYPE_TEXT,
-            MessageType.MSGTYPE_NOTICE     -> {
+            MessageType.MSGTYPE_NOTICE -> {
                 var formattedText: String? = null
                 if (content is MessageContentWithFormattedBody) {
                     formattedText = content.matrixFormattedBody
@@ -696,19 +697,20 @@ internal class LocalEchoEventFactory @Inject constructor(
                     TextContent(content.body, formattedText)
                 }
             }
-            MessageType.MSGTYPE_FILE       -> return TextContent("sent a file.")
-            MessageType.MSGTYPE_AUDIO      -> return TextContent("sent an audio file.")
-            MessageType.MSGTYPE_IMAGE      -> return TextContent("sent an image.")
-            MessageType.MSGTYPE_VIDEO      -> return TextContent("sent a video.")
+            MessageType.MSGTYPE_FILE -> return TextContent("sent a file.")
+            MessageType.MSGTYPE_AUDIO -> return TextContent("sent an audio file.")
+            MessageType.MSGTYPE_IMAGE -> return TextContent("sent an image.")
+            MessageType.MSGTYPE_VIDEO -> return TextContent("sent a video.")
+            MessageType.MSGTYPE_BEACON_INFO -> return TextContent(content.body.ensureNotEmpty() ?: "Live location")
             MessageType.MSGTYPE_POLL_START -> {
                 return TextContent((content as? MessagePollContent)?.getBestPollCreationInfo()?.question?.getBestQuestion() ?: "")
             }
-            else                           -> return TextContent(content?.body ?: "")
+            else -> return TextContent(content?.body ?: "")
         }
     }
 
     /**
-     * Returns RFC5870 formatted geo uri 'geo:latitude,longitude;uncertainty' like 'geo:40.05,29.24;30'
+     * Returns RFC5870 formatted geo uri 'geo:latitude,longitude;u=uncertainty' like 'geo:40.05,29.24;u=30'
      * Uncertainty of the location is in meters and not required.
      */
     private fun buildGeoUri(latitude: Double, longitude: Double, uncertainty: Double?): String {
@@ -718,7 +720,7 @@ internal class LocalEchoEventFactory @Inject constructor(
             append(",")
             append(longitude)
             uncertainty?.let {
-                append(";")
+                append(";u=")
                 append(it)
             }
         }

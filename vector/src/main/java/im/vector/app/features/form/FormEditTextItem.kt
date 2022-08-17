@@ -34,8 +34,8 @@ import im.vector.app.core.epoxy.addTextChangedListenerOnce
 import im.vector.app.core.epoxy.setValueOnce
 import im.vector.app.core.platform.SimpleTextWatcher
 
-@EpoxyModelClass(layout = R.layout.item_form_text_input)
-abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
+@EpoxyModelClass
+abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>(R.layout.item_form_text_input) {
 
     @EpoxyAttribute
     var hint: String? = null
@@ -57,6 +57,9 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
 
     @EpoxyAttribute
     var singleLine: Boolean = true
+
+    @EpoxyAttribute
+    var autoCapitalize: Boolean = false
 
     @EpoxyAttribute
     var imeOptions: Int? = null
@@ -132,10 +135,9 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
      */
     private fun configureInputType(holder: Holder) {
         val newInputType =
-                inputType ?: when (singleLine) {
-                    true  -> InputType.TYPE_CLASS_TEXT
-                    false -> InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
-                }
+                inputType ?: InputType.TYPE_CLASS_TEXT
+                        .let { if (autoCapitalize) it or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES else it }
+                        .let { if (!singleLine) it or InputType.TYPE_TEXT_FLAG_MULTI_LINE else it }
 
         // This is a must in order to avoid extreme lag in some devices, on fast typing
         if (holder.textInputEditText.inputType != newInputType) {
@@ -151,7 +153,7 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
     private fun configureImeOptions(holder: Holder) {
         holder.textInputEditText.imeOptions =
                 imeOptions ?: when (singleLine) {
-                    true  -> EditorInfo.IME_ACTION_NEXT
+                    true -> EditorInfo.IME_ACTION_NEXT
                     false -> EditorInfo.IME_ACTION_NONE
                 }
     }

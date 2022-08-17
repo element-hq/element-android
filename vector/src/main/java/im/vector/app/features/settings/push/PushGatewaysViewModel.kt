@@ -64,7 +64,7 @@ class PushGatewaysViewModel @AssistedInject constructor(
 
     override fun handle(action: PushGatewayAction) {
         when (action) {
-            is PushGatewayAction.Refresh      -> handleRefresh()
+            is PushGatewayAction.Refresh -> handleRefresh()
             is PushGatewayAction.RemovePusher -> removePusher(action.pusher)
         }
     }

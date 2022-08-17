@@ -49,7 +49,7 @@ class MediaPicker : Picker<MultiPickerBaseMediaType>() {
         return Intent(Intent.ACTION_GET_CONTENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
             putExtra(Intent.EXTRA_ALLOW_MULTIPLE, !single)
-            type = "video/*, image/*"
+            type = "*/*"
             val mimeTypes = arrayOf("image/*", "video/*")
             putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
         }

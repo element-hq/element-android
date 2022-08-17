@@ -181,7 +181,7 @@ internal fun ThreadSummaryEntity.Companion.createOrUpdate(
 
             roomEntity.addIfNecessary(threadSummary)
         }
-        ThreadSummaryUpdateType.ADD     -> {
+        ThreadSummaryUpdateType.ADD -> {
             val rootThreadEventId = threadEventEntity?.rootThreadEventId ?: return
             Timber.i("###THREADS ThreadSummaryHelper ADD for root eventId:$rootThreadEventId")
 
@@ -271,7 +271,7 @@ private fun HashMap<String, RoomMemberContent?>.addSenderState(realm: Realm, roo
  * Create an EventEntity for the root thread event or get an existing one.
  */
 private fun createEventEntity(realm: Realm, roomId: String, event: Event, currentTimeMillis: Long): EventEntity {
-    val ageLocalTs = event.unsignedData?.age?.let { currentTimeMillis - it }
+    val ageLocalTs = currentTimeMillis - (event.unsignedData?.age ?: 0)
     return event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
 }
 

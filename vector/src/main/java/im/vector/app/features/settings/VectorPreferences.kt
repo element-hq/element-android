@@ -23,11 +23,12 @@ import android.provider.MediaStore
 import androidx.annotation.BoolRes
 import androidx.core.content.edit
 import com.squareup.seismic.ShakeDetector
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.time.Clock
 import im.vector.app.features.disclaimer.SHARED_PREF_KEY
+import im.vector.app.features.home.ShortcutsHandler
 import im.vector.app.features.homeserver.ServerUrlsRepository
 import im.vector.app.features.themes.ThemeUtils
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -37,6 +38,7 @@ import javax.inject.Inject
 class VectorPreferences @Inject constructor(
         private val context: Context,
         private val clock: Clock,
+        private val buildMeta: BuildMeta,
 ) {
 
     companion object {
@@ -72,6 +74,7 @@ class VectorPreferences @Inject constructor(
         const val SETTINGS_ENCRYPTION_IMPORT_E2E_ROOM_KEYS_PREFERENCE_KEY = "SETTINGS_ENCRYPTION_IMPORT_E2E_ROOM_KEYS_PREFERENCE_KEY"
         const val SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY = "SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY"
         const val SETTINGS_SHOW_DEVICES_LIST_PREFERENCE_KEY = "SETTINGS_SHOW_DEVICES_LIST_PREFERENCE_KEY"
+        const val SETTINGS_SHOW_DEVICES_LIST_V2_PREFERENCE_KEY = "SETTINGS_SHOW_DEVICES_LIST_V2_PREFERENCE_KEY"
         const val SETTINGS_ALLOW_INTEGRATIONS_KEY = "SETTINGS_ALLOW_INTEGRATIONS_KEY"
         const val SETTINGS_INTEGRATION_MANAGER_UI_URL_KEY = "SETTINGS_INTEGRATION_MANAGER_UI_URL_KEY"
         const val SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY = "SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY"
@@ -141,6 +144,9 @@ class VectorPreferences @Inject constructor(
         const val SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY = "SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY"
         const val SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY = "SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY"
 
+        // notification method
+        const val SETTINGS_NOTIFICATION_METHOD_KEY = "SETTINGS_NOTIFICATION_METHOD_KEY"
+
         // Calls
         const val SETTINGS_CALL_PREVENT_ACCIDENTAL_CALL_KEY = "SETTINGS_CALL_PREVENT_ACCIDENTAL_CALL_KEY"
         const val SETTINGS_CALL_RINGTONE_USE_RIOT_PREFERENCE_KEY = "SETTINGS_CALL_RINGTONE_USE_RIOT_PREFERENCE_KEY"
@@ -155,7 +161,6 @@ class VectorPreferences @Inject constructor(
         private const val SETTINGS_ENABLE_SEND_VOICE_FEATURE_PREFERENCE_KEY = "SETTINGS_ENABLE_SEND_VOICE_FEATURE_PREFERENCE_KEY"
 
         const val SETTINGS_LABS_ALLOW_EXTENDED_LOGS = "SETTINGS_LABS_ALLOW_EXTENDED_LOGS"
-        const val SETTINGS_LABS_SPACES_HOME_AS_ORPHAN = "SETTINGS_LABS_SPACES_HOME_AS_ORPHAN"
         const val SETTINGS_LABS_AUTO_REPORT_UISI = "SETTINGS_LABS_AUTO_REPORT_UISI"
         const val SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME = "SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME"
 
@@ -164,6 +169,9 @@ class VectorPreferences @Inject constructor(
         private const val SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY = "SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY"
         private const val SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY = "SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY"
         private const val SETTINGS_DEVELOPER_MODE_SHOW_INFO_ON_SCREEN_KEY = "SETTINGS_DEVELOPER_MODE_SHOW_INFO_ON_SCREEN_KEY"
+        private const val SETTINGS_ENABLE_MEMORY_LEAK_ANALYSIS_KEY = "SETTINGS_ENABLE_MEMORY_LEAK_ANALYSIS_KEY"
+
+        const val SETTINGS_LABS_MSC3061_SHARE_KEYS_HISTORY = "SETTINGS_LABS_MSC3061_SHARE_KEYS_HISTORY"
 
         // SETTINGS_LABS_HIDE_TECHNICAL_E2E_ERRORS
         private const val SETTINGS_LABS_SHOW_COMPLETE_HISTORY_IN_ENCRYPTED_ROOM = "SETTINGS_LABS_SHOW_COMPLETE_HISTORY_IN_ENCRYPTED_ROOM"
@@ -177,7 +185,7 @@ class VectorPreferences @Inject constructor(
         const val SETTINGS_SECURITY_USE_FLAG_SECURE = "SETTINGS_SECURITY_USE_FLAG_SECURE"
         const val SETTINGS_SECURITY_USE_PIN_CODE_FLAG = "SETTINGS_SECURITY_USE_PIN_CODE_FLAG"
         const val SETTINGS_SECURITY_CHANGE_PIN_CODE_FLAG = "SETTINGS_SECURITY_CHANGE_PIN_CODE_FLAG"
-        private const val SETTINGS_SECURITY_USE_BIOMETRICS_FLAG = "SETTINGS_SECURITY_USE_BIOMETRICS_FLAG"
+        const val SETTINGS_SECURITY_USE_BIOMETRICS_FLAG = "SETTINGS_SECURITY_USE_BIOMETRICS_FLAG"
         private const val SETTINGS_SECURITY_USE_GRACE_PERIOD_FLAG = "SETTINGS_SECURITY_USE_GRACE_PERIOD_FLAG"
         const val SETTINGS_SECURITY_USE_COMPLETE_NOTIFICATIONS_FLAG = "SETTINGS_SECURITY_USE_COMPLETE_NOTIFICATIONS_FLAG"
 
@@ -191,9 +199,6 @@ class VectorPreferences @Inject constructor(
 
         private const val DID_ASK_TO_ENABLE_SESSION_PUSH = "DID_ASK_TO_ENABLE_SESSION_PUSH"
 
-        // Location Sharing
-        const val SETTINGS_PREF_ENABLE_LOCATION_SHARING = "SETTINGS_PREF_ENABLE_LOCATION_SHARING"
-
         private const val MEDIA_SAVING_3_DAYS = 0
         private const val MEDIA_SAVING_1_WEEK = 1
         private const val MEDIA_SAVING_1_MONTH = 2
@@ -203,8 +208,9 @@ class VectorPreferences @Inject constructor(
 
         private const val TAKE_PHOTO_VIDEO_MODE = "TAKE_PHOTO_VIDEO_MODE"
 
-        private const val SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE = "SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE"
         private const val SETTINGS_LABS_ENABLE_LIVE_LOCATION = "SETTINGS_LABS_ENABLE_LIVE_LOCATION"
+
+        private const val SETTINGS_LABS_ENABLE_ELEMENT_CALL_PERMISSION_SHORTCUTS = "SETTINGS_LABS_ENABLE_ELEMENT_CALL_PERMISSION_SHORTCUTS"
 
         // This key will be used to identify clients with the old thread support enabled io.element.thread
         const val SETTINGS_LABS_ENABLE_THREAD_MESSAGES_OLD_CLIENTS = "SETTINGS_LABS_ENABLE_THREAD_MESSAGES"
@@ -264,9 +270,12 @@ class VectorPreferences @Inject constructor(
                 SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY,
                 SETTINGS_LABS_ALLOW_EXTENDED_LOGS,
                 SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY,
+                SETTINGS_ENABLE_MEMORY_LEAK_ANALYSIS_KEY,
 
                 SETTINGS_USE_RAGE_SHAKE_KEY,
-                SETTINGS_SECURITY_USE_FLAG_SECURE
+                SETTINGS_SECURITY_USE_FLAG_SECURE,
+
+                ShortcutsHandler.SHARED_PREF_KEY,
         )
     }
 
@@ -359,7 +368,17 @@ class VectorPreferences @Inject constructor(
     }
 
     fun failFast(): Boolean {
-        return BuildConfig.DEBUG || (developerMode() && defaultPrefs.getBoolean(SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY, false))
+        return buildMeta.isDebug || (developerMode() && defaultPrefs.getBoolean(SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY, false))
+    }
+
+    fun enableMemoryLeakAnalysis(isEnabled: Boolean) {
+        defaultPrefs.edit(commit = true) {
+            putBoolean(SETTINGS_ENABLE_MEMORY_LEAK_ANALYSIS_KEY, isEnabled)
+        }
+    }
+
+    fun isMemoryLeakAnalysisEnabled(): Boolean {
+        return buildMeta.isDebug && defaultPrefs.getBoolean(SETTINGS_ENABLE_MEMORY_LEAK_ANALYSIS_KEY, false)
     }
 
     fun didAskUserToEnableSessionPush(): Boolean {
@@ -672,11 +691,11 @@ class VectorPreferences @Inject constructor(
      */
     fun getMinMediasLastAccessTime(): Long {
         return when (getSelectedMediasSavingPeriod()) {
-            MEDIA_SAVING_3_DAYS  -> clock.epochMillis() / 1000 - 3 * 24 * 60 * 60
-            MEDIA_SAVING_1_WEEK  -> clock.epochMillis() / 1000 - 7 * 24 * 60 * 60
+            MEDIA_SAVING_3_DAYS -> clock.epochMillis() / 1000 - 3 * 24 * 60 * 60
+            MEDIA_SAVING_1_WEEK -> clock.epochMillis() / 1000 - 7 * 24 * 60 * 60
             MEDIA_SAVING_1_MONTH -> clock.epochMillis() / 1000 - 30 * 24 * 60 * 60
             MEDIA_SAVING_FOREVER -> 0
-            else                 -> 0
+            else -> 0
         }
     }
 
@@ -687,11 +706,11 @@ class VectorPreferences @Inject constructor(
      */
     fun getSelectedMediasSavingPeriodString(): String {
         return when (getSelectedMediasSavingPeriod()) {
-            MEDIA_SAVING_3_DAYS  -> context.getString(R.string.media_saving_period_3_days)
-            MEDIA_SAVING_1_WEEK  -> context.getString(R.string.media_saving_period_1_week)
+            MEDIA_SAVING_3_DAYS -> context.getString(R.string.media_saving_period_3_days)
+            MEDIA_SAVING_1_WEEK -> context.getString(R.string.media_saving_period_1_week)
             MEDIA_SAVING_1_MONTH -> context.getString(R.string.media_saving_period_1_month)
             MEDIA_SAVING_FOREVER -> context.getString(R.string.media_saving_period_forever)
-            else                 -> "?"
+            else -> "?"
         }
     }
 
@@ -946,6 +965,10 @@ class VectorPreferences @Inject constructor(
         return defaultPrefs.getBoolean(SETTINGS_SECURITY_USE_PIN_CODE_FLAG, false)
     }
 
+    fun setUseBiometricToUnlock(value: Boolean) {
+        defaultPrefs.edit { putBoolean(SETTINGS_SECURITY_USE_BIOMETRICS_FLAG, value) }
+    }
+
     fun useBiometricsToUnlock(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_SECURITY_USE_BIOMETRICS_FLAG, true)
     }
@@ -1015,20 +1038,12 @@ class VectorPreferences @Inject constructor(
         }
     }
 
-    private fun labsSpacesOnlyOrphansInHome(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_LABS_SPACES_HOME_AS_ORPHAN, false)
-    }
-
     fun labsAutoReportUISI(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_LABS_AUTO_REPORT_UISI, false)
     }
 
     fun prefSpacesShowAllRoomInHome(): Boolean {
-        return defaultPrefs.getBoolean(
-                SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME,
-                // migration of old property
-                !labsSpacesOnlyOrphansInHome()
-        )
+        return defaultPrefs.getBoolean(SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME, false)
     }
 
     /*
@@ -1044,16 +1059,18 @@ class VectorPreferences @Inject constructor(
         }
     }
 
-    fun isLocationSharingEnabled(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_PREF_ENABLE_LOCATION_SHARING, false) && BuildConfig.enableLocationSharing
-    }
-
-    fun labsRenderLocationsInTimeline(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE, true)
-    }
-
     fun labsEnableLiveLocation(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_LABS_ENABLE_LIVE_LOCATION, false)
+    }
+
+    fun setLiveLocationLabsEnabled(isEnabled: Boolean) {
+        defaultPrefs.edit {
+            putBoolean(SETTINGS_LABS_ENABLE_LIVE_LOCATION, isEnabled)
+        }
+    }
+
+    fun labsEnableElementCallPermissionShortcuts(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_LABS_ENABLE_ELEMENT_CALL_PERMISSION_SHORTCUTS, false)
     }
 
     /**

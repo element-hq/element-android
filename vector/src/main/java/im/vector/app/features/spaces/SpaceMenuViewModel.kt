@@ -24,7 +24,7 @@ import com.airbnb.mvrx.Uninitialized
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.AppStateHandler
+import im.vector.app.SpaceStateHandler
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyViewEvents
@@ -50,7 +50,7 @@ import timber.log.Timber
 class SpaceMenuViewModel @AssistedInject constructor(
         @Assisted val initialState: SpaceMenuState,
         val session: Session,
-        val appStateHandler: AppStateHandler
+        val spaceStateHandler: SpaceStateHandler
 ) : VectorViewModel<SpaceMenuState, SpaceLeaveViewAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
@@ -73,9 +73,9 @@ class SpaceMenuViewModel @AssistedInject constructor(
                 it.getOrNull()?.let {
                     if (it.membership == Membership.LEAVE) {
                         setState { copy(leavingState = Success(Unit)) }
-                        if (appStateHandler.safeActiveSpaceId() == initialState.spaceId) {
+                        if (spaceStateHandler.getSafeActiveSpaceId() == initialState.spaceId) {
                             // switch to home?
-                            appStateHandler.setCurrentSpace(null, session)
+                            spaceStateHandler.setCurrentSpace(null, session)
                         }
                     }
                 }
@@ -114,16 +114,16 @@ class SpaceMenuViewModel @AssistedInject constructor(
 
     override fun handle(action: SpaceLeaveViewAction) {
         when (action) {
-            SpaceLeaveViewAction.SetAutoLeaveAll      -> setState {
+            SpaceLeaveViewAction.SetAutoLeaveAll -> setState {
                 copy(leaveMode = SpaceMenuState.LeaveMode.LEAVE_ALL, leavingState = Uninitialized)
             }
-            SpaceLeaveViewAction.SetAutoLeaveNone     -> setState {
+            SpaceLeaveViewAction.SetAutoLeaveNone -> setState {
                 copy(leaveMode = SpaceMenuState.LeaveMode.LEAVE_NONE, leavingState = Uninitialized)
             }
             SpaceLeaveViewAction.SetAutoLeaveSelected -> setState {
                 copy(leaveMode = SpaceMenuState.LeaveMode.LEAVE_SELECTED, leavingState = Uninitialized)
             }
-            SpaceLeaveViewAction.LeaveSpace           -> handleLeaveSpace()
+            SpaceLeaveViewAction.LeaveSpace -> handleLeaveSpace()
         }
     }
 

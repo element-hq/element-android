@@ -39,8 +39,8 @@ class SharedPreferencesUiStateRepository @Inject constructor(
     override fun getDisplayMode(): RoomListDisplayMode {
         return when (sharedPreferences.getInt(KEY_DISPLAY_MODE, VALUE_DISPLAY_MODE_CATCHUP)) {
             VALUE_DISPLAY_MODE_PEOPLE -> RoomListDisplayMode.PEOPLE
-            VALUE_DISPLAY_MODE_ROOMS  -> RoomListDisplayMode.ROOMS
-            else                      -> if (vectorPreferences.labAddNotificationTab()) {
+            VALUE_DISPLAY_MODE_ROOMS -> RoomListDisplayMode.ROOMS
+            else -> if (vectorPreferences.labAddNotificationTab()) {
                 RoomListDisplayMode.NOTIFICATIONS
             } else {
                 RoomListDisplayMode.PEOPLE
@@ -54,8 +54,8 @@ class SharedPreferencesUiStateRepository @Inject constructor(
                     KEY_DISPLAY_MODE,
                     when (displayMode) {
                         RoomListDisplayMode.PEOPLE -> VALUE_DISPLAY_MODE_PEOPLE
-                        RoomListDisplayMode.ROOMS  -> VALUE_DISPLAY_MODE_ROOMS
-                        else                       -> VALUE_DISPLAY_MODE_CATCHUP
+                        RoomListDisplayMode.ROOMS -> VALUE_DISPLAY_MODE_ROOMS
+                        else -> VALUE_DISPLAY_MODE_CATCHUP
                     }
             )
         }
@@ -67,28 +67,8 @@ class SharedPreferencesUiStateRepository @Inject constructor(
         }
     }
 
-    override fun storeSelectedGroup(groupId: String?, sessionId: String) {
-        sharedPreferences.edit {
-            putString("$KEY_SELECTED_GROUP@$sessionId", groupId)
-        }
-    }
-
-    override fun storeGroupingMethod(isSpace: Boolean, sessionId: String) {
-        sharedPreferences.edit {
-            putBoolean("$KEY_SELECTED_METHOD@$sessionId", isSpace)
-        }
-    }
-
-    override fun getSelectedGroup(sessionId: String): String? {
-        return sharedPreferences.getString("$KEY_SELECTED_GROUP@$sessionId", null)
-    }
-
     override fun getSelectedSpace(sessionId: String): String? {
         return sharedPreferences.getString("$KEY_SELECTED_SPACE@$sessionId", null)
-    }
-
-    override fun isGroupingMethodSpace(sessionId: String): Boolean {
-        return sharedPreferences.getBoolean("$KEY_SELECTED_METHOD@$sessionId", true)
     }
 
     override fun setCustomRoomDirectoryHomeservers(sessionId: String, servers: Set<String>) {
@@ -110,8 +90,6 @@ class SharedPreferencesUiStateRepository @Inject constructor(
         private const val VALUE_DISPLAY_MODE_ROOMS = 2
 
         private const val KEY_SELECTED_SPACE = "UI_STATE_SELECTED_SPACE"
-        private const val KEY_SELECTED_GROUP = "UI_STATE_SELECTED_GROUP"
-        private const val KEY_SELECTED_METHOD = "UI_STATE_SELECTED_METHOD"
 
         private const val KEY_CUSTOM_DIRECTORY_HOMESERVER = "KEY_CUSTOM_DIRECTORY_HOMESERVER"
     }

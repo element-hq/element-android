@@ -191,9 +191,9 @@ internal class MXOlmDecryption(
         val messageBody = message["body"] as? String ?: return null
         val messageType = when (val typeAsVoid = message["type"]) {
             is Double -> typeAsVoid.toInt()
-            is Int    -> typeAsVoid
-            is Long   -> typeAsVoid.toInt()
-            else      -> return null
+            is Int -> typeAsVoid
+            is Long -> typeAsVoid.toInt()
+            else -> return null
         }
 
         // Try each session in turn

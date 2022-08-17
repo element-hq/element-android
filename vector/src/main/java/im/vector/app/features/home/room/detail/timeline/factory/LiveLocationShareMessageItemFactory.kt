@@ -36,7 +36,6 @@ import im.vector.app.features.location.toLocationData
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.threeten.bp.LocalDateTime
-import timber.log.Timber
 import javax.inject.Inject
 
 class LiveLocationShareMessageItemFactory @Inject constructor(
@@ -56,10 +55,10 @@ class LiveLocationShareMessageItemFactory @Inject constructor(
     ): VectorEpoxyModel<*>? {
         val liveLocationShareSummaryData = getLiveLocationShareSummaryData(event)
         val item = when (val currentState = getViewState(liveLocationShareSummaryData)) {
-            LiveLocationShareViewState.Inactive   -> buildInactiveItem(highlight, attributes)
-            LiveLocationShareViewState.Loading    -> buildLoadingItem(highlight, attributes)
+            LiveLocationShareViewState.Inactive -> buildInactiveItem(highlight, attributes)
+            LiveLocationShareViewState.Loading -> buildLoadingItem(highlight, attributes)
             is LiveLocationShareViewState.Running -> buildRunningItem(highlight, attributes, currentState)
-            LiveLocationShareViewState.Unkwown    -> null
+            LiveLocationShareViewState.Unkwown -> null
         }
         item?.layout(attributes.informationData.messageLayout.layoutRes)
 
@@ -103,7 +102,6 @@ class LiveLocationShareMessageItemFactory @Inject constructor(
             attributes: AbsMessageItem.Attributes,
             runningState: LiveLocationShareViewState.Running,
     ): MessageLiveLocationItem {
-        // TODO only render location if enabled in preferences: to be handled in a next PR
         val width = timelineMediaSizeProvider.getMaxSize().first
         val height = dimensionConverter.dpToPx(MessageItemFactory.MESSAGE_LOCATION_ITEM_HEIGHT_IN_DP)
 
@@ -127,15 +125,15 @@ class LiveLocationShareMessageItemFactory @Inject constructor(
 
     private fun getViewState(liveLocationShareSummaryData: LiveLocationShareSummaryData?): LiveLocationShareViewState {
         return when {
-            liveLocationShareSummaryData?.isActive == null                                                   -> LiveLocationShareViewState.Unkwown
-            liveLocationShareSummaryData.isActive.not()                                                      -> LiveLocationShareViewState.Inactive
+            liveLocationShareSummaryData?.isActive == null -> LiveLocationShareViewState.Unkwown
+            liveLocationShareSummaryData.isActive.not() -> LiveLocationShareViewState.Inactive
             liveLocationShareSummaryData.isActive && liveLocationShareSummaryData.lastGeoUri.isNullOrEmpty() -> LiveLocationShareViewState.Loading
-            else                                                                                             ->
+            else ->
                 LiveLocationShareViewState.Running(
                         liveLocationShareSummaryData.lastGeoUri.orEmpty(),
                         getEndOfLiveDateTime(liveLocationShareSummaryData)
                 )
-        }.also { viewState -> Timber.d("computed viewState: $viewState") }
+        }
     }
 
     private fun getEndOfLiveDateTime(liveLocationShareSummaryData: LiveLocationShareSummaryData): LocalDateTime? {

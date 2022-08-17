@@ -17,7 +17,6 @@
 package im.vector.app
 
 import android.content.SharedPreferences
-import androidx.lifecycle.asFlow
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.rageshake.BugReporter
 import im.vector.app.features.rageshake.ReportType
@@ -36,7 +35,7 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toContent
-import org.matrix.android.sdk.api.session.initsync.SyncStatusService
+import org.matrix.android.sdk.api.session.sync.SyncRequestState
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -260,11 +259,10 @@ class AutoRageShaker @Inject constructor(
         }
         this.currentActiveSessionId = sessionId
 
-        hasSynced = session.hasAlreadySynced()
-        session.syncStatusService().getSyncStatusLive()
-                .asFlow()
+        hasSynced = session.syncService().hasAlreadySynced()
+        session.syncService().getSyncRequestStateFlow()
                 .onEach {
-                    hasSynced = it !is SyncStatusService.Status.InitialSyncProgressing
+                    hasSynced = it !is SyncRequestState.InitialSyncProgressing
                 }
                 .launchIn(session.coroutineScope)
         activeSessionIds.add(sessionId)

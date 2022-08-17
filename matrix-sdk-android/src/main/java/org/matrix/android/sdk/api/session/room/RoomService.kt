@@ -41,6 +41,18 @@ interface RoomService {
     suspend fun createRoom(createRoomParams: CreateRoomParams): String
 
     /**
+     * Create a room locally.
+     * This room will not be synchronized with the server and will not come back from the sync, so all the events related to this room will be generated
+     * locally.
+     */
+    suspend fun createLocalRoom(createRoomParams: CreateRoomParams): String
+
+    /**
+     * Delete a local room with all its related events.
+     */
+    suspend fun deleteLocalRoom(roomId: String)
+
+    /**
      * Create a direct room asynchronously. This is a facility method to create a direct room with the necessary parameters.
      */
     suspend fun createDirectRoom(otherUserId: String): String {
@@ -231,14 +243,11 @@ interface RoomService {
      * @param queryParams The filter to use
      * @param pagedListConfig The paged list configuration (page size, initial load, prefetch distance...)
      * @param sortOrder defines how to sort the results
-     * @param getFlattenParents When true, the list of known parents and grand parents summaries will be resolved.
-     * This can have significant impact on performance, better be used only on manageable list (filtered by displayName, ..).
      */
     fun getFilteredPagedRoomSummariesLive(
             queryParams: RoomSummaryQueryParams,
             pagedListConfig: PagedList.Config = defaultPagedListConfig,
             sortOrder: RoomSortOrder = RoomSortOrder.ACTIVITY,
-            getFlattenParents: Boolean = false,
     ): UpdatableLivePageResult
 
     /**

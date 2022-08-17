@@ -22,6 +22,8 @@ import android.util.AttributeSet
 import android.view.Gravity
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.use
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.marginBottom
 import androidx.core.view.marginTop
 import androidx.core.view.updateLayoutParams
@@ -33,6 +35,7 @@ import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
 import com.mapbox.mapboxsdk.style.layers.Property
 import im.vector.app.R
+import im.vector.app.core.utils.DimensionConverter
 import timber.log.Timber
 
 class MapTilerMapView @JvmOverloads constructor(
@@ -56,24 +59,28 @@ class MapTilerMapView @JvmOverloads constructor(
     private var mapRefs: MapRefs? = null
     private var initZoomDone = false
     private var showLocationButton = false
+    private var dimensionConverter: DimensionConverter? = null
 
     init {
-        context.theme.obtainStyledAttributes(
+        context.obtainStyledAttributes(
                 attrs,
                 R.styleable.MapTilerMapView,
                 0,
                 0
-        ).run {
-            try {
-                setLocateButtonVisibility(this)
-            } finally {
-                recycle()
-            }
+        ).use {
+            setLocateButtonVisibility(it)
         }
+        dimensionConverter = DimensionConverter(resources)
     }
 
     private fun setLocateButtonVisibility(typedArray: TypedArray) {
         showLocationButton = typedArray.getBoolean(R.styleable.MapTilerMapView_showLocateButton, false)
+    }
+
+    override fun onDestroy() {
+        mapRefs?.symbolManager?.onDestroy()
+        mapRefs = null
+        super.onDestroy()
     }
 
     /**
@@ -151,13 +158,18 @@ class MapTilerMapView @JvmOverloads constructor(
             pendingState = state
         }
 
-        safeMapRefs.map.uiSettings.setLogoMargins(0, 0, 0, state.logoMarginBottom)
+        safeMapRefs.map.uiSettings.apply {
+            setLogoMargins(0, 0, 0, state.logoMarginBottom)
+            dimensionConverter?.let {
+                setAttributionMargins(it.dpToPx(88), 0, 0, state.logoMarginBottom)
+            }
+        }
 
         val pinDrawable = state.pinDrawable ?: userLocationDrawable
         pinDrawable?.let { drawable ->
             if (!safeMapRefs.style.isFullyLoaded ||
                     safeMapRefs.style.getImage(state.pinId) == null) {
-                safeMapRefs.style.addImage(state.pinId, drawable)
+                safeMapRefs.style.addImage(state.pinId, drawable.toBitmap())
             }
         }
 

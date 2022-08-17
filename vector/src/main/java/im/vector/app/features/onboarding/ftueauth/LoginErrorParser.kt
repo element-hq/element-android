@@ -20,6 +20,7 @@ import im.vector.app.R
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.onboarding.ftueauth.LoginErrorParser.LoginErrorResult
+import org.matrix.android.sdk.api.failure.isHomeserverUnavailable
 import org.matrix.android.sdk.api.failure.isInvalidPassword
 import org.matrix.android.sdk.api.failure.isInvalidUsername
 import org.matrix.android.sdk.api.failure.isLoginEmailUnknown
@@ -31,16 +32,19 @@ class LoginErrorParser @Inject constructor(
 ) {
     fun parse(throwable: Throwable, password: String): LoginErrorResult {
         return when {
-            throwable.isInvalidUsername()                                    -> {
+            throwable.isInvalidUsername() -> {
                 LoginErrorResult(throwable, usernameOrIdError = errorFormatter.toHumanReadable(throwable))
             }
-            throwable.isLoginEmailUnknown()                                  -> {
+            throwable.isLoginEmailUnknown() -> {
                 LoginErrorResult(throwable, usernameOrIdError = stringProvider.getString(R.string.login_login_with_email_error))
             }
             throwable.isInvalidPassword() && password.hasSurroundingSpaces() -> {
                 LoginErrorResult(throwable, passwordError = stringProvider.getString(R.string.auth_invalid_login_param_space_in_password))
             }
-            else                                                             -> {
+            throwable.isHomeserverUnavailable() -> {
+                LoginErrorResult(throwable, usernameOrIdError = stringProvider.getString(R.string.login_error_homeserver_not_found))
+            }
+            else -> {
                 LoginErrorResult(throwable)
             }
         }

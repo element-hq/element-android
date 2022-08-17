@@ -32,8 +32,6 @@ import org.matrix.android.sdk.internal.database.model.threads.ThreadSummaryEntit
             EventInsertEntity::class,
             TimelineEventEntity::class,
             FilterEntity::class,
-            GroupEntity::class,
-            GroupSummaryEntity::class,
             ReadReceiptEntity::class,
             RoomEntity::class,
             RoomSummaryEntity::class,

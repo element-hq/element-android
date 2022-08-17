@@ -271,7 +271,7 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
         directionDetector.handleTouchEvent(event)
 
         return when (swipeDirection) {
-            SwipeDirection.Up, SwipeDirection.Down    -> {
+            SwipeDirection.Up, SwipeDirection.Down -> {
                 if (isSwipeToDismissAllowed && !wasScaled && isImagePagerIdle) {
                     swipeDismissHandler.onTouch(views.rootContainer, event)
                 } else true
@@ -279,7 +279,7 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
             SwipeDirection.Left, SwipeDirection.Right -> {
                 views.attachmentPager.dispatchTouchEvent(event)
             }
-            else                                      -> true
+            else -> true
         }
     }
 

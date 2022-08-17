@@ -16,7 +16,8 @@
 
 package im.vector.app.features
 
-import im.vector.app.BuildConfig
+import im.vector.app.config.Config
+import im.vector.app.config.OnboardingVariant
 
 interface VectorFeatures {
 
@@ -27,22 +28,28 @@ interface VectorFeatures {
     fun isOnboardingPersonalizeEnabled(): Boolean
     fun isOnboardingCombinedRegisterEnabled(): Boolean
     fun isOnboardingCombinedLoginEnabled(): Boolean
+    fun allowExternalUnifiedPushDistributors(): Boolean
     fun isScreenSharingEnabled(): Boolean
-
-    enum class OnboardingVariant {
-        LEGACY,
-        LOGIN_2,
-        FTUE_AUTH
-    }
+    fun isLocationSharingEnabled(): Boolean
+    fun forceUsageOfOpusEncoder(): Boolean
+    fun shouldStartDmOnFirstMessage(): Boolean
+    fun isNewAppLayoutEnabled(): Boolean
+    fun isNewDeviceManagementEnabled(): Boolean
 }
 
 class DefaultVectorFeatures : VectorFeatures {
-    override fun onboardingVariant(): VectorFeatures.OnboardingVariant = BuildConfig.ONBOARDING_VARIANT
+    override fun onboardingVariant() = Config.ONBOARDING_VARIANT
     override fun isOnboardingAlreadyHaveAccountSplashEnabled() = true
     override fun isOnboardingSplashCarouselEnabled() = true
     override fun isOnboardingUseCaseEnabled() = true
-    override fun isOnboardingPersonalizeEnabled() = false
-    override fun isOnboardingCombinedRegisterEnabled() = false
-    override fun isOnboardingCombinedLoginEnabled() = false
+    override fun isOnboardingPersonalizeEnabled() = true
+    override fun isOnboardingCombinedRegisterEnabled() = true
+    override fun isOnboardingCombinedLoginEnabled() = true
+    override fun allowExternalUnifiedPushDistributors(): Boolean = Config.ALLOW_EXTERNAL_UNIFIED_PUSH_DISTRIBUTORS
     override fun isScreenSharingEnabled(): Boolean = true
+    override fun isLocationSharingEnabled() = Config.ENABLE_LOCATION_SHARING
+    override fun forceUsageOfOpusEncoder(): Boolean = false
+    override fun shouldStartDmOnFirstMessage(): Boolean = false
+    override fun isNewAppLayoutEnabled(): Boolean = false
+    override fun isNewDeviceManagementEnabled(): Boolean = false
 }

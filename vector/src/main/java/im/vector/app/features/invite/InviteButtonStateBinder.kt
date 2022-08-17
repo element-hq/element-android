@@ -32,9 +32,9 @@ object InviteButtonStateBinder {
 
         val requestInProgress = changeMembershipState.isInProgress() || changeMembershipState.isSuccessful()
         when {
-            requestInProgress                                            -> acceptView.render(ButtonStateView.State.Loading)
+            requestInProgress -> acceptView.render(ButtonStateView.State.Loading)
             changeMembershipState is ChangeMembershipState.FailedJoining -> acceptView.render(ButtonStateView.State.Error)
-            else                                                         -> acceptView.render(ButtonStateView.State.Button)
+            else -> acceptView.render(ButtonStateView.State.Button)
         }
         // ButtonStateView.State.Loaded not used because roomSummary will not be displayed as a room invitation anymore
 
@@ -42,7 +42,7 @@ object InviteButtonStateBinder {
 
         when (changeMembershipState) {
             is ChangeMembershipState.FailedLeaving -> rejectView.render(ButtonStateView.State.Error)
-            else                                   -> rejectView.render(ButtonStateView.State.Button)
+            else -> rejectView.render(ButtonStateView.State.Button)
         }
     }
 }

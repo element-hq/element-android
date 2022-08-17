@@ -573,9 +573,7 @@
     <string name="login_a11y_choose_other">Elekti propran hejmservilon</string>
     <string name="login_a11y_choose_modular">Elekti Element Matrix Services</string>
     <string name="login_a11y_choose_matrix_org">Elekti matrix.org</string>
-    <string name="login_signup_cancel_confirmation_content">Via konto ankoraŭ ne estas kreita.
-\n
-\nĈu haltigi la registriĝon\?</string>
+    <string name="login_signup_cancel_confirmation_content">Via konto ankoraŭ ne estas kreita. Ĉu haltigi la registriĝon\?</string>
     <string name="login_signup_cancel_confirmation_title">Averto</string>
     <string name="login_signup_error_user_in_use">Tiu uzantonomo jam estas prenita</string>
     <string name="login_signup_submit">Pluen</string>
@@ -694,7 +692,6 @@
     <string name="attachment_type_camera">Filmilo</string>
     <string name="attachment_type_contact">Kontakto</string>
     <string name="attachment_type_file">Dosiero</string>
-    <string name="error_attachment">Eraris akirado de la kunsendaĵo.</string>
     <plurals name="fallback_users_read">
         <item quantity="one">%d uzanto legis</item>
         <item quantity="other">%d uzantoj legis</item>

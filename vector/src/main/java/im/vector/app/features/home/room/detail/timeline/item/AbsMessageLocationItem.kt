@@ -20,6 +20,7 @@ import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.IdRes
+import androidx.annotation.LayoutRes
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
@@ -35,8 +36,12 @@ import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
 import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
 import im.vector.app.features.home.room.detail.timeline.style.granularRoundedCorners
+import im.vector.app.features.location.MapLoadingErrorView
+import im.vector.app.features.location.MapLoadingErrorViewState
 
-abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder> : AbsMessageItem<H>() {
+abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder>(
+        @LayoutRes layoutId: Int = R.layout.item_timeline_event_base
+) : AbsMessageItem<H>(layoutId) {
 
     @EpoxyAttribute
     var locationUrl: String? = null
@@ -83,8 +88,11 @@ abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder> : AbsMe
                             target: Target<Drawable>?,
                             isFirstResource: Boolean
                     ): Boolean {
-                        holder.staticMapPinImageView.setImageResource(R.drawable.ic_location_pin_failed)
-                        holder.staticMapErrorTextView.isVisible = true
+                        holder.staticMapPinImageView.setImageDrawable(null)
+                        holder.staticMapLoadingErrorView.isVisible = true
+                        val mapErrorViewState = MapLoadingErrorViewState(imageCornerTransformation)
+                        holder.staticMapLoadingErrorView.render(mapErrorViewState)
+                        holder.staticMapCopyrightTextView.isVisible = false
                         return false
                     }
 
@@ -99,7 +107,8 @@ abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder> : AbsMe
                             // we are not using Glide since it does not display it correctly when there is no user photo
                             holder.staticMapPinImageView.setImageDrawable(pinDrawable)
                         }
-                        holder.staticMapErrorTextView.isVisible = false
+                        holder.staticMapLoadingErrorView.isVisible = false
+                        holder.staticMapCopyrightTextView.isVisible = true
                         return false
                     }
                 })
@@ -110,6 +119,7 @@ abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder> : AbsMe
     abstract class Holder(@IdRes stubId: Int) : AbsMessageItem.Holder(stubId) {
         val staticMapImageView by bind<ImageView>(R.id.staticMapImageView)
         val staticMapPinImageView by bind<ImageView>(R.id.staticMapPinImageView)
-        val staticMapErrorTextView by bind<TextView>(R.id.staticMapErrorTextView)
+        val staticMapLoadingErrorView by bind<MapLoadingErrorView>(R.id.staticMapLoadingError)
+        val staticMapCopyrightTextView by bind<TextView>(R.id.staticMapCopyrightTextView)
     }
 }

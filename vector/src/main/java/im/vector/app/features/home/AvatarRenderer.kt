@@ -70,7 +70,7 @@ class AvatarRenderer @Inject constructor(
         render(
                 GlideApp.with(imageView),
                 matrixItem,
-                DrawableImageViewTarget(imageView)
+                DrawableImageViewTarget(imageView),
         )
     }
 
@@ -103,7 +103,7 @@ class AvatarRenderer @Inject constructor(
         render(
                 glideRequests,
                 matrixItem,
-                DrawableImageViewTarget(imageView)
+                DrawableImageViewTarget(imageView),
         )
     }
 
@@ -123,7 +123,7 @@ class AvatarRenderer @Inject constructor(
         val matrixItem = MatrixItem.UserItem(
                 // Need an id starting with @
                 id = "@${mappedContact.displayName}",
-                displayName = mappedContact.displayName
+                displayName = mappedContact.displayName,
         )
 
         val placeholder = getPlaceholderDrawable(matrixItem)
@@ -140,7 +140,7 @@ class AvatarRenderer @Inject constructor(
         val matrixItem = MatrixItem.UserItem(
                 // Need an id starting with @
                 id = profileInfo.matrixId,
-                displayName = profileInfo.displayName
+                displayName = profileInfo.displayName,
         )
 
         val placeholder = getPlaceholderDrawable(matrixItem)
@@ -164,7 +164,7 @@ class AvatarRenderer @Inject constructor(
                         is MatrixItem.SpaceItem -> {
                             it.transform(MultiTransformation(CenterCrop(), RoundedCorners(dimensionConverter.dpToPx(8))))
                         }
-                        else                    -> {
+                        else -> {
                             it.apply(RequestOptions.circleCropTransform())
                         }
                     }
@@ -215,7 +215,7 @@ class AvatarRenderer @Inject constructor(
                                 .bold()
                                 .endConfig()
                                 .buildRect(matrixItem.firstLetterOfDisplayName(), avatarColor)
-                                .toBitmap(width = iconSize, height = iconSize)
+                                .toBitmap(width = iconSize, height = iconSize),
                 )
             }
         }
@@ -231,7 +231,7 @@ class AvatarRenderer @Inject constructor(
             addPlaceholder: Boolean
     ) {
         val transformations = mutableListOf<Transformation<Bitmap>>(
-                BlurTransformation(20, sampling)
+                BlurTransformation(20, sampling),
         )
         if (colorFilter != null) {
             transformations.add(ColorFilterTransformation(colorFilter))
@@ -277,7 +277,7 @@ class AvatarRenderer @Inject constructor(
                         is MatrixItem.SpaceItem -> {
                             it.buildRoundRect(matrixItem.firstLetterOfDisplayName(), avatarColor, dimensionConverter.dpToPx(8))
                         }
-                        else                    -> {
+                        else -> {
                             it.buildRound(matrixItem.firstLetterOfDisplayName(), avatarColor)
                         }
                     }

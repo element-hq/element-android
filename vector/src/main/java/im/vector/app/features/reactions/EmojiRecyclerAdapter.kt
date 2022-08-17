@@ -138,7 +138,7 @@ class EmojiRecyclerAdapter @Inject constructor() :
         itemView.setOnClickListener(itemClickListener)
         val viewHolder = when (viewType) {
             R.layout.grid_section_header -> SectionViewHolder(itemView)
-            else                         -> EmojiViewHolder(itemView)
+            else -> EmojiViewHolder(itemView)
         }
         Trace.endSection()
         return viewHolder
@@ -288,10 +288,10 @@ class EmojiRecyclerAdapter @Inject constructor() :
         override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
             super.onScrollStateChanged(recyclerView, newState)
             scrollState = when (newState) {
-                RecyclerView.SCROLL_STATE_IDLE     -> ScrollState.IDLE
+                RecyclerView.SCROLL_STATE_IDLE -> ScrollState.IDLE
                 RecyclerView.SCROLL_STATE_SETTLING -> ScrollState.SETTLING
                 RecyclerView.SCROLL_STATE_DRAGGING -> ScrollState.DRAGGING
-                else                               -> ScrollState.UNKNOWN
+                else -> ScrollState.UNKNOWN
             }
 
             // TODO better

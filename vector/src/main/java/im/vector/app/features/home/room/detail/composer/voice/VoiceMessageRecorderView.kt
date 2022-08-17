@@ -21,7 +21,6 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.hardware.vibrate
 import im.vector.app.core.time.Clock
@@ -57,6 +56,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     }
 
     @Inject lateinit var clock: Clock
+    @Inject lateinit var voiceMessageConfig: VoiceMessageConfig
 
     // We need to define views as lateinit var to be able to check if initialized for the bug fix on api 21 and 22.
     @Suppress("UNNECESSARY_LATEINIT")
@@ -84,12 +84,12 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
             override fun onRequestRecording() = callback.onVoiceRecordingStarted()
             override fun onMicButtonReleased() {
                 when (dragState) {
-                    DraggingState.Lock   -> {
+                    DraggingState.Lock -> {
                         // do nothing,
                         // onSendVoiceMessage, onDeleteVoiceMessage or onRecordingLimitReached will be triggered instead
                     }
                     DraggingState.Cancel -> callback.onVoiceRecordingCancelled()
-                    else                 -> callback.onVoiceRecordingEnded()
+                    else -> callback.onVoiceRecordingEnded()
                 }
             }
 
@@ -99,7 +99,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
                 when (lastKnownState) {
                     is RecordingUiState.Recording,
                     is RecordingUiState.Locked -> callback.onRecordingWaveformClicked()
-                    else                       -> Unit
+                    else -> Unit
                 }
             }
 
@@ -133,7 +133,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     fun render(recordingState: RecordingUiState) {
         if (lastKnownState == recordingState) return
         when (recordingState) {
-            RecordingUiState.Idle         -> {
+            RecordingUiState.Idle -> {
                 reset()
             }
             is RecordingUiState.Recording -> {
@@ -142,7 +142,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
                 voiceMessageViews.showRecordingViews()
                 dragState = DraggingState.Ready
             }
-            is RecordingUiState.Locked    -> {
+            is RecordingUiState.Locked -> {
                 if (lastKnownState == null) {
                     startRecordingTicker(startFromLocked = true, startAt = recordingState.recordingStartTimestamp)
                 }
@@ -151,7 +151,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
                     voiceMessageViews.showRecordingLockedViews(recordingState)
                 }, 500)
             }
-            RecordingUiState.Draft        -> {
+            RecordingUiState.Draft -> {
                 stopRecordingTicker()
                 voiceMessageViews.showDraftViews()
             }
@@ -169,16 +169,16 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         if (currentDragState == newDragState) return
         when (newDragState) {
             is DraggingState.Cancelling -> voiceMessageViews.renderCancelling(newDragState.distanceX)
-            is DraggingState.Locking    -> {
+            is DraggingState.Locking -> {
                 if (currentDragState is DraggingState.Cancelling) {
                     voiceMessageViews.showRecordingViews()
                 }
                 voiceMessageViews.renderLocking(newDragState.distanceY)
             }
-            DraggingState.Cancel        -> callback.onVoiceRecordingCancelled()
-            DraggingState.Lock          -> callback.onVoiceRecordingLocked()
+            DraggingState.Cancel -> callback.onVoiceRecordingCancelled()
+            DraggingState.Lock -> callback.onVoiceRecordingLocked()
             DraggingState.Ignored,
-            DraggingState.Ready         -> {
+            DraggingState.Ready -> {
                 // do nothing
             }
         }
@@ -202,7 +202,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
 
     private fun onRecordingTick(isLocked: Boolean, milliseconds: Long) {
         voiceMessageViews.renderRecordingTimer(isLocked, milliseconds / 1_000)
-        val timeDiffToRecordingLimit = BuildConfig.VOICE_MESSAGE_DURATION_LIMIT_MS - milliseconds
+        val timeDiffToRecordingLimit = voiceMessageConfig.lengthLimitMs - milliseconds
         if (timeDiffToRecordingLimit <= 0) {
             post {
                 callback.onRecordingLimitReached()
@@ -227,11 +227,11 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
             is AudioMessagePlaybackTracker.Listener.State.Recording -> {
                 voiceMessageViews.renderRecordingWaveform(state.amplitudeList.toList())
             }
-            is AudioMessagePlaybackTracker.Listener.State.Playing   -> {
+            is AudioMessagePlaybackTracker.Listener.State.Playing -> {
                 voiceMessageViews.renderPlaying(state)
             }
             is AudioMessagePlaybackTracker.Listener.State.Paused,
-            is AudioMessagePlaybackTracker.Listener.State.Idle      -> {
+            is AudioMessagePlaybackTracker.Listener.State.Idle -> {
                 voiceMessageViews.renderIdle()
             }
         }

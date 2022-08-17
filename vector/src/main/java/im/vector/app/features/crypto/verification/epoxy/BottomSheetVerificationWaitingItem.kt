@@ -26,8 +26,8 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 /**
  * A action for bottom sheet.
  */
-@EpoxyModelClass(layout = R.layout.item_verification_waiting)
-abstract class BottomSheetVerificationWaitingItem : VectorEpoxyModel<BottomSheetVerificationWaitingItem.Holder>() {
+@EpoxyModelClass
+abstract class BottomSheetVerificationWaitingItem : VectorEpoxyModel<BottomSheetVerificationWaitingItem.Holder>(R.layout.item_verification_waiting) {
 
     @EpoxyAttribute
     var title: String = ""

@@ -74,7 +74,7 @@ internal class UIEchoManager(
         when (timelineEvent.root.getClearType()) {
             EventType.REDACTION -> {
             }
-            EventType.REACTION  -> {
+            EventType.REACTION -> {
                 val content: ReactionContent? = timelineEvent.root.content?.toModel<ReactionContent>()
                 if (RelationType.ANNOTATION == content?.relatesTo?.type) {
                     val reaction = content.relatesTo.key

@@ -16,20 +16,15 @@
 
 package im.vector.app.features.location.domain.usecase
 
-import com.airbnb.mvrx.test.MvRxTestRule
 import im.vector.app.features.location.LocationData
 import im.vector.app.test.fakes.FakeSession
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.OverrideMockKs
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 
 class CompareLocationsUseCaseTest {
-
-    @get:Rule
-    val mvRxTestRule = MvRxTestRule()
 
     private val session = FakeSession()
 

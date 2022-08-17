@@ -76,11 +76,11 @@ internal class QueueMemento @Inject constructor(
                     encrypt = task.encrypt,
                     order = order
             )
-            is RedactQueuedTask    -> RedactEventTaskInfo(
+            is RedactQueuedTask -> RedactEventTaskInfo(
                     redactionLocalEcho = task.redactionLocalEchoId,
                     order = order
             )
-            else                   -> null
+            else -> null
         }
     }
 
@@ -94,7 +94,7 @@ internal class QueueMemento @Inject constructor(
                 ?.forEach { info ->
                     try {
                         when (info) {
-                            is SendEventTaskInfo   -> {
+                            is SendEventTaskInfo -> {
                                 localEchoRepository.getUpToDateEcho(info.localEchoId)?.let {
                                     if (it.sendState.isSending() && it.eventId != null && it.roomId != null) {
                                         localEchoRepository.updateSendState(it.eventId, it.roomId, SendState.UNSENT)

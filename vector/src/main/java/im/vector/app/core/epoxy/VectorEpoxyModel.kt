@@ -17,6 +17,7 @@
 package im.vector.app.core.epoxy
 
 import androidx.annotation.CallSuper
+import androidx.annotation.LayoutRes
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import com.airbnb.epoxy.VisibilityState
 import kotlinx.coroutines.CoroutineScope
@@ -27,11 +28,15 @@ import kotlinx.coroutines.cancelChildren
 /**
  * EpoxyModelWithHolder which can listen to visibility state change.
  */
-abstract class VectorEpoxyModel<H : VectorEpoxyHolder> : EpoxyModelWithHolder<H>() {
+abstract class VectorEpoxyModel<H : VectorEpoxyHolder>(
+        @LayoutRes private val layoutId: Int
+) : EpoxyModelWithHolder<H>() {
 
     protected val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
     private var onModelVisibilityStateChangedListener: OnVisibilityStateChangedListener? = null
+
+    final override fun getDefaultLayout() = layoutId
 
     @CallSuper
     override fun bind(holder: H) {

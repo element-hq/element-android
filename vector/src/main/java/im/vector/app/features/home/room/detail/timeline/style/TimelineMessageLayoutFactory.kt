@@ -62,16 +62,15 @@ class TimelineMessageLayoutFactory @Inject constructor(
                 MessageType.MSGTYPE_STICKER_LOCAL,
                 MessageType.MSGTYPE_EMOTE,
                 MessageType.MSGTYPE_BEACON_INFO,
+                MessageType.MSGTYPE_LOCATION,
+                MessageType.MSGTYPE_BEACON_LOCATION_DATA,
         )
         private val MSG_TYPES_WITH_TIMESTAMP_INSIDE_MESSAGE = setOf(
                 MessageType.MSGTYPE_IMAGE,
                 MessageType.MSGTYPE_VIDEO,
                 MessageType.MSGTYPE_BEACON_INFO,
-        )
-
-        private val MSG_TYPES_WITH_LOCATION_DATA = setOf(
                 MessageType.MSGTYPE_LOCATION,
-                MessageType.MSGTYPE_BEACON_LOCATION_DATA
+                MessageType.MSGTYPE_BEACON_LOCATION_DATA,
         )
     }
 
@@ -147,23 +146,20 @@ class TimelineMessageLayoutFactory @Inject constructor(
 
     private fun MessageContent?.isPseudoBubble(): Boolean {
         if (this == null) return false
-        if (msgType == MessageType.MSGTYPE_LOCATION) return vectorPreferences.labsRenderLocationsInTimeline()
         return this.msgType in MSG_TYPES_WITH_PSEUDO_BUBBLE_LAYOUT
     }
 
     private fun MessageContent?.timestampInsideMessage(): Boolean {
         return when {
-            this == null                            -> false
-            msgType in MSG_TYPES_WITH_LOCATION_DATA -> vectorPreferences.labsRenderLocationsInTimeline()
-            else                                    -> msgType in MSG_TYPES_WITH_TIMESTAMP_INSIDE_MESSAGE
+            this == null -> false
+            else -> msgType in MSG_TYPES_WITH_TIMESTAMP_INSIDE_MESSAGE
         }
     }
 
     private fun MessageContent?.shouldAddMessageOverlay(): Boolean {
         return when {
             this == null || msgType == MessageType.MSGTYPE_BEACON_INFO -> false
-            msgType == MessageType.MSGTYPE_LOCATION                    -> vectorPreferences.labsRenderLocationsInTimeline()
-            else                                                       -> msgType in MSG_TYPES_WITH_TIMESTAMP_INSIDE_MESSAGE
+            else -> msgType in MSG_TYPES_WITH_TIMESTAMP_INSIDE_MESSAGE
         }
     }
 
@@ -214,10 +210,10 @@ class TimelineMessageLayoutFactory @Inject constructor(
         return when (event?.root?.getClearType()) {
             EventType.KEY_VERIFICATION_DONE,
             EventType.KEY_VERIFICATION_CANCEL -> true
-            EventType.MESSAGE                 -> {
+            EventType.MESSAGE -> {
                 event.getLastMessageContent() is MessageVerificationRequestContent
             }
-            else                              -> false
+            else -> false
         }
     }
 }

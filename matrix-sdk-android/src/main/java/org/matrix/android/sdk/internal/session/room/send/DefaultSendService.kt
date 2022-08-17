@@ -129,18 +129,6 @@ internal class DefaultSendService @AssistedInject constructor(
                 .let { sendEvent(it) }
     }
 
-    override fun sendLocation(latitude: Double, longitude: Double, uncertainty: Double?, isUserLocation: Boolean): Cancelable {
-        return localEchoEventFactory.createLocationEvent(roomId, latitude, longitude, uncertainty, isUserLocation)
-                .also { createLocalEcho(it) }
-                .let { sendEvent(it) }
-    }
-
-    override fun sendLiveLocation(beaconInfoEventId: String, latitude: Double, longitude: Double, uncertainty: Double?): Cancelable {
-        return localEchoEventFactory.createLiveLocationEvent(beaconInfoEventId, roomId, latitude, longitude, uncertainty)
-                .also { createLocalEcho(it) }
-                .let { sendEvent(it) }
-    }
-
     override fun redactEvent(event: Event, reason: String?): Cancelable {
         // TODO manage media/attachements?
         val redactionEcho = localEchoEventFactory.createRedactEvent(roomId, event.eventId!!, reason)
@@ -198,7 +186,7 @@ internal class DefaultSendService @AssistedInject constructor(
                     localEchoRepository.updateSendState(localEcho.eventId, roomId, SendState.UNSENT)
                     internalSendMedia(listOf(localEcho.root), attachmentData, true)
                 }
-                is MessageFileContent  -> {
+                is MessageFileContent -> {
                     val attachmentData = ContentAttachmentData(
                             size = messageContent.info!!.size,
                             mimeType = messageContent.mimeType,
@@ -222,7 +210,7 @@ internal class DefaultSendService @AssistedInject constructor(
                     localEchoRepository.updateSendState(localEcho.eventId, roomId, SendState.UNSENT)
                     internalSendMedia(listOf(localEcho.root), attachmentData, true)
                 }
-                else                   -> NoOpCancellable
+                else -> NoOpCancellable
             }
         }
         return NoOpCancellable

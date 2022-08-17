@@ -16,7 +16,6 @@
 
 package im.vector.app.features.analytics.accountdata
 
-import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -37,7 +36,7 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.initsync.SyncStatusService
+import org.matrix.android.sdk.api.session.sync.SyncRequestState
 import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
 import java.util.UUID
@@ -66,11 +65,11 @@ class AnalyticsAccountDataViewModel @AssistedInject constructor(
 
     private fun observeInitSync() {
         combine(
-                session.syncStatusService().getSyncStatusLive().asFlow(),
+                session.syncService().getSyncRequestStateFlow(),
                 analytics.getUserConsent(),
                 analytics.getAnalyticsId()
         ) { status, userConsent, analyticsId ->
-            if (status is SyncStatusService.Status.IncrementalSyncIdle &&
+            if (status is SyncRequestState.IncrementalSyncIdle &&
                     userConsent &&
                     analyticsId.isEmpty() &&
                     !checkDone) {

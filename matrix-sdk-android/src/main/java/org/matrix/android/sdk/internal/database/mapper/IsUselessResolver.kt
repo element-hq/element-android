@@ -32,7 +32,7 @@ internal object IsUselessResolver {
                 event.content != null &&
                         event.content.toContent() == event.resolvedPrevContent()?.toContent()
             }
-            else                        -> false
+            else -> false
         }
     }
 }

@@ -40,6 +40,13 @@ internal class SessionManager @Inject constructor(
         return getOrCreateSessionComponent(sessionParams)
     }
 
+    fun getLastSession(): Session? {
+        val sessionParams = sessionParamsStore.getLast()
+        return sessionParams?.let {
+            getOrCreateSession(it)
+        }
+    }
+
     fun getOrCreateSession(sessionParams: SessionParams): Session {
         return getOrCreateSessionComponent(sessionParams).session()
     }
@@ -55,7 +62,7 @@ internal class SessionManager @Inject constructor(
 
     fun stopSession(sessionId: String) {
         val sessionComponent = sessionComponents[sessionId] ?: throw RuntimeException("You don't have a session for id $sessionId")
-        sessionComponent.session().stopSync()
+        sessionComponent.session().syncService().stopSync()
     }
 
     fun getOrCreateSessionComponent(sessionParams: SessionParams): SessionComponent {

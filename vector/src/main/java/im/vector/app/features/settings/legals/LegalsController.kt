@@ -38,7 +38,8 @@ class LegalsController @Inject constructor(
         private val stringProvider: StringProvider,
         private val resources: Resources,
         private val elementLegals: ElementLegals,
-        private val errorFormatter: ErrorFormatter
+        private val errorFormatter: ErrorFormatter,
+        private val flavorLegals: FlavorLegals,
 ) : TypedEpoxyController<LegalsState>() {
 
     var listener: Listener? = null
@@ -98,7 +99,7 @@ class LegalsController @Inject constructor(
                     buildPolicies(tag, policies)
                 }
             }
-            is Fail    -> {
+            is Fail -> {
                 errorWithRetryItem {
                     id("errorRetry_$tag")
                     text(host.errorFormatter.toHumanReadable(serverAndPolicies.error))
@@ -134,7 +135,7 @@ class LegalsController @Inject constructor(
             clickListener { host.listener?.openThirdPartyNotice() }
         }
         // Only on Gplay
-        if (resources.getBoolean(R.bool.isGplay)) {
+        if (flavorLegals.hasThirdPartyNotices()) {
             discoveryPolicyItem {
                 id("eltpn2")
                 name(host.stringProvider.getString(R.string.settings_other_third_party_notices))

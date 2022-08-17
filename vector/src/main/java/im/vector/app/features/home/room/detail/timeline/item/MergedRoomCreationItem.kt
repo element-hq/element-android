@@ -25,9 +25,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
+import androidx.core.widget.TextViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
@@ -38,12 +38,14 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.tools.linkify
+import im.vector.app.features.themes.ThemeUtils
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.model.localecho.RoomLocalEcho
 import org.matrix.android.sdk.api.util.toMatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_base_noinfo)
-abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.Holder>() {
+@EpoxyModelClass
+abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.Holder>(R.layout.item_timeline_event_base_noinfo) {
 
     @EpoxyAttribute
     override lateinit var attributes: Attributes
@@ -51,126 +53,123 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var movementMethod: MovementMethod? = null
 
+    private val roomSummary
+        get() = attributes.roomSummary
+
+    private val isDirectRoom
+        get() = distinctMergeData.lastOrNull()?.isDirectRoom
+                ?: roomSummary?.isDirect
+                ?: false
+
     override fun getViewStubId() = STUB_ID
 
     override fun bind(holder: Holder) {
         super.bind(holder)
 
         bindCreationSummaryTile(holder)
+        bindMergedViews(holder)
+    }
 
+    private fun bindMergedViews(holder: Holder) {
+        holder.mergedView.isVisible = !attributes.isLocalRoom
         if (attributes.isCollapsed) {
             // Take the oldest data
             val data = distinctMergeData.lastOrNull()
-
-            val createdFromCurrentUser = data?.userId == attributes.currentUserId
-            val summary = if (createdFromCurrentUser) {
-                if (data?.isDirectRoom == true) {
-                    holder.expandView.resources.getString(R.string.direct_room_created_summary_item_by_you)
-                } else {
-                    holder.expandView.resources.getString(R.string.room_created_summary_item_by_you)
-                }
-            } else {
-                if (data?.isDirectRoom == true) {
-                    holder.expandView.resources.getString(R.string.direct_room_created_summary_item, data.memberName)
-                } else {
-                    holder.expandView.resources.getString(R.string.room_created_summary_item, data?.memberName ?: data?.userId ?: "")
-                }
-            }
-            holder.summaryView.text = summary
+            renderSummaryText(holder, data)
             holder.summaryView.visibility = View.VISIBLE
-            holder.avatarView.visibility = View.VISIBLE
             if (data != null) {
                 holder.avatarView.visibility = View.VISIBLE
                 attributes.avatarRenderer.render(data.toMatrixItem(), holder.avatarView)
             } else {
                 holder.avatarView.visibility = View.GONE
             }
-
-            bindEncryptionTile(holder, data)
+            bindEncryptionTile(holder)
         } else {
             holder.avatarView.visibility = View.INVISIBLE
             holder.summaryView.visibility = View.GONE
-            holder.encryptionTile.isGone = true
+            holder.encryptionTile.visibility = View.GONE
         }
     }
 
-    private fun bindEncryptionTile(holder: Holder, data: Data?) {
+    private fun renderSummaryText(holder: Holder, data: Data?) {
+        val resources = holder.expandView.resources
+        val createdFromCurrentUser = data?.userId == attributes.currentUserId
+        val summary = if (createdFromCurrentUser) {
+            if (isDirectRoom) {
+                resources.getString(R.string.direct_room_created_summary_item_by_you)
+            } else {
+                resources.getString(R.string.room_created_summary_item_by_you)
+            }
+        } else {
+            if (isDirectRoom) {
+                resources.getString(R.string.direct_room_created_summary_item, data?.memberName.orEmpty())
+            } else {
+                resources.getString(R.string.room_created_summary_item, data?.memberName.orEmpty())
+            }
+        }
+        holder.summaryView.text = summary
+    }
+
+    private fun bindEncryptionTile(holder: Holder) {
         if (attributes.hasEncryptionEvent) {
             holder.encryptionTile.isVisible = true
             holder.encryptionTile.updateLayoutParams<ConstraintLayout.LayoutParams> {
                 this.marginEnd = leftGuideline
             }
             if (attributes.isEncryptionAlgorithmSecure) {
-                holder.e2eTitleTextView.text = holder.expandView.resources.getString(R.string.encryption_enabled)
-                holder.e2eTitleDescriptionView.text = if (data?.isDirectRoom == true) {
-                    holder.expandView.resources.getString(R.string.direct_room_encryption_enabled_tile_description)
-                } else {
-                    holder.expandView.resources.getString(R.string.encryption_enabled_tile_description)
-                }
-                holder.e2eTitleDescriptionView.textAlignment = View.TEXT_ALIGNMENT_CENTER
-                holder.e2eTitleTextView.setCompoundDrawablesWithIntrinsicBounds(
-                        ContextCompat.getDrawable(holder.view.context, R.drawable.ic_shield_black),
-                        null, null, null
-                )
+                renderE2ESecureTile(holder)
             } else {
-                holder.e2eTitleTextView.text = holder.expandView.resources.getString(R.string.encryption_not_enabled)
-                holder.e2eTitleDescriptionView.text = holder.expandView.resources.getString(R.string.encryption_unknown_algorithm_tile_description)
-                holder.e2eTitleTextView.setCompoundDrawablesWithIntrinsicBounds(
-                        ContextCompat.getDrawable(holder.view.context, R.drawable.ic_shield_warning),
-                        null, null, null
-                )
+                renderE2EUnsecureTile(holder)
             }
         } else {
             holder.encryptionTile.isVisible = false
         }
     }
 
+    private fun renderE2ESecureTile(holder: Holder) {
+        val resources = holder.expandView.resources
+        val description = when {
+            isDirectRoom -> {
+                if (attributes.isLocalRoom) {
+                    resources.getString(R.string.direct_room_encryption_enabled_tile_description_future)
+                } else {
+                    resources.getString(R.string.direct_room_encryption_enabled_tile_description)
+                }
+            }
+            else -> {
+                resources.getString(R.string.encryption_enabled_tile_description)
+            }
+        }
+
+        holder.e2eTitleTextView.text = holder.expandView.resources.getString(R.string.encryption_enabled)
+        holder.e2eTitleTextView.setCompoundDrawablesWithIntrinsicBounds(
+                ContextCompat.getDrawable(holder.view.context, R.drawable.ic_shield_black),
+                null, null, null
+        )
+        holder.e2eTitleDescriptionView.text = description
+        holder.e2eTitleDescriptionView.textAlignment = View.TEXT_ALIGNMENT_CENTER
+    }
+
+    private fun renderE2EUnsecureTile(holder: Holder) {
+        holder.e2eTitleTextView.text = holder.expandView.resources.getString(R.string.encryption_not_enabled)
+        holder.e2eTitleDescriptionView.text = holder.expandView.resources.getString(R.string.encryption_unknown_algorithm_tile_description)
+        holder.e2eTitleTextView.setCompoundDrawablesWithIntrinsicBounds(
+                ContextCompat.getDrawable(holder.view.context, R.drawable.ic_shield_warning),
+                null, null, null
+        )
+    }
+
     private fun bindCreationSummaryTile(holder: Holder) {
-        val roomSummary = attributes.roomSummary
         val roomDisplayName = roomSummary?.displayName
-        holder.roomNameText.setTextOrHide(roomDisplayName)
-        val isDirect = roomSummary?.isDirect == true
         val membersCount = roomSummary?.otherMemberIds?.size ?: 0
 
-        if (isDirect) {
-            holder.roomDescriptionText.text = holder.view.resources.getString(
-                    R.string.this_is_the_beginning_of_dm,
-                    roomSummary?.displayName ?: ""
-            )
-        } else if (roomDisplayName.isNullOrBlank() || roomSummary.name.isBlank()) {
-            holder.roomDescriptionText.text = holder.view.resources.getString(R.string.this_is_the_beginning_of_room_no_name)
-        } else {
-            holder.roomDescriptionText.text = holder.view.resources.getString(R.string.this_is_the_beginning_of_room, roomDisplayName)
-        }
-
-        val topic = roomSummary?.topic
-        if (topic.isNullOrBlank()) {
-            // do not show hint for DMs or group DMs
-            val canSetTopic = attributes.canChangeTopic && !isDirect
-            if (canSetTopic) {
-                val addTopicLink = holder.view.resources.getString(R.string.add_a_topic_link_text)
-                val styledText = SpannableString(holder.view.resources.getString(R.string.room_created_summary_no_topic_creation_text, addTopicLink))
-                holder.roomTopicText.setTextOrHide(styledText.tappableMatchingText(addTopicLink, object : ClickableSpan() {
-                    override fun onClick(widget: View) {
-                        attributes.callback?.onTimelineItemAction(RoomDetailAction.QuickActionSetTopic)
-                    }
-                }))
-            }
-        } else {
-            holder.roomTopicText.setTextOrHide(
-                    span {
-                        span(holder.view.resources.getString(R.string.topic_prefix)) {
-                            textStyle = "bold"
-                        }
-                        +topic.linkify(attributes.callback)
-                    }
-            )
-        }
-        holder.roomTopicText.movementMethod = movementMethod
+        holder.roomNameText.setTextOrHide(roomDisplayName)
+        renderRoomDescription(holder)
+        renderRoomTopic(holder)
 
         val roomItem = roomSummary?.toMatrixItem()
         val shouldSetAvatar = attributes.canChangeAvatar &&
-                (roomSummary?.isDirect == false || (isDirect && membersCount >= 2)) &&
+                (roomSummary?.isDirect == false || (isDirectRoom && membersCount >= 2)) &&
                 roomItem?.avatarUrl.isNullOrBlank()
 
         holder.roomAvatarImageView.isVisible = roomItem != null
@@ -193,7 +192,7 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
             }
         }
 
-        val canInvite = attributes.canInvite && !isDirect
+        val canInvite = attributes.canInvite && !isDirectRoom
         holder.addPeopleButton.isVisible = canInvite
         if (canInvite) {
             holder.addPeopleButton.onClick {
@@ -202,7 +201,60 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
         }
     }
 
+    private fun renderRoomDescription(holder: Holder) {
+        val roomDisplayName = roomSummary?.displayName
+        val resources = holder.roomDescriptionText.resources
+        val description = when {
+            isDirectRoom -> {
+                if (attributes.isLocalRoom) {
+                    resources.getString(R.string.send_your_first_msg_to_invite, roomSummary?.displayName.orEmpty())
+                } else {
+                    resources.getString(R.string.this_is_the_beginning_of_dm, roomSummary?.displayName.orEmpty())
+                }
+            }
+            roomDisplayName.isNullOrBlank() || roomSummary?.name.isNullOrBlank() -> {
+                holder.view.resources.getString(R.string.this_is_the_beginning_of_room_no_name)
+            }
+            else -> {
+                holder.view.resources.getString(R.string.this_is_the_beginning_of_room, roomDisplayName)
+            }
+        }
+        holder.roomDescriptionText.text = description
+        if (isDirectRoom && attributes.isLocalRoom) {
+            TextViewCompat.setTextAppearance(holder.roomDescriptionText, R.style.TextAppearance_Vector_Subtitle)
+            holder.roomDescriptionText.setTextColor(ThemeUtils.getColor(holder.roomDescriptionText.context, R.attr.vctr_content_primary))
+        }
+    }
+
+    private fun renderRoomTopic(holder: Holder) {
+        val topic = roomSummary?.topic
+        if (topic.isNullOrBlank()) {
+            // do not show hint for DMs or group DMs
+            val canSetTopic = attributes.canChangeTopic && !isDirectRoom
+            if (canSetTopic) {
+                val addTopicLink = holder.view.resources.getString(R.string.add_a_topic_link_text)
+                val styledText = SpannableString(holder.view.resources.getString(R.string.room_created_summary_no_topic_creation_text, addTopicLink))
+                holder.roomTopicText.setTextOrHide(styledText.tappableMatchingText(addTopicLink, object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        attributes.callback?.onTimelineItemAction(RoomDetailAction.QuickActionSetTopic)
+                    }
+                }))
+            }
+        } else {
+            holder.roomTopicText.setTextOrHide(
+                    span {
+                        span(holder.view.resources.getString(R.string.topic_prefix)) {
+                            textStyle = "bold"
+                        }
+                        +topic.linkify(attributes.callback)
+                    }
+            )
+        }
+        holder.roomTopicText.movementMethod = movementMethod
+    }
+
     class Holder : BasedMergedItem.Holder(STUB_ID) {
+        val mergedView by bind<View>(R.id.mergedSumContainer)
         val summaryView by bind<TextView>(R.id.itemNoticeTextView)
         val avatarView by bind<ImageView>(R.id.itemNoticeAvatarView)
         val encryptionTile by bind<ViewGroup>(R.id.creationEncryptionTile)
@@ -236,5 +288,8 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
             val canChangeAvatar: Boolean = false,
             val canChangeName: Boolean = false,
             val canChangeTopic: Boolean = false
-    ) : BasedMergedItem.Attributes
+    ) : BasedMergedItem.Attributes {
+
+        val isLocalRoom = RoomLocalEcho.isLocalEchoId(roomSummary?.roomId.orEmpty())
+    }
 }

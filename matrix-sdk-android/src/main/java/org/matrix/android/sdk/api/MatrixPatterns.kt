@@ -157,6 +157,20 @@ object MatrixPatterns {
     }
 
     /**
+     * Extract user name from a matrix id.
+     *
+     * @param matrixId
+     * @return null if the input is not a valid matrixId
+     */
+    fun extractUserNameFromId(matrixId: String): String? {
+        return if (isUserId(matrixId)) {
+            matrixId.removePrefix("@").substringBefore(":", missingDelimiterValue = "")
+        } else {
+            null
+        }
+    }
+
+    /**
      * Orders which are not strings, or do not consist solely of ascii characters in the range \x20 (space) to \x7E (~),
      * or consist of more than 50 characters, are forbidden and the field should be ignored if received.
      */

@@ -61,7 +61,7 @@ internal class DefaultGetEventTask @Inject constructor(
                     }
         }
 
-        event.ageLocalTs = event.unsignedData?.age?.let { clock.epochMillis() - it }
+        event.ageLocalTs = clock.epochMillis() - (event.unsignedData?.age ?: 0)
 
         return event
     }

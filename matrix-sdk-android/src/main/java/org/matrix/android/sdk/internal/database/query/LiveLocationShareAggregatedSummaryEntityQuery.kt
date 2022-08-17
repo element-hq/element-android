@@ -25,6 +25,14 @@ import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationS
 
 internal fun LiveLocationShareAggregatedSummaryEntity.Companion.where(
         realm: Realm,
+        eventId: String,
+): RealmQuery<LiveLocationShareAggregatedSummaryEntity> {
+    return realm.where<LiveLocationShareAggregatedSummaryEntity>()
+            .equalTo(LiveLocationShareAggregatedSummaryEntityFields.EVENT_ID, eventId)
+}
+
+internal fun LiveLocationShareAggregatedSummaryEntity.Companion.where(
+        realm: Realm,
         roomId: String,
         eventId: String,
 ): RealmQuery<LiveLocationShareAggregatedSummaryEntity> {
@@ -33,8 +41,10 @@ internal fun LiveLocationShareAggregatedSummaryEntity.Companion.where(
             .equalTo(LiveLocationShareAggregatedSummaryEntityFields.EVENT_ID, eventId)
 }
 
-internal fun LiveLocationShareAggregatedSummaryEntity.Companion.whereRoomId(realm: Realm,
-                                                                            roomId: String): RealmQuery<LiveLocationShareAggregatedSummaryEntity> {
+internal fun LiveLocationShareAggregatedSummaryEntity.Companion.whereRoomId(
+        realm: Realm,
+        roomId: String
+): RealmQuery<LiveLocationShareAggregatedSummaryEntity> {
     return realm.where<LiveLocationShareAggregatedSummaryEntity>()
             .equalTo(LiveLocationShareAggregatedSummaryEntityFields.ROOM_ID, roomId)
 }
@@ -70,18 +80,28 @@ internal fun LiveLocationShareAggregatedSummaryEntity.Companion.get(
     return LiveLocationShareAggregatedSummaryEntity.where(realm, roomId, eventId).findFirst()
 }
 
+internal fun LiveLocationShareAggregatedSummaryEntity.Companion.get(
+        realm: Realm,
+        eventId: String,
+): LiveLocationShareAggregatedSummaryEntity? {
+    return LiveLocationShareAggregatedSummaryEntity.where(realm, eventId).findFirst()
+}
+
 internal fun LiveLocationShareAggregatedSummaryEntity.Companion.findActiveLiveInRoomForUser(
         realm: Realm,
         roomId: String,
         userId: String,
-        ignoredEventId: String
+        ignoredEventId: String,
+        startOfLiveTimestampThreshold: Long,
 ): List<LiveLocationShareAggregatedSummaryEntity> {
     return LiveLocationShareAggregatedSummaryEntity
             .whereRoomId(realm, roomId = roomId)
             .equalTo(LiveLocationShareAggregatedSummaryEntityFields.USER_ID, userId)
             .equalTo(LiveLocationShareAggregatedSummaryEntityFields.IS_ACTIVE, true)
             .notEqualTo(LiveLocationShareAggregatedSummaryEntityFields.EVENT_ID, ignoredEventId)
+            .lessThan(LiveLocationShareAggregatedSummaryEntityFields.START_OF_LIVE_TIMESTAMP_MILLIS, startOfLiveTimestampThreshold)
             .findAll()
+            .toList()
 }
 
 /**

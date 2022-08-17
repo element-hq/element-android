@@ -35,6 +35,7 @@ import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.flow.flow
@@ -91,12 +92,12 @@ class IncomingShareViewModel @AssistedInject constructor(
 
     override fun handle(action: IncomingShareAction) {
         when (action) {
-            is IncomingShareAction.SelectRoom           -> handleSelectRoom(action)
+            is IncomingShareAction.SelectRoom -> handleSelectRoom(action)
             is IncomingShareAction.ShareToSelectedRooms -> handleShareToSelectedRooms()
-            is IncomingShareAction.ShareToRoom          -> handleShareToRoom(action)
-            is IncomingShareAction.ShareMedia           -> handleShareMediaToSelectedRooms(action)
-            is IncomingShareAction.FilterWith           -> handleFilter(action)
-            is IncomingShareAction.UpdateSharedData     -> handleUpdateSharedData(action)
+            is IncomingShareAction.ShareToRoom -> handleShareToRoom(action)
+            is IncomingShareAction.ShareMedia -> handleShareMediaToSelectedRooms(action)
+            is IncomingShareAction.FilterWith -> handleFilter(action)
+            is IncomingShareAction.UpdateSharedData -> handleUpdateSharedData(action)
         }
     }
 
@@ -117,7 +118,7 @@ class IncomingShareViewModel @AssistedInject constructor(
             _viewEvents.post(IncomingShareViewEvents.ShareToRoom(selectedRoom, sharedData, showAlert = false))
         } else {
             when (sharedData) {
-                is SharedData.Text        -> {
+                is SharedData.Text -> {
                     state.selectedRoomIds.forEach { roomId ->
                         val room = session.getRoom(roomId)
                         room?.sendService()?.sendTextMessage(sharedData.text)
@@ -134,7 +135,8 @@ class IncomingShareViewModel @AssistedInject constructor(
 
     private fun handleShareToRoom(action: IncomingShareAction.ShareToRoom) = withState { state ->
         val sharedData = state.sharedData ?: return@withState
-        _viewEvents.post(IncomingShareViewEvents.ShareToRoom(action.roomSummary, sharedData, showAlert = false))
+        val roomSummary = session.getRoomSummary(action.roomId) ?: return@withState
+        _viewEvents.post(IncomingShareViewEvents.ShareToRoom(roomSummary, sharedData, showAlert = false))
     }
 
     private fun handleShareMediaToSelectedRooms(action: IncomingShareAction.ShareMedia) = withState { state ->
@@ -201,7 +203,7 @@ class IncomingShareViewModel @AssistedInject constructor(
                     // Do not show alert if the shared data contains only previewable attachments, because the user will get another chance to cancel the share
                     sharedData.attachmentData.all { it.isPreviewable() }
                 }
-                is SharedData.Text        -> {
+                is SharedData.Text -> {
                     // Do not show alert when sharing text to one room, because it will just fill the composer
                     true
                 }

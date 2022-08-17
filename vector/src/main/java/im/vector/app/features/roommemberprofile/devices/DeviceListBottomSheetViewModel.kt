@@ -93,7 +93,7 @@ class DeviceListBottomSheetViewModel @AssistedInject constructor(
 
     override fun handle(action: DeviceListAction) {
         when (action) {
-            is DeviceListAction.SelectDevice   -> selectDevice(action)
+            is DeviceListAction.SelectDevice -> selectDevice(action)
             is DeviceListAction.DeselectDevice -> deselectDevice()
             is DeviceListAction.ManuallyVerify -> manuallyVerify(action)
         }

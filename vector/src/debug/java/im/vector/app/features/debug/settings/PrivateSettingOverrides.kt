@@ -20,8 +20,8 @@ sealed interface BooleanHomeserverCapabilitiesOverride : OverrideOption {
 
     companion object {
         fun from(value: Boolean?) = when (value) {
-            null  -> null
-            true  -> ForceEnabled
+            null -> null
+            true -> ForceEnabled
             false -> ForceDisabled
         }
     }
@@ -36,7 +36,7 @@ sealed interface BooleanHomeserverCapabilitiesOverride : OverrideOption {
 }
 
 fun BooleanHomeserverCapabilitiesOverride?.toBoolean() = when (this) {
-    null                                                -> null
+    null -> null
     BooleanHomeserverCapabilitiesOverride.ForceDisabled -> false
-    BooleanHomeserverCapabilitiesOverride.ForceEnabled  -> true
+    BooleanHomeserverCapabilitiesOverride.ForceEnabled -> true
 }

@@ -60,7 +60,7 @@ internal class DefaultLeaveRoomTask @Inject constructor(
         val roomCreateStateEvent = stateEventDataSource.getStateEvent(
                 roomId = roomId,
                 eventType = EventType.STATE_ROOM_CREATE,
-                stateKey = QueryStringValue.NoCondition
+                stateKey = QueryStringValue.IsEmpty,
         )
         // Server is not cleaning predecessor rooms, so we also try to left them
         val predecessorRoomId = roomCreateStateEvent?.getClearContent()?.toModel<RoomCreateContent>()?.predecessor?.roomId

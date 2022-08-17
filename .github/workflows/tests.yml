@@ -7,9 +7,8 @@ on:
 
 # Enrich gradle.properties for CI/CD
 env:
-  CI_GRADLE_ARG_PROPERTIES: >
-    -Porg.gradle.jvmargs=-Xmx2g
-    -Porg.gradle.parallel=false
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3072m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.daemon.jvm.options="-Xmx2560m" -Dkotlin.incremental=false
+  CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 2 --no-daemon
 
 jobs:
   tests:
@@ -28,7 +27,7 @@ jobs:
           distribution: 'adopt'
           java-version: '11'
       - uses: gradle/gradle-build-action@v2
-      - uses: actions/setup-python@v3
+      - uses: actions/setup-python@v4
         with:
           python-version: 3.8
       - uses: michaelkaye/setup-matrix-synapse@v1.0.3
@@ -40,6 +39,7 @@ jobs:
       - name: Run all the codecoverage tests at once
         id: tests
         uses: reactivecircus/android-emulator-runner@v2
+        continue-on-error: true
         with:
           api-level: 28
           arch: x86
@@ -48,7 +48,11 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           emulator-build: 7425822
-          script: ./gradlew theCodeCoverageReport --stacktrace $CI_GRADLE_ARG_PROPERTIES
+          script: | 
+            ./gradlew unitTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
+            ./gradlew instrumentationTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
+            ./gradlew generateCoverageReport $CI_GRADLE_ARG_PROPERTIES
+# NB: continue-on-error marks steps.tests.conclusion = 'success' but leaves stes.tests.outcome = 'failure'
       - name: Run all the codecoverage tests at once (retry if emulator failed)
         uses: reactivecircus/android-emulator-runner@v2
         if: always() && steps.tests.outcome == 'failure' # don't run if previous step succeeded.
@@ -60,11 +64,14 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           emulator-build: 7425822
-          script: ./gradlew theCodeCoverageReport --stacktrace $CI_GRADLE_ARG_PROPERTIES
+          script: |
+            ./gradlew unitTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
+            ./gradlew instrumentationTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
+            ./gradlew generateCoverageReport $CI_GRADLE_ARG_PROPERTIES
       - run: ./gradlew sonarqube $CI_GRADLE_ARG_PROPERTIES
         if: always() # we may have failed a previous step and retried, that's OK
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          GITHUB_TOKEN: ${{ secrets.SONARQUBE_GITHUB_API_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           ORG_GRADLE_PROJECT_SONAR_LOGIN: ${{ secrets.SONAR_TOKEN }}
 
@@ -105,5 +112,5 @@ jobs:
 #          restore-keys: | 
 #            ${{ runner.os }}-gradle- 
 #      - name: Build Android Tests  
-#        run: ./gradlew clean assembleAndroidTest $CI_GRADLE_ARG_PROPERTIES --stacktrace 
+#        run: ./gradlew clean assembleAndroidTest $CI_GRADLE_ARG_PROPERTIES
 

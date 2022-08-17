@@ -16,18 +16,17 @@
 
 package im.vector.app.features.home
 
-import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.config.analyticsConfig
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.extensions.toAnalyticsType
 import im.vector.app.features.analytics.plan.Signup
@@ -60,10 +59,10 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningServic
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.api.session.getUser
-import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.pushrules.RuleIds
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
+import org.matrix.android.sdk.api.session.sync.SyncRequestState
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import org.matrix.android.sdk.api.util.awaitCallback
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -81,7 +80,8 @@ class HomeActivityViewModel @AssistedInject constructor(
         private val analyticsStore: AnalyticsStore,
         private val lightweightSettingsStorage: LightweightSettingsStorage,
         private val vectorPreferences: VectorPreferences,
-        private val analyticsTracker: AnalyticsTracker
+        private val analyticsTracker: AnalyticsTracker,
+        private val analyticsConfig: AnalyticsConfig,
 ) : VectorViewModel<HomeActivityViewState, HomeActivityViewActions, HomeActivityViewEvents>(initialState) {
 
     @AssistedFactory
@@ -131,10 +131,10 @@ class HomeActivityViewModel @AssistedInject constructor(
                         }
                     }
                 }
-                AuthenticationDescription.Login       -> {
+                AuthenticationDescription.Login -> {
                     // do nothing
                 }
-                null                                  -> {
+                null -> {
                     // do nothing
                 }
             }
@@ -198,7 +198,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                 vectorPreferences.userNotifiedAboutThreads()
             }
             // Migrate users with enabled lab settings
-            vectorPreferences.shouldNotifyUserAboutThreads() && vectorPreferences.shouldMigrateThreads()     -> {
+            vectorPreferences.shouldNotifyUserAboutThreads() && vectorPreferences.shouldMigrateThreads() -> {
                 Timber.i("----> Migrate threads with enabled labs")
                 // If user had io.element.thread enabled then enable the new thread support,
                 // clear cache to sync messages appropriately
@@ -208,7 +208,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                 _viewEvents.post(HomeActivityViewEvents.MigrateThreads(checkSession = false))
             }
             // Enable all users
-            vectorPreferences.shouldMigrateThreads() && vectorPreferences.areThreadMessagesEnabled()         -> {
+            vectorPreferences.shouldMigrateThreads() && vectorPreferences.areThreadMessagesEnabled() -> {
                 Timber.i("----> Try to migrate threads")
                 _viewEvents.post(HomeActivityViewEvents.MigrateThreads(checkSession = true))
             }
@@ -218,25 +218,24 @@ class HomeActivityViewModel @AssistedInject constructor(
     private fun observeInitialSync() {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
 
-        session.syncStatusService().getSyncStatusLive()
-                .asFlow()
+        session.syncService().getSyncRequestStateFlow()
                 .onEach { status ->
                     when (status) {
-                        is SyncStatusService.Status.Idle -> {
+                        is SyncRequestState.Idle -> {
                             maybeVerifyOrBootstrapCrossSigning()
                         }
-                        else                             -> Unit
+                        else -> Unit
                     }
 
                     setState {
                         copy(
-                                syncStatusServiceStatus = status
+                                syncRequestState = status
                         )
                     }
                 }
                 .launchIn(viewModelScope)
 
-        if (session.hasAlreadySynced()) {
+        if (session.syncService().hasAlreadySynced()) {
             maybeVerifyOrBootstrapCrossSigning()
         }
     }
@@ -364,14 +363,30 @@ class HomeActivityViewModel @AssistedInject constructor(
                             // If 4S is forced, force verification
                             _viewEvents.post(HomeActivityViewEvents.ForceVerification(true))
                         } else {
-                            // New session
-                            _viewEvents.post(
-                                    HomeActivityViewEvents.OnNewSession(
-                                            session.getUser(session.myUserId)?.toMatrixItem(),
-                                            // Always send request instead of waiting for an incoming as per recent EW changes
-                                            false
-                                    )
-                            )
+                            // we wan't to check if there is a way to actually verify this session,
+                            // that means that there is another session to verify against, or
+                            // secure backup is setup
+                            val hasTargetDeviceToVerifyAgainst = session
+                                    .cryptoService()
+                                    .getUserDevices(session.myUserId)
+                                    .size >= 2 // this one + another
+                            val is4Ssetup = session.sharedSecretStorageService().isRecoverySetup()
+                            if (hasTargetDeviceToVerifyAgainst || is4Ssetup) {
+                                // New session
+                                _viewEvents.post(
+                                        HomeActivityViewEvents.CurrentSessionNotVerified(
+                                                session.getUser(session.myUserId)?.toMatrixItem(),
+                                                // Always send request instead of waiting for an incoming as per recent EW changes
+                                                false
+                                        )
+                                )
+                            } else {
+                                _viewEvents.post(
+                                        HomeActivityViewEvents.CurrentSessionCannotBeVerified(
+                                                session.getUser(session.myUserId)?.toMatrixItem(),
+                                        )
+                                )
+                            }
                         }
                     }
                 }
@@ -426,7 +441,7 @@ class HomeActivityViewModel @AssistedInject constructor(
             HomeActivityViewActions.PushPromptHasBeenReviewed -> {
                 vectorPreferences.setDidAskUserToEnableSessionPush()
             }
-            HomeActivityViewActions.ViewStarted               -> {
+            HomeActivityViewActions.ViewStarted -> {
                 initialize()
             }
         }

@@ -17,6 +17,7 @@
 package im.vector.app.ui.robot
 
 import androidx.recyclerview.widget.RecyclerView
+import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions
@@ -44,6 +45,7 @@ class RoomDetailRobot {
 
     fun postMessage(content: String) {
         writeTo(R.id.composerEditText, content)
+        closeSoftKeyboard()
         waitUntilViewVisible(withId(R.id.sendButton))
         clickOn(R.id.sendButton)
         waitUntilViewVisible(withText(content))
@@ -68,6 +70,7 @@ class RoomDetailRobot {
         }
         val threadMessage = "Hello universe - long message to avoid espresso tapping edited!"
         writeTo(R.id.composerEditText, threadMessage)
+        closeSoftKeyboard()
         waitUntilViewVisible(withId(R.id.sendButton))
         clickOn(R.id.sendButton)
     }
@@ -105,6 +108,7 @@ class RoomDetailRobot {
         // TODO Cancel action
         val edit = "Hello universe - long message to avoid espresso tapping edited!"
         writeTo(R.id.composerEditText, edit)
+        closeSoftKeyboard()
         // Wait a bit for the keyboard layout to update
         waitUntilViewVisible(withId(R.id.sendButton))
         clickOn(R.id.sendButton)
@@ -150,7 +154,9 @@ class RoomDetailRobot {
 
     fun openThreadSummaries() {
         clickMenu(R.id.menu_timeline_thread_list)
-        waitUntilViewVisible(withId(R.id.threadListRecyclerView))
+        withRetry {
+            waitUntilViewVisible(withId(R.id.threadListRecyclerView))
+        }
     }
 
     fun selectThreadSummariesFilter() {

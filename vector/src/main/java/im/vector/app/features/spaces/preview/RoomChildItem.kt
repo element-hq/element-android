@@ -27,8 +27,8 @@ import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.util.MatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_space_roomchild)
-abstract class RoomChildItem : VectorEpoxyModel<RoomChildItem.Holder>() {
+@EpoxyModelClass
+abstract class RoomChildItem : VectorEpoxyModel<RoomChildItem.Holder>(R.layout.item_space_roomchild) {
 
     @EpoxyAttribute
     lateinit var roomId: String

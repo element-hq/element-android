@@ -16,8 +16,8 @@
     <string name="notice_display_name_removed">%1$s a supprimé son nom d’affichage (précédemment %2$s)</string>
     <string name="notice_room_topic_changed">%1$s a changé le sujet en : %2$s</string>
     <string name="notice_room_name_changed">%1$s a changé le nom du salon en : %2$s</string>
-    <string name="notice_placed_video_call">%s a passé un appel vidéo.</string>
-    <string name="notice_placed_voice_call">%s a passé un appel audio.</string>
+    <string name="notice_placed_video_call">%s a lancé un appel vidéo.</string>
+    <string name="notice_placed_voice_call">%s a lancé un appel audio.</string>
     <string name="notice_answered_call">%s a répondu à l’appel.</string>
     <string name="notice_ended_call">%s a raccroché.</string>
     <string name="notice_made_future_room_visibility">%1$s a rendu l’historique futur du salon visible pour %2$s</string>
@@ -159,8 +159,8 @@
     <string name="notice_answered_call_by_you">Vous avez répondu à l’appel.</string>
     <string name="notice_call_candidates_by_you">Vous avez envoyé les données pour configurer l’appel.</string>
     <string name="notice_call_candidates">%s a envoyé les données pour configurer l’appel.</string>
-    <string name="notice_placed_voice_call_by_you">Vous avez passé un appel audio.</string>
-    <string name="notice_placed_video_call_by_you">Vous avez passé un appel vidéo.</string>
+    <string name="notice_placed_voice_call_by_you">Vous avez lancé un appel audio.</string>
+    <string name="notice_placed_video_call_by_you">Vous avez lancé un appel vidéo.</string>
     <string name="notice_room_name_changed_by_you">Vous avez changé le nom du salon en : %1$s</string>
     <string name="notice_room_avatar_changed_by_you">Vous avez modifié l’avatar du salon</string>
     <string name="notice_room_avatar_changed">%1$s a modifié l’avatar du salon</string>
@@ -582,7 +582,7 @@
     <string name="merged_events_expand">développer</string>
     <string name="merged_events_collapse">réduire</string>
     <string name="generic_label_and_value">%1$s : %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="room_participants_action_remove">Expulser</string>
     <string name="settings_inline_url_preview_summary">Afficher un aperçu des liens dans la discussion quand votre serveur d’accueil le permet.</string>
     <string name="settings_send_typing_notifs">Envoyer des notifications de saisie</string>
@@ -971,7 +971,6 @@
         <item quantity="one">%d utilisateur a lu</item>
         <item quantity="other">%d utilisateurs ont lu</item>
     </plurals>
-    <string name="error_attachment">Une erreur est survenue pendant la récupération de la pièce jointe.</string>
     <string name="attachment_type_file">Fichier</string>
     <string name="attachment_type_contact">Contact</string>
     <string name="attachment_type_camera">Appareil photo</string>
@@ -1118,9 +1117,7 @@
     <string name="login_signup_submit">Suivant</string>
     <string name="login_signup_error_user_in_use">Ce nom d’utilisateur est déjà pris</string>
     <string name="login_signup_cancel_confirmation_title">Attention</string>
-    <string name="login_signup_cancel_confirmation_content">Votre compte n’est pas encore crée.
-\n
-\nArrêter le processus de création \?</string>
+    <string name="login_signup_cancel_confirmation_content">Votre compte n’est pas encore crée. Arrêter le processus de création \?</string>
     <string name="login_a11y_choose_matrix_org">Sélectionner matrix.org</string>
     <string name="login_a11y_choose_modular">Sélectionner Element Matrix Services</string>
     <string name="login_a11y_choose_other">Sélectionner un serveur d’accueil personnalisé</string>
@@ -1276,7 +1273,7 @@
         <item quantity="one">%d session active</item>
         <item quantity="other">%d sessions actives</item>
     </plurals>
-    <string name="crosssigning_verify_this_session">Vérifier cette session</string>
+    <string name="crosssigning_verify_this_session">Vérifier cet appareil</string>
     <string name="verification_open_other_to_verify">Utilisez une session existante pour vérifier celle-ci, ce qui lui permettra d’avoir accès aux messages chiffrés.</string>
     <string name="verification_profile_verify">Vérifier</string>
     <string name="verification_profile_verified">Vérifié</string>
@@ -2337,9 +2334,6 @@
     <string name="ftue_auth_carousel_control_body">Choisissez où vos conversations sont stockées, vous avez le contrôle et êtes indépendant. Connecté via Matrix.</string>
     <string name="room_unsupported_e2e_algorithm">Le chiffrement a été mal configuré ce qui vous empêche d’envoyer des messages. Veuillez contacter un administrateur pour remettre le chiffrement en état de marche.</string>
     <string name="tooltip_attachment_location">Partager la localisation</string>
-    <string name="labs_render_locations_in_timeline">Afficher les localisations de l\'utilisateur dans le temps</string>
-    <string name="settings_enable_location_sharing_summary">Une fois activé il vous sera possible d\'envoyer votre localisation dans n\'importe quel salon</string>
-    <string name="settings_enable_location_sharing">Activer le partage de localisation</string>
     <string name="location_share_external">Ouvrir avec</string>
     <string name="location_not_available_dialog_content">${app_name} n\'a pas pu accéder à votre localisation. Veuillez réessayer plus tard.</string>
     <string name="location_not_available_dialog_title">${app_name} n\'a pas pu accéder à votre localisation</string>
@@ -2378,12 +2372,12 @@
     <string name="labs_enable_thread_messages">Activer les messages en fils de discussion</string>
     <string name="ftue_auth_use_case_connect_to_server">Se connecter au serveur</string>
     <string name="ftue_auth_use_case_join_existing_server">Vous cherchez à joindre un serveur existant \?</string>
-    <string name="ftue_auth_use_case_skip_partial">passer cette question</string>
-    <string name="ftue_auth_use_case_skip">Pas encore sûr \? Vous pouvez %s</string>
+    <string name="ftue_auth_use_case_skip_partial">Passer cette question</string>
+    <string name="ftue_auth_use_case_skip">Pas encore sûr \? %s</string>
     <string name="ftue_auth_use_case_option_three">Communautés</string>
     <string name="ftue_auth_use_case_option_two">Équipes</string>
     <string name="ftue_auth_use_case_option_one">Famille et amis</string>
-    <string name="ftue_auth_use_case_subtitle">Nous allons vous aider à vous connecter.</string>
+    <string name="ftue_auth_use_case_subtitle">Nous allons vous aider à vous connecter</string>
     <string name="ftue_auth_use_case_title">À qui allez-vous le plus parler \?</string>
     <string name="navigate_to_thread_when_already_in_the_thread">Vous êtes déjà en train de voir ce fil de discussion !</string>
     <string name="view_in_room">Voir dans le salon</string>
@@ -2414,9 +2408,6 @@
     <string name="live_location_sharing_notification_title">Position en temps réel de ${app_name}</string>
     <string name="location_share_live_stop">Arrêter</string>
     <string name="location_share_live_enabled">Position en temps réel activée</string>
-    <string name="location_in_background_missing_permission_dialog_content">Si vous souhaitez partager votre position en temps réel, ${app_name} a besoin de l’autorisation d’accès permanent à la position quand l’application est en arrière-plan.
-\nNous accèderons à votre position seulement pendant la durée que vous définissez.</string>
-    <string name="location_in_background_missing_permission_dialog_title">Autoriser l’accès</string>
     <string name="a11y_location_share_option_pinned_icon">Partager cet emplacement</string>
     <string name="location_share_option_pinned">Partager cet emplacement</string>
     <string name="a11y_location_share_option_user_live_icon">Partager la position en temps réel</string>
@@ -2428,16 +2419,16 @@
     <string name="error_forbidden_digits_only_username">Le serveur hôte n’accepte pas de nom d’utilisateur avec seulement des chiffres.</string>
     <string name="ftue_personalize_skip_this_step">Ignorer cette étape</string>
     <string name="ftue_personalize_submit">Enregistrer et continuer</string>
-    <string name="ftue_personalize_complete_subtitle">Vos préférences ont été enregistrées.</string>
-    <string name="ftue_personalize_complete_title">Tout est prêt !</string>
+    <string name="ftue_personalize_complete_subtitle">Dirigez vous dans les paramètres à tout moment pour mettre à jour votre profil</string>
+    <string name="ftue_personalize_complete_title">Ça a l’air correct !</string>
     <string name="ftue_personalize_lets_go">Allons-y</string>
-    <string name="ftue_profile_picture_subtitle">Vous pouvez la changer à tout moment.</string>
+    <string name="ftue_profile_picture_subtitle">C’est le moment de mettre un visage sur ce nom</string>
     <string name="ftue_profile_picture_title">Ajouter une photo de profil</string>
     <string name="ftue_display_name_entry_footer">Vous pourrez le changer plus tard</string>
     <string name="ftue_display_name_entry_title">Nom d’affichage</string>
     <string name="ftue_display_name_subtitle">Il sera affiché quand vous enverrez des messages.</string>
     <string name="ftue_display_name_title">Choisissez un nom d’affichage</string>
-    <string name="ftue_account_created_subtitle">Votre compte %s a été créé.</string>
+    <string name="ftue_account_created_subtitle">Votre compte %s a été créé</string>
     <string name="ftue_account_created_congratulations_title">Félicitations !</string>
     <string name="ftue_account_created_take_me_home">Aller à l’accueil</string>
     <string name="ftue_account_created_personalize">Personnaliser le profil</string>
@@ -2490,4 +2481,126 @@
 \n
 \nCette action va redémarrer l’application et pourra prendre du temps.</string>
     <string name="initial_sync_request_title">Requête de synchronisation initiale</string>
+    <string name="live_location_bottom_sheet_last_updated_at">Mis-à-jour il y a %1$s</string>
+    <string name="live_location_bottom_sheet_stop_sharing">Arrêter le partage</string>
+    <string name="labs_enable_live_location_summary">Implémentation temporaire : les positions sont persistantes dans l’historique du salon</string>
+    <string name="labs_enable_live_location">Activer le partage de position en continu</string>
+    <string name="location_share_live_remaining_time">%1$s restant</string>
+    <string name="location_share_live_until">En direct jusqu’à %1$s</string>
+    <string name="location_share_live_view">Voir la position en direct</string>
+    <string name="location_share_live_ended">Position en temps réel terminée</string>
+    <string name="space_explore_filter_no_result_description">Certains résultats peuvent être cachés car ils sont privés et requièrent une invitation.</string>
+    <string name="space_explore_filter_no_result_title">Aucun résultat</string>
+    <string name="space_leave_radio_button_none">Ne rien quitter</string>
+    <string name="space_leave_radio_button_all">Tout quitter</string>
+    <string name="space_leave_radio_buttons_title">Choses dans cet espace</string>
+    <string name="settings_autoplay_animated_images_summary">Joue les images animées de l’historique dès qu’elles sont visibles</string>
+    <string name="settings_autoplay_animated_images_title">Jouer automatiquement les images animées</string>
+    <string name="time_unit_second_short">s</string>
+    <string name="time_unit_minute_short">min</string>
+    <string name="time_unit_hour_short">h</string>
+    <string name="live_location_labs_promotion_switch_title">Activer le partage de localisation</string>
+    <string name="live_location_labs_promotion_description">Attention : c\'est une fonctionnalité expérimentale qui utilise une implémentation temporaire. Cela implique que vous ne pourrez pas supprimer votre historique de positions, et les utilisateurs avancés pourront voir votre historique de positions même après avoir arrêter le partage de votre position en continu dans ce salon.</string>
+    <string name="live_location_labs_promotion_title">Partage de position en continu</string>
+    <string name="settings_troubleshoot_test_current_gateway">Passerelle actuelle : %s</string>
+    <string name="settings_troubleshoot_test_current_gateway_title">Passerelle</string>
+    <string name="settings_troubleshoot_test_current_endpoint_failed">Impossible de trouver le point de connexion.</string>
+    <string name="settings_troubleshoot_test_current_endpoint_success">Point de connexion actuel : %s</string>
+    <string name="settings_troubleshoot_test_current_endpoint_title">Point de connexion</string>
+    <string name="settings_troubleshoot_test_current_distributor">Utilise %s actuellement.</string>
+    <string name="settings_troubleshoot_test_current_distributor_title">Méthode</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="one">%d méthode trouvée.</item>
+        <item quantity="other">%d méthodes trouvées.</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_distributors_fdroid">Aucune autre méthode que la synchronisation en arrière-plan n’a été trouvée.</string>
+    <string name="settings_troubleshoot_test_distributors_gplay">Aucune autre méthode que Google Play Service n’a été trouvée.</string>
+    <string name="settings_troubleshoot_test_distributors_title">Méthodes disponibles</string>
+    <string name="settings_notification_method">Méthode de notification</string>
+    <string name="unifiedpush_distributor_background_sync">Synchronisation en arrière-plan</string>
+    <string name="unifiedpush_distributor_fcm_fallback">Google Services</string>
+    <string name="unifiedpush_getdistributors_dialog_title">Choisissez comment recevoir les notifications</string>
+    <string name="settings_security_pin_code_use_biometrics_error">Impossible d’activer l’authentification biométrique.</string>
+    <string name="auth_biometric_key_invalidated_message">L’authentification biométrique a été désactivée car une nouvelle méthode d’authentification biométrique a été ajoutée récemment. Vous pouvez la réactiver dans les Paramètres.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">Réinitialiser la méthode de notification</string>
+    <string name="push_gateway_item_profile_tag">Étiquette de profil :</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">Le jeton du point de connexion n’a pas pu être enregistré sur le serveur d’accueil :
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">Le point de connexion a été correctement enregistré sur le serveur d’accueil.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_title">Enregistrement du point de connexion</string>
+    <string name="action_next">Suivant</string>
+    <string name="poll_undisclosed_not_ended">Les résultats seront visibles lorsque le sondage sera terminé</string>
+    <string name="labs_enable_msc3061_share_history_desc">Lors de l’invitation dans un salon chiffré qui partage son historique, son historique chiffré sera visible.</string>
+    <string name="labs_enable_msc3061_share_history">MSC3061 : Partage des clés du salon pour les messages passés</string>
+    <string name="send_your_first_msg_to_invite">Envoyez votre premier message pour inviter %s à discuter</string>
+    <string name="direct_room_encryption_enabled_tile_description_future">Les messages de ce salon seront chiffrés de bout en bout.</string>
+    <string name="create_room_action_go">C’est parti</string>
+    <plurals name="room_removed_messages">
+        <item quantity="one">%d message supprimé</item>
+        <item quantity="other">%d messages supprimés</item>
+    </plurals>
+    <string name="live_location_share_location_item_share">Partager la position</string>
+    <string name="live_location_not_enough_permission_dialog_description">Vous avez besoin d’une autorisation pour partager une position en direct dans ce salon.</string>
+    <string name="live_location_not_enough_permission_dialog_title">Vous n’avez pas l’autorisation de partager une position en direct</string>
+    <string name="permalink_unsupported_groups">Impossible d’ouvrir ce lien : les communautés ont été remplacées par les espaces</string>
+    <string name="ftue_auth_login_username_entry">Nom d’utilisateur / Courriel / Téléphone</string>
+    <string name="ftue_auth_captcha_title">Êtes-vous un humain \?</string>
+    <string name="ftue_auth_password_reset_email_confirmation_subtitle">Suivez les instructions envoyées à %s</string>
+    <string name="ftue_auth_password_reset_confirmation">Réinitialisation de mot de passe</string>
+    <string name="ftue_auth_forgot_password">Mot de passe oublié</string>
+    <string name="ftue_auth_email_resend_email">Renvoyer le courriel</string>
+    <string name="ftue_auth_email_verification_footer">Pas reçu de courriel \?</string>
+    <string name="ftue_auth_email_verification_subtitle">Suivez les instructions envoyées à %s</string>
+    <string name="ftue_auth_email_verification_title">Vérifiez votre courriel</string>
+    <string name="ftue_auth_phone_confirmation_resend_code">Renvoyer le code</string>
+    <string name="ftue_auth_phone_confirmation_subtitle">Un code a été envoyé au %s</string>
+    <string name="ftue_auth_phone_confirmation_title">Confirmer votre numéro de téléphone</string>
+    <string name="ftue_auth_sign_out_all_devices">Déconnecter tous les appareils</string>
+    <string name="ftue_auth_reset_password">Réinitialiser le mot de passe</string>
+    <string name="ftue_auth_new_password_subtitle">Soyez sûr qu’il ait au moins 8 caractères.</string>
+    <string name="ftue_auth_new_password_title">Choisissez un nouveau mot de passe</string>
+    <string name="ftue_auth_new_password_entry_title">Nouveau mot de passe</string>
+    <string name="ftue_auth_reset_password_breaker_title">Vérifiez vos courriels.</string>
+    <string name="ftue_auth_reset_password_email_subtitle">%s va vous envoyer un lien de vérification</string>
+    <string name="ftue_auth_phone_confirmation_entry_title">Code de confirmation</string>
+    <string name="ftue_auth_phone_entry_title">Numéro de téléphone</string>
+    <string name="ftue_auth_phone_subtitle">%s a besoin de vérifier votre compte</string>
+    <string name="ftue_auth_phone_title">Saisissez votre numéro de téléphone</string>
+    <string name="ftue_auth_email_entry_title">Courriel</string>
+    <string name="ftue_auth_email_subtitle">%s a besoin de vérifier votre compte</string>
+    <string name="ftue_auth_email_title">Saisissez votre courriel</string>
+    <string name="ftue_auth_terms_subtitle">Veuillez lire les conditions et politiques de %s</string>
+    <string name="ftue_auth_terms_title">Politiques du serveur</string>
+    <string name="ftue_auth_choose_server_ems_cta">Prendre contact</string>
+    <string name="ftue_auth_choose_server_ems_subtitle">Element Matrix Services (EMS) est un service d’hébergement fiable et robuste pour des communications rapides, sécurisées et en temps réel. Pour en savoir plus, rendez-vous sur <a href="${ftue_ems_url}">element.io/ems</a></string>
+    <string name="ftue_auth_choose_server_ems_title">Héberger votre propre serveur \?</string>
+    <string name="ftue_auth_choose_server_entry_hint">URL du serveur</string>
+    <string name="ftue_auth_choose_server_subtitle">Quelle est l’adresse de votre serveur \? C’est comme un domicile pour toutes vos données</string>
+    <string name="ftue_auth_choose_server_title">Sélectionner votre serveur</string>
+    <string name="ftue_auth_welcome_back_title">Bon retour parmi nous !</string>
+    <string name="ftue_auth_create_account_edit_server_selection">Modifier</string>
+    <string name="ftue_auth_create_account_sso_section_header">Ou</string>
+    <string name="ftue_auth_create_account_choose_server_header">Où vos conversations résideront</string>
+    <string name="ftue_auth_create_account_password_entry_footer">Doit contenir au moins 8 caractères</string>
+    <string name="ftue_auth_create_account_username_entry_footer">Les autres peuvent vous trouver en tant que %s</string>
+    <string name="ftue_auth_create_account_title">Créer votre compte</string>
+    <string name="font_size_use_system">Utiliser la valeur du système</string>
+    <string name="font_size_section_manually">Choisir manuellement</string>
+    <string name="font_size_section_auto">Automatique</string>
+    <string name="font_size_title">Choisir la taille de la police</string>
+    <string name="labs_enable_element_call_permission_shortcuts_summary">Approuve automatiquement les widgets de Element Call et leur donner l’accès au micro et à la caméra</string>
+    <string name="labs_enable_element_call_permission_shortcuts">Activer les raccourcis de permission de Element Call</string>
+    <string name="live_location_description">Position en direct</string>
+    <string name="verify_invalid_qr_notice">Ce QR code semble incorrect. Veuillez réessayer la vérification avec une autre méthode.</string>
+    <string name="crosssigning_cannot_verify_this_session_desc">Vous ne pourrez plus accéder à l’historique des messages chiffrés. Réinitialiser votre sauvegarde sécurisée des messages et vos clés de récupération pour un nouveau départ.</string>
+    <string name="crosssigning_cannot_verify_this_session">Impossible de vérifier cet appareil</string>
+    <string name="ftue_auth_choose_server_sign_in_subtitle">Quelle est l’adresse de votre serveur \?</string>
+    <string name="ftue_auth_sign_in_choose_server_header">Où seront vos conversations</string>
+    <string name="updating_your_data">Mise-à-jour de vos données…</string>
+    <plurals name="search_space_multiple_parents">
+        <item quantity="one">%1$s et %2$d autre</item>
+        <item quantity="other">%1$s et %2$d autres</item>
+    </plurals>
+    <string name="search_space_two_parents">%1$s et %2$s</string>
+    <string name="auth_reset_password_error_unverified">Courriel non vérifié, relevez votre boîte de réception</string>
 </resources>

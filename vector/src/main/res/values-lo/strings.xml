@@ -1106,7 +1106,6 @@
     <string name="attachment_type_contact">ຕິດຕໍ່</string>
     <string name="attachment_type_file">ໄຟລ໌</string>
     <string name="attachment_type_dialog_title">ເພີ່ມຮູບພາບຈາກ</string>
-    <string name="error_attachment">ເກີດຄວາມຜິດພາດຂຶ້ນໃນຂະນະທີ່ກຳລັງດຶງໄຟລ໌ແນບມາ.</string>
     <string name="error_file_too_big_simple">ໄຟລ໌ໃຫຍ່ເກີນທີ່ຈະອັບໂຫລດ.</string>
     <plurals name="fallback_users_read">
         <item quantity="other">%d ຜູ້ໃຊ້ອ່ານແລ້ວ</item>
@@ -2347,15 +2346,9 @@
     <string name="location_share_live_started">ກຳລັງໂຫຼດສະຖານທີ່ປັດຈຸບັນ…</string>
     <string name="location_share_live_enabled">ເປີດໃຊ້ສະຖານທີ່ປັດຈຸບັນແລ້ວ</string>
     <string name="location_timeline_failed_to_load_map">ໂຫຼດແຜນທີ່ບໍ່ສຳເລັດ</string>
-    <string name="labs_render_locations_in_timeline">ສະແດງສະຖານທີ່ຂອງຜູ້ໃຊ້ໃນທາມລາຍ</string>
-    <string name="settings_enable_location_sharing_summary">ເມື່ອເປີດໃຊ້ແລ້ວທ່ານຈະສາມາດສົ່ງສະຖານທີ່ຂອງທ່ານໄປຫາຫ້ອງໃດກໍໄດ້</string>
-    <string name="settings_enable_location_sharing">ເປີດໃຊ້ການແບ່ງປັນສະຖານທີ່</string>
     <string name="location_share_external">ເປີດດ້ວຍ</string>
     <string name="location_not_available_dialog_content">${app_name} ບໍ່ສາມາດເຂົ້າເຖິງສະຖານທີ່ຂອງທ່ານໄດ້. ກະລຸນາລອງໃໝ່ໃນພາຍຫຼັງ.</string>
     <string name="location_not_available_dialog_title">${app_name} ບໍ່ສາມາດເຂົ້າເຖິງສະຖານທີ່ຂອງທ່ານໄດ້</string>
-    <string name="location_in_background_missing_permission_dialog_content">ຖ້າທ່ານຕ້ອງການແບ່ງປັນສະຖານທີ່ປັດຈຸບັນຂອງທ່ານ, ${app_name} ຕ້ອງການການເຂົ້າເຖິງສະຖານທີ່ຕະຫຼອດເວລາທີ່ແອັບຯຢູ່ໃນພື້ນຫຼັງ.
-\nພວກເຮົາຈະເຂົ້າເຖິງສະຖານທີ່ຂອງທ່ານສະເພາະໄລຍະເວລາທີ່ທ່ານເລືອກ.</string>
-    <string name="location_in_background_missing_permission_dialog_title">ອະນຸຍາດໃຫ້ເຂົ້າເຖິງ</string>
     <string name="location_share_live_select_duration_option_3">8 ຊົ່ວໂມງ</string>
     <string name="location_share_live_select_duration_option_2">1 ຊົ່ວໂມງ</string>
     <string name="location_share_live_select_duration_option_1">15 ນາທີ</string>

@@ -106,12 +106,13 @@ internal class RoomSummaryMapper @Inject constructor(
                             worldReadable = it.childSummaryEntity?.joinRules == RoomJoinRules.PUBLIC
                     )
                 },
+                directParentNames = roomSummaryEntity.directParentNames.toList(),
                 flattenParentIds = roomSummaryEntity.flattenParentIds?.split("|") ?: emptyList(),
                 roomEncryptionAlgorithm = when (val alg = roomSummaryEntity.e2eAlgorithm) {
                     // I should probably use #hasEncryptorClassForAlgorithm but it says it supports
                     // OLM which is some legacy? Now only megolm allowed in rooms
                     MXCRYPTO_ALGORITHM_MEGOLM -> RoomEncryptionAlgorithm.Megolm
-                    else                      -> RoomEncryptionAlgorithm.UnsupportedAlgorithm(alg)
+                    else -> RoomEncryptionAlgorithm.UnsupportedAlgorithm(alg)
                 }
         )
     }

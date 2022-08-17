@@ -28,8 +28,8 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.features.themes.ThemeUtils
 
-@EpoxyModelClass(layout = R.layout.item_form_advanced_toggle)
-abstract class FormAdvancedToggleItem : VectorEpoxyModel<FormAdvancedToggleItem.Holder>() {
+@EpoxyModelClass
+abstract class FormAdvancedToggleItem : VectorEpoxyModel<FormAdvancedToggleItem.Holder>(R.layout.item_form_advanced_toggle) {
 
     @EpoxyAttribute lateinit var title: String
     @EpoxyAttribute var expanded: Boolean = false

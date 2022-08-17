@@ -28,6 +28,7 @@ internal class MXOutboundSessionInfo(
         private val clock: Clock,
         // When the session was created
         private val creationTime: Long = clock.epochMillis(),
+        val sharedHistory: Boolean = false
 ) {
 
     // Number of times this session has been used

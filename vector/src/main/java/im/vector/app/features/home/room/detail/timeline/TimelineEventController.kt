@@ -603,12 +603,13 @@ class TimelineEventController @Inject constructor(
     }
 
     private fun wantsDateSeparator(event: TimelineEvent, nextEvent: TimelineEvent?): Boolean {
-        return if (hasReachedInvite && hasUTD) {
-            true
-        } else {
-            val date = event.root.localDateTime()
-            val nextDate = nextEvent?.root?.localDateTime()
-            date.toLocalDate() != nextDate?.toLocalDate()
+        return when {
+            hasReachedInvite && hasUTD -> true
+            else -> {
+                val date = event.root.localDateTime()
+                val nextDate = nextEvent?.root?.localDateTime()
+                date.toLocalDate() != nextDate?.toLocalDate()
+            }
         }
     }
 

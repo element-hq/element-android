@@ -39,7 +39,6 @@ import androidx.browser.customtabs.CustomTabsSession
 import androidx.core.app.ShareCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.getSystemService
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.themes.ThemeUtils
@@ -76,6 +75,8 @@ fun openUrlInExternalBrowser(context: Context, url: String?) {
 fun openUrlInExternalBrowser(context: Context, uri: Uri?) {
     uri?.let {
         val browserIntent = Intent(Intent.ACTION_VIEW, it).apply {
+            // Open activity on browser task and not on element task
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
             putExtra(Browser.EXTRA_APPLICATION_ID, context.packageName)
             putExtra(Browser.EXTRA_CREATE_NEW_TAB, true)
         }
@@ -105,8 +106,8 @@ fun openUrlInChromeCustomTab(
                 .setColorScheme(
                         when {
                             ThemeUtils.isSystemTheme(context) -> CustomTabsIntent.COLOR_SCHEME_SYSTEM
-                            ThemeUtils.isLightTheme(context)  -> CustomTabsIntent.COLOR_SCHEME_LIGHT
-                            else                              -> CustomTabsIntent.COLOR_SCHEME_DARK
+                            ThemeUtils.isLightTheme(context) -> CustomTabsIntent.COLOR_SCHEME_LIGHT
+                            else -> CustomTabsIntent.COLOR_SCHEME_DARK
                         }
                 )
                 // Note: setting close button icon does not work
@@ -180,7 +181,7 @@ fun openUri(activity: Activity, uri: String) {
  */
 fun openMedia(activity: Activity, savedMediaPath: String, mimeType: String) {
     val file = File(savedMediaPath)
-    val uri = FileProvider.getUriForFile(activity, BuildConfig.APPLICATION_ID + ".fileProvider", file)
+    val uri = FileProvider.getUriForFile(activity, activity.packageName + ".fileProvider", file)
 
     val intent = Intent(Intent.ACTION_VIEW).apply {
         setDataAndType(uri, mimeType)
@@ -212,7 +213,7 @@ fun openLocation(activity: Activity, latitude: Double, longitude: Double) {
 
 fun shareMedia(context: Context, file: File, mediaMimeType: String?) {
     val mediaUri = try {
-        FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", file)
+        FileProvider.getUriForFile(context, context.packageName + ".fileProvider", file)
     } catch (e: Exception) {
         Timber.e(e, "onMediaAction Selected File cannot be shared")
         return
@@ -278,7 +279,7 @@ suspend fun saveMedia(
                 mediaMimeType?.isMimeTypeImage() == true -> MediaStore.Images.Media.EXTERNAL_CONTENT_URI
                 mediaMimeType?.isMimeTypeVideo() == true -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
                 mediaMimeType?.isMimeTypeAudio() == true -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-                else                                     -> MediaStore.Downloads.EXTERNAL_CONTENT_URI
+                else -> MediaStore.Downloads.EXTERNAL_CONTENT_URI
             }
 
             val uri = context.contentResolver.insert(externalContentUri, values)
@@ -326,7 +327,7 @@ private fun saveMediaLegacy(
         mediaMimeType?.isMimeTypeImage() == true -> Environment.DIRECTORY_PICTURES
         mediaMimeType?.isMimeTypeVideo() == true -> Environment.DIRECTORY_MOVIES
         mediaMimeType?.isMimeTypeAudio() == true -> Environment.DIRECTORY_MUSIC
-        else                                     -> Environment.DIRECTORY_DOWNLOADS
+        else -> Environment.DIRECTORY_DOWNLOADS
     }
     val downloadDir = Environment.getExternalStoragePublicDirectory(dest)
     try {
@@ -374,7 +375,7 @@ private fun addToGallery(savedFile: File, mediaMimeType: String?, context: Conte
 /**
  * Open the play store to the provided application Id, default to this app.
  */
-fun openPlayStore(activity: Activity, appId: String = BuildConfig.APPLICATION_ID) {
+fun openPlayStore(activity: Activity, appId: String) {
     try {
         activity.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appId")))
     } catch (activityNotFoundException: ActivityNotFoundException) {

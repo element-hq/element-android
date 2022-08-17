@@ -26,6 +26,8 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
 import im.vector.app.features.location.domain.usecase.CompareLocationsUseCase
+import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
+import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.lastOrNull
@@ -36,9 +38,12 @@ import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.getUser
+import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.util.toMatrixItem
+import timber.log.Timber
 
 /**
  * Sampling period to compare target location and user location.
@@ -51,6 +56,7 @@ class LocationSharingViewModel @AssistedInject constructor(
         private val locationPinProvider: LocationPinProvider,
         private val session: Session,
         private val compareLocationsUseCase: CompareLocationsUseCase,
+        private val vectorPreferences: VectorPreferences,
 ) : VectorViewModel<LocationSharingViewState, LocationSharingAction, LocationSharingViewEvents>(initialState), LocationTracker.Callback {
 
     private val room = session.getRoom(initialState.roomId)!!
@@ -65,11 +71,33 @@ class LocationSharingViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<LocationSharingViewModel, LocationSharingViewState> by hiltMavericksViewModelFactory()
 
     init {
-        locationTracker.addCallback(this)
-        locationTracker.start()
+        initLocationTracking()
         setUserItem()
         updatePin()
         compareTargetAndUserLocation()
+        observePowerLevelsForLiveLocationSharing()
+    }
+
+    private fun observePowerLevelsForLiveLocationSharing() {
+        PowerLevelsFlowFactory(room).createFlow()
+                .distinctUntilChanged()
+                .setOnEach {
+                    val powerLevelsHelper = PowerLevelsHelper(it)
+                    val canShareLiveLocation = EventType.STATE_ROOM_BEACON_INFO
+                            .all { beaconInfoType ->
+                                powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, beaconInfoType)
+                            }
+
+                    copy(canShareLiveLocation = canShareLiveLocation)
+                }
+    }
+
+    private fun initLocationTracking() {
+        locationTracker.addCallback(this)
+        locationTracker.locations
+                .onEach(::onLocationUpdate)
+                .launchIn(viewModelScope)
+        locationTracker.start()
     }
 
     private fun setUserItem() {
@@ -118,11 +146,23 @@ class LocationSharingViewModel @AssistedInject constructor(
 
     override fun handle(action: LocationSharingAction) {
         when (action) {
-            LocationSharingAction.CurrentUserLocationSharing  -> handleCurrentUserLocationSharingAction()
-            is LocationSharingAction.PinnedLocationSharing    -> handlePinnedLocationSharingAction(action)
-            is LocationSharingAction.LocationTargetChange     -> handleLocationTargetChangeAction(action)
-            LocationSharingAction.ZoomToUserLocation          -> handleZoomToUserLocationAction()
+            LocationSharingAction.CurrentUserLocationSharing -> handleCurrentUserLocationSharingAction()
+            is LocationSharingAction.PinnedLocationSharing -> handlePinnedLocationSharingAction(action)
+            is LocationSharingAction.LocationTargetChange -> handleLocationTargetChangeAction(action)
+            LocationSharingAction.ZoomToUserLocation -> handleZoomToUserLocationAction()
+            LocationSharingAction.LiveLocationSharingRequested -> handleLiveLocationSharingRequestedAction()
             is LocationSharingAction.StartLiveLocationSharing -> handleStartLiveLocationSharingAction(action.durationMillis)
+            LocationSharingAction.ShowMapLoadingError -> handleShowMapLoadingError()
+        }
+    }
+
+    private fun handleLiveLocationSharingRequestedAction() = withState { state ->
+        if (!state.canShareLiveLocation) {
+            _viewEvents.post(LocationSharingViewEvents.LiveLocationSharingNotEnoughPermission)
+        } else if (vectorPreferences.labsEnableLiveLocation()) {
+            _viewEvents.post(LocationSharingViewEvents.ChooseLiveLocationDuration)
+        } else {
+            _viewEvents.post(LocationSharingViewEvents.ShowLabsFlagPromotion)
         }
     }
 
@@ -136,13 +176,15 @@ class LocationSharingViewModel @AssistedInject constructor(
 
     private fun shareLocation(locationData: LocationData?, isUserLocation: Boolean) {
         locationData?.let { location ->
-            room.sendService().sendLocation(
-                    latitude = location.latitude,
-                    longitude = location.longitude,
-                    uncertainty = location.uncertainty,
-                    isUserLocation = isUserLocation
-            )
-            _viewEvents.post(LocationSharingViewEvents.Close)
+            viewModelScope.launch {
+                room.locationSharingService().sendStaticLocation(
+                        latitude = location.latitude,
+                        longitude = location.longitude,
+                        uncertainty = location.uncertainty,
+                        isUserLocation = isUserLocation
+                )
+                _viewEvents.post(LocationSharingViewEvents.Close)
+            }
         } ?: run {
             _viewEvents.post(LocationSharingViewEvents.LocationNotAvailableError)
         }
@@ -170,7 +212,12 @@ class LocationSharingViewModel @AssistedInject constructor(
         )
     }
 
-    override fun onLocationUpdate(locationData: LocationData) {
+    private fun handleShowMapLoadingError() {
+        setState { copy(loadingMapHasFailed = true) }
+    }
+
+    private fun onLocationUpdate(locationData: LocationData) {
+        Timber.d("onLocationUpdate()")
         setState {
             copy(lastKnownUserLocation = locationData)
         }
@@ -182,7 +229,7 @@ class LocationSharingViewModel @AssistedInject constructor(
         }
     }
 
-    override fun onLocationProviderIsNotAvailable() {
+    override fun onNoLocationProviderAvailable() {
         _viewEvents.post(LocationSharingViewEvents.LocationNotAvailableError)
     }
 }

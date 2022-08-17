@@ -111,7 +111,7 @@ class WidgetViewModel @AssistedInject constructor(
         if (room == null) {
             return
         }
-        room.flow().liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
+        room.flow().liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
                 .mapOptional { it.content.toModel<PowerLevelsContent>() }
                 .unwrap()
                 .map {
@@ -140,14 +140,19 @@ class WidgetViewModel @AssistedInject constructor(
 
     override fun handle(action: WidgetAction) {
         when (action) {
-            is WidgetAction.OnWebViewLoadingError   -> handleWebViewLoadingError(action)
+            is WidgetAction.OnWebViewLoadingError -> handleWebViewLoadingError(action)
             is WidgetAction.OnWebViewLoadingSuccess -> handleWebViewLoadingSuccess(action)
-            is WidgetAction.OnWebViewStartedToLoad  -> handleWebViewStartLoading()
-            WidgetAction.LoadFormattedUrl           -> loadFormattedUrl(forceFetchToken = false)
-            WidgetAction.DeleteWidget               -> handleDeleteWidget()
-            WidgetAction.RevokeWidget               -> handleRevokeWidget()
-            WidgetAction.OnTermsReviewed            -> loadFormattedUrl(forceFetchToken = false)
+            is WidgetAction.OnWebViewStartedToLoad -> handleWebViewStartLoading()
+            WidgetAction.LoadFormattedUrl -> loadFormattedUrl(forceFetchToken = false)
+            WidgetAction.DeleteWidget -> handleDeleteWidget()
+            WidgetAction.RevokeWidget -> handleRevokeWidget()
+            WidgetAction.OnTermsReviewed -> loadFormattedUrl(forceFetchToken = false)
+            WidgetAction.CloseWidget -> handleCloseWidget()
         }
+    }
+
+    private fun handleCloseWidget() {
+        _viewEvents.post(WidgetViewEvents.Close())
     }
 
     private fun handleRevokeWidget() {

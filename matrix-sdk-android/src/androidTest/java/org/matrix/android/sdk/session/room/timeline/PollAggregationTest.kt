@@ -57,7 +57,7 @@ class PollAggregationTest : InstrumentedTest {
         // Bob creates a poll
         roomFromBobPOV.sendService().sendPoll(PollType.DISCLOSED, pollQuestion, pollOptions)
 
-        aliceSession.startSync(true)
+        aliceSession.syncService().startSync(true)
         val aliceTimeline = roomFromAlicePOV.timelineService().createTimeline(null, TimelineSettings(30))
         aliceTimeline.start()
 
@@ -77,7 +77,7 @@ class PollAggregationTest : InstrumentedTest {
                     }
 
                     when (lock.count.toInt()) {
-                        TOTAL_TEST_COUNT     -> {
+                        TOTAL_TEST_COUNT -> {
                             // Poll has just been created.
                             testInitialPollConditions(pollContent, pollSummary)
                             lock.countDown()
@@ -119,7 +119,7 @@ class PollAggregationTest : InstrumentedTest {
                             testEndedPoll(pollSummary)
                             lock.countDown()
                         }
-                        else                 -> {
+                        else -> {
                             fail("Lock count ${lock.count} didn't handled.")
                         }
                     }
@@ -133,7 +133,7 @@ class PollAggregationTest : InstrumentedTest {
 
         aliceTimeline.removeAllListeners()
 
-        aliceSession.stopSync()
+        aliceSession.syncService().stopSync()
         aliceTimeline.dispose()
     }
 

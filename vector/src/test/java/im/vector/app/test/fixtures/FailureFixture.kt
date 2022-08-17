@@ -25,4 +25,16 @@ fun a401ServerError() = Failure.ServerError(
         MatrixError(MatrixError.M_UNAUTHORIZED, ""), HttpsURLConnection.HTTP_UNAUTHORIZED
 )
 
+fun anInvalidUserNameError() = Failure.ServerError(
+        MatrixError(MatrixError.M_INVALID_USERNAME, ""), HttpsURLConnection.HTTP_BAD_REQUEST
+)
+
+fun anInvalidPasswordError() = Failure.ServerError(
+        MatrixError(MatrixError.M_FORBIDDEN, "Invalid password"), HttpsURLConnection.HTTP_FORBIDDEN
+)
+
+fun aLoginEmailUnknownError() = Failure.ServerError(
+        MatrixError(MatrixError.M_FORBIDDEN, ""), HttpsURLConnection.HTTP_FORBIDDEN
+)
+
 fun aHomeserverUnavailableError() = Failure.NetworkConnection(UnknownHostException())

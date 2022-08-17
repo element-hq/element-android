@@ -120,7 +120,7 @@ class CallItemFactory @Inject constructor(
                         reactionsSummaryEvents = params.reactionsSummaryEvents
                 )
             }
-            else                  -> null
+            else -> null
         }
         return if (callItem == null && showHiddenEvents) {
             // Fallback to notice item for showing hidden events

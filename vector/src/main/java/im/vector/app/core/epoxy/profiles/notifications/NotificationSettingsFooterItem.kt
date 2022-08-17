@@ -25,8 +25,8 @@ import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.extensions.setTextWithColoredPart
 
-@EpoxyModelClass(layout = R.layout.item_notifications_footer)
-abstract class NotificationSettingsFooterItem : VectorEpoxyModel<NotificationSettingsFooterItem.Holder>() {
+@EpoxyModelClass
+abstract class NotificationSettingsFooterItem : VectorEpoxyModel<NotificationSettingsFooterItem.Holder>(R.layout.item_notifications_footer) {
 
     @EpoxyAttribute
     var encrypted: Boolean = false

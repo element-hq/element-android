@@ -180,3 +180,11 @@ System\.currentTimeMillis\(\)===2
 
 ### Remove extra space between the name and the description
 \* @\w+ \w+  +
+
+### Please use the MenuProvider interface now
+onCreateOptionsMenu
+onOptionsItemSelected
+onPrepareOptionsMenu
+
+### Suspicious String template. Please check that the string template will behave as expected, i.e. the class field and not the whole object will be used. For instance `Timber.d("$event.type")` is not correct, you should write `Timber.d("${event.type}")`. In the former the whole event content will be logged, since it's a data class. If this is expected (i.e. to fix false positive), please add explicit curly braces (`{` and `}`) around the variable, for instance `"elementLogs.${i}.txt"`
+\$[a-zA-Z_]\w*\??\.[a-zA-Z_]

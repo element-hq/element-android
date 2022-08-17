@@ -29,6 +29,7 @@ import im.vector.app.features.login.ReAuthHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.UserPasswordAuth
@@ -50,7 +51,8 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
         @Assisted private val initialState: CrossSigningSettingsViewState,
         private val session: Session,
         private val reAuthHelper: ReAuthHelper,
-        private val stringProvider: StringProvider
+        private val stringProvider: StringProvider,
+        private val matrix: Matrix,
 ) : VectorViewModel<CrossSigningSettingsViewState, CrossSigningSettingsAction, CrossSigningSettingsViewEvents>(initialState) {
 
     init {
@@ -123,7 +125,7 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
                 }
                 Unit
             }
-            is CrossSigningSettingsAction.SsoAuthDone         -> {
+            is CrossSigningSettingsAction.SsoAuthDone -> {
                 Timber.d("## UIA - FallBack success")
                 if (pendingAuth != null) {
                     uiaContinuation?.resume(pendingAuth!!)
@@ -131,8 +133,8 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
                     uiaContinuation?.resumeWithException(IllegalArgumentException())
                 }
             }
-            is CrossSigningSettingsAction.PasswordAuthDone    -> {
-                val decryptedPass = session.secureStorageService()
+            is CrossSigningSettingsAction.PasswordAuthDone -> {
+                val decryptedPass = matrix.secureStorageService()
                         .loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
                 uiaContinuation?.resume(
                         UserPasswordAuth(
@@ -142,7 +144,7 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
                         )
                 )
             }
-            CrossSigningSettingsAction.ReAuthCancelled        -> {
+            CrossSigningSettingsAction.ReAuthCancelled -> {
                 Timber.d("## UIA - Reauth cancelled")
                 _viewEvents.post(CrossSigningSettingsViewEvents.HideModalWaitingView)
                 uiaContinuation?.resumeWithException(Exception())

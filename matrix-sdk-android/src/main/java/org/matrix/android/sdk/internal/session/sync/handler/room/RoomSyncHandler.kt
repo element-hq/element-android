@@ -27,11 +27,11 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
-import org.matrix.android.sdk.api.session.initsync.InitSyncStep
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.threads.model.ThreadSummaryUpdateType
+import org.matrix.android.sdk.api.session.sync.InitialSyncStep
 import org.matrix.android.sdk.api.session.sync.InitialSyncStrategy
 import org.matrix.android.sdk.api.session.sync.initialSyncStrategy
 import org.matrix.android.sdk.api.session.sync.model.InvitedRoomSync
@@ -57,6 +57,7 @@ import org.matrix.android.sdk.internal.database.model.deleteOnCascade
 import org.matrix.android.sdk.internal.database.model.threads.ThreadSummaryEntity
 import org.matrix.android.sdk.internal.database.query.copyToRealmOrIgnore
 import org.matrix.android.sdk.internal.database.query.find
+import org.matrix.android.sdk.internal.database.query.findAll
 import org.matrix.android.sdk.internal.database.query.findLastForwardChunkOfRoom
 import org.matrix.android.sdk.internal.database.query.findLastForwardChunkOfThread
 import org.matrix.android.sdk.internal.database.query.getOrCreate
@@ -67,17 +68,17 @@ import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.extensions.clearWith
 import org.matrix.android.sdk.internal.session.StreamEventsManager
 import org.matrix.android.sdk.internal.session.events.getFixedRoomMemberContent
-import org.matrix.android.sdk.internal.session.initsync.ProgressReporter
-import org.matrix.android.sdk.internal.session.initsync.mapWithProgress
-import org.matrix.android.sdk.internal.session.initsync.reportSubtask
 import org.matrix.android.sdk.internal.session.room.membership.RoomChangeMembershipStateDataSource
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberEventHandler
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryUpdater
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
 import org.matrix.android.sdk.internal.session.room.timeline.TimelineInput
 import org.matrix.android.sdk.internal.session.room.typing.TypingEventContent
+import org.matrix.android.sdk.internal.session.sync.ProgressReporter
 import org.matrix.android.sdk.internal.session.sync.SyncResponsePostTreatmentAggregator
+import org.matrix.android.sdk.internal.session.sync.mapWithProgress
 import org.matrix.android.sdk.internal.session.sync.parsing.RoomSyncAccountDataHandler
+import org.matrix.android.sdk.internal.session.sync.reportSubtask
 import org.matrix.android.sdk.internal.util.computeBestChunkSize
 import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
@@ -140,24 +141,24 @@ internal class RoomSyncHandler @Inject constructor(
         }
         val syncLocalTimeStampMillis = clock.epochMillis()
         val rooms = when (handlingStrategy) {
-            is HandlingStrategy.JOINED  -> {
+            is HandlingStrategy.JOINED -> {
                 if (isInitialSync && initialSyncStrategy is InitialSyncStrategy.Optimized) {
                     insertJoinRoomsFromInitSync(realm, handlingStrategy, syncLocalTimeStampMillis, aggregator, reporter)
                     // Rooms are already inserted, return an empty list
                     emptyList()
                 } else {
-                    handlingStrategy.data.mapWithProgress(reporter, InitSyncStep.ImportingAccountJoinedRooms, 0.6f) {
+                    handlingStrategy.data.mapWithProgress(reporter, InitialSyncStep.ImportingAccountJoinedRooms, 0.6f) {
                         handleJoinedRoom(realm, it.key, it.value, insertType, syncLocalTimeStampMillis, aggregator)
                     }
                 }
             }
             is HandlingStrategy.INVITED ->
-                handlingStrategy.data.mapWithProgress(reporter, InitSyncStep.ImportingAccountInvitedRooms, 0.1f) {
+                handlingStrategy.data.mapWithProgress(reporter, InitialSyncStep.ImportingAccountInvitedRooms, 0.1f) {
                     handleInvitedRoom(realm, it.key, it.value, insertType, syncLocalTimeStampMillis)
                 }
 
-            is HandlingStrategy.LEFT    -> {
-                handlingStrategy.data.mapWithProgress(reporter, InitSyncStep.ImportingAccountLeftRooms, 0.3f) {
+            is HandlingStrategy.LEFT -> {
+                handlingStrategy.data.mapWithProgress(reporter, InitialSyncStep.ImportingAccountLeftRooms, 0.3f) {
                     handleLeftRoom(realm, it.key, it.value, insertType, syncLocalTimeStampMillis)
                 }
             }
@@ -178,7 +179,7 @@ internal class RoomSyncHandler @Inject constructor(
         )
 
         if (bestChunkSize.shouldChunk()) {
-            reportSubtask(reporter, InitSyncStep.ImportingAccountJoinedRooms, bestChunkSize.numberOfChunks, 0.6f) {
+            reportSubtask(reporter, InitialSyncStep.ImportingAccountJoinedRooms, bestChunkSize.numberOfChunks, 0.6f) {
                 Timber.d("INIT_SYNC ${handlingStrategy.data.keys.size} rooms to insert, split with $bestChunkSize")
                 // I cannot find a better way to chunk a map, so chunk the keys and then create new maps
                 handlingStrategy.data.keys
@@ -202,7 +203,7 @@ internal class RoomSyncHandler @Inject constructor(
             }
         } else {
             // No need to split
-            val rooms = handlingStrategy.data.mapWithProgress(reporter, InitSyncStep.ImportingAccountJoinedRooms, 0.6f) {
+            val rooms = handlingStrategy.data.mapWithProgress(reporter, InitialSyncStep.ImportingAccountJoinedRooms, 0.6f) {
                 handleJoinedRoom(realm, it.key, it.value, EventInsertType.INITIAL_SYNC, syncLocalTimeStampMillis, aggregator)
             }
             realm.insertOrUpdate(rooms)
@@ -243,7 +244,7 @@ internal class RoomSyncHandler @Inject constructor(
                 if (event.eventId == null || event.stateKey == null || event.type == null) {
                     continue
                 }
-                val ageLocalTs = event.unsignedData?.age?.let { syncLocalTimestampMillis - it }
+                val ageLocalTs = syncLocalTimestampMillis - (event.unsignedData?.age ?: 0)
                 val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, insertType)
                 Timber.v("## received state event ${event.type} and key ${event.stateKey}")
                 CurrentStateEventEntity.getOrCreate(realm, roomId, event.stateKey, event.type).apply {
@@ -305,7 +306,7 @@ internal class RoomSyncHandler @Inject constructor(
                 if (event.stateKey == null || event.type == null) {
                     return@forEach
                 }
-                val ageLocalTs = event.unsignedData?.age?.let { syncLocalTimestampMillis - it }
+                val ageLocalTs = syncLocalTimestampMillis - (event.unsignedData?.age ?: 0)
                 val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, insertType)
                 CurrentStateEventEntity.getOrCreate(realm, roomId, event.stateKey, event.type).apply {
                     eventId = eventEntity.eventId
@@ -335,7 +336,7 @@ internal class RoomSyncHandler @Inject constructor(
             if (event.eventId == null || event.stateKey == null || event.type == null) {
                 continue
             }
-            val ageLocalTs = event.unsignedData?.age?.let { syncLocalTimestampMillis - it }
+            val ageLocalTs = syncLocalTimestampMillis - (event.unsignedData?.age ?: 0)
             val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, insertType)
             CurrentStateEventEntity.getOrCreate(realm, roomId, event.stateKey, event.type).apply {
                 eventId = event.eventId
@@ -347,7 +348,7 @@ internal class RoomSyncHandler @Inject constructor(
             if (event.eventId == null || event.senderId == null || event.type == null) {
                 continue
             }
-            val ageLocalTs = event.unsignedData?.age?.let { syncLocalTimestampMillis - it }
+            val ageLocalTs = syncLocalTimestampMillis - (event.unsignedData?.age ?: 0)
             val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, insertType)
             if (event.stateKey != null) {
                 CurrentStateEventEntity.getOrCreate(realm, roomId, event.stateKey, event.type).apply {
@@ -381,12 +382,13 @@ internal class RoomSyncHandler @Inject constructor(
             aggregator: SyncResponsePostTreatmentAggregator
     ): ChunkEntity {
         val lastChunk = ChunkEntity.findLastForwardChunkOfRoom(realm, roomEntity.roomId)
-        if (isLimited && lastChunk != null) {
-            lastChunk.deleteOnCascade(deleteStateEvents = false, canDeleteRoot = true)
-        }
         val chunkEntity = if (!isLimited && lastChunk != null) {
             lastChunk
         } else {
+            // Delete all chunks of the room in case of gap.
+            ChunkEntity.findAll(realm, roomId).forEach {
+                it.deleteOnCascade(deleteStateEvents = false, canDeleteRoot = true)
+            }
             realm.createObject<ChunkEntity>().apply {
                 this.prevToken = prevToken
                 this.isLastForward = true
@@ -399,7 +401,10 @@ internal class RoomSyncHandler @Inject constructor(
         for (rawEvent in eventList) {
             // It's annoying roomId is not there, but lot of code rely on it.
             // And had to do it now as copy would delete all decryption results..
-            val event = rawEvent.copy(roomId = roomId)
+            val ageLocalTs = syncLocalTimestampMillis - (rawEvent.unsignedData?.age ?: 0)
+            val event = rawEvent.copy(roomId = roomId).also {
+                it.ageLocalTs = ageLocalTs
+            }
             if (event.eventId == null || event.senderId == null || event.type == null) {
                 continue
             }
@@ -421,7 +426,6 @@ internal class RoomSyncHandler @Inject constructor(
                 contentToInject = threadsAwarenessHandler.makeEventThreadAware(realm, roomId, event)
             }
 
-            val ageLocalTs = event.unsignedData?.age?.let { syncLocalTimestampMillis - it }
             val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs, contentToInject).copyToRealmOrIgnore(realm, insertType)
             if (event.stateKey != null) {
                 CurrentStateEventEntity.getOrCreate(realm, roomId, event.stateKey, event.type).apply {
@@ -578,12 +582,12 @@ internal class RoomSyncHandler @Inject constructor(
                         readReceiptHandler.handle(realm, roomId, readReceiptContent, isInitialSync, aggregator)
                     }
                 }
-                EventType.TYPING  -> {
+                EventType.TYPING -> {
                     event.content.toModel<TypingEventContent>()?.let { typingEventContent ->
                         result = result.copy(typingUserIds = typingEventContent.typingUserIds)
                     }
                 }
-                else              -> Timber.w("Ephemeral event type '${event.type}' not yet supported")
+                else -> Timber.w("Ephemeral event type '${event.type}' not yet supported")
             }
         }
 

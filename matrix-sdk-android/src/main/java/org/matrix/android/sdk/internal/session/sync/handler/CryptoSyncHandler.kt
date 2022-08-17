@@ -29,7 +29,7 @@ import org.matrix.android.sdk.api.session.sync.model.SyncResponse
 import org.matrix.android.sdk.api.session.sync.model.ToDeviceSyncResponse
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
 import org.matrix.android.sdk.internal.crypto.verification.DefaultVerificationService
-import org.matrix.android.sdk.internal.session.initsync.ProgressReporter
+import org.matrix.android.sdk.internal.session.sync.ProgressReporter
 import timber.log.Timber
 import javax.inject.Inject
 

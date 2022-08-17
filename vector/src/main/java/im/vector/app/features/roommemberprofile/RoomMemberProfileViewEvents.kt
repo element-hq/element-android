@@ -40,4 +40,5 @@ sealed class RoomMemberProfileViewEvents : VectorViewEvents {
 
     data class ShareRoomMemberProfile(val permalink: String) : RoomMemberProfileViewEvents()
     data class OpenRoom(val roomId: String) : RoomMemberProfileViewEvents()
+    object GoBack : RoomMemberProfileViewEvents()
 }

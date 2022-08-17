@@ -25,7 +25,7 @@
         android:layout_height="0dp"
         app:layout_constraintHeight_percent="0.60"
         app:layout_constraintTop_toTopOf="parent"
-        tools:background="@drawable/bg_waiting_for_email_verification" />
+        tools:background="@drawable/bg_gradient_ftue_breaker" />
 
     <Space
         android:id="@+id/emailVerificationSpace1"
@@ -96,7 +96,7 @@
         android:id="@+id/emailVerificationWaiting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@id/emailVerificationSpace4"
         app:layout_constraintEnd_toEndOf="@id/ftueAuthGutterEnd"
         app:layout_constraintStart_toStartOf="@id/ftueAuthGutterStart"
