@@ -74,6 +74,19 @@
 
                 </com.google.android.material.appbar.MaterialToolbar>
 
+                <ImageView
+                    android:id="@+id/debug_button"
+                    style="@style/VectorDebug"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="bottom|end"
+                    android:layout_marginStart="12dp"
+                    android:importantForAccessibility="no"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_settings_x"
+                    app:tint="?colorPrimary"
+                    tools:ignore="MissingPrefix" />
+
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
         </com.google.android.material.appbar.AppBarLayout>

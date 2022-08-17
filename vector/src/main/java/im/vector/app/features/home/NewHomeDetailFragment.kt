@@ -22,6 +22,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
@@ -36,6 +37,7 @@ import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.VectorMenuProvider
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.ui.views.CurrentCallsView
 import im.vector.app.core.ui.views.CurrentCallsViewPresenter
@@ -71,6 +73,7 @@ class NewHomeDetailFragment @Inject constructor(
         private val vectorPreferences: VectorPreferences,
         private val spaceStateHandler: SpaceStateHandler,
         private val session: Session,
+        private val buildMeta: BuildMeta,
 ) : VectorBaseFragment<FragmentNewHomeDetailBinding>(),
         KeysBackupBanner.Delegate,
         CurrentCallsView.Callback,
@@ -125,6 +128,7 @@ class NewHomeDetailFragment @Inject constructor(
         setupToolbar()
         setupKeysBackupBanner()
         setupActiveCallView()
+        setupDebugButton()
 
         withState(viewModel) {
             // Update the navigation view if needed (for when we restore the tabs)
@@ -192,6 +196,7 @@ class NewHomeDetailFragment @Inject constructor(
         updateTabVisibilitySafely(R.id.bottom_action_notification, vectorPreferences.labAddNotificationTab())
         callManager.checkForProtocolsSupportIfNeeded()
         refreshSpaceState()
+        refreshDebugButtonState()
     }
 
     private fun refreshSpaceState() {
@@ -365,6 +370,17 @@ class NewHomeDetailFragment @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun setupDebugButton() {
+        views.debugButton.debouncedClicks {
+            sharedActionViewModel.post(HomeActivitySharedAction.CloseDrawer)
+            navigator.openDebug(requireActivity())
+        }
+    }
+
+    private fun refreshDebugButtonState() {
+        views.debugButton.isVisible = buildMeta.isDebug && vectorPreferences.developerMode()
     }
 
     /* ==========================================================================================
