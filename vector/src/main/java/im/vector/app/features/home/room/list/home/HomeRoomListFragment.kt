@@ -43,9 +43,12 @@ import im.vector.app.features.home.room.list.RoomSummaryItemFactory
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
+import im.vector.app.features.home.room.list.actions.RoomListSharedAction
+import im.vector.app.features.home.room.list.actions.RoomListSharedActionViewModel
 import im.vector.app.features.home.room.list.home.filter.HomeFilteredRoomsController
 import im.vector.app.features.home.room.list.home.filter.HomeRoomFilter
 import im.vector.app.features.home.room.list.home.recent.RecentRoomCarouselController
+import im.vector.app.features.spaces.SpaceListBottomSheet
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -62,9 +65,12 @@ class HomeRoomListFragment @Inject constructor(
         RoomListListener {
 
     private val roomListViewModel: HomeRoomListViewModel by fragmentViewModel()
-    private lateinit var sharedActionViewModel: RoomListQuickActionsSharedActionViewModel
+    private lateinit var sharedQuickActionsViewModel: RoomListQuickActionsSharedActionViewModel
+    private lateinit var sharedActionViewModel: RoomListSharedActionViewModel
     private var concatAdapter = ConcatAdapter()
     private var modelBuildListener: OnModelBuildFinishedListener? = null
+
+    private val spaceListBottomSheet = SpaceListBottomSheet()
 
     private lateinit var stateRestorer: LayoutManagerStateRestorer
 
@@ -74,15 +80,25 @@ class HomeRoomListFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        sharedActionViewModel = activityViewModelProvider[RoomListQuickActionsSharedActionViewModel::class.java]
-        sharedActionViewModel
-                .stream()
-                .onEach { handleQuickActions(it) }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
-
         views.stateView.contentView = views.roomListView
         views.stateView.state = StateView.State.Loading
+        setupObservers()
+        setupRecyclerView()
+        setupFabs()
+    }
+
+    private fun setupObservers() {
+        sharedQuickActionsViewModel = activityViewModelProvider[RoomListQuickActionsSharedActionViewModel::class.java]
+        sharedActionViewModel = activityViewModelProvider[RoomListSharedActionViewModel::class.java]
+
+        sharedActionViewModel
+                .stream()
+                .onEach(::handleSharedAction)
+                .launchIn(viewLifecycleOwner.lifecycleScope)
+        sharedQuickActionsViewModel
+                .stream()
+                .onEach(::handleQuickActions)
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         roomListViewModel.observeViewEvents {
             when (it) {
@@ -92,9 +108,42 @@ class HomeRoomListFragment @Inject constructor(
                 is HomeRoomListViewEvents.Done -> Unit
             }
         }
+    }
 
-        setupRecyclerView()
-        setupFabs()
+    private fun handleSharedAction(action: RoomListSharedAction) {
+        when (action) {
+            RoomListSharedAction.CloseBottomSheet -> spaceListBottomSheet.dismiss()
+        }
+    }
+
+    private fun handleQuickActions(quickAction: RoomListQuickActionsSharedAction) {
+        when (quickAction) {
+            is RoomListQuickActionsSharedAction.NotificationsAllNoisy -> {
+                roomListViewModel.handle(HomeRoomListAction.ChangeRoomNotificationState(quickAction.roomId, RoomNotificationState.ALL_MESSAGES_NOISY))
+            }
+            is RoomListQuickActionsSharedAction.NotificationsAll -> {
+                roomListViewModel.handle(HomeRoomListAction.ChangeRoomNotificationState(quickAction.roomId, RoomNotificationState.ALL_MESSAGES))
+            }
+            is RoomListQuickActionsSharedAction.NotificationsMentionsOnly -> {
+                roomListViewModel.handle(HomeRoomListAction.ChangeRoomNotificationState(quickAction.roomId, RoomNotificationState.MENTIONS_ONLY))
+            }
+            is RoomListQuickActionsSharedAction.NotificationsMute -> {
+                roomListViewModel.handle(HomeRoomListAction.ChangeRoomNotificationState(quickAction.roomId, RoomNotificationState.MUTE))
+            }
+            is RoomListQuickActionsSharedAction.Settings -> {
+                navigator.openRoomProfile(requireActivity(), quickAction.roomId)
+            }
+            is RoomListQuickActionsSharedAction.Favorite -> {
+                roomListViewModel.handle(HomeRoomListAction.ToggleTag(quickAction.roomId, RoomTag.ROOM_TAG_FAVOURITE))
+            }
+            is RoomListQuickActionsSharedAction.LowPriority -> {
+                roomListViewModel.handle(HomeRoomListAction.ToggleTag(quickAction.roomId, RoomTag.ROOM_TAG_LOW_PRIORITY))
+            }
+            is RoomListQuickActionsSharedAction.Leave -> {
+                roomListViewModel.handle(HomeRoomListAction.LeaveRoom(quickAction.roomId))
+                promptLeaveRoom(quickAction.roomId)
+            }
+        }
     }
 
     private fun setupRecyclerView() {
@@ -121,7 +170,8 @@ class HomeRoomListFragment @Inject constructor(
         }
 
         views.newLayoutOpenSpacesButton.setOnClickListener {
-            // Click action for open spaces modal goes here (Issue #6499)
+            // Click action for open spaces modal goes here
+            spaceListBottomSheet.show(requireActivity().supportFragmentManager, SpaceListBottomSheet.TAG)
         }
 
         // Hide FABs when list is scrolling
@@ -155,36 +205,6 @@ class HomeRoomListFragment @Inject constructor(
     private fun setUpAdapters(sections: Set<HomeRoomSection>) {
         sections.forEach {
             concatAdapter.addAdapter(getAdapterForData(it))
-        }
-    }
-
-    private fun handleQuickActions(quickAction: RoomListQuickActionsSharedAction) {
-        when (quickAction) {
-            is RoomListQuickActionsSharedAction.NotificationsAllNoisy -> {
-                roomListViewModel.handle(HomeRoomListAction.ChangeRoomNotificationState(quickAction.roomId, RoomNotificationState.ALL_MESSAGES_NOISY))
-            }
-            is RoomListQuickActionsSharedAction.NotificationsAll -> {
-                roomListViewModel.handle(HomeRoomListAction.ChangeRoomNotificationState(quickAction.roomId, RoomNotificationState.ALL_MESSAGES))
-            }
-            is RoomListQuickActionsSharedAction.NotificationsMentionsOnly -> {
-                roomListViewModel.handle(HomeRoomListAction.ChangeRoomNotificationState(quickAction.roomId, RoomNotificationState.MENTIONS_ONLY))
-            }
-            is RoomListQuickActionsSharedAction.NotificationsMute -> {
-                roomListViewModel.handle(HomeRoomListAction.ChangeRoomNotificationState(quickAction.roomId, RoomNotificationState.MUTE))
-            }
-            is RoomListQuickActionsSharedAction.Settings -> {
-                navigator.openRoomProfile(requireActivity(), quickAction.roomId)
-            }
-            is RoomListQuickActionsSharedAction.Favorite -> {
-                roomListViewModel.handle(HomeRoomListAction.ToggleTag(quickAction.roomId, RoomTag.ROOM_TAG_FAVOURITE))
-            }
-            is RoomListQuickActionsSharedAction.LowPriority -> {
-                roomListViewModel.handle(HomeRoomListAction.ToggleTag(quickAction.roomId, RoomTag.ROOM_TAG_LOW_PRIORITY))
-            }
-            is RoomListQuickActionsSharedAction.Leave -> {
-                roomListViewModel.handle(HomeRoomListAction.LeaveRoom(quickAction.roomId))
-                promptLeaveRoom(quickAction.roomId)
-            }
         }
     }
 
