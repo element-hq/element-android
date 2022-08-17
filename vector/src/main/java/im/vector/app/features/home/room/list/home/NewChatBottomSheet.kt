@@ -45,7 +45,11 @@ class NewChatBottomSheet @Inject constructor() : BottomSheetDialogFragment() {
         }
 
         binding.createRoom.setOnClickListener {
-            navigator.openCreateRoom(requireActivity(), "")
+            navigator.openCreateRoom(requireActivity())
+        }
+
+        binding.exploreRooms.setOnClickListener {
+            navigator.openRoomDirectory(requireContext())
         }
     }
 
