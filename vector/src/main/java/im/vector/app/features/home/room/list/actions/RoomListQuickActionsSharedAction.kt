@@ -25,8 +25,7 @@ sealed class RoomListQuickActionsSharedAction(
         @StringRes val titleRes: Int,
         @DrawableRes val iconResId: Int?,
         val destructive: Boolean = false
-) :
-        VectorSharedAction {
+) : VectorSharedAction {
 
     data class NotificationsAllNoisy(val roomId: String) : RoomListQuickActionsSharedAction(
             R.string.room_list_quick_actions_notifications_all_noisy,

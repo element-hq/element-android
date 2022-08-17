@@ -67,7 +67,7 @@ class NewHomeDetailFragment @Inject constructor(
         private val alertManager: PopupAlertManager,
         private val callManager: WebRtcCallManager,
         private val vectorPreferences: VectorPreferences,
-        private val appStateHandler: SpaceStateHandler,
+        private val spaceStateHandler: SpaceStateHandler,
         private val session: Session,
 ) : VectorBaseFragment<FragmentNewHomeDetailBinding>(),
         KeysBackupBanner.Delegate,
@@ -176,13 +176,13 @@ class NewHomeDetailFragment @Inject constructor(
     }
 
     private fun navigateBack() {
-        val previousSpaceId = appStateHandler.getSpaceBackstack().removeLastOrNull()
-        val parentSpaceId = appStateHandler.getCurrentSpace()?.flattenParentIds?.lastOrNull()
+        val previousSpaceId = spaceStateHandler.getSpaceBackstack().removeLastOrNull()
+        val parentSpaceId = spaceStateHandler.getCurrentSpace()?.flattenParentIds?.lastOrNull()
         setCurrentSpace(previousSpaceId ?: parentSpaceId)
     }
 
     private fun setCurrentSpace(spaceId: String?) {
-        appStateHandler.setCurrentSpace(spaceId, isForwardNavigation = false)
+        spaceStateHandler.setCurrentSpace(spaceId, isForwardNavigation = false)
         sharedActionViewModel.post(HomeActivitySharedAction.OnCloseSpace)
     }
 
@@ -205,7 +205,7 @@ class NewHomeDetailFragment @Inject constructor(
     }
 
     private fun refreshSpaceState() {
-        appStateHandler.getCurrentSpace()?.let {
+        spaceStateHandler.getCurrentSpace()?.let {
             onSpaceChange(it)
         }
     }
@@ -268,8 +268,7 @@ class NewHomeDetailFragment @Inject constructor(
     }
 
     private fun onSpaceChange(spaceSummary: RoomSummary?) {
-        // Reimplement in next PR
-        println(spaceSummary)
+        views.collapsingToolbar.title = (spaceSummary?.displayName ?: getString(R.string.all_chats))
     }
 
     private fun setupKeysBackupBanner() {
@@ -450,7 +449,7 @@ class NewHomeDetailFragment @Inject constructor(
         return this
     }
 
-    override fun onBackPressed(toolbarButton: Boolean) = if (appStateHandler.getCurrentSpace() != null) {
+    override fun onBackPressed(toolbarButton: Boolean) = if (spaceStateHandler.getCurrentSpace() != null) {
         navigateBack()
         true
     } else {

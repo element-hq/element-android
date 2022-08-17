@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/TextAppearance.Vector.Body.Medium"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_space_item"
+    android:ellipsize="middle"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:singleLine="true"
+    android:text="@string/change_space"
+    android:textAllCaps="true"
+    android:textColor="?vctr_content_tertiary"
+    android:textSize="14sp"
+    tools:viewBindingIgnore="true" />

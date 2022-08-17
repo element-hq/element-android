@@ -49,6 +49,7 @@
             app:layout_constraintTop_toBottomOf="@id/syncStateView">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/collapsing_toolbar"
                 style="@style/Widget.Vector.Material3.CollapsingToolbar.Medium"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/collapsingToolbarLayoutMediumSize"
@@ -61,7 +62,7 @@
                     android:layout_height="?attr/actionBarSize"
                     android:elevation="0dp"
                     app:layout_collapseMode="pin"
-                    app:title="@string/all_chats">
+                    tools:title="@string/all_chats">
 
                     <ImageView
                         android:id="@+id/avatar"

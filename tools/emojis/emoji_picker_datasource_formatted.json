@@ -2634,7 +2634,8 @@
                 "mask",
                 "sick",
                 "ill",
-                "disease"
+                "disease",
+                "covid"
             ]
         },
         "face-with-thermometer": {
@@ -2647,7 +2648,8 @@
                 "thermometer",
                 "temperature",
                 "cold",
-                "fever"
+                "fever",
+                "covid"
             ]
         },
         "face-with-headbandage": {
@@ -4481,7 +4483,9 @@
                 "hope",
                 "wish",
                 "namaste",
-                "highfive"
+                "highfive",
+                "thank you",
+                "appreciate"
             ]
         },
         "writing-hand": {
@@ -9581,7 +9585,8 @@
                 "amoeba",
                 "bacteria",
                 "virus",
-                "germs"
+                "germs",
+                "covid"
             ]
         },
         "bouquet": {
@@ -10260,7 +10265,9 @@
                 "baguette",
                 "bread",
                 "food",
-                "french"
+                "french",
+                "france",
+                "bakery"
             ]
         },
         "flatbread": {
@@ -10272,7 +10279,8 @@
                 "naan",
                 "pita",
                 "flour",
-                "food"
+                "food",
+                "bakery"
             ]
         },
         "pretzel": {
@@ -10282,7 +10290,9 @@
                 "twisted",
                 "convoluted",
                 "food",
-                "bread"
+                "bread",
+                "germany",
+                "bakery"
             ]
         },
         "bagel": {
@@ -10293,7 +10303,8 @@
                 "breakfast",
                 "schmear",
                 "food",
-                "bread"
+                "bread",
+                "jewish"
             ]
         },
         "pancakes": {
@@ -10306,7 +10317,8 @@
                 "hotcake",
                 "pancake",
                 "flapjacks",
-                "hotcakes"
+                "hotcakes",
+                "brunch"
             ]
         },
         "waffle": {
@@ -10316,7 +10328,8 @@
                 "breakfast",
                 "indecisive",
                 "iron",
-                "food"
+                "food",
+                "brunch"
             ]
         },
         "cheese-wedge": {
@@ -10325,7 +10338,8 @@
             "j": [
                 "cheese",
                 "food",
-                "chadder"
+                "chadder",
+                "swiss"
             ]
         },
         "meat-on-bone": {
@@ -10376,7 +10390,8 @@
                 "food",
                 "meat",
                 "pork",
-                "pig"
+                "pig",
+                "brunch"
             ]
         },
         "hamburger": {
@@ -10400,7 +10415,8 @@
                 "fries",
                 "chips",
                 "snack",
-                "fast food"
+                "fast food",
+                "potato"
             ]
         },
         "pizza": {
@@ -10410,7 +10426,8 @@
                 "cheese",
                 "slice",
                 "food",
-                "party"
+                "party",
+                "italy"
             ]
         },
         "hot-dog": {
@@ -10420,7 +10437,8 @@
                 "frankfurter",
                 "hotdog",
                 "sausage",
-                "food"
+                "food",
+                "america"
             ]
         },
         "sandwich": {
@@ -10429,7 +10447,9 @@
             "j": [
                 "bread",
                 "food",
-                "lunch"
+                "lunch",
+                "toast",
+                "bakery"
             ]
         },
         "taco": {
@@ -10468,7 +10488,8 @@
                 "food",
                 "gyro",
                 "kebab",
-                "stuffed"
+                "stuffed",
+                "mediterranean"
             ]
         },
         "falafel": {
@@ -10477,7 +10498,8 @@
             "j": [
                 "chickpea",
                 "meatball",
-                "food"
+                "food",
+                "mediterranean"
             ]
         },
         "egg": {
@@ -10498,7 +10520,8 @@
                 "frying",
                 "pan",
                 "food",
-                "kitchen"
+                "kitchen",
+                "skillet"
             ]
         },
         "shallow-pan-of-food": {
@@ -10510,7 +10533,8 @@
                 "paella",
                 "pan",
                 "shallow",
-                "cooking"
+                "cooking",
+                "skillet"
             ]
         },
         "pot-of-food": {
@@ -10521,7 +10545,8 @@
                 "stew",
                 "food",
                 "meat",
-                "soup"
+                "soup",
+                "hot pot"
             ]
         },
         "fondue": {
@@ -10556,7 +10581,8 @@
                 "green",
                 "salad",
                 "healthy",
-                "lettuce"
+                "lettuce",
+                "vegetable"
             ]
         },
         "popcorn": {
@@ -10566,7 +10592,8 @@
                 "food",
                 "movie theater",
                 "films",
-                "snack"
+                "snack",
+                "drama"
             ]
         },
         "butter": {
@@ -10592,7 +10619,8 @@
             "j": [
                 "can",
                 "food",
-                "soup"
+                "soup",
+                "tomatoes"
             ]
         },
         "bento-box": {
@@ -10602,7 +10630,8 @@
                 "bento",
                 "box",
                 "food",
-                "japanese"
+                "japanese",
+                "lunch"
             ]
         },
         "rice-cracker": {
@@ -10612,7 +10641,8 @@
                 "cracker",
                 "rice",
                 "food",
-                "japanese"
+                "japanese",
+                "snack"
             ]
         },
         "rice-ball": {
@@ -10633,7 +10663,6 @@
                 "cooked",
                 "rice",
                 "food",
-                "china",
                 "asian"
             ]
         },
@@ -10680,7 +10709,8 @@
                 "roasted",
                 "sweet",
                 "food",
-                "nature"
+                "nature",
+                "plant"
             ]
         },
         "oden": {
@@ -10745,7 +10775,8 @@
                 "autumn",
                 "festival",
                 "yuèbǐng",
-                "food"
+                "food",
+                "dessert"
             ]
         },
         "dango": {
@@ -10772,7 +10803,8 @@
                 "jiaozi",
                 "pierogi",
                 "potsticker",
-                "food"
+                "food",
+                "gyoza"
             ]
         },
         "fortune-cookie": {
@@ -10780,7 +10812,8 @@
             "b": "1F960",
             "j": [
                 "prophecy",
-                "food"
+                "food",
+                "dessert"
             ]
         },
         "takeout-box": {
@@ -22169,7 +22202,9 @@
                 "nation",
                 "country",
                 "banner",
-                "japan"
+                "japan",
+                "jp",
+                "ja"
             ]
         },
         "flag-kenya": {
