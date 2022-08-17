@@ -71,7 +71,7 @@ import java.util.concurrent.CancellationException
  *
  */
 class OnboardingViewModel @AssistedInject constructor(
-        @Assisted private val initialState: OnboardingViewState,
+        @Assisted initialState: OnboardingViewState,
         private val applicationContext: Context,
         private val authenticationService: AuthenticationService,
         private val activeSessionHolder: ActiveSessionHolder,
