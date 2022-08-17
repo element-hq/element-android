@@ -46,8 +46,7 @@ internal class DefaultSendEventTask @Inject constructor(
 
     override suspend fun execute(params: SendEventTask.Params): String {
         try {
-            if (RoomLocalEcho.isLocalEchoId(params.event.roomId.orEmpty())) {
-                // Room is local, so create a real one and send the event to this new room
+            if (params.event.isLocalRoomEvent) {
                 return createRoomAndSendEvent(params)
             }
 
@@ -105,4 +104,7 @@ internal class DefaultSendEventTask @Inject constructor(
         }
         return params.event
     }
+
+    private val Event.isLocalRoomEvent
+        get() = RoomLocalEcho.isLocalEchoId(roomId.orEmpty())
 }
