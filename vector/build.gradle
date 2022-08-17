@@ -232,7 +232,7 @@ dependencies {
     // UnifiedPush
     implementation 'com.github.UnifiedPush:android-connector:2.0.1'
 
-    implementation "androidx.emoji2:emoji2:1.1.0"
+    implementation "androidx.emoji2:emoji2:1.2.0"
 
     // WebRTC
     // org.webrtc:google-webrtc is for development purposes only
