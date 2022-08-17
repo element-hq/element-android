@@ -42,7 +42,7 @@
         android:drawablePadding="16dp"
         android:paddingHorizontal="16dp"
         android:paddingVertical="16dp"
-        android:text="@string/space_explore_activity_title"
+        android:text="@string/explore_rooms"
         android:textColor="?vctr_content_primary"
         android:textSize="16sp"
         app:drawableStartCompat="@drawable/ic_room_explore" />
