@@ -25,6 +25,7 @@ import android.view.ViewStub
 import com.airbnb.mvrx.args
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
+import im.vector.app.core.extensions.crawlCausesFor
 import im.vector.app.databinding.FragmentFtueLoginCaptchaBinding
 import im.vector.app.databinding.ViewStubWebviewBinding
 import im.vector.app.features.onboarding.OnboardingAction
@@ -98,18 +99,6 @@ private fun ViewStub.inflateWebView(onError: (Throwable) -> Unit) {
             onError(MissingWebViewException(e))
         } else {
             onError(e)
-        }
-    }
-}
-
-private fun Throwable?.crawlCausesFor(predicate: (Throwable) -> Boolean): Boolean {
-    return when {
-        this == null -> false
-        else -> {
-            when (predicate(this)) {
-                true -> true
-                else -> this.cause.crawlCausesFor(predicate)
-            }
         }
     }
 }
