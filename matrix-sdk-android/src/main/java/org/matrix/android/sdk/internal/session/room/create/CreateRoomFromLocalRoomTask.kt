@@ -53,11 +53,11 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /**
- * Create a Room from a "fake" local room.
+ * Create a room on the server from a local room.
  * The configuration of the local room will be use to configure the new room.
  * The potential local room members will also be invited to this new room.
  *
- * A "fake" local tombstone event will be created to indicate that the local room has been replacing by the new one.
+ * A local tombstone event will be created to indicate that the local room has been replacing by the new one.
  */
 internal interface CreateRoomFromLocalRoomTask : Task<CreateRoomFromLocalRoomTask.Params, String> {
     data class Params(val localRoomId: String)

@@ -55,6 +55,13 @@ import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.time.Clock
 import javax.inject.Inject
 
+/**
+ * Generate a list of local state events from the given [CreateRoomBody].
+ * The states events are generated according to the given configuration and following the matrix specification.
+ * This list reflects as much as possible a list of state events related to a real room configured and got from the server.
+ *
+ * Ref: https://spec.matrix.org/latest/client-server-api/#post_matrixclientv3createroom
+ */
 internal interface CreateLocalRoomStateEventsTask : Task<Params, List<Event>> {
     data class Params(
             val roomCreatorUserId: String,
@@ -74,6 +81,8 @@ internal class DefaultCreateLocalRoomStateEventsTask @Inject constructor(
         createRoomBody = params.createRoomBody
         roomCreatorUserId = params.roomCreatorUserId
 
+        // Build the list of the state events following the priorities from the matrix specification
+        // Changing the order of the events might break the correct display of the room on the client side
         return buildList {
             createRoomCreateEvent()
             createRoomMemberEvents(listOf(roomCreatorUserId))
