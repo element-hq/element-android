@@ -31,6 +31,10 @@ class FakeStartAuthenticationFlowUseCase {
         coEvery { instance.execute(config) } returns result
     }
 
+    fun givenErrors(config: HomeServerConnectionConfig, error: Throwable) {
+        coEvery { instance.execute(config) } throws  error
+    }
+
     fun givenHomeserverUnavailable(config: HomeServerConnectionConfig) {
         coEvery { instance.execute(config) } throws aHomeserverUnavailableError()
     }

@@ -48,6 +48,7 @@ import im.vector.app.test.fakes.FakeVectorOverrides
 import im.vector.app.test.fakes.toTestString
 import im.vector.app.test.fixtures.a401ServerError
 import im.vector.app.test.fixtures.aHomeServerCapabilities
+import im.vector.app.test.fixtures.anUnrecognisedCertificateError
 import im.vector.app.test.test
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
@@ -66,6 +67,7 @@ private const val A_DISPLAY_NAME = "a display name"
 private const val A_PICTURE_FILENAME = "a-picture.png"
 private val A_SERVER_ERROR = a401ServerError()
 private val AN_ERROR = RuntimeException("an error!")
+private val AN_UNRECOGNISED_CERTIFICATE_ERROR = anUnrecognisedCertificateError()
 private val A_LOADABLE_REGISTER_ACTION = RegisterAction.StartRegistration
 private val A_NON_LOADABLE_REGISTER_ACTION = RegisterAction.CheckIfEmailHasBeenValidated(delayMillis = -1L)
 private val A_RESULT_IGNORED_REGISTER_ACTION = RegisterAction.SendAgainThreePid
@@ -323,6 +325,25 @@ class OnboardingViewModelTest {
     }
 
     @Test
+    fun `given has sign in with matrix id sign mode, when handling login or register action fails with certificate error, then emits error`() = runTest {
+        viewModelWith(initialState.copy(signMode = SignMode.SignInWithMatrixId))
+        fakeDirectLoginUseCase.givenFailureResult(A_DIRECT_LOGIN, config = null, cause = AN_UNRECOGNISED_CERTIFICATE_ERROR)
+        givenInitialisesSession(fakeSession)
+        val test = viewModel.test()
+
+        viewModel.handle(A_DIRECT_LOGIN)
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false) }
+                )
+                .assertEvents(OnboardingViewEvents.UnrecognisedCertificateFailure(A_DIRECT_LOGIN, AN_UNRECOGNISED_CERTIFICATE_ERROR))
+                .finish()
+    }
+
+    @Test
     fun `when handling SignUp then sets sign mode to sign up and starts registration`() = runTest {
         givenRegistrationResultFor(RegisterAction.StartRegistration, ANY_CONTINUING_REGISTRATION_RESULT)
         val test = viewModel.test()
@@ -551,6 +572,44 @@ class OnboardingViewModelTest {
     }
 
     @Test
+    fun `when editing homeserver errors with certificate error, then emits error`() = runTest {
+        fakeHomeServerConnectionConfigFactory.givenConfigFor(A_HOMESERVER_URL, fingerprint = null, A_HOMESERVER_CONFIG)
+        fakeStartAuthenticationFlowUseCase.givenErrors(A_HOMESERVER_CONFIG, AN_UNRECOGNISED_CERTIFICATE_ERROR)
+        val editAction = OnboardingAction.HomeServerChange.EditHomeServer(A_HOMESERVER_URL)
+        val test = viewModel.test()
+
+        viewModel.handle(editAction)
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false) }
+                )
+                .assertEvents(OnboardingViewEvents.UnrecognisedCertificateFailure(editAction, AN_UNRECOGNISED_CERTIFICATE_ERROR))
+                .finish()
+    }
+
+    @Test
+    fun `when selecting homeserver errors with certificate error, then emits error`() = runTest {
+        fakeHomeServerConnectionConfigFactory.givenConfigFor(A_HOMESERVER_URL, fingerprint = null, A_HOMESERVER_CONFIG)
+        fakeStartAuthenticationFlowUseCase.givenErrors(A_HOMESERVER_CONFIG, AN_UNRECOGNISED_CERTIFICATE_ERROR)
+        val selectAction = OnboardingAction.HomeServerChange.SelectHomeServer(A_HOMESERVER_URL)
+        val test = viewModel.test()
+
+        viewModel.handle(selectAction)
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false) }
+                )
+                .assertEvents(OnboardingViewEvents.UnrecognisedCertificateFailure(selectAction, AN_UNRECOGNISED_CERTIFICATE_ERROR))
+                .finish()
+    }
+
+    @Test
     fun `given unavailable full matrix id, when a register username is entered, then emits availability error`() = runTest {
         viewModelWith(initialRegistrationState("ignored-url"))
         givenCanSuccessfullyUpdateHomeserver(A_HOMESERVER_URL, SELECTED_HOMESERVER_STATE)
@@ -725,7 +784,6 @@ class OnboardingViewModelTest {
                 .assertEvents(OnboardingViewEvents.OnPersonalizationComplete)
                 .finish()
     }
-
 
     @Test
     fun `given in sign in mode, when accepting user certificate with SelectHomeserver retry action, then emits OnHomeserverEdited`() = runTest {
