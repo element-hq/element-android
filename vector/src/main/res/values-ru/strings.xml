@@ -290,7 +290,7 @@
     <string name="send_bug_report_sent">Отчет об ошибке успешно отправлен</string>
     <string name="send_bug_report_failed">Сбой отправки отчета об ошибке (%s)</string>
     <string name="send_bug_report_progress">Прогресс (%s%%)</string>
-    <string name="send_bug_report_app_crashed">В прошлый раз приложение некорректно завершило работу. Хотите отправить отчет о сбое?</string>
+    <string name="send_bug_report_app_crashed">В прошлый раз приложение некорректно завершило работу. Хотите отправить отчёт о сбое\?</string>
     <string name="join_room">Войти в Комнату</string>
     <string name="username">Имя пользователя</string>
     <string name="logout">Выйти</string>
