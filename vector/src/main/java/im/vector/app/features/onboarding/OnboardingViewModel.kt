@@ -280,11 +280,8 @@ class OnboardingViewModel @AssistedInject constructor(
             is AuthenticateAction.LoginDirect ->
                 handleDirectLogin(
                         action.retryAction,
-                        HomeServerConnectionConfig.Builder()
-                                // Will be replaced by the task
-                                .withHomeServerUri("https://dummy.org")
-                                .withAllowedFingerPrints(listOf(action.fingerprint))
-                                .build()
+                        // Will be replaced by the task
+                        homeServerConnectionConfigFactory.create("https://dummy.org", action.fingerprint)
                 )
             else -> Unit
         }

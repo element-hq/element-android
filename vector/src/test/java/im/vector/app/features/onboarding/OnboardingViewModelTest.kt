@@ -58,6 +58,7 @@ import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.network.ssl.Fingerprint
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 
@@ -69,6 +70,7 @@ private val A_LOADABLE_REGISTER_ACTION = RegisterAction.StartRegistration
 private val A_NON_LOADABLE_REGISTER_ACTION = RegisterAction.CheckIfEmailHasBeenValidated(delayMillis = -1L)
 private val A_RESULT_IGNORED_REGISTER_ACTION = RegisterAction.SendAgainThreePid
 private val A_HOMESERVER_CAPABILITIES = aHomeServerCapabilities(canChangeDisplayName = true, canChangeAvatar = true)
+private val A_FINGERPRINT = Fingerprint(ByteArray(1), Fingerprint.HashType.SHA1)
 private val ANY_CONTINUING_REGISTRATION_RESULT = RegistrationActionHandler.Result.NextStage(Stage.Dummy(mandatory = true))
 private val A_DIRECT_LOGIN = OnboardingAction.AuthenticateAction.LoginDirect("@a-user:id.org", "a-password", "a-device-name")
 private const val A_HOMESERVER_URL = "https://edited-homeserver.org"
@@ -406,7 +408,7 @@ class OnboardingViewModelTest {
     @Test
     fun `given unavailable deeplink, when selecting homeserver, then emits failure with default homeserver as retry action`() = runTest {
         fakeContext.givenHasConnection()
-        fakeHomeServerConnectionConfigFactory.givenConfigFor(A_HOMESERVER_URL, A_HOMESERVER_CONFIG)
+        fakeHomeServerConnectionConfigFactory.givenConfigFor(A_HOMESERVER_URL, fingerprint = null, A_HOMESERVER_CONFIG)
         fakeStartAuthenticationFlowUseCase.givenHomeserverUnavailable(A_HOMESERVER_CONFIG)
         val test = viewModel.test()
 
@@ -723,6 +725,25 @@ class OnboardingViewModelTest {
                 .assertEvents(OnboardingViewEvents.OnPersonalizationComplete)
                 .finish()
     }
+    
+    @Test
+    fun `given DirectLogin retry action, when accepting user certificate, then logs in directly`() = runTest {
+        fakeHomeServerConnectionConfigFactory.givenConfigFor("https://dummy.org", A_FINGERPRINT, A_HOMESERVER_CONFIG)
+        fakeDirectLoginUseCase.givenSuccessResult(A_DIRECT_LOGIN, config = A_HOMESERVER_CONFIG, result = fakeSession)
+        givenInitialisesSession(fakeSession)
+        val test = viewModel.test()
+
+        viewModel.handle(OnboardingAction.UserAcceptCertificate(A_FINGERPRINT, A_DIRECT_LOGIN))
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false) }
+                )
+                .assertEvents(OnboardingViewEvents.OnAccountSignedIn)
+                .finish()
+    }
 
     @Test
     fun `given can successfully start password reset, when resetting password, then emits confirmation email sent`() = runTest {
@@ -991,15 +1012,19 @@ class OnboardingViewModelTest {
         fakeRegistrationActionHandler.givenResultsFor(results)
     }
 
-    private fun givenCanSuccessfullyUpdateHomeserver(homeserverUrl: String, resultingState: SelectedHomeserverState) {
-        fakeHomeServerConnectionConfigFactory.givenConfigFor(homeserverUrl, A_HOMESERVER_CONFIG)
-        fakeStartAuthenticationFlowUseCase.givenResult(A_HOMESERVER_CONFIG, StartAuthenticationResult(isHomeserverOutdated = false, resultingState))
+    private fun givenCanSuccessfullyUpdateHomeserver(
+            homeserverUrl: String,
+            resultingState: SelectedHomeserverState,
+            config: HomeServerConnectionConfig = A_HOMESERVER_CONFIG
+    ) {
+        fakeHomeServerConnectionConfigFactory.givenConfigFor(homeserverUrl, fingerprint = null, config)
+        fakeStartAuthenticationFlowUseCase.givenResult(config, StartAuthenticationResult(isHomeserverOutdated = false, resultingState))
         givenRegistrationResultFor(RegisterAction.StartRegistration, RegistrationActionHandler.Result.StartRegistration)
-        fakeHomeServerHistoryService.expectUrlToBeAdded(A_HOMESERVER_CONFIG.homeServerUri.toString())
+        fakeHomeServerHistoryService.expectUrlToBeAdded(config.homeServerUri.toString())
     }
 
     private fun givenUpdatingHomeserverErrors(homeserverUrl: String, resultingState: SelectedHomeserverState, error: Throwable) {
-        fakeHomeServerConnectionConfigFactory.givenConfigFor(homeserverUrl, A_HOMESERVER_CONFIG)
+        fakeHomeServerConnectionConfigFactory.givenConfigFor(homeserverUrl, fingerprint = null, A_HOMESERVER_CONFIG)
         fakeStartAuthenticationFlowUseCase.givenResult(A_HOMESERVER_CONFIG, StartAuthenticationResult(isHomeserverOutdated = false, resultingState))
         givenRegistrationResultFor(RegisterAction.StartRegistration, RegistrationActionHandler.Result.Error(error))
         fakeHomeServerHistoryService.expectUrlToBeAdded(A_HOMESERVER_CONFIG.homeServerUri.toString())
