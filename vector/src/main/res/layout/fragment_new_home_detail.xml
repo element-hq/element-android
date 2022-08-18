@@ -68,8 +68,8 @@
                         android:id="@+id/avatar"
                         android:layout_width="36dp"
                         android:layout_height="36dp"
-                        android:padding="6dp"
                         android:contentDescription="@string/a11y_open_settings"
+                        android:padding="6dp"
                         tools:src="@sample/user_round_avatars" />
 
                 </com.google.android.material.appbar.MaterialToolbar>

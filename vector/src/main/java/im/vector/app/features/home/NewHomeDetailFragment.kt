@@ -28,6 +28,7 @@ import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.badge.BadgeDrawable
 import im.vector.app.R
 import im.vector.app.SpaceStateHandler
@@ -377,6 +378,10 @@ class NewHomeDetailFragment @Inject constructor(
             sharedActionViewModel.post(HomeActivitySharedAction.CloseDrawer)
             navigator.openDebug(requireActivity())
         }
+
+        views.appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
+            views.debugButton.isVisible = verticalOffset == 0
+        })
     }
 
     private fun refreshDebugButtonState() {
