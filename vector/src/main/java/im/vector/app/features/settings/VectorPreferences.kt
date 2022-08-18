@@ -1031,7 +1031,11 @@ class VectorPreferences @Inject constructor(
     }
 
     fun getSyncBackgroundMode(): BackgroundSyncMode {
-        val defValue = if (fcmHelper.isFirebaseAvailable()) BackgroundSyncMode.BACKGROUND_SYNC_MODE_DISABLED else BackgroundSyncMode.BACKGROUND_SYNC_MODE_FOR_BATTERY
+        val defValue = if (fcmHelper.isFirebaseAvailable()){
+            BackgroundSyncMode.BACKGROUND_SYNC_MODE_DISABLED
+        } else {
+            BackgroundSyncMode.BACKGROUND_SYNC_MODE_FOR_BATTERY
+        }
         return try {
             val strPref = defaultPrefs
                     .getString(SETTINGS_BACKGROUND_SYNC_MODE, defValue.name)
