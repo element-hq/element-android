@@ -34,6 +34,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -60,7 +61,7 @@ class HomeRoomListViewModel @AssistedInject constructor(
         @Assisted initialState: HomeRoomListViewState,
         private val session: Session,
         private val spaceStateHandler: SpaceStateHandler,
-        private val preferences: HomeLayoutPreferences,
+        private val preferencesStore: HomeLayoutPreferencesStore,
 ) : VectorViewModel<HomeRoomListViewState, HomeRoomListAction, HomeRoomListViewEvents>(initialState) {
 
     @AssistedFactory
@@ -80,8 +81,6 @@ class HomeRoomListViewModel @AssistedInject constructor(
     private val _sections = MutableSharedFlow<Set<HomeRoomSection>>(replay = 1)
     val sections = _sections.asSharedFlow()
 
-    private val filtersPreferencesFlow = MutableSharedFlow<Boolean>(replay = 1)
-
     private var filteredPagedRoomSummariesLive: UpdatableLivePageResult? = null
 
     init {
@@ -90,40 +89,26 @@ class HomeRoomListViewModel @AssistedInject constructor(
     }
 
     private fun observePreferences() {
-        preferences.registerFiltersListener { areFiltersEnabled ->
-            viewModelScope.launch {
-                filtersPreferencesFlow.emit(areFiltersEnabled)
-            }
-        }
-        viewModelScope.launch {
-            filtersPreferencesFlow.emit(preferences.areFiltersEnabled())
-        }
-
-        preferences.registerRecentsListener { _ ->
+        preferencesStore.areRecentsEnabledFlow.onEach {
             configureSections()
-        }
+        }.launchIn(viewModelScope)
 
-        preferences.registerOrderingListener { _ ->
+        preferencesStore.isAZOrderingEnabledFlow.onEach {
             configureSections()
-        }
+        }.launchIn(viewModelScope)
     }
 
-    override fun onCleared() {
-        preferences.unregisterListeners()
-        super.onCleared()
-    }
-
-    private fun configureSections() {
+    private fun configureSections() = viewModelScope.launch {
         val newSections = mutableSetOf<HomeRoomSection>()
 
-        if (preferences.areRecentsEnabled()) {
+        val areSettingsEnabled = preferencesStore.areRecentsEnabledFlow.first()
+
+        if (areSettingsEnabled) {
             newSections.add(getRecentRoomsSection())
         }
         newSections.add(getFilteredRoomsSection())
 
-        viewModelScope.launch {
-            _sections.emit(newSections)
-        }
+        _sections.emit(newSections)
 
         setState {
             copy(state = StateView.State.Content)
@@ -142,13 +127,13 @@ class HomeRoomListViewModel @AssistedInject constructor(
         )
     }
 
-    private fun getFilteredRoomsSection(): HomeRoomSection.RoomSummaryData {
+    private suspend fun getFilteredRoomsSection(): HomeRoomSection.RoomSummaryData {
         val builder = RoomSummaryQueryParams.Builder().also {
             it.memberships = listOf(Membership.JOIN)
         }
 
         val params = getFilteredQueryParams(HomeRoomFilter.ALL, builder.build())
-        val sortOrder = if (preferences.isAZOrderingEnabled()) {
+        val sortOrder = if (preferencesStore.isAZOrderingEnabledFlow.first()) {
             RoomSortOrder.NAME
         } else {
             RoomSortOrder.ACTIVITY
@@ -202,7 +187,7 @@ class HomeRoomListViewModel @AssistedInject constructor(
                 .map { it.isNotEmpty() }
                 .distinctUntilChanged()
 
-        combine(favouritesFlow, dmsFLow, filtersPreferencesFlow) { hasFavourite, hasDm, areFiltersEnabled ->
+        combine(favouritesFlow, dmsFLow, preferencesStore.areFiltersEnabledFlow) { hasFavourite, hasDm, areFiltersEnabled ->
             Triple(hasFavourite, hasDm, areFiltersEnabled)
         }.onEach { (hasFavourite, hasDm, areFiltersEnabled) ->
             if (areFiltersEnabled) {

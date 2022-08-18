@@ -20,17 +20,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetHomeLayoutSettingsBinding
-import im.vector.app.features.home.room.list.home.HomeLayoutPreferences
+import im.vector.app.features.home.room.list.home.HomeLayoutPreferencesStore
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeLayoutSettingBottomDialogFragment : VectorBaseBottomSheetDialogFragment<BottomSheetHomeLayoutSettingsBinding>() {
 
-    @Inject lateinit var preferences: HomeLayoutPreferences
+    @Inject lateinit var preferencesStore: HomeLayoutPreferencesStore
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetHomeLayoutSettingsBinding {
         return BottomSheetHomeLayoutSettingsBinding.inflate(inflater, container, false)
@@ -39,20 +42,24 @@ class HomeLayoutSettingBottomDialogFragment : VectorBaseBottomSheetDialogFragmen
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        views.homeLayoutSettingsRecents.isChecked = preferences.areRecentsEnabled()
-        views.homeLayoutSettingsFilters.isChecked = preferences.areFiltersEnabled()
+        lifecycleScope.launch {
+            views.homeLayoutSettingsRecents.isChecked = preferencesStore.areRecentsEnabledFlow.first()
+            views.homeLayoutSettingsFilters.isChecked = preferencesStore.areFiltersEnabledFlow.first()
 
-        if (preferences.isAZOrderingEnabled()) {
-            views.homeLayoutSettingsSortName.isChecked = true
-        } else {
-            views.homeLayoutSettingsSortActivity.isChecked = true
+            if (preferencesStore.isAZOrderingEnabledFlow.first()) {
+                views.homeLayoutSettingsSortName.isChecked = true
+            } else {
+                views.homeLayoutSettingsSortActivity.isChecked = true
+            }
         }
 
         views.homeLayoutSettingsDone.setOnClickListener {
-            preferences.setRecentsEnabled(views.homeLayoutSettingsRecents.isChecked)
-            preferences.setFiltersEnabled(views.homeLayoutSettingsFilters.isChecked)
-            preferences.setAZOrderingEnabled(views.homeLayoutSettingsSortGroup.checkedRadioButtonId == R.id.home_layout_settings_sort_name)
-            dismiss()
+            lifecycleScope.launch {
+                preferencesStore.setRecentsEnabled(views.homeLayoutSettingsRecents.isChecked)
+                preferencesStore.setFiltersEnabled(views.homeLayoutSettingsFilters.isChecked)
+                preferencesStore.setAZOrderingEnabled(views.homeLayoutSettingsSortGroup.checkedRadioButtonId == R.id.home_layout_settings_sort_name)
+                dismiss()
+            }
         }
     }
 }
