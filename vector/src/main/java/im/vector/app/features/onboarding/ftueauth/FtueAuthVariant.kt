@@ -202,6 +202,7 @@ class FtueAuthVariant(
                 openMsisdnConfirmation(viewEvents.msisdn)
             }
             is OnboardingViewEvents.Failure,
+            is OnboardingViewEvents.UnrecognisedCertificateFailure,
             is OnboardingViewEvents.Loading ->
                 // This is handled by the Fragments
                 Unit
