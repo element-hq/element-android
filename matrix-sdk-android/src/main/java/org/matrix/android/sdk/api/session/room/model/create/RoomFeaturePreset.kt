@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.api.session.room.model.create
 
-import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
@@ -30,7 +29,7 @@ interface RoomFeaturePreset {
 
     fun updateRoomParams(params: CreateRoomParams)
 
-    fun setupInitialStates(): List<Event>?
+    fun setupInitialStates(): List<CreateRoomStateEvent>?
 }
 
 class RestrictedRoomPreset(val homeServerCapabilities: HomeServerCapabilities, val restrictedList: List<RoomJoinRulesAllowEntry>) : RoomFeaturePreset {
@@ -41,9 +40,9 @@ class RestrictedRoomPreset(val homeServerCapabilities: HomeServerCapabilities, v
         params.roomVersion = homeServerCapabilities.versionOverrideForFeature(HomeServerCapabilities.ROOM_CAP_RESTRICTED)
     }
 
-    override fun setupInitialStates(): List<Event>? {
+    override fun setupInitialStates(): List<CreateRoomStateEvent> {
         return listOf(
-                Event(
+                CreateRoomStateEvent(
                         type = EventType.STATE_ROOM_JOIN_RULES,
                         stateKey = "",
                         content = RoomJoinRulesContent(

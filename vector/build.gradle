@@ -37,7 +37,7 @@ ext.versionMinor = 4
 // Note: even values are reserved for regular release, odd values for hotfix release.
 // When creating a hotfix, you should decrease the value, since the current value
 // is the value for the next regular release.
-ext.versionPatch = 32
+ext.versionPatch = 34
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -307,7 +307,6 @@ android {
             isDefault = true
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getGplayVersionSuffix()}"
 
-            resValue "bool", "isGplay", "true"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"G\""
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"GooglePlay\""
         }
@@ -317,7 +316,6 @@ android {
 
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getFdroidVersionSuffix()}"
 
-            resValue "bool", "isGplay", "false"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"F\""
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"FDroid\""
         }
@@ -393,7 +391,7 @@ dependencies {
     implementation libs.androidx.biometric
 
     implementation "org.threeten:threetenbp:1.4.0:no-tzdb"
-    implementation "com.gabrielittner.threetenbp:lazythreetenbp:0.10.0"
+    implementation "com.gabrielittner.threetenbp:lazythreetenbp:0.11.0"
 
     implementation libs.squareup.moshi
     kapt libs.squareup.moshiKotlin
@@ -426,6 +424,9 @@ dependencies {
     kapt libs.airbnb.epoxyProcessor
     implementation libs.airbnb.epoxyPaging
     implementation libs.airbnb.mavericks
+
+    // Snap Helper https://github.com/rubensousa/GravitySnapHelper
+    implementation 'com.github.rubensousa:gravitysnaphelper:2.2.2'
 
     // Nightly
     // API-only library
@@ -499,7 +500,7 @@ dependencies {
     implementation 'com.posthog.android:posthog:1.1.2'
 
     // UnifiedPush
-    implementation 'com.github.UnifiedPush:android-connector:2.0.0'
+    implementation 'com.github.UnifiedPush:android-connector:2.0.1'
     // UnifiedPush gplay flavor only
     gplayImplementation('com.github.UnifiedPush:android-embedded_fcm_distributor:2.1.1') {
         exclude group: 'com.google.firebase', module: 'firebase-core'
@@ -575,7 +576,7 @@ dependencies {
     debugImplementation "com.kgurgul.flipper:flipper-realm-android:2.2.0"
 
     // Activate when you want to check for leaks, from time to time.
-    //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.3'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
 
     androidTestImplementation libs.androidx.testCore
     androidTestImplementation libs.androidx.testRunner

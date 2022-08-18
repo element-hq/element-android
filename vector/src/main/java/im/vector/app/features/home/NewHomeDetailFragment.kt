@@ -31,7 +31,6 @@ import com.google.android.material.badge.BadgeDrawable
 import im.vector.app.R
 import im.vector.app.SpaceStateHandler
 import im.vector.app.core.extensions.commitTransaction
-import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
@@ -45,7 +44,6 @@ import im.vector.app.features.call.SharedKnownCallsViewModel
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.dialpad.DialPadFragment
 import im.vector.app.features.call.webrtc.WebRtcCallManager
-import im.vector.app.features.home.room.list.RoomListParams
 import im.vector.app.features.home.room.list.home.HomeRoomListFragment
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
@@ -326,8 +324,7 @@ class NewHomeDetailFragment @Inject constructor(
             if (fragmentToShow == null) {
                 when (tab) {
                     is HomeTab.RoomList -> {
-                        val params = RoomListParams(tab.displayMode)
-                        add(R.id.roomListContainer, HomeRoomListFragment::class.java, params.toMvRxBundle(), fragmentTag)
+                        add(R.id.roomListContainer, HomeRoomListFragment::class.java, null, fragmentTag)
                     }
                     is HomeTab.DialPad -> {
                         add(R.id.roomListContainer, createDialPadFragment(), fragmentTag)

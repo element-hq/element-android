@@ -34,6 +34,7 @@ interface VectorFeatures {
     fun forceUsageOfOpusEncoder(): Boolean
     fun shouldStartDmOnFirstMessage(): Boolean
     fun isNewAppLayoutEnabled(): Boolean
+    fun isNewDeviceManagementEnabled(): Boolean
 }
 
 class DefaultVectorFeatures : VectorFeatures {
@@ -50,4 +51,5 @@ class DefaultVectorFeatures : VectorFeatures {
     override fun forceUsageOfOpusEncoder(): Boolean = false
     override fun shouldStartDmOnFirstMessage(): Boolean = false
     override fun isNewAppLayoutEnabled(): Boolean = false
+    override fun isNewDeviceManagementEnabled(): Boolean = false
 }

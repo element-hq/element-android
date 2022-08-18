@@ -31,7 +31,6 @@ import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
 import im.vector.app.TestBuildVersionSdkIntProvider
 import im.vector.app.features.pin.lockscreen.configuration.LockScreenConfiguration
-import im.vector.app.features.pin.lockscreen.configuration.LockScreenConfiguratorProvider
 import im.vector.app.features.pin.lockscreen.configuration.LockScreenMode
 import im.vector.app.features.pin.lockscreen.crypto.LockScreenCryptoConstants
 import im.vector.app.features.pin.lockscreen.crypto.LockScreenKeyRepository
@@ -40,6 +39,7 @@ import im.vector.app.features.pin.lockscreen.ui.fallbackprompt.FallbackBiometric
 import im.vector.app.features.pin.lockscreen.utils.DevicePromptCheck
 import io.mockk.clearAllMocks
 import io.mockk.every
+import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.mockkStatic
@@ -54,8 +54,10 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
+import org.amshove.kluent.coInvoking
 import org.amshove.kluent.shouldBeFalse
 import org.amshove.kluent.shouldBeTrue
+import org.amshove.kluent.shouldThrow
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
@@ -239,36 +241,35 @@ class BiometricHelperTests {
 
     @Test
     @SdkSuppress(minSdkVersion = Build.VERSION_CODES.R) // Due to some issues with mockk and CryptoObject initialization
-    fun authenticateCreatesSystemKeyIfNeededOnSuccessOnAndroidM() = runTest {
+    fun enableAuthenticationDeletesSystemKeyOnFailure() = runTest {
         buildVersionSdkIntProvider.value = Build.VERSION_CODES.M
-        every { lockScreenKeyRepository.isSystemKeyValid() } returns true
         val mockAuthChannel = Channel<Boolean>(capacity = 1)
         val biometricUtils = spyk(createBiometricHelper(createDefaultConfiguration(isBiometricsEnabled = true))) {
             every { createAuthChannel() } returns mockAuthChannel
             every { authenticateWithPromptInternal(any(), any(), any()) } returns mockk()
         }
+        justRun { lockScreenKeyRepository.deleteSystemKey() }
 
         val latch = CountDownLatch(1)
         val intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, LockScreenTestActivity::class.java)
         ActivityScenario.launch<LockScreenTestActivity>(intent).onActivity { activity ->
             activity.lifecycleScope.launch {
+                val exception = IllegalStateException("Some error")
                 launch {
-                    mockAuthChannel.send(true)
-                    mockAuthChannel.close()
+                    mockAuthChannel.close(exception)
                 }
-                biometricUtils.authenticate(activity).collect()
+                coInvoking { biometricUtils.enableAuthentication(activity).collect() } shouldThrow exception
                 latch.countDown()
             }
         }
 
         latch.await(1, TimeUnit.SECONDS)
-        verify { lockScreenKeyRepository.ensureSystemKey() }
+        verify { lockScreenKeyRepository.deleteSystemKey() }
     }
 
     private fun createBiometricHelper(configuration: LockScreenConfiguration): BiometricHelper {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
-        val configProvider = LockScreenConfiguratorProvider(configuration)
-        return BiometricHelper(context, lockScreenKeyRepository, configProvider, biometricManager, buildVersionSdkIntProvider)
+        return BiometricHelper(configuration, context, lockScreenKeyRepository, biometricManager, buildVersionSdkIntProvider)
     }
 
     private fun createDefaultConfiguration(

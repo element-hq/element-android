@@ -52,6 +52,19 @@ if (requiresChangelog) {
     }
 }
 
+// check that frozen classes have not been modified
+const frozenClasses = [
+    "OlmInboundGroupSessionWrapper.kt",
+    "OlmInboundGroupSessionWrapper2.kt",
+]
+
+frozenClasses.forEach(frozen => {
+    if (editedFiles.some(file => file.endsWith(frozen))) {
+        fail("Frozen class `" + frozen + "` has been modified. Please do not modify frozen class.")
+    }
+  }
+)
+
 // Check for a sign-off
 const signOff = "Signed-off-by:"
 

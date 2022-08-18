@@ -16,6 +16,7 @@
 
 package im.vector.app.features.createdirect
 
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.plan.CreatedRoom
 import im.vector.app.features.raw.wellknown.getElementWellknown
@@ -30,7 +31,8 @@ import javax.inject.Inject
 class DirectRoomHelper @Inject constructor(
         private val rawService: RawService,
         private val session: Session,
-        private val analyticsTracker: AnalyticsTracker
+        private val analyticsTracker: AnalyticsTracker,
+        private val vectorFeatures: VectorFeatures,
 ) {
 
     suspend fun ensureDMExists(userId: String): String {
@@ -48,8 +50,12 @@ class DirectRoomHelper @Inject constructor(
                 setDirectMessage()
                 enableEncryptionIfInvitedUsersSupportIt = adminE2EByDefault
             }
-            roomId = session.roomService().createRoom(roomParams)
-            analyticsTracker.capture(CreatedRoom(isDM = roomParams.isDirect.orFalse()))
+            roomId = if (vectorFeatures.shouldStartDmOnFirstMessage()) {
+                session.roomService().createLocalRoom(roomParams)
+            } else {
+                analyticsTracker.capture(CreatedRoom(isDM = roomParams.isDirect.orFalse()))
+                session.roomService().createRoom(roomParams)
+            }
         }
         return roomId
     }

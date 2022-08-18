@@ -83,7 +83,7 @@ private fun useMediaStoreScreenshotStorage(
         screenshotLocation: String,
         bitmap: Bitmap
 ) {
-    contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, "$screenshotName.jpeg")
+    contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, "${screenshotName}.jpeg")
     contentValues.put(MediaStore.Images.Media.RELATIVE_PATH, screenshotLocation)
     val uri: Uri? = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
     if (uri != null) {
@@ -104,7 +104,7 @@ private fun usePublicExternalScreenshotStorage(
     if (!directory.exists()) {
         directory.mkdirs()
     }
-    val file = File(directory, "$screenshotName.jpeg")
+    val file = File(directory, "${screenshotName}.jpeg")
     saveScreenshotToStream(bitmap, FileOutputStream(file))
     contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
 }
