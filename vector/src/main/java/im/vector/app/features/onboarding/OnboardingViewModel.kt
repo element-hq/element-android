@@ -63,6 +63,7 @@ import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.isHomeserverUnavailable
 import org.matrix.android.sdk.api.failure.isUnrecognisedCertificate
+import org.matrix.android.sdk.api.network.ssl.Fingerprint
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.util.BuildVersionSdkIntProvider
 import timber.log.Timber
@@ -114,8 +115,6 @@ class OnboardingViewModel @AssistedInject constructor(
             copy(isForceLoginFallbackEnabled = isForceLoginFallbackEnabled)
         }
     }
-
-    private var currentHomeServerConnectionConfig: HomeServerConnectionConfig? = null
 
     private val matrixOrgUrl = stringProvider.getString(R.string.matrix_org_server_url).ensureTrailingSlash()
     private val defaultHomeserverUrl = matrixOrgUrl
@@ -272,11 +271,7 @@ class OnboardingViewModel @AssistedInject constructor(
         // It happens when we get the login flow, or during direct authentication.
         // So alter the homeserver config and retrieve again the login flow
         when (action.retryAction) {
-            is OnboardingAction.HomeServerChange -> {
-                currentHomeServerConnectionConfig
-                        ?.let { it.copy(allowedFingerprints = it.allowedFingerprints + action.fingerprint) }
-                        ?.let { startAuthenticationFlow(action.retryAction, it, serverTypeOverride = null) }
-            }
+            is OnboardingAction.HomeServerChange -> handleHomeserverChange(action.retryAction, fingerprint = action.fingerprint)
             is AuthenticateAction.LoginDirect ->
                 handleDirectLogin(
                         action.retryAction,
@@ -684,8 +679,13 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleHomeserverChange(action: OnboardingAction.HomeServerChange, serverTypeOverride: ServerType? = null, postAction: suspend () -> Unit = {}) {
-        val homeServerConnectionConfig = homeServerConnectionConfigFactory.create(action.homeServerUrl)
+    private fun handleHomeserverChange(
+            action: OnboardingAction.HomeServerChange,
+            serverTypeOverride: ServerType? = null,
+            fingerprint: Fingerprint? = null,
+            postAction: suspend () -> Unit = {},
+    ) {
+        val homeServerConnectionConfig = homeServerConnectionConfigFactory.create(action.homeServerUrl, fingerprint)
         if (homeServerConnectionConfig == null) {
             // This is invalid
             _viewEvents.post(OnboardingViewEvents.Failure(Throwable("Unable to create a HomeServerConnectionConfig")))
@@ -700,8 +700,6 @@ class OnboardingViewModel @AssistedInject constructor(
             serverTypeOverride: ServerType?,
             postAction: suspend () -> Unit = {},
     ) {
-        currentHomeServerConnectionConfig = homeServerConnectionConfig
-
         currentJob = viewModelScope.launch {
             setState { copy(isLoading = true) }
             runCatching { startAuthenticationFlowUseCase.execute(homeServerConnectionConfig) }.fold(

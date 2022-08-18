@@ -725,7 +725,59 @@ class OnboardingViewModelTest {
                 .assertEvents(OnboardingViewEvents.OnPersonalizationComplete)
                 .finish()
     }
-    
+
+
+    @Test
+    fun `given in sign in mode, when accepting user certificate with SelectHomeserver retry action, then emits OnHomeserverEdited`() = runTest {
+        viewModelWith(initialState.copy(onboardingFlow = OnboardingFlow.SignIn))
+        val test = viewModel.test()
+        fakeVectorFeatures.givenCombinedLoginEnabled()
+        givenCanSuccessfullyUpdateHomeserver(
+                A_HOMESERVER_URL,
+                SELECTED_HOMESERVER_STATE,
+                config = A_HOMESERVER_CONFIG.copy(allowedFingerprints = listOf(A_FINGERPRINT)),
+                fingerprint = A_FINGERPRINT,
+        )
+
+        viewModel.handle(OnboardingAction.UserAcceptCertificate(A_FINGERPRINT, OnboardingAction.HomeServerChange.SelectHomeServer(A_HOMESERVER_URL)))
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = true) },
+                        { copy(selectedHomeserver = SELECTED_HOMESERVER_STATE) },
+                        { copy(signMode = SignMode.SignIn) },
+                        { copy(isLoading = false) }
+                )
+                .assertEvents(OnboardingViewEvents.OpenCombinedLogin)
+                .finish()
+    }
+
+    @Test
+    fun `given in sign up mode, when accepting user certificate with EditHomeserver retry action, then emits OnHomeserverEdited`() = runTest {
+        viewModelWith(initialState.copy(onboardingFlow = OnboardingFlow.SignUp))
+        givenCanSuccessfullyUpdateHomeserver(
+                A_HOMESERVER_URL,
+                SELECTED_HOMESERVER_STATE,
+                config = A_HOMESERVER_CONFIG.copy(allowedFingerprints = listOf(A_FINGERPRINT)),
+                fingerprint = A_FINGERPRINT,
+        )
+        val test = viewModel.test()
+
+        viewModel.handle(OnboardingAction.UserAcceptCertificate(A_FINGERPRINT, OnboardingAction.HomeServerChange.EditHomeServer(A_HOMESERVER_URL)))
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = true) },
+                        { copy(selectedHomeserver = SELECTED_HOMESERVER_STATE) },
+                        { copy(isLoading = false) }
+
+                )
+                .assertEvents(OnboardingViewEvents.OnHomeserverEdited)
+                .finish()
+    }
+
     @Test
     fun `given DirectLogin retry action, when accepting user certificate, then logs in directly`() = runTest {
         fakeHomeServerConnectionConfigFactory.givenConfigFor("https://dummy.org", A_FINGERPRINT, A_HOMESERVER_CONFIG)
@@ -1015,9 +1067,10 @@ class OnboardingViewModelTest {
     private fun givenCanSuccessfullyUpdateHomeserver(
             homeserverUrl: String,
             resultingState: SelectedHomeserverState,
-            config: HomeServerConnectionConfig = A_HOMESERVER_CONFIG
+            config: HomeServerConnectionConfig = A_HOMESERVER_CONFIG,
+            fingerprint: Fingerprint? = null,
     ) {
-        fakeHomeServerConnectionConfigFactory.givenConfigFor(homeserverUrl, fingerprint = null, config)
+        fakeHomeServerConnectionConfigFactory.givenConfigFor(homeserverUrl, fingerprint, config)
         fakeStartAuthenticationFlowUseCase.givenResult(config, StartAuthenticationResult(isHomeserverOutdated = false, resultingState))
         givenRegistrationResultFor(RegisterAction.StartRegistration, RegistrationActionHandler.Result.StartRegistration)
         fakeHomeServerHistoryService.expectUrlToBeAdded(config.homeServerUri.toString())
