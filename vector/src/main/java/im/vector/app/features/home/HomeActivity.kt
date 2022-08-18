@@ -55,6 +55,8 @@ import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.disclaimer.showDisclaimerDialog
+import im.vector.app.features.home.room.list.actions.RoomListSharedAction
+import im.vector.app.features.home.room.list.actions.RoomListSharedActionViewModel
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.matrixto.OriginOfMatrixTo
 import im.vector.app.features.navigation.Navigator
@@ -110,6 +112,7 @@ class HomeActivity :
         VectorMenuProvider {
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
+    private lateinit var roomListSharedActionViewModel: RoomListSharedActionViewModel
 
     private val homeActivityViewModel: HomeActivityViewModel by viewModel()
 
@@ -139,6 +142,7 @@ class HomeActivity :
     private val createSpaceResultLauncher = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
             val spaceId = SpaceCreationActivity.getCreatedSpaceId(activityResult.data)
+            val spaceName = SpaceCreationActivity.getCreatedSpaceName(activityResult.data)
             val defaultRoomId = SpaceCreationActivity.getDefaultRoomId(activityResult.data)
             val isJustMe = SpaceCreationActivity.isJustMeSpace(activityResult.data)
             views.drawerLayout.closeDrawer(GravityCompat.START)
@@ -155,8 +159,10 @@ class HomeActivity :
                 navigator.switchToSpace(
                         context = this,
                         spaceId = spaceId,
-                        postSwitchOption
+                        postSwitchOption,
+                        overriddenSpaceName = spaceName,
                 )
+                roomListSharedActionViewModel.post(RoomListSharedAction.CloseBottomSheet)
             }
         }
     }
@@ -205,6 +211,7 @@ class HomeActivity :
             }
         }
         sharedActionViewModel = viewModelProvider[HomeSharedActionViewModel::class.java]
+        roomListSharedActionViewModel = viewModelProvider[RoomListSharedActionViewModel::class.java]
         views.drawerLayout.addDrawerListener(drawerListener)
         if (isFirstCreation()) {
             if (vectorFeatures.isNewAppLayoutEnabled()) {

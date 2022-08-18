@@ -72,10 +72,13 @@ class SpaceStateHandlerImpl @Inject constructor(
             session: Session?,
             persistNow: Boolean,
             isForwardNavigation: Boolean,
+            overriddenSpaceName: String?,
     ) {
         val activeSession = session ?: activeSessionHolder.getSafeActiveSession() ?: return
         val spaceToLeave = selectedSpaceDataSource.currentValue?.orNull()
-        val spaceToSet = spaceId?.let { activeSession.getRoomSummary(spaceId) }
+        val spaceToSet = spaceId?.let { activeSession.getRoomSummary(spaceId) }?.let {
+            if (overriddenSpaceName != null) it.copy(displayName = overriddenSpaceName) else it
+        }
         val sameSpaceSelected = spaceId == spaceToLeave?.roomId
 
         if (sameSpaceSelected) {

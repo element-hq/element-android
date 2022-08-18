@@ -177,12 +177,17 @@ class DefaultNavigator @Inject constructor(
         startActivity(context, intent, buildTask)
     }
 
-    override fun switchToSpace(context: Context, spaceId: String, postSwitchSpaceAction: Navigator.PostSwitchSpaceAction) {
+    override fun switchToSpace(
+            context: Context,
+            spaceId: String,
+            postSwitchSpaceAction: Navigator.PostSwitchSpaceAction,
+            overriddenSpaceName: String?,
+    ) {
         if (sessionHolder.getSafeActiveSession()?.getRoomSummary(spaceId) == null) {
             fatalError("Trying to open an unknown space $spaceId", vectorPreferences.failFast())
             return
         }
-        spaceStateHandler.setCurrentSpace(spaceId)
+        spaceStateHandler.setCurrentSpace(spaceId, overriddenSpaceName = overriddenSpaceName)
         when (postSwitchSpaceAction) {
             Navigator.PostSwitchSpaceAction.None -> {
                 // go back to home if we are showing room details?
