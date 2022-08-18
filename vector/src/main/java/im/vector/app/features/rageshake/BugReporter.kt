@@ -78,6 +78,7 @@ class BugReporter @Inject constructor(
         private val systemLocaleProvider: SystemLocaleProvider,
         private val matrix: Matrix,
         private val buildMeta: BuildMeta,
+        private val processInfo: ProcessInfo,
         private val sdkIntProvider: BuildVersionSdkIntProvider,
 ) {
     var inMultiWindowMode = false
@@ -500,12 +501,18 @@ class BugReporter @Inject constructor(
     fun openBugReportScreen(activity: FragmentActivity, reportType: ReportType = ReportType.BUG_REPORT) {
         screenshot = takeScreenshot(activity)
         logDbInfo()
+        logProcessInfo()
         activity.startActivity(BugReportActivity.intent(activity, reportType))
     }
 
     private fun logDbInfo() {
         val dbInfo = matrix.debugService().getDbUsageInfo()
         Timber.i(dbInfo)
+    }
+
+    private fun logProcessInfo() {
+        val pInfo = processInfo.getInfo()
+        Timber.i(pInfo)
     }
 
     private fun rageShakeAppNameForReport(reportType: ReportType): String {
