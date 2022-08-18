@@ -193,25 +193,32 @@ class OnboardingViewModel @AssistedInject constructor(
     }
 
     private suspend fun checkUserNameAvailability(userName: String) {
-        when (val result = registrationWizard.registrationAvailable(userName)) {
-            RegistrationAvailability.Available -> {
-                setState {
-                    copy(
-                            registrationState = RegistrationState(
-                                    isUserNameAvailable = true,
-                                    selectedMatrixId = when {
-                                        userName.isMatrixId() -> userName
-                                        else -> "@$userName:${selectedHomeserver.userFacingUrl.toReducedUrl()}"
-                                    },
-                            )
-                    )
-                }
-            }
+        runCatching { registrationWizard.registrationAvailable(userName) }.fold(
+                onSuccess = { result ->
+                    when (result) {
+                        RegistrationAvailability.Available -> {
+                            setState {
+                                copy(
+                                        registrationState = RegistrationState(
+                                                isUserNameAvailable = true,
+                                                selectedMatrixId = when {
+                                                    userName.isMatrixId() -> userName
+                                                    else -> "@$userName:${selectedHomeserver.userFacingUrl.toReducedUrl()}"
+                                                },
+                                        )
+                                )
+                            }
+                        }
 
-            is RegistrationAvailability.NotAvailable -> {
-                _viewEvents.post(OnboardingViewEvents.Failure(result.failure))
-            }
-        }
+                        is RegistrationAvailability.NotAvailable -> {
+                            _viewEvents.post(OnboardingViewEvents.Failure(result.failure))
+                        }
+                    }
+                },
+                onFailure = {
+                    _viewEvents.post(OnboardingViewEvents.Failure(it))
+                }
+        )
     }
 
     private fun withAction(action: OnboardingAction, block: (OnboardingAction) -> Unit) {

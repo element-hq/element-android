@@ -42,12 +42,14 @@ interface SpaceStateHandler : DefaultLifecycleObserver {
      * @param session the current active session
      * @param persistNow if true, the current space will immediately be persisted in shared prefs
      * @param isForwardNavigation whether this navigation is a forward action to properly handle backstack
+     * @param overriddenSpaceName overrides the display name of the space being set
      */
     fun setCurrentSpace(
             spaceId: String?,
             session: Session? = null,
             persistNow: Boolean = false,
             isForwardNavigation: Boolean = true,
+            overriddenSpaceName: String? = null,
     )
 
     /**
@@ -57,7 +59,7 @@ interface SpaceStateHandler : DefaultLifecycleObserver {
      */
     fun popSpaceBackstack(): String?
 
-    fun getPersistedSpaceBackstack(): List<String?>
+    fun getSpaceBackstack(): List<String?>
 
     /**
      * Gets a flow of the selected space for clients to react immediately to space changes.

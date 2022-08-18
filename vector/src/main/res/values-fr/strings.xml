@@ -1273,7 +1273,7 @@
         <item quantity="one">%d session active</item>
         <item quantity="other">%d sessions actives</item>
     </plurals>
-    <string name="crosssigning_verify_this_session">Vérifier cette session</string>
+    <string name="crosssigning_verify_this_session">Vérifier cet appareil</string>
     <string name="verification_open_other_to_verify">Utilisez une session existante pour vérifier celle-ci, ce qui lui permettra d’avoir accès aux messages chiffrés.</string>
     <string name="verification_profile_verify">Vérifier</string>
     <string name="verification_profile_verified">Vérifié</string>
@@ -2550,8 +2550,8 @@
     <string name="ftue_auth_forgot_password">Mot de passe oublié</string>
     <string name="ftue_auth_email_resend_email">Renvoyer le courriel</string>
     <string name="ftue_auth_email_verification_footer">Pas reçu de courriel \?</string>
-    <string name="ftue_auth_email_verification_subtitle">Pour confirmer votre courriel, appuyez sur le bouton dans le courriel que nous venons d’envoyer à %s</string>
-    <string name="ftue_auth_email_verification_title">Relevez vos courriels pour la vérification.</string>
+    <string name="ftue_auth_email_verification_subtitle">Suivez les instructions envoyées à %s</string>
+    <string name="ftue_auth_email_verification_title">Vérifiez votre courriel</string>
     <string name="ftue_auth_phone_confirmation_resend_code">Renvoyer le code</string>
     <string name="ftue_auth_phone_confirmation_subtitle">Un code a été envoyé au %s</string>
     <string name="ftue_auth_phone_confirmation_title">Confirmer votre numéro de téléphone</string>
@@ -2588,4 +2588,19 @@
     <string name="font_size_section_manually">Choisir manuellement</string>
     <string name="font_size_section_auto">Automatique</string>
     <string name="font_size_title">Choisir la taille de la police</string>
+    <string name="labs_enable_element_call_permission_shortcuts_summary">Approuve automatiquement les widgets de Element Call et leur donner l’accès au micro et à la caméra</string>
+    <string name="labs_enable_element_call_permission_shortcuts">Activer les raccourcis de permission de Element Call</string>
+    <string name="live_location_description">Position en direct</string>
+    <string name="verify_invalid_qr_notice">Ce QR code semble incorrect. Veuillez réessayer la vérification avec une autre méthode.</string>
+    <string name="crosssigning_cannot_verify_this_session_desc">Vous ne pourrez plus accéder à l’historique des messages chiffrés. Réinitialiser votre sauvegarde sécurisée des messages et vos clés de récupération pour un nouveau départ.</string>
+    <string name="crosssigning_cannot_verify_this_session">Impossible de vérifier cet appareil</string>
+    <string name="ftue_auth_choose_server_sign_in_subtitle">Quelle est l’adresse de votre serveur \?</string>
+    <string name="ftue_auth_sign_in_choose_server_header">Où seront vos conversations</string>
+    <string name="updating_your_data">Mise-à-jour de vos données…</string>
+    <plurals name="search_space_multiple_parents">
+        <item quantity="one">%1$s et %2$d autre</item>
+        <item quantity="other">%1$s et %2$d autres</item>
+    </plurals>
+    <string name="search_space_two_parents">%1$s et %2$s</string>
+    <string name="auth_reset_password_error_unverified">Courriel non vérifié, relevez votre boîte de réception</string>
 </resources>

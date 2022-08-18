@@ -90,6 +90,11 @@ class DebugFeaturesStateFactory @Inject constructor(
                                 key = DebugFeatureKeys.newAppLayoutEnabled,
                                 factory = VectorFeatures::isNewAppLayoutEnabled
                         ),
+                        createBooleanFeature(
+                                label = "Enable New Device Management",
+                                key = DebugFeatureKeys.newDeviceManagementEnabled,
+                                factory = VectorFeatures::isNewDeviceManagementEnabled
+                        ),
                 )
         )
     }

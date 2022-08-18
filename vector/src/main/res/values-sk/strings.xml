@@ -1239,7 +1239,7 @@
     <string name="encryption_not_enabled">Šifrovanie nie je zapnuté</string>
     <string name="keep_it_safe">Udržujte ho v bezpečí</string>
     <string name="verify_new_session_was_not_me">Toto som nebol ja</string>
-    <string name="crosssigning_verify_this_session">Overte toto prihlásenie</string>
+    <string name="crosssigning_verify_this_session">Overiť toto zariadenie</string>
     <plurals name="settings_active_sessions_count">
         <item quantity="one">%d aktívna relácia</item>
         <item quantity="few">%d aktívne relácie</item>
@@ -2600,8 +2600,8 @@
     <string name="ftue_auth_forgot_password">Zabudnuté heslo</string>
     <string name="ftue_auth_email_resend_email">Opätovne odoslať e-mail</string>
     <string name="ftue_auth_email_verification_footer">Nedostali ste e-mail\?</string>
-    <string name="ftue_auth_email_verification_subtitle">Ak chcete potvrdiť svoj e-mail, ťuknite na tlačidlo v e-maile, ktorý sme práve poslali na adresu %s</string>
-    <string name="ftue_auth_email_verification_title">Pre overenie skontrolujte svoj e-mail.</string>
+    <string name="ftue_auth_email_verification_subtitle">Postupujte podľa pokynov zaslaných na adresu %s</string>
+    <string name="ftue_auth_email_verification_title">Overte svoj e-mail</string>
     <string name="ftue_auth_phone_confirmation_resend_code">Znovu odoslať kód</string>
     <string name="ftue_auth_phone_confirmation_subtitle">Kód bol odoslaný na %s</string>
     <string name="ftue_auth_phone_confirmation_title">Potvrďte svoje telefónne číslo</string>
@@ -2637,4 +2637,20 @@
     <string name="font_size_section_manually">Vybrať manuálne</string>
     <string name="font_size_section_auto">Nastaviť automaticky</string>
     <string name="font_size_title">Vyberte veľkosť písma</string>
+    <string name="labs_enable_element_call_permission_shortcuts_summary">Automaticky schvaľovať miniaplikácie Element Call a udeliť prístup ku kamere/mikrofónu</string>
+    <string name="labs_enable_element_call_permission_shortcuts">Zapnúť skratky na povolenie Element hovorov</string>
+    <string name="live_location_description">Poloha v reálnom čase</string>
+    <string name="verify_invalid_qr_notice">Tento QR kód vyzerá chybne. Skúste vykonať overenie inou metódou.</string>
+    <string name="crosssigning_cannot_verify_this_session_desc">K zašifrovanej histórii správ nebudete mať prístup. Obnovte zálohu zabezpečených správ a overovacie kľúče a začnite odznova.</string>
+    <string name="crosssigning_cannot_verify_this_session">Nie je možné overiť toto zariadenie</string>
+    <string name="ftue_auth_choose_server_sign_in_subtitle">Aká je adresa vášho servera\?</string>
+    <string name="ftue_auth_sign_in_choose_server_header">Kde vaše rozhovory žijú</string>
+    <string name="updating_your_data">Aktualizácia vašich údajov…</string>
+    <plurals name="search_space_multiple_parents">
+        <item quantity="one">%1$s a %2$d ďalší</item>
+        <item quantity="few">%1$s a %2$d ďalší</item>
+        <item quantity="other">%1$s a %2$d ďalších</item>
+    </plurals>
+    <string name="search_space_two_parents">%1$s a %2$s</string>
+    <string name="auth_reset_password_error_unverified">E-mail nie je overený, skontrolujte si schránku</string>
 </resources>

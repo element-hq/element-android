@@ -104,6 +104,7 @@ class SpaceCreationActivity : SimpleFragmentActivity() {
                 is CreateSpaceEvents.FinishSuccess -> {
                     setResult(RESULT_OK, Intent().apply {
                         putExtra(RESULT_DATA_CREATED_SPACE_ID, it.spaceId)
+                        putExtra(RESULT_DATA_CREATED_SPACE_NAME, it.spaceName)
                         putExtra(RESULT_DATA_DEFAULT_ROOM_ID, it.defaultRoomId)
                         putExtra(RESULT_DATA_CREATED_SPACE_IS_JUST_ME, it.topology == SpaceTopology.JustMe)
                     })
@@ -159,6 +160,7 @@ class SpaceCreationActivity : SimpleFragmentActivity() {
 
     companion object {
         private const val RESULT_DATA_CREATED_SPACE_ID = "RESULT_DATA_CREATED_SPACE_ID"
+        private const val RESULT_DATA_CREATED_SPACE_NAME = "RESULT_DATA_CREATED_SPACE_NAME"
         private const val RESULT_DATA_DEFAULT_ROOM_ID = "RESULT_DATA_DEFAULT_ROOM_ID"
         private const val RESULT_DATA_CREATED_SPACE_IS_JUST_ME = "RESULT_DATA_CREATED_SPACE_IS_JUST_ME"
 
@@ -170,6 +172,10 @@ class SpaceCreationActivity : SimpleFragmentActivity() {
 
         fun getCreatedSpaceId(data: Intent?): String? {
             return data?.extras?.getString(RESULT_DATA_CREATED_SPACE_ID)
+        }
+
+        fun getCreatedSpaceName(data: Intent?): String? {
+            return data?.extras?.getString(RESULT_DATA_CREATED_SPACE_NAME)
         }
 
         fun getDefaultRoomId(data: Intent?): String? {

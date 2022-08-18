@@ -18,10 +18,18 @@ package im.vector.app.features.home.room.list.home
 
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
+import im.vector.app.features.home.room.list.home.filter.HomeRoomFilter
+import kotlinx.coroutines.flow.SharedFlow
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 sealed class HomeRoomSection {
     data class RoomSummaryData(
-            val list: LiveData<PagedList<RoomSummary>>
+            val list: LiveData<PagedList<RoomSummary>>,
+            val showFilters: Boolean,
+            val filtersData: SharedFlow<List<HomeRoomFilter>>
+    ) : HomeRoomSection()
+
+    data class RecentRoomsData(
+            val list: LiveData<List<RoomSummary>>
     ) : HomeRoomSection()
 }

@@ -35,11 +35,11 @@ import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSettingsNotificationsTroubleshootBinding
 import im.vector.app.features.notifications.NotificationActionIds
+import im.vector.app.features.push.NotificationTroubleshootTestManagerFactory
 import im.vector.app.features.rageshake.BugReporter
 import im.vector.app.features.settings.VectorSettingsFragmentInteractionListener
 import im.vector.app.features.settings.troubleshoot.NotificationTroubleshootTestManager
 import im.vector.app.features.settings.troubleshoot.TroubleshootTest
-import im.vector.app.push.fcm.NotificationTroubleshootTestManagerFactory
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import javax.inject.Inject

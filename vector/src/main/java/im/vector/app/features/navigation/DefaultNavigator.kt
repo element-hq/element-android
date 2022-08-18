@@ -34,6 +34,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.SpaceStateHandler
 import im.vector.app.config.OnboardingVariant
+import im.vector.app.core.debug.DebugNavigator
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.error.fatalError
 import im.vector.app.features.VectorFeatures
@@ -51,7 +52,6 @@ import im.vector.app.features.crypto.recover.BootstrapBottomSheet
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.crypto.verification.SupportedVerificationMethodsProvider
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
-import im.vector.app.features.debug.DebugMenuActivity
 import im.vector.app.features.devtools.RoomDevToolActivity
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.arguments.TimelineArgs
@@ -123,13 +123,13 @@ class DefaultNavigator @Inject constructor(
         private val spaceStateHandler: SpaceStateHandler,
         private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
         private val features: VectorFeatures,
-        private val analyticsTracker: AnalyticsTracker
+        private val analyticsTracker: AnalyticsTracker,
+        private val debugNavigator: DebugNavigator,
 ) : Navigator {
 
     override fun openLogin(context: Context, loginConfig: LoginConfig?, flags: Int) {
         val intent = when (features.onboardingVariant()) {
             OnboardingVariant.LEGACY -> LoginActivity.newIntent(context, loginConfig)
-            OnboardingVariant.LOGIN_2,
             OnboardingVariant.FTUE_AUTH -> OnboardingActivity.newIntent(context, loginConfig)
         }
         intent.addFlags(flags)
@@ -139,7 +139,6 @@ class DefaultNavigator @Inject constructor(
     override fun loginSSORedirect(context: Context, data: Uri?) {
         val intent = when (features.onboardingVariant()) {
             OnboardingVariant.LEGACY -> LoginActivity.redirectIntent(context, data)
-            OnboardingVariant.LOGIN_2,
             OnboardingVariant.FTUE_AUTH -> OnboardingActivity.redirectIntent(context, data)
         }
         context.startActivity(intent)
@@ -177,13 +176,26 @@ class DefaultNavigator @Inject constructor(
         startActivity(context, intent, buildTask)
     }
 
-    override fun switchToSpace(context: Context, spaceId: String, postSwitchSpaceAction: Navigator.PostSwitchSpaceAction) {
+    override fun switchToSpace(
+            context: Context,
+            spaceId: String,
+            postSwitchSpaceAction: Navigator.PostSwitchSpaceAction,
+            overriddenSpaceName: String?,
+    ) {
         if (sessionHolder.getSafeActiveSession()?.getRoomSummary(spaceId) == null) {
             fatalError("Trying to open an unknown space $spaceId", vectorPreferences.failFast())
             return
         }
-        spaceStateHandler.setCurrentSpace(spaceId)
-        when (postSwitchSpaceAction) {
+        spaceStateHandler.setCurrentSpace(spaceId, overriddenSpaceName = overriddenSpaceName)
+        handlePostSwitchAction(context, spaceId, postSwitchSpaceAction)
+    }
+
+    private fun handlePostSwitchAction(
+            context: Context,
+            spaceId: String,
+            action: Navigator.PostSwitchSpaceAction,
+    ) {
+        when (action) {
             Navigator.PostSwitchSpaceAction.None -> {
                 // go back to home if we are showing room details?
                 // This is a bit ugly, but the navigator is supposed to know about the activity stack
@@ -199,9 +211,9 @@ class DefaultNavigator @Inject constructor(
             }
             is Navigator.PostSwitchSpaceAction.OpenDefaultRoom -> {
                 val args = TimelineArgs(
-                        postSwitchSpaceAction.roomId,
+                        action.roomId,
                         eventId = null,
-                        openShareSpaceForId = spaceId.takeIf { postSwitchSpaceAction.showShareSheet }
+                        openShareSpaceForId = spaceId.takeIf { action.showShareSheet }
                 )
                 val intent = RoomDetailActivity.newIntent(context, args, false)
                 startActivity(context, intent, false)
@@ -367,7 +379,7 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun openDebug(context: Context) {
-        context.startActivity(Intent(context, DebugMenuActivity::class.java))
+        debugNavigator.openDebugMenu(context)
     }
 
     override fun openKeysBackupSetup(context: Context, showManualExport: Boolean) {

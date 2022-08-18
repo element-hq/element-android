@@ -68,7 +68,12 @@ interface Navigator {
         data class OpenDefaultRoom(val roomId: String, val showShareSheet: Boolean) : PostSwitchSpaceAction()
     }
 
-    fun switchToSpace(context: Context, spaceId: String, postSwitchSpaceAction: PostSwitchSpaceAction)
+    fun switchToSpace(
+            context: Context,
+            spaceId: String,
+            postSwitchSpaceAction: PostSwitchSpaceAction,
+            overriddenSpaceName: String? = null,
+    )
 
     fun openSpacePreview(context: Context, spaceId: String)
 

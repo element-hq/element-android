@@ -479,6 +479,20 @@ class OnboardingViewModelTest {
     }
 
     @Test
+    fun `given available username throws, when a register username is entered, then emits error`() = runTest {
+        viewModelWith(initialRegistrationState(A_HOMESERVER_URL))
+        fakeAuthenticationService.givenRegistrationWizard(FakeRegistrationWizard().also { it.givenUserNameIsAvailableThrows(A_USERNAME, AN_ERROR) })
+        val test = viewModel.test()
+
+        viewModel.handle(OnboardingAction.UserNameEnteredAction.Registration(A_USERNAME))
+
+        test
+                .assertStates(initialState)
+                .assertEvents(OnboardingViewEvents.Failure(AN_ERROR))
+                .finish()
+    }
+
+    @Test
     fun `given available username, when a register username is entered, then emits available registration state`() = runTest {
         viewModelWith(initialRegistrationState(A_HOMESERVER_URL))
         val onlyUsername = "a-username"

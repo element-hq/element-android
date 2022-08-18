@@ -20,13 +20,13 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.security.keystore.KeyPermanentlyInvalidatedException
-import android.security.keystore.UserNotAuthenticatedException
 import android.util.Base64
 import androidx.annotation.VisibleForTesting
 import androidx.biometric.BiometricPrompt
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.securestorage.SecretStoringUtils
 import org.matrix.android.sdk.api.util.BuildVersionSdkIntProvider
 import java.security.Key
@@ -113,14 +113,8 @@ class KeyStoreCrypto @AssistedInject constructor(
     fun hasValidKey(): Boolean {
         val keyExists = hasKey()
         return if (buildVersionSdkIntProvider.get() >= Build.VERSION_CODES.M && keyExists) {
-            try {
-                ensureKey()
-                true
-            } catch (e: KeyPermanentlyInvalidatedException) {
-                false
-            } catch (e: UserNotAuthenticatedException) {
-                false
-            }
+            val initializedKey = tryOrNull("Error validating lockscreen system key.") { ensureKey() }
+            initializedKey != null
         } else {
             keyExists
         }

@@ -47,6 +47,10 @@ class ScreenCaptureServiceConnection @Inject constructor(
         }
     }
 
+    fun unbind() {
+        callback = null
+    }
+
     fun stopScreenCapturing() {
         screenCaptureAndroidService?.stopService()
     }

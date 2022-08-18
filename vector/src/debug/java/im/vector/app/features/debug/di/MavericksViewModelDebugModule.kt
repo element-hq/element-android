@@ -24,6 +24,7 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.MavericksViewModelComponent
 import im.vector.app.core.di.MavericksViewModelKey
 import im.vector.app.features.debug.analytics.DebugAnalyticsViewModel
+import im.vector.app.features.debug.leak.DebugMemoryLeaksViewModel
 import im.vector.app.features.debug.settings.DebugPrivateSettingsViewModel
 
 @InstallIn(MavericksViewModelComponent::class)
@@ -39,4 +40,9 @@ interface MavericksViewModelDebugModule {
     @IntoMap
     @MavericksViewModelKey(DebugPrivateSettingsViewModel::class)
     fun debugPrivateSettingsViewModelFactory(factory: DebugPrivateSettingsViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(DebugMemoryLeaksViewModel::class)
+    fun debugMemoryLeaksViewModelFactory(factory: DebugMemoryLeaksViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 }
