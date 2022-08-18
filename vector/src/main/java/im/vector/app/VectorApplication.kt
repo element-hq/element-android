@@ -66,6 +66,7 @@ import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.version.VersionProvider
+import im.vector.app.gplay.BackgroundSyncStarter
 import org.jitsi.meet.sdk.log.JitsiMeetDefaultLogHandler
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.auth.AuthenticationService
@@ -108,6 +109,8 @@ class VectorApplication :
     @Inject lateinit var fcmHelper: FcmHelper
     @Inject lateinit var buildMeta: BuildMeta
     @Inject lateinit var leakDetector: LeakDetector
+    @Inject lateinit var backgroundSyncStarter: BackgroundSyncStarter
+
 
     // font thread handler
     private var fontThreadHandler: Handler? = null
@@ -184,7 +187,7 @@ class VectorApplication :
 
             override fun onPause(owner: LifecycleOwner) {
                 Timber.i("App entered background")
-                fcmHelper.onEnterBackground(activeSessionHolder)
+                fcmHelper.onEnterBackground(activeSessionHolder, backgroundSyncStarter)
             }
         })
         ProcessLifecycleOwner.get().lifecycle.addObserver(spaceStateHandler)

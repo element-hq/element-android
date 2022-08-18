@@ -874,15 +874,15 @@
     <string name="settings_call_invitations">Saabuvad kõned</string>
     <string name="settings_messages_sent_by_bot">Robotite saadetud sõnumid</string>
     <string name="settings_background_sync">Andmete sünkroniseerimine taustal</string>
-    <string name="settings_background_fdroid_sync_mode">Andmete taustal sünkroniseerimise režiim</string>
-    <string name="settings_background_fdroid_sync_mode_battery">Optimeeritud akukestust silmas pidades</string>
+    <string name="settings_background_sync_mode">Andmete taustal sünkroniseerimise režiim</string>
+    <string name="settings_background_sync_mode_battery">Optimeeritud akukestust silmas pidades</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} sünkroniseerib taustal nii, et see arvestab seadme piiratud ressursse (aku).
 \nSõltuvalt seadme olekust võib operatsioonisüsteem sünkroniseerimist edasi lükata.</string>
-    <string name="settings_background_fdroid_sync_mode_real_time">Optimeeritud reaalajas</string>
+    <string name="settings_background_sync_mode_real_time">Optimeeritud reaalajas</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} sünkroniseerib sõnumeid taustal etteantud aja järel (aeg on seadistatav).
 \nSee mõjutab seadme saatjat/vastuvõtjat ja akukasutust ning kuvatakse püsiteade, et ${app_name} kuulab sündmusi.</string>
-    <string name="settings_background_fdroid_sync_mode_disabled">Taustasünkroonimine puudub</string>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">Kui rakendus töötab taustal, siis sa ei saa saabunud sõnumite kohta teavitusi.</string>
+    <string name="settings_background_sync_mode_disabled">Taustasünkroonimine puudub</string>
+    <string name="settings_background_sync_mode_disabled_description">Kui rakendus töötab taustal, siis sa ei saa saabunud sõnumite kohta teavitusi.</string>
     <string name="settings_start_on_boot">Käivita teenus seadme käivitamisel</string>
     <string name="settings_set_sync_timeout">Sünkroniseerimispäring aegus</string>
     <string name="settings_set_sync_delay">Viivitus sünkroonimiste vahel</string>

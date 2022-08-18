@@ -868,9 +868,9 @@
     <string name="action_disconnect">Katkaise yhteys</string>
     <string name="action_decline">Kieltäydy</string>
     <string name="login_error_homeserver_not_found">Kotipalvelinta ei voi tavoittaa tästä URL-osoitteesta, tarkista osoite</string>
-    <string name="settings_background_fdroid_sync_mode">Taustasynkronointitila</string>
-    <string name="settings_background_fdroid_sync_mode_disabled">Ei taustasynkronointia</string>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">Et saa ilmoituksia saapuvista viesteistä, kun sovellus on taustalla.</string>
+    <string name="settings_background_sync_mode">Taustasynkronointitila</string>
+    <string name="settings_background_sync_mode_disabled">Ei taustasynkronointia</string>
+    <string name="settings_background_sync_mode_disabled_description">Et saa ilmoituksia saapuvista viesteistä, kun sovellus on taustalla.</string>
     <string name="widget_integration_review_terms">Jatkaaksesi sinun täytyy hyväksyä palvelun käyttöehdot.</string>
     <string name="identity_server_not_defined">Et käytä mitään identiteettipalvelinta</string>
     <string name="error_user_already_logged_in">Näyttää, että yrität yhdistää toiseen kotipalvelimeen. Haluatko kirjautua ulos\?</string>
@@ -913,10 +913,10 @@
     <string name="report_content_spam">Se on roskapostia</string>
     <string name="report_content_inappropriate">Se on sopimaton</string>
     <string name="none">Ei mitään</string>
-    <string name="settings_background_fdroid_sync_mode_battery">Optimoitu akunkestoa varten</string>
+    <string name="settings_background_sync_mode_battery">Optimoitu akunkestoa varten</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} synkronoi taustalla laitteen rajallisia resursseja (akkua) säästäen.
 \nLaitteesi resurssien tilasta riippuen käyttöjärjestelmä saattaa lykätä synkronointia.</string>
-    <string name="settings_background_fdroid_sync_mode_real_time">Optimoitu reaaliaikaa varten</string>
+    <string name="settings_background_sync_mode_real_time">Optimoitu reaaliaikaa varten</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} synkronoi taustalla täsmällisin aikavälein (säädettävä).
 \nTämä vaikuttaa radion ja akun käyttöön. Näet pysyvän ilmoituksen, joka kertoo, että ${app_name} kuuntelee tapahtumia.</string>
     <string name="message_edits">Viestimuokkaukset</string>

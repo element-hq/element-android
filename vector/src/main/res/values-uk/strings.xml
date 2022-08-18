@@ -929,15 +929,15 @@
         <item quantity="many">%d секунд</item>
         <item quantity="other">%d секунд</item>
     </plurals>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">Ви не отримуватимете сповіщення про вхідні повідомлення, коли програма перебуває у фоновому режимі.</string>
-    <string name="settings_background_fdroid_sync_mode_disabled">Немає фонової синхронізації</string>
+    <string name="settings_background_sync_mode_disabled_description">Ви не отримуватимете сповіщення про вхідні повідомлення, коли програма перебуває у фоновому режимі.</string>
+    <string name="settings_background_sync_mode_disabled">Немає фонової синхронізації</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} періодично синхронізуватиметься у фоновому режимі в певний час (налаштовується).
 \nЦе вплине на використання радіо та акумулятора, з’явиться постійне сповіщення про те, що ${app_name} очікує на події.</string>
-    <string name="settings_background_fdroid_sync_mode_real_time">Оптимізовано для реального часу</string>
+    <string name="settings_background_sync_mode_real_time">Оптимізовано для реального часу</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} синхронізується у фоновому режимі так, щоб зберегти обмежені ресурси пристрою (акумулятор).
 \nЗалежно від стану ресурсів вашого пристрою, синхронізацію може бути відкладено операційною системою.</string>
-    <string name="settings_background_fdroid_sync_mode_battery">Оптимізовано для батареї</string>
-    <string name="settings_background_fdroid_sync_mode">Режим фонової синхронізації</string>
+    <string name="settings_background_sync_mode_battery">Оптимізовано для батареї</string>
+    <string name="settings_background_sync_mode">Режим фонової синхронізації</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Нехтувати оптимізацією</string>
     <string name="settings_troubleshoot_test_battery_failed">Якщо користувач залишає пристрій від\'єднаним та нерухомим впродовж певного часу з вимкненим екраном, пристрій переходить у режим сну. Це запобігає доступу застосунків до мережі та відкладає їхні завдання, синхронізацію та стандартні попередження.</string>
     <string name="settings_troubleshoot_test_battery_success">Оптимізація акумулятора не впливає на ${app_name}.</string>

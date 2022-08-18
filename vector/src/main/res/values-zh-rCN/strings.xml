@@ -876,15 +876,15 @@
     <string name="room_participants_ban_reason">封禁理由</string>
     <string name="room_participants_unban_title">取消封禁用户</string>
     <string name="room_participants_unban_prompt_msg">取消封禁用户将允许他们再次加入房间。</string>
-    <string name="settings_background_fdroid_sync_mode">后台同步模式</string>
-    <string name="settings_background_fdroid_sync_mode_battery">电池优化</string>
+    <string name="settings_background_sync_mode">后台同步模式</string>
+    <string name="settings_background_sync_mode_battery">电池优化</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} 将在后台以保留设备有限资源（电池）的方式同步。
 \n取决于你的设备资源状态，同步可能被操作系统推迟。</string>
-    <string name="settings_background_fdroid_sync_mode_real_time">实时优化</string>
+    <string name="settings_background_sync_mode_real_time">实时优化</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} 将在后台定期准时同步（可配置）。
 \n这将影响网络和电池的使用，将显示一个永久通知表明 ${app_name} 正在监听事件。</string>
-    <string name="settings_background_fdroid_sync_mode_disabled">无后台同步</string>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">应用在后台时你不会收到消息通知。</string>
+    <string name="settings_background_sync_mode_disabled">无后台同步</string>
+    <string name="settings_background_sync_mode_disabled_description">应用在后台时你不会收到消息通知。</string>
     <string name="settings_integrations">集成</string>
     <string name="settings_integrations_summary">使用集成管理器管理机器人、桥接、部件和贴纸包。
 \n集成管理器接收配置数据，可以代表你修改部件、发送房间邀请及设置权力级别。</string>

@@ -892,20 +892,20 @@
     <string name="action_revoke">Revocar</string>
     <string name="action_disconnect">Desconectar</string>
     <string name="action_decline">Declinar</string>
-    <string name="settings_background_fdroid_sync_mode_battery">Optimizado para batería</string>
-    <string name="settings_background_fdroid_sync_mode_real_time">Optimizado para operar en tiempo real</string>
-    <string name="settings_background_fdroid_sync_mode_disabled">Sin sincronización en segundo plano</string>
+    <string name="settings_background_sync_mode_battery">Optimizado para batería</string>
+    <string name="settings_background_sync_mode_real_time">Optimizado para operar en tiempo real</string>
+    <string name="settings_background_sync_mode_disabled">Sin sincronización en segundo plano</string>
     <string name="settings_integrations">Integraciones</string>
     <string name="settings_discovery_category">Descubrimiento</string>
     <string name="settings_discovery_manage">Gestione sus preferencias de descubrimiento.</string>
     <string name="login_error_no_homeserver_found">Esta no es una dirección de servidor Matrix válida</string>
     <string name="login_error_homeserver_not_found">No se puede acceder al servidor en esta URL, por favor, compruébelo</string>
-    <string name="settings_background_fdroid_sync_mode">Modo Sincronización en segundo plano</string>
+    <string name="settings_background_sync_mode">Modo Sincronización en segundo plano</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} se sincronizará en segundo plano de manera que se preserven los recursos del dispositivo (batería).
 \nDependiendo del estado de los recursos del dispositivo, la sincronización puede ser aplazada por el sistema operativo.</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} se sincronizará en segundo plano periódicamente en un momento preciso (configurable).
 \nEsto afectará al uso de la radio y la batería, se mostrará una notificación permanente que indica que ${app_name} está escuchando a nuevos acontecimientos.</string>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">No se le notificará de los mensajes entrantes cuando la aplicación esté en segundo plano.</string>
+    <string name="settings_background_sync_mode_disabled_description">No se le notificará de los mensajes entrantes cuando la aplicación esté en segundo plano.</string>
     <string name="settings_integrations_summary">Utiliza un Gestor de Integración para gestionar los bots, puentes, widgets y paquetes de pegatinas.
 \nLos Gestores de Integración reciben los datos de configuración y pueden modificar los widgets, enviar invitaciones a salas y establecer niveles de poder en su nombre.</string>
     <string name="settings_integration_allow">Permitir integraciones</string>

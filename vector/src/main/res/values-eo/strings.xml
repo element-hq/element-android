@@ -307,15 +307,15 @@
     <string name="settings_call_invitations">Invitoj al vokoj</string>
     <string name="settings_messages_sent_by_bot">Mesaĝoj senditaj de roboto</string>
     <string name="settings_background_sync">Fona spegulado</string>
-    <string name="settings_background_fdroid_sync_mode">Reĝimo de fona spegulado</string>
-    <string name="settings_background_fdroid_sync_mode_battery">Optimumigita por baterio</string>
+    <string name="settings_background_sync_mode">Reĝimo de fona spegulado</string>
+    <string name="settings_background_sync_mode_battery">Optimumigita por baterio</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} spegulos fone, per maniero konservanta la limigitajn rimedojn de la aparato (ĉefe la baterion).
 \nDepende de la stato de la rimedoj de via aparato, la spegulado povus esti prokrastita de la operaciumo.</string>
-    <string name="settings_background_fdroid_sync_mode_real_time">Optimumigita por tujeco</string>
+    <string name="settings_background_sync_mode_real_time">Optimumigita por tujeco</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} spegulos fone, ripete, je preciza tempo (agordebla).
 \nĈi tio influos uzadon de baterio kaj radiilo, kaj aperigos ĉiaman sciigon pri tio, ke ${app_name} aŭskultas okazojn.</string>
-    <string name="settings_background_fdroid_sync_mode_disabled">Neniu fona spegulado</string>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">Vi ne sciiĝos pri envenaj mesaĝoj dum la aplikaĵo estas fone.</string>
+    <string name="settings_background_sync_mode_disabled">Neniu fona spegulado</string>
+    <string name="settings_background_sync_mode_disabled_description">Vi ne sciiĝos pri envenaj mesaĝoj dum la aplikaĵo estas fone.</string>
     <string name="settings_start_on_boot">Ruliĝi je eko de sistemo</string>
     <string name="settings_set_sync_timeout">Tempolimo de petoj por spegulado</string>
     <string name="settings_set_sync_delay">Prokrasto inter ĉiu spegulado</string>

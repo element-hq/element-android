@@ -1653,15 +1653,15 @@
     <string name="settings_set_sync_delay">Délai entre chaque synchronisation</string>
     <string name="settings_set_sync_timeout">Délai d’attente de la requête de synchronisation</string>
     <string name="settings_start_on_boot">Lancer au démarrage</string>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">Vous ne serez pas notifié des messages entrants quand l’application est en arrière-plan.</string>
-    <string name="settings_background_fdroid_sync_mode_disabled">Aucune synchronisation en arrière-plan</string>
+    <string name="settings_background_sync_mode_disabled_description">Vous ne serez pas notifié des messages entrants quand l’application est en arrière-plan.</string>
+    <string name="settings_background_sync_mode_disabled">Aucune synchronisation en arrière-plan</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} se synchronisera en arrière-plan de façon périodique à un moment précis (configurable).
 \nCela aura un impact sur l’utilisation des données mobiles et de la batterie, une notification permanente sera affichée indiquant que ${app_name} est à l’écoute des évènements.</string>
-    <string name="settings_background_fdroid_sync_mode_real_time">Optimisé pour le temps réel</string>
+    <string name="settings_background_sync_mode_real_time">Optimisé pour le temps réel</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} se synchronisera en arrière-plan de façon à préserver les ressources limitées de l’appareil (batterie).
 \nSelon l’état des ressources de votre appareil, la synchronisation peut être retardée par le système d’exploitation.</string>
-    <string name="settings_background_fdroid_sync_mode_battery">Optimisé pour préserver la batterie</string>
-    <string name="settings_background_fdroid_sync_mode">Mode de synchronisation en arrière-plan</string>
+    <string name="settings_background_sync_mode_battery">Optimisé pour préserver la batterie</string>
+    <string name="settings_background_sync_mode">Mode de synchronisation en arrière-plan</string>
     <string name="settings_background_sync">Synchronisation en arrière-plan</string>
     <string name="settings_messages_sent_by_bot">Messages envoyés par un robot</string>
     <string name="settings_call_invitations">Appels entrants</string>

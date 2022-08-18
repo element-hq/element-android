@@ -582,8 +582,8 @@
     <string name="settings_user_settings">Brûkersynstellingen</string>
     <string name="settings_olm_version">olm-ferzje</string>
     <string name="settings_version">Ferzje</string>
-    <string name="settings_background_fdroid_sync_mode">Eftergrûnsyngronisaasjemodus</string>
-    <string name="settings_background_fdroid_sync_mode_battery">Optimalisearre foar batterij</string>
+    <string name="settings_background_sync_mode">Eftergrûnsyngronisaasjemodus</string>
+    <string name="settings_background_sync_mode_battery">Optimalisearre foar batterij</string>
     <string name="settings_invited_to_room">Wannear’t ik útnûge wurd foar in keamer</string>
     <string name="settings_silent_notifications_preferences">Stille notifikaasjes konfigurearje</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Restriksjes útskeakelje</string>

@@ -170,8 +170,8 @@ class UnifiedPushHelper @Inject constructor(
     }
 
     suspend fun unregister(pushersManager: PushersManager? = null) {
-        val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME
-        vectorPreferences.setFdroidSyncBackgroundMode(mode)
+        val mode = BackgroundSyncMode.BACKGROUND_SYNC_MODE_FOR_REALTIME
+        vectorPreferences.setSyncBackgroundMode(mode)
         try {
             pushersManager?.unregisterPusher(unifiedPushStore.getEndpointOrToken().orEmpty())
         } catch (e: Exception) {
@@ -246,7 +246,7 @@ class UnifiedPushHelper @Inject constructor(
     }
 
     fun isBackgroundSync(): Boolean {
-        return UnifiedPush.getDistributor(context) == context.packageName && !fcmHelper.isFirebaseAvailable()
+        return true
     }
 
     fun getPrivacyFriendlyUpEndpoint(): String? {

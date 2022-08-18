@@ -32,6 +32,7 @@ import im.vector.app.features.call.lookup.CallUserMapper
 import im.vector.app.features.call.utils.EglUtils
 import im.vector.app.features.call.vectorCallService
 import im.vector.app.features.session.coroutineScope
+import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asCoroutineDispatcher
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -74,7 +75,8 @@ class WebRtcCallManager @Inject constructor(
         private val analyticsTracker: AnalyticsTracker,
         private val unifiedPushHelper: UnifiedPushHelper,
         private val voipConfig: VoipConfig,
-) : CallListener,
+        private val vectorPreferences: VectorPreferences,
+        ) : CallListener,
         DefaultLifecycleObserver {
 
     private val currentSession: Session?
@@ -273,7 +275,7 @@ class WebRtcCallManager @Inject constructor(
             audioManager.setMode(CallAudioManager.Mode.DEFAULT)
             // did we start background sync? so we should stop it
             if (isInBackground) {
-                if (!unifiedPushHelper.isBackgroundSync()) {
+                if (!unifiedPushHelper.isBackgroundSync() && !vectorPreferences.isBackgroundSyncEnabled()) {
                     currentSession?.syncService()?.stopAnyBackgroundSync()
                 } else {
                     // for fdroid we should not stop, it should continue syncing
@@ -379,11 +381,11 @@ class WebRtcCallManager @Inject constructor(
         // and thus won't be able to received events. For example if the call is
         // accepted on an other session this device will continue ringing
         if (isInBackground) {
-            if (!unifiedPushHelper.isBackgroundSync()) {
+            if (!unifiedPushHelper.isBackgroundSync() && !vectorPreferences.isBackgroundSyncEnabled()) {
                 // only for push version as fdroid version is already doing it?
                 currentSession?.syncService()?.startAutomaticBackgroundSync(30, 0)
             } else {
-                // Maybe increase sync freq? but how to set back to default values?
+                // Maybe increase sync freq? but how to set back to default values? Why not in DefaultPreferences?
             }
         }
     }

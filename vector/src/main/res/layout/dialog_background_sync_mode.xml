@@ -20,7 +20,7 @@
                 style="@style/Widget.Vector.TextView.Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/settings_background_fdroid_sync_mode_battery"
+                android:text="@string/settings_background_sync_mode_battery"
                 android:textColor="?vctr_content_primary"
                 android:textStyle="bold" />
 
@@ -46,7 +46,7 @@
                 style="@style/Widget.Vector.TextView.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/settings_background_fdroid_sync_mode_real_time"
+                android:text="@string/settings_background_sync_mode_real_time"
                 android:textColor="?vctr_content_primary"
                 android:textStyle="bold" />
 
@@ -72,7 +72,7 @@
                 style="@style/Widget.Vector.TextView.Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/settings_background_fdroid_sync_mode_disabled"
+                android:text="@string/settings_background_sync_mode_disabled"
                 android:textColor="?vctr_content_primary"
                 android:textStyle="bold" />
 
@@ -81,7 +81,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
-                android:text="@string/settings_background_fdroid_sync_mode_disabled_description"
+                android:text="@string/settings_background_sync_mode_disabled_description"
                 android:textColor="?vctr_content_secondary" />
 
         </LinearLayout>

@@ -898,15 +898,15 @@
     <string name="action_revoke">Оттегли</string>
     <string name="action_disconnect">Прекъсни</string>
     <string name="login_error_homeserver_not_found">Неуспешна връзка със сървъра на този адрес, моля проверете</string>
-    <string name="settings_background_fdroid_sync_mode">Режим на фонова синхронизация</string>
-    <string name="settings_background_fdroid_sync_mode_battery">Пестящ батерия</string>
+    <string name="settings_background_sync_mode">Режим на фонова синхронизация</string>
+    <string name="settings_background_sync_mode_battery">Пестящ батерия</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} ще синхронизира във фонов режим по начин, който пести ограничените ресурси на устройството (батерия).
 \nВ зависимост от състоянието на ресурсите, синхронизацията може да бъде отложена от операционната система.</string>
-    <string name="settings_background_fdroid_sync_mode_real_time">Целящ висока интерактивност</string>
+    <string name="settings_background_sync_mode_real_time">Целящ висока интерактивност</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} ще синхронизира във фонов режим на определен интервал (конфигурируемо).
 \nТова ще повлияе на използването на антената и батерията. Ще се показва перманентна нотификация, че ${app_name} слуша за събития.</string>
-    <string name="settings_background_fdroid_sync_mode_disabled">Без фонова синхронизация</string>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">Няма да бъдете уведомени за входящи съобщения, когато приложението е във фонов режим.</string>
+    <string name="settings_background_sync_mode_disabled">Без фонова синхронизация</string>
+    <string name="settings_background_sync_mode_disabled_description">Няма да бъдете уведомени за входящи съобщения, когато приложението е във фонов режим.</string>
     <string name="settings_discovery_category">Откриване</string>
     <string name="settings_discovery_manage">Управлявайте настройките на откриваемостта.</string>
     <string name="identity_server_not_defined">Не използвате сървър за самоличност</string>

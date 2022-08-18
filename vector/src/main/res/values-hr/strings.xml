@@ -287,15 +287,15 @@
     <string name="settings_call_invitations">Pozivnice za pozive</string>
     <string name="settings_messages_sent_by_bot">Poruke koje je poslao bot</string>
     <string name="settings_background_sync">Pozadinska sinkronizacija</string>
-    <string name="settings_background_fdroid_sync_mode">Način pozadinske sinkronizacije (eksperimentalno)</string>
-    <string name="settings_background_fdroid_sync_mode_battery">Optimirano za bateriju</string>
+    <string name="settings_background_sync_mode">Način pozadinske sinkronizacije (eksperimentalno)</string>
+    <string name="settings_background_sync_mode_battery">Optimirano za bateriju</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} će sinkronizirati u pozadini na način koji čuva ograničena sredstva uređaja (baterija).
 \nOvisno o stanju sredstava uređaja, operacijski sustav može odgoditi sinkronizaciju.</string>
-    <string name="settings_background_fdroid_sync_mode_real_time">Optimirano za stvarno vrijeme</string>
+    <string name="settings_background_sync_mode_real_time">Optimirano za stvarno vrijeme</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} će u pozadini i periodično u točno određeno vrijeme koje je podesivo vršiti sinkronizaciju.
 \nOvo će imati utjecaja na korištenje radijskog sustava i potrošnju baterije. Uočit ćete stalno prikazanu obavijest da ${app_name} osluškuje događaje.</string>
-    <string name="settings_background_fdroid_sync_mode_disabled">Bez pozadinske sinkronizacije</string>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">Nećete primati obavijesti o dolaznim porukama kada je aplikacija u pozadini.</string>
+    <string name="settings_background_sync_mode_disabled">Bez pozadinske sinkronizacije</string>
+    <string name="settings_background_sync_mode_disabled_description">Nećete primati obavijesti o dolaznim porukama kada je aplikacija u pozadini.</string>
     <string name="settings_start_on_boot">Pokreni pri podizanju sustava</string>
     <string name="settings_set_sync_timeout">Istekao je sinkronizacijski zahtjev</string>
     <string name="settings_set_sync_delay">Razmak između dvije sinkronizacije</string>

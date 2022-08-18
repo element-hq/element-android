@@ -113,9 +113,9 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
             }
         }
 
-        findPreference<VectorPreference>(VectorPreferences.SETTINGS_FDROID_BACKGROUND_SYNC_MODE)?.let {
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_BACKGROUND_SYNC_MODE)?.let {
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                val initialMode = vectorPreferences.getFdroidSyncBackgroundMode()
+                val initialMode = vectorPreferences.getSyncBackgroundMode()
                 val dialogFragment = BackgroundSyncModeChooserDialog.newInstance(initialMode)
                 dialogFragment.interactionListener = this
                 activity?.supportFragmentManager?.let { fm ->
@@ -219,7 +219,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
     // BackgroundSyncModeChooserDialog.InteractionListener
     override fun onOptionSelected(mode: BackgroundSyncMode) {
         // option has change, need to act
-        if (mode == BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME) {
+        if (mode == BackgroundSyncMode.BACKGROUND_SYNC_MODE_FOR_REALTIME) {
             // Important, Battery optim white listing is needed in this mode;
             // Even if using foreground service with foreground notif, it stops to work
             // in doze mode for certain devices :/
@@ -227,21 +227,17 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
                 requestDisablingBatteryOptimization(requireActivity(), batteryStartForActivityResult)
             }
         }
-        vectorPreferences.setFdroidSyncBackgroundMode(mode)
+        vectorPreferences.setSyncBackgroundMode(mode)
         refreshBackgroundSyncPrefs()
     }
 
     private fun refreshBackgroundSyncPrefs() {
-        findPreference<VectorPreference>(VectorPreferences.SETTINGS_FDROID_BACKGROUND_SYNC_MODE)?.let {
-            it.summary = when (vectorPreferences.getFdroidSyncBackgroundMode()) {
-                BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY -> getString(R.string.settings_background_fdroid_sync_mode_battery)
-                BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME -> getString(R.string.settings_background_fdroid_sync_mode_real_time)
-                BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_DISABLED -> getString(R.string.settings_background_fdroid_sync_mode_disabled)
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_BACKGROUND_SYNC_MODE)?.let {
+            it.summary = when (vectorPreferences.getSyncBackgroundMode()) {
+                BackgroundSyncMode.BACKGROUND_SYNC_MODE_FOR_BATTERY -> getString(R.string.settings_background_sync_mode_battery)
+                BackgroundSyncMode.BACKGROUND_SYNC_MODE_FOR_REALTIME -> getString(R.string.settings_background_sync_mode_real_time)
+                BackgroundSyncMode.BACKGROUND_SYNC_MODE_DISABLED -> getString(R.string.settings_background_sync_mode_disabled)
             }
-        }
-
-        findPreference<VectorPreferenceCategory>(VectorPreferences.SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY)?.let {
-            it.isVisible = unifiedPushHelper.isBackgroundSync()
         }
 
         val backgroundSyncEnabled = vectorPreferences.isBackgroundSyncEnabled()

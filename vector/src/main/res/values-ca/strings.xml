@@ -1131,15 +1131,15 @@
         <item quantity="one">%d segon</item>
         <item quantity="other">%d segons</item>
     </plurals>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">No se\'t notificarà de missatges entrants quan l\'aplicació es trobi en segon pla.</string>
-    <string name="settings_background_fdroid_sync_mode_disabled">Sense sincronització en segon pla</string>
+    <string name="settings_background_sync_mode_disabled_description">No se\'t notificarà de missatges entrants quan l\'aplicació es trobi en segon pla.</string>
+    <string name="settings_background_sync_mode_disabled">Sense sincronització en segon pla</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} farà la sincronització en segon pla periòdicament en instants de temps precisos (configurable).
 \nAixò tindrà un impacte en l\'ús de la ràdio i la bateria, es mostrarà una notificació permanent informant de que ${app_name} està a l\'espera d\'esdeveniments.</string>
-    <string name="settings_background_fdroid_sync_mode_real_time">Optimitzat per a temps real</string>
+    <string name="settings_background_sync_mode_real_time">Optimitzat per a temps real</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} farà la sincronització en segon pla de manera que es preservin els recursos limitats del dispositiu (bateria).
 \nEn funció de l\'estat dels recursos del dispositiu, pot ser que el sistema operatiu endarrereixi la sincronització.</string>
-    <string name="settings_background_fdroid_sync_mode_battery">Optimitzat per a la bateria</string>
-    <string name="settings_background_fdroid_sync_mode">Mode de sincronització en segon pla</string>
+    <string name="settings_background_sync_mode_battery">Optimitzat per a la bateria</string>
+    <string name="settings_background_sync_mode">Mode de sincronització en segon pla</string>
     <string name="settings_troubleshoot_test_notification_notification_clicked">La notificació ha estat clicada!</string>
     <string name="settings_troubleshoot_test_notification_notice">Fes clic a la notificació. Si no veus la notificació, revisa la configuració del sistema.</string>
     <string name="room_settings_permissions_subtitle">Revisa i actualitza els rols necessaris per canviar diferents parts de la sala.</string>

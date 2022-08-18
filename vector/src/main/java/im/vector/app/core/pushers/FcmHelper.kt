@@ -18,6 +18,7 @@ package im.vector.app.core.pushers
 
 import android.app.Activity
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.gplay.BackgroundSyncStarter
 
 interface FcmHelper {
     fun isFirebaseAvailable(): Boolean
@@ -47,5 +48,5 @@ interface FcmHelper {
 
     fun onEnterForeground(activeSessionHolder: ActiveSessionHolder)
 
-    fun onEnterBackground(activeSessionHolder: ActiveSessionHolder)
+    fun onEnterBackground(activeSessionHolder: ActiveSessionHolder, backgroundSyncStarter: BackgroundSyncStarter)
 }

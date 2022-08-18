@@ -638,11 +638,11 @@
     <string name="settings_call_invitations">دعوت‌های تماس</string>
     <string name="settings_messages_sent_by_bot">پیام‌های ارسالی از بات‌ها</string>
     <string name="settings_background_sync">همگام‌سازی پس‌زمینه</string>
-    <string name="settings_background_fdroid_sync_mode">حالت همگام‌سازی پس‌زمینه</string>
-    <string name="settings_background_fdroid_sync_mode_battery">بهینه برای باتری</string>
-    <string name="settings_background_fdroid_sync_mode_real_time">بهینه برای بلادرنگ</string>
-    <string name="settings_background_fdroid_sync_mode_disabled">بدون همگام‌سازی پس‌زمینه</string>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">هنگامی که کاره در پس‌زمینه‌است، از پیام‌های ورودی آگاه نخواهید شد.</string>
+    <string name="settings_background_sync_mode">حالت همگام‌سازی پس‌زمینه</string>
+    <string name="settings_background_sync_mode_battery">بهینه برای باتری</string>
+    <string name="settings_background_sync_mode_real_time">بهینه برای بلادرنگ</string>
+    <string name="settings_background_sync_mode_disabled">بدون همگام‌سازی پس‌زمینه</string>
+    <string name="settings_background_sync_mode_disabled_description">هنگامی که کاره در پس‌زمینه‌است، از پیام‌های ورودی آگاه نخواهید شد.</string>
     <string name="settings_start_on_boot">شروع هنگام راه‌اندازی</string>
     <string name="settings_set_sync_timeout">پایان زمان درخواست همگام‌سازی</string>
     <plurals name="seconds">

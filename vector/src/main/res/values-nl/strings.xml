@@ -713,15 +713,15 @@
     <string name="action_decline">Weigeren</string>
     <string name="login_error_no_homeserver_found">Dit is geen geldig Matrix-serveradres</string>
     <string name="login_error_homeserver_not_found">Kan geen verbinding maken met een server op deze URL, controleer de URL</string>
-    <string name="settings_background_fdroid_sync_mode">Synchroniseren op de achtergrond</string>
-    <string name="settings_background_fdroid_sync_mode_battery">Geoptimaliseerd voor batterij</string>
+    <string name="settings_background_sync_mode">Synchroniseren op de achtergrond</string>
+    <string name="settings_background_sync_mode_battery">Geoptimaliseerd voor batterij</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} zal op een batterijzuinige manier synchroniseren op de achtergrond.
 \nAfhankelijk van de staat van uw apparaat kan het besturingssysteem de synchronisatie uitstellen.</string>
-    <string name="settings_background_fdroid_sync_mode_real_time">Geoptimaliseerd voor snelheid</string>
+    <string name="settings_background_sync_mode_real_time">Geoptimaliseerd voor snelheid</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} zal periodiek op de achtergrond synchroniseren (configureerbaar).
 \nDit heeft een negatieve impact op uw batterij- en datagebruik. Er zal een melding getoond worden ter informatie.</string>
-    <string name="settings_background_fdroid_sync_mode_disabled">Geen achtergrondssynchronisatie</string>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">U zal geen melding van berichten ontvangen als de app zich in de achtergrond bevindt.</string>
+    <string name="settings_background_sync_mode_disabled">Geen achtergrondssynchronisatie</string>
+    <string name="settings_background_sync_mode_disabled_description">U zal geen melding van berichten ontvangen als de app zich in de achtergrond bevindt.</string>
     <string name="settings_integrations">Integraties</string>
     <string name="settings_integrations_summary">Gebruik een integratiebeheerder om bots, bruggen, widgets en stickerpakketten te beheren.
 \nIntegratiebeheerders ontvangen configuratiedata en kunnen widgets aanpassen, gespreksuitnodigingen versturen en bestuursniveaus instellen namens u.</string>

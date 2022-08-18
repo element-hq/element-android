@@ -923,15 +923,15 @@
     <string name="action_revoke">撤銷</string>
     <string name="action_disconnect">斷線</string>
     <string name="login_error_homeserver_not_found">無法在此 URL 找到家伺服器，請檢查</string>
-    <string name="settings_background_fdroid_sync_mode">背景同步模式</string>
-    <string name="settings_background_fdroid_sync_mode_battery">為電池最佳化</string>
+    <string name="settings_background_sync_mode">背景同步模式</string>
+    <string name="settings_background_sync_mode_battery">為電池最佳化</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} 將會在背景同步以節省裝置的有限資源（電池）。
 \n取決於您裝置的資源狀態，作業系統可能會延遲同步。</string>
-    <string name="settings_background_fdroid_sync_mode_real_time">為即時作業最佳化</string>
+    <string name="settings_background_sync_mode_real_time">為即時作業最佳化</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} 將會精準地定期在背景同步（可設定）。
 \n這會影響到網路與電池的使用，並會顯示指出 ${app_name} 正在監聽某事件的永久通知。</string>
-    <string name="settings_background_fdroid_sync_mode_disabled">無背景同步</string>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">當應用程式在背景時，您將不會收到訊息通知。</string>
+    <string name="settings_background_sync_mode_disabled">無背景同步</string>
+    <string name="settings_background_sync_mode_disabled_description">當應用程式在背景時，您將不會收到訊息通知。</string>
     <string name="settings_discovery_category">探索</string>
     <string name="settings_discovery_manage">管理您的探索設定。</string>
     <string name="identity_server_not_defined">您未使用任何身份識別伺服器</string>

@@ -766,15 +766,15 @@
     <string name="room_participants_ban_reason">Razão de ban</string>
     <string name="room_participants_unban_title">Desbanir usuária(o)</string>
     <string name="room_participants_unban_prompt_msg">Desbanir usuária(o) vai permitir-lhe se juntar à sala de novo.</string>
-    <string name="settings_background_fdroid_sync_mode">Modo Sinc no Background</string>
-    <string name="settings_background_fdroid_sync_mode_battery">Optimizado para bateria</string>
+    <string name="settings_background_sync_mode">Modo Sinc no Background</string>
+    <string name="settings_background_sync_mode_battery">Optimizado para bateria</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} vai sincar em background de maneira que preserva recursos limitados do dispositivo (bateria).
 \nDependendo do estado de recurso de seu dispositivo, a sinc pode ser adiada pelo sistema operacional.</string>
-    <string name="settings_background_fdroid_sync_mode_real_time">Optimizado para tempo real</string>
+    <string name="settings_background_sync_mode_real_time">Optimizado para tempo real</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} vai sincar em background periodicamente em tempo preciso (configurável).
 \nIsto vai impactar uso de rádio e bateria, vai ter uma notificação permanente exibida declarando que ${app_name} está à escuta por eventos.</string>
-    <string name="settings_background_fdroid_sync_mode_disabled">Sem sinc em background</string>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">Você não vai ser notificada(o) sobre mensagens entrantes quando o app está em background.</string>
+    <string name="settings_background_sync_mode_disabled">Sem sinc em background</string>
+    <string name="settings_background_sync_mode_disabled_description">Você não vai ser notificada(o) sobre mensagens entrantes quando o app está em background.</string>
     <string name="settings_integrations">Integrações</string>
     <string name="settings_integrations_summary">Use um gerenciador de integrações para gerenciar bots, bridges, widgets e pacotes de stickers.
 \nGerenciadores de integrações recebem dados de configuração, e podem modificar widgets, enviar convites de sala e definir níveis de poder em seu nome.</string>

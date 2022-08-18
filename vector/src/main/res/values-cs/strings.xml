@@ -523,15 +523,15 @@
     <string name="settings_call_invitations">Pozvání k hovoru</string>
     <string name="settings_messages_sent_by_bot">Zprávy poslané botem</string>
     <string name="settings_background_sync">Synchronizace na pozadí</string>
-    <string name="settings_background_fdroid_sync_mode">Režim synchronizace na pozadí</string>
-    <string name="settings_background_fdroid_sync_mode_battery">Optimalizován pro baterii</string>
+    <string name="settings_background_sync_mode">Režim synchronizace na pozadí</string>
+    <string name="settings_background_sync_mode_battery">Optimalizován pro baterii</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} bude synchronizovat na pozadí způsobem, který šetří omezené zdroje zařízení (baterii).
 \nV závislosti na stavu zdrojů zařízení může být sync operačním systémem odložen.</string>
-    <string name="settings_background_fdroid_sync_mode_real_time">Optimalizováno pro reálný čas</string>
+    <string name="settings_background_sync_mode_real_time">Optimalizováno pro reálný čas</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} bude synchronizovat na pozadí periodicky v přesný čas (nastavitelné).
 \nTo bude mít vliv na využití rádia a baterie, stálé oznámení o tom, že ${app_name} čeká na události, bude zobrazeno.</string>
-    <string name="settings_background_fdroid_sync_mode_disabled">Žádný sync na pozadí</string>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">Neobdržíte oznámení o příchozích zprávách, je-li aplikace na pozadí.</string>
+    <string name="settings_background_sync_mode_disabled">Žádný sync na pozadí</string>
+    <string name="settings_background_sync_mode_disabled_description">Neobdržíte oznámení o příchozích zprávách, je-li aplikace na pozadí.</string>
     <string name="settings_start_on_boot">Start při zavádění</string>
     <string name="settings_set_sync_timeout">Čas požadavku na sync vypršel</string>
     <string name="settings_set_sync_delay">Prodleva mezi jednotlivými syncy</string>

@@ -555,12 +555,12 @@
     <string name="denied_permission_generic">Vài quyền đang thiếu để thực hiện hành vi này, vui lòng cấp quyền từ cài đặt hệ thống.</string>
     <string name="settings_set_sync_timeout">Yêu cầu đồng bộ hết thời hạn</string>
     <string name="settings_start_on_boot">Chạy khi khởi động</string>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">Bạn sẽ không được báo tin nhắn đến khi App đang hoạt động ngầm.</string>
+    <string name="settings_background_sync_mode_disabled_description">Bạn sẽ không được báo tin nhắn đến khi App đang hoạt động ngầm.</string>
     <string name="settings_background_sync">Đồng bộ ngầm</string>
-    <string name="settings_background_fdroid_sync_mode">Chế độ đồng bộ ngầm</string>
-    <string name="settings_background_fdroid_sync_mode_disabled">Không đồng bộ ngầm</string>
-    <string name="settings_background_fdroid_sync_mode_real_time">Được tối ưu cho thời gian thực</string>
-    <string name="settings_background_fdroid_sync_mode_battery">Được tối ưu cho pin</string>
+    <string name="settings_background_sync_mode">Chế độ đồng bộ ngầm</string>
+    <string name="settings_background_sync_mode_disabled">Không đồng bộ ngầm</string>
+    <string name="settings_background_sync_mode_real_time">Được tối ưu cho thời gian thực</string>
+    <string name="settings_background_sync_mode_battery">Được tối ưu cho pin</string>
     <string name="settings_mentions_and_keywords_encryption_notice">Bạn sẽ không nhận được thông báo khi được đề cập tới trong phòng chat mã hóa trên mobile.</string>
     <string name="settings_room_upgrades">Nâng cấp phòng</string>
     <string name="settings_messages_by_bot">Các tin nhắn gửi bởi bot</string>

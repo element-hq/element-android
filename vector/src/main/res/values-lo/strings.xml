@@ -1186,15 +1186,15 @@
     <string name="settings_set_sync_delay">ທ່ວງເວລາລະຫວ່າງSync</string>
     <string name="settings_set_sync_timeout">ໝົດເວລາການຮ້ອງຂໍການຊິງຄ໌</string>
     <string name="settings_start_on_boot">ເລີ່ມຕົ້ນໃນການboot</string>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">ທ່ານຈະບໍ່ໄດ້ຮັບການແຈ້ງເຕືອນກ່ຽວກັບຂໍ້ຄວາມທີ່ເຂົ້າມາເມື່ອແອັບຯຢູ່ໃນພື້ນຫຼັງ.</string>
-    <string name="settings_background_fdroid_sync_mode_disabled">ບໍ່ມີການຊິງຄ໌ພື້ນຫຼັງ</string>
+    <string name="settings_background_sync_mode_disabled_description">ທ່ານຈະບໍ່ໄດ້ຮັບການແຈ້ງເຕືອນກ່ຽວກັບຂໍ້ຄວາມທີ່ເຂົ້າມາເມື່ອແອັບຯຢູ່ໃນພື້ນຫຼັງ.</string>
+    <string name="settings_background_sync_mode_disabled">ບໍ່ມີການຊິງຄ໌ພື້ນຫຼັງ</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} ຈະຊິງຄ໌ໃນພື້ນຫຼັງເປັນໄລຍະໆຕາມເວລາທີ່ຊັດເຈນ (ກຳນົດໄດ້).
 \nນີ້ຈະສົ່ງຜົນກະທົບຕໍ່ການໃຊ້ວິທະຍຸ ແລະແບັດເຕີຣີ, ຈະມີການແຈ້ງເຕືອນແບບຖາວອນທີ່ສະແດງວ່າ ${app_name} ກຳລັງຟັງເຫດການ.</string>
-    <string name="settings_background_fdroid_sync_mode_real_time">ປັບໃຫ້ເຫມາະສໍາລັບເວລາທີ່ແທ້ຈິງ</string>
+    <string name="settings_background_sync_mode_real_time">ປັບໃຫ້ເຫມາະສໍາລັບເວລາທີ່ແທ້ຈິງ</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} ຈະຊິ້ງຂໍ້ມູນໃນພື້ນຫຼັງເພື່ອຮັກສາຊັບພະຍາກອນທີ່ຈຳກັດຂອງອຸປະກອນ (ແບັດເຕີຣີ).
 \nອີງຕາມສະຖານະຊັບພະຍາກອນອຸປະກອນຂອງທ່ານ, ການຊິງຄ໌ອາດຈະຖືກເລື່ອນໂດຍລະບົບປະຕິບັດການ.</string>
-    <string name="settings_background_fdroid_sync_mode_battery">ເຫມາະສໍາລັບເເບັດເຕີລີ</string>
-    <string name="settings_background_fdroid_sync_mode">ຮູບແບບການຊິງຄ໌ພື້ນຫຼັງ</string>
+    <string name="settings_background_sync_mode_battery">ເຫມາະສໍາລັບເເບັດເຕີລີ</string>
+    <string name="settings_background_sync_mode">ຮູບແບບການຊິງຄ໌ພື້ນຫຼັງ</string>
     <string name="settings_background_sync">ການຊິ້ງຂໍ້ມູນພື້ນຫຼັງ</string>
     <string name="settings_mentions_and_keywords_encryption_notice">ທ່ານຈະບໍ່ໄດ້ຮັບການແຈ້ງເຕືອນສໍາລັບການກ່າວເຖິງ &amp; ຄໍາສໍາຄັນຢູ່ໃນຫ້ອງທີ່ເຂົ້າລະຫັດຢູ່ໃນມືຖື.</string>
     <string name="settings_room_upgrades">ການຍົກລະດັບຫ້ອງ</string>

@@ -229,15 +229,15 @@
     <string name="settings_set_sync_delay">עיכוב בין כל סינכרון</string>
     <string name="settings_set_sync_timeout">פסק-זמן לבקשה לסנכרון</string>
     <string name="settings_start_on_boot">החל באתחול</string>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">לא תקבל הודעה על הודעות נכנסות כאשר האפליקציה ברקע.</string>
-    <string name="settings_background_fdroid_sync_mode_disabled">אין סנכרון רקע</string>
+    <string name="settings_background_sync_mode_disabled_description">לא תקבל הודעה על הודעות נכנסות כאשר האפליקציה ברקע.</string>
+    <string name="settings_background_sync_mode_disabled">אין סנכרון רקע</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">אלמנט יסונכרן ברקע מעת לעת בזמן מדויק (ניתן להגדרה).
 \nזה ישפיע על השימוש ברדיו ובסוללה, תוצג הודעה קבועה לפיה אלמנט מאזין לאירועים.</string>
-    <string name="settings_background_fdroid_sync_mode_real_time">מותאם לזמן אמת</string>
+    <string name="settings_background_sync_mode_real_time">מותאם לזמן אמת</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">אלמנט יסונכרן ברקע באופן שישמור על המשאבים המוגבלים של המכשיר (סוללה).
 \nבהתאם למצב משאבי המכשיר שלך, ייתכן שהסנכרון יידחה על ידי מערכת ההפעלה.</string>
-    <string name="settings_background_fdroid_sync_mode_battery">מותאם לסוללה</string>
-    <string name="settings_background_fdroid_sync_mode">מצב סנכרון רקע</string>
+    <string name="settings_background_sync_mode_battery">מותאם לסוללה</string>
+    <string name="settings_background_sync_mode">מצב סנכרון רקע</string>
     <string name="settings_background_sync">סנכרון רקע</string>
     <string name="settings_messages_sent_by_bot">הודעות שנשלחו על ידי בוט</string>
     <string name="settings_call_invitations">הזמנות לשיחות</string>

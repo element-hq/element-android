@@ -1139,15 +1139,15 @@ Errore hau ${app_name}-en kontroletik kanpo dago. Ez dago Google konturik gailua
 
 
     <string name="login_error_homeserver_not_found">Ezin izan da hasiera-zerbitzari bat atzitu URL honetan, egiaztatu ezazu</string>
-    <string name="settings_background_fdroid_sync_mode">Bigarren planoko sinkronizazio modua (Esperimentala)</string>
-    <string name="settings_background_fdroid_sync_mode_battery">Bateria erabilerarako optimizatua</string>
+    <string name="settings_background_sync_mode">Bigarren planoko sinkronizazio modua (Esperimentala)</string>
+    <string name="settings_background_sync_mode_battery">Bateria erabilerarako optimizatua</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} bigarren planoan sinkronizatuko da gailuaren baliabide mugatuen erabilera ahal beste murriztuz (bateria).
 \nZure gailuaren baliabideen egoeraren arabera, sistema eragileak sinkronizazioa atzeratu dezake.</string>
-    <string name="settings_background_fdroid_sync_mode_real_time">Denbora errealerako optimizatua</string>
+    <string name="settings_background_sync_mode_real_time">Denbora errealerako optimizatua</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} bigarren planoan sinkronizatuko da maiztasun finkoarekin (konfiguragarria).
 \nHonek irrati eta bateriaren erabileran eragina izango du, eta ${app_name} gertaerei adi dagoela dion jakinarazpen bat bistaratuko da etengabe.</string>
-    <string name="settings_background_fdroid_sync_mode_disabled">Ez sinkronizatu bigarren planoan</string>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">Ez zaizu jasotako mezuei buruz jakinaraziko aplikazioa bigarren planoan dagoenean.</string>
+    <string name="settings_background_sync_mode_disabled">Ez sinkronizatu bigarren planoan</string>
+    <string name="settings_background_sync_mode_disabled_description">Ez zaizu jasotako mezuei buruz jakinaraziko aplikazioa bigarren planoan dagoenean.</string>
 
 
 

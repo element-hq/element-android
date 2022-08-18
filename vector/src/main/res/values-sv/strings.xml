@@ -904,8 +904,8 @@
     <string name="settings_troubleshoot_test_battery_success">${app_name} påverkas inte av batterioptimering.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignorera optimering</string>
     <string name="settings_background_sync">Bakgrundssynkronisering</string>
-    <string name="settings_background_fdroid_sync_mode">Bakgrundssynkläge</string>
-    <string name="settings_background_fdroid_sync_mode_battery">Optimerad för batteri</string>
+    <string name="settings_background_sync_mode">Bakgrundssynkläge</string>
+    <string name="settings_background_sync_mode_battery">Optimerad för batteri</string>
     <string name="settings_app_term_conditions">Användarvillkor</string>
     <string name="settings_third_party_notices">Meddelanden från tredje part</string>
     <string name="settings_copyright">Upphovsrätt</string>
@@ -1086,9 +1086,9 @@
     <string name="bottom_sheet_setup_secure_backup_security_phrase_subtitle">Skriv in en hemlig fras endast du känner till, och generera en nyckel för säkerhetskopiering.</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} kommer att synka i bakgrunden på ett sätt som sparar på enhetens begränsade resurser (batteri).
 \nBeroende på din enhets resurser, så kan synkroniseringen bli uppskjuten av operativsystemet.</string>
-    <string name="settings_background_fdroid_sync_mode_real_time">Optimerad för realtid</string>
-    <string name="settings_background_fdroid_sync_mode_disabled">Ingen bakgrundssynk</string>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">Du kommer inte att bli aviserad om inkommande meddelanden när appen är i bakgrunden.</string>
+    <string name="settings_background_sync_mode_real_time">Optimerad för realtid</string>
+    <string name="settings_background_sync_mode_disabled">Ingen bakgrundssynk</string>
+    <string name="settings_background_sync_mode_disabled_description">Du kommer inte att bli aviserad om inkommande meddelanden när appen är i bakgrunden.</string>
     <string name="settings_start_on_boot">Starta vid boot</string>
     <string name="settings_set_sync_timeout">Timeout för synkbegäran</string>
     <string name="settings_set_sync_delay">Fördröjning mellan varje synkronisering</string>

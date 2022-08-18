@@ -619,10 +619,10 @@
 
     <string name="settings_background_fdroid_sync_mode_battery_description">${app_name}, cihazın sınırlı kaynaklarını (pil) koruyacak şekilde arka planda senkronize olur.
 \nCihazınızın kaynak durumuna bağlı olarak, senkronizasyon işletim sistemi tarafından ertelenebilir.</string>
-    <string name="settings_background_fdroid_sync_mode_real_time">Gerçek zamanlı için optimize</string>
+    <string name="settings_background_sync_mode_real_time">Gerçek zamanlı için optimize</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} periyodik olarak belirli bir zamanda (ayarlanabilir) arka planda senkronize olur.
 \nBu pil ve radyo kullanımını etkileyecek ve ${app_name}\'in olayları dinlediğini belirten kalıcı bir bildirim gösterecektir.</string>
-    <string name="settings_background_fdroid_sync_mode_disabled">Arka plan senkronizasyonu yok</string>
+    <string name="settings_background_sync_mode_disabled">Arka plan senkronizasyonu yok</string>
 
     <string name="settings_integrations">Entegrasyonlar</string>
     <string name="settings_integrations_summary">Botları, köprüleri, widget\'ları ve çıkartma paketlerini yönetmek için bir entegrasyon yöneticisi kullanın.
@@ -739,9 +739,9 @@
     <string name="keys_backup_unable_to_get_keys_backup_data">Anahtar yedek verileri alınırken hata oluştu</string>
     <string name="login_error_no_homeserver_found">Bu geçerli bir Matrix sunucu adresi değil</string>
     <string name="login_error_homeserver_not_found">Bu URL ile ev-sunucusuna erişilemiyor, lütfen kontrol edin</string>
-    <string name="settings_background_fdroid_sync_mode">Arka plan Senkronizasyon Modu (Deneysel)</string>
-    <string name="settings_background_fdroid_sync_mode_battery">Batarya için optimize edildi</string>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">Uygulama arka plandayken gelen mesajlar için uyarılmayacaksınız.</string>
+    <string name="settings_background_sync_mode">Arka plan Senkronizasyon Modu (Deneysel)</string>
+    <string name="settings_background_sync_mode_battery">Batarya için optimize edildi</string>
+    <string name="settings_background_sync_mode_disabled_description">Uygulama arka plandayken gelen mesajlar için uyarılmayacaksınız.</string>
     <string name="action_play">Oynat</string>
     <string name="action_dismiss">Kapat</string>
     <string name="action_copy">Kopyala</string>

@@ -88,12 +88,12 @@
     <im.vector.app.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY"
         android:title="@string/settings_background_sync"
-        app:isPreferenceVisible="false">
+        app:isPreferenceVisible="true">
 
         <im.vector.app.core.preference.VectorPreference
-            android:key="SETTINGS_FDROID_BACKGROUND_SYNC_MODE"
+            android:key="SETTINGS_BACKGROUND_SYNC_MODE"
             android:persistent="false"
-            android:title="@string/settings_background_fdroid_sync_mode" />
+            android:title="@string/settings_background_sync_mode" />
 
         <im.vector.app.core.preference.VectorEditTextPreference
             android:inputType="numberDecimal"

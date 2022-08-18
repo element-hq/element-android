@@ -201,7 +201,7 @@
         <item quantity="one">১ টি রুম</item>
         <item quantity="other">%d টি রুম</item>
     </plurals>
-    <string name="settings_background_fdroid_sync_mode">পটভূমি সিঙ্ক মোড (পরীক্ষামূলক)</string>
+    <string name="settings_background_sync_mode">পটভূমি সিঙ্ক মোড (পরীক্ষামূলক)</string>
     <string name="settings_background_sync">পটভূমি সিঙ্ক্রোনাইজেশন</string>
     <string name="settings_messages_sent_by_bot">বোট দ্বারা পাঠানো বার্তাগুলি</string>
     <string name="settings_call_invitations">কল এর আমন্ত্রণগুলি</string>
@@ -572,14 +572,14 @@
 
     <string name="settings_set_sync_timeout">সিঙ্ক অনুরোধ সময়সীমার</string>
     <string name="settings_start_on_boot">বুট করার সময় শুরু</string>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">অ্যাপটি ব্যাকগ্রাউন্ডে থাকা অবস্থায় আপনাকে আগত বার্তাগুলি সম্পর্কে অবহিত করা হবে না।</string>
-    <string name="settings_background_fdroid_sync_mode_disabled">কোনও পটভূমি সিঙ্ক না</string>
+    <string name="settings_background_sync_mode_disabled_description">অ্যাপটি ব্যাকগ্রাউন্ডে থাকা অবস্থায় আপনাকে আগত বার্তাগুলি সম্পর্কে অবহিত করা হবে না।</string>
+    <string name="settings_background_sync_mode_disabled">কোনও পটভূমি সিঙ্ক না</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">রায়ট নির্দিষ্ট সময়ে সময়ে পটভূমিতে সিঙ্ক হবে (কনফিগারযোগ্য)।
 \nএটি রেডিও এবং ব্যাটারির ব্যবহারকে প্রভাবিত করবে, রায়ট ইভেন্টগুলি শুনছে বলে জানিয়ে একটি স্থায়ী বিজ্ঞপ্তি প্রদর্শিত হবে।</string>
-    <string name="settings_background_fdroid_sync_mode_real_time">রিয়েল টাইম জন্য অনুকূলিত</string>
+    <string name="settings_background_sync_mode_real_time">রিয়েল টাইম জন্য অনুকূলিত</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">রায়ট এমনভাবে পটভূমিতে সিঙ্ক হবে যা ডিভাইসের সীমিত সংস্থান (ব্যাটারি) সংরক্ষণ করে।
 \nআপনার ডিভাইস রিসোর্স স্থিতির উপর নির্ভর করে সিঙ্কটি অপারেটিং সিস্টেম দ্বারা পিছিয়ে যেতে পারে।</string>
-    <string name="settings_background_fdroid_sync_mode_battery">ব্যাটারির জন্য অনুকূলিত</string>
+    <string name="settings_background_sync_mode_battery">ব্যাটারির জন্য অনুকূলিত</string>
     <string name="action_skip">বাদ</string>
     <string name="action_accept">স্বীকার</string>
     <string name="action_invite">আমন্ত্রণ</string>

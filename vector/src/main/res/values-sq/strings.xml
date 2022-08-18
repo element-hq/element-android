@@ -934,15 +934,15 @@
     <string name="action_revoke">Shfuqizoje</string>
     <string name="action_disconnect">Shkëputu</string>
     <string name="login_error_homeserver_not_found">S’kapet dot shërbyes Home te kjo URL, ju lutemi, kontrollojeni</string>
-    <string name="settings_background_fdroid_sync_mode">Mënyrë Njëkohësimi Në Prapaskenë</string>
-    <string name="settings_background_fdroid_sync_mode_battery">E optimizuar për baterinë</string>
+    <string name="settings_background_sync_mode">Mënyrë Njëkohësimi Në Prapaskenë</string>
+    <string name="settings_background_sync_mode_battery">E optimizuar për baterinë</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">${app_name}-i do të bëjë njëkohësim në prapaskenë, në një mënyrë që kursen burimet e kufizuara të pajisjes (baterinë).
 \nNë varësi të gjendjes së burimeve tuaja, njëkohësimi mund të shtyhet për më vonë nga sistemi operativ.</string>
-    <string name="settings_background_fdroid_sync_mode_real_time">I optimizuar për kohë të njëmendtë</string>
+    <string name="settings_background_sync_mode_real_time">I optimizuar për kohë të njëmendtë</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name}0-i do të bëjë njëkohësim në prapaskenë periodikisht në një kohë të caktuar (e formësueshme).
 \nKjo do të ketë ndikim mbi përdorimin e baterisë dhe të transmetimit, do të shfaqet një njoftim i pandërprerë që pohon se ${app_name}-i po përgjon për akte.</string>
-    <string name="settings_background_fdroid_sync_mode_disabled">Pa njëkohësim në prapraskenë</string>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">S’do të njoftoheni për mesazhe ardhës, kur aplikacioni gjendet në prapaskenë.</string>
+    <string name="settings_background_sync_mode_disabled">Pa njëkohësim në prapraskenë</string>
+    <string name="settings_background_sync_mode_disabled_description">S’do të njoftoheni për mesazhe ardhës, kur aplikacioni gjendet në prapaskenë.</string>
     <string name="settings_discovery_manage">Administroni rregullimet tuaja për zbulime.</string>
     <string name="identity_server_not_defined">S’po përdorni ndonjë shërbyes identitetesh</string>
     <string name="error_user_already_logged_in">Duket se po rrekeni të lidheni me një tjetër shërbyes Home. Doni të bëhet dalja\?</string>

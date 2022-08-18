@@ -27,6 +27,8 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.DefaultSharedPreferences
 import im.vector.app.core.pushers.FcmHelper
 import im.vector.app.core.pushers.PushersManager
+import im.vector.app.gplay.BackgroundSyncStarter
+import im.vector.app.gplay.receiver.AlarmSyncBroadcastReceiver
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -35,7 +37,7 @@ import javax.inject.Inject
  * It has an alter ego in the fdroid variant.
  */
 class GoogleFcmHelper @Inject constructor(
-        context: Context,
+        private val context: Context,
 ) : FcmHelper {
     companion object {
         private const val PREFS_KEY_FCM_TOKEN = "FCM_TOKEN"
@@ -92,10 +94,12 @@ class GoogleFcmHelper @Inject constructor(
     }
 
     override fun onEnterForeground(activeSessionHolder: ActiveSessionHolder) {
-        // No op
+        // try to stop all regardless of background mode
+        activeSessionHolder.getSafeActiveSession()?.syncService()?.stopAnyBackgroundSync()
+        AlarmSyncBroadcastReceiver.cancelAlarm(context)
     }
 
-    override fun onEnterBackground(activeSessionHolder: ActiveSessionHolder) {
-        // No op
+    override fun onEnterBackground(activeSessionHolder: ActiveSessionHolder, backgroundSyncStarter: BackgroundSyncStarter) {
+        backgroundSyncStarter.start(activeSessionHolder)
     }
 }

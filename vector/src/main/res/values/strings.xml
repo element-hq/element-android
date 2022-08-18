@@ -934,15 +934,15 @@
     <string name="settings_mentions_and_keywords_encryption_notice">You won’t get notifications for mentions &amp; keywords in encrypted rooms on mobile.</string>
 
     <string name="settings_background_sync">Background synchronization</string>
-    <string name="settings_background_fdroid_sync_mode">Background Sync Mode</string>
-    <string name="settings_background_fdroid_sync_mode_battery">Optimized for battery</string>
+    <string name="settings_background_sync_mode">Background Sync Mode</string>
+    <string name="settings_background_sync_mode_battery">Optimized for battery</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
     <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} will sync in background in way that preserves the device’s limited resources (battery).\nDepending on your device resource state, the sync may be deferred by the operating system.</string>
-    <string name="settings_background_fdroid_sync_mode_real_time">Optimized for real time</string>
+    <string name="settings_background_sync_mode_real_time">Optimized for real time</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} will sync in background periodically at precise time (configurable).\nThis will impact radio and battery usage, there will be a permanent notification displayed stating that ${app_name} is listening for events.</string>
-    <string name="settings_background_fdroid_sync_mode_disabled">No background sync</string>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">You will not be notified of incoming messages when the app is in background.</string>
+    <string name="settings_background_sync_mode_disabled">No background sync</string>
+    <string name="settings_background_sync_mode_disabled_description">You will not be notified of incoming messages when the app is in background.</string>
 
     <string name="settings_start_on_boot">Start on boot</string>
     <string name="settings_set_sync_timeout">Sync request timeout</string>

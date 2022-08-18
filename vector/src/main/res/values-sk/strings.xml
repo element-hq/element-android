@@ -760,15 +760,15 @@
     <string name="room_participants_ban_reason">Dôvod zákazu vstupovať</string>
     <string name="room_participants_unban_title">Povoliť používateľovi vstupovať</string>
     <string name="room_participants_unban_prompt_msg">Povolením používateľovi vstupovať zaistíte, aby sa používateľ mohol vrátiť do miestnosti.</string>
-    <string name="settings_background_fdroid_sync_mode">Režim synchronizácie na pozadí</string>
-    <string name="settings_background_fdroid_sync_mode_battery">Optimalizovaný na využívanie batérie</string>
+    <string name="settings_background_sync_mode">Režim synchronizácie na pozadí</string>
+    <string name="settings_background_sync_mode_battery">Optimalizovaný na využívanie batérie</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} sa bude synchronizovať na pozadí s cieľom ušetriť limitované zdroje (batériu).
 \nV závislosti od kapacity prostriedkov zariadenia môže byť synchronizácia odložená operačným systémom na neskôr.</string>
-    <string name="settings_background_fdroid_sync_mode_real_time">Optimalizovaný na používanie v reálnom čase</string>
+    <string name="settings_background_sync_mode_real_time">Optimalizovaný na používanie v reálnom čase</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} sa bude pravidelne synchronizovať na pozadí v presne stanovenom čase (nastaviteľné).
 \nBude to mať vplyv na používanie rádia a batérie, bude sa zobrazovať trvalé oznámenie, že ${app_name} počúva udalosti.</string>
-    <string name="settings_background_fdroid_sync_mode_disabled">Žiadna synchronizácia na pozadí</string>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">Nebudete dostávať oznámenia o prichádzajúcich správach, keď aplikácia pracuje na pozadí.</string>
+    <string name="settings_background_sync_mode_disabled">Žiadna synchronizácia na pozadí</string>
+    <string name="settings_background_sync_mode_disabled_description">Nebudete dostávať oznámenia o prichádzajúcich správach, keď aplikácia pracuje na pozadí.</string>
     <string name="settings_integrations">Integrácie</string>
     <string name="settings_integrations_summary">Použite správcu integrácií na nastavenie botov, premostení, widgetov a balíčkov s nálepkami.
 \nSprávcovia integrácie dostávajú konfiguračné údaje a môžu vo vašom mene upravovať widgety, posielať pozvánky do miestnosti a nastavovať úrovne oprávnení.</string>

@@ -1333,10 +1333,10 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_integrations_summary">Izmantojiet Integrācijas Pārvaldnieku, lai pārvaldītu botus, tiltus, logrīkus un uzlīmes.
 \nIntegrācijas Pārvaldnieks saņem konfigurācijas datus un var modificēt logrīkus, sūtīt istabu uzaicinājumus jūsu vārdā.</string>
 
-    <string name="settings_background_fdroid_sync_mode_disabled_description">Jūs nesaņemsiet jaunas notifikācijas, kad aplikācija ir fonā.</string>
-    <string name="settings_background_fdroid_sync_mode_disabled">Bez fona sinhronizācijas</string>
-    <string name="settings_background_fdroid_sync_mode_real_time">Optimizēts reālajam laikam</string>
-    <string name="settings_background_fdroid_sync_mode">Fona Sinhronizācijas Režīms</string>
+    <string name="settings_background_sync_mode_disabled_description">Jūs nesaņemsiet jaunas notifikācijas, kad aplikācija ir fonā.</string>
+    <string name="settings_background_sync_mode_disabled">Bez fona sinhronizācijas</string>
+    <string name="settings_background_sync_mode_real_time">Optimizēts reālajam laikam</string>
+    <string name="settings_background_sync_mode">Fona Sinhronizācijas Režīms</string>
     <string name="settings_system_preferences_summary">Izvēlaites LED krāsu, vibrāciju, skaņu…</string>
     <string name="settings_silent_notifications_preferences">Konfigurēt Klusās Notifikācijas</string>
     <string name="settings_call_notifications_preferences">Konfigurēt Zvanu Notifikācijas</string>
@@ -1486,7 +1486,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_troubleshoot_test_fcm_title">Firebase Tokens</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Salabot Play Servisus</string>
     <string name="error_threepid_auth_failed">Pārliecinieties, ka esat nospiedis uz saites e-pasta ziņojumā, ko esam nosūtījuši jums.</string>
-    <string name="settings_background_fdroid_sync_mode_battery">Optimizēts akumulatoram</string>
+    <string name="settings_background_sync_mode_battery">Optimizēts akumulatoram</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} sinhronizēsies fonā, tā lai ietaupītu telefona bateriju.
 \nAtkarībā no ierīces baterijas stāvokļa, sinhronizāciju var atcelt operētājsistēma.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignorēt optimizāciju</string>

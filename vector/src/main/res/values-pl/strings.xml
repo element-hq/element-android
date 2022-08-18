@@ -720,15 +720,15 @@
 \n%1$s</string>
     <string name="settings_troubleshoot_test_battery_success">Na ${app_name} nie ma wpływu Optymalizacja Baterii.</string>
     <string name="settings_troubleshoot_test_battery_failed">Jeżeli użytkownik pozostawi urządzenie odłączone od zasilania oraz nieużywane przez określony okres, z wyłączonym ekranem, urządzenie przejdzie w tryb Doze. Uniemożliwia to aplikacjom dostęp do sieci i opóźnia ich zadania, synchonizację oraz standardowe alarmy.</string>
-    <string name="settings_background_fdroid_sync_mode">Tryb synchronizacji w tle</string>
-    <string name="settings_background_fdroid_sync_mode_battery">Zoptymalizowano dla baterii</string>
+    <string name="settings_background_sync_mode">Tryb synchronizacji w tle</string>
+    <string name="settings_background_sync_mode_battery">Zoptymalizowano dla baterii</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} będzie synchronizował się w tle w sposób który oszczędza limitowane zasoby urządzenia (baterię).
 \nW zależności od stanu zasobów urządzenia, synchronizacja może być opóźniania przez system operacyjny.</string>
-    <string name="settings_background_fdroid_sync_mode_real_time">Zopytmalizowano dla działania w czasie rzeczywistym</string>
+    <string name="settings_background_sync_mode_real_time">Zopytmalizowano dla działania w czasie rzeczywistym</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} będzie synchornizował się okresowo o ściśle określonym czasie (konfigurowalne).
 \nWpłynie to na użycie baterii i sieci, na panelu powiadomień pozostanie wyświetlone stałe powiadomiene o nasłuchiwaniu zdarzeń.</string>
-    <string name="settings_background_fdroid_sync_mode_disabled">Brak synchronizacji w tle</string>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">Nie będziesz otrzymywać powiadomień o przychodzących wiadomościach gdy aplikacja będzie działać w tle.</string>
+    <string name="settings_background_sync_mode_disabled">Brak synchronizacji w tle</string>
+    <string name="settings_background_sync_mode_disabled_description">Nie będziesz otrzymywać powiadomień o przychodzących wiadomościach gdy aplikacja będzie działać w tle.</string>
     <string name="settings_integrations_summary">Użyj menedżera integracji aby zarządzać botami, mostami, widżetami i pakietami naklejek.
 \nMenedżerzy integracji odbierają dane konfiguracji, modyfikują widżety, wysyłają zaproszenia do pokojów i ustawiają poziomy uprawnień w Twoim imieniu.</string>
     <string name="settings_inline_url_preview_summary">Pokaż podgląd linków wewnątrz czatu jeśli twój serwer wspiera tę funkcję.</string>

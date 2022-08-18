@@ -940,15 +940,15 @@
     <string name="action_revoke">Revoca</string>
     <string name="action_disconnect">Disconnetti</string>
     <string name="login_error_homeserver_not_found">Non è stato trovato alcun Home Server seguendo questo URL. Per favore, controllalo</string>
-    <string name="settings_background_fdroid_sync_mode">Modalità sync in background</string>
-    <string name="settings_background_fdroid_sync_mode_battery">Ottimizzato per la batteria</string>
+    <string name="settings_background_sync_mode">Modalità sync in background</string>
+    <string name="settings_background_sync_mode_battery">Ottimizzato per la batteria</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} si sincronizzerà in background in modo da non consumare la poca batteria disponibile.
 \nA seconda del livello della batteria, il sistema operativo potrebbe ritardare la sincronizzazione.</string>
-    <string name="settings_background_fdroid_sync_mode_real_time">Ottimizzato per la performance</string>
+    <string name="settings_background_sync_mode_real_time">Ottimizzato per la performance</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} si sincronizzerà in background ad intervalli regolari (configurabili).
 \nCiò avrà un certo impatto sulla quantità di dati e batteria utilizzati. Una notifica sempre accesa comunicherà che ${app_name} è attivo.</string>
-    <string name="settings_background_fdroid_sync_mode_disabled">Nessuna sincronizzazione in background</string>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">Quando l\'App è in background non ti verranno notificati i messaggi in arrivo.</string>
+    <string name="settings_background_sync_mode_disabled">Nessuna sincronizzazione in background</string>
+    <string name="settings_background_sync_mode_disabled_description">Quando l\'App è in background non ti verranno notificati i messaggi in arrivo.</string>
     <string name="settings_discovery_category">Farsi trovare</string>
     <string name="settings_discovery_manage">Gestisci le impostazioni per farsi trovare.</string>
     <string name="identity_server_not_defined">Non stai usando alcun server di identità</string>

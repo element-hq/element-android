@@ -980,16 +980,16 @@
     <string name="action_revoke">Отмена</string>
     <string name="action_disconnect">Отключить</string>
     <string name="login_error_homeserver_not_found">Не удается связаться с домашним сервером по этому URL, пожалуйста, проверьте его</string>
-    <string name="settings_background_fdroid_sync_mode_battery">Оптимизирован для батареи</string>
-    <string name="settings_background_fdroid_sync_mode_real_time">Оптимизирован для работы в реальном времени</string>
-    <string name="settings_background_fdroid_sync_mode_disabled">Без фоновой синхронизации</string>
+    <string name="settings_background_sync_mode_battery">Оптимизирован для батареи</string>
+    <string name="settings_background_sync_mode_real_time">Оптимизирован для работы в реальном времени</string>
+    <string name="settings_background_sync_mode_disabled">Без фоновой синхронизации</string>
     <string name="settings_discovery_category">Обнаружение</string>
-    <string name="settings_background_fdroid_sync_mode">Режим фоновой синхронизации</string>
+    <string name="settings_background_sync_mode">Режим фоновой синхронизации</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} будет синхронизироваться в фоновом режиме таким образом, чтобы сохранить ограниченные ресурсы устройства (батарея).
 \nВ зависимости от состояния ресурса вашего устройства, синхронизация может быть отложена операционной системой.</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} будет синхронизироваться в фоновом режиме периодически в точное время (настраивается).
 \nЭто повлияет на использование радио и батареи, появится постоянное уведомление о том, что ${app_name} прислушивается к событиям.</string>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">Вы не будете уведомлены о входящих сообщениях, когда приложение находится в фоновом режиме.</string>
+    <string name="settings_background_sync_mode_disabled_description">Вы не будете уведомлены о входящих сообщениях, когда приложение находится в фоновом режиме.</string>
     <string name="settings_discovery_manage">Изменить настройки обнаружения.</string>
     <string name="identity_server_not_defined">Вы не используете какой-либо сервер обнаружения</string>
     <string name="error_user_already_logged_in">Похоже, вы пытаетесь подключиться к другому домашнему серверу. Вы хотите выйти\?</string>

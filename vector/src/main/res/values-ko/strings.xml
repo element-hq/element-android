@@ -764,15 +764,15 @@
     <string name="action_revoke">취소</string>
     <string name="action_disconnect">연결 해제</string>
     <string name="login_error_homeserver_not_found">이 URL로는 홈서버에 접근할 수 없습니다, 확인해주세요</string>
-    <string name="settings_background_fdroid_sync_mode">백그라운드 동기화 모드 (실험적)</string>
-    <string name="settings_background_fdroid_sync_mode_battery">배터리에 최적화됨</string>
+    <string name="settings_background_sync_mode">백그라운드 동기화 모드 (실험적)</string>
+    <string name="settings_background_sync_mode_battery">배터리에 최적화됨</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">${app_name}은 기기의 제한된 자원 (배터리)을 유지하기 위해 백그라운드에서 동기화합니다.
 \n기기 자원 상태에 따라 운영체제에 의해 동기화는 지연될 수 있습니다.</string>
-    <string name="settings_background_fdroid_sync_mode_real_time">실시간으로 최적화됨</string>
+    <string name="settings_background_sync_mode_real_time">실시간으로 최적화됨</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name}은 (설정할 수 있는) 특정 시간에 주기적으로 백그라운드에거 동기화됩니다.
 \n이는 라디오와 배터리 사용에 영향을 주며 ${app_name}이 이벤트를 수신하고 있는 상태라는 알림이 영구적으로 표시됩니다.</string>
-    <string name="settings_background_fdroid_sync_mode_disabled">백그라운드 동기화 없음</string>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">앱이 백그라운드에 있을 때 수신 메시지의 알림을 받지 않습니다.</string>
+    <string name="settings_background_sync_mode_disabled">백그라운드 동기화 없음</string>
+    <string name="settings_background_sync_mode_disabled_description">앱이 백그라운드에 있을 때 수신 메시지의 알림을 받지 않습니다.</string>
     <string name="settings_discovery_category">탐색</string>
     <string name="settings_discovery_manage">탐색 설정을 관리합니다.</string>
     <string name="identity_server_not_defined">ID 서버를 사용하고 있지 않습니다</string>

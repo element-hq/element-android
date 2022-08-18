@@ -536,11 +536,11 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="notice_room_created">%1$s membuat ruangan ini</string>
     <string name="notice_room_invite_no_invitee_by_you">Undangan Anda</string>
     <string name="notice_room_invite_no_invitee">Undangan %s</string>
-    <string name="settings_background_fdroid_sync_mode_real_time">Dioptimalkan untuk real-time</string>
+    <string name="settings_background_sync_mode_real_time">Dioptimalkan untuk real-time</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} akan mengsinkron di latar belakang dengan cara yang akan mempertahankan sumber daya (baterai) yang terbatas.
 \nTergantung pada keadaan sumber daya perangkat Anda, sinkronisasi dapat ditangguhkan oleh operasi sistem.</string>
-    <string name="settings_background_fdroid_sync_mode_battery">Dioptimalkan untuk baterai</string>
-    <string name="settings_background_fdroid_sync_mode">Mode Sinkronisasi Latar Belakang</string>
+    <string name="settings_background_sync_mode_battery">Dioptimalkan untuk baterai</string>
+    <string name="settings_background_sync_mode">Mode Sinkronisasi Latar Belakang</string>
     <string name="settings_troubleshoot_test_notification_notification_clicked">Pemberitahuannya telah ditekan!</string>
     <string name="settings_troubleshoot_test_notification_notice">Silakan tekan notifikasinya. Jika Anda tidak melihat notifikasinya, silakan periksa pengaturan sistem.</string>
     <string name="settings_troubleshoot_test_notification_title">Tampilan Pemberitahuan</string>
@@ -1001,8 +1001,8 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <plurals name="seconds">
         <item quantity="other">%d detik</item>
     </plurals>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">Anda tidak akan diberitahu tentang pesan masuk saat aplikasi berada di latar belakang.</string>
-    <string name="settings_background_fdroid_sync_mode_disabled">Tidak ada sinkronisasi latar belakang</string>
+    <string name="settings_background_sync_mode_disabled_description">Anda tidak akan diberitahu tentang pesan masuk saat aplikasi berada di latar belakang.</string>
+    <string name="settings_background_sync_mode_disabled">Tidak ada sinkronisasi latar belakang</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} akan disinkronkan di latar belakang secara berkala pada waktu yang tepat (dapat dikonfigurasi).
 \nIni akan memengaruhi penggunaan radio dan baterai, dan ada juga pemberitahuan yang ditampilkan permanen menyatakan bahwa ${app_name} sedang mendengarkan peristiwa.</string>
     <string name="settings_mentions_and_keywords_encryption_notice">Anda tidak akan mendapatkan notifikasi untuk sebutan &amp; keyword di ruangan terenkripsi di ponsel.</string>

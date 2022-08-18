@@ -1080,9 +1080,9 @@
         <item quantity="one">%d sekund</item>
         <item quantity="other">%d sekunder</item>
     </plurals>
-    <string name="settings_background_fdroid_sync_mode_disabled">Ingen bakgrunnssynkronisering</string>
-    <string name="settings_background_fdroid_sync_mode_real_time">Optimalisert for sanntid</string>
-    <string name="settings_background_fdroid_sync_mode_battery">Optimalisert for batteri</string>
+    <string name="settings_background_sync_mode_disabled">Ingen bakgrunnssynkronisering</string>
+    <string name="settings_background_sync_mode_real_time">Optimalisert for sanntid</string>
+    <string name="settings_background_sync_mode_battery">Optimalisert for batteri</string>
     <string name="settings_background_sync">Bakgrunnssynkronisering</string>
     <string name="settings_messages_sent_by_bot">Meldinger sendt av bot</string>
     <string name="settings_call_invitations">Ring invitasjoner</string>
@@ -1142,7 +1142,7 @@
     <string name="settings_set_sync_delay">Forsinkelse mellom hver synkronisering</string>
 
     <string name="settings_set_sync_timeout">Tidsavbrudd for synkroniseringsforespørsel</string>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">Du vil ikke bli varslet om innkommende meldinger når appen er i bakgrunnen.</string>
+    <string name="settings_background_sync_mode_disabled_description">Du vil ikke bli varslet om innkommende meldinger når appen er i bakgrunnen.</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} vil synkroniseres i bakgrunnen med jevne mellomrom på presis tid (konfigurerbar).
 \nDette vil påvirke radio og batteribruk, det vises en permanent melding om at ${app_name} lytter etter hendelser.</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} synkroniseres i bakgrunnen på en måte som bevarer enhetens begrensede ressurser (batteri).

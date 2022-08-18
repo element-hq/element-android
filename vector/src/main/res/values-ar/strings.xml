@@ -1077,7 +1077,7 @@
     <string name="action_enable">فعّل</string>
     <string name="cannot_call_yourself_with_invite">لا يمكنك إجراء مكالمة مع نفسك، انتظر قبول منتسبين لطلب</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">شغّلتّ التعمية بين الطرفيات (خورزمية مجهولة %1$s).</string>
-    <string name="settings_background_fdroid_sync_mode">وضع المزامنة في الخلفية</string>
+    <string name="settings_background_sync_mode">وضع المزامنة في الخلفية</string>
     <string name="settings_mentions_and_keywords_encryption_notice">على الهاتف لن تتلق إخطارات عند ذكرك أو ذكر كلمة مفتاحية في الغرف المعماة.</string>
     <string name="settings_room_upgrades">ترقيات الغرف</string>
     <string name="settings_messages_by_bot">رسائل آلي (Bot)</string>
@@ -1148,9 +1148,9 @@
     <string name="location_share_option_pinned">شارك هذا الموقع</string>
     <string name="location_timeline_failed_to_load_map">فَشِلَ تحميل الخريطة</string>
     <string name="user_directory_search_hint_2">ابحث باسم المستخدم، أو الهوية (ID) أو البريد</string>
-    <string name="settings_background_fdroid_sync_mode_disabled">لا توجد مزامنة في الخلفية</string>
+    <string name="settings_background_sync_mode_disabled">لا توجد مزامنة في الخلفية</string>
     <string name="settings_room_invitations">دعوات الغُرف</string>
-    <string name="settings_background_fdroid_sync_mode_battery">الأمثل للبطارية</string>
+    <string name="settings_background_sync_mode_battery">الأمثل للبطارية</string>
     <string name="settings_messages_at_room">الرسائل التي تحتوي على @room</string>
     <string name="room_unsupported_e2e_algorithm_as_admin">هُيِئَتْ التَعْمِيَةُ بشَكَلٍ خَاطِئ لِذَا لا تَسْتَطِيعُ إرْسَال الرَسَائِل. اُنْقُرْ لِفَتْحِ الإعدَادَات.</string>
     <string name="login_error_homeserver_from_url_not_found_enter_manual">اِخْتَرْ خَادِمًا رَّئِيسِيًا</string>

@@ -31,7 +31,6 @@ import javax.inject.Inject
  */
 class FdroidFcmHelper @Inject constructor(
         private val context: Context,
-        private val backgroundSyncStarter: BackgroundSyncStarter,
 ) : FcmHelper {
 
     override fun isFirebaseAvailable(): Boolean = false
@@ -54,7 +53,7 @@ class FdroidFcmHelper @Inject constructor(
         AlarmSyncBroadcastReceiver.cancelAlarm(context)
     }
 
-    override fun onEnterBackground(activeSessionHolder: ActiveSessionHolder) {
+    override fun onEnterBackground(activeSessionHolder: ActiveSessionHolder, backgroundSyncStarter: BackgroundSyncStarter) {
         backgroundSyncStarter.start(activeSessionHolder)
     }
 }

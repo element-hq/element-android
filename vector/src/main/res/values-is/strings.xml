@@ -706,10 +706,10 @@
     <string name="encryption_exported_successfully">Útflutningur dulritunarlykla tókst</string>
     <string name="other_spaces_or_rooms_you_might_not_know">Önnur svæði sem þú gætir ekki vitað um</string>
     <string name="settings_play_shutter_sound">Spila hljóð við myndatöku</string>
-    <string name="settings_background_fdroid_sync_mode_disabled">Engin samstilling í bakgrunni</string>
-    <string name="settings_background_fdroid_sync_mode_real_time">Bestað gagnvart rauntíma</string>
-    <string name="settings_background_fdroid_sync_mode_battery">Bestað gagnvart rafhleðslu</string>
-    <string name="settings_background_fdroid_sync_mode">Hamur samstillingar í bakgrunni</string>
+    <string name="settings_background_sync_mode_disabled">Engin samstilling í bakgrunni</string>
+    <string name="settings_background_sync_mode_real_time">Bestað gagnvart rauntíma</string>
+    <string name="settings_background_sync_mode_battery">Bestað gagnvart rafhleðslu</string>
+    <string name="settings_background_sync_mode">Hamur samstillingar í bakgrunni</string>
     <string name="settings_notification_notify_me_for">Láta mig vita fyrir</string>
     <string name="settings_emails_empty">Engu tölvupóstfangi hefur verið bætt við notandaaðganginn þinn</string>
     <string name="settings_phone_number_empty">Engu símanúmeri hefur verið bætt við notandaaðganginn þinn</string>

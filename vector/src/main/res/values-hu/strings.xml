@@ -878,15 +878,15 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="action_revoke">Visszavonás</string>
     <string name="action_disconnect">Bontás</string>
     <string name="login_error_homeserver_not_found">Nem érhető el Matrix-kiszolgáló ezen a címen, ellenőrizd</string>
-    <string name="settings_background_fdroid_sync_mode">Háttér Szinkronizálási Mód</string>
-    <string name="settings_background_fdroid_sync_mode_battery">Optimalizált akkumulátor használat</string>
+    <string name="settings_background_sync_mode">Háttér Szinkronizálási Mód</string>
+    <string name="settings_background_sync_mode_battery">Optimalizált akkumulátor használat</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} a háttérben úgy szinkronizál, hogy a leginkább kímélje az eszköz korlátozott erőforrásait (akkumulátor).
 \nAz eszköz erőforrásainak állapotától függően a szinkronizációt az operációs rendszer elhalaszthatja.</string>
-    <string name="settings_background_fdroid_sync_mode_real_time">Optimalizálás valós idejű használatra</string>
+    <string name="settings_background_sync_mode_real_time">Optimalizálás valós idejű használatra</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} a háttérben rendszeresen, pontosan a megadott időközönként, szinkronizálni fog (beállítható).
 \nEz befolyásolja a rádió és az akkumulátor használatot, és folyamatosan egy értesítés fog megjelenni arról, hogy a ${app_name} figyel a neki küldött eseményekre.</string>
-    <string name="settings_background_fdroid_sync_mode_disabled">Nincs szinkroniziálás a háttérben</string>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">Nem leszel értesítve az érkező üzenetekről, ha az alkalmazás csak a háttérben fut.</string>
+    <string name="settings_background_sync_mode_disabled">Nincs szinkroniziálás a háttérben</string>
+    <string name="settings_background_sync_mode_disabled_description">Nem leszel értesítve az érkező üzenetekről, ha az alkalmazás csak a háttérben fut.</string>
     <string name="settings_discovery_category">Felderítés</string>
     <string name="settings_discovery_manage">Felderítési beállítások megváltoztatása.</string>
     <string name="identity_server_not_defined">Nem használsz Azonosítási Szervert</string>

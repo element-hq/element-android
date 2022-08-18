@@ -934,9 +934,9 @@
     <string name="none">Keine</string>
     <string name="action_revoke">Widerrufen</string>
     <string name="action_disconnect">Trennen</string>
-    <string name="settings_background_fdroid_sync_mode_battery">Optimiert für die Batterie</string>
-    <string name="settings_background_fdroid_sync_mode_real_time">Optimiert für die Echtzeit</string>
-    <string name="settings_background_fdroid_sync_mode_disabled">Keine Hintergrundsynchronisation</string>
+    <string name="settings_background_sync_mode_battery">Optimiert für die Batterie</string>
+    <string name="settings_background_sync_mode_real_time">Optimiert für die Echtzeit</string>
+    <string name="settings_background_sync_mode_disabled">Keine Hintergrundsynchronisation</string>
     <string name="settings_discovery_category">Auffindbarkeit</string>
     <string name="widget_integration_review_terms">Um fortzufahren, musst du die Nutzungsbedingungen akzeptieren.</string>
     <string name="identity_server_not_defined">Du verwendest keinen Identitätsserver</string>
@@ -957,7 +957,7 @@
     <string name="settings_discovery_bad_identity_server">Konnte keine Verbindung zum Homeserver herstellen</string>
     <string name="login_error_no_homeserver_found">Dies ist keine Adresse eines Matrixservers</string>
     <string name="login_error_homeserver_not_found">Kann Homeserver nicht unter dieser URL erreichen. Bitte überprüfen</string>
-    <string name="settings_background_fdroid_sync_mode">Hintergrund-Synchronisierungsmodus</string>
+    <string name="settings_background_sync_mode">Hintergrund-Synchronisierungsmodus</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} wird sich im Hintergrund auf eine Art synchronisieren, die Ressourcen des Geräts (Akku) schont.
 \nAbhängig vom Ressourcen-Status deines Geräts kann dein System die Synchronisierung verschieben.</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} wird sich im Hintergrund periodisch zu einem bestimmten Zeitpunkt synchronisieren (konfigurierbar).
@@ -985,7 +985,7 @@
     <string name="room_widget_webview_access_camera">Kamera benutzen</string>
     <string name="room_widget_webview_access_microphone">Mikrofon benutzen</string>
     <string name="room_widget_webview_read_protected_media">Lese DRM-geschützte Medien</string>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">Du wirst nicht über eingehende Nachrichten benachrichtigt, wenn die App im Hintergrund ist.</string>
+    <string name="settings_background_sync_mode_disabled_description">Du wirst nicht über eingehende Nachrichten benachrichtigt, wenn die App im Hintergrund ist.</string>
     <string name="settings_discovery_manage">Erkennungseinstellungen verwalten.</string>
     <string name="room_widget_revoke_access">Zugriff für mich zurückziehen</string>
     <string name="push_gateway_item_device_name">Sitzungsname:</string>

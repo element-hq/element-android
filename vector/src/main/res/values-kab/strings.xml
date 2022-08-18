@@ -958,8 +958,8 @@
     <string name="settings_messages_in_one_to_one">Iznan deg usqerdec gar sin kan</string>
     <string name="settings_messages_in_group_chat">Iznan n yisqerdicen n ugraw</string>
     <string name="settings_background_sync">Amtawi n ugilal</string>
-    <string name="settings_background_fdroid_sync_mode">Askar n umatawi n ugilal</string>
-    <string name="settings_background_fdroid_sync_mode_disabled">Ulac amtawi n ugilal</string>
+    <string name="settings_background_sync_mode">Askar n umatawi n ugilal</string>
+    <string name="settings_background_sync_mode_disabled">Ulac amtawi n ugilal</string>
     <string name="settings_start_on_boot">Bdu seg usenker</string>
     <string name="settings_app_term_conditions">Tiwtilin &amp; tfadiwin</string>
     <string name="settings_clear_cache">Sfeḍ takatut tuffirt</string>
@@ -1145,11 +1145,11 @@
     <string name="settings_enable_this_device">Rmed ilɣa i tɣimit-a</string>
     <string name="settings_containing_my_display_name">Iznan ideg yella yisem-iw yettwaskanen</string>
     <string name="settings_invited_to_room">Mi ara d-ttunecdeɣ ɣer texxamt</string>
-    <string name="settings_background_fdroid_sync_mode_battery">Yettusesfer i uẓru</string>
+    <string name="settings_background_sync_mode_battery">Yettusesfer i uẓru</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} ad yemtawi deg ugilal akken ara yeḥrez tilisa n teɣbula n yibenk (aẓru).
 \nAlmend n waddad n teɣbalut n yibenk-inek·inem, amtawi yezmer ad iɛeṭṭel seg anagraw n wammud.</string>
-    <string name="settings_background_fdroid_sync_mode_real_time">Yettusesfer i wakud ilaw</string>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">Ur d-tetteṭṭfeḍ ara ulɣu n yiznan i d-ikecmen ma yili asnas ɣef ugilal i yella.</string>
+    <string name="settings_background_sync_mode_real_time">Yettusesfer i wakud ilaw</string>
+    <string name="settings_background_sync_mode_disabled_description">Ur d-tetteṭṭfeḍ ara ulɣu n yiznan i d-ikecmen ma yili asnas ɣef ugilal i yella.</string>
     <string name="settings_set_sync_timeout">Yemmed wakud n usuter n umtawi</string>
 
     <string name="settings_set_sync_delay">Tanzagt gar yal amtawi</string>

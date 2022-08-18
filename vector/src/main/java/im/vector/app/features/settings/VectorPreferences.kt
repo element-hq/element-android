@@ -25,6 +25,7 @@ import androidx.core.content.edit
 import com.squareup.seismic.ShakeDetector
 import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
+import im.vector.app.core.pushers.FcmHelper
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.time.Clock
 import im.vector.app.features.disclaimer.SHARED_PREF_KEY
@@ -39,7 +40,8 @@ class VectorPreferences @Inject constructor(
         private val context: Context,
         private val clock: Clock,
         private val buildMeta: BuildMeta,
-) {
+        private val fcmHelper: FcmHelper,
+        ) {
 
     companion object {
         const val SETTINGS_HELP_PREFERENCE_KEY = "SETTINGS_HELP_PREFERENCE_KEY"
@@ -59,7 +61,7 @@ class VectorPreferences @Inject constructor(
         const val SETTINGS_CONTACT_PREFERENCE_KEYS = "SETTINGS_CONTACT_PREFERENCE_KEYS"
         const val SETTINGS_NOTIFICATIONS_TARGETS_PREFERENCE_KEY = "SETTINGS_NOTIFICATIONS_TARGETS_PREFERENCE_KEY"
         const val SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY = "SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY"
-        const val SETTINGS_FDROID_BACKGROUND_SYNC_MODE = "SETTINGS_FDROID_BACKGROUND_SYNC_MODE"
+        const val SETTINGS_BACKGROUND_SYNC_MODE = "SETTINGS_BACKGROUND_SYNC_MODE"
         const val SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY = "SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY"
         const val SETTINGS_BACKGROUND_SYNC_DIVIDER_PREFERENCE_KEY = "SETTINGS_BACKGROUND_SYNC_DIVIDER_PREFERENCE_KEY"
         const val SETTINGS_LABS_PREFERENCE_KEY = "SETTINGS_LABS_PREFERENCE_KEY"
@@ -1018,23 +1020,24 @@ class VectorPreferences @Inject constructor(
     }
 
     fun isBackgroundSyncEnabled(): Boolean {
-        return getFdroidSyncBackgroundMode() != BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_DISABLED
+        return getSyncBackgroundMode() != BackgroundSyncMode.BACKGROUND_SYNC_MODE_DISABLED
     }
 
-    fun setFdroidSyncBackgroundMode(mode: BackgroundSyncMode) {
+    fun setSyncBackgroundMode(mode: BackgroundSyncMode) {
         defaultPrefs
                 .edit()
-                .putString(SETTINGS_FDROID_BACKGROUND_SYNC_MODE, mode.name)
+                .putString(SETTINGS_BACKGROUND_SYNC_MODE, mode.name)
                 .apply()
     }
 
-    fun getFdroidSyncBackgroundMode(): BackgroundSyncMode {
+    fun getSyncBackgroundMode(): BackgroundSyncMode {
+        val defValue = if (fcmHelper.isFirebaseAvailable()) BackgroundSyncMode.BACKGROUND_SYNC_MODE_DISABLED else BackgroundSyncMode.BACKGROUND_SYNC_MODE_FOR_BATTERY
         return try {
             val strPref = defaultPrefs
-                    .getString(SETTINGS_FDROID_BACKGROUND_SYNC_MODE, BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY.name)
-            BackgroundSyncMode.values().firstOrNull { it.name == strPref } ?: BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY
+                    .getString(SETTINGS_BACKGROUND_SYNC_MODE, defValue.name)
+            BackgroundSyncMode.values().firstOrNull { it.name == strPref } ?: defValue
         } catch (e: Throwable) {
-            BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY
+            defValue
         }
     }
 

@@ -140,22 +140,22 @@ class VectorMessagingReceiver : MessagingReceiver() {
                 Timber.tag(loggerTag.value).i("onNewEndpoint: skipped")
             }
         }
-        val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_DISABLED
-        vectorPreferences.setFdroidSyncBackgroundMode(mode)
+        val mode = BackgroundSyncMode.BACKGROUND_SYNC_MODE_DISABLED
+        vectorPreferences.setSyncBackgroundMode(mode)
         guardServiceStarter.stop()
     }
 
     override fun onRegistrationFailed(context: Context, instance: String) {
         Toast.makeText(context, "Push service registration failed", Toast.LENGTH_SHORT).show()
-        val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME
-        vectorPreferences.setFdroidSyncBackgroundMode(mode)
+        val mode = BackgroundSyncMode.BACKGROUND_SYNC_MODE_FOR_REALTIME
+        vectorPreferences.setSyncBackgroundMode(mode)
         guardServiceStarter.start()
     }
 
     override fun onUnregistered(context: Context, instance: String) {
         Timber.tag(loggerTag.value).d("Unifiedpush: Unregistered")
-        val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME
-        vectorPreferences.setFdroidSyncBackgroundMode(mode)
+        val mode = BackgroundSyncMode.BACKGROUND_SYNC_MODE_FOR_REALTIME
+        vectorPreferences.setSyncBackgroundMode(mode)
         guardServiceStarter.start()
         runBlocking {
             try {

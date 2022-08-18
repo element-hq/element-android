@@ -156,7 +156,7 @@
     <string name="settings_app_term_conditions">Termene și condiții</string>
     <string name="settings_olm_version">Versiune olm</string>
     <string name="settings_version">Versiune</string>
-    <string name="settings_background_fdroid_sync_mode_battery">Optimizat pentru baterie</string>
+    <string name="settings_background_sync_mode_battery">Optimizat pentru baterie</string>
     <string name="settings_invited_to_room">Când sunt invitat într-o cameră</string>
     <string name="settings_silent_notifications_preferences">Configurează notificările silențioase</string>
     <string name="settings_notification_ringtone">Sunet de notificare</string>
