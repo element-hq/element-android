@@ -1120,7 +1120,7 @@ class VectorPreferences @Inject constructor(
      *
      * Only the IDs of the spaces are stored
      */
-    fun setPersistedSpaceBackstack(spaceBackstack: List<String?>) {
+    fun setSpaceBackstack(spaceBackstack: List<String?>) {
         val spaceIdsJoined = spaceBackstack.takeIf { it.isNotEmpty() }?.joinToString(",")
         defaultPrefs.edit().putString(SETTINGS_PERSISTED_SPACE_BACKSTACK, spaceIdsJoined).apply()
     }
@@ -1128,7 +1128,7 @@ class VectorPreferences @Inject constructor(
     /**
      * Gets the space backstack used for up navigation
      */
-    fun getPersistedSpaceBackstack(): List<String?> {
+    fun getSpaceBackstack(): List<String?> {
         val spaceIdsJoined = defaultPrefs.getString(SETTINGS_PERSISTED_SPACE_BACKSTACK, null)
         return spaceIdsJoined?.takeIf { it.isNotEmpty() }?.split(",").orEmpty()
     }

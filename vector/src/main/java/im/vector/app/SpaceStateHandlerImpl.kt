@@ -109,13 +109,13 @@ class SpaceStateHandlerImpl @Inject constructor(
     }
 
     private fun addToBackstack(spaceToLeave: RoomSummary?, spaceToSet: RoomSummary?) {
-        // Only add to the persisted backstack if the space to set is not All Chats, else reset the persisted stack
+        // Only add to the backstack if the space to set is not All Chats, else clear the backstack
         if (spaceToSet != null) {
-            val currentPersistedBackstack = vectorPreferences.getPersistedSpaceBackstack().toMutableList()
+            val currentPersistedBackstack = vectorPreferences.getSpaceBackstack().toMutableList()
             currentPersistedBackstack.add(spaceToLeave?.roomId)
-            vectorPreferences.setPersistedSpaceBackstack(currentPersistedBackstack)
+            vectorPreferences.setSpaceBackstack(currentPersistedBackstack)
         } else {
-            vectorPreferences.setPersistedSpaceBackstack(emptyList())
+            vectorPreferences.setSpaceBackstack(emptyList())
         }
     }
 
@@ -143,14 +143,14 @@ class SpaceStateHandlerImpl @Inject constructor(
     }
 
     override fun popSpaceBackstack(): String? {
-        vectorPreferences.getPersistedSpaceBackstack().toMutableList().apply {
+        vectorPreferences.getSpaceBackstack().toMutableList().apply {
             val poppedSpaceId = removeLast()
-            vectorPreferences.setPersistedSpaceBackstack(this)
+            vectorPreferences.setSpaceBackstack(this)
             return poppedSpaceId
         }
     }
 
-    override fun getPersistedSpaceBackstack() = vectorPreferences.getPersistedSpaceBackstack()
+    override fun getSpaceBackstack() = vectorPreferences.getSpaceBackstack()
 
     override fun getSelectedSpaceFlow() = selectedSpaceFlow
 
