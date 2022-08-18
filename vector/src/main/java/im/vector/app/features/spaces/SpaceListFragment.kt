@@ -37,6 +37,8 @@ import im.vector.app.features.home.HomeActivitySharedAction
 import im.vector.app.features.home.HomeSharedActionViewModel
 import im.vector.app.features.home.room.list.actions.RoomListSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListSharedActionViewModel
+import im.vector.app.features.spaces.manage.ManageType
+import im.vector.app.features.spaces.manage.SpaceManageActivity
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 
@@ -172,10 +174,11 @@ class SpaceListFragment @Inject constructor(
 
     private fun observeViewEvents() = viewModel.observeViewEvents {
         when (it) {
-            is SpaceListViewEvents.OpenSpaceSummary -> homeActivitySharedActionViewModel.post(HomeActivitySharedAction.OpenSpacePreview(it.id))
-            is SpaceListViewEvents.AddSpace -> homeActivitySharedActionViewModel.post(HomeActivitySharedAction.AddSpace)
-            is SpaceListViewEvents.OpenSpaceInvite -> homeActivitySharedActionViewModel.post(HomeActivitySharedAction.OpenSpaceInvite(it.id))
+            SpaceListViewEvents.AddSpace -> homeActivitySharedActionViewModel.post(HomeActivitySharedAction.AddSpace)
             SpaceListViewEvents.CloseDrawer -> homeActivitySharedActionViewModel.post(HomeActivitySharedAction.CloseDrawer)
+            is SpaceListViewEvents.AddSubSpace -> startActivity(SpaceManageActivity.newIntent(requireActivity(), it.spaceId, ManageType.AddRoomsOnlySpaces))
+            is SpaceListViewEvents.OpenSpaceSummary -> homeActivitySharedActionViewModel.post(HomeActivitySharedAction.OpenSpacePreview(it.id))
+            is SpaceListViewEvents.OpenSpaceInvite -> homeActivitySharedActionViewModel.post(HomeActivitySharedAction.OpenSpaceInvite(it.id))
         }
     }
 

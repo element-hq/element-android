@@ -27,6 +27,7 @@ import im.vector.app.SpaceStateHandler
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.plan.Interaction
 import im.vector.app.features.invite.AutoAcceptInvites
@@ -65,7 +66,8 @@ class SpaceListViewModel @AssistedInject constructor(
         private val session: Session,
         private val vectorPreferences: VectorPreferences,
         private val autoAcceptInvites: AutoAcceptInvites,
-        private val analyticsTracker: AnalyticsTracker
+        private val analyticsTracker: AnalyticsTracker,
+        private val vectorFeatures: VectorFeatures,
 ) : VectorViewModel<SpaceListViewState, SpaceListAction, SpaceListViewEvents>(initialState) {
 
     @AssistedFactory
@@ -247,7 +249,13 @@ class SpaceListViewModel @AssistedInject constructor(
     }
 
     private fun handleAddSpace() {
-        _viewEvents.post(SpaceListViewEvents.AddSpace)
+        val currentSpace = spaceStateHandler.getCurrentSpace()
+
+        if (currentSpace == null || !vectorFeatures.isNewAppLayoutEnabled()) {
+            _viewEvents.post(SpaceListViewEvents.AddSpace)
+        } else {
+            _viewEvents.post(SpaceListViewEvents.AddSubSpace(currentSpace.roomId))
+        }
     }
 
     private fun observeSpaceSummaries() {

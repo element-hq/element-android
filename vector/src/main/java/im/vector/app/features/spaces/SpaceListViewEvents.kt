@@ -25,5 +25,6 @@ sealed class SpaceListViewEvents : VectorViewEvents {
     data class OpenSpaceSummary(val id: String) : SpaceListViewEvents()
     data class OpenSpaceInvite(val id: String) : SpaceListViewEvents()
     object AddSpace : SpaceListViewEvents()
+    data class AddSubSpace(val spaceId: String) : SpaceListViewEvents()
     object CloseDrawer : SpaceListViewEvents()
 }
