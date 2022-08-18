@@ -42,7 +42,7 @@ class HomeLayoutSettingBottomDialogFragment : VectorBaseBottomSheetDialogFragmen
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             views.homeLayoutSettingsRecents.isChecked = preferencesStore.areRecentsEnabledFlow.first()
             views.homeLayoutSettingsFilters.isChecked = preferencesStore.areFiltersEnabledFlow.first()
 
@@ -53,13 +53,26 @@ class HomeLayoutSettingBottomDialogFragment : VectorBaseBottomSheetDialogFragmen
             }
         }
 
-        views.homeLayoutSettingsDone.setOnClickListener {
-            lifecycleScope.launch {
-                preferencesStore.setRecentsEnabled(views.homeLayoutSettingsRecents.isChecked)
-                preferencesStore.setFiltersEnabled(views.homeLayoutSettingsFilters.isChecked)
-                preferencesStore.setAZOrderingEnabled(views.homeLayoutSettingsSortGroup.checkedRadioButtonId == R.id.home_layout_settings_sort_name)
-                dismiss()
-            }
+        views.homeLayoutSettingsRecents.setOnCheckedChangeListener { _, isChecked ->
+            setRecentsEnabled(isChecked)
         }
+        views.homeLayoutSettingsFilters.setOnCheckedChangeListener { _, isChecked ->
+            setFiltersEnabled(isChecked)
+        }
+        views.homeLayoutSettingsSortGroup.setOnCheckedChangeListener { _, checkedId ->
+            setAzOrderingEnabled(checkedId == R.id.home_layout_settings_sort_name)
+        }
+    }
+
+    private fun setRecentsEnabled(isEnabled: Boolean) = lifecycleScope.launch {
+        preferencesStore.setRecentsEnabled(isEnabled)
+    }
+
+    private fun setFiltersEnabled(isEnabled: Boolean) = lifecycleScope.launch {
+        preferencesStore.setFiltersEnabled(isEnabled)
+    }
+
+    private fun setAzOrderingEnabled(isEnabled: Boolean) = lifecycleScope.launch {
+        preferencesStore.setAZOrderingEnabled(isEnabled)
     }
 }

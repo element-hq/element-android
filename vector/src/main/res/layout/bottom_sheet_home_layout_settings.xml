@@ -64,15 +64,4 @@
             android:textColor="?vctr_content_primary" />
     </RadioGroup>
 
-    <Button
-        android:id="@+id/home_layout_settings_done"
-        style="@style/Widget.Vector.Button.Login"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginHorizontal="18dp"
-        android:layout_marginTop="20dp"
-        android:text="@string/done" />
-
-
 </LinearLayout>
