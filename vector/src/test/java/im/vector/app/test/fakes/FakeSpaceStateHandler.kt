@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,13 @@
 
 package im.vector.app.test.fakes
 
-import io.mockk.every
+import im.vector.app.SpaceStateHandler
 import io.mockk.mockk
-import org.matrix.android.sdk.api.session.room.RoomService
-import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import io.mockk.verify
 
-class FakeRoomService(
-        private val fakeRoom: FakeRoom = FakeRoom()
-) : RoomService by mockk() {
+class FakeSpaceStateHandler : SpaceStateHandler by mockk(relaxUnitFun = true) {
 
-    override fun getRoom(roomId: String) = fakeRoom
-
-    fun getRoomSummaryReturns(roomSummary: RoomSummary?) {
-        every { getRoomSummary(any()) } returns roomSummary
+    fun verifySetCurrentSpace(spaceId: String, overriddenSpaceName: String? = null) {
+        verify { setCurrentSpace(spaceId, overriddenSpaceName = overriddenSpaceName) }
     }
 }

@@ -188,7 +188,15 @@ class DefaultNavigator @Inject constructor(
             return
         }
         spaceStateHandler.setCurrentSpace(spaceId, overriddenSpaceName = overriddenSpaceName)
-        when (postSwitchSpaceAction) {
+        handlePostSwitchAction(context, spaceId, postSwitchSpaceAction)
+    }
+
+    private fun handlePostSwitchAction(
+            context: Context,
+            spaceId: String,
+            action: Navigator.PostSwitchSpaceAction,
+    ) {
+        when (action) {
             Navigator.PostSwitchSpaceAction.None -> {
                 // go back to home if we are showing room details?
                 // This is a bit ugly, but the navigator is supposed to know about the activity stack
@@ -204,9 +212,9 @@ class DefaultNavigator @Inject constructor(
             }
             is Navigator.PostSwitchSpaceAction.OpenDefaultRoom -> {
                 val args = TimelineArgs(
-                        postSwitchSpaceAction.roomId,
+                        action.roomId,
                         eventId = null,
-                        openShareSpaceForId = spaceId.takeIf { postSwitchSpaceAction.showShareSheet }
+                        openShareSpaceForId = spaceId.takeIf { action.showShareSheet }
                 )
                 val intent = RoomDetailActivity.newIntent(context, args, false)
                 startActivity(context, intent, false)
