@@ -17,9 +17,9 @@
 package im.vector.app.core.extensions
 
 /**
- * Recursive through the throwable and its causes for the given predicate
+ * Recursive through the throwable and its causes for the given predicate.
  *
- * @return true when the predicate finds a match
+ * @return true when the predicate finds a match.
  */
 tailrec fun Throwable?.crawlCausesFor(predicate: (Throwable) -> Boolean): Boolean {
     return when {
