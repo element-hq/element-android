@@ -499,8 +499,13 @@ class BugReporter @Inject constructor(
      */
     fun openBugReportScreen(activity: FragmentActivity, reportType: ReportType = ReportType.BUG_REPORT) {
         screenshot = takeScreenshot(activity)
-        matrix.debugService().logDbUsageInfo()
+        logDbInfo()
         activity.startActivity(BugReportActivity.intent(activity, reportType))
+    }
+
+    private fun logDbInfo() {
+        val dbInfo = matrix.debugService().getDbUsageInfo()
+        Timber.i(dbInfo)
     }
 
     private fun rageShakeAppNameForReport(reportType: ReportType): String {
