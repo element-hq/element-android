@@ -66,6 +66,7 @@ class PstnDialActivity : SimpleFragmentActivity() {
                 dismissLoadingDialog()
                 finish()
             } catch (failure: Throwable) {
+                dismissLoadingDialog()
                 displayErrorDialog(failure)
             }
         }
