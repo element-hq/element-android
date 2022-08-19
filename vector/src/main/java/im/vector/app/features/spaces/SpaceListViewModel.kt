@@ -85,15 +85,10 @@ class SpaceListViewModel @AssistedInject constructor(
                 }
 
         observeSpaceSummaries()
-        val spaceHistory = spaceStateHandler.getSpaceBackstack()
-                .map { it to it?.let { session.roomService().getRoomSummary(it)?.displayName }.orEmpty()  }
         spaceStateHandler.getSelectedSpaceFlow()
                 .distinctUntilChanged()
                 .setOnEach { selectedSpaceOption ->
-                    copy(
-                            selectedSpace = selectedSpaceOption.orNull(),
-                            spaceHistory = spaceHistory,
-                    )
+                    copy(selectedSpace = selectedSpaceOption.orNull())
                 }
 
         // XXX there should be a way to refactor this and share it

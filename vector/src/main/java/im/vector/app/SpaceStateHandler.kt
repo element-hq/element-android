@@ -42,20 +42,18 @@ interface SpaceStateHandler : DefaultLifecycleObserver {
      * @param session the current active session
      * @param persistNow if true, the current space will immediately be persisted in shared prefs
      * @param isForwardNavigation whether this navigation is a forward action to properly handle backstack
-     * @param overriddenSpaceName overrides the display name of the space being set
      */
     fun setCurrentSpace(
             spaceId: String?,
             session: Session? = null,
             persistNow: Boolean = false,
             isForwardNavigation: Boolean = true,
-            overriddenSpaceName: String? = null,
     )
 
     /**
      * Gets the Space ID of the space on top of the backstack.
      *
-     * May return null to indicate the All Chats space
+     * May return null to indicate the All Chats space.
      */
     fun popSpaceBackstack(): String?
 

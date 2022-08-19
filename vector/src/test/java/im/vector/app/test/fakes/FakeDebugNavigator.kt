@@ -16,13 +16,7 @@
 
 package im.vector.app.test.fakes
 
-import im.vector.app.SpaceStateHandler
+import im.vector.app.core.debug.DebugNavigator
 import io.mockk.mockk
-import io.mockk.verify
 
-class FakeSpaceStateHandler : SpaceStateHandler by mockk(relaxUnitFun = true) {
-
-    fun verifySetCurrentSpace(spaceId: String) {
-        verify { setCurrentSpace(spaceId) }
-    }
-}
+class FakeDebugNavigator : DebugNavigator by mockk()

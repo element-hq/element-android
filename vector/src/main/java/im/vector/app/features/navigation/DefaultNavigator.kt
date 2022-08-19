@@ -180,13 +180,12 @@ class DefaultNavigator @Inject constructor(
             context: Context,
             spaceId: String,
             postSwitchSpaceAction: Navigator.PostSwitchSpaceAction,
-            overriddenSpaceName: String?,
     ) {
         if (sessionHolder.getSafeActiveSession()?.getRoomSummary(spaceId) == null) {
             fatalError("Trying to open an unknown space $spaceId", vectorPreferences.failFast())
             return
         }
-        spaceStateHandler.setCurrentSpace(spaceId, overriddenSpaceName = overriddenSpaceName)
+        spaceStateHandler.setCurrentSpace(spaceId)
         handlePostSwitchAction(context, spaceId, postSwitchSpaceAction)
     }
 

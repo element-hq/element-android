@@ -144,7 +144,6 @@ class HomeActivity :
     private val createSpaceResultLauncher = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
             val spaceId = SpaceCreationActivity.getCreatedSpaceId(activityResult.data)
-            val spaceName = SpaceCreationActivity.getCreatedSpaceName(activityResult.data)
             val defaultRoomId = SpaceCreationActivity.getDefaultRoomId(activityResult.data)
             val isJustMe = SpaceCreationActivity.isJustMeSpace(activityResult.data)
             views.drawerLayout.closeDrawer(GravityCompat.START)
@@ -162,7 +161,6 @@ class HomeActivity :
                         context = this,
                         spaceId = spaceId,
                         postSwitchOption,
-                        overriddenSpaceName = spaceName,
                 )
                 roomListSharedActionViewModel.post(RoomListSharedAction.CloseBottomSheet)
             }
