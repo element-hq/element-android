@@ -502,7 +502,12 @@ class BugReporter @Inject constructor(
         screenshot = takeScreenshot(activity)
         logDbInfo()
         logProcessInfo()
+        logOtherInfo()
         activity.startActivity(BugReportActivity.intent(activity, reportType))
+    }
+
+    private fun logOtherInfo() {
+        Timber.i("SyncThread state: " + activeSessionHolder.getSafeActiveSession()?.syncService()?.getSyncState())
     }
 
     private fun logDbInfo() {
