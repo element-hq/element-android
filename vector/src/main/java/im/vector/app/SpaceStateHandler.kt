@@ -53,7 +53,7 @@ interface SpaceStateHandler : DefaultLifecycleObserver {
     )
 
     /**
-     * Gets the Space ID of the space on top of the backstack
+     * Gets the Space ID of the space on top of the backstack.
      *
      * May return null to indicate the All Chats space
      */

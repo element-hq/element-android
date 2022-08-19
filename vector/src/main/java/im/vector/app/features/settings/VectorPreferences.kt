@@ -1128,10 +1128,10 @@ class VectorPreferences @Inject constructor(
     }
 
     /**
-     * Sets the space backstack that is used for up navigation
-     * This needs to be persisted because navigating up through spaces should work across sessions
+     * Sets the space backstack that is used for up navigation.
+     * This needs to be persisted because navigating up through spaces should work across sessions.
      *
-     * Only the IDs of the spaces are stored
+     * Only the IDs of the spaces are stored.
      */
     fun setSpaceBackstack(spaceBackstack: List<String?>) {
         val spaceIdsJoined = spaceBackstack.takeIf { it.isNotEmpty() }?.joinToString(",")
@@ -1139,7 +1139,7 @@ class VectorPreferences @Inject constructor(
     }
 
     /**
-     * Gets the space backstack used for up navigation
+     * Gets the space backstack used for up navigation.
      */
     fun getSpaceBackstack(): List<String?> {
         val spaceIdsJoined = defaultPrefs.getString(SETTINGS_PERSISTED_SPACE_BACKSTACK, null)

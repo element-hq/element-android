@@ -48,8 +48,8 @@ internal class DefaultNavigatorTest {
     )
 
     /**
-     * The below tests are by no means all that we want to test in [DefaultNavigator]
-     * Please add relevant tests as you make changes to or related to other functions in the class
+     * The below tests are by no means all that we want to test in [DefaultNavigator].
+     * Please add relevant tests as you make changes to or related to other functions in the class.
      */
 
     @Test
