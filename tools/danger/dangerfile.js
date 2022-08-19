@@ -11,6 +11,8 @@ const pr = danger.github.pr
 const github = danger.github
 // User who has created the PR.
 const user = pr.user.login
+// The relation of the pr author to the repo / organisation
+const authorAssociation = pr.author_association
 const modified = danger.git.modified_files
 const created = danger.git.created_files
 const editedFiles = [...modified, ...created]
@@ -68,29 +70,7 @@ frozenClasses.forEach(frozen => {
 // Check for a sign-off
 const signOff = "Signed-off-by:"
 
-// Please add new names following the alphabetical order.
-const allowList = [
-    "aringenbach",
-    "BillCarsonFr",
-    "bmarty",
-    "Claire1817",
-    "dependabot[bot]",
-    "ericdecanini",
-    "fedrunov",
-    "Florian14",
-    "ganfra",
-    "jmartinesp",
-    "langleyd",
-    "MadLittleMods",
-    "manuroe",
-    "mnaturel",
-    "onurays",
-    "ouchadam",
-    "stefanceriu",
-    "yostyle",
-]
-
-const requiresSignOff = !allowList.includes(user)
+const requiresSignOff = authorAssociation != "MEMBER"
 
 if (requiresSignOff) {
     const hasPRBodySignOff = pr.body.includes(signOff)
