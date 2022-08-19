@@ -1409,7 +1409,7 @@
 \n
 \n你也可以通过设置菜单来建立保护备份以及管理你的密钥。</string>
     <string name="encryption_enabled">加密已开启</string>
-    <string name="encryption_enabled_tile_description">本房间信息已经端到端加密。验证成员时，请查看其个人档案以了解更多信息。</string>
+    <string name="encryption_enabled_tile_description">本房间的消息端到端加密。在成员用户资料中了解更多信息与验证成员。</string>
     <string name="encryption_not_enabled">加密未开启</string>
     <string name="encryption_unknown_algorithm_tile_description">不支持本房间使用的加密方式</string>
     <string name="room_created_summary_item">%s 创建并配置了房间。</string>
@@ -1670,7 +1670,7 @@
     <string name="room_alias_published_alias_add_manually">手动发布新地址</string>
     <string name="room_alias_published_other">其它发布的地址：</string>
     <string name="room_alias_published_alias_main">这是主要地址</string>
-    <string name="room_alias_published_alias_subtitle">发布的地址可以被任何服务器上的任何人用来加入你的房间。要发布一个地址，它必须先被设为一个本地地址。</string>
+    <string name="room_alias_published_alias_subtitle">任何服务器上的任何人都可用发布的地址加入你的房间。一个地址必须先设置为本地地址才可发布。</string>
     <string name="room_alias_published_alias_title">发布的地址</string>
     <string name="room_settings_alias_subtitle">查看和管理此房间的地址，以及它在房间目录中的可见性。</string>
     <string name="room_settings_alias_title">房间地址</string>
