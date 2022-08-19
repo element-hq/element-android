@@ -62,7 +62,7 @@ internal class SyncThread @Inject constructor(
         private val backgroundDetectionObserver: BackgroundDetectionObserver,
         private val activeCallHandler: ActiveCallHandler,
         private val lightweightSettingsStorage: DefaultLightweightSettingsStorage
-) : Thread("SyncThread"), NetworkConnectivityChecker.Listener, BackgroundDetectionObserver.Listener {
+) : Thread("Matrix-SyncThread"), NetworkConnectivityChecker.Listener, BackgroundDetectionObserver.Listener {
 
     private var state: SyncState = SyncState.Idle
     private var liveState = MutableLiveData(state)
