@@ -380,7 +380,6 @@ class CreateSpaceViewModel @AssistedInject constructor(
                         _viewEvents.post(
                                 CreateSpaceEvents.FinishSuccess(
                                         result.spaceId,
-                                        spaceName,
                                         result.childIds.firstOrNull(),
                                         state.spaceTopology
                                 )
@@ -394,7 +393,6 @@ class CreateSpaceViewModel @AssistedInject constructor(
                         _viewEvents.post(
                                 CreateSpaceEvents.FinishSuccess(
                                         result.spaceId,
-                                        spaceName,
                                         result.childIds.firstOrNull(),
                                         state.spaceTopology
                                 )

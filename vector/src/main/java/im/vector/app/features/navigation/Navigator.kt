@@ -72,7 +72,6 @@ interface Navigator {
             context: Context,
             spaceId: String,
             postSwitchSpaceAction: PostSwitchSpaceAction,
-            overriddenSpaceName: String? = null,
     )
 
     fun openSpacePreview(context: Context, spaceId: String)

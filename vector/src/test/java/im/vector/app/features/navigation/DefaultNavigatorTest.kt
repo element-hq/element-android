@@ -19,6 +19,7 @@ package im.vector.app.features.navigation
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakeAnalyticsTracker
 import im.vector.app.test.fakes.FakeContext
+import im.vector.app.test.fakes.FakeDebugNavigator
 import im.vector.app.test.fakes.FakeSpaceStateHandler
 import im.vector.app.test.fakes.FakeSupportedVerificationMethodsProvider
 import im.vector.app.test.fakes.FakeVectorFeatures
@@ -36,6 +37,7 @@ internal class DefaultNavigatorTest {
     private val supportedVerificationMethodsProvider = FakeSupportedVerificationMethodsProvider()
     private val features = FakeVectorFeatures()
     private val analyticsTracker = FakeAnalyticsTracker()
+    private val debugNavigator = FakeDebugNavigator()
 
     private val navigator = DefaultNavigator(
             sessionHolder.instance,
@@ -45,11 +47,12 @@ internal class DefaultNavigatorTest {
             supportedVerificationMethodsProvider.instance,
             features,
             analyticsTracker,
+            debugNavigator,
     )
 
     /**
-     * The below tests are by no means all that we want to test in [DefaultNavigator]
-     * Please add relevant tests as you make changes to or related to other functions in the class
+     * The below test is by no means all that we want to test in [DefaultNavigator].
+     * Please add relevant tests as you make changes to or related to other functions in the class.
      */
 
     @Test
@@ -61,17 +64,5 @@ internal class DefaultNavigatorTest {
         navigator.switchToSpace(FakeContext().instance, spaceId, Navigator.PostSwitchSpaceAction.None)
 
         spaceStateHandler.verifySetCurrentSpace(spaceId)
-    }
-
-    @Test
-    fun `given non-null overriddenSpaceName, when switchToSpace, then current space set`() {
-        val spaceId = "space-id"
-        val spaceSummary = aRoomSummary(spaceId)
-        sessionHolder.fakeSession.fakeRoomService.getRoomSummaryReturns(spaceSummary)
-        val overriddenSpaceName = "new-space-name"
-
-        navigator.switchToSpace(FakeContext().instance, spaceId, Navigator.PostSwitchSpaceAction.None, overriddenSpaceName)
-
-        spaceStateHandler.verifySetCurrentSpace(spaceId, overriddenSpaceName = overriddenSpaceName)
     }
 }
