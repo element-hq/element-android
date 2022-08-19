@@ -27,13 +27,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSettingsDevicesBinding
-import javax.inject.Inject
 
 /**
  * Display the list of the user's devices and sessions.
  */
 @AndroidEntryPoint
-class VectorSettingsDevicesFragment @Inject constructor() : VectorBaseFragment<FragmentSettingsDevicesBinding>() {
+class VectorSettingsDevicesFragment : VectorBaseFragment<FragmentSettingsDevicesBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSettingsDevicesBinding {
         return FragmentSettingsDevicesBinding.inflate(inflater, container, false)
