@@ -17,7 +17,7 @@
 package im.vector.app.features.call.dialpad
 
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -42,7 +42,7 @@ class PstnDialActivity : SimpleFragmentActivity() {
     @Inject lateinit var session: Session
     @Inject lateinit var errorFormatter: ErrorFormatter
 
-    private var progress: AlertDialog? = null
+    private var progress: AppCompatDialog? = null
 
     override fun getTitleRes(): Int = R.string.call
 
