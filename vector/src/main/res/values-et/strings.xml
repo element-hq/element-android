@@ -720,7 +720,7 @@
         <item quantity="one">%d aktiivne sessioon</item>
         <item quantity="other">%d aktiivset sessiooni</item>
     </plurals>
-    <string name="crosssigning_verify_this_session">Verifitseeri see sisselogimissessioon</string>
+    <string name="crosssigning_verify_this_session">Verifitseeri see seade</string>
     <string name="verification_open_other_to_verify">Kasuta olemasolevat sessiooni selle sessiooni verifitseerimiseks, andes sellega ligipääsu krüptitud sõnumitele.</string>
     <string name="verification_profile_verify">Verifitseeri</string>
     <string name="verification_profile_verified">Verifitseeritud</string>
@@ -2541,8 +2541,8 @@
     <string name="ftue_auth_forgot_password">Kas unustasid oma salasõna</string>
     <string name="ftue_auth_email_resend_email">Saada e-kiri uuesti</string>
     <string name="ftue_auth_email_verification_footer">Sa ei saanud e-kirja kätte\?</string>
-    <string name="ftue_auth_email_verification_subtitle">Oma e-posti aadressi kinnitamiseks klõpsi selles kirjas leiduvat nuppu, mille just saatsime %s aadressile</string>
-    <string name="ftue_auth_email_verification_title">Kinnitamiseks vaata oma e-kirju.</string>
+    <string name="ftue_auth_email_verification_subtitle">Palun järgi juhtnööre, mille just saatsime %s aadressile</string>
+    <string name="ftue_auth_email_verification_title">Verifitseeri oma e-posti aadress</string>
     <string name="ftue_auth_phone_confirmation_resend_code">Saada kinnituskood uuesti</string>
     <string name="ftue_auth_phone_confirmation_subtitle">Kinnituskoodi saatsime telefoninumbrile %s</string>
     <string name="ftue_auth_phone_confirmation_title">Kinnita oma telefoninumber</string>
@@ -2579,4 +2579,19 @@
     <string name="font_size_section_manually">Vali ise</string>
     <string name="font_size_section_auto">Määra automaatselt</string>
     <string name="font_size_title">Vali kirjatüübi suurus</string>
+    <string name="labs_enable_element_call_permission_shortcuts_summary">Automaatsel luba kasutada Element\'i põhiste kõnede vidinaid ning luba ligipääs kaamerale ja mikrofonile</string>
+    <string name="labs_enable_element_call_permission_shortcuts">Võta kasutsele Element\'i põhiste kõnede õiguste kiirnupud</string>
+    <string name="live_location_description">Asukoht reaalajas</string>
+    <string name="verify_invalid_qr_notice">See QR-kood tundub olema vigane. Palun proovi verifitseerimist mõne muu meetodiga.</string>
+    <string name="crosssigning_cannot_verify_this_session_desc">Sa ei saa lugeda varasemaid krüptitud sõnumeid. Uuesti alustamiseks seadista varundusvõtmed ja verifitseerimisvõtmed.</string>
+    <string name="crosssigning_cannot_verify_this_session">Selle seadme verifitseerimine ei õnnestunud</string>
+    <string name="ftue_auth_choose_server_sign_in_subtitle">Mis on sinu koduserveri aadress\?</string>
+    <string name="ftue_auth_sign_in_choose_server_header">Kuidas sinu vestlusi hallatakse</string>
+    <string name="updating_your_data">Sinu andmed on uuendamisel…</string>
+    <plurals name="search_space_multiple_parents">
+        <item quantity="one">%1$s ja veel %2$d</item>
+        <item quantity="other">%1$s ja veel %2$d muud</item>
+    </plurals>
+    <string name="search_space_two_parents">%1$s ja %2$s</string>
+    <string name="auth_reset_password_error_unverified">E-posti aadress on kinnitamata, palun vaata oma saabunud e-kirju</string>
 </resources>

@@ -18,7 +18,6 @@ package im.vector.app.features.pin.lockscreen.crypto.migrations
 
 import android.annotation.SuppressLint
 import android.os.Build
-import android.security.keystore.KeyPermanentlyInvalidatedException
 import im.vector.app.features.pin.lockscreen.crypto.KeyStoreCrypto
 import im.vector.app.features.pin.lockscreen.di.BiometricKeyAlias
 import im.vector.app.features.settings.VectorPreferences
@@ -40,12 +39,15 @@ class MissingSystemKeyMigrator @Inject constructor(
      * If user had biometric auth enabled, ensure system key exists, creating one if needed.
      */
     @SuppressLint("NewApi")
-    fun migrate() {
+    fun migrateIfNeeded() {
         if (buildVersionSdkIntProvider.get() >= Build.VERSION_CODES.M && vectorPreferences.useBiometricsToUnlock()) {
-            try {
-                keystoreCryptoFactory.provide(systemKeyAlias, true).ensureKey()
-            } catch (e: KeyPermanentlyInvalidatedException) {
-                Timber.e("Could not automatically create biometric key.", e)
+            val systemKeyStoreCrypto = keystoreCryptoFactory.provide(systemKeyAlias, true)
+            runCatching {
+                systemKeyStoreCrypto.ensureKey()
+            }.onFailure { e ->
+                Timber.e(e, "Could not automatically create biometric key. Biometric authentication will be disabled.")
+                systemKeyStoreCrypto.deleteKey()
+                vectorPreferences.setUseBiometricToUnlock(false)
             }
         }
     }

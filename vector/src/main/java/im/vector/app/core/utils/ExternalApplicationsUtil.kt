@@ -39,7 +39,6 @@ import androidx.browser.customtabs.CustomTabsSession
 import androidx.core.app.ShareCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.getSystemService
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.themes.ThemeUtils
@@ -182,7 +181,7 @@ fun openUri(activity: Activity, uri: String) {
  */
 fun openMedia(activity: Activity, savedMediaPath: String, mimeType: String) {
     val file = File(savedMediaPath)
-    val uri = FileProvider.getUriForFile(activity, BuildConfig.APPLICATION_ID + ".fileProvider", file)
+    val uri = FileProvider.getUriForFile(activity, activity.packageName + ".fileProvider", file)
 
     val intent = Intent(Intent.ACTION_VIEW).apply {
         setDataAndType(uri, mimeType)
@@ -214,7 +213,7 @@ fun openLocation(activity: Activity, latitude: Double, longitude: Double) {
 
 fun shareMedia(context: Context, file: File, mediaMimeType: String?) {
     val mediaUri = try {
-        FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", file)
+        FileProvider.getUriForFile(context, context.packageName + ".fileProvider", file)
     } catch (e: Exception) {
         Timber.e(e, "onMediaAction Selected File cannot be shared")
         return
@@ -376,7 +375,7 @@ private fun addToGallery(savedFile: File, mediaMimeType: String?, context: Conte
 /**
  * Open the play store to the provided application Id, default to this app.
  */
-fun openPlayStore(activity: Activity, appId: String = BuildConfig.APPLICATION_ID) {
+fun openPlayStore(activity: Activity, appId: String) {
     try {
         activity.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appId")))
     } catch (activityNotFoundException: ActivityNotFoundException) {

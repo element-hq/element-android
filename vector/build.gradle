@@ -37,7 +37,7 @@ ext.versionMinor = 4
 // Note: even values are reserved for regular release, odd values for hotfix release.
 // When creating a hotfix, you should decrease the value, since the current value
 // is the value for the next regular release.
-ext.versionPatch = 32
+ext.versionPatch = 34
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -156,19 +156,6 @@ android {
         buildConfigField "String", "GIT_BRANCH_NAME", "\"${gitBranchName()}\""
         buildConfigField "String", "BUILD_NUMBER", "\"${buildNumber}\""
 
-        buildConfigField "im.vector.app.features.VectorFeatures.OnboardingVariant", "ONBOARDING_VARIANT", "im.vector.app.features.VectorFeatures.OnboardingVariant.FTUE_AUTH"
-
-        buildConfigField "im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy", "outboundSessionKeySharingStrategy", "im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy.WhenTyping"
-
-        buildConfigField "Long", "VOICE_MESSAGE_DURATION_LIMIT_MS", "120_000L"
-
-        //  If set, MSC3086 asserted identity messages sent on VoIP calls will cause the call to appear in the room corresponding to the asserted identity.
-        //  This *must* only be set in trusted environments.
-        buildConfigField "Boolean", "handleCallAssertedIdentityEvents", "false"
-
-        buildConfigField "Boolean", "enableLocationSharing", "true"
-        buildConfigField "String", "mapTilerKey", "\"fU3vlMsMn4Jb6dnEIFsx\""
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         // Keep abiFilter for the universalApk
@@ -250,10 +237,6 @@ android {
             resValue "string", "app_name", "Element dbg"
             resValue "color", "launcher_background", "#0DBD8B"
 
-            buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
-            // Set to true if you want to enable strict mode in debug
-            buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
-
             signingConfig signingConfigs.debug
 
             if (project.hasProperty("coverage")) {
@@ -265,10 +248,6 @@ android {
             resValue "string", "app_name", "Element"
             resValue "color", "launcher_background", "#0DBD8B"
 
-            buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
-            buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
-
-            // When updating this block, please also update the same block in the `nightly` buildType below
             postprocessing {
                 removeUnusedCode true
                 removeUnusedResources true
@@ -328,8 +307,6 @@ android {
             isDefault = true
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getGplayVersionSuffix()}"
 
-            resValue "bool", "isGplay", "true"
-            buildConfigField "boolean", "ALLOW_FCM_USE", "true"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"G\""
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"GooglePlay\""
         }
@@ -339,8 +316,6 @@ android {
 
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getFdroidVersionSuffix()}"
 
-            resValue "bool", "isGplay", "false"
-            buildConfigField "boolean", "ALLOW_FCM_USE", "false"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"F\""
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"FDroid\""
         }
@@ -416,7 +391,7 @@ dependencies {
     implementation libs.androidx.biometric
 
     implementation "org.threeten:threetenbp:1.4.0:no-tzdb"
-    implementation "com.gabrielittner.threetenbp:lazythreetenbp:0.10.0"
+    implementation "com.gabrielittner.threetenbp:lazythreetenbp:0.11.0"
 
     implementation libs.squareup.moshi
     kapt libs.squareup.moshiKotlin
@@ -438,7 +413,7 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.6.0'
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.52'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.53'
 
     // FlowBinding
     implementation libs.github.flowBinding
@@ -449,6 +424,9 @@ dependencies {
     kapt libs.airbnb.epoxyProcessor
     implementation libs.airbnb.epoxyPaging
     implementation libs.airbnb.mavericks
+
+    // Snap Helper https://github.com/rubensousa/GravitySnapHelper
+    implementation 'com.github.rubensousa:gravitysnaphelper:2.2.2'
 
     // Nightly
     // API-only library
@@ -522,7 +500,7 @@ dependencies {
     implementation 'com.posthog.android:posthog:1.1.2'
 
     // UnifiedPush
-    implementation 'com.github.UnifiedPush:android-connector:2.0.0'
+    implementation 'com.github.UnifiedPush:android-connector:2.0.1'
     // UnifiedPush gplay flavor only
     gplayImplementation('com.github.UnifiedPush:android-embedded_fcm_distributor:2.1.1') {
         exclude group: 'com.google.firebase', module: 'firebase-core'
@@ -598,7 +576,7 @@ dependencies {
     debugImplementation "com.kgurgul.flipper:flipper-realm-android:2.2.0"
 
     // Activate when you want to check for leaks, from time to time.
-    //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.3'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
 
     androidTestImplementation libs.androidx.testCore
     androidTestImplementation libs.androidx.testRunner
@@ -621,4 +599,5 @@ dependencies {
     androidTestImplementation libs.mockk.mockkAndroid
     androidTestUtil libs.androidx.orchestrator
     debugImplementation libs.androidx.fragmentTesting
+    androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:1.7.10"
 }

@@ -71,4 +71,7 @@
     <dimen name="location_sharing_compass_button_margin_horizontal">8dp</dimen>
     <dimen name="location_sharing_live_duration_choice_margin_horizontal">12dp</dimen>
     <dimen name="location_sharing_live_duration_choice_margin_vertical">22dp</dimen>
+
+    <!-- Material 3 -->
+    <dimen name="collapsing_toolbar_layout_medium_size">112dp</dimen>
 </resources>

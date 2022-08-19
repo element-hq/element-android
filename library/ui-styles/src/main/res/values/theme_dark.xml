@@ -149,6 +149,9 @@
 
         <!-- Location sharing -->
         <item name="vctr_live_location">@color/vctr_live_location_dark</item>
+
+        <!-- Material 3 -->
+        <item name="collapsingToolbarLayoutMediumSize">@dimen/collapsing_toolbar_layout_medium_size</item>
     </style>
 
     <style name="Theme.Vector.Dark" parent="Base.Theme.Vector.Dark" />

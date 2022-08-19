@@ -71,6 +71,11 @@ class DebugFeaturesStateFactory @Inject constructor(
                                 factory = VectorFeatures::allowExternalUnifiedPushDistributors
                         ),
                         createBooleanFeature(
+                                label = "Enable Live Location Sharing",
+                                key = DebugFeatureKeys.liveLocationSharing,
+                                factory = VectorFeatures::isLocationSharingEnabled
+                        ),
+                        createBooleanFeature(
                                 label = "Force usage of OpusEncoder library",
                                 key = DebugFeatureKeys.forceUsageOfOpusEncoder,
                                 factory = VectorFeatures::forceUsageOfOpusEncoder
@@ -84,6 +89,11 @@ class DebugFeaturesStateFactory @Inject constructor(
                                 label = "Enable New App Layout",
                                 key = DebugFeatureKeys.newAppLayoutEnabled,
                                 factory = VectorFeatures::isNewAppLayoutEnabled
+                        ),
+                        createBooleanFeature(
+                                label = "Enable New Device Management",
+                                key = DebugFeatureKeys.newDeviceManagementEnabled,
+                                factory = VectorFeatures::isNewDeviceManagementEnabled
                         ),
                 )
         )

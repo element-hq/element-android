@@ -7,7 +7,7 @@
 
     <!-- Size will be overrode -->
     <ImageView
-        android:id="@+id/locationLiveStartMap"
+        android:id="@+id/liveLocationStartMap"
         android:layout_width="300dp"
         android:layout_height="200dp"
         android:contentDescription="@string/a11y_static_map_image"
@@ -16,18 +16,18 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/locationLiveStartBanner"
+        android:id="@+id/liveLocationStartBanner"
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:alpha="0.75"
         android:src="?android:colorBackground"
-        app:layout_constraintBottom_toBottomOf="@id/locationLiveStartMap"
-        app:layout_constraintEnd_toEndOf="@id/locationLiveStartMap"
-        app:layout_constraintStart_toStartOf="@id/locationLiveStartMap"
+        app:layout_constraintBottom_toBottomOf="@id/liveLocationStartMap"
+        app:layout_constraintEnd_toEndOf="@id/liveLocationStartMap"
+        app:layout_constraintStart_toStartOf="@id/liveLocationStartMap"
         tools:ignore="ContentDescription" />
 
     <ImageView
-        android:id="@+id/locationLiveStartIcon"
+        android:id="@+id/liveLocationStartIcon"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginVertical="8dp"
@@ -35,15 +35,15 @@
         android:background="@drawable/circle"
         android:backgroundTint="?vctr_content_quaternary"
         android:padding="3dp"
-        app:layout_constraintBottom_toBottomOf="@id/locationLiveStartBanner"
-        app:layout_constraintStart_toStartOf="@id/locationLiveStartBanner"
-        app:layout_constraintTop_toTopOf="@id/locationLiveStartBanner"
-        app:srcCompat="@drawable/ic_attachment_location_live_white"
+        app:layout_constraintBottom_toBottomOf="@id/liveLocationStartBanner"
+        app:layout_constraintStart_toStartOf="@id/liveLocationStartBanner"
+        app:layout_constraintTop_toTopOf="@id/liveLocationStartBanner"
+        app:srcCompat="@drawable/ic_attachment_live_location_white"
         app:tint="?android:colorBackground"
         tools:ignore="ContentDescription" />
 
     <TextView
-        android:id="@+id/locationLiveStartTitle"
+        android:id="@+id/liveLocationStartTitle"
         style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -52,19 +52,19 @@
         android:ellipsize="end"
         android:text="@string/location_share_live_started"
         android:textColor="?vctr_content_tertiary"
-        app:layout_constraintBottom_toBottomOf="@id/locationLiveStartBanner"
-        app:layout_constraintEnd_toEndOf="@id/locationLiveStartBanner"
-        app:layout_constraintStart_toEndOf="@id/locationLiveStartIcon"
-        app:layout_constraintTop_toTopOf="@id/locationLiveStartBanner" />
+        app:layout_constraintBottom_toBottomOf="@id/liveLocationStartBanner"
+        app:layout_constraintEnd_toEndOf="@id/liveLocationStartBanner"
+        app:layout_constraintStart_toEndOf="@id/liveLocationStartIcon"
+        app:layout_constraintTop_toTopOf="@id/liveLocationStartBanner" />
 
     <ProgressBar
-        android:id="@+id/locationLiveStartLoader"
+        android:id="@+id/liveLocationStartLoader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:indeterminateTint="?vctr_content_quaternary"
-        app:layout_constraintBottom_toTopOf="@id/locationLiveStartBanner"
-        app:layout_constraintEnd_toEndOf="@id/locationLiveStartMap"
-        app:layout_constraintStart_toStartOf="@id/locationLiveStartMap"
-        app:layout_constraintTop_toTopOf="@id/locationLiveStartMap" />
+        app:layout_constraintBottom_toTopOf="@id/liveLocationStartBanner"
+        app:layout_constraintEnd_toEndOf="@id/liveLocationStartMap"
+        app:layout_constraintStart_toStartOf="@id/liveLocationStartMap"
+        app:layout_constraintTop_toTopOf="@id/liveLocationStartMap" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

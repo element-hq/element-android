@@ -26,6 +26,7 @@ import androidx.biometric.BiometricPrompt
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.securestorage.SecretStoringUtils
 import org.matrix.android.sdk.api.util.BuildVersionSdkIntProvider
 import java.security.Key
@@ -112,12 +113,8 @@ class KeyStoreCrypto @AssistedInject constructor(
     fun hasValidKey(): Boolean {
         val keyExists = hasKey()
         return if (buildVersionSdkIntProvider.get() >= Build.VERSION_CODES.M && keyExists) {
-            try {
-                ensureKey()
-                true
-            } catch (e: KeyPermanentlyInvalidatedException) {
-                false
-            }
+            val initializedKey = tryOrNull("Error validating lockscreen system key.") { ensureKey() }
+            initializedKey != null
         } else {
             keyExists
         }

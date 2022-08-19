@@ -8,9 +8,12 @@ const {danger, warn} = require('danger')
 // warn(JSON.stringify(danger))
 
 const pr = danger.github.pr
+const github = danger.github
+// User who has created the PR.
+const user = pr.user.login
 const modified = danger.git.modified_files
 const created = danger.git.created_files
-let editedFiles = [...modified, ...created]
+const editedFiles = [...modified, ...created]
 
 // Check that the PR has a description
 if (pr.body.length == 0) {
@@ -19,27 +22,48 @@ if (pr.body.length == 0) {
 
 // Warn when there is a big PR
 if (editedFiles.length > 50) {
-    warn("This pull request seems relatively large. Please consider splitting it into multiple smaller ones.")
+    message("This pull request seems relatively large. Please consider splitting it into multiple smaller ones.")
 }
 
 // Request a changelog for each PR
-let changelogFiles = editedFiles.filter(file => file.startsWith("changelog.d/"))
+const changelogAllowList = [
+    "dependabot[bot]",
+]
 
-if (changelogFiles.length == 0) {
-    warn("Please add a changelog. See instructions [here](https://github.com/vector-im/element-android/blob/develop/CONTRIBUTING.md#changelog)")
-} else {
-    const validTowncrierExtensions = [
-        "bugfix",
-        "doc",
-        "feature",
-        "misc",
-        "sdk",
-        "wip",
-    ]
-    if (!changelogFiles.every(file => validTowncrierExtensions.includes(file.split(".").pop()))) {
-        fail("Invalid extension for changelog. See instructions [here](https://github.com/vector-im/element-android/blob/develop/CONTRIBUTING.md#changelog)")
+const requiresChangelog = !changelogAllowList.includes(user)
+
+if (requiresChangelog) {
+    const changelogFiles = editedFiles.filter(file => file.startsWith("changelog.d/"))
+
+    if (changelogFiles.length == 0) {
+        warn("Please add a changelog. See instructions [here](https://github.com/vector-im/element-android/blob/develop/CONTRIBUTING.md#changelog)")
+    } else {
+        const validTowncrierExtensions = [
+            "bugfix",
+            "doc",
+            "feature",
+            "misc",
+            "sdk",
+            "wip",
+        ]
+        if (!changelogFiles.every(file => validTowncrierExtensions.includes(file.split(".").pop()))) {
+            fail("Invalid extension for changelog. See instructions [here](https://github.com/vector-im/element-android/blob/develop/CONTRIBUTING.md#changelog)")
+        }
     }
 }
+
+// check that frozen classes have not been modified
+const frozenClasses = [
+    "OlmInboundGroupSessionWrapper.kt",
+    "OlmInboundGroupSessionWrapper2.kt",
+]
+
+frozenClasses.forEach(frozen => {
+    if (editedFiles.some(file => file.endsWith(frozen))) {
+        fail("Frozen class `" + frozen + "` has been modified. Please do not modify frozen class.")
+    }
+  }
+)
 
 // Check for a sign-off
 const signOff = "Signed-off-by:"
@@ -50,6 +74,7 @@ const allowList = [
     "BillCarsonFr",
     "bmarty",
     "Claire1817",
+    "dependabot[bot]",
     "ericdecanini",
     "fedrunov",
     "Florian14",
@@ -65,18 +90,18 @@ const allowList = [
     "yostyle",
 ]
 
-let requiresSignOff = !allowList.includes(pr.user.login)
+const requiresSignOff = !allowList.includes(user)
 
 if (requiresSignOff) {
-    let hasPRBodySignOff = pr.body.includes(signOff)
-    let hasCommitSignOff = danger.git.commits.every(commit => commit.message.includes(signOff))
+    const hasPRBodySignOff = pr.body.includes(signOff)
+    const hasCommitSignOff = danger.git.commits.every(commit => commit.message.includes(signOff))
     if (!hasPRBodySignOff && !hasCommitSignOff) {
-        fail("Please add a sign-off to either the PR description or to the commits themselves.")
+        fail("Please add a sign-off to either the PR description or to the commits themselves. See instructions [here](https://matrix-org.github.io/synapse/latest/development/contributing_guide.html#sign-off).")
     }
 }
 
 // Check for screenshots on view changes
-let hasChangedViews = editedFiles.filter(file => file.includes("/layout")).length > 0
+const hasChangedViews = editedFiles.filter(file => file.includes("/layout")).length > 0
 if (hasChangedViews) {
     if (!pr.body.includes("user-images")) {
         warn("You seem to have made changes to views. Please consider adding screenshots.")
@@ -84,12 +109,12 @@ if (hasChangedViews) {
 }
 
 // Check for pngs on resources
-let hasPngs = editedFiles.filter(file => file.toLowerCase().endsWith(".png")).length > 0
+const hasPngs = editedFiles.filter(file => file.toLowerCase().endsWith(".png")).length > 0
 if (hasPngs) {
     warn("You seem to have made changes to some images. Please consider using an vector drawable.")
 }
 
 // Check for reviewers
-if (pr.requested_reviewers.length == 0 && !pr.draft) {
-    fail("Please add a reviewer to your PR.")
+if (github.requested_reviewers.users.length == 0 && !pr.draft) {
+    warn("Please add a reviewer to your PR.")
 }

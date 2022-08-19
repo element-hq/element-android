@@ -25,4 +25,5 @@ sealed class LocationSharingAction : VectorViewModelAction {
     object ZoomToUserLocation : LocationSharingAction()
     object LiveLocationSharingRequested : LocationSharingAction()
     data class StartLiveLocationSharing(val durationMillis: Long) : LocationSharingAction()
+    object ShowMapLoadingError : LocationSharingAction()
 }

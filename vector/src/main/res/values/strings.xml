@@ -136,6 +136,8 @@
     <string name="matrix_error">Matrix error</string>
 
     <!-- Home Screen -->
+    <string name="all_chats">All Chats</string>
+    <string name="change_space">Change Space</string>
 
     <!-- Last seen time -->
 
@@ -522,7 +524,9 @@
     <string name="auth_msisdn_already_defined">This phone number is already defined.</string>
     <string name="auth_forgot_password">Forgot password?</string>
     <string name="auth_recaptcha_message">This homeserver would like to make sure you are not a robot</string>
-    <string name="auth_reset_password_missing_email">The email address linked to your account must be entered.</string>
+
+    <!-- TODO delete  -->
+    <string name="auth_reset_password_missing_email" tools:ignore="UnusedResources">The email address linked to your account must be entered.</string>
     <string name="auth_reset_password_error_unauthorized">Failed to verify email address: make sure you clicked the link in the email</string>
     <string name="auth_reset_password_error_unverified">Email not verified, check your inbox</string>
     <string name="auth_accept_policies">"Please review and accept the policies of this homeserver:"</string>
@@ -1609,6 +1613,11 @@
     <!-- Note to translators: for RTL languages, the + will be at the bottom left. Please translate "bottom left" instead of "bottom right". Thanks! -->
     <string name="room_list_rooms_empty_body">Your rooms will be displayed here. Tap the + at the bottom right to find existing ones or start some of your own.</string>
 
+    <string name="room_list_filter_all">All</string>
+    <string name="room_list_filter_unreads">Unreads</string>
+    <string name="room_list_filter_favourites">Favourites</string>
+    <string name="room_list_filter_people">People</string>
+
     <string name="title_activity_emoji_reaction_picker">Reactions</string>
     <string name="message_add_reaction">Add Reaction</string>
     <string name="message_view_reaction">View Reactions</string>
@@ -1810,7 +1819,9 @@
     <string name="a11y_create_menu_open">Open the create room menu</string>
     <string name="a11y_create_menu_close">Close the create room menu…</string>
     <string name="a11y_create_direct_message">Create a new direct conversation</string>
-    <string name="a11y_create_room">Create a new room</string>
+    <string name="a11y_create_message">Create a new conversation or room</string>
+    <string name="a11y_create_room">Create a new room</string> <!-- TODO TO BE REMOVED -->
+    <string name="a11y_open_spaces">Open spaces list</string>
     <string name="a11y_close_keys_backup_banner">Close keys backup banner</string>
     <string name="a11y_jump_to_bottom">Jump to bottom</string>
 
@@ -2333,6 +2344,9 @@
     <string name="settings_active_sessions_show_all">Show All Sessions</string>
     <string name="settings_active_sessions_manage">Manage Sessions</string>
     <string name="settings_active_sessions_signout_device">Sign out of this session</string>
+    <string name="settings_sessions_list">Sessions</string>
+    <string name="settings_sessions_other_title">Other sessions</string>
+    <string name="settings_sessions_other_description">For best security, verify your sessions and sign out from any session that you don’t recognize or use anymore.</string>
 
     <string name="settings_server_name">Server name</string>
     <string name="settings_server_version">Server version</string>
@@ -2808,6 +2822,7 @@
 
     <string name="a11y_screenshot">Screenshot</string>
     <string name="a11y_open_widget">Open widgets</string>
+    <string name="a11y_open_settings">Open settings</string>
     <string name="a11y_import_key_from_file">Import key from file</string>
     <string name="a11y_image">Image</string>
     <string name="a11y_change_avatar">Change avatar</string>
@@ -3112,6 +3127,7 @@
     <string name="location_not_available_dialog_content">${app_name} could not access your location. Please try again later.</string>
     <string name="location_share_external">Open with</string>
     <string name="location_timeline_failed_to_load_map">Failed to load map</string>
+    <string name="location_share_loading_map_error">Unable to load map\nThis home server may not be configured to display maps.</string>
     <string name="location_share_live_enabled">Live location enabled</string>
     <string name="location_share_live_started">Loading live location…</string>
     <string name="location_share_live_ended">Live location ended</string>
@@ -3190,4 +3206,7 @@
     <!-- Element Call Widget -->
     <string name="labs_enable_element_call_permission_shortcuts">Enable Element Call permission shortcuts</string>
     <string name="labs_enable_element_call_permission_shortcuts_summary">Auto-approve Element Call widgets and grant camera / mic access</string>
+
+    <!-- Device Manager -->
+    <string name="device_manager_settings_active_sessions_show_all">Show All Sessions (V2, WIP)</string>
 </resources>

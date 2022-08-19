@@ -67,7 +67,7 @@ class ShowUserCodeFragment @Inject constructor(
         sharedViewModel.observeViewEvents {
             if (it is UserCodeShareViewEvents.SharePlainText) {
                 startSharePlainTextIntent(
-                        fragment = this,
+                        context = requireContext(),
                         activityResultLauncher = null,
                         chooserTitle = it.title,
                         text = it.text,

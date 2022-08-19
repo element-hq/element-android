@@ -19,9 +19,9 @@ package im.vector.app.features.settings.troubleshoot
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
 import im.vector.app.R
+import im.vector.app.core.pushers.FcmHelper
 import im.vector.app.core.pushers.UnifiedPushHelper
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.push.fcm.FcmHelper
 import javax.inject.Inject
 
 class TestAvailableUnifiedPushDistributors @Inject constructor(

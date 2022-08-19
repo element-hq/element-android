@@ -1,3 +1,47 @@
+Changes in Element v1.4.32 (2022-08-10)
+=======================================
+
+Features ✨
+----------
+ - [Location Share] Render fallback UI when map fails to load ([#6711](https://github.com/vector-im/element-android/issues/6711))
+
+Bugfixes 🐛
+----------
+ - Fix message content sometimes appearing in the log ([#6706](https://github.com/vector-im/element-android/issues/6706))
+ - Disable 'Enable biometrics' option if there are not biometric authenticators enrolled. ([#6713](https://github.com/vector-im/element-android/issues/6713))
+ - Fix crash when biometric key is used when coming back to foreground and KeyStore reports that the device is still locked. ([#6768](https://github.com/vector-im/element-android/issues/6768))
+ - Catch all exceptions on lockscreen system key migrations. ([#6769](https://github.com/vector-im/element-android/issues/6769))
+ - Fixes crash when entering non ascii characters during account creation ([#6735](https://github.com/vector-im/element-android/issues/6735))
+ - Fixes onboarding login/account creation errors showing after navigation ([#6737](https://github.com/vector-im/element-android/issues/6737))
+ - [Location sharing] Invisible text on map symbol ([#6687](https://github.com/vector-im/element-android/issues/6687))
+
+In development 🚧
+----------------
+  - Adds new app layout toolbar ([#6655](https://github.com/vector-im/element-android/issues/6655))
+
+Other changes
+-------------
+ - [Modularization] Provides abstraction to avoid direct usages of BuildConfig ([#6406](https://github.com/vector-im/element-android/issues/6406))
+ - Refactors SpaceStateHandler (previously AppStateHandler) and adds unit tests for it ([#6598](https://github.com/vector-im/element-android/issues/6598))
+ - Setup Danger to the project ([#6637](https://github.com/vector-im/element-android/issues/6637))
+ - [Location Share] Open maximized map on tapping on live sharing notification ([#6642](https://github.com/vector-im/element-android/issues/6642))
+ - [Location sharing] Align naming of components for live location feature ([#6647](https://github.com/vector-im/element-android/issues/6647))
+ - [Location share] Update minimum sending period to 5 seconds for a live ([#6653](https://github.com/vector-im/element-android/issues/6653))
+ - [Location sharing] - Fix the memory leaks ([#6674](https://github.com/vector-im/element-android/issues/6674))
+ - [Timeline] Memory leak in audio message playback tracker ([#6678](https://github.com/vector-im/element-android/issues/6678))
+ - [FTUE] Memory leak on FtueAuthSplashCarouselFragment ([#6680](https://github.com/vector-im/element-android/issues/6680))
+ - Link directly to DCO docs from danger message. ([#6739](https://github.com/vector-im/element-android/issues/6739))
+
+
+Changes in Element v1.4.31 (2022-08-01)
+=======================================
+
+Bugfixes 🐛
+----------
+ - Fixes crash when returning to the app after backgrounding ([#6709](https://github.com/vector-im/element-android/issues/6709))
+ - Fix message content sometimes appearing in the log ([#6706](https://github.com/vector-im/element-android/issues/6706))
+
+
 Changes in Element v1.4.30 (2022-07-29)
 =======================================
 

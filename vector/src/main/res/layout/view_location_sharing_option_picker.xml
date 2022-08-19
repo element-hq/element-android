@@ -65,7 +65,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/locationSharingOptionUserCurrent"
-        app:locShareIcon="@drawable/ic_attachment_location_live_white"
+        app:locShareIcon="@drawable/ic_attachment_live_location_white"
         app:locShareIconBackground="@drawable/circle"
         app:locShareIconBackgroundTint="?vctr_live_location"
         app:locShareIconDescription="@string/a11y_location_share_option_user_live_icon"
