@@ -104,7 +104,7 @@
     <string name="notice_room_name_changed_by_you">你把房间名称改为：%1$s</string>
     <string name="notice_placed_video_call_by_you">你发起了一次视频通话。</string>
     <string name="notice_placed_voice_call_by_you">你发起了一次语音通话。</string>
-    <string name="notice_call_candidates">%s 发送了数据以建立通话。</string>
+    <string name="notice_call_candidates">%s 发送了数据以设置并建立通话。</string>
     <string name="notice_call_candidates_by_you">你发送了数据以建立通话。</string>
     <string name="notice_answered_call_by_you">你接听了通话。</string>
     <string name="notice_ended_call_by_you">你结束了通话。</string>
