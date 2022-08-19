@@ -23,10 +23,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
+import com.airbnb.mvrx.fragmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
+import im.vector.app.core.dialogs.ManuallyVerifyDialog
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSettingsDevicesBinding
+import im.vector.app.features.crypto.recover.SetupMode
+import im.vector.app.features.crypto.verification.VerificationBottomSheet
+import im.vector.app.features.settings.devices.DevicesAction
+import im.vector.app.features.settings.devices.DevicesViewEvents
+import im.vector.app.features.settings.devices.DevicesViewModel
 import javax.inject.Inject
 
 /**
@@ -34,6 +42,8 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class VectorSettingsDevicesFragment @Inject constructor() : VectorBaseFragment<FragmentSettingsDevicesBinding>() {
+
+    private val viewModel: DevicesViewModel by fragmentViewModel()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSettingsDevicesBinding {
         return FragmentSettingsDevicesBinding.inflate(inflater, container, false)
@@ -52,7 +62,45 @@ class VectorSettingsDevicesFragment @Inject constructor() : VectorBaseFragment<F
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         initLearnMoreButtons()
+        initWaitingView()
+        observerViewEvents()
+    }
+
+    private fun observerViewEvents() {
+        viewModel.observeViewEvents {
+            when (it) {
+                is DevicesViewEvents.Loading -> showLoading(it.message)
+                is DevicesViewEvents.Failure -> showFailure(it.throwable)
+                is DevicesViewEvents.RequestReAuth -> Unit // TODO. Next PR
+                is DevicesViewEvents.PromptRenameDevice -> Unit // TODO. Next PR
+                is DevicesViewEvents.ShowVerifyDevice -> {
+                    VerificationBottomSheet.withArgs(
+                            roomId = null,
+                            otherUserId = it.userId,
+                            transactionId = it.transactionId
+                    ).show(childFragmentManager, "REQPOP")
+                }
+                is DevicesViewEvents.SelfVerification -> {
+                    VerificationBottomSheet.forSelfVerification(it.session)
+                            .show(childFragmentManager, "REQPOP")
+                }
+                is DevicesViewEvents.ShowManuallyVerify -> {
+                    ManuallyVerifyDialog.show(requireActivity(), it.cryptoDeviceInfo) {
+                        viewModel.handle(DevicesAction.MarkAsManuallyVerified(it.cryptoDeviceInfo))
+                    }
+                }
+                is DevicesViewEvents.PromptResetSecrets -> {
+                    navigator.open4SSetup(requireContext(), SetupMode.PASSPHRASE_AND_NEEDED_SECRETS_RESET)
+                }
+            }
+        }
+    }
+
+    private fun initWaitingView() {
+        views.waitingView.waitingStatusText.setText(R.string.please_wait)
+        views.waitingView.waitingStatusText.isVisible = true
     }
 
     override fun onDestroyView() {
