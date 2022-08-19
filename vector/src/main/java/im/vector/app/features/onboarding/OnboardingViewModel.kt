@@ -61,6 +61,7 @@ import org.matrix.android.sdk.api.auth.login.LoginWizard
 import org.matrix.android.sdk.api.auth.registration.RegistrationAvailability
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.failure.isHomeserverConnectionError
 import org.matrix.android.sdk.api.failure.isHomeserverUnavailable
 import org.matrix.android.sdk.api.failure.isUnrecognisedCertificate
 import org.matrix.android.sdk.api.network.ssl.Fingerprint
@@ -702,7 +703,14 @@ class OnboardingViewModel @AssistedInject constructor(
     private fun onAuthenticationStartError(error: Throwable, trigger: OnboardingAction.HomeServerChange) {
         when {
             error.isHomeserverUnavailable() && applicationContext.inferNoConnectivity(sdkIntProvider) -> _viewEvents.post(OnboardingViewEvents.Failure(error))
-            isUnableToSelectServer(error, trigger) -> handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.EditServerSelection))
+            isUnableToSelectServer(error, trigger) -> {
+                withState { state ->
+                    when {
+                        canEditServerSelectionError(state) -> handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.EditServerSelection))
+                        else -> _viewEvents.post(OnboardingViewEvents.Failure(error))
+                    }
+                }
+            }
             error.isUnrecognisedCertificate() -> {
                 _viewEvents.post(OnboardingViewEvents.UnrecognisedCertificateFailure(trigger, error as Failure.UnrecognizedCertificateFailure))
             }
@@ -710,8 +718,12 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
+    private fun canEditServerSelectionError(state: OnboardingViewState) =
+            (state.onboardingFlow == OnboardingFlow.SignIn && vectorFeatures.isOnboardingCombinedLoginEnabled()) ||
+                    (state.onboardingFlow == OnboardingFlow.SignUp && vectorFeatures.isOnboardingCombinedRegisterEnabled())
+
     private fun isUnableToSelectServer(error: Throwable, trigger: OnboardingAction.HomeServerChange) =
-            trigger is OnboardingAction.HomeServerChange.SelectHomeServer && error.isHomeserverUnavailable()
+            trigger is OnboardingAction.HomeServerChange.SelectHomeServer && error.isHomeserverConnectionError()
 
     private suspend fun onAuthenticationStartedSuccess(
             trigger: OnboardingAction.HomeServerChange,
