@@ -412,6 +412,63 @@ class OnboardingViewModelTest {
     }
 
     @Test
+    fun `given in sign in flow, when selecting homeserver fails with network error, then emits Failure`() = runTest {
+        viewModelWith(initialState.copy(onboardingFlow = OnboardingFlow.SignIn))
+        fakeVectorFeatures.givenCombinedLoginEnabled()
+        givenHomeserverSelectionFailsWith(AN_ERROR)
+        val test = viewModel.test()
+
+        viewModel.handle(OnboardingAction.HomeServerChange.SelectHomeServer(A_HOMESERVER_URL))
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false) }
+                )
+                .assertEvents(OnboardingViewEvents.Failure(AN_ERROR))
+                .finish()
+    }
+
+    @Test
+    fun `given in sign in flow, when selecting homeserver fails with network error, then emits EditServerSelection`() = runTest {
+        viewModelWith(initialState.copy(onboardingFlow = OnboardingFlow.SignIn))
+        fakeVectorFeatures.givenCombinedLoginEnabled()
+        givenHomeserverSelectionFailsWithNetworkError()
+        val test = viewModel.test()
+
+        viewModel.handle(OnboardingAction.HomeServerChange.SelectHomeServer(A_HOMESERVER_URL))
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false) }
+                )
+                .assertEvents(OnboardingViewEvents.EditServerSelection)
+                .finish()
+    }
+
+    @Test
+    fun `given in sign up flow, when selecting homeserver fails with network error, then emits EditServerSelection`() = runTest {
+        viewModelWith(initialState.copy(onboardingFlow = OnboardingFlow.SignUp))
+        fakeVectorFeatures.givenCombinedRegisterEnabled()
+        givenHomeserverSelectionFailsWithNetworkError()
+        val test = viewModel.test()
+
+        viewModel.handle(OnboardingAction.HomeServerChange.SelectHomeServer(A_HOMESERVER_URL))
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false) }
+                )
+                .assertEvents(OnboardingViewEvents.EditServerSelection)
+                .finish()
+    }
+
+    @Test
     fun `given in the sign up flow, when editing homeserver, then updates selected homeserver state and emits edited event`() = runTest {
         viewModelWith(initialState.copy(onboardingFlow = OnboardingFlow.SignUp))
         givenCanSuccessfullyUpdateHomeserver(A_HOMESERVER_URL, SELECTED_HOMESERVER_STATE)
@@ -1121,6 +1178,18 @@ class OnboardingViewModelTest {
     private fun initialRegistrationState(homeServerUrl: String) = initialState.copy(
             onboardingFlow = OnboardingFlow.SignUp, selectedHomeserver = SelectedHomeserverState(userFacingUrl = homeServerUrl)
     )
+
+    private fun givenHomeserverSelectionFailsWithNetworkError() {
+        fakeContext.givenHasConnection()
+        fakeHomeServerConnectionConfigFactory.givenConfigFor(A_HOMESERVER_URL, fingerprint = null, A_HOMESERVER_CONFIG)
+        fakeStartAuthenticationFlowUseCase.givenHomeserverUnavailable(A_HOMESERVER_CONFIG)
+    }
+
+    private fun givenHomeserverSelectionFailsWith(cause: Throwable) {
+        fakeContext.givenHasConnection()
+        fakeHomeServerConnectionConfigFactory.givenConfigFor(A_HOMESERVER_URL, fingerprint = null, A_HOMESERVER_CONFIG)
+        fakeStartAuthenticationFlowUseCase.givenErrors(A_HOMESERVER_CONFIG, cause)
+    }
 }
 
 private fun HomeServerCapabilities.toPersonalisationState(displayName: String? = null) = PersonalizationState(
