@@ -61,12 +61,12 @@ class VectorSettingsDevicesFragment @Inject constructor() : VectorBaseFragment<F
     }
 
     private fun initLearnMoreButtons() {
-        views.devicesListHeaderSectionOther.onLearnMoreClickListener = {
+        views.deviceListHeaderSectionOther.onLearnMoreClickListener = {
             Toast.makeText(context, "Learn more other", Toast.LENGTH_LONG).show()
         }
     }
 
     private fun cleanUpLearnMoreButtonsListeners() {
-        views.devicesListHeaderSectionOther.onLearnMoreClickListener = null
+        views.deviceListHeaderSectionOther.onLearnMoreClickListener = null
     }
 }

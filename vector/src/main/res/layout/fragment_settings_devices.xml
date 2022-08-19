@@ -5,13 +5,33 @@
     android:layout_height="match_parent">
 
     <im.vector.app.features.settings.devices.v2.list.DevicesListHeaderView
-        android:id="@+id/devices_list_header_section_other"
+        android:id="@+id/deviceListHeaderSectionCurrent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:devicesListHeaderDescription=""
+        app:devicesListHeaderTitle="@string/device_manager_header_section_current_session"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <im.vector.app.features.settings.devices.v2.list.CurrentSessionView
+        android:id="@+id/deviceListCurrentSession"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginVertical="24dp"
+        android:layout_marginHorizontal="16dp"
+        app:layout_constraintTop_toBottomOf="@id/deviceListHeaderSectionCurrent" />
+
+    <im.vector.app.features.settings.devices.v2.list.DevicesListHeaderView
+        android:id="@+id/deviceListHeaderSectionOther"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:devicesListHeaderDescription="@string/settings_sessions_other_description"
         app:devicesListHeaderTitle="@string/settings_sessions_other_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/deviceListCurrentSession" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
