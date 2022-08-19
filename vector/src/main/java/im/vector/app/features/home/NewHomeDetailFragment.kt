@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -41,6 +42,7 @@ import im.vector.app.core.ui.views.KeysBackupBanner
 import im.vector.app.databinding.FragmentNewHomeDetailBinding
 import im.vector.app.features.call.SharedKnownCallsViewModel
 import im.vector.app.features.call.VectorCallActivity
+import im.vector.app.features.call.dialpad.PstnDialActivity
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.home.room.list.home.HomeRoomListFragment
 import im.vector.app.features.popup.PopupAlertManager
@@ -96,6 +98,10 @@ class NewHomeDetailFragment @Inject constructor(
                 viewModel.handle(HomeDetailAction.MarkAllRoomsRead)
                 true
             }
+            R.id.menu_home_dialpad -> {
+                startActivity(Intent(requireContext(), PstnDialActivity::class.java))
+                true
+            }
             else -> false
         }
     }
@@ -104,6 +110,7 @@ class NewHomeDetailFragment @Inject constructor(
         withState(viewModel) { state ->
             val isRoomList = state.currentTab is HomeTab.RoomList
             menu.findItem(R.id.menu_home_mark_all_as_read).isVisible = isRoomList && hasUnreadRooms
+            menu.findItem(R.id.menu_home_dialpad).isVisible = state.showDialPadTab
         }
     }
 

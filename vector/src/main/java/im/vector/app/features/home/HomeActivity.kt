@@ -54,7 +54,6 @@ import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.analytics.accountdata.AnalyticsAccountDataViewModel
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.analytics.plan.ViewRoom
-import im.vector.app.features.call.dialpad.PstnDialActivity
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.disclaimer.showDisclaimerDialog
 import im.vector.app.features.matrixto.MatrixToBottomSheet
@@ -599,10 +598,6 @@ class HomeActivity :
             }
             R.id.menu_home_invite_friends -> {
                 launchInviteFriends()
-                true
-            }
-            R.id.menu_home_diapad -> {
-                startActivity(Intent(this, PstnDialActivity::class.java))
                 true
             }
             else -> false
