@@ -412,27 +412,6 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `given unavailable deeplink, when selecting homeserver, then emits failure with default homeserver as retry action`() = runTest {
-        fakeContext.givenHasConnection()
-        fakeHomeServerConnectionConfigFactory.givenConfigFor(A_HOMESERVER_URL, fingerprint = null, A_HOMESERVER_CONFIG)
-        fakeStartAuthenticationFlowUseCase.givenHomeserverUnavailable(A_HOMESERVER_CONFIG)
-        val test = viewModel.test()
-
-        viewModel.handle(OnboardingAction.InitWith(LoginConfig(A_HOMESERVER_URL, null)))
-        viewModel.handle(OnboardingAction.HomeServerChange.SelectHomeServer(A_HOMESERVER_URL))
-
-        val expectedRetryAction = OnboardingAction.HomeServerChange.SelectHomeServer("${R.string.matrix_org_server_url.toTestString()}/")
-        test
-                .assertStatesChanges(
-                        initialState,
-                        { copy(isLoading = true) },
-                        { copy(isLoading = false) }
-                )
-                .assertEvents(OnboardingViewEvents.DeeplinkAuthenticationFailure(expectedRetryAction))
-                .finish()
-    }
-
-    @Test
     fun `given in the sign up flow, when editing homeserver, then updates selected homeserver state and emits edited event`() = runTest {
         viewModelWith(initialState.copy(onboardingFlow = OnboardingFlow.SignUp))
         givenCanSuccessfullyUpdateHomeserver(A_HOMESERVER_URL, SELECTED_HOMESERVER_STATE)

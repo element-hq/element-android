@@ -238,7 +238,6 @@ class FtueAuthVariant(
                 ensureEditServerBackstack()
             }
             OnboardingViewEvents.OpenCombinedLogin -> onStartCombinedLogin()
-            is OnboardingViewEvents.DeeplinkAuthenticationFailure -> onDeeplinkedHomeserverUnavailable(viewEvents)
             OnboardingViewEvents.DisplayRegistrationFallback -> displayFallbackWebDialog()
             is OnboardingViewEvents.DisplayRegistrationStage -> doStage(viewEvents.stage)
             OnboardingViewEvents.DisplayStartRegistration -> when {
@@ -265,22 +264,6 @@ class FtueAuthVariant(
                 }
             }
         }
-    }
-
-    private fun onDeeplinkedHomeserverUnavailable(viewEvents: OnboardingViewEvents.DeeplinkAuthenticationFailure) {
-        showHomeserverUnavailableDialog(onboardingViewModel.getInitialHomeServerUrl().orEmpty()) {
-            onboardingViewModel.handle(OnboardingAction.ResetDeeplinkConfig)
-            onboardingViewModel.handle(viewEvents.retryAction)
-        }
-    }
-
-    private fun showHomeserverUnavailableDialog(url: String, action: () -> Unit) {
-        MaterialAlertDialogBuilder(activity)
-                .setTitle(R.string.dialog_title_error)
-                .setMessage(activity.getString(R.string.login_error_homeserver_from_url_not_found, url))
-                .setPositiveButton(R.string.login_error_homeserver_from_url_not_found_enter_manual) { _, _ -> action() }
-                .setNegativeButton(R.string.action_cancel, null)
-                .show()
     }
 
     private fun onStartCombinedLogin() {

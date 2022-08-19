@@ -703,11 +703,6 @@ class OnboardingViewModel @AssistedInject constructor(
         when {
             error.isHomeserverUnavailable() && applicationContext.inferNoConnectivity(sdkIntProvider) -> _viewEvents.post(OnboardingViewEvents.Failure(error))
             isUnableToSelectServer(error, trigger) -> handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.EditServerSelection))
-            deeplinkUrlIsUnavailable(error, trigger) -> _viewEvents.post(
-                    OnboardingViewEvents.DeeplinkAuthenticationFailure(
-                            retryAction = (trigger as OnboardingAction.HomeServerChange.SelectHomeServer).resetToDefaultUrl()
-                    )
-            )
             error.isUnrecognisedCertificate() -> {
                 _viewEvents.post(OnboardingViewEvents.UnrecognisedCertificateFailure(trigger, error as Failure.UnrecognizedCertificateFailure))
             }
@@ -717,12 +712,6 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private fun isUnableToSelectServer(error: Throwable, trigger: OnboardingAction.HomeServerChange) =
             trigger is OnboardingAction.HomeServerChange.SelectHomeServer && error.isHomeserverUnavailable()
-
-    private fun deeplinkUrlIsUnavailable(error: Throwable, trigger: OnboardingAction.HomeServerChange) = error.isHomeserverUnavailable() &&
-            loginConfig != null &&
-            trigger is OnboardingAction.HomeServerChange.SelectHomeServer
-
-    private fun OnboardingAction.HomeServerChange.SelectHomeServer.resetToDefaultUrl() = copy(homeServerUrl = defaultHomeserverUrl)
 
     private suspend fun onAuthenticationStartedSuccess(
             trigger: OnboardingAction.HomeServerChange,
