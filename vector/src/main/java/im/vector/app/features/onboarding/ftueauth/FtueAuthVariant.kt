@@ -46,6 +46,7 @@ import im.vector.app.features.login.SignMode
 import im.vector.app.features.login.TextInputFormFragmentMode
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingActivity
+import im.vector.app.features.onboarding.OnboardingFlow
 import im.vector.app.features.onboarding.OnboardingVariant
 import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewModel
@@ -213,7 +214,7 @@ class FtueAuthVariant(
                         option = commonOption
                 )
             }
-            OnboardingViewEvents.OpenCombinedRegister -> openStartCombinedRegister()
+            OnboardingViewEvents.OpenCombinedRegister -> onStartCombinedRegister()
             is OnboardingViewEvents.OnAccountCreated -> onAccountCreated()
             OnboardingViewEvents.OnAccountSignedIn -> onAccountSignedIn()
             OnboardingViewEvents.OnChooseDisplayName -> onChooseDisplayName()
@@ -229,17 +230,39 @@ class FtueAuthVariant(
                         tag = FRAGMENT_EDIT_HOMESERVER_TAG
                 )
             }
-            OnboardingViewEvents.OnHomeserverEdited -> supportFragmentManager.popBackStack(
-                    FRAGMENT_EDIT_HOMESERVER_TAG,
-                    FragmentManager.POP_BACK_STACK_INCLUSIVE
-            )
+            OnboardingViewEvents.OnHomeserverEdited -> {
+                supportFragmentManager.popBackStack(
+                        FRAGMENT_EDIT_HOMESERVER_TAG,
+                        FragmentManager.POP_BACK_STACK_INCLUSIVE
+                )
+                ensureEditServerBackstack()
+            }
             OnboardingViewEvents.OpenCombinedLogin -> onStartCombinedLogin()
             is OnboardingViewEvents.DeeplinkAuthenticationFailure -> onDeeplinkedHomeserverUnavailable(viewEvents)
             OnboardingViewEvents.DisplayRegistrationFallback -> displayFallbackWebDialog()
             is OnboardingViewEvents.DisplayRegistrationStage -> doStage(viewEvents.stage)
             OnboardingViewEvents.DisplayStartRegistration -> when {
-                vectorFeatures.isOnboardingCombinedRegisterEnabled() -> openStartCombinedRegister()
+                vectorFeatures.isOnboardingCombinedRegisterEnabled() -> onStartCombinedRegister()
                 else -> openAuthLoginFragmentWithTag(FRAGMENT_REGISTRATION_STAGE_TAG)
+            }
+        }
+    }
+
+    private fun ensureEditServerBackstack() {
+        when (activity.supportFragmentManager.findFragmentById(views.loginFragmentContainer.id)) {
+            is FtueAuthCombinedLoginFragment,
+            is FtueAuthCombinedRegisterFragment -> {
+                // do nothing
+            }
+            else -> {
+                withState(onboardingViewModel) { state ->
+                    when (state.onboardingFlow) {
+                        OnboardingFlow.SignIn -> onStartCombinedLogin()
+                        OnboardingFlow.SignUp -> onStartCombinedRegister()
+                        OnboardingFlow.SignInSignUp,
+                        null -> error("${state.onboardingFlow} does not support editing server url")
+                    }
+                }
             }
         }
     }
@@ -264,7 +287,7 @@ class FtueAuthVariant(
         addRegistrationStageFragmentToBackstack(FtueAuthCombinedLoginFragment::class.java, allowStateLoss = true)
     }
 
-    private fun openStartCombinedRegister() {
+    private fun onStartCombinedRegister() {
         addRegistrationStageFragmentToBackstack(FtueAuthCombinedRegisterFragment::class.java, allowStateLoss = true)
     }
 

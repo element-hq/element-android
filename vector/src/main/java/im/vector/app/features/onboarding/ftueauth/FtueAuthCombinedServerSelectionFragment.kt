@@ -86,7 +86,7 @@ class FtueAuthCombinedServerSelectionFragment @Inject constructor() : AbstractFt
         )
 
         if (views.chooseServerInput.content().isEmpty()) {
-            val userUrlInput = state.selectedHomeserver.userFacingUrl?.toReducedUrlKeepingSchemaIfInsecure()
+            val userUrlInput = state.selectedHomeserver.userFacingUrl?.toReducedUrlKeepingSchemaIfInsecure() ?: viewModel.getDefaultHomeserverUrl()
             views.chooseServerInput.editText().setText(userUrlInput)
         }
     }

@@ -701,9 +701,8 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private fun onAuthenticationStartError(error: Throwable, trigger: OnboardingAction.HomeServerChange) {
         when {
-            error.isHomeserverUnavailable() && applicationContext.inferNoConnectivity(sdkIntProvider) -> _viewEvents.post(
-                    OnboardingViewEvents.Failure(error)
-            )
+            error.isHomeserverUnavailable() && applicationContext.inferNoConnectivity(sdkIntProvider) -> _viewEvents.post(OnboardingViewEvents.Failure(error))
+            isUnableToSelectServer(error, trigger) -> handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.EditServerSelection))
             deeplinkUrlIsUnavailable(error, trigger) -> _viewEvents.post(
                     OnboardingViewEvents.DeeplinkAuthenticationFailure(
                             retryAction = (trigger as OnboardingAction.HomeServerChange.SelectHomeServer).resetToDefaultUrl()
@@ -715,6 +714,9 @@ class OnboardingViewModel @AssistedInject constructor(
             else -> _viewEvents.post(OnboardingViewEvents.Failure(error))
         }
     }
+
+    private fun isUnableToSelectServer(error: Throwable, trigger: OnboardingAction.HomeServerChange) =
+            trigger is OnboardingAction.HomeServerChange.SelectHomeServer && error.isHomeserverUnavailable()
 
     private fun deeplinkUrlIsUnavailable(error: Throwable, trigger: OnboardingAction.HomeServerChange) = error.isHomeserverUnavailable() &&
             loginConfig != null &&
@@ -806,6 +808,8 @@ class OnboardingViewModel @AssistedInject constructor(
     fun getInitialHomeServerUrl(): String? {
         return loginConfig?.homeServerUrl
     }
+
+    fun getDefaultHomeserverUrl() = defaultHomeserverUrl
 
     fun fetchSsoUrl(redirectUrl: String, deviceId: String?, provider: SsoIdentityProvider?): String? {
         setState {
