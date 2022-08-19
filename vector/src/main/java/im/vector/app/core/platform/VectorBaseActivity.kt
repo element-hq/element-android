@@ -169,7 +169,6 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
     lateinit var navigator: Navigator
         private set
-    private lateinit var fragmentFactory: FragmentFactory
 
     private lateinit var activeSessionHolder: ActiveSessionHolder
     private lateinit var vectorPreferences: VectorPreferences
@@ -210,8 +209,6 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
         val singletonEntryPoint = singletonEntryPoint()
         val activityEntryPoint = EntryPointAccessors.fromActivity(this, ActivityEntryPoint::class.java)
         ThemeUtils.setActivityTheme(this, getOtherThemes())
-        fragmentFactory = activityEntryPoint.fragmentFactory()
-        supportFragmentManager.fragmentFactory = fragmentFactory
         viewModelFactory = activityEntryPoint.viewModelFactory()
         super.onCreate(savedInstanceState)
         addOnMultiWindowModeChangedListener(onMultiWindowModeChangedListener)
@@ -462,12 +459,6 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     private val onMultiWindowModeChangedListener = Consumer<MultiWindowModeChangedInfo> {
         Timber.w("onMultiWindowModeChanged. isInMultiWindowMode: ${it.isInMultiWindowMode}")
         bugReporter.inMultiWindowMode = it.isInMultiWindowMode
-    }
-
-    protected fun createFragment(fragmentClass: Class<out Fragment>, argsParcelable: Parcelable? = null): Fragment {
-        return fragmentFactory.instantiate(classLoader, fragmentClass.name).apply {
-            arguments = argsParcelable?.toMvRxBundle()
-        }
     }
 
     /* ==========================================================================================
