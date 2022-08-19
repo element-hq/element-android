@@ -38,7 +38,7 @@ internal abstract class RealmLiveEntityObserver<T : RealmObject>(protected val r
         LiveEntityObserver, RealmChangeListener<RealmResults<T>> {
 
     private companion object {
-        val BACKGROUND_HANDLER = createBackgroundHandler("LIVE_ENTITY_BACKGROUND")
+        val BACKGROUND_HANDLER = createBackgroundHandler("Matrix-LIVE_ENTITY_BACKGROUND")
     }
 
     protected val observerScope = CoroutineScope(SupervisorJob() + BACKGROUND_HANDLER.asCoroutineDispatcher())
