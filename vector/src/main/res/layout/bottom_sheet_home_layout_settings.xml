@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?colorSurface"
+    android:orientation="vertical">
+
+    <TextView
+        style="@style/Widget.Vector.TextView.Subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/home_layout_preferences"
+        android:textAllCaps="true" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/home_layout_settings_recents"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_marginHorizontal="16dp"
+        android:checked="true"
+        android:text="@string/home_layout_preferences_recents" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/home_layout_settings_filters"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_marginHorizontal="16dp"
+        android:checked="true"
+        android:text="@string/home_layout_preferences_filters" />
+
+    <TextView
+        style="@style/Widget.Vector.TextView.Subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="8dp"
+        android:text="@string/home_layout_preferences_sort_by"
+        android:textAllCaps="true" />
+
+    <RadioGroup
+        android:id="@+id/home_layout_settings_sort_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/home_layout_settings_sort_activity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/home_layout_preferences_sort_activity"
+            android:textColor="?vctr_content_primary" />
+
+        <RadioButton
+            android:id="@+id/home_layout_settings_sort_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/home_layout_preferences_sort_name"
+            android:textColor="?vctr_content_primary" />
+    </RadioGroup>
+
+</LinearLayout>

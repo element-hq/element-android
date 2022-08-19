@@ -28,7 +28,6 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 class HomeFilteredRoomsController(
         private val roomSummaryItemFactory: RoomSummaryItemFactory,
-        private val showFilters: Boolean,
 ) : PagedListEpoxyController<RoomSummary>(
         // Important it must match the PageList builder notify Looper
         modelBuildingHandler = createUIHandler()
@@ -48,7 +47,7 @@ class HomeFilteredRoomsController(
 
     override fun addModels(models: List<EpoxyModel<*>>) {
         val host = this
-        if (showFilters) {
+        if (host.filtersData != null) {
             roomFilterHeaderItem {
                 id("filter_header")
                 filtersData(host.filtersData)
@@ -58,7 +57,7 @@ class HomeFilteredRoomsController(
         super.addModels(models)
     }
 
-    fun submitFiltersData(data: List<HomeRoomFilter>) {
+    fun submitFiltersData(data: List<HomeRoomFilter>?) {
         this.filtersData = data
         requestForcedModelBuild()
     }

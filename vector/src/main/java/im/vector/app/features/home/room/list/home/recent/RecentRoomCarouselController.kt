@@ -59,7 +59,13 @@ class RecentRoomCarouselController @Inject constructor(
         data?.let { data ->
             carousel {
                 id("recents_carousel")
-                padding(Carousel.Padding(host.hPadding, host.itemSpacing))
+                padding(Carousel.Padding(
+                        host.hPadding,
+                        0,
+                        host.hPadding,
+                        0,
+                        host.itemSpacing)
+                )
                 withModelsFrom(data) { roomSummary ->
                     val onClick = host.listener?.let { it::onRoomClicked }
                     val onLongClick = host.listener?.let { it::onRoomLongClicked }
