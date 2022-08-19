@@ -27,6 +27,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.StateView
@@ -47,11 +48,15 @@ import javax.inject.Inject
  * In the New App Layout this fragment will instead be displayed in a Bottom Sheet [SpaceListBottomSheet]
  * and will only display spaces that are direct children of the currently selected space (or root spaces if none)
  */
-class SpaceListFragment @Inject constructor(
-        private val spaceController: SpaceSummaryController,
-        private val newSpaceController: NewSpaceSummaryController,
-        private val vectorFeatures: VectorFeatures,
-) : VectorBaseFragment<FragmentSpaceListBinding>(), SpaceSummaryController.Callback, NewSpaceSummaryController.Callback {
+@AndroidEntryPoint
+class SpaceListFragment :
+        VectorBaseFragment<FragmentSpaceListBinding>(),
+        SpaceSummaryController.Callback,
+        NewSpaceSummaryController.Callback {
+
+    @Inject lateinit var spaceController: SpaceSummaryController
+    @Inject lateinit var newSpaceController: NewSpaceSummaryController
+    @Inject lateinit var vectorFeatures: VectorFeatures
 
     private lateinit var homeActivitySharedActionViewModel: HomeSharedActionViewModel
     private lateinit var roomListSharedActionViewModel: RoomListSharedActionViewModel

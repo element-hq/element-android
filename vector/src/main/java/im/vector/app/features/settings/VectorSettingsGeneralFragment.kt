@@ -34,6 +34,7 @@ import androidx.preference.SwitchPreference
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.cache.DiskCache
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.hideKeyboard
@@ -74,12 +75,13 @@ import java.io.File
 import java.util.UUID
 import javax.inject.Inject
 
-class VectorSettingsGeneralFragment @Inject constructor(
-        colorProvider: ColorProvider,
-        clock: Clock,
-) :
+@AndroidEntryPoint
+class VectorSettingsGeneralFragment :
         VectorSettingsBaseFragment(),
         GalleryOrCameraDialogHelper.Listener {
+
+    @Inject lateinit var colorProvider: ColorProvider
+    @Inject lateinit var clock: Clock
 
     override var titleRes = R.string.settings_general_title
     override val preferenceXmlRes = R.xml.vector_settings_general

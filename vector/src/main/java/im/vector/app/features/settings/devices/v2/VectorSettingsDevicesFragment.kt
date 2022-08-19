@@ -32,7 +32,8 @@ import im.vector.app.databinding.FragmentSettingsDevicesBinding
  * Display the list of the user's devices and sessions.
  */
 @AndroidEntryPoint
-class VectorSettingsDevicesFragment : VectorBaseFragment<FragmentSettingsDevicesBinding>() {
+class VectorSettingsDevicesFragment :
+        VectorBaseFragment<FragmentSettingsDevicesBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSettingsDevicesBinding {
         return FragmentSettingsDevicesBinding.inflate(inflater, container, false)

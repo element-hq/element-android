@@ -24,6 +24,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isInvisible
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
@@ -38,11 +39,14 @@ import im.vector.app.features.onboarding.OnboardingViewState
 import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
 
-class FtueAuthChooseProfilePictureFragment @Inject constructor(
-        private val activeSessionHolder: ActiveSessionHolder,
-        colorProvider: ColorProvider,
-        clock: Clock,
-) : AbstractFtueAuthFragment<FragmentFtueProfilePictureBinding>(), GalleryOrCameraDialogHelper.Listener {
+@AndroidEntryPoint
+class FtueAuthChooseProfilePictureFragment :
+        AbstractFtueAuthFragment<FragmentFtueProfilePictureBinding>(),
+        GalleryOrCameraDialogHelper.Listener {
+
+    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
+    @Inject lateinit var colorProvider: ColorProvider
+    @Inject lateinit var clock: Clock
 
     private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider, clock)
     private val avatarRenderer: AvatarRenderer by lazy { requireContext().singletonEntryPoint().avatarRenderer() }

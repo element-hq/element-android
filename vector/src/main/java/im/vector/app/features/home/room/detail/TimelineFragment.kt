@@ -67,6 +67,7 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.vanniktech.emoji.EmojiPopup
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.animations.play
 import im.vector.app.core.dialogs.ConfirmationDialogBuilder
@@ -255,31 +256,8 @@ import java.net.URL
 import java.util.UUID
 import javax.inject.Inject
 
-class TimelineFragment @Inject constructor(
-        private val session: Session,
-        private val avatarRenderer: AvatarRenderer,
-        private val timelineEventController: TimelineEventController,
-        autoCompleterFactory: AutoCompleter.Factory,
-        private val permalinkHandler: PermalinkHandler,
-        private val notificationDrawerManager: NotificationDrawerManager,
-        private val eventHtmlRenderer: EventHtmlRenderer,
-        private val vectorPreferences: VectorPreferences,
-        private val threadsManager: ThreadsManager,
-        private val colorProvider: ColorProvider,
-        private val dimensionConverter: DimensionConverter,
-        private val userPreferencesProvider: UserPreferencesProvider,
-        private val notificationUtils: NotificationUtils,
-        private val matrixItemColorProvider: MatrixItemColorProvider,
-        private val imageContentRenderer: ImageContentRenderer,
-        private val roomDetailPendingActionStore: RoomDetailPendingActionStore,
-        private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
-        private val callManager: WebRtcCallManager,
-        private val audioMessagePlaybackTracker: AudioMessagePlaybackTracker,
-        private val shareIntentHandler: ShareIntentHandler,
-        private val clock: Clock,
-        private val vectorFeatures: VectorFeatures,
-        private val buildMeta: BuildMeta,
-) :
+@AndroidEntryPoint
+class TimelineFragment :
         VectorBaseFragment<FragmentTimelineBinding>(),
         TimelineEventController.Callback,
         VectorInviteView.Callback,
@@ -288,6 +266,30 @@ class TimelineFragment @Inject constructor(
         GalleryOrCameraDialogHelper.Listener,
         CurrentCallsView.Callback,
         VectorMenuProvider {
+
+    @Inject lateinit var session: Session
+    @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var timelineEventController: TimelineEventController
+    @Inject lateinit var autoCompleterFactory: AutoCompleter.Factory
+    @Inject lateinit var permalinkHandler: PermalinkHandler
+    @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
+    @Inject lateinit var eventHtmlRenderer: EventHtmlRenderer
+    @Inject lateinit var vectorPreferences: VectorPreferences
+    @Inject lateinit var threadsManager: ThreadsManager
+    @Inject lateinit var colorProvider: ColorProvider
+    @Inject lateinit var dimensionConverter: DimensionConverter
+    @Inject lateinit var userPreferencesProvider: UserPreferencesProvider
+    @Inject lateinit var notificationUtils: NotificationUtils
+    @Inject lateinit var matrixItemColorProvider: MatrixItemColorProvider
+    @Inject lateinit var imageContentRenderer: ImageContentRenderer
+    @Inject lateinit var roomDetailPendingActionStore: RoomDetailPendingActionStore
+    @Inject lateinit var pillsPostProcessorFactory: PillsPostProcessor.Factory
+    @Inject lateinit var callManager: WebRtcCallManager
+    @Inject lateinit var audioMessagePlaybackTracker: AudioMessagePlaybackTracker
+    @Inject lateinit var shareIntentHandler: ShareIntentHandler
+    @Inject lateinit var clock: Clock
+    @Inject lateinit var vectorFeatures: VectorFeatures
+    @Inject lateinit var buildMeta: BuildMeta
 
     companion object {
 

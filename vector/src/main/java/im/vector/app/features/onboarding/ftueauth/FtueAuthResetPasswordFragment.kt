@@ -22,6 +22,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
@@ -35,12 +36,13 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import reactivecircus.flowbinding.android.widget.textChanges
-import javax.inject.Inject
 
 /**
  * In this screen, the user is asked for email and new password to reset his password.
  */
-class FtueAuthResetPasswordFragment @Inject constructor() : AbstractFtueAuthFragment<FragmentLoginResetPasswordBinding>() {
+@AndroidEntryPoint
+class FtueAuthResetPasswordFragment :
+        AbstractFtueAuthFragment<FragmentLoginResetPasswordBinding>() {
 
     // Show warning only once
     private var showWarning = true

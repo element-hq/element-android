@@ -25,6 +25,7 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.cleanup
@@ -35,10 +36,12 @@ import im.vector.app.databinding.FragmentReviewTermsBinding
 import org.matrix.android.sdk.api.session.terms.TermsService
 import javax.inject.Inject
 
-class ReviewTermsFragment @Inject constructor(
-        private val termsController: TermsController
-) : VectorBaseFragment<FragmentReviewTermsBinding>(),
+@AndroidEntryPoint
+class ReviewTermsFragment :
+        VectorBaseFragment<FragmentReviewTermsBinding>(),
         TermsController.Listener {
+
+    @Inject lateinit var termsController: TermsController
 
     private val reviewTermsViewModel: ReviewTermsViewModel by activityViewModel()
 

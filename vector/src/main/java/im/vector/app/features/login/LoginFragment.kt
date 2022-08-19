@@ -28,6 +28,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
@@ -41,7 +42,6 @@ import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.failure.isInvalidPassword
 import reactivecircus.flowbinding.android.widget.textChanges
-import javax.inject.Inject
 
 /**
  * In this screen:
@@ -51,7 +51,9 @@ import javax.inject.Inject
  * In signup mode:
  * - the user is asked for login and password
  */
-class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLoginBinding>() {
+@AndroidEntryPoint
+class LoginFragment :
+        AbstractSSOLoginFragment<FragmentLoginBinding>() {
 
     private var isSignupMode = false
 

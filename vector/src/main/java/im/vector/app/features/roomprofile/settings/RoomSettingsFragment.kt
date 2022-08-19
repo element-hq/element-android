@@ -29,6 +29,7 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.cleanup
@@ -56,17 +57,18 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import java.util.UUID
 import javax.inject.Inject
 
-class RoomSettingsFragment @Inject constructor(
-        private val controller: RoomSettingsController,
-        colorProvider: ColorProvider,
-        private val avatarRenderer: AvatarRenderer,
-        clock: Clock,
-) :
+@AndroidEntryPoint
+class RoomSettingsFragment :
         VectorBaseFragment<FragmentRoomSettingGenericBinding>(),
         RoomSettingsController.Callback,
         OnBackPressed,
         GalleryOrCameraDialogHelper.Listener,
         VectorMenuProvider {
+
+    @Inject lateinit var controller: RoomSettingsController
+    @Inject lateinit var colorProvider: ColorProvider
+    @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var clock: Clock
 
     private val viewModel: RoomSettingsViewModel by fragmentViewModel()
     private lateinit var roomProfileSharedActionViewModel: RoomProfileSharedActionViewModel

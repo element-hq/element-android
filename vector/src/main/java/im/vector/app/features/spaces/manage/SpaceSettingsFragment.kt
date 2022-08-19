@@ -30,6 +30,7 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.cleanup
@@ -59,16 +60,18 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import java.util.UUID
 import javax.inject.Inject
 
-class SpaceSettingsFragment @Inject constructor(
-        private val epoxyController: SpaceSettingsController,
-        colorProvider: ColorProvider,
-        clock: Clock,
-        private val avatarRenderer: AvatarRenderer,
-) : VectorBaseFragment<FragmentRoomSettingGenericBinding>(),
+@AndroidEntryPoint
+class SpaceSettingsFragment :
+        VectorBaseFragment<FragmentRoomSettingGenericBinding>(),
         SpaceSettingsController.Callback,
         GalleryOrCameraDialogHelper.Listener,
         OnBackPressed,
         VectorMenuProvider {
+
+    @Inject lateinit var epoxyController: SpaceSettingsController
+    @Inject lateinit var colorProvider: ColorProvider
+    @Inject lateinit var clock: Clock
+    @Inject lateinit var avatarRenderer: AvatarRenderer
 
     private val viewModel: RoomSettingsViewModel by fragmentViewModel()
     private val sharedViewModel: SpaceManageSharedViewModel by activityViewModel()
