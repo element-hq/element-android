@@ -72,6 +72,7 @@ import im.vector.app.R
 import im.vector.app.core.animations.play
 import im.vector.app.core.dialogs.ConfirmationDialogBuilder
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
+import im.vector.app.core.dialogs.GalleryOrCameraDialogHelperFactory
 import im.vector.app.core.epoxy.LayoutManagerStateRestorer
 import im.vector.app.core.error.fatalError
 import im.vector.app.core.extensions.cleanup
@@ -290,6 +291,7 @@ class TimelineFragment :
     @Inject lateinit var clock: Clock
     @Inject lateinit var vectorFeatures: VectorFeatures
     @Inject lateinit var buildMeta: BuildMeta
+    @Inject lateinit var galleryOrCameraDialogHelperFactory: GalleryOrCameraDialogHelperFactory
 
     companion object {
 
@@ -311,7 +313,7 @@ class TimelineFragment :
         private const val ircPattern = " (IRC)"
     }
 
-    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider, clock)
+    private lateinit var galleryOrCameraDialogHelper: GalleryOrCameraDialogHelper
 
     private val timelineArgs: TimelineArgs by args()
     private val glideRequests by lazy {
@@ -364,6 +366,7 @@ class TimelineFragment :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         analyticsScreenName = MobileScreen.ScreenName.Room
+        galleryOrCameraDialogHelper = galleryOrCameraDialogHelperFactory.create(this)
         setFragmentResultListener(MigrateRoomBottomSheet.REQUEST_KEY) { _, bundle ->
             bundle.getString(MigrateRoomBottomSheet.BUNDLE_KEY_REPLACEMENT_ROOM)?.let { replacementRoomId ->
                 timelineViewModel.handle(RoomDetailAction.RoomUpgradeSuccess(replacementRoomId))

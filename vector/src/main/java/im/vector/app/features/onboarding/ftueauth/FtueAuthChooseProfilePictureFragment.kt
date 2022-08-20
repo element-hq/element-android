@@ -28,9 +28,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
+import im.vector.app.core.dialogs.GalleryOrCameraDialogHelperFactory
 import im.vector.app.core.extensions.singletonEntryPoint
-import im.vector.app.core.resources.ColorProvider
-import im.vector.app.core.time.Clock
 import im.vector.app.databinding.FragmentFtueProfilePictureBinding
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.onboarding.OnboardingAction
@@ -45,14 +44,19 @@ class FtueAuthChooseProfilePictureFragment :
         GalleryOrCameraDialogHelper.Listener {
 
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
-    @Inject lateinit var colorProvider: ColorProvider
-    @Inject lateinit var clock: Clock
+    @Inject lateinit var galleryOrCameraDialogHelperFactory: GalleryOrCameraDialogHelperFactory
 
-    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider, clock)
+    private lateinit var galleryOrCameraDialogHelper: GalleryOrCameraDialogHelper
+
     private val avatarRenderer: AvatarRenderer by lazy { requireContext().singletonEntryPoint().avatarRenderer() }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueProfilePictureBinding {
         return FragmentFtueProfilePictureBinding.inflate(inflater, container, false)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        galleryOrCameraDialogHelper = galleryOrCameraDialogHelperFactory.create(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

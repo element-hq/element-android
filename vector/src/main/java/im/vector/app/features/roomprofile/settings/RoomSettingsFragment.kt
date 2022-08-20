@@ -32,14 +32,13 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
+import im.vector.app.core.dialogs.GalleryOrCameraDialogHelperFactory
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.intent.getFilenameFromUri
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.VectorMenuProvider
-import im.vector.app.core.resources.ColorProvider
-import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.FragmentRoomSettingGenericBinding
 import im.vector.app.features.analytics.plan.MobileScreen
@@ -66,9 +65,8 @@ class RoomSettingsFragment :
         VectorMenuProvider {
 
     @Inject lateinit var controller: RoomSettingsController
-    @Inject lateinit var colorProvider: ColorProvider
     @Inject lateinit var avatarRenderer: AvatarRenderer
-    @Inject lateinit var clock: Clock
+    @Inject lateinit var galleryOrCameraDialogHelperFactory: GalleryOrCameraDialogHelperFactory
 
     private val viewModel: RoomSettingsViewModel by fragmentViewModel()
     private lateinit var roomProfileSharedActionViewModel: RoomProfileSharedActionViewModel
@@ -76,7 +74,7 @@ class RoomSettingsFragment :
     private lateinit var roomJoinRuleSharedActionViewModel: RoomJoinRuleSharedActionViewModel
 
     private val roomProfileArgs: RoomProfileArgs by args()
-    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider, clock)
+    private lateinit var galleryOrCameraDialogHelper: GalleryOrCameraDialogHelper
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomSettingGenericBinding {
         return FragmentRoomSettingGenericBinding.inflate(inflater, container, false)
@@ -87,6 +85,7 @@ class RoomSettingsFragment :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         analyticsScreenName = MobileScreen.ScreenName.RoomSettings
+        galleryOrCameraDialogHelper = galleryOrCameraDialogHelperFactory.create(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
