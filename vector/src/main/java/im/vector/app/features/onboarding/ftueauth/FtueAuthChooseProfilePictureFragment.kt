@@ -45,10 +45,9 @@ class FtueAuthChooseProfilePictureFragment :
 
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var galleryOrCameraDialogHelperFactory: GalleryOrCameraDialogHelperFactory
+    @Inject lateinit var avatarRenderer: AvatarRenderer
 
     private lateinit var galleryOrCameraDialogHelper: GalleryOrCameraDialogHelper
-
-    private val avatarRenderer: AvatarRenderer by lazy { requireContext().singletonEntryPoint().avatarRenderer() }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueProfilePictureBinding {
         return FragmentFtueProfilePictureBinding.inflate(inflater, container, false)
