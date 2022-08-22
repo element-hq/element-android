@@ -29,7 +29,6 @@ import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelperFactory
-import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.databinding.FragmentFtueProfilePictureBinding
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.onboarding.OnboardingAction

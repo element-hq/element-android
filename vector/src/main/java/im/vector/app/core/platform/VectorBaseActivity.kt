@@ -21,7 +21,6 @@ import android.app.Activity
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -39,8 +38,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.util.Consumer
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
@@ -67,7 +64,6 @@ import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.restart
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.extensions.singletonEntryPoint
-import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.utils.AndroidSystemSettingsProvider
 import im.vector.app.core.utils.ToolbarConfig
