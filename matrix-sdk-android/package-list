@@ -288,7 +288,7 @@ $dokka.location:org.matrix.android.sdk.api.crypto/MXCryptoConfig/limitRoomKeyReq
 $dokka.location:org.matrix.android.sdk.api.debug////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.debug/index.html
 $dokka.location:org.matrix.android.sdk.api.debug/DebugService///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.debug/-debug-service/index.html
 $dokka.location:org.matrix.android.sdk.api.debug/DebugService/getAllRealmConfigurations/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.debug/-debug-service/get-all-realm-configurations.html
-$dokka.location:org.matrix.android.sdk.api.debug/DebugService/logDbUsageInfo/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.debug/-debug-service/log-db-usage-info.html
+$dokka.location:org.matrix.android.sdk.api.debug/DebugService/getDbUsageInfo/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.debug/-debug-service/get-db-usage-info.html
 $dokka.location:org.matrix.android.sdk.api.extensions////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.extensions/index.html
 $dokka.location:org.matrix.android.sdk.api.extensions//appendNl/java.lang.StringBuilder#kotlin.String/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.extensions/append-nl.html
 $dokka.location:org.matrix.android.sdk.api.extensions//ensureNotEmpty/kotlin.String#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.extensions/ensure-not-empty.html
@@ -4111,6 +4111,7 @@ $dokka.location:org.matrix.android.sdk.api.session.sync/SyncService/getSyncReque
 $dokka.location:org.matrix.android.sdk.api.session.sync/SyncService/getSyncState/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.sync/-sync-service/get-sync-state.html
 $dokka.location:org.matrix.android.sdk.api.session.sync/SyncService/getSyncStateLive/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.sync/-sync-service/get-sync-state-live.html
 $dokka.location:org.matrix.android.sdk.api.session.sync/SyncService/hasAlreadySynced/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.sync/-sync-service/has-already-synced.html
+$dokka.location:org.matrix.android.sdk.api.session.sync/SyncService/isSyncThreadAlive/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.sync/-sync-service/is-sync-thread-alive.html
 $dokka.location:org.matrix.android.sdk.api.session.sync/SyncService/requireBackgroundSync/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.sync/-sync-service/require-background-sync.html
 $dokka.location:org.matrix.android.sdk.api.session.sync/SyncService/startAutomaticBackgroundSync/#kotlin.Long#kotlin.Long/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.sync/-sync-service/start-automatic-background-sync.html
 $dokka.location:org.matrix.android.sdk.api.session.sync/SyncService/startSync/#kotlin.Boolean/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.sync/-sync-service/start-sync.html
@@ -4327,6 +4328,7 @@ $dokka.location:org.matrix.android.sdk.api.session/Session/eventStreamService/#/
 $dokka.location:org.matrix.android.sdk.api.session/Session/federationService/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session/-session/federation-service.html
 $dokka.location:org.matrix.android.sdk.api.session/Session/fileService/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session/-session/file-service.html
 $dokka.location:org.matrix.android.sdk.api.session/Session/filterService/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session/-session/filter-service.html
+$dokka.location:org.matrix.android.sdk.api.session/Session/getDbUsageInfo/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session/-session/get-db-usage-info.html
 $dokka.location:org.matrix.android.sdk.api.session/Session/getOkHttpClient/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session/-session/get-ok-http-client.html
 $dokka.location:org.matrix.android.sdk.api.session/Session/getRealmConfigurations/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session/-session/get-realm-configurations.html
 $dokka.location:org.matrix.android.sdk.api.session/Session/getUiaSsoFallbackUrl/#kotlin.String/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session/-session/get-uia-sso-fallback-url.html
@@ -4334,7 +4336,6 @@ $dokka.location:org.matrix.android.sdk.api.session/Session/homeServerCapabilitie
 $dokka.location:org.matrix.android.sdk.api.session/Session/identityService/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session/-session/identity-service.html
 $dokka.location:org.matrix.android.sdk.api.session/Session/integrationManagerService/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session/-session/integration-manager-service.html
 $dokka.location:org.matrix.android.sdk.api.session/Session/isOpenable/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session/-session/is-openable.html
-$dokka.location:org.matrix.android.sdk.api.session/Session/logDbUsageInfo/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session/-session/log-db-usage-info.html
 $dokka.location:org.matrix.android.sdk.api.session/Session/mediaService/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session/-session/media-service.html
 $dokka.location:org.matrix.android.sdk.api.session/Session/myUserId/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session/-session/my-user-id.html
 $dokka.location:org.matrix.android.sdk.api.session/Session/open/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session/-session/open.html
