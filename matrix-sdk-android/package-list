@@ -312,6 +312,7 @@ $dokka.location:org.matrix.android.sdk.api.failure//isMissingEmailVerification/k
 $dokka.location:org.matrix.android.sdk.api.failure//isRegistrationAvailabilityError/kotlin.Throwable#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/is-registration-availability-error.html
 $dokka.location:org.matrix.android.sdk.api.failure//isRegistrationDisabled/kotlin.Throwable#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/is-registration-disabled.html
 $dokka.location:org.matrix.android.sdk.api.failure//isTokenError/kotlin.Throwable#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/is-token-error.html
+$dokka.location:org.matrix.android.sdk.api.failure//isUnrecognisedCertificate/kotlin.Throwable#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/is-unrecognised-certificate.html
 $dokka.location:org.matrix.android.sdk.api.failure//isUsernameInUse/kotlin.Throwable#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/is-username-in-use.html
 $dokka.location:org.matrix.android.sdk.api.failure//isWeakPassword/kotlin.Throwable#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/is-weak-password.html
 $dokka.location:org.matrix.android.sdk.api.failure//shouldBeRetried/kotlin.Throwable#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/should-be-retried.html
