@@ -72,7 +72,6 @@ class SpaceListFragment @Inject constructor(
 
     private fun setupSpaceController() {
         if (vectorFeatures.isNewAppLayoutEnabled()) {
-            enableDragAndDropForNewSpaceController()
             newSpaceController.callback = this
             views.groupListView.configureWith(newSpaceController)
         } else {
@@ -80,49 +79,6 @@ class SpaceListFragment @Inject constructor(
             spaceController.callback = this
             views.groupListView.configureWith(spaceController)
         }
-    }
-
-    private fun enableDragAndDropForNewSpaceController() {
-        EpoxyTouchHelper.initDragging(newSpaceController)
-                .withRecyclerView(views.groupListView)
-                .forVerticalList()
-                .withTarget(NewSpaceSummaryItem::class.java)
-                .andCallbacks(object : EpoxyTouchHelper.DragCallbacks<NewSpaceSummaryItem>() {
-                    var toPositionM: Int? = null
-                    var fromPositionM: Int? = null
-                    var initialElevation: Float? = null
-
-                    override fun onDragStarted(model: NewSpaceSummaryItem?, itemView: View?, adapterPosition: Int) {
-                        toPositionM = null
-                        fromPositionM = null
-                        model?.matrixItem?.id?.let {
-                            viewModel.handle(SpaceListAction.OnStartDragging(it, false))
-                        }
-                        itemView?.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-                        initialElevation = itemView?.elevation
-                        itemView?.elevation = 6f
-                    }
-
-                    override fun onDragReleased(model: NewSpaceSummaryItem?, itemView: View?) {
-                        if (toPositionM == null || fromPositionM == null) return
-                        val movedSpaceId = model?.matrixItem?.id ?: return
-                        viewModel.handle(SpaceListAction.MoveSpace(movedSpaceId, toPositionM!! - fromPositionM!!))
-                    }
-
-                    override fun clearView(model: NewSpaceSummaryItem?, itemView: View?) {
-                        itemView?.elevation = initialElevation ?: 0f
-                    }
-
-                    override fun onModelMoved(fromPosition: Int, toPosition: Int, modelBeingMoved: NewSpaceSummaryItem?, itemView: View?) {
-                        if (fromPositionM == null) {
-                            fromPositionM = fromPosition
-                        }
-                        if (toPositionM != toPosition) {
-                            toPositionM = toPosition
-                            itemView?.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-                        }
-                    }
-                })
     }
 
     private fun enableDragAndDropForSpaceController() {
