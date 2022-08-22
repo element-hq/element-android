@@ -38,22 +38,22 @@ import org.matrix.android.sdk.api.util.MatrixItem
 abstract class NewSubSpaceSummaryItem : VectorEpoxyModel<NewSubSpaceSummaryItem.Holder>(R.layout.item_new_sub_space) {
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) lateinit var avatarRenderer: AvatarRenderer
-    @EpoxyAttribute lateinit var matrixItem: MatrixItem
-    @EpoxyAttribute var selected: Boolean = false
-    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var listener: ClickListener? = null
-    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var onMore: ClickListener? = null
-    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var toggleExpand: ClickListener? = null
+    @EpoxyAttribute var countState: UnreadCounterBadgeView.State = UnreadCounterBadgeView.State(0, false)
     @EpoxyAttribute var expanded: Boolean = false
     @EpoxyAttribute var hasChildren: Boolean = false
     @EpoxyAttribute var indent: Int = 0
-    @EpoxyAttribute var countState: UnreadCounterBadgeView.State = UnreadCounterBadgeView.State(0, false)
+    @EpoxyAttribute lateinit var matrixItem: MatrixItem
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var onLongClickListener: ClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var onSubSpaceSelectedListener: ClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var onToggleExpandListener: ClickListener? = null
+    @EpoxyAttribute var selected: Boolean = false
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.root.onClick(listener)
+        holder.root.onClick(onSubSpaceSelectedListener)
         holder.name.text = matrixItem.displayName
         holder.root.isChecked = selected
-        holder.root.setOnLongClickListener { onMore?.invoke(holder.root).let { true } }
+        holder.root.setOnLongClickListener { onLongClickListener?.invoke(holder.root).let { true } }
 
         holder.chevron.setImageDrawable(
                 ContextCompat.getDrawable(
@@ -61,7 +61,7 @@ abstract class NewSubSpaceSummaryItem : VectorEpoxyModel<NewSubSpaceSummaryItem.
                         if (expanded) R.drawable.ic_expand_more else R.drawable.ic_arrow_right
                 )
         )
-        holder.chevron.onClick(toggleExpand)
+        holder.chevron.onClick(onToggleExpandListener)
         holder.chevron.isVisible = hasChildren
 
         holder.indent.isVisible = indent > 0
