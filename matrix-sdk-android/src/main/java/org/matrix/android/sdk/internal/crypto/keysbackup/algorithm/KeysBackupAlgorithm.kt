@@ -27,7 +27,7 @@ internal interface KeysBackupAlgorithm {
     val authData: MegolmBackupAuthData
     val untrusted: Boolean
 
-    fun setRecoveryKey(recoveryKey: String?)
+    fun setPrivateKey(privateKey: ByteArray)
     fun encryptSession(sessionData: MegolmSessionData): JsonDict?
     fun decryptSessions(data: KeysBackupData): List<MegolmSessionData>
     fun keyMatches(privateKey: ByteArray): Boolean

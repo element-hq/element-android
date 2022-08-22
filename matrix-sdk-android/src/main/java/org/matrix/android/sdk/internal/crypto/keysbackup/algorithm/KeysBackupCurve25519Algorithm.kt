@@ -52,8 +52,8 @@ internal class KeysBackupCurve25519Algorithm(keysVersions: KeysVersionResult) : 
         }
     }
 
-    override fun setRecoveryKey(recoveryKey: String?) {
-        privateKey = extractCurveKeyFromRecoveryKey(recoveryKey)
+    override fun setPrivateKey(privateKey: ByteArray) {
+        this.privateKey = privateKey
     }
 
     override fun encryptSession(sessionData: MegolmSessionData): JsonDict? {

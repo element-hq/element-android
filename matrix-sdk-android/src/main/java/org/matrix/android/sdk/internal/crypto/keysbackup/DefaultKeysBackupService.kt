@@ -632,7 +632,9 @@ internal class DefaultKeysBackupService @Inject constructor(
 
                 // Get backed up keys from the homeserver
                 val data = getKeys(sessionId, roomId, keysVersionResult.version)
-                algorithm?.setRecoveryKey(recoveryKey)
+                extractCurveKeyFromRecoveryKey(recoveryKey)?.also { privateKey ->
+                    algorithm?.setPrivateKey(privateKey)
+                }
                 val sessionsData = withContext(coroutineDispatchers.computation) {
                     algorithm?.decryptSessions(data)
                 }.orEmpty()
@@ -1138,7 +1140,9 @@ internal class DefaultKeysBackupService @Inject constructor(
                 // roomId -> sessionId -> MXKeyBackupData
                 val keysBackupData = KeysBackupData()
                 val recoveryKey = cryptoStore.getKeyBackupRecoveryKeyInfo()?.recoveryKey
-                algorithm?.setRecoveryKey(recoveryKey)
+                extractCurveKeyFromRecoveryKey(recoveryKey)?.also { privateKey ->
+                    algorithm?.setPrivateKey(privateKey)
+                }
                 olmInboundGroupSessionWrappers.forEach { olmInboundGroupSessionWrapper ->
                     val roomId = olmInboundGroupSessionWrapper.roomId ?: return@forEach
                     val olmInboundGroupSession = olmInboundGroupSessionWrapper.session

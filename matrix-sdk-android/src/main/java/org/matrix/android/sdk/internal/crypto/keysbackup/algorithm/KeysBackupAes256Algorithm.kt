@@ -46,8 +46,8 @@ internal class KeysBackupAes256Algorithm(keysVersions: KeysVersionResult) : Keys
         aesAuthData = keysVersions.getAuthDataAsMegolmBackupAuthData() as MegolmBackupAes256AuthData
     }
 
-    override fun setRecoveryKey(recoveryKey: String?) {
-        privateKey = extractCurveKeyFromRecoveryKey(recoveryKey)
+    override fun setPrivateKey(privateKey: ByteArray) {
+        this.privateKey = privateKey
     }
 
     override fun encryptSession(sessionData: MegolmSessionData): JsonDict? {
