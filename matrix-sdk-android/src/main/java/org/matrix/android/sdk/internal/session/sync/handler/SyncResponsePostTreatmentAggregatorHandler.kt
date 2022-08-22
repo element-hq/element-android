@@ -83,13 +83,13 @@ internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
         }
     }
 
-    private suspend fun fetchAndUpdateUsers(userIdsToFetch: List<String>) {
+    private suspend fun fetchAndUpdateUsers(userIdsToFetch: Collection<String>) {
         fetchUsers(userIdsToFetch)
                 .takeIf { it.isNotEmpty() }
                 ?.saveLocally()
     }
 
-    private suspend fun fetchUsers(userIdsToFetch: List<String>) = userIdsToFetch.mapNotNull {
+    private suspend fun fetchUsers(userIdsToFetch: Collection<String>) = userIdsToFetch.mapNotNull {
         tryOrNull {
             val profileJson = getProfileInfoTask.execute(GetProfileInfoTask.Params(it))
             User.fromJson(it, profileJson)
