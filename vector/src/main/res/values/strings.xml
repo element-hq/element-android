@@ -3210,9 +3210,6 @@
     <string name="a11y_device_manager_device_type_web" tools:ignore="UnusedResources">Web</string>
     <string name="a11y_device_manager_device_type_desktop" tools:ignore="UnusedResources">Desktop</string>
     <string name="device_manager_device_type_android">${app_name} Mobile: Android</string>
-    <string name="device_manager_device_type_ios" tools:ignore="UnusedResources">${app_name} Mobile: iOS</string>
-    <string name="device_manager_device_type_web" tools:ignore="UnusedResources">${app_name} Web</string>
-    <string name="device_manager_device_type_desktop" tools:ignore="UnusedResources">${app_name} Desktop</string>
     <string name="device_manager_verification_status_verified">Verified session</string>
     <string name="device_manager_verification_status_unverified">Unverified session</string>
     <string name="device_manager_verification_status_detail_verified">Your current session is ready for secure messaging.</string>
