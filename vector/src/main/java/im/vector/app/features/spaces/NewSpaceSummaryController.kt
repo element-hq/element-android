@@ -113,7 +113,7 @@ class NewSpaceSummaryController @Inject constructor(
 
                     if (hasChildren && expanded) {
                         subSpaces?.forEach { child ->
-                            addSubSpace(spaceSummary.roomId, spaceSummaries, expandedStates, selectedSpace, child, 1, 3)
+                            addSubSpace(spaceSummary.roomId, spaceSummaries, expandedStates, selectedSpace, child, 1)
                         }
                     }
                 }
@@ -127,11 +127,9 @@ class NewSpaceSummaryController @Inject constructor(
             expandedStates: Map<String, Boolean>,
             selectedSpace: RoomSummary?,
             info: SpaceChildInfo,
-            currentDepth: Int,
-            maxDepth: Int,
+            depth: Int,
     ) {
         val host = this
-        if (currentDepth >= maxDepth) return
         val childSummary = spaceSummaries?.firstOrNull { it.roomId == info.childRoomId } ?: return
         val id = "$idPrefix:${childSummary.roomId}"
         val countState = UnreadCounterBadgeView.State(childSummary.notificationCount, childSummary.highlightCount > 0)
@@ -145,7 +143,7 @@ class NewSpaceSummaryController @Inject constructor(
             countState(countState)
             expanded(expanded)
             hasChildren(!subSpaces.isNullOrEmpty())
-            indent(currentDepth)
+            indent(depth)
             matrixItem(childSummary.toMatrixItem())
             onLongClickListener { host.callback?.onSpaceSettings(childSummary) }
             onSubSpaceSelectedListener { host.callback?.onSpaceSelected(childSummary) }
@@ -155,7 +153,7 @@ class NewSpaceSummaryController @Inject constructor(
 
         if (expanded) {
             subSpaces?.forEach {
-                addSubSpace(id, spaceSummaries, expandedStates, selectedSpace, it, currentDepth + 1, maxDepth)
+                addSubSpace(id, spaceSummaries, expandedStates, selectedSpace, it, depth + 1)
             }
         }
     }
