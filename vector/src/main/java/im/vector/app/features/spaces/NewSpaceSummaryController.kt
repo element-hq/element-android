@@ -135,7 +135,8 @@ class NewSpaceSummaryController @Inject constructor(
         val countState = UnreadCounterBadgeView.State(childSummary.notificationCount, childSummary.highlightCount > 0)
         val expanded = expandedStates[childSummary.roomId] == true
         val isSelected = childSummary.roomId == selectedSpace?.roomId
-        val subSpaces = childSummary.spaceChildren?.filter { childSpace -> spaceSummaries.containsSpaceId(childSpace.childRoomId) }?.sortedWith(subSpaceComparator)
+        val subSpaces = childSummary.spaceChildren?.filter { childSpace -> spaceSummaries.containsSpaceId(childSpace.childRoomId) }
+                ?.sortedWith(subSpaceComparator)
 
         newSubSpaceSummaryItem {
             id(id)
