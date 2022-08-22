@@ -33,7 +33,6 @@ import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewModel
 import im.vector.app.features.onboarding.OnboardingViewState
 import kotlinx.coroutines.CancellationException
-import org.matrix.android.sdk.api.failure.Failure
 
 /**
  * Parent Fragment for all the login/registration screens.
@@ -68,6 +67,7 @@ abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<V
     private fun handleOnboardingViewEvents(viewEvents: OnboardingViewEvents) {
         when (viewEvents) {
             is OnboardingViewEvents.Failure -> showFailure(viewEvents.throwable)
+            is OnboardingViewEvents.UnrecognisedCertificateFailure -> showUnrecognizedCertificateFailure(viewEvents)
             else ->
                 // This is handled by the Activity
                 Unit
@@ -84,20 +84,20 @@ abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<V
             is CancellationException ->
                 /* Ignore this error, user has cancelled the action */
                 Unit
-            is Failure.UnrecognizedCertificateFailure -> showUnrecognizedCertificateFailure(throwable)
             else -> onError(throwable)
         }
     }
 
-    private fun showUnrecognizedCertificateFailure(failure: Failure.UnrecognizedCertificateFailure) {
+    private fun showUnrecognizedCertificateFailure(event: OnboardingViewEvents.UnrecognisedCertificateFailure) {
         // Ask the user to accept the certificate
+        val cause = event.cause
         unrecognizedCertificateDialog.show(requireActivity(),
-                failure.fingerprint,
-                failure.url,
+                cause.fingerprint,
+                cause.url,
                 object : UnrecognizedCertificateDialog.Callback {
                     override fun onAccept() {
                         // User accept the certificate
-                        viewModel.handle(OnboardingAction.UserAcceptCertificate(failure.fingerprint))
+                        viewModel.handle(OnboardingAction.UserAcceptCertificate(cause.fingerprint, event.retryAction))
                     }
 
                     override fun onIgnore() {

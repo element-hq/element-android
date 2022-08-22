@@ -37,7 +37,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.failure.isInvalidPassword
@@ -100,13 +99,11 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
         }
     }
 
-    private fun setupSocialLoginButtons(state: LoginViewState) {
-        views.loginSocialLoginButtons.mode = when (state.signMode) {
-            SignMode.Unknown -> error("developer error")
-            SignMode.SignUp -> SocialLoginButtonsView.Mode.MODE_SIGN_UP
-            SignMode.SignIn,
-            SignMode.SignInWithMatrixId -> SocialLoginButtonsView.Mode.MODE_SIGN_IN
-        }
+    private fun ssoMode(state: LoginViewState) = when (state.signMode) {
+        SignMode.Unknown -> error("developer error")
+        SignMode.SignUp -> SocialLoginButtonsView.Mode.MODE_SIGN_UP
+        SignMode.SignIn,
+        SignMode.SignInWithMatrixId -> SocialLoginButtonsView.Mode.MODE_SIGN_IN
     }
 
     private fun submit() {
@@ -201,16 +198,13 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
 
             if (state.loginMode is LoginMode.SsoAndPassword) {
                 views.loginSocialLoginContainer.isVisible = true
-                views.loginSocialLoginButtons.ssoIdentityProviders = state.loginMode.ssoIdentityProviders?.sorted()
-                views.loginSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
-                    override fun onProviderSelected(provider: SsoIdentityProvider?) {
-                        loginViewModel.getSsoUrl(
-                                redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
-                                deviceId = state.deviceId,
-                                providerId = provider?.id
-                        )
-                                ?.let { openInCustomTab(it) }
-                    }
+                views.loginSocialLoginButtons.render(state.loginMode.ssoState, ssoMode(state)) { provider ->
+                    loginViewModel.getSsoUrl(
+                            redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
+                            deviceId = state.deviceId,
+                            providerId = provider?.id
+                    )
+                            ?.let { openInCustomTab(it) }
                 }
             } else {
                 views.loginSocialLoginContainer.isVisible = false
@@ -272,7 +266,6 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
 
         setupUi(state)
         setupAutoFill(state)
-        setupSocialLoginButtons(state)
         setupButtons(state)
 
         when (state.asyncLoginAction) {

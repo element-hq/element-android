@@ -59,6 +59,7 @@ import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.disclaimer.showDisclaimerDialog
 import im.vector.app.features.home.room.list.actions.RoomListSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListSharedActionViewModel
+import im.vector.app.features.home.room.list.home.layout.HomeLayoutSettingBottomDialogFragment
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.matrixto.OriginOfMatrixTo
 import im.vector.app.features.navigation.Navigator
@@ -290,6 +291,11 @@ class HomeActivity :
                     }
                 })
                 .show(supportFragmentManager, "SPACE_SETTINGS")
+    }
+
+    private fun showLayoutSettings() {
+        HomeLayoutSettingBottomDialogFragment()
+                .show(supportFragmentManager, "LAYOUT_SETTINGS")
     }
 
     private fun openSpaceInvite(spaceId: String) {
@@ -611,6 +617,10 @@ class HomeActivity :
             }
             R.id.menu_home_setting -> {
                 navigator.openSettings(this)
+                true
+            }
+            R.id.menu_home_layout_settings -> {
+                showLayoutSettings()
                 true
             }
             R.id.menu_home_invite_friends -> {

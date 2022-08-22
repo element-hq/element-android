@@ -63,7 +63,7 @@ class SoftLogoutFragment @Inject constructor(
                             LoginAction.SetupSsoForSessionRecovery(
                                     softLogoutViewState.homeServerUrl,
                                     softLogoutViewState.deviceId,
-                                    mode.ssoIdentityProviders
+                                    mode.ssoState.providersOrNull()
                             )
                     )
                 }
@@ -72,7 +72,7 @@ class SoftLogoutFragment @Inject constructor(
                             LoginAction.SetupSsoForSessionRecovery(
                                     softLogoutViewState.homeServerUrl,
                                     softLogoutViewState.deviceId,
-                                    mode.ssoIdentityProviders
+                                    mode.ssoState.providersOrNull()
                             )
                     )
                 }
