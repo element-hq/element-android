@@ -1,0 +1,1 @@
+Fixes uncaught exceptions in the SyncWorker to cause the worker to become stuck in the failure state
