@@ -113,10 +113,14 @@ class HomeDrawerFragment @Inject constructor(
         }
 
         // Debug menu
-        views.homeDrawerHeaderDebugView.isVisible = buildMeta.isDebug && vectorPreferences.developerMode()
         views.homeDrawerHeaderDebugView.debouncedClicks {
             sharedActionViewModel.post(HomeActivitySharedAction.CloseDrawer)
             navigator.openDebug(requireActivity())
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        views.homeDrawerHeaderDebugView.isVisible = buildMeta.isDebug && vectorPreferences.developerMode()
     }
 }
