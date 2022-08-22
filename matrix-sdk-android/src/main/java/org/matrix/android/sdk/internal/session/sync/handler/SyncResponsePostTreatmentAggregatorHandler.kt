@@ -30,6 +30,7 @@ import org.matrix.android.sdk.internal.session.user.UserEntityFactory
 import org.matrix.android.sdk.internal.session.user.accountdata.DirectChatsHelper
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateUserAccountDataTask
 import org.matrix.android.sdk.internal.util.awaitTransaction
+import timber.log.Timber
 import javax.inject.Inject
 
 internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
@@ -101,8 +102,11 @@ internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
 
     private suspend fun List<User>.saveLocally() {
         val userEntities = map { user -> UserEntityFactory.create(user) }
+        Timber.d("## saveLocally()")
         monarchy.awaitTransaction {
+            Timber.d("## saveLocally() - in transaction")
             it.insertOrUpdate(userEntities)
         }
+        Timber.d("## saveLocally() - END")
     }
 }
