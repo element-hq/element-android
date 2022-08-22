@@ -28,7 +28,7 @@ interface DebugService {
     fun getAllRealmConfigurations(): List<RealmConfiguration>
 
     /**
-     * Prints out info on DB size to logcat.
+     * Get info on DB size.
      */
-    fun logDbUsageInfo()
+    fun getDbUsageInfo(): String
 }

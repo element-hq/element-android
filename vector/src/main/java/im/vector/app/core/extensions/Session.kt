@@ -28,7 +28,7 @@ import org.matrix.android.sdk.api.session.sync.FilterService
 import timber.log.Timber
 
 fun Session.configureAndStart(context: Context, startSyncing: Boolean = true) {
-    Timber.i("Configure and start session for $myUserId")
+    Timber.i("Configure and start session for $myUserId. startSyncing: $startSyncing")
     open()
     filterService().setFilter(FilterService.FilterPreset.ElementFilter)
     if (startSyncing) {
