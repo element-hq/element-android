@@ -23,6 +23,7 @@ import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.databinding.ViewCurrentSessionBinding
 import im.vector.app.features.settings.devices.TrustUtils
+import im.vector.app.features.themes.ThemeUtils
 import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
 
 class CurrentSessionView @JvmOverloads constructor(
@@ -53,19 +54,30 @@ class CurrentSessionView @JvmOverloads constructor(
         )
         views.currentSessionVerificationStatusImageView.render(shield)
         if (deviceTrustLevel.crossSigningVerified) {
-            views.currentSessionVerificationStatusTextView.text = context.getString(R.string.device_manager_verification_status_verified)
-            views.currentSessionVerificationStatusDetailTextView.text = context.getString(R.string.device_manager_verification_status_detail_verified)
-            views.currentSessionVerifySessionButton.isVisible = false
+            renderCrossSigningVerified()
         } else {
-            views.currentSessionVerificationStatusTextView.text = context.getString(R.string.device_manager_verification_status_unverified)
-            views.currentSessionVerificationStatusDetailTextView.text = context.getString(R.string.device_manager_verification_status_detail_unverified)
-            views.currentSessionVerifySessionButton.isVisible = true
+            renderCrossSigningUnverified()
         }
+    }
+
+    private fun renderCrossSigningVerified() {
+        views.currentSessionVerificationStatusTextView.text = context.getString(R.string.device_manager_verification_status_verified)
+        views.currentSessionVerificationStatusTextView.setTextColor(ThemeUtils.getColor(context, R.attr.colorPrimary))
+        views.currentSessionVerificationStatusDetailTextView.text = context.getString(R.string.device_manager_verification_status_detail_verified)
+        views.currentSessionVerifySessionButton.isVisible = false
+    }
+
+    private fun renderCrossSigningUnverified() {
+        views.currentSessionVerificationStatusTextView.text = context.getString(R.string.device_manager_verification_status_unverified)
+        views.currentSessionVerificationStatusTextView.setTextColor(ThemeUtils.getColor(context, R.attr.colorError))
+        views.currentSessionVerificationStatusDetailTextView.text = context.getString(R.string.device_manager_verification_status_detail_unverified)
+        views.currentSessionVerifySessionButton.isVisible = true
     }
 
     // TODO. We don't have this info yet. Update later accordingly.
     private fun renderDeviceType() {
         views.currentSessionDeviceTypeImageView.setImageResource(R.drawable.ic_device_type_mobile)
+        views.currentSessionDeviceTypeImageView.contentDescription = context.getString(R.string.a11y_device_manager_device_type_mobile)
         views.currentSessionDeviceTypeTextView.text = context.getString(R.string.device_manager_device_type_android)
     }
 }
