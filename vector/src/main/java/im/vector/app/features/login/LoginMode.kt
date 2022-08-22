@@ -18,22 +18,21 @@ package im.vector.app.features.login
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 
 sealed class LoginMode : Parcelable { // Parcelable because persist state
 
     @Parcelize object Unknown : LoginMode()
     @Parcelize object Password : LoginMode()
-    @Parcelize data class Sso(val ssoIdentityProviders: List<SsoIdentityProvider>?) : LoginMode()
-    @Parcelize data class SsoAndPassword(val ssoIdentityProviders: List<SsoIdentityProvider>?) : LoginMode()
+    @Parcelize data class Sso(val ssoState: SsoState) : LoginMode()
+    @Parcelize data class SsoAndPassword(val ssoState: SsoState) : LoginMode()
     @Parcelize object Unsupported : LoginMode()
 }
 
-fun LoginMode.ssoIdentityProviders(): List<SsoIdentityProvider>? {
+fun LoginMode.ssoState(): SsoState {
     return when (this) {
-        is LoginMode.Sso -> ssoIdentityProviders
-        is LoginMode.SsoAndPassword -> ssoIdentityProviders
-        else -> null
+        is LoginMode.Sso -> ssoState
+        is LoginMode.SsoAndPassword -> ssoState
+        else -> SsoState.Fallback
     }
 }
 
