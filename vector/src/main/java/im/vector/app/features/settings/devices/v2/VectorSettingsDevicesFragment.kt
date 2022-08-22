@@ -24,7 +24,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.dialogs.ManuallyVerifyDialog
@@ -35,6 +39,7 @@ import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.settings.devices.DevicesAction
 import im.vector.app.features.settings.devices.DevicesViewEvents
 import im.vector.app.features.settings.devices.DevicesViewModel
+import im.vector.app.features.settings.devices.DevicesViewState
 import javax.inject.Inject
 
 /**
@@ -116,5 +121,41 @@ class VectorSettingsDevicesFragment @Inject constructor() : VectorBaseFragment<F
 
     private fun cleanUpLearnMoreButtonsListeners() {
         views.deviceListHeaderSectionOther.onLearnMoreClickListener = null
+    }
+
+    override fun invalidate() = withState(viewModel) { state ->
+        val currentDeviceInfo = state.devices()
+                ?.firstOrNull {
+                    it.deviceInfo.deviceId == state.myDeviceId
+                }
+
+        if (state.devices is Success && currentDeviceInfo != null) {
+            renderCurrentDevice(state)
+        } else {
+            hideCurrentSessionView()
+        }
+
+        handleRequestStatus(state.request)
+    }
+
+    private fun hideCurrentSessionView() {
+        views.deviceListHeaderSectionCurrent.isVisible = false
+        views.deviceListCurrentSession.isVisible = false
+    }
+
+    private fun renderCurrentDevice(state: DevicesViewState) {
+        views.deviceListHeaderSectionCurrent.isVisible = true
+        views.deviceListCurrentSession.isVisible = true
+        views.deviceListCurrentSession.update(
+                accountCrossSigningIsTrusted = state.accountCrossSigningIsTrusted,
+                legacyMode = !state.hasAccountCrossSigning
+        )
+    }
+
+    private fun handleRequestStatus(unIgnoreRequest: Async<Unit>) {
+        views.waitingView.root.isVisible = when (unIgnoreRequest) {
+            is Loading -> true
+            else -> false
+        }
     }
 }
