@@ -70,7 +70,7 @@ class ActiveSessionHolder @Inject constructor(
 
     suspend fun clearActiveSession() {
         // Do some cleanup first
-        getSafeActiveSession()?.let {
+        getSafeActiveSession(startSync = false)?.let {
             Timber.w("clearActiveSession of ${it.myUserId}")
             it.callSignalingService().removeCallListener(callManager)
             it.removeListener(sessionListener)
@@ -91,8 +91,8 @@ class ActiveSessionHolder @Inject constructor(
         return activeSessionReference.get() != null || authenticationService.hasAuthenticatedSessions()
     }
 
-    fun getSafeActiveSession(): Session? {
-        return runBlocking { getOrInitializeSession(startSync = true) }
+    fun getSafeActiveSession(startSync: Boolean = true): Session? {
+        return runBlocking { getOrInitializeSession(startSync = startSync) }
     }
 
     fun getActiveSession(): Session {
