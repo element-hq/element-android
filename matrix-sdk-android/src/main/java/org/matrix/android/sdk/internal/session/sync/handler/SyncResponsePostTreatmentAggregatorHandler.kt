@@ -20,6 +20,7 @@ import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.user.model.User
+import org.matrix.android.sdk.internal.crypto.crosssigning.DefaultCrossSigningService
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.profile.GetProfileInfoTask
 import org.matrix.android.sdk.internal.session.sync.RoomSyncEphemeralTemporaryStore
@@ -36,12 +37,14 @@ internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
         private val ephemeralTemporaryStore: RoomSyncEphemeralTemporaryStore,
         private val updateUserAccountDataTask: UpdateUserAccountDataTask,
         private val getProfileInfoTask: GetProfileInfoTask,
+        private val crossSigningService: DefaultCrossSigningService,
         @SessionDatabase private val monarchy: Monarchy,
 ) {
     suspend fun handle(aggregator: SyncResponsePostTreatmentAggregator) {
         cleanupEphemeralFiles(aggregator.ephemeralFilesToDelete)
         updateDirectUserIds(aggregator.directChatsToCheck)
         fetchAndUpdateUsers(aggregator.userIdsToFetch)
+        handleUserIdsWithDeviceUpdate(aggregator.userIdsWithDeviceUpdate)
     }
 
     private fun cleanupEphemeralFiles(ephemeralFilesToDelete: List<String>) {
@@ -90,6 +93,10 @@ internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
             val profileJson = getProfileInfoTask.execute(GetProfileInfoTask.Params(it))
             User.fromJson(it, profileJson)
         }
+    }
+
+    private fun handleUserIdsWithDeviceUpdate(userIdsWithDeviceUpdate: Iterable<String>) {
+        crossSigningService.onUsersDeviceUpdate(userIdsWithDeviceUpdate.toList())
     }
 
     private suspend fun List<User>.saveLocally() {
