@@ -1,0 +1,1 @@
+Removes ability to continue registration after the app has been destroyed, fixes the next steps crashing due to missing information from the previous steps
