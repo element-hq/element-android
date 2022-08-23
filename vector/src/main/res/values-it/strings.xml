@@ -2594,4 +2594,8 @@
     </plurals>
     <string name="search_space_two_parents">%1$s e %2$s</string>
     <string name="auth_reset_password_error_unverified">Email non verificata, controlla la posta in arrivo</string>
+    <string name="location_share_loading_map_error">Impossibile caricare la mappa
+\nQuesto homeserver potrebbe non essere configurato per mostrare mappe.</string>
+    <string name="a11y_open_settings">Apri le impostazioni</string>
+    <string name="all_chats">Tutte le chat</string>
 </resources>

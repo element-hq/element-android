@@ -2293,15 +2293,15 @@
     <string name="this_invite_to_this_space_was_sent">Це запрошення до простору надіслане %s, не пов\'язаній із вашим обліковим записом</string>
     <string name="this_invite_to_this_room_was_sent">Це запрошення до кімнати надіслане %s, не пов\'язаній із вашим обліковим записом</string>
     <string name="upgrade_room_for_restricted_note">Зауважте, що поліпшення створить нову версію кімнати. Всі наявні повідомлення залишаться в цій архівованій кімнаті.</string>
-    <string name="upgrade_room_for_restricted_no_param">Будь-хто в батьківському просторі зможемо знайти кімнату й долучитись — нема потреба вручну запрошувати всіх. Можна змінити це в налаштуваннях кімнати будь-коли.</string>
-    <string name="upgrade_room_for_restricted">Будь-хто в %s зможе знайти кімнату й долучитись — нема потреби вручну запрошувати всіх. Можна змінити це в налаштуваннях кімнати будь-коли.</string>
+    <string name="upgrade_room_for_restricted_no_param">Будь-хто в батьківському просторі зможе знайти кімнату й приєднатись — непотрібно вручну запрошувати всіх. Це можна змінити в налаштуваннях кімнати будь-коли.</string>
+    <string name="upgrade_room_for_restricted">Будь-хто в %s зможе знайти кімнату й приєднатись — непотрібно вручну запрошувати всіх. Це можна змінити в налаштуваннях кімнати будь-коли.</string>
     <string name="error_voice_message_cannot_reply_or_edit">Не вдалося відповісти чи редагувати, бо голосове повідомлення активне</string>
     <string name="room_using_unstable_room_version">Кімната — версії %s, яку домашній сервер позначив нестабільною.</string>
     <string name="upgrade_room_warning">Поліпшення кімнати — серйозна операція. Її зазвичай радять, коли кімната нестабільна через вади, брак функціоналу чи вразливості безпеки.
 \nЗазвичай це впливає лише на деталі опрацювання кімнати сервером.</string>
     <string name="this_space_has_no_rooms_admin">Деяких кімнат може бути не видно, бо вони закриті й потребують запрошення.</string>
-    <string name="this_space_has_no_rooms_not_admin">Деяких кімнат може бути не видно, бо вони закриті й потребують запрошення.
-\nУ вас нема дозволу додавати кімнати.</string>
+    <string name="this_space_has_no_rooms_not_admin">Деякі кімнати можуть бути приховані, оскільки вони приватні й потребують запрошення.
+\nУ вас немає дозволу додавати кімнати.</string>
     <string name="space_leave_prompt_msg_as_admin">Ви єдиний адміністратор цього простору. Якщо вийдете, він залишиться без керівництва.</string>
     <string name="space_leave_prompt_msg_private">Ви не зможете приєднатись, поки вас не запросять знову.</string>
     <string name="space_leave_prompt_msg_only_you">Ви єдина особа тут. Якщо ви вийдете, більше ніхто не зможе приєднатись, навіть ви ж.</string>
@@ -2703,4 +2703,8 @@
     </plurals>
     <string name="search_space_two_parents">%1$s і %2$s</string>
     <string name="auth_reset_password_error_unverified">Електронна пошта не підтверджена, перевірте свою поштову скриньку</string>
+    <string name="location_share_loading_map_error">Неможливо завантажити карту
+\nМожливо, цей домашній сервер не налаштовано для показу карт.</string>
+    <string name="a11y_open_settings">Відкрити налаштування</string>
+    <string name="all_chats">Усі бесіди</string>
 </resources>

@@ -2576,7 +2576,7 @@
     <string name="ftue_auth_choose_server_entry_hint">URL de servidor</string>
     <string name="ftue_auth_choose_server_subtitle">Qual é o endereço de seu servidor\? Isto é como uma casa para todos os seus dados</string>
     <string name="ftue_auth_choose_server_title">Selecionar seu servidor</string>
-    <string name="ftue_auth_welcome_back_title">Boas-vindas de volta!</string>
+    <string name="ftue_auth_welcome_back_title">Boas vindas de volta!</string>
     <string name="ftue_auth_create_account_edit_server_selection">Editar</string>
     <string name="ftue_auth_create_account_sso_section_header">Ou</string>
     <string name="ftue_auth_create_account_choose_server_header">Onde suas conversas vão viver</string>
@@ -2603,4 +2603,8 @@
     </plurals>
     <string name="search_space_two_parents">%1$s e %2$s</string>
     <string name="auth_reset_password_error_unverified">Email não verificado, cheque sua inbox</string>
+    <string name="location_share_loading_map_error">Incapaz de carregar mapa
+\nEste servidor casa pode não estar configurado para exibir mapas.</string>
+    <string name="a11y_open_settings">Abrir configurações</string>
+    <string name="all_chats">Todos os Chats</string>
 </resources>

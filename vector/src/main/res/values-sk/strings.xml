@@ -2653,4 +2653,8 @@
     </plurals>
     <string name="search_space_two_parents">%1$s a %2$s</string>
     <string name="auth_reset_password_error_unverified">E-mail nie je overený, skontrolujte si schránku</string>
+    <string name="location_share_loading_map_error">Nie je možné načítať mapu
+\nTento domovský server nemusí byť nakonfigurovaný na zobrazovanie máp.</string>
+    <string name="a11y_open_settings">Otvoriť nastavenia</string>
+    <string name="all_chats">Všetky konverzácie</string>
 </resources>

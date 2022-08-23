@@ -1233,7 +1233,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
         <item quantity="one">%d aktív munkamenet</item>
         <item quantity="other">%d aktív munkamenet</item>
     </plurals>
-    <string name="crosssigning_verify_this_session">Munkamenet ellenőrzése</string>
+    <string name="crosssigning_verify_this_session">Az eszköz ellenőrzése</string>
     <string name="verification_open_other_to_verify">A titkosított üzenetekhez való hozzáféréshez nyiss meg egy létező munkamenetet és használd ennek a hitelesítésére.</string>
     <string name="verification_profile_verify">Ellenőriz</string>
     <string name="verification_profile_verified">Hitelesített</string>
@@ -1394,7 +1394,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
         <item quantity="other">Meghívó elküldve neki: %1$s és még %2$d helyre</item>
     </plurals>
     <string name="invite_users_to_room_failure">Felhasználókat nem tudtuk meghívni. Ellenőrizd azokat a felhasználókat akiket meg szeretnél hívni és próbáld újra.</string>
-    <string name="event_redacted">Üzenet törölve</string>
+    <string name="event_redacted">Üzenet eltávolítva</string>
     <string name="settings_show_redacted_summary">Helykitöltő mutatása a törölt szövegek helyett</string>
     <string name="settings_discovery_confirm_mail_not_clicked">Megerősítő levelet küldtünk ide: %s, először ellenőrizd az e-mailedet és kattints a megerősítő hivatkozásra</string>
     <string name="uploads_media_title">MÉDIA</string>
@@ -2575,4 +2575,36 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="ftue_auth_create_account_choose_server_header">Itt lesznek tárolva a beszélgetéseid</string>
     <string name="ftue_auth_choose_server_subtitle">Mi a szervered címe\? Itt lesz tárolva az összes üzeneted</string>
     <string name="auth_reset_password_error_unverified">Az email cím nem lett ellenőrizve, kérlek nézd meg a beérkező email-jeidet</string>
+    <string name="labs_enable_element_call_permission_shortcuts_summary">Element Call kisalkalmazás kamera és mikrofon használatának automatikus engedélyezése</string>
+    <string name="labs_enable_element_call_permission_shortcuts">Element Call jogosultságok engedélyezése</string>
+    <plurals name="room_removed_messages">
+        <item quantity="one">%d üzenet eltávolítva</item>
+        <item quantity="other">%d üzenet eltávolítva</item>
+    </plurals>
+    <string name="live_location_description">Élő földrajzi helyzet</string>
+    <string name="live_location_share_location_item_share">Tartózkodási hely megosztása</string>
+    <string name="live_location_not_enough_permission_dialog_description">Az élő helymegosztáshoz ebben a szobában megfelelő jogosultságokra van szükséged.</string>
+    <string name="live_location_not_enough_permission_dialog_title">Nincs jogosultságod az élő helymegosztáshoz</string>
+    <string name="location_share_loading_map_error">A térkép betöltése sikertelen
+\nEz a matrix szerver nincs beállítva, hogy térképet mutasson.</string>
+    <string name="a11y_open_settings">Beállítások megnyitása</string>
+    <string name="verify_invalid_qr_notice">Ez a QR code nem tűnik jónak. Próbáld meg az ellenőrzést másik metódussal.</string>
+    <string name="crosssigning_cannot_verify_this_session_desc">A régi titkosított üzenetekhez nem férsz majd hozzá. Állítsd be újra a Biztonságos Üzenet Mentést és ellenőrizd a kulcsokat az újrakezdéshez.</string>
+    <string name="crosssigning_cannot_verify_this_session">Ennek az eszköznek az ellenőrzése nem lehetséges</string>
+    <string name="permalink_unsupported_groups">Ez a hivatkozás nem nyitható meg: a közösségeket felváltották a terek</string>
+    <string name="ftue_auth_new_password_title">Válassz jelszót</string>
+    <string name="ftue_auth_new_password_entry_title">Új jelszó</string>
+    <string name="ftue_auth_reset_password_breaker_title">Ellenőrizd az e-mailed.</string>
+    <string name="ftue_auth_reset_password_email_subtitle">%s ellenőrző hivatkozást fog küldeni</string>
+    <string name="updating_your_data">Adatok frissítése…</string>
+    <string name="font_size_use_system">Rendszerbeállítás használata</string>
+    <string name="font_size_section_manually">Kézi beállítás</string>
+    <string name="font_size_section_auto">Automatikus beállítás</string>
+    <string name="font_size_title">Válassz betűméretet</string>
+    <plurals name="search_space_multiple_parents">
+        <item quantity="one">%1$s és %2$d másik</item>
+        <item quantity="other">%1$s és %2$d másik</item>
+    </plurals>
+    <string name="search_space_two_parents">%1$s és %2$s</string>
+    <string name="all_chats">Minden beszélgetés</string>
 </resources>
