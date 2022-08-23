@@ -122,9 +122,6 @@ class OnboardingViewModel @AssistedInject constructor(
     private val registrationWizard: RegistrationWizard
         get() = authenticationService.getRegistrationWizard()
 
-    val currentThreePid: String?
-        get() = registrationWizard.getCurrentThreePid()
-
     // True when login and password has been sent with success to the homeserver
     val isRegistrationStarted: Boolean
         get() = authenticationService.isRegistrationStarted()
@@ -479,17 +476,6 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private fun handleInitWith(action: OnboardingAction.InitWith) {
         loginConfig = action.loginConfig
-        // If there is a pending email validation continue on this step
-        try {
-            if (registrationWizard.isRegistrationStarted()) {
-                currentThreePid?.let {
-                    handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnSendEmailSuccess(it, isRestoredSession = true)))
-                }
-            }
-        } catch (e: Throwable) {
-            // NOOP. API is designed to use wizards in a login/registration flow,
-            // but we need to check the state anyway.
-        }
     }
 
     private fun handleResetPassword(action: OnboardingAction.ResetPassword) {
