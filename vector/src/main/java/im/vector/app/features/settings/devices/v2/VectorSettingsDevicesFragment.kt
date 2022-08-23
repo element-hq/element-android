@@ -130,7 +130,7 @@ class VectorSettingsDevicesFragment @Inject constructor() : VectorBaseFragment<F
                 }
 
         if (state.devices is Success && currentDeviceInfo != null) {
-            renderCurrentDevice(state)
+            renderCurrentDevice(state.accountCrossSigningIsTrusted, !state.hasAccountCrossSigning, currentDeviceInfo.deviceInfo.displayName ?: "")
         } else {
             hideCurrentSessionView()
         }
@@ -143,12 +143,13 @@ class VectorSettingsDevicesFragment @Inject constructor() : VectorBaseFragment<F
         views.deviceListCurrentSession.isVisible = false
     }
 
-    private fun renderCurrentDevice(state: DevicesViewState) {
+    private fun renderCurrentDevice(accountCrossSigningIsTrusted: Boolean, legacyMode: Boolean, sessionName: String) {
         views.deviceListHeaderSectionCurrent.isVisible = true
         views.deviceListCurrentSession.isVisible = true
         views.deviceListCurrentSession.update(
-                accountCrossSigningIsTrusted = state.accountCrossSigningIsTrusted,
-                legacyMode = !state.hasAccountCrossSigning
+                accountCrossSigningIsTrusted = accountCrossSigningIsTrusted,
+                legacyMode = legacyMode,
+                sessionName = sessionName
         )
     }
 

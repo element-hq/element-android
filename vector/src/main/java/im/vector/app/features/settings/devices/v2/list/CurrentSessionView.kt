@@ -39,8 +39,8 @@ class CurrentSessionView @JvmOverloads constructor(
         views = ViewCurrentSessionBinding.bind(this)
     }
 
-    fun update(accountCrossSigningIsTrusted: Boolean, legacyMode: Boolean) {
-        renderDeviceType()
+    fun update(accountCrossSigningIsTrusted: Boolean, legacyMode: Boolean, sessionName: String) {
+        renderDeviceInfo(sessionName)
         renderVerificationStatus(accountCrossSigningIsTrusted, legacyMode)
     }
 
@@ -75,9 +75,9 @@ class CurrentSessionView @JvmOverloads constructor(
     }
 
     // TODO. We don't have this info yet. Update later accordingly.
-    private fun renderDeviceType() {
+    private fun renderDeviceInfo(sessionName: String) {
         views.currentSessionDeviceTypeImageView.setImageResource(R.drawable.ic_device_type_mobile)
         views.currentSessionDeviceTypeImageView.contentDescription = context.getString(R.string.a11y_device_manager_device_type_mobile)
-        views.currentSessionDeviceTypeTextView.text = context.getString(R.string.device_manager_device_type_android)
+        views.currentSessionNameTextView.text = sessionName
     }
 }
