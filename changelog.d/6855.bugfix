@@ -1,1 +1,0 @@
-Fixes onboarding captcha crashing when no WebView is available by showing an error with information instead
