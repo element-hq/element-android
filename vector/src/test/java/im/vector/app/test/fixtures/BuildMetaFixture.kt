@@ -16,7 +16,17 @@
 
 package im.vector.app.test.fixtures
 
-import android.os.Build
 import im.vector.app.core.resources.BuildMeta
 
-fun aBuildMeta() = BuildMeta(Build.VERSION_CODES.O)
+fun aBuildMeta() = BuildMeta(
+        isDebug = false,
+        applicationId = "im.vector",
+        lowPrivacyLoggingEnabled = false,
+        versionName = "app-version-name",
+        gitRevision = "abcdef",
+        gitRevisionDate = "01-01-01",
+        gitBranchName = "a-branch-name",
+        buildNumber = "100",
+        flavorDescription = "Gplay",
+        flavorShortDescription = "",
+)

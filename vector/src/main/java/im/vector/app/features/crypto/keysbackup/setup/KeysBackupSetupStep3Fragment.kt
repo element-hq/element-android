@@ -134,7 +134,7 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment<Fr
             selectTxtFileToWrite(
                     activity = requireActivity(),
                     activityResultLauncher = saveRecoveryActivityResultLauncher,
-                    defaultFileName = "recovery-key-$userId-$timestamp.txt",
+                    defaultFileName = "recovery-key-$userId-${timestamp}.txt",
                     chooserHint = getString(R.string.save_recovery_key_chooser_hint)
             )
             dialog.dismiss()
@@ -142,7 +142,7 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment<Fr
 
         dialog.findViewById<View>(R.id.keys_backup_setup_share)?.debouncedClicks {
             startSharePlainTextIntent(
-                    fragment = this,
+                    context = requireContext(),
                     activityResultLauncher = null,
                     chooserTitle = context?.getString(R.string.keys_backup_setup_step3_share_intent_chooser_title),
                     text = recoveryKey,

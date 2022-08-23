@@ -44,8 +44,6 @@
 \nImportando cuenta…</string>
     <string name="initial_sync_start_importing_account_rooms">Sincronización inicial:
 \nImportando salas</string>
-    <string name="initial_sync_start_importing_account_groups">Sincronización inicial:
-\nImportando comunidades</string>
     <string name="initial_sync_start_importing_account_data">Sincronización inicial:
 \nImportando datos de la cuenta</string>
     <string name="event_status_sending_message">Enviando mensaje…</string>
@@ -290,7 +288,6 @@
     <string name="auth_email_already_defined">Esta dirección de correo electrónico ya está definida.</string>
     <string name="auth_forgot_password">¿Olvidaste tu contraseña?</string>
     <string name="auth_recaptcha_message">Este Servidor Doméstico quiere asegurarse de que no eres un robot</string>
-    <string name="auth_reset_password_missing_email">Debes ingresar la dirección de correo electrónico vinculada a tu cuenta.</string>
     <string name="auth_reset_password_error_unauthorized">No se pudo verificar la dirección de correo electrónico: asegúrate de hacer clic en el enlace del correo electrónico</string>
     <string name="login_error_invalid_home_server">Por favor introduce una URL válida</string>
     <string name="login_error_bad_json">JSON mal formado</string>
@@ -496,7 +493,6 @@
     <string name="notification_noisy">Ruidoso</string>
     <string name="encrypted_message">Mensaje cifrado</string>
     <string name="loading">Cargando…</string>
-    <string name="groups_header">Comunidades</string>
     <string name="start_voice_call_prompt_msg">¿Seguro que quieres iniciar una llamada de voz?</string>
     <string name="start_video_call_prompt_msg">¿Seguro que quieres iniciar una llamada de vídeo?</string>
     <string name="room_participants_ban_prompt_msg">Vetar un usuario lo echará de esta sala y evitará que se una nuevamente.</string>
@@ -742,7 +738,7 @@
     <string name="notification_silent">Silencioso</string>
     <string name="error_empty_field_enter_user_name">Por favor introduzca un nombre de usuario.</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="no_valid_google_play_services_apk">No se ha encontrado ningún APK válido de Servicios de Google Play. Las notificaciones podrían no funcionar correctamente.</string>
     <string name="passphrase_empty_error_message">Por favor introduzca una contraseña</string>
     <string name="passphrase_passphrase_too_weak">La contraseña que has introducido es muy débil</string>
@@ -855,9 +851,9 @@
     <string name="invited_by">Invitado por %s</string>
     <string name="room_list_catchup_empty_body">No tienes más mensajes sin leer</string>
     <string name="room_list_people_empty_title">Conversaciones</string>
-    <string name="room_list_people_empty_body">Tus conversaciones se mostrarán aquí. Toque + en la derecha para comenzar.</string>
+    <string name="room_list_people_empty_body">Tus conversaciones se mostrarán aquí. Toque el + en la esquina inferior derecha para comenzar.</string>
     <string name="room_list_rooms_empty_title">Salas</string>
-    <string name="room_list_rooms_empty_body">Tus salas se mostrarán aquí. Pulsa el botón + abajo a la derecha para buscar o crear salas propias.</string>
+    <string name="room_list_rooms_empty_body">Tus salas se mostrarán aquí. Pulsa el botón + abajo en la esquina inferior derecha para buscar o crear salas propias.</string>
     <string name="title_activity_emoji_reaction_picker">Reacciones</string>
     <string name="action_agree">De acuerdo</string>
     <string name="message_add_reaction">Añadir reacción</string>
@@ -871,7 +867,6 @@
     <string name="action_change">Cambiar</string>
     <string name="change_room_directory_network">Cambiar red</string>
     <string name="please_wait">Espere por favor…</string>
-    <string name="group_all_communities">Todas la comunidades</string>
     <string name="room_preview_no_preview">Esta sala no se puede previsualizar</string>
     <string name="fab_menu_create_room">Salas</string>
     <string name="fab_menu_create_chat">Chats</string>
@@ -1015,7 +1010,6 @@
         <item quantity="one">Leído por %d usuario</item>
         <item quantity="other">Leído por %d usuarios</item>
     </plurals>
-    <string name="error_attachment">Ha ocurrido un error recuperando el archivo adjunto.</string>
     <string name="attachment_type_file">Archivo</string>
     <string name="attachment_type_contact">Contacto</string>
     <string name="attachment_type_camera">Cámara</string>
@@ -2451,7 +2445,6 @@
     <string name="sent_live_location">Compartieron su localización en vivo</string>
     <string name="sent_location">Compartieron su localización</string>
     <string name="ftue_profile_picture_subtitle">Puedes cambiar esto en todo momento.</string>
-    <string name="ftue_display_name_subtitle">Esto se mostrará cuando mandes mensajes.</string>
     <string name="ftue_account_created_take_me_home">Llévame a casa</string>
     <string name="ftue_account_created_personalize">Personalizar perfil</string>
     <string name="ftue_auth_use_case_connect_to_server">Conectar a servidor</string>
@@ -2479,7 +2472,6 @@
     <string name="settings_show_latest_profile">Mostrar última información del usuario</string>
     <string name="a11y_presence_busy">Ocupado</string>
     <string name="live_location_bottom_sheet_last_updated_at">Actualizado hace %1$s</string>
-    <string name="live_location_bottom_sheet_stop_sharing">Dejar de compartir</string>
     <string name="labs_enable_live_location_summary">Implementación temporal: las ubicaciones persisten en el historial de la sala</string>
     <string name="labs_enable_live_location">Activar compartir ubicación en tiempo real</string>
     <string name="location_share_live_remaining_time">Queda %1$s</string>
@@ -2496,4 +2488,34 @@
     <string name="time_unit_second_short">sec</string>
     <string name="time_unit_minute_short">min</string>
     <string name="time_unit_hour_short">h</string>
+    <string name="live_location_labs_promotion_switch_title">Activar compartir ubicación</string>
+    <string name="live_location_labs_promotion_description">Nota: esta funcionalidad es experimental, y su funcionamiento es todavía provisional. Esto significa que no podrás eliminar el historial de tu ubicación, y usuarios con conocimientos avanzados podrán verlo en esta sala incluso cuando dejes de compartir en tiempo real.</string>
+    <string name="live_location_labs_promotion_title">Compartir ubicación en tiempo real</string>
+    <string name="settings_troubleshoot_test_current_gateway">Puerta de enlace actual: %s</string>
+    <string name="settings_troubleshoot_test_current_gateway_title">Puerta de enlace</string>
+    <string name="settings_troubleshoot_test_current_endpoint_failed">No se pudo encontrar el punto final.</string>
+    <string name="settings_troubleshoot_test_current_endpoint_success">Punto final actual: %s</string>
+    <string name="settings_troubleshoot_test_current_endpoint_title">Punto final</string>
+    <string name="settings_troubleshoot_test_current_distributor">Actualmente usando %s.</string>
+    <string name="settings_troubleshoot_test_current_distributor_title">Método</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="one">Se encontró %d método.</item>
+        <item quantity="other">Se encontraron %d métodos.</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_distributors_fdroid">No se ha encontrado otro método aparte de la sincronización en segundo plano.</string>
+    <string name="settings_troubleshoot_test_distributors_gplay">No se ha encontrado otro método aparte de los servicios de Google Play.</string>
+    <string name="settings_troubleshoot_test_distributors_title">Métodos disponibles</string>
+    <string name="settings_notification_method">Método de notificación</string>
+    <string name="unifiedpush_distributor_background_sync">Sincronización en segundo plano</string>
+    <string name="unifiedpush_distributor_fcm_fallback">Servicios de Google</string>
+    <string name="unifiedpush_getdistributors_dialog_title">Elija como recibir notificaciones</string>
+    <string name="settings_security_pin_code_use_biometrics_error">No se pudo habilitar la identificación biométrica.</string>
+    <string name="auth_biometric_key_invalidated_message">La identificación biométrica fue desactivada debido a que un método de identificación biométrica fue añadido recientemente. Puede activarlo de nuevo en Preferencias.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">Reestablecer método de notificación</string>
+    <string name="push_gateway_item_profile_tag">Etiqueta de perfil:</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">Ha ocurrido un error al registrar el token del punto final al servidor doméstico:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">El destino se ha registrado de forma satisfactoria al servidor doméstico.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_title">Registración de punto final</string>
+    <string name="action_next">Siguiente</string>
 </resources>

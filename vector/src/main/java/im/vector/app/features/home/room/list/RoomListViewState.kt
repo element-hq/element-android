@@ -19,9 +19,9 @@ package im.vector.app.features.home.room.list
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
-import im.vector.app.RoomGroupingMethod
 import im.vector.app.features.home.RoomListDisplayMode
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 
 data class RoomListViewState(
@@ -30,7 +30,8 @@ data class RoomListViewState(
         val roomMembershipChanges: Map<String, ChangeMembershipState> = emptyMap(),
         val asyncSuggestedRooms: Async<List<SpaceChildInfo>> = Uninitialized,
         val currentUserName: String? = null,
-        val currentRoomGrouping: Async<RoomGroupingMethod> = Uninitialized
+        val asyncSelectedSpace: Async<RoomSummary?> = Uninitialized,
+        val localRoomIds: Set<String> = emptySet()
 ) : MavericksState {
 
     constructor(args: RoomListParams) : this(displayMode = args.displayMode)

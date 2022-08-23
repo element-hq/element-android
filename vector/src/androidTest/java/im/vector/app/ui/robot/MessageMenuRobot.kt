@@ -16,6 +16,7 @@
 
 package im.vector.app.ui.robot
 
+import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -59,6 +60,7 @@ class MessageMenuRobot(
         clickOn(R.string.message_add_reaction)
         // Wait for emoji to load, it's async now
         waitUntilActivityVisible<EmojiReactionPickerActivity> {
+            closeSoftKeyboard()
             waitUntilViewVisible(withId(R.id.emojiRecyclerView))
             waitUntilViewVisible(withText("😀"))
         }

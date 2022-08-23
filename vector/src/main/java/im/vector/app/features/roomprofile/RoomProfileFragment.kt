@@ -39,6 +39,7 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.copyOnLongClick
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.FragmentMatrixProfileBinding
@@ -70,7 +71,8 @@ class RoomProfileFragment @Inject constructor(
         private val roomDetailPendingActionStore: RoomDetailPendingActionStore,
 ) :
         VectorBaseFragment<FragmentMatrixProfileBinding>(),
-        RoomProfileController.Callback {
+        RoomProfileController.Callback,
+        VectorMenuProvider {
 
     private lateinit var headerViews: ViewStubRoomProfileHeaderBinding
 
@@ -170,14 +172,14 @@ class RoomProfileFragment @Inject constructor(
         headerViews.roomProfileAliasView.copyOnLongClick()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             R.id.roomProfileShareAction -> {
                 roomProfileViewModel.handle(RoomProfileAction.ShareRoomProfile)
-                return true
+                true
             }
+            else -> false
         }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun handleQuickActions(action: RoomListQuickActionsSharedAction) = when (action) {
@@ -335,7 +337,7 @@ class RoomProfileFragment @Inject constructor(
 
     private fun onShareRoomProfile(permalink: String) {
         startSharePlainTextIntent(
-                fragment = this,
+                context = requireContext(),
                 activityResultLauncher = null,
                 chooserTitle = null,
                 text = permalink

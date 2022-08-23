@@ -23,6 +23,7 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.getRelationContent
 import org.matrix.android.sdk.api.session.events.model.isEdition
+import org.matrix.android.sdk.api.session.events.model.isLiveLocation
 import org.matrix.android.sdk.api.session.events.model.isPoll
 import org.matrix.android.sdk.api.session.events.model.isReply
 import org.matrix.android.sdk.api.session.events.model.isSticker
@@ -163,6 +164,10 @@ fun TimelineEvent.isPoll(): Boolean =
 
 fun TimelineEvent.isSticker(): Boolean {
     return root.isSticker()
+}
+
+fun TimelineEvent.isLiveLocation(): Boolean {
+    return root.isLiveLocation()
 }
 
 /**

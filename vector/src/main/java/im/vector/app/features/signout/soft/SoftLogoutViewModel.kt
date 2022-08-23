@@ -33,6 +33,7 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.hasUnsavedKeys
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.login.LoginMode
+import im.vector.app.features.login.toSsoState
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.LoginType
@@ -115,8 +116,8 @@ class SoftLogoutViewModel @AssistedInject constructor(
             val loginMode = when {
                 // SSO login is taken first
                 data.supportedLoginTypes.contains(LoginFlowTypes.SSO) &&
-                        data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
-                data.supportedLoginTypes.contains(LoginFlowTypes.SSO) -> LoginMode.Sso(data.ssoIdentityProviders)
+                        data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders.toSsoState())
+                data.supportedLoginTypes.contains(LoginFlowTypes.SSO) -> LoginMode.Sso(data.ssoIdentityProviders.toSsoState())
                 data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.Password
                 else -> LoginMode.Unsupported
             }

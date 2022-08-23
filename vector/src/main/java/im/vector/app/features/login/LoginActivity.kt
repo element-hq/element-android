@@ -221,7 +221,7 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
                 analyticsScreenName = MobileScreen.ScreenName.Register
             }
             val authDescription = inferAuthDescription(loginViewState)
-            val intent = HomeActivity.newIntent(this, authenticationDescription = authDescription)
+            val intent = HomeActivity.newIntent(this, firstStartMainActivity = false, authenticationDescription = authDescription)
             startActivity(intent)
             finish()
             return

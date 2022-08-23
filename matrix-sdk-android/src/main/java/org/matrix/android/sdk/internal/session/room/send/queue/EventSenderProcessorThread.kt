@@ -55,7 +55,7 @@ internal class EventSenderProcessorThread @Inject constructor(
         private val queuedTaskFactory: QueuedTaskFactory,
         private val taskExecutor: TaskExecutor,
         private val memento: QueueMemento
-) : Thread("SENDER_THREAD_SID_${sessionParams.credentials.sessionId()}"), EventSenderProcessor {
+) : Thread("Matrix-SENDER_THREAD_SID_${sessionParams.credentials.sessionId()}"), EventSenderProcessor {
 
     private fun markAsManaged(task: QueuedTask) {
         memento.track(task)
@@ -119,7 +119,7 @@ internal class EventSenderProcessorThread @Inject constructor(
 
     override fun cancel(eventId: String, roomId: String) {
         (currentTask as? SendEventQueuedTask)
-                ?.takeIf { it -> it.event.eventId == eventId && it.event.roomId == roomId }
+                ?.takeIf { it.event.eventId == eventId && it.event.roomId == roomId }
                 ?.cancel()
     }
 

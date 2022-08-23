@@ -27,8 +27,6 @@
     <string name="invitations_header">คำเชิญ</string>
     <string name="system_alerts_header">การแจ้งเตือนจากระบบ</string>
     <string name="no_result_placeholder">ไม่มีผลลัพธ์</string>
-
-    <string name="groups_header">ชุมชน</string>
     <string name="send_bug_report_description_in_english">ถ้าเป็นไปได้ โปรดเขียนคำอธิบายเป็นภาษาอังกฤษ</string>
     <string name="send_bug_report_placeholder">อธิบายปัญหาของคุณที่นี่</string>
     <string name="join_room">เข้าร่วมห้อง</string>

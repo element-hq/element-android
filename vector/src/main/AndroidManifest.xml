@@ -187,7 +187,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".features.home.HomeActivity" />
         </activity>
-        <activity android:name=".features.debug.DebugMenuActivity" />
         <activity android:name=".features.createdirect.CreateDirectRoomActivity" />
         <activity android:name=".features.invite.InviteUsersToRoomActivity" />
         <activity android:name=".features.webview.VectorWebViewActivity" />
@@ -308,7 +307,8 @@
         <activity android:name=".features.terms.ReviewTermsActivity" />
         <activity
             android:name=".features.widgets.WidgetActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation" />
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:supportsPictureInPicture="true" />
 
         <activity android:name=".features.pin.PinActivity" />
         <activity android:name=".features.analytics.ui.consent.AnalyticsOptInActivity" />
@@ -346,12 +346,14 @@
         <activity android:name=".features.spaces.leave.SpaceLeaveAdvancedActivity" />
         <activity android:name=".features.poll.create.CreatePollActivity" />
         <activity android:name=".features.location.LocationSharingActivity" />
-        <activity android:name=".features.location.live.map.LocationLiveMapViewActivity" />
+        <activity android:name=".features.location.live.map.LiveLocationMapViewActivity" />
+        <activity android:name=".features.settings.font.FontScaleSettingActivity"/>
+        <activity android:name=".features.call.dialpad.PstnDialActivity" />
 
         <!-- Services -->
 
         <service
-            android:name=".core.services.CallService"
+            android:name=".core.services.CallAndroidService"
             android:exported="false">
             <!-- in order to get headset button events -->
             <intent-filter>
@@ -366,7 +368,7 @@
             tools:ignore="Instantiatable" />
 
         <service
-            android:name=".features.call.telecom.VectorConnectionService"
+            android:name=".features.call.telecom.VectorConnectionAndroidService"
             android:exported="false"
             android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE">
             <intent-filter>
@@ -375,12 +377,17 @@
         </service>
 
         <service
-            android:name=".features.location.LocationSharingService"
+            android:name=".features.location.live.tracking.LocationSharingAndroidService"
             android:exported="false"
             android:foregroundServiceType="location" />
 
         <service
-            android:name=".features.call.webrtc.ScreenCaptureService"
+            android:name=".features.start.StartAppAndroidService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+
+        <service
+            android:name=".features.call.webrtc.ScreenCaptureAndroidService"
             android:exported="false"
             android:foregroundServiceType="mediaProjection"
             tools:targetApi="Q" />

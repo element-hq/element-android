@@ -57,13 +57,16 @@ import im.vector.app.features.discovery.change.SetIdentityServerFragment
 import im.vector.app.features.home.HomeDetailFragment
 import im.vector.app.features.home.HomeDrawerFragment
 import im.vector.app.features.home.LoadingFragment
+import im.vector.app.features.home.NewHomeDetailFragment
 import im.vector.app.features.home.room.breadcrumbs.BreadcrumbsFragment
 import im.vector.app.features.home.room.detail.TimelineFragment
 import im.vector.app.features.home.room.detail.search.SearchFragment
 import im.vector.app.features.home.room.list.RoomListFragment
+import im.vector.app.features.home.room.list.home.HomeRoomListFragment
+import im.vector.app.features.home.room.list.home.NewChatBottomSheet
 import im.vector.app.features.home.room.threads.list.views.ThreadListFragment
-import im.vector.app.features.location.LocationPreviewFragment
 import im.vector.app.features.location.LocationSharingFragment
+import im.vector.app.features.location.preview.LocationPreviewFragment
 import im.vector.app.features.login.LoginCaptchaFragment
 import im.vector.app.features.login.LoginFragment
 import im.vector.app.features.login.LoginGenericTextInputFormFragment
@@ -77,24 +80,6 @@ import im.vector.app.features.login.LoginSplashFragment
 import im.vector.app.features.login.LoginWaitForEmailFragment
 import im.vector.app.features.login.LoginWebFragment
 import im.vector.app.features.login.terms.LoginTermsFragment
-import im.vector.app.features.login2.LoginCaptchaFragment2
-import im.vector.app.features.login2.LoginFragmentSigninPassword2
-import im.vector.app.features.login2.LoginFragmentSigninUsername2
-import im.vector.app.features.login2.LoginFragmentSignupPassword2
-import im.vector.app.features.login2.LoginFragmentSignupUsername2
-import im.vector.app.features.login2.LoginFragmentToAny2
-import im.vector.app.features.login2.LoginGenericTextInputFormFragment2
-import im.vector.app.features.login2.LoginResetPasswordFragment2
-import im.vector.app.features.login2.LoginResetPasswordMailConfirmationFragment2
-import im.vector.app.features.login2.LoginResetPasswordSuccessFragment2
-import im.vector.app.features.login2.LoginServerSelectionFragment2
-import im.vector.app.features.login2.LoginServerUrlFormFragment2
-import im.vector.app.features.login2.LoginSplashSignUpSignInSelectionFragment2
-import im.vector.app.features.login2.LoginSsoOnlyFragment2
-import im.vector.app.features.login2.LoginWaitForEmailFragment2
-import im.vector.app.features.login2.LoginWebFragment2
-import im.vector.app.features.login2.created.AccountCreatedFragment
-import im.vector.app.features.login2.terms.LoginTermsFragment2
 import im.vector.app.features.matrixto.MatrixToRoomSpaceFragment
 import im.vector.app.features.matrixto.MatrixToUserFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthAccountCreatedFragment
@@ -162,6 +147,7 @@ import im.vector.app.features.settings.devtools.GossipingEventsPaperTrailFragmen
 import im.vector.app.features.settings.devtools.IncomingKeyRequestListFragment
 import im.vector.app.features.settings.devtools.KeyRequestsFragment
 import im.vector.app.features.settings.devtools.OutgoingKeyRequestListFragment
+import im.vector.app.features.settings.font.FontScaleSettingFragment
 import im.vector.app.features.settings.homeserver.HomeserverSettingsFragment
 import im.vector.app.features.settings.ignored.VectorSettingsIgnoredUsersFragment
 import im.vector.app.features.settings.legals.LegalsFragment
@@ -205,6 +191,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(RoomListFragment::class)
     fun bindRoomListFragment(fragment: RoomListFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(NewChatBottomSheet::class)
+    fun bindNewChatBottomSheetFragment(fragment: NewChatBottomSheet): Fragment
 
     @Binds
     @IntoMap
@@ -255,6 +246,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(HomeDetailFragment::class)
     fun bindHomeDetailFragment(fragment: HomeDetailFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(NewHomeDetailFragment::class)
+    fun bindNewHomeDetailFragment(fragment: NewHomeDetailFragment): Fragment
 
     @Binds
     @IntoMap
@@ -325,96 +321,6 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(LoginWaitForEmailFragment::class)
     fun bindLoginWaitForEmailFragment(fragment: LoginWaitForEmailFragment): Fragment
-
-    @Binds
-    @IntoMap
-    @FragmentKey(LoginFragmentSigninUsername2::class)
-    fun bindLoginFragmentSigninUsername2(fragment: LoginFragmentSigninUsername2): Fragment
-
-    @Binds
-    @IntoMap
-    @FragmentKey(AccountCreatedFragment::class)
-    fun bindAccountCreatedFragment(fragment: AccountCreatedFragment): Fragment
-
-    @Binds
-    @IntoMap
-    @FragmentKey(LoginFragmentSignupUsername2::class)
-    fun bindLoginFragmentSignupUsername2(fragment: LoginFragmentSignupUsername2): Fragment
-
-    @Binds
-    @IntoMap
-    @FragmentKey(LoginFragmentSigninPassword2::class)
-    fun bindLoginFragmentSigninPassword2(fragment: LoginFragmentSigninPassword2): Fragment
-
-    @Binds
-    @IntoMap
-    @FragmentKey(LoginFragmentSignupPassword2::class)
-    fun bindLoginFragmentSignupPassword2(fragment: LoginFragmentSignupPassword2): Fragment
-
-    @Binds
-    @IntoMap
-    @FragmentKey(LoginCaptchaFragment2::class)
-    fun bindLoginCaptchaFragment2(fragment: LoginCaptchaFragment2): Fragment
-
-    @Binds
-    @IntoMap
-    @FragmentKey(LoginFragmentToAny2::class)
-    fun bindLoginFragmentToAny2(fragment: LoginFragmentToAny2): Fragment
-
-    @Binds
-    @IntoMap
-    @FragmentKey(LoginTermsFragment2::class)
-    fun bindLoginTermsFragment2(fragment: LoginTermsFragment2): Fragment
-
-    @Binds
-    @IntoMap
-    @FragmentKey(LoginServerUrlFormFragment2::class)
-    fun bindLoginServerUrlFormFragment2(fragment: LoginServerUrlFormFragment2): Fragment
-
-    @Binds
-    @IntoMap
-    @FragmentKey(LoginResetPasswordMailConfirmationFragment2::class)
-    fun bindLoginResetPasswordMailConfirmationFragment2(fragment: LoginResetPasswordMailConfirmationFragment2): Fragment
-
-    @Binds
-    @IntoMap
-    @FragmentKey(LoginResetPasswordFragment2::class)
-    fun bindLoginResetPasswordFragment2(fragment: LoginResetPasswordFragment2): Fragment
-
-    @Binds
-    @IntoMap
-    @FragmentKey(LoginResetPasswordSuccessFragment2::class)
-    fun bindLoginResetPasswordSuccessFragment2(fragment: LoginResetPasswordSuccessFragment2): Fragment
-
-    @Binds
-    @IntoMap
-    @FragmentKey(LoginServerSelectionFragment2::class)
-    fun bindLoginServerSelectionFragment2(fragment: LoginServerSelectionFragment2): Fragment
-
-    @Binds
-    @IntoMap
-    @FragmentKey(LoginSsoOnlyFragment2::class)
-    fun bindLoginSsoOnlyFragment2(fragment: LoginSsoOnlyFragment2): Fragment
-
-    @Binds
-    @IntoMap
-    @FragmentKey(LoginSplashSignUpSignInSelectionFragment2::class)
-    fun bindLoginSplashSignUpSignInSelectionFragment2(fragment: LoginSplashSignUpSignInSelectionFragment2): Fragment
-
-    @Binds
-    @IntoMap
-    @FragmentKey(LoginWebFragment2::class)
-    fun bindLoginWebFragment2(fragment: LoginWebFragment2): Fragment
-
-    @Binds
-    @IntoMap
-    @FragmentKey(LoginGenericTextInputFormFragment2::class)
-    fun bindLoginGenericTextInputFormFragment2(fragment: LoginGenericTextInputFormFragment2): Fragment
-
-    @Binds
-    @IntoMap
-    @FragmentKey(LoginWaitForEmailFragment2::class)
-    fun bindLoginWaitForEmailFragment2(fragment: LoginWaitForEmailFragment2): Fragment
 
     @Binds
     @IntoMap
@@ -585,6 +491,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(HomeserverSettingsFragment::class)
     fun bindHomeserverSettingsFragment(fragment: HomeserverSettingsFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(FontScaleSettingFragment::class)
+    fun bindFontScaleSettingFragment(fragment: FontScaleSettingFragment): Fragment
 
     @Binds
     @IntoMap
@@ -1035,4 +946,9 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(LocationPreviewFragment::class)
     fun bindLocationPreviewFragment(fragment: LocationPreviewFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(HomeRoomListFragment::class)
+    fun binHomeRoomListFragment(fragment: HomeRoomListFragment): Fragment
 }

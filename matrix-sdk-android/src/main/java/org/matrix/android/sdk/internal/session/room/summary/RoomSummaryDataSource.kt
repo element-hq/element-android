@@ -200,14 +200,13 @@ internal class RoomSummaryDataSource @Inject constructor(
             queryParams: RoomSummaryQueryParams,
             pagedListConfig: PagedList.Config,
             sortOrder: RoomSortOrder,
-            getFlattenedParents: Boolean = false
     ): UpdatableLivePageResult {
         val realmDataSourceFactory = monarchy.createDataSourceFactory { realm ->
             roomSummariesQuery(realm, queryParams).process(sortOrder)
         }
         val dataSourceFactory = realmDataSourceFactory.map {
             roomSummaryMapper.map(it)
-        }.map { if (getFlattenedParents) it.getWithParents() else it }
+        }
 
         val boundaries = MutableLiveData(ResultBoundaries())
 
@@ -244,13 +243,6 @@ internal class RoomSummaryDataSource @Inject constructor(
                     }
                 }
         }
-    }
-
-    private fun RoomSummary.getWithParents(): RoomSummary {
-        val parents = flattenParentIds.mapNotNull { parentId ->
-            getRoomSummary(parentId)
-        }
-        return copy(flattenParents = parents)
     }
 
     fun getCountLive(queryParams: RoomSummaryQueryParams): LiveData<Int> {
@@ -325,12 +317,9 @@ internal class RoomSummaryDataSource @Inject constructor(
             is SpaceFilter.ExcludeSpace -> {
                 query.not().contains(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, queryParams.spaceFilter.spaceId)
             }
-            null -> Unit // nop
+            SpaceFilter.NoFilter -> Unit // nop
         }
 
-        queryParams.activeGroupId?.let { activeGroupId ->
-            query.contains(RoomSummaryEntityFields.GROUP_IDS, activeGroupId)
-        }
         return query
     }
 

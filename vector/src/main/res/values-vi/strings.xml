@@ -8,7 +8,6 @@
     <string name="send_bug_report">Báo lỗi</string>
     <string name="send_bug_report_include_screenshot">Gửi ảnh chụp màn hình</string>
     <string name="send_bug_report_include_key_share_history">Gửi lịch sử yêu cầu chia sẻ khóa</string>
-    <string name="groups_header">Cộng đồng</string>
     <string name="rooms_header">Phòng</string>
     <string name="no_more_results">Không còn kết quả nào nữa</string>
     <string name="action_ignore">Bỏ qua</string>
@@ -328,7 +327,6 @@
     <string name="notice_crypto_unable_to_decrypt_friendly">Đang đợi tin nhắn này, việc này có thể mất một lúc</string>
     <string name="notice_room_leave_with_reason_by_you">Bạn đã rời phòng. Lý do: %1$s</string>
     <string name="notice_room_leave_with_reason">%1$s đã rời phòng. Lý do: %2$s</string>
-    <string name="auth_reset_password_missing_email">Địa chỉ email được liên kết đến tài khoản của bạn phải được nhập.</string>
     <string name="auth_recaptcha_message">Máy chủ nhà này muốn chắc chắn bạn không phải rô bốt</string>
     <string name="auth_msisdn_already_defined">Số điện thoại này đã được định nghĩa rồi.</string>
     <string name="auth_email_already_defined">Địa chỉ email này đã được định nghĩa rồi.</string>
@@ -491,8 +489,6 @@
     <string name="event_status_sent_message">Đã gửi tin nhắn</string>
     <string name="initial_sync_start_importing_account_data">Đồng bộ ban đầu:
 \nĐang nhập dữ liệu tài khoản</string>
-    <string name="initial_sync_start_importing_account_groups">Đồng bộ ban đầu:
-\nĐang nhập các Community</string>
     <string name="initial_sync_start_importing_account_left_rooms">Đồng bộ ban đầu:
 \nĐang nhập các phòng đã rời khỏi</string>
     <string name="initial_sync_start_importing_account_invited_rooms">Đồng bộ ban đầu:
@@ -736,7 +732,6 @@
     <string name="attachment_type_contact">Liên hệ</string>
     <string name="attachment_type_file">Tệp</string>
     <string name="attachment_type_dialog_title">Thêm hình từ</string>
-    <string name="error_attachment">Lỗi xảy ra khi hiển thị tệp đính kèm.</string>
     <string name="error_file_too_big_simple">Tệp quá lớn để tải lên.</string>
     <plurals name="fallback_users_read">
         <item quantity="other">%d người dùng đã đọc</item>
@@ -976,7 +971,7 @@
 \nVui lòng kiểm tra thiết lập.</string>
     <string name="settings_troubleshoot_test_system_settings_success">Thông báo được bật trong thiết lập hệ thống.</string>
     <string name="settings_troubleshoot_test_system_settings_title">Thiết lập hệ thống.</string>
-    <string name="settings_notification_troubleshoot">Xử lý lỗi thông báo</string>
+    <string name="settings_notification_troubleshoot">Thông báo khắc phục lỗi</string>
     <string name="settings_notification_keyword_contains_invalid_character">Từ khóa không được chứa \'%s\'</string>
     <string name="settings_notification_keyword_contains_dot">Từ khóa không được bắt đầu với \'.\'</string>
     <string name="settings_notification_new_keyword">Thêm mới từ khóa</string>
@@ -1495,14 +1490,14 @@
     <string name="use_recovery_key">Sử dụng Khóa Khôi phục</string>
     <string name="enter_secret_storage_passphrase_or_key">Dùng %1$s của bạn hoặc dùng %2$s của bạn để tiếp tục.</string>
     <string name="command_description_discard_session_not_handled">Chỉ được hỗ trợ trong các phòng được mã hóa</string>
-    <string name="command_description_discard_session">Buộc nhóm phiên hướng ra hiện tại trong một căn phòng được mã hóa phải bị loại bỏ</string>
+    <string name="command_description_discard_session">Buộc nhóm phiên hướng ra hiện tại trong một phòng được mã hóa phải bị loại bỏ</string>
     <string name="use_latest_app">Sử dụng ${app_name mới nhất} trên các thiết bị khác của bạn:</string>
-    <string name="or_other_mx_capable_client">hoặc một máy khách Matrix có khả năng xác thực chéo khác</string>
+    <string name="or_other_mx_capable_client">hoặc một máy khách Matrix khác có khả năng xác thực chéo</string>
     <string name="app_ios_android">${app_name} iOS
 \n${app_name} Android</string>
     <string name="app_desktop_web">${app_name} Web
 \n${app_name} Desktop</string>
-    <string name="use_other_session_content_description">Sử dụng ${app_name} mới nhất trên các thiết bị khác của bạn, Web ${app_name}, Máy tính để bàn ${app_name}, iOS ${app_name}, ${app_name} cho Android hoặc một máy khách Matrix có khả năng xác thực chéo khác</string>
+    <string name="use_other_session_content_description">Sử dụng ${app_name} mới nhất trên các thiết bị khác của bạn, Web ${app_name}, Máy tính để bàn ${app_name}, iOS ${app_name}, Android ${app_name} hoặc một máy khách Matrix khác có khả năng xác thực chéo</string>
     <string name="change_password_summary">Đặt mật khẩu tài khoản mới…</string>
     <string name="error_saving_media_file">Không thể lưu tệp Media</string>
     <string name="settings_security_prevent_screenshots_summary">Bật thiết đặt này thêm FLAG_SECURE cho tất cả các Hoạt động. Khởi động lại ứng dụng để thay đổi có hiệu lực.</string>
@@ -1591,11 +1586,11 @@
     <string name="settings_active_sessions_show_all">Hiện Tất cả Phiên</string>
     <string name="settings_active_sessions_list">Phiên Hoạt động</string>
     <string name="settings_hs_admin_e2e_disabled">Người quản trị máy chủ của bạn đã vô hiệu hóa mã hóa đầu cuối theo mặc định trong phòng riêng và Tin nhắn trực tiếp.</string>
-    <string name="encryption_information_dg_xsigning_disabled">Xác thực chéo không được bật</string>
+    <string name="encryption_information_dg_xsigning_disabled">Xác thực chéo không được kích hoạt</string>
     <string name="encryption_information_dg_xsigning_not_trusted">Xác thực chéo được kích hoạt.
 \nCác khóa không đáng tin cậy</string>
     <string name="encryption_information_dg_xsigning_trusted">Xác thực chéo được kích hoạt
-\nCác mã khóa là đáng tin cậy.
+\nCác khóa là đáng tin cậy.
 \nCác khóa riêng tư không xác định</string>
     <string name="encryption_information_dg_xsigning_complete">Xác thực chéo được kích hoạt
 \nKhóa riêng trên thiết bị.</string>
@@ -1847,7 +1842,6 @@
     <string name="room_preview_not_found">Căn phòng này không thể truy cập vào thời điểm này.
 \nHãy thử lại sau, hoặc yêu cầu quản trị viên phòng kiểm tra xem bạn có quyền truy cập hay không.</string>
     <string name="room_preview_no_preview">Phòng này không thể được xem trước</string>
-    <string name="group_all_communities">Tất cả Community</string>
     <string name="please_wait">Vui lòng chờ…</string>
     <string name="change_room_directory_network">Thay đổi mạng</string>
     <string name="action_change">Thay đổi</string>
@@ -2259,7 +2253,7 @@
     <string name="preference_help">Trợ giúp</string>
     <string name="preference_root_legals">Pháp lý</string>
     <string name="preference_root_help_about">Trợ giúp &amp; Giới thiệu</string>
-    <string name="preference_voice_and_video">Voice &amp; Video</string>
+    <string name="preference_voice_and_video">Âm thanh &amp; Hình ảnh</string>
     <string name="push_gateway_item_format">Format:</string>
     <string name="push_gateway_item_url">Url:</string>
     <string name="push_gateway_item_device_name">session_name:</string>
@@ -2271,4 +2265,11 @@
     <plurals name="send_images_with_original_size">
         <item quantity="other">Gửi ảnh với kích thước gốc</item>
     </plurals>
+    <string name="settings_presence_user_always_appears_offline_summary">Nếu được bật, bạn sẽ luôn hiển thị ngoại tuyến với các người dùng khác, ngay cả thi sử dụng ứng dụng.</string>
+    <string name="settings_presence_user_always_appears_offline">Chế độ ngoại tuyến</string>
+    <string name="settings_presence">Sự hiện diện</string>
+    <string name="message_bubbles">Hiển thị bong bóng tin nhắn</string>
+    <string name="unifiedpush_getdistributors_dialog_title">Chọn cách nhận thông báo</string>
+    <string name="settings_notification_method">Phương thức thông báo</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">Đặt lại phương thức thông báo</string>
 </resources>

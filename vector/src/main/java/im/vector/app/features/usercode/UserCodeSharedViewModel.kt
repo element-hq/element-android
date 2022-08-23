@@ -29,7 +29,6 @@ import im.vector.app.features.createdirect.DirectRoomHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
-import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getUser
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
@@ -42,7 +41,6 @@ class UserCodeSharedViewModel @AssistedInject constructor(
         private val session: Session,
         private val stringProvider: StringProvider,
         private val directRoomHelper: DirectRoomHelper,
-        private val rawService: RawService
 ) : VectorViewModel<UserCodeState, UserCodeActions, UserCodeShareViewEvents>(initialState) {
 
     companion object : MavericksViewModelFactory<UserCodeSharedViewModel, UserCodeState> by hiltMavericksViewModelFactory()
@@ -129,15 +127,11 @@ class UserCodeSharedViewModel @AssistedInject constructor(
                         )
                     }
                 }
-                is PermalinkData.GroupLink -> {
-                    // not yet supported
-                    _viewEvents.post(UserCodeShareViewEvents.ToastMessage(stringProvider.getString(R.string.not_implemented)))
-                }
+                is PermalinkData.RoomEmailInviteLink,
                 is PermalinkData.FallbackLink -> {
                     // not yet supported
                     _viewEvents.post(UserCodeShareViewEvents.ToastMessage(stringProvider.getString(R.string.not_implemented)))
                 }
-                is PermalinkData.RoomEmailInviteLink -> Unit
             }
             _viewEvents.post(UserCodeShareViewEvents.HideWaitingScreen)
         }

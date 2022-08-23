@@ -25,18 +25,19 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.BuildConfig
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.network.WifiDetector
 import im.vector.app.core.pushers.model.PushData
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.services.GuardServiceStarter
 import im.vector.app.features.notifications.NotifiableEventResolver
+import im.vector.app.features.notifications.NotificationActionIds
 import im.vector.app.features.notifications.NotificationDrawerManager
-import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.settings.BackgroundSyncMode
 import im.vector.app.features.settings.VectorDataStore
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -67,6 +68,8 @@ class VectorMessagingReceiver : MessagingReceiver() {
     @Inject lateinit var unifiedPushHelper: UnifiedPushHelper
     @Inject lateinit var unifiedPushStore: UnifiedPushStore
     @Inject lateinit var pushParser: PushParser
+    @Inject lateinit var actionIds: NotificationActionIds
+    @Inject lateinit var buildMeta: BuildMeta
 
     private val coroutineScope = CoroutineScope(SupervisorJob())
 
@@ -86,7 +89,7 @@ class VectorMessagingReceiver : MessagingReceiver() {
         Timber.tag(loggerTag.value).d("## onMessage() received")
 
         val sMessage = String(message)
-        if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
+        if (buildMeta.lowPrivacyLoggingEnabled) {
             Timber.tag(loggerTag.value).d("## onMessage() $sMessage")
         }
 
@@ -99,7 +102,7 @@ class VectorMessagingReceiver : MessagingReceiver() {
 
         // Diagnostic Push
         if (pushData.eventId == PushersManager.TEST_EVENT_ID) {
-            val intent = Intent(NotificationUtils.PUSH_ACTION)
+            val intent = Intent(actionIds.push)
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
             return
         }
@@ -114,7 +117,7 @@ class VectorMessagingReceiver : MessagingReceiver() {
                 // we are in foreground, let the sync do the things?
                 Timber.tag(loggerTag.value).d("PUSH received in a foreground state, ignore")
             } else {
-                onMessageReceivedInternal(pushData)
+                coroutineScope.launch(Dispatchers.IO) { onMessageReceivedInternal(pushData) }
             }
         }
     }
@@ -168,15 +171,15 @@ class VectorMessagingReceiver : MessagingReceiver() {
      *
      * @param pushData Object containing message data.
      */
-    private fun onMessageReceivedInternal(pushData: PushData) {
+    private suspend fun onMessageReceivedInternal(pushData: PushData) {
         try {
-            if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
+            if (buildMeta.lowPrivacyLoggingEnabled) {
                 Timber.tag(loggerTag.value).d("## onMessageReceivedInternal() : $pushData")
             } else {
                 Timber.tag(loggerTag.value).d("## onMessageReceivedInternal()")
             }
 
-            val session = activeSessionHolder.getSafeActiveSession()
+            val session = activeSessionHolder.getOrInitializeSession(startSync = false)
 
             if (session == null) {
                 Timber.tag(loggerTag.value).w("## Can't sync from push, no current session")
@@ -197,7 +200,7 @@ class VectorMessagingReceiver : MessagingReceiver() {
         }
     }
 
-    private fun getEventFastLane(session: Session, pushData: PushData) {
+    private suspend fun getEventFastLane(session: Session, pushData: PushData) {
         pushData.roomId ?: return
         pushData.eventId ?: return
 
@@ -211,18 +214,16 @@ class VectorMessagingReceiver : MessagingReceiver() {
             return
         }
 
-        coroutineScope.launch {
-            Timber.tag(loggerTag.value).d("Fast lane: start request")
-            val event = tryOrNull { session.eventService().getEvent(pushData.roomId, pushData.eventId) } ?: return@launch
+        Timber.tag(loggerTag.value).d("Fast lane: start request")
+        val event = tryOrNull { session.eventService().getEvent(pushData.roomId, pushData.eventId) } ?: return
 
-            val resolvedEvent = notifiableEventResolver.resolveInMemoryEvent(session, event, canBeReplaced = true)
+        val resolvedEvent = notifiableEventResolver.resolveInMemoryEvent(session, event, canBeReplaced = true)
 
-            resolvedEvent
-                    ?.also { Timber.tag(loggerTag.value).d("Fast lane: notify drawer") }
-                    ?.let {
-                        notificationDrawerManager.updateEvents { it.onNotifiableEventReceived(resolvedEvent) }
-                    }
-        }
+        resolvedEvent
+                ?.also { Timber.tag(loggerTag.value).d("Fast lane: notify drawer") }
+                ?.let {
+                    notificationDrawerManager.updateEvents { it.onNotifiableEventReceived(resolvedEvent) }
+                }
     }
 
     // check if the event was not yet received

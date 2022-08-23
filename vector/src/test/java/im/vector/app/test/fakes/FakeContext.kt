@@ -33,6 +33,7 @@ class FakeContext(
 
     init {
         every { instance.contentResolver } returns contentResolver
+        every { instance.applicationContext } returns instance
     }
 
     fun givenFileDescriptor(uri: Uri, mode: String, factory: () -> ParcelFileDescriptor?) {

@@ -29,14 +29,12 @@ data class RoomGuestAccessContent(
         // Required. Whether guests can join the room. One of: ["can_join", "forbidden"]
         @Json(name = "guest_access") val guestAccessStr: String? = null
 ) {
-    val guestAccess: GuestAccess? = when (guestAccessStr) {
-        "can_join" -> GuestAccess.CanJoin
-        "forbidden" -> GuestAccess.Forbidden
-        else -> {
-            Timber.w("Invalid value for GuestAccess: `$guestAccessStr`")
-            null
-        }
-    }
+    val guestAccess: GuestAccess? = GuestAccess.values()
+            .find { it.value == guestAccessStr }
+            ?: run {
+                Timber.w("Invalid value for GuestAccess: `$guestAccessStr`")
+                null
+            }
 }
 
 @JsonClass(generateAdapter = false)

@@ -76,7 +76,7 @@ class EmojiDataSourceTest : InstrumentedTest {
     fun searchTestOneResult() {
         val emojiDataSource = createEmojiDataSource()
         val result = runBlocking {
-            emojiDataSource.filterWith("france")
+            emojiDataSource.filterWith("flag-france")
         }
         assertEquals("Should have 1 result", 1, result.size)
     }

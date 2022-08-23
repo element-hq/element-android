@@ -120,3 +120,20 @@ internal data class CreateRoomBody(
         @Json(name = "room_version")
         val roomVersion: String?
 )
+
+/**
+ * Tells if the created room can be a direct chat one.
+ *
+ * @return true if it is a direct chat
+ */
+private fun CreateRoomBody.isDirect(): Boolean {
+    return preset == CreateRoomPreset.PRESET_TRUSTED_PRIVATE_CHAT && isDirect == true
+}
+
+internal fun CreateRoomBody.getDirectUserId(): String? {
+    return if (isDirect()) {
+        invitedUserIds?.firstOrNull()
+                ?: invite3pids?.firstOrNull()?.address
+                ?: throw IllegalStateException("You can't create a direct room without an invitedUser")
+    } else null
+}

@@ -25,8 +25,9 @@ import im.vector.app.core.preference.VectorPreferenceCategory
 import im.vector.app.core.preference.VectorSwitchPreference
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.rageshake.RageShake
+import javax.inject.Inject
 
-class VectorSettingsAdvancedSettingsFragment : VectorSettingsBaseFragment() {
+class VectorSettingsAdvancedSettingsFragment @Inject constructor() : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.settings_advanced_settings
     override val preferenceXmlRes = R.xml.vector_settings_advanced_settings

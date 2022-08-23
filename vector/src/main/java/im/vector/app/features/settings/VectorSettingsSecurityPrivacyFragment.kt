@@ -35,7 +35,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.fragmentViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
-import im.vector.app.config.analyticsConfig
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.dialogs.ExportKeysDialog
 import im.vector.app.core.extensions.queryExportKeys
@@ -51,6 +50,8 @@ import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.openFileSelection
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.DialogImportE2eKeysBinding
+import im.vector.app.features.VectorFeatures
+import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.analytics.ui.consent.AnalyticsConsentViewActions
 import im.vector.app.features.analytics.ui.consent.AnalyticsConsentViewModel
@@ -84,7 +85,9 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         private val keysExporter: KeysExporter,
         private val keysImporter: KeysImporter,
         private val rawService: RawService,
-        private val navigator: Navigator
+        private val navigator: Navigator,
+        private val analyticsConfig: AnalyticsConfig,
+        private val vectorFeatures: VectorFeatures,
 ) : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.settings_security_and_privacy
@@ -132,6 +135,10 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
 
     private val showDeviceListPref by lazy {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_SHOW_DEVICES_LIST_PREFERENCE_KEY)!!
+    }
+
+    private val showDevicesListV2Pref by lazy {
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_SHOW_DEVICES_LIST_V2_PREFERENCE_KEY)!!
     }
 
     // encrypt to unverified devices
@@ -544,6 +551,10 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
     private fun refreshCryptographyPreference(devices: List<DeviceInfo>) {
         showDeviceListPref.isEnabled = devices.isNotEmpty()
         showDeviceListPref.summary = resources.getQuantityString(R.plurals.settings_active_sessions_count, devices.size, devices.size)
+
+        showDevicesListV2Pref.isVisible = vectorFeatures.isNewDeviceManagementEnabled()
+        showDevicesListV2Pref.title = getString(R.string.device_manager_settings_active_sessions_show_all)
+        showDevicesListV2Pref.summary = resources.getQuantityString(R.plurals.settings_active_sessions_count, devices.size, devices.size)
 
         val userId = session.myUserId
         val deviceId = session.sessionParams.deviceId

@@ -104,7 +104,7 @@ class BootstrapSaveRecoveryKeyFragment @Inject constructor(
                 ?: return@withState
 
         startSharePlainTextIntent(
-                this,
+                requireContext(),
                 copyStartForActivityResult,
                 context?.getString(R.string.keys_backup_setup_step3_share_intent_chooser_title),
                 recoveryKey,
