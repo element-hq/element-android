@@ -35,7 +35,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 /**
- * Note: We reuse the same type [UpdateTrustWorker.Params], since the inout data are the same.
+ * Note: We reuse the same type [UpdateTrustWorker.Params], since the input data are the same.
  */
 internal class UpdateUserWorker(context: Context, params: WorkerParameters, sessionManager: SessionManager) :
         SessionSafeCoroutineWorker<UpdateTrustWorker.Params>(context, params, sessionManager, UpdateTrustWorker.Params::class.java) {
