@@ -42,7 +42,6 @@
     <string name="low_priority_header">Lavprioritet</string>
     <string name="no_result_placeholder">Ingen treff</string>
     <string name="rooms_header">Rom</string>
-    <string name="groups_header">Samfunn</string>
     <string name="send_bug_report">Meld fra om en bug</string>
     <string name="send_bug_report_progress">Fremgang (%s%%)</string>
     <string name="join_room">Bli med i rommet</string>
@@ -524,7 +523,6 @@
     <string name="event_redacted">Meldingen ble slettet</string>
     <string name="settings_show_redacted">Vis fjernede meldinger</string>
     <string name="settings_show_redacted_summary">Vis en stattholder for fjernede meldinger</string>
-    <string name="group_all_communities">Alle samfunn</string>
     <string name="settings_sdk_version">Matrix SDK-versjon</string>
     <string name="send_suggestion">Send inn et forslag</string>
     <string name="send_file_step_encrypting_file">Krypterer filen …</string>
@@ -604,7 +602,6 @@
     <string name="auth_accept_policies">Vennligst gjennomgå og godta retningslinjene til denne hjemmeserveren:</string>
 
     <string name="auth_reset_password_error_unauthorized">Klarte ikke verifisere e-postadressen: Pass på at du har klikket på lenken i e-posten</string>
-    <string name="auth_reset_password_missing_email">Du må skrive inn e-postadressen som er knyttet til din konto.</string>
     <string name="auth_recaptcha_message">Denne hjemmetjeneren vil vite om du er en robot</string>
 
     <string name="call_failed_no_connection_description">Klarte ikke å starte en sanntidskopling.

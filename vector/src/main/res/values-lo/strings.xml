@@ -259,7 +259,6 @@
     <string name="login_error_invalid_home_server">ກະລຸນາໃສ່ URL ທີ່ຖືກຕ້ອງ</string>
     <string name="auth_accept_policies">ກະລຸນາກວດເບິ່ງ ແລະຍອມຮັບນະໂຍບາຍຂອງ homeserver ນີ້:</string>
     <string name="auth_reset_password_error_unauthorized">ການກວດສອບທີ່ຢູ່ອີເມວບໍ່ສຳເລັດ: ໃຫ້ແນ່ໃຈວ່າທ່ານໄດ້ກົດໃສ່ການເຊື່ອມຕໍ່ໃນອີເມວ</string>
-    <string name="auth_reset_password_missing_email">ຕ້ອງໃສ່ອິເມວທີ່ເຊື່ອມຕໍ່ກັບບັນຊີຂອງທ່ານ.</string>
     <string name="auth_recaptcha_message">homeserver ນີ້ຕ້ອງການໃຫ້ແນ່ໃຈວ່າທ່ານບໍ່ແມ່ນຫຸ່ນຍົນ</string>
     <string name="auth_forgot_password">ລືມລະຫັດຜ່ານ\?</string>
     <string name="auth_msisdn_already_defined">ເບີໂທລະສັບນີ້ຖືກກໍານົດໄວ້ແລ້ວ.</string>
@@ -320,7 +319,6 @@
     <string name="send_bug_report_include_crash_logs">ສົ່ງບັນທຶກການຂັດຂ້ອງ</string>
     <string name="send_bug_report_include_logs">ສົ່ງບັນທຶກ</string>
     <string name="spaces_header">ພື້ນທີ່</string>
-    <string name="groups_header">ຊຸມຊົນ</string>
     <string name="settings_room_directory_show_all_rooms_summary">ສະແດງໃຫ້ເຫັນຫ້ອງທັງຫມົດໃນລະບົບຫ້ອງ, ລວມທັງຫ້ອງທີ່ມີເນື້ອຫາຊັດເຈນ.</string>
     <string name="settings_room_directory_show_all_rooms">ສະແດງຫ້ອງທີ່ມີເນື້ອຫາບໍ່ຈະແຈ້ງ</string>
     <string name="rooms_header">ຫ້ອງ</string>
@@ -515,8 +513,6 @@
     <string name="event_status_sent_message">ຂໍ້ຄວາມຖືກສົ່ງ</string>
     <string name="initial_sync_start_importing_account_data">ການຊິງຄ໌ເບື້ອງຕົ້ນ:
 \nການນໍາເຂົ້າຂໍ້ມູນບັນຊີ</string>
-    <string name="initial_sync_start_importing_account_groups">ການຊິງຄ໌ເບື້ອງຕົ້ນ:
-\nຊຸມຊົນນໍາເຂົ້າ</string>
     <string name="initial_sync_start_importing_account_left_rooms">ການຊິງຄ໌ເບື້ອງຕົ້ນ:
 \nການນໍາເຂົ້າຫ້ອງຊ້າຍ</string>
     <string name="initial_sync_start_importing_account_invited_rooms">ການຊິງຄ໌ເບື້ອງຕົ້ນ:
@@ -737,7 +733,6 @@
     <string name="room_preview_not_found">ຫ້ອງນີ້ບໍ່ສາມາດເຂົ້າເຖິງໄດ້ໃນເວລານີ້.
 \nລອງໃໝ່ໃນພາຍຫຼັງ, ຫຼືຖາມຜູ້ເບິ່ງແຍງຫ້ອງເພື່ອກວດເບິ່ງວ່າທ່ານມີການເຂົ້າເຖິງຫຼືບໍ່.</string>
     <string name="room_preview_no_preview">ຫ້ອງນີ້ບໍ່ສາມາດເບິ່ງຕົວຢ່າງໄດ້</string>
-    <string name="group_all_communities">ຊຸມຊົນທັງໝົດ</string>
     <string name="please_wait">ກະລຸນາລໍຖ້າ…</string>
     <string name="change_room_directory_network">ປ່ຽນເຄືອຂ່າຍ</string>
     <string name="error_no_network">ບໍ່ມີເຄືອຂ່າຍ. ກະລຸນາກວດເບິ່ງການເຊື່ອມຕໍ່ອິນເຕີເນັດຂອງທ່ານ.</string>
@@ -2243,7 +2238,6 @@
     <string name="direct_room_profile_section_more_leave">ອອກໄປ</string>
     <string name="room_profile_section_more_leave">ອອກຈາກຫ້ອງ</string>
     <string name="room_profile_section_more_uploads">ອັບໂຫຼດ</string>
-    <string name="ftue_display_name_subtitle">ສິ່ງນີ້ຈະຖືກສະແດງເມື່ອທ່ານສົ່ງຂໍ້ຄວາມ.</string>
     <string name="ftue_display_name_title">ເລືອກຊື່ທີ່ຈະສະແດງ</string>
     <string name="ftue_account_created_subtitle">ບັນຊີຂອງທ່ານ%sໄດ້ຖືກສ້າງຂື້ນແລ້ວ.</string>
     <string name="ftue_account_created_congratulations_title">ຊົມເຊີຍ!</string>
