@@ -126,6 +126,8 @@ ext.libs = [
                 'epoxyProcessor'         : "com.airbnb.android:epoxy-processor:$epoxy",
                 'epoxyPaging'            : "com.airbnb.android:epoxy-paging:$epoxy",
                 'mavericks'              : "com.airbnb.android:mavericks:$mavericks",
+                'mavericksMocking'       : "com.airbnb.android:mavericks-mocking:$mavericks",
+                'mavericksLauncher'      : "com.airbnb.android:mavericks-launcher:$mavericks",
                 'mavericksTesting'       : "com.airbnb.android:mavericks-testing:$mavericks"
         ],
         maplibre    : [
