@@ -3,7 +3,6 @@ Changes in Element v1.4.34 (2022-08-23)
 
 Features ✨
 ----------
- - Adds New App Layout FABs (hidden behind feature flag) ([#6693](https://github.com/vector-im/element-android/issues/6693))
  - [Notification] - Handle creation of notification for live location and poll start ([#6746](https://github.com/vector-im/element-android/issues/6746))
 
 Bugfixes 🐛
@@ -30,6 +29,7 @@ In development 🚧
  - Adds new chat bottom sheet as the click action of the main FAB in the new app layout ([#6801](https://github.com/vector-im/element-android/issues/6801))
  - [Devices management] Other sessions section in new layout ([#6806](https://github.com/vector-im/element-android/issues/6806))
  - [New Layout] Adds space settings accessible through clicking the toolbar ([#6859](https://github.com/vector-im/element-android/issues/6859))
+ - Adds New App Layout FABs (hidden behind feature flag) ([#6693](https://github.com/vector-im/element-android/issues/6693))
 
 SDK API changes ⚠️
 ------------------
