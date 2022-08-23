@@ -4592,6 +4592,11 @@ $dokka.location:org.matrix.android.sdk.internal.crypto.model/SessionInfo///Point
 $dokka.location:org.matrix.android.sdk.internal.crypto.model/SessionInfo/SessionInfo/#kotlin.String#kotlin.String/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.crypto.model/-session-info/-session-info.html
 $dokka.location:org.matrix.android.sdk.internal.crypto.model/SessionInfo/senderKey/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.crypto.model/-session-info/sender-key.html
 $dokka.location:org.matrix.android.sdk.internal.crypto.model/SessionInfo/sessionId/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.crypto.model/-session-info/session-id.html
+$dokka.location:org.matrix.android.sdk.internal.database////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.database/index.html
+$dokka.location:org.matrix.android.sdk.internal.database/RealmCompactOnLaunch///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.database/-realm-compact-on-launch/index.html
+$dokka.location:org.matrix.android.sdk.internal.database/RealmCompactOnLaunch/RealmCompactOnLaunch/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.database/-realm-compact-on-launch/-realm-compact-on-launch.html
+$dokka.location:org.matrix.android.sdk.internal.database/RealmCompactOnLaunch/equals/#kotlin.Any?/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.database/-realm-compact-on-launch/equals.html
+$dokka.location:org.matrix.android.sdk.internal.database/RealmCompactOnLaunch/hashCode/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.database/-realm-compact-on-launch/hash-code.html
 $dokka.location:org.matrix.android.sdk.internal.session.room.aggregation.poll////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.session.room.aggregation.poll/index.html
 $dokka.location:org.matrix.android.sdk.internal.session.room.aggregation.poll/DefaultPollAggregationProcessor///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.session.room.aggregation.poll/-default-poll-aggregation-processor/index.html
 $dokka.location:org.matrix.android.sdk.internal.session.room.aggregation.poll/DefaultPollAggregationProcessor/DefaultPollAggregationProcessor/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.session.room.aggregation.poll/-default-poll-aggregation-processor/-default-poll-aggregation-processor.html
@@ -4727,6 +4732,7 @@ org.matrix.android.sdk.api.session.widgets.model
 org.matrix.android.sdk.api.settings
 org.matrix.android.sdk.api.util
 org.matrix.android.sdk.internal.crypto.model
+org.matrix.android.sdk.internal.database
 org.matrix.android.sdk.internal.session.room.aggregation.poll
 org.matrix.android.sdk.userstories
 
