@@ -140,7 +140,8 @@ internal class RoomMemberEventHandler @Inject constructor(
             val previousDisplayName = prevContent?.get("displayname") as? String
             val previousAvatar = prevContent?.get("avatar_url") as? String
 
-            if (previousDisplayName != roomMember.displayName || previousAvatar != roomMember.avatarUrl) {
+            if ((previousDisplayName != null && previousDisplayName != roomMember.displayName) ||
+                    (previousAvatar != null && previousAvatar != roomMember.avatarUrl)) {
                 aggregator.userIdsToFetch.add(eventUserId)
             }
         }
