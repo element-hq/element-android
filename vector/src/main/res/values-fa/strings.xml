@@ -2603,4 +2603,8 @@
     </plurals>
     <string name="search_space_two_parents">%1$s و %2$s</string>
     <string name="auth_reset_password_error_unverified">رایانامه تأیید نشده. صندوق ورودیتان را بررسی کنید</string>
+    <string name="location_share_loading_map_error">ناتوان در بار کردن نقشه
+\nشاید این کارساز خانگی برای نمایش نقشه‌ها پیکربندی نشده باشد.</string>
+    <string name="a11y_open_settings">گشودن تنظیمات</string>
+    <string name="all_chats">تمامی گپ‌ها</string>
 </resources>

@@ -2603,4 +2603,8 @@
     </plurals>
     <string name="search_space_two_parents">%1$s et %2$s</string>
     <string name="auth_reset_password_error_unverified">Courriel non vérifié, relevez votre boîte de réception</string>
+    <string name="location_share_loading_map_error">Impossible de charger la carte
+\nCe serveur d’accueil n’a peut-être pas été configuré pour afficher les cartes.</string>
+    <string name="a11y_open_settings">Ouvrir les paramètres</string>
+    <string name="all_chats">Toutes les conversations</string>
 </resources>

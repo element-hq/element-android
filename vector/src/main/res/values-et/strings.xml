@@ -2594,4 +2594,8 @@
     </plurals>
     <string name="search_space_two_parents">%1$s ja %2$s</string>
     <string name="auth_reset_password_error_unverified">E-posti aadress on kinnitamata, palun vaata oma saabunud e-kirju</string>
+    <string name="location_share_loading_map_error">Kaardi laadimine ei õnnestu.
+\nSee koduserver ei pruugi olla seadistatud kuvama kaarte.</string>
+    <string name="a11y_open_settings">Ava seadistused</string>
+    <string name="all_chats">Kõik vestlused</string>
 </resources>

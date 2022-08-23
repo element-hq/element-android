@@ -2553,4 +2553,8 @@
     </plurals>
     <string name="search_space_two_parents">%1$s 與 %2$s</string>
     <string name="auth_reset_password_error_unverified">電子郵件未驗證，請檢查您的收件匣</string>
+    <string name="location_share_loading_map_error">無法載入地圖
+\n此家伺服器可能未設定好顯示地圖。</string>
+    <string name="a11y_open_settings">開啟設定</string>
+    <string name="all_chats">所有聊天</string>
 </resources>
