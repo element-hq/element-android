@@ -137,9 +137,9 @@ internal class SyncResponseHandler @Inject constructor(
                 checkPushRules(it, isInitialSync)
                 userAccountDataSyncHandler.synchronizeWithServerIfNeeded(it.invite)
                 dispatchInvitedRoom(it)
-            }.also {
-                Timber.v("SyncResponse.rooms post treatment took $it ms")
             }
+        }.also {
+            Timber.v("SyncResponse.rooms post treatment took $it ms")
         }
 
         measureTimeMillis {
