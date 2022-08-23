@@ -21,7 +21,7 @@
         tools:src="@drawable/ic_device_type_mobile" />
 
     <TextView
-        android:id="@+id/currentSessionDeviceTypeTextView"
+        android:id="@+id/currentSessionNameTextView"
         style="@style/TextAppearance.Vector.Headline.Medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,7 +29,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/currentSessionDeviceTypeImageView"
-        tools:text="@string/device_manager_device_type_android" />
+        tools:text="Element Mobile: Android" />
 
     <LinearLayout
         android:id="@+id/currentSessionVerificationStatusContainer"
@@ -40,7 +40,7 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/currentSessionDeviceTypeTextView">
+        app:layout_constraintTop_toBottomOf="@id/currentSessionNameTextView">
 
         <im.vector.app.core.ui.views.ShieldImageView
             android:id="@+id/currentSessionVerificationStatusImageView"
