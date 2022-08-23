@@ -24,6 +24,8 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
 import androidx.core.content.getSystemService
+import com.airbnb.mvrx.launcher.MavericksLauncherActivity
+import com.airbnb.mvrx.launcher.MavericksLauncherMockActivity
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
@@ -82,6 +84,11 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
     }
 
     private fun setupViews() {
+
+        views.debugMock.setOnClickListener {
+            MavericksLauncherMockActivity.activityToShowMock = VectorLauncherMockActivity::class
+            MavericksLauncherActivity.show(this)
+        }
         views.debugFeatures.setOnClickListener { startActivity(Intent(this, DebugFeaturesSettingsActivity::class.java)) }
         views.debugPrivateSetting.setOnClickListener { openPrivateSettings() }
         views.debugAnalytics.setOnClickListener {

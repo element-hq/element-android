@@ -37,6 +37,8 @@ import com.airbnb.epoxy.Carousel
 import com.airbnb.epoxy.EpoxyAsyncUtil
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.mvrx.Mavericks
+import com.airbnb.mvrx.mocking.MavericksMock
+import com.airbnb.mvrx.mocking.MockableMavericks
 import com.facebook.stetho.Stetho
 import com.gabrielittner.threetenbp.LazyThreeTen
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper
@@ -146,7 +148,8 @@ class VectorApplication :
         }
         logInfo()
         LazyThreeTen.init(this)
-        Mavericks.initialize(debugMode = false)
+        MockableMavericks.initialize(mocksEnabled = buildMeta.isDebug, debugMode = false, applicationContext = applicationContext)
+        //Mavericks.initialize(debugMode = false)
 
         configureEpoxy()
 

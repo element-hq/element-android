@@ -25,6 +25,12 @@
             android:showDividers="middle">
 
             <Button
+                android:id="@+id/debug_mock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mocks" />
+
+            <Button
                 android:id="@+id/debug_features"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

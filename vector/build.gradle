@@ -424,6 +424,8 @@ dependencies {
     kapt libs.airbnb.epoxyProcessor
     implementation libs.airbnb.epoxyPaging
     implementation libs.airbnb.mavericks
+    implementation libs.airbnb.mavericksMocking
+    implementation libs.airbnb.mavericksLauncher
 
     // Snap Helper https://github.com/rubensousa/GravitySnapHelper
     implementation 'com.github.rubensousa:gravitysnaphelper:2.2.2'

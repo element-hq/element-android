@@ -11,6 +11,7 @@
         <activity android:name=".features.debug.features.DebugFeaturesSettingsActivity" />
         <activity android:name=".features.debug.DebugMenuActivity" />
         <activity android:name=".features.debug.leak.DebugMemoryLeaksActivity" />
+        <activity android:name=".features.debug.VectorLauncherMockActivity" />
 
         <activity
             android:name="com.facebook.flipper.android.diagnostics.FlipperDiagnosticActivity"
