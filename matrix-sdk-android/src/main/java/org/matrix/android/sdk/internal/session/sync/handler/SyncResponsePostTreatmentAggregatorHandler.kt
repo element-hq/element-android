@@ -16,30 +16,33 @@
 
 package org.matrix.android.sdk.internal.session.sync.handler
 
-import com.zhuinden.monarchy.Monarchy
+import androidx.work.BackoffPolicy
+import androidx.work.ExistingWorkPolicy
 import org.matrix.android.sdk.api.MatrixPatterns
-import org.matrix.android.sdk.api.extensions.tryOrNull
-import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.internal.crypto.crosssigning.DefaultCrossSigningService
-import org.matrix.android.sdk.internal.di.SessionDatabase
-import org.matrix.android.sdk.internal.session.profile.GetProfileInfoTask
+import org.matrix.android.sdk.internal.crypto.crosssigning.UpdateTrustWorker
+import org.matrix.android.sdk.internal.crypto.crosssigning.UpdateTrustWorkerDataRepository
+import org.matrix.android.sdk.internal.di.SessionId
+import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.session.sync.RoomSyncEphemeralTemporaryStore
 import org.matrix.android.sdk.internal.session.sync.SyncResponsePostTreatmentAggregator
 import org.matrix.android.sdk.internal.session.sync.model.accountdata.toMutable
-import org.matrix.android.sdk.internal.session.user.UserEntityFactory
 import org.matrix.android.sdk.internal.session.user.accountdata.DirectChatsHelper
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateUserAccountDataTask
-import org.matrix.android.sdk.internal.util.awaitTransaction
+import org.matrix.android.sdk.internal.util.logLimit
+import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
         private val directChatsHelper: DirectChatsHelper,
         private val ephemeralTemporaryStore: RoomSyncEphemeralTemporaryStore,
         private val updateUserAccountDataTask: UpdateUserAccountDataTask,
-        private val getProfileInfoTask: GetProfileInfoTask,
         private val crossSigningService: DefaultCrossSigningService,
-        @SessionDatabase private val monarchy: Monarchy,
+        private val updateTrustWorkerDataRepository: UpdateTrustWorkerDataRepository,
+        private val workManagerProvider: WorkManagerProvider,
+        @SessionId private val sessionId: String,
 ) {
     suspend fun handle(aggregator: SyncResponsePostTreatmentAggregator) {
         cleanupEphemeralFiles(aggregator.ephemeralFilesToDelete)
@@ -83,30 +86,26 @@ internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
         }
     }
 
-    private suspend fun fetchAndUpdateUsers(userIdsToFetch: Collection<String>) {
-        fetchUsers(userIdsToFetch)
-                .takeIf { it.isNotEmpty() }
-                ?.saveLocally()
-    }
+    private fun fetchAndUpdateUsers(userIdsToFetch: Collection<String>) {
+        if (userIdsToFetch.isEmpty()) return
+        Timber.d("## Configure Worker to update users: ${userIdsToFetch.logLimit()}")
+        val workerParams = UpdateTrustWorker.Params(
+                sessionId = sessionId,
+                filename = updateTrustWorkerDataRepository.createParam(userIdsToFetch.toList())
+        )
+        val workerData = WorkerParamsFactory.toData(workerParams)
 
-    private suspend fun fetchUsers(userIdsToFetch: Collection<String>) = userIdsToFetch.mapNotNull {
-        tryOrNull {
-            val profileJson = getProfileInfoTask.execute(GetProfileInfoTask.Params(it))
-            User.fromJson(it, profileJson)
-        }
+        val workRequest = workManagerProvider.matrixOneTimeWorkRequestBuilder<UpdateUserWorker>()
+                .setInputData(workerData)
+                .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
+                .build()
+
+        workManagerProvider.workManager
+                .beginUniqueWork("USER_UPDATE_QUEUE", ExistingWorkPolicy.APPEND_OR_REPLACE, workRequest)
+                .enqueue()
     }
 
     private fun handleUserIdsWithDeviceUpdate(userIdsWithDeviceUpdate: Iterable<String>) {
         crossSigningService.onUsersDeviceUpdate(userIdsWithDeviceUpdate.toList())
-    }
-
-    private suspend fun List<User>.saveLocally() {
-        val userEntities = map { user -> UserEntityFactory.create(user) }
-        Timber.d("## saveLocally()")
-        monarchy.awaitTransaction {
-            Timber.d("## saveLocally() - in transaction")
-            it.insertOrUpdate(userEntities)
-        }
-        Timber.d("## saveLocally() - END")
     }
 }
