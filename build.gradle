@@ -24,7 +24,7 @@ buildscript {
         classpath libs.gradle.gradlePlugin
         classpath libs.gradle.kotlinPlugin
         classpath libs.gradle.hiltPlugin
-        classpath 'com.google.firebase:firebase-appdistribution-gradle:3.0.2'
+        classpath 'com.google.firebase:firebase-appdistribution-gradle:3.0.3'
         classpath 'com.google.gms:google-services:4.3.13'
         classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.4.0.2513'
         classpath 'com.google.android.gms:oss-licenses-plugin:0.10.5'
@@ -44,7 +44,7 @@ plugins {
     id "io.gitlab.arturbosch.detekt" version "1.21.0"
 
     // Dependency Analysis
-    id 'com.autonomousapps.dependency-analysis' version "1.11.2"
+    id 'com.autonomousapps.dependency-analysis' version "1.12.0"
 }
 
 // https://github.com/jeremylong/DependencyCheck
@@ -151,6 +151,8 @@ allprojects {
                 "experimental:comment-wrapping",
                 // - A KDoc comment after any other element on the same line must be separated by a new line
                 "experimental:kdoc-wrapping",
+                // Ignore error "Redundant curly braces", since we use it to fix false positives, for instance in "elementLogs.${i}.txt"
+                "string-template",
         ]
     }
 

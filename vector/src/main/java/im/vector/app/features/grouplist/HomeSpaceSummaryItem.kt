@@ -37,6 +37,7 @@ import im.vector.app.features.themes.ThemeUtils
 @EpoxyModelClass
 abstract class HomeSpaceSummaryItem : VectorEpoxyModel<HomeSpaceSummaryItem.Holder>(R.layout.item_space) {
 
+    @EpoxyAttribute var text: String = ""
     @EpoxyAttribute var selected: Boolean = false
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var listener: ClickListener? = null
     @EpoxyAttribute var countState: UnreadCounterBadgeView.State = UnreadCounterBadgeView.State(0, false)

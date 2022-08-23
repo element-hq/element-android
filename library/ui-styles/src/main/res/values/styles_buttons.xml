@@ -65,4 +65,8 @@
         <item name="colorPrimary">?colorOnPrimary</item>
     </style>
 
+    <style name="Widget.Vector.FloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.Material3.FloatingActionButton</item>
+    </style>
+
 </resources>

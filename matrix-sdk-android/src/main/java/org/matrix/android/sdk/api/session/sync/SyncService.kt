@@ -54,6 +54,11 @@ interface SyncService {
     fun getSyncState(): SyncState
 
     /**
+     * This method returns true if the sync thread is alive, i.e. started.
+     */
+    fun isSyncThreadAlive(): Boolean
+
+    /**
      * This method allows to listen the sync state.
      * @return a [LiveData] of [SyncState].
      */

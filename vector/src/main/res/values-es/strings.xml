@@ -44,8 +44,6 @@
 \nImportando cuenta…</string>
     <string name="initial_sync_start_importing_account_rooms">Sincronización inicial:
 \nImportando salas</string>
-    <string name="initial_sync_start_importing_account_groups">Sincronización inicial:
-\nImportando comunidades</string>
     <string name="initial_sync_start_importing_account_data">Sincronización inicial:
 \nImportando datos de la cuenta</string>
     <string name="event_status_sending_message">Enviando mensaje…</string>
@@ -290,7 +288,6 @@
     <string name="auth_email_already_defined">Esta dirección de correo electrónico ya está definida.</string>
     <string name="auth_forgot_password">¿Olvidaste tu contraseña?</string>
     <string name="auth_recaptcha_message">Este Servidor Doméstico quiere asegurarse de que no eres un robot</string>
-    <string name="auth_reset_password_missing_email">Debes ingresar la dirección de correo electrónico vinculada a tu cuenta.</string>
     <string name="auth_reset_password_error_unauthorized">No se pudo verificar la dirección de correo electrónico: asegúrate de hacer clic en el enlace del correo electrónico</string>
     <string name="login_error_invalid_home_server">Por favor introduce una URL válida</string>
     <string name="login_error_bad_json">JSON mal formado</string>
@@ -496,7 +493,6 @@
     <string name="notification_noisy">Ruidoso</string>
     <string name="encrypted_message">Mensaje cifrado</string>
     <string name="loading">Cargando…</string>
-    <string name="groups_header">Comunidades</string>
     <string name="start_voice_call_prompt_msg">¿Seguro que quieres iniciar una llamada de voz?</string>
     <string name="start_video_call_prompt_msg">¿Seguro que quieres iniciar una llamada de vídeo?</string>
     <string name="room_participants_ban_prompt_msg">Vetar un usuario lo echará de esta sala y evitará que se una nuevamente.</string>
@@ -871,7 +867,6 @@
     <string name="action_change">Cambiar</string>
     <string name="change_room_directory_network">Cambiar red</string>
     <string name="please_wait">Espere por favor…</string>
-    <string name="group_all_communities">Todas la comunidades</string>
     <string name="room_preview_no_preview">Esta sala no se puede previsualizar</string>
     <string name="fab_menu_create_room">Salas</string>
     <string name="fab_menu_create_chat">Chats</string>
@@ -2450,7 +2445,6 @@
     <string name="sent_live_location">Compartieron su localización en vivo</string>
     <string name="sent_location">Compartieron su localización</string>
     <string name="ftue_profile_picture_subtitle">Puedes cambiar esto en todo momento.</string>
-    <string name="ftue_display_name_subtitle">Esto se mostrará cuando mandes mensajes.</string>
     <string name="ftue_account_created_take_me_home">Llévame a casa</string>
     <string name="ftue_account_created_personalize">Personalizar perfil</string>
     <string name="ftue_auth_use_case_connect_to_server">Conectar a servidor</string>
@@ -2478,7 +2472,6 @@
     <string name="settings_show_latest_profile">Mostrar última información del usuario</string>
     <string name="a11y_presence_busy">Ocupado</string>
     <string name="live_location_bottom_sheet_last_updated_at">Actualizado hace %1$s</string>
-    <string name="live_location_bottom_sheet_stop_sharing">Dejar de compartir</string>
     <string name="labs_enable_live_location_summary">Implementación temporal: las ubicaciones persisten en el historial de la sala</string>
     <string name="labs_enable_live_location">Activar compartir ubicación en tiempo real</string>
     <string name="location_share_live_remaining_time">Queda %1$s</string>

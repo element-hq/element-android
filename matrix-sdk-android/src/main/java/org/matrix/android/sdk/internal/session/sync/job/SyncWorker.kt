@@ -30,6 +30,7 @@ import org.matrix.android.sdk.internal.session.sync.SyncTask
 import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
+import org.matrix.android.sdk.internal.worker.startChain
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -136,6 +137,7 @@ internal class SyncWorker(context: Context, workerParameters: WorkerParameters, 
                     .setConstraints(WorkManagerProvider.workConstraints)
                     .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
                     .setInputData(data)
+                    .startChain(true)
                     .build()
             workManagerProvider.workManager
                     .enqueueUniqueWork(BG_SYNC_WORK_NAME, ExistingWorkPolicy.APPEND_OR_REPLACE, workRequest)

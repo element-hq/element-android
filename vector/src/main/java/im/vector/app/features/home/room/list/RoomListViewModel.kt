@@ -146,17 +146,17 @@ class RoomListViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<RoomListViewModel, RoomListViewState> by hiltMavericksViewModelFactory()
 
     private val roomListSectionBuilder = RoomListSectionBuilder(
-                session,
-                stringProvider,
-                spaceStateHandler,
-                viewModelScope,
-                autoAcceptInvites,
-                {
-                    updatableQuery = it
-                },
-                suggestedRoomJoiningState,
-                !vectorPreferences.prefSpacesShowAllRoomInHome()
-        )
+            session,
+            stringProvider,
+            spaceStateHandler,
+            viewModelScope,
+            autoAcceptInvites,
+            {
+                updatableQuery = it
+            },
+            suggestedRoomJoiningState,
+            !vectorPreferences.prefSpacesShowAllRoomInHome()
+    )
 
     val sections: List<RoomsSection> by lazy {
         roomListSectionBuilder.buildSections(initialState.displayMode)

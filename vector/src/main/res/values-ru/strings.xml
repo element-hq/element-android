@@ -52,10 +52,8 @@
 \nИмпорт приглашенных комнат</string>
     <string name="initial_sync_start_importing_account_left_rooms">Начальная синхронизация:
 \nИмпорт покинутых комнат</string>
-    <string name="initial_sync_start_importing_account_groups">Начальная синхронизация:
-\nИмпорт сообществ</string>
     <string name="initial_sync_start_importing_account_data">Начальная синхронизация:
-\nИмпорт данных учетной записи</string>
+\nИмпорт данных учётной записи</string>
     <string name="notice_room_update">%s обновил эту комнату.</string>
     <string name="event_status_sending_message">Отправка сообщения…</string>
     <string name="notice_room_third_party_revoked_invite">%1$s отозвал приглашение %2$s присоединиться к комнате</string>
@@ -194,7 +192,7 @@
     <string name="room_displayname_3_members">%1$s, %2$s и %3$s</string>
     <string name="notice_room_server_acl_allow_is_empty">🎉 Всем серверам запрещено участвовать! Эта комната больше не может быть использована.</string>
     <string name="notice_room_server_acl_updated_no_change">Без изменений.</string>
-    <string name="room_displayname_empty_room_was">Пустая комната (был(а) %s)</string>
+    <string name="room_displayname_empty_room_was">Пустая комната (без %s)</string>
     <string name="notice_room_server_acl_set_banned">• Соответствующие серверы %s заблокированы.</string>
     <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Серверы, соответствующие буквальным IP-адресам, теперь запрещены.</string>
     <string name="notice_room_server_acl_updated_ip_literals_allowed">• Серверы, соответствующие буквальным IP-адресам, теперь разрешены.</string>
@@ -290,7 +288,7 @@
     <string name="send_bug_report_sent">Отчет об ошибке успешно отправлен</string>
     <string name="send_bug_report_failed">Сбой отправки отчета об ошибке (%s)</string>
     <string name="send_bug_report_progress">Прогресс (%s%%)</string>
-    <string name="send_bug_report_app_crashed">В прошлый раз приложение некорректно завершило работу. Хотите отправить отчет о сбое?</string>
+    <string name="send_bug_report_app_crashed">В прошлый раз приложение некорректно завершило работу. Хотите отправить отчёт о сбое\?</string>
     <string name="join_room">Войти в Комнату</string>
     <string name="username">Имя пользователя</string>
     <string name="logout">Выйти</string>
@@ -307,7 +305,6 @@
     <string name="auth_email_already_defined">Этот адрес электронной почты уже используется.</string>
     <string name="auth_forgot_password">Забыли пароль?</string>
     <string name="auth_recaptcha_message">Этот домашний сервер хочет убедиться, что вы не робот</string>
-    <string name="auth_reset_password_missing_email">Должен быть введен адрес электронной почты привязанный к учетной записи.</string>
     <string name="auth_reset_password_error_unauthorized">Не удалось проверить адрес электронной почты: убедитесь, что вы перешли по ссылке из сообщения</string>
     <string name="login_error_invalid_home_server">Пожалуйста, введите корректный URL</string>
     <string name="login_error_bad_json">Неверный формат JSON</string>
@@ -513,7 +510,6 @@
     <string name="notification_noisy">Громко</string>
     <string name="encrypted_message">Зашифрованное сообщение</string>
     <string name="loading">Загрузка…</string>
-    <string name="groups_header">Сообщества</string>
     <string name="start_voice_call_prompt_msg">Вы уверены, что хотите начать голосовой вызов?</string>
     <string name="start_video_call_prompt_msg">Вы уверены, что хотите начать видеовызов?</string>
     <string name="room_participants_ban_prompt_msg">Блокировка пользователя удалит его из этой комнаты и не позволит ему присоединиться вновь.</string>
@@ -916,7 +912,6 @@
     <string name="action_change">Изменить</string>
     <string name="change_room_directory_network">Изменить сеть</string>
     <string name="please_wait">Пожалуйста, подождите…</string>
-    <string name="group_all_communities">Все сообщества</string>
     <string name="room_preview_no_preview">Эту комнату нельзя предварительно просмотреть</string>
     <string name="fab_menu_create_room">Комнаты</string>
     <string name="fab_menu_create_chat">Личные сообщения</string>
@@ -960,7 +955,7 @@
     <string name="message_edits">Изменение сообщения</string>
     <string name="no_message_edits_found">Изменения не найдены</string>
     <string name="room_filtering_filter_hint">Отфильтровать беседы…</string>
-    <string name="room_filtering_footer_title">Не можете найти то, что ищете\?</string>
+    <string name="room_filtering_footer_title">Не можете найти нужное\?</string>
     <string name="room_filtering_footer_create_new_room">Создать новую комнату</string>
     <string name="room_filtering_footer_create_new_direct_message">Отправить новое личное сообщение</string>
     <string name="room_filtering_footer_open_room_directory">Просмотр каталога комнат</string>
@@ -1743,10 +1738,10 @@
     <string name="settings_security_application_protection_summary">Защитите доступ с помощью PIN-кода и биометрии.</string>
     <string name="settings_security_application_protection_title">Защита доступа</string>
     <string name="secure_backup_reset_no_history">Вы перезапустите приложение без истории, сообщений, доверенных устройств или доверенных пользователей</string>
-    <string name="secure_backup_reset_if_you_reset_all">Если сбросить все</string>
+    <string name="secure_backup_reset_if_you_reset_all">Если сбросить всё</string>
     <string name="secure_backup_reset_all_no_other_devices">Делайте это только в том случае, если у вас нет другого устройства, с которого вы можете проверить это устройство.</string>
-    <string name="secure_backup_reset_all">Сбросить все</string>
-    <string name="bad_passphrase_key_reset_all_action">Забыли или потеряли все варианты восстановления\? Сбросить все</string>
+    <string name="secure_backup_reset_all">Сбросить всё</string>
+    <string name="bad_passphrase_key_reset_all_action">Забыли или потеряли все варианты восстановления\? Сбросить всё</string>
     <string name="direct_room_created_summary_item_by_you">Вы вошли.</string>
     <string name="direct_room_created_summary_item">%s вошёл(ла).</string>
     <string name="direct_room_encryption_enabled_tile_description">Сообщения в этой переписке защищены сквозным шифрованием.</string>
@@ -2235,7 +2230,7 @@
     <string name="call_tile_video_incoming">Входящий видеовызов</string>
     <string name="call_tile_voice_incoming">Входящий голосовой вызов</string>
     <string name="call_tile_you_declined_this_call">Вы отклонили этот вызов</string>
-    <string name="room_settings_room_notifications_account_settings">Настройки учетной записи</string>
+    <string name="room_settings_room_notifications_account_settings">Настройки учётной записи</string>
     <string name="room_settings_room_notifications_manage_notifications">Вы можете управлять уведомлениями в %1$s.</string>
     <string name="room_settings_room_notifications_encryption_notice">Обратите внимание, что уведомления об упоминаниях и ключевых словах недоступны в зашифрованных комнатах на мобильных устройствах.</string>
     <string name="room_settings_room_notifications_notify_me">Уведомлять меня о</string>
@@ -2449,7 +2444,7 @@
     <string name="ftue_auth_use_case_option_two">Команды</string>
     <string name="ftue_auth_use_case_option_one">Друзья и семья</string>
     <string name="ftue_auth_use_case_subtitle">Мы поможем вам подключиться</string>
-    <string name="ftue_auth_use_case_title">С кем вы будете общаться больше всего\?</string>
+    <string name="ftue_auth_use_case_title">С кем вы будете общаться чаще всего\?</string>
     <string name="navigate_to_thread_when_already_in_the_thread">Вы уже просматриваете это обсуждение!</string>
     <string name="view_in_room">Просмотр в Комнате</string>
     <string name="reply_in_thread">Обсудить</string>
@@ -2487,7 +2482,6 @@
     <string name="ftue_profile_picture_title">Добавить аватар</string>
     <string name="ftue_display_name_entry_footer">Вы сможете изменить это позже</string>
     <string name="ftue_display_name_entry_title">Отображаемое имя</string>
-    <string name="ftue_display_name_subtitle">Показывается, когда вы отправляете сообщения.</string>
     <string name="ftue_display_name_title">Выберите отображаемое имя</string>
     <string name="ftue_account_created_subtitle">Ваша учётная запись %s создана</string>
     <string name="ftue_account_created_congratulations_title">Поздравляем!</string>
@@ -2513,7 +2507,6 @@
     <string name="live_location_sharing_notification_description">Идёт отправка местоположения</string>
     <string name="location_share_live_remaining_time">Осталось %1$s</string>
     <string name="live_location_bottom_sheet_last_updated_at">Обновлено %1$s назад</string>
-    <string name="live_location_bottom_sheet_stop_sharing">Остановить трансляцию</string>
     <string name="labs_enable_live_location">Включить функцию \"Поделиться трансляцией местоположения\"</string>
     <string name="live_location_sharing_notification_title">${app_name} Трансляция местоположения</string>
     <string name="location_share_live_until">Транслировать до %1$s</string>
@@ -2661,6 +2654,10 @@
     <string name="ftue_auth_choose_server_entry_hint">URL-адрес сервера</string>
     <string name="ftue_auth_welcome_back_title">С возвращением!</string>
     <string name="ftue_auth_create_account_sso_section_header">Или</string>
-    <string name="ftue_auth_create_account_title">Создать учётную запись</string>
+    <string name="ftue_auth_create_account_title">Создайте учётную запись</string>
     <string name="search_space_two_parents">%1$s и %2$s</string>
+    <string name="a11y_open_settings">Открыть настройки</string>
+    <string name="location_share_loading_map_error">Не удалось загрузить карту
+\nВозможно, этот домашний сервер не настроен для отображения карт.</string>
+    <string name="all_chats">Все Беседы</string>
 </resources>

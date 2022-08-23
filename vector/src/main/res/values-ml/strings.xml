@@ -403,8 +403,6 @@
     <string name="event_status_sending_message">സന്ദേശം അയയ്ക്കുന്നു…</string>
     <string name="initial_sync_start_importing_account_data">പ്രാരംഭ സമന്വയം:
 \nഅക്കൗണ്ട് ഡാറ്റ ഇറക്കുമതി ചെയ്യുന്നു</string>
-    <string name="initial_sync_start_importing_account_groups">പ്രാരംഭ സമന്വയം:
-\nജനസമൂഹങ്ങൾ ഇറക്കുമതി ചെയ്യുന്നു</string>
     <string name="initial_sync_start_importing_account_left_rooms">പ്രാരംഭ സമന്വയം:
 \nഉപേക്ഷിച്ച മുറികൾ ഇറക്കുമതി ചെയ്യുന്നു</string>
     <string name="initial_sync_start_importing_account_invited_rooms">പ്രാരംഭ സമന്വയം:
@@ -474,7 +472,6 @@
     <string name="call_camera_front">മുന്നിലുള്ള</string>
     <string name="call_camera_back">പിന്നിലുള്ള</string>
     <string name="sound_device_headset">ഹെഡ്‌സെറ്റ്</string>
-    <string name="groups_header">കമ്മ്യൂണിറ്റികൾ</string>
     <string name="dialog_title_error">പിശക്</string>
     <string name="action_disconnect">വിച്ഛേദിക്കുക</string>
     <string name="action_revoke">അസാധുവാക്കുക</string>

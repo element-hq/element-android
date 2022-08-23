@@ -323,9 +323,9 @@ interface Session {
     fun getUiaSsoFallbackUrl(authenticationSessionId: String): String
 
     /**
-     * Debug API, will print out info on DB size to logcat.
+     * Debug API, will return info about the DB.
      */
-    fun logDbUsageInfo()
+    fun getDbUsageInfo(): String
 
     /**
      * Debug API, return the list of all RealmConfiguration used by this session.

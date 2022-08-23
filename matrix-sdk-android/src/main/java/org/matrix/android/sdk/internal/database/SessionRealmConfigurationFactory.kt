@@ -64,7 +64,7 @@ internal class SessionRealmConfigurationFactory @Inject constructor(
         }
 
         val realmConfiguration = RealmConfiguration.Builder()
-                .compactOnLaunch()
+                .compactOnLaunch(RealmCompactOnLaunch())
                 .directory(directory)
                 .name(REALM_NAME)
                 .apply {
@@ -93,7 +93,7 @@ internal class SessionRealmConfigurationFactory @Inject constructor(
             return
         }
 
-        listOf(REALM_NAME, "$REALM_NAME.lock", "$REALM_NAME.note", "$REALM_NAME.management").forEach { file ->
+        listOf(REALM_NAME, "${REALM_NAME}.lock", "${REALM_NAME}.note", "${REALM_NAME}.management").forEach { file ->
             try {
                 File(directory, file).deleteRecursively()
             } catch (e: Exception) {

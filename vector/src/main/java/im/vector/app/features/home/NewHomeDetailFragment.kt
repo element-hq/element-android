@@ -16,13 +16,13 @@
 
 package im.vector.app.features.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
@@ -42,12 +42,11 @@ import im.vector.app.core.ui.views.KeysBackupBanner
 import im.vector.app.databinding.FragmentNewHomeDetailBinding
 import im.vector.app.features.call.SharedKnownCallsViewModel
 import im.vector.app.features.call.VectorCallActivity
-import im.vector.app.features.call.dialpad.DialPadFragment
+import im.vector.app.features.call.dialpad.PstnDialActivity
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.home.room.list.home.HomeRoomListFragment
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
-import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity.Companion.EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY_MANAGE_SESSIONS
 import im.vector.app.features.themes.ThemeUtils
@@ -67,7 +66,7 @@ class NewHomeDetailFragment @Inject constructor(
         private val alertManager: PopupAlertManager,
         private val callManager: WebRtcCallManager,
         private val vectorPreferences: VectorPreferences,
-        private val appStateHandler: SpaceStateHandler,
+        private val spaceStateHandler: SpaceStateHandler,
         private val session: Session,
 ) : VectorBaseFragment<FragmentNewHomeDetailBinding>(),
         KeysBackupBanner.Delegate,
@@ -99,6 +98,10 @@ class NewHomeDetailFragment @Inject constructor(
                 viewModel.handle(HomeDetailAction.MarkAllRoomsRead)
                 true
             }
+            R.id.menu_home_dialpad -> {
+                startActivity(Intent(requireContext(), PstnDialActivity::class.java))
+                true
+            }
             else -> false
         }
     }
@@ -107,6 +110,7 @@ class NewHomeDetailFragment @Inject constructor(
         withState(viewModel) { state ->
             val isRoomList = state.currentTab is HomeTab.RoomList
             menu.findItem(R.id.menu_home_mark_all_as_read).isVisible = isRoomList && hasUnreadRooms
+            menu.findItem(R.id.menu_home_dialpad).isVisible = state.showDialPadTab
         }
     }
 
@@ -138,14 +142,10 @@ class NewHomeDetailFragment @Inject constructor(
             updateUIForTab(currentTab)
         }
 
-        viewModel.onEach(HomeDetailViewState::showDialPadTab) { showDialPadTab ->
-            updateTabVisibilitySafely(R.id.bottom_action_dial_pad, showDialPadTab)
-        }
-
         viewModel.observeViewEvents { viewEvent ->
             when (viewEvent) {
-                HomeDetailViewEvents.CallStarted -> handleCallStarted()
-                is HomeDetailViewEvents.FailToCall -> showFailure(viewEvent.failure)
+                HomeDetailViewEvents.CallStarted -> Unit
+                is HomeDetailViewEvents.FailToCall -> Unit
                 HomeDetailViewEvents.Loading -> showLoadingDialog()
             }
         }
@@ -176,20 +176,14 @@ class NewHomeDetailFragment @Inject constructor(
     }
 
     private fun navigateBack() {
-        val previousSpaceId = appStateHandler.getSpaceBackstack().removeLastOrNull()
-        val parentSpaceId = appStateHandler.getCurrentSpace()?.flattenParentIds?.lastOrNull()
+        val previousSpaceId = spaceStateHandler.getSpaceBackstack().removeLastOrNull()
+        val parentSpaceId = spaceStateHandler.getCurrentSpace()?.flattenParentIds?.lastOrNull()
         setCurrentSpace(previousSpaceId ?: parentSpaceId)
     }
 
     private fun setCurrentSpace(spaceId: String?) {
-        appStateHandler.setCurrentSpace(spaceId, isForwardNavigation = false)
+        spaceStateHandler.setCurrentSpace(spaceId, isForwardNavigation = false)
         sharedActionViewModel.post(HomeActivitySharedAction.OnCloseSpace)
-    }
-
-    private fun handleCallStarted() {
-        dismissLoadingDialog()
-        val fragmentTag = HomeTab.DialPad.toFragmentTag()
-        (childFragmentManager.findFragmentByTag(fragmentTag) as? DialPadFragment)?.clear()
     }
 
     override fun onDestroyView() {
@@ -205,7 +199,7 @@ class NewHomeDetailFragment @Inject constructor(
     }
 
     private fun refreshSpaceState() {
-        appStateHandler.getCurrentSpace()?.let {
+        spaceStateHandler.getCurrentSpace()?.let {
             onSpaceChange(it)
         }
     }
@@ -268,8 +262,7 @@ class NewHomeDetailFragment @Inject constructor(
     }
 
     private fun onSpaceChange(spaceSummary: RoomSummary?) {
-        // Reimplement in next PR
-        println(spaceSummary)
+        views.collapsingToolbar.title = (spaceSummary?.displayName ?: getString(R.string.all_chats))
     }
 
     private fun setupKeysBackupBanner() {
@@ -298,8 +291,17 @@ class NewHomeDetailFragment @Inject constructor(
             }
         }
 
+        views.collapsingToolbar.debouncedClicks(::openSpaceSettings)
+        views.toolbar.debouncedClicks(::openSpaceSettings)
+
         views.avatar.debouncedClicks {
             navigator.openSettings(requireContext())
+        }
+    }
+
+    private fun openSpaceSettings() = withState(viewModel) { viewState ->
+        viewState.selectedSpace?.let {
+            sharedActionViewModel.post(HomeActivitySharedAction.ShowSpaceSettings(it.roomId))
         }
     }
 
@@ -340,27 +342,12 @@ class NewHomeDetailFragment @Inject constructor(
                         add(R.id.roomListContainer, HomeRoomListFragment::class.java, null, fragmentTag)
                     }
                     is HomeTab.DialPad -> {
-                        add(R.id.roomListContainer, createDialPadFragment(), fragmentTag)
+                        throw NotImplementedError("this tab shouldn't exists when app layout is enabled")
                     }
                 }
             } else {
-                if (tab is HomeTab.DialPad) {
-                    (fragmentToShow as? DialPadFragment)?.applyCallback()
-                }
                 attach(fragmentToShow)
             }
-        }
-    }
-
-    private fun createDialPadFragment(): Fragment {
-        val fragment = childFragmentManager.fragmentFactory.instantiate(vectorBaseActivity.classLoader, DialPadFragment::class.java.name)
-        return (fragment as DialPadFragment).apply {
-            arguments = Bundle().apply {
-                putBoolean(DialPadFragment.EXTRA_ENABLE_DELETE, true)
-                putBoolean(DialPadFragment.EXTRA_ENABLE_OK, true)
-                putString(DialPadFragment.EXTRA_REGION_CODE, VectorLocale.applicationLocale.country)
-            }
-            applyCallback()
         }
     }
 
@@ -440,17 +427,7 @@ class NewHomeDetailFragment @Inject constructor(
         }
     }
 
-    private fun DialPadFragment.applyCallback(): DialPadFragment {
-        callback = object : DialPadFragment.Callback {
-            override fun onOkClicked(formatted: String?, raw: String?) {
-                if (raw.isNullOrEmpty()) return
-                viewModel.handle(HomeDetailAction.StartCallWithPhoneNumber(raw))
-            }
-        }
-        return this
-    }
-
-    override fun onBackPressed(toolbarButton: Boolean) = if (appStateHandler.getCurrentSpace() != null) {
+    override fun onBackPressed(toolbarButton: Boolean) = if (spaceStateHandler.getCurrentSpace() != null) {
         navigateBack()
         true
     } else {

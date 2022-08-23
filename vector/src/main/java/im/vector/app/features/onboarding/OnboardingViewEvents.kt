@@ -21,6 +21,7 @@ import im.vector.app.core.platform.VectorViewEvents
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
 import org.matrix.android.sdk.api.auth.registration.Stage
+import org.matrix.android.sdk.api.failure.Failure as SdkFailure
 
 /**
  * Transient events for Login.
@@ -28,7 +29,7 @@ import org.matrix.android.sdk.api.auth.registration.Stage
 sealed class OnboardingViewEvents : VectorViewEvents {
     data class Loading(val message: CharSequence? = null) : OnboardingViewEvents()
     data class Failure(val throwable: Throwable) : OnboardingViewEvents()
-    data class DeeplinkAuthenticationFailure(val retryAction: OnboardingAction) : OnboardingViewEvents()
+    data class UnrecognisedCertificateFailure(val retryAction: OnboardingAction, val cause: SdkFailure.UnrecognizedCertificateFailure) : OnboardingViewEvents()
 
     object DisplayRegistrationFallback : OnboardingViewEvents()
     data class DisplayRegistrationStage(val stage: Stage) : OnboardingViewEvents()

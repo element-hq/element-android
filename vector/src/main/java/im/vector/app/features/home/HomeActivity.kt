@@ -44,6 +44,7 @@ import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.extensions.validateBackPressed
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorMenuProvider
+import im.vector.app.core.pushers.FcmHelper
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.pushers.UnifiedPushHelper
 import im.vector.app.core.utils.startSharePlainTextIntent
@@ -55,6 +56,7 @@ import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.disclaimer.showDisclaimerDialog
+import im.vector.app.features.home.room.list.home.layout.HomeLayoutSettingBottomDialogFragment
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.matrixto.OriginOfMatrixTo
 import im.vector.app.features.navigation.Navigator
@@ -79,8 +81,6 @@ import im.vector.app.features.spaces.invite.SpaceInviteBottomSheet
 import im.vector.app.features.spaces.share.ShareSpaceBottomSheet
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
-import im.vector.app.nightly.NightlyProxy
-import im.vector.app.push.fcm.FcmHelper
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -282,6 +282,11 @@ class HomeActivity :
                     }
                 })
                 .show(supportFragmentManager, "SPACE_SETTINGS")
+    }
+
+    private fun showLayoutSettings() {
+        HomeLayoutSettingBottomDialogFragment()
+                .show(supportFragmentManager, "LAYOUT_SETTINGS")
     }
 
     private fun openSpaceInvite(spaceId: String) {
@@ -595,6 +600,10 @@ class HomeActivity :
             }
             R.id.menu_home_setting -> {
                 navigator.openSettings(this)
+                true
+            }
+            R.id.menu_home_layout_settings -> {
+                showLayoutSettings()
                 true
             }
             R.id.menu_home_invite_friends -> {

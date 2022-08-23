@@ -22,7 +22,7 @@ def markwon = "4.6.2"
 def moshi = "1.13.0"
 def lifecycle = "2.5.1"
 def flowBinding = "1.2.0"
-def flipper = "0.156.0"
+def flipper = "0.157.0"
 def epoxy = "4.6.2"
 def mavericks = "2.7.0"
 def glide = "4.13.2"
@@ -30,7 +30,7 @@ def bigImageViewer = "1.8.1"
 def jjwt = "0.11.5"
 def vanniktechEmoji = "0.15.0"
 
-def fragment = "1.5.1"
+def fragment = "1.5.2"
 
 // Testing
 def mockk = "1.12.3" // We need to use 1.12.3 to have mocking in androidTest until a new version is released: https://github.com/mockk/mockk/issues/819

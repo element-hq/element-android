@@ -187,7 +187,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".features.home.HomeActivity" />
         </activity>
-        <activity android:name=".features.debug.DebugMenuActivity" />
         <activity android:name=".features.createdirect.CreateDirectRoomActivity" />
         <activity android:name=".features.invite.InviteUsersToRoomActivity" />
         <activity android:name=".features.webview.VectorWebViewActivity" />
@@ -349,6 +348,7 @@
         <activity android:name=".features.location.LocationSharingActivity" />
         <activity android:name=".features.location.live.map.LiveLocationMapViewActivity" />
         <activity android:name=".features.settings.font.FontScaleSettingActivity"/>
+        <activity android:name=".features.call.dialpad.PstnDialActivity" />
 
         <!-- Services -->
 

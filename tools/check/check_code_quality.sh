@@ -17,21 +17,6 @@
 #
 
 #######################################################################################################################
-# Check frozen class modification
-#######################################################################################################################
-
-echo "Check if frozen class modified"
-git diff "HEAD@{1}" --name-only | grep -e OlmInboundGroupSessionWrapper.kt -e OlmInboundGroupSessionWrapper2.kt
-FROZEN_CHANGED=$?
-if [ ${FROZEN_CHANGED} -eq 0 ]; then
-  echo "❌ FROZEN CLASS CHANGED ERROR"
-  exit 1
-else
-  echo "Frozen check OK"
-fi
-
-
-#######################################################################################################################
 # Check drawable quantity
 #######################################################################################################################
 

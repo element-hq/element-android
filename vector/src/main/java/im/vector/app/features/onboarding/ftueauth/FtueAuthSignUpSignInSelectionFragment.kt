@@ -30,11 +30,10 @@ import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.SSORedirectRouterActivity
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
-import im.vector.app.features.login.SocialLoginButtonsView
-import im.vector.app.features.login.ssoIdentityProviders
+import im.vector.app.features.login.SocialLoginButtonsView.Mode
+import im.vector.app.features.login.render
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewState
-import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import javax.inject.Inject
 
 /**
@@ -80,16 +79,13 @@ class FtueAuthSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOF
         when (state.selectedHomeserver.preferredLoginMode) {
             is LoginMode.SsoAndPassword -> {
                 views.loginSignupSigninSignInSocialLoginContainer.isVisible = true
-                views.loginSignupSigninSocialLoginButtons.ssoIdentityProviders = state.selectedHomeserver.preferredLoginMode.ssoIdentityProviders()?.sorted()
-                views.loginSignupSigninSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
-                    override fun onProviderSelected(provider: SsoIdentityProvider?) {
-                        viewModel.fetchSsoUrl(
-                                redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
-                                deviceId = state.deviceId,
-                                provider = provider
-                        )
-                                ?.let { openInCustomTab(it) }
-                    }
+                views.loginSignupSigninSocialLoginButtons.render(state.selectedHomeserver.preferredLoginMode.ssoState, Mode.MODE_CONTINUE) { provider ->
+                    viewModel.fetchSsoUrl(
+                            redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
+                            deviceId = state.deviceId,
+                            provider = provider
+                    )
+                            ?.let { openInCustomTab(it) }
                 }
             }
             else -> {

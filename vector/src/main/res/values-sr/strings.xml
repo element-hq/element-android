@@ -128,8 +128,6 @@
     <string name="notice_room_invite_no_invitee_with_reason">%1$s - позивница. Разлог: %2$s</string>
     <string name="initial_sync_start_importing_account_data">Почетна синхронизација:
 \nувозим податке о налогу</string>
-    <string name="initial_sync_start_importing_account_groups">Почетна синхронизација:
-\nувозим заједнице</string>
     <string name="initial_sync_start_importing_account_left_rooms">Почетна синхронизација:
 \nувозим напуштене собе</string>
     <string name="initial_sync_start_importing_account_invited_rooms">Почетна синхронизација:
@@ -326,8 +324,6 @@
     <string name="send_bug_report_include_screenshot">Шаљи снимак екрана</string>
     <string name="send_bug_report_include_crash_logs">Слање записника грешке</string>
     <string name="send_bug_report_include_logs">Слање записника</string>
-    <string name="groups_header">Заједнице</string>
-
     <string name="no_more_results">Нема више резултата</string>
     <string name="system_alerts_header">Системска упозорења</string>
     <string name="bottom_action_notification">Обавештења</string>
@@ -386,7 +382,6 @@
     <string name="send_bug_report_include_key_share_history">Укључите историју размене кључева</string>
     <string name="audio_video_meeting_description">Састанци користе Jitsi безбедносне и допунске политике. Сви људи тренутно у соби видеће позив да се придруже састанку.</string>
     <string name="auth_reset_password_error_unauthorized">Није успело верификовати имејл адресу: обавезно кликните на линк из примљеног имејла</string>
-    <string name="auth_reset_password_missing_email">Мора се унети имејл адреса коришћена са вашим налогом.</string>
     <string name="auth_recaptcha_message">Овај кућни сервер жели да се увери да нисте робот</string>
     <string name="auth_forgot_password">Заборавили сте лозинку\?</string>
     <string name="auth_msisdn_already_defined">Овај број телефона је већ коришћен.</string>
