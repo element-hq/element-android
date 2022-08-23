@@ -17,13 +17,12 @@
 package org.matrix.android.sdk.internal.database
 
 import io.realm.DefaultCompactOnLaunchCallback
-import javax.inject.Inject
 
-class RealmCompactOnLaunch @Inject constructor() : DefaultCompactOnLaunchCallback() {
+class RealmCompactOnLaunch : DefaultCompactOnLaunchCallback() {
     /**
      * Forces all RealmCompactOnLaunch instances to be equal.
      * Avoids Realm throwing when multiple instances of this class are used.
      */
-    override fun equals(other: Any?) = other is RealmSessionStoreMigration
+    override fun equals(other: Any?) = other is RealmCompactOnLaunch
     override fun hashCode() = 0x1000
 }

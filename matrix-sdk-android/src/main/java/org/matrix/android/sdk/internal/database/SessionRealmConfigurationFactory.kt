@@ -41,7 +41,6 @@ private const val REALM_NAME = "disk_store.realm"
 internal class SessionRealmConfigurationFactory @Inject constructor(
         private val realmKeysUtils: RealmKeysUtils,
         private val realmSessionStoreMigration: RealmSessionStoreMigration,
-        private val realmCompactOnLaunch: RealmCompactOnLaunch,
         @SessionFilesDirectory val directory: File,
         @SessionId val sessionId: String,
         @UserMd5 val userMd5: String,
@@ -65,7 +64,7 @@ internal class SessionRealmConfigurationFactory @Inject constructor(
         }
 
         val realmConfiguration = RealmConfiguration.Builder()
-                .compactOnLaunch(realmCompactOnLaunch)
+                .compactOnLaunch(RealmCompactOnLaunch())
                 .directory(directory)
                 .name(REALM_NAME)
                 .apply {
