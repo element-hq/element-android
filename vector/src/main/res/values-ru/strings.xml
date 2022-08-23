@@ -52,8 +52,6 @@
 \nИмпорт приглашенных комнат</string>
     <string name="initial_sync_start_importing_account_left_rooms">Начальная синхронизация:
 \nИмпорт покинутых комнат</string>
-    <string name="initial_sync_start_importing_account_groups">Начальная синхронизация:
-\nИмпорт сообществ</string>
     <string name="initial_sync_start_importing_account_data">Начальная синхронизация:
 \nИмпорт данных учётной записи</string>
     <string name="notice_room_update">%s обновил эту комнату.</string>
@@ -307,7 +305,6 @@
     <string name="auth_email_already_defined">Этот адрес электронной почты уже используется.</string>
     <string name="auth_forgot_password">Забыли пароль?</string>
     <string name="auth_recaptcha_message">Этот домашний сервер хочет убедиться, что вы не робот</string>
-    <string name="auth_reset_password_missing_email">Должен быть введен адрес электронной почты привязанный к учетной записи.</string>
     <string name="auth_reset_password_error_unauthorized">Не удалось проверить адрес электронной почты: убедитесь, что вы перешли по ссылке из сообщения</string>
     <string name="login_error_invalid_home_server">Пожалуйста, введите корректный URL</string>
     <string name="login_error_bad_json">Неверный формат JSON</string>
@@ -513,7 +510,6 @@
     <string name="notification_noisy">Громко</string>
     <string name="encrypted_message">Зашифрованное сообщение</string>
     <string name="loading">Загрузка…</string>
-    <string name="groups_header">Сообщества</string>
     <string name="start_voice_call_prompt_msg">Вы уверены, что хотите начать голосовой вызов?</string>
     <string name="start_video_call_prompt_msg">Вы уверены, что хотите начать видеовызов?</string>
     <string name="room_participants_ban_prompt_msg">Блокировка пользователя удалит его из этой комнаты и не позволит ему присоединиться вновь.</string>
@@ -916,7 +912,6 @@
     <string name="action_change">Изменить</string>
     <string name="change_room_directory_network">Изменить сеть</string>
     <string name="please_wait">Пожалуйста, подождите…</string>
-    <string name="group_all_communities">Все сообщества</string>
     <string name="room_preview_no_preview">Эту комнату нельзя предварительно просмотреть</string>
     <string name="fab_menu_create_room">Комнаты</string>
     <string name="fab_menu_create_chat">Личные сообщения</string>
@@ -2487,7 +2482,6 @@
     <string name="ftue_profile_picture_title">Добавить аватар</string>
     <string name="ftue_display_name_entry_footer">Вы сможете изменить это позже</string>
     <string name="ftue_display_name_entry_title">Отображаемое имя</string>
-    <string name="ftue_display_name_subtitle">Показывается, когда вы отправляете сообщения.</string>
     <string name="ftue_display_name_title">Выберите отображаемое имя</string>
     <string name="ftue_account_created_subtitle">Ваша учётная запись %s создана</string>
     <string name="ftue_account_created_congratulations_title">Поздравляем!</string>
@@ -2513,7 +2507,6 @@
     <string name="live_location_sharing_notification_description">Идёт отправка местоположения</string>
     <string name="location_share_live_remaining_time">Осталось %1$s</string>
     <string name="live_location_bottom_sheet_last_updated_at">Обновлено %1$s назад</string>
-    <string name="live_location_bottom_sheet_stop_sharing">Остановить трансляцию</string>
     <string name="labs_enable_live_location">Включить функцию \"Поделиться трансляцией местоположения\"</string>
     <string name="live_location_sharing_notification_title">${app_name} Трансляция местоположения</string>
     <string name="location_share_live_until">Транслировать до %1$s</string>

@@ -93,7 +93,6 @@
     <string name="send_bug_report_progress">Kemajuan (%s%%)</string>
     <string name="username">Nama Pengguna</string>
     <string name="auth_invalid_login_param">Nama pengguna dan/atau kata sandi salah</string>
-    <string name="auth_reset_password_missing_email">Anda perlu memasukkan alamat email yang tertaut pada akun.</string>
     <string name="auth_reset_password_error_unauthorized">Verifikasi alamat email gagal: pastikan tautan yang termuat di email telah diklik</string>
     <string name="login_error_bad_json">JSON amburadul</string>
     <string name="login_error_not_json">Tidak berisi JSON yang sah</string>
@@ -115,7 +114,6 @@
     <string name="loading">Memuat…</string>
     <string name="action_download">Unduh</string>
     <string name="system_alerts_header">Peringatan Sistem</string>
-    <string name="groups_header">Komunitas</string>
     <string name="send_bug_report_description_in_english">Mohon deskripsikan dengan bahasa Inggris apabila memungkinkan.</string>
     <string name="send_bug_report_rage_shake">Guncang perangkat untuk laporan gangguan</string>
     <string name="option_send_voice">Kirim Pesan Suara</string>
@@ -755,8 +753,6 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="event_status_sent_message">Pesan terkirim</string>
     <string name="initial_sync_start_importing_account_data">Sinkronisasi awal:
 \nMengimpor data akun</string>
-    <string name="initial_sync_start_importing_account_groups">Sinkronisasi awal:
-\nMengimpor komunitas</string>
     <string name="initial_sync_start_importing_account_left_rooms">Sinkronisasi Awal:
 \nMengimpor ruangan yang ditinggalkan</string>
     <string name="initial_sync_start_importing_account_invited_rooms">Sinkronisasi awal:
@@ -1382,7 +1378,6 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="room_preview_not_found">Ruangan ini tidak dapat di akses di waktu ini.
 \nCoba lagi nanti, atau tanya admin ruangan untuk memeriksa jika Anda punya akses.</string>
     <string name="room_preview_no_preview">Ruangan ini tidak dapat di tampilkan</string>
-    <string name="group_all_communities">Semua Komunitas</string>
     <string name="please_wait">Mohon menunggu…</string>
     <string name="change_room_directory_network">Ganti jaringan</string>
     <string name="action_change">Ganti</string>
@@ -2387,7 +2382,6 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="ftue_profile_picture_title">Tambahkan sebuah foto profil</string>
     <string name="ftue_display_name_entry_footer">Anda dapat mengubahnya nanti</string>
     <string name="ftue_display_name_entry_title">Nama Tampilan</string>
-    <string name="ftue_display_name_subtitle">Ini akan ditampilkan ketika Anda mengirim pesan.</string>
     <string name="ftue_display_name_title">Pilih nama tampilan</string>
     <string name="ftue_account_created_subtitle">Akun %s Anda telah dibuat</string>
     <string name="ftue_account_created_congratulations_title">Selamat!</string>
@@ -2438,7 +2432,6 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="keys_backup_settings_signature_from_this_user">Cadangan memiliki tandatangan yang valid dari pengguna ini.</string>
     <string name="location_share_live_until">Langsung sampai %1$s</string>
     <string name="live_location_bottom_sheet_last_updated_at">Diperbarui %1$s yang lalu</string>
-    <string name="live_location_bottom_sheet_stop_sharing">Berhenti membagikan</string>
     <string name="labs_enable_live_location_summary">Implementasi sementara: lokasi tetap di riwayat ruangan</string>
     <string name="labs_enable_live_location">Aktifkan Pembagian Lokasi Langsung</string>
     <string name="location_share_live_remaining_time">Tinggal %1$s</string>

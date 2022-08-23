@@ -52,8 +52,6 @@
 \n正在导入已邀请的房间</string>
     <string name="initial_sync_start_importing_account_left_rooms">初始化同步：
 \n正在导入已离开的房间</string>
-    <string name="initial_sync_start_importing_account_groups">初始化同步：
-\n正在导入社区</string>
     <string name="initial_sync_start_importing_account_data">初始化同步：
 \n正在导入账户数据</string>
     <string name="notice_room_update">%s 升级了此房间。</string>
@@ -219,7 +217,6 @@
     <string name="auth_invalid_email">此电子邮箱地址似乎无效</string>
     <string name="auth_email_already_defined">此电子邮箱地址已被使用。</string>
     <string name="auth_forgot_password">忘记密码？</string>
-    <string name="auth_reset_password_missing_email">必须输入与你账户关联的电子邮箱地址。</string>
     <string name="login_error_invalid_home_server">请输入有效的 URL</string>
     <string name="login_error_not_json">没有包含有效的 JSON</string>
     <string name="login_error_limit_exceeded">发送了过多的请求</string>
@@ -461,7 +458,6 @@
     <plurals name="room_new_messages_notification">
         <item quantity="other">%d 条新消息</item>
     </plurals>
-    <string name="groups_header">社群</string>
     <string name="send_bug_report_rage_shake">摇一摇快捷反馈问题</string>
     <plurals name="membership_changes">
         <item quantity="other">%d个成员状态变动</item>
@@ -808,7 +804,6 @@
     <string name="create_new_room">创建新房间</string>
     <string name="action_change">修改</string>
     <string name="please_wait">请稍候……</string>
-    <string name="group_all_communities">所有社群</string>
     <string name="room_preview_no_preview">无法预览此房间</string>
     <string name="fab_menu_create_room">房间</string>
     <string name="create_room_action_create">创建</string>
@@ -2342,7 +2337,6 @@
     <string name="live_location_not_enough_permission_dialog_description">你需要有正确的权限，才能在这个房间里分享实时位置。</string>
     <string name="live_location_not_enough_permission_dialog_title">你没有权限分享实时位置</string>
     <string name="live_location_bottom_sheet_last_updated_at">%1$s前已更新</string>
-    <string name="live_location_bottom_sheet_stop_sharing" tools:ignore="UnusedResources">停止分享</string>
     <string name="labs_enable_live_location_summary">临时执行：地点在房间历史中持续存在</string>
     <string name="labs_enable_live_location">启用实时位置共享</string>
     <string name="live_location_sharing_notification_description">位置共享正在进行中</string>
@@ -2469,7 +2463,6 @@
     <string name="ftue_personalize_complete_title">看起来不错！</string>
     <string name="ftue_personalize_lets_go">走吧</string>
     <string name="ftue_display_name_entry_footer">你可以稍后更改这个</string>
-    <string name="ftue_display_name_subtitle">这会在你发送消息时显示。</string>
     <string name="ftue_auth_login_username_entry">用户名/电子邮件/电话号码</string>
     <string name="ftue_auth_captcha_title">你是人类吗？</string>
     <string name="ftue_auth_password_reset_email_confirmation_subtitle">按照发送到%s的操作说明</string>

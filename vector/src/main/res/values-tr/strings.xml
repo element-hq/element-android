@@ -48,7 +48,6 @@
     <string name="matrix_only_filter">Sadece Matrix kullanıcıları</string>
     <string name="no_result_placeholder">Sonuç bulunamadı</string>
     <string name="rooms_header">Odalar</string>
-    <string name="groups_header">Topluluk</string>
     <string name="send_bug_report_include_logs">Sistem günlüğünü (log) gönder</string>
     <string name="send_bug_report_include_crash_logs">Çökme günlüğünü (crash log) gönder</string>
     <string name="send_bug_report_include_screenshot">Ekran görüntüsünü gönder</string>
@@ -115,7 +114,6 @@
     <string name="auth_email_already_defined">Bu e-posta adresi zaten tanımlanmış.</string>
     <string name="auth_forgot_password">Şifreni mi unuttun\?</string>
     <string name="auth_recaptcha_message">Bu ana sunucu bir robot olmadığından emin olmak istiyor</string>
-    <string name="auth_reset_password_missing_email">Hesaba bağlı e-posta adresi mutlaka girilmeli.</string>
     <string name="auth_reset_password_error_unauthorized">E-posta doğrulaması başarısız: e-postanızdaki bağlantıya tıkladığınızdan emin olun</string>
     <string name="auth_accept_policies">Lütfen ana sunucunun ilkelerini gözden geçirin ve kabul edin:</string>
     <string name="login_error_invalid_home_server">Lütfen geçerli bir URL girin</string>
@@ -695,7 +693,6 @@
     <string name="action_change">Değiştir</string>
     <string name="change_room_directory_network">Ağı değiştir</string>
     <string name="please_wait">Lütfen bekleyin…</string>
-    <string name="group_all_communities">Tüm Topluluklar</string>
     <string name="room_preview_no_preview">Bu oda ön izlenemez</string>
     <string name="fab_menu_create_room">Odalar</string>
     <string name="fab_menu_create_chat">Doğrudan Mesajlar</string>
@@ -1361,8 +1358,6 @@
     <string name="event_status_sent_message">Mesajı gönderildi</string>
     <string name="initial_sync_start_importing_account_data">İlk senkronizasyon:
 \nHesap verilerini içe aktarma</string>
-    <string name="initial_sync_start_importing_account_groups">İlk senkronizasyon:
-\nToplulukları içe aktarma</string>
     <string name="initial_sync_start_importing_account_left_rooms">İlk senkronizasyon:
 \nSol odalar içe aktarılıyor</string>
     <string name="initial_sync_start_importing_account_invited_rooms">İlk senkronizasyon:

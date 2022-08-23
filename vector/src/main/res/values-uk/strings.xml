@@ -111,8 +111,6 @@
     <string name="notice_room_invite_no_invitee_with_reason_by_you">Ваше запрошення. Причина: %1$s</string>
     <string name="notice_room_invite_no_invitee_with_reason">Запрошення від %1$s. Причина: %2$s</string>
     <string name="event_status_sending_message">Надсилання повідомлень…</string>
-    <string name="initial_sync_start_importing_account_groups">Початкова синхронізація:
-\nІмпортування спільнот</string>
     <string name="initial_sync_start_importing_account_left_rooms">Початкова синхронізація:
 \nІмпортування кімнат, які ви залишили</string>
     <string name="initial_sync_start_importing_account_invited_rooms">Початкова синхронізація:
@@ -213,7 +211,6 @@
     <string name="auth_email_already_defined">Ця email адреса вже використовується.</string>
     <string name="auth_forgot_password">Забули пароль?</string>
     <string name="auth_recaptcha_message">Цей домашній сервер хоче переконатися, що ви не робот</string>
-    <string name="auth_reset_password_missing_email">Необхідно ввести е-пошту прив\'язану до вашого облікового запису.</string>
     <string name="auth_reset_password_error_unauthorized">Не вдалося перевірити email: переконайтеся, що ви перейшли за посиланням у листі</string>
     <string name="login_error_invalid_home_server">Введіть дійсний URL</string>
     <string name="login_error_bad_json">Викривлений JSON</string>
@@ -414,7 +411,6 @@
     <string name="command_error">Помилка виконання команди</string>
     <string name="unrecognized_command">Команду %s не розпізнано</string>
     <string name="loading">Завантаження…</string>
-    <string name="groups_header">Спільноти</string>
     <string name="send_bug_report_rage_shake">Струснути пристрій, щоб повідомити про ваду</string>
     <string name="start_voice_call_prompt_msg">Ви впевнені, що бажаєте розпочати голосовий виклик\?</string>
     <string name="start_video_call_prompt_msg">Ви впевнені, що бажаєте розпочати відео виклик\?</string>
@@ -665,7 +661,6 @@
     <string name="invite_friends_rich_title">🔐️ Приєднуйтесь до мене в ${app_name}</string>
     <string name="invite_friends_text">Привіт! Спілкуймося в ${app_name}: %s</string>
     <string name="invite_friends">Запросити друзів</string>
-    <string name="group_all_communities">Всі спільноти</string>
     <string name="settings_show_redacted_summary">Показувати заглушку на місці видалених повідомлень</string>
     <string name="settings_general_title">Загальні</string>
     <string name="send_suggestion_failed">Не вдалось надіслати пропозицію (%s)</string>
@@ -2526,7 +2521,6 @@
     <string name="ftue_profile_picture_title">Додати зображення профілю</string>
     <string name="ftue_display_name_entry_footer">Ви можете змінити його пізніше</string>
     <string name="ftue_display_name_entry_title">Показуване ім\'я</string>
-    <string name="ftue_display_name_subtitle">Його буде показано у надісланих повідомленнях.</string>
     <string name="ftue_display_name_title">Виберіть показуване ім\'я</string>
     <string name="ftue_account_created_subtitle">Ваш обліковий запис %s створений</string>
     <string name="ftue_account_created_congratulations_title">Вітаємо!</string>
@@ -2576,7 +2570,6 @@
     <string name="a11y_presence_busy">Зайнятий</string>
     <string name="keys_backup_settings_signature_from_this_user">Резервна копія має дійсний підпис від цього користувача.</string>
     <string name="live_location_bottom_sheet_last_updated_at">Оновлено %1$s тому</string>
-    <string name="live_location_bottom_sheet_stop_sharing">Припинити поширення</string>
     <string name="labs_enable_live_location_summary">Тимчасова реалізація: місця зберігаються в історії кімнат</string>
     <string name="labs_enable_live_location">Увімкнути поширення місцеперебування наживо</string>
     <string name="location_share_live_remaining_time">Залишилося %1$s</string>

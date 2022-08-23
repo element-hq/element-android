@@ -78,7 +78,6 @@
     <string name="auth_forgot_password">Zaboravljena lozinka?</string>
 
     <string name="auth_recaptcha_message">Ovaj lokalni server provjerava da niste robot</string>
-    <string name="auth_reset_password_missing_email">Email adresa povezana sa vašim računom mora biti unešena.</string>
     <string name="auth_reset_password_error_unauthorized">Neuspješna verifikacija email adrese: provjerite da li ste kliknuli link u emailu</string>
 
     <string name="login_error_invalid_home_server">Unesite ispravan URL</string>
