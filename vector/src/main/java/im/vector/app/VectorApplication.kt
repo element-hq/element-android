@@ -266,7 +266,7 @@ class VectorApplication :
     }
 
     private fun createFontThreadHandler(): Handler {
-        val handlerThread = HandlerThread("fonts")
+        val handlerThread = HandlerThread("Vector-fonts")
         handlerThread.start()
         return Handler(handlerThread.looper)
     }

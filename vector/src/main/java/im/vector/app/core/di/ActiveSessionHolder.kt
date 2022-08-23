@@ -20,6 +20,7 @@ import android.content.Context
 import arrow.core.Option
 import im.vector.app.ActiveSessionDataSource
 import im.vector.app.core.extensions.configureAndStart
+import im.vector.app.core.extensions.startSyncing
 import im.vector.app.core.pushers.UnifiedPushHelper
 import im.vector.app.core.services.GuardServiceStarter
 import im.vector.app.features.call.webrtc.WebRtcCallManager
@@ -100,10 +101,16 @@ class ActiveSessionHolder @Inject constructor(
     }
 
     suspend fun getOrInitializeSession(startSync: Boolean): Session? {
-        return activeSessionReference.get() ?: sessionInitializer.tryInitialize(readCurrentSession = { activeSessionReference.get() }) { session ->
-            setActiveSession(session)
-            session.configureAndStart(applicationContext, startSyncing = startSync)
-        }
+        return activeSessionReference.get()
+                ?.also {
+                    if (startSync && !it.syncService().isSyncThreadAlive()) {
+                        it.startSyncing(applicationContext)
+                    }
+                }
+                ?: sessionInitializer.tryInitialize(readCurrentSession = { activeSessionReference.get() }) { session ->
+                    setActiveSession(session)
+                    session.configureAndStart(applicationContext, startSyncing = startSync)
+                }
     }
 
     fun isWaitingForSessionInitialization() = activeSessionReference.get() == null && authenticationService.hasAuthenticatedSessions()

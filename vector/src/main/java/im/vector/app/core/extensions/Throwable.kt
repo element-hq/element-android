@@ -14,18 +14,21 @@
  * limitations under the License.
  */
 
-package im.vector.app.test.fakes
+package im.vector.app.core.extensions
 
-import im.vector.app.features.login.HomeServerConnectionConfigFactory
-import io.mockk.every
-import io.mockk.mockk
-import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
-import org.matrix.android.sdk.api.network.ssl.Fingerprint
-
-class FakeHomeServerConnectionConfigFactory {
-    val instance: HomeServerConnectionConfigFactory = mockk()
-
-    fun givenConfigFor(url: String, fingerprint: Fingerprint? = null, config: HomeServerConnectionConfig) {
-        every { instance.create(url, fingerprint) } returns config
+/**
+ * Recursive through the throwable and its causes for the given predicate.
+ *
+ * @return true when the predicate finds a match.
+ */
+tailrec fun Throwable?.crawlCausesFor(predicate: (Throwable) -> Boolean): Boolean {
+    return when {
+        this == null -> false
+        else -> {
+            when (predicate(this)) {
+                true -> true
+                else -> this.cause.crawlCausesFor(predicate)
+            }
+        }
     }
 }

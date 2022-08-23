@@ -202,6 +202,7 @@ class FtueAuthVariant(
                 openMsisdnConfirmation(viewEvents.msisdn)
             }
             is OnboardingViewEvents.Failure,
+            is OnboardingViewEvents.UnrecognisedCertificateFailure,
             is OnboardingViewEvents.Loading ->
                 // This is handled by the Fragments
                 Unit
@@ -260,11 +261,11 @@ class FtueAuthVariant(
     }
 
     private fun onStartCombinedLogin() {
-        addRegistrationStageFragmentToBackstack(FtueAuthCombinedLoginFragment::class.java)
+        addRegistrationStageFragmentToBackstack(FtueAuthCombinedLoginFragment::class.java, allowStateLoss = true)
     }
 
     private fun openStartCombinedRegister() {
-        addRegistrationStageFragmentToBackstack(FtueAuthCombinedRegisterFragment::class.java)
+        addRegistrationStageFragmentToBackstack(FtueAuthCombinedRegisterFragment::class.java, allowStateLoss = true)
     }
 
     private fun displayFallbackWebDialog() {
@@ -519,13 +520,14 @@ class FtueAuthVariant(
         )
     }
 
-    private fun addRegistrationStageFragmentToBackstack(fragmentClass: Class<out Fragment>, params: Parcelable? = null) {
+    private fun addRegistrationStageFragmentToBackstack(fragmentClass: Class<out Fragment>, params: Parcelable? = null, allowStateLoss: Boolean = false) {
         activity.addFragmentToBackstack(
                 views.loginFragmentContainer,
                 fragmentClass,
                 params,
                 tag = FRAGMENT_REGISTRATION_STAGE_TAG,
-                option = commonOption
+                option = commonOption,
+                allowStateLoss = allowStateLoss,
         )
     }
 

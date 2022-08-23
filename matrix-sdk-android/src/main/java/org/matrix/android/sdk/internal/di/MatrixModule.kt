@@ -40,7 +40,7 @@ internal object MatrixModule {
                 io = Dispatchers.IO,
                 computation = Dispatchers.Default,
                 main = Dispatchers.Main,
-                crypto = createBackgroundHandler("Crypto_Thread").asCoroutineDispatcher(),
+                crypto = createBackgroundHandler("Matrix-Crypto_Thread").asCoroutineDispatcher(),
                 dmVerif = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
         )
     }

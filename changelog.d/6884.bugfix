@@ -1,0 +1,1 @@
+Ensure SyncThread is started when the app is launched after a Push has been received.

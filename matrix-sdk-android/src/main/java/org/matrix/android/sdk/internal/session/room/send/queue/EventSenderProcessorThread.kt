@@ -55,7 +55,7 @@ internal class EventSenderProcessorThread @Inject constructor(
         private val queuedTaskFactory: QueuedTaskFactory,
         private val taskExecutor: TaskExecutor,
         private val memento: QueueMemento
-) : Thread("SENDER_THREAD_SID_${sessionParams.credentials.sessionId()}"), EventSenderProcessor {
+) : Thread("Matrix-SENDER_THREAD_SID_${sessionParams.credentials.sessionId()}"), EventSenderProcessor {
 
     private fun markAsManaged(task: QueuedTask) {
         memento.track(task)

@@ -60,7 +60,10 @@ import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import org.matrix.android.sdk.api.auth.login.LoginWizard
 import org.matrix.android.sdk.api.auth.registration.RegistrationAvailability
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
+import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.isHomeserverUnavailable
+import org.matrix.android.sdk.api.failure.isUnrecognisedCertificate
+import org.matrix.android.sdk.api.network.ssl.Fingerprint
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.util.BuildVersionSdkIntProvider
 import timber.log.Timber
@@ -113,18 +116,11 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    // Store the last action, to redo it after user has trusted the untrusted certificate
-    private var lastAction: OnboardingAction? = null
-    private var currentHomeServerConnectionConfig: HomeServerConnectionConfig? = null
-
     private val matrixOrgUrl = stringProvider.getString(R.string.matrix_org_server_url).ensureTrailingSlash()
     private val defaultHomeserverUrl = matrixOrgUrl
 
     private val registrationWizard: RegistrationWizard
         get() = authenticationService.getRegistrationWizard()
-
-    val currentThreePid: String?
-        get() = registrationWizard.getCurrentThreePid()
 
     // True when login and password has been sent with success to the homeserver
     val isRegistrationStarted: Boolean
@@ -146,9 +142,9 @@ class OnboardingViewModel @AssistedInject constructor(
             is OnboardingAction.UpdateServerType -> handleUpdateServerType(action)
             is OnboardingAction.UpdateSignMode -> handleUpdateSignMode(action)
             is OnboardingAction.InitWith -> handleInitWith(action)
-            is OnboardingAction.HomeServerChange -> withAction(action) { handleHomeserverChange(action) }
+            is OnboardingAction.HomeServerChange -> handleHomeserverChange(action)
             is OnboardingAction.UserNameEnteredAction -> handleUserNameEntered(action)
-            is AuthenticateAction -> withAction(action) { handleAuthenticateAction(action) }
+            is AuthenticateAction -> handleAuthenticateAction(action)
             is OnboardingAction.LoginWithToken -> handleLoginWithToken(action)
             is OnboardingAction.WebLoginSuccess -> handleWebLoginSuccess(action)
             is OnboardingAction.ResetPassword -> handleResetPassword(action)
@@ -221,11 +217,6 @@ class OnboardingViewModel @AssistedInject constructor(
         )
     }
 
-    private fun withAction(action: OnboardingAction, block: (OnboardingAction) -> Unit) {
-        lastAction = action
-        block(action)
-    }
-
     private fun handleAuthenticateAction(action: AuthenticateAction) {
         when (action) {
             is AuthenticateAction.Register -> handleRegisterWith(action.username, action.password, action.initialDeviceName)
@@ -276,20 +267,13 @@ class OnboardingViewModel @AssistedInject constructor(
     private fun handleUserAcceptCertificate(action: OnboardingAction.UserAcceptCertificate) {
         // It happens when we get the login flow, or during direct authentication.
         // So alter the homeserver config and retrieve again the login flow
-        when (val finalLastAction = lastAction) {
-            is OnboardingAction.HomeServerChange.SelectHomeServer -> {
-                currentHomeServerConnectionConfig
-                        ?.let { it.copy(allowedFingerprints = it.allowedFingerprints + action.fingerprint) }
-                        ?.let { startAuthenticationFlow(finalLastAction, it, serverTypeOverride = null) }
-            }
+        when (action.retryAction) {
+            is OnboardingAction.HomeServerChange -> handleHomeserverChange(action.retryAction, fingerprint = action.fingerprint)
             is AuthenticateAction.LoginDirect ->
                 handleDirectLogin(
-                        finalLastAction,
-                        HomeServerConnectionConfig.Builder()
-                                // Will be replaced by the task
-                                .withHomeServerUri("https://dummy.org")
-                                .withAllowedFingerPrints(listOf(action.fingerprint))
-                                .build()
+                        action.retryAction,
+                        // Will be replaced by the task
+                        homeServerConnectionConfigFactory.create("https://dummy.org", action.fingerprint)
                 )
             else -> Unit
         }
@@ -492,17 +476,6 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private fun handleInitWith(action: OnboardingAction.InitWith) {
         loginConfig = action.loginConfig
-        // If there is a pending email validation continue on this step
-        try {
-            if (registrationWizard.isRegistrationStarted()) {
-                currentThreePid?.let {
-                    handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnSendEmailSuccess(it, isRestoredSession = true)))
-                }
-            }
-        } catch (e: Throwable) {
-            // NOOP. API is designed to use wizards in a login/registration flow,
-            // but we need to check the state anyway.
-        }
     }
 
     private fun handleResetPassword(action: OnboardingAction.ResetPassword) {
@@ -589,9 +562,19 @@ class OnboardingViewModel @AssistedInject constructor(
         currentJob = viewModelScope.launch {
             directLoginUseCase.execute(action, homeServerConnectionConfig).fold(
                     onSuccess = { onSessionCreated(it, authenticationDescription = AuthenticationDescription.Login) },
-                    onFailure = {
+                    onFailure = { error ->
                         setState { copy(isLoading = false) }
-                        _viewEvents.post(OnboardingViewEvents.Failure(it))
+                        when {
+                            error.isUnrecognisedCertificate() -> {
+                                _viewEvents.post(
+                                        OnboardingViewEvents.UnrecognisedCertificateFailure(
+                                                retryAction = action,
+                                                cause = error as Failure.UnrecognizedCertificateFailure
+                                        )
+                                )
+                            }
+                            else -> _viewEvents.post(OnboardingViewEvents.Failure(error))
+                        }
                     }
             )
         }
@@ -682,8 +665,13 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleHomeserverChange(action: OnboardingAction.HomeServerChange, serverTypeOverride: ServerType? = null, postAction: suspend () -> Unit = {}) {
-        val homeServerConnectionConfig = homeServerConnectionConfigFactory.create(action.homeServerUrl)
+    private fun handleHomeserverChange(
+            action: OnboardingAction.HomeServerChange,
+            serverTypeOverride: ServerType? = null,
+            fingerprint: Fingerprint? = null,
+            postAction: suspend () -> Unit = {},
+    ) {
+        val homeServerConnectionConfig = homeServerConnectionConfigFactory.create(action.homeServerUrl, fingerprint)
         if (homeServerConnectionConfig == null) {
             // This is invalid
             _viewEvents.post(OnboardingViewEvents.Failure(Throwable("Unable to create a HomeServerConnectionConfig")))
@@ -698,8 +686,6 @@ class OnboardingViewModel @AssistedInject constructor(
             serverTypeOverride: ServerType?,
             postAction: suspend () -> Unit = {},
     ) {
-        currentHomeServerConnectionConfig = homeServerConnectionConfig
-
         currentJob = viewModelScope.launch {
             setState { copy(isLoading = true) }
             runCatching { startAuthenticationFlowUseCase.execute(homeServerConnectionConfig) }.fold(
@@ -723,9 +709,10 @@ class OnboardingViewModel @AssistedInject constructor(
                             retryAction = (trigger as OnboardingAction.HomeServerChange.SelectHomeServer).resetToDefaultUrl()
                     )
             )
-            else -> _viewEvents.post(
-                    OnboardingViewEvents.Failure(error)
-            )
+            error.isUnrecognisedCertificate() -> {
+                _viewEvents.post(OnboardingViewEvents.UnrecognisedCertificateFailure(trigger, error as Failure.UnrecognizedCertificateFailure))
+            }
+            else -> _viewEvents.post(OnboardingViewEvents.Failure(error))
         }
     }
 
