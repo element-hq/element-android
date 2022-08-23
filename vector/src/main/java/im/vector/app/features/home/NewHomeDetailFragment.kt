@@ -24,7 +24,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
@@ -180,21 +179,9 @@ class NewHomeDetailFragment @Inject constructor(
                 }
     }
 
-    private fun navigateBack() {
-        val previousSpaceId = spaceStateHandler.getSpaceBackstack().removeLastOrNull()
-        val parentSpaceId = spaceStateHandler.getCurrentSpace()?.flattenParentIds?.lastOrNull()
-        setCurrentSpace(previousSpaceId ?: parentSpaceId)
-    }
-
     private fun setCurrentSpace(spaceId: String?) {
         spaceStateHandler.setCurrentSpace(spaceId, isForwardNavigation = false)
         sharedActionViewModel.post(HomeActivitySharedAction.OnCloseSpace)
-    }
-
-    private fun handleCallStarted() {
-        dismissLoadingDialog()
-        val fragmentTag = HomeTab.DialPad.toFragmentTag()
-        (childFragmentManager.findFragmentByTag(fragmentTag) as? DialPadFragment)?.clear()
     }
 
     override fun onDestroyView() {
@@ -454,20 +441,13 @@ class NewHomeDetailFragment @Inject constructor(
         }
     }
 
-    private fun DialPadFragment.applyCallback(): DialPadFragment {
-        callback = object : DialPadFragment.Callback {
-            override fun onOkClicked(formatted: String?, raw: String?) {
-                if (raw.isNullOrEmpty()) return
-                viewModel.handle(HomeDetailAction.StartCallWithPhoneNumber(raw))
-            }
-        }
-        return this
+    override fun onBackPressed(toolbarButton: Boolean) = if (spaceStateHandler.isRoot()) {
+        false
+    } else {
+        val lastSpace = spaceStateHandler.popSpaceBackstack()
+        spaceStateHandler.setCurrentSpace(lastSpace, isForwardNavigation = false)
+        true
     }
 
-    override fun onBackPressed(toolbarButton: Boolean) = if (spaceStateHandler.getCurrentSpace() != null) {
-        navigateBack()
-        true
-    } catch (e: NoSuchElementException) {
-        false
-    }
+    private fun SpaceStateHandler.isRoot() = getSpaceBackstack().isEmpty()
 }
