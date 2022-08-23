@@ -302,6 +302,7 @@ $dokka.location:org.matrix.android.sdk.api.failure////PointingToDeclaration/mat
 $dokka.location:org.matrix.android.sdk.api.failure//getRetryDelay/kotlin.Throwable#kotlin.Long/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/get-retry-delay.html
 $dokka.location:org.matrix.android.sdk.api.failure//is401/kotlin.Throwable#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/is401.html
 $dokka.location:org.matrix.android.sdk.api.failure//is404/kotlin.Throwable#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/is404.html
+$dokka.location:org.matrix.android.sdk.api.failure//isHomeserverConnectionError/kotlin.Throwable#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/is-homeserver-connection-error.html
 $dokka.location:org.matrix.android.sdk.api.failure//isHomeserverUnavailable/kotlin.Throwable#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/is-homeserver-unavailable.html
 $dokka.location:org.matrix.android.sdk.api.failure//isInvalidPassword/kotlin.Throwable#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/is-invalid-password.html
 $dokka.location:org.matrix.android.sdk.api.failure//isInvalidUIAAuth/kotlin.Throwable#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/is-invalid-u-i-a-auth.html
