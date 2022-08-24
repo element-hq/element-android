@@ -2552,4 +2552,24 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="search_space_two_parents">%1$s dan %2$s</string>
     <string name="auth_reset_password_error_unverified">Email belum diverifikasi, periksa kotak masuk Anda</string>
     <string name="all_chats">Semua Obrolan</string>
+    <string name="device_manager_settings_active_sessions_show_all">Tampilkan Semua Sesi (V2, Dalam Pengembangan)</string>
+    <string name="settings_sessions_other_description">Untuk keamanan terbaik, verifikasi sesi Anda dan keluarkan sesi apa pun yang Anda tidak kenal atau Anda tidak gunakan lagi.</string>
+    <string name="settings_sessions_other_title">Sesi lainnya</string>
+    <string name="settings_sessions_list">Sesi</string>
+    <string name="a11y_open_spaces">Buka daftar space</string>
+    <string name="a11y_create_message">Buat percakapan atau ruangan baru</string>
+    <string name="room_list_filter_people">Orang</string>
+    <string name="room_list_filter_favourites">Favorit</string>
+    <string name="room_list_filter_unreads">Belum dibaca</string>
+    <string name="room_list_filter_all">Semua</string>
+    <string name="home_layout_preferences_sort_name">A - Z</string>
+    <string name="home_layout_preferences_sort_activity">Aktivitas</string>
+    <string name="home_layout_preferences_sort_by">Urutkan berdasarkan</string>
+    <string name="home_layout_preferences_recents">Tampilkan terkini</string>
+    <string name="home_layout_preferences_filters">Tampilkan saringan</string>
+    <string name="home_layout_preferences">Preferensi tata letak</string>
+    <string name="explore_rooms">Jelajahi Ruangan</string>
+    <string name="change_space">Ubah Space</string>
+    <string name="create_room">Buat Ruangan</string>
+    <string name="start_chat">Mulai Obrolan</string>
 </resources>
